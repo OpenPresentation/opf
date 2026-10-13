@@ -1,0 +1,166 @@
+{
+  "workspace": "/private/tmp/rr20-final-runtime-replay",
+  "refs": {
+    "opf": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+    "opf-render": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+    "opf-pptx": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+    "opf-editor": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+    "gallery-candidate": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  },
+  "commands": [
+    {
+      "label": "font-variants",
+      "args": [
+        "npm",
+        "run",
+        "test:font-variants"
+      ],
+      "cwd": "/private/tmp/rr20-final-runtime-replay/opf-render",
+      "exitCode": 0,
+      "seconds": 0.47185277938842773,
+      "log": "/private/tmp/rr20-renderer-contracts-repro-01/font-variants.log",
+      "logSha256": "21599b5047711982d855b378a345fbc9ed012330fcd20fd7890aab26e555aae0"
+    },
+    {
+      "label": "plain-whitespace-browser",
+      "args": [
+        "node",
+        "test/plain-whitespace-browser.mjs",
+        "/private/tmp/rr20-renderer-contracts-repro-01/plain-whitespace"
+      ],
+      "cwd": "/private/tmp/rr20-final-runtime-replay/opf-render",
+      "exitCode": 0,
+      "seconds": 1.0562348365783691,
+      "log": "/private/tmp/rr20-renderer-contracts-repro-01/plain-whitespace-browser.log",
+      "logSha256": "f5e392692017e3e5fc889e5145dd5e808ee7e217d8b6e6d66c60017503f3f69d"
+    },
+    {
+      "label": "font-variants-browser",
+      "args": [
+        "npm",
+        "run",
+        "test:font-variants-browser"
+      ],
+      "cwd": "/private/tmp/rr20-final-runtime-replay/opf-render",
+      "exitCode": 0,
+      "seconds": 0.543942928314209,
+      "log": "/private/tmp/rr20-renderer-contracts-repro-01/font-variants-browser.log",
+      "logSha256": "e7c164dc1c306ecc698bb5580b210d53f2bbc36d9d9a3e9d14d06a70a6ff6a00"
+    }
+  ],
+  "env": {
+    "CANDIDATE_GALLERY_REF": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+    "OPF_GOLDEN_BASELINE": "/private/tmp/rr20-final-runtime-replay/opf/scripts/fixtures/opf-examples-png.rr20-array-areas.sha256.json",
+    "OPF_TRACKER_STALE": "warn",
+    "OPF_REUSE_BUILD": "rr20-ecosystem-source-repro-01",
+    "npm_config_cache": "/private/tmp/rr20-renderer-contracts-repro-01/npm-cache"
+  },
+  "scope": "Remaining renderer font variants and two maintained browser contracts only; not full-pipeline, registry, hosted or native acceptance.",
+  "initialSources": {
+    "opf": {
+      "head": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+      "status": ""
+    },
+    "opf-render": {
+      "head": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+      "status": ""
+    },
+    "opf-pptx": {
+      "head": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+      "status": ""
+    },
+    "opf-editor": {
+      "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "status": ""
+    },
+    "gallery-candidate": {
+      "head": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "status": ""
+    }
+  },
+  "node": "v24.21.0",
+  "npm": "11.16.0",
+  "pnpm": "10.33.2",
+  "preservedOutputs": [],
+  "initialGoldenSha256": "66c0c2e45d863e33b178f717f7ebb5131f48f3643a6cbcd92956820f928dfd5d",
+  "finalSources": {
+    "opf": {
+      "head": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+      "status": ""
+    },
+    "opf-render": {
+      "head": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+      "status": ""
+    },
+    "opf-pptx": {
+      "head": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+      "status": ""
+    },
+    "opf-editor": {
+      "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "status": ""
+    },
+    "gallery-candidate": {
+      "head": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "status": ""
+    }
+  },
+  "finalGoldenSha256": "66c0c2e45d863e33b178f717f7ebb5131f48f3643a6cbcd92956820f928dfd5d",
+  "outputs": [
+    {
+      "path": "/private/tmp/rr20-final-runtime-replay/opf-render/artifacts/font-variants.json",
+      "sha256": "d74bc8466adf1ff275a68aac3b69a85bbc83a338627f1de0e76b5d4869cc4ceb",
+      "bytes": 3824
+    },
+    {
+      "path": "/private/tmp/rr20-final-runtime-replay/opf-render/artifacts/font-variants-browser.json",
+      "sha256": "f312da9e33e44c964752be6e281be107b99cd8a576a86a8aec2a9dd32701eb5d",
+      "bytes": 4480
+    },
+    {
+      "path": "/private/tmp/rr20-renderer-contracts-repro-01/plain-whitespace/estimated-1280.png",
+      "sha256": "f48ac4fb955fed3a4afb9147910b9667937623a5af83d82a51309ae211bd25e4",
+      "bytes": 18825
+    },
+    {
+      "path": "/private/tmp/rr20-renderer-contracts-repro-01/plain-whitespace/estimated-1280.svg",
+      "sha256": "cb533c16d27ddbf83950bd814a3d4c4a4680779ff8ad22b48e4c28d6f46d3f9f",
+      "bytes": 3448
+    },
+    {
+      "path": "/private/tmp/rr20-renderer-contracts-repro-01/plain-whitespace/estimated-720.png",
+      "sha256": "b767917098f18c9c0b7f7bd5a3e1d365d100fc1afb64847d6f51c8f5acc3eb6f",
+      "bytes": 19925
+    },
+    {
+      "path": "/private/tmp/rr20-renderer-contracts-repro-01/plain-whitespace/estimated-720.svg",
+      "sha256": "337f82cd1929c026caadd568a3ab1326c368d7872f2d76c549af2216241b4959",
+      "bytes": 3438
+    },
+    {
+      "path": "/private/tmp/rr20-renderer-contracts-repro-01/plain-whitespace/measured-1280.png",
+      "sha256": "a5bc9c21b5b915e8a35ebf427edc276b76ef199b723b1088866011002b659b6e",
+      "bytes": 19424
+    },
+    {
+      "path": "/private/tmp/rr20-renderer-contracts-repro-01/plain-whitespace/measured-1280.svg",
+      "sha256": "833092c2781c56034af551e627272f3f4f7588d6447af59ea9770ff440619a5f",
+      "bytes": 3979
+    },
+    {
+      "path": "/private/tmp/rr20-renderer-contracts-repro-01/plain-whitespace/measured-720.png",
+      "sha256": "ff80ca9b81d6562b96d50707f20bfecfade0fcdd887da3bb30522995856bae07",
+      "bytes": 20584
+    },
+    {
+      "path": "/private/tmp/rr20-renderer-contracts-repro-01/plain-whitespace/measured-720.svg",
+      "sha256": "8bfc110ee95b4be48eb72232cd9ef24e9f9eb5bb103f48c915e5c66fe23a810d",
+      "bytes": 3969
+    },
+    {
+      "path": "/private/tmp/rr20-renderer-contracts-repro-01/plain-whitespace/report.json",
+      "sha256": "3368c9580bc3b10b269be1b7f1f1d122e4006f0c51a9792027f099ed15fed234",
+      "bytes": 47095
+    }
+  ]
+}
