@@ -70,7 +70,7 @@ function verify() {
   if (JSON.stringify(state.resolved) !== JSON.stringify(resolved())) throw new Error('Bootstrap engine resolution changed during the gates');
   console.log(JSON.stringify(state, null, 2));
 }
-// Future releases use their ordinary registry pins. Remove this one-release configuration after 0.19 is published.
+// Future releases use their ordinary registry pins. Remove this one-release configuration after the next engine releases.
 if (manifest.version !== pins.galleryVersion) {
   if (existsSync(statePath)) throw new Error('Unexpected bootstrap state outside the configured gallery release');
   console.log('Registry engines: ' + JSON.stringify(resolved()));

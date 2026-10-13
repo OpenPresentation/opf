@@ -124,9 +124,9 @@ are not full commit hashes reachable from that branch. Merge the candidate engin
 PRs before running these gates; never weaken the ancestry check. The configured
 core source retains its genuine registry dependency metadata until gallery 3 is
 published; bootstrap staging does not make that metadata registry-installable.
-The current configuration holds reviewed PR source hashes for integration work;
-replace them with the actual merged engine commits before merging or publishing
-Gallery. A PR head alone cannot satisfy the default-branch ancestry gate.
+The current configuration pins the actual merged core and renderer commits. Any
+replacement pins must also be actual merged engine commits before merging or
+publishing Gallery. A PR head alone cannot satisfy the default-branch ancestry gate.
 
 After `npm ci`, the script builds this gallery's static records, then builds the
 immutable core and renderer sources with frozen source lockfiles. It stages three
