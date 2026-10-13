@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-10-13T17:28:50.222545+00:00",
+  "updatedAt": "2026-10-13T17:51:37.228176+00:00",
   "authorization": "Start final qualification; no deployment",
   "scope": "Unpublished array/design/list/tutorial/gallery feature graph; source qualification separate from registry/native/deployment acceptance",
   "deploymentPerformed": false,
-  "nativeWindows": "authorized-pending",
+  "nativeWindows": "in-progress",
   "sourceCommits": {
     "core": "fb1c2ee65bd45c8b5e8182f034f7fceee1dbb505",
     "gallery": "146e477196405fe7d2283008f6fad34c12742599",
@@ -115,7 +115,7 @@
     "typecheckFiles": 275,
     "buildValidate": "passed",
     "archiveReview": "30 archives independently verified; approved neutral rules, numeric alignment and magnitude axes only",
-    "nativeWindows": "authorized-pending",
+    "nativeWindows": "in-progress",
     "originalQualificationDate": "2026-10-12",
     "latestQualification": {
       "canonicalTestedHead": "e9e7fb7baad0b63349e392d4036524578877d80c",
@@ -150,24 +150,34 @@
     "finalCommitChanges": "Three reviewed tests only; runtime and official baselines unchanged from packed candidate",
     "proof": "rr20-render-pptx-final-candidate-proof.json"
   },
-  "status": "Latest Mac packed, installed and browser replay and sealed native-suite generation passed. All 17 raw round-trip differences are reviewed declared source limitations; hosted/integration gates, registry-dependent site blockers and authorized-pending native acceptance remain. Not release-ready.",
+  "status": "Latest Mac packed, installed and browser replay and sealed native-suite generation passed. All 17 raw round-trip differences are reviewed declared source limitations; hosted/integration gates, registry-dependent site blockers and native acceptance with the first authorized bounded run in progress remain. Not release-ready.",
   "remainingAcceptance": [
     "Exact integrated candidate CI, engines and cross-platform gates",
     "Matching package publication and genuine registry-generated site assets",
     "Main site registry-install example for Gallery 3",
     "Gallery site release build and published-editor manifest acceptance",
-    "Authorized-pending Windows PowerPoint acceptance after the 11:30 AM Pacific October 13 visible-worker boundary and qualification",
+    "Windows PowerPoint acceptance: supervisor verified the direct timing override and started the first bounded native run; results pending",
     "Deferred deployment and production acceptance"
   ],
   "historicalSourceQualification": "The sourceCommits and original component test counts retain the 2026-10-12 qualification snapshot. Latest runtime replay and later PPTX qualification are linked separately below.",
   "nativeAcceptance": false,
   "windowsNativeAuthorization": {
-    "status": "authorized-pending",
-    "visibleWorkerEarliestStart": "2026-10-13 11:30 AM America/Los_Angeles, after qualification",
-    "performed": false,
-    "authority": "Supervisor-verified direct user messages retained in windows-native-authorization.json; existing timing and root-only worker restrictions remain.",
+    "status": "authorized-now; first metrics lifecycle observed, fidelity pending",
+    "authority": "Supervisor-verified direct user messages retained in windows-native-authorization.json, with the later verified immediate-use override recorded here; root-only worker restrictions remain.",
     "reportedPrerequisites": "windows-final-suite-prerequisites.json",
-    "independentWindowsVerificationByMacWorker": false
+    "independentWindowsVerificationByMacWorker": false,
+    "historicalVisibleWorkerEarliestStart": "2026-10-13 11:30 AM America/Los_Angeles, after qualification",
+    "timingOverride": {
+      "date": "2026-10-13",
+      "userMessageId": "01a13663-3e31-7d32-839c-91b7cbcb8044",
+      "message": "ok you can use powerpoint now i'm done with the computer",
+      "verifiedBy": "Supervisor read the actual Windows user message.",
+      "effect": "Supersedes the earlier 11:30 AM Pacific visible-worker hold; root began the first bounded feature-metrics run. No native result is claimed."
+    },
+    "runStarted": true,
+    "result": "pending",
+    "performed": true,
+    "visibleWorkerEarliestStart": "Earlier time restriction superseded by verified direct user message 01a13663-3e31-7d32-839c-91b7cbcb8044"
   },
   "latestLocalRuntimeReplay": {
     "platform": "macOS arm64",
@@ -204,5 +214,22 @@
     "historicalRecord": "docs/programs/release-readiness/HANDOFF.md: Follow-up issues (open, not started)",
     "formalOwnerDescopeProven": false,
     "frozenCandidateChanged": false
-  }
+  },
+  "latestCore": {
+    "source": "c10e29c67b0c4ec7e7974ae7276aee45f665734e",
+    "proof": "core-c10-canonical-qualification.json",
+    "canonicalExitCode": 0,
+    "packageTests": 2328,
+    "standalonePackageScripts": 6,
+    "cliTests": 198,
+    "commandChecks": 95,
+    "conversionChecks": 77,
+    "rootChecksPassed": 45,
+    "rootChecksTotal": 45,
+    "sourcesClean": true,
+    "nativeAcceptance": false,
+    "registryAcceptance": false,
+    "hostedAcceptance": false
+  },
+  "latestNativeObservation": "windows-final-metrics-observation.json"
 }

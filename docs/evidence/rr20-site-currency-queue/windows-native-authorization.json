@@ -15,20 +15,31 @@
   "fontState": "ready; ownership journal retained for cleanup after acceptance",
   "scope": "Not a native test failure: command was rejected before launch; no retry or alternate route used.",
   "currentAuthorization": {
-    "status": "direct-user-authorized-with-start-time",
+    "status": "direct-user-authorized-now",
     "thread": "01a13110-7cf9-79b0-a2df-4ac95997c5a4",
-    "verifiedBy": "Supervisor read_thread inspected actual user messages",
-    "userMessageIds": [
-      "01a13641-46c3-7fe1-825b-902de9197e0a",
-      "01a13641-afd5-7641-852f-7c57b3f64819"
-    ],
-    "userText": [
-      "you can run powerpoint here but starting at 11:30AM",
-      "that's a one time rule since i'm using the computer right now. if you can use powerpoint in the background goa head now"
-    ],
-    "visibleWorkerNotBefore": "2026-10-13T11:30:00-07:00",
-    "earlierCondition": "Background execution without disrupting active computer use; current reviewed worker opens visible windows and does not meet that condition.",
-    "decision": "Keep reviewed worker unchanged; no visible native execution before 11:30 AM Pacific. Qualification must pass first.",
+    "verifiedBy": "Supervisor read_thread inspected actual user message",
+    "userMessageId": "01a13663-3e31-7d32-839c-91b7cbcb8044",
+    "userText": "ok you can use powerpoint now i'm done with the computer",
+    "decision": "Supersedes the earlier time hold; qualified bounded native execution is authorized.",
     "nativeAcceptance": false
-  }
+  },
+  "authorizationHistory": [
+    {
+      "status": "direct-user-authorized-with-start-time",
+      "thread": "01a13110-7cf9-79b0-a2df-4ac95997c5a4",
+      "verifiedBy": "Supervisor read_thread inspected actual user messages",
+      "userMessageIds": [
+        "01a13641-46c3-7fe1-825b-902de9197e0a",
+        "01a13641-afd5-7641-852f-7c57b3f64819"
+      ],
+      "userText": [
+        "you can run powerpoint here but starting at 11:30AM",
+        "that's a one time rule since i'm using the computer right now. if you can use powerpoint in the background goa head now"
+      ],
+      "visibleWorkerNotBefore": "2026-10-13T11:30:00-07:00",
+      "earlierCondition": "Background execution without disrupting active computer use; current reviewed worker opens visible windows and does not meet that condition.",
+      "decision": "Keep reviewed worker unchanged; no visible native execution before 11:30 AM Pacific. Qualification must pass first.",
+      "nativeAcceptance": false
+    }
+  ]
 }
