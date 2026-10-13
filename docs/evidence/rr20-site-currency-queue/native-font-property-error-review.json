@@ -1,0 +1,42 @@
+{
+  "verdict": "APPROVED for scoped source integration and Windows CI qualification; no native or Windows5.1 acceptance claimed",
+  "base": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+  "root": "/private/tmp/opf-pptx-font-property-errors",
+  "files": {
+    "test/native-furniture-control.ps1": "33fedbf0b9847004a5f5984e3e09e3103dffe8972b1ca193cfdd63ab79da9a43",
+    "test/native-furniture-harness-check.ps1": "a33983639b1b777a7975544c7c9daa578bffafaaec54f59ccb8947b6c5bf8817",
+    "test/native-furniture-style-controls.mjs": "f32d19c5f251bf30b013e45776c909dd46e8371c0d68cb4fd6b15c86b12cedf8",
+    "test/native-font-property-probe.ps1": "06c99757ab44676765166c40215c4867cf895453d3819b7edfb18cf8bb7e55d5",
+    "changes/rr-20-native-font-property-errors.md": "d3e2ed1d7ed8e314b40326a2cf316ac32369d4ba5eac509559793c8a1d2eb858"
+  },
+  "review": [
+    "Explicit PSPropertyInfo getter preserves adapter-based access and routes exceptions through unchanged Invoke-FurnitureCom latch",
+    "All7 TextFrame2/TextRange/Font/Name/Size/Bold/Italic reads covered",
+    "No-text, null/missing and mixed descriptors retained; disabled capture outputs unchanged",
+    "Seven per-property error controls retain latch and prohibit subsequent reads; original Name getter assertion strengthened, not removed",
+    "Repository discovered Windows driver invokes explicit managed/script and real non-Office COM Dictionary probe before original15controls",
+    "COM probeCount0to1 typed checks, owned ReleaseComObject, error report preserved; does not claim PowerPoint adapter proof"
+  ],
+  "supervisorEvidence": [
+    {
+      "path": "/private/tmp/rr20-font-getter-supervisor-harness-01.json",
+      "sha256": "cc334082b4c0657c6de917f8a1dfadbf8ba83a032676ff2f38f8785b61f34c7e",
+      "attribution": "Root reported and executed portablePS7; reviewer read saved report, no duplicate execution"
+    },
+    {
+      "path": "/private/tmp/rr20-font-getter-supervisor-probe-01.json",
+      "sha256": "d5a9d1980b97e4cc070b5fe3e59a828ca9d0d4acad242f9f619b5e1eaaff9a0e",
+      "attribution": "Root reported and executed portablePS7; reviewer read saved report, no duplicate execution"
+    }
+  ],
+  "remaining": [
+    "ActualWindows5.1 suite andCOMadapter qualification",
+    "WindowsPS7COMadapter if desired separatecompatibility observation; currentdriver usesWinPS5.1",
+    "ActualPowerPoint native capture/root-only acceptance remains separate"
+  ],
+  "nativeAcceptance": false,
+  "sources": [
+    "https://raw.githubusercontent.com/PowerShell/PowerShell/master/src/System.Management.Automation/engine/MshMemberInfo.cs",
+    "https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.psproperty.value"
+  ]
+}
