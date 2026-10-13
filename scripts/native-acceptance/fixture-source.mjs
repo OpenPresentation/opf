@@ -7,7 +7,7 @@ const fixture = name => new URL(`./fixtures/${name}`, import.meta.url);
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 export const PRIMARY_CASE_NAMES = Object.freeze([
   'layout-title-auto','layout-media-regions','layout-empty-custom','table-save',
-  'furniture-inherited','furniture-flags','picture-control',
+  'furniture-inherited','furniture-flags','list-description-native-edit','picture-control',
   'chart-treemap-category','chart-histogram-single','chart-histogram-category',
   'chart-pareto-multi','chart-box-multi','chart-waterfall-single',
   'chart-funnel-category','chart-world-category','chart-all-seven',
@@ -43,7 +43,7 @@ export async function loadFixtureSource() {
 
 export async function actionPlanFor(name) {
   assert.ok(PRIMARY_CASE_NAMES.includes(name),`unknown case: ${name}`);
-  if(!['layout-title-auto','furniture-inherited'].includes(name))return [];
+  if(!['layout-title-auto','furniture-inherited','list-description-native-edit'].includes(name))return [];
   const actions=JSON.parse(await readFile(fixture(`actions/${name}.json`)));
   assert.ok(Array.isArray(actions)&&actions.length>0&&actions.length<=20,`invalid action count: ${name}`);
   return actions;
