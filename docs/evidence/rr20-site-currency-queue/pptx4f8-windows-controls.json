@@ -1,0 +1,67 @@
+{
+  "status": "VERIFIED_WINDOWS_PURE_CONTROLS",
+  "run": 38469731559,
+  "job": 115558805064,
+  "jobName": "package (windows-latest)",
+  "jobConclusion": "success",
+  "head": "4f8a3551060d350d059ac4fdd29257c6d234fa12",
+  "selectedSourceGraph": {
+    "core": "3322297808e6acf6ef7ffdeca8aa4a4bb10bafde",
+    "renderer": "0eeafb289a3abc2435378f6dcd32fb42b5b88ebd",
+    "pptx": "4f8a3551060d350d059ac4fdd29257c6d234fa12",
+    "editor": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+    "gallery": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  },
+  "calls": 2,
+  "rawLog": "/private/tmp/rr20-pptx4f8-windows-controls/raw.log",
+  "rawSha256": "8dc152bf6ccaf54a896f4adba0826066407f4f581d3e30935d76e1c8f4e610b4",
+  "cleanLog": "/private/tmp/rr20-pptx4f8-windows-controls/clean.log",
+  "cleanSha256": "fafac8c0a7812bf61182cc2c6a46f8e61be11152dae2de13832ad97bf54b7b26",
+  "evidenceLines": [
+    {
+      "line": 239,
+      "text": "2026-10-13T21:53:19.6422302Z HEAD is now at a511967 Merge 4f8a3551060d350d059ac4fdd29257c6d234fa12 into 6bb89f1e69326532d063bacadd3bbd2acf54bd8c"
+    },
+    {
+      "line": 852,
+      "text": "2026-10-13T21:53:35.4668335Z HEAD is now at 6e7f6ef6 Merge 3322297808e6acf6ef7ffdeca8aa4a4bb10bafde into 75f3f0d741c40176e160d08cebfb571699a17793"
+    },
+    {
+      "line": 1116,
+      "text": "2026-10-13T21:53:42.1541994Z HEAD is now at 5f57c35 Merge 0eeafb289a3abc2435378f6dcd32fb42b5b88ebd into 7980fea3b0095377cb5a28c22a3a963312f941e7"
+    },
+    {
+      "line": 1330,
+      "text": "2026-10-13T21:53:46.8497432Z HEAD is now at 9306b2d Merge b45f2ca1142ffb637e80858e346b6c6dd325bd85 into ac25857cca8ce776dd23b5ca58b38a06af9d963f"
+    },
+    {
+      "line": 1630,
+      "text": "2026-10-13T21:55:07.1818241Z HEAD is now at 7cffb13 RR-20: make Gallery bootstrap commands portable on Windows"
+    },
+    {
+      "line": 7020,
+      "text": "2026-10-13T22:00:36.5984945Z Furniture harness checks passed: plans, collection identity and fail-closed wrapper. No Office automation used."
+    },
+    {
+      "line": 7611,
+      "text": "2026-10-13T22:05:57.3133437Z [73/139] node test/native-furniture-style-controls.mjs"
+    },
+    {
+      "line": 7612,
+      "text": "2026-10-13T22:06:03.8961740Z Native style/font descriptor harness controls: Windows AST-only validation and object mocks PASS; no Office."
+    }
+  ],
+  "driver": "/private/tmp/opf-pptx-font-property-errors/test/native-furniture-style-controls.mjs",
+  "driverSha256": "f32d19c5f251bf30b013e45776c909dd46e8371c0d68cb4fd6b15c86b12cedf8",
+  "executedContract": {
+    "powershell": "Explicit WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe; built-in Windows PowerShell5.1 lane, exact patch version not printed.",
+    "probe": "Mandatory -ProbeComAdapter before success marker; asserts childexit0, explicitMethodControlsPassed, Scripting.Dictionary typed Count0\u21921, owned ReleaseComObject success and OfficeInvokedfalse.",
+    "harness": "Mandatory second childexit0; accepts6/rejects23plans, exactly15fontcontrols and everypassed before success marker.",
+    "scope": "Execution evidenced by specific maintained test line and success marker plus exact reviewed driver assertions, not jobgreen alone."
+  },
+  "limits": [
+    "Temporary probe/report JSONs are not included in retrieved log; their values are enforced by reviewed driver before marker, not separately downloaded.",
+    "No PowerPoint invocation, physical font/glyph selection, native raster, list native edits, release or overall native acceptance proven."
+  ],
+  "nativeAcceptance": false
+}
