@@ -1,0 +1,33 @@
+{
+  "sourceRun": 38352808732,
+  "log": "/private/tmp/rr20-core646-current-failures.log",
+  "fontControl": {
+    "commit": "fe38c1f5",
+    "cause": "Published font helper recognized0.19.1 but historical companion test still required refusal",
+    "review": "Exact helper and companion test from85089, immutable preimage/reviewed SHA guards; no runtime change",
+    "focusedPassed": 3,
+    "mapped": {
+      "session": 82958,
+      "exit": 0,
+      "log": "/private/tmp/rr20-published-font-control-pair-mapped.log"
+    }
+  },
+  "candidateDoctor": {
+    "commit": "8b13e4d2",
+    "cause": "Interim test oracle hard-coded selected0.18 incompatible engines despite current compatible0.19 graph",
+    "review": "Check original core peer contract and authenticated selected engine versions; production CLI unchanged",
+    "focusedPassed": 6,
+    "actualConsumer": "candidate-doctor-selected-graph-proof.json",
+    "mapped": {
+      "session": 30635,
+      "exit": 0,
+      "log": "/private/tmp/rr20-candidate-doctor-canonical-mapped.log"
+    }
+  },
+  "windowsCiLog": {
+    "run": 38352808807,
+    "state": "One diagnostic log retrieval rejected by automatic approval review; owner permission requested and pending; no workaround used"
+  },
+  "hostedAcceptance": "pending fresh CI",
+  "nativeAcceptance": "unrun"
+}

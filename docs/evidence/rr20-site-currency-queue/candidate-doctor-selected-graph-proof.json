@@ -1,0 +1,63 @@
+{
+  "scope": "read-only actual authenticated local candidate artifacts; not registry or new hosted qualification",
+  "graphManifestSha256": "9c38eadab4952ed807cc4944d994d50dca3385b79fb346390024a5db97b1b3e2",
+  "cliRuntimeSha256": "d8408d796fd5df45203a325a70d1cd49ace4beb6c2df475ebaeba82c944ae1bc",
+  "helperSha256": "42cb8bc7d1df204c96b5704a232728bcc9792f103babc5ff525236a4396d84c5",
+  "versions": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.19.0",
+      "sourceSha": "af30e62cfb8bea56df520b1b0f2370437f325dee"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.19.1",
+      "sourceSha": "13a3ab0efd1e201428aea0cd647ff750efa283f4"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.19.0",
+      "sourceSha": "fe35728ffa43a1b2ff19ec275ffe6f15b209779e"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.19.0",
+      "sourceSha": "5a82cbbc58e4f3f98a0d1f26e17c73c94fa6e79a"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.19.0",
+      "sourceSha": "af30e62cfb8bea56df520b1b0f2370437f325dee"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "sourceSha": "146e477196405fe7d2283008f6fad34c12742599"
+    }
+  ],
+  "originalOracleRefused": true,
+  "correctedOraclePassed": true,
+  "doctorFacts": [
+    {
+      "name": "@openpresentation/opf-render",
+      "wanted": "^0.19.0",
+      "installed": true,
+      "version": "0.19.1",
+      "ok": true
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "wanted": "^0.19.0",
+      "installed": true,
+      "version": "0.19.0",
+      "ok": true
+    }
+  ],
+  "ready": {
+    "json": true,
+    "yaml": true,
+    "md": true,
+    "svg": true,
+    "pptx-import": true
+  }
+}

@@ -22,7 +22,9 @@
     "log": "/private/tmp/rr20-array-feature-hosted-gate.log",
     "script": "scripts/pr-gate.mjs",
     "mode": "watch only, required all",
-    "intervalSeconds": 180
+    "intervalSeconds": 180,
+    "exit": 143,
+    "reason": "Stopped watcher only after core/editor heads superseded; no CI job cancelled"
   },
   "publishedControlMappedCheck": {
     "session": 39924,
@@ -31,5 +33,12 @@
   },
   "sitesPushed": false,
   "native": "Preflight waiting on approval in Resync repository; packet07 adapter independently reviewed before any generation",
-  "inventoryDelta": "Complete snapshot10PR/43issues preceded new editor165; known count11PR/43issues, not a new complete query"
+  "inventoryDelta": "Complete snapshot10PR/43issues preceded new editor165; known count11PR/43issues, not a new complete query",
+  "historicalDispatch": true,
+  "replacementGate": {
+    "session": 36145,
+    "log": "/private/tmp/rr20-array-feature-hosted-gate-current.log",
+    "coreResult": "required failures recorded at b7eb52a7; repairs in hosted-ci-repairs.json",
+    "state": "watching remaining PRs"
+  }
 }
