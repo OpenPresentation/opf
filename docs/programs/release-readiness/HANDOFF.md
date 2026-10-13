@@ -13,6 +13,8 @@ The next work is exact candidate integration and hosted/platform qualification, 
 
 The owner connected MICHAEL-DESKTOP to Codex on the Mac on 2026-10-12. A read-only preflight is active in **Resync repository**, thread `01a13110-7cf9-79b0-a2df-4ac95997c5a4`, host `remote-control:env_e_6a6a3b3f5f848329a128a6a3e3409b54`. The host confirmed its name, PowerPoint COM registration and Office version `16.0.20430.20146`; desktop preflight is waiting on command approval. No native slide acceptance has run. Prepare a separately bound current-candidate packet; historical packet06 does not prove the new runtime.
 
+Hosted editor #165 exposed an incompatible candidate-versus-registry packed check. The reviewed CI-only repair at `b45f2ca1142ffb637e80858e346b6c6dd325bd85` preserves the mandatory published-control and candidate installed/browser gates; [review evidence](../../evidence/rr20-site-currency-queue/editor-candidate-ci-review.json). Hosted acceptance remains pending. Core #646 is reconciled with current main at `b7eb52a79`; the first watcher retains its earlier conflict result and must finish before a replacement batch.
+
 Earlier checkpoints below are historical and are superseded by this section, the current README checklist and linked exact receipts.
 
 ## Historical gallery publication update — 2026-10-12 03:40 UTC

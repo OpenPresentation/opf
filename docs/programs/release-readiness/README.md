@@ -6,7 +6,7 @@ people resuming work start here, not from chat history or local scratch files.
 
 ## Current checkpoint — 2026-10-12 published graph and feature qualification
 
-The published 0.19 graph's integrated release gates are verified, including actual #644 merge `bdbadd7980891c4f85e6aa04ca75f94d9c19a63b`, Node 22/26, coordinated installed Windows/macOS, actual #643 cross-platform receipts and clean-dist publication replay. [T32 evidence](../../evidence/rr20-site-currency-queue/rr20-t32-completion-audit.json) closes that checkpoint; progress is **32/40 (80%)**. All six publications remain independently verified. [Live-site evidence](../../evidence/rr20-site-currency-queue/live-versions.json) confirms production still serves 0.14-era assets. Site adoption and native Windows acceptance remain open. The owner authorized final qualification on 2026-10-12: “Start final qualification; no deployment.” Tutorials launch with the matching format release. The newer array/design/list/tutorial/gallery-explorer candidates have completed local qualification, with registry-dependent site checks explicitly blocked; historical published-graph qualification does not apply to them. Deployment and native Windows acceptance remain deferred.
+The published 0.19 graph's integrated release gates are verified, including actual #644 merge `bdbadd7980891c4f85e6aa04ca75f94d9c19a63b`, Node 22/26, coordinated installed Windows/macOS, actual #643 cross-platform receipts and clean-dist publication replay. [T32 evidence](../../evidence/rr20-site-currency-queue/rr20-t32-completion-audit.json) closes that checkpoint; progress is **32/40 (80%)**. All six publications remain independently verified. [Live-site evidence](../../evidence/rr20-site-currency-queue/live-versions.json) confirms production still serves 0.14-era assets. Site adoption and native Windows acceptance remain open. The owner authorized final qualification on 2026-10-12: “Start final qualification; no deployment.” Tutorials launch with the matching format release. The newer array/design/list/tutorial/gallery-explorer candidates have completed local qualification, with registry-dependent site checks explicitly blocked; historical published-graph qualification does not apply to them. Deployment remains deferred. The reconnected Windows host is awaiting preflight command approval; native acceptance is unrun.
 
 ## Current feature qualification checklist
 
@@ -25,7 +25,7 @@ No production deployment or native Windows acceptance is included below.
 | Dev site | Passed locally | 976 tests, normal type/build and 58 browser cases; one existing test skip |
 | Gallery site | Conditional | 606 tests, source-only build, 12 focused cases and 123 full browser cases pass; one browser check and release build await genuine matching registry editor assets |
 | Coordinated tarballs | Passed locally | Six packages, consumer type checks and 8 browser suites / 282 assertions; explicit isolated catalog 3 authorization recorded |
-| Native Windows, publication and deployment | Deferred | Separate acceptance; no deployment authorized |
+| Native Windows, publication and deployment | Open | Windows preflight awaits command approval; matching publication awaits integration gates; no deployment authorized |
 
 ## Goal
 
