@@ -1,0 +1,35 @@
+{
+  "scope": "Draft package hosted qualification only; no merge, release or deployment",
+  "core": {
+    "pr": 646,
+    "head": "6bc09d60363c0ff90ad6f46d78d1ff0e119b9362"
+  },
+  "renderer": {
+    "pr": 240,
+    "head": "f95353c3dca1e5e48e50030c2841d86204fdb6f4"
+  },
+  "pptx": {
+    "pr": 253,
+    "head": "fe35728ffa43a1b2ff19ec275ffe6f15b209779e"
+  },
+  "editor": {
+    "pr": 165,
+    "head": "5a82cbbc58e4f3f98a0d1f26e17c73c94fa6e79a"
+  },
+  "galleryCandidate": "146e477196405fe7d2283008f6fad34c12742599",
+  "gate": {
+    "session": 89007,
+    "log": "/private/tmp/rr20-array-feature-hosted-gate.log",
+    "script": "scripts/pr-gate.mjs",
+    "mode": "watch only, required all",
+    "intervalSeconds": 180
+  },
+  "publishedControlMappedCheck": {
+    "session": 39924,
+    "exit": 0,
+    "log": "/private/tmp/rr20-published-control19-canonical-mapped.log"
+  },
+  "sitesPushed": false,
+  "native": "Preflight waiting on approval in Resync repository; packet07 adapter independently reviewed before any generation",
+  "inventoryDelta": "Complete snapshot10PR/43issues preceded new editor165; known count11PR/43issues, not a new complete query"
+}
