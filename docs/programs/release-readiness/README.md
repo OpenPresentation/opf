@@ -13,21 +13,34 @@ The latest [Mac runtime replay](../../evidence/rr20-site-currency-queue/final-ru
 ## Current feature qualification checklist
 
 The [qualification record](../../evidence/rr20-site-currency-queue/final-qualification.json)
-tracks the unpublished feature graph separately from the published 32/40 checklist.
-No production deployment or native Windows acceptance is included below.
+keeps the unpublished feature graph separate from the historical published 32/40
+checklist. The newer [peer-contract qualification](../../evidence/rr20-site-currency-queue/peer020-candidate-qualification.json)
+records 21 passing commands on core `b8011e65`, renderer `0eeafb28`, PPTX
+`84582787`, editor `b45f2ca1` and Gallery `7cffb136`. The same peer and test changes
+are integrated in core `33222978`, whose fresh [mapped qualification](../../evidence/rr20-site-currency-queue/peer020-integrated-mapped-proof.json)
+passes against that sibling graph. Candidate tarballs retain their original package
+versions; installed 0.19 engines do not satisfy the new stable `^0.20.0` readiness
+contract. This evidence does not substitute for genuine registry release gates.
+
+At the recorded 21:40 UTC checkpoint, all four reviewed source PRs are ready.
+Core #646 `33222978` passed 28/28 checks and confirmation and is queued for fresh
+merge-group checks. Renderer #240 `0eeafb28`, PPTX #253 `4f8a3551` and editor #165
+`b45f2ca1` remain subject to their own exact-head gates; no source merge is recorded
+here. Source integration, registry publication, native acceptance and production
+deployment are separate decisions.
 
 | Component | State | Evidence or remaining check |
 | --- | --- | --- |
-| Core and CLI | Passed locally | Latest exact `c10e29c6` canonical run: 2,328 core and 198 CLI tests; all 45 root checks pass. [Proof](../../evidence/rr20-site-currency-queue/core-c10-canonical-qualification.json); earlier qualification retained |
-| Gallery package | Passed locally | Historical 28 exact previews and type/build/stability/pack checks; latest `7cffb136` portability receipt records 111 Mac tests and 111 reported Windows tests ([receipt](../../evidence/rr20-site-currency-queue/gallery-windows-bootstrap-portability.json)) |
-| Renderer | Passed locally | All 119 tests, type/validation/browser checks; reviewed official 807-example and 495-template baselines |
-| PPTX | Passed locally | Combined runtime passes 136 canonical test files, 279 syntax checks and validation; final `0c714b00` docs/test-only follow-up is included in fresh installed replay; exactly two provenance-only archive updates reviewed, other 28 unchanged |
-| Editor | Passed locally | 72 source tests, 21 playground and 11 registered browser suites |
-| Main site | Conditional | Local build/navigation pass, including all 19 tutorial steps and 650 pages; registry-install docs example awaits matching Gallery 3 publication |
-| Dev site | Passed locally | 976 tests, normal type/build and 58 browser cases; one existing test skip |
-| Gallery site | Conditional | 606 tests, source-only build, 12 focused cases and 123 full browser cases pass; one browser check and release build await genuine matching registry editor assets |
-| Coordinated tarballs | Passed locally | Fresh approved six-package graph at `a94a1aed` / `0c714b00` with reviewed Gallery 3 authorization; maintained installed checks and 8 browser suites / 282 assertions / 8 interactions pass; tooling `e4da9319` seals 54 cases / 304 files, with 17 raw differences retained |
-| Native Windows, publication and deployment | Open | [Reported final Windows prerequisites](../../evidence/rr20-site-currency-queue/windows-final-suite-prerequisites.json) at tooling `e4da9319` / PPTX `0c714b00` record font Check and validation-only passes; earlier `6480f2cc` / `95c601b0` attempts remain historical. Supervisor verified the later immediate-use override. The [first metrics lifecycle](../../evidence/rr20-site-currency-queue/windows-final-metrics-observation.json) passed with unchanged reopened shapes and PNGs; measured preview/native fidelity remains pending, with no native acceptance; publication awaits integration gates; no deployment authorized |
+| Core and CLI | Passed locally; core queued | Canonical peer-contract source `b8011e65` passes 2,328 core tests, 199 CLI tests and all 45 root checks, including 95 CLI command and 77 drawing checks. Integrated `33222978` passes fresh mapped checks with typecheck and both package suites. [Canonical proof](../../evidence/rr20-site-currency-queue/peer020-candidate-qualification.json), [integrated proof](../../evidence/rr20-site-currency-queue/peer020-integrated-mapped-proof.json). Earlier `c10e29c6` evidence remains historical. |
+| Gallery package | Source qualified; registry pending | Historical evidence retains 28 reviewed previews and type/build/stability/pack checks; the `7cffb136` portability receipt records 111 Mac tests and 111 reported Windows tests. [Portability receipt](../../evidence/rr20-site-currency-queue/gallery-windows-bootstrap-portability.json). Gallery 3 still needs strict bootstrap against actual merged engine pins, its release gates and independent registry verification. |
+| Renderer | Source qualified; integration pending | `0eeafb28` includes the Mac realpath test correction, with the reviewed 119-test runtime and official 807-example and 495-template baselines retained. Applicable current-head hosted integration gates remain required; an older successful run selected core `4e03f7e8` and is not proof of the newer peer contract. [Selection evidence](../../evidence/rr20-site-currency-queue/core332-sibling-selection.json). |
+| PPTX | Runtime qualified; Windows worker check pending | The reviewed list-role runtime passed 138 package test files. Candidate `84582787` passes coordinated installed qualification. `4f8a3551` changes only the native worker, pure probes, tests and fragment; package JavaScript, dist and versions remain unchanged. All 15 font controls and managed getter probes pass on portable PowerShell 7.6.7 after reproducing the original error. Windows 5.1, the non-Office COM-adapter control and actual PowerPoint acceptance remain pending. [Fix proof](../../evidence/rr20-site-currency-queue/native-font-property-error-fix.json), [independent review](../../evidence/rr20-site-currency-queue/native-font-property-error-review.json). |
+| Editor | Source qualified; integration pending | Unchanged `b45f2ca1` retains 72 source tests, 21 playground and 11 registered browser suites. The current coordinated consumer passes installed browser contracts; matching release and registry artifacts are still required. |
+| Main site | Conditional | Local build/navigation pass, including all 19 tutorial steps and 650 pages; registry-install docs example awaits matching Gallery 3 publication. Tutorials launch with the matching format release. No production deployment is authorized. |
+| Dev site | Passed locally; release adoption pending | 976 tests, normal type/build and 58 browser cases pass; one existing test skip. Final matching registry dependencies and production acceptance remain separate. |
+| Gallery site | Conditional | 606 tests, source-only build, 12 focused cases and 123 full browser cases pass; one browser check and release build await genuine matching registry editor assets. No deployment is authorized. |
+| Coordinated tarballs | Passed locally; registry pending | The newer reviewed candidate graph at core `b8011e65` / renderer `0eeafb28` / PPTX `84582787` / editor `b45f2ca1` / Gallery `7cffb136` passes all 21 commands, installed checks and eight browser suites with 282 assertions and eight interaction scenarios. [Receipt](../../evidence/rr20-site-currency-queue/peer020-candidate-command-receipt.json). The earlier `a94a1aed` / `0c714b00` native suite and its raw differences remain historical; they are not fresh seals for worker `4f8a3551`. |
+| Native Windows, publication and deployment | Open | Earlier [Windows prerequisites](../../evidence/rr20-site-currency-queue/windows-final-suite-prerequisites.json) and [metrics lifecycle](../../evidence/rr20-site-currency-queue/windows-final-metrics-observation.json) retain their exact older identities and limited observations. Regenerate the maintained suite and run pure prerequisites on the current reviewed graph before owner-coordinated font/Office work. Native list edits, font and measured visual fidelity remain pending. Gallery 3 publication, genuine engine/CLI registry gates and matching site acceptance remain open; no native acceptance or deployment is claimed. |
 
 ## Goal
 
