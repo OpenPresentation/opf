@@ -1,0 +1,41 @@
+{
+  "status": "installed-candidate-and-suite-preparation-passed",
+  "host": "MICHAEL-DESKTOP",
+  "node": "24.21.0",
+  "sourceRevisions": {
+    "opf": "52d2e0e00a4ae81c60b67b407b4bd32334c48351",
+    "opf-render": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+    "opf-pptx": "53fcdd1c6f6e0339208d07d0ecdb7ccf4fb1b010",
+    "opf-editor": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+    "gallery": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  },
+  "allCheckoutsClean": true,
+  "completedSteps": [
+    "candidate-gallery link",
+    "materialize-gallery-catalog",
+    "candidate-gallery-build",
+    "test-packed-ecosystem",
+    "strict Windows runner tests (2 passed, no skips)",
+    "native-acceptance prepare"
+  ],
+  "allExitCodes": 0,
+  "suite": {
+    "path": "C:\\opf-work\\native-suite-52d2e0e-attempt01",
+    "manifestSha256": "318a40616c781a05bd7dcd28a424ea6b837a2fad33bcb9514f9e635e99db38ae",
+    "cases": 54,
+    "verifiedFileRecords": 304,
+    "genericEligible": 49,
+    "manualChartCases": 4,
+    "dedicatedTableCases": 1
+  },
+  "findings": {
+    "primaryRoundtripDifferences": 9,
+    "additionalChartModeDifferences": 15,
+    "nativeMultiSeriesPareto": "Explicit unsupported-chart-data refusal, no partial archive"
+  },
+  "logs": "C:\\opf-work\\candidate-81c4fdf5\\logs (steps09-14)",
+  "evidenceOrigin": "Windows supervisor report and completed verification output read via read_thread",
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "deployment": false
+}
