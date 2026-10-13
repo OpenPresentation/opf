@@ -1,9 +1,9 @@
 {
-  "updatedAt": "2026-10-12T20:49:38.727892+00:00",
+  "updatedAt": "2026-10-13T17:28:50.222545+00:00",
   "authorization": "Start final qualification; no deployment",
   "scope": "Unpublished array/design/list/tutorial/gallery feature graph; source qualification separate from registry/native/deployment acceptance",
   "deploymentPerformed": false,
-  "nativeWindows": "deferred",
+  "nativeWindows": "authorized-pending",
   "sourceCommits": {
     "core": "fb1c2ee65bd45c8b5e8182f034f7fceee1dbb505",
     "gallery": "146e477196405fe7d2283008f6fad34c12742599",
@@ -29,7 +29,16 @@
   "galleryPackage": {
     "tests": 110,
     "previews": 28,
-    "typeBuildVerifyLicenseStabilityPack": "passed"
+    "typeBuildVerifyLicenseStabilityPack": "passed",
+    "originalQualificationDate": "2026-10-12",
+    "latestPortabilityQualification": {
+      "source": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "macPassed": 111,
+      "windowsReportedPassed": 111,
+      "proof": "gallery-windows-bootstrap-portability.json",
+      "independentWindowsVerificationByMacWorker": false,
+      "nativeAcceptance": false
+    }
   },
   "mainSite": {
     "sourceSyncTestsTutorialContentTypeBuild": "passed",
@@ -106,7 +115,19 @@
     "typecheckFiles": 275,
     "buildValidate": "passed",
     "archiveReview": "30 archives independently verified; approved neutral rules, numeric alignment and magnitude axes only",
-    "nativeWindows": "deferred"
+    "nativeWindows": "authorized-pending",
+    "originalQualificationDate": "2026-10-12",
+    "latestQualification": {
+      "canonicalTestedHead": "e9e7fb7baad0b63349e392d4036524578877d80c",
+      "canonicalSourceTestFiles": 136,
+      "typecheckFiles": 279,
+      "allCanonicalCommandsExitZero": true,
+      "canonicalProof": "pptx-combined-qualification.json",
+      "finalRuntimeHead": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+      "finalFollowupScope": "Reviewed docs/test-only fallback-boundary follow-up; runtime source/dist remains the qualified combined implementation.",
+      "installedReplayProof": "final-runtime-replay-macos-proof.json",
+      "nativeAcceptance": false
+    }
   },
   "coordinatedTarballs": {
     "status": "passed locally",
@@ -117,7 +138,10 @@
     "trustedInteractions": 8,
     "authorizationOverlay": "Isolated catalog 3 configuration and manifest authorization; exact sources and package hashes retained in proof",
     "proof": "rr20-final-packed-qualification-proof.json",
-    "registryNativeOtherOSAcceptance": false
+    "registryNativeOtherOSAcceptance": false,
+    "originalQualificationDate": "2026-10-12",
+    "latestProof": "final-runtime-replay-macos-proof.json",
+    "latestReceipt": "final-runtime-replay-macos-receipt.json"
   },
   "renderer": {
     "sourceTestFiles": 119,
@@ -126,13 +150,50 @@
     "finalCommitChanges": "Three reviewed tests only; runtime and official baselines unchanged from packed candidate",
     "proof": "rr20-render-pptx-final-candidate-proof.json"
   },
-  "status": "Local qualification complete with explicit registry-dependent site blockers; not release-ready",
+  "status": "Latest Mac packed, installed and browser replay and sealed native-suite generation passed. All 17 raw round-trip differences are reviewed declared source limitations; hosted/integration gates, registry-dependent site blockers and authorized-pending native acceptance remain. Not release-ready.",
   "remainingAcceptance": [
     "Exact integrated candidate CI, engines and cross-platform gates",
     "Matching package publication and genuine registry-generated site assets",
     "Main site registry-install example for Gallery 3",
     "Gallery site release build and published-editor manifest acceptance",
-    "Deferred native Windows PowerPoint acceptance",
+    "Authorized-pending Windows PowerPoint acceptance after the 11:30 AM Pacific October 13 visible-worker boundary and qualification",
     "Deferred deployment and production acceptance"
-  ]
+  ],
+  "historicalSourceQualification": "The sourceCommits and original component test counts retain the 2026-10-12 qualification snapshot. Latest runtime replay and later PPTX qualification are linked separately below.",
+  "nativeAcceptance": false,
+  "windowsNativeAuthorization": {
+    "status": "authorized-pending",
+    "visibleWorkerEarliestStart": "2026-10-13 11:30 AM America/Los_Angeles, after qualification",
+    "performed": false,
+    "authority": "Supervisor-verified direct user messages retained in windows-native-authorization.json; existing timing and root-only worker restrictions remain.",
+    "reportedPrerequisites": "windows-final-suite-prerequisites.json",
+    "independentWindowsVerificationByMacWorker": false
+  },
+  "latestLocalRuntimeReplay": {
+    "platform": "macOS arm64",
+    "proof": "final-runtime-replay-macos-proof.json",
+    "receipt": "final-runtime-replay-macos-receipt.json",
+    "packageRuntimeCore": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+    "packageRuntimePptx": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+    "suiteTooling": "e4da9319c02f8f1a37e0dae0d2cc0b301b62218d",
+    "packages": 6,
+    "ownVersionsPreserved": true,
+    "packInstallBrowserExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "browserSuites": 8,
+    "browserAssertions": 282,
+    "trustedInteractions": 8,
+    "suiteCases": 54,
+    "sealedFiles": 304,
+    "suiteSha256": "0675ea8f197835500f7266cf3606e9c301177b3fa27c7547db89f6f8140383c8",
+    "allFileHashesAndLengthsVerified": true,
+    "rawInequalities": 17,
+    "nativeAcceptance": false,
+    "registryAcceptance": false,
+    "rawDifferenceReview": "final-native-differences-review.json",
+    "rawDifferenceClassification": "15 chart-type-only adaptations, one histogram binning/type adaptation and one dormant furniture omission; reviewed as declared source limitations with no additional implementation blocker identified. Raw inequalities and native pending remain."
+  }
 }

@@ -1,0 +1,1693 @@
+{
+  "schemaVersion": 1,
+  "suite": "/private/tmp/opf-native-suite-final-runtime-02",
+  "suiteSha256": "0675ea8f197835500f7266cf3606e9c301177b3fa27c7547db89f6f8140383c8",
+  "sourceCheckout": "/private/tmp/rr20-final-runtime-replay/opf-pptx",
+  "sourceHead": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+  "toolingHead": "e4da9319c02f8f1a37e0dae0d2cc0b301b62218d",
+  "fixtureBinding": {
+    "path": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json",
+    "sha256": "a1552375ab207c6c0c23453c2be7df48a99c630b8ea9829902f4a709e41bfa4c",
+    "matchesSuiteRecordedSource": true
+  },
+  "installedConverterIdentity": {
+    "filesChecked": 60,
+    "allRecordedRuntimeFilesMatch": true,
+    "sourceCheckoutRuntimeMatchesExcept": "package.json",
+    "packageMetadataDifference": "Normal preview staging rewrites core/Gallery deps to exact local tarballs and removes scripts/devDependencies; all59 non-manifest runtime files match source checkout. No registry artifact claim.",
+    "runtimeSha256": "e72f91450c8485f85a4aaff30fd951a1a7cff9e986460ce68f1ccffcb294f63d"
+  },
+  "counts": {
+    "rawInequalities": 17,
+    "dormantFurniture": 1,
+    "chartTypeOnly": 15,
+    "chartBinningAndType": 1,
+    "unexpectedLossIdentified": 0
+  },
+  "readOnly": true,
+  "OfficeExecuted": false,
+  "nativeAcceptance": false,
+  "sourceOrBaselinesChanged": false,
+  "records": [
+    {
+      "id": "furniture-flags",
+      "source": "/private/tmp/opf-native-suite-final-runtime-02/sources/furniture-flags.opf.json",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/inspection/furniture-flags-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.design.footer",
+          "source": {
+            "right": {
+              "text": "Global footer must be suppressed."
+            }
+          },
+          "importAbsent": true
+        },
+        {
+          "path": "$.design.header",
+          "source": {
+            "left": {
+              "text": "Global header must be suppressed."
+            }
+          },
+          "importAbsent": true
+        }
+      ],
+      "classification": "documented dormant authoring-default omission",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "not-chart-fixture",
+      "diagnostics": [],
+      "chartComparisons": [],
+      "evidence": [
+        "README.md:479–485 dormant default/native words policy; test/native-fallback-contracts.mjs all-suppressed/addition/deletion; src/furniture-provenance.js:83–112 effective source"
+      ],
+      "sourceCanonicalSha256": "47002005df7f9f2f1791b56ac86eb747b1656150f88ccac73697285c05604102",
+      "importSha256": "ea785c9cdf6918bcee185896f8c2d287e63244a268133d9cee6df99223e878c3",
+      "localDefinitionsEqual": [
+        true,
+        true,
+        true
+      ],
+      "semanticLimit": "Suppression survives, but original dormant deck header/footer literal definitions cannot be reused after import. Not whole-source equivalence."
+    },
+    {
+      "id": "chart-pareto-multi",
+      "source": "/private/tmp/opf-native-suite-final-runtime-02/sources/chart-pareto-multi.opf.json",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/inspection/chart-pareto-multi-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "pareto",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "auto",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that cannot represent multiple value series natively; all authored series are preserved in the fallback; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "pareto",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "importedColumns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "bec16ac3d9f403c438f17036e214858028ec256a1e2605c7e2c90ba2ffae05dd",
+      "importSha256": "16d80535f924b25b2da11a0f0b13282a04bc1a2648b01cb646b9692f55ad5dcb",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-world-category",
+      "source": "/private/tmp/opf-native-suite-final-runtime-02/sources/chart-world-category.opf.json",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/inspection/chart-world-category-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "world",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "auto",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that PowerPoint has not yet accepted natively from this exporter (pass chartex: 'native' to write its chartex part); its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "world",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "国",
+            "値"
+          ],
+          "importedColumns": [
+            "国",
+            "値"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "476ab8900de7fddc415257e2992ffa329eb0196d8dc220099e9d999f2f008cf1",
+      "importSha256": "9b57477bd7cbfa51d9bc0c5e0d37fa078789f65b5e8df7b62819c300b0dd05d2",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-all-seven",
+      "source": "/private/tmp/opf-native-suite-final-runtime-02/sources/chart-all-seven.opf.json",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/inspection/chart-all-seven-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[6].chart.type",
+          "source": "world",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "auto",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that PowerPoint has not yet accepted natively from this exporter (pass chartex: 'native' to write its chartex part); its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "treemap",
+          "importedType": "treemap",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 2,
+          "sourceType": "histogram",
+          "importedType": "histogram",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 3,
+          "sourceType": "pareto",
+          "importedType": "pareto",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 4,
+          "sourceType": "box-and-whisker",
+          "importedType": "box-and-whisker",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 5,
+          "sourceType": "waterfall",
+          "importedType": "waterfall",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 6,
+          "sourceType": "funnel",
+          "importedType": "funnel",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 7,
+          "sourceType": "world",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "242423ce852279724d9386c991d29efdeee3205bf3ee8edae5c96c7cd098de64",
+      "importSha256": "cda7ccdcb48452457a35d73702dbc3cdbe6939536f970fd9a615f5e1d64566e7",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-mode-treemap-category-fallback",
+      "source": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json#/decks/treemap-category",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/treemap-category-fallback-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "treemap",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "fallback",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'treemap' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "treemap",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "39e431d064c071f6be75716e0bc9bb44db477fd89599c1fb5947afe53dd795a8",
+      "importSha256": "5b5c7d1499f3ad2fa5185daadac29bdccabdbafcf6f7e35294e86c9ab7a750ad",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-mode-histogram-single-fallback",
+      "source": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json#/decks/histogram-single",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/histogram-single-fallback-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.data.columns",
+          "source": [
+            "Sample"
+          ],
+          "import": [
+            "Bin",
+            "Frequency"
+          ]
+        },
+        {
+          "path": "$.slides[0].chart.data.rows",
+          "source": [
+            [
+              3
+            ],
+            [
+              5
+            ],
+            [
+              8
+            ],
+            [
+              13
+            ],
+            [
+              5.5
+            ],
+            [
+              9
+            ]
+          ],
+          "import": [
+            [
+              "3–5.5",
+              2
+            ],
+            [
+              "5.5–8",
+              1
+            ],
+            [
+              "8–10.5",
+              2
+            ],
+            [
+              "10.5–13",
+              1
+            ]
+          ]
+        },
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "histogram",
+          "import": "column"
+        }
+      ],
+      "classification": "documented non-invertible binning fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "fallback",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The histogram's single data column 'Sample' (6 values) was binned into 4 equal-width bins and exported as a column chart of the counts; PowerPoint's own histogram chart is not exported, and the binned counts do not restore the raw values on re-import.",
+          "adaptation": "histogram-binned"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "histogram",
+          "importedType": "column",
+          "dataEqual": false,
+          "sourceColumns": [
+            "Sample"
+          ],
+          "importedColumns": [
+            "Bin",
+            "Frequency"
+          ],
+          "rowsEqual": false,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:105 raw vs fallback histogram; src/index.js:3632–3640 and3712–3734 Sturges binning; src/data-provenance.js:214–221 no raw replay over counts; test/row-data-provenance.mjs:109–119"
+      ],
+      "sourceCanonicalSha256": "99ff7434a11b7dd2079d1fa516b54df56eb9737d543e2cccf1aafd57db5fb19b",
+      "importSha256": "ce6d9860837c82ab11589a0b25362d2bb8378bb4d10acaf5da063e96a939ed91",
+      "originalObservations": {
+        "columns": [
+          "Sample"
+        ],
+        "rows": [
+          [
+            3
+          ],
+          [
+            5
+          ],
+          [
+            8
+          ],
+          [
+            13
+          ],
+          [
+            5.5
+          ],
+          [
+            9
+          ]
+        ]
+      },
+      "binnedData": {
+        "columns": [
+          "Bin",
+          "Frequency"
+        ],
+        "rows": [
+          [
+            "3–5.5",
+            2
+          ],
+          [
+            "5.5–8",
+            1
+          ],
+          [
+            "8–10.5",
+            2
+          ],
+          [
+            "10.5–13",
+            1
+          ]
+        ]
+      },
+      "observationCount": 6,
+      "binFrequencyTotal": 6,
+      "semanticLimit": "Counts preserve distribution aggregates, not individual values or their order. Do not claim raw source-data preservation; use auto/native histogram when raw values are required."
+    },
+    {
+      "id": "chart-mode-histogram-category-fallback",
+      "source": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json#/decks/histogram-category",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/histogram-category-fallback-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "histogram",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "fallback",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'histogram' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "histogram",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "b1485f0cfde38b7b18ab094ef555cc6a4cd81b8dfce455cf014f82986733f112",
+      "importSha256": "384f09a67cd2e32f28d11c8211e4e407002059b2704f81f46f8b2c51fccae3cf",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-mode-pareto-multi-fallback",
+      "source": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json#/decks/pareto-multi",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/pareto-multi-fallback-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "pareto",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "fallback",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "pareto",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "importedColumns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "ba40315497b716a490e3e806ba13a5374ce9ae4e5502ac824606dcb0286c7ae1",
+      "importSha256": "a0b774b6cadfbc9b06d2ec5028fba9b1d5902708c9131e367abdab004fabdf73",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-mode-pareto-multi-auto",
+      "source": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json#/decks/pareto-multi",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/pareto-multi-auto-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "pareto",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "auto",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that cannot represent multiple value series natively; all authored series are preserved in the fallback; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "pareto",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "importedColumns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "ba40315497b716a490e3e806ba13a5374ce9ae4e5502ac824606dcb0286c7ae1",
+      "importSha256": "a0b774b6cadfbc9b06d2ec5028fba9b1d5902708c9131e367abdab004fabdf73",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-mode-box-multi-fallback",
+      "source": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json#/decks/box-multi",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/box-multi-fallback-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "box-and-whisker",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "fallback",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'box-and-whisker' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "box-and-whisker",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "importedColumns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "df52ea86daf85b15d8b39d73a1ce4e31b18691d23d34bcd64149ecb9b4bb297a",
+      "importSha256": "1973b3b6d44f3b0f1d39de6b9cfd410b2a63148a97da7f432025160f99218810",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-mode-waterfall-single-fallback",
+      "source": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json#/decks/waterfall-single",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/waterfall-single-fallback-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "waterfall",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "fallback",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'waterfall' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The chart's single data column 'Sample' has no category column, so its 6 values are plotted against their row numbers.",
+          "adaptation": "row-numbers"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "waterfall",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Sample"
+          ],
+          "importedColumns": [
+            "Sample"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "e10ef518c35a82e6ffd0c3b0ffccf5440e45733914f8684a6760704ef548e1ad",
+      "importSha256": "9e00406cbad92d428a980908b762886c94df4a442d9e570de164a8768bd8f3e4",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-mode-funnel-category-fallback",
+      "source": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json#/decks/funnel-category",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/funnel-category-fallback-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "funnel",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "fallback",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'funnel' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "funnel",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "c10e9a8c33483341cc0c4409578c00480a7bca30aea86fb9a4718a69c20948bf",
+      "importSha256": "bd2a377f42d57e934d062d799d3197daece6db462502d0e53313200247e6f387",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-mode-world-category-fallback",
+      "source": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json#/decks/world-category",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/world-category-fallback-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "world",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "fallback",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "world",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "国",
+            "値"
+          ],
+          "importedColumns": [
+            "国",
+            "値"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "476ab8900de7fddc415257e2992ffa329eb0196d8dc220099e9d999f2f008cf1",
+      "importSha256": "9b57477bd7cbfa51d9bc0c5e0d37fa078789f65b5e8df7b62819c300b0dd05d2",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-mode-world-category-auto",
+      "source": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json#/decks/world-category",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/world-category-auto-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "world",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "auto",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that PowerPoint has not yet accepted natively from this exporter (pass chartex: 'native' to write its chartex part); its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "world",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "国",
+            "値"
+          ],
+          "importedColumns": [
+            "国",
+            "値"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "476ab8900de7fddc415257e2992ffa329eb0196d8dc220099e9d999f2f008cf1",
+      "importSha256": "9b57477bd7cbfa51d9bc0c5e0d37fa078789f65b5e8df7b62819c300b0dd05d2",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-mode-all-seven-fallback",
+      "source": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json#/decks/all-seven",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/all-seven-fallback-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "treemap",
+          "import": "column"
+        },
+        {
+          "path": "$.slides[1].chart.type",
+          "source": "histogram",
+          "import": "column"
+        },
+        {
+          "path": "$.slides[2].chart.type",
+          "source": "pareto",
+          "import": "column"
+        },
+        {
+          "path": "$.slides[3].chart.type",
+          "source": "box-and-whisker",
+          "import": "column"
+        },
+        {
+          "path": "$.slides[4].chart.type",
+          "source": "waterfall",
+          "import": "column"
+        },
+        {
+          "path": "$.slides[5].chart.type",
+          "source": "funnel",
+          "import": "column"
+        },
+        {
+          "path": "$.slides[6].chart.type",
+          "source": "world",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "fallback",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'treemap' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.1.chart",
+          "message": "The 'histogram' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.2.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.3.chart",
+          "message": "The 'box-and-whisker' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.4.chart",
+          "message": "The 'waterfall' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.5.chart",
+          "message": "The 'funnel' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "treemap",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 2,
+          "sourceType": "histogram",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 3,
+          "sourceType": "pareto",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 4,
+          "sourceType": "box-and-whisker",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 5,
+          "sourceType": "waterfall",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 6,
+          "sourceType": "funnel",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 7,
+          "sourceType": "world",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "f6a4bb91cc7af618245e748740651b8c3834b435865ffbc6a56a528f3fd42a46",
+      "importSha256": "5cb700ff78d45e5bdf7ab103e5bd6f0c05e69670abdd87c6a08026ecb33b2f19",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-mode-all-seven-auto",
+      "source": "/private/tmp/rr20-native-tooling-e4da9319/scripts/native-acceptance/fixtures/chartex-fallback-main.json#/decks/all-seven",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/all-seven-auto-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[6].chart.type",
+          "source": "world",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "auto",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that PowerPoint has not yet accepted natively from this exporter (pass chartex: 'native' to write its chartex part); its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "treemap",
+          "importedType": "treemap",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 2,
+          "sourceType": "histogram",
+          "importedType": "histogram",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 3,
+          "sourceType": "pareto",
+          "importedType": "pareto",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 4,
+          "sourceType": "box-and-whisker",
+          "importedType": "box-and-whisker",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 5,
+          "sourceType": "waterfall",
+          "importedType": "waterfall",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 6,
+          "sourceType": "funnel",
+          "importedType": "funnel",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        },
+        {
+          "slide": 7,
+          "sourceType": "world",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Region",
+            "Value"
+          ],
+          "importedColumns": [
+            "Region",
+            "Value"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "f6a4bb91cc7af618245e748740651b8c3834b435865ffbc6a56a528f3fd42a46",
+      "importSha256": "a18a1661add20ae553be179685ed927d10575b504b264477eca21fd3ed663878",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    },
+    {
+      "id": "chart-mode-pareto-single-fallback",
+      "source": "/private/tmp/opf-native-suite-final-runtime-02/sources/chart-pareto-single.opf.json",
+      "import": "/private/tmp/opf-native-suite-final-runtime-02/chart-modes/pareto-single-fallback-imported.opf.json",
+      "deltas": [
+        {
+          "path": "$.slides[0].chart.type",
+          "source": "pareto",
+          "import": "column"
+        }
+      ],
+      "classification": "declared native chart-construct fallback",
+      "unexpectedLoss": false,
+      "blockingDefectIdentified": false,
+      "rawInequalityPreserved": true,
+      "nativeAcceptance": false,
+      "mode": "fallback",
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "chartComparisons": [
+        {
+          "slide": 1,
+          "sourceType": "pareto",
+          "importedType": "column",
+          "dataEqual": true,
+          "sourceColumns": [
+            "Category",
+            "Only"
+          ],
+          "importedColumns": [
+            "Category",
+            "Only"
+          ],
+          "rowsEqual": true,
+          "sourceOptions": {},
+          "importedOptions": {},
+          "optionsEqual": true,
+          "sourceKeys": [
+            "data",
+            "type"
+          ],
+          "importedKeys": [
+            "data",
+            "type"
+          ]
+        }
+      ],
+      "evidence": [
+        "README.md:199–213 chartex modes; test/chartex.mjs:406–431 mode selection/diagnostics/archive bounds; test/pareto-multi-series.mjs:6–32 fallback/multi refusal; test/native-fallback-contracts.mjs world/all-seven data/type controls"
+      ],
+      "sourceCanonicalSha256": "34766e7f4ff6637e70be6c56b2c23e33c0450d183221c0a41eb48c9d5059536e",
+      "importSha256": "e9494860d3d36a953584892e8f0be6e70b8c3e976e9db0e8f077b3508078ad98",
+      "semanticLimit": "Actual native construct changes to columns; identical data/options do not make chart meaning or visuals equivalent."
+    }
+  ],
+  "conclusion": "All17 differences match declared source-retention/fallback contracts. No unexpected additional data/series/options loss found. Histogram fallback loses individual raw observations by design; source inequalities remain review-required and native rendering/edit acceptance remains unproven."
+}

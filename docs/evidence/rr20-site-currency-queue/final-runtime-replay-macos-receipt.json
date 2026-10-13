@@ -1,0 +1,147 @@
+{
+  "schemaVersion": 1,
+  "platform": "macOS arm64",
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "deploymentAcceptance": false,
+  "commandRuntime": "v24.21.0",
+  "postRunArchiveAuditRuntime": "v26.7.0",
+  "runtimeNote": "The original receipt.node records the post-run archive auditor (Node 26.7.0). Build, pack, installation, browser replay and native preparation commands used pinned Node 24.21.0; the browser report and generated suite record Node 24.21.0.",
+  "sourceReceipt": {
+    "path": "/private/tmp/rr20-final-runtime-replay/results/receipt.json",
+    "sha256": "9a065073bca785209cbf4d16b757924d6f9eee7b4eeaa59b018400a9b026cef4"
+  },
+  "receipt": {
+    "schemaVersion": 1,
+    "scope": "Fresh local candidate archives and installed/browser qualification. Not registry release or native PowerPoint acceptance.",
+    "node": "v26.7.0",
+    "workspace": "/private/tmp/rr20-final-runtime-replay",
+    "sources": {
+      "opf": {
+        "head": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+        "status": ""
+      },
+      "opf-render": {
+        "head": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+        "status": ""
+      },
+      "opf-pptx": {
+        "head": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+        "status": ""
+      },
+      "opf-editor": {
+        "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+        "status": ""
+      },
+      "gallery-candidate": {
+        "head": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+        "status": ""
+      }
+    },
+    "candidateGallery": {
+      "repository": "OpenPresentation/gallery",
+      "version": "3.0.0",
+      "catalogSchema": 3,
+      "sha": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+    },
+    "tarballs": [
+      {
+        "name": "@openpresentation/opf",
+        "version": "0.19.0",
+        "sourceSha": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+        "file": "openpresentation-opf-0.19.0.tgz",
+        "sha256": "0e6bc22293ccf25fb2276c58f5dc866860aec9e193e443c2974e79557193d2f7",
+        "bytes": 3332117
+      },
+      {
+        "name": "@openpresentation/opf-render",
+        "version": "0.19.1",
+        "sourceSha": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+        "file": "openpresentation-opf-render-0.19.1.tgz",
+        "sha256": "57f15e58450ead320e9866ced9b0ff616254ca299221f05fe803a2d13123e6dd",
+        "bytes": 13073809
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "version": "0.19.0",
+        "sourceSha": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+        "file": "openpresentation-opf-pptx-0.19.0.tgz",
+        "sha256": "63e5f11fe1d291a810f1425268b5a3c601e460b2716b5905ed68ca108f696eca",
+        "bytes": 724396
+      },
+      {
+        "name": "@openpresentation/opf-editor",
+        "version": "0.19.0",
+        "sourceSha": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+        "file": "openpresentation-opf-editor-0.19.0.tgz",
+        "sha256": "c8c34788b76d6e0c8efa80d7b53421942cb0153f007dff40c7effd28fc7ae150",
+        "bytes": 405103
+      },
+      {
+        "name": "@openpresentation/cli",
+        "version": "0.19.0",
+        "sourceSha": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+        "file": "openpresentation-cli-0.19.0.tgz",
+        "sha256": "c30144d9d1c8ffb1b88f01ccb1c70753f8f94696235f144735d2f452248b1fdb",
+        "bytes": 198832
+      },
+      {
+        "name": "@openpresentation/gallery",
+        "version": "3.0.0",
+        "sourceSha": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+        "file": "openpresentation-gallery-3.0.0.tgz",
+        "sha256": "1639c962013732404c51d40d0727bcb72615e42eead0de4220d06de4a6efc297",
+        "bytes": 96819
+      }
+    ],
+    "commands": [
+      {
+        "label": "gallery-build",
+        "command": "node scripts/build.mjs",
+        "exitCode": 0
+      },
+      {
+        "label": "core-cli-build",
+        "command": "pnpm build",
+        "exitCode": 0
+      },
+      {
+        "label": "pack",
+        "command": "pnpm pack:ecosystem",
+        "exitCode": 0
+      },
+      {
+        "label": "consumer",
+        "command": "pnpm test:packed-ecosystem",
+        "exitCode": 0
+      },
+      {
+        "label": "browser",
+        "command": "pnpm test:packed-browser",
+        "exitCode": 0
+      },
+      {
+        "label": "native-prepare",
+        "command": "pnpm native:prepare --consumer /private/tmp/rr20-final-runtime-replay/opf/artifacts/npm/consumer --output /private/tmp/opf-native-suite-final-runtime-01 --pptx-repo /private/tmp/rr20-final-runtime-replay/opf-pptx",
+        "exitCode": 1
+      }
+    ],
+    "logs": {
+      "/private/tmp/rr20-final-runtime-replay/results/gallery-build.log": "2e54645fd6303c0792256ae45f55a375681c9fd21ecad8829932e5a816480bc3",
+      "/private/tmp/rr20-final-runtime-replay/results/core-cli-build.log": "7b99ba54940f5ab2e9ef4a298b6fc0c11d25f9b4579a5c60e7ae161086d00ce6",
+      "/private/tmp/rr20-final-runtime-replay/results/pack.log": "10573c82ac19b76c486b1c4fe59c0a93974dbc15e23c986b53a873c0f1deca44",
+      "/private/tmp/rr20-final-runtime-replay/results/consumer.log": "c45d5e21f10490d8e5cb04ffdb769b496afe140b465b6c37fea3d7bfa8878f00",
+      "/private/tmp/rr20-final-runtime-replay/results/browser.log": "6239f23f0176037646a47426134a26935c04f0f799d99c2395095f46359c3bf4",
+      "/private/tmp/rr20-final-runtime-replay/results/native-prepare.log": "7de1250ad4cc76be2d948e1c69c93c990ff2f921d3e4fd0134eee31b926afb82"
+    },
+    "installedLockSha256": "4c4a721324c97430a11e1955495de2f6c4d417e951407849ec2b797daba9c2f8",
+    "browserReport": "/private/tmp/rr20-final-runtime-replay/opf/artifacts/editor/packed-browser-packed-node24-report.json",
+    "browserReportSha256": "a389b9a867ad02117e2b21b10066ee65b421843b1511065355493acab1852a2a",
+    "nativeSuite": {
+      "output": "/private/tmp/opf-native-suite-final-runtime-01",
+      "complete": false,
+      "failure": "Maintained chart fallback snapshot still requires old waterfall-single hash; actual final package produces the independently approved new provenance-only hash."
+    },
+    "candidatePreflightPassedAfterConsumerAndBrowser": true
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-13T17:25:39Z",
+  "evidenceSource": "Windows supervisor chat 01a13110-7cf9-79b0-a2df-4ac95997c5a4; reported terminal results and receipt identities, not local execution on the Mac",
+  "toolingRevision": "e4da9319c02f8f1a37e0dae0d2cc0b301b62218d",
+  "pptxRevision": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+  "suite": {
+    "path": "C:/opf-work/native-suite-e4da9319-0c714b00-attempt01/suite.json",
+    "sha256": "72e3098a0abbb59ac085426c0ad178c538b1fd13cc5969ed9b0de21d91aba42b",
+    "cases": 54,
+    "verifiedFiles": 304,
+    "generationExit": 0
+  },
+  "fontCheck": {
+    "exit": 0,
+    "scope": "Maintained Check against original suite and ownership journal, followed by separate equivalence proof for the new suite",
+    "journalSha256": "4acdec5b9faf2587ecc834b2d65115e56c79760609b9a0ceb0d9dc4c671dd15a",
+    "equivalenceReceipt": "C:/opf-work/candidate-a94a1aed-0c714b00/logs/14-font-cross-suite-equivalence.json",
+    "equivalenceReceiptSha256": "ccd33d0ce65e3374b72fdfd26a528f4364200e8884a135c4980660e1833b1442",
+    "matchingFaces": 7,
+    "verified": ["installed file hashes", "user registry entries", "available families", "identical complete old/new suite face records", "unchanged setup and probe identities"],
+    "mutations": "No rebind, cleanup, reinstall or journal modification"
+  },
+  "validationOnly": {
+    "case": "feature-metrics",
+    "exit": 0,
+    "receipt": "C:/opf-work/native-validate-metrics-e4da9319-0c714b00-attempt01/runner.json",
+    "receiptSha256": "0d92f7985884d29390baa1e71c4c906f9e31bd518e895c5879f6d892ad3b3cfe",
+    "status": "pure-checks-completed; native-not-run",
+    "pureProcessAndFurnitureHarnesses": "passed"
+  },
+  "nativeAcceptance": false,
+  "officeExecuted": false,
+  "visibleExecutionEarliest": "2026-10-13T18:30:00Z",
+  "remaining": "Supervisor-run native observation and review; prerequisites do not prove PowerPoint rendering, editing, geometry or font fidelity"
+}

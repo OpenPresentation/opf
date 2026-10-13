@@ -1,0 +1,657 @@
+{
+  "schemaVersion": 1,
+  "recordedAt": "2026-10-13T17:27:04.139Z",
+  "platform": "macOS arm64",
+  "scope": "Fresh local candidate package, installed-browser and Office-free suite-generation proof. No registry publication, Windows verification, PowerPoint observation or deployment acceptance.",
+  "nativeAcceptance": false,
+  "nativeStatus": "pending",
+  "registryAcceptance": false,
+  "deploymentAcceptance": false,
+  "runtimes": {
+    "qualificationCommands": "v24.21.0",
+    "postRunArchiveAudit": "v26.7.0",
+    "suiteAndFinalSuiteAudit": "v24.21.0"
+  },
+  "runtimeSources": {
+    "opf": {
+      "head": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+      "status": ""
+    },
+    "opf-render": {
+      "head": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+      "status": ""
+    },
+    "opf-pptx": {
+      "head": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+      "status": ""
+    },
+    "opf-editor": {
+      "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "status": ""
+    },
+    "gallery-candidate": {
+      "head": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "status": ""
+    }
+  },
+  "candidateGallery": {
+    "repository": "OpenPresentation/gallery",
+    "version": "3.0.0",
+    "catalogSchema": 3,
+    "sha": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  },
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.19.0",
+      "sourceSha": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+      "file": "openpresentation-opf-0.19.0.tgz",
+      "sha256": "0e6bc22293ccf25fb2276c58f5dc866860aec9e193e443c2974e79557193d2f7",
+      "bytes": 3332117
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.19.1",
+      "sourceSha": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+      "file": "openpresentation-opf-render-0.19.1.tgz",
+      "sha256": "57f15e58450ead320e9866ced9b0ff616254ca299221f05fe803a2d13123e6dd",
+      "bytes": 13073809
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.19.0",
+      "sourceSha": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+      "file": "openpresentation-opf-pptx-0.19.0.tgz",
+      "sha256": "63e5f11fe1d291a810f1425268b5a3c601e460b2716b5905ed68ca108f696eca",
+      "bytes": 724396
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.19.0",
+      "sourceSha": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "file": "openpresentation-opf-editor-0.19.0.tgz",
+      "sha256": "c8c34788b76d6e0c8efa80d7b53421942cb0153f007dff40c7effd28fc7ae150",
+      "bytes": 405103
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.19.0",
+      "sourceSha": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+      "file": "openpresentation-cli-0.19.0.tgz",
+      "sha256": "c30144d9d1c8ffb1b88f01ccb1c70753f8f94696235f144735d2f452248b1fdb",
+      "bytes": 198832
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "sourceSha": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "file": "openpresentation-gallery-3.0.0.tgz",
+      "sha256": "1639c962013732404c51d40d0727bcb72615e42eead0de4220d06de4a6efc297",
+      "bytes": 96819
+    }
+  ],
+  "packageOwnVersionsPreserved": true,
+  "sourceCheckoutStatusClean": true,
+  "packageGraphUnchangedAfterSuiteToolingCorrection": true,
+  "commands": [
+    {
+      "label": "gallery-build",
+      "command": "node scripts/build.mjs",
+      "exitCode": 0
+    },
+    {
+      "label": "core-cli-build",
+      "command": "pnpm build",
+      "exitCode": 0
+    },
+    {
+      "label": "pack",
+      "command": "pnpm pack:ecosystem",
+      "exitCode": 0
+    },
+    {
+      "label": "consumer",
+      "command": "pnpm test:packed-ecosystem",
+      "exitCode": 0
+    },
+    {
+      "label": "browser",
+      "command": "pnpm test:packed-browser",
+      "exitCode": 0
+    },
+    {
+      "label": "native-prepare",
+      "command": "pnpm native:prepare --consumer /private/tmp/rr20-final-runtime-replay/opf/artifacts/npm/consumer --output /private/tmp/opf-native-suite-final-runtime-01 --pptx-repo /private/tmp/rr20-final-runtime-replay/opf-pptx",
+      "exitCode": 1
+    },
+    {
+      "label": "native-prepare-02",
+      "command": "node scripts/native-acceptance/prepare.mjs --consumer /private/tmp/rr20-final-runtime-replay/opf/artifacts/npm/consumer --output /private/tmp/opf-native-suite-final-runtime-02 --pptx-repo /private/tmp/rr20-final-runtime-replay/opf-pptx",
+      "exitCode": 0,
+      "toolingRoot": "/private/tmp/rr20-native-tooling-e4da9319"
+    }
+  ],
+  "logs": {
+    "/private/tmp/rr20-final-runtime-replay/results/gallery-build.log": "2e54645fd6303c0792256ae45f55a375681c9fd21ecad8829932e5a816480bc3",
+    "/private/tmp/rr20-final-runtime-replay/results/core-cli-build.log": "7b99ba54940f5ab2e9ef4a298b6fc0c11d25f9b4579a5c60e7ae161086d00ce6",
+    "/private/tmp/rr20-final-runtime-replay/results/pack.log": "10573c82ac19b76c486b1c4fe59c0a93974dbc15e23c986b53a873c0f1deca44",
+    "/private/tmp/rr20-final-runtime-replay/results/consumer.log": "c45d5e21f10490d8e5cb04ffdb769b496afe140b465b6c37fea3d7bfa8878f00",
+    "/private/tmp/rr20-final-runtime-replay/results/browser.log": "6239f23f0176037646a47426134a26935c04f0f799d99c2395095f46359c3bf4",
+    "/private/tmp/rr20-final-runtime-replay/results/native-prepare.log": "7de1250ad4cc76be2d948e1c69c93c990ff2f921d3e4fd0134eee31b926afb82",
+    "/private/tmp/rr20-final-runtime-replay/results/native-prepare-02.log": "a65cf41770d643e106627d2bb0097488ac67a88186788f456b06cd450dec4833"
+  },
+  "installedLockSha256": "4c4a721324c97430a11e1955495de2f6c4d417e951407849ec2b797daba9c2f8",
+  "browser": {
+    "suites": 8,
+    "assertions": 282,
+    "trustedInteractions": 8,
+    "report": "/private/tmp/rr20-final-runtime-replay/opf/artifacts/editor/packed-browser-packed-node24-report.json",
+    "reportSha256": "a389b9a867ad02117e2b21b10066ee65b421843b1511065355493acab1852a2a"
+  },
+  "tooling": {
+    "head": "e4da9319c02f8f1a37e0dae0d2cc0b301b62218d",
+    "directory": "/private/tmp/rr20-native-tooling-e4da9319",
+    "workerHead": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+    "workerDirectory": "/private/tmp/rr20-final-runtime-replay/opf-pptx",
+    "sourceIdentitiesReverified": true
+  },
+  "suite": {
+    "path": "/private/tmp/opf-native-suite-final-runtime-02/suite.json",
+    "sha256": "0675ea8f197835500f7266cf3606e9c301177b3fa27c7547db89f6f8140383c8",
+    "cases": 54,
+    "sealedFiles": 304,
+    "allFileHashesAndLengthsVerified": true,
+    "allFilesRegularAndCanonical": true,
+    "installedRuntimeIdentityUnchanged": true,
+    "independentSupervisorVerification": "Supervisor reported independently checking the same suite SHA-256 and all 304 file hashes, byte lengths and regular contained paths after generation. Native acceptance remains false."
+  },
+  "fonts": {
+    "faces": 7,
+    "families": [
+      "Roboto",
+      "Roboto Medium",
+      "Roboto SemiBold",
+      "Roboto ExtraBold"
+    ],
+    "license": "OFL-1.1",
+    "manifestFaceAndLicenseHashesBoundToSeal": true,
+    "hostRegistrationClaimed": false
+  },
+  "waterfallPrimaryRoundTripEqual": true,
+  "rawInequalityCount": 17,
+  "rawInequalities": [
+    {
+      "id": "furniture-flags",
+      "source": "sources/furniture-flags.opf.json",
+      "imported": "inspection/furniture-flags-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Import omits the stored global header and footer text suppressed on every slide. These unrendered source definitions cannot be recovered from visible native furniture; this remains a raw difference under the reviewed dormant-source preservation boundary.",
+      "differences": [
+        {
+          "path": "design.header",
+          "sourcePresent": true,
+          "importedPresent": false,
+          "source": {
+            "left": {
+              "text": "Global header must be suppressed."
+            }
+          }
+        },
+        {
+          "path": "design.footer",
+          "sourcePresent": true,
+          "importedPresent": false,
+          "source": {
+            "right": {
+              "text": "Global footer must be suppressed."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "chart-pareto-multi",
+      "source": "sources/chart-pareto-multi.opf.json",
+      "imported": "inspection/chart-pareto-multi-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Native Pareto supports one value series. Auto deliberately exports all authored series as editable clustered columns; data is preserved, type changes from pareto to column. Forced native mode separately refuses rather than dropping series.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "pareto",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-world-category",
+      "source": "sources/chart-world-category.opf.json",
+      "imported": "inspection/chart-world-category-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Auto deliberately uses the clustered-column fallback for the unconfirmed world/region-map construct. Data is preserved; chart type changes from world to column.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "world",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-all-seven",
+      "source": "sources/chart-all-seven.opf.json",
+      "imported": "inspection/chart-all-seven-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "The six historically confirmed constructs retain native-format exports; this replay does not repeat their native confirmations; auto uses the documented clustered-column fallback only for world, so slide 7 changes type while its data is preserved.",
+      "differences": [
+        {
+          "path": "slides.6.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "world",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-treemap-category-fallback",
+      "source": "tooling-fixture/decks/treemap-category",
+      "imported": "chart-modes/treemap-category-fallback-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Explicit fallback exports this extension construct as an editable clustered-column chart. Its authored category/value data is preserved; the OPF chart type imports as column.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "treemap",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-histogram-single-fallback",
+      "source": "tooling-fixture/decks/histogram-single",
+      "imported": "chart-modes/histogram-single-fallback-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Explicit fallback bins raw histogram samples into a column chart of Bin/Frequency counts. Raw sample representation is intentionally not restored as column-chart values; both type and data differ.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "histogram",
+          "imported": "column"
+        },
+        {
+          "path": "slides.0.chart.data.columns.0",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "Sample",
+          "imported": "Bin"
+        },
+        {
+          "path": "slides.0.chart.data.columns.1",
+          "sourcePresent": false,
+          "importedPresent": true,
+          "imported": "Frequency"
+        },
+        {
+          "path": "slides.0.chart.data.rows.0.0",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": 3,
+          "imported": "3\u20135.5"
+        },
+        {
+          "path": "slides.0.chart.data.rows.0.1",
+          "sourcePresent": false,
+          "importedPresent": true,
+          "imported": 2
+        },
+        {
+          "path": "slides.0.chart.data.rows.1.0",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": 5,
+          "imported": "5.5\u20138"
+        },
+        {
+          "path": "slides.0.chart.data.rows.1.1",
+          "sourcePresent": false,
+          "importedPresent": true,
+          "imported": 1
+        },
+        {
+          "path": "slides.0.chart.data.rows.2.0",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": 8,
+          "imported": "8\u201310.5"
+        },
+        {
+          "path": "slides.0.chart.data.rows.2.1",
+          "sourcePresent": false,
+          "importedPresent": true,
+          "imported": 2
+        },
+        {
+          "path": "slides.0.chart.data.rows.3.0",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": 13,
+          "imported": "10.5\u201313"
+        },
+        {
+          "path": "slides.0.chart.data.rows.3.1",
+          "sourcePresent": false,
+          "importedPresent": true,
+          "imported": 1
+        },
+        {
+          "path": "slides.0.chart.data.rows.4",
+          "sourcePresent": true,
+          "importedPresent": false,
+          "source": [
+            5.5
+          ]
+        },
+        {
+          "path": "slides.0.chart.data.rows.5",
+          "sourcePresent": true,
+          "importedPresent": false,
+          "source": [
+            9
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-histogram-category-fallback",
+      "source": "tooling-fixture/decks/histogram-category",
+      "imported": "chart-modes/histogram-category-fallback-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Explicit fallback exports this extension construct as an editable clustered-column chart. Its authored category/value data is preserved; the OPF chart type imports as column.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "histogram",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-pareto-multi-fallback",
+      "source": "tooling-fixture/decks/pareto-multi",
+      "imported": "chart-modes/pareto-multi-fallback-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Explicit fallback exports this extension construct as an editable clustered-column chart. Its authored category/value data is preserved; the OPF chart type imports as column.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "pareto",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-pareto-multi-auto",
+      "source": "tooling-fixture/decks/pareto-multi",
+      "imported": "chart-modes/pareto-multi-auto-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Native Pareto supports one series. Auto preserves all three authored series through a clustered-column fallback, changing type only; forced native rejection is retained as a separate ineligible case.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "pareto",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-box-multi-fallback",
+      "source": "tooling-fixture/decks/box-multi",
+      "imported": "chart-modes/box-multi-fallback-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Explicit fallback exports this extension construct as an editable clustered-column chart. Its authored category/value data is preserved; the OPF chart type imports as column.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "box-and-whisker",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-waterfall-single-fallback",
+      "source": "tooling-fixture/decks/waterfall-single",
+      "imported": "chart-modes/waterfall-single-fallback-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Explicit fallback imports as column rather than waterfall. The new unchanged-cache provenance restores the exact authored single-column data; remaining inequality is chart type only.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "waterfall",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-funnel-category-fallback",
+      "source": "tooling-fixture/decks/funnel-category",
+      "imported": "chart-modes/funnel-category-fallback-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Explicit fallback exports this extension construct as an editable clustered-column chart. Its authored category/value data is preserved; the OPF chart type imports as column.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "funnel",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-world-category-fallback",
+      "source": "tooling-fixture/decks/world-category",
+      "imported": "chart-modes/world-category-fallback-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Explicit fallback exports this extension construct as an editable clustered-column chart. Its authored category/value data is preserved; the OPF chart type imports as column.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "world",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-world-category-auto",
+      "source": "tooling-fixture/decks/world-category",
+      "imported": "chart-modes/world-category-auto-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Auto retains the documented clustered-column fallback for unconfirmed world charts. Data is preserved; type differs.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "world",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-all-seven-fallback",
+      "source": "tooling-fixture/decks/all-seven",
+      "imported": "chart-modes/all-seven-fallback-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Explicit fallback exports every extension chart as editable clustered columns. All seven chart types differ; authored category/value data is preserved.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "treemap",
+          "imported": "column"
+        },
+        {
+          "path": "slides.1.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "histogram",
+          "imported": "column"
+        },
+        {
+          "path": "slides.2.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "pareto",
+          "imported": "column"
+        },
+        {
+          "path": "slides.3.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "box-and-whisker",
+          "imported": "column"
+        },
+        {
+          "path": "slides.4.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "waterfall",
+          "imported": "column"
+        },
+        {
+          "path": "slides.5.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "funnel",
+          "imported": "column"
+        },
+        {
+          "path": "slides.6.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "world",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-all-seven-auto",
+      "source": "tooling-fixture/decks/all-seven",
+      "imported": "chart-modes/all-seven-auto-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Auto preserves native-format exports for the six historically confirmed chart types, without repeating their native confirmations, and falls back only for world. The world slide type differs; authored data is preserved.",
+      "differences": [
+        {
+          "path": "slides.6.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "world",
+          "imported": "column"
+        }
+      ]
+    },
+    {
+      "id": "chart-mode-pareto-single-fallback",
+      "source": "sources/chart-pareto-single.opf.json",
+      "imported": "chart-modes/pareto-single-fallback-imported.opf.json",
+      "roundTripEqual": false,
+      "nativeAcceptance": false,
+      "nativeStatus": "pending",
+      "rationale": "Explicit fallback exports this extension construct as an editable clustered-column chart. Its authored category/value data is preserved; the OPF chart type imports as column.",
+      "differences": [
+        {
+          "path": "slides.0.chart.type",
+          "sourcePresent": true,
+          "importedPresent": true,
+          "source": "pareto",
+          "imported": "column"
+        }
+      ]
+    }
+  ],
+  "preservedFailedAttempt": {
+    "output": "/private/tmp/opf-native-suite-final-runtime-01",
+    "exitCode": 1,
+    "reason": "Strict maintained fixture still named old waterfall archive hash. Tooling-only commit e4da9319 synchronized the independently reviewed expectation without changing installed packages; a new output directory was used."
+  },
+  "historicalQualificationReplaced": false,
+  "sourceProof": {
+    "path": "/private/tmp/rr20-final-runtime-replay/results/native-02-proof.json",
+    "sha256": "68ca27649a59c2bf595fe16bd96207451843490db203504ad4ea320036377a29"
+  },
+  "supervisorVerification": {
+    "origin": "Root supervisor reported independent verification after reviewing the durable Mac proof",
+    "logsVerified": 7,
+    "tarballHashesAndLengthsVerified": 6,
+    "nativeSuiteSealVerified": true,
+    "sealedSuiteFilesVerified": 304,
+    "nativePowerPointExecuted": false
+  },
+  "rawDifferenceReview": {
+    "proof": "final-native-differences-review.json",
+    "reviewedBy": "Independent read-only reviewer and root supervisor",
+    "counts": {
+      "rawInequalities": 17,
+      "chartTypeOnly": 15,
+      "histogramBinningAndType": 1,
+      "dormantFurniture": 1,
+      "unexpectedAdditionalImplementationBlockers": 0
+    },
+    "classification": "Declared source-preservation limitations; all raw equalities remain false and native acceptance remains pending.",
+    "nativeAcceptance": false
+  }
+}
