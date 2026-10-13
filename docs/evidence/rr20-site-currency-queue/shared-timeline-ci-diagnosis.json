@@ -1,0 +1,117 @@
+{
+  "authorizedBy": "User: Yes, read the failed job logs",
+  "requestBudget": 8,
+  "requestsThisAttempt": 4,
+  "previousAttempt": "CLI refused terminal escapes; raw bytes now captured to files and sanitized before viewing",
+  "results": [
+    {
+      "name": "core",
+      "repo": "OpenPresentation/opf",
+      "job": 115452421740,
+      "exit": 0,
+      "bytes": 905899,
+      "sha256": "f631a36099a19d2d6d6e06672ed1ff7add69d60492db9a61f5a7fcbaa985f126",
+      "error": null,
+      "failureExcerpt": [
+        "2026-10-13T18:40:31.1151218Z page.evaluate: OPFCompositionError: Slide content does not fit its composition.",
+        "2026-10-13T18:40:31.1152090Z     at composeSlide (<anonymous>:6115:33)",
+        "2026-10-13T18:40:31.1152550Z     at bindSlide (<anonymous>:81285:22)",
+        "2026-10-13T18:40:31.1152856Z     at <anonymous>:81322:61",
+        "2026-10-13T18:40:31.1153142Z     at Array.map (<anonymous>)",
+        "2026-10-13T18:40:31.1153481Z     at resolveDeck (<anonymous>:81322:41)",
+        "2026-10-13T18:40:31.1153802Z     at toSvg (<anonymous>:81335:22)",
+        "2026-10-13T18:40:31.1154102Z     at render (<anonymous>:85718:23)",
+        "2026-10-13T18:40:31.1154415Z     at renderFor (<anonymous>:85707:12)",
+        "2026-10-13T18:40:31.1154768Z     at createCanvasEditor (<anonymous>:86436:7)",
+        "2026-10-13T18:40:31.1155128Z     at window.mount (<anonymous>:130082:26)",
+        "2026-10-13T18:40:31.1155562Z     at /__w/opf/opf/opf/scripts/test-timeline-workflow.mjs:47:14 {",
+        "2026-10-13T18:40:31.1155933Z   log: []",
+        "2026-10-13T18:40:31.1156129Z }"
+      ]
+    },
+    {
+      "name": "renderer",
+      "repo": "OpenPresentation/opf-render",
+      "job": 115461823430,
+      "exit": 0,
+      "bytes": 711591,
+      "sha256": "c36f87f9d6c0e269e9a37d11b6bb89f44d99359401be76578d5d31197eb7ca24",
+      "error": null,
+      "failureExcerpt": [
+        "2026-10-13T18:39:05.6443432Z page.evaluate: OPFCompositionError: Slide content does not fit its composition.",
+        "2026-10-13T18:39:05.6443988Z     at composeSlide (<anonymous>:6115:33)",
+        "2026-10-13T18:39:05.6444382Z     at bindSlide (<anonymous>:81285:22)",
+        "2026-10-13T18:39:05.6444690Z     at <anonymous>:81322:61",
+        "2026-10-13T18:39:05.6444909Z     at Array.map (<anonymous>)",
+        "2026-10-13T18:39:05.6445156Z     at resolveDeck (<anonymous>:81322:41)",
+        "2026-10-13T18:39:05.6445402Z     at toSvg (<anonymous>:81335:22)",
+        "2026-10-13T18:39:05.6445666Z     at render (<anonymous>:85718:23)",
+        "2026-10-13T18:39:05.6445899Z     at renderFor (<anonymous>:85707:12)",
+        "2026-10-13T18:39:05.6446160Z     at createCanvasEditor (<anonymous>:86436:7)",
+        "2026-10-13T18:39:05.6446427Z     at window.mount (<anonymous>:130082:26)",
+        "2026-10-13T18:39:05.6446776Z     at /__w/opf-render/opf-render/opf/scripts/test-timeline-workflow.mjs:47:14 {",
+        "2026-10-13T18:39:05.6447081Z   log: []",
+        "2026-10-13T18:39:05.6447240Z }"
+      ]
+    },
+    {
+      "name": "pptx",
+      "repo": "OpenPresentation/opf-pptx",
+      "job": 115468709039,
+      "exit": 0,
+      "bytes": 638910,
+      "sha256": "f4e780813283e04523dc26bf4c54e597d099cfbc9a9552b91588e5d0dae93ef8",
+      "error": null,
+      "failureExcerpt": [
+        "2026-10-13T18:52:36.4271117Z page.evaluate: OPFCompositionError: Slide content does not fit its composition.",
+        "2026-10-13T18:52:36.4272086Z     at composeSlide (<anonymous>:6115:33)",
+        "2026-10-13T18:52:36.4272705Z     at bindSlide (<anonymous>:81285:22)",
+        "2026-10-13T18:52:36.4273187Z     at <anonymous>:81322:61",
+        "2026-10-13T18:52:36.4273679Z     at Array.map (<anonymous>)",
+        "2026-10-13T18:52:36.4274198Z     at resolveDeck (<anonymous>:81322:41)",
+        "2026-10-13T18:52:36.4274723Z     at toSvg (<anonymous>:81335:22)",
+        "2026-10-13T18:52:36.4275306Z     at render (<anonymous>:85718:23)",
+        "2026-10-13T18:52:36.4275831Z     at renderFor (<anonymous>:85707:12)",
+        "2026-10-13T18:52:36.4276403Z     at createCanvasEditor (<anonymous>:86436:7)",
+        "2026-10-13T18:52:36.4276867Z     at window.mount (<anonymous>:130082:26)",
+        "2026-10-13T18:52:36.4277646Z     at /__w/opf-pptx/opf-pptx/opf/scripts/test-timeline-workflow.mjs:47:14 {",
+        "2026-10-13T18:52:36.4278040Z   log: []",
+        "2026-10-13T18:52:36.4278233Z }"
+      ]
+    },
+    {
+      "name": "editor",
+      "repo": "OpenPresentation/opf-editor",
+      "job": 115463440440,
+      "exit": 0,
+      "bytes": 652963,
+      "sha256": "58a30e23662761b31a35a2279c2135f5ec6be7071a691ba2d20100291f8e8ff2",
+      "error": null,
+      "failureExcerpt": [
+        "2026-10-13T18:49:41.0473227Z page.evaluate: OPFCompositionError: Slide content does not fit its composition.",
+        "2026-10-13T18:49:41.0473725Z     at composeSlide (<anonymous>:6115:33)",
+        "2026-10-13T18:49:41.0474047Z     at bindSlide (<anonymous>:81285:22)",
+        "2026-10-13T18:49:41.0474330Z     at <anonymous>:81322:61",
+        "2026-10-13T18:49:41.0474622Z     at Array.map (<anonymous>)",
+        "2026-10-13T18:49:41.0474940Z     at resolveDeck (<anonymous>:81322:41)",
+        "2026-10-13T18:49:41.0475256Z     at toSvg (<anonymous>:81335:22)",
+        "2026-10-13T18:49:41.0475550Z     at render (<anonymous>:85718:23)",
+        "2026-10-13T18:49:41.0476198Z     at renderFor (<anonymous>:85707:12)",
+        "2026-10-13T18:49:41.0476545Z     at createCanvasEditor (<anonymous>:86436:7)",
+        "2026-10-13T18:49:41.0476921Z     at window.mount (<anonymous>:130082:26)",
+        "2026-10-13T18:49:41.0477454Z     at /__w/opf-editor/opf-editor/opf/scripts/test-timeline-workflow.mjs:47:14 {",
+        "2026-10-13T18:49:41.0477854Z   log: []",
+        "2026-10-13T18:49:41.0478041Z }"
+      ]
+    }
+  ],
+  "standingAuthorization": "Owner: Weird no you can always get error logs. Routine diagnostic log reads require no renewed confirmation.",
+  "finding": "All four jobs fail the installed scripts/test-timeline-workflow.mjs at initial mount (line 47), OPFCompositionError. Core packages failure is an aggregate. Underlying geometry cause still being investigated.",
+  "installedReproduction": "/private/tmp/rr20-installed-timeline-repro-03/receipt.json",
+  "separateLocalInstall": {
+    "failure": "npm optional-peer metadata lookup ENOTFOUND, followed by misleading ERESOLVE undefined version",
+    "repair": "Unchanged maintained test with ordinary network permission",
+    "result": "passed 6/6",
+    "evidence": "/private/tmp/rr20-furniture-absent-network-repro-01/run-VnZ9Qh/receipt.json"
+  }
+}
