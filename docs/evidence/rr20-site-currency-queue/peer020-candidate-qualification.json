@@ -1,0 +1,143 @@
+{
+  "state": "Passed local source and authenticated staged candidate qualification; original registry metadata and release gates remain pending",
+  "receipt": "/private/tmp/rr20-peer020-candidate-02/receipt.json",
+  "receiptSha256": "279df93555877e8ad53609d48aeb32804a2c2da4548f8ef622d5fe1626d2b6cb",
+  "stageManifest": "/private/tmp/rr20-peer020-candidate-02/opf/artifacts/npm/manifest.json",
+  "stageManifestSha256": "b1c27bd32e26c87af91d6cad2912eaf2847cbc03f4ce9c094f7dc705060f8dcb",
+  "refs": {
+    "opf": "b8011e65d4edf7101547631379f3607d046e4395",
+    "opf-render": "0eeafb289a3abc2435378f6dcd32fb42b5b88ebd",
+    "opf-pptx": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+    "opf-editor": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+    "gallery-candidate": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  },
+  "commandsPassed": 21,
+  "artifacts": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.19.0",
+      "sourceSha": "b8011e65d4edf7101547631379f3607d046e4395",
+      "tarball": "/private/tmp/rr20-peer020-candidate-02/opf/artifacts/npm/openpresentation-opf-0.19.0.tgz",
+      "sha256": "42107b017b2a1183670afde8ec23225cd4bb9abedc3c93c0939a2b97bcaa4afc",
+      "bytes": 3332221
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.19.1",
+      "sourceSha": "0eeafb289a3abc2435378f6dcd32fb42b5b88ebd",
+      "tarball": "/private/tmp/rr20-peer020-candidate-02/opf/artifacts/npm/openpresentation-opf-render-0.19.1.tgz",
+      "sha256": "ae262137541691e31420698c40512f3eaa4041e5d2cd7f0a93e9a07e322c69f8",
+      "bytes": 13073806
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.19.0",
+      "sourceSha": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+      "tarball": "/private/tmp/rr20-peer020-candidate-02/opf/artifacts/npm/openpresentation-opf-pptx-0.19.0.tgz",
+      "sha256": "b9080f04e5dae4ebcce5f03a77618b42df359d4d08ec1739f07262788b45afff",
+      "bytes": 725545
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.19.0",
+      "sourceSha": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "tarball": "/private/tmp/rr20-peer020-candidate-02/opf/artifacts/npm/openpresentation-opf-editor-0.19.0.tgz",
+      "sha256": "70da038083c6e78f9a1817ff00d977940150e323e45c83e221192608ed606f49",
+      "bytes": 405104
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.19.0",
+      "sourceSha": "b8011e65d4edf7101547631379f3607d046e4395",
+      "tarball": "/private/tmp/rr20-peer020-candidate-02/opf/artifacts/npm/openpresentation-cli-0.19.0.tgz",
+      "sha256": "9af3d7795767dfd1f3807cd583c6d018737eaf22ffa3a6d38b3812bd2029d2b9",
+      "bytes": 198837
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "sourceSha": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "tarball": "/private/tmp/rr20-peer020-candidate-02/opf/artifacts/npm/openpresentation-gallery-3.0.0.tgz",
+      "sha256": "1639c962013732404c51d40d0727bcb72615e42eead0de4220d06de4a6efc297",
+      "bytes": 96819
+    }
+  ],
+  "canonical": {
+    "coreTests": 2328,
+    "coreTestFiles": 120,
+    "coreScripts": 6,
+    "cliTests": 199,
+    "cliTestFiles": 22,
+    "cliScripts": 2,
+    "cliCommands": 95,
+    "cliDrawingChecks": 77,
+    "rootChecks": 45
+  },
+  "mappedSteps": 12,
+  "packedBrowser": {
+    "suites": 8,
+    "assertions": 282,
+    "trustedInteractionScenarios": 8
+  },
+  "installedIdentityDoctor": {
+    "log": "/private/tmp/rr20-peer020-candidate-02/installed-identity-doctor.log",
+    "logSha256": "50d64a0c1a86b2e2794311469290bfb24ebded6bed9a613ddadd4b9450fe927b",
+    "report": "/private/tmp/rr20-peer020-candidate-02/installed-doctor.json",
+    "reportSha256": "d77331c4c01928e93c9d30ce456f7aa1ea7ce24a9370102f923aa03382c9b5a4",
+    "exitCode": 0,
+    "engineFacts": [
+      {
+        "name": "@openpresentation/opf-render",
+        "wanted": "^0.20.0",
+        "installed": true,
+        "version": "0.19.1",
+        "ok": false
+      },
+      {
+        "name": "@openpresentation/opf-pptx",
+        "wanted": "^0.20.0",
+        "installed": true,
+        "version": "0.19.0",
+        "ok": false
+      }
+    ],
+    "maintainedHelpers": [
+      "assertInstalledCandidateGraph",
+      "installedCandidatePreflight",
+      "assertCandidateDoctor"
+    ]
+  },
+  "originalCorePeerRanges": {
+    "@openpresentation/opf-pptx": "^0.20.0",
+    "@openpresentation/opf-render": "^0.20.0"
+  },
+  "stagedCorePeerRanges": {
+    "@openpresentation/opf-pptx": "^0.19.0",
+    "@openpresentation/opf-render": "^0.19.1"
+  },
+  "published": false,
+  "registryAcceptance": false,
+  "nativeAcceptance": false,
+  "historicalSkippedSVGGoldens": "CLI retains explicit renderer0.14/core0.14 digests; selected0.19.1/0.19.0 versions skip those historical digests, recorded in logs. No tolerance/baseline edits.",
+  "preservedFailure": {
+    "receipt": "/private/tmp/rr20-peer020-candidate-01/receipt.json",
+    "receiptSha256": "952837c0ca7ce98d7b8eb71377d55f88566d5e17b91a864a27b663f47c4d0d5b",
+    "exitCode": 1,
+    "cliTestsFailed": 5
+  },
+  "supervisorVerification": {
+    "all21CommandLogsRehashed": true,
+    "sixTarballsRehashed": true,
+    "metadataFilesRehashed": 12,
+    "reviewedSourceCommits": [
+      "e2f257a4f6cf1445d820edcf01e19872759c274e",
+      "b8011e65d4edf7101547631379f3607d046e4395"
+    ],
+    "localIntegrationCommits": [
+      "0a423677",
+      "e7f081eb"
+    ],
+    "hostedCoreStill": "4e03f7e88bfa99a3b2ac1dce8e7539355cd7c85b",
+    "integrationMappedCheck": "pending"
+  }
+}

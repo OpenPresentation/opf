@@ -1,0 +1,353 @@
+{
+  "refs": {
+    "opf": "b8011e65d4edf7101547631379f3607d046e4395",
+    "opf-render": "0eeafb289a3abc2435378f6dcd32fb42b5b88ebd",
+    "opf-pptx": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+    "opf-editor": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+    "gallery-candidate": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  },
+  "before": {
+    "opf": {
+      "head": "b8011e65d4edf7101547631379f3607d046e4395",
+      "status": ""
+    },
+    "opf-render": {
+      "head": "0eeafb289a3abc2435378f6dcd32fb42b5b88ebd",
+      "status": ""
+    },
+    "opf-pptx": {
+      "head": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+      "status": ""
+    },
+    "opf-editor": {
+      "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "status": ""
+    },
+    "gallery-candidate": {
+      "head": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "status": ""
+    }
+  },
+  "after": {
+    "opf": {
+      "head": "b8011e65d4edf7101547631379f3607d046e4395",
+      "status": ""
+    },
+    "opf-render": {
+      "head": "0eeafb289a3abc2435378f6dcd32fb42b5b88ebd",
+      "status": ""
+    },
+    "opf-pptx": {
+      "head": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+      "status": ""
+    },
+    "opf-editor": {
+      "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "status": ""
+    },
+    "gallery-candidate": {
+      "head": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "status": ""
+    }
+  },
+  "metadataSha256": {
+    "opf/package.json": "786efa56a97de9d1f2af9765da88da70f23923564db348dde82b4eae2f0e0a80",
+    "opf/pnpm-lock.yaml": "f6b0249623d7585d8fbd14cf4c79df6b1cb96ba837d7b2f4478b67235f5504ca",
+    "opf/packages/javascript/package.json": "e3c34e59d914c416a8c1a313f2970e19c064533226e0089708375923b35e9b4f",
+    "opf/packages/cli/package.json": "92e4bcc194dab4a0c5b52183160c06a7dbf6712129121659b95e3a59d4a3169b",
+    "opf-render/package.json": "0325ab66d0face9e352d11820bcb15f4c21f6b542d30a67d5c7119c546c399ba",
+    "opf-render/package-lock.json": "cf35e0560aeb386904d6ed9752b3d9815b2bf6b0cd13dad31c0aa7b118cde598",
+    "opf-pptx/package.json": "32d4cb9ca83b20ddecab67314cc1e4897a525ab646c52913f5e42b9227b82208",
+    "opf-pptx/package-lock.json": "164d2930446939c846d78b8480214393e5d1822ff62983d883df6883b4e32c9f",
+    "opf-editor/package.json": "35714f2cac2072e7ed8d0d4b87ba8c36316abad790abf95d9cbdd73881e42469",
+    "opf-editor/package-lock.json": "fb1326e5a28e7579de1687f29c9ded23e34d1392063308dc61fdb413563422cd",
+    "gallery-candidate/package.json": "bc5ba5e099ece0fe39d4c3c1ca8e00493ee5757b8a48d122b677091cd3f61f5c",
+    "gallery-candidate/package-lock.json": "67e05abc96ff84d90827e5cf90a7910a8ffcabd74308ce1b39dd3d9bba7cd52a"
+  },
+  "metadataUnchanged": true,
+  "commands": [
+    {
+      "label": "toolchain",
+      "command": [
+        "node",
+        "--version"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 0.01,
+      "log": "/private/tmp/rr20-peer020-candidate-02/toolchain.log",
+      "logSha256": "f2ec568164f99546161909b0189b57bb5be3e80f8e2ccd8a51a4aed8c4055a04"
+    },
+    {
+      "label": "npm-version",
+      "command": [
+        "npm",
+        "--version"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 0.05,
+      "log": "/private/tmp/rr20-peer020-candidate-02/npm-version.log",
+      "logSha256": "041fb0a6f23ccf0102a18d4591e1bfa36eebc17d27d348727a5eee18806d1c3c"
+    },
+    {
+      "label": "pnpm-version",
+      "command": [
+        "pnpm",
+        "--version"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 0.1,
+      "log": "/private/tmp/rr20-peer020-candidate-02/pnpm-version.log",
+      "logSha256": "abb3ce293b7ae818d9d22051b093e51415a4de46f6dd529189c4feb458037cb5"
+    },
+    {
+      "label": "core-install",
+      "command": [
+        "pnpm",
+        "install",
+        "--frozen-lockfile"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 0.76,
+      "log": "/private/tmp/rr20-peer020-candidate-02/core-install.log",
+      "logSha256": "b69fb94e31e1587bd22de8f82907a257a58eed121804a16fca2f11b89734c89e"
+    },
+    {
+      "label": "opf-render-install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf-render",
+      "exitCode": 0,
+      "seconds": 4.61,
+      "log": "/private/tmp/rr20-peer020-candidate-02/opf-render-install.log",
+      "logSha256": "ba7d4e4b80d452f0e1edaea88642995b8a2e0703eb77e74005806b4d854520ce"
+    },
+    {
+      "label": "opf-pptx-install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf-pptx",
+      "exitCode": 0,
+      "seconds": 1.15,
+      "log": "/private/tmp/rr20-peer020-candidate-02/opf-pptx-install.log",
+      "logSha256": "c8900d8efd220304038654241826dcd2daccbf821bce888ba03b66c12f072307"
+    },
+    {
+      "label": "opf-editor-install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf-editor",
+      "exitCode": 0,
+      "seconds": 2.33,
+      "log": "/private/tmp/rr20-peer020-candidate-02/opf-editor-install.log",
+      "logSha256": "b054bc7e35ae24c66da481077d0946913111a9ec706253da84b5adbee7a0af36"
+    },
+    {
+      "label": "gallery-candidate-install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/gallery-candidate",
+      "exitCode": 0,
+      "seconds": 0.43,
+      "log": "/private/tmp/rr20-peer020-candidate-02/gallery-candidate-install.log",
+      "logSha256": "3f711898ed06c3a911e425390ba73b60dacf634f1b0efed2d7a9d368bfa5c89f"
+    },
+    {
+      "label": "gallery-initial-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/gallery-candidate",
+      "exitCode": 0,
+      "seconds": 0.11,
+      "log": "/private/tmp/rr20-peer020-candidate-02/gallery-initial-build.log",
+      "logSha256": "458aafea2ab52e541aabc422b028b3c7555872444b9651ff9d4778cdde9d7f07"
+    },
+    {
+      "label": "gallery-link",
+      "command": [
+        "node",
+        "scripts/candidate-gallery.mjs",
+        "link"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 0.05,
+      "log": "/private/tmp/rr20-peer020-candidate-02/gallery-link.log",
+      "logSha256": "ae186426cbf7b8d0154314d432734eb811203984b0129bdf45f572686078300a"
+    },
+    {
+      "label": "gallery-materialize",
+      "command": [
+        "node",
+        "scripts/materialize-gallery-catalog.mjs"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 0.06,
+      "log": "/private/tmp/rr20-peer020-candidate-02/gallery-materialize.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "candidate-build-stage",
+      "command": [
+        "node",
+        "scripts/candidate-gallery-build.mjs"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 20.0,
+      "log": "/private/tmp/rr20-peer020-candidate-02/candidate-build-stage.log",
+      "logSha256": "6d9cbc0ad591bd90fcb2769f802d7132528b1ea0352be3dccef149ab78d710fc"
+    },
+    {
+      "label": "mapped",
+      "command": [
+        "pnpm",
+        "check:changed",
+        "--base",
+        "4e03f7e88bfa99a3b2ac1dce8e7539355cd7c85b"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 146.41,
+      "log": "/private/tmp/rr20-peer020-candidate-02/mapped.log",
+      "logSha256": "0d1824ac8dece57b2b3ccba294442d1703761f6735dd1cfb9a7fc02bdb1da485"
+    },
+    {
+      "label": "canonical-test",
+      "command": [
+        "pnpm",
+        "test"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 165.32,
+      "log": "/private/tmp/rr20-peer020-candidate-02/canonical-test.log",
+      "logSha256": "9024ecd413a86640099985b63c707140e827ccbe931611cdeada0b3a9666d9e3"
+    },
+    {
+      "label": "core-pack-dry-run",
+      "command": [
+        "pnpm",
+        "--filter",
+        "@openpresentation/opf",
+        "pack:dry-run"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 0.7,
+      "log": "/private/tmp/rr20-peer020-candidate-02/core-pack-dry-run.log",
+      "logSha256": "96cede6d3e917a8760b25ec82d7ae6ea3c78d72e633890f5466d21050fcdbe36"
+    },
+    {
+      "label": "core-packed-smoke",
+      "command": [
+        "node",
+        "scripts/agent-slot.mjs",
+        "--",
+        "node",
+        "packages/javascript/test/packed-install-smoke.mjs"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 49.67,
+      "log": "/private/tmp/rr20-peer020-candidate-02/core-packed-smoke.log",
+      "logSha256": "8a29c0a7fbd89283338016c808b16b67a16ecf71aa5250b4cc9a79a2ddaa4c3d"
+    },
+    {
+      "label": "cli-packed",
+      "command": [
+        "node",
+        "scripts/agent-slot.mjs",
+        "--",
+        "pnpm",
+        "test:cli:packed"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 69.59,
+      "log": "/private/tmp/rr20-peer020-candidate-02/cli-packed.log",
+      "logSha256": "c3986bd659d77e2a49626ebf8734bc1dbdd451e03816fa676f95cca623e26405"
+    },
+    {
+      "label": "cli-packed-peers",
+      "command": [
+        "node",
+        "scripts/agent-slot.mjs",
+        "--",
+        "pnpm",
+        "test:cli:packed:peers"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 182.48,
+      "log": "/private/tmp/rr20-peer020-candidate-02/cli-packed-peers.log",
+      "logSha256": "a00da813d04d59d23c36a4c60263e49d6f9240284af76677dd3e0597f35ee804"
+    },
+    {
+      "label": "pack-ecosystem",
+      "command": [
+        "pnpm",
+        "pack:ecosystem"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 2.49,
+      "log": "/private/tmp/rr20-peer020-candidate-02/pack-ecosystem.log",
+      "logSha256": "9ea7de03fbcd551c961d9b57df9cdd01abe040cfcbbaacbf2277b46817948712"
+    },
+    {
+      "label": "packed-ecosystem",
+      "command": [
+        "node",
+        "scripts/agent-slot.mjs",
+        "--",
+        "pnpm",
+        "test:packed-ecosystem"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 72.12,
+      "log": "/private/tmp/rr20-peer020-candidate-02/packed-ecosystem.log",
+      "logSha256": "99d60a951a15fadc56712e1c46e997cea00237693ac0fbdf2ab92bb2c2479827"
+    },
+    {
+      "label": "packed-browser",
+      "command": [
+        "node",
+        "scripts/agent-slot.mjs",
+        "--",
+        "pnpm",
+        "test:packed-browser"
+      ],
+      "cwd": "/private/tmp/rr20-peer020-candidate-02/opf",
+      "exitCode": 0,
+      "seconds": 7.02,
+      "log": "/private/tmp/rr20-peer020-candidate-02/packed-browser.log",
+      "logSha256": "209062d31d92d7e36319560ffbeb61643e938b61c7384e4c44ee639581b61b40"
+    }
+  ],
+  "environment": {
+    "npm_config_cache": "/private/tmp/rr20-peer020-candidate-02/npm-cache",
+    "CANDIDATE_GALLERY_REF": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+    "OPF_GOLDEN_BASELINE": "/private/tmp/rr20-peer020-candidate-02/opf/scripts/fixtures/opf-examples-png.rr20-array-areas.sha256.json",
+    "OPF_TRACKER_STALE": "warn",
+    "OPF_REUSE_BUILD": "rr20-peer020-candidate-02"
+  },
+  "nativeAcceptance": false,
+  "publication": false
+}
