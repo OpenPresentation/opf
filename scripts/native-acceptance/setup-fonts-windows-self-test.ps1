@@ -36,21 +36,48 @@ function Remove-EmptyFontKey { $script:keyRemovals++ }
 try {
     $fontDir=Join-Path $scratch 'fonts/roboto'
     [void][IO.Directory]::CreateDirectory($fontDir)
-    $faces=@();$files=@()
+    $styles=@(
+        @{file='400Regular/Roboto_400Regular.ttf';family='Roboto';weight=400;italic=$false},
+        @{file='500Medium/Roboto_500Medium.ttf';family='Roboto Medium';weight=500;italic=$false},
+        @{file='600SemiBold/Roboto_600SemiBold.ttf';family='Roboto SemiBold';weight=600;italic=$false},
+        @{file='700Bold/Roboto_700Bold.ttf';family='Roboto';weight=700;italic=$false},
+        @{file='800ExtraBold/Roboto_800ExtraBold.ttf';family='Roboto ExtraBold';weight=800;italic=$false},
+        @{file='400Regular_Italic/Roboto_400Regular_Italic.ttf';family='Roboto';weight=400;italic=$true},
+        @{file='700Bold_Italic/Roboto_700Bold_Italic.ttf';family='Roboto';weight=700;italic=$true}
+    )
+    $faces=@();$files=@();$pins=@()
     for($i=0;$i -lt 7;$i++) {
-        $relative="fonts/roboto/face-$i.ttf"; $file=Join-Path $scratch $relative
+        $style=$styles[$i]
+        $relative="fonts/roboto/$($style.file)"; $file=Join-Path $scratch $relative
+        [void][IO.Directory]::CreateDirectory((Split-Path -Parent $file))
         [IO.File]::WriteAllBytes($file,[Text.Encoding]::UTF8.GetBytes("synthetic-$i"))
-        $faces+=@{file=$relative;family='Roboto';sha256=(Hash-File $file)}
+        $faces+=@{file=$relative;family=$style.family;weight=$style.weight;italic=$style.italic;sha256=(Hash-File $file)}
+        $pins+=@{file=$style.file;family=$style.family;weight=$style.weight;italic=$style.italic;sha256=(Hash-File $file)}
         $files+=@{path=$relative;sha256=(Hash-File $file);bytes=(Get-Item -LiteralPath $file).Length}
     }
     $license=Join-Path $fontDir 'LICENSE'
     [IO.File]::WriteAllText($license,'SIL OPEN FONT LICENSE')
     $files+=@{path='fonts/roboto/LICENSE';sha256=(Hash-File $license);bytes=(Get-Item -LiteralPath $license).Length}
-    $inventory=@{name='@expo-google-fonts/roboto';license='OFL-1.1';actualLicenseVerified=$true;actualFaceHashesVerified=$true;transferredFaces=$faces;transferredLicense=@{file='fonts/roboto/LICENSE';sha256=(Hash-File $license)}}
+    $inventory=@{name='@expo-google-fonts/roboto';license='OFL-1.1';licenseSha256=(Hash-File $license);faces=$pins;actualLicenseVerified=$true;actualFaceHashesVerified=$true;transferredFaces=$faces;transferredLicense=@{file='fonts/roboto/LICENSE';sha256=(Hash-File $license)}}
     $suite=@{schemaVersion=1;fontInventory=$inventory;files=$files}
     $suitePath=Join-Path $scratch 'suite.json'
     $suite | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $suitePath -Encoding UTF8
     Assert-True (@(Read-FontInputs $scratch).Count -eq 7) 'Seven sealed faces should validate'
+    foreach($field in @('family','weight','italic','file','sha256')) {
+        $original=$faces[1][$field]
+        $faces[1][$field]=switch($field) {
+            'family' { 'Roboto' }; 'weight' { 400 }; 'italic' { $true }
+            'file' { $faces[0].file }; 'sha256' { $faces[0].sha256 }
+        }
+        $suite | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $suitePath -Encoding UTF8
+        Must-Refuse { Read-FontInputs $scratch } "Transferred $field mismatch must be refused"
+        $faces[1][$field]=$original
+    }
+    $pins[1].family='Roboto Unexpected';$faces[1].family='Roboto Unexpected'
+    $suite | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $suitePath -Encoding UTF8
+    Must-Refuse { Read-FontInputs $scratch } 'Unrecognized source and transfer family must be refused'
+    $pins[1].family='Roboto Medium';$faces[1].family='Roboto Medium'
+    $suite | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $suitePath -Encoding UTF8
     [IO.File]::WriteAllText((Join-Path $scratch $faces[0].file),'tampered')
     Must-Refuse { Read-FontInputs $scratch } 'Changed font must be refused'
     Must-Refuse { Suite-File $scratch 'fonts/roboto/../suite.json' $faces[0].sha256 } 'Traversal must be refused'

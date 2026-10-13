@@ -27,14 +27,35 @@ function Read-FontInputs([string]$Root) {
     $rootPath=Plain-Path $Root
     $suite=Get-Content -LiteralPath (Plain-Path (Join-Path $rootPath 'suite.json')) -Raw -Encoding UTF8 | ConvertFrom-Json
     $inventory=$suite.fontInventory
-    if($suite.schemaVersion -ne 1 -or $inventory.name -cne '@expo-google-fonts/roboto' -or $inventory.license -cne 'OFL-1.1' -or $inventory.actualLicenseVerified -ne $true -or $inventory.actualFaceHashesVerified -ne $true -or $inventory.transferredFaces -isnot [array] -or $inventory.transferredFaces.Count -ne 7) { throw 'Expected the verified seven-face Roboto suite inventory' }
+    if($suite.schemaVersion -ne 1 -or $inventory.name -cne '@expo-google-fonts/roboto' -or $inventory.license -cne 'OFL-1.1' -or $inventory.actualLicenseVerified -ne $true -or $inventory.actualFaceHashesVerified -ne $true -or $inventory.faces -isnot [array] -or $inventory.faces.Count -ne 7 -or $inventory.transferredFaces -isnot [array] -or $inventory.transferredFaces.Count -ne 7) { throw 'Expected the verified seven-face Roboto suite inventory' }
+    # Preserve the renderer's exact family/style vocabulary, including separate
+    # Windows families for medium, semibold and extra-bold faces.
+    $expectedFaces=@(
+        @{family='Roboto';weight=400;italic=$false},
+        @{family='Roboto Medium';weight=500;italic=$false},
+        @{family='Roboto SemiBold';weight=600;italic=$false},
+        @{family='Roboto';weight=700;italic=$false},
+        @{family='Roboto ExtraBold';weight=800;italic=$false},
+        @{family='Roboto';weight=400;italic=$true},
+        @{family='Roboto';weight=700;italic=$true}
+    )
+    foreach($expected in $expectedFaces) {
+        $pins=@($inventory.faces | Where-Object { $_.family -ceq $expected.family -and ($_.weight -is [int] -or $_.weight -is [long]) -and $_.weight -eq $expected.weight -and $_.italic -is [bool] -and $_.italic -eq $expected.italic })
+        if($pins.Count -ne 1) { throw 'Renderer inventory differs from the seven pinned Roboto styles' }
+    }
+    if($inventory.transferredLicense.sha256 -cne $inventory.licenseSha256) { throw 'Transferred license differs from renderer pin' }
     $license=Suite-File $rootPath $inventory.transferredLicense.file $inventory.transferredLicense.sha256
     if(@($suite.files | Where-Object { $_.path -ceq $inventory.transferredLicense.file -and $_.sha256 -ceq $inventory.transferredLicense.sha256 -and $_.bytes -eq (Get-Item -LiteralPath $license).Length }).Count -ne 1) { throw 'License differs from sealed suite files' }
     if((Get-Content -LiteralPath $license -Raw) -notmatch 'SIL OPEN FONT LICENSE') { throw 'Missing OFL notice' }
     $seen=New-Object 'System.Collections.Generic.HashSet[string]' ([StringComparer]::OrdinalIgnoreCase)
     $result=@()
     foreach($face in $inventory.transferredFaces) {
-        if($face.family -cne 'Roboto' -or $face.file -cnotmatch '\.ttf$' -or -not $seen.Add($face.sha256)) { throw 'Invalid or duplicate Roboto face' }
+        if($face.file -cnotmatch '\.ttf$' -or ($face.weight -isnot [int] -and $face.weight -isnot [long]) -or $face.italic -isnot [bool] -or -not $seen.Add($face.sha256)) { throw 'Invalid or duplicate Roboto face' }
+        $pins=@($inventory.faces | Where-Object {
+            $face.file -ceq ('fonts/roboto/'+$_.file) -and $face.sha256 -ceq $_.sha256 -and
+            $face.family -ceq $_.family -and $face.weight -eq $_.weight -and $face.italic -eq $_.italic
+        })
+        if($pins.Count -ne 1) { throw 'Transferred face differs from renderer family/style/file/hash pin' }
         $source=Suite-File $rootPath $face.file $face.sha256
         $record=@($suite.files | Where-Object { $_.path -ceq $face.file -and $_.sha256 -ceq $face.sha256 -and $_.bytes -eq (Get-Item -LiteralPath $source).Length })
         if($record.Count -ne 1) { throw 'Font inventory differs from sealed suite files' }
@@ -62,7 +83,7 @@ function Font-Names([string[]]$Files) {
     try {
         foreach($file in $Files) { $collection.AddFontFile($file) }
         $names=@($collection.Families | ForEach-Object { $_.Name })
-        if($names.Count -eq 0 -or @($names | Where-Object { $_ -notmatch '^Roboto($| )' }).Count -gt 0) { throw 'Font bytes do not contain Roboto faces' }
+        if($names.Count -eq 0 -or @($names | Where-Object { $_ -cnotin @('Roboto','Roboto Medium','Roboto SemiBold','Roboto ExtraBold') }).Count -gt 0) { throw 'Font bytes do not contain Roboto faces' }
         return $names
     } finally { $collection.Dispose() }
 }
