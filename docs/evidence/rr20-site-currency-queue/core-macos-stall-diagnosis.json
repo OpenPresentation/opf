@@ -1,0 +1,140 @@
+{
+  "scope": "Read-only diagnosis plus one expressly authorized bounded no-emit compiler measurement; no workflow rerun, network polling, source/dist changes or full candidate repetition",
+  "hosted": {
+    "runId": 38454953192,
+    "jobName": "Installed candidates (macos-latest)",
+    "numericJobId": 115495296245,
+    "coreSha": "4e03f7e88bfa99a3b2ac1dce8e7539355cd7c85b",
+    "gallerySha": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+    "log": "/private/tmp/rr20-core-macos-cancelled.log",
+    "logSha256": "9adac47eee06b39cd7cca51b32b5949b406e247e22b6c5856b3fb7518ec3b496",
+    "runner": "macOS26.6.2 arm64",
+    "nodeVersion": "v24.20.0",
+    "galleryTests": {
+      "passed": 111,
+      "failed": 0,
+      "durationMs": 66987.153459
+    },
+    "typecheckStartedAt": "2026-10-13T19:31:57.034996Z",
+    "lastBuildOutputAt": "2026-10-13T19:31:57.445189Z",
+    "cancelledAt": "2026-10-13T20:13:12.794954Z",
+    "silentSeconds": 2475.349765,
+    "chain": "node scripts/build.mjs && tsc -p test/tsconfig.json",
+    "jobTimeoutMinutes": 45,
+    "childTimeout": null,
+    "sourceRunnerBlobSha256": "1b69956486f4ce78221bccc0917a9b722df16c33045ac51f4d58c59a836e8b79",
+    "cancelledLogOrphan": "pid7416 node, command arguments unavailable",
+    "jobUrl": "https://github.com/OpenPresentation/opf/actions/runs/38454953192/job/115495296245",
+    "runAttempt": 1,
+    "jobStartedAt": "2026-10-13T19:27:54Z",
+    "jobCompletedAt": "2026-10-13T20:13:24Z",
+    "jobConclusion": "cancelled"
+  },
+  "evidence": [
+    "Gallery111tests passed and build completed before silence",
+    "Compiler is next shell-chain command; gallery build entrypoint opens no persistent service/timer",
+    "Source candidate runner uses spawnSync with no timeout and Gallery compiler does not acquire agent slot",
+    "45-minute job budget exists; cancellation timing is consistent with budget but precise backend cancellation cause is not proven"
+  ],
+  "inference": [
+    "Most likely stalled child is tsc; process arguments/CPU samples absent, so not proven",
+    "No invalid-type diagnostic appears; local measurement does not support an inherent high-memory compiler workload",
+    "Cannot infer hosted root cause or qualification from local successful run; Node patch and runner environment differ"
+  ],
+  "successfulCandidate02": {
+    "receipt": "/private/tmp/rr20-peer020-candidate-02/receipt.json",
+    "receiptSha256": "279df93555877e8ad53609d48aeb32804a2c2da4548f8ef622d5fe1626d2b6cb",
+    "coreSha": "b8011e65d4edf7101547631379f3607d046e4395",
+    "gallerySha": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+    "entireBuildStageSeconds": 20.0,
+    "candidateRunnerIdenticalToHostedCore": true,
+    "sameCatalogTypesSource": "No diff between4e03 andb801 in packages/javascript/src/catalog/types.ts; b801 changes peer contract/test fixtures, so not identical full core input graph"
+  },
+  "measurement": {
+    "command": [
+      "/usr/bin/time",
+      "-l",
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "/private/tmp/rr20-peer020-candidate-02/gallery-candidate/node_modules/typescript/lib/tsc.js",
+      "-p",
+      "test/tsconfig.json",
+      "--extendedDiagnostics"
+    ],
+    "cwd": "/private/tmp/rr20-peer020-candidate-02/gallery-candidate",
+    "timeoutSeconds": 120,
+    "timedOut": false,
+    "exitCode": 0,
+    "seconds": 0.314,
+    "nodeVersion": "v24.21.0",
+    "typescriptVersion": "5.9.3",
+    "log": "/private/tmp/rr20-gallery-tsc-measure-01.log",
+    "normalSharedSlot": true,
+    "noEmit": true,
+    "receipt": "/private/tmp/rr20-gallery-tsc-measure-01.json",
+    "receiptSha256": "aa465de39a1e25a4b0558dc809f5f8620808eb6f2967e81d16a7181e4081c807",
+    "logSha256": "751c6fe4ae3751e706d852c74f09a4a1c8c2bf3c486ac37232ad4efee9c6a3c4",
+    "compilerTotalSeconds": 0.18,
+    "compilerMemoryUsedK": 72909,
+    "maxResidentSetBytes": 175570944,
+    "maxResidentSetMiB": 167.44,
+    "swaps": 0,
+    "compilerFiles": 88,
+    "normalSlotBefore120SecondCompilerTimeout": true,
+    "sourceStatusAfter": "clean"
+  },
+  "gate403": {
+    "log": "/private/tmp/rr20-coordinated-fix-hosted-gate-03.log",
+    "logSha256": "9dc6720a8b58aa5b46d800d90dd7c1d61cd2c6869b6141a8cfadd7b5df780895",
+    "observedAt": "20:16:43",
+    "runId": 38454953192,
+    "response": "This workflow is already running (HTTP403)",
+    "code": "scripts/pr-gate.mjs rerunFailed/onRed",
+    "gateSourceSha256": "3561c0da90bcc90663955249594d213bcca48ea960b6c3d8d427805bda60d99e",
+    "behavior": "onRed sets fresh.reran=true before POST; rerunFailed catches403 and returns true even when no POST succeeds; stores failed checkIDs and prints rerun-requested; no later rerun POST for this head; only existing at-most2-poll stale-check grace then red if unchanged",
+    "qualification": "No rerun actually accepted by403; cannot call subsequent state an authorized new attempt"
+  },
+  "nextAction": "Preserve terminal old4e03 attempt; do not rerun old source graph. After root mapped qualification of the new integrated graph passes, push that reviewed graph once and qualify genuine fullCI through the sole canonical gate. Retain all checks and existing45-minute budget. If adding diagnosis, instrument the maintained Gallery compiler child with actualNode/TSversions, argv/PID/start/end timing and a bounded timeout/resource sample; local measured workload is small, so do not assume memory pressure or repeat whole local candidate.",
+  "nativeAcceptance": false,
+  "remoteMutation": false,
+  "terminalMetadata": {
+    "path": "/private/tmp/rr20-core-38454953192-jobs-2026.json",
+    "sha256": "219d220fdd3b889c35e51b2b3fb3e6fdd5634fd15c9580c10cd87f1583ae04cd",
+    "relevantJobs": [
+      {
+        "id": 115495296245,
+        "name": "Installed candidates (macos-latest)",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "completed_at": "2026-10-13T20:13:24Z"
+      },
+      {
+        "id": 115495296333,
+        "name": "Installed candidates (windows-latest)",
+        "status": "completed",
+        "conclusion": "success",
+        "completed_at": "2026-10-13T19:55:11Z"
+      },
+      {
+        "id": 115495296949,
+        "name": "candidate / source",
+        "status": "completed",
+        "conclusion": "success",
+        "completed_at": "2026-10-13T20:23:52Z"
+      },
+      {
+        "id": 115495297018,
+        "name": "control / control",
+        "status": "completed",
+        "conclusion": "success",
+        "completed_at": "2026-10-13T20:14:15Z"
+      },
+      {
+        "id": 115520914611,
+        "name": "packages",
+        "status": "completed",
+        "conclusion": "failure",
+        "completed_at": "2026-10-13T20:24:05Z"
+      }
+    ]
+  }
+}

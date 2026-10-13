@@ -34,3 +34,7 @@ The owner authorized **“Start final qualification; no deployment.”** These r
 5. Complete site rollout and production acceptance only after deployment is authorized. No site deployment is part of this qualification.
 
 The qualification commands use pinned Node 24.21.0. The original replay receipt’s `node` field identifies the post-run archive auditor (Node 26.7.0), not the command runtime; the durable receipt makes this distinction explicit. Suite generation and its final hash audit use Node 24.21.0. Failed native-generation attempt `01` is preserved: its strict old waterfall archive expectation was synchronized to the approved metadata, then a new tooling checkout and attempt `02` were used without changing the installed package graph.
+
+### Integrated 0.20 source prerequisite
+
+[Candidate qualification](peer020-candidate-qualification.json) and [integrated mapped proof](peer020-integrated-mapped-proof.json) qualify the reviewed peer-contract source changes locally. Core `33222978` is pushed to draft #646; source versions remain unchanged pending genuine release preparation. [Mac CI diagnosis](core-macos-stall-diagnosis.json) preserves the preceding failed hosted attempt. [Dependency review](dependency-pr-triage-20261013T2015Z.json) records all eighteen new PR dispositions. These records do not close registry, native, hosted or site-deployment acceptance.
