@@ -195,5 +195,14 @@
     "registryAcceptance": false,
     "rawDifferenceReview": "final-native-differences-review.json",
     "rawDifferenceClassification": "15 chart-type-only adaptations, one histogram binning/type adaptation and one dormant furniture omission; reviewed as declared source limitations with no additional implementation blocker identified. Raw inequalities and native pending remain."
+  },
+  "adaptiveScopeAudit": "adaptive-scope-audit.json",
+  "openImportFollowup": {
+    "issue": "https://github.com/OpenPresentation/opf-pptx/issues/238",
+    "status": "known native-edit gap; isolated fix investigation started",
+    "behavior": "A list description resized to entry size or larger can import as entry text.",
+    "historicalRecord": "docs/programs/release-readiness/HANDOFF.md: Follow-up issues (open, not started)",
+    "formalOwnerDescopeProven": false,
+    "frozenCandidateChanged": false
   }
 }
