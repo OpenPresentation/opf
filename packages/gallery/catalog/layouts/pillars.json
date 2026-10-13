@@ -2,16 +2,20 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v2",
   "id": "pillars",
   "name": "Pillars",
-  "summary": "Two to six ideas of equal weight, as cards.",
+  "summary": "Related ideas arranged in equal columns.",
   "tags": [
     "Groups of items"
   ],
   "design": {
-    "contentBox": true
+    "contentBox": false
   },
   "areas": [
-    "title",
-    "pillars"
+    [
+      "title"
+    ],
+    [
+      "pillars"
+    ]
   ],
   "columns": [
     1

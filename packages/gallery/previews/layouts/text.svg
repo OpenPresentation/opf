@@ -1,12 +1,17 @@
-<svg aria-label="Quarterly operating plan" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
-<rect aria-hidden="true" fill="#011842" height="720" opacity="1" width="1280" x="0" y="0"/>
-<g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Quarterly operating plan</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Review for the leadership team</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="214.98">Revenue grew 18% on new </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="245.48">accounts while churn held </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="275.98">flat.</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="453.867" xml:space="preserve" y="214.98">Two field teams piloted the </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="453.867" xml:space="preserve" y="245.48">new workflow for six weeks.</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="850.133" xml:space="preserve" y="214.98">Support tickets fell by a </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="850.133" xml:space="preserve" y="245.48">third after the redesign.</text></g>
+<svg aria-label="Learn before scaling" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
+<rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Learn before scaling</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Illustrative example • fictional data</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="214.98">Test with two teams for six </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="245.48">weeks. Measure task </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="275.98">completion and time before </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="306.48">deciding what to scale.</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="453.867" xml:space="preserve" y="214.98">Keep the scope narrow, </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="453.867" xml:space="preserve" y="245.48">collect feedback weekly and </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="453.867" xml:space="preserve" y="275.98">give each decision a named </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="453.867" xml:space="preserve" y="306.48">owner.</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="850.133" xml:space="preserve" y="214.98">Compare the results with the </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="850.133" xml:space="preserve" y="245.48">baseline. Expand only when </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="850.133" xml:space="preserve" y="275.98">the evidence supports the </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="850.133" xml:space="preserve" y="306.48">next step.</text></g>
 </svg>

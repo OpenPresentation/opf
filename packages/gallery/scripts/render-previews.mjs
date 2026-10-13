@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// Renders the layout previews of @openpresentation/gallery/previews: one SVG per layout of catalog/layouts/, the first
-// slide of the layout's stability fixture (scripts/fixtures.mjs: sample content in every region), drawn by the
+// Renders the layout previews of @openpresentation/gallery/previews: one SVG per layout of catalog/layouts/, an authored
+// illustrative slide (scripts/editorial-previews.mjs), drawn by the
 // @openpresentation/opf-render (and its @openpresentation/opf) this repository pins in devDependencies.
 //
 //   node scripts/render-previews.mjs            write previews/layouts/<id>.svg and previews/layouts/index.json
@@ -12,7 +12,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { readCatalog } from "./build.mjs";
-import { templateDeck } from "./fixtures.mjs";
+import { editorialDeck } from "./editorial-previews.mjs";
 import { loadEngines } from "./stability.mjs";
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -26,7 +26,7 @@ export async function renderPreviews() {
   const { toSvg, versions } = await loadEngines();
   const previews = [];
   for (const [id, record] of Object.entries(gallery.layouts)) {
-    const deck = templateDeck(id, record);
+    const deck = editorialDeck(id, record);
     const [svg] = toSvg({ ...deck, slides: deck.slides.slice(0, 1) }, { catalogs: [gallery] });
     previews.push({ id, file: `${id}.svg`, svg: `${svg.trimEnd()}\n` });
   }
@@ -37,7 +37,7 @@ export function previewIndex(previews) {
   return {
     $schema: PREVIEW_INDEX_SCHEMA,
     version: "2",
-    description: "One SVG preview per layout of the catalog, keyed by the layout id, in catalog order: the layout's first fixture slide (sample content in every region, scripts/fixtures.mjs) drawn by the @openpresentation/opf-render this package pins, with the engine's default design. Each preview is a self-contained <svg> element with a 16:9 viewBox; scale it to any thumbnail. Written by scripts/render-previews.mjs; never edit by hand.",
+    description: "One SVG preview per layout of the catalog, keyed by the layout id, in catalog order: an authored illustrative slide (scripts/editorial-previews.mjs) drawn by the @openpresentation/opf-render this package pins, with an explicit light background and the engine's remaining design defaults. Each preview is a self-contained <svg> element with a 16:9 viewBox; scale it to any thumbnail. Written by scripts/render-previews.mjs; never edit by hand.",
     records: previews.map(({ id, file, svg }) => ({ id, file, bytes: Buffer.byteLength(svg, "utf8") })),
   };
 }

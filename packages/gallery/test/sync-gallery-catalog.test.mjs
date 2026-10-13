@@ -75,7 +75,7 @@ describe("planSnapshot", () => {
     const gallery = publishedFromSnapshot();
     const tone = { $schema: "https://openpresentation.org/schema/opf-tone/v1", id: "playful", name: "Playful", "x-gallery": {} };
     addRecord(gallery, "tones", tone, { id: "playful", name: "Playful", file: "playful.json" });
-    const layout = { $schema: "https://openpresentation.org/schema/opf-layout/v2", id: "gallery-only-layout", name: "Gallery only", areas: ["title"], regions: {}, "x-gallery": {} };
+    const layout = { $schema: "https://openpresentation.org/schema/opf-layout/v2", id: "gallery-only-layout", name: "Gallery only", areas: [["title"]], regions: {}, "x-gallery": {} };
     addRecord(gallery, "layouts", layout, { id: "gallery-only-layout", name: "Gallery only", file: "gallery-only-layout.json" });
     const plan = planSnapshot({ gallery, current: snapshot.current, manifest: snapshot.manifest, validators, source });
     assert.deepEqual(plan.problems, []);

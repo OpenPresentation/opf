@@ -114,16 +114,19 @@ Never move or re-push a published tag; fix a problem with a new version.
 
 By contributing you agree that your contribution is licensed under the [MIT License](LICENSE) of this repository.
 
-## Gallery 2.0.0 bootstrap
+## Gallery 3.0.0 bootstrap
 
-Gallery 2.0.0 must publish before core 0.19, which depends on it. Its build and
-validation need the v2 engines before those engines are on npm. For this release
+Gallery 3.0.0 publishes catalog schema 3 before the next engine release. Its build and
+validation need the merged schema-3 engines before those engines are on npm. For this release
 only, `scripts/bootstrap-engines.mjs` reads `.github/bootstrap-engines.json`,
 fetches each engine repository's actual default branch, and refuses pins that
 are not full commit hashes reachable from that branch. Merge the candidate engine
 PRs before running these gates; never weaken the ancestry check. The configured
-core source retains its genuine registry dependency metadata until gallery 2 is
+core source retains its genuine registry dependency metadata until gallery 3 is
 published; bootstrap staging does not make that metadata registry-installable.
+The current configuration holds reviewed PR source hashes for integration work;
+replace them with the actual merged engine commits before merging or publishing
+Gallery. A PR head alone cannot satisfy the default-branch ancestry gate.
 
 After `npm ci`, the script builds this gallery's static records, then builds the
 immutable core and renderer sources with frozen source lockfiles. It stages three
@@ -140,7 +143,7 @@ by the workflows. The published gallery remains dependency-free; staged local
 dependency ranges never enter its published manifest. Trusted publishing and the
 merged-ancestor, tag and release gates remain unchanged.
 
-After the 0.19 engine releases, raise the ordinary registry development pins and
+After the next engine releases, raise the ordinary registry development pins and
 remove this configuration/script and workflow steps. Other gallery versions use
 the normal npm-ci registry path automatically; candidate sources do not become
 a dependency of later releases.

@@ -7,8 +7,12 @@
     "Visuals"
   ],
   "areas": [
-    "title",
-    "media"
+    [
+      "title"
+    ],
+    [
+      "media"
+    ]
   ],
   "columns": [
     1

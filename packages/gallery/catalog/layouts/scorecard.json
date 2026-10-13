@@ -2,16 +2,20 @@
   "$schema": "https://openpresentation.org/schema/opf-layout/v2",
   "id": "scorecard",
   "name": "Scorecard",
-  "summary": "Metrics with commentary or status, as cards.",
+  "summary": "Headline measures with their targets and status.",
   "tags": [
     "Numbers"
   ],
   "design": {
-    "contentBox": true
+    "contentBox": false
   },
   "areas": [
-    "title",
-    "cards"
+    [
+      "title"
+    ],
+    [
+      "cards"
+    ]
   ],
   "columns": [
     1

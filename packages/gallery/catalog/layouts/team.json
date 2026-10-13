@@ -7,8 +7,12 @@
     "Mixed"
   ],
   "areas": [
-    "title",
-    "people"
+    [
+      "title"
+    ],
+    [
+      "people"
+    ]
   ],
   "columns": [
     1

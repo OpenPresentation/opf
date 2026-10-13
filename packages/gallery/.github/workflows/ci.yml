@@ -23,13 +23,13 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Bootstrap gallery 2.0.0 build engines from merged immutable sources
+      - name: Bootstrap gallery 3.0.0 build engines from merged immutable sources
         run: node scripts/bootstrap-engines.mjs
       - name: License (MIT)
         run: npm run check:license
       - name: Records match their indexes and the manifest
         run: npm run verify
-      - name: Build and test (records valid against the published @openpresentation/opf)
+      - name: Build and test (records valid against the merged source graph)
         run: npm test
       - name: Declarations
         run: npm run typecheck

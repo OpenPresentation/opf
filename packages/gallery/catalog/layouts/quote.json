@@ -7,8 +7,12 @@
     "Text"
   ],
   "areas": [
-    "title",
-    "quotes"
+    [
+      "title"
+    ],
+    [
+      "quotes"
+    ]
   ],
   "columns": [
     1
@@ -24,7 +28,8 @@
         "group"
       ],
       "role": "primary",
-      "flow": "grid"
+      "flow": "grid",
+      "anchor": "middle"
     }
   },
   "description": "Highlight a quotation and its source. Use the attribution to explain who said it and why their perspective matters.",

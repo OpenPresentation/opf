@@ -3,8 +3,9 @@ import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 import {bootstrapPnpmEnvironment} from './bootstrap-pnpm.mjs';
+import {bootstrapInvocation} from './bootstrap-command.mjs';
 import {stageBootstrapPackage,verifyBootstrapInstallation,digest} from './bootstrap-artifacts.mjs';
-import { existsSync, mkdirSync, symlinkSync, lstatSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, symlinkSync, lstatSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { createRequire } from 'node:module';
@@ -15,7 +16,10 @@ const statePath = path.join(root, 'node_modules', '.gallery-bootstrap.json');
 const manifest = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'));
 const pins = JSON.parse(readFileSync(path.join(root, '.github', 'bootstrap-engines.json'), 'utf8'));
 let childEnvironment=process.env;
-const run = (command, args, cwd = root) => execFileSync(command, args, { cwd, env:childEnvironment, stdio: ['ignore', 'pipe', 'inherit'], encoding: 'utf8' }).trim();
+const run = (command, args, cwd = root) => {
+ const invocation=bootstrapInvocation(command,args,{env:childEnvironment});
+ return execFileSync(invocation.command, invocation.args, { cwd, env:childEnvironment, stdio: ['ignore', 'pipe', 'inherit'], encoding: 'utf8' }).trim();
+};
 const hashes = () => Object.fromEntries(['package.json', 'package-lock.json'].map(name => [name, createHash('sha256').update(readFileSync(path.join(root, name))).digest('hex')]));
 function packageDigest(directory) {
   const hash = createHash('sha256');
@@ -71,15 +75,16 @@ if (manifest.version !== pins.galleryVersion) {
   if (existsSync(statePath)) throw new Error('Unexpected bootstrap state outside the configured gallery release');
   console.log('Registry engines: ' + JSON.stringify(resolved()));
 } else if (process.argv.includes('--verify')) {
+  assert.equal(manifest.opf?.catalogSchema,3,'Gallery 3 bootstrap requires catalog schema 3');
   verify();
 } else {
-  if (pins.galleryVersion !== '2.0.0') throw new Error('Bootstrap is restricted to gallery 2.0.0');
+  if (pins.galleryVersion !== '3.0.0' || manifest.opf?.catalogSchema !== 3) throw new Error('Bootstrap is restricted to gallery 3.0.0 with catalog schema 3');
   const expectedRepositories = { core: 'OpenPresentation/opf', render: 'OpenPresentation/opf-render' };
   for (const [name, repository] of Object.entries(expectedRepositories)) {
     if (pins[name].repository !== repository || !/^[a-f0-9]{40}$/.test(pins[name].sha)) throw new Error(`Invalid immutable ${name} pin`);
   }
   const original = hashes();
-  const temporary = mkdtempSync(path.join(tmpdir(), 'gallery-engines-'));
+  const temporary = realpathSync(mkdtempSync(path.join(tmpdir(), 'gallery-engines-')));
   try {
     const sources = {};
     for (const name of ['core', 'render']) {

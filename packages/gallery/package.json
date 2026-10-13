@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/gallery",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "description": "The pptx.gallery catalog for OPF: layouts, themes, colour and font schemes, narratives, audiences, purposes and tones, registered with catalogs: [gallery].",
   "license": "MIT",
   "author": "Open Presentation",
@@ -47,7 +47,7 @@
     "package.json"
   ],
   "opf": {
-    "catalogSchema": 2
+    "catalogSchema": 3
   },
   "engines": {
     "node": ">=22"
@@ -67,8 +67,8 @@
     "prepack": "node scripts/build.mjs"
   },
   "devDependencies": {
-    "@openpresentation/opf": "0.18.1",
-    "@openpresentation/opf-render": "0.18.0",
+    "@openpresentation/opf": "0.19.0",
+    "@openpresentation/opf-render": "0.19.1",
     "@resvg/resvg-js": "2.6.2",
     "typescript": "~5.9.3"
   }

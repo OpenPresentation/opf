@@ -1,9 +1,10 @@
-<svg aria-label="Quarterly operating plan" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
-<rect aria-hidden="true" fill="#011842" height="720" opacity="1" width="1280" x="0" y="0"/>
-<g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Quarterly operating plan</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Review for the leadership team</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="214.98">Revenue grew 18% on new accounts while churn </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="245.48">held flat.</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="214.98">Two field teams piloted the new workflow for </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="245.48">six weeks.</text></g>
+<svg aria-label="Opportunity and constraints" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
+<rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Opportunity and constraints</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Illustrative example • fictional data</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="214.98">Test with two teams for six weeks. Measure </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="245.48">task completion and time before deciding </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="275.98">what to scale.</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="214.98">Keep the scope narrow, collect feedback </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="245.48">weekly and give each decision a named owner.</text></g>
 </svg>

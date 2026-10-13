@@ -7,8 +7,14 @@
     "Text"
   ],
   "areas": [
-    "title title",
-    "first second"
+    [
+      "title",
+      "title"
+    ],
+    [
+      "first",
+      "second"
+    ]
   ],
   "columns": [
     1,

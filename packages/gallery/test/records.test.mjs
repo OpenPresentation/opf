@@ -52,7 +52,7 @@ test("the layouts are the 28 OPF 0.19 intent templates, in six groups, each pass
     assert.deepEqual([entry.name, entry.summary, entry.group], [record.name, record.summary, record.tags[0]], `${record.id}: index entry`);
     assert.ok(isLayoutTemplate(record), `${record.id} is a grid template`);
     assert.deepEqual(layoutTemplateIssues(record), [], `${record.id}: opf/layout-template and opf/layout-region`);
-    assert.ok(record.areas.some((row) => row.split(/\s+/).includes("title")), `${record.id} has a title area`);
+    assert.ok(record.areas.some((row) => row.includes("title")), `${record.id} has a title area`);
     assert.equal(record.placeholders, undefined, `${record.id} carries no 0.18 placeholders`);
   }
 });

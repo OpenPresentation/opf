@@ -1,12 +1,14 @@
-<svg aria-label="Quarterly operating plan" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
-<rect aria-hidden="true" fill="#011842" height="720" opacity="1" width="1280" x="0" y="0"/>
-<g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Quarterly operating plan</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Review for the leadership team</text></g>
-<rect aria-hidden="true" fill="#011842" height="472.42" rx="8" stroke="#3AC67A" width="372.266667" x="57.6" y="189.98"/><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="69.6" xml:space="preserve" y="226.98">Revenue grew 18% on new </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="69.6" xml:space="preserve" y="257.48">accounts while churn held </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="69.6" xml:space="preserve" y="287.98">flat.</text></g>
-<rect aria-hidden="true" fill="#011842" height="472.42" rx="8" stroke="#3AC67A" width="372.266667" x="453.866667" y="189.98"/><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="465.867" xml:space="preserve" y="226.98">Two field teams piloted the </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="465.867" xml:space="preserve" y="257.48">new workflow for six weeks.</text></g>
-<rect aria-hidden="true" fill="#011842" height="472.42" rx="8" stroke="#3AC67A" width="372.266667" x="850.133333" y="189.98"/><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="862.133" xml:space="preserve" y="226.98">Support tickets fell by a </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="862.133" xml:space="preserve" y="257.48">third after the redesign.</text></g>
+<svg aria-label="Three conditions for a useful pilot" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
+<rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Three conditions for a useful pilot</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Illustrative example • fictional data</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="214.98">Clear scope</text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="245.48">Two teams and one workflow </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="275.98">keep the pilot focused.</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="453.867" xml:space="preserve" y="214.98">Consistent measures</text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="453.867" xml:space="preserve" y="245.48">Track completion and task </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="453.867" xml:space="preserve" y="275.98">time against a baseline.</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="850.133" xml:space="preserve" y="214.98">An explicit decision</text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="850.133" xml:space="preserve" y="245.48">Agree the evidence needed </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="850.133" xml:space="preserve" y="275.98">before expanding.</text></g>
 </svg>

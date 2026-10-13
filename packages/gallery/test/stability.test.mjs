@@ -4,6 +4,7 @@
 import assert from "node:assert/strict";
 import { before, test } from "node:test";
 import * as built from "../dist/index.js";
+import { SNAPSHOT_KINDS } from "../scripts/catalog-snapshot.mjs";
 import { layoutDeck, templateDeck } from "../scripts/fixtures.mjs";
 import { allowsChanges, catalogSchemaOf, compareReleases, formatResult, loadEngines, previousVersion } from "../scripts/stability.mjs";
 
@@ -32,7 +33,7 @@ test("the previous release is the highest published stable version at or below t
   assert.equal(allowsChanges("2.0.0", "2.1.0"), false);
   assert.equal(allowsChanges("2.4.2", "2.4.3"), false);
   assert.equal(allowsChanges("2.9.0", "3.0.0"), true);
-  assert.equal(catalogSchemaOf(built), 2);
+  assert.equal(catalogSchemaOf(built), 3);
   assert.equal(catalogSchemaOf({ gallery: {} }), 1, "a release from before the CATALOG_SCHEMA export is schema 1");
 });
 
@@ -122,7 +123,8 @@ test("2.0.0 is a new baseline over 1.x: a record schema change needs a major rel
   const previous = release("1.0.0", (gallery) => {
     gallery.layouts = structuredClone(v1Layouts);
   }, 1);
-  const baseline = await compareReleases(previous, published, engines);
+  const schemaTwo = { ...published, module: { ...published.module, CATALOG_SCHEMA: 2 } };
+  const baseline = await compareReleases(previous, schemaTwo, engines);
   assert.equal(baseline.ok, true, formatResult(baseline));
   assert.equal(baseline.baseline, true);
   assert.deepEqual(baseline.schema, { previous: 1, candidate: 2 });
@@ -130,8 +132,26 @@ test("2.0.0 is a new baseline over 1.x: a record schema change needs a major rel
   assert.equal(baseline.kinds.layouts.added.length, Object.keys(built.gallery.layouts).length - 1);
   assert.match(formatResult(baseline), /new baseline: CATALOG_SCHEMA 1 -> 2/);
 
-  const notMajor = await compareReleases(previous, { ...published, version: "1.1.0" }, engines);
+  const notMajor = await compareReleases(previous, { ...schemaTwo, version: "1.1.0" }, engines);
   assert.equal(notMajor.ok, false);
   assert.ok(notMajor.problems.includes("CATALOG_SCHEMA 1 -> 2: a record schema change needs a major release"), notMajor.problems.join("\n"));
   assert.ok(notMajor.problems.includes("layouts/chart-1x: removed"));
+});
+
+
+test("array area rows require catalog contract 3 and a major release without changing layout URI generation", async () => {
+  const previous = release("2.0.0", () => {}, 2);
+  const candidate = release("3.0.0", () => {}, 3);
+  const result = await compareReleases(previous, candidate, engines);
+  assert.equal(result.ok, true, formatResult(result));
+  assert.deepEqual(result.schema, { previous: 2, candidate: 3 });
+  assert.equal(result.baseline, true);
+  const minor = await compareReleases(previous, { ...candidate, version: "2.1.0" }, engines);
+  assert.equal(minor.ok, false);
+  assert.ok(minor.problems.includes("CATALOG_SCHEMA 2 -> 3: a record schema change needs a major release"));
+  const layoutKind = SNAPSHOT_KINDS.find(({ kind }) => kind === "layouts");
+  assert.equal(layoutKind.recordSchemaId, "https://openpresentation.org/schema/opf-layout/v2");
+  for (const layout of Object.values(built.gallery.layouts)) {
+    assert.ok(layout.areas.every((row) => Array.isArray(row)));
+  }
 });

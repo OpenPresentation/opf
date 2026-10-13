@@ -1,25 +1,17 @@
-<svg aria-label="Quarterly operating plan" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
-<rect aria-hidden="true" fill="#011842" height="720" opacity="1" width="1280" x="0" y="0"/>
-<g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Quarterly operating plan</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Review for the leadership team</text></g>
-<g><line aria-hidden="true" stroke="#3AC67A" stroke-width="3" x1="203.2" x2="1076.8" y1="354.16319999999996" y2="354.16319999999996"/>
-<circle aria-hidden="true" cx="203.2" cy="354.16319999999996" fill="#2874A6" r="9"/>
-<circle aria-hidden="true" cx="494.4" cy="354.16319999999996" fill="#2874A6" r="9"/>
-<circle aria-hidden="true" cx="785.5999999999999" cy="354.16319999999996" fill="#2874A6" r="9"/>
-<circle aria-hidden="true" cx="1076.8" cy="354.16319999999996" fill="#2874A6" r="9"/>
-<g><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="500" style="white-space:pre" text-anchor="middle" x="203.2" xml:space="preserve" y="205.98">Q1</text></g></g>
-<g><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="500" style="white-space:pre" text-anchor="middle" x="203.2" xml:space="preserve" y="225.5">Baseline</text></g></g>
-<g><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="500" style="white-space:pre" text-anchor="middle" x="494.4" xml:space="preserve" y="394.163">Q2</text></g></g>
-<g><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="500" style="white-space:pre" text-anchor="middle" x="494.4" xml:space="preserve" y="413.683">Pilot</text></g></g>
-<g><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="500" style="white-space:pre" text-anchor="middle" x="785.6" xml:space="preserve" y="205.98">Q3</text></g></g>
-<g><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="500" style="white-space:pre" text-anchor="middle" x="785.6" xml:space="preserve" y="225.5">Launch</text></g></g>
-<g><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="500" style="white-space:pre" text-anchor="middle" x="1076.8" xml:space="preserve" y="394.163">Q4</text></g></g>
-<g><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="500" style="white-space:pre" text-anchor="middle" x="1076.8" xml:space="preserve" y="413.683">Scale</text></g></g></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="595.9">Revenue grew 18% on new </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="626.4">accounts while churn held </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="656.9">flat.</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="453.867" xml:space="preserve" y="595.9">Two field teams piloted the </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="453.867" xml:space="preserve" y="626.4">new workflow for six weeks.</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="850.133" xml:space="preserve" y="595.9">Support tickets fell by a </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="850.133" xml:space="preserve" y="626.4">third after the redesign.</text></g>
+<svg aria-label="Six weeks to an informed decision" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
+<rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Six weeks to an informed decision</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Illustrative example • fictional data</text></g>
+<g><line aria-hidden="true" stroke="#CBD5E1" stroke-width="3" x1="251.73333333333332" x2="1028.2666666666667" y1="383.69" y2="383.69"/>
+<circle aria-hidden="true" cx="251.73333333333332" cy="383.69" fill="#2874A6" r="9"/>
+<circle aria-hidden="true" cx="640" cy="383.69" fill="#2874A6" r="9"/>
+<circle aria-hidden="true" cx="1028.2666666666667" cy="383.69" fill="#2874A6" r="9"/>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="18" font-weight="500" style="white-space:pre" text-anchor="middle" x="251.733" xml:space="preserve" y="324.89">Week 1</text></g></g>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="22" font-weight="600" style="white-space:pre" text-anchor="middle" x="251.733" xml:space="preserve" y="354.85">Baseline</text></g></g>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="18" font-weight="500" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="425.69">Weeks 2–5</text></g></g>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="22" font-weight="600" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="455.65">Pilot</text></g></g>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="18" font-weight="500" style="white-space:pre" text-anchor="middle" x="1028.267" xml:space="preserve" y="324.89">Week 6</text></g></g>
+<g><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="22" font-weight="600" style="white-space:pre" text-anchor="middle" x="1028.267" xml:space="preserve" y="354.85">Review and decide</text></g></g></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="626.4">Test with two teams for six weeks. Measure task completion and time before deciding what to </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="656.9">scale.</text></g>
 </svg>

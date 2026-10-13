@@ -1,10 +1,12 @@
-<svg aria-label="Quarterly operating plan" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
-<rect aria-hidden="true" fill="#011842" height="720" opacity="1" width="1280" x="0" y="0"/>
-<g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Quarterly operating plan</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Review for the leadership team</text></g>
-<rect aria-hidden="true" fill="#011842" height="393.92" rx="8" stroke="#3AC67A" width="570.4" x="57.6" y="189.98"/><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="69.6" xml:space="preserve" y="226.98">Revenue grew 18% on new accounts while </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="69.6" xml:space="preserve" y="257.48">churn held flat.</text></g>
-<rect aria-hidden="true" fill="#011842" height="393.92" rx="8" stroke="#3AC67A" width="570.4" x="652" y="189.98"/><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="664" xml:space="preserve" y="226.98">Two field teams piloted the new workflow </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="664" xml:space="preserve" y="257.48">for six weeks.</text></g>
-<rect aria-hidden="true" fill="#011842" height="54.5" rx="8" stroke="#3AC67A" width="1164.8" x="57.6" y="607.9"/><g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="69.6" xml:space="preserve" y="644.9">Support tickets fell by a third after the redesign.</text></g>
+<svg aria-label="Choose the smallest useful test" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
+<rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Choose the smallest useful test</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Illustrative example • fictional data</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="214.98">Option A: focused pilot</text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="245.48">Two teams, six weeks. Low setup cost and a </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="275.98">clear baseline.</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="214.98">Option B: broad rollout</text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="245.48">All teams, three months. Wider reach with </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="652" xml:space="preserve" y="275.98">greater coordination needs.</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="656.9">Recommendation: establish the evidence with Option A before committing to Option B.</text></g>
 </svg>

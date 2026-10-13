@@ -11,8 +11,12 @@
     "contentAlignment": "center"
   },
   "areas": [
-    "title",
-    "message"
+    [
+      "title"
+    ],
+    [
+      "message"
+    ]
   ],
   "columns": [
     1

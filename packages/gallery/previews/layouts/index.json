@@ -1,147 +1,147 @@
 {
   "$schema": "https://openpresentation.org/schema/opf-layout-preview-index/v1",
   "version": "2",
-  "description": "One SVG preview per layout of the catalog, keyed by the layout id, in catalog order: the layout's first fixture slide (sample content in every region, scripts/fixtures.mjs) drawn by the @openpresentation/opf-render this package pins, with the engine's default design. Each preview is a self-contained <svg> element with a 16:9 viewBox; scale it to any thumbnail. Written by scripts/render-previews.mjs; never edit by hand.",
+  "description": "One SVG preview per layout of the catalog, keyed by the layout id, in catalog order: an authored illustrative slide (scripts/editorial-previews.mjs) drawn by the @openpresentation/opf-render this package pins, with an explicit light background and the engine's remaining design defaults. Each preview is a self-contained <svg> element with a 16:9 viewBox; scale it to any thumbnail. Written by scripts/render-previews.mjs; never edit by hand.",
   "records": [
     {
       "id": "cover",
       "file": "cover.svg",
-      "bytes": 1630
+      "bytes": 1689
     },
     {
       "id": "section",
       "file": "section.svg",
-      "bytes": 703
+      "bytes": 702
     },
     {
       "id": "agenda",
       "file": "agenda.svg",
-      "bytes": 4506
+      "bytes": 2013
     },
     {
       "id": "statement",
       "file": "statement.svg",
-      "bytes": 943
+      "bytes": 969
     },
     {
       "id": "closing",
       "file": "closing.svg",
-      "bytes": 2153
+      "bytes": 975
     },
     {
       "id": "text",
       "file": "text.svg",
-      "bytes": 2149
+      "bytes": 3170
     },
     {
       "id": "list",
       "file": "list.svg",
-      "bytes": 4530
+      "bytes": 4824
     },
     {
       "id": "quote",
       "file": "quote.svg",
-      "bytes": 2987
+      "bytes": 1202
     },
     {
       "id": "two-column",
       "file": "two-column.svg",
-      "bytes": 1540
+      "bytes": 1806
     },
     {
       "id": "pillars",
       "file": "pillars.svg",
-      "bytes": 2521
+      "bytes": 2576
     },
     {
       "id": "comparison",
       "file": "comparison.svg",
-      "bytes": 2118
+      "bytes": 2251
     },
     {
       "id": "process",
       "file": "process.svg",
-      "bytes": 7303
+      "bytes": 2969
     },
     {
       "id": "timeline",
       "file": "timeline.svg",
-      "bytes": 4230
+      "bytes": 2802
     },
     {
       "id": "faq",
       "file": "faq.svg",
-      "bytes": 4874
+      "bytes": 2002
     },
     {
       "id": "metrics",
       "file": "metrics.svg",
-      "bytes": 3748
+      "bytes": 3758
     },
     {
       "id": "scorecard",
       "file": "scorecard.svg",
-      "bytes": 3962
+      "bytes": 3397
     },
     {
       "id": "image",
       "file": "image.svg",
-      "bytes": 1442
+      "bytes": 1487
     },
     {
       "id": "image-beside",
       "file": "image-beside.svg",
-      "bytes": 4343
+      "bytes": 2150
     },
     {
       "id": "gallery",
       "file": "gallery.svg",
-      "bytes": 2956
+      "bytes": 3017
     },
     {
       "id": "chart",
       "file": "chart.svg",
-      "bytes": 13772
+      "bytes": 6070
     },
     {
       "id": "chart-beside",
       "file": "chart-beside.svg",
-      "bytes": 6917
+      "bytes": 6242
     },
     {
       "id": "table",
       "file": "table.svg",
-      "bytes": 13656
+      "bytes": 4957
     },
     {
       "id": "table-beside",
       "file": "table-beside.svg",
-      "bytes": 5820
+      "bytes": 5163
     },
     {
       "id": "code",
       "file": "code.svg",
-      "bytes": 5695
+      "bytes": 2720
     },
     {
       "id": "hero",
       "file": "hero.svg",
-      "bytes": 3136
+      "bytes": 4602
     },
     {
       "id": "dashboard",
       "file": "dashboard.svg",
-      "bytes": 14858
+      "bytes": 10799
     },
     {
       "id": "team",
       "file": "team.svg",
-      "bytes": 3612
+      "bytes": 3125
     },
     {
       "id": "logos",
       "file": "logos.svg",
-      "bytes": 2956
+      "bytes": 2250
     }
   ]
 }

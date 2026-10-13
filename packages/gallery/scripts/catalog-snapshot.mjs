@@ -19,6 +19,7 @@ export const DEFAULT_CATALOG_PUBLISHER = "https://www.pptx.gallery";
 // OPF schema names as each kind's default source (https://www.pptx.gallery/<kind>).
 // `schemaVersion` is the kind's record schema generation (default 1). CATALOG_SCHEMA 2 (gallery 2.0.0): the layouts
 // are OPF 0.19 grid templates, `opf-layout/v2`, written in this repository; every other kind is still v1.
+// Overall CATALOG_SCHEMA 3 requires array-row areas but does not change these per-kind URI generations.
 export const SNAPSHOT_KINDS = [
   { kind: "audiences", catalogKey: "audiences", schemaFile: "audience.schema.json" },
   { kind: "chart-types", catalogKey: "chartTypes", schemaFile: "chart-type.schema.json" },

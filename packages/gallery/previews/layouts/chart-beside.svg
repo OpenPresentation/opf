@@ -1,48 +1,41 @@
-<svg aria-label="Quarterly operating plan" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
-<rect aria-hidden="true" fill="#011842" height="720" opacity="1" width="1280" x="0" y="0"/>
-<g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Quarterly operating plan</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Review for the leadership team</text></g>
-<g><rect fill="#011842" height="472.42" stroke="#3AC67A" stroke-width="1" width="684.48" x="57.6" y="189.98"/>
-<rect fill="#2874A6" height="9.6" width="9.6" x="637.68" y="409.39"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="653.68" xml:space="preserve" y="420.43">Current</text></g>
-<rect fill="#89B4DC" height="9.6" width="9.6" x="637.68" y="433.39"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="653.68" xml:space="preserve" y="444.43">Baseline</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="160.97" xml:space="preserve" y="646.64">Q1</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="292.03" xml:space="preserve" y="646.64">Q2</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="423.09" xml:space="preserve" y="646.64">Q3</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="554.15" xml:space="preserve" y="646.64">Q4</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="95.44" x2="619.68" y1="628.4" y2="628.4"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="89.84" xml:space="preserve" y="634.64">0</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="95.44" x2="619.68" y1="576.347" y2="576.347"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="89.84" xml:space="preserve" y="582.587">5</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="95.44" x2="619.68" y1="524.295" y2="524.295"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="89.84" xml:space="preserve" y="530.535">10</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="95.44" x2="619.68" y1="472.242" y2="472.242"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="89.84" xml:space="preserve" y="478.482">15</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="95.44" x2="619.68" y1="420.19" y2="420.19"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="89.84" xml:space="preserve" y="426.43">20</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="95.44" x2="619.68" y1="368.137" y2="368.137"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="89.84" xml:space="preserve" y="374.377">25</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="95.44" x2="619.68" y1="316.085" y2="316.085"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="89.84" xml:space="preserve" y="322.325">30</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="95.44" x2="619.68" y1="264.032" y2="264.032"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="89.84" xml:space="preserve" y="270.272">35</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="95.44" x2="619.68" y1="211.98" y2="211.98"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="89.84" xml:space="preserve" y="218.22">40</text></g>
-<rect fill="#2874A6" height="270.673" width="26.212" x="134.758" y="357.727"/>
-<rect fill="#2874A6" height="312.315" width="26.212" x="265.818" y="316.085"/>
-<rect fill="#2874A6" height="343.546" width="26.212" x="396.878" y="284.853"/>
-<rect fill="#2874A6" height="385.188" width="26.212" x="527.938" y="243.212"/>
-<rect fill="#89B4DC" height="239.442" width="26.212" x="160.97" y="388.958"/>
-<rect fill="#89B4DC" height="260.263" width="26.212" x="292.03" y="368.137"/>
-<rect fill="#89B4DC" height="281.083" width="26.212" x="423.09" y="347.317"/>
-<rect fill="#89B4DC" height="301.904" width="26.212" x="554.15" y="326.495"/>
-<line stroke="#888888" stroke-width="1.333" x1="95.44" x2="95.44" y1="211.98" y2="628.4"/>
-<line stroke="#888888" stroke-width="1.333" x1="95.44" x2="619.68" y1="628.4" y2="628.4"/></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="214.98">Revenue grew 18% on new accounts </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="245.48">while churn held flat.</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="380.453">Two field teams piloted the new </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="410.953">workflow for six weeks.</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="545.927">Support tickets fell by a third </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="576.427">after the redesign.</text></g>
+<svg aria-label="The largest gain came in week four" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
+<rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">The largest gain came in week four</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Illustrative example • fictional data</text></g>
+<g><rect fill="#F0F0F0" height="472.42" stroke="#CBD5E1" stroke-width="1" width="684.48" x="57.6" y="189.98"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="202.58" xml:space="preserve" y="622.64">1</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="351.58" xml:space="preserve" y="622.64">2</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="500.58" xml:space="preserve" y="622.64">3</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="649.58" xml:space="preserve" y="622.64">4</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="128.08" x2="724.08" y1="604.4" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="122.48" xml:space="preserve" y="610.64">0%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="128.08" x2="724.08" y1="560.798" y2="560.798"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="122.48" xml:space="preserve" y="567.038">10%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="128.08" x2="724.08" y1="517.196" y2="517.196"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="122.48" xml:space="preserve" y="523.436">20%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="128.08" x2="724.08" y1="473.593" y2="473.593"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="122.48" xml:space="preserve" y="479.833">30%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="128.08" x2="724.08" y1="429.991" y2="429.991"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="122.48" xml:space="preserve" y="436.231">40%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="128.08" x2="724.08" y1="386.389" y2="386.389"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="122.48" xml:space="preserve" y="392.629">50%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="128.08" x2="724.08" y1="342.787" y2="342.787"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="122.48" xml:space="preserve" y="349.027">60%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="128.08" x2="724.08" y1="299.184" y2="299.184"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="122.48" xml:space="preserve" y="305.424">70%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="128.08" x2="724.08" y1="255.582" y2="255.582"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="122.48" xml:space="preserve" y="261.822">80%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="128.08" x2="724.08" y1="211.98" y2="211.98"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="122.48" xml:space="preserve" y="218.22">90%</text></g>
+<rect fill="#2874A6" height="296.495" width="59.6" x="172.78" y="307.905"/>
+<rect fill="#2874A6" height="313.936" width="59.6" x="321.78" y="290.464"/>
+<rect fill="#2874A6" height="331.377" width="59.6" x="470.78" y="273.023"/>
+<rect fill="#2874A6" height="366.259" width="59.6" x="619.78" y="238.141"/>
+<line stroke="#888888" stroke-width="1.333" x1="128.08" x2="128.08" y1="211.98" y2="604.4"/>
+<line stroke="#888888" stroke-width="1.333" x1="128.08" x2="724.08" y1="604.4" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="426.08" xml:space="preserve" y="656.64">Week</text></g>
+<g transform="rotate(-90 69.6 408.19)"><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="69.6" xml:space="preserve" y="414.43">Task completion</text></g></g></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="214.98">Test with two teams for six weeks. </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="245.48">Measure task completion and time </text>
+<text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="766.08" xml:space="preserve" y="275.98">before deciding what to scale.</text></g>
 </svg>

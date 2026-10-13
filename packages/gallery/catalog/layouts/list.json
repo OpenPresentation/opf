@@ -7,8 +7,12 @@
     "Text"
   ],
   "areas": [
-    "title",
-    "body"
+    [
+      "title"
+    ],
+    [
+      "body"
+    ]
   ],
   "columns": [
     1

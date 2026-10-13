@@ -10,9 +10,15 @@
     "contentAlignment": "center"
   },
   "areas": [
-    "title",
-    "metrics",
-    "note"
+    [
+      "title"
+    ],
+    [
+      "metrics"
+    ],
+    [
+      "note"
+    ]
   ],
   "columns": [
     1
@@ -29,7 +35,8 @@
         "group"
       ],
       "role": "primary",
-      "flow": "grid"
+      "flow": "grid",
+      "anchor": "middle"
     },
     "note": {
       "accepts": [

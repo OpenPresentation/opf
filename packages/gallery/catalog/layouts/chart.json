@@ -7,9 +7,15 @@
     "Visuals"
   ],
   "areas": [
-    "title",
-    "charts",
-    "note"
+    [
+      "title"
+    ],
+    [
+      "charts"
+    ],
+    [
+      "note"
+    ]
   ],
   "columns": [
     1

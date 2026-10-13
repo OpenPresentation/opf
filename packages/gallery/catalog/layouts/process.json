@@ -7,12 +7,16 @@
     "Groups of items"
   ],
   "design": {
-    "contentBox": true,
+    "contentBox": false,
     "contentDirection": "horizontal"
   },
   "areas": [
-    "title",
-    "steps"
+    [
+      "title"
+    ],
+    [
+      "steps"
+    ]
   ],
   "columns": [
     1

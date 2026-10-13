@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {createRequire} from 'node:module';
-import {cpSync,mkdirSync,mkdtempSync,readFileSync,realpathSync,rmSync,writeFileSync} from 'node:fs';
+import {cpSync,mkdirSync,mkdtempSync,readFileSync,realpathSync,rmSync,symlinkSync,writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import {stageBootstrapPackage,verifyBootstrapInstallation} from '../scripts/bootstrap-artifacts.mjs';
-const run=(command,args,cwd)=>execFileSync(command,args,{cwd,encoding:'utf8',stdio:['ignore','pipe','pipe']});
+import {bootstrapInvocation} from '../scripts/bootstrap-command.mjs';
+const run=(command,args,cwd)=>{const invocation=bootstrapInvocation(command,args);return execFileSync(invocation.command,invocation.args,{cwd,encoding:'utf8',stdio:['ignore','pipe','pipe']});};
 const tar=(file,flags,args=[],options={})=>execFileSync('tar',[flags,path.basename(file),...args],{cwd:path.dirname(file),encoding:'utf8',...options});
 test('three development tarballs preserve versions/runtime and share exact core/gallery',()=>{
  const root=realpathSync(mkdtempSync(path.join(tmpdir(),'gallery-artifacts-')));
@@ -27,4 +28,27 @@ test('three development tarballs preserve versions/runtime and share exact core/
   const installed=path.join(modules,'@openpresentation/opf');writeFileSync(path.join(installed,'dist/index.js'),'tampered');assert.throws(()=>verifyBootstrapInstallation(installed,artifacts[1]),/bytes changed/);
   const invalid={...artifacts[0],version:'3.0.0'};assert.throws(()=>verifyBootstrapInstallation(path.join(modules,'@openpresentation/gallery'),invalid));
  }finally{rmSync(root,{recursive:true,force:true});}
+});
+
+
+test('canonical temporary root permits an aliased parent but rejects aliased source children',()=>{
+ const parent=realpathSync(mkdtempSync(path.join(tmpdir(),'gallery-alias-')));
+ try{
+  const actual=path.join(parent,'actual'),alias=path.join(parent,'alias');mkdirSync(actual);
+  symlinkSync(actual,alias,process.platform==='win32'?'junction':'dir');
+  const source=readFileSync(new URL('../scripts/bootstrap-engines.mjs',import.meta.url),'utf8');
+  const expression=source.match(/const temporary = (realpathSync\(mkdtempSync\(path\.join\(tmpdir\(\), 'gallery-engines-'\)\)\));/);
+  assert.ok(expression,'bootstrap must canonicalize its created temporary root');
+  const temporary=Function('realpathSync','mkdtempSync','path','tmpdir',`return ${expression[1]}`)(realpathSync,mkdtempSync,path,()=>alias);
+  assert.equal(temporary,realpathSync(temporary));assert.ok(temporary.startsWith(actual+path.sep));
+  const directory=path.join(temporary,'source');mkdirSync(path.join(directory,'dist'),{recursive:true});
+  const original={name:'@openpresentation/gallery',version:'3.0.0',files:['dist']};
+  writeFileSync(path.join(directory,'package.json'),JSON.stringify(original));for(const file of ['README.md','LICENSE'])writeFileSync(path.join(directory,file),'fixture');
+  writeFileSync(path.join(directory,'dist/index.js'),'export const exact = true;');
+  const options={directory,temporary,original,staged:original,sourceSha:'a'.repeat(40),run,tar};
+  const artifact=stageBootstrapPackage(options);assert.equal(artifact.version,'3.0.0');
+  const external=path.join(temporary,'external');mkdirSync(external);writeFileSync(path.join(external,'child.js'),'outside');
+  symlinkSync(external,path.join(directory,'dist/linked'),process.platform==='win32'?'junction':'dir');
+  assert.throws(()=>stageBootstrapPackage(options),/aliased bootstrap file/);
+ }finally{rmSync(parent,{recursive:true,force:true});}
 });

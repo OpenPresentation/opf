@@ -11,10 +11,10 @@
 export declare const GALLERY_SOURCE: "https://www.pptx.gallery";
 
 /**
- * The version of core's catalog record schemas these records target (package.json `opf.catalogSchema`). 2: the layouts
- * are OPF 0.19 grid templates (`opf-layout/v2`); every other kind is unchanged from 1.
+ * The version of core's catalog record compatibility contract these records target (package.json `opf.catalogSchema`). 3 requires
+ * array rows in layout grid areas. Per-kind layout schemaVersion 2 and `opf-layout/v2` remain unchanged.
  */
-export declare const CATALOG_SCHEMA: 2;
+export declare const CATALOG_SCHEMA: 3;
 
 /** Records of one kind, keyed by id (core's `CatalogRecordMap`). */
 export type GalleryRecords = Readonly<Record<string, Readonly<Record<string, unknown>>>>;

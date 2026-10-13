@@ -7,9 +7,15 @@
     "Groups of items"
   ],
   "areas": [
-    "title",
-    "timeline",
-    "notes"
+    [
+      "title"
+    ],
+    [
+      "timeline"
+    ],
+    [
+      "notes"
+    ]
   ],
   "columns": [
     1

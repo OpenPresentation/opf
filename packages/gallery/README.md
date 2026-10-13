@@ -13,6 +13,10 @@ default.
 templates (`opf-layout/v2`); they need `@openpresentation/opf` 0.19 or later. 1.x holds the 278 OPF 0.18 layouts. 2.0.0
 changed the layouts with no migration path: see [Layouts](#layouts) and the [changelog](CHANGELOG.md).
 
+The unpublished 3.x source candidate advances the overall catalog compatibility contract to `3`: layout grid
+`areas` use arrays of cells instead of whitespace-delimited strings. The per-kind layout schema version remains
+`2` and its URI remains `opf-layout/v2`; those identifiers are distinct from the overall catalog contract.
+
 ## Use
 
 ```sh
@@ -37,7 +41,7 @@ registers later.
 | --- | --- |
 | `gallery` | The content records by kind and then by id, without `$schema`, `id` or `x-*` members, with `source: "https://www.pptx.gallery"` |
 | `GALLERY_SOURCE` | `https://www.pptx.gallery`, the `source` of a document's `catalogs.default` |
-| `CATALOG_SCHEMA` | The version of core's catalog record schemas these records target (also `opf.catalogSchema` in `package.json`): `2`, the layouts are `opf-layout/v2` grid templates |
+| `CATALOG_SCHEMA` | The overall catalog compatibility contract (also `opf.catalogSchema` in `package.json`): `3` requires array-row areas; layouts retain per-kind schema version `2` and `opf-layout/v2` |
 | `catalogDisplay` | Display metadata for pickers: `chartTypes`, `languages` and `socialPlatforms` by id |
 | `catalogIndexes` | Each kind's `index.json`: the record summaries and their content hash (a layout's entry also has its `summary` and `group`) |
 | `catalogManifest` | The pptx.gallery commit the 1.x records were taken from, and a content hash per kind |
@@ -143,3 +147,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the checks, releases and the license.
 ## License
 
 [MIT](LICENSE). The records, the previews and the code are all under it; `npm run check:license` checks it.
+
+### Editorial layout defaults
+
+Compact quote, headline-metric and image-side explanation regions opt into `anchor: "middle"`. Long text, lists and analytical views retain top alignment. A pin still selects a named region; its anchor governs content placement within that region. Centering needs a core engine that measures the content kind; older engines may keep unsupported kinds at the top. Explicit deck and slide design continues to override catalog defaults.
+
+Picker examples in `scripts/editorial-previews.mjs` use fictional content and are separate from the unchanged filled/empty stability fixtures. Numeric examples supply units and explicit precision; FAQ previews pair questions with answers, and process previews show ordered actions.

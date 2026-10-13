@@ -1,94 +1,66 @@
-<svg aria-label="Quarterly operating plan" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
-<rect aria-hidden="true" fill="#011842" height="720" opacity="1" width="1280" x="0" y="0"/>
-<g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Quarterly operating plan</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Review for the leadership team</text></g>
-<rect aria-hidden="true" fill="#011842" height="179.368" rx="8" stroke="#3AC67A" width="372.266667" x="57.6" y="189.98"/><g><g><text fill="#2874A6" font-family="Aptos Display, sans-serif" font-size="43.493" font-weight="800" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="69.6" xml:space="preserve" y="245.473"><tspan x="69.6">18%</tspan></text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="23" font-weight="500" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="69.6" xml:space="preserve" y="290.042"><tspan x="69.6">Net revenue growth</tspan></text></g>
-<g><text fill="#4ADE80" font-family="Aptos, sans-serif" font-size="18" font-weight="500" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="69.6" xml:space="preserve" y="321.102"><tspan x="69.6">up</tspan></text></g>
-<g aria-label="Trend: up" role="img"><polygon fill="#4ADE80" points="94.44,314.622 100.92,308.142 107.4,314.622 104.16,314.622 104.16,321.102 97.68,321.102 97.68,314.622"/></g></g>
-<rect aria-hidden="true" fill="#011842" height="179.368" rx="8" stroke="#3AC67A" width="372.266667" x="453.866667" y="189.98"/><g><g><text fill="#2874A6" font-family="Aptos Display, sans-serif" font-size="43.493" font-weight="800" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="465.867" xml:space="preserve" y="245.473"><tspan x="465.867">3.1M</tspan></text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="23" font-weight="500" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="465.867" xml:space="preserve" y="290.042"><tspan x="465.867">Active users</tspan></text></g>
-<g><text fill="#4ADE80" font-family="Aptos, sans-serif" font-size="18" font-weight="500" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="465.867" xml:space="preserve" y="321.102"><tspan x="465.867">up</tspan></text></g>
-<g aria-label="Trend: up" role="img"><polygon fill="#4ADE80" points="490.707,314.622 497.187,308.142 503.667,314.622 500.427,314.622 500.427,321.102 493.947,321.102 493.947,314.622"/></g></g>
-<rect aria-hidden="true" fill="#011842" height="179.368" rx="8" stroke="#3AC67A" width="372.266667" x="850.133333" y="189.98"/><g><g><text fill="#2874A6" font-family="Aptos Display, sans-serif" font-size="43.493" font-weight="800" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="862.133" xml:space="preserve" y="245.473"><tspan x="862.133">42</tspan></text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="23" font-weight="500" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="862.133" xml:space="preserve" y="290.042"><tspan x="862.133">Net promoter score</tspan></text></g>
-<g><text fill="#CBD5E1" font-family="Aptos, sans-serif" font-size="18" font-weight="500" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="862.133" xml:space="preserve" y="321.102"><tspan x="862.133">flat</tspan></text></g>
-<g aria-label="Trend: flat" role="img"><polygon fill="#CBD5E1" points="906.413,311.382 912.893,311.382 912.893,308.142 919.373,314.622 912.893,321.102 912.893,317.862 906.413,317.862"/></g></g>
-<rect aria-hidden="true" fill="#011842" height="269.052" rx="8" stroke="#3AC67A" width="372.266667" x="57.6" y="393.348"/><g><rect fill="#011842" height="245.052" stroke="#3AC67A" stroke-width="1" width="348.267" x="69.6" y="405.348"/>
-<rect fill="#2874A6" height="9.6" width="9.6" x="313.467" y="511.074"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="329.467" xml:space="preserve" y="522.114">Current</text></g>
-<rect fill="#89B4DC" height="9.6" width="9.6" x="313.467" y="535.074"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="329.467" xml:space="preserve" y="546.114">Baseline</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="130.943" xml:space="preserve" y="634.64">Q1</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="177.95" xml:space="preserve" y="634.64">Q2</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="224.957" xml:space="preserve" y="634.64">Q3</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="271.963" xml:space="preserve" y="634.64">Q4</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="107.44" x2="295.467" y1="616.4" y2="616.4"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="101.84" xml:space="preserve" y="622.64">0</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="107.44" x2="295.467" y1="569.137" y2="569.137"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="101.84" xml:space="preserve" y="575.377">10</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="107.44" x2="295.467" y1="521.874" y2="521.874"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="101.84" xml:space="preserve" y="528.114">20</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="107.44" x2="295.467" y1="474.611" y2="474.611"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="101.84" xml:space="preserve" y="480.851">30</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="107.44" x2="295.467" y1="427.348" y2="427.348"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="101.84" xml:space="preserve" y="433.588">40</text></g>
-<rect fill="#2874A6" height="122.884" width="9.401" x="121.542" y="493.516"/>
-<rect fill="#2874A6" height="141.789" width="9.401" x="168.549" y="474.611"/>
-<rect fill="#2874A6" height="155.968" width="9.401" x="215.555" y="460.432"/>
-<rect fill="#2874A6" height="174.873" width="9.401" x="262.562" y="441.527"/>
-<rect fill="#89B4DC" height="108.705" width="9.401" x="130.943" y="507.695"/>
-<rect fill="#89B4DC" height="118.157" width="9.401" x="177.95" y="498.243"/>
-<rect fill="#89B4DC" height="127.61" width="9.401" x="224.957" y="488.79"/>
-<rect fill="#89B4DC" height="137.063" width="9.401" x="271.963" y="479.337"/>
-<line stroke="#888888" stroke-width="1.333" x1="107.44" x2="107.44" y1="427.348" y2="616.4"/>
-<line stroke="#888888" stroke-width="1.333" x1="107.44" x2="295.467" y1="616.4" y2="616.4"/></g>
-<rect aria-hidden="true" fill="#011842" height="269.052" rx="8" stroke="#3AC67A" width="372.266667" x="453.866667" y="393.348"/><g><rect fill="#011842" height="245.052" stroke="#3AC67A" stroke-width="1" width="348.267" x="465.867" y="405.348"/>
-<polyline fill="none" points="696.933,515.874 719.333,515.874" stroke="#2874A6" stroke-width="2.667"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="725.733" xml:space="preserve" y="522.114">Current</text></g>
-<polyline fill="none" points="696.933,539.874 719.333,539.874" stroke="#89B4DC" stroke-width="2.667"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="725.733" xml:space="preserve" y="546.114">Baseline</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="525.61" xml:space="preserve" y="634.64">Q1</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="569.417" xml:space="preserve" y="634.64">Q2</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="613.223" xml:space="preserve" y="634.64">Q3</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="657.03" xml:space="preserve" y="634.64">Q4</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="503.707" x2="678.933" y1="616.4" y2="616.4"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="498.107" xml:space="preserve" y="622.64">0</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="503.707" x2="678.933" y1="569.137" y2="569.137"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="498.107" xml:space="preserve" y="575.377">10</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="503.707" x2="678.933" y1="521.874" y2="521.874"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="498.107" xml:space="preserve" y="528.114">20</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="503.707" x2="678.933" y1="474.611" y2="474.611"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="498.107" xml:space="preserve" y="480.851">30</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="503.707" x2="678.933" y1="427.348" y2="427.348"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="498.107" xml:space="preserve" y="433.588">40</text></g>
-<polyline fill="none" points="525.61,488.79 569.417,474.611 613.223,465.158 657.03,441.527" stroke="#2874A6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.667"/>
-<polyline fill="none" points="525.61,507.695 569.417,493.516 613.223,488.79 657.03,479.337" stroke="#89B4DC" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.667"/>
-<line stroke="#888888" stroke-width="1.333" x1="503.707" x2="503.707" y1="427.348" y2="616.4"/>
-<line stroke="#888888" stroke-width="1.333" x1="503.707" x2="678.933" y1="616.4" y2="616.4"/></g>
-<rect aria-hidden="true" fill="#011842" height="269.052" rx="8" stroke="#3AC67A" width="372.266667" x="850.133333" y="393.348"/><g><rect fill="#011842" height="245.052" stroke="#3AC67A" stroke-width="1" width="348.267" x="862.133" y="405.348"/>
-<rect fill="#2874A6" height="9.6" width="9.6" x="1106" y="511.074"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="1122" xml:space="preserve" y="522.114">Current</text></g>
-<rect fill="#89B4DC" height="9.6" width="9.6" x="1106" y="535.074"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="start" x="1122" xml:space="preserve" y="546.114">Baseline</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="899.973" xml:space="preserve" y="599.008">Q1</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="899.973" xml:space="preserve" y="551.745">Q2</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="899.973" xml:space="preserve" y="504.482">Q3</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="899.973" xml:space="preserve" y="457.219">Q4</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="904.973" x2="904.973" y1="427.348" y2="616.4"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="904.973" xml:space="preserve" y="634.64">0</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="992.487" x2="992.487" y1="427.348" y2="616.4"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="992.487" xml:space="preserve" y="634.64">20</text></g>
-<line stroke="#3AC67A" stroke-opacity="0.7" stroke-width="1.333" x1="1080" x2="1080" y1="427.348" y2="616.4"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="1080" xml:space="preserve" y="634.64">40</text></g>
-<rect fill="#2874A6" height="9.453" width="122.519" x="904.973" y="592.769"/>
-<rect fill="#2874A6" height="9.453" width="131.27" x="904.973" y="545.505"/>
-<rect fill="#2874A6" height="9.453" width="135.646" x="904.973" y="498.243"/>
-<rect fill="#2874A6" height="9.453" width="161.9" x="904.973" y="450.979"/>
-<rect fill="#89B4DC" height="9.453" width="100.64" x="904.973" y="583.316"/>
-<rect fill="#89B4DC" height="9.453" width="118.143" x="904.973" y="536.053"/>
-<rect fill="#89B4DC" height="9.453" width="118.143" x="904.973" y="488.79"/>
-<rect fill="#89B4DC" height="9.453" width="126.894" x="904.973" y="441.527"/>
-<line stroke="#888888" stroke-width="1.333" x1="904.973" x2="904.973" y1="427.348" y2="616.4"/>
-<line stroke="#888888" stroke-width="1.333" x1="904.973" x2="1080" y1="616.4" y2="616.4"/></g>
+<svg aria-label="Pilot performance at a glance" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
+<rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Pilot performance at a glance</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Illustrative example • fictional data</text></g>
+<g><g><text fill="#2874A6" font-family="Aptos Display, sans-serif" font-size="50.213" font-weight="800" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="57.6" xml:space="preserve" y="240.193"><tspan x="57.6">52</tspan></text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="23" font-weight="500" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="57.6" xml:space="preserve" y="286.24"><tspan x="57.6">Trial participants</tspan></text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="57.6" xml:space="preserve" y="319.3"><tspan x="57.6">Illustrative six-week pilot</tspan></text></g></g>
+<g><g><text fill="#2874A6" font-family="Aptos Display, sans-serif" font-size="50.213" font-weight="800" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="453.867" xml:space="preserve" y="240.193"><tspan x="453.867">84%</tspan></text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="23" font-weight="500" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="453.867" xml:space="preserve" y="286.24"><tspan x="453.867">Task completion</tspan></text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="453.867" xml:space="preserve" y="319.3"><tspan x="453.867">Up from 68% at baseline</tspan></text></g></g>
+<g><g><text fill="#2874A6" font-family="Aptos Display, sans-serif" font-size="50.213" font-weight="800" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="850.133" xml:space="preserve" y="240.193"><tspan x="850.133">6.2</tspan></text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="23" font-weight="500" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="947.513" xml:space="preserve" y="240.193"><tspan x="947.513">min</tspan></text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="23" font-weight="500" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="850.133" xml:space="preserve" y="286.24"><tspan x="850.133">Median task time</tspan></text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="20" font-weight="400" style="white-space:pre" text-anchor="start" text-rendering="geometricPrecision" x="850.133" xml:space="preserve" y="319.3"><tspan x="850.133">Down from 9.4 min</tspan></text></g></g>
+<g><rect fill="#F0F0F0" height="269.052" stroke="#CBD5E1" stroke-width="1" width="570.4" x="57.6" y="393.348"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="197" xml:space="preserve" y="622.64">1</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="315" xml:space="preserve" y="622.64">2</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="433" xml:space="preserve" y="622.64">3</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="551" xml:space="preserve" y="622.64">4</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="138" x2="610" y1="604.4" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="132.4" xml:space="preserve" y="610.64">0%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="138" x2="610" y1="566.59" y2="566.59"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="132.4" xml:space="preserve" y="572.83">20%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="138" x2="610" y1="528.779" y2="528.779"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="132.4" xml:space="preserve" y="535.019">40%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="138" x2="610" y1="490.969" y2="490.969"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="132.4" xml:space="preserve" y="497.209">60%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="138" x2="610" y1="453.158" y2="453.158"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="132.4" xml:space="preserve" y="459.398">80%</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="138" x2="610" y1="415.348" y2="415.348"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="132.4" xml:space="preserve" y="421.588">100%</text></g>
+<rect fill="#2874A6" height="128.555" width="47.2" x="173.4" y="475.845"/>
+<rect fill="#2874A6" height="136.117" width="47.2" x="291.4" y="468.283"/>
+<rect fill="#2874A6" height="143.68" width="47.2" x="409.4" y="460.72"/>
+<rect fill="#2874A6" height="158.804" width="47.2" x="527.4" y="445.596"/>
+<line stroke="#888888" stroke-width="1.333" x1="138" x2="138" y1="415.348" y2="604.4"/>
+<line stroke="#888888" stroke-width="1.333" x1="138" x2="610" y1="604.4" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="374" xml:space="preserve" y="656.64">Week</text></g>
+<g transform="rotate(-90 69.6 509.874)"><g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="69.6" xml:space="preserve" y="516.114">Task completion</text></g></g></g>
+<g><rect fill="#F0F0F0" height="269.052" stroke="#CBD5E1" stroke-width="1" width="570.4" x="652" y="393.348"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="679.92" xml:space="preserve" y="563.377">A</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="end" x="679.92" xml:space="preserve" y="468.851">B</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="684.92" x2="684.92" y1="415.348" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="684.92" xml:space="preserve" y="622.64">0.0</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="748.855" x2="748.855" y1="415.348" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="748.855" xml:space="preserve" y="622.64">1.0</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="812.79" x2="812.79" y1="415.348" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="812.79" xml:space="preserve" y="622.64">2.0</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="876.725" x2="876.725" y1="415.348" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="876.725" xml:space="preserve" y="622.64">3.0</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="940.66" x2="940.66" y1="415.348" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="940.66" xml:space="preserve" y="622.64">4.0</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="1004.595" x2="1004.595" y1="415.348" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="1004.595" xml:space="preserve" y="622.64">5.0</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="1068.53" x2="1068.53" y1="415.348" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="1068.53" xml:space="preserve" y="622.64">6.0</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="1132.465" x2="1132.465" y1="415.348" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="1132.465" xml:space="preserve" y="622.64">7.0</text></g>
+<line stroke="#CBD5E1" stroke-opacity="0.7" stroke-width="1.333" x1="1196.4" x2="1196.4" y1="415.348" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="1196.4" xml:space="preserve" y="622.64">8.0</text></g>
+<rect fill="#2874A6" height="37.81" width="370.823" x="684.92" y="538.232"/>
+<rect fill="#2874A6" height="37.81" width="428.365" x="684.92" y="443.706"/>
+<line stroke="#888888" stroke-width="1.333" x1="684.92" x2="684.92" y1="415.348" y2="604.4"/>
+<line stroke="#888888" stroke-width="1.333" x1="684.92" x2="1196.4" y1="604.4" y2="604.4"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="16" font-weight="400" style="white-space:pre" text-anchor="middle" x="940.66" xml:space="preserve" y="656.64">Median task time (min)</text></g></g>
 </svg>

@@ -3,7 +3,7 @@
   "kind": "layouts",
   "version": "1",
   "description": "The built-in slide layouts of OPF 0.19: 28 grid templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (areas, columns, rows and regions) lives in the per-id JSON file alongside this index.",
-  "contentSha256": "b88052b72bb8cc5780fefdece83e09ad9bae6738ebeb43a8d9a3e93a7e5c17d8",
+  "contentSha256": "33717fa0132e34e458d933b9280e5665a4f7385b8d15f41b984df5d1083a5202",
   "records": [
     {
       "id": "cover",
@@ -71,7 +71,7 @@
     {
       "id": "pillars",
       "name": "Pillars",
-      "summary": "Two to six ideas of equal weight, as cards.",
+      "summary": "Related ideas arranged in equal columns.",
       "group": "Groups of items",
       "file": "pillars.json"
     },
@@ -113,7 +113,7 @@
     {
       "id": "scorecard",
       "name": "Scorecard",
-      "summary": "Metrics with commentary or status, as cards.",
+      "summary": "Headline measures with their targets and status.",
       "group": "Numbers",
       "file": "scorecard.json"
     },

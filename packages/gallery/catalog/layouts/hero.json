@@ -7,9 +7,18 @@
     "Mixed"
   ],
   "areas": [
-    "title title",
-    "lead media",
-    "support support"
+    [
+      "title",
+      "title"
+    ],
+    [
+      "lead",
+      "media"
+    ],
+    [
+      "support",
+      "support"
+    ]
   ],
   "columns": [
     1,

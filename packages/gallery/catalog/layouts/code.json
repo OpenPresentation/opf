@@ -7,8 +7,14 @@
     "Visuals"
   ],
   "areas": [
-    "title title",
-    "code notes"
+    [
+      "title",
+      "title"
+    ],
+    [
+      "code",
+      "notes"
+    ]
   ],
   "columns": [
     3,

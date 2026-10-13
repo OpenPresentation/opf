@@ -1,16 +1,7 @@
-<svg aria-label="Quarterly operating plan" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
-<rect aria-hidden="true" fill="#011842" height="720" opacity="1" width="1280" x="0" y="0"/>
-<g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Quarterly operating plan</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Review for the leadership team</text></g>
-<g><g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="28" font-weight="600" style="white-space:pre" text-anchor="start" x="75.6" xml:space="preserve" y="235.98">"The plan makes the </text>
-<text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="28" font-weight="600" style="white-space:pre" text-anchor="start" x="75.6" xml:space="preserve" y="270.14">sequence of choices </text>
-<text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="28" font-weight="600" style="white-space:pre" text-anchor="start" x="75.6" xml:space="preserve" y="304.3">explicit."</text></g>
-<g><text fill="#F0F0F0" font-family="Aptos, sans-serif" font-size="17" font-weight="500" style="white-space:pre" text-anchor="start" x="75.6" xml:space="preserve" y="621.4">Program sponsor</text></g></g>
-<g><g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="28" font-weight="600" style="white-space:pre" text-anchor="start" x="471.867" xml:space="preserve" y="235.98">"We finally see the </text>
-<text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="28" font-weight="600" style="white-space:pre" text-anchor="start" x="471.867" xml:space="preserve" y="270.14">whole pipeline in one </text>
-<text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="28" font-weight="600" style="white-space:pre" text-anchor="start" x="471.867" xml:space="preserve" y="304.3">place."</text></g>
-<g><text fill="#F0F0F0" font-family="Aptos, sans-serif" font-size="17" font-weight="500" style="white-space:pre" text-anchor="start" x="471.867" xml:space="preserve" y="621.4">Sales lead</text></g></g>
-<g><g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="28" font-weight="600" style="white-space:pre" text-anchor="start" x="868.133" xml:space="preserve" y="235.98">"Onboarding now takes </text>
-<text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="28" font-weight="600" style="white-space:pre" text-anchor="start" x="868.133" xml:space="preserve" y="270.14">minutes, not days."</text></g>
-<g><text fill="#F0F0F0" font-family="Aptos, sans-serif" font-size="17" font-weight="500" style="white-space:pre" text-anchor="start" x="868.133" xml:space="preserve" y="621.4">Customer</text></g></g>
+<svg aria-label="A shared view makes decisions easier" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
+<rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">A shared view makes decisions easier</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Illustrative example • fictional data</text></g>
+<g><g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="28" font-weight="600" style="white-space:pre" text-anchor="start" x="75.6" xml:space="preserve" y="416.24">"We can now see where participants need help."</text></g>
+<g><text fill="#011842" font-family="Aptos, sans-serif" font-size="17" font-weight="500" style="white-space:pre" text-anchor="start" x="75.6" xml:space="preserve" y="457.4">Pilot lead - Illustrative quotation</text></g></g>
 </svg>

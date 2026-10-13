@@ -7,8 +7,12 @@
     "Openers and closers"
   ],
   "areas": [
-    "title",
-    "items"
+    [
+      "title"
+    ],
+    [
+      "items"
+    ]
   ],
   "columns": [
     1

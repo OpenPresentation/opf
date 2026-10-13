@@ -7,8 +7,14 @@
     "Visuals"
   ],
   "areas": [
-    "title title",
-    "chart notes"
+    [
+      "title",
+      "title"
+    ],
+    [
+      "chart",
+      "notes"
+    ]
   ],
   "columns": [
     3,

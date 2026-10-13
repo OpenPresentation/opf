@@ -7,11 +7,15 @@
     "Groups of items"
   ],
   "design": {
-    "contentBox": true
+    "contentBox": false
   },
   "areas": [
-    "title",
-    "questions"
+    [
+      "title"
+    ],
+    [
+      "questions"
+    ]
   ],
   "columns": [
     1

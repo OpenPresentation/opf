@@ -1,12 +1,6 @@
-<svg aria-label="Quarterly operating plan" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
-<rect aria-hidden="true" fill="#011842" height="720" opacity="1" width="1280" x="0" y="0"/>
-<g><text fill="#FFFFFF" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="302.06">Quarterly operating plan</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="350.94">Review for the leadership team</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="middle" x="243.733" xml:space="preserve" y="595.9">Revenue grew 18% on new </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="middle" x="243.733" xml:space="preserve" y="626.4">accounts while churn held </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="middle" x="243.733" xml:space="preserve" y="656.9">flat.</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="595.9">Two field teams piloted the </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="626.4">new workflow for six weeks.</text></g>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="middle" x="1036.267" xml:space="preserve" y="595.9">Support tickets fell by a </text>
-<text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="middle" x="1036.267" xml:space="preserve" y="626.4">third after the redesign.</text></g>
+<svg aria-label="Agree the pilot team and start date" aria-roledescription="slide" height="720" role="group" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
+<rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="332.56">Agree the pilot team and start date</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="381.44">Illustrative example • fictional data</text></g>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="656.9">Next step: name the pilot lead and agree the start date.</text></g>
 </svg>

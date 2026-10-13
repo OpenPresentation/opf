@@ -7,8 +7,14 @@
     "Visuals"
   ],
   "areas": [
-    "title title",
-    "media body"
+    [
+      "title",
+      "title"
+    ],
+    [
+      "media",
+      "body"
+    ]
   ],
   "columns": [
     1,
@@ -36,7 +42,8 @@
         "group"
       ],
       "role": "primary",
-      "flow": "auto"
+      "flow": "auto",
+      "anchor": "middle"
     }
   },
   "description": "Explain a visual alongside its supporting text. Use the text to direct attention to the meaningful parts of the image.",

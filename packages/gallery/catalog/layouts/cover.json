@@ -11,7 +11,10 @@
     "contentAlignment": "center"
   },
   "areas": [
-    "title media"
+    [
+      "title",
+      "media"
+    ]
   ],
   "columns": [
     1,
