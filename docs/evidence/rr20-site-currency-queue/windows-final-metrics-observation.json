@@ -24,9 +24,20 @@
   "nativeAcceptance": false,
   "editabilityExercised": false,
   "geometryTolerancePt": 0.02,
-  "geometryVsExportMeasured": false,
-  "remaining": "Measure native versus intended geometry and preview baseline differences; do not infer fidelity from lifecycle or no-op save/reopen.",
+  "geometryVsExportMeasured": true,
+  "remaining": "Run maintained geometry comparison and capture native font observations; complete representative native edit cases. Raster edge deltas are observations, not baseline measurements or native acceptance.",
   "powerPoint": "16.0.20430.20146",
   "officeProcessRetained": 56340,
-  "ownedPresentationClosed": true
+  "ownedPresentationClosed": true,
+  "measuredComparison": {
+    "source": "Windows supervisor measurement of existing artifacts; reusable comparator under implementation",
+    "shapeGeometryMaxDeltaPt": 1.2598e-05,
+    "serializedPrecisionBoundPt": 0.0001,
+    "svgAnchorMaxDeltaPt": 0.00034105,
+    "nativeBaselineMeasured": false,
+    "comFontDescriptorsCaptured": false,
+    "xmlFontDescriptorsUnchanged": true,
+    "nativeVsPreviewInk": "Title roughly 3 pixels higher; metric values roughly 4 pixels higher; labels roughly 2 pixels higher. Original and reopened native rasters unchanged.",
+    "gateInterpretation": "Existing 0.02 pt shape geometry threshold satisfied. Existing metric harness does not impose SVG/native pixel-edge equality. Font and actual baseline fidelity remain unproven."
+  }
 }
