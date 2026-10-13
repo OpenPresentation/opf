@@ -56,3 +56,23 @@ Add fixtures, expected actions and assertions here with normal code review.
 `pnpm check:native-acceptance` runs portable contract and negative tests without
 Office; `pnpm check:changed` selects it for changes in this directory. Native
 PowerPoint remains a separate Windows supervisor gate.
+
+## Compare recorded text geometry
+
+After a successful bounded Windows case, run the maintained comparator against
+that case's existing output and the exact consumer recorded in its suite:
+
+```sh
+node scripts/native-acceptance/compare-text.mjs --suite /path/to/suite --output /path/to/case-output --consumer /path/to/installed-consumer --case feature-metrics
+```
+
+It verifies sealed fixture files, installed package identities, runner/worker
+snapshots and lifecycle completion before comparing named text allocation boxes
+at the existing 0.02 pt tolerance. Word comparison is whitespace-delimited; it
+does not establish preservation of spacing, tabs or line breaks. It supports
+no-op and `set-text` plans; unsupported actions are refused explicitly.
+
+The new `text-comparison.json` is written once, preserving existing evidence.
+Font selection, actual baselines and raster equivalence remain unmeasured, and
+`nativeAcceptance` remains false even when this comparison passes. It never opens
+Office or regenerates the suite.

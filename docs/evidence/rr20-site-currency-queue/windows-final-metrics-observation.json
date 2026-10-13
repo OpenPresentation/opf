@@ -39,5 +39,22 @@
     "xmlFontDescriptorsUnchanged": true,
     "nativeVsPreviewInk": "Title roughly 3 pixels higher; metric values roughly 4 pixels higher; labels roughly 2 pixels higher. Original and reopened native rasters unchanged.",
     "gateInterpretation": "Existing 0.02 pt shape geometry threshold satisfied. Existing metric harness does not impose SVG/native pixel-edge equality. Font and actual baseline fidelity remain unproven."
+  },
+  "maintainedComparison": {
+    "toolingRevision": "8c70c8e7cffc388cc049f5c07e9d518c9989303a",
+    "command": "node scripts/native-acceptance/compare-text.mjs",
+    "exit": 0,
+    "result": "C:/opf-work/native-metrics-e4da9319-0c714b00-attempt01/text-comparison.json",
+    "sha256": "0c707ae8ff227132968d1268e154b7f0b31c907bc491b9840e6c72f1e21e5e62",
+    "passed": true,
+    "slides": 1,
+    "textShapes": 13,
+    "observations": 39,
+    "findings": [],
+    "maxGeometryDeltaPt": 1.25984252e-05,
+    "tolerancePt": 0.02,
+    "identityChecks": "Complete suite, installed graph and runner/worker snapshots verified by maintained comparator on Windows",
+    "limitations": "Whitespace-delimited words and shape geometry only; no spacing, tabs, line breaks, native font selection, baseline or pixel-equivalence acceptance",
+    "nativeAcceptance": false
   }
 }
