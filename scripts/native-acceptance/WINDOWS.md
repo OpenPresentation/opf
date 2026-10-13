@@ -131,3 +131,19 @@ is safe. Start a fresh directory for another setup. Do not run Setup/Check/Clean
 concurrently; a per-user mutex refuses overlapping invocations. The tool neither opens nor closes Office.
 Windows runtime and actual registration must be verified on the Windows host;
 macOS static checks are not evidence of Windows execution.
+
+## Optional uniform text-font observations
+
+A reviewed worker that declares `-CaptureTextFonts` can record the whole text
+range's reported font name, point size, bold and italic values for the original,
+edited and reopened states. Pass `-CaptureTextFonts` to `run-windows.ps1` to opt
+in. The runner refuses an older worker without that switch before creating
+output or starting Office. Omit the switch to retain the existing observation
+scope. Validate the matching runner and worker's pure controls on Windows first.
+
+The request, worker report and runner receipt record the option. Mixed or
+unavailable descriptors remain explicit observations; they must not be guessed
+or treated as font passes. Whole-range COM descriptors do not establish
+character-level fallback, the physical font file used for each glyph, or the
+text's actual baseline. Compare recorded sizes against the existing 0.02 pt
+criterion only where the source style is explicit and uniform.

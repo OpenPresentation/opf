@@ -4,7 +4,8 @@ param(
     [Parameter(Mandatory=$true)][string]$Case,
     [Parameter(Mandatory=$true)][string]$OutputDirectory,
     [ValidateRange(5,60)][int]$TimeoutSeconds=45,
-    [switch]$ValidateOnly
+    [switch]$ValidateOnly,
+    [switch]$CaptureTextFonts
 )
 $ErrorActionPreference='Stop'
 
@@ -106,6 +107,17 @@ function Import-NativePlanValidation([string]$Worker) {
         Invoke-Expression $definition
     }
 }
+function Assert-NativeFontCaptureSupport([string]$Worker,[bool]$Requested) {
+    if(-not $Requested) { return }
+    $tokens=$null;$errors=$null
+    $ast=[System.Management.Automation.Language.Parser]::ParseFile($Worker,[ref]$tokens,[ref]$errors)
+    if($errors.Count -ne 0) { throw 'Font-capture worker has parser errors' }
+    $parameters=@($ast.ParamBlock.Parameters | Where-Object { $_.Name.VariablePath.UserPath -ceq 'CaptureTextFonts' })
+    if($parameters.Count -ne 1 -or $parameters[0].StaticType -ne [System.Management.Automation.SwitchParameter]) { throw 'Selected worker does not support the reviewed CaptureTextFonts switch' }
+}
+function Get-NativeFontCaptureArguments([bool]$Requested) {
+    if($Requested) { return '-CaptureTextFonts' }
+}
 function Invoke-NativeChild([string]$Shell,[string]$Script,[string[]]$Arguments,[string]$Log) {
     & $Shell -NoProfile -NonInteractive -File $Script @Arguments *> $Log
     if($LASTEXITCODE -ne 0) { throw "Child failed; preserve $Log. No retry was started." }
@@ -119,6 +131,7 @@ $workerIdentity=Assert-NativeRepositoryIdentity $workerRoot $binding.suite.prove
 $suiteIdentity=Assert-NativeRepositoryIdentity $suiteRoot $binding.suite.provenance.suiteRepository @('scripts/native-acceptance/run-windows.ps1')
 $worker=Resolve-NativeAsset $workerRoot 'test/native-furniture-control.ps1'
 Import-NativePlanValidation $worker
+Assert-NativeFontCaptureSupport $worker ([bool]$CaptureTextFonts)
 $null=Read-AndValidateActionPlan $binding.planPath
 $output=Assert-FreshNativeOutput $OutputDirectory @($binding.root,$workerRoot,$suiteRoot)
 if([Environment]::OSVersion.Platform -ne [PlatformID]::Win32NT) { throw 'Run this entrypoint on Windows; pure self-tests do not require Office' }
@@ -127,6 +140,7 @@ if(-not (Test-Path -LiteralPath $shell -PathType Leaf)) { throw 'Windows PowerSh
 [void](New-Item -ItemType Directory -Path $output)
 $harness=Join-Path $output 'harness';[void](New-Item -ItemType Directory -Path $harness)
 $receipt=[ordered]@{schemaVersion=1;case=$Case;timestamp=(Get-Date).ToUniversalTime().ToString('o');manifestSha256=$binding.manifestSha256;selectedCase=$binding.selected;provenance=$binding.suite.provenance;executingCode=[ordered]@{suite=$suiteIdentity;workers=$workerIdentity};timeoutSeconds=$TimeoutSeconds;status='pure-checks-pending';nativeAcceptance=$false;registryAcceptance=$false}
+if($CaptureTextFonts) { $receipt.captureTextFonts=$true }
 $snapshots=Join-Path $output 'inputs';[void](New-Item -ItemType Directory -Path $snapshots)
 $inputSnapshot=Join-Path $snapshots 'case.pptx';$planSnapshot=Join-Path $snapshots 'action-plan.json'
 $expectedInput=@($binding.suite.files | Where-Object { $_.path -ceq $binding.selected.input })[0]
@@ -149,7 +163,8 @@ try {
     $null=Read-AndValidateActionPlan $planSnapshot
     Assert-NativeFileRecords $snapshots $snapshotRecords
     $receipt.status='native-worker-pending';Write-RunnerReceipt
-    Invoke-NativeChild $shell $worker @('-InputPresentation',$inputSnapshot,'-ActionPlan',$planSnapshot,'-OutputDirectory',(Join-Path $output 'native'),'-TimeoutSeconds',([string]$TimeoutSeconds)) (Join-Path $output 'native-worker.log')
+    $workerArguments=@('-InputPresentation',$inputSnapshot,'-ActionPlan',$planSnapshot,'-OutputDirectory',(Join-Path $output 'native'),'-TimeoutSeconds',([string]$TimeoutSeconds)) + @(Get-NativeFontCaptureArguments ([bool]$CaptureTextFonts))
+    Invoke-NativeChild $shell $worker $workerArguments (Join-Path $output 'native-worker.log')
     $terminal=Get-Content -LiteralPath (Join-Path $output 'native/supervisor.json') -Raw -Encoding UTF8 | ConvertFrom-Json
     if($terminal.timedOut -ne $false -or $terminal.exitCode -ne 0 -or $terminal.cleanupConfirmed -ne $true) { throw 'Worker did not confirm successful completion and cleanup; preserve the attempt and inspect Office' }
     $after=Read-NativeSuite $SuiteDirectory $Case

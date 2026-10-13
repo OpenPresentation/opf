@@ -4,7 +4,7 @@ $tokens=$null;$errors=$null
 $ast=[System.Management.Automation.Language.Parser]::ParseFile($RunnerPath,[ref]$tokens,[ref]$errors)
 if($errors.Count -ne 0) { throw ($errors | Out-String) }
 # Evaluate only pure preflight definitions. Never evaluate the runner entrypoint, child launcher or Office.
-foreach($name in @('Assert-PlainNativePath','Resolve-NativeAsset','Assert-NativeFileRecords','Read-NativeSuite','Assert-FreshNativeOutput','Assert-NativeRepositoryIdentity','Import-NativePlanValidation')) {
+foreach($name in @('Assert-PlainNativePath','Resolve-NativeAsset','Assert-NativeFileRecords','Read-NativeSuite','Assert-FreshNativeOutput','Assert-NativeRepositoryIdentity','Import-NativePlanValidation','Assert-NativeFontCaptureSupport','Get-NativeFontCaptureArguments')) {
     $function=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
     if($null -eq $function) { throw "Missing preflight function: $name" }
     Invoke-Expression $function.Extent.Text
@@ -31,6 +31,16 @@ function Reject([string]$Name,[scriptblock]$Operation) {
     $script:passed++
 }
 try {
+    $fontWorker=Join-Path $root 'font-worker.ps1'
+    [IO.File]::WriteAllText($fontWorker,'param([switch]$CaptureTextFonts)')
+    Assert-NativeFontCaptureSupport $fontWorker $true
+    if(@(Get-NativeFontCaptureArguments $true).Count -ne 1 -or (Get-NativeFontCaptureArguments $true) -cne '-CaptureTextFonts') { throw 'Capture switch was not forwarded exactly' }
+    if(@(Get-NativeFontCaptureArguments $false).Count -ne 0) { throw 'Default capture arguments changed' }
+    [IO.File]::WriteAllText($fontWorker,'param([string]$CaptureTextFonts)')
+    Reject 'wrong capture parameter type' { Assert-NativeFontCaptureSupport $fontWorker $true }
+    [IO.File]::WriteAllText($fontWorker,'param([switch]$Other)')
+    Reject 'missing capture parameter' { Assert-NativeFontCaptureSupport $fontWorker $true }
+    Assert-NativeFontCaptureSupport $fontWorker $false
     # Exercise the actual scoped importer with inline parameters. The worker
     # fixture contains pure definitions only; no entrypoint or Office code.
     $validator=Join-Path $root 'pure-plan-validator.ps1'
