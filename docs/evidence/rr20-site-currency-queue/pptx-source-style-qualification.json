@@ -1,0 +1,104 @@
+{
+  "checkout": "/private/tmp/opf-pptx-packed-gate",
+  "base": "53fcdd1c6f6e0339208d07d0ecdb7ccf4fb1b010",
+  "firstReviewedCommit": "e673f106c2fd38fcb5d51db190649c3855cc1885",
+  "nativeExecution": false,
+  "registryQualification": false,
+  "baselineChanges": [],
+  "ownedDependencySymlinkRemoved": true,
+  "symlinkTargetPreserved": true,
+  "commands": [
+    {
+      "command": "npm test initial",
+      "exit": 1,
+      "log": "/private/tmp/rr20-source-run-styles-full-package.log",
+      "sha256": "a94285cee68f6a50cd00286457ae7c4e974158d5dcb43023c0dd9dc98fef9ed6"
+    },
+    {
+      "command": "npm test attempt2",
+      "exit": 1,
+      "log": "/private/tmp/rr20-source-run-styles-full-package-attempt2.log",
+      "sha256": "f60b5c26bc31405f9be89ce9d0f7bd45f29808c738658101a64e387587fd360b"
+    },
+    {
+      "command": "remaining81 diagnostic",
+      "exit": 0,
+      "log": "/private/tmp/rr20-source-run-styles-remaining-diagnostic.log",
+      "sha256": "8591b57bb5e2aa1d334fda494a099aeeba950e5396be6b4003ffc81de195f087"
+    },
+    {
+      "command": "source style pure focused",
+      "exit": 0,
+      "log": "/private/tmp/rr20-source-run-styles-color-authority-source-run-styles.log",
+      "sha256": "c822f332a2c29e0b6b824b2143ecf065c29f9529873d9f3e1d32bd3f9c654fea"
+    },
+    {
+      "command": "actual source style roundtrip focused",
+      "exit": 0,
+      "log": "/private/tmp/rr20-source-run-styles-color-authority-source-run-styles-roundtrip.log",
+      "sha256": "794a623c081f8c171bda5e4e3e7715c9ffb085af526a3b8e859ae08e473bbf28"
+    },
+    {
+      "command": "import-details focused",
+      "exit": 0,
+      "log": "/private/tmp/rr20-source-run-styles-color-authority-import-details.log",
+      "sha256": "57fe4054ab0a4480936ff27eaf0338a21eefe8af37c8af3a491577003b4cf55b"
+    },
+    {
+      "command": "media-placeholder focused",
+      "exit": 0,
+      "log": "/private/tmp/rr20-source-run-styles-color-authority-media-placeholder.log",
+      "sha256": "0e69a536ebeb7cd37339090977ff9257a4846b160a108a85d83ccf8b1f0f6251"
+    },
+    {
+      "command": "npm test final",
+      "exit": 0,
+      "log": "/private/tmp/rr20-source-run-styles-full-package-final.log",
+      "sha256": "3247597802949003a55e70e2e6809a127a92935ca12a85c0dfce6d48af24b7ae"
+    },
+    {
+      "command": "npm validate",
+      "exit": 0,
+      "log": "/private/tmp/rr20-source-run-styles-package-validate.log",
+      "sha256": "52aa7a156103b8336d1cd7a39345a16dbf1ccf4fbe7ac30adc370c06d3f71424"
+    },
+    {
+      "command": "npm typecheck final",
+      "exit": 0,
+      "log": "/private/tmp/rr20-source-run-styles-final-syntax.log",
+      "sha256": "70b346554e34a45e04df5ab42e9be079f40c1f5f7e080751a52a6e510c444827"
+    }
+  ],
+  "canonicalFinalPackageTests": 135,
+  "falsePositiveCorrection": {
+    "earlierClaim": "Focused import-details pass reported from shell compound whose final sed succeeded",
+    "actualFailure": "ReferenceError strFromU8 undefined in new test check",
+    "correction": "Use existing dec.decode; direct captured focused command exits thereafter. Initial log preserved rr20-source-run-styles-import-details-focused.log; replay errors preserved final/final2/final3 logs. No original failure erased."
+  },
+  "runtimeInteractionCorrected": "Named color source replay could bypass existing run-colors damaged-record refusal. Validated keepColor marker leaves references solely under original authority; forged reference values reject. Existing rejection oracle retained.",
+  "limits": [
+    "Property restoration conservatively gated across slide, native text stays current.",
+    "String runs retain existing normalization to object runs.",
+    "Waterfall/suppressed furniture remain separately scoped findings."
+  ],
+  "head": "64d2c297ef09bbfe3818661f4d3802e82b403aad",
+  "clean": true,
+  "files": {
+    "changes/rr-20-source-text-style-roundtrip.md": "17a2f90907fdbd91d01bc7fea16b235f503b5e00456a2b430e6f545a6de3167f",
+    "dist/content-topology.js": "48f769c3ac79cae500d744e8d101cf6ac02745f5201f53afa3fb9d6e8cd19f1c",
+    "dist/document-provenance.js": "33826f889d40aa5d96de65bbdcb647257c315914414f712d068375a404826e58",
+    "dist/source-run-styles.js": "0ed5609f426ea53437b7b49c472e16ae039b59dfc69b51839c52670b95299c2c",
+    "scripts/build.mjs": "bc2119d0517ba681e9d2ba2b9a749c57c19896606c8cea56108e809296d4825d",
+    "src/content-topology.js": "48f769c3ac79cae500d744e8d101cf6ac02745f5201f53afa3fb9d6e8cd19f1c",
+    "src/document-provenance.js": "33826f889d40aa5d96de65bbdcb647257c315914414f712d068375a404826e58",
+    "src/source-run-styles.js": "0ed5609f426ea53437b7b49c472e16ae039b59dfc69b51839c52670b95299c2c",
+    "test/fa-13-conveniences.mjs": "a9600505cfeaaa4ad0950f0676723babc410f6e6369a25ec304b87b7b40d3fbe",
+    "test/fixtures/source-style-timeline.opf.json": "5b2069096574180d353ae87e97b570efb7d7926498b3fbe5530cc33072623e36",
+    "test/import-details.mjs": "87ed388026dfa589b6b33c8dced7a6e385145a702849291ff07be76b96233a62",
+    "test/media-placeholder.mjs": "cea33b70566e56ffc04614b120c460d2086a09085a8aafa8f1f79c24174fb59d",
+    "test/source-run-styles-roundtrip.mjs": "d97ef4da0b3540819100a558e212c21f99f40c6380c4f6c308a14aa0add29044",
+    "test/source-run-styles.mjs": "969f445f8423c1e9b0e12b35780ff39735a7be888b45c9ab6657795084d6ea5f"
+  },
+  "supervisorVerification": "All recorded source and log hashes independently verified; production color-authority change and expectation updates reviewed.",
+  "diagnosticClarification": "The remaining81 diagnostic command exit0 is its collection exit, not an all-tests-pass claim: 80 passed and media-placeholder failed before its reviewed expectation correction. Canonical final npm test is the full acceptance evidence."
+}
