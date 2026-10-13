@@ -78,7 +78,8 @@ function Save-State($State) {
     $temp=Join-Path $statePath 'state.next.json'
     $State | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath $temp -Encoding UTF8
     $target=Join-Path $statePath 'state.json'
-    if(Test-Path -LiteralPath $target) { [IO.File]::Replace($temp,$target,$null) } else { [IO.File]::Move($temp,$target) }
+    # Windows PowerShell 5.1 coerces $null to an empty string for this .NET parameter.
+    if(Test-Path -LiteralPath $target) { [IO.File]::Replace($temp,$target,[NullString]::Value) } else { [IO.File]::Move($temp,$target) }
 }
 function Read-State {
     $state=Get-Content -LiteralPath (Plain-Path (Join-Path $statePath 'state.json')) -Raw -Encoding UTF8 | ConvertFrom-Json
