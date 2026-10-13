@@ -38,7 +38,7 @@ export function layoutFromGrid({ id, name, summary, cells, regions, columns, row
   if (typeof name !== "string" || !name.trim()) throw fail("layout-name", "Name the custom layout.");
   if (!Array.isArray(cells) || cells.length < 1 || cells.length > 12 || !cells.every((row) => Array.isArray(row) && row.length === cells[0].length && row.length >= 1 && row.length <= 12))
     throw fail("layout-grid", "Draw a rectangular grid of at most 12 by 12 cells.");
-  const areas = cells.map((row) => row.join(" "));
+  const areas = cells.map((row) => [...row]);
   const names = new Set(cells.flat().filter((cell) => cell !== "."));
   for (const area of names) if (!NAME.test(area) || (RESERVED.has(area) && area !== "title" && area !== "subtitle")) throw fail("layout-area", `Invalid area name: ${area}.`);
   if (names.has("subtitle") && !names.has("title")) throw fail("layout-area", "A subtitle area needs a title area.");

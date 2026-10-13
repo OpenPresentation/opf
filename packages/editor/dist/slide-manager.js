@@ -523,9 +523,9 @@ export function createSlideManager(container, options) {
         template.append(el("img", { src: choice.record.preview, alt: `${choice.label} template preview` }));
       } else if (Array.isArray(choice?.record?.areas)) {
         const diagram = el("div", { class: "opf-layout-diagram" });
-        diagram.style.gridTemplateAreas = choice.record.areas.map((row) => `"${row}"`).join(" ");
-        diagram.style.gridTemplateColumns = `repeat(${choice.record.areas[0]?.trim().split(/\s+/).length ?? 1}, 1fr)`;
-        const areas = [...new Set(choice.record.areas.flatMap((row) => row.trim().split(/\s+/)))].filter((area) => area !== ".");
+        diagram.style.gridTemplateAreas = choice.record.areas.map((row) => `"${row.join(" ")}"`).join(" ");
+        diagram.style.gridTemplateColumns = `repeat(${choice.record.areas[0]?.length ?? 1}, 1fr)`;
+        const areas = [...new Set(choice.record.areas.flat())].filter((area) => area !== ".");
         for (const area of areas) { const part = el("span", { text: area }); part.style.gridArea = area; diagram.append(part); }
         template.append(diagram);
       }

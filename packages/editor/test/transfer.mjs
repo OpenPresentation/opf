@@ -115,7 +115,7 @@ assert.throws(() =>
 );
 // A pasted deck that names a catalog group by source brings the group along (core copySlides matches groups by source).
 {
-  const named = { catalogs: { acme: { source: "pkg:@acme/opf-catalog", layouts: { hero: { name: "Hero", areas: ["title"] } } } }, slides: [{ id: "acme", layout: "acme:hero", title: "Acme" }] };
+  const named = { catalogs: { acme: { source: "pkg:@acme/opf-catalog", layouts: { hero: { name: "Hero", areas: [["title"]] } } } }, slides: [{ id: "acme", layout: "acme:hero", title: "Acme" }] };
   const target = { catalogs: { brand: { source: "pkg:@acme/opf-catalog" } }, slides: [{ id: "host", title: "Host" }] };
   const inserted = prepareOpfImport(target, parseOpfTransfer(JSON.stringify(named)), { mode: "insert", slideIndex: 0 });
   assert.equal(inserted.presentation.slides[1].layout, "brand:hero", "references are rewritten to the target's name for that source");

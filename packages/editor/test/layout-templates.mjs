@@ -20,14 +20,17 @@ const layout = layoutFromGrid({
   },
   columns: [2, 1], rows: ["auto", 1],
 });
-assert.deepEqual(layout.record.areas, ["title title", "main notes"]);
+assert.deepEqual(layout.record.areas, [["title", "title"], ["main", "notes"]]);
+const oldRows = validate({catalogs: {custom: {layouts: {old: {name: "Old row spelling", areas: ["title title", "main notes"], regions: layout.record.regions}}}}, slides: [{title: "Old row spelling"}]});
+assert.equal(oldRows.valid, false);
+assert.ok(oldRows.findings.some(finding => finding.path === "/catalogs/custom/layouts/old/areas/0" && finding.validation?.params?.type === "array"));
 const input = { id: layout.id, name: layout.record.name, regions: layout.record.regions };
 assert.throws(() => layoutFromGrid({ ...input, cells: [["title", "main"], ["main", "title"]] }), /rectangle/);
 assert.throws(() => layoutFromGrid({ ...input, cells: Array.from({ length: 13 }, () => ["main"]) }), /12 by 12/);
 
 const largest = layoutFromGrid({ id: "largest-grid", name: "Largest", cells: Array.from({ length: 12 }, () => Array(12).fill("main")), regions: { main: { accepts: ["text"], role: "primary", flow: "grid" } } });
 assert.equal(largest.record.areas.length, 12);
-assert.equal(largest.record.areas[0].split(" ").length, 12);
+assert.equal(largest.record.areas[0].length, 12);
 assert.throws(() => layoutFromGrid({ ...input, cells: [["main", "main"], ["main"]] }), /rectangular grid/);
 assert.throws(() => layoutFromGrid({ ...input, cells: [["main"]], regions: { main: { accepts: [] } } }), /accepted content kinds/);
 assert.throws(() => layoutFromGrid({ ...input, cells: [["main"]], regions: { main: { accepts: ["text"], role: "invalid" } } }), /valid role/);

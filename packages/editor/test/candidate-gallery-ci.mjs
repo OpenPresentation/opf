@@ -53,6 +53,20 @@ test(ending+': '+'ordinary packing is preserved and candidate no-repack requires
   assert.match(packed[0],/if \[ -n "\$CANDIDATE_GALLERY_REF" \]; then\n            node --input-type=module -e .*assert.ok\(candidateArtifacts\(process.cwd\(\)\)\)/);
   assert.match(packed[0],/else\n            pnpm pack:ecosystem\n          fi\n          pnpm test:packed-ecosystem\n          pnpm test:packed-browser/);
 });
+test(ending+': '+'candidate gallery skips only the incompatible editor registry packed check',()=>{
+  const expectedGate="if: steps.published-core.outputs.skip != 'true' && needs.candidate-selection.outputs.candidate_gallery == ''";
+  for(const job of sources.filter(job=>/^  (package|node-range):/.test(job))){
+    assert.match(job,/id: published-core\n        run: node scripts\/published-core-gate\.mjs/);
+    assert.ok(job.includes(`- name: Verify editor with published dependencies\n        ${expectedGate}\n        run: npm run test:packed`));
+    assert.match(job,/name: Explain candidate gallery published-dependency gate\n        if: needs\.candidate-selection\.outputs\.candidate_gallery != ''\n        run: echo '::notice::/);
+    if(job.startsWith('  package:')){
+      assert.match(job,/pnpm test:packed-ecosystem/);
+      assert.match(job,/pnpm test:packed-browser/);
+    }else assert.match(job,/\n      - run: npm test\n/);
+  }
+  const control=jobs.find(job=>job.startsWith('  published-control:'));
+  assert.ok(control?.includes("if: needs.candidate-selection.outputs.candidate_gallery != ''"));
+});
 test(ending+': '+'published control binds its own selected tools and every published graph input',()=>{
   const control=jobs.find(job=>job.startsWith('  published-control:'));
   assert.ok(control);

@@ -3,7 +3,7 @@ import {getJsonFieldContext,replaceFieldOption,fieldOptionEdit} from '../dist/js
 import {validate} from '@openpresentation/opf';
 import {gallery as defaultCatalog} from '@openpresentation/gallery';
 // OPF 0.15: the document embeds records by group (`custom`, `default`, named groups); the host passes its catalogs (Catalog[]).
-const record=(name)=>({name,areas:['title','body'],regions:{body:{accepts:['text'],flow:'auto'}}});
+const record=(name)=>({name,areas:[['title'], ['body']],regions:{body:{accepts:['text'],flow:'auto'}}});
 const deck={name:'Two  spaces',tone:'formal',slides:[{layout:'text',title:'Keep title',text:'e\u0302',notes:'Keep\r\nnotes'}],catalogs:{gallery:{source:'https://example.invalid/catalog.json'},custom:{layouts:{'text':record('Local override'),local:record('local')}}},'x-data':{layout:'text'}};
 const original=JSON.stringify(deck,null,2).replace('"name":','"name"  :').replaceAll('\n','\r\n');
 const loaded=[{source:'pkg:app',layouts:{'text':record('Loaded override'),loaded:record('loaded')},tones:defaultCatalog.tones}],snapshot=structuredClone(loaded);

@@ -40,7 +40,7 @@ try {
   await page.waitForFunction(() => !document.querySelector("dialog.opf-grid-dialog"));
   const readDoc = async () => JSON.parse(await page.locator("#json").inputValue());
   let document = await readDoc();
-  assert.deepEqual(document.catalogs.custom.layouts["review-grid"].areas, ["title title title", "content content notes", "content content notes"]);
+  assert.deepEqual(document.catalogs.custom.layouts["review-grid"].areas, [["title", "title", "title"], ["content", "content", "notes"], ["content", "content", "notes"]]);
   await page.locator("#choose-layout").click();
   const picker = page.locator("dialog.opf-layout-dialog[open]");
   await picker.getByPlaceholder("Filter layouts").fill("review-grid");
