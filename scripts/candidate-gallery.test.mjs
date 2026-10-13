@@ -1,4 +1,4 @@
-import {publishedGalleryControl,optionalRegularJson} from './candidate-gallery.mjs';
+import {publishedGalleryControl,optionalRegularJson,assertPublishedGallery} from './candidate-gallery.mjs';
 import assert from 'node:assert/strict';
 import {mkdtempSync,mkdirSync,writeFileSync,symlinkSync,rmSync,readFileSync,realpathSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
@@ -63,4 +63,21 @@ test('pristine published control binds every immutable source to actual registry
  await assert.rejects(publishedGalleryControl(plan,async(name,version)=>({name,version:version==='latest'?'0.18.2':version,gitHead:'a'.repeat(40)})),/current reviewed stable/);
  await assert.rejects(publishedGalleryControl({...plan,verificationRefs:{}},registry),/immutable/);
  await assert.rejects(publishedGalleryControl(plan,async()=>{throw Error('registry unavailable');}),/registry unavailable/);
+});
+
+
+test('explicit contract3 configuration preserves immutable authorization and release refusals',async()=>{
+ const manifest={opf:{requiresUnreleasedGallery:'3.0.0'}};
+ const configuration={version:2,gallery:{repository:'OpenPresentation/gallery',version:'3.0.0',catalogSchema:3,sha}};
+ const selected=galleryConfiguration(manifest,configuration);
+ assert.deepEqual(selected,{...configuration.gallery});
+ assert.deepEqual(await resolveCandidateGallery({manifest,configuration,event:'workflow_dispatch',input:sha}),selected);
+ for(const changed of [undefined,2,4,'3'])assert.throws(()=>galleryConfiguration(manifest,{...configuration,gallery:{...configuration.gallery,catalogSchema:changed}}));
+ for(const changed of ['main','b'.repeat(39),''])assert.throws(()=>galleryConfiguration(manifest,{...configuration,gallery:{...configuration.gallery,sha:changed}}));
+ assert.throws(()=>galleryConfiguration({opf:{requiresUnreleasedGallery:'2.0.0'}},configuration));
+ assert.throws(()=>galleryConfiguration(manifest,{...configuration,version:1}));
+ assert.throws(()=>galleryConfiguration(manifest,{...configuration,extra:true}));
+ await assert.rejects(resolveCandidateGallery({manifest,configuration,event:'workflow_dispatch',input:sha,ref:'refs/tags/opf-v0.20.0'}),/release tags/);
+ for(const event of ['push','schedule','pull_request_target'])await assert.rejects(resolveCandidateGallery({manifest,configuration,event,input:sha}));
+ assert.throws(()=>assertPublishedGallery(manifest,configuration),/unresolved/);
 });

@@ -1,0 +1,489 @@
+{
+  "inventory": "/private/tmp/opf-supervisor-20261010/inventory-maintenance-20261013T2015Z.json",
+  "previousInventory": "/private/tmp/opf-supervisor-20261010/inventory-maintenance-20261013T1922Z.json",
+  "reviewed": 18,
+  "networkBudgetUsed": {
+    "diffCalls": 18,
+    "batchedMetadataCalls": 1,
+    "ciQueries": 0
+  },
+  "headConfirmation": "/private/tmp/rr20-dependency-pr-diffs-2015/head-confirmation.json",
+  "summary": [
+    "No dependency update is demonstrated essential to the active release blocker. Preserve frozen candidate graph.",
+    "Three package-only Playwright updates concretely conflict with exact CI1.63 guards: render242/PPTX254/editor167.",
+    "Major PDFium/XML parser/Lucide/Tailwind/tailwind-merge upgrades need separate validation; parse-xml5 minimum22.12 and GalleryTailwind4 config gap are concrete boundary issues.",
+    "All site merges/deployments held; grouped font updates overlap already-qualified candidate pins and must not overwrite generated assets/guards.",
+    "Compared supplied1922 inventory: none of these18 dependency PR numbers were present there; previous eleven appears to describe existing nondependency PR set, not eleven already-reviewed dependency diffs."
+  ],
+  "prs": [
+    {
+      "repo": "OpenPresentation/opf",
+      "number": 647,
+      "title": "Bump the actions-minor-patch group with 3 updates",
+      "head": "232ed302f2cb3aa85ceaf769c4af81d5595eb8af",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/OpenPresentation-opf-647.diff",
+      "diffSha256": "1db8df769bfb34c79ddd3aa082d944e28ea5d44da0042ab5027bc760be8097c6",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        ".github/workflows/candidate-gallery-qualification.yml",
+        ".github/workflows/cli-publish.yml",
+        ".github/workflows/cli-windows.yml",
+        ".github/workflows/ecosystem-ci.yml",
+        ".github/workflows/engines-range.yml",
+        ".github/workflows/flake-repeat.yml",
+        ".github/workflows/installed-parity.yml",
+        ".github/workflows/npm-publish.yml",
+        ".github/workflows/opf-ci.yml",
+        ".github/workflows/published-gallery-control.yml",
+        ".github/workflows/published-matrix.yml",
+        ".github/workflows/regenerate-core-golden.yml",
+        ".github/workflows/release-train.yml",
+        ".github/workflows/tracker-refresh.yml"
+      ],
+      "packageChanges": [],
+      "disposition": "defer-compatible-actions-maintenance",
+      "finding": "Only pinned action SHA replacements (setup-node7.0\u21927.1, upload-artifact7.0.1\u21927.0.2 and/or download-artifact8.0.1\u21928.0.2). No Node/npm/pnpm settings, permissions, concurrency, event/matrix or product source changes. Routine later qualification; touches CI/publish/deploy workflows, so preserve current source gate snapshot and site no-merge/no-deploy boundary. Action upstream implementation compatibility not executed in this read-only review.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "number": 241,
+      "title": "Bump the actions-minor-patch group with 3 updates",
+      "head": "281eb84d58ec29d6c1e96e509f140a2be3045da0",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/OpenPresentation-opf-render-241.diff",
+      "diffSha256": "c21820e32a9365212d198c4ff9f9527ebfb0bf049f12685f1d5436619c1dd8a5",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/flake-repeat.yml",
+        ".github/workflows/npm-publish.yml",
+        ".github/workflows/platform-residual.yml",
+        ".github/workflows/regenerate-candidate-goldens.yml",
+        ".github/workflows/regenerate-goldens.yml"
+      ],
+      "packageChanges": [],
+      "disposition": "defer-compatible-actions-maintenance",
+      "finding": "Only pinned action SHA replacements (setup-node7.0\u21927.1, upload-artifact7.0.1\u21927.0.2 and/or download-artifact8.0.1\u21928.0.2). No Node/npm/pnpm settings, permissions, concurrency, event/matrix or product source changes. Routine later qualification; touches CI/publish/deploy workflows, so preserve current source gate snapshot and site no-merge/no-deploy boundary. Action upstream implementation compatibility not executed in this read-only review.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "number": 242,
+      "title": "Bump the npm-minor-patch group with 2 updates",
+      "head": "ae66f04426dbd205342526aa9dad7d82f30073fa",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/OpenPresentation-opf-render-242.diff",
+      "diffSha256": "82dcf6d88d86d661eec17f4577f631f2c07356ce33a2c58fa2c9b7e8b9ad5be6",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        "package-lock.json",
+        "package.json"
+      ],
+      "packageChanges": [
+        "-    \"@napi-rs/canvas\": \"1.0.10\",",
+        "+    \"@napi-rs/canvas\": \"1.0.11\",",
+        "-    \"playwright\": \"1.63.0\",",
+        "+    \"playwright\": \"1.64.0\","
+      ],
+      "disposition": "hold-coordinate-playwright",
+      "finding": "Canvas patch 1.0.10\u21921.0.11 plus Playwright1.63\u21921.64. CI still pins 1.63 image and explicitly rejects other package versions; update image digest/version and browser receipts together. Native canvas patch also needs targeted raster/font qualification; not a current-train prerequisite.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "number": 243,
+      "title": "Bump @hyzyla/pdfium from 2.1.13 to 3.0.0",
+      "head": "7aa0bf65ebe85bc538d3c3628e5e1266d771ac7c",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/OpenPresentation-opf-render-243.diff",
+      "diffSha256": "5b1ce27349914ff39daff48ee8927925cacafba6e20fb2084f445e88a5f478e5",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        "package-lock.json",
+        "package.json"
+      ],
+      "packageChanges": [
+        "-    \"@hyzyla/pdfium\": \"2.1.13\",",
+        "+    \"@hyzyla/pdfium\": \"3.0.0\","
+      ],
+      "disposition": "separate-major-validation",
+      "finding": "PDFium2\u21923 is a dev/test rendering oracle upgrade, not runtime implementation. New Node>=22 aligns current minimum, but PDFiumLibrary.init/loadDocument/text helpers and cross-engine PDF fidelity need dedicated validation; do not rebaseline current train because a test oracle changed.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "number": 254,
+      "title": "Bump playwright from 1.63.0 to 1.64.0 in the npm-minor-patch group",
+      "head": "7943f80b0334bf271177178defe9522e0879be28",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/OpenPresentation-opf-pptx-254.diff",
+      "diffSha256": "e55c36b8e8c30773d1e7900c593210990cee2475be1fdde0bd791bd000982059",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        "package-lock.json",
+        "package.json"
+      ],
+      "packageChanges": [
+        "-    \"playwright\": \"1.63.0\"",
+        "+    \"playwright\": \"1.64.0\""
+      ],
+      "disposition": "hold-coordinate-playwright",
+      "finding": "Playwright1.64 package-only update conflicts with CI pinned1.63 image and exact version guard. Requires coordinated image/browser update; would fail unchanged CI if adopted.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "number": 255,
+      "title": "Bump @rgrove/parse-xml from 4.2.3 to 5.0.0",
+      "head": "e86e172ef607f0d5c6e2473425cc3c98719baa7f",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/OpenPresentation-opf-pptx-255.diff",
+      "diffSha256": "7d16a5dcc00e769c3cc1ff4314457a2e7e861d16126ef939d2bc1af4de5af697",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        "package-lock.json",
+        "package.json"
+      ],
+      "packageChanges": [
+        "-    \"@rgrove/parse-xml\": \"4.2.3\",",
+        "+    \"@rgrove/parse-xml\": \"5.0.0\","
+      ],
+      "disposition": "separate-major-migration",
+      "finding": "parse-xml4\u21925 is used by parser-smoke validation. Lock raises minimumNode14\u219222.12 while package advertises>=22. Do not adopt unchanged minimum contract; decide supported lower22 range and test parser behavior/browser packaging separately.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "number": 256,
+      "title": "Bump the actions-minor-patch group with 2 updates",
+      "head": "ecb2ce5cce2f9a584340a5e4c421c938c96e8bd7",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/OpenPresentation-opf-pptx-256.diff",
+      "diffSha256": "a2aba30382dbcb1df0e8cf76b1a98e810c4fa8fdb40440c97f758539621453df",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/flake-repeat.yml",
+        ".github/workflows/release.yml"
+      ],
+      "packageChanges": [],
+      "disposition": "defer-compatible-actions-maintenance",
+      "finding": "Only pinned action SHA replacements (setup-node7.0\u21927.1, upload-artifact7.0.1\u21927.0.2 and/or download-artifact8.0.1\u21928.0.2). No Node/npm/pnpm settings, permissions, concurrency, event/matrix or product source changes. Routine later qualification; touches CI/publish/deploy workflows, so preserve current source gate snapshot and site no-merge/no-deploy boundary. Action upstream implementation compatibility not executed in this read-only review.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "number": 166,
+      "title": "Bump the actions-minor-patch group with 2 updates",
+      "head": "8f573a93c451f9a583c6968c26d5a1872c4d4278",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/OpenPresentation-opf-editor-166.diff",
+      "diffSha256": "7498486d06d990780a40e1f467ade0dede0a998d31660dd03a6eba34ded2b2b2",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/flake-repeat.yml",
+        ".github/workflows/release.yml"
+      ],
+      "packageChanges": [],
+      "disposition": "defer-compatible-actions-maintenance",
+      "finding": "Only pinned action SHA replacements (setup-node7.0\u21927.1, upload-artifact7.0.1\u21927.0.2 and/or download-artifact8.0.1\u21928.0.2). No Node/npm/pnpm settings, permissions, concurrency, event/matrix or product source changes. Routine later qualification; touches CI/publish/deploy workflows, so preserve current source gate snapshot and site no-merge/no-deploy boundary. Action upstream implementation compatibility not executed in this read-only review.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "number": 167,
+      "title": "Bump the npm-minor-patch group with 3 updates",
+      "head": "a01bbb6267921b1fc9fe27189c68d6f2a4611aaa",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/OpenPresentation-opf-editor-167.diff",
+      "diffSha256": "f4a3ef42bec870fe5abd89a0b35b77dd80a761117e36fee90dbd0aa85a4756cf",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        "package-lock.json",
+        "package.json"
+      ],
+      "packageChanges": [
+        "-    \"@codemirror/language\": \"6.12.4\",",
+        "+    \"@codemirror/language\": \"6.13.1\",",
+        "-    \"@codemirror/view\": \"6.43.13\",",
+        "+    \"@codemirror/view\": \"6.43.14\",",
+        "-    \"playwright\": \"1.63.0\"",
+        "+    \"playwright\": \"1.64.0\""
+      ],
+      "disposition": "hold-coordinate-playwright",
+      "finding": "CodeMirror language/view compatible-line updates plus Playwright1.64. Editor CI exact1.63 image/version guard must move with package; then exercise editor input/selection/history/JSON and browser interactions. Preserve current candidate qualification.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "number": 128,
+      "title": "build(deps): bump the actions-minor-patch group with 2 updates",
+      "head": "4aa1422d9b2a943eeebbbf7d309d689e51b0c887",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/Data-Advantage-pptx-gallery-128.diff",
+      "diffSha256": "c9e0a1eed969686e3159dec46bafcbb367d7ffea4a5b9a56ecd15e33cc5bec6b",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        ".github/workflows/cloudflare-deploy.yml",
+        ".github/workflows/cloudflare-worker.yml",
+        ".github/workflows/production-checks.yml",
+        ".github/workflows/validate-gallery-registry.yml"
+      ],
+      "packageChanges": [],
+      "disposition": "defer-compatible-actions-maintenance",
+      "finding": "Only pinned action SHA replacements (setup-node7.0\u21927.1, upload-artifact7.0.1\u21927.0.2 and/or download-artifact8.0.1\u21928.0.2). No Node/npm/pnpm settings, permissions, concurrency, event/matrix or product source changes. Routine later qualification; touches CI/publish/deploy workflows, so preserve current source gate snapshot and site no-merge/no-deploy boundary. Action upstream implementation compatibility not executed in this read-only review.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "number": 129,
+      "title": "build(deps): bump the npm-minor-patch group with 13 updates",
+      "head": "8b19d12de3b4080be19de665a128522ba07ce277",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/Data-Advantage-pptx-gallery-129.diff",
+      "diffSha256": "ae4199c750b9b1deefeaa87337d7db62f2563e8c445de2d3c2ae244280093f9e",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        "package.json",
+        "pnpm-lock.yaml"
+      ],
+      "packageChanges": [
+        "-    \"next\": \"16.3.8\",",
+        "+    \"next\": \"16.4.0\",",
+        "-    \"simple-icons\": \"16.31.0\",",
+        "+    \"simple-icons\": \"16.34.0\",",
+        "-    \"@expo-google-fonts/noto-color-emoji\": \"0.4.6\",",
+        "-    \"@expo-google-fonts/noto-emoji\": \"0.4.7\",",
+        "+    \"@expo-google-fonts/noto-color-emoji\": \"0.4.7\",",
+        "+    \"@expo-google-fonts/noto-emoji\": \"0.4.8\",",
+        "-    \"@expo-google-fonts/noto-sans-jp\": \"0.4.3\",",
+        "+    \"@expo-google-fonts/noto-sans-jp\": \"0.4.4\",",
+        "-    \"@expo-google-fonts/noto-sans-kr\": \"0.4.3\",",
+        "+    \"@expo-google-fonts/noto-sans-kr\": \"0.4.4\",",
+        "-    \"@expo-google-fonts/noto-sans-sc\": \"0.4.3\",",
+        "+    \"@expo-google-fonts/noto-sans-sc\": \"0.4.4\",",
+        "-    \"@expo-google-fonts/noto-sans-tc\": \"0.4.3\",",
+        "+    \"@expo-google-fonts/noto-sans-tc\": \"0.4.4\",",
+        "-    \"@playwright/test\": \"1.63.0\",",
+        "+    \"@playwright/test\": \"1.64.0\",",
+        "-    \"postcss\": \"8.5.28\",",
+        "+    \"postcss\": \"8.5.29\",",
+        "-    \"vitest\": \"5.0.1\",",
+        "+    \"vitest\": \"5.0.3\","
+      ],
+      "disposition": "hold-site-maintenance",
+      "finding": "Next16.4, icons, Playwright1.64, PostCSS/Vitest and six Noto package pins; large lock rewrite747 additions/1309 deletions. Noto target pins match current renderer-manifest packages and are already reflected in qualified candidate site, but bot main baseline is older. Rebase against final site source; regenerate hash-verified assets and browser/CF qualification. No site merge/deploy during hold.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "number": 130,
+      "title": "build(deps): bump lucide-react from 0.468.0 to 1.55.0",
+      "head": "3c3d9f0f61eb2639af2df381f857690c87d7ce8a",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/Data-Advantage-pptx-gallery-130.diff",
+      "diffSha256": "e1c85cc29b3b268973122f14f4e22bf1ce4a782a5734ecba200693ab6915e3d3",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        "package.json",
+        "pnpm-lock.yaml"
+      ],
+      "packageChanges": [
+        "-    \"lucide-react\": \"^0.468.0\",",
+        "+    \"lucide-react\": \"^1.55.0\","
+      ],
+      "disposition": "separate-major-ui-migration",
+      "finding": "Lucide0.468\u21921.55 changes a major API/icon surface. No implementation migration in diff; inventory used icon exports and visual defaults before separate local UI validation. No reason to broaden layout release.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "number": 131,
+      "title": "build(deps-dev): bump tailwindcss from 3.4.19 to 4.3.3",
+      "head": "9beef8f66462dbb78473abec05af377ff60a884f",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/Data-Advantage-pptx-gallery-131.diff",
+      "diffSha256": "1d5eabb46889dc3a080c4fd130c670b1f9de0bd3b2f5cf892193753b2e2218d8",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        "package.json",
+        "pnpm-lock.yaml"
+      ],
+      "packageChanges": [
+        "-    \"tailwindcss\": \"^3.4.17\",",
+        "+    \"tailwindcss\": \"^4.3.3\","
+      ],
+      "disposition": "separate-major-css-migration",
+      "finding": "Tailwind3\u21924 package/lock-only diff leaves existing PostCSS plugin tailwindcss and autoprefixer config, missing v4 integration/config migration. Gallery is still Tailwind3 with tailwind-merge2. Requires explicit coordinated migration and full visual/localCF validation, not routine dependency merge.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "number": 105,
+      "title": "build(deps): bump the compatible-actions group with 2 updates",
+      "head": "70e95afbc67e8374c405e2cf16ea9ae159139ea5",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/Data-Advantage-openpresentation-site-105.diff",
+      "diffSha256": "e2a9275dadd930da2dca480c716a49ca134e839224696e7d7f1fdece76f71a85",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        ".github/workflows/cloudflare-deploy.yml",
+        ".github/workflows/production-smoke.yml",
+        ".github/workflows/site-ci.yml"
+      ],
+      "packageChanges": [],
+      "disposition": "defer-compatible-actions-maintenance",
+      "finding": "Only pinned action SHA replacements (setup-node7.0\u21927.1, upload-artifact7.0.1\u21927.0.2 and/or download-artifact8.0.1\u21928.0.2). No Node/npm/pnpm settings, permissions, concurrency, event/matrix or product source changes. Routine later qualification; touches CI/publish/deploy workflows, so preserve current source gate snapshot and site no-merge/no-deploy boundary. Action upstream implementation compatibility not executed in this read-only review.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "number": 106,
+      "title": "build(deps): bump the compatible-version-updates group with 19 updates",
+      "head": "7312e295f1c2caa9da64a650aeb280960428e6ad",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/Data-Advantage-openpresentation-site-106.diff",
+      "diffSha256": "1fdab0556c93f10d414ed620d117d7a0fe05c046d2a60c438509d0f2d967afee",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        "package.json",
+        "pnpm-lock.yaml"
+      ],
+      "packageChanges": [
+        "-    \"@base-ui/react\": \"^1.8.0\",",
+        "+    \"@base-ui/react\": \"^1.9.0\",",
+        "-    \"@codemirror/language\": \"^6.12.4\",",
+        "+    \"@codemirror/language\": \"^6.13.1\",",
+        "-    \"@codemirror/view\": \"^6.43.13\",",
+        "-    \"@lezer/highlight\": \"^1.2.4\",",
+        "-    \"@next/third-parties\": \"16.3.8\",",
+        "+    \"@codemirror/view\": \"^6.43.14\",",
+        "+    \"@lezer/highlight\": \"^1.2.5\",",
+        "+    \"@next/third-parties\": \"16.4.0\",",
+        "-    \"lucide-react\": \"^1.48.0\",",
+        "-    \"next\": \"16.3.8\",",
+        "+    \"lucide-react\": \"^1.55.0\",",
+        "+    \"next\": \"16.4.0\",",
+        "-    \"@expo-google-fonts/noto-color-emoji\": \"0.4.6\",",
+        "-    \"@expo-google-fonts/noto-emoji\": \"0.4.7\",",
+        "+    \"@expo-google-fonts/noto-color-emoji\": \"0.4.7\",",
+        "+    \"@expo-google-fonts/noto-emoji\": \"0.4.8\",",
+        "-    \"@expo-google-fonts/noto-sans-jp\": \"0.4.3\",",
+        "+    \"@expo-google-fonts/noto-sans-jp\": \"0.4.4\",",
+        "-    \"@expo-google-fonts/noto-sans-kr\": \"0.4.3\",",
+        "+    \"@expo-google-fonts/noto-sans-kr\": \"0.4.4\",",
+        "-    \"@expo-google-fonts/noto-sans-sc\": \"0.4.3\",",
+        "+    \"@expo-google-fonts/noto-sans-sc\": \"0.4.4\",",
+        "-    \"@expo-google-fonts/noto-sans-tc\": \"0.4.3\",",
+        "+    \"@expo-google-fonts/noto-sans-tc\": \"0.4.4\",",
+        "-    \"@opennextjs/cloudflare\": \"^1.20.8\",",
+        "+    \"@opennextjs/cloudflare\": \"^1.20.10\",",
+        "-    \"@playwright/test\": \"1.63.0\",",
+        "+    \"@playwright/test\": \"1.64.0\",",
+        "-    \"esbuild\": \"0.28.1\",",
+        "+    \"esbuild\": \"0.28.2\",",
+        "-    \"pdfjs-dist\": \"6.3.289\",",
+        "-    \"postcss\": \"^8.5.23\",",
+        "+    \"pdfjs-dist\": \"6.4.299\",",
+        "+    \"postcss\": \"^8.5.29\",",
+        "-    \"wrangler\": \"^4.147.0\"",
+        "+    \"wrangler\": \"^4.149.0\""
+      ],
+      "disposition": "hold-site-maintenance",
+      "finding": "19 grouped updates include Next16.4/third-parties, CodeMirror, fonts, OpenNext/Wrangler, Playwright1.64 and PDF.js6.4. Six Noto pins align current renderer and overlap prepared candidate. Broad lock947 additions/1210 deletions; integrate only after final site source/release identity, regenerate fonts and qualify showcase/PDF/browser/CF locally. No deployment authorized.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "number": 107,
+      "title": "build(deps-dev): bump @types/node from 24.13.4 to 26.6.5",
+      "head": "8e53cc8ead2ec031c26bf67a02f213b8de51e3e3",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/Data-Advantage-openpresentation-site-107.diff",
+      "diffSha256": "0eb4872ab13c9aa2de7ee5047d65885eb92226fdcf4b48ef08bf898f38df03ab",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        "package.json",
+        "pnpm-lock.yaml"
+      ],
+      "packageChanges": [
+        "-    \"@types/node\": \"^24.13.4\",",
+        "+    \"@types/node\": \"^26.6.5\","
+      ],
+      "disposition": "hold-runtime-types-alignment",
+      "finding": "Node types24\u219226 while pinned qualification/deploy runtime is Node24. New API types can admit calls absent on actual runtime; keep Node24 types unless intentionally changing supported/runtime target and validating compatibility. No release need demonstrated.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "number": 108,
+      "title": "build(deps): bump tailwind-merge from 2.6.1 to 3.7.0",
+      "head": "e59074231b1b36621dd5a197ac2b5ca80e891474",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/Data-Advantage-openpresentation-site-108.diff",
+      "diffSha256": "b8a4b6826ff151ce20f1570157335823cf7f6c3e3e44c53e3157f62e10bcde3c",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        "package.json",
+        "pnpm-lock.yaml"
+      ],
+      "packageChanges": [
+        "-    \"tailwind-merge\": \"^2.5.5\"",
+        "+    \"tailwind-merge\": \"^3.7.0\""
+      ],
+      "disposition": "separate-major-css-utility-validation",
+      "finding": "tailwind-merge2\u21923 affects cn/class conflict semantics. Current candidate main site uses Tailwind4, so alignment is relevant but needs dedicated utility/visual regression review; source diff contains only package/lock. Do not silently combine into held train.",
+      "essentialCurrentReleaseBlocker": false
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "number": 129,
+      "title": "build: bump the compatible-actions group with 3 updates",
+      "head": "932995db13ce785508dc0819c6664357e1151619",
+      "diff": "/private/tmp/rr20-dependency-pr-diffs-2015/Data-Advantage-pptx-dev-129.diff",
+      "diffSha256": "8d0a46c62d68b45d1eae86f687fbb6f6f5e1449c791cf572c71b79c6147609a5",
+      "exit": 0,
+      "error": null,
+      "headConfirmed": true,
+      "changedPaths": [
+        ".github/workflows/application-ci.yml",
+        ".github/workflows/artifact-compatibility.yml",
+        ".github/workflows/cloudflare-build.yml",
+        ".github/workflows/cloudflare-deploy.yml",
+        ".github/workflows/e2e-signed-in.yml",
+        ".github/workflows/flake-repeat.yml",
+        ".github/workflows/publish-cli-homebrew.yml",
+        ".github/workflows/publish-cli-npm.yml",
+        ".github/workflows/publish-cli-pypi.yml",
+        ".github/workflows/publish-sdk-python.yml",
+        ".github/workflows/publish-sdk-typescript.yml"
+      ],
+      "packageChanges": [],
+      "disposition": "defer-compatible-actions-maintenance",
+      "finding": "Only pinned action SHA replacements (setup-node7.0\u21927.1, upload-artifact7.0.1\u21927.0.2 and/or download-artifact8.0.1\u21928.0.2). No Node/npm/pnpm settings, permissions, concurrency, event/matrix or product source changes. Routine later qualification; touches CI/publish/deploy workflows, so preserve current source gate snapshot and site no-merge/no-deploy boundary. Action upstream implementation compatibility not executed in this read-only review.",
+      "essentialCurrentReleaseBlocker": false
+    }
+  ],
+  "limits": "Read-only diff/metadata/local-source inspection. No installs, tests, CI polling, code edits, merges, comments, publishing or deployment. No claim upstream major API compatibility proven.",
+  "supervisorVerification": "All eighteen exact-head diff hashes independently rechecked; dispositions retained for post-train work. No source/dependency/CI/deployment mutation."
+}

@@ -1,0 +1,16 @@
+{
+  "state": "Reviewed local proposal; intentionally not merge-ready until actual engine merge pins replace provisional heads",
+  "worktree": "/private/tmp/opf-gallery3-strict",
+  "commit": "49b1c09135903eb4e35ac68ac75c4447f4172bd6",
+  "baseGalleryRuntime": "146e477196405fe7d2283008f6fad34c12742599",
+  "changes": "Fixed Gallery 3/catalog schema 3 bootstrap, labels, documentation and focused checks; actual default-branch ancestry remains mandatory",
+  "checks": {
+    "focusedPassed": 5,
+    "focusedFailed": 0,
+    "diffCheck": "passed"
+  },
+  "rootReview": "Reviewed version/schema/config diff and retained default ancestry behavior",
+  "remoteMutation": false,
+  "publication": false,
+  "provisionalPrAuthorization": "Separate prototype is not selected for integration"
+}

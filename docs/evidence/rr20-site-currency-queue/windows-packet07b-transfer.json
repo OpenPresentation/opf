@@ -1,0 +1,27 @@
+{
+  "host": "MICHAEL-DESKTOP",
+  "thread": "01a13110-7cf9-79b0-a2df-4ac95997c5a4",
+  "preflight": {
+    "status": "passed",
+    "Windows": "11 Home25H2 build26200.9457",
+    "Office": "16.0.20430.20146",
+    "COM": "registered; activation not tested",
+    "desktop": "interactive session1 with Explorer; GUI accessibility untested"
+  },
+  "transfer": {
+    "method": "existing private Tailscale Taildrop",
+    "archive": "/private/tmp/rr20-t31-packet-07b-transfer.zip",
+    "bytes": 24729939,
+    "sha256": "e7199bb35cfda07e3618259d7a76c75d02ac959866548b34f2a3b0619b3e1c84",
+    "senderSession": 92168,
+    "senderExit": 0,
+    "receiverVerified": false
+  },
+  "packetSha256": "7bca4500d5438c1354f3b8e85ac91029f6f53770b17f749d91af75ff05968bad",
+  "offlineSha256": "a1be6cdee8370b3c30964933d7464e2dd35ce4af10b3f12a001fcef2120b4ea9",
+  "remoteInstructions": "Retrieve only named archive, verify archive and safe extraction, then externally pinned seal. No Office before supervisor next command.",
+  "latestObservation": "Remote host thread_list_unavailable after accepted handoff messages; do not infer remote task stopped or resend work",
+  "next": "Read existing remote task result when available; verify received packet before pure harness and one supervised native attempt",
+  "nativeAcceptance": false,
+  "deployment": false
+}

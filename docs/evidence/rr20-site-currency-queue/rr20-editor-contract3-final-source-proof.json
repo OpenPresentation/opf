@@ -1,0 +1,105 @@
+{
+  "head": "5a82cbbc58e4f3f98a0d1f26e17c73c94fa6e79a",
+  "clean": true,
+  "session": 31338,
+  "terminal": 0,
+  "results": [
+    {
+      "step": "typecheck",
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-editor-contract3-frozen-results/typecheck.log",
+      "sha256": "c22ec789ef4f42468562f1fa9b93e6a93808e8f049caf6847d0ec69fc5eb0728"
+    },
+    {
+      "step": "build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-editor-contract3-frozen-results/build.log",
+      "sha256": "bc8a7c8637f2bb109da553bd763700fdde489475c9b7729efe10ac27187c2171"
+    },
+    {
+      "step": "validate",
+      "command": [
+        "npm",
+        "run",
+        "validate"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-editor-contract3-frozen-results/validate.log",
+      "sha256": "a3d9c85973c301d74d91e967065eceb7e245732fa9f70fd480e91ea91389e161"
+    },
+    {
+      "step": "full",
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-editor-contract3-frozen-results/full.log",
+      "sha256": "7f5eb20ab976df117cc166dcdb55a8b18bab7e0c48b7be4dfaeb5c87348c0927"
+    },
+    {
+      "step": "browser-contract",
+      "command": [
+        "node",
+        "--test",
+        "scripts/quarantine.test.mjs",
+        "scripts/browser-suites.test.mjs"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-editor-contract3-frozen-results/browser-contract.log",
+      "sha256": "0ce60dbc3d9ab5cf4c63d87f27c88c8eed745b815f0c042083c491522f1c5d30"
+    },
+    {
+      "step": "quarantine-contract",
+      "command": [
+        "node",
+        "scripts/quarantine.mjs",
+        "check"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-editor-contract3-frozen-results/quarantine-contract.log",
+      "sha256": "1674e5ff1c365ac9aa6e330f45c91d6269cdf989574758259dca5e2f3ba1d6b3"
+    },
+    {
+      "step": "playground",
+      "command": [
+        "node",
+        "scripts/quarantine.mjs",
+        "run-suite",
+        "playground"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-editor-contract3-frozen-results/playground.log",
+      "sha256": "2b87ee93816034680941d6ea648b7752b8bae247360b7dd384417775f528c55b"
+    },
+    {
+      "step": "browser",
+      "command": [
+        "node",
+        "scripts/quarantine.mjs",
+        "run-suite",
+        "browser"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-editor-contract3-frozen-results/browser.log",
+      "sha256": "f6c1c4213af1aa72a1663c97234d01296af46224ce4c660923ce26e6ff69074a"
+    }
+  ],
+  "trackedInputDrift": [],
+  "registeredPlaygroundCases": 21,
+  "registeredBrowserCases": 11,
+  "sourceTests": 72,
+  "scope": "unpublished array/catalog3 source candidate; no registry/deployment/native acceptance",
+  "coreFreezeProof": "/private/tmp/rr20-core-contract3-final-freeze-proof.json",
+  "galleryHead": "146e477196405fe7d2283008f6fad34c12742599"
+}

@@ -31,7 +31,8 @@ describe('the grid flow by count', () => {
     const result = compose({ title: 'Five', blocks: short(5) }, layouts.pillars);
     const items = cells(result, 'pillars');
     assert.equal(rows(items), 2);
-    const [a, b, c, d, e] = items.map((item) => item.frameBox);
+    assert.ok(items.every(item => item.frameBox === undefined), 'pillars has no decorative cards by default');
+    const [a, b, c, d, e] = items.map((item) => item.box);
     assert.ok(near(d.width, a.width) && near(e.width, a.width));
     const box = region(result, 'pillars').box;
     assert.ok(near((d.x - box.x), (box.x + box.width) - (e.x + e.width)), 'centred');
@@ -122,14 +123,14 @@ describe('empty regions and headings', () => {
   });
 
   test('a template without a title area gets an implicit auto row on top', () => {
-    const record = { name: 'x', areas: ['body'], regions: { body: { accepts: ['text'] } } };
+    const record = { name: 'x', areas: [['body']], regions: { body: { accepts: ['text'] } } };
     const result = compose({ title: 'Heading', blocks: [text('a')] }, record);
     assert.deepEqual(result.headingAreas.map((area) => [area.name, area.implicit]), [['title', true]]);
     assert.ok(region(result, 'body').box.y > result.items[0].box.y + result.items[0].box.height);
   });
 
   test('a subtitle area takes the subtitle out of the title group', () => {
-    const record = { name: 'x', areas: ['title subtitle', 'body body'], columns: [1, 1], rows: ['auto', 1], regions: { body: { accepts: ['text'] } } };
+    const record = { name: 'x', areas: [['title', 'subtitle'], ['body', 'body']], columns: [1, 1], rows: ['auto', 1], regions: { body: { accepts: ['text'] } } };
     const result = compose({ title: 'T', subtitle: 'S', blocks: [text('a')] }, record);
     const subtitle = result.items.find((item) => item.field === 'subtitle');
     assert.ok(subtitle.box.x >= result.headingAreas.find((area) => area.name === 'subtitle').box.x - 1e-6);
@@ -201,13 +202,14 @@ describe('one long list in columns', () => {
   test('a lone list in a listColumns: auto region flows into the first column count that fits', () => {
     const result = compose({ title: 'Agenda', items }, layouts.agenda);
     const list = result.items.find((item) => item.field === 'items');
-    assert.equal(list.listColumns.length, 2);
-    assert.deepEqual(list.listColumns.map((column) => [column.start, column.end]), [[0, 7], [7, 14]]);
-    assert.ok(list.listColumns.every((column) => !column.text.overflow && near(column.text.fontSize, 25)));
+    assert.equal(list.listColumns.length, 3);
+    assert.deepEqual(list.listColumns.map((column) => [column.start, column.end]), [[0, 4], [4, 9], [9, 14]]);
+    assert.ok(list.listColumns.every((column) => !column.text.overflow && near(column.text.fontSize, 32)));
     // The item's text is the whole list, every column's entries at their columns (RR-81 review).
     assert.equal(list.text.listEntries.length, 14);
     assert.deepEqual(list.text.listEntries.map((entry) => entry.index), Array.from({ length: 14 }, (_, index) => index));
-    assert.deepEqual(list.text.listEntries.slice(7), list.listColumns[1].text.listEntries);
+    assert.deepEqual(list.text.listEntries, list.listColumns.flatMap((column) => column.text.listEntries));
+    assert.deepEqual(list.text.listEntries.map((entry) => entry.value), items);
     assert.equal(list.text.overflow, false);
     assert.ok(list.listColumns[1].box.x > list.listColumns[0].box.x, 'reading order runs column by column');
   });
@@ -231,7 +233,9 @@ describe('one long list in columns', () => {
     const fixed = compose({ title: 'x', blocks: [{ items: items.slice(0, 6), columns: 3 }] }, layouts.text).items.find((item) => item.field === 'items');
     assert.equal(fixed.listColumns.length, 3);
     const automatic = composeSlide({ title: 'x', blocks: [{ items, columns: 'auto' }] }).items.find((item) => item.field === 'items');
-    assert.equal(automatic.listColumns.length, 2);
+    assert.equal(automatic.listColumns.length, 3);
+    assert.deepEqual(automatic.listColumns.flatMap((column) => column.text.listEntries).map((entry) => entry.value), items);
+    assert.equal(automatic.text.overflow, false);
   });
 
   test('breaks keep the columns as even as possible', () => {
@@ -310,7 +314,7 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     const { contentBox, areas } = composeLayoutAreas(layouts.comparison);
     assert.deepEqual(areas.map((area) => [area.name, area.heading]), [['title', true], ['first', false], ['second', false], ['verdict', false]]);
     const verdict = areas.find((area) => area.name === 'verdict').box;
-    assert.ok(near(verdict.height, 2 * 25 * 1.22 + 24), 'two body lines inside the card insets (comparison draws cards)');
+    assert.ok(near(verdict.height, 2 * 25 * 1.22), 'two body lines without decorative card insets');
     assert.ok(near(verdict.y + verdict.height, contentBox.y + contentBox.height));
     const cover = composeLayoutAreas(layouts.cover, { mirror: true }).areas;
     assert.ok(cover.find((area) => area.name === 'media').box.x < cover.find((area) => area.name === 'title').box.x, 'mirrored');
@@ -332,11 +336,11 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     }
     // A filled two-line verdict on a carded slide is exactly as tall as the layout's verdict placeholder.
     const verdict = 'The new plan wins on cost and on time to market, and the old plan wins only on what we already know how to run well.';
-    const filled = composeSlide({ title: 'Title', subtitle: 'Subtitle', blocks: [{ text: 'A' }, { text: 'B' }, { text: verdict }] }, { layout: layouts.comparison });
+    const filled = composeSlide({ title: 'Title', subtitle: 'Subtitle', blocks: [{ text: 'A' }, { text: 'B' }, { text: verdict }], design: {contentBox: true} }, { layout: layouts.comparison });
     const verdictItem = filled.items.find((item) => item.region === 'verdict');
     assert.equal(verdictItem.text.lines.length, 2);
     assert.ok(verdictItem.frameBox, 'carded');
-    const placeholder = composeLayoutAreas(layouts.comparison).areas.find((area) => area.name === 'verdict').box;
+    const placeholder = composeLayoutAreas(layouts.comparison, {presentation: {design: {contentBox: true}}}).areas.find((area) => area.name === 'verdict').box;
     assert.ok(near(placeholder.height, filled.regions.find((region) => region.name === 'verdict').box.height, 0.5), `${placeholder.height} vs the filled verdict`);
     const image = composeLayoutAreas(layouts.image).areas.find((area) => area.name === 'media').box;
     assert.equal(image.x, 0, 'bled to the slide edge by default');

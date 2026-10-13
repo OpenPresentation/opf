@@ -6,6 +6,7 @@ import {cpSync,lstatSync,mkdirSync,readFileSync,readdirSync,realpathSync,rmSync,
 import path from 'node:path';
 import {createRequire} from 'node:module';
 import {packageManagerInvocation} from './package-manager.mjs';
+import {satisfies} from './release-plan-cli.mjs';
 import {tar} from './archive-tar.mjs';
 import {galleryConfiguration,verifyGalleryCheckout,readRegularJson,optionalRegularJson} from './candidate-gallery.mjs';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -218,17 +219,28 @@ export function installedCandidatePreflight(root,executable){
 }
 
 export function assertCandidateDoctor(context,doctor){
+ const core=context.graph.artifacts.find(item=>item.name==='@openpresentation/opf');
+ assert.ok(core,'candidate doctor requires the selected core');
+ const readiness={};
  for(const name of ['@openpresentation/opf-render','@openpresentation/opf-pptx']){
   const engine=context.graph.artifacts.find(item=>item.name===name);
-  const cli=context.graph.artifacts.find(item=>item.name==='@openpresentation/cli');
-  const wanted=cli.originalManifest.peerDependencies[name];
-  assert.equal(wanted,'^0.19.0','interim doctor oracle requires the unchanged stable 0.19 contract');
-  assert.ok(/^0\.18\./.test(engine.version),'interim doctor oracle requires selected 0.18 engines');
-  const fact=doctor.packages.find(item=>item.name===name);
-  assert.deepEqual([fact.installed,fact.version,fact.wanted,fact.ok],[true,engine.version,wanted,false]);
+  assert.ok(engine,'candidate doctor requires the selected engine');
+  // Doctor reads core's runtime peer contract, not the development-only staged peer relationships.
+  const wanted=core.originalManifest.peerDependencies?.[name];
+  assert.match(wanted??'',/^\^\d+\.\d+\.\d+$/,'candidate doctor needs an explicit stable caret peer contract');
+  assert.match(engine.version??'',/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/,'candidate doctor needs a selected semantic version');
+  const ok=satisfies(engine.version,wanted);
+  const facts=doctor.packages.filter(item=>item.name===name);
+  assert.equal(facts.length,1,'doctor must report exactly one selected engine');
+  const fact=facts[0];
+  assert.deepEqual([fact.installed,fact.version,fact.wanted,fact.ok],[true,engine.version,wanted,ok]);
+  readiness[name]=ok;
  }
  for(const format of ['json','yaml','md'])assert.equal(doctor.formats[format].ready,true);
- for(const format of ['svg','pptx-import'])assert.equal(doctor.formats[format].ready,false);
+ // The drawing fixture has already exercised the required office fonts. Peer compatibility must
+ // still be reflected truthfully: old0.18 engines stay unready; selected compatible0.19 engines are ready.
+ assert.equal(doctor.formats.svg.ready,readiness['@openpresentation/opf-render']);
+ assert.equal(doctor.formats['pptx-import'].ready,readiness['@openpresentation/opf-pptx']);
 }
 
 export function assertInstalledCandidateGraph(root,consumer){

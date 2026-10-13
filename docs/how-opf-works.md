@@ -197,9 +197,9 @@ A reference is a bare id (`"two-column"`) or `name:id` (`"acme:hero"`), where th
 
 ```json
 "catalogs": {
-  "default": { "source": "https://www.pptx.gallery", "layouts": { "two-column": { "name": "Two column", "areas": ["title title", "left right"], "rows": ["auto", 1], "columns": [1, 1], "regions": { "left": { "accepts": ["text"], "flow": "none" }, "right": { "accepts": ["text"], "flow": "none" } } } } },
+  "default": { "source": "https://www.pptx.gallery", "layouts": { "two-column": { "name": "Two column", "areas": [["title", "title"], ["left", "right"]], "rows": ["auto", 1], "columns": [1, 1], "regions": { "left": { "accepts": ["text"], "flow": "none" }, "right": { "accepts": ["text"], "flow": "none" } } } } },
   "acme": { "source": "pkg:@acme/opf-catalog", "themes": { "brand": { "name": "Brand", "colorScheme": "ocean", "fontScheme": "inter" } } },
-  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "areas": ["title", "chart"], "rows": ["auto", 1], "regions": { "chart": { "accepts": ["chart"], "flow": "none" } } } } }
+  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "areas": [["title"], ["chart"]], "rows": ["auto", 1], "regions": { "chart": { "accepts": ["chart"], "flow": "none" } } } } }
 }
 ```
 

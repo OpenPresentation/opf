@@ -1,0 +1,24 @@
+{
+  "command": [
+    "node",
+    "scripts/test-package-ecosystem.mjs",
+    "--siblings",
+    "opf-editor,opf-pptx",
+    "--tier",
+    "full"
+  ],
+  "cwd": "/private/tmp/rr20-final-runtime-replay/opf",
+  "exit": 0,
+  "seconds": 295.81912779808044,
+  "environment": {
+    "CANDIDATE_GALLERY_REF": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+    "OPF_GOLDEN_BASELINE": "/private/tmp/rr20-final-runtime-replay/opf/scripts/fixtures/opf-examples-png.rr20-array-areas.sha256.json",
+    "OPF_TRACKER_STALE": "warn",
+    "OPF_REUSE_BUILD": "rr20-remaining-siblings-01-67926"
+  },
+  "node": "v24.21.0",
+  "npm": "11.16.0",
+  "pnpm": "10.33.2",
+  "logSha256": "3b3af326042478464516035aed0e79b1b9af622e83625547d3479f03b16dce68",
+  "scope": "Remaining editor/PPTX source sibling shard only; not full ecosystem pipeline, registry, native or hosted acceptance"
+}

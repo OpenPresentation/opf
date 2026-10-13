@@ -252,7 +252,7 @@ const templateBlock = {
 function layoutSlide(id, layoutId, text) {
   const record = byId('layouts', layoutId);
   const content = layoutKinds(record);
-  const heading = record.areas.some(row => row.split(/\s+/).includes('title'));
+  const heading = record.areas.some(row => row.includes('title'));
   const types = heading ? ['title', 'subtitle'] : [];
   return {id, layout: layoutId, ...(types.includes('title') ? {title: text.title} : {}), ...(types.includes('subtitle') ? {subtitle: text.subtitle} : {}), ...(content.length ? {blocks: content.map((type) => templateBlock[type](text))} : {})};
 }

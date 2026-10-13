@@ -1,0 +1,137 @@
+{
+  "scope": "Explicit unpublished coordinated source tarball graph; not registry release/native/otherOS acceptance",
+  "identity": {
+    "scope": "Isolated local candidate tarballs; no registry claim",
+    "sources": {
+      "opf": [
+        "/private/tmp/opf-area-arrays",
+        "fb1c2ee65bd45c8b5e8182f034f7fceee1dbb505"
+      ],
+      "opf-render": [
+        "/private/tmp/opf-areas-array-render",
+        "13a3ab0efd1e201428aea0cd647ff750efa283f4"
+      ],
+      "opf-pptx": [
+        "/private/tmp/opf-areas-array-pptx",
+        "fe35728ffa43a1b2ff19ec275ffe6f15b209779e"
+      ],
+      "opf-editor": [
+        "/private/tmp/opf-areas-array-editor",
+        "5a82cbbc58e4f3f98a0d1f26e17c73c94fa6e79a"
+      ],
+      "gallery-candidate": [
+        "/private/tmp/opf-areas-array-gallery",
+        "146e477196405fe7d2283008f6fad34c12742599"
+      ]
+    },
+    "runtimeCoreCommit": "8f70cf1b52dc4ca4eb246a6f9d065b1403edbf31",
+    "coreToolingCommit": "fb1c2ee6",
+    "overlayHead": "af30e62cfb8bea56df520b1b0f2370437f325dee",
+    "overlayConfiguration": {
+      "version": 2,
+      "gallery": {
+        "repository": "OpenPresentation/gallery",
+        "version": "3.0.0",
+        "catalogSchema": 3,
+        "sha": "146e477196405fe7d2283008f6fad34c12742599"
+      }
+    },
+    "originalCoreManifestSha256": "631d3906cf09c764806caa322f225482c1853d48ac9dd9f0ab060cc7372c1458",
+    "overlayCoreManifestSha256": "3a66aaa7ab520bd24610d0997c49305abbf385dd9321285ef7439a7fe551f79e",
+    "nodeModules": "Physical copied tree with explicit owned workspace sibling links; no shared core builds",
+    "all98CoreDistBytesUnchanged": true,
+    "externalDependencyLinks": [],
+    "allSiblingToolTreesCopied": true
+  },
+  "tarballs": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.19.0",
+      "sourceSha": "af30e62cfb8bea56df520b1b0f2370437f325dee",
+      "sha256": "6f8e352696ae0077d938ac0e5ceeb605800acfdea31b7a7a768b0cccc502499c",
+      "npmPackIntegrity": "sha512-rqsY4gEScDfB71syoVoq5TflWgrsoXjAWwAsXBMw35godaleedAmpgxc7u0lVH0RVoZcGhUhh4sdclAERBNL8Q=="
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.19.1",
+      "sourceSha": "13a3ab0efd1e201428aea0cd647ff750efa283f4",
+      "sha256": "b5384a8182af9513dd189d2d1bd782bf30bec520239e75fe60e292df69227b26",
+      "npmPackIntegrity": "sha512-RgCKGTPCYAU0E/c5eiXDn/qy+MkkRdPqDWpAEiNL1oGBvT3dvhzsdVqlhJHuwhxaOF0aVAii1NMiFCamMVIBXA=="
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.19.0",
+      "sourceSha": "fe35728ffa43a1b2ff19ec275ffe6f15b209779e",
+      "sha256": "0787349b1b96c2e45b2d41c90a6709edaa01b30c13f1f654c33d6478e452defc",
+      "npmPackIntegrity": "sha512-t7v0M+bL0YP7NqLGVVfS1W8FPoOu70FLl2JzU6Lfny1xireLPJG/WjbbM0SVgRoyk2m/Bjq2Std4JwJBYFZZnA=="
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.19.0",
+      "sourceSha": "5a82cbbc58e4f3f98a0d1f26e17c73c94fa6e79a",
+      "sha256": "e186509ccc97084ea8d4a7400de2be345d774369501557e4a5f08bf305d6ad8e",
+      "npmPackIntegrity": "sha512-78DWL+vqQMJdxcSLgF+I65EjvOQviaG9ocT74tiCERyRLyBfxlJgjK9ArgvppdG1gaO+9j8eLGEAqtaP6im+Sw=="
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.19.0",
+      "sourceSha": "af30e62cfb8bea56df520b1b0f2370437f325dee",
+      "sha256": "cf98b097ec5b168176db4c8de28c94924928296e56484a836773274085220d5b",
+      "npmPackIntegrity": "sha512-8d18CeuSwxTX+B/TSUXf5x5jvTkj90X+doWTzceeuZnFI4FMCEJe13BjZQwYGQfwBOoywjeNyf9WA9p0gEMAwg=="
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "sourceSha": "146e477196405fe7d2283008f6fad34c12742599",
+      "sha256": "1639c962013732404c51d40d0727bcb72615e42eead0de4220d06de4a6efc297",
+      "npmPackIntegrity": "sha512-4aOjrg4LCm0Jg8ksqkk6SY77xvFQGpwf378ykiTdoQlzdegoJHvLEYhEjN1rS6SYWOw8DftWcBMDBh0Ijk9iQw=="
+    }
+  ],
+  "allTarballBytesUnchangedAfterPreflight": true,
+  "allOwnVersionsPreserved": true,
+  "allSourcesClean": {
+    "opf": "",
+    "opf-render": "",
+    "opf-pptx": "",
+    "opf-editor": "",
+    "gallery-candidate": ""
+  },
+  "results": [
+    {
+      "name": "consumer",
+      "command": [
+        "node",
+        "scripts/test-packed-ecosystem.mjs"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-final-packed/results/consumer.log"
+    },
+    {
+      "name": "browser",
+      "command": [
+        "node",
+        "scripts/test-packed-browser.mjs"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-final-packed/results/browser.log"
+    }
+  ],
+  "packExit": 0,
+  "terminalSession": 10797,
+  "terminalExit": 0,
+  "browser": {
+    "suites": 8,
+    "assertions": 282,
+    "trustedInteractions": 8,
+    "report": "/private/tmp/rr20-final-packed/opf/artifacts/editor/packed-browser-packed-node24-report.json"
+  },
+  "retainedSetupFailures": [
+    "/private/tmp/rr20-final-packed-before-final-goldens/results/consumer.log",
+    "/private/tmp/rr20-final-packed/results/consumer-setup-playwright-failure.log"
+  ],
+  "logs": {
+    "/private/tmp/rr20-final-packed/results/pack.log": "417cad53c6b610637e52f8de276fb97f9860f2ba0606bfbb2b3f581fa0235b57",
+    "/private/tmp/rr20-final-packed/results/consumer.log": "227ceb7e01222c0ebf1cffefa7f131071e264e68969825ca3f791995817916da",
+    "/private/tmp/rr20-final-packed/results/browser.log": "e3663971401bab951916042a1047639f12eaf7b10a674b59320ebc2b59319fcb"
+  }
+}

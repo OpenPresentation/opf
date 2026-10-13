@@ -1,0 +1,39 @@
+{
+  "scope": "Source qualification CI only; no runtime, release gate or deployment change",
+  "reviewedCommit": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+  "pr": "https://github.com/OpenPresentation/opf-editor/pull/165",
+  "priorFailure": {
+    "run": 38352450049,
+    "job": 115147799174,
+    "log": "/private/tmp/rr20-editor165-initial-failure.log",
+    "cause": "Candidate array-area editor catalog tests ran against published pre-array core/Gallery 2 before candidate linking"
+  },
+  "repair": "Package and Node-range registry packed steps run for ordinary published selections. Explicit candidate Gallery selections require the separate published-control and coordinated candidate source/installed/browser qualification. Release workflow unchanged.",
+  "checks": {
+    "focused": {
+      "passed": 10,
+      "failed": 0
+    },
+    "typecheck": {
+      "files": 209,
+      "errors": 0
+    },
+    "diffCheck": "passed"
+  },
+  "rootReview": "Reviewed exact two-file diff; no package runtime, dependencies or release workflow changes",
+  "hostedAcceptance": "pending",
+  "evidenceDocumentationChecks": {
+    "initialBranchMapped": {
+      "session": 24412,
+      "exit": 1,
+      "log": "/private/tmp/rr20-editor-ci-review-docs-check.log",
+      "reason": "Unscoped mapped run selected whole feature branch without explicit candidate environment; node.test correctly refused configured Gallery 3 with no authorized candidate mode. Historical isolated exact-candidate runtime pass remains separately recorded."
+    },
+    "docsOnlyMapped": {
+      "command": "pnpm check:changed --base HEAD",
+      "session": 75117,
+      "log": "/private/tmp/rr20-editor-ci-review-docs-scoped-check.log",
+      "exit": 0
+    }
+  }
+}

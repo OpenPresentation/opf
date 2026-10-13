@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { buildPollQuery, EXIT, evaluateChecks, normalizeContexts, parseArgs, runGate, suiteContexts, summarizeRules, UsageError } from './pr-gate.mjs';
+import { buildPollQuery, EXIT, evaluateChecks, normalizeContexts, parseArgs, runGate, suiteContexts, summarizeRules, resumeCommand, UsageError } from './pr-gate.mjs';
 import { selectChecks } from './run-checks.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -399,7 +399,7 @@ test('RR-67: jobs with the same name in different workflows do not hide each oth
   assert.equal(evaluateChecks({ checks, required: null }).state, 'red');
 });
 
-const suite = (runId, status, conclusion = null, workflow = 'CI') => ({ status, conclusion: status === 'COMPLETED' ? conclusion : null, app: { slug: 'github-actions' }, workflowRun: { databaseId: runId, event: 'pull_request', workflow: { name: workflow } } });
+const suite = (runId, status, conclusion = null, workflow = 'CI', attempt = 1) => ({ status, conclusion: status === 'COMPLETED' ? conclusion : null, app: { slug: 'github-actions' }, workflowRun: { databaseId: runId, event: 'pull_request', runAttempt: attempt, workflow: { name: workflow } } });
 
 test('#526: a cancelled check of a superseded run is ignored when a newer run of the same workflow exists', async () => {
   const required = summarizeRules(RULES).required;
@@ -633,4 +633,88 @@ test('cancelled/null/unknown completed empty suites cannot disappear beside succ
  const placeholder=fallbackSuite('PLACEHOLDER',[]);placeholder.status='QUEUED';placeholder.conclusion=null;placeholder.workflowRun=null;
  const actual=await suiteContexts(async()=>suitePage([placeholder,fallbackSuite('S1',GREEN())]),'o','r',HEAD);
  assert.equal(evaluateChecks({checks:normalizeContexts(actual.nodes,HEAD),required:null,suites:actual.suites}).state,'green');
+});
+
+
+test('rerun scope is explicit, validated, and defaults to failed jobs', () => {
+  assert.equal(parseArgs(['o/r#7', '--rerun-once']).rerunScope, 'failed');
+  for (const scope of ['failed', 'all']) assert.equal(parseArgs(['o/r#7', '--rerun-scope', scope, '--rerun-once']).rerunScope, scope);
+  for (const argv of [['o/r#7', '--rerun-once', '--rerun-scope'], ['o/r#7', '--rerun-once', '--rerun-scope', 'sometimes'], ['o/r#7', '--rerun-scope', 'all']]) assert.throws(() => parseArgs(argv), UsageError);
+});
+
+test('all scope restarts complete workflows once and deduplicates failed jobs', async () => {
+  const red = () => poll(pr({contexts: [run('packages', 'FAILURE', {runId:41}), run('Verify OPF packages', 'TIMED_OUT', {runId:41})]}));
+  const {deps,state} = fake({polls:[red(),red(),red(),red()]});
+  assert.equal((await gate(['o/r#7','--rerun-once','--rerun-scope','all'],deps)).code, EXIT.red);
+  assert.deepEqual(state.rest.filter(call=>call.startsWith('POST')), ['POST repos/o/r/actions/runs/41/rerun']);
+});
+
+test('explicit failed scope preserves failed-only endpoint and run deduplication', async () => {
+  const red = () => poll(pr({contexts: [run('packages', 'FAILURE', {runId:41}), run('Verify OPF packages', 'FAILURE', {runId:41})]}));
+  const {deps,state} = fake({polls:[red(),red(),red(),red()]});
+  assert.equal((await gate(['o/r#7','--rerun-once','--rerun-scope','failed'],deps)).code, EXIT.red);
+  assert.deepEqual(state.rest.filter(call=>call.startsWith('POST')), ['POST repos/o/r/actions/runs/41/rerun-failed-jobs']);
+});
+
+test('resume preserves all rerun scope without changing default resume commands', () => {
+  const options=parseArgs(['o/r#7','--rerun-once','--rerun-scope','all']);
+  const resume=resumeCommand(options,options.targets);
+  assert.match(resume,/--rerun-once --rerun-scope all/);
+  assert.equal(parseArgs(resume.split(' ').slice(2)).rerunScope,'all');
+  assert.equal(resumeCommand(parseArgs(['o/r#7','--rerun-once']),options.targets),'node scripts/pr-gate.mjs o/r#7 --timeout-minutes 100 --rerun-once');
+});
+
+
+test('RR-20: lower-id retry check creation supersedes intervening cancellation, not current failures', async () => {
+ const cancelled=run('selection','CANCELLED',{runId:38454969449,id:115495925923});
+ const retry=pending('selection',{runId:38454956973,id:115500000000,attempt:2});
+ assert.equal(normalizeContexts([retry],HEAD)[0].attempt,2,'queried workflowRun.runAttempt survives normalization');
+ const live=[suite(38454969449,'COMPLETED','CANCELLED'),suite(38454956973,'IN_PROGRESS',null,'CI',2)];
+ const verdict=contexts=>evaluateChecks({checks:normalizeContexts(contexts,HEAD),required:null,suites:live});
+ assert.equal(verdict([cancelled,retry]).state,'pending');
+ assert.equal(verdict([cancelled,pending('selection',{runId:38454956973,id:115500000000,attempt:2,oid:'foreign'})]).state,'red');
+ assert.equal(verdict([cancelled,pending('selection',{runId:38454956973,id:115500000000,attempt:1})]).state,'red');
+ assert.equal(verdict([cancelled,pending('selection',{runId:38454956973,id:115495925900,attempt:2})]).state,'red');
+ assert.equal(verdict([cancelled,pending('selection',{runId:38454956973,id:115500000000,attempt:2,workflow:'Other'})]).state,'red');
+ assert.equal(verdict([cancelled,run('selection','FAILURE',{runId:38454956973,id:115500000000,attempt:2})]).state,'red');
+ assert.equal(verdict([cancelled,run('selection','CANCELLED',{runId:38454956973,id:115500000000,attempt:2})]).state,'red');
+ assert.equal(evaluateChecks({checks:normalizeContexts([cancelled,retry],HEAD),required:null,suites:[suite(38454956973,'COMPLETED','CANCELLED')]}).state,'red');
+ assert.equal(verdict([cancelled,retry,run('package','FAILURE',{runId:38454969449,id:115495925924})]).state,'red');
+ assert.equal(evaluateChecks({checks:normalizeContexts([cancelled,retry],HEAD),required:[{context:'selection'},{context:'package'}],suites:live}).state,'pending','unreported required job cannot go green');
+ assert.equal(verdict([cancelled]).state,'red','a queued suite without an observed retry check is insufficient');
+ const missing=evaluateChecks({checks:normalizeContexts([cancelled,retry,run('package','CANCELLED',{runId:38454969449,id:115495925924})],HEAD),required:[{context:'selection'},{context:'package'}],suites:live});
+ assert.equal(missing.state,'pending');assert.deepEqual(missing.missing,['package'],'superseded required cancellation needs its actual replacement');
+ assert.equal(verdict([cancelled,run('package','FAILURE',{runId:38454956973,id:115495925900,attempt:2})]).state,'red','mutable workflow attempt cannot refresh an old job check identity');
+
+ assert.equal(verdict([retry,run('selection','CANCELLED',{runId:38454969449,id:115500000002})]).state,'red','a cancellation created after the retry remains current');
+
+ const green=[run('selection','SUCCESS',{runId:38454956973,id:115500000000,attempt:2}),run('package','SUCCESS',{runId:38454956973,id:115500000001,attempt:2})];
+ const done=fake({rules:[],polls:[poll(pr({contexts:[cancelled,retry],suites:live})),poll(pr({contexts:[cancelled,...green],suites:[suite(38454956973,'COMPLETED','SUCCESS','CI',2)]}))]});
+ assert.equal((await gate(['o/r#7'],done.deps)).code,EXIT.ok);
+ assert.ok(done.state.queries.length>=3,'green still needs consecutive confirmation');
+});
+
+
+test('RR-20: mutable attempt metadata cannot make retained success qualify an unfinished retry', () => {
+ const contexts=normalizeContexts([run('selection','CANCELLED',{runId:905,id:10}),run('selection','SUCCESS',{runId:900,id:20,attempt:2})],HEAD);
+ const evaluate=suites=>evaluateChecks({checks:contexts,required:[{context:'selection'}],suites});
+ assert.equal(evaluate([]).state,'pending');
+ assert.equal(evaluate([suite(900,'IN_PROGRESS',null,'CI',2)]).state,'pending');
+ assert.equal(evaluate([suite(900,'COMPLETED','SUCCESS','CI',1)]).state,'pending','old suite attempt cannot qualify current retry');
+ assert.equal(evaluate([suite(900,'COMPLETED','SUCCESS','CI',2)]).state,'green');
+ for(const conclusion of ['FAILURE','CANCELLED','TIMED_OUT'])assert.equal(evaluate([suite(900,'COMPLETED',conclusion,'CI',2)]).state,'red');
+ assert.equal(evaluate([suite(900,'COMPLETED','SUCCESS','Other',2)]).state,'pending');
+});
+
+
+test('RR-20: obsolete retry and unrelated advisory retry do not override current counted verdicts', () => {
+ const old=run('selection','SUCCESS',{runId:900,id:20,attempt:2});
+ const cancelled=run('selection','CANCELLED',{runId:905,id:10});
+ const current=run('selection','SUCCESS',{runId:910,id:30});
+ assert.equal(evaluateChecks({checks:normalizeContexts([old,cancelled,current],HEAD),required:[{context:'selection'}],suites:[suite(900,'COMPLETED','FAILURE','CI',2),suite(910,'COMPLETED','SUCCESS')]}).state,'green');
+ const advisory=[run('advisory','CANCELLED',{runId:905,id:10}),run('advisory','SUCCESS',{runId:900,id:20,attempt:2})];
+ assert.equal(evaluateChecks({checks:normalizeContexts([...advisory,current],HEAD),required:[{context:'selection'}],suites:[suite(900,'IN_PROGRESS',null,'CI',2)]}).state,'green');
+ const affected=[run('selection','SUCCESS',{runId:900,id:5,attempt:2}),run('selection','CANCELLED',{runId:905,id:10}),run('advisory','SUCCESS',{runId:900,id:20,attempt:2})];
+ assert.equal(evaluateChecks({checks:normalizeContexts(affected,HEAD),required:[{context:'selection'}],suites:[suite(900,'IN_PROGRESS',null,'CI',2)]}).state,'pending','advisory suppression of counted cancellation still needs retry completion');
+ assert.equal(evaluateChecks({checks:normalizeContexts([...affected,run('selection','SUCCESS',{runId:950,id:50,workflow:'Other'})],HEAD),required:[{context:'selection'}],suites:[suite(900,'IN_PROGRESS',null,'CI',2)]}).state,'pending','same-name foreign workflow cannot replace suppressed counted cancellation');
 });

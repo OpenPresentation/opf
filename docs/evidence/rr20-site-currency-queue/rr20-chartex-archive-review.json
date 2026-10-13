@@ -1,0 +1,135 @@
+{
+  "all-seven": {
+    "parts": 168,
+    "nativeLayoutTags": 28,
+    "baselineToCurrent": {
+      "hashOnlyTags": 28,
+      "listGeometryLayouts": 1
+    },
+    "chartChanges": [
+      "ppt/charts/chart1.xml",
+      "ppt/charts/chart2.xml",
+      "ppt/charts/chart3.xml",
+      "ppt/charts/chart4.xml",
+      "ppt/charts/chart5.xml",
+      "ppt/charts/chart6.xml",
+      "ppt/charts/chart7.xml"
+    ],
+    "zeroAxisAdditions": [],
+    "candidateSha256": "d5e9369846422d28f3dfb3b32b0009401a41d402412fdbfed106561edd354082"
+  },
+  "box-multi": {
+    "parts": 114,
+    "nativeLayoutTags": 28,
+    "baselineToCurrent": {
+      "hashOnlyTags": 28,
+      "listGeometryLayouts": 1
+    },
+    "chartChanges": [
+      "ppt/charts/chart1.xml"
+    ],
+    "zeroAxisAdditions": [
+      "ppt/charts/chart1.xml"
+    ],
+    "candidateSha256": "34d74ee3301b44a5d81ca32fd138966dfae9e93d79ba1752fc9c50a430b6d645"
+  },
+  "funnel-category": {
+    "parts": 114,
+    "nativeLayoutTags": 28,
+    "baselineToCurrent": {
+      "hashOnlyTags": 28,
+      "listGeometryLayouts": 1
+    },
+    "chartChanges": [
+      "ppt/charts/chart1.xml"
+    ],
+    "zeroAxisAdditions": [],
+    "candidateSha256": "ba1a79407651ef262d15b6b0e1e937177b3d02537960344093a568c89feaa6f4"
+  },
+  "histogram-category": {
+    "parts": 114,
+    "nativeLayoutTags": 28,
+    "baselineToCurrent": {
+      "hashOnlyTags": 28,
+      "listGeometryLayouts": 1
+    },
+    "chartChanges": [
+      "ppt/charts/chart1.xml"
+    ],
+    "zeroAxisAdditions": [],
+    "candidateSha256": "1f4c9d95b18a3821bcdbf29dd18048d0924838dbd307e3a6980a4190ac9bb479"
+  },
+  "histogram-single": {
+    "parts": 114,
+    "nativeLayoutTags": 28,
+    "baselineToCurrent": {
+      "hashOnlyTags": 28,
+      "listGeometryLayouts": 1
+    },
+    "chartChanges": [
+      "ppt/charts/chart1.xml"
+    ],
+    "zeroAxisAdditions": [
+      "ppt/charts/chart1.xml"
+    ],
+    "candidateSha256": "ccf0a5f94b46fa240a5f9aa855b19ab6bc8d552b39fe4aefa8cd471774c5ec6a"
+  },
+  "pareto-multi": {
+    "parts": 114,
+    "nativeLayoutTags": 28,
+    "baselineToCurrent": {
+      "hashOnlyTags": 28,
+      "listGeometryLayouts": 1
+    },
+    "chartChanges": [
+      "ppt/charts/chart1.xml"
+    ],
+    "zeroAxisAdditions": [
+      "ppt/charts/chart1.xml"
+    ],
+    "candidateSha256": "e7899a6dd1fc22f5b257a813323f4e63b7d328c63f582d29cea577b8262d5463"
+  },
+  "treemap-category": {
+    "parts": 114,
+    "nativeLayoutTags": 28,
+    "baselineToCurrent": {
+      "hashOnlyTags": 28,
+      "listGeometryLayouts": 1
+    },
+    "chartChanges": [
+      "ppt/charts/chart1.xml"
+    ],
+    "zeroAxisAdditions": [],
+    "candidateSha256": "b69933578667102cc1b2ffa59e97574aa90d6e27442c5e59677ff1a0c16a71f2"
+  },
+  "waterfall-single": {
+    "parts": 114,
+    "nativeLayoutTags": 28,
+    "baselineToCurrent": {
+      "hashOnlyTags": 28,
+      "listGeometryLayouts": 1
+    },
+    "chartChanges": [
+      "ppt/charts/chart1.xml"
+    ],
+    "zeroAxisAdditions": [
+      "ppt/charts/chart1.xml"
+    ],
+    "candidateSha256": "341fc617cd8edd6bdf9790134cc817c1b13f0cf0479f96b23758e55c077b0142"
+  },
+  "world-category": {
+    "parts": 112,
+    "nativeLayoutTags": 28,
+    "baselineToCurrent": {
+      "hashOnlyTags": 28,
+      "listGeometryLayouts": 1
+    },
+    "chartChanges": [
+      "ppt/charts/chart1.xml"
+    ],
+    "zeroAxisAdditions": [
+      "ppt/charts/chart1.xml"
+    ],
+    "candidateSha256": "e9dec7ca5086812227c171a3d93c45c32ceaf3e4748a55f8a67623c5dca9f914"
+  }
+}

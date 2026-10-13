@@ -1120,6 +1120,8 @@ export interface QuotePhoto {
   shape: ImageShape;
 }
 export interface QuoteLayout {
+  /** Measured vertical content envelope at the allocated width, including the photo. */
+  bounds: LayoutBox;
   algorithm: 'quote-flow-v1';
   textMeasurement: 'estimated' | 'provided';
   parts: QuoteTextPart[];
@@ -1263,6 +1265,18 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
       photoFits=selected.photoFits;
     }
   }
+  // A successful quote is one compact editorial unit, not a body at the top and attribution at the bottom.
+  // Keep failed allocations intact so readability-floor/overlap diagnostics retain their original evidence.
+  if (body.fit && !body.fit.overflow && photoFits && (!attribution || attribution.fit && !attribution.fit.overflow)) {
+    body.box.height = body.fit.placement?.height ?? heightOf(body.fit);
+    const footerTop = body.box.y + body.box.height + 18;
+    const previousTop = Math.min(attribution?.box.y ?? Infinity, photo?.box.y ?? Infinity);
+    if (Number.isFinite(previousTop)) {
+      const shift = footerTop - previousTop;
+      if (attribution) { attribution.box.y += shift; attribution.fit = translateTextFit(attribution.fit!, shift); }
+      if (photo) { photo.box.y += shift; photo.shape = imageShape('circle', photo.box); }
+    }
+  }
   if (hasPhoto && !photo) photoFits=false;
   for (const part of parts) {
     const area=part.box;
@@ -1285,7 +1299,11 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     report('part-overlap',path,['body','footer'],'Quote body and photo overlap; do not accept this layout without more space.');
   }
   if (diagnostics.length && options.overflow === 'error') throw new OPFCompositionError(diagnostics);
-  return {algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,...(photo?{photo}:{}),diagnostics,overflow:diagnostics.length>0};
+  const occupiedParts = parts.filter(part => part.fit).map(part => ({...part.box, height:part.fit!.placement?.height ?? heightOf(part.fit!)}));
+  if (photo) occupiedParts.push(photo.box);
+  const bottom = Math.max(box.y, ...occupiedParts.map(area => area.y + area.height));
+  const bounds = {x:box.x,y:box.y,width:box.width,height:bottom-box.y};
+  return {bounds,algorithm:'quote-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,...(photo?{photo}:{}),diagnostics,overflow:diagnostics.length>0};
 }
 
 export interface MetricContent {
@@ -1324,6 +1342,8 @@ export interface MetricLayoutDiagnostic extends LayoutDiagnostic {
   parts: MetricTextPart['role'][];
 }
 export interface MetricLayout {
+  /** Measured vertical value/metadata envelope at the allocated width. */
+  bounds: LayoutBox;
   algorithm: 'metric-flow-v1';
   alignment: 'left' | 'center' | 'right';
   textMeasurement: 'estimated' | 'provided';
@@ -1511,7 +1531,9 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
     }
   }
   if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
-  return {algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
+  const bottom = Math.max(box.y, ...visible.map(part => part.box.y + occupied(part.fit!)));
+  const bounds = {x:box.x,y:box.y,width:box.width,height:bottom-box.y};
+  return {bounds,algorithm:'metric-flow-v1',alignment,textMeasurement:options.textMeasurement?'provided':'estimated',arrangement:selected!.arrangement,...(metric.sentiment===undefined?{}:{sentiment:metric.sentiment}),attempts,parts,diagnostics,overflow:diagnostics.length>0};
 }
 
 /** Progress of a timeline event (FA-11). Engines draw it from the deck's colors; see `timelineMarkerShapes`. */
@@ -1585,7 +1607,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
     source.push({role,eventIndex,...(status?{status}:{}),path:partPath,text,sources:[{path:partPath,start:0,end:text.length}],box:{...box},alignment:'center',requestedFontSize:gridFontSize(size*scale,minimum),minFontSize:minimum,requestedStyle,style:resolveTextStyle({...requestedStyle},options.textMeasurement)});
   };
   add('name',timeline.name,`${path}.name`,24,700);add('description',timeline.description,`${path}.description`,18,400);
-  timeline.events.forEach((event,index)=>{add('when',event.when,`${eventPath(index)}.when`,16,500,index);add('what',event.what,`${eventPath(index)}.what`,16,500,index);add('event-description',event.description,`${eventPath(index)}.description`,16,500,index);});
+  timeline.events.forEach((event,index)=>{add('when',event.when,`${eventPath(index)}.when`,18,500,index);add('what',event.what,`${eventPath(index)}.what`,22,600,index);add('event-description',event.description,`${eventPath(index)}.description`,18,400,index);});
   const metadata:TimelineTextPart[]=[],events:TimelineTextPart[][]=timeline.events.map(()=>[]);
   for(const part of source)if(part.eventIndex===undefined)metadata.push(part);else events[part.eventIndex]!.push(part);
   const cache=new Map<string,{fit:SourceTextFit;ink:TextLineInk[];height:number}>();
@@ -1623,6 +1645,7 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
         const fit={...measured.fit,...(placement?{placement}:{}),overflow:measured.fit.overflow||!!placement?.overflow};
         const accepted={...part,box:area,alignment,fit};parts.push(accepted);
         if(fit.overflow)report(accepted,'text-fit','Timeline field exceeds its readable width; increase its space or split the timeline.');
+        if(breaksInsideWord(part.text,fit))report(accepted,'text-fit','Timeline field would split a word; use a wider vertical arrangement or paginate events.');
         if(area.x<box.x-.01||area.y<box.y-.01||area.x+area.width>box.x+box.width+.01||area.y+area.height>box.y+box.height+.01)report(accepted,'part-outside-cell','Timeline field extends outside its cell; increase the cell or paginate events.',Math.max(area.x+area.width-box.x-box.width,area.y+area.height-box.y-box.height));
         return accepted;
       };
@@ -1638,20 +1661,28 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       };
       if(arrangement==='alternating'){
         const width=box.width/Math.max(2,count),step=(box.width-width)/Math.max(1,count-1),start=count===1?box.x+box.width/2:box.x+width/2;
-        const lineY=y+Math.max(scale,available)*.46;
+        // Center the measured event envelope, not the empty halves of the cell.
+        // Upper labels end beside their marker; lower labels begin beside theirs.
+        const fieldGap=4*scale,clearance=24*scale;
+        const heights=events.map(fields=>fields.reduce((height,part)=>height+measure(part,gridFontSize(part.requestedFontSize-reduction*scale,minimum),width,'center').height,0)+Math.max(0,fields.length-1)*fieldGap);
+        const markerExtent=hasRing?ringRadius+strokeWidth/2:radius;
+        const upper=Math.max(markerExtent,...heights.filter((_,index)=>index%2===0).map(height=>height+clearance));
+        const lower=Math.max(markerExtent,...heights.filter((_,index)=>index%2===1).map(height=>height+clearance));
+        const lineY=y+Math.max(0,(available-upper-lower)/2)+upper;
         events.forEach((fields,index)=>{
-          const x=start+(rtl?count-1-index:index)*step,top=index%2===0?y:lineY+24*scale,bottom=index%2===0?lineY-24*scale:box.y+box.height;
+          const x=start+(rtl?count-1-index:index)*step,top=index%2===0?lineY-clearance-heights[index]!:lineY+clearance,bottom=index%2===0?lineY-clearance:box.y+box.height;
           markers.push(marker(index,x,lineY));let cursor=top;
-          for(const part of fields){const placed=place(part,x-width/2,cursor,width,'center');cursor+=placed.box.height;if(cursor>bottom+.01)report(placed,'event-space','Timeline event labels exceed their side of the connector; change the arrangement or paginate events.',cursor-bottom);}
+          for(const [fieldIndex,part] of fields.entries()){const placed=place(part,x-width/2,cursor,width,'center');cursor+=placed.box.height;if(cursor>bottom+.01)report(placed,'event-space','Timeline event labels exceed their side of the connector; change the arrangement or paginate events.',cursor-bottom);if(fieldIndex<fields.length-1)cursor+=fieldGap;}
         });
       }else{
         // Right to left: the marker rail runs down the right edge and the text, aligned to its start, sits to its left.
-        // A ring widens the rail, and the text keeps its usual distance from the marker's edge.
-        const lead=hasRing?ringRadius+strokeWidth/2:radius,gap=24*scale+(lead-radius);
+        // Reserve the entire marker/ring diameter plus twelve pixels of clear space before text.
+        const outlined=timeline.events.some(event=>event.status==='planned');
+        const lead=hasRing?ringRadius+strokeWidth/2:radius+(outlined?strokeWidth/2:0),gap=2*lead+12*scale;
         const x=rtl?box.x+box.width-lead:box.x+lead,textX=rtl?box.x:box.x+gap,width=box.width-gap;
         events.forEach((fields,index)=>{
           const top=y;let first:TimelineTextPart|undefined;
-          for(const part of fields){const placed=place(part,textX,y,width,'left');first??=placed;y+=placed.box.height;}
+          for(const [fieldIndex,part] of fields.entries()){const placed=place(part,textX,y,width,'left');first??=placed;y+=placed.box.height;if(fieldIndex<fields.length-1)y+=4*scale;}
           markers.push(marker(index,x,top+Math.min(first?.box.height??2*radius,2*radius)/2));
           y+=16*scale;
         });
@@ -2063,8 +2094,11 @@ export interface ListFitOptions extends RichTextOptions {
   bulletImage?:ListBulletImage;
 }
 
+/** Reference-pixel starting size; explicit rich runs retain their authored sizes. */
+function contentNominalSize(field:string):number { return field==='items'||field==='bullets'?32:25; }
+
 /** Shared hanging indents, mixed-run fitting and description spacing for list payloads. */
-export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=25,minFontSize=16,options:ListFitOptions={style:{fontFamily:'sans-serif',fontWeight:400}}):ListFit {
+export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=contentNominalSize('items'),minFontSize=16,options:ListFitOptions={style:{fontFamily:'sans-serif',fontWeight:400}}):ListFit {
   if(!Array.isArray(input)||![box.width,box.height,requestedSize,minFontSize].every(value=>Number.isFinite(value)&&value>0))throw new RangeError('List content, dimensions and font sizes must be valid.');
   const source=input.map((value,index)=>{
     const object=typeof value==='object'&&!Array.isArray(value)?value as {text:ListText;description?:ListText;level?:number}:undefined;
@@ -2134,6 +2168,8 @@ function contentText(field: string, value: unknown): string | undefined {
   return undefined;
 }
 export interface TableLayoutOptions {
+  /** Explicit resolved design alignment; absent uses typed numeric right/text left defaults. Cell style.align wins. */
+  alignment?: 'left' | 'center' | 'right';
   scale?: number;
   minFontSize?: number;
   fontFamily?: string;
@@ -2150,6 +2186,8 @@ export interface TableLayoutOptions {
   direction?: TextDirection;
 }
 export interface TableCellLayout {
+  /** Logical alignment, shared by preview and native export. Numeric default resolves to the physical right even in RTL. */
+  alignment: 'left' | 'center' | 'right';
   value: unknown;
   input: unknown;
   sourcePath: string;
@@ -2180,6 +2218,12 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   const inline = inlineTableData(value, options.presentation);
   const grid = tableGrid(inline,options.path ?? 'table');
   if(grid.issues.length) throw new RangeError(`${grid.issues[0]!.path}: ${grid.issues[0]!.message}`);
+  // Classify typed values before formatting (a numeric format may display a string). Never coerce authored numeric-looking strings.
+  const numeric = new Set(grid.rows.flat().filter(cell => !cell.header && typeof cell.value === 'number' && Number.isFinite(cell.value)));
+  const numericColumns = new Set(Array.from({length: grid.columnCount}, (_, column) => column).filter(column => {
+    const body = grid.rows.flat().filter(cell => !cell.header && cell.column === column && cell.value !== null && cell.value !== undefined);
+    return body.length > 0 && body.every(cell => cell.colSpan === 1 && numeric.has(cell));
+  }));
   const formats = resolveTableData(inline).formats;
   for (const row of grid.rows) for (const cell of row) {
     if (cell.header) continue;
@@ -2191,7 +2235,9 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
     const width=cellWidth*cell.colSpan-(padding.left+padding.right)*scale;
     const style={fontFamily:options.fontFamily??'sans-serif',fontWeight:cell.header?700:400,italic:false,path:cell.valuePath};
-    return {...cell,padding,width,textStyle:style};
+    const numericDefault = numeric.has(cell) || (cell.header && cell.colSpan === 1 && numericColumns.has(cell.column));
+    const alignment = cell.style.align ?? options.alignment ?? (numericDefault ? (options.direction === 'rtl' ? 'left' : 'right') : 'left');
+    return {...cell,padding,width,textStyle:style,alignment};
   });
   const cellMinimum=(cell:typeof cells[number])=>Array.isArray(cell.value)?richMinimum(cell.value,requested,minimum):minimum;
   const fitCell=(cell:typeof cells[number],height:number,min:number):TextFit|RichTextFit=>{
@@ -2237,7 +2283,7 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const offset=cell.style.verticalAlign==='bottom'?Math.max(0,available-height):cell.style.verticalAlign==='middle'?Math.max(0,(available-height)/2):0;
     const textBox={x:cellBox.x+cell.padding.left*scale,y:cellBox.y+cell.padding.top*scale+offset,width:Math.max(scale,cell.width),height:Math.max(scale,available-offset)};
     overflow ||= cell.width<=0||available<=0||fit.overflow;
-    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{})});
+    rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{})});
   }
   return {rows,columnCount,height:sum(heights),overflow};
 }
@@ -2641,8 +2687,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       score += reduction + (internal.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += internal.overflow ? 1000 : 0; }
     } else if (text) {
-      const fit = fitContent(node.field,node.value,text,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering);
-      const reduction = Math.max(0,snapFontSizeDown(25 * scale) - fit.fontSize) / scale;
+      const fit = fitContent(node.field,node.value,text,box,contentNominalSize(node.field)*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering);
+      const reduction = Math.max(0,snapFontSizeDown(contentNominalSize(node.field) * scale) - fit.fontSize) / scale;
       score += reduction + (fit.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += fit.overflow ? 1000 : 0; }
     }
@@ -2709,7 +2755,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   let regionTag: string | undefined, templateCell = false;
   // One node in its cell: a group arranges its children (0.18 content-group semantics), a leaf is fitted. `cards` is
   // false in a bled region, which is never drawn as a card; `listColumns` is a region's listColumns for a lone list.
-  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1): void => {
+  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number): void => {
     if (node.children) {
       const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
@@ -2717,17 +2763,18 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       return;
     }
     const frameBox = cards ? acceptedBox(box) : undefined;
+    const metricHeight = metricReferenceHeight === undefined ? undefined : payloadBox({...box,height:metricReferenceHeight},cards).height;
     box = payloadBox(box, cards);
     const caption = captionOf(node, box);
     if (caption) { box = caption.mediaBox; diagnostics.push(...caption.diagnostics); }
     const textValue = contentText(node.field, node.value);
     const quoteLayout = node.field === 'quote' ? measureQuote(node,box,settings) : undefined;
     const codeLayout = node.field === 'code' ? measureCode(node,box,settings) : undefined;
-    const metricLayout = node.field === 'metric' ? measureMetric(node,box,settings) : undefined;
+    const metricLayout = node.field === 'metric' ? measureMetric(node, {...box,height:metricHeight ?? box.height}, settings) : undefined;
     const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
     const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
     const columns = textValue !== undefined && !internal ? listColumnsFor(node, box, settings, listColumns) : undefined;
-    const text = internal ? body?.fit : columns ? (columns.length > 1 ? mergeListColumns(columns) : columns[0]!.text) : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,25*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering) : undefined;
+    const text = internal ? body?.fit : columns ? (columns.length > 1 ? mergeListColumns(columns) : columns[0]!.text) : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,contentNominalSize(node.field)*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering) : undefined;
     const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, imageContext()) : undefined;
     items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box, ...(image ? {image} : {}),
       ...(frameBox ? {frameBox} : {}),
@@ -2749,7 +2796,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const own = node.payload.columns;
     const mode = own === 'auto' || own === 1 || own === 2 || own === 3 ? own : regionMode;
     if (mode === undefined || mode === 1) return undefined;
-    const start = 25 * scale, floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
+    const start = contentNominalSize(node.field) * scale, floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
     const numbering = node.payload.numbering as NumberingInput | undefined;
     const listOptions: ListFitOptions = { ...richOptions(styleFor(node.field, node.path)), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : {}) };
     const columnGap = (count: number) => Math.min(gap, box.width / (count * 2));
@@ -2800,12 +2847,13 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (node.children) return node.children.some(child => isLong(child, cellWidth));
     if (node.field === 'text') return estimatedLines(node.value, cellWidth, startSize) > LONG_LINES;
     if (node.field === 'items' || node.field === 'bullets') {
+      const listSize=contentNominalSize(node.field)*scale;
       let lines = 0;
       for (const entry of Array.isArray(node.value) ? node.value : []) {
         const object = entry !== null && typeof entry === 'object' && !Array.isArray(entry) ? entry as Record<string, unknown> : undefined;
-        const indent = startSize * 1.1 * (1 + (typeof object?.level === 'number' ? object.level : 0));
-        lines += estimatedLines(object ? object.text : entry, cellWidth - indent, startSize);
-        if (object?.description !== undefined) lines += estimatedLines(object.description, cellWidth - indent, startSize * .82);
+        const indent = listSize * 1.1 * (1 + (typeof object?.level === 'number' ? object.level : 0));
+        lines += estimatedLines(object ? object.text : entry, cellWidth - indent, listSize);
+        if (object?.description !== undefined) lines += estimatedLines(object.description, cellWidth - indent, listSize * .82);
       }
       return lines > LONG_LINES;
     }
@@ -2819,16 +2867,17 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   };
   // The height a node needs at `cellWidth` at the starting size: sizes the `auto` rows of a template and the stack of an
   // anchored region. Text is measured; other payloads use a fixed estimate (pictures and charts at 16:10).
-  const naturalHeight = (node: Pending, cellWidth: number, cards: boolean): number => {
+  const naturalHeight = (node: Pending, cellWidth: number, cards: boolean, metricReferenceHeight?: number, naturalSettings: Composition = composition): number => {
     const pad = cards ? 2 * Math.min(12 * scale, cellWidth / 4) : 0, inner = Math.max(scale, cellWidth - pad);
     if (node.children) return node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false), 0) + gap * Math.max(0, node.children.length - 1) + pad;
     let content: number;
     if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
-      const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { x: 0, y: 0, width: inner, height: 1e6 }, startSize, startSize, node.path, node.payload.numbering);
+      const size=contentNominalSize(node.field)*scale;
+      const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { x: 0, y: 0, width: inner, height: 1e6 }, size, size, node.path, node.payload.numbering);
       content = 'height' in fit && typeof fit.height === 'number' ? fit.height : fit.lines.length * fit.lineHeight;
-    } else if (node.field === 'quote') content = estimatedLines(typeof node.value === 'string' ? node.value : record(node.value).text, inner, 32 * scale) * 32 * 1.22 * scale + 2 * 20 * 1.22 * scale;
+    } else if (node.field === 'quote') content = measureQuote(node, {x:0,y:0,width:inner,height:1e6}, naturalSettings).bounds.height + 18;
     else if (node.field === 'code') content = String(typeof node.value === 'string' ? node.value : record(node.value).source ?? '').split('\n').length * 18 * 1.4 * scale + 24 * scale;
-    else if (node.field === 'metric') content = 150 * scale;
+    else if (node.field === 'metric') content = measureMetric(node, {x:0,y:0,width:inner,height:metricReferenceHeight === undefined ? 1e6 : Math.max(scale,metricReferenceHeight-pad)}, naturalSettings).bounds.height;
     else if (node.field === 'timeline') content = 170 * scale;
     else if (node.field === 'table') { const value = record(node.value); content = ((Array.isArray(value.rows) ? value.rows.length : 4) + 1) * 36 * scale; }
     else content = inner / 1.6;
@@ -3001,20 +3050,37 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         }
         const arrangement = arrangementOf(region, units, cell);
         let boxes = flowCells(flowShape(arrangement, units.length, cell.width >= cell.height), cell, gap).cells;
-        // Anchor: a stack of text shorter than its region sits at its middle or bottom.
-        if (arrangement === 'column' && region.anchor !== 'top' && units.every(unit => !unit.children && (unit.field === 'text' || unit.field === 'items' || unit.field === 'bullets'))) {
-          const naturals = units.map(unit => naturalHeight(unit, cell.width, cards) + 2 * rasterPadding + scale);
+        const referenceHeights = boxes.map(box => box.height);
+        // Anchor only leaves with measured compact heights; charts, tables and groups keep their existing allocation.
+        if (arrangement === 'column' && region.anchor !== 'top' && units.every(unit => !unit.children && (unit.field === 'text' || unit.field === 'items' || unit.field === 'bullets' || !unit.caption && (unit.field === 'quote' || unit.field === 'metric')))) {
+          const naturals = units.map((unit,index) => naturalHeight(unit, cell.width, cards, referenceHeights[index], settings) + 2 * rasterPadding + scale);
           const used = naturals.reduce((a, b) => a + b, 0) + gap * (units.length - 1);
           if (used < cell.height) {
             let y = cell.y + (region.anchor === 'middle' ? (cell.height - used) / 2 : cell.height - used);
             boxes = naturals.map(size => { const next = { x: cell.x, y, width: cell.width, height: size }; y += size + gap; return next; });
           }
         }
+        if ((arrangement === 'grid' || arrangement === 'row') && region.anchor !== 'top') {
+          const naturals = boxes.map((box,index) => {
+            const unit = units[index]!;
+            return unit.children || unit.caption || !['text','items','bullets','quote','metric'].includes(unit.field) ? undefined
+              : naturalHeight(unit,box.width,cards,referenceHeights[index],settings)+2*rasterPadding+scale;
+          });
+          // One vertical origin per grid row keeps related metric value/label baselines aligned,
+          // even when descriptions have different line counts. Individual bounds remain compact.
+          boxes = boxes.map((box,index) => {
+            const height = naturals[index];
+            if (height === undefined || height >= box.height) return box;
+            const rowHeight = Math.max(...boxes.flatMap((peer,peerIndex) => peer.y === box.y && naturals[peerIndex] !== undefined ? [naturals[peerIndex]!] : []));
+            const spare = Math.max(0,box.height-rowHeight);
+            return {...box,y:box.y+(region.anchor==='middle'?spare/2:spare),height};
+          });
+        }
         // Right to left: the flow inside a region runs from the right (RR-05).
         if (rtl) boxes = boxes.map(box => ({ ...box, x: cell.x + cell.width - (box.x - cell.x) - box.width }));
         // listColumns: "auto" lays a lone list out in columns; with several blocks, a list that does not fit its own cell at
         // the starting size tries columns before it shrinks (RR-81 review: the region's tools before overflow).
-        units.forEach((unit, index) => { placeNode(unit, boxes[index]!, settings, cards, region.listColumns); });
+        units.forEach((unit, index) => { placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' ? undefined : referenceHeights[index]); });
         return arrangement;
       } finally { regionTag = undefined; templateCell = false; }
     };

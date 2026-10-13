@@ -6,7 +6,7 @@ license: MIT
 
 # Inspect and validate OPF locally
 
-Read the actual schema/package version used by the project. Current source is authoritative for this repository; an installed package is authoritative for that consumer. Use the 28 v2 intent templates from the installed `@openpresentation/gallery` 2 package. Avoid using historical documentation or old gallery snippets as a competing schema.
+Read the actual schema/package version used by the project. Current source is authoritative for this repository; an installed package is authoritative for that consumer. Use the 28 v2 intent templates from the installed `@openpresentation/gallery` package that matches the core schema. Avoid using historical documentation or old gallery snippets as a competing schema.
 
 The bundled [inspection helper](scripts/opf-inspect.mjs) reads schemas, catalogs, and documents locally. It does not fetch resources or modify files. Run it with Node 24 from a project that has `@openpresentation/opf` installed, from the OPF checkout after building, or set `OPF_ROOT` to that checkout. Replace the skill path below with the directory where this skill was installed.
 

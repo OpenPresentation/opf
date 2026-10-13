@@ -1,0 +1,31 @@
+{
+  "scope": "CI-only parity with reviewed editor candidate dependency selection",
+  "pptx": {
+    "head": "53fcdd1c6f6e0339208d07d0ecdb7ccf4fb1b010",
+    "pr": 253,
+    "focusedTests": 10,
+    "typecheckFiles": 275
+  },
+  "renderer": {
+    "head": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+    "pr": 240,
+    "focusedTests": 10,
+    "typecheckFiles": 257
+  },
+  "rootReview": "Both diffs modify only CI workflow and structural test. Explicit Gallery candidate skips incompatible pre-link registry packed check; mandatory published control, candidate packed/browser and source suites remain. Runtime and frozen packet unchanged.",
+  "pushed": true,
+  "hostedAcceptance": false,
+  "previousWatcher": {
+    "session": 50213,
+    "exit": 143,
+    "reason": "local watcher stopped after renderer/PPTX heads superseded; no hosted jobs cancelled",
+    "retainedFailure": "core installed Windows run38355411512, diagnostic not yet retrieved"
+  },
+  "currentWatcher": {
+    "session": 84373,
+    "log": "/private/tmp/rr20-array-feature-hosted-gate-parity.log",
+    "mode": "watch only; no merge or rerun"
+  },
+  "nativeAcceptance": "unrun; Windows preflight waitingOnApproval",
+  "deployment": false
+}

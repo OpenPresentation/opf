@@ -1,0 +1,51 @@
+{
+  "scope": "read-only source review; no additional tests or Office",
+  "files": {
+    "scripts/native-acceptance/compare-text.mjs": "2bdeba6a512aa1720f4aa02e3a2d7dc0d6f318131aec7e01aa0bbbb1634e7938",
+    "scripts/native-acceptance/compare-text.test.mjs": "46f67c4d0ca5e2b8308250abfe8ab7e1b6366f2221871a5cdd079ddcc39daac7",
+    "scripts/native-acceptance/compare-text-fonts.mjs": "00902d1980f264b9bb7700738a19005a7719983578aaffe1d4fd2697e0d5a756",
+    "scripts/native-acceptance/compare-text-fonts.test.mjs": "80f193b9e55e17405518904a61b2da7080218c09239de7d7c880476727cb4f00"
+  },
+  "approvedAspects": [
+    "Literalboolean runner/request/report capture flag consistency; absent historical flagfalse retained",
+    "Evidencebound installed package/source/runtime/snapshots/action/lifecycle identities preserved",
+    "Explicit fontface/size, no theme alias inference, mixed/absent native descriptors refuse",
+    "Paragraph/list/presentation/master/layout b/i true inheritance refusal and title correspondence controls",
+    "Scope is only feature-metrics/no-op/opt-in; percharacter physicalglyph/baseline/pixel/nativeacceptance explicitly excluded"
+  ],
+  "finding": {
+    "priority": "medium",
+    "path": "/private/tmp/opf-area-arrays/scripts/native-acceptance/compare-text-fonts.mjs",
+    "observation": "False b/i resolution does not inspect theme objectDefaults. Applicability needs confirmation or conservative refusal for nonempty theme objectDefaults before claiming every applicable inherited true is excluded.",
+    "recommendation": "Use unique master\u2192theme relationship, refuse unsupported nonempty a:objectDefaults (current generated emptydefaults unaffected) or reject inherited true there; focused theme mutation control.",
+    "resolution": "Unique master\u2192theme relationship is now required; absent/empty a:objectDefaults supported, any nonempty defaults fail closed as unsupported. Valid absent-default positive and inheritedbold/italic/missingtheme negative controls added. No general theme inheritance claim."
+  },
+  "status": "APPROVED final read-only source review; original finding retained and resolved",
+  "initialFiles": {
+    "scripts/native-acceptance/compare-text.mjs": "2bdeba6a512aa1720f4aa02e3a2d7dc0d6f318131aec7e01aa0bbbb1634e7938",
+    "scripts/native-acceptance/compare-text.test.mjs": "46f67c4d0ca5e2b8308250abfe8ab7e1b6366f2221871a5cdd079ddcc39daac7",
+    "scripts/native-acceptance/compare-text-fonts.mjs": "cbf678db81a1d6d2bf8829d2124f8589c35f9b05484b1a88de4d5188be47cc5b",
+    "scripts/native-acceptance/compare-text-fonts.test.mjs": "545fb322283a0dc9d4db4b84741c3d1e06a4f0984d31099e51bdd05e9e631095"
+  },
+  "reportedValidation": {
+    "authorFocusedTests": 17,
+    "authorSealedMetricsUniformRanges": 13,
+    "supervisorMappedCheck": "passed per supervisor receipt; no duplicate execution by reviewer"
+  },
+  "remainingLimits": "No reviewer Office execution, percharacter glyph-file selection, baseline, pixel or overall native acceptance.",
+  "toolingCommit": "b5c08d1eeba2edaefb9cfad3350f5bed1cdd3076",
+  "supervisorChecks": {
+    "mapped": {
+      "command": "pnpm check:changed --base HEAD",
+      "base": "31c7c55c",
+      "exitCode": 0,
+      "logSha256": "28db9e28de4fcd30d1b64c71255e511a02241ec74e15bc4075b1b6640cdf9980"
+    },
+    "branchWide": {
+      "exitCode": 1,
+      "reason": "Shared machine slot lock denied by sandbox before typecheck/core/CLI tests started; other 20 steps passed. Not a test pass.",
+      "logSha256": "08ed5e00e3c16fd757148e0dd51e3f94c81c584a8eab721499110d02f67f9b34"
+    }
+  },
+  "nativeExecution": false
+}

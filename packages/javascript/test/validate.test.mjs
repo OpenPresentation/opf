@@ -182,7 +182,7 @@ describe('the report', () => {
 
 	test('validate never mutates its input and is deterministic', () => {
 		const input = freeze(deck([{ text: [{ text: 'faint', color: '#CCCCCC' }], image: 'asset:nope' }], { language: undefined, design: { background: { type: 'solid', color: '#FFFFFF' } } }));
-		const options = freeze({ contracts: [{ path: '/slides/*/title', allowedValues: ['x'] }], catalogs: [{ source: 'pkg:@host/layouts', layouts: { mine: { name: 'Mine', areas: ["title"], rows: [1], regions: {} } } }] });
+		const options = freeze({ contracts: [{ path: '/slides/*/title', allowedValues: ['x'] }], catalogs: [{ source: 'pkg:@host/layouts', layouts: { mine: { name: 'Mine', areas: [["title"]], rows: [1], regions: {} } } }] });
 		assert.deepEqual(validate(input, options), validate(input, options));
 	});
 

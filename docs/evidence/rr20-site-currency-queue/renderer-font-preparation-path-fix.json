@@ -1,0 +1,23 @@
+{
+  "node": "v24.21.0",
+  "source": "/private/tmp/rr20-final-runtime-replay/opf-render",
+  "temporary": "/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-font-path-probe-lG7ToC",
+  "canonicalTemporary": "/private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-font-path-probe-lG7ToC",
+  "expectedVendoredPath": "/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-font-path-probe-lG7ToC/fonts/carlito/Carlito-Regular.ttf",
+  "observedVendoredPath": "/private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/opf-font-path-probe-lG7ToC/fonts/carlito/Carlito-Regular.ttf",
+  "lexicalIncludes": false,
+  "canonicalIncludes": true,
+  "expectedFileSha256": "f6418f708baede9789daef5d458c0f53d2a888af9820e8062934e504fedc6595",
+  "observedFileSha256": "f6418f708baede9789daef5d458c0f53d2a888af9820e8062934e504fedc6595",
+  "fontLoaderScope": "Actual source dist/fonts-node.js loaded in a disposable root with source vendored fonts; office pack integrity checks retained. No Office or full-suite retry.",
+  "fixCommit": "0eeafb289a3abc2435378f6dcd32fb42b5b88ebd",
+  "fix": "Canonicalize disposable test root with realpath; preserve exact path and all corruption assertions.",
+  "scope": "Test-only macOS alias correction; Linux hosted failure cause remains unknown.",
+  "supervisorVerifiedRuntimeFiles": 59,
+  "focusedCheck": {
+    "command": "npm run test:font-preparation",
+    "exitCode": 0,
+    "logSha256": "0ddc14f219bb5872f51b54e2bb7c4afb7db68eb38d3145253f785d6917303996"
+  },
+  "nativeAcceptance": false
+}

@@ -11,13 +11,13 @@ const { layouts } = fixture;
 const deckWith = (record, slide = { layout: 'probe', title: 'Probe' }) => ({ slides: [slide], catalogs: { custom: { layouts: { probe: record } } } });
 const rulesOf = (report) => report.findings.map((entry) => entry.ruleId);
 const issues = (record) => layoutTemplateIssues(record).map((issue) => `${issue.code} ${issue.path}`);
-const base = { name: 'Probe', areas: ['title', 'body'], rows: ['auto', 1], regions: { body: { accepts: ['text'] } } };
+const base = { name: 'Probe', areas: [['title'], ['body']], rows: ['auto', 1], regions: { body: { accepts: ['text'] } } };
 
 describe('the 28 built-in templates (design section 6)', () => {
   test('there are 28, in six groups, and every one has a title area', () => {
     assert.equal(Object.keys(layouts).length, 28);
     assert.deepEqual([...new Set(Object.values(layouts).map((record) => record.tags[0]))], ['Openers and closers', 'Text', 'Groups of items', 'Numbers', 'Visuals', 'Mixed']);
-    for (const [id, record] of Object.entries(layouts)) assert.ok(record.areas.some((row) => row.split(/\s+/).includes('title')), id);
+    for (const [id, record] of Object.entries(layouts)) assert.ok(record.areas.some((row) => row.includes('title')), id);
   });
 
   test('every one passes the schema and the template rules, embedded in a deck', () => {
@@ -54,35 +54,35 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
   });
 
   test('the grid: ragged rows, rectangles, track lengths, size and words', () => {
-    assert.deepEqual(issues({ ...base, areas: ['title title', 'body'], rows: ['auto', 1], columns: [1, 1] }), ['layout-template /areas/1']);
-    assert.deepEqual(issues({ ...base, areas: ['body title', 'title body'], rows: [1, 1], columns: [1, 1] }), ['layout-template /areas', 'layout-template /areas']);
+    assert.deepEqual(issues({ ...base, areas: [['title', 'title'], ['body']], rows: ['auto', 1], columns: [1, 1] }), ['layout-template /areas/1']);
+    assert.deepEqual(issues({ ...base, areas: [['body', 'title'], ['title', 'body']], rows: [1, 1], columns: [1, 1] }), ['layout-template /areas', 'layout-template /areas']);
     assert.deepEqual(issues({ ...base, columns: [1, 2] }), ['layout-template /columns']);
     assert.deepEqual(issues({ ...base, rows: [1] }), ['layout-template /rows']);
-    assert.deepEqual(issues({ ...base, areas: ['title', 'Body'] }), ['layout-template /areas/1']);
-    const wide = Array.from({ length: 13 }, (_, index) => `c${index}`).join(' ');
+    assert.deepEqual(issues({ ...base, areas: [['title'], ['Body']] }), ['layout-template /areas/1/0']);
+    const wide = Array.from({ length: 13 }, (_, index) => `c${index}`);
     assert.ok(issues({ ...base, areas: [wide], rows: [1], columns: Array(13).fill(1), regions: {} }).includes('layout-template /areas'));
-    const tall = Array.from({ length: 13 }, () => 'body');
+    const tall = Array.from({ length: 13 }, () => ['body']);
     assert.ok(issues({ ...base, areas: tall, rows: Array(13).fill(1) }).includes('layout-template /areas'));
     // '.' is an empty cell, never an area.
-    assert.deepEqual(issues({ ...base, areas: ['title .', 'body body'], columns: [1, 1] }), []);
+    assert.deepEqual(issues({ ...base, areas: [['title', '.'], ['body', 'body']], columns: [1, 1] }), []);
   });
 
   test('the regions: every body area has one, every region an area, no reserved name', () => {
     assert.deepEqual(issues({ ...base, regions: {} }), ['layout-region /regions']);
     assert.deepEqual(issues({ ...base, regions: { body: { accepts: ['text'] }, notes: { accepts: ['text'] } } }), ['layout-region /regions/notes']);
     for (const word of ['left', 'center', 'right', 'top', 'middle', 'bottom', 'tag', 'auto']) {
-      const found = issues({ ...base, areas: ['title', word], regions: { [word]: { accepts: ['text'] } } });
+      const found = issues({ ...base, areas: [['title'], [word]], regions: { [word]: { accepts: ['text'] } } });
       assert.ok(found.includes(`layout-region /regions/${word}`), word);
     }
-    assert.deepEqual(issues({ ...base, areas: ['subtitle', 'body'] }), ["layout-region /areas"]);
+    assert.deepEqual(issues({ ...base, areas: [['subtitle'], ['body']] }), ["layout-region /areas"]);
     assert.deepEqual(issues({ ...base, regions: { body: { accepts: ['text'], flow: 'none', max: 2 } } }), ['layout-region /regions/body/max']);
     assert.deepEqual(issues({ ...base, overflowRegion: 'notes' }), ['layout-region /overflowRegion']);
   });
 
   test('validate reports them on embedded records, and the schema checks types and kinds', () => {
-    const ragged = validate(deckWith({ ...base, areas: ['title title', 'body'], rows: ['auto', 1], columns: [1, 1] }), { only: ['format', 'references'] });
+    const ragged = validate(deckWith({ ...base, areas: [['title', 'title'], ['body']], rows: ['auto', 1], columns: [1, 1] }), { only: ['format', 'references'] });
     assert.ok(rulesOf(ragged).includes('opf/layout-template'));
-    const reserved = validate(deckWith({ ...base, areas: ['title', 'left'], regions: { left: { accepts: ['text'] } } }), { only: ['format', 'references'] });
+    const reserved = validate(deckWith({ ...base, areas: [['title'], ['left']], regions: { left: { accepts: ['text'] } } }), { only: ['format', 'references'] });
     assert.ok(rulesOf(reserved).includes('opf/layout-region'));
     const kind = validate(deckWith({ ...base, regions: { body: { accepts: ['diagram'] } } }), { only: ['format', 'references'] });
     assert.ok(rulesOf(kind).includes('opf/catalog-record'));
@@ -101,7 +101,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
   });
 
   test('defaults: role primary, flow auto, max 1 for none and 6 otherwise, collapse, top, one list column', () => {
-    const template = layoutTemplate({ ...base, areas: ['title title', 'a b'], columns: [1, 1], regions: { a: { accepts: ['text'], flow: 'none' }, b: { accepts: ['text'] } } });
+    const template = layoutTemplate({ ...base, areas: [['title', 'title'], ['a', 'b']], columns: [1, 1], regions: { a: { accepts: ['text'], flow: 'none' }, b: { accepts: ['text'] } } });
     assert.deepEqual(template.regions.map((region) => [region.name, region.role, region.flow, region.max, region.empty, region.anchor, region.listColumns, region.bleed]), [
       ['a', 'primary', 'none', 1, 'collapse', 'top', 1, false],
       ['b', 'primary', 'auto', 6, 'collapse', 'top', 1, false],
@@ -113,7 +113,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
   test('reading order is by top-left cell, row by row', () => {
     const template = layoutTemplate(layouts.hero);
     assert.deepEqual(template.areas.map((area) => area.name), ['title', 'lead', 'media', 'support']);
-    const custom = layoutTemplate({ name: 'x', areas: ['title title', 'timeline notes', 'timeline metrics'], columns: [2, 1], rows: ['auto', 1, 1], regions: { timeline: { accepts: ['timeline'], flow: 'none' }, notes: { accepts: ['text'] }, metrics: { accepts: ['metric'] } } });
+    const custom = layoutTemplate({ name: 'x', areas: [['title', 'title'], ['timeline', 'notes'], ['timeline', 'metrics']], columns: [2, 1], rows: ['auto', 1, 1], regions: { timeline: { accepts: ['timeline'], flow: 'none' }, notes: { accepts: ['text'] }, metrics: { accepts: ['metric'] } } });
     assert.deepEqual(custom.regions.map((region) => region.name), ['timeline', 'notes', 'metrics']);
   });
 });

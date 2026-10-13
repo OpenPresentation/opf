@@ -1,0 +1,22 @@
+{
+  "scope": "Independent read-only review only four qualification fixes against HEAD; no tests/builds/edits",
+  "head": "e411f6deb855f0b0d263437df1e6796e823634d6",
+  "files": {
+    "scripts/check-media-urls.mjs": "6c840809877cbcff728d1773ecc7436a89f68577aa19f3575061c3235feac4d3",
+    "tests/media-urls.test.ts": "fe83dbf5b93595d0ad92dbdda2a33600846a221ec65bab1cfee03de1854b4570",
+    "tests/e2e/editor-019.spec.mts": "e63f36ff4348271913170ed680a497c5f416d7c87e95f2fce83aa2fe6dd69939",
+    "tests/e2e/layouts.spec.ts": "0b5026bed89fdd63c90790b460d4be6297980725a067e897418aaf90a8f0f587"
+  },
+  "verdict": "Approved; no actionable implementation blocker found",
+  "assessment": [
+    "Regex label-boundary lookbehind prevents retrying greedy labels at every alphanumeric byte while preserving prior ASCII/case-insensitive suffix detection, including nested subdomains. Fixed host branch remains unchanged. Bounded2MiB no-match and matching-tail test meaningfully guards quadratic scan regression.",
+    "All28 actual explorer handoffs assert API schema/catalogid coverage, actual clicked gzip#opf route, complete editorJSON equality, expected authoredname and no pageerrors. Original genericpreset route expectations are replaced with actual product handoff, not deleted coverage.",
+    "Metrics nativeeditableexport still downloads, imports actualPPTX, validatesformat and compares complete authoredmetric/text payloads recursively; layout/pins may change as explicitlyallowed import contract. No nativePowerPoint claim.",
+    "Desktop/mobile clipboard reads actualclipboard and compares exact prettyprinted full portableAPI document; selected preview cases validateformat/count and visible actualimages. Changedquote/table counts match current editorialexamples rather than obsolete generic3blocks."
+  ],
+  "limits": [
+    "These e2e checks prove browser source-bundle behavior, not published-registry artifact identity. Current generated source editor lacks public/opf-editor/manifest.json by source-mode design; do not relabel as verify:published-editor acceptance.",
+    "Preview/source byte pairing is separately covered by the existing focused layout-example generation/cache proofs; these browser tests only require loaded preview, not full SVG hash equivalence.",
+    "No unrelated feature or generated asset delta reviewed."
+  ]
+}

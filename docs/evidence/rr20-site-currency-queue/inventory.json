@@ -1,0 +1,617 @@
+{
+  "at": "2026-10-12T19:23:03.097359+00:00",
+  "apiCalls": 1,
+  "sync": [
+    {
+      "repo": "opf",
+      "status": "synced",
+      "head": "75f3f0d741c40176e160d08cebfb571699a17793",
+      "detail": "Already up to date.\n"
+    },
+    {
+      "repo": "opf-render",
+      "status": "synced",
+      "head": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+      "detail": "Already up to date.\n"
+    },
+    {
+      "repo": "opf-pptx",
+      "status": "synced",
+      "head": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+      "detail": "Already up to date.\n"
+    },
+    {
+      "repo": "opf-editor",
+      "status": "synced",
+      "head": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+      "detail": "Already up to date.\n"
+    },
+    {
+      "repo": "gallery",
+      "status": "synced",
+      "head": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+      "detail": "Already up to date.\n"
+    },
+    {
+      "repo": "openpresentation-site",
+      "status": "synced",
+      "head": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "detail": "Already up to date.\n"
+    },
+    {
+      "repo": "pptx-gallery",
+      "status": "synced",
+      "head": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "detail": "Already up to date.\n"
+    },
+    {
+      "repo": "pptx-dev",
+      "status": "synced",
+      "head": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+      "detail": "Already up to date.\n"
+    }
+  ],
+  "inventory": {
+    "r0": {
+      "nameWithOwner": "OpenPresentation/opf",
+      "defaultBranchRef": {
+        "name": "main",
+        "target": {
+          "oid": "75f3f0d741c40176e160d08cebfb571699a17793"
+        }
+      },
+      "pullRequests": {
+        "totalCount": 1,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 646,
+            "title": "FA-32: explicit area arrays and improved layout defaults",
+            "url": "https://github.com/OpenPresentation/opf/pull/646",
+            "isDraft": true,
+            "headRefName": "codex/design-editorial-defaults",
+            "headRefOid": "5c69145399133c443a5ebe45d6a048ce73cd60d3",
+            "baseRefName": "main",
+            "updatedAt": "2026-10-12T18:38:39Z"
+          }
+        ]
+      },
+      "issues": {
+        "totalCount": 29,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 87,
+            "title": "Roadmap: native PowerPoint compatibility acceptance",
+            "url": "https://github.com/OpenPresentation/opf/issues/87",
+            "updatedAt": "2026-10-05T19:53:52Z"
+          },
+          {
+            "number": 88,
+            "title": "Roadmap: complete JSON and preview feature adoption across public surfaces",
+            "url": "https://github.com/OpenPresentation/opf/issues/88",
+            "updatedAt": "2026-10-03T03:19:04Z"
+          },
+          {
+            "number": 240,
+            "title": "Future: chart data from external spreadsheets (ChartDataSource) and a host dataResolver hook (descoped)",
+            "url": "https://github.com/OpenPresentation/opf/issues/240",
+            "updatedAt": "2026-10-01T16:06:57Z"
+          },
+          {
+            "number": 250,
+            "title": "Future: navigation and motion (transitions, builds/reveals, links between slides) (deferred, out of v1)",
+            "url": "https://github.com/OpenPresentation/opf/issues/250",
+            "updatedAt": "2026-10-09T16:02:33Z"
+          },
+          {
+            "number": 251,
+            "title": "Future: rich speaker notes (formatted notes; plain-text notes stay) (deferred, out of v1)",
+            "url": "https://github.com/OpenPresentation/opf/issues/251",
+            "updatedAt": "2026-10-09T16:02:34Z"
+          },
+          {
+            "number": 278,
+            "title": "CJK and Thai line breaking in core composition (dictionary word breaks, kinsoku)",
+            "url": "https://github.com/OpenPresentation/opf/issues/278",
+            "updatedAt": "2026-10-02T12:26:17Z"
+          },
+          {
+            "number": 292,
+            "title": "Layouts: bundle the 385 gallery-only layouts in core or keep a permanent subset; the 4 legacy font pairings have no OPF id (descoped)",
+            "url": "https://github.com/OpenPresentation/opf/issues/292",
+            "updatedAt": "2026-10-02T23:40:02Z"
+          },
+          {
+            "number": 293,
+            "title": "Slide sizes and purposes: editor switches and a pptx.gallery aspect-ratio page (descoped)",
+            "url": "https://github.com/OpenPresentation/opf/issues/293",
+            "updatedAt": "2026-10-02T19:00:51Z"
+          },
+          {
+            "number": 297,
+            "title": "RR-48: enable the merge queue on the OpenPresentation main rulesets (owner action)",
+            "url": "https://github.com/OpenPresentation/opf/issues/297",
+            "updatedAt": "2026-10-02T20:31:23Z"
+          },
+          {
+            "number": 298,
+            "title": "RR-50, RR-51: a GitHub App for cross-repository pin bumps, PRs and release tags (owner action)",
+            "url": "https://github.com/OpenPresentation/opf/issues/298",
+            "updatedAt": "2026-10-02T20:31:25Z"
+          },
+          {
+            "number": 323,
+            "title": "Windows PowerPoint native runs deferred from the Mac mini session (RR-05, FF-12, FF-13, FF-27, FF-46)",
+            "url": "https://github.com/OpenPresentation/opf/issues/323",
+            "updatedAt": "2026-10-05T19:53:53Z"
+          },
+          {
+            "number": 362,
+            "title": "FF-46: per-family host fixtures for the proprietary script, emoji, math and code-table families",
+            "url": "https://github.com/OpenPresentation/opf/issues/362",
+            "updatedAt": "2026-10-05T19:53:04Z"
+          },
+          {
+            "number": 366,
+            "title": "Native tab positions and mixed-size table paragraphs: 0.0227 pt drift over the 0.02 pt gate (post-v1)",
+            "url": "https://github.com/OpenPresentation/opf/issues/366",
+            "updatedAt": "2026-10-05T19:53:07Z"
+          },
+          {
+            "number": 505,
+            "title": "Roadmap: OpenDocument Presentation (.odp) import and export",
+            "url": "https://github.com/OpenPresentation/opf/issues/505",
+            "updatedAt": "2026-10-09T15:26:52Z"
+          },
+          {
+            "number": 506,
+            "title": "Roadmap: import Marp and Slidev Markdown decks (fromMarp, fromSlidev)",
+            "url": "https://github.com/OpenPresentation/opf/issues/506",
+            "updatedAt": "2026-10-09T15:31:54Z"
+          },
+          {
+            "number": 507,
+            "title": "Roadmap (0.19): adaptive layouts: repeatable placeholders instead of list-2x/text-3x count variants",
+            "url": "https://github.com/OpenPresentation/opf/issues/507",
+            "updatedAt": "2026-10-10T16:45:02Z"
+          },
+          {
+            "number": 508,
+            "title": "Roadmap: opf dev (local live preview) and HTML export",
+            "url": "https://github.com/OpenPresentation/opf/issues/508",
+            "updatedAt": "2026-10-09T16:02:09Z"
+          },
+          {
+            "number": 509,
+            "title": "Roadmap: math (equation run and block) with native editable PowerPoint equations (OMML)",
+            "url": "https://github.com/OpenPresentation/opf/issues/509",
+            "updatedAt": "2026-10-09T16:02:10Z"
+          },
+          {
+            "number": 510,
+            "title": "Roadmap: Mermaid diagram block (implement docs/plans/diagrams-svg.md)",
+            "url": "https://github.com/OpenPresentation/opf/issues/510",
+            "updatedAt": "2026-10-09T16:02:12Z"
+          },
+          {
+            "number": 511,
+            "title": "Roadmap: opf mcp, a local stdio MCP server for agents",
+            "url": "https://github.com/OpenPresentation/opf/issues/511",
+            "updatedAt": "2026-10-09T16:02:13Z"
+          },
+          {
+            "number": 512,
+            "title": "Roadmap: VS Code extension for .opf.md / .opf.yaml / .opf.json",
+            "url": "https://github.com/OpenPresentation/opf/issues/512",
+            "updatedAt": "2026-10-09T16:02:14Z"
+          },
+          {
+            "number": 513,
+            "title": "Roadmap: presenter upgrades: pen/laser overlay, overview grid, PDF bookmarks and notes",
+            "url": "https://github.com/OpenPresentation/opf/issues/513",
+            "updatedAt": "2026-10-09T16:02:15Z"
+          },
+          {
+            "number": 514,
+            "title": "Roadmap: Markdown dialect conveniences (include, column slots, split images, agenda, code line numbers)",
+            "url": "https://github.com/OpenPresentation/opf/issues/514",
+            "updatedAt": "2026-10-09T16:02:16Z"
+          },
+          {
+            "number": 515,
+            "title": "Roadmap: third-party catalog convention (npm keyword + --catalog)",
+            "url": "https://github.com/OpenPresentation/opf/issues/515",
+            "updatedAt": "2026-10-09T16:02:17Z"
+          },
+          {
+            "number": 516,
+            "title": "Roadmap: icons from locally installed Iconify sets",
+            "url": "https://github.com/OpenPresentation/opf/issues/516",
+            "updatedAt": "2026-10-09T16:02:18Z"
+          },
+          {
+            "number": 517,
+            "title": "Roadmap: opf.config.json project configuration",
+            "url": "https://github.com/OpenPresentation/opf/issues/517",
+            "updatedAt": "2026-10-09T16:02:19Z"
+          },
+          {
+            "number": 581,
+            "title": "FF-46 follow-up: per-script sizeAdjust (Traditional Arabic letters vs digits/Latin)",
+            "url": "https://github.com/OpenPresentation/opf/issues/581",
+            "updatedAt": "2026-10-10T21:45:50Z"
+          },
+          {
+            "number": 582,
+            "title": "FF-46 follow-up: Nirmala UI Indic fallback faces overhang natively at factor 1 (Telugu +33%, Kannada +19%, Gujarati/Malayalam +13%)",
+            "url": "https://github.com/OpenPresentation/opf/issues/582",
+            "updatedAt": "2026-10-10T21:45:51Z"
+          },
+          {
+            "number": 636,
+            "title": "Coordinated public packages is red on main",
+            "url": "https://github.com/OpenPresentation/opf/issues/636",
+            "updatedAt": "2026-10-12T08:12:43Z"
+          }
+        ]
+      }
+    },
+    "r1": {
+      "nameWithOwner": "OpenPresentation/opf-render",
+      "defaultBranchRef": {
+        "name": "main",
+        "target": {
+          "oid": "7980fea3b0095377cb5a28c22a3a963312f941e7"
+        }
+      },
+      "pullRequests": {
+        "totalCount": 1,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 240,
+            "title": "RR-20: improve structural defaults and chart magnitude scales",
+            "url": "https://github.com/OpenPresentation/opf-render/pull/240",
+            "isDraft": true,
+            "headRefName": "codex/rr-20-neutral-structure",
+            "headRefOid": "e19390ee7554c4efdc0a08da1a16ddd903f03315",
+            "baseRefName": "main",
+            "updatedAt": "2026-10-12T18:17:38Z"
+          }
+        ]
+      },
+      "issues": {
+        "totalCount": 3,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 164,
+            "title": "textAsPaths: draw SVG text as glyph outlines (plan and drawbacks)",
+            "url": "https://github.com/OpenPresentation/opf-render/issues/164",
+            "updatedAt": "2026-10-09T07:48:54Z"
+          },
+          {
+            "number": 190,
+            "title": "fontkit RangeError on an empty last glyph when glyf ends the file (upstream report drafted)",
+            "url": "https://github.com/OpenPresentation/opf-render/issues/190",
+            "updatedAt": "2026-10-10T15:14:44Z"
+          },
+          {
+            "number": 202,
+            "title": "WebKit: an RTL title paints its first letter to the right of its last",
+            "url": "https://github.com/OpenPresentation/opf-render/issues/202",
+            "updatedAt": "2026-10-10T16:45:42Z"
+          }
+        ]
+      }
+    },
+    "r2": {
+      "nameWithOwner": "OpenPresentation/opf-pptx",
+      "defaultBranchRef": {
+        "name": "main",
+        "target": {
+          "oid": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c"
+        }
+      },
+      "pullRequests": {
+        "totalCount": 1,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 253,
+            "title": "RR-20: align PowerPoint structural defaults and magnitude scales",
+            "url": "https://github.com/OpenPresentation/opf-pptx/pull/253",
+            "isDraft": true,
+            "headRefName": "codex/rr-20-neutral-structure",
+            "headRefOid": "4b09182dfce1074050c0dfd0e49c2e98d0731656",
+            "baseRefName": "main",
+            "updatedAt": "2026-10-12T18:15:15Z"
+          }
+        ]
+      },
+      "issues": {
+        "totalCount": 3,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 127,
+            "title": "Future: native PowerPoint video (p:video) export, import and preview playback (descoped)",
+            "url": "https://github.com/OpenPresentation/opf-pptx/issues/127",
+            "updatedAt": "2026-10-01T16:06:55Z"
+          },
+          {
+            "number": 133,
+            "title": "Region map chart (world): offline native map export (parked, post-v1)",
+            "url": "https://github.com/OpenPresentation/opf-pptx/issues/133",
+            "updatedAt": "2026-10-01T17:24:02Z"
+          },
+          {
+            "number": 238,
+            "title": "List import: a description resized in PowerPoint becomes part of the entry text",
+            "url": "https://github.com/OpenPresentation/opf-pptx/issues/238",
+            "updatedAt": "2026-10-10T18:10:56Z"
+          }
+        ]
+      }
+    },
+    "r3": {
+      "nameWithOwner": "OpenPresentation/opf-editor",
+      "defaultBranchRef": {
+        "name": "main",
+        "target": {
+          "oid": "ac25857cca8ce776dd23b5ca58b38a06af9d963f"
+        }
+      },
+      "pullRequests": {
+        "totalCount": 0,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": []
+      },
+      "issues": {
+        "totalCount": 1,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 150,
+            "title": "WebKit: Range.getBoundingClientRect of an SVG character is ~27 px off (editor caret placement)",
+            "url": "https://github.com/OpenPresentation/opf-editor/issues/150",
+            "updatedAt": "2026-10-10T16:45:41Z"
+          }
+        ]
+      }
+    },
+    "r4": {
+      "nameWithOwner": "OpenPresentation/gallery",
+      "defaultBranchRef": {
+        "name": "main",
+        "target": {
+          "oid": "48169a9bb38559b8385e6791e7b5e76c0f5a8792"
+        }
+      },
+      "pullRequests": {
+        "totalCount": 1,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 6,
+            "title": "Improve gallery design defaults and authored layout previews",
+            "url": "https://github.com/OpenPresentation/gallery/pull/6",
+            "isDraft": true,
+            "headRefName": "codex/design-gallery-defaults",
+            "headRefOid": "3708ef9b547b2137cdd482158466f4bdc53dd4ca",
+            "baseRefName": "main",
+            "updatedAt": "2026-10-12T18:09:28Z"
+          }
+        ]
+      },
+      "issues": {
+        "totalCount": 2,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 4,
+            "title": "Publish the four legacy gallery font pairings as OPF font schemes (gallery-first)",
+            "url": "https://github.com/OpenPresentation/gallery/issues/4",
+            "updatedAt": "2026-10-10T18:33:47Z"
+          },
+          {
+            "number": 2,
+            "title": "Per-kind subpath exports and a size gate (from opf#318)",
+            "url": "https://github.com/OpenPresentation/gallery/issues/2",
+            "updatedAt": "2026-10-10T17:04:20Z"
+          }
+        ]
+      }
+    },
+    "r5": {
+      "nameWithOwner": "Data-Advantage/openpresentation-site",
+      "defaultBranchRef": {
+        "name": "main",
+        "target": {
+          "oid": "7bd54a7d40d407766dc8d8e00f50fcc37196a641"
+        }
+      },
+      "pullRequests": {
+        "totalCount": 2,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 103,
+            "title": "RR-83: migrate site to gallery 2 and v2 layouts",
+            "url": "https://github.com/Data-Advantage/openpresentation-site/pull/103",
+            "isDraft": true,
+            "headRefName": "codex/rr-83-site-catalogs",
+            "headRefOid": "ab0b0da532e553416a05d7164a331d994e312ef4",
+            "baseRefName": "main",
+            "updatedAt": "2026-10-11T04:10:19Z"
+          },
+          {
+            "number": 104,
+            "title": "RR-83: Preserve site image export and browser guide links",
+            "url": "https://github.com/Data-Advantage/openpresentation-site/pull/104",
+            "isDraft": true,
+            "headRefName": "codex/rr-83-site-image-export-contract",
+            "headRefOid": "506a38bd8a3b6a86065199c74c09069581aa67a2",
+            "baseRefName": "codex/rr-83-site-catalogs",
+            "updatedAt": "2026-10-11T07:58:24Z"
+          }
+        ]
+      },
+      "issues": {
+        "totalCount": 1,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 102,
+            "title": "e2e: move other JSON-editor fills to fillJson (latent CodeMirror focus-timer race from #73)",
+            "url": "https://github.com/Data-Advantage/openpresentation-site/issues/102",
+            "updatedAt": "2026-10-10T21:09:57Z"
+          }
+        ]
+      }
+    },
+    "r6": {
+      "nameWithOwner": "Data-Advantage/pptx-gallery",
+      "defaultBranchRef": {
+        "name": "main",
+        "target": {
+          "oid": "92e23ed5b432195de884a6be51f2415ce49f8924"
+        }
+      },
+      "pullRequests": {
+        "totalCount": 3,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 125,
+            "title": "FF-46: per-family host fixtures for proprietary script names (pptx-gallery)",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/125",
+            "isDraft": false,
+            "headRefName": "codex/ff-46-script-name-hosts",
+            "headRefOid": "7e0a6611abc22f2d89eb754bdcc24d7ecd09288a",
+            "baseRefName": "main",
+            "updatedAt": "2026-10-11T00:28:26Z"
+          },
+          {
+            "number": 126,
+            "title": "RR-84: consume the 0.19 gallery catalog and intent previews",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/126",
+            "isDraft": true,
+            "headRefName": "codex/rr-84-gallery-019",
+            "headRefOid": "88c7119fb4727f4cd75c21e47a0a20ed3d1bf604",
+            "baseRefName": "main",
+            "updatedAt": "2026-10-11T04:32:26Z"
+          },
+          {
+            "number": 127,
+            "title": "RR-84: Preserve script-name host fixtures in gallery adoption",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/pull/127",
+            "isDraft": true,
+            "headRefName": "codex/rr-84-gallery-script-host-integration",
+            "headRefOid": "98f34580cdd07ec67f1acae9b5ee34ac36054a07",
+            "baseRefName": "codex/rr-84-gallery-019",
+            "updatedAt": "2026-10-11T08:03:52Z"
+          }
+        ]
+      },
+      "issues": {
+        "totalCount": 1,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 118,
+            "title": "Use loadFonts subsetWasm/shapeWasm for SVG downloads and outlined text",
+            "url": "https://github.com/Data-Advantage/pptx-gallery/issues/118",
+            "updatedAt": "2026-10-09T18:24:57Z"
+          }
+        ]
+      }
+    },
+    "r7": {
+      "nameWithOwner": "Data-Advantage/pptx-dev",
+      "defaultBranchRef": {
+        "name": "master",
+        "target": {
+          "oid": "b55bd642f1c8de3799dd8e06a830515e1dd4709c"
+        }
+      },
+      "pullRequests": {
+        "totalCount": 1,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 128,
+            "title": "RR-84: adopt OPF 0.19 region templates in pptx.dev",
+            "url": "https://github.com/Data-Advantage/pptx-dev/pull/128",
+            "isDraft": true,
+            "headRefName": "codex/rr-84-pptx-dev-019",
+            "headRefOid": "c83c995f8bdd04ae1fa7256ae0282a73ce65b16a",
+            "baseRefName": "master",
+            "updatedAt": "2026-10-11T04:12:36Z"
+          }
+        ]
+      },
+      "issues": {
+        "totalCount": 3,
+        "pageInfo": {
+          "hasNextPage": false
+        },
+        "nodes": [
+          {
+            "number": 85,
+            "title": "Remove the GHSA-vfj7-8cjw-p6xm audit ignore when braces 3.0.4 is published",
+            "url": "https://github.com/Data-Advantage/pptx-dev/issues/85",
+            "updatedAt": "2026-10-03T01:32:47Z"
+          },
+          {
+            "number": 87,
+            "title": "Source-preservation boundaries and destructive preset history (split from opf#88)",
+            "url": "https://github.com/Data-Advantage/pptx-dev/issues/87",
+            "updatedAt": "2026-10-03T03:19:01Z"
+          },
+          {
+            "number": 122,
+            "title": "Roadmap: PDF to OPF import (fromPdf) with OCR and AI recovery",
+            "url": "https://github.com/Data-Advantage/pptx-dev/issues/122",
+            "updatedAt": "2026-10-09T16:02:35Z"
+          }
+        ]
+      }
+    },
+    "rateLimit": {
+      "remaining": 4875,
+      "resetAt": "2026-10-12T20:14:55Z"
+    }
+  }
+}

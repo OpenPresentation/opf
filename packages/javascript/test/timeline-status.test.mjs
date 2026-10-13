@@ -41,7 +41,7 @@ test('markers and parts carry the event status; only current has a ring and only
   // The label of the current event is bold, and the line breaks were measured with that weight.
   const weights = layout.parts.filter((part) => part.eventIndex === 1).map((part) => [part.role, part.requestedStyle.fontWeight]);
   assert.deepEqual(weights, [['when', 500], ['what', 700]]);
-  assert.ok(layout.parts.filter((part) => part.eventIndex !== 1).every((part) => part.requestedStyle.fontWeight === 500 || part.eventIndex === undefined));
+  assert.ok(layout.parts.filter((part) => part.eventIndex !== 1).every((part) => part.eventIndex === undefined || part.requestedStyle.fontWeight === ({when:500,what:600,'event-description':400})[part.role]));
 });
 
 test('a done event has the geometry of an event without status', () => {
@@ -60,12 +60,15 @@ test('the vertical rail makes room for the ring and keeps the text distance from
   const stroke = status.markers[1].strokeWidth;
   assert.ok(status.markers[0].x - ring - stroke / 2 >= narrow.x - 0.01);
   assert.equal(ring, 1.6 * radius);
-  const gap = (layout) => layout.parts.find((part) => part.eventIndex === 0).box.x - (layout.markers[0].x + layout.markers[0].radius);
-  assert.ok(Math.abs(gap(status) - gap(plain)) < 1e-9);
+  const gap = (layout) => layout.parts.find((part) => part.eventIndex === 0).box.x - Math.max(...layout.markers.map(marker=>marker.x+(marker.ring?.radius??marker.radius)+(marker.strokeWidth??0)/2));
+  assert.ok(Math.abs(gap(status)-12)<1e-9);assert.ok(Math.abs(gap(plain)-12)<1e-9);
   assert.ok(status.parts.find((part) => part.eventIndex === 0).box.x > plain.parts.find((part) => part.eventIndex === 0).box.x);
   assert.ok(radius < ring);
   const rtl = layoutTimeline(value, narrow, { direction: 'rtl' });
   assert.ok(rtl.markers[0].x + ring + stroke / 2 <= narrow.x + narrow.width + 0.01);
+  const textRight=Math.max(...rtl.parts.filter(part=>part.eventIndex!==undefined).map(part=>part.box.x+part.box.width));
+  const railLeft=Math.min(...rtl.markers.map(marker=>marker.x-(marker.ring?.radius??marker.radius)-(marker.strokeWidth??0)/2));
+  assert.ok(Math.abs(railLeft-textRight-12)<1e-9);
 });
 
 test('a ring that does not fit reports the marker as out of space instead of drawing outside the box', () => {

@@ -1,0 +1,175 @@
+{
+  "auditedAt": "2026-10-12T19:17:05.775441+00:00",
+  "networkCalls": 15,
+  "galleryBundleManifestHashMatches": true,
+  "responses": [
+    {
+      "id": "openpresentation-playground",
+      "url": "https://www.openpresentation.org/playground",
+      "status": 200,
+      "sha256": "1c77a906e4b18f70a6325b84b337bec15ab04e5df0c0a1b56e8409c39350ea73",
+      "observedVersion": "0.14.0"
+    },
+    {
+      "id": "gallery-editor",
+      "url": "https://www.pptx.gallery/editor",
+      "status": 200,
+      "sha256": "545efae9501069004e3323abcdcab3da4b5866073a3c647fd7eb673e8a77bf7b"
+    },
+    {
+      "id": "pptx-dev-home",
+      "url": "https://www.pptx.dev",
+      "status": 200,
+      "sha256": "a8468622c86edd53ff100770a8619a7ab49f3b3c1b640a32be6fbd54a737e96e"
+    },
+    {
+      "id": "main-font-manifest",
+      "url": "https://www.openpresentation.org/opf-fonts/manifest.json",
+      "status": 200,
+      "sha256": "bf4fcd922dceb629b3b0550f1e72db964e949ff4c15fbbaba8c80c514a43ce6a"
+    },
+    {
+      "id": "gallery-editor-manifest",
+      "url": "https://www.pptx.gallery/opf-editor/manifest.json",
+      "status": 200,
+      "sha256": "4a00bbc97d1acc1e35ce6a29e7ce7401e48ad61341c34d7f65a9c5a68f63a03e"
+    },
+    {
+      "id": "dev-font-manifest",
+      "url": "https://www.pptx.dev/opf-fonts/manifest.json",
+      "status": 200,
+      "sha256": "9d1a0a1808ad3de84c6d30ab9bae681d27ab9032c6ad762320ff71abec8f1f9e"
+    },
+    {
+      "id": "npm-opf",
+      "url": "https://registry.npmjs.org/%40openpresentation%2Fopf",
+      "status": 200,
+      "sha256": "b1b149cf9e17ac5fac0a9a8e83bb09ed75709e96b5b7e3ea24b723faeb3b2408",
+      "registry": {
+        "name": "@openpresentation/opf",
+        "distTags": {
+          "latest": "0.19.0"
+        },
+        "latest": "0.19.0",
+        "publishedAt": "2026-10-12T08:03:58.414Z",
+        "gitHead": "b3e306d005d3cd0563964d541a834a8a50469536",
+        "integrity": "sha512-glzhH9ZWG0RmYQA4k7+SNtCmx4m5moZl+3eXdEMU+GS/ex7uNTF0NchdS5sPUUGpXX3kAY9Au74t7xOribVycg=="
+      }
+    },
+    {
+      "id": "npm-opf-render",
+      "url": "https://registry.npmjs.org/%40openpresentation%2Fopf-render",
+      "status": 200,
+      "sha256": "9418f5b8e957169e64b55b647e1053f732406fe3e7d1f69884158bd998269e68",
+      "registry": {
+        "name": "@openpresentation/opf-render",
+        "distTags": {
+          "latest": "0.19.1"
+        },
+        "latest": "0.19.1",
+        "publishedAt": "2026-10-12T11:55:52.656Z",
+        "gitHead": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+        "integrity": "sha512-Hn67Leg3rnALEEmY/0FWSB423vccf7m8jtnPA4QOQjFMuHofLMuN9r3t42gSF9ML4Cak1GiUdG8N5+vw23rSFQ=="
+      }
+    },
+    {
+      "id": "npm-opf-pptx",
+      "url": "https://registry.npmjs.org/%40openpresentation%2Fopf-pptx",
+      "status": 200,
+      "sha256": "fca70def15e54e2801be3570cf6f1f13a679edea0284ed7bf017b39cbaccec78",
+      "registry": {
+        "name": "@openpresentation/opf-pptx",
+        "distTags": {
+          "latest": "0.19.0"
+        },
+        "latest": "0.19.0",
+        "publishedAt": "2026-10-12T13:26:11.362Z",
+        "gitHead": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+        "integrity": "sha512-mwV19g5bt0hjV9n0gin51Z736DNzrzCagFEQQHJErDgzkf8xOpEy37Y6/Oh9+rvHwSXrzQu73w3UW5bRdWDRCg=="
+      }
+    },
+    {
+      "id": "npm-opf-editor",
+      "url": "https://registry.npmjs.org/%40openpresentation%2Fopf-editor",
+      "status": 200,
+      "sha256": "defc883f0e399bae75026551ba0999c079052570321eded649e19e51df093dcf",
+      "registry": {
+        "name": "@openpresentation/opf-editor",
+        "distTags": {
+          "latest": "0.19.0"
+        },
+        "latest": "0.19.0",
+        "publishedAt": "2026-10-12T15:55:56.104Z",
+        "gitHead": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+        "integrity": "sha512-7nnUzD5tAMQEIrOdRnkgvbZPHrm1O0z4C6/iOd6yQEk4xmK8k2zwwsmLDHK1ZUspIcNb9xdI4E7EaMNL/R2itQ=="
+      }
+    },
+    {
+      "id": "npm-gallery",
+      "url": "https://registry.npmjs.org/%40openpresentation%2Fgallery",
+      "status": 200,
+      "sha256": "7bd224423d39377deef3a37716eb8106c9d0a8659d3756333fcd3f265a47b372",
+      "registry": {
+        "name": "@openpresentation/gallery",
+        "distTags": {
+          "latest": "2.0.0"
+        },
+        "latest": "2.0.0",
+        "publishedAt": "2026-10-12T03:36:37.724Z",
+        "gitHead": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+        "integrity": "sha512-RiCR0SUHQ8cDPefXZiK1WsSxVMyCwTeWZ5e8lXMnKm1x2sJ9fqnIauOjEShMSZCcoYiCK/PhU+Lkd1D3llZTYw=="
+      }
+    },
+    {
+      "id": "npm-cli",
+      "url": "https://registry.npmjs.org/%40openpresentation%2Fcli",
+      "status": 200,
+      "sha256": "a7df5d94a58287ee2e95f18ecd7112a15d5a39a4aeaba5601f24939deeb9d271",
+      "registry": {
+        "name": "@openpresentation/cli",
+        "distTags": {
+          "latest": "0.19.0"
+        },
+        "latest": "0.19.0",
+        "publishedAt": "2026-10-12T16:08:37.523Z",
+        "gitHead": "9d72bc020e4b9287fe34f806e2ed4e9b4f213fd5",
+        "integrity": "sha512-3kM63NZkgyZfSmhnw8hgTwe6VJnA1/SevHqPM4a6N+txFCwTCf7n5QGMzTWPqHujTAyCI6Mz9TrbJnPXL4i4ew=="
+      }
+    },
+    {
+      "id": "gallery-editor-index",
+      "url": "https://www.pptx.gallery/opf-editor/index.html",
+      "status": 200,
+      "sha256": "1658dd213771e2273b2108e7b89b6ca585a94f32a91a3408b999420d77ad0fdb"
+    },
+    {
+      "id": "gallery-editor-bundle",
+      "url": "https://www.pptx.gallery/opf-editor/playground.js",
+      "status": 200,
+      "sha256": "41e99094fa71b9d74ac8ec167e92281fde872864031ca0b5da038bdad83553e9"
+    },
+    {
+      "id": "dev-health",
+      "url": "https://www.pptx.dev/api/v1/health",
+      "status": 200,
+      "sha256": "149a9b0f6db26942ba123b958551c5362a24a85831e8fbf561a8fac99e069cc3",
+      "health": {
+        "status": "ok",
+        "version": "0.1.0",
+        "commit": "3480454a93b51f1a471c9c1612f7a9e590f3c307",
+        "timestamp": "2026-10-12T19:18:59.503Z"
+      }
+    }
+  ],
+  "devHealthSourceCorrelation": {
+    "commit": "3480454a93b51f1a471c9c1612f7a9e590f3c307",
+    "method": "git show <live health commit>:package.json",
+    "dependencies": {
+      "opf": "0.14.0",
+      "opf-render": "0.14.0",
+      "opf-pptx": "0.14.0",
+      "opf-editor": "0.14.2"
+    },
+    "limit": "Does not independently identify every live client chunk."
+  }
+}

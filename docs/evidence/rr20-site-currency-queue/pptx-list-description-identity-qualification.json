@@ -1,0 +1,175 @@
+{
+  "checkout": "/private/tmp/opf-pptx-list-description-identity",
+  "base": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+  "state": "Committed isolated fix, supervisor verified all eight file hashes and canonical log hash; integration and native acceptance pending",
+  "files": {
+    "src/content-topology.js": "bbc154105e206d676885036d5b18f5b598faee04fa6257415f55ad2ba24fc20b",
+    "src/document-provenance.js": "7bebdd04fb9eb79ae8b03c53d49057c4b58cfce538ca7023584886e33a63a18e",
+    "src/index.js": "586b46e326064034ca5aeedd329dba08884e953b53d0ba25c5b3cc1f35a7a282",
+    "dist/content-topology.js": "bbc154105e206d676885036d5b18f5b598faee04fa6257415f55ad2ba24fc20b",
+    "dist/document-provenance.js": "7bebdd04fb9eb79ae8b03c53d49057c4b58cfce538ca7023584886e33a63a18e",
+    "dist/index.js": "586b46e326064034ca5aeedd329dba08884e953b53d0ba25c5b3cc1f35a7a282",
+    "test/list-description-identity.mjs": "3d7a37584619806bb55ec9f80dd03bfea2bf3d9e054180fe50d86f8a54e14b9f",
+    "changes/rr-20-list-description-identity.md": "c3a23b8cc34a5fa77bd920a175b86bcee2c40d8eef1028c0f045d3697a7a24d2"
+  },
+  "dependencies": {
+    "@openpresentation/opf": "/private/tmp/opf-area-arrays/packages/javascript",
+    "@openpresentation/gallery": "/private/tmp/opf-areas-array-gallery",
+    "@openpresentation/opf-render": "/private/tmp/opf-areas-array-render"
+  },
+  "results": [
+    {
+      "command": [
+        "node",
+        "test/list-inherited-runs.mjs"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-roles-check-0.log"
+    },
+    {
+      "command": [
+        "node",
+        "test/list-hard-breaks.mjs"
+      ],
+      "exit": 1,
+      "log": "/private/tmp/rr20-list-roles-check-1.log"
+    },
+    {
+      "command": [
+        "node",
+        "test/content-topology.mjs"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-roles-check-2.log"
+    },
+    {
+      "command": [
+        "node",
+        "test/document-provenance.mjs"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-roles-check-3.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-roles-check-4.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/changelog-fragments.mjs",
+        "check"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-roles-check-5.log"
+    }
+  ],
+  "additionalResults": [
+    {
+      "command": "npm run build",
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-role-build-final.log"
+    },
+    {
+      "command": "node test/list-description-identity.mjs",
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-description-focused-final-built.log"
+    },
+    {
+      "command": "node test/hard-line-breaks.mjs",
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-role-hard-line-breaks.log"
+    },
+    {
+      "command": "npm run build",
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-role-build-strengthened.log"
+    },
+    {
+      "command": "node test/list-description-identity.mjs",
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-description-strengthened-attempt2.log"
+    }
+  ],
+  "baselinePolicy": "No expectations regenerated. New slide tag listRoles/native.listIdentity only on full-provenance lists with description lines. Any strict archive change requires per-part audit before approved baseline updates.",
+  "normalization": "Existing empty description normalization to absent retained; no stale native words/styles replayed.",
+  "strengthenedResults": [
+    {
+      "command": [
+        "node",
+        "test/list-inherited-runs.mjs"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-roles-strengthened-check-0.log"
+    },
+    {
+      "command": [
+        "node",
+        "test/hard-line-breaks.mjs"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-roles-strengthened-check-1.log"
+    },
+    {
+      "command": [
+        "node",
+        "test/content-topology.mjs"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-roles-strengthened-check-2.log"
+    },
+    {
+      "command": [
+        "node",
+        "test/document-provenance.mjs"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-roles-strengthened-check-3.log"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-roles-strengthened-check-4.log"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/changelog-fragments.mjs",
+        "check"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-roles-strengthened-check-5.log"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit": 0,
+      "log": "/private/tmp/rr20-list-roles-strengthened-check-6.log"
+    }
+  ],
+  "omissionPolicy": "Overbudget/unrecordable line roles report per-list omission through existing document-provenance-omitted diagnostics; no silent fallback.",
+  "strengthenedControls": "Every mutation requires one target and changed bytes; exact lists for size/color/text; later multiline description edit; physical shape reorder preserves names/geometry but refuses roles; refused topologies retain native words; provenance-free resized description keeps current text/size in entry text.",
+  "canonicalFull": {
+    "command": "npm test",
+    "exit": 0,
+    "handle": 20169,
+    "log": "/private/tmp/rr20-list-role-canonical-full.log",
+    "logSha256": "fc9d707918dd56fcf34934c8012cd349f3e0dfa9ff0e14d74868a4c63dbe49c6",
+    "packageTests": 138,
+    "strictArchiveExpectations": "unchanged; all canonical strict archive checks passed",
+    "baselineAudit": "No archive failure triggered a baseline audit or regeneration."
+  },
+  "commit": "a711ceeab2d81dddafe18bab7df6fc0cede169de"
+}

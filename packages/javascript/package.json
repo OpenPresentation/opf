@@ -168,8 +168,8 @@
     "typescript": "~5.9.3"
   },
   "peerDependencies": {
-    "@openpresentation/opf-pptx": "^0.19.0",
-    "@openpresentation/opf-render": "^0.19.0"
+    "@openpresentation/opf-pptx": "^0.20.0",
+    "@openpresentation/opf-render": "^0.20.0"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-pptx": {
@@ -178,5 +178,8 @@
     "@openpresentation/opf-render": {
       "optional": true
     }
+  },
+  "opf": {
+    "requiresUnreleasedGallery": "3.0.0"
   }
 }

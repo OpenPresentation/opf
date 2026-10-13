@@ -1,0 +1,30 @@
+{
+  "head": "f1fe1caa96db71c90320e160d74a150be336312e",
+  "path": "/private/tmp/opf-published-control19-fix",
+  "scope": "Exact published0.19 source b3 runtime unchanged; only three pinned test-helper blobs from independently qualified merged643/85089. No currentarray runtime/tooling swap.",
+  "ownedFiles": {
+    "scripts/candidate-gallery-control.mjs": "a46b74a32aac96eb04ca86e00a96ccb98c1e48f7fa8376b18c203c52f7fafdca",
+    "scripts/candidate-gallery-control.test.mjs": "b3d12f4ce33f1743c0fea1ba1df6cae21536e17049fbae6af89a56853b309b7b",
+    "changes/rr-20-published-019-control-tooling.md": "b96cbd2bb4142b313c619b37f5fa7ffd189bef29710db2be50bebe50f2645b73"
+  },
+  "focusedTests": {
+    "session": 38993,
+    "exit": 0,
+    "passed": 3,
+    "log": "/private/tmp/rr20-published-control19-focused-final.log"
+  },
+  "actualPublishedProbe": "/private/tmp/rr20-published-control19-actual-registry-proof.json",
+  "mapped": "Localfreshclone failed dependency-install startup NO_TTY; retained /private/tmp/rr20-published-control19-mapped.log. Root will cherry-pick and run requiredscopedmapped using existingcanonicaldependencies.",
+  "negativeControls": [
+    "old19.1fontcountrefusal\u2192fixed94,95/unknownversionstillrefused",
+    "oldquote1/timeline1assertionfailscurrentintentnames",
+    "everybridgedfiletamper",
+    "publishedruntimechange",
+    "extrauntrackedtool",
+    "unknownoverridepath/record",
+    "unknown19graphversion"
+  ],
+  "runtimeBuilds": false,
+  "registryInstalls": false,
+  "remoteWrites": false
+}

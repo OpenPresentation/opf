@@ -4,7 +4,7 @@ import {layoutQuote,fitText,OPFCompositionError} from '../dist/composition.js';
 
 const cell = {x:40,y:60,width:800,height:400};
 
-test('complete quote layout preserves source ranges, requested/resolved styles and legacy readable geometry', () => {
+test('complete quote layout preserves source ranges, requested/resolved styles and compact readable geometry', () => {
   const value = Object.freeze({text:'Original “quote” — 日本語 👩‍🔬',attribution:'Name  with spaces',source:'Original source'});
   const fonts = {heading:'Requested Heading',body:'Requested Body'};
   const seen = [];
@@ -15,9 +15,11 @@ test('complete quote layout preserves source ranges, requested/resolved styles a
   const result = layoutQuote(value,cell,{fontFamilies:fonts,textMeasurement:measurement,path:'slides.3.quote'});
   assert.equal(result.overflow,false);
   assert.equal(result.textMeasurement,'provided');
-  assert.deepEqual(result.parts.map(part=>part.box),[
-    {x:58,y:78,width:764,height:306},{x:58,y:402,width:764,height:40},
-  ]);
+  assert.equal(result.parts[0].box.x,58);
+  assert.equal(result.parts[0].box.y,78);
+  assert.equal(result.parts[0].box.width,764);
+  assert.ok(Math.abs(result.parts[1].box.y-result.parts[0].box.y-result.parts[0].box.height-18)<1e-8);
+  assert.equal(result.parts[1].box.height,40);
   for (const part of result.parts) {
     assert.match(part.requestedStyle.fontFamily,/^Requested /);
     assert.match(part.style.fontFamily,/^Resolved /);
@@ -37,7 +39,7 @@ test('shorthand and empty metadata preserve schema paths without an invented foo
   for (const value of ['  Original\ntext  ',{text:'',attribution:'',source:''}]) {
     const result=layoutQuote(value,cell,{path:'slides.2.left.quote'});
     assert.equal(result.parts.length,1);
-    assert.equal(result.parts[0].box.height,364);
+    assert.equal(result.parts[0].box.height,result.parts[0].fit.lines.length*result.parts[0].fit.lineHeight);
     assert.equal(result.parts[0].sources[0].path,typeof value==='string'?'slides.2.left.quote':'slides.2.left.quote.text');
     assert.equal(result.parts[0].text,`"${typeof value==='string'?value:value.text}"`);
     assert.equal(result.textMeasurement,'estimated');

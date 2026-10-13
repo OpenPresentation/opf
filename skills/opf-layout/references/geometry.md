@@ -4,7 +4,7 @@ The shared reference coordinates use 96 pixels per inch. Default widescreen dime
 
 Default heading geometry is a reference-engine policy, not extra JSON. Title and subtitle share the padded width of the free area. Cover slides (no body payload on a v2 template or with no layout; a flowed image counts as body, a placed image does not; empty payloads such as `blocks: []` or `text: ""` do not; whitespace-only text is body) center the tag/title/subtitle group vertically inside the free area beside any placed image, between header and footer furniture; wrapping recenters the group and a group that fills the area is not moved. Content slides keep headings at the top. Reuse `item.box` (and accepted internal part boxes, line and outline origins) for preview, selection and export. Do not silently truncate; report overflow.
 
-Current bounds: columns 1–12; gap 0–0.1; padding 0–0.2; positive weights up to 100; minFontSize 8–32. Check the installed schema before relying on these bounds. Nesting is bounded at 32 content-group levels. V2 layout records allow a grid of at most 12 by 12 cells; `geometry.regions` reports each named area's box, accepted kinds, bound content, overflow and collapse. Groups inherit only readability constraints (`minFontSize`, `overflow`), and a strict ancestor cannot be weakened by a child. Child padding defaults to zero.
+Current bounds: columns 1–12; gap 0–0.1; padding 0–0.2; positive weights up to 100; minFontSize 8–32. Check the installed schema before relying on these bounds. Nesting is bounded at 32 content-group levels. V2 layout records express `areas` as nested row arrays, with at most 12 rows and 12 cells per row; `geometry.regions` reports each named area's box, accepted kinds, bound content, overflow and collapse. Groups inherit only readability constraints (`minFontSize`, `overflow`), and a strict ancestor cannot be weakened by a child. Child padding defaults to zero.
 
 A two-level arrangement:
 
@@ -68,6 +68,14 @@ Code pagination preserves exact body fragments and repeats filename/language, re
 
 ## Resizing tracks
 
+For a v2 region, `anchor: "middle"` or `"bottom"` positions a compact measured content envelope inside the region;
+it does not move the named region or change a pin's meaning. The measured-content implementation includes plain
+and list text and uncaptioned quote/metric leaves. Quote attribution/photo stays next to the quotation, and metric
+value/metadata stays together. A grid row shares an origin based on its tallest measured content; retain the
+original nominal metric font size when placing the compact result. Dense text and analytical regions normally
+stay top-aligned. Groups, captioned quotes/metrics and explicit slide composition overrides retain their existing
+allocation rules. Check the installed engine: the first 0.19 release anchored text/list stacks only.
+
 Published core 0.10.0 introduced [shared vector-outline placement](https://github.com/OpenPresentation/opf/blob/main/docs/plans/text-placement.md). Current core 0.13.0 reports `grid-score-v9` and shared `furniture-flow-v2`. Optional `textMeasurement.outlineBounds` and `textRasterPadding` determine accepted heading/scalar/rich line origins; pass identical options to pagination, preview, editing and export. Explanations report outline availability and effective padding. This does not measure every payload's ink or establish native raster equivalence.
 
 Each composed item carries a resolved `alignment`: `titleAlignment` for the title and `contentAlignment` for every other item (slide design, then the deck's design or the host option, then the layout record's `design`, then `left`). Consumers anchor text to it instead of re-resolving design; the title never inherits `contentAlignment`. On a cover (no body payload, heading-only layout) the tag and subtitle follow `titleAlignment` too, unless the slide's own `design.contentAlignment` says otherwise.
@@ -81,3 +89,9 @@ Shared content cards are published in core 0.10.0 and later. The effective `desi
 Core 0.15 (FA-22) gives a top-level image block with `placement: {edge, size, inset}` a band along that slide edge (`size` of the slide width or height, default 0.5, edge to edge or inside the padding); the headings and the body compose in the rest. Every image item carries `item.image` (frame `box`, `fit`, `focus`, `shape`, `border`, `opacity`, `recolor`, `overlay`, `placement`), and a picture background is `geometry.backgroundImage`, which moves nothing.
 
 Core after 0.11.4 (RR-34) reserves two regions only for decks that use the fields. A slide whose runs carry `cite` or `footnote` markers gets `geometry.footnotes` (`footnote-area-v1`): a rule and `<n> <text>` lines directly above the footer band with the content area's left edge and width, at the furniture size; the content area shrinks by exactly that height plus half the slide gap and nothing above it moves. The area takes at most 35% of the heading-to-footer span; a note that does not fit reports `text-overflow` at `references.N` or the run's path. Markers are fragments with `kind: "marker"` after the marked run's last fragment (0.7 of the run size, raised 0.3 of its own size, zero source length). A captioned `image`, `chart`, `table` or `video` leaf carries `item.caption` (the band, at most 35% of the region, below or above) and `item.box` is the remaining media box; grid selection scores the leaf on that media box. Pass the same `presentation` and `slideIndex` to every consumer so the numbering agrees.
+
+Lists whose text has no authored font size start at 32 reference pixels (24 points), while ordinary body text
+starts at 25 reference pixels. The shared fit can reduce a dense list to its explicit readability floor or use
+list columns; it keeps numbering, nesting and every source entry. Rich-run `fontSize` is expressed in points:
+an explicit 24-point run starts at 24 points, independently of the unspecified-list starting size.
+When it fits, that size is preserved; dense content can still shrink under the shared fitting and floor rules.

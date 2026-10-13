@@ -1,0 +1,22 @@
+{
+  "status": "failed-before-native-execution",
+  "sourceRevision": "81104a3a89e9f945503d3e7103ec78540bd9043a",
+  "host": "MICHAEL-DESKTOP",
+  "worktree": "C:\\opf-work\\native-81104a3a",
+  "node": "v26.4.0",
+  "command": "node --test scripts/native-acceptance/run-windows.test.mjs",
+  "exitCode": 1,
+  "passed": 0,
+  "failed": 1,
+  "skipped": 0,
+  "failure": "Get-FileHash not recognized in run-windows-self-test.ps1:23",
+  "evidenceOrigin": "Windows supervisor chat report; raw logs remain on Windows and have not been independently read on Mac",
+  "logs": "C:\\opf-work\\native-81104a3a-output",
+  "checkoutCleanBeforeAndAfter": true,
+  "officeExecuted": false,
+  "diagnostic": "Exact failing Node child context reproduces missing Get-FileHash with inherited PowerShell 7 module paths. Removing only PSModulePath restores standard Windows PowerShell paths and Get-FileHash. Both read-only probes exited zero; original test failure preserved, suite not retried.",
+  "diagnosticLogs": [
+    "child-environment-probe.stdout.log",
+    "child-environment-probe.stderr.log"
+  ]
+}

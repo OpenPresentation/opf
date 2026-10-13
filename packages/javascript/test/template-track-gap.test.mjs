@@ -16,7 +16,7 @@ for (const [name, width, height, columns, rows] of [
     const names = Array.from({ length: columns * rows }, (_, index) => `r${index}`);
     const kind = columns === 1 ? 'text' : 'image';
     const layout = {
-      areas: Array.from({ length: rows }, (_, row) => names.slice(row * columns, (row + 1) * columns).join(' ')),
+      areas: Array.from({ length: rows }, (_, row) => names.slice(row * columns, (row + 1) * columns)),
       rows: Array(rows).fill(1),
       columns: Array(columns).fill(1),
       regions: Object.fromEntries(names.map(region => [region, { accepts: [kind], flow: 'none', empty: 'keep' }])),

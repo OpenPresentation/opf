@@ -147,7 +147,7 @@ Host policy comes from explicit options, never from the document: fields under `
     {
       "source": "pkg:@partner/opf-catalog",
       "layouts": {
-        "partner-title": {"name":"Partner title","areas":["title"]}
+        "partner-title": {"name":"Partner title","areas":[["title"]]}
       }
     }
   ],

@@ -1,0 +1,235 @@
+{
+  "updatedAt": "2026-10-13T17:51:37.228176+00:00",
+  "authorization": "Start final qualification; no deployment",
+  "scope": "Unpublished array/design/list/tutorial/gallery feature graph; source qualification separate from registry/native/deployment acceptance",
+  "deploymentPerformed": false,
+  "nativeWindows": "in-progress",
+  "sourceCommits": {
+    "core": "fb1c2ee65bd45c8b5e8182f034f7fceee1dbb505",
+    "gallery": "146e477196405fe7d2283008f6fad34c12742599",
+    "renderer": "0be8f764c98b1c681606d28dc80e10734a562fe9",
+    "editor": "5a82cbbc58e4f3f98a0d1f26e17c73c94fa6e79a",
+    "pptx": "fe35728ffa43a1b2ff19ec275ffe6f15b209779e",
+    "coreRuntime": "8f70cf1b52dc4ca4eb246a6f9d065b1403edbf31",
+    "mainSite": "4e5c4fc706e215c7bc5c54692070dfc9769c65a6",
+    "devSite": "0d65b99a78f7f1a2ca94471c42ca26938fa40b99",
+    "gallerySite": "df08ef13b50b442de82d04a850ddb8f9aa568c0c"
+  },
+  "core": {
+    "packageTests": 2327,
+    "cliTests": 198,
+    "commandChecks": 95,
+    "conversionChecks": 77,
+    "rootChecksPassed": 44,
+    "rootChecksTotal": 44,
+    "remaining": "No remaining local core source checks; separate integration, registry and native acceptance remain",
+    "goldenReplay": "27/27 core and registry golden checks pass after official baseline adoption",
+    "changedChecks": "passed"
+  },
+  "galleryPackage": {
+    "tests": 110,
+    "previews": 28,
+    "typeBuildVerifyLicenseStabilityPack": "passed",
+    "originalQualificationDate": "2026-10-12",
+    "latestPortabilityQualification": {
+      "source": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "macPassed": 111,
+      "windowsReportedPassed": 111,
+      "proof": "gallery-windows-bootstrap-portability.json",
+      "independentWindowsVerificationByMacWorker": false,
+      "nativeAcceptance": false
+    }
+  },
+  "mainSite": {
+    "sourceSyncTestsTutorialContentTypeBuild": "passed",
+    "browserInitial": {
+      "passed": 73,
+      "failed": 2
+    },
+    "fix": "Tutorial step links now have matching fragment IDs",
+    "targetedBrowserReplay": {
+      "passed": 2,
+      "coverage": "All19 lesson steps/deep links/source/preview navigation and650 pages/58023 internal references/1260 targets"
+    },
+    "remaining": "Docs registry-install example requires unpublished gallery3.0.0; no registry acceptance claimed"
+  },
+  "devSite": {
+    "tests": {
+      "passed": 976,
+      "existingSkipped": 1,
+      "standalone": 20,
+      "quarantine": 16
+    },
+    "cleanTypeBuild": "passed",
+    "browser": {
+      "passed": 58
+    },
+    "setup": "Stale incremental cache and stalled sandbox build preserved; clean normal commands pass with local permissions"
+  },
+  "gallerySite": {
+    "typecheck": "passed",
+    "fetchContract": "passed",
+    "tests": {
+      "passed": 606,
+      "files": 47
+    },
+    "releaseBuild": "not qualified: source editor bundle must be replaced with genuine published manifest after release",
+    "sourceOnlyNextBuild": "passed; release prebuild remains blocked on matching registry editor bundle",
+    "browser": {
+      "passed": 123,
+      "failed": 1,
+      "failure": "Published-editor manifest identity; source bundle intentionally differs from genuine registry control",
+      "terminalRunLog": "/private/tmp/rr20-gallery-site-split-source-browser-final.log"
+    },
+    "focusedFontsAndLayouts": {
+      "passed": 12
+    }
+  },
+  "rendererGolden": {
+    "workflow": "https://github.com/OpenPresentation/opf-render/actions/runs/38303250315",
+    "mode": "dry-run, selection=both",
+    "status": "Official baseline commit exists; both manifests exactly match reviewed dry-run manifests",
+    "toolingRef": "codex/rr-20-golden-tools",
+    "rendererBranch": "codex/rr-20-array-areas",
+    "review": {
+      "examples": 807,
+      "changedExamples": 586,
+      "templates": 495,
+      "changedTemplates": 409,
+      "templateSheetsReviewed": 21,
+      "artifactImageHashesVerified": true,
+      "stressLimitations": "Unpaginated timeline/table/code/FAQ overflow is explicitly diagnosed; baseline is regression evidence, not universal readability or native parity"
+    },
+    "writeWorkflow": "https://github.com/OpenPresentation/opf-render/actions/runs/38304214690",
+    "baselineCommit": "5a419108bdd25e9970a1e88badb2e4ad1c5f1931"
+  },
+  "editor": {
+    "sourceTests": 72,
+    "playgroundSuites": 21,
+    "browserSuites": 11,
+    "allPassed": true
+  },
+  "pptx": {
+    "commit": "fe35728ffa43a1b2ff19ec275ffe6f15b209779e",
+    "sourceTestFiles": 133,
+    "typecheckFiles": 275,
+    "buildValidate": "passed",
+    "archiveReview": "30 archives independently verified; approved neutral rules, numeric alignment and magnitude axes only",
+    "nativeWindows": "in-progress",
+    "originalQualificationDate": "2026-10-12",
+    "latestQualification": {
+      "canonicalTestedHead": "e9e7fb7baad0b63349e392d4036524578877d80c",
+      "canonicalSourceTestFiles": 136,
+      "typecheckFiles": 279,
+      "allCanonicalCommandsExitZero": true,
+      "canonicalProof": "pptx-combined-qualification.json",
+      "finalRuntimeHead": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+      "finalFollowupScope": "Reviewed docs/test-only fallback-boundary follow-up; runtime source/dist remains the qualified combined implementation.",
+      "installedReplayProof": "final-runtime-replay-macos-proof.json",
+      "nativeAcceptance": false
+    }
+  },
+  "coordinatedTarballs": {
+    "status": "passed locally",
+    "packages": 6,
+    "consumer": "passed",
+    "browserSuites": 8,
+    "browserAssertions": 282,
+    "trustedInteractions": 8,
+    "authorizationOverlay": "Isolated catalog 3 configuration and manifest authorization; exact sources and package hashes retained in proof",
+    "proof": "rr20-final-packed-qualification-proof.json",
+    "registryNativeOtherOSAcceptance": false,
+    "originalQualificationDate": "2026-10-12",
+    "latestProof": "final-runtime-replay-macos-proof.json",
+    "latestReceipt": "final-runtime-replay-macos-receipt.json"
+  },
+  "renderer": {
+    "sourceTestFiles": 119,
+    "typecheckedFiles": 257,
+    "buildValidateBrowser": "passed",
+    "finalCommitChanges": "Three reviewed tests only; runtime and official baselines unchanged from packed candidate",
+    "proof": "rr20-render-pptx-final-candidate-proof.json"
+  },
+  "status": "Latest Mac packed, installed and browser replay and sealed native-suite generation passed. All 17 raw round-trip differences are reviewed declared source limitations; hosted/integration gates, registry-dependent site blockers and native acceptance with the first authorized bounded run in progress remain. Not release-ready.",
+  "remainingAcceptance": [
+    "Exact integrated candidate CI, engines and cross-platform gates",
+    "Matching package publication and genuine registry-generated site assets",
+    "Main site registry-install example for Gallery 3",
+    "Gallery site release build and published-editor manifest acceptance",
+    "Windows PowerPoint acceptance: supervisor verified the direct timing override and started the first bounded native run; results pending",
+    "Deferred deployment and production acceptance"
+  ],
+  "historicalSourceQualification": "The sourceCommits and original component test counts retain the 2026-10-12 qualification snapshot. Latest runtime replay and later PPTX qualification are linked separately below.",
+  "nativeAcceptance": false,
+  "windowsNativeAuthorization": {
+    "status": "authorized-now; first metrics lifecycle observed, fidelity pending",
+    "authority": "Supervisor-verified direct user messages retained in windows-native-authorization.json, with the later verified immediate-use override recorded here; root-only worker restrictions remain.",
+    "reportedPrerequisites": "windows-final-suite-prerequisites.json",
+    "independentWindowsVerificationByMacWorker": false,
+    "historicalVisibleWorkerEarliestStart": "2026-10-13 11:30 AM America/Los_Angeles, after qualification",
+    "timingOverride": {
+      "date": "2026-10-13",
+      "userMessageId": "01a13663-3e31-7d32-839c-91b7cbcb8044",
+      "message": "ok you can use powerpoint now i'm done with the computer",
+      "verifiedBy": "Supervisor read the actual Windows user message.",
+      "effect": "Supersedes the earlier 11:30 AM Pacific visible-worker hold; root began the first bounded feature-metrics run. No native result is claimed."
+    },
+    "runStarted": true,
+    "result": "pending",
+    "performed": true,
+    "visibleWorkerEarliestStart": "Earlier time restriction superseded by verified direct user message 01a13663-3e31-7d32-839c-91b7cbcb8044"
+  },
+  "latestLocalRuntimeReplay": {
+    "platform": "macOS arm64",
+    "proof": "final-runtime-replay-macos-proof.json",
+    "receipt": "final-runtime-replay-macos-receipt.json",
+    "packageRuntimeCore": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+    "packageRuntimePptx": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+    "suiteTooling": "e4da9319c02f8f1a37e0dae0d2cc0b301b62218d",
+    "packages": 6,
+    "ownVersionsPreserved": true,
+    "packInstallBrowserExitCodes": [
+      0,
+      0,
+      0
+    ],
+    "browserSuites": 8,
+    "browserAssertions": 282,
+    "trustedInteractions": 8,
+    "suiteCases": 54,
+    "sealedFiles": 304,
+    "suiteSha256": "0675ea8f197835500f7266cf3606e9c301177b3fa27c7547db89f6f8140383c8",
+    "allFileHashesAndLengthsVerified": true,
+    "rawInequalities": 17,
+    "nativeAcceptance": false,
+    "registryAcceptance": false,
+    "rawDifferenceReview": "final-native-differences-review.json",
+    "rawDifferenceClassification": "15 chart-type-only adaptations, one histogram binning/type adaptation and one dormant furniture omission; reviewed as declared source limitations with no additional implementation blocker identified. Raw inequalities and native pending remain."
+  },
+  "adaptiveScopeAudit": "adaptive-scope-audit.json",
+  "openImportFollowup": {
+    "issue": "https://github.com/OpenPresentation/opf-pptx/issues/238",
+    "status": "known native-edit gap; isolated fix investigation started",
+    "behavior": "A list description resized to entry size or larger can import as entry text.",
+    "historicalRecord": "docs/programs/release-readiness/HANDOFF.md: Follow-up issues (open, not started)",
+    "formalOwnerDescopeProven": false,
+    "frozenCandidateChanged": false
+  },
+  "latestCore": {
+    "source": "c10e29c67b0c4ec7e7974ae7276aee45f665734e",
+    "proof": "core-c10-canonical-qualification.json",
+    "canonicalExitCode": 0,
+    "packageTests": 2328,
+    "standalonePackageScripts": 6,
+    "cliTests": 198,
+    "commandChecks": 95,
+    "conversionChecks": 77,
+    "rootChecksPassed": 45,
+    "rootChecksTotal": 45,
+    "sourcesClean": true,
+    "nativeAcceptance": false,
+    "registryAcceptance": false,
+    "hostedAcceptance": false
+  },
+  "latestNativeObservation": "windows-final-metrics-observation.json"
+}

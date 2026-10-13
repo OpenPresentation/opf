@@ -6,7 +6,7 @@ import * as root from '../dist/index.js';
 // FA-17: every shared design key resolves with one merge, per key: slide design, then deck design, then the
 // layout record's design, then the engine default. SlideComposition.design carries the result, so the render and
 // PPTX engines read the same values composition used.
-const layout = id => design => ({id, design, areas: ["title","body-1"], rows: ["auto",1], regions: {"body-1":{"accepts":["text","list","chart"],"flow":"none"}}});
+const layout = id => design => ({id, design, areas: [["title"],["body-1"]], rows: ["auto",1], regions: {"body-1":{"accepts":["text","list","chart"],"flow":"none"}}});
 const asset = name => `data:image/png;base64,${name}`;
 // One value per key that the engine default does not already produce, plus an opposing value to override with.
 const KEYS = {
@@ -90,7 +90,7 @@ test('layout titleAlignment and contentAlignment align title and content; the de
 });
 
 test('a cover keeps tag, title and subtitle together under the layout titleAlignment', () => {
-  const record = {id: 'title-subtitle', design: {titleAlignment: 'center', contentAlignment: 'right'}, areas: ["title"], rows: [1], regions: {}};
+  const record = {id: 'title-subtitle', design: {titleAlignment: 'center', contentAlignment: 'right'}, areas: [["title"]], rows: [1], regions: {}};
   const cover = {tag: 'Tag', title: 'Cover', subtitle: 'Sub', layout: 'title-subtitle'};
   assert.deepEqual(alignments(composeSlide(cover, {layout: record})), {tag: 'center', title: 'center', subtitle: 'center'});
   // Only the slide's own contentAlignment splits the group.

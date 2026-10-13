@@ -6,15 +6,15 @@ built-in layouts and a deck's own layouts are records of this one schema; a cust
 `catalogs.custom.layouts` (or a named catalog group) and referenced by id like any other. The design is
 [0.19-layouts.md](programs/release-readiness/0.19-layouts.md); this page is the reference for what core implements.
 
-> The 28 built-in templates are published by `@openpresentation/gallery` 2.x. OPF 0.19 rejects v1 layout records,
-> including `placeholders` and placeholder groups; there are no aliases or migration API.
+> The 28 built-in templates come from the matching `@openpresentation/gallery` package. Published core 0.19 and gallery 2 use string rows; the next format uses the nested row arrays documented below. Use coordinated core and gallery versions.
+> V1 layout records, including `placeholders` and placeholder groups, remain unsupported; there are no aliases or migration API.
 
 ## A record
 
 ```yaml
 name: Roadmap split
 summary: A roadmap on the left, with notes over metrics beside it.
-areas: ["title title", "timeline notes", "timeline metrics"]
+areas: [["title", "title"], ["timeline", "notes"], ["timeline", "metrics"]]
 columns: [2, 1]
 rows: [auto, 1, 1]
 regions:
@@ -25,7 +25,7 @@ regions:
 
 | Field | Meaning |
 | --- | --- |
-| `areas` | 1 to 12 strings in the notation of CSS `grid-template-areas`: each string a row, each word a cell, a name repeated over adjacent cells spans them, `.` an empty cell. A name's cells form one filled rectangle. |
+| `areas` | 1 to 12 row arrays, each containing 1 to 12 area-name strings. Each string is one cell; a name repeated over adjacent cells spans them, `.` an empty cell. A name's cells form one filled rectangle. |
 | `columns` | Relative column widths, one per cell of a row. Omitted: all 1. |
 | `rows` | Relative row heights, or `auto` for the height the row's content needs (at most half the content box). Omitted: all 1. |
 | `regions` | One entry per body area, keyed by its name. |
@@ -50,6 +50,23 @@ slide that has headings. Region names may not be `title`, `subtitle`, `tag`, `au
 | `listColumns` | `"auto"` (a list that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
 | `anchor` | `top`, `middle`, `bottom` | `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
+
+### Choosing an anchor
+
+A block's `region` selects a named area; that area's `anchor` controls vertical placement inside it. Region names such
+as `main` and `aside` have no special positioning behavior. Declare the names in the layout's grid and regions.
+
+Use middle anchoring for a compact statement, quotation, headline metric or short explanation beside a visual. Keep
+substantial text, lists, charts and tables top-aligned so readers can compare common starting positions. The title
+remains in its own heading area. Anchoring does not enlarge short text to fill unused space.
+
+The measured-content implementation supports text/list leaves and uncaptioned quote/metric leaves. A quote keeps
+its body, attribution and photo together. A metric keeps its value and metadata together without reducing the
+nominal font size merely because its placement box becomes shorter. Grid and horizontal rows share an origin
+based on their tallest measured content, so differing description lengths do not stagger headline numbers.
+Content that does not fit retains its allocation and overflow diagnostics. Nested groups, captioned quotes/metrics,
+charts, tables and explicit slide composition overrides keep their existing allocation behavior; an anchor is not
+a promise to measure arbitrary content.
 
 ### Validation
 

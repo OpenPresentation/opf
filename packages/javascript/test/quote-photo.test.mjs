@@ -34,12 +34,15 @@ test('role is its own footer line and the source follows the last line', () => {
   assert.equal(layoutQuote({text:'Body',role:'Head',source:'Interview'},cell).parts[1].text,'Head - Interview');
 });
 
-test('without a role or photo the quote layout is the footer-only layout, unchanged', () => {
+test('without a role or photo the quote layout is the compact footer-only layout', () => {
   const plain = {text:quote.text,attribution:quote.attribution,source:quote.source};
   const result = layoutQuote(plain,cell,{path:'slides.0.quote'});
   assert.equal('photo' in result,false);
   assert.equal(result.parts[1].text,'Priya Raman - Interview, March 2026');
-  assert.deepEqual(result.parts.map(part=>part.box),[{x:58,y:78,width:764,height:306},{x:58,y:402,width:764,height:40}]);
+  assert.equal(result.parts[0].box.x,58);
+  assert.equal(result.parts[0].box.y,78);
+  assert.ok(Math.abs(result.parts[1].box.y-result.parts[0].box.y-result.parts[0].box.height-18)<1e-8);
+  assert.equal(result.parts[1].box.height,40);
   // An undefined role and photo are absent keys, so they change nothing.
   assert.deepEqual(layoutQuote({...plain,role:undefined,photo:undefined},cell,{path:'slides.0.quote'}),result);
 });

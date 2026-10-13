@@ -71,14 +71,14 @@ describe('the cover rule is a record rule', () => {
 
   test('a template with only a title region centres a slide with no body, whatever its id', () => {
     const slide = { title: 'Cover', subtitle: 'Subtitle' };
-    const headings = { name: 'Opening', areas: ["title"], rows: [1], regions: {} };
+    const headings = { name: 'Opening', areas: [["title"]], rows: [1], regions: {} };
     const centred = titleY(compose(slide, headings));
     assert.ok(centred > 720 * 0.25, `${centred}`);
     assert.equal(titleY(compose(slide)), centred, 'no layout record: the same cover');
   });
 
   test('empty regions collapse while populated regions retain a content heading', () => {
-    const body = { id: 'title', name: 'Title', areas: ['title','body'], rows: ['auto',1], regions: {body:{accepts:['text'],flow:'none'}} };
+    const body = { id: 'title', name: 'Title', areas: [['title'],['body']], rows: ['auto',1], regions: {body:{accepts:['text'],flow:'none'}} };
     assert.ok(titleY(compose({title:'Cover'},body)) > 720 * 0.25);
     assert.ok(titleY(compose({title:'Content',text:'Body'},body)) < 720 * 0.2);
   });

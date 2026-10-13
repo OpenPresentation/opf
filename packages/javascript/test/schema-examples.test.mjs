@@ -14,6 +14,6 @@ test('every schema-example embedded record satisfies core companion and v2 grid 
  assert.equal(checked,4);
 });
 test('a schema-example chart region with nonrectangular areas is rejected by core semantics',()=>{
- const record=structuredClone(catalogs.examples[0].custom.layouts['q4-special']);record.areas=['title title','chart .','chart chart'];
+ const record=structuredClone(catalogs.examples[0].custom.layouts['q4-special']);record.areas=[['title', 'title'],['chart', '.'],['chart', 'chart']];
  const result=validateCatalogRecord('layouts',{$schema:schemaId('layouts'),id:'q4-special',...record});assert.equal(result.valid,false);assert.ok(result.findings.some(finding=>finding.path.startsWith('/areas')));
 });

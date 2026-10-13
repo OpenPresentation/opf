@@ -1,0 +1,29 @@
+{
+  "status": "windows-pure-font-controls-passed",
+  "host": "MICHAEL-DESKTOP",
+  "sourceRevision": "5e835116be1e001372322ddcc209a0111515c6b8",
+  "node": "24.21.0",
+  "command": "node --test scripts/native-acceptance/setup-fonts-windows.test.mjs",
+  "tests": {
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0
+  },
+  "logs": "C:/opf-work/candidate-81c4fdf5/logs/20-font-tool-nullstring-test",
+  "previousFailure": {
+    "sourceRevision": "e72b1569f0a96126f18c8bdb634d4129f61f3700",
+    "passed": 1,
+    "failed": 1,
+    "skipped": 0,
+    "exitCode": 1,
+    "logs": "C:/opf-work/candidate-81c4fdf5/logs/19-font-tool-windows-test",
+    "cause": "Windows PowerShell 5.1 coerced File.Replace null backup filename to empty string; corrected with NullString.Value."
+  },
+  "scope": "Actual Windows PowerShell execution of mocked file/hash/ownership/cleanup controls; no actual registration or Office in these tests.",
+  "actualFontRegistrationProven": false,
+  "nativeAcceptance": false,
+  "checkoutClean": true,
+  "evidenceOrigin": "Completed Windows chat command report, raw logs retained on host.",
+  "next": "Reviewed per-user Setup and independent Check authorized against a fresh host-generated suite; results pending."
+}

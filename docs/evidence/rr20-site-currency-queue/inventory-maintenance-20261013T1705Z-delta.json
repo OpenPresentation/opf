@@ -1,0 +1,17 @@
+{
+  "headChanges": [
+    {
+      "repo": "OpenPresentation/opf",
+      "pr": 646,
+      "before": "6480f2cc7566689c412a61732456a25b5da02f25",
+      "after": "a94a1aedc77b782ac370e5db7d33fda090661daf"
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "pr": 253,
+      "before": "53fcdd1c6f6e0339208d07d0ecdb7ccf4fb1b010",
+      "after": "0c714b00d155d796ed9b72dea637aeb7d3c63c56"
+    }
+  ],
+  "defaultHeadsChanged": false
+}

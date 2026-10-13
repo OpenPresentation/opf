@@ -43,7 +43,7 @@ try {
   assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:'{"language":"en-US","slides":[{"title":"Regional tag"}]}'}).json.counts.warning,0);
   assert.equal(run(['validate','-'],{input:'{"slides":[}',status:1}).json.schemaValid,null);
   assert.ok(run(['validate','-'],{input:'{"slides":[{"title":"Earlier","title":"Later"}]}',status:1}).json.findings.some(issue=>issue.ruleId==='opf/duplicate-key'));
-  const config={catalogs:[{source:'pkg:@house/catalog',layouts:{pratner:{name:'Authoritative custom spelling',areas: ["title"], rows: [1], regions: {}}}}]},configRaw=JSON.stringify(config);
+  const config={catalogs:[{source:'pkg:@house/catalog',layouts:{pratner:{name:'Authoritative custom spelling',areas: [["title"]], rows: [1], regions: {}}}}]},configRaw=JSON.stringify(config);
   await writeFile(path.join(temp,'house-config.json'),configRaw);
   const configured=run(['validate','target.opf.json','--only','format,references','--config','house-config.json','--fail-on','warning']).json;assert.equal(configured.valid,true);assert.equal(configured.counts.warning,0);assert.match(configured.context.sha256,/^[a-f0-9]{64}$/);assert.equal(configured.sha256,linted.sha256);
   config.contracts=[{path:'/slides/*/layout',allowedValues:['text'],message:'Brand layouts: {{allowed}}.'}];await writeFile(path.join(temp,'house-config.json'),JSON.stringify(config));

@@ -1,0 +1,6 @@
+{
+  "rendererReceiptSha256": "ff1e88b86f0c44f402d65db309e5b9464b3fc4836f88bd51d068a247ec937c79",
+  "siblingsReceiptSha256": "07d50d7f4430837e7676f04679095ea61e83d275f96a927090e9115ef7ce1207",
+  "verified": "Supervisor verified terminal exits, command log hashes and renderer output hashes/lengths; unchanged renderer source identities and golden.",
+  "scope": "Remaining renderer font/browser contracts and editor/PPTX source shard only. Earlier full-tier failure remains recorded; core/registry/hosted/native acceptance open."
+}

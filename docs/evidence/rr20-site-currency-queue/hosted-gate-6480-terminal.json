@@ -1,0 +1,25 @@
+{
+  "result": "failed",
+  "exitCode": 1,
+  "sourceHead": "6480f2cc7566689c412a61732456a25b5da02f25",
+  "logSha256": "ea256685d418e4d471be87e49a1841f692f13a6ae9ccbbb88ffa4fe9f4d0f374",
+  "logPath": "/private/tmp/rr20-native-validator-hosted-gate.log",
+  "coreFailedRun": "https://github.com/OpenPresentation/opf/actions/runs/38428171407",
+  "coreFailedJobs": [
+    "candidate / source",
+    "packages"
+  ],
+  "siblingPackageFailures": [
+    "OpenPresentation/opf-render#240",
+    "OpenPresentation/opf-pptx#253",
+    "OpenPresentation/opf-editor#165"
+  ],
+  "jobLogsRetrieved": false,
+  "causeEstablished": false,
+  "replacementWatch": {
+    "core": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+    "pptx": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+    "log": "/private/tmp/rr20-qualified-runtime-hosted-gate.log",
+    "status": "pending"
+  }
+}

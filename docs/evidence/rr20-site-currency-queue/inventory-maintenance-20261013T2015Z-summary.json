@@ -1,0 +1,841 @@
+{
+  "at": "2026-10-13T20:15:50.339881+00:00",
+  "graphqlCalls": 1,
+  "fetches": 8,
+  "pagesComplete": true,
+  "openPullRequests": 29,
+  "openIssues": 42,
+  "allCleanSyncedDefaults": true,
+  "newPullRequests": [
+    {
+      "url": "https://github.com/OpenPresentation/opf/pull/647",
+      "title": "Bump the actions-minor-patch group with 3 updates",
+      "head": "232ed302f2cb3aa85ceaf769c4af81d5595eb8af"
+    },
+    {
+      "url": "https://github.com/OpenPresentation/opf-render/pull/241",
+      "title": "Bump the actions-minor-patch group with 3 updates",
+      "head": "281eb84d58ec29d6c1e96e509f140a2be3045da0"
+    },
+    {
+      "url": "https://github.com/OpenPresentation/opf-render/pull/242",
+      "title": "Bump the npm-minor-patch group with 2 updates",
+      "head": "ae66f04426dbd205342526aa9dad7d82f30073fa"
+    },
+    {
+      "url": "https://github.com/OpenPresentation/opf-render/pull/243",
+      "title": "Bump @hyzyla/pdfium from 2.1.13 to 3.0.0",
+      "head": "7aa0bf65ebe85bc538d3c3628e5e1266d771ac7c"
+    },
+    {
+      "url": "https://github.com/OpenPresentation/opf-pptx/pull/254",
+      "title": "Bump playwright from 1.63.0 to 1.64.0 in the npm-minor-patch group",
+      "head": "7943f80b0334bf271177178defe9522e0879be28"
+    },
+    {
+      "url": "https://github.com/OpenPresentation/opf-pptx/pull/255",
+      "title": "Bump @rgrove/parse-xml from 4.2.3 to 5.0.0",
+      "head": "e86e172ef607f0d5c6e2473425cc3c98719baa7f"
+    },
+    {
+      "url": "https://github.com/OpenPresentation/opf-pptx/pull/256",
+      "title": "Bump the actions-minor-patch group with 2 updates",
+      "head": "ecb2ce5cce2f9a584340a5e4c421c938c96e8bd7"
+    },
+    {
+      "url": "https://github.com/OpenPresentation/opf-editor/pull/166",
+      "title": "Bump the actions-minor-patch group with 2 updates",
+      "head": "8f573a93c451f9a583c6968c26d5a1872c4d4278"
+    },
+    {
+      "url": "https://github.com/OpenPresentation/opf-editor/pull/167",
+      "title": "Bump the npm-minor-patch group with 3 updates",
+      "head": "a01bbb6267921b1fc9fe27189c68d6f2a4611aaa"
+    },
+    {
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/128",
+      "title": "build(deps): bump the actions-minor-patch group with 2 updates",
+      "head": "4aa1422d9b2a943eeebbbf7d309d689e51b0c887"
+    },
+    {
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/129",
+      "title": "build(deps): bump the npm-minor-patch group with 13 updates",
+      "head": "8b19d12de3b4080be19de665a128522ba07ce277"
+    },
+    {
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/130",
+      "title": "build(deps): bump lucide-react from 0.468.0 to 1.55.0",
+      "head": "3c3d9f0f61eb2639af2df381f857690c87d7ce8a"
+    },
+    {
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/131",
+      "title": "build(deps-dev): bump tailwindcss from 3.4.19 to 4.3.3",
+      "head": "9beef8f66462dbb78473abec05af377ff60a884f"
+    },
+    {
+      "url": "https://github.com/Data-Advantage/openpresentation-site/pull/105",
+      "title": "build(deps): bump the compatible-actions group with 2 updates",
+      "head": "70e95afbc67e8374c405e2cf16ea9ae159139ea5"
+    },
+    {
+      "url": "https://github.com/Data-Advantage/openpresentation-site/pull/106",
+      "title": "build(deps): bump the compatible-version-updates group with 19 updates",
+      "head": "7312e295f1c2caa9da64a650aeb280960428e6ad"
+    },
+    {
+      "url": "https://github.com/Data-Advantage/openpresentation-site/pull/107",
+      "title": "build(deps-dev): bump @types/node from 24.13.4 to 26.6.5",
+      "head": "8e53cc8ead2ec031c26bf67a02f213b8de51e3e3"
+    },
+    {
+      "url": "https://github.com/Data-Advantage/openpresentation-site/pull/108",
+      "title": "build(deps): bump tailwind-merge from 2.6.1 to 3.7.0",
+      "head": "e59074231b1b36621dd5a197ac2b5ca80e891474"
+    },
+    {
+      "url": "https://github.com/Data-Advantage/pptx-dev/pull/129",
+      "title": "build: bump the compatible-actions group with 3 updates",
+      "head": "932995db13ce785508dc0819c6664357e1151619"
+    }
+  ],
+  "repositories": [
+    {
+      "name": "OpenPresentation/opf",
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "75f3f0d741c40176e160d08cebfb571699a17793"
+        }
+      },
+      "pullRequests": [
+        {
+          "number": 646,
+          "title": "FA-32: explicit area arrays and improved layout defaults",
+          "url": "https://github.com/OpenPresentation/opf/pull/646",
+          "isDraft": true,
+          "headRefName": "codex/design-editorial-defaults",
+          "headRefOid": "4e03f7e88bfa99a3b2ac1dce8e7539355cd7c85b",
+          "baseRefName": "main"
+        },
+        {
+          "number": 647,
+          "title": "Bump the actions-minor-patch group with 3 updates",
+          "url": "https://github.com/OpenPresentation/opf/pull/647",
+          "isDraft": false,
+          "headRefName": "dependabot/github_actions/actions-minor-patch-c673fd7efc",
+          "headRefOid": "232ed302f2cb3aa85ceaf769c4af81d5595eb8af",
+          "baseRefName": "main"
+        }
+      ],
+      "issues": [
+        {
+          "number": 87,
+          "title": "Roadmap: native PowerPoint compatibility acceptance",
+          "url": "https://github.com/OpenPresentation/opf/issues/87"
+        },
+        {
+          "number": 88,
+          "title": "Roadmap: complete JSON and preview feature adoption across public surfaces",
+          "url": "https://github.com/OpenPresentation/opf/issues/88"
+        },
+        {
+          "number": 240,
+          "title": "Future: chart data from external spreadsheets (ChartDataSource) and a host dataResolver hook (descoped)",
+          "url": "https://github.com/OpenPresentation/opf/issues/240"
+        },
+        {
+          "number": 250,
+          "title": "Future: navigation and motion (transitions, builds/reveals, links between slides) (deferred, out of v1)",
+          "url": "https://github.com/OpenPresentation/opf/issues/250"
+        },
+        {
+          "number": 251,
+          "title": "Future: rich speaker notes (formatted notes; plain-text notes stay) (deferred, out of v1)",
+          "url": "https://github.com/OpenPresentation/opf/issues/251"
+        },
+        {
+          "number": 278,
+          "title": "CJK and Thai line breaking in core composition (dictionary word breaks, kinsoku)",
+          "url": "https://github.com/OpenPresentation/opf/issues/278"
+        },
+        {
+          "number": 292,
+          "title": "Layouts: bundle the 385 gallery-only layouts in core or keep a permanent subset; the 4 legacy font pairings have no OPF id (descoped)",
+          "url": "https://github.com/OpenPresentation/opf/issues/292"
+        },
+        {
+          "number": 293,
+          "title": "Slide sizes and purposes: editor switches and a pptx.gallery aspect-ratio page (descoped)",
+          "url": "https://github.com/OpenPresentation/opf/issues/293"
+        },
+        {
+          "number": 297,
+          "title": "RR-48: enable the merge queue on the OpenPresentation main rulesets (owner action)",
+          "url": "https://github.com/OpenPresentation/opf/issues/297"
+        },
+        {
+          "number": 298,
+          "title": "RR-50, RR-51: a GitHub App for cross-repository pin bumps, PRs and release tags (owner action)",
+          "url": "https://github.com/OpenPresentation/opf/issues/298"
+        },
+        {
+          "number": 323,
+          "title": "Windows PowerPoint native runs deferred from the Mac mini session (RR-05, FF-12, FF-13, FF-27, FF-46)",
+          "url": "https://github.com/OpenPresentation/opf/issues/323"
+        },
+        {
+          "number": 362,
+          "title": "FF-46: per-family host fixtures for the proprietary script, emoji, math and code-table families",
+          "url": "https://github.com/OpenPresentation/opf/issues/362"
+        },
+        {
+          "number": 366,
+          "title": "Native tab positions and mixed-size table paragraphs: 0.0227 pt drift over the 0.02 pt gate (post-v1)",
+          "url": "https://github.com/OpenPresentation/opf/issues/366"
+        },
+        {
+          "number": 505,
+          "title": "Roadmap: OpenDocument Presentation (.odp) import and export",
+          "url": "https://github.com/OpenPresentation/opf/issues/505"
+        },
+        {
+          "number": 506,
+          "title": "Roadmap: import Marp and Slidev Markdown decks (fromMarp, fromSlidev)",
+          "url": "https://github.com/OpenPresentation/opf/issues/506"
+        },
+        {
+          "number": 507,
+          "title": "Roadmap (0.19): adaptive layouts: repeatable placeholders instead of list-2x/text-3x count variants",
+          "url": "https://github.com/OpenPresentation/opf/issues/507"
+        },
+        {
+          "number": 508,
+          "title": "Roadmap: opf dev (local live preview) and HTML export",
+          "url": "https://github.com/OpenPresentation/opf/issues/508"
+        },
+        {
+          "number": 509,
+          "title": "Roadmap: math (equation run and block) with native editable PowerPoint equations (OMML)",
+          "url": "https://github.com/OpenPresentation/opf/issues/509"
+        },
+        {
+          "number": 510,
+          "title": "Roadmap: Mermaid diagram block (implement docs/plans/diagrams-svg.md)",
+          "url": "https://github.com/OpenPresentation/opf/issues/510"
+        },
+        {
+          "number": 511,
+          "title": "Roadmap: opf mcp, a local stdio MCP server for agents",
+          "url": "https://github.com/OpenPresentation/opf/issues/511"
+        },
+        {
+          "number": 512,
+          "title": "Roadmap: VS Code extension for .opf.md / .opf.yaml / .opf.json",
+          "url": "https://github.com/OpenPresentation/opf/issues/512"
+        },
+        {
+          "number": 513,
+          "title": "Roadmap: presenter upgrades: pen/laser overlay, overview grid, PDF bookmarks and notes",
+          "url": "https://github.com/OpenPresentation/opf/issues/513"
+        },
+        {
+          "number": 514,
+          "title": "Roadmap: Markdown dialect conveniences (include, column slots, split images, agenda, code line numbers)",
+          "url": "https://github.com/OpenPresentation/opf/issues/514"
+        },
+        {
+          "number": 515,
+          "title": "Roadmap: third-party catalog convention (npm keyword + --catalog)",
+          "url": "https://github.com/OpenPresentation/opf/issues/515"
+        },
+        {
+          "number": 516,
+          "title": "Roadmap: icons from locally installed Iconify sets",
+          "url": "https://github.com/OpenPresentation/opf/issues/516"
+        },
+        {
+          "number": 517,
+          "title": "Roadmap: opf.config.json project configuration",
+          "url": "https://github.com/OpenPresentation/opf/issues/517"
+        },
+        {
+          "number": 581,
+          "title": "FF-46 follow-up: per-script sizeAdjust (Traditional Arabic letters vs digits/Latin)",
+          "url": "https://github.com/OpenPresentation/opf/issues/581"
+        },
+        {
+          "number": 582,
+          "title": "FF-46 follow-up: Nirmala UI Indic fallback faces overhang natively at factor 1 (Telugu +33%, Kannada +19%, Gujarati/Malayalam +13%)",
+          "url": "https://github.com/OpenPresentation/opf/issues/582"
+        }
+      ]
+    },
+    {
+      "name": "OpenPresentation/opf-render",
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "7980fea3b0095377cb5a28c22a3a963312f941e7"
+        }
+      },
+      "pullRequests": [
+        {
+          "number": 240,
+          "title": "RR-20: improve structural defaults and chart magnitude scales",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/240",
+          "isDraft": true,
+          "headRefName": "codex/rr-20-neutral-structure",
+          "headRefOid": "0eeafb289a3abc2435378f6dcd32fb42b5b88ebd",
+          "baseRefName": "main"
+        },
+        {
+          "number": 241,
+          "title": "Bump the actions-minor-patch group with 3 updates",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/241",
+          "isDraft": false,
+          "headRefName": "dependabot/github_actions/actions-minor-patch-c673fd7efc",
+          "headRefOid": "281eb84d58ec29d6c1e96e509f140a2be3045da0",
+          "baseRefName": "main"
+        },
+        {
+          "number": 242,
+          "title": "Bump the npm-minor-patch group with 2 updates",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/242",
+          "isDraft": false,
+          "headRefName": "dependabot/npm_and_yarn/npm-minor-patch-8945000e6f",
+          "headRefOid": "ae66f04426dbd205342526aa9dad7d82f30073fa",
+          "baseRefName": "main"
+        },
+        {
+          "number": 243,
+          "title": "Bump @hyzyla/pdfium from 2.1.13 to 3.0.0",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/243",
+          "isDraft": false,
+          "headRefName": "dependabot/npm_and_yarn/hyzyla/pdfium-3.0.0",
+          "headRefOid": "7aa0bf65ebe85bc538d3c3628e5e1266d771ac7c",
+          "baseRefName": "main"
+        }
+      ],
+      "issues": [
+        {
+          "number": 164,
+          "title": "textAsPaths: draw SVG text as glyph outlines (plan and drawbacks)",
+          "url": "https://github.com/OpenPresentation/opf-render/issues/164"
+        },
+        {
+          "number": 190,
+          "title": "fontkit RangeError on an empty last glyph when glyf ends the file (upstream report drafted)",
+          "url": "https://github.com/OpenPresentation/opf-render/issues/190"
+        },
+        {
+          "number": 202,
+          "title": "WebKit: an RTL title paints its first letter to the right of its last",
+          "url": "https://github.com/OpenPresentation/opf-render/issues/202"
+        }
+      ]
+    },
+    {
+      "name": "OpenPresentation/opf-pptx",
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c"
+        }
+      },
+      "pullRequests": [
+        {
+          "number": 253,
+          "title": "RR-20: improve PowerPoint layout defaults and source recovery",
+          "url": "https://github.com/OpenPresentation/opf-pptx/pull/253",
+          "isDraft": true,
+          "headRefName": "codex/rr-20-neutral-structure",
+          "headRefOid": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+          "baseRefName": "main"
+        },
+        {
+          "number": 254,
+          "title": "Bump playwright from 1.63.0 to 1.64.0 in the npm-minor-patch group",
+          "url": "https://github.com/OpenPresentation/opf-pptx/pull/254",
+          "isDraft": false,
+          "headRefName": "dependabot/npm_and_yarn/npm-minor-patch-6d4e572f3b",
+          "headRefOid": "7943f80b0334bf271177178defe9522e0879be28",
+          "baseRefName": "main"
+        },
+        {
+          "number": 255,
+          "title": "Bump @rgrove/parse-xml from 4.2.3 to 5.0.0",
+          "url": "https://github.com/OpenPresentation/opf-pptx/pull/255",
+          "isDraft": false,
+          "headRefName": "dependabot/npm_and_yarn/rgrove/parse-xml-5.0.0",
+          "headRefOid": "e86e172ef607f0d5c6e2473425cc3c98719baa7f",
+          "baseRefName": "main"
+        },
+        {
+          "number": 256,
+          "title": "Bump the actions-minor-patch group with 2 updates",
+          "url": "https://github.com/OpenPresentation/opf-pptx/pull/256",
+          "isDraft": false,
+          "headRefName": "dependabot/github_actions/actions-minor-patch-c1c2f9c309",
+          "headRefOid": "ecb2ce5cce2f9a584340a5e4c421c938c96e8bd7",
+          "baseRefName": "main"
+        }
+      ],
+      "issues": [
+        {
+          "number": 127,
+          "title": "Future: native PowerPoint video (p:video) export, import and preview playback (descoped)",
+          "url": "https://github.com/OpenPresentation/opf-pptx/issues/127"
+        },
+        {
+          "number": 133,
+          "title": "Region map chart (world): offline native map export (parked, post-v1)",
+          "url": "https://github.com/OpenPresentation/opf-pptx/issues/133"
+        },
+        {
+          "number": 238,
+          "title": "List import: a description resized in PowerPoint becomes part of the entry text",
+          "url": "https://github.com/OpenPresentation/opf-pptx/issues/238"
+        }
+      ]
+    },
+    {
+      "name": "OpenPresentation/opf-editor",
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "ac25857cca8ce776dd23b5ca58b38a06af9d963f"
+        }
+      },
+      "pullRequests": [
+        {
+          "number": 165,
+          "title": "RR-20: support explicit array areas throughout the editor",
+          "url": "https://github.com/OpenPresentation/opf-editor/pull/165",
+          "isDraft": true,
+          "headRefName": "codex/rr-20-array-areas",
+          "headRefOid": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+          "baseRefName": "main"
+        },
+        {
+          "number": 166,
+          "title": "Bump the actions-minor-patch group with 2 updates",
+          "url": "https://github.com/OpenPresentation/opf-editor/pull/166",
+          "isDraft": false,
+          "headRefName": "dependabot/github_actions/actions-minor-patch-c1c2f9c309",
+          "headRefOid": "8f573a93c451f9a583c6968c26d5a1872c4d4278",
+          "baseRefName": "main"
+        },
+        {
+          "number": 167,
+          "title": "Bump the npm-minor-patch group with 3 updates",
+          "url": "https://github.com/OpenPresentation/opf-editor/pull/167",
+          "isDraft": false,
+          "headRefName": "dependabot/npm_and_yarn/npm-minor-patch-e5964fc227",
+          "headRefOid": "a01bbb6267921b1fc9fe27189c68d6f2a4611aaa",
+          "baseRefName": "main"
+        }
+      ],
+      "issues": [
+        {
+          "number": 150,
+          "title": "WebKit: Range.getBoundingClientRect of an SVG character is ~27 px off (editor caret placement)",
+          "url": "https://github.com/OpenPresentation/opf-editor/issues/150"
+        }
+      ]
+    },
+    {
+      "name": "OpenPresentation/gallery",
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "48169a9bb38559b8385e6791e7b5e76c0f5a8792"
+        }
+      },
+      "pullRequests": [
+        {
+          "number": 6,
+          "title": "Improve gallery design defaults and authored layout previews",
+          "url": "https://github.com/OpenPresentation/gallery/pull/6",
+          "isDraft": true,
+          "headRefName": "codex/design-gallery-defaults",
+          "headRefOid": "3708ef9b547b2137cdd482158466f4bdc53dd4ca",
+          "baseRefName": "main"
+        }
+      ],
+      "issues": [
+        {
+          "number": 4,
+          "title": "Publish the four legacy gallery font pairings as OPF font schemes (gallery-first)",
+          "url": "https://github.com/OpenPresentation/gallery/issues/4"
+        },
+        {
+          "number": 2,
+          "title": "Per-kind subpath exports and a size gate (from opf#318)",
+          "url": "https://github.com/OpenPresentation/gallery/issues/2"
+        }
+      ]
+    },
+    {
+      "name": "Data-Advantage/pptx-gallery",
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "92e23ed5b432195de884a6be51f2415ce49f8924"
+        }
+      },
+      "pullRequests": [
+        {
+          "number": 125,
+          "title": "FF-46: per-family host fixtures for proprietary script names (pptx-gallery)",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/125",
+          "isDraft": false,
+          "headRefName": "codex/ff-46-script-name-hosts",
+          "headRefOid": "7e0a6611abc22f2d89eb754bdcc24d7ecd09288a",
+          "baseRefName": "main"
+        },
+        {
+          "number": 126,
+          "title": "RR-84: consume the 0.19 gallery catalog and intent previews",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/126",
+          "isDraft": true,
+          "headRefName": "codex/rr-84-gallery-019",
+          "headRefOid": "88c7119fb4727f4cd75c21e47a0a20ed3d1bf604",
+          "baseRefName": "main"
+        },
+        {
+          "number": 127,
+          "title": "RR-84: Preserve script-name host fixtures in gallery adoption",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/127",
+          "isDraft": true,
+          "headRefName": "codex/rr-84-gallery-script-host-integration",
+          "headRefOid": "98f34580cdd07ec67f1acae9b5ee34ac36054a07",
+          "baseRefName": "codex/rr-84-gallery-019"
+        },
+        {
+          "number": 128,
+          "title": "build(deps): bump the actions-minor-patch group with 2 updates",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/128",
+          "isDraft": false,
+          "headRefName": "dependabot/github_actions/actions-minor-patch-c1c2f9c309",
+          "headRefOid": "4aa1422d9b2a943eeebbbf7d309d689e51b0c887",
+          "baseRefName": "main"
+        },
+        {
+          "number": 129,
+          "title": "build(deps): bump the npm-minor-patch group with 13 updates",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/129",
+          "isDraft": false,
+          "headRefName": "dependabot/npm_and_yarn/npm-minor-patch-ebd2702914",
+          "headRefOid": "8b19d12de3b4080be19de665a128522ba07ce277",
+          "baseRefName": "main"
+        },
+        {
+          "number": 130,
+          "title": "build(deps): bump lucide-react from 0.468.0 to 1.55.0",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/130",
+          "isDraft": false,
+          "headRefName": "dependabot/npm_and_yarn/lucide-react-1.55.0",
+          "headRefOid": "3c3d9f0f61eb2639af2df381f857690c87d7ce8a",
+          "baseRefName": "main"
+        },
+        {
+          "number": 131,
+          "title": "build(deps-dev): bump tailwindcss from 3.4.19 to 4.3.3",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/131",
+          "isDraft": false,
+          "headRefName": "dependabot/npm_and_yarn/tailwindcss-4.3.3",
+          "headRefOid": "9beef8f66462dbb78473abec05af377ff60a884f",
+          "baseRefName": "main"
+        }
+      ],
+      "issues": [
+        {
+          "number": 118,
+          "title": "Use loadFonts subsetWasm/shapeWasm for SVG downloads and outlined text",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/issues/118"
+        }
+      ]
+    },
+    {
+      "name": "Data-Advantage/openpresentation-site",
+      "default": {
+        "name": "main",
+        "target": {
+          "oid": "7bd54a7d40d407766dc8d8e00f50fcc37196a641"
+        }
+      },
+      "pullRequests": [
+        {
+          "number": 103,
+          "title": "RR-83: migrate site to gallery 2 and v2 layouts",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/pull/103",
+          "isDraft": true,
+          "headRefName": "codex/rr-83-site-catalogs",
+          "headRefOid": "ab0b0da532e553416a05d7164a331d994e312ef4",
+          "baseRefName": "main"
+        },
+        {
+          "number": 104,
+          "title": "RR-83: Preserve site image export and browser guide links",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/pull/104",
+          "isDraft": true,
+          "headRefName": "codex/rr-83-site-image-export-contract",
+          "headRefOid": "506a38bd8a3b6a86065199c74c09069581aa67a2",
+          "baseRefName": "codex/rr-83-site-catalogs"
+        },
+        {
+          "number": 105,
+          "title": "build(deps): bump the compatible-actions group with 2 updates",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/pull/105",
+          "isDraft": false,
+          "headRefName": "dependabot/github_actions/compatible-actions-c1c2f9c309",
+          "headRefOid": "70e95afbc67e8374c405e2cf16ea9ae159139ea5",
+          "baseRefName": "main"
+        },
+        {
+          "number": 106,
+          "title": "build(deps): bump the compatible-version-updates group with 19 updates",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/pull/106",
+          "isDraft": false,
+          "headRefName": "dependabot/npm_and_yarn/compatible-version-updates-c7def14b9f",
+          "headRefOid": "7312e295f1c2caa9da64a650aeb280960428e6ad",
+          "baseRefName": "main"
+        },
+        {
+          "number": 107,
+          "title": "build(deps-dev): bump @types/node from 24.13.4 to 26.6.5",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/pull/107",
+          "isDraft": false,
+          "headRefName": "dependabot/npm_and_yarn/types/node-26.6.5",
+          "headRefOid": "8e53cc8ead2ec031c26bf67a02f213b8de51e3e3",
+          "baseRefName": "main"
+        },
+        {
+          "number": 108,
+          "title": "build(deps): bump tailwind-merge from 2.6.1 to 3.7.0",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/pull/108",
+          "isDraft": false,
+          "headRefName": "dependabot/npm_and_yarn/tailwind-merge-3.7.0",
+          "headRefOid": "e59074231b1b36621dd5a197ac2b5ca80e891474",
+          "baseRefName": "main"
+        }
+      ],
+      "issues": [
+        {
+          "number": 102,
+          "title": "e2e: move other JSON-editor fills to fillJson (latent CodeMirror focus-timer race from #73)",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/issues/102"
+        }
+      ]
+    },
+    {
+      "name": "Data-Advantage/pptx-dev",
+      "default": {
+        "name": "master",
+        "target": {
+          "oid": "b55bd642f1c8de3799dd8e06a830515e1dd4709c"
+        }
+      },
+      "pullRequests": [
+        {
+          "number": 128,
+          "title": "RR-84: adopt OPF 0.19 region templates in pptx.dev",
+          "url": "https://github.com/Data-Advantage/pptx-dev/pull/128",
+          "isDraft": true,
+          "headRefName": "codex/rr-84-pptx-dev-019",
+          "headRefOid": "c83c995f8bdd04ae1fa7256ae0282a73ce65b16a",
+          "baseRefName": "master"
+        },
+        {
+          "number": 129,
+          "title": "build: bump the compatible-actions group with 3 updates",
+          "url": "https://github.com/Data-Advantage/pptx-dev/pull/129",
+          "isDraft": false,
+          "headRefName": "dependabot/github_actions/compatible-actions-c673fd7efc",
+          "headRefOid": "932995db13ce785508dc0819c6664357e1151619",
+          "baseRefName": "master"
+        }
+      ],
+      "issues": [
+        {
+          "number": 85,
+          "title": "Remove the GHSA-vfj7-8cjw-p6xm audit ignore when braces 3.0.4 is published",
+          "url": "https://github.com/Data-Advantage/pptx-dev/issues/85"
+        },
+        {
+          "number": 87,
+          "title": "Source-preservation boundaries and destructive preset history (split from opf#88)",
+          "url": "https://github.com/Data-Advantage/pptx-dev/issues/87"
+        },
+        {
+          "number": 122,
+          "title": "Roadmap: PDF to OPF import (fromPdf) with OCR and AI recovery",
+          "url": "https://github.com/Data-Advantage/pptx-dev/issues/122"
+        }
+      ]
+    }
+  ],
+  "sync": [
+    {
+      "repo": "OpenPresentation/opf",
+      "path": "/Users/michael/Source/opf",
+      "defaultBranch": "main",
+      "inventoryHead": "75f3f0d741c40176e160d08cebfb571699a17793",
+      "beforeHead": "75f3f0d741c40176e160d08cebfb571699a17793",
+      "beforeBranch": "main",
+      "beforeStatus": "",
+      "cleanBefore": true,
+      "fetchExit": 0,
+      "remoteHead": "75f3f0d741c40176e160d08cebfb571699a17793",
+      "mergeExit": 0,
+      "action": "already synchronized",
+      "head": "75f3f0d741c40176e160d08cebfb571699a17793",
+      "branch": "main",
+      "status": "",
+      "clean": true,
+      "syncedDefault": true,
+      "matchesInventory": true
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "path": "/Users/michael/Source/opf-render",
+      "defaultBranch": "main",
+      "inventoryHead": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+      "beforeHead": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+      "beforeBranch": "main",
+      "beforeStatus": "",
+      "cleanBefore": true,
+      "fetchExit": 0,
+      "remoteHead": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+      "mergeExit": 0,
+      "action": "already synchronized",
+      "head": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+      "branch": "main",
+      "status": "",
+      "clean": true,
+      "syncedDefault": true,
+      "matchesInventory": true
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "path": "/Users/michael/Source/opf-pptx",
+      "defaultBranch": "main",
+      "inventoryHead": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+      "beforeHead": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+      "beforeBranch": "main",
+      "beforeStatus": "",
+      "cleanBefore": true,
+      "fetchExit": 0,
+      "remoteHead": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+      "mergeExit": 0,
+      "action": "already synchronized",
+      "head": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+      "branch": "main",
+      "status": "",
+      "clean": true,
+      "syncedDefault": true,
+      "matchesInventory": true
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "path": "/Users/michael/Source/opf-editor",
+      "defaultBranch": "main",
+      "inventoryHead": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+      "beforeHead": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+      "beforeBranch": "main",
+      "beforeStatus": "",
+      "cleanBefore": true,
+      "fetchExit": 0,
+      "remoteHead": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+      "mergeExit": 0,
+      "action": "already synchronized",
+      "head": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+      "branch": "main",
+      "status": "",
+      "clean": true,
+      "syncedDefault": true,
+      "matchesInventory": true
+    },
+    {
+      "repo": "OpenPresentation/gallery",
+      "path": "/Users/michael/Source/gallery",
+      "defaultBranch": "main",
+      "inventoryHead": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+      "beforeHead": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+      "beforeBranch": "main",
+      "beforeStatus": "",
+      "cleanBefore": true,
+      "fetchExit": 0,
+      "remoteHead": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+      "mergeExit": 0,
+      "action": "already synchronized",
+      "head": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+      "branch": "main",
+      "status": "",
+      "clean": true,
+      "syncedDefault": true,
+      "matchesInventory": true
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "path": "/Users/michael/Source/pptx-gallery",
+      "defaultBranch": "main",
+      "inventoryHead": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "beforeHead": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "beforeBranch": "main",
+      "beforeStatus": "",
+      "cleanBefore": true,
+      "fetchExit": 0,
+      "remoteHead": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "mergeExit": 0,
+      "action": "already synchronized",
+      "head": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "branch": "main",
+      "status": "",
+      "clean": true,
+      "syncedDefault": true,
+      "matchesInventory": true
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "path": "/Users/michael/Source/openpresentation-site",
+      "defaultBranch": "main",
+      "inventoryHead": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "beforeHead": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "beforeBranch": "main",
+      "beforeStatus": "",
+      "cleanBefore": true,
+      "fetchExit": 0,
+      "remoteHead": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "mergeExit": 0,
+      "action": "already synchronized",
+      "head": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "branch": "main",
+      "status": "",
+      "clean": true,
+      "syncedDefault": true,
+      "matchesInventory": true
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "path": "/Users/michael/Source/pptx-dev",
+      "defaultBranch": "master",
+      "inventoryHead": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+      "beforeHead": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+      "beforeBranch": "master",
+      "beforeStatus": "",
+      "cleanBefore": true,
+      "fetchExit": 0,
+      "remoteHead": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+      "mergeExit": 0,
+      "action": "already synchronized",
+      "head": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+      "branch": "master",
+      "status": "",
+      "clean": true,
+      "syncedDefault": true,
+      "matchesInventory": true
+    }
+  ],
+  "limitation": "Inventory and synchronization evidence only. New dependency PRs are being reviewed; no merge, CI, native or release acceptance is implied."
+}

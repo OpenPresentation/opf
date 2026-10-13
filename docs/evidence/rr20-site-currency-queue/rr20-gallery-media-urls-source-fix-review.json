@@ -1,0 +1,18 @@
+{
+  "files": {
+    "scripts/check-media-urls.mjs": {
+      "/private/tmp/opf-areas-array-gallery-site": "6c840809877cbcff728d1773ecc7436a89f68577aa19f3575061c3235feac4d3",
+      "/private/tmp/opf-final-qualification-sites/gallery": "6c840809877cbcff728d1773ecc7436a89f68577aa19f3575061c3235feac4d3"
+    },
+    "tests/media-urls.test.ts": {
+      "/private/tmp/opf-areas-array-gallery-site": "fe83dbf5b93595d0ad92dbdda2a33600846a221ec65bab1cfee03de1854b4570",
+      "/private/tmp/opf-final-qualification-sites/gallery": "fe83dbf5b93595d0ad92dbdda2a33600846a221ec65bab1cfee03de1854b4570"
+    }
+  },
+  "focusedLog": "/private/tmp/rr20-gallery-media-urls-focused.log",
+  "focusedExit": 0,
+  "tests": 4,
+  "durationMs": 694,
+  "contract": "fixed host and all three suffix detections retained; label-boundary anchoring avoids quadratic no-match base64 scan; 2MiB child timeout2s control",
+  "scope": "two files only; no full suite or deploy"
+}

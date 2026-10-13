@@ -13,6 +13,9 @@ import { fileURLToPath } from "node:url";
 import { installIsolatedCore } from "../../../scripts/isolated-core.mjs";
 import { STUB_LOG, installStubPeers, parseStubLog } from "../../../scripts/stub-peers.mjs";
 
+const renderRange = JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8')).peerDependencies['@openpresentation/opf-render'];
+assert.match(renderRange,/^\^\d+\.\d+\.\d+$/);
+
 const cliRoot = fileURLToPath(new URL("..", import.meta.url));
 const executable = process.env.OPF_TEST_BIN ?? path.join(cliRoot, "dist", "index.js");
 const temp = await realpath(await mkdtemp(path.join(tmpdir(), "opf-convert-command-")));
@@ -169,7 +172,9 @@ describe("a missing peer", () => {
     assert.equal(missing.error.code, "peer-not-installed");
     assert.equal(missing.error.package, "@openpresentation/opf-render");
     // A copy outside node_modules is a project: npm install without -g, the renderer, its fonts, and the PNG converters.
-    assert.match(missing.error.install, /^npm install @openpresentation\/opf-render@\^0\.19\.0 @expo-google-fonts\/roboto@0\.4\.3 .*@resvg\/resvg-js@\^2\.6\.2 sharp@\^0\.35\.5$/);
+    const prefix = `npm install @openpresentation/opf-render@${renderRange} `;
+    assert.equal(missing.error.install.startsWith(prefix),true);
+    assert.match(missing.error.install.slice(prefix.length), /^@expo-google-fonts\/roboto@0\.4\.3 .*@resvg\/resvg-js@\^2\.6\.2 sharp@\^0\.35\.5$/);
     assert.ok(missing.error.error.includes(missing.error.install));
     assert.ok(missing.error.missing.includes("@resvg/resvg-js@^2.6.2"));
     // A vector PDF needs sharp only when the deck has pictures; a raster PDF needs pdf-lib.

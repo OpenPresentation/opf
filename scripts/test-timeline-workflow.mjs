@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
+import {lstatSync,realpathSync,readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {createRequire} from 'node:module';
@@ -8,16 +9,30 @@ const require=createRequire(new URL('../../opf-render/package.json',import.meta.
 const {build}=require('esbuild'),{chromium}=require('playwright');
 import {loadFonts} from '../../opf-render/dist/fonts-node.js';
 import {withRecords} from './ecosystem-records.mjs';
-const output=path.resolve(process.argv[2]??'artifacts/timeline-workflow');await mkdir(output,{recursive:true});
-const installed=process.argv[3]==='installed',consumer=path.resolve('artifacts/npm/consumer');
+const output=path.resolve(process.argv[2]??'artifacts/timeline-workflow');
+const installed=process.argv[3]==='installed',consumer=path.resolve(process.argv[4]??'artifacts/npm/consumer');
 const installedRequire=installed?createRequire(path.join(consumer,'package.json')):null;
-const prepare=installed?(await import(pathToFileURL(installedRequire.resolve('@openpresentation/opf-render/fonts-node')).href)).loadFonts:loadFonts;
+const modules=path.join(consumer,'node_modules'),installedPackages=[];
+const contained=file=>{const actual=realpathSync(file),relative=path.relative(modules,actual);assert.ok(relative&&relative!=='..'&&!relative.startsWith(`..${path.sep}`)&&!path.isAbsolute(relative),`Installed timeline input escaped consumer: ${file}`);return actual;};
+if(installed){
+ assert.equal(realpathSync(consumer),consumer,'Installed consumer must be a physical directory');
+ assert.ok(lstatSync(modules).isDirectory()&&!lstatSync(modules).isSymbolicLink(),'Installed timeline requires physical node_modules');assert.equal(realpathSync(modules),modules);
+ for(const name of ['opf','opf-render','opf-pptx','opf-editor','gallery'].map(name=>`@openpresentation/${name}`)){
+  const file=contained(installedRequire.resolve(`${name}/package.json`)),manifest=JSON.parse(readFileSync(file,'utf8'));assert.equal(manifest.name,name);installedPackages.push({name,version:manifest.version,manifest:file});
+ }
+ for(const item of installedPackages.filter(item=>item.name!=='@openpresentation/gallery')){
+  const local=createRequire(item.manifest);for(const name of ['@openpresentation/opf','@openpresentation/gallery'])if(item.name!==name)assert.equal(contained(local.resolve(`${name}/package.json`)),installedPackages.find(item=>item.name===name).manifest,`Installed timeline uses another ${name}`);
+ }
+}
+await mkdir(output,{recursive:true});
+const prepare=installed?(await import(pathToFileURL(contained(installedRequire.resolve('@openpresentation/opf-render/fonts-node'))).href)).loadFonts:loadFonts;
 const {registry}=await prepare(),hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 let contents=`
  import {createEditorSession} from '../opf-editor/dist/index.js';
  import {createCanvasEditor} from '../opf-editor/dist/canvas.js';
  import {loadFonts} from '../opf-render/dist/fonts-browser.js';
  import {toPptx,fromPptx} from '../opf-pptx/dist/index.js';
+ window.verifyTimelineRejected=({deck,measured})=>{try{createEditorSession(deck,{rejectInvalid:true}).composeSlide(0,measured?{fonts}:{});return {rejected:false};}catch(error){return {rejected:error.name==='OPFCompositionError',diagnostics:error.diagnostics};}};
  window.mount=async({deck,faces,measured})=>{
   window.plainCanvas?.destroy();window.fonts?.dispose();window.failures=[];window.lastExport=null;window.lastImport=null;
   window.fonts=await loadFonts({faces:faces.map(face=>({...face,data:Uint8Array.from(atob(face.dataUrl.split(',')[1]),c=>c.charCodeAt(0))})),substitutionPolicy:'visual',fallbackFamily:'Roboto'});
@@ -28,8 +43,9 @@ let contents=`
   action('export',async()=>{plainCanvas.commit();window.accepted=editor.presentation;window.lastExport=await toPptx(accepted,renderOptions);window.lastImport=await fromPptx(lastExport);});
  };`;
 if(installed)contents=contents.replaceAll('../opf-editor/dist/index.js','@openpresentation/opf-editor').replaceAll('../opf-editor/dist/canvas.js','@openpresentation/opf-editor/canvas').replaceAll('../opf-render/dist/fonts-browser.js','@openpresentation/opf-render/fonts-browser').replaceAll('../opf-pptx/dist/index.js','@openpresentation/opf-pptx');
-const built=await build({stdin:{resolveDir:installed?consumer:process.cwd(),contents},bundle:true,platform:'browser',format:'iife',write:false});
-const bundle=built.outputFiles[0].text,browser=await chromium.launch(),results=[],errors=[],requests=[];let activeCase;
+const built=await build({stdin:{resolveDir:installed?consumer:process.cwd(),contents},bundle:true,platform:'browser',format:'iife',write:false,metafile:true});
+if(installed)for(const input of Object.keys(built.metafile.inputs))if(input!=='<stdin>')contained(path.resolve(input));
+const bundle=built.outputFiles[0].text,browser=await chromium.launch(),results=[],rejections=[],errors=[],requests=[];let activeCase;
 try {
  const page=await browser.newPage({viewport:{width:1400,height:1000}});page.on('pageerror',e=>errors.push(e.message));await page.route(/^https?:/,route=>{requests.push(route.request().url());return route.abort();});
  await page.setContent('<button id="undo">Undo</button><button id="redo">Redo</button><button id="export">Export</button><div id="canvas" style="width:900px"></div>');await page.addScriptTag({content:bundle});
@@ -39,12 +55,20 @@ try {
   if(fixture===0){timeline=[{when:' Q1 ',what:original,description:'Keep this context.'},{what:'Next milestone'}];fieldPath='slides.0.timeline.0.what';slide={timeline};}
   if(fixture===1){timeline={name:'Plan',description:original,events:[{when:'Q1',what:'Pilot'},{what:'Expand'}]};fieldPath='slides.0.timeline.description';slide={timeline};}
   if(fixture===2){timeline={events:[{when:'Now',what:original,description:'Blank labels remain editable.'}]};fieldPath='slides.0.blocks.0.blocks.0.timeline.events.0.what';slide={blocks:[{blocks:[{timeline}]},{text:'Keep this neighboring source.'}],composition:{mode:'row',weights:[2,1]}};}
-  if(fixture===3){timeline={events:[{when:'Q1',what:'Pilot',description:'Keep all source detail and enough readable space for this milestone.'},{when:'Q2',what:'Expand',description:'Keep all source detail and enough readable space for this milestone.'}]};fieldPath='slides.0.blocks.0.timeline.events.0.what';slide={blocks:[{timeline},{text:'Keep this neighboring source.'}],composition:{mode:'row',weights:[1,4]}};}
+  if(fixture===3){timeline={events:[{when:'Q1',what:'Pilot',description:'Keep all source detail and enough readable space for this milestone.'},{when:'Q2',what:'Expand',description:'Keep all source detail and enough readable space for this milestone.'}]};fieldPath='slides.0.blocks.0.timeline.events.0.what';slide={blocks:[{timeline},{text:'Keep this neighboring source.'}],composition:{mode:'row',weights:[1,2]}};}
   const actualOriginal=fixture===3?'Pilot':original;
   slide={title:'Timeline editing',...slide,composition:{...slide.composition,minFontSize:24,overflow:'error'}};
   const deck = withRecords({design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:height/96}},slides:[slide]});
   activeCase={measured,width,height,fixture,deck};
   await page.evaluate(args=>mount(args),{deck,faces:registry.embeddedFonts,measured});
+  if(fixture===3&&width===720){
+   // The original 1:4 portrait share leaves 86.16px beside the marker rail: neither
+   // estimated nor measured 'milestone.' fits at24. Keep that author constraint a rejection.
+   const irreducible=structuredClone(deck);irreducible.slides[0].composition.weights=[1,4];
+   const rejection=await page.evaluate(args=>verifyTimelineRejected(args),{deck:irreducible,measured});assert.equal(rejection.rejected,true);
+   assert.deepEqual(rejection.diagnostics.map(item=>({reason:item.reason,path:item.path})),[0,1].map(index=>({reason:'text-fit',path:`slides.0.blocks.0.timeline.events.${index}.description`})));
+   rejections.push({measured,width,height,weights:[1,4],minFontSize:24,...rejection});
+  }
   const geometry=await page.evaluate(async()=>{
    await document.fonts.ready;
    const context=document.createElement('canvas').getContext('2d');
@@ -78,6 +102,7 @@ try {
   }
   const target=page.locator(`[data-canvas-target][data-opf-path="${fieldPath}"]`);assert.equal(await target.count(),1);
   const selected=await page.evaluate(path=>{const layout=editor.composeSlide(0,renderOptions).items.find(item=>item.timelineLayout?.parts.some(part=>part.path===path)).timelineLayout;return {arrangement:layout.arrangement,part:layout.parts.find(part=>part.path===path)};},fieldPath);
+  if(fixture===3&&width===720)assert.equal(selected.arrangement,'vertical');
   if(!actualOriginal){const selection=await target.locator(':scope > rect.opf-selection').evaluate(n=>({x:+n.getAttribute('x'),y:+n.getAttribute('y'),width:+n.getAttribute('width'),height:+n.getAttribute('height')}));assert.equal(selection.x,selected.part.box.x-4);assert.equal(selection.y,selected.part.box.y-4);assert.equal(selection.width,selected.part.box.width+8);assert.equal(selection.height,selected.part.box.height+8);}
   await target.dblclick();let input=page.getByRole('textbox',{name:`Edit ${fieldPath.split('.').at(-1)} inline`,exact:true});await input.press('Control+Enter');assert.equal(await page.evaluate(path=>editor.get(path),fieldPath),actualOriginal);assert.equal(await page.evaluate(()=>editor.canUndo),false);
   await target.dblclick();input=page.getByRole('textbox',{name:`Edit ${fieldPath.split('.').at(-1)} inline`,exact:true});
@@ -91,7 +116,7 @@ try {
   if(measured&&(fixture===0||fixture===3))await page.screenshot({path:path.join(output,`fixture-${fixture}-${width}.png`),fullPage:true});
   results.push({measured,width,height,fixture,path:fieldPath,original:actualOriginal,accepted:expected,arrangement:selected.arrangement,part:selected.part,geometry,exportSha256:hash(new Uint8Array(await page.evaluate(()=>Array.from(lastExport))))});
  }
- assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);
- await writeFile(path.join(output,'report.json'),JSON.stringify({node:process.version,browser:browser.version(),installed,lockSha256:installed?hash(await readFile(path.join(consumer,'package-lock.json'))):undefined,verifierSha256:hash(await readFile(new URL(import.meta.url))),bundleSha256:hash(bundle),results,errors,requests,scope:'16 offline timeline workflows: actual array/object/nested source selection, no-op, editing, undo/redo and semantic PPTX reimport, with mixed source boundaries and four additional keyboard controls. Native formatting/geometry are not reconstructed. No native Office execution.'},null,2)+'\n');
- console.log('16 offline timeline workflows preserve source fields through selection, editing, undo/redo and semantic PPTX reimport.');
+ assert.deepEqual(errors,[]);assert.deepEqual(requests,[]);assert.equal(rejections.length,2);assert.equal(results.length,16);
+ await writeFile(path.join(output,'report.json'),JSON.stringify({node:process.version,browser:browser.version(),installed,lockSha256:installed?hash(await readFile(path.join(consumer,'package-lock.json'))):undefined,verifierSha256:hash(await readFile(new URL(import.meta.url))),bundleSha256:hash(bundle),installedPackages:installed?installedPackages:undefined,results,rejections,errors,requests,scope:'16 offline timeline workflows plus two strict irreducible-width rejection controls: actual array/object/nested source selection, no-op, editing, undo/redo and semantic PPTX reimport, with mixed source boundaries and four additional keyboard controls. Native formatting/geometry are not reconstructed. No native Office execution.'},null,2)+'\n');
+ console.log('16 offline timeline workflows and two irreducible portrait rejections preserve source fields through selection, editing, undo/redo and semantic PPTX reimport.');
 }catch(error){await writeFile(path.join(output,'failure.json'),JSON.stringify({activeCase,message:error.message,errors,requests},null,2)+'\n');throw error;}finally{await browser.close();}

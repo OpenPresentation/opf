@@ -1,0 +1,47 @@
+{
+  "status": "pure-checks-completed; native-not-run",
+  "sourceRevision": "6480f2cc7566689c412a61732456a25b5da02f25",
+  "host": "MICHAEL-DESKTOP",
+  "strictTests": {
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0
+  },
+  "suite": {
+    "directory": "C:/opf-work/native-suite-6480f2cc-attempt01",
+    "cases": 54,
+    "files": 304,
+    "manifestSha256": "4002c815c71f7574d736ca98f54202225d4c0fee1ec26c9b82e1bd9a04c60d75"
+  },
+  "validation": {
+    "case": "feature-metrics",
+    "exitCode": 0,
+    "output": "C:/opf-work/native-validate-metrics-6480f2cc-attempt01",
+    "runnerSha256": "cd6712961d38f00202b65444cb2f8fa649340e31f0f1b36d485a3a714851b614",
+    "timeoutSeconds": 45,
+    "processControls": [
+      "literal arguments",
+      "success exit",
+      "exact failure exit",
+      "owned-process timeout"
+    ],
+    "furnitureControls": {
+      "accepted": 3,
+      "rejected": 13
+    }
+  },
+  "logs": "C:/opf-work/candidate-81c4fdf5/logs/16..18",
+  "evidenceOrigin": "Supervisor read completed commands and final report from Windows chat Resync repository; raw logs remain on Windows.",
+  "previousFailure": {
+    "core": "52d2e0e00a4ae81c60b67b407b4bd32334c48351",
+    "step": "15-metrics-validate",
+    "exitCode": 1,
+    "cause": "AST importer dropped inline function parameters, leaving action-plan Path null. Original logs and suite preserved."
+  },
+  "officeExecuted": false,
+  "fontsInstalled": false,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "remaining": "Reusable pinned-font host setup followed by supervisor native PowerPoint execution and review."
+}

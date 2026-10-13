@@ -1,0 +1,211 @@
+{
+  "at": "2026-10-13T06:19:23.832976+00:00",
+  "source": "/private/tmp/opf-supervisor-20261010/inventory-maintenance-20261013T061647Z.json",
+  "prior": "/private/tmp/opf-supervisor-20261010/inventory-rr20-final-20261012.json",
+  "graphqlCalls": 1,
+  "maxCalls": 5,
+  "pagesComplete": true,
+  "prCount": 11,
+  "issueCount": 43,
+  "prsAdded": [
+    {
+      "id": "OpenPresentation/opf-editor#165",
+      "title": "RR-20: support explicit array areas throughout the editor",
+      "url": "https://github.com/OpenPresentation/opf-editor/pull/165",
+      "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "draft": true
+    }
+  ],
+  "prsRemoved": [],
+  "prHeadChanges": [
+    {
+      "id": "OpenPresentation/opf#646",
+      "old": "5c69145399133c443a5ebe45d6a048ce73cd60d3",
+      "new": "2a35622224e8ce5bbc711a78a47ca7a5aabf4808"
+    },
+    {
+      "id": "OpenPresentation/opf-pptx#253",
+      "old": "4b09182dfce1074050c0dfd0e49c2e98d0731656",
+      "new": "fe35728ffa43a1b2ff19ec275ffe6f15b209779e"
+    },
+    {
+      "id": "OpenPresentation/opf-render#240",
+      "old": "e19390ee7554c4efdc0a08da1a16ddd903f03315",
+      "new": "f95353c3dca1e5e48e50030c2841d86204fdb6f4"
+    }
+  ],
+  "prBodyChanges": [
+    "OpenPresentation/opf#646",
+    "OpenPresentation/opf-pptx#253",
+    "OpenPresentation/opf-render#240"
+  ],
+  "issuesAdded": [],
+  "issuesRemoved": [],
+  "repos": [
+    {
+      "repo": "OpenPresentation/opf",
+      "default": "main",
+      "head": "75f3f0d741c40176e160d08cebfb571699a17793",
+      "prs": 1,
+      "issues": 29,
+      "pullRequestPagesComplete": true,
+      "issuePagesComplete": true,
+      "openPRs": [
+        {
+          "number": 646,
+          "title": "FA-32: explicit area arrays and improved layout defaults",
+          "draft": true,
+          "head": "2a35622224e8ce5bbc711a78a47ca7a5aabf4808",
+          "url": "https://github.com/OpenPresentation/opf/pull/646"
+        }
+      ]
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "default": "main",
+      "head": "7980fea3b0095377cb5a28c22a3a963312f941e7",
+      "prs": 1,
+      "issues": 3,
+      "pullRequestPagesComplete": true,
+      "issuePagesComplete": true,
+      "openPRs": [
+        {
+          "number": 240,
+          "title": "RR-20: improve structural defaults and chart magnitude scales",
+          "draft": true,
+          "head": "f95353c3dca1e5e48e50030c2841d86204fdb6f4",
+          "url": "https://github.com/OpenPresentation/opf-render/pull/240"
+        }
+      ]
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "default": "main",
+      "head": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+      "prs": 1,
+      "issues": 3,
+      "pullRequestPagesComplete": true,
+      "issuePagesComplete": true,
+      "openPRs": [
+        {
+          "number": 253,
+          "title": "RR-20: align PowerPoint structural defaults and magnitude scales",
+          "draft": true,
+          "head": "fe35728ffa43a1b2ff19ec275ffe6f15b209779e",
+          "url": "https://github.com/OpenPresentation/opf-pptx/pull/253"
+        }
+      ]
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "default": "main",
+      "head": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+      "prs": 1,
+      "issues": 1,
+      "pullRequestPagesComplete": true,
+      "issuePagesComplete": true,
+      "openPRs": [
+        {
+          "number": 165,
+          "title": "RR-20: support explicit array areas throughout the editor",
+          "draft": true,
+          "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+          "url": "https://github.com/OpenPresentation/opf-editor/pull/165"
+        }
+      ]
+    },
+    {
+      "repo": "OpenPresentation/gallery",
+      "default": "main",
+      "head": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+      "prs": 1,
+      "issues": 2,
+      "pullRequestPagesComplete": true,
+      "issuePagesComplete": true,
+      "openPRs": [
+        {
+          "number": 6,
+          "title": "Improve gallery design defaults and authored layout previews",
+          "draft": true,
+          "head": "3708ef9b547b2137cdd482158466f4bdc53dd4ca",
+          "url": "https://github.com/OpenPresentation/gallery/pull/6"
+        }
+      ]
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "default": "main",
+      "head": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "prs": 3,
+      "issues": 1,
+      "pullRequestPagesComplete": true,
+      "issuePagesComplete": true,
+      "openPRs": [
+        {
+          "number": 125,
+          "title": "FF-46: per-family host fixtures for proprietary script names (pptx-gallery)",
+          "draft": false,
+          "head": "7e0a6611abc22f2d89eb754bdcc24d7ecd09288a",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/125"
+        },
+        {
+          "number": 126,
+          "title": "RR-84: consume the 0.19 gallery catalog and intent previews",
+          "draft": true,
+          "head": "88c7119fb4727f4cd75c21e47a0a20ed3d1bf604",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/126"
+        },
+        {
+          "number": 127,
+          "title": "RR-84: Preserve script-name host fixtures in gallery adoption",
+          "draft": true,
+          "head": "98f34580cdd07ec67f1acae9b5ee34ac36054a07",
+          "url": "https://github.com/Data-Advantage/pptx-gallery/pull/127"
+        }
+      ]
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "default": "main",
+      "head": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "prs": 2,
+      "issues": 1,
+      "pullRequestPagesComplete": true,
+      "issuePagesComplete": true,
+      "openPRs": [
+        {
+          "number": 103,
+          "title": "RR-83: migrate site to gallery 2 and v2 layouts",
+          "draft": true,
+          "head": "ab0b0da532e553416a05d7164a331d994e312ef4",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/pull/103"
+        },
+        {
+          "number": 104,
+          "title": "RR-83: Preserve site image export and browser guide links",
+          "draft": true,
+          "head": "506a38bd8a3b6a86065199c74c09069581aa67a2",
+          "url": "https://github.com/Data-Advantage/openpresentation-site/pull/104"
+        }
+      ]
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "default": "master",
+      "head": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+      "prs": 1,
+      "issues": 3,
+      "pullRequestPagesComplete": true,
+      "issuePagesComplete": true,
+      "openPRs": [
+        {
+          "number": 128,
+          "title": "RR-84: adopt OPF 0.19 region templates in pptx.dev",
+          "draft": true,
+          "head": "c83c995f8bdd04ae1fa7256ae0282a73ce65b16a",
+          "url": "https://github.com/Data-Advantage/pptx-dev/pull/128"
+        }
+      ]
+    }
+  ]
+}

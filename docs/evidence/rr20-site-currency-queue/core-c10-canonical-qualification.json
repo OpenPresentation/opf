@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "scope": "Canonical local core/CLI qualification at exact c10 source and approved candidate sibling graph; no registry, hosted, native or deployment acceptance.",
+  "workspace": "/private/tmp/rr20-core-c10-final-qualification",
+  "refs": {
+    "opf": "c10e29c67b0c4ec7e7974ae7276aee45f665734e",
+    "opf-render": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+    "opf-pptx": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+    "opf-editor": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+    "gallery-candidate": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  },
+  "node": "v24.21.0",
+  "pnpm": "10.33.2",
+  "commands": [
+    {
+      "args": [
+        "node",
+        "scripts/materialize-gallery-catalog.mjs"
+      ],
+      "cwd": "/private/tmp/rr20-core-c10-final-qualification/opf",
+      "exitCode": 0,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "args": [
+        "pnpm",
+        "test"
+      ],
+      "cwd": "/private/tmp/rr20-core-c10-final-qualification/opf",
+      "exitCode": 0,
+      "logSha256": "13f1ddb6c13e409c1f2928a0cbb53716b1459f1ca12b4965d1f9eec01d09fbea"
+    }
+  ],
+  "receipt": "/private/tmp/rr20-core-c10-final-qualification/results/attempt04/receipt.json",
+  "receiptSha256": "8a9bb89f78f44c2df56c461a8f55371d6a8d2cafd647ef8762f04efa4bb78c29",
+  "canonicalLog": "/private/tmp/rr20-core-c10-final-qualification/results/attempt04/canonical-test.log",
+  "counts": {
+    "coreTests": 2328,
+    "coreStandaloneScripts": 6,
+    "cliTests": 198,
+    "cliStandaloneScripts": 2,
+    "cliCommandChecks": 95,
+    "drawingChecks": 77,
+    "rootChecks": 45
+  },
+  "skips": [
+    "Maintained CLI file suite skips SVG golden digests pinned to renderer/core 0.14.0 when selected versions are renderer 0.19.1/core 0.19.0; its 77 drawing checks pass."
+  ],
+  "setup": {
+    "candidateBuildStageReceipt": "/private/tmp/rr20-core-c10-final-qualification/results/attempt02/receipt.json",
+    "candidateBuildStageReceiptSha256": "bacb10fbaf67377ed46254cf79e385a8418b1e13dc2314bb3be75365d3f7bc2f",
+    "candidateBuildStageExitCode": 0,
+    "galleryTests": 111,
+    "generatedInputCommand": [
+      "node",
+      "scripts/materialize-gallery-catalog.mjs"
+    ],
+    "generatedInputFileCount": 387,
+    "generatedInputInventory": "The final receipt retains all 387 paths, lengths and SHA-256 hashes tied to the selected Gallery ref.",
+    "maintainedSetupReviewed": [
+      ".github/actions/candidate-gallery/action.yml",
+      ".github/actions/candidate-gallery-stage/action.yml",
+      "package lifecycle scripts"
+    ],
+    "agentSlot": "Normal scripts/agent-slot.mjs shared machine limiter, with sandbox execution permission; no limiter overrides.",
+    "npmCache": "/private/tmp/rr20-core-c10-final-qualification/npm-cache",
+    "cacheScope": "Owned qualification workspace; default cache denial preserved.",
+    "dependencySetup": "Physical tooling reused from frozen replay; source links and builds use maintained candidate helpers.",
+    "sourceMetadataEdits": false
+  },
+  "preservedAttempts": [
+    {
+      "receipt": "/private/tmp/rr20-core-c10-final-qualification/results/receipt.json",
+      "receiptSha256": "0eff051836ac6c3525deb21fc1e9837efdb148fa4b86880d44ba9ee50f10134b",
+      "commands": [
+        {
+          "label": "candidate-build-stage",
+          "args": [
+            "node",
+            "scripts/candidate-gallery-build.mjs"
+          ],
+          "cwd": "/private/tmp/rr20-core-c10-final-qualification/opf",
+          "exitCode": 1,
+          "logSha256": "025d2f34c78cbf7866639657278120daa57286b11e2f732cca7241c1ce5438fb"
+        }
+      ],
+      "outcome": "Default npm logs/cache inaccessible; Gallery bootstrap packaging test failed, 110/111 tests passed. Canonical suite not started."
+    },
+    {
+      "receipt": "/private/tmp/rr20-core-c10-final-qualification/results/attempt02/receipt.json",
+      "receiptSha256": "bacb10fbaf67377ed46254cf79e385a8418b1e13dc2314bb3be75365d3f7bc2f",
+      "commands": [
+        {
+          "label": "candidate-build-stage",
+          "args": [
+            "node",
+            "scripts/candidate-gallery-build.mjs"
+          ],
+          "cwd": "/private/tmp/rr20-core-c10-final-qualification/opf",
+          "exitCode": 0,
+          "logSha256": "c8661a0bd32a341daa4cf18df550d08a57b03ea710f01ac0ba9ca7f59fd73511"
+        },
+        {
+          "label": "canonical-test",
+          "args": [
+            "pnpm",
+            "test"
+          ],
+          "cwd": "/private/tmp/rr20-core-c10-final-qualification/opf",
+          "exitCode": 1,
+          "logSha256": "01a1200db999d38feb8df6757bab5d5475608d3dc7e200343e74bbf6e5afabd8"
+        }
+      ],
+      "outcome": "Maintained stage passed; canonical command stopped before tests because sandbox denied normal shared-slot lock."
+    },
+    {
+      "receipt": "/private/tmp/rr20-core-c10-final-qualification/results/attempt03/receipt.json",
+      "receiptSha256": "d7e05cf9f9043d52304901cd0c61017dcedf6f713c9db9db47ad7755a433eca6",
+      "commands": [
+        {
+          "args": [
+            "pnpm",
+            "test"
+          ],
+          "cwd": "/private/tmp/rr20-core-c10-final-qualification/opf",
+          "exitCode": 1,
+          "logSha256": "c0bde6ef1c09778c187dfba71bdd6f8ae0813457881c66495cad995bd36c4c3f"
+        }
+      ],
+      "outcome": "Canonical core tests passed 2326/2328; both failures required missing generated Gallery catalog inputs."
+    }
+  ],
+  "sourcesBefore": {
+    "opf": {
+      "head": "c10e29c67b0c4ec7e7974ae7276aee45f665734e",
+      "status": ""
+    },
+    "opf-render": {
+      "head": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+      "status": ""
+    },
+    "opf-pptx": {
+      "head": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+      "status": ""
+    },
+    "opf-editor": {
+      "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "status": ""
+    },
+    "gallery-candidate": {
+      "head": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "status": ""
+    }
+  },
+  "sourcesAfter": {
+    "opf": {
+      "head": "c10e29c67b0c4ec7e7974ae7276aee45f665734e",
+      "status": ""
+    },
+    "opf-render": {
+      "head": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+      "status": ""
+    },
+    "opf-pptx": {
+      "head": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+      "status": ""
+    },
+    "opf-editor": {
+      "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "status": ""
+    },
+    "gallery-candidate": {
+      "head": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "status": ""
+    }
+  },
+  "supervisorVerification": "Supervisor independently verified final receipt SHA-256 8a9bb89f78f44c2df56c461a8f55371d6a8d2cafd647ef8762f04efa4bb78c29 and canonical log SHA-256 13f1ddb6c13e409c1f2928a0cbb53716b1459f1ca12b4965d1f9eec01d09fbea.",
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "hostedAcceptance": false,
+  "deploymentPerformed": false
+}

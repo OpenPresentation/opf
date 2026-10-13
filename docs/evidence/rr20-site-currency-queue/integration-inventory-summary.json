@@ -1,0 +1,322 @@
+{
+  "at": "2026-10-13T05:18:47.112035+00:00",
+  "apiRequests": 1,
+  "apiBudget": 5,
+  "paginationComplete": true,
+  "counts": {
+    "openPRs": 10,
+    "openIssues": 43
+  },
+  "defaultHeads": {
+    "OpenPresentation/opf": {
+      "branch": "main",
+      "sha": "75f3f0d741c40176e160d08cebfb571699a17793"
+    },
+    "OpenPresentation/opf-render": {
+      "branch": "main",
+      "sha": "7980fea3b0095377cb5a28c22a3a963312f941e7"
+    },
+    "OpenPresentation/opf-pptx": {
+      "branch": "main",
+      "sha": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c"
+    },
+    "OpenPresentation/opf-editor": {
+      "branch": "main",
+      "sha": "ac25857cca8ce776dd23b5ca58b38a06af9d963f"
+    },
+    "OpenPresentation/gallery": {
+      "branch": "main",
+      "sha": "48169a9bb38559b8385e6791e7b5e76c0f5a8792"
+    },
+    "Data-Advantage/pptx-gallery": {
+      "branch": "main",
+      "sha": "92e23ed5b432195de884a6be51f2415ce49f8924"
+    },
+    "Data-Advantage/openpresentation-site": {
+      "branch": "main",
+      "sha": "7bd54a7d40d407766dc8d8e00f50fcc37196a641"
+    },
+    "Data-Advantage/pptx-dev": {
+      "branch": "master",
+      "sha": "b55bd642f1c8de3799dd8e06a830515e1dd4709c"
+    }
+  },
+  "defaultHeadChanges": {
+    "OpenPresentation/opf": {
+      "before": "85089bf359a41950e5887d782452dd3884805386",
+      "after": "75f3f0d741c40176e160d08cebfb571699a17793"
+    }
+  },
+  "localDefaultSync": {
+    "receipt": "/private/tmp/opf-supervisor-20261010/inventory-rr20-final-20261012-sync.json",
+    "allClean": true,
+    "allAtRemoteHead": true,
+    "allOnDefault": true
+  },
+  "newPRs": [
+    {
+      "repo": "OpenPresentation/gallery",
+      "number": 6,
+      "title": "Improve gallery design defaults and authored layout previews",
+      "url": "https://github.com/OpenPresentation/gallery/pull/6",
+      "isDraft": true,
+      "headRefName": "codex/design-gallery-defaults",
+      "headRefOid": "3708ef9b547b2137cdd482158466f4bdc53dd4ca",
+      "baseRefName": "main"
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "number": 253,
+      "title": "RR-20: align PowerPoint structural defaults and magnitude scales",
+      "url": "https://github.com/OpenPresentation/opf-pptx/pull/253",
+      "isDraft": true,
+      "headRefName": "codex/rr-20-neutral-structure",
+      "headRefOid": "4b09182dfce1074050c0dfd0e49c2e98d0731656",
+      "baseRefName": "main"
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "number": 240,
+      "title": "RR-20: improve structural defaults and chart magnitude scales",
+      "url": "https://github.com/OpenPresentation/opf-render/pull/240",
+      "isDraft": true,
+      "headRefName": "codex/rr-20-neutral-structure",
+      "headRefOid": "e19390ee7554c4efdc0a08da1a16ddd903f03315",
+      "baseRefName": "main"
+    },
+    {
+      "repo": "OpenPresentation/opf",
+      "number": 646,
+      "title": "FA-32: explicit area arrays and improved layout defaults",
+      "url": "https://github.com/OpenPresentation/opf/pull/646",
+      "isDraft": true,
+      "headRefName": "codex/design-editorial-defaults",
+      "headRefOid": "5c69145399133c443a5ebe45d6a048ce73cd60d3",
+      "baseRefName": "main"
+    }
+  ],
+  "closedOrMergedSincePrevious": [
+    {
+      "repo": "OpenPresentation/opf",
+      "number": 644,
+      "title": "RR-50: roll final verified 0.19 source graph",
+      "url": "https://github.com/OpenPresentation/opf/pull/644",
+      "isDraft": false,
+      "headRefName": "ecosystem-roll/main",
+      "headRefOid": "46c578367c35f3cf064b473c695ab7c0a930dc9e",
+      "baseRefName": "main"
+    }
+  ],
+  "changedExistingPRs": [],
+  "newIssues": [],
+  "closedIssues": [],
+  "changedIssues": [],
+  "allOpenPRs": [
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "number": 103,
+      "title": "RR-83: migrate site to gallery 2 and v2 layouts",
+      "url": "https://github.com/Data-Advantage/openpresentation-site/pull/103",
+      "isDraft": true,
+      "headRefName": "codex/rr-83-site-catalogs",
+      "headRefOid": "ab0b0da532e553416a05d7164a331d994e312ef4",
+      "baseRefName": "main"
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "number": 104,
+      "title": "RR-83: Preserve site image export and browser guide links",
+      "url": "https://github.com/Data-Advantage/openpresentation-site/pull/104",
+      "isDraft": true,
+      "headRefName": "codex/rr-83-site-image-export-contract",
+      "headRefOid": "506a38bd8a3b6a86065199c74c09069581aa67a2",
+      "baseRefName": "codex/rr-83-site-catalogs"
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "number": 128,
+      "title": "RR-84: adopt OPF 0.19 region templates in pptx.dev",
+      "url": "https://github.com/Data-Advantage/pptx-dev/pull/128",
+      "isDraft": true,
+      "headRefName": "codex/rr-84-pptx-dev-019",
+      "headRefOid": "c83c995f8bdd04ae1fa7256ae0282a73ce65b16a",
+      "baseRefName": "master"
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "number": 125,
+      "title": "FF-46: per-family host fixtures for proprietary script names (pptx-gallery)",
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/125",
+      "isDraft": false,
+      "headRefName": "codex/ff-46-script-name-hosts",
+      "headRefOid": "7e0a6611abc22f2d89eb754bdcc24d7ecd09288a",
+      "baseRefName": "main"
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "number": 126,
+      "title": "RR-84: consume the 0.19 gallery catalog and intent previews",
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/126",
+      "isDraft": true,
+      "headRefName": "codex/rr-84-gallery-019",
+      "headRefOid": "88c7119fb4727f4cd75c21e47a0a20ed3d1bf604",
+      "baseRefName": "main"
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "number": 127,
+      "title": "RR-84: Preserve script-name host fixtures in gallery adoption",
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/127",
+      "isDraft": true,
+      "headRefName": "codex/rr-84-gallery-script-host-integration",
+      "headRefOid": "98f34580cdd07ec67f1acae9b5ee34ac36054a07",
+      "baseRefName": "codex/rr-84-gallery-019"
+    },
+    {
+      "repo": "OpenPresentation/gallery",
+      "number": 6,
+      "title": "Improve gallery design defaults and authored layout previews",
+      "url": "https://github.com/OpenPresentation/gallery/pull/6",
+      "isDraft": true,
+      "headRefName": "codex/design-gallery-defaults",
+      "headRefOid": "3708ef9b547b2137cdd482158466f4bdc53dd4ca",
+      "baseRefName": "main"
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "number": 253,
+      "title": "RR-20: align PowerPoint structural defaults and magnitude scales",
+      "url": "https://github.com/OpenPresentation/opf-pptx/pull/253",
+      "isDraft": true,
+      "headRefName": "codex/rr-20-neutral-structure",
+      "headRefOid": "4b09182dfce1074050c0dfd0e49c2e98d0731656",
+      "baseRefName": "main"
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "number": 240,
+      "title": "RR-20: improve structural defaults and chart magnitude scales",
+      "url": "https://github.com/OpenPresentation/opf-render/pull/240",
+      "isDraft": true,
+      "headRefName": "codex/rr-20-neutral-structure",
+      "headRefOid": "e19390ee7554c4efdc0a08da1a16ddd903f03315",
+      "baseRefName": "main"
+    },
+    {
+      "repo": "OpenPresentation/opf",
+      "number": 646,
+      "title": "FA-32: explicit area arrays and improved layout defaults",
+      "url": "https://github.com/OpenPresentation/opf/pull/646",
+      "isDraft": true,
+      "headRefName": "codex/design-editorial-defaults",
+      "headRefOid": "5c69145399133c443a5ebe45d6a048ce73cd60d3",
+      "baseRefName": "main"
+    }
+  ],
+  "candidates": [
+    {
+      "label": "core",
+      "path": "/private/tmp/opf-area-arrays",
+      "branch": "codex/fa-32-area-arrays",
+      "localHead": "f9c56a04813b0e6793b286668d5dabe4ce544e13",
+      "prUrl": "https://github.com/OpenPresentation/opf/pull/646",
+      "prHead": "5c69145399133c443a5ebe45d6a048ce73cd60d3",
+      "prBase": "main",
+      "isDraft": true,
+      "commitsOnlyOnPR": 0,
+      "commitsOnlyLocal": 6,
+      "clean": true,
+      "status": ""
+    },
+    {
+      "label": "renderer",
+      "path": "/private/tmp/opf-areas-array-render",
+      "branch": "codex/rr-20-array-areas",
+      "localHead": "0be8f764c98b1c681606d28dc80e10734a562fe9",
+      "prUrl": "https://github.com/OpenPresentation/opf-render/pull/240",
+      "prHead": "e19390ee7554c4efdc0a08da1a16ddd903f03315",
+      "prBase": "main",
+      "isDraft": true,
+      "commitsOnlyOnPR": 1,
+      "commitsOnlyLocal": 6,
+      "clean": true,
+      "status": ""
+    },
+    {
+      "label": "PPTX",
+      "path": "/private/tmp/opf-areas-array-pptx",
+      "branch": "codex/rr-20-array-areas",
+      "localHead": "fe35728ffa43a1b2ff19ec275ffe6f15b209779e",
+      "prUrl": "https://github.com/OpenPresentation/opf-pptx/pull/253",
+      "prHead": "4b09182dfce1074050c0dfd0e49c2e98d0731656",
+      "prBase": "main",
+      "isDraft": true,
+      "commitsOnlyOnPR": 0,
+      "commitsOnlyLocal": 2,
+      "clean": true,
+      "status": ""
+    },
+    {
+      "label": "gallery",
+      "path": "/private/tmp/opf-areas-array-gallery",
+      "branch": "codex/rr-20-array-areas",
+      "localHead": "146e477196405fe7d2283008f6fad34c12742599",
+      "prUrl": "https://github.com/OpenPresentation/gallery/pull/6",
+      "prHead": "3708ef9b547b2137cdd482158466f4bdc53dd4ca",
+      "prBase": "main",
+      "isDraft": true,
+      "commitsOnlyOnPR": 0,
+      "commitsOnlyLocal": 2,
+      "clean": true,
+      "status": ""
+    },
+    {
+      "label": "main site",
+      "path": "/private/tmp/opf-areas-array-main-site",
+      "branch": "codex/rr-20-array-areas",
+      "localHead": "4e5c4fc706e215c7bc5c54692070dfc9769c65a6",
+      "prUrl": "https://github.com/Data-Advantage/openpresentation-site/pull/103",
+      "prHead": "ab0b0da532e553416a05d7164a331d994e312ef4",
+      "prBase": "main",
+      "isDraft": true,
+      "commitsOnlyOnPR": 0,
+      "commitsOnlyLocal": 13,
+      "clean": true,
+      "status": ""
+    },
+    {
+      "label": "gallery site",
+      "path": "/private/tmp/opf-areas-array-gallery-site",
+      "branch": "codex/rr-20-array-areas",
+      "localHead": "df08ef13b50b442de82d04a850ddb8f9aa568c0c",
+      "prUrl": "https://github.com/Data-Advantage/pptx-gallery/pull/126",
+      "prHead": "88c7119fb4727f4cd75c21e47a0a20ed3d1bf604",
+      "prBase": "main",
+      "isDraft": true,
+      "commitsOnlyOnPR": 0,
+      "commitsOnlyLocal": 11,
+      "clean": false,
+      "status": "?? artifacts/\n"
+    },
+    {
+      "label": "dev site",
+      "path": "/private/tmp/opf-areas-array-dev-site",
+      "branch": "codex/rr-20-array-areas",
+      "localHead": "0d65b99a78f7f1a2ca94471c42ca26938fa40b99",
+      "prUrl": "https://github.com/Data-Advantage/pptx-dev/pull/128",
+      "prHead": "c83c995f8bdd04ae1fa7256ae0282a73ce65b16a",
+      "prBase": "master",
+      "isDraft": true,
+      "commitsOnlyOnPR": 0,
+      "commitsOnlyLocal": 9,
+      "clean": true,
+      "status": ""
+    }
+  ],
+  "actionableDrift": [
+    "Renderer draft PR #240 has one remote-only commit and six local-only commits; reconcile the divergent branch without force-pushing before updating it.",
+    "Core #646, PPTX #253, gallery #6, and the three site adoption drafts have clean candidate commits ahead of their remote PR heads.",
+    "Gallery-site candidate has untracked artifacts/; do not infer it is ready to push without review.",
+    "The only default head change since the prior snapshot is OPF core main; all eight local defaults match their fetched remote heads."
+  ]
+}

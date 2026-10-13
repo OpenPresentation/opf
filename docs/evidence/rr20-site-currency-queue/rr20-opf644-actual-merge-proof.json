@@ -1,0 +1,12 @@
+{
+  "pr": 644,
+  "url": "https://github.com/OpenPresentation/opf/pull/644",
+  "reviewedHead": "46c578367c35f3cf064b473c695ab7c0a930dc9e",
+  "mergedCommit": "bdbadd7980891c4f85e6aa04ca75f94d9c19a63b",
+  "mergedAt": "2026-10-12T17:46:44Z",
+  "reviewedTree": "5351e90e28ec3c9b3f3edb0853a9c911d2276414",
+  "mergedTree": "5351e90e28ec3c9b3f3edb0853a9c911d2276414",
+  "exactTreeEqual": true,
+  "currentMain": "bdbadd7980891c4f85e6aa04ca75f94d9c19a63b",
+  "apiCalls": 1
+}

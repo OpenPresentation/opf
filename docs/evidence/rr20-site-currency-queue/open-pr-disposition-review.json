@@ -1,0 +1,48 @@
+{
+  "basis": "Complete 2026-10-13 inventory plus bounded GPT-6.1 Sol local-history/content review; no new network calls",
+  "engineTrain": [
+    "OpenPresentation/opf#646",
+    "OpenPresentation/opf-render#240",
+    "OpenPresentation/opf-pptx#253",
+    "OpenPresentation/opf-editor#165"
+  ],
+  "gallery": {
+    "pr": "OpenPresentation/gallery#6",
+    "remoteHead": "3708ef9b547b2137cdd482158466f4bdc53dd4ca",
+    "candidateHead": "146e477196405fe7d2283008f6fad34c12742599",
+    "relation": "remote head is ancestor of qualified local candidate",
+    "bootstrapPrepared": "49b1c09135903eb4e35ac68ac75c4447f4172bd6",
+    "remaining": "Use actual merged core/render ancestor pins, qualify strict bootstrap, then Gallery3 publication before engine registry adoption",
+    "descriptionUpdated": true,
+    "descriptionScope": "Remote PR6 prose now records source merge then Gallery3 publication before engine registry adoption; unchanged remote code head3708ef9, local146e/49b1 remain pending"
+  },
+  "siteHold": {
+    "reason": "No deployment authorized; site pushes may auto-deploy",
+    "prs": [
+      "Data-Advantage/pptx-gallery#125",
+      "Data-Advantage/pptx-gallery#126",
+      "Data-Advantage/pptx-gallery#127",
+      "Data-Advantage/openpresentation-site#103",
+      "Data-Advantage/openpresentation-site#104",
+      "Data-Advantage/pptx-dev#128"
+    ],
+    "preservationReview": [
+      "Gallery125 and127 host fixture files match qualified array candidate;127 is ancestor",
+      "Main104 is ancestor; preserved guide links and image export paths reviewed; playground version-label wording differs",
+      "Dev128 retained combined scope still requires final published dependency adoption"
+    ],
+    "closurePolicy": "Do not close preservation PRs solely on local incorporation; wait for accepted default integration"
+  },
+  "windowsSourceReview": {
+    "conclusion": "No confirmed defect from source inspection",
+    "hypothesesOnly": [
+      "Windows canonical path identities during staged/installed graph validation",
+      "CLI custom npm executable lookup"
+    ],
+    "action": "Obtain authorized hosted failure diagnosis before changing safeguards"
+  },
+  "native": "UNRUN; remote preflight waitingOnApproval",
+  "hosted": "Core installed Windows failed; one canonical batch watcher remains active",
+  "completion": false,
+  "deployment": false
+}
