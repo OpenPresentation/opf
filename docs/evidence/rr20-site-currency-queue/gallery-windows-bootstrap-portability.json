@@ -20,5 +20,18 @@
     "logs": "C:\\opf-work\\candidate-81c4fdf5\\logs\\08-gallery-windows-fix-test",
     "evidenceOrigin": "Windows supervisor report; original failed build retained in06-candidate-build logs"
   },
-  "nativeAcceptance": false
+  "nativeAcceptance": false,
+  "independentReview": {
+    "agent": "GPT-6.1 Sol gallery_portability_review",
+    "findings": [],
+    "scope": "Literal arguments without shell; copied Corepack fixture; preserved release gates; resolution/refusal/nested invocation tests; strict branch identical patch"
+  },
+  "strictReleasePreparation": {
+    "checkout": "/private/tmp/opf-gallery3-strict",
+    "commit": "50e9c18",
+    "testsPassed": 6,
+    "log": "/private/tmp/gallery-strict-windows-portability-tests.log",
+    "published": false,
+    "remaining": "Actual merged core/renderer revision pins and all release gates"
+  }
 }

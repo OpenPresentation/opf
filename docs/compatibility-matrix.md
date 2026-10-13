@@ -9,7 +9,7 @@ Verify live versions with `npm view <package> version` before treating a
 dated handoff as current. The current plan selects core/PPTX/editor/CLI 0.19.0, renderer 0.19.1 and Gallery 2.0.0; the older 0.18 matrix below is historical evidence. Immutable tag commits pin
 the verification harnesses; see [published evidence](evidence/shipped-train-20260921/README.md).
 The [September 29 source checkpoint](handoff-runtime-2026-09-29.md) records later
-accepted fixes and release prerequisites. The versions below include the verified patch train; complete native compatibility
+accepted fixes and release prerequisites. The current published contracts are listed first; the older patch trains below are historical evidence. Complete native compatibility
 remains a separate acceptance gate.
 
 ## Published 0.19 contract
@@ -118,7 +118,7 @@ and PPTX stay optional peers. CLI 0.15.0 and earlier bundled their core.
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
 ColorRef preview/export support. The renderer, PPTX and editor floors move with
-core in lockstep (core 0.18.1 with renderer, PPTX and editor 0.18.0), so
+core in lockstep (core/PPTX/editor 0.19.0 and renderer 0.19.1), so
 preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
