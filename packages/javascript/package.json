@@ -178,5 +178,8 @@
     "@openpresentation/opf-render": {
       "optional": true
     }
+  },
+  "opf": {
+    "requiresUnreleasedGallery": "3.0.0"
   }
 }

@@ -1,0 +1,11 @@
+{
+  "qualifiedHead": "0be8f764c98b1c681606d28dc80e10734a562fe9",
+  "existingPR": 240,
+  "remoteHead": "e19390ee7554c4efdc0a08da1a16ddd903f03315",
+  "equivalentLocalCommit": "013f390",
+  "stablePatchId": "f495ebf9ea2b881006eb8db5cef57c1265e0a5ba",
+  "mergedHead": "f95353c3dca1e5e48e50030c2841d86204fdb6f4",
+  "method": "ordinary no-ff merge",
+  "qualifiedTreeUnchanged": true,
+  "forcePushUsed": false
+}

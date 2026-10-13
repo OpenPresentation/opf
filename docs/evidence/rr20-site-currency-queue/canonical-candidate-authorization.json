@@ -1,0 +1,22 @@
+{
+  "scope": "Canonical Gallery 3 source qualification authorization, never publication",
+  "files": {
+    ".github/candidate-gallery.json": "fc334c47a34059296f5483e88fe430fb4a555fe8e8ba0ed769370a731872062d",
+    "packages/javascript/package.json": "3a66aaa7ab520bd24610d0997c49305abbf385dd9321285ef7439a7fe551f79e"
+  },
+  "isolatedQualifiedHead": "af30e62cfb8bea56df520b1b0f2370437f325dee",
+  "metadataByteEqualToQualifiedOverlay": true,
+  "focusedTests": 10,
+  "mappedCheckExit": 0,
+  "mappedCommand": "CANDIDATE_GALLERY_REF=146e477196405fe7d2283008f6fad34c12742599 pnpm check:changed --base HEAD^",
+  "sourceGraphPreparation": "Official candidate gallery link and source ecosystem link; all five source worktrees clean before run",
+  "logs": {
+    "/private/tmp/rr20-canonical-candidate-authorization-check.log": "1ca8ec7dc8cd4b3ca76e274e836f163e016e6a412f5822da294a9e6f53988163",
+    "/private/tmp/rr20-canonical-candidate-authorization-isolated-final.log": "6dc293eb6219cc706c15b785a1b2e8d960aefe9cb724eabb46f32276fabbfd02"
+  },
+  "retainedFailures": [
+    "/private/tmp/rr20-canonical-candidate-authorization-changed.log",
+    "/private/tmp/rr20-canonical-candidate-authorization-changed-local-access.log",
+    "/private/tmp/rr20-canonical-candidate-authorization-isolated-check.log"
+  ]
+}
