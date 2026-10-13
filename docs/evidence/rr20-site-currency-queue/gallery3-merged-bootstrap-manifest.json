@@ -1,0 +1,2803 @@
+{
+  "qualification": "development-only staged bootstrap; published engine metadata is not qualified",
+  "pins": {
+    "galleryVersion": "3.0.0",
+    "core": {
+      "repository": "OpenPresentation/opf",
+      "sha": "756d7de9ddb7e5139a9b9caf0fd0b15b1d99b80e"
+    },
+    "render": {
+      "repository": "OpenPresentation/opf-render",
+      "sha": "dd3ca98b0b11d3b2189d400be7e740e663a81130"
+    }
+  },
+  "hashes": {
+    "package.json": "bc5ba5e099ece0fe39d4c3c1ca8e00493ee5757b8a48d122b677091cd3f61f5c",
+    "package-lock.json": "67e05abc96ff84d90827e5cf90a7910a8ffcabd74308ce1b39dd3d9bba7cd52a"
+  },
+  "artifacts": [
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "sourceSha": "404e086d7af341f92ea56702befe166da2d10956",
+      "file": "/private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/gallery-engines-OW76Ux/openpresentation-gallery-3.0.0.tgz",
+      "sha256": "8ad933d392f86523a4b17b6ed965a71e69901f546521819e7d607d5af4fde3ac",
+      "bytes": 97162,
+      "originalManifest": {
+        "name": "@openpresentation/gallery",
+        "version": "3.0.0",
+        "description": "The pptx.gallery catalog for OPF: layouts, themes, colour and font schemes, narratives, audiences, purposes and tones, registered with catalogs: [gallery].",
+        "license": "MIT",
+        "author": "Open Presentation",
+        "homepage": "https://www.pptx.gallery",
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/gallery.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/gallery/issues"
+        },
+        "keywords": [
+          "opf",
+          "open-presentation-format",
+          "presentation",
+          "catalog",
+          "layouts",
+          "themes",
+          "pptx-gallery"
+        ],
+        "type": "module",
+        "sideEffects": false,
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./previews": {
+            "types": "./dist/previews.d.ts",
+            "default": "./dist/previews.js"
+          },
+          "./package.json": "./package.json"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE",
+          "CHANGELOG.md",
+          "package.json"
+        ],
+        "opf": {
+          "catalogSchema": 3
+        },
+        "engines": {
+          "node": ">=22"
+        },
+        "scripts": {
+          "build": "node scripts/build.mjs",
+          "test": "node scripts/build.mjs && node --test test/*.test.mjs",
+          "typecheck": "node scripts/build.mjs && tsc -p test/tsconfig.json",
+          "verify": "node scripts/sync-gallery-catalog.mjs --verify",
+          "rehash": "node scripts/sync-gallery-catalog.mjs --rehash --match-gallery",
+          "previews": "node scripts/render-previews.mjs",
+          "check:license": "node scripts/check-license.mjs",
+          "check:previews": "node scripts/render-previews.mjs --check",
+          "check:stability": "node scripts/build.mjs && node scripts/stability.mjs",
+          "sync": "node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery",
+          "pack:dry-run": "npm pack --dry-run",
+          "prepack": "node scripts/build.mjs"
+        },
+        "devDependencies": {
+          "@openpresentation/opf": "0.19.0",
+          "@openpresentation/opf-render": "0.19.1",
+          "@resvg/resvg-js": "2.6.2",
+          "typescript": "~5.9.3"
+        }
+      },
+      "originalManifestText": "{\n  \"name\": \"@openpresentation/gallery\",\n  \"version\": \"3.0.0\",\n  \"description\": \"The pptx.gallery catalog for OPF: layouts, themes, colour and font schemes, narratives, audiences, purposes and tones, registered with catalogs: [gallery].\",\n  \"license\": \"MIT\",\n  \"author\": \"Open Presentation\",\n  \"homepage\": \"https://www.pptx.gallery\",\n  \"publishConfig\": {\n    \"access\": \"public\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+https://github.com/OpenPresentation/gallery.git\"\n  },\n  \"bugs\": {\n    \"url\": \"https://github.com/OpenPresentation/gallery/issues\"\n  },\n  \"keywords\": [\n    \"opf\",\n    \"open-presentation-format\",\n    \"presentation\",\n    \"catalog\",\n    \"layouts\",\n    \"themes\",\n    \"pptx-gallery\"\n  ],\n  \"type\": \"module\",\n  \"sideEffects\": false,\n  \"main\": \"./dist/index.js\",\n  \"types\": \"./dist/index.d.ts\",\n  \"exports\": {\n    \".\": {\n      \"types\": \"./dist/index.d.ts\",\n      \"default\": \"./dist/index.js\"\n    },\n    \"./previews\": {\n      \"types\": \"./dist/previews.d.ts\",\n      \"default\": \"./dist/previews.js\"\n    },\n    \"./package.json\": \"./package.json\"\n  },\n  \"files\": [\n    \"dist\",\n    \"README.md\",\n    \"LICENSE\",\n    \"CHANGELOG.md\",\n    \"package.json\"\n  ],\n  \"opf\": {\n    \"catalogSchema\": 3\n  },\n  \"engines\": {\n    \"node\": \">=22\"\n  },\n  \"scripts\": {\n    \"build\": \"node scripts/build.mjs\",\n    \"test\": \"node scripts/build.mjs && node --test test/*.test.mjs\",\n    \"typecheck\": \"node scripts/build.mjs && tsc -p test/tsconfig.json\",\n    \"verify\": \"node scripts/sync-gallery-catalog.mjs --verify\",\n    \"rehash\": \"node scripts/sync-gallery-catalog.mjs --rehash --match-gallery\",\n    \"previews\": \"node scripts/render-previews.mjs\",\n    \"check:license\": \"node scripts/check-license.mjs\",\n    \"check:previews\": \"node scripts/render-previews.mjs --check\",\n    \"check:stability\": \"node scripts/build.mjs && node scripts/stability.mjs\",\n    \"sync\": \"node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery\",\n    \"pack:dry-run\": \"npm pack --dry-run\",\n    \"prepack\": \"node scripts/build.mjs\"\n  },\n  \"devDependencies\": {\n    \"@openpresentation/opf\": \"0.19.0\",\n    \"@openpresentation/opf-render\": \"0.19.1\",\n    \"@resvg/resvg-js\": \"2.6.2\",\n    \"typescript\": \"~5.9.3\"\n  }\n}\n",
+      "stagedManifest": {
+        "name": "@openpresentation/gallery",
+        "version": "3.0.0",
+        "description": "The pptx.gallery catalog for OPF: layouts, themes, colour and font schemes, narratives, audiences, purposes and tones, registered with catalogs: [gallery].",
+        "license": "MIT",
+        "author": "Open Presentation",
+        "homepage": "https://www.pptx.gallery",
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/gallery.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/gallery/issues"
+        },
+        "keywords": [
+          "opf",
+          "open-presentation-format",
+          "presentation",
+          "catalog",
+          "layouts",
+          "themes",
+          "pptx-gallery"
+        ],
+        "type": "module",
+        "sideEffects": false,
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./previews": {
+            "types": "./dist/previews.d.ts",
+            "default": "./dist/previews.js"
+          },
+          "./package.json": "./package.json"
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE",
+          "CHANGELOG.md",
+          "package.json"
+        ],
+        "opf": {
+          "catalogSchema": 3
+        },
+        "engines": {
+          "node": ">=22"
+        }
+      },
+      "originalManifestSha256": "bc5ba5e099ece0fe39d4c3c1ca8e00493ee5757b8a48d122b677091cd3f61f5c",
+      "stagedManifestSha256": "d23e0636c7b005a54fb06ce236551cf78cadd9b5ad47ddb82989ba420c5b900f",
+      "files": [
+        {
+          "path": "CHANGELOG.md",
+          "sha256": "e75eea5afcf7caa177ec7b51241887f75be448a10d8a1433d589329086fe193c",
+          "bytes": 5507
+        },
+        {
+          "path": "LICENSE",
+          "sha256": "c977d11e7e9de5bd31ab787b9a302475c0487837c66f665c174d9f92b18937d2",
+          "bytes": 1073
+        },
+        {
+          "path": "README.md",
+          "sha256": "02aff69c79aa3b3dea4f166a27aa26e52339d6c5251a0a37ae1a69578ed26a4b",
+          "bytes": 10379
+        },
+        {
+          "path": "dist/index.d.ts",
+          "sha256": "98e1040f95101d67b738cfbf70a30ed56a1bdc1b9cb8f33f23581efe255b2115",
+          "bytes": 4089
+        },
+        {
+          "path": "dist/index.js",
+          "sha256": "745579b9d7576360e8335a00d5bb41d7b85923579d636fe16eb65f341727ca11",
+          "bytes": 332518
+        },
+        {
+          "path": "dist/previews.d.ts",
+          "sha256": "178e24df4a902aa351368ea49d3e967e927993ffb2a02eff9d5558cede5a3364",
+          "bytes": 1692
+        },
+        {
+          "path": "dist/previews.js",
+          "sha256": "f1819da7819c3030b7c7a435bda32cca061c46c9404c449b992bf197e09702e2",
+          "bytes": 117586
+        },
+        {
+          "path": "package.json",
+          "sha256": "d23e0636c7b005a54fb06ce236551cf78cadd9b5ad47ddb82989ba420c5b900f",
+          "bytes": 1255
+        }
+      ]
+    },
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.19.0",
+      "sourceSha": "756d7de9ddb7e5139a9b9caf0fd0b15b1d99b80e",
+      "file": "/private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/gallery-engines-OW76Ux/openpresentation-opf-0.19.0.tgz",
+      "sha256": "fdf3d2a63973dfb21bb3b91f1700ddd5937322bb5cb55f1d0f2870cceff8b2d2",
+      "bytes": 3332244,
+      "originalManifest": {
+        "name": "@openpresentation/opf",
+        "version": "0.19.0",
+        "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; in Node, the file API and the CLI defaults register the pptx.gallery catalog of @openpresentation/gallery.",
+        "license": "MIT",
+        "author": "Open Presentation",
+        "homepage": "https://openpresentation.org",
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "https://github.com/OpenPresentation/opf.git",
+          "directory": "packages/javascript"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf/issues"
+        },
+        "keywords": [
+          "opf",
+          "open-presentation-format",
+          "presentation",
+          "schema",
+          "json-schema",
+          "catalogs",
+          "slides"
+        ],
+        "type": "module",
+        "sideEffects": false,
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "bun": "./dist/index.js",
+            "deno": "./dist/index.js",
+            "workerd": "./dist/browser.js",
+            "worker": "./dist/browser.js",
+            "browser": "./dist/browser.js",
+            "node": "./dist/index.js",
+            "default": "./dist/browser.js"
+          },
+          "./schemas": {
+            "types": "./dist/schemas.d.ts",
+            "import": "./dist/schemas.js"
+          },
+          "./validator": {
+            "types": "./dist/validator.d.ts",
+            "import": "./dist/validator.js"
+          },
+          "./types": {
+            "types": "./dist/types.d.ts",
+            "import": "./dist/types.js"
+          },
+          "./spec-files": {
+            "types": "./dist/spec-files.d.ts",
+            "import": "./dist/spec-files.js"
+          },
+          "./examples": {
+            "types": "./dist/examples.d.ts",
+            "import": "./dist/examples.js"
+          },
+          "./docs": {
+            "types": "./dist/docs.d.ts",
+            "import": "./dist/docs.js"
+          },
+          "./repo-readme": {
+            "types": "./dist/repo-readme.d.ts",
+            "import": "./dist/repo-readme.js"
+          },
+          "./spec/*": "./dist/spec/*",
+          "./package.json": "./package.json",
+          "./composition": {
+            "types": "./dist/composition.d.ts",
+            "import": "./dist/composition.js"
+          },
+          "./pagination": {
+            "types": "./dist/pagination.d.ts",
+            "import": "./dist/pagination.js"
+          },
+          "./data": {
+            "types": "./dist/data.d.ts",
+            "import": "./dist/data.js"
+          },
+          "./font-policy": {
+            "types": "./dist/font-policy.d.ts",
+            "import": "./dist/font-policy.js"
+          },
+          "./symbol-font-encodings": {
+            "types": "./dist/symbol-font-encodings.d.ts",
+            "import": "./dist/symbol-font-encodings.js"
+          },
+          "./deck": {
+            "types": "./dist/deck.d.ts",
+            "import": "./dist/deck.js"
+          },
+          "./markdown": {
+            "types": "./dist/markdown.d.ts",
+            "import": "./dist/markdown.js"
+          },
+          "./yaml": {
+            "types": "./dist/yaml.d.ts",
+            "import": "./dist/yaml.js"
+          },
+          "./patch": {
+            "types": "./dist/patch.d.ts",
+            "import": "./dist/patch.js"
+          },
+          "./diff": {
+            "types": "./dist/diff.d.ts",
+            "import": "./dist/diff.js"
+          },
+          "./format": {
+            "types": "./dist/format.d.ts",
+            "import": "./dist/format.js"
+          },
+          "./convert": {
+            "types": "./dist/convert.d.ts",
+            "import": "./dist/convert.js"
+          },
+          "./internal/engine": {
+            "types": "./dist/node-engine.d.ts",
+            "node": "./dist/node-engine.js"
+          }
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE",
+          "package.json"
+        ],
+        "engines": {
+          "node": ">=22"
+        },
+        "scripts": {
+          "clean": "rm -rf dist src/generated",
+          "generate": "node scripts/generate.mjs && node scripts/generate-content.mjs",
+          "build": "node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)",
+          "typecheck": "pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
+          "test": "pnpm run build && node ../../scripts/run-tests.mjs",
+          "test:packed": "node test/packed-install-smoke.mjs",
+          "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
+        },
+        "dependencies": {
+          "@openpresentation/gallery": "^2.0.0",
+          "ajv": "^8.17.1",
+          "ajv-formats": "^3.0.1",
+          "jsonc-parser": "3.3.1",
+          "yaml": "^2.9.1"
+        },
+        "devDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@openpresentation/opf-pptx": "0.19.0",
+          "@openpresentation/opf-render": "0.19.1",
+          "@resvg/resvg-js": "2.6.2",
+          "@types/node": "^24.13.4",
+          "json-schema-to-typescript": "^16.0.0",
+          "pdf-lib": "1.17.1",
+          "sharp": "0.35.5",
+          "tsup": "^8.5.1",
+          "typescript": "~5.9.3"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-pptx": "^0.20.0",
+          "@openpresentation/opf-render": "^0.20.0"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-pptx": {
+            "optional": true
+          },
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        },
+        "opf": {
+          "requiresUnreleasedGallery": "3.0.0"
+        }
+      },
+      "originalManifestText": "{\n  \"name\": \"@openpresentation/opf\",\n  \"version\": \"0.19.0\",\n  \"description\": \"Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; in Node, the file API and the CLI defaults register the pptx.gallery catalog of @openpresentation/gallery.\",\n  \"license\": \"MIT\",\n  \"author\": \"Open Presentation\",\n  \"homepage\": \"https://openpresentation.org\",\n  \"publishConfig\": {\n    \"access\": \"public\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"https://github.com/OpenPresentation/opf.git\",\n    \"directory\": \"packages/javascript\"\n  },\n  \"bugs\": {\n    \"url\": \"https://github.com/OpenPresentation/opf/issues\"\n  },\n  \"keywords\": [\n    \"opf\",\n    \"open-presentation-format\",\n    \"presentation\",\n    \"schema\",\n    \"json-schema\",\n    \"catalogs\",\n    \"slides\"\n  ],\n  \"type\": \"module\",\n  \"sideEffects\": false,\n  \"main\": \"./dist/index.js\",\n  \"types\": \"./dist/index.d.ts\",\n  \"exports\": {\n    \".\": {\n      \"types\": \"./dist/index.d.ts\",\n      \"bun\": \"./dist/index.js\",\n      \"deno\": \"./dist/index.js\",\n      \"workerd\": \"./dist/browser.js\",\n      \"worker\": \"./dist/browser.js\",\n      \"browser\": \"./dist/browser.js\",\n      \"node\": \"./dist/index.js\",\n      \"default\": \"./dist/browser.js\"\n    },\n    \"./schemas\": {\n      \"types\": \"./dist/schemas.d.ts\",\n      \"import\": \"./dist/schemas.js\"\n    },\n    \"./validator\": {\n      \"types\": \"./dist/validator.d.ts\",\n      \"import\": \"./dist/validator.js\"\n    },\n    \"./types\": {\n      \"types\": \"./dist/types.d.ts\",\n      \"import\": \"./dist/types.js\"\n    },\n    \"./spec-files\": {\n      \"types\": \"./dist/spec-files.d.ts\",\n      \"import\": \"./dist/spec-files.js\"\n    },\n    \"./examples\": {\n      \"types\": \"./dist/examples.d.ts\",\n      \"import\": \"./dist/examples.js\"\n    },\n    \"./docs\": {\n      \"types\": \"./dist/docs.d.ts\",\n      \"import\": \"./dist/docs.js\"\n    },\n    \"./repo-readme\": {\n      \"types\": \"./dist/repo-readme.d.ts\",\n      \"import\": \"./dist/repo-readme.js\"\n    },\n    \"./spec/*\": \"./dist/spec/*\",\n    \"./package.json\": \"./package.json\",\n    \"./composition\": {\n      \"types\": \"./dist/composition.d.ts\",\n      \"import\": \"./dist/composition.js\"\n    },\n    \"./pagination\": {\n      \"types\": \"./dist/pagination.d.ts\",\n      \"import\": \"./dist/pagination.js\"\n    },\n    \"./data\": {\n      \"types\": \"./dist/data.d.ts\",\n      \"import\": \"./dist/data.js\"\n    },\n    \"./font-policy\": {\n      \"types\": \"./dist/font-policy.d.ts\",\n      \"import\": \"./dist/font-policy.js\"\n    },\n    \"./symbol-font-encodings\": {\n      \"types\": \"./dist/symbol-font-encodings.d.ts\",\n      \"import\": \"./dist/symbol-font-encodings.js\"\n    },\n    \"./deck\": {\n      \"types\": \"./dist/deck.d.ts\",\n      \"import\": \"./dist/deck.js\"\n    },\n    \"./markdown\": {\n      \"types\": \"./dist/markdown.d.ts\",\n      \"import\": \"./dist/markdown.js\"\n    },\n    \"./yaml\": {\n      \"types\": \"./dist/yaml.d.ts\",\n      \"import\": \"./dist/yaml.js\"\n    },\n    \"./patch\": {\n      \"types\": \"./dist/patch.d.ts\",\n      \"import\": \"./dist/patch.js\"\n    },\n    \"./diff\": {\n      \"types\": \"./dist/diff.d.ts\",\n      \"import\": \"./dist/diff.js\"\n    },\n    \"./format\": {\n      \"types\": \"./dist/format.d.ts\",\n      \"import\": \"./dist/format.js\"\n    },\n    \"./convert\": {\n      \"types\": \"./dist/convert.d.ts\",\n      \"import\": \"./dist/convert.js\"\n    },\n    \"./internal/engine\": {\n      \"types\": \"./dist/node-engine.d.ts\",\n      \"node\": \"./dist/node-engine.js\"\n    }\n  },\n  \"files\": [\n    \"dist\",\n    \"README.md\",\n    \"LICENSE\",\n    \"package.json\"\n  ],\n  \"engines\": {\n    \"node\": \">=22\"\n  },\n  \"scripts\": {\n    \"clean\": \"rm -rf dist src/generated\",\n    \"generate\": \"node scripts/generate.mjs && node scripts/generate-content.mjs\",\n    \"build\": \"node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)\",\n    \"typecheck\": \"pnpm run generate && node ../../scripts/typecheck.mjs --noEmit\",\n    \"test\": \"pnpm run build && node ../../scripts/run-tests.mjs\",\n    \"test:packed\": \"node test/packed-install-smoke.mjs\",\n    \"pack:dry-run\": \"pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache\"\n  },\n  \"dependencies\": {\n    \"@openpresentation/gallery\": \"^2.0.0\",\n    \"ajv\": \"^8.17.1\",\n    \"ajv-formats\": \"^3.0.1\",\n    \"jsonc-parser\": \"3.3.1\",\n    \"yaml\": \"^2.9.1\"\n  },\n  \"devDependencies\": {\n    \"@expo-google-fonts/arimo\": \"0.4.3\",\n    \"@expo-google-fonts/caladea\": \"0.4.2\",\n    \"@expo-google-fonts/cousine\": \"0.4.3\",\n    \"@expo-google-fonts/gelasio\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans\": \"0.4.2\",\n    \"@expo-google-fonts/roboto\": \"0.4.3\",\n    \"@expo-google-fonts/roboto-mono\": \"0.4.2\",\n    \"@expo-google-fonts/tinos\": \"0.4.2\",\n    \"@openpresentation/opf-pptx\": \"0.19.0\",\n    \"@openpresentation/opf-render\": \"0.19.1\",\n    \"@resvg/resvg-js\": \"2.6.2\",\n    \"@types/node\": \"^24.13.4\",\n    \"json-schema-to-typescript\": \"^16.0.0\",\n    \"pdf-lib\": \"1.17.1\",\n    \"sharp\": \"0.35.5\",\n    \"tsup\": \"^8.5.1\",\n    \"typescript\": \"~5.9.3\"\n  },\n  \"peerDependencies\": {\n    \"@openpresentation/opf-pptx\": \"^0.20.0\",\n    \"@openpresentation/opf-render\": \"^0.20.0\"\n  },\n  \"peerDependenciesMeta\": {\n    \"@openpresentation/opf-pptx\": {\n      \"optional\": true\n    },\n    \"@openpresentation/opf-render\": {\n      \"optional\": true\n    }\n  },\n  \"opf\": {\n    \"requiresUnreleasedGallery\": \"3.0.0\"\n  }\n}\n",
+      "stagedManifest": {
+        "name": "@openpresentation/opf",
+        "version": "0.19.0",
+        "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; in Node, the file API and the CLI defaults register the pptx.gallery catalog of @openpresentation/gallery.",
+        "license": "MIT",
+        "author": "Open Presentation",
+        "homepage": "https://openpresentation.org",
+        "publishConfig": {
+          "access": "public"
+        },
+        "repository": {
+          "type": "git",
+          "url": "https://github.com/OpenPresentation/opf.git",
+          "directory": "packages/javascript"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf/issues"
+        },
+        "keywords": [
+          "opf",
+          "open-presentation-format",
+          "presentation",
+          "schema",
+          "json-schema",
+          "catalogs",
+          "slides"
+        ],
+        "type": "module",
+        "sideEffects": false,
+        "main": "./dist/index.js",
+        "types": "./dist/index.d.ts",
+        "exports": {
+          ".": {
+            "types": "./dist/index.d.ts",
+            "bun": "./dist/index.js",
+            "deno": "./dist/index.js",
+            "workerd": "./dist/browser.js",
+            "worker": "./dist/browser.js",
+            "browser": "./dist/browser.js",
+            "node": "./dist/index.js",
+            "default": "./dist/browser.js"
+          },
+          "./schemas": {
+            "types": "./dist/schemas.d.ts",
+            "import": "./dist/schemas.js"
+          },
+          "./validator": {
+            "types": "./dist/validator.d.ts",
+            "import": "./dist/validator.js"
+          },
+          "./types": {
+            "types": "./dist/types.d.ts",
+            "import": "./dist/types.js"
+          },
+          "./spec-files": {
+            "types": "./dist/spec-files.d.ts",
+            "import": "./dist/spec-files.js"
+          },
+          "./examples": {
+            "types": "./dist/examples.d.ts",
+            "import": "./dist/examples.js"
+          },
+          "./docs": {
+            "types": "./dist/docs.d.ts",
+            "import": "./dist/docs.js"
+          },
+          "./repo-readme": {
+            "types": "./dist/repo-readme.d.ts",
+            "import": "./dist/repo-readme.js"
+          },
+          "./spec/*": "./dist/spec/*",
+          "./package.json": "./package.json",
+          "./composition": {
+            "types": "./dist/composition.d.ts",
+            "import": "./dist/composition.js"
+          },
+          "./pagination": {
+            "types": "./dist/pagination.d.ts",
+            "import": "./dist/pagination.js"
+          },
+          "./data": {
+            "types": "./dist/data.d.ts",
+            "import": "./dist/data.js"
+          },
+          "./font-policy": {
+            "types": "./dist/font-policy.d.ts",
+            "import": "./dist/font-policy.js"
+          },
+          "./symbol-font-encodings": {
+            "types": "./dist/symbol-font-encodings.d.ts",
+            "import": "./dist/symbol-font-encodings.js"
+          },
+          "./deck": {
+            "types": "./dist/deck.d.ts",
+            "import": "./dist/deck.js"
+          },
+          "./markdown": {
+            "types": "./dist/markdown.d.ts",
+            "import": "./dist/markdown.js"
+          },
+          "./yaml": {
+            "types": "./dist/yaml.d.ts",
+            "import": "./dist/yaml.js"
+          },
+          "./patch": {
+            "types": "./dist/patch.d.ts",
+            "import": "./dist/patch.js"
+          },
+          "./diff": {
+            "types": "./dist/diff.d.ts",
+            "import": "./dist/diff.js"
+          },
+          "./format": {
+            "types": "./dist/format.d.ts",
+            "import": "./dist/format.js"
+          },
+          "./convert": {
+            "types": "./dist/convert.d.ts",
+            "import": "./dist/convert.js"
+          },
+          "./internal/engine": {
+            "types": "./dist/node-engine.d.ts",
+            "node": "./dist/node-engine.js"
+          }
+        },
+        "files": [
+          "dist",
+          "README.md",
+          "LICENSE",
+          "package.json"
+        ],
+        "engines": {
+          "node": ">=22"
+        },
+        "dependencies": {
+          "@openpresentation/gallery": "file:/private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/gallery-engines-OW76Ux/openpresentation-gallery-3.0.0.tgz",
+          "ajv": "^8.17.1",
+          "ajv-formats": "^3.0.1",
+          "jsonc-parser": "3.3.1",
+          "yaml": "^2.9.1"
+        },
+        "peerDependencies": {
+          "@openpresentation/opf-pptx": "^0.20.0",
+          "@openpresentation/opf-render": "^0.19.1"
+        },
+        "peerDependenciesMeta": {
+          "@openpresentation/opf-pptx": {
+            "optional": true
+          },
+          "@openpresentation/opf-render": {
+            "optional": true
+          }
+        }
+      },
+      "originalManifestSha256": "e3c34e59d914c416a8c1a313f2970e19c064533226e0089708375923b35e9b4f",
+      "stagedManifestSha256": "b4a19ddf31a6d13d2bdeac1d5ad31323b970a6b14765008255a4fdd14936cc82",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "6665f92bf003fd21ca6893e90c757766b7b3ee95735aedada83de2e133b6fdf4",
+          "bytes": 1086
+        },
+        {
+          "path": "README.md",
+          "sha256": "3ade7d08797e07e850e9886a4ae5004d15c2cfc00e4307c9f7937cc4255a131b",
+          "bytes": 17689
+        },
+        {
+          "path": "dist/browser.js",
+          "sha256": "b14c8922bd94cf8cf54934219e54895877c8bc9f5fd64f933883e2688e80b452",
+          "bytes": 3795
+        },
+        {
+          "path": "dist/catalog-refs-CSHevLn1.d.ts",
+          "sha256": "e792a8eb9a83e169150f1fd0918f0bb3146fc14635d009b334c62d5530ef5c52",
+          "bytes": 7324
+        },
+        {
+          "path": "dist/chart-data-BnNqgnC-.d.ts",
+          "sha256": "90e199b6f716aac5d39fb5b528574c41e2a797207dc9aef1866234f728206170",
+          "bytes": 11060
+        },
+        {
+          "path": "dist/chunk-2AGWO7RM.js",
+          "sha256": "7467e3eab32fc9db3f0dfff0fef3adfbb531cfd349c4ac2add82cb6b3665150a",
+          "bytes": 47263
+        },
+        {
+          "path": "dist/chunk-2XJUXMBS.js",
+          "sha256": "f3fe6e13cb6531207c56374410d64e50aabe8d7d4ba2dea774c5194652e41747",
+          "bytes": 12493
+        },
+        {
+          "path": "dist/chunk-4FBXVST6.js",
+          "sha256": "0bd8517a5ca27095e2332d870dc437989a327555ded567ce2f35155ef0ea3a92",
+          "bytes": 15633
+        },
+        {
+          "path": "dist/chunk-7QUAOKS6.js",
+          "sha256": "6b0acfac686567c3becddfcef152383fb7c1d2c562a17e41cd0845d83e5aad0e",
+          "bytes": 207285
+        },
+        {
+          "path": "dist/chunk-32MHL3B3.js",
+          "sha256": "5964a70f61c40d9c59baa43ee537b22d7874931874f7ecd02eaada12daefabf8",
+          "bytes": 3788
+        },
+        {
+          "path": "dist/chunk-BDXJYO6R.js",
+          "sha256": "55d71e193cb637791571f63c54accfd5dc5e0726b94fbf694e9c405c193a6a97",
+          "bytes": 19442
+        },
+        {
+          "path": "dist/chunk-BYEIFHWS.js",
+          "sha256": "a325dc65a426a16821393ef942f653c50e6f7347777fa5a54f8a68fd783cb4d4",
+          "bytes": 910
+        },
+        {
+          "path": "dist/chunk-F7PLNWHQ.js",
+          "sha256": "ef122ad1185c83102a0436af5fb6dc474558719b6d8faef2a471b6574c875124",
+          "bytes": 157769
+        },
+        {
+          "path": "dist/chunk-KDQYJHDP.js",
+          "sha256": "9e131d83311051c6fa7be365abc0202e051eafc4c863405f4212d7b1408b1530",
+          "bytes": 57917
+        },
+        {
+          "path": "dist/chunk-L6RRLN6Q.js",
+          "sha256": "f52f00e47237acabe0f67ae7c767c60b6eb9e4b417b0d81a5e452833339a5a77",
+          "bytes": 27677
+        },
+        {
+          "path": "dist/chunk-NZDWCYDI.js",
+          "sha256": "6cedafb20603e4dbeb5f58115ade0d9845c78631a50f553f40b3a7a0d148b6a7",
+          "bytes": 3008
+        },
+        {
+          "path": "dist/chunk-P6LMWUXV.js",
+          "sha256": "94c0f216860937ab90e61e34b09e6114e9e53401b92e57c354989de65b4b6845",
+          "bytes": 7833
+        },
+        {
+          "path": "dist/chunk-RFJ5TR3V.js",
+          "sha256": "ac1b27bc18324446812a05429bda0eba3221809acf76609105ad01e1c711bb65",
+          "bytes": 84224
+        },
+        {
+          "path": "dist/chunk-UA5EROLC.js",
+          "sha256": "188b93f75805f4954bc857a8d896fbe6036823d42c0b37f65b06421b9ef8882e",
+          "bytes": 5033
+        },
+        {
+          "path": "dist/chunk-UAXSW6VV.js",
+          "sha256": "5550cd04b1e9b5d4fb2cfda597a4afc35be0864e966a18e2eda654bf85ea0bd8",
+          "bytes": 431466
+        },
+        {
+          "path": "dist/chunk-UJSAR6GF.js",
+          "sha256": "57eb2cf7b2398ddb590d27a021de6f7b8dd337d93f643868abbae4c70b23938d",
+          "bytes": 5655
+        },
+        {
+          "path": "dist/chunk-VEHLQVGQ.js",
+          "sha256": "d56e2374412f750e15cd6b9760ad7f2e2d1b28d9fed130d3ea9b14b80c205703",
+          "bytes": 345638
+        },
+        {
+          "path": "dist/chunk-W7G5LSXI.js",
+          "sha256": "8050324485a54c72a9ca6136744e5cd00817a118840712057a7abb4184691d2f",
+          "bytes": 6461
+        },
+        {
+          "path": "dist/chunk-ZU5EQ23T.js",
+          "sha256": "c941a4c072ac82c3b3aa1ddb57a19c9813afad621c1828578b746c8629e6a731",
+          "bytes": 4562
+        },
+        {
+          "path": "dist/composition-MFjGwuN_.d.ts",
+          "sha256": "3064a3465bcad3df299e52458f5dc090bba8aa5e56edfb163a1b67afad1812b6",
+          "bytes": 151744
+        },
+        {
+          "path": "dist/composition.d.ts",
+          "sha256": "9b23510e979115a27a4de87f19d71ce74a8a1781aee29a5939f869e07f752de9",
+          "bytes": 9765
+        },
+        {
+          "path": "dist/composition.js",
+          "sha256": "5baa5a4970c256e1635182190bc73c52a0ef70f07d4af08d44276e305d062b0d",
+          "bytes": 3623
+        },
+        {
+          "path": "dist/conversion-DDd1mdIj.d.ts",
+          "sha256": "b7e0572a2e1bb2b08ef8a4349ab4da97811bd72976cab7c69a150a2a1386930f",
+          "bytes": 27537
+        },
+        {
+          "path": "dist/conversion-NBQS5DLY.js",
+          "sha256": "4a609ca795fd1b5bfd0f7caadf562b3fb431ed69f65ef0a8af657fdbd91c8f83",
+          "bytes": 685
+        },
+        {
+          "path": "dist/convert.d.ts",
+          "sha256": "17e3169df1bfcd3a56cdbfdc4c8ddee8d2f3252a8fab6a2a4e7263a9597ad8f0",
+          "bytes": 15108
+        },
+        {
+          "path": "dist/convert.js",
+          "sha256": "198fdcdfc6ffef7e974dfe02e4e594860c5a1e85090ffd8bc4ff784a0609c944",
+          "bytes": 61016
+        },
+        {
+          "path": "dist/data.d.ts",
+          "sha256": "855d7f9df258aee64842eadd717f13f412b7af00c8b02dd1899c2dc790659b37",
+          "bytes": 2633
+        },
+        {
+          "path": "dist/data.js",
+          "sha256": "1033e061a9b7d37d2d4ae1a66f9f52937511ff5e8826923c6fc0655548a395ee",
+          "bytes": 413
+        },
+        {
+          "path": "dist/deck-report-DldBcTHe.d.ts",
+          "sha256": "9e650db048617e633daf37acc02b7b2aec1774a9e333a9a5d1580c4d84d7c593",
+          "bytes": 2418
+        },
+        {
+          "path": "dist/deck.d.ts",
+          "sha256": "9c9ddc20823256436bab3cc70506dc8832d76a3801a812341147eb6e4c4b4e87",
+          "bytes": 2944
+        },
+        {
+          "path": "dist/deck.js",
+          "sha256": "306c45405964c62cb323549fa506fbd184efdc734621d0f1ad79a7ca969e5875",
+          "bytes": 354
+        },
+        {
+          "path": "dist/diff.d.ts",
+          "sha256": "0a76a44d91e1d01c9963dc970d3d6933bbf397fa769c0f2d34a2835cb6cea536",
+          "bytes": 6024
+        },
+        {
+          "path": "dist/diff.js",
+          "sha256": "222b425841dd4f52224209e4951aea628f3045e2e2b200443538581d045c6793",
+          "bytes": 241
+        },
+        {
+          "path": "dist/docs.d.ts",
+          "sha256": "80367c579659357c6c0fde511706a8512f0152a589fcaaac2d78bf2b41aa94f7",
+          "bytes": 671
+        },
+        {
+          "path": "dist/docs.js",
+          "sha256": "49ca96fa716c3faa74374a6e0a66ef1d701f9e1ac7d3700b346b9e66df8af308",
+          "bytes": 1315240
+        },
+        {
+          "path": "dist/examples.d.ts",
+          "sha256": "6ab33c520646f4009f3f982d34fcd246517b4635d1cff22e3cec3622695c38bd",
+          "bytes": 2141
+        },
+        {
+          "path": "dist/examples.js",
+          "sha256": "cae643dfb463933a0c603f427e48d73a71b97b9a6ef051f811900e1c79f057e0",
+          "bytes": 5585153
+        },
+        {
+          "path": "dist/finding-CT_f_vbD.d.ts",
+          "sha256": "35597bd168c7f555510bbf7aa997240591f7f323bfa4dcacb0ccf1ee44754888",
+          "bytes": 7991
+        },
+        {
+          "path": "dist/font-policy.d.ts",
+          "sha256": "a68d0e245fb71433b286a75f897de891ca7876204dc482d0c7fb3e1131a4d304",
+          "bytes": 7938
+        },
+        {
+          "path": "dist/font-policy.js",
+          "sha256": "f6b5acb03edaf769f72400c0ddd88756a6b4cc6aea116a762605064dc315f831",
+          "bytes": 121
+        },
+        {
+          "path": "dist/format.d.ts",
+          "sha256": "a8fb2b91433191bcf747a83400e335c559512b59c8d44ea20b479082efba566c",
+          "bytes": 940
+        },
+        {
+          "path": "dist/format.js",
+          "sha256": "9463882b7b1297b57ce76e77e380ddb0cabb70b0d7f7699407350608775cd9e5",
+          "bytes": 127
+        },
+        {
+          "path": "dist/index.d.ts",
+          "sha256": "2b69648e12a1e69923ef5ec4fa24df8cabc06caf9c429f67d53a8d366a6a4953",
+          "bytes": 36641
+        },
+        {
+          "path": "dist/index.js",
+          "sha256": "e6acf6f39fc6d248689e80df067011cc3af2f40a7bff435bee4c865237ccb694",
+          "bytes": 4788
+        },
+        {
+          "path": "dist/json-BFSdESOE.d.ts",
+          "sha256": "e42487d6802977bc25edd5ba56177caf5ebe95da82cf5606d9dad086df233b78",
+          "bytes": 827
+        },
+        {
+          "path": "dist/markdown.d.ts",
+          "sha256": "97d0db501c7d6c0512e803a6912697f2d2149d36ea8006ad2b8bc9971b45f703",
+          "bytes": 5208
+        },
+        {
+          "path": "dist/markdown.js",
+          "sha256": "0705b14aed3cf848439dc49841b4fcb96aec2af3ae142e214184c21e704b74fb",
+          "bytes": 270
+        },
+        {
+          "path": "dist/node-engine.d.ts",
+          "sha256": "2633a659ac8456fbe51b0ad855c17bee2a7e4a1b5d2ab46a3d4fabbfb6b8c40d",
+          "bytes": 8819
+        },
+        {
+          "path": "dist/node-engine.js",
+          "sha256": "5ad628e4c35ebc18e47cab19b65e825ffdb49d50f58a15b24a529b209ba6ada4",
+          "bytes": 2455
+        },
+        {
+          "path": "dist/pagination-BKsZIEcA.d.ts",
+          "sha256": "5520ee31bfc20576f85548a3aaa5e202ed2e0ce7e6293403a772122d1e331808",
+          "bytes": 7738
+        },
+        {
+          "path": "dist/pagination.d.ts",
+          "sha256": "e875a203455bc65e5b9065690c7e5f5eb18886da6ca9103a05b9d31c8001c05a",
+          "bytes": 373
+        },
+        {
+          "path": "dist/pagination.js",
+          "sha256": "02f352b8e4ea1778a4a30969f8d69a354a0408564587b129f2b41f8ed190a229",
+          "bytes": 173
+        },
+        {
+          "path": "dist/patch.d.ts",
+          "sha256": "74705352dd8f2c39b5d6a5a96179e1efdafb05e905931bc7e4d3f3426619e497",
+          "bytes": 5056
+        },
+        {
+          "path": "dist/patch.js",
+          "sha256": "9757527ec62f67d5f5a97a0f4573f246c7f920afd70e510d6bcc233d7d61203e",
+          "bytes": 384
+        },
+        {
+          "path": "dist/presentation-B_e2Djga.d.ts",
+          "sha256": "f07b7b1acff2a37715640c9d0a94dbd6dd7f6bff41b54f9e16d8d4687654af09",
+          "bytes": 185853
+        },
+        {
+          "path": "dist/repo-readme.d.ts",
+          "sha256": "efa7477233f1982692546f2aaa2b2133546021755b66139970b136a724b45455",
+          "bytes": 139
+        },
+        {
+          "path": "dist/repo-readme.js",
+          "sha256": "1860dc3569731f0e94a87f32d1b02f6ead7b3eb3d40b20dbcfc90673cc416482",
+          "bytes": 16367
+        },
+        {
+          "path": "dist/schemas.d.ts",
+          "sha256": "9961791b7fdfeb05bce20a3cc3b9d71fea89e340203274af30006683dc1c2fe7",
+          "bytes": 11950
+        },
+        {
+          "path": "dist/schemas.js",
+          "sha256": "6431b4ef9b16985ec606bfacca97af2b66b88927aa21b96642b07e2c58928102",
+          "bytes": 202
+        },
+        {
+          "path": "dist/spec-files.d.ts",
+          "sha256": "b4255ceea26317ce0654fa56268a8e347128afe1bf60c839909a8aa8612367ad",
+          "bytes": 1518
+        },
+        {
+          "path": "dist/spec-files.js",
+          "sha256": "73367981f93d9213c79a295cddb1673e8c2026e52dd0eb6f16259920656b41b9",
+          "bytes": 85
+        },
+        {
+          "path": "dist/spec/openapi.yaml",
+          "sha256": "523bbb95ce43b5213b6f1aa963f8c3392b7ccef41e8c6faee24bffb1e0d7df79",
+          "bytes": 24151
+        },
+        {
+          "path": "dist/spec/README.md",
+          "sha256": "764ffec2a30b383a7787d758db70b40872d78e01bdb410aae549d8aac21196e1",
+          "bytes": 5999
+        },
+        {
+          "path": "dist/spec/reference/engine-defaults.json",
+          "sha256": "9faa8e4a2aec0e138d26f603ab6a0f55d7715e8f0bb0792cca2b5476adca9d6f",
+          "bytes": 1341
+        },
+        {
+          "path": "dist/spec/reference/engine-vocabularies.json",
+          "sha256": "32257373b6a6171056f198ec4cb87b6bcf3418e9a9c37c3072cc98ab00f8dc53",
+          "bytes": 33487
+        },
+        {
+          "path": "dist/spec/reference/font-policy.json",
+          "sha256": "1692b0702cf9a37afc69b4de1b0b12dbb7f25546b13ebcc2edeed845c847b611",
+          "bytes": 154307
+        },
+        {
+          "path": "dist/spec/reference/font-policy.schema.json",
+          "sha256": "0e5a1132c08e80f561b0734e9eeb28d0238d3bd5481f8c0b69f85c774a64d837",
+          "bytes": 10295
+        },
+        {
+          "path": "dist/spec/reference/symbol-font-encodings.json",
+          "sha256": "64f18aa6a2674125d08af6e3d23275a2c9d4318e2aa4718b2b4b8e264582834d",
+          "bytes": 318426
+        },
+        {
+          "path": "dist/spec/reference/symbol-font-encodings.schema.json",
+          "sha256": "a2f27e92b29106fd4c1eb8cc2158618bf1bad0e5b2090fb0830b8e9ec13eb74e",
+          "bytes": 7451
+        },
+        {
+          "path": "dist/spec/schemas/audience.schema.json",
+          "sha256": "11a842909d015fb4f66161d55fb6c13fea27b6af92d8b81ce5606641a609a29a",
+          "bytes": 5925
+        },
+        {
+          "path": "dist/spec/schemas/catalog-index.schema.json",
+          "sha256": "97460dc055080271ca4dd0e118db696eadc56e93bb95ca9b6b03982c14479384",
+          "bytes": 4525
+        },
+        {
+          "path": "dist/spec/schemas/catalog-manifest.schema.json",
+          "sha256": "e772c4280812dc84693070ea38fa033c2d42660c5decf47154fa89281ad003e1",
+          "bytes": 3472
+        },
+        {
+          "path": "dist/spec/schemas/chart-type.schema.json",
+          "sha256": "31115a16fdb69dc95290e73a819693bc2793a1e98323a0feecc88becb909b8e4",
+          "bytes": 9776
+        },
+        {
+          "path": "dist/spec/schemas/color-scheme.schema.json",
+          "sha256": "1a73147919ccc1c1eb9918404af88ff4c7b259c1da38fc465aa9a3d6495cc0ee",
+          "bytes": 7093
+        },
+        {
+          "path": "dist/spec/schemas/finding.schema.json",
+          "sha256": "bcae8b87f78d7f711b596c0ae6e62fc802c35fd2e96634c6827ee969f866c2eb",
+          "bytes": 10553
+        },
+        {
+          "path": "dist/spec/schemas/font-scheme.schema.json",
+          "sha256": "6286c88cdf9b727481a4c6972ad92989996cf0c8cf0e5e402f13332b18e1e462",
+          "bytes": 9896
+        },
+        {
+          "path": "dist/spec/schemas/language.schema.json",
+          "sha256": "7d77a9e74bc5b3fc969598abb7fbce78cef0422ec1001ac285a1a88270dc9d65",
+          "bytes": 7014
+        },
+        {
+          "path": "dist/spec/schemas/layout-preview-index.schema.json",
+          "sha256": "3bb09714bceb8c1e02cbf92db709b1c419c91750296b25a9a034d50f565c62e8",
+          "bytes": 2248
+        },
+        {
+          "path": "dist/spec/schemas/layout.schema.json",
+          "sha256": "943ac52234f3e20b07e3a019f143e0e02a8b3f2118bc7125eb8f0feb57e8ed47",
+          "bytes": 17820
+        },
+        {
+          "path": "dist/spec/schemas/narrative.schema.json",
+          "sha256": "2930de17f4b58fbe12654435f45fd67ab852dee0d77fb4773b533e49b6da4fee",
+          "bytes": 8313
+        },
+        {
+          "path": "dist/spec/schemas/opf.schema.json",
+          "sha256": "aef7115bee726d011449b61beff5fc6245e4205e7f76d16a5bb31f8b9a543d38",
+          "bytes": 217057
+        },
+        {
+          "path": "dist/spec/schemas/purpose.schema.json",
+          "sha256": "4a152c3bcb4ee713c81c4f0254bd311911a6c1911bf1278bcdeb0b372fe9a569",
+          "bytes": 3876
+        },
+        {
+          "path": "dist/spec/schemas/social-platform.schema.json",
+          "sha256": "dd3ff564095dad2d88456b7b5997b4ece789d4404e0238c997d6f953ae64eaff",
+          "bytes": 5610
+        },
+        {
+          "path": "dist/spec/schemas/theme.schema.json",
+          "sha256": "95613b3dc21dd481f5fa9381a55fd15e8db2730ca52d8b10662a4cb141da2587",
+          "bytes": 8094
+        },
+        {
+          "path": "dist/spec/schemas/tone.schema.json",
+          "sha256": "0284b55a803279aa6a608f62b375aaab14f637126dabd3febfc81cad3502a4c9",
+          "bytes": 5435
+        },
+        {
+          "path": "dist/symbol-font-encodings.d.ts",
+          "sha256": "0a6e3068bbfafabb7182299f6a2d0c54888d40c249e559204ae6da110c8f9308",
+          "bytes": 5701
+        },
+        {
+          "path": "dist/symbol-font-encodings.js",
+          "sha256": "5336e48bf89cfaa1109e41c3eb933d72d51da96a61a814f67e9dc9bd098b6f42",
+          "bytes": 424000
+        },
+        {
+          "path": "dist/types.d.ts",
+          "sha256": "0025350bf795db14e4ce11507ead625b93a46abc662c7902b75c0b4e845f5435",
+          "bytes": 60542
+        },
+        {
+          "path": "dist/types.js",
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+          "bytes": 1
+        },
+        {
+          "path": "dist/validation-types-DtN8X_HZ.d.ts",
+          "sha256": "413b03c92eed540c18f542fcec11d2510f741074b851fd34a0c21742b806d35a",
+          "bytes": 15484
+        },
+        {
+          "path": "dist/validator-1d29Z3YY.d.ts",
+          "sha256": "170b72b0c6ee43e0bf5e22ab742ddeaf3505eadcfb18247ffead653b71e72ff1",
+          "bytes": 5778
+        },
+        {
+          "path": "dist/validator.d.ts",
+          "sha256": "00ff4206f1a2dec9052f918ad766a83bc2ad106aeac3f5d1fa25f1b2b1eac0b6",
+          "bytes": 805
+        },
+        {
+          "path": "dist/validator.js",
+          "sha256": "78f21014c8bfd0cbc05d9549cd60baf25866f46acc048f6a4b52ab5bb1149193",
+          "bytes": 331
+        },
+        {
+          "path": "dist/yaml.d.ts",
+          "sha256": "ceb98be78ba4f91ae380467e56be2bb91315eaa4f7dfb5d954f7d4d6ae4e668f",
+          "bytes": 6094
+        },
+        {
+          "path": "dist/yaml.js",
+          "sha256": "6b1c2f71e258a7831bbcc4b0b4bb71227df7e535eeb090d4fdd71b02f63dd968",
+          "bytes": 300
+        },
+        {
+          "path": "package.json",
+          "sha256": "b4a19ddf31a6d13d2bdeac1d5ad31323b970a6b14765008255a4fdd14936cc82",
+          "bytes": 4043
+        }
+      ]
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.19.1",
+      "sourceSha": "dd3ca98b0b11d3b2189d400be7e740e663a81130",
+      "file": "/private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/gallery-engines-OW76Ux/openpresentation-opf-render-0.19.1.tgz",
+      "sha256": "6de3f713dd2af20a5ce244f50829d922d3d7b097827f39c3bd037ef00b19d5da",
+      "bytes": 13073762,
+      "originalManifest": {
+        "name": "@openpresentation/opf-render",
+        "version": "0.19.1",
+        "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-render.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-render/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-render#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "fonts",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "browser": {
+              "types": "./dist/svg.d.ts",
+              "default": "./dist/svg.js"
+            },
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./package.json": "./package.json",
+          "./fonts": {
+            "types": "./dist/fonts.d.ts",
+            "default": "./dist/fonts.js"
+          },
+          "./fonts-node": {
+            "types": "./dist/fonts-node.d.ts",
+            "default": "./dist/fonts-node.js"
+          },
+          "./fonts-browser": {
+            "types": "./dist/fonts-browser.d.ts",
+            "default": "./dist/fonts-browser.js"
+          },
+          "./export-browser": {
+            "types": "./dist/export-browser.d.ts",
+            "default": "./dist/export-browser.js"
+          },
+          "./png": {
+            "types": "./dist/png.d.ts",
+            "default": "./dist/png.js"
+          },
+          "./pdf": {
+            "types": "./dist/pdf.d.ts",
+            "default": "./dist/pdf.js"
+          },
+          "./svg": {
+            "types": "./dist/svg.d.ts",
+            "default": "./dist/svg.js"
+          },
+          "./player": {
+            "types": "./dist/player.d.ts",
+            "default": "./dist/player.js"
+          },
+          "./element": {
+            "types": "./dist/element.d.ts",
+            "default": "./dist/element.js"
+          },
+          "./element/define": {
+            "types": "./dist/element-define.d.ts",
+            "default": "./dist/element-define.js"
+          },
+          "./preview-fonts": {
+            "types": "./dist/preview-fonts.d.ts",
+            "default": "./dist/preview-fonts.js"
+          },
+          "./preview-fonts-node": {
+            "types": "./dist/preview-fonts-node.d.ts",
+            "default": "./dist/preview-fonts-node.js"
+          }
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": [
+          "./dist/element-define.js"
+        ],
+        "scripts": {
+          "build": "node scripts/build.mjs",
+          "typecheck": "node scripts/check-syntax.mjs src test scripts",
+          "validate": "node scripts/validate-package.mjs",
+          "test": "npm run build && npm run check:fonts && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes",
+          "test:contract": "npm run build && npm run check:fonts && node scripts/run-tests.mjs --suite contract && npm run build:browser-check",
+          "check:runners": "node --test scripts/run-tests.test.mjs",
+          "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+          "check:fonts": "node test/font-licenses.mjs && npm run check:font-hotlinks",
+          "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
+          "test:golden": "npm run build && node test/golden.mjs",
+          "test:packed": "node test/packed-install.mjs",
+          "test:next-bundle": "node scripts/check-next-bundle.mjs",
+          "test:browser": "npm run build:browser-check && node test/browser-check.mjs && node test/rich-tab-browser.mjs && node test/rich-tab-estimated-browser.mjs",
+          "golden:update": "npm run build && node test/golden.mjs --update",
+          "golden:promote": "node scripts/golden-promote.mjs",
+          "bench:soak": "node scripts/soak.mjs",
+          "prepack": "npm run build",
+          "build:browser-check": "node scripts/build-browser-check.mjs",
+          "test:styled-table": "node test/styled-table.mjs",
+          "test:pdf-vector": "node test/pdf-vector.mjs && node test/pdf-vector-visual.mjs",
+          "test:export-browser": "node test/export-browser.mjs artifacts/export-browser",
+          "report:pdf-vector": "node test/pdf-vector-visual.mjs --all --report artifacts/pdf-vector-visual.json",
+          "test:code": "node test/shared-code.mjs",
+          "test:code-browser": "node test/shared-code-browser.mjs",
+          "test:metric": "node test/shared-metric.mjs",
+          "test:images-browser": "node test/image-placeholders-browser.mjs",
+          "test:font-preparation": "node test/font-preparation.mjs artifacts/font-preparation.json",
+          "test:font-preparation-browser": "node test/font-preparation-browser.mjs artifacts/font-preparation-browser.json",
+          "test:font-variants": "node test/font-variants.mjs",
+          "test:font-variants-browser": "node test/font-variants-browser.mjs",
+          "test:variable-font-gate": "node test/platform-residual-probe.mjs ../archive/test/fixtures/font-formats artifacts/variable-font-gate/live.json && node test/variable-font-retained-gate.mjs ../archive/docs/evidence/rejected-truetype-rounding-20260915 artifacts/variable-font-gate/retained.json",
+          "test:aptos-preview-browser": "node test/aptos-preview-browser.mjs artifacts/aptos-preview-browser.json",
+          "test:lazy-face-fallback-browser": "node test/lazy-face-fallback-browser.mjs artifacts/lazy-face-fallback",
+          "test:lazy-fonts-browser": "node test/lazy-fonts-browser.mjs artifacts/lazy-fonts",
+          "test:latin-family-hosts-browser": "node test/latin-family-hosts-browser.mjs artifacts/latin-family-hosts",
+          "test:script-family-hosts-browser": "node test/script-family-hosts-browser.mjs artifacts/script-family-hosts",
+          "test:extra-lazy-fonts-browser": "node test/extra-lazy-fonts-browser.mjs artifacts/extra-lazy-fonts",
+          "test:script-fonts-browser": "node test/script-fonts-browser.mjs artifacts/script-fonts-browser.json",
+          "test:script-corpora-browser": "node test/script-corpora-browser.mjs artifacts/script-corpora-browser.json && node test/script-corpora-slides-browser.mjs artifacts/script-corpora-slides-browser.json",
+          "test:script-fonts-auto-browser": "node test/script-fonts-auto-browser.mjs artifacts/script-fonts-auto",
+          "test:symbol-fonts-browser": "node test/symbol-fonts-browser.mjs artifacts/symbol-fonts-browser.json",
+          "test:text": "node test/font-outlines.mjs && node test/accepted-text.mjs",
+          "test:text-browser": "node test/accepted-text-browser.mjs",
+          "test:rich-spacing-browser": "node test/rich-spacing-browser.mjs",
+          "test:rich-flow-browser": "node test/rich-flow-browser.mjs",
+          "test:plain-whitespace-browser": "node test/plain-whitespace-browser.mjs",
+          "test:emoji-math-browser": "node test/emoji-math-browser.mjs artifacts/emoji-math-browser.json",
+          "test:player": "node test/player-unit.mjs",
+          "test:player-browser": "node test/player-browser.mjs artifacts/player",
+          "test:preview-a11y-browser": "node test/preview-a11y-browser.mjs",
+          "test:forced-colors-browser": "node test/forced-colors-browser.mjs artifacts/forced-colors"
+        },
+        "dependencies": {
+          "@openpresentation/opf": "^0.19.0",
+          "bidi-js": "1.1.0",
+          "fontkit": "^2.0.4",
+          "harfbuzzjs": "1.6.3",
+          "pako": "3.0.2"
+        },
+        "peerDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-emoji": "0.4.8",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+          "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+          "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+          "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+          "@expo-google-fonts/noto-sans-jp": "0.4.4",
+          "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+          "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+          "@expo-google-fonts/noto-sans-kr": "0.4.4",
+          "@expo-google-fonts/noto-sans-lao": "0.4.2",
+          "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+          "@expo-google-fonts/noto-sans-math": "0.4.2",
+          "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+          "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+          "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+          "@expo-google-fonts/noto-sans-sc": "0.4.4",
+          "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+          "@expo-google-fonts/noto-sans-symbols": "0.4.1",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+          "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+          "@expo-google-fonts/noto-sans-tc": "0.4.4",
+          "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+          "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+          "@expo-google-fonts/noto-sans-thai": "0.4.2",
+          "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+          "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/stix-two-math": "0.4.0",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@resvg/resvg-js": "^2.6.2",
+          "pdf-lib": "^1.17.1",
+          "sharp": "^0.35.5"
+        },
+        "peerDependenciesMeta": {
+          "@expo-google-fonts/arimo": {
+            "optional": true
+          },
+          "@expo-google-fonts/caladea": {
+            "optional": true
+          },
+          "@expo-google-fonts/cousine": {
+            "optional": true
+          },
+          "@expo-google-fonts/gelasio": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-color-emoji": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-emoji": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-naskh-arabic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-nastaliq-urdu": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-arabic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-armenian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-bengali": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-devanagari": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-ethiopic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-georgian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-gujarati": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-gurmukhi": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-hebrew": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-jp": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-kannada": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-khmer": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-kr": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-lao": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-malayalam": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-math": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-mongolian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-myanmar": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-oriya": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-sc": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-sinhala": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-symbols": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-symbols-2": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-syriac": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-tamil": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-tc": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-telugu": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-thaana": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-thai": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-serif-hebrew": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-serif-tibetan": {
+            "optional": true
+          },
+          "@expo-google-fonts/roboto": {
+            "optional": true
+          },
+          "@expo-google-fonts/roboto-mono": {
+            "optional": true
+          },
+          "@expo-google-fonts/stix-two-math": {
+            "optional": true
+          },
+          "@expo-google-fonts/tinos": {
+            "optional": true
+          },
+          "@resvg/resvg-js": {
+            "optional": true
+          },
+          "pdf-lib": {
+            "optional": true
+          },
+          "sharp": {
+            "optional": true
+          }
+        },
+        "devDependencies": {
+          "@openpresentation/gallery": "^2.0.0",
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-emoji": "0.4.8",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+          "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+          "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+          "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+          "@expo-google-fonts/noto-sans-jp": "0.4.4",
+          "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+          "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+          "@expo-google-fonts/noto-sans-kr": "0.4.4",
+          "@expo-google-fonts/noto-sans-lao": "0.4.2",
+          "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+          "@expo-google-fonts/noto-sans-math": "0.4.2",
+          "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+          "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+          "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+          "@expo-google-fonts/noto-sans-sc": "0.4.4",
+          "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+          "@expo-google-fonts/noto-sans-symbols": "0.4.1",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+          "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+          "@expo-google-fonts/noto-sans-tc": "0.4.4",
+          "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+          "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+          "@expo-google-fonts/noto-sans-thai": "0.4.2",
+          "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+          "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/stix-two-math": "0.4.0",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@hyzyla/pdfium": "2.1.13",
+          "@jspawn/qpdf-wasm": "0.0.2",
+          "@napi-rs/canvas": "1.0.10",
+          "@resvg/resvg-js": "2.6.2",
+          "axe-core": "4.14.0",
+          "esbuild": "0.28.2",
+          "pdf-lib": "1.17.1",
+          "pdfjs-dist": "6.4.299",
+          "playwright": "1.63.0",
+          "sharp": "0.35.5"
+        },
+        "bin": {
+          "opf-preview-fonts": "./dist/preview-fonts-cli.js"
+        }
+      },
+      "originalManifestText": "{\n  \"name\": \"@openpresentation/opf-render\",\n  \"version\": \"0.19.1\",\n  \"description\": \"Deterministic local OPF renderer for SVG, PNG, and PDF output.\",\n  \"license\": \"MIT\",\n  \"type\": \"module\",\n  \"private\": false,\n  \"engines\": {\n    \"node\": \">=22\"\n  },\n  \"repository\": {\n    \"type\": \"git\",\n    \"url\": \"git+https://github.com/OpenPresentation/opf-render.git\"\n  },\n  \"bugs\": {\n    \"url\": \"https://github.com/OpenPresentation/opf-render/issues\"\n  },\n  \"homepage\": \"https://github.com/OpenPresentation/opf-render#readme\",\n  \"publishConfig\": {\n    \"access\": \"public\"\n  },\n  \"files\": [\n    \"dist\",\n    \"fonts\",\n    \"README.md\",\n    \"LICENSE\"\n  ],\n  \"exports\": {\n    \".\": {\n      \"browser\": {\n        \"types\": \"./dist/svg.d.ts\",\n        \"default\": \"./dist/svg.js\"\n      },\n      \"types\": \"./dist/index.d.ts\",\n      \"default\": \"./dist/index.js\"\n    },\n    \"./package.json\": \"./package.json\",\n    \"./fonts\": {\n      \"types\": \"./dist/fonts.d.ts\",\n      \"default\": \"./dist/fonts.js\"\n    },\n    \"./fonts-node\": {\n      \"types\": \"./dist/fonts-node.d.ts\",\n      \"default\": \"./dist/fonts-node.js\"\n    },\n    \"./fonts-browser\": {\n      \"types\": \"./dist/fonts-browser.d.ts\",\n      \"default\": \"./dist/fonts-browser.js\"\n    },\n    \"./export-browser\": {\n      \"types\": \"./dist/export-browser.d.ts\",\n      \"default\": \"./dist/export-browser.js\"\n    },\n    \"./png\": {\n      \"types\": \"./dist/png.d.ts\",\n      \"default\": \"./dist/png.js\"\n    },\n    \"./pdf\": {\n      \"types\": \"./dist/pdf.d.ts\",\n      \"default\": \"./dist/pdf.js\"\n    },\n    \"./svg\": {\n      \"types\": \"./dist/svg.d.ts\",\n      \"default\": \"./dist/svg.js\"\n    },\n    \"./player\": {\n      \"types\": \"./dist/player.d.ts\",\n      \"default\": \"./dist/player.js\"\n    },\n    \"./element\": {\n      \"types\": \"./dist/element.d.ts\",\n      \"default\": \"./dist/element.js\"\n    },\n    \"./element/define\": {\n      \"types\": \"./dist/element-define.d.ts\",\n      \"default\": \"./dist/element-define.js\"\n    },\n    \"./preview-fonts\": {\n      \"types\": \"./dist/preview-fonts.d.ts\",\n      \"default\": \"./dist/preview-fonts.js\"\n    },\n    \"./preview-fonts-node\": {\n      \"types\": \"./dist/preview-fonts-node.d.ts\",\n      \"default\": \"./dist/preview-fonts-node.js\"\n    }\n  },\n  \"types\": \"./dist/index.d.ts\",\n  \"sideEffects\": [\n    \"./dist/element-define.js\"\n  ],\n  \"scripts\": {\n    \"build\": \"node scripts/build.mjs\",\n    \"typecheck\": \"node scripts/check-syntax.mjs src test scripts\",\n    \"validate\": \"node scripts/validate-package.mjs\",\n    \"test\": \"npm run build && npm run check:fonts && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes\",\n    \"test:contract\": \"npm run build && npm run check:fonts && node scripts/run-tests.mjs --suite contract && npm run build:browser-check\",\n    \"check:runners\": \"node --test scripts/run-tests.test.mjs\",\n    \"check:changes\": \"node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check\",\n    \"check:fonts\": \"node test/font-licenses.mjs && npm run check:font-hotlinks\",\n    \"check:font-hotlinks\": \"node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs\",\n    \"test:golden\": \"npm run build && node test/golden.mjs\",\n    \"test:packed\": \"node test/packed-install.mjs\",\n    \"test:next-bundle\": \"node scripts/check-next-bundle.mjs\",\n    \"test:browser\": \"npm run build:browser-check && node test/browser-check.mjs && node test/rich-tab-browser.mjs && node test/rich-tab-estimated-browser.mjs\",\n    \"golden:update\": \"npm run build && node test/golden.mjs --update\",\n    \"golden:promote\": \"node scripts/golden-promote.mjs\",\n    \"bench:soak\": \"node scripts/soak.mjs\",\n    \"prepack\": \"npm run build\",\n    \"build:browser-check\": \"node scripts/build-browser-check.mjs\",\n    \"test:styled-table\": \"node test/styled-table.mjs\",\n    \"test:pdf-vector\": \"node test/pdf-vector.mjs && node test/pdf-vector-visual.mjs\",\n    \"test:export-browser\": \"node test/export-browser.mjs artifacts/export-browser\",\n    \"report:pdf-vector\": \"node test/pdf-vector-visual.mjs --all --report artifacts/pdf-vector-visual.json\",\n    \"test:code\": \"node test/shared-code.mjs\",\n    \"test:code-browser\": \"node test/shared-code-browser.mjs\",\n    \"test:metric\": \"node test/shared-metric.mjs\",\n    \"test:images-browser\": \"node test/image-placeholders-browser.mjs\",\n    \"test:font-preparation\": \"node test/font-preparation.mjs artifacts/font-preparation.json\",\n    \"test:font-preparation-browser\": \"node test/font-preparation-browser.mjs artifacts/font-preparation-browser.json\",\n    \"test:font-variants\": \"node test/font-variants.mjs\",\n    \"test:font-variants-browser\": \"node test/font-variants-browser.mjs\",\n    \"test:variable-font-gate\": \"node test/platform-residual-probe.mjs ../archive/test/fixtures/font-formats artifacts/variable-font-gate/live.json && node test/variable-font-retained-gate.mjs ../archive/docs/evidence/rejected-truetype-rounding-20260915 artifacts/variable-font-gate/retained.json\",\n    \"test:aptos-preview-browser\": \"node test/aptos-preview-browser.mjs artifacts/aptos-preview-browser.json\",\n    \"test:lazy-face-fallback-browser\": \"node test/lazy-face-fallback-browser.mjs artifacts/lazy-face-fallback\",\n    \"test:lazy-fonts-browser\": \"node test/lazy-fonts-browser.mjs artifacts/lazy-fonts\",\n    \"test:latin-family-hosts-browser\": \"node test/latin-family-hosts-browser.mjs artifacts/latin-family-hosts\",\n    \"test:script-family-hosts-browser\": \"node test/script-family-hosts-browser.mjs artifacts/script-family-hosts\",\n    \"test:extra-lazy-fonts-browser\": \"node test/extra-lazy-fonts-browser.mjs artifacts/extra-lazy-fonts\",\n    \"test:script-fonts-browser\": \"node test/script-fonts-browser.mjs artifacts/script-fonts-browser.json\",\n    \"test:script-corpora-browser\": \"node test/script-corpora-browser.mjs artifacts/script-corpora-browser.json && node test/script-corpora-slides-browser.mjs artifacts/script-corpora-slides-browser.json\",\n    \"test:script-fonts-auto-browser\": \"node test/script-fonts-auto-browser.mjs artifacts/script-fonts-auto\",\n    \"test:symbol-fonts-browser\": \"node test/symbol-fonts-browser.mjs artifacts/symbol-fonts-browser.json\",\n    \"test:text\": \"node test/font-outlines.mjs && node test/accepted-text.mjs\",\n    \"test:text-browser\": \"node test/accepted-text-browser.mjs\",\n    \"test:rich-spacing-browser\": \"node test/rich-spacing-browser.mjs\",\n    \"test:rich-flow-browser\": \"node test/rich-flow-browser.mjs\",\n    \"test:plain-whitespace-browser\": \"node test/plain-whitespace-browser.mjs\",\n    \"test:emoji-math-browser\": \"node test/emoji-math-browser.mjs artifacts/emoji-math-browser.json\",\n    \"test:player\": \"node test/player-unit.mjs\",\n    \"test:player-browser\": \"node test/player-browser.mjs artifacts/player\",\n    \"test:preview-a11y-browser\": \"node test/preview-a11y-browser.mjs\",\n    \"test:forced-colors-browser\": \"node test/forced-colors-browser.mjs artifacts/forced-colors\"\n  },\n  \"dependencies\": {\n    \"@openpresentation/opf\": \"^0.19.0\",\n    \"bidi-js\": \"1.1.0\",\n    \"fontkit\": \"^2.0.4\",\n    \"harfbuzzjs\": \"1.6.3\",\n    \"pako\": \"3.0.2\"\n  },\n  \"peerDependencies\": {\n    \"@expo-google-fonts/arimo\": \"0.4.3\",\n    \"@expo-google-fonts/caladea\": \"0.4.2\",\n    \"@expo-google-fonts/cousine\": \"0.4.3\",\n    \"@expo-google-fonts/gelasio\": \"0.4.1\",\n    \"@expo-google-fonts/noto-color-emoji\": \"0.4.7\",\n    \"@expo-google-fonts/noto-emoji\": \"0.4.8\",\n    \"@expo-google-fonts/noto-naskh-arabic\": \"0.4.5\",\n    \"@expo-google-fonts/noto-nastaliq-urdu\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-arabic\": \"0.4.3\",\n    \"@expo-google-fonts/noto-sans-armenian\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-bengali\": \"0.4.4\",\n    \"@expo-google-fonts/noto-sans-devanagari\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans-ethiopic\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-georgian\": \"0.4.3\",\n    \"@expo-google-fonts/noto-sans-gujarati\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-gurmukhi\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans-hebrew\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans-jp\": \"0.4.4\",\n    \"@expo-google-fonts/noto-sans-kannada\": \"0.4.3\",\n    \"@expo-google-fonts/noto-sans-khmer\": \"0.4.3\",\n    \"@expo-google-fonts/noto-sans-kr\": \"0.4.4\",\n    \"@expo-google-fonts/noto-sans-lao\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-malayalam\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-math\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-mongolian\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans-myanmar\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-oriya\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-sc\": \"0.4.4\",\n    \"@expo-google-fonts/noto-sans-sinhala\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-symbols\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans-symbols-2\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans-syriac\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-tamil\": \"0.4.3\",\n    \"@expo-google-fonts/noto-sans-tc\": \"0.4.4\",\n    \"@expo-google-fonts/noto-sans-telugu\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-thaana\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-thai\": \"0.4.2\",\n    \"@expo-google-fonts/noto-serif-hebrew\": \"0.4.2\",\n    \"@expo-google-fonts/noto-serif-tibetan\": \"0.4.2\",\n    \"@expo-google-fonts/roboto\": \"0.4.3\",\n    \"@expo-google-fonts/roboto-mono\": \"0.4.2\",\n    \"@expo-google-fonts/stix-two-math\": \"0.4.0\",\n    \"@expo-google-fonts/tinos\": \"0.4.2\",\n    \"@resvg/resvg-js\": \"^2.6.2\",\n    \"pdf-lib\": \"^1.17.1\",\n    \"sharp\": \"^0.35.5\"\n  },\n  \"peerDependenciesMeta\": {\n    \"@expo-google-fonts/arimo\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/caladea\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/cousine\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/gelasio\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-color-emoji\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-emoji\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-naskh-arabic\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-nastaliq-urdu\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-arabic\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-armenian\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-bengali\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-devanagari\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-ethiopic\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-georgian\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-gujarati\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-gurmukhi\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-hebrew\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-jp\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-kannada\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-khmer\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-kr\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-lao\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-malayalam\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-math\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-mongolian\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-myanmar\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-oriya\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-sc\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-sinhala\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-symbols\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-symbols-2\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-syriac\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-tamil\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-tc\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-telugu\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-thaana\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-sans-thai\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-serif-hebrew\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/noto-serif-tibetan\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/roboto\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/roboto-mono\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/stix-two-math\": {\n      \"optional\": true\n    },\n    \"@expo-google-fonts/tinos\": {\n      \"optional\": true\n    },\n    \"@resvg/resvg-js\": {\n      \"optional\": true\n    },\n    \"pdf-lib\": {\n      \"optional\": true\n    },\n    \"sharp\": {\n      \"optional\": true\n    }\n  },\n  \"devDependencies\": {\n    \"@openpresentation/gallery\": \"^2.0.0\",\n    \"@expo-google-fonts/arimo\": \"0.4.3\",\n    \"@expo-google-fonts/caladea\": \"0.4.2\",\n    \"@expo-google-fonts/cousine\": \"0.4.3\",\n    \"@expo-google-fonts/gelasio\": \"0.4.1\",\n    \"@expo-google-fonts/noto-color-emoji\": \"0.4.7\",\n    \"@expo-google-fonts/noto-emoji\": \"0.4.8\",\n    \"@expo-google-fonts/noto-naskh-arabic\": \"0.4.5\",\n    \"@expo-google-fonts/noto-nastaliq-urdu\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-arabic\": \"0.4.3\",\n    \"@expo-google-fonts/noto-sans-armenian\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-bengali\": \"0.4.4\",\n    \"@expo-google-fonts/noto-sans-devanagari\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans-ethiopic\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-georgian\": \"0.4.3\",\n    \"@expo-google-fonts/noto-sans-gujarati\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-gurmukhi\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans-hebrew\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans-jp\": \"0.4.4\",\n    \"@expo-google-fonts/noto-sans-kannada\": \"0.4.3\",\n    \"@expo-google-fonts/noto-sans-khmer\": \"0.4.3\",\n    \"@expo-google-fonts/noto-sans-kr\": \"0.4.4\",\n    \"@expo-google-fonts/noto-sans-lao\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-malayalam\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-math\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-mongolian\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans-myanmar\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-oriya\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-sc\": \"0.4.4\",\n    \"@expo-google-fonts/noto-sans-sinhala\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-symbols\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans-symbols-2\": \"0.4.1\",\n    \"@expo-google-fonts/noto-sans-syriac\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-tamil\": \"0.4.3\",\n    \"@expo-google-fonts/noto-sans-tc\": \"0.4.4\",\n    \"@expo-google-fonts/noto-sans-telugu\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-thaana\": \"0.4.2\",\n    \"@expo-google-fonts/noto-sans-thai\": \"0.4.2\",\n    \"@expo-google-fonts/noto-serif-hebrew\": \"0.4.2\",\n    \"@expo-google-fonts/noto-serif-tibetan\": \"0.4.2\",\n    \"@expo-google-fonts/roboto\": \"0.4.3\",\n    \"@expo-google-fonts/roboto-mono\": \"0.4.2\",\n    \"@expo-google-fonts/stix-two-math\": \"0.4.0\",\n    \"@expo-google-fonts/tinos\": \"0.4.2\",\n    \"@hyzyla/pdfium\": \"2.1.13\",\n    \"@jspawn/qpdf-wasm\": \"0.0.2\",\n    \"@napi-rs/canvas\": \"1.0.10\",\n    \"@resvg/resvg-js\": \"2.6.2\",\n    \"axe-core\": \"4.14.0\",\n    \"esbuild\": \"0.28.2\",\n    \"pdf-lib\": \"1.17.1\",\n    \"pdfjs-dist\": \"6.4.299\",\n    \"playwright\": \"1.63.0\",\n    \"sharp\": \"0.35.5\"\n  },\n  \"bin\": {\n    \"opf-preview-fonts\": \"./dist/preview-fonts-cli.js\"\n  }\n}\n",
+      "stagedManifest": {
+        "name": "@openpresentation/opf-render",
+        "version": "0.19.1",
+        "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
+        "license": "MIT",
+        "type": "module",
+        "private": false,
+        "engines": {
+          "node": ">=22"
+        },
+        "repository": {
+          "type": "git",
+          "url": "git+https://github.com/OpenPresentation/opf-render.git"
+        },
+        "bugs": {
+          "url": "https://github.com/OpenPresentation/opf-render/issues"
+        },
+        "homepage": "https://github.com/OpenPresentation/opf-render#readme",
+        "publishConfig": {
+          "access": "public"
+        },
+        "files": [
+          "dist",
+          "fonts",
+          "README.md",
+          "LICENSE"
+        ],
+        "exports": {
+          ".": {
+            "browser": {
+              "types": "./dist/svg.d.ts",
+              "default": "./dist/svg.js"
+            },
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+          },
+          "./package.json": "./package.json",
+          "./fonts": {
+            "types": "./dist/fonts.d.ts",
+            "default": "./dist/fonts.js"
+          },
+          "./fonts-node": {
+            "types": "./dist/fonts-node.d.ts",
+            "default": "./dist/fonts-node.js"
+          },
+          "./fonts-browser": {
+            "types": "./dist/fonts-browser.d.ts",
+            "default": "./dist/fonts-browser.js"
+          },
+          "./export-browser": {
+            "types": "./dist/export-browser.d.ts",
+            "default": "./dist/export-browser.js"
+          },
+          "./png": {
+            "types": "./dist/png.d.ts",
+            "default": "./dist/png.js"
+          },
+          "./pdf": {
+            "types": "./dist/pdf.d.ts",
+            "default": "./dist/pdf.js"
+          },
+          "./svg": {
+            "types": "./dist/svg.d.ts",
+            "default": "./dist/svg.js"
+          },
+          "./player": {
+            "types": "./dist/player.d.ts",
+            "default": "./dist/player.js"
+          },
+          "./element": {
+            "types": "./dist/element.d.ts",
+            "default": "./dist/element.js"
+          },
+          "./element/define": {
+            "types": "./dist/element-define.d.ts",
+            "default": "./dist/element-define.js"
+          },
+          "./preview-fonts": {
+            "types": "./dist/preview-fonts.d.ts",
+            "default": "./dist/preview-fonts.js"
+          },
+          "./preview-fonts-node": {
+            "types": "./dist/preview-fonts-node.d.ts",
+            "default": "./dist/preview-fonts-node.js"
+          }
+        },
+        "types": "./dist/index.d.ts",
+        "sideEffects": [
+          "./dist/element-define.js"
+        ],
+        "dependencies": {
+          "@openpresentation/opf": "file:/private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/gallery-engines-OW76Ux/openpresentation-opf-0.19.0.tgz",
+          "bidi-js": "1.1.0",
+          "fontkit": "^2.0.4",
+          "harfbuzzjs": "1.6.3",
+          "pako": "3.0.2"
+        },
+        "peerDependencies": {
+          "@expo-google-fonts/arimo": "0.4.3",
+          "@expo-google-fonts/caladea": "0.4.2",
+          "@expo-google-fonts/cousine": "0.4.3",
+          "@expo-google-fonts/gelasio": "0.4.1",
+          "@expo-google-fonts/noto-color-emoji": "0.4.7",
+          "@expo-google-fonts/noto-emoji": "0.4.8",
+          "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+          "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+          "@expo-google-fonts/noto-sans": "0.4.2",
+          "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+          "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+          "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+          "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+          "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+          "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+          "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+          "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+          "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+          "@expo-google-fonts/noto-sans-jp": "0.4.4",
+          "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+          "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+          "@expo-google-fonts/noto-sans-kr": "0.4.4",
+          "@expo-google-fonts/noto-sans-lao": "0.4.2",
+          "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+          "@expo-google-fonts/noto-sans-math": "0.4.2",
+          "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+          "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+          "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+          "@expo-google-fonts/noto-sans-sc": "0.4.4",
+          "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+          "@expo-google-fonts/noto-sans-symbols": "0.4.1",
+          "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+          "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+          "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+          "@expo-google-fonts/noto-sans-tc": "0.4.4",
+          "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+          "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+          "@expo-google-fonts/noto-sans-thai": "0.4.2",
+          "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+          "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+          "@expo-google-fonts/roboto": "0.4.3",
+          "@expo-google-fonts/roboto-mono": "0.4.2",
+          "@expo-google-fonts/stix-two-math": "0.4.0",
+          "@expo-google-fonts/tinos": "0.4.2",
+          "@resvg/resvg-js": "^2.6.2",
+          "pdf-lib": "^1.17.1",
+          "sharp": "^0.35.5"
+        },
+        "peerDependenciesMeta": {
+          "@expo-google-fonts/arimo": {
+            "optional": true
+          },
+          "@expo-google-fonts/caladea": {
+            "optional": true
+          },
+          "@expo-google-fonts/cousine": {
+            "optional": true
+          },
+          "@expo-google-fonts/gelasio": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-color-emoji": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-emoji": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-naskh-arabic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-nastaliq-urdu": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-arabic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-armenian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-bengali": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-devanagari": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-ethiopic": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-georgian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-gujarati": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-gurmukhi": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-hebrew": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-jp": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-kannada": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-khmer": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-kr": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-lao": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-malayalam": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-math": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-mongolian": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-myanmar": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-oriya": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-sc": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-sinhala": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-symbols": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-symbols-2": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-syriac": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-tamil": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-tc": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-telugu": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-thaana": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-sans-thai": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-serif-hebrew": {
+            "optional": true
+          },
+          "@expo-google-fonts/noto-serif-tibetan": {
+            "optional": true
+          },
+          "@expo-google-fonts/roboto": {
+            "optional": true
+          },
+          "@expo-google-fonts/roboto-mono": {
+            "optional": true
+          },
+          "@expo-google-fonts/stix-two-math": {
+            "optional": true
+          },
+          "@expo-google-fonts/tinos": {
+            "optional": true
+          },
+          "@resvg/resvg-js": {
+            "optional": true
+          },
+          "pdf-lib": {
+            "optional": true
+          },
+          "sharp": {
+            "optional": true
+          }
+        },
+        "bin": {
+          "opf-preview-fonts": "./dist/preview-fonts-cli.js"
+        }
+      },
+      "originalManifestSha256": "0325ab66d0face9e352d11820bcb15f4c21f6b542d30a67d5c7119c546c399ba",
+      "stagedManifestSha256": "52d6751f69620b9c1196bce421527e45544bc3e4b521ad21670fafca66c78cc0",
+      "files": [
+        {
+          "path": "LICENSE",
+          "sha256": "c977d11e7e9de5bd31ab787b9a302475c0487837c66f665c174d9f92b18937d2",
+          "bytes": 1073
+        },
+        {
+          "path": "README.md",
+          "sha256": "3c75b88a5d4e6deaa1bdacfdfdd2f27466261f428fd574cac1b72d5c60b67ebe",
+          "bytes": 134543
+        },
+        {
+          "path": "dist/annotations.js",
+          "sha256": "14ff09f55fe92c96e3cece9235d8050d4e457e01679b3167f14fda23e22d5738",
+          "bytes": 4097
+        },
+        {
+          "path": "dist/chart-options.js",
+          "sha256": "c383eaca8d6493f2619552693a3f556f240df22995a4721b8ee545312fa99f6e",
+          "bytes": 10198
+        },
+        {
+          "path": "dist/charts.js",
+          "sha256": "6b0394530f61d4aacb7695eeac1c7e05ed3a243875891ef3df357d69fe5ab5f1",
+          "bytes": 93742
+        },
+        {
+          "path": "dist/color-fonts.js",
+          "sha256": "bd65c25d0c4ad6f7c6a1e59dd6ecc5a543a3e21fe0859c9cb852a8d3eaca8468",
+          "bytes": 2435
+        },
+        {
+          "path": "dist/converters.js",
+          "sha256": "5390e6545f344088a24ad4383ed10a2005ca49e6e341b317997950b1e17c486b",
+          "bytes": 2679
+        },
+        {
+          "path": "dist/deck-runtime.js",
+          "sha256": "d5352fcc2395cf5db62bcdbe46ac86170ed0a4b1b5a2d36521a49b52c7c54dc2",
+          "bytes": 18105
+        },
+        {
+          "path": "dist/drawn-faces.js",
+          "sha256": "3ba6046997336f4278cf94e66ecfa9e942511c959e8dd7ecbd0b94ff524afe4f",
+          "bytes": 2865
+        },
+        {
+          "path": "dist/element-define.d.ts",
+          "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+          "bytes": 11
+        },
+        {
+          "path": "dist/element-define.js",
+          "sha256": "4a3ae5cc04f57bac3b622eff4342f833376a928f20b1078313aa12a5c2fbedba",
+          "bytes": 314
+        },
+        {
+          "path": "dist/element.d.ts",
+          "sha256": "dbe3727b829dfb46c6db7cddef1f1ffc6c6a6745738174ae1240a83e85404b6d",
+          "bytes": 5061
+        },
+        {
+          "path": "dist/element.js",
+          "sha256": "68857bd5cec1c20e8c7bddecc1fdf2b9af6b206905dd890ab02d28bf966c54b3",
+          "bytes": 35509
+        },
+        {
+          "path": "dist/export-browser.d.ts",
+          "sha256": "f8bfd3a7bc4e44eea75ed3cdc610b63e246472c931797f0b638264fc15f36c40",
+          "bytes": 3787
+        },
+        {
+          "path": "dist/export-browser.js",
+          "sha256": "cfe0c211b6df08c33eb939829a58c29901199ae4f1452d67e43bb579a59d80c8",
+          "bytes": 15104
+        },
+        {
+          "path": "dist/font-compatibility.js",
+          "sha256": "0b0be7d18b7d519d905849de3e16423ecd3567fd353a088dc582fd7632218d3a",
+          "bytes": 9574
+        },
+        {
+          "path": "dist/font-fstype.js",
+          "sha256": "5c60126e48ca99c8be104c4305ed80cfb8b7d63795ea0aeb88e7596aceaf6869",
+          "bytes": 3542
+        },
+        {
+          "path": "dist/font-manifest.js",
+          "sha256": "16d0b4141054f42c66f3aa9a4f146362693825689c442c8ee693832b729fa699",
+          "bytes": 110526
+        },
+        {
+          "path": "dist/font-registry.js",
+          "sha256": "a15f6f44437436856171c03e19c0897272bf53be72122c281d6c3272f75b03c5",
+          "bytes": 32901
+        },
+        {
+          "path": "dist/font-subset.js",
+          "sha256": "0895481579fb98de0f3e535c0fe4157add39fbd14732ae680d3ab11c3aef30cc",
+          "bytes": 9956
+        },
+        {
+          "path": "dist/fonts-browser.d.ts",
+          "sha256": "a96b7562ff094a6770acaa346df1d7880614ff2e09d56bb86a4d1c4d2fc318f4",
+          "bytes": 14108
+        },
+        {
+          "path": "dist/fonts-browser.js",
+          "sha256": "84980d17d47304ec4646830385f5daa94ac734113ded3139c796599c6f8ed659",
+          "bytes": 22606
+        },
+        {
+          "path": "dist/fonts-node.d.ts",
+          "sha256": "2c80c2c811ce76a8a4922bd26c1b76272e3da4eadebbf00958f6a3c7180d5faa",
+          "bytes": 8629
+        },
+        {
+          "path": "dist/fonts-node.js",
+          "sha256": "dee0a31e6086b7061582cea772f6331c091cbed49396eab1de1ebba94da1baab",
+          "bytes": 24199
+        },
+        {
+          "path": "dist/fonts.d.ts",
+          "sha256": "d82fab823de32d2030548e50da6d647d7820bdb59006a02ea6945fa043a0a36f",
+          "bytes": 14702
+        },
+        {
+          "path": "dist/fonts.js",
+          "sha256": "230dd980941d2392cde8181b5d02405278004e4c81444afa00e6920777e01d2b",
+          "bytes": 1409
+        },
+        {
+          "path": "dist/hb-shape.js",
+          "sha256": "88e5b31209805ca95a04e270560acdd8d214192ce7a268243a8c432c2e62ebf2",
+          "bytes": 7333
+        },
+        {
+          "path": "dist/index.d.ts",
+          "sha256": "22fea5118ba853f1d78fdfb09b1c3f908ed98fc2d0e157a7e703acfeb99001f1",
+          "bytes": 18122
+        },
+        {
+          "path": "dist/index.js",
+          "sha256": "571367765a59c7cffe60606b4a6de2358832a106332c199b4dc9b64859a2c459",
+          "bytes": 67
+        },
+        {
+          "path": "dist/lazy-font-list.js",
+          "sha256": "51ae79039afd67f23c569218234b778f81d0115b59bb2a76de593af43a09b266",
+          "bytes": 4834
+        },
+        {
+          "path": "dist/lazy-fonts.js",
+          "sha256": "77f6f5c56d38ad3b8560a7668d267f46f1a79ab450c9aaba0d0d8e2a2f8936c5",
+          "bytes": 12708
+        },
+        {
+          "path": "dist/node-resolve.js",
+          "sha256": "0c0abd267065c7a3b702ee36ca338344ebdb2dbb466afaedb42a487260aa3f7f",
+          "bytes": 1796
+        },
+        {
+          "path": "dist/pdf-fonts.js",
+          "sha256": "7c1b031b8e7d5bfe58748c38556d54485e0e2f94f2463e197beb029bb1ae1781",
+          "bytes": 16436
+        },
+        {
+          "path": "dist/pdf-style.js",
+          "sha256": "c7f5f84a6d42502e8b46c96e3fdde0a2510834adc14db9693c036e4012203041",
+          "bytes": 26153
+        },
+        {
+          "path": "dist/pdf-subset.js",
+          "sha256": "d5f78c128380d1570e0c299ce0d530188aa37f010c6e23d36b605f236fb029a1",
+          "bytes": 8232
+        },
+        {
+          "path": "dist/pdf-text.js",
+          "sha256": "ad942dd2e7187cb4878cea2088913d260dbaf8e351732ccf72a5d68a9a7cd758",
+          "bytes": 17334
+        },
+        {
+          "path": "dist/pdf-vector.js",
+          "sha256": "a0cd88ce4083410925569b361fd751907877ed1e003f1a33b693c0b0064c0e39",
+          "bytes": 71125
+        },
+        {
+          "path": "dist/pdf-writer.js",
+          "sha256": "0add8171eee8446b2817c0800821a1394dd76102d4735c9b306ae4a5dcec8ad6",
+          "bytes": 6009
+        },
+        {
+          "path": "dist/pdf-xml.js",
+          "sha256": "778acbc775c3a508d5fd7484cdecae1f566a11d8fb8d044f7ce57200e08cd669",
+          "bytes": 3847
+        },
+        {
+          "path": "dist/pdf.d.ts",
+          "sha256": "27386c86cc10b91fe4c7f6fe3306c18344962723b37c9abf0d3361487bed0dc1",
+          "bytes": 112
+        },
+        {
+          "path": "dist/pdf.js",
+          "sha256": "d2eaef8eb54f130b0c242f9c35562b06fd9f038d617e7da4630a2cb14a78146c",
+          "bytes": 448
+        },
+        {
+          "path": "dist/player.d.ts",
+          "sha256": "85ab76661fd08056c915deef089a405c4c53efc70a7b7f84772644a88939e22a",
+          "bytes": 4668
+        },
+        {
+          "path": "dist/player.js",
+          "sha256": "56434862f15805818bbda69b62a7cd46a26c1a09ce73b75c74e209ba63b96357",
+          "bytes": 40971
+        },
+        {
+          "path": "dist/png.d.ts",
+          "sha256": "ce179217342929bfdc163560ba139249a72f94e00be3b4ddc5214826ecf34e6b",
+          "bytes": 84
+        },
+        {
+          "path": "dist/png.js",
+          "sha256": "488f4b5196459a1ccf8fc8a9bf04579fa965d1bea5064f7eaa9aeb078fe4bfe5",
+          "bytes": 345
+        },
+        {
+          "path": "dist/preview-fonts-cli.js",
+          "sha256": "c8c3746309f8418af924b660cca9f525886917c3368054b268ac63961edd4698",
+          "bytes": 1213
+        },
+        {
+          "path": "dist/preview-fonts-node.d.ts",
+          "sha256": "7c25a049c3df2317379cf9dc3a3bcf13d5ddde6bbbd6bb59a978acd6905239ee",
+          "bytes": 842
+        },
+        {
+          "path": "dist/preview-fonts-node.js",
+          "sha256": "5863537db697ad38c5c772a013857ef4d62dc4e81e330764860035e0c2f314ae",
+          "bytes": 5446
+        },
+        {
+          "path": "dist/preview-fonts.d.ts",
+          "sha256": "8b96826a8b2f7b53f65dd686e3a2e4469aa92b97c9bfc7fed885f9056e6bc572",
+          "bytes": 1569
+        },
+        {
+          "path": "dist/preview-fonts.js",
+          "sha256": "52a5714a38fae3c16621b26bd5e3b12d4146c6d49b1b1d56af67b2f825227d47",
+          "bytes": 4587
+        },
+        {
+          "path": "dist/raster-images.js",
+          "sha256": "293265c5b833f52d0ad642af8c14754f9d9c2a3e575ecfda059d036c4319f303",
+          "bytes": 5367
+        },
+        {
+          "path": "dist/raster-text.js",
+          "sha256": "1acc0cf65a15406ef823c521ac462e43ac8a2fd5f31f5c3e4d3df7ec41cfea14",
+          "bytes": 34635
+        },
+        {
+          "path": "dist/raster.js",
+          "sha256": "cffc7d1da6229264355b84cf53527805da4f4d382ec6f78735688f2f3aea5705",
+          "bytes": 12058
+        },
+        {
+          "path": "dist/script-font-pack.js",
+          "sha256": "bd9505c1c88d3d25fbda8fc07d39aef374e242c3a8e5f739c07c5199bbcf9b90",
+          "bytes": 16507
+        },
+        {
+          "path": "dist/script-fonts.js",
+          "sha256": "fb6258c314522a272965dd16748b29ac1b757f851e9652b47d80007b699782fb",
+          "bytes": 51054
+        },
+        {
+          "path": "dist/sha256.js",
+          "sha256": "39fed065ca4c33c5e097e40bf7e87eefd7b359601df1a6e58e131c27ea96cd6b",
+          "bytes": 3035
+        },
+        {
+          "path": "dist/slide-sources.js",
+          "sha256": "bb989439e821c66552d637b75d5f7f9a70e02bb0f6e13762d0bb8691855923d3",
+          "bytes": 2976
+        },
+        {
+          "path": "dist/svg.d.ts",
+          "sha256": "9bf3249d611c825f966393fd1f326995101970534c982f1b447b092d6ba82e8e",
+          "bytes": 11022
+        },
+        {
+          "path": "dist/svg.js",
+          "sha256": "862476c442a84ada6f88e14cc23c0a35fc733b2ade0681b031450aacc3340a2e",
+          "bytes": 140372
+        },
+        {
+          "path": "dist/symbol-fonts.js",
+          "sha256": "70d09798a3e53f5227b8000f478e9a6fba8a8bee2cd4074bb9d998c302829ad7",
+          "bytes": 3986
+        },
+        {
+          "path": "dist/text-paths.js",
+          "sha256": "1c671b8751fd1c765338220a2022fa6517703c1406b9281866d81540dba1b6da",
+          "bytes": 20837
+        },
+        {
+          "path": "fonts/anton/Anton-Regular.ttf",
+          "sha256": "a4ba3a92350ebb031da0cb47630ac49eb265082ca1bc0450442f4a83ab947cab",
+          "bytes": 170812
+        },
+        {
+          "path": "fonts/anton/OFL.txt",
+          "sha256": "ee67e6ee22790b7929f1a3769ca2801d565c64b5a9096942c1adf5596de9c9e4",
+          "bytes": 4484
+        },
+        {
+          "path": "fonts/anton/PROVENANCE.json",
+          "sha256": "183c9c6841ae4a2fea2746f90bfed34eda84b0b08b3965936e7270ae36bb996d",
+          "bytes": 815
+        },
+        {
+          "path": "fonts/archivo-narrow/ArchivoNarrow_400Regular_Italic.ttf",
+          "sha256": "61653c68a59fc5f0a660f2cfec0bad7344a626b8177649370e94cb732eabbb37",
+          "bytes": 66396
+        },
+        {
+          "path": "fonts/archivo-narrow/ArchivoNarrow_400Regular.ttf",
+          "sha256": "a6f42674111326d8a14897d87de4ce667090560941afc3e190709021982abf5a",
+          "bytes": 63652
+        },
+        {
+          "path": "fonts/archivo-narrow/ArchivoNarrow_700Bold_Italic.ttf",
+          "sha256": "dd588c564e4dec669335f6fea01b1f229f7629c3e836178e3ad9db8d6e9d6228",
+          "bytes": 66284
+        },
+        {
+          "path": "fonts/archivo-narrow/ArchivoNarrow_700Bold.ttf",
+          "sha256": "bc2698008c4fa878f17b9ffb64c6fd2f0c83ca1f69cda591253221efb357a78d",
+          "bytes": 63640
+        },
+        {
+          "path": "fonts/archivo-narrow/OFL.txt",
+          "sha256": "b2087ef3fb91248e346600d19021249152a9688efea72905aa1996bb16a4c8de",
+          "bytes": 4495
+        },
+        {
+          "path": "fonts/archivo-narrow/PROVENANCE.json",
+          "sha256": "a97a47812369695f598be6c65f4b4f404b13a18f812cb4436283d2b78c3b92c5",
+          "bytes": 1745
+        },
+        {
+          "path": "fonts/barlow/Barlow-Bold.ttf",
+          "sha256": "84e6a4d61e7c3e21f3c50ea6a4f7e5303a3467864c038be6ea3759bab8d547f9",
+          "bytes": 108220
+        },
+        {
+          "path": "fonts/barlow/Barlow-BoldItalic.ttf",
+          "sha256": "079dcee4a53544177f3b16354b27b40b521e22861a40084ab4d052f0289ed9e8",
+          "bytes": 111996
+        },
+        {
+          "path": "fonts/barlow/Barlow-Italic.ttf",
+          "sha256": "70cf45c354af39e55082fd506e748cc6a0a1812949875f99ded3f76bf691e4ca",
+          "bytes": 109624
+        },
+        {
+          "path": "fonts/barlow/Barlow-Regular.ttf",
+          "sha256": "95aa02c7c43096e0dd44d787ba6216864a67157e402adab59b35572e0c1577ea",
+          "bytes": 104068
+        },
+        {
+          "path": "fonts/barlow/OFL.txt",
+          "sha256": "186d750eb496a4c17a76385f82be6aea2ac1cf2de074a811d63786cf374ea73f",
+          "bytes": 4377
+        },
+        {
+          "path": "fonts/barlow/PROVENANCE.json",
+          "sha256": "39765b4894f83970b6afcc9ba0e763b537a54a736bba3ca7cf4c289227f9b17b",
+          "bytes": 1834
+        },
+        {
+          "path": "fonts/bebas-neue/BebasNeue_400Regular.ttf",
+          "sha256": "830ea186acffc2316ed1a4e42319246ba3b46b04e33a211079249bf901193f04",
+          "bytes": 57676
+        },
+        {
+          "path": "fonts/bebas-neue/OFL.txt",
+          "sha256": "72082f6cb4d04be2ecf7cc7d9e1e7d73787f0af8a5a278a47cade70c16b78341",
+          "bytes": 4337
+        },
+        {
+          "path": "fonts/bebas-neue/PROVENANCE.json",
+          "sha256": "90115ef2224f5373ff828721f146eb54371747b43c92179196783c8dab4fa053",
+          "bytes": 799
+        },
+        {
+          "path": "fonts/bitter/Bitter_400Regular_Italic.ttf",
+          "sha256": "4eda5cb005b1af2d5a733e0dcd727f65e2bddd0ea0466893f6d9259929ef20b2",
+          "bytes": 186624
+        },
+        {
+          "path": "fonts/bitter/Bitter_400Regular.ttf",
+          "sha256": "46a52a6b4e3202563bac5134c02e4d9db63685c439104a803a0b4fbf9e8ceaf4",
+          "bytes": 187176
+        },
+        {
+          "path": "fonts/bitter/Bitter_700Bold_Italic.ttf",
+          "sha256": "65fad0650e416aebb4a7f6893633907f0e10ea153974b0c69f9074b611c259c4",
+          "bytes": 187244
+        },
+        {
+          "path": "fonts/bitter/Bitter_700Bold.ttf",
+          "sha256": "391582a3004c7600b7234123c3c810b8c2c5ed3c90af7f087fe55f003cc075bf",
+          "bytes": 188372
+        },
+        {
+          "path": "fonts/bitter/OFL.txt",
+          "sha256": "152a1e283e23b42c4940da4c72f2f5bebaa17969cb77c76d7af05903846006f1",
+          "bytes": 4424
+        },
+        {
+          "path": "fonts/bitter/PROVENANCE.json",
+          "sha256": "cd897b0b061101463efc3a78e29b4363fe9feeca08d17b78abd0206634923d7a",
+          "bytes": 1645
+        },
+        {
+          "path": "fonts/carlito/Carlito-Bold.ttf",
+          "sha256": "bb5d20f79b82599ec72983597437373a80f2d2085fa91fc144fd74e876a594db",
+          "bytes": 682468
+        },
+        {
+          "path": "fonts/carlito/Carlito-BoldItalic.ttf",
+          "sha256": "b32928186c119599e03ca6a1ffc680fdcb7fac95772f4b95d989cf6cd3861517",
+          "bytes": 808508
+        },
+        {
+          "path": "fonts/carlito/Carlito-Italic.ttf",
+          "sha256": "0b019225e58d702bfedcbd35c21696769f8ee115cb6343f84c2f240312450d1c",
+          "bytes": 615236
+        },
+        {
+          "path": "fonts/carlito/Carlito-Regular.ttf",
+          "sha256": "f6418f708baede9789daef5d458c0f53d2a888af9820e8062934e504fedc6595",
+          "bytes": 628032
+        },
+        {
+          "path": "fonts/carlito/OFL.txt",
+          "sha256": "58402f82a7c332a700294988fe7554fbb0a63a8d27ccc1ee3bbc640311990a00",
+          "bytes": 4424
+        },
+        {
+          "path": "fonts/eb-garamond/EBGaramond_400Regular_Italic.ttf",
+          "sha256": "228da33df456ec4e0a149f33cfc2264d5bd500bdfcf55ee36710ca8df923cbd6",
+          "bytes": 440240
+        },
+        {
+          "path": "fonts/eb-garamond/EBGaramond_400Regular.ttf",
+          "sha256": "d5baed6e48bf4c99a770e6edc86ddaf67942bb1850491ed54f94d5c2c213531e",
+          "bytes": 489640
+        },
+        {
+          "path": "fonts/eb-garamond/EBGaramond_700Bold_Italic.ttf",
+          "sha256": "0030bda44f15b85f5adee17dc25cb5948c547ecf7f6d06e10723b406cd15a472",
+          "bytes": 443560
+        },
+        {
+          "path": "fonts/eb-garamond/EBGaramond_700Bold.ttf",
+          "sha256": "8bb7f13020d522de1c441da0a76f05843b74d788c1b16a933af3be4880782d17",
+          "bytes": 492280
+        },
+        {
+          "path": "fonts/eb-garamond/OFL.txt",
+          "sha256": "0985066662eb755ed3683ae5482a81a9195b49ce3f7e165cc2388b3dbece7dd7",
+          "bytes": 4398
+        },
+        {
+          "path": "fonts/eb-garamond/PROVENANCE.json",
+          "sha256": "3133f45ef52e9b0d1878dea2d0452355a02a4c21f714120895266545ee7361c1",
+          "bytes": 1699
+        },
+        {
+          "path": "fonts/figtree/Figtree_400Regular_Italic.ttf",
+          "sha256": "9e77e88c4713c641faa7385d8c367a52542969fcb24022fc649c06422ad721f5",
+          "bytes": 40636
+        },
+        {
+          "path": "fonts/figtree/Figtree_400Regular.ttf",
+          "sha256": "4e2e9876c4a908c2cbe410ceb648e4724464a84492bd49cb2d6e7b0d3f769a66",
+          "bytes": 40140
+        },
+        {
+          "path": "fonts/figtree/Figtree_700Bold_Italic.ttf",
+          "sha256": "eccf9cafb8a6112216b040112ce783553e30b30b1eb2649b9f2913e34d7ecbd2",
+          "bytes": 40928
+        },
+        {
+          "path": "fonts/figtree/Figtree_700Bold.ttf",
+          "sha256": "183bf1a8523731738c72be9aa8236453a21d6a3ed70bd8e5266723b212331dc4",
+          "bytes": 40324
+        },
+        {
+          "path": "fonts/figtree/OFL.txt",
+          "sha256": "140d37233e7f3ce7313798befa9600893bcceaf41a55fa0fa5ad52f7f657a268",
+          "bytes": 4388
+        },
+        {
+          "path": "fonts/figtree/PROVENANCE.json",
+          "sha256": "2027b31fe5b2c64bb9cacfb94a37fa1fc10f2c633f264ce616473122bebd1c6c",
+          "bytes": 1642
+        },
+        {
+          "path": "fonts/intos/Intos-Bold.ttf",
+          "sha256": "8afd148fff67d6426d0d6906d4c6232886aedc81a7832544806e6c93c44340ab",
+          "bytes": 771364
+        },
+        {
+          "path": "fonts/intos/Intos-BoldItalic.ttf",
+          "sha256": "dec13afb35718df39f5a422d7ecb2f69bd719c9ae3196508c17021a428578a11",
+          "bytes": 793796
+        },
+        {
+          "path": "fonts/intos/Intos-Italic.ttf",
+          "sha256": "8ca602e312af876190610b0416fdfc67f58ee38bcf9e01ce2f0fcc1094d8fbe4",
+          "bytes": 769196
+        },
+        {
+          "path": "fonts/intos/Intos-Regular.ttf",
+          "sha256": "4de204b6414d30f9f49b9375dc9b71ccea1683e55ac37de6c8d541abbc760eea",
+          "bytes": 766880
+        },
+        {
+          "path": "fonts/intos/IntosDisplay-Bold.ttf",
+          "sha256": "5055714a7215331b7786b10538138baa4dc969a8afe018bbf459f8b5395026d8",
+          "bytes": 773028
+        },
+        {
+          "path": "fonts/intos/IntosDisplay-BoldItalic.ttf",
+          "sha256": "1d9e18845be66b00793b8142581898b70ca72425f4d9f498fe4c35f88c39014d",
+          "bytes": 795224
+        },
+        {
+          "path": "fonts/intos/IntosDisplay-Italic.ttf",
+          "sha256": "2741bd21a8904acf3ce28aff7a896c0c87777e3d459e1e10ffe085057471bc28",
+          "bytes": 769804
+        },
+        {
+          "path": "fonts/intos/IntosDisplay-Regular.ttf",
+          "sha256": "b652fdab5e8939540f084529a507ddd158629985b8eee1b553ef05c46d131877",
+          "bytes": 766576
+        },
+        {
+          "path": "fonts/intos/IntosNarrow-Bold.ttf",
+          "sha256": "59fd6e53b61ae483809ce1d8fc396357ec33d7beedef2e81f87da11551a99e51",
+          "bytes": 771956
+        },
+        {
+          "path": "fonts/intos/IntosNarrow-BoldItalic.ttf",
+          "sha256": "6e1cb55b955539301ffc51b1a602a3fb9c8411b9082383fd29f555492eb9d079",
+          "bytes": 806784
+        },
+        {
+          "path": "fonts/intos/IntosNarrow-Italic.ttf",
+          "sha256": "f2b4745a51b0c0c13d9768caf14017014c299e11a19031f83c1d8c77f4e23c6b",
+          "bytes": 771332
+        },
+        {
+          "path": "fonts/intos/IntosNarrow-Regular.ttf",
+          "sha256": "ea91acdb933f2f1919df688f154140b851191adf4ecb77f7d931724198ea23c1",
+          "bytes": 758048
+        },
+        {
+          "path": "fonts/intos/IntosSerif-Bold.ttf",
+          "sha256": "ad994397ce37c29f8881e9fe6e7fcdc743b643465a96ab4d1e2a02d95784a79f",
+          "bytes": 614616
+        },
+        {
+          "path": "fonts/intos/IntosSerif-BoldItalic.ttf",
+          "sha256": "f99eb0845ab26e305ffe58f3baa9c920d676d2204a222d925d4fa001573f53f2",
+          "bytes": 524188
+        },
+        {
+          "path": "fonts/intos/IntosSerif-Italic.ttf",
+          "sha256": "eed3fa7449ce0fc31fe51569ce056ce483e25ce8f6e2fdda16d6cd36ff231327",
+          "bytes": 546064
+        },
+        {
+          "path": "fonts/intos/IntosSerif-Regular.ttf",
+          "sha256": "56351ac7a9d0b66a5d9a0b6c656cefa6fa5cf9fb5e3ee7e44bd1e4e327828d35",
+          "bytes": 616712
+        },
+        {
+          "path": "fonts/intos/NOTICE.md",
+          "sha256": "3e1241892bf385141df55d9762612505cd47ce8fd046438e2d4babb3d3c0fcf7",
+          "bytes": 2424
+        },
+        {
+          "path": "fonts/intos/OFL.txt",
+          "sha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e",
+          "bytes": 4380
+        },
+        {
+          "path": "fonts/intos/PROVENANCE.json",
+          "sha256": "773b622cfb701ee7bc448c540dfd912644a7401976c6529e6ec977b9482e1519",
+          "bytes": 6370
+        },
+        {
+          "path": "fonts/libre-caslon-text/LibreCaslonText_400Regular_Italic.ttf",
+          "sha256": "a32b7d8314e5f7e6dd919d1df2334ecc7b92e54173c8cc421ef8e9e4bae97061",
+          "bytes": 100380
+        },
+        {
+          "path": "fonts/libre-caslon-text/LibreCaslonText_400Regular.ttf",
+          "sha256": "912cda295d683d283f65944563ef2204413ef85bf49748482a5e263c4d56afd4",
+          "bytes": 91316
+        },
+        {
+          "path": "fonts/libre-caslon-text/LibreCaslonText_700Bold.ttf",
+          "sha256": "ddff46045846dfc35f20db138117a2bf249bb75b9336c4ee823b162d22ac82e6",
+          "bytes": 91136
+        },
+        {
+          "path": "fonts/libre-caslon-text/OFL.txt",
+          "sha256": "a294245c822c5aa9fd9a9f3189418e99415428be5fecadf797793d5d8f6a3ad3",
+          "bytes": 4404
+        },
+        {
+          "path": "fonts/libre-caslon-text/PROVENANCE.json",
+          "sha256": "9972b971895aa702c95d7eb4e226e1643fc6cc64c74aa2532863578a06978a11",
+          "bytes": 1483
+        },
+        {
+          "path": "fonts/lora/Lora-Bold.ttf",
+          "sha256": "32baf740eac1bf3f257904a6cf89e4e067ca1566b375bf22f743a26fc88b3791",
+          "bytes": 218640
+        },
+        {
+          "path": "fonts/lora/Lora-BoldItalic.ttf",
+          "sha256": "f448e41ab0bf529ec7bd4f8aef843eb4d33b5608c7ed0a53128ead588e6ea9e5",
+          "bytes": 213560
+        },
+        {
+          "path": "fonts/lora/Lora-Italic.ttf",
+          "sha256": "1985f2fa49d675c3d88ca6a0b9161be38f955bec7efb025d2a5b68bc03e471fe",
+          "bytes": 206912
+        },
+        {
+          "path": "fonts/lora/Lora-Regular.ttf",
+          "sha256": "c72a925082ba55885e7b4ead25d34a3c91fa44edda72a16a3a2983fc7fa7cef3",
+          "bytes": 198380
+        },
+        {
+          "path": "fonts/lora/OFL.txt",
+          "sha256": "1d9a970809ac804b582a6ce7f0ebc4e7fefcbfd7ff6299cad35ee656a21be716",
+          "bytes": 4423
+        },
+        {
+          "path": "fonts/lora/PROVENANCE.json",
+          "sha256": "fa60f228250a2b19c80754f5100ade658cbdb237143926a6a77da5b55fbbd704",
+          "bytes": 2055
+        },
+        {
+          "path": "fonts/merriweather-sans/MerriweatherSans-Bold.ttf",
+          "sha256": "94ac9ad8fc7decbf9108b2fd532dafc34747c3fb0a43adc96d0182ff9242b2be",
+          "bytes": 169508
+        },
+        {
+          "path": "fonts/merriweather-sans/MerriweatherSans-BoldItalic.ttf",
+          "sha256": "cb77e6a773760f24c84e8388eb0226fe4b58af4e1d91bc402e1087e64038415c",
+          "bytes": 157120
+        },
+        {
+          "path": "fonts/merriweather-sans/MerriweatherSans-Italic.ttf",
+          "sha256": "977d0588a2da17b6a773b8f34492ef0b368e32350463b8ac8bb15741ca17e072",
+          "bytes": 149612
+        },
+        {
+          "path": "fonts/merriweather-sans/MerriweatherSans-Regular.ttf",
+          "sha256": "aef68ceec429f644df7e35e57667a5f37df42d231210ecc456ef4abe4b1e3595",
+          "bytes": 164764
+        },
+        {
+          "path": "fonts/merriweather-sans/OFL.txt",
+          "sha256": "c487138e4ea4688386abfaf72ab2cbc72a7c8c358cca19bd70095e0d07d8d9f2",
+          "bytes": 4586
+        },
+        {
+          "path": "fonts/merriweather-sans/PROVENANCE.json",
+          "sha256": "efd296d1c8bf2070570125e36efe08d036dbf34f357e976be0b5851e82303664",
+          "bytes": 2212
+        },
+        {
+          "path": "fonts/montserrat/Montserrat_400Regular_Italic.ttf",
+          "sha256": "7e87c0f96b39fbb919b30aef8991323d0b257649f391e6456bcf03c231448f49",
+          "bytes": 337132
+        },
+        {
+          "path": "fonts/montserrat/Montserrat_400Regular.ttf",
+          "sha256": "ef9cf99f0175bef530b88934bd904fcf56f773cec6fd4dfb8ccaf7ce2bbd395e",
+          "bytes": 330948
+        },
+        {
+          "path": "fonts/montserrat/Montserrat_700Bold_Italic.ttf",
+          "sha256": "001a59b0f2c541080033b83ca6dfacce03095d99caa3594835f51b7c6d9ce758",
+          "bytes": 342016
+        },
+        {
+          "path": "fonts/montserrat/Montserrat_700Bold.ttf",
+          "sha256": "7fa93d7daa5c2f881a6727229c211782de6b76008fbd6346b3d7664e8fc83f43",
+          "bytes": 335788
+        },
+        {
+          "path": "fonts/montserrat/Montserrat_900Black.ttf",
+          "sha256": "b48e6741b9889ede4ffe3d8acfda3e6917c62127537b19fe7206cba04e6ebb63",
+          "bytes": 343296
+        },
+        {
+          "path": "fonts/montserrat/OFL.txt",
+          "sha256": "8b7141c03fa4f8d44e6345d5d4931709290f0f67875e452e95ac1fd3a027802e",
+          "bytes": 4400
+        },
+        {
+          "path": "fonts/montserrat/PROVENANCE.json",
+          "sha256": "0f668431219772171574af14e9a77c909b2f919de4d1aa22e9ad3b7d6c3ace9d",
+          "bytes": 1960
+        },
+        {
+          "path": "fonts/open-sans/OFL.txt",
+          "sha256": "fbbbcfef55318de350562559b671360de6d597112ecc5c73881b05092db89602",
+          "bytes": 4389
+        },
+        {
+          "path": "fonts/open-sans/OpenSans_400Regular_Italic.ttf",
+          "sha256": "dd74eb2d271b57ef5c382a97403818715bfb6b1d53d7fa6da9c88336763651fb",
+          "bytes": 136604
+        },
+        {
+          "path": "fonts/open-sans/OpenSans_400Regular.ttf",
+          "sha256": "33e93bec67d91c396876db50694213802a39e43a911bb5c22322f0dbdf4d5e43",
+          "bytes": 130832
+        },
+        {
+          "path": "fonts/open-sans/OpenSans_700Bold_Italic.ttf",
+          "sha256": "c7e0a936ff0f08b6726cf205126a5e6dd6ae1340111325f7e86cbba1408e82d7",
+          "bytes": 136360
+        },
+        {
+          "path": "fonts/open-sans/OpenSans_700Bold.ttf",
+          "sha256": "5f4c6f0c6beae94863a099a7a538059c480f91587f1abffc06552e9fa3a44f40",
+          "bytes": 130860
+        },
+        {
+          "path": "fonts/open-sans/PROVENANCE.json",
+          "sha256": "b3cdf0eec6a5f1fa3e1b18ba7635b5f169367b3b5d6268ea6e1ebcea62b7cce0",
+          "bytes": 1664
+        },
+        {
+          "path": "fonts/playfair-display/OFL.txt",
+          "sha256": "e414e07f7a4da16ed47ebec80d52dd79f21d3ca42bc92385a755d8078a038814",
+          "bytes": 4542
+        },
+        {
+          "path": "fonts/playfair-display/PlayfairDisplay-Bold.ttf",
+          "sha256": "898a01a59214578e72012131ef4c346844c1fd35613f4ee113a37d61a094a2d0",
+          "bytes": 225552
+        },
+        {
+          "path": "fonts/playfair-display/PlayfairDisplay-BoldItalic.ttf",
+          "sha256": "bd3b48ca605438de4337d05ece1ecb9e4149a975d3207174f28e02098bbec3ff",
+          "bytes": 225284
+        },
+        {
+          "path": "fonts/playfair-display/PlayfairDisplay-Italic.ttf",
+          "sha256": "30a7eb5a9309754d4b3e205e6435ef07d80e1b86735774b2ace427f6ed61f991",
+          "bytes": 223352
+        },
+        {
+          "path": "fonts/playfair-display/PlayfairDisplay-Regular.ttf",
+          "sha256": "70ef3ee8de32dc81c39f2733a4a2a050c7e6ba78a2f1632f9d5c6cfd482c3abb",
+          "bytes": 222056
+        },
+        {
+          "path": "fonts/playfair-display/PROVENANCE.json",
+          "sha256": "88acfb693f6f8a738f61e02af941cdcfc3e0193f8a69084089a64f4a2579850b",
+          "bytes": 2207
+        },
+        {
+          "path": "fonts/poppins/OFL.txt",
+          "sha256": "6be04893d770899a015649c7aa3b582f871b272f8747a92b78b17c3e5c8b2573",
+          "bytes": 4385
+        },
+        {
+          "path": "fonts/poppins/Poppins_400Regular_Italic.ttf",
+          "sha256": "3225cec6a018310497ea9ee116aa43b2a833464fed6156dceb9a3a4424bb8613",
+          "bytes": 182012
+        },
+        {
+          "path": "fonts/poppins/Poppins_400Regular.ttf",
+          "sha256": "707fdc5c8bab57a90061c6a8ed7b70d5ffb82fc810e994e79f90bace890c255a",
+          "bytes": 158240
+        },
+        {
+          "path": "fonts/poppins/Poppins_700Bold_Italic.ttf",
+          "sha256": "9d4d9f3c2c289eaec403660ec215bdc45e62b49f978807714bfc31ca7916c8fe",
+          "bytes": 176588
+        },
+        {
+          "path": "fonts/poppins/Poppins_700Bold.ttf",
+          "sha256": "7219547ee25334cbac0fe4b3acf0bf631e48ebb622c71af038edaaa652c60875",
+          "bytes": 153944
+        },
+        {
+          "path": "fonts/poppins/PROVENANCE.json",
+          "sha256": "167815d22ded62a9f9e4b3cb2b3ebc4d8a217aff93ad00e5343cab3b0d25ff68",
+          "bytes": 1639
+        },
+        {
+          "path": "fonts/pt-serif/OFL.txt",
+          "sha256": "ddf311c28ddf5a5ad9747649837346b67bed9d356789c3072bb27dbce49e514d",
+          "bytes": 4434
+        },
+        {
+          "path": "fonts/pt-serif/PROVENANCE.json",
+          "sha256": "b1a0d7e0ff00cf49dac63eef7fa9ff6d28bb89c7085340ecf7a91ac05b41104f",
+          "bytes": 2067
+        },
+        {
+          "path": "fonts/pt-serif/PT_Serif-Web-Bold.ttf",
+          "sha256": "038ba7336bd7ea14f12ad155bed51a4345cac5153275d521dec3ba04021c526e",
+          "bytes": 339996
+        },
+        {
+          "path": "fonts/pt-serif/PT_Serif-Web-BoldItalic.ttf",
+          "sha256": "f003788ba08981eb0988b3557a6f224a53dab49c20e283e8b74d5af3c466f8be",
+          "bytes": 337580
+        },
+        {
+          "path": "fonts/pt-serif/PT_Serif-Web-Italic.ttf",
+          "sha256": "f57e95ff9dc85691a3b2e193f2028db36f6663939a46c0fc4f286d618b80b7ce",
+          "bytes": 375356
+        },
+        {
+          "path": "fonts/pt-serif/PT_Serif-Web-Regular.ttf",
+          "sha256": "a4951fade06ff8f09b7673aa81ffb65a8cd409e24d3289a6dc670bc4dda2557a",
+          "bytes": 359048
+        },
+        {
+          "path": "fonts/raleway/OFL.txt",
+          "sha256": "7e946cf1171784d1015279e7dc35f827957a6b5d1f1f659ae0c98e5f5e37ed9b",
+          "bytes": 4497
+        },
+        {
+          "path": "fonts/raleway/PROVENANCE.json",
+          "sha256": "f08c34bcd4d35b090ba330951640d680fb279d457c03d57ee10185e15d8e7c1d",
+          "bytes": 2046
+        },
+        {
+          "path": "fonts/raleway/Raleway-Bold.ttf",
+          "sha256": "6894481ab1c298e9c66f23455ecf05ccb25393d719a6b2d63428358c0409d2d0",
+          "bytes": 137952
+        },
+        {
+          "path": "fonts/raleway/Raleway-BoldItalic.ttf",
+          "sha256": "57eb1a701136eca30b52a4847edcec93daa53f0b5597dd98dbc0b07f475ce44a",
+          "bytes": 138168
+        },
+        {
+          "path": "fonts/raleway/Raleway-Italic.ttf",
+          "sha256": "63f52b6d8e88afa43d94162147ff55846f28af630d834018de5cb7ccc75a8ee8",
+          "bytes": 132224
+        },
+        {
+          "path": "fonts/raleway/Raleway-Regular.ttf",
+          "sha256": "cb70f8815eecd850263d54fa59286377b1d7362bec612e981155a00039d8b513",
+          "bytes": 132000
+        },
+        {
+          "path": "fonts/red-hat-display/OFL.txt",
+          "sha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8",
+          "bytes": 4394
+        },
+        {
+          "path": "fonts/red-hat-display/PROVENANCE.json",
+          "sha256": "7ef1ee49592f0bc092a44054789b7fb9fef5c1001fa882a3a7b093449ecb6dc5",
+          "bytes": 2901
+        },
+        {
+          "path": "fonts/red-hat-display/RedHatDisplay_300Light_Italic.ttf",
+          "sha256": "b76f8742593b53a466c99c61522f494aed59a3e4485f94fcdb2d2600bab0d6fb",
+          "bytes": 53168
+        },
+        {
+          "path": "fonts/red-hat-display/RedHatDisplay_300Light.ttf",
+          "sha256": "77eae6c6360c8a8445268dac09c32b6915f658aed2613408d7e118436a0c3eef",
+          "bytes": 51700
+        },
+        {
+          "path": "fonts/red-hat-display/RedHatDisplay_400Regular_Italic.ttf",
+          "sha256": "947a7431db8083115e2aa2db5265a1abcb5a80a56c6d46e2c7862b9fab406b90",
+          "bytes": 53064
+        },
+        {
+          "path": "fonts/red-hat-display/RedHatDisplay_400Regular.ttf",
+          "sha256": "b3c6289677cb95107738025b86cba835f0283b46dc60d6ace3bff9b9700bfbd0",
+          "bytes": 51660
+        },
+        {
+          "path": "fonts/red-hat-display/RedHatDisplay_600SemiBold_Italic.ttf",
+          "sha256": "d39a86c7334a400505a068b1c1a824c91b3ebae37563e36836c19bf889bfcd3a",
+          "bytes": 53172
+        },
+        {
+          "path": "fonts/red-hat-display/RedHatDisplay_600SemiBold.ttf",
+          "sha256": "d8a250cf848e2b52e505776ec15c078dd022d920846d83f21bdb7a56e43c5ad8",
+          "bytes": 51712
+        },
+        {
+          "path": "fonts/red-hat-display/RedHatDisplay_700Bold_Italic.ttf",
+          "sha256": "6af3f3c0ce2b4aa5cee332cc5f075e3cab7707ce02db8a4dc241ab8104cb21cc",
+          "bytes": 53088
+        },
+        {
+          "path": "fonts/red-hat-display/RedHatDisplay_700Bold.ttf",
+          "sha256": "861c7d8c0ebe239611dddce4f017d6a5c3389aea28bb31d9ee5bf8cded0826d0",
+          "bytes": 51664
+        },
+        {
+          "path": "fonts/red-hat-text/OFL.txt",
+          "sha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8",
+          "bytes": 4394
+        },
+        {
+          "path": "fonts/red-hat-text/PROVENANCE.json",
+          "sha256": "cabdbceb17926fb801819db1cc8b42c186efd02aed3564ff8fa29edf4170877d",
+          "bytes": 1701
+        },
+        {
+          "path": "fonts/red-hat-text/RedHatText_400Regular_Italic.ttf",
+          "sha256": "6da9408ce2ad47d8f4b2881853d92aee45ca52af39b4c28ddedaab1fb91f57c5",
+          "bytes": 53504
+        },
+        {
+          "path": "fonts/red-hat-text/RedHatText_400Regular.ttf",
+          "sha256": "65bce50e2d904363a2ade7dac0b381c72638c43fd690a65a35aad1cc874f75cf",
+          "bytes": 52656
+        },
+        {
+          "path": "fonts/red-hat-text/RedHatText_700Bold_Italic.ttf",
+          "sha256": "1f2b2ed57f70ea28bacc1bd3ce3f0b740c5b16a262c61925400f1da5d1045a7c",
+          "bytes": 53552
+        },
+        {
+          "path": "fonts/red-hat-text/RedHatText_700Bold.ttf",
+          "sha256": "a82d498bd5314be56ccb79fb5c2244513a41a5c2b04be56a45751c26a2132a03",
+          "bytes": 52616
+        },
+        {
+          "path": "fonts/source-sans-3/OFL.txt",
+          "sha256": "89ad2c4f66dd29127527493e729c31e731f111cf10faf5774c3db9275ed0c22c",
+          "bytes": 4579
+        },
+        {
+          "path": "fonts/source-sans-3/PROVENANCE.json",
+          "sha256": "b62baf525eee2b2294c250e4b3a83a5356634bc580faef5b4a393752f15515ee",
+          "bytes": 2197
+        },
+        {
+          "path": "fonts/source-sans-3/SourceSans3-Bold.ttf",
+          "sha256": "9214b9d95e4231c609802815c2646c98174e2102d0d37f88978a7f8e71006e6a",
+          "bytes": 428176
+        },
+        {
+          "path": "fonts/source-sans-3/SourceSans3-BoldIt.ttf",
+          "sha256": "7978291fc1bf314db887e0366853b33c5cf2e964c7b95cfb9ce403a6ec46a842",
+          "bytes": 318700
+        },
+        {
+          "path": "fonts/source-sans-3/SourceSans3-It.ttf",
+          "sha256": "192afd78f0f54a3c69eaf02d43f4d9a821e9d6110e41d3d25d61a7385cd580e4",
+          "bytes": 315812
+        },
+        {
+          "path": "fonts/source-sans-3/SourceSans3-Regular.ttf",
+          "sha256": "4644c81b86ec9caaa76b634889968ed3c4f4f52f054855933acc7c2b21e53b0f",
+          "bytes": 431196
+        },
+        {
+          "path": "fonts/work-sans/OFL.txt",
+          "sha256": "749aca05078664ce682dce1b1b10096ac397cb088c1a6df4e1bb56f0092a9272",
+          "bytes": 4396
+        },
+        {
+          "path": "fonts/work-sans/PROVENANCE.json",
+          "sha256": "af73f6c3432e95ded1350290901c1efb2504376105f751aa7aee93f3f294c478",
+          "bytes": 1670
+        },
+        {
+          "path": "fonts/work-sans/WorkSans_400Regular_Italic.ttf",
+          "sha256": "6b7f7002e0b0c8b261fe878658ef5551e3e59d9f6b609b04efb90dde1e2c1ada",
+          "bytes": 174280
+        },
+        {
+          "path": "fonts/work-sans/WorkSans_400Regular.ttf",
+          "sha256": "e67985a843df0d3cdee51a3d0f329eb1774a344ad9ff0c9ab923751f1577e2a4",
+          "bytes": 188916
+        },
+        {
+          "path": "fonts/work-sans/WorkSans_700Bold_Italic.ttf",
+          "sha256": "a5b2cad813df0aaa7d16621f2e93b5117c25e9bc788bc9a3ad218e9d6348ce34",
+          "bytes": 175772
+        },
+        {
+          "path": "fonts/work-sans/WorkSans_700Bold.ttf",
+          "sha256": "240d125fc9f8561363dc1ea3f513501253bd70942f41468f48f0b0cafb0c82e2",
+          "bytes": 191304
+        },
+        {
+          "path": "package.json",
+          "sha256": "52d6751f69620b9c1196bce421527e45544bc3e4b521ad21670fafca66c78cc0",
+          "bytes": 8334
+        }
+      ]
+    }
+  ],
+  "resolved": {
+    "core": {
+      "path": "/private/tmp/opf-gallery3-strict/node_modules/@openpresentation/opf/package.json",
+      "entry": "/private/tmp/opf-gallery3-strict/node_modules/@openpresentation/opf/dist/index.js",
+      "version": "0.19.0",
+      "digest": "d6d32d100fd8f19301502aac108d52e948223c824e59dbc4e06ec722c80652ec"
+    },
+    "render": {
+      "path": "/private/tmp/opf-gallery3-strict/node_modules/@openpresentation/opf-render/package.json",
+      "entry": "/private/tmp/opf-gallery3-strict/node_modules/@openpresentation/opf-render/dist/index.js",
+      "version": "0.19.1",
+      "digest": "b6b80efd9ef919c0bf224248d533d7b1529df878377e28bb64e811a3f5c2a147"
+    }
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "status": "COMMITTED_REVIEWED_SOURCE_FIX",
+  "base": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+  "checkout": "/private/tmp/opf-pptx-font-property-errors",
+  "files": {
+    "test/native-furniture-control.ps1": "33fedbf0b9847004a5f5984e3e09e3103dffe8972b1ca193cfdd63ab79da9a43",
+    "test/native-furniture-harness-check.ps1": "a33983639b1b777a7975544c7c9daa578bffafaaec54f59ccb8947b6c5bf8817",
+    "test/native-furniture-style-controls.mjs": "f32d19c5f251bf30b013e45776c909dd46e8371c0d68cb4fd6b15c86b12cedf8",
+    "test/native-font-property-probe.ps1": "06c99757ab44676765166c40215c4867cf895453d3819b7edfb18cf8bb7e55d5",
+    "changes/rr-20-native-font-property-errors.md": "d3e2ed1d7ed8e314b40326a2cf316ac32369d4ba5eac509559793c8a1d2eb858"
+  },
+  "commands": {
+    "originalHarness": {
+      "log": "/private/tmp/rr20-font-getter-before-harness/run.log",
+      "exit": 1,
+      "sha256": "c13f70a36e8aa3e51a4a2030e77f95787b96eb51c09d9fc9e99dc55bfff4e134"
+    },
+    "fixedHarness": {
+      "log": "/private/tmp/rr20-font-getter-after-harness/run.log",
+      "exit": 0,
+      "sha256": "5f4eb68788259b862619ef2adaa9106c5a15239299145dde97e352ae85c9527b"
+    },
+    "beforeProbe02": {
+      "log": "/private/tmp/rr20-powershell-property-probe-before02.log",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "afterProbe03": {
+      "log": "/private/tmp/rr20-powershell-property-probe-after03.log",
+      "exit": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sourcePolicy": {
+      "log": "/private/tmp/rr20-font-getter-source-controls-formatted.log",
+      "exit": 0,
+      "sha256": "2ecda07f701257919dc26e59924f20838fe9577715e173fb505e62a11534b54e"
+    },
+    "typecheck": {
+      "log": "/private/tmp/rr20-font-getter-typecheck.log",
+      "exit": 0,
+      "sha256": "9f8ce8090b6d48ce63e441058aa45b3c6c49191000b82338afbbc8c9e2b3f558"
+    },
+    "runners": {
+      "log": "/private/tmp/rr20-font-getter-runners.log",
+      "exit": 0,
+      "sha256": "fc411599127c983686cb5c3396bdd29f95df0380bca19b1114a4acd658830688"
+    },
+    "fragments": {
+      "log": "/private/tmp/rr20-font-getter-fragments.log",
+      "exit": 0,
+      "sha256": "664fb7affaa077a03b9dc36d5a9d9c3e8bef73dae2ed432ebd0848bc18d84d18"
+    },
+    "biomeWrite": {
+      "log": "/private/tmp/rr20-font-getter-biome-write.log",
+      "exit": 0,
+      "sha256": "eaf93d8e9fc298f3aae940a4bae8ae9cbe00e188e4735e643ca3c604d5c7c1d6"
+    }
+  },
+  "beforeReport": "/private/tmp/rr20-powershell-property-probe-before02.json",
+  "afterReport": "/private/tmp/rr20-powershell-property-probe-after03.json",
+  "portableRuntimeReceipt": "/private/tmp/rr20-powershell-portable/receipt.json",
+  "findings": [
+    "Implicit ETS reads suppress thrown script/managed COMException getter errors and return missing data without failure latch; reproduced independently of Office.",
+    "Explicit PSPropertyInfo.get_Value keeps actual adapter property access; seven new descriptor-chain reads now use existing COM failure latch with same stage names.",
+    "Seven throwing chain getters remain strict, and a post-failure attempt cannot run or log. Legitimate missing/null/mixed and numeric types preserved."
+  ],
+  "qualificationLimit": "PowerShell7.6.7 Mac managed probes only. Windows5.1/Scripting.Dictionary and actual PowerPoint adapter not executed. Existing Windows Node control will run opt-in Dictionary control and original strict harness. No native acceptance or export/archive change claim.",
+  "initialFailuresPreserved": [
+    "Official SHA file UTF16 decoding setup failure corrected locally.",
+    "Initial diagnostic probe01 missing TestInteger/filter issue retained; before02 is valid reproduction.",
+    "Default Biome initial preexisting style/import errors, corrected through safe driver formatting."
+  ],
+  "mappedCheck": "Repository has no check:changed; maintained AGENTS equivalent typecheck/check:runners/check:changes and focused native source/harness probes run. No full package/release gate claimed.",
+  "commit": "4f8a3551060d350d059ac4fdd29257c6d234fa12",
+  "workingTreeClean": true,
+  "supervisor": {
+    "sourceAndLogHashesVerified": true,
+    "independentReview": "APPROVED",
+    "integratedAndPushed": "4f8a3551060d350d059ac4fdd29257c6d234fa12",
+    "harnessReport": "/private/tmp/rr20-font-getter-supervisor-harness-01.json",
+    "probeReport": "/private/tmp/rr20-font-getter-supervisor-probe-01.json",
+    "harnessExit": 0,
+    "probeExit": 0,
+    "nativeAcceptance": false,
+    "harnessReportSha256": "cc334082b4c0657c6de917f8a1dfadbf8ba83a032676ff2f38f8785b61f34c7e",
+    "probeReportSha256": "d5a9d1980b97e4cc070b5fe3e59a828ca9d0d4acad242f9f619b5e1eaaff9a0e"
+  }
+}

@@ -1,0 +1,268 @@
+{
+  "at": "2026-10-13T22:22:32.312598+00:00",
+  "previous": "/private/tmp/opf-supervisor-20261010/inventory-maintenance-20261013T212738Z.json",
+  "inventory": "/private/tmp/opf-supervisor-20261010/inventory-read-20261013T222230Z.json",
+  "calls": [
+    {
+      "exit": 0,
+      "response": "/private/tmp/opf-supervisor-20261010/inventory-read-20261013T222230Z-response-1.json",
+      "stderr": ""
+    }
+  ],
+  "budget": "one initial batched GraphQL; pagination only if necessary, safety max3",
+  "paginationComplete": true,
+  "openPRs": 27,
+  "openIssues": 42,
+  "delta": [
+    {
+      "repo": "OpenPresentation/opf",
+      "defaultBefore": {
+        "name": "main",
+        "target": {
+          "oid": "75f3f0d741c40176e160d08cebfb571699a17793"
+        }
+      },
+      "defaultAfter": {
+        "name": "main",
+        "target": {
+          "oid": "75f3f0d741c40176e160d08cebfb571699a17793"
+        }
+      },
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {
+          "646": {
+            "isDraft": {
+              "before": true,
+              "after": false
+            }
+          }
+        }
+      },
+      "issues": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "defaultBefore": {
+        "name": "main",
+        "target": {
+          "oid": "7980fea3b0095377cb5a28c22a3a963312f941e7"
+        }
+      },
+      "defaultAfter": {
+        "name": "main",
+        "target": {
+          "oid": "7980fea3b0095377cb5a28c22a3a963312f941e7"
+        }
+      },
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {
+          "240": {
+            "isDraft": {
+              "before": true,
+              "after": false
+            },
+            "body": {
+              "before": "Render explicit array-area layouts and the coordinated typography, timeline and neutral structural defaults consistently with core. Bar, column and area magnitude axes include zero; authored alignment and colors remain respected.\n\nValidation: all 119 package tests and the strict 807-example/495-template golden corpora pass, alongside remaining font and whitespace browser contracts. A test-only macOS fix canonicalizes the disposable font directory before comparing exact package paths; all corruption controls remain intact, and all 59 runtime files are byte-identical to the prior candidate. Focused checks and independent review pass.\n\nDepends-On: OpenPresentation/opf#646\nDepends-On: OpenPresentation/opf-pptx#253\nDepends-On: OpenPresentation/opf-editor#165\nCandidate-Gallery: OpenPresentation/gallery@7cffb136d6c93c92fdc882a1f17a548d00d32530\n\nIntegration order: after exact coordinated hosted/platform and review gates pass, merge engine source through the canonical merge gates. Then qualify Gallery 3 against actual merged core/renderer pins, publish and verify Gallery 3, adopt genuine registry dependencies, and complete the official ecosystem roll. Native list-edit, font and visual acceptance remain pending and must meet their applicable engine acceptance/release gates; source integration and the independent Gallery lane do not close them. No site deployment is included.\n",
+              "after": "Render explicit array-area layouts and the coordinated typography, timeline and neutral structural defaults consistently with core. Bar, column and area magnitude axes include zero; authored alignment and colors remain respected.\n\nValidation: all 119 package tests and the strict 807-example/495-template golden corpora pass, alongside remaining font and whitespace browser contracts. A test-only macOS fix canonicalizes the disposable font directory before comparing exact package paths; all corruption controls remain intact, and all 59 runtime files are byte-identical to the prior candidate. Focused checks and independent review pass.\n\nDepends-On: OpenPresentation/opf#646\nDepends-On: OpenPresentation/opf-pptx#253\nDepends-On: OpenPresentation/opf-editor#165\nCandidate-Gallery: OpenPresentation/gallery@7cffb136d6c93c92fdc882a1f17a548d00d32530\n\nIntegration order: after exact coordinated hosted/platform and review gates pass, merge engine source through the canonical merge gates. Then qualify Gallery 3 against actual merged core/renderer pins, publish and verify Gallery 3, adopt genuine registry dependencies, and complete the official ecosystem roll. Native list-edit, font and visual acceptance remain pending and must meet their applicable engine acceptance/release gates; source integration and the independent Gallery lane do not close them. No site deployment is included.\n\n<!-- CURSOR_SUMMARY -->\n---\n\n> [!NOTE]\n> **Medium Risk**\n> Wide visual-output and golden-baseline changes affect charts, tables, and layout templates across CI; behavior is gated by large corpora but pixel drift is intentional and coordinated with core/gallery pins.\n> \n> **Overview**\n> **RR-20** updates renderer fidelity and regression gates for coordinated core/gallery layout and design-default work.\n> \n> **Rendering:** Structural borders use the resolved neutral `roles.border` instead of scheme accent5. Tables pass slide `contentAlignment` into layout and draw cells with core-resolved `cell.alignment` (right-aligning typed numerics by default). Bar, column, and filled-area charts always include **zero** on the magnitude axis; line charts keep tight automatic domains.\n> \n> **Layout contract:** Gallery layout records in fixtures now author `areas` as nested string arrays (string rows are out of contract); grid geometry and region pins are unchanged.\n> \n> **Goldens & CI:** Default example baseline moves to `opf-examples-png.rr20-array-areas` (807 decks). Template goldens add `layout-templates-rr20-array-areas.json` with **495** reviewed cases (three prior paginated FAQ-3-long overflow pages dropped). Candidate-golden tooling targets gallery3 / `catalogSchema` 3, compares templates against a reviewed subset of the historical 498-key corpus, and CI skips incompatible `test:packed` when a candidate gallery is selected (with workflow notices). Tests and SVG digests are refreshed for the new pixels.\n> \n> <sup>Reviewed by [Cursor Bugbot](https://cursor.com/bugbot) for commit 0eeafb289a3abc2435378f6dcd32fb42b5b88ebd. Configure [here](https://www.cursor.com/dashboard/bugbot).</sup>\n<!-- /CURSOR_SUMMARY -->"
+            }
+          }
+        }
+      },
+      "issues": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "defaultBefore": {
+        "name": "main",
+        "target": {
+          "oid": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c"
+        }
+      },
+      "defaultAfter": {
+        "name": "main",
+        "target": {
+          "oid": "56f01d0d9fc9bc611fc0b543c4c369ccbbe46beb"
+        }
+      },
+      "defaultChanged": true,
+      "pullRequests": {
+        "new": [],
+        "closedOrMerged": [
+          {
+            "number": 253,
+            "title": "RR-20: improve PowerPoint layout defaults and source recovery",
+            "url": "https://github.com/OpenPresentation/opf-pptx/pull/253",
+            "isDraft": true,
+            "headRefName": "codex/rr-20-neutral-structure",
+            "headRefOid": "4f8a3551060d350d059ac4fdd29257c6d234fa12",
+            "baseRefName": "main",
+            "body": "Export the coordinated array-area layouts and editorial defaults to PowerPoint, including neutral structural rules, aligned numeric cells, compact metric/quote positioning and timelines. Native magnitude axes include zero while authored overrides remain respected.\n\nUnchanged imports recover authored rich-text style presence and adapted single-column chart source data only while provenance matches. Native list-description edits now retain source identity so the edited text style can be recovered. Repository-native test actions support bounded text-style edits and optional font-descriptor capture.\n\nThe font-observation worker now retains its failure latch when any of the seven descriptor-chain property getters throws. Explicit adapted getter reads preserve legitimate missing and mixed values and prevent later reads after failure. The source fix is `4f8a3551060d350d059ac4fdd29257c6d234fa12`.\n\nValidation: the list-identity runtime previously passed all 138 package test files with unchanged strict archive expectations. Bounded style-action controls passed six accepted and 23 rejected plans on Windows without Office. Portable PowerShell 7.6.7 reproduced the getter failure before the fix; the corrected harness passes all 15 font controls, and managed/script getter probes verify strict latching plus normal, missing and null values. Syntax, source-policy, runner and fragment checks pass. The existing Windows test lane now includes a bounded non-Office COM-adapter probe; Windows PowerShell 5.1, actual PowerPoint descriptor capture and native acceptance remain pending. Earlier metrics lifecycle and 13-shape geometry observations do not establish full native fidelity.\n\nDepends-On: OpenPresentation/opf#646\nDepends-On: OpenPresentation/opf-render#240\nDepends-On: OpenPresentation/opf-editor#165\nCandidate-Gallery: OpenPresentation/gallery@7cffb136d6c93c92fdc882a1f17a548d00d32530\n\nIntegration order: after exact coordinated hosted/platform and review gates pass, merge engine source through the canonical merge gates. Then qualify Gallery 3 against actual merged core/renderer pins, publish and verify Gallery 3, adopt genuine registry dependencies, and complete the official ecosystem roll. Native list-edit, font and visual acceptance remain pending and must meet their applicable engine acceptance/release gates; source integration and the independent Gallery lane do not close them. No site deployment is included.\n"
+          }
+        ],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "defaultBefore": {
+        "name": "main",
+        "target": {
+          "oid": "ac25857cca8ce776dd23b5ca58b38a06af9d963f"
+        }
+      },
+      "defaultAfter": {
+        "name": "main",
+        "target": {
+          "oid": "5d13f6655e34d7ecfc7a355a32557b35b475af02"
+        }
+      },
+      "defaultChanged": true,
+      "pullRequests": {
+        "new": [],
+        "closedOrMerged": [
+          {
+            "number": 165,
+            "title": "RR-20: support explicit array areas throughout the editor",
+            "url": "https://github.com/OpenPresentation/opf-editor/pull/165",
+            "isDraft": true,
+            "headRefName": "codex/rr-20-array-areas",
+            "headRefOid": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+            "baseRefName": "main",
+            "body": "Array-based layout areas work throughout composition, layout selection, code editing and playground examples. Legacy space-separated rows are rejected consistently with core; content, selection, edits and undo remain preserved.\n\nValidation: all 72 source test files pass. Prior candidate qualification covers 21 playground suites, 11 registered browser suites and six-package installed consumer checks. The shared installed timeline workflow now passes all 16 editing/export cases with two strict overflow controls against this unchanged editor runtime. These results are source/candidate qualification, not published-package or native PowerPoint acceptance.\n\nDepends-On: OpenPresentation/opf#646\nDepends-On: OpenPresentation/opf-render#240\nDepends-On: OpenPresentation/opf-pptx#253\nCandidate-Gallery: OpenPresentation/gallery@7cffb136d6c93c92fdc882a1f17a548d00d32530\n\nIntegration order: after exact coordinated hosted/platform and review gates pass, merge engine source through the canonical merge gates. Then qualify Gallery 3 against actual merged core/renderer pins, publish and verify Gallery 3, adopt genuine registry dependencies, and complete the official ecosystem roll. Native list-edit, font and visual acceptance remain pending and must meet their applicable engine acceptance/release gates; source integration and the independent Gallery lane do not close them. No site deployment is included.\n"
+          }
+        ],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "OpenPresentation/gallery",
+      "defaultBefore": {
+        "name": "main",
+        "target": {
+          "oid": "48169a9bb38559b8385e6791e7b5e76c0f5a8792"
+        }
+      },
+      "defaultAfter": {
+        "name": "main",
+        "target": {
+          "oid": "48169a9bb38559b8385e6791e7b5e76c0f5a8792"
+        }
+      },
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "defaultBefore": {
+        "name": "main",
+        "target": {
+          "oid": "92e23ed5b432195de884a6be51f2415ce49f8924"
+        }
+      },
+      "defaultAfter": {
+        "name": "main",
+        "target": {
+          "oid": "92e23ed5b432195de884a6be51f2415ce49f8924"
+        }
+      },
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "defaultBefore": {
+        "name": "main",
+        "target": {
+          "oid": "7bd54a7d40d407766dc8d8e00f50fcc37196a641"
+        }
+      },
+      "defaultAfter": {
+        "name": "main",
+        "target": {
+          "oid": "7bd54a7d40d407766dc8d8e00f50fcc37196a641"
+        }
+      },
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "defaultBefore": {
+        "name": "master",
+        "target": {
+          "oid": "b55bd642f1c8de3799dd8e06a830515e1dd4709c"
+        }
+      },
+      "defaultAfter": {
+        "name": "master",
+        "target": {
+          "oid": "b55bd642f1c8de3799dd8e06a830515e1dd4709c"
+        }
+      },
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closedOrMerged": [],
+        "changed": {}
+      }
+    }
+  ],
+  "fetches": 0,
+  "ciQueries": 0
+}

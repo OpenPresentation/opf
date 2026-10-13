@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "terminalExit": 0,
+  "root": "3322297808e6acf6ef7ffdeca8aa4a4bb10bafde",
+  "refs": {
+    "opf": "3322297808e6acf6ef7ffdeca8aa4a4bb10bafde",
+    "opf-render": "0eeafb289a3abc2435378f6dcd32fb42b5b88ebd",
+    "opf-pptx": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+    "opf-editor": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+    "gallery-candidate": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  },
+  "receipt": "/private/tmp/rr20-peer020-integrated-mapped-01/receipt.json",
+  "receiptSha256": "fd2efa5a215a4b3aeea352e8c21bc90f52c5c4af983af2af09e02bc147ab60ac",
+  "runner": "/private/tmp/rr20-peer020-integrated-mapped-01-run.py",
+  "runnerSha256": "ff380170afbf688fdf6672f08977f2a5be3fd255d73b1dcf34b62d3e6914ce6a",
+  "commands": 13,
+  "metadataUnchanged": true,
+  "scope": "Fresh maintained candidate setup plus mandatory check:changed --base ca7036cd; no separate canonical/fullbrowser repeat.",
+  "historicalSVGDigests": "CLI0.14 golden SVG digests explicitly skipped by maintained test when installed candidate version19; no new digest claim",
+  "sealedCandidate02": "No files/commands targeted sealed candidate02 beyond read-only clone source.",
+  "nativeAcceptance": false,
+  "publication": false
+}
