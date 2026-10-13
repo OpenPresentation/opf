@@ -91,6 +91,10 @@ export function exportedTextShapes(bytes,{unzipSync,XMLParser,XMLValidator},slid
 async function regular(file){assert.equal(await realpath(file),path.resolve(file),'Aliased evidence path');assert.ok((await lstat(file)).isFile(),'Expected regular evidence file');return readFile(file);}
 const json=async file=>JSON.parse((await regular(file)).toString('utf8').replace(/^\uFEFF/u,''));
 async function asset(root,relative){assert.equal(typeof relative,'string');assert.ok(relative&&!relative.includes('\\')&&!path.isAbsolute(relative)&&relative.split('/').every(part=>part&&part!=='.'&&part!=='..'&&![...part].some(char=>char.charCodeAt(0)<32||'<>:"|?*'.includes(char))),'Unsafe asset path');return regular(path.join(root,relative));}
+export function nativeFontCaptureFlag(runner,request,report){
+  const flags=[runner,request,report].map(record=>{if(!Object.hasOwn(record,'captureTextFonts'))return false;assert.equal(typeof record.captureTextFonts,'boolean','Font capture flag must be boolean');return record.captureTextFonts;});
+  assert.ok(flags.every(flag=>flag===flags[0]),'Runner/request/report font capture flags differ');return flags[0];
+}
 export async function bindNativeCaseEvidence({suiteDirectory,output,consumer,caseId}){
   const suiteBytes=await regular(path.join(suiteDirectory,'suite.json')),suite=JSON.parse(suiteBytes.toString());assert.equal(suite.schemaVersion,1);
   unique(suite.cases,item=>item.id,'Suite cases');unique(suite.files,item=>item.path,'Suite files');assert.ok(suite.files.length>0&&suite.files.length<=1000);
@@ -114,8 +118,9 @@ export async function bindNativeCaseEvidence({suiteDirectory,output,consumer,cas
   const saved=await asset(output,'native/native-furniture-control.pptx');assert.equal(digest(saved),report.saved.sha256);assert.equal(report.reopened.sha256,report.saved.sha256);
   const require=createRequire(path.join(consumer,'package.json')),dependencies=createRequire(require.resolve('@openpresentation/opf-pptx/package.json'));
   assertNativeLifecycle(report,actions);
+  const captureTextFonts=nativeFontCaptureFlag(runner,request,report);
   const identity={case:caseId,manifestSha256:digest(suiteBytes),reportSha256:digest(reportBytes),runnerSha256:digest(await regular(path.join(output,'runner.json'))),inputSha256:digest(input),savedSha256:digest(saved),actionPlanSha256:digest(plan),evidenceBinderSha256:digest(await regular(fileURLToPath(import.meta.url))),node:process.version};
-  return {suite,selected,runner,request,report,terminal,input,saved,sourceBytes,actions,dependencies:{...dependencies('fflate'),...dependencies('fast-xml-parser')},identity};
+  return {suite,selected,runner,request,report,terminal,input,saved,sourceBytes,actions,captureTextFonts,dependencies:{...dependencies('fflate'),...dependencies('fast-xml-parser')},identity};
 }
 export async function compareText(options){
   const {selected,report,input,actions,dependencies,identity}=await bindNativeCaseEvidence(options);

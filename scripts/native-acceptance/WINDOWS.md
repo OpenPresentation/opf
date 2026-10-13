@@ -147,3 +147,20 @@ or treated as font passes. Whole-range COM descriptors do not establish
 character-level fallback, the physical font file used for each glyph, or the
 text's actual baseline. Compare recorded sizes against the existing 0.02 pt
 criterion only where the source style is explicit and uniform.
+
+After a successful opt-in `feature-metrics` lifecycle, use the maintained
+comparator with the same sealed suite, case output and installed consumer:
+
+```sh
+node scripts/native-acceptance/compare-text-fonts.mjs --suite /path/to/suite --output /path/to/case-output --consumer /path/to/installed-consumer --case feature-metrics
+```
+
+It verifies the suite and runtime identities and requires matching capture flags
+in the runner, request and report. It compares names and bold/italic exactly and
+sizes within 0.02 pt for all three phases. Unsupported source inheritance, mixed
+ranges and missing observations stop the comparison. The initial supported case
+is the no-op metrics fixture; other cases and edit actions are rejected.
+The new `text-font-comparison.json` retains findings and source identities and
+cannot overwrite a prior result. Run the separate text/geometry comparator as
+well: font descriptors alone do not qualify geometry, words, visual alignment or
+overall native acceptance.
