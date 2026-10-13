@@ -1,0 +1,61 @@
+{
+  "sourceCommit": "b584bab7c0cfd42eadf6d4a9a95b3011b3237be1",
+  "integratedCommit": "75929687",
+  "review": {
+    "status": "APPROVED",
+    "commit": "b584bab7c0cfd42eadf6d4a9a95b3011b3237be1",
+    "checkout": "/private/tmp/opf-gate-retry-chronology",
+    "fileHashes": {
+      "scripts/pr-gate.mjs": "3561c0da90bcc90663955249594d213bcca48ea960b6c3d8d427805bda60d99e",
+      "scripts/pr-gate.test.mjs": "d5a556a0a11f818bcd33e3f3e7d81857f6cca6a08b55e1dcc4ded42da8a2125e",
+      "changes/rr-20-gate-retry-chronology.md": "e9e69654c8f8f16341cb66760c4e5c5db901489e2a04b89f1120ac127dec3168"
+    },
+    "resolvedFindings": [
+      {
+        "observation": "Workflow runAttempt is mutable on retained checks, so newer check identity alone cannot prove current retry completion.",
+        "resolution": "Any chronology override affecting counted verdicts must have matching GitHub Actions workflow/run/attempt suite completed SUCCESS; absent/live pending, actual failure/cancellation red."
+      },
+      {
+        "observation": "Historical/advisory retries must not poison a newer genuine winning workflow.",
+        "resolution": "Guards restricted to actual winning retry checks affecting counted same-job verdict or cancellation suppression; independently newer samekind/sameworkflow replacement excludes obsolete override."
+      },
+      {
+        "observation": "Same-name foreign workflow cannot stand in for counted cancellation replacement.",
+        "resolution": "Independent replacement requires matching kind/workflow/job; direct foreign workflow control stays pending."
+      }
+    ],
+    "focused": {
+      "tests": 51,
+      "exit": 0,
+      "log": "/private/tmp/rr20-gate-retry-focused-09.log",
+      "sha256": "d3ecaf7245a4dedf7f19cc3e4a233179127ac8a3bf845b859ba7519d4ea23d01"
+    },
+    "scope": [
+      "Existing head normalization, required missing-check guards and consecutive green confirmation retained.",
+      "No extra polling framework, rerun, API call or active gate mutation by reviewer."
+    ],
+    "qualificationLimit": "Author mapped setup failed shared dependency purge/noTTY before checks; root maintained-dependency mapped qualification remains separate.",
+    "supersedes": [
+      "0902a598a4e65de52da60f3a68ec3cfefe947990",
+      "07634e0223d34dda73cb53a044d043d2e383c121"
+    ]
+  },
+  "mapped": {
+    "exitCode": 0,
+    "logSha256": "5f1232c5a112031b4a530484c93aa7eefc5646a815fd5e43cd9bc470195a4884",
+    "passed": [
+      "biome",
+      "check:pr-gate",
+      "check:changes"
+    ]
+  },
+  "watcherReplacement": {
+    "oldSession": 99107,
+    "oldExitCode": 130,
+    "reason": "Intentional replacement after reviewed retry-ordering correction, not an observation timeout",
+    "newSession": 43776,
+    "rerunsRequested": false,
+    "remoteCandidateHeadsUnchanged": true
+  },
+  "currentLimit": "New watcher still refuses renderer and PPTX package failures. Exact logs show SELECTION cancelled / CONTROL skipped before checkout; no package acceptance is claimed. Core and editor checks remain pending. Windows delivery remains unconfirmed; no new Office run."
+}
