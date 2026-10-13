@@ -1,0 +1,24 @@
+{
+  "head": "3322297808e6acf6ef7ffdeca8aa4a4bb10bafde",
+  "run": 38463151918,
+  "attempt": 1,
+  "job": 115523391128,
+  "calls": {
+    "rollup": 1,
+    "logAttempts": 2
+  },
+  "firstLogFailure": "gh refused terminal escape sequences; retry explicit output then sanitized",
+  "sourceMutation": false,
+  "cause": "npm ci dependency installation read ECONNRESET errno -104; exited 152 before pnpm build or published runtime assertions",
+  "sourceContractMismatchDemonstrated": false,
+  "publishedCore": "b3e306d005d3cd0563964d541a834a8a50469536",
+  "publishedBridgeStaged": true,
+  "pnpmFrozenInstallExit": 0,
+  "npmPackageLoop": "opf-render, opf-pptx, opf-editor; no successful npm-ci completion logged, first renderer install is likely but requested package URL is not recorded",
+  "recommendation": "Normal canonical --rerun-once failed-job retry after sole gate boundary; unchanged successful selection/refs may be reused. No source fix or gate/range relaxation justified.",
+  "rawSha256": "b9e96533c45e179460f4c5748fc7a8ebe5b9a7405c8b12d614ad74ad72225846",
+  "sanitizedSha256": "c1ec12135e4c114b3aa12a5e9bb6b2cd9777133757b63e15154d87cbb418f761",
+  "supervisorVerifiedSanitizedHash": "c1ec12135e4c114b3aa12a5e9bb6b2cd9777133757b63e15154d87cbb418f761",
+  "workflowStillRunningAtDiagnostic": true,
+  "retryDispatched": false
+}

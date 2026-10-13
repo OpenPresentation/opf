@@ -1,0 +1,138 @@
+{
+  "observedAt": "2026-10-13T21:08:35.999364+00:00",
+  "initialReceipt": "/private/tmp/rr20-current-core332-sibling-selection/receipt.json",
+  "initialReceiptSha256": "3d3b8188d9ea1af38150a6a86253a6d25948723673f383a471347a91e168f3c8",
+  "initialCalls": 8,
+  "additionalAuthorizedTransportCalls": 4,
+  "repairCalls": 3,
+  "totalCalls": 11,
+  "expectedCore": "3322297808e6acf6ef7ffdeca8aa4a4bb10bafde",
+  "expectedGallery": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+  "records": [
+    {
+      "repository": "opf-render",
+      "pullRequest": 240,
+      "expectedOwnHead": "0eeafb289a3abc2435378f6dcd32fb42b5b88ebd",
+      "run": {
+        "id": 38467780639,
+        "run_attempt": 1,
+        "head_sha": "0eeafb289a3abc2435378f6dcd32fb42b5b88ebd",
+        "created_at": "2026-10-13T21:04:13Z",
+        "status": "in_progress",
+        "conclusion": null,
+        "html_url": "https://github.com/OpenPresentation/opf-render/actions/runs/38467780639"
+      },
+      "selectionJob": {
+        "id": 115538888282,
+        "name": "Resolve reviewed coordinated graph",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-13T21:04:15Z",
+        "completed_at": "2026-10-13T21:04:41Z",
+        "html_url": "https://github.com/OpenPresentation/opf-render/actions/runs/38467780639/job/115538888282"
+      },
+      "status": "verified-literals",
+      "selectionLog": "/private/tmp/rr20-current-core332-sibling-selection/opf-render-selection-repaired.log",
+      "selectionLogSha256": "8c1d46b819e6d01aa5d080f63687809b1abd816376e1e52a47d484687234a74e",
+      "ansiStripped": true,
+      "expectedCoreLiteralInLog": true,
+      "expectedGalleryLiteralInLog": true,
+      "linesOfInterest": [
+        "2026-10-13T21:04:36.5790976Z HEAD is now at 6e7f6ef Merge 3322297808e6acf6ef7ffdeca8aa4a4bb10bafde into 75f3f0d741c40176e160d08cebfb571699a17793",
+        "2026-10-13T21:04:39.5606797Z candidate_gallery=7cffb136d6c93c92fdc882a1f17a548d00d32530"
+      ]
+    },
+    {
+      "repository": "opf-pptx",
+      "pullRequest": 253,
+      "expectedOwnHead": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+      "run": {
+        "id": 38467797766,
+        "run_attempt": 1,
+        "head_sha": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+        "created_at": "2026-10-13T21:04:21Z",
+        "status": "in_progress",
+        "conclusion": null,
+        "html_url": "https://github.com/OpenPresentation/opf-pptx/actions/runs/38467797766"
+      },
+      "status": "jobs-repair-error"
+    },
+    {
+      "repository": "opf-editor",
+      "pullRequest": 165,
+      "expectedOwnHead": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "run": {
+        "id": 38467805590,
+        "run_attempt": 1,
+        "head_sha": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+        "created_at": "2026-10-13T21:04:24Z",
+        "status": "in_progress",
+        "conclusion": null,
+        "html_url": "https://github.com/OpenPresentation/opf-editor/actions/runs/38467805590"
+      },
+      "selectionJob": {
+        "id": 115538969249,
+        "name": "Resolve reviewed coordinated graph",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-10-13T21:04:27Z",
+        "completed_at": "2026-10-13T21:04:58Z",
+        "html_url": "https://github.com/OpenPresentation/opf-editor/actions/runs/38467805590/job/115538969249"
+      },
+      "status": "verified-literals",
+      "selectionLog": "/private/tmp/rr20-current-core332-sibling-selection/opf-editor-selection-repaired.log",
+      "selectionLogSha256": "d921cff721d21d0119d2fd303222ab6193ba4b32cfe0fd6f6f0928c430620dfd",
+      "ansiStripped": true,
+      "expectedCoreLiteralInLog": true,
+      "expectedGalleryLiteralInLog": true,
+      "linesOfInterest": [
+        "2026-10-13T21:04:53.4509208Z HEAD is now at 6e7f6ef Merge 3322297808e6acf6ef7ffdeca8aa4a4bb10bafde into 75f3f0d741c40176e160d08cebfb571699a17793",
+        "2026-10-13T21:04:55.7523985Z candidate_gallery=7cffb136d6c93c92fdc882a1f17a548d00d32530"
+      ]
+    }
+  ],
+  "calls": [
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/OpenPresentation/opf-render/actions/jobs/115538888282/logs"
+      ],
+      "exitCode": 0,
+      "response": "/private/tmp/rr20-current-core332-sibling-selection/opf-render-selection-repaired.raw.log",
+      "responseSha256": "d3ee7fc2d1e62e280f59541cea1f094c3e1334765245b462dafade79a570a7e0",
+      "stderr": "/private/tmp/rr20-current-core332-sibling-selection/opf-render-selection-repaired.raw.log.stderr",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/OpenPresentation/opf-pptx/actions/runs/38467797766/jobs?filter=latest&per_page=100"
+      ],
+      "exitCode": 1,
+      "response": "/private/tmp/rr20-current-core332-sibling-selection/opf-pptx-jobs-repaired.json",
+      "responseSha256": "66f94f66a4663eb2a43d552b17609a828166862b7c5dba75b425301de772f858",
+      "stderr": "/private/tmp/rr20-current-core332-sibling-selection/opf-pptx-jobs-repaired.json.stderr",
+      "stderrSha256": "a23c9f20796b2fda2921413c8762d2cdea7b84b24e72cec1bf59ad8b3ee27c7d"
+    },
+    {
+      "command": [
+        "gh",
+        "api",
+        "--allow-escape-sequences",
+        "repos/OpenPresentation/opf-editor/actions/jobs/115538969249/logs"
+      ],
+      "exitCode": 0,
+      "response": "/private/tmp/rr20-current-core332-sibling-selection/opf-editor-selection-repaired.raw.log",
+      "responseSha256": "993f20f9cc434aee161d9c296c142403e643cf5c0c3b07a145084befe71b30d2",
+      "stderr": "/private/tmp/rr20-current-core332-sibling-selection/opf-editor-selection-repaired.raw.log.stderr",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "scope": "Explicitly authorized CLI ANSI handling and one502 transport repair; no polling, watcher, rerun or mutations",
+  "coreWorkflowUntouched": 38463151918,
+  "supervisorLogHashAndSelectionVerified": true
+}
