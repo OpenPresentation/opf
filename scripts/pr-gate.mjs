@@ -3,7 +3,7 @@
 // batched GraphQL query per interval for every target. Agents use this instead of writing their own watcher.
 //
 //   node scripts/pr-gate.mjs <owner/repo#N> [more…] [--merge] [--expect-head <sha>]… [--required auto|all|<a,b,…>]
-//                            [--interval 180] [--timeout-minutes 100] [--rerun-once] [--no-skipped] [--json]
+//                            [--interval 180] [--timeout-minutes 100] [--rerun-once [--rerun-scope failed|all]] [--no-skipped] [--json]
 //   node scripts/pr-gate.mjs --commit <owner/repo@sha> [same options, without --merge/--expect-head]
 //
 // Green: every REQUIRED check (the base branch's ruleset, read once per repository through REST) exists for the current
@@ -16,7 +16,9 @@
 // counts except neutral bots (Cursor Bugbot), every GitHub Actions suite must be complete, and green must hold on two
 // consecutive polls. Red (a required check failed, was cancelled, timed out, hit a startup failure or needs action) stops
 // at once and prints the failing checks with their URLs; --rerun-once re-runs the failed or cancelled workflow runs one
-// time first. --merge enqueues into the merge queue (GraphQL, with the expected head; retried for up to 6 minutes while
+// time first (default --rerun-scope failed; cancelled runs always restart in full). With --rerun-scope all, restart each
+// failing workflow in full so successful prerequisite jobs, including candidate selection, run again. This is opt-in
+// and sends the same one REST request per workflow run. --merge enqueues into the merge queue (GraphQL, with the expected head; retried for up to 6 minutes while
 // GitHub is still computing mergeability) and follows the queue, re-enqueueing once after an ejection; a repository
 // without a queue is squash-merged. Re-running resumes: a merged PR exits 0 and a queued PR is followed. A PR the queue
 // merges prints "MERGED <label> <sha> (merged by the merge queue)" and exits 0: the queue also records a removal with the
@@ -67,7 +69,8 @@ export function targetLabel(target) {
 }
 
 export function parseArgs(argv) {
-  const options = { targets: [], merge: false, expectHeads: [], required: 'auto', interval: DEFAULTS.interval, timeoutMinutes: DEFAULTS.timeoutMinutes, json: false, rerunOnce: false, allowSkipped: true, help: false };
+  const options = { targets: [], merge: false, expectHeads: [], required: 'auto', interval: DEFAULTS.interval, timeoutMinutes: DEFAULTS.timeoutMinutes, json: false, rerunOnce: false, rerunScope: 'failed', allowSkipped: true, help: false };
+  let rerunScopeSpecified = false;
   const value = (index, flag) => {
     if (index >= argv.length || argv[index].startsWith('--')) throw new UsageError(`${flag} needs a value`);
     return argv[index];
@@ -77,6 +80,12 @@ export function parseArgs(argv) {
     if (arg === '--merge') options.merge = true;
     else if (arg === '--json') options.json = true;
     else if (arg === '--rerun-once') options.rerunOnce = true;
+    else if (arg === '--rerun-scope') {
+      const scope = value(++index, arg);
+      if (!['failed', 'all'].includes(scope)) throw new UsageError('--rerun-scope wants failed or all');
+      options.rerunScope = scope;
+      rerunScopeSpecified = true;
+    }
     else if (arg === '--no-skipped') options.allowSkipped = false;
     else if (arg === '--help' || arg === '-h') options.help = true;
     else if (arg === '--commit') options.targets.push(parseTarget(value(++index, arg), { commit: true }));
@@ -97,6 +106,7 @@ export function parseArgs(argv) {
     else options.targets.push(parseTarget(arg));
   }
   if (options.help) return options;
+  if (rerunScopeSpecified && !options.rerunOnce) throw new UsageError('--rerun-scope requires --rerun-once');
   if (!options.targets.length) throw new UsageError('name at least one pull request (owner/repo#N) or --commit owner/repo@sha');
   const prs = options.targets.filter((target) => target.kind === 'pr');
   if (options.expectHeads.length && options.expectHeads.length !== prs.length) throw new UsageError(`give one --expect-head per pull request (${prs.length}), in the same order`);
@@ -481,10 +491,10 @@ export async function runGate(options, deps) {
     for (const check of checks.failing) if (check.runId) runs.set(check.runId, check.conclusion);
     if (!runs.size) return false;
     for (const [runId, conclusion] of runs) {
-      const path = `repos/${repo.owner}/${repo.name}/actions/runs/${runId}/${conclusion === 'CANCELLED' ? 'rerun' : 'rerun-failed-jobs'}`;
+      const path = `repos/${repo.owner}/${repo.name}/actions/runs/${runId}/${options.rerunScope === 'all' || conclusion === 'CANCELLED' ? 'rerun' : 'rerun-failed-jobs'}`;
       try {
         await rest(path, { method: 'POST' });
-        say(`${target.label}: re-ran ${conclusion === 'CANCELLED' ? 'the cancelled run' : 'the failed jobs of run'} ${runId}`);
+        say(`${target.label}: re-ran ${options.rerunScope === 'all' ? 'the complete workflow run' : conclusion === 'CANCELLED' ? 'the cancelled run' : 'the failed jobs of run'} ${runId}`);
       } catch (error) {
         say(`${target.label}: could not re-run ${runId}: ${error?.message ?? error}`);
       }
@@ -806,7 +816,10 @@ export function resumeCommand(options, unfinished) {
   if (options.required && options.required !== 'auto') args.push('--required', JSON.stringify(Array.isArray(options.required) ? options.required.join(',') : options.required));
   if ((options.interval ?? DEFAULTS.interval) !== DEFAULTS.interval) args.push('--interval', String(options.interval));
   args.push('--timeout-minutes', String(options.timeoutMinutes ?? DEFAULTS.timeoutMinutes));
-  if (options.rerunOnce) args.push('--rerun-once');
+  if (options.rerunOnce) {
+    args.push('--rerun-once');
+    if (options.rerunScope === 'all') args.push('--rerun-scope', 'all');
+  }
   if (options.allowSkipped === false) args.push('--no-skipped');
   if (options.json) args.push('--json');
   return args.join(' ');
@@ -846,7 +859,7 @@ export function ghDeps({ json = false } = {}) {
 }
 
 const USAGE = `Usage: node scripts/pr-gate.mjs <owner/repo#N> [more…] [--merge] [--expect-head <sha>]… [--required auto|all|<a,b>]
-                              [--interval 180] [--timeout-minutes 100] [--rerun-once] [--no-skipped] [--json]
+                              [--interval 180] [--timeout-minutes 100] [--rerun-once [--rerun-scope failed|all]] [--no-skipped] [--json]
        node scripts/pr-gate.mjs --commit <owner/repo@sha> [--required …] [--interval …] [--timeout-minutes …] [--json]
 Exit: 0 green/merged (also merged by the queue), 1 red, 2 conflict, 3 closed, 4 head moved (after 3 re-reads), 5 ejected/refused, 64 usage, 75 timeout (re-run the RESUME line).`;
 

@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { buildPollQuery, EXIT, evaluateChecks, normalizeContexts, parseArgs, runGate, suiteContexts, summarizeRules, UsageError } from './pr-gate.mjs';
+import { buildPollQuery, EXIT, evaluateChecks, normalizeContexts, parseArgs, runGate, suiteContexts, summarizeRules, resumeCommand, UsageError } from './pr-gate.mjs';
 import { selectChecks } from './run-checks.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -633,4 +633,33 @@ test('cancelled/null/unknown completed empty suites cannot disappear beside succ
  const placeholder=fallbackSuite('PLACEHOLDER',[]);placeholder.status='QUEUED';placeholder.conclusion=null;placeholder.workflowRun=null;
  const actual=await suiteContexts(async()=>suitePage([placeholder,fallbackSuite('S1',GREEN())]),'o','r',HEAD);
  assert.equal(evaluateChecks({checks:normalizeContexts(actual.nodes,HEAD),required:null,suites:actual.suites}).state,'green');
+});
+
+
+test('rerun scope is explicit, validated, and defaults to failed jobs', () => {
+  assert.equal(parseArgs(['o/r#7', '--rerun-once']).rerunScope, 'failed');
+  for (const scope of ['failed', 'all']) assert.equal(parseArgs(['o/r#7', '--rerun-scope', scope, '--rerun-once']).rerunScope, scope);
+  for (const argv of [['o/r#7', '--rerun-once', '--rerun-scope'], ['o/r#7', '--rerun-once', '--rerun-scope', 'sometimes'], ['o/r#7', '--rerun-scope', 'all']]) assert.throws(() => parseArgs(argv), UsageError);
+});
+
+test('all scope restarts complete workflows once and deduplicates failed jobs', async () => {
+  const red = () => poll(pr({contexts: [run('packages', 'FAILURE', {runId:41}), run('Verify OPF packages', 'TIMED_OUT', {runId:41})]}));
+  const {deps,state} = fake({polls:[red(),red(),red(),red()]});
+  assert.equal((await gate(['o/r#7','--rerun-once','--rerun-scope','all'],deps)).code, EXIT.red);
+  assert.deepEqual(state.rest.filter(call=>call.startsWith('POST')), ['POST repos/o/r/actions/runs/41/rerun']);
+});
+
+test('explicit failed scope preserves failed-only endpoint and run deduplication', async () => {
+  const red = () => poll(pr({contexts: [run('packages', 'FAILURE', {runId:41}), run('Verify OPF packages', 'FAILURE', {runId:41})]}));
+  const {deps,state} = fake({polls:[red(),red(),red(),red()]});
+  assert.equal((await gate(['o/r#7','--rerun-once','--rerun-scope','failed'],deps)).code, EXIT.red);
+  assert.deepEqual(state.rest.filter(call=>call.startsWith('POST')), ['POST repos/o/r/actions/runs/41/rerun-failed-jobs']);
+});
+
+test('resume preserves all rerun scope without changing default resume commands', () => {
+  const options=parseArgs(['o/r#7','--rerun-once','--rerun-scope','all']);
+  const resume=resumeCommand(options,options.targets);
+  assert.match(resume,/--rerun-once --rerun-scope all/);
+  assert.equal(parseArgs(resume.split(' ').slice(2)).rerunScope,'all');
+  assert.equal(resumeCommand(parseArgs(['o/r#7','--rerun-once']),options.targets),'node scripts/pr-gate.mjs o/r#7 --timeout-minutes 100 --rerun-once');
 });
