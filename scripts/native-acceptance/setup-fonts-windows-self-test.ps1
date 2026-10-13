@@ -9,6 +9,9 @@ function Must-Refuse([scriptblock]$Operation,[string]$Message) {
     try { & $Operation | Out-Null } catch { $refused=$true }
     Assert-True $refused $Message
 }
+# Exercise the actual bounded child launcher without registering any font.
+$freshNames=@(Fresh-InstalledNames)
+Assert-True ($freshNames.Count -gt 0 -and $freshNames.Count -le 10000) 'Fresh child must enumerate installed families'
 Add-Type @'
 using System;
 using System.Collections.Generic;

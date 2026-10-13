@@ -91,6 +91,38 @@ function Installed-Names {
     $collection=New-Object Drawing.Text.InstalledFontCollection
     try { return @($collection.Families | ForEach-Object { $_.Name }) } finally { $collection.Dispose() }
 }
+function Fresh-InstalledNames {
+    $probePath=Plain-Path (Join-Path (Split-Path -Parent $script:toolPath) 'probe-fonts-windows.ps1')
+    $shell=Join-Path $env:WINDIR 'System32/WindowsPowerShell/v1.0/powershell.exe'
+    $start=New-Object Diagnostics.ProcessStartInfo
+    $start.FileName=$shell
+    $start.Arguments='-NoLogo -NoProfile -NonInteractive -File "'+$probePath+'"'
+    $start.UseShellExecute=$false
+    $start.CreateNoWindow=$true
+    $start.RedirectStandardOutput=$true
+    $start.RedirectStandardError=$true
+    # The child rebuilds its Windows PowerShell module paths, independently of
+    # an inherited PowerShell 7 environment. The parent environment is unchanged.
+    $start.EnvironmentVariables.Remove('PSModulePath')
+    $child=New-Object Diagnostics.Process
+    $child.StartInfo=$start
+    try {
+        if(-not $child.Start()) { throw 'Could not start read-only font probe' }
+        $stdout=$child.StandardOutput.ReadToEndAsync()
+        $stderr=$child.StandardError.ReadToEndAsync()
+        if(-not $child.WaitForExit(10000)) {
+            # This exact child is ours; no Office or unrelated process is touched.
+            $child.Kill(); [void]$child.WaitForExit(1000)
+            throw 'Fresh font enumeration exceeded its 10-second bound'
+        }
+        $output=$stdout.GetAwaiter().GetResult()
+        $errorOutput=$stderr.GetAwaiter().GetResult()
+        if($child.ExitCode -ne 0 -or $errorOutput.Trim()) { throw "Fresh font enumeration failed: $errorOutput" }
+        $probe=$output | ConvertFrom-Json
+        if($probe.schemaVersion -ne 1 -or $probe.names -isnot [array] -or $probe.names.Count -eq 0 -or $probe.names.Count -gt 10000 -or @($probe.names | Where-Object { $_ -isnot [string] -or -not $_.Trim() }).Count -gt 0) { throw 'Fresh font probe returned malformed names' }
+        return $probe.names
+    } finally { $child.Dispose() }
+}
 $registryPath='Software\Microsoft\Windows NT\CurrentVersion\Fonts'
 function Open-FontKey { return [Microsoft.Win32.Registry]::CurrentUser.OpenSubKey($registryPath,$true) }
 function Remove-EmptyFontKey { [Microsoft.Win32.Registry]::CurrentUser.DeleteSubKey($registryPath,$false) }
@@ -158,9 +190,10 @@ function Invoke-FontSetup {
         $state=Read-State
         if($state.status -cne 'ready' -or $state.entries.Count -ne 7) { throw 'Font setup is incomplete or cleaned' }
         if($state.toolSha256 -cne (Hash-File $script:toolPath)) { throw 'Setup tool identity differs from receipt' }
+        if($state.probeSha256 -cne (Hash-File (Plain-Path (Join-Path (Split-Path -Parent $script:toolPath) 'probe-fonts-windows.ps1')))) { throw 'Fresh enumeration probe differs from receipt' }
         Assert-Owned $state $true
         $files=@($state.entries | ForEach-Object { Join-Path $statePath $_.file })
-        $installed=Installed-Names
+        $installed=Fresh-InstalledNames
         foreach($name in (Font-Names $files)) { if($name -cnotin $installed) { throw "Font family is not available through GDI+: $name" } }
         if($SuiteDirectory) {
             if($state.suiteSha256 -cne (Hash-File (Plain-Path (Join-Path $SuiteDirectory 'suite.json')))) { throw 'Suite manifest differs from receipt' }
@@ -178,7 +211,7 @@ function Invoke-FontSetup {
     $createdRegistryKey=($null -eq $existing)
     if($null -ne $existing) { $existing.Dispose() }
     [void][IO.Directory]::CreateDirectory($statePath)
-    $state=[ordered]@{schemaVersion=1;id=[Guid]::NewGuid().ToString('N');status='preparing';createdRegistryKey=$createdRegistryKey;suiteSha256=(Hash-File (Join-Path (Plain-Path $SuiteDirectory) 'suite.json'));toolSha256=(Hash-File $script:toolPath);entries=@()}
+    $state=[ordered]@{schemaVersion=1;id=[Guid]::NewGuid().ToString('N');status='preparing';createdRegistryKey=$createdRegistryKey;suiteSha256=(Hash-File (Join-Path (Plain-Path $SuiteDirectory) 'suite.json'));toolSha256=(Hash-File $script:toolPath);probeSha256=(Hash-File (Plain-Path (Join-Path (Split-Path -Parent $script:toolPath) 'probe-fonts-windows.ps1')));entries=@()}
     Save-State $state
     try {
         if($createdRegistryKey) {
@@ -200,7 +233,7 @@ function Invoke-FontSetup {
         }
         [OpfNativeFontApi]::Notify()
         Assert-Owned $state $true
-        $installed=Installed-Names
+        $installed=Fresh-InstalledNames
         foreach($name in (Font-Names @($inputs.source))) { if($name -cnotin $installed) { throw "Registered family unavailable: $name" } }
         $state.status='ready'; Save-State $state
         Write-Output 'PASS: seven suite-pinned Roboto faces registered for the current user'

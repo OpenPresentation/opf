@@ -115,7 +115,11 @@ created it and it remains empty. The write-ahead
 `state.json` records this attempt's files/values plus suite and setup-script hashes;
 retain it after cleanup. Check binds these hashes to the executing script and suite.
 Check confirms the exact hashes, exact user registry values and availability of
-the bundled family names through GDI+. Setup additionally requires Windows to
+the bundled family names through GDI+ in a fresh read-only Windows PowerShell
+child, bounded to ten seconds. The child avoids reusing the setup process's
+pre-registration font collection cache. A stale cache is a hypothesis for an
+observed failed setup; successful fresh enumeration still needs Windows evidence.
+The receipt binds the enumeration script hash as well. Setup additionally requires Windows to
 accept each exact file through `AddFontResourceEx`. These checks do not establish
 which font PowerPoint actually rendered; native observation remains necessary.
 
