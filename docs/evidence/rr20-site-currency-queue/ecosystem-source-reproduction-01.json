@@ -1,0 +1,148 @@
+{
+  "workspace": "/private/tmp/rr20-final-runtime-replay",
+  "refs": {
+    "opf": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+    "opf-render": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+    "opf-pptx": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+    "opf-editor": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+    "gallery-candidate": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  },
+  "commands": [
+    {
+      "label": "stage-preflight",
+      "args": [
+        "node",
+        "--input-type=module",
+        "-e",
+        "import {candidateArtifacts} from './scripts/candidate-gallery-pack.mjs'; const graph=candidateArtifacts(process.cwd()); console.log(JSON.stringify({packages:graph.artifacts.map(x=>({name:x.name,sourceSha:x.sourceSha,sha256:x.sha256})),gallery:graph.gallery}));"
+      ],
+      "cwd": "/private/tmp/rr20-final-runtime-replay/opf",
+      "exitCode": 0,
+      "seconds": 10.309935808181763,
+      "log": "/private/tmp/rr20-ecosystem-source-repro-01/stage-preflight.log",
+      "logSha256": "7ecd167c1672e57ccd94c98bf6bed7ea963307340c705167e884fd4f2579c8d5"
+    },
+    {
+      "label": "materialize-gallery",
+      "args": [
+        "node",
+        "scripts/materialize-gallery-catalog.mjs"
+      ],
+      "cwd": "/private/tmp/rr20-final-runtime-replay/opf",
+      "exitCode": 0,
+      "seconds": 0.05574297904968262,
+      "log": "/private/tmp/rr20-ecosystem-source-repro-01/materialize-gallery.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "full-ecosystem",
+      "args": [
+        "node",
+        "scripts/test-package-ecosystem.mjs",
+        "--tier",
+        "full"
+      ],
+      "cwd": "/private/tmp/rr20-final-runtime-replay/opf",
+      "exitCode": 1,
+      "seconds": 358.57263708114624,
+      "log": "/private/tmp/rr20-ecosystem-source-repro-01.log",
+      "logSha256": "d1bc39bed7e982406486af840fc17d5b8a5f9fb8d429429e315f7c92255c0913"
+    }
+  ],
+  "env": {
+    "CANDIDATE_GALLERY_REF": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+    "OPF_GOLDEN_BASELINE": "/private/tmp/rr20-final-runtime-replay/opf/scripts/fixtures/opf-examples-png.rr20-array-areas.sha256.json",
+    "OPF_TRACKER_STALE": "warn",
+    "OPF_REUSE_BUILD": "rr20-ecosystem-source-repro-01",
+    "npm_config_cache": "/private/tmp/rr20-ecosystem-source-repro-01/npm-cache"
+  },
+  "scope": "Local exact source ecosystem full-tier reproduction; not hosted cause diagnosis, registry or native acceptance.",
+  "node": "v24.21.0",
+  "pnpm": "10.33.2",
+  "npm": "11.16.0",
+  "initialSources": {
+    "opf": {
+      "head": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+      "status": "",
+      "trackedFileCount": 14623,
+      "trackedInventory": "/private/tmp/rr20-ecosystem-source-repro-01/initial-opf-tracked.json",
+      "trackedInventorySha256": "643e5baaab2902da3ff0a8860e24fbe837b95e1bae757f3701523ce41d2b2565"
+    },
+    "opf-render": {
+      "head": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+      "status": "",
+      "trackedFileCount": 3225,
+      "trackedInventory": "/private/tmp/rr20-ecosystem-source-repro-01/initial-opf-render-tracked.json",
+      "trackedInventorySha256": "c415ed77c153f72100441174b96263a9f89ff21d0685fb04e5d566681f637b0d"
+    },
+    "opf-pptx": {
+      "head": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+      "status": "",
+      "trackedFileCount": 656,
+      "trackedInventory": "/private/tmp/rr20-ecosystem-source-repro-01/initial-opf-pptx-tracked.json",
+      "trackedInventorySha256": "d6aa04a3272d24c6c09e86c3fbc5a24b43eb4d2387c49f91f390e6baafcfa9b1"
+    },
+    "opf-editor": {
+      "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "status": "",
+      "trackedFileCount": 502,
+      "trackedInventory": "/private/tmp/rr20-ecosystem-source-repro-01/initial-opf-editor-tracked.json",
+      "trackedInventorySha256": "40f07cd6f66696af52ff49bb7a20b6dd60ff4d77ff9ecd4b7e506a3642be0dd6"
+    },
+    "gallery-candidate": {
+      "head": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "status": "",
+      "trackedFileCount": 424,
+      "trackedInventory": "/private/tmp/rr20-ecosystem-source-repro-01/initial-gallery-candidate-tracked.json",
+      "trackedInventorySha256": "e408be58a9f6a6288e35af7e729d382cb6baa88ddfe57e9f3f58ad89f87960f6"
+    }
+  },
+  "preservedArtifacts": "/private/tmp/rr20-ecosystem-source-repro-01/preserved-artifacts",
+  "preservedResults": "/private/tmp/rr20-ecosystem-source-repro-01/preserved-results",
+  "originalManifestSha256": "a86d30fc0bdfe109921187eb1e00201f561df4e03d8cc460cbd04d4c1cfb42a7",
+  "goldenSha256": "66c0c2e45d863e33b178f717f7ebb5131f48f3643a6cbcd92956820f928dfd5d",
+  "finalSources": {
+    "opf": {
+      "head": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+      "status": "",
+      "trackedFileCount": 14623,
+      "trackedInventory": "/private/tmp/rr20-ecosystem-source-repro-01/final-opf-tracked.json",
+      "trackedInventorySha256": "643e5baaab2902da3ff0a8860e24fbe837b95e1bae757f3701523ce41d2b2565"
+    },
+    "opf-render": {
+      "head": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+      "status": "",
+      "trackedFileCount": 3225,
+      "trackedInventory": "/private/tmp/rr20-ecosystem-source-repro-01/final-opf-render-tracked.json",
+      "trackedInventorySha256": "c415ed77c153f72100441174b96263a9f89ff21d0685fb04e5d566681f637b0d"
+    },
+    "opf-pptx": {
+      "head": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+      "status": "",
+      "trackedFileCount": 656,
+      "trackedInventory": "/private/tmp/rr20-ecosystem-source-repro-01/final-opf-pptx-tracked.json",
+      "trackedInventorySha256": "d6aa04a3272d24c6c09e86c3fbc5a24b43eb4d2387c49f91f390e6baafcfa9b1"
+    },
+    "opf-editor": {
+      "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "status": "",
+      "trackedFileCount": 502,
+      "trackedInventory": "/private/tmp/rr20-ecosystem-source-repro-01/final-opf-editor-tracked.json",
+      "trackedInventorySha256": "40f07cd6f66696af52ff49bb7a20b6dd60ff4d77ff9ecd4b7e506a3642be0dd6"
+    },
+    "gallery-candidate": {
+      "head": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "status": "",
+      "trackedFileCount": 424,
+      "trackedInventory": "/private/tmp/rr20-ecosystem-source-repro-01/final-gallery-candidate-tracked.json",
+      "trackedInventorySha256": "e408be58a9f6a6288e35af7e729d382cb6baa88ddfe57e9f3f58ad89f87960f6"
+    }
+  },
+  "finalGoldenSha256": "66c0c2e45d863e33b178f717f7ebb5131f48f3643a6cbcd92956820f928dfd5d",
+  "supervisorVerification": {
+    "receiptSha256": "13bf28c08b5f680f31d13dc9c5afdb04a83a37ee04c05f46be7e0a8b553658a4",
+    "logHashesVerified": true,
+    "trackedInventoriesVerifiedUnchanged": true,
+    "claim": "Local full-tier failure at renderer vendored font path assertion. Mac path alias hypothesis pending direct probe. Hosted Linux failure cause unknown."
+  }
+}
