@@ -1,0 +1,17 @@
+{
+  "status": "not-executed-auto-review-rejected",
+  "host": "MICHAEL-DESKTOP",
+  "sourceRevision": "95c601b08a14478036321f5fba8f38284270df96",
+  "case": "feature-metrics",
+  "requestedTimeoutSeconds": 45,
+  "suite": "C:/opf-work/native-suite-95c601b0-attempt01",
+  "requestedOutput": "C:/opf-work/native-metrics-95c601b0-attempt01",
+  "processLaunched": false,
+  "officeExecuted": false,
+  "attemptOutputCreated": false,
+  "nativeAcceptance": false,
+  "reason": "Automatic approval review rejected delegated PowerPoint command under opf-pptx AGENTS.md root-only supervisor rule, requiring direct user authorization.",
+  "approvalRequested": true,
+  "fontState": "ready; ownership journal retained for cleanup after acceptance",
+  "scope": "Not a native test failure: command was rejected before launch; no retry or alternate route used."
+}
