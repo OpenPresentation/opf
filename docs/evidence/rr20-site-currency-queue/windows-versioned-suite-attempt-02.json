@@ -1,0 +1,17 @@
+{
+  "status": "pure-prerequisites-passed-native-unrun",
+  "sourceRevision": "81c4fdf55e8ac5072c011f3d50a52d1d780ba429",
+  "host": "MICHAEL-DESKTOP",
+  "worktree": "C:\\opf-work\\native-81c4fdf5",
+  "node": "v26.4.0",
+  "command": "node --test scripts/native-acceptance/run-windows.test.mjs",
+  "exitCode": 0,
+  "passed": 2,
+  "failed": 0,
+  "skipped": 0,
+  "evidenceOrigin": "Supervisor read completed Windows command output via read_thread; exact revision and both test successes present. Raw files retained on Windows.",
+  "logs": "C:\\opf-work\\native-81c4fdf5-output",
+  "checkoutCleanBeforeAndAfter": true,
+  "officeExecuted": false,
+  "scope": "Child-environment regression and pure runner controls only; installed candidate generation and native acceptance not yet run."
+}
