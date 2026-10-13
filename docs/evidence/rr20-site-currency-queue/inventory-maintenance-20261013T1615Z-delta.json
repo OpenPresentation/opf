@@ -1,0 +1,25 @@
+{
+  "issues": {
+    "new": [],
+    "removed": [
+      {
+        "number": 636,
+        "title": "Coordinated public packages is red on main",
+        "url": "https://github.com/OpenPresentation/opf/issues/636",
+        "body": "The full coordinated ecosystem suites failed on schedule at 969392e28af3f694a23f7a371ba5771873e87b78: https://github.com/OpenPresentation/opf/actions/runs/38220497999 (packages: failure; installed candidates: success). Pull requests only run the siblings' contract suites (RR-53), so the queue and this nightly run are the gate for the rest; fix forward or revert. This issue closes itself on the next green nightly run."
+      }
+    ],
+    "changed": []
+  },
+  "pullRequests": {
+    "new": [],
+    "removed": [],
+    "changed": [
+      "https://github.com/OpenPresentation/opf-pptx/pull/253",
+      "https://github.com/OpenPresentation/gallery/pull/6",
+      "https://github.com/OpenPresentation/opf-render/pull/240",
+      "https://github.com/OpenPresentation/opf-editor/pull/165",
+      "https://github.com/OpenPresentation/opf/pull/646"
+    ]
+  }
+}
