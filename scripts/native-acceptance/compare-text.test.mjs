@@ -44,7 +44,7 @@ test('PPTX missing transform, duplicate names, groups, rotations and slide misma
 
 test('complete comparison binds sealed inputs, installed graph, worker snapshots and lifecycle',async()=>{
  const {mkdir,mkdtemp,writeFile,readFile,realpath,rm,symlink}=await import('node:fs/promises'),{tmpdir}=await import('node:os'),path=await import('node:path');
- const {digest,installedIdentity,packageNames}=await import('./identity.mjs'),{compareText}=await import('./compare-text.mjs');
+ const {digest,installedIdentity,packageNames}=await import('./identity.mjs'),{compareText,bindNativeCaseEvidence}=await import('./compare-text.mjs');
  const root=await realpath(await mkdtemp(path.join(tmpdir(),'native-text-compare-')));
  try{
   const consumer=path.join(root,'consumer'),suiteDirectory=path.join(root,'suite'),output=path.join(root,'result');
@@ -77,6 +77,7 @@ test('complete comparison binds sealed inputs, installed graph, worker snapshots
   await rm(path.join(output,'native/report.json'));await assert.rejects(()=>compareText(options),/ENOENT/);await writeJson('native/report.json',f.report);
   await writeFile(path.join(suiteDirectory,'suite.json'),JSON.stringify({...suite,cases:[selected,selected]}));await assert.rejects(()=>compareText(options),/duplicate/);await writeFile(path.join(suiteDirectory,'suite.json'),suiteBytes);
   suite.files[0].path='../escape';await writeFile(path.join(suiteDirectory,'suite.json'),JSON.stringify(suite));await assert.rejects(()=>compareText(options),/Unsafe asset path/);suite.files[0].path='inputs/test.pptx';await writeFile(path.join(suiteDirectory,'suite.json'),suiteBytes);
+  const bound=await bindNativeCaseEvidence(options);assert.equal(bound.identity.inputSha256,digest(input));assert.deepEqual(bound.input,Buffer.from(input));assert.deepEqual(bound.saved,Buffer.from(input));assert.equal(bound.sourceBytes,null);assert.equal(bound.dependencies.XMLParser,dependencies.XMLParser);await assert.rejects(()=>readFile(path.join(output,'text-comparison.json')),/ENOENT/);
   const result=await compareText(options);assert.equal(result.passed,true);assert.equal(result.nativeAcceptance,false);assert.equal(result.case,'test');assert.equal(result.manifestSha256,digest(suiteBytes));await assert.rejects(()=>compareText(options),/EEXIST/);
  }finally{await rm(root,{recursive:true,force:true});}
 });

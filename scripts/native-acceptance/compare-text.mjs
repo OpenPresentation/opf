@@ -14,6 +14,14 @@ const unique=(items,key,label)=>{
   for(const item of items){const value=key(item);assert.equal(typeof value,'string',`${label}: missing identity`);assert.ok(value.length&&!seen.has(value.toLowerCase()),`${label}: duplicate/empty identity`);seen.add(value.toLowerCase());}
 };
 
+function assertNativeLifecycle(report,actions){
+  assert.ok(Array.isArray(actions)&&actions.length<=20,'Invalid action list');
+  assert.equal(report.schemaVersion,1);assert.equal(report.cleanupConfirmed,true);assert.equal(report.officeOperationsStopped,false);assert.equal(report.error,null);assert.equal(report.lastStage,'worker.complete');assert.equal(report.lastStatus,'success');
+  assert.deepEqual(report.actionPlan.actions,actions,'Worker action plan differs');
+  assert.equal(report.actionPlan.completed.length,actions.length,'Incomplete native actions');
+  report.actionPlan.completed.forEach((item,index)=>{assert.deepEqual(item,{index:index+1,op:actions[index].op,status:'success'});});
+}
+
 export function compareTextObservations({expected,report,actions=[]}={}){
   assert.ok(Array.isArray(expected)&&expected.length>0&&expected.length<=3,'Expected one through three slides');
   assert.ok(Array.isArray(actions)&&actions.length<=20,'Invalid action list');
@@ -21,10 +29,7 @@ export function compareTextObservations({expected,report,actions=[]}={}){
   for(const action of actions)assert.ok(['set-text'].includes(action.op),`Unsupported text comparison action: ${action.op}`);
   for(const action of actions){assert.ok(Number.isInteger(action.slideIndex)&&action.slideIndex>=1&&action.slideIndex<=expected.length,'Invalid action slide');assert.equal(typeof action.text,'string');assert.equal(expected[action.slideIndex-1].shapes.filter(shape=>shape.name===action.shapeName).length,1,'Action must select one exact named text shape');}
   const findings=[],rows=[];
-  assert.equal(report.schemaVersion,1);assert.equal(report.cleanupConfirmed,true);assert.equal(report.officeOperationsStopped,false);assert.equal(report.error,null);assert.equal(report.lastStage,'worker.complete');assert.equal(report.lastStatus,'success');
-  assert.deepEqual(report.actionPlan.actions,actions,'Worker action plan differs');
-  assert.equal(report.actionPlan.completed.length,actions.length,'Incomplete native actions');
-  report.actionPlan.completed.forEach((item,index)=>{assert.deepEqual(item,{index:index+1,op:actions[index].op,status:'success'});});
+  assertNativeLifecycle(report,actions);
   for(const phase of ['original','edited','reopened']){
     const observed=report.phases[phase];assert.equal(observed.slideCount,expected.length,`${phase}: slide count`);assert.equal(observed.slides.length,expected.length);
     for(const [index,slide] of expected.entries()){
@@ -86,12 +91,13 @@ export function exportedTextShapes(bytes,{unzipSync,XMLParser,XMLValidator},slid
 async function regular(file){assert.equal(await realpath(file),path.resolve(file),'Aliased evidence path');assert.ok((await lstat(file)).isFile(),'Expected regular evidence file');return readFile(file);}
 const json=async file=>JSON.parse((await regular(file)).toString('utf8').replace(/^\uFEFF/u,''));
 async function asset(root,relative){assert.equal(typeof relative,'string');assert.ok(relative&&!relative.includes('\\')&&!path.isAbsolute(relative)&&relative.split('/').every(part=>part&&part!=='.'&&part!=='..'&&![...part].some(char=>char.charCodeAt(0)<32||'<>:"|?*'.includes(char))),'Unsafe asset path');return regular(path.join(root,relative));}
-export async function compareText({suiteDirectory,output,consumer,caseId}){
+export async function bindNativeCaseEvidence({suiteDirectory,output,consumer,caseId}){
   const suiteBytes=await regular(path.join(suiteDirectory,'suite.json')),suite=JSON.parse(suiteBytes.toString());assert.equal(suite.schemaVersion,1);
   unique(suite.cases,item=>item.id,'Suite cases');unique(suite.files,item=>item.path,'Suite files');assert.ok(suite.files.length>0&&suite.files.length<=1000);
   for(const file of suite.files){assert.match(file.sha256,/^[a-f0-9]{64}$/u);assert.ok(Number.isSafeInteger(file.bytes)&&file.bytes>=0);const bytes=await asset(suiteDirectory,file.path);assert.equal(bytes.length,file.bytes,`Suite bytes differ: ${file.path}`);assert.equal(digest(bytes),file.sha256,`Suite hash differs: ${file.path}`);}
   const selected=suite.cases.find(item=>item.id===caseId);assert.ok(selected,'Exact selected case missing');assert.equal(selected.worker,'furniture');assert.equal(selected.automaticControlEligible,true);
   for(const field of ['input','actionPlan'])assert.equal(suite.files.filter(file=>file.path===selected[field]).length,1,`Unsealed selected ${field}`);
+  let sourceBytes=null;if(selected.source!==undefined){assert.equal(suite.files.filter(file=>file.path===selected.source).length,1,'Unsealed selected source');sourceBytes=await asset(suiteDirectory,selected.source);}
   assert.deepEqual(installedIdentity(consumer),suite.provenance.packages,'Installed identity changed');
   const runner=await json(path.join(output,'runner.json'));assert.equal(runner.schemaVersion,1);assert.equal(runner.case,caseId);assert.equal(runner.manifestSha256,digest(suiteBytes));assert.deepEqual(runner.selectedCase,selected);assert.deepEqual(runner.provenance,suite.provenance);assert.equal(runner.status,'native-observation-completed; acceptance-requires-supervisor-review');assert.equal(runner.nativeAcceptance,false);assert.equal(runner.registryAcceptance,false);
   for(const identity of [suite.provenance.suiteRepository,suite.provenance.workerRepository]){assert.match(identity.revision,/^[a-f0-9]{40}$/u);assert.equal(typeof identity.dirty,'boolean');unique(identity.files,item=>item.path,'Recorded code inputs');}
@@ -107,9 +113,15 @@ export async function compareText({suiteDirectory,output,consumer,caseId}){
   assert.equal(request.actionPlan.count,actions.length,'Request action count differs');
   const saved=await asset(output,'native/native-furniture-control.pptx');assert.equal(digest(saved),report.saved.sha256);assert.equal(report.reopened.sha256,report.saved.sha256);
   const require=createRequire(path.join(consumer,'package.json')),dependencies=createRequire(require.resolve('@openpresentation/opf-pptx/package.json'));
-  const expected=exportedTextShapes(input,{...dependencies('fflate'),...dependencies('fast-xml-parser')},selected.slideCount),result=compareTextObservations({expected,report,actions});
-  const comparator=await regular(fileURLToPath(import.meta.url));Object.assign(result,{case:caseId,manifestSha256:digest(suiteBytes),reportSha256:digest(reportBytes),runnerSha256:digest(await regular(path.join(output,'runner.json'))),comparatorSha256:digest(comparator),node:process.version});
-  await writeFile(path.join(output,'text-comparison.json'),JSON.stringify(result,null,2)+'\n',{flag:'wx'});return result;
+  assertNativeLifecycle(report,actions);
+  const identity={case:caseId,manifestSha256:digest(suiteBytes),reportSha256:digest(reportBytes),runnerSha256:digest(await regular(path.join(output,'runner.json'))),inputSha256:digest(input),savedSha256:digest(saved),actionPlanSha256:digest(plan),evidenceBinderSha256:digest(await regular(fileURLToPath(import.meta.url))),node:process.version};
+  return {suite,selected,runner,request,report,terminal,input,saved,sourceBytes,actions,dependencies:{...dependencies('fflate'),...dependencies('fast-xml-parser')},identity};
+}
+export async function compareText(options){
+  const {selected,report,input,actions,dependencies,identity}=await bindNativeCaseEvidence(options);
+  const expected=exportedTextShapes(input,dependencies,selected.slideCount),result=compareTextObservations({expected,report,actions});
+  Object.assign(result,{case:identity.case,manifestSha256:identity.manifestSha256,reportSha256:identity.reportSha256,runnerSha256:identity.runnerSha256,comparatorSha256:identity.evidenceBinderSha256,node:identity.node});
+  await writeFile(path.join(options.output,'text-comparison.json'),JSON.stringify(result,null,2)+'\n',{flag:'wx'});return result;
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
   const options={};for(let index=2;index<process.argv.length;index+=2){const key=process.argv[index];assert.ok(['--suite','--output','--consumer','--case'].includes(key),`Unknown option ${key}`);assert.ok(!Object.hasOwn(options,key)&&process.argv[index+1]&&!process.argv[index+1].startsWith('--'),`Invalid/duplicate option ${key}`);options[key]=process.argv[index+1];}
