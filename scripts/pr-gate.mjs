@@ -127,7 +127,7 @@ export function parseArgs(argv) {
 
 const CONTEXT_NODES =
   'nodes{__typename ... on CheckRun{databaseId name status conclusion detailsUrl startedAt checkSuite{commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}} ... on StatusContext{context state targetUrl createdAt commit{oid}}}';
-const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){nodes{status conclusion app{slug} workflowRun{databaseId event workflow{name}}}}`;
+const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){nodes{status conclusion app{slug} workflowRun{databaseId event runAttempt workflow{name}}}}`;
 const SUITE_RUNS = 'checkRuns(first:100){pageInfo{hasNextPage endCursor} nodes{__typename databaseId name status conclusion detailsUrl startedAt checkSuite{id commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}}}';
 const SUITE_FIELDS = `id status conclusion commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}} ${SUITE_RUNS}`;
 /** Actual check runs are authoritative when GitHub has not materialized a rollup. Never synthesize success from a suite. */
@@ -277,7 +277,15 @@ export function normalizeContexts(nodes, headOid) {
  * failed before it started has no start time and must not look "newest". Fallback: a queued run (no start time yet) is
  * newest; on a tie a pending one wins.
  */
+// A retry keeps its workflow-run id but creates new check runs. A higher check id
+// plus an observed retry attempt proves creation after an intervening workflow run.
+function retryAfter(item, other) {
+  return item.retryEligible !== false && item.kind === 'check' && other.kind === 'check' && item.workflow != null && item.workflow === other.workflow && item.runId != null && other.runId != null && item.runId < other.runId && item.attempt > 1 && item.id != null && other.id != null && item.id > other.id;
+}
+
 function supersedes(item, best) {
+  if (retryAfter(item, best)) return true;
+  if (retryAfter(best, item)) return false;
   if (item.runId != null && best.runId != null && item.runId !== best.runId) return item.runId > best.runId;
   if (item.id != null && best.id != null && item.id !== best.id) return item.id > best.id;
   const a = item.at ?? '￿';
@@ -317,6 +325,7 @@ export function latestPerCheck(checks) {
  * cancellations are dropped; a real failure of an older run stays until a newer report of that same check replaces it.
  */
 export function dropSupersededCancellations(checks, suites = []) {
+  checks = checks.map(check => suites.some(suite => suite.workflowRun?.databaseId === check.runId && suite.status === 'COMPLETED' && suite.conclusion === 'CANCELLED') ? {...check, retryEligible: false} : check);
   const live = new Map();
   const seen = (workflow, runId) => {
     if (workflow == null || runId == null) return;
@@ -327,7 +336,8 @@ export function dropSupersededCancellations(checks, suites = []) {
     if (suite?.app?.slug !== 'github-actions' || (suite.status === 'COMPLETED' && suite.conclusion === 'CANCELLED')) continue;
     seen(suite.workflowRun?.workflow?.name, suite.workflowRun?.databaseId);
   }
-  return checks.filter((check) => !(check.kind === 'check' && check.conclusion === 'CANCELLED' && check.workflow != null && check.runId != null && (live.get(check.workflow) ?? -1) > check.runId));
+  const retries = checks.filter(check => check.kind === 'check' && check.attempt > 1 && check.conclusion !== 'CANCELLED' && !suites.some(suite => suite.workflowRun?.databaseId === check.runId && suite.status === 'COMPLETED' && suite.conclusion === 'CANCELLED'));
+  return checks.filter(check => !((check.conclusion === 'CANCELLED' && retries.some(retry => retryAfter(retry, check))) || (check.kind === 'check' && check.conclusion === 'CANCELLED' && check.workflow != null && check.runId != null && (live.get(check.workflow) ?? -1) > check.runId)));
 }
 
 /**
@@ -357,19 +367,30 @@ export function evaluateChecks({ checks: reported, required, suites = [], allowS
       verdicts.push(check);
     }
   }
+  // workflowRun.runAttempt is mutable even on retained check runs. An override
+  // therefore needs the matching current retry suite to complete successfully.
+  const winningChecks = latestPerCheck(checks);
+  const sameCheck = (a,b) => a.kind === b.kind && a.id === b.id && a.runId === b.runId && a.name === b.name && a.workflow === b.workflow;
+  const retryOverrides = reported.filter(check => winningChecks.some(winner => sameCheck(winner,check)) && reported.some(other => retryAfter(check, other) && (
+    (other.name === check.name && verdicts.some(winner => sameCheck(winner,check))) ||
+    (other.conclusion === 'CANCELLED' && (mode === 'all' || counted.has(other.name)) && !verdicts.some(winner => winner.kind === other.kind && winner.workflow === other.workflow && winner.name === other.name && supersedes(winner,other)))
+  )));
+  const retrySuites = retryOverrides.map(check => ({check, suite:suites.find(suite => suite.app?.slug === 'github-actions' && suite.workflowRun?.databaseId === check.runId && suite.workflowRun?.workflow?.name === check.workflow && suite.workflowRun?.runAttempt === check.attempt)}));
+  const retryFailing = retrySuites.filter(({suite}) => suite?.status === 'COMPLETED' && RED_CONCLUSIONS.has(suite.conclusion)).map(({check,suite}) => ({name:`${check.workflow} retry suite`,conclusion:suite.conclusion,url:check.url,runId:check.runId,id:null}));
   const passes = (check) => check.result === 'success' || (check.result === 'skipped' && allowSkipped);
   const failing = verdicts.filter((check) => check.result === 'failure' || (check.result === 'skipped' && !allowSkipped));
   const pending = verdicts.filter((check) => check.result === 'pending').map((check) => check.name);
+  for (const {check,suite} of retrySuites) if ((suite?.status !== 'COMPLETED' || !['SUCCESS', ...RED_CONCLUSIONS].includes(suite.conclusion)) && !pending.includes(`${check.workflow} retry suite`)) pending.push(`${check.workflow} retry suite`);
   const passed = verdicts.filter(passes).map((check) => check.name);
   const advisoryFailing = [...new Set(latestPerCheck(checks).filter((check) => !counted.has(check.name) && check.result === 'failure').map((check) => check.name))];
   const suitesRunning = mode === 'all' ? suites.filter((suite) => suite?.app?.slug === 'github-actions' && suite.workflowRun && suite.status !== 'COMPLETED').length : 0;
   let state = 'green';
-  if (failing.length) state = 'red';
+  if (failing.length || retryFailing.length) state = 'red';
   else if (pending.length || missing.length || !verdicts.length || suitesRunning) state = 'pending';
   return {
     state,
     mode,
-    failing: failing.map(({ name, conclusion, url, runId, id }) => ({ name, conclusion, url, runId, id })),
+    failing: [...failing.map(({ name, conclusion, url, runId, id }) => ({ name, conclusion, url, runId, id })), ...retryFailing],
     pending,
     missing,
     passed,
