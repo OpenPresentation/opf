@@ -1,0 +1,65 @@
+{
+  "packet": "/private/tmp/rr20-t31-packet-07b",
+  "files": 292,
+  "primaryDecks": 24,
+  "candidateArchives": 54,
+  "reviewedArchiveReferences": 9,
+  "sealedFilesVerified": 292,
+  "seals": {
+    "packetSha256": "7bca4500d5438c1354f3b8e85ac91029f6f53770b17f749d91af75ff05968bad",
+    "offlineResultSha256": "a1be6cdee8370b3c30964933d7464e2dd35ce4af10b3f12a001fcef2120b4ea9"
+  },
+  "generation": {
+    "session": 29482,
+    "exit": 1,
+    "log": "/private/tmp/rr20-packet07b-generation.log",
+    "reason": "Generation, sealing and inspection passed; final negative harness used aliased macOS TMPDIR and failed canonical-parent guard before intended duplicate check"
+  },
+  "finalNegativeReplay": {
+    "session": 43863,
+    "exit": 0,
+    "log": "/private/tmp/rr20-packet07b-canonical-temp-negative.log",
+    "environment": "TMPDIR=/private/tmp; same frozen verifier and same sealed packet",
+    "passed": [
+      "read-only verifier twice",
+      "duplicate",
+      "input-tamper",
+      "source-mismatch",
+      "extra-file",
+      "nested-symlink"
+    ],
+    "packetUnchanged": true
+  },
+  "visualReview": {
+    "cases": [
+      "catalog-timeline",
+      "dense-events",
+      "custom-roadmap",
+      "long-labels",
+      "list",
+      "metrics",
+      "quote",
+      "table"
+    ],
+    "allEightPngsMatchFirstAttempt": true,
+    "quoteLeadingA": "Present; original suspected omission cleared by repeat single-image/pixel inspection, no renderer patch"
+  },
+  "roundTripEqualityFailures": [
+    "furniture-flags",
+    "chart-pareto-multi",
+    "chart-waterfall-single",
+    "chart-world-category",
+    "chart-all-seven",
+    "feature-catalog-timeline",
+    "feature-dense-events",
+    "feature-custom-roadmap",
+    "feature-long-labels"
+  ],
+  "reviewedDifferences": {
+    "historicalFive": "Imported furniture-flags/pareto-multi/waterfall-single/world-category/all-seven equal packet06 imported documents; do not claim exact source round trips",
+    "newTimelineFour": "Timeline data/structure unchanged. Notes rich runs materialize Roboto/#000000; catalog-timeline notes fontSize24 becomes fitted23.04 consistently in preview and PPTX. Exact authored-style equality is not achieved."
+  },
+  "nativeAcceptance": "unrun; Windows preflight awaiting command approval",
+  "registryAcceptance": false,
+  "deployment": false
+}

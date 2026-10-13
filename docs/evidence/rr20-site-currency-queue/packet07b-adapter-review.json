@@ -1,0 +1,260 @@
+{
+  "reviewReady": true,
+  "directory": "/private/tmp/rr20-t31-packet07-adapter",
+  "target": "/private/tmp/rr20-t31-packet-07b",
+  "failedPacketProtected": "/private/tmp/rr20-t31-packet-07",
+  "inventorySHA256": "5c035f7828f8dfc77d010f2e28dcd1a2e5f5d60a8d78fa597a343884f487fe80",
+  "fileCount": 48,
+  "files": [
+    {
+      "path": "README.md",
+      "bytes": 3785,
+      "sha256": "86e4cf57b2d363feae09d7c4827f59951273e503c89bea4be3a5ee850513fbeb"
+    },
+    {
+      "path": "SHA256SUMS.json",
+      "bytes": 4768,
+      "sha256": "56a72d924aeb5ec3ab945c8dc8ff6f70b1f9572e4da501ff85a3005f1cb9ba70"
+    },
+    {
+      "path": "adapter.test.mjs",
+      "bytes": 11532,
+      "sha256": "a8429baf4f65cb2cb8f39c9961673bf93dfe3e7d46284dbfc073b8b7ef179955"
+    },
+    {
+      "path": "archive-pin.mjs",
+      "bytes": 517,
+      "sha256": "842063b0942bc51b3f1cfd81929fdbcf30e80aef10f57e851b6337db06e20c8a"
+    },
+    {
+      "path": "binding.mjs",
+      "bytes": 3593,
+      "sha256": "63e55ab12c05a8e60994ffca2c2a8734768cc67877bad673b4c41836fc2831f3"
+    },
+    {
+      "path": "bindings.json",
+      "bytes": 8148,
+      "sha256": "96c5ed461fa4c5a8afc444c90c9d57a898998d42df158d49cec4454a15a8ca40"
+    },
+    {
+      "path": "chart-modes.mjs",
+      "bytes": 3885,
+      "sha256": "60ac7844630d9e43ee54213d6fdbe4a1026f77b7d8a5e8308b65513b3d7498ff"
+    },
+    {
+      "path": "core-runtime-pin.json",
+      "bytes": 9949,
+      "sha256": "9875173e52df3c36ad993ebb8cb5b1386ad9ee26bddb3c0e7c804911b2d21247"
+    },
+    {
+      "path": "current-archive-review.json",
+      "bytes": 3441,
+      "sha256": "a2211e388b32a1c889112cc6d0c543e3a733cb20f27301e305d5bb2df6562a3a"
+    },
+    {
+      "path": "expected-graph.json",
+      "bytes": 2072,
+      "sha256": "91ed6d1fc29287fb69182581bcb41d496fab0ff12cc66714351d46c232215745"
+    },
+    {
+      "path": "feature-inputs/feature-catalog-timeline.opf.json",
+      "bytes": 4717,
+      "sha256": "8071bf3b90b87dc982014565f916b89f9d23642ce27aaa3fd68e22e3425d7efe"
+    },
+    {
+      "path": "feature-inputs/feature-custom-roadmap.opf.json",
+      "bytes": 4529,
+      "sha256": "d029ff2cdf378610d4adc98ff226662e01dcecce1ff2f6fa192ab9e2859ebb18"
+    },
+    {
+      "path": "feature-inputs/feature-dense-events.opf.json",
+      "bytes": 5282,
+      "sha256": "e81a5c9a5bd9e4a3367b0cde47948834014a2bce906e05dbe8b2cfb517068f13"
+    },
+    {
+      "path": "feature-inputs/feature-list.opf.json",
+      "bytes": 2020,
+      "sha256": "b6e562fe04d5e2b7cfe40137b1fb6bac1e3b6f5090eb3ea0fc2af02498014367"
+    },
+    {
+      "path": "feature-inputs/feature-long-labels.opf.json",
+      "bytes": 4876,
+      "sha256": "043c8d2e293cab1df7c2b7705216ec60c4d142a8b5b8a4659daa182eb710cb41"
+    },
+    {
+      "path": "feature-inputs/feature-metrics.opf.json",
+      "bytes": 2663,
+      "sha256": "8ce76e355c54b47cf51384db03ff76f0e38fc071189480ab64ef147a0e165125"
+    },
+    {
+      "path": "feature-inputs/feature-quote.opf.json",
+      "bytes": 1681,
+      "sha256": "8d6afbf76f8109e76355649fd7ce69a8171e84457f608c714b7329f60b574a82"
+    },
+    {
+      "path": "feature-inputs/feature-table.opf.json",
+      "bytes": 2526,
+      "sha256": "58335a082fadcbf58b0e5e327d7f2bc014c0d6aa6bf9a584cf06812937d0b637"
+    },
+    {
+      "path": "feature-inputs.json",
+      "bytes": 3009,
+      "sha256": "1a24a7310523de8d7f9563bf36f807f0c6f1bfcd4d11a6bc0a045e2d5fad85f5"
+    },
+    {
+      "path": "finish.mjs",
+      "bytes": 5415,
+      "sha256": "3aa5013ce87ef830a93e879261926682f5e30743ce32f1fe44868a92dfbfd619"
+    },
+    {
+      "path": "fixtures.mjs",
+      "bytes": 3253,
+      "sha256": "0d2bfc9edcf166ca4f64f02aa4b3b62cb28e22a0e97edb93e62670689f481da7"
+    },
+    {
+      "path": "fonts.mjs",
+      "bytes": 1842,
+      "sha256": "4457b918c48461d104c22f03df49820bdbd04acc4faece78ed299ca33de32845"
+    },
+    {
+      "path": "generate.mjs",
+      "bytes": 6196,
+      "sha256": "d108ddb6bee99bdd055eaff697c0131b239800ee71020a0ff17f3b0bf42a094f"
+    },
+    {
+      "path": "graph-probe.mjs",
+      "bytes": 204,
+      "sha256": "1bc311e21e1d037478ed87ba585f2a4489dfd454fce2e5480a123077632f691a"
+    },
+    {
+      "path": "graph.mjs",
+      "bytes": 3501,
+      "sha256": "11827b2fc5ba521324b2b1951d8aa8b0724844b0bc2ae2930f5ef9453f5c8de1"
+    },
+    {
+      "path": "inspect.mjs",
+      "bytes": 8050,
+      "sha256": "f3aad5d96b0d6cb0b5d4d6dddb839d90fa450f399fce1dc6888cb00c43b9683b"
+    },
+    {
+      "path": "native-furniture-control.ps1",
+      "bytes": 27761,
+      "sha256": "c85fe9f79b9c8e01feb6f0c4cfc8b84c90d7d93498f88b4cde2750630c9b2e9e"
+    },
+    {
+      "path": "native-furniture-harness-check.ps1",
+      "bytes": 6623,
+      "sha256": "2c14c170daa5e952da9879e69410624a5bde13c2b43581bc2b078a084ad2e6f4"
+    },
+    {
+      "path": "native-picture-control.ps1",
+      "bytes": 21632,
+      "sha256": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a"
+    },
+    {
+      "path": "native-picture-harness-check.ps1",
+      "bytes": 2726,
+      "sha256": "0b88466e9ccd6bfb6a62f7f9fa52b987a11743047d495735fc2f5c256ed503d1"
+    },
+    {
+      "path": "native-process.ps1",
+      "bytes": 2341,
+      "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+    },
+    {
+      "path": "native-table-colors-staged.mjs",
+      "bytes": 7584,
+      "sha256": "29f12fdd2bec2bc554eb839ac3b769a54828b4a3e1c8cda958babc76cc494c57"
+    },
+    {
+      "path": "native-table-colors.mjs",
+      "bytes": 7245,
+      "sha256": "269dfff133bc6a4184e63582afc969eccf234994c8dc922c00924234ea31c950"
+    },
+    {
+      "path": "native-table-colors.ps1",
+      "bytes": 5753,
+      "sha256": "04ae8767029de0e6ed4017daf3fa8420fd109264aa6300abb978dc95f5b0a81a"
+    },
+    {
+      "path": "pareto-single-control.mjs",
+      "bytes": 2146,
+      "sha256": "7bac8d20f9fc20c37074b312e154ede1476fc7a0fea98e59d0b33e9af7aa92b8"
+    },
+    {
+      "path": "prepare.sh",
+      "bytes": 904,
+      "sha256": "027593415156130fa9e0c995971a5a72fd80956824a72894205b19ed1d4c7a06"
+    },
+    {
+      "path": "reviewed-archives/all-seven-candidate.pptx",
+      "bytes": 144311,
+      "sha256": "d5e9369846422d28f3dfb3b32b0009401a41d402412fdbfed106561edd354082"
+    },
+    {
+      "path": "reviewed-archives/box-multi-candidate.pptx",
+      "bytes": 81518,
+      "sha256": "34d74ee3301b44a5d81ca32fd138966dfae9e93d79ba1752fc9c50a430b6d645"
+    },
+    {
+      "path": "reviewed-archives/funnel-category-candidate.pptx",
+      "bytes": 81345,
+      "sha256": "ba1a79407651ef262d15b6b0e1e937177b3d02537960344093a568c89feaa6f4"
+    },
+    {
+      "path": "reviewed-archives/histogram-category-candidate.pptx",
+      "bytes": 81346,
+      "sha256": "1f4c9d95b18a3821bcdbf29dd18048d0924838dbd307e3a6980a4190ac9bb479"
+    },
+    {
+      "path": "reviewed-archives/histogram-single-candidate.pptx",
+      "bytes": 81361,
+      "sha256": "ccf0a5f94b46fa240a5f9aa855b19ab6bc8d552b39fe4aefa8cd471774c5ec6a"
+    },
+    {
+      "path": "reviewed-archives/pareto-multi-candidate.pptx",
+      "bytes": 81519,
+      "sha256": "e7899a6dd1fc22f5b257a813323f4e63b7d328c63f582d29cea577b8262d5463"
+    },
+    {
+      "path": "reviewed-archives/treemap-category-candidate.pptx",
+      "bytes": 81345,
+      "sha256": "b69933578667102cc1b2ffa59e97574aa90d6e27442c5e59677ff1a0c16a71f2"
+    },
+    {
+      "path": "reviewed-archives/waterfall-single-candidate.pptx",
+      "bytes": 81372,
+      "sha256": "341fc617cd8edd6bdf9790134cc817c1b13f0cf0479f96b23758e55c077b0142"
+    },
+    {
+      "path": "reviewed-archives/world-category-candidate.pptx",
+      "bytes": 80164,
+      "sha256": "e9dec7ca5086812227c171a3d93c45c32ceaf3e4748a55f8a67623c5dca9f914"
+    },
+    {
+      "path": "rich-title-probe.mjs",
+      "bytes": 1870,
+      "sha256": "1a89fd5daac9aeaf2034fcde899f11ee1591a68dc765c90885ea7b3148cfddc6"
+    },
+    {
+      "path": "test.mjs",
+      "bytes": 3314,
+      "sha256": "31a30fa221870e1df4fde30684f145d555701f592a80bb37fba79b3c3590ce76"
+    },
+    {
+      "path": "verify-seal.mjs",
+      "bytes": 2779,
+      "sha256": "2e673352d3c97009107e1a0752bfcfa83f20989bb91bce20a6d63f234bd46ade"
+    }
+  ],
+  "focusedTests": {
+    "cases": 9,
+    "exit": 0,
+    "command": "Node24 node --test adapter.test.mjs"
+  },
+  "fixtureArchivesMatchReviewed": 9,
+  "packetGenerated": false,
+  "nativeExecution": false,
+  "registryAcceptance": false,
+  "nativeAcceptance": false
+}
