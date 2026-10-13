@@ -1,0 +1,44 @@
+{
+  "at": "2026-10-13T18:55:11Z",
+  "status": "failed",
+  "exitCode": 1,
+  "monitorSession": 31422,
+  "logSha256": "18a791b3eeed803388fb338341747255d6bc11a6b050fea1864162ea04a8e305",
+  "retryPolicy": "one full-workflow retry per failing run; exhausted",
+  "failedTargets": [
+    {
+      "pr": "OpenPresentation/opf#646",
+      "head": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+      "jobs": [
+        "https://github.com/OpenPresentation/opf/actions/runs/38435616711/job/115452421740",
+        "https://github.com/OpenPresentation/opf/actions/runs/38435616711/job/115474142904"
+      ],
+      "note": "packages is an aggregate depending on candidate/source; not independent evidence of a second cause"
+    },
+    {
+      "pr": "OpenPresentation/opf-render#240",
+      "head": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+      "jobs": [
+        "https://github.com/OpenPresentation/opf-render/actions/runs/38356352873/job/115461823430"
+      ]
+    },
+    {
+      "pr": "OpenPresentation/opf-editor#165",
+      "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+      "jobs": [
+        "https://github.com/OpenPresentation/opf-editor/actions/runs/38353645254/job/115463440440"
+      ]
+    },
+    {
+      "pr": "OpenPresentation/opf-pptx#253",
+      "head": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+      "jobs": [
+        "https://github.com/OpenPresentation/opf-pptx/actions/runs/38435583471/job/115468709039"
+      ]
+    }
+  ],
+  "jobLogsRetrieved": false,
+  "causeEstablished": false,
+  "nextAction": "Complete maintained local full-tier ecosystem reproduction; do not restart hosted gate without evidence-based change.",
+  "releaseAcceptance": false
+}
