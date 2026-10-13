@@ -1,0 +1,55 @@
+{
+  "verdict": "Prior installed-package runtime evidence remains applicable to unchanged PPTX distributables; new native-worker source/Windows harness qualification remains required",
+  "before": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+  "after": "4f8a3551060d350d059ac4fdd29257c6d234fa12",
+  "currentSourceClean": true,
+  "changedFiles": [
+    "changes/rr-20-native-font-property-errors.md",
+    "test/native-font-property-probe.ps1",
+    "test/native-furniture-control.ps1",
+    "test/native-furniture-harness-check.ps1",
+    "test/native-furniture-style-controls.mjs"
+  ],
+  "publishedFilePrefixes": [
+    "package.json",
+    "dist",
+    "vendor",
+    "DEPENDENCY-NOTES.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "trackedPublishSurfaceFiles": 70,
+  "publishSurfaceGitBlobsIdentical": true,
+  "trackedBuildInputFiles": 71,
+  "buildInputsAndLockIdentical": true,
+  "actualPriorTarball": {
+    "name": "@openpresentation/opf-pptx",
+    "version": "0.19.0",
+    "sourceSha": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+    "tarball": "/private/tmp/rr20-peer020-candidate-02/opf/artifacts/npm/openpresentation-opf-pptx-0.19.0.tgz",
+    "sha256": "b9080f04e5dae4ebcce5f03a77618b42df359d4d08ec1739f07262788b45afff",
+    "bytes": 725545
+  },
+  "priorProof": "/private/tmp/rr20-peer020-candidate-02/proof.json",
+  "priorProofSha256": "3273fcf5b18d61ea1f13844c404ef0c53fd216796d72dc7e97273d8084958bb5",
+  "priorTarballRegularFiles": 70,
+  "priorTarballNonManifestFiles": 69,
+  "priorTarballNonManifestBytesMatchCurrentCheckout": true,
+  "payloadInventorySha256": "c47e9370e22e0e84816ded5a203d5d1c69841f68d5873512afb6017c71318366",
+  "originalManifestBlobIdentical": true,
+  "packageScriptsUnchanged": true,
+  "prepack": "npm run build; unchanged scripts/build.mjs copies unchanged src files into dist and verifies unchanged vendor",
+  "testDiscovery": "Existing scripts/run-tests.mjs discovers changed native-furniture-style-controls.mjs; it scans/invokes new PowerShell probe and15 strict font controls on Windows. No new orphan package test.",
+  "recommendation": [
+    "Retain prior PPTX JS/types/vendor/browser/installed-runtime results with exact845 attribution and this bounded publish-surface equivalence proof; no repeated whole six-package replay justified solely by4f8 delta",
+    "Require changed PowerShell source/parser/mock/fragment/syntax checks and new Windows5.1 real non-Office COM adapter+15controls; source-only Windows/actualnative-worker evidence from845 cannot qualify4f8",
+    "For actual PowerPoint capture use4f8 worker with fresh sealed worker/request/report identities; preserve failed845 attempts and existingnative acceptance criteria",
+    "Do not claim core332 source graph equals priorb801 graph or that current sibling workflows selected4f8; they selected845",
+    "If fresh staging is laterneeded, sourceSha/manifest provenance and absolute file tarball paths can change metadata or archiveSHA even while package runtime payload bytes are unchanged"
+  ],
+  "noBroadGraphEquivalence": true,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "remoteMutation": false,
+  "supervisorVerified": true
+}
