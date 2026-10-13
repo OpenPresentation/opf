@@ -1,0 +1,12 @@
+{
+  "sourceHead": "1f4a170dad20e88c1c978a7dd254cbb4726ebcf4",
+  "command": "pnpm check:changed",
+  "exitCode": 1,
+  "passed": "22 of 23 steps, including typecheck and CLI tests",
+  "failed": "Core package test/node.test.mjs refused missing explicit authorized Gallery candidate mode",
+  "failureText": "configured gallery needs explicit authorized candidate mode; no published fallback",
+  "candidateGalleryRefWasSet": false,
+  "qualification": false,
+  "nextAction": "Use maintained candidate setup with real coordinated checkouts and sealed staged graph for the final source snapshot; do not bypass the candidate preflight. Existing c10 canonical qualification remains separately scoped.",
+  "logSha256": "24bde3741b997cbbbe5f3f0948dc688126f3b54391940c0ccae6c53bb92f6ee6"
+}

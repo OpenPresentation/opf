@@ -1,0 +1,35 @@
+{
+  "observedAt": "2026-10-13T18:43:08Z",
+  "batchStatus": "still-running-for-other-targets",
+  "failedTargets": [
+    {
+      "pr": "OpenPresentation/opf#646",
+      "head": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+      "checks": [
+        {
+          "name": "candidate / source",
+          "url": "https://github.com/OpenPresentation/opf/actions/runs/38435616711/job/115452421740"
+        },
+        {
+          "name": "packages",
+          "url": "https://github.com/OpenPresentation/opf/actions/runs/38435616711/job/115474142904"
+        }
+      ]
+    },
+    {
+      "pr": "OpenPresentation/opf-render#240",
+      "head": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+      "checks": [
+        {
+          "name": "package",
+          "url": "https://github.com/OpenPresentation/opf-render/actions/runs/38356352873/job/115461823430"
+        }
+      ]
+    }
+  ],
+  "logSnapshotSha256": "92183eaac61a6d5e3da3c2707cc6582ca7e4dd850446efb50ae0afc43a95cb87",
+  "jobLogsRetrieved": false,
+  "causeEstablished": false,
+  "mergeAuthorizedByThisResult": false,
+  "note": "Canonical gate has exhausted configured retry for these targets. Local source/workflow comparison assigned; no speculative fix or repeat workflow rerun."
+}
