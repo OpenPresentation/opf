@@ -42,12 +42,12 @@ try {
     delete ordinaryEnv.OPF_GOLDEN_BASELINE; delete ordinaryEnv.OPF_EXAMPLES_DIR;
     const ordinary = spawnSync(process.execPath,[runner],{encoding:'utf8',timeout:120000,env:ordinaryEnv});
     succeeds(ordinary);
-    const selected = readBaseline(fileURLToPath(new URL('./golden/opf-examples-png.rr81-v2-reviewed.sha256.json', import.meta.url)));
+    const selected = readBaseline(fileURLToPath(new URL('./golden/opf-examples-png.rr20-array-areas.sha256.json', import.meta.url)));
     const actual = JSON.parse(readFileSync(path.join(temp,'ordinary/candidate.json'),'utf8'));
     assert.equal(Object.keys(selected.entries).length,807);
     assert.deepEqual(actual.source,selected.source);
     assert.deepEqual(actual.entries,selected.entries);
-    console.log('Ordinary published-core v2 baseline selection passed: 807 exact slides.');
+    console.log('Ordinary RR-20 baseline selection passed: 807 exact slides.');
   } else {
     console.log('Explicit corpus/baseline preserved; default probe is not applicable.');
   }

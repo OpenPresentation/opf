@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
-import {cp,mkdir,mkdtemp,readFile,rm,symlink,writeFile} from 'node:fs/promises';
+import {cp,mkdir,mkdtemp,readFile,realpath,rm,symlink,writeFile} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
@@ -55,7 +55,7 @@ await assert.rejects(loadFonts({pack:'unknown'}),{code:'invalid-font-pack'});
 assert.throws(()=>toSvg({design:{fontScheme:'roboto'},slides:[{text:'你好'}]}, 1, {fonts: prepared}),{code:'missing-glyph'});
 
 // Corrupt only a disposable copy. Real parser-valid fonts must still fail an integrity mismatch.
-const temporary=await mkdtemp(path.join(tmpdir(),'opf-font-integrity-'));
+const temporary=await realpath(await mkdtemp(path.join(tmpdir(),'opf-font-integrity-')));
 try{
   await writeFile(path.join(temporary,'package.json'),JSON.stringify({type:'module'}));
   await cp(path.join(root,'dist'),path.join(temporary,'dist'),{recursive:true});

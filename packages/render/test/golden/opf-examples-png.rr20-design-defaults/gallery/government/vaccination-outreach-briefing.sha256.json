@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/government/vaccination-outreach-briefing.opf.json",
+  "entries": {
+    "gallery/government/vaccination-outreach-briefing.opf.json#0": {
+      "sha256": "ded5cc05e9d5ec745ee4c0cac43afd691beabe0b00cbc6b49e075a3890a95c98",
+      "bytes": 6043
+    },
+    "gallery/government/vaccination-outreach-briefing.opf.json#1": {
+      "sha256": "af53df7465485acad03bcb0d23b02ce1554f7924b8c13ceb87d315d775c95d26",
+      "bytes": 8275
+    },
+    "gallery/government/vaccination-outreach-briefing.opf.json#2": {
+      "sha256": "0adf5a131e24c697035dfbdd49e5ff16b11e979015d9a7ff9237ac1a0f04bd67",
+      "bytes": 5106
+    },
+    "gallery/government/vaccination-outreach-briefing.opf.json#3": {
+      "sha256": "a001004536240a11838392f76fb414fc54b688ac654a6f2a657e7a985c3827dc",
+      "bytes": 7121
+    },
+    "gallery/government/vaccination-outreach-briefing.opf.json#4": {
+      "sha256": "3e3c51f0fd08f40e9b12f05cdeedd974e3183d2cc73e72e121b0070a7e93e366",
+      "bytes": 8459
+    },
+    "gallery/government/vaccination-outreach-briefing.opf.json#5": {
+      "sha256": "e37593ddfd5a16c18fc38794104ffc5a12700f642215562e51bb95f732794efd",
+      "bytes": 7539
+    }
+  }
+}

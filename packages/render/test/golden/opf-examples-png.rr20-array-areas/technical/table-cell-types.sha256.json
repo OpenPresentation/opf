@@ -1,0 +1,13 @@
+{
+  "deck": "technical/table-cell-types.opf.json",
+  "entries": {
+    "technical/table-cell-types.opf.json#0": {
+      "sha256": "f7e64b56ce8ac58416931e16bcf14674507cd9b7d79579d71cf4b1be137c410e",
+      "bytes": 3641
+    },
+    "technical/table-cell-types.opf.json#1": {
+      "sha256": "67062bf7637ec4f58904191bce54e174fb32fa58e68ce6bf6915c66e2aa23e09",
+      "bytes": 3294
+    }
+  }
+}

@@ -20,7 +20,7 @@ import { featureDecks, fixture, layouts, paginatedDecks, templateDeck } from './
 //   node test/layout-template-goldens.mjs --promote   rewrites the baseline after the candidate was reviewed
 // and explain the change in test/golden/notes/<ID>.md.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const baselinePath = path.join(root, 'test/golden/layout-templates-0.19.json');
+const baselinePath = path.join(root, 'test/golden/layout-templates-rr20-array-areas.json');
 const output = path.resolve(process.env.OPF_TEMPLATE_GOLDEN_OUT ?? path.join(root, 'artifacts/template-goldens'));
 const update = process.argv.includes('--update'), promote = process.argv.includes('--promote');
 const scale = 0.25;

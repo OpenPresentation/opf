@@ -22,8 +22,11 @@ for (const count of [1, 2, 4, 8]) {
     for (const [, attributes, text] of svg.matchAll(/<text\b([^>]*)>([^<]*)<\/text>/g)) {
       if (!attributes.includes('.timeline.events.')) continue;
       labels++;
-      const x = Number(/\bx="([^"]+)"/.exec(attributes)[1]), size = Number(/font-size="([^"]+)"/.exec(attributes)[1]);
-      const width = fonts.textMeasurement.measure(text, size, { fontFamily: 'Roboto', fontWeight: 500 });
+      const x = Number(/\bx="([^"]+)"/.exec(attributes)[1]);
+      // The SVG pins the shaped advance with textLength; it can differ from remeasuring a run at
+      // a guessed weight (for example a 400-weight description vs a 500-weight event time).
+      const width = Number(/textLength="([^"]+)"/.exec(attributes)?.[1]);
+      assert.ok(Number.isFinite(width) && width > 0, 'Timeline text pins its measured advance');
       assert.ok(x - width / 2 >= box.x - 0.1, 'First event text must not spill past the left edge');
       assert.ok(x + width / 2 <= box.x + box.width + 0.1, 'Last event text must not spill past the right edge');
     }

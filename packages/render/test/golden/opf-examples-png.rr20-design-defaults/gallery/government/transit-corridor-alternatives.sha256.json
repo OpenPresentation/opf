@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/government/transit-corridor-alternatives.opf.json",
+  "entries": {
+    "gallery/government/transit-corridor-alternatives.opf.json#0": {
+      "sha256": "e7ce34220730271671603a81c0c5fb6c9b41d47267e627334b9993d2bc4b463b",
+      "bytes": 6093
+    },
+    "gallery/government/transit-corridor-alternatives.opf.json#1": {
+      "sha256": "74d1154fa83f08b37702b58dadb0fe28a8c1b09d85a3431da0e1030215a9f587",
+      "bytes": 7897
+    },
+    "gallery/government/transit-corridor-alternatives.opf.json#2": {
+      "sha256": "4be44f4d2ad7d50bb5fe5b27381122c1a1de93574da598fcb2fe5e6f7b6645fd",
+      "bytes": 6427
+    },
+    "gallery/government/transit-corridor-alternatives.opf.json#3": {
+      "sha256": "6288e501a5ffa977ca8b46dd561033947d66032b256afe4cdaf697c3849c7502",
+      "bytes": 6776
+    },
+    "gallery/government/transit-corridor-alternatives.opf.json#4": {
+      "sha256": "3ffa0f7f952b76e247efc630fffd9803978c4c2542b0f8e2dfcbe122dbbec974",
+      "bytes": 7631
+    },
+    "gallery/government/transit-corridor-alternatives.opf.json#5": {
+      "sha256": "0d209302e79ef024af528c72a3b135757e825e886d64269a48925cce67adbb9f",
+      "bytes": 14710
+    },
+    "gallery/government/transit-corridor-alternatives.opf.json#6": {
+      "sha256": "0bf190c6b8557462518b040640d7154e40f6fc54540b832b7e4bc5553592abed",
+      "bytes": 10337
+    },
+    "gallery/government/transit-corridor-alternatives.opf.json#7": {
+      "sha256": "7eca779cba401034b77d0bf5eb2e90e08a7a2347c52e674100a743f603452670",
+      "bytes": 3802
+    },
+    "gallery/government/transit-corridor-alternatives.opf.json#8": {
+      "sha256": "aad2c49bbb492a344e316f82d604eb66a2964e57b12c52155590bf4210fad4fe",
+      "bytes": 5325
+    },
+    "gallery/government/transit-corridor-alternatives.opf.json#9": {
+      "sha256": "633880f7729d50dddf29415586bffe6b6bb8a4e5a3bd7139c4f7b6c43acb748f",
+      "bytes": 9868
+    }
+  }
+}

@@ -723,12 +723,11 @@ function renderCategoryChart(c, spec) {
   const rtl = c.bound.geometry?.direction === "rtl" && !horizontal;
   const categorySlot = (i) => rtl ? count - 1 - i : i;
   const stacks = stackCategoryValues(series, count, spec.kind, spec.grouping, c.path);
-  // The scale follows the plotted values. Only stacked bars and areas plot from a
-  // base (the running total below them); an unstacked series has a synthetic zero
-  // `from`, which must not force zero onto the axis, and a line plots `to` alone.
+  // Bar/column lengths and filled areas encode magnitude and must include zero even for near-equal
+  // values. Lines retain their existing automatic domain; stacked extents retain totals.
   const stackedGrouping = spec.grouping === "stacked" || percent;
   const extents = stacks.flat().filter(Boolean).flatMap((point) => spec.kind === "line" || !stackedGrouping ? [point.to] : [point.from, point.to]);
-  const dataMin = extents.length ? Math.min(...extents) : 0, dataMax = extents.length ? Math.max(...extents) : 1;
+  const dataMin = extents.length ? Math.min(...extents, ...((spec.kind === "bar" || spec.kind === "area") ? [0] : [])) : 0, dataMax = extents.length ? Math.max(...extents, ...((spec.kind === "bar" || spec.kind === "area") ? [0] : [])) : 1;
   const legendWidth = seriesLegend(c, series, spec.kind === "line" ? "line" : undefined, spec.markers);
   const right = box.x + box.width - pad - legendWidth;
   const top = box.y + pad + c.lineHeight / 2;

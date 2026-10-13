@@ -13,7 +13,7 @@ import { diffManifests, readBaseline } from './golden-store.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // RR-52: a baseline is a directory with one file per deck (test/golden/<name>/...). A legacy
 // `<name>.sha256.json` path still selects `<name>/` and a legacy single-file manifest still loads.
-const baselinePath = path.resolve(process.env.OPF_GOLDEN_BASELINE ?? path.join(root, 'test/golden/opf-examples-png.rr81-v2-reviewed.sha256.json'));
+const baselinePath = path.resolve(process.env.OPF_GOLDEN_BASELINE ?? path.join(root, 'test/golden/opf-examples-png.rr20-array-areas.sha256.json'));
 const started = performance.now();
 const output = path.resolve(process.env.OPF_GOLDEN_OUT ?? path.join(root, 'artifacts/golden'));
 const update = process.argv.includes('--update');

@@ -15,7 +15,7 @@ on:
         required: true
         type: string
       gallery-ref:
-        description: Exact candidate gallery2 commit SHA
+        description: Exact candidate gallery3 commit SHA
         required: true
         type: string
       baseline-name:
@@ -108,7 +108,7 @@ jobs:
           rm -rf guard/opf-render/node_modules/@openpresentation/opf
           ln -s "$GITHUB_WORKSPACE/guard/opf/packages/javascript" guard/opf-render/node_modules/@openpresentation/opf
           (cd guard/opf-render && node scripts/golden-pinned-image.mjs && node test/golden.mjs --update)
-          node tools/scripts/candidate-goldens.mjs guard --candidate guard/opf-render/artifacts/golden/candidate.json --baseline guard/opf-render/test/golden/opf-examples-png.cover-centering --core "$CORE" --gallery "$GALLERY" --name "$NAME" --selection "$SELECTION"
+          node tools/scripts/candidate-goldens.mjs guard --candidate guard/opf-render/artifacts/golden/candidate.json --baseline guard/opf-render/test/golden/opf-examples-png.rr81-v2-reviewed --core "$CORE" --gallery "$GALLERY" --name "$NAME" --selection "$SELECTION"
           git -C guard/opf rev-parse HEAD > guard/core-sha.txt
           git -C guard/opf-render rev-parse HEAD > guard/renderer-sha.txt
       - name: Install, link and build candidate only
@@ -122,10 +122,10 @@ jobs:
           pnpm --dir opf build
           npm run build --prefix opf-render
           (cd opf-render && node scripts/golden-pinned-image.mjs)
-      - name: Generate fixed 807 examples and 498 template cases
+      - name: Generate fixed 807 examples and reviewed 495 template cases
         working-directory: opf-render
         run: |
-          if [ "$SELECTION" != templates ]; then OPF_GOLDEN_ARTIFACTS=changed node test/golden.mjs --update; fi
+          if [ "$SELECTION" != templates ]; then OPF_GOLDEN_BASELINE=test/golden/opf-examples-png.rr81-v2-reviewed OPF_GOLDEN_ARTIFACTS=changed node test/golden.mjs --update; fi
           if [ "$SELECTION" != examples ]; then node test/layout-template-goldens.mjs --update; fi
           node "$GITHUB_WORKSPACE/tools/scripts/candidate-goldens.mjs" verify --workspace "$GITHUB_WORKSPACE" --root "$PWD" --core "$CORE" --gallery "$GALLERY" --name "$NAME" --selection "$SELECTION"
           cp "$GITHUB_WORKSPACE/guard/core-sha.txt" artifacts/guard-core-sha.txt

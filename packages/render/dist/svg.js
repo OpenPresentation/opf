@@ -380,7 +380,7 @@ function resolveDesign(presentation, slide, slideContext) {
       accent,
       hyperlink: roles.hyperlink,
       followedHyperlink: roles.followedHyperlink,
-      border: colorFromScheme(colorScheme, "accent5", "#CBD5E1")
+      border: roles.border
     },
     fonts: { ...composeOptions.fontFamilies },
     darkBackground,
@@ -1459,7 +1459,7 @@ function renderTimeline(item, box, bound, options) {
 
 function renderTable(item, box, bound, options) {
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
-  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {})});
+  const layout = layoutTable(item.value, box, {scale, minFontSize:(bound.composition ?? bound.geometry.composition).minFontSize, fontFamily:bound.design.fonts.body, ...(bound.design.fonts.code ? {codeFontFamily:bound.design.fonts.code} : {}), textMeasurement:options.textMeasurement, path:item.path, presentation:bound.presentation, alignment:bound.geometry.design.contentAlignment, ...(bound.geometry?.direction === "rtl" ? {direction:"rtl"} : {})});
   const children = [];
   // RR-54: a dataset table has no rows or columns of its own to point at; every cell reports the table's authored path.
   const own = isDatasetTable(item, bound) ? () => item.path : (path) => path;
@@ -1495,7 +1495,7 @@ function renderTable(item, box, bound, options) {
     children.push((cell.rich ? renderRichTextBox : renderTextBox)(cell.rich ? cell.value : flattenText(cell.value ?? ""), cell.textBox, bound, {
       path:own(cell.path), fontSize:15, fontFamily:bound.design.fonts.body,
       fontWeight:cell.header ? 700 : 400, textStyle:cell.textStyle, fit:cell.fit,
-      fill:textFill, align:style.align, options
+      fill:textFill, align:cell.alignment, options
     }));
   }
 

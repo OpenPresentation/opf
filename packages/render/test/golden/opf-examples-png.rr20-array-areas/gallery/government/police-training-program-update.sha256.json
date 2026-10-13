@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/government/police-training-program-update.opf.json",
+  "entries": {
+    "gallery/government/police-training-program-update.opf.json#0": {
+      "sha256": "7a6db05aa6a0ec7df34bb909b5ed7e70dab6cce360f774bd845f60a9fe8cc8c1",
+      "bytes": 6192
+    },
+    "gallery/government/police-training-program-update.opf.json#1": {
+      "sha256": "0b6361c8d42d2cbbd6249e00865e949e7ba4d8f226d132480d2e1bb4ff9c49a9",
+      "bytes": 7954
+    },
+    "gallery/government/police-training-program-update.opf.json#2": {
+      "sha256": "d854c00f5c9be6aba8d745d42d2a5b2355567e66d3eeee9347cd2521580bb4d7",
+      "bytes": 4882
+    },
+    "gallery/government/police-training-program-update.opf.json#3": {
+      "sha256": "6f103b07e0f7ecfbdd1b64b2a4913084b078a08760d014754f0007e2b2e1a4ce",
+      "bytes": 6636
+    },
+    "gallery/government/police-training-program-update.opf.json#4": {
+      "sha256": "8d3c7bbd73ee410e374b20c200f44780d05f919a65174c0811e257f05e5f8414",
+      "bytes": 8502
+    },
+    "gallery/government/police-training-program-update.opf.json#5": {
+      "sha256": "1a3d5625163c53f4c8d3fa0a50539953bd283a565ca8927c987732dabbfdee04",
+      "bytes": 8738
+    }
+  }
+}

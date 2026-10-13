@@ -1,0 +1,124 @@
+{
+  "scope": "RR-20 source-key review before pinned-image raster generation",
+  "sourceHeads": {
+    "core": "8f70cf1b52dc4ca4eb246a6f9d065b1403edbf31",
+    "gallery": "146e477196405fe7d2283008f6fad34c12742599"
+  },
+  "examples": {
+    "historicalSource": {
+      "repository": "OpenPresentation/opf",
+      "path": "examples",
+      "sha256": "b05ed665d5e357e0453fbd4a20a5e0074a6bface26b5e9afa0a3a630827115bf",
+      "decks": 127
+    },
+    "currentSource": {
+      "repository": "OpenPresentation/opf",
+      "path": "examples",
+      "sha256": "a44bb32210a1b054bdfb13794b5b75e6e4e2743e5fa2851e78f9e84434c1d9c4",
+      "decks": 127
+    },
+    "historicalCount": 807,
+    "currentCount": 807,
+    "historicalKeysSha256": "9c87ca965779999b163f39a6c05eba5666b8bca8278d2fde027c6feaeddf9ae0",
+    "currentKeysSha256": "9c87ca965779999b163f39a6c05eba5666b8bca8278d2fde027c6feaeddf9ae0",
+    "removed": [],
+    "added": []
+  },
+  "templates": {
+    "historicalSource": {
+      "fixture": "@openpresentation/gallery layouts (see layout-template-fixture.mjs)",
+      "sha256": "5be8cb1bbeef4c99909c61090b43cf022f60007bc726cc90a63fa12b94fa3856",
+      "templates": 28
+    },
+    "currentSource": {
+      "fixture": "@openpresentation/gallery layouts (see layout-template-fixture.mjs)",
+      "sha256": "573a7d235a6ece9a01a045ca28bfe7b223523f10baec476829d9c065514e2f4e",
+      "templates": 28
+    },
+    "historicalCount": 498,
+    "currentCount": 495,
+    "historicalKeysSha256": "3e288b95f23c218971050e43481b256c488e87bfbfd7e85d8fea63b58786bb70",
+    "currentKeysSha256": "8c8616066db810cb7b019e30197ab8caf88579aeafe83142f7a2d8ce980f8335",
+    "removed": [
+      "paginated faq 3 long page 1",
+      "paginated faq 3 long page 2",
+      "paginated faq 3 long page 3"
+    ],
+    "added": []
+  },
+  "faq3Long": {
+    "sourceBlockCount": 3,
+    "sourceItemCounts": [
+      7,
+      7,
+      7
+    ],
+    "diagnostics": [],
+    "regionBox": {
+      "x": 57.6,
+      "y": 213.36,
+      "width": 1164.8,
+      "height": 449.04
+    },
+    "resolvedColumns": [
+      {
+        "path": "slides.0.blocks.0.items",
+        "ranges": [
+          [
+            0,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            4,
+            7
+          ]
+        ],
+        "resolvedItemCount": 7,
+        "allAuthoredStringsExact": true
+      },
+      {
+        "path": "slides.0.blocks.1.items",
+        "ranges": [
+          [
+            0,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            4,
+            7
+          ]
+        ],
+        "resolvedItemCount": 7,
+        "allAuthoredStringsExact": true
+      },
+      {
+        "path": "slides.0.blocks.2.items",
+        "ranges": [
+          [
+            0,
+            2
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            4,
+            7
+          ]
+        ],
+        "resolvedItemCount": 7,
+        "allAuthoredStringsExact": true
+      }
+    ]
+  },
+  "note": "The template fixture remains authored as before. The 32pt list default composes each seven-item block into three columns without text-overflow, so paginatedDecks omits precisely the prior three FAQ3-long pages. The unpaginated slide preserves every authored item and its text."
+}

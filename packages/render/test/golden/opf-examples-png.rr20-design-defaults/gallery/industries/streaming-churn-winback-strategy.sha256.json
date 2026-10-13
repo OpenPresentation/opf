@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/industries/streaming-churn-winback-strategy.opf.json",
+  "entries": {
+    "gallery/industries/streaming-churn-winback-strategy.opf.json#0": {
+      "sha256": "4e0b8aeecf1e6031ab4af70ee30956a6aad29ee74f0b8b47388e258eb76888a1",
+      "bytes": 20166
+    },
+    "gallery/industries/streaming-churn-winback-strategy.opf.json#1": {
+      "sha256": "689ffbe65e7955f271084194d78b2aa62165160e50f1b1a4f746c3b0bdc61c42",
+      "bytes": 22453
+    },
+    "gallery/industries/streaming-churn-winback-strategy.opf.json#2": {
+      "sha256": "fcf54a8b543bb3a95cf3656044d524f372eb4b065e6b1b34d4813255d159d9ad",
+      "bytes": 10096
+    },
+    "gallery/industries/streaming-churn-winback-strategy.opf.json#3": {
+      "sha256": "40eb56a937c9b4175b7847ab13dbf84e4913df1a22486b762e278637dfd37200",
+      "bytes": 16802
+    },
+    "gallery/industries/streaming-churn-winback-strategy.opf.json#4": {
+      "sha256": "145485c0966f5951e12f19542ffd801ce7baf10dea03d1ace6eb5b0b2f676f69",
+      "bytes": 21729
+    },
+    "gallery/industries/streaming-churn-winback-strategy.opf.json#5": {
+      "sha256": "078fc7f857db8a4f8f2c93fd5d05f7cb4855c05d29faf79e1e78d53274326cc0",
+      "bytes": 20972
+    }
+  }
+}

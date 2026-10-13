@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/government/recycling-participation-campaign.opf.json",
+  "entries": {
+    "gallery/government/recycling-participation-campaign.opf.json#0": {
+      "sha256": "dddc63885a1804ea0d1c92eb0feeee5a062762ef5bea6f68367e52d2b5732400",
+      "bytes": 6935
+    },
+    "gallery/government/recycling-participation-campaign.opf.json#1": {
+      "sha256": "8ef9c3f69076122e002a0927f476633bf9b72c7c59c5454190e38b3bff27d939",
+      "bytes": 8950
+    },
+    "gallery/government/recycling-participation-campaign.opf.json#2": {
+      "sha256": "a641e03f2f04f45dbdc0d35ec2f2e9ac24c7a11c9ba813c14c57266e1bf167e2",
+      "bytes": 6345
+    },
+    "gallery/government/recycling-participation-campaign.opf.json#3": {
+      "sha256": "bcf94d5aa2cc559232be2aac13f7abb2003b188bc92c831572ae0bff3fac3c45",
+      "bytes": 7490
+    },
+    "gallery/government/recycling-participation-campaign.opf.json#4": {
+      "sha256": "5ac14ca24894ed135b988009c731989f9e05cfea6785717bdb2c0a9da4e7f6d0",
+      "bytes": 9492
+    },
+    "gallery/government/recycling-participation-campaign.opf.json#5": {
+      "sha256": "086465c3b05ceed638e298f4dc8c9d659d0269cda1227f32818c8f78ef817cc9",
+      "bytes": 16827
+    },
+    "gallery/government/recycling-participation-campaign.opf.json#6": {
+      "sha256": "9d3e154ac158f7fc1d3793ff390cb2ba31d522b1b66588e7d00bfcf2e68b848c",
+      "bytes": 10903
+    },
+    "gallery/government/recycling-participation-campaign.opf.json#7": {
+      "sha256": "7ecfdde7da5b27c464cefe30fa5d4fa6bec759219690d3ac2b13917b8e0532ad",
+      "bytes": 4974
+    },
+    "gallery/government/recycling-participation-campaign.opf.json#8": {
+      "sha256": "730545237578c6d01befa9acd64e0040a2603c32499703aa6d21b39ba1847657",
+      "bytes": 6318
+    },
+    "gallery/government/recycling-participation-campaign.opf.json#9": {
+      "sha256": "614ed95066cf879c80656cd7cd626e9ca819d35515e4a9187130209ff5068b80",
+      "bytes": 14862
+    }
+  }
+}

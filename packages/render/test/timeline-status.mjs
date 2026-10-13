@@ -52,7 +52,8 @@ for (const design of [{}, { theme: 'dark' }]) {
   assert.equal(d.fill, colors.text); assert.equal(c.fill, colors.text);
   assert.equal(p.fill, timelineTextColor({ status: 'planned' }, colors));
   assert.ok(colorContrast(p.fill, colors.background) >= 4.5);
-  assert.ok(Number(c.weight) >= 600 && Number(d.weight) < 600, `weights ${d.weight} ${c.weight}`);
+  // Ordinary event labels compose at 600; the current label composes at 700.
+  assert.deepEqual([d.weight, c.weight, p.weight].map(Number), [600, 700, 600]);
   assert.equal(textFill(svg, 'slides.0.timeline.2.when').fill, p.fill);
 }
 console.log('Timeline status passed: plain markers are byte-identical, and done, current and planned match core in light and dark themes.');

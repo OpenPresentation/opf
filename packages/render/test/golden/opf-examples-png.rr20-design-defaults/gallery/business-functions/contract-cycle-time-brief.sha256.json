@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/business-functions/contract-cycle-time-brief.opf.json",
+  "entries": {
+    "gallery/business-functions/contract-cycle-time-brief.opf.json#0": {
+      "sha256": "3dcafacdab05c9affe10fbc34a2cdd8b6caf9e68c8a9f45f9e0389affe1271f6",
+      "bytes": 4584
+    },
+    "gallery/business-functions/contract-cycle-time-brief.opf.json#1": {
+      "sha256": "d6c9e51b103b6b509d44d4dced0e702db673ae81087b02c5aaf36a63a140fbea",
+      "bytes": 6811
+    },
+    "gallery/business-functions/contract-cycle-time-brief.opf.json#2": {
+      "sha256": "3c151d31ba6511341e8c8c614787d5dada814020ca6abf3878dec4fa2920decc",
+      "bytes": 4629
+    },
+    "gallery/business-functions/contract-cycle-time-brief.opf.json#3": {
+      "sha256": "d5ad43201147fd815c4e696b82c2481bd52f85dfaa581af4ffb1511d5f3f6dae",
+      "bytes": 6160
+    },
+    "gallery/business-functions/contract-cycle-time-brief.opf.json#4": {
+      "sha256": "117c68bd525f4e8b2a998aa5f52dd6bc8201aac285893f771cb8d191354d493c",
+      "bytes": 6487
+    },
+    "gallery/business-functions/contract-cycle-time-brief.opf.json#5": {
+      "sha256": "5153729788b0e5e18f3e6be9c044782f4311efd56e786cdb9e2cdf7571815129",
+      "bytes": 5766
+    }
+  }
+}

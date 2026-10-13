@@ -13,7 +13,10 @@
         "contentAlignment": "center"
       },
       "areas": [
-        "title media"
+        [
+          "title",
+          "media"
+        ]
       ],
       "columns": [
         1,
@@ -45,7 +48,9 @@
         "contentAlignment": "center"
       },
       "areas": [
-        "title"
+        [
+          "title"
+        ]
       ],
       "columns": [
         1
@@ -62,8 +67,12 @@
         "Openers and closers"
       ],
       "areas": [
-        "title",
-        "items"
+        [
+          "title"
+        ],
+        [
+          "items"
+        ]
       ],
       "columns": [
         1
@@ -95,8 +104,12 @@
         "contentAlignment": "center"
       },
       "areas": [
-        "title",
-        "message"
+        [
+          "title"
+        ],
+        [
+          "message"
+        ]
       ],
       "columns": [
         1
@@ -129,8 +142,12 @@
         "contentAlignment": "center"
       },
       "areas": [
-        "title",
-        "details"
+        [
+          "title"
+        ],
+        [
+          "details"
+        ]
       ],
       "columns": [
         1
@@ -158,8 +175,12 @@
         "Text"
       ],
       "areas": [
-        "title",
-        "body"
+        [
+          "title"
+        ],
+        [
+          "body"
+        ]
       ],
       "columns": [
         1
@@ -189,8 +210,12 @@
         "Text"
       ],
       "areas": [
-        "title",
-        "body"
+        [
+          "title"
+        ],
+        [
+          "body"
+        ]
       ],
       "columns": [
         1
@@ -219,8 +244,12 @@
         "Text"
       ],
       "areas": [
-        "title",
-        "quotes"
+        [
+          "title"
+        ],
+        [
+          "quotes"
+        ]
       ],
       "columns": [
         1
@@ -247,8 +276,14 @@
         "Text"
       ],
       "areas": [
-        "title title",
-        "first second"
+        [
+          "title",
+          "title"
+        ],
+        [
+          "first",
+          "second"
+        ]
       ],
       "columns": [
         1,
@@ -303,8 +338,12 @@
         "contentBox": true
       },
       "areas": [
-        "title",
-        "pillars"
+        [
+          "title"
+        ],
+        [
+          "pillars"
+        ]
       ],
       "columns": [
         1
@@ -337,9 +376,18 @@
         "contentBox": true
       },
       "areas": [
-        "title title",
-        "first second",
-        "verdict verdict"
+        [
+          "title",
+          "title"
+        ],
+        [
+          "first",
+          "second"
+        ],
+        [
+          "verdict",
+          "verdict"
+        ]
       ],
       "columns": [
         1,
@@ -397,8 +445,12 @@
         "contentDirection": "horizontal"
       },
       "areas": [
-        "title",
-        "steps"
+        [
+          "title"
+        ],
+        [
+          "steps"
+        ]
       ],
       "columns": [
         1
@@ -428,9 +480,15 @@
         "Groups of items"
       ],
       "areas": [
-        "title",
-        "timeline",
-        "notes"
+        [
+          "title"
+        ],
+        [
+          "timeline"
+        ],
+        [
+          "notes"
+        ]
       ],
       "columns": [
         1
@@ -469,8 +527,12 @@
         "contentBox": true
       },
       "areas": [
-        "title",
-        "questions"
+        [
+          "title"
+        ],
+        [
+          "questions"
+        ]
       ],
       "columns": [
         1
@@ -502,9 +564,15 @@
         "contentAlignment": "center"
       },
       "areas": [
-        "title",
-        "metrics",
-        "note"
+        [
+          "title"
+        ],
+        [
+          "metrics"
+        ],
+        [
+          "note"
+        ]
       ],
       "columns": [
         1
@@ -543,8 +611,12 @@
         "contentBox": true
       },
       "areas": [
-        "title",
-        "cards"
+        [
+          "title"
+        ],
+        [
+          "cards"
+        ]
       ],
       "columns": [
         1
@@ -573,8 +645,12 @@
         "Visuals"
       ],
       "areas": [
-        "title",
-        "media"
+        [
+          "title"
+        ],
+        [
+          "media"
+        ]
       ],
       "columns": [
         1
@@ -602,8 +678,14 @@
         "Visuals"
       ],
       "areas": [
-        "title title",
-        "media body"
+        [
+          "title",
+          "title"
+        ],
+        [
+          "media",
+          "body"
+        ]
       ],
       "columns": [
         1,
@@ -642,8 +724,12 @@
         "Visuals"
       ],
       "areas": [
-        "title",
-        "pictures"
+        [
+          "title"
+        ],
+        [
+          "pictures"
+        ]
       ],
       "columns": [
         1
@@ -671,9 +757,15 @@
         "Visuals"
       ],
       "areas": [
-        "title",
-        "charts",
-        "note"
+        [
+          "title"
+        ],
+        [
+          "charts"
+        ],
+        [
+          "note"
+        ]
       ],
       "columns": [
         1
@@ -708,8 +800,14 @@
         "Visuals"
       ],
       "areas": [
-        "title title",
-        "chart notes"
+        [
+          "title",
+          "title"
+        ],
+        [
+          "chart",
+          "notes"
+        ]
       ],
       "columns": [
         3,
@@ -747,9 +845,15 @@
         "Visuals"
       ],
       "areas": [
-        "title",
-        "table",
-        "note"
+        [
+          "title"
+        ],
+        [
+          "table"
+        ],
+        [
+          "note"
+        ]
       ],
       "columns": [
         1
@@ -783,8 +887,14 @@
         "Visuals"
       ],
       "areas": [
-        "title title",
-        "table notes"
+        [
+          "title",
+          "title"
+        ],
+        [
+          "table",
+          "notes"
+        ]
       ],
       "columns": [
         3,
@@ -821,8 +931,14 @@
         "Visuals"
       ],
       "areas": [
-        "title title",
-        "code notes"
+        [
+          "title",
+          "title"
+        ],
+        [
+          "code",
+          "notes"
+        ]
       ],
       "columns": [
         3,
@@ -857,9 +973,18 @@
         "Mixed"
       ],
       "areas": [
-        "title title",
-        "lead media",
-        "support support"
+        [
+          "title",
+          "title"
+        ],
+        [
+          "lead",
+          "media"
+        ],
+        [
+          "support",
+          "support"
+        ]
       ],
       "columns": [
         1,
@@ -910,9 +1035,15 @@
         "contentBox": true
       },
       "areas": [
-        "title",
-        "kpis",
-        "charts"
+        [
+          "title"
+        ],
+        [
+          "kpis"
+        ],
+        [
+          "charts"
+        ]
       ],
       "columns": [
         1
@@ -947,8 +1078,12 @@
         "Mixed"
       ],
       "areas": [
-        "title",
-        "people"
+        [
+          "title"
+        ],
+        [
+          "people"
+        ]
       ],
       "columns": [
         1
@@ -977,8 +1112,12 @@
         "Mixed"
       ],
       "areas": [
-        "title",
-        "logos"
+        [
+          "title"
+        ],
+        [
+          "logos"
+        ]
       ],
       "columns": [
         1

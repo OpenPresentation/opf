@@ -210,7 +210,8 @@ const furnitureSources = svg => [...svg.matchAll(/<g\b[^>]*data-opf-furniture-fi
     assert.equal(Number(attr(marker, 'width')), Number((entry.marker.fontSize * 0.65).toFixed(3)), 'PowerPoint picture-bullet size');
     assert.equal(Number(attr(marker, 'width')), Number(entry.bulletBox.width.toFixed(3)));
     assert.equal(Number(attr(marker, 'x')), Number(Number(entry.marker.x).toFixed(3)));
-    assert.equal(Number(attr(marker, 'y')) + Number(attr(marker, 'height')), Number((entry.marker.y).toFixed(3)), 'bottom on the marker baseline');
+    const drawnBottom = Number(attr(marker, 'y')) + Number(attr(marker, 'height'));
+    assert.equal(Number(drawnBottom.toFixed(3)), Number(entry.marker.y.toFixed(3)), 'bottom on the marker baseline');
     assert.equal(attr(marker, 'preserveAspectRatio'), 'xMidYMid meet');
     assert.equal(attr(marker, 'href'), icon);
   });

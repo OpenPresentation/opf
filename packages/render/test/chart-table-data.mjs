@@ -23,9 +23,10 @@ const doc = (slide, extra = {}) => ({ design: { fontScheme: 'roboto' }, slides: 
 const chartDoc = (chart, extra = {}) => doc({ title: 'Chart', chart }, extra);
 
 // ---------------------------------------------------------------------------------------------------------------------
-// 0. Documents that use none of the new fields draw byte for byte as before. The digests below were taken from the renderer
-//    before RR-54 (RR54_PRINT_DIGESTS=1 prints them): one traced render per chart type with numeric data, a legacy
-//    sketch, and a styled table. A change here is a change to existing output and needs a reason. FA-03: the eight stacked types lost their -3x suffix; the SVG names the chart type in data-opf-chart, so only those digests changed, and rendering with the old id string put back reproduces the previous digests. FA-30: the slide root became a labelled group (role="group", aria-roledescription="slide") and decorative shapes gained aria-hidden, so every digest changed; with those attributes taken out and role="img" put back on the root the SVG reproduces the previous digests, so only accessibility attributes differ.
+// 0. Traced SVG digests for one chart per type, a legacy sketch, and a styled table (RR54_PRINT_DIGESTS=1 prints them).
+//    RR-20 changes only the neutral structural stroke in 30 SVGs; the styled table also right-aligns two numeric cells.
+//    Old and new full SVG strings were compared before these reviewed digests changed. Further drift needs a reason.
+//    Full old/new SVG comparisons are recorded in the RR-20 source qualification. FA-03: the eight stacked types lost their -3x suffix; the SVG names the chart type in data-opf-chart, so only those digests changed, and rendering with the old id string put back reproduces the previous digests. FA-30: the slide root became a labelled group (role="group", aria-roledescription="slide") and decorative shapes gained aria-hidden, so every digest changed; with those attributes taken out and role="img" put back on the root the SVG reproduces the previous digests, so only accessibility attributes differ.
 
 const CATALOG_TYPES = ['column', 'stacked-column', '100pct-stacked-column', 'bar', 'stacked-bar', '100pct-stacked-bar', 'line', 'line-with-markers', 'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world', 'sketch'];
 const plainRows = [['Q1', 12.4, 3, 8], ['Q2', 18.1, 5, 9], ['Q3', 21.75, 2, 4], ['Q4', 9, 7, 6]];
@@ -42,40 +43,40 @@ if (process.env.RR54_PRINT_DIGESTS) {
   console.log(JSON.stringify(digests, null, 2));
   process.exit(0);
 }
-const BEFORE_RR54 = {
-  'column': 'a0e54a2e976be4c690e6ee1e',
-  'stacked-column': '12bab83f18ad0b6ea3845de3',
-  '100pct-stacked-column': '512ab7424215bd78992830f1',
-  'bar': '80d8c8c3d899a136587058fc',
-  'stacked-bar': '7a225621ebce93e706f8437a',
-  '100pct-stacked-bar': '67f1cfc8032fe9f591a3dbc5',
-  'line': '9e3eb92d88afa66569f062d6',
-  'line-with-markers': '65a01d4fec706c83d4a5e50d',
-  'stacked-line': 'd2a8fbf724bb9ff6b1a11c9b',
-  'stacked-line-with-markers': 'fd59db95d544f09582cc2121',
-  'area': '9881436325cc29db61179d20',
-  'stacked-area': '25631f9cc8b7f4b6969c1ec1',
-  '100pct-stacked-area': '7e60e1d91af977090a906679',
-  'pie': '5c2a812afc7b5b32476b033f',
-  'doughnut': 'bbd1e48b6eb0f9b66f6df753',
-  'scatter': '9d4c3dc17320a95894681a0d',
-  'radar': '2b31ddb73cab34ba97819711',
-  'radar-with-markers': 'c6e7a44948517c68e6eb677a',
-  'filled-radar': '31f0a57464cb80098aa0094d',
-  'treemap': '0c89959a5ecf93623299dfef',
-  'histogram': '21cb438a56b76e5cd5257ef7',
-  'pareto': '80d9cbf103cead919721d32c',
-  'box-and-whisker': 'd4451f73358443889181cb68',
-  'waterfall': '25a7f275c7aa76f94c41ea7f',
-  'funnel': 'c47f9c42fe8c169cdb539e9c',
-  'world': '256a301c13a96dcc01f4ae50',
-  'sketch': '7d2b6b1ad9e049018245f46d',
-  'column-no-options': '5b705ad9342db75ee43e11d7',
-  'line-string-numbers': '423f34ac6ae4258efdbcb2a1',
-  'histogram-lone-column': 'a9780d58c60052dae373c497',
-  'table-styled': '06e02d8bd9f41cb8b4e1b3cb'
+const REVIEWED_SVG_DIGESTS = {
+  'column': '31532f809522110ecb0271e7',
+  'stacked-column': '514a1026ba38a8115bf707c9',
+  '100pct-stacked-column': 'fef7fdf1235db92d3eaa33b2',
+  'bar': '577571724540d73440d8a3d4',
+  'stacked-bar': '4ca7fd8629e89882fcbcedae',
+  '100pct-stacked-bar': '9e0df36d778b4fa6e38c5cf6',
+  'line': '61f156dd62c7f2309c3179d1',
+  'line-with-markers': '3891e9283af4a9bddbb3279c',
+  'stacked-line': '7a4f75546c8af01e693d4d6d',
+  'stacked-line-with-markers': 'c76c28d26fdf207790ac55eb',
+  'area': '9b6050aa129b45ec3de0b8c5',
+  'stacked-area': '70ba44688c3f4ae238ed8d2b',
+  '100pct-stacked-area': '86d54a732833de0f6089de0a',
+  'pie': 'fe556f56f7adeeae8816b124',
+  'doughnut': '7f0aa7df633720c1e4870d47',
+  'scatter': '0427f5139ce3a71c7a181d9b',
+  'radar': 'bb7f6d8226af9df72b8aa1d5',
+  'radar-with-markers': 'd01ef14f9e2d7272b2259047',
+  'filled-radar': '4b10c449b1e076eec9fe19fe',
+  'treemap': 'b4d086037542bcad2164dc87',
+  'histogram': 'de60789621cbdb4cf236775f',
+  'pareto': 'd94f2839e1e0e3cefc4f72b7',
+  'box-and-whisker': 'aee0bd56d8c18e70a53aaee0',
+  'waterfall': '7ac8bb19dfcf327a512f174e',
+  'funnel': '179951c3224fe15f160a54fe',
+  'world': '0af0be2441b773236bde02f0',
+  'sketch': '6677bf147286ee31cbca78c0',
+  'column-no-options': '692cb10f9944692684812774',
+  'line-string-numbers': 'a9553e0274860d4bdc415a32',
+  'histogram-lone-column': '2cb5e6adc310a866386fa551',
+  'table-styled': 'd5d091b99473afb60a7d2ae5'
 };
-assert.deepEqual(digests, BEFORE_RR54, 'documents without the new fields render exactly as before RR-54');
+assert.deepEqual(digests, REVIEWED_SVG_DIGESTS, 'documents without the new fields retain the reviewed traced SVG output');
 
 // ---------------------------------------------------------------------------------------------------------------------
 // 1. Strict numbers: the renderer's chartNumber is core's. "12%", "(5)" and "Q1" are gaps, "1e6" is 1000000.
@@ -227,8 +228,9 @@ for (const type of ['column', 'line', 'pie', 'scatter', 'treemap', 'sketch']) {
   for (const text of ['Region', 'Revenue', 'Growth', 'EMEA', '$8.2', '40%', '$6.1', '52.0%', 'n/a']) assert.ok(shown.includes(text), `${text} is drawn (${shown.join(' | ')})`);
   assert.ok(!shown.includes('8.2') && !shown.includes('0.52'), 'the authored numbers are not drawn');
   assert.ok(paths(svg).some((path) => path.startsWith('slides.0.table.rows.0.1')), 'cells keep their authored paths');
-  // The same table with the formatted text written out by hand draws the same.
-  const written = { columns: ['Region', 'Revenue', { value: 'Growth', style: { align: 'right' } }], rows: [['EMEA', '$8.2', '40%'], ['APAC', '$6.1', '52.0%'], ['AMER', 'n/a', null]] };
+  // The same table with the formatted text and resulting numeric alignment written out by hand draws the same.
+  const right = (value) => ({ value, style: { align: 'right' } });
+  const written = { columns: ['Region', 'Revenue', { value: 'Growth', style: { align: 'right' } }], rows: [['EMEA', right('$8.2'), right('40%')], ['APAC', right('$6.1'), right('52.0%')], ['AMER', 'n/a', null]] };
   const strip = (markup) => markup.replace(/ data-opf-path="[^"]*"/g, '');
   assert.equal(strip(render(doc({ title: 'T', table: written }), { trace: true })), strip(svg), 'formatting a cell draws what its text would draw');
 

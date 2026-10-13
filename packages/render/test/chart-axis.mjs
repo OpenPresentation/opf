@@ -13,8 +13,8 @@ const elements = (svg) => [...svg.matchAll(/<(rect|circle|line|polyline|path)\b(
 
 // Ordinary-range invariants ported from the retired legacy five-tick axis test:
 // every authored value lands where the drawn value axis says it does, bars
-// begin at the zero baseline, the axis includes zero for data that do not sit
-// in the top sixth of the range, marks stay in the plot, rendering is byte
+// begin at the zero baseline, magnitude axes always include zero while line
+// axes may zoom on a tight range, marks stay in the plot, rendering is byte
 // deterministic and never mutates the authored document.
 const ordinary = [
   ["positive", [1, 3, 2]],
@@ -112,8 +112,9 @@ for (const [name, values, dropsZero, edge] of autoZero) {
     const lo = Math.min(...values), hi = Math.max(...values);
     assert.ok(labels[0] <= lo && labels.at(-1) >= hi, `${label}: axis covers every value`);
     const zeroOnAxis = labels[0] <= 0 && labels.at(-1) >= 0;
-    assert.equal(!zeroOnAxis, dropsZero, `${label}: zero ${dropsZero ? "dropped" : "kept"} by the top-sixth rule`);
-    if (dropsZero) {
+    const expectedDrop = (type === "line" || type === "line-with-markers") && dropsZero;
+    assert.equal(!zeroOnAxis, expectedDrop, `${label}: zero ${expectedDrop ? "dropped for line zoom" : "kept for magnitude"}`);
+    if (expectedDrop) {
       // No big empty band: the data span fills most of the axis.
       const span = labels.at(-1) - labels[0];
       assert.ok((hi - lo) / span > 0.3, `${label}: data fills the tight axis (${hi - lo} of ${span})`);
@@ -166,4 +167,4 @@ for (const type of ["stacked-column", "stacked-area"]) {
   assert.equal(Math.min(...first), 0, `${type}: stacked totals keep zero on the axis`);
   autoZeroChecked++;
 }
-console.log(`Chart axis passed: ${ordinaryChecked} public ordinary-range cases and ${autoZeroChecked} automatic-minimum cases; authored fractions, zero baselines, evenly spaced ticks, top-sixth zero rule for line/column/bar/area, source preservation and deterministic bytes.`);
+console.log(`Chart axis passed: ${ordinaryChecked} public ordinary-range cases and ${autoZeroChecked} automatic-minimum cases; authored fractions, zero baselines, evenly spaced ticks, zero magnitude baseline for column/bar/area and top-sixth zoom retained for line, source preservation and deterministic bytes.`);

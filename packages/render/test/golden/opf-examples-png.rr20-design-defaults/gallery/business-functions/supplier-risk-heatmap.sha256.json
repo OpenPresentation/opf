@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/supplier-risk-heatmap.opf.json",
+  "entries": {
+    "gallery/business-functions/supplier-risk-heatmap.opf.json#0": {
+      "sha256": "cd54e20a0ded444d27b99b2b952f501ca1d3ae35258a5912dbb74a0f41c217ec",
+      "bytes": 5998
+    },
+    "gallery/business-functions/supplier-risk-heatmap.opf.json#1": {
+      "sha256": "2d0c99768fec1240e88534ad00e57a2b9eeafeb297e7a293aca88276a064d208",
+      "bytes": 8424
+    },
+    "gallery/business-functions/supplier-risk-heatmap.opf.json#2": {
+      "sha256": "b66e54c2004043f38b3457cf5ddea4d568fb26b4b5fc7c195aba1b15f43de15a",
+      "bytes": 7593
+    },
+    "gallery/business-functions/supplier-risk-heatmap.opf.json#3": {
+      "sha256": "fd52700602cd7c3445818330716d5e3288fb479da24ff50c11884fb433515241",
+      "bytes": 7132
+    },
+    "gallery/business-functions/supplier-risk-heatmap.opf.json#4": {
+      "sha256": "7923cb254ad5f946f61ea1c8552c832ab8d282316b1de635b8897ec45493a282",
+      "bytes": 8439
+    },
+    "gallery/business-functions/supplier-risk-heatmap.opf.json#5": {
+      "sha256": "89f9b3f6eeef5cb5870c7910389baff90b01ca890ac421f358ecef0fb20a6467",
+      "bytes": 17175
+    },
+    "gallery/business-functions/supplier-risk-heatmap.opf.json#6": {
+      "sha256": "f27a266d13fb3cf6a9db36372db03b3ad6d8ca620fb9ffed81bc36e231751001",
+      "bytes": 10736
+    },
+    "gallery/business-functions/supplier-risk-heatmap.opf.json#7": {
+      "sha256": "a8012f66e6ba15e73da5e1ad4e96e3a6d6966fd0589608ad05137054388351d0",
+      "bytes": 4875
+    },
+    "gallery/business-functions/supplier-risk-heatmap.opf.json#8": {
+      "sha256": "a7fc23e3e5e82be5f9e377d6097f2739b3f8fae2092329ff764a7f990fc104bc",
+      "bytes": 6361
+    },
+    "gallery/business-functions/supplier-risk-heatmap.opf.json#9": {
+      "sha256": "e911b709ceeb1710aeb974c9281922dbb564f1158b0d8172c2fac39e5b568bb5",
+      "bytes": 11080
+    }
+  }
+}

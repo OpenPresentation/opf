@@ -10,6 +10,7 @@
 import assert from 'node:assert/strict';
 import {catalogs, toSvg} from './catalog-harness.mjs';
 import {loadFonts} from '../dist/fonts-node.js';
+import {resolvePresentation} from '../dist/index.js';
 
 const deck = {
   name: 'RR-59 mixed Arabic and Latin',
@@ -113,18 +114,21 @@ function chunks(svg) {
 }
 
 // 3. Latin runs of an Arabic list item are drawn as the body's Latin runs are: their own text chunk (no Arabic shaped with them, so no
-// fallback face can take them over), in the body family at the body size.
+// fallback face can take them over), in the body family at each list entry's composed size.
 {
   const bodyLatin = chunks(paragraphSvg).filter(chunk => chunk.path?.endsWith('.text') && LATIN.test(chunk.visible) && !ARABIC.test(chunk.visible));
   assert.ok(bodyLatin.length >= 3, 'the body paragraph has Latin runs');
   const regular = bodyLatin.flatMap(chunk => chunk.faces).find(face => face.text.includes('openpresentation'));
   const listLatin = chunks(listSvg).filter(chunk => chunk.path?.includes('.items.') && LATIN.test(chunk.visible));
+  const listEntries = resolvePresentation(deck, {catalogs, fonts}).slides[1].geometry.items.find(item => item.path === 'slides.1.items').text.listEntries;
   assert.equal(listLatin.length, 4, 'each list item has one Latin run');
   for (const chunk of listLatin) {
     assert.doesNotMatch(chunk.visible, ARABIC, `"${chunk.visible.trim()}" shares its text chunk with no Arabic text`);
+    const index = Number(/\.items\.(\d+)/.exec(chunk.path)?.[1]);
+    assert.ok(Number.isInteger(index) && listEntries[index], `"${chunk.visible.trim()}" belongs to a composed list entry`);
     for (const face of chunk.faces) {
       assert.equal(face.family, regular.family, `"${face.text.trim()}" is drawn in the body's Latin family`);
-      assert.equal(face.size, regular.size, `"${face.text.trim()}" is drawn at the body's Latin size`);
+      assert.equal(face.size, listEntries[index].text.fontSize, `"${face.text.trim()}" is drawn at its composed list size`);
     }
   }
   assert.match(regular.family, /^Intos\b/, 'Aptos previews in Intos');

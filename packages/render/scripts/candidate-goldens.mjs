@@ -10,9 +10,24 @@ export function candidatePlan({core,gallery,selection='examples',name}) {
   assert.ok(['examples','templates','both'].includes(selection),'invalid selection');
   assert.match(name??'',/^[a-z0-9]+(?:[.-][a-z0-9]+)*$/,'invalid baseline name');
   assert.notEqual(name,'cover-centering','preserve the published baseline');
-  return {core,gallery,examples:selection!=='templates',templates:selection!=='examples',baseline:`test/golden/opf-examples-png.${name}`,template:'test/golden/layout-templates-0.19.json'};
+  return {core,gallery,examples:selection!=='templates',templates:selection!=='examples',baseline:`test/golden/opf-examples-png.${name}`,template:'test/golden/layout-templates-rr20-array-areas.json'};
 }
-export function verifyManifest(next,previous,count,template=false,source) {
+const HISTORICAL_TEMPLATE = 'test/golden/layout-templates-0.19.json';
+const HISTORICAL_TEMPLATE_SHA256 = 'cd84208d7faa1d321842fe14e5de8edcd385b415ad88b0dd31b98f29f2a6a759';
+const REMOVED_TEMPLATE_KEYS = [
+  'paginated faq 3 long page 1',
+  'paginated faq 3 long page 2',
+  'paginated faq 3 long page 3',
+];
+export function reviewedTemplateKeys(previous) {
+  const keys=Object.keys(previous.entries);
+  assert.equal(keys.length,498,'historical template corpus changed');
+  for(const key of REMOVED_TEMPLATE_KEYS)assert.ok(keys.includes(key),`historical template case missing: ${key}`);
+  const expected=keys.filter(key=>!REMOVED_TEMPLATE_KEYS.includes(key));
+  assert.equal(expected.length,495,'reviewed RR-20 template corpus changed');
+  return expected;
+}
+export function verifyManifest(next,previous,count,template=false,source,expectedKeys=Object.keys(previous.entries)) {
   if(source)assert.deepEqual(next.source,source,'candidate source does not match selected source inputs');
   assert.match(next.source?.sha256??'',/^[0-9a-f]{64}$/,'invalid source digest');
   assert.deepEqual(Object.keys(next.source).sort(),Object.keys(previous.source).sort(),'source fields changed');
@@ -20,7 +35,7 @@ export function verifyManifest(next,previous,count,template=false,source) {
   for(const entry of Object.values(next.entries))assert.ok(Number.isSafeInteger(entry.bytes)&&entry.bytes>0,'invalid entry bytes');
   for(const key of ['version','format','scale','systemFonts',...(template?['trace']:[])]) assert.deepEqual(next[key],previous[key],`golden ${key} changed`);
   assert.equal(Object.keys(next.entries).length,count,'candidate corpus count changed');
-  assert.deepEqual(Object.keys(next.entries).sort(),Object.keys(previous.entries).sort(),'candidate dropped or added cases');
+  assert.deepEqual(Object.keys(next.entries).sort(),[...expectedKeys].sort(),'candidate dropped or added cases');
   for(const entry of Object.values(next.entries)) for(const field of template?['svg','png']:['sha256']) assert.match(entry[field],/^[0-9a-f]{64}$/,'invalid hash');
 }
 export function verifyHead(expected,actual){assert.match(expected,/^[0-9a-f]{40}$/);assert.equal(actual,expected,'branch moved during generation');}
@@ -30,10 +45,10 @@ export function expectedSources(workspace,plan,renderer){
  const core=path.join(workspace,'opf'),gallery=path.join(workspace,'gallery-candidate'),sources={};
  for(const [directory,sha]of[[core,plan.core],[gallery,plan.gallery]])assert.equal(execFileSync('git',['-C',directory,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),sha,'source checkout HEAD mismatch');
  if(plan.examples){const read=(directory,prefix='')=>readdirSync(directory,{withFileTypes:true}).flatMap(entry=>{const file=path.posix.join(prefix,entry.name),absolute=path.join(directory,entry.name);return entry.isDirectory()?read(absolute,file):entry.isFile()&&file.endsWith('.opf.json')?[[file,canonical(readArtifact(absolute))]]:[];});const corpus=read(path.join(core,'examples')).sort(([a],[b])=>a<b?-1:a>b?1:0);sources.examples={repository:'OpenPresentation/opf',path:'examples',sha256:hash(JSON.stringify(corpus)),decks:corpus.length};}
- if(plan.templates){const fixtureText=readFileSync(path.join(renderer,'test/layout-template-fixture.mjs'),'utf8');const marker=/export const fixture = \{ source: '([^']+)', layouts: gallery.layouts \};/.exec(fixtureText)?.[1];assert.equal(marker,`gallery2 ${plan.gallery}`,'template fixture does not name selected gallery');const records=readArtifact(path.join(gallery,'catalog/layouts/index.json')).records;const layouts=Object.fromEntries(records.map(({id,file})=>{assert.ok(!file.includes('..')&&!path.isAbsolute(file),'invalid gallery record path');const record=readArtifact(path.join(gallery,'catalog/layouts',file));return[id,Object.fromEntries(Object.entries(record).filter(([key])=>key!=='$schema'&&key!=='id'&&!key.startsWith('x-')))];}));sources.templates={fixture:'@openpresentation/gallery layouts (see layout-template-fixture.mjs)',sha256:hash(JSON.stringify({source:marker,layouts})),templates:records.length};}
+ if(plan.templates){const fixtureText=readFileSync(path.join(renderer,'test/layout-template-fixture.mjs'),'utf8');const marker=/export const fixture = \{ source: '([^']+)', layouts: gallery.layouts \};/.exec(fixtureText)?.[1];assert.equal(marker,`gallery3 ${plan.gallery}`,'template fixture does not name selected gallery');const records=readArtifact(path.join(gallery,'catalog/layouts/index.json')).records;const layouts=Object.fromEntries(records.map(({id,file})=>{assert.ok(!file.includes('..')&&!path.isAbsolute(file),'invalid gallery record path');const record=readArtifact(path.join(gallery,'catalog/layouts',file));return[id,Object.fromEntries(Object.entries(record).filter(([key])=>key!=='$schema'&&key!=='id'&&!key.startsWith('x-')))];}));sources.templates={fixture:'@openpresentation/gallery layouts (see layout-template-fixture.mjs)',sha256:hash(JSON.stringify({source:marker,layouts})),templates:records.length};}
  return sources;
 }
-export function trustedTemplate(file){assert.equal(hash(readFileSync(file)),'a6102dd12a26594eb101ac6344ab4af45e71f247decaa663f3bf3be6e207ee98','template baseline differs from reviewed PR215 reference');return readArtifact(file);}
+export function trustedTemplate(file){assert.equal(hash(readFileSync(file)),HISTORICAL_TEMPLATE_SHA256,'historical template baseline differs from reviewed RR-20 reference');return readArtifact(file);}
 export function requireNewBaseline(root,relative){const target=safeTarget(root,relative);try{lstatSync(target);throw new Error('new example baseline already exists');}catch(error){if(error.code!=='ENOENT')throw error;}return target;}
 export function regularTree(target){let stat;try{stat=lstatSync(target);}catch(error){if(error.code==='ENOENT')return;throw error;}assert.ok(!stat.isSymbolicLink(),'symlink in promotion tree');if(stat.isDirectory())for(const name of readdirSync(target))regularTree(path.join(target,name));else assert.ok(stat.isFile(),'nonregular promotion file');}
 export function readArtifact(file){assert.equal(realpathSync(file),path.resolve(file),'aliased artifact path');assert.ok(lstatSync(file).isFile()&&!lstatSync(file).isSymbolicLink(),'artifact is not a regular file');return JSON.parse(readFileSync(file,'utf8'));}
@@ -44,7 +59,7 @@ export function allowedPaths(plan,files){for(const file of files) assert.ok(!fil
 export function linkSources(workspace,plan){
  const root=realpathSync(workspace),core=path.join(root,'opf'),gallery=path.join(root,'gallery-candidate'),renderer=path.join(root,'opf-render');
  for(const [dir,sha,name]of[[core,plan.core,'@openpresentation/opf'],[gallery,plan.gallery,'@openpresentation/gallery']]){assert.equal(execFileSync('git',['-C',dir,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),sha);assert.equal(JSON.parse(readFileSync(path.join(dir,'package.json'),'utf8')).name,name==='@openpresentation/opf'?'openpresentation-workspace':name);}
- assert.equal(JSON.parse(readFileSync(path.join(gallery,'package.json'),'utf8')).opf.catalogSchema,2);
+ assert.equal(JSON.parse(readFileSync(path.join(gallery,'package.json'),'utf8')).opf.catalogSchema,3);
  for(const [dir,name,target]of[[core,'gallery',gallery],[path.join(core,'packages/javascript'),'gallery',gallery],[renderer,'gallery',gallery],[renderer,'opf',path.join(core,'packages/javascript')]]){const parent=path.join(dir,'node_modules/@openpresentation');mkdirSync(parent,{recursive:true});assert.equal(realpathSync(parent),parent,'aliased package parent');const dest=path.join(parent,name);rmSync(dest,{recursive:true,force:true});symlinkSync(target,dest,process.platform==='win32'?'junction':'dir');}
 }
 const toolsRoot=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
@@ -55,8 +70,8 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
  else if(command==='guard')verifyGuard(readArtifact(get('candidate')),readBaseline(get('baseline')));
  else if(command==='verify'){
   const expected=expectedSources(get('workspace'),plan,root);
-  if(plan.examples)verifyManifest(JSON.parse(readFileSync(path.join(root,'artifacts/golden/candidate.json'))),readBaseline(path.join(toolsRoot,'test/golden/opf-examples-png.cover-centering')),807,false,expected.examples);
-  if(plan.templates)verifyManifest(JSON.parse(readFileSync(path.join(root,'artifacts/template-goldens/candidate.json'))),trustedTemplate(path.join(root,plan.template)),498,true,expected.templates);
+  if(plan.examples)verifyManifest(JSON.parse(readFileSync(path.join(root,'artifacts/golden/candidate.json'))),readBaseline(path.join(toolsRoot,'test/golden/opf-examples-png.rr81-v2-reviewed')),807,false,expected.examples);
+  if(plan.templates){const historical=trustedTemplate(path.join(toolsRoot,HISTORICAL_TEMPLATE));verifyManifest(JSON.parse(readFileSync(path.join(root,'artifacts/template-goldens/candidate.json'))),historical,495,true,expected.templates,reviewedTemplateKeys(historical));}
   const candidates={};if(plan.examples)candidates.examples=readArtifact(path.join(root,'artifacts/golden/candidate.json'));if(plan.templates)candidates.templates=readArtifact(path.join(root,'artifacts/template-goldens/candidate.json'));
   const graph={renderer:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),core:plan.core,gallery:plan.gallery,selection:get('selection'),sources:Object.fromEntries(Object.entries(expected).map(([key,value])=>[key,value.sha256]))};
   writeFileSync(path.join(root,'artifacts/candidate-graph.json'),JSON.stringify(graph,null,2)+'\n');
@@ -66,10 +81,10 @@ if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.ur
   const expected=expectedSources(get('workspace'),plan,root);
   const artifact=get('artifact'),candidates={};if(plan.examples)candidates.examples=readArtifact(path.join(artifact,'golden/candidate.json'));if(plan.templates)candidates.templates=readArtifact(path.join(artifact,'template-goldens/candidate.json'));
   verifyGraph(readArtifact(path.join(artifact,'candidate-graph.json')),plan,get('head'),candidates);
-  if(plan.examples){verifyManifest(candidates.examples,readBaseline(path.join(toolsRoot,'test/golden/opf-examples-png.cover-centering')),807,false,expected.examples);requireNewBaseline(root,plan.baseline);}
-  if(plan.templates){verifyManifest(candidates.templates,trustedTemplate(path.join(root,plan.template)),498,true,expected.templates);safeTarget(root,plan.template);}
-  if(plan.examples){const next=candidates.examples,previous=readBaseline(path.join(toolsRoot,'test/golden/opf-examples-png.cover-centering'));verifyManifest(next,previous,807,false,expected.examples);writeBaseline(requireNewBaseline(root,plan.baseline),next);}
-  if(plan.templates){const next=candidates.templates;verifyManifest(next,trustedTemplate(path.join(root,plan.template)),498,true,expected.templates);writeFileSync(safeTarget(root,plan.template),JSON.stringify(next,null,1)+'\n');}
+  if(plan.examples){verifyManifest(candidates.examples,readBaseline(path.join(toolsRoot,'test/golden/opf-examples-png.rr81-v2-reviewed')),807,false,expected.examples);requireNewBaseline(root,plan.baseline);}
+  if(plan.templates){const historical=trustedTemplate(path.join(toolsRoot,HISTORICAL_TEMPLATE));verifyManifest(candidates.templates,historical,495,true,expected.templates,reviewedTemplateKeys(historical));requireNewBaseline(root,plan.template);}
+  if(plan.examples){const next=candidates.examples,previous=readBaseline(path.join(toolsRoot,'test/golden/opf-examples-png.rr81-v2-reviewed'));verifyManifest(next,previous,807,false,expected.examples);writeBaseline(requireNewBaseline(root,plan.baseline),next);}
+  if(plan.templates){const next=candidates.templates,historical=trustedTemplate(path.join(toolsRoot,HISTORICAL_TEMPLATE));verifyManifest(next,historical,495,true,expected.templates,reviewedTemplateKeys(historical));writeFileSync(requireNewBaseline(root,plan.template),JSON.stringify(next,null,1)+'\n');}
   const files=execFileSync('git',['status','--porcelain','--untracked-files=all'],{cwd:root,encoding:'utf8'}).split('\n').filter(Boolean).map(line=>line.slice(3));allowedPaths(plan,files);
  }else throw Error('unknown command');
 }
