@@ -1,0 +1,136 @@
+{
+  "at": "2026-10-13T21:28:04.304604+00:00",
+  "prefix": "/private/tmp/opf-supervisor-20261010/inventory-maintenance-20261013T212738Z",
+  "previous": "/private/tmp/opf-supervisor-20261010/inventory-maintenance-20261013T204105Z",
+  "calls": 1,
+  "pagesComplete": true,
+  "prs": 29,
+  "issues": 42,
+  "allCleanSyncedDefaults": true,
+  "delta": [
+    {
+      "repo": "OpenPresentation/opf",
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closed": [],
+        "changed": {
+          "253": {
+            "headRefOid": {
+              "before": "84582787acdc1401b9c1c7c9f8ca7ca0a2c5f1b2",
+              "after": "4f8a3551060d350d059ac4fdd29257c6d234fa12"
+            },
+            "body": {
+              "before": "Export the coordinated array-area layouts and editorial defaults to PowerPoint, including neutral structural rules, aligned numeric cells, compact metric/quote positioning and timelines. Native magnitude axes include zero while authored overrides remain respected.\n\nUnchanged imports recover authored rich-text style presence and adapted single-column chart source data only while provenance matches. Native list-description edits now retain source identity so the edited text style can be recovered. Repository-native test actions support bounded text-style edits and optional font-descriptor capture.\n\nValidation: the list-identity runtime passed all 138 package test files with unchanged strict archive expectations. Bounded style-action controls passed six accepted and 23 rejected plans on Windows without Office. Optional descriptor capture passes local mocked controls and review; actual Windows capture and native list-edit acceptance remain pending. Earlier metrics lifecycle and 13-shape geometry observations do not establish full native fidelity.\n\nDepends-On: OpenPresentation/opf#646\nDepends-On: OpenPresentation/opf-render#240\nDepends-On: OpenPresentation/opf-editor#165\nCandidate-Gallery: OpenPresentation/gallery@7cffb136d6c93c92fdc882a1f17a548d00d32530\n\nIntegration order: after exact coordinated hosted/platform and review gates pass, merge engine source through the canonical merge gates. Then qualify Gallery 3 against actual merged core/renderer pins, publish and verify Gallery 3, adopt genuine registry dependencies, and complete the official ecosystem roll. Native list-edit, font and visual acceptance remain pending and must meet their applicable engine acceptance/release gates; source integration and the independent Gallery lane do not close them. No site deployment is included.\n",
+              "after": "Export the coordinated array-area layouts and editorial defaults to PowerPoint, including neutral structural rules, aligned numeric cells, compact metric/quote positioning and timelines. Native magnitude axes include zero while authored overrides remain respected.\n\nUnchanged imports recover authored rich-text style presence and adapted single-column chart source data only while provenance matches. Native list-description edits now retain source identity so the edited text style can be recovered. Repository-native test actions support bounded text-style edits and optional font-descriptor capture.\n\nThe font-observation worker now retains its failure latch when any of the seven descriptor-chain property getters throws. Explicit adapted getter reads preserve legitimate missing and mixed values and prevent later reads after failure. The source fix is `4f8a3551060d350d059ac4fdd29257c6d234fa12`.\n\nValidation: the list-identity runtime previously passed all 138 package test files with unchanged strict archive expectations. Bounded style-action controls passed six accepted and 23 rejected plans on Windows without Office. Portable PowerShell 7.6.7 reproduced the getter failure before the fix; the corrected harness passes all 15 font controls, and managed/script getter probes verify strict latching plus normal, missing and null values. Syntax, source-policy, runner and fragment checks pass. The existing Windows test lane now includes a bounded non-Office COM-adapter probe; Windows PowerShell 5.1, actual PowerPoint descriptor capture and native acceptance remain pending. Earlier metrics lifecycle and 13-shape geometry observations do not establish full native fidelity.\n\nDepends-On: OpenPresentation/opf#646\nDepends-On: OpenPresentation/opf-render#240\nDepends-On: OpenPresentation/opf-editor#165\nCandidate-Gallery: OpenPresentation/gallery@7cffb136d6c93c92fdc882a1f17a548d00d32530\n\nIntegration order: after exact coordinated hosted/platform and review gates pass, merge engine source through the canonical merge gates. Then qualify Gallery 3 against actual merged core/renderer pins, publish and verify Gallery 3, adopt genuine registry dependencies, and complete the official ecosystem roll. Native list-edit, font and visual acceptance remain pending and must meet their applicable engine acceptance/release gates; source integration and the independent Gallery lane do not close them. No site deployment is included.\n"
+            }
+          }
+        }
+      },
+      "issues": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "OpenPresentation/gallery",
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      }
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "defaultChanged": false,
+      "pullRequests": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      },
+      "issues": {
+        "new": [],
+        "closed": [],
+        "changed": {}
+      }
+    }
+  ],
+  "syncProblems": []
+}
