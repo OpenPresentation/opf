@@ -135,7 +135,7 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         with:
           version: 10.33.2
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         if: steps.scope.outputs.run == 'true'
         with:
           node-version: 24
@@ -171,7 +171,7 @@ jobs:
         run: npm run test:font-variants-browser
       - name: Preserve renderer evidence
         if: always() && steps.scope.outputs.run == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ecosystem-render-evidence
           path: |
@@ -236,7 +236,7 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         with:
           version: 10.33.2
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         if: steps.scope.outputs.run == 'true'
         with:
           node-version: 24
@@ -264,7 +264,7 @@ jobs:
         run: node scripts/test-package-ecosystem.mjs --siblings opf-editor,opf-pptx --tier ${{ steps.scope.outputs.tier }}
       - name: Preserve opf-pptx evidence
         if: always() && steps.scope.outputs.run == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ecosystem-pptx-editor-evidence
           path: |
@@ -367,7 +367,7 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         with:
           version: 10.33.2
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         if: steps.scope.outputs.run == 'true'
         with:
           node-version: 24
@@ -471,7 +471,7 @@ jobs:
         run: node scripts/quarantine.mjs run-deferred
       - name: Preserve installed-browser evidence
         if: always() && steps.scope.outputs.run == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: installed-browser-node24-${{ matrix.shard }}
           path: |
@@ -589,7 +589,7 @@ jobs:
         if: steps.scope.outputs.run == 'true'
         with:
           version: 10.33.2
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         if: steps.scope.outputs.run == 'true'
         with:
           node-version: 24
@@ -657,7 +657,7 @@ jobs:
           node packages/cli/test/packed.mjs --registry
       - name: Preserve installed portability evidence
         if: always() && steps.scope.outputs.run == 'true'
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: installed-portability-node24-${{ matrix.os }}
           path: |
