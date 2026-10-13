@@ -17,7 +17,7 @@ installed or registered by this runner.
 node scripts/native-acceptance/prepare.mjs --consumer C:/opf-work/consumer --output C:/opf-work/suite --pptx-repo C:/opf-work/opf-pptx
 
 # Office-free runner/path/hash self-test. This does not invoke the entrypoint.
-powershell.exe -NoProfile -NonInteractive -File scripts/native-acceptance/run-windows-self-test.ps1
+node --test scripts/native-acceptance/run-windows.test.mjs
 
 # On Windows: verify suite/code, snapshot selected inputs, run the existing pure
 # process and furniture harnesses, and stop before Office.
@@ -26,6 +26,12 @@ powershell.exe -NoProfile -NonInteractive -File scripts/native-acceptance/run-wi
 # SUPERVISOR ONLY. Use an actual eligible suite case ID and a fresh directory.
 powershell.exe -NoProfile -NonInteractive -File scripts/native-acceptance/run-windows.ps1 -SuiteDirectory C:/opf-work/suite -PptxRepository C:/opf-work/opf-pptx -Case feature-metrics -OutputDirectory C:/opf-work/native-metrics
 ```
+
+The Node self-test launcher removes inherited `PSModulePath` only from its
+Windows PowerShell child environment, so PowerShell 7 module paths cannot break
+the pure checks. Run the direct `powershell.exe` validation and supervisor
+commands shown here from a Windows PowerShell 5.1 environment with its standard
+module paths. The Node self-test launcher does not change those commands' environment.
 
 The four required parameters are `SuiteDirectory`, `PptxRepository`, `Case` and
 `OutputDirectory`. `TimeoutSeconds` defaults to 45 seconds and cannot exceed 60. Choose
