@@ -1,0 +1,50 @@
+{
+  "status": "per-user-font-setup-and-independent-check-passed",
+  "host": "MICHAEL-DESKTOP",
+  "sourceRevision": "95c601b08a14478036321f5fba8f38284270df96",
+  "tests": {
+    "passed": 3,
+    "failed": 0,
+    "skipped": 0
+  },
+  "stepExitCodes": {
+    "28-pure-tests": 0,
+    "29-suite-generation": 0,
+    "30-setup": 0,
+    "31-independent-check": 0
+  },
+  "suite": {
+    "directory": "C:/opf-work/native-suite-95c601b0-attempt01",
+    "sha256": "d9c5422e6520fe1cd04a771b4f1229664354259af0a4a16191afd11930b234ed",
+    "cases": 54,
+    "files": 304
+  },
+  "fontState": {
+    "directory": "C:/Users/micha/AppData/Local/Microsoft/Windows/Fonts/opf-native-95c601b0-attempt01",
+    "sha256": "4acdec5b9faf2587ecc834b2d65115e56c79760609b9a0ceb0d9dc4c671dd15a",
+    "status": "ready",
+    "entries": 7,
+    "ownershipId": "f65dcb206f424bfc8fd47b8146174eb5",
+    "allFileHashesVerified": true,
+    "allRegistryPathsAndKindsVerified": true,
+    "families": [
+      "Roboto",
+      "Roboto ExtraBold",
+      "Roboto Medium",
+      "Roboto SemiBold"
+    ],
+    "cleanupPending": true
+  },
+  "priorFailures": {
+    "22-setup": "Exact family validator incorrectly rejected valid Roboto subfamilies; no mutations.",
+    "26-setup": "Same-process availability check failed after registration; built-in rollback verified all seven files and registry values absent; cleaned journal retained."
+  },
+  "officeExecutedDuringPrerequisites": false,
+  "powerPointProcessesBeforeAndAfter": 0,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "checkoutClean": true,
+  "logs": "C:/opf-work/candidate-81c4fdf5/logs/28..31",
+  "evidenceOrigin": "Windows root supervisor completed command reports and independent read-only file/registry verification; raw logs and journals retained on host.",
+  "next": "First bounded native feature-metrics run authorized once in a fresh output; outcome pending."
+}
