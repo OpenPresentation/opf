@@ -1,0 +1,101 @@
+{
+  "verifier": "/private/tmp/rr20-timeline-workflow-fix-01/opf/scripts/test-timeline-workflow.mjs",
+  "verifierSha256": "80d617fa0854514e0c2f9c7d0909e7fb7f1d498e6f312b928f5215a862f73846",
+  "sourceBase": "74e532100",
+  "runtimeRefs": {
+    "core": "a94a1aedc77b782ac370e5db7d33fda090661daf",
+    "render": "2b4a60f932b7ec0ea9adaab91de392721540c28f",
+    "pptx": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+    "editor": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+    "gallery": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  },
+  "command": [
+    "node",
+    "scripts/test-timeline-workflow.mjs",
+    "/private/tmp/rr20-timeline-workflow-fixed-positive-01",
+    "installed",
+    "/private/tmp/rr20-timeline-workflow-fix-01/opf/artifacts/npm/consumer"
+  ],
+  "terminal": 60156,
+  "exitCode": 0,
+  "report": "/private/tmp/rr20-timeline-workflow-fixed-positive-01/report.json",
+  "reportSha256": "951deeafbc2f04361076d3dc4b8ca65549f1696edac03df307567363cfbe8bd2",
+  "log": "/private/tmp/rr20-timeline-workflow-fixed-positive-01.log",
+  "logSha256": "64ee33261389170c62d24a6d4bef56c78db7ff4d249d6f5145241a8edb2beda7",
+  "workflows": 16,
+  "irreducibleWidthRejections": 2,
+  "packages": [
+    {
+      "name": "opf",
+      "files": 101,
+      "inventorySha256": "19dd7edd4565fa2fd72f6079ff242b2808f277cd579bd15f20d4d7082b77b7a1",
+      "copyByteIdentical": true
+    },
+    {
+      "name": "cli",
+      "files": 5,
+      "inventorySha256": "4a589753e7c3024854d5d1bd35269952a6f469fb5d944387e8fed0cfcaa2d157",
+      "copyByteIdentical": true
+    },
+    {
+      "name": "opf-render",
+      "files": 204,
+      "inventorySha256": "44c4ce8d14138711721d525d6feb0e2fa3d3b1f9bea20a7c357758bb13377443",
+      "copyByteIdentical": true
+    },
+    {
+      "name": "opf-pptx",
+      "files": 70,
+      "inventorySha256": "806e245bbd3acef1f063278281b63b861599accc8b030283ccf14c6cc7b5d9db",
+      "copyByteIdentical": true
+    },
+    {
+      "name": "opf-editor",
+      "files": 126,
+      "inventorySha256": "8fff2f4b210e9c9e21a366c3249d838956a35a34f06a0da612dba57d09fb1146",
+      "copyByteIdentical": true
+    },
+    {
+      "name": "gallery",
+      "files": 8,
+      "inventorySha256": "e210d3ada6efbe90a278d3158a7e0394375d62d035421a12965babfc8b9efb5f",
+      "copyByteIdentical": true
+    }
+  ],
+  "packageLockIdentical": true,
+  "negativeControls": [
+    {
+      "command": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "scripts/test-timeline-workflow.mjs",
+        "/private/tmp/rr20-timeline-workflow-negative-missing-01",
+        "installed",
+        "/private/tmp/rr20-timeline-workflow-fix-01/opf/artifacts/npm/missing-consumer"
+      ],
+      "exitCode": 1,
+      "outputCreated": false,
+      "log": "/private/tmp/rr20-timeline-workflow-negative-missing-01.log",
+      "logSha256": "bc216a6ad49e4918e3eed790a7915f5dae29c3f96b88b54ebb312b7696ca9260"
+    },
+    {
+      "command": [
+        "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+        "scripts/test-timeline-workflow.mjs",
+        "/private/tmp/rr20-timeline-workflow-negative-ancestor-01",
+        "installed",
+        "/private/tmp/rr20-timeline-workflow-fix-01/opf/artifacts/npm/ancestor-consumer"
+      ],
+      "exitCode": 1,
+      "outputCreated": false,
+      "log": "/private/tmp/rr20-timeline-workflow-negative-ancestor-01.log",
+      "logSha256": "f83398143c303293b91cb9fcf37c9ece8e9bf8b436203177dbbe632ab3adac91"
+    }
+  ],
+  "nativeAcceptance": false,
+  "integratedCommit": "cac4c4a5",
+  "rootMappedCheck": {
+    "command": "pnpm check:changed --base HEAD^",
+    "exit": 0
+  },
+  "rootVisualReview": "Portrait screenshot retains complete words, both events, adjacent markers and neighboring text without overlap. This is an editing stress fixture, not an editorial gallery design or native Office proof."
+}
