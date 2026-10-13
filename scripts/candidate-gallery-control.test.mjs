@@ -62,6 +62,7 @@ test('exact published19 runtime uses recorded final registry helpers and refuses
   const record=stagePublishedControlPlan({coreRoot,toolsRoot});assert.deepEqual(record.testToolingBridges,PUBLISHED_019_TOOLING);
   assert.deepEqual(verifyPublishedControlPlan({coreRoot,toolsRoot}),record);assert.deepEqual(readFileSync(runtime),runtimeBytes);
   const after=await import(`data:text/javascript;base64,${readFileSync(path.join(coreRoot,'scripts/lazy-font-counts.mjs')).toString('base64')}`);
+  execFileSync(process.execPath,['--test','scripts/lazy-font-counts.test.mjs'],{cwd:coreRoot,stdio:'pipe'});
   after.assertLazyFontCount('0.19.1',94);assert.throws(()=>after.assertLazyFontCount('0.19.1',95),/expected 94/);assert.throws(()=>after.assertLazyFontCount('0.20.0',94),/no expected/);
   for(const bridge of PUBLISHED_019_TOOLING){
    const file=path.join(coreRoot,bridge.path),bytes=readFileSync(file);writeFileSync(file,'tampered');assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}),/helper identity/);writeFileSync(file,bytes);
@@ -70,7 +71,7 @@ test('exact published19 runtime uses recorded final registry helpers and refuses
   const extra=path.join(coreRoot,'scripts/unknown-tool.mjs');writeFileSync(extra,'unexpected');assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}),/untracked/);rmSync(extra);
   const metadata=path.join(coreRoot,'artifacts/published-control/metadata.json');writeFileSync(metadata,JSON.stringify({...record,testToolingBridges:[{...PUBLISHED_019_TOOLING[0],path:'packages/javascript/src/composition.ts'}]}));assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}),/unknown 0.19/);writeFileSync(metadata,JSON.stringify(record));
   const unknown=JSON.parse(plan);unknown.packages.find(item=>item.name==='@openpresentation/opf').version='0.20.0';writeFileSync(path.join(toolsRoot,'release-plan.json'),JSON.stringify(unknown));assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}));
-  execFileSync('git',['-C',coreRoot,'checkout','HEAD','--','release-plan.json','scripts/lazy-font-counts.mjs','scripts/test-layout-contract-registry.mjs']);rmSync(path.join(coreRoot,'scripts/registry-layout-v2.mjs'));
+  execFileSync('git',['-C',coreRoot,'checkout','HEAD','--','release-plan.json','scripts/lazy-font-counts.mjs','scripts/lazy-font-counts.test.mjs','scripts/test-layout-contract-registry.mjs']);rmSync(path.join(coreRoot,'scripts/registry-layout-v2.mjs'));
   assert.throws(()=>stagePublishedControlPlan({coreRoot,toolsRoot}),/unknown published 0.19 control graph/);
   assert.deepEqual(readFileSync(runtime),runtimeBytes);
  }finally{rmSync(root,{recursive:true,force:true});}
