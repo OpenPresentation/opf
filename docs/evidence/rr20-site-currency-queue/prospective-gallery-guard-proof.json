@@ -1,0 +1,71 @@
+{
+  "status": "committed-focused-mapped-canonical-full-passed",
+  "checkout": "/private/tmp/opf-rr20-prospective-gallery",
+  "base": "756d7de9ddb7e5139a9b9caf0fd0b15b1d99b80e",
+  "files": {
+    "scripts/candidate-gallery.mjs": "13d7caacd28b5de9e9b04d86a4e4f03a486d1f6b508d3b1b76f6b410b2d327c4",
+    "scripts/release-train.mjs": "2bf80c81fefd0d310281b820bdb79b4045b099452017d895a713f255a702080d",
+    "scripts/release-train.test.mjs": "229c0e3124ee418326a9291391e7d1e9c7cada94cb027bb29bb39f9558f79d1b",
+    "changes/rr-20-prospective-gallery.md": "a3cf7bc0177339165e264ae137fe64cec755c9dbbe93e1739de398d0d39fd9ba"
+  },
+  "focused": {
+    "command": "node --test scripts/release-train.test.mjs scripts/candidate-gallery.test.mjs",
+    "log": "/private/tmp/rr20-prospective-gallery-focused-02.log",
+    "sha256": "5fa2637fc30146c21ad991b66b72dd7465384e76dff1a46e7be54e7d3b3a4fbe",
+    "exitCode": 0,
+    "passed": 50
+  },
+  "install01": {
+    "log": "/private/tmp/rr20-prospective-gallery-install-01.log",
+    "exitCode": 130,
+    "cause": "Sandbox registry DNS ENOTFOUND; deliberately stopped before network retry"
+  },
+  "install02": {
+    "executed": true,
+    "exitCode": 0,
+    "log": "/private/tmp/rr20-prospective-gallery-install-02.log",
+    "sha256": "f947848fcd3a27d826ac0a7a698a299e08181c7fd2006291df002d92b6eeb8a4",
+    "scope": "Explicit superseding implementation and required-check authorization; original automatic rejection retained in history"
+  },
+  "mapped": {
+    "executed": true,
+    "exitCode": 0,
+    "command": "pnpm check:changed --base HEAD",
+    "log": "/private/tmp/rr20-prospective-gallery-mapped-01.log",
+    "sha256": "178586532dee009cae2c51f616b7b9bedb494f66a7140e8a0c157a6140187662",
+    "checks": [
+      "biome",
+      "check:changes",
+      "check:release-train",
+      "check:candidate-gallery"
+    ],
+    "typecheck": "not mapped: no TS/tsconfig change"
+  },
+  "scope": "No manifests, locks, published-control policy, actual-tag bypass, remote writes or publication changed.",
+  "commit": "e541f80e265f9c801ffcd595e64aecbf7e7b1965",
+  "full": {
+    "session": 91965,
+    "topology": "/private/tmp/rr20-prospective-gallery-full-01",
+    "runner": "/private/tmp/rr20-prospective-gallery-full-01-run.py",
+    "runnerSha256": "bef8517a9cdaaf9602ee56f93ead344575fc4afbe75377ca9e63a111fd178103",
+    "receipt": "/private/tmp/rr20-prospective-gallery-full-01/receipt.json",
+    "log": "/private/tmp/rr20-prospective-gallery-full-01-run.log",
+    "terminalExitCode": 0,
+    "commandCount": 13,
+    "allCommandExits": 0,
+    "receiptSha256": "87070fbc6ecc169933acfe64d5fce1a7692eb153bc90f492ea117450d6f18450",
+    "sourceRefs": {
+      "opf": "e541f80e265f9c801ffcd595e64aecbf7e7b1965",
+      "opf-render": "dd3ca98b0b11d3b2189d400be7e740e663a81130",
+      "opf-pptx": "56f01d0d9fc9bc611fc0b543c4c369ccbbe46beb",
+      "opf-editor": "5d13f6655e34d7ecfc7a355a32557b35b475af02",
+      "gallery-candidate": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+    },
+    "sourceMetadataUnchanged": true,
+    "allSourceClonesClean": true,
+    "logSha256": "b8cfa62c6cea36bdac1e7c2ae48b45578f618985525cfe7544cbf34dece15198",
+    "runtimeQualification": "authenticated candidate source graph; not registry20 or native acceptance",
+    "existingExclusion": "CLI SVG digests pinned to renderer/core0.14 are excluded by existing test under current19 own versions; no new skip"
+  },
+  "sourceStatus": ""
+}

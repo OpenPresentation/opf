@@ -1,0 +1,62 @@
+{
+  "at": "2026-10-13T23:20:55.744027+00:00",
+  "documentationBase": "d97d820281c1b488009802da9b913da1ba191263",
+  "copiedEvidence": [
+    {
+      "file": "gallery6-merge-verification.json",
+      "source": "/private/tmp/rr20-gallery6-merge-verification.json",
+      "sha256": "69f0993e0cc204de8c9d16c40f01309a401bfb0d6a2f22f9c7c771079dd42076"
+    },
+    {
+      "file": "gallery7-merge-verification.json",
+      "source": "/private/tmp/rr20-gallery7-merge-verification.json",
+      "sha256": "db2f8b88591e4c6d64e5e202bc71d948d5440ff61c2f11422b44f7e6ac66d6ba"
+    },
+    {
+      "file": "gallery8-merge-verification.json",
+      "source": "/private/tmp/rr20-gallery8-merge-verification.json",
+      "sha256": "9c2377c9d8eb3e51e1f932d5013fa6d74a670705ca7da71c0aada3a9b2ef457f"
+    },
+    {
+      "file": "inventory-maintenance-20261013T230634Z-summary.json",
+      "source": "/private/tmp/opf-supervisor-20261010/inventory-maintenance-20261013T230634Z-summary.json",
+      "sha256": "3506573cc17e82928fcfd79284ad810675ba6b9c1225cf774df69fca42f7635f"
+    },
+    {
+      "file": "inventory-maintenance-20261013T230634Z-sync.json",
+      "source": "/private/tmp/opf-supervisor-20261010/inventory-maintenance-20261013T230634Z-sync.json",
+      "sha256": "cc14a2c7841135d1d06494552a9bc4d1a7a1b70a377d42e686175bccaf869c95"
+    },
+    {
+      "file": "prospective-gallery-guard-proof.json",
+      "source": "/private/tmp/rr20-prospective-gallery-proof.json",
+      "sha256": "a03e31b04c2db5ee6c23ac06f53d7c75a096632eef8820e993ee6b81f71f1245"
+    },
+    {
+      "file": "prospective-gallery-guard-independent-review.json",
+      "source": "/private/tmp/rr20-prospective-gallery-independent-review.json",
+      "sha256": "93b6f7cdc7d05a3f921dfe115fb2d6574ff2b3911755f788ccfa6d01dd22da37"
+    }
+  ],
+  "prospectiveFullReceipt": {
+    "path": "/private/tmp/rr20-prospective-gallery-full-01/receipt.json",
+    "sha256": "87070fbc6ecc169933acfe64d5fce1a7692eb153bc90f492ea117450d6f18450",
+    "refs": {
+      "opf": "e541f80e265f9c801ffcd595e64aecbf7e7b1965",
+      "opf-render": "dd3ca98b0b11d3b2189d400be7e740e663a81130",
+      "opf-pptx": "56f01d0d9fc9bc611fc0b543c4c369ccbbe46beb",
+      "opf-editor": "5d13f6655e34d7ecfc7a355a32557b35b475af02",
+      "gallery-candidate": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+    }
+  },
+  "nativeAcceptance": false,
+  "galleryPublished": false,
+  "deployment": false,
+  "windowsReportedConnectivity": {
+    "source": "supervisor report",
+    "readThread": "succeeds on same completed turn",
+    "preflightCell": "7348",
+    "delivery": "pending",
+    "nativeAction": false
+  }
+}

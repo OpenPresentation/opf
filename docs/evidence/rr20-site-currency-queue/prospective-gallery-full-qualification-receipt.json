@@ -1,0 +1,238 @@
+{
+  "refs": {
+    "opf": "e541f80e265f9c801ffcd595e64aecbf7e7b1965",
+    "opf-render": "dd3ca98b0b11d3b2189d400be7e740e663a81130",
+    "opf-pptx": "56f01d0d9fc9bc611fc0b543c4c369ccbbe46beb",
+    "opf-editor": "5d13f6655e34d7ecfc7a355a32557b35b475af02",
+    "gallery-candidate": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  },
+  "before": {
+    "opf": {
+      "head": "e541f80e265f9c801ffcd595e64aecbf7e7b1965",
+      "status": ""
+    },
+    "opf-render": {
+      "head": "dd3ca98b0b11d3b2189d400be7e740e663a81130",
+      "status": ""
+    },
+    "opf-pptx": {
+      "head": "56f01d0d9fc9bc611fc0b543c4c369ccbbe46beb",
+      "status": ""
+    },
+    "opf-editor": {
+      "head": "5d13f6655e34d7ecfc7a355a32557b35b475af02",
+      "status": ""
+    },
+    "gallery-candidate": {
+      "head": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "status": ""
+    }
+  },
+  "after": {
+    "opf": {
+      "head": "e541f80e265f9c801ffcd595e64aecbf7e7b1965",
+      "status": ""
+    },
+    "opf-render": {
+      "head": "dd3ca98b0b11d3b2189d400be7e740e663a81130",
+      "status": ""
+    },
+    "opf-pptx": {
+      "head": "56f01d0d9fc9bc611fc0b543c4c369ccbbe46beb",
+      "status": ""
+    },
+    "opf-editor": {
+      "head": "5d13f6655e34d7ecfc7a355a32557b35b475af02",
+      "status": ""
+    },
+    "gallery-candidate": {
+      "head": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+      "status": ""
+    }
+  },
+  "metadataSha256": {
+    "opf/package.json": "786efa56a97de9d1f2af9765da88da70f23923564db348dde82b4eae2f0e0a80",
+    "opf/pnpm-lock.yaml": "f6b0249623d7585d8fbd14cf4c79df6b1cb96ba837d7b2f4478b67235f5504ca",
+    "opf/packages/javascript/package.json": "e3c34e59d914c416a8c1a313f2970e19c064533226e0089708375923b35e9b4f",
+    "opf/packages/cli/package.json": "92e4bcc194dab4a0c5b52183160c06a7dbf6712129121659b95e3a59d4a3169b",
+    "opf-render/package.json": "0325ab66d0face9e352d11820bcb15f4c21f6b542d30a67d5c7119c546c399ba",
+    "opf-render/package-lock.json": "cf35e0560aeb386904d6ed9752b3d9815b2bf6b0cd13dad31c0aa7b118cde598",
+    "opf-pptx/package.json": "32d4cb9ca83b20ddecab67314cc1e4897a525ab646c52913f5e42b9227b82208",
+    "opf-pptx/package-lock.json": "164d2930446939c846d78b8480214393e5d1822ff62983d883df6883b4e32c9f",
+    "opf-editor/package.json": "35714f2cac2072e7ed8d0d4b87ba8c36316abad790abf95d9cbdd73881e42469",
+    "opf-editor/package-lock.json": "fb1326e5a28e7579de1687f29c9ded23e34d1392063308dc61fdb413563422cd",
+    "gallery-candidate/package.json": "bc5ba5e099ece0fe39d4c3c1ca8e00493ee5757b8a48d122b677091cd3f61f5c",
+    "gallery-candidate/package-lock.json": "67e05abc96ff84d90827e5cf90a7910a8ffcabd74308ce1b39dd3d9bba7cd52a"
+  },
+  "metadataUnchanged": true,
+  "commands": [
+    {
+      "label": "toolchain",
+      "command": [
+        "node",
+        "--version"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/opf",
+      "exitCode": 0,
+      "seconds": 0.01,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/toolchain.log",
+      "logSha256": "f2ec568164f99546161909b0189b57bb5be3e80f8e2ccd8a51a4aed8c4055a04"
+    },
+    {
+      "label": "npm-version",
+      "command": [
+        "npm",
+        "--version"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/opf",
+      "exitCode": 0,
+      "seconds": 0.05,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/npm-version.log",
+      "logSha256": "041fb0a6f23ccf0102a18d4591e1bfa36eebc17d27d348727a5eee18806d1c3c"
+    },
+    {
+      "label": "pnpm-version",
+      "command": [
+        "pnpm",
+        "--version"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/opf",
+      "exitCode": 0,
+      "seconds": 0.1,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/pnpm-version.log",
+      "logSha256": "abb3ce293b7ae818d9d22051b093e51415a4de46f6dd529189c4feb458037cb5"
+    },
+    {
+      "label": "core-install",
+      "command": [
+        "pnpm",
+        "install",
+        "--frozen-lockfile"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/opf",
+      "exitCode": 0,
+      "seconds": 0.77,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/core-install.log",
+      "logSha256": "3d2a8ab66612682d02e308b53be7da08545e8245f21c3599a5b3e4371103ca14"
+    },
+    {
+      "label": "opf-render-install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/opf-render",
+      "exitCode": 0,
+      "seconds": 4.43,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/opf-render-install.log",
+      "logSha256": "146d264ea5fcd361276b245b3427843d455f53fe524e2122f2602f85fd7ec189"
+    },
+    {
+      "label": "opf-pptx-install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/opf-pptx",
+      "exitCode": 0,
+      "seconds": 1.12,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/opf-pptx-install.log",
+      "logSha256": "c8900d8efd220304038654241826dcd2daccbf821bce888ba03b66c12f072307"
+    },
+    {
+      "label": "opf-editor-install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/opf-editor",
+      "exitCode": 0,
+      "seconds": 2.33,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/opf-editor-install.log",
+      "logSha256": "b054bc7e35ae24c66da481077d0946913111a9ec706253da84b5adbee7a0af36"
+    },
+    {
+      "label": "gallery-candidate-install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/gallery-candidate",
+      "exitCode": 0,
+      "seconds": 0.43,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/gallery-candidate-install.log",
+      "logSha256": "3f711898ed06c3a911e425390ba73b60dacf634f1b0efed2d7a9d368bfa5c89f"
+    },
+    {
+      "label": "gallery-initial-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/gallery-candidate",
+      "exitCode": 0,
+      "seconds": 0.11,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/gallery-initial-build.log",
+      "logSha256": "458aafea2ab52e541aabc422b028b3c7555872444b9651ff9d4778cdde9d7f07"
+    },
+    {
+      "label": "gallery-link",
+      "command": [
+        "node",
+        "scripts/candidate-gallery.mjs",
+        "link"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/opf",
+      "exitCode": 0,
+      "seconds": 0.05,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/gallery-link.log",
+      "logSha256": "60b7443c184ddb06fd644261a7906b772945d567d30bdf789f6a1c9e39d3b239"
+    },
+    {
+      "label": "gallery-materialize",
+      "command": [
+        "node",
+        "scripts/materialize-gallery-catalog.mjs"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/opf",
+      "exitCode": 0,
+      "seconds": 0.06,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/gallery-materialize.log",
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "candidate-build-stage",
+      "command": [
+        "node",
+        "scripts/candidate-gallery-build.mjs"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/opf",
+      "exitCode": 0,
+      "seconds": 20.39,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/candidate-build-stage.log",
+      "logSha256": "af607773cc4baa86fcbbbcfbc33f29445ca5f61114f7269ed3bb38b8d1bd344b"
+    },
+    {
+      "label": "canonical-test",
+      "command": [
+        "pnpm",
+        "test"
+      ],
+      "cwd": "/private/tmp/rr20-prospective-gallery-full-01/opf",
+      "exitCode": 0,
+      "seconds": 166.62,
+      "log": "/private/tmp/rr20-prospective-gallery-full-01/canonical-test.log",
+      "logSha256": "0114f8e4dabfe929a8c267ee1ea4e141564d8539cecd903c28f514e589b4ebfb"
+    }
+  ],
+  "environment": {
+    "npm_config_cache": "/private/tmp/rr20-prospective-gallery-full-01/npm-cache",
+    "CANDIDATE_GALLERY_REF": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+    "OPF_GOLDEN_BASELINE": "/private/tmp/rr20-prospective-gallery-full-01/opf/scripts/fixtures/opf-examples-png.rr20-array-areas.sha256.json",
+    "OPF_TRACKER_STALE": "warn",
+    "OPF_REUSE_BUILD": "rr20-prospective-gallery-full-01"
+  },
+  "nativeAcceptance": false,
+  "publication": false
+}

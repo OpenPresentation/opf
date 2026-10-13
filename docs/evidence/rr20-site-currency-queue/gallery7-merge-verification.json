@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-13T23:04:36.917355+00:00",
+  "merge": "fec2811143164bc9880b29380e08e9171b79e709",
+  "reviewed": "04bc036b55d3cda205ad41f39401af3731a838a5",
+  "metadata": {
+    "number": 7,
+    "merged_at": "2026-10-13T23:01:07Z",
+    "merge_commit_sha": "fec2811143164bc9880b29380e08e9171b79e709"
+  },
+  "defaultHead": "fec2811143164bc9880b29380e08e9171b79e709",
+  "mergeTree": "9d6afb8648f507394d519e171a8c1b40ae146106",
+  "reviewedTree": "9d6afb8648f507394d519e171a8c1b40ae146106",
+  "verified": true
+}

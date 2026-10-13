@@ -1,0 +1,26 @@
+{
+  "verdict": "APPROVED",
+  "head": "e541f80e265f9c801ffcd595e64aecbf7e7b1965",
+  "files": {
+    "scripts/candidate-gallery.mjs": "13d7caacd28b5de9e9b04d86a4e4f03a486d1f6b508d3b1b76f6b410b2d327c4",
+    "scripts/release-train.mjs": "2bf80c81fefd0d310281b820bdb79b4045b099452017d895a713f255a702080d",
+    "scripts/release-train.test.mjs": "229c0e3124ee418326a9291391e7d1e9c7cada94cb027bb29bb39f9558f79d1b",
+    "changes/rr-20-prospective-gallery.md": "a3cf7bc0177339165e264ae137fe64cec755c9dbbe93e1739de398d0d39fd9ba"
+  },
+  "focused": {
+    "command": "node --test scripts/release-train.test.mjs scripts/candidate-gallery.test.mjs",
+    "log": "/private/tmp/rr20-prospective-gallery-focused-02.log",
+    "sha256": "5fa2637fc30146c21ad991b66b72dd7465384e76dff1a46e7be54e7d3b3a4fbe",
+    "exitCode": 0,
+    "passed": 50
+  },
+  "review": [
+    "Prospective projection limited to core target0.20; actual tag guard retains actualmanifest.",
+    "Candidateconfig/declaration and CLI actualcore guards retained.",
+    "Full dryprep positive0.19 Gallery3\u21920.20 and neweractual downgrade rejection covered.",
+    "Version comparison unchanged; unsupportedfuturetargets not broadened."
+  ],
+  "limitations": [
+    "No independent network,install,CI or registry/native qualification performed."
+  ]
+}

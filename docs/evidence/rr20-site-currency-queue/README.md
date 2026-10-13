@@ -4,6 +4,8 @@ The owner authorized **“Start final qualification; no deployment.”** These r
 
 ## Current records
 
+- [Post-Gallery checkpoint](post-gallery-checkpoint.json) binds verified Gallery #6/#7/#8 merges, the 23:06 inventory before #649 was created (26 open PRs, 42 issues; eight clean synchronized defaults), and the exact prospective guard qualification. Gallery 3.0.0 release preparation is merged, publication is pending; core #648/#649 hosted qualification and native acceptance remain pending. No deployment is inferred.
+
 - The [current supervisor handoff](../../programs/release-readiness/HANDOFF.md#current-supervisor-checkpoint--2026-10-13) records the newer hosted candidates, active batch, selected 0.20.0/Gallery 3.0.0 targets and separate Windows delivery state. Older local replay records below prove their named graphs only.
 - [Timeline workflow correction](timeline-workflow-correction.json) preserves 16 passing positive workflows and two strict rejection controls. [CI retry correction](ci-retry-chronology-correction.json) records independent review and 51 passing focused tests plus mapped checks; it does not waive the pending hosted failures or establish release acceptance.
 

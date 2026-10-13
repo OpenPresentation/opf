@@ -1,0 +1,54 @@
+{
+  "at": "2026-10-13T22:52:05.622811+00:00",
+  "expectedMerge": "8e511b80cb35c7e900ae0ececfa30cc56f01e5b4",
+  "qualifiedHead": "404e086d7af341f92ea56702befe166da2d10956",
+  "calls": [
+    {
+      "kind": "PRmetadata",
+      "exit": 0,
+      "stderr": ""
+    },
+    {
+      "kind": "guardedfetch",
+      "exit": 0,
+      "stderr": "From https://github.com/OpenPresentation/gallery\n   48169a9..8e511b8  main       -> origin/main\n"
+    }
+  ],
+  "pr": {
+    "number": 6,
+    "state": "closed",
+    "merged": true,
+    "merge_commit_sha": "8e511b80cb35c7e900ae0ececfa30cc56f01e5b4",
+    "merged_at": "2026-10-13T22:51:17Z"
+  },
+  "defaultCheckout": "/Users/michael/Source/gallery",
+  "before": {
+    "branch": "main",
+    "head": "48169a9bb38559b8385e6791e7b5e76c0f5a8792",
+    "status": ""
+  },
+  "ffExit": 0,
+  "after": {
+    "branch": "main",
+    "head": "8e511b80cb35c7e900ae0ececfa30cc56f01e5b4",
+    "status": ""
+  },
+  "mergeTree": "dd668dcc21d5bc5da88ba053081cf242eea78737",
+  "qualifiedTree": "dd668dcc21d5bc5da88ba053081cf242eea78737",
+  "ancestorExit": 0,
+  "verified": true,
+  "docsRebase": {
+    "path": "/private/tmp/opf-gallery3-doc-accuracy",
+    "head": "04bc036b55d3cda205ad41f39401af3731a838a5",
+    "base": "8e511b80cb35c7e900ae0ececfa30cc56f01e5b4",
+    "status": "",
+    "approvedPatchByteIdentical": true,
+    "files": [
+      "CONTRIBUTING.md",
+      "README.md",
+      "scripts/bootstrap-engines.mjs"
+    ],
+    "syntaxExit": 0,
+    "diffCheckExit": 0
+  }
+}
