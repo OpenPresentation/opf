@@ -4,7 +4,7 @@ $tokens=$null;$errors=$null
 $ast=[System.Management.Automation.Language.Parser]::ParseFile($RunnerPath,[ref]$tokens,[ref]$errors)
 if($errors.Count -ne 0) { throw ($errors | Out-String) }
 # Evaluate only pure preflight definitions. Never evaluate the runner entrypoint, child launcher or Office.
-foreach($name in @('Assert-PlainNativePath','Resolve-NativeAsset','Assert-NativeFileRecords','Read-NativeSuite','Assert-FreshNativeOutput','Assert-NativeRepositoryIdentity')) {
+foreach($name in @('Assert-PlainNativePath','Resolve-NativeAsset','Assert-NativeFileRecords','Read-NativeSuite','Assert-FreshNativeOutput','Assert-NativeRepositoryIdentity','Import-NativePlanValidation')) {
     $function=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
     if($null -eq $function) { throw "Missing preflight function: $name" }
     Invoke-Expression $function.Extent.Text
@@ -31,6 +31,32 @@ function Reject([string]$Name,[scriptblock]$Operation) {
     $script:passed++
 }
 try {
+    # Exercise the actual scoped importer with inline parameters. The worker
+    # fixture contains pure definitions only; no entrypoint or Office code.
+    $validator=Join-Path $root 'pure-plan-validator.ps1'
+    @'
+function Test-Integer($Value) { return $Value -is [int] }
+function Require-Property($Action,[string]$Name,[string]$Context) { if($null -eq $Action.PSObject.Properties[$Name]) { throw "$Context missing property" }; return $Action.$Name }
+function Assert-String($Value,[string]$Name,[string]$Context,[int]$Maximum=65535,[bool]$AllowEmpty=$true) { if($Value -isnot [string] -or (-not $AllowEmpty -and $Value.Length -eq 0) -or $Value.Length -gt $Maximum) { throw "$Context invalid $Name" } }
+function Read-AndValidateActionPlan([string]$Path) {
+    Assert-String $Path 'Path' 'Plan' 65535 $false
+    $resolved=(Resolve-Path -LiteralPath $Path).Path
+    $plan=Get-Content -LiteralPath $resolved -Raw | ConvertFrom-Json
+    foreach($action in @($plan)) {
+        $index=Require-Property $action 'slideIndex' 'Plan'
+        if(-not (Test-Integer $index)) { throw 'Index must be integer' }
+    }
+    return ,@($plan)
+}
+'@ | Set-Content -LiteralPath $validator -Encoding UTF8
+    Import-NativePlanValidation $validator
+    $validationPlan=Join-Path $root 'typed-plan.json'
+    [IO.File]::WriteAllText($validationPlan,'[{"slideIndex":1}]')
+    $validated=Read-AndValidateActionPlan $validationPlan
+    if($validated.Count -ne 1 -or $validated[0].slideIndex -ne 1) { throw 'Scoped importer lost the validator parameters' };$passed++
+    Reject 'imported validator rejects missing path' { $null=Read-AndValidateActionPlan '' }
+    [IO.File]::WriteAllText($validationPlan,'[{"slideIndex":"1"}]')
+    Reject 'imported validator retains typed checks' { $null=Read-AndValidateActionPlan $validationPlan }
     Save (Manifest);$binding=Read-NativeSuite $suiteRoot 'example';if($binding.selected.id -cne 'example') { throw 'Valid identity did not select exact case' };$passed++
     $null=Assert-FreshNativeOutput $output @($suiteRoot);$passed++
     Reject 'missing case' { $null=Read-NativeSuite $suiteRoot 'missing' }

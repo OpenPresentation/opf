@@ -100,7 +100,10 @@ function Import-NativePlanValidation([string]$Worker) {
         $function=$ast.Find({param($node) $node -is [System.Management.Automation.Language.FunctionDefinitionAst] -and $node.Name -eq $name},$true)
         if($null -eq $function) { throw "Missing pure plan validator: $name" }
         # Only these pure definitions are loaded; no worker entrypoint or Office operation is evaluated.
-        Invoke-Expression ('function script:'+ $function.Name + ' ' + $function.Body.Extent.Text)
+        # Preserve inline parameters as well as the body; Body alone drops the
+        # worker's ([string]$Path) signature and makes action-plan paths null.
+        $definition=$function.Extent.Text -replace '^function\s+', 'function script:'
+        Invoke-Expression $definition
     }
 }
 function Invoke-NativeChild([string]$Shell,[string]$Script,[string[]]$Arguments,[string]$Log) {
