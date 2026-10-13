@@ -1,0 +1,24 @@
+{
+  "source": "7cffb136d6c93c92fdc882a1f17a548d00d32530",
+  "previous": "146e477196405fe7d2283008f6fad34c12742599",
+  "changes": "Portable npm/pnpm/Corepack JS invocation for Windows; privilege-free Windows fixture; no runtime/catalog/manifest changes",
+  "macTests": {
+    "passed": 111,
+    "failed": 0,
+    "skipped": 0,
+    "log": "/private/tmp/gallery-windows-bootstrap-full-tests.log"
+  },
+  "windowsTests": {
+    "passed": 111,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "node": "24.21.0",
+    "npm": "11.16.0",
+    "pnpm": "10.33.2",
+    "clean": true,
+    "logs": "C:\\opf-work\\candidate-81c4fdf5\\logs\\08-gallery-windows-fix-test",
+    "evidenceOrigin": "Windows supervisor report; original failed build retained in06-candidate-build logs"
+  },
+  "nativeAcceptance": false
+}
