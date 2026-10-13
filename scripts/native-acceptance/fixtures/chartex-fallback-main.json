@@ -29,7 +29,13 @@
       "evidence": "docs/evidence/rr20-array-areas/chartex-archive-review.json",
       "note": "Reviewed all nine coherent fallback archives against published converter and dependency graph. The 28 layout tags change only record hashes; comparison layout adjusts two content heights and footer geometry for the 32pt list default. Candidate chart XML changes only the neutral gridline color and value-axis zero minimum for five constructs. All slide XML, chart data, diagnostic codes, and ZIP part sets remain unchanged."
     },
-    "nativeAcceptanceFixtureOrigin": "OpenPresentation/opf-pptx:test/fixtures/chartex-fallback-main.json"
+    "nativeAcceptanceFixtureOrigin": "OpenPresentation/opf-pptx:test/fixtures/chartex-fallback-main.json",
+    "nativeSuiteRowDataReview": {
+      "pptxCommit": "0c714b00d155d796ed9b72dea637aeb7d3c63c56",
+      "fixture": "test/fixtures/chartex-fallback-main.json#entries.waterfall-single",
+      "evidence": "docs/evidence/rr20-row-data-provenance/archive-review.json",
+      "scope": "Only the approved waterfall fallback hash and size change. Added data-provenance tag and links; native parts and the other eight chart archives are unchanged. Previous hash and size retained in the entry. Strict fallback archive equality remains required."
+    }
   },
   "decks": {
     "treemap-category": {
@@ -577,14 +583,16 @@
       "layoutTagParts": 29
     },
     "waterfall-single": {
-      "sha256": "341fc617cd8edd6bdf9790134cc817c1b13f0cf0479f96b23758e55c077b0142",
-      "bytes": 81372,
+      "sha256": "c812d346498c0f472942fceecca3c4ff3e8b0ac3237bbbfcd7d66725605dc867",
+      "bytes": 81787,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/row-numbers"
       ],
       "layoutParts": 30,
-      "layoutTagParts": 29
+      "layoutTagParts": 29,
+      "rr20RowDataPreviousSha256": "341fc617cd8edd6bdf9790134cc817c1b13f0cf0479f96b23758e55c077b0142",
+      "rr20RowDataPreviousBytes": 81372
     },
     "funnel-category": {
       "sha256": "ba1a79407651ef262d15b6b0e1e937177b3d02537960344093a568c89feaa6f4",
