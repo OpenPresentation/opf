@@ -1,0 +1,69 @@
+{
+  "at": "2026-10-13T21:42:46.145291+00:00",
+  "expected": {
+    "ownHead": "4f8a3551060d350d059ac4fdd29257c6d234fa12",
+    "coreHead": "3322297808e6acf6ef7ffdeca8aa4a4bb10bafde",
+    "gallery": "7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  },
+  "budget": 3,
+  "calls": [
+    {
+      "endpoint": "repos/OpenPresentation/opf-pptx/actions/runs?head_sha=4f8a3551060d350d059ac4fdd29257c6d234fa12&event=pull_request&per_page=100",
+      "exit": 0,
+      "path": "/private/tmp/rr20-pptx4f8-selection-runs.json",
+      "sha256": "69b62f05492d47c6b49af2ca6bd8dfc1a22cea17ae0d78372cb9f7fa530fa496",
+      "stderr": ""
+    },
+    {
+      "endpoint": "repos/OpenPresentation/opf-pptx/actions/runs/38469731559/jobs?per_page=100",
+      "exit": 0,
+      "path": "/private/tmp/rr20-pptx4f8-selection-jobs.json",
+      "sha256": "5c5438995ecf60512c30ed16b0679044b11299a142fdc26878fceb3af412de8f",
+      "stderr": ""
+    },
+    {
+      "endpoint": "repos/OpenPresentation/opf-pptx/actions/jobs/115546150068/logs",
+      "exit": 0,
+      "path": "/private/tmp/rr20-pptx4f8-selection-selection.log",
+      "sha256": "e9c4f4155a2ac965436cada83d17abbe86c5f408225fe30b2094dff460237a6c",
+      "stderr": ""
+    }
+  ],
+  "verified": true,
+  "run": {
+    "id": 38469731559,
+    "name": "CI",
+    "head_sha": "4f8a3551060d350d059ac4fdd29257c6d234fa12",
+    "event": "pull_request",
+    "run_attempt": 1,
+    "created_at": "2026-10-13T21:19:34Z"
+  },
+  "jobNames": [
+    "Resolve reviewed coordinated graph",
+    "published-control / control"
+  ],
+  "selectionJob": {
+    "id": 115546150068,
+    "name": "Resolve reviewed coordinated graph",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "cleanLog": {
+    "path": "/private/tmp/rr20-pptx4f8-selection-selection-clean.log",
+    "sha256": "92c8239c96a54bb3943c467b7100ba297b8d641c1b98697a183b4ede2f01153c"
+  },
+  "relevantLines": [
+    "2026-10-13T21:21:41.0603960Z opf        6e7f6ef6e0a91de0698fbdb7b4ee3e9722ca8fec (Depends-On OpenPresentation/opf#646 (open; its test merge commit))",
+    "2026-10-13T21:21:41.0605075Z opf-render 5f57c353ef3f35a542b2f544d828c61d31d52cb8 (Depends-On OpenPresentation/opf-render#240 (open; its test merge commit))",
+    "2026-10-13T21:21:41.0605876Z opf-pptx   6bb89f1e69326532d063bacadd3bbd2acf54bd8c (own head (lock entry shown))",
+    "2026-10-13T21:21:41.0606710Z opf-editor 9306b2d450d6f75c47421ef90f68b528dbd3052a (Depends-On OpenPresentation/opf-editor#165 (open; its test merge commit))",
+    "2026-10-13T21:21:46.5325637Z HEAD is now at 6e7f6ef Merge 3322297808e6acf6ef7ffdeca8aa4a4bb10bafde into 75f3f0d741c40176e160d08cebfb571699a17793",
+    "2026-10-13T21:21:48.9481183Z candidate_gallery=7cffb136d6c93c92fdc882a1f17a548d00d32530"
+  ],
+  "result": "verified expected core/Gallery strings",
+  "selectedSiblingMergeRefs": {
+    "renderer": "5f57c353ef3f35a542b2f544d828c61d31d52cb8",
+    "editor": "9306b2d450d6f75c47421ef90f68b528dbd3052a"
+  },
+  "scope": "Run metadata binds own head4f8; selection log directly proves core332 test merge and Gallery7cff. Renderer/editor selected open PR test-merge refs are recorded, but this log does not separately show their underlying head parent identities."
+}
