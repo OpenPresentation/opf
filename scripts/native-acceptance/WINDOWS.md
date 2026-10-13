@@ -85,3 +85,45 @@ colors through save/reopen and further export/import cycles. It does not establi
 raster or geometry equivalence for reexports. Preserve failed attempts and their
 validation siblings. Other manual/ineligible cases need separate supervisor
 review and are never silently passed by either runner.
+
+## Suite-pinned Roboto setup
+
+The runner does not install fonts. Before starting a new PowerPoint process, use
+this separate tracked tool with the suite generated on that host. It verifies the
+OFL notice and all seven sealed Roboto hashes before making changes, copies fonts
+to a new private directory below the current user's LocalApplicationData, registers
+only HKCU font values and calls session-visible GDI registration with a bounded
+font-change broadcast. No administrator privileges or machine font changes are
+used. Choose the standard user font folder for the private directory:
+
+```powershell
+$fontState = Join-Path $env:LOCALAPPDATA 'Microsoft/Windows/Fonts/opf-native-qualification'
+powershell.exe -NoProfile -NonInteractive -File scripts/native-acceptance/setup-fonts-windows.ps1 -Action Setup -SuiteDirectory C:/opf-work/suite -StateDirectory $fontState
+powershell.exe -NoProfile -NonInteractive -File scripts/native-acceptance/setup-fonts-windows.ps1 -Action Check -SuiteDirectory C:/opf-work/suite -StateDirectory $fontState
+
+# Office-free hash/path/ownership checks; mocks all registration and registry writes.
+node --test scripts/native-acceptance/setup-fonts-windows.test.mjs
+
+# After closing the bounded native test presentations and their PowerPoint process:
+powershell.exe -NoProfile -NonInteractive -File scripts/native-acceptance/setup-fonts-windows.ps1 -Action Cleanup -StateDirectory $fontState
+```
+
+Setup refuses an existing state directory and existing Roboto families. It never
+overwrites or removes preexisting host fonts. If the shared HKCU Fonts key is
+absent, setup records its creation; cleanup removes that key only if this attempt
+created it and it remains empty. The write-ahead
+`state.json` records this attempt's files/values plus suite and setup-script hashes;
+retain it after cleanup. Check binds these hashes to the executing script and suite.
+Check confirms the exact hashes, exact user registry values and availability of
+the bundled family names through GDI+. Setup additionally requires Windows to
+accept each exact file through `AddFontResourceEx`. These checks do not establish
+which font PowerPoint actually rendered; native observation remains necessary.
+
+A failed setup tries to roll back its recorded changes. Cleanup checks all owned
+files and values before changing anything and refuses externally modified state;
+inspect that receipt instead of deleting fonts manually or retrying automatically.
+Cleanup preserves unrelated files/values and keeps the journal. Repeated cleanup
+is safe. Start a fresh directory for another setup. Do not run Setup/Check/Cleanup
+concurrently; a per-user mutex refuses overlapping invocations. The tool neither opens nor closes Office.
+Windows runtime and actual registration must be verified on the Windows host;
+macOS static checks are not evidence of Windows execution.
