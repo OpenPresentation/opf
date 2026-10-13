@@ -1,0 +1,162 @@
+{
+  "at": "2026-10-13T22:40:41.660522+00:00",
+  "root": "/private/tmp/opf-gallery3-strict",
+  "head": "404e086d7af341f92ea56702befe166da2d10956",
+  "tree": "dd668dcc21d5bc5da88ba053081cf242eea78737",
+  "statusBefore": "",
+  "pins": {
+    "galleryVersion": "3.0.0",
+    "core": {
+      "repository": "OpenPresentation/opf",
+      "sha": "756d7de9ddb7e5139a9b9caf0fd0b15b1d99b80e"
+    },
+    "render": {
+      "repository": "OpenPresentation/opf-render",
+      "sha": "dd3ca98b0b11d3b2189d400be7e740e663a81130"
+    }
+  },
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--version"
+      ],
+      "exit": 0,
+      "seconds": 0.01,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/01.log",
+      "sha256": "f2ec568164f99546161909b0189b57bb5be3e80f8e2ccd8a51a4aed8c4055a04"
+    },
+    {
+      "command": [
+        "npm",
+        "--version"
+      ],
+      "exit": 0,
+      "seconds": 0.049,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/02.log",
+      "sha256": "041fb0a6f23ccf0102a18d4591e1bfa36eebc17d27d348727a5eee18806d1c3c"
+    },
+    {
+      "command": [
+        "pnpm",
+        "--version"
+      ],
+      "exit": 0,
+      "seconds": 0.094,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/03.log",
+      "sha256": "abb3ce293b7ae818d9d22051b093e51415a4de46f6dd529189c4feb458037cb5"
+    },
+    {
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "exit": 0,
+      "seconds": 1.001,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/04.log",
+      "sha256": "8d5092479e5eda9ae30d95737fd1f997c351bc94c40b6bb56ada8d78379a47fe"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/bootstrap-engines.mjs"
+      ],
+      "exit": 0,
+      "seconds": 57.606,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/05.log",
+      "sha256": "8a48dd8f703acd677f5794aeaa47e80b9026452f92fb561decbe432fd8c58bcc"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:license"
+      ],
+      "exit": 0,
+      "seconds": 0.089,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/06.log",
+      "sha256": "3d9cd03ee20d34cd20a176489cc53809b64f4643b609bdbec488a5ffa508e7dd"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "verify"
+      ],
+      "exit": 0,
+      "seconds": 0.118,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/07.log",
+      "sha256": "3b4f6f5993e4820d031c539e199f5ed1d75a1d1571ecc96e5acfd180b8f7b73d"
+    },
+    {
+      "command": [
+        "npm",
+        "test"
+      ],
+      "exit": 0,
+      "seconds": 9.253,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/08.log",
+      "sha256": "d6f81e95a5a013b6a2eeb21699dca2f23305ef05b969d84c3f21ee8e0ffd74b6"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck"
+      ],
+      "exit": 0,
+      "seconds": 0.46,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/09.log",
+      "sha256": "bbcae6ab0fb6365849187f842acf7f2ca2e98382646ae4354335671a56866eee"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:previews"
+      ],
+      "exit": 0,
+      "seconds": 0.326,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/10.log",
+      "sha256": "f99f8a5ddc93810eac6151cfab2c43b9c1c8624c7df350bc25485d3226297d88"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:stability"
+      ],
+      "exit": 0,
+      "seconds": 1.784,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/11.log",
+      "sha256": "0f31009291cf931e9d83a7643ffb4a52d2434eb3eacf525dfb736e08b2eb756c"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "pack:dry-run"
+      ],
+      "exit": 0,
+      "seconds": 0.261,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/12.log",
+      "sha256": "06ebc791a6d4ad6a333cde6d745e8539e438224f7e5f11c55dd02a61a6c3da4a"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/bootstrap-engines.mjs",
+        "--verify"
+      ],
+      "exit": 0,
+      "seconds": 0.083,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-02/13.log",
+      "sha256": "bb7aef5c3cdcd7f70f133b1bf1adca88d969b6c393c87f80c1afbe418d642095"
+    }
+  ],
+  "nativeAcceptance": false,
+  "publication": false,
+  "statusAfter": "",
+  "headAfter": "404e086d7af341f92ea56702befe166da2d10956",
+  "complete": true
+}

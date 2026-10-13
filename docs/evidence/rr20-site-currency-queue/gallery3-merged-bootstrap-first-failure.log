@@ -1,0 +1,29 @@
+Cloning into '/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/gallery-engines-WiwYNv/core'...
+HEAD is now at 756d7de9 FA-32: explicit area arrays and improved layout defaults (#646)
+Cloning into '/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/gallery-engines-WiwYNv/render'...
+HEAD is now at dd3ca98 RR-20: improve structural defaults and chart magnitude scales (#240)
+Corepack 0.36.0
+Generated an empty chunk: "types".
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: aliased bootstrap file
++ actual - expected
+
++ '/private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/gallery-engines-WiwYNv/core/packages/javascript/dist'
+- '/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/gallery-engines-WiwYNv/core/packages/javascript/dist'
+
+    at regular (file:///private/tmp/opf-gallery3-strict/scripts/bootstrap-artifacts.mjs:7:31)
+    at stageBootstrapPackage (file:///private/tmp/opf-gallery3-strict/scripts/bootstrap-artifacts.mjs:15:46)
+    at pack (file:///private/tmp/opf-gallery3-strict/scripts/bootstrap-engines.mjs:122:20)
+    at file:///private/tmp/opf-gallery3-strict/scripts/bootstrap-engines.mjs:135:23 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: '/private/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/gallery-engines-WiwYNv/core/packages/javascript/dist',
+  expected: '/var/folders/zj/5tv5dvds3793_qhx2jyxs0000000gn/T/gallery-engines-WiwYNv/core/packages/javascript/dist',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

@@ -1,0 +1,75 @@
+{
+  "at": "2026-10-13T22:38:36.901665+00:00",
+  "root": "/private/tmp/opf-gallery3-strict",
+  "head": "733adfcdd2ef94d7d460b7e518584366459b3497",
+  "tree": "a0b12658b77ab38a379451ed4250a753a74b45d5",
+  "statusBefore": "",
+  "pins": {
+    "galleryVersion": "3.0.0",
+    "core": {
+      "repository": "OpenPresentation/opf",
+      "sha": "756d7de9ddb7e5139a9b9caf0fd0b15b1d99b80e"
+    },
+    "render": {
+      "repository": "OpenPresentation/opf-render",
+      "sha": "dd3ca98b0b11d3b2189d400be7e740e663a81130"
+    }
+  },
+  "commands": [
+    {
+      "command": [
+        "node",
+        "--version"
+      ],
+      "exit": 0,
+      "seconds": 0.01,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-01/01.log",
+      "sha256": "f2ec568164f99546161909b0189b57bb5be3e80f8e2ccd8a51a4aed8c4055a04"
+    },
+    {
+      "command": [
+        "npm",
+        "--version"
+      ],
+      "exit": 0,
+      "seconds": 0.085,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-01/02.log",
+      "sha256": "041fb0a6f23ccf0102a18d4591e1bfa36eebc17d27d348727a5eee18806d1c3c"
+    },
+    {
+      "command": [
+        "pnpm",
+        "--version"
+      ],
+      "exit": 0,
+      "seconds": 0.096,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-01/03.log",
+      "sha256": "abb3ce293b7ae818d9d22051b093e51415a4de46f6dd529189c4feb458037cb5"
+    },
+    {
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "exit": 0,
+      "seconds": 1.036,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-01/04.log",
+      "sha256": "877d5c635c6bfdd28cf88f489404e76151550d7b6aaa8e682c7d50f386e52937"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/bootstrap-engines.mjs"
+      ],
+      "exit": 1,
+      "seconds": 33.696,
+      "log": "/private/tmp/rr20-gallery3-merged-qualification-01/05.log",
+      "sha256": "77f53f7a2f9b4fb2870c3742fcc8ddf17fcc1e0af19950372b9fd9978d8911ec"
+    }
+  ],
+  "nativeAcceptance": false,
+  "publication": false,
+  "statusAfter": "",
+  "headAfter": "733adfcdd2ef94d7d460b7e518584366459b3497",
+  "complete": false
+}
