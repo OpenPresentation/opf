@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-13T22:14:12.172271+00:00",
+  "expectedHead": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+  "reportedMerge": "5d13f6655e34d7ecfc7a355a32557b35b475af02",
+  "pr": {
+    "number": 165,
+    "url": "https://github.com/OpenPresentation/opf-editor/pull/165",
+    "state": "closed",
+    "merged": true,
+    "mergedAt": "2026-10-13T22:13:03Z",
+    "mergeCommit": "5d13f6655e34d7ecfc7a355a32557b35b475af02",
+    "head": "b45f2ca1142ffb637e80858e346b6c6dd325bd85",
+    "base": "main"
+  },
+  "metadata": "/private/tmp/rr20-editor165-pr-metadata.json",
+  "calls": {
+    "prMetadata": 1,
+    "fetch": 1
+  },
+  "before": {
+    "head": "ac25857cca8ce776dd23b5ca58b38a06af9d963f",
+    "branch": "main",
+    "status": ""
+  },
+  "mergeTree": "88b00e4a2503978f3d07ddbdc7f0605e54ea8e8e",
+  "reviewedTree": "88b00e4a2503978f3d07ddbdc7f0605e54ea8e8e",
+  "treeEqual": true,
+  "treeDiff": "",
+  "remoteHead": "5d13f6655e34d7ecfc7a355a32557b35b475af02",
+  "ancestry": {
+    "beforeInMerge": true,
+    "mergeInRemote": true,
+    "reviewedHeadInMerge": false
+  },
+  "after": {
+    "head": "5d13f6655e34d7ecfc7a355a32557b35b475af02",
+    "branch": "main",
+    "status": ""
+  },
+  "verified": true
+}
