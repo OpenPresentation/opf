@@ -2,10 +2,12 @@
 
 ## Unreleased
 
+## 3.0.0 (2026-10-13)
+
 - Canonicalize the bootstrap temporary root on macOS before strict artifact checks, so the system `/var` alias does not reject valid merged-source builds. Source-child symlinks remain rejected; release metadata and runtime bytes are unchanged.
 
 - **Breaking catalog contract:** layout `areas` now use arrays of cells instead of whitespace-delimited row strings. `CATALOG_SCHEMA` and `opf.catalogSchema` advance to `3`; consumers must support array-row areas. Layout IDs, per-layout schema version `2` and `opf-layout/v2` remain unchanged.
-- Gallery 3 build tooling requires exact core and renderer commits that are ancestors of their actual remote default branches. The one-release bootstrap stages development tarballs, verifies shared core/catalog resolution and unchanged release manifests, and retains artifact identities; its commands also run portably on Windows. Provisional source pins must be replaced with genuinely merged commits before qualification. This tooling does not qualify published engine metadata or establish native acceptance.
+- Gallery 3 build tooling requires exact core and renderer commits that are ancestors of their actual remote default branches. The one-release bootstrap stages development tarballs, verifies shared core/catalog resolution and unchanged release manifests, and retains artifact identities; its commands also run portably on Windows. Qualification uses the actual merged core and renderer commits. This tooling does not qualify published engine metadata or establish native acceptance.
 - **Breaking visual defaults:** center compact quote and headline-metric regions and image-side explanations; keep dense text, lists, charts and tables top-aligned. FAQ, process, dashboard, pillars, comparison and scorecard layouts no longer add decorative content boxes by default. Existing layout IDs are preserved. These appearance changes require gallery 3 under the pixel-stability policy; record schema remains v2.
 - Picker previews now use authored, explicitly illustrative examples with distinct measures and units, number formats, actual questions and answers, ordered process steps and named responsibilities. Exhaustive stability fixtures remain separate and unchanged.
 
