@@ -15,6 +15,8 @@ The owner connected MICHAEL-DESKTOP to Codex on the Mac on 2026-10-12. A read-on
 
 Hosted editor #165 exposed an incompatible candidate-versus-registry packed check. The reviewed CI-only repair at `b45f2ca1142ffb637e80858e346b6c6dd325bd85` preserves the mandatory published-control and candidate installed/browser gates; [review evidence](../../evidence/rr20-site-currency-queue/editor-candidate-ci-review.json). Hosted acceptance remains pending. Core #646 is reconciled with current main at `b7eb52a79`; the first watcher retains its earlier conflict result and must finish before a replacement batch.
 
+The reviewed [Gallery 3 integration sequence](../../evidence/rr20-site-currency-queue/gallery3-integration-sequence.md) uses existing source-merge, strict merged-engine bootstrap, registry adoption and official roller gates. The proposed push/nightly authorization patch is parked: it does not fix lock-only dependency selection. Transitional default failures must be preserved and closed by genuine registry adoption and the full official roll before engine release.
+
 Earlier checkpoints below are historical and are superseded by this section, the current README checklist and linked exact receipts.
 
 ## Historical gallery publication update — 2026-10-12 03:40 UTC
