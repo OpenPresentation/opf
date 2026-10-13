@@ -1,15 +1,25 @@
 # Release readiness: handoff of 2026-10-11
 
-Updated by the release supervisor on 2026-10-11 after the initial 00:40 UTC handoff. Follow the live [0.19 execution checklist](0.19-execution.md), currently 31/40 verified checkpoints, for reviewed evidence and remaining acceptance. It replaces the handoff of 2026-10-06. A new
+Updated by the release supervisor on 2026-10-12 after local feature qualification. Follow the live [0.19 execution checklist](0.19-execution.md), currently 32/40 verified checkpoints, for reviewed evidence and remaining acceptance. It replaces the handoff of 2026-10-06. A new
 supervisor or agent team resumes from this file, then [README.md](README.md) (goal, invariants, resume protocol),
 [burndown.md](burndown.md), [the release process](../../release-process.md) and the root `AGENTS.md`. Nothing here
 overrides those invariants. Reviewed local integration candidates also exist; preserve their exact identities and do not treat them as merged or published artifacts.
+
+## Current supervisor checkpoint — 2026-10-12
+
+All six original 0.19 packages are published and independently verified; T32 closes for that exact published graph. The later array-area/design/list/tutorial/explorer graph has completed local qualification at the source identities recorded in [final-qualification.json](../../evidence/rr20-site-currency-queue/final-qualification.json). Package, renderer/PPTX, editor and six-package tarball checks pass. The main site's Gallery 3 install example and gallery site's genuine published-editor identity remain blocked on matching publication. Preserve those strict gates.
+
+The next work is exact candidate integration and hosted/platform qualification, then matching publication and registry site adoption. Do not rerun or republish the completed older train. Site deployment, secret or DNS changes, release deletion and remote-branch deletion remain outside scope. Tutorials launch with the matching format release.
+
+The owner connected MICHAEL-DESKTOP to Codex on the Mac on 2026-10-12. A read-only preflight is active in **Resync repository**, thread `01a13110-7cf9-79b0-a2df-4ac95997c5a4`, host `remote-control:env_e_6a6a3b3f5f848329a128a6a3e3409b54`. The host confirmed its name, PowerPoint COM registration and Office version `16.0.20430.20146`; desktop preflight is waiting on command approval. No native slide acceptance has run. Prepare a separately bound current-candidate packet; historical packet06 does not prove the new runtime.
+
+Earlier checkpoints below are historical and are superseded by this section, the current README checklist and linked exact receipts.
 
 ## Historical gallery publication update — 2026-10-12 03:40 UTC
 
 Gallery **2.0.0** is published at tag/gitHead `48169a9bb38559b8385e6791e7b5e76c0f5a8792` and independently verified, including all eight package files, SLSA provenance and npm signatures. T22/T28/T33 close: **24/40**. [Publication evidence](../../evidence/rr20-gallery2-published/README.md). Earlier statements below about Gallery publication/bootstrap pending describe superseded historical state. Core/render/PPTX/editor source merges are complete; the next action is authentic gallery2 registry adoption, one normal ecosystem roll over the adopted mains, then gated stable release preparation. Native Windows T24/T31, sites and v0.19 engine publication remain incomplete.
 
-## Latest supervisor checkpoint — operative 2026-10-12
+## Historical supervisor checkpoint — before final qualification
 
 Progress is **31/40 verified checkpoints**. T27 source removal is complete after actual renderer #236 merge and exact public/dist/ordinary packed surface inspection; T19 normal registry Gallery 2 packed/installed qualification is complete; roll #633 merged at `564e0d08`. T13 source-lock/registry records and T20/T21/T23/T25/T26 source criteria are complete. Core 0.18.4, renderer/PPTX/editor 0.18.2, CLI 0.18.1 and gallery 1.0.0 are trusted-published and independently verified; [exact patch receipts](../../evidence/rr20-patch-train-publications/README.md). Core 0.18.2 was burned and never published. Actual registry adoption records #630 and source roller #629 are merged; final site adoption remains open.
 
@@ -55,11 +65,11 @@ Renderer repair [#238](https://github.com/OpenPresentation/opf-render/pull/238) 
 | `@openpresentation/opf` | **0.19.0** | Tag `opf-v0.19.0` at `b3e306d005d3`, independently verified with all ten registry checks; prior patch 0.18.4 remains in its historical receipts. **0.18.2 is burned** and never published. |
 | `@openpresentation/opf-render` | **0.19.1** | Tag `opf-render-v0.19.1`, commit `7980fea3b009`; all ten independent registry checks pass. Prior 0.18.2 receipts and burned 0.19.0 tag remain historical. |
 | `@openpresentation/opf-pptx` | **0.19.0** | Tag `opf-pptx-v0.19.0`, commit `6bb89f1e6932`; all ten independent registry checks pass. Prior 0.18.2 remains in historical receipts. |
-| `@openpresentation/opf-editor` | **0.18.2** | Tag/release at `36d61ea27dd4677724dfec22006759139b7136ff`, trusted-published and independently verified; source #160 is merged. |
-| `@openpresentation/cli` | **0.18.1** | Independently verified; unchanged optional-peer policy. |
+| `@openpresentation/opf-editor` | **0.19.0** | Verified tag/gitHead `ac25857cca8ce776dd23b5ca58b38a06af9d963f`; [receipts](../../evidence/rr20-editor019-release-progress/README.md). |
+| `@openpresentation/cli` | **0.19.0** | Verified tag/gitHead `9d72bc020e4b9287fe34f806e2ed4e9b4f213fd5`; [receipts](../../evidence/rr20-cli019-release-progress/README.md). |
 | `@openpresentation/gallery` | **2.0.0** | Tag `v2.0.0`, commit `48169a9bb385`; independently verified package contents, provenance and signatures. No GitHub Release is required by this lane. |
 
-## Operative next steps
+## Historical next steps — before final qualification
 
 The patch package train, prescribed source-lock roll and actual registry release-plan/compatibility/consumer adoption are complete. Preserve receipts; do not repeat publication. The three qualified local patch site trees and their v2 source integrations still need actual final registry dependencies/assets and full site adoption gates. No agent deployment.
 
