@@ -1,0 +1,58 @@
+# Native PowerPoint acceptance suite
+
+This is the versioned test suite for OPF's native PowerPoint acceptance. Check out
+the reviewed core and PPTX revisions on the Windows machine, prepare the fixtures
+there, and run the tracked supervisor command. Do not send generated decks or a
+temporary ZIP between computers as the test distribution mechanism.
+
+## Prepare
+
+Use the repository's coordinated installed-package qualification to create the
+six-package consumer (`pack:ecosystem` followed by `test:packed-ecosystem`). For an
+unpublished Gallery candidate, use the existing candidate-gallery workflow and
+its explicit source authorization. Do not substitute registry packages for an
+unpublished candidate or invent package versions. The source selection and
+installation procedures remain in [ecosystem development](../../docs/ecosystem-development.md).
+
+From the exact reviewed core checkout, with the corresponding PPTX checkout:
+
+```sh
+pnpm native:prepare --consumer /path/to/installed-consumer --pptx-repo /path/to/opf-pptx --output /path/to/new-native-suite
+```
+
+The output directory must be new. Use absolute local paths on each host; there
+are no machine-specific paths or frozen release SHAs in the suite. Generated
+PPTX files, previews and results stay outside tracked source directories.
+
+`suite.json` records all six installed package versions and complete runtime
+file hashes, the test-source and worker Git revisions, exact worker/source file
+hashes, fixture outputs and diagnostics. These are identity receipts, not proof
+of registry provenance or native acceptance. Source round-trip inequalities
+remain findings; a successful generator does not erase them.
+
+The fixtures cover primary layouts, pictures, furniture, charts, the current
+timeline/list/metric/quote/table designs, chart export modes and table colours.
+The eight new design cases use the same prepared fonts for each preview/export
+pair. Historical fixtures retain their original export options and explicitly
+record that preview/export equivalence is unproven. Native font installation
+and visual comparison remain explicit acceptance steps.
+
+## Run on Windows
+
+Follow [the Windows runner instructions](WINDOWS.md). Only the supervisor runs
+Office. The runner checks the selected source revision and all generated hashes,
+runs the Office-free worker checks, and performs one explicitly selected case.
+It never retries a failed native attempt or kills Office. Generated inputs are
+preserved; the existing worker saves only its own evidence copy.
+
+Keep each result directory, including failures and cleanup status. Do not count
+an ineligible/manual case as passed, and do not equate successful serialization
+with native rendering, editing, round-trip or font fidelity. The release tracker
+closes a native criterion only after the supervisor reviews its actual evidence.
+
+## Maintain
+
+Add fixtures, expected actions and assertions here with normal code review.
+`pnpm check:native-acceptance` runs portable contract and negative tests without
+Office; `pnpm check:changed` selects it for changes in this directory. Native
+PowerPoint remains a separate Windows supervisor gate.

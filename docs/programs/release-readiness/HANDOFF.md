@@ -1,5 +1,7 @@
 # Release readiness: handoff of 2026-10-11
 
+**Owner correction (2026-10-13):** native acceptance uses the versioned [test suite](../../../scripts/native-acceptance/README.md), fetched at an exact reviewed Git revision and generated on the Windows host from the selected installed packages. Do not distribute one-off packets or ZIPs, including through a Git handoff branch. Packet07b and the Taildrop receipt below are historical evidence, not the ongoing test distribution workflow.
+
 Updated by the release supervisor on 2026-10-12 after local feature qualification. Follow the live [0.19 execution checklist](0.19-execution.md), currently 32/40 verified checkpoints, for reviewed evidence and remaining acceptance. It replaces the handoff of 2026-10-06. A new
 supervisor or agent team resumes from this file, then [README.md](README.md) (goal, invariants, resume protocol),
 [burndown.md](burndown.md), [the release process](../../release-process.md) and the root `AGENTS.md`. Nothing here

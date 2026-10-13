@@ -1,0 +1,69 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Layout fixture quote",
+  "design": {
+    "background": "light1",
+    "fontScheme": "roboto"
+  },
+  "slides": [
+    {
+      "layout": "quote",
+      "title": "A shared view makes decisions easier",
+      "subtitle": "Illustrative example \u2022 fictional data",
+      "blocks": [
+        {
+          "region": "quotes",
+          "quote": {
+            "text": "We can now see where participants need help.",
+            "attribution": "Pilot lead",
+            "source": "Illustrative quotation"
+          }
+        }
+      ]
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+        "quote": {
+          "name": "Quote",
+          "summary": "One or more quotations with attribution and photo.",
+          "tags": [
+            "Text"
+          ],
+          "areas": [
+            [
+              "title"
+            ],
+            [
+              "quotes"
+            ]
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1
+          ],
+          "regions": {
+            "quotes": {
+              "accepts": [
+                "quote",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid",
+              "anchor": "middle"
+            }
+          },
+          "description": "Highlight a quotation and its source. Use the attribution to explain who said it and why their perspective matters.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/quote.svg"
+          }
+        }
+      }
+    }
+  }
+}

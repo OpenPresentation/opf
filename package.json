@@ -95,7 +95,10 @@
     "check:audit-placement": "node --test docs/programs/font-fidelity-everywhere/gallery-support/audit-a/scripts/placement.test.mjs",
     "check:audit-chartex": "node --test docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/chartex.test.mjs docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/chart-text.test.mjs docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/chart-colors.test.mjs",
     "check:audit-restored": "node --test docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/restored-content.test.mjs",
-    "check:audit-picture-bullets": "node --test docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/picture-bullets.test.mjs"
+    "check:audit-picture-bullets": "node --test docs/programs/font-fidelity-everywhere/gallery-support/parity/scripts/picture-bullets.test.mjs",
+    "native:prepare": "node scripts/native-acceptance/prepare.mjs",
+    "check:native-acceptance": "node --test scripts/native-acceptance/*.test.mjs",
+    "native:compare:tables": "node scripts/native-acceptance/compare-tables.mjs"
   },
   "engines": {
     "node": ">=22"

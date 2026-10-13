@@ -1,0 +1,66 @@
+{
+  "command": "node scripts/native-acceptance/prepare.mjs --consumer <installed-consumer> --pptx-repo <reviewed-pptx-checkout> --output <fresh-directory>",
+  "localRun": {
+    "session": 15384,
+    "exit": 0,
+    "log": "/private/tmp/opf-native-suite-integration-02.log",
+    "output": "/private/tmp/opf-native-suite-integration-02"
+  },
+  "cases": 54,
+  "hashedFiles": 304,
+  "primaryCases": 24,
+  "positiveChartModes": 29,
+  "expectedNativeParetoRejection": 1,
+  "dedicatedTableCase": 1,
+  "fontFaces": 7,
+  "nativeAcceptance": false,
+  "distribution": "Tracked source fixtures and runner fetched by Git; generated inputs remain local to test host; no ZIP/binary handoff",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.19.0",
+      "runtimeSha256": "f5cccfa3e0818e5fad4c6744b7bc5469300b10a407c60411429b82cd91375d7c"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.19.1",
+      "runtimeSha256": "c9c3bd3d879ff7c5a8e7d4e57682ff0e3b243f0b246480fabfe3783b99930602"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.19.0",
+      "runtimeSha256": "2518d5914b81697304e79f87c8bb4f5208df63c8bd949e815297b763883a4abf"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.19.0",
+      "runtimeSha256": "79f37d0dd592532dc2f33aeee8454d112d050e875671abe3a70693fc6c51f1b6"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.19.0",
+      "runtimeSha256": "60658f77c729a6486420b721b1686756ce93644d589cea1add51d6e8ab640315"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "runtimeSha256": "32175f40c6e67c954d487778d0afc31544d3ba384bac580212d2ae6c3231f5ed"
+    }
+  ],
+  "primaryRegressionReview": "24 sources/PPTX and84previews byte-equal prior reviewed packet; same9primary roundtrip inequalities retained",
+  "registryAcceptance": false,
+  "deployment": false,
+  "mappedChecks": {
+    "session": 11413,
+    "exit": 0,
+    "log": "/private/tmp/rr20-versioned-native-final-mapped.log",
+    "passed": 9
+  },
+  "portableTests": {
+    "passed": 6,
+    "failed": 0,
+    "skipped": 1,
+    "skip": "Windows PowerShell self-test requires Windows; no native execution claimed"
+  },
+  "initialTestFailure": "Mock original/reopened raster bytes differed; corrected the mock and added negative raster/color controls without changing strict comparator assertions"
+}

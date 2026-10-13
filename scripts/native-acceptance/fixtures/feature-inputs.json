@@ -1,0 +1,54 @@
+{
+  "feature-catalog-timeline": {
+    "origin": "reviewed timeline-update source",
+    "originalSHA256": "8071bf3b90b87dc982014565f916b89f9d23642ce27aaa3fd68e22e3425d7efe",
+    "fontOverlay": null,
+    "candidateSHA256": "8071bf3b90b87dc982014565f916b89f9d23642ce27aaa3fd68e22e3425d7efe"
+  },
+  "feature-dense-events": {
+    "origin": "reviewed timeline-update source",
+    "originalSHA256": "e81a5c9a5bd9e4a3367b0cde47948834014a2bce906e05dbe8b2cfb517068f13",
+    "fontOverlay": null,
+    "candidateSHA256": "e81a5c9a5bd9e4a3367b0cde47948834014a2bce906e05dbe8b2cfb517068f13"
+  },
+  "feature-custom-roadmap": {
+    "origin": "reviewed timeline-update source",
+    "originalSHA256": "d029ff2cdf378610d4adc98ff226662e01dcecce1ff2f6fa192ab9e2859ebb18",
+    "fontOverlay": null,
+    "candidateSHA256": "d029ff2cdf378610d4adc98ff226662e01dcecce1ff2f6fa192ab9e2859ebb18"
+  },
+  "feature-long-labels": {
+    "origin": "reviewed timeline-update source",
+    "originalSHA256": "043c8d2e293cab1df7c2b7705216ec60c4d142a8b5b8a4659daa182eb710cb41",
+    "fontOverlay": null,
+    "candidateSHA256": "043c8d2e293cab1df7c2b7705216ec60c4d142a8b5b8a4659daa182eb710cb41"
+  },
+  "feature-metrics": {
+    "origin": "qualified exact gallery-site example",
+    "originalDocumentSHA256": "12c6d491457dcaa47aef03fa79b658c17c8e61e9c29888129cec3579011c8e61",
+    "cacheSHA256": "8eecfe7c084ec4e855753a0a2b34f360fcf4e8103c9b767cbe6c536f006b3be0",
+    "fontOverlay": "explicit Roboto for permissive native measurement; authored slides/catalogs unchanged",
+    "candidateSHA256": "8ce76e355c54b47cf51384db03ff76f0e38fc071189480ab64ef147a0e165125"
+  },
+  "feature-quote": {
+    "origin": "qualified exact gallery-site example",
+    "originalDocumentSHA256": "dfdcf8420bc0d0da59a55a780d42b7639392957ee34ef60b53f4244a5aea58bb",
+    "cacheSHA256": "8eecfe7c084ec4e855753a0a2b34f360fcf4e8103c9b767cbe6c536f006b3be0",
+    "fontOverlay": "explicit Roboto for permissive native measurement; authored slides/catalogs unchanged",
+    "candidateSHA256": "8d6afbf76f8109e76355649fd7ce69a8171e84457f608c714b7329f60b574a82"
+  },
+  "feature-list": {
+    "origin": "qualified exact gallery-site example",
+    "originalDocumentSHA256": "5a33cc4061415ffcc42cf68bf610e2c030f4ee2abec4cb2460ff65c97ec807d9",
+    "cacheSHA256": "8eecfe7c084ec4e855753a0a2b34f360fcf4e8103c9b767cbe6c536f006b3be0",
+    "fontOverlay": "explicit Roboto for permissive native measurement; authored slides/catalogs unchanged",
+    "candidateSHA256": "b6e562fe04d5e2b7cfe40137b1fb6bac1e3b6f5090eb3ea0fc2af02498014367"
+  },
+  "feature-table": {
+    "origin": "qualified exact gallery-site example",
+    "originalDocumentSHA256": "62d1e399be68295632770018f3fa94100a21caca7e527cc486bedd732ac9797f",
+    "cacheSHA256": "8eecfe7c084ec4e855753a0a2b34f360fcf4e8103c9b767cbe6c536f006b3be0",
+    "fontOverlay": "explicit Roboto for permissive native measurement; authored slides/catalogs unchanged",
+    "candidateSHA256": "58335a082fadcbf58b0e5e327d7f2bc014c0d6aa6bf9a584cf06812937d0b637"
+  }
+}
