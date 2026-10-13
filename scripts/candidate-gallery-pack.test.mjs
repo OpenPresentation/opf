@@ -160,3 +160,23 @@ test('candidate binary normalization preserves valid spellings and rejects unsaf
  for(const spelling of ['./dist/index.js','dist/index.js'])assert.equal(normalizedCandidateBin(spelling),'dist/index.js');
  for(const spelling of [undefined,null,'','/dist/index.js','C:/dist/index.js','../dist/index.js','./../dist/index.js','dist/../index.js','dist/./index.js','dist//index.js','dist\\index.js','././dist/index.js',' dist/index.js','dist/index.js\n','dist/index.js\0'])assert.throws(()=>normalizedCandidateBin(spelling));
 });
+
+
+test('candidate doctor follows authenticated original core contracts for old, current, mixed and prerelease engines',()=>{
+ const names=['@openpresentation/opf-render','@openpresentation/opf-pptx'];
+ function fixture(versions,expected){
+  const context={graph:{artifacts:[{name:'@openpresentation/opf',originalManifest:{peerDependencies:Object.fromEntries(names.map(name=>[name,'^0.19.0']))}},...names.map((name,index)=>({name,version:versions[index]}))]}};
+  const doctor={packages:names.map((name,index)=>({name,installed:true,version:versions[index],wanted:'^0.19.0',ok:expected[index]})),formats:{json:{ready:true},yaml:{ready:true},md:{ready:true},svg:{ready:expected[0]},'pptx-import':{ready:expected[1]}}};
+  return {context,doctor};
+ }
+ for(const [versions,expected] of [[['0.18.2','0.18.2'],[false,false]],[['0.19.1','0.19.0'],[true,true]],[['0.19.1','0.18.2'],[true,false]],[['0.19.1-next.0','0.19.0'],[false,true]],[['0.20.0','0.19.0'],[false,true]]]){
+  const {context,doctor}=fixture(versions,expected);assertCandidateDoctor(context,doctor);
+  for(const field of ['installed','ok']){const bad=structuredClone(doctor);bad.packages[0][field]=!bad.packages[0][field];assert.throws(()=>assertCandidateDoctor(context,bad));}
+  for(const [field,value]of [['version','0.19.9'],['wanted','^0.18.0']]){const bad=structuredClone(doctor);bad.packages[0][field]=value;assert.throws(()=>assertCandidateDoctor(context,bad));}
+  for(const format of ['json','yaml','md','svg','pptx-import']){const bad=structuredClone(doctor);bad.formats[format].ready=!bad.formats[format].ready;assert.throws(()=>assertCandidateDoctor(context,bad));}
+  assert.throws(()=>assertCandidateDoctor(context,{...doctor,packages:[...doctor.packages,doctor.packages[0]]}),/exactly one/);
+ }
+ const {context,doctor}=fixture(['0.19.1','0.19.0'],[true,true]);
+ context.graph.artifacts[0].originalManifest.peerDependencies[names[0]]='*';assert.throws(()=>assertCandidateDoctor(context,doctor),/stable caret/);
+ context.graph.artifacts[0].originalManifest.peerDependencies[names[0]]='^0.19.0';context.graph.artifacts[1].version='unknown';assert.throws(()=>assertCandidateDoctor(context,doctor),/semantic version/);
+});
