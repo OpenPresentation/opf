@@ -76,3 +76,24 @@ The new `text-comparison.json` is written once, preserving existing evidence.
 Font selection, actual baselines and raster equivalence remain unmeasured, and
 `nativeAcceptance` remains false even when this comparison passes. It never opens
 Office or regenerates the suite.
+
+## Verify the native list-description edit
+
+Generate `list-description-native-edit` with the reviewed list-role recovery
+runtime and the worker supporting `set-text-style`. After its bounded Windows
+save/reopen run, use the exact suite and installed consumer:
+
+```sh
+node scripts/native-acceptance/compare-list-edit.mjs --suite /path/to/suite --output /path/to/list-case-output --consumer /path/to/installed-consumer
+```
+
+The comparator requires the tracked action, exact original document recovery,
+and the entire expected edited document. It independently checks the saved
+PowerPoint XML for the description's 36 pt red text, the worker's immediate
+style readback, unchanged words in all three phases, and saved/reopened archive
+identity. It writes a new `list-edit-comparison.json` without replacing evidence.
+
+This fixture stresses semantic edit preservation: 36 pt exceeds its original
+text-box height. A pass does not establish visual fit, physical glyph-font
+selection, baseline parity, or overall native release acceptance. Preserve any
+failure and investigate its actual cause before changing expectations.
