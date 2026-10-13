@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-13T22:37:54.110717+00:00",
+  "expectedHead": "3322297808e6acf6ef7ffdeca8aa4a4bb10bafde",
+  "reportedMerge": "756d7de9ddb7e5139a9b9caf0fd0b15b1d99b80e",
+  "pr": {
+    "number": 646,
+    "html_url": "https://github.com/OpenPresentation/opf/pull/646",
+    "state": "closed",
+    "merged": true,
+    "merged_at": "2026-10-13T22:34:20Z",
+    "merge_commit_sha": "756d7de9ddb7e5139a9b9caf0fd0b15b1d99b80e"
+  },
+  "calls": {
+    "metadata": 1,
+    "fetch": 1
+  },
+  "before": {
+    "head": "75f3f0d741c40176e160d08cebfb571699a17793",
+    "branch": "main",
+    "status": ""
+  },
+  "mergeTree": "aa967bd7f3e827026c8868354555a0c30967427d",
+  "reviewedTree": "aa967bd7f3e827026c8868354555a0c30967427d",
+  "treeEqual": true,
+  "treeDiff": "",
+  "remoteHead": "756d7de9ddb7e5139a9b9caf0fd0b15b1d99b80e",
+  "ancestry": {
+    "beforeInMerge": true,
+    "mergeInRemote": true,
+    "reviewedHeadInMerge": false
+  },
+  "after": {
+    "head": "756d7de9ddb7e5139a9b9caf0fd0b15b1d99b80e",
+    "branch": "main",
+    "status": ""
+  },
+  "verified": true
+}
