@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "scope": "Windows supervisor reported fresh installed graph and maintained suite preparation; actual Office edit not yet run",
+  "thread": "01a13110-7cf9-79b0-a2df-4ac95997c5a4",
+  "workspace": "C:/opf-work/candidate-list-450d6c40",
+  "toolingRevision": "43126dfb72c681915f358e71ba4481d7d515c3ad",
+  "pptxRevision": "450d6c4015f5649d328b5f8943963a545ab699da",
+  "cleanSources": true,
+  "installBuildPackConsumerExit": 0,
+  "suite": "C:/opf-work/native-suite-list-43126dfb-450d6c40-attempt01",
+  "suiteSha256": "e5a5beadc7325ebd920dc56fa966c39c398c20de478e977d862630b8fe352da9",
+  "cases": 55,
+  "filesVerified": 311,
+  "listCase": {
+    "id": "list-description-native-edit",
+    "slides": 1,
+    "inputSha256": "710bf16de927489bd12fec1e965b564bfa35c9137784e07d48e226a8aa6320c8",
+    "roundTripEqual": true,
+    "action": {
+      "op": "set-text-style",
+      "slideIndex": 1,
+      "shapeName": "OPF list slides.0.items line 1",
+      "fontSize": 36,
+      "color": "FF0000"
+    }
+  },
+  "validateOnly": {
+    "exit": 0,
+    "output": "C:/opf-work/native-validate-list-43126dfb-450d6c40-attempt01",
+    "runnerSha256": "5937768eff8dfd783d40bd8132a54483efa113429816a760ee77f2fc1d1c3261"
+  },
+  "fontEquivalence": "All seven complete face records and owned file hashes equal original suite; original journal unchanged",
+  "fontJournalSha256": "4acdec5b9faf2587ecc834b2d65115e56c79760609b9a0ceb0d9dc4c671dd15a",
+  "retainedRoundTripDifferences": 17,
+  "nativeAcceptance": false,
+  "dispatch": "Single bounded native instruction submitted; delivery tool unresolved, no duplicate sent."
+}
