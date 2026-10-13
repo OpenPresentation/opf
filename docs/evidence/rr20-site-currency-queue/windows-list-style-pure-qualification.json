@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "scope": "Windows supervisor reported maintained pure parser/mock execution; no Office",
+  "commit": "450d6c4015f5649d328b5f8943963a545ab699da",
+  "checkout": "C:/opf-work/native-style-450d6c40",
+  "clean": true,
+  "node": "24.21.0",
+  "powerShell": "5.1.26100.9444",
+  "command": "node test/native-furniture-style-controls.mjs",
+  "exit": 0,
+  "accepted": 6,
+  "rejected": 23,
+  "report": "C:/opf-work/native-style-450d6c40-output/opf-style-PRE297/report.json",
+  "reportSha256": "9a12a308b0213534970b77c75beae93e330b9591591c22f0440d61c3c9eef56c",
+  "codeHashes": {
+    "native-furniture-control.ps1": {
+      "macLf": "2efd1561d72a2957e1b8dd9482d19f71087f5010b4f5c4c8e5cf08b153550f83",
+      "windowsCrLf": "154f3251c4cd9829a322a9df7039a0a7bd7495f1326e5e8ea11ec92db6f2c8ca"
+    },
+    "native-furniture-harness-check.ps1": {
+      "macLf": "3b3eed6af99949bb1a2061993fcac8742983a7682673da33255449d175726b59",
+      "windowsCrLf": "19430fe9d88fa6da8f89f8f566a3d5f70c4aae03e863bcc171115f3af6374da7"
+    }
+  },
+  "verification": "Initial raw Mac/Windows hash comparison differed; supervisor verified difference is exactly LF versus CRLF checkout conversion. No runtime semantics change claimed.",
+  "nativeAcceptance": false
+}
