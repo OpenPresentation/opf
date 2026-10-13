@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-13T22:22:17.815917+00:00",
+  "expectedHead": "4f8a3551060d350d059ac4fdd29257c6d234fa12",
+  "reportedMerge": "56f01d0d9fc9bc611fc0b543c4c369ccbbe46beb",
+  "pr": {
+    "number": 253,
+    "html_url": "https://github.com/OpenPresentation/opf-pptx/pull/253",
+    "state": "closed",
+    "merged": true,
+    "merged_at": "2026-10-13T22:21:10Z",
+    "merge_commit_sha": "56f01d0d9fc9bc611fc0b543c4c369ccbbe46beb"
+  },
+  "calls": {
+    "metadata": 1,
+    "fetch": 1
+  },
+  "before": {
+    "head": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c",
+    "branch": "main",
+    "status": ""
+  },
+  "mergeTree": "e245206f2067ecf30ed4225af2b04d138d86d328",
+  "reviewedTree": "e245206f2067ecf30ed4225af2b04d138d86d328",
+  "treeEqual": true,
+  "treeDiff": "",
+  "remoteHead": "56f01d0d9fc9bc611fc0b543c4c369ccbbe46beb",
+  "ancestry": {
+    "beforeInMerge": true,
+    "mergeInRemote": true,
+    "reviewedHeadInMerge": false
+  },
+  "after": {
+    "head": "56f01d0d9fc9bc611fc0b543c4c369ccbbe46beb",
+    "branch": "main",
+    "status": ""
+  },
+  "verified": true
+}
