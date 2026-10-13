@@ -23,3 +23,9 @@ the converter's list-role recovery fix. Preview and export use the same prepared
 font handle. After native save/reopen, import must retain the edited line as the
 first entry's description, including its new styling; generation alone cannot
 establish that acceptance. Older sealed suites remain unchanged.
+
+This case is a semantic edit stress test, not a visual-fit example: the original
+description box is about 24 pt high, so a 36 pt edit can overflow it. The worker
+does not enlarge the box. If PowerPoint changes the shape geometry, source-role
+recovery may conservatively refuse the changed topology; report that result
+separately rather than treating source recovery as proof of visual fit.
