@@ -1,0 +1,152 @@
+{
+  "site": "Dev",
+  "sourceHead": "a8b8626df42a99e98e30420564cbd0599e94d6ce",
+  "sourceURL": "https://github.com/Data-Advantage/pptx-dev/commit/a8b8626df42a99e98e30420564cbd0599e94d6ce",
+  "url": "https://www.pptx.dev",
+  "workerVersion": "6c6f7936-7543-4a22-9581-ab9539db3c1a",
+  "originalHandoff": {
+    "originalReceiptName": "dev-production-final-handoff.json",
+    "sha256": "b6f888eeacbf2549286a2e38c628b9149177a64e3c0ca38a1dd72b0889696fbc"
+  },
+  "checks": {
+    "production-deploy": {
+      "command": [
+        "python3",
+        "opf-data-advantage-deploy.py",
+        "dev",
+        "deploy"
+      ],
+      "startedAt": "2026-10-14T20:40:38.220721+00:00",
+      "endedAt": "2026-10-14T20:41:20.314187+00:00",
+      "exitCode": 0,
+      "logName": "dev-production-deploy.log",
+      "logSha256": "63edd2430351f39839fdceec1b48aef224ad3bf7fc1fc5dcf441b13689a3a820",
+      "receiptName": "dev-production-deploy.json",
+      "receiptSha256": "597592efb84cb0b56c60b2ffde5b974f2aeda97375a6a9009a1e926462058961"
+    },
+    "production-public-proof": {
+      "command": [
+        "node",
+        "dev-production-public-proof.mjs"
+      ],
+      "startedAt": "2026-10-14T20:42:12.648936+00:00",
+      "endedAt": "2026-10-14T20:42:28.988423+00:00",
+      "exitCode": 0,
+      "logName": "dev-production-public-proof.log",
+      "logSha256": "d0b4a24d73e20ae94c7bbf4911bd5d3899514debd062f21c92b30a26ad6fcaa0",
+      "receiptName": "dev-production-public-proof.json",
+      "receiptSha256": "3b37d52946c88378a2044fcacd7345b23a88945c779c3c10a0288863726a08b4"
+    },
+    "production-affected-browser": {
+      "command": [
+        "env",
+        "OPF_APP_URL=https://www.pptx.dev",
+        "pnpm",
+        "exec",
+        "playwright",
+        "test",
+        "tests/e2e/author.spec.ts",
+        "--grep",
+        "Author imports registered default layout|anonymous Author canvas edits",
+        "--output",
+        "dev-production-focused-browser-output"
+      ],
+      "startedAt": "2026-10-14T20:42:15.520203+00:00",
+      "endedAt": "2026-10-14T20:42:27.917178+00:00",
+      "exitCode": 0,
+      "logName": "dev-production-affected-browser.log",
+      "logSha256": "26fe91c166b7e2c510fd94624480733aee38d9a11b3f914134536e1edc47085e",
+      "receiptName": "dev-production-affected-browser.json",
+      "receiptSha256": "cfa9080c39a95c943d9e881c6c098efc2eebb8b27ef1c1e26a7e238827d06096"
+    },
+    "production-manifest": {
+      "command": [
+        "node",
+        "dev-production-manifest.mjs"
+      ],
+      "startedAt": "2026-10-14T20:43:56.697861+00:00",
+      "endedAt": "2026-10-14T20:43:56.899384+00:00",
+      "exitCode": 0,
+      "logName": "dev-production-manifest.log",
+      "logSha256": "244f7e2644742c13cac6467e564ae69cff7886bc4c15dfda789e369ee338875a",
+      "receiptName": "dev-production-manifest.json",
+      "receiptSha256": "18c10f417756fffc584755179abebd9a34d9f1b0e0bdd31353c27d95519a697d"
+    }
+  },
+  "liveVerification": {
+    "canonicalWwwAndApiHealthCommit": "a8b8626df42a99e98e30420564cbd0599e94d6ce",
+    "healthStatus": 200,
+    "authorStatus": 200,
+    "authorEditorMounted": true,
+    "signInStatus": 200,
+    "clerkSignInMounted": true,
+    "allThreePreviousPublicBuildValuesPreserved": true,
+    "developmentClerkInstancePreserved": true,
+    "focusedAffectedBrowserPassed": 2,
+    "importDefaultCatalogReferencesEditUndoRedoExportReimport": true,
+    "masterName": "pptx.gallery",
+    "namedThemeAndDeckTitlePreserved": true,
+    "rendererFontManifestExact": true,
+    "rendererVersion": "0.20.0",
+    "representativeRobotoFaceExact": true,
+    "loggedInUserVerified": false,
+    "backendMutation": false,
+    "rollbackNeeded": false
+  },
+  "liveBrowserArtifacts": {
+    "dev-production-focused-browser-output/.last-run.json": {
+      "bytes": 45,
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
+    },
+    "dev-production-focused-browser-output/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author-export.pptx": {
+      "bytes": 75998,
+      "sha256": "0717ba9a1b900e6f2879ae5b553f84011d905b7bc9677b917fb6506f2ce79985"
+    },
+    "dev-production-focused-browser-output/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author.png": {
+      "bytes": 111746,
+      "sha256": "cec42c68e53a221463423ee4b40758d53b3ea1b598d92a3bac99b5930d156cc8"
+    },
+    "dev-production-focused-browser-output/author-Author-imports-regi-abc9c--missing-catalog-diagnostic/catalog-import-controls.json": {
+      "bytes": 3942,
+      "sha256": "5c3c134c131d1b5ddf13cb20c73aeb2a5000bbf9a69f52989059ac8b8575c18a"
+    },
+    "dev-production-focused-browser-output/author-Author-imports-regi-abc9c--missing-catalog-diagnostic/unembedded-catalog-import.pptx": {
+      "bytes": 73731,
+      "sha256": "9c935b9053eb285dd9d03d30e9c76202bdd72b9886543f3348a56fcba88741f2"
+    }
+  },
+  "actualMergedPlanSource": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+  "planSha256": "83b7c9e01ab6446f01d12d54e7e9ab1408fc37cf2b90f330ae2a990b11307493",
+  "authoritySha256": "c12b67d85e5753de67b4821a45e0cb27c89ddbe0b31fe4412bb6730752eaaa5c",
+  "existingPR": {
+    "url": "https://github.com/Data-Advantage/pptx-dev/pull/128",
+    "headBranch": "codex/rr-84-pptx-dev-019",
+    "publishedExactCandidate": true,
+    "readyForReview": true,
+    "merge": "blocked: hosted jobs never executed due account billing/spending restriction"
+  },
+  "retainedWholeSiteProof": {
+    "head": "25b7c43653bcc623f1710bde3e34c7a37d274730",
+    "unitPassed": 976,
+    "existingUnitSkipped": 1,
+    "browserPassed": 59,
+    "newFullRepeat": false
+  },
+  "scopeLimits": [
+    "No actual signed-in-user operation, native Office/global font acceptance or checklist closure.",
+    "Normal hosted source merge requires executed checks after owner billing resolves. No force merge or failed-job retries."
+  ],
+  "schemaSourcePin": "0b6141e5a90c037286b1fbce1862ab1bcc1ad34b",
+  "preservedFailures": {
+    "localAuthenticatedStandalonePreview": "Both127.0.0.1 and::1 previews failedlocalhost self-proxy/ECONNRESET before editor; actual Worker routes and affected flows pass. No auth/proxy code or assertion bypass.",
+    "unsupportedLegacyApiMasterAssertions": "New assertions on unchanged independent lib/generator export engine failed; restoredbyteexact test. SeparatelegacyAPIbrandingfollowup remains; no engine switch/ZIPrewrite.",
+    "setupAndShim": "Original setupDNS andwrongmanagerpath failures retained."
+  },
+  "rootLiveProbe": {
+    "result": "PASS",
+    "liveCommit": "a8b8626df42a99e98e30420564cbd0599e94d6ce",
+    "healthSha256": "f85356f97a3c6ffcaa24d11aa263c2b538924ecdb318d02d14ed2e61c1b64a15",
+    "fontManifestSha256": "e3307f004c7d5c66b40adef230963c5ceff4a579f6a278a0c697ef48e77c735d",
+    "noSignedInSessionClaim": true
+  }
+}

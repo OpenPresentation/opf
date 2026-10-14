@@ -1,0 +1,665 @@
+{
+  "scope": "Current portable production/readiness proposal based on actual9fade, awaiting independent/root review. Historical local scratch input hashes stay as provenance only; current facts and accepted receipt outcomes are durable in adjacent repository evidence. No checkpoint closure, privateCI/default acceptance or new native/runtime execution.",
+  "asOf": "2026-10-14T20:50:21.312420+00:00",
+  "historicalCount": "32/40 (80%), original40criteria and checkbox states unchanged",
+  "packageAuthority": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.20.1",
+      "gitHead": "22664e18ea657db4e377b84997f2e73bf6cd738b"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.20.0",
+      "gitHead": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.20.1",
+      "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.20.0",
+      "gitHead": "671b04ee3f6b228338c0eb3d6d7453f807b28837"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.20.0",
+      "gitHead": "41e3d648f8ea8c391cac065fcadef1d79f2000cf"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "gitHead": "940633a92c0c7d3339e59447d08ba6382ef12410"
+    }
+  ],
+  "consumerScope": {
+    "originalVerified20_0Consumer": "Preserved historical plan371/authority78 consumer passed Node/API/CLI and two code browser suites with14 assertions; eight other harnesses were constructed only. No native/global proof. Prior draft no-browser wording is superseded by root-reviewed command-boundary correction.",
+    "successor20_1Consumer": "Strict all-six package version/integrity/ref/contained-path preparation passed and affected published-matrix consumer passed. Full builder-consumer factory terminal1 from absent adjacent Editor Playwright tooling is preserved; no full-pipeline success claimed. Maintained showcase builder passed using genuine installed consumer."
+  },
+  "nativeScope": {
+    "selected": 17,
+    "uiOperations": 4,
+    "unexecuted": 41,
+    "total": 58,
+    "globalAcceptance": false,
+    "observedRR81CriteriaAccepted": true,
+    "fixedOfflineRepairAccepted": true,
+    "T24T31Eligibility": "SCOPED completion review pending independent existinggenuine replay committedblobreview",
+    "furtherOfficeRequiredForAcceptedScope": false,
+    "all58NotAddedToOriginalCriterion": true,
+    "globalFontGlyphBaselineRasterFullCatalogNotAddedToOriginalCriterion": true
+  },
+  "activeNativeAssignment": "Independent committedblob/hash review of already reported genuine same-four savedarchive replay, after authorized export; no additional Office/font execution",
+  "qualifiedSites": {
+    "devRuntime": "25b7c43653bcc623f1710bde3e34c7a37d274730",
+    "devInterveningDocs": "f04b015e6beeb27a24474ecad0f750b9cdb05354",
+    "devCurrentSource": "a8b8626df42a99e98e30420564cbd0599e94d6ce",
+    "galleryRuntime": "9810fd7a098537fcd26692c0f740d21d1ba3252c",
+    "galleryCurrentSource": "55db2fe4dff8168f04dc7d683f0472b0f057f2b4",
+    "mainSource": "8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+    "mainBrowserPassed": 79,
+    "mainBrowserSkipped": 0,
+    "mainCFbuildAndLimitsPassed": true,
+    "mainCFPreviewAndFinalHandoff": "Successor scoped normal build/CF packaging and5 affected local browser cases passed; actual deployment exited0; public proof is separate below. Prior c45 full79/CF2/228 proof remains attributed to c45, not repeated or relabelled.",
+    "allThreeLocalComplete": true,
+    "allThreeRootReviewed": true,
+    "mainCFDryRunPassed": true,
+    "mainCFFocusedBrowserPassed": 2,
+    "mainCFHttpCorrectedChecks": 228,
+    "mainPriorFullRuntime": "c45e29c6bf3ddf9c92f4fbe93dc3076ca1410f67",
+    "mainBrowserHead": "c45e29c6bf3ddf9c92f4fbe93dc3076ca1410f67",
+    "mainBrowser79NotRepeatedAtSuccessor": true
+  },
+  "inputs": [
+    {
+      "path": "/private/tmp/rr20-open-checkpoint-audit-61/audit.json",
+      "sha256": "f0651f63687f0726f4130b3c0f01e00400aeaaf4bf3f8f5f7e67edd014e7caf1"
+    },
+    {
+      "path": "/private/tmp/rr20-open-checkpoint-audit-61/later-gallery-local-qualification.json",
+      "sha256": "2067339199c6901a3be19623d7c80778cb69cf36dd09afecc24fb91238154ccb"
+    },
+    {
+      "path": "/private/tmp/rr20-dev-site-61-qualification/final-local-handoff.json",
+      "sha256": "51b38c749b25c851af247d68eb0d94f2189dce783e4fb5a8d181d4e25dac9281"
+    },
+    {
+      "path": "/private/tmp/rr20-gallery-site-61-qualification/final-local-handoff.json",
+      "sha256": "d700c0eb550ac94b72fe74ac226c0c345fd08de1ce1fe062ab10aa8ef2f35d27"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/main-adoption-current-06.json",
+      "sha256": "4d90278711989c8a86fa621cb87176fa1c364fe11ee6ceeba39509200e0fd5cb"
+    },
+    {
+      "path": "/private/tmp/rr20-final-registry-61/opf/docs/evidence/rr-20-registry-current-2026-10-14/verified-registry-authority.json",
+      "sha256": "78ea003cc6bca9ef1f60d238339822f390506bbb6476058bcb815d19b16f8421"
+    },
+    {
+      "path": "/private/tmp/rr20-final-registry-61/opf/docs/evidence/rr-20-registry-current-2026-10-14/registry-qualification.json",
+      "sha256": "42f66fea092dc706115a5d5d52d89302c561446e6ea6e67961feefa8d8378a85"
+    },
+    {
+      "path": "/private/tmp/rr20-primary-sync-61/receipt.json",
+      "sha256": "1820343696698ccd695ac64f7b10c2120c41206c57d689cc8cbc3d25819e204b"
+    },
+    {
+      "path": "/private/tmp/rr20-pptx260-actual-merge-proof-61.json",
+      "sha256": "3f6b73f5638effaca152fa7caa73447899ddee2a5afc8c4e37af6aa65fdbcd42"
+    },
+    {
+      "path": "/private/tmp/rr20-core666-actual-merge-proof-61.json",
+      "sha256": "e8b4d3efa2b55f90a04a32ad8264e66f093c9130dbe4c24f18f67ee81ea99f7d"
+    },
+    {
+      "path": "/private/tmp/rr20-editor170-actual-merge-proof-61.json",
+      "sha256": "0c3f384be8b068e4404c16fc471e8802caf990eba77e1a171cce39a8c0a331ce"
+    },
+    {
+      "path": "/private/tmp/rr81-pptx0201-prep-execute-61/actual-merge-proof.json",
+      "sha256": "42c64416be066cb829a0d637f6698b9c72888b519d6b0500bcfff25a3ba1cd58"
+    },
+    {
+      "path": "/private/tmp/rr20-final-source-bookkeeping-61/final-handoff.json",
+      "sha256": "4707c04908ef906e0b2af86a549db04bfa11f1a528e8d2e8f3a61b6a0a260162"
+    },
+    {
+      "path": "/private/tmp/rr20-final-source-bookkeeping-61/reviewed-attribution.json",
+      "sha256": "7fdf2904a94e06e0d48ffa31e84864c61fb739a80bc4ba4d026214e2dbedf517"
+    },
+    {
+      "path": "/private/tmp/rr20-main-description-review-61/served-proof.json",
+      "sha256": "52a0889906dc868563f2dca1da266ed8b818da1b89a6c47ea300865259ecc8d9"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/main-actual-source20-full-browser-01.json",
+      "sha256": "40d333d6b5c653e7665fbf6e9317d221b52b9042b7a3dbaec6ba2fb29348e73e"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/main-actual-merged-source20-normal-build-01.json",
+      "sha256": "a60de698140b4a102f91bf4958c54c85b27e953009b1ab93126a5edf2a9abbbd"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/main-actual-source20-cf-build-01.json",
+      "sha256": "d967bdcc36f1adf532bc8f6e2f94ad9610bb6e5765a4383a5f905dd562931f05"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/main-actual-source20-cf-limits-01.json",
+      "sha256": "032d907804e3b72dee3bd923062da97017b86e5c877603ff037a76948c0c547c"
+    },
+    {
+      "path": "/private/tmp/rr20-final-source-bookkeeping-root-review-20261014.json",
+      "sha256": "2bf1b18c922a568e64ff611ea592b09463971d18385db0a4a9fff14e67a9a8c7"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/original-eight-criteria-reconciliation.json",
+      "sha256": "068a66e097a564406a4709c6d22d399054dc1a9ec7416ad27d936717da287073"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/original-eight-criteria-reconciliation.md",
+      "sha256": "8ca74bba28464a93713945307364a3d8d7169ce868242c44c1b36dc01cb2d1aa"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/main-final-local-handoff-current20-04.json",
+      "sha256": "7be847ced1f9ef4ae5c96eca3ab97e2c7cc0fcc3ddfe8855c34d4f7c5682f02a"
+    },
+    {
+      "path": "/private/tmp/rr20-main-full-handoff-root-review-20261014.json",
+      "sha256": "5db92bd4bbcfafa6e0d247e89ae0db2c2351f7eeb4486fe183bcdd1fb44c4ccb"
+    },
+    {
+      "path": "/private/tmp/rr20-main-full-handoff-root-review-addendum-20261014.json",
+      "sha256": "b471c85d981e6ee2648a5dc22106ac1eba94d66e3b30dcdb216e86a69e39c5ae"
+    },
+    {
+      "path": "/private/tmp/rr20-main-cf-root-review-20261014.json",
+      "sha256": "2a7fe25217ccb98b7050bd5ffeca32582804fd0d5b7c4f05c15981e86c8d90ff"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/public-site-status-probe-20261014.json",
+      "sha256": "50bef55159aec330a34c73937e84d8064a9b2778a05f46788a2228be78620944"
+    },
+    {
+      "path": "/private/tmp/rr20-windows-summary-review-61/consistency-proof.json",
+      "sha256": "0c5dd2586afe4d26ce17a38b5b7c4683529dea83f9fdfeb1e1c9437e935dbb24"
+    },
+    {
+      "path": "/private/tmp/rr81-pptx0201-publication-61/receipt.json",
+      "sha256": "db88d195bc0189a1e536f7f4f065332ca9d380d8b8f9021ed2038d1def70268a"
+    },
+    {
+      "path": "/private/tmp/rr81-pptx0201-root-publication-review-20261014.json",
+      "sha256": "4cdfd7a8eaef836f6c9e29cc11c676c279472ea764d6bbfecfac9f5b34d275ef"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/main-successor0201-production-final-handoff-02.json",
+      "sha256": "6097945129541c8d6c74102cc099781981f633b3292af53bb7c47f452bd66e5f"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/main-production-status-20261014.md",
+      "sha256": "4355516724e1eb9d88eeb70f396487ca1829f49360b0cb8d7b7f90a9fa82451a"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/main-pr103-ci-account-blocker-root-attributed-01.json",
+      "sha256": "1dd55cc10b5dab970bfc3968af364cf0eac60bb9499e3ad5e33f988b1af51760"
+    },
+    {
+      "path": "/private/tmp/rr20-production-deployment-20261014/main-root-live-probe.json",
+      "sha256": "fdd560b07a2659ed7ab1e1ac553ab4307b3c5030c24b2e620534e014610e0c35"
+    },
+    {
+      "path": "/private/tmp/rr81-pptx0201-plan-61/actual-core667-merge-proof.json",
+      "sha256": "da83916327f78b6b4177197ea424b5e34c53e9790adfeed10085a8f4f7ce5914"
+    },
+    {
+      "path": "/private/tmp/rr81-pptx0201-plan-61/successor-builder-consumer-handoff.json",
+      "sha256": "06047a07df1a3bfc5c4cccae67f2c5ff3343997ff69635271abe42aec17d4e23"
+    },
+    {
+      "path": "/private/tmp/rr20-production-deployment-20261014/main-ci-no-start-billing-proof.json",
+      "sha256": "ecd2b6b52c94effc68f03bf66434bdb94e3befdccdf3c9d529d96914d09491cb"
+    },
+    {
+      "path": "/private/tmp/rr20-main-gallery-local-61/main-successor0201-production-final-handoff-03.json",
+      "sha256": "45ffaa5c28c5d793981c7a262fe254fdd31b60ee42fb522029ab5209fbb7688b"
+    },
+    {
+      "path": "/private/tmp/rr81-dev-gallery-adoption-61/gallery-production-final-handoff.json",
+      "sha256": "71cd74d91ac0ab577d3e096d53148861cec70a7361b92653faa2cd6365a4af9a"
+    },
+    {
+      "path": "/private/tmp/rr81-dev-gallery-adoption-61/dev-production-final-handoff.json",
+      "sha256": "b6f888eeacbf2549286a2e38c628b9149177a64e3c0ca38a1dd72b0889696fbc"
+    },
+    {
+      "path": "/private/tmp/rr20-production-deployment-20261014/dev-root-live-probe.json",
+      "sha256": "80bfd4a35b495a753209cf910bbedea003ff87d9585649c34c334490d462cb7a"
+    }
+  ],
+  "unresolvedCopy": [
+    "Published Presentation.filename description still says removed opf render/export; current CLI uses opf convert. Preserve source snapshot bytes until an independently reviewed source correction."
+  ],
+  "noTestsNetworkOrRemoteWrites": true,
+  "sourceCopyEvidence": {
+    "path": "/private/tmp/opf-areas-array-dev-site/node_modules/@openpresentation/opf/dist/spec/schemas/opf.schema.json",
+    "sha256": "aef7115bee726d011449b61beff5fc6245e4205e7f76d16a5bb31f8b9a543d38",
+    "field": "Presentation.filename",
+    "description": "Optional base filename for exports (without extension). The opf CLI (render, export) and the editor strip a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and append the target format's extension. When omitted, they slugify name; with no usable name the CLI uses the input file name and the editor uses 'presentation'. See /docs/opf for full validation rules.",
+    "resolutionClaimed": false
+  },
+  "previousLocalDraft": {
+    "commit": "ef50f038de519d1814aea52fe328d5a3264f9302",
+    "preservedBranch": "codex/rr-20-current-readiness-update",
+    "snapshotSha256": "5df0f449e845b412a1ee26d7baf3d12410c4655a8acce9c7cfd28fb38029bf3d",
+    "scope": "Initial queued666/Main-unqualified local snapshot, preserved in Git history; superseded current facts below"
+  },
+  "actualMergedSource": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+  "sourceEnhancementStates": {
+    "core666ActualMerge": "0b6141e5a90c037286b1fbce1862ab1bcc1ad34b",
+    "editor170ActualMerge": "2ac0268359f48123031ef537fcc0c31d7c41a1df",
+    "PPTX260ActualMerge": "f2637951b77763bfeb45d5cd1012d12f7763f952",
+    "PPTX261PrepActualMerge": "9690abd12af8d7a4d6f29a28709517f0b6569301",
+    "PPTX261ReviewedPrep": "58512575190fffa97767cb599402c1fdd050942a",
+    "PPTX0201CommitGates": "Genuine publication/independent verification and root review passed; approved successor plan83b/authorityc12 merged in667. Main adopted/deployed PPTX20.1; other-site successor hosted acceptance awaits receipts.",
+    "publishedEditorExample": "671b04ee3f6b228338c0eb3d6d7453f807b28837",
+    "publishedPPTX": "9690abd12af8d7a4d6f29a28709517f0b6569301",
+    "core667ActualMerge": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3"
+  },
+  "earlierSuppliedPendingSnapshot": {
+    "core666ReviewedCandidate": "7def0182f7f65504f21ffc5b32343ca9484b4fa2",
+    "core666PRchecks": "24 green, queued; actual merge pending",
+    "editor170ActualMerge": "2ac (abbreviated root receipt; no full SHA invented)",
+    "PPTX260ActualMerge": "f2637951b77763bfeb45d5cd1012d12f7763f952",
+    "PPTX261PrepCandidate": "585 (abbreviated root receipt; proper gates pending)",
+    "publishedEditorExample": "671b04ee3f6b228338c0eb3d6d7453f807b28837",
+    "publishedPPTX": "0e2ea4982c4bb1280f22763411e681fe0786f4fc"
+  },
+  "metadataAttribution": {
+    "dev": {
+      "qualifiedRuntimeHead": "25b7c43653bcc623f1710bde3e34c7a37d274730",
+      "currentSourceHead": "f22d7edba38474aec8a083992a8d868f9132aaa5",
+      "qualifiedRuntimeToCurrentSourceChanges": [
+        "docs/understand-this-deck.md",
+        "opf-reference-layer-pins.json"
+      ],
+      "steps": [
+        {
+          "baseline": "25b7c43653bcc623f1710bde3e34c7a37d274730",
+          "head": "f04b015e6beeb27a24474ecad0f750b9cdb05354",
+          "scope": "Documentation only; two rollout paragraphs corrected, no runtime change",
+          "paths": [
+            "docs/understand-this-deck.md"
+          ]
+        },
+        {
+          "baseline": "f04b015e6beeb27a24474ecad0f750b9cdb05354",
+          "head": "f22d7edba38474aec8a083992a8d868f9132aaa5",
+          "scope": "Immutable source provenance only; opfSourceRef226 to actual0b",
+          "paths": [
+            "opf-reference-layer-pins.json"
+          ]
+        }
+      ],
+      "allOtherTrackedBytesEqualQualifiedRuntime": true,
+      "compiledArtifactsNotRebuiltAfterMetadata": true,
+      "artifactAttribution": "Preserved compiled builds/full-browser/native-false evidence stay qualified-runtime head; current source includes later docs/provenance-only edits, not a new full qualification"
+    },
+    "gallery": {
+      "qualifiedRuntimeHead": "9810fd7a098537fcd26692c0f740d21d1ba3252c",
+      "currentSourceHead": "db669babf62b0e6b7140bf93e3b47f34bd252a42",
+      "qualifiedRuntimeToCurrentSourceChanges": [
+        "data/preview-font-replacements.json",
+        "data/preview-fonts.json"
+      ],
+      "steps": [
+        {
+          "baseline": "9810fd7a098537fcd26692c0f740d21d1ba3252c",
+          "head": "db669babf62b0e6b7140bf93e3b47f34bd252a42",
+          "scope": "Only policy.commit metadata changed through maintained generator; font/licence/digests/records unchanged",
+          "paths": [
+            "data/preview-font-replacements.json",
+            "data/preview-fonts.json"
+          ]
+        }
+      ],
+      "allOtherTrackedBytesEqualQualifiedRuntime": true,
+      "compiledArtifactsNotRebuiltAfterMetadata": true,
+      "artifactAttribution": "Preserved compiled builds/full-browser/native-false evidence stay qualified-runtime head; current source includes later docs/provenance-only edits, not a new full qualification"
+    }
+  },
+  "reportedWindowsRegistryReplay": {
+    "source": "Supervisor message only; no Mac local committed report independently reviewed yet",
+    "sealedLocalCommitReported": "1adf11a1c9a16e8946340cff7c751b711b90e59c",
+    "base": "0b6141e5a90c037286b1fbce1862ab1bcc1ad34b",
+    "remoteAvailability": "Automatic approval review rejected push before execution; exact12metadata export authorization requested by root, pending; no remote commit/fetch inferred",
+    "driverExitCode": 0,
+    "networkAttempts": 0,
+    "sameFourOriginalArchives": true,
+    "driverReportSha256Reported": "1e44ac1551bdb80e7f3fd6bc0fd5a5904889191e6ccce9b270d4457e8cefca3b",
+    "runtimeIdentitiesSha256Reported": "d713d752b92bcc9d8a92e0c44300031700f2dca3d7977f797a9dca6944b3ab24",
+    "consumerLockSha256Reported": "62e92042e64269303f230999a27220c5fb00f5a023312828587bb4e62f6a4437",
+    "fitDelta": "image-only fit stretch delta retained; route equality/input identities still subject to root/independent committed-blob review",
+    "rootReviewAndSealing": "pending",
+    "independentlyReviewedFiles": false,
+    "nativeAcceptance": false,
+    "registryBroadAcceptance": false,
+    "rejectionReason": "Direct user authorization for exporting the exact metadata payload to GitHub was not established",
+    "noFetchOrWorkaround": true
+  },
+  "rootMetadataReview": {
+    "status": "PASS",
+    "qualifiedArtifactAttribution": "Dev25b7/Gallery9810 retained",
+    "initialReviewerFailure": "Root first expected226 as priorGallerypolicy ref; corrected from exactd308\u21920b diff; retained reviewer failure, not runtime failure"
+  },
+  "previousScopeCorrectionBaseline": {
+    "head": "e97b9b86bac3b3629f6d98838b7b1f838cc0c75d",
+    "snapshotSha256": "cfcab97161188c6b7940af427a64c1be5a69e3f788ac93edee90a369792ed9a0",
+    "scope": "Prior exact draft and active waiting language preserved in Git history; current notes corrected with root-approved original-criterion audit"
+  },
+  "originalCriteriaScopeCorrection": {
+    "rootAccepted": true,
+    "checkpointChanges": false,
+    "literal40criteriaAndStatesPreserved": true,
+    "reconciliationJsonSha256": "068a66e097a564406a4709c6d22d399054dc1a9ec7416ad27d936717da287073",
+    "reconciliationMarkdownSha256": "8ca74bba28464a93713945307364a3d8d7169ce868242c44c1b36dc01cb2d1aa",
+    "eligibility": {
+      "T14": "open: all three local and successor production adoptions accepted; original local-and-CI/default integration still account-blocked before job execution. Deployment is not a literal T14 requirement.",
+      "T16": "open: Gallery successor is deployed/public-verified and prior local fixture complete; actual default/applicable CI and prescribed order/supersession/evidence-link/tracker reconciliation remain, without a new native/full-catalog requirement.",
+      "T18": "open combined: verified publication/authority/core667 and all three served adoptions complete; applicable site CI/default and exact scoped-native committed-evidence/final-records reconciliation remain.",
+      "T24": "eligible for scopedcompletion review; acceptedRR81 observed scope, final published samefour committed evidence review pending; no automatic58case Office requirement",
+      "T29": "open combined: all three reviewed sources deployed/public-verified; default/applicable CI integration remains account-blocked before code execution.",
+      "T31": "eligible for scopedcompletion review asT24; full58/global are broader limits, not automatically added criteria",
+      "T39": "served subrequirement complete: all three latest genuine graphs deployed/public-verified; literal validated-adoption merge clause remains account-blocked. Preserve unchecked until exact final acceptance review.",
+      "T40": "open final audit: actual667 successor graph and all three public handoffs complete; account-blocked site CI/default, existing Windows committed evidence, final in-scope PR/issue/T16/records and owner note remain."
+    },
+    "sourcePlanAndAuthorityUnchanged": true,
+    "allLatestRequiredPackagesPublished": true,
+    "separateGraphAdoptionDefaultCIAndDeploymentStillHeld": false,
+    "sourcePublicationWaitResolved": true,
+    "currentBoundary": "Human revoked deployment hold; all three approved successor sources deployed/public-verified. Applicable GitHub CI jobs never started due proven account billing/spending restriction; no forced merge, checkbox closure or broader native/signed-in/backend acceptance."
+  },
+  "separateVerifiedPPTXPatch": {
+    "name": "@openpresentation/opf-pptx",
+    "version": "0.20.1",
+    "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301",
+    "integrity": "sha512-I85PuU42ELSQ1LmilNNKTAAJgCntI2JFJDfL/LkkN356CP+6npwCMGC1k343nt4HPVOpZwLqVTMkok4S2DD4cA==",
+    "publishedAt": "2026-10-14T19:07:55.155Z",
+    "trustedWorkflow": "https://github.com/OpenPresentation/opf-pptx/actions/runs/38619385113/attempts/1",
+    "publisherExit": 0,
+    "independentVerifierExit": 0,
+    "canonicalChecksPassed": 10,
+    "rootReview": "PASS",
+    "siteAdoption": true,
+    "currentQualifiedConsumerAndSiteGraph": "Main actual deployed successor plan83b/authorityc12 withPPTX20.1. Prior371/78/PPTX20.0 evidence retained; no implication other-site hosted acceptance.",
+    "newGraphAndExample2acReview": "Successor proposal root-reviewed and core667 actually merged; standalone example2ac adoption belongs Gallery lane, notMain.",
+    "nativeMenuObservation": false
+  },
+  "previousMainProductionUpdateBaseline": {
+    "head": "c083c4c21daaee24736bbc3a6e592fdce632871f",
+    "snapshotSha256": "268e94da077a73698c4bd5928171b3a38a8ec37b4b0e766dba2112f179015cca",
+    "scope": "Prior local-only snapshot is preserved in Git history; updated Main deployment facts below do not change historical criterion states."
+  },
+  "priorConsumerScope": {
+    "qualificationRuns": 1,
+    "exitCode": 0,
+    "allSixAuthorityIntegritiesMatched": true,
+    "sourcePackageOverrides": false,
+    "browserExecution": false,
+    "browserHarnessConstructionOnly": true,
+    "nativeOfficeExecution": false,
+    "siteDeployment": false
+  },
+  "mainProduction": {
+    "deployed": true,
+    "rootLiveProbeAccepted": true,
+    "sourceHead": "8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+    "workerVersion": "615cef43-de9b-405e-9e2c-adb3be1f14c4",
+    "deployedAt": "2026-10-14T20:19:20.086570+00:00",
+    "deployExit": 0,
+    "url": "https://www.openpresentation.org",
+    "sourceRef": "654a5ae3e1d8bdf76162ffad8c2d5c4e1a1ec9e3",
+    "actualCoreMerge": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+    "sourceRefTreePatchPlanAuthorityEqualActualMerge": true,
+    "sourcePinMutatedAfterDeployment": false,
+    "publicChecks": "11 exact page/artifact checks; complete actual-source schema prose/enums; history and hero downloads; unchanged4lesson/19step real-click journey; production-native browser PNG/SVG/PDF/PPTX flow; independently checked two saved public PPTX masters and same-origin/owned-blob traces.",
+    "firstBrowserBatch": "4PASS/3FAIL retained: whole-tutorial30s budget and two localhost-only test origin assertions; original outcomes not relabelled. Later unchanged120s tutorial and native-production journey pass.",
+    "exampleRef": "Main own React integration uses genuine published editor20.0; does not consume standalone Gallery exampleRefs2ac.",
+    "ci": {
+      "at": "2026-10-14T20:36:20.979288+00:00",
+      "provenance": "Read sealed root exact connector/check-annotation response proof; no independent network retrieval by this agent.",
+      "head": "8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+      "run": 38630702325,
+      "checks": [
+        {
+          "id": 116081269254,
+          "annotationCount": 1,
+          "annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings",
+          "steps": [],
+          "logsAvailable": false
+        },
+        {
+          "id": 116081268473,
+          "annotationCount": 1,
+          "annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings",
+          "steps": [],
+          "logsAvailable": false
+        }
+      ],
+      "cause": "GitHub account billing/spending limit prevented jobs from starting",
+      "codeRan": false,
+      "sourceOrBuildFailure": false,
+      "ciGreenClaimed": false,
+      "ownerAction": "Resolve GitHub Billing & plans account payments or spending limit, then canonical owner schedules applicable checks. No source fix or blind rerun required.",
+      "exactRootResponseProof": {
+        "path": "/private/tmp/rr20-production-deployment-20261014/main-ci-no-start-billing-proof.json",
+        "sha256": "ecd2b6b52c94effc68f03bf66434bdb94e3befdccdf3c9d529d96914d09491cb"
+      }
+    },
+    "siteDefaultMerged": false,
+    "allHostedSitesAccepted": true
+  },
+  "otherSiteHostedAcceptance": {
+    "dev": true,
+    "gallery": true,
+    "scope": "Main, Gallery and Dev actual root-accepted deployment/public proof receipts are linked. This does not accept applicable CI/default source merges, signed-in-user/backend operation, native/global evidence or checklist closure."
+  },
+  "galleryProduction": {
+    "sourceHead": "55db2fe4dff8168f04dc7d683f0472b0f057f2b4",
+    "workerVersion": "99693307-3b24-4155-b9d7-1a29ca5597f8",
+    "deployExitCode": 0,
+    "url": "https://www.pptx.gallery",
+    "actualMergedPlanSource": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+    "reviewedBuilderSource": "654a5ae3e1d8bdf76162ffad8c2d5c4e1a1ec9e3",
+    "planSha256": "83b7c9e01ab6446f01d12d54e7e9ab1408fc37cf2b90f330ae2a990b11307493",
+    "authoritySha256": "c12b67d85e5753de67b4821a45e0cb27c89ddbe0b31fe4412bb6730752eaaa5c",
+    "editorExample": "2ac0268359f48123031ef537fcc0c31d7c41a1df",
+    "liveVerification": {
+      "manifestExact": true,
+      "referencedFileHashes": 45,
+      "focusedBrowserPassed": 6,
+      "sourceApply60HiddenOrderUndoRedoAndDownload": true,
+      "observedApplyMs": 1268,
+      "editablePptxMaster": "pptx.gallery",
+      "namedThemeAndDeckNamePreserved": true,
+      "importEditUndoRedoExportReimport": true,
+      "fragmentHandoff": true,
+      "metricsLayoutBuilderHandoff": true,
+      "retiredRedirectAndJsonNegotiation": true,
+      "mediaExistingPngSvgManifestBytes": true,
+      "mediaGetHead200AndMissing404": true
+    },
+    "existingPR": {
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/126",
+      "headBranch": "codex/rr-84-gallery-019",
+      "publishedExactCandidate": true,
+      "readyForReview": true,
+      "merge": "blocked: hosted jobs never executed due account billing/spending restriction",
+      "stackPreserved": [
+        127,
+        125
+      ]
+    },
+    "retainedWholeSiteProof": {
+      "head": "9810fd7a098537fcd26692c0f740d21d1ba3252c",
+      "unit": 606,
+      "browser": 124,
+      "newFullRepeat": false
+    },
+    "initialMediaProbeFailure": "New probe incorrectly converted absent compressed SVG HEAD content-length to0; diagnostic proves br-compressed SVG200/weakETag/length absent, PNG200/exactlength, exactGET bytes both. Original assertionfailure retained; no source change.",
+    "scopeLimits": [
+      "No native Office/global font acceptance or checklist closure.",
+      "Normal hosted merge still requires executed checks after owner billing resolution; no forced merge or retries."
+    ],
+    "rootAcceptedReceipt": true
+  },
+  "previousTwoSiteProductionBaseline": {
+    "head": "a577ddc95a66c3b81153afee0565d970d2ee7592",
+    "snapshotSha256": "cacd9e049ddae931d8dca86adeca64f62bdb944b5e3f923a81c3468217ba9452",
+    "scope": "Earlier Main/Gallery accepted and Dev-pending draft preserved in Git history; current Dev actual-live evidence now supersedes that pending fact."
+  },
+  "devProduction": {
+    "sourceHead": "a8b8626df42a99e98e30420564cbd0599e94d6ce",
+    "workerVersion": "6c6f7936-7543-4a22-9581-ab9539db3c1a",
+    "deployExitCode": 0,
+    "url": "https://www.pptx.dev",
+    "actualMergedPlanSource": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+    "schemaSourcePin": "0b6141e5a90c037286b1fbce1862ab1bcc1ad34b",
+    "liveVerification": {
+      "canonicalWwwAndApiHealthCommit": "a8b8626df42a99e98e30420564cbd0599e94d6ce",
+      "healthStatus": 200,
+      "authorStatus": 200,
+      "authorEditorMounted": true,
+      "signInStatus": 200,
+      "clerkSignInMounted": true,
+      "allThreePreviousPublicBuildValuesPreserved": true,
+      "developmentClerkInstancePreserved": true,
+      "focusedAffectedBrowserPassed": 2,
+      "importDefaultCatalogReferencesEditUndoRedoExportReimport": true,
+      "masterName": "pptx.gallery",
+      "namedThemeAndDeckTitlePreserved": true,
+      "rendererFontManifestExact": true,
+      "rendererVersion": "0.20.0",
+      "representativeRobotoFaceExact": true,
+      "loggedInUserVerified": false,
+      "backendMutation": false,
+      "rollbackNeeded": false
+    },
+    "existingPR": {
+      "url": "https://github.com/Data-Advantage/pptx-dev/pull/128",
+      "headBranch": "codex/rr-84-pptx-dev-019",
+      "publishedExactCandidate": true,
+      "readyForReview": true,
+      "merge": "blocked: hosted jobs never executed due account billing/spending restriction"
+    },
+    "retainedWholeSiteProof": {
+      "head": "25b7c43653bcc623f1710bde3e34c7a37d274730",
+      "unitPassed": 976,
+      "existingUnitSkipped": 1,
+      "browserPassed": 59,
+      "newFullRepeat": false
+    },
+    "preservedFailures": {
+      "localAuthenticatedStandalonePreview": "Both127.0.0.1 and::1 previews failedlocalhost self-proxy/ECONNRESET before editor; actual Worker routes and affected flows pass. No auth/proxy code or assertion bypass.",
+      "unsupportedLegacyApiMasterAssertions": "New assertions on unchanged independent lib/generator export engine failed; restoredbyteexact test. SeparatelegacyAPIbrandingfollowup remains; no engine switch/ZIPrewrite.",
+      "setupAndShim": "Original setupDNS andwrongmanagerpath failures retained."
+    },
+    "scopeLimits": [
+      "No actual signed-in-user operation, native Office/global font acceptance or checklist closure.",
+      "Normal hosted source merge requires executed checks after owner billing resolves. No force merge or failed-job retries."
+    ],
+    "rootAcceptedReceipt": true,
+    "rootIndependentHealthRendererProof": {
+      "path": "/private/tmp/rr20-production-deployment-20261014/dev-root-live-probe.json",
+      "sha256": "80bfd4a35b495a753209cf910bbedea003ff87d9585649c34c334490d462cb7a"
+    }
+  },
+  "allThreeDeployedAndPublicVerified": true,
+  "allThreeSiteDefaultMerged": false,
+  "portableCurrentEvidence": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/deployment-qualification.json",
+    "sha256": "ea08e9261072cee7e2964fe0d85d64c7c2e185c82783f9702b057785acdc865e"
+  },
+  "portableInventory": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/inventory.json",
+    "sha256": "56e19b383b3aa5cef88cc8a1c52dd96fa10d42180f2085dfbb7f217732d9ea31"
+  },
+  "portableStackReconciliation": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/stack-reconciliation.json",
+    "sha256": "bc32626b2f8a6ca32adf404337d4e8c6c78f16ea4ae4fd09c33a94c620f114ba"
+  },
+  "portableOfficialCoreCI": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/official-core-ci.json",
+    "sha256": "5d79f1dab04db06a9e268d482f15741ff25d08fad16a2bb715ef546eb57f751f"
+  },
+  "freshInventoryCounts": {
+    "openPRs": 22,
+    "openIssues": 43,
+    "dependencyPRs": 18,
+    "sourcePRs": 4,
+    "draftPRs": 0
+  },
+  "siteStackCurrent": [
+    {
+      "site": "Main",
+      "url": "https://github.com/Data-Advantage/openpresentation-site/pull/104",
+      "state": "MERGED",
+      "mergedAt": "2026-10-14T20:16:42Z",
+      "mergeCommit": "506a38bd8a3b6a86065199c74c09069581aa67a2",
+      "headRefOid": "506a38bd8a3b6a86065199c74c09069581aa67a2",
+      "bodyStatesParent": 103,
+      "candidateHead": "8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+      "commitIsAncestorOfDeployedCandidate": true,
+      "currentDefaultHead": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "commitIsNotAncestorOfCurrentDefault": true,
+      "defaultIntegrationComplete": false,
+      "source": "Root exact metadata/body dependency plus local Git ancestry on existing objects; no new remote query."
+    },
+    {
+      "site": "Gallery",
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/127",
+      "state": "MERGED",
+      "mergedAt": "2026-10-14T20:32:06Z",
+      "mergeCommit": "98f34580cdd07ec67f1acae9b5ee34ac36054a07",
+      "headRefOid": "98f34580cdd07ec67f1acae9b5ee34ac36054a07",
+      "bodyStatesParent": 126,
+      "candidateHead": "55db2fe4dff8168f04dc7d683f0472b0f057f2b4",
+      "commitIsAncestorOfDeployedCandidate": true,
+      "currentDefaultHead": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "commitIsNotAncestorOfCurrentDefault": true,
+      "defaultIntegrationComplete": false,
+      "source": "Root exact metadata/body dependency plus local Git ancestry on existing objects; no new remote query."
+    }
+  ],
+  "officialCoreCurrentCI": {
+    "run": 38633380889,
+    "attempt": 1,
+    "event": "workflow_dispatch",
+    "commit": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+    "perTargetOutcome": "confirmedGREEN32/32at20:58:27UTC",
+    "mixedBatchExit": 1,
+    "mixedBatchFailure": "SeparateDev128 billing blocker before code",
+    "latestDefaultSourceLockAdopted": false,
+    "issue658NextScheduledGreenCriterionStillOpen": true
+  },
+  "pendingMaintainedLatestSourceRoll": "Release owner preparing official bounded roller proposal; current32/32 proves committedselectedlock, notlatestfourdefaultrefs. Finalsource-lock/recordsT40 remains explicit.",
+  "knownGapIssues": [
+    {
+      "url": "https://github.com/OpenPresentation/opf/issues/668",
+      "scope": "Canonical Presentation.filename obsolete command prose; future source-copy fix, authentic immutable artifacts not rewritten."
+    },
+    {
+      "url": "https://github.com/Data-Advantage/pptx-dev/issues/130",
+      "scope": "Independent legacy API missing explicit master p:cSld name; separate from genuine toolkit export/master proof, no nativeOfficeTheme/menu finding claimed."
+    }
+  ],
+  "postInventoryKnownIssueCount": 45,
+  "portableOfficialRollPending": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/official-roll-pending.json",
+    "sha256": "4c7e625d1e854f83560f17dfb09c7cfe1694f4669f1d62e955a66b0e245ca0a6"
+  },
+  "currentOwnerBudgetIncreaseConfirmed": true,
+  "currentSiteReruns": "Owner restored Actions budget; all five original failed workflow runs are actually attempt2/in_progress between2026-10-14T21:12:53Z and21:13:04Z on unchanged deployed/reviewedMain8b/Gallery55db/Deva8b. Requiredcheck/defaultmerge acceptance remains pending canonical gates; originalattempt1 billing/no-code outcomes stay historical.",
+  "allThreeApplicableCICompleted": false
+}

@@ -1,0 +1,117 @@
+{
+  "Main": {
+    "originalReceipt": {
+      "originalReceiptName": "main-ci-no-start-billing-proof.json",
+      "sha256": "ecd2b6b52c94effc68f03bf66434bdb94e3befdccdf3c9d529d96914d09491cb"
+    },
+    "repo": "Data-Advantage/openpresentation-site",
+    "pr": null,
+    "head": "8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+    "runId": 38630702325,
+    "checks": [
+      {
+        "id": 116081269254,
+        "name": "site",
+        "conclusion": "failure",
+        "annotations_count": 1,
+        "annotation": {
+          "annotation_level": "failure",
+          "message": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings",
+          "path": ".github",
+          "title": ""
+        }
+      },
+      {
+        "id": 116081268473,
+        "name": "cloudflare-build",
+        "conclusion": "failure",
+        "annotations_count": 1,
+        "annotation": {
+          "annotation_level": "failure",
+          "message": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings",
+          "path": ".github",
+          "title": ""
+        }
+      }
+    ],
+    "cause": "GitHub account failed payments/spending limit prevented jobs from starting",
+    "sourceCodeExecuted": false,
+    "stepsExecuted": 0,
+    "logsAvailable": false,
+    "sourceBuildDefectEstablished": false,
+    "retryOrForceMerge": false,
+    "toolProvenance": "Root/release-owner exact bounded check annotations and connector empty steps/logs; original receipt hash retained.",
+    "literalAnnotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the Billing & plans section in your settings.",
+    "historicalFailureScope": true,
+    "currentOwnerBudgetIncreaseConfirmed": true,
+    "currentAuthorizedRerunState": "Owner restored Actions budget; all five original failed workflow runs are actually attempt2/in_progress between2026-10-14T21:12:53Z and21:13:04Z on unchanged deployed/reviewedMain8b/Gallery55db/Deva8b. Requiredcheck/defaultmerge acceptance remains pending canonical gates; originalattempt1 billing/no-code outcomes stay historical."
+  },
+  "Gallery": {
+    "originalReceipt": {
+      "originalReceiptName": "gallery126-billing-diagnosis-receipt.json",
+      "sha256": "5eac22bea990cbc968fa559ef5afc3dca1fe85f3bafafdaf612a760cb25d2d91"
+    },
+    "repo": "Data-Advantage/pptx-gallery",
+    "pr": 126,
+    "head": "55db2fe4dff8168f04dc7d683f0472b0f057f2b4",
+    "runId": null,
+    "checks": [
+      {
+        "id": 116088727020,
+        "name": "worker-build",
+        "conclusion": "failure",
+        "annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings"
+      },
+      {
+        "id": 116088726334,
+        "name": "verify",
+        "conclusion": "failure",
+        "annotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the 'Billing & plans' section in your settings"
+      }
+    ],
+    "cause": "GitHub account failed payments/spending limit prevented jobs from starting",
+    "sourceCodeExecuted": false,
+    "stepsExecuted": 0,
+    "logsAvailable": false,
+    "sourceBuildDefectEstablished": false,
+    "retryOrForceMerge": false,
+    "toolProvenance": "Root/release-owner exact bounded check annotations and connector empty steps/logs; original receipt hash retained.",
+    "literalAnnotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the Billing & plans section in your settings.",
+    "historicalFailureScope": true,
+    "currentOwnerBudgetIncreaseConfirmed": true,
+    "currentAuthorizedRerunState": "Owner restored Actions budget; all five original failed workflow runs are actually attempt2/in_progress between2026-10-14T21:12:53Z and21:13:04Z on unchanged deployed/reviewedMain8b/Gallery55db/Deva8b. Requiredcheck/defaultmerge acceptance remains pending canonical gates; originalattempt1 billing/no-code outcomes stay historical."
+  },
+  "Dev": {
+    "originalReceipt": {
+      "originalReceiptName": "dev128-billing-diagnosis-receipt.json",
+      "sha256": "d5ff60c39c33fe0a49e732e375ee06acc6fc5c9945f30941228c6dd31acf16e6"
+    },
+    "repo": null,
+    "pr": 128,
+    "head": "a8b8626df42a99e98e30420564cbd0599e94d6ce",
+    "runId": null,
+    "checks": [
+      {
+        "id": 116092699873,
+        "name": "verify (ubuntu-latest)",
+        "conclusion": "failure"
+      },
+      {
+        "id": 116092700521,
+        "name": "build",
+        "conclusion": "failure"
+      }
+    ],
+    "cause": "GitHub account failed payments/spending limit prevented jobs from starting",
+    "sourceCodeExecuted": false,
+    "stepsExecuted": 0,
+    "logsAvailable": false,
+    "sourceBuildDefectEstablished": false,
+    "retryOrForceMerge": false,
+    "toolProvenance": "Root/release-owner exact bounded check annotations and connector empty steps/logs; original receipt hash retained.",
+    "literalAnnotation": "The job was not started because recent account payments have failed or your spending limit needs to be increased. Please check the Billing & plans section in your settings.",
+    "historicalFailureScope": true,
+    "currentOwnerBudgetIncreaseConfirmed": true,
+    "currentAuthorizedRerunState": "Owner restored Actions budget; all five original failed workflow runs are actually attempt2/in_progress between2026-10-14T21:12:53Z and21:13:04Z on unchanged deployed/reviewedMain8b/Gallery55db/Deva8b. Requiredcheck/defaultmerge acceptance remains pending canonical gates; originalattempt1 billing/no-code outcomes stay historical."
+  }
+}

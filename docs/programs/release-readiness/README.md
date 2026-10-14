@@ -29,8 +29,7 @@ proof passed. Its fresh full factory exited 1 because the clean adjacent Editor
 tooling lacked Playwright before code-browser execution; no full successor
 pipeline pass is claimed. Normal Main/Gallery asset builders passed using that
 approved genuine consumer. Production deployment and live qualification have
-separate owner evidence; private hosted source-integration checks remain blocked
-by account billing/spending restrictions. The accepted native sample remains
+separate owner evidence; private hosted source-integration attempt 1 jobs never started because of account billing/spending restrictions. The owner restored the budget; five attempt 2 workflows are now actually in progress on unchanged reviewed/deployed heads, with normal source merges still pending required gates. The accepted native sample remains
 17 selected cases and four actual UI operations, with 41 of 58 cases unexecuted.
 It does not establish all-case, global font/raster or pixel parity; the program
 remains active.
@@ -58,6 +57,10 @@ faithfully inherits that published description. Current documentation uses
 `convert`; the immutable artifact and generated assets remain unchanged.
 Canonical description cleanup and normal artifact regeneration require their
 own reviewed source change and gates. This caption does not restart the train.
+
+The three reviewed site candidates are now deployed and publicly verified. [Portable production/inventory/CI evidence](../../evidence/rr-20-sites-current-2026-10-14/README.md) records exact identities and original failures; [the current 0.20 owner note](release-notes-0.20-current.md) states what ships and what remains. Original private-site attempt 1 jobs were billing-blocked before code execution. The owner restored the budget; actual attempt 2 workflows are in progress, with CI/default acceptance pending required gates. The separate public-core32/32confirmed result applies to its committed selected lock; latest-default source-lock rollout remains gated. No checkpoint/native/owner closure is implied.
+
+The owner subsequently confirmed Actions budget increased. Canonical required checks/default merges on exact deployed site heads are now authorized/pending; original billing/no-code results remain historical evidence. No current CI/merge success is claimed before its actual proof.
 
 ## Historical checkpoint — 2026-10-13 published graph and feature qualification
 

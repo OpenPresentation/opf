@@ -1,0 +1,210 @@
+{
+  "asOf": "2026-10-14T21:00:35.563834+00:00",
+  "scope": "Portable three-site production and current graph evidence. Source PR integration/checkpoint/native acceptance stays separate. No artifact/version/history fabricated.",
+  "actualCoreSource": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+  "actualCoreSourceURL": "https://github.com/OpenPresentation/opf/commit/9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+  "reviewedCoreSource": "654a5ae3e1d8bdf76162ffad8c2d5c4e1a1ec9e3",
+  "reviewedTreeAndFullPatchEqualActualMerge": true,
+  "releasePlan": {
+    "path": "release-plan.json",
+    "sha256": "83b7c9e01ab6446f01d12d54e7e9ab1408fc37cf2b90f330ae2a990b11307493"
+  },
+  "publicationAuthority": {
+    "path": "docs/evidence/rr-20-registry-current-2026-10-14/verified-registry-authority.json",
+    "sha256": "c12b67d85e5753de67b4821a45e0cb27c89ddbe0b31fe4412bb6730752eaaa5c"
+  },
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.20.1",
+      "gitHead": "22664e18ea657db4e377b84997f2e73bf6cd738b",
+      "integrity": "sha512-rQdrzEh/wYOtXnOqB0FYTNEkutnR3VCw63WZ5ONgfWBIuWDcTj63dXfR/Ng6CBlQwkdMlWLSKvHsBPaloUeUcw==",
+      "repository": "https://github.com/OpenPresentation/opf",
+      "tag": "opf-v0.20.1",
+      "trustedWorkflow": ".github/workflows/npm-publish.yml",
+      "provenanceInvocation": "https://github.com/OpenPresentation/opf/actions/runs/38549148120/attempts/1",
+      "canonicalVerified": true,
+      "canonicalChecksPassed": 10,
+      "signatureSummary": "2 verified, 0 invalid, 0 missing; @openpresentation/opf@0.20.1 has a verified attestation",
+      "verificationLogSha256": "aa9237401d163018ea930d318dc32d85a9f3d27411f2d4fbfda9a4309be80bc2"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.20.0",
+      "gitHead": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034",
+      "integrity": "sha512-335a5h/QweiJGexf/UcyTVOWX4smi3fW59bVqsK03aScY6r57dqDeimmaG6H1HalnqnIh2vvdb8OagSQZPt+Hg==",
+      "repository": "https://github.com/OpenPresentation/opf-render",
+      "tag": "opf-render-v0.20.0",
+      "trustedWorkflow": ".github/workflows/npm-publish.yml",
+      "provenanceInvocation": "https://github.com/OpenPresentation/opf-render/actions/runs/38559177143/attempts/1",
+      "canonicalVerified": true,
+      "canonicalChecksPassed": 10,
+      "signatureSummary": "5 verified, 0 invalid, 0 missing; @openpresentation/opf-render@0.20.0 has a verified attestation",
+      "verificationLogSha256": "bd7ebe554de599f60f31b4554dd6385c5b5587b782918083b72c645292a1e046"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.20.1",
+      "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301",
+      "integrity": "sha512-I85PuU42ELSQ1LmilNNKTAAJgCntI2JFJDfL/LkkN356CP+6npwCMGC1k343nt4HPVOpZwLqVTMkok4S2DD4cA==",
+      "repository": "https://github.com/OpenPresentation/opf-pptx",
+      "tag": "opf-pptx-v0.20.1",
+      "trustedWorkflow": ".github/workflows/release.yml",
+      "provenanceInvocation": "https://github.com/OpenPresentation/opf-pptx/actions/runs/38619385113/attempts/1",
+      "canonicalVerified": true,
+      "canonicalChecksPassed": 10,
+      "signatureSummary": "14 verified, 0 invalid, 0 missing; @openpresentation/opf-pptx@0.20.1 has a verified attestation",
+      "verificationLogSha256": "4eed90403d35d324e7ca1dd2db3c7143e113ba44b15a3aea0a4b94fa7542be84"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.20.0",
+      "gitHead": "671b04ee3f6b228338c0eb3d6d7453f807b28837",
+      "integrity": "sha512-z6SoyGty0cpOlxnGkBhzNrWqNs/ck/CXkmphZUcDKQ3HNiKsHf0gdzHQlvUnTZBMOIQxSBA+ZyfAHWRf06dm9g==",
+      "repository": "https://github.com/OpenPresentation/opf-editor",
+      "tag": "opf-editor-v0.20.0",
+      "trustedWorkflow": ".github/workflows/release.yml",
+      "provenanceInvocation": "https://github.com/OpenPresentation/opf-editor/actions/runs/38584179461/attempts/2",
+      "canonicalVerified": true,
+      "canonicalChecksPassed": 10,
+      "signatureSummary": "3 verified, 0 invalid, 0 missing; @openpresentation/opf-editor@0.20.0 has a verified attestation",
+      "verificationLogSha256": "682a5d18106e593fa50c00eec27b734d97d4266d4e44333dbe38fad9b9847c52"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.20.0",
+      "gitHead": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
+      "integrity": "sha512-QtLK+H585iGWbhRcvjEZqrGs2HbLJpqbXXx/zWoGUWE3bQMkPx/QZDJJUwaESxBrZkLMylgIFlzdfBD6kDhv9w==",
+      "repository": "https://github.com/OpenPresentation/opf",
+      "tag": "cli-v0.20.0",
+      "trustedWorkflow": ".github/workflows/cli-publish.yml",
+      "provenanceInvocation": "https://github.com/OpenPresentation/opf/actions/runs/38589252641/attempts/1",
+      "canonicalVerified": true,
+      "canonicalChecksPassed": 10,
+      "signatureSummary": "3 verified, 0 invalid, 0 missing; @openpresentation/cli@0.20.0 has a verified attestation",
+      "verificationLogSha256": "e29b2acccb36065dc1b0c5700e8bde6c3ac93b94a7d47dbfe645abba167c7726"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "gitHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "integrity": "sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ==",
+      "repository": "https://github.com/OpenPresentation/gallery",
+      "tag": "v3.0.0",
+      "trustedWorkflow": ".github/workflows/gallery-publish.yml",
+      "provenanceInvocation": "https://github.com/OpenPresentation/gallery/actions/runs/38493340689/attempts/1",
+      "canonicalVerified": true,
+      "canonicalChecksPassed": 10,
+      "signatureSummary": "1 verified, 0 invalid, 0 missing; @openpresentation/gallery@3.0.0 has a verified attestation",
+      "verificationLogSha256": "56b42264ff139e5075d0e4c64dd3f80d0c2fd93eba8525a374385ab646a95a73"
+    }
+  ],
+  "sites": {
+    "Gallery": {
+      "sourceHead": "55db2fe4dff8168f04dc7d683f0472b0f057f2b4",
+      "workerVersion": "99693307-3b24-4155-b9d7-1a29ca5597f8",
+      "url": "https://www.pptx.gallery",
+      "receipt": {
+        "path": "docs/evidence/rr-20-sites-current-2026-10-14/gallery-production-final-handoff.json",
+        "sha256": "72f8f0ecb59ca6711c3220e8d78f5439482ebcabcc4ef0b58be77b7b6d5294d1"
+      }
+    },
+    "Dev": {
+      "sourceHead": "a8b8626df42a99e98e30420564cbd0599e94d6ce",
+      "workerVersion": "6c6f7936-7543-4a22-9581-ab9539db3c1a",
+      "url": "https://www.pptx.dev",
+      "receipt": {
+        "path": "docs/evidence/rr-20-sites-current-2026-10-14/dev-production-final-handoff.json",
+        "sha256": "534293295cf74c4c4f0c72ef88a5eef0df94dc7ca21921649d623a4346fd4cc9"
+      }
+    },
+    "Main": {
+      "sourceHead": "8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+      "workerVersion": "615cef43-de9b-405e-9e2c-adb3be1f14c4",
+      "url": "https://www.openpresentation.org",
+      "receipt": {
+        "path": "docs/evidence/rr-20-sites-current-2026-10-14/main-production.json",
+        "sha256": "5faec50fa30c7db26d2412b78af84d319e67fe157e7486b93b5494cee0dd55c3"
+      }
+    }
+  },
+  "accountBlockers": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/ci-account-blockers.json",
+    "sha256": "e6213fca4a14ebab6592e04cda88f1f0caca51c2101faa7ba9d35d17248f6ebe"
+  },
+  "inventory": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/inventory.json",
+    "sha256": "56e19b383b3aa5cef88cc8a1c52dd96fa10d42180f2085dfbb7f217732d9ea31"
+  },
+  "stackReconciliation": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/stack-reconciliation.json",
+    "sha256": "bc32626b2f8a6ca32adf404337d4e8c6c78f16ea4ae4fd09c33a94c620f114ba"
+  },
+  "officialPublicCoreCI": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/official-core-ci.json",
+    "sha256": "5d79f1dab04db06a9e268d482f15741ff25d08fad16a2bb715ef546eb57f751f"
+  },
+  "allThreeActualDeploymentsAndPublicProof": true,
+  "allThreeSiteDefaultMerged": false,
+  "originalChecklist": {
+    "total": 40,
+    "checked": 32,
+    "unchecked": 8,
+    "noClosureInThisProposal": true,
+    "openIDs": [
+      "T14",
+      "T16",
+      "T18",
+      "T24",
+      "T29",
+      "T31",
+      "T39",
+      "T40"
+    ]
+  },
+  "nativeScope": {
+    "selected": 17,
+    "UIOperations": 4,
+    "unexecuted": 41,
+    "total": 58,
+    "globalAcceptance": false,
+    "canonicalScopedReceipt": "docs/evidence/rr-20-windows-current-2026-10-14/supervisor-scoped-acceptance.json",
+    "canonicalScopedReceiptSha256": "7b522e98e755248effa013474cbce7df2dcf09c5e6af78d6d6335d9aaa2ee88a",
+    "T24T31Eligibility": "Scoped closure review after independent committed-blob acceptance of already reported genuine same-four replay; export authorization/independent review still pending. No new Office/full58/globalfont gate."
+  },
+  "originalConsumer": "Historical20.0 registry consumer executed Node/API/CLI and two code-browser suites14assertions; eight other harnesses constructed only. Successor strict all-six preparation/matrix/master controls passed, full factory terminal1 missing adjacentEditor tooling retained; actualsite builders terminal0.",
+  "ownerActions": [
+    "Follow actualrunning attempt2 requiredchecks on exactreviewed/deployed103/126/128heads after ownerbudgetrestoration, then normal sourceintegration; no forcedmerge or extra manualdeployment for identicalsource.",
+    "If explicitly authorized, export exact existing Windows metadata and independently review committed blobs; no workaround or newOffice run.",
+    "Complete prescribedT16 host/default/supersession/evidence-link/tracker reconciliation and final owner exactcriteria/records note."
+  ],
+  "remainingCopyAndScope": [
+    "Canonical Presentation.filename currentCLI prose remains separate source correction; authentic published schema bytes unchanged.",
+    "Dev separate legacyAPI exporter branding is separate from genuine toolkit AuthorPPTX20.1 path; no engine switch/ZIP rewrite.",
+    "No actual signed-in-user/backend operation, newPowerPoint menu observation/globalfont/raster/fullcatalog claim.",
+    "Historical localhost8765 demonstration retains original19-era attribution, separate from maintained publicsites."
+  ],
+  "sourceProposals": {
+    "proseHead": "291d8dfb2b677e30c350f5194a97db6611a99426",
+    "readinessDraftHead": "e94f638bbee3c77fdb7286f1d590fb174109163c",
+    "bothLocalNotPreviouslyCanonical": true
+  },
+  "latestDefaultSourceLockAdoption": false,
+  "remainingOfficialRoll": "Officialroller38637195180 is running and generated886023e2d3f7a0a92d5073c7399ac02732fa0afd, parent9fade, ONLYecosystem.lock with latest9fade/83c/969/2ac and unchangedgolden. Candidate/childgates and actualmerge pending; T40latestdefaultlock notaccepted. No manualpins/issue658closure.",
+  "knownGapIssues": [
+    {
+      "url": "https://github.com/OpenPresentation/opf/issues/668",
+      "scope": "Canonical Presentation.filename obsolete command prose; future source-copy fix, authentic immutable artifacts not rewritten."
+    },
+    {
+      "url": "https://github.com/Data-Advantage/pptx-dev/issues/130",
+      "scope": "Independent legacy API missing explicit master p:cSld name; separate from genuine toolkit export/master proof, no nativeOfficeTheme/menu finding claimed."
+    }
+  ],
+  "officialRollPending": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/official-roll-pending.json",
+    "sha256": "4c7e625d1e854f83560f17dfb09c7cfe1694f4669f1d62e955a66b0e245ca0a6"
+  },
+  "currentPrivateSiteCI": "Owner restored Actions budget; all five original failed workflow runs are actually attempt2/in_progress between2026-10-14T21:12:53Z and21:13:04Z on unchanged deployed/reviewedMain8b/Gallery55db/Deva8b. Requiredcheck/defaultmerge acceptance remains pending canonical gates; originalattempt1 billing/no-code outcomes stay historical.",
+  "allThreeApplicableCICompleted": false
+}
