@@ -1,0 +1,295 @@
+{
+  "site": "Main",
+  "sourceHead": "8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+  "sourceURL": "https://github.com/Data-Advantage/openpresentation-site/commit/8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+  "sitePR": "https://github.com/Data-Advantage/openpresentation-site/pull/103",
+  "url": "https://www.openpresentation.org",
+  "workerURL": "https://openpresentation-site.michael-136.workers.dev",
+  "workerVersion": "615cef43-de9b-405e-9e2c-adb3be1f14c4",
+  "deployedAt": "2026-10-14T20:19:20.086570+00:00",
+  "deployment": {
+    "command": [
+      "python3",
+      "historical-local-artifact:opf-data-advantage-deploy.py",
+      "main",
+      "deploy"
+    ],
+    "startedAt": "2026-10-14T20:17:41.000526+00:00",
+    "endedAt": "2026-10-14T20:19:20.086570+00:00",
+    "exitCode": 0,
+    "logSha256": "0807e66c37f9b79e99d1fe44b8cfea01cff7ea820c7a59d380ba98fd762acfc9"
+  },
+  "sourcePin": "654a5ae3e1d8bdf76162ffad8c2d5c4e1a1ec9e3",
+  "actualMergedCoreSource": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+  "sourcePinTreeAndPatchEqualActualMerge": true,
+  "packages": {
+    "opf": "0.20.1",
+    "opf-render": "0.20.0",
+    "opf-pptx": "0.20.1",
+    "opf-editor": "0.20.0",
+    "cli": "0.20.0",
+    "gallery": "3.0.0"
+  },
+  "originalHandoff": {
+    "originalReceiptName": "main-successor0201-production-final-handoff-03.json",
+    "sha256": "45ffaa5c28c5d793981c7a262fe254fdd31b60ee42fb522029ab5209fbb7688b"
+  },
+  "liveHTTP": {
+    "at": "2026-10-14T20:22:12.787524+00:00",
+    "base": "https://www.openpresentation.org",
+    "requestCount": 11,
+    "allPassed": true,
+    "results": [
+      {
+        "route": "/showcase/manifest.json",
+        "status": 200,
+        "bytes": 2092,
+        "sha256": "4fb3203a2de7e208bc0649e375f20185cedc144d9b745121fdaebb91ad1df000",
+        "expectedLocalBytesEqual": true
+      },
+      {
+        "route": "/showcase/example.pptx",
+        "status": 200,
+        "bytes": 20300,
+        "sha256": "2a2cd3acf061701c2564c14fd1b96de788717527bcb73da8e3dfaf987de54805",
+        "expectedLocalBytesEqual": true,
+        "allGeneratedMasterNames": "pptx.gallery"
+      },
+      {
+        "route": "/showcase/example.opf.json",
+        "status": 200,
+        "bytes": 3213,
+        "sha256": "f9a7671f5b685f9ffb6ed53a62d61d984658220ee8aadb58c85a43becabd3b1c",
+        "expectedLocalBytesEqual": true
+      },
+      {
+        "route": "/showcase/example.svg",
+        "status": 200,
+        "bytes": 432323,
+        "sha256": "6fbb0e01793f576069d2199fb1eedaa8989d1ebf9e69a3b192760a95778711c9",
+        "expectedLocalBytesEqual": true
+      },
+      {
+        "route": "/starters/website.zip",
+        "status": 200,
+        "bytes": 4403,
+        "sha256": "10720a15173d6e349ac10154955d014d8448afb91cd01bc67ce2a5bae1255c99",
+        "expectedLocalBytesEqual": true,
+        "starterPptxVersion": "0.20.1"
+      },
+      {
+        "route": "/starters/editor.zip",
+        "status": 200,
+        "bytes": 5474,
+        "sha256": "8631646d4c3394d4fc0f09aade04772ba37da63f7b646c690dcab187c691e07c",
+        "expectedLocalBytesEqual": true,
+        "starterPptxVersion": "0.20.1"
+      },
+      {
+        "route": "/starters/node.zip",
+        "status": 200,
+        "bytes": 3149,
+        "sha256": "041ea682f1afae9bfca3fe16b5f6c048843f81173ffcebfcf5a6302d395c9c52",
+        "expectedLocalBytesEqual": true,
+        "starterPptxVersion": "0.20.1"
+      },
+      {
+        "route": "/opf-fonts/manifest.json",
+        "status": 200,
+        "bytes": 8705,
+        "sha256": "50b1cf9e6e4f98a112626ef657a1b2d0b094f44bb280d4c47ff99a54e6e97b9c",
+        "expectedLocalBytesEqual": true
+      },
+      {
+        "route": "/",
+        "status": 200,
+        "bytes": 136828,
+        "sha256": "4934f7651f0047c52818b75abcca7edddb11494b605dbb70027585baa0375494"
+      },
+      {
+        "route": "/changelog",
+        "status": 200,
+        "bytes": 156179,
+        "sha256": "303763c764475677bf690791ba39038d58b9c147b610bb93fe4a4d7afabb3257"
+      },
+      {
+        "route": "/docs/get-started",
+        "status": 200,
+        "bytes": 627914,
+        "sha256": "e58f01e3168d46b8e1109fb7b70e7a990df59b67b45d9aec367cf985dd1fbf49",
+        "correctGalleryInstallFloorServed": true
+      }
+    ],
+    "fontBinaryHttpRepeat": false,
+    "deploymentPerformed": true,
+    "workerVersion": "615cef43-de9b-405e-9e2c-adb3be1f14c4"
+  },
+  "rootLiveProbe": {
+    "home": {
+      "current20_1": true,
+      "old14": false,
+      "sha256": "4934f7651f0047c52818b75abcca7edddb11494b605dbb70027585baa0375494"
+    },
+    "fontScheme": {
+      "current20_1": true,
+      "allowedValues": true,
+      "powerpoint": true,
+      "googleSlides": true,
+      "sha256": "49b578a300f728397a409ade061bdd54e6c82f45d3707572bb15b300555c43f5"
+    },
+    "showcaseManifest": {
+      "renderer": "@openpresentation/opf-render",
+      "source": "example.opf.json",
+      "preview": "example.svg",
+      "pptx": "example.pptx",
+      "sha256": "6fbb0e01793f576069d2199fb1eedaa8989d1ebf9e69a3b192760a95778711c9",
+      "toolchain": {
+        "source": "npm",
+        "packages": [
+          {
+            "name": "@openpresentation/opf",
+            "version": "0.20.1",
+            "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.20.1.tgz",
+            "integrity": "sha512-rQdrzEh/wYOtXnOqB0FYTNEkutnR3VCw63WZ5ONgfWBIuWDcTj63dXfR/Ng6CBlQwkdMlWLSKvHsBPaloUeUcw=="
+          },
+          {
+            "name": "@openpresentation/opf-render",
+            "version": "0.20.0",
+            "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.20.0.tgz",
+            "integrity": "sha512-335a5h/QweiJGexf/UcyTVOWX4smi3fW59bVqsK03aScY6r57dqDeimmaG6H1HalnqnIh2vvdb8OagSQZPt+Hg=="
+          },
+          {
+            "name": "@openpresentation/opf-editor",
+            "version": "0.20.0",
+            "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.20.0.tgz",
+            "integrity": "sha512-z6SoyGty0cpOlxnGkBhzNrWqNs/ck/CXkmphZUcDKQ3HNiKsHf0gdzHQlvUnTZBMOIQxSBA+ZyfAHWRf06dm9g=="
+          },
+          {
+            "name": "@openpresentation/opf-pptx",
+            "version": "0.20.1",
+            "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.20.1.tgz",
+            "integrity": "sha512-I85PuU42ELSQ1LmilNNKTAAJgCntI2JFJDfL/LkkN356CP+6npwCMGC1k343nt4HPVOpZwLqVTMkok4S2DD4cA=="
+          },
+          {
+            "name": "@openpresentation/cli",
+            "version": "0.20.0",
+            "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.20.0.tgz",
+            "integrity": "sha512-QtLK+H585iGWbhRcvjEZqrGs2HbLJpqbXXx/zWoGUWE3bQMkPx/QZDJJUwaESxBrZkLMylgIFlzdfBD6kDhv9w=="
+          }
+        ]
+      },
+      "files": {
+        "example.opf.json": "f9a7671f5b685f9ffb6ed53a62d61d984658220ee8aadb58c85a43becabd3b1c",
+        "example.svg": "6fbb0e01793f576069d2199fb1eedaa8989d1ebf9e69a3b192760a95778711c9",
+        "example.pptx": "2a2cd3acf061701c2564c14fd1b96de788717527bcb73da8e3dfaf987de54805"
+      }
+    },
+    "initialPythonDefaultUaProbe": "HTTP403; normal curl200; cause not established"
+  },
+  "priorFullRuntime": "c45e29c6bf3ddf9c92f4fbe93dc3076ca1410f67",
+  "priorFullBrowserPassed": 79,
+  "newFullBrowserRepeat": false,
+  "affectedLocalBrowserPassed": 5,
+  "publicBrowserOriginal": {
+    "passed": 4,
+    "failed": 3,
+    "logSha256": "0206a0ed4176da92f4938e9c0366b68d66d46b9a887352c75ef2130c9ab292f2",
+    "failureClassification": [
+      "Combined4lesson19step test exceeded local30s budget after reaching fourthlesson; unchanged production120s-budget journey passed.",
+      "Two actual savedPPTX archive/master/content assertions passed, then localhost-only final same-origin assertions failed on actualwww HTTPS URL. Original outcomes remain failed."
+    ]
+  },
+  "laterPublicTutorial": {
+    "head": "8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+    "base": "https://www.openpresentation.org",
+    "workerVersion": "615cef43-de9b-405e-9e2c-adb3be1f14c4",
+    "command": [
+      "pnpm",
+      "exec",
+      "playwright",
+      "test",
+      "tests/e2e/learn.spec.ts",
+      "--project=e2e",
+      "--timeout=120000",
+      "--output",
+      "main-public-tutorial-output"
+    ],
+    "startedAt": "2026-10-14T20:23:52.821702+00:00",
+    "endedAt": "2026-10-14T20:24:16.168564+00:00",
+    "exitCode": 0,
+    "logSha256": "b180b58051d07e3ccce6917951442c0148b7345ac1ce2b9b0cfb975f4dd4fe87",
+    "scope": "Maintained read-only served-production checks, client-only exports; no backend mutations or deployment",
+    "originalReceiptSha256": "aa90723efa659eff1c1960bdcc4a9d3eccf927b89056d448f30ced855480acb3",
+    "logName": "main-successor0201-public-tutorial-01.log"
+  },
+  "productionBrowserExportJourney": {
+    "head": "8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+    "base": "https://www.openpresentation.org",
+    "workerVersion": "615cef43-de9b-405e-9e2c-adb3be1f14c4",
+    "command": [
+      "pnpm",
+      "exec",
+      "playwright",
+      "test",
+      "--config=playwright.production.config.ts",
+      "--grep",
+      "J2:",
+      "--output",
+      "main-public-playground-output"
+    ],
+    "startedAt": "2026-10-14T20:23:22.508825+00:00",
+    "endedAt": "2026-10-14T20:23:28.290908+00:00",
+    "exitCode": 0,
+    "logSha256": "19e6758d52925928e63db8f3df726e9cd65e2e7126cfa6f1bbaa82054cefc9d6",
+    "scope": "Maintained read-only served-production checks, client-only exports; no backend mutations or deployment",
+    "originalReceiptSha256": "97acb04e9a2364617795b4ecab2279e0f268b9890180cff21a7ef51373258a54",
+    "logName": "main-successor0201-public-playground-01.log"
+  },
+  "savedPublicPptx": [
+    {
+      "file": "board-pack.pptx",
+      "bytes": 112157,
+      "sha256": "513972d10bdf3eb3d525ec2b996693d35b7ef2b5b25bf8b40a5ee02f6049eaaf",
+      "masters": [
+        {
+          "part": "ppt/slideMasters/slideMaster1.xml",
+          "name": "pptx.gallery"
+        }
+      ],
+      "traceSha256": "a813880edf6ac78e86fd9d0414333053057cabc69b5d1aa2f505ddb1be3cbffa",
+      "requestCount": 82,
+      "allRequestsGETSamePublicOriginOrOwnedBlob": true
+    },
+    {
+      "file": "two-slide-check.pptx",
+      "bytes": 77450,
+      "sha256": "0119fc8b795b7f9d205af3ac5926a85aa5dd39ca146fc1becf95eff4c5c76253",
+      "masters": [
+        {
+          "part": "ppt/slideMasters/slideMaster1.xml",
+          "name": "pptx.gallery"
+        }
+      ],
+      "traceSha256": "933e28ab5f8db9b052ce34afe40d108bd5170c173b09a6319e76750b32420b9e",
+      "requestCount": 191,
+      "allRequestsGETSamePublicOriginOrOwnedBlob": true
+    }
+  ],
+  "tutorialTiming": {
+    "firstTraceSha256": "887b8b169e0ed90e6cd5d4f51ca6445f07149854b9f03daf54090cec1fcc1ec4",
+    "fourthLessonGotoMs": 28319.858,
+    "followingClickMs": 30030.197,
+    "firstBudgetMs": 30000,
+    "laterBudgetMs": 120000,
+    "sameViewport": [
+      1440,
+      1000
+    ],
+    "forceClickOrScrollOverride": false,
+    "runtimeSourceChange": false
+  },
+  "scopeLimits": [
+    "No new nativePowerPoint menu observation/globalfont/raster/fullcatalog claim.",
+    "ApplicableCI/default source merge is separate from successful reviewed-branch deployment."
+  ]
+}

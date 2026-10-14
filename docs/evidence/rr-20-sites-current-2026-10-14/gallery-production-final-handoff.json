@@ -1,0 +1,167 @@
+{
+  "site": "Gallery",
+  "sourceHead": "55db2fe4dff8168f04dc7d683f0472b0f057f2b4",
+  "sourceURL": "https://github.com/Data-Advantage/pptx-gallery/commit/55db2fe4dff8168f04dc7d683f0472b0f057f2b4",
+  "url": "https://www.pptx.gallery",
+  "workerVersion": "99693307-3b24-4155-b9d7-1a29ca5597f8",
+  "originalHandoff": {
+    "originalReceiptName": "gallery-production-final-handoff.json",
+    "sha256": "71cd74d91ac0ab577d3e096d53148861cec70a7361b92653faa2cd6365a4af9a"
+  },
+  "checks": {
+    "production-deploy": {
+      "command": [
+        "python3",
+        "opf-data-advantage-deploy.py",
+        "gallery",
+        "deploy"
+      ],
+      "startedAt": "2026-10-14T20:32:11.653273+00:00",
+      "endedAt": "2026-10-14T20:32:54.120935+00:00",
+      "exitCode": 0,
+      "logName": "gallery-production-deploy.log",
+      "logSha256": "0401d647182ed5bb0eff1c7dc815a27334a622f9922583bce96d1dd6fa314890",
+      "receiptName": "gallery-production-deploy.json",
+      "receiptSha256": "54181f4e0e7aa1ed89de2483d79d431343da9377bde753450b8442ca9f328c22"
+    },
+    "production-editor-entry": {
+      "command": [
+        "env",
+        "GALLERY_BASE=https://www.pptx.gallery",
+        "pnpm",
+        "verify:editor-entry"
+      ],
+      "startedAt": "2026-10-14T20:33:39.183626+00:00",
+      "endedAt": "2026-10-14T20:33:45.184660+00:00",
+      "exitCode": 0,
+      "logName": "gallery-production-editor-entry.log",
+      "logSha256": "60ba12de32ef02c85fd04c76b1311108360a9e569c454a9955ac357226b95d8b",
+      "receiptName": "gallery-production-editor-entry.json",
+      "receiptSha256": "a4859a5ac9b949f1ec4d387e882da95e204027a548da80281b155d8df4ad92db"
+    },
+    "production-focused-browser": {
+      "command": [
+        "env",
+        "GALLERY_BASE=https://www.pptx.gallery",
+        "pnpm",
+        "exec",
+        "playwright",
+        "test",
+        "tests/e2e/editor.spec.ts",
+        "--grep",
+        "deployed editor bundle|author, preview, edit and undo|60-slide Source Apply|editor opens a deck handed",
+        "--output",
+        "gallery-production-focused-browser-output"
+      ],
+      "startedAt": "2026-10-14T20:33:58.698514+00:00",
+      "endedAt": "2026-10-14T20:34:42.625459+00:00",
+      "exitCode": 0,
+      "logName": "gallery-production-focused-browser.log",
+      "logSha256": "162a6168a7fdca95f87187ce03424a32b55ffc35b7117ccc156f54eeab5e8b50",
+      "receiptName": "gallery-production-focused-browser.json",
+      "receiptSha256": "a57af0e18b734ad894e665b88094c8f580bae5184471d7a3497c2eb76c83730e"
+    },
+    "production-layout-handoff-and-redirect-browser": {
+      "command": [
+        "env",
+        "GALLERY_BASE=https://www.pptx.gallery",
+        "pnpm",
+        "exec",
+        "playwright",
+        "test",
+        "tests/e2e/editor-019.spec.mts",
+        "tests/e2e/catalog-019.spec.ts",
+        "--grep",
+        "metrics|actual Next content negotiation",
+        "--output",
+        "gallery-production-layout-route-output"
+      ],
+      "startedAt": "2026-10-14T20:35:07.519739+00:00",
+      "endedAt": "2026-10-14T20:35:21.501536+00:00",
+      "exitCode": 0,
+      "logName": "gallery-production-layout-handoff-and-redirect-browser.log",
+      "logSha256": "5c93d32959cfb5e6e572735a116a4c87e3b3da83a3f192bc9039ddb6f4b927b4",
+      "receiptName": "gallery-production-layout-handoff-and-redirect-browser.json",
+      "receiptSha256": "e1dff75ebc1372ed2699d6574f1b2b9810277f5467699e06e9743948247220a9"
+    },
+    "production-media-diagnostic": {
+      "command": [
+        "node",
+        "gallery-production-media-diagnostic.mjs"
+      ],
+      "startedAt": "2026-10-14T20:38:08.021913+00:00",
+      "endedAt": "2026-10-14T20:38:10.426335+00:00",
+      "exitCode": 0,
+      "logName": "gallery-production-media-diagnostic.log",
+      "logSha256": "3e801a8ed12905627812d4404b95e372546cedf564ddcb30ba28f2e5da5383f8",
+      "receiptName": "gallery-production-media-diagnostic.json",
+      "receiptSha256": "e29ced96abc91b3a6fb0d68e51350977405333138c2dd9c2893cfba29626a065"
+    }
+  },
+  "liveVerification": {
+    "manifestExact": true,
+    "referencedFileHashes": 45,
+    "focusedBrowserPassed": 6,
+    "sourceApply60HiddenOrderUndoRedoAndDownload": true,
+    "observedApplyMs": 1268,
+    "editablePptxMaster": "pptx.gallery",
+    "namedThemeAndDeckNamePreserved": true,
+    "importEditUndoRedoExportReimport": true,
+    "fragmentHandoff": true,
+    "metricsLayoutBuilderHandoff": true,
+    "retiredRedirectAndJsonNegotiation": true,
+    "mediaExistingPngSvgManifestBytes": true,
+    "mediaGetHead200AndMissing404": true
+  },
+  "liveBrowserArtifacts": {
+    "gallery-production-focused-browser-output/.last-run.json": {
+      "bytes": 45,
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
+    },
+    "gallery-production-focused-browser-output/editor-60-slide-Source-App-60e6f-ditable-PowerPoint-download/sixty-slide-0201.pptx": {
+      "bytes": 353766,
+      "sha256": "e3332088ca2466fdbf76abf9b54c6b6d1a2d65937239b378c1975266b87fb16f"
+    },
+    "gallery-production-focused-browser-output/editor-60-slide-Source-App-60e6f-ditable-PowerPoint-download/sixty-slide-adoption.json": {
+      "bytes": 1646,
+      "sha256": "a9c68906d47a2b8e452ac21eb29a36058bd5803b5a2c2cdab164bbe6c170a3c7"
+    },
+    "gallery-production-focused-browser-output/editor-author-preview-edit-fbb9f-Point-then-reimport-offline/registry-editor-0201.pptx": {
+      "bytes": 77917,
+      "sha256": "889ea3182ed8fa5e6eb8928ca400f01311cfd0654b1bcc23db1b6a8b31205ed9"
+    },
+    "gallery-production-layout-route-output/.last-run.json": {
+      "bytes": 45,
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
+    }
+  },
+  "actualMergedPlanSource": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+  "planSha256": "83b7c9e01ab6446f01d12d54e7e9ab1408fc37cf2b90f330ae2a990b11307493",
+  "authoritySha256": "c12b67d85e5753de67b4821a45e0cb27c89ddbe0b31fe4412bb6730752eaaa5c",
+  "existingPR": {
+    "url": "https://github.com/Data-Advantage/pptx-gallery/pull/126",
+    "headBranch": "codex/rr-84-gallery-019",
+    "publishedExactCandidate": true,
+    "readyForReview": true,
+    "merge": "blocked: hosted jobs never executed due account billing/spending restriction",
+    "stackPreserved": [
+      127,
+      125
+    ],
+    "stackStatus": "PR127 actually merged into parent adoption branch;125 remains open; parent126 notmerged/default acceptance incomplete."
+  },
+  "retainedWholeSiteProof": {
+    "head": "9810fd7a098537fcd26692c0f740d21d1ba3252c",
+    "unit": 606,
+    "browser": 124,
+    "newFullRepeat": false
+  },
+  "scopeLimits": [
+    "No native Office/global font acceptance or checklist closure.",
+    "Normal hosted merge still requires executed checks after owner billing resolution; no forced merge or retries."
+  ],
+  "builderQualifiedSource": "654a5ae3e1d8bdf76162ffad8c2d5c4e1a1ec9e3",
+  "editorExampleSource": "2ac0268359f48123031ef537fcc0c31d7c41a1df",
+  "initialMediaProbeFailure": "New probe incorrectly converted absent compressed SVG HEAD content-length to0; diagnostic proves br-compressed SVG200/weakETag/length absent, PNG200/exactlength, exactGET bytes both. Original assertionfailure retained; no source change.",
+  "mediaProofSha256": "fa47f99b69a580cdb253c387605659b72b7ee6f1c28af58d7f3ed16973c15b7f"
+}

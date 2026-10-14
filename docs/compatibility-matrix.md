@@ -5,7 +5,7 @@ is the honest supported subset for [the developer quickstart](quickstart.md).
 It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
-The coordinated plan selects core 0.20.1, renderer/PPTX/editor/CLI 0.20.0
+The coordinated plan selects core/PPTX 0.20.1, renderer/editor/CLI 0.20.0
 and Gallery 3.0.0. Immutable release commits and complete registry, SLSA
 provenance and signature checks are recorded in the
 [verified publication authority](evidence/rr-20-registry-current-2026-10-14/verified-registry-authority.json).
@@ -34,7 +34,7 @@ imply universal Office or full-catalog visual parity.
 | Core | 0.20.1 | Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
 | CLI | 0.20.0 | Core ^0.20.1, Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
 | Renderer | 0.20.0 | Core ^0.20.1; optional pinned font/converter peers |
-| PPTX | 0.20.0 | Core ^0.20.1, Gallery ^3.0.0; optional renderer ^0.20.0 |
+| PPTX | 0.20.1 | Core ^0.20.1, Gallery ^3.0.0; optional renderer ^0.20.0 |
 | Editor | 0.20.0 | Core ^0.20.1; optional renderer ^0.20.0 |
 | Gallery | 3.0.0 | Independent owner of every default catalog record; 28 intent layouts |
 

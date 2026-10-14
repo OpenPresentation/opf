@@ -8,7 +8,7 @@ people resuming work start here, not from chat history or local scratch files.
 
 Official roll #651 and native tooling #652 are merged and verified. Evidence #661 is merged at `d0abab263708db5558fa1bf4bf23213d673b4f6c`; the supervisor's scoped acceptance covers 17 selected native cases, four actual UI operations and the fixed-source four-archive offline import replay. All 58 dispositions remain literal; 41 cases were not executed natively. No further Office run is needed for this accepted scope. [Scoped decision and exact identities](../../evidence/rr-20-windows-current-2026-10-14/supervisor-scoped-acceptance.json).
 
-Core 0.20.1, renderer/PPTX/editor/CLI 0.20.0 and Gallery 3.0.0 are
+Core/PPTX 0.20.1, renderer/editor/CLI 0.20.0 and Gallery 3.0.0 are
 genuinely published and verified. The
 [publication authority](../../evidence/rr-20-registry-current-2026-10-14/verified-registry-authority.json)
 binds each immutable tag and `gitHead` to its registry integrity, trusted
@@ -19,27 +19,36 @@ tree and binary patch equal the reviewed preparation. The runtime core
 artifact remains 0.20.1 at `22664e18ea657db4e377b84997f2e73bf6cd738b`.
 Old e43 core 0.20.0 preparation remains unpublished and must never be tagged.
 
-The maintained stable registry consumer passed with all five exact planned
-packages and Gallery 3, with registry lock identities matching the publication
-authority. [Exact installed qualification](../../evidence/rr-20-registry-current-2026-10-14/registry-qualification.json)
-retains the source, plan and command-log hashes. Matching three-site dependency,
-asset and copy adoption remain separate from this Node qualification. Gallery
-host/default/hosted checks and owner scope remain open. Held local site
-evidence is not deployment or complete site acceptance. The accepted native
-sample remains 17 selected cases and four actual UI operations, with 41 of
-58 cases unexecuted. It does not establish all-case, global font/raster or
-pixel parity; the program remains active.
+The original full registry consumer passed with core 0.20.1,
+renderer/PPTX/editor/CLI 0.20.0 and Gallery 3.0.0 on its historical plan and
+publication authority. [Original installed qualification](../../evidence/rr-20-registry-current-2026-10-14/registry-qualification.json)
+retains those exact identities and command-log hashes. The current successor
+has separate [affected installed qualification](../../evidence/rr-81-pptx0201-registry-2026-10-14/affected-consumer-qualification.json):
+strict package/authority preparation, matrix types and the generated master-name
+proof passed. Its fresh full factory exited 1 because the clean adjacent Editor
+tooling lacked Playwright before code-browser execution; no full successor
+pipeline pass is claimed. Normal Main/Gallery asset builders passed using that
+approved genuine consumer. Production deployment and live qualification have
+separate owner evidence; private hosted source-integration attempt 1 jobs never started because of account billing/spending restrictions. The owner restored the budget; five attempt 2 workflows are now actually in progress on unchanged reviewed/deployed heads, with normal source merges still pending required gates. The accepted native sample remains
+17 selected cases and four actual UI operations, with 41 of 58 cases unexecuted.
+It does not establish all-case, global font/raster or pixel parity; the program
+remains active.
 
-The plan uses the genuinely qualified published Editor example source
-`671b04ee3f6b228338c0eb3d6d7453f807b28837`. Editor [#170](https://github.com/OpenPresentation/opf-editor/pull/170)
-merged at `2ac0268359f48123031ef537fcc0c31d7c41a1df`, adding example thumbnail
-batching and a reviewed package-job CI budget fix after fresh required checks
-passed. PPTX [#260](https://github.com/OpenPresentation/opf-pptx/pull/260) merged
-at `f2637951b77763bfeb45d5cd1012d12f7763f952`, changing the generated master
-display name in source. Both actual merge trees equal the reviewed source
-heads. Published Editor `671b04e`, PPTX `0e2ea49` and the current plan's Editor
-example reference remain unchanged; source merges do not claim those
-improvements are adopted in the published artifacts or current site assets.
+The current plan and publication authority merged in core [#667](https://github.com/OpenPresentation/opf/pull/667)
+at `9fade9f6dc9f28a34fc766310de2fac859e1a6a3`, binding the verified PPTX
+0.20.1 artifact at `9690abd12af8d7a4d6f29a28709517f0b6569301` and Editor
+example source `2ac0268359f48123031ef537fcc0c31d7c41a1df`. Editor
+[#170](https://github.com/OpenPresentation/opf-editor/pull/170) added example
+thumbnail batching and a reviewed package-job CI budget fix after fresh required
+checks passed; its published library remains 0.20.0 at
+`671b04ee3f6b228338c0eb3d6d7453f807b28837`. PPTX
+[#260](https://github.com/OpenPresentation/opf-pptx/pull/260) changed the generated
+master display name to `pptx.gallery`; merged release preparation
+[#261](https://github.com/OpenPresentation/opf-pptx/pull/261) published that fix
+through the trusted workflow, with independent registry, provenance and
+signature verification. The original PPTX 0.20.0 artifact at `0e2ea49` and
+published Editor example `671b04e` remain bound to their historical qualification
+receipts. Site deployment and source integration have separate owner evidence.
 
 A narrow source-copy follow-up remains: the published core 0.20.1 schema
 description for `Presentation.filename` still names the removed CLI commands
@@ -48,6 +57,10 @@ faithfully inherits that published description. Current documentation uses
 `convert`; the immutable artifact and generated assets remain unchanged.
 Canonical description cleanup and normal artifact regeneration require their
 own reviewed source change and gates. This caption does not restart the train.
+
+The three reviewed site candidates are now deployed and publicly verified. [Portable production/inventory/CI evidence](../../evidence/rr-20-sites-current-2026-10-14/README.md) records exact identities and original failures; [the current 0.20 owner note](release-notes-0.20-current.md) states what ships and what remains. Original private-site attempt 1 jobs were billing-blocked before code execution. The owner restored the budget; actual attempt 2 workflows are in progress, with CI/default acceptance pending required gates. The separate public-core32/32confirmed result applies to its committed selected lock; latest-default source-lock rollout remains gated. No checkpoint/native/owner closure is implied.
+
+The owner subsequently confirmed Actions budget increased. Canonical required checks/default merges on exact deployed site heads are now authorized/pending; original billing/no-code results remain historical evidence. No current CI/merge success is claimed before its actual proof.
 
 ## Historical checkpoint — 2026-10-13 published graph and feature qualification
 

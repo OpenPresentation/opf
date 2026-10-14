@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "site": "Main",
+      "url": "https://github.com/Data-Advantage/openpresentation-site/pull/104",
+      "state": "MERGED",
+      "mergedAt": "2026-10-14T20:16:42Z",
+      "mergeCommit": "506a38bd8a3b6a86065199c74c09069581aa67a2",
+      "headRefOid": "506a38bd8a3b6a86065199c74c09069581aa67a2",
+      "bodyStatesParent": 103,
+      "candidateHead": "8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+      "commitIsAncestorOfDeployedCandidate": true,
+      "currentDefaultHead": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "commitIsNotAncestorOfCurrentDefault": true,
+      "defaultIntegrationComplete": false,
+      "source": "Root exact metadata/body dependency plus local Git ancestry on existing objects; no new remote query.",
+      "lastBoundedPreMergeBaseRefName": "codex/rr-83-site-catalogs",
+      "preMergeMetadataSourceSha256": "1e95f99420b42a613b1650cacaf3ccafb882144d66ef5ba95497056ec5b7c89d"
+    },
+    {
+      "site": "Gallery",
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/127",
+      "state": "MERGED",
+      "mergedAt": "2026-10-14T20:32:06Z",
+      "mergeCommit": "98f34580cdd07ec67f1acae9b5ee34ac36054a07",
+      "headRefOid": "98f34580cdd07ec67f1acae9b5ee34ac36054a07",
+      "bodyStatesParent": 126,
+      "candidateHead": "55db2fe4dff8168f04dc7d683f0472b0f057f2b4",
+      "commitIsAncestorOfDeployedCandidate": true,
+      "currentDefaultHead": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "commitIsNotAncestorOfCurrentDefault": true,
+      "defaultIntegrationComplete": false,
+      "source": "Root exact metadata/body dependency plus local Git ancestry on existing objects; no new remote query.",
+      "lastBoundedPreMergeBaseRefName": "codex/rr-84-gallery-019",
+      "preMergeMetadataSourceSha256": "1e95f99420b42a613b1650cacaf3ccafb882144d66ef5ba95497056ec5b7c89d"
+    }
+  ],
+  "sourceMetadataSha256": "a125277cd43c5b0ddd46f5c1b790be6acdbf70349fa89620e5b4ca3846178778",
+  "noPRClosureOrBranchDeletion": true
+}
