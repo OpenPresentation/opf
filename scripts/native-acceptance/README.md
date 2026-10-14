@@ -97,3 +97,64 @@ This fixture stresses semantic edit preservation: 36 pt exceeds its original
 text-box height. A pass does not establish visual fit, physical glyph-font
 selection, baseline parity, or overall native release acceptance. Preserve any
 failure and investigate its actual cause before changing expectations.
+
+## Replay retained native saves through published packages
+
+`replay-retained-saves.mjs` compares the four retained manual saves (Change Layout,
+New Slide custom/Text, Change Picture) with their accepted fixed-source imports.
+It imports the saved bytes through direct PPTX import, core `open` and `convert`
+with default and registered Gallery, and the installed CLI. It does not open
+Office or generate a replacement native suite.
+
+```sh
+node scripts/native-acceptance/replay-retained-saves.mjs --consumer /path/to/registry-consumer --evidence docs/evidence/rr-20-windows-current-2026-10-14 --output /path/to/fresh-replay --release-plan /path/to/reviewed-release-plan.json --registry-receipt /path/to/verified-registry-authority.json
+```
+
+The release plan defaults to this checkout's `release-plan.json`; an explicit
+plan must also be the supervisor's immutable approved plan. All six core,
+renderer, PPTX, editor, CLI and Gallery versions must be exact stable versions,
+with immutable verification refs. The consumer must declare those exact registry
+versions, resolve one internal core/Gallery runtime, and have matching npm URL,
+version and SHA-512 lock records. Source links, escaped/junction runtimes,
+prereleases, missing packages and historical pre-0.20/Gallery-2 graphs refuse.
+The driver installs nothing; use the maintained registry-consumer preparation
+only after the supervisor verifies the complete graph.
+
+`--registry-receipt` is required. It is the separately reviewed canonical
+six-package verification authority, not a claim inferred from package-lock.json.
+Its schema is `schemaVersion: 1`, `verifiedAt`, and `packages` containing each
+package's name/version/gitHead, `dist.integrity`, repository/tag/workflow,
+provenanceInvocation, and `canonicalVerification` (`ok: true`, passing named
+checks, and logSha256). Each version/integrity must match the plan/consumer; each
+package gitHead must match its plan ref, including `verificationRefs.gallery`. The authority also records nativeScope
+(selectedCases, uiOperations, unexecutedCases, totalCases, globalAcceptance:false)
+and siteDeployment:false. Those counts must match the retained evidence. Missing,
+incomplete or failing authority refuses final replay before importing packages.
+The driver records the plan and authority file hashes; canonical provenance and
+signature verification remain a separate supervisor responsibility.
+
+Every archive, accepted import, historical import and named-region binding is
+checked against its retained index hash before processing. Inputs and original
+runtime identities are never changed. A fresh output cannot overlap the consumer,
+evidence, source checkout or authority. Socket/fetch refusal uses the installed
+CLI regression's offline policy, applied before engines load and preloaded into
+the CLI child. Attempts are logged and fail the replay even if caught by an engine.
+This is Node-level denial, not a machine firewall or protection against arbitrary
+untrusted native code; only the verified installed packages are executed.
+
+The new reports retain literal package runtime and lock hashes, authority, tooling,
+input hashes, diagnostics and API/CLI results. The custom slide must retain its
+first-region binding and document custom-layout resolution. Change Picture must
+differ from the historical direct import only by image block `fit: 'stretch'`,
+keep exact embedded image bytes, cleared alt and pic500, and reexport full-source
+without crop/offset/tile. Actual saved/reexport transforms are recorded, never
+asserted equal. No geometry or pixel tolerance is widened.
+
+Successful replay is bounded offline semantic evidence. Global nativeAcceptance
+and registryAcceptance stay false: the original 17 selected native cases and four
+UI operations remain separately identified, and all 41 unexecuted cases remain
+unexecuted. Failed runtime attempts retain failure.json and partial outputs;
+preflight refusals print an error without processing inputs or creating output.
+Do not retry an existing output or relabel historical previews as published releases.
+The focused `check:retained-native-replay` guard tests use synthetic manifests;
+they establish preflight/isolation/offline refusal, not genuine registry replay.
