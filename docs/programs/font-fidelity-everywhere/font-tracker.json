@@ -230,35 +230,35 @@
       }
     },
     "scriptNameHostFixtures": {
-      "file": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json",
-      "date": "2026-10-10",
+      "file": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json",
+      "date": "2026-10-14",
       "hosts": {
         "node": {
           "repository": "OpenPresentation/opf-render",
           "test": "test/script-name-hosts.mjs",
-          "commit": "01b0459546add78b5a69c5efce2cae2def98b376",
-          "families": 22,
+          "commit": "a78da5ea85b4f284f4ae3626e1e990d6ea7a5523",
+          "families": 23,
           "findings": 0
         },
         "browser": {
           "repository": "OpenPresentation/opf-render",
           "test": "test/script-name-hosts-browser.mjs",
-          "commit": "01b0459546add78b5a69c5efce2cae2def98b376",
-          "families": 22,
+          "commit": "a78da5ea85b4f284f4ae3626e1e990d6ea7a5523",
+          "families": 23,
           "findings": 0
         },
         "editor": {
           "repository": "OpenPresentation/opf-editor",
           "test": "test/font-gate-script-names.mjs",
-          "commit": "6e11f2b37c1581692601edacd33bba76f7f420bb",
-          "families": 22,
+          "commit": "cdc7868ff9b633a93dd677350f34f230b4bf355f",
+          "families": 23,
           "findings": 0
         },
         "galleryEditor": {
           "repository": "Data-Advantage/pptx-gallery",
           "test": "tests/editor-script-names.test.ts",
-          "commit": "7e0a6611abc22f2d89eb754bdcc24d7ecd09288a",
-          "families": 22,
+          "commit": "67bc00085915322d23f2267ac994bb058af6637b",
+          "families": 23,
           "findings": 0
         }
       },
@@ -284,31 +284,32 @@
         "Symbol",
         "Tunga",
         "Webdings",
-        "Wingdings"
+        "Wingdings",
+        "Yu Gothic"
       ],
       "lazyBudget": {
         "node": {
-          "families": 22,
+          "families": 23,
           "packageBytesMedianMiB": 0,
           "packageBytesMaxMiB": 0,
           "largestPackage": "Aparajita"
         },
         "browser": {
-          "families": 22,
+          "families": 23,
           "packageBytesMedianMiB": 1.525,
           "packageBytesMaxMiB": 24.164,
           "largestPackage": "Segoe UI Emoji"
         },
         "editor": {
-          "families": 22,
+          "families": 23,
           "packageBytesMedianMiB": 1.525,
-          "packageBytesMaxMiB": 23.948,
+          "packageBytesMaxMiB": 24.164,
           "largestPackage": "Segoe UI Emoji"
         },
         "galleryEditor": {
-          "families": 22,
+          "families": 23,
           "packageBytesMedianMiB": 1.525,
-          "packageBytesMaxMiB": 23.948,
+          "packageBytesMaxMiB": 24.164,
           "largestPackage": "Segoe UI Emoji"
         }
       }
@@ -571,23 +572,23 @@
     },
     "hostVerification": {
       "node": {
-        "verified": 144,
-        "unverified": 24,
+        "verified": 145,
+        "unverified": 23,
         "NA": 0
       },
       "browser": {
-        "verified": 143,
-        "unverified": 25,
+        "verified": 144,
+        "unverified": 24,
         "NA": 0
       },
       "editor": {
-        "verified": 144,
-        "unverified": 24,
+        "verified": 145,
+        "unverified": 23,
         "NA": 0
       },
       "galleryEditor": {
-        "verified": 144,
-        "unverified": 24,
+        "verified": 145,
+        "unverified": 23,
         "NA": 0
       },
       "galleryCards": {
@@ -1498,7 +1499,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -3909,7 +3910,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -8891,7 +8892,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -11874,7 +11875,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -13237,7 +13238,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -14578,7 +14579,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -15680,7 +15681,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -18226,7 +18227,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -22526,7 +22527,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -23181,7 +23182,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -23541,7 +23542,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -23871,7 +23872,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -32766,7 +32767,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -33817,7 +33818,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -37366,7 +37367,7 @@
         "valuesAffected": 7,
         "valuesOpen": 7,
         "hostFactor": 0.25,
-        "rank": 23
+        "rank": 22
       }
     },
     {
@@ -37569,7 +37570,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -38305,7 +38306,7 @@
         "valuesAffected": 7,
         "valuesOpen": 7,
         "hostFactor": 0.25,
-        "rank": 24
+        "rank": 23
       }
     },
     {
@@ -39360,7 +39361,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -39706,7 +39707,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -41290,7 +41291,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -41731,7 +41732,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -43920,7 +43921,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -44904,7 +44905,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -45282,7 +45283,7 @@
           },
           {
             "label": "FF-46 per-name host fixtures for the proprietary script, emoji, math and code-table names (node, browser, editor, gallery editor)",
-            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json"
+            "url": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261014.json"
           },
           {
             "label": "opf-render#217 (Node and browser script name fixtures)",
@@ -45726,10 +45727,10 @@
       },
       "candidates": [],
       "hostVerification": {
-        "node": "unverified",
-        "browser": "unverified",
-        "editor": "unverified",
-        "galleryEditor": "unverified",
+        "node": "verified",
+        "browser": "verified",
+        "editor": "verified",
+        "galleryEditor": "verified",
         "galleryCards": "verified"
       },
       "hostLoading": {
@@ -45840,7 +45841,12 @@
           "real font wider than the replacement: native / preview ink width median 1.0105 on 5 line(s) of at least 200 pt (a full composed line overflows by about 1%)"
         ],
         "notes": [],
-        "ownFixtureHosts": []
+        "ownFixtureHosts": [
+          "node",
+          "browser",
+          "editor",
+          "galleryEditor"
+        ]
       },
       "scriptCorpus": {
         "corpus": "opf-script-corpora-v1",
@@ -45964,12 +45970,12 @@
         }
       ],
       "priority": {
-        "score": 3.6,
+        "score": 2.5,
         "severity": 2,
         "valuesAffected": 1,
         "valuesOpen": 1,
-        "hostFactor": 0.8,
-        "rank": 22
+        "hostFactor": 0.25,
+        "rank": 24
       }
     }
   ]

@@ -1,0 +1,24 @@
+
+> @openpresentation/opf-render@0.20.0 check:changes
+> node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check
+
+✔ parseFragment reads type, packages and the entry text (0.940417ms)
+✔ parseFragment rejects what would silently corrupt the changelog (0.322ms)
+✔ assembleChangelog adds a dated section under an empty Unreleased and keeps the older sections byte for byte (0.251167ms)
+✔ assembleChangelog follows a loose list and folds leftover Unreleased bullets in first (0.132042ms)
+✔ assembleChangelog keeps a multi-line entry together and refuses a duplicate or empty release (0.153917ms)
+✔ assembleChangelog adds the Unreleased heading when a changelog lacks one (0.058875ms)
+✔ assemble groups by type (added, changed, fixed) then slug, and deletes the fragments it used (1.470583ms)
+✔ assemble in a monorepo splits fragments by package and keeps a shared one until both changelogs have it (2.427542ms)
+✔ withoutPackage drops one package and reports when none remain (0.142667ms)
+✔ needsFragment warns only for package code without a fragment or a hand edit of the changelog (0.200584ms)
+✔ the command line validates fragments, assembles with --dry-run untouched, and fails on a bad fragment (95.7835ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 151.127542
+changes/: 0 fragment(s) valid

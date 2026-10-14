@@ -1,0 +1,9 @@
+
+ RUN  v5.0.1 /private/tmp/rr17-yu-61/gallery
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  14:55:46
+   Duration  1.42s (tests 91%, import 7%, transform 1%)
+

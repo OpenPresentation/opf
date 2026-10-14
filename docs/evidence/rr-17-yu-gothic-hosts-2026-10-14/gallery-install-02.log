@@ -1,0 +1,141 @@
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +665
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 665, reused 665, downloaded 0, added 287
+Progress: resolved 665, reused 665, downloaded 0, added 661
+Progress: resolved 665, reused 665, downloaded 0, added 665, done
+
+dependencies:
++ @fontsource-variable/bitter 5.3.0
++ @fontsource-variable/eb-garamond 5.3.0
++ @fontsource-variable/figtree 5.3.0
++ @fontsource-variable/gelasio 5.3.0
++ @fontsource-variable/montserrat 5.3.0
++ @fontsource-variable/noto-naskh-arabic 5.3.0
++ @fontsource-variable/noto-nastaliq-urdu 5.3.0
++ @fontsource-variable/noto-sans-hebrew 5.3.0
++ @fontsource-variable/noto-sans-jp 5.3.0
++ @fontsource-variable/noto-sans-kr 5.3.0
++ @fontsource-variable/noto-sans-sc 5.3.0
++ @fontsource-variable/noto-sans-tc 5.3.0
++ @fontsource-variable/red-hat-display 5.3.0
++ @fontsource-variable/roboto 5.3.0
++ @fontsource-variable/source-sans-3 5.3.0
++ @fontsource/anton 5.3.0
++ @fontsource/arimo 5.3.0
++ @fontsource/barlow 5.3.0
++ @fontsource/bebas-neue 5.3.0
++ @fontsource/cousine 5.3.0
++ @fontsource/libre-caslon-text 5.3.0
++ @fontsource/merriweather-sans 5.3.0
++ @fontsource/noto-sans 5.3.0
++ @fontsource/noto-sans-armenian 5.3.0
++ @fontsource/noto-sans-bengali 5.3.0
++ @fontsource/noto-sans-devanagari 5.3.0
++ @fontsource/noto-sans-ethiopic 5.3.0
++ @fontsource/noto-sans-georgian 5.3.0
++ @fontsource/noto-sans-gujarati 5.3.0
++ @fontsource/noto-sans-gurmukhi 5.3.0
++ @fontsource/noto-sans-kannada 5.3.0
++ @fontsource/noto-sans-khmer 5.3.0
++ @fontsource/noto-sans-malayalam 5.3.0
++ @fontsource/noto-sans-mongolian 5.3.0
++ @fontsource/noto-sans-oriya 5.3.0
++ @fontsource/noto-sans-tamil 5.3.0
++ @fontsource/noto-sans-telugu 5.3.0
++ @fontsource/noto-sans-thai 5.3.0
++ @fontsource/noto-serif-hebrew 5.3.0
++ @fontsource/open-sans 5.3.0
++ @fontsource/poppins 5.3.0
++ @fontsource/pt-serif 5.3.0
++ @fontsource/red-hat-text 5.3.0
++ @fontsource/tinos 5.3.0
++ @fontsource/work-sans 5.3.0
++ @openpresentation/gallery 3.0.0
++ @openpresentation/opf 0.20.1
++ @types/mdast 4.0.4
++ @vercel/analytics 2.0.1
++ class-variance-authority 0.7.1
++ clsx 2.1.1
++ gray-matter 4.0.3
++ lucide-react 0.468.0
++ next 16.3.8
++ react 19.3.0
++ react-dom 19.3.0
++ remark 15.0.1
++ remark-gfm 4.0.1
++ remark-html 16.0.1
++ simple-icons 16.31.0
++ tailwind-merge 2.6.1
+
+devDependencies:
++ @expo-google-fonts/arimo 0.4.3
++ @expo-google-fonts/caladea 0.4.2
++ @expo-google-fonts/cousine 0.4.3
++ @expo-google-fonts/gelasio 0.4.1
++ @expo-google-fonts/noto-color-emoji 0.4.7
++ @expo-google-fonts/noto-emoji 0.4.8
++ @expo-google-fonts/noto-naskh-arabic 0.4.5
++ @expo-google-fonts/noto-nastaliq-urdu 0.4.2
++ @expo-google-fonts/noto-sans 0.4.2
++ @expo-google-fonts/noto-sans-arabic 0.4.3
++ @expo-google-fonts/noto-sans-armenian 0.4.2
++ @expo-google-fonts/noto-sans-bengali 0.4.4
++ @expo-google-fonts/noto-sans-devanagari 0.4.1
++ @expo-google-fonts/noto-sans-ethiopic 0.4.2
++ @expo-google-fonts/noto-sans-georgian 0.4.3
++ @expo-google-fonts/noto-sans-gujarati 0.4.2
++ @expo-google-fonts/noto-sans-gurmukhi 0.4.1
++ @expo-google-fonts/noto-sans-hebrew 0.4.1
++ @expo-google-fonts/noto-sans-jp 0.4.4
++ @expo-google-fonts/noto-sans-kannada 0.4.3
++ @expo-google-fonts/noto-sans-khmer 0.4.3
++ @expo-google-fonts/noto-sans-kr 0.4.4
++ @expo-google-fonts/noto-sans-lao 0.4.2
++ @expo-google-fonts/noto-sans-malayalam 0.4.2
++ @expo-google-fonts/noto-sans-math 0.4.2
++ @expo-google-fonts/noto-sans-mongolian 0.4.1
++ @expo-google-fonts/noto-sans-myanmar 0.4.2
++ @expo-google-fonts/noto-sans-oriya 0.4.2
++ @expo-google-fonts/noto-sans-sc 0.4.4
++ @expo-google-fonts/noto-sans-sinhala 0.4.2
++ @expo-google-fonts/noto-sans-symbols 0.4.1
++ @expo-google-fonts/noto-sans-symbols-2 0.4.1
++ @expo-google-fonts/noto-sans-syriac 0.4.2
++ @expo-google-fonts/noto-sans-tamil 0.4.3
++ @expo-google-fonts/noto-sans-tc 0.4.4
++ @expo-google-fonts/noto-sans-telugu 0.4.2
++ @expo-google-fonts/noto-sans-thaana 0.4.2
++ @expo-google-fonts/noto-sans-thai 0.4.2
++ @expo-google-fonts/noto-serif-hebrew 0.4.2
++ @expo-google-fonts/noto-serif-tibetan 0.4.2
++ @expo-google-fonts/roboto 0.4.3
++ @expo-google-fonts/roboto-mono 0.4.2
++ @expo-google-fonts/stix-two-math 0.4.0
++ @expo-google-fonts/tinos 0.4.2
++ @opennextjs/cloudflare 1.20.8
++ @openpresentation/opf-pptx 0.20.1
++ @openpresentation/opf-render 0.20.0
++ @playwright/test 1.63.0
++ @tailwindcss/typography 0.5.20
++ @types/node 24.13.4
++ @types/react 19.3.0
++ @types/react-dom 19.3.0
++ autoprefixer 10.6.1
++ esbuild 0.28.2
++ postcss 8.5.28
++ tailwindcss 3.4.19
++ typescript 7.0.2
++ vitest 5.0.1
++ wrangler 4.147.0
+
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: esbuild@0.25.4, esbuild@0.28.1, esbuild@0.28.2,     │
+│   workerd@1.20261001.1.                                                      │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Done in 3s using pnpm v10.33.2

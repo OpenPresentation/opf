@@ -1,0 +1,404 @@
+{
+  "family": "Yu Gothic",
+  "route": "Noto Sans JP",
+  "samples": [
+    {
+      "id": "jpan-sentence",
+      "runs": [
+        {
+          "text": "四半期レビュー：売上は前年比12％増加しまし",
+          "path": "slides.0.title",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 1143.72
+        },
+        {
+          "text": "た。",
+          "path": "slides.0.title",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 108
+        },
+        {
+          "text": "四半期レビュー：売上は前年比12％増加しました。",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 400,
+          "advance": 577.75
+        },
+        {
+          "text": "四半期レビュー：売上は前年比12％増加しました。",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 579.5
+        }
+      ],
+      "faces": [
+        {
+          "family": "Roboto",
+          "weight": 400
+        },
+        {
+          "family": "Roboto",
+          "weight": 700
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 400
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 700
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 400
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 700
+        }
+      ]
+    },
+    {
+      "id": "jpan-prolonged",
+      "runs": [
+        {
+          "text": "コンピューター サーバー ッ ャ ュ ョ ぁ ぃ",
+          "path": "slides.0.title",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 1003.266
+        },
+        {
+          "text": "コンピューター サーバー ッ ャ ュ ョ ぁ ぃ",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 400,
+          "advance": 463.95
+        },
+        {
+          "text": "コンピューター サーバー ッ ャ ュ ョ ぁ ぃ",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 464.475
+        }
+      ],
+      "faces": [
+        {
+          "family": "Roboto",
+          "weight": 400
+        },
+        {
+          "family": "Roboto",
+          "weight": 700
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 400
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 700
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 400
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 700
+        }
+      ]
+    },
+    {
+      "id": "jpan-halfwidth",
+      "runs": [
+        {
+          "text": "ｶﾀｶﾅ ﾊﾝｶｸ ｱｲｳｴｵ",
+          "path": "slides.0.title",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 375.516
+        },
+        {
+          "text": "ｶﾀｶﾅ ﾊﾝｶｸ ｱｲｳｴｵ",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 400,
+          "advance": 173.7
+        },
+        {
+          "text": "ｶﾀｶﾅ ﾊﾝｶｸ ｱｲｳｴｵ",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 173.85
+        }
+      ],
+      "faces": [
+        {
+          "family": "Roboto",
+          "weight": 400
+        },
+        {
+          "family": "Roboto",
+          "weight": 700
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 400
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 700
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 400
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 700
+        }
+      ]
+    },
+    {
+      "id": "jpan-punctuation",
+      "runs": [
+        {
+          "text": "「括弧」、（かっこ）。『二重』…！？",
+          "path": "slides.0.title",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 972
+        },
+        {
+          "text": "「括弧」、（かっこ）。『二重』…！？",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 400,
+          "advance": 450
+        },
+        {
+          "text": "「括弧」、（かっこ）。『二重』…！？",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 450
+        }
+      ],
+      "faces": [
+        {
+          "family": "Roboto",
+          "weight": 400
+        },
+        {
+          "family": "Roboto",
+          "weight": 700
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 400
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 700
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 400
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 700
+        }
+      ]
+    },
+    {
+      "id": "jpan-combining-dakuten",
+      "runs": [
+        {
+          "text": "が が ぱ ぱ ガ ガ",
+          "path": "slides.0.title",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 385.29
+        },
+        {
+          "text": "が が ぱ ぱ ガ ガ",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 400,
+          "advance": 178
+        },
+        {
+          "text": "が が ぱ ぱ ガ ガ",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 178.375
+        }
+      ],
+      "faces": [
+        {
+          "family": "Roboto",
+          "weight": 400
+        },
+        {
+          "family": "Roboto",
+          "weight": 700
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 400
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 700
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 400
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 700
+        }
+      ]
+    },
+    {
+      "id": "jpan-mixed-latin",
+      "runs": [
+        {
+          "text": "Q3 2026 の概要と OPF の計画",
+          "path": "slides.0.title",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 737.1
+        },
+        {
+          "text": "Q3 2026 の概要と OPF の計画",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 400,
+          "advance": 333.5
+        },
+        {
+          "text": "Q3 2026 の概要と OPF の計画",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 341.25
+        }
+      ],
+      "faces": [
+        {
+          "family": "Roboto",
+          "weight": 400
+        },
+        {
+          "family": "Roboto",
+          "weight": 700
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 400
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 700
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 400
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 700
+        }
+      ]
+    },
+    {
+      "id": "jpan-no-spaces",
+      "runs": [
+        {
+          "text": "日本語の文章はスペースなしで続きます。折り",
+          "path": "slides.0.title",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 1120.5
+        },
+        {
+          "text": "返しは文字の間で起こります。",
+          "path": "slides.0.title",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 750.6
+        },
+        {
+          "text": "日本語の文章はスペースなしで続きます。折り返しは文字の間で起こります。",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 400,
+          "advance": 866.25
+        },
+        {
+          "text": "日本語の文章はスペースな",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 297
+        },
+        {
+          "text": "しで続きます。折り返しは文字の間で起こります。",
+          "path": "slides.0.text",
+          "family": "Noto Sans JP",
+          "weight": 700,
+          "advance": 569.25
+        }
+      ],
+      "faces": [
+        {
+          "family": "Roboto",
+          "weight": 400
+        },
+        {
+          "family": "Roboto",
+          "weight": 700
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 400
+        },
+        {
+          "family": "Roboto Mono",
+          "weight": 700
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 400
+        },
+        {
+          "family": "Noto Sans JP",
+          "weight": 700
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "file": "700Bold/NotoSansJP_700Bold.ttf",
+      "sha256": "7c03e14d8a03e8f5181dbd130712d51e4ae01ac648cbd59442ae8b16c0951835",
+      "status": 200
+    },
+    {
+      "file": "400Regular/NotoSansJP_400Regular.ttf",
+      "sha256": "6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5",
+      "status": 200
+    }
+  ],
+  "nativeVisualAccepted": false
+}

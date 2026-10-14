@@ -1,0 +1,28 @@
+# RR-17: Yu Gothic's original own-host commission
+
+The original [core issue362](https://github.com/OpenPresentation/opf/issues/362) commissioned eleven names, including Yu Gothic. The historical20261010 table contains22 other names and four passing host reports; it omitted Yu Gothic after the later native visual run recorded a finding. The missing positive own-host fixture is now implemented and locally qualified. Native visual acceptance remains separate and unchanged.
+
+## Exact source and current execution
+
+These are reviewed local source candidates, not merged source or published runtime enhancements. Execution used the exact test/fixture bytes committed below. No runtime, package version/range/lock, schema, font policy, font input or served asset changed. Normal hosted gates and source integration remain required. [Qualification, command/log identities and original failures](qualification.json).
+
+| Host | Exact source | Actual current result |
+| --- | --- | --- |
+| Renderer Node | `a78da5ea85b4f284f4ae3626e1e990d6ea7a5523` | [23 names,1464 run checks,30 route faces painted](node.json); real pinned fonts, SVG, fontkit and resvg controls. |
+| Renderer offline Chromium | `a78da5ea85b4f284f4ae3626e1e990d6ea7a5523` | [23 names,1464 runs,41 pinned files](browser.json); real loaded FontFaces, measured SVG runs and painted ink. |
+| Editor font gate | `cdc7868ff9b633a93dd677350f34f230b4bf355f` | [23 names,188 resolutions,1464 runs,41 pinned files](editor.json), plus [real Chromium canvas](editor-canvas.json). |
+| Gallery editor | `67bc00085915322d23f2267ac994bb058af6637b` | [23-name manifest-only loading/drawing fixture](gallery.json), plus [actual served /editor iframe](gallery-canvas.json) with real FontFaces and the two fetched-file SHA controls. |
+
+All22 original rows remain unchanged. Yu Gothic adds all seven original FF-44 `Jpan` samples: sentence, prolonged marks, halfwidth katakana, punctuation, combining dakuten, mixed Latin/Japanese and no-space line breaking. Each deck names Yu Gothic in major/minor/eastAsian/complexScript slots, language `ja`, and draws regular400/bold700. The real Editor/Gallery witnesses require the complete sample at **each** weight in one nonempty traced source path, accumulating wrapped lines rather than requiring an unwrapped title. The screenshot is [the final no-space Japanese sample](gallery-canvas.png), not a native comparison.
+
+The existing policy remains Yu Gothic → Noto Sans JP, compatibility `visual`, no `sizeAdjust`. Existing `@expo-google-fonts/noto-sans-jp@0.4.4` bytes remain regular SHA `6255ea4692e97ef27330304fb96fd650f9111f868cd585fcf2802d42823930e5` and bold SHA `7c03e14d8a03e8f5181dbd130712d51e4ae01ac648cbd59442ae8b16c0951835`. All705 prepared Gallery public files match the previously qualified held site byte for byte. Standard preparation only copied the existing pinned faces/WASM; it generated no new font or WASM binary.
+
+The new [dated four-host evidence](../font-replacements-20260923/script-name-host-fixtures-20261014.json) was assembled from these newly executed23-name reports; no old22-name report was relabelled current. The original20261010 JSON remains untouched. Only its current override reference and related generated tracker were updated. The tracker regression proves that all four verified own-host records **do not** promote Yu Gothic: it retains `script-gap`, `accepted:false`, native visual outcome `finding` and ink-width ratio1.0105. Removing its browser own-host record also removes that verification, without changing the native finding.
+
+## Honest carrier chronology and remaining scope
+
+Original renderer217 was carried/superseded into renderer219, then215; editor155 into156; core584 into592. Their original exact source/evidence and supervisor tracker/host checks remain in [held-source proof](../rr20-held-patch-source-merged/README.md) and [v0.19 carrier proof](../rr20-v019-source-merged/README.md). Those core carrier merges occurred before Gallery's eventual default integration, so this record does not claim the originally prescribed individual-PR merge sequence happened.
+
+Gallery125's two exact fixture files and Gallery127's six integration/evidence paths survived byte for byte in candidate55db. Gallery127 merged98f into parent126; [Gallery126](https://github.com/Data-Advantage/pptx-gallery/pull/126) later merged at `dda2a068eed2820b95afe3689662f8f0cb6b7f98` with the same deployed tree. The new missing-name host candidates above and their core evidence still need normal ordered integration and final T16 requirement review. Core362/RR-17's other long-tail/native findings do not close automatically.
+
+No new Office run, proprietary-font installation, Windows12-report export, broad font/native/site regression, runtime publication or deployment occurred. Native17 selected cases+four actual UI operations and41 unexecuted cases retain their independent identities and limits. The native1.0105 original-versus-preview finding is not cleared by loading or drawing the correct open substitute.

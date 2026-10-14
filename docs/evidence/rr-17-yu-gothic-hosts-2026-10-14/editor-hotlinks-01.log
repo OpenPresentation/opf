@@ -1,0 +1,18 @@
+
+> @openpresentation/opf-editor@0.20.0 check:font-hotlinks
+> node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs
+
+✔ flags each kind of font CDN reference (2.358666ms)
+✔ does not flag bundled files, data URLs or provenance strings (0.325167ms)
+✔ allowlist is exact, needs a reason, and goes stale (3.385959ms)
+✔ build output is scanned and never allowlisted (1.000083ms)
+✔ this repository has no font CDN references (67.705ms)
+ℹ tests 5
+ℹ suites 0
+ℹ pass 5
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 119.838125
+font hotlink check passed (tracked files)
