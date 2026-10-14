@@ -1,0 +1,41 @@
+{
+  "head": "886023e2d3f7a0a92d5073c7399ac02732fa0afd",
+  "parent": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+  "branch": "ecosystem-roll/main",
+  "run": 38637195180,
+  "runURL": "https://github.com/OpenPresentation/opf/actions/runs/38637195180",
+  "paths": [
+    "ecosystem.lock.json"
+  ],
+  "fullIndexPatchSha256": "b73172be91f41c57ef3437706bc2a57ebe4770f1330a8a2c4d947eaf462b0558",
+  "generatedLockSha256": "5e040a7e52ae596d89222be6b3d1bb3d7129568e86f2764bab7edbcb1612685f",
+  "repositories": {
+    "opf": {
+      "sha": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3"
+    },
+    "opf-render": {
+      "sha": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034"
+    },
+    "opf-pptx": {
+      "sha": "9690abd12af8d7a4d6f29a28709517f0b6569301"
+    },
+    "opf-editor": {
+      "sha": "2ac0268359f48123031ef537fcc0c31d7c41a1df"
+    }
+  },
+  "golden": {
+    "repository": "opf",
+    "path": "scripts/fixtures/opf-examples-png.rr20-array-areas.sha256.json",
+    "note": "golden adopted from opf-render golden-override (core fixture)"
+  },
+  "goldenExactUnchanged": true,
+  "planAuthorityExactUnchanged": true,
+  "actualReadOnlyPlanRefsEqual": true,
+  "qualified": false,
+  "status": "actual generated candidate only; official child gates pending",
+  "sourceGate": 85428,
+  "gitBranchReadCalls": 1,
+  "originalReceiptName": "official-final-roll-generated-proof.json",
+  "originalReceiptSha256": "dccbdab55a9d5353059469e017a69d4546927f3272efbeb1c1df6cd3ce460305",
+  "acceptance": "Generated/running only; candidate/child gates and actual merge pending. No lockfile from this proposal or manual source-pin edits."
+}
