@@ -4,6 +4,10 @@ The owner authorized **“Start final qualification; no deployment.”** These r
 
 ## Current records
 
+- [RR-55 bounded controls](gallery3-adoption-rr55-controls-receipt.json) and the [source qualification index](gallery3-adoption-source-qualification-index.json) separately record metadata-only sibling successors and supervisor verification of 18 expected outcomes. Full-suite tested-head identities remain unchanged.
+
+- [Genuine Gallery 3 source-adoption qualification](gallery3-adoption-source-qualification-proof.json), [main receipt](gallery3-adoption-source-qualification-receipt.json), [remaining checks](gallery3-adoption-remaining-checks-receipt.json) and [hash index](gallery3-adoption-source-qualification-index.json) bind the exact core `88a0261c` source graph. Full source/packed and 8 browser suites (282 assertions) pass; canonical core/CLI strict local ^0.20 peer publication waits remain recorded. Root coverage is 43 original passes plus two corrected-doc passes on `b72ba303`. Later RR-55 sibling declaration edits are not covered. Native/0.20 registry/site acceptance remain open.
+
 - [Complete native coverage review](native-full-coverage-review.md) enumerates all 55 current suite cases: 50 bounded cases, four manual seven-slide cases and the dedicated table-color case. It prevents a metrics/list-only resumption from closing full feature acceptance; no Office execution or new native pass is recorded.
 - [Three-site genuine adoption review](site-final-adoption-review.md) records prepared source candidates and remaining genuine 0.20/Gallery 3 registry adoption and gates. It is held planning evidence, not a new installed-registry qualification or deployment authorization.
 

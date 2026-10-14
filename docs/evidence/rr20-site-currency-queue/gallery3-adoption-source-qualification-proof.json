@@ -1,0 +1,133 @@
+{
+  "refs": {
+    "opf": "88a0261ced6c681d7697a8de9acf3605a81e50bf",
+    "opf-render": "80dd5518d6e24e337f520bc45c0a6e667bf922d6",
+    "opf-pptx": "e7eefcaf2557c8cebe62855837f82ce37c1fea93",
+    "opf-editor": "be1e009f2a6d8687d895546a9c90069c9a323a24"
+  },
+  "receiptSha256": "62df0d3038b59bbc97b0f8fe3423097effaf48236d2e7b2bfd0837b4b5bdd85e",
+  "remainingReceiptSha256": "d1e6843353ec37215ede3b8d763e54fa9a5d9fd10fd08fdaaf82b1db541a17cf",
+  "metadata": {
+    "opf": {
+      "package.json": {
+        "sha256": "be58dde4639e0b5c1c2646c8405776c02ac813e8580a863fbb81a0ed758de5f1",
+        "unchangedFromSource": true
+      },
+      "pnpm-lock.yaml": {
+        "sha256": "44eaea87857c864f7198edc70b6ae2785d8fced54cac43a9f797ab041d104c17",
+        "unchangedFromSource": true
+      },
+      "packages/javascript/package.json": {
+        "sha256": "e537a1f3a0a5e2b24dcebfc33464f44d6b392779a3631858cdd3231878ccf1c3",
+        "unchangedFromSource": true
+      },
+      "packages/cli/package.json": {
+        "sha256": "f3ba5c23422ac004f34509bf57ef92b64d6b565a24a8c30bdc98c0d7177855c4",
+        "unchangedFromSource": true
+      }
+    },
+    "opf-render": {
+      "package.json": {
+        "sha256": "936c2e4c642382458da299ac38b49bd7957de473b5c1c47113d5db16b715b276",
+        "unchangedFromSource": true
+      },
+      "package-lock.json": {
+        "sha256": "29c01c48ae5a0090feffb26be37e63209af74cf93bed7afcf2161cfdf106e037",
+        "unchangedFromSource": true
+      }
+    },
+    "opf-pptx": {
+      "package.json": {
+        "sha256": "accb78f16fe3b97674d2bebe5a210b30ff0680787d7e17f2f3a33f7958925653",
+        "unchangedFromSource": true
+      },
+      "package-lock.json": {
+        "sha256": "d8a789c24d9d7739771ab1621c71992e6499a68a3ba61b8d2ba9dcf26f507ff9",
+        "unchangedFromSource": true
+      }
+    },
+    "opf-editor": {
+      "package.json": {
+        "sha256": "31cb99ba61f2a4cd4ffa79721c38e6afe241825d54d028ab830cbbf600a0de34",
+        "unchangedFromSource": true
+      },
+      "package-lock.json": {
+        "sha256": "807e201b3ed559e340560be21fb124fa4a5910869246e5c3c23f3a24b467afc4",
+        "unchangedFromSource": true
+      }
+    }
+  },
+  "sourceStatus": {
+    "opf": {
+      "head": "88a0261ced6c681d7697a8de9acf3605a81e50bf",
+      "status": ""
+    },
+    "opf-render": {
+      "head": "80dd5518d6e24e337f520bc45c0a6e667bf922d6",
+      "status": ""
+    },
+    "opf-pptx": {
+      "head": "e7eefcaf2557c8cebe62855837f82ce37c1fea93",
+      "status": ""
+    },
+    "opf-editor": {
+      "head": "be1e009f2a6d8687d895546a9c90069c9a323a24",
+      "status": ""
+    }
+  },
+  "results": {
+    "fullTierEcosystemExit": 0,
+    "rendererFiles": 119,
+    "editorFiles": 72,
+    "pptxFiles": 139,
+    "canonicalExit": 1,
+    "corePassed": 2303,
+    "coreFailed": 1,
+    "canonicalFailure": "strict local optional peer renderer^0.20 vs genuine19.1",
+    "packedBrowserExit": 0,
+    "browserSuites": 8,
+    "browserAssertions": 282,
+    "trustedInteractions": 8,
+    "cliExit": 1,
+    "cliUnitTestsPassed": 199,
+    "cliFailure": "strict local renderer/PPTX^0.20 publication prerequisite",
+    "rootChecksExit": 1,
+    "rootChecksPassed": 43,
+    "rootChecksFailed": [
+      "check:gallery-tracker",
+      "check:release-report"
+    ],
+    "rootCause": "88 source burndown Now RR20 row split over newlines; malformed six-column table"
+  },
+  "registryRuntimeAcceptance": false,
+  "nativeAcceptance": false,
+  "publication": false,
+  "documentationCorrection": {
+    "head": "b72ba303098f6af7cf70002720b41d49ea184594",
+    "runtimeQualificationHead": "88a0261ced6c681d7697a8de9acf3605a81e50bf",
+    "changedFiles": [
+      "docs/evidence/rr20-site-currency-queue/README.md",
+      "docs/evidence/rr20-site-currency-queue/inventory-maintenance-20261014T011324Z-copies.json",
+      "docs/evidence/rr20-site-currency-queue/inventory-maintenance-20261014T011324Z-summary.json",
+      "docs/evidence/rr20-site-currency-queue/inventory-maintenance-20261014T011324Z-sync.json",
+      "docs/programs/release-readiness/README.md",
+      "docs/programs/release-readiness/burndown.md"
+    ],
+    "runtimeManifestLockChanges": false,
+    "checks": [
+      {
+        "command": "pnpm check:release-report",
+        "exitCode": 0,
+        "log": "/private/tmp/rr20-gallery3-b72-release-report.log",
+        "sha256": "8e4e474ba44dd7e2d9138807c991dada3d634092b07784731127d5347f6c2c6f"
+      },
+      {
+        "command": "pnpm check:gallery-tracker",
+        "exitCode": 0,
+        "log": "/private/tmp/rr20-gallery3-b72-gallery-tracker.log",
+        "sha256": "2eb28602874c31301af879ae90455bc91900ab49d018bf8847f7d41d68743f34"
+      }
+    ],
+    "aggregate": "43 original root checks plus2 corrected-doc checks; not a repeated all45 run"
+  }
+}
