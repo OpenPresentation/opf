@@ -1,4 +1,4 @@
-// FF-46 (opf#362): every proprietary script, emoji, math and code-table name that passed the native visual comparison has its own
+// FF-46 (opf#362): every proprietary script, emoji, math and code-table name commissioned in opf#362 (native visual acceptance remains separate) has its own
 // fixture in the Node host. The script-family fixtures (test/script-family-hosts.mjs) are keyed by the open route faces, so a name such as
 // Microsoft YaHei never matched them; this one is keyed by the proprietary name. For each name of test/fixtures/script-name-families.json,
 // decks that name it (as the Latin, East Asian and complex-script font; a code-table name as the run font, the way symbol fonts are used)
@@ -26,7 +26,7 @@ import {monochromeColorFonts, rasterFontFiles} from '../dist/color-fonts.js';
 import {loadCorpora} from '../scripts/script-corpora.mjs';
 import {covers, directAdvance, drawnRuns, expectedWeight, root, scriptFamilies, shortName} from './script-family-fixture.mjs';
 
-const NAMES = ['Aparajita', 'Arabic Typesetting', 'Cambria Math', 'David', 'FangSong', 'Gautami', 'Gisha', 'Kalinga', 'Microsoft JhengHei', 'Microsoft YaHei', 'MingLiU', 'Miriam', 'Nyala', 'PMingLiU', 'Segoe UI Emoji', 'SimHei', 'SimSun', 'Sylfaen', 'Symbol', 'Tunga', 'Webdings', 'Wingdings'];
+const NAMES = ['Aparajita', 'Arabic Typesetting', 'Cambria Math', 'David', 'FangSong', 'Gautami', 'Gisha', 'Kalinga', 'Microsoft JhengHei', 'Microsoft YaHei', 'MingLiU', 'Miriam', 'Nyala', 'PMingLiU', 'Segoe UI Emoji', 'SimHei', 'SimSun', 'Sylfaen', 'Symbol', 'Tunga', 'Webdings', 'Wingdings', 'Yu Gothic'];
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const slash = file => file.split(String.fromCharCode(92)).join('/');
 const table = JSON.parse(await readFile(path.join(root, 'test/fixtures/script-name-families.json'), 'utf8'));
@@ -56,7 +56,7 @@ function codeDeck(name, sample) {
 
 // ---- the table: names, routes and samples agree with core's policy, the corpus and the pinned faces ----
 assert.equal(table.schema, 'opf-script-name-families/v1');
-assert.deepEqual(Object.keys(table.families).sort(), NAMES, 'the fixture covers the 22 names that pass natively and wait only on host fixtures');
+assert.deepEqual(Object.keys(table.families).sort(), NAMES, 'the fixture covers the 23 commissioned names with native visual findings kept separate from host loading/drawing');
 const fontkit = await import('fontkit');
 const regularFont = async family => {
   const pkg = BUNDLED_FONT_MANIFEST.packages.find(item => item.faces.some(face => face.family === family && face.weight === 400 && !face.italic));

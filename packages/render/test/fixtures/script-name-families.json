@@ -1,6 +1,6 @@
 {
  "schema": "opf-script-name-families/v1",
- "description": "FF-46 (opf#362): the proprietary script, emoji, math and code-table names that pass the native visual comparison (FF-46 run of 2026-10-05 with the Windows supplemental fonts) and need their own fixture in every host before the font tracker makes them documented-visual. Per name: the route the font policy gives it (core fontPolicyFor(name).replacement.family; for a symbol-encoded name the first face of its code-table chain) and the policy sizeAdjust where there is one; per script the face that draws it (the policy route when it covers the script, otherwise the designated script face, as for Sylfaen's Armenian and Georgian) and samples: original FF-44 corpus text and FF-45 emoji and math samples that the face covers completely (test/script-family-fixture.mjs picks them for that face), or, for a code table, every code core's symbol-font encodings map to Unicode, with the chain face that draws each one. The samples make no claim of translation quality; they exist to exercise shaping. No proprietary font file is read.",
+ "description": "FF-46 (opf#362): the commissioned proprietary script, emoji, math and code-table names, including Yu Gothic whose native visual finding remains separate. Own-host loading and drawing do not promote native visual acceptance; documented-visual still requires a native pass and the name's own fixture in every host. Per name: the route the font policy gives it (core fontPolicyFor(name).replacement.family; for a symbol-encoded name the first face of its code-table chain) and the policy sizeAdjust where there is one; per script the face that draws it (the policy route when it covers the script, otherwise the designated script face, as for Sylfaen's Armenian and Georgian) and samples: original FF-44 corpus text and FF-45 emoji and math samples that the face covers completely (test/script-family-fixture.mjs picks them for that face), or, for a code table, every code core's symbol-font encodings map to Unicode, with the chain face that draws each one. The samples make no claim of translation quality; they exist to exercise shaping. No proprietary font file is read.",
  "families": {
   "Aparajita": {
    "kind": "script",
@@ -929,6 +929,75 @@
       {
        "id": "webdings-codes-FA-FF",
        "codes": "FA FB FC FD FE FF"
+      }
+     ]
+    }
+   ]
+  },
+ "Yu Gothic": {
+   "kind": "script",
+   "route": "Noto Sans JP",
+   "scripts": [
+    {
+     "script": "Jpan",
+     "route": "Noto Sans JP",
+     "via": "policy",
+     "samples": [
+      {
+       "id": "jpan-sentence",
+       "script": "Jpan",
+       "text": "四半期レビュー：売上は前年比12％増加しました。",
+       "lang": "ja",
+       "rtl": false,
+       "language": "ja"
+      },
+      {
+       "id": "jpan-prolonged",
+       "script": "Jpan",
+       "text": "コンピューター サーバー ッ ャ ュ ョ ぁ ぃ",
+       "lang": "ja",
+       "rtl": false,
+       "language": "ja"
+      },
+      {
+       "id": "jpan-halfwidth",
+       "script": "Jpan",
+       "text": "ｶﾀｶﾅ ﾊﾝｶｸ ｱｲｳｴｵ",
+       "lang": "ja",
+       "rtl": false,
+       "language": "ja"
+      },
+      {
+       "id": "jpan-punctuation",
+       "script": "Jpan",
+       "text": "「括弧」、（かっこ）。『二重』…！？",
+       "lang": "ja",
+       "rtl": false,
+       "language": "ja"
+      },
+      {
+       "id": "jpan-combining-dakuten",
+       "script": "Jpan",
+       "text": "が が ぱ ぱ ガ ガ",
+       "lang": "ja",
+       "rtl": false,
+       "language": "ja"
+      },
+      {
+       "id": "jpan-mixed-latin",
+       "script": "Jpan",
+       "text": "Q3 2026 の概要と OPF の計画",
+       "lang": "ja",
+       "rtl": false,
+       "language": "ja"
+      },
+      {
+       "id": "jpan-no-spaces",
+       "script": "Jpan",
+       "text": "日本語の文章はスペースなしで続きます。折り返しは文字の間で起こります。",
+       "lang": "ja",
+       "rtl": false,
+       "language": "ja"
       }
      ]
     }

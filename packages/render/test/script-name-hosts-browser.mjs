@@ -1,4 +1,4 @@
-// FF-46 (opf#362): every proprietary script, emoji, math and code-table name that passed the native visual comparison has its own
+// FF-46 (opf#362): every proprietary script, emoji, math and code-table name commissioned in opf#362 (native visual acceptance remains separate) has its own
 // fixture in the browser host. A page bundles the browser font loader and the SVG renderer, starts from the 33 eager office and base faces
 // (the registry a browser host or the gallery editor starts with) and serves the pinned @expo-google-fonts files from local routes and
 // nothing else. For each name of test/fixtures/script-name-families.json, with decks that name it (as every font-scheme slot; a code-table
@@ -27,7 +27,7 @@ const outputDirectory = path.resolve(root, process.argv[2] ?? 'artifacts/script-
 await mkdir(outputDirectory, {recursive: true});
 const table = JSON.parse(await readFile(path.join(root, 'test/fixtures/script-name-families.json'), 'utf8'));
 const names = Object.keys(table.families).sort();
-assert.equal(names.length, 22, `the fixture covers ${names.length} names`);
+assert.equal(names.length, 23, `the fixture covers ${names.length} names`);
 const rows = await scriptFamilies();
 const rowOf = family => rows.find(row => row.family === family);
 const symbolTables = new Map(coreSymbols.SYMBOL_FONT_ENCODINGS.families.map(entry => [entry.family, entry]));
