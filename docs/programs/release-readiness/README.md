@@ -32,11 +32,14 @@ pixel parity; the program remains active.
 
 The plan uses the genuinely qualified published Editor example source
 `671b04ee3f6b228338c0eb3d6d7453f807b28837`. Editor [#170](https://github.com/OpenPresentation/opf-editor/pull/170)
-adds example thumbnail batching and a reviewed package-job CI budget fix;
-PPTX [#260](https://github.com/OpenPresentation/opf-pptx/pull/260) changes the
-generated master display name. Both are pending source work, separate from
-the completed publications. Current package or example identities do not
-claim those unmerged enhancements.
+merged at `2ac0268359f48123031ef537fcc0c31d7c41a1df`, adding example thumbnail
+batching and a reviewed package-job CI budget fix after fresh required checks
+passed. PPTX [#260](https://github.com/OpenPresentation/opf-pptx/pull/260) merged
+at `f2637951b77763bfeb45d5cd1012d12f7763f952`, changing the generated master
+display name in source. Both actual merge trees equal the reviewed source
+heads. Published Editor `671b04e`, PPTX `0e2ea49` and the current plan's Editor
+example reference remain unchanged; source merges do not claim those
+improvements are adopted in the published artifacts or current site assets.
 
 A narrow source-copy follow-up remains: the published core 0.20.1 schema
 description for `Presentation.filename` still names the removed CLI commands

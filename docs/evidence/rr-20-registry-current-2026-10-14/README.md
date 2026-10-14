@@ -36,16 +36,21 @@ to hide it. A future reviewed source cleanup must regenerate normal artifacts.
 The current plan’s Editor example reference is the genuinely qualified published
 source `671b04ee3f6b228338c0eb3d6d7453f807b28837`.
 [Editor PR #170](https://github.com/OpenPresentation/opf-editor/pull/170) is a
-separate pending example thumbnail performance enhancement. Its first source
+separate example thumbnail performance enhancement, merged at
+`2ac0268359f48123031ef537fcc0c31d7c41a1df`. Its first source
 CI run completed the playground suite, then exhausted its 35-minute package-job
 budget before the standalone and installed-package browser gates finished.
 The reviewed follow-up raises only that job budget to 75 minutes; all test
 commands, assertions, test-level deadlines and quarantine rules are unchanged.
-No unfinished coverage is inferred to pass, and the current plan does not
-claim that the published example source contains this enhancement.
+The first run's unfinished coverage remains literal. Fresh required checks
+passed on the reviewed follow-up before its exact source tree merged; this
+does not relabel the cancelled attempt. The current plan does not claim that
+the published example source contains this enhancement.
 
 [PPTX PR #260](https://github.com/OpenPresentation/opf-pptx/pull/260) is a separate
-pending source change naming generated slide masters `pptx.gallery`. It does
-not alter the verified PPTX 0.20.0 artifact or this plan. Both source follow-ups
-require their own canonical gates; later source or asset adoption must retain
-separate proof.
+source change naming generated slide masters `pptx.gallery`, merged at
+`f2637951b77763bfeb45d5cd1012d12f7763f952` after its canonical gate passed.
+It does not alter the verified PPTX 0.20.0 artifact at `0e2ea49` or this plan.
+Both source merge trees equal the reviewed heads; later example, asset or
+package adoption requires separate proof. Published Editor `671b04e` and the
+current plan's Editor example reference remain unchanged.
