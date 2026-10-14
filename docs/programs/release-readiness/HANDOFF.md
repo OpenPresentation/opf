@@ -11,6 +11,10 @@ overrides those invariants. Reviewed local integration candidates also exist; pr
 
 ## Current supervisor checkpoint — 2026-10-14 final site source-integration proposal
 
+**Current scoped update — 2026-10-14:** the supervisor accepts RR-53 on actual merged core335, implemented core PR contract/full queue-and-schedule policy, prior core669 queue success and retained 11–15% runner saving/no wall-clock gain. The broader program is now **77/84 complete or descoped**, with seven open rows: RR-14, RR-17, RR-19, RR-48, RR-51, RR-68 and RR-20. RR-48’s three sibling rulesets and issue658’s next-green-nightly condition remain separate and open. [Scoped acceptance](../../evidence/rr-53-contract-tier-2026-10-14/README.md). This follow-up does not change frozen PR670 or preclaim its pending terminal acceptance.
+
+**Earlier PR670 sealing snapshot — 2026-10-14 (retained):**
+
 **Proposed terminal state: 40/40 only when this exact reviewed source transaction’s merged tree passes the normal required PR/merge-queue gates and actually lands. At proposal sealing, 38/40 are already supervisor-accepted; T16/T40 completion is conditional on that merge. No future merge SHA or unrun check result is claimed. The supervisor’s external terminal receipt will confirm completion without a second self-recording PR. The broader program remains 76/84 eligible complete, with eight real items open; this is not 100% program completion.**
 
 Final bounded census 2026-10-14T22:49:27.296923+00:00: 17 open PRs/42 issues (12 dependency PRs, five source PRs, two drafts), complete pagination in one GraphQL query, and eight clean local defaults matching observed remote heads; no fetch or CI polling by the collector. [Final inventory](../../evidence/rr-20-sites-current-2026-10-14/final-inventory.json).
