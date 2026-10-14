@@ -99,7 +99,8 @@
     "native:prepare": "node scripts/native-acceptance/prepare.mjs",
     "check:native-acceptance": "node --test scripts/native-acceptance/*.test.mjs",
     "native:compare:tables": "node scripts/native-acceptance/compare-tables.mjs",
-    "check:preview-packaging": "node --test scripts/ecosystem-preview-plan.test.mjs"
+    "check:preview-packaging": "node --test scripts/ecosystem-preview-plan.test.mjs",
+    "check:retained-native-replay": "node --test scripts/native-acceptance/replay-retained-saves.test.mjs"
   },
   "engines": {
     "node": ">=22"
