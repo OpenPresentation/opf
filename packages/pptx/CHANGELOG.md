@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.20.1 (2026-10-14)
+
+Patch release: name generated slide masters pptx.gallery.
+
+- Name generated PowerPoint slide masters `pptx.gallery` so their layout group has an explicit display label. Keep authored theme identities and individual Gallery or custom layout names unchanged, including masters copied for per-slide script fonts.
+
 ## 0.20.0 (2026-10-14)
 
 PPTX 0.20.0 requires published core 0.20.1 and renderer 0.20.0, supports Gallery 3 nested-array layouts and shared neutral design defaults, and preserves reviewed native text, list, chart and picture edits. The temporary unreleased-core declaration has been removed for this release.
