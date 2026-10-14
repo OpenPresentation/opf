@@ -1,0 +1,203 @@
+{
+  "at": "2026-10-14T03:22:23.107043+00:00",
+  "criterion": {
+    "file": "/Users/michael/Source/opf/docs/programs/release-readiness/0.19-execution.md",
+    "line": 30,
+    "sha256": "481b45b49217094cb608d6c0077c723c8408bca2edfa71b54314a910114d52f8",
+    "text": "- [ ] **T16 \u2014 Review and merge host fixtures in order.** render#217, then editor#155 and pptx-gallery#125, then opf#584. Validate evidence links and regenerate conflicting trackers without relaxing acceptance. Supervisor independently passed all 37 font-tracker tests at core46533d99 and checked the four host evidence references against the exact draft heads (22 names per host); Supervisor also reviewed renderer#217 at01b04595 and passed its exact-source Node and offline Chromium fixtures:22names,24scripts,1440run checks per host,29pinned route faces painted and39files fetched in browser. Editor#155/gallery#125 source review retains strict route/hash/content checks. Supervisor independently passed editor#155 at6e11f2b against installed renderer0.18.0:22names,174resolutions,1440runs and39pinned files. Final integrated reruns remain."
+  },
+  "verdict": "UNMET; do not markdone",
+  "hostEvidence": {
+    "file": "/Users/michael/Source/opf/docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json",
+    "sha256": "166d7d0cd831e7ced411297176ed14685ebe0b6e2da1b8fa419584512db42380",
+    "scope": "2026-10-10 historicalnamedhostfixtures, not new20/native proof",
+    "hosts": [
+      {
+        "host": "node",
+        "source": {
+          "repository": "OpenPresentation/opf-render",
+          "test": "test/script-name-hosts.mjs",
+          "commit": "01b0459546add78b5a69c5efce2cae2def98b376",
+          "runtime": "Node v26.4.0"
+        },
+        "qualifiedNames": 22,
+        "findings": 0
+      },
+      {
+        "host": "browser",
+        "source": {
+          "repository": "OpenPresentation/opf-render",
+          "test": "test/script-name-hosts-browser.mjs",
+          "commit": "01b0459546add78b5a69c5efce2cae2def98b376",
+          "runtime": "Node v26.4.0, Chromium 154.0.4258.53, offline"
+        },
+        "qualifiedNames": 22,
+        "findings": 0
+      },
+      {
+        "host": "editor",
+        "source": {
+          "repository": "OpenPresentation/opf-editor",
+          "test": "test/font-gate-script-names.mjs",
+          "commit": "6e11f2b37c1581692601edacd33bba76f7f420bb",
+          "runtime": "Node v26.4.0, renderer 0.18.0, the editor's createFontGate"
+        },
+        "qualifiedNames": 22,
+        "findings": 0
+      },
+      {
+        "host": "galleryEditor",
+        "source": {
+          "repository": "Data-Advantage/pptx-gallery",
+          "test": "tests/editor-script-names.test.ts",
+          "commit": "7e0a6611abc22f2d89eb754bdcc24d7ecd09288a",
+          "runtime": "renderer 0.18.0, manifest public/opf-editor/script-fonts.json (renderer 0.18.0)"
+        },
+        "qualifiedNames": 22,
+        "findings": 0
+      }
+    ]
+  },
+  "sourceHeadsAndHashes": [
+    {
+      "name": "core",
+      "path": "/Users/michael/Source/opf",
+      "head": "70b12d5910088b7d16a81c683db8873813041fde",
+      "status": "",
+      "hostFiles": [
+        {
+          "path": "docs/evidence/font-replacements-20260923/script-name-host-fixtures-20261010.json",
+          "sha256": "166d7d0cd831e7ced411297176ed14685ebe0b6e2da1b8fa419584512db42380"
+        }
+      ]
+    },
+    {
+      "name": "renderer",
+      "path": "/Users/michael/Source/opf-render",
+      "head": "d96c70ad86deeb69a6f4a18df78e659875b733a4",
+      "status": "",
+      "hostFiles": [
+        {
+          "path": "test/script-name-hosts.mjs",
+          "sha256": "badf1cc42515f1ae72dfbb6555c7e51aa55715bc181d2bc59b0c664889354a24"
+        },
+        {
+          "path": "test/script-name-hosts-browser.mjs",
+          "sha256": "4d0211df9272a6fbed49f7ee00d9825502f5d9eb483213af84220588cb5cdc3e"
+        },
+        {
+          "path": "test/fixtures/script-name-families.json",
+          "sha256": "58e9c553eea054b4597e74353efdcaf6fc95044a0b0b95e7c61b7f9f76995f72"
+        }
+      ]
+    },
+    {
+      "name": "editor",
+      "path": "/Users/michael/Source/opf-editor",
+      "head": "7474315ee10d8ecce5d6bdb9cb4b5127f9cd38b1",
+      "status": "",
+      "hostFiles": [
+        {
+          "path": "test/fixtures/script-name-families.json",
+          "sha256": "58e9c553eea054b4597e74353efdcaf6fc95044a0b0b95e7c61b7f9f76995f72"
+        },
+        {
+          "path": "test/font-gate-script-names.mjs",
+          "sha256": "e1989a2dbbfa9e16ddcb61858d36ff1d536f491dbc1514cfa75ecc88c2f2177a"
+        }
+      ]
+    },
+    {
+      "name": "galleryDefault",
+      "path": "/Users/michael/Source/pptx-gallery",
+      "head": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "status": "",
+      "hostFiles": []
+    },
+    {
+      "name": "galleryPrepared",
+      "path": "/private/tmp/opf-areas-array-gallery-site",
+      "head": "df08ef13b50b442de82d04a850ddb8f9aa568c0c",
+      "status": "?? artifacts/",
+      "hostFiles": [
+        {
+          "path": "tests/editor-script-names.test.ts",
+          "sha256": "056115a8cc75b573ac0cf978546759c37835151682fbc5fec5b8a86e3e24b4ea"
+        },
+        {
+          "path": "tests/fixtures/script-name-families.json",
+          "sha256": "58e9c553eea054b4597e74353efdcaf6fc95044a0b0b95e7c61b7f9f76995f72"
+        }
+      ]
+    }
+  ],
+  "retainedQualification": [
+    {
+      "file": "/Users/michael/Source/opf/docs/evidence/rr20-complete-source-qualification/README.md",
+      "sha256": "6280e2447a816a8e60d677bb258cf00b81c0e2cdd7b11c331e12377dae5c788e",
+      "scope": "Historicalcompletev019source integration includes core584/renderer217/editor155; source/browser host1440; explicitlyGallery125integration stillneeded"
+    },
+    {
+      "file": "/Users/michael/Source/opf/docs/evidence/rr20-three-sites-final-local/README.md",
+      "sha256": "1b57faae70145b6842b747acc35a2947ada1b73f877beb1d71df01846e1ec75a",
+      "scope": "Genuine19gallerylocal73f74ae4 all14gates/124browser reported; not mergeddefault/hostedsuccess"
+    },
+    {
+      "file": "/private/tmp/rr20-gallery3-adoption-full-01/11.log",
+      "sha256": "f75f2d1af1bfd5ca7588f559eef96cfd370b79506e65b8705ec1ad34e2f172f9",
+      "scope": "Exact20adoption source88/80dd/e7ee/be1e fulltierexit0. Renderer script-name-hosts atline247 andeditor font-gate-script-names528\u2013529;22names174resolutions1440runs39files. Doesnotqualifygalleryhost or native."
+    }
+  ],
+  "savedInventory": {
+    "file": "/private/tmp/opf-supervisor-20261010/inventory-maintenance-20261014T031436Z.json",
+    "sha256": "75f18aedd1a0bbb7dce9a25feb59ad2108cf795461725f9a33692531e361d694",
+    "at": "2026-10-14T031436Z",
+    "relevantOpenPRs": [
+      {
+        "repo": "Data-Advantage/pptx-gallery",
+        "number": 125,
+        "head": "7e0a6611abc22f2d89eb754bdcc24d7ecd09288a",
+        "isDraft": false
+      },
+      {
+        "repo": "Data-Advantage/pptx-gallery",
+        "number": 126,
+        "head": "88c7119fb4727f4cd75c21e47a0a20ed3d1bf604",
+        "isDraft": true
+      }
+    ],
+    "limitation": "MissingPRs do not independentlyprove mergeorder; currentmergedsource presence and historicalintegration review are separatelybound."
+  },
+  "clauses": [
+    {
+      "clause": "Renderer, editor and corehostfixture source/evidence integration",
+      "status": "supported implementation/source evidence",
+      "basis": "Currentmergedsource containsfixtures/coreevidence; retainedv019integrationreview andactual20fullsource hostchecks. Not solelystandalonehistoricalfixtures."
+    },
+    {
+      "clause": "Merge prescribed gallery125 and its hostintegration in finalsite graph/order",
+      "status": "unmet",
+      "basis": "Savedboundedinventorystillopen125head7e0a6611; preparedgalleryfeaturecandidate containshostfixture butdefault hasno correspondingfixture. Local19sitequalification doesnotestablishactualdefault/hostedmerge."
+    },
+    {
+      "clause": "Validate links and track conflicts without relaxedacceptance",
+      "status": "partial evidence",
+      "basis": "Corehistoricalhostreceipt records fourexactsourcecommits22names andzerofindings; retainedcorequalificationcoversassembler/tracker source. Current20sourcechecksremainstrict; finalgalleryhosted/trackerclosure notdocumented."
+    },
+    {
+      "clause": "Final integrated host reruns",
+      "status": "partial; galleryremaining",
+      "basis": "Renderer/editor20hostchecks passactualfulltier; site19localreport passesallgates, but no final20genuine-registry site integration/hostedhostfixtureproof. No newtest/nativeexecution performed."
+    }
+  ],
+  "unmetClauses": [
+    "ActualGallery125/finalsite source/default integration and applicablehostedgate evidence",
+    "Finalgalleryhostfixture replay tied to genuine finalmatchingregistry/site graph",
+    "Explicitprescribedorder/supersession linkage and finalcoretracker evidence aftergalleryclosure"
+  ],
+  "nextMinimalAction": "Preservegallery125implementation in matchingfinalsiteadoption and obtain its existinghostfixture/tests/hosted evidence through authorizedsiteintegration whenno-deployboundary permits. Evidence reclassification alone cannotcloseT16; do not rerunwholeenginegraph alreadyqualified.",
+  "nativeAcceptance": false,
+  "networkCalls": 0,
+  "testsRun": 0,
+  "repoMutation": false
+}

@@ -4,6 +4,8 @@ The owner authorized **“Start final qualification; no deployment.”** These r
 
 ## Current records
 
+- [Post-roll handoff](post-roll-handoff-checkpoint.json) records verified official #651 merge `70b12d59` and queued #652 (22 checks reported, merge/acceptance pending). [T16 audit](t16-host-integration-evidence-audit.json) keeps Gallery host integration/final site evidence open; no engine retest or native/registry/site completion is inferred.
+
 - [Qualification tooling integration](qualification-tooling-integration-checkpoint.json) binds reviewed gate recovery and maintained CLI preview packaging on the unchanged pending official roll #651. Native preparation covers 55 cases/311 sealed files with independent supervisor verification, without Office/native acceptance; original strict canonical peer failures remain retained.
 
 - [Post-adoption handoff checkpoint](post-adoption-handoff-checkpoint.json) binds all four actual adoption merges and the reviewed official lock-only roll `229810d2` (run `38499933920`, qualification/merge pending). The dated 02:14 inventory has 24 PRs/42 issues and eight clean synchronized defaults. Existing source qualification limits and native/0.20 registry/site gates remain open.
