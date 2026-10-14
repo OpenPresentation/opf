@@ -12,7 +12,7 @@ shipped versus deferred.
 ## Versions
 
 Pin the coordinated set from `release-plan.json` (currently core **0.20.1**,
-CLI **0.20.0**, renderer **0.20.0**, PPTX **0.20.0**, editor **0.20.0**,
+CLI **0.20.0**, renderer **0.20.0**, PPTX **0.20.1**, editor **0.20.0**,
 with Gallery **3.0.0**). All of these packages declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 
@@ -21,7 +21,7 @@ node -v   # 24.x (verified); 22 and later are declared
 npm install @openpresentation/opf@0.20.1 \
   @openpresentation/opf-render@0.20.0 \
   @openpresentation/opf-editor@0.20.0 \
-  @openpresentation/opf-pptx@0.20.0 \
+  @openpresentation/opf-pptx@0.20.1 \
   @openpresentation/cli@0.20.0 \
   @openpresentation/gallery@3.0.0
 # opf-render 0.20 keeps its converters and font packages as optional peers: install the ones you use

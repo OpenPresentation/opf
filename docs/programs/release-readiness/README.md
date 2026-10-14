@@ -8,7 +8,7 @@ people resuming work start here, not from chat history or local scratch files.
 
 Official roll #651 and native tooling #652 are merged and verified. Evidence #661 is merged at `d0abab263708db5558fa1bf4bf23213d673b4f6c`; the supervisor's scoped acceptance covers 17 selected native cases, four actual UI operations and the fixed-source four-archive offline import replay. All 58 dispositions remain literal; 41 cases were not executed natively. No further Office run is needed for this accepted scope. [Scoped decision and exact identities](../../evidence/rr-20-windows-current-2026-10-14/supervisor-scoped-acceptance.json).
 
-Core 0.20.1, renderer/PPTX/editor/CLI 0.20.0 and Gallery 3.0.0 are
+Core/PPTX 0.20.1, renderer/editor/CLI 0.20.0 and Gallery 3.0.0 are
 genuinely published and verified. The
 [publication authority](../../evidence/rr-20-registry-current-2026-10-14/verified-registry-authority.json)
 binds each immutable tag and `gitHead` to its registry integrity, trusted
@@ -30,16 +30,21 @@ sample remains 17 selected cases and four actual UI operations, with 41 of
 58 cases unexecuted. It does not establish all-case, global font/raster or
 pixel parity; the program remains active.
 
-The plan uses the genuinely qualified published Editor example source
-`671b04ee3f6b228338c0eb3d6d7453f807b28837`. Editor [#170](https://github.com/OpenPresentation/opf-editor/pull/170)
-merged at `2ac0268359f48123031ef537fcc0c31d7c41a1df`, adding example thumbnail
-batching and a reviewed package-job CI budget fix after fresh required checks
-passed. PPTX [#260](https://github.com/OpenPresentation/opf-pptx/pull/260) merged
-at `f2637951b77763bfeb45d5cd1012d12f7763f952`, changing the generated master
-display name in source. Both actual merge trees equal the reviewed source
-heads. Published Editor `671b04e`, PPTX `0e2ea49` and the current plan's Editor
-example reference remain unchanged; source merges do not claim those
-improvements are adopted in the published artifacts or current site assets.
+The current plan and publication authority merged in core [#667](https://github.com/OpenPresentation/opf/pull/667)
+at `9fade9f6dc9f28a34fc766310de2fac859e1a6a3`, binding the verified PPTX
+0.20.1 artifact at `9690abd12af8d7a4d6f29a28709517f0b6569301` and Editor
+example source `2ac0268359f48123031ef537fcc0c31d7c41a1df`. Editor
+[#170](https://github.com/OpenPresentation/opf-editor/pull/170) added example
+thumbnail batching and a reviewed package-job CI budget fix after fresh required
+checks passed; its published library remains 0.20.0 at
+`671b04ee3f6b228338c0eb3d6d7453f807b28837`. PPTX
+[#260](https://github.com/OpenPresentation/opf-pptx/pull/260) changed the generated
+master display name to `pptx.gallery`; merged release preparation
+[#261](https://github.com/OpenPresentation/opf-pptx/pull/261) published that fix
+through the trusted workflow, with independent registry, provenance and
+signature verification. The original PPTX 0.20.0 artifact at `0e2ea49` and
+published Editor example `671b04e` remain bound to their historical qualification
+receipts. Site deployment and source integration have separate owner evidence.
 
 A narrow source-copy follow-up remains: the published core 0.20.1 schema
 description for `Presentation.filename` still names the removed CLI commands
