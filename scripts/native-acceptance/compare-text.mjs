@@ -35,7 +35,12 @@ export function compareTextObservations({expected,report,actions=[]}={}){
     for(const [index,slide] of expected.entries()){
       unique(slide.shapes,item=>item.name,'Expected shapes');const actual=observed.slides[index];assert.equal(actual.index,index+1);assert.equal(actual.shapeCount,actual.shapes.length);assert.ok(actual.shapeCount<=30);
       unique(actual.shapes,item=>item.name,`${phase}: shapes`);
-      const textShapes=actual.shapes.filter(item=>item.hasTextFrame!==0&&item.text!==null);
+      const emptyTextFrameNames=slide.emptyTextFrameNames??[];
+      unique(emptyTextFrameNames,name=>name,'Expected nontext shapes');
+      assert.ok(emptyTextFrameNames.every(name=>!slide.shapes.some(shape=>shape.name===name)),'Nontext shape overlaps text shape');
+      // PowerPoint exposes empty TextFrames on native decorative shapes that
+      // have no txBody in the source. Only exact source identities qualify.
+      const textShapes=actual.shapes.filter(item=>item.hasTextFrame!==0&&item.text!==null&&!(item.text===''&&emptyTextFrameNames.includes(item.name)));
       assert.equal(textShapes.length,slide.shapes.length,`${phase}: named text shape count`);
       for(const shape of slide.shapes){
         const matches=textShapes.filter(item=>item.name===shape.name);assert.equal(matches.length,1,`${phase}: missing exact named text shape ${shape.name}`);
@@ -84,7 +89,10 @@ export function exportedTextShapes(bytes,{unzipSync,XMLParser,XMLValidator},slid
       assert.ok(!transform[':@']?.flipH&&!transform[':@']?.flipV,'Flipped text requires separate comparison');
       const rotation=transform[':@']?.rot===undefined?0:number(transform,'rot')/60000;assert.equal(rotation,0,'Rotated text requires a dedicated comparator');
       return {name,text:child(one(sp,'p:txBody')['p:txBody'],'a:p').map(node=>text(node['a:p'])).join('\r'),left:number(off,'x')/12700,top:number(off,'y')/12700,width:number(ext,'cx')/12700,height:number(ext,'cy')/12700,rotation};
-    });unique(shapes,item=>item.name,'PPTX text shapes');return {dimensions,shapes};
+    });unique(shapes,item=>item.name,'PPTX text shapes');
+    const emptyTextFrameNames=child(tree,'p:sp').filter(node=>!child(node['p:sp'],'p:txBody').length).map(node=>attr(one(one(node['p:sp'],'p:nvSpPr')['p:nvSpPr'],'p:cNvPr'),'name'));
+    unique([...shapes,...emptyTextFrameNames.map(name=>({name}))],item=>item.name,'PPTX shape identities');
+    return {dimensions,shapes,...(emptyTextFrameNames.length?{emptyTextFrameNames}:{})};
   });
 }
 

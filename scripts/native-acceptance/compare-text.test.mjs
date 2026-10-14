@@ -82,3 +82,37 @@ test('complete comparison binds sealed inputs, installed graph, worker snapshots
   const result=await compareText(options);assert.equal(result.passed,true);assert.equal(result.nativeAcceptance,false);assert.equal(result.case,'test');assert.equal(result.manifestSha256,digest(suiteBytes));await assert.rejects(()=>compareText(options),/EEXIST/);
  }finally{await rm(root,{recursive:true,force:true});}
 });
+
+
+test('only source-named decorative shapes may expose additional empty native text frames',()=>{
+ const f=fixture(),decorations=['OPF timeline connector','OPF timeline marker 0','OPF timeline marker 1','OPF timeline marker 2'];
+ f.expected[0].emptyTextFrameNames=decorations;
+ for(const phase of ['original','edited','reopened']){
+  const slide=f.report.phases[phase].slides[0];
+  slide.shapes.push(...decorations.map(name=>({name,hasTextFrame:-1,text:''})));
+  slide.shapeCount=slide.shapes.length;
+ }
+ assert.equal(compareTextObservations(f).passed,true);
+ for(const phase of ['original','edited','reopened']){
+  const added=structuredClone(f);added.report.phases[phase].slides[0].shapes[1].text='Unexpected visible label';
+  assert.throws(()=>compareTextObservations(added),/named text shape count/);
+  const unknown=structuredClone(f);unknown.report.phases[phase].slides[0].shapes[1].name='Unknown empty frame';
+  assert.throws(()=>compareTextObservations(unknown),/named text shape count/);
+  const missing=structuredClone(f);missing.report.phases[phase].slides[0].shapes.shift();missing.report.phases[phase].slides[0].shapeCount--;
+  assert.throws(()=>compareTextObservations(missing),/named text shape count/);
+  const blank=structuredClone(f);blank.report.phases[phase].slides[0].shapes[0].text='';
+  assert.equal(compareTextObservations(blank).passed,false,'Missing source words remain a finding');
+  const moved=structuredClone(f);moved.report.phases[phase].slides[0].shapes[0].top+=0.0201;
+  assert.equal(compareTextObservations(moved).passed,false,'Text geometry tolerance is unchanged');
+ }
+});
+
+test('PPTX empty-frame identities come only from native shapes without txBody',()=>{
+ const decoration='<p:sp><p:nvSpPr><p:cNvPr name="OPF timeline connector"/></p:nvSpPr><p:spPr/></p:sp>';
+ const expected=exportedTextShapes(archive(shape+decoration),dependencies,1);
+ assert.deepEqual(expected[0].emptyTextFrameNames,['OPF timeline connector']);
+ assert.equal(expected[0].shapes.length,1);
+ assert.throws(()=>exportedTextShapes(archive(shape+decoration+decoration),dependencies,1),/duplicate/);
+ const emptyText=shape.replace('42 ','').replace('ms','').replace('Next &amp; last','');
+ assert.equal(exportedTextShapes(archive(emptyText),dependencies,1)[0].shapes.length,1,'An authored txBody remains a text shape even when empty');
+});
