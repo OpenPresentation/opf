@@ -1,0 +1,212 @@
+
+> openpresentation-workspace@ test:packed-ecosystem C:\opf-work\current-2ec2-stretch-01\opf
+> node scripts/test-packed-ecosystem.mjs
+
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "overrides". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+Renderer-absent furniture passed 6/6; evidence: C:\opf-work\current-2ec2-stretch-01\opf\artifacts\npm\renderer-absent-furniture\run-OZGa9i
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "overrides". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+
+added 118 packages in 38s
+Color reference renderer passed: scheme slots, roles, variables, hex, and invalid run fallback.
+ColorRef export passed: scheme slots, roles, variables, styled cells, and invalid run soft-degrade.
+✔ barChart: reordered sparse caches keep holes, zero and empty labels aligned (28.7318ms)
+✔ lineChart: reordered sparse caches keep holes, zero and empty labels aligned (10.5511ms)
+✔ areaChart: reordered sparse caches keep holes, zero and empty labels aligned (8.2119ms)
+✔ pieChart: reordered sparse caches keep holes, zero and empty labels aligned (9.0034ms)
+✔ doughnutChart: reordered sparse caches keep holes, zero and empty labels aligned (9.2244ms)
+✔ radarChart: reordered sparse caches keep holes, zero and empty labels aligned (8.788ms)
+✔ scatterChart: reordered sparse xVal/yVal caches keep holes, zero and empty X values aligned (9.3731ms)
+✔ scatterChart: a chart without c:xVal is plotted against 1..n (12.0031ms)
+✔ strRef: label indices retain explicit empty and absent values (7.0678ms)
+✔ strLit: label indices retain explicit empty and absent values (7.9368ms)
+✔ numRef: label indices retain explicit empty and absent values (6.7594ms)
+✔ numLit: label indices retain explicit empty and absent values (7.4944ms)
+✔ multiLvlStrRef: label indices retain explicit empty and absent values (7.1391ms)
+✔ empty series name is retained, missing series name still receives a fallback (15.1692ms)
+✔ numRef: empty numeric values and omitted c:v are missing, not zero (6.3301ms)
+✔ numLit: empty numeric values and omitted c:v are missing, not zero (6.9353ms)
+✔ absent ptCount infers extent from indices rather than point order (7.1895ms)
+✔ unsigned integer lexical forms retain their numeric indices (8.0291ms)
+✔ empty caches with a declared extent retain all-missing rows (6.1805ms)
+✔ category and numeric extents are aligned without manufacturing labels or zeros (6.129ms)
+✔ malformed duplicate index rejects with chart part and cache location (6.4592ms)
+✔ malformed missing index rejects with chart part and cache location (6.7405ms)
+✔ malformed negative index rejects with chart part and cache location (7.0506ms)
+✔ malformed fractional index rejects with chart part and cache location (6.2533ms)
+✔ malformed exponent index rejects with chart part and cache location (5.3775ms)
+✔ malformed nonnumeric index rejects with chart part and cache location (6.7513ms)
+✔ malformed huge index rejects with chart part and cache location (5.9684ms)
+✔ malformed index outside declared extent rejects with chart part and cache location (6.1138ms)
+✔ malformed negative count rejects with chart part and cache location (7.2407ms)
+✔ malformed fractional count rejects with chart part and cache location (5.5882ms)
+✔ malformed huge count rejects with chart part and cache location (5.5757ms)
+✔ malformed duplicate count rejects with chart part and cache location (5.5107ms)
+✔ malformed category and name caches are checked too (12.4032ms)
+✔ unchanged dense caches still import ordinary chart values (9.0624ms)
+✔ multiple cache sources and multiple point values are rejected (17.8168ms)
+✔ hierarchical categories are refused instead of becoming extra data rows (6.0705ms)
+✔ largest supported sparse extent is retained without index truncation (140.2954ms)
+✔ combined cache and output-table budgets reject before oversized allocations (14.3889ms)
+✔ duplicate c:numRef containers reject instead of importing missing data (8.4394ms)
+✔ duplicate c:strRef containers reject instead of importing missing data (12.3607ms)
+✔ duplicate c:multiLvlStrRef containers reject instead of importing missing data (8.2694ms)
+✔ duplicate c:val containers reject instead of importing missing data (7.9911ms)
+✔ duplicate c:yVal containers reject instead of importing missing data (8.2241ms)
+✔ duplicate c:cat containers reject instead of importing missing data (7.9807ms)
+✔ duplicate c:tx containers reject instead of importing missing data (8.3927ms)
+✔ ordinary numeric export/import/re-export retains scientific-notation cells (57.4502ms)
+✔ val/numRef: complete exponents preserve finite values, zeros and sparse labels (6.65ms)
+✔ val/numRef: exponent overflow and nonzero underflow refuse the exact logical point (21.3551ms)
+✔ val/numRef: malformed exponents and non-numeric text are gaps under the strict chart number rule (6.9257ms)
+✔ val/numLit: complete exponents preserve finite values, zeros and sparse labels (8.3855ms)
+✔ val/numLit: exponent overflow and nonzero underflow refuse the exact logical point (21.8349ms)
+✔ val/numLit: malformed exponents and non-numeric text are gaps under the strict chart number rule (7.2322ms)
+✔ yVal/numRef: complete exponents preserve finite values, zeros and sparse labels (6.7726ms)
+✔ yVal/numRef: exponent overflow and nonzero underflow refuse the exact logical point (23.706ms)
+✔ yVal/numRef: malformed exponents and non-numeric text are gaps under the strict chart number rule (8.6117ms)
+✔ yVal/numLit: complete exponents preserve finite values, zeros and sparse labels (6.5564ms)
+✔ yVal/numLit: exponent overflow and nonzero underflow refuse the exact logical point (22.2116ms)
+✔ yVal/numLit: malformed exponents and non-numeric text are gaps under the strict chart number rule (6.586ms)
+ℹ tests 58
+ℹ suites 0
+ℹ pass 58
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 735.8898
+Chart axis passed: 15 public ordinary-range cases and 47 automatic-minimum cases; authored fractions, zero baselines, evenly spaced ticks, zero magnitude baseline for column/bar/area and top-sixth zoom retained for line, source preservation and deterministic bytes.
+ZIP date public fixture: {"node":"v24.21.0","zones":["UTC","America/Los_Angeles","Pacific/Apia"],"validCasesPerZone":13,"invalidCasesPerZone":32,"exports":50,"explicitPostImportTimezoneChange":true,"recursiveLeafParts":41,"preservedDefaultAndUndefined":true,"equalAbsoluteRepresentations":true,"wholeFileTimezoneEquality":true,"nestedWorkbooks":true,"sourceOptionsPreserved":true,"reimport":true,"deterministicRepeat":true}
+ZIP date artifacts: C:\opf-work\current-2ec2-stretch-01\opf\artifacts\npm\zip-date-candidate\installed-RwTZzV\run-bZwUe0
+Installed font preparation passed layout, edit/undo, SVG/PNG, editable PPTX export and heading reimport.
+Furniture provenance: 8 measured/estimated local/inherited wide/portrait cases, 12 damaged-tag controls, edits/clearing/reordering, current images and metadata conflicts pass (38 validated imports). Native Office is a separate gate.
+Furniture fields: live slide numbers, fixed {{deck.slideCount}}, fixed and current dates, native date types, edits and helpers pass. Native Office is a separate gate.
+✔ measured wrapped baseline reports both static paths without native date fields or source mutation (34.3726ms)
+✔ unchanged full-mode wrapped dates recover generated source/format and use a new host date on reexport (92.584ms)
+✔ same inputs have byte-identical output (36.6411ms)
+✔ references-only/off export no fallback marker and do not regain generated date intent (98.4592ms)
+✔ old or unmarked flattened dates stay literal (27.8888ms)
+✔ edited parseable date stays current literal text through reexport (73.8261ms)
+✔ typed words stays current literal text through reexport (73.8501ms)
+✔ cleared date stays current literal text through reexport (70.6506ms)
+✔ damaged marker version cannot restore generated intent (24.4987ms)
+✔ damaged marker reason cannot restore generated intent (27.7605ms)
+✔ damaged marker format cannot restore generated intent (26.0097ms)
+✔ damaged marker fingerprint cannot restore generated intent (25.5483ms)
+✔ damaged marker extra words cannot restore generated intent (24.9973ms)
+✔ damaged marker missing fingerprint cannot restore generated intent (25.2522ms)
+✔ missing boundary conservatively retains ordinary native text (24.8959ms)
+✔ damaged separator conservatively retains ordinary native text (24.3223ms)
+✔ duplicate line conservatively retains ordinary native text (25.8982ms)
+✔ missing date shape cannot restore old text (24.4804ms)
+✔ actual current native date field takes precedence over stale static evidence (27.1812ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 802.9196
+Nine exact grouped faces preserve measured bytes and physical style links; overrides, aliases, duplicates and approximation controls pass.
+7 payload slides use all nine real physical font styles; deterministic output, source, reimport and provider controls pass.
+Packed consumer: core, editor, SVG, measured fonts and PPTX passed.
+✔ complete code parts preserve exact filename, language, body, whitespace and hard line boundaries (2.7735ms)
+✔ shorthand, empty source and absent metadata retain their source and generated-label distinction (0.452ms)
+✔ long language labels and filenames are measured within their cell before allocating the body (6.4149ms)
+✔ wrapped whitespace and graphemes retain contiguous source offsets, including CRLF and blank final lines (0.7363ms)
+✔ tabs use measured space stops and never send control tabs to the font-width provider (0.5022ms)
+✔ readability floors scale once and body shrinking preserves all code content (0.307ms)
+✔ irreducible body and metadata failures remain explicit; strict mode does not return partial output (9.1871ms)
+✔ invalid inner boxes never become invented one-pixel fits; malformed options reject (0.3035ms)
+✔ font trials stay bounded independently of canvas scale (5.0863ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 99.2079
+✔ accepted code uses rounded cells and preserves body compatibility without repeated explanation measurements (4.9386ms)
+✔ candidate penalties include complete code metadata and charge overflowing leaves once (12.5846ms)
+✔ strict ancestors reject code metadata paths and cannot be weakened by descendants (316.375ms)
+✔ explicit code placement and weights remain authoritative even when metadata overflows (18.5996ms)
+✔ pagination preserves exact code bytes, metadata, ranges and floors across wide and portrait slides (136.7163ms)
+✔ irreducible code metadata rejects pagination even after earlier content or with an empty body (253.9901ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 854.2844
+Shared code PPTX: 8 decks, 37 accepted native lines, 8 tab stops, six whitespace imports, strict failures, 132 XML-boundary rejections and valid character boundaries verified.
+Code provenance: exact source/metadata, native edits, ordering, empty/Unicode values, five damaged groups and edited generated label verified.
+Shared code SVG: 10 accepted layouts, source/whitespace/trace preservation, no extra measurement, strict/tiny-cell rejection, 132 XML-boundary rejections and valid character boundaries.
+Actual shared code browser: 12 wide/portrait cases with source preservation, accepted tab positions and contained glyphs.
+Code canvas: wide/portrait source editing, metadata, CRLF, tabs, pagination, undo, offline export and bounded reimport checks pass.
+Installed code: candidate source, pagination, metadata guards and actual offline browser workflows passed.
+✔ complete quote layout preserves source ranges, requested/resolved styles and compact readable geometry (2.1347ms)
+✔ shorthand and empty metadata preserve schema paths without an invented footer (0.747ms)
+✔ body and footer share available space before shrinking text or changing the outer arrangement (10.1131ms)
+✔ long footer, body/footer collision and strict rejection remain explicit without source truncation (148.6729ms)
+✔ tiny cells retain invalid available dimensions and never measure an invented fitting box (0.1989ms)
+✔ explicit readability floors are respected after scaling, including above nominal footer size (0.1941ms)
+✔ invalid content, geometry, scales and policies fail before reporting a usable layout (0.1937ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 236.7683
+✔ accepted quote geometry includes all parts without changing source or re-measuring for explanations (4.9803ms)
+✔ automatic candidates account for footer fit and choose the arrangement that keeps it readable (11.1359ms)
+✔ strict ancestors reject a quote body diagnostic below the leaf path (333.2856ms)
+✔ strict path matching respects component boundaries rather than numeric prefixes (231.1652ms)
+✔ pagination preserves quote body, repeated metadata, ranges and the accepted readability floor (2385.3556ms)
+✔ irreducible footer overflow rejects pagination without mutating or returning partial content (48.8538ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3144.0232
+Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission.
+Shared quote PPTX: 4 wide/portrait decks and 6 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.
+Packed quote editor passed: accepted one-page policy, source preservation, actual fonts, SVG/PPTX, undo/redo and editable native text reimport. An unchanged quote re-imports as its quote payload (FF-57); earlier opf-pptx releases return native text lines.
+Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.
+Native merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling.
+Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics.
+Native conditional table borders passed: outer frame/interior grid, bands/edges/corners, partial/direct overrides, theme lines/alpha, missing-reference masking, repeated conversion and diagnostics.
+✔ short table rows preserve baseline geometry and missing cells (2.0989ms)
+✔ wrapped and rich multiline rows grow into available space (5.7479ms)
+✔ constrained tables consume spare row height before reporting real overflow (0.4727ms)
+✔ readability settings and mixed-font metrics govern row fitting (0.3472ms)
+✔ pagination retains complete multiline rows and repeated headers (121.3186ms)
+✔ mixed-size table paragraphs reserve the native uniform line spacing (0.2969ms)
+✔ spare height in short rows is removed before any font shrinking (0.183ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 241.5648
+Packed consumer: TypeScript declarations and browser bundle passed.
+Packed browser harness built: artifacts/editor/packed-canvas-tests.html (serve alongside demo fonts.json).
+Installed styled-table browser harness built: artifacts/editor/packed-styled-table-tests.html. Open it to verify real pointer/keyboard interaction.
+Packed TypeScript 5.9/7 consumers passed: 21 exports, NodeNext/Bundler, installed renderer/editor/PPTX, browser entries without Node types.
+Local tarball consumer passed; this is not a registry verification.

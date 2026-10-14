@@ -4,7 +4,11 @@ Status: **active** (opened 2026-10-01). Tracker: [burndown.md](burndown.md).
 This is the single source of truth for the cross-repository program. Agents and
 people resuming work start here, not from chat history or local scratch files.
 
-## Current checkpoint — 2026-10-13 published graph and feature qualification
+## Current checkpoint — 2026-10-14
+
+The official source roll #651 and native tooling #652 are merged and verified. The selected next train is core 0.20.1 with renderer/PPTX/editor/CLI 0.20.0 and genuinely published Gallery 3.0.0; selection is not engine registry acceptance. The old e43 core 0.20.0 preparation remains unpublished and must never be tagged. Reviewed core fixes #659/#660 are enqueued and PPTX #258 full-ci is pending supervisor-confirmed merge. Windows retained 17 selected native cases and four actual UI operations, with all 58 case dispositions and 41 unexecuted cases preserved. The fixed-source five-package preview preparation and four saved-archive offline replays pass; no further Office run was needed. Final scope decision, source merges, stable registry qualification and site qualification remain separate; global/native acceptance stays open. [Windows evidence and fixed replay](../../evidence/rr-20-windows-current-2026-10-14/README.md). Earlier dated checkpoints below remain historical.
+
+## Historical checkpoint — 2026-10-13 published graph and feature qualification
 
 **Post-roll checkpoint — 2026-10-14 UTC:** official roll #651 merged at `70b12d5910088b7d16a81c683db8873813041fde`; supervisor verification binds its exact tree to reviewed lock-only `229810d2`. Qualification tooling #652 merged at `47e66c570ff8666bbf63485b4b984e475e33849a`; supervisor verification binds its exact tree to reviewed `957d3bcd`. Both #651 and #652 are merged and verified. Their source integration does not close native or genuine 0.20 registry acceptance. [Merge receipt and T16 audit](../../evidence/rr20-site-currency-queue/post-roll-handoff-checkpoint.json) preserve source identities and hashes. T16 stays open: renderer/editor/core host integration has retained evidence, but Gallery host-fixture actual default/hosted integration and final matching site evidence remain. Do not repeat already qualified engine suites merely to reconcile this site gap. Genuine 0.20 release/registry, all native-case dispositions, sites and owner scope remain open; no Office or deployment acceptance is inferred. Earlier pending-roll narratives retain their historical checkpoint scope.
 

@@ -1,0 +1,22 @@
+{
+  "saved": {
+    "picture": "<p:pic><p:nvPicPr><p:cNvPr id=\"3\" name=\"OPF image 1\"/><p:cNvPicPr><a:picLocks noGrp=\"1\" noChangeAspect=\"1\"/></p:cNvPicPr><p:nvPr><p:ph type=\"pic\" idx=\"500\"/></p:nvPr></p:nvPicPr><p:blipFill><a:blip r:embed=\"rId6\"/><a:srcRect/><a:stretch/></p:blipFill><p:spPr><a:xfrm><a:off x=\"548640\" y=\"2498788\"/><a:ext cx=\"5433060\" cy=\"2716530\"/></a:xfrm><a:prstGeom prst=\"rect\"><a:avLst/></a:prstGeom></p:spPr></p:pic>",
+    "srcRect": "<a:srcRect/>",
+    "frame": "<a:xfrm><a:off x=\"548640\" y=\"2498788\"/><a:ext cx=\"5433060\" cy=\"2716530\"/></a:xfrm>",
+    "media": "ppt/media/image1.png",
+    "mediaSha256": "a168bef97c7e01a6a993350bb1d0e73dd8af1bfb9949cf1b36d88c48124dfd6e",
+    "placeholder": "<p:ph type=\"pic\" idx=\"500\"/>",
+    "fullSource": true
+  },
+  "exported": {
+    "picture": "<p:pic>  <p:nvPicPr><p:cNvPr id=\"3\" name=\"OPF image 1\"/>    <p:cNvPicPr><a:picLocks noGrp=\"1\" noChangeAspect=\"1\"/></p:cNvPicPr><p:nvPr><p:ph type=\"pic\" idx=\"500\"/><p:custDataLst><p:tags r:id=\"rIdOpfImage1\"/></p:custDataLst></p:nvPr>  </p:nvPicPr><p:blipFill><a:blip r:embed=\"rId1\"></a:blip>  <a:stretch><a:fillRect/></a:stretch></p:blipFill><p:spPr> <a:xfrm><a:off x=\"548640\" y=\"1404747\"/><a:ext cx=\"5433060\" cy=\"4904613\"/></a:xfrm> <a:prstGeom prst=\"rect\"><a:avLst/></a:prstGeom></p:spPr></p:pic>",
+    "srcRect": null,
+    "frame": "<a:xfrm><a:off x=\"548640\" y=\"1404747\"/><a:ext cx=\"5433060\" cy=\"4904613\"/></a:xfrm>",
+    "media": "ppt/media/image-1-1.png",
+    "mediaSha256": "a168bef97c7e01a6a993350bb1d0e73dd8af1bfb9949cf1b36d88c48124dfd6e",
+    "placeholder": "<p:ph type=\"pic\" idx=\"500\"/>",
+    "fullSource": true
+  },
+  "absoluteGeometryParityAsserted": false,
+  "pixelParityAsserted": false
+}

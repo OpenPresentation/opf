@@ -1,0 +1,92 @@
+{
+  "results": [
+    {
+      "id": "change-layout",
+      "savedSha256": "f208df72212cdf9f6fc1f67a5cef35ba989cd39456ee4b315710c266f8c75e34",
+      "apiResults": [
+        {
+          "catalogMode": "default",
+          "openMatches": true,
+          "convertMatches": true,
+          "unresolvedReferenceWarnings": 0
+        },
+        {
+          "catalogMode": "registered",
+          "openMatches": true,
+          "convertMatches": true,
+          "unresolvedReferenceWarnings": 0
+        }
+      ],
+      "cliMatchesDirect": true,
+      "changeAgainstHistoricalDirect": "none",
+      "passed": true
+    },
+    {
+      "id": "new-custom",
+      "savedSha256": "200653c27b9065733ec395261f1f3fac10f28310097bf6f1569bd8fac79b251e",
+      "apiResults": [
+        {
+          "catalogMode": "default",
+          "openMatches": true,
+          "convertMatches": true,
+          "unresolvedReferenceWarnings": 0
+        },
+        {
+          "catalogMode": "registered",
+          "openMatches": true,
+          "convertMatches": true,
+          "unresolvedReferenceWarnings": 0
+        }
+      ],
+      "cliMatchesDirect": true,
+      "changeAgainstHistoricalDirect": "none",
+      "passed": true
+    },
+    {
+      "id": "new-text",
+      "savedSha256": "7cdc801aa2cd4fbb7928b3d361b8bc78b4cb2a7465eba59142c0fd1a65366465",
+      "apiResults": [
+        {
+          "catalogMode": "default",
+          "openMatches": true,
+          "convertMatches": true,
+          "unresolvedReferenceWarnings": 0
+        },
+        {
+          "catalogMode": "registered",
+          "openMatches": true,
+          "convertMatches": true,
+          "unresolvedReferenceWarnings": 0
+        }
+      ],
+      "cliMatchesDirect": true,
+      "changeAgainstHistoricalDirect": "none",
+      "passed": true
+    },
+    {
+      "id": "change-picture",
+      "savedSha256": "040e6bf64408d7a09b15c43565076ff16af583bf6b1a4b4cb525abece8c721fe",
+      "apiResults": [
+        {
+          "catalogMode": "default",
+          "openMatches": true,
+          "convertMatches": true,
+          "unresolvedReferenceWarnings": 0
+        },
+        {
+          "catalogMode": "registered",
+          "openMatches": true,
+          "convertMatches": true,
+          "unresolvedReferenceWarnings": 0
+        }
+      ],
+      "cliMatchesDirect": true,
+      "changeAgainstHistoricalDirect": "image block fit:stretch only",
+      "passed": true
+    }
+  ],
+  "passed": true,
+  "scope": "Bounded offline replay of four retained manual archives; no new Office action, native/global/registry acceptance or publication",
+  "nativeAcceptance": false,
+  "registryAcceptance": false
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "ruleId": "import/heading-import-reflow",
+    "severity": "warning",
+    "category": "import",
+    "path": "/slides/0",
+    "scope": "document",
+    "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+    "help": ""
+  },
+  {
+    "ruleId": "import/text-import-reflow",
+    "severity": "warning",
+    "category": "import",
+    "path": "/slides/0",
+    "scope": "document",
+    "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+    "help": ""
+  },
+  {
+    "ruleId": "import/heading-import-reflow",
+    "severity": "warning",
+    "category": "import",
+    "path": "/slides/1",
+    "scope": "document",
+    "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+    "help": ""
+  },
+  {
+    "ruleId": "import/text-import-reflow",
+    "severity": "warning",
+    "category": "import",
+    "path": "/slides/1",
+    "scope": "document",
+    "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+    "help": ""
+  },
+  {
+    "ruleId": "import/heading-import-reflow",
+    "severity": "warning",
+    "category": "import",
+    "path": "/slides/2",
+    "scope": "document",
+    "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+    "help": ""
+  }
+]

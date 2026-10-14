@@ -1,0 +1,23 @@
+[
+  {
+    "id": "change-layout",
+    "savedSha256": "f208df72212cdf9f6fc1f67a5cef35ba989cd39456ee4b315710c266f8c75e34",
+    "apiResults": [
+      {
+        "catalogMode": "default",
+        "openMatches": true,
+        "convertMatches": true,
+        "unresolvedReferenceWarnings": 0
+      },
+      {
+        "catalogMode": "registered",
+        "openMatches": true,
+        "convertMatches": true,
+        "unresolvedReferenceWarnings": 0
+      }
+    ],
+    "cliMatchesDirect": true,
+    "changeAgainstHistoricalDirect": "none",
+    "passed": true
+  }
+]

@@ -4,12 +4,16 @@
 
 **Owner correction (2026-10-13):** native acceptance uses the versioned [test suite](../../../scripts/native-acceptance/README.md), fetched at an exact reviewed Git revision and generated on the Windows host from the selected installed packages. Do not distribute one-off packets or ZIPs, including through a Git handoff branch. Packet07b and the Taildrop receipt below are historical evidence, not the ongoing test distribution workflow.
 
-Updated by the release supervisor on 2026-10-12 after local feature qualification. Follow the live [0.19 execution checklist](0.19-execution.md), currently 32/40 verified checkpoints, for reviewed evidence and remaining acceptance. It replaces the handoff of 2026-10-06. A new
+Operative update: 2026-10-14; the current checkpoint below supersedes dated historical states. Follow the live [0.19 execution checklist](0.19-execution.md), currently 32/40 verified checkpoints, for reviewed evidence and remaining acceptance. It replaces the handoff of 2026-10-06. A new
 supervisor or agent team resumes from this file, then [README.md](README.md) (goal, invariants, resume protocol),
 [burndown.md](burndown.md), [the release process](../../release-process.md) and the root `AGENTS.md`. Nothing here
 overrides those invariants. Reviewed local integration candidates also exist; preserve their exact identities and do not treat them as merged or published artifacts.
 
-## Current supervisor checkpoint — 2026-10-13
+## Current supervisor checkpoint — 2026-10-14
+
+The official source roll #651 and native tooling #652 are merged and verified. The selected next train is core 0.20.1 with renderer/PPTX/editor/CLI 0.20.0 and genuinely published Gallery 3.0.0; selection is not engine registry acceptance. The old e43 core 0.20.0 preparation remains unpublished and must never be tagged. Reviewed core fixes #659/#660 are enqueued and PPTX #258 full-ci is pending supervisor-confirmed merge. Windows retained 17 selected native cases and four actual UI operations, with all 58 case dispositions and 41 unexecuted cases preserved. The fixed-source five-package preview preparation and four saved-archive offline replays pass; no further Office run was needed. Final scope decision, source merges, stable registry qualification and site qualification remain separate; global/native acceptance stays open. [Exact Windows identities, limitations and replay](../../evidence/rr-20-windows-current-2026-10-14/README.md).
+
+## Historical supervisor checkpoint — 2026-10-13
 
 **Post-roll checkpoint — 2026-10-14 UTC:** official roll #651 merged at `70b12d5910088b7d16a81c683db8873813041fde`; supervisor verification binds its exact tree to reviewed lock-only `229810d2`. Qualification tooling #652 merged at `47e66c570ff8666bbf63485b4b984e475e33849a`; supervisor verification binds its exact tree to reviewed `957d3bcd`. Both #651 and #652 are merged and verified. Their source integration does not close native or genuine 0.20 registry acceptance. [Merge receipt and T16 audit](../../evidence/rr20-site-currency-queue/post-roll-handoff-checkpoint.json) preserve source identities and hashes. T16 stays open: renderer/editor/core host integration has retained evidence, but Gallery host-fixture actual default/hosted integration and final matching site evidence remain. Do not repeat already qualified engine suites merely to reconcile this site gap. Genuine 0.20 release/registry, all native-case dispositions, sites and owner scope remain open; no Office or deployment acceptance is inferred. Earlier pending-roll narratives retain their historical checkpoint scope.
 

@@ -1,0 +1,104 @@
+{
+  "command": "convert",
+  "ok": true,
+  "input": {
+    "file": "C:\\opf-work\\native-manual-current-6eea8909-attempt01\\change-layout.pptx",
+    "sha256": "f208df72212cdf9f6fc1f67a5cef35ba989cd39456ee4b315710c266f8c75e34",
+    "bytes": 93328
+  },
+  "outputs": [
+    {
+      "file": "C:\\opf-work\\current-2ec2-stretch-01\\replay-attempt02\\change-layout-cli.opf.json",
+      "sha256": "b16cedabd15cf429cf946cbf061918f8c63c8a1503e9589f4462fb919a6ed1ca",
+      "bytes": 1997,
+      "mediaType": "application/json"
+    }
+  ],
+  "findings": [
+    {
+      "ruleId": "import/heading-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0",
+      "scope": "document",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/text-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0",
+      "scope": "document",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/unsupported-image-crop",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/pictures/0",
+      "scope": "document",
+      "message": "Native picture crop is not represented by the imported OPF asset; the full image was retained.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/heading-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1",
+      "scope": "document",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/text-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/1",
+      "scope": "document",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/heading-import-reflow",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/2",
+      "scope": "document",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/slide-reference-changed",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/content",
+      "scope": "document",
+      "message": "The slide's objects were moved, resized, added or removed since export, so the authored content structure of slides.0 (groups, regions, block ids) was not restored; the imported slide keeps its flat blocks.",
+      "help": ""
+    },
+    {
+      "ruleId": "import/layout-reference-changed",
+      "severity": "warning",
+      "category": "import",
+      "path": "/slides/0/layout",
+      "scope": "document",
+      "message": "The slide's objects were moved, resized, added or removed since export, so slides.0.layout 'image-beside' was not restored; the imported slide keeps its observed arrangement.",
+      "help": ""
+    }
+  ],
+  "counts": {
+    "error": 0,
+    "warning": 8,
+    "info": 0
+  },
+  "format": "json",
+  "pptx": {
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.1.0-preview.11"
+  },
+  "opfVersion": "0.4.0-preview.11",
+  "cli": "0.19.0",
+  "written": true
+}

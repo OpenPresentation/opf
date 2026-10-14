@@ -1,0 +1,149 @@
+[
+  {
+    "step": 1,
+    "arguments": [
+      "install",
+      "--frozen-lockfile"
+    ],
+    "finished": "2026-10-14T08:20:03.5272784Z",
+    "started": "2026-10-14T08:20:01.2700217Z",
+    "exitCode": 0,
+    "tool": "C:\\opf-work\\candidate-81c4fdf5\\tools\\node_modules\\pnpm\\bin\\pnpm.cjs",
+    "log": "C:\\opf-work\\current-2ec2-stretch-01\\logs\\01-preparation.log"
+  },
+  {
+    "step": 2,
+    "arguments": [
+      "ci",
+      "--prefix",
+      "../opf-render"
+    ],
+    "finished": "2026-10-14T08:20:08.3028959Z",
+    "started": "2026-10-14T08:20:03.5409737Z",
+    "exitCode": 0,
+    "tool": "C:\\opf-work\\candidate-81c4fdf5\\tools\\node_modules\\npm\\bin\\npm-cli.js",
+    "log": "C:\\opf-work\\current-2ec2-stretch-01\\logs\\02-preparation.log"
+  },
+  {
+    "step": 3,
+    "arguments": [
+      "ci",
+      "--prefix",
+      "../opf-pptx"
+    ],
+    "finished": "2026-10-14T08:20:11.0711951Z",
+    "started": "2026-10-14T08:20:08.3047445Z",
+    "exitCode": 0,
+    "tool": "C:\\opf-work\\candidate-81c4fdf5\\tools\\node_modules\\npm\\bin\\npm-cli.js",
+    "log": "C:\\opf-work\\current-2ec2-stretch-01\\logs\\03-preparation.log"
+  },
+  {
+    "step": 4,
+    "arguments": [
+      "ci",
+      "--prefix",
+      "../opf-editor"
+    ],
+    "finished": "2026-10-14T08:20:15.9331584Z",
+    "started": "2026-10-14T08:20:11.0728929Z",
+    "exitCode": 0,
+    "tool": "C:\\opf-work\\candidate-81c4fdf5\\tools\\node_modules\\npm\\bin\\npm-cli.js",
+    "log": "C:\\opf-work\\current-2ec2-stretch-01\\logs\\04-preparation.log"
+  },
+  {
+    "step": 5,
+    "arguments": [
+      "build"
+    ],
+    "finished": "2026-10-14T08:20:33.3207062Z",
+    "started": "2026-10-14T08:20:15.9346200Z",
+    "exitCode": 0,
+    "tool": "C:\\opf-work\\candidate-81c4fdf5\\tools\\node_modules\\pnpm\\bin\\pnpm.cjs",
+    "log": "C:\\opf-work\\current-2ec2-stretch-01\\logs\\05-preparation.log"
+  },
+  {
+    "step": 6,
+    "arguments": [
+      "--packages-only"
+    ],
+    "finished": "2026-10-14T08:20:34.2232825Z",
+    "started": "2026-10-14T08:20:33.3224230Z",
+    "exitCode": 0,
+    "tool": "scripts/link-ecosystem.mjs",
+    "log": "C:\\opf-work\\current-2ec2-stretch-01\\logs\\06-preparation.log"
+  },
+  {
+    "step": 7,
+    "arguments": [],
+    "finished": "2026-10-14T08:20:34.4369379Z",
+    "started": "2026-10-14T08:20:34.2249140Z",
+    "exitCode": 0,
+    "tool": "scripts/materialize-gallery-catalog.mjs",
+    "log": "C:\\opf-work\\current-2ec2-stretch-01\\logs\\07-preparation.log"
+  },
+  {
+    "step": 8,
+    "arguments": [
+      "run",
+      "build",
+      "--prefix",
+      "../opf-render"
+    ],
+    "finished": "2026-10-14T08:20:34.6392272Z",
+    "started": "2026-10-14T08:20:34.4385337Z",
+    "exitCode": 0,
+    "tool": "C:\\opf-work\\candidate-81c4fdf5\\tools\\node_modules\\npm\\bin\\npm-cli.js",
+    "log": "C:\\opf-work\\current-2ec2-stretch-01\\logs\\08-preparation.log"
+  },
+  {
+    "step": 9,
+    "arguments": [
+      "run",
+      "build",
+      "--prefix",
+      "../opf-pptx"
+    ],
+    "finished": "2026-10-14T08:20:34.8537629Z",
+    "started": "2026-10-14T08:20:34.6407445Z",
+    "exitCode": 0,
+    "tool": "C:\\opf-work\\candidate-81c4fdf5\\tools\\node_modules\\npm\\bin\\npm-cli.js",
+    "log": "C:\\opf-work\\current-2ec2-stretch-01\\logs\\09-preparation.log"
+  },
+  {
+    "step": 10,
+    "arguments": [
+      "run",
+      "build",
+      "--prefix",
+      "../opf-editor"
+    ],
+    "finished": "2026-10-14T08:20:35.0859668Z",
+    "started": "2026-10-14T08:20:34.8553123Z",
+    "exitCode": 0,
+    "tool": "C:\\opf-work\\candidate-81c4fdf5\\tools\\node_modules\\npm\\bin\\npm-cli.js",
+    "log": "C:\\opf-work\\current-2ec2-stretch-01\\logs\\10-preparation.log"
+  },
+  {
+    "step": 11,
+    "arguments": [
+      "pack:ecosystem",
+      "--include-cli"
+    ],
+    "finished": "2026-10-14T08:20:38.9251135Z",
+    "started": "2026-10-14T08:20:35.0872707Z",
+    "exitCode": 0,
+    "tool": "C:\\opf-work\\candidate-81c4fdf5\\tools\\node_modules\\pnpm\\bin\\pnpm.cjs",
+    "log": "C:\\opf-work\\current-2ec2-stretch-01\\logs\\11-preparation.log"
+  },
+  {
+    "step": 12,
+    "arguments": [
+      "test:packed-ecosystem"
+    ],
+    "finished": "2026-10-14T08:22:00.6565359Z",
+    "started": "2026-10-14T08:20:38.9263963Z",
+    "exitCode": 0,
+    "tool": "C:\\opf-work\\candidate-81c4fdf5\\tools\\node_modules\\pnpm\\bin\\pnpm.cjs",
+    "log": "C:\\opf-work\\current-2ec2-stretch-01\\logs\\12-preparation.log"
+  }
+]
