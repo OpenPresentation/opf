@@ -1,0 +1,17 @@
+change-layout passed
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+Error: EEXIST: file already exists, open 'C:\opf-work\current-2ec2-stretch-01\replay-attempt02\progress.json'
+    at Object.openSync (node:fs:621:18)
+    at writeFileSync (node:fs:2496:35)
+    at json (file:///C:/opf-work/current-2ec2-stretch-01/logs/replay-attempt02.mjs:10:26)
+    at file:///C:/opf-work/current-2ec2-stretch-01/logs/replay-attempt02.mjs:55:126 {
+  errno: -4075,
+  code: 'EEXIST',
+  syscall: 'open',
+  path: 'C:\\opf-work\\current-2ec2-stretch-01\\replay-attempt02\\progress.json'
+}
+
+Node.js v24.21.0

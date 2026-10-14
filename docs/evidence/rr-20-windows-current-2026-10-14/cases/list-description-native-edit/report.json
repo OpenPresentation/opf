@@ -1,0 +1,382 @@
+﻿{
+    "schemaVersion":  1,
+    "captureTextFonts":  false,
+    "source":  {
+                   "path":  "C:\\opf-work\\native-current-list-b8364ac3-attempt01\\inputs\\case.pptx",
+                   "sha256":  "710bf16de927489bd12fec1e965b564bfa35c9137784e07d48e226a8aa6320c8",
+                   "openedPath":  "C:\\opf-work\\native-current-list-b8364ac3-attempt01\\native\\inputs\\input.pptx",
+                   "openedSha256":  "710bf16de927489bd12fec1e965b564bfa35c9137784e07d48e226a8aa6320c8"
+               },
+    "saved":  {
+                  "path":  "C:\\opf-work\\native-current-list-b8364ac3-attempt01\\native\\native-furniture-control.pptx",
+                  "sha256":  "9093abd1ad3723114e1b3104a97b7c3b28f8788b556699f00e95f9b64eb48507"
+              },
+    "reopened":  {
+                     "path":  "C:\\opf-work\\native-current-list-b8364ac3-attempt01\\native\\native-furniture-control.pptx",
+                     "sha256":  "9093abd1ad3723114e1b3104a97b7c3b28f8788b556699f00e95f9b64eb48507"
+                 },
+    "actionPlan":  {
+                       "path":  "C:\\opf-work\\native-current-list-b8364ac3-attempt01\\inputs\\action-plan.json",
+                       "sha256":  "9557a7ae564d0e0928eb2d3beda71976c081f00c3aa1dea13ac4c15fc05692ff",
+                       "snapshotPath":  "C:\\opf-work\\native-current-list-b8364ac3-attempt01\\native\\inputs\\action-plan.json",
+                       "snapshotSha256":  "9557a7ae564d0e0928eb2d3beda71976c081f00c3aa1dea13ac4c15fc05692ff",
+                       "actions":  [
+                                       {
+                                           "op":  "set-text-style",
+                                           "slideIndex":  1,
+                                           "shapeName":  "OPF list slides.0.items line 1",
+                                           "fontSize":  36,
+                                           "color":  "FF0000"
+                                       }
+                                   ],
+                       "completed":  [
+                                         {
+                                             "index":  1,
+                                             "op":  "set-text-style",
+                                             "status":  "success"
+                                         }
+                                     ],
+                       "styleEdits":  [
+                                          {
+                                              "index":  1,
+                                              "slideIndex":  1,
+                                              "shapeName":  "OPF list slides.0.items line 1",
+                                              "observed":  {
+                                                               "textBefore":  "about it",
+                                                               "textAfter":  "about it",
+                                                               "fontSize":  36,
+                                                               "color":  "FF0000"
+                                                           }
+                                          }
+                                      ]
+                   },
+    "phases":  {
+                   "original":  {
+                                    "slideCount":  1,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226974656D73222C22626F78223A5B35372E362C3134372E362C313136342E382C3531342E385D7D2C226C69737452756E73223A5B5B22736C696465732E302E6974656D73222C7B2274657874223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223464646464646222C22666F6E7453697A65223A32342C22666F6E7446616D696C79223A22526F626F746F227D2C226465736372697074696F6E223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223463046304630222C22666F6E7453697A65223A31392E36382C22666F6E7446616D696C79223A22526F626F746F227D7D5D5D2C226C697374526F6C6573223A5B5B22736C696465732E302E6974656D73222C5B5B302C2274657874222C747275655D2C5B302C226465736372697074696F6E222C66616C73655D2C5B312C2274657874222C747275655D5D5D5D2C226E6174697665223A7B22737472756374757265223A223062643830303833316536303337222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223062303266663939633536653433222C226C6973744964656E74697479223A223164613736363236356331373963227D7D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  4,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Descriptions remain descriptions",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF list slides.0.items line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  110.676537,
+                                                                          "width":  873.6,
+                                                                          "height":  29.28,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "With a description",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF list slides.0.items line 1",
+                                                                          "type":  1,
+                                                                          "left":  69.6,
+                                                                          "top":  142.836533,
+                                                                          "width":  847.2,
+                                                                          "height":  24.0096054,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "about it",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  4,
+                                                                          "id":  5,
+                                                                          "name":  "OPF list slides.0.items line 2",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  173.566147,
+                                                                          "width":  873.6,
+                                                                          "height":  29.28,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Unchanged second entry",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\native-current-list-b8364ac3-attempt01\\native\\original-slide-01.png",
+                                                        "sha256":  "b89a4f974c79cfdd8d31b1a8becca525b891d799f5e837d2b352724281369d32"
+                                                    }
+                                                ]
+                                },
+                   "edited":  {
+                                  "slideCount":  1,
+                                  "slides":  [
+                                                 {
+                                                     "index":  1,
+                                                     "slideId":  256,
+                                                     "name":  "Slide 1",
+                                                     "tags":  [
+                                                                  {
+                                                                      "index":  1,
+                                                                      "name":  "OPF_SLIDE_V1",
+                                                                      "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226974656D73222C22626F78223A5B35372E362C3134372E362C313136342E382C3531342E385D7D2C226C69737452756E73223A5B5B22736C696465732E302E6974656D73222C7B2274657874223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223464646464646222C22666F6E7453697A65223A32342C22666F6E7446616D696C79223A22526F626F746F227D2C226465736372697074696F6E223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223463046304630222C22666F6E7453697A65223A31392E36382C22666F6E7446616D696C79223A22526F626F746F227D7D5D5D2C226C697374526F6C6573223A5B5B22736C696465732E302E6974656D73222C5B5B302C2274657874222C747275655D2C5B302C226465736372697074696F6E222C66616C73655D2C5B312C2274657874222C747275655D5D5D5D2C226E6174697665223A7B22737472756374757265223A223062643830303833316536303337222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223062303266663939633536653433222C226C6973744964656E74697479223A223164613736363236356331373963227D7D"
+                                                                  }
+                                                              ],
+                                                     "shapeCount":  4,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF heading slides.0.title line 0",
+                                                                        "type":  14,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  49.41,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Descriptions remain descriptions",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_HEADING_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  2,
+                                                                        "id":  3,
+                                                                        "name":  "OPF list slides.0.items line 0",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  110.676537,
+                                                                        "width":  873.6,
+                                                                        "height":  29.28,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "With a description",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  3,
+                                                                        "id":  4,
+                                                                        "name":  "OPF list slides.0.items line 1",
+                                                                        "type":  1,
+                                                                        "left":  69.6,
+                                                                        "top":  142.836533,
+                                                                        "width":  847.2,
+                                                                        "height":  24.0096054,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "about it",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  4,
+                                                                        "id":  5,
+                                                                        "name":  "OPF list slides.0.items line 2",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  173.566147,
+                                                                        "width":  873.6,
+                                                                        "height":  29.28,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Unchanged second entry",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+
+                                                                                 ]
+                                                                    }
+                                                                ]
+                                                 }
+                                             ],
+                                  "rasters":  [
+                                                  {
+                                                      "slideIndex":  1,
+                                                      "path":  "C:\\opf-work\\native-current-list-b8364ac3-attempt01\\native\\edited-slide-01.png",
+                                                      "sha256":  "c06bb294492d3bbac7ca447a6391d5ae31acad9dbfa5b462ce1f415b351ed4e4"
+                                                  }
+                                              ]
+                              },
+                   "reopened":  {
+                                    "slideCount":  1,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226974656D73222C22626F78223A5B35372E362C3134372E362C313136342E382C3531342E385D7D2C226C69737452756E73223A5B5B22736C696465732E302E6974656D73222C7B2274657874223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223464646464646222C22666F6E7453697A65223A32342C22666F6E7446616D696C79223A22526F626F746F227D2C226465736372697074696F6E223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223463046304630222C22666F6E7453697A65223A31392E36382C22666F6E7446616D696C79223A22526F626F746F227D7D5D5D2C226C697374526F6C6573223A5B5B22736C696465732E302E6974656D73222C5B5B302C2274657874222C747275655D2C5B302C226465736372697074696F6E222C66616C73655D2C5B312C2274657874222C747275655D5D5D5D2C226E6174697665223A7B22737472756374757265223A223062643830303833316536303337222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223062303266663939633536653433222C226C6973744964656E74697479223A223164613736363236356331373963227D7D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  4,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Descriptions remain descriptions",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF list slides.0.items line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  110.676537,
+                                                                          "width":  873.6,
+                                                                          "height":  29.28,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "With a description",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF list slides.0.items line 1",
+                                                                          "type":  1,
+                                                                          "left":  69.6,
+                                                                          "top":  142.836533,
+                                                                          "width":  847.2,
+                                                                          "height":  24.0096054,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "about it",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  4,
+                                                                          "id":  5,
+                                                                          "name":  "OPF list slides.0.items line 2",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  173.566147,
+                                                                          "width":  873.6,
+                                                                          "height":  29.28,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Unchanged second entry",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\native-current-list-b8364ac3-attempt01\\native\\reopened-slide-01.png",
+                                                        "sha256":  "c06bb294492d3bbac7ca447a6391d5ae31acad9dbfa5b462ce1f415b351ed4e4"
+                                                    }
+                                                ]
+                                }
+               },
+    "inputs":  {
+                   "verifier":  {
+                                    "path":  "C:\\opf-work\\current-be40-gallery3-01\\opf-pptx\\test\\native-furniture-control.ps1",
+                                    "sha256":  "2f136366f02b89e2bf04899124bbde8fba6b847513776d03de139f77902af9a8",
+                                    "snapshotPath":  "C:\\opf-work\\native-current-list-b8364ac3-attempt01\\native\\inputs\\native-furniture-control.ps1",
+                                    "snapshotSha256":  "2f136366f02b89e2bf04899124bbde8fba6b847513776d03de139f77902af9a8"
+                                },
+                   "processHelper":  {
+                                         "path":  "C:\\opf-work\\current-be40-gallery3-01\\opf-pptx\\test\\native-process.ps1",
+                                         "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                                         "snapshotPath":  "C:\\opf-work\\native-current-list-b8364ac3-attempt01\\native\\inputs\\native-process.ps1",
+                                         "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                                     }
+               },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\Root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20430.20146",
+                        "powerPointExecutableSha256":  "d402e97afb5dd21fc38e9e3c1afc90bb22eacae31078f41081f0b68ea00af3bb"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "scope":  "One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker never quits or kills Office, changes security, retries, or closes unrelated presentations."
+}

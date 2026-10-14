@@ -1,0 +1,194 @@
+{
+  "records": [
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos\\26205970649.ttf",
+      "bytes": 228648,
+      "sha256": "7d7ba35b867c5873274466c743a9812c7bca1a0828f137f7697ae311664f41b9",
+      "familyName": "Aptos",
+      "subfamilyName": "Bold Italic",
+      "fullName": "Aptos Bold Italic",
+      "postscriptName": "Aptos-BoldItalic"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos\\26395700251.ttf",
+      "bytes": 227828,
+      "sha256": "888909eceb9acd84157078cc097c11f8a94a34ff3bd3fe08194ce7866f5998d1",
+      "familyName": "Aptos",
+      "subfamilyName": "Italic",
+      "fullName": "Aptos Italic",
+      "postscriptName": "Aptos-Italic"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos\\30153066857.ttf",
+      "bytes": 220792,
+      "sha256": "95980114fcfd42f2f9c446dae429b70582bf2f03097d68433ea9e7d85a49da0b",
+      "familyName": "Aptos",
+      "subfamilyName": "Regular",
+      "fullName": "Aptos",
+      "postscriptName": "Aptos"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos\\32483553004.ttf",
+      "bytes": 221372,
+      "sha256": "cf4b35ac6d81e0eb42ffa44c3829b710c058de6fa3cf2c7cdad0407e22538877",
+      "familyName": "Aptos",
+      "subfamilyName": "Bold",
+      "fullName": "Aptos Bold",
+      "postscriptName": "Aptos-Bold"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos\\36622313817.ttf",
+      "bytes": 219448,
+      "sha256": "c8acea7ac6e48869022b204ebea274b8d031565cfc3ecef236b1301f8b6e2bd8",
+      "familyName": "Aptos Light",
+      "subfamilyName": "Regular",
+      "fullName": "Aptos Light",
+      "postscriptName": "Aptos-Light"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Display\\25576969643.ttf",
+      "bytes": 229100,
+      "sha256": "67efa2915e860d32365f01fae22400a0ab5a36d7942dd2024dd210910894f0f2",
+      "familyName": "Aptos Display",
+      "subfamilyName": "Bold Italic",
+      "fullName": "Aptos Display Bold Italic",
+      "postscriptName": "AptosDisplay-BoldItalic"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Display\\30169865670.ttf",
+      "bytes": 221112,
+      "sha256": "af7a83e6f1d18b62535a8ee97939ab8653d5ac1fe1861cdb8fce829d3878d901",
+      "familyName": "Aptos Display",
+      "subfamilyName": "Regular",
+      "fullName": "Aptos Display",
+      "postscriptName": "AptosDisplay"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Display\\31638818185.ttf",
+      "bytes": 228224,
+      "sha256": "a47bafebfe957f26bd59cfd2d063950c547cb505ce0c8e0951f496dc5eaae432",
+      "familyName": "Aptos Display",
+      "subfamilyName": "Italic",
+      "fullName": "Aptos Display Italic",
+      "postscriptName": "AptosDisplay-Italic"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Display\\32677218994.ttf",
+      "bytes": 221832,
+      "sha256": "e66a3774f5c9f2799f1a7f4734f5d1ad942cc9aeb173eb2c94bc09a5f1bf1142",
+      "familyName": "Aptos Display",
+      "subfamilyName": "Bold",
+      "fullName": "Aptos Display Bold",
+      "postscriptName": "AptosDisplay-Bold"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Mono\\26742764473.ttf",
+      "bytes": 98204,
+      "sha256": "03fd2366d28670b2dfe313b3f6e00278b31a5d5845dcf0128369f31d6aa44710",
+      "familyName": "Aptos Mono",
+      "subfamilyName": "Regular",
+      "fullName": "Aptos Mono",
+      "postscriptName": "AptosMono"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Mono\\29738531134.ttf",
+      "bytes": 98772,
+      "sha256": "f35e7499d4e90bcfd2ffb414a7f9800cf031694920974e2f5eeb63f9ab59f9c8",
+      "familyName": "Aptos Mono",
+      "subfamilyName": "Bold",
+      "fullName": "Aptos Mono Bold",
+      "postscriptName": "AptosMono-Bold"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Mono\\32841571791.ttf",
+      "bytes": 102108,
+      "sha256": "fb686f350a1e69e5434e97196f1410858edc584783aa76e3f6f61b0aa2f7bfe0",
+      "familyName": "Aptos Mono",
+      "subfamilyName": "Italic",
+      "fullName": "Aptos Mono Italic",
+      "postscriptName": "AptosMono-Italic"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Mono\\33252215275.ttf",
+      "bytes": 102628,
+      "sha256": "ea9fdb1af26cbb6c8b307351509bf9cc6dcc632042c03cb9a21d3b821543e5fd",
+      "familyName": "Aptos Mono",
+      "subfamilyName": "Bold Italic",
+      "fullName": "Aptos Mono Bold Italic",
+      "postscriptName": "AptosMono-BoldItalic"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Narrow\\25065980124.ttf",
+      "bytes": 238076,
+      "sha256": "217defe9a60387f83f2544d36815c7e86a9abf3fbff5aa0388f04ff3bd1a3fca",
+      "familyName": "Aptos Narrow",
+      "subfamilyName": "Bold",
+      "fullName": "Aptos Narrow Bold",
+      "postscriptName": "Aptos-Narrow-Bold"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Narrow\\27970306811.ttf",
+      "bytes": 238544,
+      "sha256": "ded7515aa064578485a09c11a798a05d0303bdacdd7f2de92d0521f3bc7793ba",
+      "familyName": "Aptos Narrow",
+      "subfamilyName": "Regular",
+      "fullName": "Aptos Narrow",
+      "postscriptName": "Aptos-Narrow"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Narrow\\28903934312.ttf",
+      "bytes": 248804,
+      "sha256": "20f9138ae3e5204e76e966577ed1d66e60dc66e6e39f59aafcef4579111c9c1f",
+      "familyName": "Aptos Narrow",
+      "subfamilyName": "Italic",
+      "fullName": "Aptos Narrow Italic",
+      "postscriptName": "Aptos-Narrow-Italic"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Narrow\\29867269125.ttf",
+      "bytes": 250276,
+      "sha256": "4fedf90c05d024730d52a49093ca455efcd26b7ad3465c13c10970609bc06fd9",
+      "familyName": "Aptos Narrow",
+      "subfamilyName": "Bold Italic",
+      "fullName": "Aptos Narrow Bold Italic",
+      "postscriptName": "Aptos-Narrow-Bold-Italic"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Serif\\28035971489.ttf",
+      "bytes": 202396,
+      "sha256": "80080e373218b8086ddd375a8d2d0376b49b8fdfd9787074ff811e2f57e3efa2",
+      "familyName": "Aptos Serif",
+      "subfamilyName": "Regular",
+      "fullName": "Aptos Serif",
+      "postscriptName": "AptosSerif-Regular"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Serif\\28045946047.ttf",
+      "bytes": 222928,
+      "sha256": "bd510afbd03fee8960251232cc8b50d4ab0c17680ca74fdfc4205861df99c2bf",
+      "familyName": "Aptos Serif",
+      "subfamilyName": "Italic",
+      "fullName": "Aptos Serif Italic",
+      "postscriptName": "AptosSerif-Italic"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Serif\\29802638159.ttf",
+      "bytes": 202700,
+      "sha256": "4cc8ac9e312e46afe3ea846561d71c9b0babd5e823a13c9f4ed153e33758c0a6",
+      "familyName": "Aptos Serif",
+      "subfamilyName": "Bold",
+      "fullName": "Aptos Serif Bold",
+      "postscriptName": "AptosSerif-Bold"
+    },
+    {
+      "path": "C:\\Users\\micha\\AppData\\Local\\Microsoft\\FontCache\\4\\CloudFonts\\Aptos Serif\\31828726204.ttf",
+      "bytes": 223280,
+      "sha256": "559c3391321d87ad2a0f1c8938600a9d095f0bde59d36562d93461f5aa982f3e",
+      "familyName": "Aptos Serif",
+      "subfamilyName": "Bold Italic",
+      "fullName": "Aptos Serif Bold Italic",
+      "postscriptName": "AptosSerif-BoldItalic"
+    }
+  ],
+  "nativeFontSelectionProven": false
+}

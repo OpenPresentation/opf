@@ -1,0 +1,210 @@
+
+> openpresentation-workspace@ build C:\opf-work\current-2ec2-stretch-01\opf
+> pnpm --filter @openpresentation/opf build && pnpm --filter @openpresentation/cli build
+
+
+> @openpresentation/opf@0.20.0 build C:\opf-work\current-2ec2-stretch-01\opf\packages\javascript
+> node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)
+
+
+> @openpresentation/opf@0.20.0 generate C:\opf-work\current-2ec2-stretch-01\opf\packages\javascript
+> node scripts/generate.mjs && node scripts/generate-content.mjs
+
+Generated src/generated/examples.ts (127 examples, 7 galleries)
+Generated src/generated/docs.ts (59 docs)
+Generated src/generated/repo-readme.ts (16001 bytes)
+CLI Building entry: {"deck":"src/deck.ts","markdown":"src/markdown.ts","yaml":"src/yaml.ts","patch":"src/patch.ts","diff":"src/diff.ts","format":"src/format.ts","convert":"src/convert.ts","font-policy":"src/font-policy.ts","symbol-font-encodings":"src/symbol-font-encodings.ts","data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts","browser":"src/browser.ts","node-engine":"src/node-engine.ts"}
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: C:\opf-work\current-2ec2-stretch-01\opf\packages\javascript\tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+Generated an empty chunk: "types".
+DTS Build start
+ESM dist\spec-files.js            85.00 B
+ESM dist\node-engine.js           2.40 KB
+ESM dist\repo-readme.js           15.98 KB
+ESM dist\conversion-WHN4D4WH.js   685.00 B
+ESM dist\browser.js               3.71 KB
+ESM dist\chunk-JMYM44I4.js        56.74 KB
+ESM dist\data.js                  413.00 B
+ESM dist\pagination.js            173.00 B
+ESM dist\composition.js           3.54 KB
+ESM dist\index.js                 4.68 KB
+ESM dist\chunk-UJSAR6GF.js        5.52 KB
+ESM dist\chunk-BYEIFHWS.js        910.00 B
+ESM dist\chunk-2AGWO7RM.js        46.13 KB
+ESM dist\validator.js             331.00 B
+ESM dist\schemas.js               202.00 B
+ESM dist\chunk-W7G5LSXI.js        6.31 KB
+ESM dist\types.js                 1.00 B
+ESM dist\deck.js                  354.00 B
+ESM dist\chunk-NZDWCYDI.js        2.94 KB
+ESM dist\markdown.js              270.00 B
+ESM dist\yaml.js                  300.00 B
+ESM dist\chunk-P6LMWUXV.js        7.65 KB
+ESM dist\patch.js                 384.00 B
+ESM dist\chunk-4FBXVST6.js        15.27 KB
+ESM dist\diff.js                  241.00 B
+ESM dist\chunk-L6RRLN6Q.js        27.03 KB
+ESM dist\chunk-2XJUXMBS.js        12.20 KB
+ESM dist\format.js                127.00 B
+ESM dist\chunk-32MHL3B3.js        3.70 KB
+ESM dist\chunk-RFJ5TR3V.js        82.25 KB
+ESM dist\chunk-BDXJYO6R.js        18.98 KB
+ESM dist\chunk-UA5EROLC.js        4.88 KB
+ESM dist\chunk-ZU5EQ23T.js        4.46 KB
+ESM dist\convert.js               59.59 KB
+ESM dist\font-policy.js           121.00 B
+ESM dist\chunk-VEHLQVGQ.js        337.54 KB
+ESM dist\symbol-font-encodings.js 414.06 KB
+ESM dist\chunk-7QUAOKS6.js        202.43 KB
+ESM dist\chunk-F7PLNWHQ.js        154.07 KB
+ESM dist\chunk-UAXSW6VV.js        421.35 KB
+ESM dist\docs.js                  1.25 MB
+ESM dist\examples.js              5.33 MB
+ESM ⚡️ Build success in 861ms
+DTS ⚡️ Build success in 6557ms
+DTS dist\symbol-font-encodings.d.ts     5.57 KB
+DTS dist\deck.d.ts                      2.88 KB
+DTS dist\patch.d.ts                     4.94 KB
+DTS dist\format.d.ts                    940.00 B
+DTS dist\data.d.ts                      2.57 KB
+DTS dist\repo-readme.d.ts               139.00 B
+DTS dist\yaml.d.ts                      5.95 KB
+DTS dist\font-policy.d.ts               7.75 KB
+DTS dist\examples.d.ts                  2.09 KB
+DTS dist\docs.d.ts                      671.00 B
+DTS dist\diff.d.ts                      5.88 KB
+DTS dist\markdown.d.ts                  5.09 KB
+DTS dist\convert.d.ts                   14.75 KB
+DTS dist\node-engine.d.ts               8.65 KB
+DTS dist\index.d.ts                     35.78 KB
+DTS dist\schemas.d.ts                   11.67 KB
+DTS dist\types.d.ts                     59.09 KB
+DTS dist\spec-files.d.ts                1.48 KB
+DTS dist\pagination.d.ts                373.00 B
+DTS dist\validator.d.ts                 805.00 B
+DTS dist\composition.d.ts               9.54 KB
+DTS dist\deck-report-DldBcTHe.d.ts      2.36 KB
+DTS dist\chart-data-BnNqgnC-.d.ts       10.80 KB
+DTS dist\finding-CT_f_vbD.d.ts          7.80 KB
+DTS dist\catalog-refs-CSHevLn1.d.ts     7.15 KB
+DTS dist\json-BFSdESOE.d.ts             825.00 B
+DTS dist\presentation-B_e2Djga.d.ts     181.48 KB
+DTS dist\pagination-BKsZIEcA.d.ts       7.56 KB
+DTS dist\validation-types-DtN8X_HZ.d.ts 15.12 KB
+DTS dist\validator-1d29Z3YY.d.ts        5.64 KB
+DTS dist\conversion-DDd1mdIj.d.ts       26.89 KB
+DTS dist\composition-MFjGwuN_.d.ts      148.19 KB
+
+> @openpresentation/cli@0.19.0 build C:\opf-work\current-2ec2-stretch-01\opf\packages\cli
+> pnpm --filter @openpresentation/opf build && (node ../../scripts/reuse-build.mjs check || (tsup && node ../../scripts/reuse-build.mjs stamp))
+
+
+> @openpresentation/opf@0.20.0 build C:\opf-work\current-2ec2-stretch-01\opf\packages\javascript
+> node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)
+
+
+> @openpresentation/opf@0.20.0 generate C:\opf-work\current-2ec2-stretch-01\opf\packages\javascript
+> node scripts/generate.mjs && node scripts/generate-content.mjs
+
+Generated src/generated/examples.ts (127 examples, 7 galleries)
+Generated src/generated/docs.ts (59 docs)
+Generated src/generated/repo-readme.ts (16001 bytes)
+CLI Building entry: {"deck":"src/deck.ts","markdown":"src/markdown.ts","yaml":"src/yaml.ts","patch":"src/patch.ts","diff":"src/diff.ts","format":"src/format.ts","convert":"src/convert.ts","font-policy":"src/font-policy.ts","symbol-font-encodings":"src/symbol-font-encodings.ts","data":"src/data.ts","pagination":"src/pagination.ts","composition":"src/composition.ts","index":"src/index.ts","schemas":"src/schemas.ts","validator":"src/validator.ts","types":"src/types.ts","spec-files":"src/spec-files.ts","examples":"src/examples.ts","docs":"src/docs.ts","repo-readme":"src/repo-readme.ts","browser":"src/browser.ts","node-engine":"src/node-engine.ts"}
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: C:\opf-work\current-2ec2-stretch-01\opf\packages\javascript\tsup.config.ts
+CLI Target: es2022
+CLI Cleaning output folder
+ESM Build start
+Generated an empty chunk: "types".
+DTS Build start
+ESM dist\spec-files.js            85.00 B
+ESM dist\node-engine.js           2.40 KB
+ESM dist\repo-readme.js           15.98 KB
+ESM dist\conversion-WHN4D4WH.js   685.00 B
+ESM dist\browser.js               3.71 KB
+ESM dist\pagination.js            173.00 B
+ESM dist\chunk-JMYM44I4.js        56.74 KB
+ESM dist\data.js                  413.00 B
+ESM dist\composition.js           3.54 KB
+ESM dist\index.js                 4.68 KB
+ESM dist\chunk-BYEIFHWS.js        910.00 B
+ESM dist\chunk-2AGWO7RM.js        46.13 KB
+ESM dist\chunk-UJSAR6GF.js        5.52 KB
+ESM dist\chunk-W7G5LSXI.js        6.31 KB
+ESM dist\validator.js             331.00 B
+ESM dist\types.js                 1.00 B
+ESM dist\deck.js                  354.00 B
+ESM dist\schemas.js               202.00 B
+ESM dist\chunk-NZDWCYDI.js        2.94 KB
+ESM dist\markdown.js              270.00 B
+ESM dist\yaml.js                  300.00 B
+ESM dist\chunk-4FBXVST6.js        15.27 KB
+ESM dist\diff.js                  241.00 B
+ESM dist\patch.js                 384.00 B
+ESM dist\chunk-P6LMWUXV.js        7.65 KB
+ESM dist\chunk-32MHL3B3.js        3.70 KB
+ESM dist\format.js                127.00 B
+ESM dist\chunk-RFJ5TR3V.js        82.25 KB
+ESM dist\symbol-font-encodings.js 414.06 KB
+ESM dist\chunk-2XJUXMBS.js        12.20 KB
+ESM dist\chunk-L6RRLN6Q.js        27.03 KB
+ESM dist\chunk-BDXJYO6R.js        18.98 KB
+ESM dist\chunk-ZU5EQ23T.js        4.46 KB
+ESM dist\chunk-UA5EROLC.js        4.88 KB
+ESM dist\convert.js               59.59 KB
+ESM dist\chunk-VEHLQVGQ.js        337.54 KB
+ESM dist\chunk-F7PLNWHQ.js        154.07 KB
+ESM dist\chunk-7QUAOKS6.js        202.43 KB
+ESM dist\font-policy.js           121.00 B
+ESM dist\chunk-UAXSW6VV.js        421.35 KB
+ESM dist\docs.js                  1.25 MB
+ESM dist\examples.js              5.33 MB
+ESM ⚡️ Build success in 903ms
+DTS ⚡️ Build success in 6573ms
+DTS dist\symbol-font-encodings.d.ts     5.57 KB
+DTS dist\deck.d.ts                      2.88 KB
+DTS dist\patch.d.ts                     4.94 KB
+DTS dist\format.d.ts                    940.00 B
+DTS dist\data.d.ts                      2.57 KB
+DTS dist\repo-readme.d.ts               139.00 B
+DTS dist\yaml.d.ts                      5.95 KB
+DTS dist\font-policy.d.ts               7.75 KB
+DTS dist\examples.d.ts                  2.09 KB
+DTS dist\docs.d.ts                      671.00 B
+DTS dist\diff.d.ts                      5.88 KB
+DTS dist\markdown.d.ts                  5.09 KB
+DTS dist\convert.d.ts                   14.75 KB
+DTS dist\node-engine.d.ts               8.65 KB
+DTS dist\index.d.ts                     35.78 KB
+DTS dist\schemas.d.ts                   11.67 KB
+DTS dist\types.d.ts                     59.09 KB
+DTS dist\spec-files.d.ts                1.48 KB
+DTS dist\pagination.d.ts                373.00 B
+DTS dist\validator.d.ts                 805.00 B
+DTS dist\composition.d.ts               9.54 KB
+DTS dist\deck-report-DldBcTHe.d.ts      2.36 KB
+DTS dist\chart-data-BnNqgnC-.d.ts       10.80 KB
+DTS dist\finding-CT_f_vbD.d.ts          7.80 KB
+DTS dist\catalog-refs-CSHevLn1.d.ts     7.15 KB
+DTS dist\json-BFSdESOE.d.ts             825.00 B
+DTS dist\presentation-B_e2Djga.d.ts     181.48 KB
+DTS dist\pagination-BKsZIEcA.d.ts       7.56 KB
+DTS dist\validation-types-DtN8X_HZ.d.ts 15.12 KB
+DTS dist\validator-1d29Z3YY.d.ts        5.64 KB
+DTS dist\conversion-DDd1mdIj.d.ts       26.89 KB
+DTS dist\composition-MFjGwuN_.d.ts      148.19 KB
+CLI Building entry: {"index":"src/index.ts"}
+CLI Using tsconfig: tsconfig.json
+CLI tsup v8.5.1
+CLI Using tsup config: C:\opf-work\current-2ec2-stretch-01\opf\packages\cli\tsup.config.ts
+CLI Target: node24
+CLI Cleaning output folder
+ESM Build start
+ESM dist\index.js     249.77 KB
+ESM dist\index.js.map 387.79 KB
+ESM ⚡️ Build success in 23ms

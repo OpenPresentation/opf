@@ -1,0 +1,427 @@
+{
+  "passed": true,
+  "tolerancePoints": 0.02,
+  "slides": 1,
+  "slideDimensionsPoints": [
+    {
+      "width": 960,
+      "height": 540
+    }
+  ],
+  "textShapes": 11,
+  "observations": [
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF heading slides.0.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF heading slides.0.subtitle line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.0000015669291286712905,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.0.items line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.0.items line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.0.items line 2",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.1.items line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.1.items line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.1.items line 2",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.2.items line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.2.items line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.2.items line 2",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF heading slides.0.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF heading slides.0.subtitle line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.0000015669291286712905,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.0.items line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.0.items line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.0.items line 2",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.1.items line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.1.items line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.1.items line 2",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.2.items line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.2.items line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.2.items line 2",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF heading slides.0.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF heading slides.0.subtitle line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.0000015669291286712905,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.0.items line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.0.items line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.0.items line 2",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.1.items line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.1.items line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.1.items line 2",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.2.items line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.2.items line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF list slides.0.blocks.2.items line 2",
+      "differences": {
+        "left": 0,
+        "top": 0.000004889763772553124,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    }
+  ],
+  "findings": [],
+  "unavailable": {
+    "fontSelection": "Existing worker does not record character font/style descriptors; host registration is not glyph font proof.",
+    "baseline": "COM shape geometry does not measure a typographic baseline.",
+    "pixelEquivalence": "Not compared; PNG ink differences are separate observations."
+  },
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "textComparison": "Whitespace-delimited words only; exact spacing, tabs, line breaks and typography are not compared.",
+  "coordinateSystem": "PPTX transform EMUs divided by 12700 give points; native COM boxes are points. No slide aspect ratio or raster resolution is assumed.",
+  "scope": "Named editable text words and exported allocation boxes versus native COM, including edited/reopened stability. No font, baseline, glyph-outline or pixel-equivalence acceptance.",
+  "case": "feature-list",
+  "manifestSha256": "f16e73ad64a9ba2ab02e3241347c29e881fc6daa4956697ec4024f66fe12cf1b",
+  "reportSha256": "ff2cbb7b4f9297acb3b33dd3d3ff5f719b9579f66fb45d3e50632f435a156cd0",
+  "runnerSha256": "b1628f8ed9fbf060d7641000056663af60d681412946d6ed1126db6c3f93d029",
+  "comparatorSha256": "2bdeba6a512aa1720f4aa02e3a2d7dc0d6f318131aec7e01aa0bbbb1634e7938",
+  "node": "v24.21.0"
+}

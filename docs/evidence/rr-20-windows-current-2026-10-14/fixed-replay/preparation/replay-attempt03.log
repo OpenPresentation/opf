@@ -1,0 +1,22 @@
+change-layout passed
+new-custom passed
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
++ actual - expected
+
++ undefined
+- 'RR20 built-in body witness.'
+
+    at file:///C:/opf-work/current-2ec2-stretch-01/logs/replay-attempt03.mjs:50:140 {
+  generatedMessage: true,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: 'RR20 built-in body witness.',
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

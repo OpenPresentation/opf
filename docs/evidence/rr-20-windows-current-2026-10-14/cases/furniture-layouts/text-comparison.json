@@ -1,0 +1,615 @@
+{
+  "passed": true,
+  "tolerancePoints": 0.02,
+  "slides": 3,
+  "slideDimensionsPoints": [
+    {
+      "width": 960,
+      "height": 540
+    },
+    {
+      "width": 960,
+      "height": 540
+    },
+    {
+      "width": 960,
+      "height": 540
+    }
+  ],
+  "textShapes": 16,
+  "observations": [
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF heading slides.0.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF text slides.0.text line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF furniture 0 part 2 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF furniture 0 part 3 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF furniture 0 part 4 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 2,
+      "name": "OPF heading slides.1.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 2,
+      "name": "OPF text slides.1.text line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 2,
+      "name": "OPF furniture 1 part 1 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 2,
+      "name": "OPF furniture 1 part 3 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 2,
+      "name": "OPF furniture 1 part 4 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 2,
+      "name": "OPF furniture 1 part 5 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 3,
+      "name": "OPF heading slides.2.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 3,
+      "name": "OPF text slides.2.text line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 3,
+      "name": "OPF furniture 2 part 2 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 3,
+      "name": "OPF furniture 2 part 3 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 3,
+      "name": "OPF furniture 2 part 4 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF heading slides.0.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF text slides.0.text line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF furniture 0 part 2 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF furniture 0 part 3 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF furniture 0 part 4 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 2,
+      "name": "OPF heading slides.1.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 2,
+      "name": "OPF text slides.1.text line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 2,
+      "name": "OPF furniture 1 part 1 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 2,
+      "name": "OPF furniture 1 part 3 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 2,
+      "name": "OPF furniture 1 part 4 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 2,
+      "name": "OPF furniture 1 part 5 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 3,
+      "name": "OPF heading slides.2.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 3,
+      "name": "OPF text slides.2.text line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 3,
+      "name": "OPF furniture 2 part 2 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 3,
+      "name": "OPF furniture 2 part 3 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 3,
+      "name": "OPF furniture 2 part 4 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF heading slides.0.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF text slides.0.text line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF furniture 0 part 2 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF furniture 0 part 3 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF furniture 0 part 4 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 2,
+      "name": "OPF heading slides.1.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 2,
+      "name": "OPF text slides.1.text line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 2,
+      "name": "OPF furniture 1 part 1 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 2,
+      "name": "OPF furniture 1 part 3 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 2,
+      "name": "OPF furniture 1 part 4 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 2,
+      "name": "OPF furniture 1 part 5 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 3,
+      "name": "OPF heading slides.2.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 3,
+      "name": "OPF text slides.2.text line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 3,
+      "name": "OPF furniture 2 part 2 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 3,
+      "name": "OPF furniture 2 part 3 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 3,
+      "name": "OPF furniture 2 part 4 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    }
+  ],
+  "findings": [],
+  "unavailable": {
+    "fontSelection": "Existing worker does not record character font/style descriptors; host registration is not glyph font proof.",
+    "baseline": "COM shape geometry does not measure a typographic baseline.",
+    "pixelEquivalence": "Not compared; PNG ink differences are separate observations."
+  },
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "textComparison": "Whitespace-delimited words only; exact spacing, tabs, line breaks and typography are not compared.",
+  "coordinateSystem": "PPTX transform EMUs divided by 12700 give points; native COM boxes are points. No slide aspect ratio or raster resolution is assumed.",
+  "scope": "Named editable text words and exported allocation boxes versus native COM, including edited/reopened stability. No font, baseline, glyph-outline or pixel-equivalence acceptance.",
+  "case": "furniture-layouts",
+  "manifestSha256": "239443eccb435e228a854ece5ccbfbf03070240c1307450c293bc1e34ea68a8f",
+  "reportSha256": "4aefd269ce8dce02eb21c21793ed6e1143e8377e68fffcb4b4e9e3ecb97b4827",
+  "runnerSha256": "09747357684350515134e49f25160c16f67050b55c862c0285efd908ae29e01b",
+  "comparatorSha256": "b5f1828c98f8364abc7f06e39ee257844212f3f09f42c17991b54eff3a9077ee",
+  "node": "v24.21.0"
+}

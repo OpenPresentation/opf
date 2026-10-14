@@ -1,0 +1,149 @@
+
+> openpresentation-workspace@ check:candidate-gallery C:\opf-work\native-evidence-current-01
+> node --test scripts/candidate-gallery.test.mjs scripts/candidate-gallery-pack.test.mjs scripts/candidate-gallery-results.test.mjs scripts/candidate-gallery-control.test.mjs scripts/candidate-gallery-workflow.test.mjs
+
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'release-plan.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'source.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'release-plan.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'release-plan.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'source.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'release-plan.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'runtime.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/lazy-font-counts.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/lazy-font-counts.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'scripts/lazy-font-counts.mjs', LF will be replaced by CRLF the next time Git touches it
+✔ published control permits only the independently recorded exact plan override (712.8073ms)
+✔ published runtime bridge is pinned, preserves original bytes and rejects arbitrary overrides (1287.5971ms)
+✔ exact published19 runtime uses recorded final registry helpers and refuses tampering (11082.3419ms)
+✔ explicit staged metadata keeps source versions and records only candidate dependency relationships (2.5002ms)
+✖ real contract2 six-package tarballs bind source, staged manifests, installed bytes and one gallery (1611.6464ms)
+✖ real contract3 six-package tarballs bind source, staged manifests, installed bytes and one gallery (1613.5266ms)
+✔ ordinary packed smoke still builds the CLI (49.0821ms)
+✔ candidate binary normalization preserves valid spellings and rejects unsafe paths (0.6761ms)
+✔ candidate doctor follows authenticated original core contracts for old, current, mixed and prerelease engines (3.0625ms)
+✔ required status cannot turn missing, skipped, failed or mixed candidate/control checks green (2.0844ms)
+✔ default unpublished-peer waits retain their report while explicit candidate waits fail (0.5093ms)
+✔ LF: candidate and control lanes keep exact metadata, immutable browser, and required status boundaries (2.2786ms)
+✔ LF: supported engines and CLI portability use fresh candidate staging and preserve original contracts (0.8921ms)
+✔ LF: sibling published control selects the core tools repository/ref with an unchanged core default (0.3269ms)
+✔ LF: installed candidate staging primes gallery engines before strict source linking (0.6081ms)
+✔ LF: engines range retains complete contracts within a bounded candidate graph budget (0.4486ms)
+✔ LF: installed and CLI portability retain registry controls within their bounded graph budget (0.4204ms)
+✔ CRLF: candidate and control lanes keep exact metadata, immutable browser, and required status boundaries (1.1525ms)
+✔ CRLF: supported engines and CLI portability use fresh candidate staging and preserve original contracts (0.5709ms)
+✔ CRLF: sibling published control selects the core tools repository/ref with an unchanged core default (0.3021ms)
+✔ CRLF: installed candidate staging primes gallery engines before strict source linking (0.6021ms)
+✔ CRLF: engines range retains complete contracts within a bounded candidate graph budget (0.3156ms)
+✔ CRLF: installed and CLI portability retain registry controls within their bounded graph budget (0.4888ms)
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+✔ default source selection is unchanged and no candidate input may fall back (2.5189ms)
+✔ exact source authorization survives the merge queue and refuses mismatches or unreadable bodies (2.1515ms)
+✔ manual, release and other events cannot substitute candidate data (0.5019ms)
+✖ source linking verifies actual immutable package identity and preserves metadata (440.4465ms)
+✔ pristine published control binds every immutable source to actual registry metadata (0.7267ms)
+✔ explicit contract3 configuration preserves immutable authorization and release refusals (0.7483ms)
+ℹ tests 29
+ℹ suites 0
+ℹ pass 26
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13154.8843
+
+✖ failing tests:
+
+test at scripts\candidate-gallery-pack.test.mjs:25:34
+✖ real contract2 six-package tarballs bind source, staged manifests, installed bytes and one gallery (1611.6464ms)
+  Error: spawnSync npm ENOENT
+      at Object.spawnSync (node:internal/child_process:1160:20)
+      at spawnSync (node:child_process:928:24)
+      at execFileSync (node:child_process:971:15)
+      at run (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery-pack.test.mjs:29:32)
+      at stageGalleryGraph (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery-pack.mjs:61:27)
+      at TestContext.<anonymous> (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery-pack.test.mjs:50:52)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'spawnSync npm',
+    path: 'npm',
+    spawnargs: [ 'pack', '--json', '--ignore-scripts', '--pack-destination', 'C:\\Users\\micha\\AppData\\Local\\Temp\\rr78-tarballs-ZLMEMc\\opf\\artifacts\\npm', '--cache', 'C:\\Users\\micha\\AppData\\Local\\Temp\\rr78-tarballs-ZLMEMc\\opf\\artifacts\\npm\\cache' ],
+    error: Error: spawnSync npm ENOENT
+        at Object.spawnSync (node:internal/child_process:1160:20)
+        at spawnSync (node:child_process:928:24)
+        at execFileSync (node:child_process:971:15)
+        at run (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery-pack.test.mjs:29:32)
+        at stageGalleryGraph (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery-pack.mjs:61:27)
+        at TestContext.<anonymous> (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery-pack.test.mjs:50:52)
+        at Test.runInAsyncScope (node:async_hooks:227:14)
+        at Test.run (node:internal/test_runner/test:1402:25)
+        at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+        at Test.postRun (node:internal/test_runner/test:1542:19),
+    status: null,
+    signal: null,
+    output: null,
+    pid: 0,
+    stdout: undefined,
+    stderr: undefined
+  }
+
+test at scripts\candidate-gallery-pack.test.mjs:25:34
+✖ real contract3 six-package tarballs bind source, staged manifests, installed bytes and one gallery (1613.5266ms)
+  Error: spawnSync npm ENOENT
+      at Object.spawnSync (node:internal/child_process:1160:20)
+      at spawnSync (node:child_process:928:24)
+      at execFileSync (node:child_process:971:15)
+      at run (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery-pack.test.mjs:29:32)
+      at stageGalleryGraph (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery-pack.mjs:61:27)
+      at TestContext.<anonymous> (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery-pack.test.mjs:50:52)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19) {
+    errno: -4058,
+    code: 'ENOENT',
+    syscall: 'spawnSync npm',
+    path: 'npm',
+    spawnargs: [ 'pack', '--json', '--ignore-scripts', '--pack-destination', 'C:\\Users\\micha\\AppData\\Local\\Temp\\rr78-tarballs-I7dCC2\\opf\\artifacts\\npm', '--cache', 'C:\\Users\\micha\\AppData\\Local\\Temp\\rr78-tarballs-I7dCC2\\opf\\artifacts\\npm\\cache' ],
+    error: Error: spawnSync npm ENOENT
+        at Object.spawnSync (node:internal/child_process:1160:20)
+        at spawnSync (node:child_process:928:24)
+        at execFileSync (node:child_process:971:15)
+        at run (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery-pack.test.mjs:29:32)
+        at stageGalleryGraph (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery-pack.mjs:61:27)
+        at TestContext.<anonymous> (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery-pack.test.mjs:50:52)
+        at Test.runInAsyncScope (node:async_hooks:227:14)
+        at Test.run (node:internal/test_runner/test:1402:25)
+        at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+        at Test.postRun (node:internal/test_runner/test:1542:19),
+    status: null,
+    signal: null,
+    output: null,
+    pid: 0,
+    stdout: undefined,
+    stderr: undefined
+  }
+
+test at scripts\candidate-gallery.test.mjs:37:1
+✖ source linking verifies actual immutable package identity and preserves metadata (440.4465ms)
+  Error: EPERM: operation not permitted, symlink 'C:\Users\micha\AppData\Local\Temp\gallery-link-yfS8Kj\missing' -> 'C:\Users\micha\AppData\Local\Temp\gallery-link-yfS8Kj\gallery\dist\dangling'
+      at symlinkSync (node:fs:1937:11)
+      at TestContext.<anonymous> (file:///C:/opf-work/native-evidence-current-01/scripts/candidate-gallery.test.mjs:48:48)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    errno: -4048,
+    code: 'EPERM',
+    syscall: 'symlink',
+    path: 'C:\\Users\\micha\\AppData\\Local\\Temp\\gallery-link-yfS8Kj\\missing',
+    dest: 'C:\\Users\\micha\\AppData\\Local\\Temp\\gallery-link-yfS8Kj\\gallery\\dist\\dangling'
+  }
+ ELIFECYCLE  Command failed with exit code 1.

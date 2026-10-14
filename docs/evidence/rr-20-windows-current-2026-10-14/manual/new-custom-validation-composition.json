@@ -1,0 +1,125 @@
+{
+  "validation": {
+    "valid": true,
+    "schemaValid": true,
+    "findings": [],
+    "counts": {
+      "error": 0,
+      "warning": 0,
+      "info": 0
+    },
+    "checks": {
+      "syntax": "not-applicable",
+      "schema": "checked",
+      "references": "checked",
+      "policy": "not-run",
+      "accessibility": "not-run",
+      "content": "not-run",
+      "layout": "not-run",
+      "backgroundPixels": "not-read",
+      "imageBytes": "embedded-only",
+      "nativeExport": "not-checked"
+    }
+  },
+  "composition": {
+    "width": 1280,
+    "height": 720,
+    "contentBox": {
+      "x": 57.6,
+      "y": 57.6,
+      "width": 1164.8,
+      "height": 604.8
+    },
+    "items": [
+      {
+        "path": "slides.3.blocks.0.text",
+        "field": "text",
+        "type": "text",
+        "value": "RR20 custom first region witness.",
+        "payload": {
+          "type": "text",
+          "text": "RR20 custom first region witness."
+        },
+        "box": {
+          "x": 57.6,
+          "y": 57.6,
+          "width": 1164.8,
+          "height": 604.8
+        },
+        "text": {
+          "lines": [
+            "RR20 custom first region witness."
+          ],
+          "sourceLines": [
+            {
+              "start": 0,
+              "end": 33,
+              "nextStart": 33,
+              "boundary": "end",
+              "width": 431.49999999999966,
+              "segments": [
+                {
+                  "kind": "text",
+                  "start": 0,
+                  "end": 33,
+                  "x": 0,
+                  "width": 431.49999999999966
+                }
+              ]
+            }
+          ],
+          "fontSize": 25,
+          "lineHeight": 30.5,
+          "tabSize": 4,
+          "tabWidth": 32,
+          "overflow": false
+        },
+        "textStyle": {
+          "fontFamily": "sans-serif",
+          "fontWeight": 400,
+          "path": "slides.3.blocks.0.text"
+        },
+        "composition": {
+          "mode": "auto"
+        },
+        "alignment": "left"
+      }
+    ],
+    "groups": [],
+    "flows": [
+      {
+        "path": "slides.3",
+        "box": {
+          "x": 57.6,
+          "y": 57.6,
+          "width": 1164.8,
+          "height": 604.8
+        },
+        "composition": {
+          "mode": "auto"
+        },
+        "columns": [
+          {
+            "offset": 0,
+            "size": 1164.8
+          }
+        ],
+        "rows": [
+          {
+            "offset": 0,
+            "size": 604.8
+          }
+        ],
+        "gap": 24,
+        "itemCount": 1,
+        "slotCount": 1
+      }
+    ],
+    "diagnostics": [],
+    "composition": {},
+    "design": {
+      "sources": {},
+      "paths": {}
+    }
+  }
+}

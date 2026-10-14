@@ -1,0 +1,180 @@
+{
+  "original": {
+    "imageTags": [],
+    "picture": {
+      "p:nvPicPr": {
+        "p:cNvPr": {
+          "@_id": "3",
+          "@_name": "OPF image 1",
+          "@_descr": "Packet local picture"
+        },
+        "p:cNvPicPr": {
+          "a:picLocks": {
+            "@_noGrp": "1",
+            "@_noChangeAspect": "1"
+          }
+        },
+        "p:nvPr": {
+          "p:ph": {
+            "@_type": "pic",
+            "@_idx": "500"
+          }
+        }
+      },
+      "p:blipFill": {
+        "a:blip": {
+          "@_r:embed": "rId1"
+        },
+        "a:stretch": {
+          "a:fillRect": ""
+        }
+      },
+      "p:spPr": {
+        "a:xfrm": {
+          "a:off": {
+            "@_x": "548640",
+            "@_y": "2498788"
+          },
+          "a:ext": {
+            "@_cx": "5433060",
+            "@_cy": "2716530"
+          }
+        },
+        "a:prstGeom": {
+          "a:avLst": "",
+          "@_prst": "rect"
+        }
+      }
+    },
+    "slideRelationships": {
+      "?xml": {
+        "@_version": "1.0",
+        "@_encoding": "UTF-8",
+        "@_standalone": "yes"
+      },
+      "Relationships": {
+        "Relationship": [
+          {
+            "@_Id": "rId1",
+            "@_Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+            "@_Target": "../media/image-1-1.png"
+          },
+          {
+            "@_Id": "rId2",
+            "@_Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout",
+            "@_Target": "../slideLayouts/slideLayout19.xml"
+          },
+          {
+            "@_Id": "rId3",
+            "@_Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide",
+            "@_Target": "../notesSlides/notesSlide1.xml"
+          },
+          {
+            "@_Id": "rIdOpfHeading1",
+            "@_Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags",
+            "@_Target": "../tags/opfHeading1.xml"
+          },
+          {
+            "@_Id": "rIdOpfText1",
+            "@_Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags",
+            "@_Target": "../tags/opfText1.xml"
+          },
+          {
+            "@_Id": "rIdOpfSlide",
+            "@_Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags",
+            "@_Target": "../tags/opfSlide1.xml"
+          }
+        ],
+        "@_xmlns": "http://schemas.openxmlformats.org/package/2006/relationships"
+      }
+    }
+  },
+  "saved": {
+    "imageTags": [],
+    "picture": {
+      "p:nvPicPr": {
+        "p:cNvPr": {
+          "@_id": "3",
+          "@_name": "OPF image 1"
+        },
+        "p:cNvPicPr": {
+          "a:picLocks": {
+            "@_noGrp": "1",
+            "@_noChangeAspect": "1"
+          }
+        },
+        "p:nvPr": {
+          "p:ph": {
+            "@_type": "pic",
+            "@_idx": "500"
+          }
+        }
+      },
+      "p:blipFill": {
+        "a:blip": {
+          "@_r:embed": "rId6"
+        },
+        "a:srcRect": "",
+        "a:stretch": ""
+      },
+      "p:spPr": {
+        "a:xfrm": {
+          "a:off": {
+            "@_x": "548640",
+            "@_y": "2498788"
+          },
+          "a:ext": {
+            "@_cx": "5433060",
+            "@_cy": "2716530"
+          }
+        },
+        "a:prstGeom": {
+          "a:avLst": "",
+          "@_prst": "rect"
+        }
+      }
+    },
+    "slideRelationships": {
+      "?xml": {
+        "@_version": "1.0",
+        "@_encoding": "UTF-8",
+        "@_standalone": "yes"
+      },
+      "Relationships": {
+        "Relationship": [
+          {
+            "@_Id": "rId3",
+            "@_Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags",
+            "@_Target": "../tags/tag32.xml"
+          },
+          {
+            "@_Id": "rId2",
+            "@_Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags",
+            "@_Target": "../tags/tag31.xml"
+          },
+          {
+            "@_Id": "rId1",
+            "@_Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags",
+            "@_Target": "../tags/tag30.xml"
+          },
+          {
+            "@_Id": "rId6",
+            "@_Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image",
+            "@_Target": "../media/image1.png"
+          },
+          {
+            "@_Id": "rId5",
+            "@_Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/notesSlide",
+            "@_Target": "../notesSlides/notesSlide1.xml"
+          },
+          {
+            "@_Id": "rId4",
+            "@_Type": "http://schemas.openxmlformats.org/officeDocument/2006/relationships/slideLayout",
+            "@_Target": "../slideLayouts/slideLayout19.xml"
+          }
+        ],
+        "@_xmlns": "http://schemas.openxmlformats.org/package/2006/relationships"
+      }
+    }
+  }
+}

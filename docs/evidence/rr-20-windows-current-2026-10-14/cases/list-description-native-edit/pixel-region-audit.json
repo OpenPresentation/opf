@@ -1,0 +1,96 @@
+{
+  "dimensions": {
+    "format": "raw",
+    "width": 1280,
+    "height": 720,
+    "channels": 4,
+    "depth": "uchar",
+    "premultiplied": false,
+    "hasAlpha": true,
+    "size": 3686400
+  },
+  "regions": {
+    "title": [
+      40,
+      50,
+      1000,
+      130
+    ],
+    "firstEntry": [
+      40,
+      145,
+      500,
+      188
+    ],
+    "secondEntry": [
+      40,
+      237,
+      600,
+      280
+    ],
+    "descriptionAndOverflow": [
+      80,
+      188,
+      600,
+      237
+    ]
+  },
+  "rows": {
+    "title": {
+      "original": {
+        "brightPixels": 12625,
+        "changedFromOriginal": 0
+      },
+      "edited": {
+        "brightPixels": 12625,
+        "changedFromOriginal": 0
+      },
+      "reopened": {
+        "brightPixels": 12625,
+        "changedFromOriginal": 0
+      }
+    },
+    "firstEntry": {
+      "original": {
+        "brightPixels": 1678,
+        "changedFromOriginal": 0
+      },
+      "edited": {
+        "brightPixels": 1678,
+        "changedFromOriginal": 0
+      },
+      "reopened": {
+        "brightPixels": 1678,
+        "changedFromOriginal": 0
+      }
+    },
+    "secondEntry": {
+      "original": {
+        "brightPixels": 2192,
+        "changedFromOriginal": 0
+      },
+      "edited": {
+        "brightPixels": 2192,
+        "changedFromOriginal": 0
+      },
+      "reopened": {
+        "brightPixels": 2192,
+        "changedFromOriginal": 0
+      }
+    },
+    "descriptionAndOverflow": {
+      "original": {
+        "brightPixels": 443,
+        "changedFromOriginal": 0
+      },
+      "edited": {
+        "brightPixels": 0,
+        "changedFromOriginal": 2558
+      },
+      "reopened": {
+        "brightPixels": 0,
+        "changedFromOriginal": 2558
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+change-layout passed
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+TypeError: current.core.bindRegions is not a function
+    at file:///C:/opf-work/current-2ec2-stretch-01/logs/replay.mjs:53:114
+
+Node.js v24.21.0

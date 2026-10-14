@@ -1,0 +1,27 @@
+[
+  {
+    "code": "heading-import-reflow",
+    "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+    "path": "slides.0"
+  },
+  {
+    "code": "heading-import-reflow",
+    "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+    "path": "slides.1"
+  },
+  {
+    "code": "text-import-reflow",
+    "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+    "path": "slides.1"
+  },
+  {
+    "code": "unsupported-image-crop",
+    "message": "Native picture crop is not represented by the imported OPF asset; the full image was retained.",
+    "path": "slides.1.pictures.0"
+  },
+  {
+    "code": "heading-import-reflow",
+    "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+    "path": "slides.2"
+  }
+]

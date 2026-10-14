@@ -1,0 +1,91 @@
+{
+  "purpose": "Offline baseline warning capture on unchanged qualified consumer. Original saved files and original CLI imports retained.",
+  "exitCode": 0,
+  "stderr": "",
+  "report": {
+    "command": "convert",
+    "ok": true,
+    "input": {
+      "file": "C:\\opf-work\\native-manual-current-6eea8909-attempt01\\new-custom.pptx",
+      "sha256": "200653c27b9065733ec395261f1f3fac10f28310097bf6f1569bd8fac79b251e",
+      "bytes": 96028
+    },
+    "outputs": [
+      {
+        "file": "C:\\opf-work\\native-manual-current-6eea8909-attempt01\\baseline-cli\\new-custom.opf.json",
+        "sha256": "0a08985368ec7451979fb1067feda9b5155d9b2b554b9954f71822cf1d873edf",
+        "bytes": 26263,
+        "mediaType": "application/json"
+      }
+    ],
+    "findings": [
+      {
+        "ruleId": "import/heading-import-reflow",
+        "severity": "warning",
+        "category": "import",
+        "path": "/slides/0",
+        "scope": "document",
+        "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+        "help": ""
+      },
+      {
+        "ruleId": "import/heading-import-reflow",
+        "severity": "warning",
+        "category": "import",
+        "path": "/slides/1",
+        "scope": "document",
+        "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+        "help": ""
+      },
+      {
+        "ruleId": "import/text-import-reflow",
+        "severity": "warning",
+        "category": "import",
+        "path": "/slides/1",
+        "scope": "document",
+        "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+        "help": ""
+      },
+      {
+        "ruleId": "import/unsupported-image-crop",
+        "severity": "warning",
+        "category": "import",
+        "path": "/slides/1/pictures/0",
+        "scope": "document",
+        "message": "Native picture crop is not represented by the imported OPF asset; the full image was retained.",
+        "help": ""
+      },
+      {
+        "ruleId": "import/heading-import-reflow",
+        "severity": "warning",
+        "category": "import",
+        "path": "/slides/2",
+        "scope": "document",
+        "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+        "help": ""
+      },
+      {
+        "ruleId": "import/unresolved-reference",
+        "severity": "warning",
+        "category": "import",
+        "path": "/slides/0/layout",
+        "scope": "document",
+        "message": "Layout 'two-column' resolves neither in the catalogs the PPTX stores nor in a registered catalog, so slides.0.layout was not restored; the imported slide keeps its observed arrangement.",
+        "help": "Use an id from opf catalog <kind>, define the record in catalogs.custom, or run opf embed to embed what the deck references."
+      }
+    ],
+    "counts": {
+      "error": 0,
+      "warning": 6,
+      "info": 0
+    },
+    "format": "json",
+    "pptx": {
+      "package": "@openpresentation/opf-pptx",
+      "version": "0.1.0-preview.11"
+    },
+    "opfVersion": "0.4.0-preview.11",
+    "cli": "0.19.0",
+    "written": true
+  }
+}

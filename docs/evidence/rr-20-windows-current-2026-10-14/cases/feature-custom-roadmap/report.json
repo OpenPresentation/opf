@@ -1,0 +1,1067 @@
+﻿{
+    "schemaVersion":  1,
+    "captureTextFonts":  false,
+    "source":  {
+                   "path":  "C:\\opf-work\\native-current-roadmap-6eea8909-attempt01\\inputs\\case.pptx",
+                   "sha256":  "010833557351f342a16f0da4a4d9e0d814a0224f7602aa524a1af22219dc82fb",
+                   "openedPath":  "C:\\opf-work\\native-current-roadmap-6eea8909-attempt01\\native\\inputs\\input.pptx",
+                   "openedSha256":  "010833557351f342a16f0da4a4d9e0d814a0224f7602aa524a1af22219dc82fb"
+               },
+    "saved":  {
+                  "path":  "C:\\opf-work\\native-current-roadmap-6eea8909-attempt01\\native\\native-furniture-control.pptx",
+                  "sha256":  "84927f494b0474db78938f28c7c82a879dde4cc5cf135532b65fc5d18af0dffd"
+              },
+    "reopened":  {
+                     "path":  "C:\\opf-work\\native-current-roadmap-6eea8909-attempt01\\native\\native-furniture-control.pptx",
+                     "sha256":  "84927f494b0474db78938f28c7c82a879dde4cc5cf135532b65fc5d18af0dffd"
+                 },
+    "actionPlan":  {
+                       "path":  "C:\\opf-work\\native-current-roadmap-6eea8909-attempt01\\inputs\\action-plan.json",
+                       "sha256":  "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+                       "snapshotPath":  "C:\\opf-work\\native-current-roadmap-6eea8909-attempt01\\native\\inputs\\action-plan.json",
+                       "snapshotSha256":  "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+                       "actions":  [
+
+                                   ],
+                       "completed":  [
+
+                                     ],
+                       "styleEdits":  [
+
+                                      ]
+                   },
+    "phases":  {
+                   "original":  {
+                                    "slideCount":  1,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C226964223A226578616D706C65222C226C61796F7574223A22617574686F726564222C22636F6E74656E74223A7B22666F726D223A22626C6F636B73222C22626C6F636B73223A5B7B2274223A226C656166222C226B223A2274696D656C696E65222C2270696E223A22726F61646D6170222C22696E223A22726F61646D6170222C22626F78223A5B35372E362C3134382E312C3638342E352C3531342E335D7D2C7B2274223A226C656166222C226B223A2274657874222C2270696E223A226E6F746573222C22696E223A226E6F746573222C22626F78223A5B3736362E312C3134382E312C3435362E332C3332362E395D2C22736F757263655374796C6573223A5B7B226C656E677468223A36322C22666F6E7453697A65223A32347D5D2C226C696E6573223A327D2C7B2274223A226C656166222C226B223A226D6574726963222C2270696E223A227369676E616C222C22696E223A227369676E616C222C22626F78223A5B3736362E312C3439392C3435362E332C3136332E345D7D5D7D2C226C61796F75745265636F7264223A7B2267726F7570223A22637573746F6D222C226964223A22617574686F726564222C227265636F7264223A7B226E616D65223A22417574686F7265642067726964222C226172656173223A5B5B227469746C65222C227469746C65225D2C5B22726F61646D6170222C226E6F746573225D2C5B22726F61646D6170222C227369676E616C225D5D2C22636F6C756D6E73223A5B332C325D2C22726F7773223A5B226175746F222C322C315D2C22726567696F6E73223A7B22726F61646D6170223A7B2261636365707473223A5B2274696D656C696E65225D2C22666C6F77223A226E6F6E65227D2C226E6F746573223A7B2261636365707473223A5B2274657874225D2C22666C6F77223A226E6F6E65227D2C227369676E616C223A7B2261636365707473223A5B226D6574726963225D2C22666C6F77223A226E6F6E65227D7D7D7D2C226E6174697665223A7B22737472756374757265223A223133393339393433653836636633222C2272756E5374796C6573223A7B22666F6E7453697A65223A223036336564383366383034373837222C22666F6E7446616D696C79223A223164303263316337363562306637222C22636F6C6F72223A223036373439663238363764623962227D2C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223031356239346134373838316664227D7D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  15,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.811573,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "A grid that matches the story",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF timeline 0 connector",
+                                                                          "type":  9,
+                                                                          "left":  128.76,
+                                                                          "top":  303.41275,
+                                                                          "width":  342.24,
+                                                                          "height":  0,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2230222C22726F6C65223A22636F6E6E6563746F72227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF timeline 0 marker 0",
+                                                                          "type":  1,
+                                                                          "left":  122.01,
+                                                                          "top":  296.66275,
+                                                                          "width":  13.5,
+                                                                          "height":  13.5,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2230222C22726F6C65223A226D61726B6572222C226576656E74496E646578223A307D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  4,
+                                                                          "id":  5,
+                                                                          "name":  "OPF timeline 0 marker 1",
+                                                                          "type":  1,
+                                                                          "left":  293.13,
+                                                                          "top":  296.66275,
+                                                                          "width":  13.5,
+                                                                          "height":  13.5,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2230222C22726F6C65223A226D61726B6572222C226576656E74496E646578223A317D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  5,
+                                                                          "id":  6,
+                                                                          "name":  "OPF timeline 0 marker 2",
+                                                                          "type":  1,
+                                                                          "left":  464.25,
+                                                                          "top":  296.66275,
+                                                                          "width":  13.5,
+                                                                          "height":  13.5,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2230222C22726F6C65223A226D61726B6572222C226576656E74496E646578223A327D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  6,
+                                                                          "id":  7,
+                                                                          "name":  "OPF timeline 0 part 0 line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  245.812759,
+                                                                          "width":  171.12,
+                                                                          "height":  16.47,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Discover",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A302C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22616E63686F72223A7B2273686F727468616E64223A66616C73652C226576656E74436F756E74223A332C227061727473223A5B7B226576656E74496E646578223A302C226669656C64223A227768656E222C226C696E6573223A317D2C7B226576656E74496E646578223A302C226669656C64223A2277686174222C226C696E6573223A317D2C7B226576656E74496E646578223A312C226669656C64223A227768656E222C226C696E6573223A317D2C7B226576656E74496E646578223A312C226669656C64223A2277686174222C226C696E6573223A317D2C7B226576656E74496E646578223A322C226669656C64223A227768656E222C226C696E6573223A317D2C7B226576656E74496E646578223A322C226669656C64223A2277686174222C226C696E6573223A317D5D7D7D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  7,
+                                                                          "id":  8,
+                                                                          "name":  "OPF timeline 0 part 1 line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  265.282745,
+                                                                          "width":  171.12,
+                                                                          "height":  20.13,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Find the real need",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  8,
+                                                                          "id":  9,
+                                                                          "name":  "OPF timeline 0 part 2 line 0",
+                                                                          "type":  1,
+                                                                          "left":  214.32,
+                                                                          "top":  321.41275,
+                                                                          "width":  171.12,
+                                                                          "height":  16.47,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Design",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  9,
+                                                                          "id":  10,
+                                                                          "name":  "OPF timeline 0 part 3 line 0",
+                                                                          "type":  1,
+                                                                          "left":  214.32,
+                                                                          "top":  341.477478,
+                                                                          "width":  171.12,
+                                                                          "height":  20.13,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Shape the response",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A332C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  10,
+                                                                          "id":  11,
+                                                                          "name":  "OPF timeline 0 part 4 line 0",
+                                                                          "type":  1,
+                                                                          "left":  385.44,
+                                                                          "top":  245.812759,
+                                                                          "width":  171.12,
+                                                                          "height":  16.47,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Deliver",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A342C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  11,
+                                                                          "id":  12,
+                                                                          "name":  "OPF timeline 0 part 5 line 0",
+                                                                          "type":  1,
+                                                                          "left":  385.44,
+                                                                          "top":  265.282745,
+                                                                          "width":  171.12,
+                                                                          "height":  20.13,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Learn from the result",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A352C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  12,
+                                                                          "id":  13,
+                                                                          "name":  "Text 11",
+                                                                          "type":  1,
+                                                                          "left":  574.56,
+                                                                          "top":  111.091812,
+                                                                          "width":  342.24,
+                                                                          "height":  29.28,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Pilot first. Roll out what works. ",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  13,
+                                                                          "id":  14,
+                                                                          "name":  "Text 12",
+                                                                          "type":  1,
+                                                                          "left":  574.56,
+                                                                          "top":  140.371811,
+                                                                          "width":  342.24,
+                                                                          "height":  29.28,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Keep the feedback loop open.",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  14,
+                                                                          "id":  15,
+                                                                          "name":  "OPF metric 1 value line 1",
+                                                                          "type":  1,
+                                                                          "left":  574.56,
+                                                                          "top":  374.230621,
+                                                                          "width":  342.24,
+                                                                          "height":  41.85819,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "3",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A22616E63686F72222C2270617274223A302C226C696E65223A302C2276616C7565223A7B2276616C7565223A2233222C226C6162656C223A22506861736573227D2C227061727473223A5B7B22726F6C65223A2276616C7565222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A312C226E6578745374617274223A312C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226C6162656C222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A362C226E6578745374617274223A362C22626F756E64617279223A22656E64227D5D7D5D7D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  15,
+                                                                          "id":  16,
+                                                                          "name":  "OPF metric 1 label line 1",
+                                                                          "type":  1,
+                                                                          "left":  574.56,
+                                                                          "top":  425.0888,
+                                                                          "width":  342.24,
+                                                                          "height":  21.04504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Phases",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A226C696E65222C2270617274223A312C226C696E65223A307D"
+                                                                                       }
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\native-current-roadmap-6eea8909-attempt01\\native\\original-slide-01.png",
+                                                        "sha256":  "483d86680800720a3c186a3dc343c6077ab78c65307a31939984880e705438f3"
+                                                    }
+                                                ]
+                                },
+                   "edited":  {
+                                  "slideCount":  1,
+                                  "slides":  [
+                                                 {
+                                                     "index":  1,
+                                                     "slideId":  256,
+                                                     "name":  "Slide 1",
+                                                     "tags":  [
+                                                                  {
+                                                                      "index":  1,
+                                                                      "name":  "OPF_SLIDE_V1",
+                                                                      "value":  "7B2276223A312C22736C696465223A302C226964223A226578616D706C65222C226C61796F7574223A22617574686F726564222C22636F6E74656E74223A7B22666F726D223A22626C6F636B73222C22626C6F636B73223A5B7B2274223A226C656166222C226B223A2274696D656C696E65222C2270696E223A22726F61646D6170222C22696E223A22726F61646D6170222C22626F78223A5B35372E362C3134382E312C3638342E352C3531342E335D7D2C7B2274223A226C656166222C226B223A2274657874222C2270696E223A226E6F746573222C22696E223A226E6F746573222C22626F78223A5B3736362E312C3134382E312C3435362E332C3332362E395D2C22736F757263655374796C6573223A5B7B226C656E677468223A36322C22666F6E7453697A65223A32347D5D2C226C696E6573223A327D2C7B2274223A226C656166222C226B223A226D6574726963222C2270696E223A227369676E616C222C22696E223A227369676E616C222C22626F78223A5B3736362E312C3439392C3435362E332C3136332E345D7D5D7D2C226C61796F75745265636F7264223A7B2267726F7570223A22637573746F6D222C226964223A22617574686F726564222C227265636F7264223A7B226E616D65223A22417574686F7265642067726964222C226172656173223A5B5B227469746C65222C227469746C65225D2C5B22726F61646D6170222C226E6F746573225D2C5B22726F61646D6170222C227369676E616C225D5D2C22636F6C756D6E73223A5B332C325D2C22726F7773223A5B226175746F222C322C315D2C22726567696F6E73223A7B22726F61646D6170223A7B2261636365707473223A5B2274696D656C696E65225D2C22666C6F77223A226E6F6E65227D2C226E6F746573223A7B2261636365707473223A5B2274657874225D2C22666C6F77223A226E6F6E65227D2C227369676E616C223A7B2261636365707473223A5B226D6574726963225D2C22666C6F77223A226E6F6E65227D7D7D7D2C226E6174697665223A7B22737472756374757265223A223133393339393433653836636633222C2272756E5374796C6573223A7B22666F6E7453697A65223A223036336564383366383034373837222C22666F6E7446616D696C79223A223164303263316337363562306637222C22636F6C6F72223A223036373439663238363764623962227D2C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223031356239346134373838316664227D7D"
+                                                                  }
+                                                              ],
+                                                     "shapeCount":  15,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF heading slides.0.title line 0",
+                                                                        "type":  14,
+                                                                        "left":  43.811573,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  49.41,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "A grid that matches the story",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_HEADING_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  2,
+                                                                        "id":  3,
+                                                                        "name":  "OPF timeline 0 connector",
+                                                                        "type":  9,
+                                                                        "left":  128.76,
+                                                                        "top":  303.41275,
+                                                                        "width":  342.24,
+                                                                        "height":  0,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TIMELINE_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2230222C22726F6C65223A22636F6E6E6563746F72227D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  3,
+                                                                        "id":  4,
+                                                                        "name":  "OPF timeline 0 marker 0",
+                                                                        "type":  1,
+                                                                        "left":  122.01,
+                                                                        "top":  296.66275,
+                                                                        "width":  13.5,
+                                                                        "height":  13.5,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TIMELINE_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2230222C22726F6C65223A226D61726B6572222C226576656E74496E646578223A307D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  4,
+                                                                        "id":  5,
+                                                                        "name":  "OPF timeline 0 marker 1",
+                                                                        "type":  1,
+                                                                        "left":  293.13,
+                                                                        "top":  296.66275,
+                                                                        "width":  13.5,
+                                                                        "height":  13.5,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TIMELINE_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2230222C22726F6C65223A226D61726B6572222C226576656E74496E646578223A317D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  5,
+                                                                        "id":  6,
+                                                                        "name":  "OPF timeline 0 marker 2",
+                                                                        "type":  1,
+                                                                        "left":  464.25,
+                                                                        "top":  296.66275,
+                                                                        "width":  13.5,
+                                                                        "height":  13.5,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TIMELINE_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2230222C22726F6C65223A226D61726B6572222C226576656E74496E646578223A327D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  6,
+                                                                        "id":  7,
+                                                                        "name":  "OPF timeline 0 part 0 line 0",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  245.812759,
+                                                                        "width":  171.12,
+                                                                        "height":  16.47,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Discover",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TIMELINE_V1",
+                                                                                         "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A302C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22616E63686F72223A7B2273686F727468616E64223A66616C73652C226576656E74436F756E74223A332C227061727473223A5B7B226576656E74496E646578223A302C226669656C64223A227768656E222C226C696E6573223A317D2C7B226576656E74496E646578223A302C226669656C64223A2277686174222C226C696E6573223A317D2C7B226576656E74496E646578223A312C226669656C64223A227768656E222C226C696E6573223A317D2C7B226576656E74496E646578223A312C226669656C64223A2277686174222C226C696E6573223A317D2C7B226576656E74496E646578223A322C226669656C64223A227768656E222C226C696E6573223A317D2C7B226576656E74496E646578223A322C226669656C64223A2277686174222C226C696E6573223A317D5D7D7D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  7,
+                                                                        "id":  8,
+                                                                        "name":  "OPF timeline 0 part 1 line 0",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  265.282745,
+                                                                        "width":  171.12,
+                                                                        "height":  20.13,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Find the real need",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TIMELINE_V1",
+                                                                                         "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  8,
+                                                                        "id":  9,
+                                                                        "name":  "OPF timeline 0 part 2 line 0",
+                                                                        "type":  1,
+                                                                        "left":  214.32,
+                                                                        "top":  321.41275,
+                                                                        "width":  171.12,
+                                                                        "height":  16.47,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Design",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TIMELINE_V1",
+                                                                                         "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  9,
+                                                                        "id":  10,
+                                                                        "name":  "OPF timeline 0 part 3 line 0",
+                                                                        "type":  1,
+                                                                        "left":  214.32,
+                                                                        "top":  341.477478,
+                                                                        "width":  171.12,
+                                                                        "height":  20.13,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Shape the response",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TIMELINE_V1",
+                                                                                         "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A332C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  10,
+                                                                        "id":  11,
+                                                                        "name":  "OPF timeline 0 part 4 line 0",
+                                                                        "type":  1,
+                                                                        "left":  385.44,
+                                                                        "top":  245.812759,
+                                                                        "width":  171.12,
+                                                                        "height":  16.47,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Deliver",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TIMELINE_V1",
+                                                                                         "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A342C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  11,
+                                                                        "id":  12,
+                                                                        "name":  "OPF timeline 0 part 5 line 0",
+                                                                        "type":  1,
+                                                                        "left":  385.44,
+                                                                        "top":  265.282745,
+                                                                        "width":  171.12,
+                                                                        "height":  20.13,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Learn from the result",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TIMELINE_V1",
+                                                                                         "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A352C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  12,
+                                                                        "id":  13,
+                                                                        "name":  "Text 11",
+                                                                        "type":  1,
+                                                                        "left":  574.56,
+                                                                        "top":  111.091812,
+                                                                        "width":  342.24,
+                                                                        "height":  29.28,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Pilot first. Roll out what works. ",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  13,
+                                                                        "id":  14,
+                                                                        "name":  "Text 12",
+                                                                        "type":  1,
+                                                                        "left":  574.56,
+                                                                        "top":  140.371811,
+                                                                        "width":  342.24,
+                                                                        "height":  29.28,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Keep the feedback loop open.",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  14,
+                                                                        "id":  15,
+                                                                        "name":  "OPF metric 1 value line 1",
+                                                                        "type":  1,
+                                                                        "left":  574.56,
+                                                                        "top":  374.230621,
+                                                                        "width":  342.24,
+                                                                        "height":  41.85819,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "3",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_METRIC_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A22616E63686F72222C2270617274223A302C226C696E65223A302C2276616C7565223A7B2276616C7565223A2233222C226C6162656C223A22506861736573227D2C227061727473223A5B7B22726F6C65223A2276616C7565222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A312C226E6578745374617274223A312C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226C6162656C222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A362C226E6578745374617274223A362C22626F756E64617279223A22656E64227D5D7D5D7D"
+                                                                                     }
+                                                                                 ]
+                                                                    },
+                                                                    {
+                                                                        "index":  15,
+                                                                        "id":  16,
+                                                                        "name":  "OPF metric 1 label line 1",
+                                                                        "type":  1,
+                                                                        "left":  574.56,
+                                                                        "top":  425.0888,
+                                                                        "width":  342.24,
+                                                                        "height":  21.04504,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Phases",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_METRIC_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A226C696E65222C2270617274223A312C226C696E65223A307D"
+                                                                                     }
+                                                                                 ]
+                                                                    }
+                                                                ]
+                                                 }
+                                             ],
+                                  "rasters":  [
+                                                  {
+                                                      "slideIndex":  1,
+                                                      "path":  "C:\\opf-work\\native-current-roadmap-6eea8909-attempt01\\native\\edited-slide-01.png",
+                                                      "sha256":  "483d86680800720a3c186a3dc343c6077ab78c65307a31939984880e705438f3"
+                                                  }
+                                              ]
+                              },
+                   "reopened":  {
+                                    "slideCount":  1,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C226964223A226578616D706C65222C226C61796F7574223A22617574686F726564222C22636F6E74656E74223A7B22666F726D223A22626C6F636B73222C22626C6F636B73223A5B7B2274223A226C656166222C226B223A2274696D656C696E65222C2270696E223A22726F61646D6170222C22696E223A22726F61646D6170222C22626F78223A5B35372E362C3134382E312C3638342E352C3531342E335D7D2C7B2274223A226C656166222C226B223A2274657874222C2270696E223A226E6F746573222C22696E223A226E6F746573222C22626F78223A5B3736362E312C3134382E312C3435362E332C3332362E395D2C22736F757263655374796C6573223A5B7B226C656E677468223A36322C22666F6E7453697A65223A32347D5D2C226C696E6573223A327D2C7B2274223A226C656166222C226B223A226D6574726963222C2270696E223A227369676E616C222C22696E223A227369676E616C222C22626F78223A5B3736362E312C3439392C3435362E332C3136332E345D7D5D7D2C226C61796F75745265636F7264223A7B2267726F7570223A22637573746F6D222C226964223A22617574686F726564222C227265636F7264223A7B226E616D65223A22417574686F7265642067726964222C226172656173223A5B5B227469746C65222C227469746C65225D2C5B22726F61646D6170222C226E6F746573225D2C5B22726F61646D6170222C227369676E616C225D5D2C22636F6C756D6E73223A5B332C325D2C22726F7773223A5B226175746F222C322C315D2C22726567696F6E73223A7B22726F61646D6170223A7B2261636365707473223A5B2274696D656C696E65225D2C22666C6F77223A226E6F6E65227D2C226E6F746573223A7B2261636365707473223A5B2274657874225D2C22666C6F77223A226E6F6E65227D2C227369676E616C223A7B2261636365707473223A5B226D6574726963225D2C22666C6F77223A226E6F6E65227D7D7D7D2C226E6174697665223A7B22737472756374757265223A223133393339393433653836636633222C2272756E5374796C6573223A7B22666F6E7453697A65223A223036336564383366383034373837222C22666F6E7446616D696C79223A223164303263316337363562306637222C22636F6C6F72223A223036373439663238363764623962227D2C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223031356239346134373838316664227D7D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  15,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.811573,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "A grid that matches the story",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF timeline 0 connector",
+                                                                          "type":  9,
+                                                                          "left":  128.76,
+                                                                          "top":  303.41275,
+                                                                          "width":  342.24,
+                                                                          "height":  0,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2230222C22726F6C65223A22636F6E6E6563746F72227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF timeline 0 marker 0",
+                                                                          "type":  1,
+                                                                          "left":  122.01,
+                                                                          "top":  296.66275,
+                                                                          "width":  13.5,
+                                                                          "height":  13.5,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2230222C22726F6C65223A226D61726B6572222C226576656E74496E646578223A307D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  4,
+                                                                          "id":  5,
+                                                                          "name":  "OPF timeline 0 marker 1",
+                                                                          "type":  1,
+                                                                          "left":  293.13,
+                                                                          "top":  296.66275,
+                                                                          "width":  13.5,
+                                                                          "height":  13.5,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2230222C22726F6C65223A226D61726B6572222C226576656E74496E646578223A317D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  5,
+                                                                          "id":  6,
+                                                                          "name":  "OPF timeline 0 marker 2",
+                                                                          "type":  1,
+                                                                          "left":  464.25,
+                                                                          "top":  296.66275,
+                                                                          "width":  13.5,
+                                                                          "height":  13.5,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2230222C22726F6C65223A226D61726B6572222C226576656E74496E646578223A327D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  6,
+                                                                          "id":  7,
+                                                                          "name":  "OPF timeline 0 part 0 line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  245.812759,
+                                                                          "width":  171.12,
+                                                                          "height":  16.47,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Discover",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A302C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22222C22616E63686F72223A7B2273686F727468616E64223A66616C73652C226576656E74436F756E74223A332C227061727473223A5B7B226576656E74496E646578223A302C226669656C64223A227768656E222C226C696E6573223A317D2C7B226576656E74496E646578223A302C226669656C64223A2277686174222C226C696E6573223A317D2C7B226576656E74496E646578223A312C226669656C64223A227768656E222C226C696E6573223A317D2C7B226576656E74496E646578223A312C226669656C64223A2277686174222C226C696E6573223A317D2C7B226576656E74496E646578223A322C226669656C64223A227768656E222C226C696E6573223A317D2C7B226576656E74496E646578223A322C226669656C64223A2277686174222C226C696E6573223A317D5D7D7D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  7,
+                                                                          "id":  8,
+                                                                          "name":  "OPF timeline 0 part 1 line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  265.282745,
+                                                                          "width":  171.12,
+                                                                          "height":  20.13,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Find the real need",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A312C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  8,
+                                                                          "id":  9,
+                                                                          "name":  "OPF timeline 0 part 2 line 0",
+                                                                          "type":  1,
+                                                                          "left":  214.32,
+                                                                          "top":  321.41275,
+                                                                          "width":  171.12,
+                                                                          "height":  16.47,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Design",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A322C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  9,
+                                                                          "id":  10,
+                                                                          "name":  "OPF timeline 0 part 3 line 0",
+                                                                          "type":  1,
+                                                                          "left":  214.32,
+                                                                          "top":  341.477478,
+                                                                          "width":  171.12,
+                                                                          "height":  20.13,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Shape the response",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A332C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  10,
+                                                                          "id":  11,
+                                                                          "name":  "OPF timeline 0 part 4 line 0",
+                                                                          "type":  1,
+                                                                          "left":  385.44,
+                                                                          "top":  245.812759,
+                                                                          "width":  171.12,
+                                                                          "height":  16.47,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Deliver",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A342C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  11,
+                                                                          "id":  12,
+                                                                          "name":  "OPF timeline 0 part 5 line 0",
+                                                                          "type":  1,
+                                                                          "left":  385.44,
+                                                                          "top":  265.282745,
+                                                                          "width":  171.12,
+                                                                          "height":  20.13,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Learn from the result",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TIMELINE_V1",
+                                                                                           "value":  "7B2276223A312C22726F6C65223A2274657874222C2267726F7570223A2230222C2270617274223A352C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  12,
+                                                                          "id":  13,
+                                                                          "name":  "Text 11",
+                                                                          "type":  1,
+                                                                          "left":  574.56,
+                                                                          "top":  111.091812,
+                                                                          "width":  342.24,
+                                                                          "height":  29.28,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Pilot first. Roll out what works. ",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  13,
+                                                                          "id":  14,
+                                                                          "name":  "Text 12",
+                                                                          "type":  1,
+                                                                          "left":  574.56,
+                                                                          "top":  140.371811,
+                                                                          "width":  342.24,
+                                                                          "height":  29.28,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Keep the feedback loop open.",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  14,
+                                                                          "id":  15,
+                                                                          "name":  "OPF metric 1 value line 1",
+                                                                          "type":  1,
+                                                                          "left":  574.56,
+                                                                          "top":  374.230621,
+                                                                          "width":  342.24,
+                                                                          "height":  41.85819,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "3",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A22616E63686F72222C2270617274223A302C226C696E65223A302C2276616C7565223A7B2276616C7565223A2233222C226C6162656C223A22506861736573227D2C227061727473223A5B7B22726F6C65223A2276616C7565222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A312C226E6578745374617274223A312C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226C6162656C222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A362C226E6578745374617274223A362C22626F756E64617279223A22656E64227D5D7D5D7D"
+                                                                                       }
+                                                                                   ]
+                                                                      },
+                                                                      {
+                                                                          "index":  15,
+                                                                          "id":  16,
+                                                                          "name":  "OPF metric 1 label line 1",
+                                                                          "type":  1,
+                                                                          "left":  574.56,
+                                                                          "top":  425.0888,
+                                                                          "width":  342.24,
+                                                                          "height":  21.04504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Phases",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A226C696E65222C2270617274223A312C226C696E65223A307D"
+                                                                                       }
+                                                                                   ]
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\native-current-roadmap-6eea8909-attempt01\\native\\reopened-slide-01.png",
+                                                        "sha256":  "483d86680800720a3c186a3dc343c6077ab78c65307a31939984880e705438f3"
+                                                    }
+                                                ]
+                                }
+               },
+    "inputs":  {
+                   "verifier":  {
+                                    "path":  "C:\\opf-work\\current-be40-gallery3-01\\opf-pptx\\test\\native-furniture-control.ps1",
+                                    "sha256":  "2f136366f02b89e2bf04899124bbde8fba6b847513776d03de139f77902af9a8",
+                                    "snapshotPath":  "C:\\opf-work\\native-current-roadmap-6eea8909-attempt01\\native\\inputs\\native-furniture-control.ps1",
+                                    "snapshotSha256":  "2f136366f02b89e2bf04899124bbde8fba6b847513776d03de139f77902af9a8"
+                                },
+                   "processHelper":  {
+                                         "path":  "C:\\opf-work\\current-be40-gallery3-01\\opf-pptx\\test\\native-process.ps1",
+                                         "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                                         "snapshotPath":  "C:\\opf-work\\native-current-roadmap-6eea8909-attempt01\\native\\inputs\\native-process.ps1",
+                                         "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                                     }
+               },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\Root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20430.20146",
+                        "powerPointExecutableSha256":  "d402e97afb5dd21fc38e9e3c1afc90bb22eacae31078f41081f0b68ea00af3bb"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "scope":  "One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker never quits or kills Office, changes security, retries, or closes unrelated presentations."
+}

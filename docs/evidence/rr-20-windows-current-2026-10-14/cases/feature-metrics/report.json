@@ -1,0 +1,1394 @@
+﻿{
+    "schemaVersion":  1,
+    "captureTextFonts":  true,
+    "source":  {
+                   "path":  "C:\\opf-work\\native-current-metrics-6eea8909-attempt01\\inputs\\case.pptx",
+                   "sha256":  "4f2419123041a7b95c809f22ecc3cd622cb0d940fba972ec1fc0123a9c93ecf2",
+                   "openedPath":  "C:\\opf-work\\native-current-metrics-6eea8909-attempt01\\native\\inputs\\input.pptx",
+                   "openedSha256":  "4f2419123041a7b95c809f22ecc3cd622cb0d940fba972ec1fc0123a9c93ecf2"
+               },
+    "saved":  {
+                  "path":  "C:\\opf-work\\native-current-metrics-6eea8909-attempt01\\native\\native-furniture-control.pptx",
+                  "sha256":  "35849388fcc3ef7dbb28202b787af2e17189742f949be1267978fdd9245bd090"
+              },
+    "reopened":  {
+                     "path":  "C:\\opf-work\\native-current-metrics-6eea8909-attempt01\\native\\native-furniture-control.pptx",
+                     "sha256":  "35849388fcc3ef7dbb28202b787af2e17189742f949be1267978fdd9245bd090"
+                 },
+    "actionPlan":  {
+                       "path":  "C:\\opf-work\\native-current-metrics-6eea8909-attempt01\\inputs\\action-plan.json",
+                       "sha256":  "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+                       "snapshotPath":  "C:\\opf-work\\native-current-metrics-6eea8909-attempt01\\native\\inputs\\action-plan.json",
+                       "snapshotSha256":  "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+                       "actions":  [
+
+                                   ],
+                       "completed":  [
+
+                                     ],
+                       "styleEdits":  [
+
+                                      ]
+                   },
+    "phases":  {
+                   "original":  {
+                                    "slideCount":  1,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C226C61796F7574223A226D657472696373222C22636F6E74656E74223A7B22666F726D223A22626C6F636B73222C22626C6F636B73223A5B7B2274223A226C656166222C226B223A226D6574726963222C2270696E223A226D657472696373222C22696E223A226D657472696373222C22626F78223A5B35372E362C3331342E352C3337322E332C3136392E355D7D2C7B2274223A226C656166222C226B223A226D6574726963222C2270696E223A226D657472696373222C22696E223A226D657472696373222C22626F78223A5B3435332E392C3331342E352C3337322E332C3136392E355D7D2C7B2274223A226C656166222C226B223A226D6574726963222C2270696E223A226D657472696373222C22696E223A226D657472696373222C22626F78223A5B3835302E312C3331342E352C3337322E332C3136382E325D7D2C7B2274223A226C656166222C226B223A2274657874222C2270696E223A226E6F7465222C22696E223A226E6F7465222C22626F78223A5B35372E362C3633312E392C313136342E382C33302E355D7D5D7D2C226C61796F75745265636F7264223A7B2267726F7570223A2264656661756C74222C226964223A226D657472696373222C22736F75726365223A2268747470733A2F2F7777772E707074782E67616C6C657279222C227265636F7264223A7B226E616D65223A224D657472696373222C2273756D6D617279223A224F6E6520746F2073697820686561646C696E65206E756D626572732C207769746820616E206F7074696F6E616C206E6F74652E222C2274616773223A5B224E756D62657273225D2C2264657369676E223A7B22636F6E74656E74416C69676E6D656E74223A2263656E746572227D2C226172656173223A5B5B227469746C65225D2C5B226D657472696373225D2C5B226E6F7465225D5D2C22636F6C756D6E73223A5B315D2C22726F7773223A5B226175746F222C312C226175746F225D2C22726567696F6E73223A7B226D657472696373223A7B2261636365707473223A5B226D6574726963222C2267726F7570225D2C22726F6C65223A227072696D617279222C22666C6F77223A2267726964222C22616E63686F72223A226D6964646C65227D2C226E6F7465223A7B2261636365707473223A5B2274657874222C226C697374225D2C22726F6C65223A22737570706F7274696E67222C22666C6F77223A226E6F6E65227D7D2C226465736372697074696F6E223A22486967686C69676874206120736D616C6C20736574206F6620696D706F7274616E74206E756D626572732E20476976652065616368206E756D6265722061206C6162656C20616E642074686520636F6E74657874206E656564656420746F20696E746572707265742069742E222C2270726576696577223A7B22766563746F72537263223A2268747470733A2F2F7777772E707074782E67616C6C6572792F6C61796F75742D70726576696577732F6D6574726963732E737667227D7D7D2C2264657369676E223A7B227469746C65416C69676E6D656E74223A2263656E746572227D2C226E6174697665223A7B22737472756374757265223A223065303434353739613330366531222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223064303933663439313732663665227D7D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  13,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Pilot outcomes in three measures",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  40.5,
+                                                                                           "bold":  -1,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF heading slides.0.subtitle line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  101.61,
+                                                                          "width":  873.6,
+                                                                          "height":  22.87504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Illustrative example • fictional data",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7375627469746C65222C226669656C64223A227375627469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  18.75,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF metric 1 value line 1",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  235.876373,
+                                                                          "width":  279.2,
+                                                                          "height":  69.54,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "52",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A22616E63686F72222C2270617274223A302C226C696E65223A302C2276616C7565223A7B2276616C7565223A35322C226C6162656C223A22547269616C207061727469636970616E7473222C226465736372697074696F6E223A22496C6C757374726174697665207369782D7765656B2070696C6F74227D2C227061727473223A5B7B22726F6C65223A2276616C7565222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A322C226E6578745374617274223A322C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226C6162656C222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A31382C226E6578745374617274223A31382C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226465736372697074696F6E222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A32372C226E6578745374617274223A32372C22626F756E64617279223A22656E64227D5D7D5D7D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto ExtraBold",
+                                                                                           "sizePoints":  57,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  4,
+                                                                          "id":  5,
+                                                                          "name":  "OPF metric 1 label line 1",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  314.416382,
+                                                                          "width":  279.2,
+                                                                          "height":  21.04504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Trial participants",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A226C696E65222C2270617274223A312C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto Medium",
+                                                                                           "sizePoints":  17.25,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  5,
+                                                                          "id":  6,
+                                                                          "name":  "OPF metric 1 description line 1",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  341.920319,
+                                                                          "width":  279.2,
+                                                                          "height":  18.3,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Illustrative six-week pilot",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A226C696E65222C2270617274223A322C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  15,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  6,
+                                                                          "id":  7,
+                                                                          "name":  "OPF metric 4 value line 1",
+                                                                          "type":  1,
+                                                                          "left":  340.4,
+                                                                          "top":  235.876373,
+                                                                          "width":  279.2,
+                                                                          "height":  69.54,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "84%",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2234222C22726F6C65223A22616E63686F72222C2270617274223A302C226C696E65223A302C2276616C7565223A7B2276616C7565223A22383425222C226C6162656C223A225461736B20636F6D706C6574696F6E222C226465736372697074696F6E223A2255702066726F6D2036382520617420626173656C696E65227D2C227061727473223A5B7B22726F6C65223A2276616C7565222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A332C226E6578745374617274223A332C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226C6162656C222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A31352C226E6578745374617274223A31352C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226465736372697074696F6E222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A32332C226E6578745374617274223A32332C22626F756E64617279223A22656E64227D5D7D5D7D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto ExtraBold",
+                                                                                           "sizePoints":  57,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  7,
+                                                                          "id":  8,
+                                                                          "name":  "OPF metric 4 label line 1",
+                                                                          "type":  1,
+                                                                          "left":  340.4,
+                                                                          "top":  314.416382,
+                                                                          "width":  279.2,
+                                                                          "height":  21.04504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Task completion",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2234222C22726F6C65223A226C696E65222C2270617274223A312C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto Medium",
+                                                                                           "sizePoints":  17.25,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  8,
+                                                                          "id":  9,
+                                                                          "name":  "OPF metric 4 description line 1",
+                                                                          "type":  1,
+                                                                          "left":  340.4,
+                                                                          "top":  341.920319,
+                                                                          "width":  279.2,
+                                                                          "height":  18.3,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Up from 68% at baseline",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2234222C22726F6C65223A226C696E65222C2270617274223A322C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  15,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  9,
+                                                                          "id":  10,
+                                                                          "name":  "OPF metric 7 value line 1",
+                                                                          "type":  1,
+                                                                          "left":  716.8708,
+                                                                          "top":  235.876373,
+                                                                          "width":  84.13331,
+                                                                          "height":  69.54,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "6.2",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2237222C22726F6C65223A22616E63686F72222C2270617274223A302C226C696E65223A302C2276616C7565223A7B2276616C7565223A22362E32222C22756E6974223A226D696E222C226C6162656C223A224D656469616E207461736B2074696D65222C226465736372697074696F6E223A22446F776E2066726F6D20392E34206D696E227D2C227061727473223A5B7B22726F6C65223A2276616C7565222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A332C226E6578745374617274223A332C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A22756E6974222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A332C226E6578745374617274223A332C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226C6162656C222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A31362C226E6578745374617274223A31362C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226465736372697074696F6E222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A31372C226E6578745374617274223A31372C22626F756E64617279223A22656E64227D5D7D5D7D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto ExtraBold",
+                                                                                           "sizePoints":  57,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  10,
+                                                                          "id":  11,
+                                                                          "name":  "OPF metric 7 unit line 1",
+                                                                          "type":  1,
+                                                                          "left":  807.0041,
+                                                                          "top":  275.626373,
+                                                                          "width":  30.5251179,
+                                                                          "height":  21.04504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "min",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2237222C22726F6C65223A226C696E65222C2270617274223A312C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto Medium",
+                                                                                           "sizePoints":  17.25,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  11,
+                                                                          "id":  12,
+                                                                          "name":  "OPF metric 7 label line 1",
+                                                                          "type":  1,
+                                                                          "left":  637.6,
+                                                                          "top":  314.416382,
+                                                                          "width":  279.2,
+                                                                          "height":  21.04504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Median task time",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2237222C22726F6C65223A226C696E65222C2270617274223A322C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto Medium",
+                                                                                           "sizePoints":  17.25,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  12,
+                                                                          "id":  13,
+                                                                          "name":  "OPF metric 7 description line 1",
+                                                                          "type":  1,
+                                                                          "left":  637.6,
+                                                                          "top":  341.461426,
+                                                                          "width":  279.2,
+                                                                          "height":  18.3,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Down from 9.4 min",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2237222C22726F6C65223A226C696E65222C2270617274223A332C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  15,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  13,
+                                                                          "id":  14,
+                                                                          "name":  "OPF text slides.0.blocks.3.text line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  473.925049,
+                                                                          "width":  873.6,
+                                                                          "height":  21.96,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Test with two teams for six weeks. Measure task completion and time before deciding what to scale.",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TEXT_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E626C6F636B732E332E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  18,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\native-current-metrics-6eea8909-attempt01\\native\\original-slide-01.png",
+                                                        "sha256":  "4804e324935d035d50986865e9b8a9920be6962c44dcaf59aef93f6625cc55fa"
+                                                    }
+                                                ]
+                                },
+                   "edited":  {
+                                  "slideCount":  1,
+                                  "slides":  [
+                                                 {
+                                                     "index":  1,
+                                                     "slideId":  256,
+                                                     "name":  "Slide 1",
+                                                     "tags":  [
+                                                                  {
+                                                                      "index":  1,
+                                                                      "name":  "OPF_SLIDE_V1",
+                                                                      "value":  "7B2276223A312C22736C696465223A302C226C61796F7574223A226D657472696373222C22636F6E74656E74223A7B22666F726D223A22626C6F636B73222C22626C6F636B73223A5B7B2274223A226C656166222C226B223A226D6574726963222C2270696E223A226D657472696373222C22696E223A226D657472696373222C22626F78223A5B35372E362C3331342E352C3337322E332C3136392E355D7D2C7B2274223A226C656166222C226B223A226D6574726963222C2270696E223A226D657472696373222C22696E223A226D657472696373222C22626F78223A5B3435332E392C3331342E352C3337322E332C3136392E355D7D2C7B2274223A226C656166222C226B223A226D6574726963222C2270696E223A226D657472696373222C22696E223A226D657472696373222C22626F78223A5B3835302E312C3331342E352C3337322E332C3136382E325D7D2C7B2274223A226C656166222C226B223A2274657874222C2270696E223A226E6F7465222C22696E223A226E6F7465222C22626F78223A5B35372E362C3633312E392C313136342E382C33302E355D7D5D7D2C226C61796F75745265636F7264223A7B2267726F7570223A2264656661756C74222C226964223A226D657472696373222C22736F75726365223A2268747470733A2F2F7777772E707074782E67616C6C657279222C227265636F7264223A7B226E616D65223A224D657472696373222C2273756D6D617279223A224F6E6520746F2073697820686561646C696E65206E756D626572732C207769746820616E206F7074696F6E616C206E6F74652E222C2274616773223A5B224E756D62657273225D2C2264657369676E223A7B22636F6E74656E74416C69676E6D656E74223A2263656E746572227D2C226172656173223A5B5B227469746C65225D2C5B226D657472696373225D2C5B226E6F7465225D5D2C22636F6C756D6E73223A5B315D2C22726F7773223A5B226175746F222C312C226175746F225D2C22726567696F6E73223A7B226D657472696373223A7B2261636365707473223A5B226D6574726963222C2267726F7570225D2C22726F6C65223A227072696D617279222C22666C6F77223A2267726964222C22616E63686F72223A226D6964646C65227D2C226E6F7465223A7B2261636365707473223A5B2274657874222C226C697374225D2C22726F6C65223A22737570706F7274696E67222C22666C6F77223A226E6F6E65227D7D2C226465736372697074696F6E223A22486967686C69676874206120736D616C6C20736574206F6620696D706F7274616E74206E756D626572732E20476976652065616368206E756D6265722061206C6162656C20616E642074686520636F6E74657874206E656564656420746F20696E746572707265742069742E222C2270726576696577223A7B22766563746F72537263223A2268747470733A2F2F7777772E707074782E67616C6C6572792F6C61796F75742D70726576696577732F6D6574726963732E737667227D7D7D2C2264657369676E223A7B227469746C65416C69676E6D656E74223A2263656E746572227D2C226E6174697665223A7B22737472756374757265223A223065303434353739613330366531222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223064303933663439313732663665227D7D"
+                                                                  }
+                                                              ],
+                                                     "shapeCount":  13,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF heading slides.0.title line 0",
+                                                                        "type":  14,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  49.41,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Pilot outcomes in three measures",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_HEADING_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto",
+                                                                                         "sizePoints":  40.5,
+                                                                                         "bold":  -1,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  2,
+                                                                        "id":  3,
+                                                                        "name":  "OPF heading slides.0.subtitle line 0",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  101.61,
+                                                                        "width":  873.6,
+                                                                        "height":  22.87504,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Illustrative example • fictional data",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_HEADING_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7375627469746C65222C226669656C64223A227375627469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto",
+                                                                                         "sizePoints":  18.75,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  3,
+                                                                        "id":  4,
+                                                                        "name":  "OPF metric 1 value line 1",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  235.876373,
+                                                                        "width":  279.2,
+                                                                        "height":  69.54,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "52",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_METRIC_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A22616E63686F72222C2270617274223A302C226C696E65223A302C2276616C7565223A7B2276616C7565223A35322C226C6162656C223A22547269616C207061727469636970616E7473222C226465736372697074696F6E223A22496C6C757374726174697665207369782D7765656B2070696C6F74227D2C227061727473223A5B7B22726F6C65223A2276616C7565222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A322C226E6578745374617274223A322C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226C6162656C222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A31382C226E6578745374617274223A31382C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226465736372697074696F6E222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A32372C226E6578745374617274223A32372C22626F756E64617279223A22656E64227D5D7D5D7D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto ExtraBold",
+                                                                                         "sizePoints":  57,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  4,
+                                                                        "id":  5,
+                                                                        "name":  "OPF metric 1 label line 1",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  314.416382,
+                                                                        "width":  279.2,
+                                                                        "height":  21.04504,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Trial participants",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_METRIC_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A226C696E65222C2270617274223A312C226C696E65223A307D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto Medium",
+                                                                                         "sizePoints":  17.25,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  5,
+                                                                        "id":  6,
+                                                                        "name":  "OPF metric 1 description line 1",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  341.920319,
+                                                                        "width":  279.2,
+                                                                        "height":  18.3,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Illustrative six-week pilot",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_METRIC_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A226C696E65222C2270617274223A322C226C696E65223A307D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto",
+                                                                                         "sizePoints":  15,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  6,
+                                                                        "id":  7,
+                                                                        "name":  "OPF metric 4 value line 1",
+                                                                        "type":  1,
+                                                                        "left":  340.4,
+                                                                        "top":  235.876373,
+                                                                        "width":  279.2,
+                                                                        "height":  69.54,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "84%",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_METRIC_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2234222C22726F6C65223A22616E63686F72222C2270617274223A302C226C696E65223A302C2276616C7565223A7B2276616C7565223A22383425222C226C6162656C223A225461736B20636F6D706C6574696F6E222C226465736372697074696F6E223A2255702066726F6D2036382520617420626173656C696E65227D2C227061727473223A5B7B22726F6C65223A2276616C7565222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A332C226E6578745374617274223A332C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226C6162656C222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A31352C226E6578745374617274223A31352C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226465736372697074696F6E222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A32332C226E6578745374617274223A32332C22626F756E64617279223A22656E64227D5D7D5D7D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto ExtraBold",
+                                                                                         "sizePoints":  57,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  7,
+                                                                        "id":  8,
+                                                                        "name":  "OPF metric 4 label line 1",
+                                                                        "type":  1,
+                                                                        "left":  340.4,
+                                                                        "top":  314.416382,
+                                                                        "width":  279.2,
+                                                                        "height":  21.04504,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Task completion",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_METRIC_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2234222C22726F6C65223A226C696E65222C2270617274223A312C226C696E65223A307D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto Medium",
+                                                                                         "sizePoints":  17.25,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  8,
+                                                                        "id":  9,
+                                                                        "name":  "OPF metric 4 description line 1",
+                                                                        "type":  1,
+                                                                        "left":  340.4,
+                                                                        "top":  341.920319,
+                                                                        "width":  279.2,
+                                                                        "height":  18.3,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Up from 68% at baseline",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_METRIC_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2234222C22726F6C65223A226C696E65222C2270617274223A322C226C696E65223A307D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto",
+                                                                                         "sizePoints":  15,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  9,
+                                                                        "id":  10,
+                                                                        "name":  "OPF metric 7 value line 1",
+                                                                        "type":  1,
+                                                                        "left":  716.8708,
+                                                                        "top":  235.876373,
+                                                                        "width":  84.13331,
+                                                                        "height":  69.54,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "6.2",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_METRIC_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2237222C22726F6C65223A22616E63686F72222C2270617274223A302C226C696E65223A302C2276616C7565223A7B2276616C7565223A22362E32222C22756E6974223A226D696E222C226C6162656C223A224D656469616E207461736B2074696D65222C226465736372697074696F6E223A22446F776E2066726F6D20392E34206D696E227D2C227061727473223A5B7B22726F6C65223A2276616C7565222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A332C226E6578745374617274223A332C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A22756E6974222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A332C226E6578745374617274223A332C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226C6162656C222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A31362C226E6578745374617274223A31362C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226465736372697074696F6E222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A31372C226E6578745374617274223A31372C22626F756E64617279223A22656E64227D5D7D5D7D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto ExtraBold",
+                                                                                         "sizePoints":  57,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  10,
+                                                                        "id":  11,
+                                                                        "name":  "OPF metric 7 unit line 1",
+                                                                        "type":  1,
+                                                                        "left":  807.0041,
+                                                                        "top":  275.626373,
+                                                                        "width":  30.5251179,
+                                                                        "height":  21.04504,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "min",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_METRIC_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2237222C22726F6C65223A226C696E65222C2270617274223A312C226C696E65223A307D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto Medium",
+                                                                                         "sizePoints":  17.25,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  11,
+                                                                        "id":  12,
+                                                                        "name":  "OPF metric 7 label line 1",
+                                                                        "type":  1,
+                                                                        "left":  637.6,
+                                                                        "top":  314.416382,
+                                                                        "width":  279.2,
+                                                                        "height":  21.04504,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Median task time",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_METRIC_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2237222C22726F6C65223A226C696E65222C2270617274223A322C226C696E65223A307D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto Medium",
+                                                                                         "sizePoints":  17.25,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  12,
+                                                                        "id":  13,
+                                                                        "name":  "OPF metric 7 description line 1",
+                                                                        "type":  1,
+                                                                        "left":  637.6,
+                                                                        "top":  341.461426,
+                                                                        "width":  279.2,
+                                                                        "height":  18.3,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Down from 9.4 min",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_METRIC_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A2237222C22726F6C65223A226C696E65222C2270617274223A332C226C696E65223A307D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto",
+                                                                                         "sizePoints":  15,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  13,
+                                                                        "id":  14,
+                                                                        "name":  "OPF text slides.0.blocks.3.text line 0",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  473.925049,
+                                                                        "width":  873.6,
+                                                                        "height":  21.96,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Test with two teams for six weeks. Measure task completion and time before deciding what to scale.",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_TEXT_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E626C6F636B732E332E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto",
+                                                                                         "sizePoints":  18,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    }
+                                                                ]
+                                                 }
+                                             ],
+                                  "rasters":  [
+                                                  {
+                                                      "slideIndex":  1,
+                                                      "path":  "C:\\opf-work\\native-current-metrics-6eea8909-attempt01\\native\\edited-slide-01.png",
+                                                      "sha256":  "4804e324935d035d50986865e9b8a9920be6962c44dcaf59aef93f6625cc55fa"
+                                                  }
+                                              ]
+                              },
+                   "reopened":  {
+                                    "slideCount":  1,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C226C61796F7574223A226D657472696373222C22636F6E74656E74223A7B22666F726D223A22626C6F636B73222C22626C6F636B73223A5B7B2274223A226C656166222C226B223A226D6574726963222C2270696E223A226D657472696373222C22696E223A226D657472696373222C22626F78223A5B35372E362C3331342E352C3337322E332C3136392E355D7D2C7B2274223A226C656166222C226B223A226D6574726963222C2270696E223A226D657472696373222C22696E223A226D657472696373222C22626F78223A5B3435332E392C3331342E352C3337322E332C3136392E355D7D2C7B2274223A226C656166222C226B223A226D6574726963222C2270696E223A226D657472696373222C22696E223A226D657472696373222C22626F78223A5B3835302E312C3331342E352C3337322E332C3136382E325D7D2C7B2274223A226C656166222C226B223A2274657874222C2270696E223A226E6F7465222C22696E223A226E6F7465222C22626F78223A5B35372E362C3633312E392C313136342E382C33302E355D7D5D7D2C226C61796F75745265636F7264223A7B2267726F7570223A2264656661756C74222C226964223A226D657472696373222C22736F75726365223A2268747470733A2F2F7777772E707074782E67616C6C657279222C227265636F7264223A7B226E616D65223A224D657472696373222C2273756D6D617279223A224F6E6520746F2073697820686561646C696E65206E756D626572732C207769746820616E206F7074696F6E616C206E6F74652E222C2274616773223A5B224E756D62657273225D2C2264657369676E223A7B22636F6E74656E74416C69676E6D656E74223A2263656E746572227D2C226172656173223A5B5B227469746C65225D2C5B226D657472696373225D2C5B226E6F7465225D5D2C22636F6C756D6E73223A5B315D2C22726F7773223A5B226175746F222C312C226175746F225D2C22726567696F6E73223A7B226D657472696373223A7B2261636365707473223A5B226D6574726963222C2267726F7570225D2C22726F6C65223A227072696D617279222C22666C6F77223A2267726964222C22616E63686F72223A226D6964646C65227D2C226E6F7465223A7B2261636365707473223A5B2274657874222C226C697374225D2C22726F6C65223A22737570706F7274696E67222C22666C6F77223A226E6F6E65227D7D2C226465736372697074696F6E223A22486967686C69676874206120736D616C6C20736574206F6620696D706F7274616E74206E756D626572732E20476976652065616368206E756D6265722061206C6162656C20616E642074686520636F6E74657874206E656564656420746F20696E746572707265742069742E222C2270726576696577223A7B22766563746F72537263223A2268747470733A2F2F7777772E707074782E67616C6C6572792F6C61796F75742D70726576696577732F6D6574726963732E737667227D7D7D2C2264657369676E223A7B227469746C65416C69676E6D656E74223A2263656E746572227D2C226E6174697665223A7B22737472756374757265223A223065303434353739613330366531222C226261636B67726F756E64223A223134653163303531636431396636222C227374796C65223A223064303933663439313732663665227D7D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  13,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Pilot outcomes in three measures",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  40.5,
+                                                                                           "bold":  -1,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF heading slides.0.subtitle line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  101.61,
+                                                                          "width":  873.6,
+                                                                          "height":  22.87504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Illustrative example • fictional data",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7375627469746C65222C226669656C64223A227375627469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  18.75,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF metric 1 value line 1",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  235.876373,
+                                                                          "width":  279.2,
+                                                                          "height":  69.54,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "52",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A22616E63686F72222C2270617274223A302C226C696E65223A302C2276616C7565223A7B2276616C7565223A35322C226C6162656C223A22547269616C207061727469636970616E7473222C226465736372697074696F6E223A22496C6C757374726174697665207369782D7765656B2070696C6F74227D2C227061727473223A5B7B22726F6C65223A2276616C7565222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A322C226E6578745374617274223A322C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226C6162656C222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A31382C226E6578745374617274223A31382C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226465736372697074696F6E222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A32372C226E6578745374617274223A32372C22626F756E64617279223A22656E64227D5D7D5D7D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto ExtraBold",
+                                                                                           "sizePoints":  57,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  4,
+                                                                          "id":  5,
+                                                                          "name":  "OPF metric 1 label line 1",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  314.416382,
+                                                                          "width":  279.2,
+                                                                          "height":  21.04504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Trial participants",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A226C696E65222C2270617274223A312C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto Medium",
+                                                                                           "sizePoints":  17.25,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  5,
+                                                                          "id":  6,
+                                                                          "name":  "OPF metric 1 description line 1",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  341.920319,
+                                                                          "width":  279.2,
+                                                                          "height":  18.3,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Illustrative six-week pilot",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2231222C22726F6C65223A226C696E65222C2270617274223A322C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  15,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  6,
+                                                                          "id":  7,
+                                                                          "name":  "OPF metric 4 value line 1",
+                                                                          "type":  1,
+                                                                          "left":  340.4,
+                                                                          "top":  235.876373,
+                                                                          "width":  279.2,
+                                                                          "height":  69.54,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "84%",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2234222C22726F6C65223A22616E63686F72222C2270617274223A302C226C696E65223A302C2276616C7565223A7B2276616C7565223A22383425222C226C6162656C223A225461736B20636F6D706C6574696F6E222C226465736372697074696F6E223A2255702066726F6D2036382520617420626173656C696E65227D2C227061727473223A5B7B22726F6C65223A2276616C7565222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A332C226E6578745374617274223A332C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226C6162656C222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A31352C226E6578745374617274223A31352C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226465736372697074696F6E222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A32332C226E6578745374617274223A32332C22626F756E64617279223A22656E64227D5D7D5D7D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto ExtraBold",
+                                                                                           "sizePoints":  57,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  7,
+                                                                          "id":  8,
+                                                                          "name":  "OPF metric 4 label line 1",
+                                                                          "type":  1,
+                                                                          "left":  340.4,
+                                                                          "top":  314.416382,
+                                                                          "width":  279.2,
+                                                                          "height":  21.04504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Task completion",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2234222C22726F6C65223A226C696E65222C2270617274223A312C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto Medium",
+                                                                                           "sizePoints":  17.25,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  8,
+                                                                          "id":  9,
+                                                                          "name":  "OPF metric 4 description line 1",
+                                                                          "type":  1,
+                                                                          "left":  340.4,
+                                                                          "top":  341.920319,
+                                                                          "width":  279.2,
+                                                                          "height":  18.3,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Up from 68% at baseline",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2234222C22726F6C65223A226C696E65222C2270617274223A322C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  15,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  9,
+                                                                          "id":  10,
+                                                                          "name":  "OPF metric 7 value line 1",
+                                                                          "type":  1,
+                                                                          "left":  716.8708,
+                                                                          "top":  235.876373,
+                                                                          "width":  84.13331,
+                                                                          "height":  69.54,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "6.2",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2237222C22726F6C65223A22616E63686F72222C2270617274223A302C226C696E65223A302C2276616C7565223A7B2276616C7565223A22362E32222C22756E6974223A226D696E222C226C6162656C223A224D656469616E207461736B2074696D65222C226465736372697074696F6E223A22446F776E2066726F6D20392E34206D696E227D2C227061727473223A5B7B22726F6C65223A2276616C7565222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A332C226E6578745374617274223A332C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A22756E6974222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A332C226E6578745374617274223A332C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226C6162656C222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A31362C226E6578745374617274223A31362C22626F756E64617279223A22656E64227D5D7D2C7B22726F6C65223A226465736372697074696F6E222C2276697369626C65223A747275652C226C696E6573223A5B7B227374617274223A302C22656E64223A31372C226E6578745374617274223A31372C22626F756E64617279223A22656E64227D5D7D5D7D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto ExtraBold",
+                                                                                           "sizePoints":  57,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  10,
+                                                                          "id":  11,
+                                                                          "name":  "OPF metric 7 unit line 1",
+                                                                          "type":  1,
+                                                                          "left":  807.0041,
+                                                                          "top":  275.626373,
+                                                                          "width":  30.5251179,
+                                                                          "height":  21.04504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "min",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2237222C22726F6C65223A226C696E65222C2270617274223A312C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto Medium",
+                                                                                           "sizePoints":  17.25,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  11,
+                                                                          "id":  12,
+                                                                          "name":  "OPF metric 7 label line 1",
+                                                                          "type":  1,
+                                                                          "left":  637.6,
+                                                                          "top":  314.416382,
+                                                                          "width":  279.2,
+                                                                          "height":  21.04504,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Median task time",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2237222C22726F6C65223A226C696E65222C2270617274223A322C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto Medium",
+                                                                                           "sizePoints":  17.25,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  12,
+                                                                          "id":  13,
+                                                                          "name":  "OPF metric 7 description line 1",
+                                                                          "type":  1,
+                                                                          "left":  637.6,
+                                                                          "top":  341.461426,
+                                                                          "width":  279.2,
+                                                                          "height":  18.3,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Down from 9.4 min",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_METRIC_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A2237222C22726F6C65223A226C696E65222C2270617274223A332C226C696E65223A307D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  15,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  13,
+                                                                          "id":  14,
+                                                                          "name":  "OPF text slides.0.blocks.3.text line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  473.925049,
+                                                                          "width":  873.6,
+                                                                          "height":  21.96,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Test with two teams for six weeks. Measure task completion and time before deciding what to scale.",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_TEXT_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E626C6F636B732E332E74657874222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  18,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\native-current-metrics-6eea8909-attempt01\\native\\reopened-slide-01.png",
+                                                        "sha256":  "4804e324935d035d50986865e9b8a9920be6962c44dcaf59aef93f6625cc55fa"
+                                                    }
+                                                ]
+                                }
+               },
+    "inputs":  {
+                   "verifier":  {
+                                    "path":  "C:\\opf-work\\current-be40-gallery3-01\\opf-pptx\\test\\native-furniture-control.ps1",
+                                    "sha256":  "2f136366f02b89e2bf04899124bbde8fba6b847513776d03de139f77902af9a8",
+                                    "snapshotPath":  "C:\\opf-work\\native-current-metrics-6eea8909-attempt01\\native\\inputs\\native-furniture-control.ps1",
+                                    "snapshotSha256":  "2f136366f02b89e2bf04899124bbde8fba6b847513776d03de139f77902af9a8"
+                                },
+                   "processHelper":  {
+                                         "path":  "C:\\opf-work\\current-be40-gallery3-01\\opf-pptx\\test\\native-process.ps1",
+                                         "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                                         "snapshotPath":  "C:\\opf-work\\native-current-metrics-6eea8909-attempt01\\native\\inputs\\native-process.ps1",
+                                         "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                                     }
+               },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\Root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20430.20146",
+                        "powerPointExecutableSha256":  "d402e97afb5dd21fc38e9e3c1afc90bb22eacae31078f41081f0b68ea00af3bb"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "scope":  "One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker never quits or kills Office, changes security, retries, or closes unrelated presentations."
+}

@@ -1,0 +1,318 @@
+[
+  {
+    "case": "change-layout",
+    "stage": "opened-source",
+    "at": "2026-10-14T07:12:24.510Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t673 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t705 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t706 Button New Slide",
+      "\t\t\t\t\t\t\t\t1188 Text View Indicator Slide 1 of 3",
+      "\t\t\t\t\t1203 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t1207 Slide Slide 1 - Picture region",
+      "Picture region",
+      "Native picture notes."
+    ]
+  },
+  {
+    "case": "change-layout",
+    "stage": "layout-gallery",
+    "at": "2026-10-14T07:12:35.570Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t673 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t705 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t706 Button New Slide",
+      "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t1235 List Item (selectable) Text",
+      "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t1254 List Item (selectable) Hero",
+      "\t\t\t\t\t\t\t\t1188 Text View Indicator Slide 1 of 3",
+      "\t\t\t\t\t1203 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t1207 Slide Slide 1 - Picture region",
+      "\t\t\t\t\t\t1222 textbox (selectable) Title TextBox",
+      "\t\t\t\t\t\t1224 shape (selectable) OPF text slides.0.blocks.0.text line 0",
+      "Picture region",
+      "Native picture notes."
+    ]
+  },
+  {
+    "case": "change-layout",
+    "stage": "selected-Hero-coordinate",
+    "at": "2026-10-14T07:14:26.135Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t20 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t54 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t55 Button New Slide",
+      "\t\t\t\t\t\t\t\t333 Text View Indicator Slide 1 of 3",
+      "\t\t\t\t\t355 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t359 Slide Slide 1 - Picture region",
+      "\t\t\t\t\t\t360 textbox (selectable) Title TextBox",
+      "\t\t\t\t\t\t420 textbox (selectable) Content Placeholder",
+      "\t\t\t\t\t\t429 textbox (selectable) Content Placeholder",
+      "\t\t\t\t\t\t437 shape (selectable) OPF text slides.0.blocks.0.text line 0",
+      "Picture region",
+      "Native picture notes."
+    ]
+  },
+  {
+    "case": "change-layout",
+    "stage": "saved",
+    "at": "2026-10-14T07:14:37.332Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t20 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t54 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t55 Button New Slide",
+      "\t\t\t\t\t\t\t\t333 Text View Indicator Slide 1 of 3",
+      "\t\t\t\t\t355 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t359 Slide Slide 1 - Picture region",
+      "\t\t\t\t\t\t360 textbox (selectable) Title TextBox",
+      "\t\t\t\t\t\t420 textbox (selectable) Content Placeholder",
+      "\t\t\t\t\t\t429 textbox (selectable) Content Placeholder",
+      "\t\t\t\t\t\t437 shape (selectable) OPF text slides.0.blocks.0.text line 0",
+      "Picture region",
+      "Native picture notes."
+    ]
+  },
+  {
+    "case": "change-layout",
+    "stage": "reopened",
+    "at": "2026-10-14T07:16:17.993Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t20 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t54 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t55 Button New Slide",
+      "\t\t\t\t\t\t\t\t553 Text View Indicator Slide 1 of 3",
+      "\t\t\t\t\t569 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t573 Slide Slide 1 - Picture region",
+      "Picture region",
+      "Native picture notes."
+    ]
+  },
+  {
+    "case": "new-custom",
+    "stage": "opened-source",
+    "at": "2026-10-14T07:17:12.249Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t20 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t54 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t55 Button New Slide",
+      "\t\t\t\t\t\t\t\t722 Text View Indicator Slide 1 of 3",
+      "\t\t\t\t\t741 Slide Slide 1 - Collapsed empty regions",
+      "The focused UI element is 20 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId."
+    ]
+  },
+  {
+    "case": "new-custom",
+    "stage": "New-Slide-Named-regions-gallery",
+    "at": "2026-10-14T07:17:44.558Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t20 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t54 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t55 Button New Slide",
+      "\t\t\t\t\t\t\t\t\t\t\t\t766 Menu New Slide Secondary Actions: Raise",
+      "\t\t\t\t\t\t\t\t\t\t\t\t\t767 Menu New Slide",
+      "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t775 List Item (selectable) Text",
+      "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t794 List Item (selectable) Hero",
+      "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t799 List Item (selectable) Named regions",
+      "\t\t\t\t\t\t\t\t722 Text View Indicator Slide 3 of 3",
+      "\t\t\t\t\t757 Slide Slide 3",
+      "\t\t\t\t\t\t758 shape (selectable) OPF heading slides.2.title line 0",
+      "\t\t806 menu New Slide"
+    ]
+  },
+  {
+    "case": "new-custom",
+    "stage": "entered-first-region-witness",
+    "at": "2026-10-14T07:19:29.963Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t20 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t54 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t55 Button New Slide",
+      "\t\t\t\t\t\t\t\t722 Text View Indicator Slide 4 of 4",
+      "\t\t\t\t\t811 Slide Slide 4",
+      "\t\t\t\t\t\t812 textbox (selectable) TextBox",
+      "\t\t\t\t\t\t814 shape (selectable) Picture Placeholder 2"
+    ]
+  },
+  {
+    "case": "new-custom",
+    "stage": "saved",
+    "at": "2026-10-14T07:19:40.877Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t20 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t54 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t55 Button New Slide",
+      "\t\t\t\t\t\t\t\t722 Text View Indicator Slide 4 of 4",
+      "\t\t\t\t\t811 Slide Slide 4",
+      "\t\t\t\t\t\t812 textbox (selectable) TextBox",
+      "\t\t\t\t\t\t814 shape (selectable) Picture Placeholder 2"
+    ]
+  },
+  {
+    "case": "new-custom",
+    "stage": "reopened-slide4",
+    "at": "2026-10-14T07:21:34.999Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t3926 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t3960 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t3961 Button New Slide",
+      "\t\t\t\t\t\t\t\t4239 Text View Indicator Slide 4 of 4",
+      "\t\t\t\t\t4282 Slide Slide 4",
+      "\t\t\t\t\t\t4283 textbox (selectable) TextBox",
+      "\t\t\t\t\t\t4285 shape (selectable) Picture Placeholder 2"
+    ]
+  },
+  {
+    "case": "new-text",
+    "stage": "opened-source",
+    "at": "2026-10-14T07:26:19.739Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t3926 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t3960 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t3961 Button New Slide",
+      "\t\t\t\t\t\t\t\t4409 Text View Indicator Slide 1 of 3",
+      "\t\t\t\t\t4424 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t4428 Slide Slide 1 - Picture region"
+    ]
+  },
+  {
+    "case": "new-text",
+    "stage": "New-Slide-gallery",
+    "at": "2026-10-14T07:27:00.184Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t3926 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t3960 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t3961 Button New Slide",
+      "\t\t\t\t\t\t\t\t\t\t\t\t4462 Menu New Slide Secondary Actions: Raise",
+      "\t\t\t\t\t\t\t\t\t\t\t\t\t4463 Menu New Slide",
+      "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t4471 List Item (selectable) Text",
+      "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t4490 List Item (selectable) Hero",
+      "\t\t\t\t\t\t\t\t4409 Text View Indicator Slide 3 of 3",
+      "\t\t\t\t\t4424 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t4446 Slide Slide 3 - Table region",
+      "\t\t\t\t\t\t4447 textbox (selectable) Title TextBox",
+      "\t\t\t\t\t\t4448 table (selectable) OPF table 1",
+      "\t\t4500 menu New Slide"
+    ]
+  },
+  {
+    "case": "new-text",
+    "stage": "entered-title-and-body",
+    "at": "2026-10-14T07:28:07.069Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t3926 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t3960 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t3961 Button New Slide",
+      "\t\t\t\t\t\t\t\t4409 Text View Indicator Slide 4 of 4",
+      "\t\t\t\t\t4501 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t4505 Slide Slide 4",
+      "\t\t\t\t\t\t4506 textbox (selectable) Title TextBox",
+      "\t\t\t\t\t\t4507 textbox (selectable) Content Placeholder"
+    ]
+  },
+  {
+    "case": "new-text",
+    "stage": "saved",
+    "at": "2026-10-14T07:28:17.865Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t3926 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t3960 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t3961 Button New Slide",
+      "\t\t\t\t\t\t\t\t4409 Text View Indicator Slide 4 of 4",
+      "\t\t\t\t\t4501 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t4505 Slide Slide 4",
+      "\t\t\t\t\t\t4506 textbox (selectable) Title TextBox",
+      "\t\t\t\t\t\t4507 textbox (selectable) Content Placeholder"
+    ]
+  },
+  {
+    "case": "new-text",
+    "stage": "reopened-slide4",
+    "at": "2026-10-14T07:29:23.481Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t7628 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t7662 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t7663 Button New Slide",
+      "\t\t\t\t\t\t\t\t7941 Text View Indicator Slide 4 of 4",
+      "\t\t\t\t\t7963 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t7966 list item (selectable) Slide RR20 built-in title witness ID: Slide259Image",
+      "\t\t\t\t\t7986 Slide Slide 4 - RR20 built-in title witness",
+      "\t\t\t\t\t\t7987 textbox (selectable) Title TextBox",
+      "\t\t\t\t\t\t7988 textbox (selectable) Content Placeholder"
+    ]
+  },
+  {
+    "case": "change-picture",
+    "stage": "opened-source",
+    "at": "2026-10-14T07:30:11.459Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t7628 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t7662 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t7663 Button New Slide",
+      "\t\t\t\t\t\t\t\t8112 Text View Indicator Slide 1 of 3",
+      "\t\t\t\t\t8127 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t8131 Slide Slide 1 - Picture region",
+      "\t\t\t\t\t\t8132 textbox (selectable) Title TextBox",
+      "\t\t\t\t\t\t8134 shape (selectable) OPF text slides.0.blocks.0.text line 0",
+      "Picture region",
+      "Native picture notes."
+    ]
+  },
+  {
+    "case": "change-picture",
+    "stage": "This-Device-menu",
+    "at": "2026-10-14T07:30:56.199Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t7628 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t8162 Menu Item Change Picture ID: PictureChangeMenu",
+      "\t\t\t\t\t\t\t\t\t\t\t\t8233 Menu Change Picture Secondary Actions: Raise",
+      "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t8237 Menu Item This Device...",
+      "\t\t\t\t\t\t\t\t8112 Text View Indicator Slide 1 of 3",
+      "\t\t\t\t\t8127 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t8131 Slide Slide 1 - Picture region",
+      "\t\t\t\t\t\t8132 textbox (selectable) Title TextBox",
+      "\t\t\t\t\t\t8134 shape (selectable) OPF text slides.0.blocks.0.text line 0",
+      "Picture region",
+      "Native picture notes."
+    ]
+  },
+  {
+    "case": "change-picture",
+    "stage": "replacement-inserted",
+    "at": "2026-10-14T07:31:33.847Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t7628 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t8162 Menu Item Change Picture ID: PictureChangeMenu",
+      "\t\t\t\t\t\t\t\t8112 Text View Indicator Slide 1 of 3",
+      "\t\t\t\t\t8127 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t8131 Slide Slide 1 - Picture region",
+      "\t\t\t\t\t\t8132 textbox (selectable) Title TextBox",
+      "\t\t\t\t\t\t8133 image (selectable) OPF image 1",
+      "\t\t\t\t\t\t8134 shape (selectable) OPF text slides.0.blocks.0.text line 0",
+      "Picture region",
+      "Native picture notes."
+    ]
+  },
+  {
+    "case": "change-picture",
+    "stage": "saved",
+    "at": "2026-10-14T07:31:51.299Z",
+    "controls": []
+  },
+  {
+    "case": "change-picture",
+    "stage": "reopened",
+    "at": "2026-10-14T07:33:04.827Z",
+    "controls": [
+      "\t\t\t\t\t\t\t\t\t7628 Edit Box (settable, string) Microsoft search Value: Search ID: TellMeTextBoxAutomationId",
+      "\t\t\t\t\t\t\t\t\t\t\t8347 SplitButton (settable, string) New Slide ID: SlideNewGallery",
+      "\t\t\t\t\t\t\t\t\t\t\t\t8348 Button New Slide",
+      "\t\t\t\t\t\t\t\t8732 Text View Indicator Slide 1 of 3",
+      "\t\t\t\t\t8748 list item (selectable) Slide Picture region ID: Slide256Image",
+      "\t\t\t\t\t8752 Slide Slide 1 - Picture region",
+      "\t\t\t\t\t\t8767 textbox (selectable) Title TextBox",
+      "\t\t\t\t\t\t8768 image (selectable) OPF image 1",
+      "\t\t\t\t\t\t8769 shape (selectable) OPF text slides.0.blocks.0.text line 0",
+      "Picture region",
+      "Native picture notes."
+    ]
+  }
+]

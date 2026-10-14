@@ -1,0 +1,343 @@
+{
+  "slide": {
+    "?xml": {
+      "@_version": "1.0",
+      "@_encoding": "UTF-8",
+      "@_standalone": "yes"
+    },
+    "p:sld": {
+      "p:cSld": {
+        "p:bg": {
+          "p:bgPr": {
+            "a:solidFill": {
+              "a:schemeClr": {
+                "@_val": "tx2"
+              }
+            },
+            "a:effectLst": ""
+          }
+        },
+        "p:spTree": {
+          "p:nvGrpSpPr": {
+            "p:cNvPr": {
+              "@_id": "1",
+              "@_name": ""
+            },
+            "p:cNvGrpSpPr": "",
+            "p:nvPr": ""
+          },
+          "p:grpSpPr": {
+            "a:xfrm": {
+              "a:off": {
+                "@_x": "0",
+                "@_y": "0"
+              },
+              "a:ext": {
+                "@_cx": "0",
+                "@_cy": "0"
+              },
+              "a:chOff": {
+                "@_x": "0",
+                "@_y": "0"
+              },
+              "a:chExt": {
+                "@_cx": "0",
+                "@_cy": "0"
+              }
+            }
+          },
+          "p:sp": [
+            {
+              "p:nvSpPr": {
+                "p:cNvPr": {
+                  "@_id": "2",
+                  "@_name": "OPF heading slides.0.title line 0"
+                },
+                "p:cNvSpPr": {
+                  "a:spLocks": {
+                    "@_noGrp": "1"
+                  }
+                },
+                "p:nvPr": {
+                  "p:ph": {
+                    "@_type": "title"
+                  },
+                  "p:custDataLst": {
+                    "p:tags": {
+                      "@_r:id": "rId2"
+                    }
+                  }
+                }
+              },
+              "p:spPr": {
+                "a:prstGeom": {
+                  "a:avLst": "",
+                  "@_prst": "rect"
+                },
+                "a:noFill": "",
+                "a:ln": ""
+              },
+              "p:txBody": {
+                "a:bodyPr": {
+                  "@_wrap": "none",
+                  "@_lIns": "0",
+                  "@_tIns": "0",
+                  "@_rIns": "0",
+                  "@_bIns": "0",
+                  "@_rtlCol": "0",
+                  "@_anchor": "t"
+                },
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:lnSpc": {
+                      "a:spcPct": {
+                        "@_val": "100000"
+                      }
+                    },
+                    "a:buNone": "",
+                    "a:tabLst": "",
+                    "@_marL": "0",
+                    "@_indent": "0",
+                    "@_algn": "l"
+                  },
+                  "a:r": {
+                    "a:rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "@_val": "bg1"
+                        }
+                      },
+                      "a:latin": {
+                        "@_typeface": "Roboto",
+                        "@_pitchFamily": "34",
+                        "@_charset": "0"
+                      },
+                      "@_lang": "en-US",
+                      "@_sz": "4050",
+                      "@_b": "1",
+                      "@_dirty": "0"
+                    },
+                    "a:t": "Picture region"
+                  },
+                  "a:endParaRPr": {
+                    "@_lang": "en-US",
+                    "@_sz": "4050",
+                    "@_dirty": "0"
+                  }
+                }
+              }
+            },
+            {
+              "p:nvSpPr": {
+                "p:cNvPr": {
+                  "a:extLst": {
+                    "a:ext": {
+                      "a16:creationId": {
+                        "@_xmlns:a16": "http://schemas.microsoft.com/office/drawing/2014/main",
+                        "@_id": "{D5FBF508-5356-A2BB-96D1-C6DCC5DBF652}"
+                      },
+                      "@_uri": "{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}"
+                    }
+                  },
+                  "@_id": "5",
+                  "@_name": "Content Placeholder 4"
+                },
+                "p:cNvSpPr": {
+                  "a:spLocks": {
+                    "@_noGrp": "1"
+                  }
+                },
+                "p:nvPr": {
+                  "p:ph": {
+                    "@_idx": "100"
+                  }
+                }
+              },
+              "p:spPr": "",
+              "p:txBody": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:endParaRPr": {
+                    "@_lang": "en-US"
+                  }
+                }
+              }
+            },
+            {
+              "p:nvSpPr": {
+                "p:cNvPr": {
+                  "a:extLst": {
+                    "a:ext": {
+                      "a16:creationId": {
+                        "@_xmlns:a16": "http://schemas.microsoft.com/office/drawing/2014/main",
+                        "@_id": "{C7E1C391-1AF5-0924-4B0F-8CB04B4E8A9E}"
+                      },
+                      "@_uri": "{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}"
+                    }
+                  },
+                  "@_id": "6",
+                  "@_name": "Content Placeholder 5"
+                },
+                "p:cNvSpPr": {
+                  "a:spLocks": {
+                    "@_noGrp": "1"
+                  }
+                },
+                "p:nvPr": {
+                  "p:ph": {
+                    "@_idx": "101"
+                  }
+                }
+              },
+              "p:spPr": "",
+              "p:txBody": {
+                "a:bodyPr": "",
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:endParaRPr": {
+                    "@_lang": "en-US"
+                  }
+                }
+              }
+            },
+            {
+              "p:nvSpPr": {
+                "p:cNvPr": {
+                  "@_id": "4",
+                  "@_name": "OPF text slides.0.blocks.0.text line 0"
+                },
+                "p:cNvSpPr": "",
+                "p:nvPr": {
+                  "p:custDataLst": {
+                    "p:tags": {
+                      "@_r:id": "rId3"
+                    }
+                  }
+                }
+              },
+              "p:spPr": {
+                "a:xfrm": {
+                  "a:off": {
+                    "@_x": "6210300",
+                    "@_y": "3697510"
+                  },
+                  "a:ext": {
+                    "@_cx": "5433060",
+                    "@_cy": "290513"
+                  }
+                },
+                "a:prstGeom": {
+                  "a:avLst": "",
+                  "@_prst": "rect"
+                },
+                "a:noFill": "",
+                "a:ln": ""
+              },
+              "p:txBody": {
+                "a:bodyPr": {
+                  "@_wrap": "none",
+                  "@_lIns": "0",
+                  "@_tIns": "0",
+                  "@_rIns": "0",
+                  "@_bIns": "0",
+                  "@_rtlCol": "0",
+                  "@_anchor": "t"
+                },
+                "a:lstStyle": "",
+                "a:p": {
+                  "a:pPr": {
+                    "a:lnSpc": {
+                      "a:spcPct": {
+                        "@_val": "100000"
+                      }
+                    },
+                    "a:buNone": "",
+                    "a:tabLst": "",
+                    "@_marL": "0",
+                    "@_indent": "0",
+                    "@_algn": "l"
+                  },
+                  "a:r": {
+                    "a:rPr": {
+                      "a:solidFill": {
+                        "a:schemeClr": {
+                          "@_val": "bg1"
+                        }
+                      },
+                      "a:latin": {
+                        "@_typeface": "Roboto",
+                        "@_pitchFamily": "34",
+                        "@_charset": "0"
+                      },
+                      "@_lang": "en-US",
+                      "@_sz": "1875",
+                      "@_dirty": "0"
+                    },
+                    "a:t": "Native picture notes."
+                  },
+                  "a:endParaRPr": {
+                    "@_lang": "en-US",
+                    "@_sz": "1875",
+                    "@_dirty": "0"
+                  }
+                }
+              }
+            }
+          ],
+          "p:pic": {
+            "p:nvPicPr": {
+              "p:cNvPr": {
+                "@_id": "3",
+                "@_name": "OPF image 1",
+                "@_descr": "Packet local picture"
+              },
+              "p:cNvPicPr": {
+                "a:picLocks": {
+                  "@_noGrp": "1",
+                  "@_noChangeAspect": "1"
+                }
+              },
+              "p:nvPr": {
+                "p:ph": {
+                  "@_type": "pic",
+                  "@_idx": "500"
+                }
+              }
+            },
+            "p:blipFill": {
+              "a:blip": {
+                "@_r:embed": "rId6"
+              },
+              "a:srcRect": {
+                "@_l": "2313",
+                "@_r": "2313"
+              },
+              "a:stretch": ""
+            },
+            "p:spPr": {
+              "a:prstGeom": {
+                "a:avLst": "",
+                "@_prst": "rect"
+              }
+            }
+          }
+        },
+        "p:custDataLst": {
+          "p:tags": {
+            "@_r:id": "rId1"
+          }
+        },
+        "@_name": "Slide 1"
+      },
+      "p:clrMapOvr": {
+        "a:masterClrMapping": ""
+      },
+      "@_xmlns:a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+      "@_xmlns:r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+      "@_xmlns:p": "http://schemas.openxmlformats.org/presentationml/2006/main"
+    }
+  },
+  "scope": "Saved archive transforms and placeholder bindings; EMUs/12700 are points. UI selected Hero and reopened saved copy."
+}

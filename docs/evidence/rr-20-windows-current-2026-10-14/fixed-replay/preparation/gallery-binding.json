@@ -1,0 +1,40 @@
+{
+  "registry": {
+    "version": "3.0.0",
+    "gitHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+    "dist": {
+      "shasum": "83ee9cedd5d9b038bda31e2d8764a7a94229693a",
+      "tarball": "https://registry.npmjs.org/@openpresentation/gallery/-/gallery-3.0.0.tgz",
+      "fileCount": 8,
+      "integrity": "sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ==",
+      "signatures": [
+        {
+          "sig": "MEUCIQDmZ1nbkaWIh9LWeI0E3JJ1RbxfqOREcZReFJLm0k/2MQIgOGOrs7Og+SCZhFbdMSXM7sT0VORGtOKViaFBTz8jkkc=",
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+        },
+        {
+          "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+          "sig": "MEQCIEKtEUgtTg+tIeYi+Pxc96lcb878Deg0gDxa5k30Edg7AiBjFIu5ngZ3gk8Y3exHPEk00qtLTLeXw2uZGibC1Fa/wg=="
+        }
+      ],
+      "attestations": {
+        "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fgallery@3.0.0",
+        "provenance": {
+          "predicateType": "https://slsa.dev/provenance/v1"
+        }
+      },
+      "unpackedSize": 475115
+    }
+  },
+  "installedLock": {
+    "version": "3.0.0",
+    "resolved": "https://registry.npmjs.org/@openpresentation/gallery/-/gallery-3.0.0.tgz",
+    "integrity": "sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ==",
+    "license": "MIT",
+    "engines": {
+      "node": ">=22"
+    }
+  },
+  "matched": true,
+  "registryAcceptanceForPreviewTrain": false
+}
