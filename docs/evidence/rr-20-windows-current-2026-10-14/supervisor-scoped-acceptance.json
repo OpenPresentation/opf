@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-14",
+  "source": {
+    "threadId": "01a128c9-2f22-7603-b379-122474d66d34",
+    "hostId": "remote-control:env_e_6aa1f8f0a2f483299b61428479cd837b",
+    "decisionTurn": "01a13996-8cdb-77f0-ad3d-63050728114c",
+    "decisionMessage": "msg_0992bf46a2087e83016acf427db2ec8198b109d05f9ce4dfbf",
+    "assignmentTurn": "01a139a8-becf-7200-9aa8-f66af2f77ed9",
+    "assignmentMessage": "msg_0992bf46a2087e83016acf4962dd3c81988d691f1162cc4853"
+  },
+  "reviewedHead": "5747fae0de2aa19e0fe5f2e1508f692a716ac8d0",
+  "reviewedIndexSha256": "1ae48d8eb0d251b1bad3fda84e3a3ad8343eba3ab8115390b3f74bada64dd0ab",
+  "observedRR81CriteriaAccepted": true,
+  "fixedOfflineRepairAccepted": true,
+  "selectedNativeCases": 17,
+  "actualManualOperations": 4,
+  "allCaseDispositions": 58,
+  "unexecutedNativeCases": 41,
+  "sourceMerges": {
+    "core": "d9742a7952b1f9cc2faa4f3a3528ee701530765b",
+    "coreWholeTreeEqualsTested": "2ec2fd1f84269f3fa43935e222cfdf1fff5467ea",
+    "pptx": "38d5924ed37674c1d6b529c02d0c04a02fdabe17",
+    "pptxWholeTreeEqualsTested": "8bc79e5e4af66e9bb3dd96cf01e301f03d1ebd70",
+    "treeEqualityLocallyVerified": true
+  },
+  "scope": "Supervisor accepts the observed layout operations and selected design tests, including fixed-source import repair replay. Original native identities and limitations remain unchanged.",
+  "notClaims": [
+    "all 58 cases natively executed",
+    "global font/glyph/baseline/raster/full-catalog parity",
+    "stable registry qualification",
+    "release completion"
+  ],
+  "remaining": [
+    "evidence PR661 merge",
+    "genuine core0.20.1 and siblings/CLI0.20.0 release gates and trusted publication",
+    "registry and site qualification"
+  ],
+  "nativeAcceptance": false,
+  "registryAcceptance": false
+}

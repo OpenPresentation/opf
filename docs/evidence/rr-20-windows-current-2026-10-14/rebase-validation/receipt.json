@@ -1,0 +1,11 @@
+{
+  "scope": "Evidence-only rebase validation",
+  "initialCommand": "pnpm check:changed",
+  "initialMergeBase": "75f3f0d74",
+  "initialOutcome": "Incorrect stale origin/main baseline selected902 changed files, included unrelated mapped checks. Candidate Gallery check reported failure; execution interrupted. Failure output retained, not relabelled as pass.",
+  "correctedCommand": "pnpm check:changed --base d9742a7952b1f9cc2faa4f3a3528ee701530765b",
+  "correctedOutcome": "Passed only mapped documentation/evidence checks; no typecheck required.",
+  "trackedSourceChanges": false,
+  "officeActions": false,
+  "registryAcceptance": false
+}

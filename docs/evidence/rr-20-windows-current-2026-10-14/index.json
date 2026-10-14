@@ -12784,6 +12784,29 @@
       "bytes": 2124,
       "sha256": "01a0b3d84d5154b01a4426bd96eaf84eb65adb49638181529afc0d2b7592b6ea",
       "originalPath": "C:/opf-work/current-2ec2-stretch-01/replay-attempt04/source-and-pack-identities.json"
+    },
+    {
+      "path": "supervisor-scoped-acceptance.json",
+      "bytes": 1757,
+      "sha256": "7b522e98e755248effa013474cbce7df2dcf09c5e6af78d6d6335d9aaa2ee88a",
+      "scope": "Recorded supervisor decision and locally verified merged source tree identity; separate from original observations."
+    },
+    {
+      "path": "rebase-validation/stale-base-candidate-gallery-failure.log",
+      "bytes": 10661,
+      "sha256": "b35095da55d2867d20d2da4a694975ce389c6b766e094f9a1d5fb40de068ab28",
+      "originalPath": "C:/opf-work/native-evidence-current-01/artifacts/check-changed/pnpm_run_check_candidate-gallery.log"
+    },
+    {
+      "path": "rebase-validation/exact-base-check-changed.log",
+      "bytes": 960,
+      "sha256": "14d5ff21775068015a3e271946135968da1875219d954ee42b73d19057e6f592",
+      "originalPath": "C:/opf-work/current-2ec2-stretch-01/logs/rebased-evidence-check-changed.log"
+    },
+    {
+      "path": "rebase-validation/receipt.json",
+      "bytes": 641,
+      "sha256": "4ecb9acaabbbe324a6c305ef133a666cdb51750382608a73a464fffe4c6f4ce3"
     }
   ],
   "fixedSourceReplay": {
@@ -12801,5 +12824,12 @@
       "attempt03 scalar body expectation corrected to canonical text block"
     ],
     "historicalEvidenceUnchanged": true
+  },
+  "supervisorScopedAcceptance": {
+    "path": "supervisor-scoped-acceptance.json",
+    "observedRR81CriteriaAccepted": true,
+    "fixedOfflineRepairAccepted": true,
+    "nativeAcceptance": false,
+    "registryAcceptance": false
   }
 }
