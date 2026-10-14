@@ -517,7 +517,7 @@ export async function runGate(options, deps) {
       return (Number.isInteger(count) && new Set(actualRuns.map(node => node.databaseId)).size < count) ||
         (suite.status === 'COMPLETED' && !['SUCCESS', 'SKIPPED', 'NEUTRAL'].includes(suite.conclusion) && !actualRuns.some(node => node.status === 'COMPLETED' && !['SUCCESS', 'SKIPPED', 'NEUTRAL'].includes(node.conclusion)));
     });
-    if (missingRequired || (!required?.length && incompleteSuites)) {
+    if (missingRequired || incompleteSuites) {
       const fallback = await suiteContexts(graphql, repo.owner, repo.name, commit.oid);
       commit.checkSuites = {nodes:fallback.suites};
       return fallback.nodes;

@@ -784,3 +784,14 @@ test('external suites with null workflow IDs are counted separately by suite ide
  original.deps.graphql=async(q,v)=>q.includes('status{contexts')?suitePage([fallbackSuite('EXT1',[external]),fallbackSuite('EXT2',[run('hidden','FAILURE')])]):graphql(q,v);
  assert.equal((await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps)).code,EXIT.red);
 });
+
+
+test('explicit required old success cannot hide a newer omitted failure or pending job',async()=>{
+ for(const [status,expected]of [['COMPLETED',EXIT.red],['IN_PROGRESS',EXIT.timeout]]){
+  const old=run('required','SUCCESS',{runId:800,id:100});const newer=run('required','FAILURE',{runId:900,id:200,status});
+  const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[old],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[{status:'COMPLETED',conclusion:'SUCCESS',workflowRun:{databaseId:800},checkRuns:{totalCount:1}},{status,conclusion:status==='COMPLETED'?'FAILURE':null,workflowRun:{databaseId:900},checkRuns:{totalCount:1}}],pageInfo:{hasNextPage:false}}};
+  const original=fake({polls:[()=>({data:{r0:{defaultBranchRef:{name:'main'},t0:structuredClone(commit)}}})]});const graphql=original.deps.graphql;
+  original.deps.graphql=async(q,v)=>{if(q.includes('status{contexts')){const first=fallbackSuite('OLD',[old]);first.workflowRun.databaseId=800;const last=fallbackSuite('NEW',[newer]);last.status=status;last.conclusion=status==='COMPLETED'?'FAILURE':null;return suitePage([first,last]);}return graphql(q,v);};
+  assert.equal((await gate(['--required','required','--commit',`o/r@${HEAD}`,'--timeout-minutes','1'],original.deps)).code,expected);
+ }
+});
