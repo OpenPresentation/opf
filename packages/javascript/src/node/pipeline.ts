@@ -102,7 +102,7 @@ export async function runPreparedExport(prepared: PreparedExport, presentation: 
 export async function importPresentation(bytes: Uint8Array, options: ImportOptions, loaded?: Peer<PptxModule>): Promise<{ result: ImportResult; check: ValidationReport }> {
 	const pptx = loaded ?? (await loadPptx());
 	const reporter = new Reporter();
-	const run = await runImport(bytes, { signals: options.signals === true }, reporter, pptx);
+	const run = await runImport(bytes, { catalogs: options.catalogs ?? defaultCatalogs(), signals: options.signals === true }, reporter, pptx);
 	if (run.failure || !run.presentation) throw new OPFApiError(run.failure?.message ?? "The file could not be read.", "import-failed", { details: { reason: run.failure?.code }, findings: reporter.findings });
 	// The deck is checked in its JSON form, so a located finding points into the document that would be written.
 	const check = validate(run.presentation, checkOptions(options.catalogs));
