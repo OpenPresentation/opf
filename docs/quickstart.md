@@ -11,19 +11,20 @@ shipped versus deferred.
 
 ## Versions
 
-Pin the coordinated set from `release-plan.json` (currently core **0.19.0**,
-CLI **0.19.0**, renderer **0.19.1**, PPTX **0.19.0**, editor **0.19.0**). All of these packages declare
+Pin the coordinated set from `release-plan.json` (currently core **0.20.1**,
+CLI **0.20.0**, renderer **0.20.0**, PPTX **0.20.0**, editor **0.20.0**,
+with Gallery **3.0.0**). All of these packages declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 
 ```sh
 node -v   # 24.x (verified); 22 and later are declared
-npm install @openpresentation/opf@0.19.0 \
-  @openpresentation/opf-render@0.19.1 \
-  @openpresentation/opf-editor@0.19.0 \
-  @openpresentation/opf-pptx@0.19.0 \
-  @openpresentation/cli@0.19.0 \
-  @openpresentation/gallery@2.0.0
-# opf-render 0.19 keeps its converters and font packages as optional peers: install the ones you use
+npm install @openpresentation/opf@0.20.1 \
+  @openpresentation/opf-render@0.20.0 \
+  @openpresentation/opf-editor@0.20.0 \
+  @openpresentation/opf-pptx@0.20.0 \
+  @openpresentation/cli@0.20.0 \
+  @openpresentation/gallery@3.0.0
+# opf-render 0.20 keeps its converters and font packages as optional peers: install the ones you use
 # (here the base font pack, PNG and PDF; add @expo-google-fonts/* office or script packs as needed)
 npm install @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 \
   @resvg/resvg-js@^2.6.2 pdf-lib@^1.17.1 sharp@^0.35.5
@@ -34,14 +35,14 @@ names the `npm install` command, so a host that only previews SVG in a browser i
 
 Copy [`docs/quickstart/developer-quickstart.opf.json`](quickstart/developer-quickstart.opf.json)
 into that project as `deck.opf.json`. That file is a docs fixture, not one of
-the 126 decks in `@openpresentation/opf/examples`. Verify the install came from the registry
+the 127 decks in `@openpresentation/opf/examples`. Verify the install came from the registry
 (`package-lock.json` `resolved` URLs start with `https://registry.npmjs.org/`)
 and that you did not add `file:` dependencies on this repository.
 
 The [format card](format-card.md) describes ColorRef, named variables and the
 current source contract. `opf embed` embeds the catalog records a deck uses for
 portable offline authoring; it does not download remote assets. Keep the
-ColorRef docs fixture outside the 126-deck example/golden corpus in this update.
+ColorRef docs fixture outside the 127-deck example/golden corpus in this update.
 
 ## The short path
 
@@ -182,12 +183,11 @@ pass `{ raster: true }` for the image-per-slide output that renderers up to 0.11
 always wrote. Pass the same fonts handle as for PNG; vector PDF never uses system
 fonts.
 `toPptx` is the supported editable PowerPoint export from OPF. Shared
-headers/footers in that file are tagged slide shapes (`OPF_FURNITURE_V1`), not
-native Office Header/Footer objects (`p:hf` / notes master). Opening the file
-in Microsoft PowerPoint, compiling furniture into real Header/Footer objects,
-and round-tripping native fidelity is
-[issue 87](https://github.com/OpenPresentation/opf/issues/87), not this
-quickstart.
+headers and footers are written on the slide master or layout. The retained
+[Windows sample](evidence/rr-20-windows-current-2026-10-14/README.md) covers
+17 selected native cases and four actual UI operations; 41 of 58 cases were
+not executed natively. This quickstart verifies published Node APIs and
+exports. It does not certify every Office operation or global native fidelity.
 
 Browser preview uses the same SVG core plus
 `@openpresentation/opf-render/fonts-browser` and

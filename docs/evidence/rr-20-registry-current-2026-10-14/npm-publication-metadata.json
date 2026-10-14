@@ -1,0 +1,75 @@
+{
+  "at": "2026-10-14T16:08:41.903Z",
+  "httpReads": 6,
+  "retries": 0,
+  "polls": 0,
+  "authoritySha256": "78ea003cc6bca9ef1f60d238339822f390506bbb6476058bcb815d19b16f8421",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.20.1",
+      "publishedAt": "2026-10-14T10:37:09.354Z",
+      "gitHead": "22664e18ea657db4e377b84997f2e73bf6cd738b",
+      "dist": {
+        "integrity": "sha512-rQdrzEh/wYOtXnOqB0FYTNEkutnR3VCw63WZ5ONgfWBIuWDcTj63dXfR/Ng6CBlQwkdMlWLSKvHsBPaloUeUcw==",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.20.1.tgz"
+      },
+      "source": "https://registry.npmjs.org/%40openpresentation%2Fopf"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.20.0",
+      "publishedAt": "2026-10-14T12:09:50.691Z",
+      "gitHead": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034",
+      "dist": {
+        "integrity": "sha512-335a5h/QweiJGexf/UcyTVOWX4smi3fW59bVqsK03aScY6r57dqDeimmaG6H1HalnqnIh2vvdb8OagSQZPt+Hg==",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.20.0.tgz"
+      },
+      "source": "https://registry.npmjs.org/%40openpresentation%2Fopf-render"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.20.0",
+      "publishedAt": "2026-10-14T13:28:41.551Z",
+      "gitHead": "0e2ea4982c4bb1280f22763411e681fe0786f4fc",
+      "dist": {
+        "integrity": "sha512-Ash067AcgsfEFIL9dYv+TE30vMMfC/kRGQwtRMAkmrz9IzTMn1hpHlqRVryKo13wFiZ6xHXOOkt3YcuUhOwqiw==",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.20.0.tgz"
+      },
+      "source": "https://registry.npmjs.org/%40openpresentation%2Fopf-pptx"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.20.0",
+      "publishedAt": "2026-10-14T16:02:40.427Z",
+      "gitHead": "671b04ee3f6b228338c0eb3d6d7453f807b28837",
+      "dist": {
+        "integrity": "sha512-z6SoyGty0cpOlxnGkBhzNrWqNs/ck/CXkmphZUcDKQ3HNiKsHf0gdzHQlvUnTZBMOIQxSBA+ZyfAHWRf06dm9g==",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.20.0.tgz"
+      },
+      "source": "https://registry.npmjs.org/%40openpresentation%2Fopf-editor"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.20.0",
+      "publishedAt": "2026-10-14T15:42:31.468Z",
+      "gitHead": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
+      "dist": {
+        "integrity": "sha512-QtLK+H585iGWbhRcvjEZqrGs2HbLJpqbXXx/zWoGUWE3bQMkPx/QZDJJUwaESxBrZkLMylgIFlzdfBD6kDhv9w==",
+        "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.20.0.tgz"
+      },
+      "source": "https://registry.npmjs.org/%40openpresentation%2Fcli"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "publishedAt": "2026-10-14T01:04:33.018Z",
+      "gitHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "dist": {
+        "integrity": "sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ==",
+        "tarball": "https://registry.npmjs.org/@openpresentation/gallery/-/gallery-3.0.0.tgz"
+      },
+      "source": "https://registry.npmjs.org/%40openpresentation%2Fgallery"
+    }
+  ]
+}
