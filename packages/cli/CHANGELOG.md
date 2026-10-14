@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## 0.20.0 (2026-10-14)
+
+CLI 0.20.0 uses published core 0.20.1 and renderer/PPTX 0.20.0 for nested-array layouts and shared design defaults.
+
+- Layout `areas` now uses nested arrays of cell names instead of space-separated row strings. Each inner array is one row; repeated names span a rectangular region and `.` is an empty cell. Schemas, engines, examples and authoring documentation use the same array-only contract.
+- Adopt the verified Gallery 3 array-area catalog through genuine registry dependencies and remove temporary candidate catalog staging. Engine release versions and the historical published graph remain separate from this source adoption.
+- Declare the renderer and PPTX optional peer contract as `^0.20.0` for the breaking array-area train, with matching core installation hints. Package versions and development pins remain unchanged; the engines must be published and verified before the CLI release qualification.
+
+Recognize the planned renderer 0.20.0 strict lazy-font count of 94, based on unchanged manifest, vendored font and license bytes at reviewed renderer source `0eeafb28`; unknown versions and drift still fail. This is source qualification evidence, not a registry publication claim.
+- Validate candidate CLI doctor reports against the selected engines and the original core peer contract. Compatible 0.19 engines must report ready, while older, incompatible or prerelease engines retain truthful refusal; candidate staging does not change doctor compatibility.
+- RR-20: pass registered catalogs through Node and CLI PPTX import, including signals, so native layout and template recovery uses the same default or explicit catalog set as validation. Explicit empty catalogs continue to register none.
+- Allow maintained ecosystem preview packaging to include the CLI explicitly for six-package native acceptance preparation. Local stage dependencies use the existing preview version map; source and ordinary release contracts remain unchanged.
+- Keep the published-control font-count regression tests paired with their exact reviewed helper, preserving strict count and unknown-version refusals for renderer 0.19.1.
+
 ## 0.19.0 (2026-10-12)
 
 - RR-77: `{n}` in a `.png` or `.svg` output of `convert` and `opf convert` is the deck's slide number: `opf convert deck.opf.md "slides/slide-{n}.png"` writes `slides/slide-1.png` and on, and `convert(input, "slides/slide-{n}.png")` the same. A pattern always numbers its files, even for a one-slide deck or one selected slide, and with `--slides 2,5` the numbers are 2 and 5 (padded to the largest). `{n}` is the only placeholder: any other `{key}`, and `{n}` in a `.pdf`, `.pptx`, `.zip` or deck-form output, is refused with `invalid-option` (`opf convert`: usage error, exit 2). A `.zip` keeps its entries named like the plain form.
