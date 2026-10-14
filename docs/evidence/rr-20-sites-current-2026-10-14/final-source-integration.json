@@ -133,5 +133,31 @@
       "T16",
       "T40"
     ]
+  },
+  "broaderProgramQueueAudit": {
+    "at": "2026-10-14T22:06:29.326531+00:00",
+    "source": "GitHub REST GET repos/OpenPresentation/{repo}/rules/branches/main, authenticated read-only",
+    "rawReceiptSha256": "d1dbc4b2dffc435d52de500fd08b0b835a7a06564b8a24eceefef2447c24255d",
+    "callBudget": 8,
+    "totalCallAttempts": 8,
+    "remoteSuccessfulReads": 4,
+    "initialSandboxNetworkRefusalsPreserved": 4,
+    "effectiveMergeQueue": {
+      "opf": true,
+      "opf-render": false,
+      "opf-pptx": false,
+      "opf-editor": false
+    },
+    "coreRuleset": 24382980,
+    "decisions": {
+      "RR-48": "Remains open: core queue is active and has actual queued merges; no effective merge_queue rule applies to main in renderer/PPTX/editor at this observation. Original four-repo queue requirement is not fully met. Correct blanket nothing-enabled wording, retain three sibling owner settings.",
+      "RR-53": "Do not close solely from actual core queue or manual32/32. Reconcile existing core contract/measurement evidence separately; RR48 four-repo owner condition remains open."
+    },
+    "limits": [
+      "Empty effective-rules result establishes no active ruleset merge_queue on that branch; it does not claim no legacy branch protection or no CI.",
+      "No settings, gates, flags, secrets, billing or repositories were changed.",
+      "Current publication/deployment/source merge results remain accepted and are not held on optional queue expansion."
+    ],
+    "decisionSourceSha256": "3b3653ff1121eb955d203a21f698bbd5cc20f3d450230e8f23feb39b5376fc1d"
   }
 }
