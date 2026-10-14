@@ -752,3 +752,5 @@ Append-only. One dated line per state change.
 - 2026-10-14 UTC — RR-20: prepared held qualification-tooling follow-up on pending official roll #651/229810d2, preserving the generated lock. Reviewed check-rollup recovery and maintained CLI preview tooling have bounded evidence; native55/311 preparation is sealed/supervisor-verified, not Office acceptance. Canonical peer refusals and remaining registry/native/site/owner gates remain open.
 
 - 2026-10-14 UTC — RR-20: official roll #651 merged at70b12d59 with exact reviewed229810tree; tooling #652 remains queued,22checks reported,no acceptance. T16 evidence reconciliation retains renderer/editor/core host proof but leaves actual Gallery host/default/hosted integration and final site evidence open. No checklist closure, repeated engine suite, native success or deployment is inferred.
+
+- 2026-10-14 UTC — RR-20: tooling #652 actually merged at47e66c57 with exact reviewed957tree; both official roll #651 and tooling #652 are verified/synchronized. Earlier queued/prepared checkpoint states are historical. T16 Gallery host integration, native55case acceptance, genuine0.20 registry and site/owner scope remain open.

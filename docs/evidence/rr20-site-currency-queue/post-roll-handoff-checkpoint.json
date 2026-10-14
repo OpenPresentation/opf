@@ -11,12 +11,18 @@
       "file": "t16-host-integration-evidence-audit.json",
       "originalPath": "/private/tmp/rr20-t16-evidence-audit.json",
       "sha256": "d7ff7239b3101c8d775f523f1ff194733f44aa36be0b08c0ef52601862131f0b"
+    },
+    {
+      "file": "tooling652-merge-verification.json",
+      "originalPath": "/private/tmp/rr20-tooling652-merge-verification.json",
+      "sha256": "a5b75e07232671de1c6f2314021be429356c02478129b19aacc75c0c9ca23743"
     }
   ],
   "officialRollMerged": "70b12d5910088b7d16a81c683db8873813041fde",
-  "tooling652": "queued;22checks reported;notmerged/noacceptance",
+  "tooling652": "mergedverified47e66c570ff8666bbf63485b4b984e475e33849a; exacttree=reviewed957",
   "t16": "unmet; galleryhostfixture actualdefault/hostedintegration and finalmatchinggraph evidence remain; noenginewhole-suite repeat needed",
   "nativeAcceptance": false,
   "registry20Published": false,
-  "deployment": false
+  "deployment": false,
+  "actualBase": "47e66c570ff8666bbf63485b4b984e475e33849a"
 }
