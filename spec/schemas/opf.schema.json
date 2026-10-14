@@ -24,7 +24,7 @@
     },
     "filename": {
       "type": "string",
-      "description": "Optional base filename for exports (without extension). The opf CLI (render, export) and the editor strip a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and append the target format's extension. When omitted, they slugify name; with no usable name the CLI uses the input file name and the editor uses 'presentation'. See /docs/opf for full validation rules.",
+      "description": "Optional base filename for exports (without extension). The opf CLI (convert) and the editor strip a trailing .pptx, .pdf, .png, or .svg (case-insensitive) and append the target format's extension. When omitted, they slugify name; with no usable name the CLI uses the input file name and the editor uses 'presentation'. See /docs/opf for full validation rules.",
       "examples": ["q4-2026-business-review", "acme-series-b-pitch"]
     },
     "organization": {
