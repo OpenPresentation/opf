@@ -3,19 +3,20 @@
   "$comment": "RR-50: written by the roller (scripts/ecosystem-roll.mjs), not by hand. A pull request may change `golden` (a reviewed golden decision); use a Depends-On: trailer for an unmerged dependency. See docs/ecosystem-development.md.",
   "version": 1,
   "repositories": {
-    "opf": { "sha": "85089bf359a41950e5887d782452dd3884805386" },
-    "opf-render": { "sha": "7980fea3b0095377cb5a28c22a3a963312f941e7" },
-    "opf-pptx": { "sha": "6bb89f1e69326532d063bacadd3bbd2acf54bd8c" },
-    "opf-editor": { "sha": "ac25857cca8ce776dd23b5ca58b38a06af9d963f" }
+    "opf": { "sha": "07ccce5e6579b3e43cfb8ed3acf7498593dd51ff" },
+    "opf-render": { "sha": "d96c70ad86deeb69a6f4a18df78e659875b733a4" },
+    "opf-pptx": { "sha": "147346ce9174d48576963238852ff4e4c69ba48d" },
+    "opf-editor": { "sha": "7474315ee10d8ecce5d6bdb9cb4b5127f9cd38b1" }
   },
   "golden": {
     "repository": "opf",
     "path": "scripts/fixtures/opf-examples-png.rr20-array-areas.sha256.json",
-    "note": "Reviewed official renderer baseline 5a419108bdd25e9970a1e88badb2e4ad1c5f1931; pinned workflow 38304214690; source core8f70/gallery146e"
+    "note": "golden adopted from opf-render golden-override (core fixture)"
   },
   "provenance": {
     "source": "roller",
-    "at": "2026-10-12T17:04:34Z",
-    "note": "Rolled to the four main branches (opf 85089bf, opf-render 7980fea, opf-pptx 6bb89f1, opf-editor ac25857); moved: opf, opf-render, opf-pptx, opf-editor. Golden adopted from opf-render golden-override (core fixture)."
+    "at": "2026-10-14T02:13:55Z",
+    "run": "https://github.com/OpenPresentation/opf/actions/runs/38499933920",
+    "note": "Rolled to the four main branches (opf 07ccce5, opf-render d96c70a, opf-pptx 147346c, opf-editor 7474315); moved: opf, opf-render, opf-pptx, opf-editor. Golden adopted from opf-render golden-override (core fixture)."
   }
 }
