@@ -756,3 +756,5 @@ Append-only. One dated line per state change.
 - 2026-10-14 UTC — RR-20: tooling #652 actually merged at47e66c57 with exact reviewed957tree; both official roll #651 and tooling #652 are verified/synchronized. Earlier queued/prepared checkpoint states are historical. T16 Gallery host integration, native55case acceptance, genuine0.20 registry and site/owner scope remain open.
 
 - 2026-10-14 UTC — RR-20 diagnostic tooling: add maintained `list-description-native-save`, sharing the exact list document and measured font preparation with the edit case, with an empty action plan. Pure generation checks bind identical source/archive bytes and distinct plans. Native disposition remains open; no Office run or acceptance follows from fixture generation.
+
+- 2026-10-14 UTC — RR-20 comparator diagnostic: distinguish empty native TextFrames on exact source decorative shapes without `txBody` from exported text shapes. Extra visible text, unknown empty frames, missing words and the 0.02 pt text geometry gate remain strict. Native/registry acceptance stays open.
