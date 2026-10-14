@@ -64,7 +64,7 @@
     "test:determinism": "node test/determinism.mjs"
   },
   "dependencies": {
-    "@openpresentation/gallery": "^2.0.0",
+    "@openpresentation/gallery": "^3.0.0",
     "@node-projects/jszip": "4.3.0",
     "@openpresentation/opf": "^0.19.0",
     "@rgrove/parse-xml": "4.2.3",
@@ -108,5 +108,8 @@
       "browser": "./dist/image-fallback-browser.js",
       "default": "./dist/image-fallback-node.js"
     }
+  },
+  "opf": {
+    "requiresUnreleasedCore": "0.20.0"
   }
 }
