@@ -4,6 +4,9 @@ The owner authorized **“Start final qualification; no deployment.”** These r
 
 ## Current records
 
+- [Complete native coverage review](native-full-coverage-review.md) enumerates all 55 current suite cases: 50 bounded cases, four manual seven-slide cases and the dedicated table-color case. It prevents a metrics/list-only resumption from closing full feature acceptance; no Office execution or new native pass is recorded.
+- [Three-site genuine adoption review](site-final-adoption-review.md) records prepared source candidates and remaining genuine 0.20/Gallery 3 registry adoption and gates. It is held planning evidence, not a new installed-registry qualification or deployment authorization.
+
 - [Post-Gallery checkpoint](post-gallery-checkpoint.json) binds verified Gallery #6/#7/#8 merges, the 23:06 inventory before #649 was created (26 open PRs, 42 issues; eight clean synchronized defaults), and the exact prospective guard qualification. Gallery 3.0.0 release preparation is merged, publication is pending; core #648/#649 hosted qualification and native acceptance remain pending. No deployment is inferred.
 
 - The [current supervisor handoff](../../programs/release-readiness/HANDOFF.md#current-supervisor-checkpoint--2026-10-13) records the newer hosted candidates, active batch, selected 0.20.0/Gallery 3.0.0 targets and separate Windows delivery state. Older local replay records below prove their named graphs only.
