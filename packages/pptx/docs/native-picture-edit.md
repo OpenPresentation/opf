@@ -56,3 +56,15 @@ The worker opens only the owned input snapshot, writes only the fresh output dir
 On any COM failure, COM operations stop immediately, cleanup is marked unconfirmed, and no cleanup call or retry follows. Semantic validation failures also stop the run without further Office calls. The harness never calls `Application.Quit`, kills PowerPoint or Excel, changes Office security or fonts, discards user work, or closes an unrelated presentation. If a failure or timeout leaves cleanup unconfirmed, retain the complete directory and inspect PowerPoint before attempting another native run.
 
 The result demonstrates the observed PowerPoint object-model edit and persistence for this one fixture and Office build. The current importer reports `unsupported-image-crop` for the altered native crop and retains the uncropped original image bytes; this evidence must not be classified as full crop, absolute-geometry, reflow, or general OPF round-trip fidelity. It also does not establish pixel identity across Office versions or preservation of the exact image bytes PowerPoint stores internally.
+
+Ordinary imported raster picture blocks retain `fit: "stretch"` when the native
+fill shows the full source with no crop or fill offsets and the intrinsic aspect
+differs from the unrotated frame. Same-aspect pictures cannot distinguish fit
+modes and do not gain an inferred override. Unchanged tagged image treatment and
+a restored inherited stretch default remain literal. Nonzero native crop keeps
+`unsupported-image-crop`; native tiling and fill offsets report
+`unsupported-image-fit`. A changed scalar `Slide.image` becomes an image block
+with the observed stretch fit through the existing validated flat-block
+fallback, retaining other native content and metadata. This recovery
+does not restore absolute geometry or claim pixel parity. The maintained
+`test/native-image-stretch.mjs` controls use synthetic native XML, not an Office run.

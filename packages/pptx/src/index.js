@@ -576,6 +576,7 @@ export async function fromPptx(input, options = {}) {
   restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report);
   restoreLogoFallback(imported, furnitureContexts);
   applyRunColors(imported, slideProvenance, restoredGroups, report, options);
+  applyNativeImageFits(imported, furnitureContexts, restoredGroups, options);
   if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
   languageDiagnostics(imported, observedLanguage, options.onDiagnostic && report);
 
@@ -880,7 +881,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   }
   const listRecord = slideListRecord(entries, slidePath, slideRoot, relationships);
   const content = mergeAdjacentBulletShapes(mergeOpfListShapes(items, listRecord.breaks, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`}), listRecord.runs, listRecord.roles))
-    .map((item) => ({payload: payloadFromSlideItem(item, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`})), bounds: item.visualBounds ?? item.bounds, sources: item.sources ?? []}))
+    .map((item) => ({payload: payloadFromSlideItem(item, diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}`})), bounds: item.visualBounds ?? item.bounds, sources: item.sources ?? [], inferredStretch: item.inferredStretch}))
     .filter((entry) => entry.payload);
   const blocks = content.map((entry) => entry.payload);
   // RR-81: the region of each block read from one region placeholder of the slide's 0.19 template layout (its p:ph idx).
@@ -921,6 +922,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   // Which native shapes fed each field and block (import signals); never part of the document.
   nativeContext.signalSources = {tag: tagItem?.sources ?? [], title: titleItem?.sources ?? [], subtitle: subtitleItem?.sources ?? [],
     blocks: content.map(entry => ({sources: entry.sources, type: entry.payload.type})), roles: nativeContext.signalRoles ?? new Map()};
+  nativeContext.inferredImageFits = content.flatMap((entry,index)=>entry.inferredStretch?[index]:[]);
   nativeContext.contentBounds = content.map((entry) => entry.bounds ? {x: entry.bounds.x * 96, y: entry.bounds.y * 96, width: entry.bounds.w * 96, height: entry.bounds.h * 96} : null);
 
   const notes = readSlideNotes(entries, relationships);
@@ -1047,6 +1049,8 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     const report = diagnostic => { if (!(treatment && diagnostic.code === 'unsupported-image-crop')) options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.pictures.${index}`}); };
     const item = importPicture(entries, picture, slidePath, relationships, report);
     if (item?.payload && treatment) item.payload = {...item.payload, ...structuredClone(treatment)};
+    else if (item?.nativeStretch) { item.payload.fit='stretch'; item.inferredStretch=true; }
+    else if (item?.nativeFitUnsupported) report({code:'unsupported-image-fit',message:'Native picture tiling or an offset stretch fill is not represented by the imported image block; review the reflowed image.'});
     if (item) items.push({...item, sources: [`pic:${index}`]});
   }
 
@@ -1202,6 +1206,8 @@ function importPicture(entries, picture, slidePath, relationships, report) {
 
   return {
     kind: "image",
+    nativeStretch: nativePictureStretch(picture, bytes, bounds, Boolean(svg)),
+    nativeFitUnsupported: picture['p:blipFill']?.['a:tile']!==undefined || ['l','r','t','b'].some(key=>Number(picture['p:blipFill']?.['a:stretch']?.['a:fillRect']?.[key]??0)!==0),
     bounds,
     visualBounds: visualBounds(picture["p:spPr"]?.["a:xfrm"]),
     name,
@@ -1214,6 +1220,46 @@ function importPicture(entries, picture, slidePath, relationships, report) {
       }
     }
   };
+}
+
+// A full-source native stretch is distinguishable from cover only when the
+// intrinsic aspect differs from its frame. No crop, tile, offset fill or turn is
+// inferred; those require their existing diagnostics/separate fidelity review.
+function nativePictureStretch(picture,bytes,bounds,svg) {
+  const fill=picture['p:blipFill'],crop=fill?.['a:srcRect'],stretch=fill?.['a:stretch'];
+  const rect=stretch?.['a:fillRect'],transform=picture['p:spPr']?.['a:xfrm'];
+  const metadata=svg?null:rasterMetadata(bytes);
+  if(!bounds||!(bounds.w>0&&bounds.h>0)||!metadata||!(metadata.width>0&&metadata.height>0)||metadata.orientation>1) return false;
+  if(stretch===undefined||fill?.['a:tile']!==undefined||Number(transform?.rot??0)!==0) return false;
+  if([crop,rect].some(value=>value&&['l','r','t','b'].some(key=>Number(value[key]??0)!==0)))return false;
+  // Compare dimensions in native EMUs, without a new geometry tolerance.
+  const ext=transform?.['a:ext'];
+  const cx=Number(ext?.cx),cy=Number(ext?.cy);
+  if(!Number.isFinite(cx)||!Number.isFinite(cy))return false;
+  // Equal-aspect dimensions can round by one EMU when serialized. A dimension
+  // reproduced by rounding the intrinsic ratio is still the same aspect.
+  return Math.round(cx*metadata.height/metadata.width)!==cy&&Math.round(cy*metadata.width/metadata.height)!==cx;
+}
+
+// Provenance may rebuild flat blocks into groups or scalar fields. Remove only
+// our inferred fit when restored design already supplies stretch, preserving an
+// unchanged authored default rather than adding an unsolicited block override.
+function applyNativeImageFits(imported,contexts,groups,options) {
+  for(const [slideIndex,context] of contexts.entries()) {
+    if(!context.inferredImageFits?.length)continue;
+    const slide=imported.slides[slideIndex];
+    const resolved=resolveCoreSlideContext(imported,slideIndex,options.catalogs!==undefined?{catalogs:options.catalogs}:{}).resolved;
+    const fit=slide.design?.imageFit??imported.design?.imageFit??resolved.theme?.design?.imageFit??resolved.layout?.design?.imageFit??'cover';
+    const restored=groups.find(group=>group.applied&&group.contentPaths?.slide===slideIndex)?.contentPaths?.paths;
+    for(const index of context.inferredImageFits) {
+      const path=restored?.get(index)??`blocks.${index}`;
+      const value=path.split('.').reduce((item,key)=>item?.[key],slide);
+      if(value&&typeof value==='object'&&value.image!==undefined) {
+        if(fit==='stretch')delete value.fit;
+        else value.fit='stretch';
+      }
+    }
+  }
 }
 
 function readParagraphs(txBody) {
