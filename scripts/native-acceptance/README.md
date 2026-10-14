@@ -126,7 +126,7 @@ Its schema is `schemaVersion: 1`, `verifiedAt`, and `packages` containing each
 package's name/version/gitHead, `dist.integrity`, repository/tag/workflow,
 provenanceInvocation, and `canonicalVerification` (`ok: true`, passing named
 checks, and logSha256). Each version/integrity must match the plan/consumer; each
-engine/CLI gitHead must match its plan ref. The authority also records nativeScope
+package gitHead must match its plan ref, including `verificationRefs.gallery`. The authority also records nativeScope
 (selectedCases, uiOperations, unexecutedCases, totalCases, globalAcceptance:false)
 and siteDeployment:false. Those counts must match the retained evidence. Missing,
 incomplete or failing authority refuses final replay before importing packages.

@@ -11,7 +11,7 @@ import {installOfflineGuard} from './replay-offline.mjs';
 
 const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 export const caseIds = ['change-layout', 'new-custom', 'new-text', 'change-picture'];
-const peerKeys = {opf: 'opf', 'opf-render': 'opf-render', 'opf-pptx': 'opf-pptx', 'opf-editor': 'opf-editor', cli: 'cli'};
+const peerKeys = {opf: 'opf', 'opf-render': 'opf-render', 'opf-pptx': 'opf-pptx', 'opf-editor': 'opf-editor', cli: 'cli', gallery: 'gallery'};
 const readJson = file => JSON.parse(readFileSync(file, 'utf8').replace(/^\uFEFF/, ''));
 const inside = (file, root) => file === root || file.startsWith(root + path.sep);
 

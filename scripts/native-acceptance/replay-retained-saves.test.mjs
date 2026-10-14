@@ -17,7 +17,7 @@ function fixture() {
     const short=name.split('/')[1],version=short==='opf'?'0.20.1':short==='gallery'?'3.0.0':'0.20.0';
     const record={name,version};
     (short==='gallery'?plan.independentPackages:plan.packages).push(record);
-    if(short!=='gallery')plan.verificationRefs[short]='1'.repeat(40);
+    plan.verificationRefs[short]='1'.repeat(40);
     dependencies[name]=version;
     lock.packages['node_modules/'+name]={version,integrity,resolved:`https://registry.npmjs.org/${name}/-/${short}-${version}.tgz`};
     const directory=path.join(consumer,'node_modules',name);mkdirSync(path.join(directory,'dist'),{recursive:true});
@@ -114,4 +114,8 @@ test('same-version nested core cannot substitute for the single installed runtim
 
 test('actual retained evidence keeps all41 offline-only dispositions separate from17 observations',()=>{
  const evidence=new URL('../../docs/evidence/rr-20-windows-current-2026-10-14/index.json',import.meta.url);const index=JSON.parse(readFileSync(evidence,'utf8'));assert.deepEqual(coverageCounts(index.coverage),{selectedCases:17,unexecutedCases:41,totalCases:58});assert.throws(()=>coverageCounts([{disposition:'accepted globally'}]),/Unknown retained/);
+});
+
+test('Gallery requires its sixth immutable ref and matching verified registry gitHead',()=>{
+ for(const mutation of [f=>{delete f.plan.verificationRefs.gallery;},f=>{f.plan.verificationRefs.gallery='not-an-immutable-ref';},f=>{f.plan.verificationRefs.gallery='3'.repeat(40);},f=>{f.authority.packages.find(item=>item.name==='@openpresentation/gallery').gitHead='4'.repeat(40);}]){const f=fixture();try{mutation(f);writeFileSync(f.releasePlan,JSON.stringify(f.plan));writeFileSync(f.registryReceipt,JSON.stringify(f.authority));assert.throws(()=>preflight(f));assert.equal(existsSync(f.output),false);}finally{f.close();}}
 });
