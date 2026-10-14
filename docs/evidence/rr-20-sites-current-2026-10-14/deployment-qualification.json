@@ -206,5 +206,13 @@
     "sha256": "4c7e625d1e854f83560f17dfb09c7cfe1694f4669f1d62e955a66b0e245ca0a6"
   },
   "currentPrivateSiteCI": "Owner restored Actions budget; all five original failed workflow runs are actually attempt2/in_progress between2026-10-14T21:12:53Z and21:13:04Z on unchanged deployed/reviewedMain8b/Gallery55db/Deva8b. Requiredcheck/defaultmerge acceptance remains pending canonical gates; originalattempt1 billing/no-code outcomes stay historical.",
-  "allThreeApplicableCICompleted": false
+  "allThreeApplicableCICompleted": false,
+  "finalSourceIntegration": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/final-source-integration.json",
+    "sha256": "79e6a5fa2c9c3e68a93d17722131ef77f5e51ddbe45213f0655ab42916406ab7",
+    "observedAt": "2026-10-14T21:37:24.814910+00:00",
+    "allThreeSiteDefaultMerged": true,
+    "allThreeApplicableCICompleted": true,
+    "historicalPriorObservation": "The other pending source/CI flags in this21:20 snapshot describe its original cutoff; this linked later observation supersedes those flags without changing original failed attempts."
+  }
 }
