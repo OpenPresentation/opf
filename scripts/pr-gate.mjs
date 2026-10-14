@@ -126,8 +126,8 @@ export function parseArgs(argv) {
 // GraphQL
 
 const CONTEXT_NODES =
-  'nodes{__typename ... on CheckRun{databaseId name status conclusion detailsUrl startedAt checkSuite{commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}} ... on StatusContext{context state targetUrl createdAt commit{oid}}}';
-const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){nodes{status conclusion app{slug} workflowRun{databaseId event runAttempt workflow{name}}}}`;
+  'nodes{__typename ... on CheckRun{databaseId name status conclusion detailsUrl startedAt checkSuite{id commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}} ... on StatusContext{context state targetUrl createdAt commit{oid}}}';
+const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){pageInfo{hasNextPage} nodes{id checkRuns(first:1){totalCount} status conclusion app{slug} workflowRun{databaseId event runAttempt workflow{name}}}}`;
 const SUITE_RUNS = 'checkRuns(first:100){pageInfo{hasNextPage endCursor} nodes{__typename databaseId name status conclusion detailsUrl startedAt checkSuite{id commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}}}';
 const SUITE_FIELDS = `id status conclusion commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}} ${SUITE_RUNS}`;
 /** Actual check runs are authoritative when GitHub has not materialized a rollup. Never synthesize success from a suite. */
@@ -488,7 +488,7 @@ export async function runGate(options, deps) {
     return entry;
   }
 
-  async function fullContexts(repo, commit) {
+  async function fullContexts(repo, commit, required) {
     const rollup = commit?.statusCheckRollup;
     if (!rollup) {
       const fallback = await suiteContexts(graphql, repo.owner, repo.name, commit.oid);
@@ -503,6 +503,24 @@ export async function runGate(options, deps) {
       if (!contexts) break;
       nodes.push(...(contexts.nodes ?? []));
       page = contexts.pageInfo;
+    }
+    const checks = normalizeContexts(nodes, commit.oid);
+    const missingRequired = required?.some(req => !checks.some(check => check.name === req.context && (check.kind === 'status' || req.integrationId == null || check.appId == null || check.appId === req.integrationId)));
+    // Rollups can omit real jobs even when their own pagination is complete.
+    // Counts cover partial jobs within a represented suite; suite pagination and
+    // terminal failures cover omissions that could otherwise falsely green all mode.
+    const incompleteSuites = commit.checkSuites?.pageInfo?.hasNextPage || (commit.checkSuites?.nodes ?? []).some(suite => {
+      const runId = suite.workflowRun?.databaseId;
+      const count = suite.checkRuns?.totalCount;
+      const actualRuns = nodes.filter(node => node.__typename === 'CheckRun' && node.checkSuite?.commit?.oid === commit.oid &&
+        (suite.id ? node.checkSuite?.id === suite.id : runId != null && node.checkSuite?.workflowRun?.databaseId === runId));
+      return (Number.isInteger(count) && new Set(actualRuns.map(node => node.databaseId)).size < count) ||
+        (suite.status === 'COMPLETED' && !['SUCCESS', 'SKIPPED', 'NEUTRAL'].includes(suite.conclusion) && !actualRuns.some(node => node.status === 'COMPLETED' && !['SUCCESS', 'SKIPPED', 'NEUTRAL'].includes(node.conclusion)));
+    });
+    if (missingRequired || (!required?.length && incompleteSuites)) {
+      const fallback = await suiteContexts(graphql, repo.owner, repo.name, commit.oid);
+      commit.checkSuites = {nodes:fallback.suites};
+      return fallback.nodes;
     }
     return nodes;
   }
@@ -544,7 +562,7 @@ export async function runGate(options, deps) {
   }
 
   async function handleChecks(repo, commit, headOid, rules) {
-    const nodes = commit && commit.oid === headOid ? await fullContexts(repo, commit) : [];
+    const nodes = commit && commit.oid === headOid ? await fullContexts(repo, commit, rules.required) : [];
     const checks = evaluateChecks({ checks: normalizeContexts(nodes, headOid), required: rules.required, suites: commit?.checkSuites?.nodes ?? [], allowSkipped: options.allowSkipped !== false });
     if (commit && commit.oid !== headOid) checks.note = 'the rollup is for an older commit';
     return checks;

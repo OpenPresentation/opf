@@ -76,10 +76,18 @@ function fake({ polls, mutations = [], rules = RULES, more = null }) {
         if (!next) throw new Error('unexpected mutation');
         return next;
       }
+      if (query.includes('status{contexts')) {
+        const targets = Object.values(state.lastPoll?.data ?? {}).flatMap(repo => repo && typeof repo === 'object' ? Object.values(repo) : []);
+        const commit = targets.map(target => target?.commits?.nodes?.[0]?.commit ?? target).find(target => target?.oid && query.includes(`oid:${JSON.stringify(target.oid)}`));
+        const nodes = commit?.statusCheckRollup?.contexts?.nodes ?? [];
+        return suitePage([fallbackSuite('FAKE',nodes.filter(node => (node.checkSuite?.commit?.oid ?? node.commit?.oid) === commit?.oid))],false,commit?.oid ?? HEAD);
+      }
       if (query.includes('after:')) return more;
       state.queries.push(query);
       const next = polls.length > 1 ? polls.shift() : polls[0];
-      return typeof next === 'function' ? next(now) : next;
+      const result = typeof next === 'function' ? next(now) : next;
+      state.lastPoll = result;
+      return result;
     },
     async rest(url, init = {}) {
       state.rest.push(`${init.method ?? 'GET'} ${url}`);
@@ -717,4 +725,62 @@ test('RR-20: obsolete retry and unrelated advisory retry do not override current
  const affected=[run('selection','SUCCESS',{runId:900,id:5,attempt:2}),run('selection','CANCELLED',{runId:905,id:10}),run('advisory','SUCCESS',{runId:900,id:20,attempt:2})];
  assert.equal(evaluateChecks({checks:normalizeContexts(affected,HEAD),required:[{context:'selection'}],suites:[suite(900,'IN_PROGRESS',null,'CI',2)]}).state,'pending','advisory suppression of counted cancellation still needs retry completion');
  assert.equal(evaluateChecks({checks:normalizeContexts([...affected,run('selection','SUCCESS',{runId:950,id:50,workflow:'Other'})],HEAD),required:[{context:'selection'}],suites:[suite(900,'IN_PROGRESS',null,'CI',2)]}).state,'pending','same-name foreign workflow cannot replace suppressed counted cancellation');
+});
+
+
+test('partial nonnull rollup resolves an explicit missing job through actual suites once per poll', async()=>{
+ for(const [conclusion,status,expected]of [['SUCCESS','COMPLETED',EXIT.ok],['FAILURE','COMPLETED',EXIT.red],['SUCCESS','IN_PROGRESS',EXIT.timeout]]){
+  const actual=run('Roll the ecosystem lock',conclusion,{status});
+  const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[run('unrelated')],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[]}};
+  const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});
+  const graphql=original.deps.graphql;let calls=0;
+  original.deps.graphql=async(q,v)=>{if(q.includes('status{contexts')){calls++;const suite=fallbackSuite('S1',[actual]);suite.status=status;suite.conclusion=status==='COMPLETED'?conclusion:null;return suitePage([suite]);}return graphql(q,v);};
+  const result=await gate(['--required','Roll the ecosystem lock','--commit',`o/r@${HEAD}`,'--timeout-minutes','1'],original.deps);
+  assert.equal(result.code,expected);assert.ok(calls>0);assert.equal(calls,original.state.queries.filter(q=>q.includes('r0: repository')).length,'one fallback per target poll');
+ }
+});
+
+test('partial all-mode rollup cannot hide a second failed job in the same suite',async()=>{
+ const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[run('packages')],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[{status:'COMPLETED',conclusion:'FAILURE',workflowRun:{databaseId:900},checkRuns:{totalCount:2}}],pageInfo:{hasNextPage:false}}};
+ const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});const graphql=original.deps.graphql;
+ original.deps.graphql=async(q,v)=>q.includes('status{contexts')?suitePage([fallbackSuite('S1',[run('packages'),run('other','FAILURE')])]):graphql(q,v);
+ const result=await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps);assert.equal(result.code,EXIT.red);
+});
+
+test('partial rollup authoritative fallback refuses a foreign commit',async()=>{
+ const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[run('unrelated')],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[]}};
+ const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});const graphql=original.deps.graphql;
+ original.deps.graphql=async(q,v)=>q.includes('status{contexts')?suitePage([],false,OLD):graphql(q,v);
+ await assert.rejects(gate(['--required','Roll the ecosystem lock','--commit',`o/r@${HEAD}`,'--timeout-minutes','1'],original.deps),/different commit/);
+});
+
+
+test('all-mode count deficit fetches hidden jobs even when the rollup and suite say success',async()=>{
+ const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[run('packages')],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[{status:'COMPLETED',conclusion:'SUCCESS',workflowRun:{databaseId:900},checkRuns:{totalCount:2}}],pageInfo:{hasNextPage:false}}};
+ const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});const graphql=original.deps.graphql;let calls=0;
+ original.deps.graphql=async(q,v)=>{if(q.includes('status{contexts')){calls++;return suitePage([fallbackSuite('S1',[run('packages'),run('hidden','FAILURE')])]);}return graphql(q,v);};
+ assert.equal((await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps)).code,EXIT.red);assert.equal(calls,1);
+});
+
+test('complete rollups avoid supplementary suite queries and retain confirmation',async()=>{
+ const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:GREEN(),pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[{status:'COMPLETED',conclusion:'SUCCESS',workflowRun:{databaseId:900},checkRuns:{totalCount:2}}],pageInfo:{hasNextPage:false}}};
+ const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});const graphql=original.deps.graphql;
+ original.deps.graphql=async(q,v)=>{assert.ok(!q.includes('status{contexts'),'complete rollup needs no extra query');return graphql(q,v);};
+ assert.equal((await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps)).code,EXIT.ok);assert.ok(has(original.state.lines,/confirming/));
+});
+
+
+test('represented terminal failure stays red without another suite query',async()=>{
+ const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[run('packages','FAILURE')],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[{status:'COMPLETED',conclusion:'FAILURE',workflowRun:{databaseId:900},checkRuns:{totalCount:1}}],pageInfo:{hasNextPage:false}}};
+ const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});const graphql=original.deps.graphql;
+ original.deps.graphql=async(q,v)=>{assert.ok(!q.includes('status{contexts'),'actual failed job already represented');return graphql(q,v);};
+ assert.equal((await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps)).code,EXIT.red);
+});
+
+test('external suites with null workflow IDs are counted separately by suite identity',async()=>{
+ const external=run('external-pass');external.checkSuite={...external.checkSuite,id:'EXT1',workflowRun:null};
+ const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[external],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[{id:'EXT1',status:'COMPLETED',conclusion:'SUCCESS',workflowRun:null,checkRuns:{totalCount:1}},{id:'EXT2',status:'COMPLETED',conclusion:'SUCCESS',workflowRun:null,checkRuns:{totalCount:1}}],pageInfo:{hasNextPage:false}}};
+ const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});const graphql=original.deps.graphql;
+ original.deps.graphql=async(q,v)=>q.includes('status{contexts')?suitePage([fallbackSuite('EXT1',[external]),fallbackSuite('EXT2',[run('hidden','FAILURE')])]):graphql(q,v);
+ assert.equal((await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps)).code,EXIT.red);
 });
