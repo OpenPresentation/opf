@@ -278,7 +278,7 @@
     }
   },
   "devDependencies": {
-    "@openpresentation/gallery": "^2.0.0",
+    "@openpresentation/gallery": "^3.0.0",
     "@expo-google-fonts/arimo": "0.4.3",
     "@expo-google-fonts/caladea": "0.4.2",
     "@expo-google-fonts/cousine": "0.4.3",
@@ -332,5 +332,8 @@
     "pdf-lib": "1.17.1",
     "pdfjs-dist": "6.4.299",
     "playwright": "1.63.0"
+  },
+  "opf": {
+    "requiresUnreleasedCore": "0.20.0"
   }
 }
