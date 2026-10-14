@@ -95,9 +95,9 @@
   "noRuntimeRedeployForBookkeeping": true,
   "historicalAttempt1": "Jobs never started due account payments/spending limit; original annotations, empty steps and unavailable logs remain in ci-account-blockers.json. Owner restored budget; five attempt2 workflows were retried on unchanged reviewed deployed heads.",
   "remainingBoundaries": {
-    "T16": "Original commissioned Yu Gothic own-host fixture gap and explicit supersession chronology remain; canonical22-name evidence covers ten of original eleven names, not Yu Gothic.",
+    "T16": "Actual host source integrations and exact-tree checks are complete; reviewed core evidence and honest carrier reconciliation are in this transaction, conditionally complete on its normal gated merge. NativeVisual1.0105 and long-tail scope unchanged.",
     "T24T31": "Scoped-complete per original canonical native/fixed-source acceptance plus genuine current-package samefour Mac replay and supervisor/independent reviews. Separate Windows12-report export is unaccepted and is not an added release criterion.",
-    "T40": "Official roller38637195180 generated886023e2d3f7a0a92d5073c7399ac02732fa0afd; child qualification/actual integration still pending. Final records and note delivery remain distinct."
+    "T40": "Original official roller and both children passed; exact generated lock/ancestor retained. This transaction completes final source records, inventory/reconciliation and owner note conditionally on normal new-head gates and actual merge, without claiming a future SHA or unrun result."
   },
   "independentReview": {
     "allThreeMergeReviewSourceSha256": "06b9030e9f24064292ff42cbafad17a0cab13f41193f2d4795bd73e708357ccd",
@@ -161,5 +161,71 @@
       "Current publication/deployment/source merge results remain accepted and are not held on optional queue expansion."
     ],
     "decisionSourceSha256": "3b3653ff1121eb955d203a21f698bbd5cc20f3d450230e8f23feb39b5376fc1d"
-  }
+  },
+  "officialRollTerminal": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/official-roll-terminal.json",
+    "sha256": "d484abd127fb0b54d034d12e3729c3d5afd318e49846f83755038d067cba3974",
+    "lockMainIntegration": false,
+    "laterTestOnlyHostSourceDoesNotChangeLockOrRuntime": "The official lock still selects the reviewed 9fade/83c/969/2ac source graph. Later Yu Gothic host merges are test-only evidence updates, not newly selected lock pins or new published/runtime artifacts; no second roll or publication is implied."
+  },
+  "approvedInScopeReconciliations": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/in-scope-reconciliation.json",
+    "sha256": "81be60504f6e949ee9fece8adf473846593f65ec80061933fad8bbd6ebfe24ff",
+    "sourceReceiptSha256": "73b254a71eae8daab60e2f1479966da2cdc58313d35590c79c7050404b1de70b",
+    "confirmedClosed": [
+      "https://github.com/Data-Advantage/pptx-gallery/pull/125",
+      "https://github.com/Data-Advantage/pptx-gallery/issues/118",
+      "https://github.com/OpenPresentation/opf-pptx/issues/238",
+      "https://github.com/OpenPresentation/opf/issues/507"
+    ],
+    "broader87_323_362RemainOpen": true
+  },
+  "boundedAdditionalProgramAcceptance": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/api-formats-tooling-acceptance.json",
+    "sha256": "bf29540406045ca56cddaacabcdefb9b6deb3f57465acc7cb9f3ce5030415994",
+    "rows": [
+      "RR-55",
+      "RR-56",
+      "RR-57"
+    ],
+    "supervisorAccepted": true,
+    "limits": [
+      "Internal composition strings are not old public aliases.",
+      "Main hosted YAML/Markdown adoption does not claim an interactive YAML tab.",
+      "TS5 remains solely for tsup declaration/compiler compatibility; explicit source checking uses TS7."
+    ]
+  },
+  "yuHostSourceIntegration": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/yu-host-source-integration.json",
+    "sha256": "4d19185bf33bd45744e8a7dfb9e8ee55ac31f272ee6b036366e1fb22fdd9a8fa"
+  },
+  "terminalTransaction": {
+    "alreadyAcceptedCheckpoints": 38,
+    "proposedCompletedCheckpoints": 40,
+    "conditionalCheckpoints": [
+      "T16",
+      "T40"
+    ],
+    "condition": "This exact reviewed source transaction merged tree passes normal required PR/queue gates and actually merges. External supervisor terminal receipt confirms completion; no self-recording follow-up PR required.",
+    "futureMergeSHAClaimed": false,
+    "broaderProgramEligibleComplete": 76,
+    "broaderProgramTotal": 84,
+    "broaderOpenItems": 8,
+    "newHeadRequiredHostedChecksCompletedAtSealing": false
+  },
+  "finalInventory": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/final-inventory.json",
+    "sha256": "fe9379317e56e30a2f841b7a35c346e4fb3444a56552c8c6563bb47666ba2191",
+    "asOf": "2026-10-14T22:49:27.296923+00:00",
+    "counts": {
+      "openPRs": 17,
+      "openIssues": 42,
+      "dependencyPRs": 12,
+      "sourcePRs": 5,
+      "draftPRs": 2
+    },
+    "calls": 1,
+    "allEightLocalDefaultsCleanAndMatchObservedRemote": true
+  },
+  "rootThreeHostMergeReviewSha256": "21e7a3b1165c9aabfc3e1e631540c4c90ef65de015f6e96466bb57416e03f0c2"
 }

@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "scope": "Actual fixture-only host source integration; no runtime/package/font/schema/export/deployment changes.",
+  "hosts": [
+    {
+      "pr": "https://github.com/OpenPresentation/opf-render/pull/246",
+      "actualMerge": "e7c9e25f3ffe97ae82341d5eb359644d5b7a5d9b",
+      "parent": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034",
+      "reviewedHead": "a78da5ea85b4f284f4ae3626e1e990d6ea7a5523",
+      "tree": "c8ddc2011f5ab8c3c3c56b64fda6b247d3191c46",
+      "reviewedTreeEqual": true,
+      "fullIndexBinaryPatchSha256": "198b9c8c8cbf63352579c3ccedd2a596b69d813846488e637db17ed92b4c3299",
+      "reviewedFullPatchEqual": true,
+      "paths": [
+        "test/fixtures/script-name-families.json",
+        "test/script-name-hosts-browser.mjs",
+        "test/script-name-hosts.mjs"
+      ],
+      "canonicalMarker": "22:42:43 MERGED OpenPresentation/opf-render#246 e7c9e25f3ffe97ae82341d5eb359644d5b7a5d9b",
+      "canonicalPerTargetMerged": true,
+      "checks": 6,
+      "required": "all",
+      "twoGreenConfirmations": true,
+      "primaryCleanFastForward": true,
+      "fetches": 1,
+      "runtimeVersionsChanged": false,
+      "sourceReceiptSha256": "f802f8b9832031062d127c6deea413f14d18f359817c5a8660a53881f2358a83",
+      "localPrimaryRechecked": true,
+      "localTreeAndFullPatchRechecked": true
+    },
+    {
+      "pr": "https://github.com/OpenPresentation/opf-editor/pull/171",
+      "actualMerge": "147d330e4fd8b39206819df975f0d337d43c4651",
+      "parent": "2ac0268359f48123031ef537fcc0c31d7c41a1df",
+      "reviewedHead": "cdc7868ff9b633a93dd677350f34f230b4bf355f",
+      "tree": "340dba762bf4a2cca292456197a771ed67336bab",
+      "reviewedTreeEqual": true,
+      "fullIndexBinaryPatchSha256": "c9a3310b0b4b1acb53600f9e0324bb219a5777b02c1bc08fd011a0c2ed6cfd9c",
+      "reviewedFullPatchEqual": true,
+      "paths": [
+        "test/canvas-fonts-browser.mjs",
+        "test/fixtures/script-name-families.json",
+        "test/font-gate-script-names.mjs"
+      ],
+      "canonicalMarker": "22:46:47 MERGED OpenPresentation/opf-editor#171 147d330e4fd8b39206819df975f0d337d43c4651",
+      "canonicalPerTargetMerged": true,
+      "checks": 5,
+      "required": "all",
+      "twoGreenConfirmations": true,
+      "primaryCleanFastForward": true,
+      "fetches": 1,
+      "runtimeVersionsChanged": false,
+      "sourceReceiptSha256": "6778219065c39ba5b86602c2315399cd5618a5f68fbf46c56a9ae2cb001afbe6",
+      "localPrimaryRechecked": true,
+      "localTreeAndFullPatchRechecked": true
+    },
+    {
+      "pr": "https://github.com/Data-Advantage/pptx-gallery/pull/132",
+      "actualMerge": "1aec10a6f7ee28e5bc6253deb1a8ff6ef9f9f070",
+      "parent": "dda2a068eed2820b95afe3689662f8f0cb6b7f98",
+      "reviewedHead": "67bc00085915322d23f2267ac994bb058af6637b",
+      "tree": "1df416f5b7ad9a53bc052b077165497fc7fa497f",
+      "reviewedTreeEqual": true,
+      "fullIndexBinaryPatchSha256": "7fe124a9691bb6a8a9a220293b06395400ca9968632c0719d864d20b02f49bcd",
+      "reviewedFullPatchEqual": true,
+      "paths": [
+        "tests/e2e/editor.spec.ts",
+        "tests/editor-script-names.test.ts",
+        "tests/fixtures/script-name-families.json"
+      ],
+      "canonicalMarker": "22:34:38 MERGED Data-Advantage/pptx-gallery#132 1aec10a6f7ee28e5bc6253deb1a8ff6ef9f9f070",
+      "canonicalPerTargetMerged": true,
+      "checks": 1,
+      "required": "all",
+      "twoGreenConfirmations": true,
+      "primaryCleanFastForward": true,
+      "fetches": 1,
+      "runtimeVersionsChanged": false,
+      "sourceReceiptSha256": "11a317bf8ec29d93978a66aa474f8932482717ad7b117cfe01860ff921253a41",
+      "localPrimaryRechecked": true,
+      "localTreeAndFullPatchRechecked": true
+    }
+  ],
+  "originalFixtureInputs": {
+    "old22InputsPreserved": true,
+    "newFixtureNames": 23,
+    "originalCommissionYuGothicSamples": 7,
+    "fourHosts": [
+      "node",
+      "offline Chromium",
+      "editor canvas",
+      "gallery editor canvas"
+    ],
+    "twoWeights": [
+      400,
+      700
+    ]
+  },
+  "carrierChronology": {
+    "literalOldOrderNotClaimed": true,
+    "superseded": {
+      "renderer217": "renderer219",
+      "editor155": "editor156",
+      "core584": "core592"
+    },
+    "gallery125": "Original two 22-name fixture files carried through Gallery127 into deployed55db/actual126dda2; current132 extends them with Yu Gothic and is not claimed byte-identical to the old22.",
+    "gallery127": "Merged98f34580 into parent126 before actual default126dda2."
+  },
+  "limits": [
+    "Separate nativeVisual1.0105 and script-gap acceptance fields remain unchanged.",
+    "All168 font-family statuses and acceptance fields remain unchanged apart from the dated host evidence URL.",
+    "Own-host coverage does not establish new native/global font/raster/full-catalog acceptance.",
+    "No fixture-only source merge is relabeled as a new package publication or site deployment."
+  ],
+  "coreEvidenceProposal": {
+    "reviewedSource": "3e539496f732c37fc3b10ecd11144d580597045e",
+    "reviewedPatchSha256": "ce75e0c5075dc4608bbbe7115d333cf0ce47c11b07604d073fa06138b48ec6b5",
+    "mergedInFinalSourceProposal": true,
+    "actualMainIntegrationPending": true
+  },
+  "canonicalBatch": {
+    "exitCode": 0,
+    "canonicalLogSha256": "3c2b69baa939f46638955528e544d345f55a7dc72bb98209cc4dfce87f80cb1d",
+    "allRequiredConfirmed": {
+      "renderer246": 6,
+      "editor171": 5,
+      "gallery132": 1
+    },
+    "actualMergeConfirmedAt": "2026-10-14T22:46:47Z"
+  }
+}

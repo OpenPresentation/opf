@@ -1,0 +1,177 @@
+{
+  "confirmedAt": "2026-10-14T22:30:53.606549+00:00",
+  "approvedProposalSha256": "0498080334fad4c243de475dd8e38cdb553c97bc422ac94142cc610ba7f2388b",
+  "callBudget": 16,
+  "callsUsed": 13,
+  "allFourCommentedAndClosed": true,
+  "rows": [
+    {
+      "number": 125,
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/125",
+      "state": "CLOSED",
+      "closedAt": "2026-10-14T22:30:21Z",
+      "merged": false
+    },
+    {
+      "number": 118,
+      "url": "https://github.com/Data-Advantage/pptx-gallery/issues/118",
+      "state": "CLOSED",
+      "closedAt": "2026-10-14T22:30:23Z"
+    },
+    {
+      "number": 238,
+      "url": "https://github.com/OpenPresentation/opf-pptx/issues/238",
+      "state": "CLOSED",
+      "closedAt": "2026-10-14T22:30:25Z"
+    },
+    {
+      "number": 507,
+      "url": "https://github.com/OpenPresentation/opf/issues/507",
+      "state": "CLOSED",
+      "closedAt": "2026-10-14T22:30:27Z"
+    }
+  ],
+  "comments": [
+    {
+      "repository": "Data-Advantage/pptx-gallery",
+      "number": 125,
+      "operation": "comment",
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/125#issuecomment-6179955381",
+      "state": null,
+      "receipt": "Data-Advantage-pptx-gallery-125-comment-receipt.json",
+      "receiptSha256": "43b86ee02eded8c4a4f1501aab1a7e896a380719e7c8fc8c3f96377a17463606"
+    },
+    {
+      "repository": "Data-Advantage/pptx-gallery",
+      "number": 118,
+      "operation": "comment",
+      "url": "https://github.com/Data-Advantage/pptx-gallery/issues/118#issuecomment-6179956256",
+      "state": null,
+      "receipt": "Data-Advantage-pptx-gallery-118-comment-receipt.json",
+      "receiptSha256": "2a68af24194fb864ae08f9e5cf0f88d51814f1ee59baec18493074161bb8b62d"
+    },
+    {
+      "repository": "OpenPresentation/opf-pptx",
+      "number": 238,
+      "operation": "comment",
+      "url": "https://github.com/OpenPresentation/opf-pptx/issues/238#issuecomment-6179956875",
+      "state": null,
+      "receipt": "OpenPresentation-opf-pptx-238-comment-receipt.json",
+      "receiptSha256": "b9519c8a3736e161afd809f58ca5186e17930396597236936ce0d4b8b60eaacc"
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 507,
+      "operation": "comment",
+      "url": "https://github.com/OpenPresentation/opf/issues/507#issuecomment-6179957487",
+      "state": null,
+      "receipt": "OpenPresentation-opf-507-comment-receipt.json",
+      "receiptSha256": "deac21359cc3a27f60b9f855679a42e1360a2d28b4bddb9a260a1772cd830a8b"
+    }
+  ],
+  "confirmationSha256": "be4debcac739a98d1836ffcf38ebd0b1a5542a7d78f81ab571c8ac13df774cdc",
+  "broad87_323_362Untouched": true,
+  "noCIPollingSettingsNativeRuntimeBranchDeletion": true,
+  "sourceReceiptSha256": "73b254a71eae8daab60e2f1479966da2cdc58313d35590c79c7050404b1de70b",
+  "scopedDecisions": [
+    {
+      "repository": "Data-Advantage/pptx-gallery",
+      "number": 125,
+      "kind": "pullRequests",
+      "title": "FF-46: per-family host fixtures for proprietary script names (pptx-gallery)",
+      "url": "https://github.com/Data-Advantage/pptx-gallery/pull/125",
+      "originalCachedBodySha256": "7f37e49c97ef4e348d51a62c9ac7fc619378c5eb85c53a4318e31b5740764f3d",
+      "proposal": "close-superseded",
+      "rationale": "The two original fixture/test files were carried byte-identically by Gallery126/deployed55db/actualdda2; PR127 merged into the adoption stack. Merging stale125 would duplicate integrated work. New Yu additions belong to132 and preserve125 history.",
+      "unmetOriginalClauseOrLimit": "No missing original22-name implementation clause. Original individual217\u2192155/125\u2192584 chronology did not occur and must be recorded as superseded carriers, not fabricated. Initial broaderYu commission/native finding is separate.",
+      "evidence": [
+        "docs/evidence/rr-20-sites-current-2026-10-14/final-source-integration.json",
+        "docs/evidence/rr-17-yu-gothic-hosts-2026-10-14/README.md"
+      ],
+      "remoteActionPerformed": true
+    },
+    {
+      "repository": "Data-Advantage/pptx-gallery",
+      "number": 118,
+      "kind": "issues",
+      "title": "Use loadFonts subsetWasm/shapeWasm for SVG downloads and outlined text",
+      "url": "https://github.com/Data-Advantage/pptx-gallery/issues/118",
+      "originalCachedBodySha256": "4531e0c4591da2157dcdbeb91f7c1b5f1e8240a32544e505567d7b95801f2219",
+      "proposal": "close-implemented",
+      "rationale": "Current generated editor passes subsetWasm and shapeWasm same-origin URLs to the browser fonts loader; both real HarfBuzz1.6.3 binaries are pinned/hash-verified and publicly deployed. Live preview keeps system text; download/export uses the prepared handle. Source/strict assets/normal site qualification and public exact manifest references are accepted.",
+      "unmetOriginalClauseOrLimit": "No unmet literal integration clause identified. This does not claim new every-script/native shaping or pixel parity.",
+      "evidence": [
+        "scripts/prepare-editor-wasm.mjs",
+        "docs/evidence/rr-20-sites-current-2026-10-14/gallery-production-final-handoff.json"
+      ],
+      "remoteActionPerformed": true
+    },
+    {
+      "repository": "OpenPresentation/opf-pptx",
+      "number": 238,
+      "kind": "issues",
+      "title": "List import: a description resized in PowerPoint becomes part of the entry text",
+      "url": "https://github.com/OpenPresentation/opf-pptx/issues/238",
+      "originalCachedBodySha256": "b9da117a41b2b14f0ea4e1f11337192db869d7a1597dcaa8956bf3706aab47eb",
+      "proposal": "close-fixed-scoped-native",
+      "rationale": "Committed native edit changes the exact description line to36pt/redFF0000, saves/reopens, and imports only that edited description value while preserving entry/words. The list-edit comparator passes; current source-to-publisher audit preserves import code and installed PPTX20.1 retains provenance-role controls.",
+      "unmetOriginalClauseOrLimit": "No unmet literal resize/recolour semantic clause.36pt is intentional overflow stress; no visual-fit/physicalglyph/pixel/frame claim.",
+      "evidence": [
+        "docs/evidence/rr-20-windows-current-2026-10-14/cases/list-description-native-edit/list-edit-comparison.json",
+        "docs/evidence/rr-20-windows-current-2026-10-14/supervisor-scoped-acceptance.json",
+        "docs/evidence/rr-20-sites-current-2026-10-14/retained-current-registry-replay.json"
+      ],
+      "remoteActionPerformed": true
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 507,
+      "kind": "issues",
+      "title": "Roadmap (0.19): adaptive layouts: repeatable placeholders instead of list-2x/text-3x count variants",
+      "url": "https://github.com/OpenPresentation/opf/issues/507",
+      "originalCachedBodySha256": "16d854908cc57087e2c6b972370b49ca7a674c12e7b015c651db56923f665964",
+      "proposal": "close-superseded-by-approved-design",
+      "rationale": "Owner-approved0.19-layouts explicitly supersedes placeholder.repeat proposal with named areas/regions, repeated flowing blocks, count grids, auto short/long flow, listColumns:auto, theme/deck/slide design variants and28 intent layouts. Existing bounded adaptive-scope audit covers allfive intentions; current packages/sites are now published/merged/public.",
+      "unmetOriginalClauseOrLimit": "No unimplemented semantic intention identified. Do not claim literal old placeholders.repeat API or retain count-variant aliases; the approved successor deliberately replaces that syntax.",
+      "evidence": [
+        "docs/programs/release-readiness/0.19-layouts.md",
+        "docs/evidence/rr20-site-currency-queue/adaptive-scope-audit.json",
+        "docs/evidence/rr-20-sites-current-2026-10-14/final-source-integration.json"
+      ],
+      "remoteActionPerformed": true
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 323,
+      "kind": "issues",
+      "title": "Windows PowerPoint native runs deferred from the Mac mini session (RR-05, FF-12, FF-13, FF-27, FF-46)",
+      "url": "https://github.com/OpenPresentation/opf/issues/323",
+      "originalCachedBodySha256": "1dc8071c220641e9d937321caa128d908b9f7aa0307096cc5e065d879ea68892",
+      "proposal": "keep-open-broader-native-umbrella",
+      "rationale": "Sections1/2/4/5 and selected save/edit operations have earlier recorded supervisor outcomes; original scopedT24/T31 acceptance is complete. The umbrella still carries FF46 family acceptance and native tab/mixed-size paragraph followups. Do not close the entire umbrella from17selected cases or from the Macsame4 replay.",
+      "unmetOriginalClauseOrLimit": "Section3 native per-family acceptance/size-adjust reruns remain in361/RR17; section6 tab/mixed-size native drift above0.02pt remains separately tracked366 unless exact closure/descope proof is reviewed. No new58-case or Windows12-export gate is added.",
+      "evidence": [
+        "docs/programs/release-readiness/README.md",
+        "docs/evidence/rr-20-windows-current-2026-10-14/supervisor-scoped-acceptance.json"
+      ],
+      "remoteActionPerformed": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 362,
+      "kind": "issues",
+      "title": "FF-46: per-family host fixtures for the proprietary script, emoji, math and code-table families",
+      "url": "https://github.com/OpenPresentation/opf/issues/362",
+      "originalCachedBodySha256": "4c0b1249c87048c9725f2ee8900f2203cb063de66180a8b42f83ebc4e220a770",
+      "proposal": "keep-open-original-commission-conditional-completion",
+      "rationale": "Initial eleven-name own-host commission now has a genuine local missingYu fixture; source246/171/132 plus core aggregate/tracker/control still require normal actual integration. Native finding1.0105 remains and does not invalidate positive host-route proof.",
+      "unmetOriginalClauseOrLimit": "Initial host-source merges/core evidence integration are still pending. Original Later additions names the size-adjust families once rows land and unmeasured families once measured; do not declare that broader conditional scope all complete from23 host names. Keep those separate from initialT16 commission and native acceptance.",
+      "evidence": [
+        "docs/evidence/rr-17-yu-gothic-hosts-2026-10-14/README.md",
+        "docs/programs/font-fidelity-everywhere/font-tracker.json"
+      ],
+      "remoteActionPerformed": false
+    }
+  ],
+  "fourFreshMetadataBodyHashesUnchanged": true
+}

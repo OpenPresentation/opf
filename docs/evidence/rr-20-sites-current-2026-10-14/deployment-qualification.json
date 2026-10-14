@@ -209,10 +209,11 @@
   "allThreeApplicableCICompleted": false,
   "finalSourceIntegration": {
     "path": "docs/evidence/rr-20-sites-current-2026-10-14/final-source-integration.json",
-    "sha256": "7f854dbe903e1fe1d3f546bcabbbbe361fe922d4d15c61360bffc47900e779ee",
+    "sha256": "22479cedc09d54d776072d6b92bc564afb40c9d273896d5c69513da309580a56",
     "observedAt": "2026-10-14T21:37:24.814910+00:00",
     "allThreeSiteDefaultMerged": true,
     "allThreeApplicableCICompleted": true,
-    "historicalPriorObservation": "The other pending source/CI flags in this21:20 snapshot describe its original cutoff; this linked later observation supersedes those flags without changing original failed attempts."
+    "historicalPriorObservation": "The other pending source/CI flags in this21:20 snapshot describe its original cutoff; this linked later observation supersedes those flags without changing original failed attempts.",
+    "latestProposedTerminalTransaction": "38 already accepted; T16/T40 proposed conditionally complete on this exact reviewed transaction merged tree passing normal PR/queue gates and actually merging. External supervisor receipt will confirm."
   }
 }
