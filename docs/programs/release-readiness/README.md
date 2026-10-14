@@ -6,6 +6,8 @@ people resuming work start here, not from chat history or local scratch files.
 
 ## Current checkpoint — 2026-10-14
 
+The owner’s 2026-10-14 instruction “Don’t hold deployments! Get them out!” superseded the earlier agent deployment hold. All three reviewed candidates were deployed and publicly verified using the configured production pipeline; historical prohibitions below retain their original dates. No DNS or credential mutation is inferred.
+
 Official roll #651 and native tooling #652 are merged and verified. Evidence #661 is merged at `d0abab263708db5558fa1bf4bf23213d673b4f6c`; the supervisor's scoped acceptance covers 17 selected native cases, four actual UI operations and the fixed-source four-archive offline import replay. All 58 dispositions remain literal; 41 cases were not executed natively. No further Office run is needed for this accepted scope. [Scoped decision and exact identities](../../evidence/rr-20-windows-current-2026-10-14/supervisor-scoped-acceptance.json).
 
 Core/PPTX 0.20.1, renderer/editor/CLI 0.20.0 and Gallery 3.0.0 are
