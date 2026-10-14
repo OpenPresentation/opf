@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
+import {assertCatalogGeneration} from './consumer-dependencies.mjs';
 export const BROWSER_TEXT={title:'Quarterly review',body:'Revenue grew while costs stayed flat across every region',code:'const score = urgency * confidence;'};
-export function browserFixture(scheme,{catalogSchema,gallery,validate}){
- assert.ok(catalogSchema===1||catalogSchema===2,'supported actual catalog schema');
+export function browserFixture(scheme,{catalogSchema,coreVersion,gallery,validate}){
+ assert.ok(catalogSchema===1||catalogSchema===2||catalogSchema===3,'supported actual catalog schema');
+ assertCatalogGeneration(coreVersion,catalogSchema);
  const text=BROWSER_TEXT;
  const code=catalogSchema===1
   ?{id:'b',layout:'code-1x',title:text.title,code:{source:text.code,language:'ts'},text:text.body}
