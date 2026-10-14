@@ -19,16 +19,21 @@ tree and binary patch equal the reviewed preparation. The runtime core
 artifact remains 0.20.1 at `22664e18ea657db4e377b84997f2e73bf6cd738b`.
 Old e43 core 0.20.0 preparation remains unpublished and must never be tagged.
 
-The maintained stable registry consumer passed with all five exact planned
-packages and Gallery 3, with registry lock identities matching the publication
-authority. [Exact installed qualification](../../evidence/rr-20-registry-current-2026-10-14/registry-qualification.json)
-retains the source, plan and command-log hashes. Matching three-site dependency,
-asset and copy adoption remain separate from this Node qualification. Gallery
-host/default/hosted checks and owner scope remain open. Held local site
-evidence is not deployment or complete site acceptance. The accepted native
-sample remains 17 selected cases and four actual UI operations, with 41 of
-58 cases unexecuted. It does not establish all-case, global font/raster or
-pixel parity; the program remains active.
+The original full registry consumer passed with core 0.20.1,
+renderer/PPTX/editor/CLI 0.20.0 and Gallery 3.0.0 on its historical plan and
+publication authority. [Original installed qualification](../../evidence/rr-20-registry-current-2026-10-14/registry-qualification.json)
+retains those exact identities and command-log hashes. The current successor
+has separate [affected installed qualification](../../evidence/rr-81-pptx0201-registry-2026-10-14/affected-consumer-qualification.json):
+strict package/authority preparation, matrix types and the generated master-name
+proof passed. Its fresh full factory exited 1 because the clean adjacent Editor
+tooling lacked Playwright before code-browser execution; no full successor
+pipeline pass is claimed. Normal Main/Gallery asset builders passed using that
+approved genuine consumer. Production deployment and live qualification have
+separate owner evidence; private hosted source-integration checks remain blocked
+by account billing/spending restrictions. The accepted native sample remains
+17 selected cases and four actual UI operations, with 41 of 58 cases unexecuted.
+It does not establish all-case, global font/raster or pixel parity; the program
+remains active.
 
 The current plan and publication authority merged in core [#667](https://github.com/OpenPresentation/opf/pull/667)
 at `9fade9f6dc9f28a34fc766310de2fac859e1a6a3`, binding the verified PPTX
