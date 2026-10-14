@@ -1,0 +1,20 @@
+
+> @openpresentation/opf-render@0.20.0 check:runners
+> node --test scripts/run-tests.test.mjs
+
+✔ selectTests runs the glob in name order minus the excluded files and the browser suites (0.72925ms)
+✔ selectTests fails on a stale or contradictory suites.json instead of silently dropping a test (0.206041ms)
+✔ the browser pattern matches browser suites and not look-alikes (0.239458ms)
+✔ test/suites.json agrees with test/ and every excluded file is a real file (0.852833ms)
+✔ RR-53: the contract suite is the full suite minus contractExclude, and a stale or unexplained exclusion fails (0.408416ms)
+✔ RR-53: test/suites.json contract exclusions are real full-suite tests with reasons, and npm run test:contract runs the contract suite (1.755417ms)
+✔ run-tests stops at the first failing test and lists commands with --list (114.864166ms)
+✔ check-syntax lists sources in a stable order, skips fixtures and reports a syntax error (123.280208ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 289.097417

@@ -1,0 +1,112 @@
+{
+  "at": "2026-10-14T22:35:17.296207+00:00",
+  "scope": "ONE bounded local source/retained-evidence audit; no tests, API, runtime or automatic status changes",
+  "rows": [
+    {
+      "id": "RR-55",
+      "originalRowSha256": "7c381ad2fdec534b7397d2a67d7c06043348d80a1c810aad6bfd3630edb7d548",
+      "evidence": [
+        {
+          "path": "packages/javascript/src/index.ts",
+          "sha256": "028f2be723d686c25c606971ada8584351685bc80499c8abbe9e9e20a26db142"
+        },
+        {
+          "path": "packages/javascript/src/rules-layout-content.ts",
+          "sha256": "324d1e41eb81b1c4ed75ddfbec2452a6c48245615e10148f856df3c103d578de"
+        },
+        {
+          "path": "spec/schemas/finding.schema.json",
+          "sha256": "bcae8b87f78d7f711b596c0ae6e62fc802c35fd2e96634c6827ee969f866c2eb"
+        },
+        {
+          "path": "docs/evidence/rr-20-registry-current-2026-10-14/registry-qualification.json",
+          "sha256": "42f66fea092dc706115a5d5d52d89302c561446e6ea6e67961feefa8d8378a85"
+        }
+      ],
+      "exactLimitsOrCompilerException": "Removed small-cell validator rule is explicitly filtered; same-named internal composition/pagination diagnostic is not a public old API alias. Negative/historical tests may retain names without exposing aliases. Do not claim every internal diagnostic string deleted.",
+      "statusChanged": true,
+      "completionAccepted": true,
+      "historicalEligibilityProposal": "Eligible for evidence-backed completion review; no new owner-approval gate identified. Original awaiting-approval prose is stale against merged/shipped API and approved no-migration-guide decision."
+    },
+    {
+      "id": "RR-56",
+      "originalRowSha256": "f81f8d59c4e8c204020a36b9f94a735b9a0100da34d7503e733296a56a653f0f",
+      "evidence": [
+        {
+          "path": "docs/yaml.md",
+          "sha256": "bd1c0ef316352e561cfa4a5f6750a1d99e070209d9c9592cc8322142db5a47cc"
+        },
+        {
+          "path": "docs/markdown.md",
+          "sha256": "82dd188306fcb4ef1310ed1aae7abdda4454a2d3baa3dd54e103cbd9275b6409"
+        },
+        {
+          "path": "packages/javascript/src/yaml.ts",
+          "sha256": "b1520d5e7b4b18820454cc463816e94ebdcc070f18b8ea9e9deab91791561732"
+        },
+        {
+          "path": "packages/javascript/src/markdown.ts",
+          "sha256": "225e673fbdd01c2fdf367bceda2d5a3a739975da11495eaa3f52d2bb99591695"
+        },
+        {
+          "path": "skills/opf-author/references/yaml.md",
+          "sha256": "aea512951519c91b250a37d58d209c58a3fc9815fc578cd61631edfe4be01723"
+        }
+      ],
+      "exactLimitsOrCompilerException": "Dev uses fromYaml aliases:true and core Markdown conversion. Main playground remains a JSON editing surface while its docs and snippets explicitly adopt the shipped YAML/Markdown converters; do not claim Main interactive YAML parsing or add it silently as an extra criterion.",
+      "statusChanged": true,
+      "completionAccepted": true,
+      "historicalEligibilityProposal": "Eligible for completion review on shipped core YAML/Markdown subpaths+current convert CLI/docs, Dev actual codec adoption and Main hosted guides/shared authoring-format definitions. No literal requirement for a new Main interactive YAML tab was found."
+    },
+    {
+      "id": "RR-57",
+      "originalRowSha256": "8b03171edfab1284fc3e8ce19d8c5b1f1319e35c87b7ce21def2d1004bf6d828",
+      "evidence": [
+        {
+          "path": ".claude/settings.json",
+          "sha256": "4fd5c16e81de27062b014cf4b3582cfd3c28bc99667b0ee745996399740d388c"
+        },
+        {
+          "path": "scripts/agent-slot.mjs",
+          "sha256": "505ccab5a43774cf2fcde5688885585a4c4a191dbaa477d6840ca340cf4ade33"
+        },
+        {
+          "path": "scripts/check-changed.mjs",
+          "sha256": "1022c79198aa80ce3c18a3b25e06b75518e8ba2a289715077b5da3bb956d5264"
+        },
+        {
+          "path": "scripts/typecheck.mjs",
+          "sha256": "e1b3bc57d4ea4f40a60487405a279e2759d143f5f63bf94a60e5c25a940aff3b"
+        },
+        {
+          "path": "package.json",
+          "sha256": "c5169f819ba7711d9bcd48485960783e682144c6c7bf4d0b297a22ab3601e2a7"
+        },
+        {
+          "path": ".github/workflows/opf-ci.yml",
+          "sha256": "521f3d4145b502ddcdf59d8c715ecebfa77976dfb0ddd5c8a02ed84673118e44"
+        },
+        {
+          "path": ".github/workflows/ecosystem-ci.yml",
+          "sha256": "1bcd7e98808e32204dafe1afc2ebbf68ad09d07f53309733278556d205c0e1af"
+        }
+      ],
+      "exactLimitsOrCompilerException": "Package-local TypeScript5.9 compiler API remains for tsup declaration generation and compatibility checks; explicit source typecheck commands select root TypeScript7. Do not claim TS5 dependencies removed or declaration compiler replaced. If literal everywhere is interpreted to require that separate declaration API as well, identify that exact scope rather than closing from package-name grep alone.",
+      "statusChanged": true,
+      "completionAccepted": true,
+      "historicalEligibilityProposal": "Eligible for supervisor reconciliation of the actual checker scope: merged format hook/three-slot runner/mapped checks, pinned pnpm10.33.2 and explicit TypeScript7 command are present and exercised in accepted current gates."
+    }
+  ],
+  "additionalActualSiteSources": {
+    "main": "8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+    "mainYamlMarkdownDocs": "lib/authoring-formats.ts and app/docs/get-started/page.tsx",
+    "dev": "a8b8626df42a99e98e30420564cbd0599e94d6ce",
+    "devCodec": "lib/playground/opf-codec.ts"
+  },
+  "retainedRemaining": "RR48 three sibling queues remain open; RR68 active genuine maintenance remains separate; no owner final-note approval invented.",
+  "auditSourceSha256": "89f2ec9d0aa784ee3f05a8ae6478fb91ce2255cb69e5c2be28e43bced7b5febc",
+  "supervisorAccepted": true,
+  "decisionDate": "2026-10-14",
+  "decision": "Original RR55/56/57 criteria accepted complete with the recorded bounded exceptions; no new tests, API reads or settings changes.",
+  "currentSiteProof": "final-source-integration.json (linked by this evidence index; not a recursive hash dependency)"
+}

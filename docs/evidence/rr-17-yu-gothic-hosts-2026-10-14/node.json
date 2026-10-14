@@ -1,0 +1,696 @@
+{
+ "node": "v24.21.0",
+ "families": 23,
+ "resolutionChecks": 46,
+ "scriptChecks": 25,
+ "runChecks": 1464,
+ "paintChecks": 30,
+ "findings": [],
+ "report": [
+  {
+   "family": "Aparajita",
+   "kind": "script",
+   "route": "Noto Sans Devanagari",
+   "scripts": [
+    {
+     "script": "Deva",
+     "route": "Noto Sans Devanagari",
+     "via": "policy",
+     "samples": [
+      "deva-title",
+      "deva-conjuncts",
+      "deva-reph"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-devanagari/400Regular/NotoSansDevanagari_400Regular.ttf"
+   ],
+   "samples": [
+    "deva-title",
+    "deva-conjuncts",
+    "deva-reph"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "Arabic Typesetting",
+   "kind": "script",
+   "route": "Noto Naskh Arabic",
+   "sizeAdjust": 0.64,
+   "scripts": [
+    {
+     "script": "Arab",
+     "route": "Noto Naskh Arabic",
+     "via": "policy",
+     "samples": [
+      "arab-joining",
+      "arab-lam-alef",
+      "arab-harakat"
+     ]
+    }
+   ],
+   "files": [
+    "noto-naskh-arabic/400Regular/NotoNaskhArabic_400Regular.ttf"
+   ],
+   "samples": [
+    "arab-joining",
+    "arab-lam-alef",
+    "arab-harakat"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "Cambria Math",
+   "kind": "math",
+   "route": "STIX Two Math",
+   "scripts": [
+    {
+     "script": "Zmth",
+     "route": "STIX Two Math",
+     "via": "policy",
+     "samples": [
+      "math-operators",
+      "math-alphanumerics",
+      "math-brackets"
+     ]
+    }
+   ],
+   "files": [
+    "stix-two-math/400Regular/STIXTwoMath_400Regular.ttf"
+   ],
+   "samples": [
+    "math-operators",
+    "math-alphanumerics",
+    "math-brackets"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "David",
+   "kind": "script",
+   "route": "Noto Serif Hebrew",
+   "scripts": [
+    {
+     "script": "Hebr",
+     "route": "Noto Serif Hebrew",
+     "via": "policy",
+     "samples": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud"
+     ]
+    }
+   ],
+   "files": [
+    "noto-serif-hebrew/400Regular/NotoSerifHebrew_400Regular.ttf"
+   ],
+   "samples": [
+    "hebr-words",
+    "hebr-final-forms",
+    "hebr-niqqud"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "FangSong",
+   "kind": "script",
+   "route": "Noto Sans SC",
+   "scripts": [
+    {
+     "script": "Hans",
+     "route": "Noto Sans SC",
+     "via": "policy",
+     "samples": [
+      "hans-mixed-latin",
+      "hans-sentence",
+      "hans-punctuation"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-sc/400Regular/NotoSansSC_400Regular.ttf"
+   ],
+   "samples": [
+    "hans-mixed-latin",
+    "hans-sentence",
+    "hans-punctuation"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "Gautami",
+   "kind": "script",
+   "route": "Noto Sans Telugu",
+   "scripts": [
+    {
+     "script": "Telu",
+     "route": "Noto Sans Telugu",
+     "via": "policy",
+     "samples": [
+      "telu-title",
+      "telu-conjuncts",
+      "telu-vowels"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-telugu/400Regular/NotoSansTelugu_400Regular.ttf"
+   ],
+   "samples": [
+    "telu-title",
+    "telu-conjuncts",
+    "telu-vowels"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "Gisha",
+   "kind": "script",
+   "route": "Noto Sans Hebrew",
+   "scripts": [
+    {
+     "script": "Hebr",
+     "route": "Noto Sans Hebrew",
+     "via": "policy",
+     "samples": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-hebrew/400Regular/NotoSansHebrew_400Regular.ttf"
+   ],
+   "samples": [
+    "hebr-words",
+    "hebr-final-forms",
+    "hebr-niqqud"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "Kalinga",
+   "kind": "script",
+   "route": "Noto Sans Oriya",
+   "scripts": [
+    {
+     "script": "Orya",
+     "route": "Noto Sans Oriya",
+     "via": "policy",
+     "samples": [
+      "orya-title",
+      "orya-conjuncts",
+      "orya-nukta"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-oriya/400Regular/NotoSansOriya_400Regular.ttf"
+   ],
+   "samples": [
+    "orya-title",
+    "orya-conjuncts",
+    "orya-nukta"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "Microsoft JhengHei",
+   "kind": "script",
+   "route": "Noto Sans TC",
+   "scripts": [
+    {
+     "script": "Hant",
+     "route": "Noto Sans TC",
+     "via": "policy",
+     "samples": [
+      "hant-bopomofo",
+      "hant-mixed-latin",
+      "hant-sentence"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-tc/400Regular/NotoSansTC_400Regular.ttf"
+   ],
+   "samples": [
+    "hant-bopomofo",
+    "hant-mixed-latin",
+    "hant-sentence"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "Microsoft YaHei",
+   "kind": "script",
+   "route": "Noto Sans SC",
+   "scripts": [
+    {
+     "script": "Hans",
+     "route": "Noto Sans SC",
+     "via": "policy",
+     "samples": [
+      "hans-mixed-latin",
+      "hans-sentence",
+      "hans-punctuation"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-sc/400Regular/NotoSansSC_400Regular.ttf"
+   ],
+   "samples": [
+    "hans-mixed-latin",
+    "hans-sentence",
+    "hans-punctuation"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "MingLiU",
+   "kind": "script",
+   "route": "Noto Sans TC",
+   "scripts": [
+    {
+     "script": "Hant",
+     "route": "Noto Sans TC",
+     "via": "policy",
+     "samples": [
+      "hant-bopomofo",
+      "hant-mixed-latin",
+      "hant-sentence"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-tc/400Regular/NotoSansTC_400Regular.ttf"
+   ],
+   "samples": [
+    "hant-bopomofo",
+    "hant-mixed-latin",
+    "hant-sentence"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "Miriam",
+   "kind": "script",
+   "route": "Noto Sans Hebrew",
+   "scripts": [
+    {
+     "script": "Hebr",
+     "route": "Noto Sans Hebrew",
+     "via": "policy",
+     "samples": [
+      "hebr-words",
+      "hebr-final-forms",
+      "hebr-niqqud"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-hebrew/400Regular/NotoSansHebrew_400Regular.ttf"
+   ],
+   "samples": [
+    "hebr-words",
+    "hebr-final-forms",
+    "hebr-niqqud"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "Nyala",
+   "kind": "script",
+   "route": "Noto Sans Ethiopic",
+   "scripts": [
+    {
+     "script": "Ethi",
+     "route": "Noto Sans Ethiopic",
+     "via": "policy",
+     "samples": [
+      "ethi-title",
+      "ethi-words",
+      "ethi-punctuation"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-ethiopic/400Regular/NotoSansEthiopic_400Regular.ttf"
+   ],
+   "samples": [
+    "ethi-title",
+    "ethi-words",
+    "ethi-punctuation"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "PMingLiU",
+   "kind": "script",
+   "route": "Noto Sans TC",
+   "scripts": [
+    {
+     "script": "Hant",
+     "route": "Noto Sans TC",
+     "via": "policy",
+     "samples": [
+      "hant-bopomofo",
+      "hant-mixed-latin",
+      "hant-sentence"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-tc/400Regular/NotoSansTC_400Regular.ttf"
+   ],
+   "samples": [
+    "hant-bopomofo",
+    "hant-mixed-latin",
+    "hant-sentence"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "Segoe UI Emoji",
+   "kind": "emoji",
+   "route": "Noto Color Emoji",
+   "scripts": [
+    {
+     "script": "Zsye",
+     "route": "Noto Color Emoji",
+     "via": "policy",
+     "samples": [
+      "emoji-pictographs",
+      "emoji-sequences"
+     ]
+    }
+   ],
+   "files": [
+    "noto-color-emoji/400Regular/NotoColorEmoji_400Regular.ttf"
+   ],
+   "samples": [
+    "emoji-pictographs",
+    "emoji-sequences"
+   ],
+   "runs": 6
+  },
+  {
+   "family": "SimHei",
+   "kind": "script",
+   "route": "Noto Sans SC",
+   "scripts": [
+    {
+     "script": "Hans",
+     "route": "Noto Sans SC",
+     "via": "policy",
+     "samples": [
+      "hans-mixed-latin",
+      "hans-sentence",
+      "hans-punctuation"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-sc/400Regular/NotoSansSC_400Regular.ttf"
+   ],
+   "samples": [
+    "hans-mixed-latin",
+    "hans-sentence",
+    "hans-punctuation"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "SimSun",
+   "kind": "script",
+   "route": "Noto Sans SC",
+   "scripts": [
+    {
+     "script": "Hans",
+     "route": "Noto Sans SC",
+     "via": "policy",
+     "samples": [
+      "hans-mixed-latin",
+      "hans-sentence",
+      "hans-punctuation"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-sc/400Regular/NotoSansSC_400Regular.ttf"
+   ],
+   "samples": [
+    "hans-mixed-latin",
+    "hans-sentence",
+    "hans-punctuation"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "Sylfaen",
+   "kind": "script",
+   "route": "Noto Sans",
+   "scripts": [
+    {
+     "script": "Latn",
+     "route": "Noto Sans",
+     "via": "policy",
+     "samples": [
+      "latn-vi"
+     ]
+    },
+    {
+     "script": "Armn",
+     "route": "Noto Sans Armenian",
+     "via": "script",
+     "samples": [
+      "armn-title",
+      "armn-ligature",
+      "armn-punctuation"
+     ]
+    },
+    {
+     "script": "Geor",
+     "route": "Noto Sans Georgian",
+     "via": "script",
+     "samples": [
+      "geor-title",
+      "geor-mtavruli"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans/400Regular/NotoSans_400Regular.ttf",
+    "noto-sans-armenian/400Regular/NotoSansArmenian_400Regular.ttf",
+    "noto-sans-georgian/400Regular/NotoSansGeorgian_400Regular.ttf"
+   ],
+   "samples": [
+    "latn-vi",
+    "armn-title",
+    "armn-ligature",
+    "armn-punctuation",
+    "geor-title",
+    "geor-mtavruli"
+   ],
+   "runs": 19
+  },
+  {
+   "family": "Symbol",
+   "kind": "code-table",
+   "route": "Noto Sans",
+   "scripts": [
+    {
+     "script": "Zsym",
+     "route": [
+      "Noto Sans",
+      "Noto Sans Math",
+      "Noto Sans Symbols 2",
+      "Noto Sans Symbols"
+     ],
+     "via": "code-table",
+     "samples": [
+      "symbol-codes-21-38",
+      "symbol-codes-39-50",
+      "symbol-codes-51-68",
+      "symbol-codes-69-A1",
+      "symbol-codes-A2-B9",
+      "symbol-codes-BA-D1",
+      "symbol-codes-D2-E9",
+      "symbol-codes-EA-FE"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans/400Regular/NotoSans_400Regular.ttf",
+    "noto-sans-math/400Regular/NotoSansMath_400Regular.ttf",
+    "noto-sans-symbols/400Regular/NotoSansSymbols_400Regular.ttf"
+   ],
+   "samples": [
+    "symbol-codes-21-38",
+    "symbol-codes-39-50",
+    "symbol-codes-51-68",
+    "symbol-codes-69-A1",
+    "symbol-codes-A2-B9",
+    "symbol-codes-BA-D1",
+    "symbol-codes-D2-E9",
+    "symbol-codes-EA-FE"
+   ],
+   "runs": 376
+  },
+  {
+   "family": "Tunga",
+   "kind": "script",
+   "route": "Noto Sans Kannada",
+   "scripts": [
+    {
+     "script": "Knda",
+     "route": "Noto Sans Kannada",
+     "via": "policy",
+     "samples": [
+      "knda-title",
+      "knda-conjuncts",
+      "knda-vowels"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-kannada/400Regular/NotoSansKannada_400Regular.ttf"
+   ],
+   "samples": [
+    "knda-title",
+    "knda-conjuncts",
+    "knda-vowels"
+   ],
+   "runs": 9
+  },
+  {
+   "family": "Webdings",
+   "kind": "code-table",
+   "route": "Noto Sans Symbols 2",
+   "scripts": [
+    {
+     "script": "Zsym",
+     "route": [
+      "Noto Sans Symbols 2",
+      "Noto Sans Symbols",
+      "Noto Sans Math",
+      "Noto Sans"
+     ],
+     "via": "code-table",
+     "samples": [
+      "webdings-codes-21-38",
+      "webdings-codes-39-50",
+      "webdings-codes-51-68",
+      "webdings-codes-69-81",
+      "webdings-codes-82-99",
+      "webdings-codes-9A-B1",
+      "webdings-codes-B2-C9",
+      "webdings-codes-CA-E1",
+      "webdings-codes-E2-F9",
+      "webdings-codes-FA-FF"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-symbols-2/400Regular/NotoSansSymbols2_400Regular.ttf",
+    "noto-sans-symbols/400Regular/NotoSansSymbols_400Regular.ttf",
+    "noto-sans-math/400Regular/NotoSansMath_400Regular.ttf"
+   ],
+   "samples": [
+    "webdings-codes-21-38",
+    "webdings-codes-39-50",
+    "webdings-codes-51-68",
+    "webdings-codes-69-81",
+    "webdings-codes-82-99",
+    "webdings-codes-9A-B1",
+    "webdings-codes-B2-C9",
+    "webdings-codes-CA-E1",
+    "webdings-codes-E2-F9",
+    "webdings-codes-FA-FF"
+   ],
+   "runs": 444
+  },
+  {
+   "family": "Wingdings",
+   "kind": "code-table",
+   "route": "Noto Sans Symbols 2",
+   "scripts": [
+    {
+     "script": "Zsym",
+     "route": [
+      "Noto Sans Symbols 2",
+      "Noto Sans Symbols",
+      "Noto Sans Math",
+      "Noto Sans"
+     ],
+     "via": "code-table",
+     "samples": [
+      "wingdings-codes-21-38",
+      "wingdings-codes-39-50",
+      "wingdings-codes-51-68",
+      "wingdings-codes-69-81",
+      "wingdings-codes-82-99",
+      "wingdings-codes-9A-B1",
+      "wingdings-codes-B2-C9",
+      "wingdings-codes-CA-E1",
+      "wingdings-codes-E2-F9",
+      "wingdings-codes-FA-FE"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-symbols-2/400Regular/NotoSansSymbols2_400Regular.ttf",
+    "noto-sans-symbols/400Regular/NotoSansSymbols_400Regular.ttf"
+   ],
+   "samples": [
+    "wingdings-codes-21-38",
+    "wingdings-codes-39-50",
+    "wingdings-codes-51-68",
+    "wingdings-codes-69-81",
+    "wingdings-codes-82-99",
+    "wingdings-codes-9A-B1",
+    "wingdings-codes-B2-C9",
+    "wingdings-codes-CA-E1",
+    "wingdings-codes-E2-F9",
+    "wingdings-codes-FA-FE"
+   ],
+   "runs": 442
+  },
+  {
+   "family": "Yu Gothic",
+   "kind": "script",
+   "route": "Noto Sans JP",
+   "scripts": [
+    {
+     "script": "Jpan",
+     "route": "Noto Sans JP",
+     "via": "policy",
+     "samples": [
+      "jpan-sentence",
+      "jpan-prolonged",
+      "jpan-halfwidth",
+      "jpan-punctuation",
+      "jpan-combining-dakuten",
+      "jpan-mixed-latin",
+      "jpan-no-spaces"
+     ]
+    }
+   ],
+   "files": [
+    "noto-sans-jp/400Regular/NotoSansJP_400Regular.ttf"
+   ],
+   "samples": [
+    "jpan-sentence",
+    "jpan-prolonged",
+    "jpan-halfwidth",
+    "jpan-punctuation",
+    "jpan-combining-dakuten",
+    "jpan-mixed-latin",
+    "jpan-no-spaces"
+   ],
+   "runs": 24
+  }
+ ]
+}

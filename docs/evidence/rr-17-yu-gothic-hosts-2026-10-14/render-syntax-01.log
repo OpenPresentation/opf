@@ -1,0 +1,5 @@
+
+> @openpresentation/opf-render@0.20.0 typecheck
+> node scripts/check-syntax.mjs src test scripts
+
+257 files checked, 0 failed

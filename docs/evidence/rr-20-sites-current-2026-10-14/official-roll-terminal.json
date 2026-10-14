@@ -1,0 +1,168 @@
+{
+  "run": 38637195180,
+  "attempt": 1,
+  "source": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+  "runURL": "https://github.com/OpenPresentation/opf/actions/runs/38637195180",
+  "conclusion": "success",
+  "completedAt": "2026-10-14T21:19:46Z",
+  "generatedHead": "886023e2d3f7a0a92d5073c7399ac02732fa0afd",
+  "generatedLockSha256": "5e040a7e52ae596d89222be6b3d1bb3d7129568e86f2764bab7edbcb1612685f",
+  "children": [
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "Resolve explicit gallery qualification",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168/job/116103382094"
+    },
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "Installed candidates (windows-latest)",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168/job/116103477842"
+    },
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "ecosystem-core (registry)",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168/job/116103477862"
+    },
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "ecosystem-render",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168/job/116103477879"
+    },
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "Installed candidates (macos-latest)",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168/job/116103477918"
+    },
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "ecosystem-core (installed)",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168/job/116103477932"
+    },
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "ecosystem-pptx-editor",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168/job/116103478020"
+    },
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "ecosystem-core (model)",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168/job/116103478107"
+    },
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "control",
+      "conclusion": "skipped",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168/job/116103479673"
+    },
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "candidate",
+      "conclusion": "skipped",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168/job/116103480210"
+    },
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "packages",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168/job/116110469985"
+    },
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "main-status",
+      "conclusion": "skipped",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168/job/116110554856"
+    },
+    {
+      "workflow": "ecosystem-ci.yml",
+      "job": "(run)",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637230168"
+    },
+    {
+      "workflow": "opf-ci.yml",
+      "job": "Resolve explicit gallery qualification",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637233745/job/116103394324"
+    },
+    {
+      "workflow": "opf-ci.yml",
+      "job": "Published dependency source checks",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637233745/job/116103485891"
+    },
+    {
+      "workflow": "opf-ci.yml",
+      "job": "candidate",
+      "conclusion": "skipped",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637233745/job/116103488193"
+    },
+    {
+      "workflow": "opf-ci.yml",
+      "job": "control",
+      "conclusion": "skipped",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637233745/job/116103488401"
+    },
+    {
+      "workflow": "opf-ci.yml",
+      "job": "Verify OPF packages",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637233745/job/116107828685"
+    },
+    {
+      "workflow": "opf-ci.yml",
+      "job": "(run)",
+      "conclusion": "success",
+      "url": "https://github.com/OpenPresentation/opf/actions/runs/38637233745"
+    }
+  ],
+  "canonicalSession": 41402,
+  "canonicalExit": 0,
+  "canonicalMarker": "22:16:13 GREEN OpenPresentation/opf@9fade9f6dc9f 9fade9f6dc9f28a34fc766310de2fac859e1a6a3 (checks green (33/33 checks, no ruleset))",
+  "checks": 33,
+  "agentDispatches": 1,
+  "agentChildDispatches": 0,
+  "rollerAutoPR": "403 Actions may not create PR; green compare fallback, not CI failure",
+  "manualLockEdits": 0,
+  "lockMainIntegration": false,
+  "issue658Close": false,
+  "logRetrievalSyntaxFailure": "unsupported gh --allow-escape-sequences rejected before network; corrected supported --log once",
+  "files": {
+    "official-final-roll-terminal-identity.json": "0158c9715adfbba3cec1c2bc33ac43169fde2e1915a1f71c9f1fcfa2372b4c16",
+    "official-final-roll-terminal-job.log": "b4a5fe85f0c81def7ccba3c3c96a19681583ea20cea5c25cd44f4b6db6b16b8f",
+    "official-final-roll-source-resume-gate.log": "4ff979198ca993e3e42f160a71d374ed0750e2e0a75efef0ed47e3b426ba7381",
+    "official-final-roll-source-resume-gate.exit": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa",
+    "official-final-roll-generated-proof.json": "dccbdab55a9d5353059469e017a69d4546927f3272efbeb1c1df6cd3ce460305"
+  },
+  "sourceReceiptSha256": "463113583f142936cd64523d0b8cf15598c7bf5d1e649d7232de106994129e36",
+  "reviewedIntegrationBase": {
+    "head": "43b87515c4097b8ca4a7da67456a2afd38b7aae4",
+    "parents": [
+      "886023e2d3f7a0a92d5073c7399ac02732fa0afd",
+      "d248a64fa0adbe4a8a08a5179b797f646469192c"
+    ],
+    "proofSha256": "cfcb2b35a1bd88f79068c542e793690f177c8748c8fb84b4db44aadd24058322",
+    "originalGeneratedLockPreserved": true,
+    "combinedHeadQualificationPending": true
+  },
+  "rootIntegrationAndTerminalReviewSha256": "33f11eafabe398e69036abc9ca404715b8b0831a7a12e63dbcda4513ddafe4b9",
+  "childConclusionCounts": {
+    "success": 14,
+    "skipped": 5
+  },
+  "countBoundary": "33/33 is the later canonical source-head confirmation, not33 fresh child jobs. Child table has14success entries and5intentional skips; skips remain skips. Roller completed21:19:46; source confirmation22:16:13.",
+  "ancestryAttribution": {
+    "retainedAncestorOfReviewedProposal": true,
+    "originalBotBranchCommitWorkflowUnchanged": true,
+    "futureMainAncestryClaimed": false,
+    "mainMergeMaySquashHistory": true,
+    "actualMainAcceptance": "Bind actual merged tree, exact lock/golden bytes and immutable original generated commit/workflow evidence; do not require or preclaim retained main ancestry."
+  }
+}

@@ -984,6 +984,44 @@ test("a script, visual or code-table family is documented-visual only with a nat
 
 // ---- FF-46 (opf#362): the proprietary script, emoji, math and code-table names have their own per-host fixtures, keyed by the name ----
 
+test("Yu Gothic's genuine own-host fixtures do not clear its retained native visual finding", () => {
+  const family = "Yu Gothic";
+  const hosts = overrides.visualAcceptance.hosts;
+  const evidence = read(overrides.scriptNameHostFixtureEvidence);
+  const sampleIds = ["jpan-sentence", "jpan-prolonged", "jpan-halfwidth", "jpan-punctuation", "jpan-combining-dakuten", "jpan-mixed-latin", "jpan-no-spaces"];
+  for (const host of hosts) {
+    const fixture = evidence.hosts[host].families[family];
+    assert.equal(fixture.route, "Noto Sans JP", host);
+    assert.deepEqual(fixture.scripts.map((script) => script.script), ["Jpan"], host);
+    assert.deepEqual(fixture.scripts[0].samples, sampleIds, host);
+    assert.ok(fixture.files.length > 0, `${host}: actual pinned files are recorded`);
+  }
+  const record = committed.records.find((item) => item.family === family);
+  assert.deepEqual(record.nativeVisual.ownFixtureHosts, hosts);
+  for (const host of hosts) assert.equal(record.hostVerification[host], "verified", host);
+  assert.equal(record.nativeVisual.outcome, "finding");
+  assert.equal(record.nativeVisual.inkWidthRatio, 1.0105);
+  assert.equal(record.status, "script-gap");
+  assert.equal(record.acceptance.accepted, false);
+  assert.match(record.acceptance.note, /native visual comparison .* recorded a finding/);
+
+  // Removing a recorded own-host result must remove verification; neither state may promote a native finding.
+  const dir = scratchCopy();
+  try {
+    const file = path.join(dir, overrides.scriptNameHostFixtureEvidence);
+    delete evidence.hosts.browser.families[family];
+    writeFileSync(file, JSON.stringify(evidence));
+    const missing = buildTracker({ root: dir }).tracker.records.find((item) => item.family === family);
+    assert.equal(missing.hostVerification.browser, "unverified");
+    assert.deepEqual(missing.nativeVisual.ownFixtureHosts, hosts.filter((host) => host !== "browser"));
+    assert.equal(missing.nativeVisual.inkWidthRatio, 1.0105);
+    assert.equal(missing.status, "script-gap");
+    assert.equal(missing.acceptance.accepted, false);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test("a name that passes natively is documented-visual with its own fixture in all four hosts, and stays put with three", () => {
   const rules = overrides.visualAcceptance;
   const evidence = read(overrides.scriptNameHostFixtureEvidence);
