@@ -172,6 +172,14 @@ export function retainedInputs(evidence) {
   return {evidence, indexSha256: digest(readFileSync(indexFile)), historicalPackageGraph: index.packageGraph, nativeSelectedCases: index.results?.length, manualOperations: index.manualOperations?.length, coverage: index.coverage, cases, binding, acceptedReport, fixedRuntime};
 }
 
+export function coverageCounts(coverage) {
+  assert.ok(Array.isArray(coverage), 'Retained case coverage must be explicit');
+  const selectedCases = coverage.filter(item => /^native-observed\b/.test(item.disposition ?? '')).length;
+  const unexecutedCases = coverage.filter(item => /^(unexecuted\b|prepared-offline only; not executed natively\b)/.test(item.disposition ?? '')).length;
+  assert.equal(selectedCases + unexecutedCases, coverage.length, 'Unknown retained native disposition; do not infer acceptance');
+  return {selectedCases, unexecutedCases, totalCases: coverage.length};
+}
+
 export function preflight(options) {
   const consumer = canonicalPath(options.consumer), evidence = canonicalPath(options.evidence);
   const planFile = canonicalPath(options.releasePlan);
@@ -186,7 +194,9 @@ export function preflight(options) {
   assert.equal(inputs.coverage?.length, scope.totalCases, 'Authority/evidence coverage count differs');
   assert.equal(inputs.nativeSelectedCases, scope.selectedCases, 'Authority/evidence selected native count differs');
   assert.equal(inputs.manualOperations, scope.uiOperations, 'Authority/evidence UI operation count differs');
-  assert.equal(inputs.coverage.filter(item => item.disposition?.startsWith('unexecuted')).length, scope.unexecutedCases, 'Authority/evidence unexecuted count differs');
+  const counts = coverageCounts(inputs.coverage);
+  assert.equal(counts.selectedCases, scope.selectedCases, 'Authority/evidence observed count differs');
+  assert.equal(counts.unexecutedCases, scope.unexecutedCases, 'Authority/evidence unexecuted count differs');
   return {consumer, evidence, output, plan, authority, planIdentity: {path: planFile, sha256: digest(readFileSync(planFile)), verificationRefs: plan.verificationRefs}, identity, inputs};
 }
 

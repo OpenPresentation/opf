@@ -6,7 +6,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import {digest,packageNames} from './identity.mjs';
-import {parseArguments,plannedPackages,registryIdentity,retainedInputs,assertOutputIsolation,preflight,caseIds} from './replay-retained-saves.mjs';
+import {parseArguments,plannedPackages,registryIdentity,retainedInputs,assertOutputIsolation,preflight,caseIds,coverageCounts} from './replay-retained-saves.mjs';
 
 function fixture() {
   const root=realpathSync(mkdtempSync(path.join(tmpdir(),'opf-replay-'))),consumer=path.join(root,'consumer'),evidence=path.join(root,'evidence');
@@ -110,4 +110,8 @@ test('final replay refuses absent, incomplete, failed or integrity-mismatched ca
 
 test('same-version nested core cannot substitute for the single installed runtime',()=>{
  const f=fixture();try{const nested=path.join(f.consumer,'node_modules/@openpresentation/opf-render/node_modules/@openpresentation/opf');mkdirSync(nested,{recursive:true});writeFileSync(path.join(nested,'package.json'),readFileSync(path.join(f.consumer,'node_modules/@openpresentation/opf/package.json')));assert.throws(()=>registryIdentity(f.consumer,f.plan),/resolves another/);}finally{f.close();}
+});
+
+test('actual retained evidence keeps all41 offline-only dispositions separate from17 observations',()=>{
+ const evidence=new URL('../../docs/evidence/rr-20-windows-current-2026-10-14/index.json',import.meta.url);const index=JSON.parse(readFileSync(evidence,'utf8'));assert.deepEqual(coverageCounts(index.coverage),{selectedCases:17,unexecutedCases:41,totalCases:58});assert.throws(()=>coverageCounts([{disposition:'accepted globally'}]),/Unknown retained/);
 });
