@@ -3,7 +3,7 @@
 // Real Chromium, the built playground's font files served locally, the real browser font registry.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
-import { mkdir, readFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
@@ -219,6 +219,52 @@ try {
   assert.deepEqual(problems, [], 'no page errors, console errors or blocked requests');
   assert.ok(requests.length > 0 && requests.every(url => url.startsWith(base)), 'every request stayed on the local server');
   console.log(`Canvas fonts: language and font-scheme switches, Aptos with Japanese, undo/redo to pending faces, retry and drafts all load faces before the canvas draws; ${requests.length} requests, all local.`);
+
+  // FF-46 / opf#362: Yu Gothic was commissioned before the later native visual finding. Its own host fixture must draw real
+  // Japanese corpus text from the pinned substitute; this does not accept that substitute's metrics against the proprietary face.
+  const names = JSON.parse(await readFile(path.join(repo, 'test/fixtures/script-name-families.json'), 'utf8'));
+  const samples = names.families['Yu Gothic'].scripts[0].samples;
+  assert.equal(samples.length, 7, 'Yu Gothic retains all seven FF-44 Japanese samples');
+  await tab.goto(`${base}/index.html`);
+  await tab.locator('#canvas svg').waitFor();
+  const yuBefore = faceRequests.length;
+  const yuReport = [];
+  for (const sample of samples) {
+    const deck = { name: `Yu Gothic ${sample.id}`, language: 'ja', design: { fontScheme: {
+      name: 'Yu Gothic', major: 'Yu Gothic', minor: 'Yu Gothic',
+      eastAsian: { major: 'Yu Gothic', minor: 'Yu Gothic' }, complexScript: { major: 'Yu Gothic', minor: 'Yu Gothic' },
+    } }, slides: [{ id: 'yu', title: sample.text, text: [{ text: sample.text }, { text: sample.text, bold: true }] }] };
+    await run(deck => window.harness.editor.applyPatch([{ op: 'replace', path: '', value: deck }]), deck);
+    await settle();
+    const drawn = await run(() => ({
+      runs: [...document.querySelectorAll('#canvas svg text, #canvas svg tspan')].filter(node => !node.querySelector('tspan') && node.textContent.trim()).map(node => {
+        const owner = node.closest('text'), attr = name => node.getAttribute(name) ?? owner.getAttribute(name);
+        return { text: node.textContent.replace(/[⁦-⁩‎‏‪-‮]/g, ''), path: node.closest('[data-opf-path]')?.getAttribute('data-opf-path'), family: (attr('font-family') ?? '').split(',')[0].trim().replace(/^["']|["']$/g, ''), weight: Number(attr('font-weight') ?? 400), advance: Number(attr('textLength')) };
+      }),
+      faces: [...document.fonts].filter(face => face.status === 'loaded').map(face => ({ family: face.family.replace(/^["']|["']$/g, ''), weight: Number(face.weight) })),
+      pending: window.harness.pending(window.harness.editor.presentation), errors: [...window.harness.errors],
+    }));
+    assert.deepEqual(drawn.pending, [], `${sample.id}: the editor has loaded the document's fonts`);
+    assert.deepEqual(drawn.errors, [], `${sample.id}: no canvas error`);
+    assert.ok(drawn.runs.length >= 3 && drawn.runs.every(run => run.family === 'Noto Sans JP' && Number.isFinite(run.advance) && run.advance > 0), `${sample.id}: actual SVG runs draw in the pinned Japanese face`);
+    assert.ok(drawn.runs.some(run => run.text === sample.text), `${sample.id}: complete original corpus text`);
+    for (const weight of [400, 700]) {
+      assert.ok(drawn.runs.some(run => run.weight === weight), `${sample.id}: ${weight} is drawn`);
+      const byPath = new Map();
+      for (const run of drawn.runs.filter(run => run.weight === weight)) {
+        assert.ok(typeof run.path === 'string' && run.path.trim(), `${sample.id}: every run has a traced source path`);
+        byPath.set(run.path, (byPath.get(run.path) ?? '') + run.text);
+      }
+      assert.ok([...byPath.values()].some(text => text.replace(/\s/g, '') === sample.text.replace(/\s/g, '')), `${sample.id}: complete ${weight} sample in one source path, allowing wrapped lines`);
+      assert.ok(drawn.faces.some(face => face.family === 'Noto Sans JP' && face.weight === weight), `${sample.id}: a real loaded ${weight} FontFace backs the SVG`);
+    }
+    yuReport.push({ id: sample.id, ...drawn });
+  }
+  const yuFiles = faceRequests.slice(yuBefore).filter(url => /noto-sans-jp/.test(url));
+  assert.equal(new Set(yuFiles).size, 2, 'the fresh editor loads both pinned Noto Sans JP files');
+  assert.deepEqual(problems, [], 'Yu Gothic: no browser errors or external requests');
+  await writeFile(path.join(output, 'yu-gothic.json'), `${JSON.stringify({ family: 'Yu Gothic', route: 'Noto Sans JP', samples: yuReport, files: yuFiles, nativeVisualAccepted: false }, null, 2)}\n`);
+  console.log('Yu Gothic canvas: all seven original Japanese samples draw regular/bold with real loaded Noto Sans JP FontFaces; native visual finding remains separate.');
 } finally {
   await browser?.close();
   await new Promise(resolve => server.close(resolve));

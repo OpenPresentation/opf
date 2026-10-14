@@ -1,4 +1,4 @@
-// FF-46 (opf#362): every proprietary script, emoji, math and code-table name that passed the native visual comparison has its own
+// FF-46 (opf#362): every proprietary script, emoji, math and code-table name commissioned in opf#362 (native visual acceptance remains separate) has its own
 // fixture in the editor host. The script-family fixture (test/font-gate-script-families.mjs) is keyed by the open route faces, so a name
 // such as Microsoft YaHei never matched it; this one is keyed by the proprietary name. The font gate (the one path every document-replacing
 // action goes through) is driven with the real renderer registry in a fake document with a local fetch, starting from the 33 eager faces.
@@ -33,7 +33,7 @@ const table = JSON.parse(await readFile(path.join(root, "test/fixtures/script-na
 const SCRIPTS_ROOT = path.join(root, "node_modules/@expo-google-fonts");
 const shortName = (name) => name.replace("@expo-google-fonts/", "");
 const names = Object.keys(table.families).sort();
-assert.equal(names.length, 22, `the fixture covers ${names.length} names`);
+assert.equal(names.length, 23, `the fixture covers ${names.length} names`);
 
 // The 33 eager office and base faces, as a gallery or playground registry starts.
 const eagerFaces = (await loadFonts({ pack: "office" })).registry.embeddedFonts.map((face, index) => ({ index, family: face.family, weight: face.weight, italic: !!face.italic, data: new Uint8Array(Buffer.from(face.dataUrl.split(",")[1], "base64")) }));
