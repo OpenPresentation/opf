@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-14T03:27:40.095339+00:00",
+  "at": "2026-10-14T03:44:36.056500+00:00",
   "reviewedBase": "957d3bcd6ab42e84bb2ed8d137ab07f43d9a18a4",
   "evidence": [
     {
@@ -24,5 +24,6 @@
   "nativeAcceptance": false,
   "registry20Published": false,
   "deployment": false,
-  "actualBase": "47e66c570ff8666bbf63485b4b984e475e33849a"
+  "actualBase": "47e66c570ff8666bbf63485b4b984e475e33849a",
+  "preparedAt": "2026-10-14T03:27:40.095339+00:00"
 }
