@@ -1,0 +1,28 @@
+{
+  "head": "96f923f21e34d6d107b0ed58db9348b3b7c0c91e",
+  "base": "07ccce5e6579b3e43cfb8ed3acf7498593dd51ff",
+  "files": {
+    "scripts/pr-gate.mjs": "4a3878120cde94f778e67e4587b5147ede2f5bf916448d46f59ed4c9182635da",
+    "scripts/pr-gate.test.mjs": "a738d41ca12b41794354a97472a840ebbd089c5d4962857553a1015ce3a96408",
+    "changes/rr-20-partial-check-rollup.md": "accafc654d8f81e8c44a8734f058bf763b63a848442ac3528343873e4e5a0009"
+  },
+  "focused": {
+    "log": "/private/tmp/rr20-partial-rollup-focused-08.log",
+    "sha256": "4e84db2864de741ba18ebae24900902622b482e207b88277197bf22fbce30495",
+    "exitCode": 0,
+    "tests": 59
+  },
+  "mapped": {
+    "log": "/private/tmp/rr20-partial-rollup-mapped-03.log",
+    "sha256": "ec528752ae7d8ba2e636aa26bfc230c140d3fc30f3943d6816f2391a21d62123",
+    "exitCode": 0
+  },
+  "canonical": {
+    "log": "/private/tmp/rr20-partial-rollup-canonical-01.log",
+    "sha256": "e53a098e3e71b9121b60bb99e69e878fae47f5506f1da8efc1cbbc8a52d83960",
+    "exitCode": 1,
+    "cause": "Existing strict local renderer^0.20 vs actualpublished19.1 guard; no fakeevent/version override"
+  },
+  "apiBudgetImpact": "Initialbatchadds suiteid, checkRuns(first:1)totalCount, suitepagination. Existingauthoritativepager onceperaffectedtargetpoll in ANYmode. Completeadequaterollup noextraquery; historicalattempttotalCount maycause repeatedfallback eachpoll if rollupmaterializesonlylatestattempt. Globalratefloor/backoff andpaginationexisting unchanged. No newwatcher.",
+  "runningGateChanged": false
+}

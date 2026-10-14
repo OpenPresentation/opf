@@ -4,6 +4,8 @@ The owner authorized **“Start final qualification; no deployment.”** These r
 
 ## Current records
 
+- [Qualification tooling integration](qualification-tooling-integration-checkpoint.json) binds reviewed gate recovery and maintained CLI preview packaging on the unchanged pending official roll #651. Native preparation covers 55 cases/311 sealed files with independent supervisor verification, without Office/native acceptance; original strict canonical peer failures remain retained.
+
 - [Post-adoption handoff checkpoint](post-adoption-handoff-checkpoint.json) binds all four actual adoption merges and the reviewed official lock-only roll `229810d2` (run `38499933920`, qualification/merge pending). The dated 02:14 inventory has 24 PRs/42 issues and eight clean synchronized defaults. Existing source qualification limits and native/0.20 registry/site gates remain open.
 
 - [RR-55 bounded controls](gallery3-adoption-rr55-controls-receipt.json) and the [source qualification index](gallery3-adoption-source-qualification-index.json) separately record metadata-only sibling successors and supervisor verification of 18 expected outcomes. Full-suite tested-head identities remain unchanged.
