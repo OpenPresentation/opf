@@ -1,5 +1,9 @@
 # Current packages and three-site production evidence — 2026-10-14
 
+**Post-merge supervisor acceptance — 2026-10-14:** core [670](https://github.com/OpenPresentation/opf/pull/670) normally merged at `c36727c64d15d7584f66b80f5257c94c0ada4083`, with exact reviewed tree/lock/golden/plan/authority. [Portable terminal decision](terminal-supervisor-acceptance.json), SHA256 `00c60a4730d46bf328f2fe0245cd6ebc68d861779e05df71cb4330fc2bc13ede`, accepts original T16/T40 and the original 40/40 handoff. Broader program work remains 77/84 complete or descoped after separate [RR-53 acceptance](../rr-53-contract-tier-2026-10-14/README.md); seven rows remain open. No new native/global-font or runtime/deployment acceptance is inferred.
+
+**Earlier sealed PR670 evidence/index below (historical proposal state):**
+
 ## Final source-integration transaction
 
 **Accepted checkpoints: 38/40. Proposed terminal state: 40/40 only when this exact reviewed source transaction’s merged tree passes normal required PR/queue gates and actually merges. T16/T40 are conditional on that merge; no future SHA or unrun check result is claimed. The supervisor will confirm completion with an external terminal receipt. The broader program is 76/84 eligible complete, with eight real items open.**
