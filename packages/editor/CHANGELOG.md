@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 0.20.0 (2026-10-14)
+
+Editor 0.20.0 uses published core 0.20.1, renderer/PPTX 0.20.0 and Gallery 3, with nested-array layout authoring and the shared design defaults. The temporary unreleased-core declaration has been removed for this release.
+
+- Layout templates now author `areas` as nested arrays of region-name cells. String rows are outside the contract; grid geometry and explicit region pins retain their existing meaning.
+- Adopt the published Gallery 3 catalog contract for editor development fixtures with an authentic registry lock. Engine versions and existing core/renderer contracts remain unchanged until the coordinated 0.20 release preparation.
+
+Declare the matching unreleased core 0.20 requirement so the established RR-55 gate waits for genuine registry core before standalone packed checks; coordinated source and packed/browser qualification remains required. Release preparation removes this declaration and release checks refuse it.
+
 ## 0.19.0 (2026-10-12)
 
 - RR-82 (OPF 0.19): choose adaptive layouts by intent with a template diagram and a live preview of the current slide's content; draw custom grid layouts of up to 12 by 12 cells, set region kinds, roles and flows, and save them in `catalogs.custom.layouts`; place blocks in template regions through canvas drop targets. Each change is validated and undoable. The editor's script-font test packages now match the 0.19 renderer's reviewed font bytes.
