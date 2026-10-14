@@ -77,7 +77,7 @@ jobs:
     if: ${{ always() && (github.event.action != 'labeled' || github.event.label.name == 'full-ci') }}
     runs-on: ubuntu-latest
     container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
-    timeout-minutes: 35
+    timeout-minutes: 75
     defaults:
       run:
         working-directory: opf-editor

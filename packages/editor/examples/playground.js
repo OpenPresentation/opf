@@ -1,4 +1,5 @@
 import {installDataControls} from './data-controls.js';
+import {createThumbnailCache} from './thumbnail-cache.js';
 import {installReviewControls} from './review-controls.js';
 import {installChartControls} from './chart-controls.js';
 import {installNumberingControls} from './numbering-controls.js';
@@ -9,8 +10,8 @@ import {installCropControls} from './crop-controls.js';
 import {installMobileControls} from './mobile-controls.js';
 import {installTransferControls} from './transfer-controls.js';
 import { createEditorSession, saveDocument } from '../src/index.js';
-// FA-23: the editor library ships no catalog data. This app is the host: it registers the default catalog (the pptx.gallery
-// snapshot core publishes as an opt-in subpath) and hands the session's one list to every render, check, embed and export.
+// FA-23: the editor library ships no catalog data. This app is the host: it registers the default catalog owned and
+// published by pptx.gallery and hands the session's one list to every render, check, embed and export.
 import { catalogDisplay, gallery as defaultCatalog } from '@openpresentation/gallery';
 import {createCanvasEditor} from '../src/canvas.js';
 import { whenFontsReady } from '../src/font-gate.js';
@@ -110,7 +111,7 @@ element('edit-data').onclick = () => { dataGridOpen = !dataGridOpen; syncDataGri
 element('close-data-grid').onclick = () => { dataGridOpen = false; syncDataGrid(); element('edit-data').focus(); };
 function status(message) { element('status').textContent = message; }
 let activePanel = 'content';
-const thumbnailCache = new Map();
+const thumbnailCache = createThumbnailCache({toSvg, getOptions: () => ({...renderOptions(), fonts, text: 'system', trace: false})});
 function showPanel(panel, focus = false) {
   activePanel = panel;
   for (const name of ['content', 'design', 'review']) {
@@ -151,15 +152,7 @@ function viewSource(deck) {
 }
 // RR-21: the slide navigator and the sorter share one component (slide-manager.js): select, drag and keyboard reorder, hide, sections,
 // duplicate, delete, add with a layout, split and merge. The thumbnails come from the same cache, keyed by what a slide draws.
-const thumbnailKey = (deck, index) => JSON.stringify([index, deck.slides.length, deck.slides[index], deck.design, deck.catalogs, deck.assets]);
-function thumbnailHtml(deck, index) {
-  const key = thumbnailKey(deck, index);
-  if (!thumbnailCache.has(key)) {
-    try { thumbnailCache.set(key, toSvg(deck, index + 1, {...renderOptions(), fonts, text: 'system', trace: false})); }
-    catch { thumbnailCache.set(key, 'Preview unavailable'); }
-  }
-  return thumbnailCache.get(key);
-}
+const thumbnailHtml = (deck, index) => thumbnailCache.html(deck, index);
 const slideManagerOptions = {
   editor, getSlideIndex: () => slideIndex, setSlideIndex: value => { slideIndex = value; refresh(); },
   renderThumbnail: thumbnailHtml, onStatus: message => status(message), onError: () => {}, autoRender: false,
@@ -174,11 +167,10 @@ const slideManager = createSlideManager(element('slide-list'), {...slideManagerO
 let sorter, outline, activeView = 'slide';
 function renderNavigator(deck) {
   element('slide-count').textContent = deck.slides.length;
+  thumbnailCache.prepare(deck);
   slideManager.render();
   if (activeView === 'sorter') sorter.render();
   if (activeView === 'outline') outline.render();
-  const live = new Set(deck.slides.map((_, index) => thumbnailKey(deck, index)));
-  for (const key of thumbnailCache.keys()) if (!live.has(key)) thumbnailCache.delete(key);
 }
 // Slide, Sorter and Outline are views of the same document; the slide inspector follows whichever slide is current.
 function showView(view, focus = false) {
