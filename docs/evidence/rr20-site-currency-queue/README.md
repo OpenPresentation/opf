@@ -43,3 +43,5 @@ The qualification commands use pinned Node 24.21.0. The original replay receiptâ
 ### Integrated 0.20 source prerequisite
 
 [Candidate qualification](peer020-candidate-qualification.json) and [integrated mapped proof](peer020-integrated-mapped-proof.json) qualify the reviewed peer-contract source changes locally. Core `33222978` is pushed to draft #646; source versions remain unchanged pending genuine release preparation. [Mac CI diagnosis](core-macos-stall-diagnosis.json) preserves the preceding failed hosted attempt. [Dependency review](dependency-pr-triage-20261013T2015Z.json) records all eighteen new PR dispositions. These records do not close registry, native, hosted or site-deployment acceptance.
+
+Gallery 3 genuine registry adoption: `gallery3-registry-adoption-receipts.json` indexes the exact verification/tag and core #648/#649 merge receipts. This is upstream publication/source evidence, not 0.20 or native/site acceptance.

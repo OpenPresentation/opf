@@ -1,0 +1,13 @@
+{
+  "observedAt": "2026-10-14T00:28:32.838897+00:00",
+  "pr": "https://github.com/OpenPresentation/opf/pull/648",
+  "reviewedHead": "d97d820281c1b488009802da9b913da1ba191263",
+  "actualMerge": "bf7c1331cb7d607a2238f90a10bb2a4762f00247",
+  "reviewedTree": "4f86087c1c913a3c66bf0bf87da06dca1ac5654f",
+  "mergedTree": "4f86087c1c913a3c66bf0bf87da06dca1ac5654f",
+  "treesEqual": true,
+  "defaultSyncedClean": true,
+  "source": "canonical pr-gate merge result and fetched git objects",
+  "nativeAcceptance": false,
+  "published": false
+}

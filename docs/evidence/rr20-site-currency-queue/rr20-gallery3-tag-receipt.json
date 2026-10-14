@@ -1,0 +1,9 @@
+{
+  "at": "2026-10-14T01:00:29.720002+00:00",
+  "tag": "v3.0.0",
+  "commit": "940633a92c0c7d3339e59447d08ba6382ef12410",
+  "remoteTagVerified": true,
+  "releaseCommitGate": "/private/tmp/rr20-gallery3-release-commit-gate-01.log",
+  "publicationVerified": false,
+  "mechanism": "gallery-publish.yml trusted publishing triggered by tag"
+}

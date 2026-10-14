@@ -1,0 +1,56 @@
+{
+  "base": "c9fb6aa8ecebbc08f3dc185134fce44b491f42ab",
+  "heldDocsHead": "3e75e4e654fc024b418a552a3eada94df62966df",
+  "checkout": "/private/tmp/opf-rr20-gallery3-registry-adoption",
+  "files": {
+    ".github/candidate-gallery.json": null,
+    "docs/evidence/rr20-site-currency-queue/README.md": "d596dedc39189eaebe6fe34e8f99d8320a54a28446d76969b9d81a51b034a50f",
+    "docs/programs/release-readiness/HANDOFF.md": "caa8cb7339e085dc71da77e7f9af14ed5363112d0416e640bfbefb217cbdfd92",
+    "docs/programs/release-readiness/burndown.md": "70e4b268cdfa3c08cff34fed9d92e98d154a6ddfa70111b326d4a430b0d7806d",
+    "package.json": "be58dde4639e0b5c1c2646c8405776c02ac813e8580a863fbb81a0ed758de5f1",
+    "packages/cli/package.json": "f3ba5c23422ac004f34509bf57ef92b64d6b565a24a8c30bdc98c0d7177855c4",
+    "packages/javascript/package.json": "e537a1f3a0a5e2b24dcebfc33464f44d6b392779a3631858cdd3231878ccf1c3",
+    "packages/javascript/test/exports.test.mjs": "cbf8b1aba84f8df908374ceb9f488b1c52efa8b527470a632c2a2d0f91a8fcd7",
+    "pnpm-lock.yaml": "44eaea87857c864f7198edc70b6ae2785d8fced54cac43a9f797ab041d104c17",
+    "changes/rr-20-gallery3-registry-adoption.md": "9de6fe8f8d4d6f45174d1f2f4c2bc0db3295eef3dc8276aa61704d6196032cbd",
+    "docs/evidence/rr20-site-currency-queue/gallery3-registry-adoption-receipts.json": "67d25947b1caedb9d3f6d22107407ae29548dbb6c0285d545d4545e12076e68c",
+    "docs/evidence/rr20-site-currency-queue/rr20-core648-merge-verification.json": "188f96550f1071cb9229d7c136551125459f50888ee38411ef3e1e3ca4165c12",
+    "docs/evidence/rr20-site-currency-queue/rr20-core649-merge-verification.json": "5d76c850249d8fa65f26ad39a7e0959f6b5d6161015b2df5194f7bb64ca80eed",
+    "docs/evidence/rr20-site-currency-queue/rr20-gallery3-registry-verification-01.json": "56b42264ff139e5075d0e4c64dd3f80d0c2fd93eba8525a374385ab646a95a73",
+    "docs/evidence/rr20-site-currency-queue/rr20-gallery3-tag-receipt.json": "d48f25b4cb711dcb55ec3479388375a861b734dce940c703cf4cbe8a195bd725"
+  },
+  "logsSha256": {
+    "/private/tmp/rr20-core-gallery3-adoption-install-01.log": "83d9b9ab180992d290f1c961de5f845ffea3e62e71e07a58f205c1415d00467d",
+    "/private/tmp/rr20-core-gallery3-adoption-frozen-01.log": "59653a4e2bf30590af362bf88b094bce1647f55c43ff207ebec3fc82831c04cc",
+    "/private/tmp/rr20-core-gallery3-adoption-mapped-01.log": "3e970a5bcef17427604301002e948193ff9100094e4d27639e121a26f16157e4",
+    "/private/tmp/rr20-core-gallery3-adoption-mapped-02.log": "5c5efa454cc9f04eb2f2af615e48fa7a8f98b846575305ea3a874ea04baafaaa",
+    "/private/tmp/rr20-core-gallery3-adoption-exports-01.log": "10a040f1edce2dfcce690f60305f960cdf198e078acb9d713c6945bb20f64852"
+  },
+  "install01": 0,
+  "frozen01": "no-TTY failure preserved",
+  "frozen02": {
+    "exitCode": 0,
+    "tty": true,
+    "pnpm": "10.33.2"
+  },
+  "mapped02": {
+    "exitCode": 1,
+    "passed": [
+      "biome",
+      "10 mapped source/doc checks"
+    ],
+    "failures": [
+      "stale exports Gallery^2 oracle (corrected;focused53pass)",
+      "ordinary local core/CLI^20 peers refuse genuine published19 dependencies"
+    ]
+  },
+  "exportsFocused": {
+    "exitCode": 0,
+    "passed": 53
+  },
+  "ownVersionsUnchanged": true,
+  "historicalPublishedPlanUnchanged": true,
+  "requiredNext": "coherent source siblings via maintained ordinary preview pipeline then mapped/full",
+  "nativeAcceptance": false,
+  "deployment": false
+}

@@ -1,0 +1,10 @@
+{
+  "copiesSha256": {
+    "rr20-gallery3-registry-verification-01.json": "56b42264ff139e5075d0e4c64dd3f80d0c2fd93eba8525a374385ab646a95a73",
+    "rr20-gallery3-tag-receipt.json": "d48f25b4cb711dcb55ec3479388375a861b734dce940c703cf4cbe8a195bd725",
+    "rr20-core648-merge-verification.json": "188f96550f1071cb9229d7c136551125459f50888ee38411ef3e1e3ca4165c12",
+    "rr20-core649-merge-verification.json": "5d76c850249d8fa65f26ad39a7e0959f6b5d6161015b2df5194f7bb64ca80eed"
+  },
+  "nativeAcceptance": false,
+  "siteDeployment": false
+}
