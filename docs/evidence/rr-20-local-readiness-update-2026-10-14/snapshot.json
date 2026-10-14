@@ -579,7 +579,7 @@
   "allThreeSiteDefaultMerged": false,
   "portableCurrentEvidence": {
     "path": "docs/evidence/rr-20-sites-current-2026-10-14/deployment-qualification.json",
-    "sha256": "ea08e9261072cee7e2964fe0d85d64c7c2e185c82783f9702b057785acdc865e"
+    "sha256": "8bf6bfed285ef79a7262c1bfa4184af18da57c155aa2ce299aa6cb4c2ae60fcd"
   },
   "portableInventory": {
     "path": "docs/evidence/rr-20-sites-current-2026-10-14/inventory.json",
