@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 0.20.1 (2026-10-14)
+
+First published release of the 0.20 line: layout areas use nested arrays and require Gallery 3; lists start at 32 reference pixels when no size is authored; attributed quotes use measured content heights; structural borders use quiet neutral defaults and numeric table columns align right. Includes Node/CLI PPTX import catalog forwarding and maintained native qualification tooling. The earlier 0.20.0 preparation was never published.
+
+- RR-20: add a maintained no-op native furniture witness spanning Text and Two columns, including inherited per-layout carriers and local furniture.
+- RR-20: add a maintained identical-document list save/reopen control with no edit actions to isolate native save behavior from description formatting edits.
+- RR-20: pass registered catalogs through Node and CLI PPTX import, including signals, so native layout and template recovery uses the same default or explicit catalog set as validation. Explicit empty catalogs continue to register none.
+- RR-20: compare named native text without counting empty PowerPoint text frames on decorative shapes whose exact source identities have no text body. Unexpected frames, visible text, missing words and geometry changes still fail.
+
 ## 0.20.0 (2026-10-14)
 
 - Add a maintained native acceptance witness pairing a slide-edge image bleed with an explicitly boxed text region, using the same prepared fonts for preview and export. Native PowerPoint observation remains a separate supervisor gate.
