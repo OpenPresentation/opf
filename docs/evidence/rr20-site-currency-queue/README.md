@@ -4,6 +4,10 @@ The owner authorized **“Start final qualification; no deployment.”** These r
 
 ## Current records
 
+- [Qualification tooling integration](qualification-tooling-integration-checkpoint.json) binds reviewed gate recovery and maintained CLI preview packaging on the unchanged pending official roll #651. Native preparation covers 55 cases/311 sealed files with independent supervisor verification, without Office/native acceptance; original strict canonical peer failures remain retained.
+
+- [Post-adoption handoff checkpoint](post-adoption-handoff-checkpoint.json) binds all four actual adoption merges and the reviewed official lock-only roll `229810d2` (run `38499933920`, qualification/merge pending). The dated 02:14 inventory has 24 PRs/42 issues and eight clean synchronized defaults. Existing source qualification limits and native/0.20 registry/site gates remain open.
+
 - [RR-55 bounded controls](gallery3-adoption-rr55-controls-receipt.json) and the [source qualification index](gallery3-adoption-source-qualification-index.json) separately record metadata-only sibling successors and supervisor verification of 18 expected outcomes. Full-suite tested-head identities remain unchanged.
 
 - [Genuine Gallery 3 source-adoption qualification](gallery3-adoption-source-qualification-proof.json), [main receipt](gallery3-adoption-source-qualification-receipt.json), [remaining checks](gallery3-adoption-remaining-checks-receipt.json) and [hash index](gallery3-adoption-source-qualification-index.json) bind the exact core `88a0261c` source graph. Full source/packed and 8 browser suites (282 assertions) pass; canonical core/CLI strict local ^0.20 peer publication waits remain recorded. Root coverage is 43 original passes plus two corrected-doc passes on `b72ba303`. Later RR-55 sibling declaration edits are not covered. Native/0.20 registry/site acceptance remain open.

@@ -164,3 +164,69 @@ The new `text-font-comparison.json` retains findings and source identities and
 cannot overwrite a prior result. Run the separate text/geometry comparator as
 well: font descriptors alone do not qualify geometry, words, visual alignment or
 overall native acceptance.
+
+
+## Complete native case coverage
+
+Use the exact reviewed core/PPTX revisions and installed consumer to generate a
+fresh Windows suite. Keep the suite seal, executing code/runtime identities and
+every case disposition. The [reviewed 55-case dispatch table](../../docs/evidence/rr20-site-currency-queue/native55-dispatch-coverage.md)
+records the current fixture inventory and its original evidence scope; actual
+execution uses the freshly verified `suite.json`, not a historical seal.
+
+The full scope is 50 generic eligible cases, one dedicated `table-colors` case
+and four manual seven-slide cases. Supervised execution runs each eligible
+case once through `run-windows.ps1` with its exact case ID and a distinct new
+output directory. Start with metrics/list diagnostics, then complete the other
+six measured features, all other eligible primary controls and all 26 eligible
+chart-mode cases. Do not retry failures automatically or treat two diagnostic
+cases as the complete suite. `table-colors` uses `run-table-windows.ps1` followed
+by `native:compare:tables`, retaining its separate validation sibling.
+
+`chart-all-seven` and `chart-mode-all-seven-fallback`,
+`chart-mode-all-seven-auto`, `chart-mode-all-seven-native` exceed the generic
+three-slide limit. Keep them pending until supervised manual observation covers
+all seven slides through editing/save/reopen, with bound inputs and evidence,
+or a reviewed maintained dedicated runner is qualified. Never raise the generic
+limit, split the case silently, or count refusal as success. The additional
+`chart-mode-pareto-multi-native` exporter refusal has no PPTX; retain its explicit
+unsupported-data diagnostic and absence of partial output, not a native pass.
+
+### Actual font prerequisites
+
+Suite-pinned Roboto Setup/Check covers only its seven recorded faces. The current
+measured feature cases use those prepared faces; historical preview/export
+pairs have separately recorded font profiles. Actual sealed slide XML additionally
+requires Calibri for `chart-world-category` and all three
+`chart-mode-world-category-*` cases, Aptos Display for the other chart-mode
+cases, and Aptos for `table-colors`. Verify those host/Office faces with the
+maintained read-only `probe-fonts-windows.ps1` inventory and actual native
+observations. Availability alone does not prove glyph selection. Do not bundle,
+hotlink or install proprietary Office fonts through the Roboto setup. Preserve
+existing font-state ownership and use a fresh PowerPoint process after setup.
+
+### Comparisons and closure
+
+Run `compare-text.mjs` only for its supported no-op/set-text actions and named
+unrotated/ungrouped text. Its existing 0.02 pt allocation gate and
+whitespace-delimited words do not qualify chart/table/image semantics, actual
+baselines or raster/glyph fidelity. `furniture-inherited` includes set-alt and
+move-slide and needs separate review of its three phases, deletion, alt text,
+slide order and source/native-authoritative reimport; an unsupported comparator
+is neither a native failure nor a pass.
+
+Use `compare-list-edit.mjs` for `list-description-native-edit`; its 36 pt red edit
+proves semantic/style preservation only and exceeds the original text box.
+Record overflow/clipping separately. `feature-metrics` may opt into
+`-CaptureTextFonts`, then run both text and font comparators. Uniform COM
+name/size/bold/italic descriptors do not prove physical glyph fonts or baselines;
+other/mixed/edit cases remain outside that narrow font comparator.
+
+Retain all 17 raw source inequalities and diagnostics: dormant furniture defaults,
+chart-construct/type adaptations and the explicit non-invertible histogram
+fallback. Review authored categories, values, series/options, editable native
+objects, style/fit, all visible slide rasters, saved/reopened hashes and semantic
+imports. Historical classification does not establish fresh native visual
+acceptance. Every case needs linked evidence and a disposition; pure controls,
+serialization, generated previews or comparator existence never close native
+acceptance. Preserve the existing tolerances and supervisor evidence review.

@@ -8,9 +8,9 @@ temporary ZIP between computers as the test distribution mechanism.
 ## Prepare
 
 Use the repository's coordinated installed-package qualification to create the
-six-package consumer (`pack:ecosystem` followed by `test:packed-ecosystem`). For an
+six-package consumer (`pnpm pack:ecosystem --include-cli` followed by `pnpm test:packed-ecosystem`). For an
 unpublished Gallery candidate, use the existing candidate-gallery workflow and
-its explicit source authorization. Do not substitute registry packages for an
+its explicit source authorization. The opt-in includes the CLI using the same explicit local preview versions and dependency adaptation as the four engines; the default pack command remains four packages. Gallery stays the genuine registry dependency. Original source versions and runtime identities remain recorded; these preview tarballs are not published artifacts. Do not substitute registry packages for an
 unpublished candidate or invent package versions. The source selection and
 installation procedures remain in [ecosystem development](../../docs/ecosystem-development.md).
 

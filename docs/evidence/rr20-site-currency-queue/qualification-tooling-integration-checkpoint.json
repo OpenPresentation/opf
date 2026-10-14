@@ -1,0 +1,51 @@
+{
+  "at": "2026-10-14T02:34:58.842070+00:00",
+  "base": "229810d2b6e29cc6127f1eaa7b786484564c9cf5",
+  "officialRollPR": 651,
+  "rollStatus": "pending",
+  "integratedCommits": [
+    "00e5f0f30ff921fba17b7ed58174ba40455fbefb",
+    "96f923f21e34d6d107b0ed58db9348b3b7c0c91e",
+    "5323417c1736e9ae4125d2daf4127a87daba33d5",
+    "490f196f0dcd91e1cc6da0bf19640e55358b77ab"
+  ],
+  "evidence": [
+    {
+      "file": "partial-rollup-gate-qualification-proof.json",
+      "sha256": "e164b246ea4c0184509683cf133b8ff1c0803dba49a44f8fc8b49c7100c20068"
+    },
+    {
+      "file": "native-cli-preview-tooling-qualification-proof.json",
+      "sha256": "d1f6d3119b2ab6f368774008a5e3c8b189b62ca90a51354876b2f49010ae0c6c"
+    },
+    {
+      "file": "native-merged-suite55-preparation-proof.json",
+      "sha256": "30ad43b555007ead3e75f88b023de17b2cfaefa4f12c704c1f6dc9acfc159c58"
+    },
+    {
+      "file": "native-suite55-supervisor-review.json",
+      "sha256": "adce0fdfe6af52cceda6cd1ba4c7911e6f2ec0d11b91254389706c4c89bb823b"
+    }
+  ],
+  "scope": "Nativepreparation55cases/311sealedfiles; supervisorverifiedseal. NoOffice/WindowsTransfer/native acceptance. Originaltoolingcanonical runsretain strictlocalpeerfailure. Gatefix recoversactualmissingchecks, no syntheticgreen. Official generatedlockunchanged.",
+  "nativeAcceptance": false,
+  "registry20Acceptance": false,
+  "deployment": false,
+  "integratedChecks": {
+    "mapped": {
+      "log": "/private/tmp/rr20-qualification-tooling-mapped-01.log",
+      "sha256": "2ee2611b65995bc31f357da6dd9a9c6b29098f67ee90e62eac2559cbbe653403",
+      "exitCode": 0
+    },
+    "canonical": {
+      "log": "/private/tmp/rr20-qualification-tooling-canonical-01.log",
+      "sha256": "2c9235bb9241b97152233ec4f4598cb30a1876963cdba22af5338c0bd9677083",
+      "exitCode": 1,
+      "passed": 2302,
+      "failed": 1,
+      "skipped": 1,
+      "failure": "strict local renderer^0.20 vs actualpublished19.1 in node.test.mjs",
+      "runs": 1
+    }
+  }
+}

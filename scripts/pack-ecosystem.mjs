@@ -5,7 +5,10 @@ import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
+import {previewPackages, previewManifest} from './ecosystem-preview-plan.mjs';
 import {stageGalleryGraph,candidateArtifacts} from './candidate-gallery-pack.mjs';
+const packages = previewPackages(process.argv.slice(2));
+if (process.env.CANDIDATE_GALLERY_REF && process.argv.length > 2) throw new Error('--include-cli is for the ordinary preview graph; candidate Gallery staging already includes CLI');
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = path.join(root, "artifacts/npm");
 if(!process.env.CANDIDATE_GALLERY_REF)candidateArtifacts(path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'));
@@ -13,12 +16,7 @@ if(process.env.CANDIDATE_GALLERY_REF){
   console.log(JSON.stringify(stageGalleryGraph({coreRoot:path.resolve(root),workspace:path.resolve(root,'..'),out}),null,2));
   process.exit(0);
 }
-const packages = [
-  ["opf", "packages/javascript", "0.4.0-preview.11"],
-  ["opf-render", "../opf-render", "0.1.0-preview.11"],
-  ["opf-editor", "../opf-editor", "0.1.0-preview.11"],
-  ["opf-pptx", process.env.OPF_PPTX_ROOT ?? "../opf-pptx", "0.1.0-preview.11"],
-];
+
 const versions = Object.fromEntries(
   packages.map(([name, , version]) => [`@openpresentation/${name}`, version]),
 );
@@ -34,25 +32,12 @@ for (const [name, source, version] of packages) {
   if (!actualStage.startsWith(actualOut + path.sep) || !actualStageParent.startsWith(actualOut + path.sep)) throw new Error('Refusing a staging path outside package artifacts');
   await rm(stage, { recursive: true, force: true });
   await mkdir(stage, { recursive: true });
-  const manifest = JSON.parse(
+  const original = JSON.parse(
     await readFile(path.join(directory, "package.json"), "utf8"),
   );
-  const sourceVersion = manifest.version;
-  manifest.version = version;
-  // A peer range keeps the shape of the published manifests (`^0.18.0`): npm cannot resolve an OPTIONAL peer pinned to an
-  // exact version when that peer is absent (ERESOLVE: core's optional opf-render peer in a consumer with no renderer), which
-  // is how test-packed-furniture-absent.mjs installs core and pptx. Dependencies stay exact.
-  for (const section of [
-    "dependencies",
-    "peerDependencies",
-    "optionalDependencies",
-  ])
-    for (const dependency of Object.keys(manifest[section] ?? {}))
-      if (versions[dependency])
-        manifest[section][dependency] = section === "peerDependencies" ? `^${versions[dependency]}` : versions[dependency];
-  // The stage contains built distributables, so packing never executes a missing source build.
-  delete manifest.scripts;
-  delete manifest.devDependencies;
+  const sourceVersion = original.version;
+  // Exact dependencies and caret optional peers keep the existing preview install semantics.
+  const manifest = previewManifest(original, version, versions);
   // Preserve every declared distributable, including vendored runtime/license
   // files. Source package file lists currently contain literal relative paths.
   for (const file of new Set([...(manifest.files ?? ['dist']), 'README.md', 'LICENSE'])) {

@@ -1,0 +1,475 @@
+{
+  "exitCode": 0,
+  "suite": "/private/tmp/rr20-native-merged-suite-01",
+  "suiteSha256": "d5b4329d81aeaa0785b41814289dcc55d7b625ab7b1df91238b53408108b4ae9",
+  "cases": 55,
+  "sealedFiles": 311,
+  "allSealedHashesVerified": true,
+  "rawInequalities": [
+    {
+      "id": "furniture-flags",
+      "roundTripEqual": false,
+      "roundTripAcceptance": "review-required"
+    },
+    {
+      "id": "chart-pareto-multi",
+      "roundTripEqual": false,
+      "roundTripAcceptance": "review-required"
+    },
+    {
+      "id": "chart-world-category",
+      "roundTripEqual": false,
+      "roundTripAcceptance": "review-required"
+    },
+    {
+      "id": "chart-all-seven",
+      "roundTripEqual": false,
+      "roundTripAcceptance": "review-required"
+    },
+    {
+      "id": "chart-mode-treemap-category-fallback",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    },
+    {
+      "id": "chart-mode-histogram-single-fallback",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    },
+    {
+      "id": "chart-mode-histogram-category-fallback",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    },
+    {
+      "id": "chart-mode-pareto-multi-fallback",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    },
+    {
+      "id": "chart-mode-pareto-multi-auto",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    },
+    {
+      "id": "chart-mode-box-multi-fallback",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    },
+    {
+      "id": "chart-mode-waterfall-single-fallback",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    },
+    {
+      "id": "chart-mode-funnel-category-fallback",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    },
+    {
+      "id": "chart-mode-world-category-fallback",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    },
+    {
+      "id": "chart-mode-world-category-auto",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    },
+    {
+      "id": "chart-mode-all-seven-fallback",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    },
+    {
+      "id": "chart-mode-all-seven-auto",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    },
+    {
+      "id": "chart-mode-pareto-single-fallback",
+      "roundTripEqual": false,
+      "roundTripAcceptance": null
+    }
+  ],
+  "provenance": {
+    "packages": {
+      "consumer": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer",
+      "packages": [
+        {
+          "name": "@openpresentation/opf",
+          "version": "0.4.0-preview.11",
+          "directory": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer/node_modules/@openpresentation/opf",
+          "runtime": {
+            "sha256": "2e1109c339e9520c211283779175d70cbe85ded42a7d4d19301d37d8f2ae58de",
+            "fileCount": 99
+          }
+        },
+        {
+          "name": "@openpresentation/opf-render",
+          "version": "0.1.0-preview.11",
+          "directory": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer/node_modules/@openpresentation/opf-render",
+          "runtime": {
+            "sha256": "2bdfeda765ed4161a742a89bfd756c6bd3f021d41c29a0cfbc9fb3547259fb07",
+            "fileCount": 60
+          }
+        },
+        {
+          "name": "@openpresentation/opf-pptx",
+          "version": "0.1.0-preview.11",
+          "directory": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer/node_modules/@openpresentation/opf-pptx",
+          "runtime": {
+            "sha256": "691ea740ffc1a52ace301b9d0d9161de3a395afac5ce120418e6503c9cc5a07c",
+            "fileCount": 60
+          }
+        },
+        {
+          "name": "@openpresentation/opf-editor",
+          "version": "0.1.0-preview.11",
+          "directory": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer/node_modules/@openpresentation/opf-editor",
+          "runtime": {
+            "sha256": "ec70319e03f2c8c81776be3b54aae305ebe89420d78fcc70990dba24b7a57338",
+            "fileCount": 124
+          }
+        },
+        {
+          "name": "@openpresentation/cli",
+          "version": "0.1.0-preview.11",
+          "directory": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer/node_modules/@openpresentation/cli",
+          "runtime": {
+            "sha256": "d615112f765e89d143a07640f42b2ad52346e257d5a379bd1b6624c38aaf4ccc",
+            "fileCount": 3
+          }
+        },
+        {
+          "name": "@openpresentation/gallery",
+          "version": "3.0.0",
+          "directory": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer/node_modules/@openpresentation/gallery",
+          "runtime": {
+            "sha256": "0a794c942f8e5050e5143b1606f8847c2ad8b7bba750958eb72611231ce622ad",
+            "fileCount": 5
+          }
+        }
+      ],
+      "registryAcceptance": false
+    },
+    "suiteRepository": {
+      "directory": "/private/tmp/rr20-native-merged-preview-01/opf",
+      "revision": "5323417c1736e9ae4125d2daf4127a87daba33d5",
+      "dirty": false,
+      "files": [
+        {
+          "path": "scripts/native-acceptance/README.md",
+          "bytes": 5650,
+          "sha256": "d68dca39096d1deaa74a554aaea538fcfa695536763f43ba48d15b4e042d4904"
+        },
+        {
+          "path": "scripts/native-acceptance/WINDOWS.md",
+          "bytes": 10875,
+          "sha256": "0f6bbf55805c9ae4e2f386f080e5d0e9b15a7afcba67f1d12c9c9887f72c4f59"
+        },
+        {
+          "path": "scripts/native-acceptance/chart-modes.mjs",
+          "bytes": 5883,
+          "sha256": "87ec88503cef51095de4d0b719ad58ae545bcf956903fdf2dde214719a7fa570"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-list-edit.mjs",
+          "bytes": 8096,
+          "sha256": "52d9a4b1cb20c1d828fdab4d8a365b2849bf9e1dfd7a3e8cfb95c6d8bdc91a2a"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-list-edit.test.mjs",
+          "bytes": 4766,
+          "sha256": "b794d38dd09812d5d7530bbe4570b2d9b022cf3a3f59dda18ea784eaee489a88"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-table-colors.mjs",
+          "bytes": 4871,
+          "sha256": "3cb42089dec2479851b739d13c206fd7e7c47cee3ce9e34cc3944e2216acb245"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-table-colors.test.mjs",
+          "bytes": 4121,
+          "sha256": "a02127adc3a441ac7251f6e8bb2f1258adbc837b86ac2cfcaf4456a1fa3e4afb"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-tables.mjs",
+          "bytes": 1785,
+          "sha256": "9c69026d6021ee4c376a6346a09581c048e82b27551a7adfb766e5e503924ace"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-text-fonts.mjs",
+          "bytes": 10620,
+          "sha256": "00902d1980f264b9bb7700738a19005a7719983578aaffe1d4fd2697e0d5a756"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-text-fonts.test.mjs",
+          "bytes": 9218,
+          "sha256": "80f193b9e55e17405518904a61b2da7080218c09239de7d7c880476727cb4f00"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-text.mjs",
+          "bytes": 18613,
+          "sha256": "2bdeba6a512aa1720f4aa02e3a2d7dc0d6f318131aec7e01aa0bbbb1634e7938"
+        },
+        {
+          "path": "scripts/native-acceptance/compare-text.test.mjs",
+          "bytes": 12778,
+          "sha256": "46f67c4d0ca5e2b8308250abfe8ab7e1b6366f2221871a5cdd079ddcc39daac7"
+        },
+        {
+          "path": "scripts/native-acceptance/fixture-source.mjs",
+          "bytes": 3041,
+          "sha256": "585f5d8986e1ae8e7bdf9075d4ee86816db893af3b7099bc9943bb9c94859700"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures.mjs",
+          "bytes": 3424,
+          "sha256": "de7f280604cfa4e6c339376ba586cfc7d68b133529aa3b338ffed0aa9d52217d"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/PROVENANCE.md",
+          "bytes": 1737,
+          "sha256": "80de9ee120b76c66e70ceb71450b6d77f5d7579c93acbf5136af1ff6d27bb730"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/README.md",
+          "bytes": 1948,
+          "sha256": "67ca498c1a41ac65e1858618ce1f35f970ce4fa62a4789c67bee70ed6f1c3ff4"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/actions/furniture-inherited.json",
+          "bytes": 323,
+          "sha256": "d27a96bea4513368205453999e9a2d53a50f27c029ad2d7b67dedfaaacc5fedd"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/actions/layout-title-auto.json",
+          "bytes": 153,
+          "sha256": "d3d06764f433a91c50ca5e08fa413e51e2412760d61989220a76d58e9997bfda"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/actions/list-description-native-edit.json",
+          "bytes": 154,
+          "sha256": "9557a7ae564d0e0928eb2d3beda71976c081f00c3aa1dea13ac4c15fc05692ff"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/chartex-fallback-main.json",
+          "bytes": 24345,
+          "sha256": "a1552375ab207c6c0c23453c2be7df48a99c630b8ea9829902f4a709e41bfa4c"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/feature-inputs.json",
+          "bytes": 3009,
+          "sha256": "1a24a7310523de8d7f9563bf36f807f0c6f1bfcd4d11a6bc0a045e2d5fad85f5"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-catalog-timeline.opf.json",
+          "bytes": 4717,
+          "sha256": "8071bf3b90b87dc982014565f916b89f9d23642ce27aaa3fd68e22e3425d7efe"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-custom-roadmap.opf.json",
+          "bytes": 4529,
+          "sha256": "d029ff2cdf378610d4adc98ff226662e01dcecce1ff2f6fa192ab9e2859ebb18"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-dense-events.opf.json",
+          "bytes": 5282,
+          "sha256": "e81a5c9a5bd9e4a3367b0cde47948834014a2bce906e05dbe8b2cfb517068f13"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-list.opf.json",
+          "bytes": 2020,
+          "sha256": "b6e562fe04d5e2b7cfe40137b1fb6bac1e3b6f5090eb3ea0fc2af02498014367"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-long-labels.opf.json",
+          "bytes": 4876,
+          "sha256": "043c8d2e293cab1df7c2b7705216ec60c4d142a8b5b8a4659daa182eb710cb41"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-metrics.opf.json",
+          "bytes": 2663,
+          "sha256": "8ce76e355c54b47cf51384db03ff76f0e38fc071189480ab64ef147a0e165125"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-quote.opf.json",
+          "bytes": 1681,
+          "sha256": "8d6afbf76f8109e76355649fd7ce69a8171e84457f608c714b7329f60b574a82"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/features/feature-table.opf.json",
+          "bytes": 2526,
+          "sha256": "58335a082fadcbf58b0e5e327d7f2bc014c0d6aa6bf9a584cf06812937d0b637"
+        },
+        {
+          "path": "scripts/native-acceptance/fixtures/wide.png",
+          "bytes": 469,
+          "sha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905"
+        },
+        {
+          "path": "scripts/native-acceptance/fonts.mjs",
+          "bytes": 2898,
+          "sha256": "bdd27c9a39199f0ebc57326066783bf4f0bd18e3b1f0bb8255c25d8cac87864e"
+        },
+        {
+          "path": "scripts/native-acceptance/fonts.test.mjs",
+          "bytes": 2603,
+          "sha256": "ab6e76331ab12bdacc8ceb1e60bb12a6e5b407d697d228627a805c44c98f630f"
+        },
+        {
+          "path": "scripts/native-acceptance/generate.mjs",
+          "bytes": 7488,
+          "sha256": "0b55ab4ed71fe64883e2e16f8df9dc64233cc572b8b775fd0f5bb599e93702bc"
+        },
+        {
+          "path": "scripts/native-acceptance/generate.test.mjs",
+          "bytes": 4838,
+          "sha256": "defefa97938e76cf12c5f604b6dfb6773ae7641ab54399bb95edb924195744c9"
+        },
+        {
+          "path": "scripts/native-acceptance/identity.mjs",
+          "bytes": 3090,
+          "sha256": "7cf2fcc8951860353269f3a026e3d7a19a6251ba242f0cce1e37b118da6a3912"
+        },
+        {
+          "path": "scripts/native-acceptance/identity.test.mjs",
+          "bytes": 1224,
+          "sha256": "eeb7567191e1f0f459c773062c4b3a87a9c214670001f746c20ba15f4fcaf2c7"
+        },
+        {
+          "path": "scripts/native-acceptance/prepare.mjs",
+          "bytes": 4934,
+          "sha256": "e812c01e01b5d0e0fd69ca0bfccc58cda5f2f8655143462f32d343a8dbfac331"
+        },
+        {
+          "path": "scripts/native-acceptance/prepare.test.mjs",
+          "bytes": 682,
+          "sha256": "0865b80d275bf7d13610b439e8b303748b6902004def850a9170f4359616ce83"
+        },
+        {
+          "path": "scripts/native-acceptance/probe-fonts-windows.ps1",
+          "bytes": 536,
+          "sha256": "49855dd4a941a7d39804ce6b7254b98d3561dfdbbf3716e4e8ff4622a2a2284f"
+        },
+        {
+          "path": "scripts/native-acceptance/run-table-windows.ps1",
+          "bytes": 7725,
+          "sha256": "78b5231d9152d597794b758f4ce79792dac3dba672ba0f16c616fd97968c6c6e"
+        },
+        {
+          "path": "scripts/native-acceptance/run-windows-self-test.ps1",
+          "bytes": 11397,
+          "sha256": "c99c05266517462a945df15adee8ebd07fc6ce337e6446779db4eb8827a72cff"
+        },
+        {
+          "path": "scripts/native-acceptance/run-windows.ps1",
+          "bytes": 14306,
+          "sha256": "a01d1ff8ed85d6d0bb685fbaf4045eeab2299904d775e69709bb3b0606be2dc5"
+        },
+        {
+          "path": "scripts/native-acceptance/run-windows.test.mjs",
+          "bytes": 2363,
+          "sha256": "4174534d73cc8ff6dd2fa20949c87124c8ec91407f3ea35ca996cf41441a35f3"
+        },
+        {
+          "path": "scripts/native-acceptance/setup-fonts-windows-self-test.ps1",
+          "bytes": 8294,
+          "sha256": "172097a5e77239a08baba0a4375eba7756b3e882b24409f8f9488c04f6b202ef"
+        },
+        {
+          "path": "scripts/native-acceptance/setup-fonts-windows.ps1",
+          "bytes": 17135,
+          "sha256": "eea52129b8aee679506bac4268360472eff3e213f19026955c0faa0bacc14069"
+        },
+        {
+          "path": "scripts/native-acceptance/setup-fonts-windows.test.mjs",
+          "bytes": 3055,
+          "sha256": "6aea5ebe6824e85cce755936a9f3427124caf22232599db1cd895339de6f1005"
+        },
+        {
+          "path": "scripts/native-acceptance/table-colors.mjs",
+          "bytes": 3031,
+          "sha256": "705dcef2df00f2267703acabd38185b6e5bb6cac43eaa09ab5679fbd09d5885e"
+        },
+        {
+          "path": "scripts/native-acceptance/windows-powershell-env.mjs",
+          "bytes": 495,
+          "sha256": "80ff3cb3936d2b928745152fc8c602e7014c85ed85a1b8c0d5057fecf13a93b6"
+        }
+      ]
+    },
+    "workerRepository": {
+      "directory": "/private/tmp/rr20-native-merged-preview-01/opf-pptx",
+      "revision": "147346ce9174d48576963238852ff4e4c69ba48d",
+      "dirty": false,
+      "files": [
+        {
+          "path": "test/native-process.ps1",
+          "bytes": 2341,
+          "sha256": "b9444de1367fe3a3aab654f4787b5aa9a1304dc38360159a45d1f9f420adf69c"
+        },
+        {
+          "path": "test/native-process-check.ps1",
+          "bytes": 2333,
+          "sha256": "50ae41cf771dab0e0c9245f3627abc4586451df8414bdc986df882d3ceda5027"
+        },
+        {
+          "path": "test/native-furniture-control.ps1",
+          "bytes": 33713,
+          "sha256": "33fedbf0b9847004a5f5984e3e09e3103dffe8972b1ca193cfdd63ab79da9a43"
+        },
+        {
+          "path": "test/native-furniture-harness-check.ps1",
+          "bytes": 15557,
+          "sha256": "a33983639b1b777a7975544c7c9daa578bffafaaec54f59ccb8947b6c5bf8817"
+        },
+        {
+          "path": "test/native-picture-control.ps1",
+          "bytes": 21632,
+          "sha256": "e3ae357f0e2cd45a72c83a0ac545d42d8698d84d81498a8bffd9dba8c761017a"
+        },
+        {
+          "path": "test/native-picture-harness-check.ps1",
+          "bytes": 2726,
+          "sha256": "0b88466e9ccd6bfb6a62f7f9fa52b987a11743047d495735fc2f5c256ed503d1"
+        },
+        {
+          "path": "test/native-table-colors.ps1",
+          "bytes": 5753,
+          "sha256": "04ae8767029de0e6ed4017daf3fa8420fd109264aa6300abb978dc95f5b0a81a"
+        }
+      ]
+    },
+    "node": "v24.21.0",
+    "nativeAcceptance": false,
+    "registryAcceptance": false
+  },
+  "prepareCommand": [
+    "pnpm",
+    "native:prepare",
+    "--consumer",
+    "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer",
+    "--pptx-repo",
+    "/private/tmp/rr20-native-merged-preview-01/opf-pptx",
+    "--output",
+    "/private/tmp/rr20-native-merged-suite-01"
+  ],
+  "prepareLog": "/private/tmp/rr20-native-merged-suite-01-prepare.log",
+  "prepareLogSha256": "d2bd8d360875567758a7cd4d1377ffd9941f1bff54510db2bfe25a6afd362c6e",
+  "nativeAcceptance": false,
+  "registry20Acceptance": false,
+  "WindowsTransfer": false,
+  "canonicalFull": {
+    "exitCode": 1,
+    "log": "/private/tmp/rr20-native-cli-preview-canonical-full-01.log",
+    "sha256": "841db7b08cbaff1a6711824c0b29b6f34d25319e109fddc09bb231fa689101a9",
+    "scope": "ordinary core peer^20 refuses own19 renderer; not native or new tooling failure"
+  },
+  "originalProof": {
+    "path": "/private/tmp/rr20-native-merged-suite-01-proof.json",
+    "sha256": "c06a149fb4a1277ad8049205cff580c736ecd0129b0acbec38c9894474f23af1",
+    "compression": "Per-package runtimefilelists omitted; completeinventory bound by originalproof digest and runtime aggregate hashes. No generatedsuitepayload copied."
+  }
+}

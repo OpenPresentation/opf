@@ -1,0 +1,351 @@
+{
+  "status": "committed-tooling-mapped-consumer-native-prepare-pass-canonical-peer-boundary-fail",
+  "sourceRefs": {
+    "opf": "07ccce5e6579b3e43cfb8ed3acf7498593dd51ff",
+    "opf-render": "d96c70ad86deeb69a6f4a18df78e659875b733a4",
+    "opf-pptx": "147346ce9174d48576963238852ff4e4c69ba48d",
+    "opf-editor": "7474315ee10d8ecce5d6bdb9cb4b5127f9cd38b1"
+  },
+  "toolingSource": {
+    "base": "07ccce5e6579b3e43cfb8ed3acf7498593dd51ff",
+    "files": {
+      "changes/rr-20-native-cli-preview.md": "908da4072d69edb095ee3af5b86a0fd4674829249abec699f0e7adf67b7c60bb",
+      "package.json": "30af3da626060bcbca02290ba397a2a322407126aaf1699ce1a92565a896307e",
+      "scripts/checks.json": "cff648fb1c6e3426a7c5e23820a579359bbba23fffe0a3dafeda71ba9d7d88a0",
+      "scripts/ecosystem-preview-plan.mjs": "c18ccc2fcff829d94ee244c356e8d594ee4ece8cd64d41444b8e5be341669b6f",
+      "scripts/ecosystem-preview-plan.test.mjs": "1c38115ed2026ee1a1c37f8ef4ed262c192971b5665b7c62e17a3079464f8abc",
+      "scripts/native-acceptance/README.md": "d68dca39096d1deaa74a554aaea538fcfa695536763f43ba48d15b4e042d4904",
+      "scripts/pack-ecosystem.mjs": "e302499d0e4a1418fe1acfa405068c9926c1cd990149f4270fd1b99b76976694"
+    },
+    "commit": "5323417c1736e9ae4125d2daf4127a87daba33d5"
+  },
+  "recipe": "/private/tmp/rr20-native-cli-preview-checks.py",
+  "recipeSha256": "7cc1abfcd701adf849151f8060b3be17478180d1fa827bba8c095e3cd0306657",
+  "commands": [
+    {
+      "label": "core-frozen-install",
+      "command": [
+        "pnpm",
+        "install",
+        "--frozen-lockfile"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf",
+      "exitCode": 0,
+      "seconds": 0.28,
+      "log": "/private/tmp/rr20-native-merged-preview-01/core-frozen-install.log",
+      "sha256": "56b560249d28c9b5624a8a607a09d8c428651a2c447982281ddea4d3e7e7e045"
+    },
+    {
+      "label": "opf-render-install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf-render",
+      "exitCode": 0,
+      "seconds": 2.28,
+      "log": "/private/tmp/rr20-native-merged-preview-01/opf-render-install.log",
+      "sha256": "6122e2151b853a7c0e6bd79a347c76df47225f18fdceb9161f173912103c5174"
+    },
+    {
+      "label": "opf-pptx-install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf-pptx",
+      "exitCode": 0,
+      "seconds": 1.06,
+      "log": "/private/tmp/rr20-native-merged-preview-01/opf-pptx-install.log",
+      "sha256": "b319795743e374fdb177a1525d37ad1fa7ef1cd7ad919815e677183ba2b50993"
+    },
+    {
+      "label": "opf-editor-install",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf-editor",
+      "exitCode": 0,
+      "seconds": 2.39,
+      "log": "/private/tmp/rr20-native-merged-preview-01/opf-editor-install.log",
+      "sha256": "76694478a059908b2527ad70dac70932cbad37062b93988b30fdaea90c9ecdc9"
+    },
+    {
+      "label": "mapped",
+      "command": [
+        "pnpm",
+        "check:changed",
+        "--base",
+        "HEAD"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf",
+      "exitCode": 0,
+      "seconds": 2.28,
+      "log": "/private/tmp/rr20-native-merged-preview-01/mapped.log",
+      "sha256": "a50a984fd97f64f1dac28d9f410ca76eb4bc5cd598b726d4ecdd74e17915b09a"
+    },
+    {
+      "label": "core-build",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf",
+      "exitCode": 0,
+      "seconds": 6.42,
+      "log": "/private/tmp/rr20-native-merged-preview-01/core-build.log",
+      "sha256": "6f48b73831fd5da72e886308be7974e8578f35a1bb4bf7fea4df92feced62a7b"
+    },
+    {
+      "label": "link-ecosystem",
+      "command": [
+        "node",
+        "scripts/link-ecosystem.mjs",
+        "--packages-only"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf",
+      "exitCode": 0,
+      "seconds": 0.42,
+      "log": "/private/tmp/rr20-native-merged-preview-01/link-ecosystem.log",
+      "sha256": "a1e4e6b2684e54da5e14b60b593b18f1f91db792b541ca2eb6ac4546ed8481a2"
+    },
+    {
+      "label": "materialize-gallery",
+      "command": [
+        "node",
+        "scripts/materialize-gallery-catalog.mjs"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf",
+      "exitCode": 0,
+      "seconds": 0.08,
+      "log": "/private/tmp/rr20-native-merged-preview-01/materialize-gallery.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "opf-render-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf-render",
+      "exitCode": 0,
+      "seconds": 0.1,
+      "log": "/private/tmp/rr20-native-merged-preview-01/opf-render-build.log",
+      "sha256": "d7252c7dabc2265d1a8a3b5c7aba69f6fdce817ae9fd93f8cefd9e9ace62f188"
+    },
+    {
+      "label": "opf-pptx-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf-pptx",
+      "exitCode": 0,
+      "seconds": 0.1,
+      "log": "/private/tmp/rr20-native-merged-preview-01/opf-pptx-build.log",
+      "sha256": "4e535785d052430268bf652f5179974e8d1c9a96bac342a801d6d41ef0e0237e"
+    },
+    {
+      "label": "opf-editor-build",
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf-editor",
+      "exitCode": 0,
+      "seconds": 0.1,
+      "log": "/private/tmp/rr20-native-merged-preview-01/opf-editor-build.log",
+      "sha256": "bc8a7c8637f2bb109da553bd763700fdde489475c9b7729efe10ac27187c2171"
+    },
+    {
+      "label": "pack-default",
+      "command": [
+        "pnpm",
+        "pack:ecosystem"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf",
+      "exitCode": 0,
+      "seconds": 2.02,
+      "log": "/private/tmp/rr20-native-merged-preview-01/pack-default.log",
+      "sha256": "66388c1d2c5ee95264a3741d4d35afa24e432210df3ad95d7945634f1e4e544b"
+    },
+    {
+      "label": "pack-include-cli",
+      "command": [
+        "pnpm",
+        "pack:ecosystem",
+        "--include-cli"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf",
+      "exitCode": 0,
+      "seconds": 2.12,
+      "log": "/private/tmp/rr20-native-merged-preview-01/pack-include-cli.log",
+      "sha256": "6c1fc34b6f265407a7dc672d1ebeb709919b09f10a756131d9f76d95c5ce1e83"
+    },
+    {
+      "label": "packed-six-consumer",
+      "command": [
+        "pnpm",
+        "test:packed-ecosystem"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf",
+      "exitCode": 0,
+      "seconds": 44.92,
+      "log": "/private/tmp/rr20-native-merged-preview-01/packed-six-consumer.log",
+      "sha256": "685df58ce8bd327726d31e63111968dbb9304b9c54fd380bf2b5e8c6e5a704f5"
+    },
+    {
+      "label": "six-installed-identity",
+      "command": [
+        "node",
+        "--input-type=module",
+        "-e",
+        "import {installedIdentity} from './scripts/native-acceptance/identity.mjs'; console.log(JSON.stringify(installedIdentity('artifacts/npm/consumer'),null,2));"
+      ],
+      "cwd": "/private/tmp/rr20-native-merged-preview-01/opf",
+      "exitCode": 0,
+      "seconds": 0.05,
+      "log": "/private/tmp/rr20-native-merged-preview-01/six-installed-identity.log",
+      "sha256": "56d2e3303af13192c94080470235929e5c2f39105a4801e79492676239117783"
+    }
+  ],
+  "defaultFourArtifactsExactInIncludeCli": true,
+  "previewArtifacts": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.4.0-preview.11",
+      "sourceVersion": "0.19.0",
+      "file": "openpresentation-opf-0.4.0-preview.11.tgz",
+      "sha256": "b0828da842040bb8d9858507362d0080e0e9756ed966a368e82daef5a3ec4f64",
+      "bytes": 3332175
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.1.0-preview.11",
+      "sourceVersion": "0.19.1",
+      "file": "openpresentation-opf-render-0.1.0-preview.11.tgz",
+      "sha256": "87a5c630dbd017510d46e71e076c70f4f6905c4813aca26370b1bd363a540d74",
+      "bytes": 13073821
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.1.0-preview.11",
+      "sourceVersion": "0.19.0",
+      "file": "openpresentation-opf-editor-0.1.0-preview.11.tgz",
+      "sha256": "218d51222ef4e5a84b53be85c95e505159b139bfceb4933826cd70d1cc2d3cc8",
+      "bytes": 405094
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.1.0-preview.11",
+      "sourceVersion": "0.19.0",
+      "file": "openpresentation-opf-pptx-0.1.0-preview.11.tgz",
+      "sha256": "cb9bc253026286bfb387d84d06dbb0c11023735e152df8ee4057f871ab69db1d",
+      "bytes": 725521
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.1.0-preview.11",
+      "sourceVersion": "0.19.0",
+      "file": "openpresentation-cli-0.1.0-preview.11.tgz",
+      "sha256": "8777457aba4a762c2437da2b3bc910c6a0b0bfed4acef3d4ebf1613cad68a857",
+      "bytes": 198800
+    }
+  ],
+  "installedPackages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.4.0-preview.11",
+      "directory": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer/node_modules/@openpresentation/opf",
+      "runtime": {
+        "sha256": "2e1109c339e9520c211283779175d70cbe85ded42a7d4d19301d37d8f2ae58de",
+        "fileCount": 99
+      }
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.1.0-preview.11",
+      "directory": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer/node_modules/@openpresentation/opf-render",
+      "runtime": {
+        "sha256": "2bdfeda765ed4161a742a89bfd756c6bd3f021d41c29a0cfbc9fb3547259fb07",
+        "fileCount": 60
+      }
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.1.0-preview.11",
+      "directory": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer/node_modules/@openpresentation/opf-pptx",
+      "runtime": {
+        "sha256": "691ea740ffc1a52ace301b9d0d9161de3a395afac5ce120418e6503c9cc5a07c",
+        "fileCount": 60
+      }
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.1.0-preview.11",
+      "directory": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer/node_modules/@openpresentation/opf-editor",
+      "runtime": {
+        "sha256": "ec70319e03f2c8c81776be3b54aae305ebe89420d78fcc70990dba24b7a57338",
+        "fileCount": 124
+      }
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.1.0-preview.11",
+      "directory": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer/node_modules/@openpresentation/cli",
+      "runtime": {
+        "sha256": "d615112f765e89d143a07640f42b2ad52346e257d5a379bd1b6624c38aaf4ccc",
+        "fileCount": 3
+      }
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "directory": "/private/tmp/rr20-native-merged-preview-01/opf/artifacts/npm/consumer/node_modules/@openpresentation/gallery",
+      "runtime": {
+        "sha256": "0a794c942f8e5050e5143b1606f8847c2ad8b7bba750958eb72611231ce622ad",
+        "fileCount": 5
+      }
+    }
+  ],
+  "ordinaryReleaseContractsUnchanged": true,
+  "candidateGalleryOverride": false,
+  "nativeAcceptance": false,
+  "registry20Acceptance": false,
+  "nativeGenerationExecuted": true,
+  "originalQualifiedConsumerUntouched": true,
+  "finalMapped": {
+    "exitCode": 0,
+    "log": "/private/tmp/rr20-native-cli-preview-final-mapped.log",
+    "sha256": "7947b7335552e5138d44b72853e7611f7c8be8e09188df933cee3ad49d4a674e"
+  },
+  "canonicalFull": {
+    "exitCode": 1,
+    "session": 24313,
+    "log": "/private/tmp/rr20-native-cli-preview-canonical-full-01.log",
+    "sha256": "841db7b08cbaff1a6711824c0b29b6f34d25319e109fddc09bb231fa689101a9",
+    "tests": 2304,
+    "passed": 2303,
+    "failed": 1,
+    "firstFailure": "test/node.test.mjs: sourcecore^20 renderer requirement refuses source-own-version19.1; strict ordinary local RR55 publication boundary",
+    "laterCLIAndRootChecks": "not reached; no completion claim"
+  },
+  "nativeSuiteProof": "/private/tmp/rr20-native-merged-suite-01-proof.json",
+  "nativeSuiteProofSha256": "c06a149fb4a1277ad8049205cff580c736ecd0129b0acbec38c9894474f23af1",
+  "installedCliBin": {
+    "exitCode": 0,
+    "log": "/private/tmp/rr20-native-cli-preview-installed-bin.log",
+    "sha256": "449aff3b0730aa2dc8d3f28ad3eae9c159046ac572f616f4460f33ec70eba963",
+    "observed": "source bundled CLI0.19.0, shared core0.4-preview; installed CLI manifest0.1-preview remains explicit staged identity"
+  },
+  "sourceStatus": "",
+  "originalProof": {
+    "path": "/private/tmp/rr20-native-cli-preview-tooling-proof.json",
+    "sha256": "6c37bee39d6f0c12a8712b8dac1129596b4b74fe07c79796e31d76508f8d7b37",
+    "compression": "Per-package runtimefilelists omitted; completeinventory bound by originalproof digest and runtime aggregate hashes. No generatedsuitepayload copied."
+  }
+}
