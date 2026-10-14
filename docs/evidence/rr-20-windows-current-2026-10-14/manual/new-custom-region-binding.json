@@ -1,0 +1,40 @@
+{
+  "binding": {
+    "regions": [
+      {
+        "name": "first",
+        "blocks": [
+          {
+            "path": "slides.3.blocks.0",
+            "kind": "text",
+            "block": 0
+          }
+        ],
+        "overflow": []
+      },
+      {
+        "name": "second",
+        "blocks": [],
+        "overflow": []
+      }
+    ],
+    "below": [],
+    "diagnostics": []
+  },
+  "shapes": [
+    {
+      "name": "Text Placeholder 1",
+      "ph": {
+        "@_type": "body",
+        "@_idx": "300"
+      }
+    },
+    {
+      "name": "Picture Placeholder 2",
+      "ph": {
+        "@_type": "pic",
+        "@_idx": "500"
+      }
+    }
+  ]
+}

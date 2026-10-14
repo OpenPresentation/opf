@@ -1,0 +1,108 @@
+{
+  "design": {
+    "background": "light1",
+    "fontScheme": "roboto"
+  },
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Layout fixture metrics",
+  "slides": [
+    {
+      "layout": "metrics",
+      "title": "Pilot outcomes in three measures",
+      "subtitle": "Illustrative example • fictional data",
+      "blocks": [
+        {
+          "region": "metrics",
+          "metric": {
+            "value": 52,
+            "label": "Trial participants",
+            "description": "Illustrative six-week pilot"
+          }
+        },
+        {
+          "region": "metrics",
+          "metric": {
+            "value": "84%",
+            "label": "Task completion",
+            "description": "Up from 68% at baseline"
+          }
+        },
+        {
+          "region": "metrics",
+          "metric": {
+            "value": "6.2",
+            "unit": "min",
+            "label": "Median task time",
+            "description": "Down from 9.4 min"
+          }
+        },
+        {
+          "region": "note",
+          "text": "Test with two teams for six weeks. Measure task completion and time before deciding what to scale."
+        }
+      ],
+      "design": {
+        "titleAlignment": "center"
+      }
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "layouts": {
+        "metrics": {
+          "name": "Metrics",
+          "summary": "One to six headline numbers, with an optional note.",
+          "tags": [
+            "Numbers"
+          ],
+          "design": {
+            "contentAlignment": "center"
+          },
+          "areas": [
+            [
+              "title"
+            ],
+            [
+              "metrics"
+            ],
+            [
+              "note"
+            ]
+          ],
+          "columns": [
+            1
+          ],
+          "rows": [
+            "auto",
+            1,
+            "auto"
+          ],
+          "regions": {
+            "metrics": {
+              "accepts": [
+                "metric",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "grid",
+              "anchor": "middle"
+            },
+            "note": {
+              "accepts": [
+                "text",
+                "list"
+              ],
+              "role": "supporting",
+              "flow": "none"
+            }
+          },
+          "description": "Highlight a small set of important numbers. Give each number a label and the context needed to interpret it.",
+          "preview": {
+            "vectorSrc": "https://www.pptx.gallery/layout-previews/metrics.svg"
+          }
+        }
+      }
+    }
+  }
+}

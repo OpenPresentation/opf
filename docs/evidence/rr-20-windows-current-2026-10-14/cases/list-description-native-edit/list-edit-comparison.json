@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "case": "list-description-native-edit",
+  "sourceRoundTripEqual": true,
+  "editedItems": [
+    {
+      "text": "With a description",
+      "description": [
+        {
+          "text": "about it",
+          "fontSize": 36,
+          "color": "#FF0000"
+        }
+      ]
+    },
+    "Unchanged second entry"
+  ],
+  "nativeStyle": {
+    "shape": "OPF list slides.0.items line 1",
+    "text": "about it",
+    "fontSize": 36,
+    "color": "#FF0000",
+    "runs": 1
+  },
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "visualFitAcceptance": false,
+  "scope": "Exact source and saved/reopened import semantics, sealed runtime/actions/input/report identities, immediate COM style receipt and independent native XML. Reopened archive hash equals saved archive; XML proves serialized run semantics, not glyph selection.36pt exceeds original description box height; no visual fit, raster, baseline or overall native acceptance.",
+  "manifestSha256": "f16e73ad64a9ba2ab02e3241347c29e881fc6daa4956697ec4024f66fe12cf1b",
+  "reportSha256": "873fc2c1eaf3878e553e28bcd06409969a0dfa78f952387e47682c408422bcba",
+  "runnerSha256": "1f6c7047b699890e017456929e52d7b6fe597cb46b0b42047755bf94c3f27e90",
+  "inputSha256": "710bf16de927489bd12fec1e965b564bfa35c9137784e07d48e226a8aa6320c8",
+  "savedSha256": "9093abd1ad3723114e1b3104a97b7c3b28f8788b556699f00e95f9b64eb48507",
+  "actionPlanSha256": "9557a7ae564d0e0928eb2d3beda71976c081f00c3aa1dea13ac4c15fc05692ff",
+  "evidenceBinderSha256": "2bdeba6a512aa1720f4aa02e3a2d7dc0d6f318131aec7e01aa0bbbb1634e7938",
+  "node": "v24.21.0",
+  "sourceSha256": "062a48a4863cba489a7b8bba1a321a78f3a4f450d502c7551a07e2e058b89b85",
+  "comparatorSha256": "52d9a4b1cb20c1d828fdab4d8a365b2849bf9e1dfd7a3e8cfb95c6d8bdc91a2a"
+}

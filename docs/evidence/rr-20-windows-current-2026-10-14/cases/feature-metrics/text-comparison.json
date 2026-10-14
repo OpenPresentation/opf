@@ -1,0 +1,499 @@
+{
+  "passed": true,
+  "tolerancePoints": 0.02,
+  "slides": 1,
+  "slideDimensionsPoints": [
+    {
+      "width": 960,
+      "height": 540
+    }
+  ],
+  "textShapes": 13,
+  "observations": [
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF heading slides.0.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF heading slides.0.subtitle line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF metric 1 value line 1",
+      "differences": {
+        "left": 0,
+        "top": -0.000004952755915610396,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF metric 1 label line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004047244090088498,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF metric 1 description line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.00000403937008286448,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF metric 4 value line 1",
+      "differences": {
+        "left": 0,
+        "top": -0.000004952755915610396,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF metric 4 label line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004047244090088498,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF metric 4 description line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.00000403937008286448,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF metric 7 value line 1",
+      "differences": {
+        "left": 0.000012598425200849306,
+        "top": -0.000004952755915610396,
+        "width": 0.000002913385827696402,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF metric 7 unit line 1",
+      "differences": {
+        "left": 0.0000055118109685281524,
+        "top": -0.000004952755887188687,
+        "width": -2.1023621954441296e-7,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF metric 7 label line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004047244090088498,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF metric 7 description line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000008677165396875353,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF text slides.0.blocks.3.text line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.00000962992123731965,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF heading slides.0.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF heading slides.0.subtitle line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF metric 1 value line 1",
+      "differences": {
+        "left": 0,
+        "top": -0.000004952755915610396,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF metric 1 label line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004047244090088498,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF metric 1 description line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.00000403937008286448,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF metric 4 value line 1",
+      "differences": {
+        "left": 0,
+        "top": -0.000004952755915610396,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF metric 4 label line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004047244090088498,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF metric 4 description line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.00000403937008286448,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF metric 7 value line 1",
+      "differences": {
+        "left": 0.000012598425200849306,
+        "top": -0.000004952755915610396,
+        "width": 0.000002913385827696402,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF metric 7 unit line 1",
+      "differences": {
+        "left": 0.0000055118109685281524,
+        "top": -0.000004952755887188687,
+        "width": -2.1023621954441296e-7,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF metric 7 label line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004047244090088498,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF metric 7 description line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000008677165396875353,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF text slides.0.blocks.3.text line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.00000962992123731965,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF heading slides.0.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF heading slides.0.subtitle line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF metric 1 value line 1",
+      "differences": {
+        "left": 0,
+        "top": -0.000004952755915610396,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF metric 1 label line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004047244090088498,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF metric 1 description line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.00000403937008286448,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF metric 4 value line 1",
+      "differences": {
+        "left": 0,
+        "top": -0.000004952755915610396,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF metric 4 label line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004047244090088498,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF metric 4 description line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.00000403937008286448,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF metric 7 value line 1",
+      "differences": {
+        "left": 0.000012598425200849306,
+        "top": -0.000004952755915610396,
+        "width": 0.000002913385827696402,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF metric 7 unit line 1",
+      "differences": {
+        "left": 0.0000055118109685281524,
+        "top": -0.000004952755887188687,
+        "width": -2.1023621954441296e-7,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF metric 7 label line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000004047244090088498,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF metric 7 description line 1",
+      "differences": {
+        "left": 0,
+        "top": 0.000008677165396875353,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF text slides.0.blocks.3.text line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.00000962992123731965,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    }
+  ],
+  "findings": [],
+  "unavailable": {
+    "fontSelection": "Existing worker does not record character font/style descriptors; host registration is not glyph font proof.",
+    "baseline": "COM shape geometry does not measure a typographic baseline.",
+    "pixelEquivalence": "Not compared; PNG ink differences are separate observations."
+  },
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "textComparison": "Whitespace-delimited words only; exact spacing, tabs, line breaks and typography are not compared.",
+  "coordinateSystem": "PPTX transform EMUs divided by 12700 give points; native COM boxes are points. No slide aspect ratio or raster resolution is assumed.",
+  "scope": "Named editable text words and exported allocation boxes versus native COM, including edited/reopened stability. No font, baseline, glyph-outline or pixel-equivalence acceptance.",
+  "case": "feature-metrics",
+  "manifestSha256": "4e1d82b2a7546ccab71913dcaab23fcae6b3f12e9c3afd249e5a6b19e32faf80",
+  "reportSha256": "3d71789aa9e2d3edb73b316de6731468f1d33f99df311f042ebaf523b7493f45",
+  "runnerSha256": "4de825b651cf7d69cd63b82671367f4d4309143102808f9413145926411198e7",
+  "comparatorSha256": "2bdeba6a512aa1720f4aa02e3a2d7dc0d6f318131aec7e01aa0bbbb1634e7938",
+  "node": "v24.21.0"
+}

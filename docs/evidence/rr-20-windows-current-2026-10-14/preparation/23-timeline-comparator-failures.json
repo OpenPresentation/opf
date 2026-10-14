@@ -1,0 +1,22 @@
+{
+  "tooling": "6eea890985ba918beba0f28776cebf8d15925912",
+  "comparator": "compare-text.mjs",
+  "roadmap": {
+    "exitCode": 1,
+    "actualFrames": 15,
+    "expectedFrames": 11,
+    "assertion": "original: named text shape count",
+    "extraEmptyFrames": 4
+  },
+  "denseEvents": {
+    "exitCode": 1,
+    "actualFrames": 28,
+    "expectedFrames": 19,
+    "assertion": "original: named text shape count",
+    "extraEmptyFrames": 9,
+    "combinedShellExitCode": 0,
+    "combinedShellExitIsComparatorPass": false
+  },
+  "acceptance": false,
+  "status": "awaiting reviewed offline comparator correction"
+}

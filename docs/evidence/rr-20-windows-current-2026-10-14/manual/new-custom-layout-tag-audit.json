@@ -1,0 +1,1388 @@
+{
+  "original": {
+    "layoutPart": "ppt/slideLayouts/slideLayout31.xml",
+    "layout": {
+      "?xml": {
+        "@_version": "1.0",
+        "@_encoding": "UTF-8",
+        "@_standalone": "yes"
+      },
+      "p:sldLayout": {
+        "p:cSld": {
+          "p:spTree": {
+            "p:nvGrpSpPr": {
+              "p:cNvPr": {
+                "@_id": "1",
+                "@_name": ""
+              },
+              "p:cNvGrpSpPr": "",
+              "p:nvPr": ""
+            },
+            "p:grpSpPr": {
+              "a:xfrm": {
+                "a:off": {
+                  "@_x": "0",
+                  "@_y": "0"
+                },
+                "a:ext": {
+                  "@_cx": "0",
+                  "@_cy": "0"
+                },
+                "a:chOff": {
+                  "@_x": "0",
+                  "@_y": "0"
+                },
+                "a:chExt": {
+                  "@_cx": "0",
+                  "@_cy": "0"
+                }
+              }
+            },
+            "p:sp": [
+              {
+                "p:nvSpPr": {
+                  "p:cNvPr": {
+                    "@_id": "5",
+                    "@_name": "first"
+                  },
+                  "p:cNvSpPr": {
+                    "a:spLocks": {
+                      "@_noGrp": "1"
+                    }
+                  },
+                  "p:nvPr": {
+                    "p:ph": {
+                      "@_type": "body",
+                      "@_idx": "300"
+                    }
+                  }
+                },
+                "p:spPr": {
+                  "a:xfrm": {
+                    "a:off": {
+                      "@_x": "548640",
+                      "@_y": "548640"
+                    },
+                    "a:ext": {
+                      "@_cx": "5433060",
+                      "@_cy": "5760720"
+                    }
+                  }
+                },
+                "p:txBody": {
+                  "a:bodyPr": "",
+                  "a:lstStyle": {
+                    "a:lvl1pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl2pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl3pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl4pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl5pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl6pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl7pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl8pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl9pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    }
+                  },
+                  "a:p": {
+                    "a:r": {
+                      "a:rPr": {
+                        "@_lang": "en-US"
+                      },
+                      "a:t": "Click to edit Master text styles"
+                    }
+                  }
+                }
+              },
+              {
+                "p:nvSpPr": {
+                  "p:cNvPr": {
+                    "@_id": "6",
+                    "@_name": "second"
+                  },
+                  "p:cNvSpPr": {
+                    "a:spLocks": {
+                      "@_noGrp": "1"
+                    }
+                  },
+                  "p:nvPr": {
+                    "p:ph": {
+                      "@_type": "pic",
+                      "@_idx": "500"
+                    }
+                  }
+                },
+                "p:spPr": {
+                  "a:xfrm": {
+                    "a:off": {
+                      "@_x": "6210300",
+                      "@_y": "548640"
+                    },
+                    "a:ext": {
+                      "@_cx": "5433060",
+                      "@_cy": "5760720"
+                    }
+                  }
+                },
+                "p:txBody": {
+                  "a:bodyPr": "",
+                  "a:lstStyle": {
+                    "a:lvl1pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl2pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl3pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl4pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl5pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl6pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl7pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl8pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl9pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    }
+                  },
+                  "a:p": {
+                    "a:endParaRPr": {
+                      "@_lang": "en-US"
+                    }
+                  }
+                }
+              },
+              {
+                "p:nvSpPr": {
+                  "p:cNvPr": {
+                    "@_id": "2",
+                    "@_name": "Date Placeholder 1"
+                  },
+                  "p:cNvSpPr": {
+                    "a:spLocks": {
+                      "@_noGrp": "1"
+                    }
+                  },
+                  "p:nvPr": {
+                    "p:ph": {
+                      "@_type": "dt",
+                      "@_sz": "half",
+                      "@_idx": "10"
+                    }
+                  }
+                },
+                "p:spPr": "",
+                "p:txBody": {
+                  "a:bodyPr": "",
+                  "a:lstStyle": "",
+                  "a:p": {
+                    "a:fld": {
+                      "a:rPr": {
+                        "@_lang": "en-US"
+                      },
+                      "a:t": "10/10/2026",
+                      "@_id": "{0F0F2701-0002-4000-8000-000000000001}",
+                      "@_type": "datetimeFigureOut"
+                    },
+                    "a:endParaRPr": {
+                      "@_lang": "en-US"
+                    }
+                  }
+                }
+              },
+              {
+                "p:nvSpPr": {
+                  "p:cNvPr": {
+                    "@_id": "3",
+                    "@_name": "Footer Placeholder 2"
+                  },
+                  "p:cNvSpPr": {
+                    "a:spLocks": {
+                      "@_noGrp": "1"
+                    }
+                  },
+                  "p:nvPr": {
+                    "p:ph": {
+                      "@_type": "ftr",
+                      "@_sz": "quarter",
+                      "@_idx": "11"
+                    }
+                  }
+                },
+                "p:spPr": "",
+                "p:txBody": {
+                  "a:bodyPr": "",
+                  "a:lstStyle": "",
+                  "a:p": {
+                    "a:endParaRPr": {
+                      "@_lang": "en-US"
+                    }
+                  }
+                }
+              },
+              {
+                "p:nvSpPr": {
+                  "p:cNvPr": {
+                    "@_id": "4",
+                    "@_name": "Slide Number Placeholder 3"
+                  },
+                  "p:cNvSpPr": {
+                    "a:spLocks": {
+                      "@_noGrp": "1"
+                    }
+                  },
+                  "p:nvPr": {
+                    "p:ph": {
+                      "@_type": "sldNum",
+                      "@_sz": "quarter",
+                      "@_idx": "12"
+                    }
+                  }
+                },
+                "p:spPr": "",
+                "p:txBody": {
+                  "a:bodyPr": "",
+                  "a:lstStyle": "",
+                  "a:p": {
+                    "a:fld": {
+                      "a:rPr": {
+                        "@_lang": "en-US"
+                      },
+                      "a:t": "‹#›",
+                      "@_id": "{0F0F2701-0002-4000-8000-000000000003}",
+                      "@_type": "slidenum"
+                    },
+                    "a:endParaRPr": {
+                      "@_lang": "en-US"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "p:custDataLst": {
+            "p:tags": {
+              "@_r:id": "rId2"
+            }
+          },
+          "@_name": "Named regions"
+        },
+        "p:clrMapOvr": {
+          "a:masterClrMapping": ""
+        },
+        "p:hf": {
+          "@_sldNum": "0",
+          "@_hdr": "0",
+          "@_ftr": "0",
+          "@_dt": "0"
+        },
+        "@_xmlns:a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+        "@_xmlns:r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        "@_xmlns:p": "http://schemas.openxmlformats.org/presentationml/2006/main",
+        "@_preserve": "1",
+        "@_type": "cust",
+        "@_userDrawn": "1"
+      }
+    },
+    "layoutTags": [
+      {
+        "part": "ppt/tags/opfLayout30.xml",
+        "name": "OPF_LAYOUT_V1",
+        "decoded": {
+          "v": 1,
+          "id": "named",
+          "group": "custom",
+          "reference": "named",
+          "hash": "5bd4ee7ba75f3e81",
+          "regions": {
+            "300": "first",
+            "500": "second"
+          },
+          "record": {
+            "name": "Named regions",
+            "areas": [
+              [
+                "first",
+                "second"
+              ],
+              [
+                "first",
+                "second"
+              ]
+            ],
+            "regions": {
+              "first": {
+                "accepts": [
+                  "text",
+                  "list"
+                ],
+                "flow": "column"
+              },
+              "second": {
+                "accepts": [
+                  "image"
+                ],
+                "role": "media",
+                "flow": "none"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "slide": null,
+    "slideTags": []
+  },
+  "saved": {
+    "layoutPart": "ppt/slideLayouts/slideLayout31.xml",
+    "layout": {
+      "?xml": {
+        "@_version": "1.0",
+        "@_encoding": "UTF-8",
+        "@_standalone": "yes"
+      },
+      "p:sldLayout": {
+        "p:cSld": {
+          "p:spTree": {
+            "p:nvGrpSpPr": {
+              "p:cNvPr": {
+                "@_id": "1",
+                "@_name": ""
+              },
+              "p:cNvGrpSpPr": "",
+              "p:nvPr": ""
+            },
+            "p:grpSpPr": {
+              "a:xfrm": {
+                "a:off": {
+                  "@_x": "0",
+                  "@_y": "0"
+                },
+                "a:ext": {
+                  "@_cx": "0",
+                  "@_cy": "0"
+                },
+                "a:chOff": {
+                  "@_x": "0",
+                  "@_y": "0"
+                },
+                "a:chExt": {
+                  "@_cx": "0",
+                  "@_cy": "0"
+                }
+              }
+            },
+            "p:sp": [
+              {
+                "p:nvSpPr": {
+                  "p:cNvPr": {
+                    "@_id": "5",
+                    "@_name": "first"
+                  },
+                  "p:cNvSpPr": {
+                    "a:spLocks": {
+                      "@_noGrp": "1"
+                    }
+                  },
+                  "p:nvPr": {
+                    "p:ph": {
+                      "@_type": "body",
+                      "@_idx": "300"
+                    }
+                  }
+                },
+                "p:spPr": {
+                  "a:xfrm": {
+                    "a:off": {
+                      "@_x": "548640",
+                      "@_y": "548640"
+                    },
+                    "a:ext": {
+                      "@_cx": "5433060",
+                      "@_cy": "5760720"
+                    }
+                  }
+                },
+                "p:txBody": {
+                  "a:bodyPr": "",
+                  "a:lstStyle": {
+                    "a:lvl1pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl2pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl3pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl4pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl5pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl6pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl7pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl8pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl9pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    }
+                  },
+                  "a:p": {
+                    "a:r": {
+                      "a:rPr": {
+                        "@_lang": "en-US"
+                      },
+                      "a:t": "Click to edit Master text styles"
+                    }
+                  }
+                }
+              },
+              {
+                "p:nvSpPr": {
+                  "p:cNvPr": {
+                    "@_id": "6",
+                    "@_name": "second"
+                  },
+                  "p:cNvSpPr": {
+                    "a:spLocks": {
+                      "@_noGrp": "1"
+                    }
+                  },
+                  "p:nvPr": {
+                    "p:ph": {
+                      "@_type": "pic",
+                      "@_idx": "500"
+                    }
+                  }
+                },
+                "p:spPr": {
+                  "a:xfrm": {
+                    "a:off": {
+                      "@_x": "6210300",
+                      "@_y": "548640"
+                    },
+                    "a:ext": {
+                      "@_cx": "5433060",
+                      "@_cy": "5760720"
+                    }
+                  }
+                },
+                "p:txBody": {
+                  "a:bodyPr": "",
+                  "a:lstStyle": {
+                    "a:lvl1pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl2pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl3pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl4pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl5pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl6pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl7pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl8pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    },
+                    "a:lvl9pPr": {
+                      "a:defRPr": {
+                        "a:latin": {
+                          "@_typeface": "+mn-lt"
+                        },
+                        "a:ea": {
+                          "@_typeface": "+mn-ea"
+                        },
+                        "a:cs": {
+                          "@_typeface": "+mn-cs"
+                        },
+                        "@_sz": "1875"
+                      },
+                      "@_algn": "l"
+                    }
+                  },
+                  "a:p": {
+                    "a:endParaRPr": {
+                      "@_lang": "en-US"
+                    }
+                  }
+                }
+              },
+              {
+                "p:nvSpPr": {
+                  "p:cNvPr": {
+                    "@_id": "2",
+                    "@_name": "Date Placeholder 1"
+                  },
+                  "p:cNvSpPr": {
+                    "a:spLocks": {
+                      "@_noGrp": "1"
+                    }
+                  },
+                  "p:nvPr": {
+                    "p:ph": {
+                      "@_type": "dt",
+                      "@_sz": "half",
+                      "@_idx": "10"
+                    }
+                  }
+                },
+                "p:spPr": "",
+                "p:txBody": {
+                  "a:bodyPr": "",
+                  "a:lstStyle": "",
+                  "a:p": {
+                    "a:fld": {
+                      "a:rPr": {
+                        "@_lang": "en-US"
+                      },
+                      "a:t": "10/14/2026",
+                      "@_id": "{0F0F2701-0002-4000-8000-000000000001}",
+                      "@_type": "datetimeFigureOut"
+                    },
+                    "a:endParaRPr": {
+                      "@_lang": "en-US"
+                    }
+                  }
+                }
+              },
+              {
+                "p:nvSpPr": {
+                  "p:cNvPr": {
+                    "@_id": "3",
+                    "@_name": "Footer Placeholder 2"
+                  },
+                  "p:cNvSpPr": {
+                    "a:spLocks": {
+                      "@_noGrp": "1"
+                    }
+                  },
+                  "p:nvPr": {
+                    "p:ph": {
+                      "@_type": "ftr",
+                      "@_sz": "quarter",
+                      "@_idx": "11"
+                    }
+                  }
+                },
+                "p:spPr": "",
+                "p:txBody": {
+                  "a:bodyPr": "",
+                  "a:lstStyle": "",
+                  "a:p": {
+                    "a:endParaRPr": {
+                      "@_lang": "en-US"
+                    }
+                  }
+                }
+              },
+              {
+                "p:nvSpPr": {
+                  "p:cNvPr": {
+                    "@_id": "4",
+                    "@_name": "Slide Number Placeholder 3"
+                  },
+                  "p:cNvSpPr": {
+                    "a:spLocks": {
+                      "@_noGrp": "1"
+                    }
+                  },
+                  "p:nvPr": {
+                    "p:ph": {
+                      "@_type": "sldNum",
+                      "@_sz": "quarter",
+                      "@_idx": "12"
+                    }
+                  }
+                },
+                "p:spPr": "",
+                "p:txBody": {
+                  "a:bodyPr": "",
+                  "a:lstStyle": "",
+                  "a:p": {
+                    "a:fld": {
+                      "a:rPr": {
+                        "@_lang": "en-US"
+                      },
+                      "a:t": "‹#›",
+                      "@_id": "{0F0F2701-0002-4000-8000-000000000003}",
+                      "@_type": "slidenum"
+                    },
+                    "a:endParaRPr": {
+                      "@_lang": "en-US"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "p:custDataLst": {
+            "p:tags": {
+              "@_r:id": "rId1"
+            }
+          },
+          "@_name": "Named regions"
+        },
+        "p:clrMapOvr": {
+          "a:masterClrMapping": ""
+        },
+        "p:hf": {
+          "@_sldNum": "0",
+          "@_hdr": "0",
+          "@_ftr": "0",
+          "@_dt": "0"
+        },
+        "@_xmlns:a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+        "@_xmlns:r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        "@_xmlns:p": "http://schemas.openxmlformats.org/presentationml/2006/main",
+        "@_preserve": "1",
+        "@_userDrawn": "1"
+      }
+    },
+    "layoutTags": [
+      {
+        "part": "ppt/tags/tag31.xml",
+        "name": "OPF_LAYOUT_V1",
+        "decoded": {
+          "v": 1,
+          "id": "named",
+          "group": "custom",
+          "reference": "named",
+          "hash": "5bd4ee7ba75f3e81",
+          "regions": {
+            "300": "first",
+            "500": "second"
+          },
+          "record": {
+            "name": "Named regions",
+            "areas": [
+              [
+                "first",
+                "second"
+              ],
+              [
+                "first",
+                "second"
+              ]
+            ],
+            "regions": {
+              "first": {
+                "accepts": [
+                  "text",
+                  "list"
+                ],
+                "flow": "column"
+              },
+              "second": {
+                "accepts": [
+                  "image"
+                ],
+                "role": "media",
+                "flow": "none"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "slide": {
+      "?xml": {
+        "@_version": "1.0",
+        "@_encoding": "UTF-8",
+        "@_standalone": "yes"
+      },
+      "p:sld": {
+        "p:cSld": {
+          "p:spTree": {
+            "p:nvGrpSpPr": {
+              "p:cNvPr": {
+                "@_id": "1",
+                "@_name": ""
+              },
+              "p:cNvGrpSpPr": "",
+              "p:nvPr": ""
+            },
+            "p:grpSpPr": {
+              "a:xfrm": {
+                "a:off": {
+                  "@_x": "0",
+                  "@_y": "0"
+                },
+                "a:ext": {
+                  "@_cx": "0",
+                  "@_cy": "0"
+                },
+                "a:chOff": {
+                  "@_x": "0",
+                  "@_y": "0"
+                },
+                "a:chExt": {
+                  "@_cx": "0",
+                  "@_cy": "0"
+                }
+              }
+            },
+            "p:sp": [
+              {
+                "p:nvSpPr": {
+                  "p:cNvPr": {
+                    "a:extLst": {
+                      "a:ext": {
+                        "a16:creationId": {
+                          "@_xmlns:a16": "http://schemas.microsoft.com/office/drawing/2014/main",
+                          "@_id": "{1433378D-BD7D-AD9D-AFD8-20510D2C42E2}"
+                        },
+                        "@_uri": "{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}"
+                      }
+                    },
+                    "@_id": "2",
+                    "@_name": "Text Placeholder 1"
+                  },
+                  "p:cNvSpPr": {
+                    "a:spLocks": {
+                      "@_noGrp": "1"
+                    }
+                  },
+                  "p:nvPr": {
+                    "p:ph": {
+                      "@_type": "body",
+                      "@_idx": "300"
+                    }
+                  }
+                },
+                "p:spPr": "",
+                "p:txBody": {
+                  "a:bodyPr": "",
+                  "a:lstStyle": "",
+                  "a:p": {
+                    "a:r": {
+                      "a:rPr": {
+                        "@_lang": "en-US"
+                      },
+                      "a:t": "RR20 custom first region witness."
+                    },
+                    "a:endParaRPr": {
+                      "@_lang": "en-US",
+                      "@_dirty": "0"
+                    }
+                  }
+                }
+              },
+              {
+                "p:nvSpPr": {
+                  "p:cNvPr": {
+                    "a:extLst": {
+                      "a:ext": {
+                        "a16:creationId": {
+                          "@_xmlns:a16": "http://schemas.microsoft.com/office/drawing/2014/main",
+                          "@_id": "{62DCF684-1B9D-CC97-23D4-B47EA2CA0C43}"
+                        },
+                        "@_uri": "{FF2B5EF4-FFF2-40B4-BE49-F238E27FC236}"
+                      }
+                    },
+                    "@_id": "3",
+                    "@_name": "Picture Placeholder 2"
+                  },
+                  "p:cNvSpPr": {
+                    "a:spLocks": {
+                      "@_noGrp": "1",
+                      "@_noChangeAspect": "1"
+                    }
+                  },
+                  "p:nvPr": {
+                    "p:ph": {
+                      "@_type": "pic",
+                      "@_idx": "500"
+                    }
+                  }
+                },
+                "p:spPr": "",
+                "p:txBody": {
+                  "a:bodyPr": "",
+                  "a:lstStyle": "",
+                  "a:p": {
+                    "a:endParaRPr": {
+                      "@_lang": "en-US"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "p:extLst": {
+            "p:ext": {
+              "p14:creationId": {
+                "@_xmlns:p14": "http://schemas.microsoft.com/office/powerpoint/2010/main",
+                "@_val": "1563263233"
+              },
+              "@_uri": "{BB962C8B-B14F-4D97-AF65-F5344CB8AC3E}"
+            }
+          }
+        },
+        "p:clrMapOvr": {
+          "a:masterClrMapping": ""
+        },
+        "@_xmlns:a": "http://schemas.openxmlformats.org/drawingml/2006/main",
+        "@_xmlns:r": "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        "@_xmlns:p": "http://schemas.openxmlformats.org/presentationml/2006/main"
+      }
+    },
+    "slideTags": []
+  },
+  "cli": {
+    "customLayoutKeys": [
+      "named",
+      "maximum"
+    ],
+    "namedRecord": {
+      "name": "Named regions",
+      "areas": [
+        [
+          "first",
+          "second"
+        ],
+        [
+          "first",
+          "second"
+        ]
+      ],
+      "regions": {
+        "first": {
+          "accepts": [
+            "text",
+            "list"
+          ],
+          "flow": "column"
+        },
+        "second": {
+          "accepts": [
+            "image"
+          ],
+          "role": "media",
+          "flow": "none"
+        }
+      }
+    },
+    "newSlide": {
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": "#011842"
+        }
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text": "RR20 custom first region witness."
+        }
+      ],
+      "layout": "named"
+    }
+  },
+  "direct": {
+    "newSlide": {
+      "design": {
+        "background": {
+          "type": "solid",
+          "color": "#011842"
+        }
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text": "RR20 custom first region witness."
+        }
+      ],
+      "layout": "named"
+    },
+    "diagnostics": [
+      {
+        "code": "heading-import-reflow",
+        "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+        "path": "slides.0"
+      },
+      {
+        "code": "heading-import-reflow",
+        "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+        "path": "slides.1"
+      },
+      {
+        "code": "text-import-reflow",
+        "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+        "path": "slides.1"
+      },
+      {
+        "code": "unsupported-image-crop",
+        "message": "Native picture crop is not represented by the imported OPF asset; the full image was retained.",
+        "path": "slides.1.pictures.0"
+      },
+      {
+        "code": "heading-import-reflow",
+        "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+        "path": "slides.2"
+      }
+    ]
+  }
+}

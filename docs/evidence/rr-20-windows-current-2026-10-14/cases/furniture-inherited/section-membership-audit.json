@@ -1,0 +1,328 @@
+{
+  "original": {
+    "presentationXml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n<p:presentation xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" firstSlideNum=\"1\"  saveSubsetFonts=\"1\" autoCompressPictures=\"0\"><p:sldMasterIdLst><p:sldMasterId id=\"2147483648\" r:id=\"rId1\"/></p:sldMasterIdLst><p:notesMasterIdLst><p:notesMasterId r:id=\"rId5\"/></p:notesMasterIdLst><p:sldIdLst><p:sldId id=\"256\" r:id=\"rId2\"/><p:sldId id=\"257\" r:id=\"rId3\"/><p:sldId id=\"258\" r:id=\"rId4\"/></p:sldIdLst><p:sldSz cx=\"12192000\" cy=\"6858000\"/><p:notesSz cx=\"6858000\" cy=\"12192000\"/><p:custDataLst><p:tags r:id=\"rIdOpfDocument\"/></p:custDataLst><p:defaultTextStyle><a:lvl1pPr marL=\"0\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl1pPr><a:lvl2pPr marL=\"457200\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl2pPr><a:lvl3pPr marL=\"914400\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl3pPr><a:lvl4pPr marL=\"1371600\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl4pPr><a:lvl5pPr marL=\"1828800\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl5pPr><a:lvl6pPr marL=\"2286000\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl6pPr><a:lvl7pPr marL=\"2743200\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl7pPr><a:lvl8pPr marL=\"3200400\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl8pPr><a:lvl9pPr marL=\"3657600\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl9pPr></p:defaultTextStyle><p:extLst><p:ext uri=\"{521415D9-36F7-43E2-AB2F-B90AF26B5E84}\"><p14:sectionLst xmlns:p14=\"http://schemas.microsoft.com/office/powerpoint/2010/main\"><p14:section name=\"  Alpha section  \" id=\"{107A146C-E071-4720-8292-5CDD81D8460E}\"><p14:sldIdLst><p14:sldId id=\"256\"/></p14:sldIdLst></p14:section><p14:section name=\"  Beta section  \" id=\"{163E7C47-F5AB-4170-85B0-2AD600BC1219}\"><p14:sldIdLst><p14:sldId id=\"257\"/></p14:sldIdLst></p14:section><p14:section name=\"  Gamma section  \" id=\"{12738615-B273-44B1-86EB-265E83D6470E}\"><p14:sldIdLst><p14:sldId id=\"258\"/></p14:sldIdLst></p14:section></p14:sectionLst></p:ext></p:extLst></p:presentation>",
+    "slideIDs": {
+      "p:sldId": [
+        {
+          "@_id": "256",
+          "@_r:id": "rId2"
+        },
+        {
+          "@_id": "257",
+          "@_r:id": "rId3"
+        },
+        {
+          "@_id": "258",
+          "@_r:id": "rId4"
+        }
+      ]
+    },
+    "sectionExtensions": {
+      "p:ext": {
+        "p14:sectionLst": {
+          "p14:section": [
+            {
+              "p14:sldIdLst": {
+                "p14:sldId": {
+                  "@_id": "256"
+                }
+              },
+              "@_name": "Alpha section",
+              "@_id": "{107A146C-E071-4720-8292-5CDD81D8460E}"
+            },
+            {
+              "p14:sldIdLst": {
+                "p14:sldId": {
+                  "@_id": "257"
+                }
+              },
+              "@_name": "Beta section",
+              "@_id": "{163E7C47-F5AB-4170-85B0-2AD600BC1219}"
+            },
+            {
+              "p14:sldIdLst": {
+                "p14:sldId": {
+                  "@_id": "258"
+                }
+              },
+              "@_name": "Gamma section",
+              "@_id": "{12738615-B273-44B1-86EB-265E83D6470E}"
+            }
+          ],
+          "@_xmlns:p14": "http://schemas.microsoft.com/office/powerpoint/2010/main"
+        },
+        "@_uri": "{521415D9-36F7-43E2-AB2F-B90AF26B5E84}"
+      }
+    }
+  },
+  "saved": {
+    "presentationXml": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n<p:presentation xmlns:a=\"http://schemas.openxmlformats.org/drawingml/2006/main\" xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\" xmlns:p=\"http://schemas.openxmlformats.org/presentationml/2006/main\" saveSubsetFonts=\"1\" autoCompressPictures=\"0\"><p:sldMasterIdLst><p:sldMasterId id=\"2147483648\" r:id=\"rId1\"/></p:sldMasterIdLst><p:notesMasterIdLst><p:notesMasterId r:id=\"rId5\"/></p:notesMasterIdLst><p:sldIdLst><p:sldId id=\"258\" r:id=\"rId2\"/><p:sldId id=\"256\" r:id=\"rId3\"/><p:sldId id=\"257\" r:id=\"rId4\"/></p:sldIdLst><p:sldSz cx=\"12192000\" cy=\"6858000\"/><p:notesSz cx=\"6858000\" cy=\"12192000\"/><p:custDataLst><p:tags r:id=\"rId6\"/></p:custDataLst><p:defaultTextStyle><a:lvl1pPr marL=\"0\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl1pPr><a:lvl2pPr marL=\"457200\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl2pPr><a:lvl3pPr marL=\"914400\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl3pPr><a:lvl4pPr marL=\"1371600\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl4pPr><a:lvl5pPr marL=\"1828800\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl5pPr><a:lvl6pPr marL=\"2286000\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl6pPr><a:lvl7pPr marL=\"2743200\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl7pPr><a:lvl8pPr marL=\"3200400\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl8pPr><a:lvl9pPr marL=\"3657600\" algn=\"l\" defTabSz=\"914400\" rtl=\"0\" eaLnBrk=\"1\" latinLnBrk=\"0\" hangingPunct=\"1\"><a:defRPr sz=\"1800\" kern=\"1200\"><a:solidFill><a:schemeClr val=\"tx1\"/></a:solidFill><a:latin typeface=\"+mn-lt\"/><a:ea typeface=\"+mn-ea\"/><a:cs typeface=\"+mn-cs\"/></a:defRPr></a:lvl9pPr></p:defaultTextStyle><p:extLst><p:ext uri=\"{521415D9-36F7-43E2-AB2F-B90AF26B5E84}\"><p14:sectionLst xmlns:p14=\"http://schemas.microsoft.com/office/powerpoint/2010/main\"><p14:section name=\"  Alpha section  \" id=\"{107A146C-E071-4720-8292-5CDD81D8460E}\"><p14:sldIdLst><p14:sldId id=\"258\"/><p14:sldId id=\"256\"/></p14:sldIdLst></p14:section><p14:section name=\"  Beta section  \" id=\"{163E7C47-F5AB-4170-85B0-2AD600BC1219}\"><p14:sldIdLst><p14:sldId id=\"257\"/></p14:sldIdLst></p14:section><p14:section name=\"  Gamma section  \" id=\"{12738615-B273-44B1-86EB-265E83D6470E}\"><p14:sldIdLst/></p14:section></p14:sectionLst></p:ext><p:ext uri=\"{EFAFB233-063F-42B5-8137-9DF3F51BA10A}\"><p15:sldGuideLst xmlns:p15=\"http://schemas.microsoft.com/office/powerpoint/2012/main\"/></p:ext></p:extLst></p:presentation>",
+    "slideIDs": {
+      "p:sldId": [
+        {
+          "@_id": "258",
+          "@_r:id": "rId2"
+        },
+        {
+          "@_id": "256",
+          "@_r:id": "rId3"
+        },
+        {
+          "@_id": "257",
+          "@_r:id": "rId4"
+        }
+      ]
+    },
+    "sectionExtensions": {
+      "p:ext": [
+        {
+          "p14:sectionLst": {
+            "p14:section": [
+              {
+                "p14:sldIdLst": {
+                  "p14:sldId": [
+                    {
+                      "@_id": "258"
+                    },
+                    {
+                      "@_id": "256"
+                    }
+                  ]
+                },
+                "@_name": "Alpha section",
+                "@_id": "{107A146C-E071-4720-8292-5CDD81D8460E}"
+              },
+              {
+                "p14:sldIdLst": {
+                  "p14:sldId": {
+                    "@_id": "257"
+                  }
+                },
+                "@_name": "Beta section",
+                "@_id": "{163E7C47-F5AB-4170-85B0-2AD600BC1219}"
+              },
+              {
+                "p14:sldIdLst": "",
+                "@_name": "Gamma section",
+                "@_id": "{12738615-B273-44B1-86EB-265E83D6470E}"
+              }
+            ],
+            "@_xmlns:p14": "http://schemas.microsoft.com/office/powerpoint/2010/main"
+          },
+          "@_uri": "{521415D9-36F7-43E2-AB2F-B90AF26B5E84}"
+        },
+        {
+          "p15:sldGuideLst": {
+            "@_xmlns:p15": "http://schemas.microsoft.com/office/powerpoint/2012/main"
+          },
+          "@_uri": "{EFAFB233-063F-42B5-8137-9DF3F51BA10A}"
+        }
+      ]
+    }
+  },
+  "phases": {
+    "original": [
+      {
+        "index": 1,
+        "slideId": 256,
+        "texts": [
+          "Inherited furniture",
+          "Scalar body inherited — exact.",
+          "  Alpha section  ",
+          "  Inherited footer  ",
+          "1"
+        ]
+      },
+      {
+        "index": 2,
+        "slideId": 257,
+        "texts": [
+          "Local furniture",
+          "Scalar body local — exact.",
+          "  Local image label  ",
+          "  Beta section  ",
+          "  Local footer  ",
+          "2"
+        ]
+      },
+      {
+        "index": 3,
+        "slideId": 258,
+        "texts": [
+          "Inherited again",
+          "Scalar body inherited again — exact.",
+          "  Gamma section  ",
+          "  Inherited footer  ",
+          "3"
+        ]
+      }
+    ],
+    "edited": [
+      {
+        "index": 1,
+        "slideId": 258,
+        "texts": [
+          "Inherited again",
+          "Scalar body inherited again — exact.",
+          "  Gamma section  ",
+          "  Inherited footer  ",
+          "1"
+        ]
+      },
+      {
+        "index": 2,
+        "slideId": 256,
+        "texts": [
+          "Inherited furniture",
+          "Scalar body inherited — exact.",
+          "  Alpha section  ",
+          "2"
+        ]
+      },
+      {
+        "index": 3,
+        "slideId": 257,
+        "texts": [
+          "Local furniture",
+          "Scalar body local — exact.",
+          "  Local image label  ",
+          "  Beta section  ",
+          "  Local footer  ",
+          "3"
+        ]
+      }
+    ],
+    "reopened": [
+      {
+        "index": 1,
+        "slideId": 258,
+        "texts": [
+          "Inherited again",
+          "Scalar body inherited again — exact.",
+          "  Gamma section  ",
+          "  Inherited footer  ",
+          "1"
+        ]
+      },
+      {
+        "index": 2,
+        "slideId": 256,
+        "texts": [
+          "Inherited furniture",
+          "Scalar body inherited — exact.",
+          "  Alpha section  ",
+          "2"
+        ]
+      },
+      {
+        "index": 3,
+        "slideId": 257,
+        "texts": [
+          "Local furniture",
+          "Scalar body local — exact.",
+          "  Local image label  ",
+          "  Beta section  ",
+          "  Local footer  ",
+          "3"
+        ]
+      }
+    ]
+  },
+  "savedImport": {
+    "slides": [
+      {
+        "design": {
+          "header": {
+            "left": {
+              "text": "  Inherited header\twords\r\nsecond line  \r\n"
+            },
+            "center": {
+              "text": "Registry Organization"
+            },
+            "right": {
+              "text": "  Gamma section  "
+            }
+          },
+          "footer": {
+            "left": {
+              "text": "  Inherited footer  "
+            },
+            "right": {
+              "text": "{{slide.number}}"
+            }
+          }
+        },
+        "title": "Inherited again",
+        "text": "Scalar body inherited again — exact.",
+        "section": "  Alpha section  "
+      },
+      {
+        "design": {
+          "header": {
+            "left": {
+              "text": "  Inherited header\twords\r\nsecond line  \r\n"
+            },
+            "center": {
+              "text": "Registry Organization"
+            },
+            "right": {
+              "text": "{{slide.section}}"
+            }
+          },
+          "footer": {
+            "left": {
+              "text": ""
+            },
+            "right": {
+              "text": "{{slide.number}}"
+            }
+          }
+        },
+        "title": "Inherited furniture",
+        "text": "Scalar body inherited — exact.",
+        "section": "  Alpha section  "
+      },
+      {
+        "design": {
+          "header": {
+            "left": {
+              "image": {
+                "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg==",
+                "alt": "Native edited furniture picture alt"
+              },
+              "text": "  Local image label  "
+            },
+            "center": {
+              "text": "Registry Organization"
+            },
+            "right": {
+              "text": "{{slide.section}}"
+            }
+          },
+          "footer": {
+            "left": {
+              "text": "  Local footer  "
+            },
+            "right": {
+              "text": "{{slide.number}}"
+            }
+          }
+        },
+        "title": "Local furniture",
+        "text": "Scalar body local — exact.",
+        "section": "  Beta section  "
+      }
+    ],
+    "design": {
+      "dimensions": {
+        "widthInches": 13.333333,
+        "heightInches": 7.5
+      },
+      "fontScheme": "roboto"
+    },
+    "organization": {
+      "id": "registry_org",
+      "name": "  Registry Organization  "
+    }
+  }
+}

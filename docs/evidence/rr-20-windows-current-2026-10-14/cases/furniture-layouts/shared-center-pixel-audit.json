@@ -1,0 +1,35 @@
+[
+  {
+    "slide": 1,
+    "region": [
+      480,
+      10,
+      800,
+      60
+    ],
+    "brightPixels": 521,
+    "rawCropSha256": "4863071b63faa3a40de7f382e5a261ef529ef74e26733c1a15937ec93d29b860"
+  },
+  {
+    "slide": 2,
+    "region": [
+      480,
+      10,
+      800,
+      60
+    ],
+    "brightPixels": 521,
+    "rawCropSha256": "4863071b63faa3a40de7f382e5a261ef529ef74e26733c1a15937ec93d29b860"
+  },
+  {
+    "slide": 3,
+    "region": [
+      480,
+      10,
+      800,
+      60
+    ],
+    "brightPixels": 521,
+    "rawCropSha256": "4863071b63faa3a40de7f382e5a261ef529ef74e26733c1a15937ec93d29b860"
+  }
+]

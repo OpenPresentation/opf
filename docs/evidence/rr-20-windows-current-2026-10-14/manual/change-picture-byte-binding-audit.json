@@ -1,0 +1,79 @@
+{
+  "savedSha256": "040e6bf64408d7a09b15c43565076ff16af583bf6b1a4b4cb525abece8c721fe",
+  "imageSha256": "a168bef97c7e01a6a993350bb1d0e73dd8af1bfb9949cf1b36d88c48124dfd6e",
+  "block": {
+    "image": {
+      "src": "[bytes verified]"
+    }
+  },
+  "nativePicture": {
+    "p:nvPicPr": {
+      "p:cNvPr": {
+        "@_id": "3",
+        "@_name": "OPF image 1"
+      },
+      "p:cNvPicPr": {
+        "a:picLocks": {
+          "@_noGrp": "1",
+          "@_noChangeAspect": "1"
+        }
+      },
+      "p:nvPr": {
+        "p:ph": {
+          "@_type": "pic",
+          "@_idx": "500"
+        }
+      }
+    },
+    "p:blipFill": {
+      "a:blip": {
+        "@_r:embed": "rId6"
+      },
+      "a:srcRect": "",
+      "a:stretch": ""
+    },
+    "p:spPr": {
+      "a:xfrm": {
+        "a:off": {
+          "@_x": "548640",
+          "@_y": "2498788"
+        },
+        "a:ext": {
+          "@_cx": "5433060",
+          "@_cy": "2716530"
+        }
+      },
+      "a:prstGeom": {
+        "a:avLst": "",
+        "@_prst": "rect"
+      }
+    }
+  },
+  "diagnostics": [
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+      "path": "slides.0"
+    },
+    {
+      "code": "text-import-reflow",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "path": "slides.0"
+    },
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+      "path": "slides.1"
+    },
+    {
+      "code": "text-import-reflow",
+      "message": "Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.",
+      "path": "slides.1"
+    },
+    {
+      "code": "heading-import-reflow",
+      "message": "Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.",
+      "path": "slides.2"
+    }
+  ]
+}

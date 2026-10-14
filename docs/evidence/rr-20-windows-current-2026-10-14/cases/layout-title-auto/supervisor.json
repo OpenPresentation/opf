@@ -1,0 +1,8 @@
+﻿{
+    "timestamp":  "2026-10-14T07:02:10.9739389Z",
+    "timedOut":  false,
+    "exitCode":  0,
+    "cleanupConfirmed":  true,
+    "lastDurableStage":  "worker.complete",
+    "lastDurableStatus":  "success"
+}

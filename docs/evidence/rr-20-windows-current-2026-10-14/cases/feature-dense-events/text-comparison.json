@@ -1,0 +1,715 @@
+{
+  "passed": true,
+  "tolerancePoints": 0.02,
+  "slides": 1,
+  "slideDimensionsPoints": [
+    {
+      "width": 960,
+      "height": 540
+    }
+  ],
+  "textShapes": 19,
+  "observations": [
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF heading slides.0.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 0 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.0000017086614150230162,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 1 line 0",
+      "differences": {
+        "left": 0,
+        "top": -7.086614175477735e-7,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 2 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.00000429133856982844,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 3 line 0",
+      "differences": {
+        "left": 0.000004960629922834414,
+        "top": 0.000005291338567303683,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 4 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.00000262992128341466,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 5 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000003629921280889903,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 6 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.000006370078722284234,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 7 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.000005370078724808991,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 8 line 0",
+      "differences": {
+        "left": 0,
+        "top": -3.700787374327774e-7,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 9 line 0",
+      "differences": {
+        "left": 0.0000012929133816896865,
+        "top": 6.299212600424653e-7,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 10 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.0000037716535530307738,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 11 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.000002771653498712112,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 12 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.0000022283464886641013,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF timeline 0 part 13 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000003228346429295925,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "Text 24",
+      "differences": {
+        "left": 0,
+        "top": -0.0000017086614150230162,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "Text 25",
+      "differences": {
+        "left": 0,
+        "top": -0.0000037086614099735016,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF metric 1 value line 1",
+      "differences": {
+        "left": 0,
+        "top": -0.000010236220475690061,
+        "width": 0,
+        "height": 0.0000015748031430007359,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "original",
+      "slide": 1,
+      "name": "OPF metric 1 label line 1",
+      "differences": {
+        "left": 0,
+        "top": -0.000008661417325583898,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF heading slides.0.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 0 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.0000017086614150230162,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 1 line 0",
+      "differences": {
+        "left": 0,
+        "top": -7.086614175477735e-7,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 2 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.00000429133856982844,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 3 line 0",
+      "differences": {
+        "left": 0.000004960629922834414,
+        "top": 0.000005291338567303683,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 4 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.00000262992128341466,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 5 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000003629921280889903,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 6 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.000006370078722284234,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 7 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.000005370078724808991,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 8 line 0",
+      "differences": {
+        "left": 0,
+        "top": -3.700787374327774e-7,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 9 line 0",
+      "differences": {
+        "left": 0.0000012929133816896865,
+        "top": 6.299212600424653e-7,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 10 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.0000037716535530307738,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 11 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.000002771653498712112,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 12 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.0000022283464886641013,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF timeline 0 part 13 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000003228346429295925,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "Text 24",
+      "differences": {
+        "left": 0,
+        "top": -0.0000017086614150230162,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "Text 25",
+      "differences": {
+        "left": 0,
+        "top": -0.0000037086614099735016,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF metric 1 value line 1",
+      "differences": {
+        "left": 0,
+        "top": -0.000010236220475690061,
+        "width": 0,
+        "height": 0.0000015748031430007359,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "edited",
+      "slide": 1,
+      "name": "OPF metric 1 label line 1",
+      "differences": {
+        "left": 0,
+        "top": -0.000008661417325583898,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF heading slides.0.title line 0",
+      "differences": {
+        "left": 0,
+        "top": 0,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 0 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.0000017086614150230162,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 1 line 0",
+      "differences": {
+        "left": 0,
+        "top": -7.086614175477735e-7,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 2 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.00000429133856982844,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 3 line 0",
+      "differences": {
+        "left": 0.000004960629922834414,
+        "top": 0.000005291338567303683,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 4 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.00000262992128341466,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 5 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000003629921280889903,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 6 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.000006370078722284234,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 7 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.000005370078724808991,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 8 line 0",
+      "differences": {
+        "left": 0,
+        "top": -3.700787374327774e-7,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 9 line 0",
+      "differences": {
+        "left": 0.0000012929133816896865,
+        "top": 6.299212600424653e-7,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 10 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.0000037716535530307738,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 11 line 0",
+      "differences": {
+        "left": 0,
+        "top": -0.000002771653498712112,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 12 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.0000022283464886641013,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF timeline 0 part 13 line 0",
+      "differences": {
+        "left": 0,
+        "top": 0.000003228346429295925,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "Text 24",
+      "differences": {
+        "left": 0,
+        "top": -0.0000017086614150230162,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "Text 25",
+      "differences": {
+        "left": 0,
+        "top": -0.0000037086614099735016,
+        "width": 0,
+        "height": 0,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF metric 1 value line 1",
+      "differences": {
+        "left": 0,
+        "top": -0.000010236220475690061,
+        "width": 0,
+        "height": 0.0000015748031430007359,
+        "rotation": 0
+      }
+    },
+    {
+      "phase": "reopened",
+      "slide": 1,
+      "name": "OPF metric 1 label line 1",
+      "differences": {
+        "left": 0,
+        "top": -0.000008661417325583898,
+        "width": 0,
+        "height": 6.299212600424653e-7,
+        "rotation": 0
+      }
+    }
+  ],
+  "findings": [],
+  "unavailable": {
+    "fontSelection": "Existing worker does not record character font/style descriptors; host registration is not glyph font proof.",
+    "baseline": "COM shape geometry does not measure a typographic baseline.",
+    "pixelEquivalence": "Not compared; PNG ink differences are separate observations."
+  },
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "textComparison": "Whitespace-delimited words only; exact spacing, tabs, line breaks and typography are not compared.",
+  "coordinateSystem": "PPTX transform EMUs divided by 12700 give points; native COM boxes are points. No slide aspect ratio or raster resolution is assumed.",
+  "scope": "Named editable text words and exported allocation boxes versus native COM, including edited/reopened stability. No font, baseline, glyph-outline or pixel-equivalence acceptance.",
+  "case": "feature-dense-events",
+  "manifestSha256": "4e1d82b2a7546ccab71913dcaab23fcae6b3f12e9c3afd249e5a6b19e32faf80",
+  "reportSha256": "4fcaa6b0ec39bf69724ae121f8eb1a5021841cf18c777afec0c6c7979e88283f",
+  "runnerSha256": "da49cf9fc4d849d39020d7b1b0f63a50cd5f8623627224c6997220617173b4b4",
+  "comparatorSha256": "b5f1828c98f8364abc7f06e39ee257844212f3f09f42c17991b54eff3a9077ee",
+  "node": "v24.21.0"
+}

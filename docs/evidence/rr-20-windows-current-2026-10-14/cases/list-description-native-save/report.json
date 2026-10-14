@@ -1,0 +1,494 @@
+﻿{
+    "schemaVersion":  1,
+    "captureTextFonts":  true,
+    "source":  {
+                   "path":  "C:\\opf-work\\native-current-description-save-6eea8909-attempt01\\inputs\\case.pptx",
+                   "sha256":  "710bf16de927489bd12fec1e965b564bfa35c9137784e07d48e226a8aa6320c8",
+                   "openedPath":  "C:\\opf-work\\native-current-description-save-6eea8909-attempt01\\native\\inputs\\input.pptx",
+                   "openedSha256":  "710bf16de927489bd12fec1e965b564bfa35c9137784e07d48e226a8aa6320c8"
+               },
+    "saved":  {
+                  "path":  "C:\\opf-work\\native-current-description-save-6eea8909-attempt01\\native\\native-furniture-control.pptx",
+                  "sha256":  "49b78714a30bf92d01189605e4641a614c9afba61f7bf85ce6292cfe7e3e791d"
+              },
+    "reopened":  {
+                     "path":  "C:\\opf-work\\native-current-description-save-6eea8909-attempt01\\native\\native-furniture-control.pptx",
+                     "sha256":  "49b78714a30bf92d01189605e4641a614c9afba61f7bf85ce6292cfe7e3e791d"
+                 },
+    "actionPlan":  {
+                       "path":  "C:\\opf-work\\native-current-description-save-6eea8909-attempt01\\inputs\\action-plan.json",
+                       "sha256":  "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+                       "snapshotPath":  "C:\\opf-work\\native-current-description-save-6eea8909-attempt01\\native\\inputs\\action-plan.json",
+                       "snapshotSha256":  "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+                       "actions":  [
+
+                                   ],
+                       "completed":  [
+
+                                     ],
+                       "styleEdits":  [
+
+                                      ]
+                   },
+    "phases":  {
+                   "original":  {
+                                    "slideCount":  1,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226974656D73222C22626F78223A5B35372E362C3134372E362C313136342E382C3531342E385D7D2C226C69737452756E73223A5B5B22736C696465732E302E6974656D73222C7B2274657874223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223464646464646222C22666F6E7453697A65223A32342C22666F6E7446616D696C79223A22526F626F746F227D2C226465736372697074696F6E223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223463046304630222C22666F6E7453697A65223A31392E36382C22666F6E7446616D696C79223A22526F626F746F227D7D5D5D2C226C697374526F6C6573223A5B5B22736C696465732E302E6974656D73222C5B5B302C2274657874222C747275655D2C5B302C226465736372697074696F6E222C66616C73655D2C5B312C2274657874222C747275655D5D5D5D2C226E6174697665223A7B22737472756374757265223A223062643830303833316536303337222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223062303266663939633536653433222C226C6973744964656E74697479223A223164613736363236356331373963227D7D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  4,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Descriptions remain descriptions",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  40.5,
+                                                                                           "bold":  -1,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF list slides.0.items line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  110.676537,
+                                                                          "width":  873.6,
+                                                                          "height":  29.28,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "With a description",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  24,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF list slides.0.items line 1",
+                                                                          "type":  1,
+                                                                          "left":  69.6,
+                                                                          "top":  142.836533,
+                                                                          "width":  847.2,
+                                                                          "height":  24.0096054,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "about it",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  19.68,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  4,
+                                                                          "id":  5,
+                                                                          "name":  "OPF list slides.0.items line 2",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  173.566147,
+                                                                          "width":  873.6,
+                                                                          "height":  29.28,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Unchanged second entry",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  24,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\native-current-description-save-6eea8909-attempt01\\native\\original-slide-01.png",
+                                                        "sha256":  "b89a4f974c79cfdd8d31b1a8becca525b891d799f5e837d2b352724281369d32"
+                                                    }
+                                                ]
+                                },
+                   "edited":  {
+                                  "slideCount":  1,
+                                  "slides":  [
+                                                 {
+                                                     "index":  1,
+                                                     "slideId":  256,
+                                                     "name":  "Slide 1",
+                                                     "tags":  [
+                                                                  {
+                                                                      "index":  1,
+                                                                      "name":  "OPF_SLIDE_V1",
+                                                                      "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226974656D73222C22626F78223A5B35372E362C3134372E362C313136342E382C3531342E385D7D2C226C69737452756E73223A5B5B22736C696465732E302E6974656D73222C7B2274657874223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223464646464646222C22666F6E7453697A65223A32342C22666F6E7446616D696C79223A22526F626F746F227D2C226465736372697074696F6E223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223463046304630222C22666F6E7453697A65223A31392E36382C22666F6E7446616D696C79223A22526F626F746F227D7D5D5D2C226C697374526F6C6573223A5B5B22736C696465732E302E6974656D73222C5B5B302C2274657874222C747275655D2C5B302C226465736372697074696F6E222C66616C73655D2C5B312C2274657874222C747275655D5D5D5D2C226E6174697665223A7B22737472756374757265223A223062643830303833316536303337222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223062303266663939633536653433222C226C6973744964656E74697479223A223164613736363236356331373963227D7D"
+                                                                  }
+                                                              ],
+                                                     "shapeCount":  4,
+                                                     "shapes":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "id":  2,
+                                                                        "name":  "OPF heading slides.0.title line 0",
+                                                                        "type":  14,
+                                                                        "left":  43.2,
+                                                                        "top":  43.2,
+                                                                        "width":  873.6,
+                                                                        "height":  49.41,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Descriptions remain descriptions",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+                                                                                     {
+                                                                                         "index":  1,
+                                                                                         "name":  "OPF_HEADING_V1",
+                                                                                         "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                     }
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto",
+                                                                                         "sizePoints":  40.5,
+                                                                                         "bold":  -1,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  2,
+                                                                        "id":  3,
+                                                                        "name":  "OPF list slides.0.items line 0",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  110.676537,
+                                                                        "width":  873.6,
+                                                                        "height":  29.28,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "With a description",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto",
+                                                                                         "sizePoints":  24,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  3,
+                                                                        "id":  4,
+                                                                        "name":  "OPF list slides.0.items line 1",
+                                                                        "type":  1,
+                                                                        "left":  69.6,
+                                                                        "top":  142.836533,
+                                                                        "width":  847.2,
+                                                                        "height":  24.0096054,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "about it",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto",
+                                                                                         "sizePoints":  19.68,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    },
+                                                                    {
+                                                                        "index":  4,
+                                                                        "id":  5,
+                                                                        "name":  "OPF list slides.0.items line 2",
+                                                                        "type":  1,
+                                                                        "left":  43.2,
+                                                                        "top":  173.566147,
+                                                                        "width":  873.6,
+                                                                        "height":  29.28,
+                                                                        "rotation":  0,
+                                                                        "hasTextFrame":  -1,
+                                                                        "text":  "Unchanged second entry",
+                                                                        "alternativeText":  "",
+                                                                        "tags":  [
+
+                                                                                 ],
+                                                                        "textFont":  {
+                                                                                         "status":  "uniform",
+                                                                                         "name":  "Roboto",
+                                                                                         "sizePoints":  24,
+                                                                                         "bold":  0,
+                                                                                         "italic":  0,
+                                                                                         "unavailableFields":  [
+
+                                                                                                               ],
+                                                                                         "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                     }
+                                                                    }
+                                                                ]
+                                                 }
+                                             ],
+                                  "rasters":  [
+                                                  {
+                                                      "slideIndex":  1,
+                                                      "path":  "C:\\opf-work\\native-current-description-save-6eea8909-attempt01\\native\\edited-slide-01.png",
+                                                      "sha256":  "b89a4f974c79cfdd8d31b1a8becca525b891d799f5e837d2b352724281369d32"
+                                                  }
+                                              ]
+                              },
+                   "reopened":  {
+                                    "slideCount":  1,
+                                    "slides":  [
+                                                   {
+                                                       "index":  1,
+                                                       "slideId":  256,
+                                                       "name":  "Slide 1",
+                                                       "tags":  [
+                                                                    {
+                                                                        "index":  1,
+                                                                        "name":  "OPF_SLIDE_V1",
+                                                                        "value":  "7B2276223A312C22736C696465223A302C22636F6E74656E74223A7B22666F726D223A22726F6F74222C226669656C64223A226974656D73222C22626F78223A5B35372E362C3134372E362C313136342E382C3531342E385D7D2C226C69737452756E73223A5B5B22736C696465732E302E6974656D73222C7B2274657874223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223464646464646222C22666F6E7453697A65223A32342C22666F6E7446616D696C79223A22526F626F746F227D2C226465736372697074696F6E223A7B22626F6C64223A66616C73652C22636F6C6F72223A2223463046304630222C22666F6E7453697A65223A31392E36382C22666F6E7446616D696C79223A22526F626F746F227D7D5D5D2C226C697374526F6C6573223A5B5B22736C696465732E302E6974656D73222C5B5B302C2274657874222C747275655D2C5B302C226465736372697074696F6E222C66616C73655D2C5B312C2274657874222C747275655D5D5D5D2C226E6174697665223A7B22737472756374757265223A223062643830303833316536303337222C226261636B67726F756E64223A223131336637323562636232336536222C227374796C65223A223062303266663939633536653433222C226C6973744964656E74697479223A223164613736363236356331373963227D7D"
+                                                                    }
+                                                                ],
+                                                       "shapeCount":  4,
+                                                       "shapes":  [
+                                                                      {
+                                                                          "index":  1,
+                                                                          "id":  2,
+                                                                          "name":  "OPF heading slides.0.title line 0",
+                                                                          "type":  14,
+                                                                          "left":  43.2,
+                                                                          "top":  43.2,
+                                                                          "width":  873.6,
+                                                                          "height":  49.41,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Descriptions remain descriptions",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+                                                                                       {
+                                                                                           "index":  1,
+                                                                                           "name":  "OPF_HEADING_V1",
+                                                                                           "value":  "7B2276223A312C2267726F7570223A22736C696465732E302E7469746C65222C226669656C64223A227469746C65222C226C696E65223A302C22636F756E74223A312C22626F756E64617279223A22656E64222C22736570617261746F72223A22227D"
+                                                                                       }
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  40.5,
+                                                                                           "bold":  -1,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  2,
+                                                                          "id":  3,
+                                                                          "name":  "OPF list slides.0.items line 0",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  110.676537,
+                                                                          "width":  873.6,
+                                                                          "height":  29.28,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "With a description",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  24,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  3,
+                                                                          "id":  4,
+                                                                          "name":  "OPF list slides.0.items line 1",
+                                                                          "type":  1,
+                                                                          "left":  69.6,
+                                                                          "top":  142.836533,
+                                                                          "width":  847.2,
+                                                                          "height":  24.0096054,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "about it",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  19.68,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      },
+                                                                      {
+                                                                          "index":  4,
+                                                                          "id":  5,
+                                                                          "name":  "OPF list slides.0.items line 2",
+                                                                          "type":  1,
+                                                                          "left":  43.2,
+                                                                          "top":  173.566147,
+                                                                          "width":  873.6,
+                                                                          "height":  29.28,
+                                                                          "rotation":  0,
+                                                                          "hasTextFrame":  -1,
+                                                                          "text":  "Unchanged second entry",
+                                                                          "alternativeText":  "",
+                                                                          "tags":  [
+
+                                                                                   ],
+                                                                          "textFont":  {
+                                                                                           "status":  "uniform",
+                                                                                           "name":  "Roboto",
+                                                                                           "sizePoints":  24,
+                                                                                           "bold":  0,
+                                                                                           "italic":  0,
+                                                                                           "unavailableFields":  [
+
+                                                                                                                 ],
+                                                                                           "scope":  "Whole TextFrame2 range reported name/size/bold/italic; not character-level font selection, glyph-file identity or baseline measurement."
+                                                                                       }
+                                                                      }
+                                                                  ]
+                                                   }
+                                               ],
+                                    "rasters":  [
+                                                    {
+                                                        "slideIndex":  1,
+                                                        "path":  "C:\\opf-work\\native-current-description-save-6eea8909-attempt01\\native\\reopened-slide-01.png",
+                                                        "sha256":  "b89a4f974c79cfdd8d31b1a8becca525b891d799f5e837d2b352724281369d32"
+                                                    }
+                                                ]
+                                }
+               },
+    "inputs":  {
+                   "verifier":  {
+                                    "path":  "C:\\opf-work\\current-be40-gallery3-01\\opf-pptx\\test\\native-furniture-control.ps1",
+                                    "sha256":  "2f136366f02b89e2bf04899124bbde8fba6b847513776d03de139f77902af9a8",
+                                    "snapshotPath":  "C:\\opf-work\\native-current-description-save-6eea8909-attempt01\\native\\inputs\\native-furniture-control.ps1",
+                                    "snapshotSha256":  "2f136366f02b89e2bf04899124bbde8fba6b847513776d03de139f77902af9a8"
+                                },
+                   "processHelper":  {
+                                         "path":  "C:\\opf-work\\current-be40-gallery3-01\\opf-pptx\\test\\native-process.ps1",
+                                         "sha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015",
+                                         "snapshotPath":  "C:\\opf-work\\native-current-description-save-6eea8909-attempt01\\native\\inputs\\native-process.ps1",
+                                         "snapshotSha256":  "2a49f620b77fd998b791b835dd17bc64487f9539fa20935cbbba50ea5b7dc015"
+                                     }
+               },
+    "environment":  {
+                        "hostVersion":  "5.1.26100.9444",
+                        "windowsProductName":  "Windows 10 Home",
+                        "windowsDisplayVersion":  "25H2",
+                        "windowsBuild":  "26200.9457",
+                        "powerPointVersion":  "16.0",
+                        "powerPointExecutable":  "C:\\Program Files\\Microsoft Office\\Root\\Office16\\POWERPNT.EXE",
+                        "powerPointBuild":  "16.0.20430.20146",
+                        "powerPointExecutableSha256":  "d402e97afb5dd21fc38e9e3c1afc90bb22eacae31078f41081f0b68ea00af3bb"
+                    },
+    "cleanupConfirmed":  true,
+    "officeOperationsStopped":  false,
+    "lastStage":  "worker.complete",
+    "lastStatus":  "success",
+    "error":  null,
+    "scope":  "One explicitly supplied presentation with at most three slides, thirty shapes per slide and twenty prevalidated actions. Original, edited and read-only reopened native states and PNGs are observations. The worker never quits or kills Office, changes security, retries, or closes unrelated presentations."
+}

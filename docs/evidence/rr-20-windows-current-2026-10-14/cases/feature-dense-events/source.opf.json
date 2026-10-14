@@ -1,0 +1,194 @@
+{
+  "design": {
+    "theme": "classic",
+    "fontScheme": "roboto",
+    "colorScheme": "cool-horizon",
+    "dimensions": "widescreen"
+  },
+  "name": "A grid that matches the story",
+  "catalogs": {
+    "custom": {
+      "layouts": {
+        "authored": {
+          "name": "Authored grid",
+          "areas": [
+            [
+              "title",
+              "title"
+            ],
+            [
+              "roadmap",
+              "notes"
+            ],
+            [
+              "roadmap",
+              "signal"
+            ]
+          ],
+          "columns": [
+            3,
+            2
+          ],
+          "rows": [
+            "auto",
+            2,
+            1
+          ],
+          "regions": {
+            "roadmap": {
+              "accepts": [
+                "timeline"
+              ],
+              "flow": "none"
+            },
+            "notes": {
+              "accepts": [
+                "text"
+              ],
+              "flow": "none"
+            },
+            "signal": {
+              "accepts": [
+                "metric"
+              ],
+              "flow": "none"
+            }
+          }
+        }
+      }
+    },
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "colorSchemes": {
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      },
+      "fontSchemes": {
+        "roboto": {
+          "name": "Roboto",
+          "app": "google-slides",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Roboto",
+          "minor": "Roboto",
+          "textSample": "Perfect for tech",
+          "type": "sans-serif",
+          "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "example",
+      "title": "Seven phases in a narrow region",
+      "layout": "authored",
+      "blocks": [
+        {
+          "timeline": {
+            "events": [
+              {
+                "when": "Phase 1",
+                "what": "Understand the user need",
+                "status": "done"
+              },
+              {
+                "when": "Phase 2",
+                "what": "Test a focused prototype",
+                "status": "current"
+              },
+              {
+                "when": "Phase 3",
+                "what": "Measure outcomes and learn",
+                "status": "planned"
+              },
+              {
+                "when": "Phase 4",
+                "what": "Understand the user need",
+                "status": "planned"
+              },
+              {
+                "when": "Phase 5",
+                "what": "Test a focused prototype",
+                "status": "planned"
+              },
+              {
+                "when": "Phase 6",
+                "what": "Measure outcomes and learn",
+                "status": "planned"
+              },
+              {
+                "when": "Phase 7",
+                "what": "Understand the user need",
+                "status": "planned"
+              }
+            ]
+          },
+          "region": "roadmap"
+        },
+        {
+          "text": [
+            {
+              "text": "Pilot first. Roll out what works. Keep the feedback loop open.",
+              "fontSize": 24
+            }
+          ],
+          "region": "notes"
+        },
+        {
+          "metric": {
+            "value": "7",
+            "label": "Phases"
+          },
+          "region": "signal"
+        }
+      ]
+    }
+  ]
+}
