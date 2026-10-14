@@ -29,3 +29,8 @@ description box is about 24 pt high, so a 36 pt edit can overflow it. The worker
 does not enlarge the box. If PowerPoint changes the shape geometry, source-role
 recovery may conservatively refuse the changed topology; report that result
 separately rather than treating source recovery as proof of visual fit.
+
+`list-description-native-save` uses the same shared document and prepared font
+handle as `list-description-native-edit`, with an empty action plan. It isolates
+PowerPoint save/reopen behavior from the description style edit. Generate a new
+sealed suite for this control; existing suites and attempts remain unchanged.

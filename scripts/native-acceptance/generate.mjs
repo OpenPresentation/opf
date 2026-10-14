@@ -66,7 +66,7 @@ export async function generatePrimaryFixtures({consumer,output,sourceIdentity,en
     assert.ok(validation.valid,`${name}: ${JSON.stringify(validation.findings)}`);
     const input=`inputs/${name}.pptx`,sourcePath=`sources/${name}.opf.json`,actionPlan=`actions/${name}.json`;
     await put(sourcePath,json(deck));await put(actionPlan,json(await actionPlanFor(name)));
-    const measured=Object.hasOwn(source.featureManifest,name)||['list-description-native-edit','layout-bleed-card'].includes(name),diagnostics=[];
+    const measured=Object.hasOwn(source.featureManifest,name)||['list-description-native-edit','list-description-native-save','layout-bleed-card'].includes(name),diagnostics=[];
     if(measured)await (await measuredFonts()).ensure(deck,{renderOptions:{catalogs:[gallery]},onDiagnostic:issue=>diagnostics.push(issue)});
     const exportOptions={...options,...(measured?{fonts}:{}),onDiagnostic:issue=>diagnostics.push(issue)};
     const bytes=await pptx.toPptx(deck,exportOptions);

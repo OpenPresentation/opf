@@ -7,7 +7,7 @@ const fixture = name => new URL(`./fixtures/${name}`, import.meta.url);
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');
 export const PRIMARY_CASE_NAMES = Object.freeze([
   'layout-title-auto','layout-media-regions','layout-empty-custom','table-save',
-  'furniture-inherited','furniture-flags','list-description-native-edit','layout-bleed-card','picture-control',
+  'furniture-inherited','furniture-flags','list-description-native-edit','list-description-native-save','layout-bleed-card','picture-control',
   'chart-treemap-category','chart-histogram-single','chart-histogram-category',
   'chart-pareto-multi','chart-box-multi','chart-waterfall-single',
   'chart-funnel-category','chart-world-category','chart-all-seven',

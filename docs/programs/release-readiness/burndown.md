@@ -754,3 +754,5 @@ Append-only. One dated line per state change.
 - 2026-10-14 UTC — RR-20: official roll #651 merged at70b12d59 with exact reviewed229810tree; tooling #652 remains queued,22checks reported,no acceptance. T16 evidence reconciliation retains renderer/editor/core host proof but leaves actual Gallery host/default/hosted integration and final site evidence open. No checklist closure, repeated engine suite, native success or deployment is inferred.
 
 - 2026-10-14 UTC — RR-20: tooling #652 actually merged at47e66c57 with exact reviewed957tree; both official roll #651 and tooling #652 are verified/synchronized. Earlier queued/prepared checkpoint states are historical. T16 Gallery host integration, native55case acceptance, genuine0.20 registry and site/owner scope remain open.
+
+- 2026-10-14 UTC — RR-20 diagnostic tooling: add maintained `list-description-native-save`, sharing the exact list document and measured font preparation with the edit case, with an empty action plan. Pure generation checks bind identical source/archive bytes and distinct plans. Native disposition remains open; no Office run or acceptance follows from fixture generation.
