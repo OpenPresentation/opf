@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+## 0.20.0 (2026-10-14)
+
+Renderer 0.20.0 requires published core 0.20.1 and supports Gallery 3 nested-array layout records, neutral structural defaults, typed numeric alignment and zero-based magnitude axes. The temporary unreleased-core declaration has been removed for this release.
+
+- Layout templates now author `areas` as nested arrays of region-name cells. String rows are outside the contract; grid geometry and explicit region pins retain their existing meaning.
+- Adopt the published Gallery 3 catalog contract for renderer development fixtures with an authentic registry lock. Engine versions and existing core/renderer contracts remain unchanged until the coordinated 0.20 release preparation.
+
+Declare the matching unreleased core 0.20 requirement so the established RR-55 gate waits for genuine registry core before standalone packed checks; coordinated source and packed/browser qualification remains required. Release preparation removes this declaration and release checks refuse it.
+- Structural card, table and chart rules use quiet neutral defaults instead of the scheme’s fifth brand accent. Authored border colors remain unchanged. Tables align typed numeric values and numeric-column headers to the right by default, retaining explicit cell and design alignment and original cell values. Preview and native export share the same resolved defaults.
+
+Bar, column and filled-area magnitude axes include zero by default, including near-equal positive or negative values; line/scatter automatic domains remain unchanged.
+
 ## 0.19.1 (2026-10-12)
 
 The 0.19 renderer train uses 0.19.1 after the 0.19.0 publisher stopped before npm publication. It includes the adaptive v2 layout renderer and the corrected ordinary release checks.
