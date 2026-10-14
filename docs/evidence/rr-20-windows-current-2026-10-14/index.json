@@ -9970,6 +9970,10 @@
     {
       "finding": "Native replacement picture stretch versus imported implicit cover",
       "disposition": "Confirmed runtime fidelity defect. The zero-crop 16:9 replacement in a native2:1 stretched frame needs explicit block fit:stretch recovery. Exact saved native archive retained; reviewed PPTX fix and offline replay pending. No Office rerun."
+    },
+    {
+      "finding": "Historical custom validation/composition receipt used default context",
+      "disposition": "new-custom-validation-composition.json retained historically; its composition is not qualified named-layout geometry. Separate new-custom-resolved-context-composition.json resolves the public SlideContext first, then composes its slide/options. This proves document custom named resolution and first allocation using portable estimates, not native pixel parity."
     }
   ],
   "limitations": [
@@ -11688,6 +11692,12 @@
       "bytes": 5053,
       "sha256": "2f4721181a5cecbf44a73f00b99b2cbb8a202cf345fe048afe5bdfa585612e01",
       "originalPath": "C:/opf-work/native-manual-current-6eea8909-attempt01/baseline-cli/change-picture-report.json"
+    },
+    {
+      "path": "manual/new-custom-resolved-context-composition.json",
+      "bytes": 39235,
+      "sha256": "d917fd43ca1a593f85656f679ed9b79aa1660959eb79448c0a4504de354d1374",
+      "originalPath": "C:/opf-work/native-manual-current-6eea8909-attempt01/new-custom-resolved-context-composition.json"
     }
   ]
 }
