@@ -12,6 +12,8 @@ const decks={
  'layout-bleed-card':{"design":{...base.design,"contentBox":true},"catalogs":{"custom":{"layouts":{"bleed-card":{"name":"Bleed and card native witness","areas":[["media","body"]],"columns":[1,1],"rows":[1],"regions":{"media":{"accepts":["image"],"role":"media","flow":"none","bleed":true},"body":{"accepts":["text"],"flow":"none"}}}}}},"slides":[{"layout":"custom:bleed-card","blocks":[{"region":"media","image":image},{"region":"body","text":"A picture reaches the slide edge. This text remains inside a padded visible card."}]}]},
  'picture-control':{slides:[{title:'Native picture control',image}]},
 };
+decks['furniture-layouts']=structuredClone(decks['furniture-inherited']);
+decks['furniture-layouts'].slides.forEach((slide,index)=>{slide.layout=index===0?'text':'two-column';});
 for(const [name,deck] of Object.entries(chartFixture.decks))decks[`chart-${name}`]=structuredClone(deck);
 return decks;
 }

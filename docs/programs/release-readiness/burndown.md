@@ -758,3 +758,5 @@ Append-only. One dated line per state change.
 - 2026-10-14 UTC — RR-20 diagnostic tooling: add maintained `list-description-native-save`, sharing the exact list document and measured font preparation with the edit case, with an empty action plan. Pure generation checks bind identical source/archive bytes and distinct plans. Native disposition remains open; no Office run or acceptance follows from fixture generation.
 
 - 2026-10-14 UTC — RR-20 comparator diagnostic: distinguish empty native TextFrames on exact source decorative shapes without `txBody` from exported text shapes. Extra visible text, unknown empty frames, missing words and the 0.02 pt text geometry gate remain strict. Native/registry acceptance stays open.
+
+- 2026-10-14 UTC — RR-20 native tooling: add `furniture-layouts` with Text / Two columns / Two columns across inherited / local / inherited furniture; archive tests bind both per-layout shared-header variants. Native observation and RR-81 acceptance remain pending; previous suites and receipts retain their literal identities.
