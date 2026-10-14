@@ -34,3 +34,9 @@ separately rather than treating source recovery as proof of visual fit.
 handle as `list-description-native-edit`, with an empty action plan. It isolates
 PowerPoint save/reopen behavior from the description style edit. Generate a new
 sealed suite for this control; existing suites and attempts remain unchanged.
+
+`furniture-layouts` clones the inherited/local/inherited furniture document with
+explicit Text / Two columns / Two columns layouts and no actions. Its native
+save/reopen witness covers inherited shared-header carriers on two distinct
+layout variants alongside local picture/header/footer content. Generate a fresh
+sealed suite; this case does not replace earlier attempts.
