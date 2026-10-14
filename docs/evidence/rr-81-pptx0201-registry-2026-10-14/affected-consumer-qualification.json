@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "at": "2026-10-14T19:22:40.869249+00:00",
+  "scope": "Affected genuine installed published-matrix consumer and unchanged maintained master-label cases only; no repeated full source/registry/browser/native or site qualification. Shared original site consumer remains unchanged.",
+  "runtime": {
+    "node": "v24.21.0",
+    "platform": "darwin",
+    "arch": "arm64"
+  },
+  "planSha256": "83b7c9e01ab6446f01d12d54e7e9ab1408fc37cf2b90f330ae2a990b11307493",
+  "authoritySha256": "c12b67d85e5753de67b4821a45e0cb27c89ddbe0b31fe4412bb6730752eaaa5c",
+  "installedPackages": {
+    "@openpresentation/opf": {
+      "version": "0.20.1",
+      "integrity": "sha512-rQdrzEh/wYOtXnOqB0FYTNEkutnR3VCw63WZ5ONgfWBIuWDcTj63dXfR/Ng6CBlQwkdMlWLSKvHsBPaloUeUcw==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.20.1.tgz"
+    },
+    "@openpresentation/opf-render": {
+      "version": "0.20.0",
+      "integrity": "sha512-335a5h/QweiJGexf/UcyTVOWX4smi3fW59bVqsK03aScY6r57dqDeimmaG6H1HalnqnIh2vvdb8OagSQZPt+Hg==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.20.0.tgz"
+    },
+    "@openpresentation/opf-pptx": {
+      "version": "0.20.1",
+      "integrity": "sha512-I85PuU42ELSQ1LmilNNKTAAJgCntI2JFJDfL/LkkN356CP+6npwCMGC1k343nt4HPVOpZwLqVTMkok4S2DD4cA==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.20.1.tgz"
+    },
+    "@openpresentation/opf-editor": {
+      "version": "0.20.0",
+      "integrity": "sha512-z6SoyGty0cpOlxnGkBhzNrWqNs/ck/CXkmphZUcDKQ3HNiKsHf0gdzHQlvUnTZBMOIQxSBA+ZyfAHWRf06dm9g==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.20.0.tgz"
+    },
+    "@openpresentation/gallery": {
+      "version": "3.0.0",
+      "integrity": "sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/gallery/-/gallery-3.0.0.tgz"
+    }
+  },
+  "allInstalledEntriesMatchAuthority": true,
+  "allSixVerificationRefsMatchAuthority": true,
+  "matrixMembership": "four libraries plus Gallery; CLI independently canonically verified and intentionally not added",
+  "unchangedPeerHelperDevtoolAndTransitiveRecords": true,
+  "changedLockRecords": [
+    "",
+    "node_modules/@openpresentation/opf-pptx"
+  ],
+  "checks": {
+    "maintainedUpdateLock": 0,
+    "actualHostedPrepareNpmCiAndNodeNextBundlerEmit": 0,
+    "actualEmittedNodeConsumer": 0,
+    "unchangedMaintainedMasterLabelCasesOnInstalledArtifact": 0
+  },
+  "nodeConsumer": {
+    "consumer": "ok",
+    "fontFiles": 197,
+    "svg": "b75de9d83593a1166eaa986dcb34e7f384c8582cde86830469a33693f227c3f9",
+    "png": "c98bc6d640d32c93e2131a550a2e782150209478a0f5576ae803d91336c7f3ff",
+    "pptx": "f58d502c0ae52ee64676bf0391d1538e9149103e9e538620486f991e8f486bbc",
+    "fontsUsed": [
+      "Calibri"
+    ],
+    "loadSystemFonts": false
+  },
+  "priorNodeConsumerLogSha256": "849da28c14bb8fa8d5c936debf21a7154c29b46834b22b96356cae4b21e6068f",
+  "svgPngFontInventoryEqualPrior20Graph": true,
+  "pptxDigestChangedAndRetained": true,
+  "masterLabelBinding": {
+    "sourceCommit": "9690abd12af8d7a4d6f29a28709517f0b6569301",
+    "sourceTest": "test/master-display-name.mjs",
+    "sourceTestSha256": "98aa7ac0ff311d07b43715c6ddf0c5e79131db37dfd57b312667096eddfe33de",
+    "copiedTestUnchanged": true,
+    "sourceHelperSha256": "b750042cbbfbf4624f5d3287ac796be3cce0542695973f6e8fdf65434b065b58",
+    "boundHelperSha256": "94a148cab05f3da6596feab52bf4528b878ea4102d0a662c5f9d21a51cf29015",
+    "onlyHelperBindingChange": "../../dist/index.js -> @openpresentation/opf-pptx",
+    "purpose": "Execute the unchanged maintained five-archive master-label cases against the actual newly installed registry artifact; no source runtime alias or new assertion/tolerance."
+  },
+  "masterLabelResult": "Master display names: five exported archives; default/authored themes, all Gallery labels, custom layouts and two script profiles preserved.",
+  "logs": {
+    "matrix-update-lock": {
+      "exitCode": 0,
+      "sha256": "1731e0e46fda5c36d68c2757af68deca7f82b74c52e853c0f8aa1e26389efa14"
+    },
+    "matrix-prepare": {
+      "exitCode": 0,
+      "sha256": "b954691211d09ad765b2aea93ea4af1ad98fe399c3f8848da1f966443d6b6bda"
+    },
+    "matrix-node-consumer": {
+      "exitCode": 0,
+      "sha256": "7bddd9aca8e5410f2b80dd6532540977c5d7fef1c38aec082bf5bf842a0ac3cb"
+    },
+    "installed-master-label": {
+      "exitCode": 0,
+      "sha256": "c2c5a5f8abb19d61d77efb04ea13182513ca5b588098da86e8d424eceda2ac1c"
+    }
+  },
+  "browserExecution": false,
+  "newOfficeExecution": false,
+  "siteAdoption": false,
+  "deployment": false,
+  "nativeGlobalAcceptance": false
+}

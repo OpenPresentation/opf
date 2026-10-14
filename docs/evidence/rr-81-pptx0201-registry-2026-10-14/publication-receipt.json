@@ -1,0 +1,140 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-10-14T19:10:58.346498+00:00",
+  "package": {
+    "name": "@openpresentation/opf-pptx",
+    "version": "0.20.1",
+    "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301",
+    "dist": {
+      "integrity": "sha512-I85PuU42ELSQ1LmilNNKTAAJgCntI2JFJDfL/LkkN356CP+6npwCMGC1k343nt4HPVOpZwLqVTMkok4S2DD4cA=="
+    },
+    "repository": "https://github.com/OpenPresentation/opf-pptx",
+    "tag": "opf-pptx-v0.20.1",
+    "workflow": ".github/workflows/release.yml",
+    "provenanceInvocation": "https://github.com/OpenPresentation/opf-pptx/actions/runs/38619385113/attempts/1",
+    "canonicalVerification": {
+      "ok": true,
+      "checks": [
+        {
+          "name": "npm version",
+          "ok": true,
+          "detail": "@openpresentation/opf-pptx@0.20.1, integrity sha512-I85PuU42ELSQ1LmilNNKTAAJgCntI2JFJDfL/LkkN356CP+6npwCMGC1k343nt4HPVOpZwLqVTMkok4S2DD4cA=="
+        },
+        {
+          "name": "tag",
+          "ok": true,
+          "detail": "OpenPresentation/opf-pptx opf-pptx-v0.20.1 -> 9690abd12af8d7a4d6f29a28709517f0b6569301"
+        },
+        {
+          "name": "gitHead",
+          "ok": true,
+          "detail": "gitHead 9690abd12af8d7a4d6f29a28709517f0b6569301 = tag commit 9690abd12af8d7a4d6f29a28709517f0b6569301"
+        },
+        {
+          "name": "tag on main",
+          "ok": true,
+          "detail": "9690abd12af8 is on opf-pptx main (identical)"
+        },
+        {
+          "name": "version at tag",
+          "ok": true,
+          "detail": "package.json at 9690abd12af8 carries 0.20.1"
+        },
+        {
+          "name": "dist.attestations",
+          "ok": true,
+          "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.20.1)"
+        },
+        {
+          "name": "SLSA provenance",
+          "ok": true,
+          "detail": "built by .github/workflows/release.yml on refs/tags/opf-pptx-v0.20.1 from 9690abd12af8 (https://github.com/OpenPresentation/opf-pptx/actions/runs/38619385113/attempts/1)"
+        },
+        {
+          "name": "npm audit signatures",
+          "ok": true,
+          "detail": "14 verified, 0 invalid, 0 missing; @openpresentation/opf-pptx@0.20.1 has a verified attestation"
+        },
+        {
+          "name": "GitHub release",
+          "ok": true,
+          "detail": "https://github.com/OpenPresentation/opf-pptx/releases/tag/opf-pptx-v0.20.1"
+        },
+        {
+          "name": "dist-tag",
+          "ok": true,
+          "info": true,
+          "detail": "latest"
+        }
+      ],
+      "logSha256": "4eed90403d35d324e7ca1dd2db3c7143e113ba44b15a3aea0a4b94fa7542be84",
+      "logName": "rr81-pptx0201-independent-verification.json"
+    }
+  },
+  "publishedAt": "2026-10-14T19:07:55.155Z",
+  "canonicalPublisher": {
+    "exitCode": 0,
+    "workflowRun": "https://github.com/OpenPresentation/opf-pptx/actions/runs/38619385113",
+    "logSha256": "c1dd81a7205a21ad3ab6243100322c17aaead140e677291252c9ac64b3e4872d"
+  },
+  "independentCanonicalVerification": {
+    "exitCode": 0,
+    "checks": 10,
+    "file": "rr81-pptx0201-independent-verification.json",
+    "sha256": "4eed90403d35d324e7ca1dd2db3c7143e113ba44b15a3aea0a4b94fa7542be84"
+  },
+  "registryMetadata": {
+    "requests": 1,
+    "url": "https://registry.npmjs.org/@openpresentation%2fopf-pptx",
+    "packumentSha256": "e3465b41d54d48689e385e35104002f6e7990dd89a48f0c7da2002d1445729fb",
+    "capturedMetadataSha256": "dc140ddcabd83277b0773306ef2d74f1c3268c2b4ac495f8f16ff1accb9b2f3c"
+  },
+  "reviewedReleaseSource": {
+    "sourceMerge": "f2637951b77763bfeb45d5cd1012d12f7763f952",
+    "prepPR": 261,
+    "prepMerge": "9690abd12af8d7a4d6f29a28709517f0b6569301",
+    "prepTree": "3e0c67fbc49e7289da5bf57f9ca1b071517caaa5",
+    "prepFullIndexPatchSha256": "a4130882849f4ca5f898adeec514add85224ec4d1c22444df430b59a6192b2ec",
+    "actualCommitGate": {
+      "checks": "6/6",
+      "exitCode": 0,
+      "logSha256": "38976baa910100be421096fdd05604047867d3065b4e5044c30d4889047ac00a"
+    },
+    "rootPublicationReviewSha256": "4cdfd7a8eaef836f6c9e29cc11c676c279472ea764d6bbfecfac9f5b34d275ef"
+  },
+  "proposedExampleSource": {
+    "repository": "OpenPresentation/opf-editor",
+    "sourceMerge": "2ac0268359f48123031ef537fcc0c31d7c41a1df",
+    "sourcePR": 170,
+    "publishedLibrarySourceUnchanged": "671b04ee3f6b228338c0eb3d6d7453f807b28837",
+    "scope": "Examples/helper/test and reviewed CI job budget only; no new Editor package publication."
+  },
+  "priorQualifiedGraph": {
+    "coreSource": "0b6141e5a90c037286b1fbce1862ab1bcc1ad34b",
+    "planSha256": "371e07dd96c1f98b15bd07d60329a976d5991f088253e805f368574d02793902",
+    "authoritySha256": "78ea003cc6bca9ef1f60d238339822f390506bbb6476058bcb815d19b16f8421",
+    "pptxVersion": "0.20.0",
+    "pptxSource": "0e2ea4982c4bb1280f22763411e681fe0786f4fc",
+    "editorExampleSource": "671b04ee3f6b228338c0eb3d6d7453f807b28837",
+    "qualificationScopeUnchanged": true
+  },
+  "pendingAcceptance": {
+    "successorRegistryConsumer": true,
+    "scopedSiteArtifactAndExampleAdoption": true,
+    "officialCurrentMainCoordinatedCIReconciliation": true,
+    "siteDefaultAndDeployment": true
+  },
+  "nativeScope": {
+    "selectedCases": 17,
+    "uiOperations": 4,
+    "unexecutedCases": 41,
+    "totalCases": 58,
+    "globalAcceptance": false
+  },
+  "siteDeployment": false,
+  "scope": "New PPTX publication verification and successor plan/example-source proposal only. Prior installed-consumer, site and native evidence remains attributed to its original graph.",
+  "affectedMatrixConsumer": {
+    "qualification": "affected-consumer-qualification.json",
+    "status": "passed hosted preparation/types/Node consumer and five-archive installed master-label cases; shared site-consumer rebuild and adoption remain pending"
+  }
+}
