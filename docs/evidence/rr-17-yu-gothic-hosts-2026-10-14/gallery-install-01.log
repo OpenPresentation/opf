@@ -1,0 +1,15 @@
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +665
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ ENOTFOUND  request to https://registry.npmjs.org/@fontsource-variable/bitter/-/bitter-5.3.0.tgz failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org
+
+FetchError: request to https://registry.npmjs.org/@fontsource-variable/bitter/-/bitter-5.3.0.tgz failed, reason: getaddrinfo ENOTFOUND registry.npmjs.org
+    at ClientRequest.<anonymous> (/Users/michael/.cache/node/corepack/v1/pnpm/10.33.2/dist/pnpm.cjs:39283:18)
+    at ClientRequest.emit (node:events:514:28)
+    at emitErrorEvent (node:_http_client:114:11)
+    at TLSSocket.socketErrorListener (node:_http_client:766:5)
+    at TLSSocket.emit (node:events:526:24)
+    at emitErrorNT (node:internal/streams/destroy:170:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:129:3)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)

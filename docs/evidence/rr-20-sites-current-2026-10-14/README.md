@@ -1,5 +1,15 @@
 # Current packages and three-site production evidence — 2026-10-14
 
+## Final source-integration update
+
+All three site adoption PRs passed their two required checks on actual attempt 2, received canonical confirmation and merged: Main #103 `a283fcdf6e6cd9e46da1210d1787b10727208045`, Gallery #126 `dda2a068eed2820b95afe3689662f8f0cb6b7f98` and Dev #128 `a84dd6c65a98b40dda73c0a4d4c4a03ac6b2cd4d`. Each actual merge tree and full-index binary patch equals its reviewed/deployed candidate; all three primary defaults were cleanly fast-forwarded with one fetch each. Existing deployed Workers and accepted live proofs are unchanged. Original attempt 1 no-start billing failures remain historical; the owner restored the budget and fresh checks passed without source changes or forced merges. [Final source/CI/default receipt](final-source-integration.json). Proposed exact closure: T14/T18/T24/T29/T31/T39 and RR-80/RR-83/RR-84; T16/T40 stay open (38/40 original checkpoints). T16 remains unchecked: the original commissioned eleven-name request includes Yu Gothic, which is absent from the retained twenty-two-name fixtures. Four own-host Yu Gothic corpus/route/render cases and explicit carrier chronology reconciliation remain. renderer #217/editor #155/core #584 were superseded by renderer #219/editor #156/core #592 carriers; no original literal merge chronology is fabricated. Gallery #125’s two fixtures and Gallery #127’s six paths are byte-identical in deployed 55db; PR #127 merged 98f into parent #126 before actual default merge dda2. The separate nativeVisual 1.0105 finding, script gap and four-host long-tail scope remain literal. T24/T31 are scoped-complete; a second Windows-only Node replay/export was not an original criterion. T40 remains open for actual final source-lock qualification/integration, bounded remaining records and readiness-note delivery; official roller 38637195180 has only generated 8860 at this observation.
+
+[Accepted same-four current registry replay](retained-current-registry-replay.json) binds the original canonical native saves, exact six installed/published package identities, all 57 actual output hashes, strict fit-only recovery and independent/root review. Original 17 native + four UI/41 unexecuted and all global false limits remain. No new Office operation or Windows report export is claimed.
+
+## Historical 21:20 production checkpoint
+
+The observations below retain the earlier source-gates-pending cutoff; the final update above supersedes those current-state waits.
+
 All three maintained websites were deployed from reviewed, qualified source and verified publicly after the owner explicitly revoked the earlier deployment hold. These production results are separate from site default-branch integration: required private GitHub attempt 1 jobs never started because of the account billing/spending restriction. The owner restored the budget and all five attempt 2 workflows are actually in progress on unchanged heads; source/default acceptance remains pending required gates. No forced merge, blind retry or source workaround occurred.
 
 | Site | Deployed source | Worker version | Accepted public scope |

@@ -1,0 +1,9 @@
+Canvas fonts: language and font-scheme switches, Aptos with Japanese, undo/redo to pending faces, retry and drafts all load faces before the canvas draws; 26 requests, all local.
+file:///private/tmp/rr17-yu-61/editor/test/canvas-fonts-browser.mjs:260
+  await writeFile(path.join(output, 'yu-gothic.json'), `${JSON.stringify({ family: 'Yu Gothic', route: 'Noto Sans JP', samples: yuReport, files: yuFiles, nativeVisualAccepted: false }, null, 2)}\n`);
+  ^
+
+ReferenceError: writeFile is not defined
+    at file:///private/tmp/rr17-yu-61/editor/test/canvas-fonts-browser.mjs:260:3
+
+Node.js v24.21.0

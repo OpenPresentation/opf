@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-14T21:37:24.814910+00:00",
+  "sourceReceiptSha256": "479bb0a6b88c44b618d3bc7955a9d96349be910a9c6c59d8c9977ec8a205bc25",
+  "allThreeNormalSourceIntegrationsVerified": true,
+  "allThreeProductionDeploymentsAndBoundedLiveProofPreviouslyRootAccepted": true,
+  "sites": [
+    {
+      "branch": "main",
+      "parent": "7bd54a7d40d407766dc8d8e00f50fcc37196a641",
+      "actualMerge": "a283fcdf6e6cd9e46da1210d1787b10727208045",
+      "reviewedDeployedHead": "8b320e414ca2a3d6be99acb007895d2ebb02ba12",
+      "tree": "fe955f5be861ba27eab97263007858ad2ae78645",
+      "reviewedTreeEqual": true,
+      "fullIndexBinaryPatchSha256": "b00bf634319c74f2f1e1fbaf5fd5ef65b1038e1d629319aa06e62a39a1b84257",
+      "reviewedFullPatchEqual": true,
+      "primaryCleanFastForward": true,
+      "fetches": 1,
+      "runtimeRedeploy": false,
+      "name": "main103",
+      "pr": 103,
+      "proofSha256": "29d0493e4e7a699d199a2fb7427c2a8437872bd06b91fb629811efce2ed693e8",
+      "freshRequiredChecksPassed": 2,
+      "freshRequiredChecksCounted": 2,
+      "requiredWorkflowRetryAttempt": 2,
+      "confirmedCanonicalMarker": "21:25:44 MERGED Data-Advantage/openpresentation-site#103 a283fcdf6e6cd9e46da1210d1787b10727208045",
+      "canonicalLogSnapshotSha256": "7abaee3aee218f2e3d02f469cf0f1b7244c51d54b1b10b6ce6ad0f490165a02c",
+      "originalAttempt1NoStartFailurePreserved": true,
+      "deployedWorkerUnchangedByMergeBookkeeping": true,
+      "repository": "Data-Advantage/openpresentation-site",
+      "pullRequestUrl": "https://github.com/Data-Advantage/openpresentation-site/pull/103",
+      "commitUrl": "https://github.com/Data-Advantage/openpresentation-site/commit/a283fcdf6e6cd9e46da1210d1787b10727208045",
+      "reviewedChangedPathCount": 115,
+      "sourceProofFile": "main103-actual-merge-proof.json"
+    },
+    {
+      "branch": "main",
+      "parent": "92e23ed5b432195de884a6be51f2415ce49f8924",
+      "actualMerge": "dda2a068eed2820b95afe3689662f8f0cb6b7f98",
+      "reviewedDeployedHead": "55db2fe4dff8168f04dc7d683f0472b0f057f2b4",
+      "tree": "ea578851187e17964465145968debd0ada114849",
+      "reviewedTreeEqual": true,
+      "fullIndexBinaryPatchSha256": "540efaafe413f5ef95e778dc930661ca7cedc1bc6d46e59785039b90a4ca218d",
+      "reviewedFullPatchEqual": true,
+      "primaryCleanFastForward": true,
+      "fetches": 1,
+      "runtimeRedeploy": false,
+      "name": "gallery126",
+      "pr": 126,
+      "proofSha256": "9b344969fde2a848aaf343d6a1592a4003cafa79ef50147e9af12def45aea2ed",
+      "freshRequiredChecksPassed": 2,
+      "freshRequiredChecksCounted": 2,
+      "requiredWorkflowRetryAttempt": 2,
+      "confirmedCanonicalMarker": "21:30:08 MERGED Data-Advantage/pptx-gallery#126 dda2a068eed2820b95afe3689662f8f0cb6b7f98",
+      "canonicalLogSnapshotSha256": "f437688bc1655852a6ff30c61390ace91b6ada2b48aac7e302ba41c55071af64",
+      "originalAttempt1NoStartFailurePreserved": true,
+      "deployedWorkerUnchangedByMergeBookkeeping": true,
+      "repository": "Data-Advantage/pptx-gallery",
+      "pullRequestUrl": "https://github.com/Data-Advantage/pptx-gallery/pull/126",
+      "commitUrl": "https://github.com/Data-Advantage/pptx-gallery/commit/dda2a068eed2820b95afe3689662f8f0cb6b7f98",
+      "reviewedChangedPathCount": 1078,
+      "sourceProofFile": "gallery126-actual-merge-proof.json"
+    },
+    {
+      "branch": "master",
+      "parent": "b55bd642f1c8de3799dd8e06a830515e1dd4709c",
+      "actualMerge": "a84dd6c65a98b40dda73c0a4d4c4a03ac6b2cd4d",
+      "reviewedDeployedHead": "a8b8626df42a99e98e30420564cbd0599e94d6ce",
+      "tree": "c9e4dd395c9742044913d49c95f1e570c5fd0cf4",
+      "reviewedTreeEqual": true,
+      "fullIndexBinaryPatchSha256": "f0f2ae558c1bd29718b9b558b4e5d5cbff2abf0b5bda345faa174b7a38b71cc9",
+      "reviewedFullPatchEqual": true,
+      "primaryCleanFastForward": true,
+      "fetches": 1,
+      "runtimeRedeploy": false,
+      "name": "dev128",
+      "pr": 128,
+      "proofSha256": "cf17f73ce5be4ffb91c64b0b11659a4dcdf084495eb46d952d327cbf99422931",
+      "freshRequiredChecksPassed": 2,
+      "freshRequiredChecksCounted": 2,
+      "requiredWorkflowRetryAttempt": 2,
+      "confirmedCanonicalMarker": "21:34:13 MERGED Data-Advantage/pptx-dev#128 a84dd6c65a98b40dda73c0a4d4c4a03ac6b2cd4d",
+      "canonicalLogSnapshotSha256": "f437688bc1655852a6ff30c61390ace91b6ada2b48aac7e302ba41c55071af64",
+      "originalAttempt1NoStartFailurePreserved": true,
+      "deployedWorkerUnchangedByMergeBookkeeping": true,
+      "repository": "Data-Advantage/pptx-dev",
+      "pullRequestUrl": "https://github.com/Data-Advantage/pptx-dev/pull/128",
+      "commitUrl": "https://github.com/Data-Advantage/pptx-dev/commit/a84dd6c65a98b40dda73c0a4d4c4a03ac6b2cd4d",
+      "reviewedChangedPathCount": 60,
+      "sourceProofFile": "dev128-actual-merge-proof.json"
+    }
+  ],
+  "noForcedMerge": true,
+  "noAdditionalRetry": true,
+  "noRuntimeRedeployForBookkeeping": true,
+  "historicalAttempt1": "Jobs never started due account payments/spending limit; original annotations, empty steps and unavailable logs remain in ci-account-blockers.json. Owner restored budget; five attempt2 workflows were retried on unchanged reviewed deployed heads.",
+  "remainingBoundaries": {
+    "T16": "Original commissioned Yu Gothic own-host fixture gap and explicit supersession chronology remain; canonical22-name evidence covers ten of original eleven names, not Yu Gothic.",
+    "T24T31": "Scoped-complete per original canonical native/fixed-source acceptance plus genuine current-package samefour Mac replay and supervisor/independent reviews. Separate Windows12-report export is unaccepted and is not an added release criterion.",
+    "T40": "Official roller38637195180 generated886023e2d3f7a0a92d5073c7399ac02732fa0afd; child qualification/actual integration still pending. Final records and note delivery remain distinct."
+  },
+  "independentReview": {
+    "allThreeMergeReviewSourceSha256": "06b9030e9f24064292ff42cbafad17a0cab13f41193f2d4795bd73e708357ccd",
+    "ciBindingsReviewSourceSha256": "c6b511de9bf2e17c47ea88f58a3666abc375fab7e4e3d2a8a4ece3e8bd985d2a",
+    "outcome": "PASS: all three exact merge trees/full patches equal deployed candidates; six actual attempt2 check passes/confirmation and clean defaults verified",
+    "proposedCriterionClosures": [
+      "T14",
+      "T18",
+      "T29",
+      "T39"
+    ],
+    "proposedProgramDone": [
+      "RR-80",
+      "RR-83",
+      "RR-84"
+    ],
+    "retainedOpen": [
+      "T16",
+      "T24",
+      "T31",
+      "T40"
+    ],
+    "noNewTestsNetworkEditsByReviewer": true,
+    "finalEligibilitySourceSha256": "9cb6cd97d2e39f6911fc0e871660a28e4ee3f85419a8bdb6c71b4ff78c723019"
+  },
+  "currentScopedReplay": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/retained-current-registry-replay.json",
+    "sha256": "e468d6624ad67020b1ccbdb3a64c1f0a7ae6df62c6bd8682453b12f5042f0162",
+    "T24Complete": true,
+    "T31Complete": true,
+    "originalChecklistChecked": 38,
+    "originalChecklistOpen": [
+      "T16",
+      "T40"
+    ],
+    "RR81OriginalScopedFeatureNativeCriterionComplete": true,
+    "RR81Basis": "Supervisor accepts the original scoped row based on canonical observedRR81CriteriaAccepted:true, merged runtime/native mappings and independently/root accepted current published samefour replay. No additional Windows-only or global/all58 clause is inferred."
+  },
+  "broaderProgramQueueAudit": {
+    "at": "2026-10-14T22:06:29.326531+00:00",
+    "source": "GitHub REST GET repos/OpenPresentation/{repo}/rules/branches/main, authenticated read-only",
+    "rawReceiptSha256": "d1dbc4b2dffc435d52de500fd08b0b835a7a06564b8a24eceefef2447c24255d",
+    "callBudget": 8,
+    "totalCallAttempts": 8,
+    "remoteSuccessfulReads": 4,
+    "initialSandboxNetworkRefusalsPreserved": 4,
+    "effectiveMergeQueue": {
+      "opf": true,
+      "opf-render": false,
+      "opf-pptx": false,
+      "opf-editor": false
+    },
+    "coreRuleset": 24382980,
+    "decisions": {
+      "RR-48": "Remains open: core queue is active and has actual queued merges; no effective merge_queue rule applies to main in renderer/PPTX/editor at this observation. Original four-repo queue requirement is not fully met. Correct blanket nothing-enabled wording, retain three sibling owner settings.",
+      "RR-53": "Do not close solely from actual core queue or manual32/32. Reconcile existing core contract/measurement evidence separately; RR48 four-repo owner condition remains open."
+    },
+    "limits": [
+      "Empty effective-rules result establishes no active ruleset merge_queue on that branch; it does not claim no legacy branch protection or no CI.",
+      "No settings, gates, flags, secrets, billing or repositories were changed.",
+      "Current publication/deployment/source merge results remain accepted and are not held on optional queue expansion."
+    ],
+    "decisionSourceSha256": "3b3653ff1121eb955d203a21f698bbd5cc20f3d450230e8f23feb39b5376fc1d"
+  }
+}

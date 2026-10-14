@@ -1,0 +1,653 @@
+{
+  "schemaVersion": 1,
+  "scope": "Current published-package Node/CLI replay of the SAME four already committed native archives on Mac; no new native or Windows-only replay claim.",
+  "platform": "darwin",
+  "node": "v24.21.0",
+  "driverActualSource": "9fade9f6dc9f28a34fc766310de2fac859e1a6a3",
+  "tooling": [
+    {
+      "name": "replay-retained-saves.mjs",
+      "sha256": "32318acad3aace3eceb34ddee1b15d6a70d49a70219248f7dcbc83994650ca83"
+    },
+    {
+      "name": "replay-offline.mjs",
+      "sha256": "a00adfd34bb7c0c2cab3dd7231090fdfb271bc3dd53c0477ea8e0112ebb2f86d"
+    },
+    {
+      "name": "identity.mjs",
+      "sha256": "7cf2fcc8951860353269f3a026e3d7a19a6251ba242f0cce1e37b118da6a3912"
+    },
+    {
+      "name": "generate.mjs",
+      "sha256": "f0caeea9f1f377214ffc94c3a32970e37bb3e053d32038b81055f5581900d5bd"
+    }
+  ],
+  "canonicalEvidence": "docs/evidence/rr-20-windows-current-2026-10-14",
+  "canonicalIndexSha256": "f6da57d1dbf038934b713706a305334cb9d053967978d15728d3902df2d8869c",
+  "canonicalScopedDecisionSha256": "7b522e98e755248effa013474cbce7df2dcf09c5e6af78d6d6335d9aaa2ee88a",
+  "originalScopedNative": {
+    "selectedCases": 17,
+    "uiOperations": 4,
+    "unexecutedCases": 41,
+    "totalCases": 58,
+    "globalAcceptance": false
+  },
+  "planSha256": "83b7c9e01ab6446f01d12d54e7e9ab1408fc37cf2b90f330ae2a990b11307493",
+  "authoritySha256": "c12b67d85e5753de67b4821a45e0cb27c89ddbe0b31fe4412bb6730752eaaa5c",
+  "consumerPreparationReceiptSha256": "1354cd153520a474e628c9bc8bf257812f6ed79f347727a01a354e8ea2de02cc",
+  "literalScopeAuditSha256": "24fe1dd6d085c3c03381d11f660facfef08f59bb4b6e82903acd3b73b452d67c",
+  "sourceToPublisherComparison": [
+    {
+      "name": "core",
+      "acceptedFixedSource": "d9742a7952b1f9cc2faa4f3a3528ee701530765b",
+      "publishedSource": "22664e18ea657db4e377b84997f2e73bf6cd738b",
+      "comparedPaths": [
+        "packages/javascript/src",
+        "spec/schemas",
+        "spec/reference"
+      ],
+      "changedPaths": [],
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "renderer",
+      "acceptedFixedSource": "d96c70ad86deeb69a6f4a18df78e659875b733a4",
+      "publishedSource": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034",
+      "comparedPaths": [
+        "src",
+        "fonts"
+      ],
+      "changedPaths": [],
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "editor",
+      "acceptedFixedSource": "7474315ee10d8ecce5d6bdb9cb4b5127f9cd38b1",
+      "publishedSource": "671b04ee3f6b228338c0eb3d6d7453f807b28837",
+      "comparedPaths": [
+        "src"
+      ],
+      "changedPaths": [],
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "CLI",
+      "acceptedFixedSource": "d9742a7952b1f9cc2faa4f3a3528ee701530765b",
+      "publishedSource": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
+      "comparedPaths": [
+        "packages/cli/src"
+      ],
+      "changedPaths": [],
+      "patchSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "PPTX",
+      "acceptedFixedSource": "38d5924ed37674c1d6b529c02d0c04a02fdabe17",
+      "publishedSource": "9690abd12af8d7a4d6f29a28709517f0b6569301",
+      "comparedPaths": [
+        "src"
+      ],
+      "changedPaths": [
+        "src/index.js"
+      ],
+      "patchSha256": "571aee08d179b09f725f50cd7f3f5719449c0ebdc54fcdc8337dce72ca605a01"
+    }
+  ],
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.20.1",
+      "runtimeSha256": "b210ea3f86629fe1eec9832112fd26a9b1f4933982db381abe9f0d62a8b75a6b",
+      "gitHead": "22664e18ea657db4e377b84997f2e73bf6cd738b",
+      "integrity": "sha512-rQdrzEh/wYOtXnOqB0FYTNEkutnR3VCw63WZ5ONgfWBIuWDcTj63dXfR/Ng6CBlQwkdMlWLSKvHsBPaloUeUcw=="
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.20.0",
+      "runtimeSha256": "8413381344f759a448c6c7e7d3c291e19deb19444292c05b300c7d31629160e4",
+      "gitHead": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034",
+      "integrity": "sha512-335a5h/QweiJGexf/UcyTVOWX4smi3fW59bVqsK03aScY6r57dqDeimmaG6H1HalnqnIh2vvdb8OagSQZPt+Hg=="
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.20.1",
+      "runtimeSha256": "00c90b73a5b1a697076dcf3755d670fec052e2662f062e09207760d730701b72",
+      "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301",
+      "integrity": "sha512-I85PuU42ELSQ1LmilNNKTAAJgCntI2JFJDfL/LkkN356CP+6npwCMGC1k343nt4HPVOpZwLqVTMkok4S2DD4cA=="
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.20.0",
+      "runtimeSha256": "22649b1b4ac4aa32a01b292c9c031fa2371d066fee96300793cd4ee0b0b60a9a",
+      "gitHead": "671b04ee3f6b228338c0eb3d6d7453f807b28837",
+      "integrity": "sha512-z6SoyGty0cpOlxnGkBhzNrWqNs/ck/CXkmphZUcDKQ3HNiKsHf0gdzHQlvUnTZBMOIQxSBA+ZyfAHWRf06dm9g=="
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.20.0",
+      "runtimeSha256": "54e3119b2a31c598fe49036758ef74ab8c31077eb0c02a53ee7ad01e74c0fb12",
+      "gitHead": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
+      "integrity": "sha512-QtLK+H585iGWbhRcvjEZqrGs2HbLJpqbXXx/zWoGUWE3bQMkPx/QZDJJUwaESxBrZkLMylgIFlzdfBD6kDhv9w=="
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "runtimeSha256": "0a794c942f8e5050e5143b1606f8847c2ad8b7bba750958eb72611231ce622ad",
+      "gitHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "integrity": "sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ=="
+    }
+  ],
+  "inputs": {
+    "indexSha256": "f6da57d1dbf038934b713706a305334cb9d053967978d15728d3902df2d8869c",
+    "cases": [
+      {
+        "id": "change-layout",
+        "archive": {
+          "path": "manual/change-layout.pptx",
+          "sha256": "f208df72212cdf9f6fc1f67a5cef35ba989cd39456ee4b315710c266f8c75e34"
+        },
+        "baseline": {
+          "path": "fixed-replay/replay-attempt04/change-layout-direct.opf.json",
+          "sha256": "b16cedabd15cf429cf946cbf061918f8c63c8a1503e9589f4462fb919a6ed1ca"
+        },
+        "historical": {
+          "path": "fixed-replay/replay-attempt04/change-layout-historical-direct.opf.json",
+          "sha256": "b16cedabd15cf429cf946cbf061918f8c63c8a1503e9589f4462fb919a6ed1ca"
+        }
+      },
+      {
+        "id": "new-custom",
+        "archive": {
+          "path": "manual/new-custom.pptx",
+          "sha256": "200653c27b9065733ec395261f1f3fac10f28310097bf6f1569bd8fac79b251e"
+        },
+        "baseline": {
+          "path": "fixed-replay/replay-attempt04/new-custom-direct.opf.json",
+          "sha256": "0a08985368ec7451979fb1067feda9b5155d9b2b554b9954f71822cf1d873edf"
+        },
+        "historical": {
+          "path": "fixed-replay/replay-attempt04/new-custom-historical-direct.opf.json",
+          "sha256": "0a08985368ec7451979fb1067feda9b5155d9b2b554b9954f71822cf1d873edf"
+        }
+      },
+      {
+        "id": "new-text",
+        "archive": {
+          "path": "manual/new-text.pptx",
+          "sha256": "7cdc801aa2cd4fbb7928b3d361b8bc78b4cb2a7465eba59142c0fd1a65366465"
+        },
+        "baseline": {
+          "path": "fixed-replay/replay-attempt04/new-text-direct.opf.json",
+          "sha256": "45d8d7571368bb18f73394619cf8596b9d3d91fa79a507db4303f1d4b2ca0f04"
+        },
+        "historical": {
+          "path": "fixed-replay/replay-attempt04/new-text-historical-direct.opf.json",
+          "sha256": "45d8d7571368bb18f73394619cf8596b9d3d91fa79a507db4303f1d4b2ca0f04"
+        }
+      },
+      {
+        "id": "change-picture",
+        "archive": {
+          "path": "manual/change-picture.pptx",
+          "sha256": "040e6bf64408d7a09b15c43565076ff16af583bf6b1a4b4cb525abece8c721fe"
+        },
+        "baseline": {
+          "path": "fixed-replay/replay-attempt04/change-picture-direct.opf.json",
+          "sha256": "d8f637092106748460175929b103a49da51da1ee12d83680e9da86af9936ff38"
+        },
+        "historical": {
+          "path": "fixed-replay/replay-attempt04/change-picture-historical-direct.opf.json",
+          "sha256": "6ddfc84b6f1d7f108cab19f366f733c4aadc6d974a8ed0e7972777f3b9813393"
+        }
+      }
+    ],
+    "binding": {
+      "path": "manual/new-custom-region-binding.json",
+      "sha256": "d9a7943d6ca5633c4947cbcc00db5537fa4f5ad9a0ca9a63da542872c80cf705"
+    }
+  },
+  "results": [
+    {
+      "id": "change-layout",
+      "savedSha256": "f208df72212cdf9f6fc1f67a5cef35ba989cd39456ee4b315710c266f8c75e34",
+      "apiResults": [
+        {
+          "catalogMode": "default",
+          "openMatchesDirect": true,
+          "convertMatchesDirect": true,
+          "unresolvedReferences": 0
+        },
+        {
+          "catalogMode": "registered",
+          "openMatchesDirect": true,
+          "convertMatchesDirect": true,
+          "unresolvedReferences": 0
+        }
+      ],
+      "cliMatchesDirect": true,
+      "historicalDelta": "none",
+      "passed": true
+    },
+    {
+      "id": "new-custom",
+      "savedSha256": "200653c27b9065733ec395261f1f3fac10f28310097bf6f1569bd8fac79b251e",
+      "apiResults": [
+        {
+          "catalogMode": "default",
+          "openMatchesDirect": true,
+          "convertMatchesDirect": true,
+          "unresolvedReferences": 0
+        },
+        {
+          "catalogMode": "registered",
+          "openMatchesDirect": true,
+          "convertMatchesDirect": true,
+          "unresolvedReferences": 0
+        }
+      ],
+      "cliMatchesDirect": true,
+      "historicalDelta": "none",
+      "passed": true
+    },
+    {
+      "id": "new-text",
+      "savedSha256": "7cdc801aa2cd4fbb7928b3d361b8bc78b4cb2a7465eba59142c0fd1a65366465",
+      "apiResults": [
+        {
+          "catalogMode": "default",
+          "openMatchesDirect": true,
+          "convertMatchesDirect": true,
+          "unresolvedReferences": 0
+        },
+        {
+          "catalogMode": "registered",
+          "openMatchesDirect": true,
+          "convertMatchesDirect": true,
+          "unresolvedReferences": 0
+        }
+      ],
+      "cliMatchesDirect": true,
+      "historicalDelta": "none",
+      "passed": true
+    },
+    {
+      "id": "change-picture",
+      "savedSha256": "040e6bf64408d7a09b15c43565076ff16af583bf6b1a4b4cb525abece8c721fe",
+      "apiResults": [
+        {
+          "catalogMode": "default",
+          "openMatchesDirect": true,
+          "convertMatchesDirect": true,
+          "unresolvedReferences": 0
+        },
+        {
+          "catalogMode": "registered",
+          "openMatchesDirect": true,
+          "convertMatchesDirect": true,
+          "unresolvedReferences": 0
+        }
+      ],
+      "cliMatchesDirect": true,
+      "historicalDelta": "image block fit:stretch only",
+      "passed": true
+    }
+  ],
+  "changePictureInspection": {
+    "saved": {
+      "frame": "<a:xfrm><a:off x=\"548640\" y=\"2498788\"/><a:ext cx=\"5433060\" cy=\"2716530\"/></a:xfrm>",
+      "srcRect": "<a:srcRect/>",
+      "fillRect": null,
+      "placeholder": "<p:ph type=\"pic\" idx=\"500\"/>",
+      "mediaSha256": "a168bef97c7e01a6a993350bb1d0e73dd8af1bfb9949cf1b36d88c48124dfd6e",
+      "fullSource": true
+    },
+    "reexport": {
+      "frame": "<a:xfrm><a:off x=\"548640\" y=\"1404747\"/><a:ext cx=\"5433060\" cy=\"4904613\"/></a:xfrm>",
+      "srcRect": null,
+      "fillRect": "<a:fillRect/>",
+      "placeholder": "<p:ph type=\"pic\" idx=\"500\"/>",
+      "mediaSha256": "a168bef97c7e01a6a993350bb1d0e73dd8af1bfb9949cf1b36d88c48124dfd6e",
+      "fullSource": true
+    },
+    "absoluteGeometryParityAsserted": false,
+    "pixelParityAsserted": false
+  },
+  "artifacts": [
+    {
+      "path": "network-attempts.jsonl",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "runtime-identities.json",
+      "bytes": 305858,
+      "sha256": "c79e72f5a55997e655524fe38c5bda5dc13fb9c9e4e01aa2b6474641f1ab8734"
+    },
+    {
+      "path": "plan-identity.json",
+      "bytes": 534,
+      "sha256": "fc51cdf0e9b60674753c7e44a7c8def3af16747116be0504fbc3634b40efe948"
+    },
+    {
+      "path": "inputs-identity.json",
+      "bytes": 2623,
+      "sha256": "c58fcebcca347c6a7331f4cc20be9132b10a04665c2210cb0908a946aae184f6"
+    },
+    {
+      "path": "registry-authority.json",
+      "bytes": 18239,
+      "sha256": "5a25390438a0a8a3833f5cae0c585e0cd2212c5464fc0f7f59516fbf4d11fd39"
+    },
+    {
+      "path": "tooling-identity.json",
+      "bytes": 589,
+      "sha256": "7ad54357273aa6929ee373de282aeff705c07080f251cab673ec5f58b48aa7b9"
+    },
+    {
+      "path": "change-layout-direct.opf.json",
+      "bytes": 1997,
+      "sha256": "b16cedabd15cf429cf946cbf061918f8c63c8a1503e9589f4462fb919a6ed1ca"
+    },
+    {
+      "path": "change-layout-diagnostics.json",
+      "bytes": 2434,
+      "sha256": "33ba9b2cf970e262e4cd308b0e9d528a9d2965cf6af5dfc4090c502293e2e19a"
+    },
+    {
+      "path": "change-layout-default-open.opf.json",
+      "bytes": 1997,
+      "sha256": "b16cedabd15cf429cf946cbf061918f8c63c8a1503e9589f4462fb919a6ed1ca"
+    },
+    {
+      "path": "change-layout-default-convert.opf.json",
+      "bytes": 1997,
+      "sha256": "b16cedabd15cf429cf946cbf061918f8c63c8a1503e9589f4462fb919a6ed1ca"
+    },
+    {
+      "path": "change-layout-default-findings.json",
+      "bytes": 3266,
+      "sha256": "167056ef505e8bcfcd31543a1df7bb28eacfb2676b9dd7ecf91f207680a48635"
+    },
+    {
+      "path": "change-layout-registered-open.opf.json",
+      "bytes": 1997,
+      "sha256": "b16cedabd15cf429cf946cbf061918f8c63c8a1503e9589f4462fb919a6ed1ca"
+    },
+    {
+      "path": "change-layout-registered-convert.opf.json",
+      "bytes": 1997,
+      "sha256": "b16cedabd15cf429cf946cbf061918f8c63c8a1503e9589f4462fb919a6ed1ca"
+    },
+    {
+      "path": "change-layout-registered-findings.json",
+      "bytes": 3266,
+      "sha256": "167056ef505e8bcfcd31543a1df7bb28eacfb2676b9dd7ecf91f207680a48635"
+    },
+    {
+      "path": "change-layout-input.pptx",
+      "bytes": 93328,
+      "sha256": "f208df72212cdf9f6fc1f67a5cef35ba989cd39456ee4b315710c266f8c75e34"
+    },
+    {
+      "path": "change-layout-cli-report.json",
+      "bytes": 4195,
+      "sha256": "1ad16e2df5132806a97dacd4503c296955276637dfa7c2d7266402b066bcdc36"
+    },
+    {
+      "path": "change-layout-cli.opf.json",
+      "bytes": 1997,
+      "sha256": "b16cedabd15cf429cf946cbf061918f8c63c8a1503e9589f4462fb919a6ed1ca"
+    },
+    {
+      "path": "change-layout-result.json",
+      "bytes": 505,
+      "sha256": "ca91b42c470f1d6265b79fcf5800de5928eee9573b2da12952fd3b14f5dd2410"
+    },
+    {
+      "path": "new-custom-direct.opf.json",
+      "bytes": 26263,
+      "sha256": "0a08985368ec7451979fb1067feda9b5155d9b2b554b9954f71822cf1d873edf"
+    },
+    {
+      "path": "new-custom-diagnostics.json",
+      "bytes": 1590,
+      "sha256": "4866427c5fd2b410a5f0e1ebd3edb33ea9323b813452a70482a901a34dd033bb"
+    },
+    {
+      "path": "new-custom-default-open.opf.json",
+      "bytes": 26263,
+      "sha256": "0a08985368ec7451979fb1067feda9b5155d9b2b554b9954f71822cf1d873edf"
+    },
+    {
+      "path": "new-custom-default-convert.opf.json",
+      "bytes": 26263,
+      "sha256": "0a08985368ec7451979fb1067feda9b5155d9b2b554b9954f71822cf1d873edf"
+    },
+    {
+      "path": "new-custom-default-findings.json",
+      "bytes": 2110,
+      "sha256": "405e7d67cc27225a4039f987c310c9461b6ed04dddd77a051ed98801e813c41b"
+    },
+    {
+      "path": "new-custom-registered-open.opf.json",
+      "bytes": 26263,
+      "sha256": "0a08985368ec7451979fb1067feda9b5155d9b2b554b9954f71822cf1d873edf"
+    },
+    {
+      "path": "new-custom-registered-convert.opf.json",
+      "bytes": 26263,
+      "sha256": "0a08985368ec7451979fb1067feda9b5155d9b2b554b9954f71822cf1d873edf"
+    },
+    {
+      "path": "new-custom-registered-findings.json",
+      "bytes": 2110,
+      "sha256": "405e7d67cc27225a4039f987c310c9461b6ed04dddd77a051ed98801e813c41b"
+    },
+    {
+      "path": "new-custom-input.pptx",
+      "bytes": 96028,
+      "sha256": "200653c27b9065733ec395261f1f3fac10f28310097bf6f1569bd8fac79b251e"
+    },
+    {
+      "path": "new-custom-cli-report.json",
+      "bytes": 2980,
+      "sha256": "8f7ea1f0894ac6145bd6d4f0840d5a8ceb2cf94b031e4e19fd92205d7277cb70"
+    },
+    {
+      "path": "new-custom-cli.opf.json",
+      "bytes": 26263,
+      "sha256": "0a08985368ec7451979fb1067feda9b5155d9b2b554b9954f71822cf1d873edf"
+    },
+    {
+      "path": "new-custom-resolved-context.json",
+      "bytes": 39290,
+      "sha256": "a1a7a19058835bb262ec076dcfadd385924b07f3c6c4861d1fa3406f5e1ef497"
+    },
+    {
+      "path": "new-custom-result.json",
+      "bytes": 502,
+      "sha256": "4519d64455004142def43c2a05042a430722f07e986ae9e3100bda3e403fc4e0"
+    },
+    {
+      "path": "new-text-direct.opf.json",
+      "bytes": 2272,
+      "sha256": "45d8d7571368bb18f73394619cf8596b9d3d91fa79a507db4303f1d4b2ca0f04"
+    },
+    {
+      "path": "new-text-diagnostics.json",
+      "bytes": 1664,
+      "sha256": "12013251e4d4e3895398bbffa654d54c59d3903510fc638933ae54bb4d62f098"
+    },
+    {
+      "path": "new-text-default-open.opf.json",
+      "bytes": 2272,
+      "sha256": "45d8d7571368bb18f73394619cf8596b9d3d91fa79a507db4303f1d4b2ca0f04"
+    },
+    {
+      "path": "new-text-default-convert.opf.json",
+      "bytes": 2272,
+      "sha256": "45d8d7571368bb18f73394619cf8596b9d3d91fa79a507db4303f1d4b2ca0f04"
+    },
+    {
+      "path": "new-text-default-findings.json",
+      "bytes": 2184,
+      "sha256": "33a4701fe89a9739cf3f345f983812aedbe4545dba357b5529085c7b79e6642c"
+    },
+    {
+      "path": "new-text-registered-open.opf.json",
+      "bytes": 2272,
+      "sha256": "45d8d7571368bb18f73394619cf8596b9d3d91fa79a507db4303f1d4b2ca0f04"
+    },
+    {
+      "path": "new-text-registered-convert.opf.json",
+      "bytes": 2272,
+      "sha256": "45d8d7571368bb18f73394619cf8596b9d3d91fa79a507db4303f1d4b2ca0f04"
+    },
+    {
+      "path": "new-text-registered-findings.json",
+      "bytes": 2184,
+      "sha256": "33a4701fe89a9739cf3f345f983812aedbe4545dba357b5529085c7b79e6642c"
+    },
+    {
+      "path": "new-text-input.pptx",
+      "bytes": 94330,
+      "sha256": "7cdc801aa2cd4fbb7928b3d361b8bc78b4cb2a7465eba59142c0fd1a65366465"
+    },
+    {
+      "path": "new-text-cli-report.json",
+      "bytes": 3049,
+      "sha256": "0d5fb683e9e41c29371a942864d37b7f3d7c602ef7d9fb14cf63632795439d02"
+    },
+    {
+      "path": "new-text-cli.opf.json",
+      "bytes": 2272,
+      "sha256": "45d8d7571368bb18f73394619cf8596b9d3d91fa79a507db4303f1d4b2ca0f04"
+    },
+    {
+      "path": "new-text-result.json",
+      "bytes": 500,
+      "sha256": "9145a87e8d51a94d18959d73f80a4b6e084a868263ba051008e0a5af24e95a9f"
+    },
+    {
+      "path": "change-picture-direct.opf.json",
+      "bytes": 34925,
+      "sha256": "d8f637092106748460175929b103a49da51da1ee12d83680e9da86af9936ff38"
+    },
+    {
+      "path": "change-picture-diagnostics.json",
+      "bytes": 1664,
+      "sha256": "12013251e4d4e3895398bbffa654d54c59d3903510fc638933ae54bb4d62f098"
+    },
+    {
+      "path": "change-picture-default-open.opf.json",
+      "bytes": 34925,
+      "sha256": "d8f637092106748460175929b103a49da51da1ee12d83680e9da86af9936ff38"
+    },
+    {
+      "path": "change-picture-default-convert.opf.json",
+      "bytes": 34925,
+      "sha256": "d8f637092106748460175929b103a49da51da1ee12d83680e9da86af9936ff38"
+    },
+    {
+      "path": "change-picture-default-findings.json",
+      "bytes": 2184,
+      "sha256": "33a4701fe89a9739cf3f345f983812aedbe4545dba357b5529085c7b79e6642c"
+    },
+    {
+      "path": "change-picture-registered-open.opf.json",
+      "bytes": 34925,
+      "sha256": "d8f637092106748460175929b103a49da51da1ee12d83680e9da86af9936ff38"
+    },
+    {
+      "path": "change-picture-registered-convert.opf.json",
+      "bytes": 34925,
+      "sha256": "d8f637092106748460175929b103a49da51da1ee12d83680e9da86af9936ff38"
+    },
+    {
+      "path": "change-picture-registered-findings.json",
+      "bytes": 2184,
+      "sha256": "33a4701fe89a9739cf3f345f983812aedbe4545dba357b5529085c7b79e6642c"
+    },
+    {
+      "path": "change-picture-input.pptx",
+      "bytes": 117859,
+      "sha256": "040e6bf64408d7a09b15c43565076ff16af583bf6b1a4b4cb525abece8c721fe"
+    },
+    {
+      "path": "change-picture-cli-report.json",
+      "bytes": 3063,
+      "sha256": "6c141f9cf9f1223176a0a03dff572169a12655273710e609ea049c144e428721"
+    },
+    {
+      "path": "change-picture-cli.opf.json",
+      "bytes": 34925,
+      "sha256": "d8f637092106748460175929b103a49da51da1ee12d83680e9da86af9936ff38"
+    },
+    {
+      "path": "change-picture-reexport.pptx",
+      "bytes": 101723,
+      "sha256": "b7b4525bfd160cf47ed830edfe376fe36a729393986094df970314927440e98a"
+    },
+    {
+      "path": "change-picture-picture-inspection.json",
+      "bytes": 768,
+      "sha256": "8873834ccee202806387cf4820d0c7490beda17b26a35674f1ecd03f2414b077"
+    },
+    {
+      "path": "change-picture-result.json",
+      "bytes": 530,
+      "sha256": "beb04fb5e4b8bf59f1799e3d479ae521710bd3cd717d5cb5b83a41a62460543f"
+    }
+  ],
+  "reportSha256": "58693fab70994ce2455d10f05b336e2f2fb8d3326a1397c558652c51a9aa50da",
+  "executionReceiptSha256": "31fede9adf87aed566133f65ddee3f3113263b51165d4116c9419766cf31f2d5",
+  "logSha256": "bacc05a5237bcbf175d46f568737a08b6f7a0e00b97d6015f51e6c4d214a4b6f",
+  "exitCode": 0,
+  "passed": true,
+  "networkAttempts": 0,
+  "networkAttemptLogBytes": 0,
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "WindowsStableReplayAccepted": false,
+  "blockedWindows12FileExportAuthorized": false,
+  "noNewOfficeRun": true,
+  "scopeCorrection": "The added dependency on a second Windows-only Node replay and blocked twelve-report export was not an original T24/T31 criterion. Canonical native/fixed-source acceptance plus genuine publication/registry/site proof and this same-four current-runtime portable replay satisfy the scoped criterion; preserve historical decisions and global limits.",
+  "originalPreflightFailure": {
+    "exitCode": 1,
+    "phase": "Before installed imports or output creation",
+    "error": "Consumer must declare exact registry version: @openpresentation/gallery; actual undefined, expected3.0.0",
+    "receiptSha256": "035183273692cfcf1d57e2b7dbf70d815e41f212b798fecd370e3beeadd34082",
+    "remedy": "Isolated copy of genuine installed consumer; normal npm lock-only adds direct Gallery3 declaration; all6276 installed files/links and originalconsumer preserved."
+  },
+  "limitations": [
+    "No new Office observation; original 17 selected native cases and four UI operations retain their identities; 41 cases unexecuted.",
+    "No absolute frame, glyph, baseline, raster or full-catalog parity.",
+    "Canonical registry authority is supplied separately; this offline replay does not repeat attestation or release verification."
+  ],
+  "independentReviewSha256": "a32a83ecadf0c575fb0fb491e22fba8781bdcb713cd76724fbd7cdae86565d4f",
+  "rootReplayReviewSha256": "b8a737a3e57c4ba81b69c9328df689216ca3f4342581f7930cb80f959e73e068",
+  "supervisorScopedDecision": {
+    "at": "2026-10-14T21:59:11.531573+00:00",
+    "decision": "Original scoped T24 and T31 complete",
+    "scope": {
+      "acceptedEarlierNativeCases": 17,
+      "acceptedEarlierActualUIOperations": 4,
+      "retainedNativeCaseDispositions": 58,
+      "unexecutedNativeCases": 41,
+      "currentPublishedRuntimeRetainedArchiveReplayCases": 4,
+      "newOfficeOperations": 0,
+      "specificWindows12ReportExportAccepted": false,
+      "WindowsStableReplayAccepted": false,
+      "globalNativeFontRasterPixelOrMenuParityAccepted": false
+    },
+    "basis": "The original criteria require the scoped native operations already accepted in canonical #661. Immutable published-runtime equivalence and actual reviewed current-registry replay of the same four committed saves bind that accepted scope to current packages. A second Windows-only Node replay/export was not an original criterion.",
+    "remainingOriginalChecklist": [
+      "T16 own-host fixture completion and honest source carrier chronology",
+      "T40 actual final lock/records, in-scope PR and issue reconciliation, and owner note delivery"
+    ],
+    "broader84RowProgramComplete": false,
+    "pictureBoundary": "Only fit:stretch historical semantic delta accepted; frames differ; media/full source/placeholder preserved; no absolute frame or pixel parity asserted.",
+    "originalFailedPreparationPreserved": true
+  },
+  "supervisorAcceptanceSourceSha256": "8be21d7eaaf4aa25766e89d3ff63919107e0a8637eeac645a575e5ee627fe59c"
+}

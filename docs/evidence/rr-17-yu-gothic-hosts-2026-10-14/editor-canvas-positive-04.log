@@ -1,0 +1,2 @@
+Canvas fonts: language and font-scheme switches, Aptos with Japanese, undo/redo to pending faces, retry and drafts all load faces before the canvas draws; 26 requests, all local.
+Yu Gothic canvas: all seven original Japanese samples draw regular/bold with real loaded Noto Sans JP FontFaces; native visual finding remains separate.

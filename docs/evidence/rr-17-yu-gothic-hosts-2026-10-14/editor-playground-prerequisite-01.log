@@ -1,0 +1,5 @@
+
+> @openpresentation/opf-editor@0.20.0 build:playground
+> node scripts/build-playground.mjs
+
+Browser editor built in /private/tmp/rr17-yu-61/editor/artifacts/playground/ (70 lazy script faces, 94 lazy preview faces)

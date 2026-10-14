@@ -1,0 +1,414 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-14T22:06:25.816218+00:00",
+  "sourceQualificationOnly": true,
+  "sourceHeads": {
+    "render": "a78da5ea85b4f284f4ae3626e1e990d6ea7a5523",
+    "editor": "cdc7868ff9b633a93dd677350f34f230b4bf355f",
+    "gallery": "67bc00085915322d23f2267ac994bb058af6637b"
+  },
+  "allHostsSourceMerged": false,
+  "existingNamesPreserved": 22,
+  "namesExecutedEachHost": 23,
+  "YuGothicOriginalFF44Samples": 7,
+  "weights": [
+    400,
+    700
+  ],
+  "genuineNodeAndChromiumDrawing": true,
+  "realEditorAndGalleryLoadedFontFaceWitnesses": true,
+  "perWeightSourcePathTextPreservedAcrossWraps": true,
+  "nativeVisualFindingPreserved": {
+    "inkWidthRatio": 1.0105,
+    "status": "script-gap",
+    "accepted": false
+  },
+  "artifacts": [
+    {
+      "path": "node.json",
+      "bytes": 13480,
+      "sha256": "932760486812b2874becf284661524422ff1e3a2a4d11d2dcac9d52a1d6a72a6"
+    },
+    {
+      "path": "browser.json",
+      "bytes": 18862,
+      "sha256": "c25868809e582e7e1eb03cd15fd3cc4ee31119b1bc116d8f97985b54fe36cdcf"
+    },
+    {
+      "path": "editor.json",
+      "bytes": 15941,
+      "sha256": "0cda8d63b84e4ce4920bce634966ebb33041c24c9a5448ad4019956413233c6c"
+    },
+    {
+      "path": "gallery.json",
+      "bytes": 15053,
+      "sha256": "19c64b5cf6d775cce5a9e77777a6a691c2e7c4ed3640d844d689c949a46a884b"
+    },
+    {
+      "path": "editor-canvas.json",
+      "bytes": 25138,
+      "sha256": "0e00d536d47b1c064a0dd37a891ae7c7164a5ee3bd0aee39a178384fdf308240"
+    },
+    {
+      "path": "gallery-canvas.json",
+      "bytes": 9588,
+      "sha256": "0461635fb05381e336ea52bf40f7e8d06227500a34b6b10bb745c8e5b025e705"
+    },
+    {
+      "path": "gallery-canvas.png",
+      "bytes": 51329,
+      "sha256": "d71d64bb789cba7d66cd75371e3726b111df07aa853e4a653c76ac190d8ad192"
+    }
+  ],
+  "checks": {
+    "render": [
+      {
+        "command": [
+          "npm",
+          "ci"
+        ],
+        "startedAt": "2026-10-14T21:47:45.682759+00:00",
+        "endedAt": "2026-10-14T21:47:48.138350+00:00",
+        "exitCode": 0,
+        "log": "render-install-01.log",
+        "sha256": "43e85dc6b8bbe88bffad4ce5949c88fddd141eeca91e5a6f3d35635e496e23bc"
+      },
+      {
+        "command": [
+          "node",
+          "/Users/michael/Source/opf/scripts/agent-slot.mjs",
+          "--",
+          "npm",
+          "run",
+          "build"
+        ],
+        "startedAt": "2026-10-14T21:48:49.064128+00:00",
+        "endedAt": "2026-10-14T21:48:49.186839+00:00",
+        "exitCode": 0,
+        "log": "render-build-02.log",
+        "sha256": "0b4849277b2b2b72751be7c419ab1bcc7bd3bb47f3a8d8a14c9bd6176cb9a43d"
+      },
+      {
+        "command": [
+          "node",
+          "/Users/michael/Source/opf/scripts/agent-slot.mjs",
+          "--",
+          "node",
+          "test/script-name-hosts.mjs",
+          "artifacts/yu-gothic-hosts"
+        ],
+        "startedAt": "2026-10-14T21:49:06.630982+00:00",
+        "endedAt": "2026-10-14T21:49:24.180435+00:00",
+        "exitCode": 0,
+        "log": "render-own-host-node-01.log",
+        "sha256": "749f20e1462dc35b1ec2b29c180d21428cbe7cfcabe0a2967aaa91cc9571cdc9"
+      },
+      {
+        "command": [
+          "node",
+          "/Users/michael/Source/opf/scripts/agent-slot.mjs",
+          "--",
+          "node",
+          "test/script-name-hosts-browser.mjs",
+          "artifacts/yu-gothic-hosts"
+        ],
+        "startedAt": "2026-10-14T21:49:31.835122+00:00",
+        "endedAt": "2026-10-14T21:49:37.724851+00:00",
+        "exitCode": 0,
+        "log": "render-own-host-browser-01.log",
+        "sha256": "bf8853e320ea6f877ec1f0e816a230efabb05878bbbdc3027d9158f9a9ad2a01"
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "startedAt": "2026-10-14T21:53:37.340978+00:00",
+        "endedAt": "2026-10-14T21:53:38.469797+00:00",
+        "exitCode": 0,
+        "log": "render-syntax-01.log",
+        "sha256": "378ba6dc0e95fd670dd4a07f90bc5f1239e60637a7b8d55dca48db50c6cb8b31"
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "check:runners"
+        ],
+        "startedAt": "2026-10-14T22:04:11.345493+00:00",
+        "endedAt": "2026-10-14T22:04:11.749918+00:00",
+        "exitCode": 0,
+        "log": "render-runners-01.log",
+        "sha256": "6f5388c3449daf52bc4888d0610af9e72331881aba62e579e140ec39165cd21d"
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "check:changes"
+        ],
+        "startedAt": "2026-10-14T22:04:11.361665+00:00",
+        "endedAt": "2026-10-14T22:04:11.659898+00:00",
+        "exitCode": 0,
+        "log": "render-changes-01.log",
+        "sha256": "d9b4311a2ea620dd92bbb3a7cf13bea9107416f22e6757f6f304b3f56d6e2822"
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "check:font-hotlinks"
+        ],
+        "startedAt": "2026-10-14T22:04:11.375168+00:00",
+        "endedAt": "2026-10-14T22:04:11.880760+00:00",
+        "exitCode": 0,
+        "log": "render-hotlinks-01.log",
+        "sha256": "12313c2d74af2993f60f4bc54eb7c438b4b14c10f0916311aa3b038545b791bc"
+      }
+    ],
+    "editor": [
+      {
+        "command": [
+          "npm",
+          "ci"
+        ],
+        "startedAt": "2026-10-14T21:48:17.021414+00:00",
+        "endedAt": "2026-10-14T21:48:19.243170+00:00",
+        "exitCode": 0,
+        "log": "editor-install-01.log",
+        "sha256": "c12604b8decf1748b1e656aafe240ab549f4302ba80165a9ddada578d15bbf42"
+      },
+      {
+        "command": [
+          "node",
+          "/Users/michael/Source/opf/scripts/agent-slot.mjs",
+          "--",
+          "npm",
+          "run",
+          "build"
+        ],
+        "startedAt": "2026-10-14T21:49:09.041273+00:00",
+        "endedAt": "2026-10-14T21:49:09.182855+00:00",
+        "exitCode": 0,
+        "log": "editor-build-01.log",
+        "sha256": "32e7f813186d1b735c9e2520eddcad28d71f5208f662fea30ce180ab760354b5"
+      },
+      {
+        "command": [
+          "node",
+          "/Users/michael/Source/opf/scripts/agent-slot.mjs",
+          "--",
+          "npm",
+          "run",
+          "build:playground"
+        ],
+        "startedAt": "2026-10-14T21:50:53.230685+00:00",
+        "endedAt": "2026-10-14T21:50:53.858632+00:00",
+        "exitCode": 0,
+        "log": "editor-playground-prerequisite-01.log",
+        "sha256": "9e4c0c12cf743b0151105e499818caa06e731f2416915ea6e2de232e048a3454"
+      },
+      {
+        "command": [
+          "node",
+          "/Users/michael/Source/opf/scripts/agent-slot.mjs",
+          "--",
+          "node",
+          "test/font-gate-script-names.mjs",
+          "artifacts/yu-gothic-hosts"
+        ],
+        "startedAt": "2026-10-14T21:49:34.319304+00:00",
+        "endedAt": "2026-10-14T21:49:35.719739+00:00",
+        "exitCode": 0,
+        "log": "editor-own-host-01.log",
+        "sha256": "0f86b74951c95d9258c04d8d1701b193d133c0ece177220c962836c573d549dd"
+      },
+      {
+        "command": [
+          "node",
+          "/Users/michael/Source/opf/scripts/agent-slot.mjs",
+          "--",
+          "node",
+          "test/canvas-fonts-browser.mjs",
+          "artifacts/yu-gothic-canvas-traced-weights"
+        ],
+        "startedAt": "2026-10-14T22:04:13.634029+00:00",
+        "endedAt": "2026-10-14T22:04:21.402038+00:00",
+        "exitCode": 0,
+        "log": "editor-canvas-positive-04.log",
+        "sha256": "8eb342c0ae06a3939900201bfcd41cb2dc6154f1ae580267b537d2505b639e1c"
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "startedAt": "2026-10-14T22:04:39.741272+00:00",
+        "endedAt": "2026-10-14T22:04:40.703731+00:00",
+        "exitCode": 0,
+        "log": "editor-syntax-04.log",
+        "sha256": "cacb71db02cf606354ca41a1fed350cc869de57737fb80b71a8e5468a43e2b64"
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "check:runners"
+        ],
+        "startedAt": "2026-10-14T22:04:11.340307+00:00",
+        "endedAt": "2026-10-14T22:04:11.744818+00:00",
+        "exitCode": 0,
+        "log": "editor-runners-01.log",
+        "sha256": "00fd4c3cdb1b602c4a4b757b983e907a8e976a8824c998f19992215accfe0b82"
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "check:changes"
+        ],
+        "startedAt": "2026-10-14T22:04:11.326320+00:00",
+        "endedAt": "2026-10-14T22:04:11.603107+00:00",
+        "exitCode": 0,
+        "log": "editor-changes-01.log",
+        "sha256": "f63e67576cb36014b7e3f05d10248e3d02ae2afb209de754c57a924ae5d7b30f"
+      },
+      {
+        "command": [
+          "npm",
+          "run",
+          "check:font-hotlinks"
+        ],
+        "startedAt": "2026-10-14T22:04:11.346913+00:00",
+        "endedAt": "2026-10-14T22:04:11.717616+00:00",
+        "exitCode": 0,
+        "log": "editor-hotlinks-01.log",
+        "sha256": "7bedfd8274b958298475403dcdc06f8030a15aac0046912572548a5db8c4f093"
+      }
+    ],
+    "gallery": [
+      {
+        "command": [
+          "pnpm",
+          "install",
+          "--frozen-lockfile",
+          "--prefer-offline"
+        ],
+        "startedAt": "2026-10-14T21:49:03.971544+00:00",
+        "endedAt": "2026-10-14T21:49:07.085580+00:00",
+        "exitCode": 0,
+        "log": "gallery-install-02.log",
+        "sha256": "2cfc07b9f33b49f14df261d7847f91114746314fe1f76042602a277282a713ff"
+      },
+      {
+        "command": [
+          "env",
+          "SCRIPT_NAME_HOST_REPORT=artifacts/yu-gothic-hosts/gallery.json",
+          "node",
+          "/Users/michael/Source/opf/scripts/agent-slot.mjs",
+          "--",
+          "pnpm",
+          "exec",
+          "vitest",
+          "run",
+          "tests/editor-script-names.test.ts"
+        ],
+        "startedAt": "2026-10-14T21:55:46.591588+00:00",
+        "endedAt": "2026-10-14T21:55:48.324481+00:00",
+        "exitCode": 0,
+        "log": "gallery-own-host-report-02.log",
+        "sha256": "7a7034c3c8113cd3b14d8e6a7a4dbf1dca6dce7c8b2dfbd7290f99e2ff8e685f"
+      },
+      {
+        "command": [
+          "env",
+          "GALLERY_BASE=http://127.0.0.1:4362",
+          "node",
+          "/Users/michael/Source/opf/scripts/agent-slot.mjs",
+          "--",
+          "pnpm",
+          "exec",
+          "playwright",
+          "test",
+          "tests/e2e/editor.spec.ts",
+          "--grep",
+          "Yu Gothic commissioned"
+        ],
+        "startedAt": "2026-10-14T22:04:38.571742+00:00",
+        "endedAt": "2026-10-14T22:04:47.453244+00:00",
+        "exitCode": 0,
+        "log": "gallery-canvas-positive-03.log",
+        "sha256": "00d958926fd7d4196a812dab89af677a92ee76c890e987e6edbddc95474fcc4c"
+      },
+      {
+        "command": [
+          "node",
+          "/Users/michael/Source/opf/scripts/agent-slot.mjs",
+          "--",
+          "pnpm",
+          "lint"
+        ],
+        "startedAt": "2026-10-14T22:04:42.305447+00:00",
+        "endedAt": "2026-10-14T22:04:42.707960+00:00",
+        "exitCode": 0,
+        "log": "gallery-typecheck-03.log",
+        "sha256": "8773eff3fbc8045095d849233f778699eb7d66b5543b4b230cc417975d4872b3"
+      }
+    ]
+  },
+  "originalFailures": [
+    {
+      "command": [
+        "node",
+        "/Users/michael/Source/opf/scripts/agent-slot.mjs",
+        "--",
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 1,
+      "log": "render-build-01.log",
+      "sha256": "b28e9ab31cc79c09b8c3bcb38a41c43d6bd4821468965c5172f653be716505dd",
+      "reason": "Sandbox denied existing shared machine-slot lock; authorized normal access thenpassed"
+    },
+    {
+      "command": [
+        "pnpm",
+        "install",
+        "--frozen-lockfile",
+        "--prefer-offline"
+      ],
+      "exitCode": 1,
+      "log": "gallery-install-01.log",
+      "sha256": "134c79c2cc322a751499863dfa6130f357461da937fee0aea0f678e7c2851a52",
+      "reason": "Sandbox denied registry DNS; authorized frozen unchanged install thenpassed"
+    },
+    {
+      "command": [
+        "node",
+        "/Users/michael/Source/opf/scripts/agent-slot.mjs",
+        "--",
+        "node",
+        "test/canvas-fonts-browser.mjs",
+        "artifacts/yu-gothic-canvas"
+      ],
+      "exitCode": 1,
+      "log": "editor-canvas-positive-01.log",
+      "sha256": "d3328aa392a99d14028ab086b73ba9f05835eeff6ce8b1dce1e892d9cffcbfb5",
+      "reason": "Allnewdraw checks reached reportwrite; missingwriteFile import in newharness corrected; finalrealbrowserreportpassed"
+    }
+  ],
+  "normalGateScope": "Corecheck:changed handlesrelatedtracker/evidence/control; siblingshavenocheck:changed, theirnormalsyntax/build/runners/changes/hotlinks+changedown-host suitesrun; Gallerynormaltsc/changedVitest/oneactualiframePlaywright. No newwholeengine/font/native/site suite.",
+  "versionsLocksRuntimeSchemasPolicyFontInputsAssetsChanged": false,
+  "assetProof": {
+    "localInventorySha256": "943336916465c1255cbb57f319b88b91373c42d0b1a0c6b236422cbce4d161b4",
+    "GalleryPublicFilesByteIdenticalToPriorQualifiedHeld": 705,
+    "unexpectedDeltas": []
+  },
+  "historical20261010EvidenceReplaced": false,
+  "nativeOfficeRuns": 0,
+  "WindowsMetadataExported": false,
+  "remoteWrites": false
+}
