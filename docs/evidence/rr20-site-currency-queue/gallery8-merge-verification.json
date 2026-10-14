@@ -1,0 +1,20 @@
+{
+  "at": "2026-10-13T23:14:33.717195+00:00",
+  "merge": "940633a92c0c7d3339e59447d08ba6382ef12410",
+  "reviewed": "34577c3ab4f91ea74a5d3180e7e80c25ee9f102d",
+  "metadata": {
+    "number": 8,
+    "merged_at": "2026-10-13T23:13:40Z",
+    "merge_commit_sha": "940633a92c0c7d3339e59447d08ba6382ef12410"
+  },
+  "defaultHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+  "mergeTree": "7f964d0e82de9ea2019a09c58c4cce720f706284",
+  "reviewedTree": "7f964d0e82de9ea2019a09c58c4cce720f706284",
+  "verified": true,
+  "releaseMetadata": {
+    "version": "3.0.0",
+    "changelogSha256": "5c2594a81400c0079d61f6795ff8c11d3b5f760ab703d45232bd36c887b81578",
+    "date": "2026-10-13",
+    "status": ""
+  }
+}

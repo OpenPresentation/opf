@@ -1,0 +1,44 @@
+{
+  "scope": "Independent remaining checks after preserved canonical peer-publication rejection; no event/version overrides",
+  "commands": [
+    {
+      "label": "packed-browser",
+      "command": [
+        "pnpm",
+        "test:packed-browser"
+      ],
+      "exitCode": 0,
+      "seconds": 6.94,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/remaining-packed-browser.log",
+      "sha256": "c01867a504bcb5d97b306d333cd415589eec315b8cca8806c2f7a7bcf7d33b68"
+    },
+    {
+      "label": "cli",
+      "command": [
+        "node",
+        "scripts/agent-slot.mjs",
+        "--",
+        "pnpm",
+        "test:cli"
+      ],
+      "exitCode": 1,
+      "seconds": 44.37,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/remaining-cli.log",
+      "sha256": "f9f8fc0c6b90420c104b486f7e36b3ce3ef45761b70abbdb605ed7a27409ebfe"
+    },
+    {
+      "label": "root-checks",
+      "command": [
+        "node",
+        "scripts/agent-slot.mjs",
+        "--",
+        "node",
+        "scripts/run-checks.mjs"
+      ],
+      "exitCode": 1,
+      "seconds": 22.54,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/remaining-root-checks.log",
+      "sha256": "0630ea6e65edae67ea6fd1702edba0cb5dbdfebbfb02db7b50c23acfdc547ab3"
+    }
+  ]
+}

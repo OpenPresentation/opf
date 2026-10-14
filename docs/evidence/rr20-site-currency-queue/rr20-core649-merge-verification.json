@@ -1,0 +1,18 @@
+{
+  "observedAt": "2026-10-14T00:55:47.723320+00:00",
+  "pr": "https://github.com/OpenPresentation/opf/pull/649",
+  "actualMerge": "c9fb6aa8ecebbc08f3dc185134fce44b491f42ab",
+  "reviewedHead": "e541f80e265f9c801ffcd595e64aecbf7e7b1965",
+  "previousVerifiedMain": "bf7c1331cb7d607a2238f90a10bb2a4762f00247",
+  "changedPathsEqual": true,
+  "reviewedBlobIdentities": {
+    "changes/rr-20-prospective-gallery.md": "131af7fc015c148e4f252880cf8025cefce6869d",
+    "scripts/candidate-gallery.mjs": "959efe6a0c8e678ad7a90d6a032701f53715adfd",
+    "scripts/release-train.mjs": "b1b9791bfb62e7b2aa66bc25f21c6196060a09c7",
+    "scripts/release-train.test.mjs": "c2f9aa2954f348d83b4b4b9428af43cc6e98bfc9"
+  },
+  "defaultSyncedClean": true,
+  "gateExit": 0,
+  "nativeAcceptance": false,
+  "published": false
+}

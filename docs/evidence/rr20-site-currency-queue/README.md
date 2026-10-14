@@ -4,6 +4,15 @@ The owner authorized **“Start final qualification; no deployment.”** These r
 
 ## Current records
 
+- [RR-55 bounded controls](gallery3-adoption-rr55-controls-receipt.json) and the [source qualification index](gallery3-adoption-source-qualification-index.json) separately record metadata-only sibling successors and supervisor verification of 18 expected outcomes. Full-suite tested-head identities remain unchanged.
+
+- [Genuine Gallery 3 source-adoption qualification](gallery3-adoption-source-qualification-proof.json), [main receipt](gallery3-adoption-source-qualification-receipt.json), [remaining checks](gallery3-adoption-remaining-checks-receipt.json) and [hash index](gallery3-adoption-source-qualification-index.json) bind the exact core `88a0261c` source graph. Full source/packed and 8 browser suites (282 assertions) pass; canonical core/CLI strict local ^0.20 peer publication waits remain recorded. Root coverage is 43 original passes plus two corrected-doc passes on `b72ba303`. Later RR-55 sibling declaration edits are not covered. Native/0.20 registry/site acceptance remain open.
+
+- [Complete native coverage review](native-full-coverage-review.md) enumerates all 55 current suite cases: 50 bounded cases, four manual seven-slide cases and the dedicated table-color case. It prevents a metrics/list-only resumption from closing full feature acceptance; no Office execution or new native pass is recorded.
+- [Three-site genuine adoption review](site-final-adoption-review.md) records prepared source candidates and remaining genuine 0.20/Gallery 3 registry adoption and gates. It is held planning evidence, not a new installed-registry qualification or deployment authorization.
+
+- [Post-Gallery checkpoint](post-gallery-checkpoint.json) binds verified Gallery #6/#7/#8 merges, the 23:06 inventory before #649 was created (26 open PRs, 42 issues; eight clean synchronized defaults), and the exact prospective guard qualification. Gallery 3.0.0 release preparation is merged, publication is pending; core #648/#649 hosted qualification and native acceptance remain pending. No deployment is inferred.
+
 - The [current supervisor handoff](../../programs/release-readiness/HANDOFF.md#current-supervisor-checkpoint--2026-10-13) records the newer hosted candidates, active batch, selected 0.20.0/Gallery 3.0.0 targets and separate Windows delivery state. Older local replay records below prove their named graphs only.
 - [Timeline workflow correction](timeline-workflow-correction.json) preserves 16 passing positive workflows and two strict rejection controls. [CI retry correction](ci-retry-chronology-correction.json) records independent review and 51 passing focused tests plus mapped checks; it does not waive the pending hosted failures or establish release acceptance.
 
@@ -38,3 +47,7 @@ The qualification commands use pinned Node 24.21.0. The original replay receipt�
 ### Integrated 0.20 source prerequisite
 
 [Candidate qualification](peer020-candidate-qualification.json) and [integrated mapped proof](peer020-integrated-mapped-proof.json) qualify the reviewed peer-contract source changes locally. Core `33222978` is pushed to draft #646; source versions remain unchanged pending genuine release preparation. [Mac CI diagnosis](core-macos-stall-diagnosis.json) preserves the preceding failed hosted attempt. [Dependency review](dependency-pr-triage-20261013T2015Z.json) records all eighteen new PR dispositions. These records do not close registry, native, hosted or site-deployment acceptance.
+
+Gallery 3 genuine registry adoption: `gallery3-registry-adoption-receipts.json` indexes the exact verification/tag and core #648/#649 merge receipts. This is upstream publication/source evidence, not 0.20 or native/site acceptance.
+
+Latest bounded inventory: `inventory-maintenance-20261014T011324Z-summary.json` and `inventory-maintenance-20261014T011324Z-sync.json`, with hashes in the corresponding copies index. All eight defaults are clean/synced; 24 open PRs and 42 issues. Only core #649 closed since the 00:33 snapshot.

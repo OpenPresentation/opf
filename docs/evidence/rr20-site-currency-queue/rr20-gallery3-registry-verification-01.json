@@ -1,0 +1,56 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "npm version",
+      "ok": true,
+      "detail": "@openpresentation/gallery@3.0.0, integrity sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ=="
+    },
+    {
+      "name": "tag",
+      "ok": true,
+      "detail": "OpenPresentation/gallery v3.0.0 -> 940633a92c0c7d3339e59447d08ba6382ef12410"
+    },
+    {
+      "name": "gitHead",
+      "ok": true,
+      "detail": "gitHead 940633a92c0c7d3339e59447d08ba6382ef12410 = tag commit 940633a92c0c7d3339e59447d08ba6382ef12410"
+    },
+    {
+      "name": "tag on main",
+      "ok": true,
+      "detail": "940633a92c0c is on gallery main (identical)"
+    },
+    {
+      "name": "version at tag",
+      "ok": true,
+      "detail": "package.json at 940633a92c0c carries 3.0.0"
+    },
+    {
+      "name": "dist.attestations",
+      "ok": true,
+      "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fgallery@3.0.0)"
+    },
+    {
+      "name": "SLSA provenance",
+      "ok": true,
+      "detail": "built by .github/workflows/gallery-publish.yml on refs/tags/v3.0.0 from 940633a92c0c (https://github.com/OpenPresentation/gallery/actions/runs/38493340689/attempts/1)"
+    },
+    {
+      "name": "npm audit signatures",
+      "ok": true,
+      "detail": "1 verified, 0 invalid, 0 missing; @openpresentation/gallery@3.0.0 has a verified attestation"
+    },
+    {
+      "name": "GitHub release",
+      "ok": true,
+      "detail": "not created by gallery's gallery-publish.yml (none expected)"
+    },
+    {
+      "name": "dist-tag",
+      "ok": true,
+      "info": true,
+      "detail": "latest"
+    }
+  ]
+}

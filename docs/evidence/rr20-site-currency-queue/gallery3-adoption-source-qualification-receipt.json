@@ -1,0 +1,187 @@
+{
+  "at": "2026-10-14T01:10:21.886644+00:00",
+  "refs": {
+    "opf": "88a0261ced6c681d7697a8de9acf3605a81e50bf",
+    "opf-render": "80dd5518d6e24e337f520bc45c0a6e667bf922d6",
+    "opf-pptx": "e7eefcaf2557c8cebe62855837f82ce37c1fea93",
+    "opf-editor": "be1e009f2a6d8687d895546a9c90069c9a323a24"
+  },
+  "commands": [
+    {
+      "cwd": "opf",
+      "command": [
+        "node",
+        "--version"
+      ],
+      "exitCode": 0,
+      "seconds": 0.01,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/01.log",
+      "sha256": "f2ec568164f99546161909b0189b57bb5be3e80f8e2ccd8a51a4aed8c4055a04"
+    },
+    {
+      "cwd": "opf",
+      "command": [
+        "npm",
+        "--version"
+      ],
+      "exitCode": 0,
+      "seconds": 0.05,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/02.log",
+      "sha256": "041fb0a6f23ccf0102a18d4591e1bfa36eebc17d27d348727a5eee18806d1c3c"
+    },
+    {
+      "cwd": "opf",
+      "command": [
+        "pnpm",
+        "--version"
+      ],
+      "exitCode": 0,
+      "seconds": 0.1,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/03.log",
+      "sha256": "abb3ce293b7ae818d9d22051b093e51415a4de46f6dd529189c4feb458037cb5"
+    },
+    {
+      "cwd": "opf",
+      "command": [
+        "pnpm",
+        "install",
+        "--frozen-lockfile"
+      ],
+      "exitCode": 0,
+      "seconds": 0.72,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/04.log",
+      "sha256": "182261fb96abc0fd5de706690182684a927587f3ac568a3756add832bce324ec"
+    },
+    {
+      "cwd": "opf-render",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "exitCode": 0,
+      "seconds": 4.67,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/05.log",
+      "sha256": "b7faf82f5fe68654353855ffcfbc5682a41cb1c8b5b908c3be2b344d7c644989"
+    },
+    {
+      "cwd": "opf-pptx",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "exitCode": 0,
+      "seconds": 1.19,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/06.log",
+      "sha256": "04896dbe64ac4ada5f45d0e3513a6ba6ef7e0339d7aaa1f563bd2bcbb128e859"
+    },
+    {
+      "cwd": "opf-editor",
+      "command": [
+        "npm",
+        "ci"
+      ],
+      "exitCode": 0,
+      "seconds": 2.24,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/07.log",
+      "sha256": "76694478a059908b2527ad70dac70932cbad37062b93988b30fdaea90c9ecdc9"
+    },
+    {
+      "cwd": "opf",
+      "command": [
+        "node",
+        "scripts/materialize-gallery-catalog.mjs"
+      ],
+      "exitCode": 0,
+      "seconds": 0.06,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/08.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "cwd": "opf",
+      "command": [
+        "pnpm",
+        "build"
+      ],
+      "exitCode": 0,
+      "seconds": 11.42,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/09.log",
+      "sha256": "44649dade9e2f7427fe83c164cc0387cdd0efa7f8ed01da595e11f21d26693b4"
+    },
+    {
+      "cwd": "opf",
+      "command": [
+        "node",
+        "scripts/link-ecosystem.mjs",
+        "--packages-only"
+      ],
+      "exitCode": 0,
+      "seconds": 0.4,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/10.log",
+      "sha256": "a1e4e6b2684e54da5e14b60b593b18f1f91db792b541ca2eb6ac4546ed8481a2"
+    },
+    {
+      "cwd": "opf",
+      "command": [
+        "node",
+        "scripts/test-package-ecosystem.mjs",
+        "--tier",
+        "full"
+      ],
+      "exitCode": 0,
+      "seconds": 771.78,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/11.log",
+      "sha256": "f75f2d1af1bfd5ca7588f559eef96cfd370b79506e65b8705ec1ad34e2f172f9"
+    },
+    {
+      "cwd": "opf",
+      "command": [
+        "pnpm",
+        "test"
+      ],
+      "exitCode": 1,
+      "seconds": 22.0,
+      "log": "/private/tmp/rr20-gallery3-adoption-full-01/12.log",
+      "sha256": "9e557d5521b89cd3411e74e9585c35093c8382d22464f552f07abc6e0520a2b4"
+    }
+  ],
+  "candidateGallery": false,
+  "nativeAcceptance": false,
+  "publication": false,
+  "source": {
+    "opf": {
+      "head": "88a0261ced6c681d7697a8de9acf3605a81e50bf",
+      "status": ""
+    },
+    "opf-render": {
+      "head": "80dd5518d6e24e337f520bc45c0a6e667bf922d6",
+      "status": ""
+    },
+    "opf-pptx": {
+      "head": "e7eefcaf2557c8cebe62855837f82ce37c1fea93",
+      "status": ""
+    },
+    "opf-editor": {
+      "head": "be1e009f2a6d8687d895546a9c90069c9a323a24",
+      "status": ""
+    }
+  },
+  "complete": false,
+  "after": {
+    "opf": {
+      "head": "88a0261ced6c681d7697a8de9acf3605a81e50bf",
+      "status": ""
+    },
+    "opf-render": {
+      "head": "80dd5518d6e24e337f520bc45c0a6e667bf922d6",
+      "status": ""
+    },
+    "opf-pptx": {
+      "head": "e7eefcaf2557c8cebe62855837f82ce37c1fea93",
+      "status": ""
+    },
+    "opf-editor": {
+      "head": "be1e009f2a6d8687d895546a9c90069c9a323a24",
+      "status": ""
+    }
+  }
+}

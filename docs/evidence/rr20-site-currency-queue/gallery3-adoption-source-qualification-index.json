@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-14T01:28:55.682958+00:00",
+  "files": [
+    {
+      "file": "gallery3-adoption-source-qualification-proof.json",
+      "sha256": "fa70af97076accb38f3916b619fbe8a0a78841f784dab4b56ec4957b0d048acf"
+    },
+    {
+      "file": "gallery3-adoption-source-qualification-receipt.json",
+      "sha256": "62df0d3038b59bbc97b0f8fe3423097effaf48236d2e7b2bfd0837b4b5bdd85e"
+    },
+    {
+      "file": "gallery3-adoption-remaining-checks-receipt.json",
+      "sha256": "d1e6843353ec37215ede3b8d763e54fa9a5d9fd10fd08fdaaf82b1db541a17cf"
+    }
+  ],
+  "correctedDocLogs": [
+    {
+      "command": "check:release-report",
+      "exitCode": 0,
+      "path": "/private/tmp/rr20-gallery3-b72-release-report.log",
+      "sha256": "8e4e474ba44dd7e2d9138807c991dada3d634092b07784731127d5347f6c2c6f"
+    },
+    {
+      "command": "check:gallery-tracker",
+      "exitCode": 0,
+      "path": "/private/tmp/rr20-gallery3-b72-gallery-tracker.log",
+      "sha256": "2eb28602874c31301af879ae90455bc91900ab49d018bf8847f7d41d68743f34"
+    }
+  ],
+  "supervisorVerification": "Supervisor independently rehashed15 command logs,2receipts,10metadata files against exact refs, plus2corrected-doc logs; reported2026-10-14.",
+  "nativeAcceptance": false,
+  "registry020Acceptance": false,
+  "rr55Successors": {
+    "renderer": "0de5e09fc895091233a29148c59e4e78b9d35222",
+    "pptx": "e7a23bb2ec3439bc5b9120811c5c4ae546a2694a",
+    "editor": "a4a787874b822a457f1e990affe8bbb08bbf3a3a",
+    "receipt": "gallery3-adoption-rr55-controls-receipt.json",
+    "sha256": "3e3f8c20c60e4017347a094847660689f7e71020bcd1a65b823cd38057a318b3",
+    "supervisorReviewedScope": "Each adds only opf.requiresUnreleasedCore=0.20.0 and a fragment; runtime and locks unchanged.18controls receipts rehashed and expected outcomes independently checked by supervisor.",
+    "identityLimit": "Full-tier/browser execution retains original80dd/e7ee/be1e identities; later source heads are reviewed metadata-only successors, not a repeated full qualification."
+  }
+}

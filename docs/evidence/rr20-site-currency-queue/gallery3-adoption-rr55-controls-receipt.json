@@ -1,0 +1,230 @@
+[
+  {
+    "repo": "render",
+    "sourceHead": "80dd5518d6e24e337f520bc45c0a6e667bf922d6",
+    "command": [
+      "node",
+      "test/published-core-gate.mjs"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/render-published-core-controls.log",
+    "sha256": "0e4f594565fea4551c1dc02c78deca1026d2343e179ad8ac9f9343644c6f4a55"
+  },
+  {
+    "repo": "render",
+    "sourceHead": "80dd5518d6e24e337f520bc45c0a6e667bf922d6",
+    "command": [
+      "node",
+      "scripts/published-core-gate.mjs"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/render-actual-gate.log",
+    "sha256": "11a1f79c0b86383b4cc47f7b059ec4e32ada8a628a0edacaa06c4994214dba57"
+  },
+  {
+    "repo": "render",
+    "sourceHead": "80dd5518d6e24e337f520bc45c0a6e667bf922d6",
+    "command": [
+      "node",
+      "scripts/published-core-gate.mjs",
+      "--forbid"
+    ],
+    "exit": 1,
+    "expected": 1,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/render-release-forbid.log",
+    "sha256": "0de8b25f3c9f1c0a65468b4c6e0154c6b13e5d4d3c5a2c16684a423aa6b5f90e"
+  },
+  {
+    "repo": "render",
+    "sourceHead": "80dd5518d6e24e337f520bc45c0a6e667bf922d6",
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/render-typecheck.log",
+    "sha256": "f84db1730afd50601b3e23e00c7ad00dac051317b9c90cfb2f5024ee757a2b44"
+  },
+  {
+    "repo": "render",
+    "sourceHead": "80dd5518d6e24e337f520bc45c0a6e667bf922d6",
+    "command": [
+      "npm",
+      "run",
+      "check:changes"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/render-changes.log",
+    "sha256": "e438c6ba48cd7d41cd13537f7fbb5a7e1d51611199df85e68503bedcc0e7af8d"
+  },
+  {
+    "repo": "render",
+    "sourceHead": "80dd5518d6e24e337f520bc45c0a6e667bf922d6",
+    "command": [
+      "npm",
+      "run",
+      "validate"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/render-validate.log",
+    "sha256": "dce446edababae434e1d3cb8d450ee1917d490be3d81d19364fff97de2f5edff"
+  },
+  {
+    "repo": "pptx",
+    "sourceHead": "e7eefcaf2557c8cebe62855837f82ce37c1fea93",
+    "command": [
+      "node",
+      "test/published-core-gate.mjs"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/pptx-published-core-controls.log",
+    "sha256": "0e4f594565fea4551c1dc02c78deca1026d2343e179ad8ac9f9343644c6f4a55"
+  },
+  {
+    "repo": "pptx",
+    "sourceHead": "e7eefcaf2557c8cebe62855837f82ce37c1fea93",
+    "command": [
+      "node",
+      "scripts/published-core-gate.mjs"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/pptx-actual-gate.log",
+    "sha256": "f57500e0aac1c112cc2e6717cd19f3bac2f3bd9736d00a4ef4d7fbbbace4a0ce"
+  },
+  {
+    "repo": "pptx",
+    "sourceHead": "e7eefcaf2557c8cebe62855837f82ce37c1fea93",
+    "command": [
+      "node",
+      "scripts/published-core-gate.mjs",
+      "--forbid"
+    ],
+    "exit": 1,
+    "expected": 1,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/pptx-release-forbid.log",
+    "sha256": "0de8b25f3c9f1c0a65468b4c6e0154c6b13e5d4d3c5a2c16684a423aa6b5f90e"
+  },
+  {
+    "repo": "pptx",
+    "sourceHead": "e7eefcaf2557c8cebe62855837f82ce37c1fea93",
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/pptx-typecheck.log",
+    "sha256": "9f8ce8090b6d48ce63e441058aa45b3c6c49191000b82338afbbc8c9e2b3f558"
+  },
+  {
+    "repo": "pptx",
+    "sourceHead": "e7eefcaf2557c8cebe62855837f82ce37c1fea93",
+    "command": [
+      "npm",
+      "run",
+      "check:changes"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/pptx-changes.log",
+    "sha256": "1998b1238eeb18490fee31251644577b1d3cf334bd2443976bb913a3bd17dae9"
+  },
+  {
+    "repo": "pptx",
+    "sourceHead": "e7eefcaf2557c8cebe62855837f82ce37c1fea93",
+    "command": [
+      "npm",
+      "run",
+      "validate"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/pptx-validate.log",
+    "sha256": "52aa7a156103b8336d1cd7a39345a16dbf1ccf4fbe7ac30adc370c06d3f71424"
+  },
+  {
+    "repo": "editor",
+    "sourceHead": "be1e009f2a6d8687d895546a9c90069c9a323a24",
+    "command": [
+      "node",
+      "test/published-core-gate.mjs"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/editor-published-core-controls.log",
+    "sha256": "0e4f594565fea4551c1dc02c78deca1026d2343e179ad8ac9f9343644c6f4a55"
+  },
+  {
+    "repo": "editor",
+    "sourceHead": "be1e009f2a6d8687d895546a9c90069c9a323a24",
+    "command": [
+      "node",
+      "scripts/published-core-gate.mjs"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/editor-actual-gate.log",
+    "sha256": "11a1f79c0b86383b4cc47f7b059ec4e32ada8a628a0edacaa06c4994214dba57"
+  },
+  {
+    "repo": "editor",
+    "sourceHead": "be1e009f2a6d8687d895546a9c90069c9a323a24",
+    "command": [
+      "node",
+      "scripts/published-core-gate.mjs",
+      "--forbid"
+    ],
+    "exit": 1,
+    "expected": 1,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/editor-release-forbid.log",
+    "sha256": "0de8b25f3c9f1c0a65468b4c6e0154c6b13e5d4d3c5a2c16684a423aa6b5f90e"
+  },
+  {
+    "repo": "editor",
+    "sourceHead": "be1e009f2a6d8687d895546a9c90069c9a323a24",
+    "command": [
+      "npm",
+      "run",
+      "typecheck"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/editor-typecheck.log",
+    "sha256": "c22ec789ef4f42468562f1fa9b93e6a93808e8f049caf6847d0ec69fc5eb0728"
+  },
+  {
+    "repo": "editor",
+    "sourceHead": "be1e009f2a6d8687d895546a9c90069c9a323a24",
+    "command": [
+      "npm",
+      "run",
+      "check:changes"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/editor-changes.log",
+    "sha256": "c7d8378361d05112580e6637e931016db0dc547d25836bc0274e5427ecf79b9e"
+  },
+  {
+    "repo": "editor",
+    "sourceHead": "be1e009f2a6d8687d895546a9c90069c9a323a24",
+    "command": [
+      "npm",
+      "run",
+      "validate"
+    ],
+    "exit": 0,
+    "expected": 0,
+    "log": "/private/tmp/rr20-adoption-rr55-controls/editor-validate.log",
+    "sha256": "a3d9c85973c301d74d91e967065eceb7e245732fa9f70fd480e91ea91389e161"
+  }
+]
