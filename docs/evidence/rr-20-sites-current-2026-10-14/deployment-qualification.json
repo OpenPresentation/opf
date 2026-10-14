@@ -209,7 +209,7 @@
   "allThreeApplicableCICompleted": false,
   "finalSourceIntegration": {
     "path": "docs/evidence/rr-20-sites-current-2026-10-14/final-source-integration.json",
-    "sha256": "f1e979f1123fcc173aa4aed1d64b1daca3c21246d074543f2d2b90d915e6320b",
+    "sha256": "377519b7e065d7ca2e5b24eefdf7d58b4dd4a34c1f8142e850e2a9beeaaa0d43",
     "observedAt": "2026-10-14T21:37:24.814910+00:00",
     "allThreeSiteDefaultMerged": true,
     "allThreeApplicableCICompleted": true,

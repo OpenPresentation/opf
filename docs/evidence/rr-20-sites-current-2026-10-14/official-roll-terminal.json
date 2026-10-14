@@ -157,5 +157,12 @@
     "success": 14,
     "skipped": 5
   },
-  "countBoundary": "33/33 is the later canonical source-head confirmation, not33 fresh child jobs. Child table has14success entries and5intentional skips; skips remain skips. Roller completed21:19:46; source confirmation22:16:13."
+  "countBoundary": "33/33 is the later canonical source-head confirmation, not33 fresh child jobs. Child table has14success entries and5intentional skips; skips remain skips. Roller completed21:19:46; source confirmation22:16:13.",
+  "ancestryAttribution": {
+    "retainedAncestorOfReviewedProposal": true,
+    "originalBotBranchCommitWorkflowUnchanged": true,
+    "futureMainAncestryClaimed": false,
+    "mainMergeMaySquashHistory": true,
+    "actualMainAcceptance": "Bind actual merged tree, exact lock/golden bytes and immutable original generated commit/workflow evidence; do not require or preclaim retained main ancestry."
+  }
 }
