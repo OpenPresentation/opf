@@ -96,7 +96,7 @@
   "historicalAttempt1": "Jobs never started due account payments/spending limit; original annotations, empty steps and unavailable logs remain in ci-account-blockers.json. Owner restored budget; five attempt2 workflows were retried on unchanged reviewed deployed heads.",
   "remainingBoundaries": {
     "T16": "Original commissioned Yu Gothic own-host fixture gap and explicit supersession chronology remain; canonical22-name evidence covers ten of original eleven names, not Yu Gothic.",
-    "T24T31": "Existing genuine same-four Windows replay committed metadata export requires explicit authorization and independent Git-blob review; no new Office/full58/globalfont gate.",
+    "T24T31": "Scoped-complete per original canonical native/fixed-source acceptance plus genuine current-package samefour Mac replay and supervisor/independent reviews. Separate Windows12-report export is unaccepted and is not an added release criterion.",
     "T40": "Official roller38637195180 generated886023e2d3f7a0a92d5073c7399ac02732fa0afd; child qualification/actual integration still pending. Final records and note delivery remain distinct."
   },
   "independentReview": {
@@ -122,5 +122,16 @@
     ],
     "noNewTestsNetworkEditsByReviewer": true,
     "finalEligibilitySourceSha256": "9cb6cd97d2e39f6911fc0e871660a28e4ee3f85419a8bdb6c71b4ff78c723019"
+  },
+  "currentScopedReplay": {
+    "path": "docs/evidence/rr-20-sites-current-2026-10-14/retained-current-registry-replay.json",
+    "sha256": "e468d6624ad67020b1ccbdb3a64c1f0a7ae6df62c6bd8682453b12f5042f0162",
+    "T24Complete": true,
+    "T31Complete": true,
+    "originalChecklistChecked": 38,
+    "originalChecklistOpen": [
+      "T16",
+      "T40"
+    ]
   }
 }
