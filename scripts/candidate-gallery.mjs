@@ -134,6 +134,7 @@ export async function publishedGalleryControl(plan, registry = async (name, vers
 export function assertPublishedGallery(manifest,configuration){
   assert.ok(!Object.hasOwn(manifest.opf??{},'requiresUnreleasedGallery')&&configuration===undefined,'unresolved candidate gallery cannot qualify release, tag, registry or publication');
   if(manifest.name==='@openpresentation/opf'&&/^0\.19\./.test(manifest.version??''))assert.match(manifest.dependencies?.['@openpresentation/gallery']??'',/^\^2\.\d+\.\d+$/,'core 0.19 publication requires an actual gallery ^2 registry dependency');
+  if(manifest.name==='@openpresentation/opf'&&/^0\.20\./.test(manifest.version??''))assert.match(manifest.dependencies?.['@openpresentation/gallery']??'',/^\^3\.\d+\.\d+$/,'core 0.20 publication requires an actual gallery ^3 registry dependency');
 }
 
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){

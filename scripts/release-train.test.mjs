@@ -1169,3 +1169,67 @@ test("matching registry manifests require exact name and canonical SHA512 integr
     await assert.rejects(() => npm.matchingManifest(name, "^0.19.0"), /identity mismatch/);
   }
 });
+
+
+test("0.20 prep validates prospective Gallery 3 without authorizing actual 0.19 publication", async () => {
+  const world = fakeWorld();
+  const manifest = { name: "@openpresentation/opf", version: "0.19.0", dependencies: { "@openpresentation/gallery": "^3.0.0" } };
+  const head = world.commit("opf", "adopt Gallery 3", { "packages/javascript/package.json": JSON.stringify(manifest) });
+  await assertGalleryReleaseReady(world.deps, packageOf("core"), head, manifest, { prospectiveVersion: "0.20.0" });
+  assert.equal(manifest.version, "0.19.0", "validation does not edit source metadata");
+  await assert.rejects(assertGalleryReleaseReady(world.deps, packageOf("core"), head, manifest), /core 0.19 publication/);
+  await assert.rejects(tagRelease(world.deps, packageOf("core"), "0.19.0", { core: "0.19.0" }), /core 0.19 publication/);
+  for (const dependencies of [undefined, { "@openpresentation/gallery": "^2.0.0" }]) {
+    await assert.rejects(assertGalleryReleaseReady(world.deps, packageOf("core"), head, { ...manifest, dependencies }, { prospectiveVersion: "0.20.0" }), /core 0.20 publication/);
+  }
+  for (const files of [
+    { ".github/candidate-gallery.json": JSON.stringify({ version: 2 }) },
+    { "packages/javascript/package.json": JSON.stringify({ ...manifest, opf: { requiresUnreleasedGallery: "3.0.0" } }) },
+  ]) {
+    const staged = files["packages/javascript/package.json"] ? JSON.parse(files["packages/javascript/package.json"]) : manifest;
+    const stagedHead = world.commit("opf", "still staged", { "packages/javascript/package.json": JSON.stringify(staged), ...files });
+    await assert.rejects(assertGalleryReleaseReady(world.deps, packageOf("core"), stagedHead, staged, { prospectiveVersion: "0.20.0" }), /unresolved candidate gallery/);
+  }
+});
+
+test("CLI prospective version cannot relabel the actual core Gallery contract", async () => {
+  const world = fakeWorld();
+  const cli = { name: "@openpresentation/cli", version: "0.19.0" };
+  const core = { name: "@openpresentation/opf", version: "0.19.0", dependencies: { "@openpresentation/gallery": "^3.0.0" } };
+  const head = world.commit("opf", "CLI before core release", { "packages/javascript/package.json": JSON.stringify(core), "packages/cli/package.json": JSON.stringify(cli) });
+  await assert.rejects(assertGalleryReleaseReady(world.deps, packageOf("cli"), head, cli, { prospectiveVersion: "0.20.0" }), /core 0.19 publication/);
+  const released = world.commit("opf", "actual core 0.20", { "packages/javascript/package.json": JSON.stringify({ ...core, version: "0.20.0" }), "packages/cli/package.json": JSON.stringify(cli) });
+  await assertGalleryReleaseReady(world.deps, packageOf("cli"), released, cli, { prospectiveVersion: "0.20.0" });
+});
+
+test("canonical prep projects the 0.20 version while preserving adopted Gallery metadata", async t => {
+  const { world, base } = prepFixture();
+  t.after(() => rmSync(base, { recursive: true, force: true }));
+  const seed = path.join(base, "seed");
+  const original = { name: "@openpresentation/opf", version: "0.19.0", dependencies: { "@openpresentation/gallery": "^3.0.0" } };
+  const files = {
+    "packages/javascript/package.json": JSON.stringify(original, null, 2) + "\n",
+    "package.json": JSON.stringify({ name: "openpresentation-workspace", private: true, type: "module" }),
+    "CHANGELOG.md": "# Changelog\n\n## 0.19.0\n\nEarlier.\n",
+    "changes/config.json": JSON.stringify({ default: "opf", targets: { opf: "CHANGELOG.md" }, codePaths: [] }),
+    "changes/rr-99-fix.md": "---\ntype: changed\npackages: [opf]\n---\nAdopt Gallery 3.\n",
+    "pnpm-lock.yaml": "lockfileVersion: '9.0'\n",
+  };
+  for (const [file, text] of Object.entries(files)) {
+    mkdirSync(path.dirname(path.join(seed, file)), { recursive: true });
+    writeFileSync(path.join(seed, file), text);
+  }
+  git(seed, "add", "-A"); git(seed, "commit", "-qm", "adopt Gallery 3");
+  git(seed, "push", "-q", path.join(base, "origin.git"), "main");
+  world.commit("opf", "adopted", files);
+  const execute = world.deps.exec;
+  world.deps.exec = (command, args, options) => command === "pnpm" ? { status: 0, stdout: "", stderr: "" } : execute(command, args, options);
+  const result = await prep(world.deps, packageOf("core"), { core: "0.20.0" }, { date: "2026-10-13" });
+  assert.equal(result.status, "dry-run");
+  const prepared = JSON.parse(readFileSync(path.join(result.dir, "packages/javascript/package.json"), "utf8"));
+  assert.equal(prepared.version, "0.20.0");
+  assert.deepEqual(prepared.dependencies, original.dependencies);
+  assert.ok(!world.calls.some(isWrite), "dry preparation does not mutate remote state");
+  world.commit("opf", "newer actual main", { ...files, "packages/javascript/package.json": JSON.stringify({ ...original, version: "0.20.1" }) });
+  await assert.rejects(prep(world.deps, packageOf("core"), { core: "0.20.0" }), /newer than/);
+});

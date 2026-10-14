@@ -354,13 +354,16 @@ async function manifestAt(deps, pkg, ref) {
 }
 
 // Independent gallery is outside PACKAGES: staging must be removed by a reviewed registry-adoption PR.
-export async function assertGalleryReleaseReady(deps, pkg, ref, manifest) {
+export async function assertGalleryReleaseReady(deps, pkg, ref, manifest, { prospectiveVersion } = {}) {
   const configuration = await fileAt(deps, pkg.repo, ".github/candidate-gallery.json", ref);
   const core = pkg.repo === "opf" && pkg.manifest !== "packages/javascript/package.json"
     ? await manifestAt(deps, packageOf("core"), ref) : manifest;
   try {
-    assertPublishedGallery(core, configuration === null ? undefined : JSON.parse(configuration));
-    assertPublishedGallery(manifest);
+    // Preparation validates the prospective 0.20 contract; tagging always validates actual bytes.
+    const prospective = pkg.key === "core" && /^0\.20\./.test(prospectiveVersion ?? "")
+      ? { ...core, version: prospectiveVersion } : core;
+    assertPublishedGallery(prospective, configuration === null ? undefined : JSON.parse(configuration));
+    assertPublishedGallery(prospective === core ? manifest : prospective);
   } catch (error) {
     throw new TrainStop(`${pkg.name}: ${error.message}; adopt the published gallery through a reviewed range/lock/config PR before release preparation or tagging`);
   }
@@ -1005,7 +1008,7 @@ export async function prep(deps, pkg, train, { execute = false, item, branch, su
   if (!version) throw new Error(`name the version of ${pkg.key} (--${pkg.key} X.Y.Z)`);
   const head = await mainSha(deps, pkg.repo);
   const manifest = await manifestAt(deps, pkg, head);
-  await assertGalleryReleaseReady(deps, pkg, head, manifest);
+  await assertGalleryReleaseReady(deps, pkg, head, manifest, { prospectiveVersion: version });
   const order = compareVersions(manifest.version, version);
   if (order === 0) {
     deps.log(`${pkg.repo} main already carries ${pkg.name} ${version}: the release-prep PR is merged.`);
