@@ -1,0 +1,37 @@
+{
+  "at": "2026-10-14T02:19:37.271609+00:00",
+  "base": "07ccce5e6579b3e43cfb8ed3acf7498593dd51ff",
+  "copiedReceipts": [
+    {
+      "file": "gallery3-render-editor-merge-verification.json",
+      "sha256": "81fb50652a08290d7ef9bc0eed66c4149956c279f8e1d5cfc81f8d90b6620129"
+    },
+    {
+      "file": "gallery3-core-pptx-merge-verification.json",
+      "sha256": "249a8df63b1b745d629207ab07fdd6bcc3529cb7d910ff25985f903a07bf8483"
+    },
+    {
+      "file": "gallery3-official-roll-review.json",
+      "sha256": "af2ac820b14df51928e62355aa529ad8f8b5fc65cb158c4e074c519e8bb29b7d"
+    },
+    {
+      "file": "inventory-maintenance-20261014T021430Z-summary.json",
+      "sha256": "97d39e119aef13f169060be546c179a39aba94e85a69d9e87263dc90f6da9912"
+    }
+  ],
+  "officialRoll": {
+    "run": 38499933920,
+    "head": "229810d2b6e29cc6127f1eaa7b786484564c9cf5",
+    "status": "pending qualification/merge",
+    "review": "exact lock-only four verified adoption heads and approved golden"
+  },
+  "inventoryScope": "2026-10-14 02:14 UTC snapshot:24 openPRs/42issues/eight clean synchronized defaults; not livecounts",
+  "nativeAcceptance": false,
+  "registry020Published": false,
+  "deployment": false,
+  "historicalStateReference": {
+    "path": "/private/tmp/rr20-coordinated-fix-integration-01/state.json",
+    "sha256": "7b5d1a5c6aa6c402e3c796a866bd09b172514033bf6eb0c6694449dd68ac7083",
+    "scope": "Historical source push/body integration state; not current CI outcome"
+  }
+}
