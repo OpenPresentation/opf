@@ -8,9 +8,46 @@ people resuming work start here, not from chat history or local scratch files.
 
 Official roll #651 and native tooling #652 are merged and verified. Evidence #661 is merged at `d0abab263708db5558fa1bf4bf23213d673b4f6c`; the supervisor's scoped acceptance covers 17 selected native cases, four actual UI operations and the fixed-source four-archive offline import replay. All 58 dispositions remain literal; 41 cases were not executed natively. No further Office run is needed for this accepted scope. [Scoped decision and exact identities](../../evidence/rr-20-windows-current-2026-10-14/supervisor-scoped-acceptance.json).
 
-Core 0.20.1 is genuinely published and fully registry/provenance verified at `22664e18ea657db4e377b84997f2e73bf6cd738b` (`opf-v0.20.1`). Gallery 3.0.0 remains genuinely published and verified. Renderer preparation #245 merged at `83c1e6e4a9d622f5c0c213e7f12c63d6a4986034`, equal to the reviewed `438e` tree; its sole commit gate passed 8/8. Renderer 0.20.0 is genuinely published and registry/provenance verified at that commit ([trusted workflow](https://github.com/OpenPresentation/opf-render/actions/runs/38559177143)). PPTX 0.20.0 is genuinely published and fully verified at `0e2ea4982c4bb1280f22763411e681fe0786f4fc` ([trusted workflow](https://github.com/OpenPresentation/opf-pptx/actions/runs/38570040772)). Editor and CLI 0.20.0 publication remain open. This prerequisite branch adopts both exact engine versions in core's ordinary source-dev dependencies with an authentic lock refresh before CLI preparation; its changed-branch qualification and merge remain required. Core's published artifact remains immutable; no new core runtime release is implied. Old e43 core 0.20.0 preparation remains unpublished and must never be tagged.
+Core 0.20.1, renderer/PPTX/editor/CLI 0.20.0 and Gallery 3.0.0 are
+genuinely published and verified. The
+[publication authority](../../evidence/rr-20-registry-current-2026-10-14/verified-registry-authority.json)
+binds each immutable tag and `gitHead` to its registry integrity, trusted
+workflow, SLSA invocation and signature checks. Source-dev engine adoption
+#663 is merged at `bb166995921a0573958e58c2e0da68d7d70a0502`; CLI preparation
+#664 is merged at `41e3d648f8ea8c391cac065fcadef1d79f2000cf`, whose entire
+tree and binary patch equal the reviewed preparation. The runtime core
+artifact remains 0.20.1 at `22664e18ea657db4e377b84997f2e73bf6cd738b`.
+Old e43 core 0.20.0 preparation remains unpublished and must never be tagged.
 
-Matching stable registry qualification, final release records, genuine three-site dependency/assets/copy adoption, Gallery host/default/hosted checks and owner scope remain open. Held local site evidence is not deployment or complete site acceptance. Selected native acceptance does not imply all-case, global font/raster or pixel parity; the program is not complete.
+The maintained stable registry consumer passed with all five exact planned
+packages and Gallery 3, with registry lock identities matching the publication
+authority. [Exact installed qualification](../../evidence/rr-20-registry-current-2026-10-14/registry-qualification.json)
+retains the source, plan and command-log hashes. Matching three-site dependency,
+asset and copy adoption remain separate from this Node qualification. Gallery
+host/default/hosted checks and owner scope remain open. Held local site
+evidence is not deployment or complete site acceptance. The accepted native
+sample remains 17 selected cases and four actual UI operations, with 41 of
+58 cases unexecuted. It does not establish all-case, global font/raster or
+pixel parity; the program remains active.
+
+The plan uses the genuinely qualified published Editor example source
+`671b04ee3f6b228338c0eb3d6d7453f807b28837`. Editor [#170](https://github.com/OpenPresentation/opf-editor/pull/170)
+merged at `2ac0268359f48123031ef537fcc0c31d7c41a1df`, adding example thumbnail
+batching and a reviewed package-job CI budget fix after fresh required checks
+passed. PPTX [#260](https://github.com/OpenPresentation/opf-pptx/pull/260) merged
+at `f2637951b77763bfeb45d5cd1012d12f7763f952`, changing the generated master
+display name in source. Both actual merge trees equal the reviewed source
+heads. Published Editor `671b04e`, PPTX `0e2ea49` and the current plan's Editor
+example reference remain unchanged; source merges do not claim those
+improvements are adopted in the published artifacts or current site assets.
+
+A narrow source-copy follow-up remains: the published core 0.20.1 schema
+description for `Presentation.filename` still names the removed CLI commands
+“render, export” instead of `convert`. Gallery’s generated schema reference
+faithfully inherits that published description. Current documentation uses
+`convert`; the immutable artifact and generated assets remain unchanged.
+Canonical description cleanup and normal artifact regeneration require their
+own reviewed source change and gates. This caption does not restart the train.
 
 ## Historical checkpoint — 2026-10-13 published graph and feature qualification
 
@@ -36,7 +73,7 @@ The published 0.19 graph's integrated release gates are verified, including actu
 
 The earlier [Mac runtime replay](../../evidence/rr20-site-currency-queue/final-runtime-replay-macos-proof.json) qualifies six fresh local archives at core/CLI `a94a1aed`, renderer `2b4a60f9`, PPTX `0c714b00`, editor `b45f2ca1` and Gallery `7cffb136`. Maintained installed-consumer and eight browser suites pass (282 assertions, eight interaction scenarios). Clean tooling `e4da9319` produces a 54-case/304-file sealed suite; every file hash and byte length is verified, including an independent supervisor recheck. The primary waterfall source is exact; all 17 raw round-trip differences remain documented with rationale, including unrendered global furniture definitions and deliberate chart-type/binning fallbacks. The [independent review](../../evidence/rr20-site-currency-queue/final-native-differences-review.json), accepted by the supervisor, classifies them as 15 chart-type-only adaptations, one histogram binning/type adaptation and one dormant furniture omission; no additional implementation blocker was identified, while raw inequalities and native pending remain. This is Mac candidate qualification with `nativeAcceptance: false`; the [earlier Windows prerequisites](../../evidence/rr20-site-currency-queue/windows-final-suite-prerequisites.json) are separately reported evidence and do not record Office execution.
 
-## Current feature qualification checklist
+## Historical source-candidate feature qualification checklist
 
 The [qualification record](../../evidence/rr20-site-currency-queue/final-qualification.json)
 keeps the unpublished feature graph separate from the historical published 32/40
@@ -82,8 +119,9 @@ The owner's goal (2026-10-01), restated:
 
 Repositories in scope:
 
-- core: [OpenPresentation/opf](https://github.com/OpenPresentation/opf) (spec,
-  catalogs, `@openpresentation/opf`, the CLI, ecosystem CI, evidence)
+- core: [OpenPresentation/opf](https://github.com/OpenPresentation/opf) (schemas,
+  default catalog integration, `@openpresentation/opf`, the CLI, ecosystem CI, evidence)
+- [gallery](https://github.com/OpenPresentation/gallery) (every default catalog record, independently released)
 - [opf-render](https://github.com/OpenPresentation/opf-render) (SVG/PDF preview)
 - [opf-pptx](https://github.com/OpenPresentation/opf-pptx) (PPTX export and import)
 - [opf-editor](https://github.com/OpenPresentation/opf-editor) (browser editor)

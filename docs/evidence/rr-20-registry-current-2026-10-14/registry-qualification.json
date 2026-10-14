@@ -1,0 +1,79 @@
+{
+  "at": "2026-10-14T16:08:41.654113+00:00",
+  "command": "pnpm test:registry-ecosystem",
+  "exitCode": 0,
+  "qualificationRuns": 1,
+  "allSixAuthorityIntegritiesMatched": true,
+  "sourceCommit": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
+  "runnerSha256": "d3f874aad38fc6cfd9c91c4aaf3be3e14e9f21a4be44c01f147fc13fc60a3cd9",
+  "releasePlanSha256": "371e07dd96c1f98b15bd07d60329a976d5991f088253e805f368574d02793902",
+  "authoritySha256": "78ea003cc6bca9ef1f60d238339822f390506bbb6476058bcb815d19b16f8421",
+  "consumerLockSha256": "70a5b80719714016a3021232317e159740242d9b43c0956448a006d21dbcade7",
+  "logName": "registry-qualification.log",
+  "logSha256": "2ad8b8d358f68b6a6419acdc2bdae46a3bdb5007d0996a1494819dce1ccde3ae",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.20.1",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.20.1.tgz",
+      "integrity": "sha512-rQdrzEh/wYOtXnOqB0FYTNEkutnR3VCw63WZ5ONgfWBIuWDcTj63dXfR/Ng6CBlQwkdMlWLSKvHsBPaloUeUcw==",
+      "authorityGitHead": "22664e18ea657db4e377b84997f2e73bf6cd738b"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.20.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.20.0.tgz",
+      "integrity": "sha512-335a5h/QweiJGexf/UcyTVOWX4smi3fW59bVqsK03aScY6r57dqDeimmaG6H1HalnqnIh2vvdb8OagSQZPt+Hg==",
+      "authorityGitHead": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.20.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.20.0.tgz",
+      "integrity": "sha512-Ash067AcgsfEFIL9dYv+TE30vMMfC/kRGQwtRMAkmrz9IzTMn1hpHlqRVryKo13wFiZ6xHXOOkt3YcuUhOwqiw==",
+      "authorityGitHead": "0e2ea4982c4bb1280f22763411e681fe0786f4fc"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.20.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.20.0.tgz",
+      "integrity": "sha512-z6SoyGty0cpOlxnGkBhzNrWqNs/ck/CXkmphZUcDKQ3HNiKsHf0gdzHQlvUnTZBMOIQxSBA+ZyfAHWRf06dm9g==",
+      "authorityGitHead": "671b04ee3f6b228338c0eb3d6d7453f807b28837"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.20.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.20.0.tgz",
+      "integrity": "sha512-QtLK+H585iGWbhRcvjEZqrGs2HbLJpqbXXx/zWoGUWE3bQMkPx/QZDJJUwaESxBrZkLMylgIFlzdfBD6kDhv9w==",
+      "authorityGitHead": "41e3d648f8ea8c391cac065fcadef1d79f2000cf"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/gallery/-/gallery-3.0.0.tgz",
+      "integrity": "sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ==",
+      "authorityGitHead": "940633a92c0c7d3339e59447d08ba6382ef12410"
+    }
+  ],
+  "verificationRefs": {
+    "opf": "22664e18ea657db4e377b84997f2e73bf6cd738b",
+    "cli": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
+    "opf-render": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034",
+    "opf-editor": "671b04ee3f6b228338c0eb3d6d7453f807b28837",
+    "opf-pptx": "0e2ea4982c4bb1280f22763411e681fe0786f4fc",
+    "gallery": "940633a92c0c7d3339e59447d08ba6382ef12410"
+  },
+  "literalSkipNotices": [
+    "\u2139 skipped 0",
+    "\u2139 skipped 0",
+    "\u2139 skipped 0",
+    "\u2139 skipped 0",
+    "\u2139 skipped 0"
+  ],
+  "sourcePackageOverrides": false,
+  "browserExecution": false,
+  "browserHarnessConstructionOnly": true,
+  "nativeOfficeExecution": false,
+  "siteDeployment": false,
+  "scope": "Maintained installed Node/API/CLI consumer of five exact release-plan versions and genuine Gallery3. Previous source, browser and native observations retain their original identities."
+}

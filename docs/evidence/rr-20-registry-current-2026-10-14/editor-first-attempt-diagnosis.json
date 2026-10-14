@@ -1,0 +1,47 @@
+{
+  "at": "2026-10-14T15:33:39.712929+00:00",
+  "source": "671b04ee3f6b228338c0eb3d6d7453f807b28837",
+  "sourceClean": true,
+  "originalWorkflowRun": "38584179461",
+  "originalFailedJob": "115921617463",
+  "originalFailure": "test/playground-download.mjs:178 click Source Apply60slides timeout30000ms duringperformingclick",
+  "failedBeforePublish": true,
+  "diagnosticApiCalls": 2,
+  "diagnosticNote": "firstgh call refusedANSI output; secondcall savedbytes, no polling",
+  "dependencies": {
+    "opf": "0.20.1",
+    "opf-render": "0.20.0",
+    "opf-pptx": "0.20.0",
+    "gallery": "3.0.0"
+  },
+  "npmCiExit": 0,
+  "buildPlaygroundExit": 0,
+  "failedStepReplayExit": 0,
+  "replayResult": {
+    "passed": true,
+    "browser": "153.0.8010.12",
+    "offline": true,
+    "pdf": {
+      "pages": 2,
+      "selectableText": true
+    },
+    "png": {
+      "width": 2560,
+      "height": 1440
+    },
+    "svg": "well-formed",
+    "zip": true,
+    "cancel": true,
+    "keyboard": true
+  },
+  "logSha256": {
+    "original": "af61e4860056b2280ce5010ca25771df0b95040345f77d95c3cf475a95f1eacf",
+    "install": "b054bc7e35ae24c66da481077d0946913111a9ec706253da84b5adbee7a0af36",
+    "build": "c802f93fd1bad4afb2bb316b295b1e0150fdf53ca888a114f7058bce8b281552",
+    "replay": "25ba0f1770517405ed0a06f6676d0d44ca073652bf837e70d1e30704bbbf4646"
+  },
+  "codeOrToleranceChanged": false,
+  "repeatScope": "onlyfailedmaintainedplayground-download, all assertionsunchanged",
+  "transientCauseProven": false,
+  "editorPublishedVerified": false
+}

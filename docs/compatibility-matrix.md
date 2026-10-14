@@ -5,27 +5,38 @@ is the honest supported subset for [the developer quickstart](quickstart.md).
 It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
-Verify live versions with `npm view <package> version` before treating a
-dated handoff as current. The current plan selects core/PPTX/editor/CLI 0.19.0, renderer 0.19.1 and Gallery 2.0.0; the older 0.18 matrix below is historical evidence. Immutable tag commits pin
-the verification harnesses; see [published evidence](evidence/shipped-train-20260921/README.md).
-The [September 29 source checkpoint](handoff-runtime-2026-09-29.md) records later
-accepted fixes and release prerequisites. The current published contracts are listed first; the older patch trains below are historical evidence. Complete native compatibility
-remains a separate acceptance gate.
+The coordinated plan selects core 0.20.1, renderer/PPTX/editor/CLI 0.20.0
+and Gallery 3.0.0. Immutable release commits and complete registry, SLSA
+provenance and signature checks are recorded in the
+[verified publication authority](evidence/rr-20-registry-current-2026-10-14/verified-registry-authority.json).
+Earlier package matrices and dated native observations below retain their
+historical identities. Complete native compatibility remains a separate gate.
 
-## Published 0.19 contract
+## Published 0.20 contract
 
-Core/PPTX/editor/CLI 0.19.0, renderer 0.19.1 and Gallery 2.0.0 are independently published and verified. The final v2 catalog has 28 intent layouts, schema 2 and no v1 API/record aliases; its owner is `@openpresentation/gallery@^2.0.0`. The recorded 0.18 matrix below is historical evidence. Registry/source and offline archive checks do not certify Windows PowerPoint or deployment.
+Layout `areas` uses nested arrays of cell names. Repeated names span rectangular
+regions and `.` denotes an empty cell. Gallery owns every default record;
+Gallery 3 is required for catalog compatibility generation 3, while per-kind
+schema versions remain v2. Core 0.19 and later consume the Gallery package and
+do not export `@openpresentation/opf/catalog` or ship a catalog snapshot.
+
+The 0.20 engines share measured quote allocation, the 32 reference pixel
+starting size for lists without an authored size, neutral structural borders
+and default right alignment for numeric table columns. Core and CLI forward
+registered catalogs during PPTX import. PPTX preserves stretch images with
+zero crop through native save/re-import. These published contracts do not
+imply universal Office or full-catalog visual parity.
 
 ## Current published package contracts
 
 | Package | Version | Dependency contract |
 | --- | --- | --- |
-| Core | 0.19.0 | Gallery ^2.0.0; optional renderer/PPTX ^0.19.0 |
-| CLI | 0.19.0 | Core ^0.19.0; optional renderer/PPTX ^0.19.0 |
-| Renderer | 0.19.1 | Core ^0.19.0; optional pinned font/converter peers |
-| PPTX | 0.19.0 | Core ^0.19.0, Gallery ^2.0.0; optional renderer ^0.19.1 |
-| Editor | 0.19.0 | Core ^0.19.0; optional renderer ^0.19.1 |
-| Gallery | 2.0.0 | Independent catalog owner, 28 schema-2 layouts |
+| Core | 0.20.1 | Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
+| CLI | 0.20.0 | Core ^0.20.1, Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
+| Renderer | 0.20.0 | Core ^0.20.1; optional pinned font/converter peers |
+| PPTX | 0.20.0 | Core ^0.20.1, Gallery ^3.0.0; optional renderer ^0.20.0 |
+| Editor | 0.20.0 | Core ^0.20.1; optional renderer ^0.20.0 |
+| Gallery | 3.0.0 | Independent owner of every default catalog record; 28 intent layouts |
 
 ## Runtime
 
@@ -118,7 +129,7 @@ and PPTX stay optional peers. CLI 0.15.0 and earlier bundled their core.
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
 ColorRef preview/export support. The renderer, PPTX and editor floors move with
-core in lockstep (core/PPTX/editor 0.19.0 and renderer 0.19.1), so
+core in lockstep (core 0.20.1 and renderer/PPTX/editor 0.20.0), so
 preview and export resolve one composition.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
@@ -197,7 +208,7 @@ The gallery (RR-78) is released from its own repository, OpenPresentation/galler
 tags, `gallery-publish.yml` there), outside the lockstep set above and
 recorded under `independentPackages` in `release-plan.json`: new catalog records are a minor release, a removed id or
 a changed drawing a major one ([release process](release-process.md#the-gallery-lane-rr-78)). From OPF 0.19 core and the
-CLI depend on `@openpresentation/gallery@^2.0.0` and core has no `/catalog` subpath; up to 0.18 core ships the same records as
+CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), and core has no `/catalog` subpath; up to 0.18 core ships the same records as
 `@openpresentation/opf/catalog`.
 
 ## Supported in this set
@@ -205,7 +216,7 @@ CLI depend on `@openpresentation/gallery@^2.0.0` and core has no `/catalog` subp
 | Capability | How | Notes |
 | --- | --- | --- |
 | JSON authoring | `*.opf.json` plus CLI `opf create` | Local files only |
-| Bundled examples catalog | `@openpresentation/opf/examples` | **127** decks; the quickstart JSON is a docs fixture, not a 127th catalog entry |
+| Bundled examples catalog | `@openpresentation/opf/examples` | **127** decks; the quickstart JSON is a docs fixture, not a 128th catalog entry |
 | Validate | `validate` / `opf validate` | One read-only checker: format, references, policy, accessibility, layout and content findings ([guide](validate.md)); no network catalog fetch |
 | Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Native `schemeClr`/theme writing and editor canvas named-color fidelity remain follow-ups. |
 | Embed catalog records | `embed` / `opf embed` | Embeds every record a document references, in the group it resolves in, so it renders with no catalog registered; remote media and data remain explicit host concerns. |
@@ -219,7 +230,7 @@ CLI depend on `@openpresentation/gallery@^2.0.0` and core has no `/catalog` subp
 | Read and write a deck in JSON, YAML or Markdown | `parse` / `stringify` (core 0.17.0 and later; `readDeck` / `writeDeck` in 0.16) | One entry point for the three text formats; `parse` throws `OPFValidationError` with located findings |
 | PNG | `toPng` (opf-render 0.18; `svgToPng` before) | Node raster of a deck or of SVG slides |
 | PDF | `toPdf` (opf-render 0.18; `svgToPdf` before) | opf-render 0.12.0 and later (RR-12, opf-render#90): **vector with selectable text by default** (embedded TrueType subsets of the supplied/bundled fonts, ToUnicode, links, metadata, tagged structure); `raster: true` keeps the image-per-slide output (`mode: "raster"` before 0.18). Renderers up to 0.11.9: raster-backed, not selectable text. Not a PDF/UA or PDF/A claim; see the renderer's `docs/evidence/rr-12-vector-pdf.md` for reader limits |
-| Editable PPTX export | `toPptx` | OPF → PPTX serialization. Furniture is tagged slide shapes (`OPF_FURNITURE_V1`), not native `p:hf` / notes-master Header/Footer objects |
+| Editable PPTX export | `toPptx` | OPF → PPTX serialization. Shared furniture is written on the master or layout; supported footer placeholders and tagged parts retain controlled re-import provenance. General native Office behavior remains separately scoped |
 | Agent skills | `opf skills install` | Offline after the CLI is installed |
 | Browser canvas | `@openpresentation/opf-editor/canvas` | Host must supply font bytes |
 

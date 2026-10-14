@@ -1,15 +1,34 @@
 import assert from 'node:assert/strict';
 import {verifyV2LayoutChoices} from './registry-layout-v2.mjs';
-import {registryToolchain} from './registry-toolchain.mjs';
+import {readFile,realpath} from 'node:fs/promises';
+import {createRequire} from 'node:module';
+import path from 'node:path';
+import {pathToFileURL} from 'node:url';
+import {assertCatalogGeneration,assertConsumerLock,assertInstalledCatalog,consumerDependencies} from './published-matrix/consumer-dependencies.mjs';
+import {registryFile,registryToolchain} from './registry-toolchain.mjs';
 const registry=await registryToolchain();
 // OPF 0.15: the host registers the published default catalog (here, the JSON options): the @openpresentation/gallery package from
 // core 0.19 (RR-78, core's dependency), core's /catalog subpath before.
 const loaded=await Promise.resolve().then(()=>registry.import('@openpresentation/gallery')).then(module=>({gallery:module.gallery,schema:module.CATALOG_SCHEMA}),()=>registry.import('@openpresentation/opf/catalog').then(module=>({gallery:module.defaultCatalog,schema:1})));
-const {gallery,schema}=loaded;assert.ok(schema===1||schema===2,'known catalog schema');
+const {gallery,schema}=loaded;
+const core=registry.packages.find(item=>item.name==='@openpresentation/opf')?.version;
+assertCatalogGeneration(core,schema);
+const modern=schema!==1;
+if(modern){
+ const plan=JSON.parse(await readFile(new URL('../release-plan.json',import.meta.url),'utf8'));
+ const consumerPlan=consumerDependencies(Object.fromEntries(registry.packages.map(item=>[item.name,item.version])),plan.independentPackages);
+ const modules=await realpath(path.join(registry.consumer,'node_modules'));
+ const require=createRequire(path.join(registry.consumer,'package.json'));
+ const manifestPath=registryFile(modules,pathToFileURL(require.resolve('@openpresentation/gallery/package.json')));
+ const manifest=JSON.parse(await readFile(manifestPath,'utf8'));
+ const lock=JSON.parse(await readFile(path.join(registry.consumer,'package-lock.json'),'utf8'));
+ assertConsumerLock(consumerPlan,lock);
+ assertInstalledCatalog(core,manifest,schema,consumerPlan);
+}
 const layouts=Object.entries(gallery.layouts).map(([id,record])=>({id,...record}));
-const {validate}=await registry.import(schema===2?'@openpresentation/opf':'@openpresentation/opf/validator');
+const {validate}=await registry.import(modern?'@openpresentation/opf':'@openpresentation/opf/validator');
 const {getJsonFieldContext,replaceFieldOption,fieldOptionEdit}=await registry.import('@openpresentation/opf-editor/json-options');
-if(schema===2){
+if(modern){
  const previews=await registry.import('@openpresentation/gallery/previews');
  console.log(verifyV2LayoutChoices({gallery,previews,validate,editor:{getJsonFieldContext,replaceFieldOption,fieldOptionEdit}}));
 }else{

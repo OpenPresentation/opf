@@ -1,0 +1,435 @@
+{
+  "schemaVersion": 1,
+  "verifiedAt": "2026-10-14T16:06:16.823751+00:00",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.20.1",
+      "gitHead": "22664e18ea657db4e377b84997f2e73bf6cd738b",
+      "dist": {
+        "integrity": "sha512-rQdrzEh/wYOtXnOqB0FYTNEkutnR3VCw63WZ5ONgfWBIuWDcTj63dXfR/Ng6CBlQwkdMlWLSKvHsBPaloUeUcw=="
+      },
+      "repository": "https://github.com/OpenPresentation/opf",
+      "tag": "opf-v0.20.1",
+      "workflow": ".github/workflows/npm-publish.yml",
+      "provenanceInvocation": "https://github.com/OpenPresentation/opf/actions/runs/38549148120/attempts/1",
+      "canonicalVerification": {
+        "ok": true,
+        "checks": [
+          {
+            "name": "npm version",
+            "ok": true,
+            "detail": "@openpresentation/opf@0.20.1, integrity sha512-rQdrzEh/wYOtXnOqB0FYTNEkutnR3VCw63WZ5ONgfWBIuWDcTj63dXfR/Ng6CBlQwkdMlWLSKvHsBPaloUeUcw=="
+          },
+          {
+            "name": "tag",
+            "ok": true,
+            "detail": "OpenPresentation/opf opf-v0.20.1 -> 22664e18ea657db4e377b84997f2e73bf6cd738b"
+          },
+          {
+            "name": "gitHead",
+            "ok": true,
+            "detail": "gitHead 22664e18ea657db4e377b84997f2e73bf6cd738b = tag commit 22664e18ea657db4e377b84997f2e73bf6cd738b"
+          },
+          {
+            "name": "tag on main",
+            "ok": true,
+            "detail": "22664e18ea65 is on opf main (identical)"
+          },
+          {
+            "name": "version at tag",
+            "ok": true,
+            "detail": "packages/javascript/package.json at 22664e18ea65 carries 0.20.1"
+          },
+          {
+            "name": "dist.attestations",
+            "ok": true,
+            "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf@0.20.1)"
+          },
+          {
+            "name": "SLSA provenance",
+            "ok": true,
+            "detail": "built by .github/workflows/npm-publish.yml on refs/tags/opf-v0.20.1 from 22664e18ea65 (https://github.com/OpenPresentation/opf/actions/runs/38549148120/attempts/1)"
+          },
+          {
+            "name": "npm audit signatures",
+            "ok": true,
+            "detail": "2 verified, 0 invalid, 0 missing; @openpresentation/opf@0.20.1 has a verified attestation"
+          },
+          {
+            "name": "GitHub release",
+            "ok": true,
+            "detail": "https://github.com/OpenPresentation/opf/releases/tag/opf-v0.20.1"
+          },
+          {
+            "name": "dist-tag",
+            "ok": true,
+            "detail": "latest",
+            "info": true
+          }
+        ],
+        "logSha256": "aa9237401d163018ea930d318dc32d85a9f3d27411f2d4fbfda9a4309be80bc2",
+        "logName": "rr20-core0201-publication-01.log"
+      }
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.20.0",
+      "gitHead": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034",
+      "dist": {
+        "integrity": "sha512-335a5h/QweiJGexf/UcyTVOWX4smi3fW59bVqsK03aScY6r57dqDeimmaG6H1HalnqnIh2vvdb8OagSQZPt+Hg=="
+      },
+      "repository": "https://github.com/OpenPresentation/opf-render",
+      "tag": "opf-render-v0.20.0",
+      "workflow": ".github/workflows/npm-publish.yml",
+      "provenanceInvocation": "https://github.com/OpenPresentation/opf-render/actions/runs/38559177143/attempts/1",
+      "canonicalVerification": {
+        "ok": true,
+        "checks": [
+          {
+            "name": "npm version",
+            "ok": true,
+            "detail": "@openpresentation/opf-render@0.20.0, integrity sha512-335a5h/QweiJGexf/UcyTVOWX4smi3fW59bVqsK03aScY6r57dqDeimmaG6H1HalnqnIh2vvdb8OagSQZPt+Hg=="
+          },
+          {
+            "name": "tag",
+            "ok": true,
+            "detail": "OpenPresentation/opf-render opf-render-v0.20.0 -> 83c1e6e4a9d622f5c0c213e7f12c63d6a4986034"
+          },
+          {
+            "name": "gitHead",
+            "ok": true,
+            "detail": "gitHead 83c1e6e4a9d622f5c0c213e7f12c63d6a4986034 = tag commit 83c1e6e4a9d622f5c0c213e7f12c63d6a4986034"
+          },
+          {
+            "name": "tag on main",
+            "ok": true,
+            "detail": "83c1e6e4a9d6 is on opf-render main (identical)"
+          },
+          {
+            "name": "version at tag",
+            "ok": true,
+            "detail": "package.json at 83c1e6e4a9d6 carries 0.20.0"
+          },
+          {
+            "name": "dist.attestations",
+            "ok": true,
+            "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-render@0.20.0)"
+          },
+          {
+            "name": "SLSA provenance",
+            "ok": true,
+            "detail": "built by .github/workflows/npm-publish.yml on refs/tags/opf-render-v0.20.0 from 83c1e6e4a9d6 (https://github.com/OpenPresentation/opf-render/actions/runs/38559177143/attempts/1)"
+          },
+          {
+            "name": "npm audit signatures",
+            "ok": true,
+            "detail": "5 verified, 0 invalid, 0 missing; @openpresentation/opf-render@0.20.0 has a verified attestation"
+          },
+          {
+            "name": "GitHub release",
+            "ok": true,
+            "detail": "https://github.com/OpenPresentation/opf-render/releases/tag/opf-render-v0.20.0"
+          },
+          {
+            "name": "dist-tag",
+            "ok": true,
+            "detail": "latest",
+            "info": true
+          }
+        ],
+        "logSha256": "bd7ebe554de599f60f31b4554dd6385c5b5587b782918083b72c645292a1e046",
+        "logName": "rr20-render020-publication-01.log"
+      }
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.20.0",
+      "gitHead": "0e2ea4982c4bb1280f22763411e681fe0786f4fc",
+      "dist": {
+        "integrity": "sha512-Ash067AcgsfEFIL9dYv+TE30vMMfC/kRGQwtRMAkmrz9IzTMn1hpHlqRVryKo13wFiZ6xHXOOkt3YcuUhOwqiw=="
+      },
+      "repository": "https://github.com/OpenPresentation/opf-pptx",
+      "tag": "opf-pptx-v0.20.0",
+      "workflow": ".github/workflows/release.yml",
+      "provenanceInvocation": "https://github.com/OpenPresentation/opf-pptx/actions/runs/38570040772/attempts/1",
+      "canonicalVerification": {
+        "ok": true,
+        "checks": [
+          {
+            "name": "npm version",
+            "ok": true,
+            "detail": "@openpresentation/opf-pptx@0.20.0, integrity sha512-Ash067AcgsfEFIL9dYv+TE30vMMfC/kRGQwtRMAkmrz9IzTMn1hpHlqRVryKo13wFiZ6xHXOOkt3YcuUhOwqiw=="
+          },
+          {
+            "name": "tag",
+            "ok": true,
+            "detail": "OpenPresentation/opf-pptx opf-pptx-v0.20.0 -> 0e2ea4982c4bb1280f22763411e681fe0786f4fc"
+          },
+          {
+            "name": "gitHead",
+            "ok": true,
+            "detail": "gitHead 0e2ea4982c4bb1280f22763411e681fe0786f4fc = tag commit 0e2ea4982c4bb1280f22763411e681fe0786f4fc"
+          },
+          {
+            "name": "tag on main",
+            "ok": true,
+            "detail": "0e2ea4982c4b is on opf-pptx main (identical)"
+          },
+          {
+            "name": "version at tag",
+            "ok": true,
+            "detail": "package.json at 0e2ea4982c4b carries 0.20.0"
+          },
+          {
+            "name": "dist.attestations",
+            "ok": true,
+            "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.20.0)"
+          },
+          {
+            "name": "SLSA provenance",
+            "ok": true,
+            "detail": "built by .github/workflows/release.yml on refs/tags/opf-pptx-v0.20.0 from 0e2ea4982c4b (https://github.com/OpenPresentation/opf-pptx/actions/runs/38570040772/attempts/1)"
+          },
+          {
+            "name": "npm audit signatures",
+            "ok": true,
+            "detail": "14 verified, 0 invalid, 0 missing; @openpresentation/opf-pptx@0.20.0 has a verified attestation"
+          },
+          {
+            "name": "GitHub release",
+            "ok": true,
+            "detail": "https://github.com/OpenPresentation/opf-pptx/releases/tag/opf-pptx-v0.20.0"
+          },
+          {
+            "name": "dist-tag",
+            "ok": true,
+            "detail": "latest",
+            "info": true
+          }
+        ],
+        "logSha256": "9da02be7f91463cc13c2afa6e756deb4b99fcb309f3ebaeeb71e623169b524fc",
+        "logName": "rr20-pptx020-publication-01.log"
+      }
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.20.0",
+      "gitHead": "671b04ee3f6b228338c0eb3d6d7453f807b28837",
+      "dist": {
+        "integrity": "sha512-z6SoyGty0cpOlxnGkBhzNrWqNs/ck/CXkmphZUcDKQ3HNiKsHf0gdzHQlvUnTZBMOIQxSBA+ZyfAHWRf06dm9g=="
+      },
+      "repository": "https://github.com/OpenPresentation/opf-editor",
+      "tag": "opf-editor-v0.20.0",
+      "workflow": ".github/workflows/release.yml",
+      "provenanceInvocation": "https://github.com/OpenPresentation/opf-editor/actions/runs/38584179461/attempts/2",
+      "canonicalVerification": {
+        "ok": true,
+        "checks": [
+          {
+            "name": "npm version",
+            "ok": true,
+            "detail": "@openpresentation/opf-editor@0.20.0, integrity sha512-z6SoyGty0cpOlxnGkBhzNrWqNs/ck/CXkmphZUcDKQ3HNiKsHf0gdzHQlvUnTZBMOIQxSBA+ZyfAHWRf06dm9g=="
+          },
+          {
+            "name": "tag",
+            "ok": true,
+            "detail": "OpenPresentation/opf-editor opf-editor-v0.20.0 -> 671b04ee3f6b228338c0eb3d6d7453f807b28837"
+          },
+          {
+            "name": "gitHead",
+            "ok": true,
+            "detail": "gitHead 671b04ee3f6b228338c0eb3d6d7453f807b28837 = tag commit 671b04ee3f6b228338c0eb3d6d7453f807b28837"
+          },
+          {
+            "name": "tag on main",
+            "ok": true,
+            "detail": "671b04ee3f6b is on opf-editor main (identical)"
+          },
+          {
+            "name": "version at tag",
+            "ok": true,
+            "detail": "package.json at 671b04ee3f6b carries 0.20.0"
+          },
+          {
+            "name": "dist.attestations",
+            "ok": true,
+            "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-editor@0.20.0)"
+          },
+          {
+            "name": "SLSA provenance",
+            "ok": true,
+            "detail": "built by .github/workflows/release.yml on refs/tags/opf-editor-v0.20.0 from 671b04ee3f6b (https://github.com/OpenPresentation/opf-editor/actions/runs/38584179461/attempts/2)"
+          },
+          {
+            "name": "npm audit signatures",
+            "ok": true,
+            "detail": "3 verified, 0 invalid, 0 missing; @openpresentation/opf-editor@0.20.0 has a verified attestation"
+          },
+          {
+            "name": "GitHub release",
+            "ok": true,
+            "detail": "https://github.com/OpenPresentation/opf-editor/releases/tag/opf-editor-v0.20.0"
+          },
+          {
+            "name": "dist-tag",
+            "ok": true,
+            "info": true,
+            "detail": "latest"
+          }
+        ],
+        "logSha256": "682a5d18106e593fa50c00eec27b734d97d4266d4e44333dbe38fad9b9847c52",
+        "logName": "rr20-editor020-verify-61.json"
+      }
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.20.0",
+      "gitHead": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
+      "dist": {
+        "integrity": "sha512-QtLK+H585iGWbhRcvjEZqrGs2HbLJpqbXXx/zWoGUWE3bQMkPx/QZDJJUwaESxBrZkLMylgIFlzdfBD6kDhv9w=="
+      },
+      "repository": "https://github.com/OpenPresentation/opf",
+      "tag": "cli-v0.20.0",
+      "workflow": ".github/workflows/cli-publish.yml",
+      "provenanceInvocation": "https://github.com/OpenPresentation/opf/actions/runs/38589252641/attempts/1",
+      "canonicalVerification": {
+        "ok": true,
+        "checks": [
+          {
+            "name": "npm version",
+            "ok": true,
+            "detail": "@openpresentation/cli@0.20.0, integrity sha512-QtLK+H585iGWbhRcvjEZqrGs2HbLJpqbXXx/zWoGUWE3bQMkPx/QZDJJUwaESxBrZkLMylgIFlzdfBD6kDhv9w=="
+          },
+          {
+            "name": "tag",
+            "ok": true,
+            "detail": "OpenPresentation/opf cli-v0.20.0 -> 41e3d648f8ea8c391cac065fcadef1d79f2000cf"
+          },
+          {
+            "name": "gitHead",
+            "ok": true,
+            "detail": "gitHead 41e3d648f8ea8c391cac065fcadef1d79f2000cf = tag commit 41e3d648f8ea8c391cac065fcadef1d79f2000cf"
+          },
+          {
+            "name": "tag on main",
+            "ok": true,
+            "detail": "41e3d648f8ea is on opf main (identical)"
+          },
+          {
+            "name": "version at tag",
+            "ok": true,
+            "detail": "packages/cli/package.json at 41e3d648f8ea carries 0.20.0"
+          },
+          {
+            "name": "dist.attestations",
+            "ok": true,
+            "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fcli@0.20.0)"
+          },
+          {
+            "name": "SLSA provenance",
+            "ok": true,
+            "detail": "built by .github/workflows/cli-publish.yml on refs/tags/cli-v0.20.0 from 41e3d648f8ea (https://github.com/OpenPresentation/opf/actions/runs/38589252641/attempts/1)"
+          },
+          {
+            "name": "npm audit signatures",
+            "ok": true,
+            "detail": "3 verified, 0 invalid, 0 missing; @openpresentation/cli@0.20.0 has a verified attestation"
+          },
+          {
+            "name": "GitHub release",
+            "ok": true,
+            "detail": "https://github.com/OpenPresentation/opf/releases/tag/cli-v0.20.0"
+          },
+          {
+            "name": "dist-tag",
+            "ok": true,
+            "detail": "latest",
+            "info": true
+          }
+        ],
+        "logSha256": "e29b2acccb36065dc1b0c5700e8bde6c3ac93b94a7d47dbfe645abba167c7726",
+        "logName": "rr20-cli020-publication-61.log"
+      }
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "gitHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "dist": {
+        "integrity": "sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ=="
+      },
+      "repository": "https://github.com/OpenPresentation/gallery",
+      "tag": "v3.0.0",
+      "workflow": ".github/workflows/gallery-publish.yml",
+      "provenanceInvocation": "https://github.com/OpenPresentation/gallery/actions/runs/38493340689/attempts/1",
+      "canonicalVerification": {
+        "ok": true,
+        "checks": [
+          {
+            "name": "npm version",
+            "ok": true,
+            "detail": "@openpresentation/gallery@3.0.0, integrity sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ=="
+          },
+          {
+            "name": "tag",
+            "ok": true,
+            "detail": "OpenPresentation/gallery v3.0.0 -> 940633a92c0c7d3339e59447d08ba6382ef12410"
+          },
+          {
+            "name": "gitHead",
+            "ok": true,
+            "detail": "gitHead 940633a92c0c7d3339e59447d08ba6382ef12410 = tag commit 940633a92c0c7d3339e59447d08ba6382ef12410"
+          },
+          {
+            "name": "tag on main",
+            "ok": true,
+            "detail": "940633a92c0c is on gallery main (identical)"
+          },
+          {
+            "name": "version at tag",
+            "ok": true,
+            "detail": "package.json at 940633a92c0c carries 3.0.0"
+          },
+          {
+            "name": "dist.attestations",
+            "ok": true,
+            "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fgallery@3.0.0)"
+          },
+          {
+            "name": "SLSA provenance",
+            "ok": true,
+            "detail": "built by .github/workflows/gallery-publish.yml on refs/tags/v3.0.0 from 940633a92c0c (https://github.com/OpenPresentation/gallery/actions/runs/38493340689/attempts/1)"
+          },
+          {
+            "name": "npm audit signatures",
+            "ok": true,
+            "detail": "1 verified, 0 invalid, 0 missing; @openpresentation/gallery@3.0.0 has a verified attestation"
+          },
+          {
+            "name": "GitHub release",
+            "ok": true,
+            "detail": "not created by gallery's gallery-publish.yml (none expected)"
+          },
+          {
+            "name": "dist-tag",
+            "ok": true,
+            "info": true,
+            "detail": "latest"
+          }
+        ],
+        "logSha256": "56b42264ff139e5075d0e4c64dd3f80d0c2fd93eba8525a374385ab646a95a73",
+        "logName": "rr20-gallery3-registry-verification-01.json"
+      }
+    }
+  ],
+  "nativeScope": {
+    "selectedCases": 17,
+    "uiOperations": 4,
+    "unexecutedCases": 41,
+    "totalCases": 58,
+    "globalAcceptance": false
+  },
+  "siteDeployment": false,
+  "scope": "Canonical publication verification only. Stable installed-consumer qualification, retained native-save replay and local site qualification are separate evidence."
+}
