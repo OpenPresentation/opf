@@ -4330,7 +4330,11 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         `<Override PartName="/${part}" ContentType="${metadata.mediaType}"/>`).join('');
       xml = xml.replace('</Types>', `${overrides}</Types>`);
     }
-    if (/^ppt\/slideMasters\/slideMaster\d+\.xml$/.test(path)) xml = themeMasterBulletFonts(xml);
+    if (/^ppt\/slideMasters\/slideMaster\d+\.xml$/.test(path)) {
+      // Name the generated layout group independently of a:theme's authored identity. Script masters copy this label.
+      xml = themeMasterBulletFonts(xml).replace(/<p:cSld\b([^>]*)>/, (_, attributes) =>
+        `<p:cSld${attributes.replace(/\s+name="[^"]*"/, '')} name="pptx.gallery">`);
+    }
     if (context.masterBackground && path === 'ppt/slideMasters/slideMaster1.xml') xml = writeMasterBackground(xml, context.masterBackground);
     if (context.masterBackground && /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)) xml = inheritLayoutBackground(xml);
     if (path === 'ppt/presentation.xml') xml = presentationInSchemaOrder(xml);

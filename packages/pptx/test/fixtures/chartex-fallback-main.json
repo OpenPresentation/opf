@@ -34,6 +34,11 @@
       "runtime": "Node 24.21.0",
       "changedEntry": "waterfall-single",
       "evidence": "docs/evidence/rr20-row-data-provenance/archive-review.json"
+    },
+    "galleryMasterNameReview": {
+      "baselineConverter": "0e2ea4982c4bb1280f22763411e681fe0786f4fc",
+      "evidence": "docs/evidence/rr81-gallery-master-name/archive-review.json",
+      "note": "Owner-requested generated master display name pptx.gallery, reviewed 2026-10-14. Existing source.commit, notes and earlier review identities above are historical. All nine old hashes/sizes reproduced exactly on the published baseline. Only master name attributes change: 20 XML bytes and 14 compressed archive bytes per deck; every other part, inventory and diagnostic is exact. Authored theme identity and individual layout names stay unchanged. Native menu display was not observed."
     }
   },
   "decks": {
@@ -537,8 +542,8 @@
   },
   "entries": {
     "treemap-category": {
-      "sha256": "b69933578667102cc1b2ffa59e97574aa90d6e27442c5e59677ff1a0c16a71f2",
-      "bytes": 81345,
+      "sha256": "c4e119fd35338b95901e382ec3ec04a70393540fd15caaec5d2f16dfde960944",
+      "bytes": 81359,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -546,8 +551,8 @@
       "layoutTagParts": 29
     },
     "histogram-single": {
-      "sha256": "ccf0a5f94b46fa240a5f9aa855b19ab6bc8d552b39fe4aefa8cd471774c5ec6a",
-      "bytes": 81361,
+      "sha256": "b5b45ac2aa0b6195397716fb62c6402cdfc3d5a2627c5b4e5c7da6689a950fc8",
+      "bytes": 81375,
       "diagnostics": [
         "chart-data-adapted/histogram-binned"
       ],
@@ -555,8 +560,8 @@
       "layoutTagParts": 29
     },
     "histogram-category": {
-      "sha256": "1f4c9d95b18a3821bcdbf29dd18048d0924838dbd307e3a6980a4190ac9bb479",
-      "bytes": 81346,
+      "sha256": "22f2785e598c6850f9730be36c3d5ab622442860cb39864babb6607752e1b392",
+      "bytes": 81360,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -564,8 +569,8 @@
       "layoutTagParts": 29
     },
     "pareto-multi": {
-      "sha256": "e7899a6dd1fc22f5b257a813323f4e63b7d328c63f582d29cea577b8262d5463",
-      "bytes": 81519,
+      "sha256": "9f3f8dfcd37d6451a5fec95bb9acab85e6ad434b353e598a184b70b045c7c3ab",
+      "bytes": 81533,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -573,8 +578,8 @@
       "layoutTagParts": 29
     },
     "box-multi": {
-      "sha256": "34d74ee3301b44a5d81ca32fd138966dfae9e93d79ba1752fc9c50a430b6d645",
-      "bytes": 81518,
+      "sha256": "d85bdfc4dfb590658e7e713b4b1cd62bd91ca941e5fa8d2f084c944707256f11",
+      "bytes": 81532,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -582,8 +587,8 @@
       "layoutTagParts": 29
     },
     "waterfall-single": {
-      "sha256": "c812d346498c0f472942fceecca3c4ff3e8b0ac3237bbbfcd7d66725605dc867",
-      "bytes": 81787,
+      "sha256": "c06d10040d366d96db7ffa898a21414c84dee2a489dd4c929213c8e7560dffd0",
+      "bytes": 81801,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/row-numbers"
@@ -594,8 +599,8 @@
       "rr20RowDataPreviousBytes": 81372
     },
     "funnel-category": {
-      "sha256": "ba1a79407651ef262d15b6b0e1e937177b3d02537960344093a568c89feaa6f4",
-      "bytes": 81345,
+      "sha256": "58f8167c934e31338c66ae0daeb75c279f7578eefad9ad0879e6f6320ea16ee6",
+      "bytes": 81359,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -603,8 +608,8 @@
       "layoutTagParts": 29
     },
     "world-category": {
-      "sha256": "e9dec7ca5086812227c171a3d93c45c32ceaf3e4748a55f8a67623c5dca9f914",
-      "bytes": 80164,
+      "sha256": "d3de3c6c4c6d30fc7be94158afb91dbd5e7dda0ec034a105296af9e8e8e61e05",
+      "bytes": 80178,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -612,8 +617,8 @@
       "layoutTagParts": 28
     },
     "all-seven": {
-      "sha256": "d5e9369846422d28f3dfb3b32b0009401a41d402412fdbfed106561edd354082",
-      "bytes": 144311,
+      "sha256": "4906a9d2be4bff9cc89e6314f0ecb45a139ecd58d181a2c3940a2fb214b0c045",
+      "bytes": 144325,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chartex-fallback",

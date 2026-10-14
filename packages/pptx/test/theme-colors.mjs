@@ -193,7 +193,7 @@ const layoutOf = entries => strFromU8(entries['ppt/slideLayouts/slideLayout1.xml
 for (const [result, background, text] of [[dark, 'tx1', 'bg1'], [minimal, 'tx2', 'bg1']]) {
   const master = masterOf(result.entries);
   assert.equal(XMLValidator.validate(master), true);
-  assert.match(master, new RegExp(`<p:cSld><p:bg><p:bgPr><a:solidFill><a:schemeClr val="${background}"/></a:solidFill><a:effectLst/></p:bgPr></p:bg><p:spTree>`));
+  assert.match(master, new RegExp(`<p:cSld name="pptx.gallery"><p:bg><p:bgPr><a:solidFill><a:schemeClr val="${background}"/></a:solidFill><a:effectLst/></p:bgPr></p:bg><p:spTree>`));
   const styles = master.match(/<p:txStyles>[\s\S]*<\/p:txStyles>/)[0];
   assert.doesNotMatch(styles, /schemeClr val="tx1"/);
   const vendorStyles = masterOf(classic.entries).match(/<p:txStyles>[\s\S]*<\/p:txStyles>/)[0];
