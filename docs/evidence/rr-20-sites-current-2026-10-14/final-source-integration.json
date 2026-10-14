@@ -132,7 +132,9 @@
     "originalChecklistOpen": [
       "T16",
       "T40"
-    ]
+    ],
+    "RR81OriginalScopedFeatureNativeCriterionComplete": true,
+    "RR81Basis": "Supervisor accepts the original scoped row based on canonical observedRR81CriteriaAccepted:true, merged runtime/native mappings and independently/root accepted current published samefour replay. No additional Windows-only or global/all58 clause is inferred."
   },
   "broaderProgramQueueAudit": {
     "at": "2026-10-14T22:06:29.326531+00:00",
