@@ -760,3 +760,5 @@ Append-only. One dated line per state change.
 - 2026-10-14 UTC — RR-20 comparator diagnostic: distinguish empty native TextFrames on exact source decorative shapes without `txBody` from exported text shapes. Extra visible text, unknown empty frames, missing words and the 0.02 pt text geometry gate remain strict. Native/registry acceptance stays open.
 
 - 2026-10-14 UTC — RR-20 native tooling: add `furniture-layouts` with Text / Two columns / Two columns across inherited / local / inherited furniture; archive tests bind both per-layout shared-header variants. Native observation and RR-81 acceptance remain pending; previous suites and receipts retain their literal identities.
+
+- 2026-10-14 UTC — RR-20 native manual import diagnosis: forward registered catalogs through the Node/CLI PPTX import engine, including signals. Existing native custom first-region binding is valid without a redundant pin; this fix addresses the independently reproduced missing default-gallery warning. Native/registry acceptance stays separate.
