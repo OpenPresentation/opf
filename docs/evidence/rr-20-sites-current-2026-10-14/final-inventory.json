@@ -565,7 +565,7 @@
       ],
       "classification": "next-green-nightly criterion remains open",
       "summary": "Current manual core32/32 and original official roller/children are green; original issue requires next green NIGHTLY, so no closure is inferred.",
-      "nextSafeAction": "Sole maintained core9fade gate observed official full run32/32green; confirmation still pending. Review issue closing criterion against actual terminal/scheduled evidence before closure.",
+      "nextSafeAction": "Retain the original next-green-NIGHTLY closure criterion. The current manual 32/32 result and original official roller/child suites are confirmed green; do not substitute those distinct runs for that nightly criterion.",
       "headChangedSinceDatedInventory": false,
       "CIObservation": "Not queried by this inventory; current required-check outcomes are recorded in the separately sealed maintained gate proofs."
     },

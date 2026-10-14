@@ -215,7 +215,7 @@
   },
   "finalInventory": {
     "path": "docs/evidence/rr-20-sites-current-2026-10-14/final-inventory.json",
-    "sha256": "06559a739ffe491e29d3c178b802cd629985ca0c9e490b6beb6544691e4927e6",
+    "sha256": "c57accbf4495d753e4436cd1a285bd95e3b1103e0e6d1b9c957ad98c9d040080",
     "asOf": "2026-10-14T22:49:27.296923+00:00",
     "counts": {
       "openPRs": 17,
