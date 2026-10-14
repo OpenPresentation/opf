@@ -11640,6 +11640,54 @@
       "bytes": 4943,
       "sha256": "6ad85a03839665d79cceb3599853992d8bbdff4ae59f6a8a86014824c11bfe9c",
       "originalPath": "C:/opf-work/native-manual-current-6eea8909-attempt01/change-picture-image-tag-audit.json"
+    },
+    {
+      "path": "manual/baseline-cli/change-layout.opf.json",
+      "bytes": 1997,
+      "sha256": "b16cedabd15cf429cf946cbf061918f8c63c8a1503e9589f4462fb919a6ed1ca",
+      "originalPath": "C:/opf-work/native-manual-current-6eea8909-attempt01/baseline-cli/change-layout.opf.json"
+    },
+    {
+      "path": "manual/baseline-cli/change-layout-report.json",
+      "bytes": 5695,
+      "sha256": "406d98a1ffca7d3594cd71fafc445f0d25050535060c7101d9a7362b7a301dce",
+      "originalPath": "C:/opf-work/native-manual-current-6eea8909-attempt01/baseline-cli/change-layout-report.json"
+    },
+    {
+      "path": "manual/baseline-cli/new-custom.opf.json",
+      "bytes": 26263,
+      "sha256": "0a08985368ec7451979fb1067feda9b5155d9b2b554b9954f71822cf1d873edf",
+      "originalPath": "C:/opf-work/native-manual-current-6eea8909-attempt01/baseline-cli/new-custom.opf.json"
+    },
+    {
+      "path": "manual/baseline-cli/new-custom-report.json",
+      "bytes": 3885,
+      "sha256": "553864cd24d18eed53817257b5a925a9cbd9beffceb516f2ded32acfa84f4cc5",
+      "originalPath": "C:/opf-work/native-manual-current-6eea8909-attempt01/baseline-cli/new-custom-report.json"
+    },
+    {
+      "path": "manual/baseline-cli/new-text.opf.json",
+      "bytes": 2272,
+      "sha256": "45d8d7571368bb18f73394619cf8596b9d3d91fa79a507db4303f1d4b2ca0f04",
+      "originalPath": "C:/opf-work/native-manual-current-6eea8909-attempt01/baseline-cli/new-text.opf.json"
+    },
+    {
+      "path": "manual/baseline-cli/new-text-report.json",
+      "bytes": 5039,
+      "sha256": "fefa31631432f00c43c8fbbd743b470dafd0148bb77d1440c94081098b73e61a",
+      "originalPath": "C:/opf-work/native-manual-current-6eea8909-attempt01/baseline-cli/new-text-report.json"
+    },
+    {
+      "path": "manual/baseline-cli/change-picture.opf.json",
+      "bytes": 34897,
+      "sha256": "6ddfc84b6f1d7f108cab19f366f733c4aadc6d974a8ed0e7972777f3b9813393",
+      "originalPath": "C:/opf-work/native-manual-current-6eea8909-attempt01/baseline-cli/change-picture.opf.json"
+    },
+    {
+      "path": "manual/baseline-cli/change-picture-report.json",
+      "bytes": 5053,
+      "sha256": "2f4721181a5cecbf44a73f00b99b2cbb8a202cf345fe048afe5bdfa585612e01",
+      "originalPath": "C:/opf-work/native-manual-current-6eea8909-attempt01/baseline-cli/change-picture-report.json"
     }
   ]
 }
