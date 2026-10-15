@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "corpus": {
+    "path": "docs/evidence/script-corpora-20261001/script-corpora.json",
+    "sha256": "cd31a9c8cc848548bc0114561b34e4454858d5d7e786af3e08609a2ddbf2f31a"
+  },
+  "styles": [
+    {
+      "weight": 400,
+      "italic": false
+    },
+    {
+      "weight": 700,
+      "italic": false
+    }
+  ],
+  "nominalSizesPoints": [
+    18,
+    24,
+    32
+  ],
+  "cases": [
+    {
+      "id": "font-route-traditional-arabic",
+      "requestedNativeFamily": "Traditional Arabic",
+      "script": "Arab",
+      "language": "ar",
+      "expectedPreviewFamily": "Noto Naskh Arabic",
+      "samples": [
+        "arab-joining",
+        "arab-lam-alef",
+        "arab-harakat",
+        "arab-digits",
+        "arab-bidi-latin",
+        "arab-punctuation",
+        "arab-fa-letters",
+        "arab-fa-digits",
+        "arab-ur-title"
+      ]
+    },
+    {
+      "id": "font-route-nirmala-telu",
+      "requestedNativeFamily": "Nirmala UI",
+      "script": "Telu",
+      "language": "te",
+      "expectedPreviewFamily": "Noto Sans Telugu",
+      "samples": [
+        "telu-title",
+        "telu-conjuncts",
+        "telu-vowels",
+        "telu-zwnj"
+      ]
+    },
+    {
+      "id": "font-route-nirmala-knda",
+      "requestedNativeFamily": "Nirmala UI",
+      "script": "Knda",
+      "language": "kn",
+      "expectedPreviewFamily": "Noto Sans Kannada",
+      "samples": [
+        "knda-title",
+        "knda-conjuncts",
+        "knda-vowels"
+      ]
+    },
+    {
+      "id": "font-route-nirmala-gujr",
+      "requestedNativeFamily": "Nirmala UI",
+      "script": "Gujr",
+      "language": "gu",
+      "expectedPreviewFamily": "Noto Sans Gujarati",
+      "samples": [
+        "gujr-title",
+        "gujr-conjuncts",
+        "gujr-marks"
+      ]
+    },
+    {
+      "id": "font-route-nirmala-mlym",
+      "requestedNativeFamily": "Nirmala UI",
+      "script": "Mlym",
+      "language": "ml",
+      "expectedPreviewFamily": "Noto Sans Malayalam",
+      "samples": [
+        "mlym-title",
+        "mlym-chillu",
+        "mlym-conjuncts",
+        "mlym-vowels"
+      ]
+    }
+  ]
+}

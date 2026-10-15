@@ -8,6 +8,7 @@ import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {isDeepStrictEqual} from 'node:util';
 import {actionPlanFor,loadFixtureSource,PRIMARY_CASE_NAMES} from './fixture-source.mjs';
+import {loadFontRouteSource,previewRoutePins} from './font-routes.mjs';
 
 const sha256=bytes=>createHash('sha256').update(bytes).digest('hex');
 const json=value=>Buffer.from(`${JSON.stringify(value,null,2)}\n`);
@@ -50,24 +51,39 @@ export async function installedEngines(consumer){
   return {core,pptx,render,gallery:galleryModule.gallery,fflate};
 }
 
-export async function generatePrimaryFixtures({consumer,output,sourceIdentity,engines}={}){
+export async function generatePrimaryFixtures({consumer,output,sourceIdentity,engines,fontRouteNames}={}){
   assert.ok(sourceIdentity&&typeof sourceIdentity==='object'&&!Array.isArray(sourceIdentity),'explicit source identity required');
-  const source=await loadFixtureSource();
+  const source=fontRouteNames?await loadFontRouteSource(fontRouteNames):await loadFixtureSource();
   const engine=engines??await installedEngines(consumer);
   const {core,pptx,render,gallery,fflate}=engine;
   assert.ok(core?.validate&&core?.convert&&pptx?.toPptx&&pptx?.fromPptx&&render?.loadFonts&&gallery?.layouts&&fflate?.unzipSync&&fflate?.strFromU8);
   const root=await prepareFreshOutput(output,consumer),{put,files}=fixtureWriter(root);
   const options={catalogs:[gallery],seed:1,timestamp:'2026-01-01T00:00:00Z',date:'2026-10-10',provenance:'full'};
+  let previewManifest;
+  if(fontRouteNames){
+    if(engines?.fontManifest)previewManifest=engines.fontManifest;
+    else{const require=createRequire(path.join(await realpath(consumer),'package.json'));
+      const directory=path.dirname(require.resolve('@openpresentation/opf-render/package.json'));
+      previewManifest=(await import(pathToFileURL(path.join(directory,'dist/font-manifest.js')).href)).BUNDLED_FONT_MANIFEST;
+    }
+  }
   const cases=[];let fonts;
-  const measuredFonts=async()=>fonts??=await render.loadFonts({pack:'office'});
-  for(const name of PRIMARY_CASE_NAMES){
+  const measuredFonts=async()=>fonts??=await render.loadFonts({pack:'office',...(fontRouteNames?{scripts:source.previewScripts}:{})});
+  for(const name of source.caseNames??PRIMARY_CASE_NAMES){
     const deck={...source.base,...source.decks[name]},before=structuredClone(deck);
     const validation=core.validate(deck,{catalogs:[gallery],only:['format','references']});
     assert.ok(validation.valid,`${name}: ${JSON.stringify(validation.findings)}`);
     const input=`inputs/${name}.pptx`,sourcePath=`sources/${name}.opf.json`,actionPlan=`actions/${name}.json`;
-    await put(sourcePath,json(deck));await put(actionPlan,json(await actionPlanFor(name)));
-    const measured=Object.hasOwn(source.featureManifest,name)||['list-description-native-edit','list-description-native-save','layout-bleed-card'].includes(name),diagnostics=[];
+    await put(sourcePath,json(deck));await put(actionPlan,json(fontRouteNames?[]:await actionPlanFor(name)));
+    const measured=!!source.fontRoutes?.[name]||Object.hasOwn(source.featureManifest,name)||['list-description-native-edit','list-description-native-save','layout-bleed-card'].includes(name),diagnostics=[];
     if(measured)await (await measuredFonts()).ensure(deck,{renderOptions:{catalogs:[gallery]},onDiagnostic:issue=>diagnostics.push(issue)});
+    let fontRouteMetadata;
+    if(fontRouteNames){
+      fontRouteMetadata=`inspection/${name}-font-route.json`;
+      const route=source.fontRoutes[name];
+      await put(fontRouteMetadata,json({...route,preview:previewRoutePins(route,fonts,previewManifest),
+        comparisonScope:'Preparation and preview byte identity only; Office BoundWidth, physical glyph face, baseline and ink remain unmeasured.'}));
+    }
     const exportOptions={...options,...(measured?{fonts}:{}),onDiagnostic:issue=>diagnostics.push(issue)};
     const bytes=await pptx.toPptx(deck,exportOptions);
     assert.deepEqual(deck,before,`${name}: export mutated source`);
@@ -87,9 +103,9 @@ export async function generatePrimaryFixtures({consumer,output,sourceIdentity,en
         await put(preview,file.bytes);previewPaths[format].push(preview);
       }
     }
-    cases.push({id:name,input,source:sourcePath,actionPlan,archiveSha256:archive.sha256,slideCount:slides.length,automaticControlEligible:slides.length>=1&&slides.length<=3&&shapes.every(item=>item.count<=30),roundTripEqual,roundTripAcceptance:roundTripEqual?'source-preserved':'review-required',fontProfile:measured?'prepared-office-font-handle-for-export-and-preview':'direct-pptx-export; preview independently rendered',chartex:name.startsWith('chart-')?'auto':'not-chart-fixture',previews:previewPaths});
+    cases.push({id:name,input,source:sourcePath,actionPlan,...(fontRouteMetadata?{fontRouteMetadata,requestedNativeFamily:source.fontRoutes[name].requestedNativeFamily}:{}),archiveSha256:archive.sha256,slideCount:slides.length,automaticControlEligible:slides.length>=1&&slides.length<=3&&shapes.every(item=>item.count<=30),roundTripEqual,roundTripAcceptance:roundTripEqual?'source-preserved':'review-required',fontProfile:measured?'prepared-office-font-handle-for-export-and-preview':'direct-pptx-export; preview independently rendered',chartex:name.startsWith('chart-')?'auto':'not-chart-fixture',previews:previewPaths});
   }
-  return {output:root,sourceIdentity:structuredClone(sourceIdentity),cases,files,sourceFiles:source.sourceFiles,options:{seed:options.seed,timestamp:options.timestamp,date:options.date,provenance:options.provenance,catalog:{source:gallery.source,layoutCount:Object.keys(gallery.layouts).length,layoutsSha256:sha256(JSON.stringify(gallery.layouts))}},nativeAcceptance:false,nativeStatus:'pending'};
+  return {output:root,sourceIdentity:structuredClone(sourceIdentity),...(fontRouteNames?{scope:{kind:'font-routes',caseIds:fontRouteNames,defaultSuite:false,fullSuite:false,nativeAcceptance:false}}:{}),cases,files,sourceFiles:source.sourceFiles,options:{seed:options.seed,timestamp:options.timestamp,date:options.date,provenance:options.provenance,catalog:{source:gallery.source,layoutCount:Object.keys(gallery.layouts).length,layoutsSha256:sha256(JSON.stringify(gallery.layouts))}},nativeAcceptance:false,nativeStatus:'pending'};
 }
 
 export {generateChartModes} from './chart-modes.mjs';
