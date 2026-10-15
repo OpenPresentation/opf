@@ -1,0 +1,274 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-10-15T01:27:28.557878+00:00",
+  "decision": "Supervisor accepts four independent normal-gated Actions source merges; RR-68 remains in progress.",
+  "merges": [
+    {
+      "repository": "OpenPresentation/opf",
+      "pr": "https://github.com/OpenPresentation/opf/pull/672",
+      "actualMerge": "62eb49b1686a5d26d00ab79dde5ea75faecf8512",
+      "parents": [
+        "a6fe2a0a3eb253195b9eb1091cd952e9084daef0"
+      ],
+      "tree": "53d3653485c4ba1a9ba6e3d590d49dd1158db176",
+      "reviewedPublicHead": "7209ae7b50a37d61a59d5b1a5b98671eb37e5436",
+      "changedPaths": [
+        ".github/workflows/ecosystem-roll.yml",
+        ".github/workflows/release-train.yml"
+      ],
+      "postimageSha256": {
+        ".github/workflows/ecosystem-roll.yml": "d777cf52efda130016bf0d77c84e74e567234f9f112c2eed2c942bfa548ff08c",
+        ".github/workflows/release-train.yml": "6f4397ca5ecf70b93ab10c94d4058bdc8c07446292204c839e0503aa3f35827f"
+      },
+      "fullIndexBinaryPatchSha256": "b00ff499e50a6c9817da1c8940ab821c01f7ab03229a67eb7543ab2a8c74bf08",
+      "sourceProofSha256": "05ac76eb9d967bdc7b09bd177534d6e5c52419bcbac7ef0d41bcb5347cf9e72b",
+      "allRequiredSourceChecks": 19,
+      "normalGatedMerge": true,
+      "coreNormalQueuePassed": true,
+      "normalQueueCheckCountNotInvented": true,
+      "canonicalMarker": "01:23:59 MERGED OpenPresentation/opf#672 62eb49b1686a5d26d00ab79dde5ea75faecf8512 (merged by the merge queue)",
+      "allOtherGitEntriesUnchanged": true,
+      "sourceOnly": true
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "pr": "https://github.com/OpenPresentation/opf-render/pull/241",
+      "actualMerge": "7c13fd0c7a7a045445973372e26d6b93140ff134",
+      "parents": [
+        "e7c9e25f3ffe97ae82341d5eb359644d5b7a5d9b"
+      ],
+      "tree": "ba14a3c51d22f6a763498fba76da7c3e8a814692",
+      "reviewedPublicHead": "281eb84d58ec29d6c1e96e509f140a2be3045da0",
+      "changedPaths": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/flake-repeat.yml",
+        ".github/workflows/npm-publish.yml",
+        ".github/workflows/platform-residual.yml",
+        ".github/workflows/regenerate-candidate-goldens.yml",
+        ".github/workflows/regenerate-goldens.yml"
+      ],
+      "postimageSha256": {
+        ".github/workflows/ci.yml": "9d1780bd8d41a0899593ab409a2f114a90c60a6fbc1cd5411a72bb3a53dd3197",
+        ".github/workflows/flake-repeat.yml": "c09349afa68d00fc8b9654eb8d5af3a6e1ab2d81a031301e9da4843a770b9612",
+        ".github/workflows/npm-publish.yml": "ff6d4f5303849f731df8672790b3619658c660b1952fae9e37bb59eeca2b41b8",
+        ".github/workflows/platform-residual.yml": "4889ec7cdcb9f70f132f97e3a59abc468f297865941857ba4ebae57063bb1437",
+        ".github/workflows/regenerate-candidate-goldens.yml": "959f78a502688122e119185a90492bc32854e7864ebf1c8c140d8b09f6c68476",
+        ".github/workflows/regenerate-goldens.yml": "25737b81ffcfc563f55219a9e5fdcd7d45d48fc321d3bffa54c901ac6a4f1759"
+      },
+      "fullIndexBinaryPatchSha256": "b21e974b38a17942bb4141195ba20dcb44791bb448056a72c497d908d03a7cb8",
+      "sourceProofSha256": "f4ed66fb09f02f4d9dc885f7eccecf68f62aa2f45018e71fea7ca15fd6c47b9b",
+      "allRequiredSourceChecks": 9,
+      "normalGatedMerge": true,
+      "coreNormalQueuePassed": null,
+      "normalQueueCheckCountNotInvented": true,
+      "canonicalMarker": "01:18:38 MERGED OpenPresentation/opf-render#241 7c13fd0c7a7a045445973372e26d6b93140ff134",
+      "allOtherGitEntriesUnchanged": true,
+      "sourceOnly": true
+    },
+    {
+      "repository": "OpenPresentation/opf-pptx",
+      "pr": "https://github.com/OpenPresentation/opf-pptx/pull/256",
+      "actualMerge": "d14dd7232d4075565403172cfef234e70946b4fd",
+      "parents": [
+        "9690abd12af8d7a4d6f29a28709517f0b6569301"
+      ],
+      "tree": "0ae07f74e2312a6157ac2cd8244c1fd7acee548d",
+      "reviewedPublicHead": "ecb2ce5cce2f9a584340a5e4c421c938c96e8bd7",
+      "changedPaths": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/flake-repeat.yml",
+        ".github/workflows/release.yml"
+      ],
+      "postimageSha256": {
+        ".github/workflows/ci.yml": "97822a4ec6c1637585061c289c321ad7e3e0a4099a0e846937a02d8d75f85b87",
+        ".github/workflows/flake-repeat.yml": "73b28bd03e9a803ea52ab383c6013a6b65d22c70dd9017d0891c492189eba15d",
+        ".github/workflows/release.yml": "de574bb94d8cd464666c4988f1c06c16f1107339eb454e5547897bb65f6233ec"
+      },
+      "fullIndexBinaryPatchSha256": "556dd508af9ea3a6ca22657197aed3014b6caba64a5377c995fb9a8c98b647da",
+      "sourceProofSha256": "2923d7e7203897f40f76106c1aea745a005ed2898b3027053491ffafa725bdc1",
+      "allRequiredSourceChecks": 6,
+      "normalGatedMerge": true,
+      "coreNormalQueuePassed": null,
+      "normalQueueCheckCountNotInvented": true,
+      "canonicalMarker": "01:18:40 MERGED OpenPresentation/opf-pptx#256 d14dd7232d4075565403172cfef234e70946b4fd",
+      "allOtherGitEntriesUnchanged": true,
+      "sourceOnly": true
+    },
+    {
+      "repository": "OpenPresentation/opf-editor",
+      "pr": "https://github.com/OpenPresentation/opf-editor/pull/166",
+      "actualMerge": "9689a4b0473009a243344f7376b6a6f2b7599aba",
+      "parents": [
+        "147d330e4fd8b39206819df975f0d337d43c4651"
+      ],
+      "tree": "e789628b0c25be8145c06b0fc05c4b09e1901458",
+      "reviewedPublicHead": "8f573a93c451f9a583c6968c26d5a1872c4d4278",
+      "changedPaths": [
+        ".github/workflows/ci.yml",
+        ".github/workflows/flake-repeat.yml",
+        ".github/workflows/release.yml"
+      ],
+      "postimageSha256": {
+        ".github/workflows/ci.yml": "fe0f5d359a1bbcabba5f8dc5026ba7cd0c5552e429cbd0100ebefd5b3915cc29",
+        ".github/workflows/flake-repeat.yml": "94b106c2cdd8ffd6ce1ac974ad44154ef5c554bcf19b37eadef0456f298e0a24",
+        ".github/workflows/release.yml": "7855ba9b4837a4f3d919ec4e7c6e613f78cb03bc8494111e413d3418f9b9b763"
+      },
+      "fullIndexBinaryPatchSha256": "a84819110ec7fd9288de181065c97c77e610722629f430c2faa0ea129b8ca7fa",
+      "sourceProofSha256": "74f7eea83d0c8138d0d52e40a961e975f864b1d65ddda8895ad2700bcf7644a1",
+      "allRequiredSourceChecks": 6,
+      "normalGatedMerge": true,
+      "coreNormalQueuePassed": null,
+      "normalQueueCheckCountNotInvented": true,
+      "canonicalMarker": "01:24:02 MERGED OpenPresentation/opf-editor#166 9689a4b0473009a243344f7376b6a6f2b7599aba",
+      "allOtherGitEntriesUnchanged": true,
+      "sourceOnly": true
+    }
+  ],
+  "terminal": {
+    "observedAt": "2026-10-15T01:24:33.477875+00:00",
+    "exitCode": 0,
+    "allFourActualMerges": true,
+    "noActiveWatcherAtTerminal": true,
+    "canonicalReceiptSha256": "5cc0de0a389ff4a741798036f5580bd89ad723c7879b84fe58e8254fcc7925e9",
+    "intentionalStops": "Two exit130 transitions only for approved serial target additions; retained in original terminal receipt, not code/test failures."
+  },
+  "supervisorReviewSha256": [
+    "d4b90844f505af5ebcb0eddaa050f903505d9d5057700c7b62fbd1301715ace8",
+    "f7737b660c3ee4730a347aa79cde850466ca3ad6c2221e33514fbf5fc8a92f55"
+  ],
+  "originalChecklist": {
+    "accepted": 40,
+    "total": 40,
+    "decision": "../rr-20-sites-current-2026-10-14/terminal-supervisor-acceptance.json",
+    "sha256": "00c60a4730d46bf328f2fe0245cd6ebc68d861779e05df71cb4330fc2bc13ede"
+  },
+  "broaderProgram": {
+    "doneOrDescoped": 77,
+    "total": 84,
+    "open": [
+      "RR-14",
+      "RR-17",
+      "RR-19",
+      "RR-48",
+      "RR-51",
+      "RR-68",
+      "RR-20"
+    ]
+  },
+  "unchangedInputs": {
+    "release-plan.json": "83b7c9e01ab6446f01d12d54e7e9ab1408fc37cf2b90f330ae2a990b11307493",
+    "docs/evidence/rr-20-registry-current-2026-10-14/verified-registry-authority.json": "c12b67d85e5753de67b4821a45e0cb27c89ddbe0b31fe4412bb6730752eaaa5c",
+    "ecosystem.lock.json": "5e040a7e52ae596d89222be6b3d1bb3d7129568e86f2764bab7edbcb1612685f",
+    "scripts/fixtures/opf-examples-png.rr20-array-areas.sha256.json": "66c0c2e45d863e33b178f717f7ebb5131f48f3643a6cbcd92956820f928dfd5d",
+    "package.json": "c5169f819ba7711d9bcd48485960783e682144c6c7bf4d0b297a22ab3601e2a7",
+    "packages/javascript/package.json": "f176eec8ba9e3a280f0492f9b7aabe6d78cf3574c994735744381366cb8be478",
+    "packages/cli/package.json": "d9a8f876d066a27b5672b518de09c9adb4cf09e3a464d833edcffb702beb626e",
+    "pnpm-lock.yaml": "c7e52515907554d11a5119f408401b1a01f12cc60499b6a6bc4bf81ace54f2ee"
+  },
+  "publishedGraph": {
+    "authority": "../rr-20-registry-current-2026-10-14/verified-registry-authority.json",
+    "sha256": "c12b67d85e5753de67b4821a45e0cb27c89ddbe0b31fe4412bb6730752eaaa5c",
+    "newPublication": false,
+    "future164Adopted": false
+  },
+  "deployedSitesUnchanged": [
+    {
+      "site": "https://www.openpresentation.org",
+      "source": "32f5521766475d179dea8e471a1629cc022f79a2",
+      "worker": "766bee0b-ee2b-4d2a-a438-19b625b3cad1",
+      "productionReceiptSha256": "9bc1cc3d7cc9dd7b5135960e61e868b1dbcacf0fc19e1562e78ce84f37cf66cf"
+    },
+    {
+      "site": "https://www.pptx.gallery",
+      "source": "8f597e953928053422a5d3c7b2103276dc45bba4",
+      "worker": "cd363be9-3df6-4138-aea1-8af496cb3709",
+      "productionReceiptSha256": "debcc93cf5040d9667fed0a9534f27afd836f436156987c7018e78953269b265"
+    },
+    {
+      "site": "https://www.pptx.dev",
+      "source": "4c11bdc28eaad2b5757b44f5ac9f85798c69eff2",
+      "worker": "ff83fdfa-3907-4719-bc34-722af3a23bc1",
+      "productionReceiptSha256": "9d75c38e26e13930c466a90f6157710c24aacdc8a718bab9212d3e26f0c4ee36"
+    }
+  ],
+  "nativeScopeUnchanged": {
+    "selectedNativeCasesAccepted": 17,
+    "UIOperationsAccepted": 4,
+    "unexecutedCases": 41,
+    "totalCorpus": 58,
+    "globalFontRasterOrPixelAcceptance": false,
+    "separateWindowsReportExportAccepted": false
+  },
+  "ownerBoundaryObservations": {
+    "RR-14": {
+      "observedAt": "2026-10-15T01:11:25.231596+00:00",
+      "method": "GET",
+      "publicURL": "https://www.pptx.dev/api/v1/author/understand/capability",
+      "status": 404,
+      "conclusion": "Only current server feature flag confirmed off by documented pre-auth capability route.",
+      "notEstablished": [
+        "allowlist configuration or evaluation",
+        "authentication",
+        "AI calls or model behavior",
+        "other build/server flags",
+        "gateway key or budget configuration"
+      ],
+      "requests": 1,
+      "mutationOrModelCall": false,
+      "receiptSha256": "2b2d0fa056e70945e436c587049ad7fa1711cd5d09e6c99ee36a5b29d37b69e6"
+    },
+    "RR-51": {
+      "observedAt": "2026-10-15T01:23:43.529115+00:00",
+      "metadataReads": 2,
+      "httpStatuses": [
+        404,
+        404
+      ],
+      "availability": "UNKNOWN / not visible",
+      "conclusion": "Two repository metadata404s do not establish that the App/configuration is missing; permissions/inherited scopes are not resolved.",
+      "actualAppInstallationGrantsTokenOrExecuteModeWorkflowVerified": false,
+      "valuesPrintedOrSaved": false,
+      "mutations": 0,
+      "receiptSha256": "473019611698fe16f48e94feaaea9a1209dd66be9ae3c07c95143fe657c90f55"
+    }
+  },
+  "futureLocalCandidates": [
+    {
+      "component": "renderer",
+      "publicPR": "https://github.com/OpenPresentation/opf-render/pull/247",
+      "publicHead": "9ab32ced87ddf7f20f098d962afe7a65e7702a03",
+      "localHead": "98ddcc1d8b58ca8282d2650059526ce17e56cddf",
+      "localBase": "7c13fd0c7a7a045445973372e26d6b93140ff134",
+      "sourceReceiptSha256": "95994769a32ac723e13c2df0a0e480df5f90a17b179a92b62d9b8c33d8245bf1",
+      "remoteUpdated": false
+    },
+    {
+      "component": "PPTX",
+      "publicPR": "https://github.com/OpenPresentation/opf-pptx/pull/262",
+      "publicHead": "d799d24ced824cf6348045ea377410de8552086c",
+      "localHead": "54c3ededd902b47687f2ae045ecf25d6a47d6201",
+      "localBase": "d14dd7232d4075565403172cfef234e70946b4fd",
+      "sourceReceiptSha256": "1078a399ec318cee5dbbca6a3b69635ec47f1bf03392cbc7ebab337535a4dcc1",
+      "remoteUpdated": false
+    },
+    {
+      "component": "core",
+      "localHead": "3b1951200c35dda51190e7ee21b397494be4e4cf",
+      "localBase": "a6fe2a0a3eb253195b9eb1091cd952e9084daef0",
+      "state": "Local future browser composition; refresh onto actual62eb remains a later task, no publicPR.",
+      "remoteUpdated": false
+    }
+  ],
+  "heldWindowsSource": "Prepared future Editor push/new draft remains held; no held files transported. Public166 normal merge used only existing public bot/main source.",
+  "noRuntimeReleaseDeploymentSettingsOrNewRollChanges": true,
+  "evidenceScope": "Portable allowlist of public source IDs/URLs, hashes, counts, outcomes and limits. Raw private bodies, authors/comments, credential/config dumps and external temporary paths are not copied.",
+  "futureLocalCompositionSupervisorAcceptanceSha256": "522bacc0e0b809fa6c7efeb6c80fc6d238d1042e97fe3bcc1f760926bf2abc03",
+  "futureFullOSGraphQualificationAccepted": false,
+  "remainingCIObservation": {
+    "provenOutstandingBillingRetries": 0,
+    "currentFivePRCI": "UNKNOWN / not collected",
+    "historicalBillingFailures": "Resolved by actual successful site retry/source merge evidence; not a current proven blocker.",
+    "auditSha256": "c06751a93d5f863bbe858c49147a00bfdc921fcda99c1cffaa1ebc396e3d1fbb",
+    "newCIQueriesOrRetryAuthorizedByCheckpoint": false
+  }
+}
