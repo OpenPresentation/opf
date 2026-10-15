@@ -1,0 +1,209 @@
+{
+  "at": "2026-10-15T12:12:55.794052+00:00",
+  "pr": "https://github.com/OpenPresentation/opf/pull/681",
+  "status": "Actually merged through normal merge queue; exact approved parent/tree/full66path patch; clean primaryFF.",
+  "reviewed": {
+    "head": "01ebfc25f45007cf8bf6b94f9d2c81fd012c493c",
+    "parent": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+    "tree": "e79142b1e3161a5eab6cdd06fc4700545a00d0e3",
+    "fullPatchSha256": "bfdd76365e888976f3eb0e14ef56d90bdb69d69834e3f9e20de1ccbcd811b312",
+    "pathCount": 66
+  },
+  "actual": {
+    "merge": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd",
+    "parents": [
+      "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d"
+    ],
+    "tree": "e79142b1e3161a5eab6cdd06fc4700545a00d0e3",
+    "fullPatchSha256": "bfdd76365e888976f3eb0e14ef56d90bdb69d69834e3f9e20de1ccbcd811b312",
+    "paths": [
+      "docs/evidence/rr-17-five-route-diagnosis-2026-10-15/README.md",
+      "docs/evidence/rr-17-five-route-diagnosis-2026-10-15/diagnosis-summary.json",
+      "docs/evidence/rr-17-five-route-diagnosis-2026-10-15/original-manifest.json",
+      "docs/evidence/rr-17-five-route-diagnosis-2026-10-15/root-acceptance.json",
+      "docs/evidence/rr-20-registry-current-2026-10-14/verified-registry-authority.json",
+      "docs/evidence/rr-68-editor022-current-2026-10-15/actual-679-680-integration-proof.json",
+      "docs/evidence/rr-68-editor022-current-2026-10-15/braces-trigger-1124.json",
+      "docs/evidence/rr-68-editor022-current-2026-10-15/current-facts.json",
+      "docs/evidence/rr-68-editor022-current-2026-10-15/inventory-0728.json",
+      "docs/evidence/rr-68-editor022-current-2026-10-15/inventory-0858.json",
+      "docs/evidence/rr-68-editor022-current-2026-10-15/inventory-1035.json",
+      "docs/evidence/rr-68-editor022-current-2026-10-15/inventory-1123-metadata.json",
+      "docs/evidence/rr-68-editor022-current-2026-10-15/primary-and-issue-comparison-1035.json",
+      "docs/evidence/rr-68-editor022-current-2026-10-15/primary-observations-1124.json",
+      "docs/evidence/rr-68-editor022-current-2026-10-15/remaining-scope-audit.json",
+      "docs/evidence/rr-68-editor022-current-2026-10-15/remaining-scope-audit.md",
+      "docs/evidence/rr-68-editor022-current-2026-10-15/scheduled-green-658.json",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/activation-check-changed.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/actual-commit-gate-receipt.json",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/affected-consumer-qualification.json",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/affected-edit-render-import-undo.json",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/affected-installed-controls.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/browser-exact-install.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/early-producer-consumer-handoff.json",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/final-records-mapped-checks.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/final-records-validation.json",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/final-source-qualification.json",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/final-source-slot-refusal.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/final-source-test.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/independent-verify.json",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/installed-browser-missing-cache.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/installed-browser-qualification.json",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/installed-browser-selection.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/matrix-prepare.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/matrix-smoke.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/matrix-update-lock.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/owned-frozen-install.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/producer-consumer-handoff.json",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/reconciled-check-changed.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/six-root-install.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/six-root-lock.log",
+      "docs/evidence/rr-68-editor022-registry-2026-10-15/verified-publication-receipt.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/current-site-facts.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/dev-production-seal.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/gallery-production-seal.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/main-origin-canonical-browser.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/main-origin-local-browser.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/main-origin-pr-handoff.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/main-original-live-browser.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/main-original-live-limitation.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/main-production-seal.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/main-qualified-test-origin.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/main113-actual-merge-receipt.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/main113-sole-observer.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/main113-terminal-exit.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/main113-terminal-gate.log",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/root-accepted-site-boundaries.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/root-gallery-production-acceptance.json",
+      "docs/evidence/rr-68-editor022-sites-2026-10-15/terminal-site-merge-batch.json",
+      "docs/programs/release-readiness/HANDOFF.md",
+      "docs/programs/release-readiness/README.md",
+      "docs/programs/release-readiness/burndown.md",
+      "docs/programs/release-readiness/release-notes-0.20-current.md",
+      "release-plan.json",
+      "scripts/published-matrix/consumer/package-lock.json",
+      "scripts/published-matrix/consumer/package.json"
+    ],
+    "defaultHeadAtFetch": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd"
+  },
+  "comparison": {
+    "parentEqualsReviewedBase": true,
+    "wholeTreeEqualsCandidate": true,
+    "fullPatchEqualsReviewed": true,
+    "pathsExactlyReviewed": true,
+    "changedPathCount": 66,
+    "parentDeltaBytes": 0,
+    "candidateTreeDeltaBytes": 0
+  },
+  "primary": {
+    "root": "/Users/michael/Source/opf",
+    "before": {
+      "head": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+      "branch": "main",
+      "status": ""
+    },
+    "after": {
+      "head": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd",
+      "branch": "main",
+      "status": ""
+    },
+    "fetchCount": 1,
+    "update": "guarded clean --ff-only"
+  },
+  "gate": {
+    "sourceCommit": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+    "scriptSha256": "82001f7f587da2f3d699d8b0fffe833108db8c25c83dd116971515bc920c9f64",
+    "ownedHandle": 8949,
+    "ownedPid": 50866,
+    "exit": {
+      "at": "2026-10-15T12:11:36.989381+00:00",
+      "exit": 0,
+      "pid": 50866
+    },
+    "terminalObservation": {
+      "chunk": "5c547d",
+      "exit": 0,
+      "wallTimeSeconds": 28.2688905
+    },
+    "mode": "normal --merge, exact approved expect-head,180s interval; actual merge queue acceptance",
+    "errorLogCallsUsed": 0,
+    "noObserverLive": true,
+    "absenceCheck": {
+      "command": "ps -p 50866 -o pid=,ppid=,args=",
+      "exit": 1,
+      "stdout": "",
+      "toolChunk": "5c30f5"
+    }
+  },
+  "refs": [
+    {
+      "path": "/private/tmp/rr-editor022-root-review-61/final-records-source-approval.json",
+      "bytes": 1851,
+      "sha256": "25ce5ab40e5e04ee6b79937d848fbe2fbf2c2ca43bfab8650fa9704867ea8d55"
+    },
+    {
+      "path": "/private/tmp/rr68-editor022-records-61/pr-source-handoff.json",
+      "bytes": 6960,
+      "sha256": "b4ead0ce49b1354875393dc2d1cfa72b8b41093fb6daf3a45c811336667e835c"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-core681-gate-61/gate.log",
+      "bytes": 897,
+      "sha256": "2428b4e19043a2a1439a849894fa54ada2bbac07af2d7dcefe8d6ebdcd1f82dd"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-core681-gate-61/exit.json",
+      "bytes": 76,
+      "sha256": "5c0f63959142ebaf87ce34df70cc3c6d1901ca5ed03d2acc924f35c33a5993c9"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-core681-gate-61/process.json",
+      "bytes": 436,
+      "sha256": "fc745ddb5015fed58268a510a1549a6a6660b21f0e6f5e49c256a1b55ef3cb9d"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-core681-gate-61/run.py",
+      "bytes": 1441,
+      "sha256": "bc40857674ae65a93ce5d32d8b1f66962182ecfde60c78ac6906f66709d99eef"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-core681-gate-61/core681-bind-first-attempt.json",
+      "bytes": 678985,
+      "sha256": "7e4d32c2e2ca69af585094292f0253af3cfaa1e0130687e108ab041bbf0073c1"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-core681-gate-61/core681-bind-second-attempt.json",
+      "bytes": 684857,
+      "sha256": "2c4ec6149d45772e8e46ecbd63b00f3548945a5dbd69b3c7c63b8b8b3e205d0b"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-core681-gate-61/core681-actual.patch",
+      "bytes": 638120,
+      "sha256": "bfdd76365e888976f3eb0e14ef56d90bdb69d69834e3f9e20de1ccbcd811b312"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-core681-gate-61/core681-parent-delta.patch",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-core681-gate-61/core681-candidate-tree-delta.patch",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-core681-gate-61/core681-merge-commands.json",
+      "bytes": 695201,
+      "sha256": "a22a828a078f8322cb376c25475100e597a27848310716a009a449dfe4548c89"
+    }
+  ],
+  "boundaries": {
+    "noNewStatusQueryOrWatcher": true,
+    "noRestart": true,
+    "noGateChangeOrBypass": true,
+    "noNewPackageOrSiteRelease": true,
+    "noWindowsReadsContactOrUse": true,
+    "noNewNativeOrGlobalProgramAcceptance": true
+  },
+  "initialBindingAttempt": "Single normal fetch completed; source candidate commit is absent from fetched squash history. Preserved first-attempt command log; exact approved tree object and full reviewed patch comparison completed without a second fetch. Default-sandbox FF then refused ORIG_HEAD.lock before change; authorized escalated same guarded FF completed with that refusal retained."
+}

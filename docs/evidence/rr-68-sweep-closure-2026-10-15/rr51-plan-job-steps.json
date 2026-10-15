@@ -1,0 +1,55 @@
+{
+  "job": {
+    "id": 116415510927,
+    "run_id": 38733105109,
+    "run_attempt": 1,
+    "head_sha": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd",
+    "name": "Release train (plan)",
+    "status": "completed",
+    "conclusion": "success",
+    "started_at": "2026-10-15T12:14:13Z",
+    "completed_at": "2026-10-15T12:14:31Z"
+  },
+  "selectedSteps": [
+    {
+      "name": "Check the release train script",
+      "number": 5,
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-15T12:14:25Z",
+      "completed_at": "2026-10-15T12:14:26Z"
+    },
+    {
+      "name": "GitHub App token",
+      "number": 6,
+      "status": "completed",
+      "conclusion": "skipped",
+      "started_at": "2026-10-15T12:14:26Z",
+      "completed_at": "2026-10-15T12:14:26Z"
+    },
+    {
+      "name": "Refuse execute without the App",
+      "number": 7,
+      "status": "completed",
+      "conclusion": "skipped",
+      "started_at": "2026-10-15T12:14:26Z",
+      "completed_at": "2026-10-15T12:14:26Z"
+    },
+    {
+      "name": "Plan (read only)",
+      "number": 8,
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-10-15T12:14:26Z",
+      "completed_at": "2026-10-15T12:14:29Z"
+    },
+    {
+      "name": "Run the train",
+      "number": 9,
+      "status": "completed",
+      "conclusion": "skipped",
+      "started_at": "2026-10-15T12:14:29Z",
+      "completed_at": "2026-10-15T12:14:29Z"
+    }
+  ]
+}

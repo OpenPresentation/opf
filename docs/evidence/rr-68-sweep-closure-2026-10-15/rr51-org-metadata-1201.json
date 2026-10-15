@@ -1,0 +1,43 @@
+{
+  "at": "2026-10-15T12:01:02.684115+00:00",
+  "scope": "Finite read-only exact organization-secret inheritance metadata; no dispatch or variable/Appinstallation read",
+  "budgets": {
+    "githubRESTLimit": 2,
+    "githubRESTUsed": 1,
+    "CIStatusCheckRunQueries": 0
+  },
+  "source": {
+    "path": "/private/tmp/rr68-editor022-records-61/opf/.github/workflows/release-train.yml",
+    "sha256": "6f4397ca5ecf70b93ab10c94d4058bdc8c07446292204c839e0503aa3f35827f",
+    "jobEnvironmentDeclarationPresent": false,
+    "reusableWorkflowJobPresent": false,
+    "expectedSecret": "ECOSYSTEM_APP_PRIVATE_KEY",
+    "expectedVariable": "ECOSYSTEM_APP_ID",
+    "appTokenStepCondition": "vars.ECOSYSTEM_APP_ID != ''",
+    "planOnlySemantics": "mode=plan invokes release-train.mjs plan and writes a job summary; execute-only step is guarded. Optional App token creation still runs if App ID variable is nonempty, so plan success with fallback github.token alone does not establish App capability."
+  },
+  "organizationSecretMetadata": {
+    "observedAt": "2026-10-15T12:01:02.683263+00:00",
+    "endpoint": "orgs/OpenPresentation/actions/secrets?per_page=100",
+    "httpStatus": 403,
+    "commandExitCode": 1,
+    "hasNextPage": false,
+    "paginationComplete": false,
+    "expectedName": "ECOSYSTEM_APP_PRIVATE_KEY",
+    "expectedNamePresent": null,
+    "visibility": null
+  },
+  "selectedRepositoryMetadata": null,
+  "organizationSecretAvailableToPublicCoreByObservedVisibility": null,
+  "repoVariablePresenceValueInstallationGrantsTokenCapability": "not inspected or established",
+  "conclusion": "Organization secret inheritance unknown/not-visible,incomplete or not proven available; no absentApp inference.",
+  "noSecretValuesOrUnrelatedNamesPersisted": true,
+  "actions": {
+    "settingsSecretsGrantsChanges": 0,
+    "workflowDispatches": 0,
+    "sourceEdits": 0,
+    "WindowsOfficeModelCalls": 0,
+    "localPrivateAccountConfigReads": 0,
+    "authRefresh": 0
+  }
+}

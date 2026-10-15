@@ -1,0 +1,139 @@
+{
+  "at": "2026-10-15T12:12:25.456241+00:00",
+  "priorMetadataAt": "2026-10-15T11:23:05.860630+00:00",
+  "counts": {
+    "repos": 8,
+    "PR": 0,
+    "drafts": 0,
+    "issue": 37
+  },
+  "everyReturnedPr": [],
+  "returnedPrCount": 0,
+  "allReturnedPrMetadataInspectedIndividually": true,
+  "authorOrOriginInferredFromClassifier": false,
+  "issueMetadataChanges": [],
+  "issueBodiesRequestedOrComparedFresh": false,
+  "bodyLedgerRetainsDated1035Evidence": true,
+  "defaultHeadChanges": [
+    {
+      "repository": "OpenPresentation/opf",
+      "previous": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+      "current": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd"
+    },
+    {
+      "repository": "Data-Advantage/openpresentation-site",
+      "previous": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+      "current": "0ff67a7ebd4b5adf102afd985c705dc018ea0482"
+    }
+  ],
+  "connections": [
+    {
+      "repo": "OpenPresentation/opf",
+      "kind": "pullRequests",
+      "complete": true,
+      "count": 0
+    },
+    {
+      "repo": "OpenPresentation/opf",
+      "kind": "issues",
+      "complete": true,
+      "count": 25
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "kind": "pullRequests",
+      "complete": true,
+      "count": 0
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "kind": "issues",
+      "complete": true,
+      "count": 3
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "kind": "pullRequests",
+      "complete": true,
+      "count": 0
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "kind": "issues",
+      "complete": true,
+      "count": 2
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "kind": "pullRequests",
+      "complete": true,
+      "count": 0
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "kind": "issues",
+      "complete": true,
+      "count": 1
+    },
+    {
+      "repo": "OpenPresentation/gallery",
+      "kind": "pullRequests",
+      "complete": true,
+      "count": 0
+    },
+    {
+      "repo": "OpenPresentation/gallery",
+      "kind": "issues",
+      "complete": true,
+      "count": 2
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "kind": "pullRequests",
+      "complete": true,
+      "count": 0
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "kind": "issues",
+      "complete": true,
+      "count": 1
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "kind": "pullRequests",
+      "complete": true,
+      "count": 0
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "kind": "issues",
+      "complete": true,
+      "count": 0
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "kind": "pullRequests",
+      "complete": true,
+      "count": 0
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "kind": "issues",
+      "complete": true,
+      "count": 3
+    }
+  ],
+  "all16ConnectionsAndLabelPagesComplete": true,
+  "calls": 1,
+  "budget": 1,
+  "noRetry": true,
+  "ciQueries": 0,
+  "sourceRecords681AcceptedByThisCollector": false,
+  "refs": {
+    "query.graphql": "14ada80f6a7e6d36773100cf69188ac2d2ecc097109f7fc30ff38acfc50dc21e",
+    "census-budget.json": "d4f9ecaf35f86488ee03b3d007a9177fea7ce15da6542a0cfd320dd1aa9516ae",
+    "inventory-raw.json": "411744df119915b4f5cf4ee1347c076e3f9862dae626a4819d419884b64ac331",
+    "census-summary.json": "50841e73800c263dd785011f8a496fc21b7970a2efb4e2d640287760c2d28325"
+  }
+}
