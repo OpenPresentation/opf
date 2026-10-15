@@ -37,6 +37,20 @@ pair. Historical fixtures retain their original export options and explicitly
 record that preview/export equivalence is unproven. Native font installation
 and visual comparison remain explicit acceptance steps.
 
+## Opt-in font-route subset
+
+Prepare only the versioned Traditional Arabic and Nirmala Telugu/Kannada/Gujarati/Malayalam fixtures with `--font-routes all`, or pass comma-separated exact case IDs from `fixtures/font-routes.json`:
+
+```sh
+pnpm native:prepare --consumer /path/to/installed-consumer --pptx-repo /path/to/opf-pptx --output /path/to/fresh-font-suite --font-routes font-route-traditional-arabic
+```
+
+The default suite and case IDs stay unchanged. The opt-in output records `scope.kind: font-routes`, its exact selected IDs and `fullSuite: false`; it does not prepare chart/table fixtures or transfer Roboto font inputs. Every generated source, archive, preview and diagnostic is included in the existing complete file seal. The committed script corpus is also bound to the suite repository identity.
+
+Each selected fixture has explicit 400/700 upright corpus rows, numeric/Latin/neutral/mixed controls and 18/24/32 pt size controls. Requested native names remain in the source and PPTX. One pinned open-font handle measures preview and export; metadata verifies its expected route-face bytes against the installed renderer manifest. No proprietary font is read, installed or copied. These pins describe preview bytes, not a physical native face or reference measurement. No coefficient is injected.
+
+The existing one-case Windows runner can retain its ordinary observations for a selected eligible fixture after explicit authorization. Preparation and that worker's completion do not establish font fidelity: the route metadata keeps reference measurements, native physical face, BoundWidth/ink/baseline acceptance unresolved. Actual contextual per-class reference widths and affected Office overflow/ink measurements require separately reviewed assertions and supervisor evidence. This change adds no worker assertion or native pass criterion.
+
 ## Run on Windows
 
 Follow [the Windows runner instructions](WINDOWS.md). Only the supervisor runs
