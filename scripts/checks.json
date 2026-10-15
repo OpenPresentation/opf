@@ -15,6 +15,7 @@
   "changed": {
     "always": ["check:changes"],
     "rules": [
+      {"match": ["scripts/measurement-policy.mjs", "scripts/fixtures/editor-scheduled-measurement.json"], "run": ["check:pr-gate", "check:release-train"]},
       {"match": ["scripts/native-acceptance/"], "run": ["check:native-acceptance"]},
       {"match": ["scripts/pack-ecosystem.mjs", "scripts/ecosystem-preview-plan.mjs", "scripts/ecosystem-preview-plan.test.mjs"], "run": ["check:preview-packaging"]},
       {"match": ["scripts/candidate-gallery.mjs", "scripts/candidate-gallery.test.mjs", "scripts/candidate-gallery-pack.mjs", "scripts/candidate-gallery-pack.test.mjs", "scripts/pack-cli-candidate.mjs", "scripts/candidate-gallery-results.mjs", "scripts/candidate-gallery-results.test.mjs", "scripts/candidate-gallery-build.mjs", "scripts/candidate-gallery-control.mjs", "scripts/candidate-gallery-control.test.mjs", "scripts/candidate-gallery-workflow.test.mjs", ".github/actions/candidate-gallery-stage/", ".github/actions/candidate-gallery/", ".github/workflows/candidate-gallery-qualification.yml", ".github/workflows/published-gallery-control.yml"], "run": ["check:candidate-gallery"]},

@@ -10,6 +10,7 @@ import {
   assertGalleryReleaseReady,
   allowedPrepFile,
   compareVersions,
+  commitChecks,
   defaultBranch,
   editManifestText,
   editPeersText,
@@ -1232,4 +1233,33 @@ test("canonical prep projects the 0.20 version while preserving adopted Gallery 
   assert.ok(!world.calls.some(isWrite), "dry preparation does not mutate remote state");
   world.commit("opf", "newer actual main", { ...files, "packages/javascript/package.json": JSON.stringify({ ...original, version: "0.20.1" }) });
   await assert.rejects(prep(world.deps, packageOf("core"), { core: "0.20.0" }), /newer than/);
+});
+
+
+test("RR-68: release fallback measures only the verified scheduled Editor run and never hides required checks or statuses", async () => {
+  const metadata = JSON.parse(readFileSync(path.join(root, "scripts/fixtures/editor-scheduled-measurement.json"), "utf8"));
+  const job = {name:"Repeat the browser suites",status:"in_progress",conclusion:null,app:{id:15368,slug:"github-actions"},check_suite:{id:metadata.check_suite_id},details_url:`https://github.com/OpenPresentation/opf-editor/actions/runs/${metadata.id}/job/123`};
+  async function check({required=[],real="success",measurement=job,run=metadata,statuses=[],repo="opf-editor",sha=metadata.head_sha,rulesError=false}={}) {
+    let reads=0;
+    const deps={api:async route=>{
+      if(route.includes("/rules/branches/")){if(rulesError==="invalid")return [{}];if(rulesError)throw Object.assign(new Error("not visible"),{status:rulesError===403?403:404});return required.length?[{type:"required_status_checks",parameters:{required_status_checks:required.map(context=>({context}))}}]:[];}
+      if(route.endsWith("/check-runs?per_page=100"))return {check_runs:[{name:"packages",status:real==="pending"?"in_progress":"completed",conclusion:real},measurement]};
+      if(route.endsWith("/status"))return {statuses};
+      if(route.includes("/actions/runs/")){reads++;if(run instanceof Error)throw run;return run;}
+      throw new Error(`unexpected route ${route}`);
+    }};
+    let verdict;
+    try {verdict=await commitChecks(deps,repo,sha);} catch(error) {assert.equal(reads,0);throw error;}
+    await commitChecks(deps,repo,sha);
+    return {verdict,reads};
+  }
+  let checked=await check();assert.equal(checked.verdict.state,"green");assert.deepEqual(checked.verdict.advisoryPending,[job.name]);assert.equal(checked.reads,1);
+  checked=await check({measurement:{...job,status:"completed",conclusion:"failure"}});assert.equal(checked.verdict.state,"green");assert.deepEqual(checked.verdict.advisoryFailing,[job.name]);
+  for(const options of [{real:"pending"},{rulesError:true},{rulesError:"invalid"},{required:[job.name]},{statuses:[{context:job.name,state:"pending"}]},{repo:"opf"},{sha:sha("other")},{measurement:{...job,app:{id:999,slug:"github-actions"}}},{measurement:{...job,app:{id:15368,slug:"other"}}},{measurement:{...job,check_suite:{id:1}}},{measurement:{...job,details_url:null}},{run:null},{run:new Error("unavailable")},{run:{...metadata,event:"workflow_dispatch"}},{run:{...metadata,path:".github/workflows/ci.yml"}},{run:{...metadata,head_sha:sha("other")}},{run:{...metadata,repository:{full_name:"elsewhere/opf-editor"}}}]) assert.equal((await check(options)).verdict.state,"pending",JSON.stringify(options));
+  assert.equal((await check({real:"failure"})).verdict.state,"red");
+  assert.equal((await check({required:[job.name],measurement:{...job,status:"completed",conclusion:"failure"}})).verdict.state,"red");
+  await assert.rejects(check({rulesError:403}),error=>error.status===403);
+  assert.equal((await check({required:[job.name]})).reads,0);
+  assert.equal((await check({rulesError:true})).reads,0);
+  assert.equal((await check({rulesError:"invalid"})).reads,0);
 });
