@@ -367,8 +367,9 @@ export function evaluateChecks({ checks: reported, required, suites = [], allowS
   const mode = required?.length ? 'required' : 'all';
   const advisory = mode === 'all' ? reported.filter(check => check.measurement) : [];
   const gatingReported = reported.filter(check => !advisory.includes(check));
-  const checks = dropSupersededCancellations(gatingReported, suites);
   const gatingSuites = mode === 'all' ? suites.filter(suite => !suite.measurement) : suites;
+  // Advisory suites cannot supersede or qualify retries of a real gating run.
+  const checks = dropSupersededCancellations(gatingReported, gatingSuites);
   const verdicts = [];
   const missing = [];
   const counted = new Set();
@@ -394,7 +395,7 @@ export function evaluateChecks({ checks: reported, required, suites = [], allowS
     (other.name === check.name && verdicts.some(winner => sameCheck(winner,check))) ||
     (other.conclusion === 'CANCELLED' && (mode === 'all' || counted.has(other.name)) && !verdicts.some(winner => winner.kind === other.kind && winner.workflow === other.workflow && winner.name === other.name && supersedes(winner,other)))
   )));
-  const retrySuites = retryOverrides.map(check => ({check, suite:suites.find(suite => suite.app?.slug === 'github-actions' && suite.workflowRun?.databaseId === check.runId && suite.workflowRun?.workflow?.name === check.workflow && suite.workflowRun?.runAttempt === check.attempt)}));
+  const retrySuites = retryOverrides.map(check => ({check, suite:gatingSuites.find(suite => suite.app?.slug === 'github-actions' && suite.workflowRun?.databaseId === check.runId && suite.workflowRun?.workflow?.name === check.workflow && suite.workflowRun?.runAttempt === check.attempt)}));
   const retryFailing = retrySuites.filter(({suite}) => suite?.status === 'COMPLETED' && RED_CONCLUSIONS.has(suite.conclusion)).map(({check,suite}) => ({name:`${check.workflow} retry suite`,conclusion:suite.conclusion,url:check.url,runId:check.runId,id:null}));
   const passes = (check) => check.result === 'success' || (check.result === 'skipped' && allowSkipped);
   const failing = verdicts.filter((check) => check.result === 'failure' || (check.result === 'skipped' && !allowSkipped));

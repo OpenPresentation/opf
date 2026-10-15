@@ -957,3 +957,39 @@ test('RR-68: observer excludes only verified fallback measurement jobs AND runni
   assert.equal((await observe({real:'FAILURE'})).result.code,EXIT.red);
   assert.equal((await observe({measurement:'FAILURE',required:'Repeat the browser suites'})).result.code,EXIT.red);
 });
+
+// A measurement is outside the gating history: its newer suite must not supersede
+// a cancelled real dispatch, even though GitHub gives both the same workflow/job names.
+test('RR-68: scheduled measurement cannot supersede a cancelled non-advisory dispatch on the same commit', async () => {
+  const oid = measurementRun.head_sha;
+  const dispatchRun = {...measurementRun, id:measurementRun.id-1, event:'workflow_dispatch', check_suite_node_id:'CS_dispatch', check_suite_id:measurementRun.check_suite_id-1};
+  for (const includeScheduledJob of [false, true]) {
+    const cancelled = run('Repeat the browser suites','CANCELLED',{oid,runId:dispatchRun.id,workflow:'Flake measurement'});
+    cancelled.checkSuite.id=dispatchRun.check_suite_node_id;
+    cancelled.checkSuite.workflowRun.event='workflow_dispatch';
+    const scheduled = pending('Repeat the browser suites',{oid,runId:measurementRun.id,workflow:'Flake measurement'});
+    scheduled.checkSuite.id=measurementRun.check_suite_node_id;
+    scheduled.checkSuite.workflowRun.event='schedule';
+    const suite = (job,status,conclusion) => ({id:job.checkSuite.id,app:job.checkSuite.app,workflowRun:job.checkSuite.workflowRun,status,conclusion});
+    const contexts = [run('packages','SUCCESS',{oid,workflow:'CI'}),cancelled,...(includeScheduledJob?[scheduled]:[])];
+    const object = pr({head:oid,contexts,suites:[suite(cancelled,'COMPLETED','CANCELLED'),suite(scheduled,'IN_PROGRESS',null)]}).commits.nodes[0].commit;
+    const {deps,state} = fake({polls:[{data:{rateLimit:{remaining:4000},r0:{defaultBranchRef:{name:'main'},t0:object}}}],rules:[]});
+    const original = deps.rest;
+    deps.rest = async (route,init) => route.endsWith(`/actions/runs/${measurementRun.id}`) ? measurementRun :
+      route.endsWith(`/actions/runs/${dispatchRun.id}`) ? dispatchRun : original(route,init);
+    const observed = await gate(['--commit',`OpenPresentation/opf-editor@${oid}`,'--timeout-minutes','1'],deps);
+    assert.equal(observed.code,EXIT.red,`scheduled check materialized: ${includeScheduledJob}`);
+    assert.ok(has(state.lines,/Repeat the browser suites \(CANCELLED\)/));
+  }
+});
+
+test('RR-68: advisory suites cannot qualify a gating retry; required-mode retry semantics are unchanged', () => {
+  const workflow='Flake measurement';
+  const cancelled=run('unrecognized job','CANCELLED',{oid:measurementRun.head_sha,runId:measurementRun.id+1,id:10,workflow});
+  const retried=run('unrecognized job','SUCCESS',{oid:measurementRun.head_sha,runId:measurementRun.id,id:20,attempt:2,workflow});
+  const checks=normalizeContexts([cancelled,retried],measurementRun.head_sha);
+  const measurementSuite={...suite(measurementRun.id,'COMPLETED','SUCCESS',workflow,2),id:measurementRun.check_suite_node_id,measurement:true};
+  measurementSuite.workflowRun.event='schedule';
+  assert.equal(evaluateChecks({checks,required:null,suites:[measurementSuite]}).state,'pending');
+  assert.equal(evaluateChecks({checks,required:[{context:'unrecognized job'}],suites:[measurementSuite]}).state,'green');
+});
