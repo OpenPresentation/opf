@@ -1,0 +1,13 @@
+03:52:04 OpenPresentation/opf-render main: no required checks: every check except neutral bots counts
+03:52:04 OpenPresentation/opf-render#226 head 6470a9d9; checks pending (3/4 checks, no ruleset); running: package; 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+03:52:04 OpenPresentation/opf-pptx main: no required checks: every check except neutral bots counts
+03:52:04 RED OpenPresentation/opf-pptx#244: required checks failed:
+  package (windows-latest) (FAILURE) https://github.com/OpenPresentation/opf-pptx/actions/runs/38109422741/job/114381692036
+03:52:04 OpenPresentation/opf-editor main: no required checks: every check except neutral bots counts
+03:52:04 RED OpenPresentation/opf-editor#157: required checks failed:
+  package (CANCELLED) https://github.com/OpenPresentation/opf-editor/actions/runs/38109427167/job/114381703785
+  Node 22 (engines range) (CANCELLED) https://github.com/OpenPresentation/opf-editor/actions/runs/38109427167/job/114381703649
+  Node 26 (engines range) (CANCELLED) https://github.com/OpenPresentation/opf-editor/actions/runs/38109427167/job/114381703764
+  macOS playground (CANCELLED) https://github.com/OpenPresentation/opf-editor/actions/runs/38109427167/job/114381703752
+04:04:08 OpenPresentation/opf-render#226 head 6470a9d9; checks green (4/4 checks, no ruleset); mergeable MERGEABLE/CLEAN; confirming at the next poll
+04:07:11 MERGED OpenPresentation/opf-render#226 d4259333a1105ce54d136ced0635f086d0f750ee

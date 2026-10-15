@@ -245,7 +245,9 @@ cite it; the owner can revise it.
 
 ## Open decisions
 
-**Current 2026-10-14:** real remaining owner decisions concern RR-14 rollout, the retained native/font/raster scope, three sibling merge-queue rulesets, release automation and authorized cleanup. They are separate from the accepted scoped native criteria and completed deployments. Entries 1 and 7 below are settled or superseded historical decisions; no fresh catalog-ownership, old-release-timing or generic final-note approval gate is created. Broader issues #87/#323/#362 remain open on their exact remaining clauses.
+**Current RR-17 boundary — 2026-10-15:** the original 23-name four-host commission and Didot documented-visual outcome are already accepted; #361/#364/#363 are closed. The old questions in entries 2, 3 and 6 below retain their dates and are not renewed owner blockers. Actual remaining #581/#582 work is a separately reviewed engineering correction, followed by its affected native criteria; broader per-family findings remain literal. No blanket owner-permission gate, known-bad scalar or global font acceptance is introduced. [Bounded current evidence](../../evidence/rr-68-original-acceptance-index-2026-10-15/font-followup-scope.json).
+
+**Earlier decision-boundary snapshot — 2026-10-14 (retained):** real remaining owner decisions concern RR-14 rollout, the retained native/font/raster scope, three sibling merge-queue rulesets, release automation and authorized cleanup. They are separate from the accepted scoped native criteria and completed deployments. Entries 1 and 7 below are settled or superseded historical decisions; no fresh catalog-ownership, old-release-timing or generic final-note approval gate is created. Broader issues #87/#323/#362 remain open on their exact remaining clauses.
 
 The dated decision record follows; settled entries are retained for history. Open decisions also appear in their program rows.
 

@@ -1,0 +1,316 @@
+{
+  "at": "2026-10-15T03:59:52.933079+00:00",
+  "scope": "Historical T06/T09 portable source and retained-log indexing only; no new runtime/test/API observation",
+  "T06": {
+    "assessment": "Source-level prerequisites independently reconstructable",
+    "twoConfiguredOverridesEmpty": true,
+    "overrideNature": "Literal workflow inputs at renderer18.1 CI63/229, not a claim every old process environment variable was captured",
+    "selectedGolden": "test/golden/opf-examples-png.cover-centering/_baseline.json",
+    "sourceDigest": "20da988227cb90ad9a1f04185981f83d24c0afee7c9070d7b84e55fe7895e71b",
+    "sourceDecks": 127,
+    "sourceExamplesRecomputedOffline": true,
+    "coreReviewedGoldenMatches": true,
+    "unrelatedRendererBaseline": "test/golden/opf-examples-png/_baseline.json records cbd0d2c7/126decks and is NOT the runner default; do not cite it as the matching20da golden",
+    "executionEvidence": "Retained exact d425 release-commit6/6 confirmation; trusted publish38112000992; canonical verify4signatures/ownattestation. Full historical raw job environment unavailable; no new observation invented."
+  },
+  "T09": {
+    "assessment": "Actual154 gate, merge and six source pins independently indexed;157 distinct",
+    "merge": "4c29be041bb3b4ea67b4b086e69c13395542377c",
+    "gate": "patch-prerequisites-final-gate.log:18\u201319 3/3 green confirmation, actual merge05:23:28",
+    "originalFailurePreserved": "Same log7\u20138 preserves failed package/run38093606228 authorized retry before finalgreen",
+    "fonts": [
+      {
+        "name": "@expo-google-fonts/noto-sans-jp",
+        "editorDevelopmentPin": "0.4.4",
+        "rendererPeerPin": "0.4.4",
+        "lockIdentity": {
+          "version": "0.4.4",
+          "resolved": "https://registry.npmjs.org/@expo-google-fonts/noto-sans-jp/-/noto-sans-jp-0.4.4.tgz",
+          "integrity": "sha512-1vl2U7uYG5JAXGERZaLMXtfOSgyOU4Qhq30OOPrbAHjOu8AW9Pral/qN9Anta9fjd6eVRTijiNqcgy2TowzrDA=="
+        },
+        "exactMatch": true
+      },
+      {
+        "name": "@expo-google-fonts/noto-sans-kr",
+        "editorDevelopmentPin": "0.4.4",
+        "rendererPeerPin": "0.4.4",
+        "lockIdentity": {
+          "version": "0.4.4",
+          "resolved": "https://registry.npmjs.org/@expo-google-fonts/noto-sans-kr/-/noto-sans-kr-0.4.4.tgz",
+          "integrity": "sha512-zePBzeh74ja/0Jiw3T/9+V6Ie3+eONlIl5o1dQQYsOCmfXjJttMz0rGv1oB2AWlzX/TPiL7J3IP3M9Ga7CBvWA=="
+        },
+        "exactMatch": true
+      },
+      {
+        "name": "@expo-google-fonts/noto-sans-sc",
+        "editorDevelopmentPin": "0.4.4",
+        "rendererPeerPin": "0.4.4",
+        "lockIdentity": {
+          "version": "0.4.4",
+          "resolved": "https://registry.npmjs.org/@expo-google-fonts/noto-sans-sc/-/noto-sans-sc-0.4.4.tgz",
+          "integrity": "sha512-LF4+p6xdtgUArufW0K+l9/FeDiXrW8FcEkEbOPIUC5ZnPupeFVA6yY9qCZ0sBrdAeLdlusDhv0R7q2x3onXo3w=="
+        },
+        "exactMatch": true
+      },
+      {
+        "name": "@expo-google-fonts/noto-sans-tc",
+        "editorDevelopmentPin": "0.4.4",
+        "rendererPeerPin": "0.4.4",
+        "lockIdentity": {
+          "version": "0.4.4",
+          "resolved": "https://registry.npmjs.org/@expo-google-fonts/noto-sans-tc/-/noto-sans-tc-0.4.4.tgz",
+          "integrity": "sha512-mTYARqbwmV05CyyMFEpPtRz2QdtBZCIL3AgT1nzE2QyB2uhA7KdBBzr49ON41aIP+1xnJ6z8AtWYICk4DjygAQ=="
+        },
+        "exactMatch": true
+      },
+      {
+        "name": "@expo-google-fonts/noto-color-emoji",
+        "editorDevelopmentPin": "0.4.7",
+        "rendererPeerPin": "0.4.7",
+        "lockIdentity": {
+          "version": "0.4.7",
+          "resolved": "https://registry.npmjs.org/@expo-google-fonts/noto-color-emoji/-/noto-color-emoji-0.4.7.tgz",
+          "integrity": "sha512-0jZUhh9r92VouxJ5z59Vxw1BGjbaat7EEEasmsLI+doe5hXS1/d4oZUyfyv/TFvkwuZjqvbDh6WdYM9q0ZhiyA=="
+        },
+        "exactMatch": true
+      },
+      {
+        "name": "@expo-google-fonts/noto-emoji",
+        "editorDevelopmentPin": "0.4.8",
+        "rendererPeerPin": "0.4.8",
+        "lockIdentity": {
+          "version": "0.4.8",
+          "resolved": "https://registry.npmjs.org/@expo-google-fonts/noto-emoji/-/noto-emoji-0.4.8.tgz",
+          "integrity": "sha512-zuq8xBS8nfdgqHXIwfdotQNObA22aMLdPJbFmzJt1AUjbBE4hP/K3az/GftD3e2/JTzRnX30C5lmpuNkVewRlA=="
+        },
+        "exactMatch": true
+      }
+    ],
+    "packedGuard": "Exact154 source installs published renderer\u2019s peer font pins and asserts resolved renderer+each font; every shipped SHA check remains.",
+    "separateRepair": {
+      "merge": "b2c9bab8a58b17ec3aa10c6360c0870067943986",
+      "paths": [
+        ".github/workflows/ci.yml",
+        "changes/rr-20-ci-npm-version.md"
+      ],
+      "gate": "patch-prerequisites-next-gate.log21/24,4/4green confirmation\u219205:55:37merge",
+      "priorFailure": "release-retry-batch-gate.log retains canceled157; finalgate10 onward retains initialrerunfailure"
+    },
+    "packedLogCaution": "Retained editor157-merged154-packed.log reports editor0.18.0/123byte-matchedfiles/23models/offlinebrowser and genuine signatures. Filename/version alone does not independently bind every packed byte to154; directGit+actual154gate prove the original row, this log is supplementary only."
+  },
+  "source": [
+    {
+      "repository": "OpenPresentation/opf-render",
+      "commit": "d4259333a1105ce54d136ced0635f086d0f750ee",
+      "path": ".github/workflows/ci.yml",
+      "gitBlob": "1553e2d36658d79396f57bcfa5c73f9fc4cfb13f",
+      "sha256": "8c4d70f2c09c188cd1812ffbb90d6195bafcd4571a3d6accc06a644bd6391b5e",
+      "url": "https://github.com/OpenPresentation/opf-render/blob/d4259333a1105ce54d136ced0635f086d0f750ee/.github/workflows/ci.yml",
+      "excerpts": [
+        {
+          "start": 49,
+          "end": 63,
+          "text": "      # RR-50: no hand pins. The commits of opf, opf-pptx and opf-editor and the golden baseline (OPF_GOLDEN_BASELINE, exported\n      # to the later steps) come from core's ecosystem.lock.json, written by the roller. A `Depends-On:` trailer in the pull\n      # request body tests an unmerged pull request of another repository instead (core docs/ecosystem-development.md).\n      - name: Resolve the coordinated commits from core's ecosystem.lock.json\n        id: refs\n        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main\n        with:\n          consumer: opf-render\n          export-golden: 'true'\n          # A renderer pull request that moves pixels selects its own baseline directory here, e.g.\n          # opf-render/test/golden/<name> (regenerate-goldens writes into it; scripts/ecosystem-pins.mjs reads it).\n          # Empty selects the lock's golden. The roller makes a non-empty value the lock's golden, so set it only for a\n          # baseline that records core main's examples: core's registry run selects a reviewed core golden (or a retained\n          # one, scripts/registry-golden.mjs) only while the lock's golden lives in core.\n          golden-override: ''"
+        },
+        {
+          "start": 222,
+          "end": 229,
+          "text": "      - name: Resolve the coordinated commits from core's ecosystem.lock.json\n        id: refs\n        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main\n        with:\n          consumer: opf-render\n          export-golden: 'true'\n          # Keep equal to the package job's golden-override (scripts/ecosystem-pins.mjs reads the first one).\n          golden-override: ''"
+        }
+      ]
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "commit": "d4259333a1105ce54d136ced0635f086d0f750ee",
+      "path": "test/golden/opf-examples-png.cover-centering/_baseline.json",
+      "gitBlob": "2bf0816045c7a222704dbcd0de0ac6df8271e6f5",
+      "sha256": "536b25b57a5fdce9a7a3e87743de8746cb949556606ec85f603f332955afbd87",
+      "url": "https://github.com/OpenPresentation/opf-render/blob/d4259333a1105ce54d136ced0635f086d0f750ee/test/golden/opf-examples-png.cover-centering/_baseline.json"
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "commit": "d4259333a1105ce54d136ced0635f086d0f750ee",
+      "path": "test/golden.mjs",
+      "gitBlob": "f299cf6f2258cd5e537a14bb4848a479f9c7af4e",
+      "sha256": "6ece98a3ab2d1587f5403acf351b4664f3c519d723e1a1e9c86ca63ddc399953",
+      "url": "https://github.com/OpenPresentation/opf-render/blob/d4259333a1105ce54d136ced0635f086d0f750ee/test/golden.mjs",
+      "excerpts": [
+        {
+          "start": 14,
+          "end": 32,
+          "text": "// RR-52: a baseline is a directory with one file per deck (test/golden/<name>/...). A legacy\n// `<name>.sha256.json` path still selects `<name>/` and a legacy single-file manifest still loads.\nconst baselinePath = path.resolve(process.env.OPF_GOLDEN_BASELINE ?? path.join(root, 'test/golden/opf-examples-png.cover-centering.sha256.json'));\nconst started = performance.now();\nconst output = path.resolve(process.env.OPF_GOLDEN_OUT ?? path.join(root, 'artifacts/golden'));\nconst update = process.argv.includes('--update');\nconst scale = Number(process.env.OPF_GOLDEN_SCALE ?? '0.25');\nassert.ok(Number.isFinite(scale) && scale > 0, 'Golden scale must be positive');\n// Installed core examples are the default: no sibling checkout or .git state can\n// silently skip the visual regression gate. Explicit corpora must match as well.\nconst corpus = process.env.OPF_EXAMPLES_DIR\n  ? readCorpus(path.resolve(process.env.OPF_EXAMPLES_DIR))\n  : examples.map(({ file, deck }) => ({ file: file.replace(/^examples\\//, ''), deck }));\ncorpus.sort((a, b) => a.file < b.file ? -1 : a.file > b.file ? 1 : 0);\nassert.ok(corpus.length > 0, 'Golden corpus must not be empty');\nconst sourceDigest = sha256(JSON.stringify(corpus.map(({ file, deck }) => [file, canonical(deck)])));\nconst next = {\n  version: 2,\n  source: { repository: 'OpenPresentation/opf', path: 'examples', sha256: sourceDigest, decks: corpus.length },"
+        },
+        {
+          "start": 73,
+          "end": 82,
+          "text": "  const expected = readBaseline(baselinePath);\n  const { changedSlides: changes, changedDecks } = diffManifests(expected, next);\n  writeFileSync(path.join(output, 'diff.json'), JSON.stringify({ sourceMatches: JSON.stringify(expected.source) === JSON.stringify(next.source), changedSlides: changes, changedDecks }, null, 2) + '\\n');\n  assert.deepEqual(next.source, expected.source, 'Golden corpus changed; inspect candidate and review the new corpus.');\n  assert.equal(next.version, expected.version, 'Golden manifest version changed');\n  assert.equal(next.scale, expected.scale, 'Golden scale changed');\n  assert.equal(next.format, expected.format, 'Golden format changed');\n  assert.equal(next.systemFonts, expected.systemFonts, 'Golden font policy changed');\n  assert.equal(changes.length, 0, `${changes.length} raster baselines changed; see ${output}/diff.json`);\n  console.log(`Golden passed: ${Object.keys(next.entries).length} slides, ${corpus.length} decks; no skipped corpus (${((performance.now() - started) / 1000).toFixed(1)} s).`);"
+        }
+      ]
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "commit": "d4259333a1105ce54d136ced0635f086d0f750ee",
+      "path": "test/suites.json",
+      "gitBlob": "779ba8102d9564c5240ad5b913d87bdc0fb12ab8",
+      "sha256": "0cc5af27ddaa55e443ce59f45c6d7ca0c067bf80ae1bad34bea48f580fd612c9",
+      "url": "https://github.com/OpenPresentation/opf-render/blob/d4259333a1105ce54d136ced0635f086d0f750ee/test/suites.json"
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "commit": "d4259333a1105ce54d136ced0635f086d0f750ee",
+      "path": ".github/workflows/npm-publish.yml",
+      "gitBlob": "c85b52ae62e894a802be1a1d749952f42b454663",
+      "sha256": "5ce709a60b6e66b582cf34702488193d6956ac27c97062d2116451edd98287b2",
+      "url": "https://github.com/OpenPresentation/opf-render/blob/d4259333a1105ce54d136ced0635f086d0f750ee/.github/workflows/npm-publish.yml",
+      "excerpts": [
+        {
+          "start": 28,
+          "end": 53,
+          "text": "      - run: npm install -g npm@11.16.0\n      - run: npm ci\n      - run: npm audit\n      - name: Verify release tag\n        if: startsWith(github.ref, 'refs/tags/')\n        run: |\n          VERSION=\"$(node -p \"require('./package.json').version\")\"\n          case \"${GITHUB_REF_NAME}\" in\n            \"opf-render-v${VERSION}\"|\"@openpresentation/opf-render@v${VERSION}\") ;;\n            *) echo \"Release tag does not match package version ${VERSION}.\"; exit 1 ;;\n          esac\n      - run: npm run typecheck\n      - run: npm run validate\n      - run: npm test\n      - run: npm run test:code\n      - name: Refuse a declared unreleased core (RR-55)\n        run: node scripts/published-core-gate.mjs --forbid\n      - run: npm run test:packed\n      - name: Verify Playwright image version\n        run: node -e \"if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');\"\n      - run: npm run test:browser\n      - run: npm run test:code-browser\n      - run: npm pack --dry-run\n      - run: npm publish --access public --provenance\n\n  # RR-20: every npm publish creates its GitHub Release (from 0.18 on), notes taken from the version's CHANGELOG.md section."
+        }
+      ]
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "commit": "d52fa6ce499ad750bfc1b237dc4ae1abb0303d4c",
+      "path": "scripts/fixtures/opf-examples-png.rr-71.sha256.json",
+      "gitBlob": "7817340f1754e060b14139d99d80b126861c3403",
+      "sha256": "8e3664581b0b03423caa5a761302f0f298467012b30f00097980ba3dace8afdb",
+      "url": "https://github.com/OpenPresentation/opf/blob/d52fa6ce499ad750bfc1b237dc4ae1abb0303d4c/scripts/fixtures/opf-examples-png.rr-71.sha256.json"
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "commit": "d52fa6ce499ad750bfc1b237dc4ae1abb0303d4c",
+      "path": "scripts/registry-golden.mjs",
+      "gitBlob": "760f17d85c2492e31ab14f7526e488a247f4d7ec",
+      "sha256": "4f081cd907d0212ff0b847db13a21ac8dfecc3be3082b52288a5115e3f8849c0",
+      "url": "https://github.com/OpenPresentation/opf/blob/d52fa6ce499ad750bfc1b237dc4ae1abb0303d4c/scripts/registry-golden.mjs",
+      "excerpts": [
+        {
+          "start": 10,
+          "end": 21,
+          "text": "// Same digest as the renderer's test/golden.mjs: sha256 of the sorted [file, key-sorted deck] pairs.\nexport function examplesDigest(examples) {\n  const corpus = examples.map(({ file, deck }) => ({ file: file.replace(/^examples\\//, ''), deck }));\n  corpus.sort((a, b) => (a.file < b.file ? -1 : a.file > b.file ? 1 : 0));\n  return createHash('sha256').update(JSON.stringify(corpus.map(({ file, deck }) => [file, canonical(deck)]))).digest('hex');\n}\n\nfunction canonical(value) {\n  if (Array.isArray(value)) return value.map(canonical);\n  if (value && typeof value === 'object') return Object.fromEntries(Object.keys(value).sort().map((key) => [key, canonical(value[key])]));\n  return value;\n}"
+        }
+      ]
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "commit": "d52fa6ce499ad750bfc1b237dc4ae1abb0303d4c",
+      "path": "ecosystem.lock.json",
+      "gitBlob": "3dfae646c6d8003d33e305c359f06fe618b46f7a",
+      "sha256": "d514180262d5643dc57a32ea061498226b0027a7b74672a190d38989531e1768",
+      "url": "https://github.com/OpenPresentation/opf/blob/d52fa6ce499ad750bfc1b237dc4ae1abb0303d4c/ecosystem.lock.json"
+    },
+    {
+      "repository": "OpenPresentation/opf-editor",
+      "commit": "4c29be041bb3b4ea67b4b086e69c13395542377c",
+      "path": "package.json",
+      "gitBlob": "e8104f83a52eefbce693f9babf91f60515a5beee",
+      "sha256": "3017d8506b05ded78bf0106827375c5f42cd1e9ee55690573e112e09b4f79326",
+      "url": "https://github.com/OpenPresentation/opf-editor/blob/4c29be041bb3b4ea67b4b086e69c13395542377c/package.json"
+    },
+    {
+      "repository": "OpenPresentation/opf-editor",
+      "commit": "4c29be041bb3b4ea67b4b086e69c13395542377c",
+      "path": "package-lock.json",
+      "gitBlob": "e273487be514c1de522155eef20352bc23c90a2e",
+      "sha256": "fcdfb0dd2c4405f13a20af974ef24e50ed393cdfa5069ff48d2d79c41db0919d",
+      "url": "https://github.com/OpenPresentation/opf-editor/blob/4c29be041bb3b4ea67b4b086e69c13395542377c/package-lock.json"
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "commit": "d4259333a1105ce54d136ced0635f086d0f750ee",
+      "path": "package.json",
+      "gitBlob": "175f7d2f6980f0492c1ca4675833d34c7845bdce",
+      "sha256": "d7e9603e55784ba72e724bf979aff9aa7821ae66658b0181b5b0f07f36a7ddc5",
+      "url": "https://github.com/OpenPresentation/opf-render/blob/d4259333a1105ce54d136ced0635f086d0f750ee/package.json"
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "commit": "d4259333a1105ce54d136ced0635f086d0f750ee",
+      "path": "package-lock.json",
+      "gitBlob": "6dcce1c0f6c611686a5da432f1af5b77c3ac2efc",
+      "sha256": "1f5d06ec5217bda6ec3dc5f7b5be57b3db4274f3648c672e82ecf225d2708789",
+      "url": "https://github.com/OpenPresentation/opf-render/blob/d4259333a1105ce54d136ced0635f086d0f750ee/package-lock.json"
+    },
+    {
+      "repository": "OpenPresentation/opf-editor",
+      "commit": "4c29be041bb3b4ea67b4b086e69c13395542377c",
+      "path": "test/packed-install.mjs",
+      "gitBlob": "0a281536c1c2ad68476e1d09008bc1c2f9fcbfb7",
+      "sha256": "d0cd047e5aae00877afe88333f5d6371894160960ceeaf8ef3822c3cccea21d1",
+      "url": "https://github.com/OpenPresentation/opf-editor/blob/4c29be041bb3b4ea67b4b086e69c13395542377c/test/packed-install.mjs",
+      "excerpts": [
+        {
+          "start": 19,
+          "end": 24,
+          "text": " // The consumer installs the published renderer, so its font packages (exact-pinned optional peers of opf-render) are the versions\n // that renderer declares, not the editor's own development pins (which follow the renderer source the ecosystem tests link).\n const renderSpec=manifest.devDependencies['@openpresentation/opf-render'];\n let published=JSON.parse(npm(['view',`@openpresentation/opf-render@${renderSpec}`,'version','peerDependencies','--json'],temporary));\n if(Array.isArray(published))published=published.at(-1);\n const fontPeers=Object.fromEntries(Object.entries(published.peerDependencies??{}).filter(([name])=>name.startsWith('@expo-google-fonts/')));"
+        },
+        {
+          "start": 40,
+          "end": 42,
+          "text": " }\n assert.equal(dependencies['@openpresentation/opf-render'].version,published.version,'the consumer resolved the renderer whose peers it installed');\n for(const [name,version] of Object.entries(fontPeers))if(manifest.devDependencies[name])assert.equal(lock.packages['node_modules/'+name]?.version,version,`${name} is the version the published renderer pins`);"
+        }
+      ]
+    },
+    {
+      "repository": "OpenPresentation/opf-editor",
+      "commit": "b2c9bab8a58b17ec3aa10c6360c0870067943986",
+      "path": ".github/workflows/ci.yml",
+      "gitBlob": "9f23f5c589bf01e4a79738d100b3fb565e81f0b8",
+      "sha256": "90ad5c5be70468465d0882f595d345d0218ee993f4a4f08aa531cb2020d19c7b",
+      "url": "https://github.com/OpenPresentation/opf-editor/blob/b2c9bab8a58b17ec3aa10c6360c0870067943986/.github/workflows/ci.yml"
+    }
+  ],
+  "logs": [
+    {
+      "originalPath": "/private/tmp/opf-supervisor-20261010/patch-prerequisites-final-gate.log",
+      "portableFile": "patch-prerequisites-final-gate.log",
+      "sha256": "42761fc81d6055a5b9df0515f3cbebed63d7d6d1ce3035ba5aa6dd9bf7c71600",
+      "bytes": 2466
+    },
+    {
+      "originalPath": "/private/tmp/opf-supervisor-20261010/patch-prerequisites-next-gate.log",
+      "portableFile": "patch-prerequisites-next-gate.log",
+      "sha256": "42b7b5a2d085b1e3ca564c24e229abe8ab01dcea59ee823e4c484be5b9886e18",
+      "bytes": 3556
+    },
+    {
+      "originalPath": "/private/tmp/opf-supervisor-20261010/release-retry-batch-gate.log",
+      "portableFile": "release-retry-batch-gate.log",
+      "sha256": "fc64677bb4e989c69e8f539856cfd56adce406518901194273cffdb47da1aa3a",
+      "bytes": 1463
+    },
+    {
+      "originalPath": "/private/tmp/opf-supervisor-20261010/render-retry-release-commit-gate.log",
+      "portableFile": "render-retry-release-commit-gate.log",
+      "sha256": "a144cd397035bf7590c12923031891b689247f6a8cbcf872246032f702cbbe1d",
+      "bytes": 1046
+    },
+    {
+      "originalPath": "/private/tmp/opf-supervisor-20261010/render-tag-execute.log",
+      "portableFile": "render-tag-execute.log",
+      "sha256": "c25f032dc3e867f55b387dc6dca4aa7c85249907e43299b0faef285b7b9e9bc7",
+      "bytes": 2572
+    },
+    {
+      "originalPath": "/private/tmp/opf-supervisor-20261010/render-independent-verify.log",
+      "portableFile": "render-independent-verify.log",
+      "sha256": "fd5b5ca0a80f2cb838f26b8c779a86e1fe9d8381572792fadabe5237201f7068",
+      "bytes": 1165
+    },
+    {
+      "originalPath": "/private/tmp/opf-supervisor-20261010/editor157-merged154-packed.log",
+      "portableFile": "editor157-merged154-packed.log",
+      "sha256": "cbe2e6aa05dbfd10cc8b82bd9a605b49c135ebb843f39b553cb74880b8959f0a",
+      "bytes": 5464
+    }
+  ],
+  "missingProof": [
+    "No saved full process-environment dump for original T06; not required to prove the literal two committed override inputs.",
+    "No new historical raster/browser/native reproduction was attempted. No claimed reconstruction of unretained raw hosted job steps."
+  ],
+  "networkCalls": 0,
+  "tests": 0,
+  "trackerOrSourceMutations": 0
+}

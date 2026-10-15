@@ -1,6 +1,14 @@
 # Release readiness: handoff of 2026-10-11
 
-## Current RR-68 work checkpoint — 2026-10-15 UTC
+## Current original acceptance and owner boundaries — 2026-10-15
+
+Original T16/T40 are accepted on actual core #670 `c36727c64d15d7584f66b80f5257c94c0ada4083`, with the [terminal scoped supervisor decision](../../evidence/rr-20-sites-current-2026-10-14/terminal-supervisor-acceptance.json). The original checklist is **40/40 accepted**; broader progress remains **77/84** with seven open rows. Earlier 38/40/conditional descriptions below are dated sealing snapshots, not current blockers.
+
+RR-17 is not wholly owner-bound: #581/#582 are concrete per-script/requested-family fallback engineering follow-ups; their affected native acceptance remains separate. #361/#364/#363 are closed, Didot documented-visual is accepted, and the 23-name four-host commission is complete. No old host commission or reroute permission is required again. [Current scope](../../evidence/rr-68-original-acceptance-index-2026-10-15/font-followup-scope.json) retains nativeVisual 1.0105/script-gap and the accepted 17 native plus four UI/41-unexecuted limits.
+
+Actual rollout/configuration choices, sibling queue rulesets, App capability verification and authorized cleanup retain their own boundaries; RR-51 metadata 404s are unknown/not-visible, not proof of absent setup. Prior deployment holds were superseded by the owner's explicit authorization and accepted production delivery. Later Editor 0.20.1 release preparation, source roll and site adoption are not completed by this records proposal. Optional [T06/T09 source/log indexing](../../evidence/rr-68-original-acceptance-index-2026-10-15/README.md) strengthens historical traceability without reruns or a new gate.
+
+## Earlier RR-68 work checkpoint — 2026-10-15 01:27 UTC (retained)
 
 Four independent Actions source PRs actually merged through their normal required gates: core #672 `62eb49b1`, renderer #241 `7c13fd0c`, PPTX #256 `d14dd723` and existing public Editor #166 `9689a4b0`. [Portable source acceptance and current work](../../evidence/rr-68-current-work-2026-10-15/README.md) bind the exact commits/trees/postimages, supervisor acceptance and a fresh complete census at 01:27:28 UTC: **5 open PRs (2 drafts), 41 issues**, all eight primaries clean and matching defaults. This observation preceded creation of the tracker proposal; no new or moved item is automatically adopted.
 
@@ -195,7 +203,7 @@ intentional breaking-change version gate awaits release prep; the registry golde
 workflow and visual review. Those are real remaining gates, not waived failures. Cross-engine and published-consumer
 acceptance must be rerun on the final dependency set.
 
-## Owner actions (agents cannot do these)
+## Historical owner-action snapshot — 2026-10-11 (retained; current boundaries above)
 
 1. **Completed: npm trusted publisher for `@openpresentation/gallery`** at https://www.npmjs.com/package/@openpresentation/gallery/access
    (GitHub Actions, organization `OpenPresentation`, repository `gallery`, workflow `gallery-publish.yml`, no
