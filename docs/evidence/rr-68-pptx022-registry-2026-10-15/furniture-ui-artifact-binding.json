@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "scope": "Narrow read-only source-candidate native menu observation, separately bound by exact Mac export to genuine PPTX0.20.2; no new whole-suite/native-font acceptance",
+  "macQualification": {
+    "at": "2026-10-15T07:04:57.661Z",
+    "sourceRevision": "6d92566d1cbc935a3f176f8312ee4b3f0e0cc8a9",
+    "case": "furniture-layouts",
+    "producer": {
+      "package": "@openpresentation/opf-pptx",
+      "version": "0.20.2",
+      "gitHead": "19f775a74905ff8760c21e0a3520e2f0aad19f6e"
+    },
+    "sourceFiles": [
+      {
+        "path": "scripts/native-acceptance/fixture-source.mjs",
+        "sha256": "69847a11df4d91322bdfe03db3a084e951f673bf56e59cb700c14f9a9ee8dd04"
+      },
+      {
+        "path": "scripts/native-acceptance/fixtures.mjs",
+        "sha256": "8d0f06767ae6f3ea9d50a0565c8905b09efa1059f7fa3fc1d7463b14d7998e38"
+      },
+      {
+        "path": "scripts/native-acceptance/generate.mjs",
+        "sha256": "f0caeea9f1f377214ffc94c3a32970e37bb3e053d32038b81055f5581900d5bd"
+      }
+    ],
+    "options": {
+      "seed": 1,
+      "timestamp": "2026-01-01T00:00:00Z",
+      "date": "2026-10-10",
+      "provenance": "full",
+      "fontProfile": "direct-pptx-export; no prepared font handle",
+      "catalogLayoutsSha256": "4f1f64fa1604c22b8437be29b17ac59429786109c5a676194286de15b43728ea"
+    },
+    "planSha256": "028159581a492876a5bf7ad71938cb1ddce8dfefb469e673fb01d665691020ec",
+    "authoritySha256": "c00762414476d4b592cab1ed7bfef76fad9f838aa7e54503fa8d5fb9ab9593b0",
+    "consumerLockSha256": "1498642c1882cdc2a530bc4cd921bd1b6ea625df4c0dfd2dc61187c65a8d44d1",
+    "archive": {
+      "path": "inputs/furniture-layouts.pptx",
+      "sha256": "c437652b119b64fe97eff55ce715a7fe55725d839df3596fe141982ac7d3b893",
+      "bytes": 95942
+    },
+    "parts": 148,
+    "diagnostics": [],
+    "wholeArchiveEqualsSourceCandidateObservedInput": true,
+    "sourceCandidate": "560571c7ced447484c55c673c8fbeb8f69f838a4",
+    "sourceCandidateReceiptUnchanged": true,
+    "exportCalls": 1,
+    "officeInvokedByThisMacCommand": false,
+    "windowsFilesReadOrTransferred": false,
+    "fullSuiteGenerated": false,
+    "globalNativeAcceptance": false
+  },
+  "macQualificationSha256": "76b69c70a13621d3c455f1ffffd2bfd72596ff6689f5a96030fd1da2f2a006a5",
+  "windowsObservation": {
+    "attributedBy": "Supervisor independently verified direct human authorization and the Windows-local result; this Mac agent did not read Windows files",
+    "humanResume": {
+      "time": "2026-10-15 06:54 UTC",
+      "directHumanText": "ok go ahead with powerpoint now",
+      "scope": "The prepared read-only source-candidate category observation"
+    },
+    "sourceCandidatePptx": "560571c7ced447484c55c673c8fbeb8f69f838a4",
+    "sourceCandidateCore": "ad0bc47c4f23735f7b0ea1eea7edf8f6710e3ec1",
+    "powerPointVersion": "16.0.20430.20146",
+    "path": "Home > Layout",
+    "observedCategory": "pptx.gallery",
+    "namedLayoutEntries": 31,
+    "inputAndCopySha256": "c437652b119b64fe97eff55ce715a7fe55725d839df3596fe141982ac7d3b893",
+    "bytes": 95942,
+    "suiteSha256Prefix": "1b6748cb",
+    "sealedFilesUnchanged": 336,
+    "copyClosedWithoutSaving": true,
+    "unrelatedUserDocumentPreserved": "new-custom.pptx",
+    "resultWindowsLocalPath": "C:/opf-work/theme-candidate/ui-resume-04/result.json",
+    "resultSha256": "d27f3ec1130323d9f8487d83999f35c9c64e119a83944278292937cba7598b21",
+    "screenshotsRemainWindowsLocal": true,
+    "windowsEvidenceTransferred": false
+  },
+  "genuineArtifactBinding": {
+    "wholeArchiveByteIdentical": true,
+    "package": "@openpresentation/opf-pptx",
+    "version": "0.20.2",
+    "gitHead": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+    "claim": "The genuine Mac export exactly reproduces the bytes observed in the source-candidate native UI; no claim that Windows installed or executed the published package"
+  },
+  "historicalFlags": {
+    "sourceCandidateReceiptUnchanged": true,
+    "nineArchiveProofUnchanged": true,
+    "physicalWindowsHoldInEarlierReceipts": "Prior assignment context, before this agent received the independently verified human-resume update; it does not describe an Office action by the Mac nine-archive driver."
+  },
+  "originalNativeScope": {
+    "selectedCases": 17,
+    "actualUiOperations": 4,
+    "unexecutedOf58": 41,
+    "unchanged": true
+  },
+  "globalNativeAcceptance": false,
+  "fontAcceptanceAdded": false,
+  "newReleaseOrSiteGate": false
+}
