@@ -130,15 +130,24 @@ const CONTEXT_NODES =
 const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){pageInfo{hasNextPage} nodes{id checkRuns(first:1){totalCount} status conclusion app{slug} workflowRun{databaseId event runAttempt workflow{name}}}}`;
 const SUITE_RUNS = 'checkRuns(first:100){pageInfo{hasNextPage endCursor} nodes{__typename databaseId name status conclusion detailsUrl startedAt checkSuite{id commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}}}';
 const SUITE_FIELDS = `id status conclusion commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}} ${SUITE_RUNS}`;
+/** A cancelled suite with no failed jobs needs real newer same-workflow reports before its inconsistency is superseded. */
+function supersededCancellationWithoutFailedJobs(suite, suites, runsBySuite) {
+  const workflow = suite.workflowRun?.workflow?.name, runId = suite.workflowRun?.databaseId;
+  if (suite.app?.slug !== 'github-actions' || suite.status !== 'COMPLETED' || suite.conclusion !== 'CANCELLED' || !runsBySuite.get(suite.id).every(run => run.status === 'COMPLETED' && ['SUCCESS','SKIPPED'].includes(run.conclusion) && run.checkSuite?.app?.slug === 'github-actions' && run.checkSuite?.workflowRun?.databaseId === runId && run.checkSuite?.workflowRun?.workflow?.name === workflow) || typeof workflow !== 'string' || !workflow || (!Number.isSafeInteger(runId) || runId <= 0)) return false;
+  return suites.some(newer => newer.app?.slug === 'github-actions' && newer.commit.oid === suite.commit.oid && newer.workflowRun?.workflow?.name === workflow && Number.isSafeInteger(newer.workflowRun?.databaseId) && newer.workflowRun.databaseId > runId &&
+    (newer.status !== 'COMPLETED' || newer.conclusion === 'SUCCESS' || (RED_CONCLUSIONS.has(newer.conclusion) && newer.conclusion !== 'CANCELLED')) &&
+    runsBySuite.get(newer.id).some(run => run.checkSuite?.workflowRun?.databaseId === newer.workflowRun.databaseId && run.checkSuite?.workflowRun?.workflow?.name === workflow && (run.status !== 'COMPLETED' || run.conclusion === 'SUCCESS' || (RED_CONCLUSIONS.has(run.conclusion) && run.conclusion !== 'CANCELLED'))));
+}
 /** Actual check runs are authoritative when GitHub has not materialized a rollup. Never synthesize success from a suite. */
 export async function suiteContexts(graphql, owner, name, oid) {
-  const nodes = [], suites = [], seenSuites = new Set(), suiteCursors = new Set();
+  const nodes = [], suites = [], runsBySuite = new Map(), seenSuites = new Set(), suiteCursors = new Set();
   const fetch = async query => {const result = await graphql(query);if(result?.errors?.length) throw new Error('check-suite GraphQL response contains errors');return result;};
   const validatePage = connection => {if (!Array.isArray(connection?.nodes) || typeof connection.pageInfo?.hasNextPage !== 'boolean') throw new Error('check-suite pagination is incomplete');};
   const appendRuns = (runs, suiteId) => {
     for (const run of runs.nodes ?? []) {
       if (run.checkSuite?.id !== suiteId || run.checkSuite?.commit?.oid !== oid) throw new Error('check run belongs to a different or missing commit');
       nodes.push(run);
+      runsBySuite.get(suiteId).push(run);
     }
   };
   let cursor = null;
@@ -156,7 +165,7 @@ export async function suiteContexts(graphql, owner, name, oid) {
       if (seenSuites.has(suite.id)) throw new Error('duplicate check suite in pagination');
       seenSuites.add(suite.id);
       suites.push(suite);
-      const firstRun = nodes.length;
+      runsBySuite.set(suite.id, []);
       let runs = suite.checkRuns;
       validatePage(runs);
       const runCursors = new Set();
@@ -171,13 +180,17 @@ export async function suiteContexts(graphql, owner, name, oid) {
         validatePage(runs);
         appendRuns(runs, suite.id);
       }
-      if (suite.status === 'COMPLETED' && !['SUCCESS','SKIPPED','NEUTRAL'].includes(suite.conclusion) && !nodes.slice(firstRun).some(run => run.status === 'COMPLETED' && !['SUCCESS','SKIPPED','NEUTRAL'].includes(run.conclusion))) throw new Error('failed check suite has no corresponding failed check run');
     }
     if (connection.pageInfo.hasNextPage && (typeof connection.pageInfo.endCursor !== 'string' || !connection.pageInfo.endCursor)) throw new Error('check-suite pagination lacks cursor');
     cursor = connection.pageInfo.hasNextPage ? connection.pageInfo.endCursor : null;
     if (cursor && suiteCursors.has(cursor)) throw new Error('repeated check-suite cursor');
     if (cursor) suiteCursors.add(cursor);
   } while (cursor);
+  // Read every suite/run page first: a genuine successor may appear after its cancelled predecessor.
+  for (const suite of suites) {
+    const runs = runsBySuite.get(suite.id);
+    if (suite.status === 'COMPLETED' && !['SUCCESS','SKIPPED','NEUTRAL'].includes(suite.conclusion) && !runs.some(run => run.status === 'COMPLETED' && !['SUCCESS','SKIPPED','NEUTRAL'].includes(run.conclusion)) && !supersededCancellationWithoutFailedJobs(suite, suites, runsBySuite)) throw new Error('failed check suite has no corresponding failed check run');
+  }
   return {nodes,suites};
 }
 const PR_FIELDS = `id number url state merged isDraft mergeCommit{oid} headRefOid baseRefName mergeable mergeStateStatus isInMergeQueue mergeQueueEntry{state position} timelineItems(last:1,itemTypes:[REMOVED_FROM_MERGE_QUEUE_EVENT]){nodes{... on RemovedFromMergeQueueEvent{reason createdAt}}} commits(last:1){nodes{commit{oid ${CHECKS}}}}`;
