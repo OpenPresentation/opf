@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.20.1 (2026-10-15)
+
+- Update the JSON editor CodeMirror dependencies from the reviewed public dependency proposal and align development Playwright 1.64.0 with the verified Microsoft container digest and existing workflow version checks.
+- RR-20: the playground batches missing slide thumbnails through one whole-deck renderer resolution, so applying a long deck avoids composing it once per thumbnail. Cache invalidation includes inherited deck metadata and registered catalogs; hidden slides and individual preview errors keep their existing behavior. This changes the example app only, not the editor library.
+
 ## 0.20.0 (2026-10-14)
 
 Editor 0.20.0 uses published core 0.20.1, renderer/PPTX 0.20.0 and Gallery 3, with nested-array layout authoring and the shared design defaults. The temporary unreleased-core declaration has been removed for this release.
