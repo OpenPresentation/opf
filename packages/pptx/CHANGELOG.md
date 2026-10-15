@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.20.2 (2026-10-15)
+
+- Align Playwright 1.64.0 with its verified digest-pinned browser image and version guards. Retain the vendored engine runtime dependency parse-xml at exact 4.2.3 and add an isolated production-only packed control that rejects missing or escaped runtime parser dependencies.
+- Name the generated default PowerPoint theme `pptx.gallery` so Home > Layout can use the requested category name; preserve explicitly selected catalog or embedded themes, palette, fonts and layout names.
+
 ## 0.20.1 (2026-10-14)
 
 Patch release: name generated slide masters pptx.gallery.
