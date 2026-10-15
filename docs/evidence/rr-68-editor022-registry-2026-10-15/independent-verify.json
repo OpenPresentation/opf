@@ -1,0 +1,56 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "name": "npm version",
+      "ok": true,
+      "detail": "@openpresentation/opf-editor@0.20.2, integrity sha512-ofK/cIZ7DJaM6WcIGeBGEau4p+VW0YaKrAM6PVKEgMNfwp2t2mfhzzmyTBCP1ePzC1TVAwZeZqzmA66U0jUwIg=="
+    },
+    {
+      "name": "tag",
+      "ok": true,
+      "detail": "OpenPresentation/opf-editor opf-editor-v0.20.2 -> ac3bf55ead8e96053ca79344dd1849b3f60e357e"
+    },
+    {
+      "name": "gitHead",
+      "ok": true,
+      "detail": "gitHead ac3bf55ead8e96053ca79344dd1849b3f60e357e = tag commit ac3bf55ead8e96053ca79344dd1849b3f60e357e"
+    },
+    {
+      "name": "tag on main",
+      "ok": true,
+      "detail": "ac3bf55ead8e is on opf-editor main (identical)"
+    },
+    {
+      "name": "version at tag",
+      "ok": true,
+      "detail": "package.json at ac3bf55ead8e carries 0.20.2"
+    },
+    {
+      "name": "dist.attestations",
+      "ok": true,
+      "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-editor@0.20.2)"
+    },
+    {
+      "name": "SLSA provenance",
+      "ok": true,
+      "detail": "built by .github/workflows/release.yml on refs/tags/opf-editor-v0.20.2 from ac3bf55ead8e (https://github.com/OpenPresentation/opf-editor/actions/runs/38718731536/attempts/1)"
+    },
+    {
+      "name": "npm audit signatures",
+      "ok": true,
+      "detail": "3 verified, 0 invalid, 0 missing; @openpresentation/opf-editor@0.20.2 has a verified attestation"
+    },
+    {
+      "name": "GitHub release",
+      "ok": true,
+      "detail": "https://github.com/OpenPresentation/opf-editor/releases/tag/opf-editor-v0.20.2"
+    },
+    {
+      "name": "dist-tag",
+      "ok": true,
+      "info": true,
+      "detail": "latest"
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "at": "2026-10-15T10:45:24.233466+00:00",
+  "scope": "Bounded authentic installed E22 successor qualification. No nine-archive requalification, full58 native factory, font/native or live-site acceptance implied.",
+  "node": "v24.21.0",
+  "pnpm": "10.33.2",
+  "planSha256": "f2a43aafb136fa6c7d83dc9f14f145e400244380ee4aa78f089f489540b1be83",
+  "authoritySha256": "1273b12e6fad9e937042188d55f47f7a534439a06e9de9c2c8948d84b57ca956",
+  "consumerManifestSha256": "74f7e969fac884f4f3389fc91f1c1c2784fd215b76724ff8d18a3cd0f131913e",
+  "consumerLockSha256": "cf4942fa3fc1f467db4e9dd746529003ad1b592c501c90cadb80ad59b52e0587",
+  "matrixManifestSha256": "caf2296daf498379043d1ef1591da7a605e27b488dd925dcc502c9941d3771af",
+  "matrixLockSha256": "97549a3e3ee35a31231de7f4695c1842d86a88012706f2d829b8bdef00549a30",
+  "normalLockDelta": [
+    "root dependencies editor version",
+    "node_modules/@openpresentation/opf-editor version, tarball and integrity"
+  ],
+  "otherFiveAuthorityAndInstalledPayloadsExact": true,
+  "oneCore": [
+    "node_modules/@openpresentation/opf"
+  ],
+  "exampleRef": "2ac0268359f48123031ef537fcc0c31d7c41a1df",
+  "passed": [
+    "owned frozen repository install",
+    "maintained matrix update-lock",
+    "fresh genuine six-root registry lock/install",
+    "strict authority identity/integrity/containment and one-Core",
+    "other-five package payload inventories exact",
+    "maintained registry-toolchain resolution/imports for five library roots; CLI identity through contained manifest/lock",
+    "maintained matrix NodeNext, Bundler, emit",
+    "maintained matrix compiled smoke",
+    "registered Gallery edit/render SVG+PNG/PPTX import/exact undo-redo control",
+    "unchanged installed-payload selection browser",
+    "mapped repository check:changed"
+  ],
+  "consumerRemainedReadOnlyAfterProducerHandoff": true,
+  "logs": {
+    "owned-frozen-install.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/owned-frozen-install.log",
+      "sha256": "dd179cd0d186732b74f5c0c58a0b67411be5976b9a1ac0f686d7f8f52fdd7568"
+    },
+    "matrix-update-lock.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/matrix-update-lock.log",
+      "sha256": "a54a5ad285aa9285d86b5f5bd69da286dae3321bb0cfeb074fbc1c2cd7ba20f3"
+    },
+    "matrix-prepare.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/matrix-prepare.log",
+      "sha256": "ee40f76d99e52fe600804da463a91876ec6b02da8748c75d01a0aa119ca43256"
+    },
+    "six-root-lock.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/six-root-lock.log",
+      "sha256": "6c430fd085fbe29f6ebfde6245cef495ade54db0c850c5dc6fd7c858e6bdb2b8"
+    },
+    "six-root-install.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/six-root-install.log",
+      "sha256": "1cd9e26314b87e0eaefd3dc1ee3d215735ac7abb5a498c529c48f014f959c012"
+    },
+    "matrix-smoke.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/matrix-smoke.log",
+      "sha256": "7bddd9aca8e5410f2b80dd6532540977c5d7fef1c38aec082bf5bf842a0ac3cb"
+    },
+    "installed-browser-missing-cache.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/installed-browser-missing-cache.log",
+      "sha256": "8b9b0df192afac472bb3d390a24067896764b96b50ecf90e04d956dda6220e0d"
+    },
+    "browser-exact-install.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/browser-exact-install.log",
+      "sha256": "57203a7abbe8d732d5a1148a713f861ce6d9a113639614c2475c21df3a81e351"
+    },
+    "installed-browser-selection.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/installed-browser-selection.log",
+      "sha256": "a71af87cfe5c7361e4f64ab5a647fbe07733b87e88daa6adc258db30524985f2"
+    },
+    "affected-installed-controls.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/affected-installed-controls.log",
+      "sha256": "a2748eb19a30d37c5874f74fc05ea022c20955ccb370bd081e0ad446c4cd516b"
+    },
+    "activation-check-changed.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/activation-check-changed.log",
+      "sha256": "ca355b9b0250e29c3d1b9777c5fe7877c2bfefefb69cb8b7002f8757e448e73d"
+    }
+  },
+  "retainedProofs": {
+    "earlierP22NineArchive": "../rr-68-pptx022-registry-2026-10-15/nine-fallback-qualification.json",
+    "earlierFurnitureUiArtifactBinding": "../rr-68-pptx022-registry-2026-10-15/furniture-ui-artifact-binding.json"
+  },
+  "original40Accepted": 40,
+  "broaderCompleteOrDescoped": 77,
+  "broaderTotal": 84,
+  "nativeSelected": 17,
+  "nativeUiOperations": 4,
+  "nativeUnexecuted": 41,
+  "currentWindowsHold": true,
+  "newSiteRolloutClaim": false
+}

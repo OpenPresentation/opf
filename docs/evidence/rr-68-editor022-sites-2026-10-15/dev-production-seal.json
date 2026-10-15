@@ -1,0 +1,271 @@
+{
+  "at": "2026-10-15T11:13:59.475565+00:00",
+  "site": "https://www.pptx.dev",
+  "pr": "https://github.com/Data-Advantage/pptx-dev/pull/135",
+  "actualMerge": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+  "builtSource": "d6c991e2785b2aa493ef3a4889bac0ea639ef023",
+  "equalTree": "8cad0913679930fc04b8985294860f769b3dad99",
+  "trackedSourceClean": true,
+  "workerVersion": "eeaf4ea8-d6eb-4ee3-ac5a-87c4d954f106",
+  "trafficPercentage": 100,
+  "normalDeployExit": 0,
+  "graph": "Core0.20.1/Renderer0.20.0/Editor0.20.2/PPTX0.20.2/Gallery3.0.0",
+  "genuineEditorPublisher": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+  "sourceRefPreserved": "5a98de8f3ac42e5a5fef70204ed43998252cd8de",
+  "health200ExactBuiltSource": true,
+  "affectedAnonymousMaintainedTests": {
+    "passed": 3,
+    "unchangedTests": true,
+    "fullAssertionsRetained": true,
+    "registeredCatalogImportNegativeControlUndoRedo": true,
+    "canvasEditTabJsonYamlMarkdownCopyPptxReimportUndo": true,
+    "toolkitActualVersionsRenderEditUndoExport": true,
+    "localServerOrSecretSource": false
+  },
+  "actualBrowserPptx": {
+    "path": "/private/tmp/rr-editor022-dev-61/dev/test-results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author-export.pptx",
+    "sha256": "ad83e80cbf8db3528da0ff367140993d4bd9235030921a17ee974c8619026b4b",
+    "bytes": 76008,
+    "payloadFiles": 113,
+    "crcXmlAllValid": true,
+    "masterName": "pptx.gallery",
+    "bothThemeNamesAndFamilies": "pptx.gallery",
+    "allFontDeclarationsAndSlideTextMatchPrior": true,
+    "byteIdenticalAcceptedPriorBrowserPptx": true,
+    "changedPayloadParts": [],
+    "physicalPowerPointMenuClaim": false
+  },
+  "screenshotReview": {
+    "path": "/private/tmp/rr-editor022-dev-61/dev/test-results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author.png",
+    "sha256": "cec42c68e53a221463423ee4b40758d53b3ea1b598d92a3bac99b5930d156cc8",
+    "review": "Actual production screenshot viewed: selected title \u201cExport commits this title\u201d displays one visible purple selection rectangle; slide text and table render legibly.",
+    "scope": "Visual observation of this one retained screenshot; no new DOM outline-count assertion, native PowerPoint or general pixel-parity claim."
+  },
+  "legacyApi": {
+    "newPostAttempts": 0,
+    "priorAcceptedProofPreserved": true
+  },
+  "assets": {
+    "qualifiedAll291PublicAndServedBytesExact": true,
+    "schema29Data1Exact": true,
+    "wasm2Exact": true,
+    "selectedActualLiveAssetsByteEqual": 3,
+    "pass": true,
+    "files": 1216,
+    "maximumFileBytes": 25337824,
+    "all11ReviewedArtifactHashesUnchanged": true,
+    "all2WasmHashesUnchanged": true,
+    "cfCompressedMiB": 9.19
+  },
+  "authorization": {
+    "firstAutomaticRefusalPreserved": true,
+    "laterDirectUserRoleTranscriptIndependentlyVerified": true,
+    "sameActionReviewAcceptedWithNewEvidence": true,
+    "noAlternateRouteAccountOrCommand": true,
+    "credentialReadOnlyByApprovedDeployHelperAndSupportedCli": true,
+    "noRefreshByThisLane": true
+  },
+  "limits": [
+    "No signed-in, model-call, backend-account mutation, private local env/Clerk secret read, new login, settings or DNS changes.",
+    "Physical Windows remains explicit human HOLD; no reads/contact/use or native/global-fidelity claim.",
+    "Secret-dependent local browser cases remain unexecuted; three actual anonymous production journeys are separate passing proof.",
+    "No new legacy API POST or repeated historical full browser/font/native suite; prior accepted seals remain immutable."
+  ],
+  "refs": [
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/qualification/candidate-handoff.json",
+      "bytes": 12909,
+      "sha256": "32b1824fbd4756e225ef9faf7253e5e3a57760da7cb7284499bcd3f7b27b435b"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/qualification/pr-handoff.json",
+      "bytes": 1844,
+      "sha256": "207a1dcf2d6f33b5f187334ec9c029744251b114655006ad5dd06f554b94498b"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/qualification/artifact-proof.json",
+      "bytes": 4237,
+      "sha256": "011df5f960d28e24c8a6acf76f6f70d40096dfe887ca0ad0ddeaffe98153ee7a"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/qualification/actual-deploy.json",
+      "bytes": 406,
+      "sha256": "f6fef5d90184d517b991817ae442b254f96517ba3d5f528e4077bf822dbb3b47"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/qualification/actual-deploy.log",
+      "bytes": 6601,
+      "sha256": "1f4f0d1381dcc00bf5383094af49f2a9e39af8c0936d7af493921c044dd6e253"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/qualification/deployment-preflight.json",
+      "bytes": 530,
+      "sha256": "f4e1d4d9c888db46d373a5634c47e8d10e8c1ce70e824e093b73acca7a25a6d1"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/qualification/deploy-helper.diff",
+      "bytes": 559,
+      "sha256": "3fbb67825d9461259cd1e916436ca90047f2e4987969e1eb7eca379d27cf0714"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/qualification/deploy-owned-dev.py",
+      "bytes": 2617,
+      "sha256": "b9dece19e6063671a5b88c2ce8c2e9770c743a7fa94ad9bc84f88035cdf38866"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/qualification/deployment-approval-rejection.json",
+      "bytes": 536,
+      "sha256": "e002fd7ca6189380e821516193d36d050c97b4a4bf051d63d0d10d917e03b1a6"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/qualification/direct-human-deployment-authorization.json",
+      "bytes": 499,
+      "sha256": "3ca32b0a51b359d507ca50eb326ed59e9290910c415fe4b6aea9d573ef682556"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/actual-browser-export-archive.json",
+      "bytes": 281639,
+      "sha256": "2c8f6ddc02bb95ab7ba2de8c84b38872b4e1b27748f63e1b9a9047d55b3559a8"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/deploy-summary.json",
+      "bytes": 604,
+      "sha256": "cc50197162e6b5e61a34c1ddbc636b2c3951276c7f28fad8fa760f9d1e5cbe35"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/health-assets-execution.json",
+      "bytes": 468,
+      "sha256": "f1e6dc91f833aacf3f070cdfc887cbdbaacce8816517a33848473c872d5f4f47"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/health-assets-result.json",
+      "bytes": 1248,
+      "sha256": "f5bc8e5dfe7ec313dc59ceabb5282415369c3ff981ec0fe9c287e85d93b071f4"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/health-assets.log",
+      "bytes": 108,
+      "sha256": "51281b32874581dd62e123e21051652bacac6cd3885964a05a348e59f2b7591c"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/maintained-browser-execution.json",
+      "bytes": 678,
+      "sha256": "1e494f459dd04055d2ccfb15507478de893ddcfda83993c58b403635fbc929f9"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/maintained-browser.log",
+      "bytes": 656,
+      "sha256": "9204f282a455b804f85f514a180689f3190d98cd00f4bdb129910beed815e288"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/new-worker-active-deployments-receipt.json",
+      "bytes": 508,
+      "sha256": "3cd6d1e983b0abda0e13924e3987289ae195f565f778985f3b27f8eefa8edafe"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/new-worker-active-deployments.json",
+      "bytes": 419,
+      "sha256": "7cf6c85881584c1fc48476c22297fc238367005e90b1b93b85a24de751215ce3"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/new-worker-version-receipt.json",
+      "bytes": 513,
+      "sha256": "6e2ef18d9dff848e29ccd412a75be3fd4bf48849f19aef31e378ab759f158953"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/new-worker-version.json",
+      "bytes": 1684,
+      "sha256": "5a8e2b555c78aab187be041d644900c90687c28eaa77381d91102c379bf68e7d"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/postdeploy-artifact-limits.json",
+      "bytes": 151,
+      "sha256": "aa1b254d1789fc033769b94408ca7c599f078284e744f933ce040120a7597e1a"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/read-worker-metadata.py",
+      "bytes": 1472,
+      "sha256": "0796b94faf4cdb3c4a463993c0465cc4d31d68dee75a7038644aaaf8e489b61d"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/run.py",
+      "bytes": 1256,
+      "sha256": "d1d51bcba195be90c051895bad130caf1ad708f6e865cb67c4e549b13015df8b"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/screenshot-review.json",
+      "bytes": 560,
+      "sha256": "68547c2a2d37ac470de3558186a69c77eecaac4882b9cb99a0ac707e75648de7"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/verify-browser-archive.py",
+      "bytes": 3537,
+      "sha256": "f45872866f884ff6c054f1a8a7bda1f02a77a26ca170ed712fb8cd824ad155c0"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/verify-health-assets.mjs",
+      "bytes": 1956,
+      "sha256": "08c6c135da7764001d00ca383cc53b42c6f45bebb63fc46534e802d90f30ff5a"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/worker-metadata-execution.json",
+      "bytes": 470,
+      "sha256": "908944375a4c139d43e2bfbddd76c95e1b16b2fa2c14aae761cb7baac7728579"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/production/worker-metadata.log",
+      "bytes": 191,
+      "sha256": "3447ab889b8ce2b1c6038469226f9f35b3aff90ae46021a9c8e230e4bf00f469"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/dev-merge-receipt.json",
+      "bytes": 2161,
+      "sha256": "f51e8a5c419bb6043d10ba05380aaacc872ecb2b6a1f938450afad64d8fd97c4"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/verified-publication-receipt.json",
+      "bytes": 7414,
+      "sha256": "ca3a6a0d83631f7e154fb20101efc87dbaf80284c95ecc31087e6e5bb2f53d7f"
+    },
+    {
+      "path": "/private/tmp/rr-pptx022-dev-61/production/final-rollout-handoff.json",
+      "bytes": 9922,
+      "sha256": "66a8c4d38db76a95ffca1cc58b63b51f770572a143abc59a26f6abfb94a803c4"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/dev/test-results/.last-run.json",
+      "bytes": 45,
+      "sha256": "91d1c43004802cd49950d78eb11c8fa7d05da8ffffe219a8b13b2f561bc00903"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/dev/test-results/author-Author-imports-regi-abc9c--missing-catalog-diagnostic/catalog-import-controls.json",
+      "bytes": 3942,
+      "sha256": "1b8e7fd6146c2e2a484efef22ceea73266100e51bb6eb602541e0ede6f6e8ebd"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/dev/test-results/author-Author-imports-regi-abc9c--missing-catalog-diagnostic/unembedded-catalog-import.pptx",
+      "bytes": 73731,
+      "sha256": "9c935b9053eb285dd9d03d30e9c76202bdd72b9886543f3348a56fcba88741f2"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/dev/test-results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author-export.pptx",
+      "bytes": 76008,
+      "sha256": "ad83e80cbf8db3528da0ff367140993d4bd9235030921a17ee974c8619026b4b"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/dev/test-results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author.png",
+      "bytes": 111746,
+      "sha256": "cec42c68e53a221463423ee4b40758d53b3ea1b598d92a3bac99b5930d156cc8"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/dev/tests/e2e/author.spec.ts",
+      "bytes": 18089,
+      "sha256": "794c6c5846aa6c763c2dcce238c4b1348bfbba139a203b9051137d96b7add72d"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/dev/tests/e2e/toolkit.spec.ts",
+      "bytes": 1475,
+      "sha256": "262603d599976178dc7ab6c60f6c5b202f5e34c0173576a12a83515aa3ea96b8"
+    }
+  ]
+}

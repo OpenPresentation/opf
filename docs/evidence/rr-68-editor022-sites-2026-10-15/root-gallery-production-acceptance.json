@@ -1,0 +1,13 @@
+{
+  "at": "2026-10-15T11:20:52.950963+00:00",
+  "reviewer": "Root",
+  "actualMerge": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+  "worker": "d9749aaf-5a58-4d0e-8224-973425a858b7",
+  "traffic": 100,
+  "seal": {
+    "path": "/private/tmp/rr-editor022-sites-61/gallery-production-seal.json",
+    "sha256": "09baf6114b4c57c63943891253eedea00ad36eea4eea771b3c7eed60c8048459"
+  },
+  "independentReview": "All 23 referenced hashes, actual 2/2 canonical report, maintained asset verification log, postdeploy preservation, actual authored/default exported ZIP CRC/all XML and master/theme names checked. Actual source parent/tree/full patch accepted separately.",
+  "nativeClaim": false
+}

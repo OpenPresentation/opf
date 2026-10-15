@@ -1,0 +1,239 @@
+{
+  "scope": "Root-accepted source integration and100%-traffic production/live qualification for all three genuine E22 sites. Main test-only113 actually normally merged at0ff67a7e; no runtime redeploy, original1/2 and corrected local/canonical2/2 results remain distinct. Latest11:23 metadata/10:35 body census snapshots remain dated.",
+  "sourceIntegrations": {
+    "dev": {
+      "merge": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+      "tree": "8cad0913679930fc04b8985294860f769b3dad99",
+      "patchSha256": "49054f64140bbb0c8c6e721e8c3f2ebc6971a41c950df3a53a1288af2b08082b",
+      "wholeTreeAndPatchEqualReviewed": true,
+      "normalMerge": true,
+      "primaryDefaultClean": true
+    },
+    "main": {
+      "merge": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+      "tree": "7e9a563ed93059a979aed8bd1d742813ee688193",
+      "patchSha256": "d533a56caad4cce56ce8f2bf076faa961e6f480a3c44c872260c2443b97435a0",
+      "wholeTreeAndPatchEqualReviewed": true,
+      "normalMerge": true,
+      "primaryDefaultClean": true
+    },
+    "gallery": {
+      "merge": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+      "tree": "80d0a7de668959f0b3e45018f708fa204c495398",
+      "patchSha256": "870dc599dc16ccd4ada0e1772452300ad5c5d8bdea65a65e0de45eaebe9aa513",
+      "wholeTreeAndPatchEqualReviewed": true,
+      "normalMerge": true,
+      "primaryDefaultClean": true
+    }
+  },
+  "normalMergeObserverTerminalExit": 0,
+  "normalMergeObserverRemainsLive": false,
+  "main": {
+    "worker": "f829b0fb-bdcd-43e6-9c09-c453ac458dbe",
+    "trafficPercentage": 100,
+    "deployedRuntimeSource": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+    "originalMaintainedBrowser": {
+      "passed": 1,
+      "failed": 1,
+      "homepageSingleOutlinePassed": true,
+      "exportProductAndDownloadAssertionsPassedBeforeHardcodedLocalhostFailure": true,
+      "originalFailurePreserved": true,
+      "originalActualTwoSlideArchive": {
+        "path": "/private/tmp/rr-editor022-sites-61/main-live-browser-output/playground-downloads-the-p-9870a-o-request-to-another-origin-e2e/two-slide-check.pptx",
+        "sha256": "1ab09c888b1a3fea3fbe3781fc035910a30e9dbab41cdb6bc97b1a100e37897b",
+        "bytes": 77458,
+        "crcAndAllXmlPass": true,
+        "slides": 2,
+        "bothAuthoredTitlesPresent": true
+      }
+    },
+    "separateConfiguredOriginCorrection": {
+      "onlyChangedPath": [
+        "tests/e2e/playground-downloads.spec.ts"
+      ],
+      "patchSha256": "c1a0e8a1be72379e36ecc9d9006382f5ee8757405e07d97b10dc93f9f28af4b5",
+      "localPassed": 2,
+      "canonicalPassed": 2,
+      "allOriginalAssertionsRetained": true,
+      "actualArchiveByteExact": true,
+      "runtimeRedeployed": false,
+      "sourcePrIdentityPending": false,
+      "sourcePr": {
+        "url": "https://github.com/Data-Advantage/openpresentation-site/pull/113",
+        "head": "749c8a5abff2045d5aa5d366fbfd9498160812cc",
+        "tree": "f7fd4ad477f1ce59f72c26b6eadaeabfd14ba702",
+        "mergePending": false,
+        "runtimeSourceRemains": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+        "actualMerge": "0ff67a7ebd4b5adf102afd985c705dc018ea0482",
+        "normalGateExit": 0,
+        "actualMergeAt": "2026-10-15T11:31:27Z",
+        "actualSourceEqualityReceiptPending": false,
+        "actualSourceReceipt": {
+          "path": "main113-actual-merge-receipt.json",
+          "sha256": "205f7d8e448946dddd7bdd8a55553d99f54673f79d8a862763e27d5cb43175dc"
+        },
+        "actualWholeTreeAndFullPatchEqualReviewed": true,
+        "actualParent": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+        "primaryCleanAtActualMerge": true
+      }
+    }
+  },
+  "dev": {
+    "worker": "eeaf4ea8-d6eb-4ee3-ac5a-87c4d954f106",
+    "trafficPercentage": 100,
+    "actualMerge": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+    "builtSource": "d6c991e2785b2aa493ef3a4889bac0ea639ef023",
+    "equalTree": "8cad0913679930fc04b8985294860f769b3dad99",
+    "anonymousMaintainedJourneysPassed": 3,
+    "unchangedTests": true,
+    "actualBrowserPptx": {
+      "path": "/private/tmp/rr-editor022-dev-61/dev/test-results/author-anonymous-Author-ca-d560b-xport-and-undoable-reimport/author-export.pptx",
+      "sha256": "ad83e80cbf8db3528da0ff367140993d4bd9235030921a17ee974c8619026b4b",
+      "bytes": 76008,
+      "payloadFiles": 113,
+      "crcXmlAllValid": true,
+      "masterName": "pptx.gallery",
+      "bothThemeNamesAndFamilies": "pptx.gallery",
+      "allFontDeclarationsAndSlideTextMatchPrior": true,
+      "byteIdenticalAcceptedPriorBrowserPptx": true,
+      "changedPayloadParts": [],
+      "physicalPowerPointMenuClaim": false
+    },
+    "newLegacyApiPosts": 0
+  },
+  "gallery": {
+    "actualMerge": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+    "worker": "d9749aaf-5a58-4d0e-8224-973425a858b7",
+    "trafficPercentage": 100,
+    "productionSealPending": false,
+    "rootProductionAcceptance": "root-gallery-production-acceptance.json",
+    "unchangedMaintainedBrowserPassed": 2,
+    "declaredAssetHashesExact": 44,
+    "exampleRef": "2ac0268359f48123031ef537fcc0c31d7c41a1df",
+    "actualExports": [
+      {
+        "archive": {
+          "path": "/private/tmp/rr-editor022-sites-61/gallery-live-browser-output/editor-author-preview-edit-fbb9f-Point-then-reimport-offline/registry-editor-0201.pptx",
+          "sha256": "889ea3182ed8fa5e6eb8928ca400f01311cfd0654b1bcc23db1b6a8b31205ed9"
+        },
+        "parts": 113,
+        "crcAndAllXmlPass": true,
+        "masterNames": [
+          "pptx.gallery"
+        ],
+        "themeName": "Classic",
+        "themeFamily": "Classic",
+        "applicationThemeParts": [
+          "Classic",
+          "Classic"
+        ],
+        "exactSameBytesAsQualifiedLocalExport": true,
+        "nativeObservation": false
+      },
+      {
+        "archive": {
+          "path": "/private/tmp/rr-editor022-sites-61/gallery-live-default-browser.pptx",
+          "sha256": "48e4e81b818f611f075b74e16a053efff76d290f4450fbbed45515987c0c9378"
+        },
+        "parts": 111,
+        "crcAndAllXmlPass": true,
+        "masterNames": [
+          "pptx.gallery"
+        ],
+        "themeName": "pptx.gallery",
+        "themeFamily": "pptx.gallery",
+        "applicationThemeParts": [
+          "pptx.gallery",
+          "pptx.gallery"
+        ],
+        "exactSameBytesAsQualifiedLocalExport": true,
+        "nativeObservation": false
+      }
+    ]
+  },
+  "refs": [
+    {
+      "path": "terminal-site-merge-batch.json",
+      "sha256": "c1b7afbc1cecd8689e5b03a87a1eba6a62d2299346b1da0f0f11dd16a87870d1",
+      "source": "/private/tmp/rr-editor022-site-gates-61/terminal-batch-receipt.json"
+    },
+    {
+      "path": "main-production-seal.json",
+      "sha256": "6f406906112f5bc4d1013daa6b0565b9179343d81d5a29ad51b15b24a2014ff7",
+      "source": "/private/tmp/rr-editor022-sites-61/main-production-seal.json"
+    },
+    {
+      "path": "main-qualified-test-origin.json",
+      "sha256": "deca6b13a6b5d4be6b0e21fee28ed3326cb42ada4a8fedfcdea264d7f80a89ce",
+      "source": "/private/tmp/rr-editor022-main-test-origin-61/evidence/qualified-test-origin.json"
+    },
+    {
+      "path": "dev-production-seal.json",
+      "sha256": "c35ff6b21cb49543dc377d9bb160a91f56d3cf6aab21ae15cd6c9d0116df2992",
+      "source": "/private/tmp/rr-editor022-dev-61/production/final-rollout-handoff.json"
+    },
+    {
+      "path": "main-original-live-browser.json",
+      "sha256": "41db5d69f3b1e760041238af40b6be70772ba01b7c582e60cf0f24a001bea4d1",
+      "source": "/private/tmp/rr-editor022-sites-61/main-live-browser.json"
+    },
+    {
+      "path": "main-original-live-limitation.json",
+      "sha256": "197a7311da549981092611274e69992d685cc0ee7ccaeedf1f13c0e9c678f3df",
+      "source": "/private/tmp/rr-editor022-sites-61/main-live-primary-limitation.json"
+    },
+    {
+      "path": "main-origin-local-browser.json",
+      "sha256": "4903f8950d2ef81011b0984e4ed4ac5e5cf81ca4218679b2a7b1b56f60b7e6bd",
+      "source": "/private/tmp/rr-editor022-main-test-origin-61/evidence/local-browser.json"
+    },
+    {
+      "path": "main-origin-canonical-browser.json",
+      "sha256": "f356b3c848433cc5b9cf489c59c5f2b34e8acf0ad9ec188f776a1df08916a28d",
+      "source": "/private/tmp/rr-editor022-main-test-origin-61/evidence/canonical-browser.json"
+    },
+    {
+      "path": "root-accepted-site-boundaries.json",
+      "sha256": "10ff99bf6e01d1ac24ac4b755c0aa71162477df239bbb8eb62da4b9895810574"
+    },
+    {
+      "path": "main-origin-pr-handoff.json",
+      "sha256": "0cdda0496980d0faee525d08f2cc29d542396dfe34e0250d208afd6652816785"
+    },
+    {
+      "path": "gallery-production-seal.json",
+      "sha256": "09baf6114b4c57c63943891253eedea00ad36eea4eea771b3c7eed60c8048459"
+    },
+    {
+      "path": "root-gallery-production-acceptance.json",
+      "sha256": "0a177f27d3488b937318dcf9927bf6afc693ffa414c0fa148410cb48059941a8"
+    },
+    {
+      "path": "main113-terminal-gate.log",
+      "sha256": "4396917a9625ce5fb5f03893f541022f6c7790f596e8de0ce729cfc86967ab6f"
+    },
+    {
+      "path": "main113-terminal-exit.json",
+      "sha256": "61a6a5fcc1158de77d4e60ef27ea4d00da075360428a7e638e940297225c0833"
+    },
+    {
+      "path": "main113-sole-observer.json",
+      "sha256": "5ef9077bb7f3030c4543d0c26590dd7d4405f442d9fe5dcec947c9d29b39ced2"
+    },
+    {
+      "path": "main113-actual-merge-receipt.json",
+      "sha256": "205f7d8e448946dddd7bdd8a55553d99f54673f79d8a862763e27d5cb43175dc"
+    }
+  ],
+  "oldE21P22SealsUnchanged": true,
+  "original40Accepted": 40,
+  "broaderCompleteOrDescoped": 77,
+  "broaderTotal": 84,
+  "all84ItemStatusesAndCriteriaUnchanged": true,
+  "nativeSelected": 17,
+  "nativeUiOperations": 4,
+  "nativeUnexecuted": 41,
+  "physicalWindowsHold": true,
+  "noNewRegistryPublication": true,
+  "allThreeProductionSealsAccepted": true
+}

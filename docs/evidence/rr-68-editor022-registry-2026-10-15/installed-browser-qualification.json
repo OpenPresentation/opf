@@ -1,0 +1,54 @@
+{
+  "at": "2026-10-15T10:45:24.233146+00:00",
+  "scope": "Unchanged maintained selection-browser test from actual published gitHead against byte-exact copy of actual installed Editor0.20.2 payload; no source build, patch, alias or runtime package override.",
+  "installedPackage": "/private/tmp/rr68-editor022-records-61/opf/artifacts/npm/registry-consumer/node_modules/@openpresentation/opf-editor",
+  "payloadCopy": "/private/tmp/rr68-editor022-records-61/installed-browser/package",
+  "payloadFiles": 126,
+  "payloadInventorySha256": "6316788f641be381e95f0daeefa9796992f4e93dcff27e4facbc742806f05006",
+  "originalInventoryAndAllBytesUnchangedBeforeAfter": true,
+  "copiedPayloadAllOriginalBytesExactBeforeAfter": true,
+  "onlyAddedPayloadFile": "test/selection-browser.mjs",
+  "testGitHead": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+  "testSha256": "e2b245caa4c54e7e3f8042f93f17136a16e41126632ce0d2980a67e7843defca",
+  "runtimeModules": "/private/tmp/rr68-editor022-records-61/opf/artifacts/npm/registry-consumer/node_modules",
+  "harnessOnlyDependencies": {
+    "esbuild": "0.28.2",
+    "playwright": "1.64.0"
+  },
+  "harnessLockSha256": "6a0cec97ce7b8e8d951cdc0adef0a2eabbe193d7f1f0a6333c9dbd96418a32f0",
+  "initialAttempt": {
+    "exit": 1,
+    "reason": "Pinned Playwright1.64 requires Chromium1248; existing cache only1243, so browser did not launch.",
+    "log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/installed-browser-missing-cache.log",
+      "sha256": "8b9b0df192afac472bb3d390a24067896764b96b50ecf90e04d956dda6220e0d"
+    }
+  },
+  "exactRevisionSetup": {
+    "normalPinnedPlaywrightInstall": true,
+    "browsersPath": "/private/tmp/rr68-editor022-records-61/playwright-browsers",
+    "revision": 1248,
+    "log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/browser-exact-install.log",
+      "sha256": "57203a7abbe8d732d5a1148a713f861ce6d9a113639614c2475c21df3a81e351"
+    }
+  },
+  "finalAttempt": {
+    "exit": 0,
+    "unchangedTest": true,
+    "log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/installed-browser-selection.log",
+      "sha256": "a71af87cfe5c7361e4f64ab5a647fbe07733b87e88daa6adc258db30524985f2"
+    },
+    "allocatedPlaceholderChecks": 8,
+    "scalarScales": [
+      570,
+      856,
+      1000
+    ],
+    "keyboardPointerDraftCancelCommitUndo": true,
+    "richTextAndNonTextSelectionVisible": true
+  },
+  "acceptedConsumerManifestAndLockUnchanged": true,
+  "physicalPowerPointOrWindowsActions": 0
+}

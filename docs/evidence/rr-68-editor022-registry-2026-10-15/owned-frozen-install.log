@@ -1,0 +1,22 @@
+Scope: all 3 workspace projects
+Lockfile is up to date, resolution step is skipped
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages: +128
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 128, reused 128, downloaded 0, added 128, done
+
+devDependencies:
++ @biomejs/biome 2.5.14
++ @openpresentation/gallery 3.0.0
++ @typescript/native <- typescript 7.0.2
+
+. postinstall$ node scripts/materialize-gallery-catalog.mjs
+. postinstall: Done
+╭ Warning ─────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│   Ignored build scripts: esbuild@0.28.2.                                     │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed     │
+│   to run scripts.                                                            │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+Done in 741ms using pnpm v10.33.2

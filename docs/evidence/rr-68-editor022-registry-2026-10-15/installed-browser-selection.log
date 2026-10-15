@@ -1,0 +1,2 @@
+Selection outlines: 8 placeholders across wide/portrait cover and content slides use allocated box bounds, not glyph ink.
+Inline boundaries: one scalar editing outline at three scales, keyboard/pointer entry, draft rerender, cancel, commit and undo; rich text and non-text selection stay visible.

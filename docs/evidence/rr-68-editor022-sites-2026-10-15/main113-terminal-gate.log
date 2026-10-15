@@ -1,0 +1,6 @@
+11:19:20 Data-Advantage/openpresentation-site: could not read the rules of main (gh: Upgrade to GitHub Pro or make this repository public to enable this feature. (HTTP 403)); every check counts
+11:19:20 Data-Advantage/openpresentation-site main: no required checks: every check except neutral bots counts
+11:19:20 Data-Advantage/openpresentation-site#113 head 749c8a5a; checks pending (0/2 checks, no ruleset); running: site, cloudflare-build; 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+11:22:21 Data-Advantage/openpresentation-site#113 head 749c8a5a; checks pending (1/2 checks, no ruleset); running: site; 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+11:28:23 Data-Advantage/openpresentation-site#113 head 749c8a5a; checks green (2/2 checks, no ruleset); mergeable MERGEABLE/CLEAN; confirming at the next poll
+11:31:27 MERGED Data-Advantage/openpresentation-site#113 0ff67a7ebd4b5adf102afd985c705dc018ea0482

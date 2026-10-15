@@ -1,0 +1,82 @@
+[
+  {
+    "repository": "OpenPresentation/opf",
+    "path": "/Users/michael/Source/opf",
+    "remoteDefaultBranch": "main",
+    "observedRemoteDefaultHead": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+    "localHead": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+    "localPrimaryClean": true,
+    "localMatchesObservedRemoteDefault": true,
+    "localObservedAt": "2026-10-15T11:24:21.723494+00:00"
+  },
+  {
+    "repository": "OpenPresentation/opf-render",
+    "path": "/Users/michael/Source/opf-render",
+    "remoteDefaultBranch": "main",
+    "observedRemoteDefaultHead": "b87cf01f6b3c70556769d3ea2dcdc75365d5b2ae",
+    "localHead": "b87cf01f6b3c70556769d3ea2dcdc75365d5b2ae",
+    "localPrimaryClean": true,
+    "localMatchesObservedRemoteDefault": true,
+    "localObservedAt": "2026-10-15T11:24:21.723494+00:00"
+  },
+  {
+    "repository": "OpenPresentation/opf-pptx",
+    "path": "/Users/michael/Source/opf-pptx",
+    "remoteDefaultBranch": "main",
+    "observedRemoteDefaultHead": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+    "localHead": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+    "localPrimaryClean": true,
+    "localMatchesObservedRemoteDefault": true,
+    "localObservedAt": "2026-10-15T11:24:21.723494+00:00"
+  },
+  {
+    "repository": "OpenPresentation/opf-editor",
+    "path": "/Users/michael/Source/opf-editor",
+    "remoteDefaultBranch": "main",
+    "observedRemoteDefaultHead": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+    "localHead": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+    "localPrimaryClean": true,
+    "localMatchesObservedRemoteDefault": true,
+    "localObservedAt": "2026-10-15T11:24:21.723494+00:00"
+  },
+  {
+    "repository": "OpenPresentation/gallery",
+    "path": "/Users/michael/Source/gallery",
+    "remoteDefaultBranch": "main",
+    "observedRemoteDefaultHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+    "localHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+    "localPrimaryClean": true,
+    "localMatchesObservedRemoteDefault": true,
+    "localObservedAt": "2026-10-15T11:24:21.723494+00:00"
+  },
+  {
+    "repository": "Data-Advantage/openpresentation-site",
+    "path": "/Users/michael/Source/openpresentation-site",
+    "remoteDefaultBranch": "main",
+    "observedRemoteDefaultHead": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+    "localHead": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+    "localPrimaryClean": true,
+    "localMatchesObservedRemoteDefault": true,
+    "localObservedAt": "2026-10-15T11:24:21.723494+00:00"
+  },
+  {
+    "repository": "Data-Advantage/pptx-gallery",
+    "path": "/Users/michael/Source/pptx-gallery",
+    "remoteDefaultBranch": "main",
+    "observedRemoteDefaultHead": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+    "localHead": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+    "localPrimaryClean": true,
+    "localMatchesObservedRemoteDefault": true,
+    "localObservedAt": "2026-10-15T11:24:21.723494+00:00"
+  },
+  {
+    "repository": "Data-Advantage/pptx-dev",
+    "path": "/Users/michael/Source/pptx-dev",
+    "remoteDefaultBranch": "master",
+    "observedRemoteDefaultHead": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+    "localHead": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+    "localPrimaryClean": true,
+    "localMatchesObservedRemoteDefault": true,
+    "localObservedAt": "2026-10-15T11:24:21.723494+00:00"
+  }
+]

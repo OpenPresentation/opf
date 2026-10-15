@@ -1,0 +1,112 @@
+{
+  "at": "2026-10-15T11:32:34.666311+00:00",
+  "pr": "https://github.com/Data-Advantage/openpresentation-site/pull/113",
+  "status": "Normally merged; exact reviewed parent/tree/full single-file binary patch; primary cleanly fast-forwarded to actual default.",
+  "reviewed": {
+    "head": "749c8a5abff2045d5aa5d366fbfd9498160812cc",
+    "parent": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+    "tree": "f7fd4ad477f1ce59f72c26b6eadaeabfd14ba702",
+    "fullPatchSha256": "c1a0e8a1be72379e36ecc9d9006382f5ee8757405e07d97b10dc93f9f28af4b5",
+    "paths": [
+      "tests/e2e/playground-downloads.spec.ts"
+    ]
+  },
+  "actual": {
+    "merge": "0ff67a7ebd4b5adf102afd985c705dc018ea0482",
+    "parents": [
+      "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58"
+    ],
+    "tree": "f7fd4ad477f1ce59f72c26b6eadaeabfd14ba702",
+    "fullPatchSha256": "c1a0e8a1be72379e36ecc9d9006382f5ee8757405e07d97b10dc93f9f28af4b5",
+    "paths": [
+      "tests/e2e/playground-downloads.spec.ts"
+    ],
+    "defaultHeadAtFetch": "0ff67a7ebd4b5adf102afd985c705dc018ea0482"
+  },
+  "comparison": {
+    "parentEqualsReviewedBase": true,
+    "wholeTreeEqualsCandidate": true,
+    "fullPatchEqualsReviewed": true,
+    "candidateVsActualTreeDiffBytes": 0,
+    "parentDeltaBytes": 0
+  },
+  "primary": {
+    "root": "/Users/michael/Source/openpresentation-site",
+    "before": {
+      "head": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+      "branch": "main",
+      "status": ""
+    },
+    "after": {
+      "head": "0ff67a7ebd4b5adf102afd985c705dc018ea0482",
+      "branch": "main",
+      "status": ""
+    },
+    "fetchCount": 1,
+    "update": "guarded clean --ff-only"
+  },
+  "gate": {
+    "sourceCommit": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+    "sourceScriptSha256": "82001f7f587da2f3d699d8b0fffe833108db8c25c83dd116971515bc920c9f64",
+    "rootOwnedHandle": 13038,
+    "pid": 48183,
+    "exit": {
+      "at": "2026-10-15T11:31:27.938482+00:00",
+      "exit": 0,
+      "pid": 48183
+    },
+    "absenceCheck": {
+      "command": "ps -p 48183 -o pid=,ppid=,args=",
+      "exit": 1,
+      "stdout": ""
+    },
+    "noObserverLive": true,
+    "mode": "normal --merge with exact expect-head,180s",
+    "checks": "Fallback-all normal policy; 2/2 green confirmed on two consecutive polls; actual merged11:31:27"
+  },
+  "runtime": {
+    "unchangedByThisTestOnlySourceMerge": true,
+    "acceptedRuntimeSource": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+    "acceptedWorkerPrefix": "f829b0fb",
+    "redeployed": false,
+    "attribution": "Root-supplied accepted runtime identity; this observer performed no deployment."
+  },
+  "boundaries": {
+    "noNewCiQueryOrWatcher": true,
+    "noRestart": true,
+    "noPackagePublication": true,
+    "noWindowsAction": true
+  },
+  "refs": [
+    {
+      "path": "/private/tmp/rr-editor022-final-gate-61/gate.log",
+      "bytes": 938,
+      "sha256": "4396917a9625ce5fb5f03893f541022f6c7790f596e8de0ce729cfc86967ab6f"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-final-gate-61/exit.json",
+      "bytes": 76,
+      "sha256": "61a6a5fcc1158de77d4e60ef27ea4d00da075360428a7e638e940297225c0833"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-final-gate-61/process.json",
+      "bytes": 306,
+      "sha256": "5ef9077bb7f3030c4543d0c26590dd7d4405f442d9fe5dcec947c9d29b39ced2"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-final-gate-61/run.py",
+      "bytes": 1108,
+      "sha256": "8c90503eae80c4a155e6fd4d54cace3b6384b044275374d5f3d5b39bc7b6d2e5"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-final-gate-61/observation-handoff.json",
+      "bytes": 1537,
+      "sha256": "5f1eabb861b0087233c3ab847e17c79c7856b1f6822c9efd7f064c26a4c14212"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-final-gate-61/main113-actual.patch",
+      "bytes": 2306,
+      "sha256": "c1a0e8a1be72379e36ecc9d9006382f5ee8757405e07d97b10dc93f9f28af4b5"
+    }
+  ]
+}

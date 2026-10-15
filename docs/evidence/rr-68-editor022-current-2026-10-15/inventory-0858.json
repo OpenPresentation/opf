@@ -1,0 +1,81 @@
+{
+  "at": "2026-10-15T08:58:31.858011+00:00",
+  "networkCalls": 1,
+  "apiBudget": 1,
+  "queryKind": "source metadata only, no CI rollups",
+  "allConnectionsComplete": true,
+  "rawSha256": "f3fcd5ecc3cdf73b0a5a40c3f371ba54fcfb863a7c30f6f49c18d66914dc7221",
+  "rateLimit": {
+    "cost": 16,
+    "remaining": 4977,
+    "resetAt": "2026-10-15T09:09:30Z"
+  },
+  "repos": [
+    {
+      "repo": "OpenPresentation/opf",
+      "head": "4952807b6d61ab9adacd49dc96b652020fe2bada",
+      "prs": 1,
+      "drafts": 0,
+      "issues": 25
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "head": "b87cf01f6b3c70556769d3ea2dcdc75365d5b2ae",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 3
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "head": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 2
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "head": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 1
+    },
+    {
+      "repo": "OpenPresentation/gallery",
+      "head": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 2
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "head": "9ea3f92eead7d5858f4a5d0468e392d683239258",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 1
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "head": "22bcc03909bec508a26821cd7050985ead115b80",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 0
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "head": "023ba386f2174684411289c0d1b537186baa5470",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 3
+    }
+  ],
+  "pullRequests": 1,
+  "drafts": 0,
+  "issues": 37,
+  "issue658": {
+    "number": 658,
+    "state": "CLOSED",
+    "closedAt": "2026-10-15T06:39:49Z",
+    "stateReason": "COMPLETED",
+    "url": "https://github.com/OpenPresentation/opf/issues/658"
+  }
+}

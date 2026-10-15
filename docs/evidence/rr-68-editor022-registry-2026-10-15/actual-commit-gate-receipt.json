@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-15T10:13:22.378606+00:00",
+  "target": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+  "session": 86920,
+  "exit": 0,
+  "markerAt": "2026-10-15T10:12:57Z",
+  "gatingChecks": "6/6 confirmed green",
+  "scheduledMeasurement": "identity-verified nongating; not passed, skipped or canceled by us",
+  "mergedPolicyCommit": "72ec1235e7c1198513cbb0430e0b695e7967b7ea",
+  "toolSourceCommit": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+  "gateToolSha256": "82001f7f587da2f3d699d8b0fffe833108db8c25c83dd116971515bc920c9f64",
+  "log": "/private/tmp/rr68-editor0202-publication-61/actual-release-commit-merged-policy.log",
+  "logSha256": "de5b13def9928f1bf46517d0746df7c531c4779c07015921883b1f07a66b2aeb",
+  "sourcePrepMergeProof": "/private/tmp/rr68-editor0202-prep-61/actual-prep175-merge-proof.json",
+  "sourceClean": true,
+  "sourceTree": "025226fdd4ebe9a3d153da9fa83d793b9e729336"
+}

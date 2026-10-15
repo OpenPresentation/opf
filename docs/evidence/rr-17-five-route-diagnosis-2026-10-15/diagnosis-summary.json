@@ -1,0 +1,251 @@
+{
+  "scope": "Compact durable receipt of Root-accepted bounded five-route genuine E22/P22 diagnosis; original runtime file inventories and 60 sealed witness files remain bound by exact original manifest/suite hashes, without duplication here.",
+  "sourceDiagnosis": {
+    "path": "/private/tmp/rr17-localdiag-61/diagnosis.json",
+    "sha256": "0687d490f029695cbb7f6314a73bb36459cc1c4727fc8cc5a2281a4d54601dc1"
+  },
+  "sourceManifest": {
+    "path": "/private/tmp/rr17-localdiag-61/manifest.json",
+    "sha256": "776f3e7d90cc067466b59df53988ca82068968cd76b17d054157de94a92d714a"
+  },
+  "sourceSuite": {
+    "path": "/private/tmp/rr17-localdiag-61/five-route-witness/suite.json",
+    "sha256": "864f07baa0bf563c41a3113c825367535e2ef860a706824963b6adf13dd33aa1"
+  },
+  "rootAcceptance": {
+    "path": "root-acceptance.json",
+    "sha256": "e990a99941f22e1bc5f5cc90d0404729f63e2781b496783e7c58c1ef47cae5f5"
+  },
+  "node": "v24.21.0",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.20.1",
+      "runtimeSha256": "b210ea3f86629fe1eec9832112fd26a9b1f4933982db381abe9f0d62a8b75a6b"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.20.0",
+      "runtimeSha256": "8413381344f759a448c6c7e7d3c291e19deb19444292c05b300c7d31629160e4"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.20.2",
+      "runtimeSha256": "f86e6c6b3fdc27a2d3f769f4930eebab486c26190b3644b84556586dbdd0e807"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.20.2",
+      "runtimeSha256": "b458a8e3291cbcdc0438b0798d66d1d56e60f8967a727aaf554e992afafead5e"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.20.0",
+      "runtimeSha256": "54e3119b2a31c598fe49036758ef74ab8c31077eb0c02a53ee7ad01e74c0fb12"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "runtimeSha256": "0a794c942f8e5050e5143b1606f8847c2ad8b7bba750958eb72611231ce622ad"
+    }
+  ],
+  "consumerPlanSha256": "f2a43aafb136fa6c7d83dc9f14f145e400244380ee4aa78f089f489540b1be83",
+  "consumerAuthoritySha256": "1273b12e6fad9e937042188d55f47f7a534439a06e9de9c2c8948d84b57ca956",
+  "reproduction": {
+    "actualDriver": "/private/tmp/rr17-localdiag-61/prepare.mjs",
+    "actualDriverSha256": "894c77ff01f3b7e47c34f30afe1c41ac10389ac45c18c09c45e908a07ad0b98c",
+    "invocation": "node /private/tmp/rr17-localdiag-61/prepare.mjs",
+    "maintainedApi": "scripts/native-acceptance/prepare.mjs: prepare",
+    "arguments": [
+      "--consumer",
+      "<qualified-six-root-consumer>",
+      "--output",
+      "<owned-new-five-route-witness-directory>",
+      "--pptx-repo",
+      "<actual-published-PPTX-checkout>",
+      "--font-routes",
+      "all"
+    ],
+    "preflight": "Maintained registryIdentity and verifiedRegistryAuthority; exact accepted plan/authority; identity unchanged afterward.",
+    "offlineGuard": "scripts/native-acceptance/replay-offline.mjs: installOfflineGuard",
+    "sourceFixtureAndCorpusHashes": [
+      {
+        "path": "scripts/native-acceptance/fixtures/font-routes.json",
+        "sha256": "787f85f265095028cbcc368a462814995bd797637bf3c9a8b20655783c53c8bd"
+      },
+      {
+        "path": "docs/evidence/script-corpora-20261001/script-corpora.json",
+        "sha256": "cd31a9c8cc848548bc0114561b34e4454858d5d7e786af3e08609a2ddbf2f31a"
+      }
+    ],
+    "options": {
+      "seed": 1,
+      "timestamp": "2026-01-01T00:00:00Z",
+      "date": "2026-10-10",
+      "provenance": "full",
+      "catalog": {
+        "source": "https://www.pptx.gallery",
+        "layoutCount": 28,
+        "layoutsSha256": "4f1f64fa1604c22b8437be29b17ac59429786109c5a676194286de15b43728ea"
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "font-route-nirmala-gujr",
+      "sourceSha256": "1e8bfebddaf976c6d8297f0c01c3e6e870993df1d6f63f90a5b82c6724063f91",
+      "archiveSha256": "1314c7d66c5ab054dfaf1eb836528e424c60d8ecbfa2de73bf40cb9ab5f7efc4",
+      "importedSha256": "25f8dc9bef96c6a1b88d146f14d016f041e1a01637937cc1b90e3c9d59f39b7f",
+      "roundTripEqual": false,
+      "diagnosticCounts": {
+        "heading-import-reflow": 3,
+        "content-structure-changed": 3
+      },
+      "metadataPreserved": true,
+      "allRowChecksPassed": true,
+      "totalBodyRows": 20,
+      "textFamilySizeWeightAndImportLanguageChecksPassed": true
+    },
+    {
+      "id": "font-route-nirmala-knda",
+      "sourceSha256": "8231dfeb9de51553438795665682b03c34f42dd8f3f6dcbb0b36064fe774ad7f",
+      "archiveSha256": "affe323658bcc9663dff61ddfaa2e77799bae922d2ca9761cc21f5408b47a4fb",
+      "importedSha256": "d13ab4a0652583d9cce87e28db92720dca6dafead1a8e7a29a5b5256c6955cea",
+      "roundTripEqual": false,
+      "diagnosticCounts": {
+        "heading-import-reflow": 3,
+        "content-structure-changed": 3
+      },
+      "metadataPreserved": true,
+      "allRowChecksPassed": true,
+      "totalBodyRows": 20,
+      "textFamilySizeWeightAndImportLanguageChecksPassed": true
+    },
+    {
+      "id": "font-route-nirmala-mlym",
+      "sourceSha256": "7b314983e27f79861c5804e11bbd3f55b17d1bd9a2bfc067e4b072485bbc25c7",
+      "archiveSha256": "d5322b25675c17877b3d537dacb4b2606cbdbb544fce578ab84e5747fb71987b",
+      "importedSha256": "e3a0fa27cbf9dd2c826bd3e1dd18afedb70a72f0951308ca87f033e55f645967",
+      "roundTripEqual": false,
+      "diagnosticCounts": {
+        "heading-import-reflow": 3,
+        "content-structure-changed": 3
+      },
+      "metadataPreserved": true,
+      "allRowChecksPassed": true,
+      "totalBodyRows": 22,
+      "textFamilySizeWeightAndImportLanguageChecksPassed": true
+    },
+    {
+      "id": "font-route-nirmala-telu",
+      "sourceSha256": "3b80bbad5412e1e58de24e973bea0565f91eb5d2b45e6df80cfda8f43c2890c2",
+      "archiveSha256": "52a0cf27460f634b8a4b397b7c6bef0c86c9532f4407f30925c12bf3d1094ba5",
+      "importedSha256": "416765b3fc4bf4195274892d058f8e0f3ce29376e7e3450364ded7d89766147b",
+      "roundTripEqual": false,
+      "diagnosticCounts": {
+        "heading-import-reflow": 3,
+        "content-structure-changed": 3
+      },
+      "metadataPreserved": true,
+      "allRowChecksPassed": true,
+      "totalBodyRows": 22,
+      "textFamilySizeWeightAndImportLanguageChecksPassed": true
+    },
+    {
+      "id": "font-route-traditional-arabic",
+      "sourceSha256": "8f16317d43bad928a971214504051cbb0f6abba6f30b9d63f4e27030906d4d86",
+      "archiveSha256": "f877daae835e7cb34ea9549e8aed79517b78c145c08f8714e9aaeb4ae56738a4",
+      "importedSha256": "b835d5cb843ac1e98c58c3de5926320660c6382e0d513aab9e0df166f2f73bb1",
+      "roundTripEqual": false,
+      "diagnosticCounts": {
+        "heading-import-reflow": 3,
+        "content-structure-changed": 3,
+        "mixed-run-languages": 1
+      },
+      "metadataPreserved": true,
+      "allRowChecksPassed": false,
+      "totalBodyRows": 32,
+      "textFamilySizeWeightAndImportLanguageChecksPassed": true
+    }
+  ],
+  "slides": 15,
+  "sealedFiles": 60,
+  "requiredBodyRows": 116,
+  "allRequiredTextFamilySizeUprightWeightAndImportLanguageComparisonsPassed": true,
+  "literalAllBodyRowChecksPassed": false,
+  "nativeLanguageLiteralDifferenceCount": 4,
+  "nativeLanguageLiteralDifferences": [
+    {
+      "case": "font-route-traditional-arabic",
+      "slide": 1,
+      "row": 4,
+      "nativeLanguageTags": [
+        "ar-SA",
+        "en-US"
+      ],
+      "sourceBoundaryAttribution": "opf-pptx/src/script-fonts.js:321-367 explicitly splits Latin phrases in RTL paragraphs to en-US; body importer:src/body-text-import.js:93 and script-fonts.js:502 excludes these from a second presentation language."
+    },
+    {
+      "case": "font-route-traditional-arabic",
+      "slide": 1,
+      "row": 12,
+      "nativeLanguageTags": [
+        "ar-SA",
+        "en-US"
+      ],
+      "sourceBoundaryAttribution": "opf-pptx/src/script-fonts.js:321-367 explicitly splits Latin phrases in RTL paragraphs to en-US; body importer:src/body-text-import.js:93 and script-fonts.js:502 excludes these from a second presentation language."
+    },
+    {
+      "case": "font-route-traditional-arabic",
+      "slide": 2,
+      "row": 4,
+      "nativeLanguageTags": [
+        "ar-SA",
+        "en-US"
+      ],
+      "sourceBoundaryAttribution": "opf-pptx/src/script-fonts.js:321-367 explicitly splits Latin phrases in RTL paragraphs to en-US; body importer:src/body-text-import.js:93 and script-fonts.js:502 excludes these from a second presentation language."
+    },
+    {
+      "case": "font-route-traditional-arabic",
+      "slide": 2,
+      "row": 12,
+      "nativeLanguageTags": [
+        "ar-SA",
+        "en-US"
+      ],
+      "sourceBoundaryAttribution": "opf-pptx/src/script-fonts.js:321-367 explicitly splits Latin phrases in RTL paragraphs to en-US; body importer:src/body-text-import.js:93 and script-fonts.js:502 excludes these from a second presentation language."
+    }
+  ],
+  "diagnosis": {
+    "contentStructure": "Every fixture has explicit styled text runs separated by independent plain-string newlines. Export tags retain sourceStyles but no wrap/lines because the conservative wrappedLines algorithm cannot prove a gap belongs to either differently styled neighbor. Import therefore retains exact native line blocks with content-structure-changed.",
+    "languages": "Native language tags are canonicalized (ar-SA,fa-IR,ur-PK,etc), redundant presentation-language overrides omitted and distinct run languages retained. This is independently separate from the topology fallback.",
+    "sourceEquality": "Exact source-object equality also differs through resolved defaults and run segmentation. Do not turn semantic row preservation into a false exact roundTripEqual claim.",
+    "implementationDefectEstablished": false,
+    "existingMaintainedBoundary": "opf-pptx/src/content-topology.js:196-214 and test/hard-line-breaks.mjs:134-141 explicitly document/test refusal for a differently styled standalone break.",
+    "nativeLanguageLiteralDifferences": "Four mixed Arabic/Latin body rows differ literally in native language tagging as expected by the documented RTL Latin-phrase split. They remain recorded; no blanket literal-language-equality claim."
+  },
+  "previewObservation": {
+    "scope": "Pixel-level follow-up to inconsistent displayed-image observations; no native/visual-parity acceptance",
+    "initialObservationCorrected": true,
+    "observed": "Initial image-display inspection suggested missing headings with inconsistent case attribution. Direct PNG decoding proves all four Indic title bands byte-identical and nonblank; no missing-title renderer defect established.",
+    "decodedTitleBandSha256": "31816cf79dfe7678504d951e79f9cd6b5fb2d86702355ba7cf439a227da05045",
+    "brightTitlePixelsEach": 1918,
+    "evidence": "title-band-pixels.json",
+    "originalPNGsExactToSuiteSeal": true,
+    "probeOrInPlaceImageMutation": false,
+    "faceCoverage": "title-face-coverage.json",
+    "sourceChanged": false
+  },
+  "referenceInputsStillMissing": [
+    "Per requested family/script and400/700upright route-specific real reference-font hash/PostScript identity,contextual widths at actual nominal sizes; metadata remains unresolved-for-this-suite/null.",
+    "Physical native face or glyph identity,OfficeBoundWidth,baseline/ink data on these exact witnesses and affected no-overflow native outcome.",
+    "Genuine permitted measurements supporting production scoped coefficients. No coefficient selected or native source touched."
+  ],
+  "sourceMutations": 0,
+  "networkCalls": 0,
+  "windowsActions": 0,
+  "productionCoefficientsSelected": false,
+  "nativeAcceptance": false,
+  "originalSuiteRegistryAcceptance": false,
+  "oldEvidencePreserved": true
+}

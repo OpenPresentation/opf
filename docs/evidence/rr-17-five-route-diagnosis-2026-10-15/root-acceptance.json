@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-15T11:25:57.414796+00:00",
+  "reviewer": "Root",
+  "diagnosis": {
+    "path": "/private/tmp/rr17-localdiag-61/diagnosis.json",
+    "sha256": "0687d490f029695cbb7f6314a73bb36459cc1c4727fc8cc5a2281a4d54601dc1"
+  },
+  "manifest": {
+    "path": "/private/tmp/rr17-localdiag-61/manifest.json",
+    "sha256": "776f3e7d90cc067466b59df53988ca82068968cd76b17d054157de94a92d714a"
+  },
+  "scope": "All six manifest references and 60 independently sealed witness files verified; five actual PPTX archives CRC/all XML pass. All 116 raw body row text/family/size/upright-weight/import-language comparisons pass, four explicit native Latin-language differences remain false and documented. Read actual published source content-topology boundary, maintained hard-line-break negative control, and Latin-phrase splitting implementation. No demonstrated source defect, no source change needed. Four Indic witnesses now prepared; roundTripEqual:false unchanged in all five.",
+  "previewObservation": "Prior inconsistent displayed title observations withdrawn; exact original seals and decoded identical nonblank band evidence retained.",
+  "remaining": "True contextual reference/font identity and affected native acceptance unresolved. No coefficients selected; no Windows/global acceptance or goal closure."
+}

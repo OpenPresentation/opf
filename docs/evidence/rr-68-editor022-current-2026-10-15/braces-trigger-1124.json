@@ -1,0 +1,41 @@
+{
+  "at": "2026-10-15T11:24:01.944171+00:00",
+  "issue": "https://github.com/Data-Advantage/pptx-dev/issues/85",
+  "oneBoundedTriggerCheck": true,
+  "requests": [
+    {
+      "url": "https://registry.npmjs.org/braces",
+      "at": "2026-10-15T11:24:01.530573+00:00",
+      "status": 200,
+      "responseDate": "Thu, 15 Oct 2026 11:24:01 GMT",
+      "sha256": "dc80413fcf3711b65478aa7cc9ee16e99764c5dc8024d3facb58cface9750424"
+    },
+    {
+      "url": "https://api.github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "at": "2026-10-15T11:24:01.635714+00:00",
+      "status": 200,
+      "responseDate": "Thu, 15 Oct 2026 11:24:01 GMT",
+      "sha256": "2ddb4a23a2b060e6b8b7c1a4dbf8693153be4ff8f5a2c478120ea6d8044c7bcb"
+    }
+  ],
+  "sourceMutation": false,
+  "dependencyOrIgnoreMutation": false,
+  "registryLatest": "3.0.3",
+  "version3_0_4Present": false,
+  "availableStable3xOr4xBeyond3_0_3": [],
+  "officialAdvisory": "GHSA-vfj7-8cjw-p6xm",
+  "advisoryUpdatedAt": "2026-10-02T22:36:34Z",
+  "vulnerabilities": [
+    {
+      "package": {
+        "ecosystem": "npm",
+        "name": "braces"
+      },
+      "vulnerable_version_range": "<= 3.0.3",
+      "first_patched_version": null,
+      "vulnerable_functions": []
+    }
+  ],
+  "triggerMet": false,
+  "decision": "Trigger unmet at this dated primary-source check; preserve conditional issue and current ignore. No exhaustive exploitability or audit-clean claim."
+}

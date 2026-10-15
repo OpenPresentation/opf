@@ -1,0 +1,9 @@
+(node:64172) [DEP0190] DeprecationWarning: Passing args to a child process with shell option true can lead to security vulnerabilities, as the arguments are not escaped, only concatenated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+$ npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+
+up to date in 2s
+$ npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+
+up to date in 107ms
+Updated the consumer manifest and lockfile to {"@openpresentation/opf":"0.20.1","@openpresentation/opf-render":"0.20.0","@openpresentation/opf-pptx":"0.20.2","@openpresentation/opf-editor":"0.20.2"}

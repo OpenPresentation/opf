@@ -1,0 +1,112 @@
+{
+  "at": "2026-10-15T11:13:38.078019+00:00",
+  "status": "Separate maintained-test-only fix ready for Root source review before commit/PR",
+  "root": "/private/tmp/rr-editor022-main-test-origin-61/site",
+  "branch": "codex/rr-68-main-export-origin",
+  "base": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+  "changedPaths": [
+    "tests/e2e/playground-downloads.spec.ts"
+  ],
+  "patch": {
+    "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/test-origin.patch",
+    "sha256": "c1a0e8a1be72379e36ecc9d9006382f5ee8757405e07d97b10dc93f9f28af4b5"
+  },
+  "behavior": "Capture explicitly configured Playwright baseURL origin; compare URL.origin exactly for all network requests and exporter-only requests. Preserve data/blob exceptions and POST/error/foreign-request assertions. Do not derive expected origin from page URL or redirects.",
+  "typecheckExit": 0,
+  "ownedFrozenInstallExit": 0,
+  "browsers": {
+    "local-browser": {
+      "stats": {
+        "startTime": "2026-10-15T11:12:54.908Z",
+        "duration": 3054.279,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "report": {
+        "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/local-browser.json",
+        "sha256": "4903f8950d2ef81011b0984e4ed4ac5e5cf81ca4218679b2a7b1b56f60b7e6bd"
+      },
+      "actualPowerPoint": {
+        "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/local-browser-output/playground-downloads-the-p-9870a-o-request-to-another-origin-e2e/two-slide-check.pptx",
+        "sha256": "1ab09c888b1a3fea3fbe3781fc035910a30e9dbab41cdb6bc97b1a100e37897b"
+      },
+      "sameAsQualifiedDeployedRuntimeExport": true,
+      "crcAndAllXmlPass": true
+    },
+    "canonical-browser": {
+      "stats": {
+        "startTime": "2026-10-15T11:12:57.302Z",
+        "duration": 12507.026,
+        "expected": 2,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "report": {
+        "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/canonical-browser.json",
+        "sha256": "f356b3c848433cc5b9cf489c59c5f2b34e8acf0ad9ec188f776a1df08916a28d"
+      },
+      "actualPowerPoint": {
+        "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/canonical-browser-output/playground-downloads-the-p-9870a-o-request-to-another-origin-e2e/two-slide-check.pptx",
+        "sha256": "1ab09c888b1a3fea3fbe3781fc035910a30e9dbab41cdb6bc97b1a100e37897b"
+      },
+      "sameAsQualifiedDeployedRuntimeExport": true,
+      "crcAndAllXmlPass": true
+    }
+  },
+  "localRuntime": "Unchanged qualified Main production artifact served from /private/tmp/rr-editor022-main-adoption-61/site, no source/runtime/dependency aliases",
+  "productionRuntime": {
+    "site": "https://www.openpresentation.org",
+    "merge": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+    "worker": "f829b0fb-bdcd-43e6-9c09-c453ac458dbe",
+    "noRedeployment": true
+  },
+  "sourceAndRuntimeEvidenceDistinct": true,
+  "originalPrimaryFailurePreserved": true,
+  "noRuntimeOrPackageOrLockChange": true,
+  "noCommitOrPrYet": true,
+  "references": [
+    {
+      "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/frozen-install.log",
+      "sha256": "93039f2c32ecb21ed7da296015402999e9613c6e1583a12e051528660ac972f6"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/typecheck.log",
+      "sha256": "41a502096b521d8cf2cf99c477a098ad9610c03c91aed225323b5ebc6ad32eea"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/local-browser.json",
+      "sha256": "4903f8950d2ef81011b0984e4ed4ac5e5cf81ca4218679b2a7b1b56f60b7e6bd"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/canonical-browser.json",
+      "sha256": "f356b3c848433cc5b9cf489c59c5f2b34e8acf0ad9ec188f776a1df08916a28d"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/local-browser.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/canonical-browser.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/test-origin.patch",
+      "sha256": "c1a0e8a1be72379e36ecc9d9006382f5ee8757405e07d97b10dc93f9f28af4b5"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-sites-61/main-live-browser.json",
+      "sha256": "41db5d69f3b1e760041238af40b6be70772ba01b7c582e60cf0f24a001bea4d1"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-sites-61/main-live-primary-limitation.json",
+      "sha256": "197a7311da549981092611274e69992d685cc0ee7ccaeedf1f13c0e9c678f3df"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-sites-61/main-production-seal.json",
+      "sha256": "6f406906112f5bc4d1013daa6b0565b9179343d81d5a29ad51b15b24a2014ff7"
+    }
+  ]
+}

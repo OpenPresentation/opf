@@ -1,0 +1,572 @@
+{
+  "scope": "Current accepted Core679/680 and genuine E22 publication/consumer/browser; all three E22 site sources merged and100%-traffic production/live seals accepted; Main113 test-only source also normally merged without runtime redeploy. Latest11:23 metadata and10:35 body-ledger dates preserved.",
+  "base": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+  "originalAccepted": 40,
+  "originalTotal": 40,
+  "broaderCompleteOrDescoped": 77,
+  "broaderTotal": 84,
+  "nativeSelected": 17,
+  "nativeUiOperations": 4,
+  "nativeUnexecuted": 41,
+  "census": {
+    "path": "inventory-1123-metadata.json",
+    "at": "2026-10-15T11:23:05.860630+00:00",
+    "issues": 37,
+    "pullRequests": 1,
+    "drafts": 0,
+    "openProposalAtSnapshot": {
+      "repository": "Data-Advantage/openpresentation-site",
+      "number": 113,
+      "head": "749c8a5abff2045d5aa5d366fbfd9498160812cc"
+    },
+    "all16ConnectionsAndLabelsComplete": true,
+    "metadataOnly": true,
+    "ciOrIssueBodiesQueried": false,
+    "bodyLedgerRemainsDated1035": true,
+    "collectorCalls": 1,
+    "collectorCallBudget": 1,
+    "collectorGraphqlCost": 16,
+    "recordsTaskNewApiCalls": 0,
+    "rawSource": {
+      "path": "/private/tmp/rr68-report-e22-current-61/inventory-raw.json",
+      "sha256": "e539f475da6f7beb6e293edb2c8301c65c7550be098e9f24fbd91de67a4ef45a"
+    }
+  },
+  "laterKnownMerges": {
+    "core676": "4952807b6d61ab9adacd49dc96b652020fe2bada",
+    "gallery136": "22bcc03909bec508a26821cd7050985ead115b80",
+    "editor174": "7d9ef375ed3f3d31155ce253ec09d06cff782d12",
+    "editor175": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+    "core679": "72ec1235e7c1198513cbb0430e0b695e7967b7ea",
+    "core680": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d"
+  },
+  "editor022": {
+    "sourcePrep": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+    "tree": "025226fdd4ebe9a3d153da9fa83d793b9e729336",
+    "publicationVerified": true,
+    "consumerUpdated": true,
+    "releaseSourceGate": {
+      "head": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+      "conclusion": "confirmed 6/6 green",
+      "at": "2026-10-15T10:12:57Z",
+      "actualReceipt": {
+        "path": "/private/tmp/rr68-editor0202-publication-61/actual-commit-gate-receipt.json",
+        "sha256": "9da45b5ee5765a9321b3e32695d54ff8a6784d44b7d3a60266b18e08df50f322"
+      },
+      "publicationIsSeparateAndUnverified": false
+    },
+    "version": "0.20.2",
+    "publishedAt": "2026-10-15T10:35:47.883Z",
+    "tag": "opf-editor-v0.20.2",
+    "gitHead": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+    "integrity": "sha512-ofK/cIZ7DJaM6WcIGeBGEau4p+VW0YaKrAM6PVKEgMNfwp2t2mfhzzmyTBCP1ePzC1TVAwZeZqzmA66U0jUwIg==",
+    "workflowRun": "https://github.com/OpenPresentation/opf-editor/actions/runs/38718731536",
+    "publicationReceipt": {
+      "path": "../rr-68-editor022-registry-2026-10-15/verified-publication-receipt.json",
+      "sha256": "ca3a6a0d83631f7e154fb20101efc87dbaf80284c95ecc31087e6e5bb2f53d7f"
+    },
+    "canonicalVerifier": {
+      "path": "../rr-68-editor022-registry-2026-10-15/independent-verify.json",
+      "sha256": "0a6fa1de3824546454ff18a18f44351869f1b82df9362c275c82258d36e3b31b"
+    },
+    "canonicalChecksPassed": 10,
+    "consumerPlanSha256": "f2a43aafb136fa6c7d83dc9f14f145e400244380ee4aa78f089f489540b1be83",
+    "consumerAuthoritySha256": "1273b12e6fad9e937042188d55f47f7a534439a06e9de9c2c8948d84b57ca956",
+    "consumerManifestSha256": "74f7e969fac884f4f3389fc91f1c1c2784fd215b76724ff8d18a3cd0f131913e",
+    "consumerLockSha256": "cf4942fa3fc1f467db4e9dd746529003ad1b592c501c90cadb80ad59b52e0587",
+    "consumerQualification": "../rr-68-editor022-registry-2026-10-15/affected-consumer-qualification.json",
+    "installedBrowserQualification": "../rr-68-editor022-registry-2026-10-15/installed-browser-qualification.json",
+    "siteAdoptionAndLiveProofPending": false,
+    "siteSourceAllNormallyMerged": true,
+    "mainAndDevRolloutAccepted": true,
+    "galleryProductionSealPending": false,
+    "allThreeRolloutsAccepted": true,
+    "mainOriginTestSourcePr": {
+      "url": "https://github.com/Data-Advantage/openpresentation-site/pull/113",
+      "head": "749c8a5abff2045d5aa5d366fbfd9498160812cc",
+      "runtimeRedeployRequired": false,
+      "actualMerge": "0ff67a7ebd4b5adf102afd985c705dc018ea0482",
+      "pending": false
+    }
+  },
+  "pptx022Sites": {
+    "graph": {
+      "core": "0.20.1",
+      "renderer": "0.20.0",
+      "pptx": "0.20.2",
+      "editor": "0.20.1",
+      "cli": "0.20.0",
+      "gallery": "3.0.0"
+    },
+    "main": {
+      "actualMerge": "9ea3f92eead7d5858f4a5d0468e392d683239258",
+      "reviewedHead": "72700a4bde477b88bf49a6a6876b4879230648b0",
+      "tree": "0191301a54d68eba888a15793efc4500d68d9e75",
+      "workerVersion": "6acf7e52-cbe8-40d4-ae5c-cb183a9dcb91",
+      "deploymentId": "6f8654c2-eb3c-49b3-b9d7-7aef1fdbb84a",
+      "deployExit": 0,
+      "trafficPercentage": 100,
+      "observedAt": "2026-10-15T07:29:29.261Z",
+      "trafficObservedAt": "2026-10-15T07:28:40.918835+00:00",
+      "mergeProof": {
+        "path": "/private/tmp/rr-pptx022-site-integration-61/main-actual-merge-proof.json",
+        "sha256": "8ddc89a9e964155540939504da6d7b1264951dad86bd771d7b7fcd27c652c764"
+      },
+      "root": "/private/tmp/rr-pptx022-main-adoption-61/site",
+      "sourceClean": true
+    },
+    "gallery": {
+      "actualMerge": "22bcc03909bec508a26821cd7050985ead115b80",
+      "reviewedHead": "1255901dfcad21bede496b27beab03a626596f30",
+      "tree": "96ddbb4aa79aee6f04f89b4d6a3860f53cd672ba",
+      "workerVersion": "12864f5b-22c9-4ff6-9bc8-6eaf12266ac4",
+      "deploymentId": "8ac23255-ed3c-4a8f-a335-f8380bb7845e",
+      "deployExit": 0,
+      "trafficPercentage": 100,
+      "observedAt": "2026-10-15T07:40:53.366Z",
+      "trafficObservedAt": "2026-10-15T07:40:37.814725+00:00",
+      "mergeProof": {
+        "path": "/private/tmp/rr-pptx022-site-integration-61/gallery-actual-merge-proof.json",
+        "sha256": "db5d0dca69a5a831bb285f03f7890b66aa673bf2a5b96e42d87ef9e1d4bf6927"
+      },
+      "root": "/private/tmp/rr-pptx022-gallery-adoption-61/pptx-gallery",
+      "sourceClean": true
+    },
+    "dev": {
+      "actualMerge": "023ba386f2174684411289c0d1b537186baa5470",
+      "builtSource": "263f2fc70a2ac4f91b8f794e2dabb1c2ad6d4c1b",
+      "equalTree": "3914015b0b8e766460a7569e2bf68717e2fd5a21",
+      "workerVersion": "68e6b257-b44e-4255-a763-b1842849c4cb",
+      "trafficPercentage": 100,
+      "normalDeployExit": 0,
+      "health200ExactBuiltSource": true,
+      "affectedAnonymousMaintainedTests": {
+        "passed": 3,
+        "fullAssertionsRetained": true,
+        "onlyCurrentDefaultThemeExpectationUpdated": "Office Theme\u2192pptx.gallery for genuine P22",
+        "registeredCatalogImportNegativeControlUndoRedo": true,
+        "canvasEditTabJsonYamlMarkdownCopyPptxReimportUndo": true,
+        "toolkitActualVersionsRenderEditUndoExport": true,
+        "localServerOrSecretSource": false
+      },
+      "actualBrowserPptx": {
+        "sha256": "ad83e80cbf8db3528da0ff367140993d4bd9235030921a17ee974c8619026b4b",
+        "bytes": 76008,
+        "payloadFiles": 113,
+        "crcXmlAllValid": true,
+        "masterName": "pptx.gallery",
+        "bothThemeNamesAndFamilies": "pptx.gallery",
+        "physicalPowerPointMenuClaim": false
+      },
+      "legacyApi": {
+        "newPostAttempts": 0,
+        "codeUnchanged": true,
+        "priorAcceptedOnePostArchiveBytes": 14638,
+        "priorArchiveSha256": "706ea8bef4d44d00777a4330bbb1a22faa2a742525acc15edcfc091f1f6fe3e5",
+        "priorE21P21HandoffRemainsDatedImmutable": true
+      },
+      "limits": [
+        "No signed-in, model-call, backend-account mutation or physical PowerPoint/native acceptance. Physical Windows remains explicit human HOLD.",
+        "Local secret-dependent browser cases remain UNEXECUTED and rejected credential source was never read/retried. These three actual production tests are separate passing evidence.",
+        "No new legacy API POST or repeated full historical native/font/browser suite; previous accepted E21/P21 seal is preserved.",
+        "No unpublished Editor174 artifact or new source snapshot/official roll is adopted.",
+        "Prior Node200/Python403 official-schema client observations remain with their original E21/P21 proof; unchanged external schema link was not requested again."
+      ]
+    },
+    "mainAndGalleryLiveChecks": {
+      "main": {
+        "outcome": "PASS",
+        "exactAssets": 12,
+        "threePublicStarterZipsExact": true,
+        "releaseP22RowAndCanonicalCaption": true,
+        "canonicalRawOpfSchemaExact": true,
+        "actualBrowserExport": {
+          "themeName": "pptx.gallery",
+          "themeFamily": "pptx.gallery",
+          "path": "/private/tmp/rr-pptx022-sites-61/main-live-export.pptx",
+          "sha256": "818908c33de3b1b5c09675e03d1cb84e592b9796f9c0b50731a23ab729eb1a35",
+          "bytes": 74233,
+          "slides": 1,
+          "containsEditedTitle": true,
+          "masterDisplayName": "pptx.gallery"
+        },
+        "rootIndependentlyVerifiedActualExportCrcXml": true,
+        "noPostsOrOtherOriginsOrPageErrors": true
+      },
+      "gallery": {
+        "maintainedPublishedEditorExit": 0,
+        "exactDeclaredFiles": 44,
+        "maintainedFontPathsAndSelectedFontBytes": true,
+        "maintainedBrowserStats": {
+          "startTime": "2026-10-15T07:40:43.506Z",
+          "duration": 11447.352,
+          "expected": 2,
+          "skipped": 0,
+          "unexpected": 0,
+          "flaky": 0
+        },
+        "defaultBrowserExit": 0,
+        "actualArchives": [
+          {
+            "path": "/private/tmp/rr-pptx022-sites-61/gallery-live-browser-output/editor-author-preview-edit-fbb9f-Point-then-reimport-offline/registry-editor-0201.pptx",
+            "sha256": "889ea3182ed8fa5e6eb8928ca400f01311cfd0654b1bcc23db1b6a8b31205ed9",
+            "bytes": 77917,
+            "payloadFiles": 113,
+            "crcAndAllXmlPass": true,
+            "masterNames": [
+              "pptx.gallery"
+            ],
+            "themeName": "Classic",
+            "themeFamily": "Classic",
+            "appThemeParts": [
+              "Classic",
+              "Classic"
+            ]
+          },
+          {
+            "path": "/private/tmp/rr-pptx022-sites-61/gallery-live-default-browser.pptx",
+            "sha256": "57ab7b8c51b7f7def6403623cbb97e08e33b2b0d21cb6afac6ac294105efd5cf",
+            "bytes": 74462,
+            "payloadFiles": 111,
+            "crcAndAllXmlPass": true,
+            "masterNames": [
+              "pptx.gallery"
+            ],
+            "themeName": "pptx.gallery",
+            "themeFamily": "pptx.gallery",
+            "appThemeParts": [
+              "pptx.gallery",
+              "pptx.gallery"
+            ]
+          }
+        ],
+        "authoredClassicArchiveByteIdenticalToEarlierSeal": true
+      }
+    },
+    "sourceReceipts": [
+      {
+        "path": "/private/tmp/rr-pptx022-sites-61/actual-rollout.json",
+        "sha256": "b96f8118fb295acbcec5c799b43e61b094800aedc14027fa581f81ef4793e120"
+      },
+      {
+        "path": "/private/tmp/rr-pptx022-dev-61/production/final-rollout-handoff.json",
+        "sha256": "66a8c4d38db76a95ffca1cc58b63b51f770572a143abc59a26f6abfb94a803c4"
+      }
+    ],
+    "earlierE21P21SealsUnchanged": true
+  },
+  "issue658": {
+    "state": "CLOSED",
+    "reason": "COMPLETED",
+    "closedAt": "2026-10-15T06:39:49Z",
+    "scheduledRun": 38691930561,
+    "scheduledConclusion": "success",
+    "causeNotInferred": true
+  },
+  "localPrimaries": {
+    "sourceReceipt": {
+      "path": "/private/tmp/rr68-editor022-records-61/root-primary-observations.json",
+      "sha256": "6d0f77a5b3506ba9e78b4b5507866d2f2370cfc26bbeab62d64dbf5afb88b161"
+    },
+    "at": "2026-10-15T08:24:43.133404+00:00",
+    "scope": "local clean/default/upstream proof; no fresh global remote census claimed",
+    "apiReads": 0,
+    "observations": [
+      {
+        "repo": "OpenPresentation/opf",
+        "path": "/Users/michael/Source/opf",
+        "head": "4952807b6d61ab9adacd49dc96b652020fe2bada",
+        "clean": true,
+        "upstream": "origin/main",
+        "trackingHead": "4952807b6d61ab9adacd49dc96b652020fe2bada",
+        "matchesLocalTracking": true
+      },
+      {
+        "repo": "OpenPresentation/opf-render",
+        "path": "/Users/michael/Source/opf-render",
+        "head": "b87cf01f6b3c70556769d3ea2dcdc75365d5b2ae",
+        "clean": true,
+        "upstream": "origin/main",
+        "trackingHead": "b87cf01f6b3c70556769d3ea2dcdc75365d5b2ae",
+        "matchesLocalTracking": true
+      },
+      {
+        "repo": "OpenPresentation/opf-pptx",
+        "path": "/Users/michael/Source/opf-pptx",
+        "head": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+        "clean": true,
+        "upstream": "origin/main",
+        "trackingHead": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+        "matchesLocalTracking": true
+      },
+      {
+        "repo": "OpenPresentation/opf-editor",
+        "path": "/Users/michael/Source/opf-editor",
+        "head": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+        "clean": true,
+        "upstream": "origin/main",
+        "trackingHead": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+        "matchesLocalTracking": true
+      },
+      {
+        "repo": "OpenPresentation/gallery",
+        "path": "/Users/michael/Source/gallery",
+        "head": "940633a92c0c7d3339e59447d08ba6382ef12410",
+        "clean": true,
+        "upstream": "origin/main",
+        "trackingHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+        "matchesLocalTracking": true
+      },
+      {
+        "repo": "Data-Advantage/openpresentation-site",
+        "path": "/Users/michael/Source/openpresentation-site",
+        "head": "9ea3f92eead7d5858f4a5d0468e392d683239258",
+        "clean": true,
+        "upstream": "origin/main",
+        "trackingHead": "9ea3f92eead7d5858f4a5d0468e392d683239258",
+        "matchesLocalTracking": true
+      },
+      {
+        "repo": "Data-Advantage/pptx-gallery",
+        "path": "/Users/michael/Source/pptx-gallery",
+        "head": "22bcc03909bec508a26821cd7050985ead115b80",
+        "clean": true,
+        "upstream": "origin/main",
+        "trackingHead": "22bcc03909bec508a26821cd7050985ead115b80",
+        "matchesLocalTracking": true
+      },
+      {
+        "repo": "Data-Advantage/pptx-dev",
+        "path": "/Users/michael/Source/pptx-dev",
+        "head": "023ba386f2174684411289c0d1b537186baa5470",
+        "clean": true,
+        "upstream": "origin/master",
+        "trackingHead": "023ba386f2174684411289c0d1b537186baa5470",
+        "matchesLocalTracking": true
+      }
+    ]
+  },
+  "sourceRoll": {
+    "id": 38705138728,
+    "dispatchCount": 1,
+    "head": "4952807b6d61ab9adacd49dc96b652020fe2bada",
+    "sourceReceipt": {
+      "path": "/private/tmp/rr68-pptx-editor-runtime-roll-plan-61/official-dispatch-receipt.json",
+      "sha256": "706a63e378df4e744176e1248e0d9986e7c0075572bbdd9d6dffdfec549bcc4b"
+    },
+    "generatedSource": {
+      "head": "6e9a370462b825e94a28528a21544a15936c7763",
+      "parent": "4952807b6d61ab9adacd49dc96b652020fe2bada",
+      "tree": "caf98958897a867a1d334cf398b05039316a8388",
+      "lockSha256": "003d4a6df05452ca96f23d7d5c36a36f9d0825a7e108b8bd2067e9b25b6820d5",
+      "goldenSha256": "66c0c2e45d863e33b178f717f7ebb5131f48f3643a6cbcd92956820f928dfd5d",
+      "allOtherLockKeysUnchanged": true,
+      "receipt": {
+        "path": "/private/tmp/rr68-pptx-editor-runtime-roll-plan-61/actual-generated-source-receipt.json",
+        "sha256": "6ad684b24af4880616fdfcdf8ccbe455a8899ec0ec8f5821809b51fd5bfc1310"
+      }
+    },
+    "earlierCheckpoint": {
+      "observedStatus": "in_progress",
+      "qualifiedOrMerged": false,
+      "sourceLockUnchanged": "d26c4188e60bd60bfff4b46cd944b895bccb2b253c89adfc00eba4521c9b43ba"
+    },
+    "qualifiedOrMerged": true,
+    "actualMerge": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+    "actualParent": "72ec1235e7c1198513cbb0430e0b695e7967b7ea",
+    "actualLockSha256": "003d4a6df05452ca96f23d7d5c36a36f9d0825a7e108b8bd2067e9b25b6820d5",
+    "integrationProof": {
+      "path": "actual-679-680-integration-proof.json",
+      "sha256": "c7fbf71931f2ed3c8869dcabd01abef28b58576342b9a7478d6e6d9e4fae079b"
+    },
+    "actualParentDeltaPaths": [
+      "ecosystem.lock.json"
+    ],
+    "goldenUnchanged": true
+  },
+  "fontSource": {
+    "core": {
+      "repository": "/Users/michael/Source/opf",
+      "localBranch": "codex/rr-17-font-route-contract-456d5efe",
+      "head": "456d5efe006e1d722ada9eee4a3e4940cdb84657"
+    },
+    "renderer": {
+      "repository": "/Users/michael/Source/opf-render",
+      "localBranch": "codex/rr-17-font-route-planner-805968da",
+      "head": "805968dad13fe763da64d35a5568ec31af916a17"
+    },
+    "externalPush": "Automatic approval review rejected the optional font-source push before execution, citing insufficient direct authorization for that payload and destination; no retry/external push. This does not assert that other publishing lacked authorization. Code preserved as self-contained local primary branch objects only.",
+    "genuineSourcePairQualified": true,
+    "registryAcceptance": false,
+    "productionScopedFactors": 0,
+    "nativeAcceptance": false,
+    "boundedFiveRouteWitnessDiagnosis": {
+      "path": "../rr-17-five-route-diagnosis-2026-10-15/diagnosis-summary.json",
+      "rootAcceptance": "../rr-17-five-route-diagnosis-2026-10-15/root-acceptance.json",
+      "rootAcceptanceSha256": "e990a99941f22e1bc5f5cc90d0404729f63e2781b496783e7c58c1ef47cae5f5",
+      "sourceDiagnosisSha256": "0687d490f029695cbb7f6314a73bb36459cc1c4727fc8cc5a2281a4d54601dc1",
+      "originalManifestSha256": "776f3e7d90cc067466b59df53988ca82068968cd76b17d054157de94a92d714a",
+      "cases": 5,
+      "slides": 15,
+      "sealedFiles": 60,
+      "requiredRows": 116,
+      "requiredComparisonsPassed": true,
+      "nativeLanguageLiteralDifferencesRetained": 4,
+      "allRoundTripEqualFalseCases": 5,
+      "reviewedConservativeStyledNewlineFallback": true,
+      "implementationDefectEstablished": false,
+      "fourIndicWitnessesPrepared": true,
+      "referencePhysicalFaceAndAffectedNativeInputsStillMissing": true,
+      "productionCoefficients": 0,
+      "nativeAcceptance": false,
+      "sourceMutations": 0,
+      "windowsActions": 0
+    }
+  },
+  "currentPhysicalWindowsHold": true,
+  "priorNarrowUiObservationUnchanged": true,
+  "sourceProofs": [
+    {
+      "path": "/private/tmp/rr-pptx022-site-integration-61/core676-actual-merge-proof.json",
+      "sha256": "40ce6e4395b7954748f378aee57982daf612075a68ece9a2e172a63e92e0d6d6"
+    },
+    {
+      "path": "/private/tmp/rr-pptx022-site-integration-61/editor174-actual-merge-proof.json",
+      "sha256": "2c971486b31a5817a7f5af81a3cece11ccfdccc3f5bfc9fc649d45e49c736994"
+    }
+  ],
+  "dev85": {
+    "observedAt": "2026-10-15T11:24:01.944171+00:00",
+    "source": "braces-trigger-1124.json",
+    "sourceSha256": "43344dd5e8cfabc66874f7239b2060715bdce98b12b4bf08738ae6365f627586",
+    "rootReviewed": true,
+    "observation": "Trigger unmet at this dated primary-source check; preserve conditional issue and current ignore. No exhaustive exploitability or audit-clean claim.",
+    "registryLatest": "3.0.3",
+    "version3_0_4Present": false,
+    "newerStable3xOr4xVersions": [],
+    "exactOfficialAdvisory": "GHSA-vfj7-8cjw-p6xm",
+    "firstPatchedVersion": null,
+    "triggerMet": false,
+    "dependencyIgnoreAndSourceUnchanged": true,
+    "auditCleanOrExhaustiveExploitabilityClaim": false,
+    "recordsTaskNewRegistryRequests": 0
+  },
+  "earlierCensus": {
+    "path": "inventory-0728.json",
+    "at": "2026-10-15T07:28:50.300115+00:00",
+    "issues": 37,
+    "pullRequests": 3,
+    "drafts": 0,
+    "laterOverlaysAreNotFreshCensus": true
+  },
+  "earlierCensus0858": {
+    "path": "inventory-0858.json",
+    "at": "2026-10-15T08:58:31.858011+00:00",
+    "issues": 37,
+    "pullRequests": 1,
+    "drafts": 0,
+    "allConnectionsComplete": true,
+    "rawSource": {
+      "path": "/private/tmp/rr68-current-inventory-editor022-phase-61/inventory-raw.json",
+      "sha256": "f3fcd5ecc3cdf73b0a5a40c3f371ba54fcfb863a7c30f6f49c18d66914dc7221"
+    },
+    "later679680MergesAreOverlaysNotFreshCensus": true
+  },
+  "currentLocalPrimaryComparison": {
+    "at": "2026-10-15T11:24:21.723494+00:00",
+    "path": "primary-observations-1124.json",
+    "sha256": "b88f1b0a340177a2bab59990a4197b0aa6757c4067120f27a80370539e84d9ab",
+    "allEightCleanDefaultsExactToObservedHeads": true,
+    "observedRemoteSnapshot": "2026-10-15T11:23:05.860630+00:00"
+  },
+  "earlierEditor022Checkpoint": {
+    "sourcePrep": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+    "tree": "025226fdd4ebe9a3d153da9fa83d793b9e729336",
+    "publicationVerified": false,
+    "consumerUpdated": false,
+    "releaseSourceGate": {
+      "head": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+      "conclusion": "confirmed 6/6 green",
+      "at": "2026-10-15T10:12:57Z",
+      "actualReceipt": {
+        "path": "/private/tmp/rr68-editor0202-publication-61/actual-commit-gate-receipt.json",
+        "sha256": "9da45b5ee5765a9321b3e32695d54ff8a6784d44b7d3a60266b18e08df50f322"
+      },
+      "publicationIsSeparateAndUnverified": false
+    }
+  },
+  "editor022Sites": {
+    "facts": "../rr-68-editor022-sites-2026-10-15/current-site-facts.json",
+    "sourceMergeReceipt": "../rr-68-editor022-sites-2026-10-15/terminal-site-merge-batch.json",
+    "sourceMergeReceiptSha256": "c1b7afbc1cecd8689e5b03a87a1eba6a62d2299346b1da0f0f11dd16a87870d1",
+    "rootAcceptedBoundaries": "../rr-68-editor022-sites-2026-10-15/root-accepted-site-boundaries.json",
+    "rootAcceptedBoundariesSha256": "10ff99bf6e01d1ac24ac4b755c0aa71162477df239bbb8eb62da4b9895810574",
+    "sourceIntegrationsAreLaterCensusOverlays": true,
+    "mainAndDev100PercentSealsAccepted": true,
+    "galleryProductionPending": false,
+    "mainOriginalPrimary1Of2Preserved": true,
+    "separateStrictOriginCorrectionLocalAndCanonical2Of2": true,
+    "mainOriginPr": "https://github.com/Data-Advantage/openpresentation-site/pull/113",
+    "mainOriginHead": "749c8a5abff2045d5aa5d366fbfd9498160812cc",
+    "mainRuntimeNotRedeployedForTestSource": true,
+    "allThree100PercentSealsAccepted": true,
+    "galleryProductionSeal": {
+      "path": "../rr-68-editor022-sites-2026-10-15/gallery-production-seal.json",
+      "sha256": "09baf6114b4c57c63943891253eedea00ad36eea4eea771b3c7eed60c8048459"
+    },
+    "rootGalleryAcceptance": {
+      "path": "../rr-68-editor022-sites-2026-10-15/root-gallery-production-acceptance.json",
+      "sha256": "0a177f27d3488b937318dcf9927bf6afc693ffa414c0fa148410cb48059941a8"
+    },
+    "mainOriginActualMerge": "0ff67a7ebd4b5adf102afd985c705dc018ea0482",
+    "mainOriginMergePending": false,
+    "mainOriginNormalGateExit": 0,
+    "mainOriginActualMergeIsLaterCensusOverlay": true
+  },
+  "remainingScopeAudit": {
+    "path": "remaining-scope-audit.json",
+    "sha256": "efb586e30fe35c23960cf661c275a3f426060d72df826994873c4a1392b6ba4c",
+    "markdownPath": "remaining-scope-audit.md",
+    "markdownSha256": "6639d27ef52e473def52fc3b34196caf63d2b61d2a385ee2d1cffb52cdaa6730",
+    "inventoryObservedAt": "2026-10-15T10:35:02Z",
+    "createdAt": "2026-10-15T11:05:57.770342+00:00",
+    "rootReviewed": true,
+    "sourceSpecificDatesPreserved": true,
+    "newProgramClosuresOrBlockersInferred": false
+  },
+  "earlierCensus1035": {
+    "path": "inventory-1035.json",
+    "at": "2026-10-15T10:35:02.179639+00:00",
+    "issues": 37,
+    "pullRequests": 0,
+    "drafts": 0,
+    "allConnectionsComplete": true,
+    "rawSource": {
+      "path": "/private/tmp/rr68-current-inventory-e22-publication-61/inventory-raw.json",
+      "sha256": "ceb64d108cdaacf3c5cdacb6acab3cbdd0e25a7709268ba95c0760f5a8e4b3cf"
+    },
+    "issueSetsTitlesAndBodiesUnchangedFrom0858": true,
+    "allEightLocalDefaultsCleanExactToFreshRemoteHeads": true,
+    "primaryAndIssueComparison": {
+      "path": "primary-and-issue-comparison-1035.json",
+      "sha256": "acf8bc09c0f37d18c57322fdc51512b4dfe23594f374eba46bb56584f88f178e"
+    }
+  },
+  "earlierLocalPrimaryComparison1035": {
+    "at": "2026-10-15T10:35:02.179639+00:00",
+    "sourceReceipt": {
+      "path": "primary-and-issue-comparison-1035.json",
+      "sha256": "acf8bc09c0f37d18c57322fdc51512b4dfe23594f374eba46bb56584f88f178e"
+    },
+    "scope": "All eight clean default branches match freshly observed remote heads (Core f9aebab6; Dev master); no fetch needed. All 37 issue sets, titles and bodies are unchanged from 08:58.",
+    "collectorMetadataApiCalls": 1,
+    "recordsTaskNewApiCalls": 0
+  },
+  "earlierDev85Observation0035": {
+    "observedAt": "2026-10-15T00:35:54Z",
+    "source": "../rr-68-current-work-2026-10-15/inventory.json",
+    "observation": "Patched-version trigger unmet at this dated bounded primary check.",
+    "freshRegistryCheck": false,
+    "auditCleanOrExhaustiveExploitabilityClaim": false
+  }
+}
