@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
+import {pathToFileURL} from 'node:url';
 import {mkdir,mkdtemp,readFile,realpath,rm,symlink,writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
@@ -12,6 +13,7 @@ const require=createRequire(new URL('../../packages/javascript/package.json',imp
 const Ajv=require('ajv/dist/2020.js').default,addFormats=require('ajv-formats').default;
 const ajv=new Ajv({allErrors:true,strict:false});addFormats(ajv);
 const validate=ajv.compile(JSON.parse(await readFile(new URL('../../spec/schemas/opf.schema.json',import.meta.url),'utf8')));
+const rows=slide=>slide.text.filter(value=>typeof value==='object');
 
 test('font route selection is opt-in, bounded and canonical without changing default CLI',()=>{
  const base=['--consumer','consumer','--output','output','--pptx-repo','pptx'];
@@ -40,18 +42,37 @@ test('five schema-valid route fixtures preserve corpus text, explicit upright st
   assert.ok(route.controls.some(control=>control.id==='latin'));
   assert.ok(route.controls.some(control=>control.id==='neutrals'));
   assert.ok(route.controls.some(control=>control.id==='mixed'));
-  for(const [index,weight]of [400,700].entries())for(const item of deck.slides[index].items){
-   assert.equal(item[0].fontFamily,route.requestedNativeFamily);assert.equal(item[0].bold,weight===700);assert.equal(item[0].italic,false);
+  for(const slide of deck.slides)assert.equal(slide.items,undefined,'measurement rows must not acquire list fitting or bullets');
+  for(const [index,weight]of [400,700].entries())for(const item of rows(deck.slides[index])){
+   assert.equal(item.fontFamily,route.requestedNativeFamily);assert.equal(item.bold,weight===700);assert.equal(item.italic,false);
   }
-  assert.deepEqual(deck.slides[2].items.map(item=>item[0].fontSize),[18,18,24,24,32,32]);
+  assert.deepEqual(rows(deck.slides[2]).map(item=>item.fontSize),[18,18,24,24,32,32]);
  }
  const arabic=source.decks[FONT_ROUTE_CASE_NAMES[0]];
- assert.equal(arabic.slides[0].items[0][0].text,'مراجعة ربع سنوية للمبيعات');
- assert.equal(arabic.slides[0].items[2][0].text,'مَرْحَبًا بِكُمْ فِي الْعَرْضِ');
- assert.ok(arabic.slides[0].items.some(item=>item[0].text.includes('۰۱۲۳۴۵۶۷۸۹')));
+ assert.equal(rows(arabic.slides[0])[0].text,'مراجعة ربع سنوية للمبيعات');
+ assert.equal(rows(arabic.slides[0])[2].text,'مَرْحَبًا بِكُمْ فِي الْعَرْضِ');
+ assert.ok(rows(arabic.slides[0]).some(item=>item.text.includes('۰۱۲۳۴۵۶۷۸۹')));
  const telugu=source.decks[FONT_ROUTE_CASE_NAMES[1]];
- assert.equal(telugu.slides[0].items[1][0].text,'క్ష జ్ఞ స్త్ర క్త ప్ర శ్రీ');
+ assert.equal(rows(telugu.slides[0])[1].text,'క్ష జ్ఞ స్త్ర క్త ప్ర శ్రీ');
  await assert.rejects(()=>loadFontRouteSource([FONT_ROUTE_CASE_NAMES[1],FONT_ROUTE_CASE_NAMES[0]]),/canonical explicit/);
+});
+
+test('measurement rows keep point sizes and upright weights through shared rich-text fitting',async()=>{
+ const peer=createRequire(require.resolve('@openpresentation/opf-pptx/package.json'));
+ const corePeer=createRequire(peer.resolve('@openpresentation/opf/package.json'));
+ const {fitRichText}=await import(new URL('./dist/composition.js',pathToFileURL(corePeer.resolve('@openpresentation/opf/package.json'))).href);
+ const source=await loadFontRouteSource(selectFontRoutes('all'));
+ for(const deck of Object.values(source.decks))for(const slide of deck.slides){
+  const fit=fitRichText(slide.text,{x:0,y:0,width:1100,height:550},25,16,{style:{fontFamily:deck.design.fontScheme.minor,fontWeight:400}});
+  assert.equal(fit.overflow,false);assert.equal(fit.fontSize,25);
+  assert.equal(fit.richLines.length,rows(slide).length);
+  for(const [index,line]of fit.richLines.entries())for(const fragment of line.fragments){
+   const authored=rows(slide)[index];
+   assert.equal(fragment.fontSize*0.75,authored.fontSize);
+   assert.equal(fragment.style.fontFamily,authored.fontFamily);
+   assert.equal(fragment.style.fontWeight,authored.bold?700:400);assert.equal(fragment.style.italic,false);
+  }
+ }
 });
 
 function fakeEngines(){

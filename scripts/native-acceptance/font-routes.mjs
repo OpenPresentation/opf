@@ -39,11 +39,13 @@ export async function loadFontRouteSource(names) {
       {id:'mixed',text:`${samples[0].text} 0123456789 PowerPoint`},
     ];
     const run=(text,weight,fontSize=18.75,lang=record.language)=>({text,fontFamily:record.requestedNativeFamily,fontSize,bold:weight===700,italic:false,lang});
+    // Plain text lines avoid list marker/spacing allocation shrinking measurement rows.
+    const lines=rows=>rows.flatMap((row,index)=>index?['\n',row]:[row]);
     const slides=manifest.styles.map(({weight})=>({
       title:[run(`${record.requestedNativeFamily} ${weight} upright`,weight)],
-      items:[...samples.map(sample=>[run(sample.text,weight,18.75,sample.lang)]),...controls.map(control=>[run(control.text,weight)])],
+      text:lines([...samples.map(sample=>run(sample.text,weight,18.75,sample.lang)),...controls.map(control=>run(control.text,weight))]),
     }));
-    slides.push({title:[run('Nominal size controls',400)],items:manifest.nominalSizesPoints.flatMap(size=>manifest.styles.map(({weight})=>[run(samples[0].text,weight,size)]))});
+    slides.push({title:[run('Nominal size controls',400)],text:lines(manifest.nominalSizesPoints.flatMap(size=>manifest.styles.map(({weight})=>run(samples[0].text,weight,size))))});
     decks[record.id]={name:`Font route ${record.requestedNativeFamily} ${record.script}`,language:record.language,
       design:{fontScheme:{major:record.requestedNativeFamily,minor:record.requestedNativeFamily,complexScript:{major:record.requestedNativeFamily,minor:record.requestedNativeFamily}}},slides};
     fontRoutes[record.id]={...record,styles:manifest.styles,nominalSizesPoints:manifest.nominalSizesPoints,
