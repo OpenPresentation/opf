@@ -1,15 +1,25 @@
 # Release readiness: handoff of 2026-10-11
 
+## Current RR-68 work checkpoint — 2026-10-15 UTC
+
+Four independent Actions source PRs actually merged through their normal required gates: core #672 `62eb49b1`, renderer #241 `7c13fd0c`, PPTX #256 `d14dd723` and existing public Editor #166 `9689a4b0`. [Portable source acceptance and current work](../../evidence/rr-68-current-work-2026-10-15/README.md) bind the exact commits/trees/postimages, supervisor acceptance and a fresh complete census at 01:27:28 UTC: **5 open PRs (2 drafts), 41 issues**, all eight primaries clean and matching defaults. This observation preceded creation of the tracker proposal; no new or moved item is automatically adopted.
+
+The original handoff remains **40/40 accepted** and broader progress **77/84**, with seven rows open. Package publications, the qualified 1.63 control/official lock/goldens and the three deployed Worker/source identities are unchanged. Public future drafts renderer #247/PPTX #262 remain at their existing heads; local reviewed rebases `98ddcc1d`/`54c3eded` and a later refresh of core `3b195120` are future source work, not graph adoption. The separate Windows Editor source push/new draft remains held; public #166 merged without reading or forwarding it.
+
+RR-14's public feature-off 404 establishes only the current server flag is off. RR-51's two repository metadata404s establish unknown/not-visible configuration, not a missing App. No AI, secrets/settings, native, release or deployment action is inferred. The dated earlier notes below remain historical where superseded by this checkpoint.
+
+## Earlier registry-adoption notes — 2026-10-13 (historical)
+
 **Registry adoption checkpoint (2026-10-13):** Gallery 3.0.0 is genuinely published and independently verified at tag/main `940633a92c0c7d3339e59447d08ba6382ef12410`, including registry integrity, signatures and SLSA provenance. Core #648 and #649 are merged in actual main `c9fb6aa8`. This source adoption raises the three core/workspace/CLI Gallery ranges to `^3.0.0` and removes the temporary candidate declaration/configuration; engine own versions, `^0.20.0` peer contracts and the historical published-19 release plan remain unchanged. Coherent sibling registry-adoption qualification and the official ecosystem roll still precede 0.20 release preparation. Windows transport failed; the maintained 55-case native acceptance remains pending. Sites remain local only, with no deployment authorized. [Verified receipts](../../evidence/rr20-site-currency-queue/gallery3-registry-adoption-receipts.json). Historical checkpoints below retain their original publication and gate states.
 
 **Owner correction (2026-10-13):** native acceptance uses the versioned [test suite](../../../scripts/native-acceptance/README.md), fetched at an exact reviewed Git revision and generated on the Windows host from the selected installed packages. Do not distribute one-off packets or ZIPs, including through a Git handoff branch. Packet07b and the Taildrop receipt below are historical evidence, not the ongoing test distribution workflow.
 
-Operative update: 2026-10-14; the current checkpoint below supersedes dated historical states. Follow the live [0.19 execution checklist](0.19-execution.md), currently 38/40 verified checkpoints, for reviewed evidence and remaining acceptance. It replaces the handoff of 2026-10-06. A new
+Operative update: 2026-10-15 UTC; the current checkpoint above supersedes dated historical states. Follow the [0.19 execution checklist](0.19-execution.md), whose original 40/40 checkpoints are accepted, and the seven open broader program rows for remaining work. It replaces the handoff of 2026-10-06. A new
 supervisor or agent team resumes from this file, then [README.md](README.md) (goal, invariants, resume protocol),
 [burndown.md](burndown.md), [the release process](../../release-process.md) and the root `AGENTS.md`. Nothing here
 overrides those invariants. Reviewed local integration candidates also exist; preserve their exact identities and do not treat them as merged or published artifacts.
 
-## Current supervisor checkpoint — 2026-10-14 final site source-integration proposal
+## Earlier supervisor checkpoint — 2026-10-14 final site source-integration proposal
 
 **Current scoped update — 2026-10-14:** the supervisor accepts RR-53 on actual merged core335, implemented core PR contract/full queue-and-schedule policy, prior core669 queue success and retained 11–15% runner saving/no wall-clock gain. The broader program is now **77/84 complete or descoped**, with seven open rows: RR-14, RR-17, RR-19, RR-48, RR-51, RR-68 and RR-20. RR-48’s three sibling rulesets and issue658’s next-green-nightly condition remain separate and open. [Scoped acceptance](../../evidence/rr-53-contract-tier-2026-10-14/README.md). Core [670](https://github.com/OpenPresentation/opf/pull/670) actually merged through its normal queue at `c36727c64d15d7584f66b80f5257c94c0ada4083`; its accepted tree/lock/provenance exactly match the reviewed proposal. The supervisor accepts original T16/T40, completing the original **40/40 handoff**. [Terminal scoped decision](../../evidence/rr-20-sites-current-2026-10-14/terminal-supervisor-acceptance.json). Broader RR-20 remains in progress on the seven program rows; this does not imply all 58 native cases or global font/raster acceptance. The frozen670 source and earlier conditional snapshot below remain unchanged historical evidence.
 
