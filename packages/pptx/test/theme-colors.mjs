@@ -57,7 +57,7 @@ for (const record of colorSchemes) {
   const theme = themeOf(parts(bytes));
   for (const [slot, element] of SLOTS) assert.equal(theme.colors[element], hex(record[slot]), `${record.id} ${slot}`);
   assert.equal(theme.schemeName, record.name.replace('&', '&amp;'));
-  assert.equal(theme.name, 'Office Theme', 'no explicit theme keeps the vendored theme name');
+  assert.equal(theme.name, 'pptx.gallery', 'no explicit theme uses the generated gallery theme name');
   const {document, theme: reports} = await importWith(bytes);
   assert.equal(document.design.colorScheme, record.id);
   assert.equal(document.design.theme, undefined);
@@ -237,12 +237,12 @@ const namedBold = await importWith(withTheme(xml => officeScheme(xml).replace(/(
 assert.equal(namedBold.document.design.theme, undefined);
 assert.deepEqual(namedBold.theme.map(d => [d.code, d.path]), [['theme-unverified', 'design.theme']]);
 
-// 6. No design: core's engine default colour scheme (cool-horizon's slots, no record name) and the vendored theme name.
+// 6. No design: core's engine default colour scheme (cool-horizon's slots, no record name) and generated gallery theme name.
 // It is recovered as cool-horizon only where that record is registered.
 const bare = parts(await exportPptx({slides: [{title: 'Base'}]}));
 const defaults = themeOf(bare);
 assert.equal(defaults.schemeName, 'OpenPresentation');
-assert.equal(defaults.name, 'Office Theme');
+assert.equal(defaults.name, 'pptx.gallery');
 for (const [slot, element] of SLOTS) assert.equal(defaults.colors[element], hex(cool[slot]), `engine default ${slot}`);
 // RR-59: the full round trip leaves the unstated design absent; FF-24 recovers it from a plain package (no provenance).
 assert.equal((await importWith(zipSync(bare))).document.design, undefined, 'the unstated colour scheme stays absent');

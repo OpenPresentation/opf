@@ -1,0 +1,897 @@
+{
+  "at": "2026-10-15T04:29:18.264Z",
+  "publishedPptx": {
+    "version": "0.20.1",
+    "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301"
+  },
+  "candidate": {
+    "base": "373715ad62bd679ad39ba5b8783ec8f11df50065",
+    "sourceIndexSha256": "a3c2e589099e47f589344fc38739eb29433463fb12e6375a379ea5eab9df4c53",
+    "notPublished": true
+  },
+  "cases": [
+    {
+      "name": "column",
+      "oldSha256": "7aa0692026b3b2f919242d31a39d39b1f1c585caa212dbcdfd9173254ee23680",
+      "oldBytes": 26019,
+      "currentSha256": "7e1f4697b606c2a751ea83e88f00a8fa1b99c8e8a490725f5faa4fd4369930b3",
+      "currentBytes": 26028,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "column-labels",
+      "oldSha256": "8af7d565d4d1d87c0987213775df1ec61d9adba45f78419ae2ac8ab855040e1b",
+      "oldBytes": 26089,
+      "currentSha256": "0f8ef776f061f917edf293c7efe51b3d7040a269e1fe3534bc39a3b8e0527405",
+      "currentBytes": 26098,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "bar",
+      "oldSha256": "93657ad10758813a01a1c85f7500df1206eadf292552920a1023f073fed7b72b",
+      "oldBytes": 26020,
+      "currentSha256": "d1f6c6dacdcf58d7ccb0d8ee5734e248f41f99042b17fb498f456667a7d462da",
+      "currentBytes": 26029,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "line",
+      "oldSha256": "63dad3d385692423dc33d7f727224bb3efca80401c72cbe16ee219e15c3db3f8",
+      "oldBytes": 26064,
+      "currentSha256": "43aa6ee11d88c68f4eb12f360d23ef3f783444783b8568bd99dbc4f6572e0f37",
+      "currentBytes": 26073,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "area",
+      "oldSha256": "686241c9de7b167c3b0ea034958bd46a9d85fcccf56d4d7ef720dcb9b0be4da4",
+      "oldBytes": 25973,
+      "currentSha256": "41ebd1d62e9f061de2bd65abc1bff035387565a50c8c550db76374b5ceff414d",
+      "currentBytes": 25982,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "stacked-column",
+      "oldSha256": "5ef7f0647c71e6ac6045996a1e68d0b4d1649ffe61780267df82c9a0d15b3406",
+      "oldBytes": 26028,
+      "currentSha256": "7e14a5b2e6979225bad31cbf93fe12c4b5e8c1844e17ec4a022e249aea14dd75",
+      "currentBytes": 26037,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "percent-stacked",
+      "oldSha256": "7ca8f27aadfa857ce000eba09d431e51c8563f7ffc4f20df36b2c947da3d207f",
+      "oldBytes": 26041,
+      "currentSha256": "23ef11ed2d0eb1d6202b7a5720bc239c5259cbf11c577c0d5e35ce37023cefd8",
+      "currentBytes": 26050,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "pie",
+      "oldSha256": "db75f245fce6617979e256c6434e0ea085a19b5c427edac13725f707d683fbd6",
+      "oldBytes": 25598,
+      "currentSha256": "5915c65aaa30d65bf9db009ce94a3b23ddc9684cf9b69369ae49edca11743d73",
+      "currentBytes": 25607,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The pie chart plots one series, so its first series 'Revenue' is exported and the other 1 ('Costs') is not.",
+          "adaptation": "series-dropped"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "doughnut",
+      "oldSha256": "75e6f679988929082d2490232632e9d5cec9fd20b366d82f0722a6c35f4867d6",
+      "oldBytes": 25541,
+      "currentSha256": "7acf99942b745701c566030c206236cf18c381ccbf241a4895827abca99e0a94",
+      "currentBytes": 25550,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The doughnut chart plots one series, so its first series 'Revenue' is exported and the other 1 ('Costs') is not.",
+          "adaptation": "series-dropped"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "radar",
+      "oldSha256": "c8468446ec48b97efa2a48fde933807266f7feaec4e25a95999047d60c19330e",
+      "oldBytes": 25979,
+      "currentSha256": "02eb52ca7839baf07f72ece405dc52498f10e37e79b25e6f5a5e4ca8a09a3781",
+      "currentBytes": 25988,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "scatter",
+      "oldSha256": "361431d84ff9d21e4e05f309b4a9cb16e6d9d58cba358aa6d9bd0e1509c3d034",
+      "oldBytes": 25806,
+      "currentSha256": "fc90eefc89eb3d6f1a32d742353e6b0c7e451cbd79cb3cbf881267744ecfe387",
+      "currentBytes": 25815,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "scatter-two-columns",
+      "oldSha256": "2be801aa7aa86fd301bc7827a29eacd91fc88211b335694e3d23f96da7533bbd",
+      "oldBytes": 25638,
+      "currentSha256": "d8ab26d33d9d90ae5112cd02a34a4bb2a3d9752b8b51231be56e05f7906b0530",
+      "currentBytes": 25647,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The scatter chart has no X column (a point label column and one value column), so its 2 values are plotted against their row numbers.",
+          "adaptation": "row-numbers"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "single-column",
+      "oldSha256": "9ca25a334f6dbacbad3b5247c966b7ba7cf28358607e24b04c2c9aad05d0d264",
+      "oldBytes": 26270,
+      "currentSha256": "873897c9c8d4a8e62e5f8f66b8b4dfd8501a782817a559961299495979952edd",
+      "currentBytes": 26279,
+      "parts": 31,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The chart's single data column 'Values' has no category column, so its 5 values (1 non-numeric cell was skipped) are plotted against their row numbers.",
+          "adaptation": "row-numbers"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "scatter-labels",
+      "oldSha256": "486df335d4fc056077b68a203028070abe71b64c8e131d6c436c072277b28b13",
+      "oldBytes": 25649,
+      "currentSha256": "ae6b016bf8b8115dc9be10cdea82bb796801e535f416659c96bc54248206fe14",
+      "currentBytes": 25658,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "chartex-native-map",
+      "oldSha256": "7e8b82c51b06b4d310664486ebd4add092ee179539cc86ab15f0915c9d8b7e27",
+      "oldBytes": 25796,
+      "currentSha256": "57e4612813ef2240553e9f358a6d48aaafcbe308966dfc75b87adffffe2ccc46",
+      "currentBytes": 25805,
+      "parts": 30,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that PowerPoint has not yet accepted natively from this exporter (pass chartex: 'native' to write its chartex part); its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "histogram",
+      "oldSha256": "b5464e777e7714e2ec1194a2061d8b978663e4c1682ac7792922b33c07d49e76",
+      "oldBytes": 28840,
+      "currentSha256": "029001ec4c827113c48e88009936fefc68eb55df8e4c635d1b85387eb2ffdad1",
+      "currentBytes": 28849,
+      "parts": 34,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "treemap",
+      "oldSha256": "fe916a7783f5ad6b8165f5a4765ef98ffd4f16832f5641d2bba9ad1370f814dc",
+      "oldBytes": 28652,
+      "currentSha256": "ed95b98640d219d424c99978d814ec166f7551b01f95ea1634f8d8fbfe3a0709",
+      "currentBytes": 28661,
+      "parts": 34,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "waterfall",
+      "oldSha256": "3feacdd270484babee91e670a85e713a058f333ec76178bd63663aa77eb111bb",
+      "oldBytes": 28745,
+      "currentSha256": "fad1ab824c2bd928e78c4a501540e35cd097b54619eca5f8e5733a4585c0491c",
+      "currentBytes": 28754,
+      "parts": 34,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "table",
+      "oldSha256": "0f31232d5d63e59110d5d4000c8d98e6b46dc445276d0c8aa503706afcc5c8f4",
+      "oldBytes": 20194,
+      "currentSha256": "5fe12568be7936ad513d4ab74b62f4174bb9b73baf88e1cc48525074bcfd903e",
+      "currentBytes": 20203,
+      "parts": 28,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/tags/opfData1.xml",
+          "beforeSha256": "99155fea16d56937d923243060aea83e0a76c8104a5922bce6c426c91dd0abd4",
+          "afterSha256": "5894b2055bdd3a9189fad8dc371a76dad009c292c61b50f538d4fd2460bb25a2",
+          "beforeBytes": 1239,
+          "afterBytes": 1239,
+          "onlyDerivedTableThemeEnvironmentChanged": true,
+          "environmentProof": {
+            "old": "5e424d779e2dc3ed",
+            "current": "830e4829368575dc",
+            "recomputedOld": "5e424d779e2dc3ed",
+            "recomputedCurrent": "830e4829368575dc",
+            "restoredOldThemes": "5e424d779e2dc3ed",
+            "allOtherParsedRecordFieldsExact": true
+          }
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true,
+      "nativeSlideEvidence": {
+        "oldSha256": "75191fd6a3bf2aa74ce2b59d6d038918cb334465af0ce0f03470f86dcdc3e316",
+        "newSha256": "75191fd6a3bf2aa74ce2b59d6d038918cb334465af0ce0f03470f86dcdc3e316",
+        "unchangedExpected": "75191fd6a3bf2aa74ce2b59d6d038918cb334465af0ce0f03470f86dcdc3e316"
+      }
+    },
+    {
+      "name": "styled-table",
+      "oldSha256": "a26620f7968baf19a46d7bae81db07b9b1b2dbb9ac3e9b1ce1e179f296827005",
+      "oldBytes": 20022,
+      "currentSha256": "d20f69a9bc453ec2390c9d29d9fbcb1815c210b64e88b8d648cd2fda324697e2",
+      "currentBytes": 20030,
+      "parts": 28,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/tags/opfData1.xml",
+          "beforeSha256": "55a1f6f69d04fc8fcd0b8d13e5951eaa5241ae9ecb19f74f02f8405e1479a044",
+          "afterSha256": "76e31c0c04382329811c034641a1f22b87729b84f12a12483a4cc30622338cf8",
+          "beforeBytes": 1041,
+          "afterBytes": 1041,
+          "onlyDerivedTableThemeEnvironmentChanged": true,
+          "environmentProof": {
+            "old": "5e424d779e2dc3ed",
+            "current": "830e4829368575dc",
+            "recomputedOld": "5e424d779e2dc3ed",
+            "recomputedCurrent": "830e4829368575dc",
+            "restoredOldThemes": "5e424d779e2dc3ed",
+            "allOtherParsedRecordFieldsExact": true
+          }
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true,
+      "nativeSlideEvidence": {
+        "oldSha256": "b74f7d78955d8da43fca63ac9ee1203d4e1b3b7929e445dca3a725e038863de9",
+        "newSha256": "b74f7d78955d8da43fca63ac9ee1203d4e1b3b7929e445dca3a725e038863de9",
+        "unchangedExpected": "b74f7d78955d8da43fca63ac9ee1203d4e1b3b7929e445dca3a725e038863de9"
+      }
+    },
+    {
+      "name": "mixed-blocks",
+      "oldSha256": "aa6029f7cceaa008b09c15d4c1cfc8dfcc2c43bc1bc8ba8bb3b14706ae3ed637",
+      "oldBytes": 26869,
+      "currentSha256": "b1526d1fa203fa23d0a5660b41d06fee517e5a63be845b4c2501a89d71151d07",
+      "currentBytes": 26879,
+      "parts": 31,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/tags/opfData1.xml",
+          "beforeSha256": "8e9aaafa81b975731ea55d87997da5de13b6f69e60c74206c2e356ddaa47ccfc",
+          "afterSha256": "9c8a4ef5a0ab9d33bc7fccce142008a8cca63385849be7fb6d59f69678584395",
+          "beforeBytes": 665,
+          "afterBytes": 665,
+          "onlyDerivedTableThemeEnvironmentChanged": true,
+          "environmentProof": {
+            "old": "5e424d779e2dc3ed",
+            "current": "830e4829368575dc",
+            "recomputedOld": "5e424d779e2dc3ed",
+            "recomputedCurrent": "830e4829368575dc",
+            "restoredOldThemes": "5e424d779e2dc3ed",
+            "allOtherParsedRecordFieldsExact": true
+          }
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true,
+      "nativeSlideEvidence": {
+        "oldSha256": "f94e0fdc8415833d61bc0d96a67a456d3b7486d3809155182ddaadb9e7224907",
+        "newSha256": "f94e0fdc8415833d61bc0d96a67a456d3b7486d3809155182ddaadb9e7224907",
+        "unchangedExpected": "f94e0fdc8415833d61bc0d96a67a456d3b7486d3809155182ddaadb9e7224907"
+      }
+    }
+  ],
+  "nativeUIVerified": false,
+  "exactCaller": {
+    "module": "test/rr-54-chart-table-data.mjs",
+    "catalogs": "omitted",
+    "options": "toPptx(structuredClone(deck))"
+  },
+  "allPartCountsAndNativeSlideGuardsUnchanged": true,
+  "tableEnvironmentPolicyUnchanged": true
+}

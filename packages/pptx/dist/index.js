@@ -2036,7 +2036,8 @@ function masterBackground(context) {
 
 // The theme part carries the deck-level scheme (slide overrides stay literal)
 // and, for a theme reference that resolves (embedded or in a registered catalog), that theme's name, which import
-// recovery matches against the registered catalogs (FF-24).
+// recovery matches against the registered catalogs (FF-24). Without an authored theme,
+// brand the generated theme: PowerPoint uses it for the Home > Layout category.
 function exportTheme(presentation, context, options) {
   const reference = presentation.design?.theme;
   const theme = typeof reference === "string" ? resolveReference(presentation, "themes", reference, {catalogs: options.catalogs}) : undefined;
@@ -2044,7 +2045,7 @@ function exportTheme(presentation, context, options) {
   return {
     themeColors: themeSlotColors(scheme),
     schemeName: scheme.name ?? scheme.id ?? "OpenPresentation",
-    themeName: theme ? theme.record.name ?? theme.id : undefined
+    themeName: theme ? theme.record.name ?? theme.id : "pptx.gallery"
   };
 }
 
@@ -4331,7 +4332,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
       xml = xml.replace('</Types>', `${overrides}</Types>`);
     }
     if (/^ppt\/slideMasters\/slideMaster\d+\.xml$/.test(path)) {
-      // Name the generated layout group independently of a:theme's authored identity. Script masters copy this label.
+      // Name the generated master; PowerPoint's layout category also needs the default theme name. Script masters copy this label.
       xml = themeMasterBulletFonts(xml).replace(/<p:cSld\b([^>]*)>/, (_, attributes) =>
         `<p:cSld${attributes.replace(/\s+name="[^"]*"/, '')} name="pptx.gallery">`);
     }
