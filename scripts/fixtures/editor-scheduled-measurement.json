@@ -1,0 +1,17 @@
+{
+  "id": 38706679059,
+  "name": "Flake measurement",
+  "head_branch": "main",
+  "head_sha": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+  "path": ".github/workflows/flake-repeat.yml",
+  "event": "schedule",
+  "workflow_id": 373564717,
+  "check_suite_id": 104888164013,
+  "check_suite_node_id": "CS_kwDOSoCN588AAAAYa9JerQ",
+  "repository": {
+    "full_name": "OpenPresentation/opf-editor"
+  },
+  "head_repository": {
+    "full_name": "OpenPresentation/opf-editor"
+  }
+}

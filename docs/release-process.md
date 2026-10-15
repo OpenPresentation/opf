@@ -102,7 +102,7 @@ What each step checks:
 - `plan` reads, per package: whether the version is already on npm (then it is only verified), the version in the
   manifest at `main`'s head, the release commit (the commit that set the version) and its merged release-prep PR, the
   required checks on the release commit (the `main` ruleset's required checks; for a repository without a ruleset,
-  every reported check), the tag, whether the upstream versions of the train are on npm, and the dependency floors.
+  every reported check apart from existing advisory bots and the identity-verified scheduled Editor flake measurement), the tag, whether the upstream versions of the train are on npm, and the dependency floors.
   It flags every sibling whose `@openpresentation/opf` floor stays below a new core in the train, with hints from core's
   fragments or changelog section: the tool cannot know whether a core release moves geometry, so the release owner
   decides whether the lockstep rule below applies (flag, never decided).
@@ -368,3 +368,18 @@ must align the CLI's peer metadata with core's peer manifest and `packages/javas
 Release core's new contract first. Then CLI prep keeps those aligned ranges and advances its core dependency
 and development pins. If CLI metadata still names the old incompatible line, prep stops before cloning;
 make the contract change in its own reviewed PR, rather than editing core runtime files in release prep.
+
+
+### Scheduled Editor measurement policy (RR-68)
+
+The Editor's `.github/workflows/flake-repeat.yml` declares that its scheduled repeat measures rather than gates.
+The fallback-all mode in `pr-gate.mjs` and `release-train.mjs` therefore treats that measurement as advisory only
+when authenticated workflow-run metadata verifies `OpenPresentation/opf-editor`, GitHub Actions app 15368,
+workflow 373564717, that exact path, event `schedule`, branch `main`, the observed commit SHA and check-suite
+association. Both the check runs and the running suite follow this policy; advisory activity and failures remain
+visible. Explicitly required contexts always gate, including the same job name. Commit statuses, other workflows,
+events, repositories or apps, and missing or inaccessible identity metadata continue to gate.
+
+Identity lookups are cached per candidate run and commit for each observer's lifetime, including failed lookups;
+they do not poll workflow state. The policy changes no checks, thresholds, retries or workflow executions, and does
+not authorize using an unmerged tooling change for a release.

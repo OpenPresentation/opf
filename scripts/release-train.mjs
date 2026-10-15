@@ -38,6 +38,7 @@ import { fileURLToPath } from "node:url";
 import { ancestry, githubApi, OWNER } from "./ecosystem-lock.mjs";
 import { assertPublishedGallery } from "./candidate-gallery.mjs";
 import { satisfies } from "./release-plan-cli.mjs";
+import { knownBranchRules, measurementClassifier } from "./measurement-policy.mjs";
 
 /** The five packages in lockstep order. `upstream` are the packages whose versions this one's floors may name. */
 export const PACKAGES = [
@@ -427,16 +428,18 @@ export async function openPrepPull(deps, pkg, version) {
   return pull ? { number: pull.number, url: pull.html_url, title: pull.title, branch: pull.head.ref, sha: pull.head.sha } : null;
 }
 
-/** Required status checks of main (rulesets), or [] when the repository has none. */
+/** Preserve required checks, and distinguish an empty known policy from an unreadable policy. */
 async function requiredChecks(deps, repo) {
   try {
     const rules = await deps.api(`/repos/${OWNER}/${repo}/rules/branches/main`);
-    return [...new Set(rules.filter((rule) => rule.type === "required_status_checks").flatMap((rule) => rule.parameters.required_status_checks.map((check) => check.context)))];
+    return { known: knownBranchRules(rules), required: [...new Set(rules.filter((rule) => rule.type === "required_status_checks").flatMap((rule) => rule.parameters.required_status_checks.map((check) => check.context)))] };
   } catch (error) {
-    if (error.status === 404) return [];
+    if (error.status === 404) return { known: false, required: [] };
     throw error;
   }
 }
+
+const measurementClassifiers = new WeakMap();
 
 /**
  * The checks on a commit: the latest run per check name plus commit statuses. With required checks (a ruleset), each
@@ -444,10 +447,19 @@ async function requiredChecks(deps, repo) {
  * Returns { state: "green" | "pending" | "red", required, failing, pending, missing }.
  */
 export async function commitChecks(deps, repo, sha) {
-  const required = await requiredChecks(deps, repo);
+  const policy = await requiredChecks(deps, repo);
+  const required = policy.required;
   const runs = (await deps.api(`/repos/${OWNER}/${repo}/commits/${sha}/check-runs?per_page=100`)).check_runs ?? [];
+  if (!measurementClassifiers.has(deps)) measurementClassifiers.set(deps, measurementClassifier(route => deps.api(`/${route}`)));
+  const isMeasurement = measurementClassifiers.get(deps);
+  const measurements = [];
   const latest = new Map();
   for (const run of runs) {
+    if (policy.known && !required.length && await isMeasurement({ repo: `${OWNER}/${repo}`, sha, name: run.name,
+      appId: run.app?.id, appSlug: run.app?.slug, suiteId: run.check_suite?.id, url: run.details_url })) {
+      measurements.push(run);
+      continue;
+    }
     if (ADVISORY_CHECKS.has(run.name)) continue;
     const seen = latest.get(run.name);
     if (!seen || (run.started_at ?? "") > (seen.started_at ?? "")) latest.set(run.name, run);
@@ -459,11 +471,14 @@ export async function commitChecks(deps, repo, sha) {
   const failing = names.filter((name) => results.get(name) === "failure");
   const pending = names.filter((name) => results.get(name) === "pending");
   const missing = required.filter((name) => !results.has(name));
-  const advisoryFailing = required.length ? [...results].filter(([name, result]) => !required.includes(name) && result === "failure").map(([name]) => name) : [];
+  const advisoryFailing = required.length ? [...results].filter(([name, result]) => !required.includes(name) && result === "failure").map(([name]) => name) :
+    [...new Set(measurements.filter(run => run.status === "completed" && !["success", "skipped", "neutral"].includes(run.conclusion)).map(run => run.name))];
+  const advisoryMeasurements = [...new Set(measurements.map(run => run.name))];
+  const advisoryPending = [...new Set(measurements.filter(run => run.status !== "completed").map(run => run.name))];
   let state = "green";
   if (failing.length) state = "red";
   else if (pending.length || missing.length || !names.length) state = "pending";
-  return { state, required, failing, pending, missing, advisoryFailing, total: results.size };
+  return { state, required, failing, pending, missing, advisoryFailing, advisoryMeasurements, advisoryPending, total: results.size };
 }
 
 function checksLine(checks) {
@@ -581,6 +596,8 @@ export async function packageState(deps, pkg, version, train) {
   state.checks = await commitChecks(deps, pkg.repo, release.sha);
   if (state.checks.state === "red") state.problems.push(`checks on the release commit ${release.sha.slice(0, 12)}: ${checksLine(state.checks)}`);
   else if (state.checks.state === "pending") state.notes.push(`checks on the release commit ${release.sha.slice(0, 12)}: ${checksLine(state.checks)}`);
+  if (state.checks.advisoryMeasurements.length) state.notes.push(`non-gating scheduled measurement on the release commit: ${state.checks.advisoryMeasurements.join(", ")}`);
+  if (state.checks.advisoryPending.length) state.notes.push(`non-gating measurement running: ${state.checks.advisoryPending.join(", ")}`);
   if (state.checks.advisoryFailing.length) state.notes.push(`non-required checks failing on the release commit: ${state.checks.advisoryFailing.join(", ")}`);
   const releaseManifest = release.sha === state.head ? headManifest : await manifestAt(deps, pkg, release.sha);
   state.manifest = releaseManifest;

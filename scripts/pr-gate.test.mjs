@@ -4,6 +4,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { buildPollQuery, EXIT, evaluateChecks, normalizeContexts, parseArgs, runGate, suiteContexts, summarizeRules, resumeCommand, UsageError } from './pr-gate.mjs';
+import { measurementClassifier } from './measurement-policy.mjs';
 import { selectChecks } from './run-checks.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -907,4 +908,88 @@ test('explicit required old success cannot hide a newer omitted failure or pendi
   original.deps.graphql=async(q,v)=>{if(q.includes('status{contexts')){const first=fallbackSuite('OLD',[old]);first.workflowRun.databaseId=800;const last=fallbackSuite('NEW',[newer]);last.status=status;last.conclusion=status==='COMPLETED'?'FAILURE':null;return suitePage([first,last]);}return graphql(q,v);};
   assert.equal((await gate(['--required','required','--commit',`o/r@${HEAD}`,'--timeout-minutes','1'],original.deps)).code,expected);
  }
+});
+
+
+// Actual-shape run identity from the observed scheduled measurement, without user/profile metadata.
+const measurementRun = JSON.parse(readFileSync(path.join(root, 'scripts/fixtures/editor-scheduled-measurement.json'), 'utf8'));
+test('RR-68: measurement classification requires full verified identity and caches failures as well as success', async () => {
+  const candidate = {repo:'OpenPresentation/opf-editor',sha:measurementRun.head_sha,name:'Repeat the browser suites',appId:15368,appSlug:'github-actions',suiteId:measurementRun.check_suite_node_id,runId:measurementRun.id};
+  let reads = 0;
+  const classify = measurementClassifier(async route => { reads++; assert.equal(route, `repos/OpenPresentation/opf-editor/actions/runs/${measurementRun.id}`); return measurementRun; });
+  assert.equal(await classify(candidate), true);
+  assert.equal(await classify({...candidate,suite:true,workflow:'Flake measurement',event:'schedule'}), true);
+  assert.equal(reads, 1);
+  for (const change of [{repo:'OpenPresentation/opf'},{name:'packages'},{appId:999},{appSlug:'other'},{suiteId:'other'},{sha:OLD},{runId:null}]) assert.equal(await classify({...candidate,...change}), false, JSON.stringify(change));
+  for (const change of [{workflow_id:1},{path:'.github/workflows/ci.yml'},{event:'pull_request'},{event:'workflow_dispatch'},{head_branch:'feature'},{head_sha:OLD},{check_suite_node_id:'other'},{repository:{full_name:'elsewhere/opf-editor'}},{head_repository:{full_name:'elsewhere/opf-editor'}},{id:1}]) {
+    const classifier = measurementClassifier(async () => ({...measurementRun,...change}));
+    assert.equal(await classifier(candidate), false, JSON.stringify(change));
+  }
+  for (const answer of [null, {}, new Error('metadata unavailable')]) {
+    let calls=0;
+    const classifier=measurementClassifier(async()=>{calls++;if(answer instanceof Error) throw answer;return answer;});
+    assert.equal(await classifier(candidate), false);assert.equal(await classifier(candidate), false);assert.equal(calls,1);
+  }
+});
+
+test('RR-68: observer excludes only verified fallback measurement jobs AND running suites, with visible diagnostics', async () => {
+  async function observe({real='SUCCESS', measurement='IN_PROGRESS', required=null, metadata=measurementRun, sameNameStatus=false, suiteOnly=false, all=false, rulesError=false}={}) {
+    const oid=measurementRun.head_sha;
+    const measurementJob=run('Repeat the browser suites',measurement==='IN_PROGRESS'?null:measurement,{oid,status:measurement==='IN_PROGRESS'?'IN_PROGRESS':'COMPLETED',runId:measurementRun.id,workflow:'Flake measurement'});
+    measurementJob.checkSuite.id=measurementRun.check_suite_node_id;
+    measurementJob.checkSuite.workflowRun.event='schedule';
+    const suite={id:measurementRun.check_suite_node_id,status:measurement==='IN_PROGRESS'?'IN_PROGRESS':'COMPLETED',app:{slug:'github-actions',databaseId:15368},workflowRun:measurementJob.checkSuite.workflowRun};
+    const contexts=[run('packages',real==='IN_PROGRESS'?null:real,{oid,status:real==='IN_PROGRESS'?'IN_PROGRESS':'COMPLETED',workflow:'CI'}),...(suiteOnly?[]:[measurementJob]),...(sameNameStatus?[status('Repeat the browser suites','PENDING',{oid})]:[])];
+    const object=pr({head:oid,contexts,suites:[suite]}).commits.nodes[0].commit;
+    const {deps,state}=fake({polls:[{data:{rateLimit:{remaining:4000},r0:{defaultBranchRef:{name:'main'},t0:object}}}],rules:rulesError==='invalid'?[{}]:rulesError?Object.assign(new Error('not visible'),{status:rulesError===403?403:404}):required?[{type:'required_status_checks',parameters:{required_status_checks:[{context:required}]}}]:[]});
+    let reads=0;
+    const original=deps.rest;deps.rest=async(route,init)=>{if(route.includes('/actions/runs/')){reads++;return metadata;}return original(route,init);};
+    const result=await gate(['--commit',`OpenPresentation/opf-editor@${oid}`,'--timeout-minutes','1',...(all?['--required','all']:[])],deps);
+    return {result,state,reads};
+  }
+  let observed=await observe();assert.equal(observed.result.code,EXIT.ok);assert.equal(observed.reads,1);assert.ok(has(observed.state.lines,/non-gating measurement running/));
+  observed=await observe({measurement:'FAILURE'});assert.equal(observed.result.code,EXIT.ok);assert.ok(has(observed.state.lines,/not required, failing: Repeat the browser suites/));
+  assert.equal((await observe({suiteOnly:true})).result.code,EXIT.ok);
+  for(const options of [{real:'IN_PROGRESS'},{rulesError:true},{rulesError:403},{rulesError:'invalid'},{required:'Repeat the browser suites'},{required:'Repeat the browser suites',all:true},{sameNameStatus:true},{metadata:null},{metadata:{...measurementRun,event:'pull_request'}}]) assert.equal((await observe(options)).result.code,EXIT.timeout,JSON.stringify(options));
+  assert.equal((await observe({rulesError:true})).reads,0);
+  assert.equal((await observe({rulesError:403})).reads,0);
+  assert.equal((await observe({rulesError:'invalid'})).reads,0);
+  assert.equal((await observe({real:'FAILURE'})).result.code,EXIT.red);
+  assert.equal((await observe({measurement:'FAILURE',required:'Repeat the browser suites'})).result.code,EXIT.red);
+});
+
+// A measurement is outside the gating history: its newer suite must not supersede
+// a cancelled real dispatch, even though GitHub gives both the same workflow/job names.
+test('RR-68: scheduled measurement cannot supersede a cancelled non-advisory dispatch on the same commit', async () => {
+  const oid = measurementRun.head_sha;
+  const dispatchRun = {...measurementRun, id:measurementRun.id-1, event:'workflow_dispatch', check_suite_node_id:'CS_dispatch', check_suite_id:measurementRun.check_suite_id-1};
+  for (const includeScheduledJob of [false, true]) {
+    const cancelled = run('Repeat the browser suites','CANCELLED',{oid,runId:dispatchRun.id,workflow:'Flake measurement'});
+    cancelled.checkSuite.id=dispatchRun.check_suite_node_id;
+    cancelled.checkSuite.workflowRun.event='workflow_dispatch';
+    const scheduled = pending('Repeat the browser suites',{oid,runId:measurementRun.id,workflow:'Flake measurement'});
+    scheduled.checkSuite.id=measurementRun.check_suite_node_id;
+    scheduled.checkSuite.workflowRun.event='schedule';
+    const suite = (job,status,conclusion) => ({id:job.checkSuite.id,app:job.checkSuite.app,workflowRun:job.checkSuite.workflowRun,status,conclusion});
+    const contexts = [run('packages','SUCCESS',{oid,workflow:'CI'}),cancelled,...(includeScheduledJob?[scheduled]:[])];
+    const object = pr({head:oid,contexts,suites:[suite(cancelled,'COMPLETED','CANCELLED'),suite(scheduled,'IN_PROGRESS',null)]}).commits.nodes[0].commit;
+    const {deps,state} = fake({polls:[{data:{rateLimit:{remaining:4000},r0:{defaultBranchRef:{name:'main'},t0:object}}}],rules:[]});
+    const original = deps.rest;
+    deps.rest = async (route,init) => route.endsWith(`/actions/runs/${measurementRun.id}`) ? measurementRun :
+      route.endsWith(`/actions/runs/${dispatchRun.id}`) ? dispatchRun : original(route,init);
+    const observed = await gate(['--commit',`OpenPresentation/opf-editor@${oid}`,'--timeout-minutes','1'],deps);
+    assert.equal(observed.code,EXIT.red,`scheduled check materialized: ${includeScheduledJob}`);
+    assert.ok(has(state.lines,/Repeat the browser suites \(CANCELLED\)/));
+  }
+});
+
+test('RR-68: advisory suites cannot qualify a gating retry; required-mode retry semantics are unchanged', () => {
+  const workflow='Flake measurement';
+  const cancelled=run('unrecognized job','CANCELLED',{oid:measurementRun.head_sha,runId:measurementRun.id+1,id:10,workflow});
+  const retried=run('unrecognized job','SUCCESS',{oid:measurementRun.head_sha,runId:measurementRun.id,id:20,attempt:2,workflow});
+  const checks=normalizeContexts([cancelled,retried],measurementRun.head_sha);
+  const measurementSuite={...suite(measurementRun.id,'COMPLETED','SUCCESS',workflow,2),id:measurementRun.check_suite_node_id,measurement:true};
+  measurementSuite.workflowRun.event='schedule';
+  assert.equal(evaluateChecks({checks,required:null,suites:[measurementSuite]}).state,'pending');
+  assert.equal(evaluateChecks({checks,required:[{context:'unrecognized job'}],suites:[measurementSuite]}).state,'green');
 });

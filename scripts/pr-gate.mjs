@@ -13,7 +13,7 @@
 // of the same job replaces the failed one, a newer failure replaces an older success; a CANCELLED check of a run that a newer
 // run of the same workflow superseded is ignored even before the newer run reports that check). Zero checks or a required check
 // that has not registered yet is pending, never green. Without a ruleset (or --required all) every check
-// counts except neutral bots (Cursor Bugbot), every GitHub Actions suite must be complete, and green must hold on two
+// counts except neutral bots (Cursor Bugbot) and identity-verified scheduled Editor flake measurement; every gating GitHub Actions suite must be complete, and green must hold on two
 // consecutive polls. Red (a required check failed, was cancelled, timed out, hit a startup failure or needs action) stops
 // at once and prints the failing checks with their URLs; --rerun-once re-runs the failed or cancelled workflow runs one
 // time first (default --rerun-scope failed; cancelled runs always restart in full). With --rerun-scope all, restart each
@@ -30,10 +30,11 @@
 // head has been seen, a later change exits 4 at once), 5 merge-queue ejection twice or the merge/enqueue was refused, 64 usage, failed gh auth or a target
 // that does not exist, 75 timeout (prints a RESUME line; re-run it). With several targets the first failure code in argument order wins,
 // then 75 if any target is unfinished. GitHub API: gh's auth; GraphQL only in the poll loop (rateLimit is read on every
-// poll and the gate backs off below 200 points); REST only for the rulesets (once per repository) and --rerun-once.
+// poll and the gate backs off below 200 points); REST for rulesets (once per repository), --rerun-once, and cached identity verification of candidate Editor measurement runs.
 import { spawnSync } from 'node:child_process';
 import { realpathSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
+import { knownBranchRules, measurementClassifier } from './measurement-policy.mjs';
 
 export const EXIT = { ok: 0, red: 1, dirty: 2, closed: 3, headMoved: 4, ejected: 5, usage: 64, timeout: 75 };
 /** Checks that never gate (advisory bots), in the "all checks" fallback. Shared with release-train's ADVISORY_CHECKS. */
@@ -127,7 +128,7 @@ export function parseArgs(argv) {
 
 const CONTEXT_NODES =
   'nodes{__typename ... on CheckRun{databaseId name status conclusion detailsUrl startedAt checkSuite{id commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}} ... on StatusContext{context state targetUrl createdAt commit{oid}}}';
-const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){pageInfo{hasNextPage} nodes{id checkRuns(first:1){totalCount} status conclusion app{slug} workflowRun{databaseId event runAttempt workflow{name}}}}`;
+const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){pageInfo{hasNextPage} nodes{id checkRuns(first:1){totalCount} status conclusion app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}}`;
 const SUITE_RUNS = 'checkRuns(first:100){pageInfo{hasNextPage endCursor} nodes{__typename databaseId name status conclusion detailsUrl startedAt checkSuite{id commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}}}';
 const SUITE_FIELDS = `id status conclusion commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}} ${SUITE_RUNS}`;
 /** A cancelled suite with no failed jobs needs real newer same-workflow reports before its inconsistency is superseded. */
@@ -272,6 +273,8 @@ export function normalizeContexts(nodes, headOid) {
         attempt: node.checkSuite?.workflowRun?.runAttempt ?? null,
         workflow: node.checkSuite?.workflowRun?.workflow?.name ?? null,
         appId: node.checkSuite?.app?.databaseId ?? null,
+        appSlug: node.checkSuite?.app?.slug ?? null,
+        suiteId: node.checkSuite?.id ?? null,
       });
     } else if (node.__typename === 'StatusContext') {
       const oid = node.commit?.oid;
@@ -361,8 +364,12 @@ export function dropSupersededCancellations(checks, suites = []) {
  * advisoryFailing, total}.
  */
 export function evaluateChecks({ checks: reported, required, suites = [], allowSkipped = true, neutral = NEUTRAL_BOTS }) {
-  const checks = dropSupersededCancellations(reported, suites);
   const mode = required?.length ? 'required' : 'all';
+  const advisory = mode === 'all' ? reported.filter(check => check.measurement) : [];
+  const gatingReported = reported.filter(check => !advisory.includes(check));
+  const gatingSuites = mode === 'all' ? suites.filter(suite => !suite.measurement) : suites;
+  // Advisory suites cannot supersede or qualify retries of a real gating run.
+  const checks = dropSupersededCancellations(gatingReported, gatingSuites);
   const verdicts = [];
   const missing = [];
   const counted = new Set();
@@ -384,19 +391,19 @@ export function evaluateChecks({ checks: reported, required, suites = [], allowS
   // therefore needs the matching current retry suite to complete successfully.
   const winningChecks = latestPerCheck(checks);
   const sameCheck = (a,b) => a.kind === b.kind && a.id === b.id && a.runId === b.runId && a.name === b.name && a.workflow === b.workflow;
-  const retryOverrides = reported.filter(check => winningChecks.some(winner => sameCheck(winner,check)) && reported.some(other => retryAfter(check, other) && (
+  const retryOverrides = gatingReported.filter(check => winningChecks.some(winner => sameCheck(winner,check)) && gatingReported.some(other => retryAfter(check, other) && (
     (other.name === check.name && verdicts.some(winner => sameCheck(winner,check))) ||
     (other.conclusion === 'CANCELLED' && (mode === 'all' || counted.has(other.name)) && !verdicts.some(winner => winner.kind === other.kind && winner.workflow === other.workflow && winner.name === other.name && supersedes(winner,other)))
   )));
-  const retrySuites = retryOverrides.map(check => ({check, suite:suites.find(suite => suite.app?.slug === 'github-actions' && suite.workflowRun?.databaseId === check.runId && suite.workflowRun?.workflow?.name === check.workflow && suite.workflowRun?.runAttempt === check.attempt)}));
+  const retrySuites = retryOverrides.map(check => ({check, suite:gatingSuites.find(suite => suite.app?.slug === 'github-actions' && suite.workflowRun?.databaseId === check.runId && suite.workflowRun?.workflow?.name === check.workflow && suite.workflowRun?.runAttempt === check.attempt)}));
   const retryFailing = retrySuites.filter(({suite}) => suite?.status === 'COMPLETED' && RED_CONCLUSIONS.has(suite.conclusion)).map(({check,suite}) => ({name:`${check.workflow} retry suite`,conclusion:suite.conclusion,url:check.url,runId:check.runId,id:null}));
   const passes = (check) => check.result === 'success' || (check.result === 'skipped' && allowSkipped);
   const failing = verdicts.filter((check) => check.result === 'failure' || (check.result === 'skipped' && !allowSkipped));
   const pending = verdicts.filter((check) => check.result === 'pending').map((check) => check.name);
   for (const {check,suite} of retrySuites) if ((suite?.status !== 'COMPLETED' || !['SUCCESS', ...RED_CONCLUSIONS].includes(suite.conclusion)) && !pending.includes(`${check.workflow} retry suite`)) pending.push(`${check.workflow} retry suite`);
   const passed = verdicts.filter(passes).map((check) => check.name);
-  const advisoryFailing = [...new Set(latestPerCheck(checks).filter((check) => !counted.has(check.name) && check.result === 'failure').map((check) => check.name))];
-  const suitesRunning = mode === 'all' ? suites.filter((suite) => suite?.app?.slug === 'github-actions' && suite.workflowRun && suite.status !== 'COMPLETED').length : 0;
+  const advisoryFailing = [...new Set(latestPerCheck([...checks, ...advisory]).filter((check) => !counted.has(check.name) && check.result === 'failure').map((check) => check.name))];
+  const suitesRunning = mode === 'all' ? gatingSuites.filter((suite) => suite?.app?.slug === 'github-actions' && suite.workflowRun && suite.status !== 'COMPLETED').length : 0;
   let state = 'green';
   if (failing.length || retryFailing.length) state = 'red';
   else if (pending.length || missing.length || !verdicts.length || suitesRunning) state = 'pending';
@@ -408,6 +415,8 @@ export function evaluateChecks({ checks: reported, required, suites = [], allowS
     missing,
     passed,
     advisoryFailing,
+    advisoryPending: advisory.filter(check => check.result === 'pending').map(check => check.name),
+    advisoryMeasurements: [...new Set([...advisory.map(check => check.name), ...suites.filter(suite => mode === 'all' && suite.measurement).map(() => 'Flake measurement')])],
     suitesRunning,
     total: verdicts.length,
   };
@@ -422,6 +431,8 @@ export function describeChecks(checks) {
   if (checks.missing.length) parts.push(`not reported yet: ${checks.missing.join(', ')}`);
   if (checks.suitesRunning) parts.push(`${checks.suitesRunning} workflow runs in progress`);
   if (!checks.total && !checks.missing.length) parts.push('no checks reported');
+  if (checks.advisoryMeasurements?.length) parts.push(`non-gating measurement: ${checks.advisoryMeasurements.join(', ')}`);
+  if (checks.advisoryPending?.length) parts.push(`non-gating measurement running: ${checks.advisoryPending.join(', ')}`);
   if (checks.advisoryFailing.length) parts.push(`not required, failing: ${checks.advisoryFailing.join(', ')}`);
   return parts.join('; ');
 }
@@ -485,7 +496,8 @@ export async function runGate(options, deps) {
     let summary = { required: [], hasQueue: false, source: 'none' };
     try {
       const path = `repos/${repo.owner}/${repo.name}/rules/branches/${base.split('/').map(encodeURIComponent).join('/')}?per_page=100`;
-      summary = { ...summarizeRules(await rest(path)), source: 'ruleset' };
+      const rules = await rest(path);
+      summary = { ...summarizeRules(rules), source: knownBranchRules(rules) ? 'ruleset' : 'unknown' };
     } catch (error) {
       if (error?.status !== 404) say(`${repo.owner}/${repo.name}: could not read the rules of ${base} (${error?.message ?? error}); every check counts`);
     }
@@ -493,7 +505,7 @@ export async function runGate(options, deps) {
     if (Array.isArray(options.required)) required = options.required.map((context) => ({ context, integrationId: null }));
     else if (options.required === 'all') required = null;
     else required = summary.required.length ? summary.required : null;
-    const entry = { ...summary, required };
+    const entry = { ...summary, required, policyRequired: summary.required };
     repo.rules.set(base, entry);
     if (!repo.bases.includes(base)) repo.bases.push(base);
     const what = required ? `${required.length} required checks (${required.map((check) => check.context).join(', ')})` : 'no required checks: every check except neutral bots counts';
@@ -574,9 +586,19 @@ export async function runGate(options, deps) {
     }
   }
 
+  const isMeasurement = measurementClassifier(rest);
+
   async function handleChecks(repo, commit, headOid, rules) {
     const nodes = commit && commit.oid === headOid ? await fullContexts(repo, commit, rules.required) : [];
-    const checks = evaluateChecks({ checks: normalizeContexts(nodes, headOid), required: rules.required, suites: commit?.checkSuites?.nodes ?? [], allowSkipped: options.allowSkipped !== false });
+    const normalized = normalizeContexts(nodes, headOid);
+    const suites = (commit?.checkSuites?.nodes ?? []).map(suite => ({...suite}));
+    if (rules.source === 'ruleset' && !rules.required?.length && !rules.policyRequired?.length) {
+      const fullRepo = `${repo.owner}/${repo.name}`;
+      for (const check of normalized) check.measurement = await isMeasurement({repo: fullRepo, sha: headOid, ...check});
+      for (const suite of suites) suite.measurement = await isMeasurement({repo: fullRepo, sha: headOid, suite: true,
+        appId: suite.app?.databaseId, appSlug: suite.app?.slug, suiteId: suite.id, runId: suite.workflowRun?.databaseId, workflow: suite.workflowRun?.workflow?.name, event: suite.workflowRun?.event});
+    }
+    const checks = evaluateChecks({ checks: normalized, required: rules.required, suites, allowSkipped: options.allowSkipped !== false });
     if (commit && commit.oid !== headOid) checks.note = 'the rollup is for an older commit';
     return checks;
   }
