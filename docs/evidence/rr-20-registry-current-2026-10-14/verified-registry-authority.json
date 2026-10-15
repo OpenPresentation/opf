@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "verifiedAt": "2026-10-15T05:53:13.460346+00:00",
+  "verifiedAt": "2026-10-15T06:53:24.050763+00:00",
   "packages": [
     {
       "name": "@openpresentation/opf",
@@ -144,62 +144,63 @@
     },
     {
       "name": "@openpresentation/opf-pptx",
-      "version": "0.20.1",
-      "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301",
+      "version": "0.20.2",
+      "gitHead": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
       "dist": {
-        "integrity": "sha512-I85PuU42ELSQ1LmilNNKTAAJgCntI2JFJDfL/LkkN356CP+6npwCMGC1k343nt4HPVOpZwLqVTMkok4S2DD4cA=="
+        "integrity": "sha512-e38+yo59ap+Es94ZdXdtAyMW0xF2eM4XXJEMRRCgWDRBbrVNWU2AywoQqq6PBQzNp1N3tT27eJY5o2bafbLPLA=="
       },
       "repository": "https://github.com/OpenPresentation/opf-pptx",
-      "tag": "opf-pptx-v0.20.1",
+      "tag": "opf-pptx-v0.20.2",
       "workflow": ".github/workflows/release.yml",
-      "provenanceInvocation": "https://github.com/OpenPresentation/opf-pptx/actions/runs/38619385113/attempts/1",
+      "provenanceInvocation": "https://github.com/OpenPresentation/opf-pptx/actions/runs/38693529256/attempts/1",
       "canonicalVerification": {
         "ok": true,
+        "logSha256": "a99d2eaeb99a9114db8f89dee31431ae56e51413ae838f1a34433da42f553758",
         "checks": [
           {
             "name": "npm version",
             "ok": true,
-            "detail": "@openpresentation/opf-pptx@0.20.1, integrity sha512-I85PuU42ELSQ1LmilNNKTAAJgCntI2JFJDfL/LkkN356CP+6npwCMGC1k343nt4HPVOpZwLqVTMkok4S2DD4cA=="
+            "detail": "@openpresentation/opf-pptx@0.20.2, integrity sha512-e38+yo59ap+Es94ZdXdtAyMW0xF2eM4XXJEMRRCgWDRBbrVNWU2AywoQqq6PBQzNp1N3tT27eJY5o2bafbLPLA=="
           },
           {
             "name": "tag",
             "ok": true,
-            "detail": "OpenPresentation/opf-pptx opf-pptx-v0.20.1 -> 9690abd12af8d7a4d6f29a28709517f0b6569301"
+            "detail": "OpenPresentation/opf-pptx opf-pptx-v0.20.2 -> 19f775a74905ff8760c21e0a3520e2f0aad19f6e"
           },
           {
             "name": "gitHead",
             "ok": true,
-            "detail": "gitHead 9690abd12af8d7a4d6f29a28709517f0b6569301 = tag commit 9690abd12af8d7a4d6f29a28709517f0b6569301"
+            "detail": "gitHead 19f775a74905ff8760c21e0a3520e2f0aad19f6e = tag commit 19f775a74905ff8760c21e0a3520e2f0aad19f6e"
           },
           {
             "name": "tag on main",
             "ok": true,
-            "detail": "9690abd12af8 is on opf-pptx main (identical)"
+            "detail": "19f775a74905 is on opf-pptx main (identical)"
           },
           {
             "name": "version at tag",
             "ok": true,
-            "detail": "package.json at 9690abd12af8 carries 0.20.1"
+            "detail": "package.json at 19f775a74905 carries 0.20.2"
           },
           {
             "name": "dist.attestations",
             "ok": true,
-            "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.20.1)"
+            "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.20.2)"
           },
           {
             "name": "SLSA provenance",
             "ok": true,
-            "detail": "built by .github/workflows/release.yml on refs/tags/opf-pptx-v0.20.1 from 9690abd12af8 (https://github.com/OpenPresentation/opf-pptx/actions/runs/38619385113/attempts/1)"
+            "detail": "built by .github/workflows/release.yml on refs/tags/opf-pptx-v0.20.2 from 19f775a74905 (https://github.com/OpenPresentation/opf-pptx/actions/runs/38693529256/attempts/1)"
           },
           {
             "name": "npm audit signatures",
             "ok": true,
-            "detail": "14 verified, 0 invalid, 0 missing; @openpresentation/opf-pptx@0.20.1 has a verified attestation"
+            "detail": "14 verified, 0 invalid, 0 missing; @openpresentation/opf-pptx@0.20.2 has a verified attestation"
           },
           {
             "name": "GitHub release",
             "ok": true,
-            "detail": "https://github.com/OpenPresentation/opf-pptx/releases/tag/opf-pptx-v0.20.1"
+            "detail": "https://github.com/OpenPresentation/opf-pptx/releases/tag/opf-pptx-v0.20.2"
           },
           {
             "name": "dist-tag",
@@ -208,8 +209,7 @@
             "detail": "latest"
           }
         ],
-        "logSha256": "4eed90403d35d324e7ca1dd2db3c7143e113ba44b15a3aea0a4b94fa7542be84",
-        "logName": "rr81-pptx0201-independent-verification.json"
+        "logName": "docs/evidence/rr-68-pptx022-registry-2026-10-15/independent-verify.json"
       }
     },
     {

@@ -55,7 +55,7 @@
     "@openpresentation/gallery": "3.0.0",
     "@openpresentation/opf": "0.20.1",
     "@openpresentation/opf-editor": "0.20.1",
-    "@openpresentation/opf-pptx": "0.20.1",
+    "@openpresentation/opf-pptx": "0.20.2",
     "@openpresentation/opf-render": "0.20.0",
     "@resvg/resvg-js": "^2.6.2",
     "fast-xml-parser": "5.11.2",
