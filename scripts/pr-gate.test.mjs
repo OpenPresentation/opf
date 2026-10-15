@@ -644,6 +644,73 @@ test('cancelled/null/unknown completed empty suites cannot disappear beside succ
 });
 
 
+const capturedEmptyCancellation = () => JSON.parse(readFileSync(path.join(root, 'scripts/fixtures/pr-gate-empty-cancelled-suite.json'), 'utf8')).response;
+const capturedSuites = response => response.data.repository.object.checkSuites;
+const capturedReplacement = response => capturedSuites(response).nodes.find(suite => suite.workflowRun.databaseId === 38668474028);
+const capturedEmpty = response => capturedSuites(response).nodes.find(suite => suite.workflowRun.databaseId === 38668473691);
+async function capturedFallback(response) {
+ const oid=response.data.repository.object.oid;
+ const result=await suiteContexts(async()=>structuredClone(response),'OpenPresentation','opf',oid);
+ return {result,verdict:evaluateChecks({checks:normalizeContexts(result.nodes,oid),required:null,suites:result.suites})};
+}
+for(const reverse of [false,true])test(`captured empty cancellation is superseded by real newer jobs, independent of suite order (${reverse?'reversed':'captured'})`,async()=>{
+ const response=capturedEmptyCancellation(),connection=capturedSuites(response);
+ assert.equal(response.data.repository.object.oid,'32be29f9e05eaec527332a50a16381dd9c832899');
+ assert.equal(capturedEmpty(response).checkRuns.nodes.length,0);
+ assert.equal(capturedReplacement(response).checkRuns.nodes.length,2);
+ if(reverse)connection.nodes.reverse();
+ const {result,verdict}=await capturedFallback(response);
+ assert.equal(result.suites.length,5);assert.equal(result.nodes.length,6,'only original actual job reports returned');
+ assert.equal(verdict.state,'pending');assert.equal(verdict.failing.length,0);
+ assert.deepEqual(verdict.pending.sort(),['Node 22 (engines range)','Node 26 (engines range)']);
+});
+test('captured empty cancellation allows actual replacement success and preserves actual replacement failure',async()=>{
+ for(const failure of [false,true]){
+  const response=capturedEmptyCancellation(),replacement=capturedReplacement(response);
+  replacement.status='COMPLETED';replacement.conclusion=failure?'FAILURE':'SUCCESS';
+  for(const run of replacement.checkRuns.nodes){run.status='COMPLETED';run.conclusion='SUCCESS';}
+  if(failure)replacement.checkRuns.nodes[0].conclusion='FAILURE';
+  const {verdict}=await capturedFallback(response);
+  assert.equal(verdict.state,failure?'red':'green');
+  if(failure)assert.equal(verdict.failing[0].name,replacement.checkRuns.nodes[0].name);
+ }
+});
+const refusedCancellationShapes={
+ 'no newer actual jobs':response=>{capturedSuites(response).nodes=capturedSuites(response).nodes.filter(suite=>suite.workflowRun.databaseId!==38668474028);},
+ 'different workflow':response=>{const suite=capturedReplacement(response);suite.workflowRun.workflow.name='Other workflow';for(const run of suite.checkRuns.nodes)run.checkSuite.workflowRun.workflow.name='Other workflow';},
+ 'different app':response=>{capturedReplacement(response).app.slug='another-app';},
+ 'newer cancelled run':response=>{const suite=capturedReplacement(response);suite.status='COMPLETED';suite.conclusion='CANCELLED';for(const run of suite.checkRuns.nodes){run.status='COMPLETED';run.conclusion='CANCELLED';}},
+ 'latest empty cancellation':response=>{capturedEmpty(response).workflowRun.databaseId=38668476000;},
+ 'newer suite has no reports':response=>{capturedReplacement(response).checkRuns.nodes=[];},
+ 'newer reports are only skipped':response=>{const suite=capturedReplacement(response);suite.status='COMPLETED';suite.conclusion='SKIPPED';for(const run of suite.checkRuns.nodes){run.status='COMPLETED';run.conclusion='SKIPPED';}},
+ 'newer reports have conflicting workflow identity':response=>{for(const run of capturedReplacement(response).checkRuns.nodes)run.checkSuite.workflowRun.workflow.name='Other workflow';},
+ 'empty failure':response=>{capturedEmpty(response).conclusion='FAILURE';},
+ 'empty unknown conclusion':response=>{capturedEmpty(response).conclusion='UNRECOGNIZED';},
+ 'empty null conclusion':response=>{capturedEmpty(response).conclusion=null;},
+};
+for(const [name,alter] of Object.entries(refusedCancellationShapes))test(`captured empty cancellation stays fail-closed: ${name}`,async()=>{
+ const response=capturedEmptyCancellation();alter(response);
+ await assert.rejects(capturedFallback(response),/failed check suite has no corresponding failed check run/);
+});
+test('captured genuine successor on a later suite page resolves old empty cancellation',async()=>{
+ const first=capturedEmptyCancellation(),second=capturedEmptyCancellation(),nodes=capturedSuites(first).nodes;
+ capturedSuites(first).nodes=nodes.slice(0,3);capturedSuites(first).pageInfo={hasNextPage:true,endCursor:'later-suites'};
+ capturedSuites(second).nodes=nodes.slice(3);
+ const pages=[first,second],queries=[],oid=first.data.repository.object.oid;
+ const result=await suiteContexts(async query=>{queries.push(query);return pages.shift();},'OpenPresentation','opf',oid);
+ assert.equal(queries.length,2);assert.match(queries[1],/after:"later-suites"/);
+ assert.equal(evaluateChecks({checks:normalizeContexts(result.nodes,oid),required:null,suites:result.suites}).state,'pending');
+});
+test('captured genuine successor reports on a later job page resolve old empty cancellation',async()=>{
+ const response=capturedEmptyCancellation(),replacement=capturedReplacement(response),jobs=replacement.checkRuns.nodes,oid=response.data.repository.object.oid;
+ replacement.checkRuns={nodes:[],pageInfo:{hasNextPage:true,endCursor:'later-jobs'}};
+ const pages=[response,{data:{node:{id:replacement.id,commit:{oid},checkRuns:{nodes:jobs,pageInfo:{hasNextPage:false}}}}}],queries=[];
+ const result=await suiteContexts(async query=>{queries.push(query);return pages.shift();},'OpenPresentation','opf',oid);
+ assert.equal(queries.length,2);assert.match(queries[1],/after:"later-jobs"/);
+ assert.equal(evaluateChecks({checks:normalizeContexts(result.nodes,oid),required:null,suites:result.suites}).state,'pending');
+});
+
+
 test('rerun scope is explicit, validated, and defaults to failed jobs', () => {
   assert.equal(parseArgs(['o/r#7', '--rerun-once']).rerunScope, 'failed');
   for (const scope of ['failed', 'all']) assert.equal(parseArgs(['o/r#7', '--rerun-scope', scope, '--rerun-once']).rerunScope, scope);
