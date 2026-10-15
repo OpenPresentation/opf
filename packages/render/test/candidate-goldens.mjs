@@ -18,7 +18,12 @@ for(const file of ['package.json',plan.baseline+'/../x','/tmp/x','test/golden/ot
 const text=readFileSync(new URL('../.github/workflows/regenerate-candidate-goldens.yml',import.meta.url),'utf8'),push=text.slice(text.indexOf('\n  push:'));
 assert.doesNotMatch(push,/npm ci|npm run build|test\/golden.mjs|test\/layout-template-goldens.mjs/);
 assert.match(push,/git push/);assert.match(push,/tip.*HEAD/);assert.match(text,/contents: read/);assert.match(text,/807/);assert.match(text,/495/);
-assert.match(text,/guard\/opf-render\/test\/golden\/opf-examples-png\.rr81-v2-reviewed/,'unchanged main reproduces its actual reviewed baseline');
+assert.match(text,/env -u OPF_GOLDEN_BASELINE -u OPF_EXAMPLES_DIR -u OPF_GOLDEN_SCALE node test\/golden.mjs/,'unchanged main verifies its actual selected example baseline');
+assert.match(text,/if \[ \"\$SELECTION\" != examples \]; then \(cd guard\/opf-render && node test\/layout-template-goldens.mjs\); fi/,'template generation verifies unchanged main template baseline');
+assert.equal(plan.template, 'test/golden/layout-templates-rr-83-v2.json');
+const rr85 = candidatePlan({core: plan.core, gallery: plan.gallery, name: 'rr85-metric-centering', selection: 'templates'});
+assert.equal(rr85.template, 'test/golden/layout-templates-rr85-metric-centering.json');
+assert.throws(() => allowedPaths(rr85, ['test/golden/layout-templates-rr20-array-areas.json']), /unexpected promotion path/);
 assert.match(text,/OPF_GOLDEN_BASELINE=test\/golden\/opf-examples-png\.rr81-v2-reviewed OPF_GOLDEN_ARTIFACTS=changed/,'candidate review images compare with the historical example baseline');
 assert.match(readFileSync(new URL('./golden.mjs',import.meta.url),'utf8'),/opf-examples-png\.rr20-array-areas/,'ordinary candidate tests select only the new baseline');
 console.log('Candidate goldens: immutable graph refs, fixed counts/keysets/metrics, promotion path and stale-head guards passed.');

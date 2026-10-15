@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { toPng, toSvg } from '../dist/index.js';
+import {layoutMetric} from '@openpresentation/opf/composition';
+import {readTemplateBaseline} from '../scripts/template-baseline.mjs';
 import { featureDecks, fixture, layouts, paginatedDecks, templateDeck } from './layout-template-fixture.mjs';
 
 // OPF 0.19 (RR-81): SVG and PNG goldens of the 28 built-in layout templates, each with 1 to 6 blocks of short and of long
@@ -20,7 +22,6 @@ import { featureDecks, fixture, layouts, paginatedDecks, templateDeck } from './
 //   node test/layout-template-goldens.mjs --promote   rewrites the baseline after the candidate was reviewed
 // and explain the change in test/golden/notes/<ID>.md.
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const baselinePath = path.join(root, 'test/golden/layout-templates-rr20-array-areas.json');
 const output = path.resolve(process.env.OPF_TEMPLATE_GOLDEN_OUT ?? path.join(root, 'artifacts/template-goldens'));
 const update = process.argv.includes('--update'), promote = process.argv.includes('--promote');
 const scale = 0.25;
@@ -34,7 +35,9 @@ const next = {
   source: { fixture: '@openpresentation/gallery layouts (see layout-template-fixture.mjs)', sha256: sha256(JSON.stringify(fixture)), templates: ids.length },
   format: 'svg-png-sha256', scale, systemFonts: false, trace: true, entries: {},
 };
-const previous = (() => { try { return JSON.parse(readFileSync(baselinePath, 'utf8')); } catch { return undefined; } })();
+const metricDefault = layoutMetric(1, {x: 0, y: 0, width: 400, height: 300}).alignment;
+const {selected, comparison, previous} = readTemplateBaseline(root, metricDefault, {update});
+const baselinePath = path.join(root, selected);
 const changed = [];
 const features = featureDecks(), paginated = paginatedDecks();
 for (const { keys, deck } of [...ids.map(templateDeck), ...features, ...paginated]) {
@@ -52,7 +55,7 @@ assert.equal(Object.keys(next.entries).length, 28 * 6 * 2 + [...features, ...pag
 if (update || promote) {
   mkdirSync(output, { recursive: true });
   writeFileSync(path.join(output, 'candidate.json'), `${JSON.stringify(next, null, 1)}\n`);
-  writeFileSync(path.join(output, 'diff.json'), `${JSON.stringify({ sourceMatches: JSON.stringify(previous?.source) === JSON.stringify(next.source), changedSlides: changed.map(({ key }) => key) }, null, 2)}\n`);
+  writeFileSync(path.join(output, 'diff.json'), `${JSON.stringify({ baseline: comparison, sourceMatches: JSON.stringify(previous?.source) === JSON.stringify(next.source), changedSlides: changed.map(({ key }) => key) }, null, 2)}\n`);
   for (const [index, { png }] of changed.entries()) writeFileSync(path.join(output, `${String(index).padStart(4, '0')}.png`), png);
   // Review sheets of the changed slides, 24 to a sheet, labelled with their key.
   for (let offset = 0; offset < changed.length; offset += 24) {
@@ -64,7 +67,7 @@ if (update || promote) {
     writeFileSync(path.join(output, `sheet-${offset / 24}.png`), await toPng(svg));
   }
   if (promote) writeFileSync(baselinePath, `${JSON.stringify(next, null, 1)}\n`);
-  console.log(`Template goldens ${promote ? 'promoted' : 'candidate'}: ${Object.keys(next.entries).length} slides, ${changed.length} changed against the baseline. Review ${output}.`);
+  console.log(`Template goldens ${promote ? 'promoted' : 'candidate'}: ${Object.keys(next.entries).length} slides, ${changed.length} changed against the baseline. Compared with ${comparison}. Review ${output}.`);
 } else {
   assert.ok(previous, `Missing ${path.relative(root, baselinePath)}; run node test/layout-template-goldens.mjs --update, review, then --promote.`);
   assert.deepEqual(next.source, previous.source, 'Template fixture changed; review the candidate (--update) and promote it.');

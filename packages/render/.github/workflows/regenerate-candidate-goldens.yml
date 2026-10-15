@@ -19,7 +19,7 @@ on:
         required: true
         type: string
       baseline-name:
-        description: New renderer example baseline suffix (never cover-centering)
+        description: New example/template baseline suffix (never cover-centering; rr85-metric-centering for RR-85)
         required: true
         type: string
       selection:
@@ -107,8 +107,8 @@ jobs:
           npm run build --prefix guard/opf-render
           rm -rf guard/opf-render/node_modules/@openpresentation/opf
           ln -s "$GITHUB_WORKSPACE/guard/opf/packages/javascript" guard/opf-render/node_modules/@openpresentation/opf
-          (cd guard/opf-render && node scripts/golden-pinned-image.mjs && node test/golden.mjs --update)
-          node tools/scripts/candidate-goldens.mjs guard --candidate guard/opf-render/artifacts/golden/candidate.json --baseline guard/opf-render/test/golden/opf-examples-png.rr81-v2-reviewed --core "$CORE" --gallery "$GALLERY" --name "$NAME" --selection "$SELECTION"
+          (cd guard/opf-render && node scripts/golden-pinned-image.mjs && env -u OPF_GOLDEN_BASELINE -u OPF_EXAMPLES_DIR -u OPF_GOLDEN_SCALE node test/golden.mjs)
+          if [ "$SELECTION" != examples ]; then (cd guard/opf-render && node test/layout-template-goldens.mjs); fi
           git -C guard/opf rev-parse HEAD > guard/core-sha.txt
           git -C guard/opf-render rev-parse HEAD > guard/renderer-sha.txt
       - name: Install, link and build candidate only

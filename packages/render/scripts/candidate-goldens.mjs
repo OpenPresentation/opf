@@ -10,7 +10,7 @@ export function candidatePlan({core,gallery,selection='examples',name}) {
   assert.ok(['examples','templates','both'].includes(selection),'invalid selection');
   assert.match(name??'',/^[a-z0-9]+(?:[.-][a-z0-9]+)*$/,'invalid baseline name');
   assert.notEqual(name,'cover-centering','preserve the published baseline');
-  return {core,gallery,examples:selection!=='templates',templates:selection!=='examples',baseline:`test/golden/opf-examples-png.${name}`,template:'test/golden/layout-templates-rr20-array-areas.json'};
+  return {core,gallery,examples:selection!=='templates',templates:selection!=='examples',baseline:`test/golden/opf-examples-png.${name}`,template:`test/golden/layout-templates-${name}.json`};
 }
 const HISTORICAL_TEMPLATE = 'test/golden/layout-templates-0.19.json';
 const HISTORICAL_TEMPLATE_SHA256 = 'cd84208d7faa1d321842fe14e5de8edcd385b415ad88b0dd31b98f29f2a6a759';

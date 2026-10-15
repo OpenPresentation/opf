@@ -18,7 +18,8 @@ const attribute = (attrs, name) => new RegExp(`(?:^|\\s)${name}="([^"]*)"`).exec
 const tokens = text => text.split(/(?=<)/);
 // The gallery also derives the layout hints core composes (contentDirection, chartPrimary, listBullet, imageFit);
 // they move boxes or change how an image or bullet draws by design, so the default keeps them and drops only what
-// is alignment (and the layout itself). FA-22: imageFit ('contain' on the *-fit-* layouts) is one such hint.
+// is alignment (and the layout itself). The comparison explicitly selects left alignment:
+// an omitted metric alignment can already be center on newer cores. FA-22: imageFit ('contain' on the *-fit-* layouts) is one such hint.
 // A layout record's own composition.mode ranks above design.contentDirection (the gallery derives the hint from the
 // layout's direction), so a layout with a mode ignores the hint and the layout-less default must not apply it either.
 const LAYOUT_HINTS = ['contentDirection', 'chartPrimary', 'listBullet', 'imageFit'];
@@ -26,14 +27,14 @@ const withoutLayout = (document, layoutMode) => {
   const base = structuredClone(document), design = document.slides[0].design ?? {};
   delete base.slides[0].layout; delete base.slides[0].design; delete base.slides[0].composition; delete base.catalogs;
   const hints = Object.fromEntries(LAYOUT_HINTS.filter(key => design[key] !== undefined && !(key === 'contentDirection' && layoutMode)).map(key => [key, design[key]]));
-  if (Object.keys(hints).length) base.slides[0].design = hints;
+  base.slides[0].design = {...hints, titleAlignment: 'left', contentAlignment: 'left'};
   return base;
 };
 // The alignment the gallery design asks for, restated independently of core.
 const expectedAlignment = (slide, field) => (field === 'title' ? slide.design?.titleAlignment : slide.design?.contentAlignment) ?? 'left';
 const boxes = svg => [...svg.matchAll(/<(rect|image|circle|path|line)\b[^>]*>/g)].map(([token]) => token);
 
-let traced = 0, layoutEffects = 0;
+let traced = 0, layoutEffects = 0, explicitMetrics = 0;
 for (const {id, document} of fixture.layouts) {
   const slide = document.slides[0];
   assert.equal(slide.layout, undefined);
@@ -73,5 +74,26 @@ for (const {id, document} of fixture.layouts) {
   }
   assert.ok(changes > 0, `${id}: the design changes text alignment in the preview`);
   layoutEffects++;
+
+  // 4. Every explicit metric alignment remains authoritative, independently of
+  //    whether the installed core's omitted metric alignment is left or center.
+  if (bound.geometry.items.some(item => item.metricLayout)) for (const alignment of Object.keys(anchors)) {
+    const explicit = structuredClone(document);
+    explicit.slides[0].design = {...explicit.slides[0].design, contentAlignment: alignment};
+    const geometry = resolvePresentation(explicit).slides[0].geometry;
+    const preview = toSvg(explicit, 1, {trace: true});
+    for (const [index, item] of geometry.items.entries()) {
+      assert.deepEqual(item.box, baseBound.geometry.items[index].box, `${id}: ${alignment} keeps the allocation`);
+      if (!item.metricLayout) continue;
+      assert.equal(item.alignment, alignment, `${id}: explicit ${alignment} item alignment`);
+      assert.equal(item.metricLayout.alignment, alignment, `${id}: explicit ${alignment} metric layout`);
+      for (const part of item.metricLayout.parts.filter(part => part.visible)) {
+        const texts = [...preview.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)].filter(([, attrs]) => attribute(attrs, 'data-opf-path') === part.path);
+        assert.equal(texts.length, part.fit.sourceLines.length, `${id}: ${alignment} traces every ${part.role} line`);
+        for (const [, attrs] of texts) assert.equal(attribute(attrs, 'text-anchor') ?? 'start', anchors[alignment], `${id}: explicit ${alignment} ${part.role} preview anchor`);
+      }
+      explicitMetrics++;
+    }
+  }
 }
-console.log(`Historical content/design alignment passed: ${fixture.layouts.length} samples (source gallery ${fixture.gallery.slice(0, 7)}), ${traced} traced texts at core's item alignment, ${layoutEffects} designs changing only text anchors with every composed box unchanged.`);
+console.log(`Historical content/design alignment passed: ${fixture.layouts.length} samples (source gallery ${fixture.gallery.slice(0, 7)}), ${traced} traced texts at core's item alignment, ${layoutEffects} designs changing only text anchors with every composed box unchanged, ${explicitMetrics} explicit left/center/right metric checks.`);
