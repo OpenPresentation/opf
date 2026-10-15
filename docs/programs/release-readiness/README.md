@@ -4,7 +4,15 @@ Status: **active** (opened 2026-10-01). Tracker: [burndown.md](burndown.md).
 This is the single source of truth for the cross-repository program. Agents and
 people resuming work start here, not from chat history or local scratch files.
 
-## Current checkpoint — 2026-10-14
+## Current checkpoint — 2026-10-15 final qualification
+
+Original 40/40 and broader 77/84 are unchanged. Editor 0.20.1 and PPTX 0.20.2 are independently published/verified. The genuine six-root successor passed maintained matrix/strict authority/one-core guards and reproduced all nine reviewed fallback archives exactly, with no full factory or native execution. Core #676 and the records histories are locally integrated; their final coherent PR/queue integration remains pending. All three E21/P21 sites normally merged and are deployed/live-qualified at 100%; later P22 adoption is separate. Font tooling #678 normally merged at `56805d1b`, retaining its source/Arabic witness and import/native limitations. The directly authorized narrow Windows observation now shows pptx.gallery and 31 named layouts; one genuine P22 Mac export exactly matches that observed archive. This is no new global/font/full-suite acceptance. The unchanged d26 source lock still pins pre-fix PPTX373; its future normal roll is separate. Last complete census: 06:32:51 UTC, two PRs/39 issues/zero drafts; known #668 closure later leaves 38 known issues, without a new census. [Current facts and remaining boundaries](HANDOFF.md#current-maintenance-and-activation-boundary--2026-10-15-final-qualification).
+
+## Earlier checkpoint — 2026-10-15 05:35 UTC (retained)
+
+Original 40/40 and broader 77/84 are unchanged. The coherent source graph and official roll #677 (`5a98de8f`) are integrated; Editor #173 (`be495d1b`) and PPTX #264 (`19f775a7`) preparations are merged, but the new artifacts remain unverified at this checkpoint. The genuine six-package graph and three accepted production Workers are unchanged. Main/Gallery/Dev adoption prerequisites are reviewed, not newly deployed. Windows physical use is on explicit human HOLD; the new source-candidate menu heading is unobserved. [Current dated facts and remaining boundaries](HANDOFF.md#current-maintenance-and-activation-boundary--2026-10-15-final-qualification).
+
+## Historical checkpoint — 2026-10-14 (retained)
 
 **Current scoped update — 2026-10-14:** the supervisor accepts RR-53 on actual merged core335, implemented core PR contract/full queue-and-schedule policy, prior core669 queue success and retained 11–15% runner saving/no wall-clock gain. The broader program is now **77/84 complete or descoped**, with seven open rows: RR-14, RR-17, RR-19, RR-48, RR-51, RR-68 and RR-20. RR-48’s three sibling rulesets and issue658’s next-green-nightly condition remain separate and open. [Scoped acceptance](../../evidence/rr-53-contract-tier-2026-10-14/README.md). Core [670](https://github.com/OpenPresentation/opf/pull/670) actually merged through its normal queue at `c36727c64d15d7584f66b80f5257c94c0ada4083`; its accepted tree/lock/provenance exactly match the reviewed proposal. The supervisor accepts original T16/T40, completing the original **40/40 handoff**. [Terminal scoped decision](../../evidence/rr-20-sites-current-2026-10-14/terminal-supervisor-acceptance.json). Broader RR-20 remains in progress on the seven program rows; this does not imply all 58 native cases or global font/raster acceptance. The frozen670 source and earlier conditional snapshot below remain unchanged historical evidence.
 
@@ -245,7 +253,9 @@ cite it; the owner can revise it.
 
 ## Open decisions
 
-**Current 2026-10-14:** real remaining owner decisions concern RR-14 rollout, the retained native/font/raster scope, three sibling merge-queue rulesets, release automation and authorized cleanup. They are separate from the accepted scoped native criteria and completed deployments. Entries 1 and 7 below are settled or superseded historical decisions; no fresh catalog-ownership, old-release-timing or generic final-note approval gate is created. Broader issues #87/#323/#362 remain open on their exact remaining clauses.
+**Current RR-17 boundary — 2026-10-15:** the original 23-name four-host commission and Didot documented-visual outcome are already accepted; #361/#364/#363 are closed. The old questions in entries 2, 3 and 6 below retain their dates and are not renewed owner blockers. Actual remaining #581/#582 work is a separately reviewed engineering correction, followed by its affected native criteria; broader per-family findings remain literal. No blanket owner-permission gate, known-bad scalar or global font acceptance is introduced. [Bounded current evidence](../../evidence/rr-68-original-acceptance-index-2026-10-15/font-followup-scope.json).
+
+**Earlier decision-boundary snapshot — 2026-10-14 (retained):** real remaining owner decisions concern RR-14 rollout, the retained native/font/raster scope, three sibling merge-queue rulesets, release automation and authorized cleanup. They are separate from the accepted scoped native criteria and completed deployments. Entries 1 and 7 below are settled or superseded historical decisions; no fresh catalog-ownership, old-release-timing or generic final-note approval gate is created. Broader issues #87/#323/#362 remain open on their exact remaining clauses.
 
 The dated decision record follows; settled entries are retained for history. Open decisions also appear in their program rows.
 

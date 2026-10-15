@@ -1,0 +1,98 @@
+{
+  "observedAt": "2026-10-15T06:32:51.922397+00:00",
+  "callBudget": 1,
+  "apiCalls": 1,
+  "metadataOnly": true,
+  "CIQueries": 0,
+  "connectionsComplete": true,
+  "prs": 2,
+  "drafts": 0,
+  "issues": 39,
+  "repositories": [
+    {
+      "repo": "OpenPresentation/opf",
+      "defaultBranch": "main",
+      "head": "5a98de8f3ac42e5a5fef70204ed43998252cd8de",
+      "prs": 2,
+      "issues": 27,
+      "openPRs": [
+        {
+          "number": 676,
+          "title": "RR-68: restore strict native preparation for published master names",
+          "url": "https://github.com/OpenPresentation/opf/pull/676",
+          "headRefOid": "ad0bc47c4f23735f7b0ea1eea7edf8f6710e3ec1",
+          "isDraft": false
+        },
+        {
+          "number": 678,
+          "title": "RR-17: add opt-in corpus-backed font-route fixtures",
+          "url": "https://github.com/OpenPresentation/opf/pull/678",
+          "headRefOid": "abf7af65b62fd5dde577d70a4139f0f3f5c53649",
+          "isDraft": false
+        }
+      ]
+    },
+    {
+      "repo": "OpenPresentation/opf-render",
+      "defaultBranch": "main",
+      "head": "b87cf01f6b3c70556769d3ea2dcdc75365d5b2ae",
+      "prs": 0,
+      "issues": 3,
+      "openPRs": []
+    },
+    {
+      "repo": "OpenPresentation/opf-pptx",
+      "defaultBranch": "main",
+      "head": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+      "prs": 0,
+      "issues": 2,
+      "openPRs": []
+    },
+    {
+      "repo": "OpenPresentation/opf-editor",
+      "defaultBranch": "main",
+      "head": "be495d1b6e3ac7dbfad58a64537cf435a43f9f6f",
+      "prs": 0,
+      "issues": 1,
+      "openPRs": []
+    },
+    {
+      "repo": "OpenPresentation/gallery",
+      "defaultBranch": "main",
+      "head": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "prs": 0,
+      "issues": 2,
+      "openPRs": []
+    },
+    {
+      "repo": "Data-Advantage/openpresentation-site",
+      "defaultBranch": "main",
+      "head": "66107906a2be0cb1e4887cee3c159b7ed22d9eb8",
+      "prs": 0,
+      "issues": 1,
+      "openPRs": []
+    },
+    {
+      "repo": "Data-Advantage/pptx-gallery",
+      "defaultBranch": "main",
+      "head": "39654cf58586c4c383b1d1b4b65b4015098414eb",
+      "prs": 0,
+      "issues": 0,
+      "openPRs": []
+    },
+    {
+      "repo": "Data-Advantage/pptx-dev",
+      "defaultBranch": "master",
+      "head": "1e9c189eaac0ae402639ef4af0aff3d1933dcbc2",
+      "prs": 0,
+      "issues": 3,
+      "openPRs": []
+    }
+  ],
+  "rateLimit": {
+    "cost": 16,
+    "remaining": 4979,
+    "resetAt": "2026-10-15T07:30:21Z"
+  },
+  "rawSha256": "bc7305cb98984d8f836cbd7dad9d5fd1b52cdef47daf5fde62423cd417576daf"
+}

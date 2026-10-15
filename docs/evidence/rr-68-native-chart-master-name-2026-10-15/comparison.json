@@ -1,0 +1,573 @@
+{
+  "schemaVersion": 1,
+  "scope": "Published PPTX0.20.0 vs0.20.1, same maintained fallback source/catalog/all other registry lock records; no native execution",
+  "fullLocalComparisonSha256": "074070273de826def5a9baf80ca272f4a85dc691b9931a6f8da71deedecb3e0c",
+  "publishedBaseline": {
+    "version": "0.20.0",
+    "gitHead": "0e2ea4982c4bb1280f22763411e681fe0786f4fc"
+  },
+  "publishedCurrent": {
+    "version": "0.20.1",
+    "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301"
+  },
+  "lockChangedPackageRecords": [
+    "",
+    "node_modules/@openpresentation/opf-pptx"
+  ],
+  "partsCompared": 1079,
+  "changedParts": 9,
+  "allOtherPartsByteIdentical": true,
+  "allDiagnosticsByteIdentical": true,
+  "historicalWindowsFirstFailure": {
+    "case": "chart-mode-treemap-category-fallback",
+    "expected": "b69933578667102cc1b2ffa59e97574aa90d6e27442c5e59677ff1a0c16a71f2",
+    "actual": "c4e119fd35338b95901e382ec3ec04a70393540fd15caaec5d2f16dfde960944",
+    "outcome": "native:prepare exited1; incomplete suite preserved; no Office launched"
+  },
+  "archives": [
+    {
+      "name": "treemap-category",
+      "oldArchiveSha256": "b69933578667102cc1b2ffa59e97574aa90d6e27442c5e59677ff1a0c16a71f2",
+      "currentArchiveSha256": "c4e119fd35338b95901e382ec3ec04a70393540fd15caaec5d2f16dfde960944",
+      "oldBytes": 81345,
+      "currentBytes": 81359,
+      "diagnosticsSha256": "a1f56a64ca7cd57782e6575720205885735ef23363b8daea04b113d16f8b2951",
+      "diagnosticsByteEqual": true,
+      "partCount": 114,
+      "changedParts": [
+        {
+          "part": "ppt/slideMasters/slideMaster1.xml",
+          "changed": true,
+          "oldSha256": "fa13fa1a4ada0f4e514109247a9661a7d47e195b1c1d61fb93da4c56f30300fc",
+          "currentSha256": "a566958de568cd84c824f148b048d23b9db19b1c96cd6225f844fa0c907df24e",
+          "oldBytes": 10879,
+          "currentBytes": 10899,
+          "onlyMissingMasterNameAdded": true
+        }
+      ]
+    },
+    {
+      "name": "histogram-single",
+      "oldArchiveSha256": "ccf0a5f94b46fa240a5f9aa855b19ab6bc8d552b39fe4aefa8cd471774c5ec6a",
+      "currentArchiveSha256": "b5b45ac2aa0b6195397716fb62c6402cdfc3d5a2627c5b4e5c7da6689a950fc8",
+      "oldBytes": 81361,
+      "currentBytes": 81375,
+      "diagnosticsSha256": "99bb6f0028d4598bee1c044059fb608d09e3585f859d14c36c13bf3305ca9dc7",
+      "diagnosticsByteEqual": true,
+      "partCount": 114,
+      "changedParts": [
+        {
+          "part": "ppt/slideMasters/slideMaster1.xml",
+          "changed": true,
+          "oldSha256": "fa13fa1a4ada0f4e514109247a9661a7d47e195b1c1d61fb93da4c56f30300fc",
+          "currentSha256": "a566958de568cd84c824f148b048d23b9db19b1c96cd6225f844fa0c907df24e",
+          "oldBytes": 10879,
+          "currentBytes": 10899,
+          "onlyMissingMasterNameAdded": true
+        }
+      ]
+    },
+    {
+      "name": "histogram-category",
+      "oldArchiveSha256": "1f4c9d95b18a3821bcdbf29dd18048d0924838dbd307e3a6980a4190ac9bb479",
+      "currentArchiveSha256": "22f2785e598c6850f9730be36c3d5ab622442860cb39864babb6607752e1b392",
+      "oldBytes": 81346,
+      "currentBytes": 81360,
+      "diagnosticsSha256": "68ae46981cf7dd5b2948fa950d2f126b8263c63721788196a53b41c9445c3f4e",
+      "diagnosticsByteEqual": true,
+      "partCount": 114,
+      "changedParts": [
+        {
+          "part": "ppt/slideMasters/slideMaster1.xml",
+          "changed": true,
+          "oldSha256": "fa13fa1a4ada0f4e514109247a9661a7d47e195b1c1d61fb93da4c56f30300fc",
+          "currentSha256": "a566958de568cd84c824f148b048d23b9db19b1c96cd6225f844fa0c907df24e",
+          "oldBytes": 10879,
+          "currentBytes": 10899,
+          "onlyMissingMasterNameAdded": true
+        }
+      ]
+    },
+    {
+      "name": "pareto-multi",
+      "oldArchiveSha256": "e7899a6dd1fc22f5b257a813323f4e63b7d328c63f582d29cea577b8262d5463",
+      "currentArchiveSha256": "9f3f8dfcd37d6451a5fec95bb9acab85e6ad434b353e598a184b70b045c7c3ab",
+      "oldBytes": 81519,
+      "currentBytes": 81533,
+      "diagnosticsSha256": "805d19b33ac22a18969c987e8511aa781c86d978f62025e530d44b5f5dbedeef",
+      "diagnosticsByteEqual": true,
+      "partCount": 114,
+      "changedParts": [
+        {
+          "part": "ppt/slideMasters/slideMaster1.xml",
+          "changed": true,
+          "oldSha256": "fa13fa1a4ada0f4e514109247a9661a7d47e195b1c1d61fb93da4c56f30300fc",
+          "currentSha256": "a566958de568cd84c824f148b048d23b9db19b1c96cd6225f844fa0c907df24e",
+          "oldBytes": 10879,
+          "currentBytes": 10899,
+          "onlyMissingMasterNameAdded": true
+        }
+      ]
+    },
+    {
+      "name": "box-multi",
+      "oldArchiveSha256": "34d74ee3301b44a5d81ca32fd138966dfae9e93d79ba1752fc9c50a430b6d645",
+      "currentArchiveSha256": "d85bdfc4dfb590658e7e713b4b1cd62bd91ca941e5fa8d2f084c944707256f11",
+      "oldBytes": 81518,
+      "currentBytes": 81532,
+      "diagnosticsSha256": "938c565e3aa0b948cc93b46859c41ba8c5a7f8537c405eeec431759c5e00bd5f",
+      "diagnosticsByteEqual": true,
+      "partCount": 114,
+      "changedParts": [
+        {
+          "part": "ppt/slideMasters/slideMaster1.xml",
+          "changed": true,
+          "oldSha256": "fa13fa1a4ada0f4e514109247a9661a7d47e195b1c1d61fb93da4c56f30300fc",
+          "currentSha256": "a566958de568cd84c824f148b048d23b9db19b1c96cd6225f844fa0c907df24e",
+          "oldBytes": 10879,
+          "currentBytes": 10899,
+          "onlyMissingMasterNameAdded": true
+        }
+      ]
+    },
+    {
+      "name": "waterfall-single",
+      "oldArchiveSha256": "c812d346498c0f472942fceecca3c4ff3e8b0ac3237bbbfcd7d66725605dc867",
+      "currentArchiveSha256": "c06d10040d366d96db7ffa898a21414c84dee2a489dd4c929213c8e7560dffd0",
+      "oldBytes": 81787,
+      "currentBytes": 81801,
+      "diagnosticsSha256": "5daf768fe9f7a1d10ad2e56c2c7addbdb1212aa395bc06f44d75d786b73586c5",
+      "diagnosticsByteEqual": true,
+      "partCount": 115,
+      "changedParts": [
+        {
+          "part": "ppt/slideMasters/slideMaster1.xml",
+          "changed": true,
+          "oldSha256": "fa13fa1a4ada0f4e514109247a9661a7d47e195b1c1d61fb93da4c56f30300fc",
+          "currentSha256": "a566958de568cd84c824f148b048d23b9db19b1c96cd6225f844fa0c907df24e",
+          "oldBytes": 10879,
+          "currentBytes": 10899,
+          "onlyMissingMasterNameAdded": true
+        }
+      ]
+    },
+    {
+      "name": "funnel-category",
+      "oldArchiveSha256": "ba1a79407651ef262d15b6b0e1e937177b3d02537960344093a568c89feaa6f4",
+      "currentArchiveSha256": "58f8167c934e31338c66ae0daeb75c279f7578eefad9ad0879e6f6320ea16ee6",
+      "oldBytes": 81345,
+      "currentBytes": 81359,
+      "diagnosticsSha256": "dff01b0ef2b3f84db4aa2f48dad169fd4f561d68736522390aeae97cb387ee6b",
+      "diagnosticsByteEqual": true,
+      "partCount": 114,
+      "changedParts": [
+        {
+          "part": "ppt/slideMasters/slideMaster1.xml",
+          "changed": true,
+          "oldSha256": "fa13fa1a4ada0f4e514109247a9661a7d47e195b1c1d61fb93da4c56f30300fc",
+          "currentSha256": "a566958de568cd84c824f148b048d23b9db19b1c96cd6225f844fa0c907df24e",
+          "oldBytes": 10879,
+          "currentBytes": 10899,
+          "onlyMissingMasterNameAdded": true
+        }
+      ]
+    },
+    {
+      "name": "world-category",
+      "oldArchiveSha256": "e9dec7ca5086812227c171a3d93c45c32ceaf3e4748a55f8a67623c5dca9f914",
+      "currentArchiveSha256": "d3de3c6c4c6d30fc7be94158afb91dbd5e7dda0ec034a105296af9e8e8e61e05",
+      "oldBytes": 80164,
+      "currentBytes": 80178,
+      "diagnosticsSha256": "97ac2e8512488910b4d1b26d6060ab08d4ee462448b72ed5e03fe93923955203",
+      "diagnosticsByteEqual": true,
+      "partCount": 112,
+      "changedParts": [
+        {
+          "part": "ppt/slideMasters/slideMaster1.xml",
+          "changed": true,
+          "oldSha256": "c281db5fefc13ed6927c64f467e64b3478b21d8868f4e2bda77f0cca2fdd8d61",
+          "currentSha256": "a558af669e3d6dd9b2041f95d83071134b8eb493dfdceaf467b6e397be48dd80",
+          "oldBytes": 10834,
+          "currentBytes": 10854,
+          "onlyMissingMasterNameAdded": true
+        }
+      ]
+    },
+    {
+      "name": "all-seven",
+      "oldArchiveSha256": "d5e9369846422d28f3dfb3b32b0009401a41d402412fdbfed106561edd354082",
+      "currentArchiveSha256": "4906a9d2be4bff9cc89e6314f0ecb45a139ecd58d181a2c3940a2fb214b0c045",
+      "oldBytes": 144311,
+      "currentBytes": 144325,
+      "diagnosticsSha256": "17d4fe489459e82cd33221aed10986e2ecb3751f1764b7a5789253119f16515a",
+      "diagnosticsByteEqual": true,
+      "partCount": 168,
+      "changedParts": [
+        {
+          "part": "ppt/slideMasters/slideMaster1.xml",
+          "changed": true,
+          "oldSha256": "fa13fa1a4ada0f4e514109247a9661a7d47e195b1c1d61fb93da4c56f30300fc",
+          "currentSha256": "a566958de568cd84c824f148b048d23b9db19b1c96cd6225f844fa0c907df24e",
+          "oldBytes": 10879,
+          "currentBytes": 10899,
+          "onlyMissingMasterNameAdded": true
+        }
+      ]
+    }
+  ],
+  "guardInventory": {
+    "chart-modes.mjs": "Only fixed whole-archive hashes reached by standard native:prepare; nine fallback entries updated together. Determinism, chartEx count, Pareto refusal/data, 30case/29positive counts unchanged.",
+    "fixture-source.mjs": "Eight feature-source candidateSHA256 checks authenticate OPF input JSON, unaffected by exporter master branding; unchanged.",
+    "fonts.mjs": "Pinned Roboto face/license SHA256 checks unaffected; unchanged.",
+    "generate.mjs/table-colors.mjs": "Deterministic output/source-preservation checks use actual bytes, no other fixed archive baseline.",
+    "prepare.mjs": "Whole tree walk, symlink checks, write-once outputs and suite.json sealing unchanged."
+  },
+  "claims": {
+    "nativeAcceptance": false,
+    "newReleaseOrGoldenPromotion": false,
+    "newCaseFilterOrBypass": false
+  },
+  "diagnostics": [
+    {
+      "name": "treemap-category",
+      "old": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'treemap' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "current": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'treemap' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "identicalSerializedSha256": "a1f56a64ca7cd57782e6575720205885735ef23363b8daea04b113d16f8b2951"
+    },
+    {
+      "name": "histogram-single",
+      "old": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The histogram's single data column 'Sample' (6 values) was binned into 4 equal-width bins and exported as a column chart of the counts; PowerPoint's own histogram chart is not exported, and the binned counts do not restore the raw values on re-import.",
+          "adaptation": "histogram-binned"
+        }
+      ],
+      "current": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The histogram's single data column 'Sample' (6 values) was binned into 4 equal-width bins and exported as a column chart of the counts; PowerPoint's own histogram chart is not exported, and the binned counts do not restore the raw values on re-import.",
+          "adaptation": "histogram-binned"
+        }
+      ],
+      "identicalSerializedSha256": "99bb6f0028d4598bee1c044059fb608d09e3585f859d14c36c13bf3305ca9dc7"
+    },
+    {
+      "name": "histogram-category",
+      "old": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'histogram' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "current": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'histogram' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "identicalSerializedSha256": "68ae46981cf7dd5b2948fa950d2f126b8263c63721788196a53b41c9445c3f4e"
+    },
+    {
+      "name": "pareto-multi",
+      "old": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "current": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "identicalSerializedSha256": "805d19b33ac22a18969c987e8511aa781c86d978f62025e530d44b5f5dbedeef"
+    },
+    {
+      "name": "box-multi",
+      "old": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'box-and-whisker' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "current": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'box-and-whisker' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "identicalSerializedSha256": "938c565e3aa0b948cc93b46859c41ba8c5a7f8537c405eeec431759c5e00bd5f"
+    },
+    {
+      "name": "waterfall-single",
+      "old": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'waterfall' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The chart's single data column 'Sample' has no category column, so its 6 values are plotted against their row numbers.",
+          "adaptation": "row-numbers"
+        }
+      ],
+      "current": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'waterfall' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The chart's single data column 'Sample' has no category column, so its 6 values are plotted against their row numbers.",
+          "adaptation": "row-numbers"
+        }
+      ],
+      "identicalSerializedSha256": "5daf768fe9f7a1d10ad2e56c2c7addbdb1212aa395bc06f44d75d786b73586c5"
+    },
+    {
+      "name": "funnel-category",
+      "old": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'funnel' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "current": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'funnel' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "identicalSerializedSha256": "dff01b0ef2b3f84db4aa2f48dad169fd4f561d68736522390aeae97cb387ee6b"
+    },
+    {
+      "name": "world-category",
+      "old": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "current": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "identicalSerializedSha256": "97ac2e8512488910b4d1b26d6060ab08d4ee462448b72ed5e03fe93923955203"
+    },
+    {
+      "name": "all-seven",
+      "old": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'treemap' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.1.chart",
+          "message": "The 'histogram' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.2.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.3.chart",
+          "message": "The 'box-and-whisker' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.4.chart",
+          "message": "The 'waterfall' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.5.chart",
+          "message": "The 'funnel' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "current": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'treemap' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.1.chart",
+          "message": "The 'histogram' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.2.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.3.chart",
+          "message": "The 'box-and-whisker' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.4.chart",
+          "message": "The 'waterfall' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.5.chart",
+          "message": "The 'funnel' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "identicalSerializedSha256": "17d4fe489459e82cd33221aed10986e2ecb3751f1764b7a5789253119f16515a"
+    }
+  ],
+  "sameGraphLockSha256": {
+    "baseline": "70a5b80719714016a3021232317e159740242d9b43c0956448a006d21dbcade7",
+    "current": "5dc0c9cf311ab6ff43ae060a5fdcfd427f1c1a2853673fd92969f15e2491f91a"
+  },
+  "currentGeneration": {
+    "at": "2026-10-15T04:05:14.381Z",
+    "cases": 30,
+    "positiveArchives": 29,
+    "strictFallbackReferences": 9,
+    "zipNoOpControls": [
+      {
+        "name": "all-seven.pptx",
+        "archiveSha256": "4906a9d2be4bff9cc89e6314f0ecb45a139ecd58d181a2c3940a2fb214b0c045",
+        "noOpRezipSha256": "4906a9d2be4bff9cc89e6314f0ecb45a139ecd58d181a2c3940a2fb214b0c045",
+        "byteExact": true
+      },
+      {
+        "name": "box-multi.pptx",
+        "archiveSha256": "d85bdfc4dfb590658e7e713b4b1cd62bd91ca941e5fa8d2f084c944707256f11",
+        "noOpRezipSha256": "d85bdfc4dfb590658e7e713b4b1cd62bd91ca941e5fa8d2f084c944707256f11",
+        "byteExact": true
+      },
+      {
+        "name": "funnel-category.pptx",
+        "archiveSha256": "58f8167c934e31338c66ae0daeb75c279f7578eefad9ad0879e6f6320ea16ee6",
+        "noOpRezipSha256": "58f8167c934e31338c66ae0daeb75c279f7578eefad9ad0879e6f6320ea16ee6",
+        "byteExact": true
+      },
+      {
+        "name": "histogram-category.pptx",
+        "archiveSha256": "22f2785e598c6850f9730be36c3d5ab622442860cb39864babb6607752e1b392",
+        "noOpRezipSha256": "22f2785e598c6850f9730be36c3d5ab622442860cb39864babb6607752e1b392",
+        "byteExact": true
+      },
+      {
+        "name": "histogram-single.pptx",
+        "archiveSha256": "b5b45ac2aa0b6195397716fb62c6402cdfc3d5a2627c5b4e5c7da6689a950fc8",
+        "noOpRezipSha256": "b5b45ac2aa0b6195397716fb62c6402cdfc3d5a2627c5b4e5c7da6689a950fc8",
+        "byteExact": true
+      },
+      {
+        "name": "pareto-multi.pptx",
+        "archiveSha256": "9f3f8dfcd37d6451a5fec95bb9acab85e6ad434b353e598a184b70b045c7c3ab",
+        "noOpRezipSha256": "9f3f8dfcd37d6451a5fec95bb9acab85e6ad434b353e598a184b70b045c7c3ab",
+        "byteExact": true
+      },
+      {
+        "name": "treemap-category.pptx",
+        "archiveSha256": "c4e119fd35338b95901e382ec3ec04a70393540fd15caaec5d2f16dfde960944",
+        "noOpRezipSha256": "c4e119fd35338b95901e382ec3ec04a70393540fd15caaec5d2f16dfde960944",
+        "byteExact": true
+      },
+      {
+        "name": "waterfall-single.pptx",
+        "archiveSha256": "c06d10040d366d96db7ffa898a21414c84dee2a489dd4c929213c8e7560dffd0",
+        "noOpRezipSha256": "c06d10040d366d96db7ffa898a21414c84dee2a489dd4c929213c8e7560dffd0",
+        "byteExact": true
+      },
+      {
+        "name": "world-category.pptx",
+        "archiveSha256": "d3de3c6c4c6d30fc7be94158afb91dbd5e7dda0ec034a105296af9e8e8e61e05",
+        "noOpRezipSha256": "d3de3c6c4c6d30fc7be94158afb91dbd5e7dda0ec034a105296af9e8e8e61e05",
+        "byteExact": true
+      }
+    ],
+    "unexplainedChartMutation": {
+      "part": "ppt/charts/chart1.xml",
+      "beforeSha256": "c4e119fd35338b95901e382ec3ec04a70393540fd15caaec5d2f16dfde960944",
+      "afterSha256": "4f9ab7f434ab76e88ed1e61e925789c5218647342796869831d75d9308c6549c",
+      "onlyChangedPart": "ppt/charts/chart1.xml",
+      "rejected": true
+    },
+    "nativeRun": false,
+    "suiteSealed": false,
+    "scriptSha256": "bdee66d071cf6cd56806f92f1cd09042d3e434855764b8a6da14777d6d15bf6f",
+    "scope": "Actual generateChartModes using genuine published PPTX0.20.1 consumer; no native run or whole native suite sealing."
+  }
+}

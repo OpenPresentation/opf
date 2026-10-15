@@ -1,0 +1,299 @@
+{
+  "at": "2026-10-15T06:56:44.592Z",
+  "scope": "Nine maintained fallback archives only; exact source-candidate bytes reproduced by independently verified PPTX0.20.2",
+  "sourceRevision": "bdfe3df38cd988105d25f8978ab338f1bf53ea5c",
+  "sourceFiles": [
+    {
+      "path": "scripts/native-acceptance/chart-modes.mjs",
+      "sha256": "7d2640cd683a3d117b53e8e94d14374668347767a606a3556fe13032e126c03b"
+    },
+    {
+      "path": "scripts/native-acceptance/fixtures/chartex-fallback-main.json",
+      "sha256": "867c384ba2a1733e7bba738b8e2f797b8efbee0b3083a22bea391c6a32994b1e"
+    },
+    {
+      "path": "docs/evidence/rr-68-native-chart-master-name-2026-10-15/source-candidate-theme-category.json",
+      "sha256": "462e70e5b31c08bc9172487d6e8cbc181786f357bda8a70fd36dc3def80772b2"
+    }
+  ],
+  "planSha256": "028159581a492876a5bf7ad71938cb1ddce8dfefb469e673fb01d665691020ec",
+  "authoritySha256": "c00762414476d4b592cab1ed7bfef76fad9f838aa7e54503fa8d5fb9ab9593b0",
+  "publicationReceiptSha256": "5a1e323d3fdb76814372cf6527bfd94143cbc6562bcc27370d2fe3b4d0c783fa",
+  "installedLockSha256": "1498642c1882cdc2a530bc4cd921bd1b6ea625df4c0dfd2dc61187c65a8d44d1",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.20.1",
+      "runtimeSha256": "b210ea3f86629fe1eec9832112fd26a9b1f4933982db381abe9f0d62a8b75a6b"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.20.0",
+      "runtimeSha256": "8413381344f759a448c6c7e7d3c291e19deb19444292c05b300c7d31629160e4"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.20.2",
+      "runtimeSha256": "f86e6c6b3fdc27a2d3f769f4930eebab486c26190b3644b84556586dbdd0e807"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.20.1",
+      "runtimeSha256": "7924b21fe62ac5a9b5cb5f5d749c9fc7dd61ef46bd4654ef9d092eaa48ec2495"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.20.0",
+      "runtimeSha256": "54e3119b2a31c598fe49036758ef74ab8c31077eb0c02a53ee7ad01e74c0fb12"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "runtimeSha256": "0a794c942f8e5050e5143b1606f8847c2ad8b7bba750958eb72611231ce622ad"
+    }
+  ],
+  "cases": [
+    {
+      "name": "treemap-category",
+      "archive": {
+        "path": "archives/treemap-category.pptx",
+        "sha256": "ae8fe51d4d66b62a99d93bbb6023eb6f6c6f35cc4d4f6e3fefae2ea741b7e2a1",
+        "bytes": 81368
+      },
+      "candidateArchiveSha256": "ae8fe51d4d66b62a99d93bbb6023eb6f6c6f35cc4d4f6e3fefae2ea741b7e2a1",
+      "diagnosticsSha256": "a1f56a64ca7cd57782e6575720205885735ef23363b8daea04b113d16f8b2951",
+      "zipParts": 114,
+      "exactReviewedDisplayNameParts": {
+        "docProps/app.xml": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+        "ppt/theme/theme1.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+        "ppt/theme/theme2.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8"
+      }
+    },
+    {
+      "name": "histogram-single",
+      "archive": {
+        "path": "archives/histogram-single.pptx",
+        "sha256": "284f1dfc71d69a4a329f31a7a2e222304902ce2bec3330fb162940c42495a08f",
+        "bytes": 81384
+      },
+      "candidateArchiveSha256": "284f1dfc71d69a4a329f31a7a2e222304902ce2bec3330fb162940c42495a08f",
+      "diagnosticsSha256": "99bb6f0028d4598bee1c044059fb608d09e3585f859d14c36c13bf3305ca9dc7",
+      "zipParts": 114,
+      "exactReviewedDisplayNameParts": {
+        "docProps/app.xml": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+        "ppt/theme/theme1.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+        "ppt/theme/theme2.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8"
+      }
+    },
+    {
+      "name": "histogram-category",
+      "archive": {
+        "path": "archives/histogram-category.pptx",
+        "sha256": "5aac69565cc2e153e5646da34354e048182881e55b85d20ea97971eebee81a2d",
+        "bytes": 81369
+      },
+      "candidateArchiveSha256": "5aac69565cc2e153e5646da34354e048182881e55b85d20ea97971eebee81a2d",
+      "diagnosticsSha256": "68ae46981cf7dd5b2948fa950d2f126b8263c63721788196a53b41c9445c3f4e",
+      "zipParts": 114,
+      "exactReviewedDisplayNameParts": {
+        "docProps/app.xml": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+        "ppt/theme/theme1.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+        "ppt/theme/theme2.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8"
+      }
+    },
+    {
+      "name": "pareto-multi",
+      "archive": {
+        "path": "archives/pareto-multi.pptx",
+        "sha256": "81f7e6aa6fa27ff830de689e8cef34a6f55eab3305e06c629a693230da236975",
+        "bytes": 81542
+      },
+      "candidateArchiveSha256": "81f7e6aa6fa27ff830de689e8cef34a6f55eab3305e06c629a693230da236975",
+      "diagnosticsSha256": "805d19b33ac22a18969c987e8511aa781c86d978f62025e530d44b5f5dbedeef",
+      "zipParts": 114,
+      "exactReviewedDisplayNameParts": {
+        "docProps/app.xml": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+        "ppt/theme/theme1.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+        "ppt/theme/theme2.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8"
+      }
+    },
+    {
+      "name": "box-multi",
+      "archive": {
+        "path": "archives/box-multi.pptx",
+        "sha256": "52a16a6121f8f0a1ff94c9b3bd37f1690785e6c1067de5713f9fa7442283ba22",
+        "bytes": 81541
+      },
+      "candidateArchiveSha256": "52a16a6121f8f0a1ff94c9b3bd37f1690785e6c1067de5713f9fa7442283ba22",
+      "diagnosticsSha256": "938c565e3aa0b948cc93b46859c41ba8c5a7f8537c405eeec431759c5e00bd5f",
+      "zipParts": 114,
+      "exactReviewedDisplayNameParts": {
+        "docProps/app.xml": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+        "ppt/theme/theme1.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+        "ppt/theme/theme2.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8"
+      }
+    },
+    {
+      "name": "waterfall-single",
+      "archive": {
+        "path": "archives/waterfall-single.pptx",
+        "sha256": "a03b42e3127a5fc00986126755a3f78561117afbae3490273e6db462a912033b",
+        "bytes": 81810
+      },
+      "candidateArchiveSha256": "a03b42e3127a5fc00986126755a3f78561117afbae3490273e6db462a912033b",
+      "diagnosticsSha256": "5daf768fe9f7a1d10ad2e56c2c7addbdb1212aa395bc06f44d75d786b73586c5",
+      "zipParts": 115,
+      "exactReviewedDisplayNameParts": {
+        "docProps/app.xml": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+        "ppt/theme/theme1.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+        "ppt/theme/theme2.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8"
+      }
+    },
+    {
+      "name": "funnel-category",
+      "archive": {
+        "path": "archives/funnel-category.pptx",
+        "sha256": "96c22d8af926d1aaf791f1d330cef86f98e334562d1dd5f921e34ee63353be39",
+        "bytes": 81368
+      },
+      "candidateArchiveSha256": "96c22d8af926d1aaf791f1d330cef86f98e334562d1dd5f921e34ee63353be39",
+      "diagnosticsSha256": "dff01b0ef2b3f84db4aa2f48dad169fd4f561d68736522390aeae97cb387ee6b",
+      "zipParts": 114,
+      "exactReviewedDisplayNameParts": {
+        "docProps/app.xml": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+        "ppt/theme/theme1.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+        "ppt/theme/theme2.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8"
+      }
+    },
+    {
+      "name": "world-category",
+      "archive": {
+        "path": "archives/world-category.pptx",
+        "sha256": "14cc0210e542eb8412122ccfe8b4fb3e856819ecfdd43da8fb9511f006eb604b",
+        "bytes": 80190
+      },
+      "candidateArchiveSha256": "14cc0210e542eb8412122ccfe8b4fb3e856819ecfdd43da8fb9511f006eb604b",
+      "diagnosticsSha256": "97ac2e8512488910b4d1b26d6060ab08d4ee462448b72ed5e03fe93923955203",
+      "zipParts": 112,
+      "exactReviewedDisplayNameParts": {
+        "docProps/app.xml": "d74965e076c212f07fee30679fd4607d26ac9a6171a541fceb9a3ddf546766e8",
+        "ppt/theme/theme1.xml": "db87ff7c4957aada9be25bd8041b50deb5820c20a003935fcd388702b02830a6",
+        "ppt/theme/theme2.xml": "db87ff7c4957aada9be25bd8041b50deb5820c20a003935fcd388702b02830a6"
+      }
+    },
+    {
+      "name": "all-seven",
+      "archive": {
+        "path": "archives/all-seven.pptx",
+        "sha256": "6b5703e687506ae2966df2e9e71de211b225b5fd3ff170dd0cee46e5f8052aac",
+        "bytes": 144333
+      },
+      "candidateArchiveSha256": "6b5703e687506ae2966df2e9e71de211b225b5fd3ff170dd0cee46e5f8052aac",
+      "diagnosticsSha256": "17d4fe489459e82cd33221aed10986e2ecb3751f1764b7a5789253119f16515a",
+      "zipParts": 168,
+      "exactReviewedDisplayNameParts": {
+        "docProps/app.xml": "4b90f5d7c7864ca4781ee79cee00bc075e55433dc3723f5b455ac5d1a2d02540",
+        "ppt/theme/theme1.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+        "ppt/theme/theme2.xml": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8"
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "archives/treemap-category.pptx",
+      "sha256": "ae8fe51d4d66b62a99d93bbb6023eb6f6c6f35cc4d4f6e3fefae2ea741b7e2a1",
+      "bytes": 81368
+    },
+    {
+      "path": "diagnostics/treemap-category.json",
+      "sha256": "0451b8c7e2f403aa891ff31acae9ed21494f229fdc3537f8765f2f9cd892e577",
+      "bytes": 293
+    },
+    {
+      "path": "archives/histogram-single.pptx",
+      "sha256": "284f1dfc71d69a4a329f31a7a2e222304902ce2bec3330fb162940c42495a08f",
+      "bytes": 81384
+    },
+    {
+      "path": "diagnostics/histogram-single.json",
+      "sha256": "dd5e2d82beb50b17ddddfabde86e3e932b96f1048b2dfe6e23c60a6f6bb231b4",
+      "bytes": 383
+    },
+    {
+      "path": "archives/histogram-category.pptx",
+      "sha256": "5aac69565cc2e153e5646da34354e048182881e55b85d20ea97971eebee81a2d",
+      "bytes": 81369
+    },
+    {
+      "path": "diagnostics/histogram-category.json",
+      "sha256": "b90d67b69820be52385649c06ca4b6b0ac3d8a8073da100229c8579b03626d76",
+      "bytes": 295
+    },
+    {
+      "path": "archives/pareto-multi.pptx",
+      "sha256": "81f7e6aa6fa27ff830de689e8cef34a6f55eab3305e06c629a693230da236975",
+      "bytes": 81542
+    },
+    {
+      "path": "diagnostics/pareto-multi.json",
+      "sha256": "d93c4e7f0f17d46335b86cb2ed8790accfd3d00cd7c65fdd04aa6e1fcf498e70",
+      "bytes": 292
+    },
+    {
+      "path": "archives/box-multi.pptx",
+      "sha256": "52a16a6121f8f0a1ff94c9b3bd37f1690785e6c1067de5713f9fa7442283ba22",
+      "bytes": 81541
+    },
+    {
+      "path": "diagnostics/box-multi.json",
+      "sha256": "0b07a6d399da07d4c9d237ddd7af1b6c2f531e38e66ee4fc89bcbc7d510b71d5",
+      "bytes": 301
+    },
+    {
+      "path": "archives/waterfall-single.pptx",
+      "sha256": "a03b42e3127a5fc00986126755a3f78561117afbae3490273e6db462a912033b",
+      "bytes": 81810
+    },
+    {
+      "path": "diagnostics/waterfall-single.json",
+      "sha256": "40336b8afa00895dc7cd50d24c311eb3b6a3e829a71a25611f40612fabe8e88f",
+      "bytes": 537
+    },
+    {
+      "path": "archives/funnel-category.pptx",
+      "sha256": "96c22d8af926d1aaf791f1d330cef86f98e334562d1dd5f921e34ee63353be39",
+      "bytes": 81368
+    },
+    {
+      "path": "diagnostics/funnel-category.json",
+      "sha256": "743b20c52dc5bb20877573620996ba3a58d0dad7adee4c96d3aeb922906ce4de",
+      "bytes": 292
+    },
+    {
+      "path": "archives/world-category.pptx",
+      "sha256": "14cc0210e542eb8412122ccfe8b4fb3e856819ecfdd43da8fb9511f006eb604b",
+      "bytes": 80190
+    },
+    {
+      "path": "diagnostics/world-category.json",
+      "sha256": "30731aba4a7c83590d0486907f675eb172669cf6ecb11734b4fe3054e6174b9e",
+      "bytes": 291
+    },
+    {
+      "path": "archives/all-seven.pptx",
+      "sha256": "6b5703e687506ae2966df2e9e71de211b225b5fd3ff170dd0cee46e5f8052aac",
+      "bytes": 144333
+    },
+    {
+      "path": "diagnostics/all-seven.json",
+      "sha256": "4840fed6d13aa9580bc1bcd370583edcbf88450f5ff28fe0ffff544c1efc3987",
+      "bytes": 2041
+    }
+  ],
+  "partsCompared": 1079,
+  "fullFactoryExecuted": false,
+  "nativeAcceptance": false,
+  "nativeUIVerified": false,
+  "physicalWindowsHold": true,
+  "sourceCandidateRegistryAcceptanceRemainsFalse": true
+}

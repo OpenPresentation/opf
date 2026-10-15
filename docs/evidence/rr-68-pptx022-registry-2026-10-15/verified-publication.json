@@ -1,0 +1,109 @@
+{
+  "at": "2026-10-15T06:53:24.050763+00:00",
+  "package": "@openpresentation/opf-pptx",
+  "version": "0.20.2",
+  "status": "published and independently fully canonical verified",
+  "trustedPublisherExit": 0,
+  "independentVerifierExit": 0,
+  "tag": "opf-pptx-v0.20.2",
+  "gitHead": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+  "dist": {
+    "shasum": "40d2211835352d78c75cd3cf2e73d54ac6fee964",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.20.2.tgz",
+    "fileCount": 70,
+    "integrity": "sha512-e38+yo59ap+Es94ZdXdtAyMW0xF2eM4XXJEMRRCgWDRBbrVNWU2AywoQqq6PBQzNp1N3tT27eJY5o2bafbLPLA==",
+    "signatures": [
+      {
+        "sig": "MEUCIQC1CbhMYcyD/6W9wccGDmyc6SXkb3R2sIWgw8McJWj5ogIgBkSpMO9fOTLQgt+vDan8pkK7jQpTd8iNb8LHDy1XpoM=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCIQCfkySFWWbl4I6X8M2enjyc4lP5hNDQcnbK+FaNmJ1KGgIgX7l4B/ljR+6S4hZAabkCk+qEYS/CNFXkUWXSi4jAV54="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.20.2",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 2647934
+  },
+  "publishedAt": "2026-10-15T06:51:00.158Z",
+  "registryPackumentUrl": "https://registry.npmjs.org/@openpresentation%2fopf-pptx",
+  "repository": "https://github.com/OpenPresentation/opf-pptx",
+  "workflow": "https://github.com/OpenPresentation/opf-pptx/blob/19f775a74905ff8760c21e0a3520e2f0aad19f6e/.github/workflows/release.yml",
+  "workflowRun": "https://github.com/OpenPresentation/opf-pptx/actions/runs/38693529256",
+  "provenanceInvocation": "https://github.com/OpenPresentation/opf-pptx/actions/runs/38693529256/attempts/1",
+  "githubRelease": "https://github.com/OpenPresentation/opf-pptx/releases/tag/opf-pptx-v0.20.2",
+  "canonicalChecks": [
+    {
+      "name": "npm version",
+      "ok": true,
+      "detail": "@openpresentation/opf-pptx@0.20.2, integrity sha512-e38+yo59ap+Es94ZdXdtAyMW0xF2eM4XXJEMRRCgWDRBbrVNWU2AywoQqq6PBQzNp1N3tT27eJY5o2bafbLPLA=="
+    },
+    {
+      "name": "tag",
+      "ok": true,
+      "detail": "OpenPresentation/opf-pptx opf-pptx-v0.20.2 -> 19f775a74905ff8760c21e0a3520e2f0aad19f6e"
+    },
+    {
+      "name": "gitHead",
+      "ok": true,
+      "detail": "gitHead 19f775a74905ff8760c21e0a3520e2f0aad19f6e = tag commit 19f775a74905ff8760c21e0a3520e2f0aad19f6e"
+    },
+    {
+      "name": "tag on main",
+      "ok": true,
+      "detail": "19f775a74905 is on opf-pptx main (identical)"
+    },
+    {
+      "name": "version at tag",
+      "ok": true,
+      "detail": "package.json at 19f775a74905 carries 0.20.2"
+    },
+    {
+      "name": "dist.attestations",
+      "ok": true,
+      "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.20.2)"
+    },
+    {
+      "name": "SLSA provenance",
+      "ok": true,
+      "detail": "built by .github/workflows/release.yml on refs/tags/opf-pptx-v0.20.2 from 19f775a74905 (https://github.com/OpenPresentation/opf-pptx/actions/runs/38693529256/attempts/1)"
+    },
+    {
+      "name": "npm audit signatures",
+      "ok": true,
+      "detail": "14 verified, 0 invalid, 0 missing; @openpresentation/opf-pptx@0.20.2 has a verified attestation"
+    },
+    {
+      "name": "GitHub release",
+      "ok": true,
+      "detail": "https://github.com/OpenPresentation/opf-pptx/releases/tag/opf-pptx-v0.20.2"
+    },
+    {
+      "name": "dist-tag",
+      "ok": true,
+      "info": true,
+      "detail": "latest"
+    }
+  ],
+  "canonicalCheckCount": 10,
+  "signatureAndAttestationVerified": true,
+  "tagMovedOrRepushed": false,
+  "canonicalVerifierLog": "/private/tmp/rr68-pptx0202-publication-61/independent-verify.json",
+  "canonicalVerifierLogSha256": "a99d2eaeb99a9114db8f89dee31431ae56e51413ae838f1a34433da42f553758",
+  "canonicalVerification": {
+    "log": "/private/tmp/rr68-pptx0202-publication-61/independent-verify.json",
+    "logSha256": "a99d2eaeb99a9114db8f89dee31431ae56e51413ae838f1a34433da42f553758",
+    "ok": true
+  },
+  "sourceSnapshotLock": "d26c4188e60bd60bfff4b46cd944b895bccb2b253c89adfc00eba4521c9b43ba",
+  "publisherIdentityDistinctFromSourceSnapshot": true,
+  "otherFiveArtifactVersionsUnchanged": true,
+  "physicalWindowsHold": true,
+  "visibleMenuNotClaimed": true,
+  "sourceReceiptSha256": "5a1e323d3fdb76814372cf6527bfd94143cbc6562bcc27370d2fe3b4d0c783fa"
+}

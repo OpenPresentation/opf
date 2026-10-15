@@ -1,0 +1,19 @@
+04:56:15 OpenPresentation/opf-pptx main: no required checks: every check except neutral bots counts
+04:56:16 OpenPresentation/opf-pptx#244: re-ran the failed jobs of run 38109422741
+04:56:16 OpenPresentation/opf-pptx#244 head 9b747bcc; checks red (3/4 checks, no ruleset); failing: package (windows-latest)=FAILURE; mergeable MERGEABLE/UNSTABLE; re-run requested, waiting for the new runs
+04:56:17 OpenPresentation/opf-editor main: no required checks: every check except neutral bots counts
+04:56:17 OpenPresentation/opf-editor#157: re-ran the cancelled run 38109427167
+04:56:17 OpenPresentation/opf-editor#157 head 0c19b5cd; checks red (0/4 checks, no ruleset); failing: package=CANCELLED, Node 22 (engines range)=CANCELLED, Node 26 (engines range)=CANCELLED, macOS playground=CANCELLED; mergeable MERGEABLE/UNSTABLE; re-run requested, waiting for the new runs
+04:56:18 OpenPresentation/opf-editor#154: re-ran the failed jobs of run 38093606228
+04:56:18 OpenPresentation/opf-editor#154 head c8828f46; checks red (2/3 checks, no ruleset); failing: package=FAILURE; mergeable MERGEABLE/UNSTABLE; re-run requested, waiting for the new runs
+04:59:19 OpenPresentation/opf-pptx#244 head 9b747bcc; checks pending (3/4 checks, no ruleset); running: package (windows-latest); 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+04:59:19 RED OpenPresentation/opf-editor#157: required checks failed:
+  package (FAILURE) https://github.com/OpenPresentation/opf-editor/actions/runs/38109427167/job/114392735659
+  Node 22 (engines range) (FAILURE) https://github.com/OpenPresentation/opf-editor/actions/runs/38109427167/job/114392735845
+  Node 26 (engines range) (FAILURE) https://github.com/OpenPresentation/opf-editor/actions/runs/38109427167/job/114392735717
+04:59:19 OpenPresentation/opf-editor#154 head c8828f46; checks pending (2/3 checks, no ruleset); running: package; 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+05:02:20 RED OpenPresentation/opf-pptx#244: required checks failed:
+  package (windows-latest) (FAILURE) https://github.com/OpenPresentation/opf-pptx/actions/runs/38109422741/job/114392733290
+05:17:24 heartbeat: OpenPresentation/opf-editor#154 head c8828f46; checks pending (2/3 checks, no ruleset)
+05:20:24 OpenPresentation/opf-editor#154 head c8828f46; checks green (3/3 checks, no ruleset); mergeable MERGEABLE/CLEAN; confirming at the next poll
+05:23:28 MERGED OpenPresentation/opf-editor#154 4c29be041bb3b4ea67b4b086e69c13395542377c

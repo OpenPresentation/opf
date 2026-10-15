@@ -10,6 +10,12 @@ import {loadFixtureSource} from './fixture-source.mjs';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const json=value=>Buffer.from(`${JSON.stringify(value,null,2)}\n`);
 
+// Keep the reference check independent of exporter availability in tooling tests.
+// It authenticates the entire archive, without XML normalization or exceptions.
+export function assertReviewedFallbackArchive(bytes,entry,id){
+  assert.equal(hash(bytes),entry.sha256,`${id}: reviewed fallback archive changed`);
+}
+
 export async function generateChartModes({consumer,output,engines}={}){
   const root=await realpath(output),installed=await realpath(consumer);
   assert.ok(root!==installed&&!root.startsWith(installed+path.sep),'chart outputs cannot live in installed consumer');
@@ -35,7 +41,7 @@ export async function generateChartModes({consumer,output,engines}={}){
     const shapeCounts=Object.entries(parts).filter(([file])=>/^ppt\/slides\/slide\d+\.xml$/.test(file)).map(([,data])=>[...fflate.strFromU8(data).matchAll(/<p:(?:sp|pic|graphicFrame)\b/g)].length);
     if(mode==='fallback'){
       assert.equal(chartExParts.length,0,`${id}: fallback emitted chartEx`);
-      assert.equal(hash(bytes),chartFixture.entries[name].sha256,`${id}: reviewed fallback archive changed`);
+      assertReviewedFallbackArchive(bytes,chartFixture.entries[name],id);
     }
     if(mode==='native')assert.equal(chartExParts.length,deck.slides.length,`${id}: chartEx count`);
     if(multiPareto){

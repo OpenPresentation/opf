@@ -1,0 +1,52 @@
+{
+  "scope": "Read-only current RR17 boundary, preserving accepted original release scope",
+  "auditReceiptSha256": "fa0fa3f231b9e3ed27e58d86ac01c28f9d6d987aeb943547731fd4769b8c33c6",
+  "auditSource": "/private/tmp/rr17-owner-audit-61/receipt.json",
+  "acceptedRootAudit": true,
+  "closed": [
+    {
+      "issue": 361,
+      "url": "https://github.com/OpenPresentation/opf/issues/361",
+      "state": "CLOSED",
+      "reason": "COMPLETED",
+      "closedAt": "2026-10-11T11:27:11Z"
+    },
+    {
+      "issue": 364,
+      "url": "https://github.com/OpenPresentation/opf/issues/364",
+      "state": "CLOSED",
+      "reason": "COMPLETED",
+      "closedAt": "2026-10-10T17:04:54Z"
+    },
+    {
+      "issue": 363,
+      "url": "https://github.com/OpenPresentation/opf/issues/363",
+      "state": "CLOSED",
+      "reason": "COMPLETED",
+      "closedAt": "2026-10-06T01:25:39Z"
+    }
+  ],
+  "acceptedExistingWork": [
+    "Didot documented-visual through322; no new reroute is required",
+    "23-name four-host commission through renderer246/editor171/Gallery132 and core670; seven original Japanese samples at400/700"
+  ],
+  "actualEngineeringFollowups": [
+    {
+      "issue": 581,
+      "url": "https://github.com/OpenPresentation/opf/issues/581",
+      "work": "Per-script/run adjustment contract for mixed Arabic/digits/Latin; one known-bad scalar is not accepted"
+    },
+    {
+      "issue": 582,
+      "url": "https://github.com/OpenPresentation/opf/issues/582",
+      "work": "Requested-family/drawn-fallback-face adjustment correction for Nirmala Indic; affected native acceptance remains"
+    }
+  ],
+  "limits": [
+    "No new factor, shaping, metric policy or geometry change",
+    "Yu Gothic nativeVisual1.0105/script-gap/acceptedfalse retained",
+    "17selectednative+4UIoperations accepted;41of58cases unexecuted; no globalfont/pixel acceptance",
+    "Original40of40 and broader77of84 unchanged"
+  ],
+  "newTestsOrQueries": 0
+}

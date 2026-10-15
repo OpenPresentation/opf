@@ -35,6 +35,34 @@
       "fixture": "test/fixtures/chartex-fallback-main.json#entries.waterfall-single",
       "evidence": "docs/evidence/rr20-row-data-provenance/archive-review.json",
       "scope": "Only the approved waterfall fallback hash and size change. Added data-provenance tag and links; native parts and the other eight chart archives are unchanged. Previous hash and size retained in the entry. Strict fallback archive equality remains required."
+    },
+    "currentMasterDisplayNameReview": {
+      "date": "2026-10-15",
+      "publishedBaseline": {
+        "version": "0.20.0",
+        "gitHead": "0e2ea4982c4bb1280f22763411e681fe0786f4fc"
+      },
+      "publishedCurrent": {
+        "version": "0.20.1",
+        "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301"
+      },
+      "evidence": "docs/evidence/rr-68-native-chart-master-name-2026-10-15/comparison.json",
+      "scope": "All nine exact maintained fallback decks exported with otherwise identical registry dependencies. Every old archive and size reproduced its historical entry; all 1079 ZIP parts retained. Only each generated slide master gains p:cSld@name=pptx.gallery; all other parts and diagnostic bytes unchanged. Older source metadata above remains historical. Whole-archive equality, chart mode assertions and complete suite sealing remain strict."
+    },
+    "sourceCandidateDefaultThemeReview": {
+      "sourceCandidate": {
+        "repository": "OpenPresentation/opf-pptx",
+        "commit": "560571c7ced447484c55c673c8fbeb8f69f838a4",
+        "base": "373715ad62bd679ad39ba5b8783ec8f11df50065",
+        "registryAcceptance": false,
+        "notPublished": true
+      },
+      "publishedBaseline": {
+        "version": "0.20.1",
+        "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301"
+      },
+      "evidence": "docs/evidence/rr-68-native-chart-master-name-2026-10-15/source-candidate-theme-category.json",
+      "scope": "Exact reviewed source-candidate default theme display-name correction; all nine current strict fallback identities change only for theme1/theme2 root/family names and app theme-name entries. Every other ZIP payload, source fixture and diagnostic remains exact. All previous published0.20.0/0.20.1 identities and cause evidence remain historical. Candidate preparation remains registryAcceptance:false; native UI success is not yet claimed."
     }
   },
   "decks": {
@@ -538,8 +566,8 @@
   },
   "entries": {
     "treemap-category": {
-      "sha256": "b69933578667102cc1b2ffa59e97574aa90d6e27442c5e59677ff1a0c16a71f2",
-      "bytes": 81345,
+      "sha256": "ae8fe51d4d66b62a99d93bbb6023eb6f6c6f35cc4d4f6e3fefae2ea741b7e2a1",
+      "bytes": 81368,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -547,8 +575,8 @@
       "layoutTagParts": 29
     },
     "histogram-single": {
-      "sha256": "ccf0a5f94b46fa240a5f9aa855b19ab6bc8d552b39fe4aefa8cd471774c5ec6a",
-      "bytes": 81361,
+      "sha256": "284f1dfc71d69a4a329f31a7a2e222304902ce2bec3330fb162940c42495a08f",
+      "bytes": 81384,
       "diagnostics": [
         "chart-data-adapted/histogram-binned"
       ],
@@ -556,8 +584,8 @@
       "layoutTagParts": 29
     },
     "histogram-category": {
-      "sha256": "1f4c9d95b18a3821bcdbf29dd18048d0924838dbd307e3a6980a4190ac9bb479",
-      "bytes": 81346,
+      "sha256": "5aac69565cc2e153e5646da34354e048182881e55b85d20ea97971eebee81a2d",
+      "bytes": 81369,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -565,8 +593,8 @@
       "layoutTagParts": 29
     },
     "pareto-multi": {
-      "sha256": "e7899a6dd1fc22f5b257a813323f4e63b7d328c63f582d29cea577b8262d5463",
-      "bytes": 81519,
+      "sha256": "81f7e6aa6fa27ff830de689e8cef34a6f55eab3305e06c629a693230da236975",
+      "bytes": 81542,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -574,8 +602,8 @@
       "layoutTagParts": 29
     },
     "box-multi": {
-      "sha256": "34d74ee3301b44a5d81ca32fd138966dfae9e93d79ba1752fc9c50a430b6d645",
-      "bytes": 81518,
+      "sha256": "52a16a6121f8f0a1ff94c9b3bd37f1690785e6c1067de5713f9fa7442283ba22",
+      "bytes": 81541,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -583,8 +611,8 @@
       "layoutTagParts": 29
     },
     "waterfall-single": {
-      "sha256": "c812d346498c0f472942fceecca3c4ff3e8b0ac3237bbbfcd7d66725605dc867",
-      "bytes": 81787,
+      "sha256": "a03b42e3127a5fc00986126755a3f78561117afbae3490273e6db462a912033b",
+      "bytes": 81810,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/row-numbers"
@@ -595,8 +623,8 @@
       "rr20RowDataPreviousBytes": 81372
     },
     "funnel-category": {
-      "sha256": "ba1a79407651ef262d15b6b0e1e937177b3d02537960344093a568c89feaa6f4",
-      "bytes": 81345,
+      "sha256": "96c22d8af926d1aaf791f1d330cef86f98e334562d1dd5f921e34ee63353be39",
+      "bytes": 81368,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -604,8 +632,8 @@
       "layoutTagParts": 29
     },
     "world-category": {
-      "sha256": "e9dec7ca5086812227c171a3d93c45c32ceaf3e4748a55f8a67623c5dca9f914",
-      "bytes": 80164,
+      "sha256": "14cc0210e542eb8412122ccfe8b4fb3e856819ecfdd43da8fb9511f006eb604b",
+      "bytes": 80190,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
@@ -613,8 +641,8 @@
       "layoutTagParts": 28
     },
     "all-seven": {
-      "sha256": "d5e9369846422d28f3dfb3b32b0009401a41d402412fdbfed106561edd354082",
-      "bytes": 144311,
+      "sha256": "6b5703e687506ae2966df2e9e71de211b225b5fd3ff170dd0cee46e5f8052aac",
+      "bytes": 144333,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chartex-fallback",

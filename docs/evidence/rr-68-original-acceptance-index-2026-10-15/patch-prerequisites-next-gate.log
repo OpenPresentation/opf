@@ -1,0 +1,24 @@
+05:25:13 OpenPresentation/opf-pptx main: no required checks: every check except neutral bots counts
+05:25:14 OpenPresentation/opf-pptx#244: re-ran the failed jobs of run 38109422741
+05:25:14 OpenPresentation/opf-pptx#244 head 9b747bcc; checks red (3/4 checks, no ruleset); failing: package (windows-latest)=FAILURE; mergeable MERGEABLE/UNSTABLE; re-run requested, waiting for the new runs
+05:25:14 OpenPresentation/opf-editor main: no required checks: every check except neutral bots counts
+05:25:14 OpenPresentation/opf-editor#157 head adf5ef23; checks pending (0/4 checks, no ruleset); running: package, Node 22 (engines range), Node 26 (engines range), macOS playground; 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+05:25:14 OpenPresentation/opf main: no required checks: every check except neutral bots counts; merge queue
+05:25:14 OpenPresentation/opf#597 head 78c28dd0; checks green (12/12 checks, no ruleset); mergeable MERGEABLE/CLEAN; confirming at the next poll
+05:25:15 OpenPresentation/opf-render main: no required checks: every check except neutral bots counts
+05:25:15 OpenPresentation/opf-render#231 head a224c61c; checks pending (2/7 checks, no ruleset); running: package, measure (linux), measure (macos), Node 22 (engines range), Node 26 (engines range); 2 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+05:28:16 OpenPresentation/opf-pptx#244 head 9b747bcc; checks pending (3/4 checks, no ruleset); running: package (windows-latest); 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+05:28:17 OpenPresentation/opf#597: enqueued at 78c28dd0 (QUEUED, position 1)
+05:28:17 OpenPresentation/opf-render#231 head a224c61c; checks pending (4/7 checks, no ruleset); running: package, Node 22 (engines range), Node 26 (engines range); 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+05:31:19 OpenPresentation/opf-editor#157 head adf5ef23; checks pending (2/4 checks, no ruleset); running: package, macOS playground; 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+05:31:19 OpenPresentation/opf#597 head 78c28dd0; checks green (12/12 checks, no ruleset); mergeable MERGEABLE/CLEAN; in the merge queue (AWAITING_CHECKS, position 1)
+05:40:24 OpenPresentation/opf-render#231 head a224c61c; checks pending (5/7 checks, no ruleset); running: package, Node 22 (engines range); 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+05:43:25 MERGED OpenPresentation/opf#597 b3a0561b993d577b3e792bd1d966e1f7a6148fc5 (merged by the merge queue)
+05:43:25 OpenPresentation/opf-render#231 head a224c61c; checks pending (6/7 checks, no ruleset); running: package; 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+05:46:26 OpenPresentation/opf-editor#157 head adf5ef23; checks pending (3/4 checks, no ruleset); running: package; 1 workflow runs in progress; mergeable MERGEABLE/UNSTABLE
+05:49:27 OpenPresentation/opf-render#231 head a224c61c; checks green (7/7 checks, no ruleset); mergeable MERGEABLE/CLEAN; confirming at the next poll
+05:52:29 OpenPresentation/opf-pptx#244 head 9b747bcc; checks green (4/4 checks, no ruleset); mergeable MERGEABLE/CLEAN; confirming at the next poll
+05:52:29 OpenPresentation/opf-editor#157 head adf5ef23; checks green (4/4 checks, no ruleset); mergeable MERGEABLE/CLEAN; confirming at the next poll
+05:52:32 MERGED OpenPresentation/opf-render#231 5aca1864158a959d52ae2d8c3548d6f6ff0aedae
+05:55:35 MERGED OpenPresentation/opf-pptx#244 ff9b41bc0702b9d043677e76494e48dac8daef71
+05:55:37 MERGED OpenPresentation/opf-editor#157 b2c9bab8a58b17ec3aa10c6360c0870067943986
