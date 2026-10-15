@@ -1,6 +1,6 @@
 import {publishedGalleryControl,optionalRegularJson,assertPublishedGallery} from './candidate-gallery.mjs';
 import assert from 'node:assert/strict';
-import {mkdtempSync,mkdirSync,writeFileSync,symlinkSync,rmSync,readFileSync,realpathSync} from 'node:fs';
+import {mkdtempSync,mkdirSync,writeFileSync,symlinkSync,rmSync,readFileSync,realpathSync,lstatSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import {tmpdir} from 'node:os';
@@ -45,10 +45,15 @@ test('source linking verifies actual immutable package identity and preserves me
   assert.throws(()=>linkCandidateGallery({gallery,candidate,consumers:[consumer]}),/reviewed SHA/);
   const before=readFileSync(path.join(gallery,'package.json'));const result=linkCandidateGallery({gallery,candidate:exact,consumers:[consumer]});assert.match(result.qualification,/source-only/);assert.deepEqual(readFileSync(path.join(gallery,'package.json')),before);
   writeFileSync(path.join(gallery,'untracked-script.mjs'),'export {};');assert.throws(()=>linkCandidateGallery({gallery,candidate:exact,consumers:[consumer]}),/untracked/);rmSync(path.join(gallery,'untracked-script.mjs'));
-  const bad=path.join(gallery,'dist/dangling');symlinkSync(path.join(root,'missing'),bad);assert.throws(()=>linkCandidateGallery({gallery,candidate:exact,consumers:[consumer]}),/symlink/);rmSync(bad);
+  const bad=path.join(gallery,'dist/dangling');symlinkSync(path.join(root,'missing'),bad,process.platform==='win32'?'junction':undefined);assert.ok(lstatSync(bad).isSymbolicLink());assert.throws(()=>linkCandidateGallery({gallery,candidate:exact,consumers:[consumer]}),/symlink/);rmSync(bad);
   writeFileSync(path.join(gallery,'package.json'),'{}');assert.throws(()=>linkCandidateGallery({gallery,candidate:exact,consumers:[consumer]}),/modified/);
-  const alias=path.join(root,'alias.json');symlinkSync(path.join(gallery,'package-lock.json'),alias);assert.throws(()=>readRegularJson(alias),/aliased/);
-  const dangling=path.join(root,'candidate-gallery.json');symlinkSync(path.join(root,'missing.json'),dangling);assert.throws(()=>optionalRegularJson(dangling),/ENOENT/);
+  // Windows junctions alias the parent while the JSON leaf remains a real regular file.
+  const aliasDirectory=path.join(root,'alias');
+  const alias=process.platform==='win32'?path.join(aliasDirectory,'package-lock.json'):path.join(root,'alias.json');
+  if(process.platform==='win32'){symlinkSync(gallery,aliasDirectory,'junction');assert.ok(lstatSync(alias).isFile());assert.equal(readFileSync(alias,'utf8'),readFileSync(path.join(gallery,'package-lock.json'),'utf8'));}
+  else symlinkSync(path.join(gallery,'package-lock.json'),alias);
+  assert.throws(()=>readRegularJson(alias),/aliased/);
+  const dangling=path.join(root,'candidate-gallery.json');symlinkSync(path.join(root,'missing.json'),dangling,process.platform==='win32'?'junction':undefined);assert.ok(lstatSync(dangling).isSymbolicLink());assert.throws(()=>optionalRegularJson(dangling),/ENOENT/);
   assert.equal(optionalRegularJson(path.join(root,'absent.json')),undefined);
  }finally{rmSync(root,{recursive:true,force:true});}
 });

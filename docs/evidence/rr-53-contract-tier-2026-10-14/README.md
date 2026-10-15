@@ -1,0 +1,9 @@
+# RR-53: scoped completion, 2026-10-14
+
+The supervisor accepts the original RR-53 criterion: ordinary core PRs run sibling contract suites; core merge-queue and scheduled runs run the full suites, without weakening gates or tolerances. [Portable decision and source bindings](scoped-acceptance.json) retain the exact supervisor decision digest, observed GitHub metadata and source/queue identities.
+
+Core [335](https://github.com/OpenPresentation/opf/pull/335) actually merged on 2026-10-05 at `c6dca9287e4de2bf8c072179a7f3e35ab0325972`, an ancestor of reviewed current source. The active “parked/ready/not merged” tracking was stale. The maintained event-tier resolver, command planner and workflow implement contract PRs and full non-PR runs; old siblings without a named contract safely fall back to the full suite. Existing [core669](https://github.com/OpenPresentation/opf/pull/669) normal queue acceptance binds actual `d248a64fa0adbe4a8a08a5179b797f646469192c` and its confirmed checks.
+
+The [original study](../../programs/release-readiness/ci-cd.md) and dated implementation measurement retained in the [burndown](../../programs/release-readiness/burndown.md) report 11–15% less runner time and no wall-clock gain because ecosystem-core remained critical. This is the retained historical result, not a new current benchmark, promised minimum gain or fresh raw timing-sample audit.
+
+RR-48 remains open for three sibling merge-queue rulesets; those are not an extra RR-53 criterion. Core issue658 still requires its next green nightly; this decision neither closes it nor relabels a manual run as scheduled. No settings, CI policy, runtime dependencies, packages, fonts, native evidence or deployment changed for this reconciliation. Frozen PR670 and its dated 76/84 snapshot remain unchanged; the independent current follow-up records 77/84 and seven broader open rows.

@@ -1,0 +1,83 @@
+{
+  "decision": {
+    "at": "2026-10-14T23:46:57.774709+00:00",
+    "decision": "ACCEPTED RR-53 against original literal criterion; current parked/owner-blocked tracking is obsolete",
+    "sourceReviewed": "32873b8d517b283a3f7eb8b77bc1e637c65a9cf0",
+    "implementation": {
+      "pr": "https://github.com/OpenPresentation/opf/pull/335",
+      "actualMerge": "c6dca9287e4de2bf8c072179a7f3e35ab0325972",
+      "mergedAt": "2026-10-05T06:40:05Z",
+      "ancestorOfReviewedCurrentSource": true
+    },
+    "criteria": {
+      "ordinaryCorePR": "Maintained event tier selects sibling contract suites and workflows forward that tier; unknown/old sibling contracts fall back to full",
+      "queueSchedule": "Maintained resolver always full for merge_group/schedule/non-PR; workflow declares queue and daily schedule",
+      "actualCoreQueue": "Canonical669 merged by queue atd248,18initialchecks and actual normal queue success; source/root merge proof previously accepted",
+      "retainedMeasurement": "Committed original study and dated implementation result report11\u201315% lower runner time, no wall-clock gain; no minimum performance threshold or new current benchmark claimed",
+      "unchangedGatesTolerances": true
+    },
+    "evidence": {
+      "agentAssessmentSha256": "8a63e88754fe37547960a2d1a3b60b99989d102af1cca8fa7441b2e7cbbb061a",
+      "actualQueueProofSha256": "522c6c418ecd334a6dd7adef635b35754252b20638f36cb6aa2d35bd33c1dd49"
+    },
+    "boundaries": [
+      "RR-48 remains open for three sibling merge-queue rulesets; it is not an additional RR-53 criterion",
+      "Issue658 next-green-nightly remains open; full scheduled policy is not a claim the next nightly passed",
+      "No new benchmark, raw historical timing-sample audit, test suite, setting change, release or deployment",
+      "Frozen670 and its dated76/84/eight-open census remain unchanged; a separate normal followup may record77/84/sevenopen after this acceptance"
+    ],
+    "next": "Update current program status/progress in independent maintenance followup with exact prior-source and queue receipts; retain historical decisions as dated history"
+  },
+  "supervisorDecisionSha256": "a2c8731136ff3cde25114cdea3e6d329362434a4f3f131723801a9ba9c9ff258",
+  "actual335Metadata": {
+    "number": 335,
+    "title": "RR-53: contract suites in the PR tier; full suites in the queue, on main and nightly",
+    "state": "MERGED",
+    "merged": true,
+    "mergedAt": "2026-10-05T06:40:05Z",
+    "closedAt": "2026-10-05T06:40:05Z",
+    "url": "https://github.com/OpenPresentation/opf/pull/335",
+    "headRefOid": "90a1c9f5c11066c346b8e2533ae0f7856744dbd2",
+    "baseRefName": "main",
+    "mergeCommit": {
+      "oid": "c6dca9287e4de2bf8c072179a7f3e35ab0325972"
+    }
+  },
+  "observation": {
+    "successfulGitHubMetadataReads": 1,
+    "initialSandboxNetworkRefusalRetainedLocally": true,
+    "noAdditionalCIQueriesOrNewTests": true
+  },
+  "publicEvidence": {
+    "implementation": "https://github.com/OpenPresentation/opf/commit/c6dca9287e4de2bf8c072179a7f3e35ab0325972",
+    "actualCoreQueueMerge": "https://github.com/OpenPresentation/opf/pull/669",
+    "acceptedQueueMerge": "d248a64fa0adbe4a8a08a5179b797f646469192c",
+    "queueProofSha256": "522c6c418ecd334a6dd7adef635b35754252b20638f36cb6aa2d35bd33c1dd49"
+  },
+  "sourceBindings": [
+    {
+      "repository": "OpenPresentation/opf",
+      "ref": "32873b8d517b283a3f7eb8b77bc1e637c65a9cf0",
+      "path": "scripts/ecosystem-scope.mjs",
+      "sha256": "b36fb7a8a642bcd1c36e6184c139811bc369ae2814b157f522e09dfc2782900d"
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "ref": "32873b8d517b283a3f7eb8b77bc1e637c65a9cf0",
+      "path": "scripts/package-ecosystem-plan.mjs",
+      "sha256": "5ba409cdf4b4e591619dc2b1d36989b8c8166a13d7b42966a554a5010df58b1c"
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "ref": "32873b8d517b283a3f7eb8b77bc1e637c65a9cf0",
+      "path": ".github/workflows/ecosystem-ci.yml",
+      "sha256": "1bcd7e98808e32204dafe1afc2ebbf68ad09d07f53309733278556d205c0e1af"
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "ref": "32873b8d517b283a3f7eb8b77bc1e637c65a9cf0",
+      "path": "docs/programs/release-readiness/ci-cd.md",
+      "sha256": "449c9bdf7f1dbad2eafc66aea5af338fe7c4dbadcdf92b30916db92a510a3a87"
+    }
+  ]
+}

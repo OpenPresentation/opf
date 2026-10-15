@@ -1,0 +1,54 @@
+{
+  "at": "2026-10-14T23:50:26.653637+00:00",
+  "decision": "ACCEPTED: normal gated actual670 merged tree closes originalT16/T40 and completes original40-checkpoint handoff",
+  "pr": "https://github.com/OpenPresentation/opf/pull/670",
+  "actualMerge": "c36727c64d15d7584f66b80f5257c94c0ada4083",
+  "tree": "e660f09d440e1259144954a61f99c541f1bae6e5",
+  "approvedHead": "32873b8d517b283a3f7eb8b77bc1e637c65a9cf0",
+  "exactTreeAndFullPatchEqualityIndependentlyVerified": true,
+  "fullPatchSha256": "eb1d77278ee7b3369f55da507ba87ecc8b69f2904bb84fff9f4a2ad1ff69fcce",
+  "releaseLaneMergeProofSha256": "f82f6bfdc915ced83de210c39435cc4195d257a33265b3b313ce663baa2260ee",
+  "normalPRChecks": 18,
+  "normalMergeQueuePassed": true,
+  "queueCheckCount": "not separately counted",
+  "originalChecklist": {
+    "accepted": 40,
+    "total": 40,
+    "percent": 100,
+    "newlyAccepted": [
+      "T16",
+      "T40"
+    ],
+    "priorAccepted": 38,
+    "closureScope": "Original scoped release/layout/site handoff; not every broader program row or all58native cases"
+  },
+  "officialLockSha256": "5e040a7e52ae596d89222be6b3d1bb3d7129568e86f2764bab7edbcb1612685f",
+  "goldenFixtureSha256": "66c0c2e45d863e33b178f717f7ebb5131f48f3643a6cbcd92956820f928dfd5d",
+  "planSha256": "83b7c9e01ab6446f01d12d54e7e9ab1408fc37cf2b90f330ae2a990b11307493",
+  "publicationAuthoritySha256": "c12b67d85e5753de67b4821a45e0cb27c89ddbe0b31fe4412bb6730752eaaa5c",
+  "history": "Normalqueue squash means8860 is not an ancestor of actualmain; immutable originalbotcommit/workflow and exactlock/tree proof retained",
+  "broaderProgram": {
+    "eligibleClosed": 77,
+    "total": 84,
+    "open": [
+      "RR-14",
+      "RR-17",
+      "RR-19",
+      "RR-48",
+      "RR-51",
+      "RR-68",
+      "RR-20"
+    ],
+    "RR53": "Separately supervisoraccepted from actual335/currentsource/669queue/retainedmeasurement; tracker followup pending normal integration",
+    "RR20": "Original40 handoff delivered separately; broader dependencies remain active"
+  },
+  "nativeScope": {
+    "selectedCasesExecuted": 17,
+    "uiOperations": 4,
+    "casesUnexecuted": 41,
+    "totalCaseDispositions": 58,
+    "globalFontGlyphRasterPixelClaim": false
+  },
+  "noAdditionalPublicationDeploymentRollerOrSelfRecordingPRRequiredForThisAcceptance": true,
+  "independentMaintenanceAndDev132RemainSeparate": true
+}

@@ -9,6 +9,7 @@ import {stagedManifest,stageGalleryGraph,candidateArtifacts,candidatePeerPreflig
 import {installIsolatedInstalledCore} from './isolated-core.mjs';
 import {preparePackedSmokeCli} from './pack-cli-candidate.mjs';
 import {assertPublishedGallery} from './candidate-gallery.mjs';
+import {packageManagerInvocation} from './package-manager.mjs';
 test('explicit staged metadata keeps source versions and records only candidate dependency relationships',()=>{
  const original={name:'@openpresentation/opf',version:'0.19.0-dev.0',dependencies:{'@openpresentation/gallery':'^1.0.0',other:'^3.0.0'},peerDependencies:{'@openpresentation/opf-render':'^0.18.0'},scripts:{build:'never execute'},devDependencies:{typescript:'5'},opf:{requiresUnreleasedGallery:'2.0.0',other:true}};
  const before=structuredClone(original);
@@ -26,7 +27,10 @@ for(const catalogSchema of [2,3])test(`real contract${catalogSchema} six-package
  const galleryVersion=`${catalogSchema}.0.0`;
  const workspace=realpathSync(mkdtempSync(path.join(tmpdir(),'rr78-tarballs-'))),root=path.join(workspace,'opf');
  const previous=process.env.CANDIDATE_GALLERY_REF;
- const run=(command,args,cwd)=>execFileSync(command,args,{cwd,encoding:'utf8',stdio:['ignore','pipe','pipe']});
+ const run=(command,args,cwd)=>{
+  if(command==='npm')({command,args}=packageManagerInvocation(command,args));
+  return execFileSync(command,args,{cwd,encoding:'utf8',stdio:['ignore','pipe','pipe']});
+ };
  const init=directory=>{mkdirSync(directory,{recursive:true});run('git',['init','-q'],directory);run('git',['config','user.name','fixture'],directory);run('git',['config','user.email','fixture@example.invalid'],directory);};
  const commit=directory=>{run('git',['add','.'],directory);run('git',['commit','-qm','fixture'],directory);return run('git',['rev-parse','HEAD'],directory).trim();};
  const roots=[root,...['opf-render','opf-pptx','opf-editor','gallery-candidate'].map(name=>path.join(workspace,name))];
