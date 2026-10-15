@@ -1,0 +1,7 @@
+# Current native chart fixture baseline
+
+The maintained native preparation used historical fallback archive hashes from before the published PPTX0.20.1 master display-name fix. The first Windows attempt stopped at treemap fallback before suite sealing or Office; preserve that incomplete attempt.
+
+[Exact comparison](comparison.json) records all nine before/after archive identities and every changed part. Both genuine published packages used the same decks/catalog and otherwise identical registry lock records. All 1079 members have identical inventories; the nine changed slide-master parts differ only by the exact ` name="pptx.gallery"` attribute on `p:cSld`. Diagnostics, chart payloads/workbooks/themes, individual layout names and all other ZIP bytes are unchanged. Historical native evidence and original converter metadata remain historical; this current tooling update does not relabel them.
+
+The current nine expected SHA/size values are updated together. No XML normalization or drift tolerance was added: `generateChartModes` still compares the entire emitted archive hash. The ordinary regression checks the authenticated nine-reference metadata and strict whole-byte guard without requiring a particular development exporter version. Separately, the genuine current registry consumer qualifies real generation of the maintained matrix and paired ZIP-preserving mutation controls. Standard prepare retains every case and whole-tree sealing; this is not native acceptance, a runtime release or a second source roll.
