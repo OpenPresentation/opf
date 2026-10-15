@@ -113,7 +113,7 @@ export function createCanvasEditor(container, options = {}) {
   notice.hidden = true;
   const style = doc.createElement("style");
   style.textContent =
-    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus{outline:none}.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection{stroke:#7765d0}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
+    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus{outline:none}.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
   root.append(style, preview, overlay, notice);
   container.replaceChildren(root);
   const report = (error) => {
@@ -449,6 +449,10 @@ export function createCanvasEditor(container, options = {}) {
     const target = getTarget(active.path),
       text = target?.matches("text") ? target : target?.querySelector("text");
     if (!text) return;
+    // The scalar textarea supplies the editing boundary. Keep the SVG rectangle for hit testing,
+    // but suppress its second stroke, including after a draft render replaces the target.
+    // Rich text uses an invisible native input, so it keeps the SVG selection boundary.
+    target.setAttribute("data-canvas-editing", "");
     const svg = preview.querySelector("svg"),
       svgRect = svg.getBoundingClientRect(),
       rootRect = root.getBoundingClientRect();
