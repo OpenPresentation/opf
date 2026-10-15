@@ -6,7 +6,7 @@ import {execFileSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 import {tar} from './archive-tar.mjs';
-import {examplesDigest,reviewedCoreGolden} from './registry-golden.mjs';
+import {examplesDigest,readPublishedCoreGolden} from './registry-golden.mjs';
 import {installablePackages} from './release-plan-cli.mjs';
 const root=process.cwd();
 const plan=JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8'));
@@ -36,14 +36,19 @@ const nativeContent=atLeast('@openpresentation/opf-pptx',[0,5,2]);
 const sharedQuotes=atLeast('@openpresentation/opf',[0,8,0]);
 const sharedCode=atLeast('@openpresentation/opf',[0,9,0]);
 const acceptedLayout=atLeast('@openpresentation/opf',[0,10,0]);
-// Core releases that change the bundled examples without moving a pixel (opf#309) are verified against the reviewed core
-// copy of the renderer baseline that ecosystem.lock.json selects; see scripts/registry-golden.mjs.
+// Read the reviewed golden from the same immutable core release source as the installed registry package. Current
+// source may compose the same examples differently; its golden must never qualify an older installed core.
 // The package exports ./examples for import only, so resolve it from the installed manifest, not through require.
 const coreManifestPath=require.resolve('@openpresentation/opf/package.json');
 const coreExamples=JSON.parse(await readFile(coreManifestPath,'utf8')).exports['./examples'].import;
 const {examples}=await import(pathToFileURL(path.resolve(path.dirname(coreManifestPath),coreExamples)).href);
-const reviewedGolden=reviewedCoreGolden({root,lock:JSON.parse(await readFile(path.join(root,'ecosystem.lock.json'),'utf8')),digest:examplesDigest(examples)});
-if(reviewedGolden)console.log('Registry golden: installed core examples match the reviewed core baseline '+path.relative(root,reviewedGolden)+'; pixel hashes compared exactly.');
+const publishedGolden=readPublishedCoreGolden({root,ref:plan.verificationRefs?.opf,version:plan.packages.find(item=>item.name==='@openpresentation/opf').version,digest:examplesDigest(examples)});
+let reviewedGolden;
+if(publishedGolden){
+ const directory=path.join(consumer,'fidelity','opf');await mkdir(directory,{recursive:true});
+ reviewedGolden=path.join(directory,'golden.json');await writeFile(reviewedGolden,publishedGolden.bytes);
+ console.log('Registry golden: exact '+publishedGolden.ref+':'+publishedGolden.path+'; installed core version and examples digest match; pixel hashes compared exactly.');
+}
 const suites=[
  ['opf-render',['webp.mjs','jpeg-orientation.mjs','rich-table.mjs','golden.mjs',...(styled?['styled-table.mjs']:[]),...(quoteFooter?['quote-footer.mjs']:[]),...(sharedQuotes?['shared-quote.mjs']:[]),...(sharedCode?['shared-code.mjs']:[]),...(acceptedLayout?['accepted-text.mjs','shared-metric.mjs','timeline.mjs']:[])]],
  ['opf-pptx',['dependency-boundary.mjs',...(styled?['styled-table.mjs','styled-table-import.mjs']:[]),...(nativeContent?['content-layout.mjs']:[]),...(sharedQuotes?['shared-quote.mjs']:[]),...(sharedCode?['shared-code.mjs','code-provenance.mjs']:[]),...(acceptedLayout?['plain-whitespace.mjs','accepted-text.mjs','content-cards.mjs','shared-timeline.mjs','font-variants.mjs']:[])]],

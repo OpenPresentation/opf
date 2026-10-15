@@ -7,8 +7,8 @@ import {composeSlide} from '../dist/composition.js';
 const slide = {title: 'Quarterly review', subtitle: 'Supporting context', blocks: [{text: 'Body copy'}, {metric: {value: 42, label: 'Accounts'}}, {items: ['First', 'Second']}]};
 const alignments = composition => composition.items.map(item => [item.field, item.alignment]);
 
-test('composed items default to left alignment', () => {
-  assert.deepEqual(alignments(composeSlide(slide)), [['title', 'left'], ['subtitle', 'left'], ['text', 'left'], ['metric', 'left'], ['items', 'left']]);
+test('composed metrics default to center and other items default to left alignment', () => {
+  assert.deepEqual(alignments(composeSlide(slide)), [['title', 'left'], ['subtitle', 'left'], ['text', 'left'], ['metric', 'center'], ['items', 'left']]);
 });
 
 test('title follows titleAlignment and every other item follows contentAlignment', () => {

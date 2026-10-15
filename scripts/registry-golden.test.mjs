@@ -1,11 +1,12 @@
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { examplesDigest, RETAINED_CORE_GOLDENS, reviewedCoreGolden } from './registry-golden.mjs';
+import { examplesDigest, readPublishedCoreGolden, RETAINED_CORE_GOLDENS, reviewedCoreGolden } from './registry-golden.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sha = (value) => createHash('sha256').update(value).digest('hex');
@@ -25,6 +26,63 @@ function checkout(digest, extra = {}) {
   for (const [name, other] of Object.entries(extra)) writeFileSync(path.join(directory, 'scripts/fixtures', name), JSON.stringify({ version: 2, source: { sha256: other }, entries: {} }));
   return directory;
 }
+
+function publishedCheckout() {
+  const digest = 'a'.repeat(64);
+  const directory = checkout(digest);
+  mkdirSync(path.join(directory, 'packages/javascript'), { recursive: true });
+  writeFileSync(path.join(directory, 'packages/javascript/package.json'), JSON.stringify({ version: '0.20.1' }));
+  writeFileSync(path.join(directory, 'ecosystem.lock.json'), JSON.stringify({ golden: { repository: 'opf', path: 'scripts/fixtures/golden.json' } }));
+  const git = (...args) => execFileSync('git', args, { cwd: directory, encoding: 'utf8', stdio: 'pipe' }).trim();
+  git('init', '--quiet');
+  const commit = () => {
+    git('add', '.');
+    git('-c', 'user.name=Registry golden test', '-c', 'user.email=registry-test@example.invalid', 'commit', '--quiet', '-m', 'fixture');
+    return git('rev-parse', 'HEAD');
+  };
+  return { directory, digest, git, commit };
+}
+
+test('registry golden preserves exact release bytes when current source moves pixels for the same examples', () => {
+  const { directory, digest, commit } = publishedCheckout();
+  const file = path.join(directory, 'scripts/fixtures/golden.json');
+  const released = Buffer.from(JSON.stringify({ version: 2, source: { sha256: digest }, entries: { metric: { sha256: 'b'.repeat(64), bytes: 42 } } }, null, 3) + '\n');
+  writeFileSync(file, released);
+  const ref = commit();
+  writeFileSync(file, JSON.stringify({ version: 2, source: { sha256: digest }, entries: { metric: { sha256: 'c'.repeat(64), bytes: 43 } } }));
+  commit();
+  const result = readPublishedCoreGolden({ root: directory, ref, version: '0.20.1', digest });
+  assert.equal(result.path, 'scripts/fixtures/golden.json');
+  assert.equal(result.ref, ref);
+  assert.deepEqual(result.bytes, released);
+  assert.notDeepEqual(result.bytes, readFileSync(file));
+});
+
+test('registry golden rejects invalid, unavailable or wrong-version source refs and a different installed corpus', () => {
+  const { directory, digest, commit } = publishedCheckout();
+  const ref = commit();
+  const options = { root: directory, ref, version: '0.20.1', digest };
+  for (const invalid of [undefined, 'main', '../outside', 'a'.repeat(39)]) {
+    assert.throws(() => readPublishedCoreGolden({ ...options, ref: invalid }), /immutable registry verification ref/);
+  }
+  assert.throws(() => readPublishedCoreGolden({ ...options, ref: '0'.repeat(40) }), /git show/);
+  assert.throws(() => readPublishedCoreGolden({ ...options, version: '0.20.2' }), /does not match installed/);
+  assert.throws(() => readPublishedCoreGolden({ ...options, digest: 'd'.repeat(64) }), /installed examples digest/);
+  writeFileSync(path.join(directory, 'packages/javascript/package.json'), JSON.stringify({ version: '0.20.2' }));
+  const differentRelease = commit();
+  assert.throws(() => readPublishedCoreGolden({ ...options, ref: differentRelease }), /does not match installed/);
+});
+
+test('registry golden refuses escaped paths and missing release fixtures', () => {
+  const { directory, digest, commit } = publishedCheckout();
+  const options = { root: directory, version: '0.20.1', digest };
+  for (const fixture of ['../golden.json', 'scripts/fixtures/../../../golden.json', 'scripts/fixtures\\golden.json']) {
+    writeFileSync(path.join(directory, 'ecosystem.lock.json'), JSON.stringify({ golden: { repository: 'opf', path: fixture } }));
+    assert.throws(() => readPublishedCoreGolden({ ...options, ref: commit() }), /leaves the fixture directory/);
+  }
+  writeFileSync(path.join(directory, 'ecosystem.lock.json'), JSON.stringify({ golden: { repository: 'opf', path: 'scripts/fixtures/missing.json' } }));
+  assert.throws(() => readPublishedCoreGolden({ ...options, ref: commit() }), /git show/);
+});
 
 test('the lock\'s core golden is selected only for the corpus it records', () => {
   const directory = checkout('a'.repeat(64));

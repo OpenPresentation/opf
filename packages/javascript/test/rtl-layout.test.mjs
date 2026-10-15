@@ -220,12 +220,13 @@ describe('tables', () => {
 describe('metric and timeline', () => {
   const box = {x: 0, y: 0, width: 400, height: 300};
 
-  it('aligns an Arabic metric to the right and a Latin one to the left', () => {
+  it('centers metrics by default and preserves explicit logical start alignment', () => {
     const arabicMetric = layoutMetric({value: '12.4', label: 'الإيرادات'}, box, {direction: 'rtl'});
-    assert.equal(arabicMetric.alignment, 'right');
-    assert.equal(layoutMetric({value: '12.4', label: 'Revenue'}, box, {direction: 'rtl'}).alignment, 'left');
-    assert.equal(layoutMetric({value: '12.4', label: 'الإيرادات'}, box).alignment, 'left');
-    assert.equal(layoutMetric({value: '12.4', label: 'الإيرادات'}, box, {direction: 'rtl', align: 'center'}).alignment, 'center');
+    assert.equal(arabicMetric.alignment, 'center');
+    assert.equal(layoutMetric({value: '12.4', label: 'Revenue'}, box, {direction: 'rtl'}).alignment, 'center');
+    assert.equal(layoutMetric({value: '12.4', label: 'الإيرادات'}, box).alignment, 'center');
+    assert.equal(layoutMetric({value: '12.4', label: 'الإيرادات'}, box, {direction: 'rtl', align: 'left'}).alignment, 'right');
+    assert.equal(layoutMetric({value: '12.4', label: 'Revenue'}, box, {direction: 'rtl', align: 'left'}).alignment, 'left');
   });
 
   it('runs a timeline right to left', () => {

@@ -1,11 +1,29 @@
-// RR-20: golden selection for the registry fidelity run (scripts/test-registry-fidelity.mjs).
-// The pinned opf-render golden test compares the installed core's examples against its own baseline, which records the
-// examples digest of one core release. When the core under test ships different examples (core 0.12.1 moved 81 examples
-// to singular audience ids without moving a pixel), the reviewed core copy of that baseline, which ecosystem.lock.json
-// selects for the ecosystem shards, is used instead. Pixel hashes stay exact either way: this only chooses the file.
+// RR-20: reviewed golden helpers. Registry fidelity binds the fixture to the installed core's immutable release ref;
+// corpus-only lookup is retained below for historical reviewed fixtures. Neither path changes any pixel comparison.
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
+
+// Registry geometry belongs to the immutable source that qualified the installed release. The examples digest alone
+// cannot distinguish two cores that compose identical documents differently (for example metric default alignment).
+// Like test-packed-ecosystem.mjs's readHarnessBytes, read only blobs at release-plan.json's verificationRefs.opf.
+export function readPublishedCoreGolden({ root, ref, version, digest }) {
+  if (!/^[a-f0-9]{40}$/.test(ref ?? '')) throw new Error('Missing immutable registry verification ref for opf');
+  const read = (file) => execFileSync('git', ['show', `${ref}:${file}`], { cwd: root, stdio: 'pipe', maxBuffer: 16 * 1024 * 1024 });
+  const manifest = JSON.parse(read('packages/javascript/package.json'));
+  if (manifest.version !== version) throw new Error(`Registry core verification ref version ${manifest.version} does not match installed ${version}`);
+  const { golden } = JSON.parse(read('ecosystem.lock.json'));
+  if (!golden || golden.repository !== 'opf') return undefined;
+  const relative = golden.path;
+  if (typeof relative !== 'string' || !relative.startsWith('scripts/fixtures/') || path.posix.isAbsolute(relative) || relative.includes('\\') || relative.split('/').some((part) => part === '..' || part === '.')) {
+    throw new Error('Published core golden path leaves the fixture directory');
+  }
+  const bytes = read(relative);
+  const baseline = JSON.parse(bytes);
+  if (baseline.source?.sha256 !== digest) throw new Error('Published core golden does not match the installed examples digest');
+  return { path: relative, bytes, ref };
+}
 
 // Same digest as the renderer's test/golden.mjs: sha256 of the sorted [file, key-sorted deck] pairs.
 export function examplesDigest(examples) {

@@ -244,8 +244,8 @@ export interface ComposedItem {
   composition: Composition;
   /**
    * Resolved horizontal text alignment for this item: titleAlignment for the
-   * title, contentAlignment for every other item (slide design, deck design, layout design,
-   * then left). Engines anchor native and preview text to this value.
+   * title, contentAlignment for every other item (slide design, deck design or host, theme design,
+   * layout design, then center for metrics or left for other items). Engines anchor native and preview text to this value.
    */
   alignment: 'left' | 'center' | 'right';
   /**
@@ -1357,6 +1357,7 @@ export interface MetricLayout {
   overflow: boolean;
 }
 export interface MetricLayoutOptions extends QuoteLayoutOptions {
+  /** Horizontal alignment of the complete metric; defaults to center. */
   align?: 'left' | 'center' | 'right';
   /** Unscaled clearance around available vector outlines; defaults to one reference pixel. */
   textRasterPadding?: number;
@@ -1387,7 +1388,7 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
   }
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Metric raster padding must be finite and nonnegative.');
   if (options.overflow!==undefined&&!['warn','error'].includes(options.overflow)) throw new RangeError('Invalid metric overflow policy.');
-  const requestedAlignment=options.align??'left';
+  const requestedAlignment=options.align??'center';
   if (!['left','center','right'].includes(requestedAlignment)) throw new RangeError('Invalid metric alignment.');
   const sourcePath=options.path??'metric',parts:MetricTextPart[]=[],diagnostics:MetricLayoutDiagnostic[]=[];
   for (const role of ['value','unit','label','description','delta','trend'] as const) {
@@ -2424,7 +2425,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   let coverGroup = false;
   const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
     (field === 'title' || (coverGroup && (field === 'tag' || field === 'subtitle') && hints.sources.contentAlignment !== 'slide')
-      ? hints.titleAlignment : hints.contentAlignment) ?? 'left';
+      ? hints.titleAlignment : hints.contentAlignment) ?? (field === 'metric' ? 'center' : 'left');
   // The tag (eyebrow) takes the accent family when the font scheme defines one; the quote body does the same in layoutQuote.
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({
     fontFamily: (field === "title" ? options.fontFamilies?.heading : field === "code" ? options.fontFamilies?.code : field === "tag" ? options.fontFamilies?.accent ?? options.fontFamilies?.body : options.fontFamilies?.body) ?? (field === "code" ? "monospace" : "sans-serif"),
