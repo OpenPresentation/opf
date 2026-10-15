@@ -1,0 +1,89 @@
+{
+  "at": "2026-10-15T12:12:25.456241+00:00",
+  "completedAt": "2026-10-15T12:12:26.760102+00:00",
+  "apiCallBudget": 1,
+  "calls": 1,
+  "paginationFollowups": 0,
+  "connectionsComplete": true,
+  "all16ConnectionsAndLabelsComplete": true,
+  "metadataOnly": true,
+  "ciFieldsQueried": false,
+  "rawSha256": "411744df119915b4f5cf4ee1347c076e3f9862dae626a4819d419884b64ac331",
+  "rateLimit": {
+    "cost": 16,
+    "remaining": 4949,
+    "resetAt": "2026-10-15T12:37:15Z"
+  },
+  "repositories": [
+    {
+      "repository": "OpenPresentation/opf",
+      "defaultBranch": "main",
+      "head": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 25
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "defaultBranch": "main",
+      "head": "b87cf01f6b3c70556769d3ea2dcdc75365d5b2ae",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 3
+    },
+    {
+      "repository": "OpenPresentation/opf-pptx",
+      "defaultBranch": "main",
+      "head": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 2
+    },
+    {
+      "repository": "OpenPresentation/opf-editor",
+      "defaultBranch": "main",
+      "head": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 1
+    },
+    {
+      "repository": "OpenPresentation/gallery",
+      "defaultBranch": "main",
+      "head": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 2
+    },
+    {
+      "repository": "Data-Advantage/openpresentation-site",
+      "defaultBranch": "main",
+      "head": "0ff67a7ebd4b5adf102afd985c705dc018ea0482",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 1
+    },
+    {
+      "repository": "Data-Advantage/pptx-gallery",
+      "defaultBranch": "main",
+      "head": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 0
+    },
+    {
+      "repository": "Data-Advantage/pptx-dev",
+      "defaultBranch": "master",
+      "head": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+      "prs": 0,
+      "drafts": 0,
+      "issues": 3
+    }
+  ],
+  "counts": {
+    "repos": 8,
+    "PR": 0,
+    "drafts": 0,
+    "issue": 37
+  }
+}

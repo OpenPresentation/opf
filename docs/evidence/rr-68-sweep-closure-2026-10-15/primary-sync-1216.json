@@ -1,0 +1,266 @@
+{
+  "at": "2026-10-15T12:16:49.591256+00:00",
+  "censusAt": "2026-10-15T12:12:25.456241+00:00",
+  "censusMetadataOnly": true,
+  "apiOrCiCalls": 0,
+  "watchersStarted": 0,
+  "fetchCount": 7,
+  "coreFetchSkipped": true,
+  "all8CleanAndMatchExactCensus": true,
+  "fastForwardCount": 0,
+  "repositories": [
+    {
+      "repository": "OpenPresentation/opf",
+      "path": "/Users/michael/Source/opf",
+      "expectedDefaultBranch": "main",
+      "censusHead": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd",
+      "startedAt": "2026-10-15T12:16:48.344685+00:00",
+      "fetches": 0,
+      "fastForwarded": false,
+      "before": {
+        "head": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd",
+        "branch": "main",
+        "status": ""
+      },
+      "fetchSkipped": "Core already fetched and cleanly fast-forwarded in accepted681 merge proof.",
+      "observedRemoteDefaultHead": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd",
+      "status": "ALREADY_SYNCHRONIZED",
+      "after": {
+        "head": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd",
+        "branch": "main",
+        "status": ""
+      },
+      "clean": true,
+      "localMatchesObservedRemoteDefault": true,
+      "matchesExactCensus": true,
+      "completedAt": "2026-10-15T12:16:48.559489+00:00",
+      "commands": {
+        "path": "/private/tmp/rr-editor022-primary-sync-61/OpenPresentation--opf-commands.json",
+        "sha256": "374063af98014ae74fd9c574a7ace96af42dee2efea6deaa1cf82ba194697424"
+      }
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "path": "/Users/michael/Source/opf-render",
+      "expectedDefaultBranch": "main",
+      "censusHead": "b87cf01f6b3c70556769d3ea2dcdc75365d5b2ae",
+      "startedAt": "2026-10-15T12:16:48.344846+00:00",
+      "fetches": 1,
+      "fastForwarded": false,
+      "before": {
+        "head": "b87cf01f6b3c70556769d3ea2dcdc75365d5b2ae",
+        "branch": "main",
+        "status": ""
+      },
+      "observedRemoteDefaultHead": "b87cf01f6b3c70556769d3ea2dcdc75365d5b2ae",
+      "status": "ALREADY_SYNCHRONIZED",
+      "after": {
+        "head": "b87cf01f6b3c70556769d3ea2dcdc75365d5b2ae",
+        "branch": "main",
+        "status": ""
+      },
+      "clean": true,
+      "localMatchesObservedRemoteDefault": true,
+      "matchesExactCensus": true,
+      "completedAt": "2026-10-15T12:16:48.830113+00:00",
+      "commands": {
+        "path": "/private/tmp/rr-editor022-primary-sync-61/OpenPresentation--opf-render-commands.json",
+        "sha256": "6e2713a6b8e5f28b6c09bec5e844bf8c2083a5c396fa3456a3e319fe8d3f314e"
+      }
+    },
+    {
+      "repository": "OpenPresentation/opf-pptx",
+      "path": "/Users/michael/Source/opf-pptx",
+      "expectedDefaultBranch": "main",
+      "censusHead": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+      "startedAt": "2026-10-15T12:16:48.345708+00:00",
+      "fetches": 1,
+      "fastForwarded": false,
+      "before": {
+        "head": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+        "branch": "main",
+        "status": ""
+      },
+      "observedRemoteDefaultHead": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+      "status": "ALREADY_SYNCHRONIZED",
+      "after": {
+        "head": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+        "branch": "main",
+        "status": ""
+      },
+      "clean": true,
+      "localMatchesObservedRemoteDefault": true,
+      "matchesExactCensus": true,
+      "completedAt": "2026-10-15T12:16:48.998895+00:00",
+      "commands": {
+        "path": "/private/tmp/rr-editor022-primary-sync-61/OpenPresentation--opf-pptx-commands.json",
+        "sha256": "cc25a0992f30b6371a23c90588aa177e9d6432bd919054dc7447842db6cee10d"
+      }
+    },
+    {
+      "repository": "OpenPresentation/opf-editor",
+      "path": "/Users/michael/Source/opf-editor",
+      "expectedDefaultBranch": "main",
+      "censusHead": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+      "startedAt": "2026-10-15T12:16:48.346638+00:00",
+      "fetches": 1,
+      "fastForwarded": false,
+      "before": {
+        "head": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+        "branch": "main",
+        "status": ""
+      },
+      "observedRemoteDefaultHead": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+      "status": "ALREADY_SYNCHRONIZED",
+      "after": {
+        "head": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+        "branch": "main",
+        "status": ""
+      },
+      "clean": true,
+      "localMatchesObservedRemoteDefault": true,
+      "matchesExactCensus": true,
+      "completedAt": "2026-10-15T12:16:48.788066+00:00",
+      "commands": {
+        "path": "/private/tmp/rr-editor022-primary-sync-61/OpenPresentation--opf-editor-commands.json",
+        "sha256": "a2eb2644b5f369d99bdd6294b0add261bfda9cd06307e8af6b6c0b6bd128388a"
+      }
+    },
+    {
+      "repository": "OpenPresentation/gallery",
+      "path": "/Users/michael/Source/gallery",
+      "expectedDefaultBranch": "main",
+      "censusHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "startedAt": "2026-10-15T12:16:48.347426+00:00",
+      "fetches": 1,
+      "fastForwarded": false,
+      "before": {
+        "head": "940633a92c0c7d3339e59447d08ba6382ef12410",
+        "branch": "main",
+        "status": ""
+      },
+      "observedRemoteDefaultHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "status": "ALREADY_SYNCHRONIZED",
+      "after": {
+        "head": "940633a92c0c7d3339e59447d08ba6382ef12410",
+        "branch": "main",
+        "status": ""
+      },
+      "clean": true,
+      "localMatchesObservedRemoteDefault": true,
+      "matchesExactCensus": true,
+      "completedAt": "2026-10-15T12:16:48.787873+00:00",
+      "commands": {
+        "path": "/private/tmp/rr-editor022-primary-sync-61/OpenPresentation--gallery-commands.json",
+        "sha256": "a32f8c7faa7293d73367b7d5c76056ba43a89755e2f39deda0fa4e2cc56db749"
+      }
+    },
+    {
+      "repository": "Data-Advantage/openpresentation-site",
+      "path": "/Users/michael/Source/openpresentation-site",
+      "expectedDefaultBranch": "main",
+      "censusHead": "0ff67a7ebd4b5adf102afd985c705dc018ea0482",
+      "startedAt": "2026-10-15T12:16:48.349223+00:00",
+      "fetches": 1,
+      "fastForwarded": false,
+      "before": {
+        "head": "0ff67a7ebd4b5adf102afd985c705dc018ea0482",
+        "branch": "main",
+        "status": ""
+      },
+      "observedRemoteDefaultHead": "0ff67a7ebd4b5adf102afd985c705dc018ea0482",
+      "status": "ALREADY_SYNCHRONIZED",
+      "after": {
+        "head": "0ff67a7ebd4b5adf102afd985c705dc018ea0482",
+        "branch": "main",
+        "status": ""
+      },
+      "clean": true,
+      "localMatchesObservedRemoteDefault": true,
+      "matchesExactCensus": true,
+      "completedAt": "2026-10-15T12:16:49.004569+00:00",
+      "commands": {
+        "path": "/private/tmp/rr-editor022-primary-sync-61/Data-Advantage--openpresentation-site-commands.json",
+        "sha256": "63fc8b35dfa955833b0b629ca08e96f31ec892f0cd84e8b72620830433eb2000"
+      }
+    },
+    {
+      "repository": "Data-Advantage/pptx-gallery",
+      "path": "/Users/michael/Source/pptx-gallery",
+      "expectedDefaultBranch": "main",
+      "censusHead": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+      "startedAt": "2026-10-15T12:16:48.350658+00:00",
+      "fetches": 1,
+      "fastForwarded": false,
+      "before": {
+        "head": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+        "branch": "main",
+        "status": ""
+      },
+      "observedRemoteDefaultHead": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+      "status": "ALREADY_SYNCHRONIZED",
+      "after": {
+        "head": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+        "branch": "main",
+        "status": ""
+      },
+      "clean": true,
+      "localMatchesObservedRemoteDefault": true,
+      "matchesExactCensus": true,
+      "completedAt": "2026-10-15T12:16:48.983566+00:00",
+      "commands": {
+        "path": "/private/tmp/rr-editor022-primary-sync-61/Data-Advantage--pptx-gallery-commands.json",
+        "sha256": "24f1cb1e5ddf6b6d723045c3a8cf3314129b49ffce2f98d067c879b6b0c4f9ab"
+      }
+    },
+    {
+      "repository": "Data-Advantage/pptx-dev",
+      "path": "/Users/michael/Source/pptx-dev",
+      "expectedDefaultBranch": "master",
+      "censusHead": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+      "startedAt": "2026-10-15T12:16:48.559916+00:00",
+      "fetches": 1,
+      "fastForwarded": false,
+      "before": {
+        "head": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+        "branch": "master",
+        "status": ""
+      },
+      "observedRemoteDefaultHead": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+      "status": "ALREADY_SYNCHRONIZED",
+      "after": {
+        "head": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+        "branch": "master",
+        "status": ""
+      },
+      "clean": true,
+      "localMatchesObservedRemoteDefault": true,
+      "matchesExactCensus": true,
+      "completedAt": "2026-10-15T12:16:49.590507+00:00",
+      "commands": {
+        "path": "/private/tmp/rr-editor022-primary-sync-61/Data-Advantage--pptx-dev-commands.json",
+        "sha256": "aec40ec3fc1ec3d16d02326f5827a29a4da12a41ca0827a6ae10dd8717725f61"
+      }
+    }
+  ],
+  "refs": [
+    {
+      "path": "/private/tmp/rr68-close-census-61/census-summary.json",
+      "sha256": "50841e73800c263dd785011f8a496fc21b7970a2efb4e2d640287760c2d28325"
+    },
+    {
+      "path": "/private/tmp/rr68-close-census-61/inventory-raw.json",
+      "sha256": "411744df119915b4f5cf4ee1347c076e3f9862dae626a4819d419884b64ac331"
+    },
+    {
+      "path": "/Users/michael/Source/opf/docs/evidence/rr-68-editor022-current-2026-10-15/primary-observations-1124.json",
+      "sha256": "b88f1b0a340177a2bab59990a4197b0aa6757c4067120f27a80370539e84d9ab"
+    }
+  ],
+  "boundaries": {
+    "noPruneDeletionResetSwitchStashOrCleanup": true,
+    "userChangesPreserved": true,
+    "noWindowsReadsContactOrUse": true,
+    "noSettingsSecretsOrAuthChanges": true
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "scope": "Docs-only closure of original RR-68 Dependabot-sweep criterion under the existing dated exact-advisory exception; this follow-up has no claimed future merge.",
+  "observedSource": {
+    "head": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd",
+    "parent": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+    "tree": "e79142b1e3161a5eab6cdd06fc4700545a00d0e3",
+    "pr": "https://github.com/OpenPresentation/opf/pull/681",
+    "actuallyMergedAt": "2026-10-15T12:11:36.989381+00:00"
+  },
+  "activationPrerequisites": {
+    "actual681Acceptance": {
+      "path": "docs/evidence/rr-68-sweep-closure-2026-10-15/root-core681-acceptance.json",
+      "sha256": "662e911b23ff12f3f6fb9fdb6e1e5676740b69d6902dce02f03eefbc3959befb"
+    },
+    "finalBoundedCurrentPrCensus": {
+      "path": "docs/evidence/rr-68-sweep-closure-2026-10-15/inventory-1212-summary.json",
+      "sha256": "50841e73800c263dd785011f8a496fc21b7970a2efb4e2d640287760c2d28325"
+    },
+    "thisFollowupIntegration": "Pending normal review and integration; no future merge claimed."
+  },
+  "literalCriterion": "Dependabot sweep across the seven repositories: original Gallery3/Dev1 alerts fixed at source, every open Dependabot PR taken or reason-closed.",
+  "acceptedException": {
+    "date": "2026-10-03",
+    "advisory": "GHSA-vfj7-8cjw-p6xm",
+    "source": "docs/programs/release-readiness/README.md decision log; Dev84/Gallery92",
+    "condition": "Exact advisory ignore accepted until a patched braces is published; Dev85 remains conditional removal follow-up.",
+    "doesNotAssert": [
+      "patched braces",
+      "clean audit",
+      "exhaustive exploitability",
+      "all development-only dependency paths",
+      "new native acceptance"
+    ]
+  },
+  "evidenceIndex": [
+    {
+      "path": "../rr-68-editor022-current-2026-10-15/braces-trigger-1124.json",
+      "sha256": "43344dd5e8cfabc66874f7239b2060715bdce98b12b4bf08738ae6365f627586",
+      "scope": "Dated11:24 primary-source check: latest3.0.3, absent3.0.4/no newer stable3.x4.x, official exact advisory first_patched:null; no source/ignore change."
+    },
+    {
+      "path": "../rr-68-editor022-current-2026-10-15/inventory-1123-metadata.json",
+      "sha256": "ca72091f53f2663183be55cbe0941bb6f5722c3d788efea36bc27b21b7326f2f",
+      "scope": "Historical11:23 complete metadata snapshot had only Main113, not a dependency PR; this does not replace final current closure census."
+    },
+    {
+      "path": "../rr-68-editor022-sites-2026-10-15/main113-actual-merge-receipt.json",
+      "sha256": "205f7d8e448946dddd7bdd8a55553d99f54673f79d8a862763e27d5cb43175dc",
+      "scope": "Actual normal source merge0ff67a7e; no runtime redeployment."
+    },
+    {
+      "path": "literal-criteria-audit-receipt.json",
+      "sha256": "30319ed565f8f4cc78b0b9d79f2c1000203a1cd95087eb71cf37bf52ae0b8e73",
+      "scope": "Offline independent literal-criteria eligibility, Root-reviewed; no new observations/criteria."
+    }
+  ],
+  "original40AcceptedUnchanged": true,
+  "all84CriterionTextsUnchanged": true,
+  "other83StatusesUnchanged": true,
+  "oldDated77of84CheckpointsUnchanged": true,
+  "currentArithmetic": {
+    "completeOrDescoped": 78,
+    "total": 84,
+    "open": [
+      "RR-14",
+      "RR-17",
+      "RR-19",
+      "RR-48",
+      "RR-51",
+      "RR-20"
+    ]
+  },
+  "actions": {
+    "finalMetadataGraphQLCalls": 1,
+    "ciQueriesByThisAgent": 0,
+    "issueBodyQueries": 0,
+    "registryOrDependencyChanges": 0,
+    "WindowsDeploymentSettingsOrDeletionActions": 0
+  },
+  "currentOwnerBoundaryEvidence": {
+    "RR-48": {
+      "path": "docs/evidence/rr-68-sweep-closure-2026-10-15/owner-metadata-1157.json",
+      "sha256": "ec5f6cc44fd0de72cc09f57de9f68eb2472192be68d7262ab54d23368441f7c0"
+    },
+    "RR-14": {
+      "path": "docs/evidence/rr-68-sweep-closure-2026-10-15/owner-metadata-1157.json",
+      "sha256": "ec5f6cc44fd0de72cc09f57de9f68eb2472192be68d7262ab54d23368441f7c0"
+    },
+    "RR-51": {
+      "path": "docs/evidence/rr-68-sweep-closure-2026-10-15/rr51-plan-observation-1214.json",
+      "sha256": "53f421da4560f40e9b92fc4dea852078605e331e533d748352375f915ffb49c8"
+    }
+  },
+  "finalEvidenceIndex": [
+    {
+      "path": "inventory-1212-raw.json",
+      "sha256": "411744df119915b4f5cf4ee1347c076e3f9862dae626a4819d419884b64ac331"
+    },
+    {
+      "path": "inventory-1212-summary.json",
+      "sha256": "50841e73800c263dd785011f8a496fc21b7970a2efb4e2d640287760c2d28325"
+    },
+    {
+      "path": "inventory-1212-budget.json",
+      "sha256": "d4f9ecaf35f86488ee03b3d007a9177fea7ce15da6542a0cfd320dd1aa9516ae"
+    },
+    {
+      "path": "inventory-1212-query.graphql",
+      "sha256": "14ada80f6a7e6d36773100cf69188ac2d2ecc097109f7fc30ff38acfc50dc21e"
+    },
+    {
+      "path": "inventory-1212-comparison.json",
+      "sha256": "82d17eec0372a5b7f72a58b54ee23d7bf984e3350ea4a5fb1859641bdfe12232"
+    },
+    {
+      "path": "core681-actual-merge-receipt.json",
+      "sha256": "2a3ccea2fc706072ad3300d43822b80f3eee172ce9d8d6f1353092a784cdb44e"
+    },
+    {
+      "path": "root-core681-acceptance.json",
+      "sha256": "662e911b23ff12f3f6fb9fdb6e1e5676740b69d6902dce02f03eefbc3959befb"
+    },
+    {
+      "path": "owner-metadata-1157.json",
+      "sha256": "ec5f6cc44fd0de72cc09f57de9f68eb2472192be68d7262ab54d23368441f7c0"
+    },
+    {
+      "path": "rr51-org-metadata-1201.json",
+      "sha256": "75aa71c96bec265b43d54e09a8c784f346d849b012a603a1239154556d18a6ef"
+    },
+    {
+      "path": "rr51-plan-observation-1214.json",
+      "sha256": "53f421da4560f40e9b92fc4dea852078605e331e533d748352375f915ffb49c8"
+    },
+    {
+      "path": "rr51-plan-job-steps.json",
+      "sha256": "7b6fca208b0620cd0fd21edf73481e5ee7ce25640df5f06c5562105b66e1f44a"
+    },
+    {
+      "path": "primary-sync-1216.json",
+      "sha256": "4af9c89087d8fa4d40a3af9088e4541f708e8065d6990098dd9f93203767c200"
+    },
+    {
+      "path": "rr51-plan-receipt-erratum.json",
+      "sha256": "74b610f3921bba1d200f8b3e0be59335bcb0b524f5ccca95eb383282f531402d"
+    }
+  ],
+  "RR51PlanBoundary": {
+    "run": 38733105109,
+    "attempt": 1,
+    "mode": "plan",
+    "core": "0.20.1",
+    "conclusion": "success",
+    "AppTokenStep": "skipped",
+    "runTrainStep": "skipped",
+    "formattedPlanObserved": false,
+    "effectiveAppIdGuardMet": false,
+    "AppTokenOrExecuteCapabilityEstablished": false,
+    "orgInheritance": "403/unknown; no absentApp inference",
+    "remaining": "authorized effective App ID/key/configuration and actual orchestrated execute-mode train"
+  }
+}

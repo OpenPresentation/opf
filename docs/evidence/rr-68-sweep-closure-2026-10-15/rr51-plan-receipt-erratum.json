@@ -1,0 +1,16 @@
+{
+  "recordedAt": "2026-10-15T12:20:06.067832+00:00",
+  "scope": "Separate erratum; immutable original receipt preserved",
+  "originalReceipt": "/private/tmp/rr51-plan-observation-61/run-38733105109-attempt-1/receipt.json",
+  "originalReceiptSha256": "53f421da4560f40e9b92fc4dea852078605e331e533d748352375f915ffb49c8",
+  "incorrectProofLimitsText": "Plan step conclusion alone is insufficient; actual formatted target/state retained",
+  "correction": "No formatted core target/state body was captured. formattedPublishedCorePlanObserved=false and selectedPlanLines=[] are authoritative. The plan step success conclusion does not establish the formatted published-core result.",
+  "observedAppStepState": "skipped",
+  "observerHelper": "/private/tmp/rr51-plan-dispatch-61/observe.py",
+  "observerHelperSha256": "87d409b8595b9b55d0b1da0cc0720435cac45ea6f3c93678a8173428dd6ec4bc",
+  "allPreAppStepsSucceededPredicate": "bool(app and all(s.get('conclusion')=='success' for s in steps if s.get('number',0)<app.get('number',0)))",
+  "allPreAppStepsSucceededEvidenceLimit": "Computed in memory from the actual complete jobs response. Only selected named step metadata was persisted, so individual preceding setup steps cannot be independently reconstructed offline from saved metadata.",
+  "noAdditionalNetworkRequests": true,
+  "noWriteCapabilityExecuteOrRR51ClosureClaim": true,
+  "observerEnded": true
+}

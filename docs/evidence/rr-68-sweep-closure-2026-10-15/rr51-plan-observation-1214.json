@@ -1,0 +1,88 @@
+{
+  "scope": "Single finite maintained published-core plan workflow observation",
+  "dispatchReceiptSha256": "6223ce42c71341b37c9437f8f9d79d56b7d1cbf407b9d7f177d676b701c759a7",
+  "dispatchPayloadSha256": "9ccd406f1c871918e903f9b098a990d2084254db6f7177105b8d64c5e230b26e",
+  "discoveryReceiptSha256": "9be2b7aa199848d608379f0c2be1a8d641e4c79c78a9f35428a27067a0a60511",
+  "run": {
+    "id": 38733105109,
+    "name": "Release train",
+    "event": "workflow_dispatch",
+    "head_branch": "main",
+    "head_sha": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd",
+    "run_attempt": 1,
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-10-15T12:14:09Z",
+    "updated_at": "2026-10-15T12:14:32Z",
+    "html_url": "https://github.com/OpenPresentation/opf/actions/runs/38733105109",
+    "path": ".github/workflows/release-train.yml",
+    "actor": "michaeljgrimm",
+    "actorIndependentlyPreestablished": false,
+    "actorAttribution": "Observed from unique exact workflow/event/head/ref/time-window run; no authorization inferred"
+  },
+  "sourceHashes": [
+    {
+      "path": ".github/workflows/release-train.yml",
+      "sha256": "6f4397ca5ecf70b93ab10c94d4058bdc8c07446292204c839e0503aa3f35827f"
+    },
+    {
+      "path": "scripts/release-train.mjs",
+      "sha256": "058961e132340ad39d48cdfdb99cbd6c9a127e27d27b1bc33d57f7c5b4a9a786"
+    },
+    {
+      "path": "scripts/release-train.test.mjs",
+      "sha256": "6edc7842382e59cac01bdab551b5dbc25656ae16229d62c4b1d1bb0912bc511a"
+    },
+    {
+      "path": "scripts/ecosystem-lock.mjs",
+      "sha256": "19f67a5923cceae90634df2347b5a8bb0ff2110c51819b9aa0b811c9555b9583"
+    },
+    {
+      "path": "docs/release-process.md",
+      "sha256": "42002257cad592d6f99c864f69c778527a3ebfddbc782b1e3ad9e3d6429a48b2"
+    }
+  ],
+  "workflowInputs": {
+    "mode": "plan",
+    "core": "0.20.1",
+    "render": "",
+    "pptx": "",
+    "editor": "",
+    "cli": "",
+    "item": ""
+  },
+  "clientRESTUsed": 4,
+  "runTerminal": true,
+  "AppStepState": "skipped",
+  "rawLogsAuthAppIDEnvSaved": false,
+  "settingsGrantsSourceWindowsModelWrites": 0,
+  "writeCapabilityOrExecuteModeOrRR51ClosureClaimed": false,
+  "jobsMetadata": {
+    "startedAt": "2026-10-15T12:16:51.009501+00:00",
+    "observedAt": "2026-10-15T12:16:51.502856+00:00",
+    "httpStatus": 200,
+    "commandExitCode": 0,
+    "endpoint": "repos/OpenPresentation/opf/actions/runs/38733105109/attempts/1/jobs?per_page=100",
+    "paginationComplete": true,
+    "matchingJobCount": 1
+  },
+  "jobStepsSha256": "7b6fca208b0620cd0fd21edf73481e5ee7ce25640df5f06c5562105b66e1f44a",
+  "allPreAppStepsSucceeded": true,
+  "logRetrieval": {
+    "startedAt": "2026-10-15T12:16:51.504481+00:00",
+    "observedAt": "2026-10-15T12:16:52.302895+00:00",
+    "httpStatus": 200,
+    "commandExitCode": 1
+  },
+  "formattedPublishedCorePlanObserved": false,
+  "planProofSha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+  "selectedPlanLines": [],
+  "tokenAttribution": "No App capability established",
+  "proofLimits": [
+    "No read of token,AppID,secret/env values",
+    "No PR/tag/publish/deploy/settings/grant write tested",
+    "Organization inheritance remains403/not-visible; no source-of-secret or absentApp claim",
+    "Plan step conclusion alone is insufficient; actual formatted target/state retained",
+    "No rerun,poll,redispatch or additional client request"
+  ]
+}

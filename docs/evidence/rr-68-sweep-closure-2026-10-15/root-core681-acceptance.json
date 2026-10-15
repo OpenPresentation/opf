@@ -1,0 +1,31 @@
+{
+  "at": "2026-10-15T12:14:26.054649+00:00",
+  "scope": "Root accepts actual normal Core681 integration and bounded dependency-sweep closure eligibility; successor tracker integration remains separate",
+  "actualMerge": "c7eef3e7fedcfc4c71e5c5b6efd6db523e24e7fd",
+  "actualParent": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+  "actualTree": "e79142b1e3161a5eab6cdd06fc4700545a00d0e3",
+  "full66PathPatchExact": true,
+  "sourcePriorReview": "25ce5ab40e5e04ee6b79937d848fbe2fbf2c2ca43bfab8650fa9704867ea8d55",
+  "gateTerminalExit": 0,
+  "all12SealedReferencesRehashed": true,
+  "cleanPrimaryExactlyObservedRemote": true,
+  "receipt": {
+    "path": "/private/tmp/rr-editor022-core681-gate-61/core681-merge-receipt.json",
+    "sha256": "2a3ccea2fc706072ad3300d43822b80f3eee172ce9d8d6f1353092a784cdb44e"
+  },
+  "currentCensus": {
+    "at": "2026-10-15T12:12:25.456241+00:00",
+    "repos": 8,
+    "PR": 0,
+    "drafts": 0,
+    "issues": 37,
+    "all16ConnectionsAndLabelsComplete": true,
+    "rawSha256": "411744df119915b4f5cf4ee1347c076e3f9862dae626a4819d419884b64ac331",
+    "manuallyReviewedEveryReturnedPr": true,
+    "noDependencyPrOutstanding": true
+  },
+  "RR68Decision": "Original Dependabot sweep substantively satisfied under existing dated exact-advisory owner exception; approve docs-only closure through normal follow-up gates. No patched-braces/clean-audit/exploitability claim.",
+  "original40AndOther83ItemsUnchanged": true,
+  "goalNotComplete": true,
+  "WindowsHoldUnchanged": true
+}

@@ -1,0 +1,111 @@
+{
+  "scope": "Finite read-only current owner-state metadata preflight; no CI/check/run queries",
+  "createdAt": "2026-10-15T11:57:40.884579+00:00",
+  "budgets": {
+    "githubRESTLimit": 5,
+    "githubRESTUsed": 4,
+    "publicHTTPLimit": 1,
+    "publicHTTPUsed": 1,
+    "ciQueries": 0
+  },
+  "sourceEvidence": [
+    {
+      "path": "/private/tmp/rr68-editor022-records-61/opf/.github/workflows/release-train.yml",
+      "sha256": "6f4397ca5ecf70b93ab10c94d4058bdc8c07446292204c839e0503aa3f35827f"
+    },
+    {
+      "path": "/private/tmp/rr68-editor022-records-61/opf/.github/workflows/ecosystem-roll.yml",
+      "sha256": "d777cf52efda130016bf0d77c84e74e567234f9f112c2eed2c942bfa548ff08c"
+    },
+    {
+      "path": "/Users/michael/Source/pptx-dev/lib/understand/route-handler.ts",
+      "sha256": "4d4e39f54b0851960861cab1917c9b0aed83b3606029d8b0a8e8f59983a000d7"
+    },
+    {
+      "path": "/Users/michael/Source/pptx-dev/app/api/v1/author/understand/capability/route.ts",
+      "sha256": "dfb59fc47f158aa1cb621e5ad8653af0da225791978c8a29928e307ec9a8135b"
+    }
+  ],
+  "RR48": [
+    {
+      "observedAt": "2026-10-15T11:57:37.083235+00:00",
+      "httpStatus": 200,
+      "commandExitCode": 0,
+      "repository": "OpenPresentation/opf-render",
+      "endpoint": "repos/OpenPresentation/opf-render/rules/branches/main?per_page=100",
+      "ruleTypes": [],
+      "paginationComplete": true,
+      "effectiveMergeQueuePresent": false,
+      "availability": "observed effective branch rules"
+    },
+    {
+      "observedAt": "2026-10-15T11:57:37.339919+00:00",
+      "httpStatus": 200,
+      "commandExitCode": 0,
+      "repository": "OpenPresentation/opf-pptx",
+      "endpoint": "repos/OpenPresentation/opf-pptx/rules/branches/main?per_page=100",
+      "ruleTypes": [],
+      "paginationComplete": true,
+      "effectiveMergeQueuePresent": false,
+      "availability": "observed effective branch rules"
+    },
+    {
+      "observedAt": "2026-10-15T11:57:37.601495+00:00",
+      "httpStatus": 200,
+      "commandExitCode": 0,
+      "repository": "OpenPresentation/opf-editor",
+      "endpoint": "repos/OpenPresentation/opf-editor/rules/branches/main?per_page=100",
+      "ruleTypes": [],
+      "paginationComplete": true,
+      "effectiveMergeQueuePresent": false,
+      "availability": "observed effective branch rules"
+    }
+  ],
+  "RR51": {
+    "secretNameMetadata": {
+      "observedAt": "2026-10-15T11:57:37.922452+00:00",
+      "httpStatus": 200,
+      "commandExitCode": 0,
+      "endpoint": "repos/OpenPresentation/opf/actions/secrets?per_page=100",
+      "paginationComplete": true,
+      "expectedNames": {
+        "ECOSYSTEM_APP_PRIVATE_KEY": {
+          "present": false
+        }
+      },
+      "availability": "visible complete repository secret-name metadata",
+      "valuesRequestedPrintedOrSaved": false,
+      "unrelatedNamesPersisted": false
+    },
+    "expectedVariableName": "ECOSYSTEM_APP_ID",
+    "variablePresenceAndValue": "not inspected; variable is not a secret",
+    "appInstallationMetadataGETPerformed": false,
+    "reason": "No new usable installation identity or authorization basis established; reserved fifthREST call unused. Secret name presence alone would not prove App/token capability.",
+    "tokenCreationInstallationGrantsExecuteModeVerified": false
+  },
+  "RR14": {
+    "observedAt": "2026-10-15T11:57:40.884419+00:00",
+    "httpStatus": 404,
+    "commandExitCode": 0,
+    "url": "https://www.pptx.dev/api/v1/author/understand/capability",
+    "method": "GET",
+    "authenticated": false,
+    "modelCalls": 0,
+    "recognizedFeatureOffResponse": true,
+    "errorCode": "not_found",
+    "enabled": null,
+    "conclusion": "documented current server feature flag off; no auth,allowlist,budget,clientflag or model behavior established"
+  },
+  "boundaries": {
+    "settingsSecretsGrantsAuthDNSMutations": 0,
+    "workflowDispatches": 0,
+    "messagesSentToOthers": 0,
+    "deployments": 0,
+    "windowsActions": 0,
+    "privateLocalEnvKeyTokenConfigReads": 0,
+    "sourceEdits": 0,
+    "valuesPersisted": false,
+    "unrelatedSecretNamesPersisted": false,
+    "programRowsOrOriginalAcceptanceChanged": false
+  }
+}
