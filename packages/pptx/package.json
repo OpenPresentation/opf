@@ -64,8 +64,8 @@
     "test:determinism": "node test/determinism.mjs"
   },
   "dependencies": {
-    "@openpresentation/gallery": "^3.0.0",
     "@node-projects/jszip": "4.3.0",
+    "@openpresentation/gallery": "^3.0.0",
     "@openpresentation/opf": "^0.20.1",
     "@rgrove/parse-xml": "4.2.3",
     "fast-xml-parser": "^5.8.0",
@@ -101,7 +101,7 @@
     "@openpresentation/opf-render": "0.20.0",
     "@resvg/resvg-js": "2.6.2",
     "esbuild": "0.28.2",
-    "playwright": "1.63.0"
+    "playwright": "1.64.0"
   },
   "imports": {
     "#image-fallback": {

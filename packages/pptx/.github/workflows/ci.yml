@@ -75,7 +75,7 @@ jobs:
     # An unrelated label starts nothing.
     if: ${{ always() && (github.event.action != 'labeled' || github.event.label.name == 'full-ci') }}
     runs-on: ${{ matrix.os }}
-    container: ${{ matrix.os == 'ubuntu-latest' && 'mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27' || '' }}
+    container: ${{ matrix.os == 'ubuntu-latest' && 'mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f' || '' }}
     # RR-57: about 2x the p90 (Linux 14 min, Windows 25 min over the last 30 pushes).
     timeout-minutes: ${{ matrix.os == 'windows-latest' && 50 || 30 }}
     defaults:
@@ -223,7 +223,7 @@ jobs:
       - run: npm run test:font-variants
       - run: npm run test:code
       - name: Verify Playwright image version
-        run: node -e "if (require('playwright/package.json').version !== '1.63.0') throw new Error('Update the pinned Playwright image with the test package.');"
+        run: node -e "if (require('playwright/package.json').version !== '1.64.0') throw new Error('Update the pinned Playwright image with the test package.');"
       - if: runner.os == 'Windows'
         run: npx playwright install chromium
       # RR-47: test/browser-suites.json (the commands of npm run test:browser); a quarantined test is deferred to the non-blocking step below.
@@ -289,7 +289,7 @@ jobs:
     # Not on a plain pull request (see the header); an unrelated label starts nothing.
     if: ${{ always() && (github.event_name != 'pull_request' || (contains(github.event.pull_request.labels.*.name, 'full-ci') && (github.event.action != 'labeled' || github.event.label.name == 'full-ci'))) }}
     runs-on: ubuntu-latest
-    container: mcr.microsoft.com/playwright:v1.63.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27
+    container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
     # RR-57: about 2x the p90 (10.6 min).
     timeout-minutes: 25
     strategy:

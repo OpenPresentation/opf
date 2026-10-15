@@ -8,13 +8,19 @@ import { fileURLToPath } from 'node:url';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const npmCli = process.env.npm_execpath;
 assert.ok(npmCli, 'Run through npm run test:packed for portable npm execution.');
+// Narrow control: npm exec -- node test/packed-install.mjs --production-only
 const native=process.argv.includes('--native');
+const productionOnly=process.argv.includes('--production-only');
+assert.ok(!productionOnly || !native, 'Production-only control never runs native Office checks.');
 assert.ok(!native||process.platform==='win32','--native requires Windows with Microsoft PowerPoint installed.');
 const temporary = await mkdtemp(path.join(tmpdir(), 'opf-pptx-packed-'));
 const actualTemporary=await realpath(temporary),temporaryParent=await realpath(tmpdir());
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const npm = (args, cwd) => execFileSync(process.execPath, [npmCli, ...args], { cwd, encoding: 'utf8', maxBuffer: 5 * 1024 * 1024 });
 try {
+  const candidateManifest=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
+  assert.equal(candidateManifest.dependencies['@rgrove/parse-xml'],'4.2.3','The shipped vendor requires the pinned production XML parser, not a dev dependency.');
+  assert.equal(candidateManifest.devDependencies?.['@rgrove/parse-xml'],undefined,'No dev parser may disguise the runtime dependency.');
   const packed = JSON.parse(npm(['pack', '--json', '--pack-destination', temporary], root))[0];
   const shipped = new Set(packed.files.map(file => file.path));
   for (const name of ['pptxgen.es.js', 'LICENSE', 'UPSTREAM.json', 'package.json']) {
@@ -29,8 +35,15 @@ try {
   // Core is a direct dependency at this package's range, so npm keeps the one core at the top level next to it.
   const self = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8')), coreName = '@openpresentation/opf';
   await writeFile(path.join(consumer, 'package.json'), JSON.stringify({ private: true, type: 'module', dependencies: { [self.name]: `file:${path.join(temporary, packed.filename)}`, [coreName]: self.dependencies[coreName] }, overrides: { [self.name]: `$${self.name}` } }));
-  npm(['install', '--ignore-scripts', '--no-fund', '--no-audit'], consumer);
+  npm(['install', '--omit=dev', '--ignore-scripts', '--no-fund', '--no-audit'], consumer);
   const installed=path.join(consumer,'node_modules/@openpresentation/opf-pptx'),files={};
+  const actualConsumer=await realpath(consumer),actualModules=await realpath(path.join(consumer,'node_modules'));
+  assert.equal(actualModules,path.join(actualConsumer,'node_modules'),'Fresh modules cannot alias an ancestor tree');
+  const productionLock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8'));
+  const candidateEntry=productionLock.packages['node_modules/@openpresentation/opf-pptx'];
+  assert.equal(candidateEntry.integrity,packed.integrity,'Installed candidate comes from the packed tarball');
+  assert.ok(!candidateEntry.link && candidateEntry.resolved.startsWith('file:') && candidateEntry.resolved.endsWith(packed.filename),'Candidate is the tarball, not a source directory alias');
+  assert.equal(productionLock.packages['node_modules/@rgrove/parse-xml'].dev,undefined,'Runtime parser is not a dev-only lock entry');
   for(const {path:file} of packed.files){
     assert.ok(!path.isAbsolute(file)&&!file.split(/[/\\]/).includes('..'));
     const bytes=await readFile(path.join(installed,file));
@@ -41,13 +54,27 @@ try {
   await writeFile(path.join(consumer, 'verify.mjs'), `
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
-import {readFile} from 'node:fs/promises';
+import {readFile,realpath,writeFile} from 'node:fs/promises';
+import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
 import {validate} from '@openpresentation/opf';
 const require = createRequire(import.meta.url);
 for(const name of ['image-size','pptxgenjs','@openpresentation/opf-render']) assert.throws(()=>require.resolve(name),{code:'MODULE_NOT_FOUND'});
 const pkg = new URL('./', import.meta.resolve('@openpresentation/opf-pptx/package.json'));
+const modules=await realpath(new URL('./node_modules/',import.meta.url));
+const installedRoot=await realpath(pkg);
+assert.equal(installedRoot,await realpath(new URL('./node_modules/@openpresentation/opf-pptx/',import.meta.url)),'Candidate imports from this isolated consumer');
+assert.ok(installedRoot.startsWith(modules+path.sep));
+const installedManifest=JSON.parse(await readFile(new URL('package.json',pkg),'utf8'));
+assert.equal(installedManifest.dependencies['@rgrove/parse-xml'],'4.2.3');
+const vendorRequire=createRequire(new URL('vendor/pptxgenjs/pptxgen.es.js',pkg));
+const parserFile=await realpath(vendorRequire.resolve('@rgrove/parse-xml'));
+const parserRoot=await realpath(new URL('./node_modules/@rgrove/parse-xml/',import.meta.url));
+assert.ok(parserRoot.startsWith(modules+path.sep));
+assert.ok(parserFile.startsWith(parserRoot+path.sep),'Shipped vendor parser cannot escape into source/ancestor modules');
+const parserManifest=JSON.parse(await readFile(path.join(parserRoot,'package.json'),'utf8'));
+assert.equal(parserManifest.version,'4.2.3');
 const manifest = JSON.parse(await readFile(new URL('vendor/pptxgenjs/UPSTREAM.json',pkg),'utf8'));
 for(const name of ['pptxgen.es.js','LICENSE']) {
  const bytes = await readFile(new URL('vendor/pptxgenjs/'+name,pkg));
@@ -69,9 +96,14 @@ assert.ok(JSON.stringify(restored).includes('Quality'));
 // FF-57: the quote re-imports as a quote payload, so its attribution and source are separate fields.
 assert.ok(JSON.stringify(restored.slides[2].quote ?? restored.slides[2].blocks).includes(JSON.stringify(input.slides[2].quote)),'Installed quote payload');
 for(const text of ['42%','approve(change)','Pilot','Rollout']) assert.ok(JSON.stringify(restored).includes(text), 'Installed payload text: '+text);
-console.log('Packed consumer: vendored licenses/hashes, absent unused dependencies, table/metric/quote/code/timeline export/reimport and schema validation pass.');
+await writeFile('production-identity.json',JSON.stringify({installedRoot,parserFile,parserVersion:parserManifest.version,sourceAliases:false,productionOnlyInstall:true,exportBytes:bytes.byteLength,slides:restored.slides.length}));
+console.log('Packed consumer: isolated production parser4.2.3, vendored licenses/hashes, absent unused dependencies, table/metric/quote/code/timeline export/reimport and schema validation pass.');
 `);
   process.stdout.write(execFileSync(process.execPath, ['verify.mjs'], { cwd: consumer, encoding: 'utf8' }));
+  const productionIdentity=JSON.parse(await readFile(path.join(consumer,'production-identity.json'),'utf8'));
+  await mkdir(path.join(root,'artifacts'),{recursive:true});
+  await writeFile(path.join(root,'artifacts/packed-production.json'),JSON.stringify({productionOnly,packed:{filename:packed.filename,integrity:packed.integrity,sha256:hash(await readFile(path.join(temporary,packed.filename)))},candidateVersion:candidateManifest.version,files,consumer:productionIdentity,lock:JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8'))},null,2)+'\n');
+  if (!productionOnly) {
   // The basic consumer above also proves the optional renderer can be absent.
   // Add its exact published fixture version for accepted-layout and native checks.
   const manifest=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
@@ -133,6 +165,7 @@ console.log('Packed consumer: vendored licenses/hashes, absent unused dependenci
   await mkdir(path.join(root,'artifacts'),{recursive:true});
   await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,registryFixtures,knownVulnerabilities:0,signatureVerification:signatures.trim(),nativeEvidence,nativeCodeEvidence,boundary:'Fresh installed candidate, every shipped file byte-matched, actual registry predecessors, optional-renderer absence, shared accepted quote/code/timeline geometry, media current-caption/link re-export and layout intent, physical font variants, guarded code/timeline provenance, indexed sparse chart-cache import, explicit UTC ZIP-date determinism and native notes/property whitespace, current untagged body rich-text import and native rich-run underline tested (linked social furniture excluded only from the historical registry fixture). Native evidence, when present, covers twelve controlled Calibri quote and eight Courier New code cases, including source/metadata edits and save/reopen; raster differences are observations without an equivalence threshold.'},null,2)+'\n');
   console.log(`Packed installation audit: zero known vulnerabilities; ${packed.filename}, ${packed.integrity}`);
+  }
 } finally {
   const actual=await realpath(temporary);assert.equal(actual,actualTemporary);
   assert.ok(actual.startsWith(temporaryParent+path.sep)&&path.basename(actual).startsWith('opf-pptx-packed-'));
