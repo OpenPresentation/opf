@@ -1,0 +1,102 @@
+{
+  "at": "2026-10-15T05:53:13.460346+00:00",
+  "package": "@openpresentation/opf-editor",
+  "version": "0.20.1",
+  "status": "published and independently fully canonical verified",
+  "trustedPublisherExit": 0,
+  "independentVerifierExit": 0,
+  "tag": "opf-editor-v0.20.1",
+  "gitHead": "be495d1b6e3ac7dbfad58a64537cf435a43f9f6f",
+  "dist": {
+    "shasum": "512c10c248b6e28cf36437c54add433a6420b279",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.20.1.tgz",
+    "fileCount": 126,
+    "integrity": "sha512-of1xu1v7+SWb11oo54TBLMrIuA/WjUrdrO3Km7u34ql3jD3gXLmOHAlDk0Vee9w5CaVzLl5/jvU+lTeo09+9dQ==",
+    "signatures": [
+      {
+        "sig": "MEYCIQDvi0FysRqwtPaWOWxvSZEVTSykkPrrzzjnN0s4y7rXfwIhAL08stLn7F3CJGFmFbnOrJd1n8/USt1/wWK+3njE9NxH",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEUCIBddbTVpy4998+pUec5dUIVRo0YhP3RwGt8ZKsb3zWgNAiEA/5jwS8KVtNmKLgGzOezBb4p5Khn8ay7ZyO7Eh0JZW2I="
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-editor@0.20.1",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 1451023
+  },
+  "publishedAt": "2026-10-15T05:49:45.078Z",
+  "registryPackumentUrl": "https://registry.npmjs.org/@openpresentation%2fopf-editor",
+  "repository": "https://github.com/OpenPresentation/opf-editor",
+  "workflow": "https://github.com/OpenPresentation/opf-editor/blob/be495d1b6e3ac7dbfad58a64537cf435a43f9f6f/.github/workflows/release.yml",
+  "workflowRun": "https://github.com/OpenPresentation/opf-editor/actions/runs/38686947758",
+  "provenanceInvocation": "https://github.com/OpenPresentation/opf-editor/actions/runs/38686947758/attempts/1",
+  "githubRelease": "https://github.com/OpenPresentation/opf-editor/releases/tag/opf-editor-v0.20.1",
+  "canonicalChecks": [
+    {
+      "name": "npm version",
+      "ok": true,
+      "detail": "@openpresentation/opf-editor@0.20.1, integrity sha512-of1xu1v7+SWb11oo54TBLMrIuA/WjUrdrO3Km7u34ql3jD3gXLmOHAlDk0Vee9w5CaVzLl5/jvU+lTeo09+9dQ=="
+    },
+    {
+      "name": "tag",
+      "ok": true,
+      "detail": "OpenPresentation/opf-editor opf-editor-v0.20.1 -> be495d1b6e3ac7dbfad58a64537cf435a43f9f6f"
+    },
+    {
+      "name": "gitHead",
+      "ok": true,
+      "detail": "gitHead be495d1b6e3ac7dbfad58a64537cf435a43f9f6f = tag commit be495d1b6e3ac7dbfad58a64537cf435a43f9f6f"
+    },
+    {
+      "name": "tag on main",
+      "ok": true,
+      "detail": "be495d1b6e3a is on opf-editor main (identical)"
+    },
+    {
+      "name": "version at tag",
+      "ok": true,
+      "detail": "package.json at be495d1b6e3a carries 0.20.1"
+    },
+    {
+      "name": "dist.attestations",
+      "ok": true,
+      "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-editor@0.20.1)"
+    },
+    {
+      "name": "SLSA provenance",
+      "ok": true,
+      "detail": "built by .github/workflows/release.yml on refs/tags/opf-editor-v0.20.1 from be495d1b6e3a (https://github.com/OpenPresentation/opf-editor/actions/runs/38686947758/attempts/1)"
+    },
+    {
+      "name": "npm audit signatures",
+      "ok": true,
+      "detail": "3 verified, 0 invalid, 0 missing; @openpresentation/opf-editor@0.20.1 has a verified attestation"
+    },
+    {
+      "name": "GitHub release",
+      "ok": true,
+      "detail": "https://github.com/OpenPresentation/opf-editor/releases/tag/opf-editor-v0.20.1"
+    },
+    {
+      "name": "dist-tag",
+      "ok": true,
+      "info": true,
+      "detail": "latest"
+    }
+  ],
+  "canonicalCheckCount": 10,
+  "signatureAndAttestationVerified": true,
+  "tagMovedOrRepushed": false,
+  "sourceSnapshotLock": "d26c4188e60bd60bfff4b46cd944b895bccb2b253c89adfc00eba4521c9b43ba",
+  "publisherIdentityDistinctFromSourceSnapshot": true,
+  "pptx0202": "not yet published/verified; not dependency of this E21 activation",
+  "physicalWindowsHold": true,
+  "visibleMenuNotClaimed": true,
+  "sourceReceiptSha256": "8fb6b20b4930d26f61fda385d8cb856050a3a44cc97906289273e62172e90d88"
+}

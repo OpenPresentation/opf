@@ -4,7 +4,15 @@ Status: **active** (opened 2026-10-01). Tracker: [burndown.md](burndown.md).
 This is the single source of truth for the cross-repository program. Agents and
 people resuming work start here, not from chat history or local scratch files.
 
-## Current checkpoint — 2026-10-14
+## Current checkpoint — 2026-10-15 06:25 UTC
+
+Original 40/40 and broader 77/84 are unchanged. Editor 0.20.1 is published with all ten canonical checks verified; the accepted successor plan/authority and strict six-root consumer now select core/PPTX/Editor 0.20.1, renderer/CLI 0.20.0 and Gallery 3.0.0. Main #110 merged normally at `66107906`; its new deployment proof is pending. Qualified Gallery #135 and Dev #133 await normal gates; PPTX 0.20.2 and final #676 baseline binding remain pending. Font tooling #678 (`abf7af65`) passed its full source gate and one bounded Arabic preparation/export witness, with import review-required and all native/physical-font/factor acceptance unresolved. Windows remains on human HOLD and the new menu heading unobserved. The 05:35 census remains dated; later known PRs do not constitute a fresh census. [Current facts and remaining boundaries](HANDOFF.md#current-maintenance-and-activation-boundary--2026-10-15-0625-utc).
+
+## Earlier checkpoint — 2026-10-15 05:35 UTC (retained)
+
+Original 40/40 and broader 77/84 are unchanged. The coherent source graph and official roll #677 (`5a98de8f`) are integrated; Editor #173 (`be495d1b`) and PPTX #264 (`19f775a7`) preparations are merged, but the new artifacts remain unverified at this checkpoint. The genuine six-package graph and three accepted production Workers are unchanged. Main/Gallery/Dev adoption prerequisites are reviewed, not newly deployed. Windows physical use is on explicit human HOLD; the new source-candidate menu heading is unobserved. [Current dated facts and remaining boundaries](HANDOFF.md#current-maintenance-and-activation-boundary--2026-10-15-0625-utc).
+
+## Historical checkpoint — 2026-10-14 (retained)
 
 **Current scoped update — 2026-10-14:** the supervisor accepts RR-53 on actual merged core335, implemented core PR contract/full queue-and-schedule policy, prior core669 queue success and retained 11–15% runner saving/no wall-clock gain. The broader program is now **77/84 complete or descoped**, with seven open rows: RR-14, RR-17, RR-19, RR-48, RR-51, RR-68 and RR-20. RR-48’s three sibling rulesets and issue658’s next-green-nightly condition remain separate and open. [Scoped acceptance](../../evidence/rr-53-contract-tier-2026-10-14/README.md). Core [670](https://github.com/OpenPresentation/opf/pull/670) actually merged through its normal queue at `c36727c64d15d7584f66b80f5257c94c0ada4083`; its accepted tree/lock/provenance exactly match the reviewed proposal. The supervisor accepts original T16/T40, completing the original **40/40 handoff**. [Terminal scoped decision](../../evidence/rr-20-sites-current-2026-10-14/terminal-supervisor-acceptance.json). Broader RR-20 remains in progress on the seven program rows; this does not imply all 58 native cases or global font/raster acceptance. The frozen670 source and earlier conditional snapshot below remain unchanged historical evidence.
 
