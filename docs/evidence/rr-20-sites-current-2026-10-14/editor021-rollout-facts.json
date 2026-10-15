@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "scope": "Existing root-reviewed E21/P21 production rollouts; subsequent P22 adoption is separate",
+  "sourceReceiptSha256": {
+    "mainGallery": "5719775c4553712e46f92f71e803ba9ae37c0710680ef8887318694c7fdfa41d",
+    "dev": "6298ead42439d0401091c23e23f127f2dd9c4e197764e5562632c2d85269571c"
+  },
+  "graph": {
+    "core": "0.20.1",
+    "renderer": "0.20.0",
+    "pptx": "0.20.1",
+    "editor": "0.20.1",
+    "cli": "0.20.0",
+    "gallery": "3.0.0"
+  },
+  "sites": {
+    "main": {
+      "actualMerge": "66107906a2be0cb1e4887cee3c159b7ed22d9eb8",
+      "reviewedHead": "58ed993fa81bfd6ad9a001248d535975d49262a2",
+      "equalEntireTree": "a14e1858f72257ca3e4aeefc10726ac379ea751d",
+      "workerVersion": "fd8a974a-8b7a-42a8-be00-310d74424ee1",
+      "deploymentId": "1d0b4cbb-ccfd-491d-815a-ee151906bb66",
+      "trafficPercent": 100,
+      "deployExit": 0,
+      "liveScope": {
+        "maintainedBrowserExpected": 2,
+        "unexpected": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "canonicalRawSchemaRoutesExact": 13,
+        "exactShowcaseStarterFontLicenseAssets": 10,
+        "actualBrowserExport": {
+          "path": "/private/tmp/rr-editor021-activation-ready-61/main-live-export.pptx",
+          "sha256": "90c585f4a30c34c1bd2512b130d820f9a66fe6c2a3f18f6f4c4c1d292b2d30c5",
+          "bytes": 74224,
+          "slides": 1,
+          "containsEditedTitle": true,
+          "masterDisplayName": "pptx.gallery"
+        },
+        "otherOrigins": [],
+        "posts": []
+      }
+    },
+    "gallery": {
+      "actualMerge": "39654cf58586c4c383b1d1b4b65b4015098414eb",
+      "reviewedHead": "d1dc43ac9c08fcaa189a1e40ba912d4d29b82b89",
+      "equalEntireTree": "65814fc5c246ae17abc50d8fbe963d739bb2568b",
+      "workerVersion": "24939d84-4555-4b6e-890f-bfca13f1dbb8",
+      "deploymentId": "7055e5e9-3e1f-4eb7-8146-1db629be0ad7",
+      "trafficPercent": 100,
+      "deployExit": 0,
+      "liveScope": {
+        "maintainedPublishedEditorExit": 0,
+        "exactDeclaredEditorFiles": 44,
+        "allDeclaredLazyScriptFontPathsCheckedByMaintainedVerifier": true,
+        "maintainedOfflineEditorBrowserExpected": 1,
+        "unexpected": 0,
+        "skipped": 0,
+        "flaky": 0,
+        "captionFullProseSearchMobileRawJson": true,
+        "exactRawPublisherProvenance": 21,
+        "exactServingLicenseFiles": 21,
+        "exactServingNoticeFiles": 1,
+        "exactWasm": 2,
+        "actualBrowserExport": {
+          "path": "/private/tmp/rr-editor021-activation-ready-61/gallery-live-browser-output/editor-author-preview-edit-fbb9f-Point-then-reimport-offline/registry-editor-0201.pptx",
+          "sha256": "889ea3182ed8fa5e6eb8928ca400f01311cfd0654b1bcc23db1b6a8b31205ed9",
+          "bytes": 77917,
+          "maintainedBrowserExportAndReimportPassed": true
+        }
+      }
+    },
+    "dev": {
+      "actualMerge": "1e9c189eaac0ae402639ef4af0aff3d1933dcbc2",
+      "builtSource": "8e452a6947f9848fae05d003073a077304122522",
+      "equalTree": "b8c68df23066da126779490ac5efebb64ce4da7b",
+      "workerVersion": "00e1a9c1-d79f-443e-8067-471493998163",
+      "trafficPercentage": 100,
+      "deployExit": 0,
+      "maintainedAnonymousBrowserTests": {
+        "passed": 3,
+        "unchanged": true,
+        "noLocalServerOrSecretRead": true,
+        "scope": [
+          "registered catalog import + missing-catalog diagnostic + undo/redo",
+          "anonymous Author edit/tab/JSON/YAML/Markdown/copy/PPTX/reimport/undo",
+          "public toolkit package/render/edit/export proofs"
+        ]
+      },
+      "legacyApi": {
+        "actualPostAttempts": 1,
+        "status": 200,
+        "archiveSha256": "706ea8bef4d44d00777a4330bbb1a22faa2a742525acc15edcfc091f1f6fe3e5",
+        "archiveBytes": 14638,
+        "all20PartsCrcXmlInventoryPass": true,
+        "masterThemeFamilyAppDisplayNames": "pptx.gallery",
+        "layout": "DEFAULT",
+        "title": "Author Local Export",
+        "creator": "pptx.dev",
+        "warningsCount": 2,
+        "warningInterpretation": "Production proves header count2 only. Prior pure local interpretation of the identical fixture: missing audience author-user and tone informative use engine defaults; cover is embedded. This is not production message telemetry."
+      },
+      "assets": {
+        "public291AndServedBytesExact": true,
+        "packagedWasm2Exact": true,
+        "selectedLiveByteChecks": 3,
+        "officialSchemaRedirectContractAndTarget200": true,
+        "officialMainSchemaRawByteEqual": true,
+        "publishedCoreSchemaEqualityClaim": false,
+        "postDeployFiles": 1216,
+        "maximumFileBytes": 25337824,
+        "all11ReviewedArtifactHashesUnchanged": true
+      },
+      "officialSchemaClientAttribution": {
+        "testedClient": "Node24 fetch, redirect manual",
+        "actualNodeStatus": 200,
+        "actualNodeRedirects": 0,
+        "actualNodeRawMatchesMainSource": true,
+        "rootReportedSeparatePythonStandardClientStatus": 403,
+        "universalClientAvailabilityClaim": false,
+        "rootFurtherComparisonPending": true
+      }
+    }
+  },
+  "limitations": [
+    "Physical Windows remains on human hold; new Office menu heading unobserved.",
+    "No P22 adoption is attributed to these E21/P21 seals.",
+    "No signed-in/model/backend account, native font or global raster acceptance.",
+    "Dev official-schema availability is client-dependent: Node24 fetch200, separate Python403; no universal-client claim."
+  ],
+  "historicalFailureScope": {
+    "mainCachedOAuth": "First two attempts refused before deploy; maintained same-profile cf auth whoami renewed expired OAuth with identical account/scopes, no new login/consent.",
+    "otherInitialAssertions": "Retained in source receipts; no product source relaxation, credential workaround or extra native acceptance."
+  }
+}

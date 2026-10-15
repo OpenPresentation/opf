@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-15T06:38:18.542873+00:00",
+  "url": "https://github.com/OpenPresentation/opf/issues/668",
+  "state": "closed",
+  "reason": "completed",
+  "closedAt": "2026-10-15T06:38:17Z",
+  "sourceFix": "https://github.com/OpenPresentation/opf/pull/675",
+  "mainIntegration": "https://github.com/Data-Advantage/openpresentation-site/pull/110",
+  "galleryIntegration": "https://github.com/Data-Advantage/pptx-gallery/pull/135",
+  "liveCaptionProofSha256": "ba10fb91562f6b803c37761806141245c5dd4d374607c34ad67b7e0de2e119dd",
+  "rawResponseSha256": "94121a82880cbdfb6b1422164a9fd2528b09f151addec0e8d807d3f6826c24d2",
+  "nativeOrPackageGateAdded": false,
+  "commentSent": false,
+  "apiCalls": 1
+}

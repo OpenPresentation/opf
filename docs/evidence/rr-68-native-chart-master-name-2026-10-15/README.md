@@ -1,5 +1,11 @@
 # Native chart fixture references and source-candidate preparation
 
+## Genuine PPTX 0.20.2 qualification — 2026-10-15
+
+Independently verified PPTX 0.20.2 at `19f775a74905ff8760c21e0a3520e2f0aad19f6e` now reproduces all nine reviewed source-candidate fallback archives byte-for-byte. The [actual nine-archive result](../rr-68-pptx022-registry-2026-10-15/nine-fallback-qualification.json) binds the clean combined source checkpoint, exact fixture/strict-guard bytes, genuine six-root consumer lock, release plan and canonical publication authority. Each whole archive, size, diagnostic array serialization/order, ZIP inventory count and reviewed theme/application part hash matches; all 1,079 parts are covered by the strict archive hashes. No normalization, tolerance or automatic rebaseline was used.
+
+The original source-candidate receipt below remains `registryAcceptance:false`; this later genuine-runtime proof has separate provenance. The other five authority records and installed runtime trees are exact to the accepted Editor 0.20.1 / PPTX 0.20.1 consumer. Normal lock generation changed only the root/PPTX package records; maintained matrix preparation, both type modes, smoke, registry-toolchain, strict authority and one-core guards passed. [Verified publication](../rr-68-pptx022-registry-2026-10-15/verified-publication.json) and its [actual independent verifier JSON](../rr-68-pptx022-registry-2026-10-15/independent-verify.json) retain canonical checks/signature/provenance identities. No full 58-case factory, Office execution, new menu observation or native acceptance is added.
+
 ## Current source candidate (not a registry artifact)
 
 The exact reviewed PPTX source candidate `560571c7ced447484c55c673c8fbeb8f69f838a4` changes the generated default theme display identity to `pptx.gallery`; explicit authored themes stay unchanged. The earlier genuine 0.20.1 native Home > Layout observation still showed `Office Theme`, despite the master name, so the master-only archive result did not establish the requested native category. No Windows screenshot or evidence branch is copied here.
