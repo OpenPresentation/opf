@@ -130,10 +130,10 @@ const CONTEXT_NODES =
 const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){pageInfo{hasNextPage} nodes{id checkRuns(first:1){totalCount} status conclusion app{slug} workflowRun{databaseId event runAttempt workflow{name}}}}`;
 const SUITE_RUNS = 'checkRuns(first:100){pageInfo{hasNextPage endCursor} nodes{__typename databaseId name status conclusion detailsUrl startedAt checkSuite{id commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}}}';
 const SUITE_FIELDS = `id status conclusion commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}} ${SUITE_RUNS}`;
-/** An old empty cancellation has no job to normalize. Only real newer same-workflow reports can supersede it. */
-function supersededEmptyCancellation(suite, suites, runsBySuite) {
+/** A cancelled suite with no failed jobs needs real newer same-workflow reports before its inconsistency is superseded. */
+function supersededCancellationWithoutFailedJobs(suite, suites, runsBySuite) {
   const workflow = suite.workflowRun?.workflow?.name, runId = suite.workflowRun?.databaseId;
-  if (suite.app?.slug !== 'github-actions' || suite.status !== 'COMPLETED' || suite.conclusion !== 'CANCELLED' || runsBySuite.get(suite.id).length || typeof workflow !== 'string' || !workflow || (!Number.isSafeInteger(runId) || runId <= 0)) return false;
+  if (suite.app?.slug !== 'github-actions' || suite.status !== 'COMPLETED' || suite.conclusion !== 'CANCELLED' || !runsBySuite.get(suite.id).every(run => run.status === 'COMPLETED' && ['SUCCESS','SKIPPED'].includes(run.conclusion) && run.checkSuite?.app?.slug === 'github-actions' && run.checkSuite?.workflowRun?.databaseId === runId && run.checkSuite?.workflowRun?.workflow?.name === workflow) || typeof workflow !== 'string' || !workflow || (!Number.isSafeInteger(runId) || runId <= 0)) return false;
   return suites.some(newer => newer.app?.slug === 'github-actions' && newer.commit.oid === suite.commit.oid && newer.workflowRun?.workflow?.name === workflow && Number.isSafeInteger(newer.workflowRun?.databaseId) && newer.workflowRun.databaseId > runId &&
     (newer.status !== 'COMPLETED' || newer.conclusion === 'SUCCESS' || (RED_CONCLUSIONS.has(newer.conclusion) && newer.conclusion !== 'CANCELLED')) &&
     runsBySuite.get(newer.id).some(run => run.checkSuite?.workflowRun?.databaseId === newer.workflowRun.databaseId && run.checkSuite?.workflowRun?.workflow?.name === workflow && (run.status !== 'COMPLETED' || run.conclusion === 'SUCCESS' || (RED_CONCLUSIONS.has(run.conclusion) && run.conclusion !== 'CANCELLED'))));
@@ -189,7 +189,7 @@ export async function suiteContexts(graphql, owner, name, oid) {
   // Read every suite/run page first: a genuine successor may appear after its cancelled predecessor.
   for (const suite of suites) {
     const runs = runsBySuite.get(suite.id);
-    if (suite.status === 'COMPLETED' && !['SUCCESS','SKIPPED','NEUTRAL'].includes(suite.conclusion) && !runs.some(run => run.status === 'COMPLETED' && !['SUCCESS','SKIPPED','NEUTRAL'].includes(run.conclusion)) && !supersededEmptyCancellation(suite, suites, runsBySuite)) throw new Error('failed check suite has no corresponding failed check run');
+    if (suite.status === 'COMPLETED' && !['SUCCESS','SKIPPED','NEUTRAL'].includes(suite.conclusion) && !runs.some(run => run.status === 'COMPLETED' && !['SUCCESS','SKIPPED','NEUTRAL'].includes(run.conclusion)) && !supersededCancellationWithoutFailedJobs(suite, suites, runsBySuite)) throw new Error('failed check suite has no corresponding failed check run');
   }
   return {nodes,suites};
 }
