@@ -1,0 +1,39 @@
+{
+  "at": "2026-10-15T11:18:23.930882+00:00",
+  "status": "Root-reviewed exact test-only source committed/pushed/ordinary PRattached; sole release gate owns CI/merge",
+  "pr": "https://github.com/Data-Advantage/openpresentation-site/pull/113",
+  "root": "/private/tmp/rr-editor022-main-test-origin-61/site",
+  "base": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+  "head": "749c8a5abff2045d5aa5d366fbfd9498160812cc",
+  "tree": "f7fd4ad477f1ce59f72c26b6eadaeabfd14ba702",
+  "branch": "codex/rr-68-main-export-origin",
+  "clean": true,
+  "patch": {
+    "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/test-origin.patch",
+    "sha256": "c1a0e8a1be72379e36ecc9d9006382f5ee8757405e07d97b10dc93f9f28af4b5"
+  },
+  "qualification": {
+    "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/qualified-test-origin.json",
+    "sha256": "deca6b13a6b5d4be6b0e21fee28ed3326cb42ada4a8fedfcdea264d7f80a89ce"
+  },
+  "notARuntimeSourceIdentity": true,
+  "noRuntimeBuildReleaseDeploymentRequiredOrPerformed": true,
+  "originalMainProductionSealUnmodified": {
+    "path": "/private/tmp/rr-editor022-sites-61/main-production-seal.json",
+    "sha256": "6f406906112f5bc4d1013daa6b0565b9179343d81d5a29ad51b15b24a2014ff7"
+  },
+  "refs": [
+    {
+      "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/push.log",
+      "sha256": "95a5f72141233c24df4917f0debb4f5b927920896630cebea45f24bd3ff202a2"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/pr-create.log",
+      "sha256": "efff1c071c7731611a837a781b97050ba475b483db8e8e34cc27a8bf45ba1395"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-main-test-origin-61/evidence/pr-body.md",
+      "sha256": "1f8e084b6527addbee7d13ea98fd4e00c5aca819f9d3cffd5ef0970e89b52555"
+    }
+  ]
+}

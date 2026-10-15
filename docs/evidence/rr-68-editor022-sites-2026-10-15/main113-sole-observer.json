@@ -1,0 +1,15 @@
+{
+  "at": "2026-10-15T11:19:19.147334+00:00",
+  "pid": 48183,
+  "command": [
+    "node",
+    "scripts/pr-gate.mjs",
+    "Data-Advantage/openpresentation-site#113",
+    "--merge",
+    "--expect-head",
+    "749c8a5abff2045d5aa5d366fbfd9498160812cc",
+    "--interval",
+    "180"
+  ],
+  "soleObserver": true
+}

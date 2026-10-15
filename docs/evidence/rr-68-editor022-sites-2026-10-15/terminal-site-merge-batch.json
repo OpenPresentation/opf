@@ -1,0 +1,270 @@
+{
+  "at": "2026-10-15T11:17:48.106350+00:00",
+  "status": "All three exact reviewed site PRs actually normally merged; exact whole trees/full binary patches/parents match and all primary defaults cleanly fast-forwarded.",
+  "gate": {
+    "sourceCommit": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+    "scriptSha256": "82001f7f587da2f3d699d8b0fffe833108db8c25c83dd116971515bc920c9f64",
+    "ownedHandle": 53965,
+    "ownedPid": 43396,
+    "terminalExit": 0,
+    "terminalObservation": {
+      "chunkId": "91a266",
+      "wallTimeSeconds": 46.997440166,
+      "lastLine": "11:16:42 MERGED Data-Advantage/pptx-gallery#137 89857e35b9be28121ab38319ebf5f09cb0dd1aed"
+    },
+    "absenceCheck": {
+      "command": "ps -p 43396 -o pid=,ppid=,args=",
+      "exit": 1,
+      "stdout": ""
+    },
+    "observerRemainsLive": false,
+    "mergeMode": "normal --merge, approved exact expect-head per target",
+    "pollIntervalSeconds": 180,
+    "policy": "Private ruleset REST403 used normal fallback-all; each target confirmed green on two consecutive maintained polls; no bypass/re-run/host-job cancellation.",
+    "batchLog": {
+      "path": "/private/tmp/rr-editor022-site-gates-61/three-sites-pr-gate.log",
+      "sha256": "75fc3b18e972a2bcf148dd5276bf247d6fe9126e4e5743911df7fd1cc28954fd"
+    }
+  },
+  "sites": {
+    "dev": {
+      "reviewed": {
+        "base": "023ba386f2174684411289c0d1b537186baa5470",
+        "head": "d6c991e2785b2aa493ef3a4889bac0ea639ef023",
+        "tree": "8cad0913679930fc04b8985294860f769b3dad99",
+        "patchSha256": "49054f64140bbb0c8c6e721e8c3f2ebc6971a41c950df3a53a1288af2b08082b"
+      },
+      "actual": {
+        "merge": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+        "parents": [
+          "023ba386f2174684411289c0d1b537186baa5470"
+        ],
+        "tree": "8cad0913679930fc04b8985294860f769b3dad99",
+        "remoteDefaultHeadAtFetch": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+        "changedPaths": [
+          "opf-reference-layer-pins.json",
+          "package.json",
+          "pnpm-lock.yaml"
+        ],
+        "patchSha256": "49054f64140bbb0c8c6e721e8c3f2ebc6971a41c950df3a53a1288af2b08082b"
+      },
+      "comparison": {
+        "wholeTreeEqual": true,
+        "fullPatchEqual": true,
+        "parentEqualsReviewedBase": true,
+        "parentDeltaBytes": 0,
+        "parentDeltaSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "primaryAfter": {
+        "head": "a05d993f1a0484902d4a2e87f6c7094a41b78e64",
+        "status": "",
+        "branch": "master"
+      },
+      "receipt": "/private/tmp/rr-editor022-site-gates-61/dev-merge-receipt.json",
+      "receiptSha256": "f51e8a5c419bb6043d10ba05380aaacc872ecb2b6a1f938450afad64d8fd97c4"
+    },
+    "main": {
+      "reviewed": {
+        "base": "9ea3f92eead7d5858f4a5d0468e392d683239258",
+        "head": "cbd5aa69cba719433cfd554ddd26db9a051256a7",
+        "tree": "7e9a563ed93059a979aed8bd1d742813ee688193",
+        "patchSha256": "d533a56caad4cce56ce8f2bf076faa961e6f480a3c44c872260c2443b97435a0"
+      },
+      "actual": {
+        "merge": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+        "parents": [
+          "9ea3f92eead7d5858f4a5d0468e392d683239258"
+        ],
+        "tree": "7e9a563ed93059a979aed8bd1d742813ee688193",
+        "remoteDefaultHeadAtFetch": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+        "changedPaths": [
+          "data/releases.json",
+          "package.json",
+          "pnpm-lock.yaml",
+          "public/showcase/manifest.json",
+          "starters/editor/package.json",
+          "tests/e2e/hero-editor.spec.ts"
+        ],
+        "patchSha256": "d533a56caad4cce56ce8f2bf076faa961e6f480a3c44c872260c2443b97435a0"
+      },
+      "comparison": {
+        "wholeTreeEqual": true,
+        "fullPatchEqual": true,
+        "parentEqualsReviewedBase": true,
+        "parentDeltaBytes": 0,
+        "parentDeltaSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "primaryAfter": {
+        "head": "6f05b52e6b01752efcc5fe1bc5c81cee08f1de58",
+        "status": "",
+        "branch": "main"
+      },
+      "receipt": "/private/tmp/rr-editor022-site-gates-61/main-merge-receipt.json",
+      "receiptSha256": "a83924da5420779d190512ef929ca859114b34417981589bb07d01dbf10eaed1"
+    },
+    "gallery": {
+      "reviewed": {
+        "base": "22bcc03909bec508a26821cd7050985ead115b80",
+        "head": "acbaad9a574ba2127ac908574100364097aca6f1",
+        "tree": "80d0a7de668959f0b3e45018f708fa204c495398",
+        "patchSha256": "870dc599dc16ccd4ada0e1772452300ad5c5d8bdea65a65e0de45eaebe9aa513"
+      },
+      "actual": {
+        "merge": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+        "parents": [
+          "22bcc03909bec508a26821cd7050985ead115b80"
+        ],
+        "tree": "80d0a7de668959f0b3e45018f708fa204c495398",
+        "remoteDefaultHeadAtFetch": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+        "changedPaths": [
+          "public/opf-editor/index.html",
+          "public/opf-editor/manifest.json",
+          "public/opf-editor/playground.js",
+          "public/opf-editor/playground.js.LEGAL.txt"
+        ],
+        "patchSha256": "870dc599dc16ccd4ada0e1772452300ad5c5d8bdea65a65e0de45eaebe9aa513"
+      },
+      "comparison": {
+        "wholeTreeEqual": true,
+        "fullPatchEqual": true,
+        "parentEqualsReviewedBase": true,
+        "parentDeltaBytes": 0,
+        "parentDeltaSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "primaryAfter": {
+        "head": "89857e35b9be28121ab38319ebf5f09cb0dd1aed",
+        "status": "",
+        "branch": "main"
+      },
+      "receipt": "/private/tmp/rr-editor022-site-gates-61/gallery-merge-receipt.json",
+      "receiptSha256": "e92a490e230949394fb77c53354d0964ffd26df74965ca52dba83366cec48685"
+    }
+  },
+  "qualificationBinding": "The hash-verified handoffs below transitively bind the complete Root-reviewed qualification/evidence/source patches and existing Editor0.20.2 publication authority. No new registry qualification or publication was performed.",
+  "refs": [
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/qualification/candidate-handoff.json",
+      "bytes": 12909,
+      "sha256": "32b1824fbd4756e225ef9faf7253e5e3a57760da7cb7284499bcd3f7b27b435b"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-dev-61/qualification/pr-handoff.json",
+      "bytes": 1844,
+      "sha256": "207a1dcf2d6f33b5f187334ec9c029744251b114655006ad5dd06f554b94498b"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-sites-61/pr-handoff.json",
+      "bytes": 6779,
+      "sha256": "1e833d59fb108eace0d2aaf828ad1fede1470f8117c901b3a29d95f44254de9d"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-sites-61/qualified-candidates.json",
+      "bytes": 16449,
+      "sha256": "3ee82821af8286944c6d922a12c96eb11c2d2d1b92660b5cb6ba1e314911f6a5"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/verified-publication-receipt.json",
+      "bytes": 7414,
+      "sha256": "ca3a6a0d83631f7e154fb20101efc87dbaf80284c95ecc31087e6e5bb2f53d7f"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/dev-merge-receipt.json",
+      "bytes": 2161,
+      "sha256": "f51e8a5c419bb6043d10ba05380aaacc872ecb2b6a1f938450afad64d8fd97c4"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/main-merge-receipt.json",
+      "bytes": 2277,
+      "sha256": "a83924da5420779d190512ef929ca859114b34417981589bb07d01dbf10eaed1"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/gallery-merge-receipt.json",
+      "bytes": 2264,
+      "sha256": "e92a490e230949394fb77c53354d0964ffd26df74965ca52dba83366cec48685"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/environment-correction.json",
+      "bytes": 865,
+      "sha256": "2f1bb12b334bb974d345429d67ddd02c707090eb776ef368c0a5ecc4d22525de"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/batch-expansion.json",
+      "bytes": 1136,
+      "sha256": "ed73ebef799470a9005d0416cea3b62fc98cb8b3f6e999476361d52cc0f0cb8a"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/pre-merge-primary-state.json",
+      "bytes": 788,
+      "sha256": "273653d19d4a3200c5e7e300ec7e9efa5f96b9e09974ed9be425de186d1f5405"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/dev135-network-blocked-exit143.log",
+      "bytes": 168,
+      "sha256": "2a65aaa5c1538c73147a0f4deaa2d3874cbf28c55700901beb0143598e62226b"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/dev135-expanded-exit143.log",
+      "bytes": 658,
+      "sha256": "044befca0c230efeb2b6c27c6b41895dbdcacf8ed36ab1b0b643717299759439"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/three-sites-pr-gate.log",
+      "bytes": 2334,
+      "sha256": "75fc3b18e972a2bcf148dd5276bf247d6fe9126e4e5743911df7fd1cc28954fd"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/dev-merge-commands.json",
+      "bytes": 12487,
+      "sha256": "8a069426ba8bc3b5520a0aded37ece224cc8b8a2ec835cbc6bd555da0c836571"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/main-merge-commands.json",
+      "bytes": 13180,
+      "sha256": "570443bcf2754f9894fc18ca5d671e30548938c96067e3ab602667619cbba06d"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/gallery-merge-commands.json",
+      "bytes": 152250,
+      "sha256": "554b21ea555fe9b8305cee1193c00414cc9cc6b2ba159907463686ace6846226"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/dev-actual-merge.patch",
+      "bytes": 7291,
+      "sha256": "49054f64140bbb0c8c6e721e8c3f2ebc6971a41c950df3a53a1288af2b08082b"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/main-actual-merge.patch",
+      "bytes": 7547,
+      "sha256": "d533a56caad4cce56ce8f2bf076faa961e6f480a3c44c872260c2443b97435a0"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/gallery-actual-merge.patch",
+      "bytes": 142794,
+      "sha256": "870dc599dc16ccd4ada0e1772452300ad5c5d8bdea65a65e0de45eaebe9aa513"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/dev-merge-gate-snapshot.log",
+      "bytes": 2095,
+      "sha256": "05ea30f5c4314a8a5b426ebb6c4f3f97800dfc6c700ff46998f78fe02a8e993e"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/main-merge-gate-snapshot.log",
+      "bytes": 2095,
+      "sha256": "05ea30f5c4314a8a5b426ebb6c4f3f97800dfc6c700ff46998f78fe02a8e993e"
+    },
+    {
+      "path": "/private/tmp/rr-editor022-site-gates-61/gallery-merge-gate-snapshot.log",
+      "bytes": 2334,
+      "sha256": "75fc3b18e972a2bcf148dd5276bf247d6fe9126e4e5743911df7fd1cc28954fd"
+    }
+  ],
+  "boundaries": {
+    "noPackagePublication": true,
+    "noDeploymentByObserver": true,
+    "noWindowsReadsContactOrUse": true,
+    "noSettingsSecretsDnsRemoteDeletionOrNewAuthGrants": true,
+    "noAdHocCiQueryOrWatcher": true,
+    "noRemainingObserver": true
+  },
+  "authorization": "Root explicitly authorized exact Dev135 first and later real exact Main112/Gallery137 expansion; environment-only restart preserved initial failure and exit/absence; actual-target expansion preserved180s cadence. Root accepted Dev/Main receipts and activated original deployment owners; Gallery proof delivered immediately, deployment owner activation belongs to Root."
+}

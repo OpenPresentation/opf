@@ -1,0 +1,24 @@
+{
+  "scope": "Bounded current genuine five-route witness/diagnosis;source unchanged",
+  "files": {
+    "preflight.json": "5ec5b934d54ce1655c3a494c1385e826c5fa5c04225a49706799ea7f3eb48598",
+    "preparation-result.json": "fad083a0b7d777029bca2c6a38f192d1d399e03eed336e3b6f0d6c571eb9fc48",
+    "five-route-witness/suite.json": "864f07baa0bf563c41a3113c825367535e2ef860a706824963b6adf13dd33aa1",
+    "diagnosis.json": "0687d490f029695cbb7f6314a73bb36459cc1c4727fc8cc5a2281a4d54601dc1",
+    "title-face-coverage.json": "6a8460ee62f0ea6df07132fe4cae53552e97c4afb96ec8c34f171414c083b57b",
+    "title-band-pixels.json": "fec232da83fa12af4fec2f907125855f84dfa022b61744152d807097e2878ade"
+  },
+  "cases": 5,
+  "slides": 15,
+  "sealedFiles": 60,
+  "bodyRows": 116,
+  "rowTextStyleImportLanguagePassed": true,
+  "nativeLanguageLiteralDifferences": 4,
+  "roundTripEqualFalseCases": 5,
+  "networkAttemptLogsExist": false,
+  "apiCalls": 0,
+  "windowsActions": 0,
+  "productionCoefficients": 0,
+  "sourceMutations": 0,
+  "blankTitleObservation": "Corrected: identical nonblank decoded title bands; no renderer defect established"
+}

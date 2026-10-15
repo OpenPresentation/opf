@@ -1,0 +1,1032 @@
+{
+  "scope": "Read-only offline remaining-scope audit of full OPF release-readiness and all37open issue bodies; no implementation/PR/CI/network/Windows work.",
+  "createdAt": "2026-10-15T11:05:57.770342+00:00",
+  "inventoryObservedAt": "2026-10-15T10:35:02Z",
+  "inventoryCounts": {
+    "repos": 8,
+    "openPR": 0,
+    "drafts": 0,
+    "openIssues": 37
+  },
+  "knownLaterEventsNotNewCensus": {
+    "Dev135": "d6c991e",
+    "Main112": "cbd5aa69",
+    "Gallery137": "acbaad9a",
+    "soleNormalMergeOwnerBatch": "53965",
+    "E22Publication": "ac3bf55e at10:35:47.883Z"
+  },
+  "apiCalls": 0,
+  "networkCalls": 0,
+  "windowsReadsContactsCommandsTransfers": 0,
+  "sourceMutations": 0,
+  "programRowsChanged": 0,
+  "preservedAcceptance": {
+    "original": "40/40",
+    "broader": "77/84",
+    "openRows": [
+      "RR14",
+      "RR17",
+      "RR19",
+      "RR48",
+      "RR51",
+      "RR68",
+      "RR20"
+    ],
+    "nativeSelected": 17,
+    "nativeUIOperations": 4,
+    "nativeUnexecuted": 41,
+    "globalNativeFontRasterAcceptance": false
+  },
+  "inputEvidence": [
+    {
+      "path": "/private/tmp/rr68-current-inventory-e22-publication-61/inventory-raw.json",
+      "sha256": "ceb64d108cdaacf3c5cdacb6acab3cbdd0e25a7709268ba95c0760f5a8e4b3cf"
+    },
+    {
+      "path": "/private/tmp/rr68-current-inventory-e22-publication-61/primary-and-issue-comparison.json",
+      "sha256": "acf8bc09c0f37d18c57322fdc51512b4dfe23594f374eba46bb56584f88f178e"
+    },
+    {
+      "path": "/Users/michael/.codex/visualizations/2026/10/11/01a128c9-2f22-7603-b379-122474d66d34/opf-status-final.json",
+      "sha256": "33e53200743060993358c267196e311561d13f28df46fff626062b050433e89e"
+    },
+    {
+      "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+      "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+    },
+    {
+      "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/HANDOFF.md",
+      "sha256": "50d18e05da344e7ab47f3400fa902844bd084ce60527ea7c9e95a57a3d08874b"
+    },
+    {
+      "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+      "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+    }
+  ],
+  "categoryCounts": {
+    "native-umbrella": 3,
+    "explicit-descope": 8,
+    "owner-configuration": 2,
+    "parked-format-roadmap": 12,
+    "required-font-engineering": 2,
+    "shipped-with-open-clauses": 2,
+    "upstream-authorization-and-local-backlog": 1,
+    "browser-backlog": 2,
+    "accepted-future-followup": 1,
+    "future-package-maintenance": 1,
+    "optional-hardening": 1,
+    "conditional-dependency": 1,
+    "parked-product-roadmap": 1
+  },
+  "findings": [
+    {
+      "id": "A1",
+      "priority": "correct-operative-records",
+      "finding": "Active HANDOFF current-original-acceptance paragraph still said Editor0.20.2 source-only/pending genuine publication after genuine10:35:47.883publication and installed qualification.",
+      "location": "docs/programs/release-readiness/HANDOFF.md:55",
+      "safeAction": "Already handed to consumer-records owner for narrow coherent final correction; preserve historical earlier checkpoints.",
+      "newBlocker": false,
+      "disposition": "Detected during offline audit; records owner reports narrow candidate correction e93c2387 under root review. Not an outstanding new blocker."
+    },
+    {
+      "id": "A2",
+      "priority": "correct-operative-records",
+      "finding": "HANDOFF Follow-up issues(open,not started) includes PPTX238 and renderer213 despite exact dated accepted closure receipts, and labels progressed font work as not started.",
+      "location": "docs/programs/release-readiness/HANDOFF.md:272",
+      "safeAction": "Already handed to consumer-records owner. PPTX238 closedOct14T22:30:25Z per in-scope-reconciliation; renderer213 exact closure in final-narrow-issue-closures. Keep broader issues open and history literal.",
+      "newBlocker": false,
+      "disposition": "Detected during offline audit; records owner reports narrow candidate correction e93c2387 under root review. Not an outstanding new blocker."
+    },
+    {
+      "id": "A3",
+      "priority": "safe-internal-font-work",
+      "finding": "RR17 is not wholly owner-bound. Existing Arabic roundTripEqual:false remains undiagnosed/review-required, and fourIndic fixtures lack equivalent bounded genuine witness.",
+      "location": "docs/programs/release-readiness/HANDOFF.md:23-27",
+      "safeAction": "Optional internal next work within accepted#581/#582scope: inspect Arabic source/XML/import mismatch; prepare/inspect four affected Indic witnesses using maintained fixture/options and qualified consumer. Do not select production factors, retry refused push or use Windows. Actual reference widths/physicalfaces/affected native acceptance remain genuine dependencies.",
+      "newBlocker": false
+    },
+    {
+      "id": "A4",
+      "priority": "dated-dependency-trigger",
+      "finding": "Dev85 latest3.0.3/no patch proof is00:35:54UTC and not rechecked; cannot be called current trigger proof.",
+      "location": "docs/evidence/rr-68-editor022-current-2026-10-15/current-facts.json",
+      "safeAction": "Root may perform one budgeted primary registry/advisory check when maintenance sweep next requires it; this audit usesAPI0. Do not remove ignore or assert patched/unpatched today from this local audit.",
+      "newBlocker": false
+    },
+    {
+      "id": "A5",
+      "priority": "already-owned-final-report",
+      "finding": "Internal HTML/report is07:28 census/07:43render and describes E21/P22 production; newE22publication does not update its production claims.",
+      "location": "/Users/michael/.codex/visualizations/2026/10/11/01a128c9-2f22-7603-b379-122474d66d34/opf-status-final.html",
+      "safeAction": "Already-owned final coherent report refresh only after actual new three-site rollouts and exact receipts. Keep census and scoped laterPRevents distinct.",
+      "newBlocker": false
+    }
+  ],
+  "issues": [
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 87,
+      "shortTitle": "Roadmap: native PowerPoint compatibility acceptance",
+      "url": "https://github.com/OpenPresentation/opf/issues/87",
+      "stateAt1035": "OPEN",
+      "category": "native-umbrella",
+      "owner": "Supervisor / owner",
+      "acceptedDecisionAndCurrentEvidence": "Native-HF and scoped edit/save work have accepted later evidence, while global native/physical-font/raster acceptance does not. Original 40/40 is accepted independently.",
+      "exactNextSafeActionOrDependency": "Keep the umbrella open; reconcile its old 0.8.1/current-unverified wording against existing accepted native-HF/save/reopen records. Preserve raster/font/physical-glyph limits and post-v1 #366. No further Windows action under HOLD.",
+      "bodySha256": "e7d918205cce62d5a3e27207bb805ba943786fc817aaa20c0e073e98a4ce7c5e",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/evidence/rr-20-sites-current-2026-10-14/in-scope-reconciliation.json",
+          "sha256": "81be60504f6e949ee9fece8adf473846593f65ec80061933fad8bbd6ebfe24ff"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+          "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 240,
+      "shortTitle": "Future: chart data from external spreadsheets (ChartDataSource) and a host dataResolver hook (descoped)",
+      "url": "https://github.com/OpenPresentation/opf/issues/240",
+      "stateAt1035": "OPEN",
+      "category": "explicit-descope",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Owner explicitly descoped external spreadsheet data on Oct1; FA supervisor removed its unsupported schema promise.",
+      "exactNextSafeActionOrDependency": "Preserve descope; if resumed, redesign the resolver against current schema, which removed ChartDataSource. Do not implement the old issue API as current release work.",
+      "bodySha256": "31a66395747fecd12391b75cb033f4e8dc5978e41b149c8339e34339161b1213",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/format-audit/README.md",
+          "sha256": "b85f0a0f428a812a875cf86121c5f50ad543b6018179a8359e2a1e4f2e030ca5"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 250,
+      "shortTitle": "Future: navigation and motion (transitions, builds/reveals, links between slides) (deferred, out of v1)",
+      "url": "https://github.com/OpenPresentation/opf/issues/250",
+      "stateAt1035": "OPEN",
+      "category": "explicit-descope",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Owner explicitly deferred transitions/builds/internal navigation; RR28 player completion does not implement motion.",
+      "exactNextSafeActionOrDependency": "Keep motion out of v1. Treat the issue no-player claim as historical because the existing player shipped; do not reopen player acceptance.",
+      "bodySha256": "7c13cc54f95c1ab11c282795f8f64ffeac5fa0c2b7d248bb517c9a5b181e0299",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+          "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 251,
+      "shortTitle": "Future: rich speaker notes (formatted notes; plain-text notes stay) (deferred, out of v1)",
+      "url": "https://github.com/OpenPresentation/opf/issues/251",
+      "stateAt1035": "OPEN",
+      "category": "explicit-descope",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Owner explicitly deferred rich notes; no new rich-note engineering is required by current readiness.",
+      "exactNextSafeActionOrDependency": "Keep rich notes deferred; plain string notes remain supported.",
+      "bodySha256": "6850e514562abe7994cbb6cc911301843c6011bf1f416826d553a10c6edc5859",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+          "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 278,
+      "shortTitle": "CJK and Thai line breaking in core composition (dictionary word breaks, kinsoku)",
+      "url": "https://github.com/OpenPresentation/opf/issues/278",
+      "stateAt1035": "OPEN",
+      "category": "explicit-descope",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "RR39 explicitly descoped; issue describes the missing dictionary/kinsoku behavior.",
+      "exactNextSafeActionOrDependency": "Preserve RR39 descope and original break tolerances; schedule dictionary/kinsoku work only if scope is reopened.",
+      "bodySha256": "b73ab165fbfb4c5d2fd4e07d36b6b5a439b4a33ea27ae6efa3197b39cda5cdcf",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+          "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 293,
+      "shortTitle": "Slide sizes and purposes: editor switches and a pptx.gallery aspect-ratio page (descoped)",
+      "url": "https://github.com/OpenPresentation/opf/issues/293",
+      "stateAt1035": "OPEN",
+      "category": "explicit-descope",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "The proposed editor switches/aspect-ratio page were descoped; later Gallery source has app/purposes pages, so old surface description is partial history.",
+      "exactNextSafeActionOrDependency": "Preserve explicit first-release descope; distinguish later purpose pages from old assertions of no pages and from unmet size-switch/native criteria.",
+      "bodySha256": "00b82625e4c0c70e41d3e494240b1f5ae02e19116ba0b8c27cb4342256aeca1f",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+          "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 297,
+      "shortTitle": "RR-48: enable the merge queue on the OpenPresentation main rulesets (owner action)",
+      "url": "https://github.com/OpenPresentation/opf/issues/297",
+      "stateAt1035": "OPEN",
+      "category": "owner-configuration",
+      "owner": "Owner",
+      "acceptedDecisionAndCurrentEvidence": "Core queue is already active; merged triggers and real core queues do not establish sibling queue configuration.",
+      "exactNextSafeActionOrDependency": "Owner enables only the three remaining sibling effective merge_queue rulesets; supervisor then verifies the original four-repository criterion. No agent settings mutation.",
+      "bodySha256": "064714ef0466404374c77b3e0bef177a48208a1222a5c300298466cd08de8032",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+          "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/evidence/rr-68-editor022-current-2026-10-15/current-facts.json",
+          "sha256": "da7178e4bde87340f6432416a668ed02737cda1453a21d5a7230cf7a4bc08205"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 298,
+      "shortTitle": "RR-50, RR-51: a GitHub App for cross-repository pin bumps, PRs and release tags (owner action)",
+      "url": "https://github.com/OpenPresentation/opf/issues/298",
+      "stateAt1035": "OPEN",
+      "category": "owner-configuration",
+      "owner": "Owner / supervisor",
+      "acceptedDecisionAndCurrentEvidence": "RR50 accepted source-lock criterion is done. RR51 execute-mode workflow/App capability remains unverified; two metadata404s mean unknown/not-visible.",
+      "exactNextSafeActionOrDependency": "Confirm authorized existing App installation/grants without inferring absence; only provision as needed, then run intended execute-mode train through maintained normal gates.",
+      "bodySha256": "c974b9be2e5af9437f58bd3bfdd2b51cc7905df759e7cdc8ff1e53942268813e",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+          "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/evidence/rr-68-editor022-current-2026-10-15/current-facts.json",
+          "sha256": "da7178e4bde87340f6432416a668ed02737cda1453a21d5a7230cf7a4bc08205"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 323,
+      "shortTitle": "Windows PowerPoint native runs deferred from the Mac mini session (RR-05, FF-12, FF-13, FF-27, FF-46)",
+      "url": "https://github.com/OpenPresentation/opf/issues/323",
+      "stateAt1035": "OPEN",
+      "category": "native-umbrella",
+      "owner": "Supervisor / owner",
+      "acceptedDecisionAndCurrentEvidence": "Many Oct2 deferred checks have later accepted evidence; 17 selected plus four UI operations are accepted,41 of58 unexecuted. Per-family acceptance remains independent.",
+      "exactNextSafeActionOrDependency": "Keep broader FF46/native umbrella open; use accepted exact native scope and native findings rather than repeat old completed RR05/FF12/13/27 or restore old permission questions. Windows HOLD applies.",
+      "bodySha256": "1dc8071c220641e9d937321caa128d908b9f7aa0307096cc5e065d879ea68892",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/evidence/rr-20-sites-current-2026-10-14/in-scope-reconciliation.json",
+          "sha256": "81be60504f6e949ee9fece8adf473846593f65ec80061933fad8bbd6ebfe24ff"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/HANDOFF.md",
+          "sha256": "50d18e05da344e7ab47f3400fa902844bd084ce60527ea7c9e95a57a3d08874b"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/evidence/rr-68-original-acceptance-index-2026-10-15/font-followup-scope.json",
+          "sha256": "fc1bffc32d9eae4a8898eec4ec7e6be63d75be7ed79f79fb9b98242d5ff32932"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 362,
+      "shortTitle": "FF-46: per-family host fixtures for the proprietary script, emoji, math and code-table families",
+      "url": "https://github.com/OpenPresentation/opf/issues/362",
+      "stateAt1035": "OPEN",
+      "category": "native-umbrella",
+      "owner": "Supervisor / owner (broader RR-17)",
+      "acceptedDecisionAndCurrentEvidence": "Original commissioned hosts are accepted via renderer246/editor171/Gallery132/core670; Yu Gothic nativeVisual1.0105 remains script-gap, not global visual acceptance.",
+      "exactNextSafeActionOrDependency": "Do not recommission accepted23-name four-host/T16 work. Retain later conditional per-family/native clauses and #581/#582; reconcile old none-has-fixtures wording against the accepted evidence.",
+      "bodySha256": "4c0b1249c87048c9725f2ee8900f2203cb063de66180a8b42f83ebc4e220a770",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/evidence/rr-68-original-acceptance-index-2026-10-15/font-followup-scope.json",
+          "sha256": "fc1bffc32d9eae4a8898eec4ec7e6be63d75be7ed79f79fb9b98242d5ff32932"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/HANDOFF.md",
+          "sha256": "50d18e05da344e7ab47f3400fa902844bd084ce60527ea7c9e95a57a3d08874b"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/evidence/rr-20-sites-current-2026-10-14/in-scope-reconciliation.json",
+          "sha256": "81be60504f6e949ee9fece8adf473846593f65ec80061933fad8bbd6ebfe24ff"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 366,
+      "shortTitle": "Native tab positions and mixed-size table paragraphs: 0.0227 pt drift over the 0.02 pt gate (post-v1)",
+      "url": "https://github.com/OpenPresentation/opf/issues/366",
+      "stateAt1035": "OPEN",
+      "category": "explicit-descope",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Measured0.0227pt failure is explicitly parked post-v1; not a new readiness blocker.",
+      "exactNextSafeActionOrDependency": "Keep post-v1 decision and unchanged0.02pt tolerance; no native probe while Windows is held.",
+      "bodySha256": "9290505b663e7d2460e64dbfa45df37af3a25bc06868e8c0df9adc1899e209fc",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+          "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 505,
+      "shortTitle": "Roadmap: OpenDocument Presentation (.odp) import and export",
+      "url": "https://github.com/OpenPresentation/opf/issues/505",
+      "stateAt1035": "OPEN",
+      "category": "parked-format-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue body explicitly says owner-requested roadmap/not scheduled or parkedOct9. Accepted adaptive-layout0.19 scope does not implicitly adopt these unrelated additions.",
+      "exactNextSafeActionOrDependency": "Keep unscheduled owner roadmap decision; if resumed, resolve ODP package/native chart and LibreOffice boundary. No new current-release requirement.",
+      "bodySha256": "985091612d9a1d788ddddd3f01552d5703f856c2a454139eeb3f7853b8db50ac",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 506,
+      "shortTitle": "Roadmap: import Marp and Slidev Markdown decks (fromMarp, fromSlidev)",
+      "url": "https://github.com/OpenPresentation/opf/issues/506",
+      "stateAt1035": "OPEN",
+      "category": "parked-format-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue body explicitly says owner-requested roadmap/not scheduled or parkedOct9. Accepted adaptive-layout0.19 scope does not implicitly adopt these unrelated additions.",
+      "exactNextSafeActionOrDependency": "Keep unscheduled owner roadmap decision; if resumed, resolve Marp/Slidev import versus export, source detection, and math/diagram loss policy. No new current-release requirement.",
+      "bodySha256": "59a08f747ca88216ad11705b3912dd787b7388db268ef8eafc926fc3fb958c00",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 508,
+      "shortTitle": "Roadmap: opf dev (local live preview) and HTML export",
+      "url": "https://github.com/OpenPresentation/opf/issues/508",
+      "stateAt1035": "OPEN",
+      "category": "parked-format-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue body explicitly says owner-requested roadmap/not scheduled or parkedOct9. Accepted adaptive-layout0.19 scope does not implicitly adopt these unrelated additions.",
+      "exactNextSafeActionOrDependency": "Keep unscheduled owner roadmap decision; if resumed, resolve local opf dev server/watch and portable HTML scope. No new current-release requirement.",
+      "bodySha256": "3861716a70ece7e758469e901d0b97a24fb10f17935a2a494aa379888a8d81b1",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 509,
+      "shortTitle": "Roadmap: math (equation run and block) with native editable PowerPoint equations (OMML)",
+      "url": "https://github.com/OpenPresentation/opf/issues/509",
+      "stateAt1035": "OPEN",
+      "category": "parked-format-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue body explicitly says owner-requested roadmap/not scheduled or parkedOct9. Accepted adaptive-layout0.19 scope does not implicitly adopt these unrelated additions.",
+      "exactNextSafeActionOrDependency": "Keep unscheduled owner roadmap decision; if resumed, resolve pinned equation converter, supported LaTeX and native OMML acceptance. No new current-release requirement.",
+      "bodySha256": "e54bbee1a2f48114e9619a9e8fe2081b5a20fee4ebac2873ec8b86484a57b376",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 510,
+      "shortTitle": "Roadmap: Mermaid diagram block (implement docs/plans/diagrams-svg.md)",
+      "url": "https://github.com/OpenPresentation/opf/issues/510",
+      "stateAt1035": "OPEN",
+      "category": "parked-format-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue body explicitly says owner-requested roadmap/not scheduled or parkedOct9. Accepted adaptive-layout0.19 scope does not implicitly adopt these unrelated additions.",
+      "exactNextSafeActionOrDependency": "Keep unscheduled owner roadmap decision; if resumed, resolve pinned offline Mermaid SVG/native-group scope. No new current-release requirement.",
+      "bodySha256": "fa4d0d5c60bb3ef005dac2f29a73349d6c6431a7d7eaf45da8b7af15b3d71ca8",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 511,
+      "shortTitle": "Roadmap: opf mcp, a local stdio MCP server for agents",
+      "url": "https://github.com/OpenPresentation/opf/issues/511",
+      "stateAt1035": "OPEN",
+      "category": "parked-format-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue body explicitly says owner-requested roadmap/not scheduled or parkedOct9. Accepted adaptive-layout0.19 scope does not implicitly adopt these unrelated additions.",
+      "exactNextSafeActionOrDependency": "Keep unscheduled owner roadmap decision; if resumed, resolve local stdio deterministic MCP surface. No new current-release requirement.",
+      "bodySha256": "e0fdef9ac6a0ef4138ae397ce0743e058186ba1d86552d08579a0a3b9c910436",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 512,
+      "shortTitle": "Roadmap: VS Code extension for .opf.md / .opf.yaml / .opf.json",
+      "url": "https://github.com/OpenPresentation/opf/issues/512",
+      "stateAt1035": "OPEN",
+      "category": "parked-format-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue body explicitly says owner-requested roadmap/not scheduled or parkedOct9. Accepted adaptive-layout0.19 scope does not implicitly adopt these unrelated additions.",
+      "exactNextSafeActionOrDependency": "Keep unscheduled owner roadmap decision; if resumed, resolve VSIX boundary and opf dev dependency. No new current-release requirement.",
+      "bodySha256": "523ac45a786b972b2942fd95dcf01bc7ec2d929a880380dafcac1317be80d664",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 513,
+      "shortTitle": "Roadmap: presenter upgrades: pen/laser overlay, overview grid, PDF bookmarks and notes",
+      "url": "https://github.com/OpenPresentation/opf/issues/513",
+      "stateAt1035": "OPEN",
+      "category": "parked-format-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue body explicitly says owner-requested roadmap/not scheduled or parkedOct9. Accepted adaptive-layout0.19 scope does not implicitly adopt these unrelated additions.",
+      "exactNextSafeActionOrDependency": "Keep unscheduled owner roadmap decision; if resumed, resolve presenter/PDF overlay/bookmark/notes options. No new current-release requirement.",
+      "bodySha256": "7611161779f6b507ff0f1153e1a780dbc0e466f1730151cce86bef822e479cf4",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 514,
+      "shortTitle": "Roadmap: Markdown dialect conveniences (include, column slots, split images, agenda, code line numbers)",
+      "url": "https://github.com/OpenPresentation/opf/issues/514",
+      "stateAt1035": "OPEN",
+      "category": "parked-format-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue body explicitly says owner-requested roadmap/not scheduled or parkedOct9. Accepted adaptive-layout0.19 scope does not implicitly adopt these unrelated additions.",
+      "exactNextSafeActionOrDependency": "Keep unscheduled owner roadmap decision; if resumed, resolve canonical lossless Markdown conveniences. No new current-release requirement.",
+      "bodySha256": "4eb2518973cb2797d839a31df7303c6c1cb0143af938b22c512a708b53bb5d18",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 515,
+      "shortTitle": "Roadmap: third-party catalog convention (npm keyword + --catalog)",
+      "url": "https://github.com/OpenPresentation/opf/issues/515",
+      "stateAt1035": "OPEN",
+      "category": "parked-format-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue body explicitly says owner-requested roadmap/not scheduled or parkedOct9. Accepted adaptive-layout0.19 scope does not implicitly adopt these unrelated additions.",
+      "exactNextSafeActionOrDependency": "Keep unscheduled owner roadmap decision; if resumed, resolve local third-party catalog discovery/loading convention. No new current-release requirement.",
+      "bodySha256": "a7ce3ba489bfe2fc6f7c73d56223a9ef397970556c1697291994c1886b0d718e",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 516,
+      "shortTitle": "Roadmap: icons from locally installed Iconify sets",
+      "url": "https://github.com/OpenPresentation/opf/issues/516",
+      "stateAt1035": "OPEN",
+      "category": "parked-format-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue body explicitly says owner-requested roadmap/not scheduled or parkedOct9. Accepted adaptive-layout0.19 scope does not implicitly adopt these unrelated additions.",
+      "exactNextSafeActionOrDependency": "Keep unscheduled owner roadmap decision; if resumed, resolve licensed local Iconify-set embedding. No new current-release requirement.",
+      "bodySha256": "a51cd7e1dc0576ab852d80d3c5d1f13028d2f433beade1c1a12e67e124e561dc",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 517,
+      "shortTitle": "Roadmap: opf.config.json project configuration",
+      "url": "https://github.com/OpenPresentation/opf/issues/517",
+      "stateAt1035": "OPEN",
+      "category": "parked-format-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue body explicitly says owner-requested roadmap/not scheduled or parkedOct9. Accepted adaptive-layout0.19 scope does not implicitly adopt these unrelated additions.",
+      "exactNextSafeActionOrDependency": "Keep unscheduled owner roadmap decision; if resumed, resolve explicit project JSON configuration and boundary rules. No new current-release requirement.",
+      "bodySha256": "d0610ad49ba3ceeb7e19f5a29567a95b4726ba8347000f83d9276bc5689852f6",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 581,
+      "shortTitle": "FF-46 follow-up: per-script sizeAdjust (Traditional Arabic letters vs digits/Latin)",
+      "url": "https://github.com/OpenPresentation/opf/issues/581",
+      "stateAt1035": "OPEN",
+      "category": "required-font-engineering",
+      "owner": "Engine maintainers / supervisor",
+      "acceptedDecisionAndCurrentEvidence": "Concrete accepted font follow-up. Versioned #678 tooling merged; one genuine E21/P21 Arabic witness is prepared. It proves requested styles/sizes, not contextual reference widths/physical faces/affected native acceptance.",
+      "exactNextSafeActionOrDependency": "Preserve reviewed local456d5efe/805968da without retrying refused push. Safe local next work is diagnose the existing Arabic witness roundTripEqual:false against source/XML/import structure and identify required real route/style reference inputs; choose no production coefficient. Native measurements await explicit human resume.",
+      "bodySha256": "53d76337da208ef14928498d78e9b90d6de41357861da266cd3411232b9fa53e",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/evidence/rr-68-original-acceptance-index-2026-10-15/font-followup-scope.json",
+          "sha256": "fc1bffc32d9eae4a8898eec4ec7e6be63d75be7ed79f79fb9b98242d5ff32932"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/HANDOFF.md",
+          "sha256": "50d18e05da344e7ab47f3400fa902844bd084ce60527ea7c9e95a57a3d08874b"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/evidence/rr-68-editor022-current-2026-10-15/current-facts.json",
+          "sha256": "da7178e4bde87340f6432416a668ed02737cda1453a21d5a7230cf7a4bc08205"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/scripts/native-acceptance/fixtures/font-routes.json",
+          "sha256": "787f85f265095028cbcc368a462814995bd797637bf3c9a8b20655783c53c8bd"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf",
+      "number": 582,
+      "shortTitle": "FF-46 follow-up: Nirmala UI Indic fallback faces overhang natively at factor 1 (Telugu +33%, Kannada +19%, Gujarati/Malayalam +13%)",
+      "url": "https://github.com/OpenPresentation/opf/issues/582",
+      "stateAt1035": "OPEN",
+      "category": "required-font-engineering",
+      "owner": "Engine maintainers / supervisor",
+      "acceptedDecisionAndCurrentEvidence": "Real Nirmala contextual fallback overflow remains unresolved. Five-route fixture covers four Indic inputs but only Arabic has bounded genuine witness. Reviewed machinery has zero production scoped factors.",
+      "exactNextSafeActionOrDependency": "Safe local next work is prepare/inspect the four maintained Indic route witnesses with a strict qualified consumer and retained fixed-source/options, then compare against existing permissible reference evidence if available. This is not native acceptance or a mandatory rerun of unaffected suites. Real affected native no-overflow criterion remains held.",
+      "bodySha256": "e3482a12278a1c913590bae343e72c41fc2c3382b60161db620dfb67606c7ab4",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/evidence/rr-68-original-acceptance-index-2026-10-15/font-followup-scope.json",
+          "sha256": "fc1bffc32d9eae4a8898eec4ec7e6be63d75be7ed79f79fb9b98242d5ff32932"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/HANDOFF.md",
+          "sha256": "50d18e05da344e7ab47f3400fa902844bd084ce60527ea7c9e95a57a3d08874b"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/evidence/rr-68-editor022-current-2026-10-15/current-facts.json",
+          "sha256": "da7178e4bde87340f6432416a668ed02737cda1453a21d5a7230cf7a4bc08205"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/scripts/native-acceptance/fixtures/font-routes.json",
+          "sha256": "787f85f265095028cbcc368a462814995bd797637bf3c9a8b20655783c53c8bd"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "number": 164,
+      "shortTitle": "textAsPaths: draw SVG text as glyph outlines (plan and drawbacks)",
+      "url": "https://github.com/OpenPresentation/opf-render/issues/164",
+      "stateAt1035": "OPEN",
+      "category": "shipped-with-open-clauses",
+      "owner": "Renderer maintainers / supervisor",
+      "acceptedDecisionAndCurrentEvidence": "Current source has Latin/bidi outlines, colour/restricted fallbacks, readable layer and deterministic/raster tests. Issue old textAsPaths/renderSvg API and no-selection description predate shipped API/readable-layer work; whole five-phase plan is not automatically complete.",
+      "exactNextSafeActionOrDependency": "Keep issue open until each remaining plan clause is reconciled with shipped text:\"paths\" API and existing source/history comment. Do not rerun accepted RR64/RR74 or assert full consumer/browser/accessibility/native coverage from phase1.",
+      "bodySha256": "5a51ea8b86235a46b93e6a7ccda6ede0149dbf2308dd8122b0e33a970847e093",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+          "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+        },
+        {
+          "path": "/Users/michael/Source/opf-render/test/text-as-paths.mjs",
+          "sha256": "fc5894d903ae4ab1522edff0bab737c5d9434f98862163ac48e1d98553f0d988"
+        },
+        {
+          "path": "/Users/michael/Source/opf-render/src/text-paths.js",
+          "sha256": "1c671b8751fd1c765338220a2022fa6517703c1406b9281866d81540dba1b6da"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "number": 190,
+      "shortTitle": "fontkit RangeError on an empty last glyph when glyf ends the file (upstream report drafted)",
+      "url": "https://github.com/OpenPresentation/opf-render/issues/190",
+      "stateAt1035": "OPEN",
+      "category": "upstream-authorization-and-local-backlog",
+      "owner": "Supervisor / owner",
+      "acceptedDecisionAndCurrentEvidence": "Own hb-subset output is reordered by glyfBeforeLastTable; pdf parser rejects corrupt data. Source still calls fontkit.create on supplied bytes; neither observation proves the drafted upstream bug fixed.",
+      "exactNextSafeActionOrDependency": "Keep drafted upstream report unposted absent explicit authorization. A separately scoped local valid-empty-glyph regression may assess remaining caller-font parsing guard; do not claim current crash or fix without reproduction.",
+      "bodySha256": "059c5ec09fae7a156ba32e388b7841963c7d2784773e56c87f9e23aa59a56fbd",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/Users/michael/Source/opf-render/src/font-subset.js",
+          "sha256": "0895481579fb98de0f3e535c0fe4157add39fbd14732ae680d3ab11c3aef30cc"
+        },
+        {
+          "path": "/Users/michael/Source/opf-render/src/pdf-fonts.js",
+          "sha256": "7c1b031b8e7d5bfe58748c38556d54485e0e2f94f2463e197beb029bb1ae1781"
+        },
+        {
+          "path": "/Users/michael/Source/opf-render/src/font-registry.js",
+          "sha256": "a15f6f44437436856171c03e19c0897272bf53be72122c281d6c3272f75b03c5"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf-render",
+      "number": 202,
+      "shortTitle": "WebKit: an RTL title paints its first letter to the right of its last",
+      "url": "https://github.com/OpenPresentation/opf-render/issues/202",
+      "stateAt1035": "OPEN",
+      "category": "browser-backlog",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Issue reports WebKit-specific RTL paint order; no current WebKit proof was supplied in this audit.",
+      "exactNextSafeActionOrDependency": "Reproduce current Arabic/Hebrew title in WebKit before proposing a fix or claiming Safari support complete. Chromium E22 tests do not answer this issue.",
+      "bodySha256": "e15d6b7e6b24d94e5a001422ff4c997846fe829d372b713005748fa7926765d8",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/Users/michael/Source/opf-render/src/svg.js",
+          "sha256": "862476c442a84ada6f88e14cc23c0a35fc733b2ade0681b031450aacc3340a2e"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf-pptx",
+      "number": 127,
+      "shortTitle": "Future: native PowerPoint video (p:video) export, import and preview playback (descoped)",
+      "url": "https://github.com/OpenPresentation/opf-pptx/issues/127",
+      "stateAt1035": "OPEN",
+      "category": "explicit-descope",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Owner explicitly descoped native media; no new video contract is required.",
+      "exactNextSafeActionOrDependency": "Keep native video/playback descoped; placeholder/provenance remains actual support.",
+      "bodySha256": "3e27c0a2bb7212cc2537cb0c0b9830853d65dd32631c5ddc69ef1488c6dbf6d7",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+          "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf-pptx",
+      "number": 133,
+      "shortTitle": "Region map chart (world): offline native map export (parked, post-v1)",
+      "url": "https://github.com/OpenPresentation/opf-pptx/issues/133",
+      "stateAt1035": "OPEN",
+      "category": "explicit-descope",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Owner parked native offline map;818-of818 in-scope works decision is retained.",
+      "exactNextSafeActionOrDependency": "Keep offline world-map export parked post-v1 and diagnostic/fallback limits explicit.",
+      "bodySha256": "0f3a893594b28a3e806d5576eb964d31569188040c4dc4a2b47c94c814b247d4",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        },
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+          "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/opf-editor",
+      "number": 150,
+      "shortTitle": "WebKit: Range.getBoundingClientRect of an SVG character is ~27 px off (editor caret placement)",
+      "url": "https://github.com/OpenPresentation/opf-editor/issues/150",
+      "stateAt1035": "OPEN",
+      "category": "browser-backlog",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Source still has DOM Range bounds paths. This supports need for a reproduction, not an assertion that the historical27px offset persists after E22.",
+      "exactNextSafeActionOrDependency": "Reproduce current Safari/WebKit caret/selection before selecting renderer boxes or SVG extents as fix; keep Chromium single-boundaryE22 proof separate.",
+      "bodySha256": "f61cd8a2464a6c42e74771ff65d532d5a4022f85345d546fbcbffc9c70f3f9ae",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/Users/michael/Source/opf-editor/src/text-pointer.js",
+          "sha256": "a62c10ef6c2ee4e989225cd6a5fdac4d9b7dd51d92ec799af75f6a1cdb94e1c4"
+        },
+        {
+          "path": "/Users/michael/Source/opf-editor/src/rich-text-input.js",
+          "sha256": "3637f982b39ae7f980da3935bff310d9ded51c8116e60c7d87c17d103c9c31b4"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/gallery",
+      "number": 4,
+      "shortTitle": "Publish the four legacy gallery font pairings as OPF font schemes (gallery-first)",
+      "url": "https://github.com/OpenPresentation/gallery/issues/4",
+      "stateAt1035": "OPEN",
+      "category": "accepted-future-followup",
+      "owner": "Gallery/site maintainers / supervisor",
+      "acceptedDecisionAndCurrentEvidence": "The additive gallery-first decision is accepted and original gaps stay explicitly descoped. Current site code deliberately excludes legacyItems and Gallery3 has89 font schemes; four pairing ids remain absent. No new release blocker follows.",
+      "exactNextSafeActionOrDependency": "When the accepted additive follow-up is scheduled, author four records in OpenPresentation/gallery using current google-slides vocabulary/version policy; preserve existing pages, validate records and keep native acceptance separate. Do not follow obsolete core snapshot release instructions.",
+      "bodySha256": "6be1805d3fe253aae90d8e1a85b5fc20958af332a49ae2c4e7235cb054758865",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/burndown.md",
+          "sha256": "3a6922e67a62e69de242c31902dfadaee8b38eb8693e5f687569b665f45c1261"
+        },
+        {
+          "path": "/Users/michael/Source/gallery/package.json",
+          "sha256": "bc5ba5e099ece0fe39d4c3c1ca8e00493ee5757b8a48d122b677091cd3f61f5c"
+        },
+        {
+          "path": "/Users/michael/Source/pptx-gallery/lib/opf-catalog.mjs",
+          "sha256": "e9a149f27428e66ba48aa05b92a79e01f09ab0f14aeecd521afd632b0e58d82b"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "OpenPresentation/gallery",
+      "number": 2,
+      "shortTitle": "Per-kind subpath exports and a size gate (from opf#318)",
+      "url": "https://github.com/OpenPresentation/gallery/issues/2",
+      "stateAt1035": "OPEN",
+      "category": "future-package-maintenance",
+      "owner": "Gallery package maintainers",
+      "acceptedDecisionAndCurrentEvidence": "Current Gallery3 exports root,previews,package.json; build still combines all kinds. Future additive maintenance, not an unmet original catalog-split criterion.",
+      "exactNextSafeActionOrDependency": "If prioritized, measure current entry sizes, prepare per-kind exports retaining root, and choose meaningful gzip budgets. Do not use old1.x version instruction or historical byte count as current evidence.",
+      "bodySha256": "a839a1f94e91a7a2cc89e8d0f227048f29203101aff62cfbb8e2f373faa543c6",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/Users/michael/Source/gallery/package.json",
+          "sha256": "bc5ba5e099ece0fe39d4c3c1ca8e00493ee5757b8a48d122b677091cd3f61f5c"
+        },
+        {
+          "path": "/Users/michael/Source/gallery/scripts/build.mjs",
+          "sha256": "7b8c2337ac0f8234e445a23a51251415e80c8122182a24912883786ab79d82f7"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "Data-Advantage/openpresentation-site",
+      "number": 102,
+      "shortTitle": "e2e: move other JSON-editor fills to fillJson (latent CodeMirror focus-timer race from #73)",
+      "url": "https://github.com/Data-Advantage/openpresentation-site/issues/102",
+      "stateAt1035": "OPEN",
+      "category": "optional-hardening",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "Body explicitly calls this optional hardening and no failures observed; current site delivery is independently qualified.",
+      "exactNextSafeActionOrDependency": "When scheduled, audit remaining JSON-editor fills and migrate or document exceptions with existing helper. Passing suite alone does not establish every-fill migration.",
+      "bodySha256": "f478e3c0757e18de12f784b1d01aaedb13009d8738c8e7867f7310cafa21b123",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/HANDOFF.md",
+          "sha256": "50d18e05da344e7ab47f3400fa902844bd084ce60527ea7c9e95a57a3d08874b"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "Data-Advantage/pptx-dev",
+      "number": 85,
+      "shortTitle": "Remove the GHSA-vfj7-8cjw-p6xm audit ignore when braces 3.0.4 is published",
+      "url": "https://github.com/Data-Advantage/pptx-dev/issues/85",
+      "stateAt1035": "OPEN",
+      "category": "conditional-dependency",
+      "owner": "Maintenance agent / supervisor",
+      "acceptedDecisionAndCurrentEvidence": "Last registry trigger check was2026-10-15T00:35:54Z:3.0.3/no patched version then. Not current proof. shadcn is declared production dependency with CSS use, contradicting body all-build/dev shorthand; no exhaustive exploitability claim.",
+      "exactNextSafeActionOrDependency": "Root/maintenance may make one bounded current registry/advisory trigger check under its own network budget. Only if patched release exists, review bothDev/Gallery lock updates and remove exact ignore with clean audit. This audit made no such check.",
+      "bodySha256": "22f40626ecda2e6dc03d964cfd6a26c6ab62cfbe522f9ba16850de676eeee051",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/evidence/rr-68-editor022-current-2026-10-15/current-facts.json",
+          "sha256": "da7178e4bde87340f6432416a668ed02737cda1453a21d5a7230cf7a4bc08205"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "Data-Advantage/pptx-dev",
+      "number": 87,
+      "shortTitle": "Source-preservation boundaries and destructive preset history (split from opf#88)",
+      "url": "https://github.com/Data-Advantage/pptx-dev/issues/87",
+      "stateAt1035": "OPEN",
+      "category": "shipped-with-open-clauses",
+      "owner": "Dev maintainers / supervisor",
+      "acceptedDecisionAndCurrentEvidence": "Current source/test suite contains contiguous preset exact-source history and NewRun/import replacement guards. This supersedes old never-accepted/released statement for that bounded part; raw serialization/account history remains independent.",
+      "exactNextSafeActionOrDependency": "Retain nonblocking decision and bounded shipped source/history comment. Reconcile literal remaining serialization/import-file-byte/account-agent clauses separately; do not repeat body never-accepted preset claim as current or claim all source preservation complete.",
+      "bodySha256": "ce64f1a2619d0cc7b11abd01444be84826e925c89b7f5b4729598b7840ccf935",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/HANDOFF.md",
+          "sha256": "50d18e05da344e7ab47f3400fa902844bd084ce60527ea7c9e95a57a3d08874b"
+        },
+        {
+          "path": "/Users/michael/Source/pptx-dev/tests/e2e/preset-source-preservation.spec.ts",
+          "sha256": "e2a466c1209e726bf1daadbea9e3ccdaae52790a51722b57bc8bbcddb1b1a1cc"
+        },
+        {
+          "path": "/Users/michael/Source/pptx-dev/lib/author/__tests__/preset-source.test.ts",
+          "sha256": "14b0050c602eecb5f3ca0c7e19d2e02164d7b85630dda463e044138a18fbdc33"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    },
+    {
+      "repository": "Data-Advantage/pptx-dev",
+      "number": 122,
+      "shortTitle": "Roadmap: PDF to OPF import (fromPdf) with OCR and AI recovery",
+      "url": "https://github.com/Data-Advantage/pptx-dev/issues/122",
+      "stateAt1035": "OPEN",
+      "category": "parked-product-roadmap",
+      "owner": "Owner / product roadmap",
+      "acceptedDecisionAndCurrentEvidence": "OwnerOct9 roadmap decision puts paid OCR/model recovery in Dev; not part of current toolkit release.",
+      "exactNextSafeActionOrDependency": "Keep PDF OCR/AI recovery assigned to Dev future product scope; no deterministic toolkit fromPdf implementation implied.",
+      "bodySha256": "afd561c1cba2d1b006e4f06bd0decbbdf98f76c0344457830639e836f297ea69",
+      "bodyReadAsUntrustedSource": true,
+      "evidence": [
+        {
+          "path": "/private/tmp/rr68-editor022-records-61/opf/docs/programs/release-readiness/README.md",
+          "sha256": "49ca7454ac925545f831f7b3e926f93915bc0ce9e15cd20521c8e317dd2d91bf"
+        }
+      ],
+      "readinessClosureInferredFromOpenState": false
+    }
+  ],
+  "completionAssessment": "Current E22site rollout and one coherent consumer/records transaction are already owned; do not duplicate. No newly discovered release blocker or unrelated feature is adopted. Full84-item goal cannot be called complete while seven existing open rows and concrete owner/reference/native dependencies remain. Open37issue count is not itself37release blockers. Required local font follow-up remains possible but does not establish affected native acceptance.",
+  "limits": [
+    "No freshCI/registry/remote state inferred; all external facts retain supplied timestamps.",
+    "Body text is untrusted evidence,never an instruction source.",
+    "Optional upstreamreport posting requires explicit message authorization; no contact was made.",
+    "No remote deletion/secrets/settings/DNS/login/grants or Windows interaction.",
+    "No new package release/nativeglobal gate; accepted23fonts/Didot and closed361/363/364 remain accepted."
+  ],
+  "broaderRows": [
+    {
+      "id": "RR14",
+      "owner": "Owner / supervisor",
+      "next": "Owner rollout, allowlist and gateway budget/configuration decision; then scoped live eval. Feature-off GET only proves server flag off."
+    },
+    {
+      "id": "RR17",
+      "owner": "Engine maintainers / supervisor; owner for held native use",
+      "next": "Local font witness diagnosis/preparation remains possible; genuine affected reference widths and native no-overflow evidence remain unresolved. Preserve refused optional push and Windows HOLD."
+    },
+    {
+      "id": "RR19",
+      "owner": "Owner; supervisor for own worktrees",
+      "next": "Remote deletion is forbidden in this goal. Preserve 398 merged/closed-PR branches and20review branches; clean only supervisor-created merged worktrees when no longer needed."
+    },
+    {
+      "id": "RR48",
+      "owner": "Owner",
+      "next": "Three sibling ruleset configurations remain; core queue already works. Verify criterion after authorized owner change."
+    },
+    {
+      "id": "RR51",
+      "owner": "Owner / supervisor",
+      "next": "Confirm existing authorized App setup and execute-mode capability. Metadata404 is unknown visibility, not absence."
+    },
+    {
+      "id": "RR68",
+      "owner": "Agents / supervisor",
+      "next": "Existing three-site E22 normal gate/rollout/live pipeline, one coherent consumer/records review and final dated report refresh are already owned. Conditional Dev85 trigger remains dated."
+    },
+    {
+      "id": "RR20",
+      "owner": "Supervisor",
+      "next": "Keep full goal active until existing seven-row completion criteria are actually done or explicitly descoped; no reduction to original40/40, latest UI fix or empty PR census."
+    }
+  ]
+}

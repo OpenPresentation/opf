@@ -1,0 +1,67 @@
+{
+  "at": "2026-10-15T10:51:40.219399+00:00",
+  "command": "pnpm test",
+  "node": "v24.21.0",
+  "pnpm": "10.33.2",
+  "exit": 0,
+  "normalSharedAgentSlotUsed": true,
+  "initialSandboxAttempt": {
+    "exit": 1,
+    "testsStarted": false,
+    "reason": "EPERM opening the normal shared machine-wide slot lock; same maintained command rerun with filesystem/network escalation, no slot bypass.",
+    "log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/final-source-slot-refusal.log",
+      "sha256": "dda1e61f85f4552bc795416a0a6599bf5a6b45dbf3875fd50b6b71d63c8aefba"
+    }
+  },
+  "core": {
+    "nodeTestFiles": 121,
+    "separateScripts": 6,
+    "tests": 2329,
+    "passed": 2328,
+    "failed": 0,
+    "skipped": 1,
+    "skipReason": "opf validate and validate() agree on the same deck: the CLI is not built at this core-test phase."
+  },
+  "cli": {
+    "nodeTestFiles": 22,
+    "separateScripts": 2,
+    "tests": 199,
+    "passed": 199,
+    "failed": 0,
+    "skipped": 0,
+    "commandChecks": 95,
+    "drawingChecks": 77,
+    "literalGoldenNote": "golden SVG digests are for renderer0.14/core0.14; installed0.20.0/0.20.1 skipped them, as the maintained historical test reports."
+  },
+  "rootChecks": {
+    "passed": 47,
+    "failed": 0
+  },
+  "mappedReconciledCheckChanged": {
+    "exit": 0,
+    "steps": [
+      "biome",
+      "check:changes",
+      "check:gallery-tracker",
+      "check:release-report",
+      "check:text"
+    ],
+    "typecheck": "skipped by maintained mapper: no TypeScript/tsconfig change; installed NodeNext/Bundler already passed separately"
+  },
+  "logs": {
+    "final-source-test.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/final-source-test.log",
+      "sha256": "f364d8cb31ba7c38612a67b2a3f14ff5fd82416e12706a68bb6e83b1df055f44"
+    },
+    "final-source-slot-refusal.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/final-source-slot-refusal.log",
+      "sha256": "dda1e61f85f4552bc795416a0a6599bf5a6b45dbf3875fd50b6b71d63c8aefba"
+    },
+    "reconciled-check-changed.log": {
+      "path": "docs/evidence/rr-68-editor022-registry-2026-10-15/reconciled-check-changed.log",
+      "sha256": "dc5beb30738aa647c53b64cd182333f4c22e49785c44467aeb54bf8abc0de000"
+    }
+  },
+  "scope": "Ordinary required source/package/root checks in owned checkout. No consumer/package override, full58 native execution, new Office/Windows contact, archive rebaseline or global font/native acceptance."
+}

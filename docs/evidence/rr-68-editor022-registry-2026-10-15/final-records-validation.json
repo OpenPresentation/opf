@@ -1,0 +1,99 @@
+{
+  "base": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+  "all84ItemsRowsExact": true,
+  "allAcceptanceCriteriaExact": true,
+  "original40ChecklistExact": true,
+  "originalProgressHistoryPrefixExact": true,
+  "acceptedHandoffIdentitiesUnchanged": {
+    "release-plan.json": {
+      "sha256": "f2a43aafb136fa6c7d83dc9f14f145e400244380ee4aa78f089f489540b1be83",
+      "matchesAccepted": true
+    },
+    "docs/evidence/rr-20-registry-current-2026-10-14/verified-registry-authority.json": {
+      "sha256": "1273b12e6fad9e937042188d55f47f7a534439a06e9de9c2c8948d84b57ca956",
+      "matchesAccepted": true
+    },
+    "artifacts/npm/registry-consumer/package.json": {
+      "sha256": "74f7e969fac884f4f3389fc91f1c1c2784fd215b76724ff8d18a3cd0f131913e",
+      "matchesAccepted": true
+    },
+    "artifacts/npm/registry-consumer/package-lock.json": {
+      "sha256": "cf4942fa3fc1f467db4e9dd746529003ad1b592c501c90cadb80ad59b52e0587",
+      "matchesAccepted": true
+    }
+  },
+  "sourceLockAndGoldenExact": {
+    "ecosystem.lock.json": true
+  },
+  "windowsActions": 0,
+  "newGitHubApiReadsByRecordsTask": 0,
+  "matrixChangedLockRecords": [
+    "",
+    "node_modules/@openpresentation/opf-editor"
+  ],
+  "otherFiveAuthorityRecordsExact": true,
+  "onlyEditorPlanVersionAndVerificationRefChanged": true,
+  "at": "2026-10-15T11:34:19.237175+00:00",
+  "scope": "Final coherent factual records: accepted genuine E22 publication/consumer/browser, all three site source+production seals and actual Main113 test-only merge; accepted bounded RR17 five-route diagnosis and current dated maintenance evidence. No native/global closure or runtime qualification rerun for factual overlays.",
+  "mappedChecks": {
+    "command": "pnpm check:changed --base f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+    "exit": 0,
+    "log": "final-records-mapped-checks.log",
+    "logSha256": "98784c3e63132cbdea853aeb73bdfc900a5e5ef51e1a36fa6eeece94ade78556"
+  },
+  "acceptedFullSource": {
+    "receipt": "final-source-qualification.json",
+    "receiptSha256": "86a6a14d2f5a4b39dc5e06b54e4f08bea546fd4e332adf672408928728a57a82",
+    "exit": 0,
+    "rootChecksPassed": 47,
+    "rerunForLaterFactualOverlays": false
+  },
+  "siteFacts": {
+    "path": "../rr-68-editor022-sites-2026-10-15/current-site-facts.json",
+    "sha256": "87de6f9f0603c2489c8dd073aaa1dad4cfef1446a978a0d284462ae473fdc686"
+  },
+  "main113ActualSourceReceipt": {
+    "path": "../rr-68-editor022-sites-2026-10-15/main113-actual-merge-receipt.json",
+    "sha256": "205f7d8e448946dddd7bdd8a55553d99f54673f79d8a862763e27d5cb43175dc",
+    "actualMerge": "0ff67a7ebd4b5adf102afd985c705dc018ea0482",
+    "runtimeRedeployed": false
+  },
+  "boundedFontDiagnosis": {
+    "path": "../rr-17-five-route-diagnosis-2026-10-15/diagnosis-summary.json",
+    "sha256": "5728717cd037d71934b33271c2e3ad9519fc74f931537e320ce7e73961f093f5",
+    "rootAcceptanceSha256": "e990a99941f22e1bc5f5cc90d0404729f63e2781b496783e7c58c1ef47cae5f5",
+    "cases": 5,
+    "slides": 15,
+    "sealedFiles": 60,
+    "requiredComparisons": 116,
+    "fourLiteralNativeLanguageDifferencesRetained": true,
+    "roundTripEqualFalseCases": 5,
+    "newNativeAcceptanceOrCoefficients": false
+  },
+  "remainingScopeLedger": {
+    "path": "../rr-68-editor022-current-2026-10-15/remaining-scope-audit.json",
+    "sha256": "efb586e30fe35c23960cf661c275a3f426060d72df826994873c4a1392b6ba4c",
+    "rows": 37,
+    "bodyCensusAt": "2026-10-15T10:35:02Z",
+    "auditAt": "2026-10-15T11:05:57.770342+00:00"
+  },
+  "latestMetadataCensus": {
+    "path": "../rr-68-editor022-current-2026-10-15/inventory-1123-metadata.json",
+    "sha256": "ca72091f53f2663183be55cbe0941bb6f5722c3d788efea36bc27b21b7326f2f",
+    "at": "2026-10-15T11:23:05.860630+00:00",
+    "counts": {
+      "pullRequests": 1,
+      "issues": 37,
+      "drafts": 0
+    },
+    "ciOrIssueBodiesQueried": false,
+    "laterMain113MergeIsOverlay": true
+  },
+  "latestDev85Trigger": {
+    "path": "../rr-68-editor022-current-2026-10-15/braces-trigger-1124.json",
+    "sha256": "43344dd5e8cfabc66874f7239b2060715bdce98b12b4bf08738ae6365f627586",
+    "at": "2026-10-15T11:24:01.944171+00:00",
+    "triggerMet": false,
+    "sourceAndIgnoreUnchanged": true
+  }
+}

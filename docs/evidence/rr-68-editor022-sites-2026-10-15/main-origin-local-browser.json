@@ -1,0 +1,177 @@
+{
+  "config": {
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "/private/tmp/rr-editor022-main-test-origin-61/site/node_modules/@playwright/test/cli.js",
+      "test",
+      "--project=e2e",
+      "tests/e2e/hero-editor.spec.ts",
+      "tests/e2e/playground-downloads.spec.ts",
+      "--grep",
+      "homepage inline editing paints one boundary|the playground downloads an editable PowerPoint file made",
+      "--reporter=json",
+      "--output=/private/tmp/rr-editor022-main-test-origin-61/evidence/local-browser-output"
+    ],
+    "configFile": "/private/tmp/rr-editor022-main-test-origin-61/site/playwright.config.ts",
+    "rootDir": "/private/tmp/rr-editor022-main-test-origin-61/site",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/private/tmp/rr-editor022-main-test-origin-61/evidence/local-browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "e2e",
+        "name": "e2e",
+        "testDir": "/private/tmp/rr-editor022-main-test-origin-61/site/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/private/tmp/rr-editor022-main-test-origin-61/evidence/local-browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "external-links",
+        "name": "external-links",
+        "testDir": "/private/tmp/rr-editor022-main-test-origin-61/site/tests/external-links",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tests/e2e/hero-editor.spec.ts",
+      "file": "tests/e2e/hero-editor.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "homepage inline editing paints one boundary, preserves the caret and commits with undo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "e2e",
+              "projectName": "e2e",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 805,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T11:12:55.175Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9f7ca1f7b85bb94f12c-c3733e73361d14297832",
+          "file": "tests/e2e/hero-editor.spec.ts",
+          "line": 129,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "tests/e2e/playground-downloads.spec.ts",
+      "file": "tests/e2e/playground-downloads.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "the playground downloads an editable PowerPoint file made in the browser, with no request to another origin",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "e2e",
+              "projectName": "e2e",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1789,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T11:12:56.141Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "576444a7a89b67b39405-1797f1cf2b6970b3c47f",
+          "file": "tests/e2e/playground-downloads.spec.ts",
+          "line": 110,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-15T11:12:54.908Z",
+    "duration": 3054.279,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

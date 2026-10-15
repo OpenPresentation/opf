@@ -1,0 +1,7 @@
+$ npm ci --ignore-scripts --no-audit --no-fund
+
+added 122 packages in 2s
+$ tsc --noEmit (NodeNext)
+$ tsc --noEmit (Bundler)
+$ tsc (emit)
+Published consumer ready in /private/tmp/rr68-editor022-records-61/opf/artifacts/published-matrix/consumer

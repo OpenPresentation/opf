@@ -1,0 +1,73 @@
+{
+  "at": "2026-10-15T10:07:30.251914+00:00",
+  "gate": {
+    "session": 60836,
+    "exit": 0,
+    "mergedMarkersAt": "2026-10-15T10:06:40Z",
+    "log": "/private/tmp/rr68-editor022-policy-roll-phase-61/corrected-pr-merge.log",
+    "logSha256": "44a2d42bc0bec5a16e6c85493426c03cbc787cc5d1f9dc3f6c3c5781e127a462"
+  },
+  "679": {
+    "actual": "72ec1235e7c1198513cbb0430e0b695e7967b7ea",
+    "parent": "4952807b6d61ab9adacd49dc96b652020fe2bada",
+    "tree": "b8766c395b33da9bdb030f345f3bc956af12eb6a",
+    "reviewed": "fee8189fe2483d6b5ab4ea8a53558e268dacee91",
+    "entireTreeEqualsReviewed": true,
+    "parentDeltaSha256": "38a0b15db9d95c717e14740362ecba7126df22f76ebd132c95f2e705128a68ee",
+    "paths": [
+      "changes/rr-68-measurement-gate-policy.md",
+      "docs/programs/release-readiness/burndown.md",
+      "docs/release-process.md",
+      "scripts/checks.json",
+      "scripts/fixtures/editor-scheduled-measurement.json",
+      "scripts/measurement-policy.mjs",
+      "scripts/pr-gate.mjs",
+      "scripts/pr-gate.test.mjs",
+      "scripts/release-train.mjs",
+      "scripts/release-train.test.mjs"
+    ],
+    "allOtherParentEntriesUnchanged": true
+  },
+  "680": {
+    "actual": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+    "parent": "72ec1235e7c1198513cbb0430e0b695e7967b7ea",
+    "tree": "fd70189b0b234e1469e232ab6779c5abe4efd294",
+    "reviewedGenerated": "6e9a370462b825e94a28528a21544a15936c7763",
+    "parentDeltaSha256": "0ee8c0e557a88545dab407663f90013a56b67549828c8b9155f6971df1a5390b",
+    "paths": [
+      "ecosystem.lock.json"
+    ],
+    "lockSha256": "003d4a6df05452ca96f23d7d5c36a36f9d0825a7e108b8bd2067e9b25b6820d5",
+    "expectedUnion": "exact fee whole tree plus reviewed generated ecosystem.lock blob; every entry equal",
+    "allOtherParentEntriesUnchanged": true,
+    "standaloneCandidateTreeEqualityNotAsserted": true,
+    "goldenSha256": "66c0c2e45d863e33b178f717f7ebb5131f48f3643a6cbcd92956820f928dfd5d"
+  },
+  "scripts": {
+    "scripts/pr-gate.mjs": {
+      "blob": "ce827a2bc1d33268064453df7caf6bd683b7dae4",
+      "sha256": "82001f7f587da2f3d699d8b0fffe833108db8c25c83dd116971515bc920c9f64",
+      "matchesReviewedFee": true
+    },
+    "scripts/release-train.mjs": {
+      "blob": "d32f8e86fdfec8fd8f3ab7d50866e2bdfbaa02d3",
+      "sha256": "058961e132340ad39d48cdfdb99cbd6c9a127e27d27b1bc33d57f7c5b4a9a786",
+      "matchesReviewedFee": true
+    },
+    "scripts/measurement-policy.mjs": {
+      "blob": "a284a92217aa73f39409192d0968787333651d04",
+      "sha256": "1228022e8e8345d0c175f24ef5dd96dc043be8fa93f61abfd27e3b40027dbc5f",
+      "matchesReviewedFee": true
+    }
+  },
+  "primary": {
+    "before": "4952807b6d61ab9adacd49dc96b652020fe2bada",
+    "after": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+    "remoteObserved": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+    "oneFetch": true,
+    "guardedFastForward": true,
+    "clean": true,
+    "branch": "main"
+  },
+  "scope": "Both normal source integrations accepted by exact actual deltas; Editor release commit remains ac3 unchanged; no package publication or Windows action performed."
+}

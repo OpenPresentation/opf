@@ -10,7 +10,7 @@
     },
     {
       "name": "@openpresentation/opf-editor",
-      "version": "0.20.1"
+      "version": "0.20.2"
     },
     {
       "name": "@openpresentation/opf-pptx",
@@ -37,7 +37,7 @@
     "opf": "22664e18ea657db4e377b84997f2e73bf6cd738b",
     "cli": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
     "opf-render": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034",
-    "opf-editor": "be495d1b6e3ac7dbfad58a64537cf435a43f9f6f",
+    "opf-editor": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
     "opf-pptx": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
     "gallery": "940633a92c0c7d3339e59447d08ba6382ef12410"
   }

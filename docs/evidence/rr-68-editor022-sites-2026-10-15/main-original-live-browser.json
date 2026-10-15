@@ -1,0 +1,212 @@
+{
+  "config": {
+    "argv": [
+      "/Users/michael/Library/Application Support/fnm/node-versions/v24.21.0/installation/bin/node",
+      "/private/tmp/rr-editor022-main-adoption-61/site/node_modules/@playwright/test/cli.js",
+      "test",
+      "--project=e2e",
+      "tests/e2e/hero-editor.spec.ts",
+      "tests/e2e/playground-downloads.spec.ts",
+      "--grep",
+      "homepage inline editing paints one boundary|the playground downloads an editable PowerPoint file made",
+      "--reporter=json",
+      "--output=/private/tmp/rr-editor022-sites-61/main-live-browser-output"
+    ],
+    "configFile": "/private/tmp/rr-editor022-main-adoption-61/site/playwright.config.ts",
+    "rootDir": "/private/tmp/rr-editor022-main-adoption-61/site",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/private/tmp/rr-editor022-sites-61/main-live-browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "e2e",
+        "name": "e2e",
+        "testDir": "/private/tmp/rr-editor022-main-adoption-61/site/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/private/tmp/rr-editor022-sites-61/main-live-browser-output",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "external-links",
+        "name": "external-links",
+        "testDir": "/private/tmp/rr-editor022-main-adoption-61/site/tests/external-links",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "json"
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.63.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tests/e2e/hero-editor.spec.ts",
+      "file": "tests/e2e/hero-editor.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "homepage inline editing paints one boundary, preserves the caret and commits with undo",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 30000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "e2e",
+              "projectName": "e2e",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4949,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T11:08:53.272Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c9f7ca1f7b85bb94f12c-c3733e73361d14297832",
+          "file": "tests/e2e/hero-editor.spec.ts",
+          "line": 129,
+          "column": 5
+        }
+      ]
+    },
+    {
+      "title": "tests/e2e/playground-downloads.spec.ts",
+      "file": "tests/e2e/playground-downloads.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "the playground downloads an editable PowerPoint file made in the browser, with no request to another origin",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "e2e",
+              "projectName": "e2e",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 8749,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n    at /private/tmp/rr-editor022-main-adoption-61/site/tests/e2e/playground-downloads.spec.ts:157:69",
+                    "location": {
+                      "file": "/private/tmp/rr-editor022-main-adoption-61/site/tests/e2e/playground-downloads.spec.ts",
+                      "column": 69,
+                      "line": 157
+                    },
+                    "snippet": "  155 |\n  156 |   // Making the file asks for nothing but this site's own exporter chunk and font files: no upload, no other origin.\n> 157 |   expect(exporter.every(url => url.startsWith('http://127.0.0.1'))).toBe(true)\n      |                                                                     ^\n  158 |   expect(posts).toEqual([])\n  159 |   expect(remote).toEqual([])\n  160 |   expect(errors).toEqual([])"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/private/tmp/rr-editor022-main-adoption-61/site/tests/e2e/playground-downloads.spec.ts",
+                        "column": 69,
+                        "line": 157
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\n  155 |\n  156 |   // Making the file asks for nothing but this site's own exporter chunk and font files: no upload, no other origin.\n> 157 |   expect(exporter.every(url => url.startsWith('http://127.0.0.1'))).toBe(true)\n      |                                                                     ^\n  158 |   expect(posts).toEqual([])\n  159 |   expect(remote).toEqual([])\n  160 |   expect(errors).toEqual([])\n    at /private/tmp/rr-editor022-main-adoption-61/site/tests/e2e/playground-downloads.spec.ts:157:69"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-15T11:08:58.470Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/private/tmp/rr-editor022-sites-61/main-live-browser-output/playground-downloads-the-p-9870a-o-request-to-another-origin-e2e/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/private/tmp/rr-editor022-sites-61/main-live-browser-output/playground-downloads-the-p-9870a-o-request-to-another-origin-e2e/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/private/tmp/rr-editor022-main-adoption-61/site/tests/e2e/playground-downloads.spec.ts",
+                    "column": 69,
+                    "line": 157
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "576444a7a89b67b39405-1797f1cf2b6970b3c47f",
+          "file": "tests/e2e/playground-downloads.spec.ts",
+          "line": 110,
+          "column": 5
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-15T11:08:53.053Z",
+    "duration": 14350.053,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

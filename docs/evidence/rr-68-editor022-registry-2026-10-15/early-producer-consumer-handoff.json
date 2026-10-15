@@ -1,0 +1,75 @@
+{
+  "at": "2026-10-15T10:42:27.665Z",
+  "scope": "Early authentic installed E22 handoff for site producers. Six identities/integrities, strict authority/containment, one Core, normal lock delta and maintained registry-toolchain imports passed. Other-five complete payload comparison and affected browser controls continue separately.",
+  "root": "/private/tmp/rr68-editor022-records-61/opf",
+  "consumer": "/private/tmp/rr68-editor022-records-61/opf/artifacts/npm/registry-consumer",
+  "planSha256": "f2a43aafb136fa6c7d83dc9f14f145e400244380ee4aa78f089f489540b1be83",
+  "authoritySha256": "1273b12e6fad9e937042188d55f47f7a534439a06e9de9c2c8948d84b57ca956",
+  "manifestSha256": "74f7e969fac884f4f3389fc91f1c1c2784fd215b76724ff8d18a3cd0f131913e",
+  "lockSha256": "cf4942fa3fc1f467db4e9dd746529003ad1b592c501c90cadb80ad59b52e0587",
+  "publicationReceiptSha256": "ca3a6a0d83631f7e154fb20101efc87dbaf80284c95ecc31087e6e5bb2f53d7f",
+  "canonicalVerifierSha256": "0a6fa1de3824546454ff18a18f44351869f1b82df9362c275c82258d36e3b31b",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.20.1",
+      "gitHead": "22664e18ea657db4e377b84997f2e73bf6cd738b",
+      "integrity": "sha512-rQdrzEh/wYOtXnOqB0FYTNEkutnR3VCw63WZ5ONgfWBIuWDcTj63dXfR/Ng6CBlQwkdMlWLSKvHsBPaloUeUcw==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.20.1.tgz",
+      "realpath": "/private/tmp/rr68-editor022-records-61/opf/artifacts/npm/registry-consumer/node_modules/@openpresentation/opf"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.20.0",
+      "gitHead": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034",
+      "integrity": "sha512-335a5h/QweiJGexf/UcyTVOWX4smi3fW59bVqsK03aScY6r57dqDeimmaG6H1HalnqnIh2vvdb8OagSQZPt+Hg==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.20.0.tgz",
+      "realpath": "/private/tmp/rr68-editor022-records-61/opf/artifacts/npm/registry-consumer/node_modules/@openpresentation/opf-render"
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.20.2",
+      "gitHead": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+      "integrity": "sha512-ofK/cIZ7DJaM6WcIGeBGEau4p+VW0YaKrAM6PVKEgMNfwp2t2mfhzzmyTBCP1ePzC1TVAwZeZqzmA66U0jUwIg==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.20.2.tgz",
+      "realpath": "/private/tmp/rr68-editor022-records-61/opf/artifacts/npm/registry-consumer/node_modules/@openpresentation/opf-editor"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.20.2",
+      "gitHead": "19f775a74905ff8760c21e0a3520e2f0aad19f6e",
+      "integrity": "sha512-e38+yo59ap+Es94ZdXdtAyMW0xF2eM4XXJEMRRCgWDRBbrVNWU2AywoQqq6PBQzNp1N3tT27eJY5o2bafbLPLA==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.20.2.tgz",
+      "realpath": "/private/tmp/rr68-editor022-records-61/opf/artifacts/npm/registry-consumer/node_modules/@openpresentation/opf-pptx"
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.20.0",
+      "gitHead": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
+      "integrity": "sha512-QtLK+H585iGWbhRcvjEZqrGs2HbLJpqbXXx/zWoGUWE3bQMkPx/QZDJJUwaESxBrZkLMylgIFlzdfBD6kDhv9w==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.20.0.tgz",
+      "realpath": "/private/tmp/rr68-editor022-records-61/opf/artifacts/npm/registry-consumer/node_modules/@openpresentation/cli"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "gitHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "integrity": "sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ==",
+      "resolved": "https://registry.npmjs.org/@openpresentation/gallery/-/gallery-3.0.0.tgz",
+      "realpath": "/private/tmp/rr68-editor022-records-61/opf/artifacts/npm/registry-consumer/node_modules/@openpresentation/gallery"
+    }
+  ],
+  "changedLockPackageRecords": [
+    "",
+    "node_modules/@openpresentation/opf-editor"
+  ],
+  "allOtherLockPackageRecordsExact": true,
+  "otherFiveAuthorityRecordsExact": true,
+  "coreEntries": [
+    "node_modules/@openpresentation/opf"
+  ],
+  "registryToolchainImportsPassed": true,
+  "exampleRef": "2ac0268359f48123031ef537fcc0c31d7c41a1df",
+  "sourceAliasesOrPatchedPackages": false,
+  "windowsActions": 0
+}

@@ -1,0 +1,168 @@
+{
+  "at": "2026-10-15T10:37:10.385439+00:00",
+  "package": "@openpresentation/opf-editor",
+  "version": "0.20.2",
+  "status": "published and independently fully canonical verified",
+  "trustedPublisherExit": 0,
+  "independentVerifierExit": 0,
+  "tag": "opf-editor-v0.20.2",
+  "gitHead": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
+  "dist": {
+    "shasum": "6bde65b3dabec8f8f353e67dfe5900036ad78e05",
+    "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.20.2.tgz",
+    "fileCount": 126,
+    "integrity": "sha512-ofK/cIZ7DJaM6WcIGeBGEau4p+VW0YaKrAM6PVKEgMNfwp2t2mfhzzmyTBCP1ePzC1TVAwZeZqzmA66U0jUwIg==",
+    "signatures": [
+      {
+        "sig": "MEUCIQCB//wuPr059JUxJFIIwZjISfTSp5hIW3nMujsHU80HIQIgA4G8HbHutrQQV97Ys1cwPYNWOfHWaprXcIO0ploka6Y=",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      },
+      {
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U",
+        "sig": "MEYCIQD8UOmHenBZrab4NVZGiUn0ImmycR3l+HRvdu5ne9oT2wIhAMp4780tnRrMkUifz9bve8HRUKqq4jenVSj+2MaWJZt2"
+      }
+    ],
+    "attestations": {
+      "url": "https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-editor@0.20.2",
+      "provenance": {
+        "predicateType": "https://slsa.dev/provenance/v1"
+      }
+    },
+    "unpackedSize": 1451434
+  },
+  "publishedAt": "2026-10-15T10:35:47.883Z",
+  "registryPackumentUrl": "https://registry.npmjs.org/@openpresentation%2fopf-editor",
+  "repository": "https://github.com/OpenPresentation/opf-editor",
+  "workflow": "https://github.com/OpenPresentation/opf-editor/blob/ac3bf55ead8e96053ca79344dd1849b3f60e357e/.github/workflows/release.yml",
+  "workflowRun": "https://github.com/OpenPresentation/opf-editor/actions/runs/38718731536",
+  "provenanceInvocation": "https://github.com/OpenPresentation/opf-editor/actions/runs/38718731536/attempts/1",
+  "githubRelease": "https://github.com/OpenPresentation/opf-editor/releases/tag/opf-editor-v0.20.2",
+  "canonicalChecks": [
+    {
+      "name": "npm version",
+      "ok": true,
+      "detail": "@openpresentation/opf-editor@0.20.2, integrity sha512-ofK/cIZ7DJaM6WcIGeBGEau4p+VW0YaKrAM6PVKEgMNfwp2t2mfhzzmyTBCP1ePzC1TVAwZeZqzmA66U0jUwIg=="
+    },
+    {
+      "name": "tag",
+      "ok": true,
+      "detail": "OpenPresentation/opf-editor opf-editor-v0.20.2 -> ac3bf55ead8e96053ca79344dd1849b3f60e357e"
+    },
+    {
+      "name": "gitHead",
+      "ok": true,
+      "detail": "gitHead ac3bf55ead8e96053ca79344dd1849b3f60e357e = tag commit ac3bf55ead8e96053ca79344dd1849b3f60e357e"
+    },
+    {
+      "name": "tag on main",
+      "ok": true,
+      "detail": "ac3bf55ead8e is on opf-editor main (identical)"
+    },
+    {
+      "name": "version at tag",
+      "ok": true,
+      "detail": "package.json at ac3bf55ead8e carries 0.20.2"
+    },
+    {
+      "name": "dist.attestations",
+      "ok": true,
+      "detail": "https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-editor@0.20.2)"
+    },
+    {
+      "name": "SLSA provenance",
+      "ok": true,
+      "detail": "built by .github/workflows/release.yml on refs/tags/opf-editor-v0.20.2 from ac3bf55ead8e (https://github.com/OpenPresentation/opf-editor/actions/runs/38718731536/attempts/1)"
+    },
+    {
+      "name": "npm audit signatures",
+      "ok": true,
+      "detail": "3 verified, 0 invalid, 0 missing; @openpresentation/opf-editor@0.20.2 has a verified attestation"
+    },
+    {
+      "name": "GitHub release",
+      "ok": true,
+      "detail": "https://github.com/OpenPresentation/opf-editor/releases/tag/opf-editor-v0.20.2"
+    },
+    {
+      "name": "dist-tag",
+      "ok": true,
+      "info": true,
+      "detail": "latest"
+    }
+  ],
+  "canonicalCheckCount": 10,
+  "canonicalVerifierLog": "/private/tmp/rr68-editor0202-publication-61/independent-verify.json",
+  "canonicalVerifierLogSha256": "0a6fa1de3824546454ff18a18f44351869f1b82df9362c275c82258d36e3b31b",
+  "canonicalVerification": {
+    "log": "/private/tmp/rr68-editor0202-publication-61/independent-verify.json",
+    "logSha256": "0a6fa1de3824546454ff18a18f44351869f1b82df9362c275c82258d36e3b31b",
+    "ok": true
+  },
+  "signatureAndAttestationVerified": true,
+  "tagMovedOrRepushed": false,
+  "metadataCaptureReads": 1,
+  "refs": [
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/trusted-tag-command.json",
+      "sha256": "949aef274343c9b4018bb345e90d2ff8da97f282e31a4d3b0a8215466afdb9e7"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/trusted-publication.log",
+      "sha256": "afe59608baaa763b7f72e2fe4d1afde4d2805f692dbc7094acd20ffaad65f8fd"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/trusted-publication.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/actual-commit-gate-receipt.json",
+      "sha256": "9da45b5ee5765a9321b3e32695d54ff8a6784d44b7d3a60266b18e08df50f322"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/actual-release-commit-merged-policy.log",
+      "sha256": "de5b13def9928f1bf46517d0746df7c531c4779c07015921883b1f07a66b2aeb"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/actual-release-commit-merged-policy.exit",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/independent-verify.json",
+      "sha256": "0a6fa1de3824546454ff18a18f44351869f1b82df9362c275c82258d36e3b31b"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/independent-verify-execution.json",
+      "sha256": "59f70c2f3367488658aefc7203fce49032c226470d383275183a2e8e754a28e6"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/independent-verify.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/registry-packument.json",
+      "sha256": "c5d6fa11a45ba62d9d9c82c9f0fea1e3f6434f501544c3af452189123b7016f1"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/registry-version.json",
+      "sha256": "43b73901d970881d1624ad589df45e0885eb46cd13f27fc08425b397ecc24cde"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-publication-61/registry-metadata-read.json",
+      "sha256": "3ddbd0723234807f7e27f334ac0afa7ba4bd8f9eb49685363570ba986fa114e8"
+    },
+    {
+      "path": "/private/tmp/rr68-editor0202-prep-61/actual-prep175-merge-proof.json",
+      "sha256": "426ea46907be70a6ccedfcaca71c8ab67e6aff2d11390e2afbbea88b9aa2abc7"
+    },
+    {
+      "path": "/private/tmp/rr68-policy-roll-actual-61/actual-679-680-integration-proof.json",
+      "sha256": "c7fbf71931f2ed3c8869dcabd01abef28b58576342b9a7478d6e6d9e4fae079b"
+    }
+  ],
+  "sourceSnapshotLock": "003d4a6df05452ca96f23d7d5c36a36f9d0825a7e108b8bd2067e9b25b6820d5",
+  "publisherIdentityDistinctFromSourceSnapshot": true,
+  "releasePolicySourceCommit": "f9aebab69b260dde3538bf41c5c6c1b5516e4a7d",
+  "advisoryMeasurement": "authenticated scheduled measurement remains separate; never recorded as passed or canceled by this lane",
+  "physicalWindowsActionPerformed": false,
+  "scope": "Immutable Editor artifact qualification only; site activation and actual live WYSIWYG fix verification are subsequent owner work."
+}

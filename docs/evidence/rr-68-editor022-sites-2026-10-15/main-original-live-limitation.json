@@ -1,0 +1,27 @@
+{
+  "status": "Real canonical primary homepage case passed; export case completed product assertions/download then hit pre-existing localhost-only test assertion",
+  "primaryReport": "/private/tmp/rr-editor022-sites-61/main-live-browser.json",
+  "unchangedTest": "/private/tmp/rr-editor022-main-adoption-61/site/tests/e2e/playground-downloads.spec.ts",
+  "failureLine": 157,
+  "failureExpression": "exporter.every(url => url.startsWith('http://127.0.0.1'))",
+  "canonicalOrigin": "https://www.openpresentation.org",
+  "sourceWasModified": false,
+  "retryPerformed": false,
+  "trace": {
+    "path": "/private/tmp/rr-editor022-sites-61/main-live-browser-output/playground-downloads-the-p-9870a-o-request-to-another-origin-e2e/trace.zip",
+    "sha256": "459b662c7325471551a8259c23a176c18b466a942e45fae0ff5ed7d2e734e9ba",
+    "requests": 199,
+    "foreignOrigins": [],
+    "posts": [],
+    "allRequestsCanonical": true
+  },
+  "actualPrimaryArchive": {
+    "path": "/private/tmp/rr-editor022-sites-61/main-live-browser-output/playground-downloads-the-p-9870a-o-request-to-another-origin-e2e/two-slide-check.pptx",
+    "sha256": "1ab09c888b1a3fea3fbe3781fc035910a30e9dbab41cdb6bc97b1a100e37897b",
+    "bytes": 77458,
+    "crcAndAllXmlPass": true,
+    "slides": 2,
+    "bothAuthoredTitlesPresent": true
+  },
+  "supplementalResult": "/private/tmp/rr-editor022-sites-61/main-live-proof.json"
+}

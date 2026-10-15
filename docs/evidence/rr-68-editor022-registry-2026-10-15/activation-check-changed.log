@@ -1,0 +1,22 @@
+
+> openpresentation-workspace@ check:changed /private/tmp/rr68-editor022-records-61/opf
+> node scripts/check-changed.mjs --base f9aebab69b260dde3538bf41c5c6c1b5516e4a7d
+
+check-changed: 21 changed files since f9aebab69 (plus uncommitted and untracked)
+ok  pnpm run check:changes (0.3 s)
+ok  biome (0.8 s)
+ok  pnpm run check:release-report (0.2 s)
+ok  pnpm run check:gallery-tracker (1.8 s)
+ok  pnpm run check:text (2.3 s)
+-  typecheck
+
+step                            status    time
+biome                           passed   0.8 s  17 files
+pnpm run check:changes          passed   0.3 s
+pnpm run check:gallery-tracker  passed   1.8 s
+pnpm run check:release-report   passed   0.2 s
+pnpm run check:text             passed   2.3 s
+typecheck                       skipped      -  no .ts, .mts or tsconfig change
+total                                    3.3 s
+
+check-changed: passed. Run the full `pnpm test` before opening the pull request.

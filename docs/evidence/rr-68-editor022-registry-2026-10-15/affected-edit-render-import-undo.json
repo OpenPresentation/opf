@@ -1,0 +1,16 @@
+{
+  "at": "2026-10-15T10:44:38.041Z",
+  "scope": "Genuine installed six-root E22 graph; registered Gallery edit/render/SVG+PNG/PPTX/reimport/exact undo-redo control. No source override, system font, browser or native claim.",
+  "consumer": "/private/tmp/rr68-editor022-records-61/opf/artifacts/npm/registry-consumer",
+  "editedTitle": "Crossed $4M ARR in nine months",
+  "originalDeckRestoredExactly": true,
+  "registeredGallery": true,
+  "svgSha256": "97c77d3323f3d68ea254a5b563a77713fe364bfb31ce0d50862c6a73151d2768",
+  "pngSha256": "f259a32f9fa515d2bc02c419ffa77bff1cc86f129d52faad5a3f15e55d13c648",
+  "pptxSha256": "19205ff5fcde4ee902c6723874d51be77131a141176d1e0120583df83005ce01",
+  "pptxBytes": 72845,
+  "formatValidAfterImport": true,
+  "editedTitleSurvivesPptxImport": true,
+  "loadSystemFonts": false,
+  "fontFiles": 197
+}

@@ -1,0 +1,6 @@
+
+> openpresentation-workspace@ test /private/tmp/rr68-editor022-records-61/opf
+> node scripts/agent-slot.mjs -- pnpm run test:run
+
+agent-slot: EPERM: operation not permitted, open '/Users/michael/.cache/opf-agent-slots/slot-0.lock'
+ ELIFECYCLE  Test failed. See above for more details.
