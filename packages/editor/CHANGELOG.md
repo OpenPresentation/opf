@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.20.2 (2026-10-15)
+
+- Show one boundary while editing plain text on the canvas. The textarea keeps its editing outline and caret; the SVG hit target stops drawing a second nested outline until editing ends. Keyboard selection, rich-text boundaries and non-text selection remain visible.
+
 ## 0.20.1 (2026-10-15)
 
 - Update the JSON editor CodeMirror dependencies from the reviewed public dependency proposal and align development Playwright 1.64.0 with the verified Microsoft container digest and existing workflow version checks.
