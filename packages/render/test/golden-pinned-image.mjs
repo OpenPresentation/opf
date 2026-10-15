@@ -13,7 +13,7 @@ const ci = readFileSync(path.join(root, '.github/workflows/ci.yml'), 'utf8');
 const pins = readFromCiWorkflow(ci);
 const good = {
   env: { GITHUB_ACTIONS: 'true', RUNNER_ENVIRONMENT: 'github-hosted', OPF_PLAYWRIGHT_IMAGE: pins.image, PLAYWRIGHT_BROWSERS_PATH: '/ms-playwright' },
-  platform: 'linux', osRelease: 'NAME="Ubuntu"\nVERSION_CODENAME=noble\n', inContainer: true, pinnedImage: pins.image, playwrightVersion: '1.63.0',
+  platform: 'linux', osRelease: 'NAME="Ubuntu"\nVERSION_CODENAME=noble\n', inContainer: true, pinnedImage: pins.image, playwrightVersion: '1.64.0',
 };
 assert.deepEqual(pinnedImageProblems(good), []);
 const refuses = (change, pattern) => assert.match(pinnedImageProblems({ ...good, ...change, env: { ...good.env, ...change.env } }).join('\n'), pattern);
