@@ -5,12 +5,12 @@ is the honest supported subset for [the developer quickstart](quickstart.md).
 It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
-The coordinated plan selects core/PPTX 0.20.1, renderer/editor/CLI 0.20.0
-and Gallery 3.0.0. Immutable release commits and complete registry, SLSA
-provenance and signature checks are recorded in the
-[verified publication authority](evidence/rr-20-registry-current-2026-10-14/verified-registry-authority.json).
-Earlier package matrices and dated native observations below retain their
-historical identities. Complete native compatibility remains a separate gate.
+**Verified package set (2026-10-16):** core 0.20.3, renderer/CLI 0.20.0,
+PPTX/editor 0.20.2 and Gallery 3.0.0.
+[Artifact verification](evidence/rr-85-published-set-2026-10-16/README.md) binds
+the selected archives to their release commits and trusted publication checks.
+Earlier matrices and native observations retain their historical identities.
+Complete native compatibility remains a separate gate.
 
 ## Published 0.20 contract
 
@@ -31,11 +31,11 @@ imply universal Office or full-catalog visual parity.
 
 | Package | Version | Dependency contract |
 | --- | --- | --- |
-| Core | 0.20.1 | Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
+| Core | 0.20.3 | Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
 | CLI | 0.20.0 | Core ^0.20.1, Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
 | Renderer | 0.20.0 | Core ^0.20.1; optional pinned font/converter peers |
-| PPTX | 0.20.1 | Core ^0.20.1, Gallery ^3.0.0; optional renderer ^0.20.0 |
-| Editor | 0.20.0 | Core ^0.20.1; optional renderer ^0.20.0 |
+| PPTX | 0.20.2 | Core ^0.20.1, Gallery ^3.0.0; optional renderer ^0.20.0 |
+| Editor | 0.20.2 | Core ^0.20.1; optional renderer ^0.20.0 |
 | Gallery | 3.0.0 | Independent owner of every default catalog record; 28 intent layouts |
 
 ## Runtime
@@ -128,9 +128,11 @@ and PPTX stay optional peers. CLI 0.15.0 and earlier bundled their core.
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
-ColorRef preview/export support. The renderer, PPTX and editor floors move with
-core in lockstep (core 0.20.1 and renderer/PPTX/editor 0.20.0), so
-preview and export resolve one composition.
+ColorRef preview/export support. The selected renderer 0.20.0, PPTX/editor
+0.20.2 and CLI 0.20.0 accept core ^0.20.1. Pin core 0.20.3 alongside them and
+verify one installed Core so preview and export use the same composition.
+Core 0.20.2 and later center metrics when alignment is omitted; explicit alignment remains
+authoritative.
 
 Shared header/footer geometry (`furniture-flow-v2`) is published. PPTX exports
 editable slide shapes tagged `OPF_FURNITURE_V1` with provenance for controlled

@@ -11,17 +11,18 @@ shipped versus deferred.
 
 ## Versions
 
-Pin the coordinated set from `release-plan.json` (currently core **0.20.1**,
-CLI **0.20.0**, renderer **0.20.0**, PPTX **0.20.1**, editor **0.20.0**,
-with Gallery **3.0.0**). All of these packages declare
+**Verified package set (2026-10-16):** core **0.20.3**, CLI **0.20.0**,
+renderer **0.20.0**, PPTX **0.20.2**, editor **0.20.2** and Gallery **3.0.0**.
+[Artifact verification](evidence/rr-85-published-set-2026-10-16/README.md) records
+the releases selected in `release-plan.json`. All declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 
 ```sh
 node -v   # 24.x (verified); 22 and later are declared
-npm install @openpresentation/opf@0.20.1 \
+npm install @openpresentation/opf@0.20.3 \
   @openpresentation/opf-render@0.20.0 \
-  @openpresentation/opf-editor@0.20.0 \
-  @openpresentation/opf-pptx@0.20.1 \
+  @openpresentation/opf-editor@0.20.2 \
+  @openpresentation/opf-pptx@0.20.2 \
   @openpresentation/cli@0.20.0 \
   @openpresentation/gallery@3.0.0
 # opf-render 0.20 keeps its converters and font packages as optional peers: install the ones you use

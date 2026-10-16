@@ -2,7 +2,7 @@
   "packages": [
     {
       "name": "@openpresentation/opf",
-      "version": "0.20.1"
+      "version": "0.20.3"
     },
     {
       "name": "@openpresentation/opf-render",
@@ -34,7 +34,7 @@
     "opf-editor": "2ac0268359f48123031ef537fcc0c31d7c41a1df"
   },
   "verificationRefs": {
-    "opf": "22664e18ea657db4e377b84997f2e73bf6cd738b",
+    "opf": "28a65e010861e6fe2f8ed140f8306df2f6d2b567",
     "cli": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
     "opf-render": "83c1e6e4a9d622f5c0c213e7f12c63d6a4986034",
     "opf-editor": "ac3bf55ead8e96053ca79344dd1849b3f60e357e",
