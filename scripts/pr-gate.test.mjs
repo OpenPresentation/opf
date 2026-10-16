@@ -53,7 +53,7 @@ function pr({ head = HEAD, contexts = [], mergeable = 'MERGEABLE', mss = 'CLEAN'
     isInMergeQueue: inQueue,
     mergeQueueEntry: inQueue ? { state: 'AWAITING_CHECKS', position: 1 } : null,
     timelineItems: { nodes: removedAt ? [{ reason: removalReason, createdAt: new Date(removedAt).toISOString() }] : [] },
-    commits: { nodes: [{ commit: { oid: commitOid, statusCheckRollup: { state: 'X', contexts: { totalCount: contexts.length, pageInfo: { hasNextPage: Boolean(more), endCursor: more ? 'c1' : null }, nodes: contexts } }, checkSuites: { nodes: suites } } }] },
+    commits: { nodes: [{ commit: { oid: commitOid, statusCheckRollup: { state: 'X', contexts: { totalCount: contexts.length + (more ? 1 : 0), pageInfo: { hasNextPage: Boolean(more), endCursor: more ? 'c1' : null }, nodes: contexts } }, checkSuites: { nodes: suites } } }] },
   };
 }
 function poll(nodes, { remaining = 4000, resetAt = '2026-10-07T13:00:00Z', queue = true } = {}) {
@@ -87,6 +87,12 @@ function fake({ polls, mutations = [], rules = RULES, more = null }) {
       state.queries.push(query);
       const next = polls.length > 1 ? polls.shift() : polls[0];
       const result = typeof next === 'function' ? next(now) : next;
+      // Older fixture literals omit the queried totalCount; materialize the actual complete-page contract.
+      for (const repo of Object.values(result?.data ?? {})) for (const target of Object.values(repo && typeof repo === 'object' ? repo : {})) {
+        const commit = target?.commits?.nodes?.[0]?.commit ?? target;
+        const contexts = commit?.statusCheckRollup?.contexts;
+        if (contexts && contexts.totalCount === undefined) contexts.totalCount = contexts.nodes.length;
+      }
       state.lastPoll = result;
       return result;
     },
@@ -557,7 +563,7 @@ test('a gh authentication failure stops at once instead of retrying until the ti
 
 test('--commit waits for a commit and reads more than 100 contexts through GraphQL', async () => {
   const commitPoll = (contexts, more) => ({ data: { rateLimit: { remaining: 4000 }, r0: { defaultBranchRef: { name: 'main' }, t0: pr({ contexts, more }).commits.nodes[0].commit } } });
-  const extra = { data: { repository: { object: { statusCheckRollup: { contexts: { pageInfo: { hasNextPage: false }, nodes: [run('Verify OPF packages')] } } } } } };
+  const extra = { data: { repository: { object: { oid: HEAD, statusCheckRollup: { contexts: { totalCount: 2, pageInfo: { hasNextPage: false }, nodes: [run('Verify OPF packages')] } } } } } };
   const { deps, state } = fake({ polls: [commitPoll([run('packages')], true)], more: extra });
   const result = await gate(['--commit', `o/r@${HEAD}`], deps);
   assert.equal(result.code, EXIT.ok);
@@ -992,4 +998,75 @@ test('RR-68: advisory suites cannot qualify a gating retry; required-mode retry 
   measurementSuite.workflowRun.event='schedule';
   assert.equal(evaluateChecks({checks,required:null,suites:[measurementSuite]}).state,'pending');
   assert.equal(evaluateChecks({checks,required:[{context:'unrecognized job'}],suites:[measurementSuite]}).state,'green');
+});
+
+
+test('rollup pagination refuses incomplete/error/identity/count/cursor pages without qualifying or mutating', async () => {
+  const first = {oid: HEAD, statusCheckRollup: {contexts: {totalCount: 2, nodes: [status('first', 'SUCCESS')], pageInfo: {hasNextPage: true, endCursor: 'next'}}}, checkSuites: {nodes: []}};
+  const nextPage = () => ({data: {repository: {object: {oid: HEAD, statusCheckRollup: {contexts: {totalCount: 2, nodes: [status('second', 'SUCCESS')], pageInfo: {hasNextPage: false, endCursor: null}}}}}}});
+  const attempt = async (change, initialChange = null) => {
+    const object = structuredClone(first); if (initialChange) initialChange(object);
+    const response = nextPage(); change(response);
+    let now = T0, writes = 0, pages = 0;
+    const deps = {now: () => now, sleep: async ms => {now += ms;}, log: () => {},
+      rest: async (_route, init) => {if (init?.method) writes++; return [];},
+      graphql: async query => {
+        if (query.startsWith('mutation')) {writes++; throw new Error('must not mutate');}
+        if (query.includes('after:')) {pages++; return response;}
+        return {data: {r0: {defaultBranchRef: {name: 'main'}, t0: structuredClone(object)}}};
+      }};
+    let error;
+    try { await gate(['--required', 'all', '--commit', `o/r@${HEAD}`], deps); } catch (caught) {error = caught;}
+    assert.ok(error, 'incomplete pagination cannot qualify');
+    assert.match(error.message, /rollup/); assert.equal(writes, 0); assert.ok(pages <= 2, 'bad cursors cannot create a query loop');
+  };
+  for (const change of [
+    response => {response.errors = [{message: 'partial GraphQL'}];},
+    response => {response.data.repository.object = null;},
+    response => {response.data.repository.object.oid = OLD;},
+    response => {delete response.data.repository.object.statusCheckRollup;},
+    response => {delete response.data.repository.object.statusCheckRollup.contexts.pageInfo;},
+    response => {delete response.data.repository.object.statusCheckRollup.contexts.nodes;},
+    response => {delete response.data.repository.object.statusCheckRollup.contexts.totalCount;},
+    response => {response.data.repository.object.statusCheckRollup.contexts.totalCount = 3;},
+    response => {response.data.repository.object.statusCheckRollup.contexts.nodes = [];},
+    response => {response.data.repository.object.statusCheckRollup.contexts.nodes = [status('first', 'SUCCESS')];},
+    response => {response.data.repository.object.statusCheckRollup.contexts.pageInfo = {hasNextPage: true, endCursor: 'next'};},
+  ]) await attempt(change);
+  for (const change of [
+    object => {object.statusCheckRollup.contexts.pageInfo.endCursor = null;},
+    object => {delete object.statusCheckRollup.contexts.pageInfo;},
+    object => {object.statusCheckRollup.contexts.totalCount = 0;},
+  ]) await attempt(() => {}, change);
+});
+
+test('partial initial target GraphQL errors cannot qualify the available check subset', async () => {
+  const response = poll(pr({contexts: GREEN()}));
+  response.errors = [{path: ['r0', 't0', 'commits'], message: 'partial checks'}];
+  const {deps, state} = fake({polls: [response]});
+  await assert.rejects(gate(['o/r#7', '--merge'], deps), /partial GraphQL response/);
+  assert.equal(state.mutations.length, 0);
+});
+
+test('complete multi-page all-mode rollups retain two-poll confirmation and a failing later status stays red', async () => {
+  for (const failure of [false, true]) {
+    const nodes = Array.from({length: 100}, (_, index) => status(`legacy-${index}`, 'SUCCESS'));
+    const object = {oid: HEAD, statusCheckRollup: {contexts: {nodes, totalCount: 101, pageInfo: {hasNextPage: true, endCursor: 'next'}}}, checkSuites: {nodes: []}};
+    let now = T0, polls = 0, pages = 0;
+    const result = await gate(['--required', 'all', '--commit', `o/r@${HEAD}`], {
+      now: () => now, sleep: async ms => {now += ms;}, log: () => {}, rest: async () => [],
+      graphql: async query => {
+        if (query.includes('after:')) {
+          pages++;
+          return {data: {repository: {object: {oid: HEAD, statusCheckRollup: {contexts: {nodes: [status('last', failure ? 'FAILURE' : 'SUCCESS')], totalCount: 101, pageInfo: {hasNextPage: false}}}}}}};
+        }
+        polls++;
+        return {data: {r0: {defaultBranchRef: {name: 'main'}, t0: structuredClone(object)}}};
+      },
+    });
+    assert.equal(result.code, failure ? EXIT.red : EXIT.ok);
+    assert.equal(polls, failure ? 1 : 2); assert.equal(pages, polls);
+    if (failure) assert.deepEqual(result.results[0].failing.map(check => check.name), ['last']);
+    else assert.equal(result.results[0].checks.total, 101);
+  }
 });
