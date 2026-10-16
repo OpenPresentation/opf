@@ -1,0 +1,16 @@
+created opf-pptx-v0.20.3 on OpenPresentation/opf-pptx@e0a67c6ee989
+waiting for opf-pptx release.yml on opf-pptx-v0.20.3 (not started)...
+waiting for opf-pptx release.yml on opf-pptx-v0.20.3 (in_progress, https://github.com/OpenPresentation/opf-pptx/actions/runs/38893042716)...
+waiting for opf-pptx release.yml on opf-pptx-v0.20.3 (in_progress, https://github.com/OpenPresentation/opf-pptx/actions/runs/38893042716)...
+waiting for opf-pptx release.yml on opf-pptx-v0.20.3 (in_progress, https://github.com/OpenPresentation/opf-pptx/actions/runs/38893042716)...
+@openpresentation/opf-pptx@0.20.3: verified
+  ok   npm version: @openpresentation/opf-pptx@0.20.3, integrity sha512-hYl/dxyfQO5PFMzTywvbyXC8LW0tgi42iicXZNlOl9QQWkBgmkbnA18EMad/xQaxIKWUTUiA2Wl2d+DHfDksbg==
+  ok   tag: OpenPresentation/opf-pptx opf-pptx-v0.20.3 -> e0a67c6ee9892c58d15131923156b0ecf51ab14e
+  ok   gitHead: gitHead e0a67c6ee9892c58d15131923156b0ecf51ab14e = tag commit e0a67c6ee9892c58d15131923156b0ecf51ab14e
+  ok   tag on main: e0a67c6ee989 is on opf-pptx main (identical)
+  ok   version at tag: package.json at e0a67c6ee989 carries 0.20.3
+  ok   dist.attestations: https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf-pptx@0.20.3)
+  ok   SLSA provenance: built by .github/workflows/release.yml on refs/tags/opf-pptx-v0.20.3 from e0a67c6ee989 (https://github.com/OpenPresentation/opf-pptx/actions/runs/38893042716/attempts/1)
+  ok   npm audit signatures: 14 verified, 0 invalid, 0 missing; @openpresentation/opf-pptx@0.20.3 has a verified attestation
+  ok   GitHub release: https://github.com/OpenPresentation/opf-pptx/releases/tag/opf-pptx-v0.20.3
+  info dist-tag: latest

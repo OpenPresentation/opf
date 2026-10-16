@@ -1,0 +1,273 @@
+{
+  "observedAt": "2026-10-16T13:02:03.654Z",
+  "selection": "Verified package set (2026-10-16); exact immutable versions, no latest claim",
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.20.3",
+      "gitHead": "28a65e010861e6fe2f8ed140f8306df2f6d2b567",
+      "dist": {
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.20.3.tgz",
+        "integrity": "sha512-Zr9LovRjM+kCQYzWeGuijz53BlCtzPavFO1xm4oApF1bPpF+5/dBSx9GrNaVo6EIYtK1KNWE3S58CLTG3AV2qw==",
+        "shasum": "bf88be4a67cdd0a36860edec6fff21f54cb002c5"
+      },
+      "artifactSha256": "890239c0f0d86a977b22ca27125135d32bff94c7207cb652cbe117433371c809",
+      "artifactBytes": 3333525,
+      "engines": {
+        "node": ">=22"
+      },
+      "dependencies": {
+        "@openpresentation/gallery": "^3.0.0"
+      },
+      "peerDependencies": {
+        "@openpresentation/opf-pptx": "^0.20.0",
+        "@openpresentation/opf-render": "^0.20.0"
+      },
+      "peerDependenciesMeta": {
+        "@openpresentation/opf-pptx": {
+          "optional": true
+        },
+        "@openpresentation/opf-render": {
+          "optional": true
+        }
+      },
+      "authorityMatch": true
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.20.2",
+      "gitHead": "837dbca5cb511b908269e9097c0ab1032de86601",
+      "dist": {
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.20.2.tgz",
+        "integrity": "sha512-iQwliZCZbVp3fr9aLYnE8njz7lZAPSH8Q48OPhp2mevz4xLRZN6eGzJm+vVR3Dy8GYHEog9BJHSVrMnAEGP+NQ==",
+        "shasum": "e59a31f47949161fb68c468acca36e4b499df7ac"
+      },
+      "artifactSha256": "9ccbf81618c0d36ac2775523043bc06ffbb51c9a05387540b6d6ceee69aa519f",
+      "artifactBytes": 13074481,
+      "engines": {
+        "node": ">=22"
+      },
+      "dependencies": {
+        "@openpresentation/opf": "^0.20.2"
+      },
+      "peerDependencies": {},
+      "peerDependenciesMeta": {},
+      "authorityMatch": true
+    },
+    {
+      "name": "@openpresentation/opf-editor",
+      "version": "0.20.3",
+      "gitHead": "c0d4c0b5316e9f777e07e1ea4321164d433bbd53",
+      "dist": {
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-editor/-/opf-editor-0.20.3.tgz",
+        "integrity": "sha512-4+4k0hIWe7g6PYYK8NCI+gQz7B4jGmqueZ4E4FjlY2KCIGUZ6JxkTxkRKkPbg8ohuCUhCEuh6UGExT9T27x0tA==",
+        "shasum": "cd390b129f638b3e7259cc2ff83f4a12795d0cdd"
+      },
+      "artifactSha256": "c8eec829cb10cabcdcf1f6224058435647f9d59d1cf7c003b7c03c3742a5c17e",
+      "artifactBytes": 406362,
+      "engines": {
+        "node": ">=22"
+      },
+      "dependencies": {
+        "@openpresentation/opf": "^0.20.2"
+      },
+      "peerDependencies": {
+        "@openpresentation/opf-render": "^0.20.2"
+      },
+      "peerDependenciesMeta": {
+        "@openpresentation/opf-render": {
+          "optional": true
+        }
+      },
+      "authorityMatch": true
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.20.3",
+      "gitHead": "e0a67c6ee9892c58d15131923156b0ecf51ab14e",
+      "dist": {
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-pptx/-/opf-pptx-0.20.3.tgz",
+        "integrity": "sha512-hYl/dxyfQO5PFMzTywvbyXC8LW0tgi42iicXZNlOl9QQWkBgmkbnA18EMad/xQaxIKWUTUiA2Wl2d+DHfDksbg==",
+        "shasum": "187af6e3ee26c43824a5786d99b48d10d5816321"
+      },
+      "artifactSha256": "e407cc8ffcbc27a159e5282908dd28f813f707f812a7cf1e77f88d5d36deb2cd",
+      "artifactBytes": 727702,
+      "engines": {
+        "node": ">=22"
+      },
+      "dependencies": {
+        "@openpresentation/gallery": "^3.0.0",
+        "@openpresentation/opf": "^0.20.2"
+      },
+      "peerDependencies": {
+        "@openpresentation/opf-render": "^0.20.2"
+      },
+      "peerDependenciesMeta": {
+        "@openpresentation/opf-render": {
+          "optional": true
+        }
+      },
+      "authorityMatch": true
+    },
+    {
+      "name": "@openpresentation/cli",
+      "version": "0.20.0",
+      "gitHead": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
+      "dist": {
+        "tarball": "https://registry.npmjs.org/@openpresentation/cli/-/cli-0.20.0.tgz",
+        "integrity": "sha512-QtLK+H585iGWbhRcvjEZqrGs2HbLJpqbXXx/zWoGUWE3bQMkPx/QZDJJUwaESxBrZkLMylgIFlzdfBD6kDhv9w==",
+        "shasum": "be8145af28505a7dd71eb77d5ae78a7f36e24916"
+      },
+      "artifactSha256": "94a0b7eae0d0b215e24ee8f067a36b7011d7d3aa10c200b0bfe05c2e4e9f718a",
+      "artifactBytes": 199117,
+      "engines": {
+        "node": ">=22"
+      },
+      "dependencies": {
+        "@openpresentation/gallery": "^3.0.0",
+        "@openpresentation/opf": "^0.20.1"
+      },
+      "peerDependencies": {
+        "@openpresentation/opf-pptx": "^0.20.0",
+        "@openpresentation/opf-render": "^0.20.0"
+      },
+      "peerDependenciesMeta": {
+        "@openpresentation/opf-pptx": {
+          "optional": true
+        },
+        "@openpresentation/opf-render": {
+          "optional": true
+        }
+      },
+      "authorityMatch": true
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "gitHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "dist": {
+        "tarball": "https://registry.npmjs.org/@openpresentation/gallery/-/gallery-3.0.0.tgz",
+        "integrity": "sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ==",
+        "shasum": "83ee9cedd5d9b038bda31e2d8764a7a94229693a"
+      },
+      "artifactSha256": "dd173f081a79ad1f0997039af5397bfd798137be55ccd469dce0dd6f4491554c",
+      "artifactBytes": 97420,
+      "engines": {
+        "node": ">=22"
+      },
+      "dependencies": {},
+      "peerDependencies": {},
+      "peerDependenciesMeta": {},
+      "authorityMatch": true
+    }
+  ],
+  "scope": "Artifact authority and runtime dependency ranges only; canonical consumer/site adoption still pending.",
+  "dependencyScope": "Only OpenPresentation relationships listed; prior C3/CLI/G3 artifacts reused byte-exact, R2/P3/E3 archives freshly downloaded and matched to actual trusted receipts.",
+  "archiveDownloadRequests": 3,
+  "declaredRanges": [
+    {
+      "package": "@openpresentation/opf",
+      "field": "dependencies",
+      "name": "@openpresentation/gallery",
+      "range": "^3.0.0",
+      "selected": "3.0.0",
+      "ok": true
+    },
+    {
+      "package": "@openpresentation/opf",
+      "field": "peerDependencies",
+      "name": "@openpresentation/opf-pptx",
+      "range": "^0.20.0",
+      "selected": "0.20.3",
+      "ok": true
+    },
+    {
+      "package": "@openpresentation/opf",
+      "field": "peerDependencies",
+      "name": "@openpresentation/opf-render",
+      "range": "^0.20.0",
+      "selected": "0.20.2",
+      "ok": true
+    },
+    {
+      "package": "@openpresentation/opf-render",
+      "field": "dependencies",
+      "name": "@openpresentation/opf",
+      "range": "^0.20.2",
+      "selected": "0.20.3",
+      "ok": true
+    },
+    {
+      "package": "@openpresentation/opf-editor",
+      "field": "dependencies",
+      "name": "@openpresentation/opf",
+      "range": "^0.20.2",
+      "selected": "0.20.3",
+      "ok": true
+    },
+    {
+      "package": "@openpresentation/opf-editor",
+      "field": "peerDependencies",
+      "name": "@openpresentation/opf-render",
+      "range": "^0.20.2",
+      "selected": "0.20.2",
+      "ok": true
+    },
+    {
+      "package": "@openpresentation/opf-pptx",
+      "field": "dependencies",
+      "name": "@openpresentation/gallery",
+      "range": "^3.0.0",
+      "selected": "3.0.0",
+      "ok": true
+    },
+    {
+      "package": "@openpresentation/opf-pptx",
+      "field": "dependencies",
+      "name": "@openpresentation/opf",
+      "range": "^0.20.2",
+      "selected": "0.20.3",
+      "ok": true
+    },
+    {
+      "package": "@openpresentation/opf-pptx",
+      "field": "peerDependencies",
+      "name": "@openpresentation/opf-render",
+      "range": "^0.20.2",
+      "selected": "0.20.2",
+      "ok": true
+    },
+    {
+      "package": "@openpresentation/cli",
+      "field": "dependencies",
+      "name": "@openpresentation/gallery",
+      "range": "^3.0.0",
+      "selected": "3.0.0",
+      "ok": true
+    },
+    {
+      "package": "@openpresentation/cli",
+      "field": "dependencies",
+      "name": "@openpresentation/opf",
+      "range": "^0.20.1",
+      "selected": "0.20.3",
+      "ok": true
+    },
+    {
+      "package": "@openpresentation/cli",
+      "field": "peerDependencies",
+      "name": "@openpresentation/opf-pptx",
+      "range": "^0.20.0",
+      "selected": "0.20.3",
+      "ok": true
+    },
+    {
+      "package": "@openpresentation/cli",
+      "field": "peerDependencies",
+      "name": "@openpresentation/opf-render",
+      "range": "^0.20.0",
+      "selected": "0.20.2",
+      "ok": true
+    }
+  ]
+}

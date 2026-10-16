@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-10-16T10:12:21.879450+00:00",
+  "status": "Draft checkpoint; RR-85 remains in progress",
+  "authority": "Accepted local source, registry and production receipts plus root normal-gate observations; no new network, census or CI collection",
+  "published": {
+    "coreMetricGeometry": {
+      "version": "0.20.2",
+      "gitHead": "b1f0aa3c543424f7befb08785634a6a5a8652caa",
+      "tag": "opf-v0.20.2",
+      "trustedRun": 38831009547,
+      "verified": true
+    },
+    "coreAnnotation": {
+      "version": "0.20.3",
+      "gitHead": "28a65e010861e6fe2f8ed140f8306df2f6d2b567",
+      "publishedAt": "2026-10-16T07:03:47.593Z",
+      "schemaAndApiIdentifiersUnchanged": true,
+      "verified": true
+    },
+    "compatibleCurrentSites": {
+      "core": "0.20.3",
+      "renderer": "0.20.0",
+      "pptx": "0.20.2",
+      "editor": "0.20.2",
+      "cli": "0.20.0",
+      "gallery": "3.0.0"
+    },
+    "renderer": {
+      "version": "0.20.2",
+      "gitHead": "837dbca5cb511b908269e9097c0ab1032de86601",
+      "tree": "7718aae89943a9f259ae94e500515aeaab55ed15",
+      "tag": "opf-render-v0.20.2",
+      "publishedAt": "2026-10-16T10:05:38.879Z",
+      "trustedRun": 38882846040,
+      "attempt": 1,
+      "verified": true,
+      "requiredChecksPassed": 9,
+      "signatureVerification": {
+        "verified": 5,
+        "invalid": 0,
+        "missing": 0,
+        "ownVerifiedAttestation": true
+      },
+      "receiptSha256": "21777b32ed04a6dfce9f98784ab001ece7231ee0745ed0b509970c311530cca8"
+    }
+  },
+  "sites": [
+    {
+      "name": "Main",
+      "pr": "https://github.com/Data-Advantage/openpresentation-site/pull/118",
+      "acceptedSource": "ad41ef70f35ebb5d3f97cba00f99271e57dbe6e5",
+      "actualMerge": "b584410f3271290ff573762726f5c40080234bf7",
+      "exactTreeAndPatch": true,
+      "workerVersion": "5a426b33-1845-4d47-aea1-3d90a021b2e3",
+      "production": "100% traffic; 19 smoke +3 Spec browser cases and11 public GETs accepted; original homepage116/Spec117 changes retained"
+    },
+    {
+      "name": "Dev",
+      "pr": "https://github.com/Data-Advantage/pptx-dev/pull/139",
+      "acceptedSource": "493c9cad4e9eed846971153f5a3bf64d3d19bfe3",
+      "actualMerge": "f2bdde6330645ba4e235dcfad8d761486108e797",
+      "exactTreeAndPatch": true,
+      "workerVersion": "fa3dccaf-f02e-4c03-a256-609cca2e206a",
+      "production": "100% traffic; 3 anonymous journeys +9 public GETs/six exact bodies accepted"
+    },
+    {
+      "name": "Gallery",
+      "pr": "https://github.com/Data-Advantage/pptx-gallery/pull/138",
+      "acceptedSource": "18e3c38d61412b8ee7c5c67a946b2eaaad89fba2",
+      "actualMerge": "9de4b23f94e9eee5af772c5d305661b42113e703",
+      "workerVersion": "579339e3-9210-4461-88c2-a1e78d7c2578",
+      "production": "100% traffic; 6 browser cases +8 public GETs accepted; canonical records/previews/API unchanged",
+      "retainedFinding": "Initial exact authored-region decimal assertion failed. All54 auxiliary width/height decimal changes match prior build; actual API bytes equal the sealed compiled JSON payload. Authored OPF and all non-region values exact; no tolerance/normalizer introduced.",
+      "actualMergedAt": "2026-10-16T08:39:32Z",
+      "exactTreeAndPatch": true,
+      "acceptedTree": "ce02817c1aa7622040ac866e8a40d2add5d9782e",
+      "fullPatchSha256": "4f6390416e8252e4dded16ba3ffda62267d3eb638fade42953697226453babcd",
+      "deployment": "289d495b-4d56-458d-b685-39a4d16ea8bb",
+      "primaryCleanFastForwardOnly": true
+    }
+  ],
+  "renderer": {
+    "sourcePr": "https://github.com/OpenPresentation/opf-render/pull/250",
+    "actualSourceMerge": "3021573b69e550054345264a0dc211686ea7e65d",
+    "acceptedSourceTree": "77587630f570e94e8455755cd876f26999359ebe",
+    "failed0201": "Tag immutable; trusted workflow38862992119 stopped before npm/GitHub release. No accepted0.20.1 artifact.",
+    "prepPr": "https://github.com/OpenPresentation/opf-render/pull/251",
+    "prepHead": "37cf54347f8cb2e3e87a853e8c7e6897f57e9d0d",
+    "target": "0.20.2",
+    "prep": "Exact four-file metadata-only normal prep; PR creation Depends-On Core#692 selects merged strict count policy",
+    "mergeTagPublicationHold": "Satisfied by actual official lock merge, actual Renderer prep merge, green release-commit gate and trusted publication/verification; earlier hold remains historical",
+    "actualPrepMerge": "837dbca5cb511b908269e9097c0ab1032de86601",
+    "prepMergedAt": "2026-10-16T09:22:32Z",
+    "publication": "Genuinely published and root-reviewed verified",
+    "actualRegistryVersion": "0.20.2"
+  },
+  "officialRoll": {
+    "run": 38869742627,
+    "workflowSource": "4506ea66a69973e87dddde20f182f2a874082f55",
+    "state": "Parent succeeded; exact official generated-lock PR693 normally merged and independently accepted",
+    "generatedHead": "91760a7c91f1b88f0bb209693085ecfbe4c8fcd3",
+    "pr": "https://github.com/OpenPresentation/opf/pull/693",
+    "literalSelectedSources": {
+      "opf": "4506ea66a69973e87dddde20f182f2a874082f55",
+      "opf-render": "b5330eaba99f05dc72f01d4d2de12c348d9e6b0d",
+      "opf-pptx": "7f300b42166c55ee14f8f9432e7340ded26f5ee4",
+      "opf-editor": "ac3bf55ead8e96053ca79344dd1849b3f60e357e"
+    },
+    "sourceBoundary": "Renderer b533 was actual main at dispatch before later302 source merge; no restamping or new artifact claim",
+    "actualMerge": "041404a0d579c7183461962022e204f7ce8a6012",
+    "mergedAt": "2026-10-16T09:16:10Z"
+  },
+  "remaining": [
+    "Normal PPTX0.20.3 dry prepared; actual metadata root review before execute/open; package unpublished",
+    "Genuine PPTX0.20.3 prerequisite before Editor0.20.3 prep; Editor not prepared/published",
+    "Final genuine published-set adoption after remaining artifacts are verified; current site deployments retain their accepted R0 graph",
+    "Separate RR86 native qualification and existing broader open program work"
+  ],
+  "boundaries": [
+    "No overall completion, global progress percentage or current PR/issue census claim",
+    "Historical checkpoints and all other item statuses/criteria preserved",
+    "Physical Windows remains on explicit human HOLD; no new Office or global font/glyph/pixel-parity acceptance",
+    "This proposed documentation change is uncommitted/unpushed and does not rewrite the official lock"
+  ],
+  "receiptHashes": [
+    {
+      "id": "core0202-publication",
+      "sha256": "84632e6831da2a96934b952611385f471e36593a2674ca4229ed9dc43debd489",
+      "privateSource": "/private/tmp/opf-rr85-core0202-trusted-publication.log"
+    },
+    {
+      "id": "core0203-publication",
+      "sha256": "bbabbb6def2e8e0519e74e5651c43e3cce80254c8a521570e613b9e0c8eafbda",
+      "privateSource": "/private/tmp/opf-core0203-trusted-publication-receipt.json"
+    },
+    {
+      "id": "main118-closure",
+      "sha256": "79660ec7cef62aabba28df58cc3861bf9b310d1380937b228ebddb677829f423",
+      "privateSource": "/private/tmp/opf-rr85-main-core0203-production-61/source-production-closure.json"
+    },
+    {
+      "id": "dev139-merge",
+      "sha256": "7ff5d693d1675a5bbf7828d3ef87ee2aed3ce2e3788f1454a960a50ffb841ce4",
+      "privateSource": "/private/tmp/opf-dev-core0203-production-61/actual-merge.json"
+    },
+    {
+      "id": "dev-production",
+      "sha256": "ebaacd2f9c355c144d9366bcaa2b3ef7f784015ea11f3faa718fd2014aedf98e",
+      "privateSource": "/private/tmp/opf-dev-core0203-production-61/qualification/receipt.json"
+    },
+    {
+      "id": "gallery-production",
+      "sha256": "044a2684a51441727c70880a304e1844076f178228749d30d78537850974ed85",
+      "privateSource": "/private/tmp/opf-gallery-core0203-production-61/qualification/receipt.json"
+    },
+    {
+      "id": "renderer250-merge",
+      "sha256": "15c7a9b4e8e8194acd67c45e87af7ae9297a088b3a304cab48ec49923cd32fd7",
+      "privateSource": "/private/tmp/opf-render-ordinary-golden-proof-61/actual-merge.json"
+    },
+    {
+      "id": "renderer251-prep",
+      "sha256": "453aa47ef2b4b1a31f0bcab0835b9754474cdc3dcff9ffaf370d0a69897b126a",
+      "privateSource": "/private/tmp/opf-render0202-release-prep-61/pr-handoff.json"
+    },
+    {
+      "id": "official-roll-dispatch",
+      "sha256": "442e762934bf8c55a946d6e1630490b61bb5e02e7f5c973af833a2cae68332ad",
+      "privateSource": "/private/tmp/opf-rr85-render0202-official-roll-61/dispatch.json"
+    },
+    {
+      "id": "official-generated-lock-pr",
+      "sha256": "1a34a7acbfb992dc325a4cced9f8786e806c77f405a86b64d71a7224243ca4a5",
+      "privateSource": "/private/tmp/opf-rr85-render0202-official-roll-61/pr-handoff.json"
+    },
+    {
+      "id": "gallery138-merge",
+      "sha256": "f1ef658401ae613d25cfa48f782cde8fb5bdbef7d70db4a866343328c5a5e1a2",
+      "privateSource": "/private/tmp/opf-gallery-core0203-production-61/actual-merge.json"
+    },
+    {
+      "id": "official693-actual-merge",
+      "sha256": "6a1f7581c3ac5a0b6ccbbbc21978b0781da5e1752a38475a08875d2bfb977c25",
+      "privateSource": "/private/tmp/opf-rr85-render0202-official-roll-61/actual-merge.json"
+    },
+    {
+      "id": "renderer251-actual-merge",
+      "sha256": "d482adf5ac083172259a71db7acc7891380650aed3ae01b8017c7b80dcf0b67e",
+      "privateSource": "/private/tmp/opf-render0202-release-prep-61/actual-merge.json"
+    },
+    {
+      "id": "renderer0202-publication",
+      "sha256": "21777b32ed04a6dfce9f98784ab001ece7231ee0745ed0b509970c311530cca8",
+      "privateSource": "/private/tmp/opf-render0202-trusted-publication-61/verified-publication-receipt.json"
+    }
+  ],
+  "datedInventoryBoundary": {
+    "metadataAt": "2026-10-16T08:36:55.679145+00:00",
+    "openPRsAtThatTime": 9,
+    "openIssuesAtThatTime": 42,
+    "precedesGallery138Merge": true,
+    "notRestamped": true,
+    "dispositions": "All 42 have dated disposition evidence: 40 reviewed at 06:19; two Gallery package issues reviewed at 08:44. They remain open, not closed.",
+    "galleryIssueLedgerSha256": "ead8d1f6c535c018f9c38d377f473246f2320c29c6bc84e38db9e64c96d2add2",
+    "laterClosures": [
+      "Gallery138 normal merge 08:39:32Z",
+      "Core693 normal merge 09:16:10Z",
+      "Renderer251 normal merge 09:22:32Z"
+    ]
+  },
+  "nextFloorPreparation": {
+    "pptx": {
+      "target": "0.20.3",
+      "rendererUpstream": "0.20.2 verified",
+      "state": "Normal dry metadata prepared for root review; not executed/opened or published by this checkpoint"
+    },
+    "editor": {
+      "target": "0.20.3",
+      "state": "Not prepared/published; genuine PPTX prerequisite remains"
+    },
+    "ownership": "Root owns review; assigned agents execute accepted normal steps"
+  }
+}
