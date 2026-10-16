@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.20.1 (2026-10-16)
+
+Require core 0.20.2 so metrics center by default while explicit alignment remains authoritative.
+
+- Align Playwright 1.64.0 with the verified digest-pinned browser image and all version guards; update the canvas development raster oracle to 1.0.11. Retain PDFium 2.1.13 because 3.0.0 fails the unchanged Hebrew logical text-order oracle.
+
 ## 0.20.0 (2026-10-14)
 
 Renderer 0.20.0 requires published core 0.20.1 and supports Gallery 3 nested-array layout records, neutral structural defaults, typed numeric alignment and zero-based magnitude axes. The temporary unreleased-core declaration has been removed for this release.
