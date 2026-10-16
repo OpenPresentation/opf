@@ -6,7 +6,7 @@
 - **Write a deck as text.** YAML front matter holds the deck, `---` separates slides, `#` is the title, `##` the subtitle, and lists, quotes, tables, images, code, charts, metrics, timelines and speaker notes have their own syntax.
 - **Read a deck as text.** `toMarkdown` writes any valid OPF document as that dialect. What the dialect has no syntax for (a design, nested groups, a styled table cell) is embedded as YAML in a fenced block, so nothing is lost; or it is left out and reported, on request.
 - **Round trip.** The Markdown the writer produces converts back to the same deck and to itself, byte for byte. Markdown written by hand converts to a deck whose canonical Markdown is the same text, apart from layout the dialect treats as equivalent (the examples in `examples/markdown/` are canonical).
-- **Errors have places.** Findings use the shared [Finding format](finding-schema-reference.md) and carry the source offset, length, line and column of the Markdown that caused them, including OPF validation errors mapped back to the Markdown that produced the field.
+- **Errors have places.** [Validation results](finding-schema-reference.md) carry the source offset, length, line and column of the Markdown that caused them, including OPF validation errors mapped back to the Markdown that produced the field.
 
 ```js
 import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
