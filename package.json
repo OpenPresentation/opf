@@ -34,6 +34,7 @@
     "check:published-matrix-fixture": "node --test scripts/published-matrix/browser-fixture.test.mjs",
     "check:parity-work-directory": "node --test scripts/published-matrix/parity-work-directory.test.mjs",
     "check:published-matrix": "node --test scripts/published-matrix/digests.test.mjs scripts/published-matrix/compare-parity.test.mjs scripts/published-matrix/installed-parity.test.mjs",
+    "check:font-measurements": "node --test scripts/measure-font-replacements.test.mjs",
     "check:font-tracker": "node --test scripts/build-font-tracker.test.mjs scripts/qualify-latin-fonts.test.mjs && node scripts/build-font-tracker.mjs --check",
     "build:font-tracker": "node scripts/build-font-tracker.mjs",
     "check:gallery-tracker": "node --test scripts/build-gallery-tracker.test.mjs scripts/tracker-staleness.test.mjs && node scripts/build-gallery-tracker.mjs --check",

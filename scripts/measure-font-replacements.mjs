@@ -89,7 +89,7 @@ function nearestVendored(family, weight, italic) {
   return choices[0] ?? null;
 }
 function replacementFace(family, weight, italic, pkg = packageOf(family)) {
-  const own = vendored.get(`${family.toLowerCase()}|${weight}|${italic}`) ?? nearestVendored(family, weight, italic);
+  const own = family ? vendored.get(`${family.toLowerCase()}|${weight}|${italic}`) ?? nearestVendored(family, weight, italic) : null;
   if (own) return own;
   const id = `${pkg}|${weight}|${italic}`;
   if (!faceCache.has(id)) faceCache.set(id, loadReplacementFace(pkg, weight, italic));
