@@ -117,12 +117,12 @@ function locate(specifier: string): string | undefined {
 }
 
 /**
- * A package as the engine would find it (RR-75, `opf doctor`): its manifest resolved from core's location, then the working
- * directory, then `from` (a file inside another package, for the optional peers opf-render loads itself). Undefined when it is
- * not installed. Nothing is loaded.
+ * A package as the engine would find it (RR-75, `opf doctor`): without `from`, resolve from core's location, then the working
+ * directory. With `from`, use only that file's normal Node resolution chain, for the optional peers opf-render loads itself.
+ * An unrelated core/global install cannot satisfy those peers. Undefined when it is not installed. Nothing is loaded.
  */
 export function locatePackage(name: string, from?: string): { manifest: string; version: string } | undefined {
-	const starts = [...bases(), ...(from === undefined ? [] : [pathToFileURL(from).href])];
+	const starts = from === undefined ? bases() : [pathToFileURL(from).href];
 	for (const base of starts) {
 		const manifest = manifestFrom(name, base);
 		if (!manifest) continue;
