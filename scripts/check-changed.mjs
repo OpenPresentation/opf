@@ -37,23 +37,30 @@ export function splitPaths(output) {
   return output.split('\0').filter(Boolean).map((file) => file.split(path.sep).join('/'));
 }
 
-function git(args) {
-  const result = spawnSync('git', ['-c', 'core.quotepath=off', ...args], { cwd: root, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+function git(args, cwd = root) {
+  const result = spawnSync('git', ['-c', 'core.quotepath=off', ...args], { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   return result.status === 0 ? result.stdout : null;
 }
 
 /** The changed files (sorted, unique, repository-relative) and the base they are measured from. */
-export function changedFiles(ref) {
+export function changedFiles(ref, { cwd = root, runGit = git } = {}) {
+  const required = (args) => {
+    const output = runGit(args, cwd);
+    if (output === null) throw new Error(`Cannot enumerate changed files: git ${args.join(' ')} failed`);
+    return output;
+  };
+  if (ref !== undefined && (typeof ref !== 'string' || !ref.trim())) throw new Error('Changed-files base must be a nonempty ref');
   let base = null;
-  for (const candidate of ref ? [ref] : ['origin/main', 'main']) {
-    const mergeBase = git(['merge-base', candidate, 'HEAD']);
+  for (const candidate of ref !== undefined ? [ref] : ['origin/main', 'main']) {
+    const mergeBase = runGit(['merge-base', candidate, 'HEAD'], cwd);
     if (mergeBase) {
       base = mergeBase.trim();
       break;
     }
   }
-  const committed = splitPaths(git(['diff', '--name-only', '-z', base ?? 'HEAD']) ?? '');
-  const untracked = splitPaths(git(['ls-files', '--others', '--exclude-standard', '-z']) ?? '');
+  if (ref !== undefined && !base) throw new Error(`Cannot resolve changed-files base ${JSON.stringify(ref)} against HEAD`);
+  const committed = splitPaths(required(['diff', '--name-only', '-z', base ?? 'HEAD']));
+  const untracked = splitPaths(required(['ls-files', '--others', '--exclude-standard', '-z']));
   return { base, files: [...new Set([...committed, ...untracked])].sort() };
 }
 
@@ -251,6 +258,7 @@ async function main(argv) {
   selectChecks(scripts, config); // fails on a stale checks.json before anything runs
   const flag = argv.indexOf('--files');
   const baseFlag = argv.indexOf('--base');
+  if (baseFlag !== -1 && (!argv[baseFlag + 1]?.trim() || argv[baseFlag + 1].startsWith('-'))) throw new Error('--base requires a nonempty ref value');
   const { base, files } = flag === -1 ? changedFiles(baseFlag === -1 ? undefined : argv[baseFlag + 1]) : { base: '(given)', files: argv.slice(flag + 1) };
   const plan = buildPlan(files, { scripts, config, needsInstall: needsInstall(), packages: readPackages(), exists: (file) => existsSync(path.join(root, file)) });
   console.log(`check-changed: ${files.length} changed files since ${base ? base.slice(0, 9) : 'HEAD'} (plus uncommitted and untracked)`);
