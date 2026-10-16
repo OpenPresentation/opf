@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.20.3 (2026-10-16)
+
+- Raise the OPF dependency floor to 0.20.2 and the renderer peer and development requirements to 0.20.2.
+
 ## 0.20.2 (2026-10-15)
 
 - Align Playwright 1.64.0 with its verified digest-pinned browser image and version guards. Retain the vendored engine runtime dependency parse-xml at exact 4.2.3 and add an isolated production-only packed control that rejects missing or escaped runtime parser dependencies.
