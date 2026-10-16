@@ -764,7 +764,7 @@
         "listBullet": {
           "type": "string",
           "enum": ["character", "image"],
-          "description": "Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the theme's design.listBullet, then the layout record's design.listBullet, then 'character'. 'character' (the default) draws the glyph marker. 'image' draws the primary organization's icon logo (or the organization and shape design.logo names; the onDark value on dark backgrounds) as a picture bullet: a square of the marker's font size whose bottom sits on the marker baseline, so list geometry does not change. Without a logo the glyph is drawn and the engine reports unresolved-content at this field."
+          "description": "Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the theme's design.listBullet, then the layout record's design.listBullet, then 'character'. 'character' (the default) draws the glyph marker. 'image' draws the primary organization's icon logo (or the organization and shape design.logo names; the onDark value on dark backgrounds) as a picture bullet: a square with side 0.65 times the marker's font size whose bottom sits on the marker baseline, so list geometry does not change. Without a logo the glyph is drawn and the engine reports unresolved-content at this field."
         },
         "mirror": {
           "type": "boolean",
@@ -1636,7 +1636,7 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["edge"],
-      "description": "Bleeds an image block to one edge of the slide: the image takes a band along that edge, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. Only top-level blocks (slides.N.blocks.I) can be placed, at most one per edge; a layout's image placeholder may carry the same placement for the slide's image. Bands are taken in block order, each spanning the free area left by earlier ones. Placement is the only mechanism that moves content aside; a background never does. A slide whose only body is placed images is composed like a cover: its headings center in the free area. In a right-to-left deck 'left' is the start side, drawn at the right.",
+      "description": "Bleeds an image block to one edge of the slide: the image takes a band along that edge, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. Only top-level blocks (slides.N.blocks.I) can be placed, at most one per edge. Template layout regions do not supply image placement; set it on the image block itself. Bands are taken in block order, each spanning the free area left by earlier ones. Placement is the only mechanism that moves content aside; a background never does. A slide whose only body is placed images is composed like a cover: its headings center in the free area. In a right-to-left deck 'left' is the start side, drawn at the right.",
       "properties": {
         "edge": {
           "type": "string",
@@ -2657,7 +2657,7 @@
         },
         "photo": {
           "$ref": "#/$defs/Asset",
-          "description": "Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the end side in a right-to-left deck). Give it alt text (validate's opf/missing-alt-text rule checks it). A raster photograph works best; an SVG exports as its PNG raster because the circular mask is not confirmed on SVG pictures in PowerPoint. An unresolved source draws the ordinary image placeholder.",
+          "description": "Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the logical start side: left in a left-to-right deck, right in a right-to-left deck). Give it alt text (validate's opf/missing-alt-text rule checks it). A raster photograph works best; an SVG exports as its PNG raster because the circular mask is not confirmed on SVG pictures in PowerPoint. An unresolved source draws the ordinary image placeholder.",
           "examples": ["./assets/priya-raman.jpg", {"src": "asset:priya-raman", "alt": "Priya Raman"}]
         },
         "source": {

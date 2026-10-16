@@ -1,0 +1,44 @@
+{
+	"schema": "opf-release-review-scope/v1",
+	"item": "RR-87",
+	"createdAt": "2026-10-16T17:20:36.712046+00:00",
+	"scope": [
+		"OpenPresentation/opf (Core and CLI)",
+		"OpenPresentation/gallery",
+		"OpenPresentation/opf-render",
+		"OpenPresentation/opf-pptx",
+		"OpenPresentation/opf-editor",
+		"Data-Advantage/openpresentation-site",
+		"Data-Advantage/pptx-gallery",
+		"Data-Advantage/pptx-dev"
+	],
+	"reviewUnits": 81,
+	"documentationTasks": 5,
+	"sequence": [
+		"Agent-authored plans and supervisor acceptance",
+		"Immutable current baseline and complete open/draft work inventory",
+		"Risk-ranked static review with exact authored-path/function coverage",
+		"Bounded reproduction, finding deduplication and supervisor disposition",
+		"Owner fixes with maintained regression tests and independent review",
+		"One final combined package/consumer/site qualification",
+		"One coordinated release window in dependency order, registry provenance verification and site adoption",
+		"Focused production verification and final coverage/risk report"
+	],
+	"coverageRules": [
+		"Read authored first-party runtime, scripts, tests, current examples/docs, workflows and configuration; record reviewed paths rather than infer coverage from test results.",
+		"Inventory generated data and binary/vendor artifacts separately; review generators and wrappers, verify identities and explicitly describe sampling/exclusions.",
+		"Review every authorization boundary and open/draft PR on its own immutable head.",
+		"Retain source, packed, registry, browser and native evidence as separate claims; preserve every initial failure.",
+		"Keep private-site code/findings out of public evidence; the supervisor retains the private combined ledger."
+	],
+	"acceptance": [
+		"Every agreed unit has explicit evidence and supervisor acceptance; no unexplained authored-code exclusions.",
+		"Every confirmed finding has a fix or an explicit reasoned disposition; critical/high fixes receive independent review.",
+		"Approved documentation changes use authoritative APIs/current setup data and preserve truthful released-versus-candidate boundaries.",
+		"Required normal checks pass without weaker gates/tolerances.",
+		"Release only changed/required packages through merged-source trusted publishing; verify each registry artifact/provenance before site adoption.",
+		"Record actual source/artifact/deployment identity and residual risk; no global/native certification is inferred."
+	],
+	"nativeBoundary": "Review agents do not operate Office or change fonts. Existing supervisor/owner native-host boundaries remain unchanged.",
+	"publicSiteBoundary": "This repository tracker does not add public support/readiness badges, status panels or new status APIs to the three sites."
+}

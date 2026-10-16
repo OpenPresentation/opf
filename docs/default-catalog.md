@@ -228,7 +228,7 @@ are not OPF records and link their catalog index with `Link: <…/<kind>/index.j
 | `audiences` | `audiences` | `opf-audience/v1` | content, `audience` | mirror |
 | `color-schemes` | `colorSchemes` | `opf-color-scheme/v1` | content, `design.colorScheme` | mirror |
 | `font-schemes` | `fontSchemes` | `opf-font-scheme/v1` | content, `design.fontScheme` | mirror |
-| `layouts` | `layouts` | `opf-layout/v2` in 0.19 | content, `Slide.layout` | authored in gallery 2.x |
+| `layouts` | `layouts` | `opf-layout/v2` since 0.19 | content, `Slide.layout` | authored in the independent Gallery package |
 | `narratives` | `narratives` | `opf-narrative/v1` | content, `narrative` | mirror |
 | `purposes` | `purposes` | `opf-purpose/v1` | content, `purpose` | mirror |
 | `themes` | `themes` | `opf-theme/v1` | content, `design.theme` | mirror |
@@ -268,9 +268,9 @@ notes and font stacks in `x-gallery`); the snapshot never carries them. The copy
 Before v1 an id is renamed or removed outright: there are no deprecated records, aliases or redirects. A document that
 names a retired id gets `opf/unresolved-reference`.
 
-## The snapshot
+## Historical snapshot (before 0.19)
 
-`spec/catalogs/manifest.json` (schema `spec/schemas/catalog-manifest.schema.json`):
+Before 0.19, Core stored the snapshot at `spec/catalogs/manifest.json` (schema `spec/schemas/catalog-manifest.schema.json`):
 
 ```json
 {
@@ -282,9 +282,7 @@ names a retired id gets `opf/unresolved-reference`.
 }
 ```
 
-Every kind is `mirror`: the snapshot holds every record the gallery publishes (all 278 layouts, for example), so
-`gallery` is the full pptx.gallery catalog and a host registers it as is. It costs nothing in the engine bundles: no
-browser entry of core imports it (`pnpm check:catalog-free`).
+That historical snapshot used `mirror` for every kind and held every record the gallery published (278 layouts at that checkpoint). The current independent Gallery package owns the snapshot and the 28 v2 layout templates; Core consumes the package and materializes ignored validation fixtures. No browser entry of Core imports catalog records (`pnpm check:catalog-free`).
 
 The snapshot never loses an id by accident: the sync refuses a publisher that stopped serving a held id. The one waiver
 is explicit and per id: `--allow-removed <kind>:<id>[,<id>...]` (repeatable) drops exactly those ids and deletes their

@@ -71,10 +71,14 @@ export function assertValidOutput(value: Obj | Obj[], as: "block" | "slide" | "s
   const slides = as === "slides" ? (value as Obj[]) : as === "slide" ? [value as Obj] : [{ blocks: [value] }];
   // RR-54: a dataset-backed chart or table validates with the document's datasets. Without them (a slide-only
   // edit) the dataset references cannot be checked here and are left to the caller's document validation.
+  // Citations likewise resolve against supplied document references, or remain the enclosing document's check.
+  // An explicit empty references list is still a context: it must reject unknown citations.
   const datasets = isRecord(context.datasets) ? context.datasets : undefined;
-  const report = validate({ ...(datasets ? { datasets } : {}), slides }, { only: ["format"] });
-  const found = report.findings.filter((entry) => entry.severity === "error");
-  const errors = datasets ? found : found.filter((entry) => entry.ruleId !== "opf/dataset-unknown" && entry.ruleId !== "opf/dataset-field-unknown");
+  const referencesProvided = own(context, "references");
+  const report = validate({ ...(datasets ? { datasets } : {}), ...(referencesProvided ? { references: context.references } : {}), slides }, { only: ["format"] });
+  const errors = report.findings.filter((entry) => entry.severity === "error").filter((entry) =>
+    (datasets || (entry.ruleId !== "opf/dataset-unknown" && entry.ruleId !== "opf/dataset-field-unknown")) &&
+    (referencesProvided || entry.ruleId !== "opf/cite-unknown-reference"));
   if (errors.length) {
     const first = errors[0];
     throw new OPFConversionError("invalid-output", `The converted content is not valid OPF: ${first?.message ?? "unknown error"}${first?.path ? ` (${first.path})` : ""}.`, { issues: errors });
@@ -86,8 +90,10 @@ export const assertValidOwner = (owner: Obj, context: Obj = {}): void => assertV
 // --- text runs --------------------------------------------------------------------------------
 
 export const FORMATTING = ["bold", "italic", "underline", "strikethrough", "color", "fontSize", "fontFamily", "link", "superscript", "subscript", "code", "lang"] as const;
+// Annotations are run metadata too, but are not Markdown character-format syntax.
+const RUN_METADATA = [...FORMATTING, "cite", "footnote"] as const;
 export type Run = string | Obj;
-export const isPlainRun = (run: Run): boolean => typeof run === "string" || (isRecord(run) && !FORMATTING.some((key) => run[key] !== undefined));
+export const isPlainRun = (run: Run): boolean => typeof run === "string" || (isRecord(run) && !RUN_METADATA.some((key) => run[key] !== undefined));
 export const runText = (run: Run): string => (typeof run === "string" ? run : (run.text ?? ""));
 export const runsOf = (value: unknown): Run[] => (typeof value === "string" ? [value] : Array.isArray(value) ? (value as Run[]) : []);
 export const plainOf = (value: unknown): string => runsOf(value).map(runText).join("");

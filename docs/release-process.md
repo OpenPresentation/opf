@@ -23,9 +23,9 @@ The owner authorized agents to prepare and publish npm releases on 2026-09-29
 and for future releases whenever a release is required. This does not waive any
 gate: a release still needs a merged release-prep PR, green required checks and
 the verification below. Agents keep publishing on the trusted-publishing
-workflows (GitHub Actions OIDC with `--provenance`); a local `npm publish` is a
-fallback only when a workflow cannot run, and it loses the provenance
-attestation that every previous version carries.
+workflows (GitHub Actions OIDC with `--provenance`). If a workflow cannot run,
+stop and repair the trusted-publishing path; do not substitute a local publish
+or an npm-token publish that omits the required provenance.
 
 The engine packages depend on each other, so publish in this order and wait for
 each version to appear on the registry before starting the next:
@@ -185,11 +185,12 @@ train: `release-train.mjs` has it in `INDEPENDENT_PACKAGES` (repository `gallery
 - **First release.** `1.0.0` is the first version published from OpenPresentation/gallery; `0.0.1` was a placeholder
   published by hand. Against 0.0.1 the stability check runs as a major release and reports no changed record.
 
-From OPF 0.19, core and the CLI declare `@openpresentation/gallery@^2.0.0`: their Node defaults register
-`gallery`, and core has no `/catalog` subpath. A core or CLI release needs a gallery version its range accepts
-on npm first. After gallery 2.0.0 is published and independently verified, a reviewed registry-adoption PR updates
-those ranges and the authentic lockfile and removes the temporary candidate-gallery configuration and declaration.
-Stable release preparation follows that adoption; it does not perform the source configuration transition.
+From OPF 0.19, core and the CLI consume the independently published Gallery package: their Node defaults register
+`gallery`, and core has no `/catalog` subpath. OPF 0.19 used Gallery 2; OPF 0.20 uses Gallery 3.
+The current ranges and exact verified set are in the package manifests and [release-plan.json](../release-plan.json).
+A core or CLI release needs a Gallery version its range accepts on npm first. A reviewed registry-adoption PR
+updates those ranges and the authentic lockfile after independent publication verification. Stable release
+preparation follows that adoption; it does not perform the source configuration transition.
 
 Before registry adoption, explicit authenticated candidate CI can stage reviewed gallery and engine tarballs
 (`scripts/candidate-gallery-build.mjs`, `scripts/pack-cli-candidate.mjs`, `scripts/pack-ecosystem.mjs`). Its recorded
@@ -280,8 +281,9 @@ The publish step should not set `NODE_AUTH_TOKEN`:
 ```
 
 If a future release fails with npm authentication errors, check the npm
-trusted-publisher settings first. Only use an `NPM_TOKEN` repository secret as a
-temporary fallback, and remove or revoke it once OIDC publishing works again.
+trusted-publisher settings first and repair the OIDC workflow. Do not add an
+`NPM_TOKEN` fallback or publish locally; the required trusted-publishing and
+provenance gates still apply.
 
 ## Verify The Release
 
@@ -334,20 +336,11 @@ Use the matching `## X.Y.Z` section of the changelog as the release notes.
 ## Troubleshooting
 
 If the tag/version check fails, the tag does not point at the release commit or
-the tag name does not match `packages/javascript/package.json`. Delete the bad
-local and remote tag, fetch `main`, and tag the correct commit:
-
-```sh
-git push origin :refs/tags/opf-vX.Y.Z
-git tag -d opf-vX.Y.Z
-git checkout main
-git pull origin main
-git tag opf-vX.Y.Z
-git push origin opf-vX.Y.Z
-```
-
-If tests fail, fix the code on `main`, create a new release commit, and move the
-tag only if npm has not already published that version.
+the tag name does not match `packages/javascript/package.json`. Stop and inspect
+the exact tag and merged release source. Never move or re-push a release tag.
+Fix a real source or version error on `main` through a new release-prep PR and
+use a new version/tag after its gates pass. A transient workflow failure may be
+retried on the same unchanged tag; it does not authorize replacing the tag.
 
 If npm publish fails with `ENEEDAUTH`, confirm:
 

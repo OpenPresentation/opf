@@ -204,7 +204,7 @@ acceptance remain open; no new package train or broad native pass is inferred.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/gallery` | 2.0.0 (independently verified at `48169a9bb385`; prior 1.0.0 remains historical) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
+| `@openpresentation/gallery` | 3.0.0 ([independent artifact verification](evidence/rr-85-final-published-set-2026-10-16/README.md); prior 2.0.0 and 1.0.0 remain historical) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
 
 The gallery (RR-78) is released from its own repository, OpenPresentation/gallery, on its own version line (`vX.Y.Z`
 tags, `gallery-publish.yml` there), outside the lockstep set above and
@@ -220,7 +220,7 @@ CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), 
 | JSON authoring | `*.opf.json` plus CLI `opf create` | Local files only |
 | Bundled examples catalog | `@openpresentation/opf/examples` | **127** decks; the quickstart JSON is a docs fixture, not a 128th catalog entry |
 | Validate | `validate` / `opf validate` | One read-only checker: format, references, policy, accessibility, layout and content findings ([guide](validate.md)); no network catalog fetch |
-| Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Native `schemeClr`/theme writing and editor canvas named-color fidelity remain follow-ups. |
+| Color references | `ColorRef`, `variables`, `resolveColorRef` | Core schema/resolution, renderer preview and PPTX resolved colors are shipped. Supported theme-slot colors write native `schemeClr` references; arbitrary native Office recoloring and full visual fidelity remain separately scoped. |
 | Embed catalog records | `embed` / `opf embed` | Embeds every record a document references, in the group it resolves in, so it renders with no catalog registered; remote media and data remain explicit host concerns. |
 | Offline fonts | `loadFonts` (`/fonts-node`) | Bundled Roboto pack (`pack: 'base'`) or the office pack; hashed files; the handle is passed as `{ fonts }` to every deck-level call |
 | Composition | `composeSlide` | Includes shared headers/footers |
@@ -238,8 +238,8 @@ CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), 
 
 ## Public sites
 
-The current source, CI and canonical production results are recorded in the
-[current font-readiness checkpoint](evidence/font-readiness-acceptance-20260921/README.md),
+The current coordinated adoption is recorded in the [final adoption note](evidence/rr-85-final-adoption-2026-10-16/README.md). The following source, CI and canonical production results are the historical September 21 checkpoint, recorded in the
+[font-readiness checkpoint](evidence/font-readiness-acceptance-20260921/README.md),
 [prior Inspector actions checkpoint](evidence/inspector-current-actions-20260921/README.md),
 [earlier publication checkpoint](evidence/inspector-share-acceptance-20260921/README.md),
 [source-preservation checkpoint](evidence/author-source-acceptance-20260921/README.md),
@@ -444,7 +444,7 @@ site40) remain unmerged. In particular, site40 is not independently shipped.
 | Topic | Tracker | Do not describe as done |
 | --- | --- | --- |
 | Linux vs Chromium native-width residual at the 0.1px gate | [opf-render#24](https://github.com/OpenPresentation/opf-render/issues/24) | Rounding that fixes Linux but breaks macOS is rejected |
-| General native PowerPoint fidelity and real Office Header/Footer objects (`p:hf`) | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Finite B/C and bounded Carlito edit controls above are accepted evidence, as is one finite mixed-size table edit/save/reopen ([evidence](evidence/windows-native-mixed-edit-20260922/README.md)). Tab tolerance, general mixed-size table layout and preview/native wrapping, physical glyph identity/fallback/synthesis, embedding and general layout/reflow fidelity remain open; self-import and tagged furniture do not certify arbitrary Office behavior |
+| General native PowerPoint fidelity beyond the supported footer placeholders | [opf#87](https://github.com/OpenPresentation/opf/issues/87) | Finite B/C and bounded Carlito edit controls above are accepted evidence, as is one finite mixed-size table edit/save/reopen ([evidence](evidence/windows-native-mixed-edit-20260922/README.md)). Tab tolerance, general mixed-size table layout and preview/native wrapping, physical glyph identity/fallback/synthesis, embedding and general layout/reflow fidelity remain open; supported native footer placeholders, self-import and tagged furniture do not certify arbitrary Office behavior |
 | Public-surface acceptance checklist | [opf#88](https://github.com/OpenPresentation/opf/issues/88) | Shipping features does not establish every acceptance item; use the checklist and deployment receipts |
 | HarfBuzz / prepared-glyph shaping | Archive branches `codex/archive-shaping-20260915` | Prototypes are preserved, not in npm |
 | Selectable vector PDF | [pdf plan](plans/pdf-export.md) | Shipped in opf-render 0.12.0 (opf-render#90; the browser download entry `@openpresentation/opf-render/export-browser` ships there too); PDF/UA, PDF/A and viewer coverage beyond pdf.js, PDFium and poppler remain open |

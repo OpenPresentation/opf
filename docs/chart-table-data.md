@@ -1,6 +1,6 @@
 # Chart and table data: numbers, formats, datasets and series mapping
 
-Status: RR-54 (release readiness). Additive schema plus one behaviour fix (strict chart numbers). Ships in the next lockstep release: core first, then renderer and PPTX, then editor. This page is the contract the four packages implement; change it here first.
+Status: RR-54 (release readiness). Additive schema plus one behaviour fix (strict chart numbers). These features are shipped in the coordinated package line; use the [compatibility matrix](compatibility-matrix.md) for the verified set. This page is the contract the four packages implement; change it here first.
 
 ## Decisions (vetoable)
 

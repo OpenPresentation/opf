@@ -509,9 +509,12 @@ export function buildTracker({ root = ROOT } = {}) {
     const col = (c) => probe?.[c] ?? pass;
     for (const [c, code] of [["compose", "broken"], ["preview", "missing-preview"], ["export", "missing-export"]]) if (col(c) === "fail") gaps.push({ code, detail: clip(probe.reasons.join("; ") || `${c} check failed`) });
     if (col("roundTrip") === "fail" && col("export") !== "fail") gaps.push({ code: "missing-export", detail: clip(probe.reasons.join("; ") || "re-import check failed") });
-    const presetParity = parityBy.get(`slide-sizes/${id}`)?.class ?? (measured ? slideSizeParity : "unmeasured");
-    if (presetParity === "near") gaps.push({ code: "parity-near", detail: clip([...parityBy.get(`slide-sizes/${id}`).checks].join(", ")) });
-    if (presetParity === "mismatch") gaps.push({ code: "parity-mismatch", detail: clip([...parityBy.get(`slide-sizes/${id}`).checks].join(", ")) });
+    const presetResult = parityBy.get(`slide-sizes/${id}`);
+    const presetParity = presetResult?.class ?? (measured ? slideSizeParity : "unmeasured");
+    const presetParityDetail = () => clip(presetResult ? [...presetResult.checks].join(", ") :
+      parity.results.filter((r) => r.checks.slideSize !== "pass").map((r) => `${r.dimension}/${r.id}: slideSize ${r.checks.slideSize ?? "missing"}`).join(", "));
+    if (presetParity === "near") gaps.push({ code: "parity-near", detail: presetParityDetail() });
+    if (presetParity === "mismatch") gaps.push({ code: "parity-mismatch", detail: presetParityDetail() });
     push({
       type: "slide-sizes",
       id,

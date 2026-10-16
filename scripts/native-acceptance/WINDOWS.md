@@ -171,10 +171,10 @@ overall native acceptance.
 Use the exact reviewed core/PPTX revisions and installed consumer to generate a
 fresh Windows suite. Keep the suite seal, executing code/runtime identities and
 every case disposition. The [reviewed 55-case dispatch table](../../docs/evidence/rr20-site-currency-queue/native55-dispatch-coverage.md)
-records the current fixture inventory and its original evidence scope; actual
+records the historical 55-case inventory and its original evidence scope; current
 execution uses the freshly verified `suite.json`, not a historical seal.
 
-The full scope is 50 generic eligible cases, one dedicated `table-colors` case
+The current 58-case scope is 53 generic eligible cases, one dedicated `table-colors` case
 and four manual seven-slide cases. Supervised execution runs each eligible
 case once through `run-windows.ps1` with its exact case ID and a distinct new
 output directory. Start with metrics/list diagnostics, then complete the other

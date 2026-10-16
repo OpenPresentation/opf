@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { spawnSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -6,7 +7,7 @@ import { PassThrough } from 'node:stream';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { selectChecks } from './run-checks.mjs';
-import { biomeBatches, buildPlan, formatTable, matches, referencedPaths, runCommand, selectChangedChecks, selectPackageTests, splitPaths } from './check-changed.mjs';
+import { biomeBatches, buildPlan, changedFiles, formatTable, matches, referencedPaths, runCommand, selectChangedChecks, selectPackageTests, splitPaths } from './check-changed.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
@@ -124,4 +125,48 @@ test('#525: the plan names pnpm bare, so the launcher (not a .cmd shim path) dec
   assert.ok(argvs.some((argv) => argv[0] === 'pnpm'));
   assert.ok(argvs.some((argv) => argv.includes('pnpm') && argv.some((part) => part.endsWith('agent-slot.mjs'))));
   for (const argv of argvs) assert.ok(!argv.some((part) => /\.cmd$/i.test(part)), argv.join(' '));
+});
+
+
+test('changedFiles refuses an invalid explicit base and failed Git enumerations', (t) => {
+  const cwd = mkdtempSync(path.join(tmpdir(), 'opf-changed-base-'));
+  t.after(() => rmSync(cwd, { recursive: true, force: true }));
+  const runGit = (args) => {
+    const result = spawnSync('git', args, { cwd, encoding: 'utf8' });
+    return result.status === 0 ? result.stdout : null;
+  };
+  const ok = (args) => assert.notEqual(runGit(args), null, args.join(' '));
+  ok(['init', '-b', 'main']);
+  ok(['config', 'user.name', 'Test']);
+  ok(['config', 'user.email', 'test@example.invalid']);
+  writeFileSync(path.join(cwd, 'a.txt'), 'base');
+  ok(['add', '.']);
+  ok(['commit', '-m', 'base']);
+  const base = runGit(['rev-parse', 'HEAD']).trim();
+  ok(['checkout', '-b', 'topic']);
+  writeFileSync(path.join(cwd, 'a.txt'), 'changed');
+  ok(['commit', '-am', 'change']);
+  writeFileSync(path.join(cwd, 'untracked.txt'), 'new');
+  assert.deepEqual(changedFiles(base, { cwd }), { base, files: ['a.txt', 'untracked.txt'] });
+  assert.deepEqual(changedFiles(undefined, { cwd }), { base, files: ['a.txt', 'untracked.txt'] }, 'missing origin/main falls back to main');
+  assert.throws(() => changedFiles('not-a-real-ref', { cwd }), /Cannot resolve changed-files base/);
+  for (const ref of ['', '   ', null]) assert.throws(() => changedFiles(ref, { cwd }), /nonempty ref/);
+  for (const command of ['diff', 'ls-files']) {
+    assert.throws(() => changedFiles(base, { cwd, runGit: (args) => args[0] === command ? null : runGit(args) }), new RegExp(`git ${command}.*failed`));
+  }
+  ok(['branch', '-D', 'main']);
+  assert.deepEqual(changedFiles(undefined, { cwd }), { base: null, files: ['untracked.txt'] }, 'no default base retains HEAD policy');
+  const outside = mkdtempSync(path.join(tmpdir(), 'opf-changed-not-git-'));
+  t.after(() => rmSync(outside, { recursive: true, force: true }));
+  assert.throws(() => changedFiles(undefined, { cwd: outside }), /git diff.*failed/);
+});
+
+
+test('CLI --base requires its own nonempty value rather than default discovery', () => {
+  for (const args of [['--base'], ['--base', ''], ['--base', '--plan'], ['--base', '--files', 'README.md']]) {
+    const result = spawnSync(process.execPath, [path.join(root, 'scripts/check-changed.mjs'), ...args], { encoding: 'utf8' });
+    assert.equal(result.status, 1, JSON.stringify(args));
+    assert.match(result.stderr, /--base requires a nonempty ref value/);
+    assert.ok(!result.stdout.includes('check-changed: passed'));
+  }
 });

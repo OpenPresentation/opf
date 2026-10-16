@@ -1,7 +1,8 @@
 // `convert`, `open` and `save` of `@openpresentation/opf` in Node (RR-62, RR-70), and the plan `opf convert` runs: files in, files out, the
 // formats named by the file names. A conversion is planned first (every option checked, the input read, checked and drawn or
-// serialized, every byte produced), then written atomically, so an error writes nothing. The command applies --fail-on to the
-// plan and writes it; `convert` writes it at once, or returns the bytes when no output path is given.
+// serialized, every byte produced), then each output is published atomically. Preparation failures publish no outputs; a later
+// publication failure can leave earlier complete files. The command applies --fail-on to the plan before writing it;
+// `convert` writes it at once, or returns the bytes when no output path is given.
 //
 //   input                                         output
 //   .pptx, PPTX bytes    imported (opf-pptx)       .pdf .pptx .png .svg        exported (opf-render, opf-pptx)
@@ -359,7 +360,7 @@ export async function planConversion(input: ConvertInput, output: string | undef
 }
 
 /**
- * Write planned files atomically (temporary sibling, then rename), creating folders. `overwrite` false refuses an existing output
+ * Stage planned files, then publish each atomically, creating folders. `overwrite` false refuses an existing output
  * (`output-exists`): the opf commands pass it unless `--force`; `convert` passes its `overwrite` option, true by default.
  */
 export async function writePlanned(files: readonly ConvertedFile[], overwrite: boolean, flags = false): Promise<void> {

@@ -92,7 +92,7 @@ validate(presentation, {
 
 `assertValid(value, options?)` throws `OPFValidationError`, carrying the `report` and its error `findings`, unless `validate(value, options)` is valid, and tells TypeScript that `value` is a `Presentation`. It takes a parsed value, not text.
 
-`validateCatalogRecord(kind, record)` and `assertValidCatalogRecord(kind, record)` check one catalog record (an audience, theme, layout, font scheme and so on) against its schema. The report has the same shape; its findings are `format`, and a record that links to an unknown id only warns.
+`validateCatalogRecord(kind, record)` and `assertValidCatalogRecord(kind, record)` check one catalog record (an audience, theme, layout, font scheme and so on) against its schema. The report has the same shape and checks the record format only (`checks.references` is `not-run`): without an enclosing catalog it does not resolve linked ids. Validate a presentation with its registered catalogs to check those references.
 
 ## Pass `fonts`, otherwise the estimate
 
@@ -119,7 +119,7 @@ Without `fonts` the rules use core's built-in estimate and `checks.layout` says 
 
 `only: ['format']` costs what the schema check alone costs; it builds no layout. The references walk reads the schema alongside the document and costs about ten times as much. The rules of `layout` (and `opf/text-contrast`, `opf/text-on-image` and `opf/reading-order`) compose every slide and are most of the cost of a full run. Each rule's `cost` says which it needs: `syntax` reads the JSON text, `structure` reads the document alone, `composition` builds slide layouts.
 
-The default runs everything, so an agent or CI job never gets "valid" for a deck that overflows, and the hot paths say what they need: pagination, conversion, patch validation and the editor's per-edit check use `{ only: ['format'] }`; the CLI's write, render, export and import commands use `{ only: ['format', 'references'] }`, so a contrast warning never blocks an export.
+The default runs every category, including overflow findings; `valid` means no error findings, so an overflow warning alone does not make it false. Hot paths select what they need: pagination, conversion, patch validation and the editor's per-edit check use `{ only: ['format'] }`; CLI document-writing commands check `format` and `references`, so a contrast warning does not block an export unless its severity or failure policy is explicitly raised.
 
 ## Quick fixes
 
@@ -181,7 +181,7 @@ A file ending `.yaml` or `.yml` (or stdin with `--from yaml`) is read as YAML th
 | 1 | At least one finding at or above `--fail-on`, or a document that is not valid JSON (or YAML) |
 | 2 | Usage, configuration or I/O error |
 
-`--fail-on` is the one way to say "fail on warnings" on every command that checks a document: `--fail-on warning`. Other commands (`create`, `edit`, `fill`, `paginate`, `bundle`, `ingest`, `render`, `export`, `import`, `from-md`, `from-yaml`) check only `format` and `references` of what they write and take `--fail-on` the same way.
+`--fail-on` is the one way to say "fail on warnings" on every command that checks a document: `--fail-on warning`. Other commands (`create`, `edit`, `fill`, `paginate`, `embed`, `ingest`, `convert`) check only `format` and `references` of what they write and take `--fail-on` the same way.
 
 ## How contrast is computed
 

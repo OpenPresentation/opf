@@ -355,7 +355,8 @@ export function backdropColors(
 						py = (region.y + (region.height * j) / 4) / size.height,
 						t = Math.max(0, Math.min(1, 0.5 + (px - 0.5) * c + (py - 0.5) * s));
 					const after = stops.findIndex((stop) => stop.position >= t);
-					if (after <= 0) colors.add(stops[Math.max(0, after)]?.color ?? PAGE);
+					if (after < 0) colors.add(stops[stops.length - 1]!.color);
+					else if (after === 0) colors.add(stops[0]!.color);
 					else {
 						const lo = stops[after - 1]!,
 							hi = stops[after]!,

@@ -10,6 +10,7 @@ import {execFileSync} from 'node:child_process';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {createRequire} from 'node:module';
+import {previewOutcome} from './render-api.mjs';
 import {classifyChosenFamilies, hostRenderOutcome, hostRenderReason, resolveFamily} from './font-availability.mjs';
 import {runElements, logicalRunCount} from './pptx-runs.mjs';
 import {drawnTableBox} from './table-box.mjs';
@@ -260,18 +261,8 @@ const overTol = d => !(d <= TOL.geomPt);
 const bucket = d => !Number.isFinite(d) ? 'non-finite' : d > 50 ? '>50pt' : d > 5 ? '>5pt' : d > TOL.geomNearPt ? '>0.5pt' : '<=0.5pt';
 function sev(dPt) { return dPt <= TOL.geomPt ? 'pass' : dPt <= TOL.geomNearPt ? 'near' : 'fail'; } // NaN and Infinity fail
 
-function compareValue(doc) {
-  const diffs = []; const checks = {};
-  const add = (check, status, reason, detail) => { diffs.push({check, status, reason, ...(detail ? {detail} : {})}); };
-  // Preview
-  const pdiag = []; let svgs, resolved;
-  try { resolved = render.resolvePresentation(structuredClone(doc), {}); svgs = render.renderSvg(structuredClone(doc), {trace: true, onDiagnostic: d => pdiag.push(d.code)}); }
-  catch (e) { return {fatal: `preview threw ${e.code ?? e.name}`, message: String(e.message).slice(0, 200)}; }
-  return {resolved, svgs, pdiag};
-}
-
 async function parity(doc) {
-  const pv = compareValue(doc); if (pv.fatal) return {class: 'mismatch', fatal: pv.fatal, message: pv.message, checks: {}, diffs: [{check: 'preview', status: 'fail', reason: pv.fatal}]};
+  const pv = previewOutcome(render, doc); if (pv.fatal) return {class: 'mismatch', fatal: pv.fatal, message: pv.message, checks: {}, diffs: [{check: 'preview', status: 'fail', reason: pv.fatal}]};
   const {resolved, svgs} = pv;
   const ediag = []; let bytes;
   try { bytes = await toPptx(structuredClone(doc), {onDiagnostic: d => ediag.push(d.code), seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'}); }

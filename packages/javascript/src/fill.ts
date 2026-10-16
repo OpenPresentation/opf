@@ -105,7 +105,7 @@ function combine(decks: FilledDeck[]): Record<string, unknown> {
 				slides.push(id === slide.id ? slide : { ...slide, id });
 			} else slides.push(slide);
 		}
-		if (isRecord(deck.presentation.assets)) for (const [key, value] of Object.entries(deck.presentation.assets)) if (!(key in assets)) assets[key] = value;
+		if (isRecord(deck.presentation.assets)) for (const [key, value] of Object.entries(deck.presentation.assets)) if (!Object.hasOwn(assets, key)) assets[key] = value;
 	}
 	return { ...first.presentation, ...(Object.keys(assets).length ? { assets } : {}), slides };
 }

@@ -18,6 +18,7 @@ import {
   floorOf,
   INDEPENDENT_PACKAGES,
   isPrepTitle,
+  isVersion,
   lockstepFlags,
   lockstepOrder,
   main,
@@ -59,6 +60,36 @@ test("versions and ranges", () => {
   assert.equal(raiseRange("~0.12.0", "0.12.3"), "~0.12.3");
   assert.equal(raiseRange("^0.12.2", "0.12.1"), null, "a floor is never lowered");
   assert.equal(raiseRange("workspace:*", "0.12.1"), null);
+});
+
+test("release ordering follows each SemVer prerelease identifier and never lowers a floor", () => {
+  const ordered = ["1.0.0-alpha", "1.0.0-alpha.1", "1.0.0-alpha.beta", "1.0.0-beta", "1.0.0-beta.2", "1.0.0-beta.11", "1.0.0-rc.1", "1.0.0"];
+  for (let i = 0; i < ordered.length; i++) {
+    assert.equal(compareVersions(ordered[i], ordered[i]), 0);
+    for (let j = i + 1; j < ordered.length; j++) {
+      assert.equal(compareVersions(ordered[i], ordered[j]), -1);
+      assert.equal(compareVersions(ordered[j], ordered[i]), 1);
+    }
+  }
+  assert.equal(compareVersions("0.20.0-rc.10", "0.20.0-rc.2"), 1);
+  assert.equal(compareVersions("0.20.0-1", "0.20.0-alpha"), -1, "numeric identifiers precede nonnumeric identifiers");
+  assert.equal(compareVersions("0.20.0-9007199254740993", "0.20.0-9007199254740992"), 1);
+  assert.equal(compareVersions("9007199254740993.0.0", "9007199254740992.0.0"), 1);
+  assert.equal(compareVersions("1.0.0-Z", "1.0.0-a"), -1, "nonnumeric identifiers compare by ASCII order");
+  const manifest = {dependencies: {"@openpresentation/opf": "^0.20.0-rc.10"}};
+  assert.equal(raiseRange(manifest.dependencies["@openpresentation/opf"], "0.20.0-rc.2"), null);
+  assert.deepEqual(floorChanges(manifest, {"@openpresentation/opf": "0.20.0-rc.2"}), []);
+  assert.equal(raiseRange("^0.20.0-rc.2", "0.20.0-rc.10"), "^0.20.0-rc.10");
+});
+
+test("unsupported release spellings and build metadata are rejected explicitly", () => {
+  for (const value of ["01.2.3", "1.02.3", "1.2.03", "1.2.3-01", "1.2.3-rc..1", "1.2.3-", "1.2.3+build.1", "1.2.3-rc.1+build", "v1.2.3", "1.2", "1.2.3\n", undefined, 123]) {
+    assert.equal(isVersion(value), false, String(value));
+    assert.throws(() => compareVersions(value, "1.2.3"), /not a supported release version/);
+  }
+  assert.equal(isVersion("1.2.3-0.a-1"), true);
+  assert.equal(floorOf("^1.2.3-01"), null);
+  assert.throws(() => raiseRange("^1.2.3", "1.2.4+build"), /not a supported release version/);
 });
 
 test("RR-55: removeUnreleasedCoreText deletes the field in every layout and changes nothing else", () => {

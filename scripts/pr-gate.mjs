@@ -223,7 +223,7 @@ export function buildPollQuery(repos) {
 }
 
 export function moreContextsQuery(owner, name, oid, cursor) {
-  return `query{rateLimit{remaining resetAt cost} repository(owner:${JSON.stringify(owner)},name:${JSON.stringify(name)}){object(oid:${JSON.stringify(oid)}){... on Commit{statusCheckRollup{contexts(first:100,after:${JSON.stringify(cursor)}){pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}}}}}}`;
+  return `query{rateLimit{remaining resetAt cost} repository(owner:${JSON.stringify(owner)},name:${JSON.stringify(name)}){object(oid:${JSON.stringify(oid)}){... on Commit{oid statusCheckRollup{contexts(first:100,after:${JSON.stringify(cursor)}){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}}}}}}`;
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -520,14 +520,36 @@ export async function runGate(options, deps) {
       commit.checkSuites = {nodes:fallback.suites};
       return fallback.nodes;
     }
-    const nodes = [...(rollup?.contexts?.nodes ?? [])];
-    let page = rollup?.contexts?.pageInfo;
-    while (page?.hasNextPage && page.endCursor) {
+    const validatePage = (connection) => {
+      if (!Array.isArray(connection?.nodes) || typeof connection.pageInfo?.hasNextPage !== 'boolean' ||
+          !Number.isSafeInteger(connection.totalCount) || connection.totalCount < 0) throw new Error('rollup pagination is incomplete');
+
+    };
+    validatePage(rollup.contexts);
+    const nodes = [...rollup.contexts.nodes];
+    const totalCount = rollup.contexts.totalCount, cursors = new Set();
+    let page = rollup.contexts.pageInfo;
+    while (page.hasNextPage) {
+      if (typeof page.endCursor !== 'string' || !page.endCursor || cursors.has(page.endCursor)) throw new Error('rollup pagination lacks a fresh cursor');
+      cursors.add(page.endCursor);
       const response = await graphql(moreContextsQuery(repo.owner, repo.name, commit.oid, page.endCursor));
-      const contexts = response?.data?.repository?.object?.statusCheckRollup?.contexts;
-      if (!contexts) break;
-      nodes.push(...(contexts.nodes ?? []));
+      if (response?.errors?.length) throw new Error('rollup pagination response contains errors');
+      const object = response?.data?.repository?.object;
+      if (object?.oid !== commit.oid) throw new Error('rollup pagination returned a different or missing commit');
+      const contexts = object.statusCheckRollup?.contexts;
+      validatePage(contexts);
+      if (contexts.totalCount !== totalCount) throw new Error('rollup count changed during pagination');
+      nodes.push(...contexts.nodes);
+      if (nodes.length > totalCount) throw new Error('rollup pagination exceeds its reported count');
       page = contexts.pageInfo;
+    }
+    if (nodes.length !== totalCount) throw new Error('rollup pagination does not match its reported count');
+    const identities = new Set();
+    for (const node of nodes) {
+      const identity = node?.__typename === 'CheckRun' && Number.isSafeInteger(node.databaseId) ? `check:${node.databaseId}` :
+        node?.__typename === 'StatusContext' && typeof node.context === 'string' && typeof node.createdAt === 'string' ? `status:${node.context}:${node.createdAt}` : null;
+      if (!identity || identities.has(identity)) throw new Error('rollup context has missing or duplicate identity');
+      identities.add(identity);
     }
     const checks = normalizeContexts(nodes, commit.oid);
     const missingRequired = required?.some(req => !checks.some(check => check.name === req.context && (check.kind === 'status' || req.integrationId == null || check.appId == null || check.appId === req.integrationId)));
@@ -830,6 +852,8 @@ export async function runGate(options, deps) {
             finish(original, EXIT.usage, 'not-found', `NOT-FOUND ${original.label}: ${why}`);
             continue;
           }
+          if ((response.errors ?? []).some(error => !error.path ||
+              (error.path[0] === repo.alias && (error.path.length === 1 || error.path[1] === target.alias)))) throw new Error(`partial GraphQL response for ${original.label}`);
           if (original.kind === 'pr') await handlePr(original, real, node);
           else await handleCommit(original, real, node);
         }

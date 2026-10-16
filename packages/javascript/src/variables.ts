@@ -270,7 +270,9 @@ export function formatVariableNumber(value: number, pattern?: string): { text: s
   const minInteger = [...integerPattern].filter((char) => char === "0").length;
   const minDecimals = [...decimalPattern].filter((char) => char === "0").length;
   const maxDecimals = decimalPattern.length;
+  if (maxDecimals > 100) return { error: `Number format '${pattern}' supports at most 100 decimal places.` };
   const scaled = prefix.includes("%") || suffix.includes("%") ? value * 100 : value;
+  if (!Number.isFinite(scaled)) return { error: `Number format '${pattern}' scales the value beyond the finite number range.` };
   const absolute = Math.abs(scaled);
   // Round half away from zero in decimal, not binary, so 1.005 with two decimals is 1.01.
   let fixed: string;

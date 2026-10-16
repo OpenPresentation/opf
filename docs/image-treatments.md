@@ -71,7 +71,7 @@ Colors accept the usual `ColorRef` forms: hex, scheme slot or role, or `var:<id>
 
 - Only a top-level block (`slides.N.blocks.I`) can be placed, and each slide edge takes at most one placed image. A placed block inside a group or a promoted region, or a second block on the same edge, is an `opf/image-placement-invalid` error.
 - Bands are taken in block order. Each spans the free area left by the earlier ones.
-- A layout's image placeholder may carry the same `placement`. The layout's n-th image placeholder places the slide's n-th top-level image (an image block, or `Slide.image`) unless that block sets its own; this is the only way a root `Slide.image` is placed.
+- Placement belongs to a top-level image block. Current v2 layout records do not have image-placeholder placement; write a block in `blocks` to place a picture rather than using the root `Slide.image` shorthand.
 - A slide whose only body is placed images is composed like a cover: its headings center in the free area beside the image.
 - In a right-to-left deck `left` is the start side, drawn at the right. Edge overlays mirror the same way.
 

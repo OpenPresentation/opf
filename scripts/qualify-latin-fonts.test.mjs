@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import test from "node:test";
 import { assemble } from "./assemble-latin-host-evidence.mjs";
-import { BOX_WIDTHS_EM, PARAGRAPH_SIZE, ROOT, compareBreaks, paragraphsOf, wrapBreaks } from "./qualify-latin-fonts.mjs";
+import { BOX_WIDTHS_EM, PARAGRAPH_SIZE, ROOT, compareBreaks, createReferenceAdvance, paragraphsOf, wrapBreaks } from "./qualify-latin-fonts.mjs";
 
 // Every character is 0.5 em wide, so a word of n letters is n / 2 em and a space is 0.5 em.
 const width = (word) => word.length / 2;
@@ -70,4 +70,28 @@ test("assemble records which families passed in which host, with the lazy-load b
   assert.equal(out.lazyBudget.node.largestDeck, "C");
   assert.equal(out.lazyBudget.galleryEditor.familiesWithoutLazyFiles, 1);
   assert.equal(out.hosts.browser.filesFetchedInTotal, 2);
+});
+
+
+test("reference advances distinguish regular, bold and italic faces in the same collection", () => {
+  const advance = createReferenceAdvance();
+  const calls = new Map();
+  const face = (name, width) => ({
+    file: "Shared.ttc",
+    unitsPerEm: 1000,
+    hasGlyphForCodePoint: (codepoint) => codepoint !== 0x2603,
+    layout(text) {
+      calls.set(name, (calls.get(name) ?? 0) + 1);
+      return { positions: [{ xAdvance: text.length * width }] };
+    },
+  });
+  const regular = face("regular", 500), bold = face("bold", 700), italic = face("italic", 600);
+  for (const [font, expected] of [[regular, 1], [bold, 1.4], [italic, 1.2]]) {
+    assert.equal(advance(font, "ab"), expected);
+    assert.equal(advance(font, "ab"), expected, "within-face repeated words reuse their advance");
+    assert.ok(Number.isNaN(advance(font, "☃")), "missing-glyph result stays unmeasured");
+  }
+  assert.deepEqual([...calls], [["regular", 1], ["bold", 1], ["italic", 1]]);
+  assert.equal(advance(regular, "a"), .5, "a new word is measured independently");
+  assert.equal(calls.get("regular"), 2);
 });

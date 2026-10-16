@@ -89,6 +89,8 @@ OPF keeps one machine-readable font policy table, [`spec/reference/font-policy.j
 - **Open pack:** the open catalog families and replacement targets, including Red Hat Display for Segoe UI and Red Hat Text for Tahoma. Node `pack: 'office'` includes this pack and the base pack by default; `includeOpenFonts: false` and `includeBaseFonts: false` opt out. There is no separate proposed `catalog` pack to install.
 - **Script packs:** pinned Noto and special-purpose faces, loaded for the scripts a presentation needs with `scripts: 'auto'`, or explicitly by script codes or `'all'`.
 
+Node loaders verify the bundled manifest; browser hosts serve the package files and load the needed faces on demand, as described below. Optional script-font packages remain explicit host dependencies.
+
 The registry tries an exact supplied family first, then an explicit alias, the permitted policy replacement and its alternates, and an explicit generic fallback if configured. Alternates are visual even when the preferred replacement is metric. Inspect `fonts.substitutions` for the actual route. `substitutionPolicy: 'visual'` permits approximate replacements; `'metric'` restricts them to metric replacements, with the policy's explicitly documented Cambria fallback; `'none'` disables policy substitutions but does not disable explicit aliases or an explicit fallback.
 
 | Environment | Font resolution | What the viewer needs |
@@ -209,7 +211,7 @@ An original OPF font project is technically feasible: independently designed or 
 
 ## Verification and remaining work
 
-Script fonts (CJK, Arabic, Hebrew, Indic, Thai, Khmer, Myanmar and the rest) have their own shaping corpora and per-family qualification (FF-44, RR-17): see [script-corpora.md](programs/font-fidelity-everywhere/script-corpora.md). It records, per script, glyph coverage, fontkit against HarfBuzz and Chromium, the installed originals measured in place, and the known limits (fontkit has no Myanmar shaper; the PNG path of resvg-js mis-shapes the Indic scripts, Thai, Lao, Khmer and Myanmar).
+Script fonts (CJK, Arabic, Hebrew, Indic, Thai, Khmer, Myanmar and the rest) have their own shaping corpora and per-family qualification (FF-44, RR-17): see [script-corpora.md](programs/font-fidelity-everywhere/script-corpora.md). It records, per script, glyph coverage, fontkit against HarfBuzz and Chromium, the installed originals measured in place, and dated shaping/raster limitations and their fixes. Read each result with its exact renderer and rasterizer versions; historical resvg-js failures do not describe every later PNG path or establish native acceptance.
 
 ### Arabic Typesetting and Traditional Arabic: line-width residual (opf#523)
 

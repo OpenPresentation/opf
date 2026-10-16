@@ -22,6 +22,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {linkModules} from './link-modules.mjs';
+import {assertParityWorkDirectory} from './parity-work-directory.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..', '..');
@@ -67,6 +68,7 @@ export async function plannedVersions() {
 }
 
 async function prepare() {
+  await assertParityWorkDirectory(work);
   const versions = await plannedVersions();
   console.log('Installed set:', JSON.stringify(versions));
   await rm(work, {recursive: true, force: true});

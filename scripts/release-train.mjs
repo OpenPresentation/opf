@@ -96,27 +96,48 @@ export const tagOf = (pkg, version) => `${pkg.tagPrefix}${version}`;
 // ---------------------------------------------------------------------------------------------------------------
 // Versions and ranges (the forms the five manifests use: exact, ^, ~, >=; anything else is left alone)
 
-const VERSION = /^(\d+)\.(\d+)\.(\d+)(?:-([0-9A-Za-z.-]+))?$/;
+// Release tags support SemVer without build metadata; reject +metadata instead of treating distinct tag strings as a release bump.
+const NUMERIC_IDENTIFIER = '(?:0|[1-9]\\d*)';
+const PRERELEASE_IDENTIFIER = `(?:${NUMERIC_IDENTIFIER}|\\d*[A-Za-z-][0-9A-Za-z-]*)`;
+const VERSION = new RegExp(`^(${NUMERIC_IDENTIFIER})\\.(${NUMERIC_IDENTIFIER})\\.(${NUMERIC_IDENTIFIER})(?:-(${PRERELEASE_IDENTIFIER}(?:\\.${PRERELEASE_IDENTIFIER})*))?$`);
 export function isVersion(text) {
-  return VERSION.test(text ?? "");
+  return typeof text === "string" && VERSION.test(text);
+}
+
+// Compare integer strings without rounding large valid numeric identifiers through Number.
+function compareNumericIdentifier(a, b) {
+  return a.length !== b.length ? (a.length < b.length ? -1 : 1) : a === b ? 0 : a < b ? -1 : 1;
 }
 
 export function compareVersions(a, b) {
-  const x = VERSION.exec(a);
-  const y = VERSION.exec(b);
-  if (!x || !y) throw new Error(`not a version: ${!x ? a : b}`);
-  for (let i = 1; i <= 3; i += 1) if (Number(x[i]) !== Number(y[i])) return Number(x[i]) < Number(y[i]) ? -1 : 1;
+  const x = typeof a === "string" && VERSION.exec(a);
+  const y = typeof b === "string" && VERSION.exec(b);
+  if (!x || !y) throw new Error(`not a supported release version: ${!x ? a : b}`);
+  for (let i = 1; i <= 3; i += 1) {
+    const order = compareNumericIdentifier(x[i], y[i]);
+    if (order) return order;
+  }
   if (x[4] === y[4]) return 0;
   if (!x[4]) return 1;
   if (!y[4]) return -1;
-  return x[4] < y[4] ? -1 : 1;
+  const left = x[4].split("."), right = y[4].split(".");
+  for (let i = 0; i < Math.max(left.length, right.length); i += 1) {
+    if (left[i] === undefined) return -1;
+    if (right[i] === undefined) return 1;
+    if (left[i] === right[i]) continue;
+    const leftNumeric = /^\d+$/.test(left[i]), rightNumeric = /^\d+$/.test(right[i]);
+    if (leftNumeric && rightNumeric) return compareNumericIdentifier(left[i], right[i]);
+    if (leftNumeric !== rightNumeric) return leftNumeric ? -1 : 1;
+    return left[i] < right[i] ? -1 : 1;
+  }
+  return 0;
 }
 
 const RANGE = /^(\^|~|>=|=)?(\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?)$/;
 /** The lowest version a range accepts, or null for forms this tool does not touch (workspace:, *, ||, ...). */
 export function floorOf(spec) {
   const match = RANGE.exec(String(spec ?? "").trim());
-  return match ? { operator: match[1] ?? "", version: match[2] } : null;
+  return match && isVersion(match[2]) ? { operator: match[1] ?? "", version: match[2] } : null;
 }
 
 /** The range with its floor raised to `version` (same operator), or null when the floor is already there. */

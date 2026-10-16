@@ -185,11 +185,11 @@ function getAjv(): Ajv2020 {
 }
 
 function isSchemaName(value: unknown): value is SchemaName {
-  return typeof value === "string" && value in schemas;
+  return typeof value === "string" && hasOwn(schemas, value);
 }
 
 function isCatalogKind(value: unknown): value is CatalogRecordKind {
-  return typeof value === "string" && value in schemaNameByCatalogKind;
+  return typeof value === "string" && hasOwn(schemaNameByCatalogKind, value);
 }
 
 function resolveValidator(schemaOrKind: SchemaOrKind): {
@@ -256,7 +256,7 @@ function presentFields(value: Record<string, unknown>, fields: readonly string[]
 }
 
 function isContentKind(value: unknown): value is ContentKind {
-  return typeof value === "string" && value in contentKindSpecs;
+  return typeof value === "string" && hasOwn(contentKindSpecs, value);
 }
 
 function inferredKinds(value: Record<string, unknown>): ContentKind[] {
