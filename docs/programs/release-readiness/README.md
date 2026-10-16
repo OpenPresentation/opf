@@ -4,6 +4,22 @@ Status: **active** (opened 2026-10-01). Tracker: [burndown.md](burndown.md).
 This is the single source of truth for the cross-repository program. Agents and
 people resuming work start here, not from chat history or local scratch files.
 
+## Current published-set checkpoint — 2026-10-16 13:05 UTC
+
+The final selected artifacts are genuinely verified: **Core 0.20.3 / renderer 0.20.2 / PPTX 0.20.3 / editor 0.20.3 / CLI 0.20.0 / Gallery 3.0.0**. Exact normal sibling publishers are `837dbca5`, `e0a67c6e` and `c0d4c0b5`; all maintained registry/tag/SLSA/signature/release checks passed. [Artifact authority and current limits](../../evidence/rr-85-final-published-set-2026-10-16/README.md). RR-85 remains **in progress** until normal final consumer/site adoption and coordinated criteria are accepted. Current Main #118/Dev #139/Gallery #138 deployments retain C3/R0/P2/E2/CLI0/G3; their earlier homepage #116/Spec #117 and source/production closures remain accepted, not restamped.
+
+RR-86 is **in progress** under the approved maintained Keynote tests/compatibility fixes and opt-in Body/footer scope. Draft [PPTX #277](https://github.com/OpenPresentation/opf-pptx/pull/277) source 1a84 has accepted source/package/default/preview evidence, nine actual Body shapes/five capability witnesses, and retained false round-trip equality with 44 measured / 37 native findings. Fresh Mac qualification remains pending while locked; physical Windows remains on human HOLD. The separately reviewed local registry-sealer tooling is unexecuted against real artifacts; current published P3 still lacks native Body. No native prototype is shipped or accepted.
+
+Official final roll 38898626339 was dispatched once from 041 at 12:09:57Z; child refs/results and generated lock are unobserved here. The last complete census remains 11:33 (seven draft PRs/42 issues); Editor #176 creation and actual merge are later overlays, not a refreshed global count. [Compact current checkpoint](../../evidence/rr-85-final-published-set-2026-10-16/checkpoint.json). Earlier sections below retain their exact dates and bytes.
+
+## Current scoped checkpoint — 2026-10-16 10:12 UTC (draft)
+
+RR-85 remains **in progress**. Core 0.20.2 shipped the metric-centering default; verified Core 0.20.3 adds the Validation results display annotation without changing schema/API identifiers. Main #118, Dev #139 and Gallery #138 have exact normal source closures and accepted production deployments. Gallery #138 merged as `9de4b23f` at 08:39:32 UTC with the accepted tree and full patch; its existing Worker remains at 100% traffic. All three sites use the genuine compatible Core 0.20.3 / renderer 0.20.0 / PPTX and Editor 0.20.2 graph, with Gallery 3.0.0.
+
+Official generated-lock PR #693 normally merged as `041404a0`; Renderer prep #251 merged as `837dbca5`. Renderer **0.20.2** is genuinely published and fully verified from that exact source/tag through trusted workflow `38882846040` / attempt 1, published **2026-10-16 10:05:38.879 UTC**. The failed 0.20.1 tag remains immutable with no accepted artifact. The three sites still use their accepted renderer **0.20.0** deployments; no output is relabeled. Normal PPTX 0.20.3 dry metadata is prepared for root review but unpublished; Editor 0.20.3 is neither prepared nor published. [Dated scoped evidence and remaining boundaries](../../evidence/rr-85-checkpoint-2026-10-16/checkpoint.json).
+
+This is an unpushed checkpoint proposal, not program completion or a fresh census. Earlier counts/checkpoints remain dated; Windows stays on human HOLD and RR86/native limits are unchanged.
+
 ## Current checkpoint — 2026-10-15 final qualification
 
 **RR-68 closure — 2026-10-15 12:14 UTC:** Root accepts actual Core #681 `c7eef3e7` (exact reviewed tree `e79142b1`) and the complete **12:12:25 UTC** metadata census: **zero open PRs, zero drafts and 37 issues** across eight repositories. The original Dependabot sweep is satisfied under the retained 2026-10-03 exact-advisory exception; Dev #85 remains a conditional future trigger. This follow-up records the scoped closure and does not claim its own future merge. [Accepted basis and current evidence](../../evidence/rr-68-sweep-closure-2026-10-15/README.md).

@@ -1,5 +1,24 @@
 # Release readiness: handoff of 2026-10-11
 
+## Current handoff — 2026-10-16 13:05 UTC
+
+- **Verified artifacts:** C3/R2/P3/E3/CLI0/G3. Editor 0.20.3 was published 12:57:35.464Z from actual normal merge `c0d4c0b5` by trusted run 38901679829; all nine required checks passed, with 3 verified signatures/0 invalid/0 missing and its own attestation. R2 and P3 retain their genuine 837/e0a authorities.
+- **Next:** independently review/commit this one docs-only plan/authority/normal matrix mirror, then run the unchanged canonical producer. Producer/Main showcase/Gallery vendor/site qualification may overlap normal plan PR integration on the exact reviewed committed inputs. No unmerged tooling or source alias. The editor example authority remains `2ac02683`; c0d is the library verification ref.
+- **Current sites:** accepted Main #118/Dev #139/Gallery #138 remain C3/R0/P2/E2/CLI0/G3; final graph adoption is not yet qualified or deployed. Source/Worker identities and every historical seal remain unchanged. RR-85 stays in progress.
+- **RR-86:** draft #277 source 1a84 and maintained source/package/preview controls are accepted only within those bounds. Retain all 44/37 import findings, K04 overlap/K06 unrun/other native limits; fresh Mac pending, Windows HOLD. Local registry-sealer successor cf29 is separate and has no real registry/native17 acceptance. Do not merge/close the six component drafts or claim a native release from this record.
+- **Official source roll:** 38898626339 dispatched once at 12:09:57Z; child refs/results, lock output and integration remain unobserved here. Last complete census 11:33 stays dated; later Editor #176 events are overlays only.
+
+[Actual artifacts and bounded current checkpoint](../../evidence/rr-85-final-published-set-2026-10-16/checkpoint.json). All earlier handoffs below remain unchanged history.
+
+## Current scoped handoff — 2026-10-16 10:12 UTC (draft)
+
+- **Shipped:** Core 0.20.2 metric geometry and Core 0.20.3 annotation are genuinely published/verified. Main #118 (`b584410f`), Dev #139 (`f2bdde63`) and Gallery #138 (`9de4b23f`) normally merged with exact accepted trees/patches; all three Core 0.20.3 site deployments are production-accepted. Gallery merged at 08:39:32 UTC and retains Worker `579339e3` / deployment `289d495b` at 100% traffic.
+- **Renderer accepted:** official lock #693 merged as `041404a0`, exact accepted lock/golden; its literal renderer pin remains the then-main `b5330eab`, before source #250 merged. Prep #251 merged as `837dbca5`. Renderer 0.20.2 is genuinely published at 10:05:38.879 UTC through trusted workflow `38882846040` / attempt 1; all nine required checks and signatures/own attestation passed. Keep the failed 0.20.1 tag immutable.
+- **Next release:** normal PPTX 0.20.3 dry metadata is prepared against genuine Renderer 0.20.2; root reviews the actual patch before execute/open. PPTX remains unpublished. Editor 0.20.3 is not prepared or published and still requires genuine PPTX upstream acceptance. Root owns review; assigned agents execute accepted steps.
+- **Site boundary:** all three accepted deployments remain Core 0.20.3 / renderer 0.20.0 / PPTX and Editor 0.20.2 / CLI 0.20.0 / Gallery 3.0.0. Final genuine floor adoption is separate; no published or deployed identity is restamped.
+
+[Compact dated evidence](../../evidence/rr-85-checkpoint-2026-10-16/checkpoint.json) retains exact source identities, the original Gallery region-decimal assertion failure and its exact compiled-payload classification. No gate/tolerance, native scope, other item status, historical checkpoint or Windows HOLD changes. This local proposal is not a global census or completion report.
+
 ## Current maintenance and activation boundary — 2026-10-15 final qualification
 
 **RR-68 closure — 2026-10-15 12:14 UTC:** Root accepts actual Core #681 `c7eef3e7` (exact reviewed tree `e79142b1`) and the complete **12:12:25 UTC** metadata census: **zero open PRs, zero drafts and 37 issues** across eight repositories. The original Dependabot sweep is satisfied under the retained 2026-10-03 exact-advisory exception; Dev #85 remains a conditional future trigger. This follow-up records the scoped closure and does not claim its own future merge. [Accepted basis and current evidence](../../evidence/rr-68-sweep-closure-2026-10-15/README.md).

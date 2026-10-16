@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "asOf": "2026-10-16T13:04:03.618690+00:00",
+  "status": "RR-85 and RR-86 remain in progress; no global completion",
+  "publishedSet": {
+    "@openpresentation/opf": {
+      "version": "0.20.3",
+      "gitHead": "28a65e010861e6fe2f8ed140f8306df2f6d2b567",
+      "integrity": "sha512-Zr9LovRjM+kCQYzWeGuijz53BlCtzPavFO1xm4oApF1bPpF+5/dBSx9GrNaVo6EIYtK1KNWE3S58CLTG3AV2qw=="
+    },
+    "@openpresentation/opf-render": {
+      "version": "0.20.2",
+      "gitHead": "837dbca5cb511b908269e9097c0ab1032de86601",
+      "integrity": "sha512-iQwliZCZbVp3fr9aLYnE8njz7lZAPSH8Q48OPhp2mevz4xLRZN6eGzJm+vVR3Dy8GYHEog9BJHSVrMnAEGP+NQ=="
+    },
+    "@openpresentation/opf-editor": {
+      "version": "0.20.3",
+      "gitHead": "c0d4c0b5316e9f777e07e1ea4321164d433bbd53",
+      "integrity": "sha512-4+4k0hIWe7g6PYYK8NCI+gQz7B4jGmqueZ4E4FjlY2KCIGUZ6JxkTxkRKkPbg8ohuCUhCEuh6UGExT9T27x0tA=="
+    },
+    "@openpresentation/opf-pptx": {
+      "version": "0.20.3",
+      "gitHead": "e0a67c6ee9892c58d15131923156b0ecf51ab14e",
+      "integrity": "sha512-hYl/dxyfQO5PFMzTywvbyXC8LW0tgi42iicXZNlOl9QQWkBgmkbnA18EMad/xQaxIKWUTUiA2Wl2d+DHfDksbg=="
+    },
+    "@openpresentation/cli": {
+      "version": "0.20.0",
+      "gitHead": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
+      "integrity": "sha512-QtLK+H585iGWbhRcvjEZqrGs2HbLJpqbXXx/zWoGUWE3bQMkPx/QZDJJUwaESxBrZkLMylgIFlzdfBD6kDhv9w=="
+    },
+    "@openpresentation/gallery": {
+      "version": "3.0.0",
+      "gitHead": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "integrity": "sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ=="
+    }
+  },
+  "newSiblingPublications": {
+    "renderer": {
+      "publisher": "837dbca5cb511b908269e9097c0ab1032de86601",
+      "at": "2026-10-16T10:05:38.879Z",
+      "run": 38882846040,
+      "requiredChecks": 9,
+      "signatures": "5 verified/0 invalid/0 missing; own attestation"
+    },
+    "pptx": {
+      "publisher": "e0a67c6ee9892c58d15131923156b0ecf51ab14e",
+      "at": "2026-10-16T11:30:23.926Z",
+      "run": 38893042716,
+      "requiredChecks": 9,
+      "signatures": "14 verified/0 invalid/0 missing; own attestation"
+    },
+    "editor": {
+      "publisher": "c0d4c0b5316e9f777e07e1ea4321164d433bbd53",
+      "at": "2026-10-16T12:57:35.464Z",
+      "run": 38901679829,
+      "requiredChecks": 9,
+      "signatures": "3 verified/0 invalid/0 missing; own attestation"
+    }
+  },
+  "sourceClosures": {
+    "officialLock693": "041404a0d579c7183461962022e204f7ce8a6012",
+    "renderer251": "837dbca5cb511b908269e9097c0ab1032de86601",
+    "pptx276": "e0a67c6ee9892c58d15131923156b0ecf51ab14e",
+    "editor176": "c0d4c0b5316e9f777e07e1ea4321164d433bbd53"
+  },
+  "officialFinalRoll": {
+    "run": 38898626339,
+    "dispatchedAt": "2026-10-16T12:09:57Z",
+    "head": "041404a0d579c7183461962022e204f7ce8a6012",
+    "selectedChildRefsResultsAndGeneratedLock": "unobserved here; normal parent owns child waiting",
+    "localWatcher": false
+  },
+  "currentSites": {
+    "graph": {
+      "core": "0.20.3",
+      "renderer": "0.20.0",
+      "pptx": "0.20.2",
+      "editor": "0.20.2",
+      "cli": "0.20.0",
+      "gallery": "3.0.0"
+    },
+    "sourceMerges": {
+      "main": "b584410f3271290ff573762726f5c40080234bf7",
+      "dev": "f2bdde6330645ba4e235dcfad8d761486108e797",
+      "gallery": "9de4b23f94e9eee5af772c5d305661b42113e703"
+    },
+    "workers": {
+      "main": "5a426b33-1845-4d47-aea1-3d90a021b2e3",
+      "dev": "fa3dccaf-f02e-4c03-a256-609cca2e206a",
+      "gallery": "579339e3-9210-4461-88c2-a1e78d7c2578"
+    },
+    "acceptedTraffic": "100% at their retained scoped production checks; no fresh Worker query",
+    "finalGraphAdoption": "not yet qualified/deployed"
+  },
+  "rr86": {
+    "carrier": "https://github.com/OpenPresentation/opf-pptx/pull/277",
+    "draft": true,
+    "source": "1a84a71b169d2d0acbf2835231552d07f7cd8556",
+    "tree": "20a0ade65589aea4c0df64dbae403e04fe659c1e",
+    "sourceAndPackageQualification": "154 source files,302 syntax, normal packed/browser,127 Node/browser comparisons,8 measured+8 estimated whole-ZIP defaults,17 source previews reviewed",
+    "bodyShapes": 9,
+    "requiredCapabilityControls": 5,
+    "roundTripEqual": false,
+    "sourceImportDiagnostics": {
+      "measured": 44,
+      "native": 37
+    },
+    "legacyCore011": "One explicit old linked-social underline skip; current source lane covers it",
+    "registrySealer": {
+      "source": "cf29adb1fe35b2c035384b0891e0fc693638de56",
+      "state": "Locally committed separately reviewed tooling only; not in277 or a published package; no real registry run/native17 proof"
+    },
+    "remaining": "Fresh Mac lifecycle/content/layout/physical-font review pending while locked; K04 measured fallback overlap issue275, K06 NOTRUN, K08 visibility, K09 automation limits, K11 paint and notes-field adaptations retained",
+    "windows": "Human HOLD",
+    "nativeAcceptance": false,
+    "published": false
+  },
+  "inventory": {
+    "fetchedAt": "2026-10-16T11:33:25.796199+00:00",
+    "repositories": 8,
+    "openPRs": 7,
+    "draftPRs": 7,
+    "openIssues": 42,
+    "complete": true,
+    "laterOverlays": [
+      "Editor176 non-draft creation derived8open/7draft",
+      "Editor176 normal merge derived7open/7draft"
+    ],
+    "freshGlobalCensus": false,
+    "inventoryHandoffSha256": "e4a114d52a047c76bd2502005c45c75072f3f7574d5413bb16cea2da4260378c"
+  },
+  "historicalEvidence": "All prior checkpoints and original84 criteria/statuses, RR85 criterion, original40/40 and dated failures remain unchanged. No native scope waiver or generated tracker refresh."
+}
