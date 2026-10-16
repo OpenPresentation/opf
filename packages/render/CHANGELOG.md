@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.20.2 (2026-10-16)
+
+- RR-85: Select the reviewed metric-centering example baseline for ordinary checks and trusted publication when the installed core defaults metrics to center. Preserve historical baseline bytes, explicit reviewed overrides and exact raster checks.
+
 ## 0.20.1 (2026-10-16)
 
 Require core 0.20.2 so metrics center by default while explicit alignment remains authoritative.
