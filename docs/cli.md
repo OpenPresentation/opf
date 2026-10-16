@@ -106,8 +106,8 @@ do, so `opf validate deck` and `validate(deck)` agree:
 import * as opf from "@openpresentation/opf";
 
 await opf.convert("deck.opf.md", "deck.pdf");                         // opf convert deck.opf.md deck.pdf
-const { files } = await opf.convert(deck, { format: "png", scale: 2 }); // bytes, nothing written
 const deck = await opf.open("deck.pptx");                             // opf convert deck.pptx -
+const { files } = await opf.convert(deck, { format: "png", scale: 2 }); // bytes, nothing written
 const { presentation } = opf.edit(deck, patch);                       // opf edit deck --patch patch.json
 const { decks } = opf.fill(template, csvText);                        // opf fill template data.csv out-{n}.opf.json
 ```

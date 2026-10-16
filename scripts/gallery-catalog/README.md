@@ -2,11 +2,13 @@
 
 `sync-gallery-catalogs.mjs` built the FF-28 narrative and audience records from pptx.gallery `data/narratives.json` and `data/audiences.json` at gallery commit f17e9ae. `gallery-layout-map.json` records how each gallery beat layout (`stats-metrics`, `title-center`, and so on) was mapped onto a bundled layout id, both as rules and as a per-beat table. Use that table to restore gallery layout ids mechanically (FF-37).
 
+Historical commands (the converter is not present in the current checkout):
+
 ```sh
 node scripts/gallery-catalog/sync-gallery-catalogs.mjs --gallery ../pptx-gallery          # add missing ids; never overwrites existing records
 node scripts/gallery-catalog/sync-gallery-catalogs.mjs --gallery ../pptx-gallery --check  # verify records and the per-beat table
 ```
 
-Starting from the pre-FF-28 catalogs, a run reproduces the committed records byte for byte. The one exception is the audiences `index.json` description sentence about singular gallery ids, which was edited by hand. The gallery checkout is not available in CI, so this is a maintenance tool, not a gate.
+Starting from the pre-FF-28 catalogs, a run reproduces the committed records byte for byte. The one exception is the audiences `index.json` description sentence about singular gallery ids, which was edited by hand. The gallery checkout is not available in CI, so this was a maintenance tool, not a gate.
 
-Since FF-37 the records are a pinned snapshot of the default catalog that pptx.gallery publishes; since RR-78 they live in `packages/gallery/catalog/` and ship as `@openpresentation/gallery`. New catalog content goes into the gallery first; then `scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery` updates the snapshot and its `manifest.json` (see `docs/default-catalog.md`). This converter stays as the record of how FF-28 derived its narrative and audience records. `gallery-layout-map.json` stays as the table for restoring gallery layout hints.
+Since FF-37 the records are a pinned snapshot of the default catalog that pptx.gallery publishes; since RR-78 the independent [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery) repository owns that snapshot and publishes `@openpresentation/gallery`. Change records there through its documented sync workflow, then adopt the package in Core (see [the current catalog contract](../../docs/default-catalog.md)). Core materializes ignored `packages/gallery/` validation fixtures from the installed package. `gallery-layout-map.json` preserves how FF-28 mapped narrative layout hints; it is historical data, not a current v2 layout migration tool.

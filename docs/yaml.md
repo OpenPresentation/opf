@@ -147,9 +147,9 @@ Every command that reads a deck or a JSON Patch reads YAML too, through one read
 
 A deck is written as YAML when the output name ends `.yaml`/`.yml` or `--to yaml` is given (`--to json` forces JSON, `--to md` writes a Markdown deck). When the output is stdout or has another name, the format of the deck that was read is used (a YAML deck is edited, merged, filled, paginated and embedded back to YAML); `create` has no deck input and defaults to JSON. `opf format` canonicalizes a YAML file in place of the form it has (`-i`, `--check`); `opf convert` changes forms.
 
-Left JSON-only on purpose: `validate --config` (a settings file), the data of `fill` (CSV, TSV or JSON, not a deck), the `ingest` source file, and `--signals` output. In `fill` and `ingest`, `--data-format csv|tsv|json` names the data format and `--to yaml` selects the output.
+These are not deck serializations: `validate --config` and `--signals` output are JSON; `fill` data and the `ingest` source accept CSV, TSV or JSON. In `fill` and `ingest`, `--data-format csv|tsv|json` names the data format and `--to yaml` selects the output.
 
-**Comments are not preserved.** A command that rewrites a YAML file (`edit`, `format`, `merge`, `paginate`, `bundle`, `fill`, `ingest --into`, `to-yaml`) writes the canonical text of the data, so comments and the original quoting and layout are lost. The CLI prints `warning: <file> has N comments; comments are not preserved when OPF rewrites a YAML file.` on stderr, and does not fail. The `# yaml-language-server:` line is kept.
+**Comments are not preserved.** A command that rewrites a YAML file (`edit`, `format`, `merge`, `paginate`, `embed`, `fill`, `ingest --into`, `convert`) writes the canonical text of the data, so comments and the original quoting and layout are lost. The CLI prints `warning: <file> has N comments; comments are not preserved when OPF rewrites a YAML file.` on stderr, and does not fail. The `# yaml-language-server:` line is kept.
 
 ## Decisions and limits
 

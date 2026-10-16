@@ -1,6 +1,6 @@
 # Chart options: axis titles, legend position, data labels and highlight
 
-Status: RR-35 (release readiness) for axis titles, legend and data labels, FA-14 (format audit) for `highlight`. Additive schema, no release yet: geometry changes only for charts that use the first three fields, and colors change only for charts that use `highlight`, so the change ships in the next lockstep release (core, then renderer and PPTX, then editor).
+Status: RR-35 (release readiness) for axis titles, legend and data labels, FA-14 (format audit) for `highlight`. These shipped fields change geometry only for charts that use the first three fields, and colors only for charts that use `highlight`. Use the coordinated package set in the [compatibility matrix](compatibility-matrix.md); schema support alone does not establish native visual fidelity.
 
 ## The fields
 
@@ -158,7 +158,7 @@ The preview (opf-render) and the PPTX export (opf-pptx) both read `resolveChartO
 
 ## Defaults and geometry
 
-A chart that sets none of the four fields renders and exports byte-for-byte as before; the preview tests and the PPTX goldens assert it. Because a chart with options reserves space for its legend and titles, the geometry of that chart (and only that chart) differs from a chart without them, so this change is part of the next lockstep release: raise the renderer's, the exporter's and the editor's core floor together.
+A chart that sets none of the four fields renders and exports byte-for-byte as before; the preview tests and the PPTX goldens assert it. A chart with options reserves space for its legend and titles, so its geometry differs from a chart without them. The implementations require coordinated Core, renderer, PPTX and editor versions; use the [compatibility matrix](compatibility-matrix.md).
 
 ## Not in this change
 
