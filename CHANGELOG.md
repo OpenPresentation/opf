@@ -2,6 +2,49 @@
 
 ## Unreleased
 
+## 0.20.4 (2026-10-16)
+
+- Record the verified Core 0.20.3, renderer 0.20.2, PPTX/editor 0.20.3, CLI 0.20.0 and Gallery 3 package set, update current installation guidance and the normal matrix-consumer mirror, and retain bounded RR85/RR86 progress and native limits.
+- Record the dated published set with Core 0.20.3, renderer and CLI 0.20.0, PPTX and editor 0.20.2, and Gallery 3.0.0 in the release plan and current installation guides.
+- Update font-pack, HTML, rendered-export and native-viewer documentation; replace copied policy counts with installed-data guidance and provide the website's generated font-matrix marker. Document a proposal for reusable custom font profiles built on existing supplied-face, alias and catalog hooks.
+- Include the renderer's immutable test-support scripts when running its pinned fidelity tests against installed registry packages, preserving exact runtime and golden verification.
+- Preserve theme dependency bindings when moving embedded catalog records to custom, even when an existing custom theme has identical raw fields.
+- Refuse changed-file qualification when an explicit comparison base is invalid or Git cannot enumerate the changed paths.
+- Keep citations and footnotes in rich-text content conversions and report their loss in plain-text targets. Validate retained citations against supplied document references without rejecting isolated blocks that have no enclosing reference context.
+- Correct current contributor and agent guidance for the CLI's Core dependency and the independent Gallery catalog, keeping the removed pre-0.19 Core catalog paths explicitly historical.
+- Correct current rich-text editing and picture-bullet support, citation marker geometry and supported locations, and image-placement guidance; preserve native and real-IME verification limits and historical version evidence.
+- Reconcile current developer guides with published package/catalog contracts, validation and script-font APIs, and trusted-workflow-only release policy; preserve dated qualification evidence and native limitations.
+- Distinguish historical catalog snapshots and converters from the current independent Gallery package, describe shipped layout/chart support without stale next-release instructions, and correct CLI example ordering and YAML command/data guidance.
+- Scope semantic matching caches to one operation so diff and similarity use current values after a caller edits an existing object.
+- RR-87: Make `opf doctor` inspect fonts and converters from the selected renderer's own Node resolution chain, so an unrelated global or Core install cannot hide a missing or incompatible renderer peer. Root engine discovery still checks Core and the working directory.
+- Put the browser editor guide on the current published setup, document commit/save/undo and cleanup, and move host-build provenance to contributor documentation. Clarify per-file atomic publication and possible partial multi-file completion after a publication I/O error.
+- Preserve asset IDs such as `constructor` and `toString` when combining filled decks, while retaining the first record for duplicate asset IDs.
+- Let font-replacement exploration select its explicit candidate package without requiring a named replacement family. Existing named-family and vendored routes are unchanged.
+- Keep reference-font advance measurements separate for distinct faces in the same collection during Latin font qualification. Historical qualification evidence is unchanged.
+- Retain general slide-size parity findings when a measured preset has no dedicated parity result, instead of failing while constructing its detail.
+- Refuse CI qualification when a rollup page is missing, reports errors or inconsistent counts, changes commit identity, or repeats a cursor or context. Retain the normal batched required-check policy.
+- Use the final gradient stop colour when validation samples text beyond that stop, keeping contrast findings aligned with the drawn background.
+- Reject incomplete published-matrix reports before cross-host comparison instead of treating matching missing evidence as parity.
+- Document theme-layer alignment precedence and the centered metric fallback, while preserving explicit alignment overrides.
+- Report unsupported decimal precision and number-format scaling overflow as formatting errors instead of throwing during variable or data validation.
+- RR-87: Preserve files created concurrently during an export when `overwrite: false` (or no CLI `--force`) is selected. Publish each staged output without replacement and report `output-exists` on a conflict.
+Sanitize both path separators in generated export basenames, including input-name fallbacks, so SVG/PNG ZIP entries remain flat filenames on Windows as well as POSIX.
+Remove owned temporary siblings after a partial staging-write failure while preserving any pre-existing temporary-name collision.
+- Use the current renderer SVG export in the maintained parity and font-host audits, retain historical renderer selection only when the current API is absent, and preserve genuine draw failures without retry.
+- Refuse parity scratch directories inside or containing Git checkouts before deleting existing scratch content.
+- Stop the maintained Windows parity wrappers after failed prerequisites and propagate failed background builds, so later stages do not summarize stale output as a successful run.
+- Describe the published local libraries and CLI, and distinguish independent Gallery catalog ownership in the current ecosystem overview.
+- Require a matching release tag checked out at a commit on main before Core or CLI publication, including manual workflow retries.
+- Reconcile the current package pins, independent Gallery ownership, SVG previews and Node CLI overview with the maintained APIs.
+- Compare release prerelease identifiers by SemVer precedence so advancing dependency floors cannot lower rc.10 to rc.2. Reject unsupported release spellings and build metadata explicitly.
+- Keep no-break spaces and word joiners intact when fitting rich text, matching plain text and reporting overflow when the protected token cannot fit.
+- Align schema descriptions with picture-bullet size, explicit image-block placement and quote-photo direction.
+- Correct current skill examples to use the supported convert, fill and output-format syntax and distinguish Markdown parsing from explicit OPF numbering.
+- Count rich-text slide titles in deck statistics and return their plain text in per-slide results.
+- Resolve absolute SVG width and height units consistently before computing embedded image proportions. Relative dimensions use a readable viewBox or remain unknown until a host resolves them.
+- RR-87: Report invalid content kinds such as `constructor`, `toString` and `__proto__` as located format findings instead of throwing while validating an untrusted presentation.
+- Distinguish the current 58-case Windows native inventory from the preserved historical 55-case dispatch evidence.
+
 ## 0.20.3 (2026-10-16)
 
 - RR-87: Name the shared report schema “Validation results” and describe it as “Errors, warnings and suggested fixes.” The schema ID, fields, filenames, lookup names and exported `Finding` / `FindingReport` types are unchanged.
