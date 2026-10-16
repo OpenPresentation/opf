@@ -579,7 +579,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `edge`
-- Purpose: Bleeds an image block to one edge of the slide: the image takes a band along that edge, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. Only top-level blocks (slides.N.blocks.I) can be placed, at most one per edge; a layout's image placeholder may carry the same placement for the slide's image. Bands are taken in block order, each spanning the free area left by earlier ones. Placement is the only mechanism that moves content aside; a ba...
+- Purpose: Bleeds an image block to one edge of the slide: the image takes a band along that edge, edge to edge, and the headings and other content compose in the rest of the slide at the normal padding. Only top-level blocks (slides.N.blocks.I) can be placed, at most one per edge. Template layout regions do not supply image placement; set it on the image block itself. Bands are taken in block order, each spanning the free area left by earlier ones. Placement is the only mechanism that moves content asi...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -822,7 +822,7 @@ _No named properties._
 | `text` | yes | `oneOf:string / array<ref:TextRun>` | Quoted text: a string, or TextRun[] for inline rich text (a colored phrase, bold, a link, or a citation or footnote marker). The engine draws the surrounding quotation marks. |
 | `attribution` | no | `string` | Person or organization credited for the quote. Drawn after the quote text, in the muted text color. |
 | `role` | no | `string` | Title and organization of the attributed person. Drawn on its own line under the attribution; without an attribution it stands alone. It does not replace the attribution, so the person's name belongs in 'attribution'. |
-| `photo` | no | `ref:Asset` | Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the end side in a right-to-left deck). Give it alt text (validate's opf/missing-alt-text rule checks it). A raster photogr... |
+| `photo` | no | `ref:Asset` | Headshot of the attributed person, drawn as a circle beside the attribution and role lines (on the logical start side: left in a left-to-right deck, right in a right-to-left deck). Give it alt text (validate's opf/mis... |
 | `source` | no | `string` | Optional quote source, citation, or URL. Follows the attribution and role after ' - '. |
 
 
