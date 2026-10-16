@@ -134,7 +134,8 @@ if (manifest.version !== pins.galleryVersion) {
     run('corepack', ['pnpm', '--filter', '@openpresentation/opf', 'build'], sources.core);
     const coreTarball=pack('core');
     run('npm', ['ci'], sources.render);
-    run('npm', ['install', '--no-save', '--package-lock=false', coreTarball], sources.render);
+    // The pinned renderer build only copies src to dist; it does not load Core.
+    // Install the complete selected graph together below, after all three tarballs exist.
     run('npm', ['run', 'build'], sources.render);
     const renderTarball=pack('render');
     run('npm', ['install', '--no-save', '--package-lock=false', galleryTarball,coreTarball, renderTarball]);
