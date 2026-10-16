@@ -45,6 +45,7 @@ import { createContentControls } from "./content-controls.js";
 import { IMAGE_EDGES, IMAGE_FITS, IMAGE_SHAPES, readImageTreatments, setImageTreatment } from "./image-options.js";
 import { applyCatalogUpdate, catalogRecordAt, checkCatalogUpdates, mergeCatalogs, moveToCustom, referenceFindings } from "./catalogs.js";
 import { describeTableCell, mergeTableCells, parseTableCellPath, readTableAlt, readTableStyle, setTableAlt, setTableCellStyle, setTableStyle, splitTableCell } from "./table-options.js";
+import { OPFEditorError } from "./index.js";
 
 /** The sections a panel can show. `selection` and `table` follow the current selection; the rest follow the deck or the current slide. */
 export const DESIGN_CONTROL_SECTIONS = Object.freeze(["look", "background", "header-footer", "brand", "layout-options", "info", "selection", "image", "table", "slide-content", "catalog"]);
@@ -117,6 +118,7 @@ export function createDesignControls(container, options = {}) {
   const state = { scope: options.scope === "slide" ? "slide" : "deck" };
   const syncs = [];
   let destroyed = false;
+  let uploadEpoch = 0;
   // After a refused change the field the person typed in is reset too, even though it still has focus.
   let restoring = false;
   // The background form is a draft until Apply; edits to it survive unrelated refreshes.
@@ -138,6 +140,10 @@ export function createDesignControls(container, options = {}) {
   };
 
   const root = h("div", { class: "opf-design-controls", "data-opf-component": "design-controls" });
+  const invalidateUpload = () => { uploadEpoch++; };
+  // Capture before the file input's own listener starts the next upload.
+  root.addEventListener("input", invalidateUpload, true);
+  root.addEventListener("change", invalidateUpload, true);
   const statusEl = h("p", { class: "opf-dc-status", role: "status", "aria-live": "polite" });
   const errorEl = h("p", { class: "opf-dc-error", role: "alert" });
 
@@ -328,9 +334,10 @@ export function createDesignControls(container, options = {}) {
 
   /**
    * Source text, file upload and alt text for one image. `apply(ref | null)` commits a typed source (null removes it);
-   * `build(ref, document)` prepares the change an upload makes, after its asset patch, in the same undo step.
+   * `captureBuild()` freezes the target and form before reading a file. Its returned
+   * builder prepares the change after the asset patch, in the same undo step.
    */
-  function imageCluster(name, label, { apply, build, help }) {
+  function imageCluster(name, label, { apply, captureBuild, help }) {
     const source = textField(`${name}-source`, `${label} source`, {
       list: true,
       placeholder: "asset:photo or https://…",
@@ -363,6 +370,18 @@ export function createDesignControls(container, options = {}) {
       const file = input.files?.[0];
       input.value = "";
       if (!file) return;
+      const epoch = ++uploadEpoch;
+      const targetKey = lastKey;
+      // A host may register assets before returning asset:id. Only assets are
+      // excluded; replacing content or changing any other source is stale.
+      const sourceSignature = () => JSON.stringify({ ...editor.presentation, assets: undefined });
+      const originalSource = sourceSignature();
+      const capturedBuild = captureBuild();
+      const build = (ref, presentation) => {
+        if (destroyed || uploadEpoch !== epoch || lastKey !== targetKey || sourceSignature() !== originalSource)
+          throw new OPFEditorError("stale-image-upload", "The upload target or form changed. Choose the image again.", {});
+        return capturedBuild(ref, presentation);
+      };
       statusEl.textContent = `Adding ${file.name}…`;
       errorEl.textContent = "";
       try {
@@ -371,6 +390,7 @@ export function createDesignControls(container, options = {}) {
         say(`${label} set to ${file.name}${change.assetId ? `, added to assets as ${change.assetId}` : ""}.${warnings} Undo restores the previous state.`);
         options.onChange?.(change);
       } catch (error) {
+        if (destroyed) return;
         complain(messageOf(error));
         sync();
       }
@@ -384,6 +404,7 @@ export function createDesignControls(container, options = {}) {
       // `key` names what the image is for (variant, zone, slide, scope): alt text typed for one target is not offered to another.
       set(ref, note = "", key = "") {
         const targetChanged = (ref ?? "") !== lastRef || key !== lastKey;
+        if (targetChanged) invalidateUpload();
         lastKey = key;
         lastRef = ref ?? "";
         source.setList(assetList());
@@ -568,7 +589,10 @@ export function createDesignControls(container, options = {}) {
     };
     const bgImage = imageCluster("bg-image", "Background image", {
       apply: (ref) => (ref === null ? setBackground(editor, null, scoped()) : setBackground(editor, imageSpec(ref), scoped())),
-      build: (ref, doc) => prepareBackground(doc, imageSpec(ref), scoped()),
+      captureBuild: () => {
+        const spec = imageSpec(undefined), target = scoped();
+        return (ref, doc) => prepareBackground(doc, { ...spec, src: ref }, target);
+      },
       help: "An asset reference, a web address or a data address. Press Enter or choose a file to apply it with the settings here.",
     });
     imagePanel.append(bgImage.wrap, fit.wrap, bgAlt.wrap, focusX.wrap, focusY.wrap, bgRecolor.wrap, bgDuoDark.wrap, bgDuoLight.wrap, overlay.wrap);
@@ -727,7 +751,10 @@ export function createDesignControls(container, options = {}) {
     });
     const image = imageCluster("hf-image", "Image", {
       apply: (ref) => setHeaderFooterZone(editor, which(), zone(), { image: ref }, scoped()),
-      build: (ref, doc) => prepareHeaderFooterZone(doc, which(), zone(), { image: ref }, scoped()),
+      captureBuild: () => {
+        const kind = which(), place = zone(), target = scoped();
+        return (ref, doc) => prepareHeaderFooterZone(doc, kind, place, { image: ref }, target);
+      },
       help: "A picture in this zone, such as a partner mark or badge: an asset reference, a web address or a data address, or an organization logo (Insert logo, below). Press Enter to apply; clear the field to remove it.",
     });
     // RR-71: a logo is the zone's image, written as a reference to the organization's logo (var:organization.logo.icon). Which artwork is drawn (light or dark) follows each slide's background.
@@ -838,9 +865,9 @@ export function createDesignControls(container, options = {}) {
         const { shape, ...rest } = logoTarget();
         return setOrganizationLogo(editor, shape, ref, rest);
       },
-      build: (ref, doc) => {
+      captureBuild: () => {
         const { shape, ...rest } = logoTarget();
-        return prepareOrganizationLogo(doc, shape, ref, rest);
+        return (ref, doc) => prepareOrganizationLogo(doc, shape, ref, rest);
       },
       help: "An asset reference, a web address or a data address for the chosen shape and background. Press Enter to apply; clear the field to remove it.",
     });
@@ -933,7 +960,10 @@ export function createDesignControls(container, options = {}) {
     });
     const watermarkSource = imageCluster("watermark", "Watermark", {
       apply: (ref) => setDesignOption(editor, "watermark", ref === null ? null : { src: ref }, scoped()),
-      build: (ref, doc) => prepareDesignOption(doc, "watermark", { src: ref }, scoped()),
+      captureBuild: () => {
+        const target = scoped();
+        return (ref, doc) => prepareDesignOption(doc, "watermark", { src: ref }, target);
+      },
     });
     // FA-13: a watermark is an image or a text stamp; the text field and the image cluster replace each other.
     const watermarkText = textField("watermark-text", "Watermark text", {
@@ -1459,6 +1489,9 @@ export function createDesignControls(container, options = {}) {
     },
     destroy() {
       destroyed = true;
+      invalidateUpload();
+      root.removeEventListener("input", invalidateUpload, true);
+      root.removeEventListener("change", invalidateUpload, true);
       unsubscribe();
       root.remove();
     },

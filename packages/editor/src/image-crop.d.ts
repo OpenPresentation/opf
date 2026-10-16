@@ -55,5 +55,5 @@ export interface LoadedImage { image: HTMLImageElement; width: number; height: n
 export declare function loadImagePixels(src: string, options?: { document?: Document; signal?: AbortSignal }): Promise<LoadedImage>;
 /** Cut a rectangle out of a loaded picture at its own resolution (JPEG stays JPEG, everything else PNG). Needs a browser canvas. */
 export declare function cropImagePixels(loaded: LoadedImage, rect: Rect, options?: { mediaType?: string; maxBytes?: number; document?: Document }): Promise<CroppedPixels>;
-/** Crop a picture of the document and apply it as one undoable change. */
-export declare function applyCrop(editor: EditorSession, path: string, rect: Rect, options?: { loaded?: LoadedImage; maxBytes?: number; meta?: Record<string, unknown> }): Promise<EditorChange & { assetId: string; reference: string; width: number; height: number }>;
+/** Crop a picture as one undoable change; rejects stale document revisions and cancellation before committing. */
+export declare function applyCrop(editor: EditorSession, path: string, rect: Rect, options?: { loaded?: LoadedImage; maxBytes?: number; meta?: Record<string, unknown>; signal?: AbortSignal }): Promise<EditorChange & { assetId: string; reference: string; width: number; height: number }>;

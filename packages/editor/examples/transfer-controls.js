@@ -478,22 +478,33 @@ export function installTransferControls({
   $("import-apply").onclick = () => {
     if (!transfer || !prepared || !commit()) return;
     try {
-      const result = prepareOpfImport(editor.presentation, transfer, {
-        mode: $("import-action").value,
-        slideIndex: getSlideIndex(),
-        path: getSelectedPath(),
+      // Commit may have changed the source. Bind this import to that committed
+      // snapshot, the selected destination and this exact preview/request.
+      const source = editor.snapshot(), selectedTransfer = transfer;
+      const action = $("import-action").value, slide = getSlideIndex(), path = getSelectedPath();
+      const request = requestId, preview = previewRun;
+      const current = () => importDialog.isConnected && importDialog.open && editor.snapshot() === source &&
+        transfer === selectedTransfer && $("import-action").value === action &&
+        getSlideIndex() === slide && getSelectedPath() === path && requestId === request && previewRun === preview;
+      const result = prepareOpfImport(source.presentation, selectedTransfer, {
+        mode: action,
+        slideIndex: slide,
+        path,
         catalogs: editor.catalogs,
       });
       // The imported document becomes the document only after its faces are loaded (at once when they already are).
       whenFontsReady(fonts, result.presentation, {
         renderOptions: { catalogs: editor.catalogs },
-        isCurrent: () => importDialog.open,
+        isCurrent: current,
         loading: () => {
           $("import-apply").disabled = true;
           $("import-summary").textContent = "Loading fonts for this document…";
         },
         ready: () => {
+          if (!current()) return;
           toSvg(result.presentation, result.slideIndex + 1, { catalogs: editor.catalogs, fonts, text: "system" });
+          // A host font/resolver callback can edit the session during rendering.
+          if (!current()) return;
           setSlideIndex(result.slideIndex);
           editor.applyPatch([{ op: "replace", path: "", value: result.presentation }], {
             source: "import",
@@ -506,6 +517,11 @@ export function installTransferControls({
           $("import-apply").disabled = !prepared;
           error(cause.message);
         },
+      }).then(() => {
+        if (!current() && importDialog.isConnected && importDialog.open && requestId === request && previewRun === preview && transfer === selectedTransfer) {
+          $("import-apply").disabled = !prepared;
+          error("The document or destination changed while loading. Review the import and choose Apply again.");
+        }
       });
     } catch (cause) {
       error(cause.message);

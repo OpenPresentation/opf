@@ -1,3 +1,4 @@
+import type { Catalog } from "@openpresentation/opf";
 import type { EditorChange, EditorSession, JsonPatchOperation } from "./index.js";
 
 /** One section of the deck: a maximal run of consecutive slides sharing a `section` label (or none). */
@@ -57,8 +58,11 @@ export interface AddSlideOptions {
   section?: string | null;
   /** A ready-made slide to insert instead of a blank one. */
   slide?: Record<string, unknown>;
-  catalogs?: Record<string, unknown>;
+  /** Host catalogs, as for DimensionSwitchOptions. */
+  catalogs?: readonly Catalog[];
   record?: Record<string, unknown>;
+  /** Catalog source of record, as for DimensionSwitchOptions. */
+  recordSource?: string;
 }
 
 export declare function listSections(presentation: unknown): SlideSection[];

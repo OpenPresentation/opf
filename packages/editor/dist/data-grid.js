@@ -914,10 +914,12 @@ export function createDataGrid(container, options = {}) {
   function copyToClipboard(then) {
     const { text, rows, columns } = selectionText();
     const done = () => {
+      if (destroyed) return;
       say(`Copied ${plural(rows, "row")} by ${plural(columns, "column")} as tab-separated text.`);
       then?.();
     };
     const fallback = () => {
+      if (destroyed) return;
       const previous = doc.activeElement;
       const area = h("textarea", { "aria-hidden": "true", tabindex: -1 });
       area.style.cssText = "position:fixed;opacity:0;left:-9999px";
@@ -1045,7 +1047,20 @@ export function createDataGrid(container, options = {}) {
         // Browsers differ in firing copy for a focused cell that holds no selection, so the keys do the copy themselves.
         event.preventDefault();
         event.stopPropagation();
-        copyToClipboard(lower === "x" ? clearSelection : undefined);
+        const source = editor.snapshot(), path = target.path;
+        const edits = [];
+        if (lower === "x") {
+          const r = rect();
+          for (let u = r.top; u <= r.bottom; u += 1)
+            for (let c = r.left; c <= r.right; c += 1) {
+              const cell = cellAt(u, c);
+              if (cell && !cell.covered) edits.push({ ...addr(u, c), text: "" });
+            }
+        }
+        copyToClipboard(lower === "x" ? () => {
+          if (destroyed || editor.snapshot() !== source || !edits.length) return;
+          attempt(() => setGridCells(editor, path, edits, opts()), `${plural(edits.length, "cell")} cleared.`);
+        } : undefined);
         return;
       }
     }

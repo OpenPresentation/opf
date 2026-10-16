@@ -1,4 +1,6 @@
 param()
+# RR-87: retired before any filesystem, process or Office operation. Historical body retained below.
+throw 'Retired unsafe native helper (ENG-X03-002). Do not retry or bypass. See docs/native-harness-retirement.md; native acceptance remains pending.'
 $ErrorActionPreference = 'Stop'
 $evidencePath = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../artifacts/browser-evidence'))
 $inputPath = Join-Path $evidencePath 'export.pptx'

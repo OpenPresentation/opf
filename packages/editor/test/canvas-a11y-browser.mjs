@@ -17,6 +17,8 @@ const faces = (await loadFonts({ pack: 'office' })).registry.embeddedFonts.filte
 const bundled = await build({stdin: {resolveDir: fileURLToPath(new URL('../', import.meta.url)), contents: `
   import {createEditorSession} from './dist/index.js';
   import {createCanvasEditor} from './dist/canvas.js';
+  import {createDataGrid} from './dist/data-grid.js';
+  window.boundaryApi = {createEditorSession,createCanvasEditor,createDataGrid};
   import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
   import { gallery as defaultCatalog } from '@openpresentation/gallery';
   window.mountCanvas = async ({deck, faces}) => {
@@ -49,7 +51,7 @@ const deck = {design: {fontScheme: 'roboto'}, slides: [
   ]},
 ]};
 
-const browser = await chromium.launch({channel: process.platform === 'win32' ? 'msedge' : undefined});
+const browser = await chromium.launch({channel: process.platform === 'win32' ? 'msedge' : undefined, ...(process.env.OPF_BROWSER_EXECUTABLE_PATH ? {executablePath:process.env.OPF_BROWSER_EXECUTABLE_PATH} : {})});
 const errors = [];
 try {
   const page = await browser.newPage({viewport: {width: 1440, height: 1200}});
@@ -96,6 +98,70 @@ try {
     const names = await page.evaluate(() => [...document.querySelectorAll('#canvas [data-canvas-target]')].map((node) => node.getAttribute('aria-label')));
     assert.ok(names.length > 0 && names.every((name) => name.startsWith('Edit ')), `${title}: targets are named "Edit <field>: ..." (${names})`);
     if (index === 1) assert.ok(names.some((name) => name.includes('would no longer contain it.')), 'a long paragraph is named in full, not cut off');
+  }
+  // RR-87: failed construction returns no handle, so every owned observer/global listener must already be released.
+  await page.evaluate(() => cv.destroy());
+  const cleanup = await page.evaluate(() => {
+    const viewport = window.visualViewport, listeners = new Set(), observers = new Set();
+    const add = viewport.addEventListener.bind(viewport), remove = viewport.removeEventListener.bind(viewport), NativeResize = window.ResizeObserver;
+    viewport.addEventListener = (name, callback, ...rest) => { if(name === 'resize') listeners.add(callback); return add(name,callback,...rest); };
+    viewport.removeEventListener = (name, callback, ...rest) => { if(name === 'resize') listeners.delete(callback); return remove(name,callback,...rest); };
+    window.ResizeObserver = class extends NativeResize {
+      constructor(callback) {super(callback); observers.add(this);}
+      disconnect() {observers.delete(this);return super.disconnect();}
+    };
+    const failures=[];
+    try {
+      for(let i=0;i<2;i++) try { boundaryApi.createCanvasEditor(document.querySelector('#canvas'),{presentation:{slides:[{title:'\0'}]}}); }
+      catch(error) {failures.push(error.code);}
+      const normal=boundaryApi.createCanvasEditor(document.querySelector('#canvas'),{presentation:{slides:[{title:'Valid'}]}});
+      const whileMounted={listeners:listeners.size,observers:observers.size};normal.destroy();
+      return {failures,whileMounted,listeners:listeners.size,observers:observers.size,roots:document.querySelectorAll('.opf-canvas').length};
+    } finally {viewport.addEventListener=add;viewport.removeEventListener=remove;window.ResizeObserver=NativeResize;}
+  });
+  assert.deepEqual(cleanup.failures,['invalid-text','invalid-text']);
+  assert.equal(cleanup.whileMounted.listeners,1,'a successful canvas owns one viewport listener');
+  assert.ok(cleanup.whileMounted.observers>0,'observers are actually registered');
+  assert.deepEqual([cleanup.listeners,cleanup.observers,cleanup.roots],[0,0,0],'failed/successful teardown releases all tracked resources');
+  // Actual DOM/session cut with a controlled clipboard promise: selection/target movement is not the cut target.
+  const cutCases=await page.evaluate(async () => {
+    const {createEditorSession,createDataGrid}=boundaryApi;
+    const results=[];
+    for(const scenario of ['selection','target','edited','destroyed','rejected']) {
+      const deck={slides:[{table:{columns:['A','B'],rows:[['first','second']]}},{table:{columns:['C'],rows:[['other']]}}]};
+      const editor=createEditorSession(deck,{rejectInvalid:true});
+      const container=document.createElement('div');document.body.append(container);
+      let path='slides.0.table',resolveCopy,rejectCopy;
+      Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:()=>new Promise((resolve,reject)=>{resolveCopy=resolve;rejectCopy=reject;})}});
+      const grid=createDataGrid(container,{editor,getSelectedPath:()=>path});
+      const original=editor.snapshot();
+      const first=container.querySelector('td[data-line="1"][data-column="0"]');first.focus();
+      first.dispatchEvent(new KeyboardEvent('keydown',{key:'x',ctrlKey:true,bubbles:true,cancelable:true}));
+      if(scenario==='selection')container.querySelector('td[data-line="1"][data-column="1"]').focus();
+      if(scenario==='target'){path='slides.1.table';grid.refresh();}
+      if(scenario==='edited')editor.set('slides.0.table.rows.0.0','New edit');
+      if(scenario==='destroyed')grid.destroy();
+      if(scenario==='rejected') { const old= document.execCommand;document.execCommand=()=>false;rejectCopy(new Error('clipboard refused'));await new Promise(resolve=>setTimeout(resolve,0));document.execCommand=old; }
+      else {resolveCopy();await new Promise(resolve=>setTimeout(resolve,0));}
+      const after=editor.presentation;
+      let undo,redo;
+      if(scenario==='selection'||scenario==='target'){editor.undo();undo=editor.presentation;editor.redo();redo=editor.presentation;}
+      results.push({scenario,deck,after,undo,redo,undoDepth:editor.snapshot().undoDepth,originalDepth:original.undoDepth});
+      grid.destroy();container.remove();
+    }
+    return results;
+  });
+  for(const result of cutCases) {
+    if(['selection','target'].includes(result.scenario)) {
+      const expected=structuredClone(result.deck);expected.slides[0].table.rows[0][0]='';
+      assert.deepEqual(result.after,expected,`${result.scenario}: only originally copied cell is cleared`);
+      assert.deepEqual(result.undo,result.deck,'one exact undo restores the cut');assert.deepEqual(result.redo,expected);
+      assert.equal(result.undoDepth,1);
+    } else {
+      const expected=structuredClone(result.deck);if(result.scenario==='edited')expected.slides[0].table.rows[0][0]='New edit';
+      assert.deepEqual(result.after,expected,`${result.scenario}: delayed cut makes no mutation`);
+      assert.equal(result.undoDepth,result.scenario==='edited'?1:0);
+    }
   }
   assert.deepEqual(errors, []);
   console.log(`canvas a11y: ${facts.targets.length} editing targets are focusable buttons outside hidden groups; the root is the Editable slide group.`);

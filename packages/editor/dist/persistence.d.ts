@@ -38,7 +38,7 @@ export interface AutosaveStatus {
   savedAt?: number;
   /** A sentence to show the user for `unavailable` and `error` (and a note on `saved`, such as "history too large to keep"). */
   message?: string;
-  error?: "quota" | "write";
+  error?: "quota" | "write" | "draft";
   /** The adapter in use: "indexedDB", "localStorage", "memory" or the host adapter's name. */
   storage?: string;
   offer?: RestoreOffer;
@@ -63,8 +63,8 @@ export interface PersistenceOptions {
   onRestorePrompt?: (offer: RestoreOffer, actions: { restore(): Promise<boolean>; discard(): Promise<boolean> }) => RestoreChoice | Promise<RestoreChoice>;
   /** Called on every status change, for an indicator. */
   onStatus?: (status: AutosaveStatus) => void;
-  /** Called before every write and before the page unloads, so the host can commit a draft (text being edited on the canvas). */
-  beforeFlush?: () => void;
+  /** Called synchronously before each explicit, debounced or lifecycle flush, even before any session edit. Commit the active draft; returning false or throwing refuses the write and reports a draft error. */
+  beforeFlush?: () => boolean | void;
   /** Warn before the page closes while the document is `dirty` (default true). */
   warnOnUnload?: boolean;
   /** For tests and frames: the window that receives `beforeunload`, `pagehide` and `visibilitychange` (default the global window; null for none). */

@@ -1,11 +1,18 @@
 // The playground suite in test/browser-suites.json must stay the same list as `npm run test:playground`, so quarantine and the flake
 // measurement see exactly what a developer runs.
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
 import test from 'node:test';
 import { listTests } from './quarantine.mjs';
 
 const read = (file) => JSON.parse(readFileSync(new URL(`../${file}`, import.meta.url), 'utf8'));
+const checkStandalone = (entry, scripts) => {
+  const name = entry.command.match(/^npm run (\S+)/)?.[1];
+  if (name) return assert.ok(scripts[name], `${entry.id}: package.json has no script ${name}`);
+  const file = entry.command.match(/^node (test\/[a-zA-Z0-9-]+-browser\.mjs)$/)?.[1];
+  assert.ok(file, `${entry.id}: expected a normal npm script or direct browser test`);
+  assert.ok(statSync(new URL(`../${file}`, import.meta.url)).isFile(), `${entry.id}: missing direct browser test`);
+};
 test('the playground suite is the test:playground script, one test per command', () => {
   const chain = read('package.json').scripts['test:playground'].split(' && ');
   const suite = read('test/browser-suites.json').suites.playground;
@@ -17,7 +24,10 @@ test('the CI browser suite lists every standalone browser script CI runs', () =>
   assert.equal(new Set(ids).size, ids.length);
   const scripts = read('package.json').scripts;
   for (const entry of read('test/browser-suites.json').suites.browser.tests) {
-    const name = entry.command.match(/^npm run (\S+)/)?.[1];
-    assert.ok(scripts[name], `${entry.id}: package.json has no script ${name}`);
+    checkStandalone(entry, scripts);
   }
+});
+test('direct browser registration refuses missing paths and arbitrary commands', () => {
+  assert.throws(() => checkStandalone({ id: 'missing', command: 'node test/missing-browser.mjs' }, {}), /ENOENT/);
+  assert.throws(() => checkStandalone({ id: 'outside', command: 'node ../outside-browser.mjs' }, {}), /expected a normal/);
 });

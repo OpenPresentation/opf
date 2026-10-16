@@ -143,6 +143,8 @@ export function createImageCropper(root, overlay, options) {
     const opener = doc.activeElement;
     const s = (session = {
       path,
+      source: editor.snapshot(),
+      controller: new win.AbortController(),
       opener,
       image,
       loaded: null,
@@ -210,6 +212,7 @@ export function createImageCropper(root, overlay, options) {
     const close = (result) => {
       if (session !== s) return;
       session = null;
+      s.controller.abort();
       resizeObserver.disconnect();
       layer.remove();
       if (s.scrollLock !== null) doc.documentElement.style.overflow = s.scrollLock;
@@ -447,7 +450,8 @@ export function createImageCropper(root, overlay, options) {
       applyButton.disabled = true;
       applyButton.textContent = "Applying…";
       try {
-        const changed = await applyCrop(editor, path, s.rect, { loaded: s.loaded, meta: { tool: s.tool } });
+        if (editor.snapshot() !== s.source) throw new Error("The presentation changed; close this crop and open the current picture again.");
+        const changed = await applyCrop(editor, path, s.rect, { loaded: s.loaded, signal: s.controller.signal, meta: { tool: s.tool } });
         if (session !== s) return;
         close("done");
         options.onCommit?.({ path, assetId: changed.assetId });
@@ -469,7 +473,7 @@ export function createImageCropper(root, overlay, options) {
     for (const control of controls) control.disabled = true;
     layer.setAttribute("aria-busy", "true");
     try {
-      s.loaded = await loadImagePixels(image.assetSrc, { document: doc });
+      s.loaded = await loadImagePixels(image.assetSrc, { document: doc, signal: s.controller.signal });
     } catch (error) {
       if (session !== s) return false;
       close("error");

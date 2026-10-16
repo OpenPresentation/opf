@@ -226,7 +226,10 @@ export function findMatches(presentation, query, options = {}) {
     const tokens = item.text.includes("{{") ? [...item.text.matchAll(VARIABLE_TOKEN)].map((token) => [token.index, token.index + token[0].length]) : [];
     while ((found = compiled.regex.exec(item.text))) {
       if (found[0] === "") {
-        compiled.regex.lastIndex += 1;
+        // AdvanceStringIndex in Unicode mode must skip a whole surrogate pair:
+        // exec() otherwise rewinds an index inside it to the same empty match.
+        const at = compiled.regex.lastIndex;
+        compiled.regex.lastIndex = at + (compiled.regex.unicode && item.text.codePointAt(at) > 0xFFFF ? 2 : 1);
         continue;
       }
       if (tokens.some(([from, to]) => found.index < to && found.index + found[0].length > from)) continue;

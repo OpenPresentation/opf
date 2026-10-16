@@ -1,5 +1,7 @@
 # Local browser PowerPoint workflow
 
+> Current status: `test/native-playground.ps1` is retired and refuses before any effect. The native paragraph below records historical evidence, not current run instructions. See [retirement and replacement requirements](native-harness-retirement.md).
+
 The playground now imports `.pptx` through the existing preview/insert/open dialog and exports editable `.pptx` through the PowerPoint button. The current canvas draft is committed before export. Conversion uses a snapshot and the same font measurement provider as preview, with strict asset handling. Export notes/errors remain visible; stale asynchronous results are discarded after closing. Import is a validated single undoable transaction. OPF download and clipboard transfer remain available.
 
 This is an example/application change. Core 0.7.0, renderer 0.5.0, editor 0.4.0 and PPTX 0.5.1 remain published and immutable. The playground test uses this checkout's editor source plus installed published core/render/PPTX packages. Gallery deployment must separately pin the reviewed example commit while bundling published editor 0.4.0; this local result is not deployed-registry evidence.

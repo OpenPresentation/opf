@@ -269,7 +269,8 @@ export function createEditorSession(input, options = {}) {
       return () => listeners.delete(listener);
     },
     get(path, fallback) {
-      return getValueAtPath(presentation, path, fallback);
+      const found = readPointer(presentation, splitOpfPath(path));
+      return found.found ? clone(found.value) : fallback;
     },
     set(path, value, meta = {}) {
       return commitPatch(createValuePatch(presentation, path, value), {

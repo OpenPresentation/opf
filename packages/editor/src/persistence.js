@@ -167,6 +167,8 @@ export function createPersistence(editor, options = {}) {
   let chain = Promise.resolve();
   let lastWritten = "";
   let destroyed = false;
+  let preparingFlush = false;
+  let flushRefused = false;
   let status = { state: "starting", available: false, dirty: false };
   const setStatus = (patch) => {
     status = { ...status, ...patch, dirty: isDirty() };
@@ -227,6 +229,24 @@ export function createPersistence(editor, options = {}) {
   function flush() {
     clearTimeout(timer);
     firstDirtyAt = 0;
+    if (destroyed) return Promise.resolve(false);
+    // Commit synchronously, including a draft in an otherwise untouched session. The lifecycle
+    // warning below must see that edit before it decides whether leaving would lose work.
+    // A commit emits a change; clear its debounce again and avoid recursive host flush hooks.
+    if (preparingFlush) return chain;
+    preparingFlush = true;
+    try {
+      if (options.beforeFlush?.() === false) throw new Error("Commit or cancel the active draft first.");
+      flushRefused = false;
+    } catch (error) {
+      flushRefused = true;
+      setStatus({ state: "error", error: "draft", message: `Autosave could not commit the active draft (${String(error?.message ?? error)}). Keep this page open to recover your work.` });
+      return Promise.resolve(false);
+    } finally {
+      preparingFlush = false;
+      clearTimeout(timer);
+      firstDirtyAt = 0;
+    }
     if (!touched) return chain.then(() => true);
     chain = chain.then(writeRecord, writeRecord);
     return chain;
@@ -342,15 +362,14 @@ export function createPersistence(editor, options = {}) {
     schedule();
   });
   const beforeUnload = (event) => {
-    try { options.beforeFlush?.(); } catch { /* an uncommitted draft that cannot commit must not block leaving */ }
     // Best effort: start the final write; a browser finishes an IndexedDB transaction that began before the page went away.
-    if (touched) void flush();
-    if (options.warnOnUnload === false || !isDirty()) return undefined;
+    void flush();
+    if (options.warnOnUnload === false || (!isDirty() && !flushRefused)) return undefined;
     event.preventDefault();
     event.returnValue = "";
     return "";
   };
-  const pageHide = () => { try { options.beforeFlush?.(); } catch { /* see above */ } if (touched) void flush(); };
+  const pageHide = () => { void flush(); };
   const visibility = () => { if (win?.document?.visibilityState === "hidden") pageHide(); };
   win?.addEventListener?.("beforeunload", beforeUnload);
   win?.addEventListener?.("pagehide", pageHide);

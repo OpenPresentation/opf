@@ -1,5 +1,6 @@
 import { splitOpfPath, opfPathToJsonPointer, getValueAtPath, applyJsonPatch } from './index.js';
 import { firstErrorMessage, checkFormat } from "./checks.js";
+import {collectReservedPresentationIds, remapSlideTreeIds} from "./presentation-ids.js";
 const prefix=(a,b)=>a.length<=b.length&&a.every((part,i)=>part===b[i]);
 
 /** Move one complete block. The insertion index refers to the destination before removal. */
@@ -120,7 +121,9 @@ export function prepareBlockReplace(presentation,path,block) {
 /** Duplicate the entire block immediately after itself, preserving formatting and asset references. */
 export function prepareBlockDuplicate(presentation,path) {
   const {container,index,blocks}=checkedBlock(presentation,path);
-  return prepareBlockInsert(presentation,opfPathToJsonPointer(container),blocks[index],index+1);
+  const copy=structuredClone(blocks[index]);
+  remapSlideTreeIds({blocks:[copy]},new Set(collectReservedPresentationIds(presentation)));
+  return prepareBlockInsert(presentation,opfPathToJsonPointer(container),copy,index+1);
 }
 /** Delete a block and prune empty ancestor groups; a slide itself is never deleted. */
 export function prepareBlockRemove(presentation,path) {

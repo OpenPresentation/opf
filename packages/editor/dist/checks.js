@@ -9,7 +9,7 @@ const EDIT_CATEGORIES = Object.freeze(["format", "opf/unresolved-reference", "op
 
 /** Core's `ValidationReport` for the `format` category and the catalog reference rules: `valid`, `findings`, `counts`, `schemaValid`. */
 export function checkFormat(presentation, options = {}) {
-  return validate(presentation, { only: EDIT_CATEGORIES, ...(options.catalogs?.length ? { catalogs: options.catalogs } : {}) });
+  return validate(presentation, { only: EDIT_CATEGORIES, ...(options.catalogs !== undefined ? { catalogs: options.catalogs } : {}) });
 }
 
 /** The error-severity findings of a report: what makes it invalid. */

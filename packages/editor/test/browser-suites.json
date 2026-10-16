@@ -98,6 +98,18 @@
       "description": "The standalone browser suites the CI package job runs after test:playground.",
       "tests": [
         {
+          "id": "browser:import-font-wait",
+          "command": "node test/import-font-wait-browser.mjs"
+        },
+        {
+          "id": "browser:design-upload-async",
+          "command": "node test/design-upload-async-browser.mjs"
+        },
+        {
+          "id": "browser:image-crop-async",
+          "command": "node test/image-crop-async-browser.mjs"
+        },
+        {
           "id": "browser:data-grid",
           "command": "npm run test:data-grid-browser"
         },

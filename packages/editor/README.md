@@ -2,7 +2,7 @@
 
 Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs/roadmap-shaping-20260915.md); it is not part of the published runtime.
 
-## Using the editor with opf-render 0.16: what to install (RR-63, unreleased)
+## Install the editor and optional export dependencies (RR-63)
 
 `@openpresentation/opf-render` is an optional peer of the editor, and from render 0.16 its heavy pieces are optional peers too, so install only what you use. The editor itself draws with `@openpresentation/opf-render/svg` and loads fonts with `/fonts-browser`, which need nothing else. Add:
 
@@ -112,11 +112,12 @@ Chart highlight (FA-14): the same module edits `chart.highlight`: `setChartOptio
 
 ```js
 import { createCanvasEditor } from '@openpresentation/opf-editor/canvas';
+import { saveDocument } from '@openpresentation/opf-editor';
 
 const canvas = createCanvasEditor(container, {
   presentation,
   fonts, // the renderer's fonts handle: const fonts = await loadFonts({ faces, ... })
-  onCommit: ({ editor }) => saveDocument(editor.presentation),
+  onCommit: ({ editor }) => console.log(saveDocument(editor).document),
 });
 await canvas.ready;
 // canvas.destroy() when unmounting.

@@ -1029,11 +1029,17 @@ export function createCanvasEditor(container, options = {}) {
   try {
     renderFor();
   } catch (error) {
+    disposed = true;
+    stopDrag?.();
+    active?.rich?.destroy();
+    imageCropper?.destroy();
     unsubscribe();
     resize.disconnect();
+    win.visualViewport?.removeEventListener("resize", keepEditVisible);
     richToolbar.destroy();
     layoutHandles.destroy();
     blockControls.destroy();
+    if (frame) win.cancelAnimationFrame(frame);
     root.remove();
     throw error;
   }

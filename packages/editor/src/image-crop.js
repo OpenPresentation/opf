@@ -259,17 +259,30 @@ export async function loadImagePixels(src, { document: doc = globalThis.document
   const win = doc.defaultView ?? globalThis;
   const attempt = (anonymous) => new Promise((resolve, reject) => {
     const image = new win.Image();
+    let settled = false;
+    const finish = (callback, value) => {
+      if (settled) return;
+      settled = true;
+      image.onload = image.onerror = null;
+      signal?.removeEventListener("abort", abort);
+      callback(value);
+    };
+    const abort = () => {
+      finish(reject, signal.reason ?? new win.DOMException("Image loading was cancelled.", "AbortError"));
+      image.src = "";
+    };
     if (anonymous) image.crossOrigin = "anonymous";
     image.decoding = "async";
-    image.onload = () => resolve(image);
-    image.onerror = () => reject(fail("image-unreadable", "The picture could not be loaded. If it is hosted elsewhere, upload it to the presentation first.", { src: src.slice(0, 80) }));
-    signal?.addEventListener("abort", () => { image.src = ""; }, { once: true });
-    image.src = src;
+    image.onload = () => finish(resolve, image);
+    image.onerror = () => finish(reject, fail("image-unreadable", "The picture could not be loaded. If it is hosted elsewhere, upload it to the presentation first.", { src: src.slice(0, 80) }));
+    signal?.addEventListener("abort", abort, { once: true });
+    if (signal?.aborted) abort();
+    else image.src = src;
   });
   // A picture on another site is read with CORS first (so its pixels can be cut); without it the picture still shows and
   // cropImagePixels reports why it cannot be cut.
   const hosted = !/^(?:data|blob):/.test(src);
-  const image = hosted ? await attempt(true).catch(() => attempt(false)) : await attempt(false);
+  const image = hosted ? await attempt(true).catch((error) => { if (signal?.aborted) throw error; return attempt(false); }) : await attempt(false);
   if (!image.naturalWidth || !image.naturalHeight) throw fail("image-unreadable", "The picture has no size.", {});
   return { image, width: image.naturalWidth, height: image.naturalHeight };
 }
@@ -324,12 +337,20 @@ export async function cropImagePixels(loaded, rect, { mediaType, maxBytes = DEFA
  * `{ assetId, reference, width, height }`.
  */
 export async function applyCrop(editor, path, rect, options = {}) {
-  const image = describeImage(editor.presentation, path);
+  const source = editor.snapshot();
+  const current = () => {
+    options.signal?.throwIfAborted();
+    if (editor.snapshot() !== source) throw fail("stale-image-crop", "The presentation changed while the picture was being cropped; open the current picture and crop it again.", { path });
+  };
+  current();
+  const image = describeImage(source.presentation, path);
   if (image.error) throw fail("not-croppable", image.error, { path });
-  const loaded = options.loaded ?? await loadImagePixels(image.assetSrc);
+  const loaded = options.loaded ?? await loadImagePixels(image.assetSrc, { signal: options.signal });
+  current();
   const pixels = await cropImagePixels(loaded, rect, { mediaType: image.mediaType, maxBytes: options.maxBytes });
-  // The document may have changed while the picture was encoding.
-  const prepared = prepareCrop(editor.presentation, path, pixels);
+  // Never apply old pixels to a newer document or to a cancelled crop session.
+  current();
+  const prepared = prepareCrop(source.presentation, path, pixels);
   const change = editor.applyPatch(prepared.patches, { ...options.meta, source: options.meta?.source ?? "image-crop", path, assetId: prepared.assetId });
   return { ...change, assetId: prepared.assetId, reference: prepared.reference, width: pixels.width, height: pixels.height };
 }
