@@ -48,7 +48,7 @@ test('literal alternate prefixes, root manifests and annotated tag objects are s
 
 test('missing, branch and wrong-version refs fail before publishing', (t) => {
   const { git, verify } = fixture(t);
-  for (const ref of [undefined, '', 'refs/heads/main', 'refs/heads/opf-v1.2.3']) assert.throws(() => verify({ ref }), /explicit refs\/tags/);
+  for (const ref of [null, '', 'refs/heads/main', 'refs/heads/opf-v1.2.3']) assert.throws(() => verify({ ref }), /explicit refs\/tags/);
   git('tag', 'opf-v1.2.30');
   assert.throws(() => verify({ ref: 'refs/tags/opf-v1.2.30' }), /does not match/);
   assert.throws(() => verify({ ref: 'refs/tags/absent' }), /Git identity/);
@@ -58,7 +58,7 @@ test('missing, branch and wrong-version refs fail before publishing', (t) => {
 test('off-main tags, missing main, checkout mismatch and event hash mismatch fail', (t) => {
   const { git, verify, options } = fixture(t);
   assert.throws(() => verify({ sha: '0'.repeat(40) }), /same release/);
-  assert.throws(() => verify({ sha: undefined }), /exact release/);
+  for (const sha of [null, '']) assert.throws(() => verify({ sha }), /exact release/);
   writeFileSync(path.join(options.cwd, 'branch.txt'), 'off main');
   git('add', '.'); git('-c', 'commit.gpgsign=false', 'commit', '-m', 'not merged');
   const offMain = git('rev-parse', 'HEAD');
@@ -78,11 +78,35 @@ test('modified manifest cannot supply a different release version', (t) => {
 test('CLI reads the actual event ref/hash and fails closed for branch dispatch', (t) => {
   const { options } = fixture(t, 'package.json');
   const args = [path.join(root, 'scripts/publish-source.mjs'), '--manifest', 'package.json', '--tag-prefix', 'opf-v'];
-  const run = (ref) => spawnSync(process.execPath, args, { cwd: options.cwd, encoding: 'utf8', env: { ...process.env, GITHUB_REF: ref, GITHUB_SHA: options.sha } });
-  const good = run(options.ref);
+  const run = (overrides = {}, omit = []) => {
+    const env = { ...process.env, GITHUB_REF: options.ref, GITHUB_SHA: options.sha, ...overrides };
+    for (const key of omit) delete env[key];
+    return spawnSync(process.execPath, args, { cwd: options.cwd, encoding: 'utf8', env });
+  };
+  const good = run();
   assert.equal(good.status, 0, good.stderr);
   assert.equal(JSON.parse(good.stdout).commit, options.sha);
-  assert.equal(run('refs/heads/main').status, 1);
+  const branch = run({ GITHUB_REF: 'refs/heads/main' });
+  assert.equal(branch.status, 1);
+  assert.match(branch.stderr, /explicit refs\/tags/);
+  for (const absent of [run({ GITHUB_SHA: '' }), run({}, ['GITHUB_SHA'])]) {
+    assert.equal(absent.status, 1);
+    assert.match(absent.stderr, /exact release/);
+  }
+  const absentRef = run({}, ['GITHUB_REF']);
+  assert.equal(absentRef.status, 1);
+  assert.match(absentRef.stderr, /explicit refs\/tags/);
+});
+
+test('fixture rejection controls are independent of ambient CI event identities', () => {
+  const env = { ...process.env, CI: 'true', GITHUB_REF: 'refs/tags/unrelated-v9.9.9', GITHUB_SHA: 'f'.repeat(40) };
+  // This child starts its own runner rather than recursively reusing the parent's node:test context.
+  delete env.NODE_TEST_CONTEXT;
+  const result = spawnSync(process.execPath, [
+    '--test', '--test-reporter=tap', '--test-name-pattern=^(missing, branch|off-main tags)', fileURLToPath(import.meta.url),
+  ], { encoding: 'utf8', env });
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.match(result.stdout, /# pass 2(?:\r?\n|$)/, 'Both rejection fixtures must actually execute in the child');
 });
 
 test('both workflows run the unconditional gate before dependency installation with full history', () => {
