@@ -1,7 +1,7 @@
-// File helpers of the Node engine: output names and atomic writes (a temporary sibling, then a rename). The opf CLI uses the
+// File helpers of the Node engine: output names and per-file atomic writes through a temporary sibling. The opf CLI uses the
 // same functions through `@openpresentation/opf/internal/engine`. Slide selections are browser-safe, in ../slide-selection.ts.
 import { randomUUID } from "node:crypto";
-import { lstat, mkdir, rename, unlink, writeFile } from "node:fs/promises";
+import { link, lstat, mkdir, open, rename, unlink } from "node:fs/promises";
 import path from "node:path";
 import { OPFApiError } from "../api-errors.js";
 
@@ -20,13 +20,13 @@ export function deckStem(deck: unknown, input: string) {
 	const root = deck && typeof deck === "object" && !Array.isArray(deck) ? (deck as { filename?: unknown; name?: unknown }) : {};
 	const clean = (value: string) =>
 		value
-			.replace(/[/:*?"<>|\p{Cc}]+/gu, "-")
+			.replace(/[\\/:*?"<>|\p{Cc}]+/gu, "-")
 			.replace(/\s+/g, "-")
 			.replace(/-{2,}/g, "-")
 			.replace(/^[-.\s]+|[-.\s]+$/g, "");
 	const text = (value: unknown) => (typeof value === "string" ? value : "");
 	const slug = (value: string) => value.replace(/[^\p{L}\p{N}_-]+/gu, "-").replace(/-{2,}/g, "-").replace(/^-|-$/g, "");
-	return clean(text(root.filename).trim().replace(/\.(pptx|pdf|png|svg)$/i, "")) || slug(text(root.name)) || stemOf(input);
+	return clean(text(root.filename).trim().replace(/\.(pptx|pdf|png|svg)$/i, "")) || slug(text(root.name)) || clean(stemOf(input)) || "deck";
 }
 
 /**
@@ -71,6 +71,10 @@ export interface PlannedFile {
 	bytes: Uint8Array;
 }
 
+function outputExists(file: string, flags: boolean) {
+	return new OPFApiError(`Output already exists: ${file}. ${flags ? "Use --force." : "Pass overwrite: true (the default) to replace it."}`, "output-exists", { details: { path: file } });
+}
+
 /**
  * Fail before writing anything when a destination exists (the commands without --force; `convert` with `overwrite: false`), is a symlink or is
  * not a regular file: `output-exists` and `output-not-file`, which the commands report at exit 1. `flags` false words the
@@ -80,7 +84,7 @@ export async function checkDestinations(files: string[], overwrite: boolean, fla
 	for (const file of files) {
 		try {
 			const stat = await lstat(file);
-			if (!overwrite) throw new OPFApiError(`Output already exists: ${file}. ${flags ? "Use --force." : "Pass overwrite: true (the default) to replace it."}`, "output-exists", { details: { path: file } });
+			if (!overwrite) throw outputExists(file, flags);
 			if (!stat.isFile()) throw new OPFApiError(`Refusing to replace a symlink or non-regular file${flags ? "" : `: ${file}`}.`, "output-not-file", { details: { path: file } });
 		} catch (error) {
 			if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
@@ -88,7 +92,7 @@ export async function checkDestinations(files: string[], overwrite: boolean, fla
 	}
 }
 
-/** Write each file through a temporary sibling and a rename, so no partial output is ever published under its final name. */
+/** Stage every file first, then publish each atomically. A later publication failure can leave earlier complete files. */
 export async function writeFiles(files: PlannedFile[], overwrite: boolean, flags = true) {
 	const unique = new Set(files.map((entry) => path.resolve(entry.file)));
 	if (unique.size !== files.length) throw new OPFApiError("Two outputs would write the same file.", "invalid-option");
@@ -99,12 +103,29 @@ export async function writeFiles(files: PlannedFile[], overwrite: boolean, flags
 			const output = path.resolve(entry.file);
 			await mkdir(path.dirname(output), { recursive: true });
 			const temporary = path.join(path.dirname(output), `.${path.basename(output)}.${randomUUID()}.tmp`);
-			await writeFile(temporary, entry.bytes, { flag: "wx" });
+			// Register ownership only after exclusive creation: a partial write must be cleaned up, but an EEXIST collision must not.
+			const handle = await open(temporary, "wx");
 			staged.push({ temporary, output });
+			try {
+				await handle.writeFile(entry.bytes);
+			} finally {
+				await handle.close();
+			}
 		}
 		for (const item of staged) {
-			await rename(item.temporary, item.output);
-			item.temporary = "";
+			if (overwrite) {
+				await rename(item.temporary, item.output);
+				item.temporary = "";
+			} else {
+				// A same-directory hardlink publishes complete bytes only if the final name is still absent.
+				// Fail closed on filesystems without hardlinks; a rename/copy fallback could overwrite a concurrent file.
+				try {
+					await link(item.temporary, item.output);
+				} catch (error) {
+					if ((error as NodeJS.ErrnoException).code === "EEXIST") throw outputExists(item.output, flags);
+					throw error;
+				}
+			}
 		}
 	} finally {
 		for (const item of staged) if (item.temporary) await unlink(item.temporary).catch(() => undefined);
