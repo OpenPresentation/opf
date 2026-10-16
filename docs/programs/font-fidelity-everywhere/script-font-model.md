@@ -156,7 +156,7 @@ The curated values are Windows culture names, with these noted choices:
   any `{ design, language, catalogs, slides }` subset.
 - `scriptFontRole(script)`.
 
-The options are `app` (`"PowerPoint"` or `"Google Slides"`), `slideIndex`,
+The options are `app` (`"powerpoint"` or `"google-slides"`), `slideIndex`,
 `language` and `defaultLanguage`. The result carries:
 
 - `heading` and `body` slots (`{ latin, eastAsian, complexScript }`). The top
@@ -388,7 +388,7 @@ PPTX mapping (native evidence of 2026-10-01 and the follow-up set, see [rr-05-rt
 
 The renderer calls the same resolver:
 
-- `app: "Google Slides"` yields Noto families for every non-Latin catalog
+- `app: "google-slides"` yields Noto families for every non-Latin catalog
   language, all openly licensed.
 - PowerPoint names can instead go through the caller's font registry
   substitution. This applies to preview drawing and measurement only; the PPTX

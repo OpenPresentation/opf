@@ -54,7 +54,7 @@ fonts-less result and pull font files into a browser bundle; pass the handle you
 
 ## Font policy (FF-31)
 
-OPF keeps one machine-readable font policy table, [`spec/reference/font-policy.json`](../spec/reference/font-policy.json). Core exports it as `FONT_POLICY`, `fontPolicyFor()` and `applyFontPolicyDecisions()` from `@openpresentation/opf` or `@openpresentation/opf/font-policy`. Each row gives a family's license class, where viewers get it, whether OPF may ever embed it, and its preview replacement with a measured width difference. It also lists alternates, ending where possible with a face that already ships with opf-render. The [licensing table](programs/font-fidelity-everywhere/font-licensing.md) lists all 153 rows. [`font-policy.schema.json`](../spec/reference/font-policy.schema.json) is its JSON Schema. The [measurement evidence](evidence/font-replacements-20260923/README.md) explains how each replacement was chosen.
+OPF keeps one machine-readable font policy table, [`spec/reference/font-policy.json`](../spec/reference/font-policy.json). Core exports it as `FONT_POLICY`, `fontPolicyFor()` and `applyFontPolicyDecisions()` from `@openpresentation/opf` or `@openpresentation/opf/font-policy`. Each row gives a family's license class, where viewers get it, whether OPF may ever embed it, and its preview replacement with a measured width difference. It also lists alternates, ending where possible with a face that already ships with opf-render. The [licensing table](programs/font-fidelity-everywhere/font-licensing.md) lists the per-family rows. [`font-policy.schema.json`](../spec/reference/font-policy.schema.json) is its JSON Schema. The [measurement evidence](evidence/font-replacements-20260923/README.md) explains how each replacement was chosen.
 
 **The policy in brief (owner decisions, 2026-09-29).** This is the canonical statement; the sibling repositories link here.
 
@@ -86,7 +86,7 @@ opf-render ships only fonts that it already pins and hash-verifies:
 - **Office pack, Aptos family:** Intos, Intos Display, Intos Narrow and Intos Serif (OFL-1.1, vendored in opf-render at a pinned commit, unmodified from the upstream files). A registry built without them (for example the base pack alone) falls back to the alternates Roboto and Carlito, reported as visual.
 - **Optional `scripts` pack (FF-19):** Noto for non-Latin scripts and CJK.
 
-Some replacements are open families that no renderer pack ships yet, such as Red Hat Display for Segoe UI and Red Hat Text for Tahoma. For these, the renderer tries the declared replacement first, then the alternates. The last alternate is the best measured bundled face, so previews stay deterministic without any extra download. `registry.substitutions` records which face was used and its tier. The proposed `catalog` pack (21 OFL `@expo-google-fonts` packages, listed in the opf-render PR) would make the declared replacements and the open catalog families available. Downloading it needs approval, and it is not part of this change.
+The renderer also ships hash-pinned vendored open families, including Red Hat Display for Segoe UI and Red Hat Text for Tahoma. Node loaders verify the bundled manifest; browser hosts serve the package files and load the needed faces on demand, as described below. Optional script-font packages remain explicit host dependencies. When a declared replacement is unavailable, the registry tries its policy alternates and records the actual face and tier in `registry.substitutions`; it never silently treats a visual fallback as metric-compatible.
 
 | Environment | Open catalog families | Proprietary families | When the real font is required |
 | --- | --- | --- | --- |
@@ -193,7 +193,7 @@ An original OPF font project is technically feasible: independently designed or 
 
 ## Verification and remaining work
 
-Script fonts (CJK, Arabic, Hebrew, Indic, Thai, Khmer, Myanmar and the rest) have their own shaping corpora and per-family qualification (FF-44, RR-17): see [script-corpora.md](programs/font-fidelity-everywhere/script-corpora.md). It records, per script, glyph coverage, fontkit against HarfBuzz and Chromium, the installed originals measured in place, and the known limits (fontkit has no Myanmar shaper; the PNG path of resvg-js mis-shapes the Indic scripts, Thai, Lao, Khmer and Myanmar).
+Script fonts (CJK, Arabic, Hebrew, Indic, Thai, Khmer, Myanmar and the rest) have their own shaping corpora and per-family qualification (FF-44, RR-17): see [script-corpora.md](programs/font-fidelity-everywhere/script-corpora.md). It records, per script, glyph coverage, fontkit against HarfBuzz and Chromium, the installed originals measured in place, and dated shaping/raster limitations and their fixes. Read each result with its exact renderer and rasterizer versions; historical resvg-js failures do not describe every later PNG path or establish native acceptance.
 
 ### Arabic Typesetting and Traditional Arabic: line-width residual (opf#523)
 
