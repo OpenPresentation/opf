@@ -15,6 +15,7 @@
     "check:registry-layout-v2": "node --test scripts/registry-layout-v2.test.mjs",
     "check:registry-toolchain": "node --test scripts/registry-toolchain.test.mjs",
     "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+    "check:publish-source": "node --test scripts/publish-source.test.mjs",
     "check:release-notes": "node --test scripts/release-notes.test.mjs",
     "check:changed": "node scripts/check-changed.mjs",
     "check:archive-tar": "node --test scripts/archive-tar.test.mjs && node scripts/test-ecosystem-links.mjs",
