@@ -1,4 +1,6 @@
-# OPF Finding Schema Reference
+# Validation results
+
+Errors, warnings and suggested fixes.
 
 A finding is one thing a checker found at one place in a presentation, and a report lists them. `validate` in `@openpresentation/opf`, the Markdown and YAML converters, the editor's Review panel and hosted reviewers such as pptx.dev's AI review all produce this shape, so a host shows and applies findings from any of them the same way. This page summarizes `spec/schemas/finding.schema.json`; the schema remains the source of truth. How core produces findings is in [validate](validate.md).
 

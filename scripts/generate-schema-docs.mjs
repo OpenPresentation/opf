@@ -146,7 +146,7 @@ async function catalogReference() {
   const lines = [
     "# OPF Catalog Schema Reference",
     "",
-    "Catalog records are reusable presets that OPF documents reference by id. This page summarizes every catalog companion schema in `spec/schemas/`. The top-level presentation schema has its own [schema reference](schema-reference.md), and the report format every tool shares has the [finding schema reference](finding-schema-reference.md).",
+    "Catalog records are reusable presets that OPF documents reference by id. This page summarizes every catalog companion schema in `spec/schemas/`. The top-level presentation schema has its own [schema reference](schema-reference.md), and the report format every tool shares has the [validation results reference](finding-schema-reference.md).",
     "",
     "OPF documents usually reference these records with string ids such as `design.theme = \"minimal\"`, `tone = \"formal\"`, or `chart.type = \"line\"`. Dense examples may also embed catalog sources or inline records under `catalogs`.",
     "",
@@ -195,7 +195,9 @@ async function catalogReference() {
 async function findingReference() {
   const schema = await loadSchema("finding.schema.json");
   const lines = [
-    "# OPF Finding Schema Reference",
+    `# ${schema.title}`,
+    "",
+    schema.description,
     "",
     "A finding is one thing a checker found at one place in a presentation, and a report lists them. `validate` in `@openpresentation/opf`, the Markdown and YAML converters, the editor's Review panel and hosted reviewers such as pptx.dev's AI review all produce this shape, so a host shows and applies findings from any of them the same way. This page summarizes `spec/schemas/finding.schema.json`; the schema remains the source of truth. How core produces findings is in [validate](validate.md).",
     "",
