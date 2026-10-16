@@ -1,0 +1,374 @@
+{
+  "asOf": "2026-10-16T14:52:40.905999+00:00",
+  "kind": "Bounded final adoption checkpoint; scoped RR85 criterion complete, broader release-readiness and RR86 remain active",
+  "proposedRepositoryPaths": [
+    "docs/evidence/rr-85-final-adoption-2026-10-16/README.md",
+    "docs/evidence/rr-85-final-adoption-2026-10-16/checkpoint.json",
+    "docs/programs/release-readiness/README.md",
+    "docs/programs/release-readiness/HANDOFF.md",
+    "docs/programs/release-readiness/burndown.md"
+  ],
+  "selectedVersions": {
+    "core": "0.20.3",
+    "renderer": "0.20.2",
+    "pptx": "0.20.3",
+    "editor": "0.20.3",
+    "cli": "0.20.0",
+    "gallery": "3.0.0"
+  },
+  "sourceClosures": {
+    "dev": "c43b93c85e796ace4b537e29b3ae58fb0ff6ecf4",
+    "gallery": "5f8e9c05af9bcb40d66b7208ef26cf0fb482d707",
+    "main": "7929265c5169870c1b4de8882d327cc96d57fe32"
+  },
+  "acceptedProduction": {
+    "dev": {
+      "worker": "58b519dc-a201-474e-a45d-827ab0107fad",
+      "trafficPercent": 100,
+      "checks": "3 browser journeys; 9 GETs, six exact bodies",
+      "pullRequest": "https://github.com/Data-Advantage/pptx-dev/pull/140",
+      "actualMerge": "https://github.com/Data-Advantage/pptx-dev/commit/c43b93c85e796ace4b537e29b3ae58fb0ff6ecf4",
+      "publicSite": "https://www.pptx.dev",
+      "workerVersion": "58b519dc-a201-474e-a45d-827ab0107fad",
+      "deployment": "165c37c6-91ef-43ac-b4e3-f3174609c6ba",
+      "BuildID": "Y4wxV41Xrl-5zgXHM7H6C",
+      "sealSha256": "84e69baa94ec3bcd72e0aa5ab1e8e281a073cc2b86efddb10022ebc93f31f335",
+      "acceptedDeploymentAt": "2026-10-16T13:21:29.529411Z"
+    },
+    "gallery": {
+      "worker": "d5c765cf-8fda-4d4d-a3c5-b660e8719c19",
+      "trafficPercent": 100,
+      "sourceCommit": "09a3b5c9b6c1e91638da227186ad5c0739c94e32",
+      "buildSourceCommit": "d94ad3943272f226b34309e69962f2984bca268a",
+      "checks": "6 browser cases; 8 GETs against exact compiled API/body oracle",
+      "pullRequest": "https://github.com/Data-Advantage/pptx-gallery/pull/139",
+      "actualMerge": "https://github.com/Data-Advantage/pptx-gallery/commit/5f8e9c05af9bcb40d66b7208ef26cf0fb482d707",
+      "publicSite": "https://www.pptx.gallery",
+      "workerVersion": "d5c765cf-8fda-4d4d-a3c5-b660e8719c19",
+      "deployment": "d2ecab8c-4a73-45cd-ad8c-ef4141f03f59",
+      "BuildID": "4VCqVJyG41fT2we9w2ux7",
+      "sealSha256": "e1500a06101f431694e9b9c1ca3f61a4219aded234b92936e28c9d15d806e638",
+      "acceptedDeploymentAt": "2026-10-16T13:37:37.388347Z"
+    },
+    "main": {
+      "worker": "2cbf8573-d87d-4757-9c11-07a8503ca04c",
+      "trafficPercent": 100,
+      "sourceCommit": "ae6e48970306164c7fa4d5f5efbad91c5c72ced8",
+      "actualBuildSourceHead": "b584410f3271290ff573762726f5c40080234bf7",
+      "qualifiedPatch": "99b9362a3841c433a6422582904d7ee37ba5e64ae0c6a9a84ff07ac23cf15b5d",
+      "checks": "19 smoke + 3 Spec/navigation; 12 GETs; 352 inputs exact",
+      "documentationSnapshot": "bbdef8045d88bc72e90fb1a1e4d09e4eef38e875",
+      "corePublisher": "28a65e010861e6fe2f8ed140f8306df2f6d2b567",
+      "pullRequest": "https://github.com/Data-Advantage/openpresentation-site/pull/119",
+      "actualMerge": "https://github.com/Data-Advantage/openpresentation-site/commit/7929265c5169870c1b4de8882d327cc96d57fe32",
+      "publicSite": "https://www.openpresentation.org",
+      "workerVersion": "2cbf8573-d87d-4757-9c11-07a8503ca04c",
+      "deployment": "b2b6feec-8924-4252-b57c-0e30fc416dd2",
+      "BuildID": "z12uOT1pKcFiw1jjksr5x",
+      "sealSha256": "e474e42240eb83e058b51cc00c11a4ec826924bda67ef54633ed1c46ced2f481",
+      "acceptedDeploymentAt": "2026-10-16T13:49:07.498532Z"
+    }
+  },
+  "pendingSourceIntegration": {},
+  "rr85": {
+    "status": "done",
+    "scope": "Existing metric-default-alignment criterion and coordinated package/site adoption only",
+    "criterionUnchanged": true,
+    "acceptedBasis": [
+      "Six genuinely published artifacts and canonical registry consumer",
+      "All three final production qualifications and exact source integrations",
+      "Actual Core694 plan/harness merge and Core695 official-lock merge with exact combined-source preservation proof"
+    ],
+    "broaderProgramComplete": false,
+    "nativeAcceptance": false
+  },
+  "rr86": {
+    "status": "in-progress",
+    "draft277Head": "cf29adb1fe35b2c035384b0891e0fc693638de56",
+    "frozenQualifiedSource": "1a84a71b169d2d0acbf2835231552d07f7cd8556",
+    "qualifiedScope": "Source154, packed/browser/default-byte and 17 source previews only; not requalified as cf29",
+    "actualBodyShapes": 9,
+    "requiredCapabilityWitnesses": 5,
+    "roundTripEqual": false,
+    "measuredFindings": 44,
+    "nativeFindings": 37,
+    "registryIdentityScope": "Four actual registry artifacts C3/R2/P3/G3; not six-root or native acceptance",
+    "publishedP3Native17": "Actual exit1 at K02: zero Body placeholders versus one required; no suite produced",
+    "nativeAcceptance": false,
+    "remaining": [
+      "Fresh Mac native qualification of exact successor and editing routes; latest bounded read still locked and automatic unlock failed, no testcase entered",
+      "Positive future registry-native17 Body/capability proof after a supporting published exporter",
+      "Physical Windows remains human HOLD",
+      "Retained findings fixed or explicitly descoped; no global/native completion"
+    ],
+    "latestMacObservation": {
+      "at": "2026-10-16T14:40:24Z",
+      "result": {
+        "observedAt": "2026-10-16T14:40:24.028382+00:00",
+        "method": "One bounded cua.getApp(Keynote) after restoring supported documentation",
+        "result": "Mac locked; automatic unlock could not unlock it",
+        "nativeTestcaseEntered": false,
+        "newCopyOrExportCreated": false,
+        "windowsContact": false,
+        "existingUnlockRequestRetained": true
+      },
+      "receiptSha256": "510573be41f66c500e3edc084ef4c5d4115ddb9cbd4bf768fe677aa0931b1fb8"
+    }
+  },
+  "census": {
+    "asOf": "2026-10-16T13:48:45.279278+00:00",
+    "openPRs": 10,
+    "draftPRs": 7,
+    "openIssues": 42,
+    "laterEvents": "Known merges, draft successor and PR695 are overlays, not a new census",
+    "issueDecisions": "All 42 dated decisions preserved; metadata unchanged at this census"
+  },
+  "preservation": {
+    "original84CriteriaSha256": "568017c666ae2dce22fa44eafebbccdc42ae78aeee0ef4af1daf008bcaa81c1a",
+    "rr85Criterion": "Metrics center horizontally by default within their allocated block; existing explicit alignment overrides remain authoritative",
+    "original40Handoff": "Unchanged",
+    "historicalCheckpointAndProgressPrefix": "Append only; no earlier dated text or failure rewritten",
+    "trackerFiles": "No regeneration or edits",
+    "sourceRuntimeLocksReleases": "No changes"
+  },
+  "evidence": {
+    "publishedArtifacts": {
+      "path": "/private/tmp/opf-final-adoption-preparation-proof-61/selected-artifacts-final.json",
+      "sha256": "50b17318308f2664a90918e8a9480330745d321b58a5155ccdac2933cf4bddb7"
+    },
+    "publishedAuthority": {
+      "path": "/private/tmp/opf-final-adoption-preparation-proof-61/verified-registry-authority-final.json",
+      "sha256": "3552eb4a47232aab07726bc9251ba14d1feb1c0a3a1ed6163221f3a9ca17b692"
+    },
+    "canonicalConsumer": {
+      "path": "/private/tmp/opf-final-adoption-preparation-proof-61/canonical-consumer-handoff.json",
+      "sha256": "1a180388d1063d1a4ef08a387aff386d594425f04aeec2a4265dba3378a2acd8"
+    },
+    "devSource": {
+      "path": "/private/tmp/opf-final-dev-adoption-production-61/actual-merge.json",
+      "sha256": "90796bf9593cdcfd194e4e657d2b1693ba0a6b5cd8a6ce66601157d9fcc35e0a"
+    },
+    "devProduction": {
+      "path": "/private/tmp/opf-final-dev-adoption-production-61/qualification/receipt.json",
+      "sha256": "3736b36014f516bfed0dde2b334c29427108466818f8af4cf6ee571c4f08f32c"
+    },
+    "gallerySource": {
+      "path": "/private/tmp/opf-final-gallery-adoption-production-61/actual-merge.json",
+      "sha256": "c0b02a55a9ed7fc3fd1793d53f1170fdaff7bf9aa46edc9d93c9578342974bda"
+    },
+    "galleryProduction": {
+      "path": "/private/tmp/opf-final-gallery-adoption-production-61/qualification/receipt.json",
+      "sha256": "b86bcf5ec0c1c58f003213cacaf7da24aa0378cf3048cd8b45ac0b58200dd93d"
+    },
+    "mainSource": {
+      "path": "/private/tmp/opf-final-main-adoption-61/production/actual-merge.json",
+      "sha256": "a55e7b4f6668d968bb8226d096320f48578b4177e01c1fef1b8437aa6c19aee0"
+    },
+    "mainProduction": {
+      "path": "/private/tmp/opf-final-main-adoption-61/production/qualification/receipt.json",
+      "sha256": "2b4c2dd98ea4d5fd981714d517390d7c2b99b1dc800f3dc69744856bf4f8bd17"
+    },
+    "officialGeneratedLock": {
+      "path": "/private/tmp/opf-final-official-lock-proof-61/official-generated-lock-proof.json",
+      "sha256": "7d77724fb441b8237b5df40d711e8a0b81ae066da98cf2df030af0dd4474e20b"
+    },
+    "officialLockPr": {
+      "path": "/private/tmp/opf-final-official-lock-proof-61/pr-creation-receipt.json",
+      "sha256": "379838c2a8d9642b5b42fb62d9605dd0b0b2ebfdbdc999e543a7ba9c154865ff"
+    },
+    "census": {
+      "path": "/private/tmp/opf-open-work-metadata-20261016T134835-61/handoff.json",
+      "sha256": "58e4ea03c259e5f91f0955f7360b75eeda0f7103fc4d4528d8111a3994c3eb99"
+    },
+    "issueMetadata": {
+      "path": "/private/tmp/opf-open-work-metadata-20261016T134835-61/inventory.json",
+      "sha256": "456ea9c8dcbea12ecb540e7d97539c37fa032cb2b49fbb22bceccde4d9138f7d"
+    },
+    "rr86DraftSuccessor": {
+      "path": "/private/tmp/opf-rr86-registry-p3-refusal-61/pr277-update/handoff.json",
+      "sha256": "33108f8be99b16831391b70e3c45ee04fd8385d8cb18ec12646408e3b8f774e6"
+    },
+    "rr86RegistryIdentity": {
+      "path": "/private/tmp/opf-rr86-registry-p3-refusal-61/identity-01/receipt.json",
+      "sha256": "1bb9357d31df0ebc4f457f02831f4a657c722b9ffe5fed912f18a8210740b418"
+    },
+    "rr86RegistryReview": {
+      "path": "/private/tmp/opf-rr86-registry-p3-refusal-61/root-identity-receipt-review.json",
+      "sha256": "66de528ec2115b58602213d64755da6011d17d3885f03c47762e925518497a7e"
+    },
+    "rr86PublishedRefusal": {
+      "path": "/private/tmp/opf-rr86-registry-p3-refusal-61/refusal-result.json",
+      "sha256": "73317371338d46cb3bad31f23c86e1e3a094ac58e3dffb81fc78aef5f7251c7c"
+    },
+    "rr86MacAvailability": {
+      "path": "/private/tmp/opf-rr86-integrated-qualification-61/native-availability-latest.json",
+      "sha256": "d3736acb8101540934826560fcc1a4c84491db1662ff93cd483eec5261255c95"
+    },
+    "core694ActualMerge": {
+      "path": "/private/tmp/opf-final-adoption-preparation-proof-61/actual-plan694-merge.json",
+      "sha256": "04cd084a37a6247da93f895162e3f6febb4ddbe36be05a68b9ac10e84a578e0e"
+    },
+    "core695ActualCombinedMerge": {
+      "path": "/private/tmp/opf-final-official-lock-proof-61/actual-combined-merge.json",
+      "sha256": "3d7a6eb3e5db5715db4a80465627279316b6d56610c3e9e2acf26935929a473e"
+    },
+    "rr86MacAvailability1440": {
+      "path": "/private/tmp/opf-rr86-native-resume-card-61/mac-availability-20261016T144024Z.json",
+      "sha256": "510573be41f66c500e3edc084ef4c5d4115ddb9cbd4bf768fe677aa0931b1fb8"
+    }
+  },
+  "evidencePackaging": "Public source/release/run links and deployment summaries are portable. Absolute local receipt paths are optional owner audit references; no local file is required to understand the scope.",
+  "actualCore694": {
+    "at": "2026-10-16T14:30:34.702850+00:00",
+    "pullRequest": "https://github.com/OpenPresentation/opf/pull/694",
+    "actualMerge": "1779821bc3ffa4a92721974641ac5495d3ddc4f0",
+    "mergedAt": "2026-10-16T14:28:10Z",
+    "tree": "8d314517ee487032aab976dd24da00ad7fa4af6f",
+    "acceptedHead": "0be1bd8f35c3d9e3e3e8a02d46e667930e872860",
+    "base": "041404a0d579c7183461962022e204f7ce8a6012",
+    "fullIndexBinaryPatchSha256": "bff1c7c241b87d734e8168db699aafd5d0bf35cf3094b1a3292193de90fb13e0",
+    "completePatchExactAcceptedPlanAndHarnessFix": true,
+    "changedPaths": [
+      "changes/rr-85-final-published-set.md",
+      "changes/rr-85-registry-fidelity-import-closure.md",
+      "docs/cli.md",
+      "docs/compatibility-matrix.md",
+      "docs/evidence/rr-85-checkpoint-2026-10-16/checkpoint.json",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/README.md",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/checkpoint.json",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/editor0203-trusted-publication.log",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/pptx0203-trusted-publication.log",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/render0202-trusted-publication.log",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/selected-artifacts-final.json",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/verified-registry-authority-final.json",
+      "docs/programs/release-readiness/HANDOFF.md",
+      "docs/programs/release-readiness/README.md",
+      "docs/programs/release-readiness/burndown.md",
+      "docs/quickstart.md",
+      "package.json",
+      "release-plan.json",
+      "scripts/checks.json",
+      "scripts/published-matrix/consumer/package-lock.json",
+      "scripts/published-matrix/consumer/package.json",
+      "scripts/registry-fidelity-archive.mjs",
+      "scripts/registry-fidelity-archive.test.mjs",
+      "scripts/test-registry-fidelity.mjs"
+    ],
+    "pathCount": 24,
+    "primaryBefore": "041404a0d579c7183461962022e204f7ce8a6012",
+    "primaryAfter": "1779821bc3ffa4a92721974641ac5495d3ddc4f0",
+    "primaryClean": true,
+    "fastForwardOnly": true,
+    "fetches": 1,
+    "frozenSitesOutputsCanonicalConsumerUntouched": true,
+    "officialLockUnchangedFromBase": true,
+    "runtimeGoldenFixturesUnchanged": true,
+    "qualification": "Accepted final plan plus narrow maintained registry archive support closure; no additional package release or site rebuild required"
+  },
+  "publicReferences": {
+    "corePlanPullRequest": "https://github.com/OpenPresentation/opf/pull/694",
+    "corePlanMerge": "https://github.com/OpenPresentation/opf/commit/1779821bc3ffa4a92721974641ac5495d3ddc4f0",
+    "officialLockPullRequest": "https://github.com/OpenPresentation/opf/pull/695",
+    "officialParentRun": "https://github.com/OpenPresentation/opf/actions/runs/38898626339",
+    "officialGeneratedCommit": "https://github.com/OpenPresentation/opf/commit/c05bdd063b0ca69989f67a60cde2ba5f5916d537",
+    "rr86Draft": "https://github.com/OpenPresentation/opf-pptx/pull/277",
+    "officialLockMerge": "https://github.com/OpenPresentation/opf/commit/b6a85073ddceda4f2ade0e01510555654ad9f3ef"
+  },
+  "publicPackageSources": [
+    {
+      "package": "@openpresentation/opf",
+      "version": "0.20.3",
+      "publisher": "28a65e010861e6fe2f8ed140f8306df2f6d2b567",
+      "release": "https://github.com/OpenPresentation/opf/releases/tag/opf-v0.20.3"
+    },
+    {
+      "package": "@openpresentation/opf-render",
+      "version": "0.20.2",
+      "publisher": "837dbca5cb511b908269e9097c0ab1032de86601",
+      "release": "https://github.com/OpenPresentation/opf-render/releases/tag/opf-render-v0.20.2"
+    },
+    {
+      "package": "@openpresentation/opf-pptx",
+      "version": "0.20.3",
+      "publisher": "e0a67c6ee9892c58d15131923156b0ecf51ab14e",
+      "release": "https://github.com/OpenPresentation/opf-pptx/releases/tag/opf-pptx-v0.20.3"
+    },
+    {
+      "package": "@openpresentation/opf-editor",
+      "version": "0.20.3",
+      "publisher": "c0d4c0b5316e9f777e07e1ea4321164d433bbd53",
+      "release": "https://github.com/OpenPresentation/opf-editor/releases/tag/opf-editor-v0.20.3"
+    },
+    {
+      "package": "@openpresentation/cli",
+      "version": "0.20.0",
+      "publisher": "41e3d648f8ea8c391cac065fcadef1d79f2000cf",
+      "release": "https://www.npmjs.com/package/@openpresentation/cli/v/0.20.0"
+    },
+    {
+      "package": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "publisher": "940633a92c0c7d3339e59447d08ba6382ef12410",
+      "release": "https://www.npmjs.com/package/@openpresentation/gallery/v/3.0.0"
+    }
+  ],
+  "actualCore695": {
+    "at": "2026-10-16T14:50:12.249440+00:00",
+    "pullRequest": "https://github.com/OpenPresentation/opf/pull/695",
+    "actualMerge": "b6a85073ddceda4f2ade0e01510555654ad9f3ef",
+    "mergedAt": "2026-10-16T14:49:29Z",
+    "tree": "e8367b245fc1e993c4a5b25a655fc09a00e36ad4",
+    "acceptedLockHead": "c05bdd063b0ca69989f67a60cde2ba5f5916d537",
+    "acceptedLockTree": "ea64a101ac0152176bd3fc85b49d505a99d78743",
+    "actualParentBase": "1779821bc3ffa4a92721974641ac5495d3ddc4f0",
+    "originalLockBase": "041404a0d579c7183461962022e204f7ce8a6012",
+    "actualDeltaPaths": [
+      "ecosystem.lock.json"
+    ],
+    "actualDeltaFullIndexBinaryPatchSha256": "457cd9b61a5131737b5c5f60c66237fbe1790834c3b7504679ffdf4ff0d83f20",
+    "exactReviewedOfficialLockPatch": true,
+    "lockBlob": "7be0acba239d078b2ca2e324bdc3c78a02f9dc20",
+    "lockFileSha256": "18d3f1a2f70c34e082de85aed75b61cf14170c82ff50dec51dbaafdf6ad70581",
+    "officialRun": 38898626339,
+    "all24PlanAndHarnessPathsByteExact": true,
+    "combinedPathCount": 25,
+    "combinedPaths": [
+      "changes/rr-85-final-published-set.md",
+      "changes/rr-85-registry-fidelity-import-closure.md",
+      "docs/cli.md",
+      "docs/compatibility-matrix.md",
+      "docs/evidence/rr-85-checkpoint-2026-10-16/checkpoint.json",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/README.md",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/checkpoint.json",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/editor0203-trusted-publication.log",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/pptx0203-trusted-publication.log",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/render0202-trusted-publication.log",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/selected-artifacts-final.json",
+      "docs/evidence/rr-85-final-published-set-2026-10-16/verified-registry-authority-final.json",
+      "docs/programs/release-readiness/HANDOFF.md",
+      "docs/programs/release-readiness/README.md",
+      "docs/programs/release-readiness/burndown.md",
+      "docs/quickstart.md",
+      "ecosystem.lock.json",
+      "package.json",
+      "release-plan.json",
+      "scripts/checks.json",
+      "scripts/published-matrix/consumer/package-lock.json",
+      "scripts/published-matrix/consumer/package.json",
+      "scripts/registry-fidelity-archive.mjs",
+      "scripts/registry-fidelity-archive.test.mjs",
+      "scripts/test-registry-fidelity.mjs"
+    ],
+    "combinedFullIndexBinaryPatchSha256": "0d462bffae1653505c2f09c812e3213a3b6fe2965d87d9d312304280ee8ef018",
+    "allOtherSourceUnchangedByLockMerge": true,
+    "primaryBefore": "1779821bc3ffa4a92721974641ac5495d3ddc4f0",
+    "primaryAfter": "b6a85073ddceda4f2ade0e01510555654ad9f3ef",
+    "primaryClean": true,
+    "fastForwardOnly": true,
+    "fetches": 1,
+    "soleGateSession": 71308,
+    "soleGateExit": 0,
+    "gateLogSha256": "148facc9b79b988d6c61d1c3da90e8a446b0501b7ea18d7438df3bba921c1e09",
+    "frozenSitesAndPackageArtifactsUntouched": true
+  }
+}
