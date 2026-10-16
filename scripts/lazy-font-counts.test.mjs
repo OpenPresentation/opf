@@ -34,3 +34,15 @@ test('renderer 0.20.0 retains the exact reviewed face count with strict refusals
   for (const version of ['99.99.99', '0.20.0-next.0']) assert.throws(() => assertLazyFontCount(version, 94), /no expected lazy font count/);
   assert.ok(Object.isFrozen(LAZY_FONT_COUNTS['0.20.0']));
 });
+
+test('renderer 0.20.1 retains the reviewed 94 faces and refuses drift or unrecorded versions', () => {
+  assert.deepEqual(LAZY_FONT_COUNTS['0.20.1'], [94]);
+  assertLazyFontCount('0.20.1', 94);
+  for (const count of [0, 93, 95, 94.5, NaN, Infinity, '94', undefined]) {
+    assert.throws(() => assertLazyFontCount('0.20.1', count), /expected 94/);
+  }
+  for (const version of ['0.20.1-next.0', '0.20.2', '99.99.99']) {
+    assert.throws(() => assertLazyFontCount(version, 94), /no expected lazy font count/);
+  }
+  assert.ok(Object.isFrozen(LAZY_FONT_COUNTS['0.20.1']));
+});
