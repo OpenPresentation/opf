@@ -41,8 +41,21 @@ test('renderer 0.20.1 retains the reviewed 94 faces and refuses drift or unrecor
   for (const count of [0, 93, 95, 94.5, NaN, Infinity, '94', undefined]) {
     assert.throws(() => assertLazyFontCount('0.20.1', count), /expected 94/);
   }
-  for (const version of ['0.20.1-next.0', '0.20.2', '99.99.99']) {
+  for (const version of ['0.20.1-next.0', '0.20.3', '99.99.99']) {
     assert.throws(() => assertLazyFontCount(version, 94), /no expected lazy font count/);
   }
   assert.ok(Object.isFrozen(LAZY_FONT_COUNTS['0.20.1']));
+});
+
+// This admits one reviewed prospective release, not every version at the same count.
+test('renderer 0.20.2 source retains 94 faces while future releases and count drift still fail', () => {
+  assert.deepEqual(LAZY_FONT_COUNTS['0.20.2'], [94]);
+  assertLazyFontCount('0.20.2', 94);
+  for (const count of [0, 93, 95, 94.5, NaN, Infinity, '94', undefined]) {
+    assert.throws(() => assertLazyFontCount('0.20.2', count), /expected 94/);
+  }
+  for (const version of ['0.20.2-next.0', '0.20.3', '99.99.99']) {
+    assert.throws(() => assertLazyFontCount(version, 94), /no expected lazy font count/);
+  }
+  assert.ok(Object.isFrozen(LAZY_FONT_COUNTS['0.20.2']));
 });
