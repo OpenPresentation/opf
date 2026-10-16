@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.20.3 (2026-10-16)
+
+- RR-87: Name the shared report schema “Validation results” and describe it as “Errors, warnings and suggested fixes.” The schema ID, fields, filenames, lookup names and exported `Finding` / `FindingReport` types are unchanged.
+
 ## 0.20.2 (2026-10-15)
 
 - Add opt-in, versioned Arabic and Nirmala font-route preparation with explicit subset scope, corpus-backed style and text controls, pinned open preview-face identities and complete source/output sealing. Native reference measurements and acceptance remain unresolved.
