@@ -5,7 +5,7 @@ import {createRequire} from 'node:module';
 import {execFileSync} from 'node:child_process';
 import {pathToFileURL} from 'node:url';
 import path from 'node:path';
-import {tar} from './archive-tar.mjs';
+import {archiveRegistryFidelity} from './registry-fidelity-archive.mjs';
 import {examplesDigest,readPublishedCoreGolden} from './registry-golden.mjs';
 import {installablePackages} from './release-plan-cli.mjs';
 const root=process.cwd();
@@ -56,9 +56,7 @@ const suites=[
 for(const [repo,tests] of suites){
  const ref=plan.verificationRefs[repo];assert.match(ref,/^[a-f0-9]{40}$/);
  const directory=path.join(consumer,'fidelity',repo);await mkdir(directory,{recursive:true});
- const archive=path.join(directory,'tests.tar');
- execFileSync('git',['archive',ref,'test','--output',archive],{cwd:path.resolve(root,'..',repo)});
- tar(archive,'-xf',['-C',directory]);
+ const archive=archiveRegistryFidelity({checkout:path.resolve(root,'..',repo),ref,repo,directory});
  const installed=path.dirname(require.resolve('@openpresentation/'+repo+'/package.json'));
  const shipped=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
  // Newer PPTX smoke fixtures reference the shipped, hash-verified vendor code.
