@@ -15,6 +15,7 @@
   "changed": {
     "always": ["check:changes"],
     "rules": [
+      {"match": ["scripts/published-matrix/parity-work-directory.mjs", "scripts/published-matrix/installed-parity.mjs"], "run": ["check:parity-work-directory"]},
       {"match": ["scripts/test-registry-fidelity.mjs", "scripts/registry-fidelity-archive.mjs"], "run": ["check:registry-fidelity-archive"]},
       {"match": ["scripts/measurement-policy.mjs", "scripts/fixtures/editor-scheduled-measurement.json"], "run": ["check:pr-gate", "check:release-train"]},
       {"match": ["scripts/native-acceptance/"], "run": ["check:native-acceptance"]},
