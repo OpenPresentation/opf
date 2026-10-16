@@ -49,22 +49,24 @@ const isObject = (value: unknown): value is Record<string, unknown> => !!value &
 const isComposite = (value: unknown) => !!value && typeof value === "object";
 export const idOf = (value: unknown): string | undefined => isObject(value) && typeof value.id === "string" && value.id !== "" ? value.id : undefined;
 
-const canonCache = new WeakMap<object, string>();
-/** Stable JSON text: member order does not matter. */
+/** Stable JSON text: member order does not matter. Cache only within this call. */
 export function canonical(value: unknown): string {
+  return canonicalCached(value, new WeakMap());
+}
+
+function canonicalCached(value: unknown, canonCache: WeakMap<object, string>): string {
   if (value === null || typeof value !== "object") return JSON.stringify(value) ?? "undefined";
   const cached = canonCache.get(value);
   if (cached !== undefined) return cached;
   const text = Array.isArray(value)
-    ? `[${value.map(canonical).join(",")}]`
-    : `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonical((value as Record<string, unknown>)[key])}`).join(",")}}`;
+    ? `[${value.map(item => canonicalCached(item, canonCache)).join(",")}]`
+    : `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${canonicalCached((value as Record<string, unknown>)[key], canonCache)}`).join(",")}}`;
   canonCache.set(value, text);
   return text;
 }
 
 type Leaves = Map<string, string | number | boolean | null>;
-const leafCache = new WeakMap<object, Leaves>();
-function leaves(value: unknown): Leaves {
+function leaves(value: unknown, leafCache: WeakMap<object, Leaves>): Leaves {
   if (!isComposite(value)) return new Map();
   const cached = leafCache.get(value as object);
   if (cached) return cached;
@@ -90,8 +92,12 @@ function wordOverlap(a: string, b: string): number {
 
 /** Content similarity in [0, 1]: matching scalar leaves at the same path, with partial credit for similar text. */
 export function similarity(a: unknown, b: unknown): number {
-  if (canonical(a) === canonical(b)) return 1;
-  const left = leaves(a), right = leaves(b);
+  return similarityCached(a, b, new WeakMap(), new WeakMap());
+}
+
+function similarityCached(a: unknown, b: unknown, canonCache: WeakMap<object, string>, leafCache: WeakMap<object, Leaves>): number {
+  if (canonicalCached(a, canonCache) === canonicalCached(b, canonCache)) return 1;
+  const left = leaves(a, leafCache), right = leaves(b, leafCache);
   const size = Math.max(left.size, right.size);
   if (!size) return 0;
   let score = 0;
@@ -148,6 +154,10 @@ function lcsPairs(keysA: string[], keysB: string[]): Array<[number, number]> {
 
 /** Match the elements of two arrays. Pure and deterministic. */
 export function matchArrays(a: readonly unknown[], b: readonly unknown[], options: MatchOptions = {}): ArrayMatch {
+  // Reuse work across pairs in this operation, never across later edits of the same objects.
+  const canonCache = new WeakMap<object, string>(), leafCache = new WeakMap<object, Leaves>();
+  const canonical = (value: unknown) => canonicalCached(value, canonCache);
+  const similarity = (left: unknown, right: unknown) => similarityCached(left, right, canonCache, leafCache);
   const threshold = options.threshold ?? DEFAULT_MATCH_THRESHOLD;
   const matchA = new Array<number>(a.length).fill(-1), matchB = new Array<number>(b.length).fill(-1);
   const pairs: MatchPair[] = [];
