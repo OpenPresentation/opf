@@ -74,7 +74,16 @@ function svgDimensions(text: string): Dimensions | undefined {
   const root = /<svg\b([^>]*)>/i.exec(text)?.[1];
   if (root === undefined) return undefined;
   const attribute = (name: string) => new RegExp(`\\s${name}\\s*=\\s*["']([^"']*)["']`, 'i').exec(root)?.[1];
-  const length = (value: string | undefined) => { const match = value && /^\s*([0-9]*\.?[0-9]+)\s*(px|pt|in|cm|mm|em)?\s*$/i.exec(value); return match ? Number(match[1]) : undefined; };
+  // Absolute SVG lengths share CSS's 96 px/in convention. Font-relative or percentage
+  // dimensions cannot establish a ratio without a host viewport/font; use viewBox instead.
+  const length = (value: string | undefined): number | undefined => {
+    const match = value && /^\s*([0-9]*\.?[0-9]+)\s*(px|pt|in|cm|mm)?\s*$/i.exec(value);
+    if (!match) return undefined;
+    const number = Number(match[1]);
+    const unit = (match[2] ?? 'px').toLowerCase();
+    const pixels = number * (unit === 'pt' ? 96 / 72 : unit === 'in' ? 96 : unit === 'cm' ? 96 / 2.54 : unit === 'mm' ? 96 / 25.4 : 1);
+    return Number.isFinite(pixels) ? pixels : undefined;
+  };
   const width = length(attribute('width')), height = length(attribute('height'));
   if (width && height) return {width, height};
   const box = attribute('viewBox')?.trim().split(/[\s,]+/).map(Number);
