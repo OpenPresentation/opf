@@ -71,6 +71,21 @@ export function compareBreaks(paragraphs, refWidth, refSpace, repWidth, repSpace
   return { cases, identical, differing: cases - identical, identicalFraction: round(identical / cases, 4), perWidth };
 }
 
+/** Cache advances by font object, so distinct faces in one collection never share measurements. */
+export function createReferenceAdvance() {
+  const cache = new WeakMap();
+  return (font, text) => {
+    let words = cache.get(font);
+    if (!words) { words = new Map(); cache.set(font, words); }
+    if (!words.has(text)) {
+      let value = NaN;
+      try { if ([...text].every((ch) => font.hasGlyphForCodePoint(ch.codePointAt(0)))) value = font.layout(text).positions.reduce((sum, p) => sum + p.xAdvance, 0) / font.unitsPerEm; } catch { value = NaN; }
+      words.set(text, value);
+    }
+    return words.get(text);
+  };
+}
+
 const cliArgs = process.argv.slice(2);
 const option = (name, fallback) => { const index = cliArgs.indexOf(name); return index >= 0 ? cliArgs[index + 1] : fallback; };
 const multi = (name) => cliArgs.flatMap((arg, index) => (arg === name ? [path.resolve(cliArgs[index + 1])] : []));
@@ -133,15 +148,7 @@ async function main() {
   };
 
   const wordCache = new Map();
-  const refAdvance = (key, font, text) => {
-    const id = `${key}\u0000${text}`;
-    if (!wordCache.has(id)) {
-      let value = NaN;
-      try { if ([...text].every((ch) => font.hasGlyphForCodePoint(ch.codePointAt(0)))) value = font.layout(text).positions.reduce((sum, p) => sum + p.xAdvance, 0) / font.unitsPerEm; } catch { value = NaN; }
-      wordCache.set(id, value);
-    }
-    return wordCache.get(id);
-  };
+  const refAdvance = createReferenceAdvance();
   const repAdvance = (style, text) => {
     const id = `rep\u0000${style.fontFamily}\u0000${style.fontWeight}\u0000${style.italic}\u0000${text}`;
     if (!wordCache.has(id)) {
@@ -231,18 +238,17 @@ async function main() {
       if (!info) { entry.styles.push({ style: styleLabel(weight, italic), error: `no manifest face for ${resolved.resolvedFamily} ${resolved.resolvedWeight}` }); continue; }
       const rep = faceOf(info);
       const style = { fontFamily: row.family, fontWeight: requested, italic };
-      const refKey = `${ref.file}`;
       const deltas = [];
       for (const text of corpus) {
-        const a = refAdvance(refKey, ref.font, text);
+        const a = refAdvance(ref.font, text);
         const b = repAdvance(style, text);
         if (Number.isFinite(a) && Number.isFinite(b) && a > 0) deltas.push(b / a - 1);
       }
       const meanAbs = deltas.reduce((sum, d) => sum + Math.abs(d), 0) / deltas.length;
       const maxAbs = Math.max(...deltas.map(Math.abs));
-      const wordWidthRef = (word) => refAdvance(refKey, ref.font, word);
+      const wordWidthRef = (word) => refAdvance(ref.font, word);
       const wordWidthRep = (word) => repAdvance(style, word);
-      const refSpace = refAdvance(refKey, ref.font, " ");
+      const refSpace = refAdvance(ref.font, " ");
       const repSpace = repAdvance(style, " ");
       const breaks = compareBreaks(paragraphs, (w) => { const v = wordWidthRef(w); return Number.isFinite(v) ? v : wordWidthRep(w); }, refSpace, (w) => { const v = wordWidthRep(w); return Number.isFinite(v) ? v : wordWidthRef(w); }, repSpace);
       const refVertical = vertical(ref.font);
