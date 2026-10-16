@@ -2,6 +2,24 @@
 
 ## Unreleased
 
+## 0.20.2 (2026-10-15)
+
+- Add opt-in, versioned Arabic and Nirmala font-route preparation with explicit subset scope, corpus-backed style and text controls, pinned open preview-face identities and complete source/output sealing. Native reference measurements and acceptance remain unresolved.
+- RR-20: add a maintained offline replay of the four retained native saves with complete verified registry authority, sealed input and output-isolation guards, and explicit semantic/geometry acceptance limits.
+- Core development fixtures now use the genuinely published renderer and PPTX 0.20.0 packages, matching the existing optional peer contract. The core runtime and published 0.20.1 artifact are unchanged.
+- Align the coordinated maintenance browser workflows with Playwright 1.64.0 and its verified immutable image. This source patch requires a separately reviewed official maintenance roll selecting matching engines; it does not alter the qualified release locks, published consumer or golden fixtures. The independent published-package control retains Playwright 1.63.0 to match the immutable published renderer's original lock; only the coordinated source candidate advances to 1.64.0.
+- Bind the verified PPTX 0.20.2 publication to the release plan, canonical registry authority and authentic consumer locks while retaining the historical published and source-candidate font/theme evidence.
+- RR-85 (composition geometry): metrics center horizontally within their allocated block by default, keeping the value/unit pair and metadata together. Explicit slide, deck, host, theme, layout and direct `layoutMetric` alignment overrides retain precedence; prose, lists and tables retain their existing defaults. Coordinate the dependent packages' minimum core version in the release train.
+- Record the independently verified Editor 0.20.1 registry identity and prepare a minimal frozen successor consumer while preserving the other five published identities and historical verification.
+- Bind maintained published-consumer and layout registry guards to the reviewed core 0.19/Gallery 2 and core 0.20/Gallery 3 generations, retaining exact registry identities and all layout/content/preview checks while rejecting unknown future generations.
+
+Refresh the maintained published-matrix consumer manifest and lock from the verified release plan, and bind its browser fixture to the same known catalog/core generations without changing its authored content or existing validation assertions.
+- Make candidate-gallery security fixtures exercise directory junctions on Windows without file-symlink privileges while retaining aliased JSON, dangling-link and built-output-link refusals. Invoke real npm through the maintained JavaScript-entrypoint helper in the isolated tarball test.
+- Keep the PR gate pending on genuine replacement jobs when an older GitHub Actions run was cancelled before creating jobs or after only successful/skipped jobs. Read all suite pages before recognizing same-commit, same-workflow supersession; unmatched cancellations and unexplained failures still fail closed.
+- Correct the Presentation.filename schema description to name the supported `opf convert` command, preserving the existing filename behavior and schema constraints.
+- RR-68: preserve the scheduled Editor flake measurement's declared advisory policy in release and PR fallback gates using verified workflow identity; required checks and unknown identities continue to gate. Advisory suites cannot supersede cancellations or qualify retries of genuine gating runs.
+- Align native preparation's nine strict chart archive references with the reviewed default-theme source candidate, retaining the genuine published PPTX 0.20.0/0.20.1 comparisons and rejecting unexplained archive drift. Source-candidate preparation remains distinct from registry and native UI acceptance.
+
 ## 0.20.1 (2026-10-14)
 
 First published release of the 0.20 line: layout areas use nested arrays and require Gallery 3; lists start at 32 reference pixels when no size is authored; attributed quotes use measured content heights; structural borders use quiet neutral defaults and numeric table columns align right. Includes Node/CLI PPTX import catalog forwarding and maintained native qualification tooling. The earlier 0.20.0 preparation was never published.
