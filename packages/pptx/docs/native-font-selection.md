@@ -1,5 +1,7 @@
 # Native output-font selection
 
+> Current status: `native-font-selection.ps1` is retired and refuses before any effect. Commands and native results below are historical; see [retirement and replacement requirements](native-harness-retirement.md).
+
 The seven-slide physical-font fixture covers headings/scalar text, rich runs, tables, quotes, code, metrics and lists. All nine bundled legacy-family/style combinations are selected by native PowerPoint character properties and by fonts actually referenced by non-whitespace glyphs in a native PDF export. Node 20.20.2 and 24.20.0 each passed seven identical save/reopen PNG pairs, 14 identical original/saved current-content slide imports and removal of all nine owned temporary font registrations on Windows PowerPoint 16.0.20326.20132.
 
 This establishes the native output family/style names. It does not prove physical font-file identity for every glyph, absence of synthetic glyph effects, edited-text reflow or browser/native pixel equality. The PDF's Windows names, such as `Roboto,Bold`, differ from source PostScript names such as `Roboto-Bold`; the reader strictly parses the optional comma Bold/Italic suffix and compares exact family/style tuples. It does not apply fallback-family aliases. The first PostScript-name-equality failure remains in the raw evidence.

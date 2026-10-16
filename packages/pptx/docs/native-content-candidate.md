@@ -1,5 +1,7 @@
 # Native content fidelity — unpublished 0.5.2 candidate
 
+> Current status: `native-quote.ps1` is retired and refuses before any effect. Commands and native results below are historical; see [retirement and replacement requirements](native-harness-retirement.md).
+
 The published 0.5.1 native feature matrix exposed hard-coded metric sizes, flattened timelines, changed quote layout with missing source, mismatched code styling and dark chart labels on dark slides. This candidate uses the shared core text fitter and published renderer 0.5.1's payload geometry to create editable native text/lines/markers. Quotes retain attribution and source, reserving footer space before fitting long bodies. Chart labels use the preview's readable theme text color; the Office chart remains editable. The optional renderer peer now requires ^0.5.1, with exact 0.5.1 development dependency and a fresh registry lockfile following renderer publication `335ed01b2efbbb872894949f2ac0519e35651474`.
 
 The [hash-bound candidate report](evidence/native-content/comparison.json) distinguishes the installed registry baseline from this unshipped implementation, recording all runtime/vendor/package/lock hashes and declared candidate version. PowerPoint 16 opens, rasterizes, edits, saves and reopens all 19 slides in the same eight controlled cases. All 24 original/saved/edited reimports validate and retain each native edit. Three native tables, one Office chart and one picture remain native. No proprietary font binary is included.

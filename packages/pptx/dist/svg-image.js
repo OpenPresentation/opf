@@ -153,7 +153,9 @@ function sanitize(input, text) {
       } else if (!skipping) {
         if (chunk.includes(']]>')) malformed('a stray CDATA terminator');
         const style = stack.at(-1).name === 'style';
-        out.push(references(style ? filterCss(chunk) : chunk));
+        const filtered = style ? filterCss(chunk) : chunk;
+        if (filtered !== chunk) removed.add('external references');
+        out.push(references(filtered));
       }
       continue;
     }
@@ -167,7 +169,12 @@ function sanitize(input, text) {
       const end = text.indexOf(']]>', index + 9);
       if (end < 0) malformed('an unterminated CDATA section');
       if (!stack.length) malformed('CDATA outside the root element');
-      if (!skipping) out.push(`<![CDATA[${stack.at(-1).name === 'style' ? filterCss(text.slice(index + 9, end)) : text.slice(index + 9, end)}]]>`);
+      if (!skipping) {
+        const chunk = text.slice(index + 9, end);
+        const filtered = stack.at(-1).name === 'style' ? filterCss(chunk) : chunk;
+        if (filtered !== chunk) removed.add('external references');
+        out.push(`<![CDATA[${filtered}]]>`);
+      }
       index = end + 3;
       continue;
     }

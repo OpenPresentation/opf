@@ -1,5 +1,7 @@
 # Metric source integration (unreleased)
 
+> Current status: `native-metric.ps1` is retired and refuses before any effect. Commands and native results below are historical; see [retirement and replacement requirements](native-harness-retirement.md).
+
 Continue `codex/shared-metric-integration-20260910` alongside the same branch in OpenPresentation/opf, opf-render and opf-editor. Published core 0.9.0 lacks the accepted `metricLayout` contract required by this source. Package versions and registry dependencies remain at the previous complete set pending a coordinated release.
 
 Each accepted metric source line becomes editable native text using its accepted origin, resolved style and tab stops. Standard native shape tags identify complete metric groups. The first value line carries source/type/boundary context without adding an invisible panel. Reimport uses current native text, preserves unchanged numeric types and empty optional fields, and retains noncanonical numeric edits as literal strings with a diagnostic. Invalid trend edits, damaged/missing/duplicated identities and cross-code ambiguity retain visible native shapes instead of restoring stale source. Geometry, formatting, alignment and font themes are not reconstructed.

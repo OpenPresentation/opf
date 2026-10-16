@@ -68,6 +68,9 @@ import {
   validate
 } from "@openpresentation/opf";
 import {checkFormat, isValidFormat} from "./format-check.js";
+import {OPFPptxError} from './errors.js';
+import {readInputZip} from './input-safety.js';
+export {OPFPptxError} from './errors.js';
 
 export {checkTypefaces, inventoryTypefaces, packageFontsUsed, THEME_SCRIPT_SUPPLEMENTS} from './typeface-inventory.js';
 export {DEFAULT_SIGNAL_LIMITS, SIGNALS_VERSION, isMonospaceFamily} from './import-signals.js';
@@ -90,18 +93,6 @@ export const runtimePolicy = Object.freeze({
   requiredNetworkCalls: false,
   deterministicLocalExecution: true
 });
-
-export class OPFPptxError extends Error {
-  constructor(code, message, details = {}) {
-    super(message);
-    this.name = "OPFPptxError";
-    this.code = code;
-    this.details = details;
-    if (details.findings) this.findings = details.findings;
-    if (details.diagnostics) this.diagnostics = details.diagnostics;
-    if (details.path) this.path = details.path;
-  }
-}
 
 const FIXED_TIMESTAMP = "1980-01-01T00:00:00Z";
 // fflate derives the DOS zip date from local-time fields, so build this from
@@ -642,8 +633,9 @@ function readPptxZip(input) {
   }
 
   try {
-    return unzipSync(bytes);
+    return readInputZip(bytes);
   } catch (error) {
+    if (error instanceof OPFPptxError) throw error;
     throw new OPFPptxError("invalid-pptx", "PPTX input is not a readable ZIP archive.", {
       cause: errorMessage(error)
     });
@@ -2215,7 +2207,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
       // FA-10: a TextRun[] heading draws and exports like rich body text; its lines are named and tagged as a heading (the body's are not).
       const heading = item.field !== 'text';
       addRichFitLines(slide, item.text, item.box, itemContext, {
-        value: item.value, alignment: item.text.placement?.alignment ?? item.alignment ?? 'left',
+        value: item.value, path: item.path, alignment: item.text.placement?.alignment ?? item.alignment ?? 'left',
         fallback: item.field === 'tag' ? tagColor(itemContext) : itemContext.textColor,
         ...(heading ? {
           objectName: index => `OPF heading ${item.path} line ${index}`,
@@ -2301,7 +2293,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
   const kind = inferPayloadKind(payload);
   switch (kind) {
     case "text":
-      addTextPayload(slide, payload.text ?? payload.bullets, region, context);
+      addTextPayload(slide, payload.text ?? payload.bullets, region, context, path);
       break;
     case "list":
       addListPayload(slide, payload.items ?? payload.bullets, region, context);
@@ -2346,9 +2338,9 @@ function inferPayloadKind(payload) {
   return "unknown";
 }
 
-function addTextPayload(slide, value, region, context) {
+function addTextPayload(slide, value, region, context, path) {
   if (Array.isArray(value)) {
-    slide.addText(textRuns(value, context, 18), textBoxOptions(region, context, 18));
+    slide.addText(textRuns(value, context, 18, path), textBoxOptions(region, context, 18));
     return;
   }
   if (Array.isArray(value?.bullets)) {
@@ -2366,9 +2358,10 @@ function listRunLook(fit,style,context){
   if(text.size!==1||description.size>1)return undefined;
   return {text:JSON.parse([...text][0]),...(description.size?{description:JSON.parse([...description][0])}:{})};
 }
-function richLineRuns(line,color,native,context) {
+function richLineRuns(line,color,native,context,path) {
   const fallback=color.replace(/^#/,'');
   return line.fragments.map(fragment=>{
+    assertXmlText(fragment.run.text ?? fragment.text, path);
     const runColor=exportColor(fragment.run.color,context,fallback),color=nativeColor(fragment.run.color,runColor,context,native);
     return {text:fragment.text,options:{...nativeFontOptions(fragment.style),fontSize:(fragment.nominalSize??fragment.fontSize)*.75,color:linkColor(fragment.run,color,context),underline:fragment.run.underline?{style:'sng',color:linkColor(fragment.run,color,context)}:undefined,strike:fragment.run.strikethrough?'sngStrike':undefined,baseline:fragment.baselineShift?-fragment.baselineShift/(fragment.nominalSize??fragment.fontSize)*2000:undefined,hyperlink:fragment.run.link&&/^(https?:|mailto:|tel:)/i.test(fragment.run.link)?{url:fragment.run.link}:undefined,...langOptions(context,fragment.style.lang)}};
   });
@@ -2416,7 +2409,7 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
         const number=first?entry.marker.number:undefined;
         if(first)context.listMarkers.set(objectName,{fontFamily:entry.marker.style.fontFamily,fontSize:entry.marker.fontSize*.75,color:pptxColor(context.textColor),picture:number?false:picture});
         const paragraph=first?{bullet:number?{type:'number',style:autoNumScheme(number.style,number.suffix),startAt:number.value,indent:entry.marker.indent*.75}:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false};
-        const runs=richLineRuns(line,color,native,context);
+        const runs=richLineRuns(line,color,native,context,path);
         if(!runs.length)runs.push({text:'',options:{}});
         // Keep paragraph intent identical across runs. ZIP normalization below
         // removes the duplicate paragraph-property nodes emitted by PptxGenJS.
@@ -2876,6 +2869,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
     const defaultText = cellStyle.color === undefined ? tableTextSchemeValue(fillValue, baseColor, context) : undefined;
     const alpha = value => value.length === 8 ? (1 - parseInt(value.slice(6), 16) / 255) * 100 : 0;
     const text = stringifyText(cell.value), style = cell.textStyle;
+    assertXmlText(text, cell.path ?? path);
     const fragments = rich ? fit.richLines.flatMap(line => line.fragments) : [];
     const runs = rich ? cell.value.flatMap((value, index) => {
       const run = typeof value === 'string' ? {text:value} : value;
@@ -2955,10 +2949,11 @@ function pixelBox(region) {
 // super/subscript (a citation marker is a baseline run) and http(s)/mailto links. The body's lines stay untagged; a heading or quote
 // body passes `objectName` and `tag`, which name and tag every line with the boundary between wrapped lines (a soft wrap inserts
 // nothing, a hard line break keeps its separator), recovered from the flattened text. `fallback` is the color of runs without one.
-function addRichFitLines(slide, fit, box, context, {value, alignment: logicalAlignment, fallback, objectName, tag}) {
+function addRichFitLines(slide, fit, box, context, {value, path, alignment: logicalAlignment, fallback, objectName, tag}) {
   const region = {x: box.x / 96, y: box.y / 96, w: box.width / 96, h: box.height / 96};
   const runText = run => typeof run === 'string' ? run : run.text;
   const whole = typeof value === 'string' ? value : value.map(runText).join('');
+  assertXmlText(whole, path);
   const count = fit.richLines.length;
   let cursor = 0;
   for (const [index, line] of fit.richLines.entries()) {
@@ -2984,11 +2979,15 @@ function addRichFitLines(slide, fit, box, context, {value, alignment: logicalAli
   }
 }
 
+function assertXmlText(text, path) {
+  const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(String(text??''));
+  if(invalid)throw new OPFPptxError('invalid-text',`Text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which DrawingML XML cannot represent.`,{path});
+}
+
 // Match the published renderer's payload geometry and shared core text fitting.
 // Each fitted line remains native editable text, without PowerPoint rewrapping it.
 function addMeasuredPayloadText(slide, text, box, context, options, config) {
-  const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(String(text??''));
-  if(invalid)throw new OPFPptxError('invalid-text',`Text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which DrawingML XML cannot represent.`,{path:config.path});
+  assertXmlText(text, config.path);
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
   const style = config.textStyle ?? resolveTextStyle({fontFamily: config.fontFamily ?? context.fonts.body, fontWeight: config.fontWeight ?? 400, path: config.path}, options.textMeasurement);
   const fit = config.fit ?? fitText(String(text ?? ''), box, config.fontSize * scale, (context.composition?.minFontSize ?? 16) * scale, textWidthMeasurer(style, options.textMeasurement));
@@ -3230,7 +3229,7 @@ async function addQuotePayload(slide, presentation, value, layout, context, opti
     // FA-10: a TextRun[] quote body (core's rich lines, quotation marks joined to its first and last run) is exported line by line like rich body text, with the same quote tags.
     if (part.runs && part.fit.richLines) {
       addRichFitLines(slide, part.fit, part.box, context, {
-        value: part.text, alignment: part.fit.placement?.alignment ?? context.contentAlignment ?? 'left', fallback: context.textColor,
+        value: part.text, path: part.path, alignment: part.fit.placement?.alignment ?? context.contentAlignment ?? 'left', fallback: context.textColor,
         objectName: line => `OPF quote ${group} part ${index} line ${line}`,
         tag: (name, line, count, boundary) => context.quoteTags.set(name, {v: 1, role: 'text', group, part: index, line, count, ...boundary, base: richBase(part.fit, part.style, context.colors.text), ...(index === 0 && line === 0 ? {anchor} : {})})
       });
@@ -3574,9 +3573,10 @@ function textBoxOptions(region, context, fontSize) {
 // The private text helpers annotation-export.js writes captions and footnote lines with (RR-34).
 const exportHelpers = {textBoxOptions, nativeFontOptions, exportColor, nativeColor};
 
-function textRuns(value, context, fallbackFontSize) {
+function textRuns(value, context, fallbackFontSize, path) {
   const runs = Array.isArray(value) ? value : [value];
   return runs.map((run) => {
+    assertXmlText(typeof run === "string" ? run : run?.text, path);
     if (typeof run === "string") {
       return {
         text: run,

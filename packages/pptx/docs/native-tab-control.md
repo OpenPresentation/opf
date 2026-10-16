@@ -1,5 +1,7 @@
 # Native-created tab control
 
+> Current status: `native-tab-control.ps1` is retired and refuses before any effect. Commands and native results below are historical; see [retirement and replacement requirements](native-harness-retirement.md).
+
 This diagnostic creates nine tab/literal textbox pairs entirely through PowerPoint, saves and reopens the owned presentation, records native bounds and PNGs, and makes a private PDF for a second coordinate observation. It does not consume OPF or alter the metric suite's 0.02 point tolerance.
 
 Run from a coordinated Windows checkout with desktop PowerPoint ready. Each attempt needs a fresh evidence directory:

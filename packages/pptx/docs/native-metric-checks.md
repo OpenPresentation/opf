@@ -1,5 +1,7 @@
 # Bounded native metric checks
 
+> Current status: `native-metric.ps1` is retired and refuses before any effect. Commands and native results below are historical; see [retirement and replacement requirements](native-harness-retirement.md).
+
 Generate fresh fixtures with Node 24 and local Calibri reference fonts. Historical Node 20 results below describe their original runs; do not restart a dual-runtime matrix. Each directory contains six decks of eight slides: wide/portrait and left/center/right. Font bytes stay local; only reference hashes and rendered pixels are retained.
 
 ```powershell

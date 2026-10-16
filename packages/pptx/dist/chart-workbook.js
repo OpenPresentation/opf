@@ -1,5 +1,6 @@
 import {unzipSync,zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
+import {readNestedInputZip} from './input-safety.js';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false,removeNSPrefix:true,htmlEntities:{amp:'&',lt:'<',gt:'>',quot:'"',apos:"'"}});
 const decoder=new TextDecoder('utf-8',{fatal:true}),encoder=new TextEncoder();
 const array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
@@ -25,11 +26,12 @@ function workbookContext(entries,chartPart){
  const ref=relationship(entries,chartPart,(chart?.externalData??chart?.chartData?.externalData)?.id);
  if(!ref?.type?.endsWith('/package')||!entries[ref.path])return undefined;
  // Read only bounded spreadsheet metadata. Never follow external workbook links.
+ const nested=readNestedInputZip(entries,ref.path);
  let size=0;
- const workbook=unzipSync(entries[ref.path],{filter:file=>{
-  if(!/^xl\/(workbook\.xml|_rels\/workbook\.xml\.rels|sharedStrings\.xml|worksheets\/[^/]+\.xml)$/.test(file.name))return false;
-  size+=file.originalSize;if(size>16*1024*1024)throw Error('Chart workbook metadata exceeds the limit.');return true;
- }});
+ const workbook=Object.fromEntries(Object.entries(nested).filter(([name,bytes])=>{
+  if(!/^xl\/(workbook\.xml|_rels\/workbook\.xml\.rels|sharedStrings\.xml|worksheets\/[^/]+\.xml)$/.test(name))return false;
+  size+=bytes.length;if(size>16*1024*1024)throw Error('Chart workbook metadata exceeds the limit.');return true;
+ }));
  // The category range: c:cat/c:xVal references, or the chartex cx:strDim type="cat" formula.
  const category=find(chart,'cat')[0]??find(chart,'xVal')[0]??find(chart,'strDim').find(dim=>dim?.type==='cat'),formula=category?.strRef?.f??category?.multiLvlStrRef?.f??category?.numRef?.f??(category?.type==='cat'?category?.f:undefined);
  // Infer a heading only for one contiguous vertical category range with a row
@@ -58,7 +60,7 @@ export function readChartCategoryHeading(entries,chartPart){
   // Error, boolean, date and formula results are not literal text headings.
   if(cell.t!==undefined&&!['str','n'].includes(cell.t))return undefined;
   return cell.v===undefined?undefined:text(cell.v);
- }catch{return undefined;}
+ }catch(error){if(error?.code==='pptx-limit-exceeded')throw error;return undefined;}
 }
 export function writeChartCategoryHeading(entries,chartPart,heading){
  const context=workbookContext(entries,chartPart);

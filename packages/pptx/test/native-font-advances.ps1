@@ -1,4 +1,6 @@
 param([string]$EvidenceDirectory='artifacts/native-font-advances')
+# RR-87: retired before any filesystem, font, process or Office operation. Historical body retained below.
+throw 'Retired unsafe native helper (ENG-X03-001). Do not retry or bypass. See docs/native-harness-retirement.md; native acceptance remains pending.'
 $ErrorActionPreference='Stop'
 function Get-ProbeHash([string]$File) { return (Get-FileHash -LiteralPath $File -Algorithm SHA256).Hash.ToLowerInvariant() }
 $evidenceRoot=(Resolve-Path -LiteralPath $EvidenceDirectory).Path

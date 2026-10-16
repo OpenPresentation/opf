@@ -1,5 +1,7 @@
 # Bounded native chart checks
 
+> Current status: `native-chart-colors.ps1` is retired and refuses before any effect. Commands and native results below are historical; see [retirement and replacement requirements](native-harness-retirement.md).
+
 Generate a fresh fixture directory for each selected workbook and Node runtime:
 
 ```powershell

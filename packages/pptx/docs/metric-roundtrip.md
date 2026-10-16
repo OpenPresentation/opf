@@ -1,5 +1,7 @@
 # Shared metric source integration (unpublished)
 
+> Current status: `native-metric.ps1` is retired and refuses before any effect. Commands and native results below are historical; see [retirement and replacement requirements](native-harness-retirement.md).
+
 This branch depends on the coordinated `codex/shared-metric-integration-20260910` core and renderer sources. These changes are not included in published PPTX 0.7.0. Use the core repository's [integration plan](https://github.com/OpenPresentation/opf/blob/codex/shared-metric-integration-20260910/docs/plans/shared-metric-integration.md) for exact checkpoints and release gates.
 
 Every visible metric value, unit, label, description, delta and trend uses the core's accepted font sizes, line positions and tab stops. Each source line is editable native text. Native paragraphs now use the accepted left/center/right anchor and available part width. This preserves the intended alignment when PowerPoint's text advances differ slightly from the measurement provider; it does not refit or scale the text.

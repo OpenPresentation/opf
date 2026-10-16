@@ -18,7 +18,7 @@
 import {XMLParser} from 'fast-xml-parser';
 import {attachTextTags, decodeTextTag} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
-import {CAPTION_TAG, FOOTNOTES_TAG} from './annotation-export.js';
+import {CAPTION_TAG, FOOTNOTES_TAG, footnotesRuleName} from './annotation-export.js';
 
 const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
@@ -141,7 +141,16 @@ export function importAnnotations({shapes, paragraphs, relationships, entries, s
     if (footnote === undefined) continue;
     consumed.add(shape);
     if (!footnote || !['rule', 'entry'].includes(footnote.role)) { report({code: 'invalid-footnote-provenance', path: `slides.${slideIndex}`, message: 'A footnote tag is unreadable or invalid; its text stays an ordinary text block.'}); consumed.delete(shape); continue; }
-    if (footnote.role === 'rule') continue;
+    if (footnote.role === 'rule') {
+      const current = paragraphs[index] ?? [];
+      if (footnote.slide !== slideIndex || name(shape) !== footnotesRuleName(slideIndex)
+        || shape['p:spPr']?.['a:prstGeom']?.prst !== 'line'
+        || current.some(paragraph => paragraph.text || paragraph.bullet || paragraph.math || paragraph.fields?.length)) {
+        consumed.delete(shape);
+        report({code: 'invalid-footnote-provenance', path: `slides.${slideIndex}`, message: 'An edited or incompatible tagged footnote separator stays ordinary native content; its current text is retained.'});
+      }
+      continue;
+    }
     if (!Number.isSafeInteger(footnote.entry) || !Number.isSafeInteger(footnote.number) || footnote.number < 1 || !['reference', 'footnote'].includes(footnote.kind) || (footnote.kind === 'reference' && typeof footnote.id !== 'string') || footnote.line === undefined) { report({code: 'invalid-footnote-provenance', path: `slides.${slideIndex}`, message: 'A footnote entry tag is invalid; its text stays an ordinary text block.'}); consumed.delete(shape); continue; }
     if (!entryGroups.has(footnote.entry)) entryGroups.set(footnote.entry, []);
     entryGroups.get(footnote.entry).push({index, shape, record: footnote});

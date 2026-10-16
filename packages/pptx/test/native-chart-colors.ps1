@@ -1,4 +1,6 @@
 param([string]$EvidenceDirectory='artifacts/native-chart-colors',[ValidateRange(0,8)][int]$EditSlide=0,[ValidateRange(5,60)][int]$TimeoutSeconds=45,[switch]$Worker)
+# RR-87: retired before any filesystem, font, process or Office operation. Historical body retained below.
+throw 'Retired unsafe native helper (ENG-X03-001). Do not retry or bypass. See docs/native-harness-retirement.md; native acceptance remains pending.'
 $ErrorActionPreference='Stop'
 if($EditSlide -eq 0) { throw 'Select exactly one embedded workbook with -EditSlide 1 through 8. Never automatically retry a blocked Office activation.' }
 . (Join-Path $PSScriptRoot 'native-process.ps1')

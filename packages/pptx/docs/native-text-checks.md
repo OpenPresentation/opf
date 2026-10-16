@@ -1,5 +1,7 @@
 # Native accepted-text checks
 
+> Current status: `native-chart-colors.ps1`, `native-text.ps1` are retired and refuse before any effect. Commands and native results below are historical; see [retirement and replacement requirements](native-harness-retirement.md).
+
 This is an unpublished verifier for the shared placement integration. PowerPoint is an optional Windows compatibility-test dependency; OPF authoring, layout, rendering, editing and conversion remain local and independent of Office.
 
 Use coordinated source checkouts and the pinned Node 20.20.2 or 24.20.0 toolchain. From this repository, generate a new evidence directory:

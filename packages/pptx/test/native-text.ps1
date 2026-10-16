@@ -1,4 +1,6 @@
 param([Parameter(Mandatory=$true)][string]$EvidenceDirectory,[ValidateRange(-1,23)][int]$Case=-1,[switch]$FontsOnly,[ValidateRange(5,60)][int]$TimeoutSeconds=45,[switch]$Worker)
+# RR-87: retired before any filesystem, font, process or Office operation. Historical body retained below.
+throw 'Retired unsafe native helper (ENG-X03-001). Do not retry or bypass. See docs/native-harness-retirement.md; native acceptance remains pending.'
 $ErrorActionPreference='Stop'
 function Get-FixtureSha256([string]$File) { (Get-FileHash -LiteralPath $File -Algorithm SHA256).Hash.ToLowerInvariant() }
 $evidenceRoot=(Resolve-Path -LiteralPath $EvidenceDirectory).Path

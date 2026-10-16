@@ -1,5 +1,7 @@
 # Code source round trips — converter 0.7.0
 
+> Current status: `native-code.ps1` is retired and refuses before any effect. Commands and native results below are historical; see [retirement and replacement requirements](native-harness-retirement.md).
+
 This feature requires core 0.9.0 and converter 0.7.0, with renderer 0.7.0 for coordinated preview/font measurement. Converter 0.6.0 does not include it. No hosted service, font download or proprietary application is required at runtime. Release candidate status and fresh registry/native verification gates are tracked in the core repository's `docs/plans/shared-code-release.md`.
 
 Export writes one editable native text shape per accepted display line, including blank lines, and consumes the same filename/language/body fits as SVG. Literal tabs use accepted explicit native tab stops. Source text is never trimmed, uppercased or independently re-fitted during export.

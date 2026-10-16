@@ -1,4 +1,6 @@
 param([string]$EvidenceDirectory = 'artifacts/native-quote',[ValidateSet('','quote-1280','quote-540')][string]$Deck='',[ValidateRange(5,60)][int]$TimeoutSeconds=45,[switch]$Worker)
+# RR-87: retired before any filesystem, font, process or Office operation. Historical body retained below.
+throw 'Retired unsafe native helper (ENG-X03-001). Do not retry or bypass. See docs/native-harness-retirement.md; native acceptance remains pending.'
 $ErrorActionPreference = 'Stop'
 # Hash through .NET so a PowerShell 7 parent's PSModulePath cannot prevent
 # Windows PowerShell from autoloading the Get-FileHash module in a child process.

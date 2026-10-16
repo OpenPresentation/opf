@@ -1,5 +1,7 @@
 # Bounded native tables, code and quotes
 
+> Current status: `native-code.ps1`, `native-quote.ps1`, `native-table-colors.ps1` are retired and refuse before any effect. Commands and native results below are historical; see [retirement and replacement requirements](native-harness-retirement.md).
+
 Use fresh generated directories and run one Office verifier at a time. Each hidden helper defaults to 45 seconds, with a maximum of 60. A timeout kills only that helper and does not establish Office cleanup. Preserve failures, inspect Office before further native work, and never automatically retry a blocked call. Workers reject already-open fixtures, close only presentations they opened, and never quit or kill Office.
 
 Tables use one six-slide fixture per invocation:

@@ -1,4 +1,4 @@
-import {unzipSync} from 'fflate';
+import {checkInputEntries,readInputZip,readNestedInputZip} from './input-safety.js';
 
 // Typeface inventory for a PPTX package (FF-08, font-fidelity-everywhere).
 //
@@ -45,7 +45,7 @@ export function inventoryTypefaces(input, options = {}) {
     for (const path of Object.keys(entries).sort()) {
       const bytes = entries[path];
       if (NESTED_PACKAGE.test(path)) {
-        if (options.nested !== false) visit(unzipSync(bytes), `${prefix}${path}!/`);
+        if (options.nested !== false) visit(readNestedInputZip(entries,path), `${prefix}${path}!/`);
         continue;
       }
       if (!XML_PART.test(path)) continue;
@@ -162,9 +162,9 @@ export function compareFontNames(left, right) {
 }
 
 function toEntries(input) {
-  if (input instanceof Uint8Array) return unzipSync(input);
-  if (input instanceof ArrayBuffer) return unzipSync(new Uint8Array(input));
-  if (input && typeof input === 'object') return input;
+  if (input instanceof Uint8Array) return readInputZip(input);
+  if (input instanceof ArrayBuffer) return readInputZip(new Uint8Array(input));
+  if (input && typeof input === 'object') return checkInputEntries(input);
   throw new TypeError('Expected PPTX bytes or a map of package parts.');
 }
 
