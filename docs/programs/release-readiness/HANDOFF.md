@@ -1,5 +1,9 @@
 # Release readiness: handoff of 2026-10-11
 
+## Latest handoff — 2026-10-16 14:54 UTC
+
+Final six publications, the canonical consumer, all three final site closures and actual Core #694/#695 combined-source integration are accepted. RR-85 is complete against its existing criterion; do not rerun passed release/site qualification to resume. Keep RR-86 in progress: [PPTX #277](https://github.com/OpenPresentation/opf-pptx/pull/277) at cf29, frozen 1a84 evidence, current P3 refusal, Mac locked at the dated 14:40 check and Windows HOLD remain distinct. [Final adoption note](../../evidence/rr-85-final-adoption-2026-10-16/README.md) carries the exact identities and limits. Preserve every earlier criterion, checkpoint, failure and seal.
+
 ## Current handoff — 2026-10-16 13:05 UTC
 
 - **Verified artifacts:** C3/R2/P3/E3/CLI0/G3. Editor 0.20.3 was published 12:57:35.464Z from actual normal merge `c0d4c0b5` by trusted run 38901679829; all nine required checks passed, with 3 verified signatures/0 invalid/0 missing and its own attestation. R2 and P3 retain their genuine 837/e0a authorities.
