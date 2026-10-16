@@ -2012,7 +2012,7 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     const ranges:{start:number;end:number}[]=[],hung=new Map<number,number>();
     let lineStart=0,lineEnd=0,hangFrom=-1;
     const push=(end:number)=>{if(hangFrom>=0)hung.set(ranges.length,hangFrom);hangFrom=-1;ranges.push({start:lineStart,end});lineStart=end;lineEnd=end;};
-    for(const match of whole.matchAll(/\r\n|\r|\n|[^\S\r\n]+|[^\s]+/gu)){
+    for(const match of whole.matchAll(/\r\n|\r|\n|[^\S\r\n\u00a0\u202f\ufeff]+|(?:[^\s]|\u00a0|\u202f|\ufeff)+/gu)){
       const start=match.index!,end=start+match[0].length;
       if(/^[\r\n]/.test(match[0])){push(start);lineStart=end;lineEnd=end;continue;}
       if(width(lineStart,end)<=box.width+WRAP_TOLERANCE){lineEnd=end;continue;}
@@ -2021,6 +2021,8 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
       if(HANGING_SPACE.test(match[0][0]!)&&lineEnd>lineStart&&/\S/u.test(whole.slice(lineStart,lineEnd))){if(hangFrom<0)hangFrom=lineEnd;lineEnd=end;continue;}
       if(lineEnd>lineStart)push(start);
       if(width(start,end)<=box.width+WRAP_TOLERANCE){lineEnd=end;continue;}
+      // Match plain prose: protected tokens stay whole and report overflow at the readability floor.
+      if(/[\u00a0\u202f\u2060\ufeff]/u.test(match[0])){lineEnd=end;continue;}
       for(const {segment,index}of textSegments.segment(match[0])){
         const next=start+index+segment.length;
         if(lineEnd>lineStart&&width(lineStart,next)>box.width+WRAP_TOLERANCE)push(start+index);
