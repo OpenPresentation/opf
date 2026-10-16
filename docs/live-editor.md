@@ -1,43 +1,22 @@
 # Browser preview and live editing
 
-Published editor 0.19.0 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
+Editor 0.20.3 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
 
 The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
 ## Install the published packages
 
-Use Node 24 with core/editor/PPTX 0.19.0 and renderer 0.19.1:
+Use Node 24 with Core, editor and PPTX 0.20.3, renderer 0.20.2 and Gallery 3.0.0. This is the current published setup; the [quickstart](quickstart.md) is the shared command-line first run:
 
 ```sh
-npm install --save-exact @openpresentation/opf@0.19.0 @openpresentation/opf-render@0.19.1 @openpresentation/opf-editor@0.19.0 @openpresentation/opf-pptx@0.19.0
+npm install --save-exact @openpresentation/opf@0.20.3 @openpresentation/opf-render@0.20.2 @openpresentation/opf-editor@0.20.3 @openpresentation/opf-pptx@0.20.3 @openpresentation/gallery@3.0.0
 ```
 
-No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.19.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
-
-For library development, separately regenerate unpublished local preview tarballs from sibling checkouts:
-
-```sh
-pnpm build
-node scripts/link-ecosystem.mjs
-pnpm pack:ecosystem
-pnpm test:packed-ecosystem
-```
-
-The packed consumer installs actual tarballs without workspace aliases, exercises editing/SVG/PPTX, checks TypeScript declarations, and bundles a browser entry without Node shims. For a public release, advance source versions and downstream minimums/lockfiles together and follow the release process.
-
-The gallery host example also offers local PPTX file import with preview/diagnostics and editable PowerPoint download. It commits active canvas text before export, shares preview text measurements and applies imports as a single undoable change. Save OPF to preserve the original source; native PowerPoint positions, fonts and unsupported features can change during conversion. The browser E2E checks run offline after loading and inspect the downloaded native merged table, then reimport and undo/redo. Native edit/save/reopen is a separate targeted check, not a pixel-equivalence claim.
+No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.20.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
 
 The editor exports in the browser (SVG through the renderer's browser entries, PPTX through opf-pptx). To export a saved presentation on a server, call `convert("deck.opf.json", "deck.pdf")` (or `convert(presentation, { format: "pdf" | "png" | "svg" | "pptx" })` for the bytes) from `@openpresentation/opf` in Node, which draws with the same engines and the bundled fonts; `open("deck.pptx")` reads a PowerPoint file back into a presentation for the editor ([OPF files in Node](node.md)).
 
-`pnpm prepare:gallery:registry` builds host controls from the immutable `exampleRefs.opf-editor` in `release-plan.json` while resolving libraries only from the fresh npm consumer. Package `verificationRefs` continue to point at actual published releases. The gallery manifest records both the example source hashes and registry package integrities. Updating example controls does not imply a new editor library release.
-
-Script fonts: when the pinned editor example loads faces from `./script-fonts/` and the pinned renderer has the script pack (0.10.0 and later), the registry build also writes `script-fonts.json` and lists its hash in `manifest.json`. The manifest is the reviewable half: every `@expo-google-fonts/noto-*` package, exact version, SPDX license, license-file hash and each face's SHA-256, taken from the published renderer. The faces are binaries (63 files, 66.9 MiB), so they are never committed to the gallery repository. The gallery build copies them from its own pinned npm dependencies into the untracked `public/opf-editor/script-fonts/` directory, verifying every hash, and writes the license notices beside them; nothing is fetched from a font CDN. See `scripts/gallery-script-fonts.mjs` and the gallery's `scripts/prepare-editor-script-fonts.mjs`.
-
-Base fonts (FF-41): when the pinned editor example loads `base-fonts.json` (opf-editor 0.10.5: the example passes the faces as the renderer's `extraLazyFonts`, renderer 0.11.7 and later; 0.10.4's example used its own `examples/base-font-gate.js`), the registry build starts the editor with Roboto Regular alone in `fonts.json` (217 KB instead of 12.8 MB) and writes every other eager face (Roboto in six more styles, Roboto Mono, the Office substitutes) as a separate file named after its hash beside it, listed with its SHA-256 in `base-fonts.json` and in `manifest.json`; the editor fetches only the faces a document draws, verified, through its font gate (`scripts/gallery-base-fonts.mjs`). An older pinned example keeps every eager face in `fonts.json`. A default Roboto deck loads about 0.7 MB of fonts instead of 12.8 MB.
-
-Lazy fonts: when the pinned editor example calls `ensureLazyFonts` and the pinned renderer vendors faces (Intos for the default Aptos scheme and the open families, renderer 0.11.0 and later), the registry build also writes `lazy-fonts.json` and lists its hash in `manifest.json`. It pins every vendored package (exact version, SPDX license, license-file and notice hashes) and each face SHA-256, taken from the published renderer. The faces are binaries, so they are not committed either: the gallery build copies them from its pinned `@openpresentation/opf-render` package (`fonts/<name>/`) into the untracked `public/opf-editor/fonts/` directory, verifying every hash, and the editor fetches only the families a document uses, same-origin. See `scripts/gallery-lazy-fonts.mjs` and the gallery's `scripts/prepare-editor-lazy-fonts.mjs`.
-
-The browser bundle links `playground.js.LEGAL.txt`, included in the hashed resources. It contains bundled license notices and package license files, including the vendored PptxGenJS MIT license. For dependencies that publish only an explicit MIT declaration in their README, the build retains that declaration/attribution and the standard terms; omitted upstream notices use a version-specific source URL and verified supplement hash. License collection runs offline from the verified installation and committed supplement. Runtime JavaScript is not rewritten to normalize comment whitespace.
+For source builds and the Gallery host bundle, see [ecosystem development](ecosystem-development.md#editor-host-bundle-and-font-provenance).
 
 ## Embed in any browser application
 
@@ -45,6 +24,7 @@ Mount after the host DOM exists. The container controls width; the slide retains
 
 ```js
 import { createCanvasEditor } from '@openpresentation/opf-editor/canvas';
+import { saveDocument } from '@openpresentation/opf-editor';
 import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
 import { gallery } from '@openpresentation/gallery';
 
@@ -56,7 +36,9 @@ const fonts = await loadFonts({ faces: [
   { url: '/fonts/RobotoMono-Regular.ttf', family: 'Roboto Mono', weight: 400 },
 ] });
 
-const canvas = createCanvasEditor(document.querySelector('#slide'), {
+const container = document.querySelector('#slide');
+if (!(container instanceof HTMLElement)) throw new Error('Missing slide container.');
+const canvas = createCanvasEditor(container, {
   presentation: {
     design: { theme: 'classic', fontScheme: 'roboto' },
     slides: [{ title: 'An editable presentation', text: 'Click to edit.' }],
@@ -64,7 +46,9 @@ const canvas = createCanvasEditor(document.querySelector('#slide'), {
   catalogs: [gallery], // core ships no records: register the catalog the theme and font scheme above come from
   fonts,
   onCommit: ({ editor }) => {
-    const updatedOPF = editor.presentation; // Host owns saving and collaboration.
+    const { document: updatedOPF, unresolved } = saveDocument(editor);
+    // Host owns storage. Surface unresolved catalog references before saving.
+    if (unresolved.length) console.warn(unresolved);
     console.log(updatedOPF);
   },
   onError: error => console.error(error.message),
@@ -86,10 +70,42 @@ For standalone SVG export, pass the handle as `{ fonts }` to `toSvg` (`toSvg(dec
 
 ```js
 import { toSvg } from '@openpresentation/opf-render/svg';
-const svg = toSvg(canvas.editor.presentation, 1, { fonts }); // slide 1: slides count from 1
+const svg = toSvg(canvas.editor.presentation, 1, { fonts, catalogs: canvas.editor.catalogs }); // slide 1: slides count from 1
 ```
 
 The explicit `/svg` entry is browser safe. Browser-aware bundlers also select it for the renderer's root import. The Node root entry additionally supplies `toPng` and `toPdf`; those functions are not browser APIs.
+
+## Save, undo and host state
+
+Before saving, exporting, importing or navigating, call `canvas.commit()`. A `false` result means the active draft could not be committed: keep it visible, show the error and stop that action. `canvas.editor.presentation` is the committed document, not necessarily the text currently being edited. A source editor must preserve invalid raw text separately instead of silently replacing it with the last valid preview.
+
+```js
+function documentForDownload() {
+  if (!canvas.commit()) throw new Error('Finish or cancel the current edit first.');
+  const result = saveDocument(canvas.editor);
+  if (result.unresolved.length) throw new Error('Resolve catalog references before sharing.');
+  return result.document; // Referenced catalog records are embedded; the session is unchanged.
+}
+const unsubscribe = canvas.editor.subscribe(({ type, snapshot }) => {
+  // Runs for patch, undo, redo, restore and catalog changes, not just canvas commits.
+  console.log(type, snapshot.canUndo, snapshot.canRedo, snapshot.validation);
+});
+// Host teardown: unsubscribe(); canvas.destroy(); fonts.dispose();
+```
+
+Undo and redo belong to that same session (`canvas.editor.undo()` / `redo()`). Subscribe when synchronizing another control or a save indicator; `onCommit` alone does not cover external edits, undo or restore. Dispose subscriptions and canvases on unmount, and dispose a shared fonts handle only after its last consumer is gone.
+
+Local persistence is optional. [`createPersistence` from `/persistence`](https://github.com/OpenPresentation/opf-editor/blob/opf-editor-v0.20.3/README.md#autosave-and-restore-rr-22) supports restore offers and explicit `flush()`. Commit the canvas yourself before an explicit save or flush; persistence stores the session, not an invalid raw source draft. Show unavailable-storage errors and retain a download path. Call `markSaved()` only after a real host save or OPF download; a preview or PowerPoint export does not preserve the complete OPF source. Destroy the persistence controller on teardown. It is not a server or collaboration service.
+
+## Export results and diagnostics
+
+In a browser, `toSvg` returns SVG strings and `toPptx` returns bytes; pass the same `fonts` and `catalogs`, surface `onDiagnostic` notifications and catch rejected conversions. When importing with `fromPptx(bytes, { signals: true })`, inspect both `presentation` and `signals` before replacing the session. Native conversion can change unsupported features. In Node, Core `convert` instead returns `{ files, findings }`; [the Node guide](node.md) explains findings, errors and file publication. Do not treat a successful conversion as a claim of complete native fidelity.
+
+## Exact package references
+
+- [Editor session types](https://github.com/OpenPresentation/opf-editor/blob/opf-editor-v0.20.3/src/index.d.ts), [canvas lifecycle](https://github.com/OpenPresentation/opf-editor/blob/opf-editor-v0.20.3/src/canvas.d.ts), [portable saving](https://github.com/OpenPresentation/opf-editor/blob/opf-editor-v0.20.3/src/catalogs.d.ts).
+- [Renderer entries and optional peers](https://github.com/OpenPresentation/opf-render/blob/opf-render-v0.20.2/README.md#install-what-to-add-for-what-rr-63).
+- [PowerPoint export/import types](https://github.com/OpenPresentation/opf-pptx/blob/opf-pptx-v0.20.3/src/index.d.ts).
 
 ## Editing behavior
 

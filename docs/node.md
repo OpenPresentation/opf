@@ -139,12 +139,14 @@ signals), and for output without a path `zip` and `name`, and `overwrite`. An op
 `zip` or `name` with an output path. The 0.17 names (`pdfMode`, `svgFonts`, `chartex`, `imageFormat`, `fontDirs`, `filename`) were
 renamed in 0.18 and are refused with the new name.
 
-**Writing.** Everything is checked, read and produced before anything is written; on any error nothing is written. Parent
-folders are created. Each file is written to a temporary sibling and renamed, so no partial file ever has the final name, and
-an output that exists is replaced, as `save` and `fs.writeFile` do: running the same `convert` again rebuilds the file.
-`overwrite: false` refuses an existing output with `output-exists` before anything is written, the rule the `opf` commands
-apply without `--force`. A symlink, a directory or another non-regular file is never replaced (`output-not-file`). The result is `{ files: [{ name, path, type, bytes, ... }], findings }`, with the slide
-number, id and size of each picture and the pages of a PDF.
+**Writing.** Inputs are checked and all results are produced and staged before destination files are published. A preflight,
+render or staging failure publishes no destination files, though parent folders may have been created. Each final file is
+published atomically from a temporary sibling, so no partial file has the final name. Multiple files are not one transaction:
+a later publication I/O failure can leave earlier complete outputs in place. Keep that possibility in your recovery logic.
+Existing regular outputs are replaced by default, as `save` and `fs.writeFile` do: running the same `convert` again rebuilds
+the file. `overwrite: false` checks for existing outputs during preflight and reports `output-exists`, the rule the `opf`
+commands apply without `--force`. A symlink, a directory or another non-regular file is refused (`output-not-file`). The result
+is `{ files: [{ name, path, type, bytes, ... }], findings }`, with the slide number, id and size of each picture and the pages of a PDF.
 
 **Images.** When `input` is a path, a deck's relative image paths resolve against the input file's folder, from any working
 directory; `assetDir` replaces that folder. Only image files inside it are read, and URLs are never fetched.
