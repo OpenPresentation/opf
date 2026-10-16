@@ -321,3 +321,31 @@ test("old passing and failing audit/native channels cannot certify any schema2 l
     } finally {rmSync(dir,{recursive:true,force:true});}
   }
 });
+
+
+test('slide-size fallback retains the general gap without requiring a dedicated preset result', () => {
+  const dir = scratchCopy();
+  try {
+    const mainFile = path.join(dir, overrides.inputs.parity);
+    const main = JSON.parse(readFileSync(mainFile, 'utf8'));
+    main.results[0].checks.slideSize = 'mismatch';
+    const expected = `${main.results[0].dimension}/${main.results[0].id}: slideSize mismatch`;
+    writeFileSync(mainFile, JSON.stringify(main));
+    for (const file of overrides.inputs.parityExtra) {
+      const target = path.join(dir, file), report = JSON.parse(readFileSync(target, 'utf8'));
+      report.results = report.results.filter(r => r.dimension !== 'slide-sizes' || r.id !== '16:9');
+      const specific = report.results.find(r => r.dimension === 'slide-sizes' && r.id === '4:3');
+      specific.class = 'near'; specific.checks.slideSize = 'near';
+      writeFileSync(target, JSON.stringify(report));
+    }
+    const rows = buildTracker({ root: dir }).tracker.records.filter(r => r.type === 'slide-sizes');
+    const fallback = rows.find(r => r.id === '16:9');
+    assert.equal(fallback.columns.parity, 'near');
+    assert.equal(fallback.gaps.find(g => g.code === 'parity-near').detail, expected);
+    const specific = rows.find(r => r.id === '4:3');
+    assert.equal(specific.columns.parity, 'near');
+    assert.equal(specific.gaps.find(g => g.code === 'parity-near').detail, 'slideSize near');
+    assert.equal(rows.find(r => r.id === 'letter').columns.parity, 'perfect', 'dedicated passing evidence remains authoritative');
+    assert.equal(rows.find(r => r.id === '1:1').columns.parity, 'unmeasured', 'unmeasured presets do not become passing or near evidence');
+  } finally { rmSync(dir, { recursive: true, force: true }); }
+});
