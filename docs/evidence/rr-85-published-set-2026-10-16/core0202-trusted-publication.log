@@ -1,0 +1,16 @@
+created opf-v0.20.2 on OpenPresentation/opf@b1f0aa3c5434
+waiting for opf npm-publish.yml on opf-v0.20.2 (not started)...
+waiting for opf npm-publish.yml on opf-v0.20.2 (in_progress, https://github.com/OpenPresentation/opf/actions/runs/38831009547)...
+waiting for opf npm-publish.yml on opf-v0.20.2 (in_progress, https://github.com/OpenPresentation/opf/actions/runs/38831009547)...
+waiting for opf npm-publish.yml on opf-v0.20.2 (in_progress, https://github.com/OpenPresentation/opf/actions/runs/38831009547)...
+@openpresentation/opf@0.20.2: verified
+  ok   npm version: @openpresentation/opf@0.20.2, integrity sha512-DXr6fFTCsxF0rJNoPVr2Yo+VoBq4YZPfmWmy1QgO05cAa6HKkWxwlnt6DrwZuuodGh/7H8/skoRrDlG7H75dJQ==
+  ok   tag: OpenPresentation/opf opf-v0.20.2 -> b1f0aa3c543424f7befb08785634a6a5a8652caa
+  ok   gitHead: gitHead b1f0aa3c543424f7befb08785634a6a5a8652caa = tag commit b1f0aa3c543424f7befb08785634a6a5a8652caa
+  ok   tag on main: b1f0aa3c5434 is on opf main (identical)
+  ok   version at tag: packages/javascript/package.json at b1f0aa3c5434 carries 0.20.2
+  ok   dist.attestations: https://slsa.dev/provenance/v1 (https://registry.npmjs.org/-/npm/v1/attestations/@openpresentation%2fopf@0.20.2)
+  ok   SLSA provenance: built by .github/workflows/npm-publish.yml on refs/tags/opf-v0.20.2 from b1f0aa3c5434 (https://github.com/OpenPresentation/opf/actions/runs/38831009547/attempts/1)
+  ok   npm audit signatures: 2 verified, 0 invalid, 0 missing; @openpresentation/opf@0.20.2 has a verified attestation
+  ok   GitHub release: https://github.com/OpenPresentation/opf/releases/tag/opf-v0.20.2
+  info dist-tag: latest
