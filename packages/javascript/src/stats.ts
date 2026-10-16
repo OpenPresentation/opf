@@ -1,3 +1,4 @@
+import { annotationText } from './annotations.js';
 import { catalogKinds, checkCatalogsOption, type CatalogOptions } from './catalog-refs.js';
 import { imageBackground, resolveCanvasDimensions, resolveFontFamilies } from './composition.js';
 import { resolveDesignRecords } from './design-records.js';
@@ -557,7 +558,8 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
     for (const cite of slideTally.cited) total.cited.add(cite);
     for (const family of slideTally.families) total.families.add(family);
 
-    const title = typeof slide.title === 'string' && slide.title.trim() !== '' ? slide.title : null;
+    const titleText = typeof slide.title === 'string' || Array.isArray(slide.title) ? annotationText(slide.title) : '';
+    const title = titleText.trim() !== '' ? titleText : null;
     if (title) withTitle++;
     if (slide.beat !== undefined) withBeat++;
     if (slide.hidden === true) hidden.push(ref);
