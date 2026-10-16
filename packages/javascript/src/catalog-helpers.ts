@@ -448,7 +448,13 @@ export function moveToCustom(document: unknown, ref: CatalogRef, options: Catalo
   if (options.id !== undefined && (typeof options.id !== 'string' || !CATALOG_GROUP_PATTERN.test(options.id))) throw new OPFMoveToCustomError('invalid-id', `moveToCustom: the new id ${JSON.stringify(options.id)} is not a lowercase kebab-case id.`);
   const wanted = options.id ?? fromId;
   let toId = wanted;
-  for (let n = 2; Object.hasOwn(existing, toId) && !sameRecord(existing[toId], moved); n++) toId = `${wanted}-${n}`;
+  // Equal bytes can name different dependencies from custom: relative references search their holder first.
+  const reusable = (candidate: unknown): boolean => sameRecord(candidate, moved) && ownSites.every(({ site, found }) => {
+    const destination = resolveReference(before, site.kind, site.reference, { ...catalogs, group: 'custom' });
+    return found === undefined ? destination === undefined : destination !== undefined &&
+      found.kind === destination.kind && found.group === destination.group && found.id === destination.id && found.origin === destination.origin;
+  });
+  for (let n = 2; Object.hasOwn(existing, toId) && !reusable(existing[toId]); n++) toId = `${wanted}-${n}`;
   const reused = Object.hasOwn(existing, toId);
 
   // Remove the record, then add it to custom (creating the containers the patch needs).
