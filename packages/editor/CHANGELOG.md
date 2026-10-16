@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.20.3 (2026-10-16)
+
+- Raise the OPF dependency floor to 0.20.2, renderer peer and development requirements to 0.20.2, and PPTX development requirement to 0.20.3.
+
 ## 0.20.2 (2026-10-15)
 
 - Show one boundary while editing plain text on the canvas. The textarea keeps its editing outline and caret; the SVG hit target stops drawing a second nested outline until editing ends. Keyboard selection, rich-text boundaries and non-text selection remain visible.
