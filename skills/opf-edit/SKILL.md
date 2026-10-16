@@ -10,7 +10,7 @@ Preserve document fields unrelated to the requested change, including assets, ca
 
 ## File edits with the CLI
 
-A deck may be JSON (canonical), YAML (`deck.opf.yaml`) or Markdown (`deck.opf.md`): `opf edit`, `format`, `merge`, `paginate`, `fill` and the other deck commands read each and write the form they read (or the form of the output name or `--format`); a rewrite of a YAML file drops its comments, and a rewrite of a Markdown deck writes canonical Markdown and may move content into `opf-slide`/`opf-block` fences (the CLI warns).
+A deck may be JSON (canonical), YAML (`deck.opf.yaml`) or Markdown (`deck.opf.md`): `opf edit`, `format`, `merge`, `paginate`, `fill` and the other deck commands read each and write the form they read (or the form of the output name or `--to`); a rewrite of a YAML file drops its comments, and a rewrite of a Markdown deck writes canonical Markdown and may move content into `opf-slide`/`opf-block` fences (the CLI warns).
 
 The CLI (Node 24, with the core it depends on) supports `opf edit deck.opf.json --patch changes.json` (the result on stdout, nothing written), then `opf edit deck.opf.json reviewed.opf.json --patch changes.json` or `-i` to save. Patches use JSON Patch arrays with `add`, `remove`, `replace`, `move`, `copy`, and `test`. The complete result must validate before saving. With no output the candidate goes to stdout; the report carries `inverse`, the patch that undoes the edit. Use `--expect-sha256` with the digest from an earlier `opf validate` for a file revision guard. File edits have no persistent undo history; save a separate output or use version control when needed. Coordinate concurrent writers externally. Check `opf --version` and `opf --help`; an older installed CLI may not support these commands.
 
