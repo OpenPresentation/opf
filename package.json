@@ -14,6 +14,7 @@
     "check:furniture-gallery": "node --test scripts/furniture-gallery.test.mjs",
     "check:registry-layout-v2": "node --test scripts/registry-layout-v2.test.mjs",
     "check:registry-toolchain": "node --test scripts/registry-toolchain.test.mjs",
+    "check:parity-wrappers": "node --test scripts/parity-wrappers.test.mjs",
     "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
     "check:publish-source": "node --test scripts/publish-source.test.mjs",
     "check:release-notes": "node --test scripts/release-notes.test.mjs",
