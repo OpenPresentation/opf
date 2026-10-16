@@ -25,7 +25,11 @@ const rr85 = candidatePlan({core: plan.core, gallery: plan.gallery, name: 'rr85-
 assert.equal(rr85.template, 'test/golden/layout-templates-rr85-metric-centering.json');
 assert.throws(() => allowedPaths(rr85, ['test/golden/layout-templates-rr20-array-areas.json']), /unexpected promotion path/);
 assert.match(text,/OPF_GOLDEN_BASELINE=test\/golden\/opf-examples-png\.rr81-v2-reviewed OPF_GOLDEN_ARTIFACTS=changed/,'candidate review images compare with the historical example baseline');
-assert.match(readFileSync(new URL('./golden.mjs',import.meta.url),'utf8'),/opf-examples-png\.rr20-array-areas/,'ordinary candidate tests select only the new baseline');
+const ordinaryRunner = readFileSync(new URL('./golden.mjs',import.meta.url),'utf8');
+assert.match(ordinaryRunner,/process\.env\.OPF_GOLDEN_BASELINE \?\?[\s\S]*?exampleBaseline\(layoutMetric/,
+  'ordinary checks preserve explicit overrides and select the installed metric-default contract');
+assert.doesNotMatch(ordinaryRunner,/rr81-v2-reviewed/,
+  'the candidate-review comparison baseline cannot become the ordinary default');
 console.log('Candidate goldens: immutable graph refs, fixed counts/keysets/metrics, promotion path and stale-head guards passed.');
 const image=/mcr\.microsoft\.com\/playwright:\S+@sha256:[0-9a-f]{64}/.exec(readFileSync(new URL('../.github/workflows/ci.yml',import.meta.url),'utf8'))[0];
 assert.equal([...text.matchAll(/mcr\.microsoft\.com\/playwright:\S+@sha256:[0-9a-f]{64}/g)].every(m=>m[0]===image),true);

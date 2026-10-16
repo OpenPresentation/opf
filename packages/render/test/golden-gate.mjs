@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import {readBaseline} from './golden-store.mjs';
+import {layoutMetric} from '@openpresentation/opf/composition';
+import {exampleBaseline} from '../scripts/example-baseline.mjs';
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync, copyFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
@@ -42,12 +44,13 @@ try {
     delete ordinaryEnv.OPF_GOLDEN_BASELINE; delete ordinaryEnv.OPF_EXAMPLES_DIR;
     const ordinary = spawnSync(process.execPath,[runner],{encoding:'utf8',timeout:120000,env:ordinaryEnv});
     succeeds(ordinary);
-    const selected = readBaseline(fileURLToPath(new URL('./golden/opf-examples-png.rr20-array-areas.sha256.json', import.meta.url)));
+    const metricDefault = layoutMetric(1, {x: 0, y: 0, width: 400, height: 300}).alignment;
+    const selected = readBaseline(fileURLToPath(new URL('../' + exampleBaseline(metricDefault), import.meta.url)));
     const actual = JSON.parse(readFileSync(path.join(temp,'ordinary/candidate.json'),'utf8'));
     assert.equal(Object.keys(selected.entries).length,807);
     assert.deepEqual(actual.source,selected.source);
     assert.deepEqual(actual.entries,selected.entries);
-    console.log('Ordinary RR-20 baseline selection passed: 807 exact slides.');
+    console.log(`Ordinary ${metricDefault}-metric baseline selection passed: 807 exact slides.`);
   } else {
     console.log('Explicit corpus/baseline preserved; default probe is not applicable.');
   }

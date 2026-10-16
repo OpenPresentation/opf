@@ -1,14 +1,15 @@
 import assert from "node:assert/strict";
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import os from "node:os";
+import { examples } from "@openpresentation/opf/examples";
 
 import {OPFRenderError, toSvg, resolvePresentation, toPdf, toPng} from "../dist/index.js";
 // FA-23: the renderer registers no catalog. Documents that name gallery records (the example corpus, the `text-2x` layout
 // below) render through the harness, which registers the gallery snapshot the way a host does.
 import * as host from "./catalog-harness.mjs";
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
+assertExamplesCorpusAuthority();
 const examplesCorpus = resolveExamplesCorpus();
 
 const minimalDeck = {
@@ -90,41 +91,62 @@ assert.throws(
 );
 
 let corpusCount = 0;
-if (examplesCorpus) {
-  const files = listOpfExamples(examplesCorpus.dir);
-  if (examplesCorpus.required) {
-    assert.ok(files.length > 0, `OPF_EXAMPLES_DIR ${examplesCorpus.dir} must contain .opf.json examples`);
+for (const { file, deck } of examplesCorpus) {
+  const svgs = host.toSvg(deck, { trace: true });
+  const repeat = host.toSvg(deck, { trace: true });
+  assert.deepEqual(svgs, repeat, `${file} must render deterministically`);
+  assert.equal(svgs.length, deck.slides.length, `${file} must emit one SVG per slide`);
+  for (const svg of svgs) {
+    assert.match(svg, /^<svg /);
+    assert.match(svg, /data-opf-path=/);
   }
-
-  for (const file of files) {
-    const deck = JSON.parse(readFileSync(file, "utf8"));
-    const svgs = host.toSvg(deck, { trace: true });
-    const repeat = host.toSvg(deck, { trace: true });
-    assert.deepEqual(svgs, repeat, `${path.relative(examplesCorpus.dir, file)} must render deterministically`);
-    assert.equal(svgs.length, deck.slides.length, `${file} must emit one SVG per slide`);
-    for (const svg of svgs) {
-      assert.match(svg, /^<svg /);
-      assert.match(svg, /data-opf-path=/);
-    }
-    corpusCount += 1;
-  }
+  corpusCount += 1;
 }
 
 console.log(`opf-render smoke passed (${corpusCount} OPF corpus deck(s) rendered).`);
 
-function resolveExamplesCorpus() {
-  const hasExplicitDir = Object.prototype.hasOwnProperty.call(process.env, "OPF_EXAMPLES_DIR");
-  if (hasExplicitDir) {
-    const configured = process.env.OPF_EXAMPLES_DIR?.trim();
+function resolveExamplesCorpus(env = process.env) {
+  if (Object.prototype.hasOwnProperty.call(env, "OPF_EXAMPLES_DIR")) {
+    const configured = env.OPF_EXAMPLES_DIR?.trim();
     assert.ok(configured, "OPF_EXAMPLES_DIR must not be empty when set");
     const explicit = path.resolve(configured);
     assert.ok(existsSync(explicit), `OPF_EXAMPLES_DIR does not exist: ${explicit}`);
     assert.ok(statSync(explicit).isDirectory(), `OPF_EXAMPLES_DIR must be a directory: ${explicit}`);
-    return { dir: explicit, required: true };
+    const files = listOpfExamples(explicit);
+    assert.ok(files.length > 0, `OPF_EXAMPLES_DIR ${explicit} must contain .opf.json examples`);
+    return files.map(file => ({ file: path.relative(explicit, file), deck: JSON.parse(readFileSync(file, "utf8")) }));
   }
 
-  const sibling = path.resolve(root, "../opf/examples");
-  return existsSync(sibling) ? { dir: sibling, required: false } : null;
+  // The installed or source-linked Core owns the ordinary corpus, just as in the raster gate.
+  // An unrelated adjacent checkout must never change what this package tests.
+  assert.ok(examples.length > 0, "Installed Core examples must not be empty");
+  return examples.map(({ file, deck }) => ({ file: file.replace(/^examples\//, ""), deck }));
+}
+
+function assertExamplesCorpusAuthority() {
+  const directory = mkdtempSync(path.join(os.tmpdir(), "opf-smoke-corpus-"));
+  const cwd = process.cwd();
+  try {
+    const renderer = path.join(directory, "renderer"), sibling = path.join(directory, "opf/examples");
+    mkdirSync(renderer); mkdirSync(sibling, { recursive: true });
+    // Deliberately invalid legacy data: automatic sibling selection would fail before rendering.
+    writeFileSync(path.join(sibling, "legacy.opf.json"), "not JSON");
+    process.chdir(renderer);
+    const installed = resolveExamplesCorpus({});
+    assert.equal(installed.length, examples.length);
+    assert.equal(installed[0].deck, examples[0].deck, "Adjacent corpus must not override installed Core");
+    assert.throws(() => resolveExamplesCorpus({ OPF_EXAMPLES_DIR: sibling }), SyntaxError);
+    const deck = { slides: [{ title: "Explicit source corpus" }] };
+    writeFileSync(path.join(sibling, "legacy.opf.json"), JSON.stringify(deck));
+    assert.deepEqual(resolveExamplesCorpus({ OPF_EXAMPLES_DIR: sibling }), [{ file: "legacy.opf.json", deck }]);
+    assert.throws(() => resolveExamplesCorpus({ OPF_EXAMPLES_DIR: "" }), /must not be empty/);
+    assert.throws(() => resolveExamplesCorpus({ OPF_EXAMPLES_DIR: path.join(directory, "missing") }), /does not exist/);
+    assert.throws(() => resolveExamplesCorpus({ OPF_EXAMPLES_DIR: renderer }), /must contain/);
+    assert.throws(() => resolveExamplesCorpus({ OPF_EXAMPLES_DIR: path.join(sibling, "legacy.opf.json") }), /must be a directory/);
+  } finally {
+    process.chdir(cwd);
+    rmSync(directory, { recursive: true, force: true });
+  }
 }
 
 function listOpfExamples(dir) {
