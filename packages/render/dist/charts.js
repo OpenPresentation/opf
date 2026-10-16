@@ -858,7 +858,7 @@ function drawLines(c, spec, series, stacks, { plot, band, at, categorySlot = (i)
   }
   // RR-35: data labels sit beside each point, over every line.
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
-    if (point) drawPointLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), [plot.x + (i + 0.5) * band, at(point.to)], `${c.path}.data.rows.${i}.${s.column}`);
+    if (point) drawPointLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), [plot.x + (categorySlot(i) + 0.5) * band, at(point.to)], `${c.path}.data.rows.${i}.${s.column}`);
   }));
 }
 
@@ -874,7 +874,7 @@ function drawAreas(c, series, stacks, { plot, band, at, crossing, categorySlot =
   if (c.dataLabels) series.forEach((s, j) => stacks[j].forEach((point, i) => {
     if (!point) return;
     const lowerEdge = point.from === 0 ? crossing : at(point.from);
-    drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), plot.x + (i + 0.5) * band, (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, seriesColor(c, j));
+    drawCenteredLabel(c, labelString(c, { category: c.rows[i][0] === null || c.rows[i][0] === undefined ? "" : String(c.rows[i][0]), value: s.values[i], format: s.format }), plot.x + (categorySlot(i) + 0.5) * band, (lowerEdge + at(point.to)) / 2, `${c.path}.data.rows.${i}.${s.column}`, seriesColor(c, j));
   }));
 }
 
@@ -1481,7 +1481,7 @@ function renderTreemapChart(c) {
  * values and clamps to the extremes, whiskers reach the furthest values within
  * 1.5 IQR of the box, and values beyond are outliers.
  */
-export function boxStatistics(values) {
+export function boxStatistics(values, path = "chart") {
   const sorted = values.filter((value) => value !== null && Number.isFinite(value)).sort((a, b) => a - b);
   const n = sorted.length;
   if (!n) return null;
@@ -1494,8 +1494,9 @@ export function boxStatistics(values) {
   };
   const q1 = quantile(0.25), median = quantile(0.5), q3 = quantile(0.75);
   const iqr = q3 - q1;
-  const inside = sorted.filter((value) => value >= q1 - 1.5 * iqr && value <= q3 + 1.5 * iqr);
   const mean = sorted.reduce((sum, value) => sum + value, 0) / n;
+  if (![q1, median, q3, iqr, mean].every(Number.isFinite)) throw chartAggregateError(path, "box statistics");
+  const inside = sorted.filter((value) => value >= q1 - 1.5 * iqr && value <= q3 + 1.5 * iqr);
   return { q1, median, q3, mean, low: inside[0] ?? q1, high: inside[inside.length - 1] ?? q3, outliers: sorted.filter((value) => value < q1 - 1.5 * iqr || value > q3 + 1.5 * iqr) };
 }
 
@@ -1512,7 +1513,7 @@ function renderBoxWhiskerChart(c) {
     if (!group) groups.push(group = { name, first: i, rows: [] });
     group.rows.push(i);
   });
-  const boxes = series.map((s) => groups.map((group) => ({ stats: boxStatistics(group.rows.map((i) => s.values[i])), rows: group.rows })));
+  const boxes = series.map((s) => groups.map((group) => ({ stats: boxStatistics(group.rows.map((i) => s.values[i]), c.path), rows: group.rows })));
   const all = boxes.flat().flatMap((entry) => entry.stats ? [entry.stats.low, entry.stats.high, ...entry.stats.outliers] : []);
   const dataMin = all.length ? Math.min(...all) : 0, dataMax = all.length ? Math.max(...all) : 1;
   const legendWidth = seriesLegend(c, series);
@@ -1569,7 +1570,7 @@ function renderRegionMapChart(c) {
   const light = mixHex(/^#[0-9A-Fa-f]{6}$/.test(c.surface) ? c.surface : "#FFFFFF", c.colors[0], 0.15);
   categories.forEach((name, i) => {
     const value = values[i];
-    const t = value === null ? 0 : max > min ? (value - min) / (max - min) : 1;
+    const t = value === null ? 0 : max > min ? axisFraction(value, {min, max}) : 1;
     const x = area.x + (i % columns) * tileWidth, y = area.y + Math.floor(i / columns) * tileHeight;
     c.mark("rect", { x, y, width: tileWidth, height: tileHeight, fill: value === null ? c.surface : mixHex(light, c.colors[0], t), stroke: "#FFFFFF", "stroke-width": c.pt }, `${c.path}.data.rows.${i}.${column}`);
     const inset = { x: x + fontPx * 0.25, width: Math.max(1, tileWidth - fontPx * 0.5) };

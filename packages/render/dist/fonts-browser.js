@@ -25,7 +25,7 @@ async function verifyDigest(entry, data, subtle) {
 }
 
 // The registry behind `loadFonts`: fetch only host-selected font files, then use those exact bytes for shaping and CSS.
-async function loadRegistry(entries, options = {}) {
+async function loadRegistry(entries, options = {}, startup = {}) {
   // Validate the host's extra faces first: a bad list must not leave startup faces registered in the document with no registry to dispose.
   const extraLazy = normalizeExtraLazyFonts(options.extraLazyFonts);
   const documentRef = options.document ?? globalThis.document;
@@ -63,6 +63,12 @@ async function loadRegistry(entries, options = {}) {
   const faces = await fetchFaces(entries, options.signal);
   const registry = createFontRegistry(faces, options),
     loaded = [];
+  let disposed = startup.failed === true;
+  const dispose = () => {
+    disposed = true;
+    for (const face of loaded) documentRef.fonts.delete(face);
+  };
+  startup.dispose = dispose;
   // Normalize family names using the registry's parsed font metadata.
   const described = registry.describeFaces();
   // Registers browser FontFaces for faces already parsed by the registry; on failure nothing stays registered.
@@ -84,19 +90,21 @@ async function loadRegistry(entries, options = {}) {
           added.push(face);
         }),
       );
+      if (disposed) throw new OPFFontError("font-registry-disposed", "The font registry was disposed.");
+      loaded.push(...added);
       for (const face of added) documentRef.fonts.add(face);
       await documentRef.fonts.ready;
+      if (disposed) throw new OPFFontError("font-registry-disposed", "The font registry was disposed.");
     } catch (error) {
       for (const face of added) documentRef.fonts.delete(face);
       throw new OPFFontError("font-load-failed", error.message);
     }
-    loaded.push(...added);
   };
   await registerBrowserFaces(faces, described);
 
   // Script faces (FF-19) are loaded lazily, once a document needs them, and only for the scripts it uses.
   const scriptPackages = new Set();
-  let queue = Promise.resolve(), disposed = false;
+  let queue = Promise.resolve();
   // FF-41: the `toSvg` options a document resolves with (`catalogs`, ...). `options.renderOptions` are the defaults; a call's own
   // options (everything but `signal`) are added over them, so a host that passes its canvas options gets the same resolution here.
   const renderOptionsFor = (callOptions) => { const { signal: _signal, ...own } = callOptions ?? {}; return { ...options.renderOptions, ...own }; };
@@ -264,12 +272,7 @@ async function loadRegistry(entries, options = {}) {
     for (const face of loaded) documentRef.fonts.delete(face);
     throw error;
   }
-  return Object.assign(registry, {
-    dispose() {
-      disposed = true;
-      for (const face of loaded) documentRef.fonts.delete(face);
-    },
-  });
+  return Object.assign(registry, { dispose });
 }
 
 const MAX_ENSURE_ROUNDS = 4;
@@ -306,8 +309,19 @@ async function fetchWasm(source, fetchImpl, signal, name) {
 }
 
 export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options } = {}) {
-  const [registry, subsetter, shaper] = await Promise.all([loadRegistry(faces, options), subsetWasm === undefined ? null : browserSubsetter(subsetWasm, options.fetch, options.signal),
-    shapeWasm === undefined ? null : browserShaper(shapeWasm, options.fetch, options.signal)]);
+  // A sibling WASM failure must reject promptly even if a host font request/ready promise
+  // never settles. The private startup guard removes registered faces now and prevents
+  // any pending face load from registering later; successful startup stays parallel.
+  const startup = {};
+  let registry, subsetter, shaper;
+  try {
+    [registry, subsetter, shaper] = await Promise.all([loadRegistry(faces, options, startup), subsetWasm === undefined ? null : browserSubsetter(subsetWasm, options.fetch, options.signal),
+      shapeWasm === undefined ? null : browserShaper(shapeWasm, options.fetch, options.signal)]);
+  } catch (error) {
+    startup.failed = true;
+    startup.dispose?.();
+    throw error;
+  }
   // The embedded list is base64 of every eager face: compute it once, and again only when faces were added.
   let embedded, stale = true;
   const addFaces = registry.addFaces;

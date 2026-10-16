@@ -27,6 +27,17 @@ export declare const engineDefaults: Readonly<{
 }>;
 
 export type RenderDiagnostic = LayoutDiagnostic | {
+  /** A run stays text because its face cannot safely be written as outlines. */
+  code: "text-as-paths-fallback";
+  reason: "colour-font" | "restricted" | "shaping";
+  fontFamily: string;
+  message: string;
+} | {
+  /** Faces omitted from the SVG because their OS/2 fsType restricts embedding. */
+  code: "font-embedding-restricted";
+  faces: { fontFamily: string; weight: number; italic: boolean; fsType: number }[];
+  message: string;
+} | {
   /** A face lacked glyphs for the text; a bundled fallback face draws them in the preview. A note, not an error. */
   code: "font-glyph-fallback";
   path?: string;

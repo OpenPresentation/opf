@@ -283,6 +283,9 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
   const selectEmbedded = () => registry.selectEmbeddedFonts(face => embedScriptFonts || !face.scripts || face.fallbackOnly);
   // The embedded list is base64 of every face: computed on first use, and again after `ensure` added faces.
   let embeddedFonts, fontFiles = [...registry.fontFiles];
+  // Calls mutate one registry: serialize their reads/additions, while returning each
+  // call's own result or error. A rejection must not poison later preparation.
+  let ensureQueue = Promise.resolve();
   const refresh = () => { embeddedFonts = undefined; fontFiles = [...registry.fontFiles]; };
   const [subsetter, shaper] = await Promise.all([nodeHarfbuzz("subsets"), nodeHarfbuzz("shaper")]);
   for (const [kind, engine] of [["subsets", subsetter], ["shaper", shaper]]) if (!engine) {
@@ -303,9 +306,13 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     manifest: BUNDLED_FONT_MANIFEST,
     get substitutions() { return registry.substitutions; },
     /** Load the script faces the presentation's text needs (see `ensureFonts`); `embeddedFonts` and `fontFiles` then include them. */
-    async ensure(presentation, callOptions = {}) {
-      const result = await ensureFonts(registry, loaded, presentation, {onDiagnostic: callOptions.onDiagnostic ?? options.onDiagnostic, renderOptions: {...options.renderOptions, ...callOptions.renderOptions}});
-      refresh();
+    ensure(presentation, callOptions = {}) {
+      const result = ensureQueue.then(async () => {
+        const prepared = await ensureFonts(registry, loaded, presentation, {onDiagnostic: callOptions.onDiagnostic ?? options.onDiagnostic, renderOptions: {...options.renderOptions, ...callOptions.renderOptions}});
+        refresh();
+        return prepared;
+      });
+      ensureQueue = result.catch(() => {});
       return result;
     },
     /** Synchronous: the script packages the presentation needs that are not loaded yet. Empty means `ensure` loads nothing. */

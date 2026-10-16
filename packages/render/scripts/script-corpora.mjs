@@ -191,7 +191,7 @@ export function qualifySample(face, group, sample, registry) {
 export async function latinFaceCoverage({registry, files, corpora}) {
   const described = registry.describeFaces();
   const groups = corpora.groups.filter(group => ['Latn', 'Cyrl', 'Grek'].includes(group.script));
-  const characters = [...new Set(groups.flatMap(group => group.samples.flatMap(sample => [...sample.text])))].filter(character => !/s/u.test(character) && !ignorable.test(character));
+  const characters = [...new Set(groups.flatMap(group => group.samples.flatMap(sample => [...sample.text])))].filter(character => !/\s/u.test(character) && !ignorable.test(character));
   const out = [];
   for (const [index, face] of described.entries()) {
     if (face.scripts || face.weight !== 400 || face.italic) continue;

@@ -65,7 +65,12 @@ try {
     const orders = [];
     for (const text of host.querySelectorAll('text')) {
       if (!titleSizes.includes(text.getAttribute('font-size'))) continue;
-      const content = text.textContent, letters = [...content].map((character, index) => [character, index]).filter(([character]) => !/[⁦-⁩s]/.test(character));
+      const content = text.textContent, letters = [];
+      let offset = 0;
+      for (const character of content) {
+        if (!/[⁦-⁩\s]/u.test(character)) letters.push([character, offset]);
+        offset += character.length;
+      }
       if (letters.length < 2) continue;
       const first = letters[0][1], last = letters.at(-1)[1];
       orders.push({first: text.getStartPositionOfChar(first).x, last: text.getStartPositionOfChar(last).x});

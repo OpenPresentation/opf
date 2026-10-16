@@ -738,6 +738,24 @@ class Converter {
   // Text
 
   async text(node, attrs, ctx) {
+    // Relative per-character positions need cumulative SVG text layout across
+    // chunks, anchors and bidi runs. Do not silently approximate that as run dx.
+    const pending = [node];
+    while (pending.length) {
+      const current = pending.pop();
+      const own = attributesOf(current);
+      for (const attribute of ["dx", "dy"]) {
+        if (own[attribute] === undefined) continue;
+        const value = String(own[attribute]).trim();
+        const values = value.split(/\s*,\s*|\s+/);
+        if (values.length && values.every(item => parseLength(item, { reference: 1 }) === 0)) continue;
+        const mark = `${attribute}=${value}`;
+        if (ctx.page.reportedAttributes.has(mark)) continue;
+        ctx.page.reportedAttributes.add(mark);
+        this.unsupported("pdf-unsupported-feature", `${attribute}="${value.slice(0, 40)}" on <${current.name}> is not drawn in the vector PDF; relative text positioning is unsupported.`, { path: current.attrs["data-opf-path"], element: current.name, attribute });
+      }
+      for (const child of current.children) if (["tspan", "textPath", "tref", "a"].includes(child.name)) pending.push(child);
+    }
     const { runs } = layoutText(node, this.env, ctx.parentStyle, ctx.link);
     if (!runs.length) return;
     for (const run of runs) {

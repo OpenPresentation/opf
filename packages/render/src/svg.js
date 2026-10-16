@@ -1962,6 +1962,7 @@ function trimRichLineEdges(line,textMeasurement) {
 }
 
 function renderRichLines(value,fit,box,bound,config) {
+  for (const run of value) assertXmlText(typeof run === 'string' ? run : run.text, config.path);
   const logicalAlignment=fit.placement?.alignment??config.align??bound.geometry.design.contentAlignment;
   // Each line takes its paragraph's direction from core (every wrapped line shares it) and its physical edge from that.
   const lineAlignment=index=>fit.placement?.lines[index]?.alignment??physicalAlignment(logicalAlignment,fit.directions?.[index]);
@@ -2061,9 +2062,13 @@ function renderRichLines(value,fit,box,bound,config) {
   return tag('g',{...traceAttrs(config.options,config.path),...(config.options.trace?{'data-opf-box-width':box.width,'data-opf-rich-text':config.rich===false?undefined:'true','data-opf-rich-lines':JSON.stringify(lineTrace),'data-opf-rich-spacing':spacing}:{}),...(fit.overflow?{'data-opf-overflow':'true'}:{})},content.join('\n'));
 }
 
-function renderTextBox(text, box, bound, config) {
+function assertXmlText(text, path) {
   const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(String(text??''));
-  if(invalid)throw new OPFRenderError('invalid-text',`Text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which SVG XML cannot represent.`,{path:config.path});
+  if(invalid)throw new OPFRenderError('invalid-text',`Text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which SVG XML cannot represent.`,{path});
+}
+
+function renderTextBox(text, box, bound, config) {
+  assertXmlText(text, config.path);
   const scale = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const style = config.textStyle ?? resolveTextStyle({fontFamily:config.fontFamily,fontWeight:config.fontWeight ?? 400,italic:config.italic ?? false,path:config.path},config.options.textMeasurement);
   const fit = config.fit ?? fitText(String(text ?? ""), box, config.fontSize * scale,
