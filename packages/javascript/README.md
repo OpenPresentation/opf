@@ -107,11 +107,9 @@ Added in 0.12.0 (not in 0.11.4 or earlier): `@openpresentation/opf/patch` is the
 
 ### Layout previews
 
-`@openpresentation/gallery/previews` ships pre-rendered HTML thumbnails for the
-slide layouts catalogued at pptx.gallery. Each preview is a Tailwind-styled
-fragment sized to fill a 16:9 container and only depends on the standard
-`--background`, `--foreground`, `--card`, `--muted`, `--muted-foreground`,
-`--accent`, and `--border` CSS variables.
+`@openpresentation/gallery/previews` ships pre-rendered SVG thumbnails for the
+slide layouts catalogued at pptx.gallery. Each preview is a self-contained SVG
+sized to fill a 16:9 container, with its colors and layout already rendered.
 
 ```tsx
 import { getLayoutPreview } from "@openpresentation/gallery/previews";
@@ -128,7 +126,7 @@ export function LayoutThumbnail({ slug }: { slug: string }) {
 }
 ```
 
-The HTML source lives in [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery); this checkout materializes ignored copies from the installed package for checks.
+The preview source lives in [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery); this checkout materializes ignored copies from the installed package for checks.
 
 ### Example decks
 

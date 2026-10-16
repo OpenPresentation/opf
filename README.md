@@ -42,7 +42,7 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 
 ## Start in three steps
 
-1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the currently recorded registry pin set: core 0.19.0, renderer 0.19.1, PPTX/editor/CLI 0.19.0 and Gallery 2.0.0. The default catalog is supplied by `@openpresentation/gallery@2.0.0`; see the [compatibility matrix](docs/compatibility-matrix.md) for feature and native limits.
+1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the currently recorded registry pin set: core 0.20.3, renderer 0.20.2, PPTX/editor 0.20.3, CLI 0.20.0 and Gallery 3.0.0. The default catalog is supplied by `@openpresentation/gallery@3.0.0`; see the [compatibility matrix](docs/compatibility-matrix.md) for feature and native limits.
 2. **Author, validate, paginate, preview and export.** Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. From code, `convert("deck.opf.md", "deck.pdf")` of `@openpresentation/opf` is the simple path to a PDF, PNG, SVG or PPTX file. `validate` / `opf validate` is one local checker for format, references, accessibility, layout and content ([guide](docs/validate.md)), not visual verification.
 3. **Know the limits.** The [compatibility matrix](docs/compatibility-matrix.md) lists shipped APIs versus renderer issue 24, native PowerPoint issue 87, and other deferred work. Browse presets at [pptx.gallery](https://pptx.gallery).
 
@@ -66,7 +66,7 @@ OPF is six packages. **Core** (`@openpresentation/opf`) is the format and its AP
 
 | Repo | Role | Boundary |
 |---|---|---|
-| `gallery` (`@openpresentation/gallery`, this repository) | The pptx.gallery catalog | Catalog records only, no runtime dependency; minor releases add records, a changed or removed record is a major release |
+| [`gallery`](https://github.com/OpenPresentation/gallery) (`@openpresentation/gallery`) | The pptx.gallery catalog | Catalog records only, no runtime dependency; minor releases add records, a changed or removed record is a major release |
 | `cli` (`@openpresentation/cli`, this repository) | `opf` command | Runs core's Node engine: reads and writes files and calls the engines below as optional peers |
 | `opf-render` | OPF to SVG/PNG/PDF | Local and embeddable rendering library |
 | `opf-editor` | WYSIWYG bindings/components | Headless editor primitives plus optional UI components |

@@ -69,7 +69,7 @@ The package's conditional exports pick the build:
 OPF is six packages. **Core** (`@openpresentation/opf`) is the format and its API: schemas, types, `validate`, `parse` and
 `stringify`, composition and pagination, and in Node the files. **The gallery** (`@openpresentation/gallery`) is the pptx.gallery
 catalog, a dependency of core released on its own version line. **The CLI** (`@openpresentation/cli`) is the `opf` command;
-its `convert`, `render`, `export` and `import` commands run core's Node engine (through `@openpresentation/opf/internal/engine`,
+its `convert` command runs core's Node engine (through `@openpresentation/opf/internal/engine`,
 which the package exports under the `node` condition for the CLI only; it is not an application API). **opf-render**,
 **opf-pptx** and **opf-editor** are the engines: drawing (SVG, PNG, PDF), PowerPoint (export and import) and the editor.
 
