@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## 0.20.4 (2026-10-17)
+
+- Bind design image uploads to their original source, form and panel lifetime so navigation, edits or destruction cannot redirect a delayed upload.
+- Release canvas-owned resources after failed construction, remap duplicated block subtree IDs, and bind delayed clipboard cuts to the originally copied cells without clearing later edits or destroyed grids.
+- Keep editor session reads isolated, preserve explicitly empty catalog registration during validation, and commit or refuse active drafts before manual, debounced and lifecycle persistence flushes.
+- Bind asynchronous image crops to their original presentation snapshot and cancel in-progress crop loading or encoding when the crop tool closes. Stale or cancelled crops add no assets or undo history.
+- Keep the example editor's delayed OPF import bound to its committed source, preview and destination, refusing stale replacement after edits or dialog changes.
+- Correct the canvas README example to save the editor session and identify the published optional-peer install policy.
+- Require a version-matching release tag on merged main history before publication, including manual workflow retries.
+- RR-87: establish Git trust only for the exact checked-out workspace in the publishing job before verifying its merged release identity. Preserve the full source, tag and manifest checks; no runtime or export behavior changes.
+- Retire the legacy editor native example before any effect until an owned-copy, bounded replacement is reviewed. Preserve historical evidence and document the replacement requirements without claiming native acceptance.
+- Declare slide insertion's existing readonly host catalog list and record source so TypeScript callers can use the supported layout options.
+- Advance zero-length regular-expression searches by a complete Unicode code point so astral text cannot stall Find and Replace.
+
 ## 0.20.3 (2026-10-16)
 
 - Raise the OPF dependency floor to 0.20.2, renderer peer and development requirements to 0.20.2, and PPTX development requirement to 0.20.3.
