@@ -208,7 +208,7 @@ describe("stats: images, assets, charts, tables, datasets", () => {
   });
 
   test("counts charts by type and data kind, tables with rows and columns, datasets with sources", () => {
-    assert.deepEqual(result.charts, { total: 2, byType: { column: 1, pie: 1 }, data: { inline: 1, dataset: 1, source: 0 } });
+    assert.deepEqual(result.charts, { total: 2, byType: { column: 1, pie: 1 }, data: { inline: 1, dataset: 1, withSource: 1 } });
     assert.equal(result.tables.total, 2);
     assert.equal(result.tables.datasetBacked, 1);
     assert.deepEqual(result.tables.items.map((item) => [item.slide, item.rows, item.columns, item.dataset]), [[2, 2, 2, "sales"], [3, 3, 2, null]]);

@@ -2,8 +2,9 @@
 // report gives about a file (SHA-256, size).
 import { createHash, randomUUID } from "node:crypto";
 import { statSync } from "node:fs";
-import { link, lstat, mkdir, readFile, rename, unlink, writeFile } from "node:fs/promises";
+import { lstat, mkdir, readFile, rename, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { publishNew } from "@openpresentation/opf/internal/engine";
 import { CliError } from "./errors.js";
 
 export { type PlannedFile, checkOutputPattern, deckStem, padNumber, parseSlideSelection, pointerOf, stemOf, writeFiles } from "@openpresentation/opf/internal/engine";
@@ -99,9 +100,9 @@ export async function saveText(file: string, text: string | Uint8Array, overwrit
 		if (original && (await readFile(original.file, "utf8")) !== original.raw) throw new CliError("The input changed while it was being edited; read it again and retry.", "input-changed", 1, { file: original.file });
 		if (overwrite) await rename(temporary, output);
 		else {
-			// A link publishes a complete file without replacing an output created concurrently.
+			// A link publishes a complete file without replacing an output created concurrently; where links are refused, an exclusive create and copy does.
 			try {
-				await link(temporary, output);
+				await publishNew(temporary, output);
 			} catch (error) {
 				if ((error as NodeJS.ErrnoException).code === "EEXIST") throw new CliError(`Output already exists: ${file}.`, "output-exists", 1, { file });
 				throw error;

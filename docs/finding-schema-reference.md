@@ -117,6 +117,7 @@ _No named properties._
 | `keyword` | yes | `string` | The JSON Schema keyword that failed, or `opf` for a rule the schema cannot express. |
 | `schemaPath` | yes | `string` |  |
 | `params` | yes | `object` |  |
+| `alternatives` | no | `array<string>` | Present when the issue is the best match of a oneOf or anyOf: one line per other form the value was checked against and did not fit, such as `string: must be string`. |
 
 
 ### Finding

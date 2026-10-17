@@ -140,7 +140,7 @@ export {
 export type { LanguageVocabulary, SocialPlatformVocabulary } from "./engine-vocabularies.js";
 export { resolveSlideContext } from './slide-context.js';
 export type { SlideContext, SlideContextDiagnostic, SlideContextOptions } from './slide-context.js';
-export { stats } from './stats.js';
+export { stats, localAssetSources } from './stats.js';
 export type { PresentationStats, StatsOptions, SlideStats, StatsSlideRef, ReferenceFact, SlideSizeFact, HeaderFooterFact, TableFact, DatasetFact } from './stats.js';
 
 export { paginate, paginateSlide, OPFPaginationError } from './pagination.js';

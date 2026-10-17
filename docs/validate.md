@@ -167,11 +167,15 @@ Contract paths are JSON Pointer patterns: `~0` escapes `~`, `~1` escapes `/`, an
 
 ## The CLI
 
-`opf validate <file|-> [--config <file>] [--only <list>] [--ignore <list>] [--fail-on <error|warning|info>] [--format <json|text>] [--list-rules]`
+`opf validate <file|-> [--config <file>] [--only <list>] [--ignore <list>] [--fail-on <error|warning|info>] [--asset-dir <dir>] [--format <json|text>] [--list-rules]`
 
 The JSON report (the default) is the `validate` report plus the source's SHA-256 (`sha256`), the installed core version (`opfVersion`) and, with `--config`, the configuration file's path and hash (`context`). `--format text` prints one line per finding (`file:line:column  severity  rule  message`), the JSON Pointer path, a hint and any fix, then a summary. `--list-rules` prints every rule (`--format json` with its full metadata).
 
 A file ending `.yaml` or `.yml` (or stdin with `--from yaml`) is read as YAML through `fromYaml`, so the report is the same and every finding is located in the YAML; a YAML syntax or dialect error is a `yaml/<rule>` finding (`format`, exit 1). A file ending `.opf.md` (or stdin with `--from md`) is read as a [Markdown deck](markdown.md#markdown-decks-in-every-command) the same way, and a Markdown error is a `markdown/<rule>` finding. A plain `.md` file, and any other text that does not start with `{` or `[`, needs `--from`.
+
+**Local images (RR-93).** The CLI, not core `validate` (which reads no file), also checks that each relative image or logo path exists: a `cli/asset-missing` warning when `opf convert` could not find it, `cli/asset-blocked` when it is outside the folder or not an image file. It uses convert's resolver and rules: paths are relative to the deck's folder (the working directory for stdin), or to `--asset-dir`; URLs, `data:` URIs and `asset:` references to them are not read. `--only` skips the check and `--ignore asset-missing` (or `asset-blocked`) drops one kind.
+
+**Schema errors in a union.** Where a value can take several forms (a table cell is a scalar, runs or a styled object), a failing value reports the errors of the form it was written for, and each finding's `validation.alternatives` lists the other forms in one line each (`--format text` prints them as `other forms: ...`). When no form fits the value's type, one error names the types accepted.
 
 `--only` and `--ignore` take comma-separated rule ids, bare names or category names. `--config` takes an explicit local JSON file, never `-`, holding `{ catalogs, contracts, severity, only, ignore, ignorePaths, thresholds, chartPalette }`; `--only` replaces the file's `only` and `--ignore` adds to its `ignore`.
 

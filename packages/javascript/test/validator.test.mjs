@@ -807,7 +807,7 @@ describe("presentation shapes that must be rejected", () => {
       name: "Incomplete Audience",
       audience: [{ technicalFluency: "high" }],
       slides: [{ title: "Slide Title" }],
-    }, "must match a schema in anyOf");
+    }, "must have required property 'id' or 'name'");
   });
 
   test("Incomplete Purpose", () => {
@@ -815,7 +815,7 @@ describe("presentation shapes that must be rejected", () => {
       name: "Incomplete Purpose",
       purpose: { outcome: "Approve the plan" },
       slides: [{ title: "Slide Title" }],
-    }, "must match a schema in anyOf");
+    }, "must have required property 'id' or 'name'");
   });
 
   test("Incomplete Tone", () => {
@@ -823,7 +823,7 @@ describe("presentation shapes that must be rejected", () => {
       name: "Incomplete Tone",
       tone: { voiceCues: ["Be crisp."] },
       slides: [{ title: "Slide Title" }],
-    }, "must match a schema in anyOf");
+    }, "must have required property 'id' or 'name'");
   });
 
   test("Invalid UK English Tag", () => {

@@ -7,6 +7,7 @@ import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, type ValidationRuleInfo, findValidationRule, validationCategories, validationRules } from "@openpresentation/opf";
 import { type CommandSpec, oneOf, parseArgs, printHelp } from "./args.js";
+import { assetRoot, localAssetProblems } from "@openpresentation/opf/internal/engine";
 import { cliCatalogs } from "./catalogs.js";
 import { reaches } from "./check.js";
 import { checkText, deckFormatFlag, inputFormatOf } from "./deck.js";
@@ -16,24 +17,28 @@ import { type Host, countsOf, failOnOf } from "./runtime.js";
 
 export const spec: CommandSpec = {
 	name: "validate",
-	usage: ["opf validate <file|dir|->... [--from <format>] [--config <file>] [--only <list>] [--ignore <list>] [--fail-on <level>] [--format <json|text|github>]", "opf validate --list-rules [--format <json|text>]"],
+	usage: ["opf validate <file|dir|->... [--from <format>] [--config <file>] [--only <list>] [--ignore <list>] [--fail-on <level>] [--asset-dir <dir>] [--format <json|text|github>]", "opf validate --list-rules [--format <json|text>]"],
 	summary: "Check decks: format, references, policy, accessibility, layout and content.",
 	operands: ["<file|dir|-> (decks, folders of decks, or - for stdin)"],
 	positional: [0, Number.POSITIVE_INFINITY],
-	values: ["from", "config", "fail-on", "format"],
+	values: ["from", "config", "fail-on", "format", "asset-dir"],
 	repeated: ["only", "ignore"],
 	flags: ["list-rules"],
 	help: `The one checker. Findings have stable rule ids (opf/text-contrast), a severity, a category and a JSON Pointer path; read from a
 file they carry line and column. Only format, references and policy produce errors by default, so "valid" keeps meaning
 correct OPF. A folder is searched (sorted, skipping node_modules and dot folders) for *.opf.json, *.opf.yaml, *.opf.yml and
 *.opf.md. --only runs just these rules or categories (full ids, bare names or category names, comma-separated or repeated);
---ignore skips them. --fail-on picks the exit threshold (default error). A --config JSON file may hold {catalogs, contracts,
-severity, only, ignore, ignorePaths, thresholds, chartPalette}; --only replaces its only and --ignore adds to its ignore.
+--ignore skips them. --fail-on picks the exit threshold (default error). Local images are checked too: a relative image or logo
+path that does not resolve, by the rules opf convert reads files with (relative to the deck's folder, or --asset-dir; nothing
+outside it; only image files), is a cli/asset-missing warning (cli/asset-blocked when the file is outside the folder or not an
+image), so convert would not stop on it later. --only skips that check; --ignore asset-missing or asset-blocked drops one kind.
+A --config JSON file may hold {catalogs, contracts, severity, only, ignore, ignorePaths, thresholds, chartPalette}; --only
+replaces its only and --ignore adds to its ignore.
 --format json (the default) prints one input's report { command, ok, input, valid, schemaValid, findings, counts, checks, file,
 sha256, ... }, or for several { command, ok, files: [reports], counts }; text prints a line per finding; github prints
 ::error/::warning/::notice workflow annotations. Exit codes: 0 no finding at or above --fail-on, 1 findings at or above it (or
 a file that is not valid JSON, YAML or Markdown), 2 usage, configuration or I/O error; the worst over every file. Validate is
-read-only and local; it never fetches images, fonts or catalogs.
+read-only and local; it reads local images only to check they exist, and never fetches images, fonts or catalogs.
 
 Examples:
   opf validate deck.opf.json
@@ -42,7 +47,30 @@ Examples:
 
 const list = (values: string[] | undefined) => (values ?? []).flatMap((value) => value.split(",")).map((entry) => entry.trim()).filter(Boolean);
 const row = (rule: ValidationRuleInfo) => `${rule.id.padEnd(34)} ${rule.category.padEnd(14)} ${rule.severity.padEnd(8)} ${rule.cost.padEnd(12)} ${rule.summary}`;
-type Located = Finding & { location?: { line: number; column: number } };
+type Located = Finding & { location?: { line: number; column: number }; validation?: { alternatives?: string[] } };
+
+const ASSET_RULES = ["asset-missing", "asset-blocked"] as const;
+const assetRule = (name: string) => ASSET_RULES.find((rule) => name === rule || name === `cli/${rule}`);
+
+/** The local images that `opf convert` would not read, as warnings (RR-93), by the same resolver and rules. */
+function assetFindings(deck: Record<string, unknown>, directory: string, skip: ReadonlySet<string>): Finding[] {
+	return localAssetProblems(deck, directory)
+		.filter((found) => !skip.has(`asset-${found.problem}`))
+		.map((found) => {
+			const shown = found.source.length > 80 ? `${found.source.slice(0, 77)}...` : found.source;
+			const slide = /^\/slides\/(\d+)(\/|$)/.exec(found.path);
+			return {
+				ruleId: `cli/asset-${found.problem}`,
+				severity: "warning",
+				category: "references",
+				scope: "document",
+				path: found.path,
+				message: `Image "${shown}" was not read: ${found.reason}`,
+				help: "Fix the path, add the file, embed the image as a data URI, or pass --asset-dir <directory> that contains it. opf convert stops on it.",
+				...(slide ? { slide: Number(slide[1]) } : {}),
+			} as Finding;
+		});
+}
 
 /** The human reporter: one line per finding, `file:line:column  severity  rule  message`, a hint under it, a summary at the end. */
 export function formatText(report: ValidationReport, file: string): string {
@@ -51,6 +79,8 @@ export function formatText(report: ValidationReport, file: string): string {
 		const where = d.location ? `${file}:${d.location.line}:${d.location.column}` : `${file}:${d.path || "/"}`;
 		lines.push(`${where}  ${d.severity.padEnd(7)} ${d.ruleId}  ${d.message}`);
 		lines.push(`    ${d.path || "(document)"}${d.slide !== undefined ? `  (slide ${d.slide + 1})` : ""}`);
+		const alternatives = (d as Located).validation?.alternatives;
+		if (alternatives?.length) lines.push(`    other forms: ${alternatives.join("; ")}`);
 		if (d.help) lines.push(`    hint: ${d.help}`);
 		for (const fix of d.fixes ?? []) lines.push(`    fix: ${fix.title}${fix.safe === false ? " (changes meaning; review)" : ""}`);
 	}
@@ -165,9 +195,12 @@ export async function run(args: string[], host: Host): Promise<void> {
 	settings.catalogs = cliCatalogs(settings.catalogs ?? []);
 	const only = list(repeated.only);
 	const ignore = list(repeated.ignore);
-	checkNames([...only, ...ignore], "--only or --ignore");
+	checkNames([...only, ...ignore.filter((name) => !assetRule(name))], "--only or --ignore");
 	if (repeated.only) settings.only = only;
-	if (ignore.length) settings.ignore = [...(settings.ignore ?? []), ...ignore];
+	const coreIgnore = ignore.filter((name) => !assetRule(name));
+	if (coreIgnore.length) settings.ignore = [...(settings.ignore ?? []), ...coreIgnore];
+	const skipAssets = new Set(ignore.flatMap((name) => assetRule(name) ?? []));
+	const explicitAssetDir = options["asset-dir"] === undefined ? undefined : String(options["asset-dir"]);
 	const files = await expand(positional);
 	const context = configFile ? { context: { file: path.resolve(configFile), sha256: sha256(configRaw as string) } } : {};
 
@@ -181,7 +214,22 @@ export async function run(args: string[], host: Host): Promise<void> {
 		try {
 			raw = await readText(file);
 			try {
-				report = checkText(raw, inputFormatOf(file, raw, from), settings).report;
+				const checked = checkText(raw, inputFormatOf(file, raw, from), settings);
+				report = checked.report;
+				// The same folder convert reads: --asset-dir, else the deck's own (the working directory for stdin). --only asks for named rules, so it skips this check.
+				if (checked.deck && !only.length && skipAssets.size < ASSET_RULES.length) {
+					let directory: string | undefined;
+					try {
+						directory = assetRoot(explicitAssetDir ?? (file === "-" ? process.cwd() : path.dirname(path.resolve(file))), true);
+					} catch (error) {
+						throw usage((error as Error).message, "invalid-value", { option: "--asset-dir" });
+					}
+					const found = directory ? assetFindings(checked.deck, directory, skipAssets) : [];
+					if (found.length) {
+						const findings = [...report.findings, ...found];
+						report = { ...report, findings, counts: countsOf(findings) };
+					}
+				}
 			} catch (error) {
 				if (error instanceof TypeError) throw usage(error.message, "invalid-config");
 				throw error;

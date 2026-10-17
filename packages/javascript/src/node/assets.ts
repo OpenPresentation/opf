@@ -4,6 +4,7 @@
 import { readFileSync, realpathSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { localAssetSources } from "../stats.js";
 import type { Reporter } from "./reporter.js";
 
 const MEDIA: Record<string, string> = { ".png": "image/png", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".gif": "image/gif", ".webp": "image/webp", ".svg": "image/svg+xml" };
@@ -81,6 +82,11 @@ export function createImageResolver(root: string | undefined, reporter: Reporter
 		return outcome;
 	}
 	return {
+		/** The reason a local source cannot be read (`missing`: no such file; `blocked`: outside the folder, not an image, too large), or undefined when it can, or is not a local file. */
+		check: (source: string): { problem: "blocked" | "missing"; reason: string } | undefined => {
+			const outcome = read(source);
+			return "problem" in outcome ? outcome : undefined;
+		},
 		/** opf-render: a data URI string, or null for the placeholder (a missing file is reported by the renderer as unresolved-asset). */
 		forSvg: (source: string | undefined, context: { path: string }): string | null => {
 			if (!source) return null;
@@ -97,4 +103,37 @@ export function createImageResolver(root: string | undefined, reporter: Reporter
 			throw new AssetError(`Image "${shown(source)}" was not read: ${outcome.reason} Fix the path, embed the image as a data URI, or ${passDirectory}.`, { path: context.path });
 		},
 	};
+}
+
+/** A local image reference that `convert` could not read. */
+export interface AssetProblem {
+	/** The JSON Pointer of the first place the deck spells the source (the registry entry for an `asset:` reference). */
+	path: string;
+	source: string;
+	problem: "blocked" | "missing";
+	reason: string;
+}
+
+function pointerToString(value: unknown, source: string, pointer = ""): string | undefined {
+	if (value === source) return pointer;
+	if (value === null || typeof value !== "object") return undefined;
+	for (const [key, child] of Object.entries(value)) {
+		const found = pointerToString(child, source, `${pointer}/${key.replaceAll("~", "~0").replaceAll("/", "~1")}`);
+		if (found !== undefined) return found;
+	}
+	return undefined;
+}
+
+/**
+ * The deck's local image sources that do not resolve under `root`, by the rules `convert` reads them with (relative to the folder,
+ * nothing outside it, only image files). `root` must be an existing folder. Reads files, so it lives here and not in core `validate`.
+ */
+export function localAssetProblems(deck: unknown, root: string): AssetProblem[] {
+	const resolver = createImageResolver(root, { add() {} } as unknown as Reporter);
+	const problems: AssetProblem[] = [];
+	for (const source of localAssetSources(deck)) {
+		const found = resolver.check(source);
+		if (found) problems.push({ path: pointerToString(deck, source) ?? "", source, ...found });
+	}
+	return problems;
 }

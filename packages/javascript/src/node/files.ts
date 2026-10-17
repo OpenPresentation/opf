@@ -1,7 +1,7 @@
 // File helpers of the Node engine: output names and per-file atomic writes through a temporary sibling. The opf CLI uses the
 // same functions through `@openpresentation/opf/internal/engine`. Slide selections are browser-safe, in ../slide-selection.ts.
 import { randomUUID } from "node:crypto";
-import { link, lstat, mkdir, open, rename, unlink } from "node:fs/promises";
+import { link, lstat, mkdir, open, readFile, rename, unlink } from "node:fs/promises";
 import path from "node:path";
 import { OPFApiError } from "../api-errors.js";
 
@@ -92,6 +92,34 @@ export async function checkDestinations(files: string[], overwrite: boolean, fla
 	}
 }
 
+/** Errors of `link` on a file system or sandbox that has no hard links (some containers, OneDrive and network shares on Windows, FAT) or a link across devices. */
+const NO_HARD_LINKS = new Set(["EPERM", "ENOTSUP", "EOPNOTSUPP", "ENOSYS", "EXDEV"]);
+
+/**
+ * Publish a complete staged file at `output`, never replacing a file that is already there (the error is EEXIST, as `link`'s).
+ * A hard link is atomic: the final name appears with every byte in place. Where the file system refuses links (RR-93), the
+ * output is created exclusively (`wx`) and the staged bytes are copied in; a failed copy removes the partial output it created.
+ * `link` is a parameter so a test can inject the refusal.
+ */
+export async function publishNew(temporary: string, output: string, publish: (from: string, to: string) => Promise<void> = link): Promise<void> {
+	try {
+		await publish(temporary, output);
+		return;
+	} catch (error) {
+		if (!NO_HARD_LINKS.has((error as NodeJS.ErrnoException).code ?? "")) throw error;
+	}
+	const bytes = await readFile(temporary);
+	const handle = await open(output, "wx");
+	try {
+		await handle.writeFile(bytes);
+		await handle.close();
+	} catch (error) {
+		await handle.close().catch(() => undefined);
+		await unlink(output).catch(() => undefined);
+		throw error;
+	}
+}
+
 /** Stage every file first, then publish each atomically. A later publication failure can leave earlier complete files. */
 export async function writeFiles(files: PlannedFile[], overwrite: boolean, flags = true) {
 	const unique = new Set(files.map((entry) => path.resolve(entry.file)));
@@ -117,10 +145,9 @@ export async function writeFiles(files: PlannedFile[], overwrite: boolean, flags
 				await rename(item.temporary, item.output);
 				item.temporary = "";
 			} else {
-				// A same-directory hardlink publishes complete bytes only if the final name is still absent.
-				// Fail closed on filesystems without hardlinks; a rename/copy fallback could overwrite a concurrent file.
+				// A same-directory hardlink publishes complete bytes only if the final name is still absent; without hard links an exclusive create and copy does.
 				try {
-					await link(item.temporary, item.output);
+					await publishNew(item.temporary, item.output);
 				} catch (error) {
 					if ((error as NodeJS.ErrnoException).code === "EEXIST") throw outputExists(item.output, flags);
 					throw error;
