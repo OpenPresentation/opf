@@ -1,5 +1,6 @@
-import { chartPaletteForFill, chartSeriesPalette } from './color.js';
+import { chartPaletteForFill, chartSeriesPalette, colorContrast, normalizeHexColor, resolveChartColors } from './color.js';
 import { type ComposedItem, type LayoutBox, type TextMeasurement, textWidthMeasurer } from './composition.js';
+import type { ResolvedDesign } from './rule-design.js';
 import { readingRows, visualReadingOrder } from './reading-order.js';
 import { tableGrid } from './table.js';
 import { timelineTextColor } from './timeline-status.js';
@@ -567,6 +568,24 @@ const chartAltRule = rule(
 	{ standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A', approximations: 'A chart passes when chart.alt has text. Without alt, it passes when the slide has any other text, list, table, quote or metric content besides title and tag, or a subtitle. It does not judge whether alt or that text states the chart\'s point (see opf/poor-alt-text for generic alt text). alt: "" is reported as a decorative chart, whatever else is on the slide.' },
 );
 
+const chartColorsRule = rule(
+	'chart-colors-adjusted',
+	'accessibility',
+	'warning',
+	'A chart colour cannot be used as authored.',
+	'`chart.colors` sets the colour of series 1, 2, 3 and so on. A colour that cannot be resolved (a `var:` colour variable the deck does not define, or a name that is not a colour) is ignored and the deck palette colour of that position is used. A colour with under 3:1 contrast against the chart panel is kept for its hue but drawn lighter or darker, so the chart does not show the colour that was written.',
+	{
+		standard: 'WCAG 2.2 SC 1.4.11 Non-text Contrast, level AA',
+		approximations: 'Resolves each entry like any colour reference (hex, colour-scheme slot or role, `var:` variable) against the slide\'s scheme and compares it with the chart panel (the slide surface colour) by WCAG contrast; 3:1 is the threshold the engines enforce. Translucent colours and unresolved panels are not measured. Colours that look alike to colour-vision deficiency are reported by opf/chart-color-only, which judges the authored colours.',
+	},
+);
+
+/** The deck roles and variables a `chart.colors` entry resolves against. */
+const chartColorContext = (design: ResolvedDesign) => ({
+	roles: { primary: design.colors.primary, secondary: design.colors.secondary, accent: design.colors.accent, background: design.colors.background, surface: design.colors.surface, text: design.colors.text, textSecondary: design.colors.mutedText },
+	variables: design.variables,
+});
+
 const chartSkip = /(histogram|box|pareto|waterfall|world|map)/;
 const perCategory = /(pie|doughnut|treemap|funnel)/;
 
@@ -587,7 +606,7 @@ const chartRules: ValidationRule[] = [
 					const count = slices ? data.rows.length : data.columns.length - 1;
 					if (count < 2) continue;
 					const surface = slide.design.colors.surface;
-					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme));
+					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme, chart.colors, chartColorContext(slide.design)));
 					if (!palette.length) continue;
 					const used = Array.from({ length: Math.min(count, 24) }, (_, i) => palette[i % palette.length]!);
 					const pairs: { a: number; b: number; model: string; difference: number }[] = [];
@@ -611,6 +630,40 @@ const chartRules: ValidationRule[] = [
 						message: `${slices ? 'Slices' : 'Series'} may be hard to tell apart without colour: ${pairs.slice(0, 3).map(describe).join('; ')}${cycles ? `${pairs.length ? '; ' : ''}${count} ${slices ? 'slices' : 'series'} exceed the ${palette.length}-colour palette, so colours repeat` : ''}.`,
 						help: 'Show fewer series per chart (split into two charts), state the key values in the slide text or a table next to the chart, or choose a chart type whose categories sit on an axis instead of in a legend.',
 						measured: { series: count, confusablePairs: pairs.length, minDifference: pairs[0] ? round(pairs[0].difference) : null },
+					});
+				}
+		},
+	},
+	{
+		info: chartColorsRule,
+		run(context) {
+			for (const slide of context.slides)
+				for (const payload of slidePayloads(slide.slide, slide.path)) {
+					const chart = rec(payload.node.chart);
+					if (!Array.isArray(chart.colors)) continue;
+					const surface = normalizeHexColor(slide.design.colors.surface);
+					const resolved = resolveChartColors(chart.colors, slide.design.colorScheme, chartColorContext(slide.design));
+					resolved.forEach((color, index) => {
+						const path = `${payload.path === slide.path ? slide.path : payload.path}/chart/colors/${index}`;
+						const entry = chart.colors[index];
+						if (color === undefined) {
+							context.report(chartColorsRule, {
+								path,
+								slide,
+								message: `Chart colour ${index + 1} (${JSON.stringify(entry)}) cannot be resolved, so the palette colour of that position is used.`,
+								help: 'Use a hex colour, a colour-scheme name such as "accent2", or the id of a colour variable the deck defines (var:<id>).',
+							});
+							return;
+						}
+						const contrast = surface ? colorContrast(color, surface) : undefined;
+						if (contrast === undefined || contrast >= 3) return;
+						context.report(chartColorsRule, {
+							path,
+							slide,
+							message: `Chart colour ${index + 1} (${color}) has ${contrast.toFixed(1)}:1 contrast against the chart panel (${surface}); it is drawn lighter or darker to reach 3:1.`,
+							help: 'Choose a colour that already has at least 3:1 contrast against the slide surface, so the chart shows the colour you wrote.',
+							measured: { contrast: round(contrast), panel: surface! },
+						});
 					});
 				}
 		},

@@ -3175,6 +3175,14 @@
           "description": "Text alternative for the chart: what the data shows (the point and the key numbers), not 'a chart' or 'bar chart'. The preview exposes it as the chart's accessible name (role img with aria-label) and the PowerPoint export writes it as the chart frame's alternative text (descr); import reads it back. An empty string marks the chart decorative, with the same meaning as an empty Asset alt, but it is a reviewed choice that opf/chart-text-alternative still reports as info (a chart almost always carries a message). When absent, validate accepts text beside the chart instead.",
           "examples": ["Revenue grew from $12M in Q1 to $18M in Q2, with the steepest rise in the West region."]
         },
+        "colors": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ColorRef" },
+          "minItems": 1,
+          "maxItems": 24,
+          "description": "Optional series colors, by position: entry i replaces palette color i, the color of series i (the i-th plotted value column), of slice or category i on a pie, doughnut, treemap or funnel chart, and of the i-th color a histogram, pareto, waterfall or box-and-whisker chart draws with. An entry is any ColorRef: a hex color, a color-scheme slot or role ('accent3', 'secondary') or a 'var:<id>' color variable; a scheme name keeps following the deck if its scheme changes, and is written to PowerPoint as a theme color. Positions past the last entry keep the deck palette (accent1 to accent6, then their tints). A color is kept at 3:1 contrast against the chart panel (a lighter or darker shade is used when it falls short) and 'chart.highlight' wins over it: highlighted marks take the primary color and the rest the muted neutral. A color that cannot be resolved falls back to the palette color for its position. Absent keeps the deck palette exactly.",
+          "examples": [["accent3", "#7B241C"]]
+        },
         "highlight": {
           "$ref": "#/$defs/ChartHighlight",
           "description": "Optional emphasis: the series and/or categories that carry the message. The engines draw the highlighted marks in the deck's primary (accent) color and every other mark in a muted neutral derived from the theme (a light grey on a light chart panel, a dim grey on a dark one); there is no color field. A mark is highlighted when its series OR its category is named. Absent keeps today's colors exactly. Supported on column, bar and line charts (series and categories; on a line a category highlight marks that category's points), pie and doughnut charts (categories, one per slice), and area, scatter and radar charts (series); the histogram, pareto, waterfall, funnel, treemap, box-and-whisker, map and combo constructs drop the option with a 'chart-option-adapted' diagnostic, as does a part the type cannot highlight. A name that matches no column or row label is a 'chart-highlight-unknown-name' error."

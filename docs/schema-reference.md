@@ -977,6 +977,7 @@ _No named properties._
 | `legend` | no | `enum:none \| top \| bottom \| left \| right` | Optional legend position. 'none' hides the legend. Absent keeps today's behaviour exactly (a legend at the right of multi-series charts and of pie and doughnut charts, none for single-series charts). A named position... |
 | `dataLabels` | no | `oneOf:boolean / ref:ChartDataLabels` | Optional data labels. true shows value labels at each type's default position, false (or absent) shows none, which is today's behaviour. Use the object form for the label content, position and separator. |
 | `alt` | no | `string` | Text alternative for the chart: what the data shows (the point and the key numbers), not 'a chart' or 'bar chart'. The preview exposes it as the chart's accessible name (role img with aria-label) and the PowerPoint ex... |
+| `colors` | no | `array<ref:ColorRef>` | Optional series colors, by position: entry i replaces palette color i, the color of series i (the i-th plotted value column), of slice or category i on a pie, doughnut, treemap or funnel chart, and of the i-th color a... |
 | `highlight` | no | `ref:ChartHighlight` | Optional emphasis: the series and/or categories that carry the message. The engines draw the highlighted marks in the deck's primary (accent) color and every other mark in a muted neutral derived from the theme (a lig... |
 
 
