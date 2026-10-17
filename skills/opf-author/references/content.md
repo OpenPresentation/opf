@@ -51,27 +51,31 @@ A table's default text is small (about 12 pt, next to 24 pt bullets). To make it
 
 ```json
 {
-  "title": "North America leads growth",
-  "table": {
-    "columns": [
-      { "value": [{ "text": "Region", "bold": true, "fontSize": 20 }], "style": { "padding": { "top": 12, "right": 16, "bottom": 12, "left": 16 } } },
-      { "value": [{ "text": "Q4 revenue", "bold": true, "fontSize": 20 }], "style": { "align": "right", "padding": { "top": 12, "right": 16, "bottom": 12, "left": 16 } } },
-      { "value": [{ "text": "Growth", "bold": true, "fontSize": 20 }], "style": { "align": "right", "padding": { "top": 12, "right": 16, "bottom": 12, "left": 16 } } }
-    ],
-    "rows": [
-      [
-        { "value": [{ "text": "North America", "fontSize": 20 }], "style": { "padding": { "top": 12, "right": 16, "bottom": 12, "left": 16 } } },
-        { "value": [{ "text": "$18.1M", "fontSize": 20 }], "style": { "align": "right", "padding": { "top": 12, "right": 16, "bottom": 12, "left": 16 } } },
-        { "value": [{ "text": "+46%", "bold": true, "fontSize": 20, "color": "accent2" }], "style": { "align": "right", "padding": { "top": 12, "right": 16, "bottom": 12, "left": 16 } } }
-      ],
-      [
-        { "value": [{ "text": "EMEA", "fontSize": 20 }], "style": { "padding": { "top": 12, "right": 16, "bottom": 12, "left": 16 } } },
-        { "value": [{ "text": "$11.5M", "fontSize": 20 }], "style": { "align": "right", "padding": { "top": 12, "right": 16, "bottom": 12, "left": 16 } } },
-        { "value": [{ "text": "+40%", "fontSize": 20 }], "style": { "align": "right", "padding": { "top": 12, "right": 16, "bottom": 12, "left": 16 } } }
-      ]
-    ],
-    "alt": "North America grew 46% to $18.1M in Q4, ahead of EMEA at 40%."
-  }
+  "slides": [
+    {
+      "title": "North America leads growth",
+      "table": {
+        "columns": [
+          {"value": [{"text": "Region", "bold": true, "fontSize": 20}], "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+          {"value": [{"text": "Q4 revenue", "bold": true, "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+          {"value": [{"text": "Growth", "bold": true, "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
+        ],
+        "rows": [
+          [
+            {"value": [{"text": "North America", "fontSize": 20}], "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": [{"text": "$18.1M", "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": [{"text": "+46%", "bold": true, "fontSize": 20, "color": "accent2"}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
+          ],
+          [
+            {"value": [{"text": "EMEA", "fontSize": 20}], "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": [{"text": "$11.5M", "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": [{"text": "+40%", "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
+          ]
+        ],
+        "alt": "North America grew 46% to $18.1M in Q4, ahead of EMEA at 40%."
+      }
+    }
+  ]
 }
 ```
 
@@ -79,10 +83,15 @@ A cell written as runs is text: it keeps no `format` and is not right-aligned un
 
 ```json
 {
-  "table": {
-    "columns": ["Region", { "name": "Q4 revenue ($M)", "format": "$#,##0.0" }, { "name": "Growth", "format": "0%" }],
-    "rows": [["North America", 18.1, 0.46], ["EMEA", 11.5, 0.4]]
-  }
+  "slides": [
+    {
+      "title": "A numeric column keeps its number",
+      "table": {
+        "columns": ["Region", { "name": "Q4 revenue ($M)", "format": "$#,##0.0" }, { "name": "Growth", "format": "0%" }],
+        "rows": [["North America", 18.1, 0.46], ["EMEA", 11.5, 0.4]]
+      }
+    }
+  ]
 }
 ```
 
