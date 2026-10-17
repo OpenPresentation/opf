@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.20.4 (2026-10-17)
+
+- RR-87: establish Git trust only for the exact checked-out workspace in the publishing job before verifying its merged release identity. Preserve the full source, tag and manifest checks; no runtime or export behavior changes.
+
 ## 0.20.3 (2026-10-16)
 
 - Remove browser font registrations when parallel shaping or subsetting initialization fails, and prevent pending startup faces from registering after rejection without delaying the original error.
