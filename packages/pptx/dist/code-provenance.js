@@ -25,12 +25,42 @@ export function codeManifest(value, layout, group, bands) {
 }
 
 export function attachCodeTags(entries, records) {
-  return attachTextTags(entries,records,TAG,'opfCode','code');
+  return attachTextTags(entries,records,TAG,'opfCode','code',{signed:true});
 }
 
 export {unhex as decodeTextTag, hex as encodeTextTag};
 
-export function attachTextTags(entries, records, tagName, prefix, kind, {pictures = false, descriptions} = {}) {
+// RR-94: a signed tag records a fingerprint of its shape as exported (the geometry and the native paragraphs). On import a group whose
+// shapes all still match their fingerprint is a pristine export: nothing was edited, so there is nothing to tell the user about.
+const cyrb53 = text => {
+  let h1 = 0xdeadbeef, h2 = 0x41c6ce57;
+  for (let i = 0; i < text.length; i++) {
+    const code = text.charCodeAt(i);
+    h1 = Math.imul(h1 ^ code, 2654435761);
+    h2 = Math.imul(h2 ^ code, 1597334677);
+  }
+  h1 = Math.imul(h1 ^ (h1 >>> 16), 2246822507) ^ Math.imul(h2 ^ (h2 >>> 13), 3266489909);
+  h2 = Math.imul(h2 ^ (h2 >>> 16), 2246822507) ^ Math.imul(h1 ^ (h1 >>> 13), 3266489909);
+  return (4294967296 * (2097151 & h2) + (h1 >>> 0)).toString(16).padStart(14, '0');
+};
+const fingerprint = (geometry, paragraphs) => cyrb53(JSON.stringify([geometry, paragraphs]));
+const wrapShape = shape => `<p:sld><p:cSld><p:spTree>${shape}</p:spTree></p:cSld></p:sld>`;
+function exportedSignature(shape) {
+  const frame = /<a:xfrm\b[^>]*>\s*<a:off x="(-?\d+)" y="(-?\d+)"\s*\/>\s*<a:ext cx="(\d+)" cy="(\d+)"\s*\/>/.exec(shape);
+  return fingerprint(frame ? frame.slice(1).map(Number) : [], nativeShapeParagraphs(wrapShape(shape))[0] ?? []);
+}
+/** True when every tagged text shape of an imported group still has the geometry and native text it was exported with. */
+export function groupUnchanged(items, paragraphs) {
+  return items.every(item => {
+    const shape = item.shape;
+    if (!shape || shape['p:nvPicPr']) return true;
+    const frame = shape['p:spPr']?.['a:xfrm'], off = frame?.['a:off'], ext = frame?.['a:ext'];
+    const geometry = off && ext ? [off.x, off.y, ext.cx, ext.cy].map(Number) : [];
+    return typeof item.data?.sig === 'string' && item.data.sig === fingerprint(geometry, paragraphs[item.index] ?? []);
+  });
+}
+
+export function attachTextTags(entries, records, tagName, prefix, kind, {pictures = false, descriptions, signed = false} = {}) {
   if (!records.size) return;
   let count = 0;
   const seen = new Set(), types = [];
@@ -48,7 +78,7 @@ export function attachTextTags(entries, records, tagName, prefix, kind, {picture
       let id = `rId${prefix[0].toUpperCase()+prefix.slice(1)}${count}`;
       while (ids.has(id)) id += '_';
       ids.add(id);
-      entries[part] = enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${tagName}" val="${hex(records.get(name))}"/></p:tagLst>`);
+      entries[part] = enc.encode(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><p:tagLst xmlns:p="${NS}"><p:tag name="${tagName}" val="${hex(signed && shape.startsWith('<p:sp>') ? {...records.get(name), sig: exportedSignature(shape)} : records.get(name))}"/></p:tagLst>`);
       types.push(`<Override PartName="/${part}" ContentType="application/vnd.openxmlformats-officedocument.presentationml.tags+xml"/>`);
       rels = rels.replace('</Relationships>',`<Relationship Id="${id}" Type="${REL}" Target="../tags/${prefix}${count}.xml"/></Relationships>`);
       // Optional alternative text (a:cNvPr descr) for generated decoration such as the metric trend arrow.
@@ -218,7 +248,7 @@ export function importCodeGroups(shapes, paragraphs, relationships, entries, rep
       }
       for (const item of group) consumed.add(item.shape);
       items.push({shape:panel.shape,payload:{type:'code',code:typeof manifest.value === 'string' ? value.source : value}});
-      report({code:'code-import-reflow',message:'Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.'});
+      if(!groupUnchanged(group,paragraphs))report({code:'code-import-reflow',message:'Code source boundaries and native text were recovered. Native positioning, formatting and font theme are not reconstructed; review the reflowed OPF.'});
     } catch (error) {
       report({code:'invalid-code-provenance',message:`${error.message} Visible native shapes were retained without restoring old source text.`});
     }

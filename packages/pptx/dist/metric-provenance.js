@@ -1,6 +1,6 @@
 import {XMLParser} from 'fast-xml-parser';
 import {isValidFormat} from './format-check.js';
-import {attachTextTags,decodeTextTag} from './code-provenance.js';
+import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 
 const TAG='OPF_METRIC_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
@@ -14,7 +14,7 @@ export function metricManifest(value,layout,group) {
   return {v:1,group,role:'anchor',part:0,line:0,value,parts:layout.parts.map(part=>({role:part.role,visible:part.visible,
     lines:part.fit?.sourceLines.map(({start,end,nextStart,boundary})=>({start,end,nextStart,boundary}))??[]}))};
 }
-export function attachMetricTags(entries,records,descriptions) {return attachTextTags(entries,records,TAG,'opfMetric','metric',{descriptions});}
+export function attachMetricTags(entries,records,descriptions) {return attachTextTags(entries,records,TAG,'opfMetric','metric',{descriptions,signed:true});}
 
 function validateManifest(manifest) {
   if (!isValidFormat({slides:[{metric:manifest.value}]})) throw new Error('Invalid metric source.');
@@ -50,7 +50,7 @@ export function importMetricGroups(shapes,paragraphs,relationships,entries,repor
         const data=decodeTextTag(tag.val);
         if (data.v!==1||typeof data.group!=='string'||!/^\d+$/.test(data.group)) throw new Error('Invalid metric identity.');
         const group=groups.get(data.group)??[];
-        group.push({data,shape,text:(paragraphs[index]??[]).map(p=>p.text).join('\n')});groups.set(data.group,group);
+        group.push({data,shape,index,text:(paragraphs[index]??[]).map(p=>p.text).join('\n')});groups.set(data.group,group);
       } catch {report({code:'invalid-metric-provenance',message:'Invalid metric tags; visible native shapes were retained.'});}
     }
   }
@@ -91,7 +91,7 @@ export function importMetricGroups(shapes,paragraphs,relationships,entries,repor
     for (const item of group) consumed.add(item.shape);
     items.push({shape:anchor.shape,payload:{type:'metric',metric}});
     if (typeChanges.length) report({code:'metric-value-type-changed',message:`Edited numeric ${typeChanges.join(', ')} retained as literal text to avoid discarding spelling or precision.`});
-    report({code:'metric-import-reflow',message:'Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.'});
+    if(!groupUnchanged(group,paragraphs))report({code:'metric-import-reflow',message:'Metric fields, source boundaries and native text were recovered. Native formatting, positioning, alignment and font theme are not reconstructed; review the reflowed OPF.'});
   } catch (error) {report({code:'invalid-metric-provenance',message:`${error.message} Visible native shapes were retained without restoring old source text.`});}
   return {consumed,items};
 }

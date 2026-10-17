@@ -23,8 +23,8 @@ for(const imageFit of ['contain','cover'])for(let orientation=1;orientation<=8;o
  assert.deepEqual(await raw(bytes),await raw(source),'Decoded pixels retain source orientation');
  assert.equal(validate(imported, {only: ['format']}).valid,true);assert.deepEqual(Buffer.from(native),before,'Input PPTX is unchanged');
  assert.deepEqual(imageBytes(await fromPptx(await toPptx(imported))),source,'Repeated image round-trip stays stable');
- assert.equal(reports.length,imageFit==='cover'?1:0);
- if(reports.length){assert.equal(reports[0].code,'unsupported-image-crop');assert.equal(reports[0].path,'slides.0.pictures.0');}
+ // RR-94: every image block is tagged, so an unchanged cover crop is no diagnostic.
+ assert.deepEqual(reports,[],'A pristine picture re-imports quietly');
  cases++;
 }
 const source=await readFile(new URL('fixtures/images/orientation-1.jpg',import.meta.url));

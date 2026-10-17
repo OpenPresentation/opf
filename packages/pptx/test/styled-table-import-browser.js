@@ -2,6 +2,7 @@ import * as pptx from '@openpresentation/opf-pptx';
 import * as render from '@openpresentation/opf-render';
 import {validate} from '@openpresentation/opf';
 import {gallery as defaultCatalog} from '@openpresentation/gallery';
+import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {nativeTableBytes} from './table-values.js';
 // OPF 0.15: the gallery ids these documents name resolve from the registered default catalog (no built-in records).
 const host = options => ({catalogs: [defaultCatalog], ...options});
@@ -15,8 +16,17 @@ try {
   [null,'Editing',{value:'In progress',style:{fill:'#FEF3C7',color:'#92400E',align:'center'}}],
   [{value:'One native merged cell',colSpan:3,style:{fill:'#F1F5F9',padding:{top:12,bottom:12},borders:{top:{color:'#64748B',width:2,dash:'dash'}}}},null,null]
  ]}}]};
- const diagnostics=[],deck=await fromPptx(nativeTableBytes(await toPptx(source)),{onDiagnostic:d=>diagnostics.push(d)});
- check(diagnostics.length===1&&diagnostics[0].code==='heading-import-reflow','Native properties import with one supported heading recovery diagnostic');
+ const exportedBytes=nativeTableBytes(await toPptx(source));
+ const diagnostics=[],deck=await fromPptx(exportedBytes,{onDiagnostic:d=>diagnostics.push(d)});
+ // RR-94: an unedited export is quiet; a heading edited in the application still reports its recovery diagnostic once.
+ check(diagnostics.length===0,'Pristine native properties import reports nothing');
+ {
+  const entries=unzipSync(exportedBytes);
+  entries['ppt/slides/slide1.xml']=strToU8(strFromU8(entries['ppt/slides/slide1.xml']).replace('Native styled table import','Edited table import'));
+  const edited=[],editedDeck=await fromPptx(zipSync(entries),{onDiagnostic:d=>edited.push(d)});
+  check(edited.length===1&&edited[0].code==='heading-import-reflow','An edited heading reports one supported heading recovery diagnostic');
+  check(editedDeck.slides[0].title==='Edited table import','The edited heading text is the current title');
+ }
  check(deck.slides[0].title===source.slides[0].title,'The tagged native heading retains its current title text');
  check(validate(deck, {only: ['format']}).valid,'Imported document validates');
  // The root table payload returns as the slide's own field (content topology).

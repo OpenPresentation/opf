@@ -1,5 +1,5 @@
 import {XMLParser} from 'fast-xml-parser';
-import {attachTextTags, decodeTextTag, encodeTextTag} from './code-provenance.js';
+import {attachTextTags, decodeTextTag, encodeTextTag, groupUnchanged} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, isBuiltinTemplate, mentionsSlideToken, parseDate, slideNumberTemplate} from './furniture-fields.js';
 import {schemas} from '@openpresentation/opf';
@@ -126,7 +126,7 @@ export function furnitureManifest(presentation, slide, layout, slideIndex, stati
 }
 
 export function attachFurnitureTags(entries, records, manifests) {
-  attachTextTags(entries, records, TAG, 'opfFurniture', 'furniture', {pictures: true});
+  attachTextTags(entries, records, TAG, 'opfFurniture', 'furniture', {pictures: true, signed: true});
   const types = [];
   for (const [path, manifest] of manifests) {
     const part = `ppt/tags/opfFurnitureSlide${manifest.group}.xml`;
@@ -390,7 +390,8 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
       if (value !== false) for (const zone of zones) if (definition.value[zone] !== undefined) {
         value[zone] = Object.fromEntries(Object.entries(definition.value[zone]).filter(([, flag]) => flag === false));
       }
-      const candidate = {scope: definition.scope, value, text: [], pictures: [], socials: []};
+      // RR-94: pristine while every tagged text shape still has the geometry and text it was exported with (a picture is not compared).
+      const candidate = {scope: definition.scope, value, text: [], pictures: [], socials: [], pristine: true};
       // A logo reference with no part (the organization had no logo to draw) returns as the reference.
       for (const [slot, entry] of Object.entries(manifest.images ?? {})) {
         const [slotKind, slotZone] = slot.split('.');
@@ -433,6 +434,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
             check(count === part.count && Number.isSafeInteger(line) && line >= 0 && line < part.count && !ordered[line], 'Ambiguous furniture line.');
             ordered[line] = record;
           }
+          if (!groupUnchanged(ordered.map(record => ({shape: source.shapes?.[record.index] ?? {}, index: record.index, data: record.data})), paragraphs)) candidate.pristine = false;
           const text = sourceLineParagraphs(ordered, paragraphs)[0].text;
           const format = manifest.formats?.[`${kind}.${part.zone}`] ?? {};
           if (part.field === 'socials') {
@@ -446,6 +448,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
         } catch (error) {
           // A part on the slide master or a layout is never slide content: when its record no longer reads, its current words (or
           // picture) stay the part's value, as literal text, and the damage is reported.
+          candidate.pristine = false;
           if (!part.on) throw error;
           report(slideIndex, `${kind}.${part.zone}.${part.field}: ${error.message} The current ${part.type === 'image' ? 'picture' : 'words'} on the slide master or layout are kept.`);
           if (part.type === 'image') {
@@ -462,6 +465,7 @@ function readSlide(context, entries, slideIndex, slideCount, report, taggedText,
         // The slide no longer follows the deck's definition: it is its own override, and the other slides can still agree.
         candidate.scope = 'local';
         candidate.derived = true;
+        candidate.pristine = false;
         if (value !== false) {
           for (const zone of Object.keys(value)) if (!Object.keys(value[zone]).length) delete value[zone];
           if (!Object.keys(value).length) candidate.value = false;
@@ -531,6 +535,7 @@ export function importFurniture(contexts, entries, onDiagnostic, {sections = [],
     const existing = slide.footer, accepted = [];
     for (const item of fields) {
       const current = existing && existing.value !== false ? existing.value[item.zone]?.[item.field] : undefined;
+      if (existing) existing.pristine = false;
       if (current !== undefined && current !== false) report(index, `footer.${item.zone}.${item.field}: A native PowerPoint placeholder duplicates a furniture part already read; it stays ordinary current text.`);
       else accepted.push(item);
     }
@@ -580,6 +585,6 @@ export function importFurniture(contexts, entries, onDiagnostic, {sections = [],
       });
     }
   }
-  candidates.forEach((slide, index) => { if (Object.keys(slide).length) onDiagnostic?.({code: 'furniture-import-reflow', path: `slides.${index}.design`, message: 'Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.'}); });
+  candidates.forEach((slide, index) => { if (Object.values(slide).some(candidate => candidate.pristine !== true)) onDiagnostic?.({code: 'furniture-import-reflow', path: `slides.${index}.design`, message: 'Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture.'}); });
   return result;
 }

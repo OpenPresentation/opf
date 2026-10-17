@@ -38,7 +38,7 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}]) for(co
   const imported=await fromPptx(bytes,{onDiagnostic:issue=>diagnostics.push(issue)});
   assert.deepEqual(imported.slides[0].code,code,'Source, metadata and hard/soft boundaries round-trip exactly');
   assert.equal(imported.slides[0].blocks,undefined,'the root code payload returns as authored');
-  assert.deepEqual(diagnostics.map(issue=>issue.code),['code-import-reflow']);
+  assert.deepEqual(diagnostics.map(issue=>issue.code),[],'RR-94: an unedited code panel re-imports quietly');
 }
 for(const source of ['a\tb','  indentation  ','\t\t','a\t','\nfirst\n\nlast\n',' \t \tkeep  ']) {
   const pptx=new PptxGenJS();pptx.layout='LAYOUT_WIDE';pptx.addSlide().addText(source,{x:1,y:2,w:10,h:3,fontSize:13.5,fontFace:'Courier New',margin:0});

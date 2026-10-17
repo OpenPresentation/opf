@@ -100,12 +100,13 @@ for (const edge of ['left', 'right', 'top', 'bottom']) {
   checked++;
 }
 
-// design.imageFit is the default fit of every image block; a plain block carries no OPF_IMAGE_V1 tag.
+// design.imageFit is the default fit of every image block; a plain block carries an OPF_IMAGE_V1 tag with an empty treatment.
 {
   const deck = { design: { imageFit: 'contain' }, slides: [{ title: 'Default fit', image: { src: uri(tall), alt: 'Tall' } }] };
   assert.equal(imageItem(deck).image.fit, 'contain');
   const { entries, bytes } = await exported(deck);
-  assert.equal(Object.keys(entries).some(path => /^ppt\/tags\/opfImage\d+\.xml$/.test(path)), false, 'no tag for an untreated block');
+  // RR-94: every image block is tagged (an empty treatment here), so an unchanged picture re-imports with no crop diagnostic.
+  assert.equal(Object.keys(entries).filter(path => /^ppt\/tags\/opfImage\d+\.xml$/.test(path)).length, 1, 'an untreated block carries an empty-treatment tag');
   const imported = await fromPptx(bytes, { onDiagnostic: () => {} });
   assert.equal(imported.design.imageFit, 'contain', 'document provenance restores the deck default');
   assert.deepEqual(imported.slides[0].image, { src: uri(tall), alt: 'Tall' });

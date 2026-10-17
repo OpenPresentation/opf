@@ -47,7 +47,7 @@ for(const measured of [false,true])for(const [width,height] of [[1280,720],[720,
  assert.equal(imported.slides[0].title,'Quote source');
  assert.deepEqual(imported.slides[0].quote,quote,JSON.stringify({measured,width,quote}));
  assert.equal(imported.slides[0].blocks,undefined);
- assert.ok(diagnostics.some(d=>d.code==='quote-import-reflow'));
+ assert.ok(!diagnostics.some(d=>d.code==='quote-import-reflow'),'RR-94: an unedited quote re-imports quietly');
  assert.ok(diagnostics.every(d=>reflow.has(d.code)),JSON.stringify(diagnostics));
  cases++;
 }

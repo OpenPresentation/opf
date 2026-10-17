@@ -52,7 +52,7 @@ assert.ok(JSON.stringify(plainCovered.deck.slides).includes('x.com/acme'), 'The 
 const {deck, issues} = await read(bytes);
 assert.deepEqual(deck.design.footer, source.design.footer, 'The organization token returns (drawn from the stored organization); the generated socials return as the flag.');
 assert.deepEqual(deck.organization, organization, 'Unedited profile lines keep the authored socials values.');
-assert.ok(issues.some(issue => issue.code === 'furniture-import-reflow'));
+assert.ok(!issues.some(issue => issue.code === 'furniture-import-reflow'), 'RR-94: unedited furniture re-imports quietly');
 assert.ok(!issues.some(issue => issue.code === 'invalid-furniture-provenance'));
 for (const slide of deck.slides) assert.ok(!JSON.stringify(slide.blocks ?? []).includes('x.com/acme'), 'Social lines are not duplicated as body text.');
 // The re-imported deck exports the same visible profiles.

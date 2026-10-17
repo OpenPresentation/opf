@@ -38,7 +38,8 @@ try {
    assert.equal((override??defaultType)['@_ContentType'],mime,`${filename} ${mode}: native content type`);
    const imported = await fromPptx(output);
    const image = (imported.slides[0].image ?? imported.slides[0].blocks?.find(block=>block.image)?.image);
-   assert.equal(image.src,`data:${mime};base64,${Buffer.from(bytes).toString('base64')}`);
+   // RR-94: an unchanged picture authored from an http(s) URL gets that URL back; a data: URI or an absolute path stays embedded bytes.
+   assert.equal(image.src,['uri','path'].includes(mode)?`data:${mime};base64,${Buffer.from(bytes).toString('base64')}`:source);
    assert.equal(image.alt,'Original image');
    if (mode === 'bytes') {
     // Imports must also recover correctly typed data URIs from older/mislabeled

@@ -1,6 +1,6 @@
 import {XMLParser} from 'fast-xml-parser';
 import {isValidFormat} from './format-check.js';
-import {attachTextTags,decodeTextTag} from './code-provenance.js';
+import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {cleanBase,headingValue,joinRichLines,unwrapQuoteRuns} from './rich-heading.js';
 
@@ -18,7 +18,7 @@ const FOOTERS=['["attribution"]','["role"]','["source"]','["attribution","role"]
 const separatorBefore=field=>field==='role'?'\n':SEPARATOR;
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
-export const attachQuoteTags=(entries,records)=>attachTextTags(entries,records,TAG,'opfQuote','quote',{pictures:true});
+export const attachQuoteTags=(entries,records)=>attachTextTags(entries,records,TAG,'opfQuote','quote',{pictures:true,signed:true});
 export const quotePhotoName=group=>`OPF quote photo ${group}`;
 
 // The manifest rides on the first body line. `footer` lists which fields the footer part joins (core writes the attribution, the role
@@ -127,7 +127,7 @@ export function importQuoteGroups(shapes,paragraphs,relationships,entries,report
     for(const item of photos)consumedPictures.add(item.picture);
     items.push({shapes:group.map(item=>item.shape),pictures:photos.map(item=>item.picture),payload:{type:'quote',quote}});
     for(const diagnostic of local)report(diagnostic);
-    report({code:'quote-import-reflow',message:'Quote text, attribution, role, source and photo were recovered from the current native text and picture. Native formatting, positions and font theme are not reconstructed; review the reflowed quote.'});
+    if(!groupUnchanged(group,paragraphs))report({code:'quote-import-reflow',message:'Quote text, attribution, role, source and photo were recovered from the current native text and picture. Native formatting, positions and font theme are not reconstructed; review the reflowed quote.'});
   }catch(error){report({code:'invalid-quote-provenance',message:`${error.message} Ordinary import retains current native text without restoring old source words.`});}
   return {consumed,consumedPictures,items};
 }

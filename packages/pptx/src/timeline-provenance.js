@@ -1,13 +1,13 @@
 import {XMLParser} from 'fast-xml-parser';
 import {isValidFormat} from './format-check.js';
-import {attachTextTags,decodeTextTag} from './code-provenance.js';
+import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 
 const STATUSES=['done','current','planned'];
 const TAG='OPF_TIMELINE_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
-export const attachTimelineTags=(entries,records)=>attachTextTags(entries,records,TAG,'opfTimeline','timeline');
+export const attachTimelineTags=(entries,records)=>attachTextTags(entries,records,TAG,'opfTimeline','timeline',{signed:true});
 
 // Only topology and line boundaries are retained. Every field value comes from
 // current native text; clearing or editing a field cannot restore old words.
@@ -86,7 +86,7 @@ export function importTimelineGroups(shapes,paragraphs,relationships,entries,rep
     if(!isValidFormat({slides:[{timeline}]}))throw Error('Current native text does not form a valid timeline.');
     for(const item of group)consumed.add(item.shape);
     items.push({shapes:group.map(item=>item.shape),payload:{type:'timeline',timeline}});
-    report({code:'timeline-import-reflow',message:'Timeline field order, source boundaries and current native text were recovered. Native formatting, positions, marker styling and font theme are not reconstructed; review the reflowed timeline.'});
+    if(!groupUnchanged(group,paragraphs))report({code:'timeline-import-reflow',message:'Timeline field order, source boundaries and current native text were recovered. Native formatting, positions, marker styling and font theme are not reconstructed; review the reflowed timeline.'});
   }catch(error){report({code:'invalid-timeline-provenance',message:`${error.message} Ordinary import retains current native text without restoring old source words.`});}
   return {consumed,items};
 }

@@ -1,11 +1,11 @@
 import {XMLParser} from 'fast-xml-parser';
-import {attachTextTags,decodeTextTag} from './code-provenance.js';
+import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {cleanBase,headingValue,joinRichLines} from './rich-heading.js';
 const TAG='OPF_HEADING_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
-export const attachHeadingTags=(entries,records)=>attachTextTags(entries,records,TAG,'opfHeading','heading');
+export const attachHeadingTags=(entries,records)=>attachTextTags(entries,records,TAG,'opfHeading','heading',{signed:true});
 
 // Tags carry only roles and line ordering. Current native text always wins;
 // neither original source text nor old geometry can be restored from these tags.
@@ -45,7 +45,7 @@ export function importHeadingGroups(shapes,paragraphs,relationships,entries,repo
     const base=cleanBase(ordered[0].data.base);
     const parts=base?joinRichLines(ordered,readBody,(item,last)=>source?item.data.separator:last?'':'\n'):undefined;
     items.push({field:first.field,shapes:ordered.map(item=>item.shape),paragraphs:restored,...(parts?{richText:headingValue(parts,base)}:{})});
-    report({code:'heading-import-reflow',message:'Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.'});
+    if(!groupUnchanged(ordered,paragraphs))report({code:'heading-import-reflow',message:'Complete tagged heading lines retain their roles, order and current native text. New boundary tags also retain authored whitespace and line endings; legacy tags retain native line breaks. Run formatting that differs between words is read back as TextRun[]; geometry is not reconstructed.'});
   }catch(error){report({code:'invalid-heading-provenance',message:`${error.message} Ordinary import retains visible native text.`});}
   return {consumed,items};
 }

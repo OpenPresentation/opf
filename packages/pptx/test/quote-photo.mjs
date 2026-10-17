@@ -49,7 +49,7 @@ for(const direction of ['ltr','rtl'])for(const quote of fixtures){
   assert.deepEqual(imported.slides[0].quote,quote,`${direction} ${JSON.stringify(quote).slice(0,120)}`);
   assert.equal(imported.slides[0].blocks,undefined);
   assert.equal(imported.slides[0].image,undefined,'the headshot is not a loose image block');
-  assert.ok(diagnostics.some(d=>d.code==='quote-import-reflow'));
+  assert.ok(!diagnostics.some(d=>d.code==='quote-import-reflow'),'RR-94: an unedited quote re-imports quietly');
   assert.ok(!diagnostics.some(d=>['quote-photo-missing','invalid-quote-provenance','quote-footer-merged'].includes(d.code)),JSON.stringify(diagnostics));
   cases++;
 }

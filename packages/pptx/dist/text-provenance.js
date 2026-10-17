@@ -1,9 +1,9 @@
 import {XMLParser} from 'fast-xml-parser';
-import {attachTextTags,decodeTextTag} from './code-provenance.js';
+import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 const TAG='OPF_TEXT_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
-export const attachPlainTextTags=(entries,records)=>attachTextTags(entries,records,TAG,'opfText','plain text');
+export const attachPlainTextTags=(entries,records)=>attachTextTags(entries,records,TAG,'opfText','plain text',{signed:true});
 
 // Only boundaries are stored. Current native characters, including edits and
 // empty lines, always supply the text; tags cannot restore discarded old words.
@@ -48,7 +48,7 @@ export function importPlainTextGroups(shapes,paragraphs,relationships,entries,re
   const restored=sourceLineParagraphs(ordered,paragraphs);
   for(const item of ordered)consumed.add(item.shape);
   items.push({shapes:ordered.map(item=>item.shape),paragraphs:restored});
-  report({code:'text-import-reflow',message:'Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.'});
+  if(!groupUnchanged(ordered,paragraphs))report({code:'text-import-reflow',message:'Complete tagged lines retain current native text, whitespace and authored line boundaries. Native formatting, geometry and OPF nesting are not reconstructed; review the reflowed text.'});
  }catch(error){report({code:'invalid-text-provenance',message:`${error.message} Ordinary import retains current native text without restoring old source words.`});}
  return {consumed,items};
 }

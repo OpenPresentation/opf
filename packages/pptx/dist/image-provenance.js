@@ -32,6 +32,19 @@ export const IMAGE_TREATMENT_KEYS = Object.freeze(['fit', 'focus', 'shape', 'cor
 /** An image background's own fields besides its source. */
 export const BACKGROUND_IMAGE_KEYS = Object.freeze(['alt', 'fit', 'focus', 'opacity', 'recolor', 'overlay']);
 
+/**
+ * RR-94: the authored `src` an image block records so a re-import can give it back instead of a data: URI: a relative path
+ * (no scheme, not absolute, no `..` segment) or an http(s) URL, as authored. Anything else (a data: URI, an `asset:` reference,
+ * a file: URL, an absolute or parent-relative path, which could name any file of the machine that re-exports it) is not recorded.
+ */
+export function recordableImageSource(value) {
+  const src = typeof value === 'string' ? value : object(value) && typeof value.src === 'string' ? value.src : undefined;
+  if (src === undefined || src.length === 0 || src.length > 2048 || /[\u0000-\u001f\u007f]/.test(src)) return undefined;
+  if (/^https?:\/\/[^/\s]+/i.test(src)) return src;
+  if (/^[A-Za-z][A-Za-z0-9+.-]*:/.test(src) || /^[\\/]/.test(src) || src.split(/[\\/]/).includes('..')) return undefined;
+  return src;
+}
+
 export const imageName = number => `OPF image ${number}`;
 export const imageOverlayName = pictureName => `${pictureName} overlay`;
 export const backgroundImageName = slide => `OPF background ${slide}`;
@@ -107,7 +120,7 @@ export function pictureFrame(metadata, {box, fit, focus = {x: .5, y: .5}, shrink
  * picture's objectName, or 'background' for the overlay of a native slide background fill; `overlay` (the authored value)
  * is stored in OPF_IMAGE_OVERLAY_V1.
  */
-export function placeImages(entries, images, overlays, {metadataFor, fail, fitImage}) {
+export function placeImages(entries, images, overlays, {metadataFor, fail, fitImage, mediaKeyFor}) {
   if (!images.size && !overlays.size) return;
   const manifests = new Map(), overlayManifests = new Map(), placed = new Set(), shaped = new Set();
   for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
@@ -135,7 +148,9 @@ export function placeImages(entries, images, overlays, {metadataFor, fail, fitIm
       placed.add(name);
       if (image.treatment !== undefined) {
         const node = parser.parse(picture)['p:pic'];
-        manifests.set(name, {v: 1, role: image.role, slide: image.slide, path: image.path, treatment: image.treatment, properties: node['p:spPr'], blipFill: blipFillIdentity(node['p:blipFill'])});
+        const media = mediaKeyFor ? mediaKeyFor(part, embed) : undefined;
+        manifests.set(name, {v: 1, role: image.role, slide: image.slide, path: image.path, treatment: image.treatment, properties: node['p:spPr'], blipFill: blipFillIdentity(node['p:blipFill']),
+          ...(media !== undefined ? {media} : {}), ...(media !== undefined && image.src !== undefined ? {src: image.src} : {})});
       }
       return picture;
     });
@@ -192,9 +207,9 @@ const pick = (value, keys) => Object.fromEntries(keys.filter(key => Object.hasOw
  * readPicture(picture) returns the ordinary imported image payload; `valid(kind, value)` checks a recovered image block
  * (`kind` 'block') or background (`kind` 'background') against the OPF format.
  */
-export function importImages({pictures, shapes, relationships, entries, slideIndex, readPicture, valid, report}) {
+export function importImages({pictures, shapes, relationships, entries, slideIndex, readPicture, valid, report, mediaKeyOf = () => undefined}) {
   const slide = `slides.${slideIndex}`;
-  const blocks = new Map(), consumed = new Set(), consumedShapes = new Set();
+  const blocks = new Map(), sources = new Map(), consumed = new Set(), consumedShapes = new Set();
   let background, backgroundOverlay;
   const invalid = (path, message) => report({code: 'invalid-image-provenance', path, message});
   // Overlay shapes first: each names the picture (or the slide background) it belongs to.
@@ -223,6 +238,10 @@ export function importImages({pictures, shapes, relationships, entries, slideInd
     consumedShapes.add(found.index);
     return found.overlay;
   };
+  const restoredSource = (manifest, picture) => {
+    const key = typeof manifest.media === 'string' ? mediaKeyOf(picture) : undefined;
+    return key !== undefined && key === manifest.media && recordableImageSource(manifest.src) === manifest.src ? manifest.src : undefined;
+  };
   const edges = new Set();
   for (const [index, picture] of pictures.entries()) {
     let manifest;
@@ -231,18 +250,24 @@ export function importImages({pictures, shapes, relationships, entries, slideInd
     if (manifest === null) continue;
     const name = picture['p:nvPicPr']?.['p:cNvPr']?.name;
     const role = manifest?.role;
+    // RR-94: a plain block (no treatment) carries a tag only for its source and its crop to stay quiet. Once its bytes are another
+    // picture's (Change Picture), or it was moved or resized, the tag has nothing to give back: it reads as the ordinary picture.
+    const plain = role === 'block' && object(manifest?.treatment) && Object.keys(manifest.treatment).length === 0;
+    if (plain && typeof manifest.media === 'string' && mediaKeyOf(picture) !== manifest.media) continue;
     const path = role === 'background' ? `${slide}.design.background` : slide;
     try {
       if (manifest?.v !== 1 || manifest.slide !== slide || !['block', 'background'].includes(role) || !object(manifest.treatment)) throw Error('Invalid image manifest.');
       if (role === 'block' ? !/^OPF image \d+$/.test(name ?? '') : name !== backgroundImageName(slide)) throw Error('Image identity changed.');
       if (canonical(picture['p:spPr']) !== canonical(manifest.properties) || canonical(blipFillIdentity(picture['p:blipFill'])) !== canonical(normalizeCrop(manifest.blipFill))) throw Error('Image geometry or effects changed.');
     } catch {
+      if (plain) continue;
       invalid(path, `An edited, ambiguous or invalid tagged OPF ${role === 'background' ? 'background picture' : 'image'} was imported as an ordinary picture; its OPF ${role === 'background' ? 'background' : 'treatment and placement'} are not reconstructed.`);
       continue;
     }
     if (role === 'background') {
       const item = readPicture(picture);
-      const src = item?.payload?.image?.src;
+      // RR-94: an unchanged picture (its bytes still hash as exported) gives back the authored relative path or URL.
+      const src = restoredSource(manifest, picture) ?? item?.payload?.image?.src;
       const fields = pick(manifest.treatment, BACKGROUND_IMAGE_KEYS.filter(key => key !== 'overlay'));
       const overlay = takeOverlay(name, `${path}.overlay`);
       const value = {type: 'image', src, ...fields, ...(overlay ? {overlay} : {})};
@@ -259,9 +284,11 @@ export function importImages({pictures, shapes, relationships, entries, slideInd
     if (edge !== undefined && edges.has(edge)) { delete fields.placement; invalid(path, `Two tagged OPF images are placed on the ${edge} edge; the second imports without its placement.`); }
     else if (edge !== undefined) edges.add(edge);
     const item = readPicture(picture);
-    const candidate = {...item?.payload, ...fields};
+    const source = restoredSource(manifest, picture);
+    const candidate = {...item?.payload, ...fields, ...(source !== undefined && object(item?.payload?.image) ? {image: {...item.payload.image, src: source}} : {})};
     if (!item?.payload || !valid('block', candidate)) { invalid(path, 'A tagged OPF image does not form a valid image block; it was imported as an ordinary picture.'); if (edge !== undefined) edges.delete(edge); continue; }
     blocks.set(index, fields);
+    if (source !== undefined && object(item.payload.image)) sources.set(index, source);
   }
   // The overlay of a native slide background fill.
   backgroundOverlay = takeOverlay('background', `${slide}.design.background.overlay`);
@@ -269,7 +296,7 @@ export function importImages({pictures, shapes, relationships, entries, slideInd
   for (const [owner, found] of overlays) if (!found.edited && !consumedShapes.has(found.index) && owner !== 'background') {
     invalid(`${slide}`, 'A tagged OPF image overlay no longer has its picture; it was imported as an ordinary shape.');
   }
-  return {blocks, background, backgroundOverlay, backgroundOverlayShape, consumed, consumedShapes};
+  return {blocks, sources, background, backgroundOverlay, backgroundOverlayShape, consumed, consumedShapes};
 }
 
 // opf-pptx#221: the "Image unavailable" placeholder of an image block whose source could not be embedded (a remote URL is never

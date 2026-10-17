@@ -36,8 +36,8 @@ import {gallery} from '@openpresentation/gallery';
 import {applyTemplateLayouts, deckTemplates, foreignLayoutReference, placeholderRegion, readLayoutTag, slideTemplate, writeTemplateLayouts} from './template-layouts.js';
 import {importImageOrientation} from './image-import.js';
 import {extractSignals, normalizeSignalOptions, themeFactsFor} from './import-signals.js';
-import {placeImages, importImages, importImagePlaceholders, isImagePlaceholderGroup, imageName, imageOverlayName, imagePlaceholderGroupName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS, IMAGE_PLACEHOLDER_TAG} from './image-provenance.js';
-import {dedupeMedia} from './media-dedupe.js';
+import {recordableImageSource, placeImages, importImages, importImagePlaceholders, isImagePlaceholderGroup, imageName, imageOverlayName, imagePlaceholderGroupName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS, IMAGE_PLACEHOLDER_TAG} from './image-provenance.js';
+import {dedupeMedia, mediaKey} from './media-dedupe.js';
 import {placeWatermarks, importWatermark, importTextWatermark, tagTextWatermarks, watermarkName, watermarkTextName, watermarkBox, watermarkOpacity} from './watermark-provenance.js';
 import {placeLogos, importLogo, importLogoPlaceholders, logoName, LOGO_TAG} from './logo-provenance.js';
 import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
@@ -801,6 +801,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
       // The recorded crop, fit and focus are re-derived from the restored background.
       if (diagnostic.code !== 'unsupported-image-crop') options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.design.background`});
     }),
+    mediaKeyOf: picture => { const bytes = entries[relationships.get(picture?.['p:blipFill']?.['a:blip']?.['r:embed'])?.path]; return bytes ? mediaKey(bytes) : undefined; },
     valid: (kind, value) => isValidFormat({slides: [kind === 'background' ? {design: {background: value}} : {blocks: [value]}]}),
     report: diagnostic => options.onDiagnostic?.(diagnostic)});
   const imageBackground = images.background ?? (background?.type === 'image' && images.backgroundOverlay ? {...background, overlay: images.backgroundOverlay} : background);
@@ -811,6 +812,7 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   if (imageBackground) slide.design = {background: imageBackground};
   if (Object.keys(furniture.design).length) slide.design = {...slide.design, ...furniture.design};
   nativeContext.imageBlocks = images.blocks;
+  nativeContext.imageSources = images.sources;
   nativeContext.imagePictures = images.consumed;
   // An overlay of a background that was not recovered stays an ordinary shape.
   nativeContext.imageShapes = images.consumedShapes;
@@ -1040,7 +1042,7 @@ function collectSlideItems(entries, slideRoot, slidePath, relationships, dimensi
     const treatment = nativeContext.imageBlocks?.get(index);
     const report = diagnostic => { if (!(treatment && diagnostic.code === 'unsupported-image-crop')) options.onDiagnostic?.({...diagnostic, path: `slides.${slideIndex}.pictures.${index}`}); };
     const item = importPicture(entries, picture, slidePath, relationships, report);
-    if (item?.payload && treatment) item.payload = {...item.payload, ...structuredClone(treatment)};
+    if (item?.payload && treatment) item.payload = {...item.payload, ...structuredClone(treatment), ...(nativeContext.imageSources?.has(index) ? {image: {...item.payload.image, src: nativeContext.imageSources.get(index)}} : {})};
     else if (item?.nativeStretch) { item.payload.fit='stretch'; item.inferredStretch=true; }
     else if (item?.nativeFitUnsupported) report({code:'unsupported-image-fit',message:'Native picture tiling or an offset stretch fill is not represented by the imported image block; review the reflowed image.'});
     if (item) items.push({...item, sources: [`pic:${index}`]});
@@ -2472,7 +2474,7 @@ async function addImagePayload(slide, presentation, asset, region, path, context
 // One native image picture at `box` (inches), fitted at packaging (src/image-provenance.js placeImages). `treatment` is
 // what OPF_IMAGE_V1 stores (the authored block fields); without it the picture is untagged. Returns the picture's object
 // name, or undefined when the source could not be embedded (the caller draws the unavailable-image panel).
-async function addImagePicture(slide, presentation, asset, box, path, context, options, {fit, focus, effects = null, shrink = true, treatment, alt, role = 'block', objectName} = {}) {
+async function addImagePicture(slide, presentation, asset, box, path, context, options, {fit, focus, effects = null, shrink = true, treatment, alt, role = 'block', objectName, src} = {}) {
   const outcome = { box, cover: fit === 'cover' };
   const resolved = await resolveImage(asset, presentation, options, path, outcome);
   if (!resolved) {
@@ -2490,7 +2492,8 @@ async function addImagePicture(slide, presentation, asset, box, path, context, o
     else context.svgPictures.set(name, outcome.svg);
   }
   const text = alt !== undefined ? alt : assetAlt(asset, presentation);
-  context.images.set(name, { slide: context.slidePath, role, path, box, fit, focus, shrink, effects, ...(treatment !== undefined ? {treatment} : {}) });
+  // RR-94: the authored relative path or URL is recorded with the picture's media key; an SVG imports from its own part, so it is not.
+  context.images.set(name, { slide: context.slidePath, role, path, box, fit, focus, shrink, effects, ...(treatment !== undefined ? {treatment} : {}), ...(src !== undefined && !outcome.svg ? {src} : {}) });
   context.pictureText.set(name, pictureText(text, asset, presentation));
   slide.addImage({ ...resolved, objectName: name, x: box.x, y: box.y, w: box.w, h: box.h, altText: text });
   return name;
@@ -2538,11 +2541,13 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
   const treatment = Object.fromEntries(IMAGE_TREATMENT_KEYS.filter(key => key !== 'overlay' && block[key] !== undefined).map(key => [key, structuredClone(block[key])]));
   const effects = imageEffects(image, context);
   const treated = Boolean(effects.border || effects.opacity !== null || effects.recolor || image.overlay || (effects.shape && effects.shape.preset !== 'rect'));
-  const tagged = Object.keys(treatment).length > 0 || block.overlay !== undefined;
+  // RR-94: every image block is tagged (an empty treatment when it has none), so an unchanged picture re-imports without a crop
+  // diagnostic, and one authored from a relative path or URL records that source to give it back.
+  const source = recordableImageSource(item.value);
   // A plain contained picture in the flow is framed by the picture itself (0.14 content images); a treated or placed one
   // keeps core's frame (0.14 slide images), so its mask, line and overlay apply to that frame.
   const name = await addImagePicture(slide, presentation, item.value, box, item.path, { ...context, slidePath: `slides.${slideIndex}` }, options, {
-    fit: image.fit, focus: image.focus, effects: treated ? effects : null, shrink: !treated && !image.placement, treatment: tagged ? treatment : undefined
+    fit: image.fit, focus: image.focus, effects: treated ? effects : null, shrink: !treated && !image.placement, treatment, src: source
   });
   if (!name) {
     const panel = addImagePlaceholder(slide, presentation, item.value, box, item.path, context, options);
@@ -4166,6 +4171,8 @@ async function normalizePptxZip(raw, context) {
   try {
     placeImages(entries, context.images, context.imageOverlays, {
       metadataFor: (part, id) => imageMetadata.get(parseRelationships(entries, part).get(id)?.path), fitImage,
+      // The key of the bytes the package finally holds: the picture's orientation is normalized when the parts are written.
+      mediaKeyFor: (part, id) => { const target = parseRelationships(entries, part).get(id)?.path, bytes = entries[target]; return bytes ? mediaKey(imageMetadata.get(target) ? normalizeImageOrientation(bytes, imageMetadata.get(target)) : bytes) : undefined; },
       fail: path => { throw new OPFPptxError("unsupported-image-dimensions", "Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. Supply a supported raster image through imageResolver.", { path }); }
     });
   } catch (error) {

@@ -65,7 +65,7 @@ for(const options of [{},fontOptions]){
   // Import restores the status.
   const diagnostics=[],imported=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});
   assert.deepEqual(imported.slides[0].timeline,timeline);
-  assert.ok(diagnostics.some(d=>d.code==='timeline-import-reflow'));
+  assert.ok(!diagnostics.some(d=>d.code==='timeline-import-reflow'),'RR-94: an unedited timeline re-imports quietly');
   // Statuses of the object form and of every state on its own.
   for(const status of ['done','current','planned']){
     const one=[{when:'Now',what:'Only',status}];
