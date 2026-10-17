@@ -1,7 +1,7 @@
 /** Canonical table grid. No renderer, fonts, DOM or network dependencies. */
 export interface TableBorder { color: string; width: number; dash?: 'solid'|'dash'|'dot' }
 export interface TableCellStyle {
-  fill?: string; color?: string;
+  fill?: string; color?: string; bold?: boolean;
   align?: 'left'|'center'|'right'; verticalAlign?: 'top'|'middle'|'bottom';
   padding?: Partial<Record<'top'|'right'|'bottom'|'left',number>>;
   borders?: Partial<Record<'top'|'right'|'bottom'|'left',TableBorder>>;

@@ -54,9 +54,9 @@ test('cover slide design contentAlignment still sets tag and subtitle explicitly
   assert.deepEqual(alignments(composeSlide({...cover, design: {titleAlignment: 'center'}}, {contentAlignment: 'right'})), [['tag', 'center'], ['title', 'center'], ['subtitle', 'center']]);
 });
 
-test('slides with body content keep contentAlignment for tag and subtitle', () => {
+test('slides with body content keep contentAlignment for the subtitle, while the tag follows the title (RR-93a)', () => {
   const composed = composeSlide({...cover, text: 'Body copy'}, {titleAlignment: 'left', contentAlignment: 'center'});
-  assert.deepEqual(alignments(composed), [['tag', 'center'], ['title', 'left'], ['subtitle', 'center'], ['text', 'center']]);
+  assert.deepEqual(alignments(composed), [['tag', 'left'], ['title', 'left'], ['subtitle', 'center'], ['text', 'center']]);
 });
 
 test('cover accepted outline placement follows the shared alignment', () => {
