@@ -423,7 +423,7 @@ const hostPersistence = (() => {
 let persistence;
 if (hostPersistence) {
   const persistenceUi = createPersistenceUi({ banner: element('restore-banner'), indicator: element('autosave-status'), restoreEarlier: () => persistence.restoreEarlier(), suffix: 'Save an OPF file to keep a copy.', fallback: 'Changes stay in this session.\nSave an OPF file to keep your work.' });
-  persistence = createPersistence(editor, { ...hostPersistence, onRestorePrompt: hostPersistence.onRestorePrompt ?? persistenceUi.prompt, onStatus: status => { persistenceUi.status(status); hostPersistence.onStatus?.(status); }, beforeFlush: () => { canvas?.commit(); } });
+  persistence = createPersistence(editor, { ...hostPersistence, onRestorePrompt: hostPersistence.onRestorePrompt ?? persistenceUi.prompt, onStatus: status => { persistenceUi.status(status); hostPersistence.onStatus?.(status); }, beforeFlush: () => canvas?.commit() });
 }
 
 const galleryConfig=await fetch('./galleries.json').then(response=>{if(!response.ok)throw new Error('Gallery configuration unavailable');return response.json();}).catch(()=>[{name:'PPTX.gallery',url:'https://www.pptx.gallery/registry.json'}]);

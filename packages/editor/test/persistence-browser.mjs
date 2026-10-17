@@ -99,6 +99,39 @@ try {
     mark(`axe: ${name}`);
   };
 
+  // A refused real canvas draft must reach the playground host's persistence callback, even
+  // when the canonical document is still the untouched baseline (so dirty alone cannot warn).
+  const refusalContext = await browser.newContext();
+  const { page: refusalPage, errors: refusalErrors } = await open(refusalContext);
+  const baseline = await doc(refusalPage);
+  const titleTarget = refusalPage.locator('#preview [data-canvas-target][data-opf-path="slides.0.title"]');
+  await titleTarget.press('Enter');
+  const refusedInput = refusalPage.getByRole('textbox', { name: 'Edit title inline', exact: true });
+  await refusedInput.fill('Refused\u0000draft');
+  await refusedInput.press('Control+Enter');
+  assert.equal(await refusedInput.inputValue(), 'Refused\u0000draft', 'the actual canvas keeps the refused draft open');
+  assert.deepEqual(await doc(refusalPage), baseline, 'an invalid XML character never changes the canonical document');
+  assert.equal(await unload(refusalPage), true, 'the host forwards commit refusal so an untouched document still warns before unload');
+  await refusalPage.waitForFunction(() => document.querySelector('#autosave-status').dataset.state === 'error');
+  assert.match(await refusalPage.locator('#autosave-status').textContent(), /could not commit the active draft/);
+  assert.equal((await stored(refusalPage)).length, 0, 'a refused draft is not reported or stored as a successful write');
+  assert.equal(await refusedInput.inputValue(), 'Refused\u0000draft', 'the lifecycle flush does not discard the refused draft');
+  await refusedInput.press('Escape');
+  await refusedInput.waitFor({ state: 'detached' });
+  assert.deepEqual(await doc(refusalPage), baseline, 'Escape restores the unchanged baseline');
+  assert.equal(await unload(refusalPage), false, 'a later successful flush clears refusal after cancellation');
+  await titleTarget.press('Enter');
+  await refusedInput.fill('Valid after refusal');
+  await refusedInput.press('Control+Enter');
+  await refusedInput.waitFor({ state: 'detached' });
+  await saved(refusalPage);
+  await storedCurrent(refusalPage);
+  assert.equal((await doc(refusalPage)).slides[0].title, 'Valid after refusal');
+  assert.equal((await stored(refusalPage))[0].record.presentation.slides[0].title, 'Valid after refusal', 'normal valid edits still persist');
+  assert.deepEqual(refusalErrors, [], 'refusal and recovery raise no unhandled browser errors');
+  mark('the real playground forwards canvas commit refusal, warns on clean-baseline unload, and recovers after cancel or valid commit');
+  await refusalContext.close();
+
   // --- autosave and restore across a reload ------------------------------------------------------------------------
   const context = await browser.newContext();
   let { page, errors } = await open(context);
