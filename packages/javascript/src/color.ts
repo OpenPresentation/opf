@@ -307,6 +307,10 @@ function labWithLightness(l: number, a: number, b: number): string {
 /** CIE76 difference of two opaque #RRGGBB colours (0 when either is not opaque). */
 function labDifference(a: Lab, b: Lab): number { return Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]); }
 
+/** Series are placed in tiers of this many: a colour is kept apart from the colours of its own and earlier tiers only (see {@link chartPaletteForFill}). */
+export const CHART_SERIES_TIER_SIZE = 6;
+const tierOf = (index: number): number => Math.floor(index / CHART_SERIES_TIER_SIZE);
+
 /** Cost, in CIE L* points of movement, of each point a placement falls short of the separation from a neighbouring series. */
 const CHART_SERIES_SHORTFALL_WEIGHT = 8;
 
@@ -325,7 +329,10 @@ const CHART_SERIES_SHORTFALL_WEIGHT = 8;
  *   series, which is what keeps neighbours apart on a greyscale print;
  * - the same lightness step from the remaining series, as a weaker aim.
  *
- * Series are placed in order against the kept colours and the colours placed before them. The placement
+ * Series are placed in order against the kept colours and the colours placed before them. The palette is read in tiers of
+ * {@link CHART_SERIES_TIER_SIZE} (series 1 to 6, 7 to 12, ...): a colour is separated from the colours of its own and earlier tiers only,
+ * so the later tiers (the tints of `chartSeriesPalette`) are placed around the first six without ever pulling them towards a lightness
+ * the tints already hold. A palette of six colours or fewer is one tier. The placement
  * with the lowest cost wins: its distance (in L*) from the contrast-adjusted colour plus a penalty for
  * every point it falls short of those separations, so a colour that is already clear of the others is
  * simply the adjusted colour, a near miss is not worth a large change, and a collision is resolved at the
@@ -350,7 +357,7 @@ export function chartPaletteForFill(fill: string, palette: readonly string[]): s
     // The separation every placed series must keep from this one: what the palette itself had, capped at the floor.
     const needs = palette.flatMap((_, other) => {
       const before = preferredLab[other], lab = placedLab[other];
-      return other !== index && before && lab && placed[other] !== undefined
+      return other !== index && tierOf(other) <= tierOf(index) && before && lab && placed[other] !== undefined
         ? [{ lab, adjacent: Math.abs(other - index) === 1, wide: Math.min(labDifference(before, wanted), CHART_SERIES_MIN_DIFFERENCE), step: Math.min(Math.abs(before[0] - wanted[0]), CHART_SERIES_MIN_LIGHTNESS_STEP) }]
         : [];
     });
