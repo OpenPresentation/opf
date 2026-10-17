@@ -25,8 +25,24 @@ export interface ChartValueAxis {
   percent?: true;
 }
 
-/** Chart text size in slide pixels at the 1280 x 720 reference, before the slide scale. The preview and the axis density both use it. */
-export const CHART_TEXT_PX = 14;
+/**
+ * RR-90: the chart text size a roomy chart asks for, in slide pixels at the 1280 x 720 reference (before the slide scale). It was 14,
+ * floored to the 16 px (12 pt) minimum, beside 24 pt bullets; 20 px (15 pt) keeps the 4:5 ratio to the 25 px table body.
+ */
+export const CHART_TEXT_PX = 20;
+
+/**
+ * RR-90: the unscaled chart text size for a chart box: {@link CHART_TEXT_PX}, shrunk only when the box is small (the text is at most
+ * 1/18 of the box height and 1/30 of its width, whole pixels) and never below `minFontSize` (default 16). `width` and `height` are the box in
+ * canvas pixels and `scale` is `min(slide width, slide height) / 720`. The preview and the axis density both call it, so the
+ * axis core computes matches the text the preview draws.
+ */
+export function chartTextSize(geometry: { width: number; height: number; scale: number; minFontSize?: number }): number {
+  const { width, height, scale } = geometry;
+  const minimum = geometry.minFontSize ?? 16;
+  if (![width, height, scale].every(Number.isFinite) || width <= 0 || height <= 0 || scale <= 0) return Math.max(CHART_TEXT_PX, minimum);
+  return Math.max(Math.floor(Math.min(CHART_TEXT_PX, height / scale / 18, width / scale / 30)), minimum);
+}
 
 function clean(value: number): number {
   const rounded = Number(value.toPrecision(12));
@@ -202,7 +218,7 @@ export interface ChartAxisGeometry {
  *   heights tall;
  * - bar: the width left of a category gutter of 30% of the box, minus the padding, over labels `4 x text size` wide.
  *
- * with pad = 10 x scale, text size = max({@link CHART_TEXT_PX}, `minFontSize`) x scale and line height = 1.5 x text size. Rotated or
+ * with pad = 10 x scale, text size = {@link chartTextSize} x scale and line height = 1.5 x text size. Rotated or
  * wrapped category labels, a wider tick label and a legend of several rows make the preview's plot shorter than this estimate; for
  * the usual chart (a plot of ten tick labels or more) all of them give the same ten intervals.
  */
@@ -228,7 +244,7 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const dataMin = extents.length ? Math.min(...extents, ...anchor) : 0;
   const dataMax = extents.length ? Math.max(...extents, ...anchor) : 1;
   const pad = 10 * scale;
-  const fontPx = Math.max(CHART_TEXT_PX, geometry.minFontSize ?? 16) * scale;
+  const fontPx = chartTextSize(geometry) * scale;
   const lineHeight = fontPx * 1.5;
   const options = resolveChartOptions(chart, chartOptionTarget(id));
   const legendBand = options.legend === 'top' || options.legend === 'bottom' ? lineHeight + pad : 0;

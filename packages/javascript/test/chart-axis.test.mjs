@@ -3,7 +3,7 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 
-import { CHART_TEXT_PX, chartValueAxis, composeSlide, maxIntervalsFor, niceScale, resolveChartData, stackCategoryValues } from '../dist/composition.js';
+import { CHART_TEXT_PX, chartTextSize, chartValueAxis, composeSlide, maxIntervalsFor, niceScale, resolveChartData, stackCategoryValues } from '../dist/composition.js';
 import * as root from '../dist/index.js';
 
 const steps = (scale) => scale.ticks.slice(1).map((tick, i) => Math.round((tick - scale.ticks[i]) * 1e9) / 1e9);
@@ -74,11 +74,29 @@ describe('stackCategoryValues', () => {
 	});
 });
 
+describe('chartTextSize', () => {
+	test('20 px for a roomy box, shrunk by a small one, never below minFontSize', () => {
+		assert.equal(chartTextSize({ width: 1000, height: 600, scale: 1 }), 20);
+		assert.equal(chartTextSize({ width: 1000, height: 300, scale: 1 }), 16);
+		assert.equal(chartTextSize({ width: 1000, height: 380, scale: 1 }), 20);
+		assert.equal(chartTextSize({ width: 560, height: 600, scale: 1, minFontSize: 12 }), 18);
+		assert.equal(chartTextSize({ width: 100, height: 100, scale: 1 }), 16);
+		assert.equal(chartTextSize({ width: 2000, height: 1200, scale: 2 }), 20);
+		assert.equal(chartTextSize({ width: 1000, height: 600, scale: 1, minFontSize: 24 }), 24);
+	});
+	test('bad geometry gives the requested size', () => {
+		assert.equal(chartTextSize({ width: 0, height: 600, scale: 1 }), 20);
+		assert.equal(chartTextSize({ width: Number.NaN, height: 600, scale: 1 }), 20);
+	});
+});
+
 describe('chartValueAxis', () => {
 	test('a column chart gets min, max and majorUnit; a bar and a line chart too', () => {
 		const axis = axisOf(chartOf([[120, 480, 760, 310]]));
 		assert.deepEqual(axis, { min: 0, max: 800, majorUnit: 100 });
-		assert.deepEqual(axisOf(chartOf([[120, 480, 760, 310]], 'bar')), axis);
+		// a horizontal bar chart's value axis runs along the width, over wider labels: fewer intervals at 800 px
+		assert.deepEqual(axisOf(chartOf([[120, 480, 760, 310]], 'bar')), { min: 0, max: 800, majorUnit: 200 });
+		assert.deepEqual(axisOf(chartOf([[120, 480, 760, 310]], 'bar'), { width: 1200, height: 450, scale: 1 }), axis);
 		assert.deepEqual(axisOf(chartOf([[120, 480, 760, 310]], 'line')), axis);
 	});
 
@@ -104,7 +122,7 @@ describe('chartValueAxis', () => {
 		assert.equal(axisOf(chart, { width: 800, height: 150, scale: 1 }).majorUnit, 500);
 		assert.equal(axisOf(chart, { width: 800, height: 450, scale: 1, minFontSize: 40 }).majorUnit, 200);
 		assert.equal(axisOf(chart, { width: 1600, height: 900, scale: 2 }).majorUnit, 100);
-		assert.equal(CHART_TEXT_PX, 14);
+		assert.equal(CHART_TEXT_PX, 20);
 	});
 
 	test('a bottom legend and a category axis title take height from the plot', () => {
@@ -163,6 +181,6 @@ describe('composition exposes the axis on the chart item', () => {
 	});
 
 	test('the names live on /composition, not the package root', () => {
-		for (const name of ['niceScale', 'maxIntervalsFor', 'stackCategoryValues', 'chartValueAxis', 'CHART_TEXT_PX']) assert.equal(root[name], undefined, name);
+		for (const name of ['niceScale', 'maxIntervalsFor', 'stackCategoryValues', 'chartValueAxis', 'chartTextSize', 'CHART_TEXT_PX']) assert.equal(root[name], undefined, name);
 	});
 });

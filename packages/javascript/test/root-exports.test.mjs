@@ -28,7 +28,7 @@ const compositionNames = [
   "CODE_HIGHLIGHT_LANGUAGES", "CODE_HIGHLIGHT_MAX_LENGTH", "CODE_PANEL_BACKGROUND", "CODE_PANEL_FOREGROUND", "CODE_SYNTAX_MIN_CONTRAST", "codeLineRuns", "codeSyntaxPalette", "codeSyntaxPaletteForScheme", "resolveCodeLanguage", "tokenizeCode",
   "METRIC_TREND_MIN_CONTRAST", "METRIC_TREND_SHAPES", "metricTrendColor", "metricTrendMark", "metricTrendPoints",
   "PATTERN_PRESETS", "PATTERN_PRESET_ALIASES", "PATTERN_TILE_SIZE", "patternBitmap", "patternRuns", "resolvePatternPreset",
-  "niceScale", "maxIntervalsFor", "stackCategoryValues", "chartValueAxis", "CHART_TEXT_PX", "chartOptionSupport", "chartOptionTarget", "resolveChartOptions", "formatChartLabelNumber", "formatChartLabelPercent", "chartLabelText", "DEFAULT_CHART_LABEL_SEPARATOR",
+  "niceScale", "maxIntervalsFor", "stackCategoryValues", "chartValueAxis", "chartTextSize", "CHART_TEXT_PX", "chartOptionSupport", "chartOptionTarget", "resolveChartOptions", "formatChartLabelNumber", "formatChartLabelPercent", "chartLabelText", "DEFAULT_CHART_LABEL_SEPARATOR",
   "resolveScriptFonts", "resolveSlideDirection", "scriptFontRole", "paragraphDirection", "paragraphDirectionAt", "physicalAlignment",
 ];
 const symbolNames = ["SYMBOL_FONT_ENCODINGS", "SYMBOL_FONT_FAMILIES", "symbolFontEncodingFor", "isSymbolEncodedFamily", "symbolCodeOf", "symbolUnicodeFor", "symbolCodeForUnicode", "mapSymbolText"];
