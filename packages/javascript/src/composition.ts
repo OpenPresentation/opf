@@ -244,7 +244,7 @@ export interface ComposedItem {
   composition: Composition;
   /**
    * Resolved horizontal text alignment for this item: titleAlignment for the
-   * title, contentAlignment for every other item (slide design, deck design or host, theme design,
+   * title and the tag, contentAlignment for every other item (slide design, deck design or host, theme design,
    * layout design, then center for metrics or left for other items). Engines anchor native and preview text to this value.
    */
   alignment: 'left' | 'center' | 'right';
@@ -2223,9 +2223,10 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   if(grid.issues.length) throw new RangeError(`${grid.issues[0]!.path}: ${grid.issues[0]!.message}`);
   // Classify typed values before formatting (a numeric format may display a string). Never coerce authored numeric-looking strings.
   const numeric = new Set(grid.rows.flat().filter(cell => !cell.header && typeof cell.value === 'number' && Number.isFinite(cell.value)));
+  // A rich (TextRun[]) cell carries a number's styling, not its type: it does not make a column of numbers textual.
   const numericColumns = new Set(Array.from({length: grid.columnCount}, (_, column) => column).filter(column => {
     const body = grid.rows.flat().filter(cell => !cell.header && cell.column === column && cell.value !== null && cell.value !== undefined);
-    return body.length > 0 && body.every(cell => cell.colSpan === 1 && numeric.has(cell));
+    return body.some(cell => numeric.has(cell)) && body.every(cell => cell.colSpan === 1 && (numeric.has(cell) || Array.isArray(cell.value)));
   }));
   const formats = resolveTableData(inline).formats;
   for (const row of grid.rows) for (const cell of row) {
@@ -2237,8 +2238,8 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   const cells=grid.rows.flat().map(cell=>{
     const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
     const width=cellWidth*cell.colSpan-(padding.left+padding.right)*scale;
-    const style={fontFamily:options.fontFamily??'sans-serif',fontWeight:cell.header?700:400,italic:false,path:cell.valuePath};
-    const numericDefault = numeric.has(cell) || (cell.header && cell.colSpan === 1 && numericColumns.has(cell.column));
+    const style={fontFamily:options.fontFamily??'sans-serif',fontWeight:cell.header||cell.style.bold?700:400,italic:false,path:cell.valuePath};
+    const numericDefault = numeric.has(cell) || ((cell.header || Array.isArray(cell.value)) && cell.colSpan === 1 && numericColumns.has(cell.column));
     const alignment = cell.style.align ?? options.alignment ?? (numericDefault ? (options.direction === 'rtl' ? 'left' : 'right') : 'left');
     return {...cell,padding,width,textStyle:style,alignment};
   });
@@ -2422,11 +2423,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const rasterPadding=(options.textRasterPadding??1)*scale;
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Text raster padding must be finite and nonnegative.');
   // One alignment resolution for placement, internal payload layouts and consumers.
-  // A cover (no body payload) has no content region, so its tag and subtitle belong to the heading group and
-  // follow titleAlignment; only a slide's own design.contentAlignment keeps them apart. Set once cover detection has run.
+  // The tag (eyebrow) sits over the title, so it follows titleAlignment on every slide (left when none is resolved,
+  // like the title). A cover (no body payload) has no content region, so its subtitle also belongs to the heading group.
+  // Only a slide's own design.contentAlignment keeps them apart. Set once cover detection has run.
   let coverGroup = false;
   const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
-    (field === 'title' || (coverGroup && (field === 'tag' || field === 'subtitle') && hints.sources.contentAlignment !== 'slide')
+    (field === 'title' || ((field === 'tag' || (coverGroup && field === 'subtitle')) && hints.sources.contentAlignment !== 'slide')
       ? hints.titleAlignment : hints.contentAlignment) ?? (field === 'metric' ? 'center' : 'left');
   // The tag (eyebrow) takes the accent family when the font scheme defines one; the quote body does the same in layoutQuote.
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({

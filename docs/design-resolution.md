@@ -246,7 +246,7 @@ An OPF 0.19 layout record (`opf-layout/v2`) describes grid `areas`, relative `co
 
 The effective `design` value of each key comes from the slide, then the deck, then the resolved theme, then the layout record, then the engine default. This includes `titleAlignment`, `contentAlignment`, `contentBox`, `contentDirection`, `chartPrimary`, `imageFit`, `listBullet` and `mirror`. `resolveDesignHints()` reports the supplying level, and `SlideComposition.design` holds the merged result. A layout's grid determines placement; `design.mirror` reverses its tracks, while the slide's own `composition` arranges the first primary flowing region. A top-level image block may still carry its own `placement` band. A layout sits on any slide background; it does not opt into a picture.
 
-On a cover, `tag` and `subtitle` follow `titleAlignment` unless the slide's own `design.contentAlignment` is set, preserving the 2026-10-06 authoring decision.
+The `tag` (eyebrow) follows `titleAlignment` on every slide, and is left-aligned when none resolves, like the title, so a layout that centres its content does not centre the tag over a left-aligned title. On a cover the `subtitle` joins them. Only the slide's own `design.contentAlignment` keeps the tag (and a cover's subtitle) on content alignment, preserving the 2026-10-06 authoring decision.
 
 ### Logos live on the organization (RR-71, OPF 0.18)
 

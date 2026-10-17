@@ -735,12 +735,12 @@
         "titleAlignment": {
           "type": "string",
           "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for the title heading area in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAlignment, then the engine default."
+          "description": "Default horizontal alignment for the title heading area (the title and the tag) in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAlignment, then the engine default."
         },
         "contentAlignment": {
           "type": "string",
           "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.contentAlignment, then the engine default. A cover's tag and subtitle follow titleAlignment unless the slide's own design sets contentAlignment."
+          "description": "Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.contentAlignment, then the engine default. The tag follows titleAlignment (and a cover's subtitle with it) unless the slide's own design sets contentAlignment."
         },
         "contentBox": {
           "type": "boolean",
@@ -3633,6 +3633,10 @@
         "color": {
           "$ref": "#/$defs/ColorRef",
           "description": "Default text color, overridden by individual rich run colors. Accepts a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference."
+        },
+        "bold": {
+          "type": "boolean",
+          "description": "Bold cell text. Runs that set their own bold keep it; a number cell stays bold and still uses the cell's or column's number format."
         },
         "align": {
           "type": "string",

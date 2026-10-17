@@ -205,7 +205,7 @@ _No named properties._
 | `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides: an image or a text stamp, in the fixed frame and at the opacity described on Watermark. Use false to suppress an inherited watermark in slide-level design; a string... |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
 | `footer` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated footer furniture rendered outside the main slide content. Use false to suppress an inherited footer. |
-| `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for the title heading area in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout record's design.titleAl... |
+| `titleAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for the title heading area (the title and the tag) in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.titleAlignment, then the layout... |
 | `contentAlignment` | no | `enum:left \| center \| right` | Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.content... |
 | `contentBox` | no | `boolean` | Whether body/content regions are rendered inside a visible card or surface. Effective value: the slide's design, then the deck's design, then the theme's design.contentBox, then the layout record's design.contentBox,... |
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Effective value: the slide's design, then the deck's design, then the theme's design.contentDirection, then the layout re... |
@@ -1194,6 +1194,7 @@ _No named properties._
 | --- | --- | --- | --- |
 | `fill` | no | `ref:ColorRef` | Cell background: a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. Eight-digit hex colors include alpha; #00000000 is transparent. |
 | `color` | no | `ref:ColorRef` | Default text color, overridden by individual rich run colors. Accepts a hex color, a color-scheme slot or role name, or a 'var:<id>' variable reference. |
+| `bold` | no | `boolean` | Bold cell text. Runs that set their own bold keep it; a number cell stays bold and still uses the cell's or column's number format. |
 | `align` | no | `enum:left \| center \| right` | Horizontal text alignment inside the cell. |
 | `verticalAlign` | no | `enum:top \| middle \| bottom` | Vertical alignment inside the padded cell box. |
 | `padding` | no | `ref:TableCellPadding` |  |
