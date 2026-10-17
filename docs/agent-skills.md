@@ -63,7 +63,7 @@ The [installable CLI](../packages/cli/README.md) complements these skills with `
 - “Use $opf-layout to fix this overflow without losing any text or notes.”
 - “Use $opf-presets to apply our brand colors while preserving slide-specific overrides.”
 - “Use $opf-edit to replace one table and retain all other document fields.”
-- “Use $opf-export to export the same reviewed slides to SVG and editable PPTX.”
+- “Use $opf-export to export the same reviewed slides to SVG and PPTX.” (PPTX text is editable one line at a time; the skill says so.)
 - “Use $opf-inspect to explain which background forms the installed schema accepts.”
 
 ## Maintenance

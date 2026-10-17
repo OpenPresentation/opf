@@ -1,0 +1,49 @@
+{
+  "description": "Quoted opf commands that are meant to fail (check:skill-commands). Each names a command the CLI removed, in a sentence that says what replaced it. An entry may add \"file\" to apply to one file; an entry that matches no failing command is an error.",
+  "allow": [
+    {
+      "command": "opf from-md",
+      "reason": "names a command or option the CLI removed, to say what replaced it"
+    },
+    {
+      "command": "opf to-md",
+      "reason": "names a command or option the CLI removed, to say what replaced it"
+    },
+    {
+      "command": "opf from-yaml",
+      "reason": "names a command or option the CLI removed, to say what replaced it"
+    },
+    {
+      "command": "opf to-yaml",
+      "reason": "names a command or option the CLI removed, to say what replaced it"
+    },
+    {
+      "command": "opf render",
+      "reason": "names a command or option the CLI removed, to say what replaced it"
+    },
+    {
+      "command": "opf export",
+      "reason": "names a command or option the CLI removed, to say what replaced it"
+    },
+    {
+      "command": "opf import",
+      "reason": "names a command or option the CLI removed, to say what replaced it"
+    },
+    {
+      "command": "opf create --from",
+      "reason": "names a command or option the CLI removed, to say what replaced it"
+    },
+    {
+      "command": "opf import-data",
+      "reason": "names a command or option the CLI removed, to say what replaced it"
+    },
+    {
+      "command": "opf import-data --dataset",
+      "reason": "names a command or option the CLI removed, to say what replaced it"
+    },
+    {
+      "command": "opf audit",
+      "reason": "names a command or option the CLI removed, to say what replaced it"
+    }
+  ]
+}

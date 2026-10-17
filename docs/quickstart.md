@@ -184,7 +184,12 @@ selectable, searchable text** in embedded font subsets, with no second layout pa
 pass `{ raster: true }` for the image-per-slide output that renderers up to 0.11.9
 always wrote. Pass the same fonts handle as for PNG; vector PDF never uses system
 fonts.
-`toPptx` is the supported editable PowerPoint export from OPF. Shared
+`toPptx` is the supported PowerPoint export from OPF. **Its text is editable
+line by line, not paragraph by paragraph:** it writes one text box for each
+wrapped line, so text you add or lengthen in PowerPoint or Keynote does not
+reflow into the next line, and a title that wraps is not the Title placeholder.
+For heavy text changes, edit the OPF source and export again. An opt-in native
+body mode is in progress and is not published yet. Shared
 headers and footers are written on the slide master or layout. The retained
 [Windows sample](evidence/rr-20-windows-current-2026-10-14/README.md) covers
 17 selected native cases and four actual UI operations; 41 of 58 cases were

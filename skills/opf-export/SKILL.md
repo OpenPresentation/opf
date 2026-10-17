@@ -8,6 +8,22 @@ license: MIT
 
 Start with a validated OPF document and the output formats the user requested. Preserve OPF as the editable source. Read [rendering and conversion](references/rendering.md) for the concrete local APIs and environment boundaries.
 
+## Know the PPTX limits before you promise "editable"
+
+PPTX text is editable line by line, not paragraph by paragraph. `opf convert deck.opf.json deck.pptx` writes one text box for each wrapped line, so PowerPoint and Keynote break lines where the preview does. Typing in a box works, but added or longer text does not reflow into the next line: it runs past its box or overlaps the line below. A title that wraps is several line boxes, not the Title placeholder (a one-line title does bind to it). State this wherever you offer "editable PPTX". For heavy text changes, edit the OPF source and export again. An opt-in native body mode, with real paragraphs that reflow, is in progress; it is not in the published packages yet, so do not offer it or name an option for it. Fonts are named in the PPTX, not embedded.
+
+<!-- glossary:start -->
+**Words these skills use**
+
+- **Furniture**: the parts that repeat on slides outside the content: header, footer, logo, slide number. You set them once on the deck or a layout, not in `blocks`.
+- **Composition**: the automatic layout step that turns a slide's content into boxes with a position, size and font size. A `composition` key steers it.
+- **Implicit blocks**: content fields written straight on the slide (`text`, `items`, `table`, ...) with no `blocks` list. Composition treats them as blocks, and editing can turn them into an explicit `blocks` list.
+- **Promoted region**: content placed by a 3×3 grid key on the slide (`left`, `top:right`, `center+right`), used when relative position matters. It cannot be mixed with root content.
+- **Catalog record**: one named, reusable design entry (a theme, layout, color scheme, font scheme, ...) from the `@openpresentation/gallery` package or a deck's `catalogs`. A deck refers to it by id.
+- **Reflow**: text wrapping again when its box or size changes. OPF computes line breaks itself; PPTX export writes each wrapped line as its own text box, so text edited in PowerPoint or Keynote does not reflow.
+- **Provenance**: tags that OPF writes into an exported PPTX to record where each shape came from, so a later import can map edits back to the OPF source.
+<!-- glossary:end -->
+
 ## Files: `convert`, from code or the shell
 
 One call turns a file into another, the formats named by the file names. In a Node application or script use core's `@openpresentation/opf` (in a browser or worker the file functions reject with `node-only`); from a shell, `opf convert` runs the same code:

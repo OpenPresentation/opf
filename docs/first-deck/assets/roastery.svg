@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" width="960" height="640">
+  <title>Sun rising over a harbor with a coffee cup</title>
+  <rect width="960" height="640" fill="#F6EBDD"/>
+  <circle cx="480" cy="300" r="170" fill="#F2A541"/>
+  <rect y="300" width="960" height="340" fill="#2F5D62"/>
+  <path d="M0 330 Q120 300 240 330 T480 330 T720 330 T960 330 V360 H0 Z" fill="#3E7C82"/>
+  <path d="M0 400 Q120 370 240 400 T480 400 T720 400 T960 400 V430 H0 Z" fill="#2A5256"/>
+  <path d="M0 470 Q120 440 240 470 T480 470 T720 470 T960 470 V500 H0 Z" fill="#234649"/>
+  <path d="M360 330 h240 v10 H360 Z" fill="#F6EBDD" opacity="0.5"/>
+  <g transform="translate(370 330)">
+    <path d="M0 0 h210 v110 a85 85 0 0 1 -85 85 h-40 a85 85 0 0 1 -85 -85 Z" fill="#8C4A2F"/>
+    <path d="M210 30 h30 a45 45 0 0 1 0 90 h-30 v-20 h30 a25 25 0 0 0 0 -50 h-30 Z" fill="#8C4A2F"/>
+    <rect x="-20" y="195" width="250" height="16" rx="8" fill="#5E2F1C"/>
+    <path d="M60 -20 q-20 -35 0 -70 M105 -20 q-20 -35 0 -70 M150 -20 q-20 -35 0 -70" fill="none" stroke="#F6EBDD" stroke-width="10" stroke-linecap="round" opacity="0.9"/>
+  </g>
+</svg>
