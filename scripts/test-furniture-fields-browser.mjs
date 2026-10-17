@@ -155,10 +155,13 @@ function verifyCaches(rows, document, date, hidden, wrapped = false) {
       assert.ok(!runs.some(run => run.text.includes('Apr 23, 2026') || run.text.includes(' / ')), 'Title override hides fixed footer text too.');
       continue;
     }
-    assert.deepEqual(numbers, [{text: String(index + 1), type: 'slidenum'}]);
+    // A number with words around it (`N / total`) is a live field with fixed runs in older opf-pptx and fixed text in newer ones, which
+    // Keynote shows as written (RR-91); either way the slide shows `N / total` (checked below).
+    const staticNumber = `${index + 1} / ${document.slides.length}`;
+    assert.ok(numbers.length === 0 ? runs.some(run => run.text === staticNumber) : JSON.stringify(numbers) === JSON.stringify([{text: String(index + 1), type: 'slidenum'}]), 'slide number shown once');
     assert.deepEqual(dates, wrapped ? [] : [{text: currentText(date), type: 'datetime4'}]);
     if (wrapped) {
-      const numberIndex = runs.findIndex(run => run.type === 'slidenum');
+      const numberIndex = runs.findIndex(run => run.type === 'slidenum' || run.text === staticNumber);
       assert.deepEqual(runs.slice(numberIndex - 2, numberIndex), [{text: 'September '}, {text: currentText(date).slice(10)}],
         'Static wrapped date lines retain exact words and reading order before the slide number.');
     }

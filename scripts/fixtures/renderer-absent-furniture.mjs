@@ -96,7 +96,11 @@ await group('03','Formatted date and slide-number fields, determinism and curren
  const source=deck({left:{date:'2026-04-23',dateFormat:'MMM d, yyyy'},center:{date:true,dateFormat:'MMMM d, yyyy'},right:{text:'{{slide.number}} / {{deck.slideCount}}'}});
  const exported=await emit('first',source,{date:'2026-09-22'}),{document}=await read('first',exported.bytes);
  assert.deepEqual(exported.issues,[]);assert.deepEqual(document.design.footer,source.design.footer);assert.deepEqual(document.slides[0].design.footer,false);
- const slide=xml(exported.entries);assert.match(slide,/type="datetime4"/);assert.match(slide,/type="slidenum"/);assert.ok(slide.includes('Apr 23, 2026')&&slide.includes('September 22, 2026')&&slide.includes(' / 3'));
+ const slide=xml(exported.entries);assert.match(slide,/type="datetime4"/);assert.ok(slide.includes('Apr 23, 2026')&&slide.includes('September 22, 2026'));
+ // A number with words around it is a live field with fixed runs in older opf-pptx and fixed text in newer ones (Keynote drops the words
+ // next to a live field); either way the slide shows the number and ' / 3'. A text that is only the number stays a live slidenum field.
+ assert.ok(slide.includes(' / 3')&&/<a:t>(?:2| \/ 3|2 \/ 3)<\/a:t>/.test(slide),'N / total text');
+ const bare=await emit('bare-number',deck({right:{text:'{{slide.number}}'}}),{date:'2026-09-22'});assert.match(xml(bare.entries),/type="slidenum"/);
  const repeated=await emit('repeat',source,{date:'2026-09-22'});assert.deepEqual(repeated.bytes,exported.bytes);
  const next=await emit('next-host',document,{date:'2027-04-23'});assert.ok(xml(next.entries).includes('April 23, 2027'));assert.ok(!xml(next.entries).includes('September 22, 2026'));
  assert.deepEqual((await read('next-host',next.bytes)).document.design.footer,source.design.footer);
