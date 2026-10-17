@@ -734,7 +734,7 @@ Default severity: **info**. Cost: structure. Chart series may be indistinguishab
 
 **Thresholds.** `minSeriesColorDifference` (default 10)
 
-**Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default the opf-render/opf-pptx palette, adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Single-series charts and chart types without a series legend are skipped.
+**Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide colour scheme (accent1 to accent6, then their tints), adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Single-series charts and chart types without a series legend are skipped.
 
 ### `opf/chart-text-alternative`
 

@@ -52,7 +52,8 @@ export interface ValidationContext {
 	slides: RuleSlide[];
 	thresholds: ValidationThresholds;
 	options: ValidateOptions;
-	chartPalette: readonly string[];
+	/** The host's series palette (`ValidateOptions.chartPalette`); absent means the deck's own, `chartSeriesPalette` of each slide's colour scheme. */
+	chartPalette: readonly string[] | undefined;
 	report(rule: ValidationRuleInfo, finding: FindingInput): Finding;
 }
 

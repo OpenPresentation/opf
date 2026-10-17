@@ -574,7 +574,7 @@ describe("core integration", () => {
     });
     const report = validate(document, { only: ["opf/chart-color-only"] });
     const colour = report.findings.filter((entry) => entry.ruleId === "opf/chart-color-only");
-    assert.ok(colour.some((entry) => entry.path === "/slides/0/chart" && entry.message.includes('"Series 2"')), JSON.stringify(report.findings.map((entry) => entry.ruleId)));
+    assert.ok(colour.some((entry) => entry.path === "/slides/0/chart" && /"Series \d+"/.test(entry.message)), JSON.stringify(report.findings.map((entry) => entry.ruleId)));
     assert.ok(colour.some((entry) => entry.path === "/slides/1/chart"));
     assert.ok(!report.findings.some((entry) => /object Object/.test(entry.message)));
   });

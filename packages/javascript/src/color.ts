@@ -1,3 +1,5 @@
+import { ENGINE_DEFAULT_COLOR_SCHEME } from './engine-vocabularies.js';
+
 const schemeColorSlots = new Set([
   'accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6',
   'dark1', 'dark2', 'light1', 'light2', 'hyperlink', 'followedHyperlink',
@@ -376,6 +378,33 @@ export function chartPaletteForFill(fill: string, palette: readonly string[]): s
     placedLab[index] = best.lab;
   });
   return placed as string[];
+}
+
+// --------------------------------------------------------------- chart series palette (RR-89)
+
+/** Share of white mixed into each accent to make the extended tints of {@link chartSeriesPalette} (series 7 to 12). */
+export const CHART_SERIES_TINT_MIX = 0.4;
+
+/**
+ * The series colours of a chart before the per-surface adjustment: twelve opaque #RRGGBB colours in series order, taken from the deck's
+ * resolved colour scheme (`design.colorScheme` after the theme, the record and any inline overrides are applied).
+ *
+ * - 1 to 6: `accent1` to `accent6`. A slot the scheme leaves out takes the engine default scheme's slot.
+ * - 7 to 12: the same six accents mixed {@link CHART_SERIES_TINT_MIX} of the way towards white, in the same order (a tint of `accent1`
+ *   is series 7), for charts with more than six series.
+ *
+ * Pass the result to {@link chartPaletteForFill} with the chart panel colour for the colours a chart draws and writes: contrast against
+ * the panel without letting two series merge. Series `i` takes colour `i`; a pie, doughnut, treemap or funnel takes colour `i` for
+ * category `i`. The colours depend on the scheme only, so the preview, the PPTX export and the colour-blind rule draw the same ones.
+ * The role overrides (`primary`, `secondary`, `accent`) do not change the list: series 1 to 3 are always `accent1` to `accent3`, the
+ * theme slots the PPTX export writes as `schemeClr accentN`.
+ */
+export function chartSeriesPalette(colorScheme: Record<string, unknown> = {}): string[] {
+  const accents = [1, 2, 3, 4, 5, 6].map(number => {
+    const slot = `accent${number}`;
+    return normalizeHexColor(colorScheme?.[slot]) ?? normalizeHexColor(ENGINE_DEFAULT_COLOR_SCHEME[slot]) ?? '#000000';
+  });
+  return [...accents, ...accents.map(accent => mixChannels(opaqueChannels(accent)!, [255, 255, 255], CHART_SERIES_TINT_MIX))];
 }
 
 // --------------------------------------------------------------- chart highlight (FA-14)

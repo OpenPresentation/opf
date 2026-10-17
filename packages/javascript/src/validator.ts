@@ -32,9 +32,7 @@ import {
 	type ValidationRuleInfo,
 	type ValidationThresholds,
 } from './validation-types.js';
-import { DEFAULT_CHART_PALETTE } from './rule-design.js';
 
-export { DEFAULT_CHART_PALETTE } from './rule-design.js';
 export { DEFAULT_VALIDATION_THRESHOLDS, findValidationRule, validationRules } from './validation-rules.js';
 export { validationCategories } from './validation-types.js';
 export type {
@@ -100,7 +98,7 @@ interface Resolved {
 	severity(info: ValidationRuleInfo): FindingSeverity | undefined;
 	ignored(info: ValidationRuleInfo, path: string[]): boolean;
 	thresholds: ValidationThresholds;
-	chartPalette: readonly string[];
+	chartPalette: readonly string[] | undefined;
 }
 
 function ruleFor(name: string, what: string): ValidationRuleInfo | ValidationCategory {
@@ -180,7 +178,7 @@ function resolveOptions(options: ValidateOptions): Resolved {
 		},
 		ignored: (info, path) => ignorePaths.some((entry) => entry.match(info) && entry.path.every((part, index) => path[index] === part)),
 		thresholds,
-		chartPalette: options.chartPalette ?? DEFAULT_CHART_PALETTE,
+		chartPalette: options.chartPalette,
 	};
 }
 
