@@ -1066,7 +1066,10 @@ if (FULL) {
     entries[workbook] = zipSync(nested);
   })).has('foreign-typeface'), 'a leaked chart workbook font is caught');
   assert.ok(reasons(audit((entries) => edited(entries, 'docProps/app.xml', /<vt:lpstr>Calibri<\/vt:lpstr>/, '<vt:lpstr>Arial</vt:lpstr>'))).has('foreign-fonts-used'), 'a stale Fonts Used entry is caught');
-  assert.ok(audit((entries) => edited(entries, 'ppt/slides/slide1.xml', /<p:sld\b/, '<p:sld <')).problems.some((problem) => /not well formed/.test(problem)), 'malformed XML is caught');
+  // Deliberately malformed XML must reach the grammar oracle before a strict font reader can reject it.
+  const malformed = {...original};
+  edited(malformed, 'ppt/slides/slide1.xml', /<p:sld\b/, '<p:sld <');
+  assert.ok(packageProblems(malformed).some((problem) => /not well formed/.test(problem)), 'malformed XML is caught');
   assert.ok(audit((entries) => delete entries['ppt/slides/slide2.xml']).problems.some((problem) => /missing part|without part/.test(problem)), 'a dangling relationship is caught');
   assert.ok(audit((entries) => {
     const nested = unzipSync(entries[workbook]);
