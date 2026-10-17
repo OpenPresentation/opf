@@ -35,16 +35,16 @@ const pptxCalls = async (site) => parseStubLog(await readFile(path.join(site.dir
 const fresh = (site) => writeFile(path.join(site.dir, STUB_LOG), "");
 
 describe("opf convert --body-text and --slide-numbers", () => {
-  test("they reach toPptx as bodyText and slideNumberWithText", async () => {
+  test("they reach toPptx as bodyText and slideNumberFields", async () => {
     await fresh(sites.new);
     run(sites.new, ["convert", "deck.opf.json", "native.pptx", "--body-text", "native", "--slide-numbers", "static"]);
     const [first] = await pptxCalls(sites.new);
     assert.equal(first.args[0].bodyText, "native");
-    assert.equal(first.args[0].slideNumberWithText, "static");
+    assert.equal(first.args[0].slideNumberFields, "static");
     await fresh(sites.new);
     run(sites.new, ["convert", "deck.opf.json", "live.pptx", "--slide-numbers", "live", "--force"]);
     const [second] = await pptxCalls(sites.new);
-    assert.equal(second.args[0].slideNumberWithText, "field");
+    assert.equal(second.args[0].slideNumberFields, "live");
     assert.equal("bodyText" in second.args[0], false);
   });
 
@@ -52,7 +52,7 @@ describe("opf convert --body-text and --slide-numbers", () => {
     await fresh(sites.new);
     run(sites.new, ["convert", "deck.opf.json", "plain.pptx"]);
     const [call] = await pptxCalls(sites.new);
-    assert.equal("bodyText" in call.args[0] || "slideNumberWithText" in call.args[0], false);
+    assert.equal("bodyText" in call.args[0] || "slideNumberFields" in call.args[0], false);
   });
 
   test("other values are usage errors (exit 2)", () => {

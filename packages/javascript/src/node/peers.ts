@@ -14,7 +14,7 @@ export const PPTX_PACKAGE = "@openpresentation/opf-pptx";
 /** Peer ranges. The CLI checks the features it calls rather than the version, so a newer release in range keeps working. */
 export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.22.0", [PPTX_PACKAGE]: "^0.22.0" } as const;
 
-/** The first opf-pptx that reads `bodyText` and `slideNumberWithText` (placeholder until the release is cut). An older one would ignore them silently. */
+/** The first opf-pptx that reads `bodyText` and `slideNumberFields` (placeholder until the release is cut). An older one would ignore them silently. */
 export const PPTX_TEXT_OPTIONS_FROM = "0.21.0";
 
 const numbers = (version: string) => version.replace(/[-+].*$/, "").split(".").map((part) => Number.parseInt(part, 10) || 0);

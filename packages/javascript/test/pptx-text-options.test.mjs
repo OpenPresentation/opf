@@ -1,4 +1,4 @@
-// RR-88 / RR-91: `bodyText` and `slideNumbers` of the pptx export reach opf-pptx's toPptx as `bodyText` and `slideNumberWithText`,
+// RR-88 / RR-91: `bodyText` and `slideNumbers` of the pptx export reach opf-pptx's toPptx as `bodyText` and `slideNumberFields`,
 // apply to pptx output only, and are refused (not ignored) by an opf-pptx that predates them.
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
@@ -25,16 +25,16 @@ describe("pptx text options", () => {
     await exportWith({ bodyText: "native", slideNumbers: "static" }, peer);
     assert.equal(calls.length, 1);
     assert.equal(calls[0].bodyText, "native");
-    assert.equal(calls[0].slideNumberWithText, "static");
+    assert.equal(calls[0].slideNumberFields, "static");
     await exportWith({ slideNumbers: "live" }, peer);
-    assert.equal(calls[1].slideNumberWithText, "field");
+    assert.equal(calls[1].slideNumberFields, "live");
     assert.equal("bodyText" in calls[1], false);
   });
 
   test("without the options toPptx is called as before", async () => {
     const { peer, calls } = spy("0.21.0");
     await exportWith({}, peer);
-    assert.equal("bodyText" in calls[0] || "slideNumberWithText" in calls[0], false);
+    assert.equal("bodyText" in calls[0] || "slideNumberFields" in calls[0], false);
   });
 
   test("other values are invalid, and the options apply to pptx only", () => {

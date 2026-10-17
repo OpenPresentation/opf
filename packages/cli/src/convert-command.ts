@@ -61,9 +61,10 @@ Flags, each only where its format is involved (otherwise exit 2):
                                                   preview draws it. native: opt in to whole paragraphs, a wrapped title as the
                                                   Title placeholder and a text or list as one body, so PowerPoint and Keynote
                                                   re-wrap edited text; what it cannot carry stays measured (native-body-fallback)
-                   --slide-numbers <static|live>  a footer like "{{slide.number}} / {{deck.slideCount}}": static writes the
-                                                  number as fixed text (Keynote shows the words too), live keeps the slide-number
-                                                  field (Keynote then shows only the digit); omitted: opf-pptx's default
+                   --slide-numbers <static|live>  a footer like "{{slide.number}} / {{deck.slideCount}}": static (the default)
+                                                  writes the number as fixed text, so Keynote shows the words too; live keeps the
+                                                  slide-number field, which Keynote shows as the digit alone. A bare
+                                                  {{slide.number}} stays a live field either way
   png, raster pdf  --scale <0.1-8>                1 draws the 1280 x 720 reference slide at 1280 x 720 pixels
   pdf              --raster                       each page a picture instead of selectable vector text
   svg              --text <fonts|system|paths>    embed the faces the slide uses (fonts), none (system), or draw outlines (paths)

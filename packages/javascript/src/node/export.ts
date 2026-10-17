@@ -65,9 +65,9 @@ export interface ExportOptions {
 	 */
 	bodyText?: "measured" | "native";
 	/**
-	 * `pptx`: a footer or header text with words around the slide number (`{{slide.number}} / {{deck.slideCount}}`). `static` writes the
-	 * number as fixed text, so Keynote shows the words too; `live` keeps the slide-number field (Keynote then shows only the digit).
-	 * Omitted: opf-pptx's default.
+	 * `pptx`: a footer or header text with words around the slide number (`{{slide.number}} / {{deck.slideCount}}`). `static` (opf-pptx's
+	 * default) writes the number as fixed text, so Keynote shows the words too; `live` keeps the slide-number field, which Keynote
+	 * draws as the digit alone. A text that is only `{{slide.number}}` stays a live field in both.
 	 */
 	slideNumbers?: "static" | "live";
 	/** `YYYY-MM-DD`, for date fields that show today's date. Nothing reads a clock: without it such a field reports `date-needs-value`. */
@@ -324,8 +324,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 				...(options.provenance ? { provenance: options.provenance === "none" ? false : options.provenance } : {}),
 				...(options.images ? { imageFormat: options.images } : {}),
 				...(options.bodyText ? { bodyText: options.bodyText } : {}),
-				// opf-pptx names the slide-number choice `slideNumberWithText` ('field' keeps the live field).
-				...(options.slideNumbers ? { slideNumberWithText: options.slideNumbers === "live" ? "field" : "static" } : {}),
+				...(options.slideNumbers ? { slideNumberFields: options.slideNumbers } : {}),
 				...(date ? { date } : {}),
 			});
 			return run({ files: [{ name: `${stem}.pptx`, type: MEDIA.pptx, bytes }], skippedHidden: [] });
