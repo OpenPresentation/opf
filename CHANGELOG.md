@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.20.5 (2026-10-17)
+
+- Check the font-switch matrix's deliberately malformed XML directly with the independent package grammar oracle, before a strict PPTX reader can reject the input. Valid-package and font-leak controls remain unchanged.
+- RR-87: record the source-verified renderer 0.20.3 lazy-font count of 94 in ecosystem tooling, retaining exact-count and unknown-version refusals. No runtime package change.
+
 ## 0.20.4 (2026-10-16)
 
 - Record the verified Core 0.20.3, renderer 0.20.2, PPTX/editor 0.20.3, CLI 0.20.0 and Gallery 3 package set, update current installation guidance and the normal matrix-consumer mirror, and retain bounded RR85/RR86 progress and native limits.
