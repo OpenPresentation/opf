@@ -1,5 +1,11 @@
 # Program: release readiness (RR)
 
+## RR-87 checkpoint — 2026-10-17 (closeout preparation)
+
+RR-87 remains **in progress** until the supervisor accepts the actual final source and three-site production closures. Core 0.20.5, renderer/PPTX/editor 0.20.4 and CLI 0.20.1 are genuinely published and independently verified; Gallery 3.0.0 is unchanged. The complete five-package registry consumer and both shared site producers passed. Main and Gallery have accepted local compiled qualification; source CI, actual merges, final production artifacts, live acceptance and the final census/synchronization are still pending in this draft. [Dated artifact and readiness evidence](../../evidence-rr-87-final-published-set-2026-10-17.md).
+
+The reconciled review has 78 planned static areas; three cross-site checklists, five documentation tasks and three later user features bring the campaign to 89 entries. Authored full reads, generated/vendor checks and sampled history remain distinct. The original 107 dispositions include aliases, observations, withdrawals and follow-ups, not 107 bugs. Private-site findings stay in the supervisor's private ledger. RR-86 and the broader release-readiness program remain open; native holds, per-font limits and all earlier criteria are unchanged. Earlier checkpoints below retain their original dates and claims.
+
 ## Latest scoped status — 2026-10-16 14:54 UTC
 
 The verified C3/R2/P3/E3/CLI0/G3 set, canonical consumer and all three final site production/source closures are accepted. [Core #694](https://github.com/OpenPresentation/opf/pull/694) and [official lock #695](https://github.com/OpenPresentation/opf/pull/695) actually merged with exact combined-source proof. RR-85 is done against its unchanged metric criterion; the broader program remains active. RR-86 stays in progress: draft [PPTX #277](https://github.com/OpenPresentation/opf-pptx/pull/277) at cf29 does not inherit frozen 1a84 qualification; current P3 refuses native17, Mac remains locked at the dated 14:40 check and Windows is held. [Exact identities and boundaries](../../evidence/rr-85-final-adoption-2026-10-16/README.md). Earlier checkpoints remain dated history.
