@@ -11,19 +11,20 @@ shipped versus deferred.
 
 ## Versions
 
-**Verified package set (2026-10-16):** core **0.20.3**, CLI **0.20.0**,
-renderer **0.20.2**, PPTX **0.20.3**, editor **0.20.3** and Gallery **3.0.0**.
-[Artifact verification](evidence/rr-85-final-published-set-2026-10-16/README.md) records
-the releases selected in `release-plan.json`. All declare
+**Verified artifacts (2026-10-17):** core **0.20.5**, CLI **0.20.1**,
+renderer **0.20.4**, PPTX **0.20.4**, editor **0.20.4** and Gallery **3.0.0**.
+[Artifact identities and verification](https://github.com/OpenPresentation/opf/blob/main/docs/evidence-rr-87-final-published-set-2026-10-17.md) records
+the releases selected in `release-plan.json`; artifact verification is separate
+from the consumer and native checks below. All declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 
 ```sh
 node -v   # 24.x (verified); 22 and later are declared
-npm install @openpresentation/opf@0.20.3 \
-  @openpresentation/opf-render@0.20.2 \
-  @openpresentation/opf-editor@0.20.3 \
-  @openpresentation/opf-pptx@0.20.3 \
-  @openpresentation/cli@0.20.0 \
+npm install @openpresentation/opf@0.20.5 \
+  @openpresentation/opf-render@0.20.4 \
+  @openpresentation/opf-editor@0.20.4 \
+  @openpresentation/opf-pptx@0.20.4 \
+  @openpresentation/cli@0.20.1 \
   @openpresentation/gallery@3.0.0
 # opf-render 0.20 keeps its converters and font packages as optional peers: install the ones you use
 # (here the base font pack, PNG and PDF; add @expo-google-fonts/* office or script packs as needed)
