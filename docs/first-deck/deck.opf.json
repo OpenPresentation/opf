@@ -1,0 +1,421 @@
+{
+  "name": "Harbor Light Coffee: Q4 update",
+  "description": "A six-slide first deck: bullets, a metric, a chart, a styled table and a local image. All numbers are made-up sample data for a fictional company.",
+  "language": "en-US",
+  "design": {
+    "theme": "classic",
+    "fontScheme": "roboto",
+    "footer": {
+      "left": {
+        "text": "Harbor Light Coffee · sample data"
+      },
+      "right": {
+        "text": "{{slide.number}} / {{deck.slideCount}}"
+      }
+    }
+  },
+  "slides": [
+    {
+      "id": "cover",
+      "tag": "Q4 update",
+      "title": "Harbor Light Coffee had its best quarter",
+      "subtitle": "Sample data for a fictional company"
+    },
+    {
+      "id": "highlights",
+      "title": "Three things drove the quarter",
+      "bullets": [
+        "Wholesale orders grew in every region",
+        "The new subscription box launched in October",
+        "Roasting costs fell after the equipment upgrade"
+      ]
+    },
+    {
+      "id": "retention",
+      "title": "Most customers stayed",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          1,
+          1
+        ]
+      },
+      "blocks": [
+        {
+          "metric": {
+            "value": 94,
+            "unit": "%",
+            "label": "Customer retention in Q4",
+            "trend": "up",
+            "sentiment": "positive"
+          }
+        },
+        {
+          "bullets": [
+            "Churn fell from 9% to 6%",
+            "Subscription customers renewed most often"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "revenue",
+      "title": "Revenue rose every quarter",
+      "chart": {
+        "type": "column",
+        "alt": "Revenue rose from $9.2M in Q1 to $14.8M in Q4.",
+        "axisTitles": {
+          "value": "Revenue ($M)"
+        },
+        "highlight": {
+          "categories": [
+            "Q4"
+          ]
+        },
+        "data": {
+          "columns": [
+            "Quarter",
+            {
+              "name": "Revenue",
+              "format": "$#,##0.0"
+            }
+          ],
+          "rows": [
+            [
+              "Q1",
+              9.2
+            ],
+            [
+              "Q2",
+              10.9
+            ],
+            [
+              "Q3",
+              12.4
+            ],
+            [
+              "Q4",
+              14.8
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "id": "regions",
+      "title": "North America leads growth",
+      "table": {
+        "columns": [
+          {
+            "value": [
+              {
+                "text": "Region",
+                "bold": true,
+                "fontSize": 20
+              }
+            ],
+            "style": {
+              "padding": {
+                "top": 12,
+                "right": 16,
+                "bottom": 12,
+                "left": 16
+              }
+            }
+          },
+          {
+            "value": [
+              {
+                "text": "Q4 revenue",
+                "bold": true,
+                "fontSize": 20
+              }
+            ],
+            "style": {
+              "align": "right",
+              "padding": {
+                "top": 12,
+                "right": 16,
+                "bottom": 12,
+                "left": 16
+              }
+            }
+          },
+          {
+            "value": [
+              {
+                "text": "Growth",
+                "bold": true,
+                "fontSize": 20
+              }
+            ],
+            "style": {
+              "align": "right",
+              "padding": {
+                "top": 12,
+                "right": 16,
+                "bottom": 12,
+                "left": 16
+              }
+            }
+          }
+        ],
+        "rows": [
+          [
+            {
+              "value": [
+                {
+                  "text": "North America",
+                  "fontSize": 20
+                }
+              ],
+              "style": {
+                "padding": {
+                  "top": 12,
+                  "right": 16,
+                  "bottom": 12,
+                  "left": 16
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "$8.1M",
+                  "fontSize": 20
+                }
+              ],
+              "style": {
+                "align": "right",
+                "padding": {
+                  "top": 12,
+                  "right": 16,
+                  "bottom": 12,
+                  "left": 16
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "+46%",
+                  "bold": true,
+                  "fontSize": 20,
+                  "color": "accent2"
+                }
+              ],
+              "style": {
+                "align": "right",
+                "padding": {
+                  "top": 12,
+                  "right": 16,
+                  "bottom": 12,
+                  "left": 16
+                }
+              }
+            }
+          ],
+          [
+            {
+              "value": [
+                {
+                  "text": "Europe",
+                  "fontSize": 20
+                }
+              ],
+              "style": {
+                "padding": {
+                  "top": 12,
+                  "right": 16,
+                  "bottom": 12,
+                  "left": 16
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "$4.6M",
+                  "fontSize": 20
+                }
+              ],
+              "style": {
+                "align": "right",
+                "padding": {
+                  "top": 12,
+                  "right": 16,
+                  "bottom": 12,
+                  "left": 16
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "+40%",
+                  "fontSize": 20
+                }
+              ],
+              "style": {
+                "align": "right",
+                "padding": {
+                  "top": 12,
+                  "right": 16,
+                  "bottom": 12,
+                  "left": 16
+                }
+              }
+            }
+          ],
+          [
+            {
+              "value": [
+                {
+                  "text": "Asia-Pacific",
+                  "fontSize": 20
+                }
+              ],
+              "style": {
+                "padding": {
+                  "top": 12,
+                  "right": 16,
+                  "bottom": 12,
+                  "left": 16
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "$2.1M",
+                  "fontSize": 20
+                }
+              ],
+              "style": {
+                "padding": {
+                  "top": 12,
+                  "right": 16,
+                  "bottom": 12,
+                  "left": 16
+                },
+                "align": "right"
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "+31%",
+                  "fontSize": 20
+                }
+              ],
+              "style": {
+                "align": "right",
+                "padding": {
+                  "top": 12,
+                  "right": 16,
+                  "bottom": 12,
+                  "left": 16
+                }
+              }
+            }
+          ]
+        ],
+        "alt": "North America grew 46% to $8.1M in Q4, ahead of Europe at 40% and Asia-Pacific at 31%."
+      }
+    },
+    {
+      "id": "next",
+      "title": "Next quarter: open the second roastery",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          1,
+          1
+        ]
+      },
+      "blocks": [
+        {
+          "image": {
+            "src": "assets/roastery.svg",
+            "alt": "A sun rising over a harbor above a coffee cup."
+          }
+        },
+        {
+          "bullets": [
+            "Sign the lease by January",
+            "Hire two roasters",
+            "Ship the first batch in March"
+          ]
+        }
+      ]
+    }
+  ],
+  "catalogs": {
+    "default": {
+      "source": "https://www.pptx.gallery",
+      "themes": {
+        "classic": {
+          "name": "Classic",
+          "background": {
+            "type": "theme",
+            "slot": "light1"
+          },
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen"
+        }
+      },
+      "fontSchemes": {
+        "roboto": {
+          "name": "Roboto",
+          "app": "google-slides",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Roboto",
+          "minor": "Roboto",
+          "textSample": "Perfect for tech",
+          "type": "sans-serif",
+          "description": "Roboto is a sans serif OPF font scheme for Latin presentations, using Roboto for both headings and body text."
+        },
+        "tenorite": {
+          "name": "Tenorite",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
+          "type": "sans-serif",
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
+        }
+      },
+      "colorSchemes": {
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "dark1": "#000000",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
+          "light1": "#FFFFFF",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
+          "tags": [
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
+          ]
+        }
+      }
+    }
+  }
+}

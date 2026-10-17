@@ -45,6 +45,58 @@ if (!report.valid) throw new Error(JSON.stringify(report.findings.filter((findin
 console.log(report.findings); // warnings and info: unresolved references, alt text, contrast, overflow
 ```
 
+## Tables you can read from the back of the room
+
+A table's default text is small (about 12 pt, next to 24 pt bullets). To make it readable at presentation size, write each text cell as runs with `fontSize` (points; 18–20 reads well), and wrap a cell in `{"value", "style"}` when it needs alignment, padding or a border. `padding` is an object of `top`, `right`, `bottom`, `left` in reference pixels (0–200), never a number: `"padding": 8` is a schema error that prints many lines. Header cells go in `columns` in the same styled form.
+
+```json
+{
+  "slides": [
+    {
+      "title": "North America leads growth",
+      "table": {
+        "columns": [
+          {"value": [{"text": "Region", "bold": true, "fontSize": 20}], "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+          {"value": [{"text": "Q4 revenue", "bold": true, "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+          {"value": [{"text": "Growth", "bold": true, "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
+        ],
+        "rows": [
+          [
+            {"value": [{"text": "North America", "fontSize": 20}], "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": [{"text": "$18.1M", "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": [{"text": "+46%", "bold": true, "fontSize": 20, "color": "accent2"}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
+          ],
+          [
+            {"value": [{"text": "EMEA", "fontSize": 20}], "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": [{"text": "$11.5M", "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": [{"text": "+40%", "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
+          ]
+        ],
+        "alt": "North America grew 46% to $18.1M in Q4, ahead of EMEA at 40%."
+      }
+    }
+  ]
+}
+```
+
+A cell written as runs is text: it keeps no `format` and is not right-aligned unless its `style.align` says so, so type the number as you want it shown (`"$18.1M"`). Keep a number a number when the same data feeds a chart or other tables, or the table is dense and reference-only: give the column a `format` and write plain numbers. Those cells use the default size.
+
+```json
+{
+  "slides": [
+    {
+      "title": "A numeric column keeps its number",
+      "table": {
+        "columns": ["Region", { "name": "Q4 revenue ($M)", "format": "$#,##0.0" }, { "name": "Growth", "format": "0%" }],
+        "rows": [["North America", 18.1, 0.46], ["EMEA", 11.5, 0.4]]
+      }
+    }
+  ]
+}
+```
+
+A `%` format multiplies by 100, so store `0.46` for 46%. The run `color` here is `accent2` from the deck's color scheme; prefer scheme names to hex so the table survives a theme change.
+
 ## Citations, footnotes and captions
 
 Colour the one word that carries a headline, or cite a headline claim or a quote: `title`, `subtitle`, `tag` and `quote.text` accept `TextRun[]` like body text (`"title": ["Revenue grew ", {"text": "28%", "color": "accent1"}]`; `"quote": {"text": ["Cut review time by ", {"text": "40%", "bold": true, "cite": "case-study"}]}`). A string stays the plain form; the heading keeps its size and shrink rules, and a run's `cite`/`footnote` follows the rules below. Headings read first, so their markers take the lowest numbers of the slide.

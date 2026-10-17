@@ -22,6 +22,18 @@ node skills/opf-inspect/scripts/opf-inspect.mjs validate custom-layout.json layo
 
 `schema` accepts a schema name and optional JSON Pointer **into the schema**, not a document field path. `find-schema` searches names, schema paths, and descriptions across definitions and union branches. Catalog search returns up to 50 concise matches plus the total count; `record` retrieves one exact ID. Validation exits 1 on invalid data and 2 on usage/runtime failures; valid data with warnings exits 0.
 
+<!-- glossary:start -->
+**Words these skills use**
+
+- **Furniture**: the parts that repeat on slides outside the content: header, footer, logo, slide number. You set them once on the deck or a layout, not in `blocks`.
+- **Composition**: the automatic layout step that turns a slide's content into boxes with a position, size and font size. A `composition` key steers it.
+- **Implicit blocks**: content fields written straight on the slide (`text`, `items`, `table`, ...) with no `blocks` list. Composition treats them as blocks, and editing can turn them into an explicit `blocks` list.
+- **Promoted region**: content placed by a 3×3 grid key on the slide (`left`, `top:right`, `center+right`), used when relative position matters. It cannot be mixed with root content.
+- **Catalog record**: one named, reusable design entry (a theme, layout, color scheme, font scheme, ...) from the `@openpresentation/gallery` package or a deck's `catalogs`. A deck refers to it by id.
+- **Reflow**: text wrapping again when its box or size changes. OPF computes line breaks itself; PPTX export writes each wrapped line as its own text box, so text edited in PowerPoint or Keynote does not reflow.
+- **Provenance**: tags that OPF writes into an exported PPTX to record where each shape came from, so a later import can map edits back to the OPF source.
+<!-- glossary:end -->
+
 ## Installed CLI alternative
 
 The published CLI provides `opf validate deck.opf.json`, `opf schemas`, `opf schema presentation '/$defs/Composition'`, `opf catalogs`, and `opf catalog fontSchemes roboto`. `opf --version` reports the CLI and the core it runs on. Validation emits findings (stable rule id, severity, category, JSON Pointer path, line and column, a hint and sometimes suggested fixes), counts and the file SHA-256; `--fail-on warning` exits 1 for warnings too. Unlike the helper below, the CLI runs on the core it depends on (with its default catalog, which every command registers), not on the host project's core package. Choose the version matching the target project. Check command availability with `opf --help` before using an older installation.

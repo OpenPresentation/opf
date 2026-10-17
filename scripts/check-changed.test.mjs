@@ -34,7 +34,7 @@ test('splitPaths, matches and referencedPaths', () => {
 
 test('selectChangedChecks maps changed paths to checks', () => {
   const docs = selectChangedChecks(['docs/agent-skills.md'], scripts, config);
-  assert.deepEqual(docs, ['check:changes', 'check:text']);
+  assert.deepEqual(docs, ['check:changes', 'check:skill-commands', 'check:text']);
   const schema = selectChangedChecks(['spec/schemas/opf.schema.json'], scripts, config);
   for (const name of ['check:schema-docs', 'check:core-golden', 'check:registry-golden', 'check:spec']) assert.ok(schema.includes(name), name);
   const catalog = selectChangedChecks(['spec/schemas/layout.schema.json'], scripts, config);
@@ -55,9 +55,9 @@ test('selectPackageTests runs the whole package for code and only the changed fi
   assert.equal(selectPackageTests(opf, ['packages/javascript/test/b.mjs'], { ...packages.opf, distExists: false }).build, true);
 });
 
-test('buildPlan: a docs-only change runs the text checks only; a .ts change adds the type check and the package tests', () => {
+test('buildPlan: a docs-only change runs the text and skill-command checks only; a .ts change adds the type check and the package tests', () => {
   const docs = buildPlan(['docs/agent-skills.md'], env);
-  assert.deepEqual(docs.map((step) => step.name), ['biome', 'pnpm run check:changes', 'pnpm run check:text', 'typecheck']);
+  assert.deepEqual(docs.map((step) => step.name), ['biome', 'pnpm run check:changes', 'pnpm run check:skill-commands', 'pnpm run check:text', 'typecheck']);
   assert.equal(docs[0].skip, true);
   assert.equal(docs.at(-1).skip, true);
 

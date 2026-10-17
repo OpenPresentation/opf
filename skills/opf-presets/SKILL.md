@@ -10,6 +10,18 @@ Use real records from the installed `@openpresentation/gallery` package, a catal
 
 Documents reference `themes`, `layouts`, `colorSchemes`, `fontSchemes`, `narratives`, `audiences`, `purposes` and `tones` records by id (or `name:id` for a named catalog group); a host's registered default catalog holds them keyed by id. The 0.19 layout IDs are intents, such as `cover`, `text`, `list` and `chart`; read the record's regions before applying one. `chartTypes`, `languages` and `socialPlatforms` are display metadata (`catalogDisplay`): `chart.type`, the `language` BCP-47 tag and the socials keys are engine vocabularies, not references. Query the current package rather than relying on counts or memorized IDs. The optional `opf-inspect` skill has a local catalog lookup helper. Chart types cover only the chart types Aspose.Slides officially supports, one record per Aspose.Slides `ChartType`, plus `combo` (clustered columns with line series, optionally on a secondary axis). There are no deprecated records or aliases.
 
+<!-- glossary:start -->
+**Words these skills use**
+
+- **Furniture**: the parts that repeat on slides outside the content: header, footer, logo, slide number. You set them once on the deck or a layout, not in `blocks`.
+- **Composition**: the automatic layout step that turns a slide's content into boxes with a position, size and font size. A `composition` key steers it.
+- **Implicit blocks**: content fields written straight on the slide (`text`, `items`, `table`, ...) with no `blocks` list. Composition treats them as blocks, and editing can turn them into an explicit `blocks` list.
+- **Promoted region**: content placed by a 3×3 grid key on the slide (`left`, `top:right`, `center+right`), used when relative position matters. It cannot be mixed with root content.
+- **Catalog record**: one named, reusable design entry (a theme, layout, color scheme, font scheme, ...) from the `@openpresentation/gallery` package or a deck's `catalogs`. A deck refers to it by id.
+- **Reflow**: text wrapping again when its box or size changes. OPF computes line breaks itself; PPTX export writes each wrapped line as its own text box, so text edited in PowerPoint or Keynote does not reflow.
+- **Provenance**: tags that OPF writes into an exported PPTX to record where each shape came from, so a later import can map edits back to the OPF source.
+<!-- glossary:end -->
+
 ## Apply intent at the right level
 
 Read [design and gallery rules](references/design.md) when applying overrides or importing examples.
