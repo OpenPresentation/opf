@@ -261,7 +261,7 @@ describe('the public surface', () => {
 	test('the old checker names are gone from the root, and the new ones are there', () => {
 		for (const gone of ['validatePresentation', 'assertValidPresentation', 'lintSource', 'lintPresentation', 'auditSource', 'auditPresentation', 'auditRules', 'findAuditRule', 'DEFAULT_AUDIT_THRESHOLDS'])
 			assert.equal(root[gone], undefined, gone);
-		for (const name of ['validate', 'assertValid', 'validateCatalogRecord', 'assertValidCatalogRecord', 'OPFValidationError', 'validationRules', 'findValidationRule', 'DEFAULT_VALIDATION_THRESHOLDS', 'DEFAULT_CHART_PALETTE', 'validationCategories'])
+		for (const name of ['validate', 'assertValid', 'validateCatalogRecord', 'assertValidCatalogRecord', 'OPFValidationError', 'validationRules', 'findValidationRule', 'DEFAULT_VALIDATION_THRESHOLDS', 'validationCategories'])
 			assert.notEqual(root[name], undefined, name);
 		assert.equal(typeof root.validate, 'function');
 		// the generic schema validator is internal: validate(value, kind) is not a second signature

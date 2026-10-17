@@ -1,4 +1,4 @@
-import { chartPaletteForFill } from './color.js';
+import { chartPaletteForFill, chartSeriesPalette } from './color.js';
 import { type ComposedItem, type LayoutBox, type TextMeasurement, textWidthMeasurer } from './composition.js';
 import { readingRows, visualReadingOrder } from './reading-order.js';
 import { tableGrid } from './table.js';
@@ -555,7 +555,7 @@ const chartColorRule = rule(
 		standard: 'WCAG 2.2 SC 1.4.1 Use of Color, level A',
 		thresholds: ['minSeriesColorDifference'],
 		approximations:
-			'Uses the engine\'s series palette (ValidateOptions.chartPalette; default the opf-render/opf-pptx palette, adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Single-series charts and chart types without a series legend are skipped.',
+			'Uses the engine\'s series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide colour scheme (accent1 to accent6, then their tints), adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Single-series charts and chart types without a series legend are skipped.',
 	},
 );
 const chartAltRule = rule(
@@ -587,7 +587,7 @@ const chartRules: ValidationRule[] = [
 					const count = slices ? data.rows.length : data.columns.length - 1;
 					if (count < 2) continue;
 					const surface = slide.design.colors.surface;
-					const palette = chartPaletteForFill(surface, context.chartPalette);
+					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme));
 					if (!palette.length) continue;
 					const used = Array.from({ length: Math.min(count, 24) }, (_, i) => palette[i % palette.length]!);
 					const pairs: { a: number; b: number; model: string; difference: number }[] = [];

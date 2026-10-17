@@ -27,7 +27,6 @@ export type { SlideSelection } from "./slide-selection.js";
 // RR-70: this module is what both builds of the root share; ./index.ts (Node) and ./browser.ts add `open`, `save` and `convert`.
 
 export {
-  DEFAULT_CHART_PALETTE,
   DEFAULT_VALIDATION_THRESHOLDS,
   OPFValidationError,
   assertValid,

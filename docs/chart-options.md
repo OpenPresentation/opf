@@ -79,6 +79,23 @@ Data labels stay readable: a label inside a mark takes the text color that contr
 
 The Office 2016 (chartex) constructs are left out on purpose. Their marks take their colors from the construct's chart style, and a per-point color (`cx:dataPt`) would need native verification this change does not have; the waterfall also already colors its marks by increase, decrease and total. They draw and export as before.
 
+## Series colors
+
+Series colors follow the deck's color scheme. They are not a field of the chart: the same chart takes the colors of whichever scheme the deck uses (`design.colorScheme`, the theme's scheme, a catalog record, a built-in such as `vibes`, or an inline scheme with slot overrides).
+
+Core's `chartSeriesPalette(colorScheme)` (on `@openpresentation/opf/composition`) returns the twelve colors the preview, the PPTX export and the `chart-color-only` accessibility rule all use, in this order:
+
+| Series | Color |
+| --- | --- |
+| 1 to 6 | `accent1` to `accent6` of the resolved color scheme (a slot the scheme leaves out takes the engine default scheme's slot) |
+| 7 to 12 | the same six accents mixed 40% toward white, in the same order (series 7 is a tint of `accent1`) |
+
+Series `i` takes color `i`; a pie, doughnut, treemap or funnel colors category `i` with color `i`. A chart with more than twelve series repeats the list (and `chart-color-only` says so). The `primary`, `secondary` and `accent` role overrides do not reorder the list: series 1 to 3 are always `accent1` to `accent3`, the slots the PPTX export writes as theme colors.
+
+Both engines then pass the list through `chartPaletteForFill(panel, palette)`, which keeps every series at 3:1 contrast against the chart panel (the card surface) and apart from its neighbours, so on a dark panel the colors are lightened, never merged. Plan a chart's series order for the scheme: put the series that carries the message first (accent1 is the deck's primary), and keep a chart to six series or fewer so no tint is needed. The `highlight` colors above are separate: they come from the primary and the panel, not from this list.
+
+A host that validates with its own palette passes `ValidateOptions.chartPalette`; without it the rule judges each slide's own scheme. There is no per-series color field today.
+
 ## What each chart type supports (axis titles, legend, data labels)
 
 `chartOptionSupport(target)` in `@openpresentation/opf/composition` returns this table; the validator, the preview, the exporter and the importer all follow it. An option a type cannot show is **adapted** (dropped, or reset to the default) and reported as a `chart-option-adapted` diagnostic by the validator (a warning), the renderer and the exporter (`onDiagnostic`). It is never silently lost and never fails the render.

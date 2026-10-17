@@ -395,12 +395,3 @@ export function readableColor(candidates: readonly string[], sample: BackdropSam
 		if (worstContrast(candidate, sample).ratio >= minimum) return candidate;
 	return undefined;
 }
-
-/**
- * The series palette opf-render and opf-pptx draw charts with (`CHART_COLORS`), in series order. A host with
- * its own palette passes `ValidateOptions.chartPalette`.
- */
-export const DEFAULT_CHART_PALETTE: readonly string[] = [
-	'#2874A6', '#1B4F72', '#5499C7', '#7BDBB2', '#3AC67A', '#24A89E',
-	'#F59E0B', '#EF4444', '#8B5CF6', '#14B8A6', '#0F172A', '#64748B',
-];

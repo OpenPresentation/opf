@@ -24,7 +24,7 @@ const compositionNames = [
   "resolveSocialProfile", "resolveLogo", "PICTURE_BULLET_SCALE", "formatFurnitureDate", "DEFAULT_FURNITURE_DATE_FORMAT",
   "NUMBERING_STYLES", "NUMBERING_SUFFIXES", "MAX_NUMBERING_VALUE", "MAX_ROMAN_VALUE", "MAX_NUMBERING_LEVELS", "formatListNumber", "listNumbers", "resolveNumbering", "numberingAtLevel", "numberingStyleDraws", "sliceNumberedItems",
   "CAPTIONABLE_FIELDS", "CAPTION_FONT_RATIO", "CAPTION_MAX_RATIO", "CITATION_MARKER_RAISE", "CITATION_MARKER_SCALE", "FOOTNOTE_MAX_RATIO", "annotationText", "captionSettings", "citationMarkerText", "collectCitations", "referencesSlide", "slideCitations", "walkCitationRuns",
-  "colorContrast", "textColorForFill", "chartColorForFill", "chartPaletteForFill", "normalizeHexColor", "resolveColorRef", "CHART_SERIES_MIN_DIFFERENCE", "CHART_SERIES_MIN_LIGHTNESS_STEP",
+  "colorContrast", "textColorForFill", "chartColorForFill", "chartPaletteForFill", "chartSeriesPalette", "normalizeHexColor", "resolveColorRef", "CHART_SERIES_MIN_DIFFERENCE", "CHART_SERIES_MIN_LIGHTNESS_STEP",
   "CODE_HIGHLIGHT_LANGUAGES", "CODE_HIGHLIGHT_MAX_LENGTH", "CODE_PANEL_BACKGROUND", "CODE_PANEL_FOREGROUND", "CODE_SYNTAX_MIN_CONTRAST", "codeLineRuns", "codeSyntaxPalette", "codeSyntaxPaletteForScheme", "resolveCodeLanguage", "tokenizeCode",
   "METRIC_TREND_MIN_CONTRAST", "METRIC_TREND_SHAPES", "metricTrendColor", "metricTrendMark", "metricTrendPoints",
   "PATTERN_PRESETS", "PATTERN_PRESET_ALIASES", "PATTERN_TILE_SIZE", "patternBitmap", "patternRuns", "resolvePatternPreset",
