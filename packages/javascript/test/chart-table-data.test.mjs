@@ -611,8 +611,9 @@ describe("RR-54 review", () => {
     assert.deepEqual(errors(deck({ datasets, slides: [{ chart: { type: "column", data: { dataset: "r", columns: ["a"] } } }] })), [
       ["/slides/0/chart/data", "must NOT have additional properties"],
     ]);
-    assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { columns: ["a", "b"], rows: [["x", 1]], source: { src: "a", retrieved: "yesterday" } } } }] })).map(([path]) => path), [
-      "/slides/0/chart/data/source/retrieved", "/slides/0/chart/data/source/retrieved", "/slides/0/chart/data/source/retrieved",
+    // A date that is neither a date nor a date-time is one error (RR-93), not one per format.
+    assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { columns: ["a", "b"], rows: [["x", 1]], source: { src: "a", retrieved: "yesterday" } } } }] })), [
+      ["/slides/0/chart/data/source/retrieved", 'must match format "date" or "date-time"'],
     ]);
     // ChartDataSource is gone: a data source by asset or file is an unknown key on inline data, and 'rows' picks the inline form.
     assert.deepEqual(errors(deck({ slides: [{ chart: { type: "column", data: { src: "asset:x", rows: [["a"]] } } }] })), [
@@ -630,7 +631,7 @@ describe("RR-54 review", () => {
     assert.deepEqual(table({ dataset: "r", columns: ["a"] }), [["/slides/0/table/columns", "'columns' is not allowed on a dataset-backed table: it takes its headers, rows and column formats from the dataset"]]);
     assert.deepEqual(table({ rows: [["a"]], fields: ["a"] }), [["/slides/0/table/fields", "'fields' applies only to a dataset-backed table; add 'dataset' or remove 'fields'"]]);
     // A malformed value with no form key keeps every alternative.
-    assert.ok(errors(deck({ slides: [{ chart: { type: "column", data: { values: [] } } }] })).some(([, message]) => message === "must match exactly one schema in oneOf"));
+    assert.ok(errors(deck({ slides: [{ chart: { type: "column", data: { values: [] } } }] })).some(([, message]) => message === "must have required property 'columns'"));
   });
 
   test("fields name each dataset column at most once", () => {

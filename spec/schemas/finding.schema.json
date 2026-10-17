@@ -137,7 +137,12 @@
         "message": { "type": "string" },
         "keyword": { "type": "string", "description": "The JSON Schema keyword that failed, or `opf` for a rule the schema cannot express." },
         "schemaPath": { "type": "string" },
-        "params": { "type": "object", "additionalProperties": true }
+        "params": { "type": "object", "additionalProperties": true },
+        "alternatives": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Present when the issue is the best match of a oneOf or anyOf: one line per other form the value was checked against and did not fit, such as `string: must be string`."
+        }
       }
     },
     "Finding": {

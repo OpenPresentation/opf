@@ -14,6 +14,7 @@ import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./c
 import {tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
 import { schemas, type SchemaName } from "./schemas.js";
+import { bestMatchErrors, type UnionError } from "./union-errors.js";
 import { rememberValidationDefinition } from './validation-definitions.js';
 import type { ValidationIssue } from "./generated/types/finding.js";
 import { VARIABLE_KINDS, hasContentVariables, instantiateForValidation, isTemplate, type VariableValues } from "./variables.js";
@@ -218,7 +219,7 @@ function resolveValidator(schemaOrKind: SchemaOrKind): {
 // SlideDesign is Design plus `not: { required: ["dimensions"] }` (schemaPath "…/allOf/1/not" on a design object); Ajv says "must NOT be valid".
 const slideDimensionsSchemaPath = /\/allOf\/1\/not$/;
 const designInstancePath = /\/design$/;
-function toIssue(error: ErrorObject): ValidationIssue {
+function toIssue(error: UnionError): ValidationIssue {
   const slideDimensions = error.keyword === "not" && slideDimensionsSchemaPath.test(error.schemaPath) && designInstancePath.test(error.instancePath);
   const issue: ValidationIssue = {
     path: error.instancePath || "/",
@@ -228,6 +229,7 @@ function toIssue(error: ErrorObject): ValidationIssue {
     keyword: error.keyword,
     schemaPath: error.schemaPath,
     params: error.params as Record<string, unknown>,
+    ...(error.alternatives?.length ? { alternatives: error.alternatives } : {}),
   };
   rememberValidationDefinition(issue, error.parentSchema, error.keyword);
   return issue;
@@ -1059,7 +1061,8 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
   }
   const valid = resolved.validate(subject) === true;
   const ajvErrors = valid ? [] : typedVariableErrors(resolved.validate.errors ?? [], subject);
-  const mapped = (resolved.schemaName === "presentation" ? dataUnionErrors(ajvErrors, subject) : ajvErrors).map(toIssue);
+  const specific = resolved.schemaName === "presentation" ? dataUnionErrors(ajvErrors, subject) : ajvErrors;
+  const mapped = bestMatchErrors(getAjv(), schemas[resolved.schemaName].$id as string, specific).map(toIssue);
   const errors = mapped;
   // OPF 0.19: the template rules a schema cannot express (opf/layout-template, opf/layout-region), on a record the schema accepts.
   if (resolved.schemaName === "layout" && valid) for (const issue of layoutTemplateIssues(subject)) errors.push(semanticIssue(issue.path, issue.message, { code: issue.code }));

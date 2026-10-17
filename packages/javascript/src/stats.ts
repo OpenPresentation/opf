@@ -167,7 +167,7 @@ export interface PresentationStats {
     speakerPhotos: number;
     videos: number;
   };
-  charts: { total: number; byType: Record<string, number>; data: { inline: number; dataset: number; source: number } };
+  charts: { total: number; byType: Record<string, number>; data: { inline: number; dataset: number; withSource: number } };
   tables: { total: number; datasetBacked: number; rows: number; columns: number; items: TableFact[] };
   datasets: { count: number; withSource: number; items: DatasetFact[] };
   citations: {
@@ -322,6 +322,21 @@ interface Tally {
 }
 
 export function stats(presentation: unknown, options: StatsOptions = {}): PresentationStats {
+  return compute(presentation, options);
+}
+
+/**
+ * The local file sources the deck draws as images (relative paths and file: URLs, an `asset:<id>` reference followed to the
+ * registry's source), each once, in the order the deck uses them. URLs, data URIs and videos are left out. Nothing is read:
+ * a host with a file system checks that they exist (`opf validate` does, against the folder `opf convert` reads).
+ */
+export function localAssetSources(presentation: unknown): string[] {
+  const found = new Set<string>();
+  compute(presentation, {}, (src) => found.add(src));
+  return [...found];
+}
+
+function compute(presentation: unknown, options: StatsOptions, onFile?: (src: string) => void): PresentationStats {
   const catalogs = { catalogs: checkCatalogsOption(options.catalogs, 'stats') };
   if (!isRecord(presentation)) throw new TypeError('stats needs a presentation object.');
   const deck = presentation as Rec;
@@ -334,9 +349,14 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
   // ---- assets ------------------------------------------------------------------------------
   const uses = { total: 0, references: 0, embedded: 0, files: 0, remote: 0 };
   let embeddedTotal = 0;
-  const useAsset = (asset: unknown): void => {
+  const useAsset = (asset: unknown, video = false): void => {
     const src = srcOf(asset);
     if (src === undefined) return;
+    if (onFile && !video) {
+      let source: string | undefined = src;
+      for (let hop = 0; source !== undefined && assetForm(source) === 'reference' && hop < 8; hop++) source = srcOf(registry[source.slice('asset:'.length)]);
+      if (source !== undefined && assetForm(source) === 'file' && !source.includes('{{')) onFile(source);
+    }
     const form = assetForm(src);
     uses.total++;
     uses[form === 'reference' ? 'references' : form === 'embedded' ? 'embedded' : form === 'remote' ? 'remote' : 'files']++;
@@ -455,7 +475,7 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
   // ---- slides --------------------------------------------------------------------------------
   const payloadCounts = { text: 0, items: 0, bullets: 0, quote: 0, metric: 0, code: 0, timeline: 0, chart: 0, table: 0, image: 0, video: 0, blocks: 0, regions: 0, groups: 0, maxDepth: 0 };
   const layouts = new Map<string, number>(), chartTypes = new Map<string, number>(), extensions = new Set<string>();
-  const chartData = { inline: 0, dataset: 0, source: 0 };
+  const chartData = { inline: 0, dataset: 0, withSource: 0 };
   const tableItems: TableFact[] = [];
   let tableRows = 0, tableColumns = 0, datasetBackedTables = 0, chartTotal = 0, captions = 0;
   const hidden: StatsSlideRef[] = [], withoutNotes: StatsSlideRef[] = [], sections: PresentationStats['slides']['sections'] = [];
@@ -505,7 +525,7 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
         for (const event of events) if (isRecord(event)) { run(event.when); run(event.what); run(event.description); }
       }
       if (node.image !== undefined) slideImages += contentImage(node.image);
-      if (node.video !== undefined) { useAsset(node.video); images.videos++; }
+      if (node.video !== undefined) { useAsset(node.video, true); images.videos++; }
       if (isRecord(node.chart)) {
         chartTotal++; slideCharts++;
         bump(chartTypes, str(node.chart.type) ?? 'unknown');
@@ -513,7 +533,7 @@ export function stats(presentation: unknown, options: StatsOptions = {}): Presen
         if (isRecord(data)) {
           if (typeof data.dataset === 'string') { chartData.dataset++; bump(datasetUse, data.dataset); }
           else if (Array.isArray(data.columns) || Array.isArray(data.rows)) chartData.inline++;
-          else if (typeof data.src === 'string') { chartData.source++; useAsset(data.src); }
+          if (isRecord(data.source)) chartData.withSource++;
         }
       }
       if (isRecord(node.table)) {

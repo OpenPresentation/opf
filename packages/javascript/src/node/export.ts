@@ -196,7 +196,7 @@ export function resolveExportOptions(options: ExportOptions): ResolvedExportOpti
 	return { ...rest, format, text: text ?? "fonts", scale, ...(isHandle(fonts) ? { fonts } : {}), fontFolders: folders };
 }
 
-function assetRoot(directory: string | undefined, flags = false): string | undefined {
+export function assetRoot(directory: string | undefined, flags = false): string | undefined {
 	if (directory === undefined) return undefined;
 	const resolved = path.resolve(directory);
 	try {

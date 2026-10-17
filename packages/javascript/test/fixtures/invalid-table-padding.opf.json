@@ -1,0 +1,119 @@
+{
+  "name": "Invalid table padding",
+  "slides": [
+    {
+      "title": "Plain"
+    },
+    {
+      "title": "Regions",
+      "table": {
+        "columns": [
+          {
+            "value": "Region",
+            "style": {
+              "padding": 12
+            }
+          },
+          {
+            "value": "Q3",
+            "style": {
+              "padding": 12
+            }
+          },
+          {
+            "value": "Q4",
+            "style": {
+              "padding": 12
+            }
+          },
+          {
+            "value": "YoY",
+            "style": {
+              "padding": 12
+            }
+          }
+        ],
+        "rows": [
+          [
+            {
+              "value": "North America",
+              "style": {
+                "padding": 12
+              }
+            },
+            {
+              "value": 12.4,
+              "style": {
+                "padding": 12
+              }
+            },
+            {
+              "value": 18.1,
+              "style": {
+                "padding": 12
+              }
+            },
+            {
+              "value": "46%",
+              "style": {
+                "padding": 12
+              }
+            }
+          ],
+          [
+            {
+              "value": "EMEA",
+              "style": {
+                "padding": 12
+              }
+            },
+            {
+              "value": 8.2,
+              "style": {
+                "padding": 12
+              }
+            },
+            {
+              "value": 11.5,
+              "style": {
+                "padding": 12
+              }
+            },
+            {
+              "value": "40%",
+              "style": {
+                "padding": 12
+              }
+            }
+          ],
+          [
+            {
+              "value": "APAC",
+              "style": {
+                "padding": 12
+              }
+            },
+            {
+              "value": 5.1,
+              "style": {
+                "padding": 12
+              }
+            },
+            {
+              "value": 7.7,
+              "style": {
+                "padding": 12
+              }
+            },
+            {
+              "value": "51%",
+              "style": {
+                "padding": 12
+              }
+            }
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -41,7 +41,7 @@ opf stats - --per-slide < deck.opf.json      # adds a row per slide
 | `notes` | `withNotes` and `withoutNotes` (`[{ index, id }]`). A note of only whitespace is no note. |
 | `speakingTime` | `basis: 'estimate'`, `wordsPerMinute`, `notesWords`, `minutes` (notes words divided by the pace, to a tenth), `declaredMinutes` (the deck's own `duration`). |
 | `images` | `content` (`total`, `withAlt`, `decorative`, `missingAlt`), `logos`, `watermarks` (`deck`, `slides`), `backgrounds` (`deck`, `slides`), `headerFooter`, `speakerPhotos`, `videos`. |
-| `charts` | `total`, `byType`, and `data`: how many take `inline` data, a `dataset` reference or an external `source`. |
+| `charts` | `total`, `byType`, and `data`: how many take `inline` data or a `dataset` reference, and `withSource`: how many record where their data came from in `data.source` (metadata only; the data itself is inline or a dataset). |
 | `tables` | `total`, `datasetBacked`, total `rows` and `columns`, and `items` (`slide`, `path`, `rows`, `columns`, `dataset`). |
 | `datasets` | `count`, `withSource`, and `items` (`id`, `title`, `columns`, `rows`, `source`: the declared `source.src` or null, `referencedBy`: charts and tables that use it). |
 | `citations` | `references`, `cited` (reference ids some run cites), `citations` (cited runs), `footnotes`, `captions`, `links`. |

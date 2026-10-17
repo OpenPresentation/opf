@@ -72,7 +72,8 @@ export class Reporter {
 			help: HELP[code] ?? "",
 			...Object.fromEntries(Object.entries(details).filter(([, value]) => value !== undefined)),
 		};
-		const key = JSON.stringify([entry.ruleId, entry.path, entry.message]);
+		// The details are part of the identity: opf-render's pdf-font-embedded has no path and no message, only the face it embedded.
+		const key = JSON.stringify([entry.ruleId, entry.path, entry.message, details]);
 		if (this.seen.has(key)) return;
 		this.seen.add(key);
 		this.findings.push(entry);
@@ -80,7 +81,7 @@ export class Reporter {
 
 	/** Add a finding as the library made it (the `findings` of a thrown OPFRenderError, OPFPptxError or core validation error). Identical entries are kept once. */
 	addFinding(finding: Finding) {
-		const key = JSON.stringify([finding.ruleId, finding.path, finding.message]);
+		const key = JSON.stringify(finding);
 		if (this.seen.has(key)) return;
 		this.seen.add(key);
 		this.findings.push(finding as ReportFinding);

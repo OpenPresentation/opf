@@ -73,11 +73,26 @@ test("no-overwrite also refuses a directory created after the preflight", async 
   });
 });
 
-test("a filesystem that refuses hardlinks fails closed without publishing or leaving staging files", async () => {
+test("a filesystem that refuses hardlinks publishes by exclusive create and copy, without leaving staging files (RR-93)", async () => {
   await scratch(async (dir) => {
     fs.link = async () => { throw Object.assign(new Error("hardlinks unavailable"), { code: "EPERM" }); };
     syncBuiltinESMExports();
-    await assert.rejects(writeFiles([{ file: path.join(dir, "deck.json"), bytes: bytes("export bytes") }], false), { code: "EPERM" });
+    const file = path.join(dir, "deck.json");
+    await writeFiles([{ file, bytes: bytes("export bytes") }], false);
+    assert.equal(await fs.readFile(file, "utf8"), "export bytes");
+    assert.deepEqual(await fs.readdir(dir), ["deck.json"]);
+    // The no-overwrite guarantee holds without the link too.
+    await assert.rejects(writeFiles([{ file, bytes: bytes("refused") }], false), { code: "output-exists" });
+    assert.equal(await fs.readFile(file, "utf8"), "export bytes");
+    assert.deepEqual(await fs.readdir(dir), ["deck.json"]);
+  });
+});
+
+test("any other link failure still fails closed without publishing or leaving staging files", async () => {
+  await scratch(async (dir) => {
+    fs.link = async () => { throw Object.assign(new Error("I/O error"), { code: "EIO" }); };
+    syncBuiltinESMExports();
+    await assert.rejects(writeFiles([{ file: path.join(dir, "deck.json"), bytes: bytes("export bytes") }], false), { code: "EIO" });
     assert.deepEqual(await fs.readdir(dir), []);
   });
 });
