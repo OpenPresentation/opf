@@ -1,5 +1,6 @@
 import {tableGrid,type TableCellStyle} from './table.js';
-import {inlineChartData,inlineTableData,resolveTableData,tableCellDisplayValue,type DataTableCell} from './chart-data.js';
+import {inlineChartData,inlineTableData,resolveChartData,resolveTableData,tableCellDisplayValue,type DataTableCell} from './chart-data.js';
+import {chartValueAxis,type ChartValueAxis} from './chart-axis.js';
 import {intrinsicImageAspect} from './image-aspect.js';
 import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
@@ -209,6 +210,10 @@ function translateTextFit<T extends {placement?: TextPlacement}>(fit: T, dy: num
     },
   };
 }
+/** RR-92: what composition computes for a chart item beyond its box. */
+export interface ComposedChart {
+  valueAxis?: ChartValueAxis;
+}
 export interface ComposedItem {
   path: string;
   field: string;
@@ -240,6 +245,12 @@ export interface ComposedItem {
   caption?: ComposedCaption;
   /** Picture geometry and treatments of an image item (`field` image); absent on every other item. */
   image?: ComposedImage;
+  /**
+   * RR-92: the value axis of a column, bar, line or area chart (`field` chart), computed from the chart box (`chartValueAxis`). The preview
+   * draws it and the PPTX export writes it as `c:min`, `c:max` and `c:majorUnit`, so both show the same axis. Absent for every other chart
+   * type (combo, scatter, pie and the rest keep the engines' own axis) and for charts whose data does not resolve.
+   */
+  chart?: ComposedChart;
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
   /**
@@ -2758,6 +2769,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   let regionTag: string | undefined, templateCell = false;
   // One node in its cell: a group arranges its children (0.18 content-group semantics), a leaf is fitted. `cards` is
   // false in a bled region, which is never drawn as a card; `listColumns` is a region's listColumns for a lone list.
+  // RR-92: the value axis the preview draws and the PPTX export writes (column, bar, line and area charts; see chartValueAxis).
+  const composeChart = (node: Pending, box: LayoutBox, settings: Composition): ComposedChart | undefined => {
+    const resolved = resolveChartData(node.value, options.presentation, {path: node.path});
+    const valueAxis = chartValueAxis(node.value, resolved, {width: box.width, height: box.height, scale, minFontSize: settings.minFontSize});
+    return valueAxis ? {valueAxis} : undefined;
+  };
   const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number): void => {
     if (node.children) {
       const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
@@ -2779,7 +2796,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const columns = textValue !== undefined && !internal ? listColumnsFor(node, box, settings, listColumns) : undefined;
     const text = internal ? body?.fit : columns ? (columns.length > 1 ? mergeListColumns(columns) : columns[0]!.text) : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,contentNominalSize(node.field)*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering) : undefined;
     const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, imageContext()) : undefined;
-    items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box, ...(image ? {image} : {}),
+    const chart = node.field === 'chart' ? composeChart(node, box, settings) : undefined;
+    items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box, ...(image ? {image} : {}), ...(chart ? {chart} : {}),
       ...(frameBox ? {frameBox} : {}),
       text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
       ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
@@ -3178,6 +3196,9 @@ export function resolveCanvasDimensions(input: unknown): { width: number; height
   if (![width, height].every(n => Number.isFinite(n) && n > 0)) throw new RangeError('Canvas dimensions must be finite and positive.');
   return { width, height };
 }
+// RR-92: the value axis (scale, intervals and the axis of a category chart), shared by the preview and the PPTX export.
+export {niceScale,maxIntervalsFor,stackCategoryValues,chartValueAxis,chartTextSize,CHART_TEXT_PX} from './chart-axis.js';
+export type {ChartScale,ChartValueAxis,ChartAxisGeometry} from './chart-axis.js';
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartHighlight,ChartHighlightMarks,ResolvedChartOptions} from './chart-options.js';
 // RR-54: chart and table data resolution, for engines that import the composition entry.
