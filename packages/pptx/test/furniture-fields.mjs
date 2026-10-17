@@ -5,7 +5,7 @@ import {formatDate, parseDate, furniturePartFields, lineFields, nativeFieldType,
 import {validate} from '@openpresentation/opf';
 
 const enc = new TextEncoder(), dec = new TextDecoder();
-const options = {seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'};
+const options = {slideNumberFields: 'live', seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'};
 const deck = footer => ({design: {footer}, slides: [{title: 'Title', design: {footer: false}}, {title: 'Two'}, {title: 'Three'}]});
 const exportDeck = async (source, extra = {}) => {
   const before = structuredClone(source), issues = [];

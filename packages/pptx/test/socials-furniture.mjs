@@ -120,7 +120,7 @@ assert.deepEqual((await read(await toPptx(keyed))).deck.organization.socials, {t
 const mixed = {organization: {id: 'acme', name: 'Acme', socials: {x: '@acme', threads: 'Visit us'}},
   design: {footer: {left: {text: '{{organization.name}}\nSlide {{slide.number}} of {{deck.slideCount}}'}, right: {socials: true, text: '{{slide.number}}'}}},
   slides: [{text: 'One'}, {text: 'Two'}]};
-const mixedBytes = await toPptx(mixed), mixedXml = shownXml(unzipSync(mixedBytes), 2);
+const mixedBytes = await toPptx(mixed, {slideNumberFields: 'live'}), mixedXml = shownXml(unzipSync(mixedBytes), 2);
 assert.ok(/<a:fld [^>]*type="slidenum"[^>]*>(?:(?!<\/a:fld>).)*<a:t>2<\/a:t><\/a:fld>/.test(mixedXml), 'Live slide-number field.');
 assert.ok(mixedXml.includes('<a:t>Slide </a:t>') && mixedXml.includes('<a:t> of 2</a:t>'), 'Fixed text around the field.');
 assert.ok(/<a:hlinkClick [^>]*>(?:(?!<\/a:r>).)*<\/a:rPr><a:t>x\.com\/acme<\/a:t>/.test(mixedXml), 'Linked profile line.');
@@ -132,7 +132,7 @@ assert.ok(mixedXml.includes('<a:t>Visit us</a:t>'));
   assert.ok(!mixedIssues.some(issue => issue.code === 'invalid-furniture-provenance'), JSON.stringify(mixedIssues));
   // Without the stored record the socials are ordinary text (see above); the slide-number fields still import as tokens in a native footer.
   // (Here the socials are the same on both slides, so they are drawn once, on the slide master, which a plain import does not read.)
-  const bare = await read(await toPptx(mixed, {provenance: false}));
+  const bare = await read(await toPptx(mixed, {provenance: false, slideNumberFields: 'live'}));
   assert.equal(bare.deck.organization, undefined);
   assert.ok(!JSON.stringify(bare.deck).includes('x.com/acme'));
 }

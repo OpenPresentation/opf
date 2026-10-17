@@ -20,7 +20,7 @@ const DATE = '2026-09-10';
 
 const exportDeck = async (source, extra = {}) => {
   const before = structuredClone(source), issues = [];
-  const bytes = await toPptx(source, {seed: 1, date: DATE, onDiagnostic: issue => issues.push(issue), ...extra});
+  const bytes = await toPptx(source, {slideNumberFields: 'live', seed: 1, date: DATE, onDiagnostic: issue => issues.push(issue), ...extra});
   assert.deepEqual(source, before, 'Export leaves the source unchanged.');
   const entries = unzipSync(bytes);
   return {bytes, issues, entries};
@@ -287,7 +287,7 @@ const footerOnly = {design: {fontScheme: 'roboto', footer: {left: {date: true, d
   assert.ok(stripped.imported.slides.every(slide => slide.design?.footer === undefined));
   for (const slide of stripped.imported.slides) assert.ok(!JSON.stringify(slide).includes('Confidential'), 'Placeholder text is not slide content.');
   // The re-exported import carries the same placeholders again.
-  const again = unzipSync(await toPptx(stripped.imported, {seed: 1, date: DATE}));
+  const again = unzipSync(await toPptx(stripped.imported, {slideNumberFields: 'live', seed: 1, date: DATE}));
   assert.deepEqual(placeholderShapes(text(again, slidePath(2))).map(runsOf), ['[datetime4:September 10, 2026]', 'Confidential', 'Page [slidenum:2]']);
 }
 {

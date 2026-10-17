@@ -16,7 +16,7 @@
 // or where core would draw a default footer when no slide has one.
 
 import {XMLParser} from 'fast-xml-parser';
-import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, formatDate, hasSlideNumberField, slideNumberTemplate} from './furniture-fields.js';
+import {DEFAULT_DATE_FORMAT, NATIVE_DATE_FIELDS, formatDate, hasSlideNumberField, isBareSlideNumber, slideNumberTemplate} from './furniture-fields.js';
 
 const enc = new TextEncoder(), dec = new TextDecoder('utf-8', {fatal: true});
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
@@ -35,11 +35,14 @@ export const isNativePlaceholderType = value => Object.hasOwn(NATIVE_PLACEHOLDER
 /**
  * The placeholder type a core footer part maps to: a date is `dt`; a zone `text` with a slide-number field
  * (`{{slide.number}}`) is `sldNum`, its words around the field fixed runs; any other zone `text` is `ftr`.
+ * With `staticNumbers` (`slideNumberFields: 'static'`, the default, RR-91) a number with words around it is written as fixed text in an
+ * ordinary shape, so it has no placeholder: Keynote shows only the number of a slide-number placeholder or field.
  */
-export function nativePlaceholderForPart(part) {
+export function nativePlaceholderForPart(part, {staticNumbers = false} = {}) {
   if (part.type !== 'text') return undefined;
   if (part.field === 'date') return 'dt';
   if (part.field !== 'text') return undefined;
+  if (staticNumbers && hasSlideNumberField(part) && !isBareSlideNumber(part)) return undefined;
   return hasSlideNumberField(part) ? 'sldNum' : 'ftr';
 }
 const ZONES = ['left', 'center', 'right'];
@@ -50,10 +53,10 @@ const ALIGN = {left: 'l', center: 'ctr', right: 'r'};
  * footer text, the first footer date and the first footer text with a slide-number
  * field whose text fits one accepted line. Returns Map<partIndex, 'dt'|'ftr'|'sldNum'>.
  */
-export function nativeFurnitureParts(layout) {
+export function nativeFurnitureParts(layout, options) {
   const chosen = new Map(), taken = new Set();
   for (const [index, part] of (layout?.parts ?? []).entries()) {
-    const ph = nativePlaceholderForPart(part);
+    const ph = nativePlaceholderForPart(part, options);
     if (part.kind !== 'footer' || !ph || taken.has(ph)) continue;
     // One native shape holds one line; a part that wraps or breaks stays tagged shapes.
     if (part.fit?.sourceLines?.length !== 1 || part.fit.lines?.length !== 1 || !part.text || part.links?.length) continue;

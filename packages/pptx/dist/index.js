@@ -29,7 +29,7 @@ import {restoreRunColors} from './run-colors.js';
 import {joinWrappedText} from './content-topology.js';
 import {applyDocumentProvenance, attachDocumentProvenance, documentProvenance, recordContentTopology, recordListRuns, restoreDocumentProvenance, joinAuthors, splitAuthors, slideListRecord, storedMetadata, DEFAULT_AUTHOR, DEFAULT_TITLE} from './document-provenance.js';
 import {INVALID_XML_CHARACTER, nativeSections, writeSectionList} from './sections.js';
-import {attachFurnitureFields, furniturePartFields, lineFields, nativeFieldType} from './furniture-fields.js';
+import {attachFurnitureFields, furniturePartFields, isBareSlideNumber, lineFields, nativeFieldType} from './furniture-fields.js';
 import {attachNativePlaceholders, defaultPlaceholderGeometry, nativeDateText, nativeFurnitureParts, nativePlaceholderForPart, writeNativeMasters} from './native-furniture.js';
 import {liftMasterFurniture} from './master-furniture.js';
 import {gallery} from '@openpresentation/gallery';
@@ -224,6 +224,9 @@ export async function toPptx(input, options = {}) {
   if (options.imageFormat !== undefined && !['compatible', 'preserve'].includes(options.imageFormat)) {
     throw new OPFPptxError('invalid-image-format', 'imageFormat must be compatible or preserve.', {path: 'options.imageFormat'});
   }
+  if (options.slideNumberFields !== undefined && !['static', 'live'].includes(options.slideNumberFields)) {
+    throw new OPFPptxError('invalid-slide-number-option', "slideNumberFields must be 'static' or 'live'.", {path: 'options.slideNumberFields'});
+  }
   if (options.provenance !== undefined && !['full', 'references-only', false].includes(options.provenance)) {
     throw new OPFPptxError('invalid-provenance-option', "provenance must be 'full', 'references-only' or false.", {path: 'options.provenance'});
   }
@@ -285,6 +288,7 @@ export async function toPptx(input, options = {}) {
   context.furnitureParts = [];
   // RR-81: the 0.19 template each slide uses (its native slide layout) and the objects bound to a region placeholder.
   context.templateSlides = [];
+  context.staticSlideNumbers = options.slideNumberFields !== 'live';
   context.automaticSlides = [];
   context.placeholderBindings = new Map();
   context.hostDate = options.date;
@@ -3071,7 +3075,7 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
   }
   const staticDates = new Map();
   // RR-11: the first footer text, date and slide number that fit one line are native placeholders (src/native-furniture.js).
-  const natives = nativeFurnitureParts(layout);
+  const natives = nativeFurnitureParts(layout, {staticNumbers: context.staticSlideNumbers});
   for(const [index,part]of layout.parts.entries()){
     const entry = {index, kind: part.kind, zone: part.zone, field: part.field, type: part.type, path: part.path, native: natives.has(index), names: []};
     drawn.push(entry);
@@ -3092,6 +3096,8 @@ async function addFurniture(slide,presentation,source,layout,context,options,sli
       // en-US field type is written as its laid-out text.
       const fields=[];
       for(const field of furniturePartFields(part)){
+        // RR-91 (slideNumberFields, default 'static'): a number with words around it is fixed text; Keynote drops the words next to a live number.
+        if(field.type==='slideNumber'&&context.staticSlideNumbers&&!isBareSlideNumber(part))continue;
         const nativeType=nativeFieldType(field);
         if(nativeType)fields.push({...field,nativeType});
         else options.onDiagnostic?.({code:'furniture-date-fixed',path:part.path,message:`dateFormat '${field.format}' has no PowerPoint en-US date field; the current date is exported as fixed text that PowerPoint will not update.`});

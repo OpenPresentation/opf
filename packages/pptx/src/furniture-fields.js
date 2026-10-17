@@ -118,7 +118,17 @@ export function furniturePartFields(part) {
 /** True when a core text part carries at least one slide-number field. */
 export const hasSlideNumberField = part => furniturePartFields(part).some(field => field.type === 'slideNumber');
 
-export const SLIDE_NUMBER_TOKEN = '{{slide.number}}';
+/**
+ * True when the whole text of a core text part is one slide-number field (`{{slide.number}}` and nothing else): the only shape
+ * a native `sldNum` placeholder can carry. Words around the number (`Page 2 of 6`, `2 / 6`) make it an ordinary text box with the
+ * field, because Keynote (and Google Slides) show only the number of a slide-number placeholder and drop the literal runs.
+ */
+export function isBareSlideNumber(part) {
+  const fields = furniturePartFields(part);
+  return fields.length === 1 && fields[0].type === 'slideNumber' && fields[0].start === 0 && fields[0].end === part.text?.length;
+}
+
+export const SLIDE_NUMBER_TOKEN ='{{slide.number}}';
 // The slide-scoped tokens core substitutes per slide (core SLIDE_TOKEN_BODY): typed text that spells one must be
 // escaped, or the next export would turn it into a live value.
 const literalSlideToken = /\{\{(?=\s*(?:slide(?:\.[A-Za-z0-9_-]+){1,2}|deck\.slideCount)\s*(?:\|[^{}]*)?\}\})/g;

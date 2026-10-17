@@ -7,7 +7,7 @@ import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 // line fits; {{deck.slideCount}} and {{slide.section}} are fixed text; in body text every slide token is fixed text. Import
 // returns {{slide.number}} for a native field, and the tokens of an OPF-written file.
 const enc = new TextEncoder(), dec = new TextDecoder();
-const options = {seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z', date: '2026-09-22'};
+const options = {slideNumberFields: 'live', seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z', date: '2026-09-22'};
 const exportDeck = async (source, extra = {}) => {
   const before = structuredClone(source), issues = [];
   const bytes = await toPptx(source, {...options, ...extra, onDiagnostic: issue => issues.push(issue)});

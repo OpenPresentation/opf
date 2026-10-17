@@ -18,7 +18,7 @@ const uri = bytes => `data:image/png;base64,${Buffer.from(bytes).toString('base6
 const bytes = {square: await image('square.png'), tall: await image('tall.png'), wide: await image('wide.png')};
 const light = {type: 'solid', color: '#FFFFFF'}, dark = {type: 'solid', color: '#0B1220'};
 const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: uri(bytes.wide), icon: {onLight: uri(bytes.square), onDark: uri(bytes.tall)}}};
-const FIXED = {seed: 1, timestamp: '2026-01-01T00:00:00Z', date: '2026-09-10'};
+const FIXED = {slideNumberFields: 'live', seed: 1, timestamp: '2026-01-01T00:00:00Z', date: '2026-09-10'};
 
 const text = (entries, path) => dec.decode(entries[path]);
 const same = (a, b) => Boolean(a && b) && Buffer.compare(Buffer.from(a), Buffer.from(b)) === 0;

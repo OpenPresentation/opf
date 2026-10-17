@@ -65,7 +65,7 @@ const decks = [
 ];
 let orders = 0;
 for (const deck of decks) {
-  const entries = unzipSync(await toPptx(deck, {date: '2026-01-02'}));
+  const entries = unzipSync(await toPptx(deck, {date: '2026-01-02', slideNumberFields: 'live'}));
   const svgs = toSvg(deck, {trace: true, date: '2026-01-02'});
   for (const [index, slide] of deck.slides.entries()) {
     const xml = dec.decode(entries[`ppt/slides/slide${index + 1}.xml`]), order = names(xml);
@@ -84,7 +84,7 @@ for (const deck of decks) {
   // Native fields and re-import do not depend on furniture position.
   const first = dec.decode(entries['ppt/slides/slide1.xml']);
   if (deck.design.footer.right) assert.match(first, /<a:fld [^>]*type="slidenum"/);
-  const imported = await fromPptx(await toPptx(deck, {date: '2026-01-02'}));
+  const imported = await fromPptx(await toPptx(deck, {date: '2026-01-02', slideNumberFields: 'live'}));
   assert.deepEqual(imported.design.footer, deck.design.footer);
   assert.deepEqual(imported.slides.map(slide => slide.title), deck.slides.map(slide => slide.title));
 }

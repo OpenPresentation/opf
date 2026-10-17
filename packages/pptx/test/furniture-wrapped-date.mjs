@@ -15,7 +15,7 @@ slides: [{title: 'Title', design: {footer: false}},
   {title: 'Content', text: 'Keep body content.', composition: {minFontSize: 32, overflow: 'error'}},
   {title: 'Third', text: 'Still current.', composition: {minFontSize: 32, overflow: 'error'}}]};
 const fonts = {fonts: await loadFonts()};
-const options = {...fonts, date: '2026-09-22', seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'};
+const options = {...fonts, slideNumberFields: 'live', date: '2026-09-22', seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'};
 const emit = async (value = source, extra = {}) => {
   const before = structuredClone(value), issues = [];
   const bytes = await toPptx(value, {...options, ...extra, onDiagnostic: issue => issues.push(issue)});

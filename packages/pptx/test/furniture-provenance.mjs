@@ -13,7 +13,7 @@ const image = {src: `data:image/png;base64,${(await readFile(new URL('fixtures/i
 const effective = (deck, index, kind) => deck.slides[index].design?.[kind] ?? deck.design?.[kind];
 const exportDeck = async (deck, options = {}) => {
   const source = structuredClone(deck);
-  const bytes = await toPptx(deck, {...options, strictAssets: true});
+  const bytes = await toPptx(deck, {...options, strictAssets: true, slideNumberFields: 'live'});
   assert.deepEqual(deck, source, 'Export leaves the source unchanged.');
   return bytes;
 };
