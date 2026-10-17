@@ -14,7 +14,7 @@ test('rich table cells and headers use canonical runs while scalar values remain
 
 test('table overflow uses run metrics and pagination preserves whole rich cells',()=>{
  const textMeasurement={measure:(text,size,style)=>text.length*size*(style.fontWeight===700?.8:.5)};
- const styled={table:{rows:[[[{text:'W'.repeat(30),fontSize:120,bold:true}]]]}};
+ const styled={table:{rows:[[[{text:'W'.repeat(300),fontSize:120,bold:true}]]]}};
  assert.ok(composeSlide(styled,{textMeasurement}).diagnostics.some(d=>d.code==='text-overflow'));
  assert.equal(composeSlide({table:{rows:[['W'.repeat(30)]]}},{textMeasurement}).diagnostics.length,0);
  const table={columns:[['Rich ',{text:'header',bold:true}],'Number'],rows:Array.from({length:45},(_,i)=>[[{text:'Row '+i,bold:i%2===0,link:'https://example.com/'+i}],i])};
