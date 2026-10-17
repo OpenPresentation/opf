@@ -87,6 +87,20 @@ const unplacedRule = rule(
 );
 const REGION_RULES = { 'region-unknown': regionUnknownRule, 'region-kind': regionKindRule, 'region-full': regionFullRule, 'layout-unplaced': unplacedRule } as const;
 
+/** A header or footer zone is a band at the slide edge; text past this many lines grows upward into the content. */
+const MAX_FURNITURE_LINES = 2;
+const furnitureWrapsRule = rule(
+	'furniture-wraps',
+	'layout',
+	'warning',
+	`A header or footer zone wraps onto more than ${MAX_FURNITURE_LINES} lines.`,
+	'Header and footer text repeats on every slide in a band at the slide edge. A zone that wraps onto three or more lines grows into the body, and long source lines read poorly at footer size. Footers carry short repeated text (a title, a date, a page number); sources belong in a caption or the speaker notes.',
+	{
+		cost: 'composition',
+		approximations: 'Uses the lines core composed for the zone at the deck\'s slide size; without a host-supplied text measurement (ValidateOptions.fonts.textMeasurement) widths are core\'s portable estimates. A deck-level header or footer is reported once.',
+	},
+);
+
 const layoutRules: ValidationRule[] = [
 	{
 		info: overflowRule,
@@ -147,6 +161,26 @@ const layoutRules: ValidationRule[] = [
 					else small(pointerOfDotted(item.path), [item.text?.fontSize], item.field === 'title' ? 'Title' : 'Text');
 				}
 			}
+		},
+	},
+	{
+		info: furnitureWrapsRule,
+		run(context) {
+			const reported = new Set<string>();
+			for (const slide of context.slides)
+				for (const part of slide.composition?.furniture?.parts ?? []) {
+					if (part.type !== 'text' || part.fit.lines.length <= MAX_FURNITURE_LINES) continue;
+					const path = pointerOfDotted(part.sourcePath ?? part.path);
+					if (reported.has(path)) continue;
+					reported.add(path);
+					context.report(furnitureWrapsRule, {
+						path,
+						slide,
+						message: `The ${part.kind} ${part.zone} text wraps onto ${part.fit.lines.length} lines (at most ${MAX_FURNITURE_LINES}).`,
+						help: 'Shorten the text, or move sources and notes to a caption or the speaker notes; keep the footer for short repeated text.',
+						measured: { lines: part.fit.lines.length, maximumLines: MAX_FURNITURE_LINES },
+					});
+				}
 		},
 	},
 ];

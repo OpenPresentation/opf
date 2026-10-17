@@ -247,6 +247,7 @@ describe('furniture', () => {
     const layout = layoutFurniture(presentation.slides[0], {presentation, slideIndex: 0});
     assert.equal(layout.parts[0].zone, 'left');
     assert.equal(layout.parts[0].alignment, 'right');
-    assert.ok(layout.parts[0].box.x > 640);
+    // RR-91: a lone zone spans the content width, so the right-aligned text ends at the right content inset.
+    assert.ok(Math.abs(layout.parts[0].box.x + layout.parts[0].box.width - (1280 - 0.08 * 720)) < 1e-6);
   });
 });
