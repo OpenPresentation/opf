@@ -113,7 +113,7 @@
     },
     "burndown": {
       "file": "docs/programs/release-readiness/burndown.md",
-      "items": 87
+      "items": 95
     },
     "overrides": {
       "file": "docs/programs/release-readiness/gallery-tracker.overrides.json",
