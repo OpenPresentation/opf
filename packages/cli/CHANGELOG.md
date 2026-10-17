@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.20.1 (2026-10-17)
+
+- RR-87: Make `opf doctor` inspect fonts and converters from the selected renderer's own Node resolution chain, so an unrelated global or Core install cannot hide a missing or incompatible renderer peer. Root engine discovery still checks Core and the working directory.
+- Report unsupported decimal precision and number-format scaling overflow as formatting errors instead of throwing during variable or data validation.
+- Count rich-text slide titles in deck statistics and return their plain text in per-slide results.
+
 ## 0.20.0 (2026-10-14)
 
 CLI 0.20.0 uses published core 0.20.1 and renderer/PPTX 0.20.0 for nested-array layouts and shared design defaults.
