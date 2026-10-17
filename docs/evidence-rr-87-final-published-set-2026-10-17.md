@@ -72,21 +72,21 @@ remaining twenty-one intended cases then ran. Initial setup/selection failures,
 traces and original build identities are retained. These are local qualification
 facts, not production deployment or native acceptance.
 
-## Pending final source and production facts
+## Accepted delivery and pending source integration
 
-This closeout preparation is **not RR-87 completion**. Pending fields below must
-be replaced only with actual supervisor-accepted evidence; no placeholder is an
-asserted future success.
+This checkpoint is **not RR-87 completion**. The delivery facts below are
+supervisor-accepted; the remaining source checks and normal merges are still
+required. Candidate production acceptance does not waive them.
 
-| Gate | Actual accepted fact still required |
+| Gate | Accepted fact and remaining boundary |
 | --- | --- |
-| Final plan source | PENDING: normal Core #707 source CI/queue and actual merged commit/tree. |
-| Main source and production | PENDING: actual merged source/tree, postmerge BuildID/artifact seal, Worker version/deployment, 100% traffic and focused live acceptance. |
-| Gallery source and production | PENDING: actual merged source/tree, postmerge BuildID/artifact seal, Worker version/deployment, 100% traffic and the agreed live journeys plus manifest/canonical asset verification. |
-| Dev source and production | PENDING: final accepted source, normal workflow result, intended backend/Worker binding, actual activation/deployment identities and scoped live acceptance; unrun authenticated/model checks remain explicit. |
-| Complete final census | PENDING: a separately assigned complete eight-repository census with its UTC timestamp, PR/draft/issue counts and reviewed dispositions. Earlier dated counts remain historical. |
-| Safe primary synchronization | PENDING: separately authorized synchronization receipt with UTC timestamp and actual clean primary refs; no destructive cleanup is inferred. |
-| RR-87 scoped closeout | PENDING: supervisor acceptance of the unchanged criterion, all final actual facts and the reviewed closeout source transaction. The broader program is not thereby complete. |
+| Final plan source | [Core #707](https://github.com/OpenPresentation/opf/pull/707) actually merged as `c9677634c6f68869936b6cb8cd63d20841d32ecd`, tree `5c20dae564003c49edf638d35587e7d2431ccbbf`, after normal required CI/queue. The seven-file patch and full tree equal the reviewed immutable `0d36559d` docs/plan commit. Core's npm publisher remains `0e689585`. |
+| Main source and production | Reviewed candidate `9a571e05`, BuildID `VQswjb0YnKAHOWBu3udJ5`, is accepted at 100% traffic (Worker `429f08ed-aad7-4c2d-8eda-c517da334afd`, deployment `10db1809-86f2-4659-a335-0a15ad2ab858`, 2026-10-17 11:12:02 UTC). All 15 maintained live cases passed with zero retries. Required source CI and the normal source merge remain PENDING. |
+| Gallery source and production | The reviewed sealed candidate is deployed at 100% traffic (BuildID `cId4t7TnGYPA3YOFrkbkM`, Worker `83a52957-7649-43e3-b749-b8df3d149273`, deployment `cf2577eb-db22-493e-a747-8b7dcff2fed5`, 2026-10-17 11:10:35 UTC). All 11 focused live journeys passed with zero retries, including 44 manifest-pinned vendor files and 28 canonical layouts/records/SVGs. The original precommit build is byte-equivalent to the reviewed candidate; no rebuild or postmerge relabeling occurred. Required source CI and the actual source merge remain PENDING; manual production acceptance does not satisfy them. |
+| Dev source and production | Current reviewed source `08a6e194` retains the actual `4209ede5` build and BuildID `z_XMRwCPqKyCFeqaProWh`, with only the accepted nonproduct delta. One backend activation and a no-reactivation resume verified two registered contracts immediately before the matching upload. Worker `ca33d210-aa91-4872-9242-07dbba6ac5da`, deployment `1ad6eba9-3833-4ac6-8887-8934e67fe7cd`, is accepted at 100% traffic (2026-10-17 11:21:29 UTC); three maintained live cases and nine bounded public checks passed. The backend-to-Worker gap was 219.279708 seconds, not atomic. Source CI/normal merge, signed-in/model checks and end-to-end delivery acceptance remain separate and PENDING. |
+| Latest complete census | 2026-10-17 11:15:57 UTC: 11 open PRs, seven drafts and 45 issues across all eight repositories. One metadata-only request, all pages complete; no CI fields or issue bodies reread. Every current head and retained issue decision is reconciled; no new unreviewed item was found. Earlier dated counts remain historical. |
+| Safe primary synchronization | 2026-10-17 11:16:50 UTC: all eight primaries are clean on expected default branches and match the fresh metadata. Four remaining primaries received one normal fetch and fast-forward-only update each; Core advanced to `c9677634`, the three site defaults remained unchanged. Four stable package defaults were unchanged, so they were not fetched again. No reset, stash, branch switch, pruning or destructive cleanup. |
+| RR-87 scoped closeout | PENDING: required hosted source checks and normal integration of the three site PRs remain blocked by actual pre-scheduling billing failures. Manual production acceptance is not a CI waiver or source-merge result. The supervisor has not marked the unchanged RR-87 criterion complete, and no closeout PR is open. The broader program remains active. |
 
 ## Residual limits
 
