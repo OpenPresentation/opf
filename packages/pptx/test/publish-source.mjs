@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync, spawnSync } from 'node:child_process';
-import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { appendFileSync, mkdtempSync, mkdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -108,6 +108,71 @@ test('fixture rejection controls are independent of ambient CI event identities'
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.match(result.stdout, /# pass 2(?:\r?\n|$)/, 'Both rejection fixtures must actually execute in the child');
 });
+
+// BEGIN shared owned-workspace controls (mirrored by sibling publication tests).
+test('checkout temporary HOME trust does not authorize the job HOME; exact workspace trust stays scoped', (t) => {
+  const current = fixture(t, 'package.json');
+  const adjacent = fixture(t, 'package.json');
+  const homes = mkdtempSync(path.join(tmpdir(), 'publish-homes-'));
+  t.after(() => rmSync(homes, { recursive: true, force: true }));
+  const checkoutHome = path.join(homes, 'checkout'), jobHome = path.join(homes, 'job');
+  for (const home of [checkoutHome, jobHome]) mkdirSync(home);
+  const environment = (home, options) => {
+    const env = { ...process.env };
+    // No inherited Git config, credentials or CI identity may make a synthetic repository trusted.
+    for (const key of Object.keys(env)) if (key.startsWith('GIT_')) delete env[key];
+    return { ...env, HOME: home, USERPROFILE: home, XDG_CONFIG_HOME: path.join(home, 'xdg'),
+      GIT_CONFIG_NOSYSTEM: '1', GIT_TEST_ASSUME_DIFFERENT_OWNER: '1', GIT_TERMINAL_PROMPT: '0',
+      LC_ALL: 'C', LANG: 'C', GITHUB_REF: options.ref, GITHUB_SHA: options.sha };
+  };
+  const runGit = (home, args) => spawnSync('git', args, { cwd: current.cwd, encoding: 'utf8', env: environment(home, current.options) });
+  const runGuard = (owner, overrides = {}) => spawnSync(process.execPath, [path.join(root, 'scripts/publish-source.mjs'),
+    '--manifest', owner.options.manifest, '--tag-prefix', 'opf-v'], {
+    cwd: owner.cwd, encoding: 'utf8', env: { ...environment(jobHome, owner.options), ...overrides },
+  });
+  const workspace = realpathSync(current.cwd);
+  const checkoutTrust = runGit(checkoutHome, ['config', '--global', '--add', 'safe.directory', workspace]);
+  assert.equal(checkoutTrust.status, 0, checkoutTrust.stderr);
+  assert.equal(runGit(jobHome, ['check-ref-format', current.options.ref]).status, 0);
+  const refused = runGuard(current);
+  assert.equal(refused.status, 1);
+  assert.match(refused.stderr, /rev-parse --is-shallow-repository/);
+  assert.match(refused.stderr, /exit 128/);
+  assert.match(refused.stderr, /dubious ownership/);
+  const jobTrust = runGit(jobHome, ['config', '--global', '--add', 'safe.directory', workspace]);
+  assert.equal(jobTrust.status, 0, jobTrust.stderr);
+  const accepted = runGuard(current);
+  assert.equal(accepted.status, 0, accepted.stderr);
+  assert.equal(JSON.parse(accepted.stdout).commit, current.options.sha);
+  const other = runGuard(adjacent);
+  assert.equal(other.status, 1);
+  assert.match(other.stderr, /dubious ownership/);
+  const wrongEvent = runGuard(current, { GITHUB_SHA: 'f'.repeat(40) });
+  assert.equal(wrongEvent.status, 1);
+  assert.match(wrongEvent.stderr, /same release/);
+  const branch = runGuard(current, { GITHUB_REF: 'refs/heads/main' });
+  assert.equal(branch.status, 1);
+  assert.match(branch.stderr, /explicit refs\/tags/);
+  writeFileSync(path.join(current.cwd, 'package.json'), '{"version":"9.9.9"}');
+  const dirty = runGuard(current);
+  assert.equal(dirty.status, 1);
+  assert.match(dirty.stderr, /manifest differs/);
+});
+
+test('Git failure diagnostics retain status and bounded real stderr', (t) => {
+  const { cwd, verify } = fixture(t);
+  // Git itself emits a long malformed-config value; no fake Git binary or mocked child process.
+  appendFileSync(path.join(cwd, '.git', 'config'), `\n[core]\nrepositoryformatversion = ${'x'.repeat(10_000)}\n`);
+  assert.throws(() => verify(), error => {
+    assert.match(error.message, /Git identity check failed/);
+    assert.match(error.message, /exit 128/);
+    assert.match(error.message, /bad numeric config value/);
+    assert.match(error.message, /\[truncated\]/);
+    assert.ok(error.message.length < 2300, 'Git stderr cannot flood the publication log');
+    return true;
+  });
+});
+// END shared owned-workspace controls.
 
 test('the publish workflow gates every entry before dependencies with full history', () => {
   const text=readFileSync(path.join(root,'.github/workflows/release.yml'),'utf8');
