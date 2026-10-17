@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+## 0.20.4 (2026-10-17)
+
+- Retain native text and incompatible shapes added to tagged footnote separators instead of discarding them as decoration during PPTX import.
+- Bound untrusted PPTX archive expansion and XML parsing, including nested workbook and typeface-inspection reads. Reject malformed directory/member identities and report supported input limits before allocating unbounded data.
+- Require a version-matching release tag on merged main history before publication, including manual workflow retries.
+- RR-87: establish Git trust only for the exact checked-out workspace in the publishing job before verifying its merged release identity. Preserve the full source, tag and manifest checks; no runtime or export behavior changes.
+- Extend fail-closed retirement to the legacy metric, text and original-tab native measurements, whose cleanup can still call Office after a failure. Preserve old evidence and document replacement review requirements without changing native tolerances or claiming success.
+- Retire six legacy native test entrypoints before any effect because their cleanup can continue calling Office after a COM failure. Preserve historical evidence, document the maintained scenario-specific controls and the explicit replacement requirements; native acceptance is not claimed or skipped.
+- Reject XML-invalid characters in rich heading, body, list and table text before native export instead of allowing packaging to silently remove them.
+- Embed the sanitized SVG bytes when removing external references from style text or CDATA, so native pictures and raster fallbacks use the same safe content.
+- Reject XML-invalid plain table text before native emission instead of allowing the writer to silently remove characters.
+
 ## 0.20.3 (2026-10-16)
 
 - Raise the OPF dependency floor to 0.20.2 and the renderer peer and development requirements to 0.20.2.
