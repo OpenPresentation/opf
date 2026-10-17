@@ -12,8 +12,11 @@ export function verifyPublishSource({ cwd = process.cwd(), manifest, tagPrefixes
   const git = (...args) => {
     try {
       return execFileSync('git', args, { cwd, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim();
-    } catch {
-      fail(`Git identity check failed: git ${args.join(' ')}`);
+    } catch (error) {
+      const status = Number.isInteger(error.status) ? `exit ${error.status}` : `code ${error.code || 'unknown'}`;
+      const stderr = String(error.stderr || '').replace(/\p{Cc}/gu, (character) => character === '\n' || character === '\t' ? character : '').trim();
+      const detail = stderr.length > 2048 ? `${stderr.slice(0, 1024)} [truncated] ${stderr.slice(-1024)}` : stderr;
+      fail(`Git identity check failed: git ${args.join(' ')} (${status})${detail ? `; stderr: ${detail}` : ''}`);
     }
   };
   if (typeof manifest !== 'string' || !manifest || path.isAbsolute(manifest) || manifest.split(/[\\/]/).includes('..')) fail('a repository-relative manifest is required');

@@ -41,7 +41,7 @@ test('renderer 0.20.1 retains the reviewed 94 faces and refuses drift or unrecor
   for (const count of [0, 93, 95, 94.5, NaN, Infinity, '94', undefined]) {
     assert.throws(() => assertLazyFontCount('0.20.1', count), /expected 94/);
   }
-  for (const version of ['0.20.1-next.0', '0.20.4', '99.99.99']) {
+  for (const version of ['0.20.1-next.0', '0.20.5', '99.99.99']) {
     assert.throws(() => assertLazyFontCount(version, 94), /no expected lazy font count/);
   }
   assert.ok(Object.isFrozen(LAZY_FONT_COUNTS['0.20.1']));
@@ -54,7 +54,7 @@ test('renderer 0.20.2 source retains 94 faces while future releases and count dr
   for (const count of [0, 93, 95, 94.5, NaN, Infinity, '94', undefined]) {
     assert.throws(() => assertLazyFontCount('0.20.2', count), /expected 94/);
   }
-  for (const version of ['0.20.2-next.0', '0.20.4', '99.99.99']) {
+  for (const version of ['0.20.2-next.0', '0.20.5', '99.99.99']) {
     assert.throws(() => assertLazyFontCount(version, 94), /no expected lazy font count/);
   }
   assert.ok(Object.isFrozen(LAZY_FONT_COUNTS['0.20.2']));
@@ -67,8 +67,21 @@ test('renderer 0.20.3 retains its source-verified 94 faces with strict version a
   for (const count of [0, 93, 95, 94.5, NaN, Infinity, '94', undefined]) {
     assert.throws(() => assertLazyFontCount('0.20.3', count), /expected 94/);
   }
-  for (const version of ['0.20.3-next.0', '0.20.4', '99.99.99']) {
+  for (const version of ['0.20.3-next.0', '0.20.5', '99.99.99']) {
     assert.throws(() => assertLazyFontCount(version, 94), /no expected lazy font count/);
   }
   assert.ok(Object.isFrozen(LAZY_FONT_COUNTS['0.20.3']));
+});
+
+// Workflow-only recovery does not infer support for the next unreviewed version.
+test('renderer 0.20.4 recovery retains exactly 94 reviewed faces and fails closed otherwise', () => {
+  assert.deepEqual(LAZY_FONT_COUNTS['0.20.4'], [94]);
+  assertLazyFontCount('0.20.4', 94);
+  for (const count of [0, 93, 95, 94.5, NaN, Infinity, '94', undefined]) {
+    assert.throws(() => assertLazyFontCount('0.20.4', count), /expected 94/);
+  }
+  for (const version of ['0.20.4-next.0', '0.20.5', '99.99.99']) {
+    assert.throws(() => assertLazyFontCount(version, 94), /no expected lazy font count/);
+  }
+  assert.ok(Object.isFrozen(LAZY_FONT_COUNTS['0.20.4']));
 });
