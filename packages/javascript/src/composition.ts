@@ -2215,7 +2215,7 @@ export interface TableLayout { rows: TableRowLayout[]; columnCount: number; heig
  * All dimensions are canvas pixels; minFontSize is an unscaled canvas size.
  */
 export function layoutTable(value: unknown, box: LayoutBox, options: TableLayoutOptions = {}): TableLayout {
-  const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale), requested = gridFontSize(15 * scale,minimum);
+  const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale), requested = gridFontSize(contentNominalSize('table') * scale,minimum);
   if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0 || minimum <= 0) throw new RangeError('Table dimensions, scale and font sizes must be finite and positive.');
   // RR-54: dataset tables are laid out from their inline copy, and a body cell measures its formatted number text.
   const inline = inlineTableData(value, options.presentation);
@@ -2243,21 +2243,26 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     return {...cell,padding,width,textStyle:style,alignment};
   });
   const cellMinimum=(cell:typeof cells[number])=>Array.isArray(cell.value)?richMinimum(cell.value,requested,minimum):minimum;
-  const fitCell=(cell:typeof cells[number],height:number,min:number):TextFit|RichTextFit=>{
-    const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:Math.max(scale,height)};
+  // RR-90: every cell is set at one trial size (the table shrinks together toward the floor, see the loop below). A run's own
+  // fontSize stays relative to the nominal size, so `requested` is the reference and `trial` the size the cells are drawn at.
+  let trial=requested;
+  const cellSize=(cell:typeof cells[number])=>{const floor=cellMinimum(cell);return gridFontSize(Math.max(trial,floor),floor);};
+  const fitCell=(cell:typeof cells[number],height:number):TextFit|RichTextFit=>{
+    const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:Math.max(scale,height)},size=cellSize(cell);
     return Array.isArray(cell.value)
-      ? fitRichText(cell.value,textBox,requested,min,{style:cell.textStyle,...(options.codeFontFamily?{codeFontFamily:options.codeFontFamily}:{}),textMeasurement:options.textMeasurement,uniformLineHeight:true,direction:options.direction})
-      : fitText(flatten(cell.value),textBox,requested,min,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement),options.direction);
+      ? richTextLayouter(cell.value,textBox,requested,{style:cell.textStyle,...(options.codeFontFamily?{codeFontFamily:options.codeFontFamily}:{}),textMeasurement:options.textMeasurement,uniformLineHeight:true,direction:options.direction},minimum)(size)
+      : fitText(flatten(cell.value),textBox,size,size,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement),options.direction);
   };
   const textHeight=(fit:TextFit|RichTextFit)=>'height' in fit?fit.height:fit.lines.length*fit.lineHeight;
   const required=(cell:typeof cells[number],natural:boolean)=>{
-    const floor=cellMinimum(cell),size=gridFontSize(natural?Math.max(requested,floor):floor,floor);
+    const floor=cellMinimum(cell),size=gridFontSize(natural?Math.max(trial,floor):floor,floor);
     const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:scale};
     const fit=Array.isArray(cell.value)
       ?richTextLayouter(cell.value,textBox,requested,{style:cell.textStyle,...(options.codeFontFamily?{codeFontFamily:options.codeFontFamily}:{}),textMeasurement:options.textMeasurement,uniformLineHeight:true},minimum)(size)
       :fitText(flatten(cell.value),textBox,size,size,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement));
     return textHeight(fit)+(cell.padding.top+cell.padding.bottom)*scale;
   };
+  const place=():TableLayout=>{
   const natural=Array(grid.rowCount).fill(0) as number[],needed=Array(grid.rowCount).fill(0) as number[];
   for(const cell of cells)if(cell.rowSpan===1){natural[cell.row]=Math.max(natural[cell.row]!,required(cell,true));needed[cell.row]=Math.max(needed[cell.row]!,required(cell,false));}
   // Satisfy every spanning cell over its full rectangle. Added height can only
@@ -2282,13 +2287,21 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   for(const cell of cells){
     const cellBox={x:box.x+(options.direction==='rtl'?columnCount-cell.column-cell.colSpan:cell.column)*cellWidth,y:ys[cell.row]!,width:cell.colSpan*cellWidth,height:ys[cell.row+cell.rowSpan]!-ys[cell.row]!};
     const available=cellBox.height-(cell.padding.top+cell.padding.bottom)*scale;
-    const fit=fitCell(cell,available,minimum),height=textHeight(fit);
+    const fit=fitCell(cell,available),height=textHeight(fit);
     const offset=cell.style.verticalAlign==='bottom'?Math.max(0,available-height):cell.style.verticalAlign==='middle'?Math.max(0,(available-height)/2):0;
     const textBox={x:cellBox.x+cell.padding.left*scale,y:cellBox.y+cell.padding.top*scale+offset,width:Math.max(scale,cell.width),height:Math.max(scale,available-offset)};
     overflow ||= cell.width<=0||available<=0||fit.overflow;
     rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{})});
   }
   return {rows,columnCount,height:sum(heights),overflow};
+  };
+  // Largest size first, one reference pixel at a time: the first size at which the text and rows fit the box is the table's size.
+  for(let step=0;;step++){
+    const raw=requested-step*scale,last=step===64||raw<=minimum;
+    trial=last?snapFontSizeUp(minimum):gridFontSize(raw,minimum);
+    const layout=place();
+    if(last||!layout.overflow)return layout;
+  }
 }
 function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string): boolean {
   return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fontFamilies?.body,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),textMeasurement:options.textMeasurement,path,presentation:options.presentation}).overflow;
