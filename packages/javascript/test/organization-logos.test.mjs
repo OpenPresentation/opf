@@ -12,6 +12,13 @@ const near = (actual, expected, message) => assert.ok(Math.abs(actual - expected
 const deck = (organization, extra = {}) => ({$schema: 'https://openpresentation.org/schema/opf/v1', organization, slides: [{title: 'Cover'}], ...extra});
 const codes = report => report.findings.filter(finding => finding.ruleId.startsWith('opf/variable-')).map(finding => [finding.ruleId, finding.severity, finding.path]);
 
+// RR-91: zones sit on the content inset (padding .08 of the short edge). A lone zone spans the content width; a zone beside
+// two occupied zones is one third of what the two gutters (2% of the width) leave.
+const inset = (width = 1280, height = 720) => 0.08 * Math.min(width, height);
+const columnWidth = (width = 1280, height = 720) => (width - 2 * inset(width, height) - 2 * 0.02 * width) / 3;
+// A zone's content with the other two zones occupied by short text, so it keeps its own column.
+const crowded = (side, content) => Object.fromEntries(['left', 'center', 'right'].map(zone => [zone, zone === side ? content : {text: '.'}]));
+
 test('the shapes are full, stacked, icon and wordmark', () => {
   assert.deepEqual([...LOGO_SHAPES], ['full', 'stacked', 'icon', 'wordmark']);
 });
@@ -221,7 +228,7 @@ test('a zone lays out image, text, socials and date in one row aligned to its ed
       if (index) near(part.box.x, parts[index - 1].box.x + parts[index - 1].box.width + FURNITURE_GAP, `${side} ${part.field} follows with one gap`);
       if (part.type === 'text') assert.equal(part.fit.lines.length, 1, `${side} ${part.field} keeps one line`);
     }
-    const zoneX = 1280 * (0.07 + ['left', 'center', 'right'].indexOf(side) * 0.3), zoneWidth = 1280 * 0.26;
+    const zoneX = inset(), zoneWidth = 1280 - 2 * inset();
     const start = parts[0].box.x, end = parts.at(-1).box.x + parts.at(-1).box.width;
     if (side === 'left') near(start, zoneX, 'starts at the left edge');
     if (side === 'right') near(end, zoneX + zoneWidth, 'ends at the right edge');
@@ -231,7 +238,7 @@ test('a zone lays out image, text, socials and date in one row aligned to its ed
   }
   // A zone with one text part keeps the whole zone width, as before.
   const lone = layoutFurniture({}, {presentation: deck(organization, {design: {footer: {right: {text: 'Only'}}}})}).parts[0];
-  near(lone.box.width, 1280 * 0.26, 'one text part spans the zone');
+  near(lone.box.width, 1280 - 2 * inset(), 'one text part spans the content width');
   // \n still breaks lines inside a part.
   const lines = layoutFurniture({}, {presentation: deck(organization, {design: {footer: {left: {image: 'var:organization.logo', text: 'One\nTwo'}}}})}).parts[1];
   assert.equal(lines.fit.lines.length, 2);
@@ -241,25 +248,25 @@ test('a right-to-left deck runs the row from the right', () => {
   const presentation = deck({id: 'acme', name: 'Acme', logo: asset('acme')}, {language: 'ar', design: {footer: {left: {image: 'var:organization.logo', text: 'نص'}}}});
   const [image, text] = layoutFurniture({}, {presentation}).parts;
   assert.equal(image.alignment, 'right');
-  near(image.box.x + image.box.width, 1280 * (0.07 + 2 * 0.3) + 1280 * 0.26, 'the image is at the start (right) edge');
+  near(image.box.x + image.box.width, 1280 - inset(), 'the image is at the start (right) edge');
   near(text.box.x + text.box.width + FURNITURE_GAP, image.box.x, 'the text follows to its left');
 });
 
 test('a row wider than its zone wraps its text, and reports overflow when it cannot fit', () => {
   const organization = {id: 'acme', name: 'Acme', logo: asset('acme')};
   const long = 'Confidential and proprietary information prepared for the board';
-  const layout = layoutFurniture({}, {presentation: deck(organization, {design: {footer: {left: {image: 'var:organization.logo', text: long, date: '2026'}}}})});
+  const layout = layoutFurniture({}, {presentation: deck(organization, {design: {footer: crowded('left', {image: 'var:organization.logo', text: long, date: '2026'})}})});
   assert.deepEqual(layout.diagnostics, []);
   const [image, text, date] = layout.parts;
   assert.ok(text.fit.lines.length > 1, 'the long text wraps');
   assert.equal(date.fit.lines.length, 1, 'the short date keeps its width');
-  near(date.box.x + date.box.width - image.box.x, 1280 * 0.26, 'the row fills the zone exactly');
+  near(date.box.x + date.box.width - image.box.x, columnWidth(), 'the row fills the zone exactly');
   // A very wide logo is capped beside text, so the text keeps room; a word that still cannot fit its share is overflow.
   const wide = `data:image/svg+xml;base64,${Buffer.from('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100"/>').toString('base64')}`;
-  const capped = layoutFurniture({}, {presentation: deck({...organization, logo: wide}, {design: {footer: {left: {image: 'var:organization.logo', text: 'Acme'}}}})});
+  const capped = layoutFurniture({}, {presentation: deck({...organization, logo: wide}, {design: {footer: crowded('left', {image: 'var:organization.logo', text: 'Acme'})}})});
   assert.deepEqual(capped.diagnostics, []);
-  near(capped.parts[0].box.width, 1280 * 0.26 * 0.4, 'the logo takes at most 40% of the zone');
-  const overflow = layoutFurniture({composition: {minFontSize: 32}}, {presentation: deck({...organization, logo: wide}, {design: {footer: {left: {image: 'var:organization.logo', text: 'Supercalifragilistic', date: '2026'}}}})});
+  near(capped.parts[0].box.width, columnWidth() * 0.4, 'the logo takes at most 40% of the zone');
+  const overflow = layoutFurniture({composition: {minFontSize: 32}}, {presentation: deck({...organization, logo: wide}, {design: {footer: crowded('left', {image: 'var:organization.logo', text: 'Supercalifragilistic', date: '2026'})}})});
   assert.equal(overflow.overflow, true);
   assert.deepEqual(overflow.diagnostics.map(entry => [entry.code, entry.path]), [['text-overflow', 'design.footer.left.text']]);
 });
@@ -284,22 +291,22 @@ const png = (width, height) => {
 
 test('beside other parts an image is capped at FURNITURE_IMAGE_SHARE of the zone; alone it keeps its width', () => {
   assert.equal(FURNITURE_IMAGE_SHARE, 0.4);
-  const zoneWidth = 1280 * 0.26;
-  const zone = content => layoutFurniture({}, {presentation: deck({id: 'acme', name: 'Acme', logo: png(400, 100)}, {design: {header: {left: content}}})}).parts;
+  const zoneWidth = columnWidth();
+  const zone = content => layoutFurniture({}, {presentation: deck({id: 'acme', name: 'Acme', logo: png(1000, 100)}, {design: {header: crowded('left', content)}})}).parts.slice(0, content.text ? 2 : 1);
   const [alone] = zone({image: 'var:organization.logo'});
-  near(alone.box.width, alone.box.height * 4, 'a lone 4:1 logo keeps its proportions');
+  near(alone.box.width, alone.box.height * 10, 'a lone 10:1 logo keeps its proportions');
   const [image, text] = zone({image: 'var:organization.logo', text: 'Acme'});
   near(image.box.width, zoneWidth * FURNITURE_IMAGE_SHARE, 'the wide logo is capped beside text');
   near(image.box.height, alone.box.height, 'at the same height (consumers fit the image inside the box)');
   near(text.box.x, image.box.x + image.box.width + FURNITURE_GAP, 'the text follows');
   // An image narrower than the share keeps its own width.
-  const [square] = layoutFurniture({}, {presentation: deck({id: 'acme', name: 'Acme', logo: png(100, 100)}, {design: {header: {left: {image: 'var:organization.logo', text: 'Acme'}}}})}).parts;
+  const [square] = layoutFurniture({}, {presentation: deck({id: 'acme', name: 'Acme', logo: png(100, 100)}, {design: {header: crowded('left', {image: 'var:organization.logo', text: 'Acme'})}})}).parts;
   near(square.box.width, square.box.height, 'a square logo is not stretched');
 });
 
 test('portrait: a logo beside text never breaks a word silently at the readability floor', () => {
   // The renderer's case: a 720 px wide portrait canvas, a header-left logo beside text, a 32 px floor.
-  const layout = (logo, text) => layoutFurniture({composition: {minFontSize: 32}}, {width: 720, height: 1280, presentation: deck({id: 'acme', name: 'Acme', logo}, {design: {header: {left: {image: 'var:organization.logo', text}}}})});
+  const layout = (logo, text) => layoutFurniture({composition: {minFontSize: 32}}, {width: 720, height: 1280, presentation: deck({id: 'acme', name: 'Acme', logo}, {design: {header: crowded('left', {image: 'var:organization.logo', text})}})});
   for (const logo of [png(400, 100), png(100, 100), './assets/acme.svg']) {
     const result = layout(logo, 'Keep both');
     assert.deepEqual(result.diagnostics, [], 'the words fit their share whole');

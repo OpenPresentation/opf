@@ -772,7 +772,8 @@ export interface FurniturePartBase {
   /**
    * The part's own box. A zone lays its parts out in one row, in the order image, text, socials, date (mirrored in a
    * right-to-left deck), aligned to the zone's edge with FURNITURE_GAP between parts and each part vertically centered
-   * in the row. A zone with one part keeps the full zone width for text.
+   * in the row. A zone with one part keeps the full zone width for text. The zones sit on the content inset
+   * (`composition.padding`); a zone beside empty zones takes their width (FURNITURE_ZONE_GUTTER between occupied zones).
    */
   box: LayoutBox;
   alignment: 'left' | 'center' | 'right';
@@ -853,6 +854,8 @@ export interface FurnitureLayout {
 
 /** Gap between the parts of one header/footer zone row, in reference pixels (scaled with the canvas's short edge). */
 export const FURNITURE_GAP = 12;
+/** Gap between the three header/footer zones, as a share of the canvas width. An empty zone's column is lent to its occupied neighbours. */
+export const FURNITURE_ZONE_GUTTER = .02;
 /** In a zone with other parts, an image is at most this share of the zone's width, so a wide logo cannot starve the text. */
 export const FURNITURE_IMAGE_SHARE = .4;
 /** Letters and digits of scripts written with spaces between words: a soft line break between two of them splits a word. */
@@ -897,11 +900,31 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
     if(!value||typeof value!=='object'||Array.isArray(value))throw new TypeError('Header/footer content must be an object or false.');
     configured=true;
     const zones:FurniturePart[][]=[];
+    // The three zones are columns on the content inset (the same left edge as the body), separated by a gutter. A zone
+    // with nothing in it lends its column to the occupied neighbours, so a lone `left` footer spans the content width
+    // and a footer with a left and a right zone shares the free centre. A centre zone stays centred on the slide.
+    const inset=Math.min((settings.padding??.08)*Math.min(width,height),width*.25),gutter=width*FURNITURE_ZONE_GUTTER,column=(width-2*inset-2*gutter)/3;
+    const slotOf=(index:number)=>furnitureRtl&&index!==1?2-index:index;
+    const hasContent=(zone:'left'|'center'|'right')=>{
+      const item=record(record(value)[zone]);
+      return item.image!==undefined||(typeof item.text==='string'?item.text.trim()!=='':item.text!==undefined)||item.socials===true||item.date===true||typeof item.date==='string';
+    };
+    const slots=(['left','center','right'] as const).map((zone,index)=>({slot:slotOf(index),occupied:hasContent(zone)})).sort((a,b)=>a.slot-b.slot);
+    const first=slots.findIndex(entry=>entry.occupied);
+    const interval=(slot:number):{x:number;width:number}=>{
+      const start=inset+slot*(column+gutter),end=start+column;
+      if(!slots[slot]!.occupied||first<0)return {x:start,width:column};
+      const before=slots.slice(0,slot).map(entry=>entry.occupied).lastIndexOf(true),after=slots.findIndex((entry,i)=>i>slot&&entry.occupied);
+      // Room taken from the empty slots on each side: all of them at the slide edge, half of the free gap between two zones.
+      const left=before<0?start-inset:(start-(inset+before*(column+gutter)+column)-gutter)/2,right=after<0?width-inset-end:(inset+after*(column+gutter)-end-gutter)/2;
+      const lend=slot===1?Math.min(left,right):undefined;
+      return {x:start-(lend??left),width:column+(lend??left)+(lend??right)};
+    };
     for(const [index,zone]of (['left','center','right'] as const).entries()){
       // Right to left: the authored `left` zone is drawn at the right and `right` at the left; `zone` keeps the authored name.
       // `alignment` is the physical edge the zone's text sits on (never flipped again by line direction).
       const side=furnitureRtl&&zone!=='center'?(zone==='left'?'right':'left'):zone;
-      const content=record(record(value)[zone]),path=`${root}.${zone}`,x=width*(.07+(furnitureRtl?2-index:index)*.3),zoneWidth=width*.26;
+      const content=record(record(value)[zone]),path=`${root}.${zone}`,{x,width:zoneWidth}=interval(slotOf(index));
       type PendingText={type:'text';field:FurniturePartBase['field'];text:string;generated:boolean;sourcePath:string|undefined;extras:FurnitureTextExtras;partPath:string;style:TextStyle};
       type PendingImage={type:'image';sourcePath:string;image:unknown;reference?:string;width:number;height:number};
       const pending:(PendingText|PendingImage)[]=[];

@@ -278,6 +278,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/region-kind`](#opfregion-kind) | Layout | warning | composition | A block is pinned to a region that does not accept its kind. |
 | [`opf/region-full`](#opfregion-full) | Layout | warning | composition | A block is pinned to a region that is already full. |
 | [`opf/layout-unplaced`](#opflayout-unplaced) | Layout | warning | composition | No region of the layout has room for a block. |
+| [`opf/furniture-wraps`](#opffurniture-wraps) | Layout | warning | composition | A header or footer zone wraps onto more than 2 lines. |
 | [`opf/font-outside-scheme`](#opffont-outside-scheme) | Layout | warning | structure | Text uses a font family that is not in the deck's font scheme. |
 | [`opf/image-resolution`](#opfimage-resolution) | Layout | warning | composition | An image has too few pixels for the size it is shown at. |
 | [`opf/chart-value-not-numeric`](#opfchart-value-not-numeric) | Content | warning | structure | A chart value is text, not a number. |
@@ -839,6 +840,14 @@ Default severity: **warning**. Cost: composition. A block is pinned to a region 
 Default severity: **warning**. Cost: composition. No region of the layout has room for a block.
 
 **Why.** Content is never dropped: a block no region has room for is drawn in the layout's overflow region beyond its max (or below the grid), where it crowds the others. Paginate moves it to a continuation slide with the same layout.
+
+### `opf/furniture-wraps`
+
+Default severity: **warning**. Cost: composition. A header or footer zone wraps onto more than 2 lines.
+
+**Why.** Header and footer text repeats on every slide in a band at the slide edge. A zone that wraps onto three or more lines grows into the body, and long source lines read poorly at footer size. Footers carry short repeated text (a title, a date, a page number); sources belong in a caption or the speaker notes.
+
+**Approximations.** Uses the lines core composed for the zone at the deck's slide size; without a host-supplied text measurement (ValidateOptions.fonts.textMeasurement) widths are core's portable estimates. A deck-level header or footer is reported once.
 
 ### `opf/font-outside-scheme`
 

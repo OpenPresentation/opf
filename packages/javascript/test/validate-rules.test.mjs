@@ -55,7 +55,7 @@ test('every rule has a stable id, a category, a cost, a rationale and an entry i
 	for (const gone of ['font-family-count', 'slide-word-count', 'title-position', 'small-cell', 'unfilled-variable', 'invalid-document', 'catalog-reference', 'deprecated-catalog-id', 'catalog-source'])
 		assert.equal(findValidationRule(gone), undefined, gone);
 	// Only the composition-cost rules build layouts.
-	assert.deepEqual(validationRules.filter((info) => info.cost === 'composition').map((info) => info.name).sort(), ['image-resolution', 'layout-failed', 'layout-unplaced', 'min-font-size', 'reading-order', 'region-full', 'region-kind', 'region-unknown', 'text-contrast', 'text-on-image', 'text-overflow', 'unresolved-content']);
+	assert.deepEqual(validationRules.filter((info) => info.cost === 'composition').map((info) => info.name).sort(), ['furniture-wraps', 'image-resolution', 'layout-failed', 'layout-unplaced', 'min-font-size', 'reading-order', 'region-full', 'region-kind', 'region-unknown', 'text-contrast', 'text-on-image', 'text-overflow', 'unresolved-content']);
 });
 
 test('docs/validate.md carries the current generated rule reference', () => {

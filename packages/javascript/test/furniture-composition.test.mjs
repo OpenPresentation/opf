@@ -88,7 +88,7 @@ test('irreducible furniture and provided ink cannot be hidden by body pagination
   const slide={design:{header:{left:{text:'Line\n'.repeat(80)}}},text:'Body'};
   const result=composeSlide(slide);assert.ok(result.furniture.overflow);assert.ok(result.diagnostics.some(d=>d.path==='slides.0.design.header.left.text'));
   assert.throws(()=>paginateSlide(slide),error=>error instanceof OPFPaginationError&&error.diagnostics.some(d=>d.path==='slides.0.design.header.left.text'));
-  const hugeInk={measure,outlineBounds:()=>({x:0,y:-16,width:1000,height:16})};
+  const hugeInk={measure,outlineBounds:()=>({x:0,y:-16,width:1300,height:16})};
   assert.throws(()=>composeSlide({composition:{overflow:'error'},design:{footer:{right:{text:'X'}}}},{textMeasurement:hugeInk}),OPFCompositionError);
   assert.throws(()=>layoutFurniture({}, {slideNumber:0}),RangeError);
   assert.throws(()=>layoutFurniture({}, {width:Infinity}),RangeError);
@@ -167,7 +167,7 @@ test('date and slide number in one zone sit side by side on one line, aligned to
   assert.deepEqual(shared.diagnostics,[]);assert.deepEqual(shared.parts.map(p=>[p.field,p.text]),[['text','3'],['date','2026-04-23']]);
   const [number,date]=shared.parts;
   assert.equal(number.box.y,date.box.y);assert.ok(Math.abs(date.box.x-(number.box.x+number.box.width+12))<1e-9,'one gap between the parts');
-  assert.ok(Math.abs(date.box.x+date.box.width-1280*.93)<1e-9,'the row ends at the right zone edge');
+  assert.ok(Math.abs(date.box.x+date.box.width-(1280-.08*720))<1e-9,'the row ends at the content inset');
   for(const part of shared.parts)assert.equal(part.fit.lines.length,1);
   const split=layoutFurniture({design:{footer:{left:{date:'2026-04-23',dateFormat:'MMM d, yyyy'},right:{text:'{{slide.number}}'}}}},{slideNumber:3});
   assert.deepEqual(split.diagnostics,[]);assert.equal(split.parts[0].box.y,split.parts[1].box.y);assert.equal(split.footerTop,shared.footerTop);

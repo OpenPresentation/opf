@@ -40,7 +40,9 @@ test('a picture bullet draws as a square 0.65 of the font size with its bottom o
 test('furniture images and logos align like the zone text: left edge, centered, right edge', () => {
   const presentation = {organization: {id: 'acme', name: 'Acme', logo: {icon: png(128, 128)}}, design: {header: {left: {image: png(128, 128)}, center: {image: 'var:organization.logo.icon'}, right: {image: png(128, 128)}}, footer: {left: {image: 'var:organization.logo.icon'}, right: {text: 'Right'}}}};
   const layout = layoutFurniture({}, {presentation});
-  const zoneX = {left: 1280 * 0.07, center: 1280 * 0.37, right: 1280 * 0.67}, zoneWidth = 1280 * 0.26;
+  // RR-91: zones are columns on the content inset (padding .08, gutter 2% of the width) when their neighbours are occupied.
+  const inset = 0.08 * 720, gutter = 1280 * 0.02, zoneWidth = (1280 - 2 * inset - 2 * gutter) / 3;
+  const zoneX = {left: inset, center: inset + zoneWidth + gutter, right: inset + 2 * (zoneWidth + gutter)};
   const images = layout.parts.filter(part => part.type === 'image');
   assert.equal(images.length, 4);
   for (const part of images) {
@@ -63,13 +65,13 @@ test('a furniture image keeps its own proportions, capped at the zone; unreadabl
   const place = (image, zone = 'right') => layoutFurniture({}, {presentation: {design: {header: {[zone]: {image}}}}}).parts[0];
   const wide = place(png(400, 100));
   near(wide.box.width, wide.box.height * 4, 'a 4:1 PNG');
-  near(wide.box.x + wide.box.width, 1280 * 0.93, 'the wide image still ends at the zone edge');
+  near(wide.box.x + wide.box.width, 1280 - 0.08 * 720, 'the wide image still ends at the content edge');
   const tall = place(png(50, 100), 'left');
   near(tall.box.width, tall.box.height / 2, 'a 1:2 PNG');
-  near(tall.box.x, 1280 * 0.07, 'the tall image starts at the zone edge');
+  near(tall.box.x, 0.08 * 720, 'the tall image starts at the content inset');
   const huge = place(png(4000, 100), 'center');
-  near(huge.box.width, 1280 * 0.26, 'an extreme ratio is capped at the zone');
-  near(huge.box.x, 1280 * 0.37, 'a capped centered image fills the zone');
+  near(huge.box.width, 1280 - 2 * 0.08 * 720, 'an extreme ratio is capped at the zone (a lone zone spans the content width)');
+  near(huge.box.x, 0.08 * 720, 'a capped centered image fills the zone');
   for (const [name, image] of [['JPEG', jpeg(300, 100)], ['GIF', gif(300, 100)], ['WebP', webp(300, 100)]]) near(place(image).box.width / place(image).box.height, 3, `a 3:1 ${name}`);
   const vector = place(svg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 100"><rect width="300" height="100"/></svg>'));
   near(vector.box.width, vector.box.height * 3, 'an SVG viewBox');
