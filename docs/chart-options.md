@@ -94,7 +94,27 @@ Series `i` takes color `i`; a pie, doughnut, treemap or funnel colors category `
 
 Both engines then pass the list through `chartPaletteForFill(panel, palette)`, which keeps every series at 3:1 contrast against the chart panel (the card surface) and apart from its neighbours, so on a dark panel the colors are lightened, never merged. The palette is read in tiers of six (series 1 to 6, then 7 to 12): a color is kept apart from the colors of its own and earlier tiers only, so the tints never pull the six accents towards each other. Plan a chart's series order for the scheme: put the series that carries the message first (accent1 is the deck's primary), and keep a chart to six series or fewer so no tint is needed. The `highlight` colors above are separate: they come from the primary and the panel, not from this list.
 
-A host that validates with its own palette passes `ValidateOptions.chartPalette`; without it the rule judges each slide's own scheme. There is no per-series color field today.
+A host that validates with its own palette passes `ValidateOptions.chartPalette`; without it the rule judges each slide's own scheme.
+
+### Setting colors: `chart.colors`
+
+`colors` lists colors by position and replaces the palette color of that position; the rest of the palette is unchanged.
+
+```json
+{
+  "chart": {
+    "type": "column",
+    "data": { "columns": ["Quarter", "Revenue", "Costs"], "rows": [["Q1", 12, 8], ["Q2", 18, 11]] },
+    "colors": ["accent3", "#7B241C"]
+  }
+}
+```
+
+- **Position.** Entry `i` is the color of series `i` (the `i`-th plotted value column), of slice or category `i` on a pie, doughnut, treemap or funnel chart, and of the `i`-th color a histogram, pareto, waterfall or box-and-whisker chart draws with (the first color for its bars, the second for its line or negative bars). Up to 24 entries; positions past the last entry keep the deck palette.
+- **Values.** Any `ColorRef`: a hex color, a color-scheme slot or role (`accent3`, `secondary`), or a `var:<id>` color variable. A scheme name follows the deck if its scheme changes and is written to PowerPoint as a theme color; a hex color stays as written. Alpha is dropped. An entry that cannot be resolved is ignored (the palette color of its position is used) and `opf/chart-colors-adjusted` says so.
+- **Contrast.** Colors still pass through `chartPaletteForFill`: one with under 3:1 contrast against the chart panel is drawn lighter or darker, and series are kept apart. `opf/chart-colors-adjusted` warns when that happens to an authored color, and `opf/chart-color-only` judges the authored colors for colour-blind and greyscale collisions.
+- **Highlight wins.** With `chart.highlight`, highlighted marks take the primary color and every other mark the muted neutral, whatever `colors` says.
+- **Engines.** Core resolves the list with `chartSeriesPalette(colorScheme, chart.colors, { roles, variables })` (and `resolveChartColors` for the entries alone); the preview and the PPTX export pass the result to `chartPaletteForFill` as before.
 
 ## Value axis
 

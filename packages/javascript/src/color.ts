@@ -405,13 +405,44 @@ export const CHART_SERIES_TINT_MIX = 0.4;
  * category `i`. The colours depend on the scheme only, so the preview, the PPTX export and the colour-blind rule draw the same ones.
  * The role overrides (`primary`, `secondary`, `accent`) do not change the list: series 1 to 3 are always `accent1` to `accent3`, the
  * theme slots the PPTX export writes as `schemeClr accentN`.
+ *
+ * RR-89: `colors` is the chart's own `chart.colors` (positional ColorRefs). Entry `i` replaces palette colour `i`; an entry that cannot
+ * be resolved ({@link resolveChartColors}) keeps the scheme colour, and entries past the twelfth extend the list. `context` carries the
+ * deck's roles and `variables` for entries that name them.
  */
-export function chartSeriesPalette(colorScheme: Record<string, unknown> = {}): string[] {
+export function chartSeriesPalette(colorScheme: Record<string, unknown> = {}, colors?: unknown, context: ChartColorContext = {}): string[] {
   const accents = [1, 2, 3, 4, 5, 6].map(number => {
     const slot = `accent${number}`;
     return normalizeHexColor(colorScheme?.[slot]) ?? normalizeHexColor(ENGINE_DEFAULT_COLOR_SCHEME[slot]) ?? '#000000';
   });
-  return [...accents, ...accents.map(accent => mixChannels(opaqueChannels(accent)!, [255, 255, 255], CHART_SERIES_TINT_MIX))];
+  const palette = [...accents, ...accents.map(accent => mixChannels(opaqueChannels(accent)!, [255, 255, 255], CHART_SERIES_TINT_MIX))];
+  resolveChartColors(colors, colorScheme, context).forEach((color, index) => {
+    if (color === undefined) return;
+    // An entry past the twelve palette colours extends the list; a gap before it keeps the scheme colour of its position.
+    while (palette.length < index) palette.push(palette[palette.length % 12]!);
+    palette[index] = color;
+  });
+  return palette;
+}
+
+/** What a `chart.colors` entry resolves against: the deck's role colours and `variables`, as for any ColorRef. */
+export interface ChartColorContext {
+  roles?: ResolveColorRefRoles;
+  variables?: Record<string, unknown>;
+}
+
+/**
+ * The opaque #RRGGBB colour of each `chart.colors` entry (a hex colour, a colour-scheme slot or role, or a `var:<id>` variable), in
+ * order; undefined for an entry that is not a string or cannot be resolved (an unknown variable, a name that is not a colour). Alpha is
+ * dropped. `colors` that is not an array resolves to an empty list.
+ */
+export function resolveChartColors(colors: unknown, colorScheme: Record<string, unknown> = {}, context: ChartColorContext = {}): (string | undefined)[] {
+  if (!Array.isArray(colors)) return [];
+  return colors.map(entry => {
+    if (typeof entry !== 'string') return undefined;
+    const resolved = resolveColorRef(entry.trim(), { colorScheme, roles: context.roles, variables: context.variables, fallback: '' });
+    return normalizeHexColor(resolved);
+  });
 }
 
 // --------------------------------------------------------------- chart highlight (FA-14)

@@ -266,6 +266,7 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/reading-order`](#opfreading-order) | Accessibility | warning | composition | The order content is read differs from the order it appears on the slide. |
 | [`opf/link-text`](#opflink-text) | Accessibility | warning | structure | Link text does not say where the link goes. |
 | [`opf/chart-color-only`](#opfchart-color-only) | Accessibility | info | structure | Chart series may be indistinguishable without colour vision. |
+| [`opf/chart-colors-adjusted`](#opfchart-colors-adjusted) | Accessibility | warning | structure | A chart colour cannot be used as authored. |
 | [`opf/chart-text-alternative`](#opfchart-text-alternative) | Accessibility | info | structure | A chart has no text alternative, or is marked decorative. |
 | [`opf/missing-language`](#opfmissing-language) | Accessibility | info | structure | The presentation does not declare its language. |
 | [`opf/chart-option-adapted`](#opfchart-option-adapted) | Layout | warning | structure | A chart option cannot be shown by the chart type. |
@@ -739,6 +740,16 @@ Default severity: **info**. Cost: structure. Chart series may be indistinguishab
 **Thresholds.** `minSeriesColorDifference` (default 10)
 
 **Approximations.** Uses the engine's series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide colour scheme (accent1 to accent6, then their tints), adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Single-series charts and chart types without a series legend are skipped.
+
+### `opf/chart-colors-adjusted`
+
+Default severity: **warning**. Cost: structure. A chart colour cannot be used as authored.
+
+**Why.** `chart.colors` sets the colour of series 1, 2, 3 and so on. A colour that cannot be resolved (a `var:` colour variable the deck does not define, or a name that is not a colour) is ignored and the deck palette colour of that position is used. A colour with under 3:1 contrast against the chart panel is kept for its hue but drawn lighter or darker, so the chart does not show the colour that was written.
+
+**Basis.** WCAG 2.2 SC 1.4.11 Non-text Contrast, level AA
+
+**Approximations.** Resolves each entry like any colour reference (hex, colour-scheme slot or role, `var:` variable) against the slide's scheme and compares it with the chart panel (the slide surface colour) by WCAG contrast; 3:1 is the threshold the engines enforce. Translucent colours and unresolved panels are not measured. Colours that look alike to colour-vision deficiency are reported by opf/chart-color-only, which judges the authored colours.
 
 ### `opf/chart-text-alternative`
 
