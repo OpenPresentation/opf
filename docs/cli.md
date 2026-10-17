@@ -153,11 +153,13 @@ A flag applies only when its format is involved; anywhere else it is a usage err
 | png, raster pdf | `--scale 0.1-8` (1 draws the 1280 x 720 reference slide at 1280 x 720 pixels) |
 | pdf | `--raster` (each page a picture instead of selectable vector text) |
 | svg | `--text fonts\|system\|paths` (embed the faces the slide uses, none, or draw glyph outlines) |
-| pptx | `--charts auto\|native\|picture`, `--images compatible\|preserve`, `--provenance full\|references-only\|none` |
+| pptx | `--charts auto\|native\|picture`, `--images compatible\|preserve`, `--provenance full\|references-only\|none`, `--body-text measured\|native`, `--slide-numbers static\|live` |
 
 A `.pptx` input is imported, checked and then written or drawn; `findings` holds both steps (`import/` rules from the importer).
 Per-slide images and the PDF skip slides marked `hidden: true` unless `--include-hidden`; slides named with `--slides` are always
 written, and the report lists the slides left out in `skippedHidden`. The PPTX keeps a hidden slide as a hidden slide.
+
+**PPTX text (RR-88, RR-91).** By default (`--body-text measured`) a wrapped paragraph becomes one text box per line, laid out exactly as the preview draws it, so editing a line in PowerPoint or Keynote does not reflow the rest. `--body-text native` opts in to whole paragraphs: a title that wraps is one Title placeholder, and a text, bullets or numbered-list region is one body that the application re-wraps when edited. What native mode cannot carry (groups, cards, nested or described lists, restarted numbering, titles with a hard break) stays measured and is reported as `native-body-fallback`. `--slide-numbers` decides a footer such as `{{slide.number}} / {{deck.slideCount}}`: `static` writes the number as fixed text, so Keynote shows the words around it (it drops them next to a live number field), and `live` keeps the slide-number field. Both flags need an opf-pptx that reads them (0.21.0 or later); an older one is refused (`peer-too-old`) rather than ignoring them, and they are exit 2 for any other output.
 
 ## The other commands
 

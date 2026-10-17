@@ -36,13 +36,13 @@ const PPTX = [
   'export const inventoryTypefaces = () => [];',
 ];
 
-/** Write the stubs into `modules` (a node_modules directory) as `@openpresentation/opf-render` (with `/fonts-node`) and `@openpresentation/opf-pptx`, version 0.18.0. */
-export async function installStubPeers(modules) {
+/** Write the stubs into `modules` (a node_modules directory) as `@openpresentation/opf-render` (with `/fonts-node`) and `@openpresentation/opf-pptx`, version 0.18.0 unless `versions` names others (`{ 'opf-pptx': '0.21.0' }`). */
+export async function installStubPeers(modules, versions = {}) {
   const packages = { 'opf-render': { 'index.js': RENDER, 'fonts-node.js': FONTS }, 'opf-pptx': { 'index.js': PPTX } };
   for (const [name, files] of Object.entries(packages)) {
     const directory = path.join(modules, '@openpresentation', name);
     await mkdir(directory, { recursive: true });
-    await writeFile(path.join(directory, 'package.json'), JSON.stringify({ name: `@openpresentation/${name}`, version: '0.18.0', type: 'module', main: 'index.js' }));
+    await writeFile(path.join(directory, 'package.json'), JSON.stringify({ name: `@openpresentation/${name}`, version: versions[name] ?? '0.18.0', type: 'module', main: 'index.js' }));
     for (const [file, lines] of Object.entries(files)) await writeFile(path.join(directory, file), `${lines.join('\n')}\n`);
   }
 }
