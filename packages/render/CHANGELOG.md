@@ -2,6 +2,21 @@
 
 ## Unreleased
 
+## 0.20.3 (2026-10-16)
+
+- Remove browser font registrations when parallel shaping or subsetting initialization fails, and prevent pending startup faces from registering after rejection without delaying the original error.
+- Reject box-statistics calculations that exceed the finite numeric range and keep region-map colors finite for opposite-sign extreme values.
+- Keep line and area data labels aligned with their corresponding plotted categories in right-to-left charts.
+- Name the current toHtml API in the shared-font server markup guidance and pass the fonts handle through the current vector-PDF option.
+- RR-87: correct the informational Latin-font corpus report to exclude whitespace rather than the literal letter `s`. Rendering and native qualification policies are unchanged.
+- Serialize concurrent Node fonts-handle `ensure` calls so a script face is loaded once. Each call retains its own options, result and error, and a failed call does not block later preparation.
+- Identify the existing 0.15, 0.16 and 0.18 renderer changes as released and link their changelog history.
+- Report unsupported SVG relative text positions (`dx` and `dy`), including nested text spans, and refuse them in strict vector PDF mode instead of silently ignoring them. Valid zero-position lists retain their previous bytes. The existing raster PDF mode remains an alternative when vector text positioning is unsupported.
+- Require a version-matching release tag on merged main history before publication, including manual workflow retries.
+- Declare the existing text-as-paths fallback and restricted-font embedding diagnostics, including their reason and face fields, on both public renderer entries.
+- Reject XML-invalid characters in rich text with the same structured path error as plain text, including headings, lists and table cells. Valid Unicode and authored whitespace remain unchanged.
+- RR-87: correct the script-corpus browser check's visible-character selection to ignore whitespace rather than literal `s`, and keep SVG character addresses correct after non-BMP text. This changes the test oracle, not rendered output or native qualification.
+
 ## 0.20.2 (2026-10-16)
 
 - RR-85: Select the reviewed metric-centering example baseline for ordinary checks and trusted publication when the installed core defaults metrics to center. Preserve historical baseline bytes, explicit reviewed overrides and exact raster checks.
