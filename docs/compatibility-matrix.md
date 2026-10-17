@@ -5,9 +5,9 @@ is the honest supported subset for [the developer quickstart](quickstart.md).
 It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
-**Verified package set (2026-10-16):** core 0.20.3, renderer 0.20.2,
-PPTX/editor 0.20.3, CLI 0.20.0 and Gallery 3.0.0.
-[Artifact verification](evidence/rr-85-final-published-set-2026-10-16/README.md) binds
+**Verified artifacts (2026-10-17):** core 0.20.5, renderer/PPTX/editor 0.20.4,
+CLI 0.20.1 and Gallery 3.0.0.
+[Artifact verification](https://github.com/OpenPresentation/opf/blob/main/docs/evidence-rr-87-final-published-set-2026-10-17.md) binds
 the selected archives to their release commits and trusted publication checks.
 Earlier matrices and native observations retain their historical identities.
 Complete native compatibility remains a separate gate.
@@ -31,11 +31,11 @@ imply universal Office or full-catalog visual parity.
 
 | Package | Version | Dependency contract |
 | --- | --- | --- |
-| Core | 0.20.3 | Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
-| CLI | 0.20.0 | Core ^0.20.1, Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
-| Renderer | 0.20.2 | Core ^0.20.2; optional pinned font/converter peers |
-| PPTX | 0.20.3 | Core ^0.20.2, Gallery ^3.0.0; optional renderer ^0.20.2 |
-| Editor | 0.20.3 | Core ^0.20.2; optional renderer ^0.20.2 |
+| Core | 0.20.5 | Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
+| CLI | 0.20.1 | Core ^0.20.5, Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
+| Renderer | 0.20.4 | Core ^0.20.5; optional pinned font/converter peers |
+| PPTX | 0.20.4 | Core ^0.20.5, Gallery ^3.0.0; optional renderer ^0.20.4 |
+| Editor | 0.20.4 | Core ^0.20.5; optional renderer ^0.20.4 |
 | Gallery | 3.0.0 | Independent owner of every default catalog record; 28 intent layouts |
 
 ## Runtime
