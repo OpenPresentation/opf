@@ -1,6 +1,6 @@
 ---
 type: fixed
-packages: [opf, cli]
+packages: [cli]
 ---
 RR-93 first-use diagnostics (two testers' findings on 0.20):
     - A value that fails a `oneOf` or `anyOf` now reports the form it was written for, not every rejected form. `padding: 12` in a table cell style was 99 errors (mostly "must be string"); it is one `must be object` per cell. The other forms are listed in `validation.alternatives` of the finding (schema `ValidationIssue.alternatives`), and `opf validate --format text` prints them on one `other forms:` line. When no form fits the value's type, the union is reported once, named by the types it accepts. A date that is neither a date nor a date-time is one error.
