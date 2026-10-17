@@ -41,75 +41,71 @@ runtime release is implied by updating the plan, matrix lock or guides.
 
 ## Review scope and accepted qualification
 
-The review spans all eight program repositories, including Core and its CLI and
-the independent Gallery package. The accepted scope reconciles to **78 static
-review areas** plus three cross-site checklists, five documentation tasks and
-three later user features: **89 campaign entries**. The original planning count
-of 81 included the three checklists; it was not 81 distinct authored-code areas.
+The review covers all eight program repositories, including Core and its CLI
+and the independently released Gallery package. The accepted plans contain
+**78 static review areas**. Three cross-site checklists, five documentation
+tasks and three later user features bring the campaign to **89 entries**; the
+original planning count of 81 included those three checklists.
 
-Authored full reads remain distinct from generator/input/output checks,
-dependency/vendor boundaries and sampled history. In particular, 76 current
-Gallery articles received risk-based sampling and eight historical design
-prototypes were sampled; neither is called a full authored read. The original
-107 dispositions include aliases, observations, withdrawals and follow-ups as
-well as confirmed defects. Private-site code and findings remain in the
-supervisor's private ledger, outside this public repository note.
+Authored full reads remain distinct from generated/vendor identity checks and
+sampled history. In particular, 76 current Gallery articles were risk-sampled
+and eight historical design prototypes were sampled. The original 107
+dispositions include aliases, observations, withdrawals and follow-ups, not
+107 bugs. Private-site source and findings remain in the owner's private ledger.
 
-The complete consumer installed all five exact selected registry artifacts with
-one Core instance and no local runtime overrides. Its maintained checks passed,
-including twelve executed installed-code browser cases and sixteen CLI
+The single complete consumer installed all five exact selected registry
+artifacts with one Core instance and no local runtime overrides. Maintained
+checks passed, including twelve installed-code browser cases and sixteen CLI
 regressions. The canvas and styled-table browser harnesses that were only built
-are not described as executed. The shared showcase and Gallery vendor producers
-then passed on that same installation, with the actual verified Editor
-publisher's sixteen-file host closure. Gallery's catalog records and twenty-eight
-canonical SVGs retain their existing identities.
+are not called executed. Both shared site producers passed on that installation,
+with the verified Editor publisher's sixteen-file host closure. Gallery 3's
+records and twenty-eight canonical SVGs retain their existing identities.
 
-Main has accepted local compiled qualification of 61 maintained cases. Gallery
-has 634 passing unit cases, typecheck and all 25 approved compiled witnesses.
-Gallery's initial file selection accidentally expanded to 76 cases and was
-stopped after sixteen passes (four intended and twelve extra); only the
-remaining twenty-one intended cases then ran. Initial setup/selection failures,
-traces and original build identities are retained. These are local qualification
-facts, not production deployment or native acceptance.
+Accepted local compiled qualification includes Main's 61 maintained cases and
+Gallery's 634 unit cases, typecheck and 25 approved compiled witnesses. The
+Gallery selection interruption and its extra cases remain separately recorded;
+only missing intended cases were subsequently run. Later focused fixes and
+normal hosted checks retain their own exact source and results. Local, registry,
+production and native claims are separate.
 
-## Accepted delivery and pending source integration
+## Current source and delivery checkpoint
 
-This checkpoint is **not RR-87 completion**. The delivery facts below are
-supervisor-accepted; the remaining source checks and normal merges are still
-required. Candidate production acceptance does not waive them.
+This is **not RR-87 completion**. Normal remaining source checks and integration,
+actual automatic-channel outcomes and the supervisor's final unit acceptance
+are still required. Earlier manual production acceptance does not waive them.
 
 | Gate | Accepted fact and remaining boundary |
 | --- | --- |
-| Final plan source | [Core #707](https://github.com/OpenPresentation/opf/pull/707) actually merged as `c9677634c6f68869936b6cb8cd63d20841d32ecd`, tree `5c20dae564003c49edf638d35587e7d2431ccbbf`, after normal required CI/queue. The seven-file patch and full tree equal the reviewed immutable `0d36559d` docs/plan commit. Core's npm publisher remains `0e689585`. |
-| Main source and production | Reviewed candidate `9a571e05`, BuildID `VQswjb0YnKAHOWBu3udJ5`, is accepted at 100% traffic (Worker `429f08ed-aad7-4c2d-8eda-c517da334afd`, deployment `10db1809-86f2-4659-a335-0a15ad2ab858`, 2026-10-17 11:12:02 UTC). All 15 maintained live cases passed with zero retries. Required source CI and the normal source merge remain PENDING. |
-| Gallery source and production | The reviewed sealed candidate is deployed at 100% traffic (BuildID `cId4t7TnGYPA3YOFrkbkM`, Worker `83a52957-7649-43e3-b749-b8df3d149273`, deployment `cf2577eb-db22-493e-a747-8b7dcff2fed5`, 2026-10-17 11:10:35 UTC). All 11 focused live journeys passed with zero retries, including 44 manifest-pinned vendor files and 28 canonical layouts/records/SVGs. The original precommit build is byte-equivalent to the reviewed candidate; no rebuild or postmerge relabeling occurred. Required source CI and the actual source merge remain PENDING; manual production acceptance does not satisfy them. |
-| Dev source and production | Current reviewed source `08a6e194` retains the actual `4209ede5` build and BuildID `z_XMRwCPqKyCFeqaProWh`, with only the accepted nonproduct delta. One backend activation and a no-reactivation resume verified two registered contracts immediately before the matching upload. Worker `ca33d210-aa91-4872-9242-07dbba6ac5da`, deployment `1ad6eba9-3833-4ac6-8887-8934e67fe7cd`, is accepted at 100% traffic (2026-10-17 11:21:29 UTC); three maintained live cases and nine bounded public checks passed. The backend-to-Worker gap was 219.279708 seconds, not atomic. Source CI/normal merge, signed-in/model checks and end-to-end delivery acceptance remain separate and PENDING. |
-| Latest complete census | 2026-10-17 11:15:57 UTC: 11 open PRs, seven drafts and 45 issues across all eight repositories. One metadata-only request, all pages complete; no CI fields or issue bodies reread. Every current head and retained issue decision is reconciled; no new unreviewed item was found. Earlier dated counts remain historical. |
-| Safe primary synchronization | 2026-10-17 11:16:50 UTC: all eight primaries are clean on expected default branches and match the fresh metadata. Four remaining primaries received one normal fetch and fast-forward-only update each; Core advanced to `c9677634`, the three site defaults remained unchanged. Four stable package defaults were unchanged, so they were not fetched again. No reset, stash, branch switch, pruning or destructive cleanup. |
-| RR-87 scoped closeout | PENDING: required hosted source checks and normal integration of the three site PRs remain blocked by actual pre-scheduling billing failures. Manual production acceptance is not a CI waiver or source-merge result. The supervisor has not marked the unchanged RR-87 criterion complete, and no closeout PR is open. The broader program remains active. |
+| Final plan source | [Core #707](https://github.com/OpenPresentation/opf/pull/707) merged as `c9677634c6f68869936b6cb8cd63d20841d32ecd`, tree `5c20dae564003c49edf638d35587e7d2431ccbbf`, after normal CI and queue gates. Its tree equals the reviewed immutable `0d36559d` documentation/plan source. Core's npm publisher remains `0e689585`. |
+| Main | The reviewed work is normally integrated. The actual default-branch source and successful automatic production channel are accepted: 19 maintained production smoke cases passed, the provider's current version is at 100%, and the homepage and Playground return the new literal BuildID `Kh5CfREY4FU41Ui7Iln0c`. This source also preserves the existing default-branch blog work. The earlier manual `1gny` footer/four-case and `VQsw` fifteen-case generations remain historical; no output seal or source attestation is borrowed from them. |
+| Gallery | The reviewed source is normally integrated and its earlier sealed candidate/manual production and eleven focused live journeys remain accepted. The automatic channel recorded a credential-gate skip, not a new upload. The later test-only verification correction is normally integrated as `67f78c3e`. No new production identity or successful current default verification is inferred. |
+| Dev | The final reviewed source is normally integrated, including the bounded Windows fixture corrections. Exact-source Windows repository checks and the full suite passed with their recorded existing conditional skips; this does not certify Office. Actual default-commit checks and the config-gated automatic backend/Worker channel remain pending. Two Windows attempts passed foreground checks but exhausted the 20-minute job budget during cache cleanup; the Dev job-envelope correction is pending normal CI and integration. The earlier sealed manual generation, three live journeys and nine bounded public checks remain separate accepted evidence; no new activation or production identity is inferred. |
+| Inventory and synchronization | The inventory snapshot used by this draft is dated 2026-10-17 11:15:57 UTC: eleven open PRs, seven drafts and 45 issues. Later source merges, test-only follow-ups and safe primary synchronizations are dated overlays, not refreshed global counts. Earlier body decisions, failures and source/build identities remain retained. |
+| Scoped closeout | Still in progress: finish remaining normal source/default-commit and automatic-channel gates, bind all 89 agreed entries to the accepted evidence and dispositions, then complete the reviewed documentation PR through its normal gates. The broader release-readiness program remains active. |
+
+## Portable pending checkpoint — 2026-10-17
+
+This draft deliberately remains incomplete. Editor [#181](https://github.com/OpenPresentation/opf-editor/pull/181) contains the reviewed example-host persistence refusal correction and its real-canvas regression; normal integration is pending. The Editor 0.20.4 artifact is unchanged. Advancing Core's immutable example source authority and adopting that host in Gallery have **not** been performed. The separate job-envelope correction and remaining site/default-channel gates are also pending. Resume from the maintained handoff and actual accepted source facts; do not infer completion from this draft or rerun the entire qualification factory by default.
 
 ## Residual limits
 
-The Gallery editor still reports real baseline Roboto style approximations:
-800 draws as 700, 500 as 400, and 600 as 700. All seven pinned Roboto faces are
-present, but the bare-family lazy selection exposes upright 400/700 while the
-intermediate weights have separate legacy family names. Font manifest bytes and
-this selection behavior are unchanged from the prior baseline. These warnings
-are not suppressed; readable screenshots, zero JavaScript errors and passing
-browser cases are not exact font-fidelity certificates. A bounded follow-up is
-prepared for separate review, without changing this release train or claiming
-new native results.
+The Gallery editor retains baseline Roboto weight approximations: 800 draws as
+700, 500 as 400, and 600 as 700. These warnings are not suppressed. Readable
+screenshots, no JavaScript errors and passing browser cases do not certify exact
+font fidelity. The separately reviewed follow-up does not expand this release.
 
-No native support is expanded here. Windows Office remains on human HOLD;
-five genuine Windows repository controls do not certify Office. Mac native work
-remains supervisor-only and incomplete. RR-86 drafts do not inherit frozen
-historical qualification, and the dated published-P3 refusal remains attributed
-to P3; this note makes no new P4 native17 claim. Physical OS IME, per-route/font
-and unsupported renderer boundaries remain explicit. Site-specific accepted
-follow-ups stay in the owner's private ledger.
+Native Office qualification remains incomplete. Windows use is authorized as
+needed, with Windows tests routed to the designated repository chat and the
+supervisor coordinating scheduling. Older approval holds and host-availability
+observations remain dated history. Repository controls do not certify Office;
+RR-86 drafts do not inherit frozen historical native qualification. The dated
+published-P3 refusal stays attributed to P3, without a new P4 native17 claim.
+Physical OS IME, per-route/font and unsupported renderer boundaries remain
+explicit. Existing architecture and native follow-ups retain their separate
+scopes; this review makes no blanket security, zero-loss or native certificate.
 
 The original program criteria and earlier
 [RR-85 evidence](evidence/rr-85-final-published-set-2026-10-16/README.md) are
-unchanged. This dated root document remains repo-only under the existing source
-export filter; it adds no site progress page, status API or machine-resource
+unchanged. This dated root document remains repository-only under the existing
+source export filter. It adds no site progress page, status API or machine-resource
 status surface.
