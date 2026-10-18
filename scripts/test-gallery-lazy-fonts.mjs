@@ -1,10 +1,12 @@
 // FF-31: the gallery editor's lazy-font manifest (Intos and the open families) is exact, hash-pinned and license-checked, and
 // the gallery commits only that manifest, never the faces.
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
 import { existsSync, readFileSync } from 'node:fs';
+import { readdir, readFile } from 'node:fs/promises';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import path from 'node:path';
-import { assertLazyFontCount } from './lazy-font-counts.mjs';
+import { assertLazyFontCount, hashFontSet } from './lazy-font-counts.mjs';
 import { galleryLazyFontManifest, galleryLazyFontManifestForExample, verifyGalleryLazyFontManifest, LAZY_FONTS_CONTRACT } from './gallery-lazy-fonts.mjs';
 
 const hash = seed => seed.repeat(64).slice(0, 64);
@@ -58,7 +60,10 @@ if (existsSync(sibling)) {
     // Every vendored open-pack or embed:"used" face of the sibling renderer, and the exact count its version is expected to list.
     const expected = siblingFonts.BUNDLED_FONT_MANIFEST.packages.filter(item => item.vendored && (item.pack === 'open' || item.embed === 'used')).reduce((total, item) => total + item.faces.length, 0);
     assert.equal(faces, expected, 'the vendored open and Intos faces of the renderer');
-    assertLazyFontCount(JSON.parse(readFileSync(path.resolve(path.dirname(sibling), '../package.json'), 'utf8')).version, faces, 'sibling opf-render');
+    // A version without a recorded count passes only with the font files and count of a reviewed set (RR-90).
+    const siblingRoot = path.resolve(path.dirname(sibling), '..');
+    const fontSet = await hashFontSet({ root: siblingRoot, readdir, readFile, createHash });
+    assertLazyFontCount(JSON.parse(readFileSync(path.join(siblingRoot, 'package.json'), 'utf8')).version, faces, 'sibling opf-render', fontSet);
     assert.ok(real.packages.some(item => item.name === 'intos' && item.noticeFile === 'NOTICE.md'));
     assert.equal(real.packages.some(item => item.name === 'carlito'), false, 'Carlito is eager, not lazy');
     console.log(`Gallery lazy fonts: fake and sibling-renderer manifests verified (${real.packages.length} packages, ${faces} faces).`);

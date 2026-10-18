@@ -8,7 +8,7 @@ import {createHash, randomUUID} from 'node:crypto';
 import {candidateArtifacts,assertInstalledCandidateGraph} from './candidate-gallery-pack.mjs';
 import {assertPublishedGallery} from './candidate-gallery.mjs';
 import {checkPackedTypes} from './check-packed-types.mjs';
-import {LAZY_FONT_COUNTS} from './lazy-font-counts.mjs';
+import {LAZY_FONT_COUNTS,REVIEWED_FONT_SETS,hashFontSet,lazyFontCountProblem} from './lazy-font-counts.mjs';
 import {cliSkipNotice, installablePackages} from './release-plan-cli.mjs';
 const root = fileURLToPath(new URL("../", import.meta.url)),
   out = path.join(root, "artifacts/npm");
@@ -252,13 +252,16 @@ if (verifyFontPreparation) {
 import assert from 'node:assert/strict';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 const LAZY_FONT_COUNTS=${JSON.stringify(LAZY_FONT_COUNTS)};
+const REVIEWED_FONT_SETS=${JSON.stringify(REVIEWED_FONT_SETS)};
+${hashFontSet.toString()}
+${lazyFontCountProblem.toString()}
 import {${R.svg},resolvePresentation,${R.png}} from '@openpresentation/opf-render';
 import {paginate} from '@openpresentation/opf/pagination';
 import {createEditorSession} from '@openpresentation/opf-editor';
 import {toPptx,fromPptx} from '@openpresentation/opf-pptx';
 const fonts=await loadFonts({pack:'office',substitutionPolicy:'visual'});const {registry}=fonts;
 assert.equal(fonts.loadSystemFonts,false);assert.equal(fonts.useBundledFonts,false);
-const {mkdir,readFile,writeFile}=await import('node:fs/promises');
+const {mkdir,readdir,readFile,writeFile}=await import('node:fs/promises');
 const {createHash}=await import('node:crypto');
 await mkdir('artifacts',{recursive:true});
 await writeFile('artifacts/font-preparation.json',JSON.stringify({systemFontDiscovery:false,bundledFallback:false,fonts:await Promise.all(fonts.fontFiles.map(async file=>({file,sha256:createHash('sha256').update(await readFile(file)).digest('hex')})))},null,2)+'\\n');
@@ -278,8 +281,12 @@ assert.equal(registry.embeddedFonts.length,33);// the eager npm faces; the vendo
 if(registry.lazyFonts){// renderers that vendor Intos and the open families (after 0.10.0) list them here; the pinned earlier renderer has none
 // the vendored open and Intos faces, exact per renderer version (scripts/lazy-font-counts.mjs)
 const renderVersion=${JSON.stringify(renderSourceVersion)};// the renderer's own version (release plan, or the source version behind a preview tarball)
-const expectedLazy=LAZY_FONT_COUNTS[renderVersion];
-assert.ok(expectedLazy&&expectedLazy.includes(registry.lazyFonts.length),'the lazy face count of renderer '+renderVersion+' is '+registry.lazyFonts.length+'; expected '+(expectedLazy??['a recorded count']).join(' or '));
+// a version without a LAZY_FONT_COUNTS entry passes only with the font files and the count of a reviewed set (RR-90)
+const rendererEntry=import.meta.resolve('@openpresentation/opf-render');
+const {fileURLToPath}=await import('node:url');
+const fontSet=await hashFontSet({root:fileURLToPath(rendererEntry.slice(0,rendererEntry.lastIndexOf('/dist/'))),readdir,readFile,createHash});
+const lazyProblem=lazyFontCountProblem({version:renderVersion,count:registry.lazyFonts.length,counts:LAZY_FONT_COUNTS,reviewedSets:REVIEWED_FONT_SETS,fonts:fontSet});
+assert.ok(!lazyProblem,lazyProblem);
 // the four Noto Sans glyph-fallback faces (opf-render#57) are npm files, also embed used; every other embed-used face is a lazy one
 assert.equal(fonts.embeddedFonts.filter(face=>face.embed==="used"&&face.family!=="Noto Sans").length,registry.lazyFonts.length);
 }
