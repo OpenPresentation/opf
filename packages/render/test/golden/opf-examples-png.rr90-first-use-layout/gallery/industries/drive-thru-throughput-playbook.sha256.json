@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/industries/drive-thru-throughput-playbook.opf.json",
+  "entries": {
+    "gallery/industries/drive-thru-throughput-playbook.opf.json#0": {
+      "sha256": "436cdf7db926b7f49d1d414c70a6e4cbae50ead5b9e709ac3f3b85f92d96c448",
+      "bytes": 6517
+    },
+    "gallery/industries/drive-thru-throughput-playbook.opf.json#1": {
+      "sha256": "2042a030a8a6871589f341c178802a6198fcdb4a6cafc5a1c3f04ae2317cafbf",
+      "bytes": 6791
+    },
+    "gallery/industries/drive-thru-throughput-playbook.opf.json#2": {
+      "sha256": "1ca2fc90d9d003b23bc078223c586919756c76ab80219705651b6d7259b2ff91",
+      "bytes": 7023
+    },
+    "gallery/industries/drive-thru-throughput-playbook.opf.json#3": {
+      "sha256": "3fcb7042496f70d0f7899232a954dcee45499b8f3319f81bd6f433f0a99c135e",
+      "bytes": 7924
+    },
+    "gallery/industries/drive-thru-throughput-playbook.opf.json#4": {
+      "sha256": "b1c3eb10a34440e936d249aaf5cc9a6ee10c10c7eac17ab116ec46d27ea5dc02",
+      "bytes": 7185
+    },
+    "gallery/industries/drive-thru-throughput-playbook.opf.json#5": {
+      "sha256": "d0bfb0f8ee48ed3250f34268b7bd9fb757dfd72aafdfee3d292c8af17cd7fda5",
+      "bytes": 6796
+    }
+  }
+}

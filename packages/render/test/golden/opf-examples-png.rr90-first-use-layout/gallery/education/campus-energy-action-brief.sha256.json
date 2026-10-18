@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/education/campus-energy-action-brief.opf.json",
+  "entries": {
+    "gallery/education/campus-energy-action-brief.opf.json#0": {
+      "sha256": "7c7f0a20659701aef26f5307c60f8343b8209a1fe34682e751ac4d95ac9dc6d3",
+      "bytes": 7068
+    },
+    "gallery/education/campus-energy-action-brief.opf.json#1": {
+      "sha256": "896ba033a7c1e1274e52f01beb1a62a6c57190cdd055711cfcebfcabba14aaa5",
+      "bytes": 8685
+    },
+    "gallery/education/campus-energy-action-brief.opf.json#2": {
+      "sha256": "1e3a9db3d0d0710262b2dcabbfaa0f3b76c2568f66ff34f431b5017114f18d56",
+      "bytes": 5095
+    },
+    "gallery/education/campus-energy-action-brief.opf.json#3": {
+      "sha256": "fda212242bf91ef89cd4b4c1d21f562b9902ad9c1f32b032d69ce9bce867a702",
+      "bytes": 10298
+    },
+    "gallery/education/campus-energy-action-brief.opf.json#4": {
+      "sha256": "caeb6fe05eafc1b588abd4d6a3a34351afd254ecef43a1a2f43ee1863ddd6b15",
+      "bytes": 9700
+    },
+    "gallery/education/campus-energy-action-brief.opf.json#5": {
+      "sha256": "d05ee8f0b1599295d2caf98e33b714224cbbe15dacba0228eeada6ede96a8972",
+      "bytes": 10172
+    }
+  }
+}

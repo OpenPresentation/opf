@@ -4,15 +4,21 @@ import {mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync} from 'node:
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {exampleBaseline, LEGACY_EXAMPLE_BASELINE, CENTERED_EXAMPLE_BASELINE} from '../scripts/example-baseline.mjs';
+import {exampleBaseline, LEGACY_EXAMPLE_BASELINE, CENTERED_EXAMPLE_BASELINE, FIRST_USE_EXAMPLE_BASELINE} from '../scripts/example-baseline.mjs';
 import {readBaseline, diffManifests} from './golden-store.mjs';
 
 assert.equal(exampleBaseline('left'), LEGACY_EXAMPLE_BASELINE);
 assert.equal(exampleBaseline('center'), CENTERED_EXAMPLE_BASELINE);
+// RR-90: a core that draws table text at the body size selects the first-use baseline; the reviewed rr85 fixture stays as it is.
+assert.equal(exampleBaseline('center', 25), FIRST_USE_EXAMPLE_BASELINE);
+assert.equal(exampleBaseline('center', 16), CENTERED_EXAMPLE_BASELINE);
+assert.equal(exampleBaseline('left', 25), LEGACY_EXAMPLE_BASELINE, 'Published-core baseline remains separate');
+for (const size of [0, -1, NaN, 'x']) assert.throws(() => exampleBaseline('center', size), /Unknown table text size/);
 for (const alignment of [undefined, 'right', 'unexpected']) {
   assert.throws(() => exampleBaseline(alignment), /Unknown metric default alignment/);
 }
 const root = fileURLToPath(new URL('../', import.meta.url));
+assert.equal(readBaseline(path.join(root, FIRST_USE_EXAMPLE_BASELINE)).entries && Object.keys(readBaseline(path.join(root, FIRST_USE_EXAMPLE_BASELINE)).entries).length, 807, 'the first-use baseline has the 807 example slides');
 const legacy = readBaseline(path.join(root, exampleBaseline('left')));
 const bytes = readFileSync(path.join(root, exampleBaseline('center')));
 assert.equal(createHash('sha256').update(bytes).digest('hex'),
