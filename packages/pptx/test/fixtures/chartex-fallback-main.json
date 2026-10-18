@@ -549,53 +549,63 @@
   },
   "entries": {
     "treemap-category": {
-      "sha256": "45db7dbf2f889c338b872b4a4ffc9a5bca4ad1d09bf115190b269b432202743d",
-      "bytes": 81392,
+      "sha256": "1207a5a567b4e1fb17c0280b599a2e7f9f52a8a6f8b740f48037afb540b78f6a",
+      "bytes": 81395,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
       "layoutParts": 30,
-      "layoutTagParts": 29
+      "layoutTagParts": 29,
+      "rr90PreviousSha256": "45db7dbf2f889c338b872b4a4ffc9a5bca4ad1d09bf115190b269b432202743d",
+      "rr90PreviousBytes": 81392
     },
     "histogram-single": {
-      "sha256": "6f22643ee02fac09477f2c5e8538e8a7214a7894e0cf28fa9f5677643d8e3a40",
-      "bytes": 81408,
+      "sha256": "0b868b612d55ee227b97707633f4b4db718dc2ea60f1d74df1d53f814dfc6ea0",
+      "bytes": 81411,
       "diagnostics": [
         "chart-data-adapted/histogram-binned"
       ],
       "layoutParts": 30,
-      "layoutTagParts": 29
+      "layoutTagParts": 29,
+      "rr90PreviousSha256": "6f22643ee02fac09477f2c5e8538e8a7214a7894e0cf28fa9f5677643d8e3a40",
+      "rr90PreviousBytes": 81408
     },
     "histogram-category": {
-      "sha256": "a9269976baa2f998262113602a8f932cd9917f630e5ff9cc946e63586fe31074",
-      "bytes": 81393,
+      "sha256": "f4eb721574f66bb99b1b0e3098832a53d0914274c3e2d3232490898094d46bd3",
+      "bytes": 81396,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
       "layoutParts": 30,
-      "layoutTagParts": 29
+      "layoutTagParts": 29,
+      "rr90PreviousSha256": "a9269976baa2f998262113602a8f932cd9917f630e5ff9cc946e63586fe31074",
+      "rr90PreviousBytes": 81393
     },
     "pareto-multi": {
-      "sha256": "56f1e577252f0c96e7f1e7a86cf1b7480850266cd757ea72297182d5185dc2e6",
-      "bytes": 81563,
+      "sha256": "45bc8c79f82cbee93df1417d1f5c761c2e816e4409944fc95d8469ee16ebe64d",
+      "bytes": 81566,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
       "layoutParts": 30,
-      "layoutTagParts": 29
+      "layoutTagParts": 29,
+      "rr90PreviousSha256": "56f1e577252f0c96e7f1e7a86cf1b7480850266cd757ea72297182d5185dc2e6",
+      "rr90PreviousBytes": 81563
     },
     "box-multi": {
-      "sha256": "d65816fc12593c821170f944fdcf4c06871fa06610c4c703bb874571569eb468",
-      "bytes": 81563,
+      "sha256": "8e7b064f4a5a6806d128b2eca04e0634f0e4893092d2ec5f81bcc50878367b4b",
+      "bytes": 81566,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
       "layoutParts": 30,
-      "layoutTagParts": 29
+      "layoutTagParts": 29,
+      "rr90PreviousSha256": "d65816fc12593c821170f944fdcf4c06871fa06610c4c703bb874571569eb468",
+      "rr90PreviousBytes": 81563
     },
     "waterfall-single": {
-      "sha256": "03f3038c04642a1309d0c12db4bbbab44663a7f94f73355a9cdd2433e158ad3f",
-      "bytes": 81835,
+      "sha256": "4d81ea5e66bcdb72c64e33c8b07064f6916c8a4491085e6db1b91da6f9c87c68",
+      "bytes": 81838,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/row-numbers"
@@ -603,29 +613,35 @@
       "layoutParts": 30,
       "layoutTagParts": 29,
       "rr20RowDataPreviousSha256": "341fc617cd8edd6bdf9790134cc817c1b13f0cf0479f96b23758e55c077b0142",
-      "rr20RowDataPreviousBytes": 81372
+      "rr20RowDataPreviousBytes": 81372,
+      "rr90PreviousSha256": "03f3038c04642a1309d0c12db4bbbab44663a7f94f73355a9cdd2433e158ad3f",
+      "rr90PreviousBytes": 81835
     },
     "funnel-category": {
-      "sha256": "340ce2a509a143e1ced9d888c93f263c0e89cc7d1b509cb6c258770f553c3875",
-      "bytes": 81394,
+      "sha256": "1e2a1ed36ce9e93ce1dfc14dc26cdbf35e280aefe35b661d339b731bd4934806",
+      "bytes": 81397,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
       "layoutParts": 30,
-      "layoutTagParts": 29
+      "layoutTagParts": 29,
+      "rr90PreviousSha256": "340ce2a509a143e1ced9d888c93f263c0e89cc7d1b509cb6c258770f553c3875",
+      "rr90PreviousBytes": 81394
     },
     "world-category": {
-      "sha256": "ae108971fb62d7933acfb54d0a8c19acc0711bbb6ba8630f6693651429f038cb",
-      "bytes": 80235,
+      "sha256": "553d91972a1b4decb36545749f24912904e4c2b726fffa76ce5c4bbaa9b54e41",
+      "bytes": 80238,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback"
       ],
       "layoutParts": 29,
-      "layoutTagParts": 28
+      "layoutTagParts": 28,
+      "rr90PreviousSha256": "ae108971fb62d7933acfb54d0a8c19acc0711bbb6ba8630f6693651429f038cb",
+      "rr90PreviousBytes": 80235
     },
     "all-seven": {
-      "sha256": "4e8aff728339290d366c0502f8584013d7deece0fb483427fdd5ad729a5e4dbc",
-      "bytes": 144497,
+      "sha256": "22b9d89f88ef92317c11cb41f0669ad907f794853b0d59ef66980348170bb429",
+      "bytes": 144500,
       "diagnostics": [
         "chart-data-adapted/chartex-fallback",
         "chart-data-adapted/chartex-fallback",
@@ -636,7 +652,14 @@
         "chart-data-adapted/chartex-fallback"
       ],
       "layoutParts": 30,
-      "layoutTagParts": 29
+      "layoutTagParts": 29,
+      "rr90PreviousSha256": "4e8aff728339290d366c0502f8584013d7deece0fb483427fdd5ad729a5e4dbc",
+      "rr90PreviousBytes": 144497
     }
+  },
+  "rr90FirstUseLayoutReview": {
+    "baselineCore": "origin/main 387dadfc (opf RR-93 diagnostics merged)",
+    "candidateCore": "codex/rr-90-first-use-layout (opf#717: RR-90 table type size, RR-91 footer zones, RR-93a tag and rich cells)",
+    "evidence": "Compared every archive part by part against a build of the same converter (main b62bf23, RR-94) with core main. The 27 chart-only archives change only ppt/slideMasters/slideMaster1.xml: the unused date, footer and slide-number placeholders take core's new footer-zone geometry (content inset, three columns with a 2% gutter). The table, styled-table and mixed-blocks archives also change ppt/slides/slide1.xml (table cell text at the 25 px body size and its row heights) and the ppt/tags/opfData1.xml part that records them. Charts, workbooks, themes, layouts, notes masters and diagnostics are byte-identical."
   }
 }

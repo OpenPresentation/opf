@@ -120,8 +120,10 @@ const paged = {name: 'Paged', design: {fontScheme: 'roboto', footer: {left: {tex
   const { deck, invalid } = await read(stripTags(bytes));
   assert.deepEqual(invalid, []);
   assert.deepEqual(deck.design.footer, {left: {text: 'Confidential'}, center: {text: 'Page {{slide.number}} of 3'}}, 'The count is words without provenance; the field is the token.');
-  const bare = await exportDeck({name: 'Number only', design: {fontScheme: 'roboto', footer: {right: {text: '{{slide.number}}'}}}, slides: [{title: 'A'}, {title: 'B'}]});
-  assert.deepEqual((await read(stripTags(bare.bytes))).deck.design.footer, {right: {text: '{{slide.number}}'}});
+  // RR-91: a lone zone spans the content width, and an untagged footer's zone is read from its box centre, so the number sits
+  // beside a left zone (as in a real footer) to keep its box in the right third.
+  const bare = await exportDeck({name: 'Number and note', design: {fontScheme: 'roboto', footer: {left: {text: 'Note'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'A'}, {title: 'B'}]});
+  assert.deepEqual((await read(stripTags(bare.bytes))).deck.design.footer, {left: {text: 'Note'}, right: {text: '{{slide.number}}'}});
 }
 
 // 6. Typed words that spell a token are literal, never a live value on the next export.

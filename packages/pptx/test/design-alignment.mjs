@@ -4,8 +4,8 @@ import {toPptx, toSvg} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 
 // design.titleAlignment/contentAlignment are Design properties: the slide design
-// overrides the deck and titles use titleAlignment while subtitle, tag and body
-// text use contentAlignment. Native paragraphs must use the same alignment and
+// overrides the deck and titles and tags use titleAlignment while subtitle
+// and body text use contentAlignment. Native paragraphs must use the same alignment and
 // anchor point as the renderer's preview, with and without outline measurement
 // (core only returns an accepted placement.alignment when outlines are measured).
 const measured = {fonts: await loadFonts()},dec=new TextDecoder();
@@ -28,7 +28,9 @@ for(const options of [{},measured])for(const [width,height]of [[1280,720],[720,1
     const shapes=[...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(match=>match[0]);
     for(const field of ['tag','title','subtitle','text'].filter(field=>slide[field])) {
       const path=`slides.${slideIndex}.${field}`;
-      const expected=native[(field==='title'?effective.titleAlignment:effective.contentAlignment)??'left'];
+      // RR-93a: the tag sits over the title and follows titleAlignment, unless the slide's own design sets contentAlignment.
+      const followsTitle=field==='title'||(field==='tag'&&slide.design?.contentAlignment===undefined);
+      const expected=native[(followsTitle?effective.titleAlignment:effective.contentAlignment)??'left'];
       const previews=[...svgs[slideIndex].matchAll(/<text\b[^>]*>/g)].map(match=>match[0]).filter(tag=>attr(tag,'data-opf-path')===path);
       assert.ok(previews.length,`${path} preview lines`);
       for(const [index,preview]of previews.entries()) {

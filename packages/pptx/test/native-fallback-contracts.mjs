@@ -43,14 +43,19 @@ const addedText='New native footer';
 const control=unzipSync(await toPptx({slides:[{title:'Control',text:'Body',design:{footer:{right:{text:addedText}}}}]},{seed:1}));
 const footerShape=[...strFromU8(control['ppt/slides/slide1.xml']).matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(match=>match[0]).find(shape=>shape.includes(`<a:t>${addedText}</a:t>`));
 assert.ok(footerShape);assert.match(footerShape,/<p:ph\b[^>]*type="ftr"/);
-const untaggedFooter=footerShape.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g,'').replace(/(<p:cNvPr\b[^>]*\bid=")\d+"/, (_, prefix) => `${prefix}999"`);
+const untaggedFooter=footerShape.replace(/<p:custDataLst>[\s\S]*?<\/p:custDataLst>/g,'').replace(/(<p:cNvPr\b[^>]*\bid=")\d+"/, (_, prefix) => `${prefix}999"`)
+// A shape without provenance is placed by its box centre (zoneOf). Since RR-91 a lone zone spans the content width, so the
+// user-added footer is given the narrow box a person drops into the right third of the slide.
+const rightThird=untaggedFooter.replace(/<a:off x="-?\d+"/,'<a:off x="8168640"').replace(/<a:ext cx="\d+"/,'<a:ext cx="3200400"');
+assert.notEqual(rightThird,untaggedFooter);
+
 const added=unzipSync(bytes);const baselineXml=strFromU8(added['ppt/slides/slide1.xml']);
-added['ppt/slides/slide1.xml']=strToU8(baselineXml.replace('</p:spTree>',`${untaggedFooter}</p:spTree>`));
+added['ppt/slides/slide1.xml']=strToU8(baselineXml.replace('</p:spTree>',`${rightThird}</p:spTree>`));
 const addedBytes=zipSync(added);const withFooter=await fromPptx(addedBytes);
 assert.equal(withFooter.slides[0].design.footer.right.text,addedText);
 assert.deepEqual(withFooter.slides.slice(1).map(slide=>slide.design),flags.slides.slice(1).map(slide=>slide.design));
 assertNoHidden(addedBytes,withFooter);
-added['ppt/slides/slide1.xml']=strToU8(strFromU8(added['ppt/slides/slide1.xml']).replace(untaggedFooter,''));
+added['ppt/slides/slide1.xml']=strToU8(strFromU8(added['ppt/slides/slide1.xml']).replace(rightThird,''));
 assert.equal(strFromU8(added['ppt/slides/slide1.xml']),baselineXml);
 const deletedBytes=zipSync(added);const afterDeletion=await fromPptx(deletedBytes);
 assert.deepEqual(afterDeletion.slides.map(slide=>slide.design),flags.slides.map(slide=>slide.design));

@@ -245,7 +245,11 @@ for (const measured of [false, true]) {
   const {entries} = await exportDeck(source);
   const master = shapesOf(text(entries, 'ppt/slideMasters/slideMaster1.xml'));
   const reference = resolvePresentation({design: {fontScheme: 'roboto', footer: {left: {date: DATE}, center: {text: 'Footer'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'A'}]}).slides[0].geometry.furniture.parts;
-  for (const [at, part] of reference.entries()) {
+  // RR-91: the used placeholder takes the geometry core gives the deck's own footer (a lone right zone spans the content width);
+  // the unused ones keep the three-zone reference band.
+  const own = resolvePresentation(source).slides[0].geometry.furniture.parts[0];
+  for (const [at, reference_] of reference.entries()) {
+    const part = at === 2 ? own : reference_;
     const box = xfrmOf(master[at]);
     assert.equal(box.x, Math.round(part.box.x * 9525));
     assert.equal(box.cx, Math.round(part.box.width * 9525));

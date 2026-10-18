@@ -91,7 +91,8 @@ const coverDeck = {design: {fontScheme: 'roboto', titleAlignment: 'left', conten
   {layout: 'cover', ...coverText, design: {contentAlignment: 'right'}},
   {...coverText, text: 'Body copy'},
 ]};
-const coverExpected = [['l', 'l', 'l'], ['r', 'l', 'r'], ['ctr', 'l', 'ctr']];
+// RR-93a: on a content slide the tag follows the title (titleAlignment); only the subtitle keeps contentAlignment.
+const coverExpected = [['l', 'l', 'l'], ['r', 'l', 'r'], ['l', 'l', 'ctr']];
 let coverChecks = 0;
 for (const options of [{}, {fonts}]) {
   const native = await slideXml(coverDeck, options), preview = toSvg(coverDeck, options);

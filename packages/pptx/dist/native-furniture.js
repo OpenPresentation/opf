@@ -238,28 +238,58 @@ function xfrmBounds(xfrm) {
   return [x, y, cx, cy].every(Number.isFinite) && cx > 0 ? {x, y, cx, cy} : undefined;
 }
 
-// A placeholder without its own xfrm inherits it: slide -> layout (same idx, else same
+// A placeholder without its own xfrm (or alignment) inherits it: slide -> layout (same idx, else same
 // type) -> master (same type). Parsed layout/master trees are cached per package read.
-function inheritedBounds(shape, ph, slidePath, relationships, readPart) {
-  const own = xfrmBounds(shape['p:spPr']?.['a:xfrm']);
-  if (own) return own;
+function placeholderChain(shape, ph, slidePath, relationships, readPart) {
+  const chain = [shape];
   const index = shape['p:nvSpPr']?.['p:nvPr']?.['p:ph']?.idx;
   const find = (path, byIdx) => {
     const tree = readPart(path)?.[path.includes('slideMaster') ? 'p:sldMaster' : 'p:sldLayout']?.['p:cSld']?.['p:spTree'];
     const candidates = array(tree?.['p:sp']).filter(candidate => candidate['p:nvSpPr']?.['p:nvPr']?.['p:ph']?.type === ph);
-    const match = (byIdx && index !== undefined ? candidates.find(candidate => candidate['p:nvSpPr']['p:nvPr']['p:ph'].idx === index) : undefined) ?? candidates[0];
-    return match ? xfrmBounds(match['p:spPr']?.['a:xfrm']) : undefined;
+    return (byIdx && index !== undefined ? candidates.find(candidate => candidate['p:nvSpPr']['p:nvPr']['p:ph'].idx === index) : undefined) ?? candidates[0];
   };
   const layout = [...relationships(slidePath).values()].find(relationship => relationship.type === REL_LAYOUT)?.path;
-  if (!layout) return undefined;
+  if (!layout) return chain;
   const fromLayout = find(layout, true);
-  if (fromLayout) return fromLayout;
+  if (fromLayout) chain.push(fromLayout);
   const master = [...relationships(layout).values()].find(relationship => relationship.type === REL_MASTER)?.path;
-  return master ? find(master, false) : undefined;
+  const fromMaster = master ? find(master, false) : undefined;
+  if (fromMaster) chain.push(fromMaster);
+  return chain;
 }
 
-function zoneOf(bounds, slideWidth, fallback) {
+function inheritedBounds(chain) {
+  for (const shape of chain) {
+    const bounds = xfrmBounds(shape['p:spPr']?.['a:xfrm']);
+    if (bounds) return bounds;
+  }
+  return undefined;
+}
+
+const ALIGN_ZONES = {l: 'left', ctr: 'center', r: 'right'};
+// The paragraph alignment of a footer shape: its first paragraph, else its list style, else what the layout and master
+// placeholder say. Read as the physical edge, as the exporter writes it (an RTL zone is `algn="r"` with `rtl="1"`).
+function inheritedAlignment(chain) {
+  for (const shape of chain) {
+    const body = shape['p:txBody'];
+    const paragraph = array(body?.['a:p']).find(item => item?.['a:pPr']?.algn !== undefined);
+    const algn = paragraph?.['a:pPr']?.algn ?? body?.['a:lstStyle']?.['a:lvl1pPr']?.algn;
+    if (ALIGN_ZONES[algn]) return ALIGN_ZONES[algn];
+  }
+  return undefined;
+}
+
+/** A box wider than this share of the slide spans more than one zone, so its centre says nothing about the zone. */
+const WIDE_ZONE_SHARE = .36;
+// A narrow box keeps the zone its centre is in; a box wider than a zone (core gives a lone zone the content width) takes the
+// zone its paragraphs align to, and keeps the centre when nothing says how they align.
+function zoneOf(chain, slideWidth, fallback) {
+  const bounds = inheritedBounds(chain);
   if (!bounds || !(slideWidth > 0)) return fallback;
+  if (bounds.cx / slideWidth > WIDE_ZONE_SHARE) {
+    const aligned = inheritedAlignment(chain);
+    if (aligned) return aligned;
+  }
   const center = (bounds.x + bounds.cx / 2) / slideWidth;
   return center < 1 / 3 ? 'left' : center > 2 / 3 ? 'right' : 'center';
 }
@@ -285,7 +315,7 @@ export function readNativePlaceholders(context, claimed, relationships, readPart
       for (const field of paragraph.fields ?? []) nativeFields.push({...field, start: base + (field.start ?? text.indexOf(field.text, base) - base)});
       base += paragraph.text.length + 1;
     }
-    const zone = zoneOf(inheritedBounds(shape, ph, context.path, relationships, readPart), context.slideWidth, NATIVE_PLACEHOLDERS[ph].zone);
+    const zone = zoneOf(placeholderChain(shape, ph, context.path, relationships, readPart), context.slideWidth, NATIVE_PLACEHOLDERS[ph].zone);
     const properties = NATIVE_PLACEHOLDERS[ph];
     if (ph === 'sldNum') {
       // The words around a native slide-number field are the zone text and the field is `{{slide.number}}`.

@@ -204,7 +204,9 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
   const master = decoder.decode(entries['ppt/slideMasters/slideMaster1.xml']);
   const masterFooter = master.match(/<p:sp>(?:(?!<\/p:sp>)[\s\S])*?<p:ph type="ftr"[\s\S]*?<\/p:sp>/)[0];
   const masterBox = masterFooter.match(/<a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/).slice(1).map(Number);
-  const zone = resolveSlideContext(deck, 0).options.width * .26;
+  // RR-91: the unused master zones are one third of what the content inset and two 2% gutters leave.
+  const {width: slideWidth, height: slideHeight} = resolveSlideContext(deck, 0).options;
+  const zone = (slideWidth - 2 * 0.08 * Math.min(slideWidth, slideHeight) - 2 * 0.02 * slideWidth) / 3;
   near(masterBox[2] / 9525, zone, 'the master footer placeholder spans its zone', 1);
   assert.ok(box[2] < masterBox[2], "the slide's placeholder is narrower than the master's");
   const reports = [];
@@ -221,7 +223,9 @@ const organization = {id: 'acme', name: 'Acme', role: 'primary', logo: {full: {o
   const deck = {organization: {id: 'acme', name: 'Acme', logo: {full: wide, wordmark}}, design: {background: light, footer: {left: {image: 'var:organization.logo.wordmark', text: 'Confidential'}, right: {text: '{{slide.number}}'}}}, slides: [{title: 'One', text: 'Body.'}]};
   const {entries, bytes: output, diagnostics} = await exportDeck(deck);
   assert.deepEqual(codes(diagnostics, 'text-overflow', 'unresolved-content', ...PROBLEMS), []);
-  const parts = geometry(deck, 0).furniture.parts, zone = resolveSlideContext(deck, 0).options.width * .26;
+  const parts = geometry(deck, 0).furniture.parts, {width: slideWidth, height: slideHeight} = resolveSlideContext(deck, 0).options;
+  // RR-91: the left zone shares the empty centre with the right one: its own column plus half the free column and gutter.
+  const gutter = slideWidth * 0.02, column = (slideWidth - 2 * 0.08 * Math.min(slideWidth, slideHeight) - 2 * gutter) / 3, zone = column + (column + gutter) / 2;
   const logo = parts.find(part => part.type === 'image'), text = parts.find(part => part.field === 'text' && part.zone === 'left');
   near(logo.box.width, zone * FURNITURE_IMAGE_SHARE, 'the 8:1 logo is capped at its share of the zone', .01);
   near(text.box.x, logo.box.x + logo.box.width + FURNITURE_GAP, 'the text follows the capped logo', .01);
