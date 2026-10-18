@@ -6,7 +6,7 @@ import { mkdir, mkdtemp, readFile, readdir, realpath, rm, writeFile } from "node
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { after, before, describe, test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const executable = process.env.OPF_TEST_BIN ?? fileURLToPath(new URL("../dist/index.js", import.meta.url));
 let temp;
@@ -94,7 +94,8 @@ describe("opf create where hard links are refused", () => {
       'fsp.link = async () => { throw Object.assign(new Error("EPERM: operation not permitted, link"), { code: "EPERM" }); };',
       "syncBuiltinESMExports();",
     ].join("\n"));
-    const node = ["--import", preload];
+    // A preload is an import specifier: a Windows path (C:\...) is not one, so pass its file: URL.
+    const node = ["--import", pathToFileURL(preload).href];
     await mkdir(path.join(temp, "sandbox"));
     const created = JSON.parse(run(["create", "made.opf.json", "--title", "Decision"], { cwd: path.join(temp, "sandbox"), node }).stdout);
     assert.equal(created.ok, true);
