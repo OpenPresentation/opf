@@ -5,6 +5,12 @@ const boolean = value => ['1','true','on'].includes(value) ? true : ['0','false'
 
 const themeFamilies = context => ['a:majorFont', 'a:minorFont'].map(key => context.fonts?.[key]?.['a:latin']?.typeface?.trim().toLowerCase()).filter(Boolean);
 
+export function nativeTypeface(font, context) {
+  if (typeof font !== 'string') return undefined;
+  const match = font.match(/^\+(mj|mn)-(lt|ea|cs)$/);
+  return match ? context.fonts?.[match[1] === 'mj' ? 'a:majorFont' : 'a:minorFont']?.[{lt:'a:latin',ea:'a:ea',cs:'a:cs'}[match[2]]]?.typeface : font;
+}
+
 // A run painted with a bare theme slot (a:schemeClr, no color transform) remembers the slot as the OPF color name: the
 // transient `_opfScheme` marker is read, and always removed, by restoreRunColors (run-colors.js) once the document's own
 // colour scheme can confirm the slot holds that colour.
@@ -36,8 +42,7 @@ export function nativeRunStyle(properties, context, relationships, report, kind 
   const font = properties['a:latin']?.typeface;
   if (properties['a:latin'] && !font) report(`unsupported-${kind}-font`, 'The native text font has no usable Latin face or theme reference.');
   if (font) {
-    const match = font.match(/^\+(mj|mn)-(lt|ea|cs)$/);
-    const family = match ? context.fonts?.[match[1] === 'mj' ? 'a:majorFont' : 'a:minorFont']?.[{lt:'a:latin',ea:'a:ea',cs:'a:cs'}[match[2]]]?.typeface : font;
+    const family = nativeTypeface(font, context);
     if (family) {
       result.fontFamily = family;
       // The exporter writes a bundled family's weight faces (Roboto SemiBold) under their

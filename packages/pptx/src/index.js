@@ -1,4 +1,5 @@
 import {nativeBodyReader, joinNativeParagraphs} from './body-text-import.js';
+import {addNativeBody, nativeBodyDefaults, planNativeBody} from './native-body.js';
 import {autoNumScheme, deriveListNumbering, withDisplayedNumbers} from './numbered-list.js';
 import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
@@ -36,7 +37,7 @@ import {gallery} from '@openpresentation/gallery';
 import {applyTemplateLayouts, deckTemplates, foreignLayoutReference, placeholderRegion, readLayoutTag, slideTemplate, writeTemplateLayouts} from './template-layouts.js';
 import {importImageOrientation} from './image-import.js';
 import {extractSignals, normalizeSignalOptions, themeFactsFor} from './import-signals.js';
-import {recordableImageSource, placeImages, importImages, importImagePlaceholders, isImagePlaceholderGroup, imageName, imageOverlayName, imagePlaceholderGroupName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS, IMAGE_PLACEHOLDER_TAG} from './image-provenance.js';
+import {recordableImageSource, placeImages, importImages, importImagePlaceholders, isImagePlaceholderGroup, samePictureAspect, imageName, imageOverlayName, imagePlaceholderGroupName, backgroundImageName, backgroundOverlayName, IMAGE_TREATMENT_KEYS, BACKGROUND_IMAGE_KEYS, IMAGE_PLACEHOLDER_TAG} from './image-provenance.js';
 import {dedupeMedia, mediaKey} from './media-dedupe.js';
 import {placeWatermarks, importWatermark, importTextWatermark, tagTextWatermarks, watermarkName, watermarkTextName, watermarkBox, watermarkOpacity} from './watermark-provenance.js';
 import {placeLogos, importLogo, importLogoPlaceholders, logoName, LOGO_TAG} from './logo-provenance.js';
@@ -207,6 +208,9 @@ function checkCatalogs(entry, catalogs) {
 }
 
 export async function toPptx(input, options = {}) {
+  if (options.bodyText !== undefined && !['measured', 'native'].includes(options.bodyText)) {
+    throw new OPFPptxError('invalid-body-text-mode', 'bodyText must be measured or native.', {path: 'options.bodyText'});
+  }
   if (options.imageFormat !== undefined && !['compatible', 'preserve'].includes(options.imageFormat)) {
     throw new OPFPptxError('invalid-image-format', 'imageFormat must be compatible or preserve.', {path: 'options.imageFormat'});
   }
@@ -215,6 +219,9 @@ export async function toPptx(input, options = {}) {
   }
   if (options.provenance !== undefined && !['full', 'references-only', false].includes(options.provenance)) {
     throw new OPFPptxError('invalid-provenance-option', "provenance must be 'full', 'references-only' or false.", {path: 'options.provenance'});
+  }
+  if (options.footerText !== undefined && !['native', 'shape'].includes(options.footerText)) {
+    throw new OPFPptxError('invalid-footer-text-option', "footerText must be 'native' or 'shape'.", {path: 'options.footerText'});
   }
   // OPF 0.15 (FA-23): the host's registered catalogs (core `Catalog[]`, matched by `source`, never fetched) reach every core
   // call that resolves a reference. Strict export (`strictReferences`, default `strictAssets`) fails on a reference that
@@ -261,6 +268,7 @@ export async function toPptx(input, options = {}) {
   context.provenanceMode = options.provenance ?? "full";
   context.headingTags = new Map();
   context.plainTextTags = new Map();
+  context.nativeBodies = new Map();
   context.timelineTags = new Map();
   context.quoteTags = new Map();
   context.quotePhotos = new Map();
@@ -270,6 +278,7 @@ export async function toPptx(input, options = {}) {
   context.furnitureManifests = new Map();
   context.nativeFurniture = new Map();
   context.nativeFurnitureBands = new Map();
+  context.footerText = options.footerText ?? 'native';
   // RR-72: each slide's furniture parts and the object names of their shapes, for the slide master and layouts.
   context.furnitureParts = [];
   // RR-81: the 0.19 template each slide uses (its native slide layout) and the objects bound to a region placeholder.
@@ -453,7 +462,7 @@ export async function fromPptx(input, options = {}) {
         return match ? shapeBounds(match['p:spPr']?.['a:xfrm']) ?? undefined : undefined;
       } : undefined,
       // RR-11: native footer placeholders resolve their position through the layout and master.
-      path: slidePath, slideWidth: Number(presentationRoot['p:sldSz']?.cx), relationshipsOf: cachedRelationships, readPart: cachedPart,
+      path: slidePath, slideWidth: Number(presentationRoot['p:sldSz']?.cx), slideHeight: Number(presentationRoot['p:sldSz']?.cy), defaultTextStyle: presentationRoot['p:defaultTextStyle'], relationshipsOf: cachedRelationships, readPart: cachedPart,
       paragraphs: nativeShapeParagraphs(decodeText(entries[slidePath])),
       readPicture: picture => importPicture(entries, picture, slidePath, relationships,
         diagnostic => options.onDiagnostic?.({...diagnostic, path: `slides.${index}.design`})),
@@ -859,8 +868,10 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
   for (const item of items) if (item.readNativeBody) {
     const current = item.readNativeBody();
     if (current) {
-      item.paragraphs = current.map((paragraph, index) => ({...item.paragraphs[index], ...paragraph}));
+      item.paragraphs = withDisplayedNumbers(current.map((paragraph, index) => ({...item.paragraphs[index], ...paragraph})));
       item.text = current.map(paragraph => paragraph.text).join('\n');
+      if (item.paragraphs.some(paragraph => paragraph.bullet) && item.paragraphs.some(paragraph => !paragraph.bullet))
+        options.onDiagnostic?.({code: 'mixed-body-paragraphs', path: `slides.${slideIndex}`, message: 'A native body mixes bulleted and plain paragraphs; current text is retained as list entries because OPF has no mixed-paragraph body model.'});
     }
   }
   const listRecord = slideListRecord(entries, slidePath, slideRoot, relationships);
@@ -1216,13 +1227,12 @@ function nativePictureStretch(picture,bytes,bounds,svg) {
   if(!bounds||!(bounds.w>0&&bounds.h>0)||!metadata||!(metadata.width>0&&metadata.height>0)||metadata.orientation>1) return false;
   if(stretch===undefined||fill?.['a:tile']!==undefined||Number(transform?.rot??0)!==0) return false;
   if([crop,rect].some(value=>value&&['l','r','t','b'].some(key=>Number(value[key]??0)!==0)))return false;
-  // Compare dimensions in native EMUs, without a new geometry tolerance.
+  // Compare the current raster and current native frame, including only the
+  // exporter's representable rounding cells (not a visual geometry tolerance).
   const ext=transform?.['a:ext'];
   const cx=Number(ext?.cx),cy=Number(ext?.cy);
   if(!Number.isFinite(cx)||!Number.isFinite(cy))return false;
-  // Equal-aspect dimensions can round by one EMU when serialized. A dimension
-  // reproduced by rounding the intrinsic ratio is still the same aspect.
-  return Math.round(cx*metadata.height/metadata.width)!==cy&&Math.round(cy*metadata.width/metadata.height)!==cx;
+  return !samePictureAspect(cx,cy,metadata.width,metadata.height);
 }
 
 // Provenance may rebuild flat blocks into groups or scalar fields. Remove only
@@ -1313,7 +1323,7 @@ function takeTitleItem(items, dimensions, inferHeadings) {
 
   const titleLimit = dimensions.heightInches * 0.28;
   const candidateIndex = items.findIndex((item) => {
-    if (item.heading || item.kind !== "text" || !item.text || item.paragraphs.some(p=>p.bullet)) return false;
+    if (item.heading || item.placeholder === 'body' || item.kind !== "text" || !item.text || item.paragraphs.some(p=>p.bullet)) return false;
     const y = item.bounds?.y ?? 0;
     return y <= titleLimit && (item.maxFontSize >= 20 || /^title\b/i.test(item.name ?? ""));
   });
@@ -1329,7 +1339,7 @@ function takeSubtitleItem(items, titleItem, dimensions, inferHeadings) {
   const titleBottom = (titleItem.bounds?.y ?? 0) + (titleItem.bounds?.h ?? 0);
   const subtitleLimit = Math.min(dimensions.heightInches * 0.34, 1.45);
   const candidateIndex = items.findIndex((item) => {
-    if (item.heading || item.kind !== "text" || !item.text || item.paragraphs.some(p=>p.bullet)) return false;
+    if (item.heading || item.placeholder === 'body' || item.kind !== "text" || !item.text || item.paragraphs.some(p=>p.bullet)) return false;
     const y = item.bounds?.y ?? 0;
     const h = item.bounds?.h ?? 0;
     return y >= titleBottom - 0.05
@@ -1513,6 +1523,15 @@ function chartFromRelationship(entries, slidePath, relationships, relId, report)
   if (chartNode.type === 'scatter') return withOptions(scatterFromSeries(entries, relationship.path, series, budget, cachePath, {codes: valueCodes, xCode, report}));
   const labels = cachedValues(series[0]?.["c:cat"], cachePath(0, 'c:cat'), budget);
   const names = series.map((entry, index) => firstCachedValue(entry?.["c:tx"], cachePath(index, 'c:tx'), budget) ?? `Series ${index + 1}`);
+  // RR-86: explicit current line paint has no per-series OPF field. Report the native locator without
+  // inferring semantic highlight, rewriting the theme or claiming that these colors differ visually.
+  for (const [index, entry] of series.entries()) {
+    const line = comboSeries ? comboSeries[index].role === 'line' : asArray(plotArea['c:lineChart']).includes(chartNode.node);
+    const solid = line && entry?.['c:spPr']?.['a:ln']?.['a:solidFill'];
+    if (solid && ['a:srgbClr', 'a:schemeClr', 'a:sysClr', 'a:prstClr', 'a:scrgbClr', 'a:hslClr'].some(color => Object.hasOwn(solid, color))) {
+      report?.({option: `series.${index}.line.color`, message: `Line series '${names[index]}' has explicit native solid paint that is not retained as per-series formatting in OPF; imported chart colors follow its design and semantic highlight.`});
+    }
+  }
   const values = series.map((entry, index) => {
     const role = entry?.["c:val"] !== undefined ? 'c:val' : 'c:yVal';
     return cachedValues(entry?.[role], cachePath(index, role), budget, strictCacheValue(budget));
@@ -2120,9 +2139,12 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
   for (const item of geometry.items) if (item.listColumns?.length > 1 && item.text?.listEntries) item.text = {...item.text, listEntries: item.listColumns.flatMap(column => column.text?.listEntries ?? [])};
   // RR-81: a slide on a 0.19 template uses that template's native slide layout (src/template-layouts.js), whose placeholders
   // core composes with this slide's options (canvas, the deck's header and footer, direction) and its placed-image bands.
-  const template = slideTemplate(slideContext.core);
+  let template = slideTemplate(slideContext.core);
+  const automatic = opfSlide.layout === undefined || opfSlide.layout === 'auto';
+  const nativeBody = options.bodyText === 'native' ? planNativeBody(opfSlide, geometry, {automatic, report: options.onDiagnostic}) : undefined;
+  if (template && nativeBody) template = {...template, key: `${template.key}\u0000native-body:${nativeBody.region}`, nativeBodyRegion: nativeBody.region};
   if (template) context.templateSlides[slideIndex] = {template, areaOptions: {...composeOptions, placements: placedImageBands(opfSlide)}};
-  else if (opfSlide.layout === undefined || opfSlide.layout === 'auto') context.automaticSlides[slideIndex] = {areaOptions: composeOptions, title: geometry.items.find(item => item.field === 'title')};
+  else if (automatic) context.automaticSlides[slideIndex] = {areaOptions: composeOptions, title: geometry.items.find(item => item.field === 'title'), ...(nativeBody ? {nativeBody} : {})};
   // The default footer band (date left, text center, number right): where a footer added natively lands (RR-11).
   if (slideIndex === 0) context.defaultFooterOptions = composeOptions;
   slideContext.zoneBand = zoneBands(composeOptions);
@@ -2143,7 +2165,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
 
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
   // The content topology (groups, regions, root form, block ids) with the leaf boxes this geometry draws.
-  recordContentTopology(context.documentProvenance, opfSlide, slideIndex, geometry.items);
+  recordContentTopology(context.documentProvenance, opfSlide, slideIndex, nativeBody ? geometry.items.map(item => item === nativeBody.item ? {...item, box: nativeBody.box, text: undefined} : item) : geometry.items);
   // Paint order, as in the preview (FA-22 contract): canvas colour, the background picture and its overlay, design.watermark,
   // the logo, then the items in core's order: the headings, the placed image blocks at their bands, then the flowed body.
   if (geometry.backgroundImage) await addBackgroundImage(slide, presentation, geometry.backgroundImage, slideIndex, slideContext, context, options);
@@ -2175,7 +2197,11 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
         rectRadius:8*Math.min(widthInches,heightInches)/720,
         fill:paint(surface),line:{...paint(`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${item.path}`});
     }
-    if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
+    if (nativeBody?.item === item) {
+      const body = addNativeBody(slide, nativeBody, itemContext, options, {textBoxOptions, nativeFontOptions, exportColor, nativeColor, linkColor, langOptions, solidColorXml});
+      context.nativeBodies.set(body.objectName, body.defaults);
+      context.placeholderBindings.set(body.objectName, {slide: slideIndex, region: nativeBody.region, object: 'body'});
+    } else if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
       addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:item.alignment,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
     } else if (["title", "subtitle", "tag"].includes(item.field) && !item.text?.richLines) {
       // Estimated-font headings use one native text box, which still needs a
@@ -4076,7 +4102,7 @@ async function normalizePptxZip(raw, context) {
   attachFurnitureFields(entries,context.furnitureFields);
   attachFurnitureTags(entries,context.furnitureTags,context.furnitureManifests);
   // RR-11: the recorded footer shapes become PowerPoint's date, footer and slide-number placeholders.
-  context.nativePlaceholders = attachNativePlaceholders(entries,context.nativeFurniture,context.nativeFurnitureBands);
+  context.nativePlaceholders = attachNativePlaceholders(entries,context.nativeFurniture,context.nativeFurnitureBands,context.footerText);
   // The "Image unavailable" panel of an unresolved logo: identity only, so import does not read it as content.
   attachTextTags(entries,context.logoPlaceholderTags,LOGO_TAG,'opfLogoPlaceholder','logo placeholder');
   // opf-pptx#221: the image block of an unavailable-image placeholder, on its panel (full provenance).
@@ -4503,6 +4529,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         const content=body.replace(/<a:pPr\b[^>]*(?:\/>|>[\s\S]*?<\/a:pPr>)/g,node=>{properties ||= node;return '';});
         return `<a:p>${properties}${content}</a:p>`;
       });
+      xml = nativeBodyDefaults(xml, context.nativeBodies);
     }
     // theme1.xml: FF-24 colors and names above, then FF-07 fonts here; they touch disjoint elements.
     if (context.scriptFonts) xml = partScriptFonts(path, xml, context.scriptFonts, context.partSlides.get(path) ?? 0);

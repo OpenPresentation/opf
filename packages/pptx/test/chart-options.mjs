@@ -65,7 +65,7 @@ for (const type of ['column', 'bar', 'line', 'area', 'pie', 'doughnut', 'scatter
   assert.deepEqual(result.imported.axisTitles, undefined);
   assert.equal(result.imported.legend, undefined, `${type}: the default legend imports as no option`);
   assert.equal(result.imported.dataLabels, undefined, `${type}: hidden labels import as no option`);
-  assert.deepEqual(result.diagnostics.filter(d => d.code === 'chart-option-adapted'), []);
+  assert.deepEqual(result.diagnostics.filter(d => d.code === 'chart-option-adapted').map(({option, path, phase}) => ({option, path, phase})), type === 'line' ? [0, 1].map(index => ({option: `series.${index}.line.color`, path: `slides.0.charts.0.series.${index}.line.color`, phase: 'import'})) : [], 'Only explicit current native line paint is diagnosed; export options remain unchanged');
 }
 {
   // Inert option values change nothing, byte for byte.

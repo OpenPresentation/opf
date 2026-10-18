@@ -148,6 +148,9 @@ export function isBuiltinTemplate(text) {
   return true;
 }
 export const escapeSlideTokens = text => text.replace(literalSlideToken, '\\{{');
+// A current native literal is never a template, including already displayed
+// backslashes. Add one escape for each complete token using core's convention.
+export const escapeLiteralTokens = text => text.replace(anyToken, token => token.replace('{{', '\\{{'));
 
 /**
  * The zone `text` a native footer or header line stands for: every native slide-number field (`{type, text, start}`,

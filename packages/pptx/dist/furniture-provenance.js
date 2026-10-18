@@ -6,6 +6,7 @@ import {schemas} from '@openpresentation/opf';
 import {resolveLogo} from '@openpresentation/opf/composition';
 import {mediaKey} from './media-dedupe.js';
 import {NATIVE_PLACEHOLDERS, footerValue, isNativePlaceholderType, readNativePlaceholders} from './native-furniture.js';
+import {classifyNativeFooters} from './native-footer-classification.js';
 
 const TAG = 'OPF_FURNITURE_V1';
 // A slide has one tag list; it also carries the document's OPF_SLIDE_V1 record.
@@ -531,7 +532,6 @@ export function importFurniture(contexts, entries, onDiagnostic, {sections = [],
     const slide = candidates[index];
     const claimed = new Set([...taggedText[index], ...Object.values(slide).flatMap(candidate => candidate.text)]);
     const fields = readNativePlaceholders(context, claimed, context.relationshipsOf, context.readPart);
-    if (!fields.length) return;
     const existing = slide.footer, accepted = [];
     for (const item of fields) {
       const current = existing && existing.value !== false ? existing.value[item.zone]?.[item.field] : undefined;
@@ -539,6 +539,9 @@ export function importFurniture(contexts, entries, onDiagnostic, {sections = [],
       if (current !== undefined && current !== false) report(index, `footer.${item.zone}.${item.field}: A native PowerPoint placeholder duplicates a furniture part already read; it stays ordinary current text.`);
       else accepted.push(item);
     }
+    const occupied = new Set(accepted.filter(item => item.field === 'text').map(item => item.zone));
+    for (const zone of zones) if (existing?.value && existing.value[zone]?.text !== undefined && existing.value[zone].text !== false) occupied.add(zone);
+    accepted.push(...classifyNativeFooters(context, claimed, accepted, occupied, diagnostic => onDiagnostic?.({...diagnostic, path: `slides.${index}.${diagnostic.path}`})));
     if (!accepted.length) return;
     const merged = footerValue(accepted), indexes = accepted.map(item => item.index);
     if (!existing) slide.footer = {scope: 'native', value: merged, text: indexes, pictures: [], socials: []};

@@ -34,6 +34,13 @@ export interface ImageResolverContext {
 }
 
 export interface MediaProvenanceDiagnostic { code: "media-provenance-omitted"; path: string; message: string }
+/** An opt-in native body could not represent this payload; current measured shapes were retained. */
+export interface NativeBodyFallbackDiagnostic {
+  code: "native-body-fallback";
+  path: string;
+  reason: "complex-composition" | "multi-column" | "unsupported-list" | "annotated-text" | "unsupported-text" | "overflow";
+  message: string;
+}
 /** The chart data cannot be plotted, so a placeholder frame stands in for the chart. */
 export interface ChartDataUnplottableDiagnostic { code: "chart-data-unplottable"; path: string; message: string; reason: "dataset-unknown" | "no-rows" | "no-columns" | "single-column-not-numeric" }
 /** Content with no PowerPoint export (an empty table, an unsupported payload) is replaced by a plain-language placeholder frame. */
@@ -90,6 +97,16 @@ export interface ToPptxOptions {
    * placeholder in both modes. A fixed number does not follow slides moved or deleted in PowerPoint; the authored text returns on import (RR-91).
    */
   slideNumberFields?: "static" | "live";
+  /**
+   * Prototype: "native" exports at most one supported paragraph or flat-bullet body per slide as one native body
+   * placeholder with native wrapping and no autofit. It retains selected fonts, effective alignment and region anchor,
+   * but native applications can choose different wraps and baselines from the measured preview. Unsupported groups,
+   * shared/multiple body regions, nested/description/numbered/multicolumn lists, annotations and complex text retain
+   * measured shapes with native-body-fallback diagnostics. Native paragraph separators normalize to LF on import.
+   * Title handling is unchanged: only accepted one-line plain titles bind to a native title placeholder.
+   * Omitted or "measured" preserves the current measured-line export. No native application qualification is implied.
+   */
+  bodyText?: "measured" | "native";
   /** Default compatible converts WebP to a static PNG. Preserve embeds original WebP bytes. */
   imageFormat?: "compatible" | "preserve";
   /**
@@ -118,6 +135,14 @@ export interface ToPptxOptions {
    */
   provenance?: "full" | "references-only" | false;
   /**
+   * Literal footer text: "native" (default) keeps the first eligible one-line footer text bound to PowerPoint's Footer
+   * placeholder. "shape" omits only that slide-local ftr binding, retaining its measured editable text shape, locks,
+   * formatting, geometry, paint order and provenance. It stays on the slide, including when repeated. Live slide-number
+   * and date fields/placeholders, master/layout footer placeholders and flags remain unchanged. The literal shape then
+   * has no native Footer-dialog ownership; this does not guarantee viewer parity or restore tags another application strips.
+   */
+  footerText?: "native" | "shape";
+  /**
    * Values for the deck's template variables, keyed by variable id (core `resolveVariables`). A deck that uses content
    * variables, or is marked `template: true`, is resolved to a concrete deck first; the PPTX holds the resolved text.
    * A template exports with each unfilled variable's example (diagnostic `variable-example-used`); a normal deck with an
@@ -135,7 +160,7 @@ export interface ToPptxOptions {
   /** Match preview/pagination clearance around supplied vector text outlines; default 1. */
   textRasterPadding?: number;
   /** Layout diagnostics, `media-provenance-omitted` when video data cannot be stored, and, from core's slide context, `unresolved-reference` (once per reference path) when a layout, theme, colour-scheme or font-scheme reference resolves nowhere (not embedded in the document's `catalogs` and not in a registered catalog): core's engine defaults are drawn instead, and a slide whose layout resolves nowhere, like one with no layout, composes automatically. None of them refuses the export unless `strictReferences` is set. */
-  onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | SvgImageRasterizedDiagnostic | VariableExampleUsedDiagnostic) => void;
+  onDiagnostic?: (diagnostic: LayoutDiagnostic | UnresolvedReferenceDiagnostic | MediaProvenanceDiagnostic | NativeBodyFallbackDiagnostic | ChartDataUnplottableDiagnostic | ChartDataAdaptedDiagnostic | ChartMapGeodataDiagnostic | ChartValueNotNumericDiagnostic | ChartMappingAdaptedDiagnostic | DataProvenanceOmittedDiagnostic | ContentPlaceholderDiagnostic | UnresolvedAssetDiagnostic | SvgSanitizedDiagnostic | SvgImageRasterizedDiagnostic | VariableExampleUsedDiagnostic) => void;
   baseDir?: string;
   compressionLevel?: number;
   imageResolver?: (src: string, context: ImageResolverContext) => ImageResolverResult | Promise<ImageResolverResult | null | undefined> | null | undefined;

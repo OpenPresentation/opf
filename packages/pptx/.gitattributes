@@ -3,3 +3,5 @@ vendor/pptxgenjs/pptxgen.es.js -text
 vendor/pptxgenjs/LICENSE -text
 vendor/jszip/index-min.js -text
 vendor/jszip/LICENSE.md -text
+# Keynote fixture JSON is verified byte-for-byte by its tests (sha256 in a manifest): keep it LF on a core.autocrlf checkout.
+test/fixtures/keynote-*/*.json -text

@@ -14,6 +14,7 @@ await copyFile(new URL('src/card-provenance.js', root), new URL('card-provenance
 await copyFile(new URL('src/media-provenance.js', root), new URL('media-provenance.js', dist));
 await copyFile(new URL('src/heading-provenance.js', root), new URL('heading-provenance.js', dist));
 await copyFile(new URL('src/text-provenance.js', root), new URL('text-provenance.js', dist));
+await copyFile(new URL('src/native-body.js', root), new URL('native-body.js', dist));
 await copyFile(new URL('src/rich-heading.js', root), new URL('rich-heading.js', dist));
 await copyFile(new URL('src/timeline-provenance.js', root), new URL('timeline-provenance.js', dist));
 await copyFile(new URL('src/quote-provenance.js', root), new URL('quote-provenance.js', dist));
@@ -27,6 +28,7 @@ await copyFile(new URL('src/run-colors.js', root), new URL('run-colors.js', dist
 await copyFile(new URL('src/sections.js', root), new URL('sections.js', dist));
 await copyFile(new URL('src/furniture-fields.js', root), new URL('furniture-fields.js', dist));
 await copyFile(new URL('src/native-furniture.js', root), new URL('native-furniture.js', dist));
+await copyFile(new URL('src/native-footer-classification.js', root), new URL('native-footer-classification.js', dist));
 await copyFile(new URL('src/master-furniture.js', root), new URL('master-furniture.js', dist));
 await copyFile(new URL('src/template-layouts.js', root), new URL('template-layouts.js', dist));
 await copyFile(new URL('src/chart-workbook.js', root), new URL('chart-workbook.js', dist));

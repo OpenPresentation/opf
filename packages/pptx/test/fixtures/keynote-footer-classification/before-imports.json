@@ -1,0 +1,2870 @@
+[
+  {
+    "name": "A",
+    "document": {
+      "$schema": "https://openpresentation.org/schema/opf/v1",
+      "name": "Imported PPTX",
+      "slides": [
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K01 Title and subtitle",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Native layout baseline",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K01 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K02 Paragraph editing",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "KN_ORIGINAL_PARAGRAPH. Keep this second sentence.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A second authored paragraph.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K02 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K03 Rich text",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Bold words",
+                  "bold": true,
+                  "color": "#FFFFFF"
+                },
+                {
+                  "text": " and ",
+                  "bold": false,
+                  "color": "#FFFFFF"
+                },
+                {
+                  "text": "italic words",
+                  "bold": false,
+                  "italic": true,
+                  "color": "#FFFFFF"
+                },
+                {
+                  "text": " and ",
+                  "bold": false,
+                  "color": "#FFFFFF"
+                },
+                {
+                  "text": "bold italic words",
+                  "bold": true,
+                  "italic": true,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A second rich paragraph.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K03 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K04 List editing",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "KN_ORIGINAL_LIST",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Parent item",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Description remains attached.",
+                  "fontSize": 19,
+                  "color": "#F0F0F0"
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "items": [
+                {
+                  "text": [
+                    {
+                      "text": "Nested child",
+                      "fontSize": 24,
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "level": 1
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Final item",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K04 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K05 Long paragraph",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K05 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K06 Long list",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A list item whose words wrap across more than one visual line while retaining ",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "its semantic item boundary. A list item whose words wrap across more than one ",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "visual line while retaining its semantic item boundary. ",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Second item remains independent.",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Third item",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "The description wraps separately from the item title and remains editable.",
+                  "fontSize": 19,
+                  "color": "#F0F0F0"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K06 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K07 Layout and reapply",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Left-column story remains visible.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "24",
+                  "bold": true,
+                  "fontSize": 57,
+                  "color": "accent1"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "teams in the pilot",
+                  "fontSize": 17,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K07 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K08 Replace this picture",
+          "blocks": [
+            {
+              "type": "image",
+              "image": {
+                "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg==",
+                "alt": "OPF image 1"
+              },
+              "fit": "stretch"
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K08 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K09 Crop this picture",
+          "blocks": [
+            {
+              "type": "image",
+              "image": {
+                "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg==",
+                "alt": "OPF image 2"
+              }
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keep this caption while adjusting the crop.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K09 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K10 Column chart data",
+          "blocks": [
+            {
+              "type": "chart",
+              "chart": {
+                "type": "column",
+                "data": {
+                  "columns": [
+                    "Category",
+                    "Revenue"
+                  ],
+                  "rows": [
+                    [
+                      "Q1",
+                      12
+                    ],
+                    [
+                      "Q2",
+                      24
+                    ],
+                    [
+                      "Q3",
+                      18
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K10 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K11 Line chart style",
+          "blocks": [
+            {
+              "type": "chart",
+              "chart": {
+                "type": "line",
+                "data": {
+                  "columns": [
+                    "Category",
+                    "Demand"
+                  ],
+                  "rows": [
+                    [
+                      "Jan",
+                      10
+                    ],
+                    [
+                      "Feb",
+                      20
+                    ],
+                    [
+                      "Mar",
+                      15
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K11 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K12 Table cell edit",
+          "blocks": [
+            {
+              "type": "table",
+              "table": {
+                "columns": [
+                  {
+                    "value": [
+                      {
+                        "text": "Team",
+                        "bold": true,
+                        "italic": false,
+                        "fontSize": 12,
+                        "fontFamily": "Arial",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "style": {
+                      "fill": "#2874A6",
+                      "align": "left",
+                      "verticalAlign": "top",
+                      "padding": {
+                        "top": 8,
+                        "right": 8,
+                        "bottom": 8,
+                        "left": 8
+                      },
+                      "borders": {
+                        "left": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "right": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "top": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "bottom": {
+                          "color": "#475569",
+                          "width": 4
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "value": [
+                      {
+                        "text": "Count",
+                        "bold": true,
+                        "italic": false,
+                        "fontSize": 12,
+                        "fontFamily": "Arial",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "style": {
+                      "fill": "#2874A6",
+                      "align": "left",
+                      "verticalAlign": "top",
+                      "padding": {
+                        "top": 8,
+                        "right": 8,
+                        "bottom": 8,
+                        "left": 8
+                      },
+                      "borders": {
+                        "left": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "right": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "top": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "bottom": {
+                          "color": "#475569",
+                          "width": 4
+                        }
+                      }
+                    }
+                  }
+                ],
+                "rows": [
+                  [
+                    {
+                      "value": [
+                        {
+                          "text": "KN_ORIGINAL_CELL",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "value": [
+                        {
+                          "text": "12",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  [
+                    {
+                      "value": [
+                        {
+                          "text": "Beta",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "value": [
+                        {
+                          "text": "24",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K12 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K13 Rich table edit",
+          "blocks": [
+            {
+              "type": "table",
+              "table": {
+                "columns": [
+                  {
+                    "value": [
+                      {
+                        "text": "Label",
+                        "bold": true,
+                        "italic": false,
+                        "fontSize": 12,
+                        "fontFamily": "Arial",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "style": {
+                      "fill": "#2874A6",
+                      "align": "left",
+                      "verticalAlign": "top",
+                      "padding": {
+                        "top": 8,
+                        "right": 8,
+                        "bottom": 8,
+                        "left": 8
+                      },
+                      "borders": {
+                        "left": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "right": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "top": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "bottom": {
+                          "color": "#475569",
+                          "width": 4
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "value": [
+                      {
+                        "text": "Note",
+                        "bold": true,
+                        "italic": false,
+                        "fontSize": 12,
+                        "fontFamily": "Arial",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "style": {
+                      "fill": "#2874A6",
+                      "align": "left",
+                      "verticalAlign": "top",
+                      "padding": {
+                        "top": 8,
+                        "right": 8,
+                        "bottom": 8,
+                        "left": 8
+                      },
+                      "borders": {
+                        "left": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "right": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "top": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "bottom": {
+                          "color": "#475569",
+                          "width": 4
+                        }
+                      }
+                    }
+                  }
+                ],
+                "rows": [
+                  [
+                    {
+                      "value": [
+                        {
+                          "text": "Alpha",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "value": [
+                        {
+                          "text": "Bold cell",
+                          "bold": true,
+                          "italic": false,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        },
+                        {
+                          "text": " and plain",
+                          "bold": false,
+                          "italic": false,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  [
+                    {
+                      "value": [
+                        {
+                          "text": "Beta",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "value": [
+                        {
+                          "text": "Keep this row",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K13 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K14 Number reorder A",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Move this slide after K15; observe the native slide number.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K14 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K15 Number reorder B",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "This slide moves before K14; observe the native slide number.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K15 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K16 Notes and final control",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Untouched final control. Notes are edited separately.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K16 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        }
+      ],
+      "design": {
+        "colorScheme": {
+          "dark1": "#000000",
+          "light1": "#011842",
+          "dark2": "#A7A7A7",
+          "light2": "#535353",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "hyperlink": "#0000FF",
+          "followedHyperlink": "#FF00FF"
+        },
+        "dimensions": {
+          "widthInches": 13.333333333333334,
+          "heightInches": 7.5
+        },
+        "footer": {
+          "right": {
+            "text": "{{slide.number}}"
+          }
+        }
+      },
+      "catalogs": {
+        "default": {
+          "source": "https://www.pptx.gallery"
+        }
+      }
+    },
+    "issues": [
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.0.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.1.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.2.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.3.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.4.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.5.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.6.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.7.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.8.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.9.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.10.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.11.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.12.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.13.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.14.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.15.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "unsupported-image-crop",
+        "message": "Native picture crop is not represented by the imported OPF asset; the full image was retained.",
+        "path": "slides.8.pictures.0"
+      },
+      {
+        "code": "unsupported-table-cell-style",
+        "message": "The native table style background is not represented; supported character styles are retained.",
+        "path": "slides.11.tables.0"
+      },
+      {
+        "code": "unsupported-table-cell-style",
+        "message": "The native table style background is not represented; supported character styles are retained.",
+        "path": "slides.12.tables.0"
+      }
+    ]
+  },
+  {
+    "name": "B",
+    "document": {
+      "$schema": "https://openpresentation.org/schema/opf/v1",
+      "name": "Imported PPTX",
+      "slides": [
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K01 Title and subtitle",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Native layout baseline",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K01 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K02 Paragraph editing",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "KN_ORIGINAL_PARAGRAPH. Keep this second sentence.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A second authored paragraph.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K02 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K03 Rich text",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Bold words",
+                  "bold": true,
+                  "color": "#FFFFFF"
+                },
+                {
+                  "text": " and ",
+                  "bold": false,
+                  "color": "#FFFFFF"
+                },
+                {
+                  "text": "italic words",
+                  "bold": false,
+                  "italic": true,
+                  "color": "#FFFFFF"
+                },
+                {
+                  "text": " and ",
+                  "bold": false,
+                  "color": "#FFFFFF"
+                },
+                {
+                  "text": "bold italic words",
+                  "bold": true,
+                  "italic": true,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A second rich paragraph.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K03 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K04 List editing",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "KN_ORIGINAL_LIST",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Parent item",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Description remains attached.",
+                  "fontSize": 19,
+                  "color": "#F0F0F0"
+                }
+              ]
+            },
+            {
+              "type": "list",
+              "items": [
+                {
+                  "text": [
+                    {
+                      "text": "Nested child",
+                      "fontSize": 24,
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "level": 1
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Final item",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K04 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K05 Long paragraph",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. ",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K05 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K06 Long list",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "A list item whose words wrap across more than one visual line while retaining ",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "its semantic item boundary. A list item whose words wrap across more than one ",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "visual line while retaining its semantic item boundary. ",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Second item remains independent.",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Third item",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "The description wraps separately from the item title and remains editable.",
+                  "fontSize": 19,
+                  "color": "#F0F0F0"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K06 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K07 Layout and reapply",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Left-column story remains visible.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "24",
+                  "bold": true,
+                  "fontSize": 57,
+                  "color": "accent1"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "teams in the pilot",
+                  "fontSize": 17,
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K07 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K08 Replace this picture",
+          "blocks": [
+            {
+              "type": "image",
+              "image": {
+                "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg==",
+                "alt": "OPF image 1"
+              },
+              "fit": "stretch"
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K08 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K09 Crop this picture",
+          "blocks": [
+            {
+              "type": "image",
+              "image": {
+                "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg==",
+                "alt": "OPF image 2"
+              }
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keep this caption while adjusting the crop.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K09 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K10 Column chart data",
+          "blocks": [
+            {
+              "type": "chart",
+              "chart": {
+                "type": "column",
+                "data": {
+                  "columns": [
+                    "Category",
+                    "Revenue"
+                  ],
+                  "rows": [
+                    [
+                      "Q1",
+                      12
+                    ],
+                    [
+                      "Q2",
+                      24
+                    ],
+                    [
+                      "Q3",
+                      18
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K10 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K11 Line chart style",
+          "blocks": [
+            {
+              "type": "chart",
+              "chart": {
+                "type": "line",
+                "data": {
+                  "columns": [
+                    "Category",
+                    "Demand"
+                  ],
+                  "rows": [
+                    [
+                      "Jan",
+                      10
+                    ],
+                    [
+                      "Feb",
+                      20
+                    ],
+                    [
+                      "Mar",
+                      15
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K11 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K12 Table cell edit",
+          "blocks": [
+            {
+              "type": "table",
+              "table": {
+                "columns": [
+                  {
+                    "value": [
+                      {
+                        "text": "Team",
+                        "bold": true,
+                        "italic": false,
+                        "fontSize": 12,
+                        "fontFamily": "Arial",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "style": {
+                      "fill": "#2874A6",
+                      "align": "left",
+                      "verticalAlign": "top",
+                      "padding": {
+                        "top": 8,
+                        "right": 8,
+                        "bottom": 8,
+                        "left": 8
+                      },
+                      "borders": {
+                        "left": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "right": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "top": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "bottom": {
+                          "color": "#475569",
+                          "width": 4
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "value": [
+                      {
+                        "text": "Count",
+                        "bold": true,
+                        "italic": false,
+                        "fontSize": 12,
+                        "fontFamily": "Arial",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "style": {
+                      "fill": "#2874A6",
+                      "align": "left",
+                      "verticalAlign": "top",
+                      "padding": {
+                        "top": 8,
+                        "right": 8,
+                        "bottom": 8,
+                        "left": 8
+                      },
+                      "borders": {
+                        "left": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "right": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "top": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "bottom": {
+                          "color": "#475569",
+                          "width": 4
+                        }
+                      }
+                    }
+                  }
+                ],
+                "rows": [
+                  [
+                    {
+                      "value": [
+                        {
+                          "text": "KN_ORIGINAL_CELL",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "value": [
+                        {
+                          "text": "12",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  [
+                    {
+                      "value": [
+                        {
+                          "text": "Beta",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "value": [
+                        {
+                          "text": "24",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K12 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K13 Rich table edit",
+          "blocks": [
+            {
+              "type": "table",
+              "table": {
+                "columns": [
+                  {
+                    "value": [
+                      {
+                        "text": "Label",
+                        "bold": true,
+                        "italic": false,
+                        "fontSize": 12,
+                        "fontFamily": "Arial",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "style": {
+                      "fill": "#2874A6",
+                      "align": "left",
+                      "verticalAlign": "top",
+                      "padding": {
+                        "top": 8,
+                        "right": 8,
+                        "bottom": 8,
+                        "left": 8
+                      },
+                      "borders": {
+                        "left": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "right": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "top": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "bottom": {
+                          "color": "#475569",
+                          "width": 4
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "value": [
+                      {
+                        "text": "Note",
+                        "bold": true,
+                        "italic": false,
+                        "fontSize": 12,
+                        "fontFamily": "Arial",
+                        "color": "#FFFFFF"
+                      }
+                    ],
+                    "style": {
+                      "fill": "#2874A6",
+                      "align": "left",
+                      "verticalAlign": "top",
+                      "padding": {
+                        "top": 8,
+                        "right": 8,
+                        "bottom": 8,
+                        "left": 8
+                      },
+                      "borders": {
+                        "left": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "right": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "top": {
+                          "color": "#475569",
+                          "width": 1.3333333333333333
+                        },
+                        "bottom": {
+                          "color": "#475569",
+                          "width": 4
+                        }
+                      }
+                    }
+                  }
+                ],
+                "rows": [
+                  [
+                    {
+                      "value": [
+                        {
+                          "text": "Alpha",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "value": [
+                        {
+                          "text": "Bold cell",
+                          "bold": true,
+                          "italic": false,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        },
+                        {
+                          "text": " and plain",
+                          "bold": false,
+                          "italic": false,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    }
+                  ],
+                  [
+                    {
+                      "value": [
+                        {
+                          "text": "Beta",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "value": [
+                        {
+                          "text": "Keep this row",
+                          "bold": false,
+                          "italic": false,
+                          "fontSize": 12,
+                          "fontFamily": "Arial",
+                          "color": "#FFFFFF"
+                        }
+                      ],
+                      "style": {
+                        "fill": "#011842",
+                        "align": "left",
+                        "verticalAlign": "top",
+                        "padding": {
+                          "top": 8,
+                          "right": 8,
+                          "bottom": 8,
+                          "left": 8
+                        },
+                        "borders": {
+                          "left": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "right": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "top": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          },
+                          "bottom": {
+                            "color": "#475569",
+                            "width": 1.3333333333333333
+                          }
+                        }
+                      }
+                    }
+                  ]
+                ]
+              }
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K13 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K14 Number reorder A",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Move this slide after K15; observe the native slide number.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K14 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K15 Number reorder B",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "This slide moves before K14; observe the native slide number.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K15 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        },
+        {
+          "design": {
+            "background": {
+              "type": "solid",
+              "color": "#011842"
+            }
+          },
+          "title": "K16 Notes and final control",
+          "blocks": [
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Untouched final control. Notes are edited separately.",
+                  "color": "#FFFFFF"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": [
+                {
+                  "text": "Keynote qualification",
+                  "fontSize": 12,
+                  "color": "#F0F0F0"
+                }
+              ]
+            }
+          ],
+          "notes": "K16 speaker notes: preserve this sentence.",
+          "layout": "default:text"
+        }
+      ],
+      "design": {
+        "colorScheme": {
+          "dark1": "#000000",
+          "light1": "#011842",
+          "dark2": "#A7A7A7",
+          "light2": "#535353",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
+          "hyperlink": "#0000FF",
+          "followedHyperlink": "#FF00FF"
+        },
+        "dimensions": {
+          "widthInches": 13.333333333333334,
+          "heightInches": 7.5
+        },
+        "footer": {
+          "right": {
+            "text": "{{slide.number}}"
+          }
+        }
+      },
+      "catalogs": {
+        "default": {
+          "source": "https://www.pptx.gallery"
+        }
+      }
+    },
+    "issues": [
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.0.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.1.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.2.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.3.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.4.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.5.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.6.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.7.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.8.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.9.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.10.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.11.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.12.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.13.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.14.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "furniture-import-reflow",
+        "path": "slides.15.design",
+        "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+      },
+      {
+        "code": "unsupported-image-crop",
+        "message": "Native picture crop is not represented by the imported OPF asset; the full image was retained.",
+        "path": "slides.8.pictures.0"
+      },
+      {
+        "code": "unsupported-table-cell-style",
+        "message": "The native table style background is not represented; supported character styles are retained.",
+        "path": "slides.11.tables.0"
+      },
+      {
+        "code": "unsupported-table-cell-style",
+        "message": "The native table style background is not represented; supported character styles are retained.",
+        "path": "slides.12.tables.0"
+      }
+    ]
+  }
+]

@@ -82,9 +82,11 @@ const guid = (kind, n) => `{0F0F2701-${kind}-4000-8000-${n.toString(16).toUpperC
  * attached: the shape keeps its name, geometry, runs, fields and tags, and gains
  * `p:ph` (a placeholder is a text shape the layout can supply defaults for).
  * `bands` maps a generated object name to its zone's band (`{x, width}` in pixels) for a part narrower than its zone.
+ * `footerText: 'shape'` omits only the slide-local literal ftr binding. Keep locks, selection and master/layout bookkeeping
+ * unchanged: the measured shape stays on its slide and all other generated package parts retain their normal semantics.
  * Returns the placeholders in use and the first geometry/alignment seen per type.
  */
-export function attachNativePlaceholders(entries, records, bands = new Map()) {
+export function attachNativePlaceholders(entries, records, bands = new Map(), footerText = 'native') {
   const used = new Set(), first = new Map(), seen = new Set();
   if (!records.size) return {used, first};
   const slides = Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path)).sort((a, b) => Number(a.match(/\d+/)[0]) - Number(b.match(/\d+/)[0]));
@@ -100,7 +102,7 @@ export function attachNativePlaceholders(entries, records, bands = new Map()) {
       if (!/<p:cNvSpPr\b[^>]*\/>/.test(shape)) throw new Error('Generated furniture shape has no plain shape properties.');
       shape = shape.replace(/<p:cNvSpPr\b([^>]*)\/>/, '<p:cNvSpPr$1><a:spLocks noGrp="1"/></p:cNvSpPr>').replace(/<p:nvPr\s*\/>/, '<p:nvPr></p:nvPr>');
       if (!shape.includes('<p:nvPr>')) throw new Error('Generated furniture shape has no native application properties.');
-      shape = shape.replace('<p:nvPr>', `<p:nvPr><p:ph type="${ph}" sz="${properties.sz}" idx="${properties.idx}"/>`);
+      if (ph !== 'ftr' || footerText !== 'shape') shape = shape.replace('<p:nvPr>', `<p:nvPr><p:ph type="${ph}" sz="${properties.sz}" idx="${properties.idx}"/>`);
       used.add(ph);
       if (!first.has(ph)) {
         const geometry = shape.match(/<a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/);

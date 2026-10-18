@@ -56,6 +56,35 @@ The cost of the default: a fixed number does not follow slides reordered, added 
 refresh it. The authored `{{slide.number}} / {{deck.slideCount}}` returns on import either way (the furniture manifest stores
 the template; a fixed-number export and a live one re-import to the same text).
 
+## Literal footer text as a shape
+
+`toPptx(deck, {footerText: 'shape'})` keeps the existing measured, editable literal footer text shape and omits only its
+slide-local `ftr` placeholder binding. The default, `footerText: 'native'`, retains the normal output exactly. Invalid
+values fail with `invalid-footer-text-option` at `options.footerText`.
+
+Only the first eligible one-line literal footer text on each slide changes. Its current words, formatting, geometry,
+paint order, `a:spLocks`, name and furniture/document provenance stay unchanged. It remains on that slide even when
+repeated. Native slide-number and date bindings and live fields, all master/layout placeholders and `p:hf` flags remain
+unchanged. A second literal part, multi-line or linked text, header text, and other furniture keep their normal export.
+The existing manifest `ph` metadata remains; that metadata alone does not prove a current native binding exists.
+
+The literal shape no longer belongs to PowerPoint's native Footer dialog. Preserved master/layout footer controls may
+still create another native footer. This option does not change import classification when another application strips
+OPF tags, nor does it establish general PowerPoint/Keynote font or layout parity.
+
+The bounded Keynote 15.1.1 control used a synthetic sixteen-slide Arial deck whose two inputs differed only by removing
+the sixteen slide-local literal `ftr` tokens. On its K08 picture slide, the supervisor observed the default footer occluded
+by the picture, while the shape variant's literal footer remained visible over it; both retained the live number 8.
+These observations persisted through saved Keynote and exported PPTX reopens. The actual default export moved the footer
+first in object order; the shape export preserved the source order on K08 and the simpler K02 paragraph slide. This is
+evidence for that fixture, not universal native acceptance. Both exports still import literal footers as content after
+Keynote strips the furniture tags, and both lose generated notes-page number fields. Speaker-note words are a separate
+required check.
+
+`test/footer-text-shape.mjs` checks the public option, unchanged defaults, all three provenance modes, the exact
+token-only uncompressed-part difference, preserved links/fields and current literal edits/deletions. ZIP compression
+bytes can differ when a token is omitted; the package-part comparison does not normalize or tolerate other changes.
+
 ## Row layout (RR-71)
 
 Core lays the parts of a zone out side by side (image, text, socials, date), each at its natural width, aligned to the zone's edge and

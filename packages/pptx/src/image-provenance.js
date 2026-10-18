@@ -91,6 +91,37 @@ function storedFocus({x, y}, orientation) {
 
 const srcRectValue = value => Math.round(value * 100000) || 0;
 
+/** Whether native dimensions can represent the raster's unchanged aspect. */
+export function samePictureAspect(cx, cy, width, height) {
+  if (![cx, cy, width, height].every(value => Number.isSafeInteger(value) && value > 0)) return false;
+  // Native writers may round an aspect-preserving frame directly to EMUs.
+  if (Math.round(cx * height / width) === cy || Math.round(cy * width / height) === cx) return true;
+  // pictureFrame passes inches to core fitImage, whose roundBox rounds each
+  // dimension to 1e-6 input units, before placeImages rounds to whole EMUs.
+  // Invert that actual serialization, rather than allowing a visual tolerance.
+  const microinches = extent => {
+    // 914400 / 1e6 = 1143 / 1250. A rounded EMU k covers
+    // [1250*k-625, 1250*k+625) / 1143 integer microinches.
+    const scaled = BigInt(extent) * 1250n;
+    const lower = (scaled - 625n + 1142n) / 1143n;
+    const upper = (scaled + 625n + 1142n) / 1143n;
+    const result = [];
+    // Include adjacent integers for a floating-point half-EMU tie, then keep
+    // only dimensions that reproduce the writer's actual numeric operation.
+    for (let value = lower - 1n; value <= upper; value++) {
+      const numeric = Number(value);
+      if (numeric > 0 && Number.isSafeInteger(numeric) && Math.round(numeric / 1e6 * EMUS_PER_INCH) === extent) result.push(value);
+    }
+    return result;
+  };
+  const w = BigInt(width), h = BigInt(height);
+  // q=round(x*1e6) represents [q-.5,q+.5). These two half-open
+  // intervals must overlap at the raster's exact rational aspect. Strict
+  // overlap excludes a boundary where only one rounding cell contains it.
+  return microinches(cx).some(x => microinches(cy).some(y =>
+    (2n * x - 1n) * h < (2n * y + 1n) * w && (2n * y - 1n) * w < (2n * x + 1n) * h));
+}
+
 /**
  * The native frame and crop of a picture: `box` (inches) is core's picture frame, `fit` cover | contain | stretch,
  * `focus` core's focus point, `metadata` the embedded raster (width, height, orientation). `fitImage` is core's shared

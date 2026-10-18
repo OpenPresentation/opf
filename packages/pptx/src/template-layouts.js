@@ -78,18 +78,27 @@ export function placeholderType(region) {
 }
 
 /** Which slide objects a placeholder of each type takes (binding a `none` region's lone object). */
-const BINDS = {title: ['title'], ctrTitle: ['title'], pic: ['picture'], chart: ['chart'], tbl: ['table'], obj: ['picture', 'chart', 'table']};
+const BINDS = {title: ['title'], ctrTitle: ['title'], body: ['body'], pic: ['picture'], chart: ['chart'], tbl: ['table'], obj: ['picture', 'chart', 'table']};
 export const bindsObject = (type, object) => (BINDS[type] ?? []).includes(object);
 
 /** The placeholder index of each region: its kind's base plus its position among the regions of that kind (REGION_IDX_BASE). */
-export function regionIndexes(record) {
+export function regionIndexes(record, nativeBodyRegion) {
   const regions = new Map(layoutTemplate(record).regions.map(region => [region.name, region]));
   const counts = {};
-  return Object.fromEntries(Object.keys(record?.regions ?? {}).filter(name => regions.has(name)).map(name => {
+  const indexes = Object.fromEntries(Object.keys(record?.regions ?? {}).filter(name => regions.has(name)).map(name => {
     const type = placeholderType(regions.get(name));
     counts[type] = (counts[type] ?? -1) + 1;
     return [name, REGION_IDX_BASE[type] + counts[type]];
   }));
+  // A native variant changes only its selected slot. Other object kinds retain
+  // their original indexes, so Change Layout cannot move a neighbouring picture.
+  if (nativeBodyRegion !== undefined && regions.has(nativeBodyRegion) && placeholderType(regions.get(nativeBodyRegion)) !== 'body') {
+    const used = new Set(Object.values(indexes));
+    let idx = REGION_IDX_BASE.body;
+    while (used.has(idx)) idx++;
+    indexes[nativeBodyRegion] = idx;
+  }
+  return indexes;
 }
 
 // FNV-1a (64-bit) of the record's canonical JSON: evidence of which record the layout was made from.
@@ -196,7 +205,7 @@ export function layoutPlaceholders(template) {
   const parsed = layoutTemplate(record);
   const {areas} = composeLayoutAreas(record, {...template.areaOptions, textMeasurement: undefined});
   const regions = new Map(parsed.regions.map(region => [region.name, region]));
-  const indexes = regionIndexes(record);
+  const indexes = regionIndexes(record, template.nativeBodyRegion);
   const emu = box => ({x: Math.round(box.x * EMU), y: Math.round(box.y * EMU), cx: Math.max(0, Math.round(box.width * EMU)), cy: Math.max(0, Math.round(box.height * EMU))});
   const result = [];
   for (const area of areas) {
@@ -210,7 +219,8 @@ export function layoutPlaceholders(template) {
     }
     if (area.name === 'subtitle') { result.push({name: 'Subtitle', type: 'subTitle', idx: SUBTITLE_IDX, anchor: 't', ...emu(area.box)}); continue; }
     const region = regions.get(area.name);
-    if (region) result.push({name: region.name, type: placeholderType(region), idx: indexes[region.name], ...emu(area.box)});
+    if (region) result.push({name: region.name, type: region.name === template.nativeBodyRegion ? 'body' : placeholderType(region), idx: indexes[region.name],
+      ...(region.name === template.nativeBodyRegion ? {anchor: {top: 't', middle: 'ctr', bottom: 'b'}[region.anchor]} : {}), ...emu(area.box)});
   }
   const sample = composeSlide({title: 'Title', subtitle: 'Subtitle', blocks: [{text: 'Body'}]}, {...template.areaOptions, layout: record, textMeasurement: undefined});
   for (const placeholder of result) {
@@ -244,7 +254,7 @@ function placeholderShape(placeholder, id) {
  */
 export function layoutTagValue(template, {record = false} = {}) {
   return {v: 1, id: template.id, group: template.group, ...(template.source !== undefined ? {source: template.source} : {}), reference: template.reference,
-    hash: recordHash(template.record), regions: Object.fromEntries(Object.entries(regionIndexes(template.record)).map(([name, idx]) => [String(idx), name])),
+    hash: recordHash(template.record), regions: Object.fromEntries(Object.entries(regionIndexes(template.record, template.nativeBodyRegion)).map(([name, idx]) => [String(idx), name])),
     ...(record && template.origin === 'document' ? {record: template.record} : {})};
 }
 
@@ -297,6 +307,7 @@ export function writeTemplateLayouts(output, slides, templates, bindings = new M
       const key = `${master}\u0001${template.key}`;
       const path = `ppt/slideLayouts/slideLayout${nextLayout++}.xml`, tagPath = `ppt/tags/opfLayout${nextTag++}.xml`;
       let name = typeof template.record.name === 'string' && template.record.name.trim() ? template.record.name : template.id;
+      if (template.nativeBodyRegion) name += ' (native body)';
       if (taken.has(name)) name = `${name} (${template.group}:${template.id})`;
       taken.add(name);
       const type = POWERPOINT_LAYOUT_TYPES[template.id] ?? 'cust';
@@ -329,17 +340,22 @@ export function writeTemplateLayouts(output, slides, templates, bindings = new M
     }
   }
   // Automatic composition is its own titleOnly layout, independently of catalog region templates.
-  for (const [master, base] of masters) {
-    const first = automaticSlides.find((plan, index) => plan && related(related(slidePaths[index], 'slideLayout'), 'slideMaster') === master);
+  for (const [master, base] of masters) for (const native of [false, true]) {
+    const first = automaticSlides.find((plan, index) => plan && Boolean(plan.nativeBody) === native && related(related(slidePaths[index], 'slideLayout'), 'slideMaster') === master);
     if (!first) continue;
     const path = `ppt/slideLayouts/slideLayout${nextLayout++}.xml`, tagPath = `ppt/tags/opfLayout${nextTag++}.xml`;
     // Reuse accepted title geometry; an empty slide needs only the engine's default prompt, never a re-fit through the caller's measurement provider.
     const title = first.title ?? composeSlide({title: 'Title'}, {...first.areaOptions, layout: undefined, textMeasurement: undefined}).items.find(item => item.field === 'title');
     const placeholder = {name: 'Title', type: 'title', x: Math.round(title.box.x * EMU), y: Math.round(title.box.y * EMU), cx: Math.round(title.box.width * EMU), cy: Math.round(title.box.height * EMU), style: {...title.textStyle, fontSize: title.text.fontSize, alignment: title.alignment}};
-    let xml = read(base).replace(/<p:sldLayout\b[^>]*>/, open => `${open.slice(0, -1).replace(/\s+(?:type|userDrawn|showMasterSp)="[^"]*"/g, '')} type="titleOnly" userDrawn="1">`);
-    xml = xml.replace(/(<p:cSld\b[^>]*?)(\s+name="[^"]*")?(\s*>)/, (match, open, _name, close) => `${open} name="OPF auto"${close}`);
+    const body = native ? {name: 'Body', type: 'body', idx: REGION_IDX_BASE.body,
+      ...Object.fromEntries(['x', 'y'].map(key => [key, Math.round(first.nativeBody.box[key] * EMU)])),
+      cx: Math.round(first.nativeBody.box.width * EMU), cy: Math.round(first.nativeBody.box.height * EMU),
+      anchor: {top: 't', middle: 'ctr', bottom: 'b'}[first.nativeBody.anchor],
+      style: {...first.nativeBody.item.textStyle, fontSize: first.nativeBody.item.text.fontSize, alignment: first.nativeBody.item.alignment}} : undefined;
+    let xml = read(base).replace(/<p:sldLayout\b[^>]*>/, open => `${open.slice(0, -1).replace(/\s+(?:type|userDrawn|showMasterSp)="[^"]*"/g, '')} type="${native ? 'tx' : 'titleOnly'}" userDrawn="1">`);
+    xml = xml.replace(/(<p:cSld\b[^>]*?)(\s+name="[^"]*")?(\s*>)/, (match, open, _name, close) => `${open} name="${native ? 'OPF auto (native body)' : 'OPF auto'}"${close}`);
     const nextId = Math.max(1, ...[...xml.matchAll(/<p:cNvPr\b[^>]*\bid="(\d+)"/g)].map(match => Number(match[1]))) + 1;
-    xml = xml.replace('</p:grpSpPr>', `</p:grpSpPr>${placeholderShape(placeholder, nextId)}`);
+    xml = xml.replace('</p:grpSpPr>', `</p:grpSpPr>${placeholderShape(placeholder, nextId)}${body ? placeholderShape(body, nextId + 1) : ''}`);
     const masterRel = relationships(read(relsOf(base))).find(rel => rel.type === `${REL}/slideMaster`);
     const tagged = addRelationship(`<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">${masterRel.node}</Relationships>`, `${REL}/tags`, relativeTarget(path, tagPath));
     xml = xml.replace('</p:spTree>', `</p:spTree><p:custDataLst><p:tags r:id="${tagged.rid}"/></p:custDataLst>`);
@@ -349,13 +365,13 @@ export function writeTemplateLayouts(output, slides, templates, bindings = new M
     const added = addRelationship(read(relsOf(master)), `${REL}/slideLayout`, relativeTarget(master, path));
     write(relsOf(master), added.relsXml);
     write(master, read(master).replace('</p:sldLayoutIdLst>', `<p:sldLayoutId id="${nextLayoutId++}" r:id="${added.rid}"/></p:sldLayoutIdLst>`));
-    created.set(`${master}\u0001auto`, {path, placeholders: new Map([['Title', placeholder]])});
+    created.set(`${master}\u0001${native ? 'auto-native-body' : 'auto'}`, {path, placeholders: new Map([['Title', placeholder], ...(body ? [['Body', body]] : [])])});
   }
   for (const [index, plan] of slidePaths.map((_, index) => slides[index]).entries()) {
     if (!plan && !automaticSlides[index]) continue;
     const slidePath = slidePaths[index];
     const master = related(related(slidePath, 'slideLayout'), 'slideMaster');
-    const layout = created.get(`${master}\u0001${plan ? plan.template.key : 'auto'}`);
+    const layout = created.get(`${master}\u0001${plan ? plan.template.key : automaticSlides[index].nativeBody ? 'auto-native-body' : 'auto'}`);
     if (!layout) throw new Error(`Slide ${index + 1} has no template layout.`);
     const slideRels = relsOf(slidePath);
     write(slideRels, read(slideRels).replace(/<Relationship\b[^>]*\/>/g, node => attribute(node, 'Type') === `${REL}/slideLayout` ? node.replace(/\sTarget="[^"]*"/, ` Target="${relativeTarget(slidePath, layout.path)}"`) : node));
@@ -366,7 +382,7 @@ export function writeTemplateLayouts(output, slides, templates, bindings = new M
       const placeholder = layout.placeholders.get(binding.region);
       if (!placeholder || !bindsObject(placeholder.type, binding.object)) continue;
       const ph = `<p:ph${placeholder.type === 'obj' ? '' : ` type="${placeholder.type}"`}${placeholder.idx !== undefined ? ` idx="${placeholder.idx}"` : ''}/>`;
-      const element = binding.object === 'picture' ? 'pic' : binding.object === 'title' ? 'sp' : 'graphicFrame';
+      const element = binding.object === 'picture' ? 'pic' : ['title', 'body'].includes(binding.object) ? 'sp' : 'graphicFrame';
       const pattern = new RegExp(`<p:${element}>[\\s\\S]*?<\\/p:${element}>`, 'g');
       slideXml = slideXml.replace(pattern, shape => {
         if (unescapeAttribute(shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1] ?? '') !== objectName || /<p:ph\b/.test(shape)) return shape;
