@@ -166,13 +166,24 @@ const MAPS: Record<ColorVariantBackground, Omit<ColorMap, 'accents'>> = {
   dark2: { bg1: 'dark2', tx1: 'light1', bg2: 'dark2', tx2: 'light2' },
 };
 
-/** True for a well formed variant: a background slot and, when given, a permutation of the six accent slots. */
-export function isColorVariant(value: unknown): value is ColorVariant {
-  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+/** A variant as authored: the background slot alone (`"dark1"`, the same as `{ "background": "dark1" }`), or the object form, which is needed only for an accent order. */
+export type ColorVariantInput = ColorVariantBackground | ColorVariant;
+
+/** The variant an authored value stands for, always the normalized object form, or undefined for a value that is not a variant: a background slot string, or an object with a background slot and, when given, a permutation of the six accent slots. */
+export function normalizeColorVariant(value: unknown): ColorVariant | undefined {
+  if (typeof value === 'string') return Object.hasOwn(MAPS, value) ? { background: value as ColorVariantBackground } : undefined;
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return undefined;
   const { background, accents } = value as { background?: unknown; accents?: unknown };
-  if (typeof background !== 'string' || !Object.hasOwn(MAPS, background)) return false;
-  if (accents === undefined) return true;
-  return Array.isArray(accents) && accents.length === 6 && ACCENT_SLOTS.every(slot => accents.includes(slot));
+  if (typeof background !== 'string' || !Object.hasOwn(MAPS, background)) return undefined;
+  if (accents === undefined) return { background: background as ColorVariantBackground };
+  return Array.isArray(accents) && accents.length === 6 && ACCENT_SLOTS.every(slot => accents.includes(slot))
+    ? { background: background as ColorVariantBackground, accents: [...accents] as ColorAccentSlot[] }
+    : undefined;
+}
+
+/** True for a well formed variant in either form (see {@link normalizeColorVariant}). */
+export function isColorVariant(value: unknown): value is ColorVariantInput {
+  return normalizeColorVariant(value) !== undefined;
 }
 
 /**
@@ -180,9 +191,10 @@ export function isColorVariant(value: unknown): value is ColorVariant {
  * light and dark; `light2` and `dark2` make that slot both the background and the alternate surface (bg2, as a slide with that theme
  * background has always had it, which keeps the default theme's dark2 background unchanged), with the text of the family's side. No variant is `light1`.
  */
-export function colorMapFor(variant?: ColorVariant): ColorMap {
-  const base = MAPS[variant && Object.hasOwn(MAPS, variant.background) ? variant.background : 'light1'];
-  return { ...base, accents: variant?.accents && isColorVariant(variant) ? [...variant.accents] : ACCENT_SLOTS };
+export function colorMapFor(variant?: ColorVariantInput): ColorMap {
+  const normalized = normalizeColorVariant(variant);
+  const base = MAPS[normalized?.background ?? 'light1'];
+  return { ...base, accents: normalized?.accents ? [...normalized.accents] : ACCENT_SLOTS };
 }
 
 const OOXML_SLOT: Record<string, string> = { light1: 'lt1', light2: 'lt2', dark1: 'dk1', dark2: 'dk2' };
@@ -317,8 +329,8 @@ export interface ResolvedColorRoles {
 export interface ResolveColorRolesOptions {
   /** The slide's resolved single-color background (solid, theme-slot or pattern background color). Omit for a gradient, picture or no background. */
   background?: string | null;
-  /** The slide's variant (RR-96). It sets the map; without it the background's luminance (or `tone`) chooses light1 or dark1. */
-  variant?: ColorVariant;
+  /** The slide's variant (RR-96), as authored (`"dark1"` or the object form). It sets the map; without it the background's luminance (or `tone`) chooses light1 or dark1. */
+  variant?: ColorVariantInput;
   /** `dark` or `light` for a picture or gradient background that names its tone: it chooses dark1 or light1 when there is no `variant`. */
   tone?: 'dark' | 'light';
 }
@@ -339,7 +351,7 @@ export interface ResolveColorRolesOptions {
 export function resolveColorRoles(colorScheme: Record<string, unknown>, options: ResolveColorRolesOptions = {}): ResolvedColorRoles {
   const slot = (name: string, fallback: string) => slotKeepingAlpha(colorScheme, name, fallback);
   const FALLBACK: Record<string, string> = { light1: '#FFFFFF', light2: '#F8FAFC', dark1: '#111827', dark2: '#1E293B' };
-  const explicit = options.variant && isColorVariant(options.variant) ? options.variant : undefined;
+  const explicit = normalizeColorVariant(options.variant);
   // The slide background decides light or dark when no variant does: a named tone, else the luminance of the resolved colour.
   const explicitBackground = keepAlpha(options.background);
   const dark = explicit ? explicit.background.startsWith('dark')

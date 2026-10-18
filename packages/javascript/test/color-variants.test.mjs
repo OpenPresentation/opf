@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import { describe, test } from 'node:test';
 
-import { ENGINE_DEFAULT_COLOR_SCHEME, applyLuminance, clrMapAttributes, codeHighlightColors, codeSyntaxPaletteForRoles, colorContrast, colorMapFor, isColorVariant, readableSchemeColor, resolveColorRoles, chartSeriesPalette } from '../dist/composition.js';
+import { ENGINE_DEFAULT_COLOR_SCHEME, applyLuminance, normalizeColorVariant, clrMapAttributes, codeHighlightColors, codeSyntaxPaletteForRoles, colorContrast, colorMapFor, isColorVariant, readableSchemeColor, resolveColorRoles, chartSeriesPalette } from '../dist/composition.js';
 import { resolveSlideContext, validate } from '../dist/index.js';
 
 const scheme = { light1: '#FFFFFF', dark1: '#101820', light2: '#F2EFE9', dark2: '#2B3A4A', accent1: '#C0392B', accent2: '#2874A6', accent3: '#27AE60', accent4: '#8E44AD', accent5: '#F39C12', accent6: '#16A085', hyperlink: '#0563C1', followedHyperlink: '#954F72' };
@@ -23,9 +23,23 @@ describe('maps', () => {
 		assert.deepEqual(colorMapFor({ background: 'dark1', accents }).accents, accents);
 		assert.ok(isColorVariant({ background: 'dark1', accents }));
 		assert.ok(isColorVariant({ background: 'light1' }));
-		for (const bad of [undefined, null, 'dark1', {}, { background: 'accent1' }, { background: 'dark1', accents: ['accent1'] }, { background: 'dark1', accents: ['accent1', 'accent1', 'accent3', 'accent4', 'accent5', 'accent6'] }, { background: 'dark1', accents: ['accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'dark1'] }])
+		for (const bad of [undefined, null, 'purple', 'accent1', 7, {}, { background: 'accent1' }, { background: 'dark1', accents: ['accent1'] }, { background: 'dark1', accents: ['accent1', 'accent1', 'accent3', 'accent4', 'accent5', 'accent6'] }, { background: 'dark1', accents: ['accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'dark1'] }])
 			assert.equal(isColorVariant(bad), false, JSON.stringify(bad));
 		assert.deepEqual(colorMapFor({ background: 'dark1', accents: ['accent1'] }).accents, colorMapFor().accents, 'a malformed accent list is ignored');
+	});
+
+	test('a background slot string is the shorthand for the object form, and the resolved value is always the object', () => {
+		for (const slot of ['light1', 'light2', 'dark1', 'dark2']) {
+			assert.ok(isColorVariant(slot));
+			assert.deepEqual(normalizeColorVariant(slot), { background: slot });
+			assert.deepEqual(colorMapFor(slot), colorMapFor({ background: slot }));
+			assert.deepEqual(resolveColorRoles(scheme, { variant: slot }).variant, { background: slot });
+			assert.equal(resolveColorRoles(scheme, { variant: slot }).text, resolveColorRoles(scheme, { variant: { background: slot } }).text);
+		}
+		assert.deepEqual(normalizeColorVariant({ background: 'dark1' }), { background: 'dark1' });
+		const accents = ['accent2', 'accent1', 'accent3', 'accent4', 'accent5', 'accent6'];
+		assert.deepEqual(normalizeColorVariant({ background: 'dark1', accents }), { background: 'dark1', accents });
+		assert.equal(normalizeColorVariant('purple'), undefined);
 	});
 
 	test('clrMapAttributes is PowerPoint\'s clrMap', () => {
@@ -164,6 +178,8 @@ describe('slide resolution', () => {
 
 	test('a deck variant applies to the slide, and a slide variant replaces it', () => {
 		assert.equal(roles(deck({ variant: { background: 'dark1' } })).dark, true);
+		assert.deepEqual(roles(deck({ variant: 'dark1' })).variant, { background: 'dark1' }, 'the string form resolves to the object');
+		assert.equal(roles(deck({ variant: 'dark1' }, { variant: 'light2' })).background, '#F2EFE9');
 		assert.equal(roles(deck({ variant: { background: 'dark1' } }, { variant: { background: 'light2' } })).background, '#F2EFE9');
 		assert.equal(resolveSlideContext(deck({ variant: { background: 'dark1' } }), 0).options.darkBackground, true);
 		// With no design color at all the engine default theme's background applies (a theme-slot background: its variant).
@@ -216,8 +232,15 @@ describe('schema', () => {
 		assert.deepEqual(errors(doc({ background: 'dark1', variant: { background: 'dark1' } })), []);
 	});
 
+	test('the string form is a schema choice on design and on a slide, and an unknown string names the choices', () => {
+		for (const slot of ['light1', 'light2', 'dark1', 'dark2']) assert.deepEqual(errors(doc({ variant: slot }, { variant: slot })), [], slot);
+		const found = validate(doc({ variant: 'purple' }), { only: ['format'] }).findings.filter((entry) => entry.severity === 'error');
+		assert.ok(found.length > 0);
+		assert.match(JSON.stringify(found), /light1.*light2.*dark1.*dark2|dark1.*dark2.*light1.*light2/, JSON.stringify(found).slice(0, 400));
+	});
+
 	test('a malformed variant is a schema error', () => {
-		for (const variant of [{}, { background: 'accent1' }, { background: 'dark1', extra: 1 }, { background: 'dark1', accents: ['accent1', 'accent1', 'accent3', 'accent4', 'accent5', 'accent6'] }, { background: 'dark1', accents: ['accent1'] }, 'dark1'])
+		for (const variant of [{}, { background: 'accent1' }, { background: 'dark1', extra: 1 }, { background: 'dark1', accents: ['accent1', 'accent1', 'accent3', 'accent4', 'accent5', 'accent6'] }, { background: 'dark1', accents: ['accent1'] }, 'purple', 7])
 			assert.ok(errors(doc({ variant })).length > 0, JSON.stringify(variant));
 	});
 

@@ -694,8 +694,12 @@
           "examples": ["dark1", "#ffff00", { "type": "theme", "slot": "light1" }]
         },
         "variant": {
-          "$ref": "#/$defs/ColorVariant",
-          "description": "Optional color variant: which slot of the color scheme is the slide background (and so which are the text and the alternate surface), and optionally the order of the accents. A variant is a mapping over the same twelve-slot scheme, as PowerPoint's color map is, never a second scheme. Without it the background decides: a theme-slot background ('dark1', { type: 'theme', slot }) is the variant of that slot, a picture or gradient takes its 'tone', and any other background picks light or dark by its luminance. A slide's variant replaces the deck's whole, including its accent order."
+          "oneOf": [
+            { "$ref": "#/$defs/ThemeBackgroundSlot" },
+            { "$ref": "#/$defs/ColorVariant" }
+          ],
+          "description": "Optional color variant, as a background slot ('light1', 'light2', 'dark1', 'dark2'; the same as { background: slot }) or the object form, which is needed only for an accent order: which slot of the color scheme is the slide background (and so which are the text and the alternate surface), and optionally the order of the accents. A variant is a mapping over the same twelve-slot scheme, as PowerPoint's color map is, never a second scheme. Without it the background decides: a theme-slot background ('dark1', { type: 'theme', slot }) is the variant of that slot, a picture or gradient takes its 'tone', and any other background picks light or dark by its luminance. A slide's variant replaces the deck's whole, including its accent order.",
+          "examples": ["dark1", { "background": "light1", "accents": ["accent2", "accent1", "accent3", "accent4", "accent5", "accent6"] }]
         },
         "logo": {
           "oneOf": [

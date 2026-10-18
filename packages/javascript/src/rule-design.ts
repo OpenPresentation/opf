@@ -1,4 +1,4 @@
-import { type ColorMap, type ColorVariant, type SchemeNeutrals, defaultSlideBackground, isColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
+import { type ColorMap, type ColorVariant, type SchemeNeutrals, defaultSlideBackground, normalizeColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
 import { imageBackground, type FontFamilies } from './composition.js';
 import type { SlideContext } from './slide-context.js';
 
@@ -269,9 +269,10 @@ export function colorChoice(levels: readonly Rec[], scheme: Rec, variables: Rec 
 		const slot = typeof definition === 'string' ? definition : rec(definition).type === 'theme' ? rec(definition).slot : undefined;
 		const themeSlot = THEME_SLOTS.has(slot) ? (slot as ColorVariant['background']) : undefined;
 		const picture = imageBackground(definition) !== undefined || rec(definition).type === 'gradient';
-		if (isColorVariant(level.variant)) {
+		const variant = normalizeColorVariant(level.variant);
+		if (variant) {
 			const fill = definition !== undefined && !variantOnly && !themeSlot && !picture ? decisionColor(definition, scheme, variables) : undefined;
-			return { variant: level.variant, ...(fill ? { background: fill } : {}) };
+			return { variant, ...(fill ? { background: fill } : {}) };
 		}
 		if (variantOnly || definition === undefined || definition === null || definition === false) continue;
 		if (themeSlot) return { variant: { background: themeSlot } };

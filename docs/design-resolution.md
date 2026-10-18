@@ -210,21 +210,25 @@ The styled table cell and border color fields enforce the reference forms at the
 
 A deck has one color scheme of twelve slots. A **variant** is a mapping over those same slots, as PowerPoint's `clrMap` is, never a second scheme: which slot is the background, and so which are the text and the alternate surface, plus an optional order for the accents. Everything OPF draws refers to the roles, so a slide that changes variant recolors text, lines, cards, chart furniture and code together.
 
+`variant` is a string, the same way `colorScheme` is: the slot that is the background.
+
 ```json
 {
-  "design": { "variant": { "background": "dark1", "accents": ["accent2", "accent1", "accent3", "accent4", "accent5", "accent6"] } },
-  "slides": [{ "title": "Light one", "design": { "variant": { "background": "light1" } } }]
+  "design": { "variant": "dark1" },
+  "slides": [{ "title": "Light one", "design": { "variant": "light1" } }]
 }
 ```
 
-| `variant.background` | bg1 | tx1 | bg2 | tx2 |
+`"dark1"` is `{ "background": "dark1" }`. The object form is only needed to reorder the accents: `{ "background": "light1", "accents": ["accent2", "accent1", "accent3", "accent4", "accent5", "accent6"] }`. Both forms are allowed on `design` and on `slides[n].design`, and what `resolveColorRoles` and `resolveSlideContext` return is always the normalized object (`normalizeColorVariant`).
+
+| `variant` (or `variant.background`) | bg1 | tx1 | bg2 | tx2 |
 | --- | --- | --- | --- | --- |
 | `light1` (default) | `light1` | `dark1` | `light2` | `dark2` |
 | `dark1` | `dark1` | `light1` | `dark2` | `light2` |
 | `light2` | `light2` | `dark1` | `light2` | `dark2` |
 | `dark2` | `dark2` | `light1` | `dark2` | `light2` |
 
-(`light2` and `dark2` keep the background slot as the surface too, as a slide with that theme background has always been drawn, so the engine default theme, whose background is `dark2`, is unchanged.) `variant.accents` is a permutation of `accent1` to `accent6`; entry `i` is the slot drawn as accent `i + 1`, which reorders `primary`, `secondary`, `accent` and the chart series colors.
+(`light2` and `dark2` keep the background slot as the surface too, as a slide with that theme background has always been drawn, so the engine default theme, whose background is `dark2`, is unchanged.) `variant.accents` (object form) is a permutation of `accent1` to `accent6`; entry `i` is the slot drawn as accent `i + 1`, which reorders `primary`, `secondary`, `accent` and the chart series colors.
 
 Which variant a slide has, from the most specific to the least (slide design, deck design, then the theme record), at the first level that says anything:
 
