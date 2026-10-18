@@ -3,7 +3,7 @@ import test from 'node:test';
 import {qualificationPeerGate,requireQualification} from './candidate-gallery-results.mjs';
 test('required status cannot turn missing, skipped, failed or mixed candidate/control checks green',()=>{
  for(const mode of ['core','ecosystem']){
-  const normal=mode==='core'?['normal']:['ecosystem-render','ecosystem-pptx-editor','ecosystem-core'];
+  const normal=mode==='core'?['normal']:['ecosystem-render','ecosystem-pptx','ecosystem-editor','ecosystem-core'];
   const results={gallery:{result:'success'},candidate:{result:'skipped'},control:{result:'skipped'},...Object.fromEntries(normal.map(name=>[name,{result:'success'}]))};
   assert.doesNotThrow(()=>requireQualification({mode,sha:'',results}));
   const candidate={'installed-portability':{result:'success'},gallery:{result:'success'},candidate:{result:'success'},control:{result:'success'},...Object.fromEntries(normal.map(name=>[name,{result:'skipped'}]))};

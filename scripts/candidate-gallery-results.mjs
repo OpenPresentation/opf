@@ -8,7 +8,7 @@ export function qualificationPeerGate(result,candidate=false){
 export function requireQualification({mode,sha,results}){
  assert.ok(['core','ecosystem'].includes(mode),'unknown qualification mode');
  assert.equal(results.gallery?.result,'success','candidate selection must succeed');
- const normal=mode==='core'?['normal']:['ecosystem-render','ecosystem-pptx-editor','ecosystem-core'];
+ const normal=mode==='core'?['normal']:['ecosystem-render','ecosystem-pptx','ecosystem-editor','ecosystem-core'];
  if(sha){
   assert.match(sha,/^[0-9a-f]{40}$/,'selected candidate SHA must be immutable');
   assert.equal(results.candidate?.result,'success','complete staged qualification must succeed');

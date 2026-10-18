@@ -7,6 +7,7 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import {packageManagerInvocation} from './package-manager.mjs';
 import {planEcosystem, resolveStep} from './package-ecosystem-plan.mjs';
+import {planSiblingShard} from './ci-test-shards.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 function run(command, args, cwd = root) {
   if (command === 'npm' || command === 'pnpm') ({command,args}=packageManagerInvocation(command,args));
@@ -20,5 +21,16 @@ for (const planned of planEcosystem(process.argv.slice(2))) {
   const {step, fellBack, missing} = resolveStep(planned, scriptsOf);
   if (fellBack) console.log(`::warning title=Contract suite missing::${step.sibling} has no \`${missing}\` script at this commit (the lock predates RR-53); running its full \`${step.args.join(' ')}\` instead.`);
   const {command, args, sibling} = step;
+  if (step.shard) {
+    // RR-57: slice i of n of this sibling's test script (scripts/ci-test-shards.mjs); the slices together are the whole script.
+    const siblingRoot = path.resolve(root, '..', sibling);
+    const commands = planSiblingShard({siblingRoot, sibling, scriptName: args.at(-1), shard: step.shard});
+    console.log(`::notice title=Test shard ${step.shard.index}/${step.shard.count}::${sibling} ${args.at(-1)}: ${commands.length} command(s)`);
+    for (const entry of commands) {
+      console.log(`+ ${entry.text}`);
+      run(entry.tool, entry.argv, siblingRoot);
+    }
+    continue;
+  }
   run(command, args, sibling ? path.resolve(root, '..', sibling) : root);
 }

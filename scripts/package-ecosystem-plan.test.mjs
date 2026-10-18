@@ -77,3 +77,29 @@ test('a sibling without test:contract (a lock that predates RR-53) runs its full
   const plain = planEcosystem(['--siblings', 'opf-pptx'])[0];
   assert.deepEqual(resolveStep(plain, () => ({})), { step: plain, fellBack: false });
 });
+
+// RR-57: a test shard (index/count) splits only each sibling's `test` step; the shards together run every step once.
+test('the test shards of a sibling partition its plan: shard 1 keeps every step, the others only their slice of the test step', () => {
+  for (const [sibling, tier] of [['opf-pptx', 'full'], ['opf-render', 'contract'], ['opf-editor', 'full']]) {
+    const whole = planEcosystem(['--siblings', sibling, '--tier', tier]);
+    const shardPlans = [1, 2, 3].map((index) => planEcosystem(['--siblings', sibling, '--tier', tier, '--test-shard', `${index}/3`]));
+    const testStep = whole.find((step) => step.args[1]?.startsWith('test') && step.args.length === 2 && ['test', 'test:contract'].includes(step.args[1]));
+    // Shard 1 is the whole plan, with its test step marked as slice 1 of 3.
+    assert.deepEqual(shardPlans[0].map(key), whole.map(key));
+    assert.deepEqual(shardPlans[0].filter((step) => step.shard).map((step) => step.shard), [{ index: 1, count: 3 }]);
+    for (const [offset, plan] of shardPlans.slice(1).entries()) {
+      assert.equal(plan.length, 1, `shard ${offset + 2} runs one step`);
+      assert.equal(key(plan[0]), key(testStep));
+      assert.deepEqual(plan[0].shard, { index: offset + 2, count: 3 });
+      assert.equal(plan[0].fallback?.args.join(' '), testStep.fallback?.args.join(' '), 'the contract fallback is kept');
+    }
+    // Without a shard nothing is marked.
+    assert.ok(whole.every((step) => !step.shard));
+  }
+});
+
+test('--test-shard needs --siblings and a valid index/count', () => {
+  for (const argv of [['--test-shard', '1/3'], ['--skip-siblings', '--test-shard', '1/3'], ['--siblings', 'opf-pptx', '--test-shard'], ['--siblings', 'opf-pptx', '--test-shard', '4/3'], ['--siblings', 'opf-pptx', '--test-shard', 'x']]) assert.throws(() => parseShardArguments(argv));
+  assert.deepEqual(parseShardArguments(['--siblings', 'opf-pptx', '--test-shard=2/3']).testShard, { index: 2, count: 3 });
+  assert.equal(parseShardArguments(['--siblings', 'opf-pptx']).testShard, null);
+});
