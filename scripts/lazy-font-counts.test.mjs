@@ -85,3 +85,16 @@ test('renderer 0.20.4 recovery retains exactly 94 reviewed faces and fails close
   }
   assert.ok(Object.isFrozen(LAZY_FONT_COUNTS['0.20.4']));
 });
+
+// RR-90: renderer 0.22.0 keeps the unchanged 94-face office registry; the next unreviewed versions still fail closed.
+test('renderer 0.22.0 retains exactly 94 reviewed faces and fails closed otherwise', () => {
+  assert.deepEqual(LAZY_FONT_COUNTS['0.22.0'], [94]);
+  assertLazyFontCount('0.22.0', 94);
+  for (const count of [0, 93, 95, 94.5, NaN, Infinity, '94', undefined]) {
+    assert.throws(() => assertLazyFontCount('0.22.0', count), /expected 94/);
+  }
+  for (const version of ['0.22.0-next.0', '0.21.0', '0.22.1', '99.99.99']) {
+    assert.throws(() => assertLazyFontCount(version, 94), /no expected lazy font count/);
+  }
+  assert.ok(Object.isFrozen(LAZY_FONT_COUNTS['0.22.0']));
+});
