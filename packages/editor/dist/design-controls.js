@@ -1341,7 +1341,9 @@ export function createDesignControls(container, options = {}) {
     fill.setOptions(CELL_FILLS.map(([value, label]) => ({ value, label })));
     const align = selectField("cell-align", "Cell text alignment", { empty: "Default", onChange: (value) => run(() => setTableCellStyle(editor, dynamic.tablePath, dynamic.cell, { align: value === "" ? null : value }), "Cell alignment changed.") });
     align.setOptions(["left", "center", "right"].map((value) => ({ value, label: titleCase(value) })));
-    const cellBox = h("div", { class: "opf-dc-cell" }, cellLabel, columns.wrap, rows.wrap, join.wrap, h("div", { class: "opf-dc-actions" }, merge, split), fill.wrap, align.wrap);
+    // RR-93: `bold` is a cell style field, so a number cell stays bold without rich runs and keeps its number format and alignment. Unchecking removes the field.
+    const bold = checkField("cell-bold", "Bold cell text", { onChange: (checked) => run(() => setTableCellStyle(editor, dynamic.tablePath, dynamic.cell, { bold: checked ? true : null }), checked ? "Cell text is bold." : "Cell text is no longer bold.") });
+    const cellBox = h("div", { class: "opf-dc-cell" }, cellLabel, columns.wrap, rows.wrap, join.wrap, h("div", { class: "opf-dc-actions" }, merge, split), fill.wrap, align.wrap, bold.wrap);
     // FA-27: the table's text alternative, like a chart's. It belongs to the table, so a dataset-backed table has it too.
     const alt = textField("table-alt", "Alt text", {
       help: "What the table shows: its point and the key numbers, not \"a table\". Optional, because a screen reader reads a table cell by cell. Press Enter to apply.",
@@ -1354,7 +1356,7 @@ export function createDesignControls(container, options = {}) {
     });
     const styleControls = [headerStyle.wrap, banding.wrap, borders.wrap, resetStyle, cellBox];
     body.append(summary, alt.wrap, decorative.wrap, ...styleControls);
-    dynamic.table = { details, summary, alt, decorative, styleControls, headerStyle, banding, borders, cellBox, cellLabel, columns, rows, merge, split, fill, align, join };
+    dynamic.table = { details, summary, alt, decorative, styleControls, headerStyle, banding, borders, cellBox, cellLabel, columns, rows, merge, split, fill, align, bold, join };
   }
 
   // --- sync -----------------------------------------------------------------------------------------
@@ -1445,6 +1447,7 @@ export function createDesignControls(container, options = {}) {
             const fillValue = typeof state.style.fill === "string" ? state.style.fill : "";
             tableUi.fill.set(CELL_FILLS.some(([value]) => value === fillValue) ? fillValue : fillValue ? "(custom)" : "");
             tableUi.align.set(state.style.align ?? "");
+            tableUi.bold.set(state.style.bold === true);
           }
         }
       }

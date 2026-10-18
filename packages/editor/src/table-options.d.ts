@@ -62,7 +62,7 @@ export declare function describeTableCell(table: unknown, cell: TableCellAddress
 /** Merge `span.colSpan` x `span.rowSpan` cells from `cell`. `join` keeps the text of covered cells by joining it into the anchor; without it, covered text refuses with `merge-would-lose-content`. */
 export declare function prepareTableMerge(presentation: unknown, tablePath: string, cell: TableCellAddress, span: { colSpan?: number; rowSpan?: number }, options?: { join?: boolean }): PreparedTableChange;
 export declare function prepareTableSplit(presentation: unknown, tablePath: string, cell: TableCellAddress): PreparedTableChange;
-/** Merge style fields into the cells' styles (null removes a field, `style: null` clears). */
+/** Merge style fields into the cells' styles (null removes a field, `style: null` clears). Fields include `fill`, `color`, `align`, `verticalAlign`, `padding`, `borders` and `bold` (boolean; keeps a numeric cell's number format and alignment, which rich runs would drop). */
 export declare function prepareTableCellStyle(presentation: unknown, tablePath: string, cells: TableCellAddress | TableCellAddress[], style: Record<string, unknown> | null): PreparedTableChange;
 /** Apply `{ header, banding, borders }` (missing fields mean theme/false) or a named preset: sets the header fill, banded-row fill and borders of every cell and clears them elsewhere; `theme` removes a previous style. */
 export declare function prepareTableStyle(presentation: unknown, tablePath: string, preset: keyof typeof TABLE_STYLE_PRESETS | Partial<TableStyle>): PreparedTableChange;

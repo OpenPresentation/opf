@@ -412,6 +412,8 @@ try {
   await button('Undo').click();
   await waitDoc(current => JSON.stringify(current.slides[2].blocks[1].table.rows[1]) === '["d","",""]', 'merge undone');
   await settle();
+  // RR-93: Bold is a cell style field, so the cell stays a plain value in the column and keeps its format and alignment.
+  await step('table cell bold', () => selection.getByLabel('Bold cell text').check(), current => JSON.stringify(current.slides[2].blocks[1].table.rows[1][0]) === '{"value":"d","style":{"bold":true}}', { preview: true });
   // Merging cells that hold text is refused with an explanation; keeping the text is an explicit choice.
   await cell('rows.0.0').click();
   await page.keyboard.press('Escape');

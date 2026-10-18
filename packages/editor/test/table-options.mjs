@@ -211,6 +211,18 @@ assert.equal(parseTableCellPath("slides.0.blocks.0.table"), undefined, "the tabl
   assert.equal(readTableStyle(editor.presentation, T).preset, "theme");
 }
 
+// RR-93: bold is a boolean cell style field; a table style keeps it, null removes it, a non-boolean is refused.
+{
+  const editor = session();
+  setTableCellStyle(editor, T, body(0, 0), { bold: true });
+  assert.deepEqual(editor.get(`${T}.rows.0.0`), { value: "North", style: { bold: true } });
+  setTableStyle(editor, T, "banded");
+  assert.equal(editor.get(`${T}.rows.0.0`).style.bold, true, "a table style keeps bold");
+  assert.throws(() => setTableCellStyle(editor, T, body(0, 0), { bold: "yes" }), (error) => error.code === "invalid-table-style");
+  setTableCellStyle(editor, T, body(0, 0), { bold: null });
+  assert.equal(editor.get(`${T}.rows.0.0`).style?.bold, undefined);
+}
+
 // Single-cell style: merge fields, null removes a field, null style clears, covered cells are skipped.
 {
   const editor = session();
