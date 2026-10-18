@@ -25,7 +25,7 @@ const chartDoc = (chart, extra = {}) => doc({ title: 'Chart', chart }, extra);
 // ---------------------------------------------------------------------------------------------------------------------
 // 0. Traced SVG digests for one chart per type, a legacy sketch, and a styled table (RR54_PRINT_DIGESTS=1 prints them).
 //    RR-20 changes only the neutral structural stroke in 30 SVGs; the styled table also right-aligns two numeric cells.
-//    Old and new full SVG strings were compared before these reviewed digests changed. Further drift needs a reason.
+//    Old and new full SVG strings were compared before these reviewed digests changed. RR-90 (core): table cells ask for the 25 px body size, so only the styled table's digest changed (b0bbca64..., was d5d091b9...); the SVG differs in the cell text sizes and row heights. Further drift needs a reason.
 //    Full old/new SVG comparisons are recorded in the RR-20 source qualification. FA-03: the eight stacked types lost their -3x suffix; the SVG names the chart type in data-opf-chart, so only those digests changed, and rendering with the old id string put back reproduces the previous digests. FA-30: the slide root became a labelled group (role="group", aria-roledescription="slide") and decorative shapes gained aria-hidden, so every digest changed; with those attributes taken out and role="img" put back on the root the SVG reproduces the previous digests, so only accessibility attributes differ.
 
 const CATALOG_TYPES = ['column', 'stacked-column', '100pct-stacked-column', 'bar', 'stacked-bar', '100pct-stacked-bar', 'line', 'line-with-markers', 'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world', 'sketch'];
@@ -74,7 +74,7 @@ const REVIEWED_SVG_DIGESTS = {
   'column-no-options': '692cb10f9944692684812774',
   'line-string-numbers': 'a9553e0274860d4bdc415a32',
   'histogram-lone-column': '2cb5e6adc310a866386fa551',
-  'table-styled': 'd5d091b99473afb60a7d2ae5'
+  'table-styled': 'b0bbca6451d05b122e7766de'
 };
 assert.deepEqual(digests, REVIEWED_SVG_DIGESTS, 'documents without the new fields retain the reviewed traced SVG output');
 

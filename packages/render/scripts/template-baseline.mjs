@@ -1,23 +1,36 @@
-// Exact template baselines for the two known metric-default contracts. Unknown defaults fail closed.
+// Exact template baselines for the known core contracts: the metric default (left, then center) and, since RR-90/91/93,
+// the first-use layout (table cell text at the body size, footer zones on the content inset). Unknown defaults fail closed.
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
+import {layoutTable} from '@openpresentation/opf/composition';
 
 export const LEGACY_TEMPLATE_BASELINE = 'test/golden/layout-templates-rr20-array-areas.json';
 export const CENTERED_TEMPLATE_BASELINE = 'test/golden/layout-templates-rr85-metric-centering.json';
-export function templateBaseline(alignment) {
-  assert.ok(alignment === 'left' || alignment === 'center', `Unknown metric default alignment: ${alignment}`);
-  return alignment === 'center' ? CENTERED_TEMPLATE_BASELINE : LEGACY_TEMPLATE_BASELINE;
+export const FIRST_USE_TEMPLATE_BASELINE = 'test/golden/layout-templates-rr90-first-use-layout.json';
+/** The table cell size (px) of core before RR-90, which asked for 15 px and was floored to 16 px. */
+const LEGACY_TABLE_TEXT_SIZE = 16;
+/** The size core draws a short table cell at: the discriminator between the centered and the first-use contracts. */
+export function tableTextSize() {
+  return layoutTable({rows: [['x']]}, {x: 0, y: 0, width: 400, height: 300}).rows[0].cells[0].fit.fontSize;
 }
-export function readTemplateBaseline(root, alignment, {update = false} = {}) {
-  const selected = templateBaseline(alignment);
+// The baseline each one is compared with while it does not exist yet (candidate generation only).
+const PREVIOUS = new Map([[FIRST_USE_TEMPLATE_BASELINE, CENTERED_TEMPLATE_BASELINE], [CENTERED_TEMPLATE_BASELINE, LEGACY_TEMPLATE_BASELINE]]);
+export function templateBaseline(alignment, tableSize = LEGACY_TABLE_TEXT_SIZE) {
+  assert.ok(alignment === 'left' || alignment === 'center', `Unknown metric default alignment: ${alignment}`);
+  assert.ok(Number.isFinite(tableSize) && tableSize > 0, `Unknown table text size: ${tableSize}`);
+  if (alignment === 'left') return LEGACY_TEMPLATE_BASELINE;
+  return tableSize > LEGACY_TABLE_TEXT_SIZE ? FIRST_USE_TEMPLATE_BASELINE : CENTERED_TEMPLATE_BASELINE;
+}
+export function readTemplateBaseline(root, alignment, {update = false, tableSize = LEGACY_TABLE_TEXT_SIZE} = {}) {
+  const selected = templateBaseline(alignment, tableSize);
   let comparison = selected, bytes;
   try { bytes = readFileSync(path.join(root, selected), 'utf8'); }
   catch (error) {
-    // Candidate generation can show the complete delta from the old approved baseline.
+    // Candidate generation can show the complete delta from the previous approved baseline.
     // Normal verification must require the baseline for the actual composition contract.
-    if (error.code !== 'ENOENT' || !update || selected === LEGACY_TEMPLATE_BASELINE) throw error;
-    comparison = LEGACY_TEMPLATE_BASELINE;
+    if (error.code !== 'ENOENT' || !update || !PREVIOUS.has(selected)) throw error;
+    comparison = PREVIOUS.get(selected);
     bytes = readFileSync(path.join(root, comparison), 'utf8');
   }
   return {selected, comparison, previous: JSON.parse(bytes)};

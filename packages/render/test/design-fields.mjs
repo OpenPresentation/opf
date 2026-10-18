@@ -165,14 +165,14 @@ const furnitureSources = svg => [...svg.matchAll(/<g\b[^>]*data-opf-furniture-fi
   for (const part of imageParts) assert.ok(drawn.some(box => box.every((value, index) => near(value, [part.box.x, part.box.y, part.box.width, part.box.height][index]))), `${part.kind} ${part.zone} logo drawn in its part box`);
   // Row layout: the image sits first, the text next to it after FURNITURE_GAP, both on the zone's left edge and vertically centred.
   const left = imageParts.find(part => part.kind === 'footer' && part.zone === 'left'), leftText = parts.find(part => part.kind === 'footer' && part.zone === 'left' && part.type === 'text');
-  assert.ok(near(left.box.x, 1280 * 0.07), 'the image starts at the zone edge');
+  assert.ok(near(left.box.x, 0.08 * 720), 'the image starts at the content inset (RR-91)');
   assert.ok(near(leftText.box.x, left.box.x + left.box.width + composition.FURNITURE_GAP), 'the text follows the image after the gap');
   assert.ok(near(leftText.box.y + leftText.box.height / 2, left.box.y + left.box.height / 2), 'the row is vertically centred');
   const textGroup = [...svg.matchAll(/<g\b[^>]*>/g)].map(match => match[0]).find(group => attr(group, 'data-opf-path') === 'design.footer.left.text' && attr(group, 'data-opf-box-x') !== undefined);
   assert.ok(textGroup && near(Number(attr(textGroup, 'data-opf-box-x')), leftText.box.x), 'the text is drawn from its own box, beside the image');
   // The right zone ends at the right edge: the text is last, the image before it.
   const rightImage = imageParts.find(part => part.kind === 'header'), rightText = parts.find(part => part.kind === 'header' && part.type === 'text');
-  assert.ok(near(rightText.box.x + rightText.box.width, 1280 * 0.93), 'the last part ends at the right zone edge');
+  assert.ok(near(rightText.box.x + rightText.box.width, 1280 - 0.08 * 720), 'the last part ends at the right content inset (RR-91)');
   assert.ok(near(rightImage.box.x + rightImage.box.width + composition.FURNITURE_GAP, rightText.box.x), 'image before text in the right zone');
   assert.ok(svg.includes('Confidential'));
   // Furniture pictures repeat on every slide: decorative unless the asset names them.

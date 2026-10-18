@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {mkdtempSync, mkdirSync, writeFileSync, rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
-import {templateBaseline, readTemplateBaseline, LEGACY_TEMPLATE_BASELINE, CENTERED_TEMPLATE_BASELINE} from '../scripts/template-baseline.mjs';
+import {templateBaseline, readTemplateBaseline, tableTextSize, LEGACY_TEMPLATE_BASELINE, CENTERED_TEMPLATE_BASELINE, FIRST_USE_TEMPLATE_BASELINE} from '../scripts/template-baseline.mjs';
 const root = mkdtempSync(path.join(tmpdir(), 'template-baseline-'));
 try {
   mkdirSync(path.join(root, 'test/golden'), {recursive: true});
@@ -22,6 +22,17 @@ try {
   assert.deepEqual(readTemplateBaseline(root, 'center').previous, next);
   assert.equal(readTemplateBaseline(root, 'center', {update: true}).comparison, CENTERED_TEMPLATE_BASELINE);
   assert.deepEqual(readTemplateBaseline(root, 'left').previous, old, 'Published-core baseline remains separate');
+  // RR-90/91/93: a core that draws table text at the body size selects the first-use baseline, whatever the metric default.
+  assert.equal(templateBaseline('center', 16), CENTERED_TEMPLATE_BASELINE);
+  assert.equal(templateBaseline('center', 25), FIRST_USE_TEMPLATE_BASELINE);
+  assert.equal(templateBaseline('left', 25), LEGACY_TEMPLATE_BASELINE, 'Published-core baseline remains separate');
+  for (const size of [0, -1, NaN, 'x']) assert.throws(() => templateBaseline('center', size), /Unknown table text size/);
+  assert.throws(() => readTemplateBaseline(root, 'center', {tableSize: 25}), /ENOENT/, 'Normal checks never accept an older geometry baseline');
+  const firstUse = readTemplateBaseline(root, 'center', {update: true, tableSize: 25});
+  assert.equal(firstUse.selected, FIRST_USE_TEMPLATE_BASELINE);
+  assert.equal(firstUse.comparison, CENTERED_TEMPLATE_BASELINE, 'A candidate is compared with the previous contract');
+  assert.deepEqual(firstUse.previous, next);
+  assert.ok(tableTextSize() > 0);
   writeFileSync(path.join(root, CENTERED_TEMPLATE_BASELINE), '{invalid');
   assert.throws(() => readTemplateBaseline(root, 'center', {update: true}), SyntaxError, 'A malformed selected baseline never falls back');
 } finally { rmSync(root, {recursive: true, force: true}); }

@@ -59,8 +59,9 @@ assert.deepEqual(coverSlides[0].geometry.items.map(item => item.alignment), ['le
 assert.deepEqual(coverAnchors(0), ['start', 'start', 'start'], 'cover heading group shares the title alignment in the preview');
 assert.deepEqual(coverSlides[1].geometry.items.map(item => item.alignment), ['right', 'left', 'right']);
 assert.deepEqual(coverAnchors(1), ['end', 'start', 'end'], 'slide contentAlignment keeps an explicit split');
-assert.deepEqual(coverSlides[2].geometry.items.slice(0, 3).map(item => item.alignment), ['center', 'left', 'center']);
-assert.deepEqual(coverAnchors(2), ['middle', 'start', 'middle'], 'slides with body content keep contentAlignment for tag and subtitle');
+// RR-93a: the tag sits over the title, so it follows titleAlignment on a content slide too; the subtitle keeps contentAlignment.
+assert.deepEqual(coverSlides[2].geometry.items.slice(0, 3).map(item => item.alignment), ['left', 'left', 'center']);
+assert.deepEqual(coverAnchors(2), ['start', 'start', 'middle'], 'slides with body content keep contentAlignment for the subtitle; the tag follows the title');
 
 // Metric lines without tabs anchor at the accepted alignment edge, like the
 // native PPTX metric paragraphs; left metrics and tabbed lines keep their origins.
