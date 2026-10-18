@@ -98,15 +98,15 @@ export interface ToPptxOptions {
    */
   slideNumberFields?: "static" | "live";
   /**
-   * Prototype: "native" exports each supported paragraph or flat-bullet (or one-sequence numbered) body as one native body
-   * with native wrapping and no autofit: the first body of a slide is the Body placeholder, a further body region (RR-88) is an
+   * Prototype: "native" exports each supported paragraph or flat-bullet body (since 0.22.0 also a one-sequence numbered list) as
+   * one native body with native wrapping and no autofit: the first body of a slide is the Body placeholder, a further body region (since 0.22.0) is an
    * ordinary native text box at its region. It retains selected fonts, effective alignment and region anchor,
    * but native applications can choose different wraps and baselines from the measured preview. Unsupported groups,
    * shared body regions, nested/description/restarted-numbered/multicolumn lists, annotations and complex text retain
    * measured shapes with native-body-fallback diagnostics. Native paragraph separators normalize to LF on import.
    * A plain-string title that wraps over several lines (no hard break, no overflow, no rich runs) is also one native text box
-   * with native wrap and no autofit, bound to the Title placeholder (RR-88); an unwrapped title binds as before.
-   * Omitted or "measured" preserves the current measured-line export. No native application qualification is implied.
+   * with native wrap and no autofit, bound to the Title placeholder (since 0.22.0); an unwrapped title binds as before.
+   * Omitted or "measured" preserves the current measured-line export. No native application qualification is implied (Keynote 15.1.1 was checked for Title/Body controls and reflow, PowerPoint was not).
    */
   bodyText?: "measured" | "native";
   /** Default compatible converts WebP to a static PNG. Preserve embeds original WebP bytes. */
