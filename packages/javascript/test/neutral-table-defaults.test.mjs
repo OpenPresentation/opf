@@ -2,10 +2,11 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {layoutTable, resolveColorRoles} from '../dist/composition.js';
 const box={x:0,y:0,width:600,height:240};
-test('structural rules are neutral and follow slide luminance without changing accents',()=>{
+test('structural rules are derived from the scheme, follow slide luminance and do not change accents',()=>{
  const scheme={accent5:'#3AC67A',accent1:'#2874A6'};
- assert.equal(resolveColorRoles(scheme,{background:'#FFFFFF'}).border,'#CBD5E1');
- assert.equal(resolveColorRoles(scheme,{background:'#000000'}).border,'#475569');
+ // RR-96: structural rules are the text colour (tx1) mixed into the background (bg1), so they follow the slide's light or dark map.
+ assert.equal(resolveColorRoles(scheme,{background:'#FFFFFF'}).border,'#C0CBE3');
+ assert.equal(resolveColorRoles(scheme,{background:'#000000'}).border,'#333333');
  assert.equal(resolveColorRoles(scheme).primary,'#2874A6');assert.equal(scheme.accent5,'#3AC67A');
 });
 test('typed numeric alignment survives formatting, headers, explicit controls and RTL without changing source',()=>{

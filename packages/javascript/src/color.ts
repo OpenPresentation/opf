@@ -132,66 +132,281 @@ function readableLink(link: string, background: string, text: string): string {
   return contrast !== undefined && contrast < MIN_LINK_CONTRAST ? text : link;
 }
 
+// --------------------------------------------------------------- variants: PowerPoint's colour map over one scheme (RR-96)
+
+/** The four slots a variant can use as the slide background. */
+export type ColorVariantBackground = 'light1' | 'light2' | 'dark1' | 'dark2';
+export type ColorAccentSlot = 'accent1' | 'accent2' | 'accent3' | 'accent4' | 'accent5' | 'accent6';
+const ACCENT_SLOTS: readonly ColorAccentSlot[] = ['accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6'];
+
+/**
+ * A variant of the deck's single colour scheme: which slot is the background (and so which are the text and the alternate surface),
+ * and optionally the order of the accents. It is a mapping over the scheme's twelve slots, as PowerPoint's `clrMap` is, never a second
+ * scheme: nothing in it is a colour.
+ */
+export interface ColorVariant {
+  background: ColorVariantBackground;
+  /** A permutation of `accent1` to `accent6`: entry `i` is the scheme slot drawn as accent `i + 1`. Default: the scheme's own order. */
+  accents?: readonly ColorAccentSlot[];
+}
+
+/** The slots the roles bg1, tx1, bg2 and tx2 and the six accents point at (OOXML `clrMap`, with `lt1` named `light1` and so on). */
+export interface ColorMap {
+  bg1: ColorVariantBackground;
+  tx1: ColorVariantBackground;
+  bg2: ColorVariantBackground;
+  tx2: ColorVariantBackground;
+  accents: readonly ColorAccentSlot[];
+}
+
+const MAPS: Record<ColorVariantBackground, Omit<ColorMap, 'accents'>> = {
+  light1: { bg1: 'light1', tx1: 'dark1', bg2: 'light2', tx2: 'dark2' },
+  light2: { bg1: 'light2', tx1: 'dark1', bg2: 'light2', tx2: 'dark2' },
+  dark1: { bg1: 'dark1', tx1: 'light1', bg2: 'dark2', tx2: 'light2' },
+  dark2: { bg1: 'dark2', tx1: 'light1', bg2: 'dark2', tx2: 'light2' },
+};
+
+/** True for a well formed variant: a background slot and, when given, a permutation of the six accent slots. */
+export function isColorVariant(value: unknown): value is ColorVariant {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  const { background, accents } = value as { background?: unknown; accents?: unknown };
+  if (typeof background !== 'string' || !Object.hasOwn(MAPS, background)) return false;
+  if (accents === undefined) return true;
+  return Array.isArray(accents) && accents.length === 6 && ACCENT_SLOTS.every(slot => accents.includes(slot));
+}
+
+/**
+ * The map a variant stands for: `light1` is the default map (bg1 = light1, tx1 = dark1, bg2 = light2, tx2 = dark2); `dark1` swaps
+ * light and dark; `light2` and `dark2` make that slot both the background and the alternate surface (bg2, as a slide with that theme
+ * background has always had it, which keeps the default theme's dark2 background unchanged), with the text of the family's side. No variant is `light1`.
+ */
+export function colorMapFor(variant?: ColorVariant): ColorMap {
+  const base = MAPS[variant && Object.hasOwn(MAPS, variant.background) ? variant.background : 'light1'];
+  return { ...base, accents: variant?.accents && isColorVariant(variant) ? [...variant.accents] : ACCENT_SLOTS };
+}
+
+const OOXML_SLOT: Record<string, string> = { light1: 'lt1', light2: 'lt2', dark1: 'dk1', dark2: 'dk2' };
+
+/**
+ * The attributes of PowerPoint's `<p:clrMap>` for a map (`bg1="lt1" tx1="dk1" bg2="lt2" tx2="dk2" accent1="accent1" ...` and the two
+ * hyperlink slots unchanged), so the PPTX export writes the master map and a slide's `clrMapOvr` from the same data the preview reads.
+ */
+export function clrMapAttributes(map: ColorMap): Record<string, string> {
+  return {
+    bg1: OOXML_SLOT[map.bg1]!, tx1: OOXML_SLOT[map.tx1]!, bg2: OOXML_SLOT[map.bg2]!, tx2: OOXML_SLOT[map.tx2]!,
+    accent1: map.accents[0]!, accent2: map.accents[1]!, accent3: map.accents[2]!, accent4: map.accents[3]!, accent5: map.accents[4]!, accent6: map.accents[5]!,
+    hlink: 'hlink', folHlink: 'folHlink',
+  };
+}
+
+// HSL as DrawingML defines it, for the luminance transforms (`lumMod`, `lumOff`) that PowerPoint writes for tints and shades of a scheme colour.
+function rgbToHsl([r, g, b]: readonly [number, number, number]): [number, number, number] {
+  const red = r / 255, green = g / 255, blue = b / 255, max = Math.max(red, green, blue), min = Math.min(red, green, blue), l = (max + min) / 2;
+  if (max === min) return [0, 0, l];
+  const d = max - min, s = l > .5 ? d / (2 - max - min) : d / (max + min);
+  const h = max === red ? (green - blue) / d + (green < blue ? 6 : 0) : max === green ? (blue - red) / d + 2 : (red - green) / d + 4;
+  return [h / 6, s, l];
+}
+function hslToRgb([h, s, l]: readonly [number, number, number]): [number, number, number] {
+  if (s === 0) return [l * 255, l * 255, l * 255];
+  const q = l < .5 ? l * (1 + s) : l + s - l * s, p = 2 * l - q;
+  const channel = (t: number) => { const u = t < 0 ? t + 1 : t > 1 ? t - 1 : t; return 255 * (u < 1 / 6 ? p + (q - p) * 6 * u : u < .5 ? q : u < 2 / 3 ? p + (q - p) * (2 / 3 - u) * 6 : p); };
+  return [channel(h + 1 / 3), channel(h), channel(h - 1 / 3)];
+}
+
+/**
+ * A scheme colour as the PPTX export writes it and the preview draws it: `slot` is the colour role or slot (`tx1`, `bg1`, `bg2`, `tx2`,
+ * `accent1` ...), `lumMod` and `lumOff` are DrawingML luminance transforms in thousandths of a percent (`lumMod 15000, lumOff 85000` is
+ * 15% of the slot's luminance plus 85%), `alpha` an opacity in the same unit, and `hex` is the colour the transforms give for the
+ * resolved scheme, so a preview that draws `hex` and a PPTX that writes `<a:schemeClr val={slot}>` with the transforms show the same colour.
+ */
+export interface SchemeColor {
+  slot: string;
+  hex: string;
+  lumMod?: number;
+  lumOff?: number;
+  alpha?: number;
+}
+
+/** The colour a `lumMod`/`lumOff` pair (thousandths of a percent) makes of `hex`: its HSL luminance times `lumMod`, plus `lumOff`. */
+export function applyLuminance(hex: string, lumMod = 100000, lumOff = 0): string {
+  const channels = opaqueChannels(hex);
+  if (!channels) return hex;
+  const [h, s, l] = rgbToHsl(channels);
+  return hexOfChannels(hslToRgb([h, s, Math.min(1, Math.max(0, l * lumMod / 100000 + lumOff / 100000))]));
+}
+
+/**
+ * A scheme colour between a slot and its background: the slot's colour made as light (or dark) as `share` of the way from the
+ * background's luminance to the slot's. `share` 0.15 is PowerPoint's gridline (tx1 at 15%: black on white is luminance 0.85). The
+ * transform is chosen on the slot (`lumMod`/`lumOff`), so it keeps the slot's hue, and `hex` is the transform applied, to the thousandth of a percent.
+ */
+function mixTowardsBackground(slot: string, slotHex: string, backgroundHex: string, share: number): SchemeColor {
+  const from = opaqueChannels(slotHex), to = opaqueChannels(backgroundHex);
+  if (!from || !to) return { slot, hex: slotHex };
+  const own = rgbToHsl(from)[2], target = rgbToHsl(to)[2] + share * (own - rgbToHsl(to)[2]);
+  let lumMod = 100000, lumOff = 0;
+  if (target >= own) { const k = own >= 1 ? 0 : (target - own) / (1 - own); lumMod = Math.round((1 - k) * 100000); lumOff = Math.round(k * 100000); }
+  else lumMod = Math.round(target / own * 100000);
+  return { slot, hex: applyLuminance(slotHex, lumMod, lumOff), ...(lumMod !== 100000 ? { lumMod } : {}), ...(lumOff !== 0 ? { lumOff } : {}) };
+}
+
+/** Shares of the text colour (tx1) mixed into the background (bg1) for the neutrals, PowerPoint's chart-style values. */
+export const NEUTRAL_SHARES = { border: .2, gridline: .15, axisLine: .25, chartText: .65, codeComment: .65 } as const;
+
+/**
+ * The colours OPF draws that are neither text nor an accent, all derived from the scheme through the variant's map, so a dark variant
+ * gets light lines and a change of variant or background style in PowerPoint recolours them.
+ */
+export interface SchemeNeutrals {
+  /** Quiet structural rules, card borders and table borders: tx1 at {@link NEUTRAL_SHARES}.border over bg1. */
+  border: SchemeColor;
+  /** Chart gridlines: tx1 at 15%. */
+  gridline: SchemeColor;
+  /** Chart axis lines: tx1 at 25%. */
+  axisLine: SchemeColor;
+  /** Chart axis labels and legend text where the chart does not use the slide text colour: tx1 at 65%. */
+  chartText: SchemeColor;
+  /** Pie and treemap outlines, the video play icon and anything drawn on top of a mark: bg1. */
+  outline: SchemeColor;
+  /** The neutral metric trend (no good or bad news): tx2. */
+  trendNeutral: SchemeColor;
+  /** The code panel: tx1 (a dark panel) on a light variant, bg2 on a dark one, so a code block is a dark card on either. */
+  codePanel: SchemeColor;
+  /** Plain code text: bg1 or tx1, whichever reads better on the panel. */
+  codeText: SchemeColor;
+  /** Code comments and line numbers: the code text at 65% over the panel. */
+  codeComment: SchemeColor;
+}
+
 export interface ResolvedColorRoles {
-  /** Role override, else accent1. */
+  /** Role override, else the first accent of the variant (accent1 by default). */
   primary: string;
-  /** Role override, else accent2. */
+  /** Role override, else the second accent of the variant (accent2 by default). */
   secondary: string;
-  /** Role override, else accent3. */
+  /** Role override, else the third accent of the variant (accent3 by default). */
   accent: string;
-  /** The slide background: the resolved single-color background of the slide, else {@link defaultSlideBackground}. */
+  /** The slide background: the resolved single-color background of the slide, else the variant's bg1 (light1 by default; see {@link defaultSlideBackground}). */
   background: string;
-  /** Role override, else dark2 on a dark background and light2 on a light one. */
+  /** Role override, else bg2 of the variant (light2 on a light slide, dark2 on a dark one). */
   surface: string;
   /** The alternate surface of banded table rows: {@link surfaceAltColor} of `surface` and `text`, always distinguishable from `surface`. */
   surfaceAlt: string;
-  /** Default text. On a dark background light1. On a light background the `text` role override, else dark1. */
+  /** Default text: tx1 of the variant (light1 on a dark background). On a light background the `text` role override, else dark1. */
   text: string;
-  /** Role override, else light2 on a dark background and dark2 on a light one. */
+  /** Role override, else tx2 of the variant (light2 on a dark background and dark2 on a light one). */
   textSecondary: string;
   /** The color of a link run that sets no color of its own: the scheme's hyperlink slot (OOXML hlink), unless that has under 4.5:1 contrast against the slide background, then the slide `text` color. */
   hyperlink: string;
   /** Followed-hyperlink slot (OOXML folHlink). */
   followedHyperlink: string;
-  /** Quiet structural rules/cards: neutral slate on a light or dark slide, never a brand accent. Authored borders still resolve their own ColorRef. */
+  /** Quiet structural rules/cards: `neutrals.border.hex`, tx1 mixed into bg1. Authored borders still resolve their own ColorRef. */
   border: string;
   /** Whether the slide background is dark; text, surface and textSecondary defaults follow it. */
   dark: boolean;
+  /** The variant these roles were resolved with: the one given, else the one the background's luminance (or tone) implies. */
+  variant: ColorVariant;
+  /** The map behind the roles (bg1, tx1, bg2, tx2 and the accent order), for PPTX `clrMap` and `clrMapOvr` ({@link clrMapAttributes}). */
+  map: ColorMap;
+  /** The six accent colours in the variant's order (primary, secondary and accent are the first three unless overridden). */
+  accents: string[];
+  /** Every neutral derived from the scheme, with its slot and luminance transform for `schemeClr` export. */
+  neutrals: SchemeNeutrals;
 }
 
 export interface ResolveColorRolesOptions {
   /** The slide's resolved single-color background (solid, theme-slot or pattern background color). Omit for a gradient, picture or no background. */
   background?: string | null;
+  /** The slide's variant (RR-96). It sets the map; without it the background's luminance (or `tone`) chooses light1 or dark1. */
+  variant?: ColorVariant;
+  /** `dark` or `light` for a picture or gradient background that names its tone: it chooses dark1 or light1 when there is no `variant`. */
+  tone?: 'dark' | 'light';
 }
 
 /**
  * Resolve a color scheme's abstract roles for one slide: the single definition the opf-render preview, the
- * PPTX export and the audit share, so the same deck draws the same colors in all three. Role overrides on the
- * scheme (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) win over the slots they
- * default to. The background-dependent roles follow {@link isDarkColor} of the slide background; a `text`
- * override applies only on a light background, so a dark slide always gets readable light1 text.
+ * PPTX export and the audit share, so the same deck draws the same colors in all three.
+ *
+ * RR-96: the roles come from the variant's map over the scheme's slots, as PowerPoint's roles do: background is bg1, text tx1,
+ * textSecondary tx2, surface bg2, and primary, secondary and accent the first three accents in the variant's order. Without
+ * `options.variant` the map is chosen from the slide: `options.tone` for a picture or gradient that names one, else the luminance of
+ * `options.background` ({@link isDarkColor}; dark1 when dark, light1 otherwise), which is the earlier behavior. Role overrides on the
+ * scheme (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) win over the slots they default to; a
+ * `text` override applies only on a light background, so a dark slide always gets readable light text. `roles.neutrals` holds every
+ * line and quiet color derived from the same map, each with the slot and luminance transform the PPTX export writes.
  * Values are uppercase #RRGGBB, or #RRGGBBAA where the scheme color carries an alpha byte.
  */
 export function resolveColorRoles(colorScheme: Record<string, unknown>, options: ResolveColorRolesOptions = {}): ResolvedColorRoles {
   const slot = (name: string, fallback: string) => slotKeepingAlpha(colorScheme, name, fallback);
-  const background = keepAlpha(options.background) ?? defaultSlideBackground(colorScheme);
-  const dark = isDarkColor(background);
-  const text = dark ? slot('light1', '#FFFFFF') : (keepAlpha(colorScheme.text) ?? slot('dark1', '#111827'));
-  const surface = keepAlpha(colorScheme.surface) ?? (dark ? slot('dark2', '#1E293B') : slot('light2', '#F8FAFC'));
+  const FALLBACK: Record<string, string> = { light1: '#FFFFFF', light2: '#F8FAFC', dark1: '#111827', dark2: '#1E293B' };
+  const explicit = options.variant && isColorVariant(options.variant) ? options.variant : undefined;
+  // The slide background decides light or dark when no variant does: a named tone, else the luminance of the resolved colour.
+  const explicitBackground = keepAlpha(options.background);
+  const dark = explicit ? explicit.background.startsWith('dark')
+    : options.tone ? options.tone === 'dark'
+    : isDarkColor(explicitBackground ?? defaultSlideBackground(colorScheme));
+  const variant: ColorVariant = explicit ?? { background: dark ? 'dark1' : 'light1' };
+  const map = colorMapFor(variant);
+  const slotColor = (name: ColorVariantBackground) => slot(name, FALLBACK[name]!);
+  // The default map keeps the scheme's `background` override as its bg1; any other map reads its slot.
+  const bg1 = map.bg1 === 'light1' ? defaultSlideBackground(colorScheme) : slotColor(map.bg1);
+  const background = explicitBackground ?? bg1;
+  const tx1 = slotColor(map.tx1), bg2 = slotColor(map.bg2), tx2 = slotColor(map.tx2);
+  const text = dark ? tx1 : (keepAlpha(colorScheme.text) ?? tx1);
+  const surface = keepAlpha(colorScheme.surface) ?? bg2;
+  const accents = map.accents.map(name => slot(name, '#000000'));
+  const neutrals = schemeNeutrals({ bg1: explicitBackground ?? bg1, tx1, bg2, tx2, dark });
   return {
-    primary: keepAlpha(colorScheme.primary) ?? slot('accent1', '#2563EB'),
-    secondary: keepAlpha(colorScheme.secondary) ?? slot('accent2', '#0F766E'),
-    accent: keepAlpha(colorScheme.accent) ?? slot('accent3', '#F59E0B'),
+    primary: keepAlpha(colorScheme.primary) ?? accents[0]!,
+    secondary: keepAlpha(colorScheme.secondary) ?? accents[1]!,
+    accent: keepAlpha(colorScheme.accent) ?? accents[2]!,
     background,
     surface,
     surfaceAlt: surfaceAltColor(surface, text),
-    border: dark ? '#475569' : '#CBD5E1',
+    border: neutrals.border.hex,
     text,
-    textSecondary: keepAlpha(colorScheme.textSecondary) ?? (dark ? slot('light2', '#E2E8F0') : slot('dark2', '#334155')),
+    textSecondary: keepAlpha(colorScheme.textSecondary) ?? tx2,
     hyperlink: readableLink(slot('hyperlink', DEFAULT_HYPERLINK), background, text),
     followedHyperlink: slot('followedHyperlink', DEFAULT_FOLLOWED_HYPERLINK),
     dark,
+    variant,
+    map,
+    accents,
+    neutrals,
   };
+}
+
+/** The neutrals of a resolved map: see {@link SchemeNeutrals}. The four colors are opaque #RRGGBB (or with alpha, as the scheme has them). */
+function schemeNeutrals(colors: { bg1: string; tx1: string; bg2: string; tx2: string; dark: boolean }): SchemeNeutrals {
+  const { bg1, tx1, bg2, tx2, dark } = colors;
+  const opaque = (value: string) => normalizeHexColor(value) ?? value;
+  const [back, front, second, secondText] = [opaque(bg1), opaque(tx1), opaque(bg2), opaque(tx2)];
+  const share = (amount: number) => mixTowardsBackground('tx1', front, back, amount);
+  // The code panel is a dark card: tx1 on a light variant, bg2 on a dark one (a dark card one step off the slide).
+  const panel: SchemeColor = dark ? { slot: 'bg2', hex: second } : { slot: 'tx1', hex: front };
+  const textOnPanel: SchemeColor = (colorContrast(back, panel.hex) ?? 0) >= (colorContrast(front, panel.hex) ?? 0) ? { slot: 'bg1', hex: back } : { slot: 'tx1', hex: front };
+  const comment = mixTowardsBackground(textOnPanel.slot, textOnPanel.hex, panel.hex, NEUTRAL_SHARES.codeComment);
+  return {
+    border: share(NEUTRAL_SHARES.border),
+    gridline: share(NEUTRAL_SHARES.gridline),
+    axisLine: share(NEUTRAL_SHARES.axisLine),
+    chartText: share(NEUTRAL_SHARES.chartText),
+    outline: { slot: 'bg1', hex: back },
+    trendNeutral: { slot: 'tx2', hex: secondText },
+    codePanel: panel,
+    codeText: textOnPanel,
+    codeComment: comment,
+  };
+}
+
+/**
+ * The scheme color, bg1 or tx1 of the roles, that reads best on `fill`: for table header text, text on a mark and anything else that
+ * sits on a color the scheme does not name. Returned as a {@link SchemeColor} (slot `bg1` or `tx1`) so the export can write a theme color.
+ */
+export function readableSchemeColor(fill: string, roles: Pick<ResolvedColorRoles, 'neutrals' | 'text' | 'background'>): SchemeColor {
+  const light: SchemeColor = { slot: 'bg1', hex: normalizeHexColor(roles.background) ?? roles.background };
+  const ink: SchemeColor = { slot: 'tx1', hex: normalizeHexColor(roles.text) ?? roles.text };
+  return (colorContrast(light.hex, fill) ?? 0) >= (colorContrast(ink.hex, fill) ?? 0) ? light : ink;
 }
 
 /** Relative luminance contrast for opaque #RGB/#RRGGBB/#RRGGBBFF colors.
@@ -411,8 +626,8 @@ export const CHART_SERIES_TINT_MIX = 0.4;
  * deck's roles and `variables` for entries that name them.
  */
 export function chartSeriesPalette(colorScheme: Record<string, unknown> = {}, colors?: unknown, context: ChartColorContext = {}): string[] {
-  const accents = [1, 2, 3, 4, 5, 6].map(number => {
-    const slot = `accent${number}`;
+  const order = context.accents && context.accents.length === 6 && ACCENT_SLOTS.every(slot => context.accents!.includes(slot)) ? context.accents : ACCENT_SLOTS;
+  const accents = order.map(slot => {
     return normalizeHexColor(colorScheme?.[slot]) ?? normalizeHexColor(ENGINE_DEFAULT_COLOR_SCHEME[slot]) ?? '#000000';
   });
   const palette = [...accents, ...accents.map(accent => mixChannels(opaqueChannels(accent)!, [255, 255, 255], CHART_SERIES_TINT_MIX))];
@@ -427,6 +642,8 @@ export function chartSeriesPalette(colorScheme: Record<string, unknown> = {}, co
 
 /** What a `chart.colors` entry resolves against: the deck's role colours and `variables`, as for any ColorRef. */
 export interface ChartColorContext {
+  /** RR-96: the variant's accent order (`roles.map.accents`): series 1 to 6 take these slots in this order. Default: accent1 to accent6. */
+  accents?: readonly ColorAccentSlot[];
   roles?: ResolveColorRefRoles;
   variables?: Record<string, unknown>;
 }

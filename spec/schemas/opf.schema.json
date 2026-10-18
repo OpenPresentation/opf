@@ -693,6 +693,10 @@
           "description": "Default slide background applied across the deck unless overridden on a slide (slides.N.design.background); the resolved theme's background is the fallback. A background is the only canvas fill and never moves content. String shorthand accepts theme slots ('light1', 'light2', 'dark1', 'dark2'), hex colors, or an image source starting with 'asset:', 'https://', 'data:', './' or '../' (a cover image); object forms support theme, solid, gradient, image, or pattern fills.",
           "examples": ["dark1", "#ffff00", { "type": "theme", "slot": "light1" }]
         },
+        "variant": {
+          "$ref": "#/$defs/ColorVariant",
+          "description": "Optional color variant: which slot of the color scheme is the slide background (and so which are the text and the alternate surface), and optionally the order of the accents. A variant is a mapping over the same twelve-slot scheme, as PowerPoint's color map is, never a second scheme. Without it the background decides: a theme-slot background ('dark1', { type: 'theme', slot }) is the variant of that slot, a picture or gradient takes its 'tone', and any other background picks light or dark by its luminance. A slide's variant replaces the deck's whole, including its accent order."
+        },
         "logo": {
           "oneOf": [
             {
@@ -1435,6 +1439,28 @@
       "description": "An image source in a string shorthand: an 'asset:<id>' reference, an HTTPS URL, a data URI, or a relative path starting with './' or '../' (resolved against the OPF file location).",
       "examples": ["asset:cover-photo", "https://cdn.acme.com/backgrounds/cover.jpg", "./images/harbour.jpg"]
     },
+    "ColorVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["background"],
+      "description": "A variant of the deck's single color scheme, as a mapping over its twelve slots (PowerPoint's clrMap): 'background' is the slot the slide background and the role bg1 take, and with it the other roles: light1 maps bg1 = light1, tx1 = dark1, bg2 = light2, tx2 = dark2; dark1 maps bg1 = dark1, tx1 = light1, bg2 = dark2, tx2 = light2; light2 and dark2 make that slot both the background and the alternate surface (light2: bg1 = bg2 = light2, tx1 = dark1, tx2 = dark2; dark2: bg1 = bg2 = dark2, tx1 = light1, tx2 = light2), which is how a slide with that theme background has always been drawn. Text, secondary text, the card surface and every neutral (borders, gridlines, chart axis, code panel) follow the map. The PowerPoint export writes it as the master's clrMap, or a slide's clrMapOvr.",
+      "properties": {
+        "background": {
+          "$ref": "#/$defs/ThemeBackgroundSlot",
+          "description": "The scheme slot that is the background (bg1) of the variant."
+        },
+        "accents": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "uniqueItems": true,
+          "items": { "type": "string", "enum": ["accent1", "accent2", "accent3", "accent4", "accent5", "accent6"] },
+          "description": "Optional accent order: a permutation of accent1 to accent6. Entry i is the scheme slot drawn as accent i + 1, so primary, secondary and accent (the first three) and the chart series colors follow it. Default: the scheme's own order.",
+          "examples": [["accent2", "accent1", "accent3", "accent4", "accent5", "accent6"]]
+        }
+      },
+      "examples": [{ "background": "dark1" }, { "background": "light2", "accents": ["accent2", "accent1", "accent3", "accent4", "accent5", "accent6"] }]
+    },
     "Background": {
       "description": "Background fill applied to slides. Theme backgrounds preserve PowerPoint's color-scheme background choice; other variants represent fixed background fills.",
       "oneOf": [
@@ -1488,6 +1514,11 @@
       "description": "Fixed gradient slide background fill.",
       "required": ["type", "gradient"],
       "properties": {
+        "tone": {
+          "type": "string",
+          "enum": ["dark", "light"],
+          "description": "Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without a tone a picture or gradient takes the deck's variant, else counts as light."
+        },
         "type": {
           "type": "string",
           "const": "gradient",
@@ -1540,6 +1571,11 @@
       "description": "Picture background: the image fills the whole canvas behind everything and never moves content (to push content aside, use an image block with placement). The string shorthand 'asset:x' (or any image source) is { type: 'image', src: 'asset:x' }, a cover image. Paint order: the colour scheme's default slide background, the picture, then the overlay, then furniture and content.",
       "required": ["type", "src"],
       "properties": {
+        "tone": {
+          "type": "string",
+          "enum": ["dark", "light"],
+          "description": "Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without a tone a picture or gradient takes the deck's variant, else counts as light."
+        },
         "type": {
           "type": "string",
           "const": "image",
