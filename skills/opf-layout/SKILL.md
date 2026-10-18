@@ -30,6 +30,10 @@ Work on the supplied OPF document without silently rewriting or dropping content
 
 Read [geometry and repair](references/geometry.md) before measuring or paginating. The format schema is the source of numeric bounds; do not invent arbitrary `x`, `y`, `width`, or `fontSize` fields on leaf payloads.
 
+## Headers and footers
+
+Header and footer zones (`left`, `center`, `right`) sit on the content inset, so a footer's left edge meets the body's. They are three columns with a small gutter, and a zone beside empty zones takes their width: a lone `left` footer spans the content width, and a `left` and a `right` zone share the free center. A `center` zone stays centered. A zone that still wraps onto more than two lines gets the `opf/furniture-wraps` warning: shorten it, or move a source to a `caption` on the chart, table or image it describes, or to the speaker notes. See `docs/dynamic-composition.md` for the geometry (`furniture-flow-v2`).
+
 ## Repair loop
 
 Inspect the current slide, effective dimensions, resolved layout, fonts, and path-specific diagnostics. Give content more space, change the grouping or arrangement, or split it explicitly. Summarize or remove content only when the user's request permits it. Reducing `minFontSize` below readability is not a successful repair.

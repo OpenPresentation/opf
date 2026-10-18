@@ -110,8 +110,7 @@
             "value": [
               {
                 "text": "Region",
-                "bold": true,
-                "fontSize": 20
+                "bold": true
               }
             ],
             "style": {
@@ -127,8 +126,7 @@
             "value": [
               {
                 "text": "Q4 revenue",
-                "bold": true,
-                "fontSize": 20
+                "bold": true
               }
             ],
             "style": {
@@ -145,8 +143,7 @@
             "value": [
               {
                 "text": "Growth",
-                "bold": true,
-                "fontSize": 20
+                "bold": true
               }
             ],
             "style": {
@@ -163,12 +160,7 @@
         "rows": [
           [
             {
-              "value": [
-                {
-                  "text": "North America",
-                  "fontSize": 20
-                }
-              ],
+              "value": "North America",
               "style": {
                 "padding": {
                   "top": 12,
@@ -179,12 +171,7 @@
               }
             },
             {
-              "value": [
-                {
-                  "text": "$8.1M",
-                  "fontSize": 20
-                }
-              ],
+              "value": "$8.1M",
               "style": {
                 "align": "right",
                 "padding": {
@@ -200,7 +187,6 @@
                 {
                   "text": "+46%",
                   "bold": true,
-                  "fontSize": 20,
                   "color": "accent2"
                 }
               ],
@@ -217,12 +203,7 @@
           ],
           [
             {
-              "value": [
-                {
-                  "text": "Europe",
-                  "fontSize": 20
-                }
-              ],
+              "value": "Europe",
               "style": {
                 "padding": {
                   "top": 12,
@@ -233,12 +214,7 @@
               }
             },
             {
-              "value": [
-                {
-                  "text": "$4.6M",
-                  "fontSize": 20
-                }
-              ],
+              "value": "$4.6M",
               "style": {
                 "align": "right",
                 "padding": {
@@ -250,12 +226,7 @@
               }
             },
             {
-              "value": [
-                {
-                  "text": "+40%",
-                  "fontSize": 20
-                }
-              ],
+              "value": "+40%",
               "style": {
                 "align": "right",
                 "padding": {
@@ -269,12 +240,7 @@
           ],
           [
             {
-              "value": [
-                {
-                  "text": "Asia-Pacific",
-                  "fontSize": 20
-                }
-              ],
+              "value": "Asia-Pacific",
               "style": {
                 "padding": {
                   "top": 12,
@@ -285,29 +251,19 @@
               }
             },
             {
-              "value": [
-                {
-                  "text": "$2.1M",
-                  "fontSize": 20
-                }
-              ],
+              "value": "$2.1M",
               "style": {
+                "align": "right",
                 "padding": {
                   "top": 12,
                   "right": 16,
                   "bottom": 12,
                   "left": 16
-                },
-                "align": "right"
+                }
               }
             },
             {
-              "value": [
-                {
-                  "text": "+31%",
-                  "fontSize": 20
-                }
-              ],
+              "value": "+31%",
               "style": {
                 "align": "right",
                 "padding": {

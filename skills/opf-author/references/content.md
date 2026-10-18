@@ -26,9 +26,11 @@ Consult the installed schema for optional fields and constraints. This guide sel
 
 Timeline `status` is progress only: `done` (filled marker), `current` ("we are here": ringed marker, bold label) and `planned` (hollow marker, muted text). Mark at most one event `current`, and write risk or blockers in the event text, not in a status. [A complete roadmap](../assets/roadmap-status.opf.json) shows all three.
 
-These numeric examples are illustrative; replace them only with supported data. `chart.type` is an engine vocabulary: use one of the supported chart types (`CHART_TYPES`); the schema rejects any other. A richer chart record does not guarantee the current renderer implements every visual detail. A chart takes optional `axisTitles` (`{"category":"Quarter","value":"Revenue ($M)"}`), `legend` (`none`, `top`, `bottom`, `left`, `right`) `dataLabels` (`true`, or `{"content":["value"],"position":"outside-end"}`) and `highlight` (`{"series":["Revenue"],"categories":["Q3"]}`: name the series or category that carries the message by its data column name or row label, and the engines draw those marks in the deck's primary color and mute the rest from the theme, with no color field; a mark is highlighted when its series or its category is named; a name the data does not have is an error); omit them to keep the engine defaults, and see `docs/chart-options.md` for what each chart type supports (an option a type cannot show is dropped with a `chart-option-adapted` diagnostic). For an amount beside a rate (revenue and margin %) use `"type":"combo"`: every series is drawn as clustered columns except those in `"line":["Margin"]` (default: the last series), and `"secondaryAxis":["Margin"]` plots those lines on a right-hand value axis labelled in that column's format (`{"name":"Margin","format":"0%"}`), titled with `axisTitles.secondary`.
+These numeric examples are illustrative; replace them only with supported data. `chart.type` is an engine vocabulary: use one of the supported chart types (`CHART_TYPES`); the schema rejects any other. A richer chart record does not guarantee the current renderer implements every visual detail. A chart takes optional `axisTitles` (`{"category":"Quarter","value":"Revenue ($M)"}`), `legend` (`none`, `top`, `bottom`, `left`, `right`) `dataLabels` (`true`, or `{"content":["value"],"position":"outside-end"}`) and `highlight` (`{"series":["Revenue"],"categories":["Q3"]}`: name the series or category that carries the message by its data column name or row label, and the engines draw those marks in the deck's primary color and mute the rest from the theme, with no color field; a mark is highlighted when its series or its category is named; a name the data does not have is an error); omit them to keep the engine defaults. Series colors follow the deck's color scheme in order (`accent1` first, the series that carries the message; keep a chart to six series so no tint is needed); `colors` (`["accent3","#7B241C"]`, a ColorRef list by position: series 1, 2, ..., or slice/category 1, 2, ... on a pie) overrides the first positions, and `highlight` wins over it. A column, bar, line or area chart gets a computed value axis (`min`, `max`, `majorUnit` in steps of 1, 2 or 5 times a power of ten) that the preview and the PPTX share, and chart text is 20 px (15 pt), so do not size chart text or tick marks yourself. See `docs/chart-options.md` for what each chart type supports (an option a type cannot show is dropped with a `chart-option-adapted` diagnostic). For an amount beside a rate (revenue and margin %) use `"type":"combo"`: every series is drawn as clustered columns except those in `"line":["Margin"]` (default: the last series), and `"secondaryAxis":["Margin"]` plots those lines on a right-hand value axis labelled in that column's format (`{"name":"Margin","format":"0%"}`), titled with `axisTitles.secondary`.
 
 Chart values are numbers. A string counts only in strict decimal syntax (`"12"`, `"-3.5"`, `"1e6"`); `"12%"`, `"$5"`, `"(5)"` and `"1,234"` are gaps and a `chart-value-not-numeric` warning. Put units, currency and percent in a column format instead: a chart, dataset or table column may be `{"name":"Revenue","format":"$#,##0.0"}` (the `NumberVariable.format` syntax: `#,##0`, `0.0%`, `#,##0 units`; a `%` multiplies by 100, so store 0.31 for 31%), and a styled table cell takes its own `format`. Data used by several charts or tables goes once in the top-level `datasets` map (`{"revenue":{"columns":[...],"rows":[...],"source":{"src":"./revenue.csv"}}}`) and is referenced with `"chart":{"type":"line","data":{"dataset":"revenue","fields":["Quarter","Revenue"]}}` or `"table":{"dataset":"revenue"}`; an unreferenced dataset is the warning `opf/unused-dataset`. `chart.mapping` (`{"category":"Quarter","x":"Spend","series":["Revenue","Costs"]}`) picks columns by name; omit it for the positional rule (first column the category, every other column a series; scatter takes the second as X). Record where inline data came from with `data.source` (`{"src","sheet","range","retrieved"}`), which engines never read. `"data":{"src":...}` (a data source by file or asset) is not part of the format and is a schema error: import the data inline or into a dataset. See `docs/chart-table-data.md`.
+
+The slide `tag` (the small line above the title) follows `titleAlignment`, like the title, so a layout that centers its content does not center the tag over a left-aligned title; only a slide's own `design.contentAlignment` keeps it on the content, as on a cover.
 
 Keep numbers numeric where the schema permits them. Tables use `columns` and `rows`, not `headers` and `cells`. OPF slide content is not an `elements` array or arbitrary HTML. Promoted region values are content payloads, for example `"left":{"text":"Context"}`.
 
@@ -47,7 +49,7 @@ console.log(report.findings); // warnings and info: unresolved references, alt t
 
 ## Tables you can read from the back of the room
 
-A table's default text is small (about 12 pt, next to 24 pt bullets). To make it readable at presentation size, write each text cell as runs with `fontSize` (points; 18–20 reads well), and wrap a cell in `{"value", "style"}` when it needs alignment, padding or a border. `padding` is an object of `top`, `right`, `bottom`, `left` in reference pixels (0–200), never a number: `"padding": 8` is a schema error that prints many lines. Header cells go in `columns` in the same styled form.
+A table's text draws at the body size (about 19 pt, next to 24 pt bullets) and the whole table shrinks together toward `composition.minFontSize` when its rows do not fit, so you do not size cells yourself: leave `fontSize` out unless one cell must differ (a run's own `fontSize` is drawn as written). Wrap a cell in `{"value", "style"}` when it needs bold, alignment, padding or a border; `style.bold` makes the whole cell bold, including a number cell that keeps its `format`. `padding` is an object of `top`, `right`, `bottom`, `left` in reference pixels (0-200), never a number: `"padding": 8` is a schema error (`must be object`). Header cells go in `columns` in the same styled form.
 
 ```json
 {
@@ -56,20 +58,20 @@ A table's default text is small (about 12 pt, next to 24 pt bullets). To make it
       "title": "North America leads growth",
       "table": {
         "columns": [
-          {"value": [{"text": "Region", "bold": true, "fontSize": 20}], "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
-          {"value": [{"text": "Q4 revenue", "bold": true, "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
-          {"value": [{"text": "Growth", "bold": true, "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
+          {"value": "Region", "style": {"bold": true, "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+          {"value": "Q4 revenue", "style": {"bold": true, "align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+          {"value": "Growth", "style": {"bold": true, "align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
         ],
         "rows": [
           [
-            {"value": [{"text": "North America", "fontSize": 20}], "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
-            {"value": [{"text": "$18.1M", "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
-            {"value": [{"text": "+46%", "bold": true, "fontSize": 20, "color": "accent2"}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
+            {"value": "North America", "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": "$18.1M", "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": [{"text": "+46%", "bold": true, "color": "accent2"}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
           ],
           [
-            {"value": [{"text": "EMEA", "fontSize": 20}], "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
-            {"value": [{"text": "$11.5M", "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
-            {"value": [{"text": "+40%", "fontSize": 20}], "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
+            {"value": "EMEA", "style": {"padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": "$11.5M", "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}},
+            {"value": "+40%", "style": {"align": "right", "padding": {"top": 12, "right": 16, "bottom": 12, "left": 16}}}
           ]
         ],
         "alt": "North America grew 46% to $18.1M in Q4, ahead of EMEA at 40%."
@@ -79,7 +81,7 @@ A table's default text is small (about 12 pt, next to 24 pt bullets). To make it
 }
 ```
 
-A cell written as runs is text: it keeps no `format` and is not right-aligned unless its `style.align` says so, so type the number as you want it shown (`"$18.1M"`). Keep a number a number when the same data feeds a chart or other tables, or the table is dense and reference-only: give the column a `format` and write plain numbers. Those cells use the default size.
+A text cell keeps the string you type, so write the number as you want it shown (`"$18.1M"`) and right-align it with `style.align`. Keep a number a number when the same data feeds a chart or other tables, or the table is dense and reference-only: give the column a `format` and write plain numbers; a number column is right-aligned for you, and a cell written as runs (to color one number, say) keeps that column's alignment. A bold number that keeps its format is `{"value": 18.1, "style": {"bold": true}}`.
 
 ```json
 {
@@ -88,14 +90,14 @@ A cell written as runs is text: it keeps no `format` and is not right-aligned un
       "title": "A numeric column keeps its number",
       "table": {
         "columns": ["Region", { "name": "Q4 revenue ($M)", "format": "$#,##0.0" }, { "name": "Growth", "format": "0%" }],
-        "rows": [["North America", 18.1, 0.46], ["EMEA", 11.5, 0.4]]
+        "rows": [["North America", 18.1, 0.46], ["EMEA", {"value": 11.5, "style": {"bold": true}}, 0.4]]
       }
     }
   ]
 }
 ```
 
-A `%` format multiplies by 100, so store `0.46` for 46%. The run `color` here is `accent2` from the deck's color scheme; prefer scheme names to hex so the table survives a theme change.
+A `%` format multiplies by 100, so store `0.46` for 46%. The run `color` above is `accent2` from the deck's color scheme; prefer scheme names to hex so the table survives a theme change.
 
 ## Citations, footnotes and captions
 

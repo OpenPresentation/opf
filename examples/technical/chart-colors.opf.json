@@ -1,0 +1,135 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Chart Colors",
+  "description": "Technical fixture for chart series colors: series follow the deck color scheme in order, chart.colors sets the first positions by ColorRef (a color-scheme slot, a hex color or a variable), and chart.highlight wins over it.",
+  "slides": [
+    {
+      "title": "Series follow the deck palette, and colors sets the first two",
+      "chart": {
+        "type": "column",
+        "alt": "Quarterly revenue, costs, services and support in $M; revenue peaks at 24 in Q3.",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Revenue",
+            "Costs",
+            "Services",
+            "Support"
+          ],
+          "rows": [
+            [
+              "Q1",
+              12,
+              8,
+              5,
+              3
+            ],
+            [
+              "Q2",
+              18,
+              11,
+              7,
+              4
+            ],
+            [
+              "Q3",
+              24,
+              15,
+              9,
+              6
+            ],
+            [
+              "Q4",
+              22,
+              14,
+              10,
+              7
+            ]
+          ]
+        },
+        "axisTitles": {
+          "value": "$M"
+        },
+        "colors": [
+          "accent5",
+          "#E67E22"
+        ]
+      }
+    },
+    {
+      "title": "A pie takes one color per category",
+      "chart": {
+        "type": "pie",
+        "alt": "Share of Q3 revenue by line: product 55%, services 25%, support 15%, other 5%.",
+        "data": {
+          "columns": [
+            "Line",
+            "Share"
+          ],
+          "rows": [
+            [
+              "Product",
+              55
+            ],
+            [
+              "Services",
+              25
+            ],
+            [
+              "Support",
+              15
+            ],
+            [
+              "Other",
+              5
+            ]
+          ]
+        },
+        "colors": [
+          "#2ECC71",
+          "accent1",
+          "#E67E22"
+        ]
+      }
+    },
+    {
+      "title": "Highlight wins over colors",
+      "chart": {
+        "type": "column",
+        "alt": "Quarterly revenue in $M with Q3 highlighted at 24.",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Revenue"
+          ],
+          "rows": [
+            [
+              "Q1",
+              12
+            ],
+            [
+              "Q2",
+              18
+            ],
+            [
+              "Q3",
+              24
+            ],
+            [
+              "Q4",
+              22
+            ]
+          ]
+        },
+        "colors": [
+          "#E67E22"
+        ],
+        "highlight": {
+          "categories": [
+            "Q3"
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "$schema": "https://openpresentation.org/schema/opf/v1",
   "name": "Table Cell Types",
-  "description": "Technical fixture for supported table cell scalar values.",
+  "description": "Technical fixture for supported table cell scalar values, and for a styled table: a bold cell keeps its number format, and a rich cell in a numeric column keeps the column's alignment.",
   "slides": [
     {
       "title": "Scalar Cells",
@@ -41,6 +41,146 @@
             "Fourth"
           ]
         ]
+      }
+    },
+    {
+      "title": "Bold Cells And A Number Column",
+      "table": {
+        "columns": [
+          {
+            "value": "Region",
+            "style": {
+              "bold": true,
+              "padding": {
+                "top": 10,
+                "right": 14,
+                "bottom": 10,
+                "left": 14
+              }
+            }
+          },
+          {
+            "value": "Q4 revenue ($M)",
+            "format": "$#,##0.0",
+            "style": {
+              "bold": true,
+              "padding": {
+                "top": 10,
+                "right": 14,
+                "bottom": 10,
+                "left": 14
+              }
+            }
+          },
+          {
+            "value": "Growth",
+            "format": "0%",
+            "style": {
+              "bold": true,
+              "padding": {
+                "top": 10,
+                "right": 14,
+                "bottom": 10,
+                "left": 14
+              }
+            }
+          }
+        ],
+        "rows": [
+          [
+            {
+              "value": "North America",
+              "style": {
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": 18.1,
+              "style": {
+                "bold": true,
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": [
+                {
+                  "text": "46%",
+                  "color": "#F5B041",
+                  "bold": true
+                }
+              ],
+              "style": {
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            }
+          ],
+          [
+            {
+              "value": "EMEA",
+              "style": {
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": 11.5,
+              "style": {
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            0.4
+          ],
+          [
+            {
+              "value": "Asia-Pacific",
+              "style": {
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            {
+              "value": 7.7,
+              "style": {
+                "padding": {
+                  "top": 10,
+                  "right": 14,
+                  "bottom": 10,
+                  "left": 14
+                }
+              }
+            },
+            0.31
+          ]
+        ],
+        "alt": "North America grew 46% to $18.1M in Q4, ahead of EMEA at 40% and Asia-Pacific at 31%."
       }
     }
   ]

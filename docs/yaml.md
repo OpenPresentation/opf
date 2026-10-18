@@ -5,7 +5,7 @@
 - **JSON stays canonical.** The schema, the interchange form and every package describe the JSON. A `.opf.yaml` file is an authoring serialization of the same data: the parsed YAML is exactly the JSON document, and the [schema](../spec/schemas/opf.schema.json) validates that parsed data.
 - **Write a deck by hand.** YAML has no braces, no quotes around keys and no trailing-comma errors, and a block scalar (`text: |`) keeps a paragraph readable. Comments are allowed in the file (they are not data).
 - **One strict dialect.** JSON-compatible YAML 1.2, core schema. Anything that could mean something else in another reader, or cannot exist in JSON, is an error with a line and a column.
-- **Round trip.** `toYaml` writes canonical text that `fromYaml` reads back to the same deck, and that converts back to itself byte for byte. Every one of the 127 example decks round-trips, JSON to YAML to JSON and YAML to JSON to YAML.
+- **Round trip.** `toYaml` writes canonical text that `fromYaml` reads back to the same deck, and that converts back to itself byte for byte. Every one of the 128 example decks round-trips, JSON to YAML to JSON and YAML to JSON to YAML.
 - **Errors have places.** Findings use the shared Finding format of [validate](validate.md) and carry the source offset, length, line and column of the YAML that caused them, including the OPF findings mapped back to the YAML of the field they name.
 
 ```js
