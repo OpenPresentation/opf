@@ -1,6 +1,7 @@
 // RR-86 opt-in prototype. Native paragraphs trade measured line positions for a
 // single editable body. No source words or per-line recovery tags are stored.
 import {paragraphDirection, resolveTextStyle} from '@openpresentation/opf/composition';
+import {autoNumScheme} from './numbered-list.js';
 
 const FIELDS = new Set(['text', 'items', 'bullets']);
 const RUN_KEYS = new Set(['text', 'bold', 'italic', 'underline', 'strikethrough', 'color', 'fontFamily', 'fontSize', 'lang', 'link']);
@@ -12,43 +13,71 @@ const richSupported = value => typeof value === 'string' || Array.isArray(value)
 const hasRtl = text => [...text].some(char => /\p{L}/u.test(char) && paragraphDirection(char, 'rtl') === 'rtl');
 const escapeXml = value => String(value).replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;'}[char]));
 
-/** Select at most one whole body. Other eligible-looking candidates fall back visibly. */
+/**
+ * Plan the native bodies of one slide: every text, list or bullets item that can be one editable body, in composition order.
+ * The first is returned with the rest as `others`; the first alone binds to the Body placeholder, each other one is an ordinary
+ * native text box at its region (RR-88). An item that cannot be a native body falls back to measured shapes with a visible diagnostic.
+ */
 export function planNativeBody(slide, geometry, {automatic = false, report = () => {}} = {}) {
   const candidates = geometry.items.filter(item => FIELDS.has(item.field));
   const reject = (item, reason) => report({code: 'native-body-fallback', path: item.path, reason,
     message: `Native body export cannot represent this ${reason.replaceAll('-', ' ')}; the current measured shapes were exported.`});
   if (!candidates.length) return undefined;
-  if (candidates.length > 1 || geometry.groups.length || automatic && geometry.items.filter(item => !['title', 'subtitle', 'tag'].includes(item.field)).length !== 1) {
+  if (geometry.groups.length) {
     candidates.forEach(item => reject(item, 'complex-composition'));
     return undefined;
   }
-  const [item] = candidates;
-  const region = geometry.regions?.find(region => region.name === item.region);
-  if (!/^slides\.\d+\.(?:blocks\.\d+\.)?(?:text|items|bullets)$/.test(item.path) || !automatic && (!region || region.collapsed || region.content.length !== 1 || region.overflow?.length) || item.frameBox) {
-    reject(item, 'complex-composition'); return undefined;
+  const plans = [];
+  for (const item of candidates) {
+    const plan = planOne(item, geometry, automatic, reason => reject(item, reason));
+    if (plan) plans.push(plan);
   }
-  if (item.listColumns?.length > 1) { reject(item, 'multi-column'); return undefined; }
-  if (item.text?.overflow) { reject(item, 'overflow'); return undefined; }
-  if (geometry.direction === 'rtl' || item.text?.directions?.includes('rtl')) { reject(item, 'unsupported-text'); return undefined; }
+  return plans.length ? {...plans[0], others: plans.slice(1)} : undefined;
+}
+
+function planOne(item, geometry, automatic, reject) {
+  const region = geometry.regions?.find(region => region.name === item.region);
+  if (!/^slides\.\d+\.(?:blocks\.\d+\.|[A-Za-z][A-Za-z0-9+_-]*\.)?(?:text|items|bullets)$/.test(item.path) || !automatic && (!region || region.collapsed || region.content.length !== 1 || region.overflow?.length) || item.frameBox) {
+    reject('complex-composition'); return undefined;
+  }
+  if (item.listColumns?.length > 1) { reject('multi-column'); return undefined; }
+  if (item.text?.overflow) { reject('overflow'); return undefined; }
+  if (geometry.direction === 'rtl' || item.text?.directions?.includes('rtl')) { reject('unsupported-text'); return undefined; }
   const list = item.field !== 'text';
-  let values;
+  let values, numbering;
   if (list) {
     const entries = item.text?.listEntries;
-    if (item.payload?.numbering !== undefined || item.bulletImage || !entries?.length || entries.some(entry => entry.level !== 0 || entry.description) ||
+    if (item.bulletImage || !entries?.length || entries.some(entry => entry.level !== 0 || entry.description) ||
       item.value.some(entry => entry && !Array.isArray(entry) && typeof entry === 'object' && Object.keys(entry).some(key => key !== 'text' && key !== 'level'))) {
-      reject(item, 'unsupported-list'); return undefined;
+      reject('unsupported-list'); return undefined;
+    }
+    if (item.payload?.numbering !== undefined) {
+      // One native numbered sequence: every entry has a number of one style and suffix, counting up from the first by one.
+      numbering = nativeNumbering(entries);
+      if (!numbering) { reject('unsupported-list'); return undefined; }
     }
     values = item.value.map(entry => entry && !Array.isArray(entry) && typeof entry === 'object' ? entry.text : entry);
-    if (values.some(value => /[\r\n]/.test(ownText(value)))) { reject(item, 'unsupported-list'); return undefined; }
+    if (values.some(value => /[\r\n]/.test(ownText(value)))) { reject('unsupported-list'); return undefined; }
   } else values = [item.value];
   if (values.some(value => !richSupported(value))) {
-    reject(item, values.some(value => Array.isArray(value) && value.some(run => run?.cite !== undefined || run?.footnote !== undefined)) ? 'annotated-text' : 'unsupported-text');
+    reject(values.some(value => Array.isArray(value) && value.some(run => run?.cite !== undefined || run?.footnote !== undefined)) ? 'annotated-text' : 'unsupported-text');
     return undefined;
   }
   if (values.some(value => hasRtl(ownText(value)) || /\t|[\u0000-\u0008\u000B\u000C\u000E-\u001F\u061C\u200E\u200F\u202A-\u202E\u2066-\u2069]/.test(ownText(value))) || !values.some(value => ownText(value).length)) {
-    reject(item, 'unsupported-text'); return undefined;
+    reject('unsupported-text'); return undefined;
   }
-  return {item, values, list, region: region?.name ?? 'Body', box: {...(region?.box ?? item.box)}, anchor: region?.anchor ?? 'top'};
+  return {item, values, list, ...(numbering ? {numbering} : {}), region: region?.name ?? 'Body', box: {...(region?.box ?? item.box)}, anchor: region?.anchor ?? 'top'};
+}
+
+// RR-88: the native auto-number (`a:buAutoNum`) that reproduces core's markers, or undefined when the entries are not one sequence.
+function nativeNumbering(entries) {
+  const first = entries[0]?.marker?.number;
+  if (!first || !Number.isInteger(first.value) || first.value < 1) return undefined;
+  const scheme = autoNumScheme(first.style, first.suffix);
+  return entries.every((entry, index) => {
+    const number = entry.marker?.number;
+    return number && number.value === first.value + index && autoNumScheme(number.style, number.suffix) === scheme;
+  }) ? {style: scheme, startAt: first.value} : undefined;
 }
 
 /** Whole authored paragraphs, retaining hard breaks only. Styling uses selected native families. */
@@ -78,7 +107,8 @@ export function addNativeBody(slide, plan, context, options, helpers) {
     }
   }
   const indent = list ? item.text.listEntries[0].marker.indent * .75 : undefined;
-  const paragraphOptions = list ? {bullet: {characterCode: '2022', indent}, hanging: indent / 4, indentLevel: 0} : {bullet: false};
+  const paragraphOptions = !list ? {bullet: false} : plan.numbering ? {bullet: {type: 'number', style: plan.numbering.style, startAt: plan.numbering.startAt, indent}, hanging: indent / 4, indentLevel: 0}
+    : {bullet: {characterCode: '2022', indent}, hanging: indent / 4, indentLevel: 0};
   const runs = paragraphs.flatMap((paragraph, index) => {
     if (!paragraph.length) paragraph = [{text: '', options: {}}];
     return paragraph.map((run, position) => ({...run, options: {...run.options, ...paragraphOptions,
@@ -91,6 +121,13 @@ export function addNativeBody(slide, plan, context, options, helpers) {
   // Defaults for blank/appended paragraphs must name the selected family too.
   const defaults = `<a:defRPr sz="${Math.round(item.text.fontSize * 75)}" b="${baseFont.bold ? 1 : 0}" i="${baseFont.italic ? 1 : 0}"><a:solidFill>${helpers.solidColorXml(context.textColor)}</a:solidFill><a:latin typeface="${escapeXml(baseFont.fontFace)}"/></a:defRPr>`;
   return {objectName, defaults};
+}
+
+/** RR-88: a native title is written with an explicit no-autofit body, so the Title placeholder's own autofit cannot shrink or move it. */
+export function nativeTitleAutofit(xml, names) {
+  if (!names?.size) return xml;
+  return xml.replace(/<p:sp>[\s\S]*?<\/p:sp>/g, shape => names.has(shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1])
+    ? shape.replace(/(<a:bodyPr\b[^>]*>)[\s\S]*?<\/a:bodyPr>/, '$1<a:noAutofit/></a:bodyPr>') : shape);
 }
 
 /** Only prototype objects receive explicit no-autofit and paragraph typing defaults. */

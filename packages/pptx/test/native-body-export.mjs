@@ -150,12 +150,11 @@ for (const provenance of ['full', 'references-only', false]) {
 }
 
 const fallbacks = [
-  ['two body regions', {title: 'Two', layout: 'two-column', blocks: [{text: 'First'}, {text: 'Second'}]}, 'complex-composition'],
-  ['shared auto body', {title: 'Two', blocks: [{text: 'First'}, {text: 'Second'}]}, 'complex-composition'],
   ['group', {title: 'Group', blocks: [{blocks: [{text: 'Grouped'}]}]}, 'complex-composition'],
   ['K04 description/nesting', {title: 'List', layout: 'list', items: [{text: 'Parent', description: 'Description'}, {text: 'Child', level: 1}]}, 'unsupported-list'],
   ['K06 columns', {title: 'List', layout: 'list', items: Array.from({length: 14}, (_, index) => `Agenda item ${index + 1} with a few more words`)}, 'multi-column'],
-  ['numbered', {title: 'List', items: ['First', 'Second'], numbering: 'arabic'}, 'unsupported-list'],
+  // RR-88: one numbered sequence is native (test/native-title-and-bodies.mjs); an entry with its own start is not.
+  ['restarted numbering', {title: 'List', items: ['First', {text: 'Second', start: 7}], numbering: 'arabic'}, 'unsupported-list'],
   ['tabs', {title: 'Tabs', text: 'First\tSecond'}, 'unsupported-text'],
   ['Arabic in LTR deck', {title: 'Arabic', text: 'مرحبا بالعالم'}, 'unsupported-text'],
   ['Hebrew phrase in LTR deck', {title: 'Hebrew', text: 'A phrase: שלום'}, 'unsupported-text'],

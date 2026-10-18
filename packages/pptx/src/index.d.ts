@@ -98,12 +98,14 @@ export interface ToPptxOptions {
    */
   slideNumberFields?: "static" | "live";
   /**
-   * Prototype: "native" exports at most one supported paragraph or flat-bullet body per slide as one native body
-   * placeholder with native wrapping and no autofit. It retains selected fonts, effective alignment and region anchor,
+   * Prototype: "native" exports each supported paragraph or flat-bullet (or one-sequence numbered) body as one native body
+   * with native wrapping and no autofit: the first body of a slide is the Body placeholder, a further body region (RR-88) is an
+   * ordinary native text box at its region. It retains selected fonts, effective alignment and region anchor,
    * but native applications can choose different wraps and baselines from the measured preview. Unsupported groups,
-   * shared/multiple body regions, nested/description/numbered/multicolumn lists, annotations and complex text retain
+   * shared body regions, nested/description/restarted-numbered/multicolumn lists, annotations and complex text retain
    * measured shapes with native-body-fallback diagnostics. Native paragraph separators normalize to LF on import.
-   * Title handling is unchanged: only accepted one-line plain titles bind to a native title placeholder.
+   * A plain-string title that wraps over several lines (no hard break, no overflow, no rich runs) is also one native text box
+   * with native wrap and no autofit, bound to the Title placeholder (RR-88); an unwrapped title binds as before.
    * Omitted or "measured" preserves the current measured-line export. No native application qualification is implied.
    */
   bodyText?: "measured" | "native";

@@ -1,0 +1,10 @@
+{
+  "name": "Native extension deck",
+  "design": {"theme": "classic", "footer": {"left": {"text": "Acme Corp"}, "right": {"text": "{{slide.number}} / {{deck.slideCount}}"}}},
+  "slides": [
+    {"title": "A wrapped title that is long enough to take two lines across the slide width for sure", "items": ["First point of the list", "Second point which is much longer than the first so that it wraps onto another line when measured against the box", "Third"]},
+    {"title": "Two text regions side by side", "left": {"text": "Left column paragraph that is long enough to wrap over a couple of visual lines in its column."}, "center+right": {"text": "Right column paragraph with enough words to wrap onto a second visual line in its own region."}},
+    {"title": "Numbered steps with a wrapped title that also needs two lines on the slide", "numbering": "arabic", "items": ["Confirm owners for open exceptions across all regions of the business", "Review aging thresholds with operations leads", "Schedule the next readout"]},
+    {"title": "Picture and text", "left": {"image": "./assets/pic.png"}, "center+right": {"text": "The dashboard pulls review status, owners, and exceptions into one operating view for every team."}}
+  ]
+}

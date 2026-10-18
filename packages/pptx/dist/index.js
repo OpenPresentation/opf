@@ -1,5 +1,5 @@
 import {nativeBodyReader, joinNativeParagraphs} from './body-text-import.js';
-import {addNativeBody, nativeBodyDefaults, planNativeBody} from './native-body.js';
+import {addNativeBody, nativeBodyDefaults, nativeTitleAutofit, planNativeBody} from './native-body.js';
 import {autoNumScheme, deriveListNumbering, withDisplayedNumbers} from './numbered-list.js';
 import {isFaceStyleSuffix} from './font-weights.js';
 import {importTableFrames} from './table-import.js';
@@ -269,6 +269,7 @@ export async function toPptx(input, options = {}) {
   context.headingTags = new Map();
   context.plainTextTags = new Map();
   context.nativeBodies = new Map();
+  context.nativeTitles = new Set();
   context.timelineTags = new Map();
   context.quoteTags = new Map();
   context.quotePhotos = new Map();
@@ -2165,7 +2166,8 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
 
   for (const diagnostic of geometry.diagnostics) options.onDiagnostic?.(diagnostic);
   // The content topology (groups, regions, root form, block ids) with the leaf boxes this geometry draws.
-  recordContentTopology(context.documentProvenance, opfSlide, slideIndex, nativeBody ? geometry.items.map(item => item === nativeBody.item ? {...item, box: nativeBody.box, text: undefined} : item) : geometry.items);
+  const nativePlans = nativeBody ? [nativeBody, ...nativeBody.others] : [];
+  recordContentTopology(context.documentProvenance, opfSlide, slideIndex, nativeBody ? geometry.items.map(item => { const plan = nativePlans.find(plan => plan.item === item); return plan ? {...item, box: plan.box, text: undefined} : item; }) : geometry.items);
   // Paint order, as in the preview (FA-22 contract): canvas colour, the background picture and its overlay, design.watermark,
   // the logo, then the items in core's order: the headings, the placed image blocks at their bands, then the flowed body.
   if (geometry.backgroundImage) await addBackgroundImage(slide, presentation, geometry.backgroundImage, slideIndex, slideContext, context, options);
@@ -2182,7 +2184,10 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     // object or one drawn on a card stays a free shape: Change Layout would move it away from its caption or card.
     const boundRegion = template && item.region !== undefined && ['image', 'chart', 'table'].includes(item.field) && !item.caption && !item.frameBox
       ? geometry.regions?.find(region => region.name === item.region && region.flow === 'none' && region.content?.length === 1 && !region.overflow?.length) : undefined;
-    if ((template || context.automaticSlides[slideIndex]) && item.field === 'title' && typeof item.value === 'string' && item.text?.lines?.length === 1 && !item.text.overflow && !item.text.richLines)
+    // RR-88: under bodyText 'native' a plain-string title that wraps is one native text box (native wrap, no autofit) at its measured
+    // block, so it can bind to the Title placeholder like a one-line title (Keynote reports `title showing` only for a bound title).
+    const nativeTitle = options.bodyText === 'native' && (template || context.automaticSlides[slideIndex]) && isNativeTitle(item);
+    if ((template || context.automaticSlides[slideIndex]) && item.field === 'title' && typeof item.value === 'string' && (item.text?.lines?.length === 1 || nativeTitle) && !item.text.overflow && !item.text.richLines)
       context.placeholderBindings.set(`OPF heading ${item.path} line 0`, {slide: slideIndex, region: 'Title', object: 'title'});
     const drawnBefore = boundRegion && {images: context.images.size, placeholders: context.imagePlaceholders.size, charts: context.chartHeadings.size, tables: context.tableHeaders.size};
     // Card text sits on a literal card fill, not the slide background: keep it literal.
@@ -2197,10 +2202,14 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
         rectRadius:8*Math.min(widthInches,heightInches)/720,
         fill:paint(surface),line:{...paint(`#${itemContext.colors.border}`),width:.75},objectName:`OPF card ${item.path}`});
     }
-    if (nativeBody?.item === item) {
-      const body = addNativeBody(slide, nativeBody, itemContext, options, {textBoxOptions, nativeFontOptions, exportColor, nativeColor, linkColor, langOptions, solidColorXml});
+    if (nativeTitle) {
+      addNativeTitle(slide, item, itemContext, options, context);
+    } else if (nativePlans.some(plan => plan.item === item)) {
+      // RR-88: the first native body is the Body placeholder; every further one is an ordinary native text box at its region.
+      const plan = nativePlans.find(plan => plan.item === item);
+      const body = addNativeBody(slide, plan, itemContext, options, {textBoxOptions, nativeFontOptions, exportColor, nativeColor, linkColor, langOptions, solidColorXml});
       context.nativeBodies.set(body.objectName, body.defaults);
-      context.placeholderBindings.set(body.objectName, {slide: slideIndex, region: nativeBody.region, object: 'body'});
+      if (plan === nativeBody) context.placeholderBindings.set(body.objectName, {slide: slideIndex, region: nativeBody.region, object: 'body'});
     } else if(['text','title','subtitle','tag'].includes(item.field)&&(item.text?.placement||item.text?.sourceLines)&&!item.text.richLines) {
       addMeasuredPayloadText(slide,item.value,item.box,itemContext,options,{path:item.path,fit:item.text,textStyle:item.textStyle,sourceText:item.field==='text'&&!!item.text.sourceLines,align:item.alignment,diagnosticsHandled:true,heading:['title','subtitle','tag'].includes(item.field)?item.field:undefined,color:item.field==='tag'?tagColor(itemContext):itemContext.textColor});
     } else if (["title", "subtitle", "tag"].includes(item.field) && !item.text?.richLines) {
@@ -3017,6 +3026,32 @@ function assertXmlText(text, path) {
 
 // Match the published renderer's payload geometry and shared core text fitting.
 // Each fitted line remains native editable text, without PowerPoint rewrapping it.
+// RR-88: a plain-string title that wraps over several lines, with no hard break, overflow, rich runs or right-to-left line.
+function isNativeTitle(item) {
+  return item.field === 'title' && typeof item.value === 'string' && item.value.length > 0 && !/[\r\n\u2028\u2029]/.test(item.value) && item.text?.lines?.length > 1
+    && !item.text.overflow && !item.text.richLines && !item.text.directions?.includes('rtl') && !item.text.sourceLines?.some(line => line.boundary === 'hard' || line.segments?.some(segment => segment.kind === 'tab'));
+}
+
+// RR-88: the wrapped title as one native text box: the whole string, native wrap, no autofit, at the block its measured lines fill
+// (top of the first line to the bottom of the last), with the measured line pitch as exact spacing. Tagged as one heading line,
+// so import reads the current words as the title. The caller binds it to the Title placeholder.
+function addNativeTitle(slide, item, context, options, deckContext) {
+  const fit = item.text, box = item.box, lines = fit.placement?.lines;
+  const tops = fit.lines.map((_, index) => lines?.[index] ? lines[index].baseline - fit.fontSize : box.y + index * fit.lineHeight);
+  const bottoms = fit.lines.map((_, index) => lines?.[index] ? lines[index].baseline - fit.fontSize + lines[index].height : box.y + (index + 1) * fit.lineHeight);
+  const top = Math.min(...tops), height = Math.max(...bottoms) - top;
+  const objectName = `OPF heading ${item.path} line 0`;
+  deckContext.headingTags.set(objectName, {v: 1, group: item.path, field: 'title', line: 0, count: 1, boundary: 'end', separator: ''});
+  deckContext.nativeTitles.add(objectName);
+  const style = item.textStyle ?? resolveTextStyle({fontFamily: context.fonts.body, fontWeight: 400, path: item.path}, options.textMeasurement);
+  slide.addText(item.value, {
+    ...textBoxOptions({x: box.x / 96, y: top / 96, w: box.width / 96, h: height / 96}, context, fit.fontSize * .75),
+    ...nativeFontOptions(style),
+    color: pptxColor(context.textColor), align: physicalAlignment(fit.placement?.alignment ?? item.alignment ?? 'left', fit.directions?.[0]),
+    objectName, fit: 'none', wrap: true, lineSpacing: fit.lineHeight * .75, lineSpacingMultiple: undefined
+  });
+}
+
 function addMeasuredPayloadText(slide, text, box, context, options, config) {
   assertXmlText(text, config.path);
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
@@ -4529,7 +4564,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
         const content=body.replace(/<a:pPr\b[^>]*(?:\/>|>[\s\S]*?<\/a:pPr>)/g,node=>{properties ||= node;return '';});
         return `<a:p>${properties}${content}</a:p>`;
       });
-      xml = nativeBodyDefaults(xml, context.nativeBodies);
+      xml = nativeTitleAutofit(nativeBodyDefaults(xml, context.nativeBodies), context.nativeTitles);
     }
     // theme1.xml: FF-24 colors and names above, then FF-07 fonts here; they touch disjoint elements.
     if (context.scriptFonts) xml = partScriptFonts(path, xml, context.scriptFonts, context.partSlides.get(path) ?? 0);

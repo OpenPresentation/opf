@@ -1,0 +1,16 @@
+{
+  "name": "Repro Deck",
+  "design": {
+    "theme": "classic",
+    "footer": {"left": {"text": "Acme Corp"}, "right": {"text": "{{slide.number}} / {{deck.slideCount}}"}}
+  },
+  "assets": {"pic": "./assets/pic.png"},
+  "slides": [
+    {"title": "Quarterly Review: how the platform migration changed delivery speed across every region"},
+    {"title": "What we learned from the migration across all regions and teams this year", "items": ["Cycle time fell by nearly half once the new pipeline reached every region we operate in.", "Support volume dropped for the third quarter in a row after the rollout.", "Customers adopted the new dashboard much faster than we had planned for."]},
+    {"title": "Cycle time by quarter and region", "chart": {"type": "column", "data": {"columns": ["Quarter", "Before", "After"], "rows": [["Q1", 14, 9], ["Q2", 13, 8], ["Q3", 12, 7]]}}},
+    {"title": "Proof points from our largest customers", "blocks": [{"table": {"columns": ["Customer", "Cycle Time", "Change"], "rows": [["Globex", "11 days", "-48%"], ["Initech", "9 days", "-52%"]]}}]},
+    {"title": "Product snapshot", "left": {"image": "./assets/pic.png"}, "center+right": {"text": "The dashboard pulls review status, owners, and exceptions into one operating view for every team."}},
+    {"title": "Next steps for the team", "items": ["Confirm owners for open exceptions.", "Review aging thresholds with operations leads.", "Schedule the next readout."]}
+  ]
+}
