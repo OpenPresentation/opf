@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.21.0 (2026-10-18)
+
+- RR-95: first-use documentation. Every skill now opens with a short glossary (furniture, composition, implicit blocks, promoted region, catalog record, reflow, provenance), and the `opf-export` skill, the quickstart and the compatibility matrix say plainly that PPTX text is one box per wrapped line, so edits in PowerPoint or Keynote do not reflow and a wrapped title is not the Title placeholder. The `opf-author` skill points at `opf schema` instead of a repository checkout and gains a styled-table example that reads at presentation size (rich runs with `fontSize`, a `padding` object, a numeric column with `format`). New `docs/first-deck/` is a runnable six-slide deck with a README from install to PowerPoint or Keynote. New root check `check:skill-commands` runs every `opf ...` command quoted in `skills/` and `docs/*.md` against the workspace CLI, so a removed command or option fails the build instead of reaching users.
+- RR-93 first-use diagnostics (two testers' findings on 0.20):
+    - A value that fails a `oneOf` or `anyOf` now reports the form it was written for, not every rejected form. `padding: 12` in a table cell style was 99 errors (mostly "must be string"); it is one `must be object` per cell. The other forms are listed in `validation.alternatives` of the finding (schema `ValidationIssue.alternatives`), and `opf validate --format text` prints them on one `other forms:` line. When no form fits the value's type, the union is reported once, named by the types it accepts. A date that is neither a date nor a date-time is one error.
+    - `opf validate` warns `cli/asset-missing` (`cli/asset-blocked` outside the folder or for a file that is not an image) for a relative image or logo path `opf convert` could not read, by the same rules, relative to the deck's folder or `--asset-dir`. Core `validate` still reads no files. `--only` skips the check; `--ignore asset-missing` drops it. The markdown example now ships its `assets/release-gate.png`.
+    - `opf stats` counted `source 0` for a chart with inline rows and `data.source`. `charts.data` is now `{ inline, dataset, withSource }`: how the data is given, and how many charts record a source (the unused `source` count of the removed `ChartDataSource` form is gone).
+    - The render, export and import reporter keeps findings that differ in their details, so a PDF report lists every embedded face (`pdf-font-embedded` has no path or message, and only the first survived).
+    - Writing a new file no longer fails with `EPERM`, `ENOTSUP` or `EXDEV` where hard links are refused (sandboxes, some OneDrive and network folders, so `opf create` and `opf convert` failed): the file is created exclusively and the staged bytes copied in, and an existing file is still never replaced.
+
 ## 0.20.1 (2026-10-17)
 
 - RR-87: Make `opf doctor` inspect fonts and converters from the selected renderer's own Node resolution chain, so an unrelated global or Core install cannot hide a missing or incompatible renderer peer. Root engine discovery still checks Core and the working directory.
