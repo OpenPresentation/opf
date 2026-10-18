@@ -35,6 +35,9 @@ The effective background is the slide's `design.background`, then the deck's, th
 | `opacity` | Picture opacity. The overlay keeps its own. |
 | `recolor` | `"grayscale"`, or `{ dark, light }` for duotone, as on an image block. Recolor and opacity apply to the picture's pixels; the overlay is drawn above them. |
 | `overlay` | A scrim over the whole picture, or a band along one edge (`edge`, `size`; see [Overlay](#overlay)). |
+| `tone` | `dark` or `light` (from core 0.23.0): the variant the slide takes (`dark1` or `light1`) so text and lines read on the picture. Absent: the deck's variant, else light. |
+
+A picture or gradient background can carry `tone: "dark"` or `"light"` (from core 0.23.0). The tone picks the color map (`dark1` or `light1`, see `design.variant` in [design resolution](design-resolution.md#color-variants)) so the slide's text, borders and chart furniture are chosen to read on the picture. Without a tone the picture takes the deck's variant, else counts as light, as before.
 
 The string shorthand `"asset:hero"` (or any source starting with `asset:`, `https://`, `data:`, `./` or `../`) is a cover picture background. Theme slots (`light1`) and hex colours keep their meaning, and any other string is invalid.
 

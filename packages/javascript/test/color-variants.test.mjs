@@ -215,6 +215,13 @@ describe('slide resolution', () => {
 		assert.equal(roles(deck({ background: image() })).dark, false);
 	});
 
+	test('a variant hides the theme background: the slide is drawn in the variant\'s bg1, and the validator does not see the theme\'s background', () => {
+		const warnings = (document) => validate(document, { only: ['accessibility'] }).findings.filter((entry) => /contrast/.test(entry.ruleId) && entry.severity === 'warning');
+		assert.deepEqual(warnings(deck({ variant: 'light1' })), [], 'dark text on the variant\'s light1, not on the default theme\'s dark2');
+		assert.deepEqual(warnings(deck({ variant: 'dark1' })), []);
+		assert.deepEqual(warnings(deck({}, { variant: 'light2' })), []);
+	});
+
 	test('the validator resolves the same roles: a dark variant has readable text, and the contrast rules still run', () => {
 		const report = validate(deck({ variant: { background: 'dark1' } }), { only: ['accessibility'] });
 		assert.deepEqual(report.findings.filter((entry) => entry.severity === 'error'), []);

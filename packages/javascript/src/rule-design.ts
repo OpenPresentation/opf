@@ -248,6 +248,8 @@ export interface ColorChoice {
 	variant?: ColorVariant;
 	/** The color of a solid or pattern background fill, when it chooses light or dark by its luminance. */
 	background?: string;
+	/** The background definition that is actually drawn: a variant at a more specific level than the theme's background hides that background (the slide is the variant's bg1), a picture or gradient with no tone stays. Present, possibly undefined, only when the choice decided it. */
+	drawn?: { definition: unknown };
 }
 
 /**
@@ -260,26 +262,30 @@ export interface ColorChoice {
  *    level can still apply, and otherwise the default (light) holds, as before;
  * 4. any other background (a solid or pattern color) decides by its luminance, with no variant.
  *
- * A slide's variant replaces the deck's whole, including its accent order.
+ * A slide's variant replaces the deck's whole, accent order included. A variant also hides a background of a less specific level (a deck
+ * variant over the theme's background: the slide is the variant's bg1), reported as `drawn`.
  */
 export function colorChoice(levels: readonly Rec[], scheme: Rec, variables: Rec = {}): ColorChoice {
 	let variantOnly = false;
+	let picture: { definition: unknown } | undefined;
 	for (const level of levels) {
 		const definition = level.background;
 		const slot = typeof definition === 'string' ? definition : rec(definition).type === 'theme' ? rec(definition).slot : undefined;
 		const themeSlot = THEME_SLOTS.has(slot) ? (slot as ColorVariant['background']) : undefined;
-		const picture = imageBackground(definition) !== undefined || rec(definition).type === 'gradient';
+		const isPicture = imageBackground(definition) !== undefined || rec(definition).type === 'gradient';
 		const variant = normalizeColorVariant(level.variant);
 		if (variant) {
-			const fill = definition !== undefined && !variantOnly && !themeSlot && !picture ? decisionColor(definition, scheme, variables) : undefined;
-			return { variant, ...(fill ? { background: fill } : {}) };
+			const fill = definition !== undefined && !variantOnly && !themeSlot && !isPicture ? decisionColor(definition, scheme, variables) : undefined;
+			const own = definition !== undefined && !variantOnly && !themeSlot;
+			return { variant, ...(fill ? { background: fill } : {}), drawn: variantOnly ? picture! : { definition: own ? definition : undefined } };
 		}
 		if (variantOnly || definition === undefined || definition === null || definition === false) continue;
 		if (themeSlot) return { variant: { background: themeSlot } };
-		if (picture) {
+		if (isPicture) {
 			const tone = rec(definition).tone;
 			if (tone === 'dark' || tone === 'light') return { variant: { background: tone === 'dark' ? 'dark1' : 'light1' } };
 			variantOnly = true;
+			picture = { definition };
 			continue;
 		}
 		return { background: decisionColor(definition, scheme, variables) };
@@ -307,8 +313,8 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 	const roles = resolveColorRoles(colorScheme, { background: choice.background, variant: choice.variant });
 	const dark = roles.dark;
 	const text = roles.text;
-	const backdrop = backdropOf(own.background ?? deck.background ?? theme.background, colorScheme, text, variables, roles.map.bg1 === 'light1' ? undefined : roles.background);
-	const picture = imageBackground(own.background ?? deck.background ?? theme.background);
+	const backdrop = backdropOf(choice.drawn ? choice.drawn.definition : own.background ?? deck.background ?? theme.background, colorScheme, text, variables, roles.map.bg1 === 'light1' ? undefined : roles.background);
+	const picture = imageBackground(choice.drawn ? choice.drawn.definition : own.background ?? deck.background ?? theme.background);
 	const backgroundImage: ResolvedDesign['backgroundImage'] =
 		picture && own.background !== undefined
 			? { source: picture.src, fit: picture.fit, path: `/slides/${index}/design/background` }
