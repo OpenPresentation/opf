@@ -1,6 +1,6 @@
-# Chart options: axis titles, legend position, data labels and highlight
+# Chart options: axis titles, legend, data labels, highlight, series colors and the value axis
 
-Status: RR-35 (release readiness) for axis titles, legend and data labels, FA-14 (format audit) for `highlight`. These shipped fields change geometry only for charts that use the first three fields, and colors only for charts that use `highlight`. Use the coordinated package set in the [compatibility matrix](compatibility-matrix.md); schema support alone does not establish native visual fidelity.
+Status: RR-35 (release readiness) for axis titles, legend and data labels, FA-14 (format audit) for `highlight`, and RR-89 and RR-92 (core 0.21.0) for series colors (`chart.colors`) and the computed value axis. The first four fields change geometry only for charts that use the first three fields, and colors only for charts that use `highlight`. Use the coordinated package set in the [compatibility matrix](compatibility-matrix.md); schema support alone does not establish native visual fidelity.
 
 ## The fields
 
@@ -81,7 +81,7 @@ The Office 2016 (chartex) constructs are left out on purpose. Their marks take t
 
 ## Series colors
 
-Series colors follow the deck's color scheme. They are not a field of the chart: the same chart takes the colors of whichever scheme the deck uses (`design.colorScheme`, the theme's scheme, a catalog record, a built-in such as `vibes`, or an inline scheme with slot overrides).
+Series colors follow the deck's color scheme by default: the same chart takes the colors of whichever scheme the deck uses (`design.colorScheme`, the theme's scheme, a catalog record, a built-in such as `vibes`, or an inline scheme with slot overrides). To set the color of one series, slice or category, list colors in [`chart.colors`](#setting-colors-chartcolors); a position it does not list keeps the deck palette.
 
 Core's `chartSeriesPalette(colorScheme)` (on `@openpresentation/opf/composition`) returns the twelve colors the preview, the PPTX export and the `chart-color-only` accessibility rule all use, in this order:
 

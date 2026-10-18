@@ -542,7 +542,7 @@ describe("round trips", () => {
   }
 
   test("property: every example deck survives OPF to Markdown to OPF with all text and block kinds", () => {
-    assert.equal(examples.length, 127);
+    assert.equal(examples.length, 128);
     let nativeSlides = 0;
     let total = 0;
     const reasons = new Map();

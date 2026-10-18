@@ -15,6 +15,8 @@ Start with [`full-feature-tour.opf.json`](./full-feature-tour.opf.json): a singl
 - Asset shorthand and object forms.
 - Inline and asset-backed chart data.
 - Chart emphasis: `chart.highlight` ([`chart-highlight.opf.json`](./chart-highlight.opf.json)).
+- Chart series colors: the deck palette, `chart.colors` by position (a color-scheme slot or a hex color, on a column chart and on a pie) and `highlight` winning over it ([`chart-colors.opf.json`](./chart-colors.opf.json)).
+- Styled tables: `bold` on a cell style (a bold cell keeps its number `format`), a rich cell in a numeric column, and a `padding` object ([`table-cell-types.opf.json`](./table-cell-types.opf.json)).
 - Design backgrounds, logo sets, headers, footers, watermarks, and slide-level overrides.
 - Metadata array forms for organizations, speakers, authors, and takeaways.
 - Custom narrative records, slide beat links and catalog override surfaces.
