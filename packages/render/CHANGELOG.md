@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.22.0 (2026-10-18)
+
+- RR-90 (adopts core RR-90, RR-91 and RR-93a, opf#717; test and baseline changes only, no renderer code): the tests that encoded the old core geometry now expect the new one. The tag follows `titleAlignment` (`item-alignment`, `design-preview`), header and footer zones sit on the content inset (`design-fields`), and a styled table's text is drawn at the 25 px body size (the `table-styled` digest of `chart-table-data`). The template goldens select a new baseline, `layout-templates-rr90-first-use-layout.json`, whenever core draws table text at the body size; the 40 changed slides are all table slides (`table`, `table-beside` and their paginated pages). The ordinary example baseline follows core's fixture (`golden-override`), which core regenerates.
+
 ## 0.20.4 (2026-10-17)
 
 - RR-87: establish Git trust only for the exact checked-out workspace in the publishing job before verifying its merged release identity. Preserve the full source, tag and manifest checks; no runtime or export behavior changes.
