@@ -34,9 +34,75 @@
 //   0.22.0: RR-90 first-use train; renderer main 2ba167d0 has no change under fonts/ since tag opf-render-v0.20.4 (142 tracked files, empty diff), and the packed candidate's office registry measured 94 lazy faces (78 open plus 16 Intos) in opf-render#258 CI. Release qualification.
 export const LAZY_FONT_COUNTS = Object.freeze({ '0.11.0': Object.freeze([51]), '0.11.1': Object.freeze([86]), '0.11.2': Object.freeze([86]), '0.11.3': Object.freeze([86]), '0.11.4': Object.freeze([94]), '0.11.5': Object.freeze([94]), '0.11.6': Object.freeze([94]), '0.11.7': Object.freeze([94]), '0.11.8': Object.freeze([94]), '0.11.9': Object.freeze([94]), '0.12.0': Object.freeze([94]), '0.12.1': Object.freeze([94]), '0.12.2': Object.freeze([94]), '0.13.0': Object.freeze([94]), '0.13.1': Object.freeze([94]), '0.14.0': Object.freeze([94]), '0.15.0': Object.freeze([94]), '0.16.0': Object.freeze([94]), '0.17.0': Object.freeze([94]), '0.17.1': Object.freeze([94]), '0.18.0': Object.freeze([94]), '0.18.1': Object.freeze([94]), '0.18.2': Object.freeze([94]), '0.19.0': Object.freeze([94]), '0.19.1': Object.freeze([94]), '0.20.0': Object.freeze([94]), '0.20.1': Object.freeze([94]), '0.20.2': Object.freeze([94]), '0.20.3': Object.freeze([94]), '0.20.4': Object.freeze([94]), '0.22.0': Object.freeze([94]) });
 
-/** Throws unless `count` is an expected lazy face count for the renderer `version`. */
-export function assertLazyFontCount(version, count, label = 'renderer') {
-  const expected = LAZY_FONT_COUNTS[version];
-  if (!expected) throw new Error(`${label} ${version}: no expected lazy font count is recorded; add it to scripts/lazy-font-counts.mjs`);
-  if (!expected.includes(count)) throw new Error(`${label} ${version} lists ${count} lazy fonts; expected ${expected.join(' or ')} (scripts/lazy-font-counts.mjs)`);
+/**
+ * RR-90: a renderer version that is not in LAZY_FONT_COUNTS still passes when its font files are exactly a set already reviewed. The
+ * set is the 143 files the renderer package ships for fonts (dist/font-manifest.js and every file under fonts/: faces, licenses,
+ * PROVENANCE.json, NOTICE.md), hashed by `hashFontSet`. A set is reviewed when it is listed in REVIEWED_FONT_SETS with the lazy face
+ * count measured for it. Any other change fails closed: a changed or unknown file set, a different count for a reviewed set, or a
+ * prerelease (which always needs its own LAZY_FONT_COUNTS entry).
+ * To review a new set: pack the release, run hashFontSet over the package, read why the files changed, then add the set (and the
+ * version's count to LAZY_FONT_COUNTS).
+ */
+export const REVIEWED_FONT_SETS = Object.freeze({
+  '7bd7928683331c2bca5ca0a642738257c646cb8b0da94600768424a6d5bb8e65': Object.freeze({
+    manifestSha256: '16d0b4141054f42c66f3aa9a4f146362693825689c442c8ee693832b729fa699',
+    files: 143,
+    count: 94,
+    versions: Object.freeze(['0.18.1', '0.20.0', '0.20.2', '0.20.4']),
+    note: 'Hashed from the published tarballs of those four versions, which are byte-identical in font files (RR-90). The office pack of renderer 0.20.4: 78 open faces plus 16 Intos faces list as 94 lazy fonts.',
+  }),
+});
+
+/**
+ * Hash a renderer package's font set: sha256 of the lines `<path> <sha256 of the file>` (path relative to the package, `/`
+ * separators, sorted by path) for dist/font-manifest.js and every file under fonts/. Self-contained so the installed-consumer check
+ * can embed it (pass `readdir`, `readFile` from node:fs/promises and `createHash` from node:crypto). Returns { manifestSha256,
+ * fontSetSha256, files }.
+ */
+export async function hashFontSet({ root, readdir, readFile, createHash }) {
+  const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
+  const paths = ['dist/font-manifest.js'];
+  const walk = async (directory) => {
+    for (const entry of await readdir(`${root}/${directory}`, { withFileTypes: true })) {
+      const relative = `${directory}/${entry.name}`;
+      if (entry.isDirectory()) await walk(relative);
+      else paths.push(relative);
+    }
+  };
+  await walk('fonts');
+  paths.sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));
+  const lines = [];
+  let manifestSha256;
+  for (const relative of paths) {
+    const hash = sha256(await readFile(`${root}/${relative}`));
+    if (relative === 'dist/font-manifest.js') manifestSha256 = hash;
+    lines.push(`${relative} ${hash}\n`);
+  }
+  return { manifestSha256, fontSetSha256: sha256(lines.join('')), files: paths.length };
+}
+
+/**
+ * The reason `count` is not acceptable for renderer `version`, or undefined. `fonts` is hashFontSet's result for the installed
+ * renderer (optional: without it only LAZY_FONT_COUNTS can admit a version). Self-contained so the installed-consumer check can embed it.
+ */
+export function lazyFontCountProblem({ version, count, counts, reviewedSets, fonts }) {
+  const expected = counts[version];
+  if (expected) return expected.includes(count) ? undefined : `renderer ${version} lists ${count} lazy fonts; expected ${expected.join(' or ')} (scripts/lazy-font-counts.mjs)`;
+  const unrecorded = `renderer ${version}: no expected lazy font count is recorded; add it to scripts/lazy-font-counts.mjs`;
+  if (!fonts) return unrecorded;
+  if (/-/.test(version)) return `${unrecorded} (a prerelease is never admitted by its font files alone)`;
+  const reviewed = reviewedSets[fonts.fontSetSha256];
+  if (!reviewed) {
+    return `${unrecorded}. Its font files are not a reviewed set (font set sha256 ${fonts.fontSetSha256}, dist/font-manifest.js sha256 ${fonts.manifestSha256}, ${fonts.files} files): the fonts changed. Review the change, then add the set to REVIEWED_FONT_SETS and the count to LAZY_FONT_COUNTS`;
+  }
+  if (count !== reviewed.count) {
+    return `${unrecorded}. Its font files are the reviewed set of renderer ${reviewed.versions.at(-1)}, but it lists ${count} lazy fonts and that set lists ${reviewed.count}: the count changed without the fonts. Review why, then add the count to LAZY_FONT_COUNTS`;
+  }
+  return undefined;
+}
+
+/** Throws unless `count` is an expected lazy face count for the renderer `version` (see lazyFontCountProblem; `fonts` is hashFontSet's result). */
+export function assertLazyFontCount(version, count, label = 'renderer', fonts = undefined) {
+  const problem = lazyFontCountProblem({ version, count, counts: LAZY_FONT_COUNTS, reviewedSets: REVIEWED_FONT_SETS, fonts });
+  if (problem) throw new Error(label === 'renderer' ? problem : problem.replace(/^renderer /, `${label} `));
 }
