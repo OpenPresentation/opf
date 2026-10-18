@@ -110,6 +110,8 @@ Chart options (RR-35): `@openpresentation/opf-editor/chart-options` edits a char
 
 Chart highlight (FA-14): the same module edits `chart.highlight`: `setChartOptions(editor, chartPath, { highlight: { series: ["Revenue"], categories: ["Q3"] } })` replaces each listed part (an empty list removes it, `null` removes the field), refuses a name the chart does not have, and writes only what the chart type can highlight (core `chartOptionSupport(...).highlight`). `readChartOptions(chart, document)` returns the `choices` (plotted series and category labels, resolved through the document for a dataset chart), and the panel lists them as two groups of checkboxes ("Highlight series", "Highlight categories").
 
+Chart colors (known gap): core 0.21 added `chart.colors` (a position-matched list of series or category colors, as a hex color, a scheme slot or a role), and opf-pptx 0.22.0 exports it (the opf-render preview follows once opf-render#256 lands), but the editor has no control for it yet. The chart options panel edits `highlight` as its only color-related setting (the two checkbox groups above), and `setChartOptions` does not accept `colors`. Until a control exists, set `chart.colors` in the document directly (the JSON control or a patch).
+
 ```js
 import { createCanvasEditor } from '@openpresentation/opf-editor/canvas';
 import { saveDocument } from '@openpresentation/opf-editor';
