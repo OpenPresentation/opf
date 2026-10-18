@@ -59,11 +59,13 @@ jobs:
   # the docs-only gate (RR-40) in its own steps, so a skipped shard still succeeds and the aggregator reports.
   # RR-45 (opf#368): ecosystem-core is itself three matrix shards (model, installed, registry); its result is success
   # only when all three succeeded.
+  # RR-57: the sibling jobs are ecosystem-render and ecosystem-pptx (three test slices each, scripts/ci-test-shards.mjs) and
+  # ecosystem-editor. A matrix job's result is success only when every slice succeeded.
   # The required status check `packages` (ruleset 24382980). It always runs, even when a shard failed or was
   # cancelled, and passes only when every shard succeeded. A shard that the docs-only gate skips step by step
   # still succeeds; a shard that did not run at all (skipped job) is a failure here, never a silent pass.
   packages:
-    needs: [gallery, ecosystem-render, ecosystem-pptx-editor, ecosystem-core, candidate, control, installed-portability]
+    needs: [gallery, ecosystem-render, ecosystem-pptx, ecosystem-editor, ecosystem-core, candidate, control, installed-portability]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -82,6 +84,14 @@ jobs:
   ecosystem-render:
     needs: gallery
     if: needs.gallery.outputs.candidate_gallery == ''
+    # RR-57: the renderer's serial test suite (about 15 minutes) runs as three parallel slices of equal weight
+    # (scripts/ci-test-shards.mjs); together they are exactly `npm test`. Shard 1 also runs the script's checks, the
+    # typecheck, validate and code steps, and the two browser steps below.
+    name: ecosystem-render (${{ matrix.shard }}/3)
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
     runs-on: ubuntu-latest
     # Matches the renderer's locked Playwright 1.64.0, including Chromium and
     # system libraries; avoids mutable apt repositories during browser setup.
@@ -141,8 +151,18 @@ jobs:
           node-version: 24
           cache: pnpm
           cache-dependency-path: opf/pnpm-lock.yaml
+      # RR-57: npm's download cache, keyed by the content of the three lockfiles at the locked commits, so a different
+      # commit has a different key and nothing is reused across commits. `npm ci` still installs from the lockfile.
+      - name: Restore the npm download cache
+        if: steps.scope.outputs.run == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ github.workspace }}/.npm-cache
+          key: ecosystem-npm-${{ runner.os }}-node24-${{ hashFiles('opf-render/package-lock.json', 'opf-editor/package-lock.json', 'opf-pptx/package-lock.json') }}
       - name: Install locked dependencies
         if: steps.scope.outputs.run == 'true'
+        env:
+          npm_config_cache: ${{ github.workspace }}/.npm-cache
         run: |
           pnpm --dir opf install --frozen-lockfile
           for repo in opf-render opf-editor opf-pptx; do
@@ -160,29 +180,36 @@ jobs:
         env:
           # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
           OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
-        run: node scripts/test-package-ecosystem.mjs --siblings opf-render --tier ${{ steps.scope.outputs.tier }}
+        run: node scripts/test-package-ecosystem.mjs --siblings opf-render --tier ${{ steps.scope.outputs.tier }} --test-shard ${{ matrix.shard }}/3
       - name: Check scalar source whitespace and accepted browser advances
-        if: steps.scope.outputs.run == 'true'
+        if: steps.scope.outputs.run == 'true' && matrix.shard == 1
         working-directory: opf-render
         run: node test/plain-whitespace-browser.mjs artifacts/plain-whitespace-browser
       - name: Check physical font selections in an offline browser
-        if: steps.scope.outputs.run == 'true'
+        if: steps.scope.outputs.run == 'true' && matrix.shard == 1
         working-directory: opf-render
         run: npm run test:font-variants-browser
       - name: Preserve renderer evidence
         if: always() && steps.scope.outputs.run == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: ecosystem-render-evidence
+          name: ecosystem-render-evidence-${{ matrix.shard }}
           path: |
             opf-render/artifacts/golden/**
             opf-render/artifacts/font-variants*.json
             opf-render/artifacts/plain-whitespace-browser/**
           retention-days: 7
           if-no-files-found: ignore
-  ecosystem-pptx-editor:
+  ecosystem-pptx:
     needs: gallery
     if: needs.gallery.outputs.candidate_gallery == ''
+    # RR-57: split from the former ecosystem-pptx-editor, and opf-pptx's serial test suite (about 15 minutes) runs as three
+    # parallel slices of equal weight (scripts/ci-test-shards.mjs); together they are exactly `npm test`.
+    name: ecosystem-pptx (${{ matrix.shard }}/3)
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
     runs-on: ubuntu-latest
     # Matches the renderer's locked Playwright 1.64.0, including Chromium and
     # system libraries; avoids mutable apt repositories during browser setup.
@@ -242,8 +269,18 @@ jobs:
           node-version: 24
           cache: pnpm
           cache-dependency-path: opf/pnpm-lock.yaml
+      # RR-57: npm's download cache, keyed by the content of the three lockfiles at the locked commits, so a different
+      # commit has a different key and nothing is reused across commits. `npm ci` still installs from the lockfile.
+      - name: Restore the npm download cache
+        if: steps.scope.outputs.run == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ github.workspace }}/.npm-cache
+          key: ecosystem-npm-${{ runner.os }}-node24-${{ hashFiles('opf-render/package-lock.json', 'opf-editor/package-lock.json', 'opf-pptx/package-lock.json') }}
       - name: Install locked dependencies
         if: steps.scope.outputs.run == 'true'
+        env:
+          npm_config_cache: ${{ github.workspace }}/.npm-cache
         run: |
           pnpm --dir opf install --frozen-lockfile
           for repo in opf-render opf-editor opf-pptx; do
@@ -255,22 +292,115 @@ jobs:
         run: |
           pnpm build
           node scripts/link-ecosystem.mjs --packages-only
-      - name: opf-pptx and opf-editor typecheck, validate, test (contract on a pull request, full otherwise), code and font checks against the linked core
+      - name: opf-pptx typecheck, validate, test (contract on a pull request, full otherwise), code and font checks against the linked core
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
         env:
           # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
           OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
-        run: node scripts/test-package-ecosystem.mjs --siblings opf-editor,opf-pptx --tier ${{ steps.scope.outputs.tier }}
+        run: node scripts/test-package-ecosystem.mjs --siblings opf-pptx --tier ${{ steps.scope.outputs.tier }} --test-shard ${{ matrix.shard }}/3
       - name: Preserve opf-pptx evidence
         if: always() && steps.scope.outputs.run == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: ecosystem-pptx-editor-evidence
+          name: ecosystem-pptx-evidence-${{ matrix.shard }}
           path: |
             opf-pptx/artifacts/zip-date/**
           retention-days: 7
           if-no-files-found: ignore
+  ecosystem-editor:
+    needs: gallery
+    if: needs.gallery.outputs.candidate_gallery == ''
+    # RR-57: split from the former ecosystem-pptx-editor. opf-editor's suite is short (under two minutes), so it is one job.
+    runs-on: ubuntu-latest
+    # Matches the renderer's locked Playwright 1.64.0, including Chromium and
+    # system libraries; avoids mutable apt repositories during browser setup.
+    container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: opf
+          fetch-depth: 0
+          persist-credentials: false
+      # RR-40: a pull request that only changes docs/programs or docs/evidence (no evidence decks) skips the
+      # checks below and reports success; scripts/ecosystem-scope.mjs lists the rule. Pushes to main always run.
+      - name: Decide whether this change needs the ecosystem checks
+        id: scope
+        working-directory: opf
+        run: node scripts/ecosystem-scope.mjs
+      # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
+      - name: Resolve the coordinated commits from ecosystem.lock.json
+        id: refs
+        if: steps.scope.outputs.run == 'true'
+        uses: ./opf/.github/actions/ecosystem-refs
+        with:
+          consumer: opf
+      # These commits are the coordinated checkpoint (the lock), not mutable default branches.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
+        with:
+          repository: OpenPresentation/opf-render
+          ref: ${{ steps.refs.outputs.opf_render }}
+          path: opf-render
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
+        with:
+          repository: OpenPresentation/opf-editor
+          ref: ${{ steps.refs.outputs.opf_editor }}
+          path: opf-editor
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: steps.scope.outputs.run == 'true'
+        with:
+          repository: OpenPresentation/opf-pptx
+          ref: ${{ steps.refs.outputs.opf_pptx }}
+          path: opf-pptx
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        if: steps.scope.outputs.run == 'true'
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: steps.scope.outputs.run == 'true'
+        with:
+          node-version: 24
+          cache: pnpm
+          cache-dependency-path: opf/pnpm-lock.yaml
+      # RR-57: npm's download cache, keyed by the content of the three lockfiles at the locked commits, so a different
+      # commit has a different key and nothing is reused across commits. `npm ci` still installs from the lockfile.
+      - name: Restore the npm download cache
+        if: steps.scope.outputs.run == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ github.workspace }}/.npm-cache
+          key: ecosystem-npm-${{ runner.os }}-node24-${{ hashFiles('opf-render/package-lock.json', 'opf-editor/package-lock.json', 'opf-pptx/package-lock.json') }}
+      - name: Install locked dependencies
+        if: steps.scope.outputs.run == 'true'
+        env:
+          npm_config_cache: ${{ github.workspace }}/.npm-cache
+        run: |
+          pnpm --dir opf install --frozen-lockfile
+          for repo in opf-render opf-editor opf-pptx; do
+            npm ci --prefix "$repo"
+          done
+      - name: Build and link coordinated sources
+        if: steps.scope.outputs.run == 'true'
+        working-directory: opf
+        run: |
+          pnpm build
+          node scripts/link-ecosystem.mjs --packages-only
+      - name: opf-editor typecheck, validate, test (contract on a pull request, full otherwise), code and font checks against the linked core
+        if: steps.scope.outputs.run == 'true'
+        working-directory: opf
+        env:
+          # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
+          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
+        run: node scripts/test-package-ecosystem.mjs --siblings opf-editor --tier ${{ steps.scope.outputs.tier }}
   # RR-45 (opf#368, item 1): the former serial ecosystem-core job is three parallel shards of one matrix, each with its own
   # setup. `model`: the model, geometry, fonts and CLI suites (with the FF-09 covering array). `installed`: the local
   # tarballs, their consumer, installed types and the installed-browser and metric-outline checks. `registry`: the exact
@@ -380,8 +510,18 @@ jobs:
           node --input-type=module -e "import {execFileSync} from 'node:child_process'; import {mkdirSync,writeFileSync} from 'node:fs';
           const repos=['opf','opf-render','opf-editor','opf-pptx'].map(name=>({name,head:execFileSync('git',['-C','../'+name,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),tree:execFileSync('git',['-C','../'+name,'rev-parse','HEAD^{tree}'],{encoding:'utf8'}).trim()}));
           mkdirSync('artifacts/portability',{recursive:true}); writeFileSync('artifacts/portability/source.json',JSON.stringify({node:process.version,platform:process.platform,arch:process.arch,repos},null,2)+'\n');"
+      # RR-57: npm's download cache, keyed by the content of the three lockfiles at the locked commits, so a different
+      # commit has a different key and nothing is reused across commits. `npm ci` still installs from the lockfile.
+      - name: Restore the npm download cache
+        if: steps.scope.outputs.run == 'true'
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ github.workspace }}/.npm-cache
+          key: ecosystem-npm-${{ runner.os }}-node24-${{ hashFiles('opf-render/package-lock.json', 'opf-editor/package-lock.json', 'opf-pptx/package-lock.json') }}
       - name: Install locked dependencies
         if: steps.scope.outputs.run == 'true'
+        env:
+          npm_config_cache: ${{ github.workspace }}/.npm-cache
         run: |
           pnpm --dir opf install --frozen-lockfile
           for repo in opf-render opf-editor opf-pptx; do

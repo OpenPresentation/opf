@@ -28,7 +28,7 @@ test(ending+': '+'candidate and control lanes keep exact metadata, immutable bro
  assert.doesNotMatch(portability,/^    if: needs\.gallery\.outputs\.candidate_gallery == ''/m);
  assert.match(portability,/needs\.gallery\.outputs\.candidate_gallery != '' \|\| github\.event_name/);
  assert.match(portability,/candidate-gallery-build\.mjs/);assert.match(portability,/test-packed-ecosystem\.mjs/);
- assert.match(ecosystem,/needs: \[gallery, ecosystem-render, ecosystem-pptx-editor, ecosystem-core, candidate, control, installed-portability\]/);
+ assert.match(ecosystem,/needs: \[gallery, ecosystem-render, ecosystem-pptx, ecosystem-editor, ecosystem-core, candidate, control, installed-portability\]/);
 });
 test(ending+': '+'supported engines and CLI portability use fresh candidate staging and preserve original contracts',()=>{
  for(const file of ['engines-range.yml','cli-windows.yml']){

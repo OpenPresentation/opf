@@ -320,7 +320,7 @@ of them failed. The check name and the ruleset stay as they are.
 | Shard | Content | Estimated minutes |
 |---|---|---|
 | `ecosystem-render` | renderer typecheck, validate, test (golden) and code checks against linked core | about 10, or 8 after quick win 2 |
-| `ecosystem-pptx-editor` | opf-pptx and opf-editor suites | about 7.6 |
+| `ecosystem-pptx-editor` | opf-pptx and opf-editor suites | about 7.6 (replaced by `ecosystem-pptx` and `ecosystem-editor`, see below) |
 | `ecosystem-core` | everything else in today's job | about 11 |
 
 `scripts/test-package-ecosystem.mjs` gains `--siblings <names>` and
@@ -342,6 +342,36 @@ of them failed. The check name and the ruleset stay as they are.
      aggregator in the same PR, so the required name never disappears.
 - **Further.** Split the 805-slide golden (5.5 min) across two shards by deck
   index. That is another -2.5 min on the critical path.
+
+#### RR-57 follow-up: parallel test slices, and the split of `ecosystem-pptx-editor`
+
+Measured on the merge-queue run 39137781065 (21a1a8e0, 2026-10-18), `packages` took about 18 min. The wall time was the two
+longest sibling jobs: `ecosystem-pptx-editor` 18.3 min and `ecosystem-render` 16.8 min. Setup (container start, four checkouts,
+installs, build and link) is only about 95 s per job. The rest is one serial `node scripts/run-tests.mjs` per sibling:
+opf-render 885 s over 132 files, opf-pptx 872 s over 152 files (one file, `determinism.mjs`, is 205 s), opf-editor 105 s over 81
+files. Splitting the editor off the pptx job alone would have saved about two minutes, so the slow suites are sliced as well.
+
+| Job | Content | Slices |
+|---|---|---|
+| `ecosystem-render` | opf-render typecheck, validate, test, code and font checks, and its two browser steps | 3 |
+| `ecosystem-pptx` | opf-pptx typecheck, validate, test, code and font checks | 3 |
+| `ecosystem-editor` | opf-editor typecheck, validate, test | 1 |
+
+- **Same checks.** `scripts/ci-test-shards.mjs` reads each sibling's own `test` (or `test:contract`) script, a chain of
+  `npm run build && ... && node scripts/run-tests.mjs && ... checks`, and runs slice *i* of *n*: `npm run build` in every
+  slice, the slice's share of `run-tests.mjs --list` (one `node [--test] test/<file>` each), and every other command of the
+  chain once, in slice 1. A script it cannot read is never split: slice 1 runs it whole. `scripts/ci-test-shards.test.mjs` proves
+  the slices run exactly the chain's commands and every listed test once; `scripts/package-ecosystem-plan.test.mjs` proves the
+  plan; `scripts/ecosystem-scope.test.mjs` pins the matrix, the denominators and the aggregator.
+- **Balance.** `scripts/ci-test-weights.json` holds the seconds per test file from that run. The slices come from the sibling's
+  list and these weights (longest first, onto the lightest slice), so every job computes the same partition. A stale or missing
+  weight only unbalances the slices. To refresh it, read the `[i/n] node test/<file>` lines and their timestamps in a full-tier job log.
+- **Required name.** `packages` aggregates the jobs; a matrix job's result is success only when all its slices succeeded.
+  `candidate-gallery-results.mjs` lists the normal lane as `ecosystem-render`, `ecosystem-pptx`, `ecosystem-editor` and
+  `ecosystem-core`. The ruleset is untouched: it requires `packages`.
+- **Caching.** The npm download cache (`.npm-cache` in the workspace) is restored with a key that contains the hash of the three
+  siblings' lockfiles at the locked commits, so it cannot cross commits. pnpm's store was already cached. A sibling's `dist` is not
+  cached: the siblings build in under a second, and core's build is already reused through `reuse-build.mjs`.
 
 ### 3. Cross-repository model: bot-owned lock, Depends-On, test against main
 

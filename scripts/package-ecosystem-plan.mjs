@@ -4,6 +4,7 @@
 //   (no flag)            every step, in the original order: the local developer run and the unsharded reference.
 //   --siblings <a,b>     only the listed siblings' own suites (opf-render, opf-editor, opf-pptx), nothing of core's.
 //   --skip-siblings      everything except the siblings' own suites.
+//   --test-shard i/n  RR-57, with --siblings: run slice i of n of each sibling's test step (scripts/ci-test-shards.mjs)
 //   --core model|packed  RR-45 (opf#368, item 1), with --skip-siblings: one half of core's own steps, for the two core
 //                        shards. `model` is the model, geometry, fonts and CLI suites; `packed` packs the tarballs, installs
 //                        and checks the local consumer that the installed-browser checks then use. Together they are exactly
@@ -14,17 +15,25 @@
 //                        pull-request checks use `contract`; merge_group, push to main, the nightly run and manual runs use
 //                        `full` (scripts/ecosystem-scope.mjs, tierForEvent). A sibling at a commit that predates
 //                        `test:contract` runs its full `test` instead (resolveStep), so a stale lock only costs time.
+import { parseShard } from './ci-test-shards.mjs';
+
 export const siblingNames = ['opf-render', 'opf-editor', 'opf-pptx'];
 
 const coreTasks = ['test:skills', 'test:ecosystem', 'test:pagination', 'test:layout', 'test:lists', 'test:rich-text', 'test:data', 'test:fonts', 'test:image-treatments', 'test:placeholder-groups'];
 
 /** One step is {command, args, sibling?}: `sibling` names the checkout the command runs in (default: core). */
-function siblingSteps(name, tier = 'full') {
+function siblingSteps(name, tier = 'full', testShard = null) {
   const steps = [];
+  // RR-57: with a test shard (index/count), shard 1 runs every step, and each other shard only its slice of the `test` step
+  // (scripts/ci-test-shards.mjs); the slices together are the whole `test` script.
+  const first = !testShard || testShard.index === 1;
+  const shard = testShard ? { shard: testShard } : {};
   for (const task of ['typecheck', 'validate', 'test']) {
-    if (task === 'test' && tier === 'contract') steps.push({ command: 'npm', args: ['run', 'test:contract'], sibling: name, fallback: { command: 'npm', args: ['run', 'test'] } });
-    else steps.push({ command: 'npm', args: ['run', task], sibling: name });
+    if (task === 'test' && tier === 'contract') steps.push({ command: 'npm', args: ['run', 'test:contract'], sibling: name, fallback: { command: 'npm', args: ['run', 'test'] }, ...shard });
+    else if (task === 'test') steps.push({ command: 'npm', args: ['run', task], sibling: name, ...shard });
+    else if (first) steps.push({ command: 'npm', args: ['run', task], sibling: name });
   }
+  if (!first) return steps;
   if (name !== 'opf-editor') steps.push({ command: 'npm', args: ['run', 'test:code'], sibling: name });
   if (name === 'opf-render') steps.push({ command: 'npm', args: ['run', 'test:font-preparation'], sibling: name });
   if (name !== 'opf-editor') steps.push({ command: 'npm', args: ['run', 'test:font-variants'], sibling: name });
@@ -36,18 +45,22 @@ export const coreParts = ['model', 'packed'];
 const packedCommands = new Set(['pack:ecosystem', 'test:packed-ecosystem']);
 const corePartOf = (step) => (step.command === 'pnpm' && packedCommands.has(step.args[0]) ? 'packed' : 'model');
 
-/** Parse the shard flags: {siblings: string[] | null, skipSiblings: boolean, tier, core}. Throws on anything unknown. */
+/** Parse the shard flags: {siblings: string[] | null, skipSiblings: boolean, tier, core, testShard}. Throws on anything unknown. */
 export function parseShardArguments(argv) {
   let siblings = null;
   let skipSiblings = false;
   let tier = 'full';
   let core = null;
+  let testShard = null;
   for (let index = 0; index < argv.length; index++) {
     const arg = argv[index];
     if (arg === '--skip-siblings') skipSiblings = true;
     else if (arg === '--core' || arg.startsWith('--core=')) {
       core = arg === '--core' ? argv[++index] : arg.slice('--core='.length);
       if (!coreParts.includes(core)) throw new Error(`Unknown core part ${core}; expected ${coreParts.join(' or ')}`);
+    }
+    else if (arg === '--test-shard' || arg.startsWith('--test-shard=')) {
+      testShard = parseShard(arg === '--test-shard' ? argv[++index] : arg.slice('--test-shard='.length));
     }
     else if (arg === '--tier' || arg.startsWith('--tier=')) {
       tier = arg === '--tier' ? argv[++index] : arg.slice('--tier='.length);
@@ -62,18 +75,19 @@ export function parseShardArguments(argv) {
   }
   if (siblings && skipSiblings) throw new Error('--siblings and --skip-siblings cannot be combined');
   if (core && !skipSiblings) throw new Error('--core needs --skip-siblings');
-  return { siblings, skipSiblings, tier, core };
+  if (testShard && !siblings) throw new Error('--test-shard needs --siblings');
+  return { siblings, skipSiblings, tier, core, testShard };
 }
 
 export function planEcosystem(argv = []) {
-  const { siblings, skipSiblings, tier, core } = parseShardArguments(argv);
+  const { siblings, skipSiblings, tier, core, testShard } = parseShardArguments(argv);
   const runCore = siblings === null;
   const runSiblings = !skipSiblings;
   const steps = [];
   if (runCore) steps.push({ command: 'node', args: ['scripts/test-ecosystem-links.mjs'] });
   if (runSiblings) {
     // The original sibling order, whatever order --siblings lists them in.
-    for (const name of siblingNames) if (siblings === null || siblings.includes(name)) steps.push(...siblingSteps(name, tier));
+    for (const name of siblingNames) if (siblings === null || siblings.includes(name)) steps.push(...siblingSteps(name, tier, testShard));
   }
   if (runCore) {
     for (const task of coreTasks) steps.push({ command: 'pnpm', args: [task] });

@@ -112,10 +112,10 @@ test("the workflow runs the contract tier on pull requests and the full suites o
   // RR-57: the queue fast-forwards main to the commit its merge_group run tested, so a push run repeats the same SHA.
   assert.ok(!triggers.includes("\n  push:"), "no push-to-main trigger");
   // The tier is decided by tierForEvent and handed to every sibling shard; a shard cannot hard-code a depth.
-  assert.equal([...workflow.matchAll(/test-package-ecosystem\.mjs --siblings [^\n]*--tier \$\{\{ steps\.scope\.outputs\.tier \}\}/g)].length, 2);
+  assert.equal([...workflow.matchAll(/test-package-ecosystem\.mjs --siblings [^\n]*--tier \$\{\{ steps\.scope\.outputs\.tier \}\}/g)].length, 3);
   assert.doesNotMatch(workflow, /--tier (contract|full)\b/);
   // The required name stays: packages aggregates both explicitly selected lanes and runs even when one fails.
-  assert.match(workflow, /\n  packages:\n    needs: \[gallery, ecosystem-render, ecosystem-pptx-editor, ecosystem-core, candidate, control, installed-portability\]\n    if: always\(\)/);
+  assert.match(workflow, /\n  packages:\n    needs: \[gallery, ecosystem-render, ecosystem-pptx, ecosystem-editor, ecosystem-core, candidate, control, installed-portability\]\n    if: always\(\)/);
   // RR-45 (opf#368, item 1): ecosystem-core runs as exactly these three shards, none of which can be dropped by fail-fast.
   const core = workflow.slice(workflow.indexOf("\n  ecosystem-core:\n"), workflow.indexOf("\n  installed-portability:\n"));
   assert.match(core, /\n    strategy:\n      fail-fast: false\n      matrix:\n        shard: \[model, installed, registry\]\n/);
@@ -159,4 +159,24 @@ test("the registry shard installs the registry consumer on every change and gate
   assert.match(body, /steps\.scope\.outputs\.registry == 'true'/);
   assert.doesNotMatch(body, /test:registry-ecosystem|test-quote-layout-geometry|test-code-layout|test-metric/);
   assert.match(workflow, /name: Install the exact published registry packages and check the registry consumer\n        if: steps\.scope\.outputs\.run == 'true' && matrix\.shard == 'registry'\n/);
+});
+
+// RR-57: opf-render and opf-pptx run their serial suites as three parallel slices, opf-editor as one job. A slice that no job
+// runs would silently drop tests, so the matrix, the denominators and the sibling list must agree.
+test("the sibling jobs run every test slice: matrix shards match the --test-shard denominator, and the former combined job is gone", () => {
+  const workflow = readFileSync(new URL("../.github/workflows/ecosystem-ci.yml", import.meta.url), "utf8");
+  assert.doesNotMatch(workflow, /\n  ecosystem-pptx-editor:\n|needs: \[[^\]]*ecosystem-pptx-editor/, "the combined job was split into ecosystem-pptx and ecosystem-editor");
+  const section = (id, next) => workflow.slice(workflow.indexOf(`\n  ${id}:\n`), workflow.indexOf(`\n  ${next}:\n`) > 0 ? workflow.indexOf(`\n  ${next}:\n`) : undefined);
+  for (const [id, next, sibling] of [["ecosystem-render", "ecosystem-pptx", "opf-render"], ["ecosystem-pptx", "ecosystem-editor", "opf-pptx"]]) {
+    const job = section(id, next);
+    assert.match(job, /\n    strategy:\n      fail-fast: false\n      matrix:\n        shard: \[1, 2, 3\]\n/, `${id} runs three shards and none is dropped by fail-fast`);
+    assert.match(job, /\n    needs: gallery\n    if: needs\.gallery\.outputs\.candidate_gallery == ''\n/);
+    assert.ok(job.includes(`--siblings ${sibling} --tier \${{ steps.scope.outputs.tier }} --test-shard \${{ matrix.shard }}/3\n`), `${id} runs its slice of ${sibling}`);
+    assert.equal([...job.matchAll(/--test-shard/g)].length, 1);
+  }
+  const editor = section("ecosystem-editor", "ecosystem-core");
+  assert.ok(editor.includes("--siblings opf-editor --tier ${{ steps.scope.outputs.tier }}\n") && !editor.includes("--test-shard") && !editor.includes("strategy:"));
+  // Every sibling suite runs in exactly one family of jobs.
+  const runs = [...workflow.matchAll(/test-package-ecosystem\.mjs --siblings (\S+)/g)].map((match) => match[1]).sort();
+  assert.deepEqual(runs, ["opf-editor", "opf-pptx", "opf-render"]);
 });
