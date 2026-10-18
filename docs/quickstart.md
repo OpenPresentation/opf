@@ -188,8 +188,10 @@ fonts.
 line by line, not paragraph by paragraph:** it writes one text box for each
 wrapped line, so text you add or lengthen in PowerPoint or Keynote does not
 reflow into the next line, and a title that wraps is not the Title placeholder.
-For heavy text changes, edit the OPF source and export again. An opt-in native
-body mode is in progress and is not published yet. Shared
+For heavy text changes, edit the OPF source and export again. From opf-pptx and
+CLI 0.22.0, `opf convert deck.opf.json deck.pptx --body-text native` (`bodyText:
+'native'` in `toPptx`) is an opt-in mode that writes whole paragraphs and binds a
+wrapped title to the Title placeholder; see [when to choose it](cli.md#pptx-text-rr-88-rr-91). Shared
 headers and footers are written on the slide master or layout. The retained
 [Windows sample](evidence/rr-20-windows-current-2026-10-14/README.md) covers
 17 selected native cases and four actual UI operations; 41 of 58 cases were
