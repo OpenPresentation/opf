@@ -15,7 +15,7 @@ export const PPTX_PACKAGE = "@openpresentation/opf-pptx";
 export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.22.0", [PPTX_PACKAGE]: "^0.22.0" } as const;
 
 /** The first opf-pptx that reads `bodyText` and `slideNumberFields` (placeholder until the release is cut). An older one would ignore them silently. */
-export const PPTX_TEXT_OPTIONS_FROM = "0.21.0";
+export const PPTX_TEXT_OPTIONS_FROM = "0.22.0";
 
 const numbers = (version: string) => version.replace(/[-+].*$/, "").split(".").map((part) => Number.parseInt(part, 10) || 0);
 /** True when `version` is `minimum` or later (release numbers only; a prerelease counts as its release). */

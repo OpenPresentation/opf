@@ -21,7 +21,7 @@ const exportWith = (options, peer, flags = false) => runExport(deck, resolveExpo
 
 describe("pptx text options", () => {
   test("bodyText and slideNumbers are handed to toPptx under opf-pptx's option names", async () => {
-    const { peer, calls } = spy("0.21.0");
+    const { peer, calls } = spy("0.22.0");
     await exportWith({ bodyText: "native", slideNumbers: "static" }, peer);
     assert.equal(calls.length, 1);
     assert.equal(calls[0].bodyText, "native");
@@ -32,7 +32,7 @@ describe("pptx text options", () => {
   });
 
   test("without the options toPptx is called as before", async () => {
-    const { peer, calls } = spy("0.21.0");
+    const { peer, calls } = spy("0.22.0");
     await exportWith({}, peer);
     assert.equal("bodyText" in calls[0] || "slideNumberFields" in calls[0], false);
   });
@@ -48,7 +48,7 @@ describe("pptx text options", () => {
 
   test("an opf-pptx that predates them is refused, naming the flag, instead of ignoring it", async () => {
     const { peer, calls } = spy("0.20.4");
-    await assert.rejects(exportWith({ bodyText: "native" }, peer, true), (error) => error instanceof OPFApiError && error.code === "peer-too-old" && /--body-text native needs @openpresentation\/opf-pptx@0\.21\.0 or later; 0\.20\.4/.test(error.message));
+    await assert.rejects(exportWith({ bodyText: "native" }, peer, true), (error) => error instanceof OPFApiError && error.code === "peer-too-old" && /--body-text native needs @openpresentation\/opf-pptx@0\.22\.0 or later; 0\.20\.4/.test(error.message));
     await assert.rejects(exportWith({ slideNumbers: "live" }, peer), { code: "peer-too-old", message: /slideNumbers needs/ });
     assert.equal(calls.length, 0);
     // measured is the default, so an older opf-pptx still serves it.

@@ -15,7 +15,7 @@ let temp;
 const sites = {};
 before(async () => {
   temp = await realpath(await mkdtemp(path.join(tmpdir(), "opf-convert-text-")));
-  for (const [name, version] of [["new", "0.21.0"], ["old", "0.20.4"]]) {
+  for (const [name, version] of [["new", "0.22.0"], ["old", "0.20.4"]]) {
     const dir = path.join(temp, name);
     await cp(path.dirname(executable), path.join(dir, "dist"), { recursive: true });
     await installIsolatedCore(path.join(dir, "node_modules"));
@@ -73,7 +73,7 @@ describe("opf convert --body-text and --slide-numbers", () => {
   test("an opf-pptx that predates them is refused, naming the flag, not silently ignored", async () => {
     await fresh(sites.old);
     const failed = JSON.parse(run(sites.old, ["convert", "deck.opf.json", "old.pptx", "--body-text", "native"], 2).stderr);
-    assert.match(failed.error, /--body-text native needs @openpresentation\/opf-pptx@0\.21\.0 or later; 0\.20\.4 is installed/);
+    assert.match(failed.error, /--body-text native needs @openpresentation\/opf-pptx@0\.22\.0 or later; 0\.20\.4 is installed/);
     assert.equal((await pptxCalls(sites.old)).length, 0);
     run(sites.old, ["convert", "deck.opf.json", "old-measured.pptx", "--body-text", "measured"]);
     assert.equal((await pptxCalls(sites.old)).length, 1);
