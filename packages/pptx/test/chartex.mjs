@@ -8,6 +8,7 @@ import {readFileSync} from 'node:fs';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {catalogDisplay} from '@openpresentation/gallery';
+import {ENGINE_DEFAULT_COLOR_SCHEME} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from './helpers/default-catalog.mjs';
 import {CHART_TYPES, CHARTEX_NAMESPACES, chartTypeFromChartex, resolveChartType} from '../dist/chart-types.js';
 import {CHARTEX_CONTENT_TYPES, CHARTEX_RELATIONSHIP_TYPES, chartexPointColors, columnLetters, scottBinCount} from '../dist/chartex.js';
@@ -175,7 +176,9 @@ for (const id of chartexIds) {
     assert.match(axes[2][2], /^<cx:valScaling max="1" min="0"\/><cx:units unit="percentage"\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, 'percentage axis');
   }
   // Colours and text follow the classic chart: series fill, per-point fills for treemap tiles and waterfall signs, label colour and font.
-  const classicSeriesColor = classic.match(/<c:ser>[\s\S]*?<c:spPr><a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)[1];
+  // RR-89: a classic series that keeps a theme accent is a schemeClr there; the chartex part writes the same colour as sRGB.
+  const classicFirst = classic.match(/<c:ser>[\s\S]*?<c:spPr><a:solidFill><a:(?:srgbClr|schemeClr) val="([0-9A-Za-z]+)"/)[1];
+  const classicSeriesColor = /^accent\d$/.test(classicFirst) ? ENGINE_DEFAULT_COLOR_SCHEME[classicFirst].slice(1).toUpperCase() : classicFirst;
   const labelColor = classic.match(/<c:txPr>[\s\S]*?<a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)[1];
   // Box whiskers, medians and mean markers are drawn with the series line, in the label colour; other constructs have no series line.
   const seriesLine = id === 'box-and-whisker' ? `<a:ln w="9525"><a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill></a:ln>` : '';

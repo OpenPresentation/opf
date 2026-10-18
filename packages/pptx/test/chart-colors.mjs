@@ -2,8 +2,11 @@ import assert from 'node:assert/strict';
 import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {toPptx,fromPptx} from '../dist/index.js';
-import {colorContrast,chartPaletteForFill} from '@openpresentation/opf/composition';
+import {colorContrast,chartPaletteForFill,chartSeriesPalette,ENGINE_DEFAULT_COLOR_SCHEME} from '@openpresentation/opf/composition';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false});
+// RR-89: a series that keeps a theme accent is a schemeClr; the default scheme (cool-horizon) holds the colour it stands for.
+const themeHex=value=>ENGINE_DEFAULT_COLOR_SCHEME[value].replace('#','').toUpperCase();
+const paintColors=paint=>[...find(paint,'a:srgbClr').map(color=>color.val),...find(paint,'a:schemeClr').map(color=>themeHex(color.val))];
 const array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
 const find=(value,key)=>!value||typeof value!=='object'?[]:Array.isArray(value)?value.flatMap(item=>find(item,key)):Object.entries(value).flatMap(([name,child])=>name===key?array(child):find(child,key));
 const cases=[
@@ -26,9 +29,10 @@ for(const fixture of cases)for(const type of ['column','bar','line','area','pie'
  for(const style of labelStyles)for(const color of find(style,'a:srgbClr'))assert.equal(color.val,fixture.expected,`${type} ${fixture.surface}`);
  const series=find(root,'c:ser');assert.ok(series.length);
  let paints=0;
- for(const item of series)for(const style of find(item,'c:spPr')){
+ // A pie or doughnut series carries a default theme fill that its per-slice points replace: the slices are the paint.
+ for(const item of circular?find(root,'c:dPt'):series)for(const style of find(item,'c:spPr')){
   const paint=type.includes('line')?style['a:ln']?.['a:solidFill']:style['a:solidFill'];
-  for(const color of find(paint,'a:srgbClr')){paints++;if(fixture.surface.length===7)assert.ok(colorContrast('#'+color.val,fixture.surface)>=3,`${type} series ${color.val} against ${fixture.surface}`);}
+  for(const color of paintColors(paint)){paints++;if(fixture.surface.length===7)assert.ok(colorContrast('#'+color,fixture.surface)>=3,`${type} series ${color} against ${fixture.surface}`);}
  }
  assert.ok(paints>0,`${type}: every fixture must inspect actual native series/point paint`);
  const imported=await fromPptx(bytes);const charts=find(imported,'chart');assert.equal(charts.length,1);assert.deepEqual(charts[0].data,data,'Chart data remains editable/reimportable');
@@ -36,12 +40,12 @@ for(const fixture of cases)for(const type of ['column','bar','line','area','pie'
 }
 // RR-29: on a dark card the exported series colours stay distinguishable (two dark blues must not merge into one colour), and they are the shared palette function's colours, the ones opf-render draws.
 {
- const palette=['2874A6','1B4F72','5499C7','7BDBB2','3AC67A','24A89E','F59E0B','EF4444','8B5CF6','14B8A6','0F172A','64748B'].map(color=>'#'+color);
+ const palette=chartSeriesPalette(ENGINE_DEFAULT_COLOR_SCHEME);
  const lightness=hex=>{const c=[1,3,5].map(i=>Number.parseInt(hex.slice(i,i+2),16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);const y=.2126729*c[0]+.7151522*c[1]+.072175*c[2];return 116*(y>216/24389?Math.cbrt(y):(24389/27*y+16)/116)-16;};
  for(const surface of ['#334155','#1B1B1B','#011842']){
   const input={design:{background:'#000000',colorScheme:{id:'cool-horizon',dark1:'#FFFFFF',light1:'#FFFFFF',text:'#FFFFFF',dark2:surface,light2:surface}},slides:[{chart:{type:'column',data:{columns:['Quarter','Current','Baseline','Third'],rows:[['Q1',2,1,3],['Q2',3,2,1]]}}}]};
   const xml=new TextDecoder().decode(unzipSync(await toPptx(input))['ppt/charts/chart1.xml']);
-  const fills=[...xml.matchAll(/<c:ser>[\s\S]*?<c:spPr><a:solidFill><a:srgbClr val="([0-9A-F]{6})"/g)].map(match=>'#'+match[1]);
+  const fills=[...xml.matchAll(/<c:ser>[\s\S]*?<c:spPr><a:solidFill>(?:<a:srgbClr val="([0-9A-F]{6})"|<a:schemeClr val="(accent\d)")/g)].map(match=>'#'+(match[1]??themeHex(match[2])));
   assert.equal(fills.length,3,'three native series on '+surface);
   assert.equal(new Set(fills).size,3,'distinct native series colours on '+surface+': '+fills);
   for(const [a,b] of [[0,1],[1,2]])assert.ok(Math.abs(lightness(fills[a])-lightness(fills[b]))>=9,surface+': native series '+(a+1)+' and '+(b+1)+' are '+fills[a]+' and '+fills[b]+', too close in lightness');

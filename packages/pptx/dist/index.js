@@ -48,11 +48,12 @@ import {themeSlotColors, writeThemeColors, schemeColorValue, schemeBackgroundFil
 import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
+import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, chartPaletteForFill, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
+  catalogRecords, chartPaletteForFill, chartSeriesPalette, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
   ENGINE_DEFAULT_FONT_SCHEME, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
-  resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
+  resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
 import PptxGenJS from "../vendor/pptxgenjs/pptxgen.es.js";
@@ -198,21 +199,6 @@ const DIMENSION_PRESETS = Object.freeze({
   "9:16": Object.freeze({ widthInches: 7.5, heightInches: 40 / 3 }),
   a4: Object.freeze({ widthInches: 11.69, heightInches: 8.27 })
 });
-
-const CHART_COLORS = [
-  "2874A6",
-  "1B4F72",
-  "5499C7",
-  "7BDBB2",
-  "3AC67A",
-  "24A89E",
-  "F59E0B",
-  "EF4444",
-  "8B5CF6",
-  "14B8A6",
-  "0F172A",
-  "64748B"
-];
 
 // The `catalogs` option is core's registered catalogs (`Catalog[]`). A value that is no array is core's
 // OPFCatalogsOptionError (code `invalid-catalogs`) up front; core checks each entry where it resolves a reference.
@@ -2227,7 +2213,7 @@ async function addSlide(pptx, presentation, authoredSlide, slideIndex, context, 
     } else {
       // RR-34: a captioned item draws its media in item.box; the caption band follows as tagged text boxes linked to the media shape by name.
       const mediaNames = item.caption ? new Set([...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()]) : undefined;
-      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", tableAlignment: geometry.design.contentAlignment, direction: geometry.direction }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout);
+      await addPayload(slide, presentation, item.payload, region, item.path, { ...itemContext, composition: item.composition, contentAlignment: item.alignment ?? "left", tableAlignment: geometry.design.contentAlignment, direction: geometry.direction }, options, item.quoteLayout, item.codeLayout,item.metricLayout,item.timelineLayout, item.chart);
       if (item.caption) {
         const mediaName = item.field === 'video' ? `OPF media ${item.path} frame` : [...context.images.keys(), ...context.imagePlaceholders.keys(), ...context.chartHeadings.keys(), ...context.tableHeaders.keys()].find(name => !mediaNames.has(name));
         addCaption(slide, item, mediaName, itemContext, exportHelpers, (code, message) => new OPFPptxError(code, message, {path: item.caption.path}));
@@ -2295,7 +2281,7 @@ function fieldToType(field) {
   return field === "items" || field === "bullets" ? "list" : field;
 }
 
-async function addPayload(slide, presentation, payload, region, path, context, options, quoteLayout, codeLayout,metricLayout,timelineLayout) {
+async function addPayload(slide, presentation, payload, region, path, context, options, quoteLayout, codeLayout,metricLayout,timelineLayout,chartLayout) {
   const kind = inferPayloadKind(payload);
   switch (kind) {
     case "text":
@@ -2311,7 +2297,7 @@ async function addPayload(slide, presentation, payload, region, path, context, o
       addMediaPayload(slide, presentation, payload.video, region, path, context, options);
       break;
     case "chart":
-      addChartPayload(slide, payload.chart, region, context, options, path, presentation);
+      addChartPayload(slide, payload.chart, region, context, options, path, presentation, chartLayout);
       break;
     case "table":
       addTablePayload(slide, payload.table, region, context, options, path, presentation);
@@ -2694,7 +2680,7 @@ function applyChartTextSize(xml, size) {
     `<a:defRPr${/\bsz="[^"]*"/.test(attributes) ? attributes.replace(/\bsz="[^"]*"/, `sz="${size}"`) : `${attributes} sz="${size}"`}${close}>`));
 }
 
-function addChartPayload(slide, chart, region, context, options = {}, path = "chart", presentation) {
+function addChartPayload(slide, chart, region, context, options = {}, path = "chart", presentation, chartLayout) {
   const chartData = toPptxChartData(chart, context.chartexMode, presentation, path);
   if (!chartData.series) {
     // Never lose a chart silently: the placeholder frame stands in for it, and a diagnostic names the reason.
@@ -2734,8 +2720,15 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   context.chartFonts.set(objectName,{heading:context.fonts.heading,body:context.fonts.body});
   // FA-09: the chart's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker), applied before the chartex frame copies the head.
   if (typeof chart.alt === 'string') context.frameAlts.set(objectName, chart.alt);
-  const preferredPalette = CHART_COLORS.map(color=>`#${color}`);
-  const palette = chartPaletteForFill(panelFill, preferredPalette).map(color=>normalizeHex(color));
+  // RR-89: the series colours are core's chartSeriesPalette (accent1 to accent6 of the deck scheme, then their tints, with the chart's own
+  // `colors` over them), adjusted for the chart panel like the preview does. A colour that is still an unadjusted theme accent (or a
+  // `chart.colors` scheme slot or role) is written as a schemeClr, so re-theming in PowerPoint recolours the series.
+  const colorContext = {roles: context.roles, variables: context.variables};
+  const preferredPalette = chartSeriesPalette(context.colorScheme, chart.colors, colorContext);
+  const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette);
+  const palette = adjustedPalette.map(color=>normalizeHex(color));
+  const paletteSchemes = chartPaletteSchemes(chart.colors, preferredPalette, adjustedPalette, (reference, hex) => schemeColorValue(reference, `#${hex}`, context));
+  Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular});
   // FA-14: chart.highlight. A highlighted chart writes accent and muted colours over the series palette, and its data labels
   // contrast with those colours (src/chart-highlight.js).
   const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor, primary: `#${context.colors.accent}`,
@@ -2788,6 +2781,9 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
       ...(chartData.series.every(entry => entry.values.every(value => value == null || value >= 0)) ? {valAxisMinVal: 0} : {}),
       ...(chartData.series.some(entry => entry.values.some(value => value < 0)) && chartData.series.every(entry => entry.values.every(value => value == null || value <= 0)) ? {valAxisMaxVal: 0} : {})
     } : {}),
+    // RR-92: the value axis core composed (column, bar, line and area charts), as the preview draws it: PowerPoint and Keynote
+    // otherwise choose their own bounds and major unit. A 100% stacked chart's axis is a fraction.
+    ...(chartLayout?.valueAxis ? {valAxisMinVal: chartLayout.valueAxis.min, valAxisMaxVal: chartLayout.valueAxis.max, valAxisMajorUnit: chartLayout.valueAxis.majorUnit} : {}),
     barDir: chartData.barDir,
     barGrouping: chartData.barGrouping,
     // Right to left (RR-05): column, line and area charts reverse their categories (c:catAx orientation maxMin), which also moves the
@@ -4100,6 +4096,10 @@ async function normalizePptxZip(raw, context) {
       if(highlight){
         try{entries[chartPart]=encodeText(applyChartHighlight(decodeText(entries[chartPart]),highlight));}
         catch(error){throw new OPFPptxError('packaging-failed',`Chart highlight could not be written: ${errorMessage(error)}`);}
+      }else{
+        // RR-89: series that keep a theme accent (or a chart.colors scheme slot) are written as theme colours.
+        const {palette,paletteSchemes,circular}=context.chartHeadings.get(name);
+        if(paletteSchemes)entries[chartPart]=encodeText(applyChartSchemeColors(decodeText(entries[chartPart]),palette,paletteSchemes,{circular}));
       }
       // PptxGenJS hardcodes a black fallback in pie/doughnut label properties.
       // Normalize only our generated chart text styles; point/series fills stay intact.

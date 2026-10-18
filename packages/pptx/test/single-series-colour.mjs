@@ -14,14 +14,15 @@ async function chartXml(chart, design = {fontScheme: 'roboto'}) {
   return strFromU8(parts['ppt/charts/chart1.xml']);
 }
 const series = (xml) => [...xml.matchAll(/<c:ser>([\s\S]*?)<\/c:ser>/g)].map(([, body]) => body);
-const seriesFill = (body) => body.match(/<c:spPr>\s*<a:solidFill>\s*<a:srgbClr val="([0-9A-F]{6})"/)?.[1];
-const pointFills = (body) => [...body.matchAll(/<c:dPt>[\s\S]*?<a:srgbClr val="([0-9A-F]{6})"[\s\S]*?<\/c:dPt>/g)].map(([, color]) => color);
+// RR-89: a series that keeps a theme accent is a schemeClr (accentN); any other colour is sRGB.
+const seriesFill = (body) => body.match(/<c:spPr>\s*<a:solidFill>\s*<a:(?:srgbClr|schemeClr) val="([0-9A-Za-z]+)"/)?.[1];
+const pointFills = (body) => [...body.matchAll(/<c:dPt>[\s\S]*?<a:(?:srgbClr|schemeClr) val="([0-9A-Za-z]+)"[\s\S]*?<\/c:dPt>/g)].map(([, color]) => color);
 
 let checked = 0;
 for (const design of [{fontScheme: 'roboto'}, {fontScheme: 'roboto', theme: 'dark'}]) {
   // The colour of series 0 in a two-series chart is the colour the single series must have (preview: palette colour 0).
   const reference = seriesFill(series(await chartXml({type: 'column', data: two}, design))[0]);
-  assert.match(reference ?? '', /^[0-9A-F]{6}$/);
+  assert.match(reference ?? '', /^(?:[0-9A-F]{6}|accent\d)$/);
   for (const [type, data] of [['column', one], ['bar', one], ['stacked-column', one], ['column', signed], ['waterfall', signed]]) {
     const xml = await chartXml({type, data}, design);
     assert.match(xml, /<c:barChart>/, `${type}: a classic bar chart part`);
