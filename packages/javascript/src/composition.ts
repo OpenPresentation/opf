@@ -255,7 +255,7 @@ export interface ComposedItem {
   composition: Composition;
   /**
    * Resolved horizontal text alignment for this item: titleAlignment for the
-   * title, contentAlignment for every other item (slide design, deck design or host, theme design,
+   * title and the tag, contentAlignment for every other item (slide design, deck design or host, theme design,
    * layout design, then center for metrics or left for other items). Engines anchor native and preview text to this value.
    */
   alignment: 'left' | 'center' | 'right';
@@ -772,7 +772,8 @@ export interface FurniturePartBase {
   /**
    * The part's own box. A zone lays its parts out in one row, in the order image, text, socials, date (mirrored in a
    * right-to-left deck), aligned to the zone's edge with FURNITURE_GAP between parts and each part vertically centered
-   * in the row. A zone with one part keeps the full zone width for text.
+   * in the row. A zone with one part keeps the full zone width for text. The zones sit on the content inset
+   * (`composition.padding`); a zone beside empty zones takes their width (FURNITURE_ZONE_GUTTER between occupied zones).
    */
   box: LayoutBox;
   alignment: 'left' | 'center' | 'right';
@@ -853,6 +854,8 @@ export interface FurnitureLayout {
 
 /** Gap between the parts of one header/footer zone row, in reference pixels (scaled with the canvas's short edge). */
 export const FURNITURE_GAP = 12;
+/** Gap between the three header/footer zones, as a share of the canvas width. An empty zone's column is lent to its occupied neighbours. */
+export const FURNITURE_ZONE_GUTTER = .02;
 /** In a zone with other parts, an image is at most this share of the zone's width, so a wide logo cannot starve the text. */
 export const FURNITURE_IMAGE_SHARE = .4;
 /** Letters and digits of scripts written with spaces between words: a soft line break between two of them splits a word. */
@@ -897,11 +900,31 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
     if(!value||typeof value!=='object'||Array.isArray(value))throw new TypeError('Header/footer content must be an object or false.');
     configured=true;
     const zones:FurniturePart[][]=[];
+    // The three zones are columns on the content inset (the same left edge as the body), separated by a gutter. A zone
+    // with nothing in it lends its column to the occupied neighbours, so a lone `left` footer spans the content width
+    // and a footer with a left and a right zone shares the free centre. A centre zone stays centred on the slide.
+    const inset=Math.min((settings.padding??.08)*Math.min(width,height),width*.25),gutter=width*FURNITURE_ZONE_GUTTER,column=(width-2*inset-2*gutter)/3;
+    const slotOf=(index:number)=>furnitureRtl&&index!==1?2-index:index;
+    const hasContent=(zone:'left'|'center'|'right')=>{
+      const item=record(record(value)[zone]);
+      return item.image!==undefined||(typeof item.text==='string'?item.text.trim()!=='':item.text!==undefined)||item.socials===true||item.date===true||typeof item.date==='string';
+    };
+    const slots=(['left','center','right'] as const).map((zone,index)=>({slot:slotOf(index),occupied:hasContent(zone)})).sort((a,b)=>a.slot-b.slot);
+    const first=slots.findIndex(entry=>entry.occupied);
+    const interval=(slot:number):{x:number;width:number}=>{
+      const start=inset+slot*(column+gutter),end=start+column;
+      if(!slots[slot]!.occupied||first<0)return {x:start,width:column};
+      const before=slots.slice(0,slot).map(entry=>entry.occupied).lastIndexOf(true),after=slots.findIndex((entry,i)=>i>slot&&entry.occupied);
+      // Room taken from the empty slots on each side: all of them at the slide edge, half of the free gap between two zones.
+      const left=before<0?start-inset:(start-(inset+before*(column+gutter)+column)-gutter)/2,right=after<0?width-inset-end:(inset+after*(column+gutter)-end-gutter)/2;
+      const lend=slot===1?Math.min(left,right):undefined;
+      return {x:start-(lend??left),width:column+(lend??left)+(lend??right)};
+    };
     for(const [index,zone]of (['left','center','right'] as const).entries()){
       // Right to left: the authored `left` zone is drawn at the right and `right` at the left; `zone` keeps the authored name.
       // `alignment` is the physical edge the zone's text sits on (never flipped again by line direction).
       const side=furnitureRtl&&zone!=='center'?(zone==='left'?'right':'left'):zone;
-      const content=record(record(value)[zone]),path=`${root}.${zone}`,x=width*(.07+(furnitureRtl?2-index:index)*.3),zoneWidth=width*.26;
+      const content=record(record(value)[zone]),path=`${root}.${zone}`,{x,width:zoneWidth}=interval(slotOf(index));
       type PendingText={type:'text';field:FurniturePartBase['field'];text:string;generated:boolean;sourcePath:string|undefined;extras:FurnitureTextExtras;partPath:string;style:TextStyle};
       type PendingImage={type:'image';sourcePath:string;image:unknown;reference?:string;width:number;height:number};
       const pending:(PendingText|PendingImage)[]=[];
@@ -2226,7 +2249,7 @@ export interface TableLayout { rows: TableRowLayout[]; columnCount: number; heig
  * All dimensions are canvas pixels; minFontSize is an unscaled canvas size.
  */
 export function layoutTable(value: unknown, box: LayoutBox, options: TableLayoutOptions = {}): TableLayout {
-  const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale), requested = gridFontSize(15 * scale,minimum);
+  const scale = options.scale ?? 1, minimum = snapFontSizeUp((options.minFontSize ?? 16) * scale), requested = gridFontSize(contentNominalSize('table') * scale,minimum);
   if (![box.x,box.y,box.width,box.height,scale,minimum].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || scale <= 0 || minimum <= 0) throw new RangeError('Table dimensions, scale and font sizes must be finite and positive.');
   // RR-54: dataset tables are laid out from their inline copy, and a body cell measures its formatted number text.
   const inline = inlineTableData(value, options.presentation);
@@ -2234,9 +2257,10 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   if(grid.issues.length) throw new RangeError(`${grid.issues[0]!.path}: ${grid.issues[0]!.message}`);
   // Classify typed values before formatting (a numeric format may display a string). Never coerce authored numeric-looking strings.
   const numeric = new Set(grid.rows.flat().filter(cell => !cell.header && typeof cell.value === 'number' && Number.isFinite(cell.value)));
+  // A rich (TextRun[]) cell carries a number's styling, not its type: it does not make a column of numbers textual.
   const numericColumns = new Set(Array.from({length: grid.columnCount}, (_, column) => column).filter(column => {
     const body = grid.rows.flat().filter(cell => !cell.header && cell.column === column && cell.value !== null && cell.value !== undefined);
-    return body.length > 0 && body.every(cell => cell.colSpan === 1 && numeric.has(cell));
+    return body.some(cell => numeric.has(cell)) && body.every(cell => cell.colSpan === 1 && (numeric.has(cell) || Array.isArray(cell.value)));
   }));
   const formats = resolveTableData(inline).formats;
   for (const row of grid.rows) for (const cell of row) {
@@ -2248,27 +2272,32 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   const cells=grid.rows.flat().map(cell=>{
     const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
     const width=cellWidth*cell.colSpan-(padding.left+padding.right)*scale;
-    const style={fontFamily:options.fontFamily??'sans-serif',fontWeight:cell.header?700:400,italic:false,path:cell.valuePath};
-    const numericDefault = numeric.has(cell) || (cell.header && cell.colSpan === 1 && numericColumns.has(cell.column));
+    const style={fontFamily:options.fontFamily??'sans-serif',fontWeight:cell.header||cell.style.bold?700:400,italic:false,path:cell.valuePath};
+    const numericDefault = numeric.has(cell) || ((cell.header || Array.isArray(cell.value)) && cell.colSpan === 1 && numericColumns.has(cell.column));
     const alignment = cell.style.align ?? options.alignment ?? (numericDefault ? (options.direction === 'rtl' ? 'left' : 'right') : 'left');
     return {...cell,padding,width,textStyle:style,alignment};
   });
   const cellMinimum=(cell:typeof cells[number])=>Array.isArray(cell.value)?richMinimum(cell.value,requested,minimum):minimum;
-  const fitCell=(cell:typeof cells[number],height:number,min:number):TextFit|RichTextFit=>{
-    const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:Math.max(scale,height)};
+  // RR-90: every cell is set at one trial size (the table shrinks together toward the floor, see the loop below). A run's own
+  // fontSize stays relative to the nominal size, so `requested` is the reference and `trial` the size the cells are drawn at.
+  let trial=requested;
+  const cellSize=(cell:typeof cells[number])=>{const floor=cellMinimum(cell);return gridFontSize(Math.max(trial,floor),floor);};
+  const fitCell=(cell:typeof cells[number],height:number):TextFit|RichTextFit=>{
+    const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:Math.max(scale,height)},size=cellSize(cell);
     return Array.isArray(cell.value)
-      ? fitRichText(cell.value,textBox,requested,min,{style:cell.textStyle,...(options.codeFontFamily?{codeFontFamily:options.codeFontFamily}:{}),textMeasurement:options.textMeasurement,uniformLineHeight:true,direction:options.direction})
-      : fitText(flatten(cell.value),textBox,requested,min,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement),options.direction);
+      ? richTextLayouter(cell.value,textBox,requested,{style:cell.textStyle,...(options.codeFontFamily?{codeFontFamily:options.codeFontFamily}:{}),textMeasurement:options.textMeasurement,uniformLineHeight:true,direction:options.direction},minimum)(size)
+      : fitText(flatten(cell.value),textBox,size,size,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement),options.direction);
   };
   const textHeight=(fit:TextFit|RichTextFit)=>'height' in fit?fit.height:fit.lines.length*fit.lineHeight;
   const required=(cell:typeof cells[number],natural:boolean)=>{
-    const floor=cellMinimum(cell),size=gridFontSize(natural?Math.max(requested,floor):floor,floor);
+    const floor=cellMinimum(cell),size=gridFontSize(natural?Math.max(trial,floor):floor,floor);
     const textBox={x:0,y:0,width:Math.max(scale,cell.width),height:scale};
     const fit=Array.isArray(cell.value)
       ?richTextLayouter(cell.value,textBox,requested,{style:cell.textStyle,...(options.codeFontFamily?{codeFontFamily:options.codeFontFamily}:{}),textMeasurement:options.textMeasurement,uniformLineHeight:true},minimum)(size)
       :fitText(flatten(cell.value),textBox,size,size,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement));
     return textHeight(fit)+(cell.padding.top+cell.padding.bottom)*scale;
   };
+  const place=():TableLayout=>{
   const natural=Array(grid.rowCount).fill(0) as number[],needed=Array(grid.rowCount).fill(0) as number[];
   for(const cell of cells)if(cell.rowSpan===1){natural[cell.row]=Math.max(natural[cell.row]!,required(cell,true));needed[cell.row]=Math.max(needed[cell.row]!,required(cell,false));}
   // Satisfy every spanning cell over its full rectangle. Added height can only
@@ -2293,13 +2322,21 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   for(const cell of cells){
     const cellBox={x:box.x+(options.direction==='rtl'?columnCount-cell.column-cell.colSpan:cell.column)*cellWidth,y:ys[cell.row]!,width:cell.colSpan*cellWidth,height:ys[cell.row+cell.rowSpan]!-ys[cell.row]!};
     const available=cellBox.height-(cell.padding.top+cell.padding.bottom)*scale;
-    const fit=fitCell(cell,available,minimum),height=textHeight(fit);
+    const fit=fitCell(cell,available),height=textHeight(fit);
     const offset=cell.style.verticalAlign==='bottom'?Math.max(0,available-height):cell.style.verticalAlign==='middle'?Math.max(0,(available-height)/2):0;
     const textBox={x:cellBox.x+cell.padding.left*scale,y:cellBox.y+cell.padding.top*scale+offset,width:Math.max(scale,cell.width),height:Math.max(scale,available-offset)};
     overflow ||= cell.width<=0||available<=0||fit.overflow;
     rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{})});
   }
   return {rows,columnCount,height:sum(heights),overflow};
+  };
+  // Largest size first, one reference pixel at a time: the first size at which the text and rows fit the box is the table's size.
+  for(let step=0;;step++){
+    const raw=requested-step*scale,last=step===64||raw<=minimum;
+    trial=last?snapFontSizeUp(minimum):gridFontSize(raw,minimum);
+    const layout=place();
+    if(last||!layout.overflow)return layout;
+  }
 }
 function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string): boolean {
   return box.width <= 0 || box.height <= 0 || layoutTable(value,box,{scale,minFontSize:settings.minFontSize,fontFamily:options.fontFamilies?.body,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),textMeasurement:options.textMeasurement,path,presentation:options.presentation}).overflow;
@@ -2433,11 +2470,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const rasterPadding=(options.textRasterPadding??1)*scale;
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Text raster padding must be finite and nonnegative.');
   // One alignment resolution for placement, internal payload layouts and consumers.
-  // A cover (no body payload) has no content region, so its tag and subtitle belong to the heading group and
-  // follow titleAlignment; only a slide's own design.contentAlignment keeps them apart. Set once cover detection has run.
+  // The tag (eyebrow) sits over the title, so it follows titleAlignment on every slide (left when none is resolved,
+  // like the title). A cover (no body payload) has no content region, so its subtitle also belongs to the heading group.
+  // Only a slide's own design.contentAlignment keeps them apart. Set once cover detection has run.
   let coverGroup = false;
   const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
-    (field === 'title' || (coverGroup && (field === 'tag' || field === 'subtitle') && hints.sources.contentAlignment !== 'slide')
+    (field === 'title' || ((field === 'tag' || (coverGroup && field === 'subtitle')) && hints.sources.contentAlignment !== 'slide')
       ? hints.titleAlignment : hints.contentAlignment) ?? (field === 'metric' ? 'center' : 'left');
   // The tag (eyebrow) takes the accent family when the font scheme defines one; the quote body does the same in layoutQuote.
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({

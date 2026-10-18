@@ -1,0 +1,84 @@
+{
+ "$schema": "https://openpresentation.org/schema/opf/v1",
+ "name": "RR first-use repro",
+ "design": {
+  "footer": {
+   "left": {
+    "text": "Source: Company filings, FY2026 Q3 earnings release, analyst consensus (Bloomberg, 2026-10-01) and internal finance dashboard exports; see appendix B for definitions."
+   },
+   "right": {
+    "text": "{{slide.number}} / {{deck.slideCount}}"
+   }
+  }
+ },
+ "slides": [
+  {
+   "layout": "metrics",
+   "tag": "Q3 results",
+   "title": "Revenue is up across the board",
+   "blocks": [
+    {
+     "metric": {
+      "value": "513",
+      "label": "Accounts"
+     }
+    },
+    {
+     "metric": {
+      "value": "$4.2M",
+      "label": "Revenue"
+     }
+    },
+    {
+     "metric": {
+      "value": "92%",
+      "label": "Retention"
+     }
+    }
+   ]
+  },
+  {
+   "title": "What changed",
+   "blocks": [
+    {
+     "items": [
+      "Enterprise renewals closed two weeks early",
+      "Churn fell for the third quarter running",
+      "Pricing change landed without discounting"
+     ]
+    },
+    {
+     "table": {
+      "columns": [
+       "Segment",
+       "Q2",
+       "Q3"
+      ],
+      "rows": [
+       [
+        "Enterprise",
+        4.1,
+        4.9
+       ],
+       [
+        "Mid-market",
+        2.2,
+        2.6
+       ],
+       [
+        "SMB",
+        1.4,
+        1.5
+       ],
+       [
+        "Other",
+        0.3,
+        0.2
+       ]
+      ]
+     }
+    }
+   ]
+  }
+ ]
+}
