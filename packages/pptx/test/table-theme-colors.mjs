@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
+import {resolveColorRoles} from '@openpresentation/opf/composition';
 import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {nativeTableBytes} from './table-values.js';
 import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
@@ -106,7 +107,7 @@ for (const record of records.colorSchemes) {
       }
       assert.equal(cell.fill.val, r === 0 ? 'accent1' : (dark ? 'tx2' : 'bg2'), `${where} fill role`);
       assert.ok(edgeColors(cell).every(color => color.kind === 'srgb'), `${where} neutral literal borders`);
-      assert.deepEqual(edgeColors(cell).map(color => color.val), Array(4).fill(dark ? '475569' : 'CBD5E1'));
+      assert.deepEqual(edgeColors(cell).map(color => color.val), Array(4).fill(resolveColorRoles(record, {variant: {background: slot ?? 'dark2'}}).border.slice(1)), 'structural borders are the scheme-derived neutral (tx1 over bg1 of the slide variant)');
       if (r > 0) assert.equal(cell.color.val, dark ? 'bg1' : 'tx1', `${where} body text pairs with the surface`);
       else assert.match(cell.color.val, /^(bg1|tx1)$/, `${where} header text is light1 or dark1`);
     }

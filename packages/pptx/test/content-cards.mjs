@@ -20,7 +20,7 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
     assert.equal(style['a:prstGeom'].prst,'roundRect');
     const radius=8*Math.min(dimensions.width,dimensions.height)/720,adjust=Number(style['a:prstGeom']['a:avLst']['a:gd'].fmla.split(' ')[1]);
     assert.ok(Math.abs(adjust/100000*Math.min(box.width,box.height)-radius)<.003);
-    assert.equal(style['a:solidFill']['a:srgbClr'].val,'F8FAFC');assert.equal(style['a:ln']['a:solidFill']['a:srgbClr'].val,'CBD5E1','card edge uses the neutral structural rule');
+    assert.equal(style['a:solidFill']['a:srgbClr'].val,'F8FAFC');assert.equal(style['a:ln']['a:solidFill']['a:srgbClr'].val,'CCCCCC','card edge uses the neutral structural rule');
     assert.equal(style['a:ln']['a:solidFill']['a:srgbClr']['a:alpha'],undefined,'neutral card edge stays opaque despite accent alpha');
     if(alpha)assert.ok(Math.abs(Number(style['a:solidFill']['a:srgbClr']['a:alpha'].val)-128/255*100000)<1);
   }
