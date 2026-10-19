@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.22.0 (2026-10-19)
+
+- RR-93: table cells take a `bold` style, so a number cell can be bold without rich runs, which dropped the column's number format and alignment. `setTableCellStyle(editor, tablePath, cell, { bold: true })` sets it (`null` removes it, a non-boolean is refused), a table style keeps it, and the design panel's table section has a Bold checkbox beside the cell fill and alignment. Needs core 0.22.0 (`TableCellStyle.bold`); the core floor is now `^0.22.0`.
+- RR-95: README note that the chart options panel edits `highlight` as its only color-related setting and the editor has no `chart.colors` control yet (a known gap); `chart.colors` is set in the document directly.
+- RR-87: the example playground forwards a refused canvas commit to autosave, so an invalid active draft reports a persistence error and still warns before leaving even when the stored document is unchanged. This changes the example host integration only; library APIs and npm payloads are unchanged.
+
 ## 0.20.4 (2026-10-17)
 
 - Bind design image uploads to their original source, form and panel lifetime so navigation, edits or destruction cannot redirect a delayed upload.
