@@ -91,11 +91,11 @@
     },
     "themes": {
       "mode": "mirror",
-      "records": 4,
-      "contentSha256": "5af95e3e353857bb49a2c303e66b99d74d884210070baac0b68291aad90fa8d5",
+      "records": 3,
+      "contentSha256": "85e3ea03a8ad179ebf243b17f52fd76053238dac3d161299cf45797a3c8c9730",
       "gallery": {
-        "records": 4,
-        "contentSha256": "5af95e3e353857bb49a2c303e66b99d74d884210070baac0b68291aad90fa8d5"
+        "records": 3,
+        "contentSha256": "85e3ea03a8ad179ebf243b17f52fd76053238dac3d161299cf45797a3c8c9730"
       }
     },
     "tones": {

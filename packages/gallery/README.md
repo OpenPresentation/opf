@@ -125,12 +125,23 @@ patch is held to the 2.x release below it.
 ## Where the records come from
 
 - **Layouts** are written here, in `catalog/layouts/`: one short `opf-layout/v2` record per layout, reviewed as code.
-- **The other kinds** (themes, colour and font schemes, narratives, audiences, purposes, tones and the display kinds) are
+- **Themes** carry `variants` from 4.0.0 (below), written here with the theme records.
+- **The other kinds** (colour and font schemes, narratives, audiences, purposes, tones and the display kinds) are
   unchanged from 1.x: the pinned snapshot of the catalog pptx.gallery published at
   `https://www.pptx.gallery/<kind>/index.json`, with the pptx.gallery commit in `catalog/manifest.json`.
 - `scripts/sync-gallery-catalog.mjs` took the 1.x records from a pptx.gallery checkout (`npm run sync`). pptx.gallery
   publishes the 1.x layouts, so a sync now refuses to run: it would remove the 28 layouts. pptx.gallery reads its records
   from this package from 2.0.0, and the sync is retired with that change.
+
+## Theme variants
+
+A theme record has a `variants` list: `{ "id", "name", "variant" }`, where `variant` is the value of `design.variant` (from
+OPF core 0.23.0): a background slot (`"light1"`, `"light2"`, `"dark1"`, `"dark2"`) or `{ "background", "accents" }` with a
+permutation of `accent1` to `accent6` to reorder the accents. A variant is a map over the theme's one color scheme, as
+PowerPoint's color map is, never a second scheme: dark is the same twelve slots with the text and background roles swapped.
+Every theme offers `light`, `light-alt`, `dark` and `dark-alt`; the variant whose background is the theme's own `background`
+is the theme's look (Minimal's own is `dark2`, so its `dark` is `dark2`). A host applies a variant by writing its `variant`
+value to `design.variant`. There is no separate dark theme: the `dark` theme of 3.x is the `dark` variant of any theme.
 
 ## Contributing a layout
 

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- **Breaking: the `dark` theme is removed; dark is a variant of every theme.** Core 0.23.0 adds `design.variant`, a map over a deck's one color scheme (light1, light2, dark1, dark2, with an optional accent order). The `minimal`, `classic` and `bold` themes gain `variants` (`light`, `light-alt`, `dark`, `dark-alt`, each the value of `design.variant`), and the separate `dark` theme (the `boost` colors with the `seaford` fonts on `dark1`) is gone: a document that names `design.theme: "dark"` is an unknown theme (`opf/unresolved-reference`). Replace it with a theme and its dark variant, plus `colorScheme: "boost"` and `fontScheme: "seaford"` if the boost look is wanted. A removed id is a major release, so this is 4.0.0. No other record or drawing changes; `CATALOG_SCHEMA` stays 3.
+- Development and CI use the published engines: `@openpresentation/opf` and `@openpresentation/opf-render` 0.23.0 replace the 0.19 pins and the one-release 3.0.0 bootstrap, which does nothing for any other gallery version. Core 0.23.0 derives borders, gridlines, axis lines, chart text and code colors from the color scheme, so seven layout previews are redrawn with `npm run previews` (this major release is where a redraw is allowed): chart, chart-beside, code, dashboard, table, table-beside and timeline. `previews/layouts/index.json` records their new sizes. No other record's drawing changes.
+- The tests validate every theme's `variants[].variant` with core 0.23.0's `normalizeColorVariant` and `isColorVariant` (`@openpresentation/opf/composition`) instead of a hand-written shape check.
+
 ## 3.0.0 (2026-10-13)
 
 - Canonicalize the bootstrap temporary root on macOS before strict artifact checks, so the system `/var` alias does not reject valid merged-source builds. Source-child symlinks remain rejected; release metadata and runtime bytes are unchanged.

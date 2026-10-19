@@ -9,5 +9,47 @@
   "colorScheme": "cool-horizon",
   "description": "A clean, minimalistic theme with a focus on simplicity and readability. Ideal for professional, straightforward presentations.",
   "fontScheme": "aptos",
-  "dimensions": "widescreen"
+  "dimensions": "widescreen",
+  "variants": [
+    {
+      "id": "light",
+      "name": "Light",
+      "variant": "light1"
+    },
+    {
+      "id": "light-alt",
+      "name": "Light alt",
+      "variant": {
+        "background": "light1",
+        "accents": [
+          "accent6",
+          "accent5",
+          "accent4",
+          "accent1",
+          "accent3",
+          "accent2"
+        ]
+      }
+    },
+    {
+      "id": "dark",
+      "name": "Dark",
+      "variant": "dark2"
+    },
+    {
+      "id": "dark-alt",
+      "name": "Dark alt",
+      "variant": {
+        "background": "dark2",
+        "accents": [
+          "accent6",
+          "accent5",
+          "accent4",
+          "accent1",
+          "accent3",
+          "accent2"
+        ]
+      }
+    }
+  ]
 }

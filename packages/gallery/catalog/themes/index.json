@@ -3,7 +3,7 @@
   "kind": "themes",
   "version": "1",
   "description": "Catalog of themes available in the openpresentation.org catalog. Each entry is a lightweight summary; full theme records live in the per-id JSON files alongside this index.",
-  "contentSha256": "5af95e3e353857bb49a2c303e66b99d74d884210070baac0b68291aad90fa8d5",
+  "contentSha256": "85e3ea03a8ad179ebf243b17f52fd76053238dac3d161299cf45797a3c8c9730",
   "records": [
     {
       "id": "minimal",
@@ -16,12 +16,6 @@
       "name": "Classic",
       "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
       "file": "classic.json"
-    },
-    {
-      "id": "dark",
-      "name": "Dark",
-      "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
-      "file": "dark.json"
     },
     {
       "id": "bold",

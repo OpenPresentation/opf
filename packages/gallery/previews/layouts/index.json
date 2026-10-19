@@ -81,7 +81,7 @@
     {
       "id": "scorecard",
       "file": "scorecard.svg",
-      "bytes": 3397
+      "bytes": 3297
     },
     {
       "id": "image",
@@ -101,12 +101,12 @@
     {
       "id": "chart",
       "file": "chart.svg",
-      "bytes": 6070
+      "bytes": 4686
     },
     {
       "id": "chart-beside",
       "file": "chart-beside.svg",
-      "bytes": 6242
+      "bytes": 6010
     },
     {
       "id": "table",
@@ -116,7 +116,7 @@
     {
       "id": "table-beside",
       "file": "table-beside.svg",
-      "bytes": 5163
+      "bytes": 5521
     },
     {
       "id": "code",
@@ -131,7 +131,7 @@
     {
       "id": "dashboard",
       "file": "dashboard.svg",
-      "bytes": 10799
+      "bytes": 9222
     },
     {
       "id": "team",

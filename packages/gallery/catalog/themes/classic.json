@@ -9,5 +9,47 @@
   "colorScheme": "cool-horizon",
   "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
   "fontScheme": "tenorite",
-  "dimensions": "widescreen"
+  "dimensions": "widescreen",
+  "variants": [
+    {
+      "id": "light",
+      "name": "Light",
+      "variant": "light1"
+    },
+    {
+      "id": "light-alt",
+      "name": "Light alt",
+      "variant": {
+        "background": "light1",
+        "accents": [
+          "accent6",
+          "accent5",
+          "accent4",
+          "accent1",
+          "accent3",
+          "accent2"
+        ]
+      }
+    },
+    {
+      "id": "dark",
+      "name": "Dark",
+      "variant": "dark1"
+    },
+    {
+      "id": "dark-alt",
+      "name": "Dark alt",
+      "variant": {
+        "background": "dark1",
+        "accents": [
+          "accent6",
+          "accent5",
+          "accent4",
+          "accent1",
+          "accent3",
+          "accent2"
+        ]
+      }
+    }
+  ]
 }
