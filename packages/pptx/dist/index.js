@@ -52,7 +52,7 @@ import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attac
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, chartPaletteForFill, chartSeriesPalette, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
+  catalogRecords, chartPaletteForFill, chartSeriesPalette, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
   ENGINE_DEFAULT_FONT_SCHEME, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
@@ -2695,17 +2695,17 @@ async function addLogo(slide, presentation, logo, slideIndex, slideContext, cont
   slide.addImage({...resolved, objectName: logoName(), ...region, altText: assetAlt(logo.source, presentation) ?? 'Logo'});
 }
 
-// FF-62: chart text is one size. The preview draws every chart label (axis, legend, data label) at
-// max(14, composition.minFontSize ?? 16) px scaled by the slide's shorter side over 720 px (renderer charts.js, `fontPx`),
-// the readability floor: 12 pt on a 13.33 x 7.5 in slide. The export writes that size, in hundredths of a point (DrawingML `sz`).
-// RR-16: core composes every font size on PowerPoint's 0.01 pt grid (1/75 px), so the preview draws the grid size, not the raw
-// product: the floor rounds up (core `snapFontSizeUp`) and an unfloored request of 14 px rounds down (`snapFontSizeDown`).
-// Math.round differed from the preview by 0.01 pt on slide sizes whose scale is not a whole number (A4, Letter, 16:10).
-function chartTextSize(context) {
+// FF-62, RR-90: chart text is one size, core's `chartTextSize` for the chart's box: 20 px at the 1280 x 720 reference (15 pt on a 13.33 x 7.5 in
+// slide), shrunk only when the box is small (at most 1/18 of its height and 1/30 of its width, whole pixels) and never below
+// `composition.minFontSize` (default 16), scaled by the slide's shorter side over 720 px. The preview (opf-render charts.js) and core's value-axis
+// density call the same function with the same inputs, so the axis core composed matches the text drawn. The export writes the size in hundredths
+// of a point (DrawingML `sz`) on core's 0.01 pt grid, as core composes every font size (RR-16): the request rounds down, never below the
+// grid-rounded floor (core `gridFontSize`, `snapFontSizeUp(floor)` against `snapFontSizeDown(request)`).
+function chartTextHundredths(context, region) {
   const scale = Math.min(context.dimensions.widthInches, context.dimensions.heightInches) * 96 / 720;
   const floor = context.composition?.minFontSize ?? 16;
-  const hundredths = Math.max(14, floor) * scale * 75;
-  return floor >= 14 ? Math.ceil(hundredths - 1e-6) : Math.floor(hundredths + 1e-6);
+  const px = coreChartTextSize({width: region.w * 96, height: region.h * 96, scale, minFontSize: floor});
+  return Math.max(Math.ceil(floor * scale * 75 - 1e-6), Math.floor(px * scale * 75 + 1e-6));
 }
 
 // Every c:txPr of a generated classic chart carries the chart text size: PptxGenJS writes no size on the legend (PowerPoint's
@@ -2739,7 +2739,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const fill = {color:normalizeHex(panelFill),transparency};
   const objectName = `OPF chart ${context.chartHeadings.size + 1}`;
   const circular = chartData.type === 'pie' || chartData.type === 'doughnut';
-  const textSize = chartTextSize(context);
+  const textSize = chartTextHundredths(context, region);
   // RR-54: the columns' number formats (Excel codes per exported series) for the caches, labels, value axis and workbook.
   // The value axis shows the first plotted series' format (General when it has none), as the preview does.
   // A combo chart's secondary value axis shows its first series' format (FA-15).
