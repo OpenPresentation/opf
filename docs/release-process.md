@@ -186,7 +186,7 @@ train: `release-train.mjs` has it in `INDEPENDENT_PACKAGES` (repository `gallery
   published by hand. Against 0.0.1 the stability check runs as a major release and reports no changed record.
 
 From OPF 0.19, core and the CLI consume the independently published Gallery package: their Node defaults register
-`gallery`, and core has no `/catalog` subpath. OPF 0.19 used Gallery 2; OPF 0.20 uses Gallery 3.
+`gallery`, and core has no `/catalog` subpath. OPF 0.19 used Gallery 2; OPF 0.20 uses Gallery 3; this checkout depends on Gallery `^4.0.0` (RR-96: theme `variants`, no `dark` theme).
 The current ranges and exact verified set are in the package manifests and [release-plan.json](../release-plan.json).
 A core or CLI release needs a Gallery version its range accepts on npm first. A reviewed registry-adoption PR
 updates those ranges and the authentic lockfile after independent publication verification. Stable release

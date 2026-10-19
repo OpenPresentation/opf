@@ -58,6 +58,46 @@ describe("basic presentation validation entry points", () => {
   });
 });
 
+describe("theme record variants (gallery 4)", () => {
+  const theme = { $schema: "https://openpresentation.org/schema/opf-theme/v1", id: "custom", name: "Custom" };
+  const accents = ["accent2", "accent1", "accent3", "accent4", "accent5", "accent6"];
+
+  test("variants hold the same values as design.variant, the slot string or the ColorVariant object", () => {
+    const variants = [
+      { id: "light", name: "Light", variant: "light1" },
+      { id: "dark-alt", name: "Dark alt", variant: { background: "dark2", accents } },
+    ];
+    assert.equal(validateCatalogRecord("themes", { ...theme, variants }).valid, true);
+    assert.equal(validateCatalogRecord("themes", { ...theme, variants: [] }).valid, true);
+    assertPresentationValid({ ...doc, design: { variant: variants[1].variant } });
+  });
+
+  test("a variant needs an id, a name and a variant, and the variant must be a valid design.variant", () => {
+    for (const variants of [
+      [{ id: "dark", name: "Dark" }],
+      [{ id: "dark", variant: "dark1" }],
+      [{ name: "Dark", variant: "dark1" }],
+      [{ id: "Dark", name: "Dark", variant: "dark1" }],
+      [{ id: "dark", name: "Dark", variant: "dark" }],
+      [{ id: "dark", name: "Dark", variant: { accents } }],
+      [{ id: "dark", name: "Dark", variant: { background: "dark1", accents: ["accent1"] } }],
+      [{ id: "dark", name: "Dark", variant: "dark1", extra: true }],
+    ]) {
+      assert.equal(validateCatalogRecord("themes", { ...theme, variants }).valid, false, JSON.stringify(variants));
+    }
+    assert.equal(validateCatalogRecord("themes", { ...theme, variants: "dark1" }).valid, false);
+  });
+
+  test("every theme record the gallery publishes validates, variants included", () => {
+    for (const [id, record] of Object.entries(gallery.themes)) {
+      const result = validateCatalogRecord("themes", { $schema: theme.$schema, id, ...record });
+      assert.equal(result.valid, true, `${id}: ${JSON.stringify(result.findings, null, 2)}`);
+    }
+    assert.ok(Object.values(gallery.themes).every((record) => Array.isArray(record.variants) && record.variants.length > 0), "gallery 4 themes carry variants");
+    assert.equal("dark" in gallery.themes, false, "gallery 4 has no dark theme");
+  });
+});
+
 function assertPresentationValid(value) {
   const result = checked(value, { only: ["format"] });
   assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2));

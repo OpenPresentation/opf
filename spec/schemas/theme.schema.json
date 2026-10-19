@@ -22,7 +22,6 @@
       "examples": [
         "minimal",
         "classic",
-        "dark",
         "bold"
       ]
     },
@@ -32,7 +31,6 @@
       "examples": [
         "Minimal",
         "Classic",
-        "Dark",
         "Bold"
       ]
     },
@@ -41,7 +39,7 @@
       "description": "One-sentence positioning of the theme — when to reach for it.",
       "examples": [
         "A clean, minimalist theme for professional, straightforward presentations.",
-        "A rich dark-mode theme with bold contrast and modern style."
+        "A vibrant, high-energy theme with bold colors for presentations that need to stand out."
       ]
     },
     "description": {
@@ -65,6 +63,20 @@
     },
     "background": {
       "$ref": "#/$defs/ThemeBackground"
+    },
+    "variants": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ThemeVariant"
+      },
+      "description": "The color variants the theme offers (OPF 0.23), for example light, light-alt, dark and dark-alt: named values of design.variant over the theme's one color scheme, so a dark deck is a variant of a theme and not a theme of its own. A picker lists them by name; choosing one sets design.variant (or a slide's design.variant) to the entry's 'variant'. A document stores that value and never the id, so a variant needs no record and the theme does not change when its variants do. The entry ids are unique within a theme.",
+      "examples": [
+        [
+          { "id": "light", "name": "Light", "variant": "light1" },
+          { "id": "dark", "name": "Dark", "variant": "dark1" },
+          { "id": "dark-alt", "name": "Dark alt", "variant": { "background": "dark1", "accents": ["accent2", "accent1", "accent3", "accent4", "accent5", "accent6"] } }
+        ]
+      ]
     },
     "dimensions": {
       "type": "string",
@@ -192,6 +204,33 @@
     }
   },
   "$defs": {
+    "ThemeVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "variant"],
+      "description": "One named color variant of a theme.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$",
+          "description": "The variant's id within the theme, lowercase kebab-case.",
+          "examples": ["light", "light-alt", "dark", "dark-alt"]
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable variant name shown in pickers.",
+          "examples": ["Light", "Light alt", "Dark", "Dark alt"]
+        },
+        "variant": {
+          "description": "The value design.variant takes when the variant is chosen: a background slot ('light1', 'light2', 'dark1', 'dark2'; the same as { background: slot }) or the ColorVariant object of opf.schema.json, which adds an accent order.",
+          "oneOf": [
+            { "$ref": "#/$defs/ThemeBackgroundSlot" },
+            { "$ref": "https://openpresentation.org/schema/opf/v1#/$defs/ColorVariant" }
+          ],
+          "examples": ["dark1", { "background": "light1", "accents": ["accent6", "accent5", "accent4", "accent1", "accent3", "accent2"] }]
+        }
+      }
+    },
     "ThemeBackgroundSlot": {
       "type": "string",
       "description": "PowerPoint theme-controlled slide background slot from the active color scheme. These are slots, not assumptions about actual colors: light1 is usually white and dark1 is usually black by convention, but the color scheme controls the real values.",

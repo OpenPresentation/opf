@@ -321,7 +321,7 @@ const FACTORS = [
   {id: 'socials', levels: ['none', 'profiles'], slots: 1}
 ];
 assert.equal(FACTORS.length, 14, 'the matrix covers the 14 gallery dimensions');
-assert.equal(FACTORS[1].levels.length, 4, 'the catalog has four themes');
+assert.equal(FACTORS[1].levels.length, 3, 'the catalog has three themes (dark is a variant of each, gallery 4)');
 
 // ---------------------------------------------------------------------------
 // Seeded pairwise covering array (AETG-style greedy, best of several restarts),
@@ -945,9 +945,13 @@ if (FULL) {
   const deck = {name: 'theme switch', language: tag('english'), design: {theme: 'minimal'}, slides: [{id: 'a', title: text.title, notes: text.body, bullets: text.items}, {id: 'b', title: text.title, layout: 'code', code: {source: CODE, language: 'ts'}, text: text.body}]};
   await runSwitch('theme', deck, [
     {label: 'classic', apply: setTheme('classic'), expectUsed: ['Tenorite Display', 'Tenorite'], expectUnused: ['Aptos']},
-    {label: 'dark', apply: setTheme('dark'), expectUsed: ['Seaford Display', 'Seaford']},
     {label: 'bold', apply: setTheme('bold'), expectUsed: ['Impact']},
     {label: 'minimal again', apply: setTheme('minimal'), expectUsed: ['Aptos Display', 'Aptos'], returnsToStart: true}
+  ]);
+  // Seaford was the font scheme of the dark theme, which gallery 4 removes (dark is a variant of every theme): it is now exercised as a font scheme of its own.
+  await runSwitch('font-scheme-seaford', {...deck, design: {theme: 'minimal', fontScheme: 'aptos'}}, [
+    {label: 'seaford', apply: setScheme('design.fontScheme', 'seaford'), expectUsed: ['Seaford Display', 'Seaford']},
+    {label: 'aptos again', apply: setScheme('design.fontScheme', 'aptos'), expectUsed: ['Aptos Display', 'Aptos'], returnsToStart: true}
   ]);
   // A language switch comes with the slide's text in that language (a block replacement); the script fonts follow.
   // The chain visits every script in the languages catalog: the pairwise languages first, then one language per other script.

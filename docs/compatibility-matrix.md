@@ -206,6 +206,8 @@ acceptance remain open; no new package train or broad native pass is inferred.
 | --- | --- | --- |
 | `@openpresentation/gallery` | 3.0.0 ([independent artifact verification](evidence/rr-85-final-published-set-2026-10-16/README.md); prior 2.0.0 and 1.0.0 remain historical) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
 
+Gallery 4.0.0 (published and independently verified 2026-10-19) adds theme `variants` and removes the `dark` theme; this checkout depends on `^4.0.0`, while the published set above keeps its recorded Gallery 3.0.0 until the next train rolls it.
+
 The gallery (RR-78) is released from its own repository, OpenPresentation/gallery, on its own version line (`vX.Y.Z`
 tags, `gallery-publish.yml` there), outside the lockstep set above and
 recorded under `independentPackages` in `release-plan.json`: new catalog records are a minor release, a removed id or

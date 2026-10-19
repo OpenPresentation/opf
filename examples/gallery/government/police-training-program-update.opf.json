@@ -40,7 +40,7 @@
   },
   "narrative": "product-launch",
   "design": {
-    "theme": "dark",
+    "theme": "classic",
     "colorScheme": {
       "id": "cool-horizon",
       "primary": "#8C4107",
@@ -552,16 +552,58 @@
         }
       },
       "themes": {
-        "dark": {
-          "name": "Dark",
+        "classic": {
+          "name": "Classic",
           "background": {
             "type": "theme",
-            "slot": "dark1"
+            "slot": "light1"
           },
-          "colorScheme": "boost",
-          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
-          "fontScheme": "seaford",
-          "dimensions": "widescreen"
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen",
+          "variants": [
+            {
+              "id": "light",
+              "name": "Light",
+              "variant": "light1"
+            },
+            {
+              "id": "light-alt",
+              "name": "Light alt",
+              "variant": {
+                "background": "light1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            },
+            {
+              "id": "dark",
+              "name": "Dark",
+              "variant": "dark1"
+            },
+            {
+              "id": "dark-alt",
+              "name": "Dark alt",
+              "variant": {
+                "background": "dark1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            }
+          ]
         }
       },
       "colorSchemes": {
@@ -588,30 +630,6 @@
             "technical",
             "versatile"
           ]
-        },
-        "boost": {
-          "name": "Boost",
-          "accent1": "#FD3223",
-          "accent2": "#0308DB",
-          "accent3": "#4F4955",
-          "accent4": "#A1DB30",
-          "accent5": "#0682FE",
-          "accent6": "#FC03BE",
-          "dark1": "#000000",
-          "dark2": "#2C2C2C",
-          "followedHyperlink": "#CC00CC",
-          "hyperlink": "#0066CC",
-          "light1": "#FFFFFF",
-          "light2": "#EFEFEF",
-          "summary": "High-energy digital accents for demos and launch moments.",
-          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
-          "tags": [
-            "digital",
-            "bold",
-            "high-energy",
-            "modern",
-            "technical"
-          ]
         }
       },
       "fontSchemes": {
@@ -626,16 +644,16 @@
           "type": "sans-serif",
           "description": "Segoe UI Light is a sans serif OPF font scheme for Latin presentations, using Segoe UI Semilight for headings with Segoe UI Light for body text."
         },
-        "seaford": {
-          "name": "Seaford",
+        "tenorite": {
+          "name": "Tenorite",
           "app": "powerpoint",
           "languageFamily": "latin",
           "languages": [],
-          "major": "Seaford Display",
-          "minor": "Seaford",
-          "textSample": "Humanist gentle tone",
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
           "type": "sans-serif",
-          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
         }
       },
       "layouts": {

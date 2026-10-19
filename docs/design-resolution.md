@@ -78,7 +78,7 @@ There is no ambiguity between "override" and "reference": every scheme value *is
 ```json
 {
   "design": {
-    "theme": "dark",
+    "theme": "minimal",
     "background": "light1",
     "footer": {
       "left": { "text": "Acme Corp" },
@@ -86,7 +86,7 @@ There is no ambiguity between "override" and "reference": every scheme value *is
     }
   },
   "slides": [
-    { "title": "Light slide in a dark theme" },
+    { "title": "Light slide on a theme that defaults to dark" },
     {
       "title": "Section divider",
       "design": {
@@ -107,7 +107,7 @@ There is no ambiguity between "override" and "reference": every scheme value *is
 }
 ```
 
-- Slide 1: the deck-level `background: "light1"` overrides the `dark` theme's default background. `light1` is a theme slot — it resolves through the effective color scheme, which itself resolved through the chain above.
+- Slide 1: the deck-level `background: "light1"` overrides the `minimal` theme's default background (`dark2`). `light1` is a theme slot — it resolves through the effective color scheme, which itself resolved through the chain above.
 - Slide 2: the gradient replaces the deck background for this slide only, and `footer: false` suppresses the inherited footer rather than inheriting or replacing it.
 
 ## Worked example 3: font scheme models
@@ -236,6 +236,8 @@ Which variant a slide has, from the most specific to the least (slide design, de
 2. a theme-slot background (`"dark1"`, `{ "type": "theme", "slot": "dark1" }`), which is the variant of that slot, so `design.background` stays a shorthand;
 3. a picture or gradient background with a `tone` (`"dark"` or `"light"`), which is the `dark1` or `light1` variant. Without a tone only a variant of a less specific level can apply; with none the slide counts as light, as before;
 4. any other background (a solid or pattern color) decides by luminance (dark below 0.179), as before.
+
+A theme record can list the variants it offers (`variants`, from gallery 4): named values of `variant`, such as `light`, `light-alt`, `dark` and `dark-alt` on `minimal`, `classic` and `bold`. They are for pickers: choosing one writes its `variant` into `design.variant` (or a slide's), and the document keeps that value, not the entry id. The engines read only `design.variant`. There is no `dark` theme in the default catalog: a dark deck is a theme with a dark variant, for example `{ "theme": "classic", "variant": "dark1" }`.
 
 A slide's variant replaces the deck's whole, accent order included. `resolveSlideContext(...).resolved.roles` is the resolved record, and `resolveColorRoles(scheme, { variant, tone, background })` is the function: besides the colors it returns `variant`, `map` (bg1, tx1, bg2, tx2 and the accents; `clrMapAttributes(map)` gives the PowerPoint `clrMap` attributes for the master and for a slide's `clrMapOvr`), `accents` (the six colors in order) and `neutrals`.
 

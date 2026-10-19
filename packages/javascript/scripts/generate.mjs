@@ -161,8 +161,24 @@ async function generateSpecFiles() {
   await fs.writeFile(path.join(generatedRoot, "spec-files.ts"), lines.join("\n"));
 }
 
+// A companion schema may point at a definition in another bundled schema by its `$id` (the theme record's `variants`
+// reference opf.schema.json's ColorVariant). Resolve those from spec/schemas so generation never fetches the network.
+async function bundledSchemaResolver() {
+  const byId = new Map();
+  for (const definition of schemaDefinitions) {
+    const schema = await readJson(path.join(schemaRoot, definition.file));
+    byId.set(schema.$id, schema);
+  }
+  return {
+    order: 1,
+    canRead: (file) => byId.has(file.url.split("#")[0]),
+    read: (file) => byId.get(file.url.split("#")[0]),
+  };
+}
+
 async function generateTypes() {
   await fs.mkdir(generatedTypesRoot, { recursive: true });
+  const bundled = await bundledSchemaResolver();
   for (const definition of schemaDefinitions) {
     const schema = await readJson(path.join(schemaRoot, definition.file));
     const schemaForTypes = JSON.parse(JSON.stringify(schema));
@@ -172,6 +188,7 @@ async function generateTypes() {
       bannerComment: generatedHeader(path.posix.join("schemas", definition.file)).trimEnd(),
       unreachableDefinitions: true,
       format: false,
+      $refOptions: { resolve: { bundled } },
       ...(definition.compileOptions ?? {}),
       style: {
         semi: true,

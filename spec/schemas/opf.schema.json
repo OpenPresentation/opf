@@ -650,7 +650,7 @@
         "theme": {
           "$ref": "#/$defs/CatalogReference",
           "description": "Theme for the deck: a themes reference, a bare id ('minimal') or 'name:id' ('acme:brand'). The theme supplies the default colour scheme, font scheme, background and dimensions; design.colorScheme, design.fontScheme, design.background and design.dimensions override it field by field. A reference that resolves nowhere is the warning opf/unresolved-reference and engines use the engine default theme.",
-          "examples": ["minimal", "classic", "dark", "bold", "acme:brand"]
+          "examples": ["minimal", "classic", "bold", "acme:brand"]
         },
         "colorScheme": {
           "oneOf": [
