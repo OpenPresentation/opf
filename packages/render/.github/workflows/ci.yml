@@ -47,7 +47,7 @@ jobs:
         uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main
         with:
           consumer: opf-render
-          golden-override: 'opf-render/test/golden/opf-examples-png.rr89-chart-palette-text'
+          golden-override: 'opf/scripts/fixtures/opf-examples-png.rr89-chart-palette-text.sha256.json'
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: OpenPresentation/opf
