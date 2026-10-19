@@ -19,7 +19,7 @@ const seriesFill = (body) => body.match(/<c:spPr>\s*<a:solidFill>\s*<a:(?:srgbCl
 const pointFills = (body) => [...body.matchAll(/<c:dPt>[\s\S]*?<a:(?:srgbClr|schemeClr) val="([0-9A-Za-z]+)"[\s\S]*?<\/c:dPt>/g)].map(([, color]) => color);
 
 let checked = 0;
-for (const design of [{fontScheme: 'roboto'}, {fontScheme: 'roboto', theme: 'dark'}]) {
+for (const design of [{fontScheme: 'roboto'}, {fontScheme: 'roboto', theme: 'classic', variant: 'dark1'}]) {
   // The colour of series 0 in a two-series chart is the colour the single series must have (preview: palette colour 0).
   const reference = seriesFill(series(await chartXml({type: 'column', data: two}, design))[0]);
   assert.match(reference ?? '', /^(?:[0-9A-F]{6}|accent\d)$/);

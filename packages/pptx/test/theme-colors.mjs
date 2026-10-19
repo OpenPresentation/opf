@@ -175,9 +175,9 @@ assert.equal(runFill(minimal.xml, 'Body'), '<a:schemeClr val="tx1"/>');
 assert.equal(runFill(minimal.xml, 'Muted'), '<a:schemeClr val="tx2"/>', 'muted text is the tx2 role, light2 on a dark background');
 assert.equal(resolve(runFill(minimal.xml, 'Muted'), minimal.colors, minimalMap), hex(cool.light2));
 assert.match(minimal.xml, /<a:buClr><a:schemeClr val="tx1"\/><\/a:buClr>/, 'list markers follow the default text');
-const dark = await pairing({theme: 'dark'});
+const dark = await pairing({theme: 'classic', variant: 'dark1'});
 assert.match(dark.xml, /<p:bg><p:bgPr><a:solidFill><a:schemeClr val="bg1"\/>/);
-assert.equal(clrMapOf(dark.entries).bg1, 'dk1', 'the dark theme background is dark1 through the clrMap');
+assert.equal(clrMapOf(dark.entries).bg1, 'dk1', 'a dark1 variant is dark1 through the clrMap');
 assert.equal(runFill(dark.xml, 'Pair'), '<a:schemeClr val="tx1"/>');
 const classic = await pairing({theme: 'classic'});
 assert.equal(runFill(classic.xml, 'Pair'), '<a:schemeClr val="tx1"/>');
@@ -222,7 +222,7 @@ assert.doesNotMatch(vendorMaster, /<p:bg>/, 'a light1 deck keeps the vendored ma
 assert.match(layoutOf(classic.entries), /<p:bg><p:bgRef idx="1001"><a:schemeClr val="bg1"\/><\/p:bgRef><\/p:bg>/);
 // Imported slides keep their own backgrounds; the master background does not leak.
 const darkImport = await importWith(zipSync(dark.entries));
-assert.equal(darkImport.document.design.theme, 'dark');
+assert.equal(darkImport.document.design.theme, 'classic');
 assert.equal((darkImport.document.slides[0].design ?? darkImport.document.design).background, undefined, "the master background does not leak into the import");
 
 // 4. Inline overrides come back relative to the named catalog scheme.
