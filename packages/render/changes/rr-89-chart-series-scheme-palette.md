@@ -1,4 +1,0 @@
----
-type: changed
----
-RR-89 (output-changing for every chart without highlight): chart series are drawn in core's `chartSeriesPalette` of the deck's resolved colour scheme (`accent1` to `accent6`, then the same six accents tinted 40% toward white), so `design.colorScheme` recolours the series instead of every deck drawing the cool-horizon blues; a deck without a colour scheme of its own keeps the engine default's accents. The palette still goes through core's `chartPaletteForFill` (contrast against the chart panel), and `chart.highlight` colours are unchanged. `chart.colors` entries (hex, scheme slot, role or `var:` reference) replace the palette colour at their position, before the same adjustment; `chart.highlight` still wins. The renderer's own `CHART_SERIES_COLORS` copy is deleted. Needs `@openpresentation/opf` 0.22.0.

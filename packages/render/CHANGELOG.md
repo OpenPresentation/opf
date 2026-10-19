@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.22.2 (2026-10-19)
+
+- RR-89 (output-changing for every chart without highlight): chart series are drawn in core's `chartSeriesPalette` of the deck's resolved colour scheme (`accent1` to `accent6`, then the same six accents tinted 40% toward white), so `design.colorScheme` recolours the series instead of every deck drawing the cool-horizon blues; a deck without a colour scheme of its own keeps the engine default's accents. The palette still goes through core's `chartPaletteForFill` (contrast against the chart panel), and `chart.highlight` colours are unchanged. `chart.colors` entries (hex, scheme slot, role or `var:` reference) replace the palette colour at their position, before the same adjustment; `chart.highlight` still wins. The renderer's own `CHART_SERIES_COLORS` copy is deleted. Needs `@openpresentation/opf` 0.22.0.
+- RR-90 (output-changing for every chart): chart axis, legend, category and data-label text is core's `chartTextSize` instead of 14 px floored to the 16 px (12 pt) minimum: 20 px (15 pt) in a roomy chart box, shrunk (at most a 1/18 of the box height and 1/30 of its width, whole pixels) only when the box is small, and never below `composition.minFontSize`. A chart no longer renders at 12 pt beside 24 pt bullets. Needs `@openpresentation/opf` 0.22.0.
+- RR-92 (no pixel change for the usual chart): a column, bar, line or area chart draws the value axis core composes for its box (`item.chart.valueAxis`: `min`, `max`, `majorUnit`), the same axis the PPTX export writes, so the preview and PowerPoint or Keynote show the same gridlines. In a short box core estimates the plot from the box rather than from the laid-out plot, so the major unit can differ by one 1/2/5 step from before; every other chart type keeps its renderer-side scale. The renderer's local `niceScale`, `maxIntervalsFor` and `stackCategoryValues` are replaced by core's. Needs `@openpresentation/opf` 0.22.0.
+
 ## 0.22.1 (2026-10-18)
 
 - RR-90: 0.22.1 is the first published 0.22 renderer. The 0.22.0 tag exists but was never published: its publish run found the example baseline stale against core 0.22. 0.22.1 carries the refreshed baseline (#260) and the same code as 0.22.0, which requires core ^0.22.0.
