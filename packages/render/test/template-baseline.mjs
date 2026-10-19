@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {mkdtempSync, mkdirSync, writeFileSync, rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
-import {templateBaseline, readTemplateBaseline, tableTextSize, LEGACY_TEMPLATE_BASELINE, CENTERED_TEMPLATE_BASELINE, FIRST_USE_TEMPLATE_BASELINE, CHART_TEMPLATE_BASELINE, chartTextSizeDefault} from '../scripts/template-baseline.mjs';
+import {templateBaseline, readTemplateBaseline, tableTextSize, LEGACY_TEMPLATE_BASELINE, CENTERED_TEMPLATE_BASELINE, FIRST_USE_TEMPLATE_BASELINE, CHART_TEMPLATE_BASELINE, SCHEME_NEUTRALS_TEMPLATE_BASELINE, schemeNeutralsDerived, chartTextSizeDefault} from '../scripts/template-baseline.mjs';
 const root = mkdtempSync(path.join(tmpdir(), 'template-baseline-'));
 try {
   mkdirSync(path.join(root, 'test/golden'), {recursive: true});
@@ -44,6 +44,17 @@ try {
   assert.equal(chartCandidate.selected, CHART_TEMPLATE_BASELINE);
   assert.equal(chartCandidate.comparison, FIRST_USE_TEMPLATE_BASELINE, 'A candidate is compared with the previous contract');
   assert.ok(tableTextSize() > 0 && chartTextSizeDefault() > 0);
+  // RR-96: a core that derives the neutrals from the scheme selects the scheme-neutrals baseline (with the chart contract).
+  assert.equal(templateBaseline('center', 25, 20, false), CHART_TEMPLATE_BASELINE);
+  assert.equal(templateBaseline('center', 25, 20, true), SCHEME_NEUTRALS_TEMPLATE_BASELINE);
+  assert.equal(templateBaseline('center', 25, 16, true), FIRST_USE_TEMPLATE_BASELINE, 'older contracts stay separate');
+  assert.equal(templateBaseline('left', 25, 20, true), LEGACY_TEMPLATE_BASELINE, 'Published-core baseline remains separate');
+  writeFileSync(path.join(root, CHART_TEMPLATE_BASELINE), JSON.stringify(next));
+  assert.throws(() => readTemplateBaseline(root, 'center', {tableSize: 25, chartSize: 20, neutrals: true}), /ENOENT/, 'Normal checks never accept an older color baseline');
+  const neutralCandidate = readTemplateBaseline(root, 'center', {update: true, tableSize: 25, chartSize: 20, neutrals: true});
+  assert.equal(neutralCandidate.selected, SCHEME_NEUTRALS_TEMPLATE_BASELINE);
+  assert.equal(neutralCandidate.comparison, CHART_TEMPLATE_BASELINE, 'A candidate is compared with the previous contract');
+  assert.equal(typeof schemeNeutralsDerived(), 'boolean');
   writeFileSync(path.join(root, CENTERED_TEMPLATE_BASELINE), '{invalid');
   assert.throws(() => readTemplateBaseline(root, 'center', {update: true}), SyntaxError, 'A malformed selected baseline never falls back');
 } finally { rmSync(root, {recursive: true, force: true}); }

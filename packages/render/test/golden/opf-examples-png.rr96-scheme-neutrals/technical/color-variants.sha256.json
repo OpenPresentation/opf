@@ -1,0 +1,33 @@
+{
+  "deck": "technical/color-variants.opf.json",
+  "entries": {
+    "technical/color-variants.opf.json#0": {
+      "sha256": "1add2c26c88a04dd9d6cda1cbb7f8ca374d85d917c22e093c60356e6f7ee6eb8",
+      "bytes": 8019
+    },
+    "technical/color-variants.opf.json#1": {
+      "sha256": "f25c5b383fa9fbb18bbd2e3f80d94437f6dcf30b573c324e4329720e63b43e4a",
+      "bytes": 5891
+    },
+    "technical/color-variants.opf.json#2": {
+      "sha256": "eab193d4102e40515c739df7b3438e723c88ed16feb888652b95014d618f9347",
+      "bytes": 5853
+    },
+    "technical/color-variants.opf.json#3": {
+      "sha256": "9c7e5236ffa0df9412ee1539aafa570bb68555684fac0375f09b8bbd5ffdb649",
+      "bytes": 5933
+    },
+    "technical/color-variants.opf.json#4": {
+      "sha256": "ec97bb1c6d8acb45df62b2b4ff5faa8749c98504c54ca9834de73a4200e0a832",
+      "bytes": 5834
+    },
+    "technical/color-variants.opf.json#5": {
+      "sha256": "388101c8ceaa49dd50c78efad680585729328627e163855d5037b6eed6ad4e97",
+      "bytes": 5202
+    },
+    "technical/color-variants.opf.json#6": {
+      "sha256": "d78fbd55b1aa8412e72a20492783b4242bf073a3144b3ee9396eb64a8bbb2631",
+      "bytes": 4359
+    }
+  }
+}

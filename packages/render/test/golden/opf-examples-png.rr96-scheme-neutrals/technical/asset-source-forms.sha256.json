@@ -1,0 +1,21 @@
+{
+  "deck": "technical/asset-source-forms.opf.json",
+  "entries": {
+    "technical/asset-source-forms.opf.json#0": {
+      "sha256": "ec1756ee2d3e86b00a4f9d4787e0db0804975a78c7f8ae7ae50581180e9c7b10",
+      "bytes": 3711
+    },
+    "technical/asset-source-forms.opf.json#1": {
+      "sha256": "65cf7932c001d6224623b3dbff14e3a0a3b72f19c5eb11f3b90008460e280a20",
+      "bytes": 7362
+    },
+    "technical/asset-source-forms.opf.json#2": {
+      "sha256": "d5746f61e955a4132f31c8d1a296cfa950e8b218a31264446ff697a2ed094672",
+      "bytes": 3470
+    },
+    "technical/asset-source-forms.opf.json#3": {
+      "sha256": "b6722965b1a360961260880299c78b306e58b1f8ecb96de0f7e99ce059d2cbc2",
+      "bytes": 4626
+    }
+  }
+}

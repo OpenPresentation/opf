@@ -19,7 +19,7 @@ assert.deepEqual(boxStatistics([2,4,8,12]),{q1:2.5,median:6,q3:11,mean:6.5,low:2
 assert.equal(boxStatistics([null]),null);
 // These ordinary SVG hashes were captured before this arithmetic-only fix and re-captured for RR-89 and RR-90 (series colours from the
 // colour scheme, 20 px chart text), which change every chart's bytes on purpose.
-const ordinary={'box-and-whisker':'7c7d8516715cf5ea77c96f2435d0b0db6339cf9fc35eb805cfd47cd4ecec80e1',world:'208eb54793583427978c7829f5ebe0f135ba7ea25ed2fb77660e239f25caaeb5'};
+const ordinary={'box-and-whisker':'e5a099959ae99237ff61709ad6c9fefd3b9c05991300813ce607919190bd6a48',world:'ccbbdb7ca10c319aa09b22e762ce4371c1c8b493352a7f8c8da3b4ea68c9617b'};
 for(const [type,expected] of Object.entries(ordinary)) {
   const svg=toSvg(deck(type,[['A',2],['A',4],['B',8],['B',12]]),1);
   finiteSvg(svg);

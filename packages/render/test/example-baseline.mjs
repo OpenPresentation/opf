@@ -4,7 +4,7 @@ import {mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync} from 'node:
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {exampleBaseline, LEGACY_EXAMPLE_BASELINE, CENTERED_EXAMPLE_BASELINE, FIRST_USE_EXAMPLE_BASELINE, CHART_EXAMPLE_BASELINE} from '../scripts/example-baseline.mjs';
+import {exampleBaseline, LEGACY_EXAMPLE_BASELINE, CENTERED_EXAMPLE_BASELINE, FIRST_USE_EXAMPLE_BASELINE, CHART_EXAMPLE_BASELINE, SCHEME_NEUTRALS_EXAMPLE_BASELINE} from '../scripts/example-baseline.mjs';
 import {readBaseline, diffManifests} from './golden-store.mjs';
 
 assert.equal(exampleBaseline('left'), LEGACY_EXAMPLE_BASELINE);
@@ -20,6 +20,11 @@ assert.equal(exampleBaseline('center', 25, 20), CHART_EXAMPLE_BASELINE);
 assert.equal(exampleBaseline('center', 16, 20), CENTERED_EXAMPLE_BASELINE);
 assert.equal(exampleBaseline('left', 25, 20), LEGACY_EXAMPLE_BASELINE, 'Published-core baseline remains separate');
 for (const size of [0, -1, NaN, 'x']) assert.throws(() => exampleBaseline('center', 25, size), /Unknown chart text size/);
+// RR-96: a core that derives the neutrals from the scheme selects the scheme-neutrals baseline (with the chart contract).
+assert.equal(exampleBaseline('center', 25, 20, false), CHART_EXAMPLE_BASELINE);
+assert.equal(exampleBaseline('center', 25, 20, true), SCHEME_NEUTRALS_EXAMPLE_BASELINE);
+assert.equal(exampleBaseline('center', 25, 16, true), FIRST_USE_EXAMPLE_BASELINE, 'older contracts stay separate');
+assert.equal(exampleBaseline('left', 25, 20, true), LEGACY_EXAMPLE_BASELINE, 'Published-core baseline remains separate');
 for (const alignment of [undefined, 'right', 'unexpected']) {
   assert.throws(() => exampleBaseline(alignment), /Unknown metric default alignment/);
 }

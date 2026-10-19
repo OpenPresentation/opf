@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/industries/fan-experience-operations-brief.opf.json",
+  "entries": {
+    "gallery/industries/fan-experience-operations-brief.opf.json#0": {
+      "sha256": "f1064992345d67fad3da3c3bfb05f58ed1113f41957a128275a2bade67066f25",
+      "bytes": 8822
+    },
+    "gallery/industries/fan-experience-operations-brief.opf.json#1": {
+      "sha256": "1d65f840b4b9967437388a4aa23aea14c0ea9e5b11ed4af65caa7b99dcab847e",
+      "bytes": 10675
+    },
+    "gallery/industries/fan-experience-operations-brief.opf.json#2": {
+      "sha256": "19f0d0b898254ab50aa7dd8544413d4f672e366613806226bcbe530ba1f9fbbd",
+      "bytes": 8273
+    },
+    "gallery/industries/fan-experience-operations-brief.opf.json#3": {
+      "sha256": "d772b1b6ec1250167c2dcb49ea184b8fc6cf0c4b3c26734b24dde3c2f5d2ea4f",
+      "bytes": 11346
+    },
+    "gallery/industries/fan-experience-operations-brief.opf.json#4": {
+      "sha256": "60c056599fad0bfec94c6c31b76d7bb70fdd1c314308d080d3af1a0c1e92e8d4",
+      "bytes": 12396
+    },
+    "gallery/industries/fan-experience-operations-brief.opf.json#5": {
+      "sha256": "36d20a99251ff972c1431e2fed53fae26957edce6dcb6774a0304d95203a0cbb",
+      "bytes": 12716
+    }
+  }
+}

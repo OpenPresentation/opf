@@ -1,0 +1,13 @@
+{
+  "deck": "technical/columns.opf.json",
+  "entries": {
+    "technical/columns.opf.json#0": {
+      "sha256": "778494b5eb44471fa4c1dc5bd8c73dd4b5e9be55e9b4a59eba989ea2470d8ce5",
+      "bytes": 4938
+    },
+    "technical/columns.opf.json#1": {
+      "sha256": "792a00e92dc7697d15c8200d24fd55270cf2080eb5b494432fff23a2344698c2",
+      "bytes": 5227
+    }
+  }
+}

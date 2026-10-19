@@ -3,7 +3,7 @@ import {toSvg} from './catalog-harness.mjs';
 const table={columns:['Team','Amount'],rows:[['A',5.8],['B',6.7]]};
 const doc={design:{theme:'classic',fontScheme:'roboto',colorScheme:'cool-horizon'},slides:[{table}]};
 const before=structuredClone(doc);const svg=toSvg(doc,1,{trace:true});
-assert.match(svg,/stroke="#CBD5E1"/);assert.doesNotMatch(svg,/stroke="#3AC67A"/);assert.deepEqual(doc,before);
+assert.match(svg,/stroke="#CCCCCC"/);assert.doesNotMatch(svg,/stroke="#3AC67A"/);assert.deepEqual(doc,before);
 const attrs=s=>Object.fromEntries([...s.matchAll(/([\w:-]+)="([^"]*)"/g)].map(m=>[m[1],m[2]]));
 const group=(s,path)=>[...s.matchAll(/<g\b([^>]*data-opf-source-text="true"[^>]*)>([\s\S]*?)<\/g>/g)].find(m=>attrs(m[1])['data-opf-path']===path)?.[2];
 assert.match(group(svg,'slides.0.table.rows.0.1'),/text-anchor="end"/,'numeric right aligned');
@@ -15,6 +15,6 @@ for(const type of ['column','bar'])for(const values of [[5.8,6.7],[-5.8,-6.7],[-
  const input={design:doc.design,slides:[{chart:{type,data:{columns:['Category','Value'],rows:values.map((v,i)=>[String(i),v])}}}]};
  const output=toSvg(input,1,{trace:true});const bars=[...output.matchAll(/<rect\b([^>]*data-opf-path="slides\.0\.chart\.data\.rows\.\d+\.1"[^>]*)\/>/g)].map(m=>attrs(m[1]));assert.equal(bars.length,2);
  if(values[0]*values[1]>0){const lengths=bars.map(b=>Number(b[type==='bar'?'width':'height']));assert.ok(Math.abs(lengths[1]/lengths[0]-Math.abs(values[1]/values[0]))<.001,'bar magnitudes reflect values from zero, not truncated domain');}
- assert.match(output,/stroke="#CBD5E1"/);assert.deepEqual(input.slides[0].chart.data.rows,values.map((v,i)=>[String(i),v]));
+ assert.match(output,/stroke="#CCCCCC"/);assert.deepEqual(input.slides[0].chart.data.rows,values.map((v,i)=>[String(i),v]));
 }
 console.log('Neutral SVG rules, numeric/explicit alignment and positive/negative/mixed zero-baseline bars passed.');

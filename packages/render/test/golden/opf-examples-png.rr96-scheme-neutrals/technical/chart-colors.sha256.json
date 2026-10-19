@@ -1,0 +1,17 @@
+{
+  "deck": "technical/chart-colors.opf.json",
+  "entries": {
+    "technical/chart-colors.opf.json#0": {
+      "sha256": "3c707de0f819a86200cd91f7b789dbcde368552fd54dc21920177c55c71be121",
+      "bytes": 8621
+    },
+    "technical/chart-colors.opf.json#1": {
+      "sha256": "9a6351716e5cc5ed5499562c4df9f312a32e954f284fcaee482516254b2761e2",
+      "bytes": 9569
+    },
+    "technical/chart-colors.opf.json#2": {
+      "sha256": "ad601d7472d1980bc9382c9355bb6a15629037c9730be9bfa02b140a7802d8dc",
+      "bytes": 5202
+    }
+  }
+}

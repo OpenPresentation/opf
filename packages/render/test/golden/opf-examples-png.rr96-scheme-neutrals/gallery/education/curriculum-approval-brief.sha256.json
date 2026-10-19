@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/education/curriculum-approval-brief.opf.json",
+  "entries": {
+    "gallery/education/curriculum-approval-brief.opf.json#0": {
+      "sha256": "775da9dfbdebbe7d01eee0a20acd3df2a03b2ea5df7f00ba916f4c1611d4a845",
+      "bytes": 6771
+    },
+    "gallery/education/curriculum-approval-brief.opf.json#1": {
+      "sha256": "4408a67cbda02cbfc12550da337dbec31778dfba9d6c0a204e7913ff2a6cacd7",
+      "bytes": 8320
+    },
+    "gallery/education/curriculum-approval-brief.opf.json#2": {
+      "sha256": "3308cc105e0f38ba175d828a80388f673e449ebb1f9ce88a5a3e982cbd75472a",
+      "bytes": 6092
+    },
+    "gallery/education/curriculum-approval-brief.opf.json#3": {
+      "sha256": "9884871dc6ffe45f423417358ecf3ba8e2f40816536964e08b48a42d9687fa78",
+      "bytes": 10312
+    },
+    "gallery/education/curriculum-approval-brief.opf.json#4": {
+      "sha256": "c445840e0e69feb40bcc838aeb03407d14e8f33d98295f30cb74a570dcbda346",
+      "bytes": 9687
+    },
+    "gallery/education/curriculum-approval-brief.opf.json#5": {
+      "sha256": "a3b1bc271db91da6d0d74b56708278a1f7438cf0a599dc32496f5445d18ddabb",
+      "bytes": 18199
+    },
+    "gallery/education/curriculum-approval-brief.opf.json#6": {
+      "sha256": "da477e87d171c6db8f5ece60b3fd5652e8e1336e3260c9170bd9b8df818954ab",
+      "bytes": 12208
+    },
+    "gallery/education/curriculum-approval-brief.opf.json#7": {
+      "sha256": "453b64dd96c32e6b61a868d93b72740ae7863dfffb13641c7dfd81eb6157847a",
+      "bytes": 4541
+    },
+    "gallery/education/curriculum-approval-brief.opf.json#8": {
+      "sha256": "008a2e4c6b9698c7248b4342ab10101ec86bbc3506f03be16243ebf0479757a4",
+      "bytes": 6384
+    },
+    "gallery/education/curriculum-approval-brief.opf.json#9": {
+      "sha256": "5bd9802048dbc518709f9140ef77f73c54d086420e84730e613cee326b03d5ca",
+      "bytes": 13948
+    }
+  }
+}
