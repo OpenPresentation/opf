@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.22.2 (2026-10-19)
+
+- RR-88, RR-91: `opf convert --body-text measured|native` and `--slide-numbers static|live` (the `bodyText` and `slideNumbers` options of `convert`/`ExportOptions`) reach opf-pptx's `toPptx` as `bodyText` and `slideNumberFields`. `native` is opt-in: a wrapped title is the Title placeholder and a text, bullets or numbered-list region is one body that PowerPoint and Keynote re-wrap, instead of one text box per line; `static` (opf-pptx's default) writes a footer like `{{slide.number}} / {{deck.slideCount}}` as fixed text because Keynote shows only the digit of a live number with words around it, and `live` keeps the field; a bare `{{slide.number}}` stays live in both. Both apply to `.pptx` output only (exit 2 otherwise), and an opf-pptx that predates them is refused with `peer-too-old` rather than ignoring them (opf-pptx 0.22.0 or later).
+
 ## 0.22.1 (2026-10-19)
 
 - RR-57: core CI is faster without dropping a check. The combined `ecosystem-pptx-editor` job is now `ecosystem-pptx` and `ecosystem-editor`, and the two long sibling suites (opf-render and opf-pptx, about 15 minutes each) run as three parallel slices of equal weight (`scripts/ci-test-shards.mjs`, `scripts/ci-test-weights.json`). The slices together run exactly each sibling's `npm test` or `npm run test:contract`; `packages` still aggregates every job. npm's download cache is restored with a key made from the lockfile hashes.
