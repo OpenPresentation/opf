@@ -187,7 +187,7 @@ function targetOf(output: string | undefined, options: ConvertOptions, flags: bo
 }
 
 /** The options of an export output. A deck output takes none of them. */
-const EXPORT_ONLY = ["slides", "includeHidden", "paginate", "scale", "raster", "text", "charts", "provenance", "images", "date", "fonts", "assetDir"] as const;
+const EXPORT_ONLY = ["slides", "includeHidden", "paginate", "scale", "raster", "text", "charts", "provenance", "images", "bodyText", "slideNumbers", "date", "fonts", "assetDir"] as const;
 const given = (value: unknown) => value !== undefined && value !== false && !(Array.isArray(value) && value.length === 0);
 
 /** Which option applies to which format (`opf convert`'s rule), with each option named as the command's flag when `flags` is set. */
@@ -206,7 +206,7 @@ function checkApplicable(source: Source, target: Target, options: ConvertOptions
 	}
 	const format = target.format;
 	if (given(options.raster) && format !== "pdf") throw invalid(`${name("raster")} applies to pdf output.`);
-	if ((options.charts !== undefined || options.provenance !== undefined || options.images !== undefined) && format !== "pptx") throw invalid(`${names("charts", "provenance", "images")} apply to pptx output.`);
+	if ((options.charts !== undefined || options.provenance !== undefined || options.images !== undefined || options.bodyText !== undefined || options.slideNumbers !== undefined) && format !== "pptx") throw invalid(`${names("charts", "provenance", "images", "bodyText", "slideNumbers")} apply to pptx output.`);
 	if (options.scale !== undefined && format !== "png" && format !== "pdf") throw invalid(`${name("scale")} applies to png output (and raster pdf).`);
 	if (given(options.includeHidden) && format === "pptx") throw invalid(`${name("includeHidden")} applies to per-slide image and PDF output; the PPTX keeps a hidden slide as a hidden slide.`);
 	if (options.slides !== undefined && format === "pptx") throw invalid(`${name("slides")} is not available for pptx output: the whole presentation is exported.`);

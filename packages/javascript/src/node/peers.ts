@@ -14,6 +14,24 @@ export const PPTX_PACKAGE = "@openpresentation/opf-pptx";
 /** Peer ranges. The CLI checks the features it calls rather than the version, so a newer release in range keeps working. */
 export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.22.0", [PPTX_PACKAGE]: "^0.22.0" } as const;
 
+/** The first opf-pptx that reads `bodyText` and `slideNumberFields`. An older one would ignore them silently. */
+export const PPTX_TEXT_OPTIONS_FROM = "0.22.0";
+
+const numbers = (version: string) => version.replace(/[-+].*$/, "").split(".").map((part) => Number.parseInt(part, 10) || 0);
+/** True when `version` is `minimum` or later (release numbers only; a prerelease counts as its release). */
+export function atLeast(version: string, minimum: string): boolean {
+	const [a, b] = [numbers(version), numbers(minimum)];
+	for (let i = 0; i < 3; i++) if ((a[i] ?? 0) !== (b[i] ?? 0)) return (a[i] ?? 0) > (b[i] ?? 0);
+	return true;
+}
+
+/** Refuse `bodyText: "native"` and `slideNumbers` on an opf-pptx that predates them: it would write the default and say nothing. */
+export function requirePptxOptions(pptx: Peer<unknown>, options: { bodyText?: string; slideNumbers?: string }, flags = false) {
+	const asked = [options.bodyText === "native" ? (flags ? "--body-text native" : "bodyText: \"native\"") : undefined, options.slideNumbers ? (flags ? "--slide-numbers" : "slideNumbers") : undefined].filter(Boolean);
+	if (asked.length && pptx.version !== "unknown" && !atLeast(pptx.version, PPTX_TEXT_OPTIONS_FROM))
+		throw new OPFApiError(`${asked.join(" and ")} needs ${pptx.name}@${PPTX_TEXT_OPTIONS_FROM} or later; ${pptx.version} is installed and would ignore it.`, "peer-too-old", { details: { package: pptx.name } });
+}
+
 export interface Diagnostic {
 	code: string;
 	path?: string;

@@ -24,7 +24,7 @@ type Target = { kind: "deck"; format: DeckFormat } | { kind: "export"; format: E
 const MD_INPUT = ["split", "title"] as const;
 const YAML_INPUT = ["aliases"] as const;
 const PPTX_INPUT = ["signals"] as const;
-const EXPORT_ONLY = ["slides", "include-hidden", "paginate", "scale", "raster", "text", "charts", "provenance", "images", "date", "asset-dir", "fonts"] as const;
+const EXPORT_ONLY = ["slides", "include-hidden", "paginate", "scale", "raster", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "date", "asset-dir", "fonts"] as const;
 const MEDIA: Record<string, string> = { svg: "image/svg+xml", png: "image/png", pdf: "application/pdf", pptx: "application/vnd.openxmlformats-officedocument.presentationml.presentation", zip: "application/zip" };
 
 export const spec: CommandSpec = {
@@ -33,7 +33,7 @@ export const spec: CommandSpec = {
 	summary: "Convert a deck or a .pptx to another form: a deck form, PDF, PPTX, PNG or SVG per slide, a .zip of slides, or stdout.",
 	operands: ["<input> (a deck, a .pptx, or - for stdin)", "<output> (a file whose extension names the format, or - for stdout with --to)"],
 	positional: [2, 2],
-	values: ["from", "to", "fail-on", "split", "title", "signals", "slides", "scale", "text", "charts", "provenance", "images", "date", "asset-dir"],
+	values: ["from", "to", "fail-on", "split", "title", "signals", "slides", "scale", "text", "charts", "provenance", "images", "body-text", "slide-numbers", "date", "asset-dir"],
 	repeated: ["fonts"],
 	flags: ["force", "aliases", "schema-comment", "drop-unsupported", "include-hidden", "paginate", "raster"],
 	help: `Formats. Input: .json, .opf.yaml/.yaml/.yml, .opf.md and a plain .md (OPF Markdown, an outline included), .pptx, or -
@@ -57,6 +57,14 @@ Flags, each only where its format is involved (otherwise exit 2):
   pdf, png, svg,   --paginate  --date <YYYY-MM-DD>  --fonts <dir>... (.ttf and .otf files)  --asset-dir <dir>
   and pptx
   pptx             --charts <auto|native|picture>  --images <compatible|preserve>  --provenance <full|references-only|none>
+                   --body-text <measured|native>  measured (the default): every wrapped line is its own text box, laid out as the
+                                                  preview draws it. native: opt in to whole paragraphs, a wrapped title as the
+                                                  Title placeholder and a text or list as one body, so PowerPoint and Keynote
+                                                  re-wrap edited text; what it cannot carry stays measured (native-body-fallback)
+                   --slide-numbers <static|live>  a footer like "{{slide.number}} / {{deck.slideCount}}": static (the default)
+                                                  writes the number as fixed text, so Keynote shows the words too; live keeps the
+                                                  slide-number field, which Keynote shows as the digit alone. A bare
+                                                  {{slide.number}} stays a live field either way
   png, raster pdf  --scale <0.1-8>                1 draws the 1280 x 720 reference slide at 1280 x 720 pixels
   pdf              --raster                       each page a picture instead of selectable vector text
   svg              --text <fonts|system|paths>    embed the faces the slide uses (fonts), none (system), or draw outlines (paths)
@@ -131,6 +139,8 @@ export async function run(args: string[], host: Host): Promise<void> {
 	oneOf("--charts", options.charts, ["auto", "native", "picture"] as const);
 	oneOf("--provenance", options.provenance, ["full", "references-only", "none"] as const);
 	oneOf("--images", options.images, ["compatible", "preserve"] as const);
+	oneOf("--body-text", options["body-text"], ["measured", "native"] as const);
+	oneOf("--slide-numbers", options["slide-numbers"], ["static", "live"] as const);
 	oneOf("--text", options.text, ["fonts", "system", "paths"] as const);
 
 	// Output-side scope, before anything is read.
@@ -282,6 +292,8 @@ async function exportDeck(
 			charts: text("charts"),
 			provenance: text("provenance"),
 			images: text("images"),
+			bodyText: text("body-text"),
+			slideNumbers: text("slide-numbers"),
 			fonts: repeated.fonts,
 			paginate: options.paginate === true ? true : undefined,
 			includeHidden: options["include-hidden"] === true ? true : undefined,

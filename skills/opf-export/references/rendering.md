@@ -7,7 +7,7 @@ npm install -g @openpresentation/cli @openpresentation/opf-render @openpresentat
 opf doctor --format text                                  # what this install can write, and the one install command
 opf convert deck.opf.json slides/deck.png --slides 1,3-5 [--scale 2] [--include-hidden]   # slides/deck-1.png, ... (zero-padded to the largest number: deck-01.png from ten slides)
 opf convert deck.opf.json "slides/slide-{n}.png"   # {n} = the slide number; always numbered, even for one slide
-opf convert deck.opf.json deck.pptx [--charts auto|native|picture] [--images compatible|preserve] [--provenance full|references-only|none]
+opf convert deck.opf.json deck.pptx [--charts auto|native|picture] [--images compatible|preserve] [--provenance full|references-only|none] [--body-text measured|native] [--slide-numbers static|live]
 opf convert deck.opf.json deck.pdf [--raster] [--paginate] [--date YYYY-MM-DD] [--fonts dir]
 opf convert deck.opf.json slides.zip [--to svg] [--text fonts|system|paths]
 opf convert deck.pptx deck.opf.json [--signals signals.json]

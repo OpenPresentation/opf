@@ -153,11 +153,17 @@ A flag applies only when its format is involved; anywhere else it is a usage err
 | png, raster pdf | `--scale 0.1-8` (1 draws the 1280 x 720 reference slide at 1280 x 720 pixels) |
 | pdf | `--raster` (each page a picture instead of selectable vector text) |
 | svg | `--text fonts\|system\|paths` (embed the faces the slide uses, none, or draw glyph outlines) |
-| pptx | `--charts auto\|native\|picture`, `--images compatible\|preserve`, `--provenance full\|references-only\|none` |
+| pptx | `--charts auto\|native\|picture`, `--images compatible\|preserve`, `--provenance full\|references-only\|none`, `--body-text measured\|native`, `--slide-numbers static\|live` |
 
 A `.pptx` input is imported, checked and then written or drawn; `findings` holds both steps (`import/` rules from the importer).
 Per-slide images and the PDF skip slides marked `hidden: true` unless `--include-hidden`; slides named with `--slides` are always
 written, and the report lists the slides left out in `skippedHidden`. The PPTX keeps a hidden slide as a hidden slide.
+
+### PPTX text (RR-88, RR-91)
+
+By default (`--body-text measured`) a wrapped paragraph becomes one text box per line, laid out exactly as the preview draws it, so editing a line in PowerPoint or Keynote does not reflow the rest. `--body-text native` opts in to whole paragraphs: a title that wraps is one Title placeholder, and a text, bullets or numbered-list region is one body that the application re-wraps when edited. What native mode cannot carry (groups, cards, nested or described lists, restarted numbering, titles with a hard break) stays measured and is reported as `native-body-fallback`. `--slide-numbers` decides a footer such as `{{slide.number}} / {{deck.slideCount}}`: `static` (the default) writes the number as fixed text, so Keynote shows the words around it, and `live` keeps the slide-number field, which Keynote draws as the digit alone because it drops the words next to a live number. A footer that is only `{{slide.number}}` stays a live field in both modes (the total is always fixed text). Both flags need an opf-pptx that reads them (0.22.0 or later); an older one is refused (`peer-too-old`) rather than ignoring them, and they are exit 2 for any other output.
+
+**Which to choose.** Pick `measured` (the default) when the deck is final and the PPTX is a delivery format: every line sits where the preview put it, and the deck is edited in OPF. Pick `native` when people will edit the text in PowerPoint or Keynote: a longer bullet wraps, a title keeps its placeholder (so outline view and slide titles work), and numbered lists renumber. Native text is re-wrapped by the application's own fonts and engine, so line breaks can differ from the preview; native wrapping is not yet qualified in every application, and anything it cannot carry (see above) stays measured with a `native-body-fallback` finding, so read the findings. `--slide-numbers static` is the default because Keynote replaces any paragraph that holds a live slide-number field with the number alone, so `{{slide.number}} / {{deck.slideCount}}` showed only the digit; the cost is that PowerPoint does not renumber a static number when you reorder slides there (choose `live` for that, and accept the digit-only footer in Keynote).
 
 ## The other commands
 

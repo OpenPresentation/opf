@@ -14,7 +14,7 @@ import { OPFApiError } from "../api-errors.js";
 import { embeddedFor, leaseSharedFonts, listFontDirectories, prepareFonts, substitutionRows } from "./fonts.js";
 import { type SlideSelection, parseSlideSelection } from "../slide-selection.js";
 import { deckStem, padNumber } from "./files.js";
-import { type Diagnostic, type FontsHandle, PPTX_PACKAGE, type Peer, type PptxModule, RENDER_PACKAGE, type Renderer, loadPptx, loadRenderer, missingPeerFrom } from "./peers.js";
+import { type Diagnostic, type FontsHandle, PPTX_PACKAGE, type Peer, type PptxModule, RENDER_PACKAGE, type Renderer, loadPptx, loadRenderer, missingPeerFrom, requirePptxOptions } from "./peers.js";
 import { Reporter, reportThrown } from "./reporter.js";
 import { createZip } from "./zip.js";
 
@@ -58,6 +58,18 @@ export interface ExportOptions {
 	provenance?: "full" | "references-only" | "none";
 	/** `pptx`: keep images as they are (`preserve`) or convert them for older PowerPoint (`compatible`). */
 	images?: "compatible" | "preserve";
+	/**
+	 * `pptx`: `measured` (the default) writes each wrapped line as its own text box, so the text lays out exactly as the preview draws it.
+	 * `native` opts in to whole paragraphs: a wrapped title is one Title placeholder and a text, list or bullets region one body, which
+	 * PowerPoint and Keynote re-wrap when edited. What native mode cannot carry keeps measured text, with a `native-body-fallback` finding.
+	 */
+	bodyText?: "measured" | "native";
+	/**
+	 * `pptx`: a footer or header text with words around the slide number (`{{slide.number}} / {{deck.slideCount}}`). `static` (opf-pptx's
+	 * default) writes the number as fixed text, so Keynote shows the words too; `live` keeps the slide-number field, which Keynote
+	 * draws as the digit alone. A text that is only `{{slide.number}}` stays a live field in both.
+	 */
+	slideNumbers?: "static" | "live";
 	/** `YYYY-MM-DD`, for date fields that show today's date. Nothing reads a clock: without it such a field reports `date-needs-value`. */
 	date?: string;
 	/** The directory a presentation's relative image paths resolve against. Omitted: no local file is read (data URIs and remote references work as the engines handle them). */
@@ -179,9 +191,11 @@ export function resolveExportOptions(options: ExportOptions): ResolvedExportOpti
 	const charts = oneOf("charts", options.charts, ["auto", "native", "picture"] as const);
 	const provenance = oneOf("provenance", options.provenance, ["full", "references-only", "none"] as const);
 	const images = oneOf("images", options.images, ["compatible", "preserve"] as const);
+	const bodyText = oneOf("bodyText", options.bodyText, ["measured", "native"] as const);
+	const slideNumbers = oneOf("slideNumbers", options.slideNumbers, ["static", "live"] as const);
 	const text = oneOf("text", options.text, EXPORT_TEXT);
 	if (options.raster && format !== "pdf") throw invalid("raster applies to format pdf.");
-	if ((charts !== undefined || provenance !== undefined || images !== undefined) && format !== "pptx") throw invalid("charts, provenance and images apply to format pptx.");
+	if ((charts !== undefined || provenance !== undefined || images !== undefined || bodyText !== undefined || slideNumbers !== undefined) && format !== "pptx") throw invalid("charts, provenance, images, bodyText and slideNumbers apply to format pptx.");
 	if (options.scale !== undefined && format !== "png" && format !== "pdf") throw invalid("scale applies to format png (and raster pdf).");
 	if (options.includeHidden && format === "pptx") throw invalid("includeHidden applies to per-slide image and PDF output; the PPTX keeps a hidden slide as a hidden slide.");
 	if (options.slides !== undefined && format === "pptx") throw invalid("slides is not available for pptx: the whole presentation is exported.");
@@ -295,6 +309,7 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 	const run = (extra: Partial<ExportRun> & { files: ExportFile[] }): ExportRun => ({ fonts: fontSummary(), ...(pagination ? { pagination } : {}), skippedHidden, ...extra });
 	try {
 		if (format === "pptx") {
+			requirePptxOptions(pptx as NonNullable<typeof pptx>, options, ctx.flags);
 			const module = (pptx as NonNullable<typeof pptx>).module;
 			const bytes = await module.toPptx(deck, {
 				fonts: handle,
@@ -308,6 +323,8 @@ async function drawWith(presentation: unknown, handle: FontsHandle, options: Res
 				...(options.charts ? { chartex: options.charts === "picture" ? "fallback" : options.charts } : {}),
 				...(options.provenance ? { provenance: options.provenance === "none" ? false : options.provenance } : {}),
 				...(options.images ? { imageFormat: options.images } : {}),
+				...(options.bodyText ? { bodyText: options.bodyText } : {}),
+				...(options.slideNumbers ? { slideNumberFields: options.slideNumbers } : {}),
 				...(date ? { date } : {}),
 			});
 			return run({ files: [{ name: `${stem}.pptx`, type: MEDIA.pptx, bytes }], skippedHidden: [] });
