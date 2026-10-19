@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import {unzipSync,zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {toPptx, fromPptx, resolvePresentation} from './helpers/default-catalog.mjs';
+import {colorHex,schemeRole,themeColorsOf,clrMapOf} from './helpers/scheme-colors.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 const fonts=await loadFonts({pack: 'base'}),options={fonts};
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),list=v=>v===undefined?[]:Array.isArray(v)?v:[v];
@@ -11,6 +12,7 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
   const deck={design:{contentBox:cards,fontScheme:'roboto',background:'#FFFFFF',colorScheme:{id:'cool-horizon',light2:alpha?'#F8FAFC80':'#F8FAFC',accent5:alpha?'#64748B80':'#64748B'},dimensions:{widthInches:dimensions.width/96,heightInches:dimensions.height/96}},slides:[{title:'Editable cards',composition:{mode:'row'},blocks:[{text:'Exact body text'},{metric}]}]},before=structuredClone(deck);
   const geometry=resolvePresentation(deck,options).slides[0].geometry;
   const bytes=await toPptx(deck,options),zip=unzipSync(bytes),xml=new TextDecoder().decode(zip['ppt/slides/slide1.xml']);
+  const theme=themeColorsOf(new TextDecoder().decode(zip['ppt/theme/theme1.xml'])),map=clrMapOf(new TextDecoder().decode(zip['ppt/slideMasters/slideMaster1.xml']));
   const shapes=list(parser.parse(xml)['p:sld']['p:cSld']['p:spTree']['p:sp']);
   const panels=shapes.filter(s=>s['p:nvSpPr']['p:cNvPr'].name.startsWith('OPF card '));
   assert.equal(panels.length,cards?2:0);
@@ -20,8 +22,11 @@ for(const dimensions of [{width:1280,height:720},{width:540,height:960}])for(con
     assert.equal(style['a:prstGeom'].prst,'roundRect');
     const radius=8*Math.min(dimensions.width,dimensions.height)/720,adjust=Number(style['a:prstGeom']['a:avLst']['a:gd'].fmla.split(' ')[1]);
     assert.ok(Math.abs(adjust/100000*Math.min(box.width,box.height)-radius)<.003);
-    assert.equal(style['a:solidFill']['a:srgbClr'].val,'F8FAFC');assert.equal(style['a:ln']['a:solidFill']['a:srgbClr'].val,'CCCCCC','card edge uses the neutral structural rule');
-    assert.equal(style['a:ln']['a:solidFill']['a:srgbClr']['a:alpha'],undefined,'neutral card edge stays opaque despite accent alpha');
+    // RR-96: the card fill is the surface role (bg2) and the edge the derived border neutral (tx1 at 20% over bg1), both scheme colours.
+    // (A translucent surface cannot be a theme slot, so the theme keeps the opaque default and the fill stays the literal colour with its alpha.)
+    assert.equal(schemeRole(style['a:solidFill']),alpha?undefined:'bg2');assert.equal(colorHex(style['a:solidFill'],theme,map),'F8FAFC');
+    assert.equal(schemeRole(style['a:ln']['a:solidFill']),'tx1');assert.equal(colorHex(style['a:ln']['a:solidFill'],theme,map),'CCCCCC','card edge uses the neutral structural rule');
+    assert.equal(style['a:ln']['a:solidFill']['a:schemeClr']['a:alpha'],undefined,'neutral card edge stays opaque despite accent alpha');
     if(alpha)assert.ok(Math.abs(Number(style['a:solidFill']['a:srgbClr']['a:alpha'].val)-128/255*100000)<1);
   }
   const body=shapes.find(s=>JSON.stringify(s['p:txBody']??{}).includes('Exact body text')),item=geometry.items.find(i=>i.field==='text'&&i.value==='Exact body text'),box=item.box,placed=item.text.placement.lines[0],position=body['p:spPr']['a:xfrm'];

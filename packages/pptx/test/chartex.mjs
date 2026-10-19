@@ -10,6 +10,7 @@ import {XMLValidator} from 'fast-xml-parser';
 import {catalogDisplay} from '@openpresentation/gallery';
 import {ENGINE_DEFAULT_COLOR_SCHEME} from '@openpresentation/opf/composition';
 import {fromPptx, toPptx} from './helpers/default-catalog.mjs';
+import {colorsInXml, themeColorsOf, clrMapOf} from './helpers/scheme-colors.mjs';
 import {CHART_TYPES, CHARTEX_NAMESPACES, chartTypeFromChartex, resolveChartType} from '../dist/chart-types.js';
 import {CHARTEX_CONTENT_TYPES, CHARTEX_RELATIONSHIP_TYPES, chartexPointColors, columnLetters, scottBinCount} from '../dist/chartex.js';
 
@@ -37,6 +38,12 @@ async function exportDeck(slides, options = {}) {
   }));
   return {bytes, parts, part, relationships, diagnostics};
 }
+// RR-96: a colour is `a:srgbClr` or `a:schemeClr` (a role of the deck with the luminance transforms of a derived neutral), written as an
+// element with or without children. Parts are compared on the colour *element*: `norm` makes an empty `<a:X ...></a:X>` self-closing so the
+// classic part and the chartex and style parts can be compared whichever way each was serialized.
+const norm = (xml) => xml.replace(/<a:(srgbClr|schemeClr)((?:\s[^>]*?)?)><\/a:\1>/g, '<a:$1$2/>');
+const COLOR = '(<a:(?:srgbClr|schemeClr)\\b[^>]*?/>|<a:(?:srgbClr|schemeClr)\\b[^>]*?>[\\s\\S]*?</a:(?:srgbClr|schemeClr)>)';
+const escapeRegExp = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const attribute = (xml, name) => xml.match(new RegExp(`\\b${name}="([^"]*)"`))?.[1];
 const points = (block) => [...block.matchAll(/<cx:pt idx="(\d+)">([^<]*)<\/cx:pt>/g)].map(([, idx, value]) => [Number(idx), value]);
 const chartChildren = (xml) => [...xml.matchAll(/<cx:(\w+)\b/g)].map(([, name]) => name);
@@ -110,7 +117,7 @@ for (const id of chartexIds) {
   assert.equal([...slide.matchAll(/<p:graphicFrame>/g)].length, 2, `${id}: no third chart frame`);
 
   // The chartex part.
-  const cx = part('ppt/charts/chartEx1.xml');
+  const cx = norm(part('ppt/charts/chartEx1.xml'));
   assert.equal(XMLValidator.validate(cx), true, `${id}: chartEx XML is well formed`);
   assert.match(cx, /^<\?xml version="1.0" encoding="UTF-8" standalone="yes"\?><cx:chartSpace xmlns:a="http:\/\/schemas.openxmlformats.org\/drawingml\/2006\/main" xmlns:r="http:\/\/schemas.openxmlformats.org\/officeDocument\/2006\/relationships" xmlns:cx="http:\/\/schemas.microsoft.com\/office\/drawing\/2014\/chartex">/, `${id}: chartSpace root`);
   assert.deepEqual(chartChildren(cx.replace(/<cx:chartData>[\s\S]*?<\/cx:chartData>/, '<cx:chartData/>').replace(/<cx:chart>[\s\S]*?<\/cx:chart>/, '<cx:chart/>')), ['chartSpace', 'chartData', 'chart', 'spPr', 'txPr'], `${id}: CT_ChartSpace child order`);
@@ -119,7 +126,7 @@ for (const id of chartexIds) {
   const blocks = [...chartData.matchAll(/<cx:data id="(\d+)">([\s\S]*?)<\/cx:data>/g)];
   const seriesColumns = id === 'box-and-whisker' ? 2 : 1;
   assert.equal(blocks.length, seriesColumns, `${id}: one cx:data per plotted series`);
-  const classic = part('ppt/charts/chart1.xml');
+  const classic = norm(part('ppt/charts/chart1.xml'));
   blocks.forEach(([, dataId, block], index) => {
     assert.equal(Number(dataId), index);
     const letter = columnLetters(index + 2);
@@ -176,14 +183,14 @@ for (const id of chartexIds) {
     assert.match(axes[2][2], /^<cx:valScaling max="1" min="0"\/><cx:units unit="percentage"\/><cx:tickLabels\/><cx:txPr>[\s\S]*<\/cx:txPr>$/, 'percentage axis');
   }
   // Colours and text follow the classic chart: series fill, per-point fills for treemap tiles and waterfall signs, label colour and font.
-  // RR-89: a classic series that keeps a theme accent is a schemeClr there; the chartex part writes the same colour as sRGB.
-  const classicFirst = classic.match(/<c:ser>[\s\S]*?<c:spPr><a:solidFill><a:(?:srgbClr|schemeClr) val="([0-9A-Za-z]+)"/)[1];
-  const classicSeriesColor = /^accent\d$/.test(classicFirst) ? ENGINE_DEFAULT_COLOR_SCHEME[classicFirst].slice(1).toUpperCase() : classicFirst;
-  const labelColor = classic.match(/<c:txPr>[\s\S]*?<a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)[1];
+  // RR-96: a colour that is a scheme colour is a schemeClr in both parts (accent for a series, tx1 with a luminance transform for a label), so the
+  // chartex part carries the very element the classic part does.
+  const classicSeriesColor = classic.match(new RegExp(`<c:ser>[\\s\\S]*?<c:spPr><a:solidFill>${COLOR}`))[1];
+  const labelColor = classic.match(new RegExp(`<c:txPr>[\\s\\S]*?<a:solidFill>${COLOR}`))[1];
   // Box whiskers, medians and mean markers are drawn with the series line, in the label colour; other constructs have no series line.
-  const seriesLine = id === 'box-and-whisker' ? `<a:ln w="9525"><a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill></a:ln>` : '';
-  assert.match(owner[2], new RegExp(`<cx:spPr><a:solidFill><a:srgbClr val="${classicSeriesColor}"/></a:solidFill>${seriesLine}</cx:spPr>`), `${id}: series colour is the classic first series colour`);
-  const pointFills = [...owner[2].matchAll(/<cx:dataPt idx="(\d+)"><cx:spPr><a:solidFill><a:srgbClr val="([0-9A-F]{6})"\/><\/a:solidFill><\/cx:spPr><\/cx:dataPt>/g)].map(([, idx, color]) => [Number(idx), color]);
+  const seriesLine = id === 'box-and-whisker' ? `<a:ln w="9525"><a:solidFill>${labelColor}</a:solidFill></a:ln>` : '';
+  assert.ok(owner[2].includes(`<cx:spPr><a:solidFill>${classicSeriesColor}</a:solidFill>${seriesLine}</cx:spPr>`), `${id}: series colour is the classic first series colour`);
+  const pointFills = [...owner[2].matchAll(new RegExp(`<cx:dataPt idx="(\\d+)"><cx:spPr><a:solidFill>${COLOR}</a:solidFill></cx:spPr></cx:dataPt>`, 'g'))].map(([, idx, color]) => [Number(idx), color]);
   if (id === 'treemap') {
     assert.equal(pointFills.length, data.rows.length, 'one tile colour per category');
     assert.equal(new Set(pointFills.map(([, color]) => color)).size, data.rows.length, 'distinct tile colours');
@@ -195,27 +202,30 @@ for (const id of chartexIds) {
   }
   const face = classic.match(/<a:latin typeface="([^"]+)"/)[1];
   // Every text element (chart space, each axis, data labels, legend) carries the same explicit label colour, font and size (FF-62, RR-90: the preview's 15 pt on the default slide).
-  const textProperties = `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="1500"><a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
+  const textProperties = `<cx:txPr><a:bodyPr/><a:lstStyle/><a:p><a:pPr><a:defRPr sz="1500"><a:solidFill>${labelColor}</a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></a:defRPr></a:pPr><a:endParaRPr lang="en-US"/></a:p></cx:txPr>`;
   const textBlocks = [...cx.matchAll(/<cx:txPr>[\s\S]*?<\/cx:txPr>/g)].map((match) => match[0]);
   assert.ok(textBlocks.every((block) => block === textProperties), `${id}: every cx:txPr is the deck's label colour and font`);
   assert.equal(textBlocks.length, 1 + want.axes + (want.dataLabels ? 1 : 0) + (id === 'box-and-whisker' ? 1 : 0), `${id}: txPr on the chart space, each axis, data labels and legend`);
   assert.ok(cx.endsWith(`${textProperties}</cx:chartSpace>`), `${id}: chart space txPr`);
-  const chartAreaFill = classic.match(/<\/c:chart><c:spPr><a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)[1];
-  assert.match(cx, new RegExp(`</cx:chart><cx:spPr><a:solidFill><a:srgbClr val="${chartAreaFill}"(?:/>|><a:alpha val="\\d+"/></a:srgbClr>)</a:solidFill><a:ln><a:noFill/></a:ln></cx:spPr>`), `${id}: chart area fill`);
+  const chartAreaFill = classic.match(new RegExp(`</c:chart><c:spPr><a:solidFill>${COLOR}`))[1];
+  // The chartex chart area is the classic chart area's colour, with the alpha of a translucent fill kept as a child.
+  const chartAreaOpen = chartAreaFill.endsWith('/>') ? chartAreaFill.slice(0, -2) : chartAreaFill.replace(/>[\s\S]*$/, '');
+  assert.match(cx, new RegExp(`</cx:chart><cx:spPr><a:solidFill>${escapeRegExp(chartAreaOpen)}(?:/>|>(?:<a:alpha val="\\d+"/>)</a:(?:srgbClr|schemeClr)>)</a:solidFill><a:ln><a:noFill/></a:ln></cx:spPr>`), `${id}: chart area fill`);
   assert.equal(cx.includes('<cx:legend'), id === 'box-and-whisker', `${id}: legend only for the multi-series box chart`);
 
   // Style parts are well formed and complete.
-  const style = part('ppt/charts/style1.xml');
+  const style = norm(part('ppt/charts/style1.xml'));
   assert.equal(XMLValidator.validate(style), true);
   assert.match(style, /^<\?xml [^>]*\?><cs:chartStyle xmlns:cs="http:\/\/schemas.microsoft.com\/office\/drawing\/2012\/chartStyle" xmlns:a="[^"]+" id="201">/);
   const entries = [...style.matchAll(/<cs:(\w+)\b/g)].map((match) => match[1]).filter((name) => !['chartStyle', 'lnRef', 'fillRef', 'effectRef', 'fontRef', 'spPr', 'defRPr', 'styleClr'].includes(name));
   assert.deepEqual(entries, ['axisTitle', 'categoryAxis', 'chartArea', 'dataLabel', 'dataLabelCallout', 'dataPoint', 'dataPoint3D', 'dataPointLine', 'dataPointMarker', 'dataPointMarkerLayout', 'dataPointWireframe', 'dataTable', 'downBar', 'dropLine', 'errorBar', 'floor', 'gridlineMajor', 'gridlineMinor', 'hiLoLine', 'leaderLine', 'legend', 'plotArea', 'plotArea3D', 'seriesAxis', 'seriesLine', 'title', 'trendline', 'trendlineLabel', 'upBar', 'valueAxis', 'wall'], 'CT_ChartStyle entries in schema order');
   for (const [, name, body] of style.matchAll(/<cs:(\w+)(?: mods="[^"]*")?>(<cs:lnRef[\s\S]*?)<\/cs:\1>/g)) {
     // The style part's text references carry the deck's label colour (PowerPoint applies them to chartex labels), never the theme's tx1.
-    assert.match(body, new RegExp(`^<cs:lnRef idx="\\d+"/><cs:fillRef idx="\\d+">(?:<cs:styleClr val="auto"/>)?</cs:fillRef><cs:effectRef idx="\\d+"/><cs:fontRef idx="minor"><a:srgbClr val="${labelColor}"/></cs:fontRef>`), `style entry ${name}`);
-    if (body.includes('<cs:defRPr')) assert.match(body, new RegExp(`<cs:defRPr sz="\\d+" kern="1200"><a:solidFill><a:srgbClr val="${labelColor}"/></a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></cs:defRPr>`), `style text ${name}`);
+    assert.match(body, new RegExp(`^<cs:lnRef idx="\\d+"/><cs:fillRef idx="\\d+">(?:<cs:styleClr val="auto"/>)?</cs:fillRef><cs:effectRef idx="\\d+"/><cs:fontRef idx="minor">${escapeRegExp(labelColor)}</cs:fontRef>`), `style entry ${name}`);
+    if (body.includes('<cs:defRPr')) assert.match(body, new RegExp(`<cs:defRPr sz="\\d+" kern="1200"><a:solidFill>${escapeRegExp(labelColor)}</a:solidFill><a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></cs:defRPr>`), `style text ${name}`);
   }
-  assert.doesNotMatch(style, /schemeClr val="tx1"/, `${id}: no theme text colour in the style part`);
+  // The deck's label colour is the only text colour the style part carries (never the theme's plain tx1, unless the label colour is that).
+  for (const [, body] of style.matchAll(/<cs:fontRef idx="minor">([\s\S]*?)<\/cs:fontRef>/g)) assert.equal(body, labelColor, `${id}: the style part's text colour is the deck's label colour`);
   const colors = part('ppt/charts/colors1.xml');
   assert.equal(XMLValidator.validate(colors), true);
   assert.match(colors, /<cs:colorStyle [^>]*meth="cycle" id="10">(<a:schemeClr val="accent[1-6]"\/>){6}(<cs:variation\/>|<cs:variation>[\s\S]*?<\/cs:variation>){9}<\/cs:colorStyle>$/);
@@ -441,26 +451,34 @@ const classicNumbers = (xml, tag) => [...xml.matchAll(new RegExp(`<c:${tag}>([\\
 // Theme-aware colours: the label colour, series line and style text follow the deck (dark text on the default light
 // surface, light text on a dark theme), as the classic chart path does.
 {
-  const colorsOf = (cx, style) => ({
-    text: [...new Set([...cx.matchAll(/<cx:txPr>[\s\S]*?<a:srgbClr val="([0-9A-F]{6})"/g)].map((m) => m[1]))],
-    style: [...new Set([...style.matchAll(/<cs:fontRef idx="minor"><a:srgbClr val="([0-9A-F]{6})"/g)].map((m) => m[1]))],
-    line: cx.match(/<cx:series[^>]*>[\s\S]*?<cx:spPr><a:solidFill>[\s\S]*?<\/a:solidFill><a:ln w="9525"><a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)?.[1],
-  });
+  // RR-96: the label colour is a scheme colour (tx1 with a luminance transform of the deck's text), so compare the colour *element* between the
+  // parts, and what it resolves to through the exported theme and the master's colour map for the light-or-dark check.
+  const resolved = (parts, element) => colorsInXml(element, themeColorsOf(strFromU8(parts['ppt/theme/theme1.xml'])), clrMapOf(strFromU8(parts['ppt/slideMasters/slideMaster1.xml'])))[0];
+  const colorsOf = (parts, cx, style) => {
+    const text = [...new Set([...cx.matchAll(new RegExp(`<cx:txPr>[\\s\\S]*?<a:solidFill>${COLOR}`, 'g'))].map((m) => m[1]))];
+    return {
+      text,
+      style: [...new Set([...style.matchAll(new RegExp(`<cs:fontRef idx="minor">${COLOR}`, 'g'))].map((m) => m[1]))],
+      line: cx.match(new RegExp(`<cx:series[^>]*>[\\s\\S]*?<cx:spPr><a:solidFill>[\\s\\S]*?</a:solidFill><a:ln w="9525"><a:solidFill>${COLOR}`))?.[1],
+      resolved: text.map((element) => resolved(parts, element)),
+    };
+  };
   // The default scheme is a dark surface; an explicit scheme with dark text on a light surface is the other case (as test/chart-colors.mjs does).
   const dark = await exportDeck([{title: 'box', chart: {type: 'box-and-whisker', data: boxData}}]);
   const lightDeck = {design: {background: '#FFFFFF', colorScheme: {id: 'cool-horizon', dark1: '#1F2937', light1: '#1F2937', text: '#1F2937', dark2: '#F3F4F6', light2: '#F3F4F6'}}, slides: [{title: 'box', chart: {type: 'box-and-whisker', data: boxData}}]};
   const lightParts = unzipSync(await toPptx(lightDeck, {chartex: 'native'}));
-  const darkColors = colorsOf(dark.part('ppt/charts/chartEx1.xml'), dark.part('ppt/charts/style1.xml'));
-  const lightColors = colorsOf(strFromU8(lightParts['ppt/charts/chartEx1.xml']), strFromU8(lightParts['ppt/charts/style1.xml']));
+  const darkColors = colorsOf(dark.parts, norm(dark.part('ppt/charts/chartEx1.xml')), norm(dark.part('ppt/charts/style1.xml')));
+  const lightColors = colorsOf(lightParts, norm(strFromU8(lightParts['ppt/charts/chartEx1.xml'])), norm(strFromU8(lightParts['ppt/charts/style1.xml'])));
   for (const [name, colors] of [['light', lightColors], ['dark', darkColors]]) {
     assert.equal(colors.text.length, 1, `${name}: one label colour`);
     assert.deepEqual(colors.style, colors.text, `${name}: the style text colour is the label colour`);
     assert.equal(colors.line, colors.text[0], `${name}: the box series line is the label colour`);
+    assert.equal(colors.resolved[0].role, 'tx1', `${name}: the label colour is a theme text colour`);
   }
   const luminance = (hex) => [0, 2, 4].map((i) => parseInt(hex.slice(i, i + 2), 16)).reduce((sum, v, i) => sum + v * [0.299, 0.587, 0.114][i], 0);
-  assert.ok(luminance(lightColors.text[0]) < 128, `light surface: dark labels (${lightColors.text[0]})`);
-  assert.ok(luminance(darkColors.text[0]) > 128, `dark surface: light labels (${darkColors.text[0]})`);
-  const classicLight = strFromU8(lightParts['ppt/charts/chart1.xml']).match(/<c:txPr>[\s\S]*?<a:srgbClr val="([0-9A-F]{6})"/)[1];
+  assert.ok(luminance(lightColors.resolved[0].hex) < 128, `light surface: dark labels (${lightColors.resolved[0].hex})`);
+  assert.ok(luminance(darkColors.resolved[0].hex) > 128, `dark surface: light labels (${darkColors.resolved[0].hex})`);
+  const classicLight = norm(strFromU8(lightParts['ppt/charts/chart1.xml'])).match(new RegExp(`<c:txPr>[\\s\\S]*?<a:solidFill>${COLOR}`))[1];
   assert.equal(lightColors.text[0], classicLight, 'the chartex label colour is the classic chart label colour');
   checks++;
 }

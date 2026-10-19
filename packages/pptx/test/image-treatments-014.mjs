@@ -9,6 +9,7 @@ import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx} from '../dist/index.js';
+import {colorHex, schemeRole} from './helpers/scheme-colors.mjs';
 
 const before = JSON.parse(await readFile(new URL('fixtures/image-treatments-0.14.json', import.meta.url), 'utf8'));
 const hero = {src: `data:image/png;base64,${(await readFile(new URL('fixtures/images/treatment-hero.png', import.meta.url))).toString('base64')}`, alt: 'Project-authored posterized landscape with a sun', mediaType: 'image/png'};
@@ -45,6 +46,8 @@ const CHANGED = {
 const deck = {assets: {hero}, design: {theme: 'classic'}, slides: Object.entries(SLIDES).map(([id, slide]) => ({id, ...(id === 'collage-grid' ? {title: 'Collage Grid'} : heading(id)), ...slide}))};
 const bytes = await toPptx(deck, {imageFormat: 'preserve', strictAssets: true, provenance: false, catalogs: [defaultCatalog]});
 const entries = unzipSync(bytes);
+const themeXml = new TextDecoder().decode(entries['ppt/theme/theme1.xml']);
+const theme = Object.fromEntries([...themeXml.matchAll(/<a:(dk1|lt1|dk2|lt2|accent[1-6]|hlink|folHlink)><a:srgbClr val="([0-9A-F]{6})"\/>/g)].map(m => [m[1], m[2]]));
 const flat = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false});
 // 0.14's names for the same objects, so the paint order compares as is.
 const legacy = (name, index) => name.replace(/^OPF background slides\.\d+ overlay$/, `OPF slide image overlay slides.${index}`).replace(/^OPF background overlay slides\.\d+$/, `OPF slide image overlay slides.${index}`)
@@ -52,12 +55,20 @@ const legacy = (name, index) => name.replace(/^OPF background slides\.\d+ overla
 const near = (a, b) => Math.abs(Number(a) - Number(b)) <= 1;
 const sameNumbers = (actual, expected, label) => {
   const flatten = (value, prefix = '') => value && typeof value === 'object' ? Object.entries(value).flatMap(([key, item]) => flatten(item, `${prefix}.${key}`)) : [[prefix, value]];
-  const a = Object.fromEntries(flatten(actual)), e = Object.fromEntries(flatten(expected));
+  const a = Object.fromEntries(flatten(literal(actual))), e = Object.fromEntries(flatten(expected));
   assert.deepEqual(Object.keys(a).sort(), Object.keys(e).sort(), label);
   for (const key of Object.keys(e)) assert.ok(/^-?\d+$/.test(e[key]) ? near(a[key], e[key]) : a[key] === e[key], `${label}${key}: ${a[key]} vs ${e[key]}`);
 };
 let same = 0, changed = 0;
-const blipEffects = blip => Object.fromEntries(Object.entries(blip).filter(([key]) => !key.startsWith('r:') && key !== 'a:extLst'));
+// RR-96: a theme colour in a blip effect (the duotone pair) is an a:schemeClr; compare what it resolves to, as the 0.14 literal.
+const literal = value => {
+  if (!value || typeof value !== 'object') return value;
+  if (Array.isArray(value)) return value.map(literal);
+  return Object.fromEntries(Object.entries(value).map(([key, item]) => key === 'a:schemeClr'
+    ? ['a:srgbClr', Array.isArray(item) ? item.map(one => ({val: colorHex({'a:schemeClr': one}, theme)})) : {val: colorHex({'a:schemeClr': item}, theme)}]
+    : [key, literal(item)]));
+};
+const blipEffects = blip => literal(Object.fromEntries(Object.entries(blip).filter(([key]) => !key.startsWith('r:') && key !== 'a:extLst')));
 deck.slides.forEach((slide, index) => {
   const xml = new TextDecoder().decode(entries[`ppt/slides/slide${index + 1}.xml`]);
   const expected = before[slide.id];
@@ -94,7 +105,11 @@ deck.slides.forEach((slide, index) => {
   if (expected.overlay) {
     sameNumbers(overlay['p:spPr']['a:xfrm'], expected.overlay.xfrm, `${slide.id} overlay frame`);
     sameNumbers(overlay['p:spPr']['a:prstGeom'], expected.overlay.geom, `${slide.id} overlay shape`);
-    sameNumbers(overlay['p:spPr']['a:solidFill'], expected.overlay.fill, `${slide.id} overlay fill`);
+    // RR-96: the overlay colour is a theme colour (a:schemeClr), so compare what it resolves to and its alpha.
+    const fill = overlay['p:spPr']['a:solidFill'];
+    assert.ok(schemeRole(fill), `${slide.id} overlay fill is a scheme colour`);
+    assert.equal(colorHex(fill, theme), expected.overlay.fill['a:srgbClr'].val, `${slide.id} overlay colour`);
+    assert.equal(fill['a:schemeClr']['a:alpha'].val, expected.overlay.fill['a:srgbClr']['a:alpha'].val, `${slide.id} overlay alpha`);
   } else assert.equal(overlay, undefined, slide.id);
   same++;
 });

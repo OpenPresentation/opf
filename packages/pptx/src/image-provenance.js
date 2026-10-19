@@ -151,7 +151,7 @@ export function pictureFrame(metadata, {box, fit, focus = {x: .5, y: .5}, shrink
  * picture's objectName, or 'background' for the overlay of a native slide background fill; `overlay` (the authored value)
  * is stored in OPF_IMAGE_OVERLAY_V1.
  */
-export function placeImages(entries, images, overlays, {metadataFor, fail, fitImage, mediaKeyFor}) {
+export function placeImages(entries, images, overlays, {metadataFor, fail, fitImage, mediaKeyFor, finish = (_part, xml) => xml}) {
   if (!images.size && !overlays.size) return;
   const manifests = new Map(), overlayManifests = new Map(), placed = new Set(), shaped = new Set();
   for (const part of Object.keys(entries).filter(path => /^ppt\/slides\/slide\d+\.xml$/.test(path))) {
@@ -176,6 +176,8 @@ export function placeImages(entries, images, overlays, {metadataFor, fail, fitIm
         const blip = blipEffects(effects);
         if (blip) picture = picture.replace(/<a:blip\b([^>]*?)(?:\/>|>([\s\S]*?)<\/a:blip>)/, (_, attributes, inner = '') => `<a:blip${attributes}>${blip}${inner}</a:blip>`);
       }
+      // RR-96: the colours the treatment wrote become scheme colours before the manifest fingerprints the shape.
+      picture = finish(part, picture);
       placed.add(name);
       if (image.treatment !== undefined) {
         const node = parser.parse(picture)['p:pic'];
@@ -191,6 +193,7 @@ export function placeImages(entries, images, overlays, {metadataFor, fail, fitIm
       if (!overlay) return shape;
       const emu = value => Math.round(value / 96 * EMUS_PER_INCH);
       shape = shape.replace(/<p:spPr>[\s\S]*?<\/p:spPr>/, `<p:spPr><a:xfrm><a:off x="${emu(overlay.box.x)}" y="${emu(overlay.box.y)}"/><a:ext cx="${emu(overlay.box.width)}" cy="${emu(overlay.box.height)}"/></a:xfrm>${presetXml(overlay.shape)}<a:solidFill>${colorXml(overlay, overlay.opacity)}</a:solidFill><a:ln><a:noFill/></a:ln></p:spPr>`);
+      shape = finish(part, shape);
       const node = parser.parse(shape)['p:sp'];
       overlayManifests.set(name, {v: 1, slide: overlay.slide, owner: overlay.owner, overlay: overlay.overlay, properties: node['p:spPr']});
       shaped.add(name);

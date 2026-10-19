@@ -38,10 +38,17 @@ const composed = (document, index = 7) => resolvePresentation(document).slides[i
 const bodyWords = slide => JSON.stringify({text: slide.text, blocks: slide.blocks, title: slide.title, subtitle: slide.subtitle, tag: slide.tag});
 const hasLiteral = document => document.slides.some(slide => bodyWords(slide).includes('Keynote qualification'));
 const fixtures = [];
+// RR-96: a table fill equal to a color of the package theme imports as that slot (the sealed control predates it, so its literals are read the same way).
+const FIXTURE_THEME_SLOTS = {'#2874A6': 'accent1', '#011842': 'light1'};
+const slotFills = value => {
+  if (Array.isArray(value)) return value.map(slotFills);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(Object.entries(value).map(([key, entry]) => [key, key === 'fill' && typeof entry === 'string' && FIXTURE_THEME_SLOTS[entry.toUpperCase()] ? FIXTURE_THEME_SLOTS[entry.toUpperCase()] : slotFills(entry)]));
+};
 for (const [index, fixture] of manifest.fixtures.entries()) {
   const bytes = new Uint8Array(await readFile(new URL(fixture.file, directory)));
   assert.equal(bytes.length, fixture.bytes); assert.equal(hash(bytes), fixture.sha256);
-  const current = await read(bytes), expected = structuredClone(before[index].document);
+  const current = await read(bytes), expected = slotFills(structuredClone(before[index].document));
   assert.equal(before[index].name, index ? 'B' : 'A');
   for (const slide of expected.slides) {
     const matches = slide.blocks?.filter(block => block.type === 'text' && block.text?.[0]?.text === 'Keynote qualification');

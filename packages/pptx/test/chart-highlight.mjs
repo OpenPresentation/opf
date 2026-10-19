@@ -10,6 +10,7 @@ import {XMLParser} from 'fast-xml-parser';
 import {chartHighlightColors, textColorForFill} from '@openpresentation/opf/composition';
 import {toSvg} from '@openpresentation/opf-render';
 import {toPptx, fromPptx} from '../dist/index.js';
+import {clrMapOf, colorsInXml, themeColorsOf} from './helpers/scheme-colors.mjs';
 
 const decoder = new TextDecoder();
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', preserveOrder: true});
@@ -153,9 +154,10 @@ for (const [type, source] of [['area', data], ['scatter', scatterData], ['radar'
 
 // 9. Data labels inside a muted mark take the colour that contrasts with it, per point where marks differ.
 {
-  const {classic} = await exportDeck({type: 'column', data, highlight: {categories: ['Q2']}, dataLabels: {position: 'center'}});
+  const {classic, theme, entries} = await exportDeck({type: 'column', data, highlight: {categories: ['Q2']}, dataLabels: {position: 'center'}});
+  const master = decoder.decode(entries['ppt/slideMasters/slideMaster1.xml']);
   const [north] = seriesOf(classic);
-  const blocks = [...north.matchAll(/<c:dLbl><c:idx val="(\d+)"\/>[\s\S]*?<a:srgbClr val="(\w{6})"\/>/g)].map(match => [Number(match[1]), match[2]]);
+  const blocks = [...north.matchAll(/<c:dLbl><c:idx val="(\d+)"\/>[\s\S]*?<\/c:dLbl>/g)].map(match => [Number(match[1]), colorsInXml(match[0], themeColorsOf(theme), clrMapOf(master))[0].hex]);
   assert.equal(blocks.length, 4, 'a label entry per point');
   const muted = /<a:srgbClr val="(\w{6})"\/>/.exec(seriesFill(north))[1];
   const text = textColorForFill(`#${muted}`, '#FFFFFF').slice(1).toUpperCase();

@@ -12,7 +12,7 @@ const bg = (parts, path, fill) => edit(parts, path, xml => xml.replace(/<p:bg>.*
 const solid = hex => `<p:bgPr><a:solidFill><a:srgbClr val="${hex}"/></a:solidFill></p:bgPr>`;
 const scheme = (slot, alpha='') => `<p:bgPr><a:solidFill><a:schemeClr val="${slot}">${alpha}</a:schemeClr></a:solidFill></p:bgPr>`;
 const map = (parts, path, kind, slot) => edit(parts,path,xml => {
-  const full = decoder.decode(parts[master]).match(/<p:clrMap ([^>]+)\/>/)[1].replace('bg1="lt1"',`bg1="${slot}"`);
+  const full = decoder.decode(parts[master]).match(/<p:clrMap ([^>]+)\/>/)[1].replace(/bg1="\w+"/,`bg1="${slot}"`);
   const override = `<p:clrMapOvr>${kind === 'master' ? '<a:masterClrMapping/>' : '<a:overrideClrMapping '+full+'/>'}</p:clrMapOvr>`;
   return xml.replace(/<p:clrMapOvr>.*?<\/p:clrMapOvr>/s,'').replace(/<\/(p:sld|p:sldLayout)>/,override+'</$1>');
 });
@@ -27,13 +27,15 @@ async function check(change, expected, diagnostic) {
   // Deck theme colors are reported separately (FF-24); translucent or missing
   // theme slots are not OPF color-scheme values. Backgrounds still resolve them.
   const imported=await fromPptx(bytes,{onDiagnostic:d=>(d.path?.startsWith('design.')?themeReports:reports).push(d)});
-  assert.ok(themeReports.every(d=>d.code==='unsupported-theme-colors'),JSON.stringify(themeReports));
+  // RR-96: a color map OPF cannot name as a variant (bg1 on an accent) is reported with the deck-level diagnostics too.
+  assert.ok(themeReports.every(d=>d.code==='unsupported-theme-colors'||d.code==='unsupported-color-map'),JSON.stringify(themeReports));
   assert.deepEqual(bytes,original,'Native source bytes stay intact');
   assert.equal(validate(imported, {only: ['format']}).valid,true);
   const comparable = background => background?.opacity === undefined ? background : {...background, opacity: Math.round(background.opacity * 1e12) / 1e12};
   assert.deepEqual(comparable(imported.slides[0].design?.background),expected);
   if(diagnostic) {assert.equal(reports[0]?.code,diagnostic);assert.equal(reports[0]?.path,'slides.0.design.background');}
-  else assert.deepEqual(reports,[]);
+  // RR-96: an override that maps bg1 to an accent is not a variant OPF names; that is reported on slides[n].design.variant, apart from the background.
+  else assert.deepEqual(reports.filter(d=>d.code!=='unsupported-color-map'),[]);
   if(expected) {
     const again=await fromPptx(await toPptx(imported));
     assert.deepEqual(comparable(again.slides[0].design.background),expected,'Resolved colors remain editable through another native round-trip');
@@ -49,11 +51,12 @@ for(const explicit of [false,true])await check(p=>{
   edit(p,theme,x=>x.replace('<a:accent1><a:srgbClr val="123456"/></a:accent1>','<a:accent1><a:srgbClr val="123456"><a:alpha val="20000"/></a:srgbClr></a:accent1>'));
   bg(p,slide,scheme('accent1',explicit?'<a:alpha val="50000"/>':''));
 },{type:'solid',color:'#123456',opacity:explicit?.5:.2});
-await check(p=>bg(p,master,scheme('bg1')),{type:'solid',color:'#FFFFFF'});
-await check(p=>{bg(p,master,scheme('bg1'));edit(p,master,x=>x.replace('bg1="lt1"','bg1="accent1"'));},{type:'solid',color:'#123456'});
+// RR-96: a plain bg1 background is the variant's own background: nothing to import (the color map carries it).
+await check(p=>bg(p,master,scheme('bg1')),undefined);
+await check(p=>{bg(p,master,scheme('bg1'));edit(p,master,x=>x.replace(/(<p:clrMap [^>]*)bg1="\w+"/,'$1bg1="accent1"'));},{type:'solid',color:'#123456'});
 await check(p=>{bg(p,master,scheme('bg1'));map(p,layout,'override','accent1');edit(p,slide,x=>x.replace(/<p:clrMapOvr>.*?<\/p:clrMapOvr>/s,''));},{type:'solid',color:'#123456'});
 await check(p=>{bg(p,master,scheme('bg1'));map(p,layout,'override','accent1');map(p,slide,'override','accent2');},{type:'solid',color:'#ABCDEF'});
-await check(p=>{bg(p,master,scheme('bg1'));map(p,layout,'override','accent1');map(p,slide,'master');},{type:'solid',color:'#FFFFFF'});
+await check(p=>{bg(p,master,scheme('bg1'));map(p,layout,'override','accent1');map(p,slide,'master');},undefined);
 
 const fillList = '<a:solidFill><a:schemeClr val="phClr"/></a:solidFill><a:gradFill><a:gsLst><a:gs pos="0"><a:schemeClr val="accent1"/></a:gs><a:gs pos="100000"><a:schemeClr val="accent2"/></a:gs></a:gsLst><a:lin ang="5400000" scaled="0"/></a:gradFill><a:solidFill><a:srgbClr val="13579B"/></a:solidFill>';
 const setStyles = p => edit(p,theme,x=>x.replace(/<a:fillStyleLst>.*?<\/a:fillStyleLst>/s,`<a:fillStyleLst>${fillList}</a:fillStyleLst>`).replace(/<a:bgFillStyleLst>.*?<\/a:bgFillStyleLst>/s,`<a:bgFillStyleLst>${fillList}</a:bgFillStyleLst>`));

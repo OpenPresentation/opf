@@ -184,11 +184,28 @@ function readNativePattern(pattern, report, context) {
     ...(uniform && foreground.alpha !== 1 ? {opacity: foreground.alpha} : {})};
 }
 
+// The OPF slot an `a:schemeClr` with no color transform stands for through the color map (`bg1` stays the role), or undefined.
+// (OPF's theme-slot background is one of the four light and dark slots; an accent keeps its resolved color.)
+const SLOT_NAMES_BY_OOXML = {lt1: 'light1', dk1: 'dark1', lt2: 'light2', dk2: 'dark2'};
+function plainSchemeSlot(fill, context) {
+  const node = fill?.['a:schemeClr'];
+  if (!node || Array.isArray(node) || Object.keys(node).some(key => key.startsWith('a:'))) return undefined;
+  if (node.val === 'bg1') return !context.mapping?.bg1 || SLOT_NAMES_BY_OOXML[context.mapping.bg1] ? 'bg1' : undefined;
+  return SLOT_NAMES_BY_OOXML[context.mapping?.[node.val] ?? node.val];
+}
+
 export function readNativeBackground(properties, {width, height}, report = () => {}, context = {}) {
   if (!properties) return undefined;
   if (Object.hasOwn(properties, 'a:noFill')) return {type: 'solid', color: '#FFFFFF', opacity: 0};
   const solid = readBackgroundColor(properties['a:solidFill'], context);
-  if (solid) return {type: 'solid', color: solid.hex, ...(solid.alpha === 1 ? {} : {opacity: solid.alpha})};
+  if (solid) {
+    // RR-96: a plain scheme color is the theme slot it reaches through the color map (the OPF theme-slot background); bg1 is the variant's own
+    // background, which design.variant already carries, so it imports as no background of its own.
+    const slot = plainSchemeSlot(properties['a:solidFill'], context);
+    if (slot === 'bg1' && solid.alpha === 1) return undefined;
+    if (slot && slot !== 'bg1') return {type: 'theme', slot, ...(solid.alpha === 1 ? {} : {opacity: solid.alpha})};
+    return {type: 'solid', color: solid.hex, ...(solid.alpha === 1 ? {} : {opacity: solid.alpha})};
+  }
   if (properties['a:pattFill']) return readNativePattern(properties['a:pattFill'], report, context);
   if (properties['a:blipFill'] && context.image) return context.image(properties['a:blipFill']);
   const gradient = properties['a:gradFill'];

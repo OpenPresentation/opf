@@ -25,7 +25,7 @@ async function read(parts = original) {
   return {deck, diagnostics};
 }
 const {deck, diagnostics} = await read();
-assert.equal(createHash('sha256').update(JSON.stringify(deck)).digest('hex'), 'c6a3d6a414dab48c37e2b076ab5182dee00532aecedd7e7036b1f4906d05aa15', 'Exact reviewed whole import; no style normalization');
+assert.equal(createHash('sha256').update(JSON.stringify(deck)).digest('hex'), '7bcfc43c75b926dc193f451c984c773fed3e0eb54ec55845356c8c509b8e9f3f', 'Exact reviewed whole import; no style normalization (RR-96: table fills equal to a package theme color import as the slot, the only change)');
 for (const slide of [1,2,4,6,8,13,14,15,16]) {
   const block = deck.slides[slide].blocks[0], values = slide === 16 ? block.items : [block.text];
   for (const value of values) for (const run of Array.isArray(value) ? value : [value]) if (typeof run !== 'string') {

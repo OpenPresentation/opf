@@ -52,7 +52,9 @@ let checked = 0;
   plain.forEach((fill, index) => { if (index >= 2 && /^accent\d$/.test(fill)) assert.equal(third[index], fill, `series ${index + 1} keeps the deck palette`); });
   assert.equal(third.length, plain.length);
   const variable = await chartXml({type: 'column', data: small, colors: ['var:brand']}, {colorScheme: scheme, background: light});
-  assert.equal(fills(variable)[0], '7B241C', 'an unresolvable variable keeps the palette colour of its position (as sRGB: the entry is not a scheme name)');
+  // RR-96: the position's colour is the deck's accent1, which the finished part writes as the theme colour (the entry itself is not a scheme name).
+  assert.equal(fills(variable)[0], 'accent1', 'an unresolvable variable keeps the palette colour of its position (accent1, the deck colour)');
+  assert.match(await themeXml({type: 'column', data: small, colors: ['var:brand']}, {colorScheme: scheme, background: light}), /<a:accent1><a:srgbClr val="7B241C"\/>/, 'accent1 of the theme is that colour');
   checked += 3;
 }
 

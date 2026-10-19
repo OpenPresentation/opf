@@ -1,22 +1,30 @@
 import assert from 'node:assert/strict';
-import {unzipSync} from 'fflate';
+import {strFromU8, unzipSync} from 'fflate';
 import {toSvg} from '@openpresentation/opf-render';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {composeSlide} from '@openpresentation/opf/composition';
 import {toPptx} from '../dist/index.js';
+import {colorsInXml, themeColorsOf, clrMapOf} from './helpers/scheme-colors.mjs';
 
 // Layout designs set title/content alignment. The native text must use the
 // same alignment the preview draws, with and without host text measurement.
 const decoder = new TextDecoder();
 const slideXml = async (deck, options = {}) => {
   const entries = unzipSync(await toPptx(deck, {seed: 1, ...options}));
-  return deck.slides.map((_, index) => decoder.decode(entries[`ppt/slides/slide${index + 1}.xml`]));
+  const slides = deck.slides.map((_, index) => decoder.decode(entries[`ppt/slides/slide${index + 1}.xml`]));
+  // RR-96: scheme colours resolve through the exported theme and the master's clrMap (a slide's override is merged over it by `shapes`).
+  return Object.assign(slides, {theme: themeColorsOf(strFromU8(entries['ppt/theme/theme1.xml'])), masterMap: clrMapOf(strFromU8(entries['ppt/slideMasters/slideMaster1.xml']))});
 };
-const shapes = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => ({
+// The solid fill of the shape itself (not its outline), as {hex, role}: an `a:schemeClr` has `role`, a literal does not.
+const shapeFill = (shape, context, slideXml) => {
+  const fill = shape.match(/<p:spPr>([\s\S]*?)(?:<a:ln\b|<\/p:spPr>)/)?.[1].match(/<a:solidFill>[\s\S]*?<\/a:solidFill>/)?.[0];
+  return fill && colorsInXml(fill, context.theme, {...context.masterMap, ...clrMapOf(slideXml)})[0];
+};
+const shapes = (xml, context) => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => ({
   name: shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1] ?? '',
   text: [...shape.matchAll(/<a:t>([^<]*)<\/a:t>/g)].map(match => match[1]).join(''),
   align: [...shape.matchAll(/<a:pPr\b[^>]*\balgn="(\w+)"/g)].map(match => match[1]),
-  fill: shape.match(/<p:spPr>[\s\S]*?<a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)?.[1],
+  fill: context && shapeFill(shape, context, xml),
   geometry: shape.match(/<a:prstGeom prst="(\w+)"/)?.[1],
   rotation: shape.match(/<a:xfrm\b[^>]*\brot="(\d+)"/)?.[1],
 }));
@@ -107,8 +115,8 @@ assert.equal(coverChecks, 18);
 
 // Media placeholders draw the same surface, play badge and caption as the preview.
 const media = {design: {fontScheme: 'roboto'}, slides: [{title: 'Media', video: {src: 'https://example.com/video.mp4', description: 'Walkthrough'}}]};
-const [mediaXml] = await slideXml(media), [mediaSvg] = toSvg(media);
-const mediaShapes = shapes(mediaXml);
+const mediaSlides = await slideXml(media), [mediaXml] = mediaSlides, [mediaSvg] = toSvg(media);
+const mediaShapes = shapes(mediaXml, mediaSlides);
 const frame = mediaShapes.find(shape => shape.name === 'OPF media slides.0.video frame');
 const badge = mediaShapes.find(shape => shape.name === 'OPF media slides.0.video badge');
 const play = mediaShapes.find(shape => shape.name === 'OPF media slides.0.video play');
@@ -116,8 +124,12 @@ assert.ok(frame && badge && play, 'Media placeholder shapes');
 assert.equal(badge.geometry, 'ellipse');
 assert.equal(play.geometry, 'triangle');
 assert.equal(play.rotation, String(90 * 60000));
-assert.equal(play.fill, 'FFFFFF');
-for (const shape of [frame, badge]) assert.ok(mediaSvg.includes(`fill="#${shape.fill}"`), `Preview uses media fill ${shape.fill}`);
+// The default deck is dark (bg1 = dk2, tx1 = lt1): the surface is the slide background role, the badge the accent, the play mark the text role.
+assert.deepEqual(play.fill, {hex: 'FFFFFF', role: 'tx1'});
+assert.deepEqual(frame.fill, {hex: '011842', role: 'bg1'});
+assert.deepEqual(badge.fill, {hex: '2874A6', role: 'accent1'});
+for (const shape of [frame, badge]) assert.ok(mediaSvg.includes(`fill="#${shape.fill.hex}"`), `Preview uses media fill ${shape.fill.hex}`);
+assert.match(mediaSvg, /<path\b[^>]*\bd="M [^"]* Z"[^>]*\bfill="#FFFFFF"/, 'Preview draws the play mark in the same colour');
 assert.deepEqual(alignmentOf(mediaXml, 'https://example.com/video.mp4'), ['ctr']);
 assert.ok(!mediaXml.includes('&quot;src&quot;'), 'Media export must not print the payload as JSON');
 

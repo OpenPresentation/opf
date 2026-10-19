@@ -9,6 +9,7 @@ import {XMLParser} from 'fast-xml-parser';
 import {composeSlide} from '@openpresentation/opf/composition';
 import {validate} from '@openpresentation/opf';
 import {toPptx, fromPptx} from '../dist/index.js';
+import {schemeRole} from './helpers/scheme-colors.mjs';
 
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false});
 const array = value => value == null ? [] : Array.isArray(value) ? value : [value];
@@ -66,7 +67,9 @@ for (const fit of ['cover', 'contain', 'stretch', 'tile']) {
     const overlay = shapes.find(shape => shape['p:nvSpPr']['p:cNvPr'].name === overlayName)['p:spPr'];
     const box = geometry.overlay.box;
     assert.deepEqual([overlay['a:xfrm']['a:off'].x, overlay['a:xfrm']['a:off'].y, overlay['a:xfrm']['a:ext'].cx, overlay['a:xfrm']['a:ext'].cy].map(Number), [box.x, box.y, box.width, box.height].map(emu));
-    assert.equal(Number(overlay['a:solidFill']['a:srgbClr']['a:alpha'].val), Math.round((label === 'fill' ? 0.4 : 0.6) * 100000));
+    // RR-96: the overlay color dark1 is the scheme role tx1 (the default map), not a literal.
+    assert.equal(schemeRole(overlay['a:solidFill']), 'tx1', `${label}: the overlay color is a theme color`);
+    assert.equal(Number(overlay['a:solidFill']['a:schemeClr']['a:alpha'].val), Math.round((label === 'fill' ? 0.4 : 0.6) * 100000));
     const imported = await fromPptx(await toPptx(deck, {imageFormat: 'preserve', provenance: false}), {onDiagnostic: () => {}});
     assert.deepEqual(imported.slides[0].design.background.overlay, background.overlay, `${label}: the overlay returns`);
     assert.equal(JSON.stringify(imported.slides[0].blocks ?? []).includes('PowerPoint shape'), false, `${label}: the overlay is no content`);
@@ -82,7 +85,7 @@ for (const fit of ['cover', 'contain', 'stretch', 'tile']) {
     const duotone = {type: 'image', src: wide, ...(alt ? {alt} : {}), recolor: {dark: 'accent1', light: 'light1'}, opacity: 0.5};
     const deck = {design: {colorScheme: scheme}, slides: [{title: 'Duotone', design: {background: duotone}}]};
     const {xml, background} = await exported(deck);
-    assert.match(alt ? xml : background, /<a:blip r:embed="[^"]+"><a:duotone><a:srgbClr val="1F5AA6"><\/a:srgbClr><a:srgbClr val="F4F1EA"><\/a:srgbClr><\/a:duotone><a:alphaModFix amt="50000"\/>/, `${alt ? 'picture' : 'fill'}: duotone then alpha`);
+    assert.match(alt ? xml : background, /<a:blip r:embed="[^"]+"><a:duotone><a:schemeClr val="accent1"><\/a:schemeClr><a:schemeClr val="bg1"><\/a:schemeClr><\/a:duotone><a:alphaModFix amt="50000"\/>/, `${alt ? 'picture' : 'fill'}: duotone (accent1 and bg1, the theme colours of the recolor) then alpha`);
     const plain = await fromPptx(await toPptx(deck, {imageFormat: 'preserve', provenance: false}), {onDiagnostic: () => {}});
     assert.deepEqual(plain.slides[0].design.background.recolor, alt ? duotone.recolor : {dark: '#1F5AA6', light: '#F4F1EA'}, 'the tag keeps the authored colours; the native fill reads the literal ones');
     const gray = await exported({slides: [{title: 'Gray', design: {background: {type: 'image', src: wide, recolor: 'grayscale'}}}]});

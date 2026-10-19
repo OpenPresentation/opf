@@ -42,17 +42,17 @@ import {dedupeMedia, mediaKey} from './media-dedupe.js';
 import {placeWatermarks, importWatermark, importTextWatermark, tagTextWatermarks, watermarkName, watermarkTextName, watermarkBox, watermarkOpacity} from './watermark-provenance.js';
 import {placeLogos, importLogo, importLogoPlaceholders, logoName, LOGO_TAG} from './logo-provenance.js';
 import {nativeBackgroundFill, nativeImageBackgroundFill, nativePatternPreset} from './background.js';
-import {importBackground} from './background-import.js';
+import {importBackground, readSlideTheme} from './background-import.js';
 import {chartHighlightPlan, applyChartHighlight} from './chart-highlight.js';
 import {orderChartSeries} from './chart-order.js';
-import {themeSlotColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath} from './theme-colors.js';
+import {themeSlotColors, schemeColorTable, writeSchemeColors, authoredLiteralColors, writeThemeColors, schemeColorValue, schemeBackgroundFill, schemeBackgroundValue, defaultTextSchemeValues, tableTextSchemeValue, solidColorXml, writeMasterBackground, inheritLayoutBackground, readThemeSlotColors, recoverColorScheme, recoverTheme, presentationThemePath, variantFromColorMap} from './theme-colors.js';
 import {languageDiagnostics, observeLanguage, observedRtl, partScriptFonts, physicalAlignment, planScriptFonts, planSlideThemes, reconcileLanguage, reportPerSlideNotesScriptFonts, runLanguageFonts, runLanguageTag, stripRunScriptFonts, themeEastAsianFromLatin} from './script-fonts.js';
 import { webpToPng, svgToPng, readLocalFile, localFileReadable } from '#image-fallback';
 import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attachSvgPictures } from './svg-image.js';
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, chartPaletteForFill, chartSeriesPalette, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
+  catalogRecords, clrMapAttributes, normalizeColorVariant, chartPaletteForFill, chartSeriesPalette, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
   ENGINE_DEFAULT_FONT_SCHEME, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
@@ -334,6 +334,14 @@ export async function toPptx(input, options = {}) {
     return slide.section;
   });
   context.masterBackground = masterBackground(context);
+  // RR-96: the master's clrMap is the deck variant's map (a dark deck is the dark map, not hand-inverted colors); a slide whose variant
+  // differs writes its own override (exportSlideContext).
+  context.clrMap = context.roles.map ? clrMapAttributes(context.roles.map) : undefined;
+  context.clrMapOverrides = new Map();
+  // RR-96: the scheme-derived colors of the deck (master and layouts) and of each slide (its parts and charts), rewritten to schemeClr in the finished parts.
+  const authoredLiterals = authoredLiteralColors(presentation.variables, {...presentation.design, colorScheme: undefined, theme: undefined});
+  context.deckSchemeColors = {table: schemeColorTable(context), keep: authoredLiterals};
+  context.slideSchemeColors = [];
   context.linkSentinels = linkSentinels(presentation);
   const pptx = new PptxGenJS();
   configurePresentation(pptx, presentation, {...context,fonts:exportSlideContext(presentation,0,context,options).fonts});
@@ -567,6 +575,8 @@ export async function fromPptx(input, options = {}) {
   restoreCitations(imported, furnitureContexts.map(context => context.annotations?.notes ?? []), report);
   restoreLogoFallback(imported, furnitureContexts);
   applyRunColors(imported, slideProvenance, restoredGroups, report, options);
+  restoreSlotFills(imported, slideProvenance, options);
+  dropImpliedVariants(imported, options);
   applyNativeImageFits(imported, furnitureContexts, restoredGroups, options);
   if (imported.design?.theme === undefined) for (const diagnostic of themeDesign.diagnostics) if (diagnostic.code === "theme-unverified") report(diagnostic);
   languageDiagnostics(imported, observedLanguage, options.onDiagnostic && report);
@@ -605,6 +615,66 @@ function applyRunColors(imported, slideProvenance, restoredGroups, report, optio
     }
   };
   restoreRunColors(imported.slides, info, resolve, report);
+}
+
+// RR-96: the variant a color map imports as is dropped where the document's own design already gives that map: core picks light1 or dark1 from the
+// slide background (a dark theme is the dark map), so a deck that is dark by its theme, and a slide that is dark by its own background, need no `variant`.
+function dropImpliedVariants(imported, options) {
+  const rolesVariant = design => {
+    try { return JSON.stringify(coreContext({...imported, design, slides: [{}]}, 0, {...options, textMeasurement: undefined}).resolved.roles?.variant); } catch { return undefined; }
+  };
+  const withoutVariant = design => { const {variant, ...rest} = design ?? {}; return rest; };
+  if (imported.design?.variant !== undefined) {
+    const implied = rolesVariant(withoutVariant(imported.design));
+    if (implied !== undefined && implied === JSON.stringify(normalizeColorVariant(imported.design.variant))) {
+      const {variant, ...rest} = imported.design;
+      if (Object.keys(rest).length) imported.design = rest; else delete imported.design;
+    }
+  }
+  for (const slide of imported.slides) {
+    if (slide.design?.variant === undefined) continue;
+    const rest = withoutVariant(slide.design);
+    const implied = rolesVariant({...imported.design, ...rest});
+    if (implied !== undefined && implied === JSON.stringify(normalizeColorVariant(slide.design.variant))) {
+      if (Object.keys(rest).length) slide.design = rest; else delete slide.design;
+    }
+  }
+}
+
+// RR-96: a fill that is exactly a slot of the slide's color scheme comes back as that slot (`accent1`, `light2`, ...), the way a PowerPoint scheme
+// fill is a theme color. Table cell and column fills only; a literal that is not a slot stays a literal.
+const FILL_SLOT_ORDER = ['accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6', 'dark1', 'light1', 'dark2', 'light2'];
+function restoreSlotFills(imported, slideProvenance, options) {
+  const names = new Map();
+  const slotsOf = slide => {
+    const key = slide.design ?? imported.design ?? null;
+    if (!names.has(key)) {
+      let table = new Map();
+      try {
+        const context = resolvePresentationContext(slide.design ? {...imported, design: {...imported.design, ...slide.design}} : imported, options);
+        const slots = themeSlotColors(context.colorScheme);
+        for (const slot of FILL_SLOT_ORDER) if (slots[slot] && !table.has(slots[slot])) table.set(slots[slot], slot);
+      } catch { table = new Map(); }
+      names.set(key, table);
+    }
+    return names.get(key);
+  };
+  const visit = (value, table) => {
+    if (Array.isArray(value)) { value.forEach(item => visit(item, table)); return; }
+    if (!isPlainObject(value)) return;
+    if (typeof value.fill === 'string') {
+      const hex = value.fill.match(/^#([0-9a-f]{6})$/i)?.[1]?.toUpperCase();
+      const slot = hex && table.get(hex);
+      if (slot) value.fill = slot;
+    }
+    for (const child of Object.values(value)) visit(child, table);
+  };
+  // A slide restored from provenance keeps its authored values (a literal that happens to equal a slot stays the literal).
+  for (const [index, slide] of imported.slides.entries()) {
+    if (slideProvenance[index]?.structure !== 'untagged') continue;
+    const containers = [slide.table, ...asArray(slide.blocks).map(block => block?.table), ...Object.values(slide).flatMap(region => isPlainObject(region) ? [region.table] : [])].filter(Boolean);
+    if (containers.length) { const table = slotsOf(slide); if (table.size) containers.forEach(container => visit(container, table)); }
+  }
 }
 
 // A consumed logo picture (OPF_LOGO_V1) never becomes content. Its own image restores the organization's logo only when the
@@ -809,7 +879,31 @@ function importSlide(entries, slidePath, slideIndex, presentationDimensions, opt
     images.consumedShapes.delete(images.backgroundOverlayShape);
     options.onDiagnostic?.({code: 'invalid-image-provenance', path: `slides.${slideIndex}.design.background.overlay`, message: 'The tagged OPF background overlay no longer sits on an image background; it was imported as an ordinary shape.'});
   }
-  if (imageBackground) slide.design = {background: imageBackground};
+  // RR-96: the tone scrim of a picture background is no content; it restores the background's tone.
+  let toned = imageBackground;
+  if (imageBackground?.type === 'image') {
+    for (const tone of ['dark', 'light']) {
+      const index = nativeContext.shapes.findIndex(shape => shape['p:nvSpPr']?.['p:cNvPr']?.name === toneScrimName(`slides.${slideIndex}`, tone));
+      if (index >= 0) { images.consumedShapes.add(index); toned = {...imageBackground, tone}; }
+    }
+  }
+  if (toned) slide.design = {background: toned};
+  // RR-96: a slide's own color map override (accents included) is its variant. An override that is the master's map imports nothing, one that is
+  // the default map on a dark master is the explicit `light1`.
+  {
+    const {mapping, masterMapping} = readSlideTheme(slidePath, {
+      part: (path, parser) => parseRequiredXml(entries, path, parser), relationships: path => parseRelationships(entries, path), bytes: path => entries[path]
+    });
+    const sameMap = [...new Set([...Object.keys(mapping), ...Object.keys(masterMapping)])].every(key => mapping[key] === masterMapping[key]);
+    if (!sameMap) {
+      const mapped = variantFromColorMap(mapping, {explicit: true});
+      // The variant a tone names is the tone's, not a second statement of it.
+      const tone = slide.design?.background?.tone, impliedByTone = tone && mapped.variant === (tone === 'dark' ? 'dark1' : 'light1');
+      if (impliedByTone) { /* the tone names this variant */ }
+      else if (mapped.variant) slide.design = {...slide.design, variant: mapped.variant};
+      else if (mapped.unsupported) options.onDiagnostic?.({code: "unsupported-color-map", path: `slides.${slideIndex}.design.variant`, message: "The slide's color map override is not a variant OPF can name, so slides[n].design.variant was not imported."});
+    }
+  }
   if (Object.keys(furniture.design).length) slide.design = {...slide.design, ...furniture.design};
   nativeContext.imageBlocks = images.blocks;
   nativeContext.imageSources = images.sources;
@@ -1912,10 +2006,20 @@ function resolvePresentationContext(presentation, options, core = coreContext({.
   const {theme, colorScheme} = core.resolved;
   const dimensions = {widthInches: core.options.width / 96, heightInches: core.options.height / 96};
   const variables = resolveVariableColors(presentation.variables);
-  const background = resolveBackground(design.background ?? theme?.background, colorScheme, variables);
+  const definition = design.background ?? theme?.background;
   const fonts = exportFonts(core, options.textMeasurement);
-  // One resolution for every color role (core resolveColorRoles), shared with the SVG preview and the audit.
-  const roles = resolveColorRoles(colorScheme, {background: `#${background}`});
+  // One resolution for every color role, shared with the SVG preview and the audit: core's, which maps the roles through the slide's
+  // variant (RR-96: bg1, tx1, bg2, tx2 and the accent order over the one scheme, the neutrals as slot plus luminance transform).
+  // A core older than the variants has no `resolved.roles`; its roles are resolved from the background as before.
+  let background = resolveBackground(definition, colorScheme, variables);
+  let roles = core.resolved.roles ?? resolveColorRoles(colorScheme, {background: `#${background}`});
+  // A single-color background is the slide's bg1 under its variant, which can differ from the background definition (a deck
+  // variant hides the theme's background); a picture, gradient or pattern keeps its own base color.
+  // A theme-slot background (the theme's own, or a slot name) with no variant keeps the slot's color: the scheme's `background` role does not
+  // restyle it, as the preview draws it.
+  const slotBackground = design.variant === undefined && (typeof definition === 'string' || definition?.type === 'theme');
+  if (core.resolved.roles && isSingleColorBackground(definition) && !slotBackground) background = normalizeHex(roles.background);
+  else if (slotBackground && roles.background !== `#${background}`) roles = {...roles, background: `#${background}`};
   const textColor = normalizeHex(roles.text);
 
   return {
@@ -2022,6 +2126,11 @@ function writeLinkSentinels(xml, sentinels) {
   });
 }
 
+// RR-96: the master's clrMap from the deck variant's map (core clrMapAttributes: bg1, tx1, bg2, tx2, the six accents and the two link slots).
+function writeColorMap(xml, attributes) {
+  return xml.replace(/<p:clrMap\b[^>]*\/>/, `<p:clrMap${Object.entries(attributes).map(([role, slot]) => ` ${role}="${slot}"`).join('')}/>`);
+}
+
 // PptxGenJS color option: a scheme value it can emit (tx1, bg2, ...) or RRGGBB.
 function pptxColor(value) {
   return /^(?:tx[12]|bg[12]|accent[1-6])$/.test(value) ? value : normalizeHex(value);
@@ -2064,6 +2173,16 @@ function hostDefaultRecords(kind, catalogs) {
 function importThemeDesign(entries, presentationRoot, presentationRels, catalogs) {
   const diagnostics = [], design = {};
   const report = (code, path, message) => diagnostics.push({code, path, message});
+  // RR-96: the first slide master's clrMap is the deck's variant (a dark deck is bg1 on dk1 and tx1 on lt1), as design.variant: the background slot
+  // alone, or {background, accents} when the map re-points the accents. The default map imports nothing.
+  const masterId = asArray(presentationRoot?.["p:sldMasterIdLst"]?.["p:sldMasterId"]).map(node => node?.["r:id"]).find(id => presentationRels.get(id)?.type?.endsWith("/slideMaster"));
+  const masterPart = masterId ? presentationRels.get(masterId).path : undefined;
+  const masterMap = masterPart && entries[masterPart] ? parseOptionalXml(entries, masterPart)?.["p:sldMaster"]?.["p:clrMap"] : undefined;
+  if (masterMap) {
+    const mapped = variantFromColorMap(masterMap);
+    if (mapped.variant) design.variant = mapped.variant;
+    else if (mapped.unsupported) report("unsupported-color-map", "design.variant", "The slide master's color map is not a variant OPF can name (a background and text on the light and dark slots, with an accent order that is a permutation of accent1 to accent6), so design.variant was not imported.");
+  }
   const themePath = presentationThemePath(presentationRoot, presentationRels, path => parseRelationships(entries, path), entries);
   const theme = themePath ? parseOptionalXml(entries, themePath)?.["a:theme"] : undefined;
   const elements = theme?.["a:themeElements"];
@@ -2300,6 +2419,11 @@ function exportSlideContext(presentation, slideIndex, baseContext, options) {
     throw new OPFPptxError("mixed-slide-dimensions", "PowerPoint requires one canvas size per presentation. Set dimensions on the deck or export this slide separately.");
   }
   const slideContext = { ...baseContext, core, composeFonts: {...core.options.fontFamilies, heading: resolved.fonts.heading, body: resolved.fonts.body, code: resolved.fonts.code}, backgroundDefinition: resolved.backgroundDefinition, colorScheme: resolved.colorScheme, fonts: resolved.fonts, colors: resolved.colors, roles: resolved.roles, variables: resolved.variables };
+  // RR-96: a slide whose variant differs from the deck's writes its own clrMapOvr (accent order included).
+  if (resolved.roles.map && baseContext.clrMap) {
+    const attributes = clrMapAttributes(resolved.roles.map);
+    if (JSON.stringify(attributes) !== JSON.stringify(baseContext.clrMap)) baseContext.clrMapOverrides.set(`ppt/slides/slide${slideIndex + 1}.xml`, attributes);
+  }
   // A slide-level color scheme (directly or through a slide theme) pins every
   // named color on that slide to literal sRGB; see schemeColorValue().
   const slideScheme = themeSlotColors(resolved.colorScheme), deckScheme = baseContext.themeColors ?? {};
@@ -2309,6 +2433,7 @@ function exportSlideContext(presentation, slideIndex, baseContext, options) {
   const text = defaultTextSchemeValues(slideContext);
   slideContext.textColor = text.text ?? resolved.colors.text;
   slideContext.mutedColor = text.muted ?? resolved.colors.mutedText;
+  baseContext.slideSchemeColors[slideIndex] = {table: schemeColorTable(slideContext), keep: authoredLiteralColors(slide, presentation.variables, {...effective.design, colorScheme: undefined, theme: undefined})};
   return slideContext;
 }
 
@@ -2587,6 +2712,9 @@ async function addImageItem(slide, presentation, item, slideIndex, context, opti
   return name;
 }
 
+const TONE_SCRIM_OPACITY = 0.4;
+const toneScrimName = (slidePath, tone) => `OPF background tone ${tone} ${slidePath}`;
+
 // An image background (core SlideComposition.backgroundImage). With alt text it is a full-slide picture at the back of
 // the slide over the canvas colour, carrying the alt text as its descr; without alt it is the native slide background
 // fill (written at packaging). Its overlay is one shape directly above the picture.
@@ -2622,6 +2750,12 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
       fit: background.fit, focus: background.focus, opacity: background.opacity ?? 1, recolor: effects.recolor, path: background.path,
       width: box.w * 96, height: box.h * 96, report: options.onDiagnostic
     } });
+  }
+  // RR-96: a picture background that names its tone (and has no overlay of its own) is a picture the text must read on: the slide background
+  // color of the tone's variant (bg1) covers it at 40%, the preview's scrim (opf-render `data-opf-tone-overlay`).
+  const tone = isPlainObject(authored) ? authored.tone : undefined;
+  if (!background.overlay && (tone === 'dark' || tone === 'light')) {
+    slide.addShape('rect', { x: box.x, y: box.y, w: box.w, h: box.h, objectName: toneScrimName(slidePath, tone), fill: { color: normalizeHex(slideContext.roles?.background ?? `#${slideContext.colors.background}`), transparency: 100 - TONE_SCRIM_OPACITY * 100 } });
   }
   if (background.overlay) addImageOverlay(slide, background.overlay, structuredClone(isPlainObject(authored) ? authored.overlay : undefined) ?? {color: background.overlay.color, opacity: background.overlay.opacity}, overlayName, owner, { ...slideContext, slidePath }, effects);
 }
@@ -2734,7 +2868,13 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // Keep the resolved palette surface (including alpha) explicit in native
   // chart/plot areas, so inherited labels are assessed against their own panel.
   const panelFill = context.colorScheme.surface ?? context.colorScheme[context.roles.dark ? 'dark2' : 'light2'] ?? `#${context.colors.surface}`;
-  const labelColor = normalizeHex(textColorForFill(panelFill, `#${context.colors.text}`));
+  // RR-96: chart text, gridlines and axis lines are core's scheme-derived neutrals (tx1 mixed into bg1 at 65%, 15% and 25%), which the finished
+  // part writes as schemeClr with lumMod/lumOff, so a variant or background style change in PowerPoint recolors them.
+  const neutrals = context.roles.neutrals;
+  const labelColor = normalizeHex(textColorForFill(panelFill, neutrals?.chartText?.hex ?? `#${context.colors.text}`));
+  // Data labels and highlighted marks contrast with their own mark, from the full text colour (the chart-text neutral is for axes and legends).
+  const markLabelColor = normalizeHex(textColorForFill(panelFill, `#${context.colors.text}`));
+  const gridColor = normalizeHex(neutrals?.gridline?.hex ?? `#${context.colors.border}`), axisLineColor = normalizeHex(neutrals?.axisLine?.hex ?? `#${context.colors.border}`);
   const transparency = /^#[0-9a-f]{8}$/i.test(panelFill) ? (1 - parseInt(panelFill.slice(7), 16) / 255) * 100 : 0;
   const fill = {color:normalizeHex(panelFill),transparency};
   const objectName = `OPF chart ${context.chartHeadings.size + 1}`;
@@ -2747,7 +2887,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   const numberFormats = chartData.formats && {...chartData.formats, axis: chartData.spec.grouping === 'percentStacked' ? undefined : chartData.formats.series[0],
     ...(secondaryIndex >= 0 ? {secondaryAxis: chartData.formats.series[secondaryIndex]} : {}),
     labels: !chartOptions?.dataLabels?.content?.includes('percent'), scatter: chartData.type === 'scatter'};
-  context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading,labelColor,spec:chartData.spec,textSize,
+  context.chartHeadings.set(objectName,{heading:chartData.type === 'scatter' ? undefined : chartData.heading,labelColor,markLabelColor,spec:chartData.spec,textSize,
     options:chartOptions,kind:chartTargetFor(chart.type)?.kind,pointCount:chartData.pointCount,numberFormats});
   // Synthetic row-number categories are a native adaptation, not an authored
   // data column. Full provenance restores the source form only on unchanged caches.
@@ -2758,15 +2898,15 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // RR-89: the series colours are core's chartSeriesPalette (accent1 to accent6 of the deck scheme, then their tints, with the chart's own
   // `colors` over them), adjusted for the chart panel like the preview does. A colour that is still an unadjusted theme accent (or a
   // `chart.colors` scheme slot or role) is written as a schemeClr, so re-theming in PowerPoint recolours the series.
-  const colorContext = {roles: context.roles, variables: context.variables};
+  const colorContext = {roles: context.roles, variables: context.variables, accents: context.roles.map?.accents};
   const preferredPalette = chartSeriesPalette(context.colorScheme, chart.colors, colorContext);
   const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette);
   const palette = adjustedPalette.map(color=>normalizeHex(color));
-  const paletteSchemes = chartPaletteSchemes(chart.colors, preferredPalette, adjustedPalette, (reference, hex) => schemeColorValue(reference, `#${hex}`, context));
+  const paletteSchemes = chartPaletteSchemes(chart.colors, preferredPalette, adjustedPalette, (reference, hex) => schemeColorValue(reference, `#${hex}`, context), context.roles.map?.accents);
   Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular});
   // FA-14: chart.highlight. A highlighted chart writes accent and muted colours over the series palette, and its data labels
   // contrast with those colours (src/chart-highlight.js).
-  const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor, primary: `#${context.colors.accent}`,
+  const highlight = chartData.chartex ? undefined : chartHighlightPlan({options: chartOptions, data: chartData.resolved, kind: chartTargetFor(chart.type)?.kind, panelFill, labelColor: markLabelColor, primary: `#${context.colors.accent}`,
     schemeFor: hex => schemeColorValue('primary', hex, context)});
   context.chartPalettes.set(objectName,highlight ? highlight.seriesFills : palette);
   if (highlight) context.chartHeadings.get(objectName).highlight = highlight;
@@ -2774,7 +2914,7 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     // The native chartex part is added when the package is normalized (attachChartexParts); the classic chart below becomes its fallback.
     // PptxGenJS rewrites the series it is given (labels become nested levels), so the chartex part keeps its own copy.
     const series = chartData.series.map((entry) => ({name: entry.name, labels: [...entry.labels], values: [...entry.values]}));
-    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, gridColor: context.colors.border, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series} : {})});
+    context.chartex.set(objectName, {spec: chartData.chartex, series, hasCategories: chartData.hasCategories, fill, labelColor, gridColor, font: context.fonts.body, palette, textSize, options: chartOptions, ...(numberFormats ? {formats: numberFormats.series} : {})});
     if (chartData.chartex.layoutId === 'regionMap') {
       options.onDiagnostic?.({code: "chart-map-geodata", path, message: `The '${stringifyText(chart.type)}' chart is exported as a native PowerPoint map (chartex regionMap) without cached geography (no cx:geoCache; provider data is never fabricated): PowerPoint must fetch the region shapes from its online map service when the deck is opened, and until it does it shows "There was a problem getting the information for your map chart" and draws nothing. The clustered column fallback shows the same values in readers without chartex support.`});
     }
@@ -2807,10 +2947,13 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
     legendColor: labelColor,
     legendFontFace: context.fonts.body,
     legendFontSize: textSize / 100,
-    dataLabelColor: labelColor,
+    dataLabelColor: markLabelColor,
     dataLabelFontSize: textSize / 100,
     showValue: false,
-    valGridLine: { color: context.colors.border, transparency: 30, size: 1 },
+    ...(circular ? {dataBorder: {color: normalizeHex(neutrals?.outline?.hex ?? `#${context.colors.background}`), pt: 0.75}} : {}),
+    valGridLine: { color: gridColor, size: 1 },
+    catAxisLineColor: axisLineColor,
+    valAxisLineColor: axisLineColor,
     // Magnitude bars/columns/areas must not let Office auto-truncate a near-equal range.
     ...(chartData.spec.family === "category" && ["bar", "area"].includes(chartData.type) && chartData.spec.grouping !== "percentStacked" ? {
       ...(chartData.series.every(entry => entry.values.every(value => value == null || value >= 0)) ? {valAxisMinVal: 0} : {}),
@@ -2903,7 +3046,8 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
     // FF-24c: engine chrome resolves from scheme roles (header accent1, body surface), so it follows the deck theme like a named fill.
     const fillReference = cellStyle.fill ?? (header ? 'accent1' : 'surface');
     const fillValue = schemeColorValue(fillReference, baseFill, context);
-    const inheritedText = textColorForFill(`#${baseFill}`, header ? "#FFFFFF" : `#${context.colors.text}`);
+    // RR-96: header text is the role (bg1 or tx1) that reads better on the fill, as the preview chooses it (core readableSchemeColor).
+    const inheritedText = header && context.roles ? readableSchemeColor(`#${baseFill}`, context.roles).hex : textColorForFill(`#${baseFill}`, header ? "#FFFFFF" : `#${context.colors.text}`);
     const baseColor = exportColor(cellStyle.color ?? inheritedText.replace(/^#/, ""), context, inheritedText.replace(/^#/, ""));
     // Default cell text follows the theme only with a theme-referenced fill: paired slot on a light or dark fill, light1/dark1 on an accent fill.
     const defaultText = cellStyle.color === undefined ? tableTextSchemeValue(fillValue, baseColor, context) : undefined;
@@ -3199,7 +3343,8 @@ function addCodePayload(slide, value, layout, region, context, path, options) {
   const highlight = codeHighlight(value, layout, context);
   context.codeTags.set(panelName,codeManifest(value,layout,group,highlight?.bands.length));
   const syntax = codeSyntax(value, layout, context, path, options);
-  slide.addShape('rect', {...region, fill: {color: '111827'}, line: {color: '334155', width: .75}, objectName:panelName});
+  const palette = codePalette(context);
+  slide.addShape('rect', {...region, fill: {color: codePanelColor(context).slice(1)}, line: {color: context.roles.neutrals?.codePanel ? context.colors.border : '334155', width: .75}, objectName:panelName});
   if (highlight) {
     const bodyPart = layout.parts.find(part => part.role === 'body');
     highlight.bands.forEach((band, bandIndex) => {
@@ -3223,7 +3368,7 @@ function addCodePayload(slide, value, layout, region, context, path, options) {
       const lineOptions = {
         ...textBoxOptions({x:part.box.x/96,y:(part.box.y+index*part.fit.lineHeight)/96,w:part.box.width/96,h:part.fit.lineHeight/96},context,part.fit.fontSize*.75),
         ...nativeFontOptions(part.style),
-        color:part.role==='body'?(lineColors?.plain.slice(1)??'E5E7EB'):'93C5FD',align:'left',fit:'none',wrap:false,lineSpacingMultiple:1,
+        color:part.role==='body'?(lineColors?.plain.slice(1)??palette.plain.slice(1)):palette.keyword.slice(1),align:'left',fit:'none',wrap:false,lineSpacingMultiple:1,
         tabStops:tabStops.length?tabStops:undefined,objectName,
       };
       // A run's own options replace the line's, so every run repeats the font, size, alignment and tab stops and differs only in colour.
@@ -3240,7 +3385,7 @@ function codeHighlight(value, layout, context) {
   if (!body?.fit) return undefined;
   const lines = codeHighlightLines(value.highlight, body.text).lines;
   if (!lines.length) return undefined;
-  return {marked: new Set(lines), numbers: codeLineNumbers(body.fit.sourceLines), bands: codeHighlightBands(body.fit.sourceLines, lines), colors: codeHighlightColors(context.colorScheme)};
+  return {marked: new Set(lines), numbers: codeLineNumbers(body.fit.sourceLines), bands: codeHighlightBands(body.fit.sourceLines, lines), colors: codeHighlightColors(context.colorScheme, codePalette(context), codePanelColor(context))};
 }
 
 // Token ranges and palette for the code body, from core (the preview calls the same functions); undefined for plain code.
@@ -3249,14 +3394,23 @@ function codeSyntax(value, layout, context, path, options) {
   const language = typeof value?.language === 'string' ? value.language : layout.parts.find(part => part.role === 'language')?.text;
   if (!body || !language) return undefined;
   const tokens = tokenizeCode(body.text, language);
-  return tokens.length ? {tokens, palette: codeSyntaxPaletteForScheme(context.colorScheme)} : undefined;
+  return tokens.length ? {tokens, palette: codePalette(context)} : undefined;
+}
+
+// RR-96: the code panel, plain text, comment and syntax colors are the slide's own roles through its variant (core codeSyntaxPaletteForRoles, the
+// panel `roles.neutrals.codePanel`), written as scheme colors in the finished slide; an older core keeps the fixed palette.
+function codePalette(context) {
+  return context.roles.neutrals?.codePanel ? codeSyntaxPaletteForRoles(context.roles) : codeSyntaxPaletteForScheme(context.colorScheme);
+}
+function codePanelColor(context) {
+  return context.roles.neutrals?.codePanel?.hex ?? '#111827';
 }
 
 function addMetricPayload(slide,value,layout,context,path,options) {
   if (!layout) throw new OPFPptxError('missing-metric-layout','Metric export requires coordinated core metric geometry.',{path});
   const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group);
   // RR-07: a trend colours the trend and delta text and adds one native arrow shape, from core's accepted geometry.
-  const trendMark=metricTrendMark(layout,{background:`#${normalizeHex(context.colors.background)}`});
+  const trendMark=metricTrendMark(layout,{background:`#${normalizeHex(context.colors.background)}`,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
   const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'?context.colors.accent:context.textColor;
   for (const [partIndex,part] of layout.parts.entries()) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
@@ -3385,7 +3539,7 @@ function addMediaPayload(slide, presentation, value, region, path, context, opti
   }
   slide.addShape("rect", {x: region.x, y: region.y, w: region.w, h: region.h, fill: {color: context.colors.surface}, line: {color: context.colors.border, width: 0.75}, hyperlink, objectName: names.frame});
   slide.addShape("ellipse", {x: icon.x / 96, y: icon.y / 96, w: 72 / 96, h: 72 / 96, fill: {color: context.colors.accent}, line: {transparency: 100}, hyperlink: hyperlink && {url: source}, objectName: names.badge});
-  slide.addShape("triangle", {x: (icon.x + 28) / 96, y: (icon.y + 22) / 96, w: 28 / 96, h: 28 / 96, rotate: 90, fill: {color: "FFFFFF"}, line: {transparency: 100}, hyperlink: hyperlink && {url: source}, objectName: names.play});
+  slide.addShape("triangle", {x: (icon.x + 28) / 96, y: (icon.y + 22) / 96, w: 28 / 96, h: 28 / 96, rotate: 90, fill: {color: context.roles ? normalizeHex(readableSchemeColor(`#${context.colors.accent}`, context.roles).hex) : "FFFFFF"}, line: {transparency: 100}, hyperlink: hyperlink && {url: source}, objectName: names.play});
   addMeasuredPayloadText(slide, mediaCaption(value), {...box, y: icon.y + 72 + 20, height: 50}, context, options,
     {path, fontSize: 18, fontFamily: context.fonts.body, fontWeight: 600, align: "center", color: context.colors.mutedText, objectName: `OPF media ${path} caption`, media: true, keepEmpty: true, hyperlink});
 }
@@ -4058,6 +4212,13 @@ function referenceId(reference) {
 
 // A solid color or pattern background color is a ColorRef (hex, `var:` variable, colour-scheme slot or role), resolved
 // as for table fills and run colours. Roles resolve through the colour scheme alone: the background cannot depend on itself.
+// A background that is one color: a color string, a theme slot, or a solid fill (not a picture, gradient or pattern).
+function isSingleColorBackground(value) {
+  if (value === undefined || value === null) return true;
+  if (typeof value === 'string') return true;
+  return isPlainObject(value) && (value.type === 'solid' || value.type === 'theme');
+}
+
 function resolveBackgroundColorRef(entry, colorScheme, variables = {}) {
   return resolveColorRefValue(entry, {colorScheme, colors: {}, variables});
 }
@@ -4125,6 +4286,12 @@ async function normalizePptxZip(raw, context) {
     });
   }
 
+  // RR-96: slide colors that are scheme colors become schemeClr first, so every fingerprint of a shape's properties (card frames, picture
+  // manifests) records the final XML.
+  for (const path of Object.keys(entries)) {
+    const match = /^ppt\/slides\/slide(\d+)\.xml$/.exec(path), entry = match && context.slideSchemeColors[Number(match[1]) - 1];
+    if (entry) entries[path] = encodeText(writeSchemeColors(decodeText(entries[path]), entry.table, entry.keep));
+  }
   attachCodeTags(entries, context.codeTags);
   attachMetricTags(entries,context.metricTags,context.metricDescriptions);
   attachCardTags(entries,context.cardTags);
@@ -4150,7 +4317,7 @@ async function normalizePptxZip(raw, context) {
       if(!context.chartHeadings.has(name))continue;
       const id=frame.match(/<c:chart\b[^>]*\br:id="([^"]+)"/)?.[1],chartPart=relationships.get(id)?.path;
       if(!chartPart)throw new OPFPptxError('packaging-failed','Generated chart relationship is missing.');
-      const {heading,labelColor,spec,textSize}=context.chartHeadings.get(name);
+      const {heading,labelColor,markLabelColor,spec,textSize}=context.chartHeadings.get(name);
       if(heading!==undefined)writeChartCategoryHeading(entries,chartPart,heading);
       entries[chartPart]=encodeText(omitEmptyNumberPoints(applyChartConstruct(decodeText(entries[chartPart]),spec)));
       const highlight=context.chartHeadings.get(name).highlight;
@@ -4168,7 +4335,7 @@ async function normalizePptxZip(raw, context) {
       entries[chartPart]=encodeText(applyChartTextSize(decodeText(entries[chartPart]),textSize));
       // RR-35: data labels last, so their own text colours (contrast inside a mark) are not normalized away.
       const {options:chartOptions,kind:optionKind,pointCount}=context.chartHeadings.get(name);
-      if(chartOptions?.dataLabels)entries[chartPart]=encodeText(applyDataLabels(decodeText(entries[chartPart]),{resolved:chartOptions,kind:optionKind,palette:context.chartPalettes.get(name),labelColor,font:context.chartFonts.get(name)?.body??'Arial',textSize,pointCount,highlight}));
+      if(chartOptions?.dataLabels)entries[chartPart]=encodeText(applyDataLabels(decodeText(entries[chartPart]),{resolved:chartOptions,kind:optionKind,palette:context.chartPalettes.get(name),labelColor:markLabelColor,font:context.chartFonts.get(name)?.body??'Arial',textSize,pointCount,highlight}));
       // RR-54: the columns' number formats, after the labels: caches, label and value-axis formats, then the workbook cells.
       const numberFormats=context.chartHeadings.get(name).numberFormats;
       if(numberFormats){
@@ -4238,6 +4405,7 @@ async function normalizePptxZip(raw, context) {
   try {
     placeImages(entries, context.images, context.imageOverlays, {
       metadataFor: (part, id) => imageMetadata.get(parseRelationships(entries, part).get(id)?.path), fitImage,
+      finish: (part, xml) => { const slide = /^ppt\/slides\/slide(\d+)\.xml$/.exec(part), entry = slide && context.slideSchemeColors[Number(slide[1]) - 1]; return entry ? writeSchemeColors(xml, entry.table, entry.keep) : xml; },
       // The key of the bytes the package finally holds: the picture's orientation is normalized when the parts are written.
       mediaKeyFor: (part, id) => { const target = parseRelationships(entries, part).get(id)?.path, bytes = entries[target]; return bytes ? mediaKey(imageMetadata.get(target) ? normalizeImageOrientation(bytes, imageMetadata.get(target)) : bytes) : undefined; },
       fail: path => { throw new OPFPptxError("unsupported-image-dimensions", "Image fitting requires readable PNG, JPEG, GIF or WebP dimensions. Supply a supported raster image through imageResolver.", { path }); }
@@ -4259,12 +4427,17 @@ async function normalizePptxZip(raw, context) {
   stampFurnitureImageKeys(entries, context.furnitureManifests, context.furnitureImages, parseRelationships);
   // Charts and notes follow the language and fonts of the slide they belong to.
   context.partSlides = new Map();
+  context.styleSlides = new Map();
   for (const part of Object.keys(entries)) {
     const slide = /^ppt\/slides\/slide(\d+)\.xml$/.exec(part);
     if (!slide) continue;
     context.partSlides.set(part, Number(slide[1]) - 1);
     for (const relationship of parseRelationships(entries, part).values()) {
       if (/\/(?:chart|chartEx|notesSlide)$/.test(relationship.type)) context.partSlides.set(relationship.path, Number(slide[1]) - 1);
+      // The chart style and color style parts of a native chart take the scheme colors of their slide.
+      if (/\/(?:chart|chartEx)$/.test(relationship.type) && entries[relationship.path]) {
+        for (const related of parseRelationships(entries, relationship.path).values()) if (/\/chartStyle$/.test(related.type)) context.styleSlides.set(related.path, Number(slide[1]) - 1);
+      }
     }
   }
   const output = {};
@@ -4410,12 +4583,15 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
       xml = themeMasterBulletFonts(xml).replace(/<p:cSld\b([^>]*)>/, (_, attributes) =>
         `<p:cSld${attributes.replace(/\s+name="[^"]*"/, '')} name="pptx.gallery">`);
     }
+    if (context.clrMap && /^ppt\/slideMasters\/slideMaster\d+\.xml$/.test(path)) xml = writeColorMap(xml, context.clrMap);
     if (context.masterBackground && path === 'ppt/slideMasters/slideMaster1.xml') xml = writeMasterBackground(xml, context.masterBackground);
     if (context.masterBackground && /^ppt\/slideLayouts\/slideLayout\d+\.xml$/.test(path)) xml = inheritLayoutBackground(xml);
     if (path === 'ppt/presentation.xml') xml = presentationInSchemaOrder(xml);
     if (path === 'ppt/theme/theme1.xml') xml = writeThemeColors(xml, {colors: context.themeColors, schemeName: context.schemeName, themeName: context.themeName});
     if (/^ppt\/slides\/slide\d+\.xml$/.test(path)) {
       xml = writeLinkSentinels(xml, context.linkSentinels);
+      const override = context.clrMapOverrides.get(path);
+      if (override) xml = xml.replace('<p:clrMapOvr><a:masterClrMapping/></p:clrMapOvr>', `<p:clrMapOvr><a:overrideClrMapping${Object.entries(override).map(([role, slot]) => ` ${role}="${slot}"`).join('')}/></p:clrMapOvr>`);
       const fill = context.backgroundFills.get(path);
       if (typeof fill === 'string') xml = xml.replace(/<p:bg>[\s\S]*?<\/p:bg>/, `<p:bg><p:bgPr>${fill}<a:effectLst/></p:bgPr></p:bg>`);
       else if (fill?.image) {
@@ -4567,6 +4743,11 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
       xml = nativeTitleAutofit(nativeBodyDefaults(xml, context.nativeBodies), context.nativeTitles);
     }
     // theme1.xml: FF-24 colors and names above, then FF-07 fonts here; they touch disjoint elements.
+    // RR-96: literal colors that are scheme colors become schemeClr (with lumMod/lumOff for the derived neutrals).
+    if (/^ppt\/(?:slides\/slide|charts\/chart(?:Ex)?|charts\/style)\d+\.xml$/.test(path)) {
+      const entry = context.slideSchemeColors[context.partSlides.get(path) ?? context.styleSlides.get(path)];
+      if (entry) xml = writeSchemeColors(xml, entry.table, entry.keep);
+    } else if (/^ppt\/(?:slideMasters\/slideMaster|slideLayouts\/slideLayout)\d+\.xml$/.test(path)) xml = writeSchemeColors(xml, context.deckSchemeColors.table, context.deckSchemeColors.keep);
     if (context.scriptFonts) xml = partScriptFonts(path, xml, context.scriptFonts, context.partSlides.get(path) ?? 0);
     else if (/^ppt\/theme\/theme\d+\.xml$/.test(path)) xml = themeEastAsianFromLatin(xml);
     if (/^ppt\/(?:slides\/slide|notesSlides\/notesSlide)\d+\.xml$/.test(path)) xml = stripRunScriptFonts(xml);

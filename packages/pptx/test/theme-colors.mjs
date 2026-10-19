@@ -38,11 +38,15 @@ const slideXml = (entries, index = 1) => {
 const runFill = (xml, text) => {
   const run = [...xml.matchAll(/<a:r>([\s\S]*?)<\/a:r>/g)].map(m => m[1]).find(body => body.includes(`<a:t>${text}</a:t>`));
   assert.ok(run, `run ${text}`);
-  return run.match(/<a:solidFill>(<a:(?:srgbClr|schemeClr) val="[^"]+"\s*\/>)/)?.[1];
+  // A colour may be written self-closed or as an empty pair (`<a:schemeClr val="tx1"></a:schemeClr>`); both are the same colour.
+  return run.match(/<a:solidFill>(<a:(?:srgbClr|schemeClr) val="[^"]+"\s*\/>)/)?.[1] ?? run.match(/<a:solidFill>(<a:(srgbClr|schemeClr) val="[^"]+")><\/a:\2>/)?.[1]?.concat('/>');
 };
-const resolve = (fill, colors) => {
+// RR-96: a content role (tx1, bg1, ...) resolves through the clrMap in force: the master's (a dark deck maps bg1 to a dark slot), or
+// the default map when none is given.
+const clrMapOf = entries => Object.fromEntries([...strFromU8(entries['ppt/slideMasters/slideMaster1.xml']).match(/<p:clrMap ([^>]*)\/>/)[1].matchAll(/(\w+)="(\w+)"/g)].map(m => [m[1], m[2]]));
+const resolve = (fill, colors, clrMap = CONTENT) => {
   const scheme = fill.match(/schemeClr val="([^"]+)"/)?.[1];
-  return scheme ? colors[CONTENT[scheme] ?? scheme] : fill.match(/srgbClr val="([^"]+)"/)[1];
+  return scheme ? colors[clrMap[scheme] ?? scheme] : fill.match(/srgbClr val="([^"]+)"/)[1];
 };
 const importWith = async (bytes, options = {catalogs}) => {
   const diagnostics = [];
@@ -81,7 +85,7 @@ for (const record of themes) {
   const slot = record.background.slot;
   const background = slideXml(entries).match(/<p:bg><p:bgPr><a:solidFill>(<a:schemeClr val="[^"]+"\/>)<\/a:solidFill>/)?.[1];
   assert.ok(background, `${record.id} background is a scheme color`);
-  assert.equal(resolve(background, theme.colors), hex(scheme[slot]));
+  assert.equal(resolve(background, theme.colors, clrMapOf(entries)), hex(scheme[slot]));
   const {document, theme: reports} = await importWith(bytes);
   assert.equal(document.design.theme, record.id);
   // RR-59: the colour scheme the theme brings was not authored, so the round trip leaves it absent.
@@ -144,7 +148,9 @@ assert.doesNotMatch(second, /<a:schemeClr/, 'no scheme reference at all on an ov
 // A literal background keeps literal default text.
 const third = slideXml(refs, 3);
 assert.match(third, /<p:bg><p:bgPr><a:solidFill><a:srgbClr val="FFFFFF"(?:\/>|><\/a:srgbClr>)<\/a:solidFill>/, 'explicit solid backgrounds stay literal');
-assert.equal(runFill(third, 'Solid'), `<a:srgbClr val="${hex(forest.dark1)}"/>`, 'text on a literal background stays literal');
+// RR-96: default text is the text role (tx1), which is the deck's dark1 here; only the authored background is a literal.
+assert.equal(runFill(third, 'Solid'), '<a:schemeClr val="tx1"/>', 'default text on a literal background is the text role');
+assert.equal(resolve(runFill(third, 'Solid'), colors), hex(forest.dark1));
 // Even an override slide whose scheme equals the deck scheme stays literal.
 const sameOverride = slideXml(parts(await toPptx({design: {colorScheme: 'forest-green'}, slides: [{title: 'Same', design: {colorScheme: 'forest-green'}, text: [{text: 'pinned', color: 'accent2'}]}]})));
 assert.doesNotMatch(sameOverride, /<a:schemeClr/);
@@ -157,15 +163,22 @@ const pairing = async (design, slide = {title: 'Pair', text: 'Body', items: [{te
 };
 const cool = colorSchemes.find(record => record.id === 'cool-horizon');
 const minimal = await pairing({theme: 'minimal'});
-assert.match(minimal.xml, /<p:bg><p:bgPr><a:solidFill><a:schemeClr val="tx2"\/>/, 'minimal background is dark2 (tx2)');
-assert.equal(runFill(minimal.xml, 'Pair'), '<a:schemeClr val="bg1"/>', 'light1 text on a dark2 background');
-assert.equal(runFill(minimal.xml, 'Body'), '<a:schemeClr val="bg1"/>');
-assert.equal(runFill(minimal.xml, 'Muted'), '<a:schemeClr val="bg2"/>', 'muted text is light2 on a dark background');
-assert.equal(resolve(runFill(minimal.xml, 'Muted'), minimal.colors), hex(cool.light2));
-assert.match(minimal.xml, /<a:buClr><a:schemeClr val="bg1"\/><\/a:buClr>/, 'list markers follow the default text');
+// RR-96: the slide background is always the bg1 role and default text the tx1 role; a dark theme background is carried by the
+// master's clrMap (bg1 = the dark slot, tx1 = light1), not by a different scheme name per slide.
+const minimalMap = clrMapOf(minimal.entries);
+assert.match(minimal.xml, /<p:bg><p:bgPr><a:solidFill><a:schemeClr val="bg1"\/>/, 'minimal background is the bg1 role');
+assert.equal(minimalMap.bg1, 'dk2', 'minimal background is dark2 through the clrMap');
+assert.equal(minimalMap.tx1, 'lt1', 'text on a dark2 background is light1 through the clrMap');
+assert.equal(runFill(minimal.xml, 'Pair'), '<a:schemeClr val="tx1"/>', 'light1 text on a dark2 background');
+assert.equal(resolve(runFill(minimal.xml, 'Pair'), minimal.colors, minimalMap), hex(cool.light1));
+assert.equal(runFill(minimal.xml, 'Body'), '<a:schemeClr val="tx1"/>');
+assert.equal(runFill(minimal.xml, 'Muted'), '<a:schemeClr val="tx2"/>', 'muted text is the tx2 role, light2 on a dark background');
+assert.equal(resolve(runFill(minimal.xml, 'Muted'), minimal.colors, minimalMap), hex(cool.light2));
+assert.match(minimal.xml, /<a:buClr><a:schemeClr val="tx1"\/><\/a:buClr>/, 'list markers follow the default text');
 const dark = await pairing({theme: 'dark'});
-assert.match(dark.xml, /<p:bg><p:bgPr><a:solidFill><a:schemeClr val="tx1"\/>/);
-assert.equal(runFill(dark.xml, 'Pair'), '<a:schemeClr val="bg1"/>');
+assert.match(dark.xml, /<p:bg><p:bgPr><a:solidFill><a:schemeClr val="bg1"\/>/);
+assert.equal(clrMapOf(dark.entries).bg1, 'dk1', 'the dark theme background is dark1 through the clrMap');
+assert.equal(runFill(dark.xml, 'Pair'), '<a:schemeClr val="tx1"/>');
 const classic = await pairing({theme: 'classic'});
 assert.equal(runFill(classic.xml, 'Pair'), '<a:schemeClr val="tx1"/>');
 assert.equal(runFill(classic.xml, 'Muted'), '<a:schemeClr val="tx2"/>');
@@ -174,33 +187,37 @@ const role = await pairing({theme: 'classic', colorScheme: {id: 'cool-horizon', 
 assert.equal(runFill(role.xml, 'Pair'), '<a:srgbClr val="333333"/>');
 // Translucent theme background: the backdrop is not the theme slot alone.
 const translucent = await pairing({theme: 'classic', background: {type: 'theme', slot: 'light1', opacity: .5}});
-assert.equal(runFill(translucent.xml, 'Pair'), `<a:srgbClr val="${hex(cool.dark1)}"/>`);
+// RR-96: default text is the tx1 role whatever the backdrop; it is the deck's dark1 here.
+assert.equal(runFill(translucent.xml, 'Pair'), '<a:schemeClr val="tx1"/>');
+assert.equal(resolve(runFill(translucent.xml, 'Pair'), translucent.colors, clrMapOf(translucent.entries)), hex(cool.dark1));
 // Theme backgrounds are limited to light1/light2/dark1/dark2 by the schema, so every
 // theme background has a semantic text pair.
 // Card text sits on a literal card fill and stays literal.
 const card = await pairing({theme: 'minimal', contentBox: true}, {title: 'Cards', composition: {mode: 'row'}, blocks: [{text: 'Inside card'}, {text: 'Second'}]});
 assert.ok(card.xml.includes('name="OPF card'), 'cards exported');
-assert.equal(runFill(card.xml, 'Cards'), '<a:schemeClr val="bg1"/>', 'the heading outside the card still pairs');
-assert.equal(runFill(card.xml, 'Inside card'), `<a:srgbClr val="${hex(cool.light1)}"/>`, 'card text stays literal');
+assert.equal(runFill(card.xml, 'Cards'), '<a:schemeClr val="tx1"/>', 'the heading outside the card still pairs');
+// RR-96: card text is the text role too, so it follows the deck's variant like the rest.
+assert.equal(runFill(card.xml, 'Inside card'), '<a:schemeClr val="tx1"/>', 'card text is the text role');
+assert.equal(resolve(runFill(card.xml, 'Inside card'), card.colors, clrMapOf(card.entries)), hex(cool.light1));
 // Table cell text follows the theme with its theme-referenced fill (FF-24c); see test/table-theme-colors.mjs.
 const table = await pairing({theme: 'classic'}, {title: 'Table', table: {columns: ['A'], rows: [['cell']]}});
 assert.equal(runFill(table.xml, 'cell'), '<a:schemeClr val="tx1"/>', 'default cell text pairs with the bg2 surface fill');
 
-// FF-24b: the slide master follows a non-bg1 theme background, with paired
-// default text, so slides added in PowerPoint match. The layout inherits it.
+// FF-24b / RR-96: the slide master follows a dark theme background through its clrMap (bg1 = the dark slot, tx1 = light1) with the
+// vendored text styles, so slides added in PowerPoint match; the master and layout keep bg1/tx1 references and no literal background.
 const masterOf = entries => strFromU8(entries['ppt/slideMasters/slideMaster1.xml']);
 const layoutOf = entries => strFromU8(entries['ppt/slideLayouts/slideLayout1.xml']);
-for (const [result, background, text] of [[dark, 'tx1', 'bg1'], [minimal, 'tx2', 'bg1']]) {
+const vendorMaster = masterOf(classic.entries);
+assert.equal(clrMapOf(classic.entries).bg1, 'lt1', 'a light1 deck keeps the default clrMap');
+for (const [result, background] of [[dark, 'dk1'], [minimal, 'dk2']]) {
   const master = masterOf(result.entries);
   assert.equal(XMLValidator.validate(master), true);
-  assert.match(master, new RegExp(`<p:cSld name="pptx.gallery"><p:bg><p:bgPr><a:solidFill><a:schemeClr val="${background}"/></a:solidFill><a:effectLst/></p:bgPr></p:bg><p:spTree>`));
+  assert.deepEqual(Object.fromEntries(Object.entries(clrMapOf(result.entries)).filter(([role]) => /^(bg|tx)\d$/.test(role))), {bg1: background, tx1: 'lt1', bg2: 'dk2', tx2: 'lt2'}, 'the master clrMap is the dark map');
+  assert.match(master, /<p:cSld name="pptx.gallery"><p:spTree>/, 'the master carries no literal background');
   const styles = master.match(/<p:txStyles>[\s\S]*<\/p:txStyles>/)[0];
-  assert.doesNotMatch(styles, /schemeClr val="tx1"/);
-  const vendorStyles = masterOf(classic.entries).match(/<p:txStyles>[\s\S]*<\/p:txStyles>/)[0];
-  assert.equal(styles, vendorStyles.split('<a:schemeClr val="tx1"/>').join(`<a:schemeClr val="${text}"/>`), 'every title, body and other level uses the paired text; nothing else changes');
-  assert.doesNotMatch(layoutOf(result.entries), /<p:bg>/, 'layout inherits the master background');
+  assert.equal(styles, vendorMaster.match(/<p:txStyles>[\s\S]*<\/p:txStyles>/)[0], 'every title, body and other level is the text role; nothing else changes');
+  assert.match(layoutOf(result.entries), /<p:bg><p:bgRef idx="1001"><a:schemeClr val="bg1"\/><\/p:bgRef><\/p:bg>/, 'the layout background is the bg1 role');
 }
-const vendorMaster = masterOf(classic.entries);
 assert.doesNotMatch(vendorMaster, /<p:bg>/, 'a light1 deck keeps the vendored master');
 assert.match(layoutOf(classic.entries), /<p:bg><p:bgRef idx="1001"><a:schemeClr val="bg1"\/><\/p:bgRef><\/p:bg>/);
 // Imported slides keep their own backgrounds; the master background does not leak.

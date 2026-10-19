@@ -15,7 +15,7 @@ function find(value, key) {
   return Object.entries(value).flatMap(([name, child]) => name === key ? array(child) : find(child, key));
 }
 // FF-24c: default table chrome is a theme reference; resolve it through the exported clrScheme and the vendored master map.
-const themeColor = (theme, value) => theme.match(new RegExp('<a:' + ({tx1: 'dk1', bg1: 'lt1', tx2: 'dk2', bg2: 'lt2', hlink: 'hlink'}[value] ?? value) + '><a:srgbClr val="([0-9A-F]{6})"'))[1];
+import {colorHex, clrMapOf, themeColorsOf} from './helpers/scheme-colors.mjs';
 let checked = 0, shrunk = 0, grown = 0;
 for (const scale of [1, 0.5]) {
 for (const [fontScheme, family, chosen] of [['roboto', 'Roboto', 'Roboto'], [{major:'Calibri',minor:'Calibri'}, 'Carlito', 'Calibri']]) {
@@ -39,6 +39,7 @@ for (const align of ['left', 'center', 'right']) {
     const bytes = await toPptx(deck, { fonts });
     const themeXml = new TextDecoder().decode(unzipSync(bytes)['ppt/theme/theme1.xml']);
     const xml = parser.parse(new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']));
+    const themeSlots = themeColorsOf(themeXml), masterMap = clrMapOf(new TextDecoder().decode(unzipSync(bytes)['ppt/slideMasters/slideMaster1.xml']));
     const frame = find(xml, 'p:graphicFrame').find(frame => find(frame, 'a:tbl').length);
     const transform = frame['p:xfrm'];
     for (const [attribute, expected] of [['x', item.box.x], ['y', item.box.y]]) {
@@ -65,7 +66,8 @@ for (const align of ['left', 'center', 'right']) {
         const path = withHeaders && r === 0 ? `${item.path}.columns.${c}` : `${item.path}.rows.${r - Number(withHeaders)}.${c}`;
         const text = find(svg, 'text').filter(text => text['@_data-opf-path'] === path);
         const rectangle = find(svg, 'rect').find(rect => rect['@_data-opf-path'] === path);
-        const nativeColor = fill => fill['a:srgbClr']?.['@_val'] ?? themeColor(themeXml, fill['a:schemeClr']['@_val']);
+        // RR-96: a scheme color resolves through the master color map and its luminance transforms.
+        const nativeColor = fill => fill['a:srgbClr']?.['@_val'] ?? colorHex({'a:schemeClr': {val: fill['a:schemeClr']['@_val'], ...(fill['a:schemeClr']['a:lumMod'] && {'a:lumMod': {val: fill['a:schemeClr']['a:lumMod']['@_val']}}), ...(fill['a:schemeClr']['a:lumOff'] && {'a:lumOff': {val: fill['a:schemeClr']['a:lumOff']['@_val']}})}}, themeSlots, masterMap);
         assert.equal(nativeColor(cell['a:tcPr']['a:solidFill']), rectangle['@_fill'].slice(1), 'Native cell fill matches the theme preview');
         assert.equal(nativeColor(cell['a:tcPr']['a:lnL']['a:solidFill']), rectangle['@_stroke'].slice(1), 'Native cell border matches the theme preview');
         const value = expectedRows[r][c];

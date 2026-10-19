@@ -3,6 +3,7 @@ import {strFromU8, unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
+import {colorsInXml, themeColorsOf, clrMapOf} from './helpers/scheme-colors.mjs';
 
 // OPF 0.15 (FA-23): the gallery records these checks name come from the snapshot, which a host registers explicitly
 // (`catalogs: [defaultCatalog]`); `records` lists them with their keys as ids.
@@ -14,6 +15,8 @@ const fromPptx = (bytes, options = {}) => importPptx(bytes, {catalogs: [defaultC
 // opf-render draws it in (colors.primary: scheme.primary, else accent1). Where the deck theme holds that colour in
 // accent1 the run is a:schemeClr accent1 (FF-24 convention: engine chrome follows the deck theme); otherwise it is the
 // literal. The title, subtitle and body keep the text colour.
+// RR-96: the text colour is a:schemeClr tx1, which the slide's clrMap (the master's, or the slide's override) points at dk1 or lt1 of the
+// exported theme; `colorOf` resolves a run's fill to {hex, role} through the theme and that map, so the tests pin the exact colour and the role.
 
 const parts = bytes => unzipSync(new Uint8Array(bytes));
 const slideXml = entries => {
@@ -24,6 +27,12 @@ const slideXml = entries => {
 const themeAccent1 = entries => strFromU8(entries['ppt/theme/theme1.xml']).match(/<a:accent1><a:srgbClr val="([0-9A-F]{6})"\/><\/a:accent1>/)[1];
 const runs = (xml, text) => [...xml.matchAll(/<a:r>([\s\S]*?)<\/a:r>/g)].map(m => m[1]).filter(body => body.includes(`<a:t>${text}</a:t>`));
 const fillOf = run => run.match(/<a:solidFill>(<a:(?:srgbClr|schemeClr) val="[^"]+"\s*\/>)/)?.[1];
+const colorOf = (run, entries, number = 1) => {
+  const fill = fillOf(run);
+  if (!fill) return undefined;
+  const map = {...clrMapOf(strFromU8(entries['ppt/slideMasters/slideMaster1.xml'])), ...clrMapOf(strFromU8(entries[`ppt/slides/slide${number}.xml`]))};
+  return colorsInXml(fill, themeColorsOf(strFromU8(entries['ppt/theme/theme1.xml'])), map)[0];
+};
 const hex = value => value.replace(/^#/, '').toUpperCase();
 const slide = {id: 'intro', layout: 'title-slide', tag: 'Pitch Intro', title: 'New category, clear wedge', subtitle: 'Why now', items: ['Problem worth solving']};
 const wcag = value => {
@@ -47,12 +56,14 @@ for (const record of records.colorSchemes) {
   const expected = hex(record.primary ?? record.accent1);
   const [run] = tagRuns(xml);
   const low = contrast(expected, hex(record.dark2)) < 4.5; // the default theme (minimal) paints the dark2 slot
-  if (low) assert.equal(fillOf(run), fillOf(runs(xml, 'New category, clear wedge')[0]), `${record.id}: low-contrast tag takes the text color`);
-  else assert.equal(fillOf(run), '<a:schemeClr val="accent1"/>', `${record.id}: tag is scheme accent1`);
+  const title = colorOf(runs(xml, 'New category, clear wedge')[0], entries), tag = colorOf(run, entries);
+  if (low) assert.deepEqual(tag, title, `${record.id}: low-contrast tag takes the text color`);
+  else assert.deepEqual(tag, {hex: expected, role: 'accent1'}, `${record.id}: tag is scheme accent1`);
   lowCount += low;
   assert.equal(themeAccent1(entries), expected, `${record.id}: theme accent1 is the preview primary`);
   // Only the tag is retinted: the title keeps the text colour.
-  assert.notEqual(fillOf(runs(xml, 'New category, clear wedge')[0]), '<a:schemeClr val="accent1"/>', `${record.id}: title is not the tag colour`);
+  assert.equal(title.role, 'tx1', `${record.id}: title keeps the text colour role`);
+  assert.notEqual(title.role, 'accent1', `${record.id}: title is not the tag colour`);
 }
 
 assert.ok(lowCount > 0 && lowCount < records.colorSchemes.length, 'both outcomes are exercised');
@@ -61,8 +72,9 @@ console.log(`default dark2 slide: ${lowCount} of ${records.colorSchemes.length} 
 // 2. A scheme that names a primary other than accent1: the theme does not hold it, so the tag stays the literal primary.
 {
   const scheme = {light1: '#FFFFFF', dark1: '#111111', accent1: '#AA0000', primary: '#0055AA'};
-  const [run] = tagRuns(slideXml(parts(await toPptx({design: {colorScheme: scheme, background: {type: 'solid', color: '#FFFFFF'}}, slides: [slide]}))));
-  assert.equal(fillOf(run), '<a:srgbClr val="0055AA"/>');
+  const entries = parts(await toPptx({design: {colorScheme: scheme, background: {type: 'solid', color: '#FFFFFF'}}, slides: [slide]}));
+  const [run] = tagRuns(slideXml(entries));
+  assert.deepEqual(colorOf(run, entries), {hex: '0055AA', role: undefined});
 }
 
 // 3. A slide with its own scheme is pinned to literals, even when the deck theme holds the same colour. (A scheme whose
@@ -72,16 +84,17 @@ console.log(`default dark2 slide: ${lowCount} of ${records.colorSchemes.length} 
   const entries = parts(await toPptx({design: {colorScheme: 'cool-horizon'}, slides: [{...slide, design: {colorScheme: other.id, background: {type: 'solid', color: '#FFFFFF'}}}]}));
   assert.notEqual(hex(other.accent1), themeAccent1(entries));
   const [run] = tagRuns(slideXml(entries));
-  assert.equal(fillOf(run), `<a:srgbClr val="${hex(other.primary ?? other.accent1)}"/>`);
+  assert.deepEqual(colorOf(run, entries), {hex: hex(other.primary ?? other.accent1), role: undefined});
 }
 
 // 4. A tag that wraps writes every line in the tag colour.
 {
   const long = {...slide, tag: 'A long eyebrow label that needs more than one line to fit in the heading width, '.repeat(6)};
-  const xml = slideXml(parts(await toPptx({design: {colorScheme: 'cool-horizon', background: {type: 'solid', color: '#FFFFFF'}}, slides: [long]})));
+  const entries = parts(await toPptx({design: {colorScheme: 'cool-horizon', background: {type: 'solid', color: '#FFFFFF'}}, slides: [long]}));
+  const xml = slideXml(entries);
   const tagShapes = [...xml.matchAll(/<p:sp>(?:(?!<\/p:sp>)[\s\S])*?name="OPF heading slides\.0\.tag line \d+"[\s\S]*?<\/p:sp>/g)].map(m => m[0]);
   assert.ok(tagShapes.length >= 1);
-  for (const shape of tagShapes) for (const run of shape.match(/<a:r>[\s\S]*?<\/a:r>/g) ?? []) assert.equal(fillOf(run), '<a:schemeClr val="accent1"/>');
+  for (const shape of tagShapes) for (const run of shape.match(/<a:r>[\s\S]*?<\/a:r>/g) ?? []) assert.deepEqual(colorOf(run, entries), {hex: themeAccent1(entries), role: 'accent1'});
 }
 
 // 5. Byte-identical output and lossless re-import of the tag text.
@@ -103,43 +116,45 @@ const pairs = [
   ['#767676', '#FFFFFF', 4.54], ['#2874A6', '#FFFFFF', 5.07], ['#38BDF8', '#0B1220', 8.74], ['#FFFFFF', '#000000', 21],
 ];
 const titleText = 'New category, clear wedge';
-const tagAndTitle = async design => {
-  const xml = slideXml(parts(await toPptx({design, slides: [slide]})));
-  return [fillOf(tagRuns(xml)[0]), fillOf(runs(xml, titleText)[0])];
+const tagAndTitle = async (design, slides = [slide]) => {
+  const entries = parts(await toPptx({design, slides}));
+  const xml = slideXml(entries);
+  return [colorOf(tagRuns(xml)[0], entries), colorOf(runs(xml, titleText)[0], entries)];
 };
 for (const [primary, background, ratio] of pairs) {
   const dark = wcag(background.slice(1)) < 0.179;
   assert.equal(Number(contrast(primary.slice(1), background.slice(1)).toFixed(2)), ratio, `${primary} on ${background}: ratio`);
   const [tag, title] = await tagAndTitle({colorScheme: {light1: '#FFFFFF', dark1: '#111111', accent1: primary}, fontScheme: 'aptos', background: {type: 'solid', color: background}});
-  assert.equal(title, `<a:srgbClr val="${dark ? 'FFFFFF' : '111111'}"/>`, `${primary} on ${background}: title color`);
-  assert.equal(tag, ratio < 4.5 ? title : '<a:schemeClr val="accent1"/>', `${primary} on ${background}: tag color`);
+  assert.deepEqual(title, {hex: dark ? 'FFFFFF' : '111111', role: 'tx1'}, `${primary} on ${background}: title color`);
+  assert.deepEqual(tag, ratio < 4.5 ? title : {hex: primary.slice(1), role: 'accent1'}, `${primary} on ${background}: tag color`);
 }
 // The threshold is 4.5 exactly: #767676 on white is 4.54 (kept), #777777 is 4.48 (text color).
 for (const [primary, kept] of [['#767676', true], ['#777777', false]]) {
   const [tag, title] = await tagAndTitle({colorScheme: {light1: '#FFFFFF', dark1: '#111111', accent1: primary}, fontScheme: 'aptos', background: {type: 'solid', color: '#FFFFFF'}});
-  assert.equal(tag, kept ? '<a:schemeClr val="accent1"/>' : title);
+  assert.deepEqual(tag, kept ? {hex: primary.slice(1), role: 'accent1'} : title);
 }
 // A theme-slot background gives the text a scheme reference, and the fallback tag uses the same one.
 {
   const light = await tagAndTitle({colorScheme: {light1: '#FFFFFF', dark1: '#111111', accent1: '#FE938C'}, fontScheme: 'aptos', background: {type: 'theme', slot: 'light1'}});
-  assert.deepEqual(light, ['<a:schemeClr val="tx1"/>', '<a:schemeClr val="tx1"/>']);
+  assert.deepEqual(light, [{hex: '111111', role: 'tx1'}, {hex: '111111', role: 'tx1'}]);
   const dark = await tagAndTitle({colorScheme: {light1: '#FFFFFF', dark1: '#000000', accent1: '#6A1B9A'}, fontScheme: 'aptos', background: {type: 'theme', slot: 'dark1'}});
-  assert.deepEqual(dark, ['<a:schemeClr val="bg1"/>', '<a:schemeClr val="bg1"/>']);
+  assert.deepEqual(dark, [{hex: 'FFFFFF', role: 'tx1'}, {hex: 'FFFFFF', role: 'tx1'}]);
 }
 // A slide-level background is the one the tag sits on, per slide.
 {
   const design = {colorScheme: {light1: '#FFFFFF', dark1: '#111111', accent1: '#6A1B9A'}, fontScheme: 'aptos', background: {type: 'solid', color: '#FFFFFF'}};
   const entries = parts(await toPptx({design, slides: [slide, {...slide, id: 'dark', design: {background: {type: 'solid', color: '#000000'}}}]}));
   const [first, second] = [1, 2].map(number => strFromU8(entries[`ppt/slides/slide${number}.xml`]));
-  assert.equal(fillOf(tagRuns(first)[0]), '<a:schemeClr val="accent1"/>', 'white slide keeps the primary');
-  assert.equal(fillOf(tagRuns(second)[0]), '<a:srgbClr val="FFFFFF"/>', 'black slide takes the text color');
+  assert.deepEqual(colorOf(tagRuns(first)[0], entries, 1), {hex: '6A1B9A', role: 'accent1'}, 'white slide keeps the primary');
+  assert.equal(colorOf(tagRuns(second)[0], entries, 2).hex, 'FFFFFF', 'black slide takes the text color');
 }
 // A wrapped low-contrast tag writes every line in the text color.
 {
   const long = {...slide, tag: 'A long eyebrow label that needs more than one line to fit in the heading width, '.repeat(6)};
-  const xml = slideXml(parts(await toPptx({design: {colorScheme: {light1: '#FFFFFF', dark1: '#111111', accent1: '#FE938C'}, fontScheme: 'aptos', background: {type: 'solid', color: '#FFFFFF'}}, slides: [long]})));
+  const entries = parts(await toPptx({design: {colorScheme: {light1: '#FFFFFF', dark1: '#111111', accent1: '#FE938C'}, fontScheme: 'aptos', background: {type: 'solid', color: '#FFFFFF'}}, slides: [long]}));
+  const xml = slideXml(entries);
   const tagShapes = [...xml.matchAll(/<p:sp>(?:(?!<\/p:sp>)[\s\S])*?name="OPF heading slides\.0\.tag line \d+"[\s\S]*?<\/p:sp>/g)].map(m => m[0]);
   assert.ok(tagShapes.length > 1);
-  for (const shape of tagShapes) for (const run of shape.match(/<a:r>[\s\S]*?<\/a:r>/g) ?? []) assert.equal(fillOf(run), '<a:srgbClr val="111111"/>');
+  for (const shape of tagShapes) for (const run of shape.match(/<a:r>[\s\S]*?<\/a:r>/g) ?? []) assert.deepEqual(colorOf(run, entries), {hex: '111111', role: 'tx1'});
 }
 console.log('tag colour ok');

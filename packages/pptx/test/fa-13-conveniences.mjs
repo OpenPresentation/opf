@@ -4,6 +4,7 @@ import {XMLValidator} from 'fast-xml-parser';
 import {validate} from '@openpresentation/opf';
 import {colorContrast, resolveCanvasDimensions} from '@openpresentation/opf/composition';
 import {toSvg, fromPptx, toPptx} from './helpers/default-catalog.mjs';
+import {colorsInXml, themeColorsOf, clrMapOf} from './helpers/scheme-colors.mjs';
 
 // FA-13: code.highlight, Watermark.text, TextRun.code, TextRun.lang and the 1:1, 4:5 and 9:16 presets, exported natively
 // and imported back. Core owns the geometry and colours (codeHighlight*, layoutWatermark); this checks the package.
@@ -235,13 +236,14 @@ const runs = xml => [...xml.matchAll(/<a:r>(<a:rPr\b[\s\S]*?<\/a:rPr>)<a:t>([^<]
   const deck = {design: {fontScheme: 'roboto', watermark: {text: 'DRAFT', opacity: 0.15}}, slides: [
     {title: 'White', text: 'x', design: {background: '#FFFFFF'}}, {title: 'Dark', text: 'x', design: {background: '#0B1020'}}, {title: 'Default', text: 'x'}]};
   const {xml, slide} = await exportDeck(deck);
-  const theme = xml['ppt/theme/theme1.xml'], map = xml['ppt/slideMasters/slideMaster1.xml'].match(/<p:clrMap\b[^>]*>/)[0];
-  const slot = name => theme.match(new RegExp(`<a:${map.match(new RegExp(`\\b${name}="(\\w+)"`))[1]}>\\s*<a:srgbClr val="([0-9A-Fa-f]{6})"`))[1].toUpperCase();
+  // RR-96: the stamp is a:schemeClr tx1; its colour is the exported theme slot the slide's clrMap (the slide's own override over the master's) names.
+  const theme = themeColorsOf(xml['ppt/theme/theme1.xml']), masterMap = clrMapOf(xml['ppt/slideMasters/slideMaster1.xml']);
   const seen = [];
   for (const index of [1, 2, 3]) {
     const mark = named(slide(index), /^OPF watermark text$/)[0];
-    const color = mark.match(/<a:rPr\b[\s\S]*?<a:solidFill><a:(srgbClr|schemeClr) val="(\w+)"/);
-    const exported = color[1] === 'srgbClr' ? color[2].toUpperCase() : slot(color[2]);
+    const [color] = colorsInXml(mark.match(/<a:rPr\b[\s\S]*?<\/a:rPr>/)[0].match(/<a:solidFill>[\s\S]*?<\/a:solidFill>/)[0], theme, {...masterMap, ...clrMapOf(slide(index))});
+    assert.equal(color.role, 'tx1', `slide ${index}: the stamp is the scheme text role`);
+    const exported = color.hex;
     const preview = toSvg(deck, index).match(/<text [^>]*fill="(#[0-9A-Fa-f]{6})"[^>]*>DRAFT/)[1].slice(1).toUpperCase();
     assert.equal(exported, preview, `slide ${index}: preview and export use one color`);
     seen.push(exported);

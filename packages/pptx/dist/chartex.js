@@ -171,7 +171,7 @@ const axisTitle = (value, text, run) => {
 
 function axes(spec, gridColor, text, titles = {}, run = {}, code) {
   if (!spec.axes) return '';
-  const gridlines = `<cx:majorGridlines><cx:spPr><a:ln w="9525"><a:solidFill><a:srgbClr val="${gridColor}"><a:alpha val="70000"/></a:srgbClr></a:solidFill></a:ln></cx:spPr></cx:majorGridlines>`;
+  const gridlines = `<cx:majorGridlines><cx:spPr><a:ln w="9525"><a:solidFill><a:srgbClr val="${gridColor}"/></a:solidFill></a:ln></cx:spPr></cx:majorGridlines>`;
   const gapWidth = {clusteredColumn: '0.06', paretoLine: '0.06', boxWhisker: '1', waterfall: '0.5', funnel: '0.06'}[spec.layoutId] ?? '1';
   // CT_Axis order: scaling, units, majorGridlines, tickLabels, spPr, txPr.
   const category = `<cx:axis id="0"><cx:catScaling gapWidth="${gapWidth}"/>${axisTitle(titles.category, text, run)}<cx:tickLabels/>${text}</cx:axis>`;
@@ -254,7 +254,7 @@ export function chartStyleXml({labelColor = '000000', gridColor = '000000', font
   // theme's tx1: PowerPoint applies the style part to chartex labels that carry no cx:txPr of their own.
   const textColor = `<a:srgbClr val="${labelColor}"/>`;
   const face = escapeXml(font);
-  const faintLine = `<a:ln w="9525" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:srgbClr val="${gridColor}"><a:alpha val="70000"/></a:srgbClr></a:solidFill><a:round/></a:ln>`;
+  const faintLine = `<a:ln w="9525" cap="flat" cmpd="sng" algn="ctr"><a:solidFill><a:srgbClr val="${gridColor}"/></a:solidFill><a:round/></a:ln>`;
   const entry = (name, {fillIdx = '0', fillColor = '', fontColor = textColor, spPr = '', size = '', mods = ''} = {}) =>
     `<cs:${name}${mods ? ` mods="${mods}"` : ''}><cs:lnRef idx="0"/><cs:fillRef idx="${fillIdx}">${fillColor}</cs:fillRef><cs:effectRef idx="0"/><cs:fontRef idx="minor">${fontColor}</cs:fontRef>${spPr ? `<cs:spPr>${spPr}</cs:spPr>` : ''}${size ? `<cs:defRPr sz="${size}" kern="1200">${solidFill(labelColor)}<a:latin typeface="${face}"/><a:ea typeface="${face}"/><a:cs typeface="${face}"/></cs:defRPr>` : ''}</cs:${name}>`;
   const entries = STYLE_ENTRIES.map(name => {

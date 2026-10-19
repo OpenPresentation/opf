@@ -130,10 +130,12 @@ const colors = (deck, slide) => {
     const replayXml = dec.decode(replay['ppt/slides/slide1.xml']);
     const plainRun = [...replayXml.matchAll(/<a:r>[\s\S]*?<\/a:r>/g)].find(match => match[0].includes('<a:t>plain</a:t>'))?.[0];
     assert.ok(plainRun, 'the plain run remains a native text run');
-    if (!/<a:srgbClr val="FFFFFF"\/>/.test(plainRun)) {
-      assert.match(plainRun, /<a:schemeClr val="bg1"\/>/);
-      const lightBackground = dec.decode(replay['ppt/theme/theme1.xml']).match(/<a:lt1>([\s\S]*?)<\/a:lt1>/)?.[1];
-      assert.match(lightBackground, /(?:lastClr|val)="FFFFFF"/, 'bg1 resolves to native white on re-export');
+    // RR-96: an uncoloured run is the text role (a:schemeClr tx1), which the master clrMap and theme resolve to the deck's text colour.
+    assert.match(plainRun, /<a:schemeClr val="tx1"\/>/);
+    {
+      const theme = Object.fromEntries([...dec.decode(replay['ppt/theme/theme1.xml']).matchAll(/<a:(dk1|lt1|dk2|lt2)>(?:<a:sysClr [^>]*lastClr="([0-9A-F]{6})"[^>]*\/>|<a:srgbClr val="([0-9A-F]{6})"\/>)/g)].map(m => [m[1], m[2] ?? m[3]]));
+      const clrMap = dec.decode(replay['ppt/slideMasters/slideMaster1.xml']).match(/<p:clrMap ([^>]*)\/>/)[1];
+      assert.equal(theme[/tx1="(\w+)"/.exec(clrMap)[1]], 'FFFFFF', 'tx1 resolves to native white on re-export');
     }
     // Words and structure are untouched by the colour pass.
     assert.equal(deck.slides[0].blocks, undefined);

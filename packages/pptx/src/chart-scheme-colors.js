@@ -12,13 +12,14 @@ const hex6 = value => String(value).replace(/^#/, '').toUpperCase();
  * maps a colour reference and its resolved hex to a scheme value when the deck theme holds that colour (theme-colors.js). A colour the
  * panel adjusted, a hex or variable entry and a tint (series 7 to 12) have none.
  */
-export function chartPaletteSchemes(colors, preferred, adjusted, schemeFor) {
+export function chartPaletteSchemes(colors, preferred, adjusted, schemeFor, accents) {
   const authored = Array.isArray(colors) ? colors : [];
   return preferred.map((color, index) => {
     if (hex6(color) !== hex6(adjusted[index])) return undefined;
     const entry = typeof authored[index] === 'string' ? authored[index].trim() : undefined;
     if (entry !== undefined) return /^[A-Za-z]/.test(entry) ? schemeFor(entry, hex6(color)) : undefined;
-    return index < 6 ? schemeFor(`accent${index + 1}`, hex6(color)) : undefined;
+    // RR-96: series i is the slot the variant's accent order puts at position i (accent i + 1 by default), and schemeFor names the role that slot has.
+    return index < 6 ? schemeFor(accents?.[index] ?? `accent${index + 1}`, hex6(color)) : undefined;
   });
 }
 

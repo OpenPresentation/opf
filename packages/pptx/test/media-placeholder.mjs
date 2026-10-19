@@ -91,7 +91,7 @@ for (const provenance of ['references-only', false]) {
     assert.deepEqual(videos(doc), [[], [], []]);
     assert.deepEqual(doc.slides[1].blocks, [
       ...['frame','badge','play'].map(role=>({type:'text',text:`PowerPoint shape: OPF media slides.1.video ${role}`})),
-      {type:'text',text:[{text:'Asset clip',bold:true,underline:false,fontSize:13.5,fontFamily:'Roboto',color:'#F0F0F0',link:deck.assets['demo-video'].src}]}
+      {type:'text',text:[{text:'Asset clip',bold:true,underline:false,fontSize:13.5,fontFamily:'Roboto',color:'light2',link:deck.assets['demo-video'].src}]}
     ]);
   } else {
     assert.ok(records.every(record => record.video === undefined));
@@ -175,7 +175,7 @@ for (const assetBacked of [false, true]) for (const provenance of ['full', 'refe
   assert.deepEqual(videos(result.doc), [[]]);
   if(provenance===false) assert.deepEqual(result.doc.slides[0].blocks,[
     ...['frame','badge','play'].map(role=>({type:'text',text:`PowerPoint shape: OPF media slides.0.video ${role}`})),
-    {type:'text',text:[{text:'Visible',bold:true,fontSize:13.5,fontFamily:'Aptos',color:'#F0F0F0'}]}
+    {type:'text',text:[{text:'Visible',bold:true,fontSize:13.5,fontFamily:'Aptos',color:'light2'}]}
   ]);
   else assert.ok(blockTexts(result.doc).includes('Visible'));
   checks++;
@@ -464,7 +464,8 @@ for (const video of ['file:clip.mp4', 'data:video/mp4;base64,PRIVATE']) {
     return {size: run.match(/\bsz="([^"]+)"/)?.[1], family: run.match(/<a:latin typeface="([^"]+)"/)?.[1], color: run.match(/<a:(?:srgbClr|schemeClr) val="([^"]+)"/)?.[1]};
   };
   const firstStyle = nativeLinkStyle(firstReplay);
-  assert.deepEqual(firstStyle, {size:'1875', family:'Aptos', color:'FFFFFF'});
+  // RR-96: the link colour is the text role (a:schemeClr tx1, which this dark deck's clrMap points at light1), not a literal.
+  assert.deepEqual(firstStyle, {size:'1875', family:'Aptos', color:'tx1'});
   assert.deepEqual(nativeLinkStyle(await toPptx(secondImported, {seed: 1})), firstStyle);
   for (const provenance of ['references-only', false]) {
     const restricted = await toPptx({slides: [{video: {src: url, title}}]}, {seed: 1, provenance});

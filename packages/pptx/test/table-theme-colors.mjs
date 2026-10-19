@@ -5,6 +5,7 @@ import {validate} from '@openpresentation/opf';
 import {resolveColorRoles} from '@openpresentation/opf/composition';
 import {gallery as defaultCatalog} from '@openpresentation/gallery';
 import {nativeTableBytes} from './table-values.js';
+import {colorHex} from './helpers/scheme-colors.mjs';
 import {toPptx as exportPptx, fromPptx as importPptx} from '../dist/index.js';
 import {themeSlotColors, writeThemeColors} from '../dist/theme-colors.js';
 
@@ -37,12 +38,27 @@ const themeSlots = entries => {
   return byElement;
 };
 const clrOf = (xml) => {
-  const match = xml?.match(/<a:(srgbClr|schemeClr) val="([^"]+)"/);
-  return match ? {kind: match[1] === 'schemeClr' ? 'scheme' : 'srgb', val: match[2]} : undefined;
+  const match = xml?.match(/<a:(srgbClr|schemeClr) val="([^"]+)"(?:\/>|>([\s\S]*?)<\/a:\1>)/);
+  if (!match) return undefined;
+  // RR-96: a derived neutral is a scheme colour with luminance transforms.
+  const lum = Object.fromEntries([...(match[3] ?? '').matchAll(/<a:(lumMod|lumOff) val="(\d+)"\/>/g)].map(m => [m[1], Number(m[2])]));
+  return {kind: match[1] === 'schemeClr' ? 'scheme' : 'srgb', val: match[2], ...lum};
 };
-// Resolve a scheme value through the vendored master map (bg1=lt1, tx1=dk1, ...).
-const resolve = (color, theme) => color.kind === 'srgb' ? color.val
-  : theme[{tx1: 'dk1', bg1: 'lt1', tx2: 'dk2', bg2: 'lt2'}[color.val] ?? color.val];
+// RR-96: a scheme value resolves through the clrMap in force: the master's, or the slide's own override (a dark deck maps bg1 to a
+// dark slot). `theme` carries the slot colours and, as `clrMap`, that map.
+const clrMapOf = (entries, index = 1) => {
+  const attrs = source => Object.fromEntries([...source.matchAll(/(\w+)="(\w+)"/g)].map(m => [m[1], m[2]]));
+  const override = strFromU8(entries[`ppt/slides/slide${index}.xml`]).match(/<a:overrideClrMapping ([^>]*)\/>/);
+  return attrs(override?.[1] ?? strFromU8(entries['ppt/slideMasters/slideMaster1.xml']).match(/<p:clrMap ([^>]*)\/>/)[1]);
+};
+const resolve = (color, theme, clrMap = theme.clrMap ?? {}) => {
+  if (color.kind === 'srgb') return color.val;
+  const scheme = {val: color.val, ...(color.lumMod !== undefined ? {'a:lumMod': {val: color.lumMod}} : {}), ...(color.lumOff !== undefined ? {'a:lumOff': {val: color.lumOff}} : {})};
+  return colorHex({'a:schemeClr': scheme}, theme, clrMap);
+};
+// A colour the slide can name as a scheme colour: a slot some clrMap role points at, an accent or a hyperlink. A content slot nothing points
+// at (dark1 on a dark2 deck, light1 on a light2 deck) has no scheme name to be written as, so it stays the literal the slot holds.
+const reachable = (hexValue, theme) => [...Object.values(theme.clrMap).filter(slot => !/^(accent\d|hlink|folHlink)$/.test(slot)), ...Object.keys(theme).filter(key => /^(accent\d|hlink|folHlink)$/.test(key))].some(slot => theme[slot] === hexValue);
 const rowsOf = xml => [...xml.matchAll(/<a:tr\b[\s\S]*?<\/a:tr>/g)].map(row => [...row[0].matchAll(/<a:tc\b[\s\S]*?<\/a:tc>/g)].map(cell => {
   const body = cell[0];
   const tcPr = body.match(/<a:tcPr[\s\S]*?<\/a:tcPr>/)[0];
@@ -68,15 +84,15 @@ for (const record of records.colorSchemes) {
     const table = {columns: ['Name', 'Value'], rows: NAMES.map(name => [name, authored(name)])};
     const entries = parts(await toPptx({design, slides: [{title: 'Named', table}]}));
     const pinned = parts(await toPptx({design, slides: [{title: 'Named', design: {colorScheme: record.id}, table}]}));
-    const theme = themeSlots(entries);
-    for (const [element, value] of Object.entries(theme)) if (CLR[element] || /^accent\d$/.test(element)) assert.equal(value, hex(record[CLR[element] ?? element]), `${record.id} theme ${element}`);
+    const theme = {...themeSlots(entries), clrMap: clrMapOf(entries)};
+    for (const [element, value] of Object.entries(themeSlots(entries))) if (CLR[element] || /^accent\d$/.test(element)) assert.equal(value, hex(record[CLR[element] ?? element]), `${record.id} theme ${element}`);
     const rows = rowsOf(slideXml(entries)), literal = rowsOf(slideXml(pinned));
     assert.equal(rows.length, NAMES.length + 1);
     assert.doesNotMatch(slideXml(pinned).match(/<a:tbl>[\s\S]*<\/a:tbl>/)[0], /schemeClr/, 'a slide with its own scheme keeps a literal table, chrome included');
     for (const [index, name] of NAMES.entries()) {
       const cell = rows[index + 1][1], expected = literal[index + 1][1], where = `${record.id} ${slot ?? 'default'} ${name}`;
       for (const [part, actual, want] of [['fill', cell.fill, expected.fill], ['text', cell.color, expected.color], ...Object.keys(cell.borders).map(edge => [`border ${edge}`, cell.borders[edge], expected.borders[edge]])]) {
-        assert.equal(actual?.kind, 'scheme', `${where} ${part} is a scheme reference`);
+        if (reachable(want.val, theme)) assert.equal(actual?.kind, 'scheme', `${where} ${part} is a scheme reference`);
         assert.equal(resolve(actual, theme), want.val, `${where} ${part} resolves to the pinned literal`);
         references++;
       }
@@ -96,20 +112,22 @@ for (const record of records.colorSchemes) {
     const table = {columns: ['Head', 'Head 2'], rows: [['a', 'b'], ['c', 'd']]};
     const entries = parts(await toPptx({design, slides: [{title: 'Default', table}]}));
     const pinned = parts(await toPptx({design, slides: [{title: 'Default', design: {colorScheme: record.id}, table}]}));
-    const theme = themeSlots(entries);
+    const theme = {...themeSlots(entries), clrMap: clrMapOf(entries)};
     const rows = rowsOf(slideXml(entries)), literal = rowsOf(slideXml(pinned));
     for (const [r, row] of rows.entries()) for (const [c, cell] of row.entries()) {
       const want = literal[r][c], where = `${record.id} ${slot ?? 'default'} r${r}c${c}`;
       for (const [part, actual, expected] of [['fill', cell.fill, want.fill], ['text', cell.color, want.color], ]) {
-        assert.equal(actual.kind, 'scheme', `${where} ${part} is a scheme reference`);
+        if (reachable(expected.val, theme)) assert.equal(actual.kind, 'scheme', `${where} ${part} is a scheme reference`);
         assert.equal(resolve(actual, theme), expected.val, `${where} ${part} resolves to the pinned literal`);
         chrome++;
       }
-      assert.equal(cell.fill.val, r === 0 ? 'accent1' : (dark ? 'tx2' : 'bg2'), `${where} fill role`);
-      assert.ok(edgeColors(cell).every(color => color.kind === 'srgb'), `${where} neutral literal borders`);
-      assert.deepEqual(edgeColors(cell).map(color => color.val), Array(4).fill(resolveColorRoles(record, {variant: {background: slot ?? 'dark2'}}).border.slice(1)), 'structural borders are the scheme-derived neutral (tx1 over bg1 of the slide variant)');
-      if (r > 0) assert.equal(cell.color.val, dark ? 'bg1' : 'tx1', `${where} body text pairs with the surface`);
-      else assert.match(cell.color.val, /^(bg1|tx1)$/, `${where} header text is light1 or dark1`);
+      assert.equal(cell.fill.val, r === 0 ? 'accent1' : 'bg2', `${where} fill role (the surface role; the clrMap points it at the dark or light surface)`);
+      // RR-96: the structural border is the derived neutral, tx1 over bg1 (lumMod/lumOff on tx1), so it follows a variant.
+      assert.ok(edgeColors(cell).every(color => color.kind === 'scheme' && color.val === 'tx1' && color.lumMod !== undefined), `${where} neutral scheme borders`);
+      assert.deepEqual(edgeColors(cell).map(color => resolve(color, theme)), Array(4).fill(resolveColorRoles(record, {variant: {background: slot ?? 'dark2'}}).border.slice(1)), 'structural borders are the scheme-derived neutral (tx1 over bg1 of the slide variant)');
+      if (r > 0) assert.equal(cell.color.val, 'tx1', `${where} body text is the text role, which the clrMap pairs with the surface`);
+      // RR-96: header text is bg1 or tx1, whichever reads better on the accent (core readableSchemeColor), so it follows a variant.
+      else { assert.ok(['bg1', 'tx1'].includes(cell.color.val), `${where} header text is bg1 or tx1`); assert.ok([theme.lt1, theme.dk1, theme.lt2, theme.dk2].includes(resolve(cell.color, theme)), `${where} header text is a light or dark slot`); }
     }
   }
 }
@@ -163,7 +181,10 @@ for (const reserved of [[], ['#FE01A0'], ['#FE01A1', '#FE02B0'], ['#FE01A0', '#F
   } else {
     // Every reserved pair is authored: the link colors stay literal rather than colliding.
     const cell = rowsOf(xml)[1][1];
-    assert.deepEqual([cell.fill, cell.color], [{kind: 'srgb', val: hex(forest.hyperlink)}, {kind: 'srgb', val: hex(forest.followedHyperlink)}], where);
+    // RR-96: the colour is the link slot's literal; the final pass may write it as another scheme colour of the slide with the same hex
+    // (forest-green's hyperlink is its accent1), so compare what it resolves to.
+    const linkTheme = {...themeSlots(entries), clrMap: clrMapOf(entries)};
+    assert.deepEqual([cell.fill, cell.color].map(color => resolve(color, linkTheme)), [hex(forest.hyperlink), hex(forest.followedHyperlink)], where);
   }
   for (const [index, color] of reserved.entries()) assert.match(xml, new RegExp(`<a:srgbClr val="${hex(color)}"`), `authored ${color} stays literal (${where}, keep${index})`);
 }

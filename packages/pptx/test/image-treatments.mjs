@@ -6,6 +6,7 @@ import { unzipSync, zipSync } from 'fflate';
 import { XMLParser } from 'fast-xml-parser';
 import { composeSlide } from '@openpresentation/opf/composition';
 import { toPptx, fromPptx } from '../dist/index.js';
+import { colorHex, schemeRole, themeColorsOf, clrMapOf } from './helpers/scheme-colors.mjs';
 
 // This suite runs against the linked coordinated core; a core without image block treatment geometry is a pinning error.
 assert.ok(composeSlide({ title: 'probe', blocks: [{ type: 'image', image: 'x', shape: 'circle' }] }).items.find(item => item.field === 'image')?.image?.shape,
@@ -23,7 +24,10 @@ async function exported(deck) {
   const entries = unzipSync(bytes);
   const tree = parser.parse(decode(entries['ppt/slides/slide1.xml']))['p:sld']['p:cSld']['p:spTree'];
   const shapes = array(tree['p:sp']);
-  return { bytes, entries, picture: array(tree['p:pic'])[0], overlay: shapes.find(shape => / overlay$/.test(shape['p:nvSpPr']['p:cNvPr'].name)) };
+  // RR-96: a colour of the slide's scheme is a schemeClr; `hexOf` reads the colour a holder stands for through the exported theme and clrMap.
+  const theme = themeColorsOf(decode(entries['ppt/theme/theme1.xml'])), map = clrMapOf(decode(entries['ppt/slideMasters/slideMaster1.xml']));
+  const hexOf = holder => colorHex(holder, theme, map);
+  return { bytes, entries, hexOf, picture: array(tree['p:pic'])[0], overlay: shapes.find(shape => / overlay$/.test(shape['p:nvSpPr']['p:cNvPr'].name)) };
 }
 const guides = geometry => Object.fromEntries(array(geometry['a:avLst']?.['a:gd']).map(gd => [gd.name, Number(gd.fmla.replace('val ', ''))]));
 let checked = 0;
@@ -52,8 +56,9 @@ for (const [shape, extra] of [['rounded', { cornerRadius: 0.12 }], ['circle', {}
   assert.equal(line['a:solidFill']['a:srgbClr'].val, '101820');
   assert.equal(Number(line['a:solidFill']['a:srgbClr']['a:alpha'].val), Math.round(0x80 / 255 * 100000));
   assert.equal(line['a:miter'].lim, '800000');
-  const themed = (await exported(deckFor({ border: { color: 'accent1', width: 2 } }))).picture['p:spPr']['a:ln'];
-  assert.equal(themed['a:solidFill']['a:srgbClr'].val, '1F5AA6');
+  const themedExport = await exported(deckFor({ border: { color: 'accent1', width: 2 } })), themed = themedExport.picture['p:spPr']['a:ln'];
+  assert.equal(schemeRole(themed['a:solidFill']), 'accent1');
+  assert.equal(themedExport.hexOf(themed['a:solidFill']), '1F5AA6');
   checked++;
 }
 
@@ -62,8 +67,10 @@ for (const [shape, extra] of [['rounded', { cornerRadius: 0.12 }], ['circle', {}
   const gray = (await exported(deckFor({ recolor: 'grayscale', opacity: 0.12345 }))).picture['p:blipFill']['a:blip'];
   assert.equal(gray['a:grayscl'], '');
   assert.equal(gray['a:alphaModFix'].amt, '12345');
-  const duo = (await exported(deckFor({ recolor: { dark: 'accent1', light: 'light1' } }))).picture['p:blipFill']['a:blip'];
-  assert.deepEqual(array(duo['a:duotone']['a:srgbClr']).map(color => color.val), ['1F5AA6', 'F4F1EA']);
+  const duoExport = await exported(deckFor({ recolor: { dark: 'accent1', light: 'light1' } })), duo = duoExport.picture['p:blipFill']['a:blip'];
+  // The deck's default theme background is dark2, so its map is the dark one (bg1=dk2, tx1=lt1): light1 is tx1.
+  assert.deepEqual(array(duo['a:duotone']['a:schemeClr']).map(color => color.val), ['accent1', 'tx1']);
+  assert.deepEqual(array(duo['a:duotone']['a:schemeClr']).map(color => duoExport.hexOf({ 'a:schemeClr': color })), ['1F5AA6', 'F4F1EA']);
   const xml = decode((await exported(deckFor({ recolor: 'grayscale', opacity: 0.5 }))).entries['ppt/slides/slide1.xml']);
   assert.match(xml, /<a:blip r:embed="[^"]+"><a:grayscl\/><a:alphaModFix amt="50000"\/><\/a:blip>/);
   const plain = (await exported(deckFor({}))).picture;
@@ -86,11 +93,13 @@ for (const [shape, extra] of [['rounded', { cornerRadius: 0.12 }], ['circle', {}
   assert.equal(names[picture + 1], `${names[picture]} overlay`, 'the overlay lies directly above its picture');
   assert.ok(names.slice(picture + 2).some(name => /^OPF text /.test(name)) || xml.lastIndexOf('<p:sp>') > xml.indexOf(' overlay"'), 'the body follows');
   const bandDeck = deckFor({ placement: { edge: 'top', inset: true }, overlay: { color: 'dark1', opacity: 0.75, edge: 'bottom', size: 0.25 } });
-  const band = (await exported(bandDeck)).overlay;
+  const bandExport = await exported(bandDeck), band = bandExport.overlay;
   const bandGeometry = geometryOf(bandDeck).overlay;
   assert.equal(band['p:spPr']['a:prstGeom'].prst, 'rect');
   assert.equal(Number(band['p:spPr']['a:xfrm']['a:off'].y), Math.round(bandGeometry.box.y / 96 * 914400));
-  assert.equal(band['p:spPr']['a:solidFill']['a:srgbClr'].val, '101820');
+  // dark1 has no role in this deck's dark map (bg1 and bg2 are dark2, tx1 and tx2 the light slots), so the overlay stays the literal colour.
+  assert.equal(schemeRole(band['p:spPr']['a:solidFill']), undefined);
+  assert.equal(bandExport.hexOf(band['p:spPr']['a:solidFill']), '101820');
   assert.equal(geometry.overlay.shape.preset, 'ellipse');
   checked += 2;
 }

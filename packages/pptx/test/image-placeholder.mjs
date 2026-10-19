@@ -3,6 +3,7 @@ import {unzipSync} from 'fflate';
 import {XMLValidator} from 'fast-xml-parser';
 import {toSvg, toPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {colorHex} from './helpers/scheme-colors.mjs';
 
 // FF-38: an image that cannot be embedded exports the preview's placeholder,
 // not a second design. The preview draws a dashed panel with a centered bold
@@ -31,7 +32,17 @@ const placeholders = svg => [...svg.matchAll(/<g\b[^>]*\bdata-opf-asset-status="
     cross: cross && attrs(cross[1]),
   };
 });
-const shapes = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => {
+// RR-96: a colour is a literal or a scheme colour (with luminance transforms); `colour` resolves the first one in `source` to RRGGBB
+// through the exported theme, `role` names the scheme colour it is (undefined for a literal).
+const COLOUR = /<a:srgbClr val="([0-9A-F]{6})"\/>|<a:schemeClr val="(\w+)"(?:\/>|>([\s\S]*?)<\/a:schemeClr>)/;
+const colourNode = match => match[1] ? {'a:srgbClr': {val: match[1]}} : {'a:schemeClr': {val: match[2], ...Object.fromEntries([...(match[3] ?? '').matchAll(/<a:(lumMod|lumOff) val="(\d+)"\/>/g)].map(([, key, val]) => [`a:${key}`, {val}]))}};
+const colour = (source, theme = {}) => { const match = source?.match(COLOUR); return match && colorHex(colourNode(match), theme, theme.clrMap); };
+const role = source => source?.match(COLOUR)?.[2];
+const themeColors = entries => Object.assign(Object.fromEntries([...decoder.decode(entries['ppt/theme/theme1.xml']).matchAll(/<a:(dk1|lt1|dk2|lt2|accent[1-6]|hlink|folHlink)><a:srgbClr val="([0-9A-F]{6})"\/>/g)].map(m => [m[1], m[2]])), {
+  // The master's clrMap says which slot the deck's background and text roles are (a dark deck maps bg1 to a dark slot).
+  clrMap: Object.fromEntries([...decoder.decode(entries['ppt/slideMasters/slideMaster1.xml']).match(/<p:clrMap ([^>]*)\/>/)[1].matchAll(/(\w+)="(\w+)"/g)].map(m => [m[1], m[2]])),
+});
+const shapes = (xml, theme) => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => {
   const off = shape.match(/<a:off x="(-?\d+)" y="(-?\d+)"\/>/), ext = shape.match(/<a:ext cx="(\d+)" cy="(\d+)"\/>/);
   return {
     name: shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1] ?? '',
@@ -43,9 +54,10 @@ const shapes = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape])
     size: shape.match(/<a:rPr\b[^>]*\bsz="(\d+)"/)?.[1],
     bold: shape.match(/<a:rPr\b[^>]*\bb="(\d)"/)?.[1],
     align: shape.match(/<a:pPr\b[^>]*\balgn="(\w+)"/)?.[1],
-    textColor: shape.match(/<a:rPr\b[\s\S]*?<a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)?.[1],
-    fill: shape.match(/<p:spPr>[\s\S]*?<a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)?.[1],
-    stroke: shape.match(/<a:ln\b[^>]*>[\s\S]*?<a:srgbClr val="([0-9A-F]{6})"/)?.[1],
+    textColor: colour(shape.match(/<a:rPr\b[\s\S]*?<a:solidFill>([\s\S]*?)<\/a:solidFill>/)?.[1], theme),
+    fill: colour(shape.match(/<p:spPr>[\s\S]*?<a:solidFill>([\s\S]*?)<\/a:solidFill>/)?.[1], theme),
+    fillRole: role(shape.match(/<p:spPr>[\s\S]*?<a:solidFill>([\s\S]*?)<\/a:solidFill>/)?.[1]),
+    stroke: colour(shape.match(/<a:ln\b[^>]*>[\s\S]*?<a:solidFill>([\s\S]*?)<\/a:solidFill>/)?.[1], theme),
     strokeWidth: shape.match(/<a:ln w="(\d+)"/)?.[1],
     dash: shape.match(/<a:prstDash val="(\w+)"/)?.[1],
   };
@@ -77,7 +89,8 @@ for (const options of [{}, {fonts}]) {
   const preview = toSvg(deck, {trace: true, ...options});
   const entries = unzipSync(await toPptx(deck, {seed: 1, ...options}));
   const slideXml = index => decoder.decode(entries[`ppt/slides/slide${index + 1}.xml`]);
-  const native = index => shapes(slideXml(index));
+  const theme = themeColors(entries);
+  const native = index => shapes(slideXml(index), theme);
 
   const labelled = placeholders(preview[0]);
   assert.deepEqual(labelled.map(item => item.label), [
@@ -93,6 +106,7 @@ for (const options of [{}, {fonts}]) {
     const panel = panels[index];
     // The panel is the preview's dashed rect; its group carries the accessible name (the preview's <g> aria-label).
     assert.equal(panel.fill, hex(item.panel.fill), `${item.path}: panel fill`);
+    assert.equal(panel.fillRole, 'bg1', `${item.path}: the panel is the slide background role`);
     assert.equal(panel.stroke, hex(item.panel.stroke), `${item.path}: panel line`);
     assert.equal(panel.dash, 'dash', `${item.path}: 4 3 dashes are PowerPoint's dash`);
     assert.equal(panel.strokeWidth, String(Math.round(+item.panel['stroke-width'] * PX_PT * 12700)), `${item.path}: panel line width`);
@@ -159,7 +173,7 @@ for (const [name, alt, code] of [
   const emoji = `${long}\u{1F600} & <done>`;
   const xml = decoder.decode(unzipSync(await toPptx({slides: [{image: {src: 'https://example.invalid/emoji.png', alt: emoji}}]}, {seed: 1}))['ppt/slides/slide1.xml']);
   assert.equal(XMLValidator.validate(xml), true);
-  assert.equal(groupDescr(xml, shapes(xml).find(shape => PANEL.test(shape.name)).name), `Image unavailable: ${emoji}`);
+  assert.equal(groupDescr(xml, shapes(xml, {}).find(shape => PANEL.test(shape.name)).name), `Image unavailable: ${emoji}`);
   checked++;
 }
 

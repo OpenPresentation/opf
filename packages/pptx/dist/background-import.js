@@ -62,7 +62,7 @@ export function readSlideTheme(slidePath, {part, relationships, bytes}) {
       if (elements?.['a:fmtScheme']) {format = elements['a:fmtScheme'];formatPath = themePath;}
     }
   }
-  return {chain, colors, mapping, fonts, format, formatPath, parsedPart};
+  return {chain, colors, mapping, masterMapping, fonts, format, formatPath, parsedPart};
 }
 
 export function importBackground(slidePath, dimensions, archive, report) {
@@ -75,7 +75,7 @@ export function importBackground(slidePath, dimensions, archive, report) {
     return undefined;
   };
   // Picture relationships belong to the part that holds the fill.
-  const context = {colors, mapping, image: fill => readImageBackground(fill, owner.path, archive, dimensions, report)};
+  const context = {colors, mapping, image: fill => readImageBackground(fill, owner.path, archive, dimensions, report, {colors, mapping})};
   if (background['p:bgPr']) return readNativeBackground(background['p:bgPr'], dimensions, report, context);
   const reference = background['p:bgRef'];
   if (!/^\d+$/.test(reference?.idx ?? '')) return unsupported();
@@ -93,7 +93,7 @@ export function importBackground(slidePath, dimensions, archive, report) {
   const style = styles?.[index < 1000 ? index - 1 : index - 1001];
   if (!style) return unsupported();
   context.placeholder = readBackgroundColor(reference, context);
-  context.image = fill => readImageBackground(fill, formatPath, archive, dimensions, report);
+  context.image = fill => readImageBackground(fill, formatPath, archive, dimensions, report, {colors, mapping});
   return readNativeBackground(drawingObject([style]), dimensions, report, context);
 }
 
@@ -108,7 +108,7 @@ const focusValue = value => Math.round(Math.max(0, Math.min(1, value)) * 10000) 
 // the focus was, so it reads as the edge-most focus that gives the same crop); centered fill-rectangle insets that keep
 // the picture's aspect are `contain`; an uncropped fill of another aspect is `stretch`. Any other geometry or picture
 // effect is imported as the closest fit and reported.
-function readImageBackground(fill, partPath, {relationships, bytes}, dimensions, report) {
+function readImageBackground(fill, partPath, {relationships, bytes}, dimensions, report, context = {}) {
   const blip = fill['a:blip'] ?? {};
   const relationship = blip['r:embed'] && relationships(partPath).get(blip['r:embed']);
   const data = relationship && relationship.targetMode !== 'External' ? bytes(relationship.path) : undefined;
@@ -125,9 +125,12 @@ function readImageBackground(fill, partPath, {relationships, bytes}, dimensions,
   if (blip['a:grayscl'] !== undefined) recolor = 'grayscale';
   const duotone = blip['a:duotone'], literal = node => /^[\da-f]{6}$/i.test(node?.val ?? '') && Object.keys(node).every(key => key === 'val' || typeof key === 'symbol') ? `#${node.val.toUpperCase()}` : undefined;
   if (duotone) {
-    const colors = Array.isArray(duotone['a:srgbClr']) ? duotone['a:srgbClr'] : [];
-    const [dark, light] = colors.map(literal);
-    if (colors.length === 2 && dark && light && Object.keys(duotone).every(key => key === 'a:srgbClr' || typeof key === 'symbol')) recolor = {dark, light};
+    // RR-96: the two colors are literals or scheme colors (the export writes the scheme-derived ones as schemeClr); a scheme color reads as the color it stands for.
+    const kind = ['a:srgbClr', 'a:schemeClr'].find(name => Array.isArray(duotone[name]) && duotone[name].length === 2);
+    const colors = kind ? duotone[kind] : [];
+    const read = node => { if (kind === 'a:srgbClr') return literal(node); const resolved = readBackgroundColor({[kind]: node}, context); return resolved && resolved.alpha === 1 ? resolved.hex : undefined; };
+    const [dark, light] = colors.map(read);
+    if (colors.length === 2 && dark && light && Object.keys(duotone).every(key => key === kind || typeof key === 'symbol')) recolor = {dark, light};
     else approximate('uses a duotone recolor that is not two literal colours');
   }
   if (recolor && blip['a:grayscl'] !== undefined && duotone) approximate('uses both a grayscale and a duotone recolor');

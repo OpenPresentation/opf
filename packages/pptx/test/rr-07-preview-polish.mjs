@@ -5,23 +5,31 @@ import {PATTERN_PRESETS, patternRuns, resolvePatternPreset, codeSyntaxPaletteFor
 import {defaultCatalog, fromPptx, toSvg, toPptx} from './helpers/default-catalog.mjs';
 const colorSchemes = Object.entries(defaultCatalog.colorSchemes).map(([id, record]) => ({id, ...record}));
 import {presetPatterns, nativePatternPreset} from '../dist/background.js';
+import {colorsInXml, themeColorsOf, clrMapOf} from './helpers/scheme-colors.mjs';
 
 // RR-07 parity: the SVG preview and the PPTX export draw code syntax colours, metric trend arrows and the
 // DrawingML preset patterns from the same core tables, so the colours and geometry must agree.
 const decoder = new TextDecoder();
 const decode = text => text.replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&quot;', '"').replaceAll('&apos;', "'").replaceAll('&amp;', '&');
+// RR-96: scheme colours are written as schemeClr; the colour a shape draws is read through the exported theme and the clrMap in force
+// (the master's, merged with the slide's override). `slideXml` returns the slide part as a string that remembers how to resolve it.
 const slideXml = async (deck, options = {}) => {
   const entries = unzipSync(await toPptx(deck, {seed: 1, ...options}));
-  return deck.slides.map((_, index) => decoder.decode(entries[`ppt/slides/slide${index + 1}.xml`]));
+  const theme = themeColorsOf(decoder.decode(entries['ppt/theme/theme1.xml'])), master = clrMapOf(decoder.decode(entries['ppt/slideMasters/slideMaster1.xml']));
+  return deck.slides.map((_, index) => {
+    const xml = decoder.decode(entries[`ppt/slides/slide${index + 1}.xml`]);
+    return Object.assign(new String(xml), {theme, clrMap: {...master, ...clrMapOf(xml)}});
+  });
 };
-const shapes = xml => [...xml.matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => ({
+const firstColor = (fragment, context) => colorsInXml(fragment, context.theme, context.clrMap)[0]?.hex;
+const shapes = xml => [...String(xml).matchAll(/<p:sp>[\s\S]*?<\/p:sp>/g)].map(([shape]) => ({
   xml: shape,
   name: shape.match(/<p:cNvPr\b[^>]*\bname="([^"]*)"/)?.[1] ?? '',
   descr: shape.match(/<p:cNvPr\b[^>]*\bdescr="([^"]*)"/)?.[1],
   geometry: shape.match(/<a:prstGeom prst="(\w+)"/)?.[1],
   box: (() => { const match = /<a:off x="(-?\d+)" y="(-?\d+)"\/><a:ext cx="(\d+)" cy="(\d+)"\/>/.exec(shape); return match && {x: match[1] / 9525, y: match[2] / 9525, width: match[3] / 9525, height: match[4] / 9525}; })(),
-  fill: shape.match(/<p:spPr>[\s\S]*?<a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)?.[1],
-  runs: [...shape.matchAll(/<a:r>[\s\S]*?<\/a:r>/g)].map(([run]) => [decode(run.match(/<a:t>([\s\S]*?)<\/a:t>/)?.[1] ?? ''), run.match(/<a:rPr\b[^>]*>[\s\S]*?<a:solidFill><a:srgbClr val="([0-9A-F]{6})"/)?.[1]]),
+  fill: (fragment => fragment && firstColor(fragment, xml))(shape.match(/<p:spPr>[\s\S]*?<a:solidFill>[\s\S]*?<\/a:solidFill>/)?.[0]),
+  runs: [...shape.matchAll(/<a:r>[\s\S]*?<\/a:r>/g)].map(([run]) => [decode(run.match(/<a:t>([\s\S]*?)<\/a:t>/)?.[1] ?? ''), (fragment => fragment && firstColor(fragment, xml))(run.match(/<a:rPr\b[^>]*>[\s\S]*?<a:solidFill>[\s\S]*?<\/a:solidFill>/)?.[0])]),
 }));
 const merged = runs => runs.reduce((out, [text, colour]) => {
   if (out.length && out.at(-1)[1] === colour) out.at(-1)[0] += text; else out.push([text, colour]);
@@ -41,6 +49,9 @@ function svgRuns(content, base) {
 const svgBodyLines = svg => [...svg.matchAll(/<text\b([^>]*?)(?:\/>|>([\s\S]*?)<\/text>)/g)]
   .filter(([, attrs]) => attrs.includes('data-opf-code-role="body"'))
   .map(([, attrs, content = '']) => svgRuns(content, /\bfill="#([0-9A-F]{6})"/.exec(attrs)[1]));
+
+// The panel foreground the preview draws (the base fill of a body line), which the native text reads as `tx1` through the clrMap.
+const svgForeground = svg => /<text\b[^>]*data-opf-code-role="body"[^>]*\bfill="#([0-9A-F]{6})"/.exec(svg)?.[1];
 
 const SAMPLES = {
   python: 'import os\n\n@cache\ndef greet(name: str) -> str:\n\t"""Doc\n\tstring"""\n\t# note\n\treturn f"Hello, {name}!" if name else None  # tail\n\nclass Box(Base):\n    size = 0x1F + 3.5e2\n',
@@ -66,7 +77,7 @@ for (const [language, source] of Object.entries(SAMPLES)) for (const colorScheme
   for (const [index, line] of native.entries()) {
     assert.deepEqual(merged(line.runs), preview[index], `${language} ${JSON.stringify(colorScheme).slice(0, 40)} line ${index + 1}: preview and PPTX colours agree`);
     checkedLines++;
-    if (line.runs.some(([, colour]) => colour !== 'E5E7EB')) coloured++;
+    if (line.runs.some(([, colour]) => colour !== svgForeground(svg))) coloured++;
   }
   // The native text is the source line, unchanged: runs only add colour.
   const palette = codeSyntaxPaletteForScheme(typeof colorScheme === 'string' ? colorSchemes.find(({id}) => id === colorScheme) : colorScheme);
@@ -78,8 +89,13 @@ assert.ok(coloured > checkedLines / 2, 'most sample lines carry a coloured token
 
 // Plain languages are exported exactly as before: one run per line in the panel foreground.
 for (const code of [{source: SAMPLES.python, language: 'klingon'}, SAMPLES.python, {source: SAMPLES.python}]) {
-  const [xml] = await slideXml({design: {fontScheme: 'roboto'}, slides: [{code}]});
-  for (const line of shapes(xml).filter(shape => /^OPF code \d+ body line \d+$/.test(shape.name))) assert.ok(line.runs.length <= 1 && line.runs.every(([, colour]) => colour === 'E5E7EB'), 'plain code stays one run');
+  const deck = {design: {fontScheme: 'roboto'}, slides: [{code}]};
+  const [xml] = await slideXml(deck), foreground = svgForeground(toSvg(deck, 1, {trace: true}));
+  assert.ok(foreground, 'the preview draws the panel foreground');
+  for (const line of shapes(xml).filter(shape => /^OPF code \d+ body line \d+$/.test(shape.name))) {
+    assert.ok(line.runs.length <= 1 && line.runs.every(([, colour]) => colour === foreground), 'plain code stays one run in the panel foreground');
+    if (line.runs.length) assert.ok(line.xml.includes('<a:schemeClr val="tx1">'), 'the panel foreground is the theme text colour');
+  }
 }
 
 // ---------------------------------------------------------------- metric trend
@@ -133,7 +149,7 @@ for (const preset of [...PATTERN_PRESETS, 'diagStripe']) {
   const svg = toSvg(deck, 1, {onDiagnostic: item => diagnostics.push(item)});
   const [xml] = await slideXml(deck, {onDiagnostic: item => diagnostics.push(item)});
   assert.deepEqual(diagnostics.filter(item => /pattern/.test(item.code)), [], `${preset}: drawn and exported`);
-  assert.match(xml, new RegExp(`<a:pattFill prst="${resolvePatternPreset(preset)}"><a:fgClr><a:srgbClr val="112233"(?:/>|></a:srgbClr>)</a:fgClr><a:bgClr><a:srgbClr val="FFEECC"(?:/>|></a:srgbClr>)</a:bgClr></a:pattFill>`), `${preset}: native pattFill`);
+  assert.match(String(xml), new RegExp(`<a:pattFill prst="${resolvePatternPreset(preset)}"><a:fgClr><a:srgbClr val="112233"(?:/>|></a:srgbClr>)</a:fgClr><a:bgClr><a:srgbClr val="FFEECC"(?:/>|></a:srgbClr>)</a:bgClr></a:pattFill>`), `${preset}: native pattFill`);
   const drawn = /<pattern\b[^>]*id="opf-s1-pattern"[^>]*>[\s\S]*?<path d="([^"]*)" fill="(#[0-9A-F]{6})"/.exec(svg);
   assert.equal(drawn[1], patternRuns(preset).map(run => `M${run.x} ${run.y}h${run.width}v1h-${run.width}z`).join(''), `${preset}: preview bitmap`);
   assert.equal(hex(drawn[2]), '112233');

@@ -76,7 +76,9 @@ for (const preset of ['pct5', 'ltHorz', 'openDmnd', 'wave', 'smGrid', 'zigZag'])
   // Opacity applies to both colors; foreground defaults to the slide text color like the SVG preview.
   const {bytes, background} = await roundTrip({design: {background: {type: 'pattern', pattern: {preset: 'pct5', backgroundColor: '#0F172A'}, opacity: .4}}, slides: [{}]});
   const xml = bg(bytes);
-  assert.match(xml, /<a:fgClr><a:srgbClr val="FFFFFF"><a:alpha val="40000"\/>/, 'Light text color on a dark pattern');
+  // RR-96: the slide text color is the role tx1; the deck is dark, so its map (bg1=dk1, tx1=lt1) makes tx1 the light text color.
+  assert.match(xml, /<a:fgClr><a:schemeClr val="tx1"><a:alpha val="40000"\/>/, 'Light text color on a dark pattern');
+  assert.match(utf8.decode(unzipSync(bytes)['ppt/slideMasters/slideMaster1.xml']), /<p:clrMap bg1="dk1" tx1="lt1" bg2="dk2" tx2="lt2"/);
   assert.match(xml, /<a:bgClr><a:srgbClr val="0F172A"><a:alpha val="40000"\/>/);
   assert.deepEqual(background, {type: 'pattern', pattern: {preset: 'pct5', foregroundColor: '#FFFFFF', backgroundColor: '#0F172A'}, opacity: .4});
   // Differing color alpha survives as eight-digit colors.
@@ -99,7 +101,9 @@ for (const preset of ['pct5', 'ltHorz', 'openDmnd', 'wave', 'smGrid', 'zigZag'])
     cases++;
   }
   const mismatch = await roundTrip({design: {background: {type: 'pattern', pattern: {preset: 'pct5', foregroundColor: 'var:undefined-variable', backgroundColor: '#FFFFFF'}}}, slides: [{}]});
-  assert.ok(!bg(mismatch.bytes).includes('schemeClr'), 'A reference drawn as the default color and literal hex stay srgbClr');
+  // RR-96: the default color is the slide text role (tx1), and the authored literal hex stays srgbClr.
+  assert.match(bg(mismatch.bytes), /<a:fgClr><a:schemeClr val="tx1">/, 'A reference drawn as the default color is the text role');
+  assert.match(bg(mismatch.bytes), /<a:bgClr><a:srgbClr val="FFFFFF">/, 'A literal hex stays srgbClr');
   // A slot name is a ColorRef like any other: its colour, and a:schemeClr because the deck theme holds it.
   const slot = await roundTrip({design: {background: {type: 'pattern', pattern: {preset: 'pct5', foregroundColor: 'accent1', backgroundColor: '#FFFFFF'}}}, slides: [{}]});
   assert.match(bg(slot.bytes), /<a:fgClr><a:schemeClr val="accent1">/);

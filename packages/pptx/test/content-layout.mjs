@@ -3,6 +3,7 @@ import {unzipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {toSvg, toPptx, fromPptx} from './helpers/default-catalog.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
+import {colorHex} from './helpers/scheme-colors.mjs';
 
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
 const all = (node, name) => {
@@ -24,10 +25,16 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
   const svgSlides = toSvg(deck, options);
   const pptx = await toPptx(deck, options), entries = unzipSync(pptx);
   const imported = await fromPptx(pptx);
-  // FF-24b: default text on a theme background is a scheme reference. Resolve it
-  // through the master color map and exported theme before comparing with SVG.
+  // FF-24b / RR-96: default text and derived neutrals are scheme references. Resolve them through the master (or slide) clrMap and the
+  // exported theme, with their luminance transforms, before comparing with SVG.
   const themeXml = new TextDecoder().decode(entries['ppt/theme/theme1.xml']);
-  const schemeHex = value => themeXml.match(new RegExp(`<a:${({tx1: 'dk1', bg1: 'lt1', tx2: 'dk2', bg2: 'lt2'})[value] ?? value}><a:srgbClr val="([0-9A-F]{6})"/>`))?.[1];
+  const theme = Object.fromEntries([...themeXml.matchAll(/<a:(dk1|lt1|dk2|lt2|accent[1-6]|hlink|folHlink)>(?:<a:sysClr [^>]*lastClr="([0-9A-F]{6})"[^>]*\/>|<a:srgbClr val="([0-9A-F]{6})"\/>)/g)].map(m => [m[1], m[2] ?? m[3]]));
+  const clrMapAttrs = source => Object.fromEntries([...source.matchAll(/(\w+)="(\w+)"/g)].map(m => [m[1], m[2]]));
+  const masterMap = clrMapAttrs(new TextDecoder().decode(entries['ppt/slideMasters/slideMaster1.xml']).match(/<p:clrMap ([^>]*)\/>/)[1]);
+  const slideMap = number => {
+    const override = new TextDecoder().decode(entries[`ppt/slides/slide${number}.xml`]).match(/<a:overrideClrMapping ([^>]*)\/>/);
+    return override ? clrMapAttrs(override[1]) : masterMap;
+  };
   // Root payloads return as authored (content topology), not as blocks.
   assert.deepEqual(imported.slides[2].code,deck.slides[2].code,'Code source and metadata survive export/import');
   assert.equal(imported.slides[2].blocks,undefined);
@@ -50,8 +57,7 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
       assert.equal(properties.b === '1', face.bold, `Physical bold style: ${value}`);
       assert.equal(properties.i === '1', face.italic, `Physical italic style: ${value}`);
       assert.equal(properties['a:latin'].typeface,face.family,`Physical family: ${value}`);
-      const scheme = all(properties, 'a:schemeClr')[0]?.val;
-      const color = scheme ? schemeHex(scheme) : all(properties, 'a:srgbClr')[0]?.val;
+      const color = colorHex(properties['a:solidFill'], theme, slideMap(index + 1));
       // A syntax-coloured code run (RR-07) carries its own fill on its tspan; the first native run follows the first tspan.
       const firstFill = (Array.isArray(text.tspan) ? text.tspan[0] : text.tspan)?.fill ?? text.fill;
       assert.equal(color?.toUpperCase(), firstFill.replace('#', '').toUpperCase(), `Color: ${value}`);
@@ -63,8 +69,11 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
       checkedText++;
     }
     if (index === 2) {
-      const fills = all(native, 'a:srgbClr').map(value => value.val);
-      assert.ok(fills.includes('111827') && fills.includes('334155'), 'Native code panel background and border match preview');
+      // RR-96: the native panel and its border are scheme colours (derived neutrals), so compare what they resolve to with the preview's panel.
+      const fills = all(native, 'a:solidFill').map(fill => colorHex(fill, theme, slideMap(index + 1)));
+      const panel = all(svg, 'rect').find(rect => rect.stroke);
+      assert.ok(panel, 'Published renderer code panel required');
+      assert.ok(fills.includes(panel.fill.replace('#', '').toUpperCase()) && fills.includes(panel.stroke.replace('#', '').toUpperCase()), 'Native code panel background and border match preview');
     }
     if (index === 3 || index === 4) {
       assert.equal(all(native, 'a:prstGeom').filter(value => value.prst === 'ellipse').length, index === 3 ? 3 : 1, 'Every event has an editable native marker');
@@ -109,10 +118,13 @@ assert.ok(axisLabel, 'Published renderer axis label required');
 const chartEntries = unzipSync(await toPptx(chartDeck, chartOptions));
 const chartFile = Object.keys(chartEntries).find(file => /^ppt\/charts\/chart\d+\.xml$/.test(file));
 assert.ok(chartFile, 'Chart stays an editable native Office chart');
+const chartTheme = Object.fromEntries([...new TextDecoder().decode(chartEntries['ppt/theme/theme1.xml']).matchAll(/<a:(dk1|lt1|dk2|lt2|accent[1-6]|hlink|folHlink)>(?:<a:sysClr [^>]*lastClr="([0-9A-F]{6})"[^>]*\/>|<a:srgbClr val="([0-9A-F]{6})"\/>)/g)].map(m => [m[1], m[2] ?? m[3]]));
+const chartClrMap = Object.fromEntries([...new TextDecoder().decode(chartEntries['ppt/slideMasters/slideMaster1.xml']).match(/<p:clrMap ([^>]*)\/>/)[1].matchAll(/(\w+)="(\w+)"/g)].map(m => [m[1], m[2]]));
 const chartXml = parser.parse(new TextDecoder().decode(chartEntries[chartFile]));
 for (const kind of ['c:catAx', 'c:valAx']) {
   const axis = all(chartXml, kind)[0];
   const properties = all(axis, 'a:defRPr')[0];
-  assert.equal(all(properties, 'a:srgbClr')[0]?.val.toUpperCase(), axisLabel.fill.replace('#', '').toUpperCase(), 'Native axis labels follow readable preview colors');
+  // RR-96: the axis label colour is a derived neutral (a scheme colour with luminance transforms); compare what it resolves to.
+  assert.equal(colorHex(properties['a:solidFill'], chartTheme, chartClrMap), axisLabel.fill.replace('#', '').toUpperCase(), 'Native axis labels follow readable preview colors');
 }
 console.log(`Native content layout passed: ${checkedText} payload text lines match actual renderer typography/geometry; ${separatedQuotes} long quotes preserve footer separation and ${overflowQuotes} oversized quotes reject in strict mode; code styling, quote source and editable timeline markers across two canvas sizes.`);

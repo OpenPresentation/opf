@@ -5,6 +5,7 @@ import { unzipSync } from "fflate";
 import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { resolveColorRoles } from "@openpresentation/opf/composition";
 import { toSvg as renderToSvg } from "@openpresentation/opf-render";
+import {clrMapOf} from "./helpers/scheme-colors.mjs";
 import {fromPptx as importPptx, toPptx as exportPptx} from "../dist/index.js";
 
 // OPF 0.15 (FA-23): the gallery records these checks name come from the snapshot, which a host registers explicitly
@@ -24,7 +25,7 @@ function themeColors(files) {
 }
 
 // The fill of the run whose text is `label`, as RRGGBB, resolving a:schemeClr through the exported theme.
-function pptxFill(xml, label, theme) {
+function pptxFill(xml, label, theme, masterMap = {}) {
   const text = `<a:t>${label}</a:t>`;
   const at = xml.indexOf(text);
   assert.ok(at > 0, `${label} run in the slide`);
@@ -32,7 +33,8 @@ function pptxFill(xml, label, theme) {
   const solid = /<a:solidFill>(.*?)<\/a:solidFill>/.exec(run)?.[1];
   assert.ok(solid, `${label} run has a fill`);
   const scheme = /<a:schemeClr val="(\w+)"/.exec(solid)?.[1];
-  if (scheme) return theme[contentSlot[scheme] ?? scheme];
+  // RR-96: the slide's own override, else the master, decides what bg1/tx1 stand for.
+  if (scheme) { const map = {...contentSlot, ...masterMap, ...clrMapOf(xml.match(/<p:clrMapOvr>[\s\S]*?<\/p:clrMapOvr>/)?.[0] ?? "")}; return theme[map[scheme] ?? scheme]; }
   return /<a:srgbClr val="([0-9A-F]{6})"/.exec(solid)[1];
 }
 
@@ -61,11 +63,12 @@ for (const { name, design, link: linkSource } of cases) {
   const deck = { design, slides: runs.map((run) => ({ title: "Roles", text: [run] })) };
   const files = unzipSync(await toPptx(deck));
   const theme = themeColors(files);
+  const masterMap = clrMapOf(decode(files["ppt/slideMasters/slideMaster1.xml"]));
   const slide = (label) => {
     const index = runs.findIndex((run) => run.text === label);
     return { svg: toSvg(deck, index + 1), xml: decode(files[`ppt/slides/slide${index + 1}.xml`]) };
   };
-  const fills = (label) => { const { svg, xml } = slide(label); return { svg: svgFill(svg, label), pptx: pptxFill(xml, label, theme) }; };
+  const fills = (label) => { const { svg, xml } = slide(label); return { svg: svgFill(svg, label), pptx: pptxFill(xml, label, theme, masterMap) }; };
   for (const role of ROLES) {
     const { svg, pptx } = fills(`ref${role}`);
     assert.equal(svg, pptx, `${name}: ${role} agrees in preview and export`);

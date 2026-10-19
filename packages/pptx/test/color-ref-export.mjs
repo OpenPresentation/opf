@@ -7,6 +7,7 @@ import { gallery as defaultCatalog } from "@openpresentation/gallery";
 import { normalizeHexColor, resolveColorRef } from "@openpresentation/opf/composition";
 import { resolveColorRefValue, resolveExportColor, colorContext } from "../dist/color-ref.js";
 import {toPptx as exportPptx} from "../dist/index.js";
+import { colorHex, schemeRole } from "./helpers/scheme-colors.mjs";
 
 // OPF 0.15 (FA-23): the gallery records these checks name come from the snapshot, which a host registers explicitly
 // (`catalogs: [defaultCatalog]`); `records` lists them with their keys as ids.
@@ -138,8 +139,12 @@ const slideTextBytes = await toPptx(slideTextDeck);
 const slideXml = new TextDecoder().decode(unzipSync(slideTextBytes)["ppt/slides/slide1.xml"]);
 const slideRuns = find(parser.parse(slideXml), "a:r");
 assert.equal(schemeHex(slideRuns.find((run) => run["a:t"] === "named")["a:rPr"]["a:solidFill"], themeColors(slideTextBytes)), "ED7D31", "Inline slot overrides reach the theme");
-const badRun = slideRuns.find((run) => run["a:t"] === "bad")["a:rPr"]["a:solidFill"]["a:srgbClr"].val;
+// RR-96: an invalid colour degrades to the slide's default text colour, which is the scheme role tx1.
+const badFill = slideRuns.find((run) => run["a:t"] === "bad")["a:rPr"]["a:solidFill"];
+const badRun = colorHex(badFill, themeColors(slideTextBytes));
 assert.match(badRun, /^[0-9A-F]{6}$/);
 assert.notEqual(badRun, "INVALID");
+assert.equal(schemeRole(badFill), "tx1");
+assert.equal(badRun, "000000", "the default text colour of this scheme (dark1)");
 
 console.log("ColorRef export passed: scheme slots, roles, variables, styled cells, and invalid run soft-degrade.");

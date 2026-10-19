@@ -6,6 +6,7 @@ import {unzipSync,zipSync} from 'fflate';
 import {XMLParser} from 'fast-xml-parser';
 import {colorContrast} from '@openpresentation/opf/composition';
 import {toPptx, fromPptx, resolvePresentation} from './helpers/default-catalog.mjs';
+import {colorHex, clrMapOf, themeColorsOf} from './helpers/scheme-colors.mjs';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),decode=bytes=>new TextDecoder().decode(bytes),encode=text=>new TextEncoder().encode(text),array=v=>v===undefined?[]:Array.isArray(v)?v:[v];
 const fontOptions={fonts:await loadFonts()};
@@ -17,7 +18,9 @@ const shapesOf=async(deck,options)=>{
   const tree=parser.parse(xml)['p:sld']['p:cSld']['p:spTree'];
   return {bytes,entries,xml,shapes:array(tree['p:sp']).filter(shape=>shape['p:nvSpPr']?.['p:cNvPr']?.name.startsWith('OPF timeline '))};
 };
-const outlined=shape=>{const color=shape['p:spPr']['a:ln']?.['a:solidFill']?.['a:srgbClr'];return color!==undefined&&color['a:alpha']===undefined;};
+// RR-96: a color is a literal or a scheme color; `hex` resolves either through the exported theme and master map (set per export below).
+let theme,clrMap;const hex=holder=>colorHex(holder,theme,clrMap);
+const outlined=shape=>{const fill=shape['p:spPr']['a:ln']?.['a:solidFill'],color=fill?.['a:srgbClr']??fill?.['a:schemeClr'];return color!==undefined&&color['a:alpha']===undefined;};
 const named=(shapes,pattern)=>shapes.filter(shape=>pattern.test(shape['p:nvSpPr']['p:cNvPr'].name));
 
 for(const options of [{},fontOptions]){
@@ -29,20 +32,21 @@ for(const options of [{},fontOptions]){
 
   const timeline=withStatus('done','current','planned');
   const deck=deckOf(timeline),{bytes,shapes,entries,xml}=await shapesOf(deck,options);
+  theme=themeColorsOf(decode(entries['ppt/theme/theme1.xml']));clrMap=clrMapOf(decode(entries['ppt/slideMasters/slideMaster1.xml']));
   const bound=resolvePresentation(deck,options).slides[0],layout=bound.geometry.items.find(item=>item.timelineLayout).timelineLayout;
   const background=bound.design.backgroundColor??bound.design.colors.background;
   assert.deepEqual(layout.markers.map(marker=>marker.status),['done','current','planned',undefined]);
   const markers=named(shapes,/ marker \d+$/),rings=named(shapes,/ ring \d+$/);
   assert.equal(markers.length,4);assert.equal(rings.length,1,'only the current event has a ring');
   for(const shape of [...markers,...rings])assert.equal(shape['p:spPr']['a:prstGeom'].prst,'ellipse');
-  const fillOf=shape=>shape['p:spPr']['a:solidFill']?.['a:srgbClr']?.val,lineOf=shape=>shape['p:spPr']['a:ln'];
+  const fillOf=shape=>hex(shape['p:spPr']['a:solidFill']),lineOf=shape=>shape['p:spPr']['a:ln'];
   const [done,current,planned,unset]=markers;
   assert.equal(fillOf(done),fillOf(unset));assert.equal(fillOf(current),fillOf(done));
   assert.ok(!outlined(done)&&!outlined(current)&&!outlined(unset),'done and current dots have no outline');
   assert.ok(outlined(planned)&&outlined(rings[0]));
   const bg=background.replace('#','').toUpperCase();
-  assert.equal(fillOf(planned),bg);assert.equal(lineOf(planned)['a:solidFill']['a:srgbClr'].val,fillOf(done));
-  assert.equal(fillOf(rings[0]),bg);assert.equal(lineOf(rings[0])['a:solidFill']['a:srgbClr'].val,fillOf(done));
+  assert.equal(fillOf(planned),bg);assert.equal(hex(lineOf(planned)['a:solidFill']),fillOf(done));
+  assert.equal(fillOf(rings[0]),bg);assert.equal(hex(lineOf(rings[0])['a:solidFill']),fillOf(done));
   const ext=shape=>Number(shape['p:spPr']['a:xfrm']['a:ext'].cx);
   assert.equal(ext(rings[0]),1.6*ext(current),'the ring ellipse is exactly 1.6 times the dot');
   assert.equal(ext(planned),ext(done),'a hollow marker is the same size as a filled one');
@@ -57,10 +61,10 @@ for(const options of [{},fontOptions]){
   assert.deepEqual([0,1,2].map(eventIndex=>layout.parts.find(part=>part.eventIndex===eventIndex&&part.role==='what').requestedStyle.fontWeight),[600,700,600]);
   assert.equal(runOf(1,'what').b,'1');
   assert.equal(runOf(0,'what').b,runOf(2,'what').b);
-  const plannedColor=runOf(2,'what')['a:solidFill']?.['a:srgbClr']?.val;
+  const plannedColor=hex(runOf(2,'what')['a:solidFill']);
   assert.ok(plannedColor&&colorContrast(`#${plannedColor}`,background)>=4.5,`planned text ${plannedColor}`);
-  assert.equal(runOf(2,'when')['a:solidFill']['a:srgbClr'].val,plannedColor);
-  assert.notEqual(runOf(0,'what')['a:solidFill']?.['a:srgbClr']?.val,plannedColor);
+  assert.equal(hex(runOf(2,'when')['a:solidFill']),plannedColor);
+  assert.notEqual(hex(runOf(0,'what')['a:solidFill']),plannedColor);
 
   // Import restores the status.
   const diagnostics=[],imported=await fromPptx(bytes,{onDiagnostic:d=>diagnostics.push(d)});

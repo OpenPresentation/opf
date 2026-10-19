@@ -43,9 +43,9 @@ assert.equal(runs(cells[2][1]).map(r=>r['a:t']).join(''),'true');assert.equal(ru
 const paragraphs=all(cells[5][0]['a:txBody']['a:p']);
 assert.deepEqual(paragraphs.map(p=>all(p['a:r']).map(r=>r['a:t']).join('')),[' A  B','C  emoji 👩‍💻'],'Only explicit newlines create native paragraphs; whitespace survives');
 for(const cell of cells.flat()) for(const paragraph of all(cell['a:txBody']['a:p'])) assert.ok(!Array.isArray(paragraph['a:pPr']),'Each native paragraph has at most one properties element');
-const colored=runs(cells[6][0]).map(r=>r['a:rPr']['a:solidFill']['a:srgbClr']);
+const coloredFills=runs(cells[6][0]).map(r=>r['a:rPr']['a:solidFill']),colored=coloredFills.map(fill=>fill['a:srgbClr']);
 assert.equal(colored[0].val,'123456');assert.ok(Math.abs(Number(colored[0]['a:alpha'].val)-128/255*100000)<2,'Eight-digit colors preserve alpha');
-assert.equal(colored[1].val,'AABBCC');assert.match(colored[2].val,/^[0-9A-F]{6}$/,'Invalid run colors fall back to the theme');
+assert.equal(colored[1].val,'AABBCC');assert.equal(colored[2],undefined,'Invalid run colors fall back to the theme');assert.equal(coloredFills[2]['a:schemeClr'].val,'tx1','(RR-96: as the slide text color, a scheme color)');
 const lines=cell=>all(cell['a:txBody']['a:p']).map(p=>all(p['a:r']).map(r=>r['a:t']??'').join(''));
 assert.deepEqual(lines(cells[7][0]),['Start','','End',''],'Run boundaries preserve blank and trailing lines');
 assert.deepEqual(lines(cells[7][1]),['','Leading'],'Leading blank lines survive');
