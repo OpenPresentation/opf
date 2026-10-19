@@ -253,8 +253,10 @@ for (const position of ['top', 'bottom', 'left', 'right']) {
     const position = element ? attributesOf(element[1]) : {};
     return {path: attributesOf(attrs)['data-opf-path'], text: [...body.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([, value]) => value).join(''), x: Number(position.x), y: Number(position.y)};
   });
+  // The plot's gridlines and axis lines are the chart's <line> elements without a source path (legend keys and marks carry one), drawn in
+  // the scheme-derived neutrals; no colour or opacity is matched, so a variant or a neutral change does not move this check.
   const plotExtent = svg => {
-    const lines = [...svg.matchAll(/<line\b([^>]*)\/>/g)].map(([, a]) => attributesOf(a)).filter(l => l['stroke-opacity'] === '0.7');
+    const lines = [...svg.matchAll(/<line\b([^>]*)\/>/g)].map(([, a]) => attributesOf(a)).filter(l => !l['data-opf-path']);
     return {left: Math.min(...lines.map(l => Number(l.x1))), right: Math.max(...lines.map(l => Number(l.x2))), top: Math.min(...lines.map(l => Number(l.y1))), bottom: Math.max(...lines.map(l => Number(l.y2)))};
   };
   for (const legend of ['top', 'bottom', 'left', 'right', 'none']) {
