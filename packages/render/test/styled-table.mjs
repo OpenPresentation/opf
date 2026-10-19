@@ -56,7 +56,8 @@ const lines = output => [...output.matchAll(/<line\b([^>]*)>/g)].map(match =>
 // adapt inherited colors; explicit cell/run colors always remain authoritative.
 for(const [fill,headerColor,bodyColor,explicit] of [
   ['#F8FAFC','#000000','#000000'],['#0F172A','#FFFFFF','#FFFFFF'],
-  ['#777777','#000000','#000000'],['#767676','#FFFFFF','#000000'],
+  ['#777777','#000000','#000000'],['#767676','#000000','#000000'], // RR-96: header text is core's readableSchemeColor (the more legible of tx1 and bg1), no longer white whenever white passes
+  
   ['#FFFFFF80','#FFFFFF','#000000'],['#F8FAFC','#FFFFFF','#FFFFFF','#FFFFFF'],
 ]){
   const style={fill,...(explicit?{color:explicit}:{})};

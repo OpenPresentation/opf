@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import { resolveTextStyle, textWidthMeasurer } from '@openpresentation/opf/composition';
-import {toSvg} from '../dist/svg.js';
+import {resolvePresentation, toSvg} from '../dist/svg.js';
+
+// RR-96: gridlines and axis lines are the deck's scheme-derived neutrals (core roles.neutrals), not a fixed colour with opacity.
+const NEUTRALS = resolvePresentation({slides: [{chart: {type: 'column', data: {columns: ['A', 'B'], rows: [['x', 1]]}}}]}).slides[0].design.roles.neutrals;
+const GRID = NEUTRALS.gridline.hex, AXIS = NEUTRALS.axisLine.hex;
+
 
 // Category-axis labels (src/charts.js) follow PowerPoint's automatic labelling:
 // never broken inside a word, rotated (-45 then -90 degrees) when they do not
@@ -42,7 +47,7 @@ function labelsOf(svg) {
     });
   }
   const lines = [...svg.matchAll(/<line\b([^>]*)\/>/g)].map(([, a]) => attributes(a));
-  const grids = lines.filter((line) => line['stroke-opacity'] === '0.7');
+  const grids = lines.filter((line) => line.stroke === GRID);
   return { labels, grids };
 }
 

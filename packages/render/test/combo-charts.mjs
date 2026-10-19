@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 // The deck names the gallery font scheme roboto: render with the host catalog registered.
-import { toSvg } from "./catalog-harness.mjs";
+import { resolvePresentation, toSvg } from "./catalog-harness.mjs";
+
+// RR-96: gridlines and axis lines are the deck's scheme-derived neutrals (core roles.neutrals), not a fixed colour with opacity.
+const NEUTRALS = resolvePresentation({slides: [{chart: {type: 'column', data: {columns: ['A', 'B'], rows: [['x', 1]]}}}]}).slides[0].design.roles.neutrals;
+const GRID = NEUTRALS.gridline.hex, AXIS = NEUTRALS.axisLine.hex;
+
 
 // FA-15: combo charts. Core resolves the plan (which series are columns, which are lines, which line uses the secondary
 // value axis); the preview draws clustered columns, lines with markers, a secondary axis at the right with ticks in the
@@ -48,7 +53,7 @@ const textsAt = (svg, path) => [...svg.matchAll(/<g\b([^>]*data-opf-source-text=
   assert.ok(Math.min(...percent.map((tick) => tick.x)) > Math.max(...dollars.map((tick) => tick.x)), "secondary ticks sit right of the primary ticks");
   // The line uses the secondary scale: the top Margin point (Q4, 37%) is near the top of the plot, not at the bottom.
   const markers = marks(svg, "circle").filter((circle) => /\.data\.rows\.\d\.2$/.test(circle["data-opf-path"] ?? ""));
-  const grid = marks(svg, "line").filter((line) => line["stroke-opacity"] === "0.7").map((line) => Number(line.y1));
+  const grid = marks(svg, "line").filter((line) => line.stroke === GRID).map((line) => Number(line.y1));
   const plotTop = Math.min(...grid), plotBottom = Math.max(...grid);
   assert.ok(Number(markers[3].cy) < plotTop + (plotBottom - plotTop) / 2, "the secondary line is scaled to its own axis");
   const primary = render({});

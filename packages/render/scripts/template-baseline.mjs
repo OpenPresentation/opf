@@ -12,6 +12,7 @@ export const CENTERED_TEMPLATE_BASELINE = 'test/golden/layout-templates-rr85-met
 export const FIRST_USE_TEMPLATE_BASELINE = 'test/golden/layout-templates-rr90-first-use-layout.json';
 export const CHART_TEMPLATE_BASELINE = 'test/golden/layout-templates-rr89-chart-palette-text.json';
 export const SCHEME_NEUTRALS_TEMPLATE_BASELINE = 'test/golden/layout-templates-rr96-scheme-neutrals.json';
+export const VARIANTS_TEMPLATE_BASELINE = 'test/golden/layout-templates-rr96-color-variants.json';
 /** The chart text size (px) of core before RR-90: 14 px floored to the 16 px minimum. */
 const LEGACY_CHART_TEXT_SIZE = 16;
 /** The table cell size (px) of core before RR-90, which asked for 15 px and was floored to 16 px. */
@@ -24,22 +25,26 @@ export function tableTextSize() {
 export function chartTextSizeDefault() {
   return chartTextSize({width: 1200, height: 500, scale: 1});
 }
+/** True when core resolves the slide's roles through a variant (`roles.variant`, RR-96): the discriminator between the scheme-neutral and the variant contracts. */
+export function colorVariantsDerived() {
+  return typeof resolveColorRoles({}).variant === 'object';
+}
 /** True when core derives the neutrals from the colour scheme (`roles.neutrals`, RR-96): the discriminator between the chart and the scheme-neutral contracts. */
 export function schemeNeutralsDerived() {
   return typeof resolveColorRoles({}).neutrals === 'object';
 }
 // The baseline each one is compared with while it does not exist yet (candidate generation only).
-const PREVIOUS = new Map([[SCHEME_NEUTRALS_TEMPLATE_BASELINE, CHART_TEMPLATE_BASELINE], [CHART_TEMPLATE_BASELINE, FIRST_USE_TEMPLATE_BASELINE], [FIRST_USE_TEMPLATE_BASELINE, CENTERED_TEMPLATE_BASELINE], [CENTERED_TEMPLATE_BASELINE, LEGACY_TEMPLATE_BASELINE]]);
-export function templateBaseline(alignment, tableSize = LEGACY_TABLE_TEXT_SIZE, chartSize = LEGACY_CHART_TEXT_SIZE, neutrals = false) {
+const PREVIOUS = new Map([[VARIANTS_TEMPLATE_BASELINE, SCHEME_NEUTRALS_TEMPLATE_BASELINE], [SCHEME_NEUTRALS_TEMPLATE_BASELINE, CHART_TEMPLATE_BASELINE], [CHART_TEMPLATE_BASELINE, FIRST_USE_TEMPLATE_BASELINE], [FIRST_USE_TEMPLATE_BASELINE, CENTERED_TEMPLATE_BASELINE], [CENTERED_TEMPLATE_BASELINE, LEGACY_TEMPLATE_BASELINE]]);
+export function templateBaseline(alignment, tableSize = LEGACY_TABLE_TEXT_SIZE, chartSize = LEGACY_CHART_TEXT_SIZE, neutrals = false, variants = false) {
   assert.ok(alignment === 'left' || alignment === 'center', `Unknown metric default alignment: ${alignment}`);
   assert.ok(Number.isFinite(tableSize) && tableSize > 0, `Unknown table text size: ${tableSize}`);
   assert.ok(Number.isFinite(chartSize) && chartSize > 0, `Unknown chart text size: ${chartSize}`);
   if (alignment === 'left') return LEGACY_TEMPLATE_BASELINE;
-  if (tableSize > LEGACY_TABLE_TEXT_SIZE) return chartSize > LEGACY_CHART_TEXT_SIZE ? (neutrals ? SCHEME_NEUTRALS_TEMPLATE_BASELINE : CHART_TEMPLATE_BASELINE) : FIRST_USE_TEMPLATE_BASELINE;
+  if (tableSize > LEGACY_TABLE_TEXT_SIZE) return chartSize > LEGACY_CHART_TEXT_SIZE ? (neutrals ? (variants ? VARIANTS_TEMPLATE_BASELINE : SCHEME_NEUTRALS_TEMPLATE_BASELINE) : CHART_TEMPLATE_BASELINE) : FIRST_USE_TEMPLATE_BASELINE;
   return CENTERED_TEMPLATE_BASELINE;
 }
-export function readTemplateBaseline(root, alignment, {update = false, tableSize = LEGACY_TABLE_TEXT_SIZE, chartSize = LEGACY_CHART_TEXT_SIZE, neutrals = false} = {}) {
-  const selected = templateBaseline(alignment, tableSize, chartSize, neutrals);
+export function readTemplateBaseline(root, alignment, {update = false, tableSize = LEGACY_TABLE_TEXT_SIZE, chartSize = LEGACY_CHART_TEXT_SIZE, neutrals = false, variants = false} = {}) {
+  const selected = templateBaseline(alignment, tableSize, chartSize, neutrals, variants);
   let comparison = selected, bytes;
   try { bytes = readFileSync(path.join(root, selected), 'utf8'); }
   catch (error) {

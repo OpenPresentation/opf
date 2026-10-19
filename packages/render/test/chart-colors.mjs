@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 // FA-23: the colour schemes below extend the gallery's `cool-horizon` record, so the host catalog is registered.
 import {resolvePresentation, toSvg} from './catalog-harness.mjs';
-import {colorContrast,chartPaletteForFill,chartSeriesPalette} from '@openpresentation/opf/composition';
+import {colorContrast,chartPaletteForFill,chartSeriesPalette,textColorForFill} from '@openpresentation/opf/composition';
 const cases=[
  {background:'#FFFFFF',surface:'#F8FAFC',text:'#0F172A',expected:'#0F172A'},
  {background:'#000000',surface:'#334155',text:'#FFFFFF',expected:'#FFFFFF'},
@@ -19,7 +19,10 @@ for(const fixture of cases)for(const type of ['column','bar','line','area','pie'
  const chartPath='slides.0.chart';
  const panel=[...svg.matchAll(/<rect\b([^>]*)>/g)].find(([,a])=>a.includes(`data-opf-path="${chartPath}"`));assert.ok(panel);assert.ok(panel[1].includes(`fill="${fixture.surface}"`));
  const labels=[...svg.matchAll(/<text\b([^>]*)>([\s\S]*?)<\/text>/g)];assert.ok(labels.length>0);
- for(const [,a]of labels)assert.ok(a.includes(`fill="${fixture.expected}"`),`${type} ${fixture.surface}: ${a}`);
+ // RR-96: chart text is the scheme-derived chart-text neutral (tx1 mixed into bg1), kept legible on the panel by core's textColorForFill.
+ const labelFill=textColorForFill(bound.design.colors.surface,bound.design.roles.neutrals.chartText.hex);
+ for(const [,a]of labels)assert.ok(a.toLowerCase().includes(`fill="${labelFill.toLowerCase()}"`),`${type} ${fixture.surface}: ${a}`);
+ if(fixture.surface.length===7)assert.ok(colorContrast(labelFill,fixture.surface)>=4.5,`${type} ${fixture.surface}: chart text ${labelFill} contrast`);
  const marks=[...svg.matchAll(/<(?:rect|path|circle|polyline)\b([^>]*)>/g)].filter(([,a])=>/data-opf-path="slides\.0\.chart\.data(?:\.|"|$)/.test(a));assert.ok(marks.length);
  for(const [,a]of marks){const color=(a.match(/\bfill="(#[0-9a-f]+)"/i)??a.match(/\bstroke="(#[0-9a-f]+)"/i))?.[1];assert.ok(color);if(fixture.surface.length===7)assert.ok(colorContrast(color,fixture.surface)>=3,`${type}: mark ${color} against ${fixture.surface}`);}
  if(fixture.surface.length===7)assert.ok(colorContrast(fixture.expected,fixture.surface)>=4.5);

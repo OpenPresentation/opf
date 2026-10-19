@@ -18,8 +18,8 @@ for(const values of [[-Number.MAX_VALUE,0,Number.MAX_VALUE],[Number.MAX_VALUE,Nu
 assert.deepEqual(boxStatistics([2,4,8,12]),{q1:2.5,median:6,q3:11,mean:6.5,low:2,high:12,outliers:[]});
 assert.equal(boxStatistics([null]),null);
 // These ordinary SVG hashes were captured before this arithmetic-only fix and re-captured for RR-89 and RR-90 (series colours from the
-// colour scheme, 20 px chart text), which change every chart's bytes on purpose.
-const ordinary={'box-and-whisker':'e5a099959ae99237ff61709ad6c9fefd3b9c05991300813ce607919190bd6a48',world:'ccbbdb7ca10c319aa09b22e762ce4371c1c8b493352a7f8c8da3b4ea68c9617b'};
+// colour scheme, 20 px chart text) and RR-96 (scheme-derived neutrals), which change every chart's bytes on purpose.
+const ordinary={'box-and-whisker':'6c9685b42fb2e3997575b8830adf5048e345f156a5d932f289706d67e3b3516a',world:'87256993cac4736dd79071aba9c9f36c180cc311087c97a47e15e86d1a269e46'};
 for(const [type,expected] of Object.entries(ordinary)) {
   const svg=toSvg(deck(type,[['A',2],['A',4],['B',8],['B',12]]),1);
   finiteSvg(svg);

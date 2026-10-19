@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { toPng, toSvg } from '../dist/index.js';
 import {layoutMetric} from '@openpresentation/opf/composition';
-import {chartTextSizeDefault, readTemplateBaseline, schemeNeutralsDerived, tableTextSize} from '../scripts/template-baseline.mjs';
+import {chartTextSizeDefault, readTemplateBaseline, schemeNeutralsDerived, colorVariantsDerived, tableTextSize} from '../scripts/template-baseline.mjs';
 import { featureDecks, fixture, layouts, paginatedDecks, templateDeck } from './layout-template-fixture.mjs';
 
 // OPF 0.19 (RR-81): SVG and PNG goldens of the 28 built-in layout templates, each with 1 to 6 blocks of short and of long
@@ -36,7 +36,7 @@ const next = {
   format: 'svg-png-sha256', scale, systemFonts: false, trace: true, entries: {},
 };
 const metricDefault = layoutMetric(1, {x: 0, y: 0, width: 400, height: 300}).alignment;
-const {selected, comparison, previous} = readTemplateBaseline(root, metricDefault, {update, tableSize: tableTextSize(), chartSize: chartTextSizeDefault(), neutrals: schemeNeutralsDerived()});
+const {selected, comparison, previous} = readTemplateBaseline(root, metricDefault, {update, tableSize: tableTextSize(), chartSize: chartTextSizeDefault(), neutrals: schemeNeutralsDerived(), variants: colorVariantsDerived()});
 const baselinePath = path.join(root, selected);
 const changed = [];
 const features = featureDecks(), paginated = paginatedDecks();

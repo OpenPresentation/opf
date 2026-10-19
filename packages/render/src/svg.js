@@ -3,8 +3,8 @@
 import {
   layoutTable, fitList, fitRichText, composeSlide, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill,
   resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns,
-  metricTrendMark as coreMetricTrendMark, tokenizeCode, codeLineRuns, codeSyntaxPaletteForScheme, resolveChartData,
-  resolveColorRoles, defaultSlideBackground, timelineMarkerShapes, timelineTextColor, layoutWatermark,
+  metricTrendMark as coreMetricTrendMark, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
+  timelineMarkerShapes, timelineTextColor, layoutWatermark,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
 } from "@openpresentation/opf/composition";
@@ -299,18 +299,18 @@ const IMAGE_BACKGROUND_SOURCE = /^(asset:|https:\/\/|data:|\.\/|\.\.\/)/;
 
 // The slide's single background color, or null when there is none (a gradient, or no color the engine can read).
 // With no definition, or a picture, the scheme's default slide background (core defaultSlideBackground) is the canvas.
-function resolveBackground(background, colorScheme, design) {
-  const canvas = defaultSlideBackground(colorScheme);
+function resolveBackground(background, colorScheme, design, canvas) {
   if (!background) return canvas;
   if (typeof background === "string") return IMAGE_BACKGROUND_SOURCE.test(background) ? canvas : colorFromScheme(colorScheme, background, canvas);
   if (background.type === "theme") return colorFromScheme(colorScheme, background.slot, canvas);
-  if (background.type === "solid") return resolveBackgroundColor(background.color, design, "#FFFFFF");
+  if (background.type === "solid") return resolveBackgroundColor(background.color, design, canvas);
   if (background.type === "gradient") return null;
-  if (background.type === "pattern") return resolveBackgroundColor(background.pattern?.backgroundColor, design, "#FFFFFF");
+  if (background.type === "pattern") return resolveBackgroundColor(background.pattern?.backgroundColor, design, canvas);
   return canvas;
 }
 
 
+// An unparseable colour measures as white: this is a luminance for the contrast tests below, never a colour that is drawn.
 function colorLuminance(color) {
   const hex = normalizeColor(color, "#FFFFFF").replace("#", "");
   const channels = [0, 2, 4].map(offset => {
@@ -342,6 +342,13 @@ const LINK_URL = /^(https?:|mailto:|tel:)/i;
 // sorted keys, so the output does not depend on the order a catalog lists a field in. A reference that resolves nowhere never
 // throws (unless `strictReferences`): the context falls back to core's engine defaults (ENGINE_DEFAULT_THEME, _COLOR_SCHEME,
 // _FONT_SCHEME; a layout to automatic composition) and reports `unresolved-reference`, which is forwarded as a render diagnostic.
+function drawnBackground(levels) {
+  for (const level of levels) {
+    if (level.variant !== undefined) return level.background;
+    if (level.background !== undefined && level.background !== null && level.background !== false) return level.background;
+  }
+  return undefined;
+}
 function resolveDesign(presentation, slide, slideContext) {
   const deckDesign = presentation.design ?? {};
   const slideDesign = slide.design ?? {};
@@ -350,14 +357,13 @@ function resolveDesign(presentation, slide, slideContext) {
   const colorScheme = cloneWithSortedKeys(resolved.colorScheme);
   const fontScheme = cloneWithSortedKeys(resolved.fontScheme);
   const dimensions = { width: composeOptions.width, height: composeOptions.height };
-  const backgroundDefinition = slideDesign.background ?? deckDesign.background ?? theme.background;
-  const { primary, secondary, accent } = resolveColorRoles(colorScheme);
+  // RR-96: core resolves the slide's roles (its variant's map over the scheme, the accents in order, the scheme-derived neutrals) once, in
+  // the slide context every engine shares. A variant hides the background of a less specific level (the slide is then the variant's bg1).
+  const roles = resolved.roles;
+  const backgroundDefinition = drawnBackground([slideDesign, deckDesign, theme]);
   const variables = presentation.variables ?? {};
-  // background/surface/text roles depend on the background itself, so a background reference sees only the scheme and the three accent roles.
-  const backgroundColor = resolveBackground(backgroundDefinition, colorScheme, { colorScheme, colors: { primary, secondary, accent }, variables });
-  // One resolution for every role (core resolveColorRoles), shared with the PPTX export and the validator. Whether the background is dark
-  // (relative luminance under 0.179) is core's decision in the slide context, the one composition uses for logos and bullets.
-  const roles = resolveColorRoles(colorScheme, { background: backgroundColor });
+  // A background reference sees only the scheme and the three accent roles; a picture or no background is the variant's bg1.
+  const backgroundColor = resolveBackground(backgroundDefinition, colorScheme, { colorScheme, colors: { primary: roles.primary, secondary: roles.secondary, accent: roles.accent }, variables }, roles.background);
   const darkBackground = composeOptions.darkBackground === true;
 
   return {
@@ -371,17 +377,20 @@ function resolveDesign(presentation, slide, slideContext) {
     background: backgroundDefinition,
     backgroundColor,
     colors: {
-      background: roles.background,
+      // The slide's drawn single-colour background, else the variant's bg1 (a picture, gradient or none).
+      background: backgroundColor ?? roles.background,
       surface: roles.surface,
       text: roles.text,
       mutedText: roles.textSecondary,
-      primary,
-      secondary,
-      accent,
+      primary: roles.primary,
+      secondary: roles.secondary,
+      accent: roles.accent,
       hyperlink: roles.hyperlink,
       followedHyperlink: roles.followedHyperlink,
       border: roles.border
     },
+    // RR-96: the variant's map, accent order and scheme-derived neutrals (gridline, axis line, chart text, outline, trend, code panel).
+    roles,
     fonts: { ...composeOptions.fontFamilies },
     darkBackground,
     diagnostics: diagnostics.map((entry) => ({ ...entry }))
@@ -766,7 +775,7 @@ function renderBackground(bound, width, height, options) {
     const runs=patternRuns(preset);
     const mark=runs?tag('path',{d:runs.map(run=>`M${run.x} ${run.y}h${run.width}v1h-${run.width}z`).join(''),fill:color,'shape-rendering':'crispEdges'}):'';
     if(!mark)reportDiagnostic({code:'unsupported-pattern',path:`${bound.path}.design.background.pattern.preset`,message:`Pattern ${preset} is not implemented by the SVG preview.`},options);
-    return tag('g',{...HIDDEN,opacity:background.opacity??1},tag('rect',{width,height,fill:bound.design.backgroundColor??'#FFFFFF'})+tag('defs',{},tag('pattern',{id,width:8,height:8,patternUnits:'userSpaceOnUse'},mark))+tag('rect',{width,height,fill:`url(#${id})`}));
+    return tag('g',{...HIDDEN,opacity:background.opacity??1},tag('rect',{width,height,fill:bound.design.backgroundColor??bound.design.colors.background})+tag('defs',{},tag('pattern',{id,width:8,height:8,patternUnits:'userSpaceOnUse'},mark))+tag('rect',{width,height,fill:`url(#${id})`}));
   }
   return tag("rect", {
     ...HIDDEN,
@@ -797,7 +806,17 @@ function renderBackgroundImage(background, bound, width, height, options) {
   const id = `opf-s${bound.index + 1}-background`, matrix = imageRecolorMatrix(background.recolor, bound);
   const defs = matrix ? tag("defs", {}, tag("filter", { id: `${id}-recolor`, "color-interpolation-filters": "sRGB" }, tag("feColorMatrix", { type: "matrix", values: matrix }))) : "";
   const pixels = matrix || background.opacity !== undefined ? tag("g", { filter: matrix ? `url(#${id}-recolor)` : undefined, opacity: background.opacity === undefined ? undefined : preciseNumber(background.opacity) }, picture) : picture;
-  return [canvas, defs, pixels, background.overlay ? renderImageOverlay(background.overlay, bound, options) : ""].filter(Boolean).join("\n");
+  return [canvas, defs, pixels, background.overlay ? renderImageOverlay(background.overlay, bound, options) : toneOverlay(bound, width, height, options)].filter(Boolean).join("\n");
+}
+
+// RR-96: a picture that names its tone (`dark` or `light`) is a picture the text must read on: with no overlay of its own, the slide
+// background colour (bg1 of the tone's variant, so dark text colours get a dark scrim and light ones a light one) covers it at 40%.
+// Core resolves the variant from the tone but exposes no overlay for it, so this scrim is the renderer's own (reported in RR-96).
+const TONE_OVERLAY_OPACITY = 0.4;
+function toneOverlay(bound, width, height, options) {
+  const tone = isPlainObject(bound.design.background) ? bound.design.background.tone : undefined;
+  if (tone !== "dark" && tone !== "light") return "";
+  return tag("rect", { ...HIDDEN, x: 0, y: 0, width, height, fill: bound.design.colors.background, opacity: TONE_OVERLAY_OPACITY, ...(options.trace ? { "data-opf-tone-overlay": tone } : {}) });
 }
 
 // tile: a pattern cell of the picture's intrinsic size, anchored at the canvas origin.
@@ -868,7 +887,7 @@ function imageRecolorMatrix(recolor, bound) {
   if (!recolor) return undefined;
   const weights = [0.299, 0.587, 0.114];
   const channels = recolor.type === 'duotone'
-    ? [imagePaint(recolor.dark, bound, '#000000'), imagePaint(recolor.light, bound, '#FFFFFF')].map(paint => [1, 3, 5].map(at => parseInt(paint.color.slice(at, at + 2), 16) / 255))
+    ? [imagePaint(recolor.dark, bound, bound.design.colorScheme.dark1 ?? ENGINE_DEFAULT_COLOR_SCHEME.dark1), imagePaint(recolor.light, bound, bound.design.colorScheme.light1 ?? ENGINE_DEFAULT_COLOR_SCHEME.light1)].map(paint => [1, 3, 5].map(at => parseInt(paint.color.slice(at, at + 2), 16) / 255))
     : [[0, 0, 0], [1, 1, 1]];
   const [dark, light] = channels;
   const rows = [0, 1, 2].map(channel => [...weights.map(weight => preciseNumber((light[channel] - dark[channel]) * weight)), 0, preciseNumber(dark[channel])].join(' '));
@@ -1274,7 +1293,8 @@ function renderMedia(item, box, bound, options) {
     tag("path", {
       ...HIDDEN,
       d: trianglePath(iconBox.x + 28, iconBox.y + 22, 28, 28),
-      fill: "#FFFFFF",
+      // The play triangle sits on the primary circle: bg1 or tx1, whichever reads better on it (core readableSchemeColor).
+      fill: readableSchemeColor(bound.design.colors.primary, bound.design.roles).hex,
       ...traceAttrs(options, item.path)
     }),
     renderTextBox(asset.title || asset.src || "Media", { ...box, y: iconBox.y + iconBox.height + 20, height: 50 }, bound, {
@@ -1308,8 +1328,8 @@ function renderCode(item, box, bound, options) {
       y: box.y,
       width: box.width,
       height: box.height,
-      fill: "#111827",
-      stroke: "#334155",
+      fill: bound.design.roles.neutrals.codePanel.hex,
+      stroke: bound.design.colors.border,
       "stroke-width": 1,
       ...traceAttrs(options, item.path)
     })
@@ -1335,7 +1355,7 @@ function renderCode(item, box, bound, options) {
       x:stableNumber(part.box.x),y:stableNumber(part.box.y+part.fit.fontSize+index*part.fit.lineHeight),
       'text-anchor':'start','font-family':fontStack(part.style.fontFamily,'monospace'),
       'font-size':stableNumber(part.fit.fontSize),'font-weight':part.style.fontWeight,'font-style':part.style.italic?'italic':undefined,
-      'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:part.role==='body'?(lineColors?.plain??'#E5E7EB'):'#93C5FD',
+      'xml:space':'preserve',style:'white-space:pre','text-rendering':'geometricPrecision',fill:part.role==='body'?(lineColors?.plain??syntax?.palette.plain??bound.design.roles.neutrals.codeText.hex):codeLabelColor(bound),
       ...traceAttrs(options,part.path),...(options.trace?{'data-opf-code-role':part.role,'data-opf-generated':part.generated?'true':undefined,
         'data-opf-text-start':line.start,'data-opf-text-end':line.end,'data-opf-text-next-start':line.nextStart,'data-opf-line-boundary':line.boundary}:{}),
     },line.segments.map(segment=>segmentSpan({
@@ -1402,7 +1422,7 @@ function renderMetric(item, box, bound, options) {
 
 // The trend arrow and colour for a laid-out metric (core metricTrendMark); undefined without a trend.
 function metricTrendMark(layout,bound,options) {
-  return coreMetricTrendMark(layout,{background:bound.design.backgroundColor??bound.design.colors.background});
+  return coreMetricTrendMark(layout,{background:bound.design.backgroundColor??bound.design.colors.background,neutral:bound.design.roles.neutrals.trendNeutral.hex});
 }
 
 function renderQuote(item, box, bound, options) {
@@ -1471,7 +1491,7 @@ function renderTable(item, box, bound, options) {
     const fill = style.fill == null
       ? defaultFill
       : resolveColorRef(style.fill, bound, defaultFill);
-    const defaultText = textColorForFill(fill, cell.header ? "#FFFFFF" : bound.design.colors.text);
+    const defaultText = cell.header ? readableSchemeColor(fill, bound.design.roles).hex : textColorForFill(fill, bound.design.colors.text);
     const textFill = style.color == null
       ? defaultText
       : resolveColorRef(style.color, bound, defaultText);
@@ -1855,7 +1875,13 @@ function codeHighlight(item, layout, bound) {
   if (!body?.fit) return undefined;
   const lines = codeHighlightLines(highlight, body.text).lines;
   if (!lines.length) return undefined;
-  return { marked: new Set(lines), numbers: codeLineNumbers(body.fit.sourceLines), bands: codeHighlightBands(body.fit.sourceLines, lines), colors: codeHighlightColors(bound.design.colorScheme) };
+  const palette = codeSyntaxPaletteForRoles(bound.design.roles);
+  return { marked: new Set(lines), numbers: codeLineNumbers(body.fit.sourceLines), bands: codeHighlightBands(body.fit.sourceLines, lines), colors: codeHighlightColors(bound.design.colorScheme, palette, bound.design.roles.neutrals.codePanel.hex) };
+}
+
+// The code language / filename label: the first accent of the variant, legible on the code panel (RR-96).
+function codeLabelColor(bound) {
+  return codeSyntaxPaletteForRoles(bound.design.roles).keyword;
 }
 
 // Token ranges of the code body and the palette to paint them with; undefined for plain code (an unknown language,
@@ -1866,7 +1892,7 @@ function codeSyntax(item, layout, bound, options) {
   if (!body || !language) return undefined;
   const tokens = tokenizeCode(body.text, language);
   if (!tokens.length) return undefined;
-  return { tokens, palette: codeSyntaxPaletteForScheme(bound.design.colorScheme) };
+  return { tokens, palette: codeSyntaxPaletteForRoles(bound.design.roles) };
 }
 
 // RR-61: a face is embedded only when the slide's own markup draws it: the family in a font-family list, at a font-weight and

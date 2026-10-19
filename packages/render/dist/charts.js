@@ -189,6 +189,12 @@ function chartContext(item, box, bound, options, svg, { rows, columns, formats, 
   // RR-90: core's chart text size (20 px, shrunk only for a small box, never below minFontSize), the size core's value-axis density assumes.
   const requested = chartTextSize({ width: box.width, height: box.height, scale: u, minFontSize: composition.minFontSize }), fontPx = requested * u;
   const surface = bound.design.colors.surface;
+  // RR-96: every neutral comes from the slide's variant (core `roles.neutrals`: tx1 mixed into bg1, the colours the PPTX export writes as
+// scheme colours): chart text, gridlines, axis lines and the outline between marks (bg1).
+const neutrals = bound.design.roles.neutrals;
+  // The quiet colour of axis, legend and category text; `labelColor` stays the full text colour (highlight mutes toward it and labels inside
+  // marks contrast against it, as the PPTX export draws them).
+  const chartTextColor = textColorForFill(surface, neutrals.chartText.hex);
   const labelColor = textColorForFill(surface, bound.design.colors.text);
   const style = resolveTextStyle({ fontFamily: bound.design.fonts.body, fontWeight: 400, italic: false, path: item.path }, options.textMeasurement);
   const measure = textWidthMeasurer(style, options.textMeasurement);
@@ -202,7 +208,7 @@ function chartContext(item, box, bound, options, svg, { rows, columns, formats, 
     return path.replace(/^(.*\.data\.(?:columns\.|rows\.\d+\.))(\d+)$/, (whole, head, column) => `${head}${trace.columnMap[Number(column)] ?? column}`);
   };
   const c = {
-    item, box, bound, options, svg, rows, columns, formats, combo, children, u, fontPx, surface, labelColor,
+    item, box, bound, options, svg, rows, columns, formats, combo, children, u, fontPx, surface, labelColor, chartTextColor,
     path: item.path,
     pt: u * 4 / 3,
     pad: 10 * u,
@@ -211,11 +217,12 @@ function chartContext(item, box, bound, options, svg, { rows, columns, formats, 
     // clear space kept between neighbouring category labels.
     textHeight: fontPx * 1.22,
     labelGap: fontPx * 0.1,
-    colors: chartSeriesPalette(surface, bound.design.colorScheme, item.value?.colors, { roles: bound.design.colors, variables: bound.design.variables }),
+    colors: chartSeriesPalette(surface, bound.design.colorScheme, item.value?.colors, { accents: bound.design.roles.map.accents, roles: bound.design.colors, variables: bound.design.variables }),
     // RR-92: the value axis core composed for a column, bar, line or area chart ({ min, max, majorUnit }); absent for the other types.
     valueAxis: item.chart?.valueAxis,
-    gridColor: bound.design.colors.border,
-    axisColor: "#888888",
+    gridColor: neutrals.gridline.hex,
+    axisColor: neutrals.axisLine.hex,
+    outlineColor: neutrals.outline.hex,
     number: chartNumber,
     label: (value) => value === null || value === undefined ? "" : String(value),
     width: (value) => measure(String(value), fontPx),
@@ -225,7 +232,7 @@ function chartContext(item, box, bound, options, svg, { rows, columns, formats, 
       for (const [key, value] of Object.entries(attrs)) out[key] = numericAttrs.has(key) && typeof value === "number" ? n(value) : value;
       children.push(svg.tag(name, { ...out, ...(path ? svg.traceAttrs(options, tracePath(path)) : {}) }));
     },
-    textElement(value, rect, path, align = "center", fill = labelColor) {
+    textElement(value, rect, path, align = "center", fill = chartTextColor) {
       if (!(rect.width > 0 && rect.height > 0)) return "";
       return svg.renderTextBox(String(value), rect, bound, {
         path: tracePath(path), fontSize: requested, fontFamily: bound.design.fonts.body, fontWeight: 400,
@@ -406,7 +413,7 @@ function seriesLegend(c, series, key, marker = false) {
 }
 
 function gridline(c, x1, y1, x2, y2) {
-  c.mark("line", { x1, y1, x2, y2, stroke: c.gridColor, "stroke-opacity": 0.7, "stroke-width": c.pt });
+  c.mark("line", { x1, y1, x2, y2, stroke: c.gridColor, "stroke-width": c.pt });
 }
 
 function axisLine(c, x1, y1, x2, y2) {
@@ -933,7 +940,7 @@ function renderCircularChart(c, spec) {
     c.text("No positive chart values", area, c.path);
     return;
   }
-  const border = { stroke: "#F9F9F9", "stroke-width": 0.75 * c.pt };
+  const border = { stroke: c.outlineColor, "stroke-width": 0.75 * c.pt };
   let angle = -Math.PI / 2;
   values.forEach((value, i) => {
     const delta = value / total * Math.PI * 2, end = angle + delta;
@@ -1059,7 +1066,7 @@ function renderRadarChart(c, spec) {
   for (const tick of scale.ticks) {
     if (tick === scale.min) continue;
     const ring = categories.map((_, i) => point(i, tick).map(n).join(" "));
-    c.mark("path", { d: `M ${ring.join(" L ")} Z`, fill: "none", stroke: c.gridColor, "stroke-opacity": 0.7, "stroke-width": c.pt });
+    c.mark("path", { d: `M ${ring.join(" L ")} Z`, fill: "none", stroke: c.gridColor, "stroke-width": c.pt });
   }
   // A spoke label that would collide with one already drawn is left out; the first is always kept.
   const drawn = [], truncated = [];
@@ -1385,7 +1392,7 @@ function renderTreemapChart(c) {
   const rects = squarify(items, area.x, area.y, area.width, area.height);
   rects.forEach((rect, i) => {
     if (!rect || !(rect.width > 0) || !(rect.height > 0)) return;
-    c.mark("rect", { x: rect.x, y: rect.y, width: rect.width, height: rect.height, fill: c.colors[i % c.colors.length], stroke: "#FFFFFF", "stroke-width": c.pt }, `${c.path}.data.rows.${i}.${column}`);
+    c.mark("rect", { x: rect.x, y: rect.y, width: rect.width, height: rect.height, fill: c.colors[i % c.colors.length], stroke: c.outlineColor, "stroke-width": c.pt }, `${c.path}.data.rows.${i}.${column}`);
     // RR-35: the treemap labels its tiles with category names by default; dataLabels picks the content, false removes them. PowerPoint
     // draws the label at the bottom left of its tile whatever the position attribute says (native check 2026-10-01), so the preview does.
     if (!c.dataLabelsOff && rect.width >= fontPx * 2 && rect.height >= c.lineHeight) {
@@ -1486,12 +1493,12 @@ function renderRegionMapChart(c) {
   const tileWidth = area.width / columns, tileHeight = area.height / rowsCount;
   const finite = values.filter((value) => value !== null);
   const min = finite.length ? Math.min(...finite) : 0, max = finite.length ? Math.max(...finite) : 0;
-  const light = mixHex(/^#[0-9A-Fa-f]{6}$/.test(c.surface) ? c.surface : "#FFFFFF", c.colors[0], 0.15);
+  const light = mixHex(/^#[0-9A-Fa-f]{6}$/.test(c.surface) ? c.surface : c.outlineColor, c.colors[0], 0.15);
   categories.forEach((name, i) => {
     const value = values[i];
     const t = value === null ? 0 : max > min ? axisFraction(value, {min, max}) : 1;
     const x = area.x + (i % columns) * tileWidth, y = area.y + Math.floor(i / columns) * tileHeight;
-    c.mark("rect", { x, y, width: tileWidth, height: tileHeight, fill: value === null ? c.surface : mixHex(light, c.colors[0], t), stroke: "#FFFFFF", "stroke-width": c.pt }, `${c.path}.data.rows.${i}.${column}`);
+    c.mark("rect", { x, y, width: tileWidth, height: tileHeight, fill: value === null ? c.surface : mixHex(light, c.colors[0], t), stroke: c.outlineColor, "stroke-width": c.pt }, `${c.path}.data.rows.${i}.${column}`);
     const inset = { x: x + fontPx * 0.25, width: Math.max(1, tileWidth - fontPx * 0.5) };
     if (tileHeight >= c.lineHeight * 2) {
       c.text(name, { ...inset, y: y + tileHeight / 2 - c.lineHeight, height: c.lineHeight }, `${c.path}.data.rows.${i}.0`);

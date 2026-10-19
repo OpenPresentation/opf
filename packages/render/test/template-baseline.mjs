@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {mkdtempSync, mkdirSync, writeFileSync, rmSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
-import {templateBaseline, readTemplateBaseline, tableTextSize, LEGACY_TEMPLATE_BASELINE, CENTERED_TEMPLATE_BASELINE, FIRST_USE_TEMPLATE_BASELINE, CHART_TEMPLATE_BASELINE, SCHEME_NEUTRALS_TEMPLATE_BASELINE, schemeNeutralsDerived, chartTextSizeDefault} from '../scripts/template-baseline.mjs';
+import {templateBaseline, readTemplateBaseline, tableTextSize, LEGACY_TEMPLATE_BASELINE, CENTERED_TEMPLATE_BASELINE, FIRST_USE_TEMPLATE_BASELINE, CHART_TEMPLATE_BASELINE, SCHEME_NEUTRALS_TEMPLATE_BASELINE, schemeNeutralsDerived, chartTextSizeDefault, VARIANTS_TEMPLATE_BASELINE, colorVariantsDerived} from '../scripts/template-baseline.mjs';
 const root = mkdtempSync(path.join(tmpdir(), 'template-baseline-'));
 try {
   mkdirSync(path.join(root, 'test/golden'), {recursive: true});
@@ -55,6 +55,15 @@ try {
   assert.equal(neutralCandidate.selected, SCHEME_NEUTRALS_TEMPLATE_BASELINE);
   assert.equal(neutralCandidate.comparison, CHART_TEMPLATE_BASELINE, 'A candidate is compared with the previous contract');
   assert.equal(typeof schemeNeutralsDerived(), 'boolean');
+  // RR-96 step 2: a core that resolves roles through a variant selects the color-variants baseline.
+  assert.equal(templateBaseline('center', 25, 20, true, true), VARIANTS_TEMPLATE_BASELINE);
+  assert.equal(templateBaseline('center', 25, 20, false, true), CHART_TEMPLATE_BASELINE, 'variants need the neutrals');
+  writeFileSync(path.join(root, SCHEME_NEUTRALS_TEMPLATE_BASELINE), JSON.stringify(next));
+  assert.throws(() => readTemplateBaseline(root, 'center', {tableSize: 25, chartSize: 20, neutrals: true, variants: true}), /ENOENT/, 'Normal checks never accept an older variant baseline');
+  const variantCandidate = readTemplateBaseline(root, 'center', {update: true, tableSize: 25, chartSize: 20, neutrals: true, variants: true});
+  assert.equal(variantCandidate.selected, VARIANTS_TEMPLATE_BASELINE);
+  assert.equal(variantCandidate.comparison, SCHEME_NEUTRALS_TEMPLATE_BASELINE, 'A candidate is compared with the previous contract');
+  assert.equal(typeof colorVariantsDerived(), 'boolean');
   writeFileSync(path.join(root, CENTERED_TEMPLATE_BASELINE), '{invalid');
   assert.throws(() => readTemplateBaseline(root, 'center', {update: true}), SyntaxError, 'A malformed selected baseline never falls back');
 } finally { rmSync(root, {recursive: true, force: true}); }

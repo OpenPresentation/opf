@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readBaseline} from './golden-store.mjs';
 import {layoutMetric} from '@openpresentation/opf/composition';
 import {exampleBaseline} from '../scripts/example-baseline.mjs';
-import {chartTextSizeDefault, schemeNeutralsDerived, tableTextSize} from '../scripts/template-baseline.mjs';
+import {chartTextSizeDefault, schemeNeutralsDerived, colorVariantsDerived, tableTextSize} from '../scripts/template-baseline.mjs';
 import { mkdtempSync, mkdirSync, readFileSync, writeFileSync, rmSync, copyFileSync } from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { tmpdir } from 'node:os';
@@ -46,7 +46,7 @@ try {
     const ordinary = spawnSync(process.execPath,[runner],{encoding:'utf8',timeout:120000,env:ordinaryEnv});
     succeeds(ordinary);
     const metricDefault = layoutMetric(1, {x: 0, y: 0, width: 400, height: 300}).alignment;
-    const selected = readBaseline(fileURLToPath(new URL('../' + exampleBaseline(metricDefault, tableTextSize(), chartTextSizeDefault(), schemeNeutralsDerived()), import.meta.url)));
+    const selected = readBaseline(fileURLToPath(new URL('../' + exampleBaseline(metricDefault, tableTextSize(), chartTextSizeDefault(), schemeNeutralsDerived(), colorVariantsDerived()), import.meta.url)));
     const actual = JSON.parse(readFileSync(path.join(temp,'ordinary/candidate.json'),'utf8'));
     assert.equal(Object.keys(selected.entries).length,Object.keys(actual.entries).length,'the selected baseline covers every slide of the installed examples');
     assert.deepEqual(actual.source,selected.source);

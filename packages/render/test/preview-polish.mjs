@@ -1,13 +1,12 @@
 import assert from 'node:assert/strict';
 // The decks name gallery records (the roboto font scheme, every gallery colour scheme), so the host catalog is registered.
-import {defaultCatalog, toSvg} from './catalog-harness.mjs';
+import {defaultCatalog, resolvePresentation, toSvg} from './catalog-harness.mjs';
 import {PATTERN_PRESETS, patternBitmap, patternRuns, colorContrast, metricTrendColor, resolveCodeLanguage} from '@openpresentation/opf/composition';
 
 // RR-07: the preview draws code.language syntax colours, metric.trend arrows and every DrawingML preset pattern.
 // The shared tables live in core (tokenizeCode, metricTrendMark, patternRuns); opf-pptx test/rr-07-preview-polish.mjs
 // checks that the PPTX export reads the same ones.
 const decode = text => text.replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&quot;', '"').replaceAll('&amp;', '&');
-const PANEL = '#111827';
 
 // ---------------------------------------------------------------- code
 const SOURCE = 'def greet(name):\n    # say hi\n    return "Hello, " + name + str(42)\n';
@@ -49,7 +48,10 @@ assert.equal(resolveCodeLanguage('klingon'), undefined);
 const colorSchemeIds = Object.keys(defaultCatalog.colorSchemes);
 assert.ok(colorSchemeIds.length > 0, 'the gallery has colour schemes');
 for (const scheme of [...colorSchemeIds, {light1: '#000000', dark1: '#000000', accent1: '#000000', accent2: '#000000', accent3: '#000000'}, {light1: '#FFFFFF', dark1: '#FFFFFF', accent1: '#FFFFFF', accent2: '#FFFFFF', accent3: '#FFFFFF'}]) {
-  const svg = toSvg(codeDeck({source: SOURCE + '\nclass Box(Base): pass\n@dec\nTrue', language: 'python'}, {colorScheme: scheme}), 1);
+  const deck = codeDeck({source: SOURCE + '\nclass Box(Base): pass\n@dec\nTrue', language: 'python'}, {colorScheme: scheme});
+  const svg = toSvg(deck, 1);
+  // RR-96: the code panel is scheme-derived (core roles.neutrals.codePanel), and every token colour is legible on it.
+  const PANEL = resolvePresentation(deck).slides[0].design.roles.neutrals.codePanel.hex;
   const fills = new Set([...svg.matchAll(/<tspan fill="(#[0-9A-F]{6})"/g)].map(match => match[1]));
   assert.ok(fills.size >= 6, `${JSON.stringify(scheme)}: distinct token colours`);
   for (const fill of fills) assert.ok(colorContrast(fill, PANEL) >= 4.5, `${fill} on the code panel (${JSON.stringify(scheme)})`);
@@ -76,7 +78,9 @@ for (const [trend, geometry] of [['up', 'upArrow'], ['down', 'downArrow'], ['fla
     assert.equal(found[0].points.length, 7, geometry);
     const background = design.background;
     assert.ok(colorContrast(found[0].fill, background) >= 4.5, `${trend} ${found[0].fill} on ${background}`);
-    assert.equal(found[0].fill, metricTrendColor(trend, {background}));
+    // RR-96: a flat trend takes the deck's scheme-derived neutral (core roles.neutrals.trendNeutral) like the export.
+    const neutral = resolvePresentation(metricDeck({value: 1, label: 'x', trend}, design)).slides[0].design.roles.neutrals.trendNeutral.hex;
+    assert.equal(found[0].fill, metricTrendColor(trend, {background, neutral}));
     // The trend word stays the visible source text; the trend and delta text take the arrow's colour.
     for (const role of ['trend', 'delta']) {
       const text = svg.match(new RegExp(`<text\\b[^>]*data-opf-metric-role="${role}"[^>]*>`))[0];

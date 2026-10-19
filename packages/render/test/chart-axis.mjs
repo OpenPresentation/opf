@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import { validate } from '@openpresentation/opf';
-import {toSvg} from '../dist/svg.js';
+import {resolvePresentation, toSvg} from '../dist/svg.js';
+
+// RR-96: gridlines and axis lines are the deck's scheme-derived neutrals (core roles.neutrals), not a fixed colour with opacity.
+const NEUTRALS = resolvePresentation({slides: [{chart: {type: 'column', data: {columns: ['A', 'B'], rows: [['x', 1]]}}}]}).slides[0].design.roles.neutrals;
+const GRID = NEUTRALS.gridline.hex, AXIS = NEUTRALS.axisLine.hex;
+
 
 // Public-API axis invariants for ordinary values. The pinned core packed-ecosystem
 // harness (scripts/test-packed-ecosystem.mjs) runs this file by name against the
@@ -38,8 +43,8 @@ for (const [name, values] of ordinary) {
     assert.equal(JSON.stringify(input), before, `${label}: unchanged authored source`);
     assert.doesNotMatch(svg, /NaN|Infinity/, `${label}: finite output`);
     const lines = [...svg.matchAll(/<line\b([^>]*)\/>/g)].map(([, a]) => attributesOf(a));
-    const grids = lines.filter((l) => l["stroke-opacity"] === "0.7");
-    const axes = lines.filter((l) => l.stroke === "#888888");
+    const grids = lines.filter((l) => l.stroke === GRID);
+    const axes = lines.filter((l) => l.stroke === AXIS);
     // Value-axis tick labels are the chart-path text groups, one per gridline, in gridline order.
     const labels = [...svg.matchAll(/<g\b([^>]*data-opf-source-text="true"[^>]*)>([\s\S]*?)<\/g>/g)]
       .filter(([, a]) => attributesOf(a)["data-opf-path"] === "slides.0.chart")
@@ -105,7 +110,7 @@ for (const [name, values, dropsZero, edge] of autoZero) {
     const labels = [...svg.matchAll(/<g\b([^>]*data-opf-source-text="true"[^>]*)>([\s\S]*?)<\/g>/g)]
       .filter(([, a]) => attributesOf(a)["data-opf-path"] === "slides.0.chart")
       .map(([, , body]) => Number([...body.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([, text]) => text).join("")));
-    const grid = lines.filter((l) => l["stroke-opacity"] === "0.7" && (horizontal ? l.x1 === l.x2 : l.y1 === l.y2));
+    const grid = lines.filter((l) => l.stroke === GRID && (horizontal ? l.x1 === l.x2 : l.y1 === l.y2));
     assert.equal(grid.length, labels.length, `${label}: one gridline per tick label`);
     const at = grid.map((g) => Number(g[horizontal ? "x1" : "y1"]));
     const scale = (value) => at[0] + (value - labels[0]) * (at.at(-1) - at[0]) / (labels.at(-1) - labels[0]);
@@ -122,7 +127,7 @@ for (const [name, values, dropsZero, edge] of autoZero) {
     // Where the baseline sits: zero if it is on the axis, otherwise the near axis edge.
     const baseline = zeroOnAxis ? scale(0) : edge === "min" ? at[0] : at.at(-1);
     const baselineValue = zeroOnAxis ? 0 : edge === "min" ? labels[0] : labels.at(-1);
-    const axisLine = lines.find((l) => l.stroke === "#888888" && (horizontal ? l.x1 === l.x2 : l.y1 === l.y2));
+    const axisLine = lines.find((l) => l.stroke === AXIS && (horizontal ? l.x1 === l.x2 : l.y1 === l.y2));
     near(Number(axisLine[horizontal ? "x1" : "y1"]), baseline, `${label}: category axis crosses at the baseline`);
     const marks = elements(svg).filter((s) => /^slides\.0\.chart\.data\.rows\.\d+\.1$/.test(s["data-opf-path"] ?? ""));
     if (type === "line-with-markers") {

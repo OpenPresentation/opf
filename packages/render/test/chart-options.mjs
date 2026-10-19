@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
-import {toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
+import {resolvePresentation, toSvg} from './catalog-harness.mjs'; // FA-23: registers the gallery snapshot (the documents name gallery records)
 import { CHART_TYPES } from '../src/charts.js';
+
+// RR-96: gridlines and axis lines are the deck's scheme-derived neutrals (core roles.neutrals), not a fixed colour with opacity.
+const NEUTRALS = resolvePresentation({slides: [{chart: {type: 'column', data: {columns: ['A', 'B'], rows: [['x', 1]]}}}]}).slides[0].design.roles.neutrals;
+const GRID = NEUTRALS.gridline.hex, AXIS = NEUTRALS.axisLine.hex;
+
 
 // RR-35: chart options (axis titles, legend position, data labels) in the preview. Core owns the support table
 // (resolveChartOptions); these tests assert what the preview draws from it, and that a chart without the fields is untouched.
@@ -23,7 +28,7 @@ function texts(svg, prefix = 'slides.0.chart') {
 }
 const byPath = (svg, path) => texts(svg).filter((entry) => entry.path === path);
 const plotExtent = (svg) => {
-  const lines = [...svg.matchAll(/<line\b([^>]*)\/>/g)].map(([, a]) => attributesOf(a)).filter((l) => l['stroke-opacity'] === '0.7');
+  const lines = [...svg.matchAll(/<line\b([^>]*)\/>/g)].map(([, a]) => attributesOf(a)).filter((l) => l.stroke === GRID);
   const xs = lines.flatMap((l) => [Number(l.x1), Number(l.x2)]), ys = lines.flatMap((l) => [Number(l.y1), Number(l.y2)]);
   return { left: Math.min(...xs), right: Math.max(...xs), top: Math.min(...ys), bottom: Math.max(...ys) };
 };

@@ -4,7 +4,7 @@ import {mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync} from 'node:
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {exampleBaseline, LEGACY_EXAMPLE_BASELINE, CENTERED_EXAMPLE_BASELINE, FIRST_USE_EXAMPLE_BASELINE, CHART_EXAMPLE_BASELINE, SCHEME_NEUTRALS_EXAMPLE_BASELINE} from '../scripts/example-baseline.mjs';
+import {exampleBaseline, LEGACY_EXAMPLE_BASELINE, CENTERED_EXAMPLE_BASELINE, FIRST_USE_EXAMPLE_BASELINE, CHART_EXAMPLE_BASELINE, SCHEME_NEUTRALS_EXAMPLE_BASELINE, VARIANTS_EXAMPLE_BASELINE} from '../scripts/example-baseline.mjs';
 import {readBaseline, diffManifests} from './golden-store.mjs';
 
 assert.equal(exampleBaseline('left'), LEGACY_EXAMPLE_BASELINE);
@@ -25,6 +25,10 @@ assert.equal(exampleBaseline('center', 25, 20, false), CHART_EXAMPLE_BASELINE);
 assert.equal(exampleBaseline('center', 25, 20, true), SCHEME_NEUTRALS_EXAMPLE_BASELINE);
 assert.equal(exampleBaseline('center', 25, 16, true), FIRST_USE_EXAMPLE_BASELINE, 'older contracts stay separate');
 assert.equal(exampleBaseline('left', 25, 20, true), LEGACY_EXAMPLE_BASELINE, 'Published-core baseline remains separate');
+// RR-96 step 2: a core that resolves roles through a variant selects the color-variants baseline.
+assert.equal(exampleBaseline('center', 25, 20, true, true), VARIANTS_EXAMPLE_BASELINE);
+assert.equal(exampleBaseline('center', 25, 20, false, true), CHART_EXAMPLE_BASELINE, 'variants need the neutrals');
+assert.equal(exampleBaseline('center', 25, 16, true, true), FIRST_USE_EXAMPLE_BASELINE, 'older contracts stay separate');
 for (const alignment of [undefined, 'right', 'unexpected']) {
   assert.throws(() => exampleBaseline(alignment), /Unknown metric default alignment/);
 }

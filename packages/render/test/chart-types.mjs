@@ -2,6 +2,8 @@ import assert from 'node:assert/strict';
 import {resolvePresentation, toSvg} from '../dist/svg.js';
 import {CHART_TYPES,chartSeriesPalette,resolveChartType,barGeometry,scatterSeries,squarify,scottBinCount,histogramBins,boxStatistics,mixHex} from '../dist/charts.js';
 import {niceScale,stackCategoryValues} from '@openpresentation/opf/composition';
+// RR-96: the connector and axis lines are the deck's scheme-derived axis neutral (core roles.neutrals).
+const AXIS=resolvePresentation({slides:[{chart:{type:'column',data:{columns:['A','B'],rows:[['x',1]]}}}]}).slides[0].design.roles.neutrals.axisLine.hex;
 
 // FF-22: every chart type previews its native construct. OPF 0.15: chart.type is core's CHART_TYPES enum (an engine
 // vocabulary, no catalog); a value outside it is rejected at the validation boundary, and the renderer's legacy preview
@@ -233,7 +235,7 @@ for(const id of CHARTEX){
   const top=r=>Number(r.y),bottom=r=>Number(r.y)+Number(r.height);
   assert.ok(Math.abs(bottom(bars[1])-top(bars[0]))<0.01,'the second bar starts where the first ends');
   assert.ok(Math.abs(top(bars[2])-top(bars[1]))<0.01,'a decrease starts at the previous total');
-  assert.equal(elements(svg,'line').filter(l=>!l['data-opf-path']&&l.stroke==='#888888'&&l.x1!==l.x2&&Number(l.x2)>Number(l.x1)+1).length>=3,true,'connector lines');
+  assert.equal(elements(svg,'line').filter(l=>!l['data-opf-path']&&l.stroke===AXIS&&l.x1!==l.x2&&Number(l.x2)>Number(l.x1)+1).length>=3,true,'connector lines');
   checks++;
 }
 {
