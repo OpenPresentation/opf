@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.22.1 (2026-10-18)
+
+- RR-90: 0.22.1 is the first published 0.22 renderer. The 0.22.0 tag exists but was never published: its publish run found the example baseline stale against core 0.22. 0.22.1 carries the refreshed baseline (#260) and the same code as 0.22.0, which requires core ^0.22.0.
+
 ## 0.22.0 (2026-10-18)
 
 - RR-90 (adopts core RR-90, RR-91 and RR-93a, opf#717; test and baseline changes only, no renderer code): the tests that encoded the old core geometry now expect the new one. The tag follows `titleAlignment` (`item-alignment`, `design-preview`), header and footer zones sit on the content inset (`design-fields`), and a styled table's text is drawn at the 25 px body size (the `table-styled` digest of `chart-table-data`). The template goldens select a new baseline, `layout-templates-rr90-first-use-layout.json`, whenever core draws table text at the body size; the 40 changed slides are all table slides (`table`, `table-beside` and their paginated pages). The ordinary example baseline follows core's fixture (`golden-override`), which core regenerates.
