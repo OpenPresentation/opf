@@ -1,4 +1,0 @@
----
-type: changed
----
-RR-89 and RR-92: native chart series use core's `chartSeriesPalette` (accent1 to accent6 of the deck colour scheme, then their tints) and the chart's own `colors` instead of the fixed cool-horizon palette, still adjusted for the chart panel. A series that keeps a theme accent, or a `chart.colors` scheme slot or role, is written as `<a:schemeClr val="accentN"/>` so re-theming in PowerPoint recolours it; hex colours, tints and adjusted colours stay sRGB. Column, bar, line and area charts write the value axis core composed (`c:min`, `c:max`, `c:majorUnit`; a fraction for 100% stacked), so PowerPoint and Keynote show the preview's gridlines instead of choosing their own. Requires `@openpresentation/opf` 0.21.0. Chart parts of exported decks change; archives of chart decks are byte-different (fixtures `rr-54-unchanged.json` and `chartex-fallback-main.json` re-pinned).

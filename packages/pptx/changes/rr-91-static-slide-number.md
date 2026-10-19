@@ -1,4 +1,0 @@
----
-type: changed
----
-RR-91 (output-changing for footers and headers with words around `{{slide.number}}`): `{{slide.number}} / {{deck.slideCount}}` and `Page {{slide.number}}` now export the number as fixed text in an ordinary tagged shape (no field, no Slide Number placeholder), so PowerPoint and Keynote both show `2 / 6`. Keynote replaces the whole paragraph that holds a slide-number field, in the placeholder or in a plain text box, with the number alone, so the live field showed only `2`. A bare `{{slide.number}}` keeps its live field in the `sldNum` placeholder (the way to get a live number in both apps), and the new `toPptx({slideNumberFields: 'live'})` keeps the previous field-plus-words output for PowerPoint-only targets. The total stays fixed because PowerPoint has no slide-count field, and the authored text returns on import either way.
