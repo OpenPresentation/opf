@@ -26,7 +26,7 @@ assert.deepEqual(circles(done).map(({ 'data-opf-timeline-status': s, 'data-opf-t
 assert.equal(toSvg(deckOf(['done', 'done', 'done']), 1, { fonts: { textMeasurement: fonts.textMeasurement } }), toSvg(deckOf([]), 1, { fonts: { textMeasurement: fonts.textMeasurement } }));
 
 // All three states.
-for (const design of [{}, { theme: 'dark' }]) {
+for (const design of [{}, { theme: 'classic', variant: 'dark1' }]) {
   const deck = deckOf(['done', 'current', 'planned'], design), svg = toSvg(deck, 1, options);
   const bound = resolvePresentation(deck, options).slides[0];
   const layout = bound.geometry.items.find(item => item.field === 'timeline').timelineLayout;
