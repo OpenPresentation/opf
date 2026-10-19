@@ -104,6 +104,8 @@ export async function loadValidators() {
   const addFormats = require("ajv-formats").default;
   const ajv = new Ajv2020({ allErrors: true, strict: false });
   addFormats(ajv);
+  // A record schema may reference a definition of the presentation schema by its $id (a theme's `variants` use ColorVariant).
+  ajv.addSchema(JSON.parse(await readFile(path.join(schemasRoot, "opf.schema.json"), "utf8")));
   const record = {};
   for (const { kind, schemaFile } of SNAPSHOT_KINDS) {
     record[kind] = ajv.compile(JSON.parse(await readFile(path.join(schemasRoot, schemaFile), "utf8")));

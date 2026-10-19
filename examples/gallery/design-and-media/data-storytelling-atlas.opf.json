@@ -40,7 +40,7 @@
   },
   "narrative": "data-storytelling-atlas-arc",
   "design": {
-    "theme": "dark",
+    "theme": "classic",
     "colorScheme": {
       "id": "black-and-white",
       "primary": "#8C4107",
@@ -668,16 +668,58 @@
         }
       },
       "themes": {
-        "dark": {
-          "name": "Dark",
+        "classic": {
+          "name": "Classic",
           "background": {
             "type": "theme",
-            "slot": "dark1"
+            "slot": "light1"
           },
-          "colorScheme": "boost",
-          "description": "A rich dark-mode theme with bold contrast and modern style. Great for moody, high-impact presentations.",
-          "fontScheme": "seaford",
-          "dimensions": "widescreen"
+          "colorScheme": "cool-horizon",
+          "description": "A timeless, clean, and versatile theme with balanced color contrasts and classic typography. Ideal for professional, readable presentations.",
+          "fontScheme": "tenorite",
+          "dimensions": "widescreen",
+          "variants": [
+            {
+              "id": "light",
+              "name": "Light",
+              "variant": "light1"
+            },
+            {
+              "id": "light-alt",
+              "name": "Light alt",
+              "variant": {
+                "background": "light1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            },
+            {
+              "id": "dark",
+              "name": "Dark",
+              "variant": "dark1"
+            },
+            {
+              "id": "dark-alt",
+              "name": "Dark alt",
+              "variant": {
+                "background": "dark1",
+                "accents": [
+                  "accent6",
+                  "accent5",
+                  "accent4",
+                  "accent1",
+                  "accent3",
+                  "accent2"
+                ]
+              }
+            }
+          ]
         }
       },
       "colorSchemes": {
@@ -705,28 +747,28 @@
             "restrained"
           ]
         },
-        "boost": {
-          "name": "Boost",
-          "accent1": "#FD3223",
-          "accent2": "#0308DB",
-          "accent3": "#4F4955",
-          "accent4": "#A1DB30",
-          "accent5": "#0682FE",
-          "accent6": "#FC03BE",
+        "cool-horizon": {
+          "name": "Cool Horizon",
+          "accent1": "#2874A6",
+          "accent2": "#1B4F72",
+          "accent3": "#5499C7",
+          "accent4": "#7BDBB2",
+          "accent5": "#3AC67A",
+          "accent6": "#24A89E",
           "dark1": "#000000",
-          "dark2": "#2C2C2C",
-          "followedHyperlink": "#CC00CC",
-          "hyperlink": "#0066CC",
+          "dark2": "#011842",
+          "followedHyperlink": "#551A8B",
+          "hyperlink": "#0000EE",
           "light1": "#FFFFFF",
-          "light2": "#EFEFEF",
-          "summary": "High-energy digital accents for demos and launch moments.",
-          "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+          "light2": "#F0F0F0",
+          "summary": "Cool blue-green palette tuned for professional business decks.",
+          "description": "A balanced cool-toned scheme with deep navy, business blues, and teal accents. It works well across strategy, finance, and technical narratives.",
           "tags": [
-            "digital",
-            "bold",
-            "high-energy",
-            "modern",
-            "technical"
+            "professional",
+            "trustworthy",
+            "calm",
+            "technical",
+            "versatile"
           ]
         }
       },
@@ -743,16 +785,16 @@
           "type": "monospace",
           "description": "Consolas is a monospace OPF font scheme for Latin presentations, using Consolas for both headings and body text."
         },
-        "seaford": {
-          "name": "Seaford",
+        "tenorite": {
+          "name": "Tenorite",
           "app": "powerpoint",
           "languageFamily": "latin",
           "languages": [],
-          "major": "Seaford Display",
-          "minor": "Seaford",
-          "textSample": "Humanist gentle tone",
+          "major": "Tenorite Display",
+          "minor": "Tenorite",
+          "textSample": "Rounded modern tone",
           "type": "sans-serif",
-          "description": "Seaford is a sans serif OPF font scheme for Latin presentations, using Seaford Display for headings with Seaford for body text."
+          "description": "Tenorite is a sans serif OPF font scheme for Latin presentations, using Tenorite Display for headings with Tenorite for body text."
         }
       },
       "layouts": {

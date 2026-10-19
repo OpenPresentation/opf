@@ -201,10 +201,21 @@ keyed by id without `$schema`, `id` or `x-*`); the package also exports `GALLERY
 `catalogDisplay`, `catalogIndexes` and `catalogManifest`, and `/previews`. New records are a minor release; an id removed
 or renamed, a changed drawing or a record schema change is a major release, which that repository's pixel-stability
 check enforces against the previous published release. From OPF 0.19 core and the CLI depend on it
-(`@openpresentation/gallery@^2.0.0`), core's Node defaults register `gallery`, and core drops `/catalog` and
-`spec/catalogs/`. The registry transition requires published, independently verified gallery 2.0.0 and a reviewed
+(`@openpresentation/gallery`, `^4.0.0` in this checkout), core's Node defaults register `gallery`, and core drops `/catalog` and
+`spec/catalogs/`. The registry transition requires a published, independently verified gallery release and a reviewed
 range/lock adoption; explicit candidate staging before that is development qualification only (see
 [the gallery release lane](release-process.md#the-gallery-lane-rr-78)).
+
+### Theme variants (gallery 4)
+
+A theme record may list `variants`, an array of `{ "id", "name", "variant" }` whose `variant` is a value of `design.variant`
+(a background slot such as `"dark1"`, or `{ "background", "accents" }`; the same definition, `ColorVariant` in
+`opf.schema.json`, validates it). Gallery 4 gives `minimal`, `classic` and `bold` four each: `light`, `light-alt`, `dark`
+and `dark-alt`. A picker offers them and writes the chosen `variant` into `design.variant`; documents never store the id, and
+the engines read only `design.variant`. Light and dark are therefore variants of every theme, and gallery 4 has no `dark`
+theme: `design.theme: "dark"` is an unresolved reference (`opf/unresolved-reference`). Use a theme with a dark variant, for
+example `{ "theme": "classic", "variant": "dark1" }`, and `colorScheme: "boost"` with `fontScheme: "seaford"` for the old
+dark look.
 
 ## Endpoints
 

@@ -142,7 +142,7 @@
     "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
   },
   "dependencies": {
-    "@openpresentation/gallery": "^3.0.0",
+    "@openpresentation/gallery": "^4.0.0",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "jsonc-parser": "3.3.1",

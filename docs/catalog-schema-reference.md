@@ -443,12 +443,25 @@ _No named properties._
 | `colorScheme` | no | `string` | The theme's default colour scheme: a reference (a bare id or 'name:id') resolved like design.colorScheme, but in the theme's own catalogs group first. |
 | `fontScheme` | no | `string` | The theme's default font scheme: a reference (a bare id or 'name:id') resolved like design.fontScheme, but in the theme's own catalogs group first. |
 | `background` | no | `ref:ThemeBackground` |  |
+| `variants` | no | `array<ref:ThemeVariant>` | The color variants the theme offers (OPF 0.23), for example light, light-alt, dark and dark-alt: named values of design.variant over the theme's one color scheme, so a dark deck is a variant of a theme and not a theme... |
 | `dimensions` | no | `enum:16:9 \| 4:3 \| 16:10 \| 1:1 \| 4:5 \| 9:16 \| letter \| a4 \| widescreen \| standard` | Default slide size for this theme. Accepts the same preset values as design.dimensions.preset. |
 | `design` | no | `object` | The theme's design defaults (OPF 0.19), so a house style such as boxed content or centred titles is set once: the keys and values of the deck's design for titleAlignment, contentAlignment, contentBox, contentDirection... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
 
 ### Nested Types
+
+#### ThemeVariant
+
+- Type: `object`
+- Required fields: `id`, `name`, `variant`
+- Purpose: One named color variant of a theme.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `id` | yes | `string` | The variant's id within the theme, lowercase kebab-case. |
+| `name` | yes | `string` | Human-readable variant name shown in pickers. |
+| `variant` | yes | `oneOf:ref:ThemeBackgroundSlot / ref:ColorVariant` | The value design.variant takes when the variant is chosen: a background slot ('light1', 'light2', 'dark1', 'dark2'; the same as { background: slot }) or the ColorVariant object of opf.schema.json, which adds an accent... |
 
 #### ThemeBackgroundSlot
 

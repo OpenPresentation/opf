@@ -355,10 +355,27 @@ function organizationLogo(index) {
     : "asset:brand-logo";
 }
 
+// RR-96 (gallery 4): the catalog has no `dark` theme; dark is a `design.variant` of every theme. The 100 decks keep the
+// rotation they had with four themes (bold, classic, dark, minimal), so only the former `dark` decks change: they use
+// `classic`, with `variant: "dark1"` when the deck's own background is dark1. The other backgrounds of those decks
+// (light, picture, pattern) were always drawn light, because design.background overrides the theme's, so they get no
+// variant and look as before.
+const EXAMPLE_THEMES = ["bold", "classic", "classic", "minimal"];
+
+function themeFor(catalogs, index, background) {
+  for (const id of EXAMPLE_THEMES) {
+    if (!catalogs.themes.includes(id)) throw new Error(`The gallery catalog has no "${id}" theme, which the example decks use.`);
+  }
+  const slot = index % EXAMPLE_THEMES.length;
+  const formerDark = slot === 2;
+  return { theme: EXAMPLE_THEMES[slot], ...(formerDark && background === "dark1" ? { variant: "dark1" } : {}) };
+}
+
 function designFor(spec, index, catalogs, density) {
   const compact = density === "sparse";
+  const background = compact ? pick(["light1", "#FFFFFF", "dark1"], index) : backgroundFor(index);
   const base = {
-    theme: pick(catalogs.themes, index),
+    ...themeFor(catalogs, index, background),
     colorScheme: compact
       ? pick(catalogs.colorSchemes, index)
       : {
@@ -384,7 +401,7 @@ function designFor(spec, index, catalogs, density) {
     dimensions: index % 9 === 0
       ? { preset: "16:10", widthInches: 13.333, heightInches: 8.333 }
       : pick(["widescreen", "16:9", "4:3", "16:10", "letter", "a4"], index),
-    background: compact ? pick(["light1", "#FFFFFF", "dark1"], index) : backgroundFor(index),
+    background,
     titleAlignment: pick(["left", "center", "right"], index),
     contentAlignment: pick(["left", "center", "right"], index, 1),
     contentBox: index % 3 === 0,
