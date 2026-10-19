@@ -8,6 +8,10 @@
     "technical/table-cell-types.opf.json#1": {
       "sha256": "a3b0b127e376a0eee289ba07daac954dbbfb963cdd765b90cf2768753bea560a",
       "bytes": 3595
+    },
+    "technical/table-cell-types.opf.json#2": {
+      "sha256": "03e1c6874d9ac955ecfb04c53b51f61986a3999ea43f6c16117ba04386f4eb75",
+      "bytes": 6930
     }
   }
 }
