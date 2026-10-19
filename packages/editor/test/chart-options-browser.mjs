@@ -131,6 +131,18 @@ try {
   await settle();
   mark('the highlight lists series and categories');
 
+  // RR-96: one row per series with the deck's accent swatches and a hex field; a swatch writes the scheme slot, so the color follows the deck.
+  // The preview does not draw chart.colors until the renderer that follows core 0.23 lands, so these steps check the document and Undo only.
+  assert.deepEqual(await panel.locator('[data-row="colors"] [data-position]').evaluateAll(rows => rows.map(row => row.querySelector('span').textContent)), ['North', 'South'], 'the colors are named by series');
+  await step('series color from the deck', () => panel.getByRole('button', { name: 'North: accent 3', exact: true }).click(), current => JSON.stringify(chartOf(current).colors) === '["accent3"]', { preview: false });
+  await step('series color from a hex value', () => field('South hex color').fill('#7b241c').then(() => field('South hex color').press('Enter')), current => JSON.stringify(chartOf(current).colors) === '["accent1","#7B241C"]', { preview: false });
+  await panel.getByRole('button', { name: 'North: accent 3', exact: true }).click();
+  await waitDoc(current => JSON.stringify(chartOf(current).colors) === '["accent3"]', 'colors for the reset step');
+  await panel.getByRole('button', { name: 'Reset chart colors to the deck palette' }).click();
+  await waitDoc(current => chartOf(current).colors === undefined, 'reset removes the field');
+  await settle();
+  mark('series colors');
+
   // A pie offers percent and a different position set, and no axis titles.
   await page.locator('#preview [data-canvas-target][data-opf-path="slides.1.blocks.0.chart"]').waitFor().catch(() => {});
   await page.locator('#slide-list button').nth(1).click();

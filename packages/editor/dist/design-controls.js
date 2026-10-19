@@ -41,6 +41,8 @@ import {
   setHeaderFooterZone,
   setOrganizationLogo,
 } from "./design-options.js";
+import { ACCENT_SLOTS } from "./color-slots.js";
+import { readDesignVariant, setDesignVariant, variantSwatches } from "./design-variants.js";
 import { createContentControls } from "./content-controls.js";
 import { IMAGE_EDGES, IMAGE_FITS, IMAGE_SHAPES, readImageTreatments, setImageTreatment } from "./image-options.js";
 import { applyCatalogUpdate, catalogRecordAt, checkCatalogUpdates, mergeCatalogs, moveToCustom, referenceFindings } from "./catalogs.js";
@@ -48,10 +50,11 @@ import { describeTableCell, mergeTableCells, parseTableCellPath, readTableAlt, r
 import { OPFEditorError } from "./index.js";
 
 /** The sections a panel can show. `selection` and `table` follow the current selection; the rest follow the deck or the current slide. */
-export const DESIGN_CONTROL_SECTIONS = Object.freeze(["look", "background", "header-footer", "brand", "layout-options", "info", "selection", "image", "table", "slide-content", "catalog"]);
+export const DESIGN_CONTROL_SECTIONS = Object.freeze(["look", "variant", "background", "header-footer", "brand", "layout-options", "info", "selection", "image", "table", "slide-content", "catalog"]);
 
 const SECTION_TITLES = {
   look: "Look and language",
+  variant: "Color variant",
   background: "Background",
   image: "Selected image",
   catalog: "Catalog records",
@@ -431,7 +434,7 @@ export function createDesignControls(container, options = {}) {
   const scopeIndex = () => (state.scope === "slide" ? getSlide() : undefined);
   const scoped = (extra = {}) => (state.scope === "slide" ? { slideIndex: getSlide(), ...extra } : extra);
   const sourceNote = (scope, inherited) => (state.scope === "slide" ? (scope === "slide" ? "set on this slide" : inherited ? "from the presentation" : "default") : "");
-  const scopeNeeded = sections.some((name) => ["look", "background", "header-footer", "brand", "layout-options"].includes(name));
+  const scopeNeeded = sections.some((name) => ["look", "variant", "background", "header-footer", "brand", "layout-options"].includes(name));
   let scopeField;
   if (scopeNeeded) {
     scopeField = selectField("scope", "Applies to", {
@@ -499,6 +502,75 @@ export function createDesignControls(container, options = {}) {
     syncs.push(() => {
       layout.setOptions(listSwitchOptions(editor.presentation, "layouts", catalogOptions()).map((entry) => ({ value: entry.id, label: entry.label })));
       layout.set(currentSwitchValue(editor.presentation, "layouts", { slideIndex: getSlide() }).value);
+    });
+  }
+
+  // --- color variant (RR-96) ----------------------------------------------------------------------
+
+  // PowerPoint's Variants gallery: four swatches built from the deck's own scheme slots (light1, light2, dark1, dark2) and, below
+  // them, the order of the accents. A choice writes the slot name (`design.variant`), so it keeps following the color scheme, and the
+  // preview comes from core's roles. Needs core 0.23 (`design.variant`).
+  if (built.variant) {
+    const { body } = built.variant;
+    const view = () => ({ ...scoped(), catalogs: catalogOptions().catalogs });
+    const SLOT_LABELS = { light1: "Light 1", light2: "Light 2", dark1: "Dark 1", dark2: "Dark 2" };
+    const gallery = h("div", { class: "opf-dc-variants", role: "radiogroup", "aria-label": "Color variant" });
+    const sameAsDeck = button("Same as presentation", () => run(() => setDesignVariant(editor, null, view()), "This slide follows the presentation's color variant."), { quiet: true });
+    const accentRows = ACCENT_SLOTS.map((_, index) => {
+      const field = selectField(`variant-accent-${index + 1}`, `Accent ${index + 1}`, {
+        onChange: (value) => {
+          const order = readDesignVariant(editor.presentation, view()).accents;
+          const from = order.indexOf(value);
+          const next = [...order];
+          // A permutation: the slot that was drawn as this accent takes the place of the one chosen.
+          [next[index], next[from]] = [order[from], order[index]];
+          run(() => setDesignVariant(editor, { accents: next }, view()), "Accent order changed.");
+        },
+      });
+      field.setOptions(ACCENT_SLOTS.map((slot, k) => ({ value: slot, label: `Accent ${k + 1} color (${slot})` })));
+      return field;
+    });
+    const resetAccents = button("Reset accent order", () => run(() => {
+      const current = readDesignVariant(editor.presentation, view());
+      return setDesignVariant(editor, { background: current.background, accents: ACCENT_SLOTS }, view());
+    }, "Accents are back in the color scheme's own order."), { quiet: true });
+    const accentGroup = h("fieldset", { class: "opf-dc-fieldset", "data-variant-accents": "" }, h("legend", {}, "Accent order"), ...accentRows.map((row) => row.wrap), resetAccents);
+    body.append(gallery, sameAsDeck, accentGroup);
+    const pick = (slot) => {
+      const current = readDesignVariant(editor.presentation, view());
+      // Keep a reordered accent order when only the background changes.
+      const accents = current.own?.accents;
+      return run(() => setDesignVariant(editor, accents ? { background: slot, accents } : slot, view()), (change) => {
+        const hidden = change.shadowed?.length ? ` ${change.shadowed.length === 1 ? "One slide keeps its own" : `${change.shadowed.length} slides keep their own`} background or variant.` : "";
+        return `Color variant set to ${SLOT_LABELS[slot]}.${hidden}`;
+      });
+    };
+    syncs.push(() => {
+      const current = readDesignVariant(editor.presentation, view());
+      const swatches = variantSwatches(editor.presentation, view());
+      const signature = JSON.stringify([swatches, state.scope]);
+      if (gallery.dataset.signature !== signature) {
+        gallery.dataset.signature = signature;
+        gallery.replaceChildren(...swatches.map((entry) => {
+          const chip = (color, className) => h("span", { class: className, style: color ? `background:${color}` : undefined, "aria-hidden": "true" });
+          return h("button", {
+            type: "button",
+            class: "opf-dc-variant",
+            role: "radio",
+            "aria-checked": String(entry.selected),
+            "data-variant": entry.slot,
+            "aria-label": `${SLOT_LABELS[entry.slot]}: ${entry.slot} background${entry.dark ? " (dark)" : ""}`,
+            title: `${SLOT_LABELS[entry.slot]}: ${entry.slot} background`,
+            style: entry.background ? `background:${entry.background};color:${entry.text ?? "inherit"}` : undefined,
+            onclick: () => pick(entry.slot),
+          }, h("span", { class: "opf-dc-variant-text", "aria-hidden": "true" }, "Aa"), h("span", { class: "opf-dc-variant-chips", "aria-hidden": "true" }, chip(entry.surface, "opf-dc-variant-chip"), ...entry.accents.map((color) => chip(color, "opf-dc-variant-chip"))));
+        }));
+      }
+      const note = current.scope === "default" ? "default" : state.scope === "slide" ? (current.inherited ? "from the presentation" : "set on this slide") : "";
+      gallery.setAttribute("aria-description", note);
+      sameAsDeck.hidden = !(state.scope === "slide" && current.own !== undefined);
+      accentRows.forEach((row, index) => row.set(current.accents[index]));
+      resetAccents.hidden = current.own?.accents === undefined;
     });
   }
 

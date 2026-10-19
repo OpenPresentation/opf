@@ -4,8 +4,11 @@
 // `setChartOptions` (src/chart-options.js), the canvas redraws, and Undo restores the chart. The panel shows only what
 // the selected chart type can show (core's support table), and hides itself when no chart is selected. On a combo chart
 // (FA-15) a "Series" group sets which series are lines and which lines use the secondary value axis, and a secondary axis
-// title field appears while a line uses that axis.
+// title field appears while a line uses that axis. (RR-96) A "Colors" group sets the color of each series (or slice) from the deck's accent
+// swatches or a hex color; a swatch writes the scheme slot, so the chart keeps following the deck.
 import { CHART_LABEL_CONTENT, CHART_LEGEND_POSITIONS, parseChartPath, readChartOptions, setChartOptions } from "./chart-options.js";
+import { readSchemeSlots } from "./color-slots.js";
+import { isColorRef } from "./background-options.js";
 
 const LEGEND_LABELS = { default: "Default", none: "None", top: "Top", bottom: "Bottom", left: "Left", right: "Right" };
 const CONTENT_LABELS = { category: "Category", value: "Value", percent: "Percent" };
@@ -46,6 +49,7 @@ export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatu
       <label class="opf-co-row" data-row="position"><span>Label position</span><select id="${id}-position" aria-label="Label position" data-opf-chart-option="dataLabels.position"></select></label>
       <label class="opf-co-row" data-row="separator"><span>Separator</span><input type="text" id="${id}-separator" aria-label="Label separator" data-opf-chart-option="dataLabels.separator" autocomplete="off"></label>
     </div>
+    <fieldset class="opf-co-group opf-co-colors" data-group="colors"><legend>Colors</legend><div data-row="colors"></div><button type="button" class="opf-co-reset" data-opf-chart-option="colors.reset" aria-label="Reset chart colors to the deck palette">Reset to deck palette</button></fieldset>
     <div class="opf-co-group" data-group="highlight">
       <fieldset class="opf-co-highlight" data-part="series"><legend>Highlight series</legend><div class="opf-co-choices" data-choices="series"></div></fieldset>
       <fieldset class="opf-co-highlight" data-part="categories"><legend>Highlight categories</legend><div class="opf-co-choices" data-choices="categories"></div></fieldset>
@@ -54,11 +58,12 @@ export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatu
   const $ = (selector) => root.querySelector(selector);
   const fields = {
     alt: $(`#${id}-alt`), decorative: $(`#${id}-decorative`), category: $(`#${id}-category`), value: $(`#${id}-value`), secondary: $(`#${id}-secondary`), legend: $(`#${id}-legend`), labels: $(`#${id}-labels`),
-    series: $("[data-row='combo-series']"),
+    series: $("[data-row='combo-series']"), colors: $("[data-row='colors']"), colorsReset: $("[data-opf-chart-option='colors.reset']"),
     position: $(`#${id}-position`), separator: $(`#${id}-separator`), contents: [...root.querySelectorAll("[data-opf-chart-option^='dataLabels.content.']")],
     highlight: { series: $("[data-choices='series']"), categories: $("[data-choices='categories']") },
   };
   let chartPath;
+  let colorState = { entries: [], count: 0 };
 
   function refresh() {
     const path = parseChartPath(getSelectedPath?.() ?? "");
@@ -70,7 +75,7 @@ export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatu
       return;
     }
     chartPath = path;
-    const { fields: support, state, choices, combo } = readChartOptions(chart, editor.presentation);
+    const { fields: support, state, choices, combo, colors } = readChartOptions(chart, editor.presentation);
     root.hidden = false;
     const setValue = (input, value) => { if (input !== document.activeElement && input.value !== value) input.value = value; };
     setValue(fields.alt, state.alt);
@@ -145,6 +150,62 @@ export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatu
       for (const input of list.querySelectorAll("input")) input.checked = state.highlight[part].includes(input.value);
     }
     $("[data-group='highlight']").hidden = $("[data-part='series']").hidden && $("[data-part='categories']").hidden;
+    refreshColors(colors, state.colors, chartPath);
+  }
+
+  // RR-96: one row per position of `chart.colors`: the deck's accent swatches, a "Default" choice and a hex field. The swatches are the
+  // deck's own colors (the resolved scheme of the chart's slide), and choosing one writes its slot name.
+  function refreshColors(positions, entries, path) {
+    colorState = { entries, count: positions.labels.length };
+    const slide = Number(/^slides\.(\d+)/.exec(path)?.[1] ?? 0);
+    const slots = readSchemeSlots(editor.presentation, { slideIndex: slide, catalogs: editor.catalogs });
+    const signature = JSON.stringify([positions.labels, positions.slots.map((slot) => slots[slot] ?? ""), entries]);
+    $("[data-group='colors']").hidden = positions.labels.length === 0;
+    fields.colorsReset.hidden = entries.length === 0;
+    if (fields.colors.dataset.signature === signature) return;
+    fields.colors.dataset.signature = signature;
+    fields.colors.replaceChildren(...positions.labels.map((name, index) => {
+      const entry = entries[index] ?? "";
+      const row = document.createElement("div");
+      row.className = "opf-co-row opf-co-color-row";
+      row.dataset.position = String(index);
+      const label = document.createElement("span");
+      label.textContent = name;
+      const group = document.createElement("span");
+      group.className = "opf-co-swatches";
+      group.setAttribute("role", "group");
+      group.setAttribute("aria-label", `${name} color`);
+      const choose = (value, text, color) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "opf-co-swatch";
+        button.dataset.opfChartOption = "colors.choose";
+        button.dataset.color = value;
+        button.setAttribute("aria-label", `${name}: ${text}`);
+        button.setAttribute("aria-pressed", String(entry === value));
+        if (color) button.style.background = color;
+        else button.textContent = "Default";
+        return button;
+      };
+      group.append(choose("", "deck palette", undefined), ...positions.slots.map((slot, k) => choose(slot, `accent ${k + 1}`, slots[slot])));
+      const hex = document.createElement("input");
+      hex.type = "text";
+      hex.className = "opf-co-hex";
+      hex.dataset.opfChartOption = "colors.hex";
+      hex.setAttribute("aria-label", `${name} hex color`);
+      hex.placeholder = "#RRGGBB";
+      hex.autocomplete = "off";
+      hex.value = entry && !positions.slots.includes(entry) ? entry : "";
+      row.append(label, group, hex);
+      return row;
+    }));
+  }
+
+  // The `colors` list with position `index` set to `value` ("" leaves it to the deck palette); other positions keep what the chart has.
+  function colorsWith(index, value) {
+    const next = Array.from({ length: Math.max(colorState.entries.length, index + 1) }, (_, k) => colorState.entries[k] ?? null);
+    next[index] = value || null;
+    return next;
   }
 
   function commit(change, message) {
@@ -175,6 +236,21 @@ export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatu
     [fields.labels, "change", () => commit({ dataLabels: fields.labels.checked }, fields.labels.checked ? "Showing data labels. Undo restores the chart." : "Hid the data labels. Undo restores them.")],
     [fields.position, "change", () => commit({ dataLabels: { position: fields.position.value } }, "Moved the data labels. Undo restores them.")],
     [fields.separator, "change", () => commit({ dataLabels: { separator: fields.separator.value } }, "Changed the label separator. Undo restores it.")],
+    [fields.colors, "click", (event) => {
+      const button = event.target.closest?.("[data-opf-chart-option='colors.choose']");
+      if (!button) return;
+      const index = Number(button.closest("[data-position]").dataset.position);
+      commit({ colors: colorsWith(index, button.dataset.color) }, button.dataset.color ? "Changed a chart color. Undo restores it." : "Returned a chart color to the deck palette. Undo restores it.");
+    }],
+    [fields.colors, "change", (event) => {
+      const input = event.target.closest?.("[data-opf-chart-option='colors.hex']");
+      if (!input) return;
+      const index = Number(input.closest("[data-position]").dataset.position);
+      const value = input.value.trim();
+      if (value && !isColorRef(value)) { onStatus("Use a hex color such as #7B241C."); refresh(); return; }
+      commit({ colors: colorsWith(index, value) }, "Changed a chart color. Undo restores it.");
+    }],
+    [fields.colorsReset, "click", () => commit({ colors: null }, "Returned the chart colors to the deck palette. Undo restores them.")],
     ...["series", "categories"].map((part) => [fields.highlight[part], "change", () => {
       const names = checkedNames(part);
       commit({ highlight: { [part]: names } }, names.length ? `Highlighted ${names.join(", ")}. Undo restores the colors.` : `Cleared the ${part} highlight. Undo restores it.`);

@@ -36,6 +36,7 @@ assert.deepEqual(readChartOptions({ type: "column", data }).state, {
   axisTitles: { category: "", value: "", secondary: "" }, legend: "default",
   dataLabels: { on: false, explicit: false, content: ["value"], position: "auto", separator: ", " },
   highlight: { series: [], categories: [] },
+  colors: [],
 });
 // A chart type outside the catalog offers everything.
 assert.equal(readChartOptions({ type: "mystery", data }).fields.dataLabels.positions.includes("outside-end"), true);

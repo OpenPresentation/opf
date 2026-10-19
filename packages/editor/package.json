@@ -5,6 +5,9 @@
   "license": "MIT",
   "type": "module",
   "private": false,
+  "opf": {
+    "requiresUnreleasedCore": "0.23.0"
+  },
   "engines": {
     "node": ">=22"
   },
@@ -113,6 +116,14 @@
     "./assets": {
       "types": "./dist/assets.d.ts",
       "default": "./dist/assets.js"
+    },
+    "./design-variants": {
+      "types": "./dist/design-variants.d.ts",
+      "default": "./dist/design-variants.js"
+    },
+    "./color-slots": {
+      "types": "./dist/color-slots.d.ts",
+      "default": "./dist/color-slots.js"
     },
     "./backgrounds": {
       "types": "./dist/background-options.d.ts",

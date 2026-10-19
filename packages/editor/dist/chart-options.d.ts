@@ -6,6 +6,10 @@ export type ChartLabelPosition = "center" | "inside-end" | "inside-base" | "outs
 
 export declare const CHART_LEGEND_POSITIONS: readonly ["default", "none", "top", "bottom", "left", "right"];
 export declare const CHART_LABEL_CONTENT: readonly ["category", "value", "percent"];
+/** The most colors `chart.colors` takes. */
+export declare const CHART_COLORS_MAX: 24;
+/** The scheme slots a chart color is offered from, in palette order. */
+export declare const CHART_COLOR_SLOTS: readonly ["accent1", "accent2", "accent3", "accent4", "accent5", "accent6"];
 
 /** What a chart type can show (core's `chartOptionSupport`). */
 export interface ChartOptionFields {
@@ -26,6 +30,14 @@ export interface ChartOptionFields {
 }
 /** The names a highlight can take on a chart, from its resolved data (empty when the data does not resolve). */
 export interface ChartHighlightChoices { series: string[]; categories: string[] }
+/** What the positions of `chart.colors` mean on a chart (RR-96): its plotted series, its slices or rows, or the colors a histogram, pareto or waterfall draws with. */
+export interface ChartColorPositions {
+  by: "series" | "categories" | "colors";
+  /** One name per position (at most 24), in the order `chart.colors` is matched. */
+  labels: string[];
+  /** The scheme slots to offer as swatches. */
+  slots: readonly string[];
+}
 /** A plotted series of a combo chart: drawn as columns ("bar") or as a line, on the primary or secondary value axis (FA-15). */
 export interface ChartComboSeriesState {
   name: string;
@@ -43,6 +55,8 @@ export interface ChartOptionState {
   dataLabels: { on: boolean; explicit: boolean; content: ChartLabelContent[]; position: ChartLabelPosition | "auto"; separator: string };
   /** The series and categories `chart.highlight` names (empty lists when it is absent). */
   highlight: { series: string[]; categories: string[] };
+  /** `chart.colors` as written, a ColorRef per position (empty when absent: the deck palette applies). */
+  colors: string[];
 }
 export interface ChartOptionChange {
   /** The text alternative: what the data shows. Trimmed; an empty string or null removes it. */
@@ -58,6 +72,11 @@ export interface ChartOptionChange {
   dataLabels?: boolean | null | { content?: ChartLabelContent[]; position?: ChartLabelPosition | "auto"; separator?: string };
   /** `null` removes the highlight; a list replaces that part (an empty list removes it) and the other part is kept. */
   highlight?: null | { series?: string[]; categories?: string[] };
+  /**
+   * RR-96: `chart.colors`, the colors by position. `null` removes it; a list replaces it: an entry is a hex color, a scheme color (`accent3`, which keeps following the
+   * deck) or `var:<id>`, and `null` or `""` leaves that position to the deck palette (a gap before a chosen color is written as the palette color itself). At most 24.
+   */
+  colors?: null | Array<string | null>;
 }
 export interface PreparedChartOptions {
   action: "chart-options";
@@ -70,6 +89,6 @@ export interface PreparedChartOptions {
 /** The chart path a selection path points at, or undefined. */
 export declare function parseChartPath(path: string): string | undefined;
 /** `combo` is present on a combo chart: its plotted series in data order. Pass the `document` for a dataset-backed chart. */
-export declare function readChartOptions(chart: unknown, presentation?: unknown): { target: unknown; fields: ChartOptionFields; choices: ChartHighlightChoices; state: ChartOptionState; combo?: { series: ChartComboSeriesState[] } };
+export declare function readChartOptions(chart: unknown, presentation?: unknown): { target: unknown; fields: ChartOptionFields; choices: ChartHighlightChoices; colors: ChartColorPositions; state: ChartOptionState; combo?: { series: ChartComboSeriesState[] } };
 export declare function prepareChartOptions(presentation: unknown, chartPath: string, change: ChartOptionChange): PreparedChartOptions;
 export declare function setChartOptions(editor: EditorSession, chartPath: string, change: ChartOptionChange, meta?: Record<string, unknown>): EditorChange & { action: "chart-options"; chartPath: string; changed: boolean };
