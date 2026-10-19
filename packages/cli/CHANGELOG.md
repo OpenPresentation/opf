@@ -4,6 +4,7 @@
 
 ## 0.23.0 (2026-10-19)
 
+- RR-96: built on core, renderer and PPTX 0.23.0, so `opf validate`, `opf render` and `opf convert` accept `design.variant` (`"dark1"` or `{ background, accents }`, per deck or slide) and a picture or gradient background `tone`, draw them in previews, and export them to PPTX as `clrMap`/`clrMapOvr` with scheme-derived neutrals.
 - The optional peer ranges move to the 0.23 minor: `@openpresentation/opf-render` and `@openpresentation/opf-pptx` `^0.23.0`, matching core 0.23.0.
 
 ## 0.22.0 (2026-10-19)
