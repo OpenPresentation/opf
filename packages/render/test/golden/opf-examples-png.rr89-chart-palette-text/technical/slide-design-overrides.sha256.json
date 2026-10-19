@@ -1,0 +1,21 @@
+{
+  "deck": "technical/slide-design-overrides.opf.json",
+  "entries": {
+    "technical/slide-design-overrides.opf.json#0": {
+      "sha256": "267dcd564ed9d1804d369790942280b385512541862f4b65cee8f92e556be042",
+      "bytes": 4124
+    },
+    "technical/slide-design-overrides.opf.json#1": {
+      "sha256": "110d7c175de417ddc6edee81c911187e5c381f11db97c280024fabdd81c6f7cd",
+      "bytes": 5204
+    },
+    "technical/slide-design-overrides.opf.json#2": {
+      "sha256": "d969cbcf489446aa9ad5875ca94608b19eaf45145b6ad43cfe541c6c33330abf",
+      "bytes": 6216
+    },
+    "technical/slide-design-overrides.opf.json#3": {
+      "sha256": "7a81958fc279f65ece77b58dc48f45ce02ee6ff8372a72cb403568dff262fc95",
+      "bytes": 4154
+    }
+  }
+}

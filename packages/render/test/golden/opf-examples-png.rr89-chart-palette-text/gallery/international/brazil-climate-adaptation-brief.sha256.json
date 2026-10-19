@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/international/brazil-climate-adaptation-brief.opf.json",
+  "entries": {
+    "gallery/international/brazil-climate-adaptation-brief.opf.json#0": {
+      "sha256": "2244d218c3d5fb29faa61de355a4b5b93209c5050af053adc02cc6c0112d93aa",
+      "bytes": 5984
+    },
+    "gallery/international/brazil-climate-adaptation-brief.opf.json#1": {
+      "sha256": "5fc2fdd7ac361c8bbe24271cb96cca25700d0add3102102c06a68fc716694a9a",
+      "bytes": 7411
+    },
+    "gallery/international/brazil-climate-adaptation-brief.opf.json#2": {
+      "sha256": "7e6af6aebcdd1e503c3c4b498be9cac187b3654d1e444ed175107005f00fda0f",
+      "bytes": 4884
+    },
+    "gallery/international/brazil-climate-adaptation-brief.opf.json#3": {
+      "sha256": "ebc9c7a3480a37d4e89cffa5a850b5b7905d80530028e8b7544c67c3d5af1c5b",
+      "bytes": 9028
+    },
+    "gallery/international/brazil-climate-adaptation-brief.opf.json#4": {
+      "sha256": "194744b622d44bfc197f96c76f7e157f7e395d3b2e7442cb3652fc4f1f7012cd",
+      "bytes": 8068
+    },
+    "gallery/international/brazil-climate-adaptation-brief.opf.json#5": {
+      "sha256": "7607cbd1407124beb5d3266ba2ade1bc55479ae855d285b442952cb757238908",
+      "bytes": 8288
+    }
+  }
+}

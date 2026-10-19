@@ -4,19 +4,14 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartHighlightColors, chartHighlightMarks, chartNumber, chartPaletteForFill, formatDataNumber, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartHighlightColors, chartHighlightMarks, chartNumber, chartPaletteForFill, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
-// Ordered series palette written by opf-pptx (`CHART_COLORS`), before the same
-// per-surface adjustment (`chartPaletteForFill`: contrast against the card, without letting two series merge).
-export const CHART_SERIES_COLORS = Object.freeze([
-  "#2874A6", "#1B4F72", "#5499C7", "#7BDBB2", "#3AC67A", "#24A89E",
-  "#F59E0B", "#EF4444", "#8B5CF6", "#14B8A6", "#0F172A", "#64748B"
-]);
-
-// The series colours for a chart panel: core's `chartPaletteForFill` (contrast against the panel without letting two series merge).
-export function chartSeriesPalette(surface) {
-  return chartPaletteForFill(surface, CHART_SERIES_COLORS);
+// The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
+// `colors` entries replacing their positions) adjusted by core's `chartPaletteForFill` (contrast against the panel without letting
+// two series merge). The PPTX export and the validator use the same pair, so the preview draws the colours they write.
+export function chartSeriesPalette(surface, colorScheme, colors, context) {
+  return chartPaletteForFill(surface, coreChartSeriesPalette(colorScheme, colors, context));
 }
 
 // FA-14: chart.highlight. Core resolves which series and categories are named (chartHighlightMarks) and the two colours
@@ -191,7 +186,8 @@ function tracePaths(item, bound, resolved) {
 function chartContext(item, box, bound, options, svg, { rows, columns, formats, trace, combo }) {
   const u = Math.min(bound.design.dimensions.width, bound.design.dimensions.height) / 720;
   const composition = bound.composition ?? bound.geometry.composition ?? {};
-  const requested = 14, fontPx = Math.max(requested, composition.minFontSize ?? 16) * u;
+  // RR-90: core's chart text size (20 px, shrunk only for a small box, never below minFontSize), the size core's value-axis density assumes.
+  const requested = chartTextSize({ width: box.width, height: box.height, scale: u, minFontSize: composition.minFontSize }), fontPx = requested * u;
   const surface = bound.design.colors.surface;
   const labelColor = textColorForFill(surface, bound.design.colors.text);
   const style = resolveTextStyle({ fontFamily: bound.design.fonts.body, fontWeight: 400, italic: false, path: item.path }, options.textMeasurement);
@@ -215,7 +211,9 @@ function chartContext(item, box, bound, options, svg, { rows, columns, formats, 
     // clear space kept between neighbouring category labels.
     textHeight: fontPx * 1.22,
     labelGap: fontPx * 0.1,
-    colors: chartSeriesPalette(surface),
+    colors: chartSeriesPalette(surface, bound.design.colorScheme, item.value?.colors, { roles: bound.design.colors, variables: bound.design.variables }),
+    // RR-92: the value axis core composed for a column, bar, line or area chart ({ min, max, majorUnit }); absent for the other types.
+    valueAxis: item.chart?.valueAxis,
     gridColor: bound.design.colors.border,
     axisColor: "#888888",
     number: chartNumber,
@@ -262,60 +260,6 @@ export function formatChartValue(value, format) {
 // ---------------------------------------------------------------------------
 // Shared axis and legend helpers
 
-/**
- * Office-like automatic value axis: include zero unless every value sits in
- * the top sixth of the range, add 5% headroom, then choose the smallest
- * 1/2/5 x 10^k major unit that fits `maxIntervals`.
- */
-export function niceScale(dataMin, dataMax, maxIntervals = 10, { percent = false } = {}) {
-  const limit = Number.isFinite(maxIntervals) ? Math.max(1, Math.floor(maxIntervals)) : 10;
-  if (percent) {
-    const min = dataMin < -1e-9 ? -1 : 0, max = dataMax > 1e-9 || min === 0 ? 1 : 0;
-    return scaleFrom(min, max, pickStep(min, max, limit, [0.1, 0.2, 0.25, 0.5, 1]));
-  }
-  if (!Number.isFinite(dataMin) || !Number.isFinite(dataMax)) { dataMin = 0; dataMax = 1; }
-  let lo = Math.min(dataMin, 0), hi = Math.max(dataMax, 0);
-  if (dataMin > 0 && dataMax - dataMin < dataMax / 6) lo = dataMin;
-  if (dataMax < 0 && dataMax - dataMin < -dataMin / 6) hi = dataMax;
-  if (hi === lo) {
-    if (hi === 0) hi = 1;
-    else if (hi > 0) lo = 0;
-    else hi = 0;
-  }
-  const span = hi - lo;
-  const top = hi > 0 ? hi + span / 20 : hi;
-  const bottom = lo < 0 ? lo - span / 20 : lo > 0 ? Math.max(0, lo - span / 20) : lo;
-  const raw = (top - bottom) / limit;
-  if (!(raw > 0) || !Number.isFinite(raw)) return normalizedScale(dataMin, dataMax, limit);
-  let exponent = Math.floor(Math.log10(raw)) - 1;
-  for (; exponent <= 308; exponent++) {
-    for (const mantissa of [1, 2, 5]) {
-      const step = mantissa * 10 ** exponent;
-      if (!(step > 0) || !Number.isFinite(step)) continue;
-      const min = Math.floor(bottom / step + 1e-9) * step, max = Math.ceil(top / step - 1e-9) * step;
-      if (Number.isFinite(min) && Number.isFinite(max) && Math.round((max - min) / step) <= limit) return scaleFrom(clean(min), clean(max), step);
-    }
-  }
-  return normalizedScale(dataMin, dataMax, limit);
-}
-
-// Work in representable units when headroom or a tick step exceeds Number's
-// range. Only axis bounds/ticks saturate at the representable endpoints; data
-// values keep their actual positions. Subnormal rounding may merge ticks.
-function normalizedScale(dataMin, dataMax, limit) {
-  const magnitude = Math.max(Math.abs(dataMin), Math.abs(dataMax));
-  const unit = 10 ** Math.floor(Math.log10(magnitude)) || Number.MIN_VALUE;
-  const normalized = niceScale(dataMin / unit, dataMax / unit, limit);
-  const restore = (value) => {
-    const scaled = value * unit;
-    return Number.isFinite(scaled) ? scaled : Math.sign(value) * Number.MAX_VALUE;
-  };
-  const min = Math.min(restore(normalized.min), dataMin);
-  const max = Math.max(restore(normalized.max), dataMax);
-  const ticks = [...new Set([min, ...normalized.ticks.map(restore), max])].sort((a, b) => a - b);
-  return { min, max, step: restore(normalized.step) || Number.MIN_VALUE, ticks };
-}
-
 // Keep ordinary arithmetic unchanged. A range spanning both finite endpoints
 // can overflow even though every value/bound is finite; divide before subtracting.
 function axisFraction(value, scale, reverse = false) {
@@ -325,10 +269,6 @@ function axisFraction(value, scale, reverse = false) {
   const unit = Math.max(Math.abs(scale.min), Math.abs(scale.max));
   const min = scale.min / unit, max = scale.max / unit, position = value / unit;
   return (reverse ? max - position : position - min) / (max - min);
-}
-
-function pickStep(min, max, limit, steps) {
-  return steps.find((step) => Math.round((max - min) / step) <= limit) ?? max - min;
 }
 
 function scaleFrom(min, max, step) {
@@ -471,10 +411,6 @@ function gridline(c, x1, y1, x2, y2) {
 
 function axisLine(c, x1, y1, x2, y2) {
   c.mark("line", { x1, y1, x2, y2, stroke: c.axisColor, "stroke-width": c.pt });
-}
-
-function maxIntervalsFor(length, labelExtent) {
-  return Math.max(1, Math.min(10, Math.floor(length / Math.max(1, labelExtent))));
 }
 
 // ---------------------------------------------------------------------------
@@ -676,38 +612,21 @@ function drawRowLabels(c, plan, entries, band, gutter, x, rowTop) {
 // ---------------------------------------------------------------------------
 // Category charts: column, bar, line and area (standard, stacked, 100%).
 
-/**
- * Plotted extents per series point. Bars stack positive and negative values
- * separately; lines and areas accumulate the signed sum. 100% groupings divide
- * by the category's sum of absolute values first.
- */
-export function stackCategoryValues(series, count, kind, grouping, path = "chart") {
-  const percent = grouping === "percentStacked";
-  const stacked = grouping === "stacked" || percent;
-  const totals = Array.from({ length: count }, (_, i) => series.reduce((sum, s) => sum + Math.abs(s.values[i] ?? 0), 0));
-  if (percent && totals.some((total) => !Number.isFinite(total))) throw chartAggregateError(path, "percentage total");
-  const positive = new Array(count).fill(0), negative = new Array(count).fill(0), running = new Array(count).fill(0);
-  return series.map((s) => s.values.map((raw, i) => {
-    if (raw === null && kind !== "area") return null;
-    let value = raw ?? 0;
-    if (percent) value = totals[i] ? value / totals[i] : 0;
-    if (!stacked) return { value, from: 0, to: value };
-    if (kind === "bar") {
-      const base = value >= 0 ? positive : negative;
-      const from = base[i];
-      base[i] += value;
-      if (!Number.isFinite(base[i])) throw chartAggregateError(path, "stacked total");
-      return { value, from, to: base[i] };
-    }
-    const from = running[i];
-    running[i] += value;
-    if (!Number.isFinite(running[i])) throw chartAggregateError(path, "stacked total");
-    return { value, from, to: running[i] };
-  }));
-}
-
 function chartAggregateError(path, aggregate) {
   return new RangeError(`Cannot render ${path}: ${aggregate} exceeds the finite numeric range. Rescale the chart values before rendering.`);
+}
+
+// RR-92: a column, bar, line or area chart draws the value axis core composed for its box (c.valueAxis), the one the PPTX export
+// writes. Without it (a chart the composition has no axis for) the scale is fitted to the plot's length as before.
+// A range so wide that min + n x majorUnit leaves Number's range (finite data up to Number.MAX_VALUE) has no ticks to rebuild from the
+// three numbers; it takes the saturating scale `niceScale` computes.
+function categoryScale(c, dataMin, dataMax, length, labelExtent, percent) {
+  const axis = c.valueAxis;
+  if (axis && Number.isFinite(axis.max - axis.min) && (axis.max - axis.min) / axis.majorUnit <= 1000) {
+    const scale = scaleFrom(axis.min, axis.max, axis.majorUnit);
+    if (scale.ticks.every(Number.isFinite)) return scale;
+  }
+  return niceScale(dataMin, dataMax, maxIntervalsFor(length, labelExtent), { percent });
 }
 
 function renderCategoryChart(c, spec) {
@@ -738,7 +657,7 @@ function renderCategoryChart(c, spec) {
     const bottom = box.y + box.height - pad - c.lineHeight;
     let width = Math.max(1, right - x - fontPx);
     const tickWidth = Math.max(c.width(formatTick(dataMax, percent, valueFormat)), c.width(formatTick(dataMin, percent, valueFormat)), c.width("100%")) + fontPx;
-    const scaleFor = (w) => niceScale(dataMin, dataMax, maxIntervalsFor(w, tickWidth), { percent });
+    const scaleFor = (w) => categoryScale(c, dataMin, dataMax, w, tickWidth, percent);
     scale = scaleFor(width);
     // RR-54: a formatted value axis keeps its end labels inside the chart.
     if (valueFormat !== undefined && !percent) ({ x, width, scale } = insetForEndLabels(c, x, width, valueFormat, scaleFor));
@@ -752,7 +671,7 @@ function renderCategoryChart(c, spec) {
     if (rtl) entries.reverse();
     const axis = planCategoryAxis(c, entries, (reserve) => {
       const height = Math.max(1, box.y + box.height - pad - reserve - top);
-      const fitted = niceScale(dataMin, dataMax, maxIntervalsFor(height, c.lineHeight * 1.2), { percent });
+      const fitted = categoryScale(c, dataMin, dataMax, height, c.lineHeight * 1.2, percent);
       const tickWidth = Math.max(...fitted.ticks.map((tick) => c.width(formatTick(tick, percent, valueFormat)))) + fontPx * 0.5;
       if (rtl) {
         const x = box.x + pad + fontPx / 2;

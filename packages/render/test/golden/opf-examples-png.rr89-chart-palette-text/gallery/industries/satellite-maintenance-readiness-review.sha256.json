@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/industries/satellite-maintenance-readiness-review.opf.json",
+  "entries": {
+    "gallery/industries/satellite-maintenance-readiness-review.opf.json#0": {
+      "sha256": "d7aaf6e21c18d4926451435b06da59f490843d0e1329ee7cda769f3e6fbad311",
+      "bytes": 17107
+    },
+    "gallery/industries/satellite-maintenance-readiness-review.opf.json#1": {
+      "sha256": "59a8368803fe8fa8beb685b05808e46043584f0f252015bd2c93064cc655ce33",
+      "bytes": 18132
+    },
+    "gallery/industries/satellite-maintenance-readiness-review.opf.json#2": {
+      "sha256": "34803f8259d8d3416a95508b480d15f3b1f74fa045e54c3828ccd03dd787a682",
+      "bytes": 10433
+    },
+    "gallery/industries/satellite-maintenance-readiness-review.opf.json#3": {
+      "sha256": "cf5f6b082deb27dfb24bed9e030a4733ef22ea94480a77e2f7f7be0f57c78c6b",
+      "bytes": 15955
+    },
+    "gallery/industries/satellite-maintenance-readiness-review.opf.json#4": {
+      "sha256": "d1c1a5d53707694261fcdc84fd6d5721120002eda1affe1141ff323f4fcb6f55",
+      "bytes": 18459
+    },
+    "gallery/industries/satellite-maintenance-readiness-review.opf.json#5": {
+      "sha256": "a05322a07b430a6cb484fd0cb48a1cbbad0682df4f1cec10137ebb685124b726",
+      "bytes": 19482
+    }
+  }
+}

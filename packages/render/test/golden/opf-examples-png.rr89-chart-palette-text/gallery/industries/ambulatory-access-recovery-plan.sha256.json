@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/industries/ambulatory-access-recovery-plan.opf.json",
+  "entries": {
+    "gallery/industries/ambulatory-access-recovery-plan.opf.json#0": {
+      "sha256": "b14284b69f76ce1ab6eba08585526d44681b4fd80fb3eafcf0ec7563cb7f3900",
+      "bytes": 5299
+    },
+    "gallery/industries/ambulatory-access-recovery-plan.opf.json#1": {
+      "sha256": "f22e955ed91c5c8a5d2981398572d1e3f69dec79ff32ce92ef3ab5fa8abaf124",
+      "bytes": 8471
+    },
+    "gallery/industries/ambulatory-access-recovery-plan.opf.json#2": {
+      "sha256": "da17e32121bc91e2be0a2107fe278f2f1f127a218147ef5e848b79f842cba3e6",
+      "bytes": 5575
+    },
+    "gallery/industries/ambulatory-access-recovery-plan.opf.json#3": {
+      "sha256": "047f58ed5a6fd9cbd67c42cfccca4fc30df1f1f6eeffb0a8f56395f38d7297f3",
+      "bytes": 6794
+    }
+  }
+}

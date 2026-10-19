@@ -106,6 +106,9 @@ function positions(rendered, count, { vertical = false, reversed = false } = {})
   const along = (entry) => {
     const centre = vertical ? entry.y - entry.size * 0.35 - (entry.lines.length - 1) * entry.size * 0.61 : entry.pivot ? entry.pivot[0] : entry.x;
     const index = Math.floor((centre - low) / band + 1e-9);
+    // RR-90: a wide horizontal label at either end is pushed in to stay inside the chart (its centre then lies several bands from its
+    // own), so an unrotated end label is located by the row it labels.
+    if (!vertical && !entry.pivot && (entry.row === 0 || entry.row === count - 1)) return entry.row;
     return vertical && !reversed ? index : vertical ? count - 1 - index : index;
   };
   return { band, positions: rendered.labels.map(along) };
@@ -184,24 +187,28 @@ for (const count of [3, 12, 49, 120]) {
   assert.equal(short3.labels.length, 3, 'three categories: every label horizontal');
   const horizontal12 = at('column', 12, 'short', { angle: 0, step: 1 });
   assert.equal(horizontal12.labels.length, 12, 'twelve short labels stay horizontal');
-  const long12 = at('column', 12, 'long', { angle: -90, step: 1 });
-  assert.equal(long12.labels.length, 12, 'twelve long labels rotate instead of wrapping');
-  at('column', 49, 'short', { angle: -90, step: 1 });
-  at('column', 49, 'long', { angle: -90, step: 1 });
+  // RR-90: at the 20 px chart text a rotated label that long no longer fits the 40% of the chart height the labels may take, so the
+  // arrangement that shows the most labels is the horizontal one with a skip interval (the first label is always drawn).
+  const long12 = at('column', 12, 'long', { angle: 0, step: 2 });
+  assert.equal(long12.labels.length, 6, 'twelve long labels are too long to rotate, so every second one is drawn horizontally');
+  const short16 = at('column', 16, 'short', { angle: -90, step: 1 });
+  assert.equal(short16.labels.length, 16, 'sixteen short labels rotate instead of skipping');
+  at('column', 49, 'short', { angle: -90, step: 2 });
+  at('column', 49, 'long', { angle: 0, step: 9 });
   at('column', 120, 'short', { angle: -90, step: 3 });
-  at('column', 120, 'long', { angle: -90, step: 3 });
+  at('column', 120, 'long', { angle: 0, step: 21 });
   // Rotated labels shrink the plot to make room, as Office does.
   const plotHeight = (rendered) => { const g = rendered.grids.filter((line) => line.y1 === line.y2).map((line) => Number(line.y1)); return Math.max(...g) - Math.min(...g); };
-  assert.ok(plotHeight(long12) < plotHeight(short3) - 20, 'rotated labels shorten the plot');
+  assert.ok(plotHeight(short16) < plotHeight(short3) - 20, 'rotated labels shorten the plot');
 }
 
 // -45 degree labels: bands too narrow for the words but wide enough for slanted text.
 {
-  const names = Array.from({ length: 30 }, (_, i) => `Team ${i + 1}`);
+  const names = Array.from({ length: 24 }, (_, i) => `Team ${i + 1}`);
   const rendered = render('column', names.map((name, i) => [name, i + 1]));
-  check('column/30/team', rendered, names);
-  assert.deepEqual([...new Set(rendered.labels.map((entry) => entry.angle))], [-45], 'thirty short team names slant at -45 degrees');
-  assert.equal(rendered.labels.length, 30, 'slanted labels show every category');
+  check('column/24/team', rendered, names);
+  assert.deepEqual([...new Set(rendered.labels.map((entry) => entry.angle))], [-45], 'twenty-four short team names slant at -45 degrees');
+  assert.equal(rendered.labels.length, 24, 'slanted labels show every category');
 }
 
 // Two-line labels: spaces let a label use two lines in its band, never a mid-word break.

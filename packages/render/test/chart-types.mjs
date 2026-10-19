@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {resolvePresentation, toSvg} from '../dist/svg.js';
-import {CHART_TYPES,CHART_SERIES_COLORS,chartSeriesPalette,resolveChartType,niceScale,stackCategoryValues,barGeometry,scatterSeries,squarify,scottBinCount,histogramBins,boxStatistics,mixHex} from '../dist/charts.js';
+import {CHART_TYPES,chartSeriesPalette,resolveChartType,barGeometry,scatterSeries,squarify,scottBinCount,histogramBins,boxStatistics,mixHex} from '../dist/charts.js';
+import {niceScale,stackCategoryValues} from '@openpresentation/opf/composition';
 
 // FF-22: every chart type previews its native construct. OPF 0.15: chart.type is core's CHART_TYPES enum (an engine
 // vocabulary, no catalog); a value outside it is rejected at the validation boundary, and the renderer's legacy preview
@@ -23,7 +24,7 @@ const marks=(svg,name,pattern)=>elements(svg,name).filter(a=>pattern.test(a['dat
 const texts=svg=>[...svg.matchAll(/<text\b[^>]*>([\s\S]*?)<\/text>/g)].map(([,t])=>t.replace(/<[^>]+>/g,''));
 const point=/^slides\.0\.chart\.data\.rows\.\d+\.\d+$/,series=/^slides\.0\.chart\.data\.columns\.\d+$/;
 const bound=resolvePresentation({slides:[{chart:{type:'column',data:categoryData}}]}).slides[0];
-const palette=chartSeriesPalette(bound.design.colors.surface);
+const palette=chartSeriesPalette(bound.design.colors.surface,bound.design.colorScheme);
 let checks=0;
 
 // Every classic id takes the chart-type renderer, never the legacy single-series fallback.
