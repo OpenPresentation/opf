@@ -1,4 +1,0 @@
----
-type: changed
----
-RR-96 (adopts core RR-96, opf#732; test and baseline changes only, no renderer code): core derives borders, chart gridlines and axis lines from the color scheme (the text color mixed into the background, `roles.neutrals`) instead of a fixed slate, so every card, table rule and chart changes color, not geometry, and the example corpus gains the color-variants deck. The tests that encoded the old colors expect the new ones (`neutral-scaffolding`, and the traced SVG digests of `chart-table-data` and `chart-finite-statistics`). The example and template baselines select new ones, `rr96-scheme-neutrals`, whenever core derives the neutrals (`schemeNeutralsDerived()`); `golden-gate` compares the selected baseline with every slide of the installed examples instead of a fixed 807. Requires the unreleased core 0.23.0.
