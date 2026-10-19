@@ -58,11 +58,11 @@ importers:
         specifier: 0.4.2
         version: 0.4.2
       '@openpresentation/opf-pptx':
-        specifier: 0.22.0
-        version: 0.22.0(@openpresentation/opf-render@0.22.2)(@types/node@24.13.6)
+        specifier: 0.23.0
+        version: 0.23.0(@openpresentation/opf-render@0.23.0)(@types/node@24.13.6)
       '@openpresentation/opf-render':
-        specifier: 0.22.2
-        version: 0.22.2(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@openpresentation/opf-pptx@0.22.0)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6))
+        specifier: 0.23.0
+        version: 0.23.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@openpresentation/opf-pptx@0.23.0)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6))
       '@resvg/resvg-js':
         specifier: 2.6.2
         version: 2.6.2
@@ -125,11 +125,11 @@ importers:
         specifier: 0.4.2
         version: 0.4.2
       '@openpresentation/opf-pptx':
-        specifier: 0.22.0
-        version: 0.22.0(@openpresentation/opf-render@0.22.2)(@types/node@24.13.6)
+        specifier: 0.23.0
+        version: 0.23.0(@openpresentation/opf-render@0.23.0)(@types/node@24.13.6)
       '@openpresentation/opf-render':
-        specifier: 0.22.2
-        version: 0.22.2(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@openpresentation/opf-pptx@0.22.0)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6))
+        specifier: 0.23.0
+        version: 0.23.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@openpresentation/opf-pptx@0.23.0)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6))
       '@resvg/resvg-js':
         specifier: 2.6.2
         version: 2.6.2
@@ -586,17 +586,17 @@ packages:
     resolution: {integrity: sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ==}
     engines: {node: '>=22'}
 
-  '@openpresentation/opf-pptx@0.22.0':
-    resolution: {integrity: sha512-lejDILX36ODZMvPfCVOykYoqdIujgNoE4e2pXLuiv4Ha8UhKuwaEJ5zwKviiTej66j2pNGOQ4Z5hMhJteWCsTA==}
+  '@openpresentation/opf-pptx@0.23.0':
+    resolution: {integrity: sha512-cAshIBsGhxCr3DuHE3FIJbny8SuAnAokgtDIdJMnrrpGAd0/nqkmmsTh36g2wzWV0N7BuoUhvEgZ1bj1VyGNng==}
     engines: {node: '>=22'}
     peerDependencies:
-      '@openpresentation/opf-render': ^0.22.1
+      '@openpresentation/opf-render': ^0.23.0
     peerDependenciesMeta:
       '@openpresentation/opf-render':
         optional: true
 
-  '@openpresentation/opf-render@0.22.2':
-    resolution: {integrity: sha512-3OoGUMhCMeqr25lZELw+AZq1LKOoEiO6kM3F5qZcqyKB0BJ53h0hGNLVSYMw37OvyYJC23VHCCcWH6RI0VXCPA==}
+  '@openpresentation/opf-render@0.23.0':
+    resolution: {integrity: sha512-X73gn0EzrOxz6btj7aXfnxF5urHcpmg9sWr38z+ttVw5R+pA8LIhdHQQZm5UetOtsJtDBAx6MhdPaAOlYTZRuA==}
     engines: {node: '>=22'}
     hasBin: true
     peerDependencies:
@@ -743,12 +743,12 @@ packages:
       sharp:
         optional: true
 
-  '@openpresentation/opf@0.22.1':
-    resolution: {integrity: sha512-btafDexYmAp2in/TTOUQyqAJiFgv/J1wHNWcew6EpSV8Qqhy7Cy3BmXQ6YFchUYn8zZU5wOKPc+aZeHbkq18wQ==}
+  '@openpresentation/opf@0.23.0':
+    resolution: {integrity: sha512-Bze3A09wunq+M7oHYS7XXgKRm4idkJYMUg/8+PxJBdWj4jXGcRldf5rOEy2uzSjVaELlkHKtJmiDVz+HcoGYmg==}
     engines: {node: '>=22'}
     peerDependencies:
-      '@openpresentation/opf-pptx': ^0.22.0
-      '@openpresentation/opf-render': ^0.22.0
+      '@openpresentation/opf-pptx': ^0.23.0
+      '@openpresentation/opf-render': ^0.23.0
     peerDependenciesMeta:
       '@openpresentation/opf-pptx':
         optional: true
@@ -1765,24 +1765,24 @@ snapshots:
 
   '@openpresentation/gallery@3.0.0': {}
 
-  '@openpresentation/opf-pptx@0.22.0(@openpresentation/opf-render@0.22.2)(@types/node@24.13.6)':
+  '@openpresentation/opf-pptx@0.23.0(@openpresentation/opf-render@0.23.0)(@types/node@24.13.6)':
     dependencies:
       '@node-projects/jszip': 4.3.0
       '@openpresentation/gallery': 3.0.0
-      '@openpresentation/opf': 0.22.1(@openpresentation/opf-pptx@0.22.0)(@openpresentation/opf-render@0.22.2)
+      '@openpresentation/opf': 0.23.0(@openpresentation/opf-pptx@0.23.0)(@openpresentation/opf-render@0.23.0)
       '@rgrove/parse-xml': 4.2.3
       fast-xml-parser: 5.11.2
       fflate: 0.8.3
       pako: 3.0.2
       sharp: 0.35.5(@types/node@24.13.6)
     optionalDependencies:
-      '@openpresentation/opf-render': 0.22.2(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@openpresentation/opf-pptx@0.22.0)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6))
+      '@openpresentation/opf-render': 0.23.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@openpresentation/opf-pptx@0.23.0)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6))
     transitivePeerDependencies:
       - '@types/node'
 
-  '@openpresentation/opf-render@0.22.2(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@openpresentation/opf-pptx@0.22.0)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6))':
+  '@openpresentation/opf-render@0.23.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@openpresentation/opf-pptx@0.23.0)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6))':
     dependencies:
-      '@openpresentation/opf': 0.22.1(@openpresentation/opf-pptx@0.22.0)(@openpresentation/opf-render@0.22.2)
+      '@openpresentation/opf': 0.23.0(@openpresentation/opf-pptx@0.23.0)(@openpresentation/opf-render@0.23.0)
       bidi-js: 1.1.0
       fontkit: 2.0.4
       harfbuzzjs: 1.6.3
@@ -1802,7 +1802,7 @@ snapshots:
     transitivePeerDependencies:
       - '@openpresentation/opf-pptx'
 
-  '@openpresentation/opf@0.22.1(@openpresentation/opf-pptx@0.22.0)(@openpresentation/opf-render@0.22.2)':
+  '@openpresentation/opf@0.23.0(@openpresentation/opf-pptx@0.23.0)(@openpresentation/opf-render@0.23.0)':
     dependencies:
       '@openpresentation/gallery': 3.0.0
       ajv: 8.20.0
@@ -1810,8 +1810,8 @@ snapshots:
       jsonc-parser: 3.3.1
       yaml: 2.9.1
     optionalDependencies:
-      '@openpresentation/opf-pptx': 0.22.0(@openpresentation/opf-render@0.22.2)(@types/node@24.13.6)
-      '@openpresentation/opf-render': 0.22.2(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@openpresentation/opf-pptx@0.22.0)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6))
+      '@openpresentation/opf-pptx': 0.23.0(@openpresentation/opf-render@0.23.0)(@types/node@24.13.6)
+      '@openpresentation/opf-render': 0.23.0(@expo-google-fonts/arimo@0.4.3)(@expo-google-fonts/caladea@0.4.2)(@expo-google-fonts/cousine@0.4.3)(@expo-google-fonts/gelasio@0.4.1)(@expo-google-fonts/noto-sans@0.4.2)(@expo-google-fonts/roboto-mono@0.4.2)(@expo-google-fonts/roboto@0.4.3)(@expo-google-fonts/tinos@0.4.2)(@openpresentation/opf-pptx@0.23.0)(@resvg/resvg-js@2.6.2)(pdf-lib@1.17.1)(sharp@0.35.5(@types/node@24.13.6))
 
   '@pdf-lib/standard-fonts@1.0.0':
     dependencies:
