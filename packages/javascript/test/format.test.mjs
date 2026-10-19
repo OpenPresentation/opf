@@ -9,7 +9,7 @@ import { check } from './support/validation.mjs';
 const examples = loadExamples();
 
 describe("format over the example decks", () => {
-  test("128 example decks are covered", () => assert.equal(examples.length, 128));
+  test("129 example decks are covered", () => assert.equal(examples.length, 129));
   for (const { file, raw } of examples) {
     test(file, () => {
       const once = format(raw);

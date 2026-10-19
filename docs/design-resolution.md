@@ -192,19 +192,70 @@ Content color fields (`TextRun.color`, styled table cell `style.fill` / `style.c
 - **Slot names** (`accent1`–`accent6`, `dark1`, `dark2`, `light1`, `light2`, `hyperlink`, `followedHyperlink`) read the named slot from the *effective* color scheme — the one produced by the slide → deck → theme → engine-default precedence at the top of this page. A slide-level `design.colorScheme` override therefore recolors that slide's named runs too.
 - **Role names** (`primary`, `secondary`, `accent`, `background`, `surface`, `text`, `textSecondary`) resolve through one shared definition, `resolveColorRoles()`, which the opf-render preview, the PPTX export and `validate` all call, so the same deck draws the same colors in each. A role defined on the effective scheme wins; otherwise it defaults from a slot:
 
-  | Role | Default |
+  | Role | Default (through the slide's variant; see [Color variants](#color-variants)) |
   | --- | --- |
-  | `primary`, `secondary`, `accent` | `accent1`, `accent2`, `accent3` |
-  | `background` | the slide's own resolved background when it is one color (solid, theme slot or pattern background color); else the scheme's `background` role, else `light1`. A gradient or picture background uses the scheme default. |
-  | `surface` | `light2`, or `dark2` on a dark slide |
-  | `text` | `dark1`, or `light1` on a dark slide. A `text` override applies on a light slide only, so a dark slide always keeps readable light text. |
-  | `textSecondary` | `dark2`, or `light2` on a dark slide |
+  | `primary`, `secondary`, `accent` | the first three accents of the variant: `accent1`, `accent2`, `accent3` unless `variant.accents` reorders them |
+  | `background` | the slide's own resolved background when it is one color (solid or pattern background color); else the variant's `bg1` (`light1` by default, the scheme's `background` role overriding it there). A gradient or picture background uses the variant, or its `tone`, or `light1`. |
+  | `surface` | `bg2` of the variant: `light2` on a light slide, `dark2` on a dark one |
+  | `text` | `tx1` of the variant: `dark1`, or `light1` on a dark slide. A `text` override applies on a light slide only, so a dark slide always keeps readable light text. |
+  | `textSecondary` | `tx2` of the variant: `dark2`, or `light2` on a dark slide |
 
   A slide is dark when its background's WCAG relative luminance is under 0.179, the point where white and black text contrast equally.
 - **Links.** A link run (`link`) with no `color` of its own is drawn underlined in the scheme's `hyperlink` slot (the OOXML `hlink` color; Office blue `#0563C1` when the scheme sets none), in the preview and in the PPTX export (`a:schemeClr hlink` where the deck theme holds that color). Where that color has under 4.5:1 contrast against the slide background (the default Office blue on a dark slide), the slide's `text` color is used instead, as the slide tag does for a low-contrast primary color. A link run with its own `color` keeps it, and a `hyperlink` ColorRef always names the slot. `followedHyperlink` is written to the PPTX theme; a static preview cannot know which links were visited, so it draws every link in `hyperlink`.
 - **Variable references** (`var:<id>`) resolve against the document's top-level `variables` map, independent of the scheme. Variables are deck-scoped named colors — use them for values that have meaning (`var:risk`) or repeat across slides. An unknown id is a validation warning, never an error, and engines fall back to their default text color.
 
 The styled table cell and border color fields enforce the reference forms at the schema level (a typo like `"acent2"` is a schema error there — neither hex, a known name, nor a `var:` reference). Run colors stay open strings so imported decks keep validating: an unrecognized run color is a validation warning, and renderers fall back to the theme text color — the same warn-don't-error posture unknown catalog ids get. Unknown `var:` ids are warnings everywhere.
+
+### Color variants
+
+A deck has one color scheme of twelve slots. A **variant** is a mapping over those same slots, as PowerPoint's `clrMap` is, never a second scheme: which slot is the background, and so which are the text and the alternate surface, plus an optional order for the accents. Everything OPF draws refers to the roles, so a slide that changes variant recolors text, lines, cards, chart furniture and code together.
+
+`variant` is a string, the same way `colorScheme` is: the slot that is the background.
+
+```json
+{
+  "design": { "variant": "dark1" },
+  "slides": [{ "title": "Light one", "design": { "variant": "light1" } }]
+}
+```
+
+`"dark1"` is `{ "background": "dark1" }`. The object form is only needed to reorder the accents: `{ "background": "light1", "accents": ["accent2", "accent1", "accent3", "accent4", "accent5", "accent6"] }`. Both forms are allowed on `design` and on `slides[n].design`, and what `resolveColorRoles` and `resolveSlideContext` return is always the normalized object (`normalizeColorVariant`).
+
+| `variant` (or `variant.background`) | bg1 | tx1 | bg2 | tx2 |
+| --- | --- | --- | --- | --- |
+| `light1` (default) | `light1` | `dark1` | `light2` | `dark2` |
+| `dark1` | `dark1` | `light1` | `dark2` | `light2` |
+| `light2` | `light2` | `dark1` | `light2` | `dark2` |
+| `dark2` | `dark2` | `light1` | `dark2` | `light2` |
+
+(`light2` and `dark2` keep the background slot as the surface too, as a slide with that theme background has always been drawn, so the engine default theme, whose background is `dark2`, is unchanged.) `variant.accents` (object form) is a permutation of `accent1` to `accent6`; entry `i` is the slot drawn as accent `i + 1`, which reorders `primary`, `secondary`, `accent` and the chart series colors.
+
+Which variant a slide has, from the most specific to the least (slide design, deck design, then the theme record), at the first level that says anything:
+
+1. a `variant`;
+2. a theme-slot background (`"dark1"`, `{ "type": "theme", "slot": "dark1" }`), which is the variant of that slot, so `design.background` stays a shorthand;
+3. a picture or gradient background with a `tone` (`"dark"` or `"light"`), which is the `dark1` or `light1` variant. Without a tone only a variant of a less specific level can apply; with none the slide counts as light, as before;
+4. any other background (a solid or pattern color) decides by luminance (dark below 0.179), as before.
+
+A slide's variant replaces the deck's whole, accent order included. `resolveSlideContext(...).resolved.roles` is the resolved record, and `resolveColorRoles(scheme, { variant, tone, background })` is the function: besides the colors it returns `variant`, `map` (bg1, tx1, bg2, tx2 and the accents; `clrMapAttributes(map)` gives the PowerPoint `clrMap` attributes for the master and for a slide's `clrMapOvr`), `accents` (the six colors in order) and `neutrals`.
+
+#### Scheme-derived neutrals
+
+Lines and quiet colors are not fixed grey. `roles.neutrals` derives each from the map, as PowerPoint's chart styles do: the text color (tx1) at a share over the background (bg1), chosen as a DrawingML luminance transform of the slot so a PPTX can write `<a:schemeClr val="tx1"><a:lumMod val="15000"/><a:lumOff val="85000"/></a:schemeClr>` and the preview draws the same color. Each neutral is `{ slot, hex, lumMod?, lumOff?, alpha? }` (the transforms in thousandths of a percent; `hex` is the transform applied, `applyLuminance(slotHex, lumMod, lumOff)`).
+
+| Neutral | Derivation |
+| --- | --- |
+| `border` (also `roles.border`) | tx1 at 20% over bg1: card, rule and table borders |
+| `gridline` | tx1 at 15%: chart gridlines |
+| `axisLine` | tx1 at 25%: chart axis lines |
+| `chartText` | tx1 at 65%: chart axis labels and legend text |
+| `outline` | bg1: pie and treemap outlines, the video play icon, anything drawn on a mark |
+| `trendNeutral` | tx2: the neutral metric trend |
+| `codePanel` | tx1 on a light map, bg2 on a dark one: the code block is a dark card on either |
+| `codeText` | bg1 or tx1, whichever reads better on the panel |
+| `codeComment` | the code text at 65% over the panel (comments and line numbers) |
+
+`codeSyntaxPaletteForRoles(roles)` builds the syntax palette from `codePanel`, `codeText`, `codeComment` and the variant's first three accents, and `codeHighlightColors(scheme, palette, codePanel.hex)` takes the panel the highlight band sits on. `readableSchemeColor(fill, roles)` returns bg1 or tx1 (as a scheme color), whichever reads on a fill the scheme does not name, for table header text and text on marks. The validator's contrast rules read the same roles, so a dark variant is checked against its own text and surface.
 
 ### Background colors are ColorRefs
 

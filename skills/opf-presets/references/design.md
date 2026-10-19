@@ -31,6 +31,25 @@ Design example:
 }
 ```
 
+### Light and dark: `design.variant` (from core 0.23.0)
+
+A deck has one color scheme of twelve slots. A **variant** says which slot is the slide background and so which are the text and the card surface, the way PowerPoint's color map does; it never adds a second scheme. Use the string form first:
+
+```json
+{
+  "design": { "variant": "light1" },
+  "slides": [
+    {"title": "Normal slide", "text": "Dark text on light1."},
+    {"title": "Dark slide", "design": {"variant": "dark1"}, "text": "Light text on dark1; lines, chart gridlines and the code panel follow."},
+    {"title": "Warm slide", "design": {"variant": "light2"}, "text": "light2 as the background."}
+  ]
+}
+```
+
+`variant` is `light1`, `light2`, `dark1` or `dark2` (the shorthand for `{ "background": "dark1" }`), on `design` and on `slides[n].design`; a slide's variant replaces the deck's. The object form is only needed to reorder the accents: `{ "background": "light1", "accents": ["accent2", "accent1", "accent3", "accent4", "accent5", "accent6"] }` (a permutation of `accent1` to `accent6`; `primary`, `secondary`, `accent` and the chart series follow it). A theme-slot `design.background` (`"dark1"`) is the same shorthand. A solid hex background still decides light or dark by its luminance, and a picture or gradient background takes `"tone": "dark"` or `"light"` (`{ "type": "image", "src": "asset:hero", "tone": "dark" }`) to pick the map; without one it takes the deck's variant, else counts as light.
+
+Every neutral follows the scheme through the variant: card and table borders, chart gridlines, axis lines and axis text (the text color at 20%, 15%, 25% and 65% over the background), the neutral metric trend, the code panel and its comments, and pie and treemap outlines are no longer fixed greys, so a dark slide gets light lines and a scheme with warm text gets warm lines. Set `design.variant` instead of hand-picking light and dark hex colors. Until 0.23.0 only the earlier behavior (luminance of the background, fixed slate lines) exists.
+
 A header/footer zone lays its fields out side by side in one row, in the order `image`, `text`, `socials`, `date`, aligned to the zone's edge; `
 ` breaks lines inside a text. Logos live on the organization (`"organization": {"id": "acme", "name": "Acme", "logo": {"full": "./assets/acme-logo.svg", "icon": "./assets/acme-mark.svg"}}`, each shape a path or `{"onLight": ..., "onDark": ...}`); a zone places one with `"image": "var:organization.logo.icon"` (also `.wordmark`, `.stacked`, a bare `var:organization.logo` for the full logo, and `var:organization.<id>.logo` for a partner), and the onLight or onDark file is chosen per slide background. Covers draw the primary organization's full logo; `design.logo` is only an override (`"var:organization.beta.logo"`) or `false`. Generated values are variables in `text`, written in the order you want with `\n` between lines: `{{organization.name}}`, `{{speaker.name}}, {{speaker.title}}`, `{{slide.section}}`, `{{slide.number}} / {{deck.slideCount}}`, or any built-in such as `{{organization.tagline}}`. A `{{slide.number}}` in header or footer text exports as a native PowerPoint slide-number field; `{{deck.slideCount}}` is fixed text. There are no `organization`, `speaker`, `section` or `slideNumber` flags.
 

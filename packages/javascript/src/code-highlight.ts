@@ -135,19 +135,20 @@ const blend = (from: string, to: string, amount: number): string => {
 /**
  * The highlight colours for a resolved colour scheme record. The band takes the scheme's `primary`
  * (or `accent1`); the palette is `codeSyntaxPaletteForScheme(scheme)` so highlighted lines keep their syntax
- * colours. Preview and export call this with the scheme they resolved.
+ * colours. Preview and export call this with the scheme they resolved. `panel` is the code panel colour the band and the dimmed
+ * lines sit on (RR-96: `roles.neutrals.codePanel.hex`, derived from the scheme); the default is the fixed {@link CODE_PANEL_BACKGROUND}.
  */
-export function codeHighlightColors(scheme: unknown, palette: CodeSyntaxPalette = codeSyntaxPaletteForScheme(scheme)): CodeHighlightColors {
+export function codeHighlightColors(scheme: unknown, palette: CodeSyntaxPalette = codeSyntaxPaletteForScheme(scheme), panel: string = CODE_PANEL_BACKGROUND): CodeHighlightColors {
   const record = (scheme && typeof scheme === 'object' ? scheme : {}) as Record<string, unknown>;
   const primary = normalize(record.primary) ?? normalize(record.accent1) ?? '#2563EB';
   // Tint with the theme colour's hue at a bounded lightness so the band stays a dark surface.
   const [hue, saturation] = toHsl(primary);
   const tint = fromHsl(hue, Math.min(saturation, 0.7), 0.45);
-  const band = blend(CODE_PANEL_BACKGROUND, tint, CODE_HIGHLIGHT_BAND_TINT);
+  const band = blend(panel, tint, CODE_HIGHLIGHT_BAND_TINT);
   const lit = {} as CodeSyntaxPalette, dim = {} as CodeSyntaxPalette;
   for (const key of Object.keys(palette) as (keyof CodeSyntaxPalette)[]) {
     lit[key] = legible(palette[key], band, CODE_SYNTAX_MIN_CONTRAST);
-    dim[key] = legible(blend(palette[key], CODE_PANEL_BACKGROUND, CODE_HIGHLIGHT_DIM), CODE_PANEL_BACKGROUND, CODE_SYNTAX_MIN_CONTRAST);
+    dim[key] = legible(blend(palette[key], panel, CODE_HIGHLIGHT_DIM), panel, CODE_SYNTAX_MIN_CONTRAST);
   }
   return { band, lit, dim };
 }

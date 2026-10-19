@@ -1,0 +1,207 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Color variants",
+  "description": "Technical fixture for design.variant (core 0.23.0): one color scheme, a variant per deck and per slide, and the neutrals (borders, chart gridlines, axis text, code) that follow it.",
+  "language": "en-US",
+  "design": {
+    "variant": "light1"
+  },
+  "slides": [
+    {
+      "title": "One scheme, several variants",
+      "subtitle": "design.variant maps the same twelve slots",
+      "bullets": [
+        "The deck variant is light1: dark text on the light background",
+        "A slide can choose dark1, dark2, light1 or light2",
+        "Borders, gridlines and chart text follow the variant"
+      ]
+    },
+    {
+      "title": "Chart on a light slide",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Revenue",
+            "Costs"
+          ],
+          "rows": [
+            [
+              "Q1",
+              120,
+              80
+            ],
+            [
+              "Q2",
+              180,
+              110
+            ],
+            [
+              "Q3",
+              240,
+              150
+            ],
+            [
+              "Q4",
+              260,
+              170
+            ]
+          ]
+        },
+        "axisTitles": {
+          "category": "Quarter",
+          "value": "$M"
+        },
+        "legend": "bottom",
+        "alt": "Revenue and costs by quarter, on a light slide"
+      }
+    },
+    {
+      "title": "Table on a light slide",
+      "table": {
+        "columns": [
+          "Region",
+          {
+            "name": "Revenue",
+            "format": "#,##0"
+          },
+          {
+            "name": "Growth",
+            "format": "0%"
+          }
+        ],
+        "rows": [
+          [
+            "North",
+            1240,
+            0.12
+          ],
+          [
+            "South",
+            980,
+            0.08
+          ],
+          [
+            "East",
+            1510,
+            0.15
+          ],
+          [
+            "West",
+            760,
+            0.04
+          ]
+        ]
+      }
+    },
+    {
+      "title": "Chart on a dark slide",
+      "design": {
+        "variant": "dark1"
+      },
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "Revenue",
+            "Costs"
+          ],
+          "rows": [
+            [
+              "Q1",
+              120,
+              80
+            ],
+            [
+              "Q2",
+              180,
+              110
+            ],
+            [
+              "Q3",
+              240,
+              150
+            ],
+            [
+              "Q4",
+              260,
+              170
+            ]
+          ]
+        },
+        "axisTitles": {
+          "category": "Quarter",
+          "value": "$M"
+        },
+        "legend": "bottom",
+        "alt": "Revenue and costs by quarter, on a dark slide"
+      }
+    },
+    {
+      "title": "Table on a dark slide",
+      "design": {
+        "variant": "dark1"
+      },
+      "table": {
+        "columns": [
+          "Region",
+          {
+            "name": "Revenue",
+            "format": "#,##0"
+          },
+          {
+            "name": "Growth",
+            "format": "0%"
+          }
+        ],
+        "rows": [
+          [
+            "North",
+            1240,
+            0.12
+          ],
+          [
+            "South",
+            980,
+            0.08
+          ],
+          [
+            "East",
+            1510,
+            0.15
+          ],
+          [
+            "West",
+            760,
+            0.04
+          ]
+        ]
+      }
+    },
+    {
+      "title": "A warm slide",
+      "design": {
+        "variant": "light2"
+      },
+      "bullets": [
+        "light2 is the background and the card surface",
+        "Text stays dark1",
+        "Switching variant never changes the scheme"
+      ]
+    },
+    {
+      "title": "A picture with a tone",
+      "design": {
+        "background": {
+          "type": "image",
+          "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAABICAIAAACx52pFAAABXElEQVR42u3R6VoMABxG8fdju5aZmmZJlGyhmaYRZUsiZAtJwv1fRf+7OF/O8/yu4JyMNbYEignwAX2BMtYcCJTx5kCgjC9uC1QDhgJlYmkoUA3YESgTrZFAmWyNBMrk8mOBasCuQJlq7wpUA54IlKnOU4EcQA+Y7u4JVAP2Bcp0b1+gzPSeCZSZlecCOYAecO36C4FqwEuBHEAPmF19JVANOBAoszcOBKoBrwXK3M1DgRyAD1h7I1Dm144Eyvz6kUA14K1AWbj1TqAacCxQFjaOBUpj471Aadz+IJAD6AHNOx8FqgEnAqV590SgGvBJoCze+yyQA/gBXwTK0v2vAjkAH7D5TaC0Nk8FSuvBqUA14LtAWX74QyAH4AMe/RSoBpwJlPbWmUA14JdAaffPBUqnfy5QOoPfAtWAC4HS3b4QqAb8ESjd4aVA6Q0vBUpv569ANeCfQFkZ/RfoClmTzIBhRBzzAAAAAElFTkSuQmCC",
+          "alt": "Dark blue gradient",
+          "tone": "dark"
+        }
+      },
+      "text": "The tone dark picks the dark1 variant, so the text and lines read on the picture."
+    }
+  ]
+}

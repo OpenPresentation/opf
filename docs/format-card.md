@@ -14,7 +14,7 @@ Optional top-level fields, grouped:
 
 - Identity: `name`, `description`, `filename`, `author`, `organization`, `speaker`, `tags`.
 - Intent (used by AI generation): `audience`, `purpose`, `tone`, `language`, `narrative`, `takeaway`, `duration`.
-- Appearance: `design` (`theme`, `colorScheme`, `fontScheme`, `dimensions`, `background`, `logo` override, `watermark`, `header`, `footer`, alignment hints), `variables`; logos themselves live on `organization`.
+- Appearance: `design` (`theme`, `colorScheme`, `fontScheme`, `dimensions`, `background`, `variant` (from core 0.23.0: `"dark1"` or `{ background, accents }`, a map over the one color scheme), `logo` override, `watermark`, `header`, `footer`, alignment hints), `variables`; logos themselves live on `organization`.
 - Resources: `assets` (registry referenced as `asset:<id>`), `catalogs` (the records the document embeds, grouped by catalog: `default`, `custom` and named groups with a `source`).
 - Machine state: `extensions` (preserved, never rendered).
 

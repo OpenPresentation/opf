@@ -1,8 +1,8 @@
 import { OPFUnresolvedReferenceError, checkCatalogsOption, provenanceOf, resolveReference, unresolvedReference, type CatalogOptions, type RecordProvenance, type UnresolvedReferenceDiagnostic } from './catalog-refs.js';
 import { resolveCanvasDimensions, resolveFontFamilies, type ComposeSlideOptions, type Fonts } from './composition.js';
-import { resolveColorRoles } from './color.js';
+import { resolveColorRoles, type ResolvedColorRoles } from './color.js';
 import { resolveDesignRecords } from './design-records.js';
-import { decisionColor } from './rule-design.js';
+import { colorChoice } from './rule-design.js';
 import { resolveSlideVariables } from './slide-variables.js';
 
 /**
@@ -48,6 +48,8 @@ export interface SlideContext {
   resolved: {
     theme: Rec;
     colorScheme: Rec;
+    /** RR-96: the slide's color roles (its variant's map over the scheme, the accents in order, and the scheme-derived neutrals), as the engines and the validator resolve them. */
+    roles: ResolvedColorRoles;
     fontScheme: Rec;
     /** Where the font scheme reference is written, dotted. */
     fontSchemePath: string;
@@ -93,6 +95,8 @@ export function resolveSlideContext(presentation: unknown, index: number, option
   }
   if (options.strictReferences && diagnostics.length) throw new OPFUnresolvedReferenceError(diagnostics);
 
+  // RR-96: the roles of this slide, from its variant or background (slide, deck, then theme); the same record the engines draw with.
+  const roles = resolveColorRoles(colorScheme, colorChoice([rec(slide.design), rec(deck.design), theme], colorScheme, rec(deck.variables)));
   const composeOptions: ComposeSlideOptions = {
     ...resolveCanvasDimensions(design.dimensions ?? theme.dimensions),
     ...(layout ? { layout } : {}),
@@ -101,7 +105,7 @@ export function resolveSlideContext(presentation: unknown, index: number, option
     slideNumber: options.slideNumber ?? index + 1,
     slideCount: options.slideCount ?? slides.length,
     fontFamilies: resolveFontFamilies(fontScheme),
-    darkBackground: resolveColorRoles(colorScheme, { background: decisionColor(design.background ?? theme.background, colorScheme, rec(deck.variables)) }).dark,
+    darkBackground: roles.dark,
     ...(theme.background !== undefined ? { themeBackground: theme.background } : {}),
     // OPF 0.19: a theme may carry the shared design keys (between the deck's design and the layout record's).
     ...(theme.design !== undefined && rec(theme.design) === theme.design ? { themeDesign: theme.design } : {}),
@@ -109,5 +113,5 @@ export function resolveSlideContext(presentation: unknown, index: number, option
     ...(options.date !== undefined ? { date: options.date } : {}),
   };
   const resolvedSlide = resolveSlideVariables(slide, { slideNumber: composeOptions.slideNumber as number, slideCount: composeOptions.slideCount as number, presentation, darkBackground: composeOptions.darkBackground === true });
-  return { slide: resolvedSlide, options: composeOptions, diagnostics, resolved: { theme, colorScheme, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}), provenance: { ...(layoutProvenance ? { layout: layoutProvenance } : {}), ...records.provenance } } };
+  return { slide: resolvedSlide, options: composeOptions, diagnostics, resolved: { theme, colorScheme, roles, fontScheme, fontSchemePath: records.fontSchemePath, ...(layout ? { layout } : {}), provenance: { ...(layoutProvenance ? { layout: layoutProvenance } : {}), ...records.provenance } } };
 }

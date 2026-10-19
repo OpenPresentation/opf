@@ -560,3 +560,17 @@ export function codeSyntaxPaletteForScheme(scheme: unknown, options: CodeSyntaxP
   const pick = (role: string, slot: string, fallback: string) => normalize(record[role]) ?? normalize(record[slot]) ?? fallback;
   return codeSyntaxPalette({ primary: pick('primary', 'accent1', '#2563EB'), secondary: pick('secondary', 'accent2', '#0F766E'), accent: pick('accent', 'accent3', '#F59E0B') }, options);
 }
+
+/**
+ * RR-96: the palette for a slide's resolved roles. The code panel, the plain text and the comment colour come from the scheme through the
+ * variant's map (`roles.neutrals.codePanel`, `codeText`, `codeComment`), and keyword, string and number take the first three accents of the
+ * variant, so a dark variant or a re-ordered accent list restyles the code block with the rest of the slide. Preview and export call this with
+ * the roles they resolved; `scheme` supplies `primary`, `secondary` and `accent` overrides the same way {@link codeSyntaxPaletteForScheme} does.
+ */
+export function codeSyntaxPaletteForRoles(roles: { primary: string; secondary: string; accent: string; neutrals: { codePanel: { hex: string }; codeText: { hex: string }; codeComment: { hex: string } } }, options: CodeSyntaxPaletteOptions = {}): CodeSyntaxPalette {
+  const { neutrals } = roles;
+  return codeSyntaxPalette(
+    { primary: roles.primary, secondary: roles.secondary, accent: roles.accent, mutedText: neutrals.codeComment.hex },
+    { background: neutrals.codePanel.hex, foreground: neutrals.codeText.hex, ...options },
+  );
+}

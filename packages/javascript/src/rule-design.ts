@@ -1,4 +1,4 @@
-import { defaultSlideBackground, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
+import { type ColorMap, type ColorVariant, type SchemeNeutrals, defaultSlideBackground, normalizeColorVariant, normalizeHexColor, resolveColorRef, resolveColorRoles } from './color.js';
 import { imageBackground, type FontFamilies } from './composition.js';
 import type { SlideContext } from './slide-context.js';
 
@@ -127,6 +127,11 @@ export interface ResolvedDesign {
 	backdrop: Backdrop;
 	/** The preview's choice: light text (`light1`) on a dark background colour, else the `text` role (`dark1`). */
 	dark: boolean;
+	/** RR-96: the variant, its map over the scheme's slots (for PPTX `clrMap`), the six accents in its order and the scheme-derived neutrals. */
+	variant: ColorVariant;
+	map: ColorMap;
+	accents: string[];
+	neutrals: SchemeNeutrals;
 	colors: {
 		background: string;
 		surface: string;
@@ -153,9 +158,9 @@ export const colorFrom = (scheme: Rec, slot: unknown, fallback: string): string 
  * colour-scheme slot or role name, or a var:<id> reference (anything unresolvable falls back: the scheme's default slide
  * background, the text colour for a pattern's foreground); opacity composites over white.
  */
-function backdropOf(definition: unknown, scheme: Rec, text: string, variables: Rec): Backdrop {
+function backdropOf(definition: unknown, scheme: Rec, text: string, variables: Rec, canvasColor?: string): Backdrop {
 	const resolve = (value: unknown, fallback: string) => backgroundColorRef(value, scheme, variables, fallback);
-	const canvas = defaultSlideBackground(scheme);
+	const canvas = canvasColor ?? defaultSlideBackground(scheme);
 	if (!definition) return { kind: 'solid', color: canvas };
 	if (imageBackground(definition)) return { kind: 'image', opacity: imageBackground(definition)?.opacity ?? 1, base: PAGE };
 	if (typeof definition === 'string') return { kind: 'solid', color: colorFrom(scheme, definition, canvas) };
@@ -236,6 +241,58 @@ export function decisionColor(definition: unknown, scheme: Rec, variables: Rec =
 	}
 }
 
+const THEME_SLOTS: ReadonlySet<unknown> = new Set(['light1', 'light2', 'dark1', 'dark2']);
+
+/** What the design says about the slide's colors: a variant (a map over the scheme), a single background color, or neither (light1 by default). */
+export interface ColorChoice {
+	variant?: ColorVariant;
+	/** The color of a solid or pattern background fill, when it chooses light or dark by its luminance. */
+	background?: string;
+	/** The background definition that is actually drawn: a variant at a more specific level than the theme's background hides that background (the slide is the variant's bg1), a picture or gradient with no tone stays. Present, possibly undefined, only when the choice decided it. */
+	drawn?: { definition: unknown };
+}
+
+/**
+ * The variant or background color that decides a slide's roles (RR-96). `levels` are the design records from the most specific to the
+ * least: the slide's design, the deck's design, then the theme record. At each level, in order:
+ *
+ * 1. a `variant` wins (a solid or pattern background at the same level still supplies the fill color);
+ * 2. a theme-slot background (`"dark1"`, `{ type: "theme", slot }`) is the variant of that slot;
+ * 3. a picture or gradient background with a `tone` is the dark1 or light1 variant; without a tone only a variant of a less specific
+ *    level can still apply, and otherwise the default (light) holds, as before;
+ * 4. any other background (a solid or pattern color) decides by its luminance, with no variant.
+ *
+ * A slide's variant replaces the deck's whole, accent order included. A variant also hides a background of a less specific level (a deck
+ * variant over the theme's background: the slide is the variant's bg1), reported as `drawn`.
+ */
+export function colorChoice(levels: readonly Rec[], scheme: Rec, variables: Rec = {}): ColorChoice {
+	let variantOnly = false;
+	let picture: { definition: unknown } | undefined;
+	for (const level of levels) {
+		const definition = level.background;
+		const slot = typeof definition === 'string' ? definition : rec(definition).type === 'theme' ? rec(definition).slot : undefined;
+		const themeSlot = THEME_SLOTS.has(slot) ? (slot as ColorVariant['background']) : undefined;
+		const isPicture = imageBackground(definition) !== undefined || rec(definition).type === 'gradient';
+		const variant = normalizeColorVariant(level.variant);
+		if (variant) {
+			const fill = definition !== undefined && !variantOnly && !themeSlot && !isPicture ? decisionColor(definition, scheme, variables) : undefined;
+			const own = definition !== undefined && !variantOnly && !themeSlot;
+			return { variant, ...(fill ? { background: fill } : {}), drawn: variantOnly ? picture! : { definition: own ? definition : undefined } };
+		}
+		if (variantOnly || definition === undefined || definition === null || definition === false) continue;
+		if (themeSlot) return { variant: { background: themeSlot } };
+		if (isPicture) {
+			const tone = rec(definition).tone;
+			if (tone === 'dark' || tone === 'light') return { variant: { background: tone === 'dark' ? 'dark1' : 'light1' } };
+			variantOnly = true;
+			picture = { definition };
+			continue;
+		}
+		return { background: decisionColor(definition, scheme, variables) };
+	}
+	return {};
+}
+
 /**
  * Effective design of one slide: the same fields and the same defaults as the opf-render preview, including
  * its choice of text colour from the luminance of the background (a gradient background counts as light, as
@@ -252,11 +309,12 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 	const dimensions = { width: options.width as number, height: options.height as number };
 	const variables = rec(document.variables);
 	// The preview derives the dark/light decision from one colour, before any opacity: see decisionColor.
-	const roles = resolveColorRoles(colorScheme, { background: decisionColor(own.background ?? deck.background ?? theme.background, colorScheme, variables) });
+	const choice = colorChoice([own, deck, theme], colorScheme, variables);
+	const roles = resolveColorRoles(colorScheme, { background: choice.background, variant: choice.variant });
 	const dark = roles.dark;
 	const text = roles.text;
-	const backdrop = backdropOf(own.background ?? deck.background ?? theme.background, colorScheme, text, variables);
-	const picture = imageBackground(own.background ?? deck.background ?? theme.background);
+	const backdrop = backdropOf(choice.drawn ? choice.drawn.definition : own.background ?? deck.background ?? theme.background, colorScheme, text, variables, roles.map.bg1 === 'light1' ? undefined : roles.background);
+	const picture = imageBackground(choice.drawn ? choice.drawn.definition : own.background ?? deck.background ?? theme.background);
 	const backgroundImage: ResolvedDesign['backgroundImage'] =
 		picture && own.background !== undefined
 			? { source: picture.src, fit: picture.fit, path: `/slides/${index}/design/background` }
@@ -271,6 +329,10 @@ export function resolveDesign(document: Rec, index: number, context: SlideContex
 		dimensions,
 		backdrop,
 		dark,
+		variant: roles.variant,
+		map: roles.map,
+		accents: roles.accents,
+		neutrals: roles.neutrals,
 		colors: {
 			background: roles.background,
 			surface: roles.surface,

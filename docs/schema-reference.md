@@ -201,6 +201,7 @@ _No named properties._
 | `fontScheme` | no | `oneOf:string / ref:FontScheme` | Font scheme for heading, body, accent, and code text. Accepts two forms: - A fontSchemes reference: a bare id ('aptos') or 'name:id' ('acme:inter'). - Object form: a FontScheme with an optional 'id' reference as the b... |
 | `dimensions` | no | `oneOf:ref:DimensionPreset / ref:Dimensions` | Slide dimensions and aspect ratio. String shorthand such as 'widescreen' is equivalent to { preset: 'widescreen' }. |
 | `background` | no | `oneOf:ref:BackgroundShortcut / ref:Background` | Default slide background applied across the deck unless overridden on a slide (slides.N.design.background); the resolved theme's background is the fallback. A background is the only canvas fill and never moves content... |
+| `variant` | no | `oneOf:ref:ThemeBackgroundSlot / ref:ColorVariant` | Optional color variant, as a background slot ('light1', 'light2', 'dark1', 'dark2'; the same as { background: slot }) or the object form, which is needed only for an accent order: which slot of the color scheme is the... |
 | `logo` | no | `oneOf:string / const:false` | Which logo covers, section dividers and picture bullets draw. Logos live on the organization (Organization.logo); without this field covers and sections draw the primary organization's full logo and picture bullets it... |
 | `watermark` | no | `oneOf:const:false / ref:Asset / ref:Watermark` | Optional decorative watermark applied across slides: an image or a text stamp, in the fixed frame and at the opacity described on Watermark. Use false to suppress an inherited watermark in slide-level design; a string... |
 | `header` | no | `oneOf:const:false / ref:HeaderFooter` | Repeated header furniture rendered outside the main slide content. Use false to suppress an inherited header. |
@@ -484,6 +485,18 @@ _No named properties._
 _No named properties._
 
 
+### ColorVariant
+
+- Type: `object`
+- Required fields: `background`
+- Purpose: A variant of the deck's single color scheme, as a mapping over its twelve slots (PowerPoint's clrMap): 'background' is the slot the slide background and the role bg1 take, and with it the other roles: light1 maps bg1 = light1, tx1 = dark1, bg2 = light2, tx2 = dark2; dark1 maps bg1 = dark1, tx1 = light1, bg2 = dark2, tx2 = light2; light2 and dark2 make that slot both the background and the alternate surface (light2: bg1 = bg2 = light2, tx1 = dark1, tx2 = dark2; dark2: bg1 = bg2 = dark2, tx1 =...
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `background` | yes | `ref:ThemeBackgroundSlot` | The scheme slot that is the background (bg1) of the variant. |
+| `accents` | no | `array<enum:accent1 \| accent2 \| accent3 \| accent4 \| accent5 \| accent6>` | Optional accent order: a permutation of accent1 to accent6. Entry i is the scheme slot drawn as accent i + 1, so primary, secondary and accent (the first three) and the chart series colors follow it. Default: the sche... |
+
+
 ### Background
 
 - Type: `oneOf:ref:ThemeBackground / ref:SolidBackground / ref:GradientBackground / ref:ImageBackground / ref:PatternBackground`
@@ -526,6 +539,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
+| `tone` | no | `enum:dark \| light` | Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without a tone a picture or gradient takes the deck's variant, else counts as light. |
 | `type` | yes | `const:"gradient"` | Fixed gradient background fill. |
 | `gradient` | yes | `object` | Gradient fill definition. |
 | `opacity` | no | `number` | Background opacity from 0 (fully transparent) to 1 (fully opaque). |
@@ -539,6 +553,7 @@ _No named properties._
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
+| `tone` | no | `enum:dark \| light` | Whether the background is dark or light, which picks the color map (dark1 or light1) so text, lines and neutrals read on it. Without a tone a picture or gradient takes the deck's variant, else counts as light. |
 | `type` | yes | `const:"image"` | Picture background. |
 | `src` | yes | `string` | Source for the background image: an 'asset:<id>' reference, HTTPS URL, data URI, or a relative path resolved against the OPF file location. |
 | `alt` | no | `string` | Alternative text. A background with alt is meaningful: PowerPoint export draws it as a full-slide picture at the back that carries the text, so screen readers see it. Without alt it is decorative and exports as the na... |
