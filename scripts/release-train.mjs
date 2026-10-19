@@ -177,6 +177,30 @@ export function floorChanges(manifest, targets, { preserveCompatiblePatchPeers =
   return changes;
 }
 
+/**
+ * The package-lock.json text without the lock entries of the named ecosystem packages (every `node_modules/.../@openpresentation/<name>`,
+ * nested copies included), so `npm install --package-lock-only` resolves them afresh against the manifest's raised ranges.
+ * npm keeps locked nodes where it can, and a lock holding the previous minor of a sibling (opf 0.21.0, opf-render 0.20.4 with its own nested
+ * opf 0.20.5) cannot be reconciled with the next minor's optional peer ranges (opf 0.22.1 asks opf-render ^0.22.0 and opf-pptx ^0.22.0): npm
+ * stops with ERESOLVE although a fresh resolution is fine. Everything else in the lock keeps its locked version. Returns the text unchanged
+ * when nothing matches or the lock is not JSON.
+ */
+export function pruneEcosystemLockEntries(lockText, names) {
+  let lock;
+  try { lock = JSON.parse(lockText); } catch { return lockText; }
+  if (!lock || typeof lock !== "object" || typeof lock.packages !== "object") return lockText;
+  const targets = new Set(names);
+  let removed = 0;
+  for (const key of Object.keys(lock.packages)) {
+    if (key === "") continue;
+    const last = key.split("node_modules/").at(-1);
+    if (targets.has(last)) { delete lock.packages[key]; removed++; }
+  }
+  if (!removed) return lockText;
+  const indent = /^(\s+)"/m.exec(lockText)?.[1] ?? "  ";
+  return JSON.stringify(lock, null, indent) + (lockText.endsWith("\n") ? "\n" : "");
+}
+
 function escapeRegExp(text) {
   return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -1094,7 +1118,15 @@ export async function prep(deps, pkg, train, { execute = false, item, branch, su
   const left = leftoverFragments(dir, pkg);
   if (left.length) throw new Error(`fragments for ${pkg.changelog.package ?? pkg.repo} are left after assemble: ${left.join(", ")}`);
   if (pkg.lockfile === "pnpm") must(deps.exec("pnpm", ["install", "--lockfile-only", "--ignore-scripts"], { cwd: dir, env: deps.env }), "pnpm install --lockfile-only");
-  else must(deps.exec("npm", ["install", "--package-lock-only", "--ignore-scripts", "--no-audit", "--no-fund"], { cwd: dir, env: deps.env }), "npm install --package-lock-only");
+  else {
+    // Raised sibling ranges are re-resolved from scratch: keeping their locked nodes makes npm fail with ERESOLVE across a minor (RR-88).
+    const lockFile = path.join(dir, "package-lock.json");
+    if (changes.length && existsSync(lockFile)) {
+      const lockText = readFileSync(lockFile, "utf8"), pruned = pruneEcosystemLockEntries(lockText, new Set(changes.map((change) => change.name)));
+      if (pruned !== lockText) writeFileSync(lockFile, pruned);
+    }
+    must(deps.exec("npm", ["install", "--package-lock-only", "--ignore-scripts", "--no-audit", "--no-fund"], { cwd: dir, env: deps.env }), "npm install --package-lock-only");
+  }
   const changed = git(["status", "--porcelain"]).split("\n").filter(Boolean).map((line) => line.slice(3).trim());
   const stray = changed.filter((file) => !allowedPrepFile(pkg, file));
   if (stray.length) throw new Error(`a release-prep PR changes only versions, the changelog, ranges and the lockfile; this one also changed: ${stray.join(", ")} (clone left at ${dir})`);

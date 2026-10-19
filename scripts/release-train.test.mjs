@@ -22,6 +22,7 @@ import {
   lockstepFlags,
   lockstepOrder,
   main,
+  pruneEcosystemLockEntries,
   nextStep,
   npmRegistry,
   PACKAGES,
@@ -1293,4 +1294,25 @@ test("RR-68: release fallback measures only the verified scheduled Editor run an
   assert.equal((await check({required:[job.name]})).reads,0);
   assert.equal((await check({rulesError:true})).reads,0);
   assert.equal((await check({rulesError:"invalid"})).reads,0);
+});
+
+test("pruneEcosystemLockEntries drops only the named ecosystem entries, nested copies included, and keeps the lock's formatting", () => {
+  const lock = {
+    name: "x", lockfileVersion: 3,
+    packages: {
+      "": { name: "x", version: "1.0.0", dependencies: { "@openpresentation/opf": "^0.21.0" } },
+      "node_modules/@openpresentation/opf": { version: "0.21.0" },
+      "node_modules/@openpresentation/opf-render": { version: "0.20.4" },
+      "node_modules/@openpresentation/opf-render/node_modules/@openpresentation/opf": { version: "0.20.5" },
+      "node_modules/@openpresentation/gallery": { version: "3.0.0" },
+      "node_modules/ajv": { version: "8.17.1" },
+    },
+  };
+  const text = JSON.stringify(lock, null, 2) + "\n";
+  const pruned = JSON.parse(pruneEcosystemLockEntries(text, new Set(["@openpresentation/opf", "@openpresentation/opf-render"])));
+  assert.deepEqual(Object.keys(pruned.packages), ["", "node_modules/@openpresentation/gallery", "node_modules/ajv"]);
+  assert.equal(pruned.packages["node_modules/ajv"].version, "8.17.1");
+  assert.ok(pruneEcosystemLockEntries(text, new Set(["@openpresentation/opf"])).endsWith("}\n"));
+  assert.equal(pruneEcosystemLockEntries(text, new Set(["@openpresentation/opf-editor"])), text, "no match: unchanged");
+  assert.equal(pruneEcosystemLockEntries("not json", new Set(["@openpresentation/opf"])), "not json");
 });
