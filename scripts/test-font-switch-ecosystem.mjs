@@ -948,6 +948,11 @@ if (FULL) {
     {label: 'bold', apply: setTheme('bold'), expectUsed: ['Impact']},
     {label: 'minimal again', apply: setTheme('minimal'), expectUsed: ['Aptos Display', 'Aptos'], returnsToStart: true}
   ]);
+  // Seaford was the font scheme of the dark theme, which gallery 4 removes (dark is a variant of every theme): it is now exercised as a font scheme of its own.
+  await runSwitch('font-scheme-seaford', {...deck, design: {theme: 'minimal', fontScheme: 'aptos'}}, [
+    {label: 'seaford', apply: setScheme('design.fontScheme', 'seaford'), expectUsed: ['Seaford Display', 'Seaford']},
+    {label: 'aptos again', apply: setScheme('design.fontScheme', 'aptos'), expectUsed: ['Aptos Display', 'Aptos'], returnsToStart: true}
+  ]);
   // A language switch comes with the slide's text in that language (a block replacement); the script fonts follow.
   // The chain visits every script in the languages catalog: the pairwise languages first, then one language per other script.
   const languageSlide = (language) => ({id: 'all', title: TEXT[language].title, bullets: TEXT[language].items, text: TEXT[language].body, notes: TEXT[language].body});
