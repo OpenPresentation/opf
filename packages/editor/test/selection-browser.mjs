@@ -61,7 +61,7 @@ try {
   // A scalar textarea paints its own editing boundary. The selected SVG hit rectangle must stay
   // interactive without painting a second box, including after a draft replaces the SVG.
   const title = 'Crossed $4M ARR in nine months';
-  const deck = {design: {theme: 'dark', fontScheme: 'roboto'}, slides: [{layout: 'cover', title, subtitle: 'Adoption keeps accelerating.'}]};
+  const deck = {design: {theme: 'classic', variant: 'dark1', fontScheme: 'roboto'}, slides: [{layout: 'cover', title, subtitle: 'Adoption keeps accelerating.'}]};
   const target = () => page.locator('[data-canvas-target][data-opf-path="slides.0.title"]');
   const input = () => page.getByRole('textbox', {name: 'Edit title inline', exact: true});
   const paint = () => page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));

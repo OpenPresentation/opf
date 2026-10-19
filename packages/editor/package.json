@@ -286,7 +286,7 @@
     }
   },
   "devDependencies": {
-    "@openpresentation/gallery": "^3.0.0",
+    "@openpresentation/gallery": "^4.0.0",
     "@expo-google-fonts/arimo": "0.4.3",
     "@expo-google-fonts/caladea": "0.4.2",
     "@expo-google-fonts/cousine": "0.4.3",

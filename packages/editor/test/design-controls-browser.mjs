@@ -152,7 +152,7 @@ try {
     const before = await doc();
     await keyNextOption(field(design, 'Theme'));
     const after = await waitDoc(current => current.design.theme !== before.design.theme, 'keyboard theme change');
-    assert.equal(after.design.theme, 'dark', 'the next theme in the list');
+    assert.equal(after.design.theme, 'bold', 'the next theme in the list');
     await settle();
     await button('Undo').click();
     await waitDoc(current => JSON.stringify(current) === JSON.stringify(before), 'keyboard theme change undone');
@@ -162,7 +162,7 @@ try {
 
   // The 14 gallery dimensions, each from its control.
   // OPF 0.15: a theme brings its own schemes, so the deck's font scheme override is removed rather than a copy being written.
-  await step('themes', () => field(design, 'Theme').selectOption('dark'), current => current.design.theme === 'dark' && current.design.fontScheme === undefined && current.design.colorScheme === undefined, { preview: true });
+  await step('themes', () => field(design, 'Theme').selectOption('minimal'), current => current.design.theme === 'minimal' && current.design.fontScheme === undefined && current.design.colorScheme === undefined, { preview: true });
   // The chart slide shows scheme colors; the cover only uses the theme.
   await slide(2);
   await step('color-schemes', () => field(design, 'Color scheme').selectOption('forest-green'), current => current.design.colorScheme === 'forest-green', { preview: true });

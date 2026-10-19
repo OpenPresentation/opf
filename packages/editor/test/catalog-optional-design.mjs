@@ -12,20 +12,20 @@ for (const path of ['design.theme', '/slides/0/design/theme']) {
   const editor = createEditorSession(initial, { catalogs, rejectInvalid: true });
   let notifications = 0;
   editor.subscribe(() => notifications++);
-  setCatalogId(editor, path, 'themes', 'dark');
-  assert.equal(editor.get(path), 'dark');
+  setCatalogId(editor, path, 'themes', 'bold');
+  assert.equal(editor.get(path), 'bold');
   assert.equal(notifications, 1, 'parent creation and selection are one transaction');
   editor.undo();
   assert.deepEqual(editor.presentation, initial, 'one Undo removes the created parent');
   assert.equal(editor.undo(), null);
   editor.redo();
-  assert.equal(editor.get(path), 'dark');
+  assert.equal(editor.get(path), 'bold');
 }
 // OPF 0.15 references are plain `id` / `name:id` strings; the sibling design fields stay as they are.
 const existing = { ...initial, design: { fontScheme: 'roboto', theme: 'classic', contentBox: false } };
 const editor = createEditorSession(existing, { catalogs });
-setCatalogId(editor, 'design.theme', 'themes', 'dark');
-assert.deepEqual(editor.get('design'), { fontScheme: 'roboto', theme: 'dark', contentBox: false });
+setCatalogId(editor, 'design.theme', 'themes', 'bold');
+assert.deepEqual(editor.get('design'), { fontScheme: 'roboto', theme: 'bold', contentBox: false });
 editor.undo();
 assert.deepEqual(editor.presentation, existing);
 for (const path of ['design.theme', 'slides.0.design.theme']) {
@@ -35,9 +35,9 @@ for (const path of ['design.theme', 'slides.0.design.theme']) {
   assert.equal(session.undo(), null);
 }
 const strict = createEditorSession(initial, { catalogs });
-assert.throws(() => strict.set('design.theme', 'dark'), /parent/i);
-assert.throws(() => setCatalogId(strict, 'extension.theme', 'themes', 'dark'), /parent/i);
-assert.throws(() => setCatalogId(strict, 'slides.9.design.theme', 'themes', 'dark'), /parent/i);
+assert.throws(() => strict.set('design.theme', 'bold'), /parent/i);
+assert.throws(() => setCatalogId(strict, 'extension.theme', 'themes', 'bold'), /parent/i);
+assert.throws(() => setCatalogId(strict, 'slides.9.design.theme', 'themes', 'bold'), /parent/i);
 assert.equal(strict.undo(), null);
 
 const document = { createElement: () => node(), defaultView: { CustomEvent: class { constructor(type, options) { this.type = type; this.detail = options.detail; } } } };
@@ -62,17 +62,17 @@ for (const binding of ['DOM', 'React', 'Svelte']) {
   if (binding === 'DOM') { control = createCatalogSelect(session, {...params, document}); fire = () => control.change(); destroy = () => control.destroy(); }
   if (binding === 'Svelte') { const action = opfCatalogSelect(control, params); fire = () => control.change(); destroy = () => action.destroy(); }
   if (binding === 'React') fire = () => OPFCatalogSelect(params).props.onChange({ currentTarget: control, defaultPrevented: false });
-  control.value = 'dark'; fire();
-  assert.equal(session.get('design.theme'), 'dark', binding);
+  control.value = 'bold'; fire();
+  assert.equal(session.get('design.theme'), 'bold', binding);
   session.undo(); assert.deepEqual(session.presentation, initial, binding);
-  session.redo(); assert.equal(session.get('design.theme'), 'dark', binding);
+  session.redo(); assert.equal(session.get('design.theme'), 'bold', binding);
   control.value = 'unknown'; fire();
   assert.equal(failures.length, 1, binding);
-  assert.equal(control.value, 'dark', 'rejected selection restores committed value');
+  assert.equal(control.value, 'bold', 'rejected selection restores committed value');
   assert.equal(control.attributes['aria-invalid'], 'true');
   assert.match(control.validityMessage, /Unknown/);
   assert.equal(control.events.at(-1).type, 'opferror');
-  assert.equal(session.get('design.theme'), 'dark');
+  assert.equal(session.get('design.theme'), 'bold');
   control.value = 'classic'; fire();
   assert.equal(control.validityMessage, '');
   assert.equal(control.attributes['aria-invalid'], undefined);
