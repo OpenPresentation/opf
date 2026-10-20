@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/government/regulatory-risk-brief.opf.json",
+  "entries": {
+    "gallery/government/regulatory-risk-brief.opf.json#0": {
+      "sha256": "ae665057e6e59bbfe15c0bee51f0013c685cc528813686e5a172a2371be2d6f9",
+      "bytes": 5180
+    },
+    "gallery/government/regulatory-risk-brief.opf.json#1": {
+      "sha256": "820a43391b55b23722451bb28c934bf237427db99f1e0fe500f75a67c3e1bddc",
+      "bytes": 8496
+    },
+    "gallery/government/regulatory-risk-brief.opf.json#2": {
+      "sha256": "45cdd538bfe89279dc76309e55984446263e7d987734c966e6e219106cff6b77",
+      "bytes": 5348
+    },
+    "gallery/government/regulatory-risk-brief.opf.json#3": {
+      "sha256": "82deb2d2e646aa4b14d2e9493099115d7392711261254cf1fc4c93671a025948",
+      "bytes": 10159
+    },
+    "gallery/government/regulatory-risk-brief.opf.json#4": {
+      "sha256": "1a52538e8c8ec0f190ea27cfcff5809ff560fc3d29a40c8c8f3c794b43e874ed",
+      "bytes": 9339
+    },
+    "gallery/government/regulatory-risk-brief.opf.json#5": {
+      "sha256": "0f92937f2fc314ae32e515bfee9d21c94b839f393b2219178841031706dc4c40",
+      "bytes": 9298
+    }
+  }
+}
