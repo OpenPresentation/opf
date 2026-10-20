@@ -18,7 +18,9 @@
 //                                   [--attest-wait-minutes 15] [--attest-poll-seconds 30] [--checks-wait-minutes 0]
 //       creates refs/tags/<prefix>X.Y.Z on the release commit (re-verified), waits for the publish run, then verifies,
 //       waiting up to --attest-wait-minutes for npm to serve the attestation bundle and the install (RR-51); with
-//       --checks-wait-minutes N it first waits up to N min for pending checks on the release commit instead of stopping
+//       --checks-wait-minutes N it first waits up to N min for pending checks on the release commit instead of stopping.
+//       RR-100: the checks are the release commit's CI evidence (scripts/ci-evidence.json, the file the publish workflow
+//       verifies before `npm publish`), so a commit whose evidence is already green is tagged without a second wait.
 //   node scripts/release-train.mjs verify <npm name or package>@X.Y.Z [--json] [--wait <minutes>]
 //       npm version, gitHead = tagged commit, SLSA provenance (bundle and `npm audit signatures`), GitHub release.
 //       Fails fast by default; --wait retries only the two propagation-sensitive checks (404 bundle, notarget install)
@@ -39,6 +41,8 @@ import { ancestry, githubApi, OWNER } from "./ecosystem-lock.mjs";
 import { assertPublishedGallery } from "./candidate-gallery.mjs";
 import { satisfies } from "./release-plan-cli.mjs";
 import { knownBranchRules, measurementClassifier } from "./measurement-policy.mjs";
+import { prepMarker } from "./release-prep.mjs";
+import { CONFIG_PATH as EVIDENCE_CONFIG, evaluateEvidence, parseConfig as parseEvidenceConfig } from "./ci-evidence.mjs";
 
 /** The five packages in lockstep order. `upstream` are the packages whose versions this one's floors may name. */
 export const PACKAGES = [
@@ -523,7 +527,42 @@ export async function commitChecks(deps, repo, sha) {
   let state = "green";
   if (failing.length) state = "red";
   else if (pending.length || missing.length || !names.length) state = "pending";
-  return { state, required, failing, pending, missing, advisoryFailing, advisoryMeasurements, advisoryPending, total: results.size };
+  const result = { state, required, failing, pending, missing, advisoryFailing, advisoryMeasurements, advisoryPending, total: results.size };
+  const evidence = await releaseEvidence(deps, repo, sha);
+  if (!evidence) return result;
+  // RR-100: the release commit's CI evidence (scripts/ci-evidence.json, the same file and code the publish workflow runs
+  // before `npm publish`). A repository with a ruleset keeps its required checks AND needs the evidence; one without
+  // (the siblings) is decided by the evidence alone, so the tag step stops waiting for checks that are not CI evidence.
+  const rank = { green: 0, pending: 1, red: 2 };
+  const fromRuleset = required.length > 0;
+  const decided = fromRuleset ? [state, evidence.state].sort((a, b) => rank[b] - rank[a])[0] : evidence.state;
+  return {
+    ...result,
+    state: decided,
+    evidence,
+    required: fromRuleset ? required : evidence.required,
+    failing: fromRuleset ? failing : evidence.problems,
+    pending: fromRuleset ? pending : evidence.pending,
+    missing: fromRuleset ? missing : [],
+    advisoryFailing: fromRuleset ? advisoryFailing : [...new Set([...advisoryFailing, ...failing])],
+  };
+}
+
+/**
+ * The CI evidence of a commit by the repository's own scripts/ci-evidence.json at that commit: null when the commit has none
+ * (a release commit from before RR-100). An unreadable configuration is red: the publish run would refuse it too.
+ */
+async function releaseEvidence(deps, repo, sha) {
+  const text = await fileAt(deps, repo, EVIDENCE_CONFIG, sha);
+  if (text === null) return null;
+  let config;
+  try {
+    config = parseEvidenceConfig(text);
+  } catch (error) {
+    return { state: "red", required: [], problems: [error.message], pending: [], lines: [] };
+  }
+  const result = await evaluateEvidence({ api: (route) => deps.api(route), repo: `${OWNER}/${repo}`, sha, config });
+  return { ...result, required: config.requirements.flatMap((requirement) => requirement.jobs) };
 }
 
 function checksLine(checks) {
@@ -1041,6 +1080,7 @@ function must(result, what) {
 export function prepBody({ pkg, version, previous, item, changes, fragments, prose, summary, train, removedField = null }) {
   const floors = changes.length ? changes.map((c) => `| \`${c.field}\` | \`${c.name}\` | \`${c.from}\` | \`${c.to}\` |`).join("\n") : "";
   return `${item ? `${item}: ` : ""}release-prep PR for ${pkg.name} ${version} (from ${previous}), opened by \`scripts/release-train.mjs prep\` (RR-51).
+${prepMarker(pkg.key, version)}
 
 - \`${pkg.manifest}\`: version ${previous} -> ${version}.
 - \`${pkg.changelog.file}\`: \`node scripts/changelog-fragments.mjs assemble --version ${version}${pkg.changelog.package ? ` --package ${pkg.changelog.package}` : ""}\` moved ${fragments} fragment(s) into the release section.${summary ? ` Summary: ${summary}` : ""}
