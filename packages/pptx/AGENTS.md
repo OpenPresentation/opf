@@ -8,7 +8,7 @@
 - Commands (all in `package.json`): `npm run build`, `npm run typecheck`, `npm test`, `npm run validate`, `npm run test:packed`, `npm run test:browser`, `npm run test:code`, `npm run test:font-variants`, and the offline native controls `npm run test:native-picture-edit-controls`, `npm run test:native-font-embed-controls`, `npm run test:native-mixed-edit-controls`.
 - CI (`.github/workflows/ci.yml`) runs one `package` job on `ubuntu-latest` (Playwright container) and `windows-latest`. It checks out core, opf-render and opf-editor at pinned SHAs, runs `test:packed` against published dependencies, links sources with core's `scripts/link-ecosystem.mjs --packages-only`, then runs audit, typecheck, the native controls, validate, test, font-variants, code, browser and core's coordinated packed-tarball checks. Windows CI also runs the harness checks and `-PureRegression` modes without Office.
 - CI cost (RR-57): a pull request runs the Linux `package` job on the current Node; the Windows leg (about 23 minutes) and the Node 22 and 26 engines-range legs run on push to main, the weekly schedule and manual runs. Add the `full-ci` label when a change touches OS- or Node-version-specific code (the native harness, paths, line endings), to get them on the pull request.
-- `release.yml` publishes on `opf-pptx-v*` tags (or manual dispatch) with npm provenance, after rerunning the full check set.
+- `release.yml` publishes on `opf-pptx-v*` tags (or manual dispatch) with npm provenance, after verifying the CI evidence of the tagged commit (`scripts/ci-evidence.mjs`, `scripts/ci-evidence.json`: the push-to-main `ci.yml` run on exactly that commit; RR-100) and the artifact (packed install, pack dry-run); it re-runs no test.
 
 ### Windows notes
 

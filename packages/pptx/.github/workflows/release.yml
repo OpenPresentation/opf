@@ -14,6 +14,7 @@ jobs:
     container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
     timeout-minutes: 20
     permissions:
+      actions: read
       contents: read
       id-token: write
     steps:
@@ -25,6 +26,14 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - name: Verify merged release source
         run: node scripts/publish-source.mjs --manifest package.json --tag-prefix opf-pptx-v --tag-prefix @openpresentation/opf-pptx@v
+      # RR-100: the tagged commit's own CI is the evidence (scripts/ci-evidence.mjs, scripts/ci-evidence.json): the push-to-main run of
+      # ci.yml on exactly this commit must have succeeded, with its package job(s) and the Node 22 and Node 26 engines-range legs.
+      # Nothing is re-tested below; the steps that remain verify the artifact itself. Fails closed: a missing, running or failed
+      # run means no publish.
+      - name: Verify the CI evidence of this commit
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/ci-evidence.mjs --sha "$(git rev-parse HEAD)"
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
@@ -41,16 +50,10 @@ jobs:
             "opf-pptx-v${VERSION}"|"@openpresentation/opf-pptx@v${VERSION}") ;;
             *) echo "Release tag does not match package version ${VERSION}."; exit 1 ;;
           esac
-      - run: npm run typecheck
-      - run: npm run validate
-      - run: npm test
-      - run: npm run test:code
+      # RR-100: typecheck, validate, the tests and the browser suites ran in CI on this exact commit; the steps below verify the artifact.
       - name: Refuse a declared unreleased core (RR-55)
         run: node scripts/published-core-gate.mjs --forbid
       - run: npm run test:packed
-      - name: Verify Playwright image version
-        run: node -e "if (require('playwright/package.json').version !== '1.64.0') throw new Error('Update the pinned Playwright image with the test package.');"
-      - run: npm run test:browser
       - run: npm pack --dry-run
       - run: npm publish --access public --provenance
 
