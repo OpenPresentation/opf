@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "description": "RR-100: the CI evidence that scripts/ci-evidence.mjs requires for a release commit (the publish workflow, before npm publish) and that opf's release-train.mjs tag reads. This repository has no merge queue, so the evidence is the push-to-main run of ci.yml on exactly the release commit: its package job(s) and the Node 22 and Node 26 engines-range legs. Keep the job names equal to ci.yml's.",
+  "requirements": [
+    {
+      "workflow": ".github/workflows/ci.yml",
+      "event": "push",
+      "branch": "main",
+      "jobs": ["package", "Node 22 (engines range)", "Node 26 (engines range)"]
+    }
+  ]
+}
