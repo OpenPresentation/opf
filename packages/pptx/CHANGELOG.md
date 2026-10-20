@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.24.1 (2026-10-20)
+
+- RR-97: an `imageResolver` that throws for an image it cannot read (the CLI's does for a missing file, a path outside the asset directory or a file that is no image) no longer fails the whole export. The picture is left out like any other unresolved source: its fallback (the "Image unavailable" placeholder, the slide's resolved background color for a background, no watermark, the character bullets) and one `unresolved-asset` warning with `reason: "resolver-failed"`, whose message is the resolver's own followed by a note that the image was left out. `strictAssets: true` still fails, now with a `missing-asset` error (`details.reason: "resolver-failed"`); an `OPFPptxError` or an `AbortError` thrown by the resolver still propagates. A background picture that is left out keeps the background the slide would have without it (the deck's own background when the slide's was the picture, otherwise the variant's `bg1`); before, a dark-variant slide fell back to the light canvas color.
+
 ## 0.24.0 (2026-10-20)
 
 - RR-96: adopts `@openpresentation/gallery` 4.0.0 (`^4.0.0`, a dependency): the default catalog has no `dark` theme (a dark deck is a theme with a dark `design.variant`, for example `{ "theme": "classic", "variant": "dark1" }`), and `minimal`, `classic` and `bold` carry `variants`. The exporter's output is unchanged; its tests use `classic` with a dark variant where they used the `dark` theme.
