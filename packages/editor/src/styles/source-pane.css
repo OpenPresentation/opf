@@ -146,7 +146,8 @@
 
 /* Code */
 .opf-source-code { position: relative; flex: 1; min-height: 0; overflow: hidden; display: flex; }
-.opf-source-code > .cm-editor { flex: 1; min-width: 0; height: 100%; background: transparent; color: var(--opf-ui-fg); }
+/* The pane frame draws the edge: the editor inside it has no border or radius of its own (panels.css gives a standalone editor both). */
+.opf-source-code > .cm-editor { flex: 1; min-width: 0; height: 100%; background: transparent; color: var(--opf-ui-fg); border: 0; border-radius: 0; }
 .opf-source-code .cm-editor.cm-focused { outline: none; }
 .opf-source-code .cm-scroller { overflow: auto; font: 400 13.5px/22px var(--opf-ui-mono); }
 .opf-source[data-density="touch"] .opf-source-code .cm-scroller { font-size: 13px; line-height: 21px; }

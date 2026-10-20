@@ -2172,6 +2172,49 @@
   box-shadow: var(--opf-ui-shadow-pop);
 }
 
+:root :is(.opf-ui, .opf-json, .opf-code) .cm-tooltip.cm-tooltip-autocomplete > ul {
+  font-family: var(--opf-ui-mono);
+  font-size: 12px;
+}
+
+:root :is(.opf-ui, .opf-json, .opf-code) .cm-tooltip.cm-tooltip-autocomplete > ul > li {
+  padding: 2px 8px;
+  color: var(--opf-ui-fg);
+}
+
+:root :is(.opf-ui, .opf-json, .opf-code) .cm-tooltip.cm-tooltip-autocomplete > ul > li[aria-selected] {
+  color: var(--opf-ui-accent-fg);
+  background: var(--opf-ui-accent);
+}
+
+:root :is(.opf-ui, .opf-json, .opf-code) .cm-tooltip-autocomplete .cm-completionDetail {
+  margin-left: 12px;
+  font-family: var(--opf-ui-font);
+  font-style: normal;
+  color: var(--opf-ui-muted-fg);
+}
+
+:root :is(.opf-ui, .opf-json, .opf-code) .cm-tooltip-autocomplete > ul > li[aria-selected] .cm-completionDetail {
+  color: inherit;
+  opacity: 0.85;
+}
+
+:root :is(.opf-ui, .opf-json, .opf-code) .cm-tooltip-autocomplete .cm-completionMatchedText {
+  font-weight: 600;
+  text-decoration: none;
+}
+
+:root :is(.opf-ui, .opf-json, .opf-code) .cm-tooltip .cm-completionInfo {
+  max-width: 280px;
+  padding: 6px 8px;
+  font: 12px/1.45 var(--opf-ui-font);
+  white-space: pre-wrap;
+  color: var(--opf-ui-fg);
+  background: var(--opf-ui-surface);
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-md);
+}
+
 :is(.opf-ui, .opf-json, .opf-code) .cm-diagnostic-error {
   border-left-color: var(--opf-ui-danger);
 }

@@ -4,7 +4,7 @@ import { defaultKeymap, history, historyKeymap, indentWithTab, isolateHistory, r
 import { HighlightStyle, StreamLanguage, bracketMatching, codeFolding, foldKeymap, indentOnInput, indentUnit, syntaxHighlighting } from "@codemirror/language";
 import { json, jsonParseLinter } from "@codemirror/lang-json";
 import { yaml } from "@codemirror/lang-yaml";
-import { closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete";
+import { autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap, startCompletion } from "@codemirror/autocomplete";
 import { highlightSelectionMatches, search, searchKeymap } from "@codemirror/search";
 import { linter } from "@codemirror/lint";
 import { tags } from "@lezer/highlight";
@@ -65,10 +65,25 @@ const markdownLanguage = StreamLanguage.define({
     return null;
   }
 });
-function languageExtension(name) {
+function languageExtension(name, completions) {
   if (name === "yaml") return yaml();
   if (name === "markdown") return markdownLanguage;
-  return [json(), linter(jsonParseLinter(), { delay: 500 }), fieldDecorations];
+  return [json(), linter(jsonParseLinter(), { delay: 500 }), fieldDecorations, completions ?? []];
+}
+// The completion popup keeps CodeMirror's keys (arrows, Enter, Escape) but not Ctrl-Space, which opens the field menu.
+const completionKeys = Prec.highest(keymap.of(completionKeymap.filter((binding) => binding.run !== startCompletion)));
+// Accept a completion by rewriting its whole token (quotes included), so a string key, a bare word and a changed value type all land
+// as valid JSON. A key adds ": " when none follows and then offers the values of that key.
+function completionApply(found, option) {
+  return (view, completion, from, to) => {
+    const start = found.quoted ? from - 1 : from;
+    const end = found.closed ? to + 1 : to;
+    let insert = JSON.stringify(option.value);
+    const chain = found.kind === "key" && !/^\s*:/.test(view.state.sliceDoc(end, Math.min(view.state.doc.length, end + 200)));
+    if (chain) insert += ": ";
+    view.dispatch({ changes: { from: start, to: end, insert }, selection: { anchor: start + insert.length }, userEvent: "input.complete", scrollIntoView: true });
+    if (chain) setTimeout(() => startCompletion(view), 0);
+  };
 }
 function indentation(source) {
   const spaces = source.match(/^[\t ]+(?=\S)/gm) ?? [];
@@ -168,6 +183,20 @@ function mountJsonCodeEditor(parent, options) {
       menu=mountJsonFieldMenu(parent,api,catalogs,left,top,()=>{menu=null;});
     }catch(error){options.onError?.(error);}
   }
+  // Live completions (JSON only, `completions: true`): property names and values at the cursor's JSON path, from the same data as the
+  // field menu. The data loads with the field menu's chunk on first use.
+  async function completionSource(context) {
+    if (disposed || languageName !== "json") return null;
+    let module;
+    try { module = await import('./json-options.js'); } catch (error) { options.onError?.(error); return null; }
+    if (disposed || context.aborted) return null;
+    const found = module.getJsonCompletions(context.state.doc.toString(), context.pos, catalogs, { explicit: context.explicit });
+    if (!found) return null;
+    return { from: found.from, to: found.to, filter: true, options: found.options.map((option) => ({
+      label: option.label, detail: option.detail, info: option.info, boost: option.boost, type: found.kind === "key" ? "property" : "enum", apply: completionApply(found, option),
+    })) };
+  }
+  const completionExtension = options.completions ? [autocompletion({ override: [completionSource], defaultKeymap: false, icons: false, maxRenderedOptions: 60 }), completionKeys] : null;
   let currentIndent = indentation(options.code);
   const contentAttributes = (invalid = options.invalid, describedBy = options.describedBy) => EditorView.contentAttributes.of({
     "aria-label": options.label,
@@ -179,7 +208,7 @@ function mountJsonCodeEditor(parent, options) {
     autocorrect: "off"
   });
   const view = new EditorView({ parent, state: EditorState.create({ doc: options.code, extensions: [
-    language.of(languageExtension(languageName)),
+    language.of(languageExtension(languageName, completionExtension)),
     editable.of(editableExtension(options.readOnly)),
     jsonSource.init(()=>options.code),jsonSourceHistory,
     indent.of(indentUnit.of(currentIndent)),
@@ -300,7 +329,7 @@ function mountJsonCodeEditor(parent, options) {
     setLanguage(name){
       if(name===languageName)return;
       languageName=name;closeOptions();
-      view.dispatch({ effects: language.reconfigure(languageExtension(name)) });
+      view.dispatch({ effects: language.reconfigure(languageExtension(name, completionExtension)) });
     },
     setReadOnly(value){view.dispatch({ effects: editable.reconfigure(editableExtension(value)) });},
     /** The CodeMirror view, for hosts that scroll or measure it. */

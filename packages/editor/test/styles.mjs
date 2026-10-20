@@ -132,6 +132,12 @@ for (const name of files.filter((name) => name !== "tokens.css")) {
   for (const [, token] of text.matchAll(/var\((--opf-ui-[a-z0-9-]+)/g)) assert.ok(defined.has(token), `${name} reads ${token}, which is not in the token contract`);
 }
 
+// 5b. The source pane's editor has no border or radius of its own: panels.css draws both on every `.cm-editor`, and the pane frame draws the edge.
+const paneEditor = blocks(readFileSync(path.join(stylesDirectory, "source-pane.css"), "utf8")).find((block) => block.selectors.includes(".opf-source-code > .cm-editor"));
+assert.ok(paneEditor, "source-pane.css styles the pane's editor");
+assert.match(declared(paneEditor.body, "border") ?? "", /^(0|none)\b/, "the pane's editor resets the border panels.css draws");
+assert.match(declared(paneEditor.body, "border-radius") ?? "", /^0\b/, "the pane's editor resets the radius panels.css draws");
+
 // 6. The package exports resolve.
 assert.deepEqual(pkg.exports["./styles.css"], { style: "./dist/styles.css", default: "./dist/styles.css" });
 assert.ok(pkg.files.includes("dist"), "dist (with dist/styles.css) is published");

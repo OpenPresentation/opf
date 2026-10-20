@@ -4,6 +4,7 @@ import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
 import { mountJsonCodeEditor } from "./json-editor.js";
 import { createSourceMemory, findDuplicateKey, updateJsonSource } from "./exact-source.js";
 import { lineForPath, lineOfOffset, offsetOfLine } from "./source-lines.js";
+import { errorText, normalizeFinding, rejectionFindings as findingsOfError } from "./source-findings.js";
 
 // The source pane (RR-98): the OPF document as JSON, YAML or Markdown, with the file name, the format menu, Format, Copy
 // and Download, and the findings under the code. JSON is canonical and keeps its authored bytes (exact-source); YAML and
@@ -65,20 +66,6 @@ function same(a, b) {
 }
 const SEVERITY = { error: 0, warning: 1, info: 2 };
 const plural = (count, word) => `${count} ${word}${count === 1 ? "" : "s"}`;
-const errorText = (error) => error?.issues?.[0]?.message ?? error?.message ?? String(error);
-
-/** Normalize one finding: core `Finding` objects, `{ path, message, severity, line? }` objects and plain strings. */
-function normalizeFinding(input, kind) {
-  const finding = typeof input === "string" ? { message: input } : input ?? {};
-  const severity = finding.severity === "error" || finding.severity === "info" ? finding.severity : finding.severity === "warning" || finding.severity === "warn" ? "warning" : "error";
-  const out = { path: String(finding.path ?? ""), message: String(finding.message ?? ""), severity };
-  const line = finding.line ?? finding.location?.line;
-  if (Number.isInteger(line) && line > 0) out.line = line;
-  const own = finding.kind ?? kind;
-  if (own) out.kind = own;
-  if (finding.ruleId) out.ruleId = finding.ruleId;
-  return out;
-}
 
 const JSON_ERRORS = { InvalidSymbol: "Invalid symbol", InvalidNumberFormat: "Invalid number", PropertyNameExpected: "Property name expected", ValueExpected: "Value expected", ColonExpected: "Colon expected", CommaExpected: "Comma expected", CloseBraceExpected: "Closing brace expected", CloseBracketExpected: "Closing bracket expected", EndOfFileExpected: "End of file expected", InvalidCommentToken: "Comments are not allowed in JSON", UnexpectedEndOfComment: "Unexpected end of comment", UnexpectedEndOfString: "Unexpected end of string", UnexpectedEndOfNumber: "Unexpected end of number", InvalidUnicode: "Invalid unicode escape", InvalidEscapeCharacter: "Invalid escape character", InvalidCharacter: "Invalid character" };
 
@@ -137,6 +124,8 @@ export function createSourcePane(container, options = {}) {
   let collapsed = false;
   let copyTimer = null;
   let renderedKey = "";
+  // Whether the findings include an error, and what the editor's `aria-invalid` currently says (null: not yet set).
+  let invalid = false, shownInvalid = null;
   const lineCache = { key: "", values: new Map() };
 
   // ---- DOM ----------------------------------------------------------------------------------------------------------
@@ -232,6 +221,7 @@ export function createSourcePane(container, options = {}) {
     lineNumbers: true,
     language: formatOf(format).language,
     readOnly,
+    completions: options.completions !== false,
     catalogs: options.catalogs ?? editor.catalogs,
     describedBy: `${id}-findings`,
     onChange: () => schedule(),
@@ -275,7 +265,8 @@ export function createSourcePane(container, options = {}) {
         editor.applyPatch([{ op: "replace", path: "", value: read.deck }], { source: "source-pane", format });
       } catch (error) {
         dirty = true;
-        rejectionFindings = read.findings.length ? read.findings.map((finding) => ({ ...finding, kind: "rejected" })) : [normalizeFinding({ message: errorText(error), kind: "rejected" })];
+        // Every issue of the refusal is its own finding, with its path; a format's own findings stand in when the error names none.
+        rejectionFindings = error?.issues?.length || !read.findings.length ? findingsOfError(error) : read.findings.map((finding) => ({ ...finding, kind: "rejected" }));
         applying = false;
         renderFindings();
         return;
@@ -292,13 +283,16 @@ export function createSourcePane(container, options = {}) {
   function refreshNotes() {
     try { noteFindings = markdownNotes(toMarkdown(deck()).report); } catch { noteFindings = []; }
   }
+  /** `aria-invalid` follows the findings: set while any finding is an error (syntax, a refused draft, the session's or the host's), cleared with them. */
   function syncAttributes() {
-    control.update(control.api.getValue(), syntaxFindings.length > 0 || rejectionFindings.length > 0, null, `${id}-findings`);
+    shownInvalid = invalid;
+    control.update(control.api.getValue(), invalid, null, `${id}-findings`);
   }
 
   /** Show `value` as the text of the current format, as an external change. */
   function show(value) {
     baseline = value;
+    shownInvalid = false;
     control.update(value, false, null, `${id}-findings`);
   }
   function fromSession(notice) {
@@ -332,7 +326,7 @@ export function createSourcePane(container, options = {}) {
 
   const unsubscribe = editor.subscribe((event) => {
     if (destroyed) return;
-    if (event.type === "catalogs") { renderFindings(); return; }
+    if (event.type === "catalogs") { control.setCatalogs(options.catalogs ?? editor.catalogs); renderFindings(); return; }
     if (applying) return;
     version++;
     fromSession();
@@ -539,13 +533,19 @@ export function createSourcePane(container, options = {}) {
       catch (error) { options.onError?.(error); host = []; }
     } else if (hostFindings) host = hostFindings.map((finding) => normalizeFinding(finding));
     else host = sessionFindings();
+    // A finding repeated by an earlier group is dropped; repeats inside one group stay, so a refusal lists every issue the validator found.
     const seen = new Set();
-    const all = [...syntaxFindings, ...rejectionFindings, ...transientNotes, ...noteFindings, ...host].filter((finding) => {
-      const key = `${finding.severity}|${finding.path}|${finding.message}`;
-      if (seen.has(key)) return false;
-      seen.add(key);
-      return true;
-    });
+    const all = [];
+    for (const group of [syntaxFindings, rejectionFindings, transientNotes, noteFindings, host]) {
+      const keys = [];
+      for (const finding of group) {
+        const key = `${finding.severity}|${finding.path}|${finding.message}`;
+        if (seen.has(key)) continue;
+        keys.push(key);
+        all.push(finding);
+      }
+      for (const key of keys) seen.add(key);
+    }
     return all.map((finding, index) => ({ finding, index })).sort((a, b) => SEVERITY[a.finding.severity] - SEVERITY[b.finding.severity] || a.index - b.index).map((entry) => entry.finding);
   }
   function lineOf(finding) {
@@ -558,9 +558,14 @@ export function createSourcePane(container, options = {}) {
     return lineCache.values.get(cacheKey) ?? explicit ?? null;
   }
   function renderFindings() {
+    paintFindings();
+    if (!destroyed && invalid !== shownInvalid) syncAttributes();
+  }
+  function paintFindings() {
     if (destroyed) return;
     const all = collect();
     const rows = all.map((finding) => ({ finding, line: lineOf(finding) }));
+    invalid = rows.some((row) => row.finding.severity === "error");
     const key = JSON.stringify([format, collapsed, rows.map(({ finding, line }) => [finding.severity, finding.path, finding.message, finding.kind, line])]);
     if (key === renderedKey) return;
     renderedKey = key;

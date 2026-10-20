@@ -316,6 +316,138 @@ try {
   assert.match(await list.innerText(), /cannot be written as YAML/);
   await broken.close();
 
+  // RR-98: the editor inside the pane frame has no border or radius of its own, and no stray focus outline.
+  const frame = await open();
+  assert.deepEqual(await frame.evaluate(() => { const style = getComputedStyle(document.querySelector('.opf-source-code > .cm-editor')); return [style.borderTopWidth, style.borderRightWidth, style.borderBottomWidth, style.borderLeftWidth, style.borderTopLeftRadius, style.borderBottomRightRadius]; }), ['0px', '0px', '0px', '0px', '0px', '0px'], 'the pane editor is borderless');
+  // aria-invalid follows the findings: set for a syntax error and a refused draft, cleared when they go.
+  const invalid = () => frame.locator('.opf-source-code .cm-content').getAttribute('aria-invalid');
+  assert.equal(await invalid(), 'false', 'a valid document is not invalid');
+  await selectIn(frame, '"What This Shows",');
+  await frame.keyboard.type('"What This Shows" "x",');
+  await frame.locator('.opf-source-findings').waitFor();
+  assert.equal(await invalid(), 'true', 'a syntax error sets aria-invalid');
+  await selectIn(frame, '"What This Shows" "x",');
+  await frame.keyboard.type('"What This Shows",');
+  await frame.locator('.opf-source-findings').waitFor({ state: 'hidden' });
+  assert.equal(await invalid(), 'false', 'fixing the text clears aria-invalid');
+  const strict = await frame.evaluate(async () => {
+    const host = document.createElement('div');
+    host.style.height = '400px';
+    document.body.append(host);
+    const session = demo.createEditorSession({ name: 'Strict', slides: [{ title: 'T' }] }, { rejectInvalid: true });
+    const pane = demo.createSourcePane(host, { editor: session, applyDelay: 0 });
+    const api = pane.editor.api, content = host.querySelector('.cm-content');
+    const result = { initial: content.getAttribute('aria-invalid') };
+    // Three problems in one draft: the session refuses it, and every one is listed with its path and line.
+    api.replace(0, api.getValue().length, JSON.stringify({ name: 'Strict', slides: [{ title: 42 }, { title: 'Agenda', items: 'One string, not an array' }, { title: 'Third', unknown: true }] }, null, 2));
+    result.refusedInvalid = content.getAttribute('aria-invalid');
+    result.count = host.querySelector('.opf-source-findings-count').textContent;
+    result.paths = [...host.querySelectorAll('.opf-source-finding-path')].map(node => node.textContent);
+    result.messages = [...host.querySelectorAll('.opf-source-finding-message')].map(node => node.textContent);
+    result.lines = [...host.querySelectorAll('.opf-source-finding-line')].map(node => node.textContent);
+    result.kinds = [...host.querySelectorAll('.opf-source-finding')].map(node => node.dataset.kind);
+    result.text = api.getValue();
+    result.title = session.presentation.slides[0].title;
+    api.replace(0, api.getValue().length, JSON.stringify({ name: 'Strict', slides: [{ title: 'Fine' }] }, null, 2));
+    result.fixedInvalid = content.getAttribute('aria-invalid');
+    result.fixedHidden = host.querySelector('.opf-source-findings').hidden;
+    // A session whose own document has errors is invalid too.
+    const broken = demo.createEditorSession({ name: 'Broken', slides: [{ title: 42 }] });
+    const brokenHost = document.createElement('div');
+    document.body.append(brokenHost);
+    const brokenPane = demo.createSourcePane(brokenHost, { editor: broken, applyDelay: 0 });
+    result.sessionInvalid = brokenHost.querySelector('.cm-content').getAttribute('aria-invalid');
+    brokenPane.setFindings([]);
+    result.hostClearedInvalid = brokenHost.querySelector('.cm-content').getAttribute('aria-invalid');
+    brokenPane.destroy();
+    pane.destroy();
+    return result;
+  });
+  assert.equal(strict.initial, 'false');
+  assert.equal(strict.title, 'T', 'the refused draft never reaches the session');
+  assert.equal(strict.refusedInvalid, 'true', 'a refused draft sets aria-invalid');
+  assert.equal(strict.count, '3 errors', 'the pane counts every issue of the rejection, as the validator does');
+  assert.deepEqual(strict.paths, ['/slides/0/title', '/slides/1/items', '/slides/2/unknown'], 'each issue has its JSON pointer');
+  assert.equal(strict.messages.length, 3);
+  assert.ok(strict.messages.every(message => message.length > 0));
+  assert.deepEqual(strict.kinds, ['rejected', 'rejected', 'rejected']);
+  const strictLines = path => strict.text.slice(0, strict.text.indexOf(path)).split('\n').length;
+  assert.deepEqual(strict.lines, [`Ln ${strictLines('"title": 42')}`, `Ln ${strictLines('"items":')}`, `Ln ${strictLines('"unknown"')}`], 'each issue has its line');
+  assert.equal(strict.fixedInvalid, 'false', 'accepting the next draft clears aria-invalid');
+  assert.equal(strict.fixedHidden, true);
+  assert.equal(strict.sessionInvalid, 'true', 'errors in the session document set aria-invalid');
+  assert.equal(strict.hostClearedInvalid, 'false', 'host findings without errors clear it');
+  await frame.close();
+
+  // RR-98: live completions while typing JSON, from the same data as the field menu.
+  const typing = await open();
+  const popup = typing.locator('.cm-tooltip-autocomplete');
+  const options = () => popup.locator('[role="option"]');
+  const cursorAfter = async needle => typing.evaluate(needle => {
+    const source = demo.pane.getText(), at = source.indexOf(needle);
+    if (at < 0) throw new Error(`"${needle}" is not in the source`);
+    demo.pane.editor.api.setSelection(at + needle.length);
+    demo.pane.editor.api.focus();
+  }, needle);
+  assert.equal(await typing.locator('.opf-source-code .cm-content').getAttribute('aria-autocomplete'), 'list', 'the editor announces its completion list');
+  await cursorAfter('"OWAA Rocks!"');
+  await typing.keyboard.type(', "lay');
+  await popup.waitFor();
+  assert.deepEqual(await options().locator('.cm-completionLabel').allInnerTexts(), ['layout'], 'typing a key offers the matching property names');
+  const box = await popup.boundingBox();
+  assert.ok(box && box.x >= 0 && box.y >= 0 && box.x + box.width <= 1200 && box.y + box.height <= 800, 'the popup is inside the page');
+  assert.notEqual(await popup.locator('[aria-selected="true"]').evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(17, 119, 204)', 'the selected option uses the token color, not the default blue');
+  await typing.keyboard.press('Enter');
+  assert.ok((await text(typing)).includes('{ "title": "OWAA Rocks!", "layout":  }'), `a key is completed with its colon: ${await text(typing)}`);
+  // The values of that key are offered right away.
+  await popup.waitFor();
+  const layouts = await options().locator('.cm-completionLabel').allInnerTexts();
+  assert.ok(layouts.includes('text') && layouts.includes('cover') && layouts.length > 10, `a catalog field offers its records: ${layouts}`);
+  await typing.keyboard.type('"tex');
+  await typing.waitForFunction(() => document.querySelector('.cm-tooltip-autocomplete [aria-selected="true"] .cm-completionLabel')?.textContent === 'text' && document.querySelectorAll('.cm-tooltip-autocomplete [role="option"]').length < 5, null, { timeout: 5000 });
+  assert.ok((await options().locator('.cm-completionLabel').allInnerTexts()).includes('text'), 'typing narrows the list');
+  await typing.keyboard.press('Enter');
+  assert.ok((await text(typing)).includes('"layout": "text" }'), `a value replaces the whole token, quotes included: ${await text(typing)}`);
+  await popup.waitFor({ state: 'hidden' });
+  await waitDeck(typing, (d) => d.slides[0].layout === 'text');
+  assert.equal(await typing.locator('.opf-source-findings').isHidden(), true, 'the completed draft is valid');
+  // Escape closes the popup and keeps the typed text; Ctrl+Space still opens the field menu, not the popup.
+  await typing.keyboard.press('Backspace');
+  await typing.keyboard.press('Backspace');
+  await typing.keyboard.type('"');
+  await typing.keyboard.press('Escape');
+  await popup.waitFor({ state: 'hidden' });
+  await typing.keyboard.press('Control+Space');
+  await typing.locator('.json-field-menu').waitFor();
+  assert.equal(await popup.count(), 0, 'Ctrl+Space opens the field menu, not the completion popup');
+  await typing.keyboard.press('Escape');
+  // An enum value, bare, in a field of the schema: a tone is offered inside quotes.
+  await typing.evaluate(() => { demo.pane.editor.api.setSelection(1); demo.pane.editor.api.focus(); });
+  await typing.keyboard.type('"tone": "cas');
+  await popup.waitFor();
+  assert.ok((await options().locator('.cm-completionLabel').allInnerTexts()).includes('casual'), 'tone values come from the registered catalog');
+  await typing.keyboard.press('Escape');
+  // A free text field offers nothing.
+  await typing.evaluate(() => { const source = demo.pane.getText(), at = source.indexOf('"Minimal OPF Deck"') + 'Minimal OPF Deck"'.length; demo.pane.editor.api.setSelection(at - 1); demo.pane.editor.api.focus(); });
+  await typing.keyboard.type('x');
+  await typing.waitForTimeout(300);
+  assert.equal(await popup.count(), 0, 'a free text field has no completions');
+  // YAML keeps the menu only.
+  await chooseFormat(typing, 'YAML');
+  await typing.evaluate(() => { demo.pane.editor.api.setSelection(demo.pane.getText().length); demo.pane.editor.api.focus(); });
+  await typing.keyboard.type('\n  - lay');
+  await typing.waitForTimeout(300);
+  assert.equal(await popup.count(), 0, 'YAML has no live completions');
+  await typing.close();
+  // completions: false turns the popup off in JSON too.
+  const off = await open('?completions=off');
+  await off.evaluate(() => { const source = demo.pane.getText(), at = source.indexOf('"OWAA Rocks!"') + 13; demo.pane.editor.api.setSelection(at); demo.pane.editor.api.focus(); });
+  await off.keyboard.type(', "lay');
+  await off.waitForTimeout(400);
+  assert.equal(await off.locator('.cm-tooltip-autocomplete').count(), 0, '`completions: false` keeps the field menu only');
+  assert.equal(await off.locator('.opf-source-code .cm-content').getAttribute('aria-autocomplete'), null);
+  await off.close();
+
   assert.deepEqual(requests, [], 'the pane makes no network requests');
   assert.deepEqual(errors, []);
   console.log('Source pane: JSON, YAML and Markdown edit the session; findings, rename, menu, copy and download work.');

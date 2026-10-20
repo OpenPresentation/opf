@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {getJsonFieldContext,replaceFieldOption,fieldOptionEdit} from '../dist/json-options.js';
+import {getJsonFieldContext,getJsonCompletions,replaceFieldOption,fieldOptionEdit} from '../dist/json-options.js';
 import {validate} from '@openpresentation/opf';
 import {gallery as defaultCatalog} from '@openpresentation/gallery';
 // OPF 0.15: the document embeds records by group (`custom`, `default`, named groups); the host passes its catalogs (Catalog[]).
@@ -43,3 +43,41 @@ console.log('V2 layout options: intent groups, region descriptions, exact conten
 
 const invalidTemplate=JSON.stringify({catalogs:{custom:{layouts:{broken:{name:'Broken',areas:[null],regions:{}}}}},slides:[{layout:'broken'}]});
 assert.equal(getJsonFieldContext(invalidTemplate,invalidTemplate.indexOf('"layout"')+1,[defaultCatalog]).options.find(option=>option.value==='broken').regions,'Invalid region template','invalid JSON drafts remain editable without restoring retired placeholders');
+
+// RR-98: live completions read the same data as the field menu, from drafts that do not parse yet.
+const complete=(draft,{catalogs=[defaultCatalog],explicit=false}={})=>{const at=draft.indexOf('|');return getJsonCompletions(draft.replace('|',''),at,catalogs,{explicit});};
+const labels=(result)=>result?.options.map(option=>option.label)??[];
+// Keys: the property names of the schema at the cursor's object, minus the ones already present.
+const keys=complete('{"slides":[{"title":"Keep","|"}]}');
+assert.equal(keys.kind,'key');assert.equal(keys.quoted,true);assert.equal(keys.closed,true);
+assert.ok(labels(keys).includes('layout')&&labels(keys).includes('notes'),'slide keys are offered');
+assert.ok(!labels(keys).includes('title'),'a key the object already has is not offered again');
+assert.ok(!labels(keys).includes('slides'),'slide keys are not the root keys');
+assert.ok(labels(complete('{"|"}')).includes('slides'),'root keys at the top level');
+assert.ok(labels(complete('{"slides":[{"design":{"|"}}]}')).includes('theme'),'nested object keys come from the nested schema');
+assert.equal(complete('{"slides":[{"ti|').kind,'key','an unterminated key still completes');
+assert.equal(complete('{"slides":[{"ti|').closed,false);
+assert.ok(labels(complete('{"slides":[{"title":"x",|}]}',{explicit:true})).includes('layout'),'a bare position after a comma offers keys when asked');
+assert.equal(complete('{"slides":[{"title":"x",|}]}'),null,'nothing is offered where nothing was typed and nothing was asked');
+assert.ok(labels(complete('{ n|')).includes('name'),'a bare word offers keys');
+assert.equal(complete('{"slides":[{"|"}]}').options.find(option=>option.label==='title').detail?.length>0,true,'a key option carries its type');
+assert.ok(complete('{"slides":[{"|"}]}').options.find(option=>option.label==='title').info,'a key option carries the schema description');
+// Values: enum and catalog values at the cursor's JSON path.
+const layouts=complete('{"slides":[{"layout":"te|"}]}');
+assert.equal(layouts.kind,'value');assert.equal(layouts.from,complete('{"slides":[{"layout":"|"}]}').from);
+assert.ok(labels(layouts).includes('text')&&labels(layouts).includes('cover'),'layouts come from the catalog');
+const fieldMenu=getJsonFieldContext('{"slides":[{"layout":"text"}]}','{"slides":[{"layout":"'.length,[defaultCatalog]);
+for(const option of fieldMenu.options.filter(option=>option.source!=='Current value'))assert.ok(labels(layouts).includes(String(option.value)),`${option.value} is in the menu and in the completions`);
+assert.deepEqual(labels(complete('{"tone":"|"}')),labels(complete('{"tone":|',{explicit:true})),'a value is offered inside quotes and bare');
+assert.ok(labels(complete('{"tone":"|"}')).includes('casual'));
+assert.equal(complete('{"tone":"|"}').options.find(option=>option.label==='casual').detail,'Casual','a catalog option names its record');
+assert.deepEqual(complete('{"slides":[{"design":{"mirror":|}}]}',{explicit:true}).options.map(option=>option.value).sort(),[false,true],'a boolean field offers true and false');
+assert.ok(labels(complete('{"slides":[{"design":{"theme":"|"}}]}')).length>0,'design references complete');
+assert.equal(complete('{"name":"|"}'),null,'a free-text field offers nothing');
+assert.equal(complete('{"extensions":{"layout":"|"}}'),null,'extension keys do not gain behavior by name');
+assert.equal(complete('{"slides":[{"title":"abc"|}]}',{explicit:true}),null,'after a finished value nothing is offered');
+// Catalogs the host did not register do not offer their records.
+assert.ok(!labels(complete('{"slides":[{"layout":"|"}]}',{catalogs:[]})).includes('cover'));
+// A draft's own catalog records are offered with their names.
+assert.equal(complete('{"catalogs":{"custom":{"layouts":{"mine":'+JSON.stringify(record('Mine'))+'}}},"slides":[{"layout":"|"}]}').options.find(option=>option.value==='mine').detail,'Mine');
+console.log('JSON completions: keys, values, booleans, catalogs, invalid drafts and the field menu data agree.');

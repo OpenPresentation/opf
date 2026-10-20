@@ -23,6 +23,8 @@ export interface JsonCodeEditorOptions {
   /** Highlighting and behavior: "json" (default) adds the parse linter, field highlights and the option menu. */
   language?: "json" | "yaml" | "markdown";
   readOnly?: boolean;
+  /** Live completion popup in JSON: property names and enum, boolean and catalog values at the cursor's JSON path, from the same data as the field menu (default false here; the source pane turns it on). Ctrl+Space still opens the field menu. */
+  completions?: boolean;
   catalogs?: JsonCatalogContext;
   /** Overrides the built-in menu, allowing an existing host UI to keep its appearance. */
   onOptions?(left?: number, top?: number): void;

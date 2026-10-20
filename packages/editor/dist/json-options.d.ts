@@ -31,3 +31,24 @@ export declare function getJsonFieldContext(source: string, position: number, lo
 export declare function replaceFieldOption(context: JsonFieldContext, value: JsonOptionValue): string;
 /** Minimal single replacement for atomic source-editor undo. */
 export declare function fieldOptionEdit(context: JsonFieldContext, value: JsonOptionValue): {from:number;to:number;insert:string};
+export interface JsonCompletionOption {
+  /** A key option's property name, or the JSON value to write. */
+  value: JsonOptionValue;
+  label: string;
+  detail?: string;
+  info?: string;
+  /** CodeMirror ranking, -99 to 99. */
+  boost: number;
+}
+export interface JsonCompletions {
+  kind: 'key' | 'value';
+  /** The text being typed: inside the quotes of a string, or the bare word. */
+  from: number;
+  to: number;
+  quoted: boolean;
+  /** Whether a closing quote follows the typed text. */
+  closed: boolean;
+  options: JsonCompletionOption[];
+}
+/** The property names and values to offer at `position` of a JSON draft (it need not parse); null when there are none. `explicit` also offers choices where nothing is typed yet. */
+export declare function getJsonCompletions(source: string, position: number, loadedCatalogs?: JsonCatalogContext, options?: { explicit?: boolean }): JsonCompletions | null;

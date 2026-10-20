@@ -1,5 +1,6 @@
 import { createEditorSession } from '../src/index.js';
 import { createSourcePane } from '../src/source-pane.js';
+import { gallery as defaultCatalog } from '@openpresentation/gallery';
 
 // Harness for the source pane (RR-98): the pane on the left, the session document and the host callbacks on the right.
 const deck = {
@@ -24,9 +25,10 @@ const source = `{
 }
 `;
 const query = new URLSearchParams(location.search);
+// The default catalog is registered, so the pane offers layouts and tones as you type and in the field menu.
 const editor = createEditorSession(query.get('deck') === 'broken'
   ? { name: 'Broken deck', slides: [{ title: 42 }, { title: 'Agenda', items: 'One string, not an array' }] }
-  : deck);
+  : deck, { catalogs: [defaultCatalog] });
 const log = [];
 const note = (entry) => { log.push(entry); document.getElementById('log').textContent = JSON.stringify(log, null, 1); };
 const pane = createSourcePane(document.getElementById('pane'), {
@@ -36,6 +38,7 @@ const pane = createSourcePane(document.getElementById('pane'), {
   format: query.get('format') ?? 'json',
   density: query.get('density') === 'touch' ? 'touch' : 'comfortable',
   applyDelay: 50,
+  completions: query.get('completions') !== 'off',
   onRename: (name) => note({ rename: name }),
   onFormatChange: (format, previous) => note({ format, previous }),
   onFindingSelect: (finding, line) => note({ select: finding.path, line }),

@@ -104,6 +104,7 @@ const pane = createSourcePane(container, {
   onDownload: file => saveAs(file.filename, file.text), // default: a Blob link named <name>.opf.<ext>
   density: 'comfortable',       // 'touch' makes the controls 40px
   readOnly: false,
+  completions: true,            // live property and value suggestions while typing JSON (default true)
 });
 pane.setFormat('yaml'); pane.focusPath('/slides/1/title'); pane.getText(); pane.destroy();
 ```
@@ -113,7 +114,8 @@ Methods: `setFindings(list | null)`, `setFormat(format)`, `focusPath(pointer)` (
 - **JSON is canonical** and keeps the author's bytes: a YAML or Markdown edit rewrites only the changed JSON tokens (`exact-source`), and Undo restores the exact spelling.
 - **YAML and Markdown** are core's browser-safe converters, `@openpresentation/opf/yaml` and `/markdown`. Switching format writes the session's document in the new format. An edit parses back to the document and reaches the session as one `replace` patch, after a short delay (`applyDelay`, default 250 ms) so one burst of typing is one undo step. A syntax error, or an OPF rule the session refuses, is listed with its line and never reaches the document; Undo, Redo and outside edits replace a draft that did not parse.
 - **Nothing is lost silently.** Markdown writes what its dialect has no syntax for (a `design`, region keys, nested groups) as YAML in `opf-slide` and `opf-block` fences; each such part is a warning finding with its JSON Pointer and reason. Comments in YAML cannot survive a rewrite from the document: Format and outside edits drop them and say how many. A document that is not valid OPF cannot be written as YAML or Markdown; the pane stays in JSON and says so.
-- **Accessibility.** The format button (`aria-label="Source format"`) opens a `role="menu"` of `menuitemradio` items: Arrow keys, Home, End, Enter, Escape (focus returns to the button) and Tab. The file name is a button that becomes a text input; Enter or Escape commits. Controls show a 2px `--opf-ui-ring` focus outline.
+- **Completions.** In JSON the pane offers property names and values as you type (`completions: false` keeps the field menu only): the keys the schema allows at the cursor's object, and the enum, boolean and catalog values of the field, from the same data as the field menu (`getJsonCompletions` in `/json-options`, which reads drafts that do not parse yet). Enter accepts, Escape closes, and Ctrl+Space or Alt+ArrowDown still open the field menu. YAML and Markdown keep the menu only. `mountJsonCodeEditor` takes the same `completions` option, off by default there.
+- **Accessibility.** The editor's `aria-invalid` is `true` while the findings include an error and `false` otherwise. The format button (`aria-label="Source format"`) opens a `role="menu"` of `menuitemradio` items: Arrow keys, Home, End, Enter, Escape (focus returns to the button) and Tab. The file name is a button that becomes a text input; Enter or Escape commits. Controls show a 2px `--opf-ui-ring` focus outline.
 - **Styles.** `src/styles/source-pane.css` uses only `--opf-ui-*` tokens under the `opf-source-` prefix. It ships in the editor's `styles.css` (`@openpresentation/opf-editor/styles.css`), which also defines the tokens.
 - **Dependency.** `@codemirror/lang-yaml` (MIT) highlights YAML; Markdown uses a small stream tokenizer built on `@codemirror/language`, so no Markdown, HTML, CSS or JavaScript grammar is added.
 
