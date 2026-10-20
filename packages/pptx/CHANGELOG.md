@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.24.0 (2026-10-20)
+
+- RR-96: adopts `@openpresentation/gallery` 4.0.0 (`^4.0.0`, a dependency): the default catalog has no `dark` theme (a dark deck is a theme with a dark `design.variant`, for example `{ "theme": "classic", "variant": "dark1" }`), and `minimal`, `classic` and `bold` carry `variants`. The exporter's output is unchanged; its tests use `classic` with a dark variant where they used the `dark` theme.
+
 ## 0.23.0 (2026-10-19)
 
 - RR-96: PPTX exports and imports color variants. `design.variant` (a background slot, or a background with a permutation of the accents) writes the master `<p:clrMap>`, and a slide whose variant differs writes `<p:clrMapOvr><a:overrideClrMapping>` with its own map, so a dark slide in a light deck, or a re-ordered accent set, follows PowerPoint's own Background Style. Every scheme-derived color is `a:schemeClr` (text, backgrounds, table, card and chart colors, code panels, tags, footers), with the derived neutrals as the text slot plus `a:lumMod`/`a:lumOff`; colors the document wrote literally, `var:` variables and slides with their own color scheme stay `a:srgbClr`. Chart axis and legend text uses core's chart-text neutral (the text color at 65%), while data labels keep the full text color. A picture background with a `tone` and no overlay of its own gets the preview's contrast scrim, a full-slide `bg1` rectangle at 40% alpha above the picture, and import restores the `tone`. `fromPptx` reads the master map, the slide override and a scheme background back into `design.variant` and the background, and a table fill equal to a scheme slot on an untagged slide returns as the slot name. Table header text is the role (`bg1` or `tx1`) that reads better on the fill, the media play mark likewise, pie and doughnut outlines are the `bg1` outline neutral, the code language label is the variant's keyword color, and native chart gridlines are solid, all as the preview draws them. Archives are byte-different for every deck that uses scheme colors. Requires the unreleased core 0.23.0.
