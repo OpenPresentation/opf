@@ -119,10 +119,13 @@ try {
 
   await page.locator('#preview').screenshot({ path: path.join(output, 'apply-aptos-ja.png') });
   // Export measures the same text: the Japanese Aptos deck converts without a missing-glyph error.
-  await button(page, 'PowerPoint').click();
-  await page.waitForFunction(() => !document.querySelector('#download-pptx').disabled || document.querySelector('#export-error').textContent, undefined, { timeout: 60000 });
-  assert.equal(await page.locator('#export-error').innerText(), '', 'PowerPoint export of the Aptos Japanese deck');
-  await button(page, 'Close PowerPoint export').click();
+  {
+    const downloaded = page.waitForEvent('download', { timeout: 60000 });
+    await button(page, 'Export').click();
+    await page.getByRole('menuitem', { name: /^PowerPoint/ }).click();
+    assert.ok((await downloaded).suggestedFilename().endsWith('.pptx'), 'PowerPoint export of the Aptos Japanese deck');
+    assert.equal(await page.locator('.opf-export-status[data-state="error"]').count(), 0);
+  }
   await page.close();
 
   // 2. Gallery handoff: pptx.gallery fills #json and clicks Apply in the same tick, without waiting for the source preview.

@@ -711,7 +711,7 @@ Findings show a severity word, the slide, the rule id and, for a hosted reviewer
 
 ## PDF, PNG and SVG downloads (RR-23)
 
-`convert(deck, { format })` from `@openpresentation/opf-editor/export` turns the deck into files in the page, next to the PowerPoint export; the playground's "PDF · PNG · SVG" button is a thin dialog over it. It has the name and the result of core's in-memory `convert` (OPF 0.18, RR-73): `{ files, findings }`, core's `ConvertResult`.
+`convert(deck, { format })` from `@openpresentation/opf-editor/export` turns the deck into files in the page, next to the PowerPoint export; the [Export menu](#export-menu-and-agent-handoff-rr-98) is a thin host over it. It has the name and the result of core's in-memory `convert` (OPF 0.18, RR-73): `{ files, findings }`, core's `ConvertResult`.
 
 ```js
 import { convert } from "@openpresentation/opf-editor/export";
@@ -753,6 +753,49 @@ const { files, findings } = await convert(editor.presentation, {
 Catalog controls initialize an absent deck or slide `design` for known theme, color-scheme and font-scheme fields as one validated transaction. Undo removes a newly created parent; existing design fields are retained. DOM, React and Svelte catalog controls accept `onError(error)` and emit a bubbling `opferror` event on rejected edits, restore the committed selection and expose native validity feedback. General `editor.set` and JSON Patch require existing parents.
 
 Optional downloads can be deferred until requested: dynamically import `@openpresentation/opf-editor/export` inside the download handler. For a PowerPoint download, dynamically import `@openpresentation/opf-pptx` inside that handler too; the `/export` helper covers PDF, PNG and SVG. This defers conversion code, while canvas rendering and font measurement still have their own startup costs.
+
+## Export menu and agent handoff (RR-98)
+
+Three framework-neutral DOM factories, plain DOM like the other modules (no framework, no network, no fonts or CSS fetched at runtime). Their CSS is `src/styles/export-menu.css` and `src/styles/handoff.css`; it uses only the `--opf-ui-*` tokens (each with its light value as a fallback) and the class prefixes `opf-export-*` and `opf-handoff-*`.
+
+```js
+import { createExportMenu } from "@openpresentation/opf-editor/export-menu";
+
+const menu = createExportMenu(document.querySelector("#export"), {
+  getDeck: () => editor.presentation,       // required: called on every export; the menu exports a structuredClone
+  beforeExport: () => !canvas || canvas.commit(), // optional: return false to stop (commit an open canvas edit first)
+  fonts,                                     // the one fonts handle the preview uses
+  catalogs: () => editor.catalogs,           // an array, or a function that returns one
+  renderOptions,
+  exportPptx: async (deck, { signal, onProgress }) => toPptx(deck, { ... }), // PowerPoint, injected (see below)
+  onDownload: ({ blob, fileName, format }) => save(blob, fileName),          // default: a Blob link
+  onAgentHandoff: ({ document, target }) => ...,                              // default: the dialog below
+  items: { slides: ["pdf", "png", "svg", "pptx"], source: ["json", "yaml", "markdown"], agent: true }, // hide groups or formats
+  mode: "menu",                              // "sheet": the mobile bottom sheet (scrim, drag handle, Close)
+  density: "comfortable",                    // "touch": 40px controls (sheet rows 44px)
+  disabled: false,                           // true or a reason string: disables the slide exports
+});
+menu.setDisabled("Showing the last valid slides. Fix the JSON to resume editing and downloads."); // or menu.setDisabled(true)
+menu.setMode(matchMedia("(max-width: 900px)").matches ? "sheet" : "menu");
+```
+
+- **The menu.** A button (Download icon, "Export", ChevronDown) and a `role="menu"` in three groups: **Slides** (PowerPoint (.pptx), PDF, SVG slides, PNG images, each with a hint), **OPF source** (JSON, YAML, Markdown) and **For an agent** (Agent handoff). Items are `role="menuitem"` buttons; ArrowUp, ArrowDown, Home and End move between them, Escape closes and returns focus to the button, Tab closes and moves on. In `mode: "sheet"` the same menu is a `role="dialog"` bottom sheet that traps Tab, closes with Escape, Close or a tap on the scrim, and returns focus.
+- **Slides.** PDF, PNG and SVG run this package's `convert` (above) with your `fonts`, `catalogs` and `renderOptions`; PNG and SVG arrive as one ZIP for several slides. `convertOptions` passes more `convert` options (`scale`, `includeHidden`, `converters`, ...). The menu imports the renderer through `/export`, so a host that bundles it needs `@openpresentation/opf-render` (an optional peer). **PowerPoint lives in `@openpresentation/opf-pptx`, which the editor does not import:** you inject `exportPptx(deck, { signal, onProgress })` and return the bytes (or `{ bytes, fileName?, warnings? }`). Load the fonts the deck needs first, as `examples/export-controls.js` does with `fontGate`. The PPTX item is offered only when `exportPptx` is given.
+- **OPF source.** JSON is the document as "Save OPF" writes it (every catalog record the deck uses is embedded). YAML and Markdown are core's `toYaml` and `toMarkdown` (`@openpresentation/opf/yaml` and `/markdown`, loaded on first use); parts the Markdown dialect has no syntax for are written as YAML fences and reported as notes. File names are `name.opf.json`, `name.opf.yaml` and `name.opf.md`.
+- **Progress, cancel, errors.** While an export runs a status panel under the button shows `onProgress` (a progress bar and the message) and a Cancel button that aborts an `AbortController` (`menu.cancel()` does the same, and `destroy()` too). Success, failure and cancellation each give a status line (`name.pdf · 2 slides · 38 KB · 1 note to review`), announced through an `aria-live="polite"` region; the converter's notes (and your PowerPoint `warnings`, core's YAML and Markdown notes, catalog references that did not resolve) are listed until dismissed. A result without notes hides itself after four seconds. `onStatus({ state, message, notes })` mirrors every change for a host footer, and `onExport({ blob, fileName, format, notes })` fires after a file was handed on.
+- **Disabled.** `setDisabled(reason)` marks the slide exports `aria-disabled` with the reason as their `title` (`true` gives "Showing the last valid slides. Fix the JSON to resume editing and downloads."); source exports and the handoff stay available. While an export runs the others are disabled too.
+
+```js
+import { buildAgentHandoff } from "@openpresentation/opf-editor/agent-handoff";
+import { createAgentHandoffDialog } from "@openpresentation/opf-editor/agent-handoff-dialog";
+
+const { markdown, lines } = buildAgentHandoff(deck, { target: "pptx", fileName: "deck.opf.json" }); // "pptx" | "pdf" | "svg"
+const dialog = createAgentHandoffDialog(document.body, { document: deck, target: "pdf", onClose: () => {} });
+```
+
+`buildAgentHandoff(document, { target, fileName, specUrl, agentGuideUrl })` is a pure function: a Markdown prompt for a coding agent (`# Task`, `## Setup`, `## Steps`, the Spec and Agent guide links, and `## deck.opf.json` with the exact `JSON.stringify(document, null, 2)` in a fenced block that no string in the deck can close). The agent installs `@openpresentation/cli` with `opf-render` (and `opf-pptx` for PowerPoint), validates the deck with `npx opf validate deck.opf.json` (exit 1 and the JSON path of each error for an invalid deck) and renders with `npx opf convert deck.opf.json deck.pptx` (or `deck.pdf`, `deck.svg`, one file per slide); these are the published `opf` command, run against the npm releases in a clean folder when written. The renderer's `@expo-google-fonts/*` packages are optional peers: the first conversion exits 2 with `peer-not-installed` and the exact `npm install` command, which the prompt tells the agent to run. The deck's text is data in the prompt, never instructions. `createAgentHandoffDialog(container, { document, target, onClose })` is the modal: a target switch (a `radiogroup`), the prompt read-only in mono with its line count, **Copy prompt** (Check and "Copied" for 1.2 seconds; when the browser refuses it selects the text and says so), **Download .md** and **Close**. It has `role="dialog"`, `aria-modal`, a focus trap and Escape, and returns focus to the opener. Nothing is sent anywhere.
+
+Icons are inlined path data from [Lucide](https://lucide.dev) (ISC license), never loaded from a CDN.
 
 ## Optional React Bindings
 

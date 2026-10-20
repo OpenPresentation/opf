@@ -1,0 +1,248 @@
+/* RR-98: the Export menu (src/export-menu.js). Only --opf-ui-* tokens, no color literals (test/styles.mjs). */
+.opf-export,
+.opf-export *,
+.opf-export *::before,
+.opf-export *::after { box-sizing: border-box; }
+.opf-export [hidden] { display: none !important; }
+
+.opf-export {
+  position: relative;
+  display: inline-flex;
+  font-family: var(--opf-ui-font);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--opf-ui-fg);
+}
+:where(.opf-export button) { font: inherit; color: inherit; margin: 0; }
+.opf-export .opf-icon { flex: none; }
+
+.opf-export button:focus-visible {
+  outline: 2px solid var(--opf-ui-ring);
+  outline-offset: 2px;
+}
+
+/* ---- trigger --------------------------------------------------------------------------------------------------------------------------- */
+.opf-export .opf-export-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--opf-ui-control-h);
+  padding: 0 8px 0 12px;
+  border: 1px solid var(--opf-ui-accent);
+  border-radius: var(--opf-ui-radius);
+  background: var(--opf-ui-accent);
+  color: var(--opf-ui-accent-fg);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity var(--opf-ui-ease);
+}
+.opf-export .opf-export-trigger:hover { opacity: 0.92; }
+.opf-export .opf-export-trigger[aria-expanded="true"] { opacity: 0.92; }
+
+/* ---- the menu (a popover under the trigger) ------------------------------------------------------------------------------------------ */
+.opf-export .opf-export-popover,
+.opf-export .opf-export-status {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 40;
+  background: var(--opf-ui-surface);
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-lg);
+  box-shadow: var(--opf-ui-shadow-pop);
+}
+.opf-export .opf-export-popover { width: 264px; padding: 4px; border-radius: var(--opf-ui-radius-md); }
+.opf-export[data-align="start"] .opf-export-popover,
+.opf-export[data-align="start"] .opf-export-status { right: auto; left: 0; }
+
+.opf-export .opf-export-menu { display: flex; flex-direction: column; }
+.opf-export .opf-export-group + .opf-export-group {
+  margin-top: 4px;
+  border-top: 1px solid var(--opf-ui-border);
+}
+.opf-export .opf-export-group-label {
+  padding: 6px 10px 4px;
+  font: 500 10.5px/1.4 var(--opf-ui-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--opf-ui-muted-fg);
+}
+.opf-export .opf-export-group + .opf-export-group .opf-export-group-label { padding-top: 8px; }
+
+.opf-export .opf-export-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: var(--opf-ui-radius-sm);
+  background: transparent;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--opf-ui-ease), color var(--opf-ui-ease);
+}
+.opf-export .opf-export-item .opf-icon { color: var(--opf-ui-accent-strong); }
+.opf-export .opf-export-item-label { flex: 1; min-width: 0; }
+.opf-export .opf-export-item-meta {
+  font: 400 11px/1.4 var(--opf-ui-mono);
+  color: var(--opf-ui-muted-fg);
+}
+.opf-export .opf-export-item:hover { background: var(--opf-ui-muted); }
+.opf-export .opf-export-item:focus-visible { background: var(--opf-ui-muted); }
+.opf-export .opf-export-item[aria-disabled="true"] { cursor: not-allowed; }
+.opf-export .opf-export-item[aria-disabled="true"] > * { opacity: 0.5; }
+.opf-export .opf-export-item[aria-disabled="true"]:hover { background: transparent; }
+
+/* ---- the bottom sheet -------------------------------------------------------------------------------------------------------------------- */
+.opf-export .opf-export-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--opf-ui-fg) 32%, transparent);
+}
+.opf-export .opf-export-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 51;
+  max-height: 85vh;
+  overflow: auto;
+  padding: 8px 8px max(20px, env(safe-area-inset-bottom));
+  background: var(--opf-ui-surface);
+  border-top: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-lg) var(--opf-ui-radius-lg) 0 0;
+  box-shadow: var(--opf-ui-shadow-pop);
+}
+.opf-export .opf-export-handle {
+  width: 36px;
+  height: 4px;
+  margin: 2px auto 10px;
+  border-radius: 2px;
+  background: var(--opf-ui-border-strong);
+}
+.opf-export .opf-export-sheet-head { display: flex; align-items: center; padding: 0 8px 6px; }
+.opf-export .opf-export-sheet-title { font-size: 15px; font-weight: 600; }
+.opf-export .opf-export-close {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-left: auto;
+  border: 0;
+  border-radius: var(--opf-ui-radius);
+  background: transparent;
+  color: var(--opf-ui-muted-fg);
+  cursor: pointer;
+  transition: background-color var(--opf-ui-ease), color var(--opf-ui-ease);
+}
+.opf-export .opf-export-close:hover { background: var(--opf-ui-muted); color: var(--opf-ui-fg); }
+.opf-export[data-mode="sheet"] .opf-export-sheet .opf-export-item { gap: 12px; min-height: 44px; padding: 0 12px; font-size: 14px; border-radius: var(--opf-ui-radius); }
+.opf-export .opf-export-sheet .opf-export-group-label { padding: 6px 12px 4px; }
+.opf-export .opf-export-sheet .opf-export-group + .opf-export-group .opf-export-group-label { padding-top: 10px; }
+
+/* ---- density ----------------------------------------------------------------------------------------------------------------------------- */
+.opf-export[data-density="touch"] .opf-export-trigger { height: max(var(--opf-ui-control-h), 40px); }
+.opf-export[data-density="touch"] .opf-export-item { min-height: 40px; }
+
+/* ---- progress, result and notes ----------------------------------------------------------------------------------------------------- */
+.opf-export .opf-export-status {
+  width: 300px;
+  max-width: calc(100vw - 16px);
+  padding: 10px 12px;
+  border-radius: var(--opf-ui-radius-md);
+  z-index: 30;
+}
+.opf-export .opf-export-status-row { display: flex; align-items: flex-start; gap: 8px; }
+.opf-export .opf-export-status-icon { display: inline-flex; padding-top: 2px; }
+.opf-export .opf-export-status-icon:empty { display: none; }
+.opf-export .opf-export-status[data-state="success"] .opf-export-status-icon { color: var(--opf-ui-success); }
+.opf-export .opf-export-status[data-state="error"] .opf-export-status-icon { color: var(--opf-ui-danger); }
+.opf-export .opf-export-status-text {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-size: 12.5px;
+  overflow-wrap: anywhere;
+}
+.opf-export .opf-export-status[data-state="error"] .opf-export-status-text { color: var(--opf-ui-danger); }
+.opf-export .opf-export-status[data-state="busy"] .opf-export-status-text,
+.opf-export .opf-export-status[data-state="cancelled"] .opf-export-status-text { color: var(--opf-ui-muted-fg); }
+.opf-export .opf-export-status-action {
+  flex: none;
+  height: 24px;
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--opf-ui-radius-sm);
+  background: transparent;
+  color: var(--opf-ui-accent-strong);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--opf-ui-ease);
+}
+.opf-export .opf-export-status-action:hover { background: var(--opf-ui-muted); }
+
+.opf-export .opf-export-progress {
+  display: block;
+  width: 100%;
+  height: 4px;
+  margin-top: 8px;
+  border: 0;
+  border-radius: 2px;
+  appearance: none;
+  -webkit-appearance: none;
+  overflow: hidden;
+  background: var(--opf-ui-muted);
+  color: var(--opf-ui-accent);
+}
+.opf-export .opf-export-progress::-webkit-progress-bar { background: var(--opf-ui-muted); }
+.opf-export .opf-export-progress::-webkit-progress-value { background: var(--opf-ui-accent); }
+.opf-export .opf-export-progress::-moz-progress-bar { background: var(--opf-ui-accent); }
+
+.opf-export .opf-export-notes {
+  max-height: 140px;
+  margin: 8px 0 0;
+  padding: 8px 0 0 18px;
+  overflow: auto;
+  border-top: 1px solid var(--opf-ui-border);
+  font-size: 12px;
+  color: var(--opf-ui-warn);
+  overflow-wrap: anywhere;
+}
+.opf-export .opf-export-notes li + li { margin-top: 4px; }
+
+/* The live region is for assistive technology only. */
+.opf-export .opf-export-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* On a phone the status sits at the bottom, where the sheet was. */
+.opf-export[data-mode="sheet"] .opf-export-status {
+  position: fixed;
+  top: auto;
+  left: 8px;
+  right: 8px;
+  bottom: max(8px, env(safe-area-inset-bottom));
+  width: auto;
+  max-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opf-export *,
+  .opf-export *::before,
+  .opf-export *::after { transition: none !important; animation: none !important; }
+}

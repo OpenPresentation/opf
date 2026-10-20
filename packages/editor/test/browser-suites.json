@@ -95,6 +95,14 @@
         {
           "id": "playground:playground-download",
           "command": "node test/playground-download.mjs artifacts/playground-download"
+        },
+        {
+          "id": "playground:export-menu-browser",
+          "command": "node test/export-menu-browser.mjs"
+        },
+        {
+          "id": "playground:agent-handoff-browser",
+          "command": "node test/agent-handoff-browser.mjs"
         }
       ]
     },

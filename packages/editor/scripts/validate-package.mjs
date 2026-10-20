@@ -70,6 +70,12 @@ assert.ok(pkg.exports?.["./styles.css"], "Must expose the RR-98 editor styleshee
 assert.equal(pkg.exports["./styles.css"].default, "./dist/styles.css");
 assert.ok(pkg.files.includes("dist"), "Must publish dist, which holds styles.css.");
 
+for (const [entry, file] of [["./export-menu", "export-menu"], ["./agent-handoff", "agent-handoff"], ["./agent-handoff-dialog", "agent-handoff-dialog"]]) {
+  assert.ok(pkg.exports?.[entry], `Must expose ${entry} as a separate entry point (RR-98).`);
+  assert.equal(pkg.exports[entry].default, `./dist/${file}.js`);
+  assert.equal(pkg.exports[entry].types, `./dist/${file}.d.ts`);
+}
+
 for (const forbidden of forbiddenDependencyNames) {
   assert.ok(!deps[forbidden], `Forbidden critical-path dependency: ${forbidden}`);
 }

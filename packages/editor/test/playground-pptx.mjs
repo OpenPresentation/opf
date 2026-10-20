@@ -32,6 +32,13 @@ try {
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   page.on('request', request => { if (!['GET', 'HEAD'].includes(request.method())) networkWrites.push(request.url()); });
   const button = name => page.getByRole('button', { name, exact: true });
+  // RR-98: PowerPoint is one item of the Export menu; the download is the converter's file.
+  const exportPptx = async () => {
+    const event = page.waitForEvent('download', { timeout: 120000 });
+    await button('Export').click();
+    await page.getByRole('menuitem', { name: /^PowerPoint/ }).click();
+    return event;
+  };
   const source = async () => {
     await button('Source').click();
     const presentation = JSON.parse(await page.locator('#json').inputValue());
@@ -47,7 +54,7 @@ try {
   };
   await page.goto(`http://127.0.0.1:${server.address().port}/index.html`);
   await page.locator('#preview svg').waitFor();
-  await page.waitForFunction(() => !!document.querySelector('#export-pptx').onclick);
+  await page.locator('.opf-export-trigger').waitFor();
   // FF-31: the default Aptos scheme previews with Intos, fetched on demand from the page's own fonts/ directory. Preview an Aptos
   // draft while still online so the vendored faces are loaded (and held by the document); everything after runs offline.
   {
@@ -62,7 +69,7 @@ try {
     await page.setViewportSize(viewport);
     // RR-25: on a phone the document's header buttons sit behind the More button.
     if (await page.locator('#more-actions').isVisible() && await page.locator('#more-actions').getAttribute('aria-expanded') !== 'true') await page.locator('#more-actions').click();
-    for (const name of ['Import', 'Copy OPF', 'Source', 'Save OPF']) {
+    for (const name of ['Import', 'Copy OPF', 'Source', 'Save OPF', 'Export']) {
       assert.equal(await button(name).count(), 1, `${name} keeps its accessible name at ${viewport.width}px`);
       assert.equal(await button(name).isVisible(), true);
     }
@@ -81,13 +88,8 @@ try {
   assert.deepEqual(await source(), deck);
   await page.locator('#preview [data-canvas-target][data-opf-path="slides.0.title"]').dblclick();
   await page.getByRole('textbox', { name: 'Edit title inline', exact: true }).fill('Edited before export');
-  // Opening export commits the active canvas draft.
-  await button('PowerPoint').click();
-  await page.waitForFunction(() => !document.querySelector('#download-pptx').disabled || document.querySelector('#export-error').textContent);
-  assert.equal(await page.locator('#export-error').innerText(), '');
-  const downloadEvent = page.waitForEvent('download');
-  await button('Download PowerPoint').click();
-  const download = await downloadEvent;
+  // Exporting commits the active canvas draft.
+  const download = await exportPptx();
   assert.equal(await download.failure(), null);
   assert.equal(download.suggestedFilename(), 'Local-browser-PowerPoint.pptx');
   const bytes = await readFile(await download.path());
@@ -99,7 +101,7 @@ try {
   assert.match(xml, /gridSpan="2"/);
   const expectedImport = await fromPptx(bytes);
   assert.equal(validate(expectedImport, { only: ["format"] }).valid, true);
-  await button('Close PowerPoint export').click();
+  assert.match(await page.locator('.opf-export-status').innerText(), /^Local-browser-PowerPoint\.pptx · 1 slide · \d+ KB/, 'the status line reports the file');
   const edited = await source();
   assert.equal(edited.slides[0].title, 'Edited before export');
   await button('Undo').click();
@@ -190,12 +192,7 @@ try {
   await page.locator('#paginate').click();
   await button('Undo').click(); assert.deepEqual(await source(),editedQuote,'Repeating pagination must not add a history entry');
   await button('Redo').click(); assert.deepEqual(await source(),paginatedQuote);
-  await button('PowerPoint').click();
-  await page.waitForFunction(()=>!document.querySelector('#download-pptx').disabled || document.querySelector('#export-error').textContent);
-  assert.equal(await page.locator('#export-error').innerText(),'');
-  const quoteDownloadEvent=page.waitForEvent('download');
-  await button('Download PowerPoint').click();
-  const quoteDownload=await quoteDownloadEvent;
+  const quoteDownload=await exportPptx();
   assert.equal(await quoteDownload.failure(),null);
   const quoteBytes=await readFile(await quoteDownload.path());
   const quoteImport=await fromPptx(quoteBytes);
@@ -226,7 +223,6 @@ try {
   const quoteXml=await (await JSZip.loadAsync(quoteBytes)).file('ppt/slides/slide1.xml').async('string');
   assert.match(quoteXml,/Reviewer - Recorded interview/);
   assert.match(quoteXml,/sz="1800"/,'Native source text uses the accepted 24px/18pt size');
-  await button('Close PowerPoint export').click();
   await button('Import').click();
   await page.getByRole('tab',{name:'File',exact:true}).click();
   await page.locator('#opf-file').setInputFiles({name:'quote.pptx',mimeType:'application/vnd.openxmlformats-officedocument.presentationml.presentation',buffer:Buffer.from(quoteBytes)});

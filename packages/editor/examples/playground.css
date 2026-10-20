@@ -398,15 +398,20 @@ select {
   gap: 6px 4px;
 }
 
-.header-actions button {
+.header-actions > button {
   min-height: 28px;
   padding: 0 8px;
   font-size: 12px;
 }
 
-.header-actions .icon {
+.header-actions > button .icon {
   width: 14px;
   height: 14px;
+}
+
+.export-menu-slot {
+  display: inline-flex;
+  align-items: center;
 }
 
 .editing-shell {
@@ -1549,141 +1554,10 @@ dialog::backdrop {
   white-space: pre-wrap;
 }
 
-#export-dialog {
-  width: min(650px, 96vw);
-}
-
-.export-body {
-  max-height: 65dvh;
-  padding: 20px;
-  overflow: auto;
-}
-
-.export-body .field-help {
-  margin: 12px 0;
-}
-
-#export-error {
-  color: var(--opf-ui-danger);
-  white-space: pre-wrap;
-}
-
-#export-diagnostics,
 #import-diagnostics {
   padding-left: 20px;
   font-size: 12px;
   overflow-wrap: anywhere;
-}
-
-#download-dialog {
-  width: min(620px, 96vw);
-}
-
-.download-body {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  max-height: 68dvh;
-  padding: 18px 24px;
-  overflow: auto;
-}
-
-.download-group {
-  padding: 10px 14px 4px;
-  margin: 0;
-  border: 1px solid var(--opf-ui-border);
-  border-radius: var(--opf-ui-radius-md);
-}
-
-.download-group legend {
-  padding: 0 6px;
-  font: 500 11px/1.4 var(--opf-ui-mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--opf-ui-muted-fg);
-}
-
-.download-choice {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 8px;
-  font-size: 13px;
-  font-weight: 400;
-  color: var(--opf-ui-fg);
-  cursor: pointer;
-}
-
-.download-choice input {
-  margin: 0;
-  accent-color: var(--opf-ui-accent);
-}
-
-#download-png-options {
-  padding: 0;
-  border: 0;
-}
-
-#download-png-options select {
-  margin: 0 0 4px;
-}
-
-.download-progress {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.download-progress progress {
-  flex: 1;
-  min-width: 0;
-  height: 8px;
-  accent-color: var(--opf-ui-accent);
-}
-
-#download-progress-label {
-  font: 11.5px var(--opf-ui-mono);
-  color: var(--opf-ui-muted-fg);
-  white-space: nowrap;
-}
-
-#download-summary {
-  font-size: 13px;
-  overflow-wrap: anywhere;
-}
-
-#download-summary:empty,
-#download-error:empty,
-#download-diagnostics:empty {
-  display: none;
-}
-
-#download-error {
-  font-size: 12px;
-  color: var(--opf-ui-danger);
-  white-space: pre-wrap;
-}
-
-#download-diagnostics,
-#download-font-list {
-  padding-left: 20px;
-  margin: 0;
-  font-size: 12px;
-  overflow-wrap: anywhere;
-}
-
-#download-diagnostics li {
-  margin-bottom: 4px;
-  color: var(--opf-ui-warn);
-}
-
-#download-fonts {
-  font: 11.5px var(--opf-ui-mono);
-  color: var(--opf-ui-muted-fg);
-}
-
-#download-fonts summary {
-  cursor: pointer;
 }
 
 /* ------------------------------------------------------------------ viewport sizes */
@@ -1782,16 +1656,15 @@ dialog::backdrop {
     grid-template-columns: 1fr;
   }
 
-  .dialog-footer,
-  #download-dialog .dialog-footer {
+  .dialog-footer {
     flex-wrap: wrap;
   }
 
-  .header-actions button {
+  .header-actions > button {
     padding: 0 7px;
   }
 
-  .header-actions button span {
+  .header-actions > button span {
     display: none;
   }
 
