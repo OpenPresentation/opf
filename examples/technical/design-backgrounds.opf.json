@@ -102,9 +102,9 @@
   ],
   "assets": {
     "cover-image": {
-      "src": "./assets/cover-image.jpg",
+      "src": "./assets/cover-image.png",
       "alt": "Abstract cover image",
-      "mediaType": "image/jpeg"
+      "mediaType": "image/png"
     }
   },
   "catalogs": {

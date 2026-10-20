@@ -10,7 +10,7 @@
   "design": {
     "theme": "classic",
     "colorScheme": "vibes",
-    "fontScheme": "noto-sans-arabic",
+    "fontScheme": "lucida-sans",
     "dimensions": "a4",
     "background": "dark1",
     "titleAlignment": "right",
@@ -344,20 +344,16 @@
         }
       },
       "fontSchemes": {
-        "noto-sans-arabic": {
-          "name": "Noto Sans Arabic",
-          "app": "google-slides",
-          "languageFamily": "cs",
-          "languages": [
-            "ar",
-            "ps",
-            "pa-Arab"
-          ],
-          "major": "Noto Naskh Arabic",
-          "minor": "Noto Naskh Arabic",
-          "textSample": "نص عربي أنيق",
+        "lucida-sans": {
+          "name": "Lucida Sans",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Lucida Sans",
+          "minor": "Lucida Sans",
+          "textSample": "Friendly clear text",
           "type": "sans-serif",
-          "description": "Noto Sans Arabic is a sans serif OPF font scheme for complex script presentations, using Noto Naskh Arabic for both headings and body text."
+          "description": "Lucida Sans is a sans serif OPF font scheme for Latin presentations, using Lucida Sans for both headings and body text."
         },
         "tenorite": {
           "name": "Tenorite",

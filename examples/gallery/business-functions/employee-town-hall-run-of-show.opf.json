@@ -10,7 +10,7 @@
   "design": {
     "theme": "bold",
     "colorScheme": "steel-blue",
-    "fontScheme": "noto-sans",
+    "fontScheme": "impact",
     "dimensions": "letter",
     "background": "#FFFFFF",
     "titleAlignment": "center",
@@ -397,22 +397,6 @@
         }
       },
       "fontSchemes": {
-        "noto-sans": {
-          "name": "Noto Sans",
-          "app": "google-slides",
-          "languageFamily": "cs",
-          "languages": [
-            "ru",
-            "uk",
-            "sr-Cyrl",
-            "tg"
-          ],
-          "major": "Noto Sans",
-          "minor": "Noto Sans",
-          "textSample": "Universal and clear",
-          "type": "sans-serif",
-          "description": "Noto Sans is a sans serif OPF font scheme for complex script presentations, using Noto Sans for both headings and body text."
-        },
         "impact": {
           "name": "Impact",
           "app": "powerpoint",

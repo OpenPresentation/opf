@@ -10,7 +10,7 @@
   "design": {
     "theme": "classic",
     "colorScheme": "boost",
-    "fontScheme": "meiryo",
+    "fontScheme": "arial",
     "dimensions": "widescreen",
     "background": "light1",
     "titleAlignment": "left",
@@ -373,18 +373,16 @@
         }
       },
       "fontSchemes": {
-        "meiryo": {
-          "name": "Meiryo",
+        "arial": {
+          "name": "Arial",
           "app": "powerpoint",
-          "languageFamily": "ea",
-          "languages": [
-            "ja"
-          ],
-          "major": "Meiryo",
-          "minor": "Meiryo",
-          "textSample": "これはメイリオフォントで書かれています",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Arial Black",
+          "minor": "Arial",
+          "textSample": "Simple and clear",
           "type": "sans-serif",
-          "description": "Meiryo is a sans serif OPF font scheme for East Asian presentations, using Meiryo for both headings and body text."
+          "description": "Arial is a sans serif OPF font scheme for Latin presentations, using Arial Black for headings with Arial for body text."
         },
         "tenorite": {
           "name": "Tenorite",

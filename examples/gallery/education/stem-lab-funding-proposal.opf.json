@@ -10,7 +10,7 @@
   "design": {
     "theme": "minimal",
     "colorScheme": "luxury",
-    "fontScheme": "noto-sans-kannada",
+    "fontScheme": "segoe-ui-light",
     "dimensions": "16:10",
     "background": "light1",
     "titleAlignment": "left",
@@ -383,18 +383,16 @@
         }
       },
       "fontSchemes": {
-        "noto-sans-kannada": {
-          "name": "Noto Sans Kannada",
-          "app": "google-slides",
-          "languageFamily": "cs",
-          "languages": [
-            "kn"
-          ],
-          "major": "Noto Sans Kannada",
-          "minor": "Noto Sans Kannada",
-          "textSample": "ಇದು ಸುಂದರ ಪುಸ್ತಕ",
+        "segoe-ui-light": {
+          "name": "Segoe UI Light",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Segoe UI Semilight",
+          "minor": "Segoe UI Light",
+          "textSample": "Clean airy look",
           "type": "sans-serif",
-          "description": "Noto Sans Kannada is a sans serif OPF font scheme for complex script presentations, using Noto Sans Kannada for both headings and body text."
+          "description": "Segoe UI Light is a sans serif OPF font scheme for Latin presentations, using Segoe UI Semilight for headings with Segoe UI Light for body text."
         },
         "aptos": {
           "name": "Aptos",

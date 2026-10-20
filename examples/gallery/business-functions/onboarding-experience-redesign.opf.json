@@ -10,7 +10,7 @@
   "design": {
     "theme": "minimal",
     "colorScheme": "burnt-orange",
-    "fontScheme": "microsoft-jhenghei",
+    "fontScheme": "bookman",
     "dimensions": "16:9",
     "background": "#FFFFFF",
     "titleAlignment": "center",
@@ -380,18 +380,16 @@
         }
       },
       "fontSchemes": {
-        "microsoft-jhenghei": {
-          "name": "Microsoft JhengHei",
+        "bookman": {
+          "name": "Bookman",
           "app": "powerpoint",
-          "languageFamily": "ea",
-          "languages": [
-            "zh-Hant"
-          ],
-          "major": "Microsoft JhengHei",
-          "minor": "Microsoft JhengHei",
-          "textSample": "這是用微軟正黑體寫的",
-          "type": "sans-serif",
-          "description": "Microsoft JhengHei is a sans serif OPF font scheme for East Asian presentations, using Microsoft JhengHei for both headings and body text."
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Bookman Old Style",
+          "minor": "Bookman Old Style",
+          "textSample": "Classic serif style",
+          "type": "serif",
+          "description": "Bookman is a serif OPF font scheme for Latin presentations, using Bookman Old Style for both headings and body text."
         },
         "aptos": {
           "name": "Aptos",

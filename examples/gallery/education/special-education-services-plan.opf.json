@@ -10,7 +10,7 @@
   "design": {
     "theme": "classic",
     "colorScheme": "corporate-blue",
-    "fontScheme": "noto-sans-thai",
+    "fontScheme": "calibri",
     "dimensions": "16:9",
     "background": "#FFFFFF",
     "titleAlignment": "center",
@@ -399,18 +399,16 @@
         }
       },
       "fontSchemes": {
-        "noto-sans-thai": {
-          "name": "Noto Sans Thai",
-          "app": "google-slides",
-          "languageFamily": "cs",
-          "languages": [
-            "th"
-          ],
-          "major": "Noto Sans Thai",
-          "minor": "Noto Sans Thai",
-          "textSample": "นี่คือสวยงาม",
+        "calibri": {
+          "name": "Calibri",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Calibri",
+          "minor": "Calibri",
+          "textSample": "Smooth professional look",
           "type": "sans-serif",
-          "description": "Noto Sans Thai is a sans serif OPF font scheme for complex script presentations, using Noto Sans Thai for both headings and body text."
+          "description": "Calibri is a sans serif OPF font scheme for Latin presentations, using Calibri for both headings and body text."
         },
         "tenorite": {
           "name": "Tenorite",
