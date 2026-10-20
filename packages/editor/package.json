@@ -38,6 +38,10 @@
       "default": "./dist/svelte.js"
     },
     "./package.json": "./package.json",
+    "./styles.css": {
+      "style": "./dist/styles.css",
+      "default": "./dist/styles.css"
+    },
     "./canvas": {
       "types": "./dist/canvas.d.ts",
       "default": "./dist/canvas.js"

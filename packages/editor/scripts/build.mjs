@@ -1,4 +1,5 @@
-import { copyFile, mkdir, readdir, rm } from "node:fs/promises";
+import { copyFile, mkdir, readdir, rm, writeFile } from "node:fs/promises";
+import { buildStyles } from "./build-styles.mjs";
 
 const root = new URL("../", import.meta.url);
 const src = new URL("src/", root);
@@ -12,3 +13,6 @@ for (const entry of await readdir(src)) {
     await copyFile(new URL(entry, src), new URL(entry, dist));
   }
 }
+
+// RR-98: dist/styles.css is the token layer plus the component styles, generated from src/styles/*.css (see scripts/build-styles.mjs).
+await writeFile(new URL("styles.css", dist), (await buildStyles(new URL("styles/", src))).css);

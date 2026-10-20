@@ -1,5 +1,5 @@
 import { build } from 'esbuild';
-import { mkdir, readdir, readFile, writeFile, copyFile } from 'node:fs/promises';
+import { mkdir, readdir, readFile, stat, writeFile, copyFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import path from 'node:path';
@@ -77,4 +77,10 @@ for (const name of ['harfbuzz-subset.wasm', 'harfbuzz.wasm']) await copyFile(ren
 for (const [source, destination] of [['playground.html', 'index.html'], ['playground.css', 'playground.css'], ['galleries.json', 'galleries.json']]) {
   await copyFile(new URL('examples/' + source, root), new URL(destination, output));
 }
+// RR-98: the same styles.css the package ships (tokens, then src/styles/*.css); the page links it before its own harness layout.
+// In a source checkout it is built from src/styles; the packed-install check runs this script beside an installed copy, where
+// `dist` is the published package and already holds styles.css.
+const stylesSource = new URL('src/styles/', root);
+const sourceCheckout = await stat(stylesSource).then(entry => entry.isDirectory(), () => false);
+await writeFile(new URL('styles.css', output), sourceCheckout ? (await (await import('./build-styles.mjs')).buildStyles(stylesSource)).css : await readFile(new URL('dist/styles.css', root)));
 console.log(`Browser editor built in ${fileURLToPath(output)} (${splitFonts ? 'eager faces split: Roboto Regular at start, the rest on demand; ' : ''}${scriptFaces} lazy script faces, ${lazyFaces} lazy preview faces)`);

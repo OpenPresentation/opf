@@ -15,6 +15,10 @@
 - This checkout is used with `core.autocrlf=true`; text files are stored LF and check out CRLF. Do not commit line-ending-only churn. The JSON editor preserves existing CRLF, CR and LF spellings through ordinary edits and undo.
 - `npm run test:playground` uses local Edge on Windows and installed Chromium in CI.
 
+## Styles (RR-98)
+
+- `src/styles/tokens.css` is the `--opf-ui-*` token layer; every other `src/styles/*.css` (one file per component: `panels.css`, `source-pane.css`, `navigator.css`, `thumbnails.css`, `export-menu.css`, `handoff.css`) uses only those variables, with no color literals (`test/styles.mjs` fails on one). `npm run build` writes `dist/styles.css` (tokens first, then the other files alphabetically) through `scripts/build-styles.mjs`, so a new component adds a file and needs no build edit. `dist/styles.css` is generated and git-ignored (the other `dist` files are tracked): never commit it, and the published package gets it from `prepack`. The playground builds the same file next to its page.
+
 ## Changelog fragments and test discovery (RR-46)
 
 - Changelog: add `changes/<slug>.md` (front matter `type: added|changed|fixed`, see `changes/README.md`) in the PR that makes a user-facing change; never edit `CHANGELOG.md` or `## Unreleased` by hand. The release-prep PR runs `node scripts/changelog-fragments.mjs assemble --version X.Y.Z [--summary "..."]`, which moves the fragments into the release section. CI warns when `src/` changes without a fragment.

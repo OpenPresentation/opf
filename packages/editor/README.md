@@ -610,6 +610,47 @@ Select a picture on the canvas and use **Crop picture** (or `canvas.cropImage(pa
 
 At 900px and narrower the playground is one screen: the slide strip on top, the slide in the middle, and a bottom bar (Edit, Design, Find, Undo, Redo) whose Edit and Design open the inspector as a **bottom sheet** that leaves the slide in view above it; the header buttons sit behind More; nothing scrolls sideways down to 320px. On a touch screen the canvas grows each text block's selection target to about 44px (up to 24 slide units each way), a tap on text enters editing at that point, `touch-action: manipulation` removes the double-tap delay, and the field being typed in is scrolled above the on-screen keyboard (visual viewport). The inline field mirrors the slide text, which is smaller than 16px on a phone; iOS would zoom into it on focus, so the playground sets `maximum-scale=1` on the viewport only while a slide text field has the focus and restores it after (embedding hosts should do the same, or keep their own fields at 16px). `test/mobile-browser.mjs` drives six emulated devices (iPhone SE, iPhone 14 Pro, Pixel 7, a 320px Android, an iPad and an Android tablet: Chromium with each device's viewport, scale factor, touch and user agent) through the layout, the sheet, tap-to-type, find and replace by touch and a crop by touch; it does not replace a check on a real iOS Safari.
 
+## Styling and theming (RR-98)
+
+The editor panels ship one stylesheet. Import it once, next to your own CSS:
+
+```js
+import "@openpresentation/opf-editor/styles.css";
+```
+
+`npm run build` writes `dist/styles.css`: the token layer (`src/styles/tokens.css`) first, then every other `src/styles/*.css` in alphabetical order. It is plain CSS with no preprocessor, no `@import` and no `url()`: nothing is fetched. The package bundles no fonts either; load Inter and Geist Mono yourself (or leave the fallbacks: `system-ui` and `ui-monospace`). The panels that existed before it (design controls, review, slide manager, find, fill template, numbering, chart options, data grid, crop, the custom layout editor, the JSON editor and the restore banner) are styled with the tokens and nothing else. The find, review, crop and data-grid components still inject a small fallback stylesheet of their own, so they look as before when you do not import `styles.css`; with it, its rules win whichever `<style>` comes last.
+
+**Tokens.** Every rule reads only `--opf-ui-*` custom properties, defined on `:root` and on `.opf-ui`, light by default. Override any of them on `:root`, on a wrapper with the class `opf-ui`, or on one component's container:
+
+```css
+.my-editor.opf-ui {
+  --opf-ui-accent: hsl(262 60% 38%);
+  --opf-ui-accent-strong: hsl(262 60% 38%);
+  --opf-ui-ring: hsl(262 60% 38%);
+  --opf-ui-radius: 4px;
+}
+```
+
+| Group | Tokens |
+|---|---|
+| Surfaces | `--opf-ui-bg`, `--opf-ui-surface`, `--opf-ui-muted`, `--opf-ui-muted-2` |
+| Text | `--opf-ui-fg`, `--opf-ui-muted-fg` |
+| Accent | `--opf-ui-accent`, `--opf-ui-accent-fg`, `--opf-ui-accent-strong`, `--opf-ui-ring` |
+| Lines | `--opf-ui-border`, `--opf-ui-border-strong` |
+| Status | `--opf-ui-danger`, `--opf-ui-warn`, `--opf-ui-success` |
+| Code | `--opf-ui-code-bg`, `--opf-ui-code-border` |
+| Type | `--opf-ui-font` (`Inter, system-ui, sans-serif`), `--opf-ui-mono` (`"Geist Mono", ui-monospace, Menlo, monospace`) |
+| Shape | `--opf-ui-radius-sm` 4px, `--opf-ui-radius` 6px, `--opf-ui-radius-md` 8px, `--opf-ui-radius-lg` 12px |
+| Size, depth, motion | `--opf-ui-control-h` 32px, `--opf-ui-shadow-pop` (menus, popovers and dialogs only), `--opf-ui-ease` `120ms ease` (color and border only) |
+
+Put the class `opf-ui` on an element that wraps a mounted component to get the base rules: the font, the text color, `box-sizing: border-box`, a 2px `--opf-ui-ring` outline with a 2px offset on `:focus-visible`, and no transitions under `prefers-reduced-motion: reduce`.
+
+**Dark mode.** The dark values apply under `.dark .opf-ui`, `.opf-ui.dark`, `[data-theme="dark"]` (on the root or any ancestor) and `:root.dark`. The host decides when: toggle `class="dark"` or `data-theme="dark"` on `<html>`, or on the wrapper. The stylesheet does not read `prefers-color-scheme`, so a host that wants to follow the system setting sets the attribute from `matchMedia("(prefers-color-scheme: dark)")`. Dark also sets `color-scheme: dark`, so native controls follow.
+
+**Touch.** `data-density="touch"` on an `.opf-ui` element raises `--opf-ui-control-h` from 32px to 40px for everything inside it (the mobile design). The new components take the same value as a `density: "comfortable" | "touch"` option.
+
+The example page `examples/playground.html` loads this stylesheet and keeps only its own page layout in `examples/playground.css`. The JSON editor (CodeMirror) ships no CSS of its own; give its container the class `opf-json` or `opf-code`, or put it inside an `.opf-ui`, to style it. The restore banner is a host element: give it the class `restore-banner`.
+
 ## Review panel (RR-29)
 
 `@openpresentation/opf-editor/review-panel` mounts the findings of core's `validate(presentation)` next to the document, grouped by category (format, references, policy, accessibility, layout, content): contrast, text that does not fit, missing alt text, reading order, fonts, links and more (the same rules as `opf validate`; see the [validate guide](https://github.com/OpenPresentation/opf/blob/main/docs/validate.md)). A finding is core's `Finding` (rule id, severity, category, JSON Pointer path, message, `fixes`), so a hosted reviewer that returns a `FindingReport`, such as pptx.dev's review, lists its findings in the same panel.

@@ -66,6 +66,10 @@ for (const [entry, file] of [["./numbering", "numbering"], ["./numbering-panel",
   assert.equal(pkg.exports[entry].types, `./dist/${file}.d.ts`);
 }
 
+assert.ok(pkg.exports?.["./styles.css"], "Must expose the RR-98 editor stylesheet as ./styles.css.");
+assert.equal(pkg.exports["./styles.css"].default, "./dist/styles.css");
+assert.ok(pkg.files.includes("dist"), "Must publish dist, which holds styles.css.");
+
 for (const forbidden of forbiddenDependencyNames) {
   assert.ok(!deps[forbidden], `Forbidden critical-path dependency: ${forbidden}`);
 }

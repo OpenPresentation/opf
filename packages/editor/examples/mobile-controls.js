@@ -11,12 +11,12 @@ const CSS = `
 html,body{overscroll-behavior:none}
 .mobile-only{display:inline-flex}
 .app-shell{display:flex;flex-direction:column;height:100dvh;min-height:0;overflow:hidden;padding-bottom:calc(var(--bar-h) + env(safe-area-inset-bottom))}
-.sidebar{flex:0 0 auto;position:static;max-height:none;flex-direction:row;flex-wrap:wrap;align-items:center;border-right:0;border-bottom:1px solid var(--border)}
+.sidebar{flex:0 0 auto;position:static;max-height:none;flex-direction:row;flex-wrap:wrap;align-items:center;border-right:0;border-bottom:1px solid var(--opf-ui-border)}
 .workspace-brand{flex:1 1 auto;height:44px}
 .workspace-badge,.sidebar-section,.sidebar-bottom{display:none}
 .sidebar .add-slide{order:1;margin:0 4px 0 0;padding:4px 8px;font-size:12px;gap:4px;min-height:36px}
 .slide-list{order:2;flex:1 1 100%;display:flex;flex-direction:row;gap:8px;overflow-x:auto;overflow-y:hidden;padding:2px 10px 8px;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
-.slide-card{flex:0 0 96px;width:96px;margin:0}
+.opf-slides .slide-card{flex:0 0 96px;width:96px;margin:0}
 .slide-toolbar{order:0;margin:0 6px 0 0}
 .slide-actions{order:1;flex:1 1 100%;display:flex;gap:4px;overflow-x:auto;padding:0 8px 4px;scrollbar-width:none}
 .slide-actions .add-slide{flex:0 0 auto;margin:0;order:0}
@@ -37,16 +37,16 @@ body[data-menu=open] .header-actions{display:flex}
 .canvas-footer{padding:0 12px}
 body[data-sheet] .sidebar,body[data-sheet] .document-bar{display:none}
 body[data-sheet] .canvas-scroll{padding-bottom:min(46dvh,420px)}
-.inspector{position:fixed;left:0;right:0;bottom:calc(var(--bar-h) + env(safe-area-inset-bottom));width:auto;max-height:min(46dvh,420px);border:0;border-top:1px solid var(--border);border-radius:14px 14px 0 0;box-shadow:0 -10px 40px #1c183033;z-index:40;overscroll-behavior:contain;transform:translateY(calc(100% + var(--bar-h)));visibility:hidden;transition:transform .2s ease,visibility 0s linear .2s}
+.inspector{position:fixed;left:0;right:0;bottom:calc(var(--bar-h) + env(safe-area-inset-bottom));width:auto;max-height:min(46dvh,420px);border:0;border-top:1px solid var(--opf-ui-border);border-radius:14px 14px 0 0;box-shadow:var(--opf-ui-shadow-pop);z-index:40;overscroll-behavior:contain;transform:translateY(calc(100% + var(--bar-h)));visibility:hidden;transition:transform .2s ease,visibility 0s linear .2s}
 body[data-sheet] .inspector{transform:none;visibility:visible;transition:transform .2s ease}
 @media (max-height:720px){.workspace-brand{height:36px}.canvas-toolbar .slide-heading{display:none}.canvas-toolbar{min-height:40px;padding:2px 10px}}
 @media (prefers-reduced-motion:reduce){.inspector{transition:none}}
-.inspector-tabs{position:sticky;top:0;z-index:2;background:#fff;align-items:center;padding-right:6px}
+.inspector-tabs{position:sticky;top:0;z-index:2;background:var(--opf-ui-surface);align-items:center;padding-right:6px}
 .sheet-close{margin-left:auto;min-height:44px}
 .inspector-panel{padding:14px 14px 20px;max-width:none}
-.mobile-bar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;background:#fff;border-top:1px solid var(--border);padding-bottom:env(safe-area-inset-bottom)}
-.mobile-bar button{flex:1 1 0;min-width:0;min-height:var(--bar-h);flex-direction:column;gap:2px;border-radius:0;font-size:11px;font-weight:600;color:#4a4b56;padding:4px 2px}
-.mobile-bar button[aria-pressed=true],.mobile-bar button[aria-expanded=true]{color:var(--accent);background:#f1effd}
+.mobile-bar{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;background:var(--opf-ui-surface);border-top:1px solid var(--opf-ui-border);padding-bottom:env(safe-area-inset-bottom)}
+.mobile-bar button{flex:1 1 0;min-width:0;min-height:var(--bar-h);flex-direction:column;gap:2px;border-radius:0;font-size:11px;font-weight:600;color:var(--opf-ui-muted-fg);padding:4px 2px}
+.mobile-bar button[aria-pressed=true],.mobile-bar button[aria-expanded=true]{color:var(--opf-ui-accent-strong);background:color-mix(in srgb,var(--opf-ui-accent) 10%,var(--opf-ui-surface))}
 .mobile-bar button:disabled{opacity:.4}
 .mobile-bar .icon{width:20px;height:20px}
 .find-host{position:fixed;left:0;right:0;bottom:calc(var(--bar-h) + env(safe-area-inset-bottom));z-index:45;padding:0 8px 8px;background:transparent}
