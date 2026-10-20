@@ -6,7 +6,7 @@ The published canvas covers the interactions below; complete PowerPoint feature 
 
 ## Install the published packages
 
-Use Node 24 with Core, editor and PPTX 0.20.3, renderer 0.20.2 and Gallery 3.0.0. This is the current published setup; the [quickstart](quickstart.md) is the shared command-line first run:
+Use Node 24 with Core 0.24.2, editor 0.24.0, PPTX 0.24.1, renderer 0.24.3 and Gallery 4.0.0. This is the current published setup; the [quickstart](quickstart.md) is the shared command-line first run:
 
 ```sh
 npm install --save-exact @openpresentation/opf@0.20.3 @openpresentation/opf-render@0.20.2 @openpresentation/opf-editor@0.20.3 @openpresentation/opf-pptx@0.20.3 @openpresentation/gallery@3.0.0

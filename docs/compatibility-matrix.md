@@ -5,10 +5,9 @@ is the honest supported subset for [the developer quickstart](quickstart.md).
 It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
-**Verified artifacts (2026-10-17):** core 0.20.5, renderer/PPTX/editor 0.20.4,
-CLI 0.20.1 and Gallery 3.0.0.
-[Artifact verification](https://github.com/OpenPresentation/opf/blob/main/docs/evidence-rr-87-final-published-set-2026-10-17.md) binds
-the selected archives to their release commits and trusted publication checks.
+**Published set (2026-10-20):** core 0.24.2, renderer 0.24.3, PPTX 0.24.1,
+editor 0.24.0, CLI 0.24.1 and Gallery 4.0.0. `release-plan.json` records each
+version with the registry `gitHead` of its publisher commit.
 Earlier matrices and native observations retain their historical identities.
 Complete native compatibility remains a separate gate.
 
@@ -16,7 +15,7 @@ Complete native compatibility remains a separate gate.
 
 Layout `areas` uses nested arrays of cell names. Repeated names span rectangular
 regions and `.` denotes an empty cell. Gallery owns every default record;
-Gallery 3 is required for catalog compatibility generation 3, while per-kind
+Gallery 3 or 4 satisfies catalog compatibility generation 3 (Gallery 4 for core 0.24), while per-kind
 schema versions remain v2. Core 0.19 and later consume the Gallery package and
 do not export `@openpresentation/opf/catalog` or ship a catalog snapshot.
 
@@ -31,12 +30,12 @@ imply universal Office or full-catalog visual parity.
 
 | Package | Version | Dependency contract |
 | --- | --- | --- |
-| Core | 0.20.5 | Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
-| CLI | 0.20.1 | Core ^0.20.5, Gallery ^3.0.0; optional renderer/PPTX ^0.20.0 |
-| Renderer | 0.20.4 | Core ^0.20.5; optional pinned font/converter peers |
-| PPTX | 0.20.4 | Core ^0.20.5, Gallery ^3.0.0; optional renderer ^0.20.4 |
-| Editor | 0.20.4 | Core ^0.20.5; optional renderer ^0.20.4 |
-| Gallery | 3.0.0 | Independent owner of every default catalog record; 28 intent layouts |
+| Core | 0.24.2 | Gallery ^4.0.0; optional renderer/PPTX ^0.24.0 |
+| CLI | 0.24.1 | Core ^0.24.2, Gallery ^4.0.0; optional renderer/PPTX ^0.24.0 |
+| Renderer | 0.24.3 | Core ^0.24.2; optional pinned font/converter peers |
+| PPTX | 0.24.1 | Core ^0.24.0, Gallery ^4.0.0; optional renderer ^0.24.1 |
+| Editor | 0.24.0 | Core ^0.24.0; optional renderer ^0.24.1 |
+| Gallery | 4.0.0 | Independent owner of every default catalog record; 28 intent layouts |
 
 ## Runtime
 
@@ -128,8 +127,8 @@ and PPTX stay optional peers. CLI 0.15.0 and earlier bundled their core.
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
-ColorRef preview/export support. The selected renderer 0.20.2 and PPTX/editor 0.20.3 require core ^0.20.2;
-CLI 0.20.0 accepts core ^0.20.1. Pin core 0.20.3 alongside them and
+ColorRef preview/export support. The selected renderer 0.24.3 requires core ^0.24.2 and PPTX/editor 0.24.x require core ^0.24.0;
+CLI 0.24.1 accepts core ^0.24.2. Pin core 0.24.2 alongside them and
 verify one installed Core so preview and export use the same composition.
 Core 0.20.2 and later center metrics when alignment is omitted; explicit alignment remains
 authoritative.
@@ -204,9 +203,9 @@ acceptance remain open; no new package train or broad native pass is inferred.
 
 | Package | Version | Depends on |
 | --- | --- | --- |
-| `@openpresentation/gallery` | 3.0.0 ([independent artifact verification](evidence/rr-85-final-published-set-2026-10-16/README.md); prior 2.0.0 and 1.0.0 remain historical) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
+| `@openpresentation/gallery` | 4.0.0 (independently published and verified 2026-10-19; prior 3.0.0, 2.0.0 and 1.0.0 remain historical) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
 
-Gallery 4.0.0 (published and independently verified 2026-10-19) adds theme `variants` and removes the `dark` theme; this checkout depends on `^4.0.0`, while the published set above keeps its recorded Gallery 3.0.0 until the next train rolls it.
+Gallery 4.0.0 (published and independently verified 2026-10-19) adds theme `variants` and removes the `dark` theme; this checkout and the published set above depend on `^4.0.0`. It still declares catalog compatibility generation 3.
 
 The gallery (RR-78) is released from its own repository, OpenPresentation/gallery, on its own version line (`vX.Y.Z`
 tags, `gallery-publish.yml` there), outside the lockstep set above and
