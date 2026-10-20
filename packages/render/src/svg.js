@@ -1186,12 +1186,22 @@ function svgHasIntrinsicSize(attributes) {
   return Boolean((length(attributes.width) && length(attributes.height)) || view);
 }
 
+// RR-97: the message of an `unresolved-asset` diagnostic names the source the author wrote, so a report says which image to fix
+// (the diagnostic's `path` says where). The renderer fetches no URL and reads no path: a host resolves a local file to a data URI
+// (`imageResolver`, or the CLI's `--asset-dir`), and one that cannot says why in its own finding.
+function unresolvedImageMessage(kind, src, missingReference, outcome) {
+  if (missingReference) return `${kind} asset "${missingReference}" is not declared in the deck's assets, so ${outcome}. Declare the asset or resolve it in the host.`;
+  if (typeof src !== "string" || src === "") return `${kind} has no src, so ${outcome}.`;
+  const shown = src.startsWith("data:") ? `${src.slice(0, Math.min(src.indexOf(",") + 1 || 40, 60))}...` : src.length > 120 ? `${src.slice(0, 117)}...` : src;
+  return `${kind} "${shown}" was not resolved to an embedded PNG, JPEG, GIF, WebP or SVG data URI, so ${outcome}. Fix the path, embed the image as a data URI, or resolve it in the host (imageResolver, or --asset-dir in the CLI).`;
+}
+
 // The drawable data URI of a picture bullet, or undefined (after reporting unresolved-asset once) so the glyph marker stays.
 function resolveBulletImage(bulletImage, bound, options) {
   const { drawable, source, asset, missingReference } = resolveImageSource({ value: bulletImage.source, path: bulletImage.path }, bound, options);
   if (drawable) return source;
   const reason=missingReference?'missing-reference':!asset.src?'missing-source':'unsupported-source';
-  const message=missingReference?`Bullet image asset ${missingReference} is missing; the preview draws the character bullet.`:'A picture bullet requires an embedded raster data URI or a host imageResolver; the preview draws the character bullet.';
+  const message=unresolvedImageMessage('Bullet image',asset.src,missingReference,'the preview draws the character bullet');
   if (options.strictAssets) throw new OPFRenderError("unresolved-asset", message, { path: bulletImage.path,reason });
   reportDiagnostic({code:'unresolved-asset',path:bulletImage.path,message,reason,source:asset.src,assetId:missingReference,description:asset.alt??asset.title??'Bullet image',placeholder:'glyph'},options);
   return undefined;
@@ -1222,7 +1232,7 @@ function renderImage(item, box, bound, options) {
       ...attrs });
   }
   const reason=missingReference?'missing-reference':!asset.src?'missing-source':'unsupported-source';
-  const message=missingReference?`Image asset ${missingReference} is missing; supply the referenced asset or resolve it in the host.`:'Image requires an embedded raster or SVG data URI, or a host imageResolver.';
+  const message=unresolvedImageMessage('Image',asset.src,missingReference,'the preview draws the unavailable-image placeholder');
   if (options.strictAssets) throw new OPFRenderError("unresolved-asset", message, { path: item.path,reason });
   const fill = bound.design.colors.surface;
   const scale=Math.min(bound.design.dimensions.width,bound.design.dimensions.height)/720;
