@@ -619,6 +619,32 @@ select {
   border: 0;
 }
 
+/* RR-98: the slide navigator (prev, counter, next) and the thumbnail strip between the canvas and its footer. The sorter and outline
+   views have their own slide rows, and the phone layout below has its own slide list. */
+.slide-dock {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  background: var(--opf-ui-muted-2);
+  border-top: 1px solid var(--opf-ui-border);
+}
+
+.slide-dock-nav {
+  display: flex;
+  justify-content: center;
+  padding: 6px 0 0;
+}
+
+.canvas-column[data-view="sorter"] .slide-dock,
+.canvas-column[data-view="outline"] .slide-dock {
+  display: none;
+}
+
+#thumb-strip {
+  min-width: 0;
+  padding: 0 10px 4px;
+}
+
 .data-grid-dock {
   position: absolute;
   right: 0;
@@ -1701,6 +1727,10 @@ dialog::backdrop {
   :root {
     --sidebar: 148px;
     --inspector: 240px;
+  }
+
+  .slide-dock {
+    display: none;
   }
 
   .app-shell {

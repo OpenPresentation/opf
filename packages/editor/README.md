@@ -512,6 +512,38 @@ OPF 0.19 layouts have a grid (`areas`) and named content regions. The slide mana
 
 `@openpresentation/opf-editor/outline` and `/outline-view` edit the deck as an outline: a row per slide title, subtitle, text paragraph and list item, and a read-only row for content that is not text (a chart, a table, an image) or text that carries formatting, so nothing is flattened away. Typing commits as one change when the row loses focus or on Enter. Enter adds a line (after a title: a slide), Alt+Up and Alt+Down move a bullet with the bullets nested under it, or a slide with its text, Alt+Shift+Right demotes and Alt+Shift+Left promotes. Demoting a bullet nests it (`level`); promoting a top-level bullet turns it into a new slide that takes the bullets after it; demoting a plain slide makes it a bullet of the slide before it (refused, with the reason, when that would drop content such as notes, blocks or a design). Backspace on an empty line removes it. Tab keeps moving focus, so the outline is no keyboard trap.
 
+## Slide navigator and thumbnail strip (RR-98)
+
+Two framework-neutral DOM factories for the slide row under the canvas. Both follow the editor session on their own, take `density: "comfortable" | "touch"` (32px or 40px controls) and style themselves with the `--opf-ui-*` tokens (`src/styles/navigator.css` and `thumbnails.css`, part of `styles.css`; no fallbacks). Icons are the Lucide ChevronLeft and ChevronRight paths (ISC license), inlined; nothing loads from a network.
+
+`@openpresentation/opf-editor/slide-navigator`: previous and next buttons around a mono counter ("01 / 03"; both numbers pad to the width of the slide count, so "001 / 120" from 100 slides). The buttons disable at the ends, and focus moves to the other one when the pressed one disables. With the navigator focused, Left, Right, Up, Down, Home and End move; `bindKeys(target)` adds page-level Left and Right that ignore typing in inputs, selects and editors (CodeMirror, contenteditable), menus, dialogs, modified keys and events another handler already took.
+
+```js
+import { createSlideNavigator } from "@openpresentation/opf-editor/slide-navigator";
+const nav = createSlideNavigator(document.querySelector("#slide-nav"), {
+  editor, slideIndex: current, density: "comfortable",
+  onChange: (index) => { current = index; redraw(); },   // the user moved (also when a shrinking deck clamps the index)
+  labels: { previous: "Previous slide", next: "Next slide" },
+});
+nav.bindKeys(document);   // returns an unbinder; destroy() removes every listener
+nav.setSlide(3);          // show a slide the host chose; no onChange
+nav.refresh();            // the count follows the editor by itself; pass `presentation` (an object or a function) instead of `editor` for a static deck
+```
+
+`@openpresentation/opf-editor/thumbnail-strip`: a `nav` of real slide renders. Each item shows a mono index and the slide title ("Untitled" when it has none); the current one has `aria-current="true"`, an accent ring and is scrolled into view (the strip scrolls itself, never the page). It is horizontal by default; `orientation: "vertical"` stacks it. Arrow keys move focus along the strip (one tab stop), Enter or Space chooses. Thumbnails use the renderer, catalogs and fonts handle the canvas uses (`fonts`, `renderOptions`), wait for the faces the document needs, and are lazy: the items near the viewport draw first through IntersectionObserver (everything draws at once without it, or with `lazy: false`).
+
+```js
+import { createThumbnailStrip } from "@openpresentation/opf-editor/thumbnail-strip";
+const strip = createThumbnailStrip(document.querySelector("#thumb-strip"), {
+  editor, fonts, renderOptions: { catalogs }, slideIndex: current, size: 128,
+  onSelect: (index) => { current = index; redraw(); },
+});
+strip.setSlide(current);               // follow the host
+strip.refresh({ clear: true });        // redraw now; clear drops the cache (after the host loaded fonts)
+```
+
+Thumbnails are cached by `@openpresentation/opf-editor/thumbnail-cache` (`createThumbnailCache({ toSvg, getOptions })`, promoted from the playground example with the same behavior). An entry is keyed by the slide's index, the slide count and the slide's own content, so an edit renders only the slides it changed, in one `toSvg` call that resolves the deck once. Deck metadata, section labels, registered catalogs and render settings are the cache's context: a change to any of them drops every entry, because inherited furniture and design change other slides too. `prepare(deck, indices)` renders only the listed slides, which is how the strip stays lazy. Share one cache between views with the strip's `cache` option.
+
 ## Data grid (RR-24)
 
 `@openpresentation/opf-editor/data-grid` mounts a spreadsheet-like grid for a chart's inline data (the first column is the categories, each further column a series; an empty cell is a gap, never 0) and for tables (rich and styled cells, merged cells drawn with their spans). Cells edit from the keyboard (arrows, Enter, F2, Tab), paste TSV or CSV from Excel and Sheets, copy out as TSV, and rows and columns insert, delete and move, sort (stable and typed) and, for charts, swap. Numbers are read in one stated number format, never guessed; text that is not a number is refused inline with the reason. Every edit is one undoable patch, so the preview redraws from the session events.

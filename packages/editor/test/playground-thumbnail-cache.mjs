@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {toSvg} from '@openpresentation/opf-render/svg';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {gallery} from '@openpresentation/gallery';
-import {createThumbnailCache} from '../examples/thumbnail-cache.js';
+import {createThumbnailCache} from '../src/thumbnail-cache.js';
 
 const catalogs = [structuredClone(gallery)];
 const fonts = await loadFonts({pack: 'office'});
@@ -69,6 +69,27 @@ assert.equal(calls.at(-1).length, 60);
 for (const index of [0, 29, 59]) assert.equal(cache.html(long, index), toSvg(long, index + 1, options));
 cache.prepare(long);
 assert.equal(calls.length, beforeLong + 1, 'a second 60-slide render is entirely cached');
+
+// RR-98: a lazy strip prepares only the slides it shows. Everything else stays unrendered until asked for, nothing cached is rendered twice,
+// and an edit renders only the edited slide.
+const lazyCalls = [];
+const lazy = createThumbnailCache({toSvg: (value, selected, settings) => { lazyCalls.push(selected); return toSvg(value, selected, settings); }, getOptions: () => options});
+const wide = {design: {fontScheme: 'roboto'}, slides: Array.from({length: 12}, (_, index) => ({id: `wide-${index}`, title: `Wide ${index + 1}`, text: 'Words.'}))};
+lazy.prepare(wide, [0, 1, 2]);
+assert.deepEqual(lazyCalls, [[1, 2, 3]], 'prepare(deck, indices) renders only those slides, in one call');
+lazy.prepare(wide, [1, 2, 3, 3, 99, -1]);
+assert.deepEqual(lazyCalls.at(-1), [4], 'cached slides, duplicates and out-of-range indices are skipped');
+assert.equal(lazyCalls.length, 2);
+lazy.prepare(wide, [0, 1]);
+assert.equal(lazyCalls.length, 2, 'asking for cached slides renders nothing');
+assert.equal(lazy.html(wide, 2), toSvg(wide, 3, options), 'a partially prepared slide is the same bytes as an individual render');
+const edited = structuredClone(wide);
+edited.slides[1].title = 'Edited';
+lazy.prepare(edited, [0, 1, 2, 3]);
+assert.deepEqual(lazyCalls.at(-1), [2], 'an edit renders only the edited slide');
+assert.equal(lazy.html(edited, 1), toSvg(edited, 2, options));
+lazy.prepare(edited, []);
+assert.equal(lazyCalls.length, 3, 'an empty list renders nothing');
 
 const errorCalls = [];
 const isolatedErrors = createThumbnailCache({getOptions: () => ({}), toSvg: (_, selection) => {

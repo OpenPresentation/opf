@@ -1,0 +1,4 @@
+---
+type: added
+---
+RR-98: `@openpresentation/opf-editor/slide-navigator` (`createSlideNavigator`: previous and next buttons around a zero-padded "01 / 03" counter, arrow-key and optional page-level `bindKeys` navigation, disabled ends, comfortable or touch density) and `@openpresentation/opf-editor/thumbnail-strip` (`createThumbnailStrip`: lazy, cached real slide renders with a mono index and title, `aria-current` and an accent ring on the active slide scrolled into view, horizontal or vertical). The thumbnail cache moved from the playground example into `@openpresentation/opf-editor/thumbnail-cache` with the same behavior and a new `prepare(deck, indices)` that renders only the listed slides. The playground shows both under the slide, next to the existing slide list. Styles: `src/styles/navigator.css` and `thumbnails.css`, on the `--opf-ui-*` tokens.

@@ -1,5 +1,7 @@
-// The playground is the host: its font gate runs before this synchronous render, and clears the cache when faces load.
-// Selecting every missing slide in one call makes the renderer resolve/compose the deck once, including hidden slides.
+// Slide thumbnail cache (promoted from the playground example by RR-98). The host owns the font gate: it runs before this synchronous render and
+// clears the cache when faces load. Selecting every missing slide in one call makes the renderer resolve/compose the deck once, including hidden
+// slides. `prepare(deck, indices)` renders only the listed slides (a lazy strip draws the visible ones first); without `indices` it renders every
+// missing slide, as before.
 export function createThumbnailCache({toSvg, getOptions}) {
   const cache = new Map();
   let context;
@@ -11,14 +13,15 @@ export function createThumbnailCache({toSvg, getOptions}) {
     // Deck metadata and preceding sections can change inherited furniture, variables, data and design on another slide.
     return JSON.stringify([metadata, slides.map(slide => slide.section), settings]);
   };
-  function prepare(deck) {
+  function prepare(deck, indices) {
     const options = getOptions();
     const nextContext = contextOf(deck, options);
     if (nextContext !== context) cache.clear();
     context = nextContext;
     preparedDeck = deck;
     const keys = deck.slides.map((_, index) => key(deck, index));
-    const missing = keys.flatMap((value, index) => cache.has(value) ? [] : [index]);
+    const wanted = indices === undefined ? keys.map((_, index) => index) : [...new Set(indices)].filter(index => Number.isInteger(index) && index >= 0 && index < keys.length);
+    const missing = wanted.filter(index => !cache.has(keys[index]));
     if (missing.length) {
       try {
         const images = toSvg(deck, missing.map(index => index + 1), options);

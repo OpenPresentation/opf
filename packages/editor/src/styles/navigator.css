@@ -1,0 +1,60 @@
+/* Slide navigator (RR-98). Uses only --opf-ui-* tokens. */
+.opf-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--opf-ui-muted-fg);
+  font-family: var(--opf-ui-font);
+}
+.opf-nav-button {
+  display: inline-grid;
+  place-items: center;
+  box-sizing: border-box;
+  width: var(--opf-ui-control-h);
+  height: var(--opf-ui-control-h);
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--opf-ui-radius);
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  transition: color var(--opf-ui-ease), background-color var(--opf-ui-ease);
+}
+.opf-nav[data-density="touch"] .opf-nav-button {
+  width: 40px;
+  height: 40px;
+}
+.opf-nav-button:hover:not(:disabled) {
+  background: var(--opf-ui-muted);
+  color: var(--opf-ui-fg);
+}
+.opf-nav-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.opf-nav-button:focus-visible {
+  outline: 2px solid var(--opf-ui-ring);
+  outline-offset: 2px;
+}
+.opf-nav-icon {
+  width: 18px;
+  height: 18px;
+}
+.opf-nav[data-density="touch"] .opf-nav-icon {
+  width: 20px;
+  height: 20px;
+}
+.opf-nav-counter {
+  min-width: 64px;
+  text-align: center;
+  font: 500 12px/1 var(--opf-ui-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--opf-ui-fg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .opf-nav-button {
+    transition: none;
+  }
+}

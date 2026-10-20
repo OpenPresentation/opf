@@ -1,5 +1,5 @@
 import {installDataControls} from './data-controls.js';
-import {createThumbnailCache} from './thumbnail-cache.js';
+import {createThumbnailCache} from '../src/thumbnail-cache.js';
 import {installReviewControls} from './review-controls.js';
 import {installChartControls} from './chart-controls.js';
 import {installNumberingControls} from './numbering-controls.js';
@@ -24,6 +24,8 @@ import { createDesignControls } from '../src/design-controls.js';
 import { createPersistence } from '../src/persistence.js';
 import { createPersistenceUi } from '../src/persistence-ui.js';
 import { createSlideManager } from '../src/slide-manager.js';
+import { createSlideNavigator } from '../src/slide-navigator.js';
+import { createThumbnailStrip } from '../src/thumbnail-strip.js';
 import { openCustomLayoutEditor } from '../src/custom-layout-editor.js';
 import { prepareDimensionSwitch } from '../src/switches.js';
 import { createOutlineView } from '../src/outline-view.js';
@@ -163,6 +165,13 @@ const slideManagerOptions = {
   contentActions: { splitSlideByBlocks, mergeSlides },
 };
 const slideManager = createSlideManager(element('slide-list'), {...slideManagerOptions, toolbar: element('slide-toolbar')});
+// RR-98: the prev/next counter and the thumbnail strip under the slide. Both follow the session on their own; the strip draws with the
+// canvas's renderer, catalogs and fonts handle and renders only the slides an edit changed. The slide list above stays.
+// Touch screens get the 40px controls. The phone layout (760px and narrower) has its own slide list and hides this row.
+const slideDensity = window.matchMedia('(pointer: coarse)').matches ? 'touch' : 'comfortable';
+const slideNav = createSlideNavigator(element('slide-nav'), {editor, slideIndex, density: slideDensity, onChange: value => { slideIndex = value; refresh(); }});
+slideNav.bindKeys(document);
+const thumbStrip = createThumbnailStrip(element('thumb-strip'), {editor, fonts, renderOptions: {}, slideIndex, density: slideDensity, labels: {navigation: 'Slide thumbnails'}, onSelect: value => { if (value !== slideIndex) { slideIndex = value; refresh(); } }, onError: error => status(error.message)});
 let sorter, outline, activeView = 'slide';
 function renderNavigator(deck) {
   element('slide-count').textContent = deck.slides.length;
@@ -222,6 +231,7 @@ function render() {
   const deck = editor.presentation;
   slideIndex = Math.max(0, Math.min(slideIndex, deck.slides.length - 1));
   renderNavigator(deck);
+  slideNav.setSlide(slideIndex); thumbStrip.setSlide(slideIndex);
   fontRegistry.clearSubstitutions();
   element('slide-number').textContent = String(slideIndex + 1).padStart(2, '0');
   element('slide-title').textContent = deck.slides[slideIndex].title ?? 'Untitled slide';
