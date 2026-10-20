@@ -67,10 +67,10 @@ column's value (`opf fill t.opf.md clients.csv decks/qbr-{client}.opf.md`); `--c
 
 ## Install
 
-**Verified package set (2026-10-16):** CLI 0.20.0 with core 0.20.3, renderer
-0.20.2, PPTX/editor 0.20.3 and Gallery 3.0.0. Use the complete pinned
+**Published set (2026-10-20):** CLI 0.24.1 with core 0.24.2, renderer
+0.24.3, PPTX 0.24.1, editor 0.24.0 and Gallery 4.0.0. Use the complete pinned
 [quickstart installation](quickstart.md#versions) and its required font/converter
-peers. [Artifact verification](evidence/rr-85-final-published-set-2026-10-16/README.md).
+peers.
 
 Deck forms (JSON, YAML, Markdown) need nothing beyond the CLI. PDF, PNG and SVG need `@openpresentation/opf-render`; PPTX output
 and `.pptx` input also need `@openpresentation/opf-pptx`. Both are **optional peer dependencies** of the CLI and of core (decision

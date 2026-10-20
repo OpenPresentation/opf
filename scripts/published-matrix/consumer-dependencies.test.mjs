@@ -42,13 +42,20 @@ test('current core 0.20 binds Gallery 3 while keeping exact library pins', () =>
   assert.throws(() => consumerDependencies(libraries, [{name: '@openpresentation/gallery', version: '3.0.0'}]));
 });
 
+test('core 0.24 binds Gallery 4, which still declares catalog generation 3', () => {
+  const current = {...libraries, '@openpresentation/opf': '0.24.2'};
+  assert.deepEqual(consumerDependencies(current, [{name: '@openpresentation/gallery', version: '4.0.0'}]), {...current, '@openpresentation/gallery': '4.0.0'});
+  for (const version of ['3.0.0', '5.0.0', '4.0.0-next.0']) assert.throws(() => consumerDependencies(current, [{name: '@openpresentation/gallery', version}]));
+  assertInstalledCatalog('0.24.2', {version: '4.0.0', opf: {catalogSchema: 3}}, 3, {'@openpresentation/gallery': '4.0.0'});
+});
+
 test('catalog generation binds each reviewed train and rejects missing, wrong or future identities', () => {
-  for (const [core, generation] of [['0.18.4', 1], ['0.19.0', 2], ['0.20.1', 3]]) {
+  for (const [core, generation] of [['0.18.4', 1], ['0.19.0', 2], ['0.20.1', 3], ['0.24.2', 3]]) {
     assert.equal(catalogGenerationForCore(core), generation);
     assertCatalogGeneration(core, generation);
     for (const wrong of [undefined, 0, 1, 2, 3, 4, '3'].filter(value => value !== generation)) assert.throws(() => assertCatalogGeneration(core, wrong));
   }
-  for (const core of ['0.21.0', '1.0.0', '0.20.1-next.0', 'file:../opf', undefined]) assert.throws(() => catalogGenerationForCore(core));
+  for (const core of ['0.25.0', '1.0.0', '0.20.1-next.0', 'file:../opf', undefined]) assert.throws(() => catalogGenerationForCore(core));
 });
 
 test('installed Gallery identity and manifest/export generation must agree with the current plan', () => {
