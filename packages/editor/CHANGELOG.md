@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.24.0 (2026-10-20)
+
+- RR-96: adopts `@openpresentation/gallery` 4.0.0 (`^4.0.0`, still a development dependency; hosts register the catalog): the default catalog has no `dark` theme (a dark deck is a theme with a dark `design.variant`, for example `{ "theme": "classic", "variant": "dark1" }`), and `minimal`, `classic` and `bold` carry `variants`. The editor's behavior is unchanged; its tests select `bold` or `minimal`, or `classic` with a dark variant, where they used the `dark` theme.
+
 ## 0.23.0 (2026-10-19)
 
 - RR-96: chart colors. `setChartOptions` and `prepareChartOptions` accept `colors` (`chart.colors`, the colors by position: a hex color, a scheme slot such as `accent3` that keeps following the deck, or a `var:` color variable; `null` or `""` leaves a position to the deck palette; `null` for the whole value removes the field; at most 24, `CHART_COLORS_MAX`), as one undoable patch. `readChartOptions` reports `colors` (what a position means: the plotted series, the slices or rows of a pie, doughnut, treemap or funnel, or the colors of a histogram, pareto or waterfall, and the scheme slots to offer) and `state.colors`. The chart options panel gains a "Colors" group with the deck's accent swatches, a "Default" choice and a hex field per position, and "Reset to deck palette". New `/color-slots` entry point: `readSchemeSlots` reads the deck's resolved scheme slots for swatches. The opf-render preview draws `chart.colors` once opf-render#256 lands.
