@@ -6,8 +6,15 @@ export function catalogGenerationForCore(core) {
   const [major, minor] = core.split('.').map(Number);
   if (major === 0 && minor < 19) return 1;
   if (major === 0 && minor === 19) return 2;
-  if (major === 0 && minor === 20) return 3;
+  if (major === 0 && minor >= 20 && minor <= 24) return 3;
   assert.fail(`No reviewed catalog generation for core ${core}`);
+}
+
+/** The published gallery major a core minor depends on: Gallery 4.0.0 (core 0.24) still declares catalogSchema 3. */
+export function galleryMajorForCore(core) {
+  const generation = catalogGenerationForCore(core);
+  if (generation === 1) return undefined;
+  return Number(core.split('.')[1]) >= 24 ? 4 : generation;
 }
 
 export function assertCatalogGeneration(core, generation) {
@@ -19,9 +26,10 @@ export function consumerDependencies(planned, independentPackages = []) {
   const core = planned['@openpresentation/opf'];
   const generation = catalogGenerationForCore(core);
   if (generation === 1) return {...planned};
+  const galleryMajor = galleryMajorForCore(core);
   const galleries = independentPackages.filter(item => item.name === '@openpresentation/gallery');
   assert.equal(galleries.length, 1, 'The final registry plan must name exactly one independent gallery');
-  assert.match(galleries[0].version ?? '', new RegExp(`^${generation}\\.\\d+\\.\\d+$`), `Core ${core} requires a published gallery ${generation} version`);
+  assert.match(galleries[0].version ?? '', new RegExp(`^${galleryMajor}\\.\\d+\\.\\d+$`), `Core ${core} requires a published gallery ${galleryMajor} version`);
   return {...planned, '@openpresentation/gallery': galleries[0].version};
 }
 

@@ -122,7 +122,9 @@ What each step checks:
   `refs/tags/<prefix>X.Y.Z` (`opf-v`, `opf-render-v`, `opf-pptx-v`, `opf-editor-v`, `cli-v`) with
   `POST /repos/{repo}/git/refs` on the release commit (checks that are still running, or not reported yet right after
   the merge, stop it unless `--checks-wait-minutes N` is given: it then polls them every `--poll-seconds` for up to N
-  minutes, and a red check still stops it at once), polls that repository's publish workflow run for the tag
+  minutes, and a red check still stops it at once; the checks are the release commit's CI evidence, see
+  [CI evidence](#ci-evidence-and-the-merge-queue-fast-path-rr-100): green evidence means no second round of checks is
+  waited for), polls that repository's publish workflow run for the tag
   (default every 120 s, up to 90 min), polls npm until the version is visible, and runs `verify`. A tag that already
   exists on the release commit is not created again; one on another commit stops the train. A failed publish run stops
   with its link: never move or re-push the tag; re-run a transient failure (`gh run rerun <id> --failed`), fix a real
@@ -258,14 +260,74 @@ git push origin opf-v0.3.0
 Pushing the tag triggers `.github/workflows/npm-publish.yml`. The workflow:
 
 - runs on tags matching `opf-v*` or `@openpresentation/opf@v*`
-- installs dependencies with pnpm on Node 24
-- verifies the tag matches `packages/javascript/package.json`
-- runs typecheck and tests
-- runs the npm package dry-run check
+- verifies the tag matches `packages/javascript/package.json` and the merged release source (`scripts/publish-source.mjs`)
+- verifies the CI evidence of the tagged commit (`scripts/ci-evidence.mjs`); it re-runs no test (RR-100)
+- installs dependencies with pnpm on Node 24 and builds
+- runs the npm package dry-run check and the isolated packed-install smoke
 - publishes from `packages/javascript` with `npm publish --access public --provenance`
 
 Do not rerun a successful publish for the same version. npm package versions are
 immutable; a second publish for an already-published version should fail.
+
+## CI evidence and the merge-queue fast path (RR-100)
+
+A release used to test the same commit three or four times: the release-prep PR's CI, the merge queue's run, the push
+checks the `tag` step waited for, and the full `pnpm test` of the publish workflow. From RR-100 the publish workflow and
+the `tag` step trust one piece of evidence, the green CI of the exact release commit, and the queue does not repeat a run
+that proves nothing new.
+
+**CI evidence.** `scripts/ci-evidence.json` lists, per repository, the workflow runs that must have succeeded on exactly
+the tagged commit (`GITHUB_SHA`), each with the jobs that must have concluded `success`:
+
+| Repository | Evidence |
+|---|---|
+| `opf` (core and CLI) | the merge-queue runs (`merge_group`, branch `gh-readonly-queue/main/...`) of `opf-ci.yml` (`Verify OPF packages`) and `ecosystem-ci.yml` (`packages`, `Installed candidates (windows-latest)`, `Installed candidates (macos-latest)`): the required checks of the `main` ruleset. The queue fast-forwards `main` to the commit it tested, so these runs sit on main's commit. |
+| `opf-render`, `opf-pptx`, `opf-editor` | the push-to-`main` run of `ci.yml` (these repositories have no merge queue): its `package` job(s) and the `Node 22` and `Node 26` engines-range legs. |
+
+`node scripts/ci-evidence.mjs --sha "$(git rev-parse HEAD)"` reads the runs and jobs with the workflow's `GITHUB_TOKEN`
+(`actions: read`) and fails closed: exit 0 only when every requirement has a completed run of that workflow, event and
+branch on this exact commit with conclusion `success` and every named job `success` (a skipped required job fails). A
+missing, running, failed or cancelled run, an absent job, an unreadable configuration or an API error is exit 1, and the
+workflow does not publish. It waits for nothing: a tag pushed while CI still runs fails there; re-run the failed job
+(`gh run rerun <id> --failed`) once CI is green. Each publish workflow runs it right after `Verify merged release source`
+and keeps every step that builds or verifies the artifact itself: install, build, the pack dry-run, the packed-install
+smoke (the CLI: `test:cli:packed` and `test:cli:packed:peers`), the published-core gate, provenance and the release job.
+
+`release-train.mjs tag`, `plan` and `run` read the same file at the release commit (through the contents API) and decide
+the checks of that commit with the same code: with evidence present, a repository without a ruleset (the siblings) is
+decided by the evidence alone, so a non-blocking measurement still running no longer holds the tag; a repository with a
+ruleset (opf) needs its ruleset checks and the evidence. A commit without the file keeps the old rule. `--checks-wait-minutes`
+still polls while the evidence is genuinely pending (CI still running on the push), and red evidence stops at once.
+Change a job name in a CI workflow and the matching `scripts/ci-evidence.json` entry in the same PR; the next release
+fails closed otherwise.
+
+**Fast path for release-prep merge groups (opf only).** A release-prep PR changes only versions, the changelogs, the
+`@openpresentation/*` dependency ranges and the lockfile, and its own CI ran in full on the pull request. Its merge_group
+run re-tests a tree that differs from the last green `main` commit by a version number, so for such a run
+`scripts/release-prep.mjs scope` (the `gallery` job of `opf-ci.yml` and `ecosystem-ci.yml`) turns the full run into a
+minimal one that still reports every required check name: `Verify OPF packages` requires a `release-prep` job
+(`pnpm install --frozen-lockfile`, `node scripts/release-prep.mjs check`: the manifest carries the version, the changelog
+has its `## X.Y.Z` section, no fragment of the package is left; `pnpm check:changes`; `pnpm check:engines-range`), and
+`packages` and both `Installed candidates` legs report as skipped lanes (the legs on an Ubuntu runner, the same policy
+skip a plain pull request takes). The rule is strict and fails closed to the full run. All of these must hold:
+
+- the event is `merge_group` and the checkout is the group's head commit;
+- the diff from the group's base commit to that head is non-empty and touches only: `packages/javascript/package.json` and
+  `packages/cli/package.json` (only `version`, existing `@openpresentation/*` dependency ranges and the deletion of
+  `opf.requiresUnreleasedCore`; any other key, including scripts, files, engines or a third-party dependency, is not
+  release-prep), `CHANGELOG.md` and `packages/cli/CHANGELOG.md` (added lines only), `pnpm-lock.yaml`, and
+  `changes/<slug>.md` fragments that are deleted or rewritten exactly as the assembler does; no file is added, renamed or
+  deleted otherwise;
+- the queue entry's pull request is from a branch of this repository named `codex/release-<core|cli>-X-Y-Z` into `main`,
+  its body carries the marker `<!-- release-train-prep: <core|cli> X.Y.Z -->` that `release-train.mjs prep` writes, its
+  title announces `release <name> X.Y.Z`, and the diff sets that package's manifest to `X.Y.Z`.
+
+The diff is the guard: a code change cannot satisfy it, whatever the pull request says (`scripts/release-prep.test.mjs`
+runs real git diffs, including a release-prep PR that smuggles a code, script, workflow, manifest or lockfile-deletion
+change). The one thing it does not inspect is what the lockfile resolves; the pull request's own CI ran in full on it.
+A group that stacks a release-prep entry on a code change has a code diff and runs in full. Every other change, and every
+case the script cannot classify, runs the full queue unchanged. Pull requests, the nightly run and manual runs are never
+fast-pathed.
 
 ## Trusted Publishing
 

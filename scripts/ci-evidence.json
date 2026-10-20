@@ -1,0 +1,18 @@
+{
+  "schema": 1,
+  "description": "RR-100: the CI evidence that scripts/ci-evidence.mjs requires for a release commit (the publish workflows, before npm publish) and that release-train.mjs tag reads. Each requirement is a workflow run on exactly the release commit: opf has a merge queue, which fast-forwards main to the commit its merge_group runs tested, so the required checks of the main ruleset (packages, both Installed candidates legs, Verify OPF packages) are jobs of those runs. Keep the job names equal to the ruleset's required checks.",
+  "requirements": [
+    {
+      "workflow": ".github/workflows/opf-ci.yml",
+      "event": "merge_group",
+      "branchPrefix": "gh-readonly-queue/main/",
+      "jobs": ["Verify OPF packages"]
+    },
+    {
+      "workflow": ".github/workflows/ecosystem-ci.yml",
+      "event": "merge_group",
+      "branchPrefix": "gh-readonly-queue/main/",
+      "jobs": ["packages", "Installed candidates (windows-latest)", "Installed candidates (macos-latest)"]
+    }
+  ]
+}

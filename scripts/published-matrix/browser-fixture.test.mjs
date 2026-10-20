@@ -13,5 +13,5 @@ test('unknown schema, missing loaded layout or invalid format/reference refuses'
 });
 
 test('catalog/core tuple mismatch, missing core and unknown future core refuse',()=>{
- for(const [generation,coreVersion] of [[3,'0.19.0'],[2,'0.20.1'],[3,'0.21.0'],[3,undefined]]) assert.throws(()=>browserFixture('consolas',{...inputs(generation),coreVersion}));
+ for(const [generation,coreVersion] of [[3,'0.19.0'],[2,'0.20.1'],[3,'0.25.0'],[3,undefined]]) assert.throws(()=>browserFixture('consolas',{...inputs(generation),coreVersion}));
 });

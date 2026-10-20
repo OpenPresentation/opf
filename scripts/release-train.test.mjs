@@ -213,7 +213,7 @@ function fakeWorld() {
     onRunsPoll: null,
   };
   world.repo = (name, { required = [] } = {}) => {
-    world.repos[name] ??= { head: null, files: {}, history: {}, commitPulls: {}, openPulls: [], tags: {}, required, checkRuns: {}, runs: [], releases: {}, offMain: new Set() };
+    world.repos[name] ??= { head: null, files: {}, history: {}, commitPulls: {}, openPulls: [], tags: {}, required, checkRuns: {}, runs: [], commitRuns: {}, runJobs: {}, releases: {}, offMain: new Set() };
     return world.repos[name];
   };
   /** Adds a commit on main that sets `files` (others are inherited from the previous head). */
@@ -289,6 +289,9 @@ function fakeWorld() {
     [/^rules\/branches\/main$/, (_, repo) => (repo.required.length ? [{ type: "required_status_checks", parameters: { required_status_checks: repo.required.map((context) => ({ context })) } }] : [])],
     [/^commits\/([0-9a-f]{40})\/check-runs/, ([, id], repo) => ({ check_runs: repo.checkRuns[id] ?? [] })],
     [/^commits\/[0-9a-f]{40}\/status$/, () => ({ statuses: [] })],
+    // RR-100: the workflow runs of a commit and the jobs of a run (scripts/ci-evidence.mjs).
+    [/^actions\/runs\?head_sha=([0-9a-f]{40})/, ([, id], repo) => ({ workflow_runs: repo.commitRuns[id] ?? [] })],
+    [/^actions\/runs\/(\d+)\/jobs/, ([, id], repo) => ({ jobs: repo.runJobs[id] ?? [] })],
     [/^compare\/([0-9a-f]{40})\.\.\.main$/, ([, id], repo) => ({ status: repo.offMain.has(id) ? "diverged" : "ahead", ahead_by: 0, behind_by: 0 })],
     [
       /^actions\/workflows\/([\w.-]+)\/runs\?/,
@@ -792,6 +795,107 @@ test("RR-20: tag --checks-wait-minutes waits for checks that are not reported ye
   assert.equal(world.clock, 0);
 });
 
+// RR-100: the tag step trusts the same CI evidence the publish run verifies (scripts/ci-evidence.json at the release commit).
+const SIBLING_EVIDENCE = JSON.stringify({ requirements: [{ workflow: ".github/workflows/ci.yml", event: "push", branch: "main", jobs: ["package (ubuntu-latest)", "package (windows-latest)", "Node 22 (engines range)"] }] });
+const evidenceRun = (release, over = {}) => ({ id: 41, path: ".github/workflows/ci.yml", event: "push", head_branch: "main", head_sha: release, status: "completed", conclusion: "success", run_number: 5, ...over });
+const evidenceJobs = (...states) => ["package (ubuntu-latest)", "package (windows-latest)", "Node 22 (engines range)"].map((name, index) => ({ name, status: states[index] === "running" ? "in_progress" : "completed", conclusion: states[index] === "running" ? null : (states[index] ?? "success") }));
+
+function evidenceWorld({ config = SIBLING_EVIDENCE } = {}) {
+  const world = publishedWorld();
+  const release = world.commit("opf-pptx", "pptx-0.12.3", { "package.json": manifestText("@openpresentation/opf-pptx", "0.12.3", { dependencies: { "@openpresentation/opf": "^0.12.0" } }), "scripts/ci-evidence.json": config }, { pull: 160 });
+  const repo = world.repos["opf-pptx"];
+  repo.commitRuns[release] = [evidenceRun(release)];
+  repo.runJobs[41] = evidenceJobs();
+  world.onRunsPoll = () => {
+    repo.runs = [{ id: 9, head_branch: "opf-pptx-v0.12.3", head_sha: release, status: "completed", conclusion: "success", html_url: "https://github.com/run/9" }];
+    world.publish("pptx", "0.12.3", release);
+  };
+  return { world, release, repo };
+}
+
+test("RR-100: tag does not wait for checks that are not CI evidence once the evidence is green", async () => {
+  const { world, release, repo } = evidenceWorld();
+  // A repository without a ruleset used to need EVERY reported check: a non-blocking measurement still running held the tag.
+  repo.checkRuns[release] = [{ name: "package (ubuntu-latest)", status: "completed", conclusion: "success", started_at: "1" }, { name: "measure (macos)", status: "in_progress", started_at: "1" }, { name: "compare", status: "completed", conclusion: "failure", started_at: "1" }];
+  const result = await tagRelease(world.deps, packageOf("pptx"), "0.12.3", { pptx: "0.12.3" }, { execute: true, pollSeconds: 60 });
+  assert.equal(result.status, "released");
+  assert.deepEqual(world.writes, [{ repo: "opf-pptx", ref: "refs/tags/opf-pptx-v0.12.3", sha: release }]);
+  assert.equal(world.clock, 0, "no second round of checks was waited for");
+  const checks = await commitChecks(world.deps, "opf-pptx", release);
+  assert.equal(checks.state, "green");
+  assert.deepEqual(checks.required, ["package (ubuntu-latest)", "package (windows-latest)", "Node 22 (engines range)"]);
+  assert.deepEqual(checks.advisoryFailing, ["compare"], "a failing check outside the evidence stays visible");
+});
+
+test("RR-100: tag stops for evidence that is missing, running or red, and --checks-wait-minutes waits only for running evidence", async () => {
+  const stop = async (setup, pattern, options = { execute: true }) => {
+    const { world, release, repo } = evidenceWorld();
+    setup(repo, release, world);
+    await assert.rejects(tagRelease(world.deps, packageOf("pptx"), "0.12.3", { pptx: "0.12.3" }, options), (error) => error instanceof TrainStop && pattern.test(error.message));
+    assert.deepEqual(world.writes, []);
+    return world;
+  };
+  await stop((repo, release) => { repo.commitRuns[release] = []; }, /are pending/);
+  await stop((repo, release) => { repo.commitRuns[release] = [evidenceRun(release, { status: "in_progress", conclusion: null })]; }, /are pending/);
+  await stop((repo, release) => { repo.commitRuns[release] = [evidenceRun(release, { conclusion: "failure" })]; }, /red \(failing: .*ci\.yml.*concluded failure/);
+  await stop((repo) => { repo.runJobs[41] = evidenceJobs("success", "skipped"); }, /red \(failing: .*package \(windows-latest\) concluded skipped/);
+  await stop((repo) => { repo.runJobs[41] = evidenceJobs("success", "success", "failure"); }, /Node 22 \(engines range\) concluded failure/);
+  await stop((repo) => { repo.runJobs[41] = evidenceJobs().slice(0, 2); }, /no job named Node 22 \(engines range\)/);
+  // A green main commit with a run of the wrong event or branch is no evidence.
+  await stop((repo, release) => { repo.commitRuns[release] = [evidenceRun(release, { event: "schedule" })]; }, /are pending/);
+  await stop((repo, release) => { repo.commitRuns[release] = [evidenceRun(release, { head_branch: "feature" })]; }, /are pending/);
+  await stop((repo, release) => { repo.commitRuns[release] = [evidenceRun(release, { head_sha: "f".repeat(40) })]; }, /are pending/);
+
+  // Running evidence is waited for, and only that.
+  const { world, release, repo } = evidenceWorld();
+  repo.commitRuns[release] = [evidenceRun(release, { status: "in_progress", conclusion: null })];
+  let sleeps = 0;
+  world.deps.sleep = async (ms) => {
+    world.clock += ms;
+    sleeps += 1;
+    if (sleeps === 2) repo.commitRuns[release] = [evidenceRun(release)];
+  };
+  const result = await tagRelease(world.deps, packageOf("pptx"), "0.12.3", { pptx: "0.12.3" }, { execute: true, pollSeconds: 60, checksWaitMinutes: 30 });
+  assert.equal(result.status, "released");
+  assert.equal(sleeps, 2, "waited while the CI run was in progress, then tagged");
+});
+
+test("RR-100: a repository with a ruleset needs its required checks AND the evidence; a commit without a config keeps the old rule", async () => {
+  const rulesets = (config) => {
+    const world = publishedWorld();
+    world.repo("opf-pptx").required = ["package (ubuntu-latest)"];
+    const release = world.commit("opf-pptx", "pptx-0.12.3", { "package.json": manifestText("@openpresentation/opf-pptx", "0.12.3", { dependencies: { "@openpresentation/opf": "^0.12.0" } }), ...(config ? { "scripts/ci-evidence.json": config } : {}) }, { pull: 160 });
+    const repo = world.repos["opf-pptx"];
+    repo.commitRuns[release] = [evidenceRun(release)];
+    repo.runJobs[41] = evidenceJobs();
+    repo.checkRuns[release] = [{ name: "package (ubuntu-latest)", status: "completed", conclusion: "success", started_at: "1" }];
+    return { world, release, repo };
+  };
+  let { world, release, repo } = rulesets(SIBLING_EVIDENCE);
+  assert.equal((await commitChecks(world.deps, "opf-pptx", release)).state, "green");
+  repo.checkRuns[release] = [{ name: "package (ubuntu-latest)", status: "in_progress", started_at: "1" }];
+  assert.equal((await commitChecks(world.deps, "opf-pptx", release)).state, "pending", "evidence green, ruleset check running");
+  repo.checkRuns[release] = [{ name: "package (ubuntu-latest)", status: "completed", conclusion: "success", started_at: "1" }];
+  repo.runJobs[41] = evidenceJobs("success", "failure");
+  assert.equal((await commitChecks(world.deps, "opf-pptx", release)).state, "red", "ruleset green, evidence red");
+  repo.runJobs[41] = evidenceJobs();
+  repo.commitRuns[release] = [];
+  assert.equal((await commitChecks(world.deps, "opf-pptx", release)).state, "pending", "ruleset green, evidence missing");
+  // No config at the commit: only the ruleset decides, as before RR-100.
+  ({ world, release } = rulesets(null));
+  assert.equal((await commitChecks(world.deps, "opf-pptx", release)).state, "green");
+  assert.ok(!world.calls.some((call) => call.includes("/actions/runs?head_sha")), "no evidence lookup without a config");
+});
+
+test("RR-100: an unreadable evidence configuration is red, never a pass", async () => {
+  for (const config of ["{", '{"requirements":[]}', JSON.stringify({ requirements: [{ workflow: "ci.yml", event: "push", branch: "main", jobs: ["x"] }] })]) {
+    const { world, release } = evidenceWorld({ config });
+    const checks = await commitChecks(world.deps, "opf-pptx", release);
+    assert.equal(checks.state, "red", config);
+    assert.match(checks.failing.join(), /ci-evidence/);
+  }
+});
+
 test("tag refuses red checks, an upstream not on npm, a commit off main or a tag elsewhere; a failed publish is never re-tagged", async () => {
   const stop = async (world, train, pattern, options = { execute: true }) => {
     await assert.rejects(tagRelease(world.deps, packageOf("pptx"), "0.12.3", train, options), (error) => error instanceof TrainStop && pattern.test(error.message));
@@ -1277,6 +1381,7 @@ test("RR-68: release fallback measures only the verified scheduled Editor run an
       if(route.includes("/rules/branches/")){if(rulesError==="invalid")return [{}];if(rulesError)throw Object.assign(new Error("not visible"),{status:rulesError===403?403:404});return required.length?[{type:"required_status_checks",parameters:{required_status_checks:required.map(context=>({context}))}}]:[];}
       if(route.endsWith("/check-runs?per_page=100"))return {check_runs:[{name:"packages",status:real==="pending"?"in_progress":"completed",conclusion:real},measurement]};
       if(route.endsWith("/status"))return {statuses};
+      if(route.includes("/contents/scripts/ci-evidence.json"))throw Object.assign(new Error("not found"),{status:404});
       if(route.includes("/actions/runs/")){reads++;if(run instanceof Error)throw run;return run;}
       throw new Error(`unexpected route ${route}`);
     }};

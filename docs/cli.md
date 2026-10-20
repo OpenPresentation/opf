@@ -67,10 +67,10 @@ column's value (`opf fill t.opf.md clients.csv decks/qbr-{client}.opf.md`); `--c
 
 ## Install
 
-**Verified package set (2026-10-16):** CLI 0.20.0 with core 0.20.3, renderer
-0.20.2, PPTX/editor 0.20.3 and Gallery 3.0.0. Use the complete pinned
+**Published set (2026-10-20):** CLI 0.24.1 with core 0.24.2, renderer
+0.24.3, PPTX 0.24.1, editor 0.24.0 and Gallery 4.0.0. Use the complete pinned
 [quickstart installation](quickstart.md#versions) and its required font/converter
-peers. [Artifact verification](evidence/rr-85-final-published-set-2026-10-16/README.md).
+peers.
 
 Deck forms (JSON, YAML, Markdown) need nothing beyond the CLI. PDF, PNG and SVG need `@openpresentation/opf-render`; PPTX output
 and `.pptx` input also need `@openpresentation/opf-pptx`. Both are **optional peer dependencies** of the CLI and of core (decision
@@ -222,9 +222,10 @@ as glyph outlines (the real text kept invisible beside it for selection and sear
 Relative image paths and `file:` paths resolve against the input's folder (or `--asset-dir`). Only `.png`, `.jpg`, `.jpeg`,
 `.gif`, `.webp` and `.svg` files whose content matches are read, and only inside that folder (symlinks are resolved first). URLs
 are never fetched. For SVG and PNG an unreadable image draws the renderer's placeholder with an `unresolved-asset` or
-`cli/asset-blocked` warning; for PPTX an unreadable or blocked local path stops the export (`pptx/asset-unresolved`), and an
-unresolved remote URL becomes an unavailable-image placeholder with a `pptx/unresolved-asset` warning. Use `--fail-on warning` to
-reject that output before any file is written.
+`cli/asset-blocked` warning. For PPTX (opf-pptx 0.24.1 and later) an unreadable or blocked local path and an unresolved remote URL
+are one case: the deck exports without that image (an unavailable-image placeholder, or the fallback background for a background
+picture) and the report carries a `pptx/unresolved-asset` warning. Use `--fail-on warning` to reject that output before any file is
+written. Before opf-pptx 0.24.1 an unreadable or blocked local path stopped the export (`pptx/asset-unresolved`, an error).
 
 ## Markdown and YAML
 

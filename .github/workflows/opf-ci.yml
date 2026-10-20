@@ -34,6 +34,12 @@ jobs:
       published_opf_pptx: ${{ steps.resolve.outputs.published_opf_pptx }}
       published_opf_editor: ${{ steps.resolve.outputs.published_opf_editor }}
       published_cli: ${{ steps.resolve.outputs.published_cli }}
+      release_prep: ${{ steps.release_prep.outputs.release_prep }}
+      release_prep_package: ${{ steps.release_prep.outputs.package }}
+      release_prep_version: ${{ steps.release_prep.outputs.version }}
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -45,9 +51,54 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           CANDIDATE_GALLERY_REF: ${{ inputs.candidate-gallery-ref }}
         run: node scripts/candidate-gallery.mjs resolve
+      # RR-100: the merge queue's release-prep fast path. A merge_group run whose diff against its base touches only a release-prep PR's
+      # files (versions, changelogs, @openpresentation ranges, the lockfile, consumed fragments) and that belongs to a pull request
+      # opened by `release-train.mjs prep` skips the full run: that pull request's CI already ran in full, and the tree differs from
+      # the last green main commit by a version number. Every other run, and anything this cannot classify, runs in full.
+      - id: release_prep
+        working-directory: opf
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/release-prep.mjs scope
+  # RR-100: what `Verify OPF packages` requires instead of `normal` on the release-prep fast path.
+  release-prep:
+    needs: gallery
+    if: needs.gallery.outputs.release_prep == 'true'
+    name: Release-prep version and changelog
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Version, changelog and fragments
+        env:
+          RELEASE_PREP_PACKAGE: ${{ needs.gallery.outputs.release_prep_package }}
+          RELEASE_PREP_VERSION: ${{ needs.gallery.outputs.release_prep_version }}
+        run: node scripts/release-prep.mjs check
+
+      - name: Changelog fragments
+        run: pnpm check:changes
+
+      - name: Dependency ranges and engines
+        run: pnpm check:engines-range
   normal:
     needs: gallery
-    if: needs.gallery.outputs.candidate_gallery == ''
+    if: needs.gallery.outputs.candidate_gallery == '' && needs.gallery.outputs.release_prep != 'true'
     name: Published dependency source checks
     # RR-40: a fixed image, so ubuntu-latest moving to Ubuntu 26 (from 2026-10-19) cannot change fonts, ICU or
     # system libraries under this required check; move to the next LTS in its own PR.
@@ -179,7 +230,7 @@ jobs:
       cli-ref: ${{ needs.gallery.outputs.published_cli }}
   verify:
     name: Verify OPF packages
-    needs: [gallery, normal, candidate, control]
+    needs: [gallery, normal, release-prep, candidate, control]
     if: always()
     runs-on: ubuntu-24.04
     timeout-minutes: 5
@@ -193,5 +244,6 @@ jobs:
         env:
           MODE: core
           CANDIDATE_SHA: ${{ needs.gallery.outputs.candidate_gallery }}
+          RELEASE_PREP: ${{ needs.gallery.outputs.release_prep }}
           RESULTS: ${{ toJSON(needs) }}
         run: node scripts/candidate-gallery-results.mjs
