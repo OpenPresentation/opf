@@ -42,6 +42,10 @@ jobs:
       published_opf_pptx: ${{ steps.resolve.outputs.published_opf_pptx }}
       published_opf_editor: ${{ steps.resolve.outputs.published_opf_editor }}
       published_cli: ${{ steps.resolve.outputs.published_cli }}
+      release_prep: ${{ steps.release_prep.outputs.release_prep }}
+    permissions:
+      contents: read
+      pull-requests: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
@@ -53,6 +57,14 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           CANDIDATE_GALLERY_REF: ${{ inputs.candidate-gallery-ref }}
         run: node scripts/candidate-gallery.mjs resolve
+      # RR-100: the merge queue's release-prep fast path (scripts/release-prep.mjs, see opf-ci.yml). On it the sibling suites, the
+      # ecosystem-core shards and the two installed legs do not run; `packages` requires them all skipped, and `Verify OPF packages`
+      # requires the version and changelog check. Any other run is unchanged.
+      - id: release_prep
+        working-directory: opf
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/release-prep.mjs scope
   # RR-45: the former single `packages` job is three parallel shards behind the `packages` aggregator, so the
   # required check name stays. The commands are identical: scripts/package-ecosystem-plan.mjs lists them and
   # scripts/package-ecosystem-plan.test.mjs proves the shards partition the unsharded list. Every shard keeps
@@ -79,11 +91,12 @@ jobs:
         env:
           MODE: ecosystem
           CANDIDATE_SHA: ${{ needs.gallery.outputs.candidate_gallery }}
+          RELEASE_PREP: ${{ needs.gallery.outputs.release_prep }}
           RESULTS: ${{ toJSON(needs) }}
         run: node scripts/candidate-gallery-results.mjs
   ecosystem-render:
     needs: gallery
-    if: needs.gallery.outputs.candidate_gallery == ''
+    if: needs.gallery.outputs.candidate_gallery == '' && needs.gallery.outputs.release_prep != 'true'
     # RR-57: the renderer's serial test suite (about 15 minutes) runs as three parallel slices of equal weight
     # (scripts/ci-test-shards.mjs); together they are exactly `npm test`. Shard 1 also runs the script's checks, the
     # typecheck, validate and code steps, and the two browser steps below.
@@ -202,7 +215,7 @@ jobs:
           if-no-files-found: ignore
   ecosystem-pptx:
     needs: gallery
-    if: needs.gallery.outputs.candidate_gallery == ''
+    if: needs.gallery.outputs.candidate_gallery == '' && needs.gallery.outputs.release_prep != 'true'
     # RR-57: split from the former ecosystem-pptx-editor, and opf-pptx's serial test suite (about 15 minutes) runs as three
     # parallel slices of equal weight (scripts/ci-test-shards.mjs); together they are exactly `npm test`.
     name: ecosystem-pptx (${{ matrix.shard }}/3)
@@ -310,7 +323,7 @@ jobs:
           if-no-files-found: ignore
   ecosystem-editor:
     needs: gallery
-    if: needs.gallery.outputs.candidate_gallery == ''
+    if: needs.gallery.outputs.candidate_gallery == '' && needs.gallery.outputs.release_prep != 'true'
     # RR-57: split from the former ecosystem-pptx-editor. opf-editor's suite is short (under two minutes), so it is one job.
     runs-on: ubuntu-latest
     # Matches the renderer's locked Playwright 1.64.0, including Chromium and
@@ -410,7 +423,7 @@ jobs:
   # is success only when every shard succeeded: a failed, cancelled or missing shard fails it.
   ecosystem-core:
     needs: gallery
-    if: needs.gallery.outputs.candidate_gallery == ''
+    if: needs.gallery.outputs.candidate_gallery == '' && needs.gallery.outputs.release_prep != 'true'
     name: ecosystem-core (${{ matrix.shard }})
     runs-on: ubuntu-latest
     # Matches the renderer's locked Playwright 1.64.0, including Chromium and
@@ -666,12 +679,12 @@ jobs:
   installed-portability:
     needs: gallery
     name: Installed candidates (${{ matrix.os }})
-    runs-on: ${{ (needs.gallery.outputs.candidate_gallery != '' || github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci')) && matrix.os || 'ubuntu-24.04' }}
+    runs-on: ${{ (needs.gallery.outputs.candidate_gallery != '' || (github.event_name != 'pull_request' && needs.gallery.outputs.release_prep != 'true') || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci')) && matrix.os || 'ubuntu-24.04' }}
     # RR-78: Windows job 114605791682 exhausted 25min during standalone CLI verification;
     # macOS completed in about 21min. Retain all candidate and published controls within 45min.
     timeout-minutes: 45
     env:
-      PORTABILITY: ${{ (needs.gallery.outputs.candidate_gallery != '' || github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci')) && 'run' || 'policy-skip' }}
+      PORTABILITY: ${{ (needs.gallery.outputs.candidate_gallery != '' || (github.event_name != 'pull_request' && needs.gallery.outputs.release_prep != 'true') || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci')) && 'run' || 'policy-skip' }}
     strategy:
       fail-fast: false
       matrix:
@@ -695,7 +708,7 @@ jobs:
             if [ -n '${{ needs.gallery.outputs.candidate_gallery }}' ]; then echo 'run=true' >> "$GITHUB_OUTPUT"; else node scripts/ecosystem-scope.mjs; fi
           else
             echo "run=false" >> "$GITHUB_OUTPUT"
-            echo "Installed candidates (${{ matrix.os }}): skipped by policy on this pull request (runner $RUNNER_OS). merge_group, the nightly run and pull requests labelled ecosystem-full or full-ci run it on ${{ matrix.os }}." | tee -a "$GITHUB_STEP_SUMMARY"
+            echo "Installed candidates (${{ matrix.os }}): skipped by policy on this pull request or on the merge queue's release-prep fast path (runner $RUNNER_OS). Every other merge_group run, the nightly run and pull requests labelled ecosystem-full or full-ci run it on ${{ matrix.os }}." | tee -a "$GITHUB_STEP_SUMMARY"
           fi
       # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
       - name: Resolve the coordinated commits from ecosystem.lock.json

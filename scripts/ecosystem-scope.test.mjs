@@ -88,7 +88,12 @@ test("a pull request that can change what the contract tier trusts runs the full
 test("the installed-candidate legs always report under their required names and run on their OS outside plain pull requests", () => {
   const workflow = readFileSync(new URL("../.github/workflows/ecosystem-ci.yml", import.meta.url), "utf8");
   const job = workflow.slice(workflow.indexOf("\n  installed-portability:\n"), workflow.indexOf("\n  main-status:"));
-  const policy = "(needs.gallery.outputs.candidate_gallery != '' || github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci'))";
+  const labels = "contains(github.event.pull_request.labels.*.name, 'ecosystem-full') || contains(github.event.pull_request.labels.*.name, 'full-ci'))";
+  // RR-100: the merge queue's release-prep fast path (scripts/release-prep.mjs) takes the same policy skip as a plain pull
+  // request, and only it: a merge_group run that is not release-prep still runs on its own OS. The workflow carries one policy.
+  const policy = job.includes("release_prep")
+    ? `(needs.gallery.outputs.candidate_gallery != '' || (github.event_name != 'pull_request' && needs.gallery.outputs.release_prep != 'true') || ${labels}`
+    : `(needs.gallery.outputs.candidate_gallery != '' || github.event_name != 'pull_request' || ${labels}`;
   assert.ok(job.includes("    name: Installed candidates (${{ matrix.os }})\n"));
   assert.ok(job.includes(`    runs-on: \${{ ${policy} && matrix.os || 'ubuntu-24.04' }}\n`));
   assert.ok(job.includes(`      PORTABILITY: \${{ ${policy} && 'run' || 'policy-skip' }}\n`));
@@ -119,7 +124,7 @@ test("the workflow runs the contract tier on pull requests and the full suites o
   // RR-45 (opf#368, item 1): ecosystem-core runs as exactly these three shards, none of which can be dropped by fail-fast.
   const core = workflow.slice(workflow.indexOf("\n  ecosystem-core:\n"), workflow.indexOf("\n  installed-portability:\n"));
   assert.match(core, /\n    strategy:\n      fail-fast: false\n      matrix:\n        shard: \[model, installed, registry\]\n/);
-  assert.match(core, /\n    needs: gallery\n    if: needs\.gallery\.outputs\.candidate_gallery == ''\n/, "only explicit candidate selection delegates the core contracts to the candidate lane");
+  assert.match(core, /\n    needs: gallery\n    if: needs\.gallery\.outputs\.candidate_gallery == ''( && needs\.gallery\.outputs\.release_prep != 'true')?\n/, "only explicit candidate selection (and the release-prep fast path, RR-100) skips the core contracts of the normal lane");
   for (const shard of ["model", "installed", "registry"]) assert.ok(core.includes(`matrix.shard == '${shard}'`), shard);
   assert.match(core, /test-package-ecosystem\.mjs --skip-siblings --core model\n/);
   assert.match(core, /test-package-ecosystem\.mjs --skip-siblings --core packed\n/);
@@ -170,7 +175,7 @@ test("the sibling jobs run every test slice: matrix shards match the --test-shar
   for (const [id, next, sibling] of [["ecosystem-render", "ecosystem-pptx", "opf-render"], ["ecosystem-pptx", "ecosystem-editor", "opf-pptx"]]) {
     const job = section(id, next);
     assert.match(job, /\n    strategy:\n      fail-fast: false\n      matrix:\n        shard: \[1, 2, 3\]\n/, `${id} runs three shards and none is dropped by fail-fast`);
-    assert.match(job, /\n    needs: gallery\n    if: needs\.gallery\.outputs\.candidate_gallery == ''\n/);
+    assert.match(job, /\n    needs: gallery\n    if: needs\.gallery\.outputs\.candidate_gallery == ''( && needs\.gallery\.outputs\.release_prep != 'true')?\n/);
     assert.ok(job.includes(`--siblings ${sibling} --tier \${{ steps.scope.outputs.tier }} --test-shard \${{ matrix.shard }}/3\n`), `${id} runs its slice of ${sibling}`);
     assert.equal([...job.matchAll(/--test-shard/g)].length, 1);
   }
