@@ -2403,6 +2403,9 @@ function placedImageBands(slide) {
 
 // One slide's export context: core's resolveSlideContext (`core`: composeSlide's options, the records and the diagnostics) and
 // the exporter's colours and measurement-resolved families derived from it.
+// RR-97: the deck's own background stays literal on a slide whose picture background is unreadable and falls back to it (useFallbackBackground).
+const geometryFallbackBackground = presentation => presentation.design?.background;
+
 function exportSlideContext(presentation, slideIndex, baseContext, options) {
   const slide = presentation.slides[slideIndex];
   const effective = { ...presentation, design: { ...presentation.design, ...slide.design } };
@@ -2433,7 +2436,7 @@ function exportSlideContext(presentation, slideIndex, baseContext, options) {
   const text = defaultTextSchemeValues(slideContext);
   slideContext.textColor = text.text ?? resolved.colors.text;
   slideContext.mutedColor = text.muted ?? resolved.colors.mutedText;
-  baseContext.slideSchemeColors[slideIndex] = {table: schemeColorTable(slideContext), keep: authoredLiteralColors(slide, presentation.variables, {...effective.design, colorScheme: undefined, theme: undefined})};
+  baseContext.slideSchemeColors[slideIndex] = {table: schemeColorTable(slideContext), keep: authoredLiteralColors(slide, presentation.variables, {...effective.design, colorScheme: undefined, theme: undefined}, geometryFallbackBackground(presentation))};
   return slideContext;
 }
 
@@ -2733,7 +2736,7 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
       treatment, alt, role: 'background', objectName: backgroundImageName(slidePath)
     });
     // addImagePicture reported the unresolved source once (opf-pptx#210).
-    if (!name) return;
+    if (!name) { useFallbackBackground(slide, presentation, background, slideIndex, slideContext, context, options); return; }
     owner = name;
     overlayName = imageOverlayName(name);
   } else {
@@ -2742,6 +2745,7 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
     const resolved = await resolveImage(background.src, presentation, options, background.path, outcome);
     if (!resolved) {
       if (!outcome.reported) options.onDiagnostic?.(backgroundUnresolved(background.path));
+      useFallbackBackground(slide, presentation, background, slideIndex, slideContext, context, options);
       return;
     }
     // PptxGenJS embeds the raster and its relationship; packaging replaces its stretched fill with the fitted native fill.
@@ -2758,6 +2762,29 @@ async function addBackgroundImage(slide, presentation, background, slideIndex, s
     slide.addShape('rect', { x: box.x, y: box.y, w: box.w, h: box.h, objectName: toneScrimName(slidePath, tone), fill: { color: normalizeHex(slideContext.roles?.background ?? `#${slideContext.colors.background}`), transparency: 100 - TONE_SCRIM_OPACITY * 100 } });
   }
   if (background.overlay) addImageOverlay(slide, background.overlay, structuredClone(isPlainObject(authored) ? authored.overlay : undefined) ?? {color: background.overlay.color, opacity: background.overlay.opacity}, overlayName, owner, { ...slideContext, slidePath }, effects);
+}
+
+// RR-97: a background picture that cannot be read leaves the background the slide would have without it: the deck's own
+// background (or the theme's) when the slide's was the picture, and the variant's bg1 when the picture is the only background,
+// written as the same native fill (a scheme color through the slide's map, a solid color, a gradient or a pattern) a slide with
+// that background has. It is not the literal canvas color core falls back to for a picture, which is the light default and so
+// white behind the light text of a dark variant. A picture that comes from the theme's own background keeps that canvas color.
+// Only the fill is replaced: the text color was chosen for the picture and is unchanged.
+function useFallbackBackground(slide, presentation, background, slideIndex, slideContext, context, options) {
+  const without = design => Object.fromEntries(Object.entries(design ?? {}).filter(([key]) => key !== 'background'));
+  let twin;
+  if (/^slides\.\d+\.design\.background(\.|$)/.test(background.path ?? '')) twin = {...presentation, slides: presentation.slides.map((entry, index) => index === slideIndex ? {...entry, design: without(entry.design)} : entry)};
+  else if (/^design\.background(\.|$)/.test(background.path ?? '')) twin = {...presentation, design: without(presentation.design)};
+  if (!twin) return;
+  const effective = {...twin, design: {...twin.design, ...twin.slides[slideIndex].design}};
+  const resolved = resolvePresentationContext(effective, options, coreContext(twin, slideIndex, options));
+  const fallback = {...slideContext, backgroundDefinition: resolved.backgroundDefinition, colors: resolved.colors, roles: resolved.roles, colorScheme: resolved.colorScheme, variables: resolved.variables};
+  slide.background = {color: resolved.colors.background};
+  const definition = resolved.backgroundDefinition;
+  const fill = definition === undefined ? null : schemeBackgroundFill(definition, fallback) ?? nativeBackgroundFill(definition, {
+    width: slideContext.dimensions.widthInches, height: slideContext.dimensions.heightInches
+  }, resolved.colors.background, resolved.colors.text, (reference, hex) => schemeColorValue(reference, hex, fallback), reference => resolveBackgroundColorRef(reference, resolved.colorScheme, resolved.variables));
+  if (fill) context.backgroundFills.set(`ppt/slides/slide${slideIndex + 1}.xml`, fill);
 }
 
 const backgroundUnresolved = path => ({code: 'unresolved-asset', path, reason: 'unresolved-source', message: 'The background image needs an embedded raster, a declared asset or a host imageResolver; the slide background color was exported instead.'});
@@ -4015,7 +4042,7 @@ function histogramBins(values) {
 // was already emitted. `outcome.box` (inches, in) sizes an SVG's fallback raster; `outcome.svg` (out) carries the SVG to
 // attach to the picture the caller adds. Local paths are read by PptxGenJS and checked after embedding.
 async function resolveImage(asset, presentation, options, path, outcome = {}) {
-  const resolved = await resolveImageSource(asset, presentation, options, path);
+  const resolved = await resolveImageSource(asset, presentation, options, path, outcome);
   // A local SVG file is read here (PptxGenJS cannot size it); a raster path is read by PptxGenJS itself.
   if (resolved?.path && /\.svg$/i.test(resolved.path)) {
     let file;
@@ -4107,7 +4134,7 @@ function dataUriBytes(uri) {
   }
 }
 
-async function resolveImageSource(asset, presentation, options, path) {
+async function resolveImageSource(asset, presentation, options, path, outcome = {}) {
   const assetObject = dereferenceAsset(asset, presentation, path);
   const src = typeof assetObject === "string" ? assetObject : assetObject?.src;
   if (!src) {
@@ -4117,9 +4144,21 @@ async function resolveImageSource(asset, presentation, options, path) {
     return null;
   }
 
-  const resolvedByHost = options.imageResolver
-    ? await options.imageResolver(src, { asset: assetObject, presentation, path })
-    : null;
+  let resolvedByHost = null;
+  if (options.imageResolver) {
+    try { resolvedByHost = await options.imageResolver(src, { asset: assetObject, presentation, path }); }
+    catch (error) {
+      // RR-97: a resolver that throws (the CLI's does for an image it cannot read) is an unresolved image, not a failed export: the
+      // picture's own fallback and one `unresolved-asset` warning that carries the resolver's message. A cancelled export and an
+      // exporter error still propagate, and `strictAssets` turns the failure into a `missing-asset` error.
+      if (error instanceof OPFPptxError || error?.name === "AbortError") throw error;
+      const cause = errorMessage(error).trim();
+      if (options.strictAssets) throw new OPFPptxError("missing-asset", cause || "The imageResolver could not read the image.", { path, src, reason: "resolver-failed" });
+      options.onDiagnostic?.({ code: "unresolved-asset", path, reason: "resolver-failed", message: `${cause ? `${/[.!?]$/.test(cause) ? cause : `${cause}.`} ` : "The imageResolver could not read the image. "}The image was left out of the export; the preview's fallback is exported instead (the unavailable-image placeholder, the slide background color, the character bullets, or no watermark).` });
+      outcome.reported = true;
+      return null;
+    }
+  }
   if (resolvedByHost) return normalizeResolvedImage(resolvedByHost, assetObject);
 
   if (src.startsWith("data:")) return { data: src };
