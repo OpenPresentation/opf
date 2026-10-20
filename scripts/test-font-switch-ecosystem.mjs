@@ -233,7 +233,13 @@ const contentBlocks = {
 };
 // Layout families and one slide builder that fills a template's regions.
 // Read the primary body kind from v2 template regions. Heading-only templates form the title family.
-const layoutKinds = record => Object.values(record.regions ?? {}).map(region => region.accepts.find(kind => kind !== 'group')).filter(Boolean);
+// This harness runs against two catalogs: the checkout's Gallery (FA-33: a layout is an ordered list of regions) and the
+// Published packages matrix's pinned set (release-plan.json), whose Gallery records are still a grid (`areas`, and `regions`
+// as a map). Both shapes are read here; the grid branch goes when the plan adopts Gallery 5.
+const flatRegions = list => (list ?? []).flatMap(entry => entry.regions ? flatRegions(entry.regions) : [entry]);
+const bodyRegions = record => Array.isArray(record.regions) ? flatRegions(record.regions).filter(region => region.accepts) : Object.values(record.regions ?? {});
+const hasTitle = record => Array.isArray(record.regions) ? flatRegions(record.regions).some(region => region.name === 'title') : record.areas.some(row => row.includes('title'));
+const layoutKinds = record => bodyRegions(record).map(region => region.accepts.find(kind => kind !== 'group')).filter(Boolean);
 const layoutFamily = record => layoutKinds(record)[0] ?? 'title';
 const LAYOUT_FAMILIES = [...new Set(catalogs.layouts.map(layoutFamily))].sort();
 const layoutMembers = (family) => catalogs.layouts.filter((record) => layoutFamily(record) === family).map((record) => record.id);
@@ -252,7 +258,7 @@ const templateBlock = {
 function layoutSlide(id, layoutId, text) {
   const record = byId('layouts', layoutId);
   const content = layoutKinds(record);
-  const heading = record.areas.some(row => row.includes('title'));
+  const heading = hasTitle(record);
   const types = heading ? ['title', 'subtitle'] : [];
   return {id, layout: layoutId, ...(types.includes('title') ? {title: text.title} : {}), ...(types.includes('subtitle') ? {subtitle: text.subtitle} : {}), ...(content.length ? {blocks: content.map((type) => templateBlock[type](text))} : {})};
 }
