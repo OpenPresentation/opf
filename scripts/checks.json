@@ -36,7 +36,7 @@
       {"match": ["skills/", "docs/", "scripts/check-skill-commands.mjs", "scripts/skill-commands-allowlist.json", "packages/cli/src/"], "run": ["check:skill-commands"]},
       {"match": ["skills/", "scripts/check-skill-glossary.test.mjs"], "run": ["check:skill-glossary"]},
       {"match": ["docs/first-deck/", "scripts/check-first-deck.test.mjs", "packages/cli/src/"], "run": ["check:first-deck"]},
-      {"match": ["scripts/check-examples-convert.mjs", "packages/cli/src/"], "run": ["check:examples-convert"]},
+      {"match": ["scripts/check-examples-convert.mjs", "scripts/check-examples-convert.test.mjs", "scripts/examples-convert-worker.mjs", "packages/cli/src/"], "run": ["check:examples-convert"]},
       {"match": ["docs/examples.md", "docs/schema-reference.md", "docs/catalog-schema-reference.md"], "run": ["check:schema-docs"]},
       {"match": ["docs/programs/release-readiness/"], "run": ["check:release-report", "check:gallery-tracker"]},
       {"match": ["docs/programs/font-fidelity-everywhere/"], "run": ["check:font-tracker", "check:works-percent"]},
