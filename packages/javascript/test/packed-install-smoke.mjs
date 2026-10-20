@@ -223,8 +223,8 @@ assert.equal(presentation.$id, "https://openpresentation.org/schema/opf/v1");
 assert.equal(focusedPresentation.$id, presentation.$id);
 assert.equal(rawPresentation.$id, presentation.$id);
 // RR-78: the pptx.gallery catalog is @openpresentation/gallery (core's dependency); core has no /catalog subpath.
-assert.equal(galleryManifest.opf.catalogSchema, 3);
-assert.equal(CATALOG_SCHEMA, galleryManifest.opf.catalogSchema, "installed core and gallery agree on catalog record contract 3");
+assert.equal(galleryManifest.opf.catalogSchema, 4);
+assert.equal(CATALOG_SCHEMA, galleryManifest.opf.catalogSchema, "installed core and gallery agree on catalog record contract 4");
 assert.ok(gallery.audiences.board && gallery.audiences.executive);
 assert.ok(Object.keys(gallery.tones).length > 0);
 await assert.rejects(import("@openpresentation/opf/catalog"));
