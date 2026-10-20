@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.24.2 (2026-10-20)
+
+- RR-97: 0.24.2 is the first published release of the 0.24.1 changes: the examples' embedded supporting photos and resolvable technical assets, and the documentation of an unreadable image as a PPTX warning. 0.24.1 was tagged but never published, because its publish job ran past the job's time limit; `check:examples-convert` now converts in-process, so the publish job finishes well inside it.
+
 ## 0.24.1 (2026-10-20)
 
 - RR-97: with opf-pptx 0.24.1 or later, `opf convert deck.opf.json out.pptx` reports an image it cannot read (a missing file, a path outside the deck folder or `--asset-dir`, a file that is no image) as a `pptx/unresolved-asset` warning and writes the deck without that image, instead of stopping with a `pptx/asset-unresolved` error; `--fail-on warning` still rejects it before any file is written. Nothing changes in core code: the CLI's resolver (`forPptx`) still throws `asset-unresolved`, which opf-pptx now turns into the warning. `docs/cli.md` states both behaviors, and the CLI's files test follows the installed opf-pptx version.
