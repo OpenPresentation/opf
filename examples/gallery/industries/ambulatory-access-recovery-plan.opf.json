@@ -10,7 +10,7 @@
   "design": {
     "theme": "bold",
     "colorScheme": "black-and-white",
-    "fontScheme": "angsana-new",
+    "fontScheme": "aptos",
     "dimensions": {
       "preset": "16:10",
       "widthInches": 13.333,
@@ -488,18 +488,16 @@
         }
       },
       "fontSchemes": {
-        "angsana-new": {
-          "name": "Angsana New",
+        "aptos": {
+          "name": "Aptos",
           "app": "powerpoint",
-          "languageFamily": "cs",
-          "languages": [
-            "th"
-          ],
-          "major": "Angsana New",
-          "minor": "Angsana New",
-          "textSample": "ภาษาไทยสวยมาก",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Aptos Display",
+          "minor": "Aptos",
+          "textSample": "Modern clean design",
           "type": "sans-serif",
-          "description": "Angsana New is a sans serif OPF font scheme for complex script presentations, using Angsana New for both headings and body text."
+          "description": "Aptos is a sans serif OPF font scheme for Latin presentations, using Aptos Display for headings with Aptos for body text."
         },
         "impact": {
           "name": "Impact",

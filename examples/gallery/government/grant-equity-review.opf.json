@@ -10,7 +10,7 @@
   "design": {
     "theme": "minimal",
     "colorScheme": "bold-red",
-    "fontScheme": "sakkal-majalla",
+    "fontScheme": "montserrat",
     "dimensions": "a4",
     "background": "dark1",
     "titleAlignment": "right",
@@ -380,20 +380,16 @@
         }
       },
       "fontSchemes": {
-        "sakkal-majalla": {
-          "name": "Sakkal Majalla",
-          "app": "powerpoint",
-          "languageFamily": "cs",
-          "languages": [
-            "ar",
-            "ur",
-            "fa"
-          ],
-          "major": "Sakkal Majalla",
-          "minor": "Sakkal Majalla",
-          "textSample": "هذا كتاب رائع",
+        "montserrat": {
+          "name": "Montserrat",
+          "app": "google-slides",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Montserrat",
+          "minor": "Montserrat",
+          "textSample": "This is beautiful",
           "type": "sans-serif",
-          "description": "Sakkal Majalla is a sans serif OPF font scheme for complex script presentations, using Sakkal Majalla for both headings and body text."
+          "description": "Montserrat is a sans serif OPF font scheme for Latin presentations, using Montserrat for both headings and body text."
         },
         "aptos": {
           "name": "Aptos",

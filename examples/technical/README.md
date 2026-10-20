@@ -6,6 +6,8 @@ Use these examples when testing validators, renderers, catalog resolution, regio
 
 Start with [`full-feature-tour.opf.json`](./full-feature-tour.opf.json): a single self-contained deck (every image is an embedded data URI) that exercises every major schema surface — intent metadata, organizations and speakers, a custom narrative record, design with slide-level overrides, assets, inline catalog records, all ten content payload kinds, blocks, regions, hidden slides, and extensions.
 
+The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cover.png`) exist in [`assets/`](./assets/): original abstract artwork, MIT licensed with this repository, written by `scripts/generate-technical-example-assets.mjs`, so `opf convert` of every fixture finds its images. The fixtures' `./media/demo.mp4` and `./data/pipeline.csv` references stay authoring examples: no conversion reads a video or a data file.
+
 ## Coverage Areas
 
 - Root slide payloads and explicit content `type` values.

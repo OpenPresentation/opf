@@ -83,7 +83,7 @@
   ],
   "assets": {
     "context-photo": {
-      "src": "./assets/context-photo.jpg",
+      "src": "./assets/context-photo.png",
       "alt": "Context photo"
     }
   },

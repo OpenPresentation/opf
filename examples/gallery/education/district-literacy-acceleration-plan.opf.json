@@ -11,7 +11,7 @@
     "theme": "classic",
     "variant": "dark1",
     "colorScheme": "golden-yellow",
-    "fontScheme": "noto-sans-jp",
+    "fontScheme": "segoe-ui",
     "dimensions": "4:3",
     "background": "dark1",
     "titleAlignment": "right",
@@ -417,18 +417,16 @@
         }
       },
       "fontSchemes": {
-        "noto-sans-jp": {
-          "name": "Noto Sans JP",
-          "app": "google-slides",
-          "languageFamily": "ea",
-          "languages": [
-            "ja"
-          ],
-          "major": "Noto Sans JP",
-          "minor": "Noto Sans JP",
-          "textSample": "これは美しいです",
+        "segoe-ui": {
+          "name": "Segoe UI",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Segoe UI Semibold",
+          "minor": "Segoe UI",
+          "textSample": "Modern interface font",
           "type": "sans-serif",
-          "description": "Noto Sans JP is a sans serif OPF font scheme for East Asian presentations, using Noto Sans JP for both headings and body text."
+          "description": "Segoe UI is a sans serif OPF font scheme for Latin presentations, using Segoe UI Semibold for headings with Segoe UI for body text."
         },
         "tenorite": {
           "name": "Tenorite",

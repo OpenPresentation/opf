@@ -10,7 +10,7 @@
   "design": {
     "theme": "classic",
     "colorScheme": "deep-purple",
-    "fontScheme": "aparajita",
+    "fontScheme": "calibri",
     "dimensions": {
       "preset": "16:10",
       "widthInches": 13.333,
@@ -376,19 +376,16 @@
         }
       },
       "fontSchemes": {
-        "aparajita": {
-          "name": "Aparajita",
+        "calibri": {
+          "name": "Calibri",
           "app": "powerpoint",
-          "languageFamily": "cs",
-          "languages": [
-            "hi",
-            "ne"
-          ],
-          "major": "Aparajita",
-          "minor": "Aparajita",
-          "textSample": "यह सुंदर किताब",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Calibri",
+          "minor": "Calibri",
+          "textSample": "Smooth professional look",
           "type": "sans-serif",
-          "description": "Aparajita is a sans serif OPF font scheme for complex script presentations, using Aparajita for both headings and body text."
+          "description": "Calibri is a sans serif OPF font scheme for Latin presentations, using Calibri for both headings and body text."
         },
         "tenorite": {
           "name": "Tenorite",

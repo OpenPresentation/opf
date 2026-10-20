@@ -10,7 +10,7 @@
   "design": {
     "theme": "classic",
     "colorScheme": "forest-green",
-    "fontScheme": "gungsuh",
+    "fontScheme": "segoe-ui",
     "dimensions": "16:10",
     "background": "light1",
     "titleAlignment": "left",
@@ -406,18 +406,16 @@
         }
       },
       "fontSchemes": {
-        "gungsuh": {
-          "name": "Gungsuh",
+        "segoe-ui": {
+          "name": "Segoe UI",
           "app": "powerpoint",
-          "languageFamily": "ea",
-          "languages": [
-            "ko"
-          ],
-          "major": "GungsuhChe",
-          "minor": "Gungsuh",
-          "textSample": "이것은 궁서 폰트로 쓰여졌습니다",
-          "type": "serif",
-          "description": "Gungsuh is a serif OPF font scheme for East Asian presentations, using GungsuhChe for headings with Gungsuh for body text."
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Segoe UI Semibold",
+          "minor": "Segoe UI",
+          "textSample": "Modern interface font",
+          "type": "sans-serif",
+          "description": "Segoe UI is a sans serif OPF font scheme for Latin presentations, using Segoe UI Semibold for headings with Segoe UI for body text."
         },
         "tenorite": {
           "name": "Tenorite",

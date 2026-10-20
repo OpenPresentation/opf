@@ -10,7 +10,7 @@
   "design": {
     "theme": "classic",
     "colorScheme": "bold-red",
-    "fontScheme": "aparajita",
+    "fontScheme": "arial",
     "dimensions": "16:9",
     "background": "#FFFFFF",
     "titleAlignment": "center",
@@ -384,19 +384,16 @@
         }
       },
       "fontSchemes": {
-        "aparajita": {
-          "name": "Aparajita",
+        "arial": {
+          "name": "Arial",
           "app": "powerpoint",
-          "languageFamily": "cs",
-          "languages": [
-            "hi",
-            "ne"
-          ],
-          "major": "Aparajita",
-          "minor": "Aparajita",
-          "textSample": "यह सुंदर किताब",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Arial Black",
+          "minor": "Arial",
+          "textSample": "Simple and clear",
           "type": "sans-serif",
-          "description": "Aparajita is a sans serif OPF font scheme for complex script presentations, using Aparajita for both headings and body text."
+          "description": "Arial is a sans serif OPF font scheme for Latin presentations, using Arial Black for headings with Arial for body text."
         },
         "tenorite": {
           "name": "Tenorite",

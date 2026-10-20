@@ -64,9 +64,9 @@
   "assets": {
     "primary-logo": "./assets/primary-logo.svg",
     "alice-photo": {
-      "src": "./assets/alice.jpg",
+      "src": "./assets/alice.png",
       "alt": "Alice Rivera headshot",
-      "mediaType": "image/jpeg"
+      "mediaType": "image/png"
     }
   }
 }

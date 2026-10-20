@@ -10,7 +10,7 @@
   "design": {
     "theme": "bold",
     "colorScheme": "cool-horizon",
-    "fontScheme": "noto-sans-telugu",
+    "fontScheme": "bookman",
     "dimensions": "widescreen",
     "background": "light1",
     "titleAlignment": "left",
@@ -380,18 +380,16 @@
         }
       },
       "fontSchemes": {
-        "noto-sans-telugu": {
-          "name": "Noto Sans Telugu",
-          "app": "google-slides",
-          "languageFamily": "cs",
-          "languages": [
-            "te"
-          ],
-          "major": "Noto Sans Telugu",
-          "minor": "Noto Sans Telugu",
-          "textSample": "ఇది చక్కనిది",
-          "type": "sans-serif",
-          "description": "Noto Sans Telugu is a sans serif OPF font scheme for complex script presentations, using Noto Sans Telugu for both headings and body text."
+        "bookman": {
+          "name": "Bookman",
+          "app": "powerpoint",
+          "languageFamily": "latin",
+          "languages": [],
+          "major": "Bookman Old Style",
+          "minor": "Bookman Old Style",
+          "textSample": "Classic serif style",
+          "type": "serif",
+          "description": "Bookman is a serif OPF font scheme for Latin presentations, using Bookman Old Style for both headings and body text."
         },
         "impact": {
           "name": "Impact",
