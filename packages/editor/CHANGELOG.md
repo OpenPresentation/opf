@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.24.2 (2026-10-20)
+
+- RR-98 source pane: JSON now has live completions while you type (`completions: true` by default; `completions: false` keeps the field menu only), offering the property names the schema allows at the cursor's object and the enum, boolean and catalog values of the field, from the same data as the field menu (`getJsonCompletions` in `/json-options`; `mountJsonCodeEditor` takes the same `completions` option, off by default there; Ctrl+Space still opens the field menu). When the session refuses a draft the pane lists every issue of the rejection, each with its JSON pointer path and line, instead of only the first. The code editor no longer draws the standalone editor's border and radius inside the pane frame. The editor sets `aria-invalid` while the findings include an error (a syntax error, a refused draft or the session's own errors) and clears it with them.
+
 ## 0.24.1 (2026-10-20)
 
 - RR-98: `@openpresentation/opf-editor/styles.css`, one stylesheet for the editor panels. `npm run build` generates `dist/styles.css` from `src/styles/*.css` (the `--opf-ui-*` token layer first, then the other files in alphabetical order; plain CSS, no preprocessor, nothing fetched). The tokens (surfaces, text, one ink-blue accent, borders, status colors, type, radii, control height, shadow and motion) apply on `:root` and `.opf-ui`, light by default and dark under `.dark .opf-ui`, `.opf-ui.dark` and `[data-theme="dark"]`; `.opf-ui[data-density="touch"]` makes controls 40px. The design controls, review, slide manager, find, fill template, numbering, chart options, data grid, crop, custom layout editor, JSON editor and restore banner are styled with the tokens only, and the block controls on the canvas follow the theme through CSS variables with their old values as fallbacks. The playground now loads the stylesheet and keeps only its page layout. See the README section "Styling and theming (RR-98)".
