@@ -1,0 +1,17 @@
+{
+  "deck": "technical/chart-highlight.opf.json",
+  "entries": {
+    "technical/chart-highlight.opf.json#0": {
+      "sha256": "1e91139e439f3c248ad5b259facea15a6f0dbd1b7e580ea6bbd89c3bf9ace9df",
+      "bytes": 5815
+    },
+    "technical/chart-highlight.opf.json#1": {
+      "sha256": "1b70effb66fe536be239a31e25bf9b360c02562b1fd61aa9b8adb898b3e3cb22",
+      "bytes": 5275
+    },
+    "technical/chart-highlight.opf.json#2": {
+      "sha256": "ece9d8d6f833c30952807ab9ba7cbd13a324a727c2c5f6a4687686b75f1f4fb9",
+      "bytes": 8188
+    }
+  }
+}

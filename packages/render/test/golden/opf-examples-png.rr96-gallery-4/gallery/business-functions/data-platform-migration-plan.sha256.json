@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/data-platform-migration-plan.opf.json",
+  "entries": {
+    "gallery/business-functions/data-platform-migration-plan.opf.json#0": {
+      "sha256": "10effb0eb5ab2f87297a4703912331c156a6809117ffb730e3bcb7bc6a8022c2",
+      "bytes": 5991
+    },
+    "gallery/business-functions/data-platform-migration-plan.opf.json#1": {
+      "sha256": "67d45434f7df3dcf491853f79d6c1acf9ebf7fb4c77375b2835c2eff96d7312f",
+      "bytes": 6608
+    },
+    "gallery/business-functions/data-platform-migration-plan.opf.json#2": {
+      "sha256": "5a98e9def37565b99f9dfdebcdee97166b3909f2057051606433e71d5a34b2f3",
+      "bytes": 5795
+    },
+    "gallery/business-functions/data-platform-migration-plan.opf.json#3": {
+      "sha256": "3a080cccb71b4345dff22ac451683ee8148641c7e180fe34e9a35e4c422f212e",
+      "bytes": 7717
+    },
+    "gallery/business-functions/data-platform-migration-plan.opf.json#4": {
+      "sha256": "d627c6d8e00bf540e9e18befbef0082e3fe66709d595d28ca409b900cc5ed684",
+      "bytes": 6996
+    },
+    "gallery/business-functions/data-platform-migration-plan.opf.json#5": {
+      "sha256": "cd547c0b93233d0d809202b244fc507fc0d1f16f4c6ad392d9192cfc7b357b8c",
+      "bytes": 14333
+    },
+    "gallery/business-functions/data-platform-migration-plan.opf.json#6": {
+      "sha256": "4d1be498940cf802a761b52bcd75ff902d272dea1f66c3812c577eccf7d1d9db",
+      "bytes": 9985
+    },
+    "gallery/business-functions/data-platform-migration-plan.opf.json#7": {
+      "sha256": "2a99a30e7129fb3b483a42ad946caa85f288fc9c2781f0636e04ba256c4c79cc",
+      "bytes": 4130
+    },
+    "gallery/business-functions/data-platform-migration-plan.opf.json#8": {
+      "sha256": "b69401c5f4c21ab8e98cd48f913b2690ebb02eda13f63c8a5f44ce6a309094f8",
+      "bytes": 5087
+    },
+    "gallery/business-functions/data-platform-migration-plan.opf.json#9": {
+      "sha256": "dc4e4961ad60ec20c296ae7c6b6fcebdb2f0c4f84130f00ecd361111230f9861",
+      "bytes": 10496
+    }
+  }
+}
