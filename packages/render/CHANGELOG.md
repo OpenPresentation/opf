@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.24.1 (2026-10-20)
+
+- RR-96: the example baseline follows core 0.24.0 (gallery 4 theme records with `variants`; no slide changes). 0.24.0 was tagged but never published, because its publish run still checked the core 0.23 corpus; 0.24.1 is the first 0.24 release of the renderer.
+
 ## 0.24.0 (2026-10-19)
 
 - RR-96: adopts `@openpresentation/gallery` 4.0.0 (`^4.0.0`, still a development dependency; hosts register the catalog): the default catalog has no `dark` theme (a dark deck is a theme with a dark `design.variant`, for example `{ "theme": "classic", "variant": "dark1" }`), and `minimal`, `classic` and `bold` carry `variants`. The renderer's output is unchanged; its tests use `classic` with a dark variant where they used the `dark` theme.
