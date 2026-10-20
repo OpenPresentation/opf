@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.24.0 (2026-10-20)
+
+- The optional peer ranges move to the 0.24 minor: `@openpresentation/opf-render` and `@openpresentation/opf-pptx` `^0.24.0`, matching core 0.24.0.
+- Breaking for documents that name the `dark` theme: the `@openpresentation/gallery` dependency moves to `^4.0.0` (RR-96), and Gallery 4 removes the `dark` theme because dark is now a `design.variant` of every theme. `design.theme: "dark"` is an unresolved reference (`opf/unresolved-reference`) and the deck falls back to the engine default theme. Use a theme with a dark variant instead, for example `{ "theme": "classic", "variant": "dark1" }`, plus `colorScheme: "boost"` and `fontScheme: "seaford"` for the old dark look. The gallery examples that named `dark` now use `classic` (with `variant: "dark1"` where the deck's own background is `dark1`), their embedded theme records carry the new `variants`, and seven layout previews are redrawn (`chart`, `chart-beside`, `code`, `dashboard`, `table`, `table-beside`, `timeline`). `CATALOG_SCHEMA` stays 3.
+- Theme records (`opf-theme/v1`) accept an optional `variants` array of `{ id, name, variant }`, where `variant` is a value of `design.variant` (a background slot, or the `ColorVariant` object of `opf.schema.json`, referenced and not copied). Gallery 4 gives `minimal`, `classic` and `bold` the variants `light`, `light-alt`, `dark` and `dark-alt`. They are for pickers: a document keeps the chosen `variant` in `design.variant`, never the entry id, and the engines read only `design.variant`. The generated `Theme` type gains `variants?: ThemeVariant[]`, and the schema docs, the design-resolution and default-catalog docs and the opf-presets skill describe them.
+
 ## 0.23.0 (2026-10-19)
 
 - RR-96: built on core, renderer and PPTX 0.23.0, so `opf validate`, `opf render` and `opf convert` accept `design.variant` (`"dark1"` or `{ background, accents }`, per deck or slide) and a picture or gradient background `tone`, draw them in previews, and export them to PPTX as `clrMap`/`clrMapOvr` with scheme-derived neutrals.
