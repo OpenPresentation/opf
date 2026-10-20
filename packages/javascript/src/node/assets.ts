@@ -95,7 +95,7 @@ export function createImageResolver(root: string | undefined, reporter: Reporter
 			if ("problem" in outcome && outcome.problem === "blocked") reporter.add("cli", { code: "asset-blocked", path: context.path, message: `Image "${shown(source)}" was not read: ${outcome.reason}` });
 			return null;
 		},
-		/** opf-pptx: bytes and media type; null for URLs and references it handles itself. An unreadable local file stops the export. */
+		/** opf-pptx: bytes and media type; null for URLs and references it handles itself. An unreadable local file throws asset-unresolved: opf-pptx before 0.24.1 stops the export, 0.24.1 and later leave the image out with a warning. */
 		forPptx: (source: string, context: { path: string }) => {
 			const outcome = read(source);
 			if ("image" in outcome) return { data: outcome.image.bytes, mediaType: outcome.image.mediaType };
