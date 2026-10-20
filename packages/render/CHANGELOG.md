@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.24.2 (2026-10-20)
+
+- RR-97: the example baseline follows core's examples, which now embed their supporting photos and name technical assets that exist (opf#752). Only test baselines change; no renderer code.
+- RR-97: the `unresolved-asset` diagnostic of an image the renderer cannot draw (a background, picture block, logo, watermark, picture bullet or `asset:` reference) now names the source in its message, for example `Image "./assets/missing.jpg" was not resolved to an embedded PNG, JPEG, GIF, WebP or SVG data URI`, and says how to fix it (fix the path, embed the image as a data URI, or resolve it in the host). The code, path, reason, `source`, placeholder and every pixel are unchanged. A test now pins the warning for a missing background, a missing picture block and a resolvable image.
+
 ## 0.24.1 (2026-10-20)
 
 - RR-96: the example baseline follows core 0.24.0 (gallery 4 theme records with `variants`; no slide changes). 0.24.0 was tagged but never published, because its publish run still checked the core 0.23 corpus; 0.24.1 is the first 0.24 release of the renderer.
