@@ -222,9 +222,10 @@ as glyph outlines (the real text kept invisible beside it for selection and sear
 Relative image paths and `file:` paths resolve against the input's folder (or `--asset-dir`). Only `.png`, `.jpg`, `.jpeg`,
 `.gif`, `.webp` and `.svg` files whose content matches are read, and only inside that folder (symlinks are resolved first). URLs
 are never fetched. For SVG and PNG an unreadable image draws the renderer's placeholder with an `unresolved-asset` or
-`cli/asset-blocked` warning; for PPTX an unreadable or blocked local path stops the export (`pptx/asset-unresolved`), and an
-unresolved remote URL becomes an unavailable-image placeholder with a `pptx/unresolved-asset` warning. Use `--fail-on warning` to
-reject that output before any file is written.
+`cli/asset-blocked` warning. For PPTX (opf-pptx 0.24.1 and later) an unreadable or blocked local path and an unresolved remote URL
+are one case: the deck exports without that image (an unavailable-image placeholder, or the fallback background for a background
+picture) and the report carries a `pptx/unresolved-asset` warning. Use `--fail-on warning` to reject that output before any file is
+written. Before opf-pptx 0.24.1 an unreadable or blocked local path stopped the export (`pptx/asset-unresolved`, an error).
 
 ## Markdown and YAML
 

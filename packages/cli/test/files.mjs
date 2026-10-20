@@ -160,9 +160,26 @@ try {
   assert.ok(![...found].some(item => item.startsWith('/slides/0/')));
   const widened = run(['convert', 'media/images.opf.json', 'media-out2/Images.svg', '--asset-dir', '.']).report;
   assert.ok(!widened.findings.some(item => item.path === '/slides/2/image' && item.ruleId === 'cli/asset-blocked'), '--asset-dir widens the readable folder');
-  const refused = run(['convert', 'media/images.opf.json', 'bad-image.pptx'], {status: 1}).report;
-  assert.ok(refused.findings.some(item => item.ruleId === 'pptx/asset-unresolved' && item.severity === 'error'));
-  assert.equal((await readdir(temp)).includes('bad-image.pptx'), false);
+  // RR-97: an image the CLI's resolver cannot read ends a PPTX export before opf-pptx 0.24.1 (pptx/asset-unresolved) and is a
+  // warning from 0.24.1 on (pptx/unresolved-asset: the export goes on without the image). The installed version decides.
+  const PPTX_IMAGE_WARNING_FROM = [0, 24, 1];
+  const pptxVersion = run(['convert', 'deck.opf.json', 'version-probe.pptx']).report.pptx.version.replace(/[-+].*$/, '').split('.').map(part => Number.parseInt(part, 10) || 0);
+  const warnsOnUnreadable = (() => { for (let i = 0; i < 3; i++) if (pptxVersion[i] !== PPTX_IMAGE_WARNING_FROM[i]) return pptxVersion[i] > PPTX_IMAGE_WARNING_FROM[i]; return true; })();
+  if (!warnsOnUnreadable) {
+    const refused = run(['convert', 'media/images.opf.json', 'bad-image.pptx'], {status: 1}).report;
+    assert.ok(refused.findings.some(item => item.ruleId === 'pptx/asset-unresolved' && item.severity === 'error'));
+    assert.equal((await readdir(temp)).includes('bad-image.pptx'), false);
+  } else {
+    const exported = run(['convert', 'media/images.opf.json', 'bad-image.pptx']).report;
+    assert.equal(exported.ok, true);
+    assert.ok(!exported.findings.some(item => item.ruleId === 'pptx/asset-unresolved'), 'an unreadable image no longer stops the export');
+    const left = new Set(exported.findings.filter(item => item.ruleId === 'pptx/unresolved-asset' && item.severity === 'warning').map(item => item.path));
+    for (const unreadable of ['/slides/2/image', '/slides/3/image', '/slides/4/image']) assert.ok(left.has(unreadable), `${unreadable} is left out of the export with a warning`);
+    assert.equal((await read('bad-image.pptx')).subarray(0, 2).toString(), 'PK', 'the deck is written without the images');
+    const strict = run(['convert', 'media/images.opf.json', 'strict-image.pptx', '--fail-on', 'warning'], {status: 1}).report;
+    assert.ok(strict.findings.some(item => item.ruleId === 'pptx/unresolved-asset'), '--fail-on warning rejects the unreadable image');
+    assert.equal((await readdir(temp)).includes('strict-image.pptx'), false, '--fail-on warning writes nothing');
+  }
 
   // PPTX (deterministic, structurally a package), PDF, zip, single files.
   const pptx = run(['convert', 'deck.opf.json', 'deck.pptx']).report;
