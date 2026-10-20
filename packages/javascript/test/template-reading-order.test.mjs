@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { validate } from '../dist/index.js';
+import { layoutTemplate } from '../dist/composition.js';
 import { layouts, payload } from './support/template-samples.mjs';
 
 // OPF 0.19 (RR-79, RR-80 review): on a template slide the expected reading order is the binding order (the regions in
@@ -16,7 +17,8 @@ test('the 28 templates, filled as the gallery fixtures fill them, have no opf/re
   const found = [];
   for (const [id, record] of Object.entries(layouts)) {
     const blocks = [], used = {};
-    for (const [name, region] of Object.entries(record.regions ?? {})) {
+    for (const region of layoutTemplate(record).regions) {
+      const name = region.name;
       const kind = region.accepts[0], count = (region.flow ?? 'auto') === 'none' ? 1 : Math.min(3, region.max ?? 6);
       for (let index = 0; index < count; index++) { const n = used[kind] ?? 0; used[kind] = n + 1; blocks.push({ region: name, ...sample(kind, n) }); }
     }

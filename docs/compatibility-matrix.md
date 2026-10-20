@@ -14,10 +14,9 @@ Complete native compatibility remains a separate gate.
 
 ## Published 0.20 contract
 
-Layout `areas` uses nested arrays of cell names. Repeated names span rectangular
-regions and `.` denotes an empty cell. Gallery owns every default record;
-Gallery 3 is required for catalog compatibility generation 3, while per-kind
-schema versions remain v2. Core 0.19 and later consume the Gallery package and
+A layout is one ordered list of regions, nested through splits for two
+dimensions (FA-33). Gallery owns every default record; Gallery 5 is required for
+catalog compatibility generation 4, while per-kind schema versions remain v2. Core 0.19 and later consume the Gallery package and
 do not export `@openpresentation/opf/catalog` or ship a catalog snapshot.
 
 The 0.20 engines share measured quote allocation, the 32 reference pixel

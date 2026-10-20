@@ -147,7 +147,7 @@ Host policy comes from explicit options, never from the document: fields under `
     {
       "source": "pkg:@partner/opf-catalog",
       "layouts": {
-        "partner-title": {"name":"Partner title","areas":[["title"]]}
+        "partner-title": {"name":"Partner title","regions":[{"name":"title","size":1}]}
       }
     }
   ],
@@ -244,8 +244,8 @@ The reference below is generated from the rule registry (`validationRules`); `no
 | [`opf/asset-reference`](#opfasset-reference) | References | error | structure | An `asset:` reference names an asset that is not in the registry. |
 | [`opf/asset-cycle`](#opfasset-cycle) | References | error | structure | Asset references form a cycle. |
 | [`opf/catalog-record`](#opfcatalog-record) | References | error | structure | An embedded or registered catalog record is invalid. |
-| [`opf/layout-template`](#opflayout-template) | References | error | structure | A layout template's grid is malformed. |
-| [`opf/layout-region`](#opflayout-region) | References | error | structure | A layout template's regions do not match its areas. |
+| [`opf/layout-template`](#opflayout-template) | References | error | structure | A layout template's region list is malformed. |
+| [`opf/layout-region`](#opflayout-region) | References | error | structure | A layout template's regions are not valid. |
 | [`opf/unresolved-reference`](#opfunresolved-reference) | References | warning | structure | A content reference resolves nowhere. |
 | [`opf/catalog-record-not-in-source`](#opfcatalog-record-not-in-source) | References | warning | structure | A record embedded under a catalog group is not in that catalog. |
 | [`opf/unused-reference`](#opfunused-reference) | References | warning | structure | A reference is never cited. |
@@ -528,21 +528,21 @@ Default severity: **error**. Cost: structure. An embedded or registered catalog 
 
 ### `opf/layout-template`
 
-Default severity: **error**. Cost: structure. A layout template's grid is malformed.
+Default severity: **error**. Cost: structure. A layout template's region list is malformed.
 
-**Why.** A layout (OPF 0.19) is a grid of named areas. Engines cannot compose a grid whose rows have different lengths, whose names do not form one filled rectangle each, whose column or row sizes do not match the grid, that is larger than 12 x 12, or that holds a word that is not a name or ".". composeSlide refuses such a record, so a slide that names it composes automatically.
+**Why.** A layout is one ordered list of regions, nested through splits for two dimensions. Engines cannot compose a list that is not 1 to 12 entries, an entry that is neither a region nor a split, a direction or size that is not valid, an "auto" size anywhere but in a column, splits nested more than three levels deep (the record's own list is level 1), or regions that compile to a grid larger than 12 x 12. composeSlide refuses such a record, so a slide that names it composes automatically.
 
-**Basis.** spec/schemas/layout.schema.json and the area rules of OPF 0.19 (docs/layout-templates.md)
+**Basis.** spec/schemas/layout.schema.json and the region list rules (docs/layout-templates.md)
 
 **Approximations.** Checked on every layout record the document embeds and every registered record it uses, once the record passes its schema.
 
 ### `opf/layout-region`
 
-Default severity: **error**. Cost: structure. A layout template's regions do not match its areas.
+Default severity: **error**. Cost: structure. A layout template's regions are not valid.
 
-**Why.** Every body area of a layout needs a region that says what it accepts, and every region needs an area. Region names may not be title, subtitle, tag, auto or a promoted-region word (left, center, right, top, middle, bottom), so a Markdown block's region= stays unambiguous; a subtitle area needs a title area; a region with flow 'none' holds one block; overflowRegion must name a region. composeSlide refuses such a record.
+**Why.** Region names are unique across the whole record and may not be tag, auto or a promoted-region word (left, center, right, top, middle, bottom), so a Markdown block's region= stays unambiguous; title and subtitle name the heading regions, which take only a size; a subtitle region needs a title region; a region accepts at least one content kind; a region with flow 'none' holds one block; overflowRegion must name a body region. composeSlide refuses such a record.
 
-**Basis.** spec/schemas/layout.schema.json and the region rules of OPF 0.19 (docs/layout-templates.md)
+**Basis.** spec/schemas/layout.schema.json and the region rules (docs/layout-templates.md)
 
 ### `opf/unresolved-reference`
 

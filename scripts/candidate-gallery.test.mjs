@@ -71,6 +71,19 @@ test('pristine published control binds every immutable source to actual registry
 });
 
 
+test('explicit contract4 configuration stages Gallery 5 (FA-33) and refuses the earlier contracts',async()=>{
+ const manifest={opf:{requiresUnreleasedGallery:'5.0.0'}};
+ const configuration={version:3,gallery:{repository:'OpenPresentation/gallery',version:'5.0.0',catalogSchema:4,sha}};
+ const selected=galleryConfiguration(manifest,configuration);
+ assert.deepEqual(selected,{...configuration.gallery});
+ assert.deepEqual(await resolveCandidateGallery({manifest,configuration,event:'workflow_dispatch',input:sha}),selected);
+ for(const changed of [undefined,2,3,5,'4'])assert.throws(()=>galleryConfiguration(manifest,{...configuration,gallery:{...configuration.gallery,catalogSchema:changed}}));
+ for(const version of [1,2,4])assert.throws(()=>galleryConfiguration(manifest,{...configuration,version}));
+ assert.throws(()=>galleryConfiguration({opf:{requiresUnreleasedGallery:'3.0.0'}},configuration));
+ assert.throws(()=>galleryConfiguration(manifest,{version:2,gallery:{...configuration.gallery,version:'3.0.0',catalogSchema:3}}));
+ assert.throws(()=>assertPublishedGallery(manifest,configuration),/unresolved/);
+});
+
 test('explicit contract3 configuration preserves immutable authorization and release refusals',async()=>{
  const manifest={opf:{requiresUnreleasedGallery:'3.0.0'}};
  const configuration={version:2,gallery:{repository:'OpenPresentation/gallery',version:'3.0.0',catalogSchema:3,sha}};

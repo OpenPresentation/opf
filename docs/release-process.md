@@ -192,6 +192,13 @@ A core or CLI release needs a Gallery version its range accepts on npm first. A 
 updates those ranges and the authentic lockfile after independent publication verification. Stable release
 preparation follows that adoption; it does not perform the source configuration transition.
 
+FA-33 (layouts as one list of regions) is such a major: core's catalog contract (`CATALOG_SCHEMA`) is 4 and Gallery 5.0.0 targets it, so
+core's `^4.0.0` range cannot ship it. Until Gallery 5.0.0 is published, `packages/javascript/package.json` declares
+`opf.requiresUnreleasedGallery: "5.0.0"`, `.github/candidate-gallery.json` (configuration version 3) names the reviewed
+gallery SHA, and the core pull request body carries `Candidate-Gallery: OpenPresentation/gallery@<sha>`. After Gallery 5.0.0 is
+published and verified, the registry-adoption pull request moves the Gallery ranges to `^5.0.0` with the lockfile and deletes
+both the declaration and the configuration file.
+
 Before registry adoption, explicit authenticated candidate CI can stage reviewed gallery and engine tarballs
 (`scripts/candidate-gallery-build.mjs`, `scripts/pack-cli-candidate.mjs`, `scripts/pack-ecosystem.mjs`). Its recorded
 original/staged metadata and runtime checks qualify development consumers; they do not prove the declared source

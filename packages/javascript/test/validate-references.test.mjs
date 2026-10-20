@@ -9,7 +9,7 @@ const checkAll = (input, options) => validate(input, { only: ['format', 'referen
 
 const layout = (name) => ({
 	name,
-	areas: [["title"],["body-1"]], rows: ["auto",1], regions: {"body-1":{"accepts":["text"],"flow":"none"}},
+	regions: [{name:"title"},{name:"body-1",accepts:["text"],flow:"none"}],
 });
 const freeze = (value) => {
 	if (value && typeof value === 'object') {

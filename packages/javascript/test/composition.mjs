@@ -25,7 +25,7 @@ assert.equal(thirds.items.length, 3);
 const byValue = Object.fromEntries(thirds.items.map(item => [item.value,item.box]));
 assert.ok(byValue.Top.y < byValue.Middle.y && byValue.Middle.y < byValue.Bottom.y);
 assert.equal(overlaps(byValue.Top,byValue.Bottom),false);
-const crowded = composeSlide({ blocks: blocks(6) }, { layout: { areas: [["body-1"],["body-2"]], rows: [1,1], regions: {"body-1":{"accepts":["text"],"flow":"none"},"body-2":{"accepts":["text"],"flow":"none"}} } });
+const crowded = composeSlide({ blocks: blocks(6) }, { layout: { regions: [{name:"body-1",accepts:["text"],flow:"none"},{name:"body-2",accepts:["text"],flow:"none"}] } });
 assert.equal(crowded.items.length,6);
 for (let i=0;i<6;i++) for (let j=i+1;j<6;j++) assert.equal(overlaps(crowded.items[i].box,crowded.items[j].box),false);
 const weighted = composeSlide({ blocks:blocks(2),composition:{ mode:'row',weights:[2,1] } });
@@ -48,7 +48,7 @@ for (const composition of [{mode:'banana'},{columns:0},{gap:-1},{weights:[0]},{m
  assert.equal(check({slides:[{text:'hello',composition}]}).valid,false,JSON.stringify(composition));
 }
 assert.equal(check({slides:[{text:'hello',composition:{mode:'auto',columns:3}}]}).valid,true);
-assert.equal(validateCatalogRecord('layouts',{$schema:'https://openpresentation.org/schema/opf-layout/v2',id:'dynamic',name:'Dynamic',areas:[['title'],['body']],rows:['auto',1],regions:{body:{accepts:['text'],flow:'auto'}}}).valid,true);
+assert.equal(validateCatalogRecord('layouts',{$schema:'https://openpresentation.org/schema/opf-layout/v2',id:'dynamic',name:'Dynamic',regions:[{name:'title'},{name:'body',accepts:['text'],flow:'auto'}]}).valid,true);
 console.log('Composition: geometry, preservation, responsive grids, weights, regions, diagnostics and schemas passed.');
 const { resolveCanvasDimensions } = await import('../dist/composition.js');
 assert.deepEqual(resolveCanvasDimensions({preset:'16:9',widthInches:7.5,heightInches:13.333333333333334}),{width:720,height:1280});

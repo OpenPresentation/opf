@@ -18,11 +18,11 @@ kind and then by id:
 "catalogs": {
   "default": {
     "source": "https://www.pptx.gallery",
-    "layouts": { "two-column": { "name": "Two column", "areas": [["title", "title"], ["first", "second"]], "columns": [1, 1], "rows": ["auto", 1], "regions": { "first": { "accepts": ["text"], "flow": "auto" }, "second": { "accepts": ["text"], "flow": "auto" } } } },
+    "layouts": { "two-column": { "name": "Two column", "regions": [{ "name": "title" }, { "direction": "row", "regions": [{ "name": "first", "accepts": ["text"], "flow": "auto" }, { "name": "second", "accepts": ["text"], "flow": "auto" }] }] } },
     "themes": { "minimal": { "name": "Minimal", "colorScheme": "cool-horizon", "fontScheme": "aptos" } }
   },
-  "acme": { "source": "pkg:@acme/opf-catalog", "layouts": { "hero": { "name": "Hero", "areas": [["title"], ["media"]], "rows": ["auto", 1], "regions": { "media": { "accepts": ["image"], "flow": "none" } } } } },
-  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "areas": [["title"], ["chart"]], "rows": ["auto", 1], "regions": { "chart": { "accepts": ["chart"], "flow": "none" } } } } }
+  "acme": { "source": "pkg:@acme/opf-catalog", "layouts": { "hero": { "name": "Hero", "regions": [{ "name": "title" }, { "name": "media", "accepts": ["image"], "flow": "none" }] } } },
+  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "regions": [{ "name": "title" }, { "name": "chart", "accepts": ["chart"], "flow": "none" }] } } }
 }
 ```
 
@@ -112,10 +112,11 @@ resolving again.
 `@openpresentation/gallery/previews` exports the static HTML layout previews: `layoutPreviews`, `layoutPreviewIndex`,
 `layoutPreviewSlugs`, `getLayoutPreview` and `hasLayoutPreview`.
 
-The nested-area-array source contract reads catalog record generation `CATALOG_SCHEMA = 3` (exported from core).
+The region-list source contract (FA-33) reads catalog record generation `CATALOG_SCHEMA = 4` (exported from core).
 This package compatibility generation is separate from the layout schema URI: layout records retain
-`https://openpresentation.org/schema/opf-layout/v2` and per-kind `schemaVersion: 2`. Generation 3 refuses
-generation-2 Gallery records because string area rows no longer validate; it does not introduce a `/v3` schema URI.
+`https://openpresentation.org/schema/opf-layout/v2` and per-kind `schemaVersion: 2`. Generation 4 refuses
+generation-3 Gallery records because `areas`, `columns`, `rows` and the `regions` map no longer validate; like generation 3
+(nested area arrays) it does not introduce a `/v3` schema URI.
 
 Core reads catalog schema `CATALOG_SCHEMA` (exported from its root). When the installed gallery declares another one,
 core never registers it: the Node defaults throw `OPFApiError` `gallery-schema-mismatch` and the CLI stops with the same

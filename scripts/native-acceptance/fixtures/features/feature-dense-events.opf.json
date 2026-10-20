@@ -11,49 +11,47 @@
       "layouts": {
         "authored": {
           "name": "Authored grid",
-          "areas": [
-            [
-              "title",
-              "title"
-            ],
-            [
-              "roadmap",
-              "notes"
-            ],
-            [
-              "roadmap",
-              "signal"
-            ]
-          ],
-          "columns": [
-            3,
-            2
-          ],
-          "rows": [
-            "auto",
-            2,
-            1
-          ],
-          "regions": {
-            "roadmap": {
-              "accepts": [
-                "timeline"
-              ],
-              "flow": "none"
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
             },
-            "notes": {
-              "accepts": [
-                "text"
-              ],
-              "flow": "none"
-            },
-            "signal": {
-              "accepts": [
-                "metric"
-              ],
-              "flow": "none"
+            {
+              "direction": "row",
+              "size": 3,
+              "regions": [
+                {
+                  "name": "roadmap",
+                  "size": 3,
+                  "accepts": [
+                    "timeline"
+                  ],
+                  "flow": "none"
+                },
+                {
+                  "direction": "column",
+                  "size": 2,
+                  "regions": [
+                    {
+                      "name": "notes",
+                      "size": 2,
+                      "accepts": [
+                        "text"
+                      ],
+                      "flow": "none"
+                    },
+                    {
+                      "name": "signal",
+                      "accepts": [
+                        "metric"
+                      ],
+                      "flow": "none"
+                    }
+                  ]
+                }
+              ]
             }
-          }
+          ]
         }
       }
     },

@@ -13,7 +13,7 @@ test('all positive schema examples and actual gallery 2 SVG previews validate',a
 });
 test('an obsolete layout record in a property-level catalog example is rejected by its companion schema',async()=>{
  const result=await mutate(schema=>{schema.$defs.Catalogs.properties.default.examples[0].layouts['two-column']={name:'Old layout',placeholders:[{type:'title'}]};});
- assert.equal(result.valid,false);assert.ok(result.failures.some(failure=>failure.includes('/properties/default/examples/0/layouts/two-column')&&failure.includes('areas')));
+ assert.equal(result.valid,false);assert.ok(result.failures.some(failure=>failure.includes('/properties/default/examples/0/layouts/two-column')&&failure.includes('regions')));
 });
 test('positive examples on arbitrary schema properties are checked at that exact schema node',async()=>{
  const result=await mutate(schema=>{schema.$defs.Slide.properties.title.examples.push(42);});

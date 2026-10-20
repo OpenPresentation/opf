@@ -223,18 +223,20 @@
       "layouts": {
         "partner-cover": {
           "name": "Partner cover",
-          "areas": [
-            ["title"],
-            ["body"]
-          ],
-          "regions": {
-            "body": {
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title",
+              "size": 1
+            },
+            {
+              "name": "body",
               "accepts": [
                 "text"
               ],
               "flow": "column"
             }
-          },
+          ],
           "design": {
             "titleAlignment": "center",
             "contentAlignment": "center"

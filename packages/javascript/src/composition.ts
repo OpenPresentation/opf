@@ -4,7 +4,7 @@ import {chartValueAxis,type ChartValueAxis} from './chart-axis.js';
 import {intrinsicImageAspect} from './image-aspect.js';
 import {resolveDesignHints,type ResolvedDesignHints} from './design-hints.js';
 import {visualReadingOrder} from './reading-order.js';
-import {isLayoutTemplate,layoutTemplate,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
+import {isLayoutTemplate,layoutTemplate,withRegionRules,type LayoutTemplate,type LayoutRegion,type RegionAnchor,type RegionFlow,type RegionKind,type RegionRole} from './layout-template.js';
 import {bindRegions,type BoundBlock} from './bind-regions.js';
 import {allocateRows,areaRects,collapseAreas,columnWidths,flowCells,flowShape,gridFlowShape,listColumnBreaks,type CellRect,type RowDemand} from './template-geometry.js';
 import type {MetricSentiment} from './metric-trend.js';
@@ -2431,7 +2431,7 @@ export interface ComposedLayoutArea {
  */
 export function composeLayoutAreas(layout: unknown, options: LayoutAreasOptions = {}): { contentBox: LayoutBox; areas: ComposedLayoutArea[] } {
   const template = layoutTemplate(layout), source = record(layout);
-  const kept = { ...source, regions: Object.fromEntries(Object.entries(record(source.regions)).map(([name, value]) => [name, { ...record(value), empty: 'keep' }])) };
+  const kept = withRegionRules(source, { empty: 'keep' });
   const { mirror, bleed = true, placements = [], ...compose } = options;
   const slide: Record<string, unknown> = {
     ...(template.title ? { title: 'Title', subtitle: 'Subtitle' } : {}),
@@ -3247,7 +3247,7 @@ export type {DataCellValue,DataColumn,DataSourceRef,Dataset,DatasetRef,ChartMapp
 export { resolveDesignHints, DESIGN_HINT_KEYS, type DesignHints, type DesignHintKey, type DesignHintSource, type ResolvedDesignHints, type ResolveDesignHintsOptions } from './design-hints.js';
 export { layoutContent, layoutStructure, LAYOUT_BODY_KINDS, type LayoutContent, type LayoutBodyKind } from './layout-content.js';
 // OPF 0.19 layout templates: the record's grid and regions, content binding and the pure geometry composeSlide uses.
-export { AUTO_LAYOUT, HEADING_AREAS, MAX_REGION_BLOCKS, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, isLayoutTemplate, layoutRegion, layoutTemplate, layoutTemplateIssues, type LayoutArea, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
+export { AUTO_LAYOUT, HEADING_AREAS, MAX_REGION_BLOCKS, MAX_REGION_DEPTH, MAX_REGION_ENTRIES, MAX_TEMPLATE_TRACKS, OPFLayoutTemplateError, REGION_ANCHORS, REGION_FLOWS, REGION_KINDS, REGION_ROLES, RESERVED_REGION_NAMES, isLayoutTemplate, layoutEntries, layoutRegion, layoutTemplate, layoutTemplateIssues, type LayoutArea, type LayoutEntry, type LayoutRegion, type LayoutTemplate, type LayoutTemplateIssue, type RegionAnchor, type RegionFlow, type RegionKind, type RegionRole } from './layout-template.js';
 export { bindRegions, blockKind, placedImageBlocks, regionAccepts, regionRoleRank, rootNodes, type BindRegionsOptions, type BoundBlock, type RegionBinding, type RegionBindingDiagnostic, type RegionBindingResult } from './bind-regions.js';
 export { allocateRows, gridFlowShape, listColumnBreaks, type FlowShape, type RowDemand } from './template-geometry.js';
 export { THEME_DESIGN_KEYS } from './design-hints.js';

@@ -6,7 +6,7 @@ import { layoutContent, layoutStructure, layoutTemplate } from '../dist/composit
 
 test('layout summaries derive content and headings from template regions', () => {
   assert.deepEqual(layoutContent(gallery.layouts['chart-beside']), { kind: 'chart', count: 2, heading: { title: true, subtitle: true, tag: true } });
-  assert.deepEqual(layoutContent({ areas: [['title']], regions: {} }), { kind: 'title', count: 0, heading: { title: true, subtitle: true, tag: true } });
+  assert.deepEqual(layoutContent({ regions: [{ name: 'title' }] }), { kind: 'title', count: 0, heading: { title: true, subtitle: true, tag: true } });
   assert.deepEqual(layoutContent({}), { kind: 'title', count: 0, heading: { title: false, subtitle: false, tag: false } });
   assert.match(layoutStructure(gallery.layouts['chart-beside']), /chart \(none: chart\)/);
 });

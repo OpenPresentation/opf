@@ -1,0 +1,9 @@
+{
+  "version": 3,
+  "gallery": {
+    "repository": "OpenPresentation/gallery",
+    "version": "5.0.0",
+    "catalogSchema": 4,
+    "sha": "ac7c439726319abdcb8146d5623d49a2721f5a4d"
+  }
+}

@@ -8,7 +8,7 @@ import { check } from './support/validation.mjs';
 test('the metrics template declares and compose metric content for every supported count',()=>{
   for(let count=1;count<=6;count++){
     const id='metrics',layout=gallery.layouts[id];
-    assert.ok(Object.values(layout.regions).some(region=>region.accepts.includes('metric')));
+    assert.ok(layout.regions.some(region=>region.accepts?.includes('metric')));
     assert.equal(validateCatalogRecord('layouts',{$schema:'https://openpresentation.org/schema/opf-layout/v2',id,...layout}).valid,true);
     const slide={layout:id,title:'Business metrics',blocks:Array.from({length:count},(_,i)=>({metric:{value:i+1,label:`Metric ${i+1}`}}))};
     const document={slides:[slide],catalogs:{default:{source:gallery.source,layouts:{[id]:layout}}}};

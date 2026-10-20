@@ -41,7 +41,7 @@ async function main() {
     for (const group of Object.values(data.catalogs ?? {})) {
       for (const [id, record] of Object.entries(group?.layouts ?? {})) {
         available.add(id);
-        if (!Array.isArray(record.areas)) failures.push({ file, errors: [`Embedded layout '${id}' is not a v2 template`] });
+        if (!Array.isArray(record.regions)) failures.push({ file, errors: [`Embedded layout '${id}' is not a v2 template`] });
       }
     }
     const inspect = (value, location = "") => {

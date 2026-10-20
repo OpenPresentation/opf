@@ -1,64 +1,130 @@
 # Layout templates
 
-OPF 0.19 layouts are grid templates. A layout record (`https://openpresentation.org/schema/opf-layout/v2`) names the cells
-of a grid, sizes its tracks, and says for every body area which content it takes and how several blocks share it. The
-built-in layouts and a deck's own layouts are records of this one schema; a custom layout is embedded under
-`catalogs.custom.layouts` (or a named catalog group) and referenced by id like any other. The design is
-[0.19-layouts.md](programs/release-readiness/0.19-layouts.md); this page is the reference for what core implements.
+A layout is **one ordered list of regions, declared once, in reading order.** Each region says how much of the slide it
+takes (`size`), which content it accepts and how several blocks share it. The list has a `direction`: `row` puts the
+regions side by side, left to right; `column` stacks them top to bottom. For two dimensions, an entry of the list can be
+a **split**: a nested list that runs the other way. That is the whole format. There is no grid of cell names to keep in
+step with a table of sizes and a table of rules.
 
-> The 28 built-in templates come from the matching `@openpresentation/gallery` package. Core 0.19 and Gallery 2 used string rows; current Core 0.20 and Gallery 3 use the nested row arrays documented below. Use coordinated core and Gallery versions.
-> V1 layout records, including `placeholders` and placeholder groups, remain unsupported; there are no aliases or migration API.
+A layout record (`https://openpresentation.org/schema/opf-layout/v2`) is an ordinary JSON object. The built-in layouts
+and a deck's own layouts are records of this one schema; a custom layout is embedded under `catalogs.custom.layouts` (or
+a named catalog group) and referenced by id like any other. This page is the reference for what core implements.
+
+> The 28 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
+> lists documented below; Gallery 4 and earlier used a grid of area names (`areas`). Use coordinated core and Gallery
+> versions. V1 layout records, including `placeholders` and placeholder groups, remain unsupported; there are no aliases or
+> migration API.
 
 ## A record
 
-```yaml
-name: Roadmap split
-summary: A roadmap on the left, with notes over metrics beside it.
-areas: [["title", "title"], ["timeline", "notes"], ["timeline", "metrics"]]
-columns: [2, 1]
-rows: [auto, 1, 1]
-regions:
-  timeline: { accepts: [timeline], role: primary, flow: none }
-  notes: { accepts: [text, list], role: secondary, flow: column }
-  metrics: { accepts: [metric, text], role: supporting, flow: grid }
+A story on the left and the evidence beside it, a third of the width:
+
+```json
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "story-and-evidence",
+  "name": "Story and evidence",
+  "direction": "row",
+  "anchor": "middle",
+  "regions": [
+    { "name": "main",  "size": 2, "accepts": ["text"] },
+    { "name": "aside", "size": 1, "accepts": ["metric"] }
+  ]
+}
+```
+
+Read it left to right, because the record's `direction` is `row`: `main` first, then `aside`, and `main` is twice as wide.
+`anchor: "middle"` is written once and applies to both regions. A block targets a region by name (`"region": "aside"`),
+and a slide's blocks otherwise bind to regions by kind, role and the order of the list.
+
+A layout with a title and a row of two regions, the most common shape of the built-ins, nests one split:
+
+```json
+{
+  "name": "Two column",
+  "regions": [
+    { "name": "title" },
+    { "direction": "row", "regions": [
+      { "name": "first",  "accepts": ["text", "list"] },
+      { "name": "second", "accepts": ["text", "list"] }
+    ] }
+  ]
+}
+```
+
+The record's `direction` is omitted, so it is `column`: the title on top, then one entry, a split whose own `direction` is
+`row`. A split has no name; it is a place to put regions the other way. Splits nest up to three levels, so a record can
+describe any layout made of full-width and full-height cuts (a guillotine partition), which is every built-in layout.
+
+`hero` nests the same way, with sizes: a title, a row of a lead and a picture twice as tall as the supporting row, then
+the supporting content.
+
+```json
+{
+  "name": "Hero",
+  "regions": [
+    { "name": "title" },
+    { "direction": "row", "size": 2, "regions": [
+      { "name": "lead",  "accepts": ["text", "quote", "metric"], "flow": "none" },
+      { "name": "media", "accepts": ["image", "video"], "role": "media", "flow": "none" }
+    ] },
+    { "name": "support", "size": 1, "accepts": ["text", "list", "metric", "group"], "role": "supporting", "flow": "grid" }
+  ]
+}
 ```
 
 | Field | Meaning |
 | --- | --- |
-| `areas` | 1 to 12 row arrays, each containing 1 to 12 area-name strings. Each string is one cell; a name repeated over adjacent cells spans them, `.` an empty cell. A name's cells form one filled rectangle. |
-| `columns` | Relative column widths, one per cell of a row. Omitted: all 1. |
-| `rows` | Relative row heights, or `auto` for the height the row's content needs (at most half the content box). Omitted: all 1. |
-| `regions` | One entry per body area, keyed by its name. |
+| `direction` | `row` (side by side, left to right in reading order) or `column` (stacked, top to bottom). Default `column`. |
+| `regions` | 1 to 12 entries in reading order, each a region or a split. |
+| `anchor` | Vertical position of the content of every body region under the record (or split) that does not set its own. Inherited by body regions only, never by `title` or `subtitle`. |
 | `overflowRegion` | Where content no region accepts goes. Omitted: the first `primary` region whose flow is not `none`. |
 | `design` | The layout's design defaults (below). |
 | `composition` | Only `gap`, `padding`, `minFontSize` and `overflow`, with their 0.18 meaning. |
 
-`title` and `subtitle` are heading areas: `title` holds the tag, title and subtitle stacked, and a `subtitle` area takes the
-subtitle out of it. They have no `regions` entry. A layout without a `title` area gets an implicit `auto` row on top for a
-slide that has headings. Region names may not be `title`, `subtitle`, `tag`, `auto` or a promoted-region word (`left`,
+An entry of `regions` is one of three things:
+
+- a **region**: `{ "name": "...", "size"?, ...rules }`, the rules below;
+- a **heading region**: `{ "name": "title" }` or `{ "name": "subtitle" }`, which take only a `size`;
+- a **split**: `{ "direction": "row" | "column", "regions": [...], "size"?, "anchor"? }`, a nested list.
+
+`size` is a number above 0 and up to 100 (default 1). Siblings share their parent's length in proportion, separated by the
+gap, so `2` and `1` are two thirds and one third. `"auto"` is the height the content needs, at most half the content box,
+and an `auto` region with no content takes no space; it is allowed only on an entry of a `column` (a `row` has no height
+to ask for), and elsewhere it is the validate finding `opf/layout-template`.
+
+`title` and `subtitle` are reserved heading regions: `title` holds the tag, title and subtitle stacked, and a `subtitle`
+region takes the subtitle out of it (a `subtitle` needs a `title`). Their `size` defaults to `auto` inside a `column` and to
+1 inside a `row`, so a cover that puts the title beside a picture is `{ "direction": "row", "regions": [{ "name": "title" },
+{ "name": "media", ... }] }`. A layout with no `title` region gets an implicit `auto` row on top for a slide that has
+headings. Region names are unique across the whole record and may not be `tag`, `auto` or a promoted-region word (`left`,
 `center`, `right`, `top`, `middle`, `bottom`).
 
 ### Regions
 
 | Field | Values | Default |
 | --- | --- | --- |
-| `accepts` | `text`, `list`, `image`, `video`, `chart`, `table`, `code`, `metric`, `quote`, `timeline`, `group` | required |
+| `name` | lowercase kebab-case, unique in the record; a block's `region` names it | required |
+| `size` | a number above 0 and up to 100, or `auto` (columns only) | 1 |
+| `accepts` | `text`, `list`, `image`, `video`, `chart`, `table`, `code`, `metric`, `quote`, `timeline`, `group` | every body kind and `group` |
 | `role` | `primary`, `secondary`, `media`, `supporting` | `primary` |
 | `flow` | `none`, `grid`, `column`, `auto` | `auto` |
 | `max` | 1 to 12 (`none` requires 1) | 1 for `none`, else 6 |
 | `bleed` | boolean: outer edges on the content box reach the slide edge; never a card | `false` |
 | `listColumns` | `"auto"` (a list that does not fit its cell flows into up to three columns before it shrinks) or `1` | `1` |
-| `anchor` | `top`, `middle`, `bottom` | `top` |
+| `anchor` | `top`, `middle`, `bottom` | inherited from the nearest split or the record, else `top` |
 | `empty` | `collapse`, `keep` | `collapse` |
 
 ### Choosing an anchor
 
-A block's `region` selects a named area; that area's `anchor` controls vertical placement inside it. Region names such
-as `main` and `aside` have no special positioning behavior. Declare the names in the layout's grid and regions.
+A block's `region` selects a named region; that region's `anchor` controls vertical placement inside it. Region names such
+as `main` and `aside` have no special positioning behavior. Declare the names in the layout's region list. Write `anchor`
+once on the record (or on a split) when every region under it shares it: body regions inherit it, a region's own `anchor`
+wins, and the heading regions never inherit it.
 
 Use middle anchoring for a compact statement, quotation, headline metric or short explanation beside a visual. Keep
 substantial text, lists, charts and tables top-aligned so readers can compare common starting positions. The title
-remains in its own heading area. Anchoring does not enlarge short text to fill unused space.
+remains in its own heading region. Anchoring does not enlarge short text to fill unused space.
 
 The measured-content implementation supports text/list leaves and uncaptioned quote/metric leaves. A quote keeps
 its body, attribution and photo together. A metric keeps its value and metadata together without reducing the
@@ -74,11 +140,28 @@ The schema checks types, enums and ranges; an embedded record that fails it is `
 
 | Rule | Severity | Raised for |
 | --- | --- | --- |
-| `opf/layout-template` | error | Ragged rows; a name whose cells are not one rectangle; `columns` or `rows` of the wrong length; a grid over 12 x 12; a word that is not a name or `.`. |
-| `opf/layout-region` | error | A body area with no region; a region with no area; a reserved region name; a `subtitle` area without `title`; `flow: none` with `max` other than 1; an `overflowRegion` that is not a region. |
+| `opf/layout-template` | error | A `regions` list that is not 1 to 12 entries; an entry that is neither a region nor a split; a bad `direction` or `size`; `auto` outside a column; splits nested more than three levels (the record's own list is level 1); regions that compile to a grid over 12 x 12. |
+| `opf/layout-region` | error | A name used twice; a reserved region name; a heading region with content rules; a `subtitle` without a `title`; a region that accepts no kind; `flow: none` with `max` other than 1; an `overflowRegion` that is not a body region. |
 
-`composeSlide` refuses such a record (`OPFLayoutTemplateError`). `layoutTemplate(record)` parses and checks a record and
-`layoutTemplateIssues(record)` lists the problems, both on `@openpresentation/opf/composition`.
+`composeSlide` refuses such a record (`OPFLayoutTemplateError`). `layoutTemplate(record)` parses, checks and compiles a record
+and `layoutTemplateIssues(record)` lists the problems, both on `@openpresentation/opf/composition`.
+
+### How a record becomes a grid
+
+Every region list is a guillotine partition: each split cuts its cell across, all the way. So the engine compiles the tree
+into the grid it has always composed with, and composition, the renderer, the PPTX export and the editor read that grid:
+
+1. Each split divides its cell among its entries in proportion to their `size`; `auto` entries take the height their
+   content needs.
+2. The cuts of all splits along one axis are collected into the grid's tracks (rows and columns), and a region fills the
+   rectangle of tracks it covers.
+3. `layoutTemplate(record)` returns that grid (`rows` as numbers or `auto`, `columns`, a cell grid of names, the areas with
+   their spans) and the regions in reading order with every default and inherited `anchor` applied.
+
+Nested sizes are relative to the entry's own parent, so a split of `{ "size": 2 }` beside a region of `{ "size": 1 }` is
+twice as large, whatever its children's sizes. Because the grid is shared, the gaps between regions are the grid's gaps: a
+row of two regions inside a column puts one gap between the two columns, as the cell grid does. The 28 built-in layouts
+compile to exactly the grids they had in Gallery 4, so nothing they draw moved.
 
 ## Binding content to regions
 
@@ -91,13 +174,13 @@ kind `group`.
    joins step 2.
 2. **Everything else.** Of the regions that accept the block and have room, the lowest role rank wins (pictures:
    media, primary, secondary, supporting; every other kind: primary, secondary, supporting, media), then the first in
-   reading order (by top-left cell, row by row).
+   reading order (the order of the `regions` list, depth first).
 3. **No candidate.** The block goes to the overflow region whatever its `accepts` while it has room, and beyond `max`
    it is drawn there anyway with `opf/layout-unplaced` (`paginate` moves it to a continuation slide). A layout with no
    overflow region draws it in an implicit row below the grid.
 
 An empty region collapses into a neighbour that shares the full length of one of its edges (start side, end side, below,
-above; a body area before a heading area). Headings are centred vertically in their area unless every row it spans is
+above; a body region before a heading region). Headings are centred vertically in their region unless every row it spans is
 `auto`, so a `cover` or a title-only slide centres its title. A slide with promoted regions (`left`, `top:left`, ...)
 composes them as in 0.18.
 

@@ -36,14 +36,14 @@ test('contentDirection sets the root mode for blocks and root payloads, slide de
 test('explicit composition modes govern automatic content and templates preserve their grid', () => {
   const slide = {title: 'Blocks', blocks};
   assert.ok(isRow(composeSlide({...slide,composition:{mode:'row'}},{presentation:{design:{contentDirection:'vertical'}},explain:true})));
-  const template = {name:'Two columns',areas:[['title', 'title'],['a', 'b']],rows:['auto',1],columns:[1,1],regions:{a:{accepts:['text'],flow:'none'},b:{accepts:['text'],flow:'none'}}};
+  const template = {name:'Two columns',regions:[{name:'title'},{direction:'row',regions:[{name:'a',accepts:['text'],flow:'none'},{name:'b',accepts:['text'],flow:'none'}]}]};
   const control=composeSlide(slide,{layout:template});
   for(const direction of ['horizontal','vertical'])assert.deepEqual(boxes(composeSlide({...slide,design:{contentDirection:direction}},{layout:template})),boxes(control));
 });
 
 test('contentDirection leaves promoted regions and nested groups untouched', () => {
   const regions = {title: 'Regions', left: {text: 'L'}, right: {text: 'R'}};
-  const twoColumn = {id: 'two-column', design: {contentDirection: 'horizontal'}, composition: {mode: 'row', gap: 0.06}, areas: [["title"],["body-1"],["body-2"]], rows: ["auto",1,1], regions: {"body-1":{"accepts":["list"],"flow":"none"},"body-2":{"accepts":["list"],"flow":"none"}}};
+  const twoColumn = {id: 'two-column', design: {contentDirection: 'horizontal'}, composition: {mode: 'row', gap: 0.06}, regions: [{name: 'title'}, {name: 'body-1', accepts: ['list'], flow: 'none'}, {name: 'body-2', accepts: ['list'], flow: 'none'}]};
   for (const layout of [twoColumn, undefined]) {
     const control = composeSlide(regions, {layout, explain: true});
     const hinted = composeSlide(regions, {layout, presentation: {design: {contentDirection: 'vertical'}}, explain: true});

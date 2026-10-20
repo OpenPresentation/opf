@@ -1315,7 +1315,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: none
-- Purpose: Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions. A v2 layout defines its grid through areas, tracks and regions; its composition supports gap, padding, minFontSize and overflow rather than mode, columns or weights.
+- Purpose: Automatic slide and content-group arrangement. Nested content groups arrange their children independently, inheriting only minFontSize and overflow. Explicit promoted regions retain their positions. A layout defines its grid as one ordered list of regions; its composition supports gap, padding, minFontSize and overflow rather than mode, columns or weights.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |

@@ -271,8 +271,8 @@ _No named properties._
 - File: `spec/schemas/layout.schema.json`
 - Schema id: `https://openpresentation.org/schema/opf-layout/v2`
 - Type: `object`
-- Required fields: `$schema`, `id`, `name`, `areas`
-- Purpose: Schema for slide-layout records (OPF 0.19). A layout is a grid template: 'areas' names the cells of a grid using nested row arrays, 'columns' and 'rows' size its tracks, and 'regions' says, for every body area, which content kinds it takes and how several blocks share it. Slide content stays flat: engines bind a slide's blocks to the regions by reading order, role and kind (bindRegions in @openpresentation/opf), a block may pin itself to a region with 'region', and an empty region collapses i...
+- Required fields: `$schema`, `id`, `name`, `regions`
+- Purpose: Schema for slide-layout records. A layout is one ordered list of regions, declared once, in reading order: 'direction' says whether the record's 'regions' sit side by side (row) or are stacked (column), and each region says which content kinds it takes and how several blocks share it. A split is an entry that nests a second list the other way, which is how a layout gets two dimensions. 'title' and 'subtitle' are reserved heading regions. Engines compile the list into a grid of tracks (the gui...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -282,10 +282,9 @@ _No named properties._
 | `summary` | no | `string` | One-sentence positioning of the layout when to reach for it. |
 | `description` | no | `string` | Longer prose describing the layout structure and ideal use cases. |
 | `design` | no | `ref:DesignHints` | The layout's design defaults, with the same keys and values as the deck's design and a slide's design (a slide overrides exactly what its layout sets, by the same name). An absent key means the layout has no opinion.... |
-| `areas` | yes | `array<array<string>>` | The grid as nested arrays: each inner array is a row, each string is one cell, and a name repeated over adjacent cells spans them; '.' is an empty cell. Cells are lowercase names ([a-z][a-z0-9-]*) or '.', and every ro... |
-| `columns` | no | `array<number>` | Relative column widths, one per cell of a row; the columns share the content width in proportion, separated by the gap. Omitted: all 1. Columns are numbers only. |
-| `rows` | no | `array<oneOf:number / const:"auto">` | Relative row heights, one per string of 'areas'. 'auto' is the height the row's content needs at the starting text size (at most half the content box; areas that span several rows do not size it); the numeric rows sha... |
-| `regions` | no | `object` | One entry per body area, keyed by the area's name. Region names may not be 'title', 'subtitle', 'tag', 'auto' or one of the promoted-region words ('left', 'center', 'right', 'top', 'middle', 'bottom'), so a Markdown b... |
+| `direction` | no | `enum:row \| column` | How the record's 'regions' are laid out: 'row' places them side by side, left to right in reading order; 'column' stacks them top to bottom. Default 'column'. |
+| `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the content of every body region when it is shorter than the region. A split's 'anchor' replaces it for the regions under that split, and a region's own 'anchor' replaces both. Only 'anchor' is in... |
+| `regions` | yes | `array<ref:RegionEntry>` | The record's regions in reading order: 1 to 12 entries, each a region ({ name, size?, ...rules }) or a split ({ direction, regions, size?, anchor? }). Every region is declared once, here, with its content rules; a blo... |
 | `overflowRegion` | no | `string` | The region where content that no region accepts goes, whatever its 'accepts', while it has room; content beyond every region's room is drawn there too, with the warning opf/layout-unplaced. Omitted: the first primary... |
 | `tags` | no | `array<string>` | Free-form labels for filtering and search. |
 | `preview` | no | `object` | Visual previews of the record, used by picker UIs and inline rendering. All sub-fields are optional; engines fall back gracefully when previews aren't available. |
@@ -293,21 +292,63 @@ _No named properties._
 
 ### Nested Types
 
-#### Region
+#### RegionEntry
+
+- Type: `oneOf:ref:HeadingRegion / ref:Region / ref:Split`
+- Required fields: none
+- Purpose: One entry of a regions list: a heading region, a body region or a split.
+
+_No named properties._
+
+#### RegionSize
+
+- Type: `oneOf:number / const:"auto"`
+- Required fields: none
+- Purpose: The region's or split's share along its parent's direction: a number above 0 and up to 100 that siblings share in proportion (the gap is taken out first), default 1; or 'auto', the length the content needs at the starting text size (at most half the content box; a split sized auto is as tall as its tallest content, and every row of a column split sized auto is auto too; auto regions with no content take no space)....
+
+_No named properties._
+
+#### HeadingRegion
 
 - Type: `object`
-- Required fields: `accepts`
-- Purpose: One body region of a layout: which content it takes and how several blocks share it.
+- Required fields: `name`
+- Purpose: A reserved heading region: 'title' holds the slide's heading group (tag, title and subtitle, stacked) and 'subtitle' takes the subtitle out of it. A heading region takes only a size. At most one of each; a 'subtitle' needs a 'title'.
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `accepts` | yes | `array<enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A group is also accepted where every one of its leaf kinds is. |
+| `name` | yes | `enum:title \| subtitle` | 'title' or 'subtitle'. |
+| `size` | no | `ref:RegionSize` |  |
+
+#### Split
+
+- Type: `object`
+- Required fields: `direction`, `regions`
+- Purpose: A split nests a list of regions the other way inside one cell of its parent: a row of regions inside a column, or a column inside a row. It has no name; its regions are declared in reading order like the record's own. Splits nest at most three levels (the record's own list is level 1).
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `direction` | yes | `enum:row \| column` | How the split's 'regions' are laid out: 'row' side by side, 'column' stacked. |
+| `regions` | yes | `array<ref:RegionEntry>` | The split's regions in reading order: 1 to 12 regions and splits. |
+| `size` | no | `ref:RegionSize` |  |
+| `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the content of every body region under this split, unless the region sets its own. The heading regions 'title' and 'subtitle' never inherit it. |
+
+#### Region
+
+- Type: `object`
+- Required fields: `name`
+- Purpose: One body region of a layout: its name, its share of the space and the rules for which content it takes and how several blocks share it.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `name` | yes | `string` | The region's name, lowercase kebab-case, unique across the whole record. A block targets it with 'region': '<name>'. It may not be 'title' (those are heading regions), 'tag', 'auto' or one of the promoted-region words... |
+| `size` | no | `ref:RegionSize` |  |
+| `accepts` | no | `array<enum:text \| list \| image \| video \| chart \| table \| code \| metric \| quote \| timeline \| group>` | Content kinds the region takes: the body content kinds, and 'group' for a content group of any content. A group is also accepted where every one of its leaf kinds is. Omitted: every body content kind and 'group'. |
 | `role` | no | `enum:primary \| secondary \| media \| supporting` | Which content the region wants first. Binding gives a picture (image, video) to a media region first, then primary, secondary, supporting; every other kind to a primary region first, then secondary, supporting, media;... |
 | `flow` | no | `enum:none \| grid \| column \| auto` | How several blocks share the region: 'none' one block fills it; 'grid' by count (1 fills, 2 side by side, 3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6 as 3 x 2, 7 to 12 in four columns; rows and columns swap in a portrait re... |
 | `max` | no | `integer` | Blocks the region holds on one slide. Default 1 for flow 'none' (which requires 1), else 6. Content beyond every region's room is drawn in the overflow region with the warning opf/layout-unplaced, and paginate moves i... |
 | `bleed` | no | `boolean` | The region's outer edges that lie on the content box's edge extend to the slide edge, as a placed image does. A bled region is never drawn as a card. Default false. |
 | `listColumns` | no | `oneOf:const:"auto" / const:1` | 'auto': a list in the region that does not fit its cell at the starting size (a lone list, or one of several blocks) flows into up to three columns before it shrinks, as a list payload's columns: 'auto'. Default 1. |
-| `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the region's content when it is shorter than the region. Default 'top'. |
+| `anchor` | no | `enum:top \| middle \| bottom` | Vertical position of the region's content when it is shorter than the region. Replaces the 'anchor' of the record and of the splits around it. Default: the nearest of those that sets one, else 'top'. |
 | `empty` | no | `enum:collapse \| keep` | What the region does on a slide that gives it no content: 'collapse' (default) joins its cells to a neighbouring area that shares the full length of one of its edges and is not itself empty; 'keep' leaves the space. |
 
 #### DesignHints

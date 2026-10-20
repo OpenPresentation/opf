@@ -233,7 +233,8 @@ const contentBlocks = {
 };
 // Layout families and one slide builder that fills a template's regions.
 // Read the primary body kind from v2 template regions. Heading-only templates form the title family.
-const layoutKinds = record => Object.values(record.regions ?? {}).map(region => region.accepts.find(kind => kind !== 'group')).filter(Boolean);
+const flatRegions = list => (list ?? []).flatMap(entry => entry.regions ? flatRegions(entry.regions) : [entry]);
+const layoutKinds = record => flatRegions(record.regions).filter(region => region.accepts).map(region => region.accepts.find(kind => kind !== 'group')).filter(Boolean);
 const layoutFamily = record => layoutKinds(record)[0] ?? 'title';
 const LAYOUT_FAMILIES = [...new Set(catalogs.layouts.map(layoutFamily))].sort();
 const layoutMembers = (family) => catalogs.layouts.filter((record) => layoutFamily(record) === family).map((record) => record.id);
@@ -252,7 +253,7 @@ const templateBlock = {
 function layoutSlide(id, layoutId, text) {
   const record = byId('layouts', layoutId);
   const content = layoutKinds(record);
-  const heading = record.areas.some(row => row.includes('title'));
+  const heading = flatRegions(record.regions).some(region => region.name === 'title');
   const types = heading ? ['title', 'subtitle'] : [];
   return {id, layout: layoutId, ...(types.includes('title') ? {title: text.title} : {}), ...(types.includes('subtitle') ? {subtitle: text.subtitle} : {}), ...(content.length ? {blocks: content.map((type) => templateBlock[type](text))} : {})};
 }

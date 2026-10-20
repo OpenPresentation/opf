@@ -1,0 +1,1879 @@
+{
+  "agenda": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "items"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "items",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "items",
+        "accepts": [
+          "list",
+          "text"
+        ],
+        "role": "primary",
+        "flow": "column",
+        "max": 6,
+        "bleed": false,
+        "listColumns": "auto",
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "items",
+    "title": true,
+    "subtitle": false
+  },
+  "chart-beside": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      3,
+      2
+    ],
+    "grid": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "chart",
+        "notes"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 2,
+        "heading": true
+      },
+      {
+        "name": "chart",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "notes",
+        "row": 1,
+        "column": 1,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "chart",
+        "accepts": [
+          "chart"
+        ],
+        "role": "primary",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "notes",
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "quote",
+          "chart"
+        ],
+        "role": "supporting",
+        "flow": "column",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "title": true,
+    "subtitle": false
+  },
+  "chart": {
+    "rows": [
+      "auto",
+      1,
+      "auto"
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "charts"
+      ],
+      [
+        "note"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "charts",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "note",
+        "row": 2,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "charts",
+        "accepts": [
+          "chart",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "grid",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "note",
+        "accepts": [
+          "text"
+        ],
+        "role": "supporting",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "charts",
+    "title": true,
+    "subtitle": false
+  },
+  "closing": {
+    "rows": [
+      1,
+      "auto"
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "details"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "details",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "details",
+        "accepts": [
+          "text",
+          "list",
+          "image"
+        ],
+        "role": "supporting",
+        "flow": "auto",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "title": true,
+    "subtitle": false
+  },
+  "code": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      3,
+      2
+    ],
+    "grid": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "code",
+        "notes"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 2,
+        "heading": true
+      },
+      {
+        "name": "code",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "notes",
+        "row": 1,
+        "column": 1,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "code",
+        "accepts": [
+          "code"
+        ],
+        "role": "primary",
+        "flow": "column",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "notes",
+        "accepts": [
+          "text",
+          "list"
+        ],
+        "role": "supporting",
+        "flow": "column",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "code",
+    "title": true,
+    "subtitle": false
+  },
+  "comparison": {
+    "rows": [
+      "auto",
+      1,
+      "auto"
+    ],
+    "columns": [
+      1,
+      1
+    ],
+    "grid": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "first",
+        "second"
+      ],
+      [
+        "verdict",
+        "verdict"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 2,
+        "heading": true
+      },
+      {
+        "name": "first",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "second",
+        "row": 1,
+        "column": 1,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "verdict",
+        "row": 2,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 2,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "first",
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "image",
+          "chart",
+          "table",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "second",
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "image",
+          "chart",
+          "table",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "verdict",
+        "accepts": [
+          "text"
+        ],
+        "role": "supporting",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "title": true,
+    "subtitle": false
+  },
+  "cover": {
+    "rows": [
+      1
+    ],
+    "columns": [
+      1,
+      1
+    ],
+    "grid": [
+      [
+        "title",
+        "media"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "media",
+        "row": 0,
+        "column": 1,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "media",
+        "accepts": [
+          "image",
+          "video"
+        ],
+        "role": "media",
+        "flow": "none",
+        "max": 1,
+        "bleed": true,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "title": true,
+    "subtitle": false
+  },
+  "dashboard": {
+    "rows": [
+      "auto",
+      2,
+      3
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "kpis"
+      ],
+      [
+        "charts"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "kpis",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "charts",
+        "row": 2,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "kpis",
+        "accepts": [
+          "metric"
+        ],
+        "role": "secondary",
+        "flow": "grid",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "charts",
+        "accepts": [
+          "chart",
+          "table"
+        ],
+        "role": "primary",
+        "flow": "grid",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "charts",
+    "title": true,
+    "subtitle": false
+  },
+  "faq": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "questions"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "questions",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "questions",
+        "accepts": [
+          "list",
+          "text",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "column",
+        "max": 6,
+        "bleed": false,
+        "listColumns": "auto",
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "questions",
+    "title": true,
+    "subtitle": false
+  },
+  "gallery": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "pictures"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "pictures",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "pictures",
+        "accepts": [
+          "image",
+          "video",
+          "group"
+        ],
+        "role": "media",
+        "flow": "grid",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "title": true,
+    "subtitle": false
+  },
+  "hero": {
+    "rows": [
+      "auto",
+      2,
+      1
+    ],
+    "columns": [
+      1,
+      1
+    ],
+    "grid": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "lead",
+        "media"
+      ],
+      [
+        "support",
+        "support"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 2,
+        "heading": true
+      },
+      {
+        "name": "lead",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "media",
+        "row": 1,
+        "column": 1,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "support",
+        "row": 2,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 2,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "lead",
+        "accepts": [
+          "text",
+          "quote",
+          "metric"
+        ],
+        "role": "primary",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "media",
+        "accepts": [
+          "image",
+          "video"
+        ],
+        "role": "media",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "support",
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "group"
+        ],
+        "role": "supporting",
+        "flow": "grid",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "title": true,
+    "subtitle": false
+  },
+  "image-beside": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1,
+      1
+    ],
+    "grid": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "media",
+        "body"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 2,
+        "heading": true
+      },
+      {
+        "name": "media",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "body",
+        "row": 1,
+        "column": 1,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "media",
+        "accepts": [
+          "image",
+          "video"
+        ],
+        "role": "media",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "body",
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "quote",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "auto",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "middle",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "body",
+    "title": true,
+    "subtitle": false
+  },
+  "image": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "media"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "media",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "media",
+        "accepts": [
+          "image",
+          "video"
+        ],
+        "role": "media",
+        "flow": "none",
+        "max": 1,
+        "bleed": true,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "title": true,
+    "subtitle": false
+  },
+  "list": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "body"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "body",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "body",
+        "accepts": [
+          "list",
+          "text",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "auto",
+        "max": 6,
+        "bleed": false,
+        "listColumns": "auto",
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "body",
+    "title": true,
+    "subtitle": false
+  },
+  "logos": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "logos"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "logos",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "logos",
+        "accepts": [
+          "image",
+          "text",
+          "group"
+        ],
+        "role": "media",
+        "flow": "grid",
+        "max": 12,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "title": true,
+    "subtitle": false
+  },
+  "metrics": {
+    "rows": [
+      "auto",
+      1,
+      "auto"
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "metrics"
+      ],
+      [
+        "note"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "metrics",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "note",
+        "row": 2,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "metrics",
+        "accepts": [
+          "metric",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "grid",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "middle",
+        "empty": "collapse"
+      },
+      {
+        "name": "note",
+        "accepts": [
+          "text",
+          "list"
+        ],
+        "role": "supporting",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "metrics",
+    "title": true,
+    "subtitle": false
+  },
+  "pillars": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "pillars"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "pillars",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "pillars",
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "image",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "grid",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "pillars",
+    "title": true,
+    "subtitle": false
+  },
+  "process": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "steps"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "steps",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "steps",
+        "accepts": [
+          "timeline",
+          "list",
+          "text",
+          "metric",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "grid",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "steps",
+    "title": true,
+    "subtitle": false
+  },
+  "quote": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "quotes"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "quotes",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "quotes",
+        "accepts": [
+          "quote",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "grid",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "middle",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "quotes",
+    "title": true,
+    "subtitle": false
+  },
+  "scorecard": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "cards"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "cards",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "cards",
+        "accepts": [
+          "metric",
+          "text",
+          "list",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "grid",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "cards",
+    "title": true,
+    "subtitle": false
+  },
+  "section": {
+    "rows": [
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      }
+    ],
+    "regions": [],
+    "title": true,
+    "subtitle": false
+  },
+  "statement": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "message"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "message",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "message",
+        "accepts": [
+          "text",
+          "quote",
+          "metric"
+        ],
+        "role": "primary",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "middle",
+        "empty": "collapse"
+      }
+    ],
+    "title": true,
+    "subtitle": false
+  },
+  "table-beside": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      3,
+      2
+    ],
+    "grid": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "table",
+        "notes"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 2,
+        "heading": true
+      },
+      {
+        "name": "table",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "notes",
+        "row": 1,
+        "column": 1,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "table",
+        "accepts": [
+          "table"
+        ],
+        "role": "primary",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "notes",
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "quote"
+        ],
+        "role": "supporting",
+        "flow": "column",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "title": true,
+    "subtitle": false
+  },
+  "table": {
+    "rows": [
+      "auto",
+      1,
+      "auto"
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "table"
+      ],
+      [
+        "note"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "table",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "note",
+        "row": 2,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "table",
+        "accepts": [
+          "table"
+        ],
+        "role": "primary",
+        "flow": "column",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "note",
+        "accepts": [
+          "text"
+        ],
+        "role": "supporting",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "table",
+    "title": true,
+    "subtitle": false
+  },
+  "team": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "people"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "people",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "people",
+        "accepts": [
+          "group",
+          "image",
+          "text",
+          "quote"
+        ],
+        "role": "primary",
+        "flow": "grid",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "people",
+    "title": true,
+    "subtitle": false
+  },
+  "text": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "body"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "body",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "body",
+        "accepts": [
+          "text",
+          "list",
+          "quote",
+          "code",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "auto",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "overflowRegion": "body",
+    "title": true,
+    "subtitle": false
+  },
+  "timeline": {
+    "rows": [
+      "auto",
+      1,
+      "auto"
+    ],
+    "columns": [
+      1
+    ],
+    "grid": [
+      [
+        "title"
+      ],
+      [
+        "timeline"
+      ],
+      [
+        "notes"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": true
+      },
+      {
+        "name": "timeline",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "notes",
+        "row": 2,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "timeline",
+        "accepts": [
+          "timeline"
+        ],
+        "role": "primary",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "notes",
+        "accepts": [
+          "text",
+          "list",
+          "metric"
+        ],
+        "role": "supporting",
+        "flow": "auto",
+        "max": 6,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "title": true,
+    "subtitle": false
+  },
+  "two-column": {
+    "rows": [
+      "auto",
+      1
+    ],
+    "columns": [
+      1,
+      1
+    ],
+    "grid": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "first",
+        "second"
+      ]
+    ],
+    "areas": [
+      {
+        "name": "title",
+        "row": 0,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 2,
+        "heading": true
+      },
+      {
+        "name": "first",
+        "row": 1,
+        "column": 0,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      },
+      {
+        "name": "second",
+        "row": 1,
+        "column": 1,
+        "rowSpan": 1,
+        "columnSpan": 1,
+        "heading": false
+      }
+    ],
+    "regions": [
+      {
+        "name": "first",
+        "accepts": [
+          "text",
+          "list",
+          "quote",
+          "code",
+          "image",
+          "video",
+          "chart",
+          "table",
+          "metric",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      },
+      {
+        "name": "second",
+        "accepts": [
+          "text",
+          "list",
+          "quote",
+          "code",
+          "image",
+          "video",
+          "chart",
+          "table",
+          "metric",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "none",
+        "max": 1,
+        "bleed": false,
+        "listColumns": 1,
+        "anchor": "top",
+        "empty": "collapse"
+      }
+    ],
+    "title": true,
+    "subtitle": false
+  }
+}

@@ -14,8 +14,8 @@ test('tracked source retains 28 primary fixtures, all nine chart modes, measured
   assert.deepEqual(Object.keys(source.decks),PRIMARY_CASE_NAMES);
   assert.equal(Object.keys(source.chartFixture.decks).length,9);
   assert.equal(Object.keys(source.featureManifest).length,8);
-  assert.equal(source.decks['layout-empty-custom'].catalogs.custom.layouts.maximum.areas.length,12);
-  assert.equal(source.decks['layout-empty-custom'].catalogs.custom.layouts.maximum.areas[0].length,12);
+  assert.equal(source.decks['layout-empty-custom'].catalogs.custom.layouts.maximum.regions.length,12);
+  assert.equal(source.decks['layout-empty-custom'].catalogs.custom.layouts.maximum.regions[0].regions.length,12);
   assert.equal(source.decks['layout-title-auto'].slides.length,3);
   assert.equal(source.decks['chart-all-seven'].slides.length,7);
   assert.equal((await actionPlanFor('layout-title-auto'))[0].shapeName,'OPF heading slides.0.title line 0');
@@ -32,8 +32,8 @@ test('tracked source retains 28 primary fixtures, all nine chart modes, measured
   assert.deepEqual(await actionPlanFor('furniture-layouts'),[]);
   const witness=source.decks['layout-bleed-card'];
   assert.equal(witness.design.contentBox,true);
-  assert.equal(witness.catalogs.custom.layouts['bleed-card'].regions.media.bleed,true);
-  assert.deepEqual(witness.catalogs.custom.layouts['bleed-card'].areas,[['media','body']]);
+  assert.equal(witness.catalogs.custom.layouts['bleed-card'].regions[0].bleed,true);
+  assert.equal(witness.catalogs.custom.layouts['bleed-card'].direction,'row');
   assert.deepEqual(await actionPlanFor('layout-bleed-card'),[]);
   const table=tableColorDocument();assert.equal(table.document.slides.length,6);
   assert.equal(table.expected.length,6);assert.equal(table.expected.reduce((sum,slide)=>sum+slide.cells.length,0),24);

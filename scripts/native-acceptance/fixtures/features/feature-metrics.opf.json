@@ -59,27 +59,13 @@
           "design": {
             "contentAlignment": "center"
           },
-          "areas": [
-            [
-              "title"
-            ],
-            [
-              "metrics"
-            ],
-            [
-              "note"
-            ]
-          ],
-          "columns": [
-            1
-          ],
-          "rows": [
-            "auto",
-            1,
-            "auto"
-          ],
-          "regions": {
-            "metrics": {
+          "direction": "column",
+          "regions": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "metrics",
               "accepts": [
                 "metric",
                 "group"
@@ -88,7 +74,9 @@
               "flow": "grid",
               "anchor": "middle"
             },
-            "note": {
+            {
+              "name": "note",
+              "size": "auto",
               "accepts": [
                 "text",
                 "list"
@@ -96,7 +84,7 @@
               "role": "supporting",
               "flow": "none"
             }
-          },
+          ],
           "description": "Highlight a small set of important numbers. Give each number a label and the context needed to interpret it.",
           "preview": {
             "vectorSrc": "https://www.pptx.gallery/layout-previews/metrics.svg"
