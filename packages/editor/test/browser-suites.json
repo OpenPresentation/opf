@@ -89,6 +89,10 @@
           "command": "node test/review-hook-browser.mjs"
         },
         {
+          "id": "playground:source-pane-browser",
+          "command": "node test/source-pane-browser.mjs"
+        },
+        {
           "id": "playground:playground-download",
           "command": "node test/playground-download.mjs artifacts/playground-download"
         }

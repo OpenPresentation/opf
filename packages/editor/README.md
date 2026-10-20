@@ -85,6 +85,40 @@ Run `npm run test:json` and `npm run test:json-browser` for the focused model an
 
 Version 0.7.0 uses core 0.10.0 and renderer 0.8.0. Code source/metadata edits preserve line endings, literal tabs and cancellation/undo through accepted trace targets. Committed preview uses shared quote/code geometry; the active source textarea uses native browser editing. `paginateSlide` records a one-page readability-policy change in undo history, and an unchanged repeat is a no-op. Coordinated examples use PPTX 0.8.0 for exact code source/metadata recovery. Native formatting, font theme and geometry are not restored; quotes still import as editable text blocks with structure and readability-policy loss.
 
+## Source pane (RR-98)
+
+`createSourcePane` from `@openpresentation/opf-editor/source-pane` is the OPF source as JSON, YAML or Markdown, with the file name, the format menu, Format, Copy and Download, line numbers and the findings under the code. It is plain DOM and builds on `mountJsonCodeEditor`, `exact-source` and the field menu of `/json-options`; it adds no second editor and makes no network request.
+
+```js
+import { createSourcePane } from '@openpresentation/opf-editor/source-pane';
+const pane = createSourcePane(container, {
+  editor,                       // the editor session: every edit goes through editor.applyPatch
+  name: 'deck',                 // shown as deck.opf.json; spaces and slashes become "-"
+  onRename: name => save(name),
+  format: 'json',               // 'json' | 'yaml' | 'md'
+  onFormatChange: (format, previous) => remember(format),
+  source: authoredJson,         // optional: the JSON bytes to keep (formatting, escapes, key order)
+  findings: report.findings,    // or getFindings: () => validate(...).findings; default: the session's validation
+  onFindingSelect: (finding, line) => reveal(finding.path),
+  onCopy: file => clipboard.write(file.text),          // default: navigator.clipboard.writeText
+  onDownload: file => saveAs(file.filename, file.text), // default: a Blob link named <name>.opf.<ext>
+  density: 'comfortable',       // 'touch' makes the controls 40px
+  readOnly: false,
+});
+pane.setFormat('yaml'); pane.focusPath('/slides/1/title'); pane.getText(); pane.destroy();
+```
+
+Methods: `setFindings(list | null)`, `setFormat(format)`, `focusPath(pointer)` (moves the cursor to the line of a JSON Pointer in any format; exact for JSON, best effort for YAML and Markdown), `getText()`, `refresh()`, `setName`, `setDensity`, `setReadOnly` and `destroy()`. A finding is `{ path, message, severity, line? }` (core `Finding` objects fit). Rows show the path in mono and the line at the right; a click moves the cursor and calls `onFindingSelect`.
+
+- **JSON is canonical** and keeps the author's bytes: a YAML or Markdown edit rewrites only the changed JSON tokens (`exact-source`), and Undo restores the exact spelling.
+- **YAML and Markdown** are core's browser-safe converters, `@openpresentation/opf/yaml` and `/markdown`. Switching format writes the session's document in the new format. An edit parses back to the document and reaches the session as one `replace` patch, after a short delay (`applyDelay`, default 250 ms) so one burst of typing is one undo step. A syntax error, or an OPF rule the session refuses, is listed with its line and never reaches the document; Undo, Redo and outside edits replace a draft that did not parse.
+- **Nothing is lost silently.** Markdown writes what its dialect has no syntax for (a `design`, region keys, nested groups) as YAML in `opf-slide` and `opf-block` fences; each such part is a warning finding with its JSON Pointer and reason. Comments in YAML cannot survive a rewrite from the document: Format and outside edits drop them and say how many. A document that is not valid OPF cannot be written as YAML or Markdown; the pane stays in JSON and says so.
+- **Accessibility.** The format button (`aria-label="Source format"`) opens a `role="menu"` of `menuitemradio` items: Arrow keys, Home, End, Enter, Escape (focus returns to the button) and Tab. The file name is a button that becomes a text input; Enter or Escape commits. Controls show a 2px `--opf-ui-ring` focus outline.
+- **Styles.** `src/styles/source-pane.css` uses only `--opf-ui-*` tokens under the `opf-source-` prefix. It ships in the editor's `styles.css` (`@openpresentation/opf-editor/styles.css`), which also defines the tokens.
+- **Dependency.** `@codemirror/lang-yaml` (MIT) highlights YAML; Markdown uses a small stream tokenizer built on `@codemirror/language`, so no Markdown, HTML, CSS or JavaScript grammar is added.
+
+Icons are inline paths from [Lucide](https://lucide.dev) (ISC license). The harness is `examples/source-pane.html` (built by `npm run build:playground`); `npm run test:source-pane-browser` drives it.
+
 ## Scope
 
 - Package: `@openpresentation/opf-editor`

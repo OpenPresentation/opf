@@ -1,8 +1,9 @@
 import { Annotation, Compartment, EditorSelection, EditorState, Prec, StateEffect, StateField, Transaction } from "@codemirror/state";
 import { Decoration, EditorView, drawSelection, keymap, lineNumbers } from "@codemirror/view";
 import { defaultKeymap, history, historyKeymap, indentWithTab, isolateHistory, redo } from "@codemirror/commands";
-import { HighlightStyle, bracketMatching, codeFolding, foldKeymap, indentOnInput, indentUnit, syntaxHighlighting } from "@codemirror/language";
+import { HighlightStyle, StreamLanguage, bracketMatching, codeFolding, foldKeymap, indentOnInput, indentUnit, syntaxHighlighting } from "@codemirror/language";
 import { json, jsonParseLinter } from "@codemirror/lang-json";
+import { yaml } from "@codemirror/lang-yaml";
 import { closeBrackets, closeBracketsKeymap } from "@codemirror/autocomplete";
 import { highlightSelectionMatches, search, searchKeymap } from "@codemirror/search";
 import { linter } from "@codemirror/lint";
@@ -18,8 +19,57 @@ const highlightStyle = HighlightStyle.define([
   { tag: tags.string, class: "tok-str" },
   { tag: [tags.number, tags.bool, tags.null], class: "tok-num" },
   { tag: tags.punctuation, class: "tok-punct" },
-  { tag: tags.bracket, class: "tok-brace" }
+  { tag: tags.bracket, class: "tok-brace" },
+  { tag: tags.comment, class: "tok-comment" },
+  { tag: tags.heading, class: "tok-head" },
+  { tag: [tags.meta, tags.keyword, tags.operator], class: "tok-meta" }
 ]);
+// OPF Markdown: front matter, "---" slide rules, headings, fences, lists and HTML comments. A small stream tokenizer
+// keeps the bundle free of the full Markdown grammar (and of the HTML, CSS and JavaScript grammars it embeds).
+const markdownLanguage = StreamLanguage.define({
+  name: "opf-markdown",
+  startState: () => ({ line: 0, front: 0, fence: null, comment: false }),
+  token(stream, state) {
+    if (state.comment) {
+      if (stream.match(/^.*?-->/)) state.comment = false; else stream.skipToEnd();
+      return "comment";
+    }
+    if (stream.sol()) {
+      state.line++;
+      if (state.fence) {
+        if (stream.match(/^(```|~~~)\s*$/)) { state.fence = null; return "meta"; }
+        stream.skipToEnd();
+        return "string";
+      }
+      if (stream.match(/^---\s*$/)) {
+        if (state.front === 1) state.front = 2; else if (state.line === 1) state.front = 1;
+        return "meta";
+      }
+      if (stream.match(/^(```|~~~)/)) { state.fence = "fence"; stream.skipToEnd(); return "meta"; }
+      if (state.front === 1) {
+        if (stream.match(/^\s*[\w$.-]+(?=:)/)) return "property";
+        stream.next();
+        return null;
+      }
+      if (stream.match(/^#{1,6}\s.*$/)) return "heading";
+      if (stream.match(/^\s*([-*+]|\d+\.)\s/)) return "operator";
+      if (stream.match(/^Notes?:/)) return "keyword";
+      if (stream.match(/^>\s?/)) return "operator";
+    }
+    if (stream.match("<!--")) {
+      if (!stream.match(/^.*?-->/)) { stream.skipToEnd(); state.comment = true; }
+      return "comment";
+    }
+    if (stream.match(/^`[^`]*`/)) return "string";
+    stream.next();
+    return null;
+  }
+});
+function languageExtension(name) {
+  if (name === "yaml") return yaml();
+  if (name === "markdown") return markdownLanguage;
+  return [json(), linter(jsonParseLinter(), { delay: 500 }), fieldDecorations];
+}
 function indentation(source) {
   const spaces = source.match(/^[\t ]+(?=\S)/gm) ?? [];
   return spaces.some((value) => value.includes("	")) ? "	" : " ".repeat(spaces.length ? Math.min(8, ...spaces.map((value) => value.length)) : 2);
@@ -102,12 +152,14 @@ function skipDelimiter(view, delimiter) {
   return true;
 }
 function mountJsonCodeEditor(parent, options) {
-  const attributes = new Compartment(), indent = new Compartment();
+  const attributes = new Compartment(), indent = new Compartment(), language = new Compartment(), editable = new Compartment();
+  const editableExtension = (readOnly) => [EditorState.readOnly.of(Boolean(readOnly)), EditorView.editable.of(!readOnly)];
+  let languageName = options.language ?? "json";
   let disposed=false, menu=null, catalogs=options.catalogs??[], generation=0;
   function closeOptions(){generation++;menu?.destroy();menu=null;}
   async function openOptions(left,top){
     closeOptions();
-    if(disposed)return;
+    if(disposed||languageName!=="json")return;
     if(options.onOptions){options.onOptions(left,top);return;}
     const revision=generation,source=api.getValue(),selection=api.getSelection();
     try{
@@ -127,7 +179,8 @@ function mountJsonCodeEditor(parent, options) {
     autocorrect: "off"
   });
   const view = new EditorView({ parent, state: EditorState.create({ doc: options.code, extensions: [
-    json(),
+    language.of(languageExtension(languageName)),
+    editable.of(editableExtension(options.readOnly)),
     jsonSource.init(()=>options.code),jsonSourceHistory,
     indent.of(indentUnit.of(currentIndent)),
     indentOnInput(),
@@ -138,10 +191,8 @@ function mountJsonCodeEditor(parent, options) {
     codeFolding(),
     search({ top: true }),
     highlightSelectionMatches(),
-    linter(jsonParseLinter(), { delay: 500 }),
     syntaxHighlighting(highlightStyle),
     activeField,
-    fieldDecorations,
     attributes.of(contentAttributes()),
     options.lineNumbers ? lineNumbers() : [],
     EditorView.lineWrapping,
@@ -245,6 +296,15 @@ function mountJsonCodeEditor(parent, options) {
     api,
     openOptions,
     setCatalogs(value){catalogs=value??[];closeOptions();},
+    /** Switch the highlighting between "json" (with its parse linter, field highlights and option menu), "yaml" and "markdown". */
+    setLanguage(name){
+      if(name===languageName)return;
+      languageName=name;closeOptions();
+      view.dispatch({ effects: language.reconfigure(languageExtension(name)) });
+    },
+    setReadOnly(value){view.dispatch({ effects: editable.reconfigure(editableExtension(value)) });},
+    /** The CodeMirror view, for hosts that scroll or measure it. */
+    view,
     update(code, invalid=false, field=null, describedBy) {
       if(code!==api.getValue())closeOptions();
       const current = view.state.doc.toString(), normalized=textInputMap(code).text;

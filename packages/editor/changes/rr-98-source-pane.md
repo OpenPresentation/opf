@@ -1,0 +1,4 @@
+---
+type: added
+---
+RR-98: `createSourcePane` (`@openpresentation/opf-editor/source-pane`), the OPF source as JSON, YAML or Markdown with a renamable file name, a real format menu, Format, Copy and Download, line numbers and a collapsible findings list under the code whose rows move the cursor to their line (`focusPath`). JSON keeps its authored bytes; YAML and Markdown use core's converters, and every edit reaches the editor session as a patch. Markdown parts with no syntax (a `design`, region keys) and YAML comments that a rewrite drops are reported as warning findings, never silently. `mountJsonCodeEditor` gains `language` (`json`, `yaml`, `markdown`), `readOnly`, `setLanguage` and `setReadOnly`, and no longer throws when an outside update follows deleting the whole text. Adds `@codemirror/lang-yaml`.

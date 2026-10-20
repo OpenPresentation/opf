@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OPF source pane</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body { margin: 0; background: var(--opf-ui-bg); color: var(--opf-ui-fg); font: 13px Inter, system-ui, sans-serif; }
+.harness { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); height: 100vh; }
+#pane { min-width: 0; min-height: 0; border-right: 1px solid var(--opf-ui-border); }
+aside { display: flex; flex-direction: column; gap: 8px; padding: 12px; min-width: 0; overflow: auto; }
+aside h2 { margin: 0; font: 600 13px Inter, system-ui, sans-serif; }
+aside pre { margin: 0; padding: 8px; border: 1px solid var(--opf-ui-border); border-radius: 6px; background: var(--opf-ui-surface); font: 12px ui-monospace, Menlo, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
+.row { display: flex; flex-wrap: wrap; gap: 6px; }
+.row button { min-height: 32px; padding: 0 10px; border: 1px solid var(--opf-ui-border); border-radius: 6px; background: var(--opf-ui-surface); color: var(--opf-ui-fg); font: inherit; cursor: pointer; }
+@media (max-width: 720px) { .harness { grid-template-columns: 1fr; grid-template-rows: 60vh auto; height: auto; } }
+</style>
+</head>
+<body>
+<div class="harness">
+  <div id="pane"></div>
+  <aside>
+    <h2>Session</h2>
+    <div class="row">
+      <button id="demo-undo" type="button">Undo</button>
+      <button id="demo-redo" type="button">Redo</button>
+      <button id="demo-rename-slide" type="button">Retitle slide 1 outside</button>
+      <button id="demo-add-design" type="button">Give slide 1 a design</button>
+      <button id="demo-touch" type="button">Touch density</button>
+      <button id="demo-readonly" type="button">Toggle read only</button>
+    </div>
+    <pre id="doc" aria-label="Session document"></pre>
+    <h2>Events</h2>
+    <pre id="log" aria-label="Host callbacks"></pre>
+  </aside>
+</div>
+<script type="module" src="source-pane.js"></script>
+</body>
+</html>

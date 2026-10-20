@@ -6,7 +6,8 @@ import {textInputMap,preferredLineEnding} from './text-input.js';
 // field, and store only removed newline spellings in its existing undo history.
 export const setJsonSource=StateEffect.define();
 const restoreEndings=StateEffect.define({map:(endings,changes)=>{
-  const mapped=endings.map(({position,ending})=>({position:changes.mapPos(position,1,MapMode.TrackDel),ending})).filter(item=>item.position!==null);
+  // A position past the end of the changed document (the text was deleted, then replaced from outside) cannot be placed: drop it.
+  const mapped=endings.map(({position,ending})=>({position:position<=changes.length?changes.mapPos(position,1,MapMode.TrackDel):null,ending})).filter(item=>item.position!==null);
   return mapped.length?mapped:undefined;
 }});
 export const jsonSource=StateField.define({

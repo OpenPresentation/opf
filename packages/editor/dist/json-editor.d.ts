@@ -20,6 +20,9 @@ export interface JsonCodeEditorOptions {
   invalid?: boolean;
   describedBy?: string;
   lineNumbers?: boolean;
+  /** Highlighting and behavior: "json" (default) adds the parse linter, field highlights and the option menu. */
+  language?: "json" | "yaml" | "markdown";
+  readOnly?: boolean;
   catalogs?: JsonCatalogContext;
   /** Overrides the built-in menu, allowing an existing host UI to keep its appearance. */
   onOptions?(left?: number, top?: number): void;
@@ -32,6 +35,10 @@ export interface JsonCodeEditor {
   /** Apply external source without emitting onChange or adding a local undo step. */
   update(code: string, invalid?: boolean, field?: string | null, describedBy?: string): void;
   setCatalogs(catalogs: JsonCatalogContext): void;
+  setLanguage(language: "json" | "yaml" | "markdown"): void;
+  setReadOnly(readOnly: boolean): void;
+  /** The CodeMirror `EditorView`. */
+  readonly view: import("@codemirror/view").EditorView;
   openOptions(left?: number, top?: number): Promise<void>;
   destroy(): void;
 }
