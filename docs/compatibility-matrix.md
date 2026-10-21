@@ -11,16 +11,16 @@ version with the registry `gitHead` of its publisher commit.
 Earlier matrices and native observations retain their historical identities.
 Complete native compatibility remains a separate gate.
 
-## Published 0.20 contract
+## Published layout contract and the 0.20 engines
 
-Layout `areas` uses nested arrays of cell names. Repeated names span rectangular
-regions and `.` denotes an empty cell. Gallery owns every default record;
-Gallery 3 or 4 satisfies catalog compatibility generation 3 (Gallery 4 for core 0.24), while per-kind
-schema versions remain v2. Core 0.19 and later consume the Gallery package and
-do not export `@openpresentation/opf/catalog` or ship a catalog snapshot.
-
-FA-33 (core 0.25.0 and Gallery 5.0.0) replaces `areas` with one ordered list of regions, nested through splits, and needs Gallery 5 (catalog
-compatibility generation 4).
+A layout record is a `direction` and one ordered `regions` list of regions and
+splits, nested for two dimensions (FA-33: core 0.25.0 and Gallery 5.0.0, catalog
+compatibility generation 4). `areas`, `columns`, `rows` and the `regions` map are
+gone, and Gallery 3 and 4 records (generation 3, written as nested `areas`
+arrays) no longer validate on core 0.25. Gallery owns every default record;
+per-kind schema versions remain v2. Core 0.19 and later consume the Gallery
+package and do not export `@openpresentation/opf/catalog` or ship a catalog
+snapshot.
 
 The 0.20 engines share measured quote allocation, the 32 reference pixel
 starting size for lists without an authored size, neutral structural borders

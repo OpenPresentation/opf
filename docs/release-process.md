@@ -200,9 +200,8 @@ core's `^4.0.0` range could not ship it. While Gallery 5.0.0 was unpublished, `p
 gallery SHA, and the core pull request body carried `Candidate-Gallery: OpenPresentation/gallery@<sha>`. Gallery 5.0.0 is published and
 verified (tag `v5.0.0`, gitHead `eff55fdd9ce712813ef798dd9f2b50a37abada53`), and the registry-adoption pull request (FA-33: adopt gallery 5.0.0)
 moved the ranges in the root, core and CLI manifests to `^5.0.0` with the lockfile and deleted both the declaration and the configuration
-file. `release-plan.json` keeps describing the published set (core 0.24.2 and the Gallery 4.0.0 it depends on) until the 0.25.0 train publishes
-core and the CLI on Gallery 5; then the plan, the published consumer lock and the docs move to the new set, and
-`scripts/test-font-switch-ecosystem.mjs` drops its read of the old grid layout shape.
+file. `release-plan.json` now describes the published 0.25.0 set (core and the CLI on Gallery 5.0.0), and
+`scripts/test-font-switch-ecosystem.mjs` reads only the region-list layout shape.
 
 Before registry adoption, explicit authenticated candidate CI can stage reviewed gallery and engine tarballs
 (`scripts/candidate-gallery-build.mjs`, `scripts/pack-cli-candidate.mjs`, `scripts/pack-ecosystem.mjs`). Its recorded
