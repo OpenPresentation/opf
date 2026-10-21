@@ -190,9 +190,13 @@
       "types": "./dist/layout-templates.d.ts",
       "default": "./dist/layout-templates.js"
     },
-    "./custom-layout-editor": {
-      "types": "./dist/custom-layout-editor.d.ts",
-      "default": "./dist/custom-layout-editor.js"
+    "./layout-editor": {
+      "types": "./dist/layout-editor.d.ts",
+      "default": "./dist/layout-editor.js"
+    },
+    "./layout-tree": {
+      "types": "./dist/layout-tree.d.ts",
+      "default": "./dist/layout-tree.js"
     },
     "./outline-view": {
       "types": "./dist/outline-view.d.ts",
@@ -278,7 +282,7 @@
     "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
     "check:font-hotlinks:built": "node scripts/check-font-hotlinks.mjs --built dist artifacts/playground",
     "build:playground": "node scripts/build-playground.mjs",
-    "test:playground": "npm run build:playground && npm run check:font-hotlinks:built && node test/playground-pptx.mjs && node test/playground-script-fonts.mjs artifacts/playground-script-fonts && node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts && node test/playground-base-fonts.mjs artifacts/playground-base-fonts && node test/playground-source.mjs && node test/design-controls-browser.mjs && node test/design-gaps-browser.mjs && node test/chart-options-browser.mjs && node test/persistence-browser.mjs && node test/slides-browser.mjs && node test/slide-navigator-browser.mjs && node test/layout-templates-browser.mjs && node test/template-panel-browser.mjs && node test/numbering-panel-browser.mjs && node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts && node test/canvas-fonts-browser.mjs artifacts/canvas-fonts && node test/find-replace-browser.mjs && node test/image-crop-browser.mjs && node test/mobile-browser.mjs && node test/review-panel-browser.mjs && node test/review-hook-browser.mjs && node test/source-pane-browser.mjs && node test/playground-download.mjs artifacts/playground-download && node test/export-menu-browser.mjs && node test/agent-handoff-browser.mjs && node test/presenter-browser.mjs && node test/present-button-browser.mjs",
+    "test:playground": "npm run build:playground && npm run check:font-hotlinks:built && node test/playground-pptx.mjs && node test/playground-script-fonts.mjs artifacts/playground-script-fonts && node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts && node test/playground-base-fonts.mjs artifacts/playground-base-fonts && node test/playground-source.mjs && node test/design-controls-browser.mjs && node test/design-gaps-browser.mjs && node test/chart-options-browser.mjs && node test/persistence-browser.mjs && node test/slides-browser.mjs && node test/slide-navigator-browser.mjs && node test/layout-templates-browser.mjs && node test/layout-editor-browser.mjs && node test/template-panel-browser.mjs && node test/numbering-panel-browser.mjs && node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts && node test/canvas-fonts-browser.mjs artifacts/canvas-fonts && node test/find-replace-browser.mjs && node test/image-crop-browser.mjs && node test/mobile-browser.mjs && node test/review-panel-browser.mjs && node test/review-hook-browser.mjs && node test/source-pane-browser.mjs && node test/playground-download.mjs artifacts/playground-download && node test/export-menu-browser.mjs && node test/agent-handoff-browser.mjs && node test/presenter-browser.mjs && node test/present-button-browser.mjs",
     "test:code-browser": "node test/code-browser.mjs",
     "test:selection-browser": "node test/selection-browser.mjs",
     "test:click-entry-browser": "node test/click-entry-browser.mjs",
@@ -302,6 +306,7 @@
     "test:review-panel-browser": "node test/review-panel-browser.mjs",
     "test:review-hook-browser": "node test/review-hook-browser.mjs",
     "test:source-pane-browser": "node test/source-pane-browser.mjs",
+    "test:layout-editor-browser": "node test/layout-editor-browser.mjs",
     "test:export-license-browser": "node test/export-license-browser.mjs",
     "test:chart-options-browser": "node test/chart-options-browser.mjs",
     "test:numbering-panel-browser": "node test/numbering-panel-browser.mjs",

@@ -512,6 +512,52 @@ select {
   overflow: auto;
 }
 
+.layouts-view {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  padding: 8px 12px 12px;
+}
+
+.layouts-view[hidden] {
+  display: none;
+}
+
+.layouts-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.layouts-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--opf-ui-muted-fg);
+}
+
+.layouts-status {
+  font: 11.5px var(--opf-ui-mono);
+  color: var(--opf-ui-muted-fg);
+}
+
+.layouts-host {
+  flex: 1;
+  min-height: 0;
+}
+
+.editing-shell[data-view="layouts"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.editing-shell[data-view="layouts"] > .inspector {
+  display: none;
+}
+
 .canvas-scroll {
   display: flex;
   flex: 1;

@@ -26,31 +26,27 @@ try {
   await page.goto(`http://127.0.0.1:${server.address().port}/index.html`);
   await page.locator("#preview svg").waitFor({ timeout: 60000 });
   await page.getByRole("tab", { name: "Design" }).click();
+  // RR-99: "Build a custom layout" opens the Layouts view, the layout editor on the presentation's own custom layouts.
   await page.locator("#custom-layout").click();
-  const grid = page.locator("dialog.opf-grid-dialog[open]");
-  await grid.getByLabel("Layout ID").fill("review-grid");
-  await grid.getByLabel("Name", { exact: true }).fill("Review grid");
-  await grid.getByLabel("Summary").fill("Recommendation with notes");
-  const regionGroup = (label) => grid.getByRole("group", { name: label, exact: true });
-  assert.deepEqual(await grid.locator(".opf-grid-region legend").allTextContents(), ["title", "content"], "regions are listed in reading order");
-  assert.equal(await regionGroup("title").getByLabel("Role").count(), 0, "a heading region takes only a size");
-  // Split the content region: a row split holds it and a new region, and focus moves to the new region's name.
-  await grid.getByRole("button", { name: "Split content" }).click();
-  assert.equal(await grid.locator(".opf-grid-split").count(), 1);
-  assert.equal(await grid.locator("[data-control='name']").evaluateAll((nodes) => nodes.some((node) => node === document.activeElement)), true, "splitting a region focuses the new region");
-  await page.keyboard.press("ControlOrMeta+A");
-  await page.keyboard.type("notes");
-  assert.ok(await grid.locator(".opf-layout-diagram span[data-region='notes']").count() === 1, "the structure preview follows the region name");
-  await regionGroup("content").getByLabel("Size").fill("2");
-  await grid.getByRole("button", { name: "Move notes up" }).click();
-  assert.deepEqual(await grid.locator(".opf-grid-region legend").allTextContents(), ["title", "notes", "content"], "move up reorders the reading order");
-  await grid.getByRole("button", { name: "Move notes down" }).click();
-  await grid.getByRole("button", { name: /Add a region to this row/ }).click();
-  assert.equal(await grid.locator(".opf-grid-region").count(), 4);
-  await grid.getByRole("button", { name: "Remove region-1" }).click();
-  assert.deepEqual(await grid.locator(".opf-grid-region legend").allTextContents(), ["title", "content", "notes"]);
-  await grid.getByRole("button", { name: "Save layout" }).click();
-  await page.waitForFunction(() => !document.querySelector("dialog.opf-grid-dialog"));
+  const studio = page.locator("#layouts-view");
+  await studio.locator(".opf-lx-node").first().waitFor();
+  assert.equal(await page.locator("#view-layouts").getAttribute("aria-pressed"), "true");
+  assert.equal(await page.locator(".inspector").isVisible(), false, "the slide inspector gives way to the layout editor");
+  await studio.getByLabel("Id", { exact: true }).fill("review-grid");
+  await studio.getByLabel("Name", { exact: true }).fill("Review grid");
+  await studio.getByLabel("Summary").fill("Recommendation with notes");
+  assert.deepEqual(await studio.locator(".opf-lx-node[data-kind='region']").evaluateAll((nodes) => nodes.map((node) => node.dataset.name)), ["title", "content"], "regions are drawn in reading order");
+  // Split the content region into a row with the tool, then name and size the regions in the inspector.
+  await studio.getByRole("button", { name: "Split into a row" }).click();
+  const content = await studio.locator(".opf-lx-node[data-name='content']").boundingBox();
+  await page.mouse.click(content.x + content.width / 2, content.y + content.height / 2);
+  assert.equal(await studio.locator(".opf-lx-node[data-kind='split']").count(), 1, "a row split holds the region and the new one");
+  assert.ok(await studio.locator(".opf-lx-node[data-name='region-1'][aria-pressed='true']").count() === 1, "the new region is selected");
+  await studio.getByLabel("Name", { exact: true }).fill("notes");
+  await studio.getByRole("treeitem", { name: /^content/ }).locator("> .opf-lx-row").click();
+  await studio.getByLabel("Size", { exact: true }).fill("2");
+  await studio.getByRole("button", { name: "Save to deck" }).click();
+  await page.waitForFunction(() => /Saved review-grid/.test(document.querySelector("#layouts-status").textContent));
   const readDoc = async () => JSON.parse(await page.locator("#json").inputValue());
   let document = await readDoc();
   assert.deepEqual(document.catalogs.custom.layouts["review-grid"], {
@@ -58,11 +54,17 @@ try {
     regions: [
       { name: "title" },
       { direction: "row", regions: [
-        { name: "content", size: 2, accepts: ["text"], role: "primary", flow: "auto" },
-        { name: "notes", accepts: ["text"], role: "primary", flow: "auto" },
+        { name: "content", size: 2 },
+        { name: "notes" },
       ] },
     ],
   });
+  // Saving the same id again is refused for a new layout, and replaces it when the layout was opened from the deck.
+  await studio.getByLabel("Layout to edit").selectOption("review-grid");
+  await studio.getByRole("button", { name: "Save to deck" }).click();
+  assert.match(await page.locator("#layouts-status").textContent(), /Saved review-grid/);
+  await page.locator("#view-slide").click();
+  await page.locator("#preview svg").waitFor();
   await page.locator("#choose-layout").click();
   const picker = page.locator("dialog.opf-layout-dialog[open]");
   await picker.getByPlaceholder("Filter layouts").fill("review-grid");
@@ -91,8 +93,8 @@ try {
   await target.getByRole("button", { name: "Block 1" }).press("Space");
   await page.waitForFunction(() => JSON.parse(document.querySelector("#json").value).slides[0].blocks[0].region === "notes");
   await page.locator("#custom-layout").click();
-  await page.locator("dialog.opf-grid-dialog[open]").getByRole("button", { name: "Cancel" }).click();
-  assert.equal(await page.locator("#custom-layout").evaluate((node) => node === document.activeElement), true, "custom dialog restores opener focus");
+  assert.equal(await page.locator("#layouts-view").isVisible(), true, "the Design tab button opens the Layouts view again");
+  await page.locator("#view-slide").click();
   document = await readDoc();
   document.slides[0].blocks = [];
   await page.getByRole("button", { name: "Source", exact: true }).click();
@@ -111,7 +113,7 @@ try {
     await empty.press("Escape");
   }
   assert.deepEqual(errors, []);
-  console.log("layout browser: region-list editor, grouped picker, live preview, region placement and undo passed");
+  console.log("layout browser: Layouts mode, grouped picker, live preview, region placement and undo passed");
 } finally {
   await browser?.close();
   await new Promise((resolve) => server.close(resolve));

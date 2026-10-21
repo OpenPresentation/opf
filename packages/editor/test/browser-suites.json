@@ -57,6 +57,10 @@
           "command": "node test/layout-templates-browser.mjs"
         },
         {
+          "id": "playground:layout-editor-browser",
+          "command": "node test/layout-editor-browser.mjs"
+        },
+        {
           "id": "playground:template-panel-browser",
           "command": "node test/template-panel-browser.mjs"
         },

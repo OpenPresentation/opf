@@ -121,6 +121,67 @@ Methods: `setFindings(list | null)`, `setFormat(format)`, `focusPath(pointer)` (
 
 Icons are inline paths from [Lucide](https://lucide.dev) (ISC license). The harness is `examples/source-pane.html` (built by `npm run build:playground`); `npm run test:source-pane-browser` drives it.
 
+## Layout editor (RR-99)
+
+`createLayoutEditor` from `@openpresentation/opf-editor/layout-editor` is a Figma-style GUI for building one layout record: a `direction` plus an ordered `regions` list of regions and splits (FA-33). It is plain DOM, styled only by `--opf-ui-*` tokens (`src/styles/layout-editor.css`, shipped in `styles.css`), and makes no network request. It is built from four parts that are exported separately, so a host can arrange them differently:
+
+| Part | Export | Prefix |
+| --- | --- | --- |
+| Tool palette | `createLayoutToolPalette` | `opf-lx-palette`, `opf-lx-tool` |
+| Canvas: a 16:9 slide frame with the region tree as labeled boxes | `createLayoutCanvas` | `opf-lx-canvas`, `opf-lx-node` |
+| Layers: the tree of splits and regions, with the findings | `createLayoutTree` | `opf-lx-layers`, `opf-lx-tree` |
+| Inspector: the properties of the selection | `createLayoutInspector` | `opf-lx-inspector` |
+
+```js
+import { createLayoutEditor } from '@openpresentation/opf-editor/layout-editor';
+import { toSvg } from '@openpresentation/opf-render/svg';
+
+const layoutEditor = createLayoutEditor(container, {
+  record,                          // { id, name, direction, regions: [...] }; default: a title and one content region
+  onChange: (record) => save(record),   // after each edit, undo and redo (not after setRecord)
+  density: 'comfortable',          // 'touch' makes the controls 40px
+  toSvg, fonts,                    // optional: Preview draws the sample slide with the host's renderer and fonts handle
+});
+layoutEditor.getRecord();          // a copy of the record
+layoutEditor.setRecord(other);     // load a layout; clears the selection and the history
+layoutEditor.getFindings();        // core's findings: { ruleId, severity, message, path, node, field }
+layoutEditor.saveToDeck(session);  // writes catalogs.custom.layouts through saveCustomLayout, one undoable edit
+layoutEditor.applyToSlide(session, 0); // saves, then makes it slide 0's layout, in one undoable edit
+```
+
+To arrange the parts yourself, create one model and pass it to each part; `saveLayoutToDeck(session, model)` and `applyLayoutToSlide(session, model, slideIndex)` are the deck functions the composed editor calls.
+
+```js
+import { createLayoutModel, createLayoutToolPalette, createLayoutCanvas, createLayoutTree, createLayoutInspector } from '@openpresentation/opf-editor/layout-editor';
+const model = createLayoutModel({ record });
+createLayoutToolPalette(paletteHost, { model, orientation: 'horizontal' });
+createLayoutCanvas(canvasHost, { model });
+createLayoutTree(layersHost, { model });
+createLayoutInspector(inspectorHost, { model });
+```
+
+**Tools** (Figma-style shortcuts; the palette buttons have the same names): Select (V), Split into a row (R), Split into a column (C), Insert region (I), Heading regions (T), Hand (H, or hold Space) and Preview (P).
+- **Select:** click a region to select it; click again inside a selected split to select what is inside. Esc selects the parent. Shift-click adds a sibling. Double-click or F2 renames in place.
+- **Split into a row or column:** click a region. The original keeps its name and rules and the new one is called `region-N`; the tool returns to Select. In a list that already runs along that axis the new region is a sibling that shares the original's size, otherwise a split holds both. With a split tool active, Enter splits the selected region.
+- **Insert region:** slots appear between siblings and at a split's edges; click one (or Tab to it and press Enter).
+- **Heading regions:** a menu to add or remove the `title` and `subtitle` regions. Without a title region the engine adds an implicit title row, drawn as a dashed band.
+- **Hand:** pan a zoomed slide (zoom buttons, Ctrl or Cmd with the wheel).
+- **Preview:** placeholder blocks of each region's accepted kinds. With the host's `toSvg` (and its `fonts` handle) the sample slide is drawn by the renderer behind the region outlines; without them a wireframe is drawn. A layout with an error finding shows the wireframe.
+
+**Direct manipulation on the canvas:**
+- **Resize:** drag the divider between siblings. With other siblings the pair keeps its joint size and snaps to whole numbers and halves; alone in its list it snaps to the nearest whole-number ratio. The ratio shows while dragging ("2 : 1"); Shift skips snapping. Double-click a divider to make both sides equal. A divider next to an `auto` size is not a share and is fixed.
+- **Reorder and move:** drag a region (or several selected siblings) before or after a sibling, or into another split, with a drop indicator; a refused drop (too deep, a split into itself) shows the reason. The same drag works in the layers panel.
+- **Delete:** Delete or Backspace. A split left with one child collapses into it, and the child takes the split's size and inherited anchor. The last region of a layout is kept.
+- **Context menu** (right click, the menu key or Shift+F10): wrap in row, wrap in column, unwrap, duplicate, delete, rename.
+
+**Inspector:** with nothing selected, the layout (`id`, `name`, `summary`, `direction`, a default `anchor` that inherits down, `overflowRegion` as a picker over the body regions, and the design hints the record carries, which can be removed). A split has a `direction` toggle, `size` and `anchor`. A region has `name` (unique), `size` (a number, or `auto` only inside a column), `accepts` as chips (none selected means every kind), `role`, `flow`, `max`, `anchor` (shown as "Inherited" with its source while unset), `bleed`, `listColumns` and `empty`. A heading region takes only a size.
+
+**Validation and history:** every edit is checked live by core (`opf/layout-template` and `opf/layout-region`, plus the schema); the finding's region is highlighted on the canvas and in the layers panel, its message is under the field, and the findings are listed under the layers (click one to select its region). Edits that would break the layout (more than three levels, more than twelve entries, a grid over 12 by 12 tracks) are refused with the reason. The editor has its own undo and redo (Cmd or Ctrl+Z, Shift+Z; the buttons in the top bar); one drag is one step and typing a value is one step. `saveToDeck` refuses a layout with an error finding and an id the deck already has, unless `replace: true`.
+
+**Keyboard:** arrows move between siblings, Enter goes into a split and Esc goes up; `[` and `]` move a region earlier or later (at the end of a split it leaves the split); Shift with a bracket moves it into the neighboring split; Cmd or Ctrl+D duplicates; Delete deletes. A divider is `role="separator"` with `aria-valuenow` (the first side's share of the pair, in percent) and `aria-valuetext` ("2 : 1"); Arrow keys resize it by half a share (Shift: one), Enter makes the sides equal. The layers panel is `role="tree"` (Up and Down, Right to open or enter, Left to close or go to the parent, Home, End, F2). Every action is also a button in the inspector. Touch density makes controls 40px and the divider hit area wider; below 760px the palette is a row above the canvas and Layers and Inspector are tabs under it.
+
+The headless operations the editor runs are in `@openpresentation/opf-editor/layout-tree` (`splitRegion`, `wrapNodes`, `unwrapNode`, `moveNodes`, `deleteNodes`, `duplicateNodes`, `resizeSizes`, `layoutBoxes` and more): pure functions that return a new record and the paths to select, or throw a `LayoutOperationError` with the reason, and keep a core-valid record core-valid. `npm run test:layout-editor-browser` drives `examples/layout-editor.html` (built by `npm run build:playground`); the playground's Layouts view mounts the same editor on the presentation's custom layouts. Icons are inline paths from [Lucide](https://lucide.dev) (ISC license).
+
 ## Scope
 
 - Package: `@openpresentation/opf-editor`
@@ -510,7 +571,7 @@ editor.subscribe(() => manager.render());
 
 OPF layouts are one ordered list of named content regions, nested with splits for two dimensions (a record has a `direction` and `regions`). The slide manager's `openLayoutPicker("apply")` groups the 28 built-ins by intent and applies one to the current slide; `openLayoutPicker()` adds a slide. Pass `renderLayoutPreview(presentation, slideIndex, choice)` to render the current slide with each candidate through the shared renderer. The picker shows the record's `preview` when supplied, otherwise a diagram of its regions and splits. It retains content when switching.
 
-`@openpresentation/opf-editor/custom-layout-editor` exports `openCustomLayoutEditor(editor)`, the playground's region-list dialog. Regions are listed in reading order, each with its name, size (a share of the row or column, or `auto` in a column) and rules (the content kinds it accepts, role and flow); name a region `title` or `subtitle` to make it a heading that takes only a size. Choose a row or a column, then split a region to nest regions the other way inside it (up to three levels of lists, at most twelve entries each); a structure preview follows every change. Saving puts the record under `catalogs.custom.layouts` in one undoable transaction. The headless `layoutFromRegions`, `prepareCustomLayout`, `saveCustomLayout` and `pinBlockToRegion` operations are in `/layout-templates`. Canvas Arrange mode shows every template region; empty ones say “Drop content here”, and a top-level block can be dragged or chosen by keyboard for a validated region pin. A full or incompatible region refuses the edit instead of silently ignoring the pin. The host registers the 0.19 catalog with the session; the editor ships no catalog data.
+Layouts are built with the layout editor (see [Layout editor](#layout-editor-rr-99)); it replaces the earlier `openCustomLayoutEditor` dialog. The headless `layoutFromRegions`, `prepareCustomLayout`, `saveCustomLayout` (with `{ replace: true }` to edit a layout the deck already has) and `pinBlockToRegion` operations are in `/layout-templates`. Canvas Arrange mode shows every template region; empty ones say “Drop content here”, and a top-level block can be dragged or chosen by keyboard for a validated region pin. A full or incompatible region refuses the edit instead of silently ignoring the pin. The host registers the 0.19 catalog with the session; the editor ships no catalog data.
 
 `@openpresentation/opf-editor/outline` and `/outline-view` edit the deck as an outline: a row per slide title, subtitle, text paragraph and list item, and a read-only row for content that is not text (a chart, a table, an image) or text that carries formatting, so nothing is flattened away. Typing commits as one change when the row loses focus or on Enter. Enter adds a line (after a title: a slide), Alt+Up and Alt+Down move a bullet with the bullets nested under it, or a slide with its text, Alt+Shift+Right demotes and Alt+Shift+Left promotes. Demoting a bullet nests it (`level`); promoting a top-level bullet turns it into a new slide that takes the bullets after it; demoting a plain slide makes it a bullet of the slide before it (refused, with the reason, when that would drop content such as notes, blocks or a design). Backspace on an empty line removes it. Tab keeps moving focus, so the outline is no keyboard trap.
 

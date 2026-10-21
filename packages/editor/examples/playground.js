@@ -27,7 +27,7 @@ import { createSlideManager } from '../src/slide-manager.js';
 import { createSlideNavigator } from '../src/slide-navigator.js';
 import { createThumbnailStrip } from '../src/thumbnail-strip.js';
 import { createPresenter, createPresentButton, bindPresentShortcut } from '../src/presenter.js';
-import { openCustomLayoutEditor } from '../src/custom-layout-editor.js';
+import { blankLayoutRecord, createLayoutEditor } from '../src/layout-editor.js';
 import { prepareDimensionSwitch } from '../src/switches.js';
 import { createOutlineView } from '../src/outline-view.js';
 import { splitSlideByBlocks, mergeSlides } from '../src/content-actions.js';
@@ -173,7 +173,7 @@ const slideDensity = window.matchMedia('(pointer: coarse)').matches ? 'touch' : 
 const slideNav = createSlideNavigator(element('slide-nav'), {editor, slideIndex, density: slideDensity, onChange: value => { slideIndex = value; refresh(); }});
 slideNav.bindKeys(document);
 const thumbStrip = createThumbnailStrip(element('thumb-strip'), {editor, fonts, renderOptions: {}, slideIndex, density: slideDensity, labels: {navigation: 'Slide thumbnails'}, onSelect: value => { if (value !== slideIndex) { slideIndex = value; refresh(); } }, onError: error => status(error.message)});
-let sorter, outline, activeView = 'slide';
+let sorter, outline, layoutEditor, activeView = 'slide';
 function renderNavigator(deck) {
   element('slide-count').textContent = deck.slides.length;
   thumbnailCache.prepare(deck);
@@ -187,18 +187,61 @@ function showView(view, focus = false) {
   activeView = view;
   if (view === 'sorter' && !sorter) sorter = createSlideManager(element('sorter-list'), {...slideManagerOptions, variant: 'sorter'});
   if (view === 'outline' && !outline) outline = createOutlineView(element('outline-view'), {editor, onSelectSlide: index => { if (index !== slideIndex) { slideIndex = index; refresh(); } }, getSlideIndex: () => slideIndex, onStatus: message => status(message)});
-  for (const name of ['slide', 'sorter', 'outline']) element(`view-${name}`).setAttribute('aria-pressed', String(name === view));
+  if (view === 'layouts') mountLayouts();
+  for (const name of ['slide', 'sorter', 'outline', 'layouts']) element(`view-${name}`).setAttribute('aria-pressed', String(name === view));
   document.querySelector('.canvas-scroll').hidden = view !== 'slide';
   element('sorter-view').hidden = view !== 'sorter';
   element('outline-view').hidden = view !== 'outline';
+  element('layouts-view').hidden = view !== 'layouts';
+  document.querySelector('.editing-shell').dataset.view = view;
   document.querySelector('.canvas-column').dataset.view = view;
   for (const id of ['insert-content', 'arrange', 'zoom']) element(id).disabled = view !== 'slide';
   if (view === 'sorter') { sorter.render(); if (focus) sorter.focus(slideIndex); }
   if (view === 'outline') { outline.render(); if (focus) outline.focusSlide(slideIndex); }
   if (view === 'slide' && canvas) canvas.setSlide(slideIndex);
-  status(view === 'slide' ? 'Slide view' : view === 'sorter' ? 'Slide sorter: drag slides, or use Alt and the arrow keys, to reorder' : 'Outline: edit titles and text as an outline');
+  status(view === 'slide' ? 'Slide view' : view === 'sorter' ? 'Slide sorter: drag slides, or use Alt and the arrow keys, to reorder' : view === 'layouts' ? 'Layouts: build a layout from regions and splits, then save it to this presentation' : 'Outline: edit titles and text as an outline');
 }
-for (const view of ['slide', 'sorter', 'outline']) element(`view-${view}`).onclick = () => showView(view, true);
+for (const view of ['slide', 'sorter', 'outline', 'layouts']) element(`view-${view}`).onclick = () => showView(view, true);
+
+// RR-99: Layouts is the layout editor (palette, canvas, layers, inspector) on the presentation's own custom layouts. It edits one layout
+// record at a time; Save to deck writes it to catalogs.custom.layouts (one undoable edit) and Use on this slide applies it.
+function customLayouts() { return editor.presentation.catalogs?.custom?.layouts ?? {}; }
+function freeLayoutId() {
+  const taken = customLayouts();
+  if (!taken['my-layout']) return 'my-layout';
+  for (let n = 2; ; n++) if (!taken[`my-layout-${n}`]) return `my-layout-${n}`;
+}
+function layoutsStatus(message) { element('layouts-status').textContent = message; }
+function refreshLayoutPick() {
+  const select = element('layouts-pick');
+  const current = select.value;
+  select.replaceChildren(new Option('New layout', ''), ...Object.entries(customLayouts()).map(([id, record]) => new Option(`${record.name || id} (${id})`, id)));
+  select.value = current in customLayouts() ? current : '';
+}
+function loadLayout(id) {
+  const record = id ? { id, ...structuredClone(customLayouts()[id]) } : { ...blankLayoutRecord(), id: freeLayoutId() };
+  layoutEditor.setRecord(record);
+  layoutsStatus(id ? `Editing ${id}. Save to deck replaces it.` : 'A new layout. Save to deck adds it to this presentation.');
+}
+function mountLayouts() {
+  refreshLayoutPick();
+  if (layoutEditor) return;
+  layoutEditor = createLayoutEditor(element('layouts-host'), {
+    record: { ...blankLayoutRecord(), id: freeLayoutId() }, toSvg, fonts, renderOptions,
+    density: matchMedia('(pointer: coarse)').matches ? 'touch' : 'comfortable',
+  });
+  element('layouts-pick').onchange = () => loadLayout(element('layouts-pick').value);
+  element('layouts-save').onclick = () => {
+    const replace = element('layouts-pick').value === layoutEditor.getRecord().id;
+    try { const change = layoutEditor.saveToDeck(editor, { replace }); refreshLayoutPick(); element('layouts-pick').value = change.layoutId; layoutsStatus(`Saved ${change.layoutId} in custom layouts`); status(`Saved ${change.layoutId} in custom layouts`); }
+    catch (error) { layoutsStatus(error.issues?.[0]?.message ?? error.message); }
+  };
+  element('layouts-apply').onclick = () => {
+    try { const change = layoutEditor.applyToSlide(editor, slideIndex); refreshLayoutPick(); element('layouts-pick').value = change.layoutId; layoutsStatus(`Slide ${slideIndex + 1} now uses ${change.layoutId}`); }
+    catch (error) { layoutsStatus(error.issues?.[0]?.message ?? error.message); }
+  };
+  loadLayout('');
+}
 
 function act(callback) {
   try { callback(); status(renderError ?? 'Changes saved in this session'); }
@@ -332,7 +375,7 @@ element('add').onclick = () => act(() => {
 });
 element('add-layout').onclick = () => slideManager.openLayoutPicker();
 element('choose-layout').onclick = () => slideManager.openLayoutPicker('apply');
-element('custom-layout').onclick = () => openCustomLayoutEditor(editor, { onSave: layout => status(`Saved ${layout.record.name} in custom layouts`) });
+element('custom-layout').onclick = () => { showView('layouts', true); element('layouts-pick').value = ''; loadLayout(''); };
 let applying = false;
 // Also the gallery handoff: it fills #json and clicks this button in the same tick, without waiting for the source preview.
 element('apply-json').onclick = async event => {

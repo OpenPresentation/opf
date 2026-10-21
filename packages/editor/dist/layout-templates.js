@@ -118,11 +118,11 @@ export function layoutFromRegions({ id, name, summary, direction = "column", anc
   return { id, record };
 }
 
-/** Prepare one validated catalog edit. Existing custom ids are never silently overwritten. */
-export function prepareCustomLayout(presentation, layout) {
+/** Prepare one validated catalog edit. Existing custom ids are never silently overwritten, unless the caller says `replace: true` (editing a layout the deck already has). */
+export function prepareCustomLayout(presentation, layout, options = {}) {
   const { id, record } = layout;
   if (!NAME.test(id) || id === "auto") throw fail("layout-id", "Choose a kebab-case layout id other than auto.");
-  if (presentation.catalogs?.custom?.layouts?.[id]) throw fail("layout-exists", `A custom layout named ${id} already exists.`);
+  if (presentation.catalogs?.custom?.layouts?.[id] && !options.replace) throw fail("layout-exists", `A custom layout named ${id} already exists.`);
   const custom = presentation.catalogs?.custom ?? {};
   const next = { ...presentation, catalogs: { ...presentation.catalogs, custom: { ...custom, layouts: { ...custom.layouts, [id]: record } } } };
   const patches = [{ op: "replace", path: "", value: next }];
@@ -130,8 +130,8 @@ export function prepareCustomLayout(presentation, layout) {
   return { presentation: next, patches, id };
 }
 
-export function saveCustomLayout(editor, layout) {
-  const prepared = prepareCustomLayout(editor.presentation, layout);
+export function saveCustomLayout(editor, layout, options = {}) {
+  const prepared = prepareCustomLayout(editor.presentation, layout, options);
   return editor.applyPatch(prepared.patches, { source: "layout-regions", rejectInvalid: true });
 }
 

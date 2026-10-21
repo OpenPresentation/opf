@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OPF layout editor</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body { margin: 0; background: var(--opf-ui-bg); color: var(--opf-ui-fg); font: 13px Inter, system-ui, sans-serif; }
+.harness { display: flex; flex-direction: column; gap: 8px; height: 100vh; padding: 8px; box-sizing: border-box; }
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.bar button { min-height: 32px; padding: 0 10px; border: 1px solid var(--opf-ui-border); border-radius: 6px; background: var(--opf-ui-surface); color: var(--opf-ui-fg); font: inherit; cursor: pointer; }
+.bar output { font: 11.5px ui-monospace, Menlo, monospace; color: var(--opf-ui-muted-fg); }
+#editor { flex: 1; min-height: 0; }
+.parts { display: none; flex: 1; min-height: 0; gap: 8px; grid-template-columns: minmax(0, 1fr) 300px; grid-template-rows: auto minmax(0, 1fr) 200px; grid-template-areas: "palette inspector" "canvas inspector" "layers inspector"; }
+.parts > div { min-width: 0; min-height: 0; border: 1px solid var(--opf-ui-border); border-radius: 8px; overflow: hidden; display: flex; flex-direction: column; }
+#p-palette { grid-area: palette; } #p-canvas { grid-area: canvas; } #p-layers { grid-area: layers; } #p-inspector { grid-area: inspector; }
+body.arranged .parts { display: grid; } body.arranged #editor { display: none; }
+details { font: 11.5px ui-monospace, Menlo, monospace; }
+pre { margin: 4px 0 0; max-height: 160px; overflow: auto; padding: 6px; border: 1px solid var(--opf-ui-border); border-radius: 6px; background: var(--opf-ui-surface); }
+</style>
+</head>
+<body>
+<div class="harness">
+  <div class="bar">
+    <button id="save" type="button">Save to deck</button>
+    <button id="replace" type="button">Save replacing</button>
+    <button id="apply" type="button">Apply to slide 1</button>
+    <button id="load-hero" type="button">Load hero</button>
+    <button id="blank" type="button">Blank</button>
+    <output id="result" aria-live="polite"></output>
+  </div>
+  <div id="editor"></div>
+  <div class="parts"><div id="p-palette"></div><div id="p-canvas"></div><div id="p-layers"></div><div id="p-inspector"></div></div>
+  <details><summary>Record, deck and callbacks</summary><pre id="log" aria-label="Host callbacks"></pre></details>
+</div>
+<script type="module" src="layout-editor.js"></script>
+</body>
+</html>

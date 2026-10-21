@@ -24,6 +24,12 @@ await build({
   outfile: fileURLToPath(new URL('source-pane.js', output)),
   bundle: true, platform: 'browser', format: 'esm', minify: true,
 });
+// RR-99: the layout editor harness, another small page next to the playground.
+await build({
+  entryPoints: [fileURLToPath(new URL('examples/layout-editor.js', root))],
+  outfile: fileURLToPath(new URL('layout-editor.js', output)),
+  bundle: true, platform: 'browser', format: 'esm', minify: true,
+});
 // The renderer's fonts handle for the Office pack: its registry's eager faces are the page's startup faces, its registry lists the vendored ones.
 const officeFonts = await renderFonts.loadFonts({ pack: 'office' });
 const isStartup = face => face.family === 'Roboto' && face.weight === 400 && !face.italic;
@@ -91,4 +97,5 @@ const sourceCheckout = await stat(stylesSource).then(entry => entry.isDirectory(
 await writeFile(new URL('styles.css', output), sourceCheckout ? (await (await import('./build-styles.mjs')).buildStyles(stylesSource)).css : await readFile(new URL('dist/styles.css', root)));
 // RR-98: the source pane harness page (it links the same styles.css).
 await copyFile(new URL('examples/source-pane.html', root), new URL('source-pane.html', output));
+await copyFile(new URL('examples/layout-editor.html', root), new URL('layout-editor.html', output));
 console.log(`Browser editor built in ${fileURLToPath(output)} (${splitFonts ? 'eager faces split: Roboto Regular at start, the rest on demand; ' : ''}${scriptFaces} lazy script faces, ${lazyFaces} lazy preview faces)`);
