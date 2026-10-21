@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-editor",
-  "version": "0.24.3",
+  "version": "0.25.0",
   "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
   "license": "MIT",
   "type": "module",
@@ -315,9 +315,6 @@
     "test:export-menu-browser": "node test/export-menu-browser.mjs",
     "test:agent-handoff-browser": "node test/agent-handoff-browser.mjs"
   },
-  "opf": {
-    "requiresUnreleasedCore": "0.25.0"
-  },
   "dependencies": {
     "@codemirror/autocomplete": "6.20.3",
     "@codemirror/commands": "6.11.1",
@@ -329,11 +326,11 @@
     "@codemirror/state": "6.7.6",
     "@codemirror/view": "6.43.14",
     "@lezer/highlight": "1.2.5",
-    "@openpresentation/opf": "^0.24.2",
+    "@openpresentation/opf": "^0.25.0",
     "jsonc-parser": "3.3.1"
   },
   "peerDependencies": {
-    "@openpresentation/opf-render": "^0.24.3"
+    "@openpresentation/opf-render": "^0.25.0"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
@@ -386,8 +383,8 @@
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/stix-two-math": "0.4.0",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf-pptx": "^0.24.1",
-    "@openpresentation/opf-render": "^0.24.3",
+    "@openpresentation/opf-pptx": "^0.25.0",
+    "@openpresentation/opf-render": "^0.25.0",
     "@resvg/resvg-js": "2.6.2",
     "axe-core": "4.14.0",
     "esbuild": "0.28.2",
