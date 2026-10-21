@@ -11,6 +11,7 @@ import {
   galleryItemUrl,
   normalizeGalleryUrl,
 } from "../src/galleries.js";
+import { DECK_FILE_ACCEPT, readDeckFile } from "../src/read-deck-file.js";
 import { toSvg } from "@openpresentation/opf-render/svg";
 import { whenFontsReady } from "../src/font-gate.js";
 import { readPptxFile, showConversionDiagnostics } from './pptx-controls.js';
@@ -299,7 +300,13 @@ export function installTransferControls({
       if (file.size > MAX_OPF_BYTES)
         throw new Error("Choose a file smaller than 20 MB.");
       const pptx = /\.pptx$/i.test(file.name) || file.type === 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
-      const result = pptx ? await readPptxFile(file) : { presentation: await file.text() };
+      // RR-98: a deck file is JSON, YAML or Markdown (readDeckFile detects which). JSON that is not a deck (a snippet, a slide, a block) takes the paste path.
+      let deckFile;
+      if (!pptx) {
+        try { deckFile = await readDeckFile(file, { catalogs: editor.catalogs }); }
+        catch (cause) { if (cause?.code !== "not-a-deck") throw cause; }
+      }
+      const result = pptx ? await readPptxFile(file) : { presentation: deckFile ? deckFile.document : await file.text() };
       if (id !== requestId || !importDialog.open) return;
       if (pptx) {
         $("import-conversion").hidden = false;
@@ -312,11 +319,13 @@ export function installTransferControls({
       } else {
         receive(result.presentation);
       }
-      $("file-name").textContent = file.name;
+      $("file-name").textContent = deckFile?.findings.length ? `${file.name} · ${deckFile.findings.length} ${deckFile.findings.length === 1 ? "note" : "notes"} from reading it as ${deckFile.format === "md" ? "Markdown" : "YAML"}` : file.name;
     } catch (cause) {
       if (id === requestId) error(cause.message);
     }
   }
+  // RR-98: the file input takes every deck format readDeckFile reads, and PowerPoint.
+  $("opf-file").accept = `${DECK_FILE_ACCEPT},.pptx,application/json,application/vnd.openxmlformats-officedocument.presentationml.presentation`;
   $("choose-opf-file").onclick = () => $("opf-file").click();
   $("opf-file").onchange = () => {
     loadFile($("opf-file").files[0]);
@@ -572,8 +581,8 @@ export function installTransferControls({
     const file = event.dataTransfer?.files?.[0];
     if (!file) return;
     event.preventDefault();
-    if (!/\.(opf|json|pptx)$/i.test(file.name)) {
-      status("Drop an .opf, .json or .pptx file to import it.");
+    if (!/\.(opf|json|ya?ml|md|pptx)$/i.test(file.name)) {
+      status("Drop an .opf, .json, .yaml, .md or .pptx file to import it.");
       return;
     }
     if (importDialog.open) showTab("file");

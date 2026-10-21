@@ -26,6 +26,7 @@ import { createPersistenceUi } from '../src/persistence-ui.js';
 import { createSlideManager } from '../src/slide-manager.js';
 import { createSlideNavigator } from '../src/slide-navigator.js';
 import { createThumbnailStrip } from '../src/thumbnail-strip.js';
+import { createPresenter, createPresentButton, bindPresentShortcut } from '../src/presenter.js';
 import { openCustomLayoutEditor } from '../src/custom-layout-editor.js';
 import { prepareDimensionSwitch } from '../src/switches.js';
 import { createOutlineView } from '../src/outline-view.js';
@@ -439,6 +440,16 @@ const galleryConfig=await fetch('./galleries.json').then(response=>{if(!response
 installTransferControls({editor,getCanvas:()=>canvas,getSlideIndex:()=>slideIndex,getSelectedPath:()=>selectedPath,setSlideIndex:value=>{slideIndex=value;},status,galleries:galleryConfig,fonts});
 // RR-98: one Export menu: PowerPoint, PDF, SVG and PNG from the same drawing as the preview, the OPF source as JSON, YAML or Markdown, and the agent handoff.
 const exportMenu = installExportMenu({editor,getCanvas:()=>canvas,status,fonts,measurementFor:deck=>layoutFor(deck,0).fonts.textMeasurement,persistence:()=>persistence,container:element('export-menu')});
+
+// RR-98: Present. Full screen, one slide at a time, drawn by the preview's renderer, catalogs and fonts handle. The button and F5 start it on the
+// current slide (an open canvas edit is committed first); leaving it returns to the slide the presentation ended on.
+const presenter = createPresenter(document.body, {editor, fonts, renderOptions: {}, density: slideDensity, onExit: index => { if (index >= 0 && index !== slideIndex) { slideIndex = index; refresh(); } }});
+function present() {
+  if (presenter.isRunning() || (canvas && !canvas.commit())) return;
+  presenter.start(slideIndex);
+}
+createPresentButton(element('present-button'), {onPresent: present, density: slideDensity});
+bindPresentShortcut(document, present);
 
 let propertiesInspector,propertiesPreviewToken=0;
 const propertiesDialog=element('properties-dialog');

@@ -831,6 +831,67 @@ const dialog = createAgentHandoffDialog(document.body, { document: deck, target:
 
 Icons are inlined path data from [Lucide](https://lucide.dev) (ISC license), never loaded from a CDN.
 
+## Presenter and Present button (RR-98)
+
+`@openpresentation/opf-editor/presenter` shows the deck full screen, one slide at a time. It is plain DOM like the other modules, with no network, no fonts or CSS fetched at runtime, and no second renderer: slides are drawn by `toSvg` with the same fonts handle, catalogs and render options the canvas and the thumbnails use. Its CSS is `src/styles/presenter.css` (classes `opf-presenter-*` and `opf-present-button`; `--opf-ui-*` tokens only, part of `styles.css`). The module needs `@openpresentation/opf-render`, an optional peer, like the thumbnail strip.
+
+```js
+import { createPresenter, createPresentButton, bindPresentShortcut } from "@openpresentation/opf-editor/presenter";
+
+const presenter = createPresenter(document.body, {
+  editor,                      // or presentation: deck (an object, or a function returning it)
+  fonts,                       // the renderer's fonts handle, the same one the canvas and the exports use
+  renderOptions: { catalogs }, // merged after the session's catalogs
+  slideIndex: current,         // the slide start() opens on (default 0)
+  onSlideChange: (index) => {},  // the shown slide changed (deck index)
+  onExit: (index) => { current = index; redraw(); }, // by any route: the host returns to that slide
+  density: "comfortable",      // "touch": the exit button is 40px
+});
+createPresentButton(document.querySelector("#present"), { onPresent: () => presenter.start(current) });
+bindPresentShortcut(document, () => presenter.start(current)); // F5
+```
+
+`createPresenter(container, options)` returns `{ element, start(slideIndex?), stop(), next(), previous(), goTo(index), getSlide(), isRunning(), destroy() }`. The presenter stays hidden until `start`. Call `start` from a user gesture (a click or a key press): the browser grants full screen only then. `start` resolves `"fullscreen"` or `"overlay"`.
+
+- **Display.** The presenter's own element goes full screen through the Fullscreen API. When the browser refuses (no gesture, an iframe without `allow="fullscreen"`, iPhone Safari), the same element is a fixed overlay over the window, so everything below works the same. Slides fill the viewport and letterbox on black. The next and previous slides are drawn ahead, so advancing draws nothing. Slides draw with their `{{variables}}` resolved, as the exports do.
+- **Navigation.** Right, Space, PageDown and Enter go forward; Left, PageUp and Backspace go back; Home and End jump; Esc exits. A click advances, and a click on the left third goes back. On touch, a swipe left goes forward and a swipe right goes back; a tap uses the same zones. Keys with Ctrl, Alt or Meta are left to the browser, and the keys the presenter handles do not reach the host page.
+- **Hidden slides** are skipped, as the exports skip them (`slidesToConvert`; `includeHidden: true` presents them). `start(i)` and `goTo(i)` on a hidden slide show the next slide that is not hidden (`onSlideChange` says which). A deck with only hidden slides shows a message and `onExit(-1)`.
+- **Counter.** A subtle "03 / 12" (mono, the navigator's format; hidden slides are not counted) and the exit button show on pointer move and hide after 2 seconds, with the cursor.
+- **Exit.** Esc, the exit button, leaving full screen (the browser's Esc), `stop()` and `destroy()` all call `onExit(index)` with the deck index of the slide shown, then focus returns to the element that was focused at `start`.
+- **Accessibility.** The element is `role="dialog"` with `aria-modal="true"` and an `aria-label` ("Presentation"; `labels.dialog`). Focus moves into it on start and stays in it (Tab cycles the dialog and the exit button). An `aria-live="polite"` region announces "Slide 3 of 12" (`labels.position`).
+- **Fonts.** Like the canvas, the presenter waits for the faces the deck needs (`fonts.pending` and `fonts.ensure`) and shows "Loading fonts…" meanwhile.
+
+`createPresentButton(container, { onPresent, disabled, density })` mounts an icon-only button (the Lucide Presentation icon, inlined) named "Present" (`aria-label`), titled "Present (F5)" and styled like the Export menu's trigger. `disabled` is `true` or a reason string (the title); the button stays focusable (`aria-disabled`) and does nothing. It returns `{ element, setDisabled(reason), setDensity(density), destroy() }`. `bindPresentShortcut(target, onPresent)` binds F5 (and prevents the browser's reload); it ignores F5 while typing in inputs, selects and editors (CodeMirror, contenteditable), in menus and dialogs, and with a modifier key, and returns a function that removes the listener. `examples/playground.js` wires all three next to the Export menu.
+
+Tests: `npm run test:presenter-browser` and `npm run test:present-button-browser`.
+
+## Opening a deck file (RR-98)
+
+`@openpresentation/opf-editor/read-deck-file` reads a deck file in any OPF source format, with no DOM:
+
+```js
+import { readDeckFile, DECK_FILE_ACCEPT, DeckFileError } from "@openpresentation/opf-editor/read-deck-file";
+
+input.accept = DECK_FILE_ACCEPT;            // ".json,.opf,.yaml,.yml,.md"
+input.onchange = async () => {
+  try {
+    const { document, format, name, findings } = await readDeckFile(input.files[0], { catalogs });
+    const editor = createEditorSession(document, { catalogs }); // the session validates it; findings say what to fix first
+  } catch (error) {
+    if (error instanceof DeckFileError) show(error.code, error.message, error.findings);
+  }
+};
+```
+
+`readDeckFile(file | { name, text }, { catalogs? })` takes a `File` (or anything with `name` and `text()`), or `{ name, text }` with the text as a string, and returns `{ document, format: "json" | "yaml" | "md", name, findings }`.
+
+- **Format.** The extension picks it: `.yaml` and `.yml` are YAML, `.md` is Markdown, and `.json`, `.opf` or anything else is JSON. If JSON fails to parse, the text is tried as YAML, and as Markdown when it starts with front matter (`---`); `format` is the one that read it. YAML and Markdown go through core's browser-safe `fromYaml` and `fromMarkdown` (`@openpresentation/opf/yaml` and `/markdown`, loaded on first use). JSON that wraps a deck (`opfSnippet`, `opf`, `presentation`) is unwrapped as `parseOpfTransfer` does.
+- **Name.** The file name without a directory and without `.opf.json`, `.opf.yaml`, `.opf.md` or its plain extension (`Q3 plan.opf.yaml` gives `Q3 plan`).
+- **Findings.** The conversion's findings for YAML and Markdown, in core's `Finding` shape: `path` (a JSON Pointer such as `/slides/1/bogus`), `message`, `severity` and `location` (line and column in the file). A deck that reads but has OPF errors is returned with them, so a host can show them; JSON gives none (the editor session validates it).
+- **Errors.** Text that cannot be read at all throws `DeckFileError` with a `code` and a clear message: `unreadable`, `file-too-large` (over 20 MB), `empty-file`, `unsupported-file` (a .pptx or other binary file), `invalid-json`, `invalid-yaml`, `invalid-markdown` (with the syntax `findings` and the line) and `not-a-deck` (JSON without a `slides` list, such as one slide or a block, which a host can send to its paste path as the playground does).
+
+The source pane has no file-opening path of its own, so it keeps no second copy of this. The playground's Import dialog uses `readDeckFile` and `DECK_FILE_ACCEPT` for its file tab and for dropped files (`examples/transfer-controls.js`). Icons in the presenter button are inlined [Lucide](https://lucide.dev) paths (ISC license).
+
 ## Optional React Bindings
 
 React bindings are isolated under `@openpresentation/opf-editor/react` and require the host app to pass its React runtime. The core package does not add React to the critical path.

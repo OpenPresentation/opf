@@ -1,0 +1,155 @@
+/* RR-98: the presenter and the Present button (src/presenter.js). Only --opf-ui-* tokens, no color literals (test/styles.mjs). */
+
+/* ---- the presenter -------------------------------------------------------------------------------------------------------------------- */
+.opf-presenter,
+.opf-presenter *,
+.opf-presenter *::before,
+.opf-presenter *::after { box-sizing: border-box; }
+.opf-presenter[hidden] { display: none !important; }
+
+.opf-presenter {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  /* Slides are letterboxed on black in every theme, so the bars never take a token's light or dark value. */
+  background: black;
+  font-family: var(--opf-ui-font);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--opf-ui-fg);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  outline: none;
+}
+.opf-presenter[data-chrome="hidden"] { cursor: none; }
+
+.opf-presenter .opf-presenter-slide {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* The slide's own width and height attributes give its shape (viewBox); this makes it as large as the screen allows. */
+.opf-presenter .opf-presenter-slide svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+}
+.opf-presenter .opf-presenter-message {
+  position: absolute;
+  margin: 0;
+  max-width: 40ch;
+  padding: 12px 16px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-md);
+  background: var(--opf-ui-surface);
+  color: var(--opf-ui-muted-fg);
+  text-align: center;
+  font: 400 13px/1.5 var(--opf-ui-font);
+}
+.opf-presenter .opf-presenter-message[hidden] { display: none; }
+.opf-presenter .opf-presenter-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- the counter and the exit button (they appear on pointer move) ---------------------------------------------------------------------- */
+.opf-presenter .opf-presenter-counter,
+.opf-presenter .opf-presenter-close {
+  position: absolute;
+  background: var(--opf-ui-surface);
+  color: var(--opf-ui-muted-fg);
+  border: 1px solid var(--opf-ui-border);
+  opacity: 0;
+  transition: opacity var(--opf-ui-ease), color var(--opf-ui-ease), border-color var(--opf-ui-ease);
+}
+.opf-presenter[data-chrome="visible"] .opf-presenter-counter,
+.opf-presenter[data-chrome="visible"] .opf-presenter-close,
+.opf-presenter .opf-presenter-close:focus-visible { opacity: 1; }
+
+.opf-presenter .opf-presenter-counter {
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  width: max-content;
+  margin: 0 auto;
+  padding: 4px 10px;
+  border-radius: var(--opf-ui-radius);
+  font: 500 11.5px/1.4 var(--opf-ui-mono);
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+.opf-presenter .opf-presenter-close {
+  top: 16px;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--opf-ui-control-h);
+  height: var(--opf-ui-control-h);
+  padding: 0;
+  margin: 0;
+  border-radius: var(--opf-ui-radius);
+  font: inherit;
+  cursor: pointer;
+}
+.opf-presenter .opf-presenter-close:hover { color: var(--opf-ui-fg); background: var(--opf-ui-muted); }
+.opf-presenter .opf-presenter-close:focus-visible {
+  outline: 2px solid var(--opf-ui-ring);
+  outline-offset: 2px;
+}
+.opf-presenter .opf-icon { flex: none; }
+
+/* ---- the Present button (styled like the Export trigger) ------------------------------------------------------------------------------- */
+.opf-present-button,
+.opf-present-button *,
+.opf-present-button *::before,
+.opf-present-button *::after { box-sizing: border-box; }
+.opf-present-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: var(--opf-ui-control-h);
+  height: var(--opf-ui-control-h);
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--opf-ui-accent);
+  border-radius: var(--opf-ui-radius);
+  background: var(--opf-ui-accent);
+  color: var(--opf-ui-accent-fg);
+  font: inherit;
+  cursor: pointer;
+  transition: opacity var(--opf-ui-ease);
+}
+.opf-present-button:hover { opacity: 0.92; }
+.opf-present-button:focus-visible {
+  outline: 2px solid var(--opf-ui-ring);
+  outline-offset: 2px;
+}
+.opf-present-button[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.opf-present-button .opf-icon { flex: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .opf-presenter .opf-presenter-counter,
+  .opf-presenter .opf-presenter-close,
+  .opf-present-button { transition: none; }
+}

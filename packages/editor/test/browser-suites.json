@@ -107,6 +107,14 @@
         {
           "id": "playground:agent-handoff-browser",
           "command": "node test/agent-handoff-browser.mjs"
+        },
+        {
+          "id": "playground:presenter-browser",
+          "command": "node test/presenter-browser.mjs"
+        },
+        {
+          "id": "playground:present-button-browser",
+          "command": "node test/present-button-browser.mjs"
         }
       ]
     },
