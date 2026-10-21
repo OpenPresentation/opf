@@ -1,4 +1,0 @@
----
-type: fixed
----
-RR-98: opening a document no longer forks its catalog records. Loading an example over another (a host's example menu), File > Open, the gallery handoff and restoring a stored copy replaced the document with an `applyPatch` that the fork-on-edit rule read as an edit of the `catalogs.default` records the two documents share, so slide layouts became `cover-custom`, `text-custom` and so on and the picker showed "Current draft". The session has a first-class `editor.replaceDocument(input, meta?)` (one undoable change that is never read as a catalog edit) and the source pane has `pane.replaceDocument(document, { source, name })`, which keeps the opened JSON as written and brings each document's text back exactly on Undo and Redo, also in YAML and Markdown. The playground's Open as a presentation, the gallery handoff and `createPersistence`'s `restore()` use it. `applyPatch` still forks an edited record.
