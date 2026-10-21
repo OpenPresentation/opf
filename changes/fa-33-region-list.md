@@ -1,5 +1,5 @@
 ---
 type: changed
-packages: [opf, cli]
+packages: [cli]
 ---
 FA-33 (breaking, no migration path): a layout record is one ordered list of regions. `areas`, `columns`, `rows` and the `regions` map are removed from `opf-layout/v2`; a record has a `direction` (`row` or `column`, default `column`) and a `regions` array of regions (`{ name, size?, ...rules }`) and splits (`{ direction, regions, size?, anchor? }`, up to three levels). `size` is a share of the parent (default 1; `auto` only in a column), `accepts` is optional (every body kind and `group`), `anchor` on the record or a split is inherited by body regions, and `title` and `subtitle` are reserved heading regions. Core compiles the tree into the grid composition has always used, so the 28 built-in layouts render identically (an equivalence test proves each compiles to its Gallery 4 grid and rules). A record with `areas`, `columns`, `rows` or a regions map is invalid. `opf/layout-template` and `opf/layout-region` cover the new rules, `layoutEntries` and the compile are in `@openpresentation/opf/composition`, and `CATALOG_SCHEMA` is 4 (Gallery 5). Examples, fixtures, docs and skills are converted.
