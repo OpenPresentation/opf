@@ -77,7 +77,9 @@ test('exact published19 runtime uses recorded final registry helpers and refuses
  }finally{rmSync(root,{recursive:true,force:true});}
 });
 
-test('published 0.24.2 runs the reviewed installed-code and catalog-generation helpers, and only those files',()=>{
+// The plan at the bridge's source commit (editor 0.24.2) and this checkout's plan (the registry's editor 0.24.3) are both the published 0.24 graph.
+for(const [label,planFor] of [['the plan at the reviewed source commit',sourceRoot=>execFileSync('git',['-C',sourceRoot,'show',`${PUBLISHED_0242_TOOLING[0].sourceSha}:release-plan.json`])],['this checkout\'s plan',sourceRoot=>readFileSync(path.join(sourceRoot,'release-plan.json'))]])
+test(`published 0.24.2 runs the reviewed installed-code and catalog-generation helpers, and only those files (${label})`,()=>{
  const root=realpathSync(mkdtempSync(path.join(tmpdir(),'fa33-control0242-'))),coreRoot=path.join(root,'core'),toolsRoot=path.join(root,'tools');
  const sourceRoot=fileURLToPath(new URL('..',import.meta.url));
  const sourceGit=execFileSync('git',['-C',sourceRoot,'rev-parse','--absolute-git-dir'],{encoding:'utf8'}).trim();
@@ -85,7 +87,7 @@ test('published 0.24.2 runs the reviewed installed-code and catalog-generation h
   execFileSync('git',['clone','--shared','--no-checkout',sourceRoot,coreRoot],{stdio:'pipe'});
   execFileSync('git',['-C',coreRoot,'checkout','--detach',PUBLISHED_0242_SOURCE],{stdio:'pipe'});
   mkdirSync(toolsRoot);writeFileSync(path.join(toolsRoot,'.git'),`gitdir: ${sourceGit}\n`);
-  const plan=execFileSync('git',['-C',sourceRoot,'show',`${PUBLISHED_0242_TOOLING[0].sourceSha}:release-plan.json`]);writeFileSync(path.join(toolsRoot,'release-plan.json'),plan);
+  writeFileSync(path.join(toolsRoot,'release-plan.json'),planFor(sourceRoot));
   const runtime=path.join(coreRoot,'packages/javascript/src/composition.ts'),runtimeBytes=readFileSync(runtime);
   const helper=path.join(coreRoot,PUBLISHED_0242_TOOLING[0].path),originalHelper=readFileSync(helper);
   assert.ok(!originalHelper.toString('utf8').includes('generatedAtRef'),'the published helper lacks the styles rebuild');

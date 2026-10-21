@@ -10,7 +10,7 @@
     },
     {
       "name": "@openpresentation/opf-editor",
-      "version": "0.24.2"
+      "version": "0.24.3"
     },
     {
       "name": "@openpresentation/opf-pptx",
@@ -31,13 +31,13 @@
     }
   ],
   "exampleRefs": {
-    "opf-editor": "9672a3823638449a6f2805be96f718addc07a68a"
+    "opf-editor": "c2beb4ffc9fff9fcac73e1a3d77bb13f80d75040"
   },
   "verificationRefs": {
     "opf": "e6ade17b4fcaf70bc716654d39102a54db015965",
     "cli": "fb4c775cf6dcc4acb35d14dc2835661b39e0a1d5",
     "opf-render": "c904dc602006a00afdc84379a52b9ebccbcadd30",
-    "opf-editor": "9672a3823638449a6f2805be96f718addc07a68a",
+    "opf-editor": "c2beb4ffc9fff9fcac73e1a3d77bb13f80d75040",
     "opf-pptx": "e7c62a29a51557c1062af8b4e851e842a3530daf",
     "gallery": "cc137fde86dba0cdcc6ff36b448fd0a18246d269"
   }

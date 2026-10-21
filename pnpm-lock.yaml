@@ -18,8 +18,8 @@ importers:
         specifier: ^2.5.3
         version: 2.5.14
       '@openpresentation/gallery':
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^5.0.0
+        version: 5.0.0
       '@typescript/native':
         specifier: npm:typescript@~7.0.2
         version: typescript@7.0.2
@@ -27,8 +27,8 @@ importers:
   packages/cli:
     dependencies:
       '@openpresentation/gallery':
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^5.0.0
+        version: 5.0.0
       '@openpresentation/opf':
         specifier: workspace:*
         version: link:../javascript
@@ -85,8 +85,8 @@ importers:
   packages/javascript:
     dependencies:
       '@openpresentation/gallery':
-        specifier: ^4.0.0
-        version: 4.0.0
+        specifier: ^5.0.0
+        version: 5.0.0
       ajv:
         specifier: ^8.17.1
         version: 8.20.0
@@ -584,6 +584,10 @@ packages:
 
   '@openpresentation/gallery@4.0.0':
     resolution: {integrity: sha512-0ZEQLIiwOt//d2/OCUb+R3Spnfo0/d/TZnTdtZm53Xq7ltPhua7+IpirSu7oOSFaVu3EBTozibeDBxhDNi8QOA==}
+    engines: {node: '>=22'}
+
+  '@openpresentation/gallery@5.0.0':
+    resolution: {integrity: sha512-hS9PWgaGMUAk8Lxrsh8Ke85DbOex8LY2u+xpOd80VH2/0+bjqxJ6DY86aXAoWu736wjzVEssv8ImKlOAjaz1bw==}
     engines: {node: '>=22'}
 
   '@openpresentation/opf-pptx@0.24.1':
@@ -1764,6 +1768,8 @@ snapshots:
       pako: 3.0.2
 
   '@openpresentation/gallery@4.0.0': {}
+
+  '@openpresentation/gallery@5.0.0': {}
 
   '@openpresentation/opf-pptx@0.24.1(@openpresentation/opf-render@0.24.3)(@types/node@24.13.6)':
     dependencies:
