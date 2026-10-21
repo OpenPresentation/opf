@@ -41,6 +41,7 @@
     "check:pins": "node --test scripts/check-pins.test.mjs && node scripts/check-pins.mjs",
     "check:versions": "node --test scripts/check-versions.test.mjs && node scripts/check-versions.mjs",
     "check:playwright-pin": "node --test scripts/check-playwright-pin.test.mjs && node scripts/check-playwright-pin.mjs",
+    "check:monorepo-import": "node --test scripts/monorepo-import.test.mjs",
     "check:stamp-githead": "node --test scripts/stamp-githead.test.mjs",
     "check:materialize-guard": "node --test scripts/materialize-gallery-catalog.test.mjs",
     "check:lazy-font-counts": "node --test scripts/lazy-font-counts.test.mjs",
