@@ -18,7 +18,7 @@
     },
     {
       "name": "@openpresentation/cli",
-      "version": "0.24.1"
+      "version": "0.25.0"
     }
   ],
   "independentPackages": [
@@ -35,7 +35,7 @@
   },
   "verificationRefs": {
     "opf": "ecb22d556ba13ef84d586215cdff30e4a77cb3be",
-    "cli": "fb4c775cf6dcc4acb35d14dc2835661b39e0a1d5",
+    "cli": "652875ce57e2e682098df933ad45aa03b9cad1a5",
     "opf-render": "917ba0ce4e707cfc91a90472a92ca49b401a20f3",
     "opf-editor": "b48042cf17acbd76bb8303a38356d57812001e07",
     "opf-pptx": "7768a5a9a2cf83eb0a58728344c96f5bf45bd029",
