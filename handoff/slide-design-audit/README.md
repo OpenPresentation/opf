@@ -21,6 +21,15 @@ No nested gallery checkout, `.git`, `node_modules` or cache directory is include
 
 ## Restore and review
 
+The private cloud review is live at [OPF Slide Design Review](https://opf-slide-design-review.lemonybow16.chatgpt.site/). Sign in with the owning ChatGPT account from any computer. The hosted copy preserves the complete evidence bundle and all pending decisions:
+
+- [Proposals P01–P03](https://opf-slide-design-review.lemonybow16.chatgpt.site/portable/proposals.html#P01), with Previous/Next controls for three proposals at a time.
+- [Gallery, columns and auto review](https://opf-slide-design-review.lemonybow16.chatgpt.site/portable/report.html).
+- [82 current-stack comparisons](https://opf-slide-design-review.lemonybow16.chatgpt.site/portable/integration-20261020/report.html).
+- [21 stress comparisons](https://opf-slide-design-review.lemonybow16.chatgpt.site/portable/candidates/sparse-stress/report.html).
+
+Open any evidence image for its full-resolution HTTPS URL. The deployment identity, exact source commit and browser verification are recorded separately in `cloud-preview.json` and `cloud-preview-browser-qa.json`; the original archive and its checksum are unchanged. Updating this private review site does not approve a proposal or authorize a package release or an audit PR merge.
+
 Run these commands from this directory after the final archive is present:
 
 ```sh
