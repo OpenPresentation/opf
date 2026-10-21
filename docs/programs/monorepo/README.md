@@ -184,19 +184,21 @@ Resulting shape: 6 workflow files plus 1 reusable (`ci.yml`, `nightly.yml`, `slo
 
 ## 3. History import
 
-**Method: `git filter-repo --to-subdirectory-filter packages/<x>` on fresh scratch clones, then unrelated-histories merges into `opf`.** Core is not rewritten (its SHAs, tags and PR references are untouched). `artifacts/monorepo/spike-S2-filter-repo.sh` and `spike-S2-verify.mjs` are the prototypes of MR-21 (`scripts/verify-import.mjs`).
+**Method: `git filter-repo --to-subdirectory-filter packages/<x>` on fresh scratch clones, then unrelated-histories merges into `opf`.** Core is not rewritten (its SHAs, tags and PR references are untouched). MR-21 turned the spike scripts into `scripts/monorepo-import.mjs` (the import) and `scripts/verify-import.mjs` (the proof), tested on fixture repositories by `check:monorepo-import`; both run in a scratch directory only and never push.
 
 ```sh
-# Scratch directory only. python3 -m venv v && v/bin/pip install git-filter-repo  (2.47.0)
-OPF_IMPORT_CONTEXT_REFS=1 bash spike-S2-filter-repo.sh "$S" render pptx editor gallery
-#   per package: git clone --no-local --single-branch --branch main; git filter-repo --force --to-subdirectory-filter packages/<x>
-#   --message-callback (qualify bare #N as OpenPresentation/<old-repo>#N; insert "issue" after closing keywords)
-#   gallery also: --tag-rename ':gallery-'   (v1.0.0 to v5.0.0 become gallery-v1.0.0 to gallery-v5.0.0; see below)
-# In a scratch clone of opf on branch monorepo/import:
-for pkg in render pptx editor gallery; do
-  git remote add import-$pkg "$S/work/<old-repo>"; git fetch import-$pkg main --tags
-  git merge --allow-unrelated-histories --no-ff import-$pkg/main -m "MR-22: import <old-repo> history under packages/$pkg"
-done
+# Scratch directory only (outside every checkout). python3 -m venv v && v/bin/pip install git-filter-repo  (2.47.0); put v/bin on PATH
+node scripts/monorepo-import.mjs "$S" --merge --identity "<owner> <email>" --date <iso>
+#   per package (render:opf-render, pptx:opf-pptx, editor:opf-editor, gallery:gallery:gallery-): git clone --no-local --single-branch
+#   --branch main into $S/orig; a fresh clone into $S/work; git filter-repo --force --to-subdirectory-filter packages/<x>
+#   --message-callback (contextual "core #N" / "opf-render #N"; bare #N as OpenPresentation/<old-repo>#N; "issue" after closing
+#   keywords); gallery also --tag-rename ':gallery-' (v1.0.0 to v5.0.0 become gallery-v1.0.0 to gallery-v5.0.0; see below);
+#   the commit map goes to $S/commit-map/<old-repo>.txt
+#   --merge: in a scratch clone of core ($S/merged, branch monorepo/import, push URL disabled), per package
+#   git fetch import-<x> main --tags; git merge --allow-unrelated-histories --no-ff import-<x>/main -m "MR-22: import <old-repo> history under packages/<x>"
+node scripts/verify-import.mjs "$S" --blame all --determinism --commit-maps docs/programs/monorepo/commit-map --report docs/programs/monorepo/import-verification.md
+#   re-run both after the freeze (MR-20): the import reuses the pristine clones unless --refresh, and a later commit in an old
+#   repository merges as a delta (the second run adds the new commits and one more import merge)
 ```
 
 - **Gallery specifics (S7, rehearsed).** The old repo is `OpenPresentation/gallery`, the destination `packages/gallery`. Its tags `v1.0.0` to `v5.0.0` (5 lightweight tags) are renamed `gallery-v1.0.0` to `gallery-v5.0.0` so that they cannot be mistaken for, or trigger, the new release tags `vX.Y.Z` (core has no bare `v*` tag today; the rename also fits the `<name>-v<version>` family); the verifier maps the rename. `spike-S2-filter-repo.sh` builds the old repository name as `opf-<pkg>`, so MR-21 changes it to take the repository name (`gallery`) and the extra `--tag-rename`. The rehearsed commands, from fresh scratch clones (git-filter-repo 2.47.0, git 2.50.1):
@@ -214,6 +216,7 @@ done
 
   Results: 10 commits in and out; tree hashes equal at `main`, all 5 tags and all 10 commits; author, committer and dates identical; blame identical on all 425 files; a second run gives a byte-identical commit map; the 9 `(#N)` squash suffixes become `(OpenPresentation/gallery#N)` (the two foreign references are already qualified); the merge into `opf` is clean (the only overlap is the ignored materialization, finding 12); `git ls-files packages/gallery` is 425. The commit map goes to `docs/programs/monorepo/commit-map/gallery.txt`. The cleanup commit deletes the imported `.github/` (`ci.yml`, `gallery-publish.yml`, `bootstrap-engines.json`), `package-lock.json`, `.gitignore` and `.gitattributes` (identical to the root's `* text=auto eol=lf`), folds `CONTRIBUTING.md` into the root file and a short package README note, rewrites the retired 1.x sync sections of `CONTRIBUTING.md` and the README's "Where the records come from" and "Versions", and edits `repository` (`git+https://github.com/OpenPresentation/opf.git` with `directory: packages/gallery`), `bugs` and the engine devDependencies in `package.json` (the only manifest edits). Its `CHANGELOG.md` and `LICENSE` are kept (npm `files` ships `LICENSE`).
 - **Deterministic and re-syncable.** Re-running the import after an old repo gained a commit and merging again brings only the new commits (under 15 seconds, S2). That is the delta procedure for the freeze window.
+- **What counts as a reference (MR-21).** A bare `#N` is rewritten only when N has no leading zero and the `#` is not preceded by a word character, `/` or `#`. The S2 callback also rewrote the `#0` in the spreadsheet format `$#,##0.0` quoted in one pptx commit message (`$#,#OpenPresentation/opf-pptx#0.0`); MR-21 fixed the pattern and `verify-import.mjs` now compares every message exactly with an independent JavaScript statement of the rewrite (apart from the commit hashes filter-repo rewrites), so a pattern error cannot hide behind the looser "differs only by qualification" check.
 - **Results to expect (S2, S3).** 818 sibling commits (283, 318, 217), plus gallery's 10; tree hashes equal at `main`, every tag and every commit; tag names, types and annotations equal; blame equal on 150 sampled files; no path outside `packages/<x>/`; no bare `#N` and no closing keyword left; a second run gives identical SHAs. Merged: 1,738 commits (plus gallery's 10), 226 tags (plus 5), 166 to 168 MiB packed, 508 MiB tracked. Core's tags and `main` history unchanged. Clone from GitHub after the push is re-measured.
 - **Where the import must be sequenced.** MR-10 (explicit workspace list, materializer skip-guard, root-check scoping) merges before the import branch is pushed; the import branch is tested in that state (S3: 60 of 60 checks pass, install, lint and test unchanged in speed). A sibling cleanup commit that deletes `.github/**` and lockfiles comes only after wire-up (MR-23).
 - **The import PR is not reviewable in GitHub** (about 830 commits and 5,400 files exceed the Files tab and the commit-list cap). Review is `verify-import.mjs`, whose output is committed as `docs/programs/monorepo/import-verification.md`; the commit maps are committed under `docs/programs/monorepo/commit-map/`. **Landing it** (OWNER, MR-22): the owner pushes the verified merge commit to `main` under a ruleset bypass (one command, prepared by the agent), or, as the fallback, opens the PR and temporarily allows merge commits and the MERGE method (the ruleset is changed anyway in MR-33). Either way no squash may touch it.
