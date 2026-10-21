@@ -10,6 +10,7 @@
 - Roll `release-plan.json`, the published consumer lock, the quickstart, CLI guide, compatibility matrix and live-editor install command to the registry's current set: editor 0.24.2 (was 0.24.0) beside core 0.24.2, renderer 0.24.3, PPTX 0.24.1, CLI 0.24.1 and Gallery 4.0.0.
 The registry check of installed files against the release commit now rebuilds the ignored `dist/styles.css` of opf-editor 0.24.1 and later from that commit's own `scripts/build-styles.mjs` and `src/styles`, instead of failing on a file the commit does not contain.
 - Move `release-plan.json`, the published consumer lock, the quickstart, CLI guide, compatibility matrix and agent-skills install command to the published 0.24 set (core 0.24.2, renderer 0.24.3, PPTX 0.24.1, editor 0.24.0, CLI 0.24.1, Gallery 4.0.0). The published-consumer catalog check now accepts Gallery 4 for core 0.24 while the catalog generation stays 3.
+- The optional peer ranges move to the 0.25 minor: `@openpresentation/opf-render` and `@openpresentation/opf-pptx` `^0.25.0` (package.json and the runtime hints in `PEER_RANGES`), so core 0.25 installs beside renderer and PPTX 0.25 without ERESOLVE.
 
 ## 0.24.2 (2026-10-20)
 
