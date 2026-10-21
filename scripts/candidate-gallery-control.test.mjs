@@ -5,7 +5,7 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import {fileURLToPath} from 'node:url';
-import {stagePublishedControlPlan,verifyPublishedControlPlan,FONT_COUNT_BRIDGE,PUBLISHED_019_TOOLING,PUBLISHED_019_SOURCE} from './candidate-gallery-control.mjs';
+import {stagePublishedControlPlan,verifyPublishedControlPlan,FONT_COUNT_BRIDGE,PUBLISHED_019_TOOLING,PUBLISHED_019_SOURCE,PUBLISHED_0242_TOOLING,PUBLISHED_0242_SOURCE} from './candidate-gallery-control.mjs';
 test('published control permits only the independently recorded exact plan override',()=>{
  const root=realpathSync(mkdtempSync(path.join(tmpdir(),'rr78-control-'))),coreRoot=path.join(root,'core'),toolsRoot=path.join(root,'tools');
  try{
@@ -74,5 +74,28 @@ test('exact published19 runtime uses recorded final registry helpers and refuses
   execFileSync('git',['-C',coreRoot,'checkout','HEAD','--','release-plan.json','scripts/lazy-font-counts.mjs','scripts/lazy-font-counts.test.mjs','scripts/test-layout-contract-registry.mjs']);rmSync(path.join(coreRoot,'scripts/registry-layout-v2.mjs'));
   assert.throws(()=>stagePublishedControlPlan({coreRoot,toolsRoot}),/unknown published 0.19 control graph/);
   assert.deepEqual(readFileSync(runtime),runtimeBytes);
+ }finally{rmSync(root,{recursive:true,force:true});}
+});
+
+test('published 0.24.2 runs the reviewed installed-code helper that rebuilds the editor styles, and only that file',()=>{
+ const root=realpathSync(mkdtempSync(path.join(tmpdir(),'fa33-control0242-'))),coreRoot=path.join(root,'core'),toolsRoot=path.join(root,'tools');
+ const sourceRoot=fileURLToPath(new URL('..',import.meta.url));
+ const sourceGit=execFileSync('git',['-C',sourceRoot,'rev-parse','--absolute-git-dir'],{encoding:'utf8'}).trim();
+ try{
+  execFileSync('git',['clone','--shared','--no-checkout',sourceRoot,coreRoot],{stdio:'pipe'});
+  execFileSync('git',['-C',coreRoot,'checkout','--detach',PUBLISHED_0242_SOURCE],{stdio:'pipe'});
+  mkdirSync(toolsRoot);writeFileSync(path.join(toolsRoot,'.git'),`gitdir: ${sourceGit}\n`);
+  const plan=execFileSync('git',['-C',sourceRoot,'show',`${PUBLISHED_0242_TOOLING[0].sourceSha}:release-plan.json`]);writeFileSync(path.join(toolsRoot,'release-plan.json'),plan);
+  const runtime=path.join(coreRoot,'packages/javascript/src/composition.ts'),runtimeBytes=readFileSync(runtime);
+  const helper=path.join(coreRoot,PUBLISHED_0242_TOOLING[0].path),originalHelper=readFileSync(helper);
+  assert.ok(!originalHelper.toString('utf8').includes('generatedAtRef'),'the published helper lacks the styles rebuild');
+  const record=stagePublishedControlPlan({coreRoot,toolsRoot});assert.deepEqual(record.testToolingBridges,PUBLISHED_0242_TOOLING);
+  assert.deepEqual(verifyPublishedControlPlan({coreRoot,toolsRoot}),record);
+  assert.ok(readFileSync(helper,'utf8').includes('generatedAtRef'),'the bridged helper rebuilds dist/styles.css from the release commit');
+  assert.deepEqual(readFileSync(path.join(coreRoot,'artifacts/published-control/original-tooling',PUBLISHED_0242_TOOLING[0].path)),originalHelper);
+  assert.deepEqual(readFileSync(runtime),runtimeBytes);
+  const bridged=readFileSync(helper);writeFileSync(helper,'tampered');assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}),/helper identity/);writeFileSync(helper,bridged);
+  writeFileSync(runtime,'tampered runtime');assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}),/outside/);writeFileSync(runtime,runtimeBytes);
+  const metadata=path.join(coreRoot,'artifacts/published-control/metadata.json');writeFileSync(metadata,JSON.stringify({...record,testToolingBridges:[{...PUBLISHED_0242_TOOLING[0],path:'packages/javascript/src/composition.ts'}]}));assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}),/unknown 0.24.2/);
  }finally{rmSync(root,{recursive:true,force:true});}
 });
