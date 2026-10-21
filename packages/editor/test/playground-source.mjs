@@ -21,11 +21,18 @@ const server = createServer(async (req, res) => {
   } catch { res.writeHead(404).end(); }
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
-let browser;
+let browser, page;
 try {
   browser = await chromium.launch({ channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined });
-  const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+  page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
   const errors = [];
+  // Diagnostics: the inline editor commits on blur, so record every focus change with the window's focus state.
+  await page.addInitScript(() => {
+    window.__focusLog = [];
+    const t0 = performance.now(), name = node => node ? `${node.tagName}${node.id ? '#' + node.id : ''}${node.className && typeof node.className === 'string' ? '.' + node.className.split(' ')[0] : ''}` : 'none';
+    document.addEventListener('focusout', event => window.__focusLog.push([Math.round(performance.now() - t0), 'out', name(event.target), '->', name(event.relatedTarget), document.hasFocus()]), true);
+    window.addEventListener('blur', () => window.__focusLog.push([Math.round(performance.now() - t0), 'window blur']));
+  });
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   const button = name => page.getByRole('button', { name, exact: true });
@@ -150,6 +157,9 @@ try {
   await button('Close source editor').click();
   assert.deepEqual(errors, []);
   console.log('Playground source: escaped tokens and irregular whitespace survive Escape, Undo and Redo byte for byte.');
+} catch (error) {
+  console.error('focus log (last 25):', JSON.stringify(await page.evaluate(() => window.__focusLog.slice(-25)).catch(() => 'unavailable')));
+  throw error;
 } finally {
   await browser?.close();
   server.close();

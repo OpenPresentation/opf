@@ -389,6 +389,16 @@ try {
     demo.pane.editor.api.setSelection(at + needle.length);
     demo.pane.editor.api.focus();
   }, needle);
+  // CodeMirror ignores Enter while the popup is stale (a query for the last keystroke is pending: `cm-tooltip-autocomplete-disabled`) and
+  // for its 75 ms interaction delay after the popup opens, and inserts a newline instead. A key press at that moment is the user's
+  // race, not the test's subject, so wait on the popup's state: a settled, selected option, on a popup that has been open that long.
+  const acceptable = (label, minAge = 150) => typing.waitForFunction(({ label, minAge }) => {
+    const node = document.querySelector('.cm-tooltip-autocomplete');
+    if (!node || node.classList.contains('cm-tooltip-autocomplete-disabled')) return false;
+    if (node.querySelector('[aria-selected="true"] .cm-completionLabel')?.textContent !== label) return false;
+    node.dataset.openedAt ??= String(performance.now());
+    return performance.now() - Number(node.dataset.openedAt) >= minAge;
+  }, { label, minAge }, { timeout: 5000 });
   assert.equal(await typing.locator('.opf-source-code .cm-content').getAttribute('aria-autocomplete'), 'list', 'the editor announces its completion list');
   await cursorAfter('"OWAA Rocks!"');
   await typing.keyboard.type(', "lay');
@@ -397,6 +407,7 @@ try {
   const box = await popup.boundingBox();
   assert.ok(box && box.x >= 0 && box.y >= 0 && box.x + box.width <= 1200 && box.y + box.height <= 800, 'the popup is inside the page');
   assert.notEqual(await popup.locator('[aria-selected="true"]').evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(17, 119, 204)', 'the selected option uses the token color, not the default blue');
+  await acceptable('layout');
   await typing.keyboard.press('Enter');
   assert.ok((await text(typing)).includes('{ "title": "OWAA Rocks!", "layout":  }'), `a key is completed with its colon: ${await text(typing)}`);
   // The values of that key are offered right away.
@@ -406,6 +417,7 @@ try {
   await typing.keyboard.type('"tex');
   await typing.waitForFunction(() => document.querySelector('.cm-tooltip-autocomplete [aria-selected="true"] .cm-completionLabel')?.textContent === 'text' && document.querySelectorAll('.cm-tooltip-autocomplete [role="option"]').length < 5, null, { timeout: 5000 });
   assert.ok((await options().locator('.cm-completionLabel').allInnerTexts()).includes('text'), 'typing narrows the list');
+  await acceptable('text');
   await typing.keyboard.press('Enter');
   assert.ok((await text(typing)).includes('"layout": "text" }'), `a value replaces the whole token, quotes included: ${await text(typing)}`);
   await popup.waitFor({ state: 'hidden' });

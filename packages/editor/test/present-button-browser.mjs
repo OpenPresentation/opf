@@ -245,10 +245,22 @@ try {
   await page.locator('.opf-presenter-close').click();
   await presenter.waitFor({ state: 'hidden' });
   assert.equal(await slideTitle(), 'Alpha');
-  // F5 while typing in a field is the browser's.
+  // F5 while typing in a field is the browser's. Leaving full screen is asynchronous and the page takes no focus (and the root element takes the
+  // pointer) until it is done, so wait for it, then for the field to hold focus; the next click would otherwise be intercepted by <html>.
+  await page.waitForFunction(() => !document.fullscreenElement, undefined, { timeout: 5000 });
   await page.locator('#document-name').focus();
-  await page.keyboard.press('F5').catch(() => {});
+  await page.waitForFunction(() => document.activeElement?.id === 'document-name', undefined, { timeout: 5000 });
+  await page.evaluate(() => { window.__noReload = true; });
+  await page.keyboard.press('F5');
+  const typingF5 = await page.evaluate(() => {
+    const event = new KeyboardEvent('keydown', { key: 'F5', bubbles: true, cancelable: true });
+    document.activeElement.dispatchEvent(event);
+    return { target: document.activeElement.id, prevented: event.defaultPrevented };
+  });
+  assert.deepEqual(typingF5, { target: 'document-name', prevented: false }, 'F5 in the name field is left to the browser: its default is not prevented');
   assert.equal(await presenter.isHidden(), true, 'F5 is not taken while typing in the name field');
+  assert.equal(await page.evaluate(() => window.__noReload), true, 'and nothing reloaded the page');
+  await page.locator('body').click({ position: { x: 5, y: 5 } });
   mark('F5 presents from the keyboard and is left alone while typing');
 
   // Open: the file input takes every deck format, through readDeckFile.
