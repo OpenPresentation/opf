@@ -7,7 +7,7 @@ import { PassThrough } from 'node:stream';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { selectChecks } from './run-checks.mjs';
-import { biomeBatches, buildPlan, changedFiles, formatTable, matches, referencedPaths, runCommand, selectChangedChecks, selectPackageTests, splitPaths } from './check-changed.mjs';
+import { PACKAGES, biomeBatches, buildPlan, changedFiles, formatTable, matches, referencedPaths, runCommand, selectChangedChecks, selectPackageTests, splitPaths } from './check-changed.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
@@ -69,6 +69,52 @@ test('buildPlan: a docs-only change runs the text and skill-command checks only;
 
   assert.equal(buildPlan(['x.md'], { ...env, needsInstall: true })[0].name, 'install');
   assert.equal(buildPlan(['gone.mjs'], { ...env, exists: () => false })[0].skip, true, 'a deleted file is not given to Biome');
+});
+
+// MR-11: the six packages of the monorepo. The engines and the gallery are not in the repository yet, so their directories
+// are absent (a changed file never names them); once imported, a change in one selects that package's tests.
+test('MR-11: PACKAGES lists the six packages of the monorepo, each with its own directory, filter and script', () => {
+  assert.deepEqual(PACKAGES.map((pkg) => pkg.id), ['opf', 'cli', 'render', 'pptx', 'editor', 'gallery']);
+  assert.deepEqual(PACKAGES.map((pkg) => pkg.dir), ['packages/javascript', 'packages/cli', 'packages/render', 'packages/pptx', 'packages/editor', 'packages/gallery']);
+  assert.deepEqual(PACKAGES.map((pkg) => pkg.filter), ['@openpresentation/opf', '@openpresentation/cli', '@openpresentation/opf-render', '@openpresentation/opf-pptx', '@openpresentation/opf-editor', '@openpresentation/gallery']);
+  assert.equal(new Set(PACKAGES.map((pkg) => pkg.dir)).size, PACKAGES.length);
+  for (const pkg of PACKAGES) assert.ok(['test', 'test:contract'].includes(pkg.script), `${pkg.id} runs a whole-package script`);
+});
+
+test('MR-11: a change in render, pptx, editor or gallery selects that package (the contract tier for the engines) and nothing for docs or evidence', () => {
+  const stepsFor = (file, extra = {}) => buildPlan([file], { ...env, ...extra }).filter((step) => step.name.startsWith('tests '));
+  const render = stepsFor('packages/render/src/svg.js');
+  assert.deepEqual(render.map((step) => step.name), ['tests render']);
+  const argv = render[0].commands[0].argv;
+  assert.deepEqual(argv.slice(argv.indexOf('pnpm')), ['pnpm', '--filter', '@openpresentation/opf-render', '--fail-if-no-match', 'test:contract']);
+  assert.deepEqual(stepsFor('packages/pptx/src/index.js').map((step) => step.name), ['tests pptx']);
+  assert.deepEqual(stepsFor('packages/editor/src/index.js').map((step) => step.name), ['tests editor']);
+  const gallery = stepsFor('packages/gallery/catalog/layouts/hero.json');
+  assert.deepEqual(gallery.map((step) => step.name), ['tests gallery']);
+  assert.deepEqual(gallery[0].commands[0].argv.slice(-4), ['--filter', '@openpresentation/gallery', '--fail-if-no-match', 'test']);
+  for (const file of ['packages/render/README.md', 'packages/render/docs/evidence/a/b.png', 'packages/pptx/AGENTS.md', 'packages/editor/CHANGELOG.md', 'packages/gallery/CONTRIBUTING.md']) {
+    assert.deepEqual(stepsFor(file), [], `${file} needs no package tests`);
+  }
+  // A test-only change in an engine runs just that file (no build when dist exists), in the package directory.
+  const present = { suites: {}, present: ['a.test.mjs', 'b.mjs', 'c-browser.mjs'], distExists: true };
+  const only = buildPlan(['packages/pptx/test/a.test.mjs', 'packages/pptx/test/b.mjs'], { ...env, packages: { ...packages, pptx: present } }).filter((step) => step.name === 'tests pptx');
+  assert.equal(only.length, 1);
+  assert.equal(only[0].commands.length, 2);
+  assert.ok(only[0].commands.every((command) => command.cwd.endsWith(path.join('packages', 'pptx'))));
+  assert.equal(only[0].commands[0].argv.includes('build'), false);
+  // Two packages in one change run in the order of PACKAGES.
+  assert.deepEqual(buildPlan(['packages/editor/src/a.js', 'packages/javascript/src/a.ts', 'packages/render/src/a.js'], env).filter((step) => step.name.startsWith('tests ')).map((step) => step.name), ['tests opf', 'tests render', 'tests editor']);
+});
+
+test('MR-11: checks.json maps the imported packages to the root checks that read them', () => {
+  const run = (file) => selectChangedChecks([file], scripts, config);
+  for (const file of ['packages/render/src/a.js', 'packages/pptx/test/a.mjs', 'packages/editor/src/a.js', 'packages/gallery/scripts/build.mjs']) {
+    assert.ok(run(file).includes('check:text'), `${file} runs check:text`);
+    assert.ok(run(file).includes('check:font-hotlinks'), `${file} runs check:font-hotlinks`);
+    assert.ok(run(file).includes('check:changes'), `${file} runs check:changes`);
+  }
+  for (const name of ['check:catalog', 'check:catalog-free', 'check:spec', 'check:schema-examples']) assert.ok(run('packages/gallery/catalog/layouts/hero.json').includes(name), name);
+  for (const file of ['packages/render/package.json', 'packages/pptx/package.json', 'packages/editor/package.json', 'packages/gallery/package.json']) assert.ok(run(file).includes('check:engines-range'), `${file} runs check:engines-range`);
 });
 
 test('formatTable prints a row per step and a total', () => {

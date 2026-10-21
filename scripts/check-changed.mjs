@@ -6,8 +6,9 @@
 //   3. checks    the check:* scripts that scripts/checks.json "changed" maps the changed paths to, plus the check:*
 //                script whose command names a changed file (a script, its test, ...)
 //   4. typecheck `pnpm typecheck` when a .ts, .mts, .cts or tsconfig file changed
-//   5. tests     the tests of each changed package (packages/javascript, packages/cli): only the changed test files
-//                when nothing but tests changed, the whole package otherwise
+//   5. tests     the tests of each changed package (MR-11: the six packages, core, cli, render, pptx, editor and gallery):
+//                only the changed test files when nothing but tests changed, the whole package otherwise (render, pptx
+//                and editor run their fast `test:contract` tier; the full suite is CI's)
 // Changed files are the committed difference to the merge base with origin/main, plus uncommitted and untracked files.
 // The typecheck and the package tests run through scripts/agent-slot.mjs (at most OPF_AGENT_SLOTS = 3 at once on the
 // machine). Every step runs; a table of statuses and timings is printed at the end; the exit code is 1 when a step fails.
@@ -26,9 +27,17 @@ import { checkJobs, selectChecks } from './run-checks.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BIOME_EXTENSIONS = new Set(['.js', '.mjs', '.cjs', '.jsx', '.ts', '.mts', '.cts', '.tsx', '.json', '.jsonc', '.css']);
 const TYPESCRIPT = /\.(ts|mts|cts)$|(^|\/)tsconfig[^/]*\.json$/;
-const PACKAGES = [
-  { id: 'opf', dir: 'packages/javascript', filter: '@openpresentation/opf' },
-  { id: 'cli', dir: 'packages/cli', filter: '@openpresentation/cli' },
+// The six packages of the monorepo (docs/programs/monorepo/README.md section 1). `script` is the package script that runs
+// the whole package. A package whose directory is not in the repository yet (the engines before their import) never has
+// a changed file, so it adds no step; one that is imported but not in pnpm-workspace.yaml fails instead of passing
+// silently (`--fail-if-no-match`).
+export const PACKAGES = [
+  { id: 'opf', dir: 'packages/javascript', filter: '@openpresentation/opf', script: 'test' },
+  { id: 'cli', dir: 'packages/cli', filter: '@openpresentation/cli', script: 'test' },
+  { id: 'render', dir: 'packages/render', filter: '@openpresentation/opf-render', script: 'test:contract' },
+  { id: 'pptx', dir: 'packages/pptx', filter: '@openpresentation/opf-pptx', script: 'test:contract' },
+  { id: 'editor', dir: 'packages/editor', filter: '@openpresentation/opf-editor', script: 'test:contract' },
+  { id: 'gallery', dir: 'packages/gallery', filter: '@openpresentation/gallery', script: 'test' },
 ];
 const BROWSER = /(^|-)browser(-|\.)/;
 
@@ -107,8 +116,9 @@ export function selectPackageTests(pkg, files, { suites = {}, present = [], dist
   const tests = inside.filter(isTest).map((file) => file.slice('test/'.length));
   const helper = tests.some((name) => exclude.includes(name));
   const build = nonTests.length > 0 || !distExists;
-  // The package's own README, LICENSE and docs do not need its tests; code, scripts, configuration and tests do.
-  const code = nonTests.some((file) => !/^(README|LICENSE|CHANGELOG)/i.test(file));
+  // The package's own README, LICENSE and docs (the imported packages carry docs/ and evidence) do not need its tests;
+  // code, scripts, configuration and tests do.
+  const code = nonTests.some((file) => !/^(README|LICENSE|CHANGELOG|CONTRIBUTING|SECURITY|AGENTS)|^docs\//i.test(file));
   if (!code && !tests.length) return null;
   if (code || helper) return { ...pkg, scope: 'all', build };
   const runnable = tests.filter((name) => present.includes(name) && !BROWSER.test(name));
@@ -125,9 +135,10 @@ function packageSteps(selection) {
   const label = `tests ${selection.id}`;
   if (selection.scope === 'none') return [{ name: label, note: `no runnable test among ${selection.skipped.join(', ')}`, skip: true }];
   const commands = [];
-  if (selection.scope === 'all') commands.push(slot(pnpm, '--filter', selection.filter, 'test'));
+  const filter = ['--filter', selection.filter, '--fail-if-no-match'];
+  if (selection.scope === 'all') commands.push(slot(pnpm, ...filter, selection.script ?? 'test'));
   else {
-    if (selection.build) commands.push(slot(pnpm, '--filter', selection.filter, 'build'));
+    if (selection.build) commands.push(slot(pnpm, ...filter, 'build'));
     const cwd = path.join(root, selection.dir);
     const batch = selection.files.filter((name) => name.endsWith('.test.mjs'));
     if (batch.length) commands.push({ cwd, argv: slot(process.execPath, '--test', ...batch.map((name) => `test/${name}`)) });

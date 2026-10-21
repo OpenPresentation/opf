@@ -34,7 +34,12 @@ export const CLOSED_RANGE_RELEASES = {
 // Workspace packages published to npm: their range must equal the root package.json's.
 export const PUBLISHED_MANIFESTS = ['packages/javascript/package.json', 'packages/cli/package.json'];
 
-const IGNORED = [/^docs\/evidence\//, /(^|\/)fixtures\//, /(^|\/)node_modules\//, /^artifacts\//];
+// MR-11: the other four packages of the monorepo (docs/programs/monorepo/README.md section 1). Each is held to the same
+// rule as soon as its manifest is tracked, which is the imported state; before the import there is nothing to read.
+export const IMPORTED_MANIFESTS = ['packages/render/package.json', 'packages/pptx/package.json', 'packages/editor/package.json', 'packages/gallery/package.json'];
+
+// Evidence of an imported package (packages/<x>/docs/evidence) records history like the root's.
+const IGNORED = [/^(?:packages\/[^/]+\/)?docs\/evidence\//, /(^|\/)fixtures\//, /(^|\/)node_modules\//, /^artifacts\//];
 
 const OPEN_RANGE = /^>=\s*v?(\d+)(?:\.(\d+))?(?:\.(\d+))?$/;
 
@@ -136,7 +141,7 @@ export function checkRepo(root) {
   for (const file of tracked.filter((name) => path.posix.basename(name) === 'package.json')) {
     findings.push(...checkManifest(file, JSON.parse(read(file))));
   }
-  for (const file of PUBLISHED_MANIFESTS) {
+  for (const file of [...PUBLISHED_MANIFESTS, ...IMPORTED_MANIFESTS.filter((name) => tracked.includes(name))]) {
     const range = JSON.parse(read(file)).engines?.node;
     if (range === undefined) findings.push(`${file}: a published package must declare engines.node (the root declares "${rootRange}")`);
     else if (range !== rootRange) findings.push(`${file}: engines.node "${range}" differs from the root's "${rootRange}"; keep one range for every package`);

@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -13,6 +14,15 @@ const scanTargets = [
   "PRODUCT.md",
   "packages/javascript",
 ];
+
+// MR-11: the packages that join the monorepo (docs/programs/monorepo/README.md section 1). Each is scanned as soon as its
+// package.json exists, which is the imported state; before that the directory is absent (or, for the gallery, a generated,
+// untracked catalog snapshot that is not the package) and there is nothing to scan.
+export const importedPackageTargets = ["packages/render", "packages/pptx", "packages/editor", "packages/gallery"];
+
+export function activeScanTargets(root = repoRoot, exists = existsSync) {
+  return [...scanTargets, ...importedPackageTargets.filter((target) => exists(path.join(root, target, "package.json")))];
+}
 
 const rejectedPatterns = [
   { name: "mojibake C3 marker", value: "\u00c3" },
@@ -66,14 +76,28 @@ function inspectLine(file, line, lineNumber) {
   return failures;
 }
 
+function isRasterImage(bytes) {
+  const jpeg = bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff;
+  const gif = bytes.subarray(0, 4).toString("latin1") === "GIF8";
+  const webp = bytes.subarray(0, 4).toString("latin1") === "RIFF" && bytes.subarray(8, 12).toString("latin1") === "WEBP";
+  return jpeg || gif || webp;
+}
+
 export function inspectTextBytes(file, bytes, { maxOutputLength = 64 * 1024 * 1024 } = {}) {
   const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
   if (bytes.subarray(0, 8).equals(pngSignature)) return { kind: "binaryImages" };
   if (path.extname(file).toLowerCase() === ".pptx" && bytes.subarray(0, 4).equals(Buffer.from([80, 75, 3, 4]))) return { kind: "binaryDocuments" };
   if (path.extname(file).toLowerCase() === ".ttf" && bytes.subarray(0, 4).equals(Buffer.from([0, 1, 0, 0]))) return { kind: "binaryFonts" };
+  // MR-11: the imported packages carry other raster images and archives (fixtures, evidence snapshots). They are
+  // recognized by their signature, never by their name, so a text file cannot hide behind an extension: a JPEG, GIF
+  // or WebP, and a gzip archive that is not one of the compressed text reports handled below (a .tgz reads as
+  // hundreds of mojibake false positives).
+  if (isRasterImage(bytes)) return { kind: "binaryImages" };
+  const compressedName = /\.(?:json|log|txt|md|svg|xml)\.gz$/i.test(file);
+  if (!compressedName && bytes[0] === 0x1f && bytes[1] === 0x8b && bytes[2] === 0x08) return { kind: "binaryArchives" };
   // These are compressed text reports, not text encoded in gzip bytes. Keep
   // their actual contents covered, and fail on malformed/oversized archives.
-  const compressed = /\.(?:json|log|txt|md|svg|xml)\.gz$/i.test(file);
+  const compressed = compressedName;
   if (compressed && !bytes.subarray(0, 3).equals(Buffer.from([31, 139, 8]))) {
     throw new Error(`Expected a gzip text report: ${file}`);
   }
@@ -87,10 +111,10 @@ export function inspectTextBytes(file, bytes, { maxOutputLength = 64 * 1024 * 10
 }
 
 async function main() {
-  const files = (await Promise.all(scanTargets.map(collectFiles))).flat().sort();
+  const files = (await Promise.all(activeScanTargets().map(collectFiles))).flat().sort();
   const failures = [];
 
-  const counts = { binaryImages: 0, binaryDocuments: 0, binaryFonts: 0, compressedText: 0 };
+  const counts = { binaryImages: 0, binaryDocuments: 0, binaryFonts: 0, binaryArchives: 0, compressedText: 0 };
 
   for (const file of files) {
     const bytes = await readFile(file);
@@ -108,7 +132,7 @@ async function main() {
     process.exit(1);
   }
 
-  process.stdout.write(`${JSON.stringify({ valid: true, files: files.length - counts.binaryImages - counts.binaryDocuments - counts.binaryFonts, ...counts }, null, 2)}\n`);
+  process.stdout.write(`${JSON.stringify({ valid: true, files: files.length - counts.binaryImages - counts.binaryDocuments - counts.binaryFonts - counts.binaryArchives, ...counts }, null, 2)}\n`);
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

@@ -12,8 +12,14 @@
       "packages/javascript/test/**",
       "packages/cli/src/**",
       "packages/cli/test/**",
+      "packages/gallery/scripts/**",
+      "packages/gallery/src/**",
+      "packages/gallery/test/**",
       "scripts/**",
       "!packages/javascript/src/generated",
+      "!packages/render",
+      "!packages/pptx",
+      "!packages/editor",
       "!**/dist",
       "!**/node_modules"
     ]
