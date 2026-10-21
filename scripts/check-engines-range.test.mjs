@@ -1,7 +1,14 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import test from 'node:test';
 import {
+  IMPORTED_MANIFESTS,
+  PUBLISHED_MANIFESTS,
   checkManifest,
+  checkRepo,
   checkPackageLock,
   checkPnpmLock,
   checkWorkflow,
@@ -73,4 +80,45 @@ test('workflow Node versions must lie inside the range', () => {
   assert.match(findings[0], /ci\.yml:5: node-version 20/);
   assert.equal(checkWorkflow('ci.yml', '        node: [20, 24]\n', 22).length, 1);
   assert.equal(checkWorkflow('ci.yml', ['          node-version: $', '{{ matrix.node }}\n'].join(''), 22).length, 0);
+});
+
+// MR-11: the four packages that join the monorepo are held to the root's range as soon as their manifest is tracked.
+test('MR-11: an imported package must declare the root engines.node range once its manifest is tracked', (t) => {
+  const root = mkdtempSync(path.join(tmpdir(), 'opf-engines-range-'));
+  t.after(() => rmSync(root, { recursive: true, force: true }));
+  const write = (file, value) => {
+    mkdirSync(path.dirname(path.join(root, file)), { recursive: true });
+    writeFileSync(path.join(root, file), `${JSON.stringify(value)}\n`);
+  };
+  const git = (...args) => execFileSync('git', ['-c', 'user.name=t', '-c', 'user.email=t@example.com', ...args], { cwd: root, stdio: 'pipe' });
+  git('init', '-q');
+  write('package.json', { engines: { node: '>=22' } });
+  for (const file of PUBLISHED_MANIFESTS) write(file, { engines: { node: '>=22' } });
+  git('add', '-A');
+  assert.deepEqual(checkRepo(root).findings, [], 'core and the CLI alone pass, as today');
+
+  // Untracked manifests (a generated or half-copied directory) are not read.
+  write('packages/render/package.json', { engines: { node: '24.x' } });
+  assert.deepEqual(checkRepo(root).findings, []);
+
+  for (const file of IMPORTED_MANIFESTS) write(file, { engines: { node: file.includes('editor') ? '>=24' : '>=22' } });
+  write('packages/gallery/package.json', {});
+  git('add', '-A');
+  const findings = checkRepo(root).findings.join('\n');
+  assert.match(findings, /packages\/editor\/package\.json: engines\.node ">=24" differs from the root's ">=22"/);
+  assert.match(findings, /packages\/gallery\/package\.json: a published package must declare engines\.node/);
+  assert.doesNotMatch(findings, /packages\/(pptx|render)\//);
+
+  // A closed range in an imported package's own manifest is reported by the any-manifest rule too.
+  write('packages/pptx/package.json', { engines: { node: '24.x' } });
+  git('add', '-A');
+  assert.match(checkRepo(root).findings.join('\n'), /packages\/pptx\/package\.json: engines\.node is "24\.x"/);
+
+  // Evidence packages record history and are skipped, as the root's docs/evidence is.
+  write('packages/render/docs/evidence/old-run/package.json', { engines: { node: '24.x' } });
+  write('packages/pptx/package.json', { engines: { node: '>=22' } });
+  write('packages/editor/package.json', { engines: { node: '>=22' } });
+  write('packages/gallery/package.json', { engines: { node: '>=22' } });
+  git('add', '-A');
+  assert.deepEqual(checkRepo(root).findings, []);
 });

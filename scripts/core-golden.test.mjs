@@ -53,6 +53,24 @@ test("the lock must select a core fixture", () => {
   assert.throws(() => resolveLock(lock({ repository: "opf", path: "docs/x.json" })), /not scripts\/fixtures/);
 });
 
+// MR-11: `packages/` is no longer one prefix. Core, the CLI, the gallery's records and the renderer's rendering inputs move
+// a render; the tests, docs and evidence of an imported package, the PPTX exporter and the editor do not.
+test("MR-11: only the packages that change a render count as golden inputs", () => {
+  const counts = (paths) => goldenInputs(paths).length;
+  assert.equal(counts(["packages/javascript/src/a.ts", "packages/cli/src/b.ts", "packages/javascript/package.json"]), 3);
+  assert.equal(counts(["packages/gallery/catalog/layouts/hero.json", "packages/gallery/previews/layouts/hero.svg"]), 2);
+  assert.equal(counts(["packages/render/src/svg.js", "packages/render/fonts/anton/Anton-Regular.ttf", "packages/render/dist/index.js", "packages/render/package.json"]), 4);
+  assert.deepEqual(goldenInputs([
+    "packages/render/test/golden-gate.mjs",
+    "packages/render/docs/evidence/a/b.png",
+    "packages/render/README.md",
+    "packages/pptx/src/index.js",
+    "packages/editor/src/index.js",
+    "packages/pptx/test/a.mjs",
+  ]), []);
+  assert.deepEqual(goldenInputs(["packages/integration/test/a.mjs", "packages/gallery/test/a.test.mjs"]), ["packages/gallery/test/a.test.mjs"], "the gallery's whole package counts (its tests cover records and previews); integration does not");
+});
+
 test("only fixtures directly under scripts/fixtures are writable", () => {
   assert.equal(isFixturePath("scripts/fixtures/opf-examples-png.example-decks.sha256.json"), true);
   for (const bad of ["scripts/fixtures/README.md", "scripts/fixtures/sub/x.sha256.json", "scripts/x.sha256.json", "../scripts/fixtures/x.sha256.json", "scripts/fixtures/x.sha256.json/../y", "ecosystem.lock.json", ""]) assert.equal(isFixturePath(bad), false, bad);

@@ -66,7 +66,26 @@ export function linkGalleryCandidate(workspace, ref) {
 }
 
 /** Paths whose change on main moves what a branch renders (or which fixture is selected). */
-export const GOLDEN_INPUT_PREFIXES = ["examples/", "packages/", "spec/", "scripts/fixtures/", "ecosystem.lock.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "package.json"];
+// MR-11: `packages/` was one prefix when core and the CLI were the only packages. With the engines in the repository
+// (docs/programs/monorepo/README.md section 4, "Goldens run when their inputs change") only what changes a rendering
+// counts: core, the CLI, the gallery's records, and the renderer's sources, fonts, build and manifest. The tests, docs and
+// evidence of an imported package, and the PPTX exporter and the editor, do not.
+export const GOLDEN_INPUT_PREFIXES = [
+  "examples/",
+  "packages/javascript/",
+  "packages/cli/",
+  "packages/gallery/",
+  "packages/render/src/",
+  "packages/render/fonts/",
+  "packages/render/dist/",
+  "packages/render/package.json",
+  "spec/",
+  "scripts/fixtures/",
+  "ecosystem.lock.json",
+  "pnpm-lock.yaml",
+  "pnpm-workspace.yaml",
+  "package.json",
+];
 
 export function isFixturePath(value) {
   return typeof value === "string" && FIXTURE_PATH.test(value) && !value.includes("..");
