@@ -1,4 +1,4 @@
-import {publishedGalleryControl,optionalRegularJson,assertPublishedGallery} from './candidate-gallery.mjs';
+import {publishedGalleryControl,resolvePublishedControl,publishedControlFloor,optionalRegularJson,assertPublishedGallery} from './candidate-gallery.mjs';
 import assert from 'node:assert/strict';
 import {mkdtempSync,mkdirSync,writeFileSync,symlinkSync,rmSync,readFileSync,realpathSync,lstatSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
@@ -65,9 +65,64 @@ test('pristine published control binds every immutable source to actual registry
  const registry=async(name,version)=>({name,version:version==='latest'?'0.18.1':version,gitHead:'a'.repeat(40)});
  assert.deepEqual(await publishedGalleryControl(plan,registry),plan.verificationRefs);
  await assert.rejects(publishedGalleryControl(plan,async(name,version)=>({name,version:version==='latest'?'0.18.1':version,gitHead:'b'.repeat(40)})),/registry gitHead/);
- await assert.rejects(publishedGalleryControl(plan,async(name,version)=>({name,version:version==='latest'?'0.18.2':version,gitHead:'a'.repeat(40)})),/current reviewed stable/);
+ await assert.rejects(publishedGalleryControl(plan,async(name,version)=>({name,version:version==='latest'?'0.19.0':version,gitHead:'a'.repeat(40)})),/current reviewed stable/);
  await assert.rejects(publishedGalleryControl({...plan,verificationRefs:{}},registry),/immutable/);
  await assert.rejects(publishedGalleryControl(plan,async()=>{throw Error('registry unavailable');}),/registry unavailable/);
+});
+
+
+// RR-101: the plan is a floor. A newer patch release must not block every candidate-gallery pull request until the plan is refreshed by hand.
+const packageNames=['opf','opf-render','opf-pptx','opf-editor','cli'];
+const floorPlan=()=>({
+ packages:packageNames.map(name=>({name:`@openpresentation/${name}`,version:'0.18.1'})),
+ independentPackages:[{name:'@openpresentation/gallery',version:'4.0.0',repository:'OpenPresentation/gallery'}],
+ exampleRefs:{'opf-editor':'c'.repeat(40)},
+ verificationRefs:{...Object.fromEntries(packageNames.map(name=>[name,'a'.repeat(40)])),gallery:'d'.repeat(40)}
+});
+// Registry whose `latest` is `latest[name]` (default: the plan's version) and whose exact versions carry the plan gitHead or `newer`'s.
+const floorRegistry=({latest={},heads={},overrides={}}={})=>async(name,version)=>{
+ const short=name.split('/')[1],resolved=version==='latest'?latest[short]??(short==='gallery'?'4.0.0':'0.18.1'):version;
+ return {name,version:resolved,gitHead:heads[`${short}@${resolved}`]??'a'.repeat(40),...(overrides[`${short}@${version}`]??{})};
+};
+test('a newer patch release is accepted and resolved with its own gitHead (RR-101)',async()=>{
+ const plan=floorPlan(),before=structuredClone(plan),notices=[];
+ const result=await resolvePublishedControl(plan,floorRegistry({latest:{'opf-render':'0.18.4',cli:'0.18.2'},heads:{'opf-render@0.18.4':'b'.repeat(40),'cli@0.18.2':'e'.repeat(40)}}),message=>notices.push(message));
+ assert.deepEqual(plan,before,'the reviewed plan object is not mutated');
+ assert.equal(result.refs['opf-render'],'b'.repeat(40));assert.equal(result.refs.cli,'e'.repeat(40));assert.equal(result.refs.opf,'a'.repeat(40));
+ assert.deepEqual(Object.keys(result.refs).sort(),['cli','opf','opf-editor','opf-pptx','opf-render']);
+ const version=name=>result.plan.packages.find(item=>item.name===`@openpresentation/${name}`).version;
+ assert.equal(version('opf-render'),'0.18.4');assert.equal(version('cli'),'0.18.2');assert.equal(version('opf'),'0.18.1');
+ assert.equal(result.plan.verificationRefs['opf-render'],'b'.repeat(40));assert.equal(result.plan.verificationRefs.gallery,'d'.repeat(40));
+ assert.deepEqual(result.plan.exampleRefs,plan.exampleRefs);assert.equal(result.plan.independentPackages[0].repository,'OpenPresentation/gallery');
+ assert.deepEqual(notices,['::notice::plan is behind registry: @openpresentation/opf-render 0.18.1 -> 0.18.4','::notice::plan is behind registry: @openpresentation/cli 0.18.1 -> 0.18.2']);
+ // publishedGalleryControl keeps returning just the refs.
+ assert.deepEqual(await publishedGalleryControl(plan,floorRegistry({latest:{'opf-render':'0.18.4'},heads:{'opf-render@0.18.4':'b'.repeat(40)}})),Object.fromEntries(packageNames.map(name=>[name,name==='opf-render'?'b'.repeat(40):'a'.repeat(40)])));
+ // Plan equal to the registry stays strict and prints no notice.
+ notices.length=0;const same=await resolvePublishedControl(plan,floorRegistry(),message=>notices.push(message));
+ assert.deepEqual(same.plan,plan);assert.deepEqual(notices,[]);
+});
+test('the gallery accepts a newer minor or patch of its own major, and a package does not accept a newer minor (RR-101)',async()=>{
+ const plan=floorPlan();
+ for(const latest of ['4.0.1','4.1.0','4.3.7']){
+  const result=await resolvePublishedControl(plan,floorRegistry({latest:{gallery:latest},heads:{[`gallery@${latest}`]:'f'.repeat(40)}}),()=>{});
+  assert.equal(result.plan.independentPackages[0].version,latest);assert.equal(result.plan.verificationRefs.gallery,'f'.repeat(40));
+ }
+ for(const latest of ['5.0.0','3.9.9'])await assert.rejects(resolvePublishedControl(plan,floorRegistry({latest:{gallery:latest}}),()=>{}),/current reviewed stable/);
+ await assert.rejects(resolvePublishedControl(plan,floorRegistry({latest:{gallery:'4.0.1'},heads:{'gallery@4.0.1':'xyz'}}),()=>{}),/gitHead/);
+ const floor=(plan,latest,independent)=>publishedControlFloor(plan,latest,{independent});
+ assert.equal(floor('0.24.2','0.24.2'),true);assert.equal(floor('0.24.2','0.24.10'),true);
+ for(const latest of ['0.24.1','0.25.0','1.24.2','0.24.3-next.1','0.24','latest',undefined])assert.equal(floor('0.24.2',latest),false);
+ assert.equal(floor('4.1.2','4.2.0',true),true);assert.equal(floor('4.1.2','4.1.1',true),false);assert.equal(floor('4.1.2','4.0.9',true),false);
+});
+test('a newer minor, major, lower or prerelease latest, or a bad newer gitHead or name or version, fails (RR-101)',async()=>{
+ const plan=floorPlan(),good={'opf-pptx@0.18.2':'b'.repeat(40)};
+ await resolvePublishedControl(plan,floorRegistry({latest:{'opf-pptx':'0.18.2'},heads:good}),()=>{});
+ for(const latest of ['0.19.0','1.0.0','0.18.0','0.18.2-next.0'])await assert.rejects(resolvePublishedControl(plan,floorRegistry({latest:{'opf-pptx':latest},heads:good}),()=>{}),/current reviewed stable/,latest);
+ for(const gitHead of [undefined,'','b'.repeat(39),'B'.repeat(40),'g'.repeat(40),'b'.repeat(41),'main'])await assert.rejects(resolvePublishedControl(plan,floorRegistry({latest:{'opf-pptx':'0.18.2'},overrides:{'opf-pptx@0.18.2':{gitHead}}}),()=>{}),/gitHead/,String(gitHead));
+ await assert.rejects(resolvePublishedControl(plan,floorRegistry({latest:{'opf-pptx':'0.18.2'},heads:good,overrides:{'opf-pptx@0.18.2':{name:'@openpresentation/other'}}}),()=>{}));
+ await assert.rejects(resolvePublishedControl(plan,floorRegistry({latest:{'opf-pptx':'0.18.2'},heads:good,overrides:{'opf-pptx@0.18.2':{version:'0.18.3'}}}),()=>{}));
+ // A newer release never excuses a stale plan ref: when latest equals the plan, the registry gitHead must still equal verificationRefs.
+ await assert.rejects(resolvePublishedControl(plan,floorRegistry({heads:{'opf@0.18.1':'b'.repeat(40)}}),()=>{}),/registry gitHead/);
 });
 
 

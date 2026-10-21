@@ -110,30 +110,58 @@ export function linkCandidateGallery({gallery,candidate,consumers}){
   return {gallery:candidate,metadata:before,builtDistSha256:buildHash.digest('hex'),consumers:consumers.map(directory=>path.resolve(directory)),qualification:'source-only; packed and registry qualification are separate'};
 }
 
-export async function publishedGalleryControl(plan, registry = async (name, version) => {
+const defaultRegistry = async (name, version) => {
   const response = await fetch(`https://registry.npmjs.org/${encodeURIComponent(name)}/${encodeURIComponent(version)}`);
   assert.ok(response.ok, `published control registry lookup failed: ${response.status}`);
   return response.json();
-}) {
-  const refs = {};
-  for (const repository of [...REPOSITORIES, 'cli']) {
-    const name = `@openpresentation/${repository}`, version = plan.packages?.find(item => item.name === name)?.version;
-    const ref = plan.verificationRefs?.[repository];
-    assert.match(version ?? '', /^\d+\.\d+\.\d+$/, 'published control needs a stable exact version');
-    assert.match(ref ?? '', /^[0-9a-f]{40}$/, 'published control needs an immutable source SHA');
-    const metadata = await registry(name, version);
+};
+const STABLE = /^(\d+)\.(\d+)\.(\d+)$/;
+const stableParts = version => STABLE.exec(version ?? '')?.slice(1).map(Number);
+// The plan is a floor, not an equality: a patch release that lands after the plan was written must not block every in-flight
+// candidate-gallery pull request (RR-101). A package accepts the plan's major.minor with a patch >= the plan's; the independent
+// gallery accepts the plan's major with a minor/patch >= the plan's. A new minor (or major) of a package, and anything lower,
+// still needs a deliberate plan refresh, so a registry `latest` that is not covered by the reviewed plan fails as before.
+export function publishedControlFloor(planVersion, latestVersion, {independent = false} = {}) {
+  const [major, minor, patch] = stableParts(planVersion) ?? [], latest = stableParts(latestVersion);
+  if (!latest || major === undefined || latest[0] !== major) return false;
+  if (independent) return latest[1] > minor || (latest[1] === minor && latest[2] >= patch);
+  return latest[1] === minor && latest[2] >= patch;
+}
+const GIT_HEAD = /^[0-9a-f]{40}$/;
+// Resolves the plan against the registry: the refs the published source must be checked out at, and a RESOLVED plan (the
+// reviewed plan with versions and verification refs raised to the registry's `latest` where it is a newer accepted release).
+export async function resolvePublishedControl(plan, registry = defaultRegistry, notice = message => console.log(message)) {
+  const resolved = structuredClone(plan), refs = {};
+  const resolve = async ({name, planVersion, planRef, independent, strictRef}) => {
+    assert.match(planVersion ?? '', STABLE, independent ? 'published control needs an exact independent gallery version' : 'published control needs a stable exact version');
+    if (strictRef) assert.match(planRef ?? '', GIT_HEAD, 'published control needs an immutable source SHA');
     const current = await registry(name, 'latest');
-    assert.equal(current.version, version, 'published control requires the current reviewed stable registry graph');
-    assert.equal(metadata.name, name); assert.equal(metadata.version, version);
-    assert.equal(metadata.gitHead, ref, 'published control source does not match registry gitHead');
-    refs[repository] = ref;
+    if (current.version === planVersion) {
+      const metadata = await registry(name, planVersion);
+      assert.equal(metadata.name, name); assert.equal(metadata.version, planVersion);
+      if (strictRef) assert.equal(metadata.gitHead, planRef, 'published control source does not match registry gitHead');
+      return {version: planVersion, ref: planRef};
+    }
+    assert.ok(publishedControlFloor(planVersion, current.version, {independent}), `published control requires the current reviewed stable registry graph: ${name} registry latest ${current.version} is not ${planVersion} or a newer release the plan accepts; refresh release-plan.json`);
+    const metadata = await registry(name, current.version);
+    assert.equal(metadata.name, name); assert.equal(metadata.version, current.version);
+    assert.match(metadata.gitHead ?? '', GIT_HEAD, `published control needs a 40 hex gitHead for ${name}@${current.version}`);
+    notice(`::notice::plan is behind registry: ${name} ${planVersion} -> ${current.version}`);
+    return {version: current.version, ref: metadata.gitHead};
+  };
+  for (const repository of [...REPOSITORIES, 'cli']) {
+    const name = `@openpresentation/${repository}`, item = resolved.packages?.find(entry => entry.name === name);
+    const {version, ref} = await resolve({name, planVersion: item?.version, planRef: plan.verificationRefs?.[repository], strictRef: true});
+    item.version = version; resolved.verificationRefs[repository] = ref; refs[repository] = ref;
   }
-  const gallery=plan.independentPackages?.find(item=>item.name==='@openpresentation/gallery');
-  assert.match(gallery?.version??'', /^\d+\.\d+\.\d+$/, 'published control needs an exact independent gallery version');
-  const galleryMetadata=await registry(gallery.name,gallery.version),latestGallery=await registry(gallery.name,'latest');
-  assert.equal(galleryMetadata.name,gallery.name);assert.equal(galleryMetadata.version,gallery.version);
-  assert.equal(latestGallery.version,gallery.version,'published gallery metadata must be current');
-  return refs;
+  const gallery = resolved.independentPackages?.find(entry => entry.name === '@openpresentation/gallery');
+  const {version, ref} = await resolve({name: gallery?.name, planVersion: gallery?.version, planRef: plan.verificationRefs?.gallery, independent: true, strictRef: false});
+  if (version !== gallery.version) { gallery.version = version; resolved.verificationRefs.gallery = ref; }
+  return {refs, plan: resolved};
+}
+
+export async function publishedGalleryControl(plan, registry) {
+  return (await resolvePublishedControl(plan, registry)).refs;
 }
 
 export function assertPublishedGallery(manifest,configuration){
