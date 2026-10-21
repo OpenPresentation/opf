@@ -103,6 +103,7 @@
     "sync:catalog": "node scripts/sync-gallery-catalog.mjs --gallery ../pptx-gallery",
     "check:examples-convert": "node scripts/check-examples-convert.mjs && node --test scripts/check-examples-convert.test.mjs",
     "check:examples": "node scripts/validate-examples.mjs && node scripts/inspect-example-findings.mjs && node scripts/check-generated-examples.mjs && node scripts/generate-example-suite.mjs --check",
+    "check:stability": "node --test scripts/gallery-stability.test.mjs && node scripts/gallery-stability.mjs",
     "check:breaking": "node scripts/test-breaking-gate.mjs && node scripts/check-breaking-changes.mjs",
     "test:packages": "node scripts/test-package-ecosystem.mjs",
     "test:registry-ecosystem": "node scripts/test-packed-ecosystem.mjs --registry",

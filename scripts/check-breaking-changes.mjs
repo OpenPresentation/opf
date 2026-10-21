@@ -30,6 +30,15 @@
 // release-prep pull request bumps the version, which acknowledges it again,
 // and assembles the fragment into the changelog.
 //
+// MR-35: a removed record id (kind 1) is acknowledged the same two ways: the bump,
+// or before it a pending gallery fragment (`packages: [gallery]`) that declares it in
+// its `drawing` list as `<kind>:<id>` (camelCase kind: `colorSchemes:cool-horizon`),
+// the field scripts/gallery-stability.mjs requires for every removed id. The records
+// are enforced from the first release tag that tracks packages/gallery/catalog (the
+// first shared train, `vX.Y.Z`); a tag from before has none, so the kind is a no-op
+// until then. The baseline is the newest release tag of either family: `opf-v*` (core's
+// own, until the import) or `v*` (the shared line), by version, prereleases excluded.
+//
 // The working tree (not HEAD) is compared against the tag, so uncommitted
 // changes are covered too. Zero external dependencies by design; uses `git`
 // via child_process for reading historical state.
@@ -63,16 +72,26 @@ const catalogsSubpath = displayPath(catalogsRoot);
 const formerCatalogsSubpath = displayPath(formerCatalogsRoot);
 const schemasSubpath = displayPath(schemasRoot);
 
+const RELEASE_TAG = /^(?:opf-)?v(\d+\.\d+\.\d+)$/;
+
+// The newest release tag merged into HEAD: `opf-v<version>` (core's own tags before the monorepo import) or `v<version>` (the
+// shared train's tags after it), by version. A prerelease tag (a canary) is no baseline, and `gallery-v*`, the imported gallery's
+// renamed tags, match neither family.
 function latestOpfTag() {
   // A publishing tag points at HEAD and must not become its own baseline.
   const currentTags = new Set(git(["tag", "--points-at", "HEAD"]).split("\n"));
-  const output = git(["tag", "-l", "opf-v*", "--merged", "HEAD", "--sort=-v:refname"]);
-  const [first] = output.split("\n").map((line) => line.trim()).filter((tag) => tag && !currentTags.has(tag));
-  return first ?? null;
+  const output = git(["tag", "-l", "opf-v*", "v[0-9]*", "--merged", "HEAD"]);
+  const tags = output
+    .split("\n")
+    .map((line) => line.trim())
+    .filter((tag) => tag && !currentTags.has(tag) && RELEASE_TAG.test(tag))
+    .map((tag) => ({ tag, version: parseVersion(RELEASE_TAG.exec(tag)[1]) }));
+  tags.sort((a, b) => b.version.major - a.version.major || b.version.minor - a.version.minor || b.version.patch - a.version.patch || (a.tag.startsWith("opf-") ? 1 : 0) - (b.tag.startsWith("opf-") ? 1 : 0));
+  return tags[0]?.tag ?? null;
 }
 
 function tagVersion(tag) {
-  const match = /^opf-v(.+)$/.exec(tag);
+  const match = RELEASE_TAG.exec(tag);
   return match ? match[1] : null;
 }
 
@@ -152,6 +171,8 @@ const breaking = [];
 const notes = [];
 // Removed package exports: { specifier, message }. Acknowledged by the version bump or a changelog fragment (kind 5).
 const removedExports = [];
+// Removed catalog records: { key: "<camelCaseKind>:<id>", message }. Acknowledged by the bump or a gallery fragment's `drawing` (MR-35).
+const removedRecords = [];
 
 function flagBreaking(message) {
   breaking.push(message);
@@ -171,7 +192,7 @@ async function checkRemovedCatalogRecords(tag) {
     // The same file below the catalog root, wherever the tag had that root.
     const inCatalog = relPath.startsWith(`${formerCatalogsSubpath}/`) ? relPath.slice(formerCatalogsSubpath.length + 1) : relPath.slice(catalogsSubpath.length + 1);
     if (!existsSync(path.join(catalogsRoot, ...inCatalog.split("/")))) {
-      flagBreaking(`[record removed] ${kind}/${id} (${relPath} existed at ${tag}, no longer exists under ${catalogsSubpath})`);
+      removedRecords.push({ key: `${kind.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())}:${id}`, message: `[record removed] ${kind}/${id} (${relPath} existed at ${tag}, no longer exists under ${catalogsSubpath})` });
     }
   }
 }
@@ -206,6 +227,19 @@ function acknowledgingFragments(root = changesRoot) {
       const packages = /^packages:\s*\[(.*)\]\s*$/m.exec(front)?.[1];
       return /^type:\s*changed\s*$/m.test(front) && (packages === undefined || packages.trim() === "" || packages.split(",").map((item) => item.trim()).includes("opf"));
     });
+}
+
+// MR-35: the pending gallery fragments (changes/*.md naming the gallery package) and the `<kind>:<id>` entries of their `drawing` list.
+function galleryDrawingFragments(root = changesRoot) {
+  if (!existsSync(root)) return [];
+  const out = [];
+  for (const name of readdirSync(root)) {
+    if (!name.endsWith(".md") || name.toLowerCase() === "readme.md") continue;
+    const front = /^---\r?\n([\s\S]*?)\r?\n---/.exec(readFileSync(path.join(root, name), "utf8"))?.[1] ?? "";
+    const list = (key) => (new RegExp(`^${key}:\\s*\\[(.*)\\]\\s*$`, "m").exec(front)?.[1] ?? "").split(",").map((item) => item.trim().replace(/^(["'])(.*)\1$/, "$2")).filter(Boolean);
+    if (list("packages").includes("gallery")) out.push({ name, drawing: list("drawing") });
+  }
+  return out;
 }
 
 // A fragment acknowledges a removed specifier when it names it exactly (not as the prefix of a longer specifier).
@@ -289,7 +323,7 @@ async function main() {
   await checkSchemas(tag);
   await checkPackageExports(tag);
 
-  if (breaking.length === 0 && removedExports.length === 0) {
+  if (breaking.length === 0 && removedExports.length === 0 && removedRecords.length === 0) {
     process.stdout.write(`${JSON.stringify({ valid: true, tag, breakingChanges: 0 }, null, 2)}\n`);
     return;
   }
@@ -303,13 +337,20 @@ async function main() {
   const fragmentAcknowledged = [];
   for (const removal of removedExports) {
     const by = fragments.find((fragment) => fragmentNames(fragment.text, removal.specifier));
-    if (by && !versionAcknowledged) fragmentAcknowledged.push(`${removal.specifier} (changes/${by.name})`);
+    if (by && !versionAcknowledged) fragmentAcknowledged.push(`[export removed] ${removal.specifier} (changes/${by.name})`);
+    else breaking.push(removal.message);
+  }
+  // MR-35: a removed record id is named by a pending gallery fragment's `drawing` list.
+  const declaring = galleryDrawingFragments();
+  for (const removal of removedRecords) {
+    const by = declaring.find((fragment) => fragment.drawing.includes(removal.key));
+    if (by && !versionAcknowledged) fragmentAcknowledged.push(`[record removed] ${removal.key} (changes/${by.name})`);
     else breaking.push(removal.message);
   }
   if (breaking.length === 0) {
-    process.stderr.write(`breaking-change check found ${removedExports.length} removed package export(s) since ${tag}, each named by a pending changelog fragment:\n\n${fragmentAcknowledged.map((item) => `  - [export removed] ${item}\n`).join("")}\n`);
+    process.stderr.write(`breaking-change check found ${removedExports.length} removed package export(s) and ${removedRecords.length} removed record id(s) since ${tag}, each named by a pending changelog fragment:\n\n${fragmentAcknowledged.map((item) => `  - ${item}\n`).join("")}\n`);
     process.stdout.write(`The release that ships them must be a breaking release: for a 0.x line, a minor or major bump of packages/javascript/package.json (now ${currentVersion}, ${oldVersion} at ${tag}). Passing.\n`);
-    process.stdout.write(`${JSON.stringify({ valid: true, tag, breakingChanges: removedExports.length, acknowledgedBy: "changelog-fragment", removedExports: removedExports.map((item) => item.specifier), oldVersion, currentVersion }, null, 2)}\n`);
+    process.stdout.write(`${JSON.stringify({ valid: true, tag, breakingChanges: removedExports.length + removedRecords.length, acknowledgedBy: "changelog-fragment", removedExports: removedExports.map((item) => item.specifier), removedRecords: removedRecords.map((item) => item.key), oldVersion, currentVersion }, null, 2)}\n`);
     return;
   }
   if (fragmentAcknowledged.length) notes.push(`Named by a pending changelog fragment: ${fragmentAcknowledged.join(", ")}.`);
@@ -332,7 +373,8 @@ async function main() {
   process.stderr.write(
     `packages/javascript/package.json is still at ${currentVersion} (compared against ${oldVersion} at ${tag}).\n` +
       `Required: bump the version (for a 0.x line, any minor or major bump; for 1.x+, a major bump) to acknowledge these breaking changes, or revert them.\n` +
-      (removedExports.length ? `A removed package export can instead be named, as its import specifier, by a pending changes/*.md fragment of type changed.\n` : ""),
+      (removedExports.length ? `A removed package export can instead be named, as its import specifier, by a pending changes/*.md fragment of type changed.\n` : "") +
+      (removedRecords.length ? `A removed record id can instead be declared, as <kind>:<id>, in the \`drawing\` list of a pending gallery fragment (changes/*.md with packages: [gallery]).\n` : ""),
   );
   process.exitCode = 1;
 }
