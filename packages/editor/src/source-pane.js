@@ -2,7 +2,7 @@ import { parse as parseJsonc, printParseErrorCode } from "jsonc-parser";
 import { fromYaml, scanYamlComments, toYaml } from "@openpresentation/opf/yaml";
 import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
 import { mountJsonCodeEditor } from "./json-editor.js";
-import { createSourceMemory, findDuplicateKey, updateJsonSource } from "./exact-source.js";
+import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from "./exact-source.js";
 import { lineForPath, lineOfOffset, offsetOfLine } from "./source-lines.js";
 import { errorText, normalizeFinding, rejectionFindings as findingsOfError } from "./source-findings.js";
 
@@ -127,6 +127,17 @@ export function createSourcePane(container, options = {}) {
   // Whether the findings include an error, and what the editor's `aria-invalid` currently says (null: not yet set).
   let invalid = false, shownInvalid = null;
   const lineCache = { key: "", values: new Map() };
+  // The exact text of the documents `replaceDocument` replaced and opened, per format, so Undo and Redo show it again byte for byte
+  // (a YAML comment, the author's JSON spelling). Keyed by format and document; the oldest entries go first.
+  const exactTexts = new Map();
+  const rememberText = (target, value, text) => {
+    if (typeof text !== "string" || text.length > MAX_EXACT_SOURCE_LENGTH) return;
+    const key = `${target}|${JSON.stringify(value)}`;
+    exactTexts.delete(key);
+    exactTexts.set(key, text);
+    while (exactTexts.size > 8) exactTexts.delete(exactTexts.keys().next().value);
+  };
+  const exactText = (target, value) => exactTexts.get(`${target}|${JSON.stringify(value)}`);
 
   // ---- DOM ----------------------------------------------------------------------------------------------------------
   const root = el("div", "opf-source opf-ui", { "data-density": density });
@@ -315,6 +326,12 @@ export function createSourcePane(container, options = {}) {
       const before = control.api.getValue(), comments = scanYamlComments(before).count;
       if (comments > 0 && written.text !== before) transientNotes = [normalizeFinding({ message: `${plural(comments, "comment")} in the YAML ${comments === 1 ? "was" : "were"} dropped when the document changed outside the source.`, severity: "warning" }, "format")];
     }
+    // A document `replaceDocument` opened or replaced comes back with the exact text it had.
+    const exact = exactText(format, deck());
+    if (exact !== undefined && exact !== written.text) {
+      try { if (same(readText(format, exact, catalogs()).deck, deck())) { written = { ...written, text: exact }; if (format === "json") jsonText = exact; } }
+      catch { /* The remembered text no longer reads as this document: use the generated one. */ }
+    }
     noteFindings = written.notes;
     if (format !== "json") syncJsonSafe();
     if (written.text !== control.api.getValue()) show(written.text);
@@ -331,6 +348,60 @@ export function createSourcePane(container, options = {}) {
     version++;
     fromSession();
   });
+
+  // ---- Replacing the whole document ----------------------------------------------------------------------------------
+  /**
+   * Open `input` (a document, or JSON text) as the whole document with `editor.replaceDocument`: one undoable change, no catalog record
+   * forked. The text shown is `options.source` (or `input` when it is text) in JSON, the document written in YAML or Markdown, and Undo
+   * and Redo bring each document's text back exactly.
+   */
+  function replaceDocument(input, replaceOptions = {}) {
+    if (destroyed) throw new Error("The source pane was destroyed.");
+    flush();
+    const before = deck();
+    const beforeText = dirty ? undefined : control.api.getValue();
+    const authored = typeof input === "string" ? input : replaceOptions.source;
+    transientNotes = [];
+    let change;
+    applying = true;
+    try {
+      // Remember the spelling of the document being replaced, then open the new one.
+      syncJson(before);
+      change = editor.replaceDocument(input, { format, ...replaceOptions.meta });
+    } catch (error) {
+      rejectionFindings = error?.issues?.length ? findingsOfError(error) : [normalizeFinding({ message: errorText(error), kind: "rejected" })];
+      renderFindings();
+      throw error;
+    } finally { applying = false; }
+    clearTimeout(timer);
+    timer = null;
+    for (const key of Object.keys(drafts)) delete drafts[key];
+    syntaxFindings = [];
+    rejectionFindings = [];
+    dirty = false;
+    version++;
+    const opened = deck();
+    let written;
+    let authoredJson = null;
+    if (typeof authored === "string") { try { if (same(JSON.parse(authored), opened) && !findDuplicateKey(authored)) authoredJson = authored; } catch { /* Not the document's JSON: write it. */ } }
+    if (replaceOptions.name !== undefined) { name = sanitizeName(replaceOptions.name) || "deck"; updateBar(); }
+    try { written = format === "json" && authoredJson !== null ? { text: authoredJson, notes: [] } : write(format, opened); }
+    catch (error) {
+      syncJsonSafe();
+      rejectionFindings = [normalizeFinding({ message: `The document cannot be written as ${formatOf(format).label}: ${errorText(error)}. The text below is the last version that could be.`, kind: "rejected" })];
+      renderFindings();
+      return change;
+    }
+    if (authoredJson !== null) jsonText = authoredJson; else syncJsonSafe();
+    rememberText(format, opened, written.text);
+    rememberText(format, before, beforeText);
+    noteFindings = written.notes;
+    if (written.text !== control.api.getValue()) show(written.text); else baseline = written.text;
+    renderedKey = "";
+    renderFindings();
+    syncAttributes();
+    return change;
+  }
 
   // ---- Format -------------------------------------------------------------------------------------------------------
   function setFormatInternal(next, notify) {
@@ -627,6 +698,11 @@ export function createSourcePane(container, options = {}) {
 
   return {
     element: root,
+    /**
+     * Open a different document: `editor.replaceDocument` as one undoable change that forks no catalog record, with the text shown in
+     * the current format. `options.source` is the JSON text the document was read from (kept byte for byte); `options.name` renames the file.
+     */
+    replaceDocument,
     /** Re-read the document from the session (for example after the host changed it without events). */
     refresh() { version++; fromSession(false); },
     /** Replace the host findings; `setFindings(null)` returns to the session's own validation. */

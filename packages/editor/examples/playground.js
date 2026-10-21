@@ -402,7 +402,9 @@ element('apply-json').onclick = async event => {
     // Remember the spelling of the document being replaced so Undo restores it exactly, then keep the applied bytes.
     updateJsonSource(sourceText ?? prettySource(editor.presentation), editor.presentation, sourceMemory);
     sourceText = applied;
-    editor.applyPatch([{op:'replace',path:'',value:deck}]);
+    // A host that loads a document (the gallery handoff) opens it: no catalog record of the current deck is forked (RR-98). Typed source is an edit.
+    if (event?.isTrusted === false) editor.replaceDocument(deck, { source: 'load' });
+    else editor.applyPatch([{op:'replace',path:'',value:deck}]);
     // A host that loads a document (the gallery handoff clicks this button from script) is not the user's work: do not autosave it or warn about it.
     if (event?.isTrusted === false) persistence?.rebase();
     if (renderError) { element('json-error').textContent = renderError; return; }

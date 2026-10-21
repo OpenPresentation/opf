@@ -1,4 +1,4 @@
-import type { EditorSession } from "./index.js";
+import type { EditorChange, EditorSession } from "./index.js";
 import type { JsonCatalogContext } from "./json-options.js";
 import type { JsonCodeEditor } from "./json-editor.js";
 
@@ -64,8 +64,26 @@ export interface SourcePaneOptions {
   onError?(error: unknown): void;
 }
 
+export interface ReplaceDocumentOptions {
+  /** The JSON text the document was read from. Used when it parses to the document, so its spelling is kept. */
+  source?: string;
+  /** The file name without extension, as `setName` (the document's own name is not used). */
+  name?: string;
+  /** Extra `meta` for the session change (`source` defaults to `"replace-document"`). */
+  meta?: Record<string, unknown>;
+}
+
 export interface SourcePane {
   element: HTMLElement;
+  /**
+   * Open a different document in the session and the pane (a host's example menu, File > Open): `editor.replaceDocument`, so it is one
+   * undoable change and no catalog record is forked into `catalogs.custom` (a diff typed or pasted into the pane is an edit; this is not).
+   * `document` is a parsed document or JSON text. The pane shows `options.source` (the JSON text the document was read from, kept byte for
+   * byte; `document` itself when it is text) in JSON and the document written in YAML or Markdown. Undo and Redo bring back each
+   * document's text exactly, in the format that is shown. A document the session refuses throws (`invalid-opf-edit` with `issues`) and
+   * changes nothing. Works in a read-only pane.
+   */
+  replaceDocument(document: unknown, options?: ReplaceDocumentOptions): EditorChange;
   /** Re-read the document from the session. */
   refresh(): void;
   /** Replace the host findings; `null` returns to the session's own validation. */

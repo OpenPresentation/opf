@@ -4,6 +4,8 @@ import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
+import { gallery } from '@openpresentation/gallery';
+import { prepareSave } from '../dist/index.js';
 
 // RR-98: the source pane (JSON, YAML and Markdown, inline findings) in the example harness, examples/source-pane.html.
 const root = fileURLToPath(new URL('../artifacts/playground/', import.meta.url));
@@ -459,6 +461,67 @@ try {
   assert.equal(await off.locator('.cm-tooltip-autocomplete').count(), 0, '`completions: false` keeps the field menu only');
   assert.equal(await off.locator('.opf-source-code .cm-content').getAttribute('aria-autocomplete'), null);
   await off.close();
+
+  // RR-98: opening an example over another replaces the whole document: no catalog record is forked, Undo restores the previous
+  // document and its source text byte for byte, and Redo brings the opened one back.
+  {
+    const embedded = (document) => prepareSave(document, { catalogs: [gallery] }).document;
+    const conference = embedded({ name: 'Conference talk', slides: [{ id: 'a1', title: 'Opening', layout: 'cover' }, { id: 'a2', title: 'Body', text: 'Alpha', layout: 'text' }] });
+    const tour = embedded({ name: 'Full feature tour', slides: [{ id: 'b1', title: 'Tour', layout: 'cover' }, { id: 'b2', title: 'More', text: 'Beta' }] });
+    // Two examples published at different times: the same record id with other content.
+    tour.catalogs.default.layouts.cover.name = 'Cover, newer catalog build';
+    const conferenceText = JSON.stringify(conference, null, '\t') + '\n';
+    const tourText = JSON.stringify(tour, null, 4);
+    const customIds = (document) => Object.values(document.catalogs?.custom ?? {}).flatMap(records => Object.keys(records));
+    const replaced = await open();
+    const original = await text(replaced);
+    await replaced.evaluate(([document, source]) => { window.replaceResult = demo.pane.replaceDocument(document, { source, name: 'conference-talk' }); }, [conference, conferenceText]);
+    assert.deepEqual(await deck(replaced), conference, 'the first example is exactly the document');
+    assert.equal(await text(replaced), conferenceText, 'the pane shows the example as written');
+    assert.equal(await replaced.evaluate(() => demo.pane.getName()), 'conference-talk');
+    await replaced.evaluate(([document, source]) => demo.pane.replaceDocument(document, { source }), [tour, tourText]);
+    await replaced.waitForTimeout(400);
+    const opened = await deck(replaced);
+    assert.deepEqual(opened, tour, 'the second example is exactly the document');
+    assert.deepEqual(customIds(opened), [], 'no catalog record is forked');
+    assert.ok(!/-custom/.test(JSON.stringify(opened)) && !/-custom/.test(await text(replaced)), 'no *-custom id in the document or the source');
+    assert.equal(await text(replaced), tourText, 'the pane shows the second example as written');
+    assert.equal(await replaced.evaluate(() => demo.editor.snapshot().undoDepth), 2, 'each load is one undoable change');
+    await replaced.getByRole('button', { name: 'Undo', exact: true }).click();
+    assert.deepEqual(await deck(replaced), conference, 'Undo restores the previous document');
+    assert.equal(await text(replaced), conferenceText, 'Undo restores its source text exactly');
+    await replaced.getByRole('button', { name: 'Undo', exact: true }).click();
+    assert.equal(await text(replaced), original, 'a second Undo restores the starting source exactly');
+    assert.equal((await deck(replaced)).name, 'Minimal OPF Deck');
+    await replaced.getByRole('button', { name: 'Redo', exact: true }).click();
+    assert.equal(await text(replaced), conferenceText, 'Redo opens the first example with its text');
+    await replaced.getByRole('button', { name: 'Redo', exact: true }).click();
+    assert.deepEqual(await deck(replaced), tour, 'Redo opens the second example');
+    assert.equal(await text(replaced), tourText, 'with its text exactly');
+    assert.deepEqual(customIds(await deck(replaced)), []);
+    // A typed edit after opening still forks the record it edits, and Undo takes it back.
+    await selectIn(replaced, 'Cover, newer catalog build');
+    await replaced.keyboard.type('Mine');
+    await replaced.keyboard.press('Escape');
+    await waitDeck(replaced, (d) => d.catalogs.custom?.layouts?.['cover-custom']);
+    await replaced.evaluate(() => demo.editor.undo());
+    await waitDeck(replaced, (d) => !d.catalogs.custom);
+    assert.equal(await text(replaced), tourText, 'Undo of a typed edit restores the opened text');
+    // The same load in YAML: the document is exact, Undo restores the YAML that was shown.
+    await chooseFormat(replaced, 'YAML');
+    const yamlBefore = await text(replaced);
+    await replaced.evaluate(([document]) => demo.pane.replaceDocument(document), [conference]);
+    assert.deepEqual(await deck(replaced), conference);
+    assert.deepEqual(customIds(await deck(replaced)), []);
+    await replaced.evaluate(() => demo.editor.undo());
+    assert.deepEqual(await deck(replaced), tour);
+    assert.equal(await text(replaced), yamlBefore, 'Undo restores the YAML text');
+    // A document the session refuses throws and changes nothing.
+    const refused = await replaced.evaluate(() => { try { demo.pane.replaceDocument({ slides: [{ title: 42 }] }, { meta: { rejectInvalid: true } }); return 'opened'; } catch (error) { return error.code; } });
+    assert.equal(refused, 'invalid-opf-edit');
+    assert.deepEqual(await deck(replaced), tour);
+    await replaced.close();
+  }
 
   assert.deepEqual(requests, [], 'the pane makes no network requests');
   assert.deepEqual(errors, []);

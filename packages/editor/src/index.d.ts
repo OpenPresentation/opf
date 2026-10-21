@@ -91,6 +91,14 @@ export interface EditorSession {
   setGroupComposition(path: string, composition: Composition, meta?: Record<string, unknown>): EditorChange;
   setCatalog(path: string | string[], catalogKind: string, id: string, meta?: Record<string, unknown>): EditorChange;
   applyPatch(operations: JsonPatchOperation[], meta?: Record<string, unknown>): EditorChange;
+  /**
+   * Open a different document in the session: the whole document is replaced as one undoable change, and the replacement is never
+   * read as an edit of the catalog records the two documents share, so nothing under `catalogs.default` or a named group is forked
+   * into `catalogs.custom`. `input` is a parsed document, JSON text or bytes. It is validated like any edit (`meta.rejectInvalid` or
+   * the session option refuses an invalid document and changes nothing). It always records its one change, also for an equal document.
+   * `meta.source` defaults to `"replace-document"`; the `patch` event carries `meta.replaceDocument: true`.
+   */
+  replaceDocument(input: unknown, meta?: Record<string, unknown>): EditorChange;
   /** The undo and redo stacks as plain data (oldest entry first), for hosts that persist work. */
   exportHistory(): EditorHistory;
   /** Replace the document and, optionally, the history in one step (one `restore` event). A history that does not replay against the document throws `invalid-history` before anything changes. */

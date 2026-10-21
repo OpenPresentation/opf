@@ -130,6 +130,10 @@
           "command": "node test/import-font-wait-browser.mjs"
         },
         {
+          "id": "browser:replace-document",
+          "command": "node test/replace-document-browser.mjs"
+        },
+        {
           "id": "browser:design-upload-async",
           "command": "node test/design-upload-async-browser.mjs"
         },

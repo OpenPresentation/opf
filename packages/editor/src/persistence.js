@@ -268,7 +268,7 @@ export function createPersistence(editor, options = {}) {
       }
     } else {
       // The user already worked in this session: bring the copy back as one undoable change instead of replacing their history.
-      editor.applyPatch([{ op: "replace", path: "", value: structuredClone(record.presentation) }], { source: "restore" });
+      editor.replaceDocument(structuredClone(record.presentation), { source: "restore" });
     }
     touched = true;
     baseline = record.dirty === false ? jsonOf(editor.presentation) : null;
@@ -315,7 +315,7 @@ export function createPersistence(editor, options = {}) {
     let record;
     try { record = await adapter.get(earlierKey); } catch { return false; }
     if (!validRecord(record)) return false;
-    try { editor.applyPatch([{ op: "replace", path: "", value: structuredClone(record.presentation) }], { source: "restore" }); }
+    try { editor.replaceDocument(structuredClone(record.presentation), { source: "restore" }); }
     catch { return false; }
     pending = undefined;
     touched = true;

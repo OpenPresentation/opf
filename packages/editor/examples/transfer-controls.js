@@ -515,7 +515,9 @@ export function installTransferControls({
           // A host font/resolver callback can edit the session during rendering.
           if (!current()) return;
           setSlideIndex(result.slideIndex);
-          editor.applyPatch([{ op: "replace", path: "", value: result.presentation }], {
+          // Opening a document ("replace") is not an edit of the catalog records it shares with the current one: no fork (RR-98).
+          if (action === "replace") editor.replaceDocument(result.presentation, { source: "import", rejectInvalid: true });
+          else editor.applyPatch([{ op: "replace", path: "", value: result.presentation }], {
             source: "import",
             rejectInvalid: true,
           });
