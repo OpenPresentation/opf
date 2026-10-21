@@ -8,6 +8,7 @@ import { registryToolchain } from './registry-toolchain.mjs';
 import { galleryEditorWasmManifest } from './gallery-editor-wasm.mjs';
 import { galleryScriptFontManifestForExample } from './gallery-script-fonts.mjs';
 import { galleryLazyFontManifestForExample } from './gallery-lazy-fonts.mjs';
+import { linkedLocalAssets, packageAssetSources, versionLinkedAssets, verifyLinkedAssets } from './gallery-editor-assets.mjs';
 import { exampleUsesBaseFonts, splitBaseFonts, verifyBaseFonts } from './gallery-base-fonts.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -138,11 +139,17 @@ if (lazyFontManifest) await writeFile(path.join(out, 'lazy-fonts.json'), `${JSON
 else await rm(path.join(out, 'lazy-fonts.json'), { force: true });
 await copyFile(path.join(source, 'playground.css'), path.join(out, 'playground.css'));
 await copyFile(path.join(source, 'galleries.json'), path.join(out, 'galleries.json'));
-const revision = sha256(Buffer.concat(await Promise.all(['playground.js', 'playground.css'].map(file => readFile(path.join(out, file)))))).slice(0, 12);
-const html = (await readFile(path.join(source, 'playground.html'), 'utf8'))
-  .replace('http://localhost:3101/spec', '/spec')
-  .replace('src="playground.js"', `src="playground.js?v=${revision}"`)
-  .replace('href="playground.css"', `href="playground.css?v=${revision}"`);
+// RR-98: the page links the editor package's own stylesheet (styles.css) beside playground.css; every linked local stylesheet and script
+// is staged from what the page links, so an asset a future editor release adds is copied (or the build fails), never dropped.
+const pageHtml = await readFile(path.join(source, 'playground.html'), 'utf8');
+const linkedAssets = linkedLocalAssets(pageHtml);
+const staged = ['playground.js', 'playground.css'];
+for (const { file, from } of await packageAssetSources({ linked: linkedAssets, staged, editorDirectory: path.join(registry.consumer, 'node_modules/@openpresentation/opf-editor') })) {
+  await copyFile(from, path.join(out, file));
+}
+const pageAssets = [...new Set([...staged, ...linkedAssets])];
+const revision = sha256(Buffer.concat(await Promise.all(pageAssets.map(file => readFile(path.join(out, file)))))).slice(0, 12);
+const html = versionLinkedAssets(pageHtml.replace('http://localhost:3101/spec', '/spec'), revision);
 await writeFile(path.join(out, 'index.html'), html);
 const result = spawnSync(process.execPath, ['scripts/build-gallery-snapshot.mjs', '--registry'], { cwd: root, stdio: 'inherit' });
 if (result.status !== 0) throw new Error('Gallery snapshot build failed');
@@ -163,7 +170,7 @@ await writeFile(path.join(out, 'opf-spec.json'), JSON.stringify({
   schemaDigest: sha256(JSON.stringify(opfSchemas)), fieldCount: fields.length, schemas: opfSchemas, fields,
 }));
 const files = {};
-for (const file of ['index.html', 'playground.js', 'playground.js.LEGAL.txt', 'playground.css', 'fonts.json', 'galleries.json', 'gallery.json', 'opf-spec.json', 'wasm.json', ...(scriptFontManifest ? ['script-fonts.json'] : []), ...(lazyFontManifest ? ['lazy-fonts.json'] : []), ...(baseFonts ? ['base-fonts.json', ...baseFonts.base.map(face => face.file)] : [])]) {
+for (const file of ['index.html', 'playground.js', 'playground.js.LEGAL.txt', 'playground.css', ...pageAssets.filter(file => !staged.includes(file)), 'fonts.json', 'galleries.json', 'gallery.json', 'opf-spec.json', 'wasm.json', ...(scriptFontManifest ? ['script-fonts.json'] : []), ...(lazyFontManifest ? ['lazy-fonts.json'] : []), ...(baseFonts ? ['base-fonts.json', ...baseFonts.base.map(face => face.file)] : [])]) {
   files[file] = sha256(await readFile(path.join(out, file)));
 }
 await writeFile(path.join(out, 'manifest.json'), JSON.stringify({
@@ -175,6 +182,7 @@ await writeFile(path.join(out, 'manifest.json'), JSON.stringify({
   ...(baseFonts ? { baseFonts: { startup: baseFonts.startup.length, faces: baseFonts.base.length } } : {}),
   files,
 }, null, 2) + '\n');
+await verifyLinkedAssets(out);
 if (await realpath(source) !== actualSource || await realpath(out) !== actualOut) throw new Error('Gallery staging location changed during build');
 await rm(source, { recursive: true });
 console.log(`Registry gallery editor built: ${gallery.items.length} validated/rendered documents, ${fields.length} schema fields.`);

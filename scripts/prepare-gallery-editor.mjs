@@ -1,5 +1,7 @@
 import {copyFile,mkdir,readFile,writeFile,rm} from 'node:fs/promises';
 import {existsSync} from 'node:fs';
+import {fileURLToPath} from 'node:url';
+import {verifyLinkedAssets} from './gallery-editor-assets.mjs';
 const registry=process.argv.includes('--registry');
 if(registry)await import('./build-registry-gallery-editor.mjs');
 else{await import('./build-editor-demo.mjs');await import('./build-spec-reference.mjs');}
@@ -21,8 +23,12 @@ if(registry&&existsSync(new URL('manifest.json',target))){
   for(const file of Object.keys(JSON.parse(await readFile(new URL('manifest.json',target),'utf8')).files??{}))if(/-[0-9a-f]{12}\.ttf$/.test(file)&&!baseFonts.includes(file))await rm(new URL(file,target),{force:true});
 }
 if(!baseFonts.length)await rm(new URL('base-fonts.json',target),{force:true});
-for(const file of ['index.html','playground.css','playground.js','fonts.json','gallery.json','galleries.json',...(baseFonts.length?['base-fonts.json',...baseFonts]:[]),...(registry?['manifest.json','playground.js.LEGAL.txt','opf-spec.json','wasm.json']:[]),...(scriptFonts?['script-fonts.json']:[]),...(lazyFonts?['lazy-fonts.json']:[])])await copyFile(new URL(`../artifacts/${source}/${file}`,import.meta.url),new URL(file,target));
+// RR-98: a registry build copies every file its manifest lists (the page's linked stylesheets and scripts included), so an asset the
+// build adds is vendored without editing this list. The older source build keeps its fixed list.
+const registryFiles=registry?['manifest.json',...Object.keys(JSON.parse(await readFile(new URL(`../artifacts/${source}/manifest.json`,import.meta.url),'utf8')).files)]:[];
+for(const file of registry?registryFiles:['index.html','playground.css','playground.js','fonts.json','gallery.json','galleries.json',...(baseFonts.length?['base-fonts.json',...baseFonts]:[]),...(scriptFonts?['script-fonts.json']:[]),...(lazyFonts?['lazy-fonts.json']:[])])await copyFile(new URL(`../artifacts/${source}/${file}`,import.meta.url),new URL(file,target));
 const html=await readFile(new URL('index.html',target),'utf8');
 await writeFile(new URL('index.html',target),html.replace('http://localhost:3101/spec','/spec'));
 await copyFile(new URL(`../artifacts/${registry?'registry-gallery-editor':'spec'}/opf-spec.json`,import.meta.url),new URL('../../pptx-gallery/data/opf-spec.json',import.meta.url));
+if(registry)await verifyLinkedAssets(fileURLToPath(target));
 console.log('Gallery editor and schema reference synchronized.');
