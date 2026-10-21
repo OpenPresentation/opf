@@ -89,7 +89,7 @@ test('published 0.24.2 runs the reviewed installed-code and catalog-generation h
   const runtime=path.join(coreRoot,'packages/javascript/src/composition.ts'),runtimeBytes=readFileSync(runtime);
   const helper=path.join(coreRoot,PUBLISHED_0242_TOOLING[0].path),originalHelper=readFileSync(helper);
   assert.ok(!originalHelper.toString('utf8').includes('generatedAtRef'),'the published helper lacks the styles rebuild');
-  assert.deepEqual(PUBLISHED_0242_TOOLING.map(item=>item.path),['scripts/test-installed-code.mjs','scripts/published-matrix/consumer-dependencies.mjs','scripts/published-matrix/consumer-dependencies.test.mjs']);
+  assert.deepEqual(PUBLISHED_0242_TOOLING.map(item=>item.path),['scripts/test-installed-code.mjs','scripts/published-matrix/consumer-dependencies.mjs','scripts/published-matrix/consumer-dependencies.test.mjs','scripts/published-matrix/browser-fixture.test.mjs']);
   const record=stagePublishedControlPlan({coreRoot,toolsRoot});assert.deepEqual(record.testToolingBridges,PUBLISHED_0242_TOOLING);
   assert.deepEqual(verifyPublishedControlPlan({coreRoot,toolsRoot}),record);
   assert.ok(readFileSync(helper,'utf8').includes('generatedAtRef'),'the bridged helper rebuilds dist/styles.css from the release commit');
