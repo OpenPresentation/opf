@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.25.0 (2026-10-21)
+
+- FA-33 (needs core with FA-33): the dependency `@openpresentation/gallery` moves from `^4.0.0` to `^5.0.0` (theme variants, layouts as one list of regions, catalog schema 4), the same major core resolves, so an installed `@openpresentation/opf-pptx` no longer nests a second Gallery 4 next to core's Gallery 5. Exported and imported decks are unchanged.
+- FA-33 (needs core with FA-33): layout records are one `direction` plus an ordered, nestable `regions` list instead of the `areas` grid with `columns`, `rows` and a `regions` map. Native slide layouts, placeholder indexes and every exported slide are unchanged: the exporter still reads the parsed template from core (`layoutTemplate`), assigns placeholder indexes by the order of its region list, and recognizes a template record with core's `isLayoutTemplate` instead of testing for `areas`. The layout tests and fixtures are written in the new form. The one byte-level difference in an exported archive is the `hash` field of each layout's `OPF_LAYOUT_V1` tag (`ppt/tags/opfLayoutN.xml`), which hashes the record and so follows its new form; every slide, layout, master, theme, chart and diagnostic is identical, and the reviewed whole-archive hashes of the chartex fixture were regenerated for it.
+
 ## 0.24.1 (2026-10-20)
 
 - RR-97: an `imageResolver` that throws for an image it cannot read (the CLI's does for a missing file, a path outside the asset directory or a file that is no image) no longer fails the whole export. The picture is left out like any other unresolved source: its fallback (the "Image unavailable" placeholder, the slide's resolved background color for a background, no watermark, the character bullets) and one `unresolved-asset` warning with `reason: "resolver-failed"`, whose message is the resolver's own followed by a note that the image was left out. `strictAssets: true` still fails, now with a `missing-asset` error (`details.reason: "resolver-failed"`); an `OPFPptxError` or an `AbortError` thrown by the resolver still propagates. A background picture that is left out keeps the background the slide would have without it (the deck's own background when the slide's was the picture, otherwise the variant's `bg1`); before, a dark-variant slide fell back to the light canvas color.

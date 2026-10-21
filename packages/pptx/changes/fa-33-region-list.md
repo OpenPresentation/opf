@@ -1,4 +1,0 @@
----
-type: changed
----
-FA-33 (needs core with FA-33): layout records are one `direction` plus an ordered, nestable `regions` list instead of the `areas` grid with `columns`, `rows` and a `regions` map. Native slide layouts, placeholder indexes and every exported slide are unchanged: the exporter still reads the parsed template from core (`layoutTemplate`), assigns placeholder indexes by the order of its region list, and recognizes a template record with core's `isLayoutTemplate` instead of testing for `areas`. The layout tests and fixtures are written in the new form. The one byte-level difference in an exported archive is the `hash` field of each layout's `OPF_LAYOUT_V1` tag (`ppt/tags/opfLayoutN.xml`), which hashes the record and so follows its new form; every slide, layout, master, theme, chart and diagnostic is identical, and the reviewed whole-archive hashes of the chartex fixture were regenerated for it.
