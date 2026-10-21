@@ -10,10 +10,10 @@ const read=file=>{
 };
 test(ending+': '+'candidate and control lanes keep exact metadata, immutable browser, and required status boundaries',()=>{
  const candidate=read('.github/workflows/candidate-gallery-qualification.yml'),control=read('.github/workflows/published-gallery-control.yml');
- // Candidate engines advance together; the independent control installs immutable published
- // renderer 83c1e6e4's original lock, whose Playwright tooling remains 1.63.0.
+ // Candidate engines advance together; the independent control installs the published set in
+ // release-plan.json, whose renderer (0.24.3) runs Playwright 1.64.0.
  assert.match(candidate,/playwright:v1\.64\.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f/);
- assert.match(control,/playwright:v1\.63\.0-noble@sha256:eff16c30e6f3f4af0a03fa4b706120d5e9b0891c344a27d64559aff5900a4a27/);
+ assert.match(control,/playwright:v1\.64\.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f/);
  for(const source of [candidate,control]){
   assert.match(source,/contents: read/);assert.match(source,/persist-credentials: false/);
   assert.ok(source.indexOf('npm install --global npm@11.16.0')<source.indexOf('npm ci --prefix'));
