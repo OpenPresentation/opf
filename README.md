@@ -161,6 +161,7 @@ See [Templates and variables](./docs/templates-and-variables.md) for fillable OP
 |---|---|
 | [`spec/schemas/opf.schema.json`](./spec/schemas/opf.schema.json) | Canonical JSON Schema for top-level OPF `Presentation` documents. |
 | [`docs/how-opf-works.md`](./docs/how-opf-works.md) | Conceptual introduction: the document model, content shapes, catalog resolution, and the validation philosophy. Start here. |
+| [`docs/slide-design-principles.md`](./docs/slide-design-principles.md) | Timeless principles for slide layout, typography, spacing, visual balance, and reviewing layout defaults. |
 | [`docs/design-resolution.md`](./docs/design-resolution.md) | The design precedence algorithm (slide design → deck design → resolved theme → engine defaults) with worked examples. |
 | [`docs/schema-reference.md`](./docs/schema-reference.md) | Author-facing reference for top-level OPF fields and every presentation schema `$defs` object/type. |
 | [`docs/slide-sizes.md`](./docs/slide-sizes.md) | OPF's slide-size presets in inches, points and EMU, how they compare with PowerPoint's presets, and what PPTX export and import do with them. |
