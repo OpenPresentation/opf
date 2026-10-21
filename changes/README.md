@@ -31,6 +31,32 @@ the bullet without the leading "- "; indent nested lists by four spaces as in th
 
 `pnpm check:changes` validates every fragment (it runs inside `pnpm test`).
 
+## Declaring a gallery drawing change (`drawing`)
+
+A change to `packages/gallery` that makes an existing record draw differently, or removes a record id, is declared in its
+fragment (MR-35, the gallery's stability rule on the shared 0.x line):
+
+```markdown
+---
+type: changed
+packages: [gallery]
+drawing: ["layouts:hero", "themes:minimal"]
+---
+Moved the hero layout's media region; the minimal theme follows its color scheme.
+```
+
+- Each entry is `<kind>:<id>`, the kind in camelCase: `layouts`, `themes`, `colorSchemes`, `fontSchemes`, `narratives`,
+  `audiences`, `purposes`, `tones`, `chartTypes`, `languages` or `socialPlatforms`. The field is valid only on a fragment
+  that names `gallery`; `pnpm check:changes` rejects anything else.
+- `pnpm check:stability` draws the `latest` dist-tag release of `@openpresentation/gallery` and the candidate with the same
+  renderer and compares them. A changed or removed id that no fragment declares **fails the pull request** (a color scheme or
+  font scheme change also changes every theme that uses it: declare those too); a declared id that did not change warns; new
+  ids always pass.
+- A declared drawing change, a removed record id or a `CATALOG_SCHEMA` change makes the release a **minor** train at least,
+  never a patch: `scripts/gallery-stability.mjs` exports `minimumBump` and `gateVersion` for the release script, and
+  `pnpm check:breaking` accepts a removed record id only with that bump or a gallery fragment declaring it.
+- `assemble` adds the declared ids to the gallery changelog bullet, so the release note carries them.
+
 ## Releasing
 
 The release-prep pull request runs the assembler for each package it releases, then commits the result:

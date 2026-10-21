@@ -14,6 +14,7 @@
 //   ---
 //   type: added | changed | fixed
 //   packages: [opf]            (only in a repository with several changelogs; see changes/config.json)
+//   drawing: ["layouts:hero"]  (MR-35, gallery fragments only: the existing records that now draw differently or are gone)
 //   ---
 //   RR-17 (what and why): the text of one CHANGELOG bullet, without the leading "- ".
 //
@@ -25,7 +26,19 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 export const TYPES = ['added', 'changed', 'fixed'];
 const DEFAULT_CONFIG = { default: '', targets: { '': 'CHANGELOG.md' }, codePaths: ['src/'] };
-const KEYS = new Set(['type', 'packages']);
+const KEYS = new Set(['type', 'packages', 'drawing']);
+
+// MR-35: the record kinds of the gallery catalog a `drawing` entry may name (`<kind>:<id>`): the eight record kinds and the three
+// display kinds of `catalogDisplay`. scripts/gallery-stability.mjs compares exactly these.
+export const DRAWING_KINDS = ['layouts', 'themes', 'colorSchemes', 'fontSchemes', 'narratives', 'audiences', 'purposes', 'tones', 'chartTypes', 'languages', 'socialPlatforms'];
+const DRAWING_ENTRY = /^([A-Za-z]+):([A-Za-z0-9][A-Za-z0-9._-]*)$/;
+
+// Splits a flow list such as `["layouts:hero", "themes:minimal"]` or `[a, b]` into its entries (quotes optional).
+function flowList(text) {
+  const list = /^\[(.*)\]$/.exec(text);
+  if (!list) return null;
+  return list[1].split(',').map((entry) => entry.trim().replace(/^(["'])(.*)\1$/, '$2')).filter(Boolean);
+}
 
 export function loadConfig(root) {
   const file = path.join(root, 'changes', 'config.json');
@@ -34,7 +47,7 @@ export function loadConfig(root) {
   return { ...DEFAULT_CONFIG, ...config };
 }
 
-// Parses `---` front matter of `type` and `packages` (a flow list) and returns the entry text.
+// Parses `---` front matter of `type`, `packages` and `drawing` (flow lists) and returns the entry text.
 export function parseFragment(name, text, config = DEFAULT_CONFIG) {
   const fail = (message) => {
     throw new Error(`changes/${name}: ${message}`);
@@ -63,10 +76,25 @@ export function parseFragment(name, text, config = DEFAULT_CONFIG) {
     for (const pkg of packages) if (!known.includes(pkg)) fail(`unknown package "${pkg}" (known: ${known.join(', ')})`);
     if (new Set(packages).size !== packages.length) fail('duplicate package');
   }
+  // MR-35: `drawing` declares the existing gallery records (and removed ids) that the change makes draw differently.
+  let drawing = [];
+  if ('drawing' in meta) {
+    const entries = flowList(meta.drawing);
+    if (!entries) fail('drawing must be a list such as ["layouts:hero", "themes:minimal"]');
+    if (!entries.length) fail('drawing is empty; drop the line when no existing record changes');
+    if (!packages.includes('gallery')) fail('drawing belongs to a gallery change: add gallery to "packages"');
+    for (const entry of entries) {
+      const parts = DRAWING_ENTRY.exec(entry);
+      if (!parts) fail(`drawing entry "${entry}" is not <kind>:<id> (for example layouts:hero)`);
+      if (!DRAWING_KINDS.includes(parts[1])) fail(`drawing entry "${entry}" names an unknown kind (known: ${DRAWING_KINDS.join(', ')})`);
+    }
+    if (new Set(entries).size !== entries.length) fail('duplicate drawing entry');
+    drawing = entries;
+  }
   const body = match[2].replace(/^\s*\n/, '').replace(/\s+$/, '');
   if (!body.trim()) fail('empty entry');
   if (/^\s*[-*]\s/.test(body)) fail('write the entry text without the leading "- "');
-  return { slug: name.replace(/\.md$/, ''), type: meta.type, packages, body };
+  return { slug: name.replace(/\.md$/, ''), type: meta.type, packages, drawing, body };
 }
 
 export function readFragments(root, config = loadConfig(root)) {
@@ -166,7 +194,9 @@ export function withoutPackage(fragmentText, pkg) {
     remaining = rest.length;
     return `packages: [${rest.join(', ')}]`;
   });
-  return remaining ? `${match[1]}${meta}${match[3]}` : null;
+  // The `drawing` declaration belongs to the gallery changelog (MR-35): once that one is assembled it goes too.
+  const kept = pkg === 'gallery' ? meta.replace(/^drawing:.*\r?\n?/m, '').replace(/\r?\n$/, '') : meta;
+  return remaining ? `${match[1]}${kept}${match[3]}` : null;
 }
 
 export function assemble(root, options, write = true) {
@@ -176,7 +206,9 @@ export function assemble(root, options, write = true) {
   const fragments = readFragments(root, config);
   const picked = orderFragments(selectFragments(fragments, pkg, config));
   const file = path.join(root, config.targets[pkg]);
-  const { text, leftover } = assembleChangelog(readFileSync(file, 'utf8'), { ...options, entries: picked });
+  // MR-35: the gallery's bullet lists the declared ids, which is how its release notes carry the drawing changes.
+  const entries = picked.map((f) => (pkg === 'gallery' && f.drawing.length ? { ...f, body: `${f.body}\n  Drawing change (existing records that draw differently or are gone): ${f.drawing.map((id) => `\`${id}\``).join(', ')}.` } : f));
+  const { text, leftover } = assembleChangelog(readFileSync(file, 'utf8'), { ...options, entries });
   if (write) {
     writeFileSync(file, text);
     for (const fragment of picked) {

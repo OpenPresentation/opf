@@ -39,7 +39,7 @@ function repo(config, files, changelogs = { 'CHANGELOG.md': CHANGELOG }) {
 
 test('parseFragment reads type, packages and the entry text', () => {
   const parsed = parseFragment('a.md', fragment('fixed', 'RR-1 (x): text.', '[opf, cli]'), mono);
-  assert.deepEqual(parsed, { slug: 'a', type: 'fixed', packages: ['opf', 'cli'], body: 'RR-1 (x): text.' });
+  assert.deepEqual(parsed, { slug: 'a', type: 'fixed', packages: ['opf', 'cli'], drawing: [], body: 'RR-1 (x): text.' });
 });
 
 test('parseFragment rejects what would silently corrupt the changelog', () => {
@@ -193,5 +193,42 @@ test('--dir selects the directory whose changes/ and changelog are used, whateve
   } finally {
     rmSync(root, { recursive: true, force: true });
     rmSync(elsewhere, { recursive: true, force: true });
+  }
+});
+
+// MR-35: the `drawing` field of a gallery fragment declares the existing records that draw differently or are gone.
+const galleryConfig = { default: 'opf', targets: { opf: 'CHANGELOG.md', gallery: 'packages/gallery/CHANGELOG.md' }, codePaths: [] };
+const drawn = (front, packages = '[gallery]') => `---\ntype: changed\npackages: ${packages}\n${front}\n---\nMoved two layouts.\n`;
+
+test('parseFragment reads a drawing list, quoted or bare', () => {
+  assert.deepEqual(parseFragment('g.md', drawn('drawing: ["layouts:hero", \'themes:minimal\', colorSchemes:cool-horizon]'), galleryConfig).drawing, ['layouts:hero', 'themes:minimal', 'colorSchemes:cool-horizon']);
+  assert.deepEqual(parseFragment('g.md', drawn('', '[gallery, opf]'), galleryConfig).drawing, []);
+  assert.deepEqual(parseFragment('g.md', drawn('drawing: [languages:zh-Hans, chartTypes:bar]', '[opf, gallery]'), galleryConfig).drawing, ['languages:zh-Hans', 'chartTypes:bar']);
+});
+
+test('parseFragment rejects a malformed or misplaced drawing declaration', () => {
+  assert.throws(() => parseFragment('g.md', drawn('drawing: layouts:hero'), galleryConfig), /drawing must be a list/);
+  assert.throws(() => parseFragment('g.md', drawn('drawing: []'), galleryConfig), /drawing is empty/);
+  assert.throws(() => parseFragment('g.md', drawn('drawing: ["layouts"]'), galleryConfig), /"layouts" is not <kind>:<id>/);
+  assert.throws(() => parseFragment('g.md', drawn('drawing: ["layouts:"]'), galleryConfig), /is not <kind>:<id>/);
+  assert.throws(() => parseFragment('g.md', drawn('drawing: ["layout:hero"]'), galleryConfig), /"layout:hero" names an unknown kind/);
+  assert.throws(() => parseFragment('g.md', drawn('drawing: ["layouts:hero", "layouts:hero"]'), galleryConfig), /duplicate drawing entry/);
+  assert.throws(() => parseFragment('g.md', drawn('drawing: ["layouts:hero"]', '[opf]'), galleryConfig), /drawing belongs to a gallery change/);
+  assert.throws(() => parseFragment('g.md', drawn('drawing: ["layouts:hero"]', '[]'), galleryConfig), /drawing belongs to a gallery change/);
+  assert.throws(() => parseFragment('g.md', drawn('drawing: ["layouts:hero"]\ndrawing: ["tones:formal"]'), galleryConfig), /duplicate key "drawing"/);
+});
+
+test('assemble lists the declared ids in the gallery bullet only, and a shared fragment loses the line once the gallery has it', () => {
+  const root = repo(galleryConfig, { 'mr-99-layouts.md': drawn('drawing: ["layouts:hero", "themes:minimal"]', '[gallery, opf]') }, { 'CHANGELOG.md': CHANGELOG, 'packages/gallery/CHANGELOG.md': CHANGELOG });
+  try {
+    const gallery = assemble(root, { version: '0.27.0', date: '2026-10-22', package: 'gallery' });
+    assert.match(gallery.text, /- Moved two layouts\.\n {2}Drawing change \(existing records that draw differently or are gone\): `layouts:hero`, `themes:minimal`\./);
+    const left = readFileSync(path.join(root, 'changes', 'mr-99-layouts.md'), 'utf8');
+    assert.doesNotMatch(left, /drawing:/);
+    assert.deepEqual(parseFragment('mr-99-layouts.md', left, galleryConfig).packages, ['opf']);
+    const core = assemble(root, { version: '0.27.0', date: '2026-10-22', package: 'opf' });
+    assert.doesNotMatch(core.text, /Drawing change/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
   }
 });

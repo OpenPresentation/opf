@@ -47,5 +47,30 @@ try{
  assert.equal(moved.status,1,moved.stdout+moved.stderr);assert.match(moved.stdout+moved.stderr,/\[record removed\] tones\/casual/);assert.doesNotMatch(moved.stdout+moved.stderr,/tones\/formal/);
  write("packages/gallery/catalog/tones/casual.json",{id:"casual"});
  const kept=run(process.execPath,["scripts/check-breaking-changes.mjs"]);assert.equal(kept.status,0,kept.stdout+kept.stderr);
+ // MR-35: tags created after the monorepo import are `vX.Y.Z` and carry packages/gallery/catalog (kebab-case kind directories).
+ // The newest release tag of either family is the baseline, by version; a prerelease and a `gallery-v*` tag are not baselines.
+ const record=(kind,id)=>{mkdirSync(path.join(root,"packages/gallery/catalog",kind),{recursive:true});write(`packages/gallery/catalog/${kind}/${id}.json`,{id});};
+ record("layouts","hero");record("color-schemes","cool-horizon");record("tones","formal");manifest("0.26.0",{".":{}});
+ git("add",".");git("commit","-qm","Import");git("tag","v0.26.0");git("tag","gallery-v9.0.0");writeFileSync(path.join(root,"README.md"),"after the import\n");git("add",".");git("commit","-qm","After the import");
+ const shared=run(process.execPath,["scripts/check-breaking-changes.mjs"]);assert.equal(shared.status,0,shared.stdout+shared.stderr);assert.match(shared.stdout,/"tag": "v0.26.0"/,"v0.26.0 outranks opf-v0.3.0 and gallery-v9.0.0 is no baseline");
+ rmSync(path.join(root,"packages/gallery/catalog/layouts/hero.json"));rmSync(path.join(root,"packages/gallery/catalog/color-schemes/cool-horizon.json"));
+ const gone=run(process.execPath,["scripts/check-breaking-changes.mjs"]);
+ assert.equal(gone.status,1,gone.stdout+gone.stderr);assert.match(gone.stderr,/\[record removed\] layouts\/hero \(packages\/gallery\/catalog\/layouts\/hero\.json existed at v0\.26\.0/);assert.match(gone.stderr,/color-schemes\/cool-horizon/);assert.doesNotMatch(gone.stderr,/tones\/formal/);
+ mkdirSync(path.join(root,"changes"),{recursive:true});
+ const gallery=(front)=>writeFileSync(path.join(root,"changes","mr-35-gallery.md"),`---\ntype: changed\n${front}\n---\nRemoved layouts.\n`);
+ gallery('packages: [gallery]\ndrawing: ["layouts:hero"]');
+ const partlyDeclared=run(process.execPath,["scripts/check-breaking-changes.mjs"]);assert.equal(partlyDeclared.status,1,"a fragment declaring only layouts:hero leaves colorSchemes:cool-horizon unacknowledged");assert.match(partlyDeclared.stderr,/color-schemes\/cool-horizon/);assert.doesNotMatch(partlyDeclared.stderr,/\[record removed\] layouts\/hero/);
+ gallery('packages: [opf]\ndrawing: ["layouts:hero", "colorSchemes:cool-horizon"]');
+ assert.equal(run(process.execPath,["scripts/check-breaking-changes.mjs"]).status,1,"a fragment that does not name the gallery declares nothing");
+ gallery('packages: [gallery]\ndrawing: ["layouts:hero", "colorSchemes:cool-horizon"]');
+ const declared=run(process.execPath,["scripts/check-breaking-changes.mjs"]);assert.equal(declared.status,0,declared.stdout+declared.stderr);
+ assert.match(declared.stdout,/"acknowledgedBy": "changelog-fragment"/);assert.deepEqual(JSON.parse(declared.stdout.slice(declared.stdout.indexOf("{"))).removedRecords.sort(),["colorSchemes:cool-horizon","layouts:hero"]);assert.match(declared.stderr,/\[record removed\] colorSchemes:cool-horizon \(changes\/mr-35-gallery\.md\)/);
+ rmSync(path.join(root,"changes"),{recursive:true});
+ manifest("0.26.1",{".":{}});assert.equal(run(process.execPath,["scripts/check-breaking-changes.mjs"]).status,1,"a patch bump does not acknowledge a removed record id");
+ manifest("0.27.0",{".":{}});const minor=run(process.execPath,["scripts/check-breaking-changes.mjs"]);assert.equal(minor.status,0,minor.stdout+minor.stderr);
+ git("add",".");git("commit","-qm","Remove records");git("tag","v0.27.0-rc.0");writeFileSync(path.join(root,"README.md"),"after the canary\n");git("add",".");git("commit","-qm","After the canary");
+ record("layouts","hero");record("color-schemes","cool-horizon");manifest("0.26.1",{".":{}});
+ const canary=run(process.execPath,["scripts/check-breaking-changes.mjs"]);assert.equal(canary.status,0,canary.stdout+canary.stderr);assert.match(canary.stdout,/"tag": "v0.26.0"/,"the rc tag is no baseline, so v0.26.0 still is");
+ // An untracked or generated catalog (no tag has records) is a no-op: the check compares with the tag's own listing.
  console.log("Release gate regression passed: a tag at HEAD cannot hide removals from the prior release; a removed package export needs the bump or a changed fragment naming it.");
 }finally{rmSync(root,{recursive:true,force:true});}
