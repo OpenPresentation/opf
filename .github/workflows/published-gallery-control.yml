@@ -94,9 +94,10 @@ jobs:
           node --input-type=module <<'JS'
           import assert from 'node:assert/strict';
           import {execFileSync} from 'node:child_process';
-          import {publishedGalleryControl,readRegularJson} from './tools/scripts/candidate-gallery.mjs';
+          import {resolvePublishedControl,readRegularJson} from './tools/scripts/candidate-gallery.mjs';
           assert.ok(['core','ecosystem'].includes(process.env.MODE));
-          const plan=readRegularJson('tools/release-plan.json'),refs=await publishedGalleryControl(plan);
+          // The reviewed plan is a floor (RR-101): bind the checkouts to the RESOLVED plan, which raises a package to a newer accepted patch release.
+          const {refs,plan}=await resolvePublishedControl(readRegularJson('tools/release-plan.json'));
           for(const [repo,sha] of Object.entries(refs)){
             if(repo==='cli'){assert.equal(execFileSync('git',['-C','cli-source','rev-parse','HEAD'],{encoding:'utf8'}).trim(),sha);assert.equal(readRegularJson('cli-source/packages/cli/package.json').version,plan.packages.find(item=>item.name==='@openpresentation/cli').version);continue;}
             assert.equal(execFileSync('git',['-C',repo,'rev-parse','HEAD'],{encoding:'utf8'}).trim(),sha);
