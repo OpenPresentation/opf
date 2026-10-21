@@ -6,41 +6,36 @@
   "tags": [
     "Visuals"
   ],
-  "areas": [
-    [
-      "title",
-      "title"
-    ],
-    [
-      "code",
-      "notes"
-    ]
-  ],
-  "columns": [
-    3,
-    2
-  ],
-  "rows": [
-    "auto",
-    1
-  ],
-  "regions": {
-    "code": {
-      "accepts": [
-        "code"
-      ],
-      "role": "primary",
-      "flow": "column"
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
     },
-    "notes": {
-      "accepts": [
-        "text",
-        "list"
-      ],
-      "role": "supporting",
-      "flow": "column"
+    {
+      "direction": "row",
+      "regions": [
+        {
+          "name": "code",
+          "size": 3,
+          "accepts": [
+            "code"
+          ],
+          "role": "primary",
+          "flow": "column"
+        },
+        {
+          "name": "notes",
+          "size": 2,
+          "accepts": [
+            "text",
+            "list"
+          ],
+          "role": "supporting",
+          "flow": "column"
+        }
+      ]
     }
-  },
+  ],
   "description": "Show a code example or technical excerpt. Keep the excerpt focused and use the title or caption to explain its purpose.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/code.svg"

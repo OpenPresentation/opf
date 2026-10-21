@@ -11,10 +11,11 @@
 export declare const GALLERY_SOURCE: "https://www.pptx.gallery";
 
 /**
- * The version of core's catalog record compatibility contract these records target (package.json `opf.catalogSchema`). 3 requires
- * array rows in layout grid areas. Per-kind layout schemaVersion 2 and `opf-layout/v2` remain unchanged.
+ * The version of core's catalog record compatibility contract these records target (package.json `opf.catalogSchema`). 4 requires
+ * layout records written as `direction` and one ordered `regions` list (FA-33); `areas`, `columns`, `rows` and the `regions` map
+ * are gone. Per-kind layout schemaVersion 2 and `opf-layout/v2` are unchanged.
  */
-export declare const CATALOG_SCHEMA: 3;
+export declare const CATALOG_SCHEMA: 4;
 
 /** Records of one kind, keyed by id (core's `CatalogRecordMap`). */
 export type GalleryRecords = Readonly<Record<string, Readonly<Record<string, unknown>>>>;

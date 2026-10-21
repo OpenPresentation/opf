@@ -6,32 +6,22 @@
   "tags": [
     "Text"
   ],
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "quotes"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    1
-  ],
-  "regions": {
-    "quotes": {
+  "direction": "column",
+  "anchor": "middle",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "quotes",
       "accepts": [
         "quote",
         "group"
       ],
       "role": "primary",
-      "flow": "grid",
-      "anchor": "middle"
+      "flow": "grid"
     }
-  },
+  ],
   "description": "Highlight a quotation and its source. Use the attribution to explain who said it and why their perspective matters.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/quote.svg"

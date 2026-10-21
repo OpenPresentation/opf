@@ -10,18 +10,13 @@
     "titleAlignment": "center",
     "contentAlignment": "center"
   },
-  "areas": [
-    [
-      "title"
-    ]
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title",
+      "size": 1
+    }
   ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    1
-  ],
-  "regions": {},
   "description": "Introduce the next part of a presentation. Use the subtitle to connect the new section to the overall argument.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/section.svg"

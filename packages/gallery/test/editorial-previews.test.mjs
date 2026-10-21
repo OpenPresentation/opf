@@ -3,7 +3,7 @@ import {test} from 'node:test';
 import {validate} from '@openpresentation/opf';
 import {readCatalog} from '../scripts/build.mjs';
 import {editorialDeck} from '../scripts/editorial-previews.mjs';
-import {templateDeck} from '../scripts/fixtures.mjs';
+import {bodyRegions, templateDeck} from '../scripts/fixtures.mjs';
 
 const {gallery} = await readCatalog();
 for (const [id, record] of Object.entries(gallery.layouts)) {
@@ -26,8 +26,8 @@ test('FAQ and process teach their intent; team does not mislabel landscape pictu
   assert.equal(new Set(metrics).size, 3);
 });
 test('only compact presentation intents opt into vertical centering', () => {
-  for (const id of ['metrics', 'quote', 'image-beside']) assert.ok(Object.values(gallery.layouts[id].regions).some(region => region.anchor === 'middle'));
+  for (const id of ['metrics', 'quote', 'image-beside']) assert.ok(bodyRegions(gallery.layouts[id]).some(([, region]) => region.anchor === 'middle'));
   for (const id of ['two-column', 'chart', 'table', 'dashboard', 'list', 'faq']) {
-    assert.ok(Object.values(gallery.layouts[id].regions).every(region => !region.anchor || region.anchor === 'top'), id);
+    assert.ok(bodyRegions(gallery.layouts[id]).every(([, region]) => !region.anchor || region.anchor === 'top'), id);
   }
 });

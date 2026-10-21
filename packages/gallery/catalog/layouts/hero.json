@@ -6,48 +6,39 @@
   "tags": [
     "Mixed"
   ],
-  "areas": [
-    [
-      "title",
-      "title"
-    ],
-    [
-      "lead",
-      "media"
-    ],
-    [
-      "support",
-      "support"
-    ]
-  ],
-  "columns": [
-    1,
-    1
-  ],
-  "rows": [
-    "auto",
-    2,
-    1
-  ],
-  "regions": {
-    "lead": {
-      "accepts": [
-        "text",
-        "quote",
-        "metric"
-      ],
-      "role": "primary",
-      "flow": "none"
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
     },
-    "media": {
-      "accepts": [
-        "image",
-        "video"
-      ],
-      "role": "media",
-      "flow": "none"
+    {
+      "direction": "row",
+      "size": 2,
+      "regions": [
+        {
+          "name": "lead",
+          "accepts": [
+            "text",
+            "quote",
+            "metric"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        {
+          "name": "media",
+          "accepts": [
+            "image",
+            "video"
+          ],
+          "role": "media",
+          "flow": "none"
+        }
+      ]
     },
-    "support": {
+    {
+      "name": "support",
+      "size": 1,
       "accepts": [
         "text",
         "list",
@@ -57,7 +48,7 @@
       "role": "supporting",
       "flow": "grid"
     }
-  },
+  ],
   "description": "Combine a prominent visual or message with supporting content. Use it when one element should lead the audience into the details.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/hero.svg"

@@ -6,34 +6,22 @@
   "tags": [
     "Groups of items"
   ],
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "timeline"
-    ],
-    [
-      "notes"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    1,
-    "auto"
-  ],
-  "regions": {
-    "timeline": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "timeline",
       "accepts": [
         "timeline"
       ],
       "role": "primary",
       "flow": "none"
     },
-    "notes": {
+    {
+      "name": "notes",
+      "size": "auto",
       "accepts": [
         "text",
         "list",
@@ -42,7 +30,7 @@
       "role": "supporting",
       "flow": "auto"
     }
-  },
+  ],
   "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"

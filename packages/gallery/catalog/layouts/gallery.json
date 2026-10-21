@@ -6,23 +6,13 @@
   "tags": [
     "Visuals"
   ],
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "pictures"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    1
-  ],
-  "regions": {
-    "pictures": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "pictures",
       "accepts": [
         "image",
         "video",
@@ -31,7 +21,7 @@
       "role": "media",
       "flow": "grid"
     }
-  },
+  ],
   "description": "Show several related visuals together. Use consistent captions and ordering to make the relationship between them clear.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/gallery.svg"

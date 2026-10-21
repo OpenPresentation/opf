@@ -6,23 +6,13 @@
   "tags": [
     "Visuals"
   ],
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "media"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    1
-  ],
-  "regions": {
-    "media": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "media",
       "accepts": [
         "image",
         "video"
@@ -31,7 +21,7 @@
       "flow": "none",
       "bleed": true
     }
-  },
+  ],
   "description": "Let one image carry the message. Add a short title or caption to explain what the audience should notice.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/image.svg"

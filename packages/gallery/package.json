@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/gallery",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "description": "The pptx.gallery catalog for OPF: layouts, themes, colour and font schemes, narratives, audiences, purposes and tones, registered with catalogs: [gallery].",
   "license": "MIT",
   "author": "Open Presentation",
@@ -47,7 +47,7 @@
     "package.json"
   ],
   "opf": {
-    "catalogSchema": 3
+    "catalogSchema": 4
   },
   "engines": {
     "node": ">=22"

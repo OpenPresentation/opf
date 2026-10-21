@@ -39,7 +39,9 @@ test("every record is valid against the published core's companion schema", asyn
   assert.ok(count > 300, `${count} records`);
 });
 
-test("the layouts are the 28 OPF 0.19 intent templates, in six groups, each passing core's template rules", async () => {
+const hasTitle = (list) => list.some((entry) => (entry.regions ? hasTitle(entry.regions) : entry.name === "title"));
+
+test("the layouts are the 28 intent templates, in six groups, each passing core's template rules", async () => {
   const { index, records } = await readSnapshotKind(catalogRoot, "layouts");
   assert.deepEqual(records.map((record) => record.id), LAYOUT_IDS);
   for (const record of records) {
@@ -52,7 +54,9 @@ test("the layouts are the 28 OPF 0.19 intent templates, in six groups, each pass
     assert.deepEqual([entry.name, entry.summary, entry.group], [record.name, record.summary, record.tags[0]], `${record.id}: index entry`);
     assert.ok(isLayoutTemplate(record), `${record.id} is a grid template`);
     assert.deepEqual(layoutTemplateIssues(record), [], `${record.id}: opf/layout-template and opf/layout-region`);
-    assert.ok(record.areas.some((row) => row.includes("title")), `${record.id} has a title area`);
+    assert.ok(Array.isArray(record.regions) && ["row", "column"].includes(record.direction), `${record.id}: direction and an ordered regions list`);
+    for (const removed of ["areas", "columns", "rows"]) assert.equal(removed in record, false, `${record.id} has no ${removed}`);
+    assert.ok(hasTitle(record.regions), `${record.id} has a title region`);
     assert.equal(record.placeholders, undefined, `${record.id} carries no 0.18 placeholders`);
   }
 });

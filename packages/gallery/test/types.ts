@@ -5,7 +5,7 @@ import { getLayoutPreview, layoutPreviewIndex } from "@openpresentation/gallery/
 
 const catalogs: readonly Catalog[] = [gallery];
 const source: "https://www.pptx.gallery" = GALLERY_SOURCE;
-const schema: 3 = CATALOG_SCHEMA;
+const schema: 4 = CATALOG_SCHEMA;
 const twoColumn: Readonly<Record<string, unknown>> | undefined = gallery.layouts?.["two-column"];
 const chart: Readonly<Record<string, unknown>> | undefined = catalogDisplay.chartTypes.column;
 const hash: string = catalogIndexes.layouts.contentSha256;

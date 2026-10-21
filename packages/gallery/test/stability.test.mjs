@@ -20,6 +20,16 @@ const release = (version, edit = () => {}, catalogSchema = built.CATALOG_SCHEMA)
   return { version, module: { gallery, catalogDisplay, CATALOG_SCHEMA: catalogSchema } };
 };
 const published = { version: "2.0.0", module: built };
+/** The named region of a layout record's `regions` tree. */
+const region = (layout, name) => {
+  const find = (list) => {
+    for (const entry of list) {
+      const found = entry.regions ? find(entry.regions) : entry.name === name ? entry : undefined;
+      if (found) return found;
+    }
+  };
+  return find(layout.regions);
+};
 
 test("the previous release is the highest published stable version at or below the candidate", () => {
   const versions = ["0.0.0-stage", "0.0.1", "1.0.0", "1.1.0", "1.2.0-rc.1", "2.0.0", "2.1.0"];
@@ -33,7 +43,7 @@ test("the previous release is the highest published stable version at or below t
   assert.equal(allowsChanges("2.0.0", "2.1.0"), false);
   assert.equal(allowsChanges("2.4.2", "2.4.3"), false);
   assert.equal(allowsChanges("2.9.0", "3.0.0"), true);
-  assert.equal(catalogSchemaOf(built), 3);
+  assert.equal(catalogSchemaOf(built), 4);
   assert.equal(catalogSchemaOf({ gallery: {} }), 1, "a release from before the CATALOG_SCHEMA export is schema 1");
 });
 
@@ -61,7 +71,7 @@ test("an unchanged release draws every existing record the same", async () => {
 
 test("a minor release that moves an existing layout fails; a major release may", async () => {
   const edit = (gallery) => {
-    gallery.layouts["two-column"].columns = [2, 1];
+    gallery.layouts["two-column"].regions[1].regions[0].size = 2;
   };
   const minor = await compareReleases(published, release("2.1.0", edit), engines);
   assert.equal(minor.ok, false);
@@ -74,12 +84,12 @@ test("a minor release that moves an existing layout fails; a major release may",
 
 test("a changed region is caught on the filled slide, and a collapse change on the empty one", async () => {
   const flow = await compareReleases(published, release("2.0.1", (gallery) => {
-    gallery.layouts.metrics.regions.metrics.flow = "column";
+    region(gallery.layouts.metrics, "metrics").flow = "column";
   }), engines);
   assert.equal(flow.ok, false);
   assert.deepEqual(flow.kinds.layouts.changed.map((change) => [change.id, change.slides]), [["metrics", [1]]]);
   const keep = await compareReleases(published, release("2.0.1", (gallery) => {
-    gallery.layouts.metrics.regions.note.empty = "keep";
+    region(gallery.layouts.metrics, "note").empty = "keep";
   }), engines);
   assert.equal(keep.ok, false);
   assert.ok(keep.kinds.layouts.changed.some((change) => change.id === "metrics" && change.slides.includes(2)), formatResult(keep));
@@ -139,19 +149,20 @@ test("2.0.0 is a new baseline over 1.x: a record schema change needs a major rel
 });
 
 
-test("array area rows require catalog contract 3 and a major release without changing layout URI generation", async () => {
-  const previous = release("2.0.0", () => {}, 2);
-  const candidate = release("3.0.0", () => {}, 3);
+test("the region-list records require catalog contract 4 and a major release without changing layout URI generation", async () => {
+  const previous = release("4.0.0", () => {}, 3);
+  const candidate = release("5.0.0", () => {}, 4);
   const result = await compareReleases(previous, candidate, engines);
   assert.equal(result.ok, true, formatResult(result));
-  assert.deepEqual(result.schema, { previous: 2, candidate: 3 });
+  assert.deepEqual(result.schema, { previous: 3, candidate: 4 });
   assert.equal(result.baseline, true);
-  const minor = await compareReleases(previous, { ...candidate, version: "2.1.0" }, engines);
+  const minor = await compareReleases(previous, { ...candidate, version: "4.1.0" }, engines);
   assert.equal(minor.ok, false);
-  assert.ok(minor.problems.includes("CATALOG_SCHEMA 2 -> 3: a record schema change needs a major release"));
+  assert.ok(minor.problems.includes("CATALOG_SCHEMA 3 -> 4: a record schema change needs a major release"));
   const layoutKind = SNAPSHOT_KINDS.find(({ kind }) => kind === "layouts");
   assert.equal(layoutKind.recordSchemaId, "https://openpresentation.org/schema/opf-layout/v2");
   for (const layout of Object.values(built.gallery.layouts)) {
-    assert.ok(layout.areas.every((row) => Array.isArray(row)));
+    assert.ok(Array.isArray(layout.regions) && ["row", "column"].includes(layout.direction));
+    assert.equal("areas" in layout, false);
   }
 });

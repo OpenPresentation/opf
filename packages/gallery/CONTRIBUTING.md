@@ -66,7 +66,7 @@ Use Node 24 (`engines.node` is `>=22`) and npm.
 
 ```sh
 npm ci
-node scripts/bootstrap-engines.mjs  # Gallery 3.0.0: merged immutable engine sources; see below
+node scripts/bootstrap-engines.mjs  # only for the release in .github/bootstrap-engines.json (5.0.0): merged engine sources; see below
 npm run check:license     # MIT: LICENSE, package.json, published files
 npm run verify            # every kind hashes to its index and the manifest
 npm test                  # build; every record valid against the selected core; package shape; previews
@@ -77,11 +77,15 @@ npm run pack:dry-run      # the package contents
 node scripts/bootstrap-engines.mjs --verify  # unchanged manifests and exact selected engine graph
 ```
 
-CI (`.github/workflows/ci.yml`) runs this sequence on every pull request and on main. Gallery 3.0.0 uses the
-[merged-source bootstrap](#gallery-300-bootstrap); its ordinary development pins remain unchanged. Other versions
-use the published `@openpresentation/opf` and `@openpresentation/opf-render` pins in `package.json`. Raise those pins
+CI (`.github/workflows/ci.yml`) runs this sequence on every pull request and on main. The release named in
+`.github/bootstrap-engines.json` (5.0.0) uses the [merged-source bootstrap](#merged-engine-bootstrap); its ordinary
+development pins remain unchanged. Other versions use the published `@openpresentation/opf` and `@openpresentation/opf-render` pins in `package.json`. Raise those pins
 in their own pull request after the engine releases are on npm, and regenerate the previews (`npm run previews`)
 there. 2.x needs `@openpresentation/opf` 0.19 or later, the first core that reads `opf-layout/v2`.
+A change to the shape of a layout record (5.0.0: `direction` and an ordered `regions` list, FA-33) is read by the engines before it
+is written here: publish the core that accepts the new form, raise the pins and regenerate the previews in the same pull request
+as the records. The records, tests and fixtures carry only the current form; the 4.0.0 grids live in
+`test/fixtures/layouts-4.0.0.json`, the expected side of `test/layout-equivalence.test.mjs`.
 
 ## Versions
 
@@ -117,27 +121,29 @@ Never move or re-push a published tag; fix a problem with a new version.
 
 By contributing you agree that your contribution is licensed under the [MIT License](LICENSE) of this repository.
 
-## Gallery 3.0.0 bootstrap
+## Merged-engine bootstrap
 
-From 4.0.0 the development pins are the published `@openpresentation/opf` and `@openpresentation/opf-render` 0.23.0, and
-`scripts/bootstrap-engines.mjs` does nothing for any version but 3.0.0 (it prints the registry engines). The text below
-describes the 3.0.0 release.
+`.github/bootstrap-engines.json` names one gallery release (`galleryVersion`, with its `catalogSchema`) and the merged
+engine commits it is built against. `scripts/bootstrap-engines.mjs` does nothing for any other version (it prints the
+registry engines) and refuses leftover bootstrap state. The development pins in `package.json` are the published
+`@openpresentation/opf` and `@openpresentation/opf-render` (0.23.0 today); 4.0.0 was built on them.
 
-Gallery 3.0.0 publishes catalog schema 3 before the next engine release. Its build and
-validation need the merged schema-3 engines before those engines are on npm. For this release
-only, `scripts/bootstrap-engines.mjs` reads `.github/bootstrap-engines.json`,
+A release that changes the shape of a record needs engines that read it before those engines are on npm, and the engines'
+own release needs the new gallery (core depends on `@openpresentation/gallery`). The bootstrap breaks that cycle for one
+release. Gallery 3.0.0 used it for catalog schema 3; **5.0.0** uses it for catalog schema 4 (FA-33, the region list), with
+core `d223fc00` (OpenPresentation/opf#756) and opf-render `e5838837` (opf-render#278). The tests then use core's own
+`layoutTemplate` from `@openpresentation/opf/composition` as the compile.
+
+For the named release, `scripts/bootstrap-engines.mjs` reads the file,
 fetches each engine repository's actual default branch, and refuses pins that
-are not full commit hashes reachable from that branch. Merge the candidate engine
-PRs before running these gates; never weaken the ancestry check. The configured
-core source retains its genuine registry dependency metadata until gallery 3 is
-published; bootstrap staging does not make that metadata registry-installable.
-The current configuration pins the actual merged core and renderer commits. Any
-replacement pins must also be actual merged engine commits before merging or
-publishing Gallery. A PR head alone cannot satisfy the default-branch ancestry gate.
+are not full commit hashes reachable from that branch. Merge the engine
+PRs before running these gates; never weaken the ancestry check. A PR head alone cannot satisfy the
+default-branch ancestry gate. The configured core source retains its genuine registry dependency metadata until the
+gallery release is published; bootstrap staging does not make that metadata registry-installable.
 
 After `npm ci`, the script builds this gallery's static records, then builds the
 immutable core and renderer sources with frozen source lockfiles. It stages three
-development tarballs—gallery, core and renderer—preserving their own versions and
+development tarballs (gallery, core and renderer) preserving their own versions and
 runtime bytes while recording original and staged manifests and integrity. Core
 builds against the exact local gallery. The pinned renderer build only copies
 its source files to dist; it does not load Core. After all three tarballs exist,
@@ -153,7 +159,8 @@ by the workflows. The published gallery remains dependency-free; staged local
 dependency ranges never enter its published manifest. Trusted publishing and the
 merged-ancestor, tag and release gates remain unchanged.
 
-After the next engine releases, raise the ordinary registry development pins and
-remove this configuration/script and workflow steps. Other gallery versions use
-the normal npm-ci registry path automatically; candidate sources do not become
+After the engine releases (core 0.25.0, which depends on gallery 5), raise the ordinary registry development pins in
+their own pull request. The bootstrap then stays idle until a release again needs unreleased engines; point the file at
+that release's version, schema and merged commits, or remove the configuration and script and the workflow steps.
+Other gallery versions use the normal npm-ci registry path automatically; candidate sources do not become
 a dependency of later releases.

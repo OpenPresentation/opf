@@ -10,23 +10,15 @@
     "titleAlignment": "center",
     "contentAlignment": "center"
   },
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "details"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    1,
-    "auto"
-  ],
-  "regions": {
-    "details": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title",
+      "size": 1
+    },
+    {
+      "name": "details",
+      "size": "auto",
       "accepts": [
         "text",
         "list",
@@ -35,7 +27,7 @@
       "role": "supporting",
       "flow": "auto"
     }
-  },
+  ],
   "description": "End with the action the audience should take. Include contact details or a brief thank-you when useful.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/closing.svg"

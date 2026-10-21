@@ -6,27 +6,13 @@
   "tags": [
     "Visuals"
   ],
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "charts"
-    ],
-    [
-      "note"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    1,
-    "auto"
-  ],
-  "regions": {
-    "charts": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "charts",
       "accepts": [
         "chart",
         "group"
@@ -34,14 +20,16 @@
       "role": "primary",
       "flow": "grid"
     },
-    "note": {
+    {
+      "name": "note",
+      "size": "auto",
       "accepts": [
         "text"
       ],
       "role": "supporting",
       "flow": "none"
     }
-  },
+  ],
   "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"

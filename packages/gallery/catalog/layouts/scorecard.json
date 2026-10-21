@@ -9,23 +9,13 @@
   "design": {
     "contentBox": false
   },
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "cards"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    1
-  ],
-  "regions": {
-    "cards": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "cards",
       "accepts": [
         "metric",
         "text",
@@ -35,7 +25,7 @@
       "role": "primary",
       "flow": "grid"
     }
-  },
+  ],
   "description": "Summarize performance across comparable measures. State the criteria consistently so the audience can assess the result.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/scorecard.svg"

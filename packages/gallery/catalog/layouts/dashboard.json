@@ -9,34 +9,23 @@
   "design": {
     "contentBox": false
   },
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "kpis"
-    ],
-    [
-      "charts"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    2,
-    3
-  ],
-  "regions": {
-    "kpis": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "kpis",
+      "size": 2,
       "accepts": [
         "metric"
       ],
       "role": "secondary",
       "flow": "grid"
     },
-    "charts": {
+    {
+      "name": "charts",
+      "size": 3,
       "accepts": [
         "chart",
         "table"
@@ -44,7 +33,7 @@
       "role": "primary",
       "flow": "grid"
     }
-  },
+  ],
   "description": "Bring several related measures and visuals into one overview. Keep labels and units consistent so the audience can scan the state quickly.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/dashboard.svg"

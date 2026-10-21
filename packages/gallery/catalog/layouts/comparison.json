@@ -9,64 +9,54 @@
   "design": {
     "contentBox": false
   },
-  "areas": [
-    [
-      "title",
-      "title"
-    ],
-    [
-      "first",
-      "second"
-    ],
-    [
-      "verdict",
-      "verdict"
-    ]
-  ],
-  "columns": [
-    1,
-    1
-  ],
-  "rows": [
-    "auto",
-    1,
-    "auto"
-  ],
-  "regions": {
-    "first": {
-      "accepts": [
-        "text",
-        "list",
-        "metric",
-        "image",
-        "chart",
-        "table",
-        "group"
-      ],
-      "role": "primary",
-      "flow": "none"
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
     },
-    "second": {
-      "accepts": [
-        "text",
-        "list",
-        "metric",
-        "image",
-        "chart",
-        "table",
-        "group"
-      ],
-      "role": "primary",
-      "flow": "none"
+    {
+      "direction": "row",
+      "regions": [
+        {
+          "name": "first",
+          "accepts": [
+            "text",
+            "list",
+            "metric",
+            "image",
+            "chart",
+            "table",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        {
+          "name": "second",
+          "accepts": [
+            "text",
+            "list",
+            "metric",
+            "image",
+            "chart",
+            "table",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        }
+      ]
     },
-    "verdict": {
+    {
+      "name": "verdict",
+      "size": "auto",
       "accepts": [
         "text"
       ],
       "role": "supporting",
       "flow": "none"
     }
-  },
+  ],
   "description": "Compare alternatives using parallel information. Keep the same criteria and level of detail for every option.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/comparison.svg"

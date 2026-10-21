@@ -9,13 +9,13 @@ It holds every layout, theme, colour scheme, font scheme, narrative, audience, p
 never fetch records: a host registers the catalogs it trusts, and this package is the catalog every OPF host registers by
 default.
 
-**2.x is the catalog of OPF 0.19.** Its layouts are the 28 OPF 0.19 layouts named by intent, written as grid
-templates (`opf-layout/v2`); their compatibility contract targets `@openpresentation/opf` 0.19. 1.x holds the 278 OPF 0.18 layouts. 2.0.0
-changed the layouts with no migration path: see [Layouts](#layouts) and the [changelog](CHANGELOG.md).
+**2.x is the catalog of OPF 0.19.** Its layouts are the 28 OPF 0.19 layouts named by intent, written as templates
+(`opf-layout/v2`). 1.x holds the 278 OPF 0.18 layouts. 2.0.0 changed the layouts with no migration path: see
+[Layouts](#layouts) and the [changelog](CHANGELOG.md).
 
-Gallery 3.x advances the overall catalog compatibility contract to `3` and requires the OPF 0.20
-engine contract. The engine packages follow their separate release process. Layout grid
-`areas` use arrays of cells instead of whitespace-delimited strings. The per-kind layout schema version remains
+Gallery 5.x advances the overall catalog compatibility contract to `4`: a layout record is `direction` and one ordered
+list of `regions`, nested for two dimensions, and `areas`, `columns`, `rows` and the `regions` map are gone (FA-33, no
+migration path). The engine packages follow their separate release process. The per-kind layout schema version remains
 `2` and its URI remains `opf-layout/v2`; those identifiers are distinct from the overall catalog contract.
 
 ## Use
@@ -42,7 +42,7 @@ registers later.
 | --- | --- |
 | `gallery` | The content records by kind and then by id, without `$schema`, `id` or `x-*` members, with `source: "https://www.pptx.gallery"` |
 | `GALLERY_SOURCE` | `https://www.pptx.gallery`, the `source` of a document's `catalogs.default` |
-| `CATALOG_SCHEMA` | The overall catalog compatibility contract (also `opf.catalogSchema` in `package.json`): `3` requires array-row areas; layouts retain per-kind schema version `2` and `opf-layout/v2` |
+| `CATALOG_SCHEMA` | The overall catalog compatibility contract (also `opf.catalogSchema` in `package.json`): `4` requires layouts written as `direction` and an ordered `regions` list; layouts retain per-kind schema version `2` and `opf-layout/v2` |
 | `catalogDisplay` | Display metadata for pickers: `chartTypes`, `languages` and `socialPlatforms` by id |
 | `catalogIndexes` | Each kind's `index.json`: the record summaries and their content hash (a layout's entry also has its `summary` and `group`) |
 | `catalogManifest` | The pptx.gallery commit the 1.x records were taken from, and a content hash per kind |
@@ -102,6 +102,39 @@ The 1.x ids `agenda`, `comparison`, `dashboard`, `faq`, `timeline` and `two-colu
 other 1.x layout id is gone, with no alias: a deck that names one finds no layout (`opf/unresolved-reference`) and its
 slides compose automatically, unless the deck embeds the old record.
 
+### The record
+
+A layout record lays its content out with `direction` and an ordered `regions` list. `direction` (`"row"` or `"column"`,
+default `"column"`) says whether the list runs side by side or top to bottom. Each entry is a **region** (`name`, an
+optional `size`, and the rules `accepts`, `role`, `flow`, `max`, `bleed`, `listColumns`, `anchor`, `empty`) or a **split**
+(`direction`, `regions`, an optional `size`) that nests another list, up to three levels. `size` is a weight (default 1):
+siblings share their parent's length in proportion; `"auto"` is the height the content needs and is allowed only in a
+column. `title` and `subtitle` are the heading regions and take only `size`. An `anchor` on the record or on a split
+applies to every region under it unless the region sets its own, and an omitted `accepts` means every content kind.
+
+```json
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "hero",
+  "name": "Hero",
+  "direction": "column",
+  "regions": [
+    { "name": "title" },
+    {
+      "direction": "row",
+      "size": 2,
+      "regions": [
+        { "name": "lead", "accepts": ["text", "quote", "metric"], "role": "primary", "flow": "none" },
+        { "name": "media", "accepts": ["image", "video"], "role": "media", "flow": "none" }
+      ]
+    },
+    { "name": "support", "size": 1, "accepts": ["text", "list", "metric", "group"], "role": "supporting", "flow": "grid" }
+  ]
+}
+```
+
+Core compiles the list to the grid its engine uses, so the same layout draws the same way it did as a grid.
+
 ## Versions
 
 The gallery has its own version line, independent of the OPF engine packages. Releases are tagged `vX.Y.Z`.
@@ -124,7 +157,7 @@ patch is held to the 2.x release below it.
 
 ## Where the records come from
 
-- **Layouts** are written here, in `catalog/layouts/`: one short `opf-layout/v2` record per layout, reviewed as code.
+- **Layouts** are written here, in `catalog/layouts/`: one short `opf-layout/v2` record per layout (`direction` and an ordered `regions` list), reviewed as code.
 - **Themes** carry `variants` from 4.0.0 (below), written here with the theme records.
 - **The other kinds** (colour and font schemes, narratives, audiences, purposes, tones and the display kinds) are
   unchanged from 1.x: the pinned snapshot of the catalog pptx.gallery published at
@@ -146,7 +179,7 @@ value to `design.variant`. There is no separate dark theme: the `dark` theme of 
 ## Contributing a layout
 
 1. Write the record in `catalog/layouts/<id>.json` (`$schema` `https://openpresentation.org/schema/opf-layout/v2`,
-   `id`, `name`, `summary`, `tags` with its group, `areas`, `columns`, `rows`, `regions` and any `design`) and add its
+   `id`, `name`, `summary`, `tags` with its group, `direction`, `regions` and any `design`; see [The record](#the-record)) and add its
    entry (`id`, `name`, `summary`, `group`, `file`) to `catalog/layouts/index.json` in picker order. A new layout gets a
    new id; an existing id never changes meaning.
 2. `npm run rehash` (the index and manifest hashes), then `npm run previews` (its SVG preview).

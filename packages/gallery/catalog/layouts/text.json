@@ -6,23 +6,13 @@
   "tags": [
     "Text"
   ],
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "body"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    1
-  ],
-  "regions": {
-    "body": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "body",
       "accepts": [
         "text",
         "list",
@@ -33,7 +23,7 @@
       "role": "primary",
       "flow": "auto"
     }
-  },
+  ],
   "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"

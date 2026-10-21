@@ -9,23 +9,13 @@
   "design": {
     "contentBox": false
   },
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "questions"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    1
-  ],
-  "regions": {
-    "questions": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "questions",
       "accepts": [
         "list",
         "text",
@@ -35,7 +25,7 @@
       "flow": "column",
       "listColumns": "auto"
     }
-  },
+  ],
   "description": "Answer the questions an audience is likely to ask. Pair each question with a direct answer and group related questions together.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/faq.svg"

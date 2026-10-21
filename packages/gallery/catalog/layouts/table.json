@@ -6,41 +6,29 @@
   "tags": [
     "Visuals"
   ],
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "table"
-    ],
-    [
-      "note"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    1,
-    "auto"
-  ],
-  "regions": {
-    "table": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "table",
       "accepts": [
         "table"
       ],
       "role": "primary",
       "flow": "column"
     },
-    "note": {
+    {
+      "name": "note",
+      "size": "auto",
       "accepts": [
         "text"
       ],
       "role": "supporting",
       "flow": "none"
     }
-  },
+  ],
   "description": "Present structured data that benefits from precise comparison. Use clear row and column headings and concise cell content.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/table.svg"

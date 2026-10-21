@@ -109,6 +109,8 @@ export async function loadValidators() {
   const addFormats = require("ajv-formats").default;
   const ajv = new Ajv2020({ allErrors: true, strict: false });
   addFormats(ajv);
+  // Record schemas ($ref into the format schema, e.g. a theme's ColorVariant) resolve against it.
+  ajv.addSchema(JSON.parse(await readFile(path.join(schemasRoot, "opf.schema.json"), "utf8")));
   const record = {};
   for (const { kind, schemaFile } of SNAPSHOT_KINDS) {
     record[kind] = ajv.compile(JSON.parse(await readFile(path.join(schemasRoot, schemaFile), "utf8")));

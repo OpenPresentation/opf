@@ -6,44 +6,39 @@
   "tags": [
     "Visuals"
   ],
-  "areas": [
-    [
-      "title",
-      "title"
-    ],
-    [
-      "chart",
-      "notes"
-    ]
-  ],
-  "columns": [
-    3,
-    2
-  ],
-  "rows": [
-    "auto",
-    1
-  ],
-  "regions": {
-    "chart": {
-      "accepts": [
-        "chart"
-      ],
-      "role": "primary",
-      "flow": "none"
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
     },
-    "notes": {
-      "accepts": [
-        "text",
-        "list",
-        "metric",
-        "quote",
-        "chart"
-      ],
-      "role": "supporting",
-      "flow": "column"
+    {
+      "direction": "row",
+      "regions": [
+        {
+          "name": "chart",
+          "size": 3,
+          "accepts": [
+            "chart"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        {
+          "name": "notes",
+          "size": 2,
+          "accepts": [
+            "text",
+            "list",
+            "metric",
+            "quote",
+            "chart"
+          ],
+          "role": "supporting",
+          "flow": "column"
+        }
+      ]
     }
-  },
+  ],
   "description": "Pair a chart with an explanation of its result. Keep the text focused on the pattern or decision supported by the data.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-beside.svg"

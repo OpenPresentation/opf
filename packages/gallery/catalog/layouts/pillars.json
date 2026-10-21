@@ -9,23 +9,13 @@
   "design": {
     "contentBox": false
   },
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "pillars"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    1
-  ],
-  "regions": {
-    "pillars": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "pillars",
       "accepts": [
         "text",
         "list",
@@ -36,7 +26,7 @@
       "role": "primary",
       "flow": "grid"
     }
-  },
+  ],
   "description": "Show the main themes or principles behind an idea. Give each item a short heading and a comparable amount of detail.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/pillars.svg"

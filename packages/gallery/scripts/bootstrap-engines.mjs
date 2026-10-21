@@ -1,4 +1,8 @@
-/** One-release build bootstrap. It changes node_modules only, never the published manifest or lockfile. */
+/**
+ * One-release build bootstrap, for the gallery version `.github/bootstrap-engines.json` names (`galleryVersion`, with its
+ * `catalogSchema`) while the engines it needs are merged but not yet on npm. It changes node_modules only, never the
+ * published manifest or lockfile. Every other version resolves the registry engines.
+ */
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import assert from 'node:assert/strict';
@@ -70,15 +74,16 @@ function verify() {
   if (JSON.stringify(state.resolved) !== JSON.stringify(resolved())) throw new Error('Bootstrap engine resolution changed during the gates');
   console.log(JSON.stringify(state, null, 2));
 }
-// Future releases use their ordinary registry pins. Remove this one-release configuration after the next engine releases.
+// Later releases use their ordinary registry pins. Point this configuration at the next release's merged engine commits
+// (or remove it) when a release again needs engines that are not on npm.
 if (manifest.version !== pins.galleryVersion) {
   if (existsSync(statePath)) throw new Error('Unexpected bootstrap state outside the configured gallery release');
   console.log('Registry engines: ' + JSON.stringify(resolved()));
 } else if (process.argv.includes('--verify')) {
-  assert.equal(manifest.opf?.catalogSchema,3,'Gallery 3 bootstrap requires catalog schema 3');
+  assert.equal(manifest.opf?.catalogSchema,pins.catalogSchema,`Gallery ${pins.galleryVersion} bootstrap requires catalog schema ${pins.catalogSchema}`);
   verify();
 } else {
-  if (pins.galleryVersion !== '3.0.0' || manifest.opf?.catalogSchema !== 3) throw new Error('Bootstrap is restricted to gallery 3.0.0 with catalog schema 3');
+  if (!Number.isInteger(pins.catalogSchema) || manifest.opf?.catalogSchema !== pins.catalogSchema) throw new Error(`Bootstrap for gallery ${pins.galleryVersion} requires catalog schema ${pins.catalogSchema}`);
   const expectedRepositories = { core: 'OpenPresentation/opf', render: 'OpenPresentation/opf-render' };
   for (const [name, repository] of Object.entries(expectedRepositories)) {
     if (pins[name].repository !== repository || !/^[a-f0-9]{40}$/.test(pins[name].sha)) throw new Error(`Invalid immutable ${name} pin`);

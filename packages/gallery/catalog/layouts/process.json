@@ -10,23 +10,13 @@
     "contentBox": false,
     "contentDirection": "horizontal"
   },
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "steps"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    1
-  ],
-  "regions": {
-    "steps": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "steps",
       "accepts": [
         "timeline",
         "list",
@@ -37,7 +27,7 @@
       "role": "primary",
       "flow": "grid"
     }
-  },
+  ],
   "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/process.svg"

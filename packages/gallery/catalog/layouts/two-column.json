@@ -6,58 +6,51 @@
   "tags": [
     "Text"
   ],
-  "areas": [
-    [
-      "title",
-      "title"
-    ],
-    [
-      "first",
-      "second"
-    ]
-  ],
-  "columns": [
-    1,
-    1
-  ],
-  "rows": [
-    "auto",
-    1
-  ],
-  "regions": {
-    "first": {
-      "accepts": [
-        "text",
-        "list",
-        "quote",
-        "code",
-        "image",
-        "video",
-        "chart",
-        "table",
-        "metric",
-        "group"
-      ],
-      "role": "primary",
-      "flow": "none"
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
     },
-    "second": {
-      "accepts": [
-        "text",
-        "list",
-        "quote",
-        "code",
-        "image",
-        "video",
-        "chart",
-        "table",
-        "metric",
-        "group"
-      ],
-      "role": "primary",
-      "flow": "none"
+    {
+      "direction": "row",
+      "regions": [
+        {
+          "name": "first",
+          "accepts": [
+            "text",
+            "list",
+            "quote",
+            "code",
+            "image",
+            "video",
+            "chart",
+            "table",
+            "metric",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        {
+          "name": "second",
+          "accepts": [
+            "text",
+            "list",
+            "quote",
+            "code",
+            "image",
+            "video",
+            "chart",
+            "table",
+            "metric",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        }
+      ]
     }
-  },
+  ],
   "description": "Place two bodies of content beside each other. Use it for paired explanations or an argument with supporting evidence.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/two-column.svg"

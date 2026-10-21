@@ -7,7 +7,7 @@ test('every narrative beat names an existing v2 intent template', () => {
   for (const [id, narrative] of Object.entries(gallery.narratives)) {
     for (const beat of narrative.beats) {
       if (!beat.layout) continue;
-      assert.ok(gallery.layouts[beat.layout]?.areas, `${id}/${beat.id}: ${beat.layout}`);
+      assert.ok(Array.isArray(gallery.layouts[beat.layout]?.regions), `${id}/${beat.id}: ${beat.layout}`);
       references++;
     }
   }

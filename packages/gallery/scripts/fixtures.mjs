@@ -59,6 +59,27 @@ export function sampleBlock(kind, index = 0) {
   }
 }
 
+/**
+ * The body regions of a layout record, in reading order: `[name, region]` pairs for every named region of the record's
+ * `regions` tree except the `title` and `subtitle` headings. A region inherits `anchor` from the nearest split or the
+ * record that sets one, as core's compile does; nothing else inherits.
+ */
+export function bodyRegions(record) {
+  const out = [];
+  const walk = (list, anchor) => {
+    for (const entry of Array.isArray(list) ? list : []) {
+      const inherited = entry.anchor ?? anchor;
+      if (Array.isArray(entry.regions)) walk(entry.regions, inherited);
+      else if (entry.name !== "title" && entry.name !== "subtitle") {
+        const { name, size, ...rules } = entry;
+        out.push([name, inherited !== undefined && rules.anchor === undefined ? { ...rules, anchor: inherited } : rules]);
+      }
+    }
+  };
+  walk(record?.regions, record?.anchor);
+  return out;
+}
+
 /** The sample kind of a region: its first accepted kind (a `group` region gets a picture-and-text group). */
 export function regionKind(region) {
   return region?.accepts?.[0] ?? "text";
@@ -77,7 +98,7 @@ const SUBTITLE = "Review for the leadership team";
 export function templateDeck(id, record) {
   const blocks = [];
   const used = {};
-  for (const [name, region] of Object.entries(record?.regions ?? {})) {
+  for (const [name, region] of bodyRegions(record)) {
     const kind = regionKind(region);
     for (let count = 0; count < regionCount(region); count += 1) {
       // Counted per kind across the slide, so two regions of one kind show different samples.
@@ -117,8 +138,8 @@ export function legacyLayoutDeck(id, record) {
   return { name: `Layout fixture ${id}`, slides: [slide] };
 }
 
-/** Whether a layout record is an OPF 0.19 grid template (it has `areas`), not a 1.x placeholder record. */
-export const isTemplate = (record) => Array.isArray(record?.areas);
+/** Whether a layout record is an OPF region-list template (it has a `regions` array), not a 1.x placeholder record. */
+export const isTemplate = (record) => Array.isArray(record?.regions);
 
 /** The fixture deck of one layout record: a template's two slides, or a 1.x record's one slide. */
 export function layoutDeck(id, record) {

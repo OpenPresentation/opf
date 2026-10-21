@@ -6,23 +6,13 @@
   "tags": [
     "Mixed"
   ],
-  "areas": [
-    [
-      "title"
-    ],
-    [
-      "people"
-    ]
-  ],
-  "columns": [
-    1
-  ],
-  "rows": [
-    "auto",
-    1
-  ],
-  "regions": {
-    "people": {
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "people",
       "accepts": [
         "group",
         "image",
@@ -32,7 +22,7 @@
       "role": "primary",
       "flow": "grid"
     }
-  },
+  ],
   "description": "Introduce people and their roles. Use consistent names, descriptions and portraits when available.",
   "preview": {
     "vectorSrc": "https://www.pptx.gallery/layout-previews/team.svg"
