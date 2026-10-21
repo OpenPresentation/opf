@@ -12,7 +12,7 @@ shipped versus deferred.
 ## Versions
 
 **Published set (2026-10-20):** core **0.24.2**, CLI **0.24.1**,
-renderer **0.24.3**, PPTX **0.24.1**, editor **0.24.0** and Gallery **4.0.0**.
+renderer **0.24.3**, PPTX **0.24.1**, editor **0.24.2** and Gallery **4.0.0**.
 `release-plan.json` records these releases with their registry `gitHead`;
 registry identity is separate from the consumer and native checks below. All declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
@@ -21,7 +21,7 @@ registry identity is separate from the consumer and native checks below. All dec
 node -v   # 24.x (verified); 22 and later are declared
 npm install @openpresentation/opf@0.24.2 \
   @openpresentation/opf-render@0.24.3 \
-  @openpresentation/opf-editor@0.24.0 \
+  @openpresentation/opf-editor@0.24.2 \
   @openpresentation/opf-pptx@0.24.1 \
   @openpresentation/cli@0.24.1 \
   @openpresentation/gallery@4.0.0

@@ -42,7 +42,7 @@ And they don't start from a blank canvas. [pptx.gallery](https://pptx.gallery) i
 
 ## Start in three steps
 
-1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the currently recorded registry pin set: core 0.24.2, renderer 0.24.3, PPTX 0.24.1, editor 0.24.0, CLI 0.24.1 and Gallery 4.0.0. The default catalog is supplied by `@openpresentation/gallery@4.0.0`; see the [compatibility matrix](docs/compatibility-matrix.md) for feature and native limits.
+1. **Install the coordinated published packages** on Node 24. See [the developer quickstart](docs/quickstart.md) for the currently recorded registry pin set: core 0.24.2, renderer 0.24.3, PPTX 0.24.1, editor 0.24.2, CLI 0.24.1 and Gallery 4.0.0. The default catalog is supplied by `@openpresentation/gallery@4.0.0`; see the [compatibility matrix](docs/compatibility-matrix.md) for feature and native limits.
 2. **Author, validate, paginate, preview and export.** New to OPF? Run the [first deck](docs/first-deck/README.md) end to end first. Copy [`docs/quickstart/developer-quickstart.opf.json`](./docs/quickstart/developer-quickstart.opf.json) and run the commands in that guide. From code, `convert("deck.opf.md", "deck.pdf")` of `@openpresentation/opf` is the simple path to a PDF, PNG, SVG or PPTX file. `validate` / `opf validate` is one local checker for format, references, accessibility, layout and content ([guide](docs/validate.md)), not visual verification.
 3. **Know the limits.** PPTX export writes one text box per wrapped line, so text edited in PowerPoint or Keynote does not reflow (see [rich text](docs/rich-text.md)) unless you opt in to `--body-text native` (opf-pptx and CLI 0.22.0 or later), and fonts are named, not embedded. The [compatibility matrix](docs/compatibility-matrix.md) lists shipped APIs versus renderer issue 24, native PowerPoint issue 87, and other deferred work. Browse presets at [pptx.gallery](https://pptx.gallery).
 
@@ -161,6 +161,7 @@ See [Templates and variables](./docs/templates-and-variables.md) for fillable OP
 |---|---|
 | [`spec/schemas/opf.schema.json`](./spec/schemas/opf.schema.json) | Canonical JSON Schema for top-level OPF `Presentation` documents. |
 | [`docs/how-opf-works.md`](./docs/how-opf-works.md) | Conceptual introduction: the document model, content shapes, catalog resolution, and the validation philosophy. Start here. |
+| [`docs/slide-design-principles.md`](./docs/slide-design-principles.md) | Timeless principles for slide layout, typography, spacing, visual balance, and reviewing layout defaults. |
 | [`docs/design-resolution.md`](./docs/design-resolution.md) | The design precedence algorithm (slide design → deck design → resolved theme → engine defaults) with worked examples. |
 | [`docs/schema-reference.md`](./docs/schema-reference.md) | Author-facing reference for top-level OPF fields and every presentation schema `$defs` object/type. |
 | [`docs/slide-sizes.md`](./docs/slide-sizes.md) | OPF's slide-size presets in inches, points and EMU, how they compare with PowerPoint's presets, and what PPTX export and import do with them. |

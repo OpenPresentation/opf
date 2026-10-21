@@ -6,7 +6,7 @@ It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
 **Published set (2026-10-20):** core 0.24.2, renderer 0.24.3, PPTX 0.24.1,
-editor 0.24.0, CLI 0.24.1 and Gallery 4.0.0. `release-plan.json` records each
+editor 0.24.2, CLI 0.24.1 and Gallery 4.0.0. `release-plan.json` records each
 version with the registry `gitHead` of its publisher commit.
 Earlier matrices and native observations retain their historical identities.
 Complete native compatibility remains a separate gate.
@@ -37,7 +37,7 @@ imply universal Office or full-catalog visual parity.
 | CLI | 0.24.1 | Core ^0.24.2, Gallery ^4.0.0; optional renderer/PPTX ^0.24.0 |
 | Renderer | 0.24.3 | Core ^0.24.2; optional pinned font/converter peers |
 | PPTX | 0.24.1 | Core ^0.24.0, Gallery ^4.0.0; optional renderer ^0.24.1 |
-| Editor | 0.24.0 | Core ^0.24.0; optional renderer ^0.24.1 |
+| Editor | 0.24.2 | Core ^0.24.2; optional renderer ^0.24.3 |
 | Gallery | 4.0.0 | Independent owner of every default catalog record; 28 intent layouts |
 
 ## Runtime
