@@ -143,3 +143,19 @@ test('playwright-grep prints nothing for an empty list and the active ids otherw
   write(root, [entry({ id: 'a.spec.ts typo' })]);
   assert.equal(cli(root, 'quarantine.mjs', 'check', '--playwright-list', 'list.json', '--today', '2026-10-02').status, 1);
 });
+test('--dir names the package directory for check, run-suite and flake-repeat, whatever the current directory', () => {
+  const root = scratch();
+  write(root, [entry({ id: 'fail' })]);
+  const elsewhere = mkdtempSync(path.join(tmpdir(), 'quarantine-cwd-'));
+  const from = (script, ...args) => cli(elsewhere, script, '--dir', root, ...args);
+  assert.equal(from('quarantine.mjs', 'check', '--today', '2026-10-02').status, 0);
+  const run = from('quarantine.mjs', 'run-suite', 's', '--today', '2026-10-02');
+  assert.equal(run.status, 0, run.stderr);
+  assert.match(run.stdout, /> last/);
+  assert.equal(from('quarantine.mjs', 'run-deferred', '--today', '2026-10-02').status, 0);
+  assert.equal(JSON.parse(readFileSync(path.join(root, 'artifacts/quarantine/report.json'), 'utf8')).failed, 1);
+  const flake = from('flake-repeat.mjs', '--suite', 'f', '--repeat', '2', '--out', 'out');
+  assert.equal(flake.status, 0, flake.stderr);
+  assert.equal(JSON.parse(readFileSync(path.join(root, 'out/flake-repeat.json'), 'utf8')).tests[0].runs, 2);
+  rmSync(elsewhere, { recursive: true, force: true });
+});

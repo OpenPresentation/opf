@@ -4,7 +4,8 @@
 // exit code stays 0. A suite whose setup fails cannot be measured and fails the job.
 //
 //   node scripts/flake-repeat.mjs [--suite <name>]... [--repeat 5] [--out artifacts/flake-repeat] [--timeout-min 15]
-//                                 [--suites test/browser-suites.json]
+//                                 [--suites test/browser-suites.json] [--dir <package directory>]
+// `--dir` is the package whose suites file and commands are used (default the current directory); `--out` is relative to it.
 //   node scripts/flake-repeat.mjs --playwright-json <report.json> [--out ...]   (a Playwright --repeat-each JSON report)
 //
 // The result is `<out>/flake-repeat.json` and a markdown table in $GITHUB_STEP_SUMMARY. No dependencies, no network.
@@ -85,6 +86,7 @@ function parseOptions(argv) {
 
 export async function main(argv) {
   const options = parseOptions(argv);
+  if (options.dir) process.chdir(path.resolve(options.dir));
   const out = path.resolve(options.out ?? 'artifacts/flake-repeat');
   const repeat = Number(options.repeat ?? 5);
   if (!Number.isInteger(repeat) || repeat < 1) throw new Error('--repeat must be a positive integer.');

@@ -12,7 +12,9 @@
 //                                                     (playwright test --list --reporter=json) to validate ids.
 //
 // Options: --quarantine <file> (default test/quarantine.json), --suites <file> (default test/browser-suites.json),
-// --today YYYY-MM-DD (tests; default the current UTC date). No dependencies, no network.
+// --today YYYY-MM-DD (tests; default the current UTC date), --dir <package directory> (the directory the default files and the
+// suite commands are relative to; default the current one, so `node ../../scripts/quarantine.mjs ...` and
+// `node scripts/quarantine.mjs --dir packages/render ...` do the same). No dependencies, no network.
 import { spawn } from 'node:child_process';
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -270,6 +272,7 @@ function parseOptions(argv) {
 
 export async function main(argv) {
   const options = parseOptions(argv);
+  if (options.dir) process.chdir(path.resolve(options.dir));
   const [command, ...rest] = options._;
   const today = options.today ?? todayUtc();
   const files = { quarantineFile: options.quarantine ?? DEFAULT_QUARANTINE, suitesFile: options.suites ?? DEFAULT_SUITES, playwrightList: options['playwright-list'], today };
@@ -294,7 +297,7 @@ export async function main(argv) {
     process.stdout.write(playwrightGrep(state.active.map((id) => id)));
     return 0;
   }
-  throw new Error('Usage: quarantine.mjs check | run-suite <suite> | run-deferred | playwright-grep [--quarantine file] [--suites file] [--today YYYY-MM-DD]');
+  throw new Error('Usage: quarantine.mjs check | run-suite <suite> | run-deferred | playwright-grep [--dir <package directory>] [--quarantine file] [--suites file] [--today YYYY-MM-DD]');
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

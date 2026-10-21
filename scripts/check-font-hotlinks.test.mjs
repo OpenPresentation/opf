@@ -1,10 +1,11 @@
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { mkdirSync, mkdtempSync, rmSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
-import { checkRepo, FONT_CDN_HOSTS, scanText } from "./check-font-hotlinks.mjs";
+import { checkRepo, FONT_CDN_HOSTS, scanFile, scanText } from "./check-font-hotlinks.mjs";
 
 const host = (...parts) => parts.join(".");
 const googleCss = `https://${host("fonts", "googleapis", "com")}/css2?family=Inter&display=swap`;
@@ -93,6 +94,45 @@ test("build output is scanned and never allowlisted", () => {
     assert.equal(problems.length, 1);
     assert.equal(problems[0].file, "out/page.html");
     assert.ok(checkRepo({ root, allowlistFile, files: [], builtDirs: [path.join(root, "missing")] }).some((p) => p.rule === "built-dir-missing"));
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("only regular files are scanned: a tracked symlink is skipped, a missing file is not an error", (t) => {
+  const root = mkdtempSync(path.join(tmpdir(), "font-hotlinks-link-"));
+  try {
+    mkdirSync(path.join(root, "real"));
+    writeFileSync(path.join(root, "real", "page.html"), `<link href="${googleCss}">\n`);
+    try {
+      symlinkSync("real", path.join(root, "alias"), "dir");
+      symlinkSync("real/page.html", path.join(root, "alias.html"));
+    } catch {
+      t.skip("symlinks are not available here");
+      return;
+    }
+    assert.equal(scanFile(path.join(root, "real", "page.html")).length, 1);
+    assert.deepEqual(scanFile(path.join(root, "alias")), []);
+    assert.deepEqual(scanFile(path.join(root, "alias.html")), []);
+    assert.deepEqual(scanFile(path.join(root, "gone.html")), []);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("--built directories are relative to --dir, or to the current directory without it", () => {
+  const script = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "check-font-hotlinks.mjs");
+  const root = mkdtempSync(path.join(tmpdir(), "font-hotlinks-dir-"));
+  try {
+    mkdirSync(path.join(root, "packages", "editor", "dist"), { recursive: true });
+    writeFileSync(path.join(root, "packages", "editor", "dist", "page.html"), `<link href="${googleCss}">\n`);
+    const run = (cwd, ...args) => spawnSync(process.execPath, [script, ...args], { cwd, encoding: "utf8" });
+    const fromPackage = run(path.join(root, "packages", "editor"), "--built", "dist");
+    assert.equal(fromPackage.status, 1);
+    assert.match(fromPackage.stderr, /dist\/page\.html:1 \[font-cdn-host\]/);
+    const withDir = run(root, "--dir", "packages/editor", "--built", "dist");
+    assert.equal(withDir.status, 1);
+    assert.match(withDir.stderr, /dist\/page\.html:1/);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

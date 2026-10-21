@@ -8,6 +8,7 @@
 //        [--package <name>] [--date YYYY-MM-DD] [--summary "<text>"] [--dry-run]
 //   node scripts/changelog-fragments.mjs warn-missing --base <ref>     warn (never fail) when code changed
 //                                                                      and the pull request has no fragment
+// Every command takes --dir <directory>: the directory whose changes/ and changelog files are used (default the current one).
 //
 // Fragment format (changes/README.md):
 //   ---
@@ -16,7 +17,7 @@
 //   ---
 //   RR-17 (what and why): the text of one CHANGELOG bullet, without the leading "- ".
 //
-// This file is identical in the four public repositories. Plain Node, no dependencies.
+// One copy serves every package of the monorepo (the siblings' copies were identical to this one). Plain Node, no dependencies.
 import { execFileSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, realpathSync, unlinkSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
@@ -193,9 +194,9 @@ function args(argv) {
 }
 
 function main(argv) {
-  const root = process.cwd();
   const [command] = argv;
   const options = args(argv.slice(1));
+  const root = path.resolve(options.dir ?? process.cwd());
   const config = loadConfig(root);
   if (command === 'check') {
     const fragments = readFragments(root, config);
@@ -212,7 +213,7 @@ function main(argv) {
   }
   if (command === 'warn-missing') {
     if (!options.base) throw new Error('Usage: warn-missing --base <ref>');
-    const changed = execFileSync('git', ['diff', '--name-only', `${options.base}...HEAD`], { encoding: 'utf8' }).split('\n').filter(Boolean);
+    const changed = execFileSync('git', ['diff', '--name-only', '--relative', `${options.base}...HEAD`], { cwd: root, encoding: 'utf8' }).split('\n').filter(Boolean);
     if (needsFragment(changed, config)) {
       console.log('::warning title=No changelog fragment::This pull request changes package code but adds no changes/<slug>.md. Add a fragment if the change is user-facing (see changes/README.md); ignore this for internal changes.');
     } else {
@@ -220,7 +221,7 @@ function main(argv) {
     }
     return 0;
   }
-  throw new Error('Usage: changelog-fragments.mjs check | assemble --version X.Y.Z | warn-missing --base <ref>');
+  throw new Error('Usage: changelog-fragments.mjs check | assemble --version X.Y.Z | warn-missing --base <ref> [--dir <directory>]');
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
