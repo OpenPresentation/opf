@@ -6,7 +6,7 @@ import { startPlayground } from './support/playground-harness.mjs';
 import { DECK_FILE_ACCEPT } from '../src/read-deck-file.js';
 
 // RR-98: the Present button, the F5 shortcut and their wiring in the example playground. Part 1 mounts the button on a bare page with the real CSS:
-// name, title, icon, size and density, the look of the Export trigger, keyboard activation, disabled, and the F5 rules. Part 2 runs the built
+// name, title, icon, size and density, the quiet default and primary looks, keyboard activation, disabled, and the F5 rules. Part 2 runs the built
 // playground: the button next to Export presents the current slide, leaving returns to the slide the presentation ended on, and Open reads YAML and
 // Markdown through readDeckFile with DECK_FILE_ACCEPT.
 const axeSource = readFileSync(createRequire(import.meta.url).resolve('axe-core/axe.min.js'), 'utf8');
@@ -46,13 +46,48 @@ try {
   await page.evaluate(() => window.button.setDensity('comfortable'));
   mark('an icon-only real button named "Present", titled "Present (F5)", 32px or 40px with density: "touch"');
 
-  // Styled like the Export trigger.
+  // The quiet default and the primary variant, light and dark.
   const look = (selector) => page.locator(selector).first().evaluate((node) => { const style = getComputedStyle(node); return { background: style.backgroundColor, color: style.color, border: style.borderTopColor, radius: style.borderTopLeftRadius, height: style.height, borderWidth: style.borderTopWidth }; });
-  assert.deepEqual(await look('#host .opf-present-button'), await look('.opf-export-trigger'), 'same fill, ink, border, radius and height as the Export trigger');
-  await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'));
-  assert.deepEqual(await look('#host .opf-present-button'), await look('.opf-export-trigger'), 'and in dark mode');
+  const token = (name, property = 'color') => page.evaluate(([variable, prop]) => { const probe = document.createElement('i'); probe.style[prop] = `var(${variable})`; document.body.append(probe); const value = getComputedStyle(probe)[prop]; probe.remove(); return value; }, [name, property]);
+  const transparent = 'rgba(0, 0, 0, 0)';
+  assert.equal(await button.getAttribute('data-variant'), 'quiet', 'quiet is the default variant');
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate((value) => (value === 'dark' ? document.documentElement.setAttribute('data-theme', 'dark') : document.documentElement.removeAttribute('data-theme')), theme);
+    await button.evaluate((node) => node.blur());
+    await page.mouse.move(900, 500);
+    await page.waitForTimeout(250); // the theme change fades over 120ms
+    const quiet = await look('#host .opf-present-button');
+    assert.equal(quiet.background, transparent, `quiet: a transparent background (${theme})`);
+    assert.equal(quiet.border, transparent, `quiet: no visible border (${theme})`);
+    assert.equal(quiet.color, await token('--opf-ui-muted-fg'), `quiet: the icon is --opf-ui-muted-fg (${theme})`);
+    assert.equal(quiet.height, '32px', `quiet: the same 32px control height (${theme})`);
+    assert.equal(quiet.borderWidth, '1px', `quiet: the border width is kept so the size matches primary (${theme})`);
+    await button.hover();
+    await page.waitForFunction(() => getComputedStyle(document.querySelector('#host .opf-present-button')).backgroundColor !== 'rgba(0, 0, 0, 0)');
+    await page.waitForTimeout(200); // the 120ms fade
+    const hover = await look('#host .opf-present-button');
+    assert.equal(hover.background, await token('--opf-ui-muted', 'backgroundColor'), `quiet hover: --opf-ui-muted (${theme})`);
+    assert.equal(hover.color, await token('--opf-ui-fg'), `quiet hover: the icon is --opf-ui-fg (${theme})`);
+    await page.mouse.move(900, 500);
+    await page.evaluate(() => window.button.setVariant('primary'));
+    assert.equal(await button.getAttribute('data-variant'), 'primary', 'setVariant("primary")');
+    await page.waitForTimeout(200);
+    assert.deepEqual(await look('#host .opf-present-button'), await look('.opf-export-trigger'), `primary: same fill, ink, border, radius and height as the Export trigger (${theme})`);
+    const primary = await look('#host .opf-present-button');
+    assert.equal(primary.background, await token('--opf-ui-accent', 'backgroundColor'), `primary: the accent fill (${theme})`);
+    assert.equal(primary.color, await token('--opf-ui-accent-fg'), `primary: the accent ink (${theme})`);
+    await page.evaluate(() => window.button.setVariant('quiet'));
+    await page.waitForTimeout(200);
+    assert.equal((await look('#host .opf-present-button')).background, transparent, `setVariant("quiet") goes back (${theme})`);
+  }
   await page.evaluate(() => document.documentElement.removeAttribute('data-theme'));
-  mark('it is styled like the Export menu trigger, light and dark');
+  await page.evaluate(() => { window.primaryButton = window.opfPresent.createPresentButton(document.getElementById('menu-host'), { variant: 'primary' }); });
+  assert.equal(await page.locator('#menu-host .opf-present-button').getAttribute('data-variant'), 'primary', 'variant: "primary" at creation');
+  await page.evaluate(() => window.primaryButton.destroy());
+  await page.evaluate(() => { window.junkButton = window.opfPresent.createPresentButton(document.getElementById('menu-host'), { variant: 'loud' }); });
+  assert.equal(await page.locator('#menu-host .opf-present-button').getAttribute('data-variant'), 'quiet', 'an unknown variant is quiet');
+  await page.evaluate(() => window.junkButton.destroy());
+  mark('the Present button is quiet by default (transparent, muted-fg icon, muted fill and fg icon on hover, 32px) and variant "primary" is the Export trigger look, light and dark');
 
   // Activation: click, Enter and Space, with focus visible.
   await button.click();

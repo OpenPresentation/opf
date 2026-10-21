@@ -83,16 +83,19 @@ export interface PresentButtonOptions {
   density?: "comfortable" | "touch";
   /** The accessible name (default "Present"). */
   label?: string;
+  /** `"quiet"` (default): a transparent icon button like the toolbar's undo and redo. `"primary"`: the filled accent look of the Export trigger. */
+  variant?: "quiet" | "primary";
 }
 
 export interface PresentButton {
   readonly element: HTMLButtonElement;
   setDisabled(reason?: boolean | string): void;
   setDensity(density: "comfortable" | "touch"): void;
+  setVariant(variant: "quiet" | "primary"): void;
   destroy(): void;
 }
 
-/** The icon-only Present button: a Lucide Presentation icon, `aria-label="Present"`, title "Present (F5)", styled like the Export trigger. */
+/** The icon-only Present button: a Lucide Presentation icon, `aria-label="Present"`, title "Present (F5)". Quiet by default (a transparent icon button like undo and redo); `variant: "primary"` styles it like the Export trigger. */
 export declare function createPresentButton(container: HTMLElement, options?: PresentButtonOptions): PresentButton;
 
 /**

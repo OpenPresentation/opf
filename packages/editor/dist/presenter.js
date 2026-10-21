@@ -372,9 +372,10 @@ function isInteractiveTarget(target) {
  * Mount the Present button in `container`: an icon-only button (Lucide Presentation) named "Present", titled "Present (F5)".
  *
  * Options: `onPresent(event)`, `disabled` (`true`, or a string that says why and is the title), `density` (`"comfortable"` 32px, or `"touch"` 40px)
- * and `label` (the accessible name, default "Present"). A disabled button stays focusable (`aria-disabled`) and does nothing.
+ * `label` (the accessible name, default "Present") and `variant` (`"quiet"`, the default: a transparent icon button like the toolbar's undo and redo,
+ * or `"primary"`: the filled accent look of the Export trigger). A disabled button stays focusable (`aria-disabled`) and does nothing.
  *
- * Returns `{ element, setDisabled(reason), setDensity(density), destroy() }`.
+ * Returns `{ element, setDisabled(reason), setDensity(density), setVariant(variant), destroy() }`.
  */
 export function createPresentButton(container, options = {}) {
   if (!container?.ownerDocument) throw new TypeError("A DOM container is required.");
@@ -384,7 +385,7 @@ export function createPresentButton(container, options = {}) {
   let destroyed = false;
   const button = el(doc, "button", {
     type: "button", class: "opf-present-button opf-ui", "aria-label": label, title: "Present (F5)", "aria-keyshortcuts": "F5",
-    "data-density": options.density === "touch" ? "touch" : "comfortable",
+    "data-density": options.density === "touch" ? "touch" : "comfortable", "data-variant": options.variant === "primary" ? "primary" : "quiet",
   }, icon(doc, "Presentation", 16));
   const paint = () => {
     if (disabledReason) { button.setAttribute("aria-disabled", "true"); button.title = disabledReason; }
@@ -404,6 +405,7 @@ export function createPresentButton(container, options = {}) {
       paint();
     },
     setDensity(next) { button.dataset.density = next === "touch" ? "touch" : "comfortable"; },
+    setVariant(next) { button.dataset.variant = next === "primary" ? "primary" : "quiet"; },
     destroy() { destroyed = true; button.remove(); },
   };
 }

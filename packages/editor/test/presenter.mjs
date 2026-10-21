@@ -14,6 +14,8 @@ const pkg = JSON.parse(await readFile(new URL('../package.json', import.meta.url
 assert.deepEqual(pkg.exports['./presenter'], { types: './dist/presenter.d.ts', default: './dist/presenter.js' }, './presenter is exported with types');
 const types = await readFile(new URL('../src/presenter.d.ts', import.meta.url), 'utf8');
 for (const name of ['createPresenter', 'createPresentButton', 'bindPresentShortcut']) assert.match(types, new RegExp(`export declare function ${name}`), `${name} is declared`);
+assert.match(types, /variant\?: "quiet" \| "primary"/, 'PresentButtonOptions.variant is declared');
+assert.match(types, /setVariant\(variant: "quiet" \| "primary"\)/, 'PresentButton.setVariant is declared');
 for (const method of ['start', 'stop', 'next', 'previous', 'goTo', 'destroy']) assert.match(types, new RegExp(`\\b${method}\\(`), `Presenter.${method} is declared`);
 
 // The styles use only the shared --opf-ui-* tokens (test/styles.mjs checks the rest), and the presenter runs on black bars.

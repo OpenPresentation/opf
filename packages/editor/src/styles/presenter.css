@@ -115,7 +115,7 @@
 }
 .opf-presenter .opf-icon { flex: none; }
 
-/* ---- the Present button (styled like the Export trigger) ------------------------------------------------------------------------------- */
+/* ---- the Present button (quiet like the toolbar's undo and redo by default; data-variant="primary" is the Export trigger's look) ------------------------------------------------------------------------------- */
 .opf-present-button,
 .opf-present-button *,
 .opf-present-button *::before,
@@ -129,15 +129,25 @@
   height: var(--opf-ui-control-h);
   margin: 0;
   padding: 0;
-  border: 1px solid var(--opf-ui-accent);
+  border: 1px solid transparent;
   border-radius: var(--opf-ui-radius);
-  background: var(--opf-ui-accent);
-  color: var(--opf-ui-accent-fg);
+  background: transparent;
+  color: var(--opf-ui-muted-fg);
   font: inherit;
   cursor: pointer;
-  transition: opacity var(--opf-ui-ease);
+  transition: background-color var(--opf-ui-ease), color var(--opf-ui-ease), opacity var(--opf-ui-ease);
 }
-.opf-present-button:hover { opacity: 0.92; }
+.opf-present-button:hover { background: var(--opf-ui-muted); color: var(--opf-ui-fg); }
+.opf-present-button[data-variant="primary"] {
+  border-color: var(--opf-ui-accent);
+  background: var(--opf-ui-accent);
+  color: var(--opf-ui-accent-fg);
+}
+.opf-present-button[data-variant="primary"]:hover {
+  background: var(--opf-ui-accent);
+  color: var(--opf-ui-accent-fg);
+  opacity: 0.92;
+}
 .opf-present-button:focus-visible {
   outline: 2px solid var(--opf-ui-ring);
   outline-offset: 2px;
@@ -145,6 +155,12 @@
 .opf-present-button[aria-disabled="true"] {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.opf-present-button[aria-disabled="true"]:hover { background: transparent; color: var(--opf-ui-muted-fg); }
+.opf-present-button[data-variant="primary"][aria-disabled="true"]:hover {
+  background: var(--opf-ui-accent);
+  color: var(--opf-ui-accent-fg);
+  opacity: 0.5;
 }
 .opf-present-button .opf-icon { flex: none; }
 
