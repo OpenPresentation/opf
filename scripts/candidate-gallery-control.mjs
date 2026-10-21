@@ -5,7 +5,7 @@ import {execFileSync} from 'node:child_process';
 import {mkdirSync,readFileSync,writeFileSync,lstatSync,realpathSync,existsSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {readRegularJson,publishedGalleryControl} from './candidate-gallery.mjs';
+import {readRegularJson,resolvePublishedControl,publishedControlFloor} from './candidate-gallery.mjs';
 const regularBytes=file=>{const absolute=path.resolve(file);assert.equal(realpathSync(absolute),absolute,'aliased test-tooling file');assert.ok(lstatSync(absolute).isFile(),'nonregular test-tooling file');return readFileSync(absolute);};
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
 const BRIDGE_PATH='scripts/lazy-font-counts.mjs';
@@ -23,9 +23,9 @@ export const PUBLISHED_0242_SOURCE='e6ade17b4fcaf70bc716654d39102a54db015965';
 export const PUBLISHED_0242_TOOLING=Object.freeze([{path:'scripts/test-installed-code.mjs',sourceSha:'8d2f43a9dfb9399be1cd0c66d5373890cc3367c1',originalSha256:'dd713c98b49fe14dca40722424f404d25bb44d2c3e83bcd4d5f80aff1fcfe1b3',reviewedSha256:'6808fd530ec4f9400de53a67e26ecc1024727d54a3eac8b1260134c91537e949'},{path:'scripts/published-matrix/consumer-dependencies.mjs',sourceSha:'8d2f43a9dfb9399be1cd0c66d5373890cc3367c1',originalSha256:'54a93b20d295baaa21163cd14fdd0697cad8ea4ab3653d0159dbea8a6cb8693d',reviewedSha256:'d4c74df425525f48b9dd04e88bb049cbcf521af2c72f6f1ace9d1da49b13a79f'},{path:'scripts/published-matrix/consumer-dependencies.test.mjs',sourceSha:'8d2f43a9dfb9399be1cd0c66d5373890cc3367c1',originalSha256:'60cbdccf6b6e50eab72b74e9f941f6d4965a7b4e045b19236e78584eb5c0b107',reviewedSha256:'4689b8b7efaf168c30d213de6894d0afbd788719c8d744443cb724c6f9ab48e0'},{path:'scripts/published-matrix/browser-fixture.test.mjs',sourceSha:'8d2f43a9dfb9399be1cd0c66d5373890cc3367c1',originalSha256:'f5f8cefcb56cc39f835ce9a5ceba5fb866c139c300f80ec30319a7e7f54a3c62',reviewedSha256:'eed5c2e6cc2361a5f72863a02de64bf51052ffc254cc9cc88cd6e8235ada417d'}]);
 function published0242Plan(plan){
  const versions=Object.fromEntries((plan.packages??[]).map(item=>[item.name,item.version]));
- // The published 0.24 core is 0.24.2; the registry `latest` editor is 0.24.2 or 0.24.3 (plan rolled in #769 and FA-33 adoption). Both are built by the
- // same release scripts, so the one reviewed bridge covers each; any other editor is an unknown graph.
- return versions['@openpresentation/opf']==='0.24.2'&&['0.24.2','0.24.3'].includes(versions['@openpresentation/opf-editor']);
+ // The published 0.24 core is 0.24.2; the registry `latest` editor is 0.24.2 or a newer 0.24 patch (the plan is a floor, RR-101). They are built by the
+ // same release scripts, so the one reviewed bridge covers each; any other editor (a new minor or major) is an unknown graph.
+ return versions['@openpresentation/opf']==='0.24.2'&&publishedControlFloor('0.24.2',versions['@openpresentation/opf-editor']);
 }
 function published019Plan(plan){
  const renderer=plan.packages?.find(item=>item.name==='@openpresentation/opf-render')?.version;
@@ -35,17 +35,37 @@ function published019Plan(plan){
  return true;
 }
 const git=(root,...args)=>execFileSync('git',['-C',root,...args],{encoding:'utf8'}).trim();
-export function stagePublishedControlPlan({toolsRoot,coreRoot}){
+// `resolvedPlan` is the reviewed plan with versions and verification refs raised to the registry's newer accepted patch releases
+// (resolvePublishedControl, RR-101). It is what the published checkout installs and verifies; without it the reviewed plan is staged unchanged.
+const samePlan=(a,b)=>{try{assert.deepEqual(a,b);return true;}catch{return false;}};
+const assertPlanFloor=(reviewed,resolved)=>{
+  assert.deepEqual(Object.keys(resolved).sort(),Object.keys(reviewed).sort(),'resolved plan changed the plan shape');
+  for(const key of Object.keys(reviewed))if(!['packages','independentPackages','verificationRefs'].includes(key))assert.deepEqual(resolved[key],reviewed[key],`resolved plan changed ${key}`);
+  for(const [group,independent] of [['packages',false],['independentPackages',true]]){
+    assert.equal(resolved[group].length,reviewed[group].length,`resolved plan changed ${group}`);
+    reviewed[group].forEach((item,index)=>{
+      const next=resolved[group][index];assert.deepEqual({...next,version:item.version},item,'resolved plan changed more than versions');
+      assert.ok(next.version===item.version||publishedControlFloor(item.version,next.version,{independent}),`resolved plan version ${next.name}@${next.version} is outside the reviewed floor ${item.version}`);
+    });
+  }
+  assert.deepEqual(Object.keys(resolved.verificationRefs).sort(),Object.keys(reviewed.verificationRefs).sort(),'resolved plan changed the verification ref set');
+  for(const [repo,ref] of Object.entries(resolved.verificationRefs))assert.match(ref,/^[0-9a-f]{40}$/,`resolved plan ref for ${repo} is not an immutable SHA`);
+};
+export function stagePublishedControlPlan({toolsRoot,coreRoot,resolvedPlan}){
   const target=path.join(coreRoot,'release-plan.json'),source=path.join(toolsRoot,'release-plan.json');
   const reviewed=readRegularJson(source),original=readRegularJson(target);
   assert.equal(git(coreRoot,'ls-files','--others','--exclude-standard'),'','published source must contain no untracked source files');
   assert.equal(git(coreRoot,'diff','--name-only','HEAD'),'','published source must be clean before metadata staging');
   const originalBytes=readFileSync(target),reviewedBytes=readFileSync(source);
-  const record={qualification:'published source/harness with reviewed registry-plan metadata; not an unchanged checkout',sourceSha:git(coreRoot,'rev-parse','HEAD'),originalPlan:original,reviewedPlan:reviewed,originalSha256:digest(originalBytes),reviewedSha256:digest(reviewedBytes)};
+  const raised=resolvedPlan!==undefined&&!samePlan(resolvedPlan,reviewed);
+  if(raised)assertPlanFloor(reviewed,resolvedPlan);
+  const staged=raised?resolvedPlan:reviewed,stagedBytes=raised?Buffer.from(`${JSON.stringify(resolvedPlan,null,2)}\n`):reviewedBytes;
+  const record={qualification:'published source/harness with reviewed registry-plan metadata; not an unchanged checkout',sourceSha:git(coreRoot,'rev-parse','HEAD'),originalPlan:original,reviewedPlan:reviewed,resolvedPlan:staged,originalSha256:digest(originalBytes),reviewedSha256:digest(reviewedBytes),resolvedSha256:digest(stagedBytes)};
   mkdirSync(path.join(coreRoot,'artifacts/published-control'),{recursive:true});
+  writeFileSync(path.join(coreRoot,'artifacts/published-control/resolved-plan.json'),stagedBytes);
   writeFileSync(path.join(coreRoot,'artifacts/published-control/original-release-plan.json'),originalBytes);
   writeFileSync(path.join(coreRoot,'artifacts/published-control/metadata.json'),`${JSON.stringify(record,null,2)}\n`);
-  const renderer=reviewed.packages?.find(item=>item.name==='@openpresentation/opf-render')?.version;
+  const renderer=staged.packages?.find(item=>item.name==='@openpresentation/opf-render')?.version;
   if(renderer==='0.18.2'){
     const helper=path.join(coreRoot,BRIDGE_PATH),originalHelper=regularBytes(helper);
     if(digest(originalHelper)!==FONT_COUNT_BRIDGE.reviewedSha256){
@@ -58,7 +78,7 @@ export function stagePublishedControlPlan({toolsRoot,coreRoot}){
       record.qualification='published runtime with reviewed registry-plan metadata and recorded pinned test-tooling bridge; not pristine source';
     }
   }
-  const bridgeSet=published019Plan(reviewed)?{label:'0.19',source:PUBLISHED_019_SOURCE,tooling:PUBLISHED_019_TOOLING}:published0242Plan(reviewed)?{label:'0.24.2',source:PUBLISHED_0242_SOURCE,tooling:PUBLISHED_0242_TOOLING}:null;
+  const bridgeSet=published019Plan(staged)?{label:'0.19',source:PUBLISHED_019_SOURCE,tooling:PUBLISHED_019_TOOLING}:published0242Plan(staged)?{label:'0.24.2',source:PUBLISHED_0242_SOURCE,tooling:PUBLISHED_0242_TOOLING}:null;
   if(bridgeSet){
     assert.equal(record.sourceSha,bridgeSet.source,`published ${bridgeSet.label} source identity differs`);
     for(const bridge of bridgeSet.tooling){
@@ -75,22 +95,27 @@ export function stagePublishedControlPlan({toolsRoot,coreRoot}){
     record.qualification=`published ${bridgeSet.label} runtime with recorded exact test-tooling bridge; not pristine source`;
   }
   writeFileSync(path.join(coreRoot,'artifacts/published-control/metadata.json'),`${JSON.stringify(record,null,2)}\n`);
-  writeFileSync(target,reviewedBytes);
+  writeFileSync(target,stagedBytes);
   return record;
 }
 export function verifyPublishedControlPlan({toolsRoot,coreRoot}){
   const record=readRegularJson(path.join(coreRoot,'artifacts/published-control/metadata.json'));
   const target=path.join(coreRoot,'release-plan.json'),source=path.join(toolsRoot,'release-plan.json');
   assert.equal(git(coreRoot,'rev-parse','HEAD'),record.sourceSha);
-  assert.equal(digest(readFileSync(target)),record.reviewedSha256);
+  // The published checkout holds the RESOLVED plan (the reviewed plan raised to newer accepted patch releases); the tools checkout still holds the reviewed one.
+  const resolvedSha256=record.resolvedSha256??record.reviewedSha256,resolvedPlan=record.resolvedPlan??record.reviewedPlan;
+  assert.equal(digest(readFileSync(target)),resolvedSha256);
+  assert.equal(digest(readFileSync(path.join(coreRoot,'artifacts/published-control/resolved-plan.json'))),resolvedSha256);
   assert.equal(digest(readFileSync(source)),record.reviewedSha256);
+  assert.deepEqual(readRegularJson(source),record.reviewedPlan);
+  if(resolvedSha256!==record.reviewedSha256)assertPlanFloor(record.reviewedPlan,resolvedPlan);
   assert.equal(digest(execFileSync('git',['-C',coreRoot,'show','HEAD:release-plan.json'])),record.originalSha256);
   assert.equal(digest(readFileSync(path.join(coreRoot,'artifacts/published-control/original-release-plan.json'))),record.originalSha256);
-  assert.deepEqual(readRegularJson(target),record.reviewedPlan);
+  assert.deepEqual(readRegularJson(target),resolvedPlan);
   const allowed=['release-plan.json'];
   const allowedUntracked=[];
   if(record.testToolingBridges){
-    const bridgeSet=published019Plan(record.reviewedPlan)?{source:PUBLISHED_019_SOURCE,tooling:PUBLISHED_019_TOOLING,label:'0.19'}:published0242Plan(record.reviewedPlan)?{source:PUBLISHED_0242_SOURCE,tooling:PUBLISHED_0242_TOOLING,label:'0.24.2'}:null;
+    const bridgeSet=published019Plan(resolvedPlan)?{source:PUBLISHED_019_SOURCE,tooling:PUBLISHED_019_TOOLING,label:'0.19'}:published0242Plan(resolvedPlan)?{source:PUBLISHED_0242_SOURCE,tooling:PUBLISHED_0242_TOOLING,label:'0.24.2'}:null;
     assert.ok(bridgeSet,'tooling bridges are recorded only for a known published graph');assert.equal(record.sourceSha,bridgeSet.source);
     assert.deepEqual(record.testToolingBridges,bridgeSet.tooling,`unknown ${bridgeSet.label} tooling override`);
     for(const bridge of bridgeSet.tooling){
@@ -108,7 +133,7 @@ export function verifyPublishedControlPlan({toolsRoot,coreRoot}){
   assert.ok(untracked.every(file=>allowedUntracked.includes(file)),'published control contains untracked source files');
   if(record.testToolingBridge){
     assert.deepEqual(record.testToolingBridge,{path:BRIDGE_PATH,...FONT_COUNT_BRIDGE},'unknown test-tooling override');
-    assert.equal(record.reviewedPlan.packages.find(item=>item.name==='@openpresentation/opf-render').version,'0.18.2');
+    assert.equal(resolvedPlan.packages.find(item=>item.name==='@openpresentation/opf-render').version,'0.18.2');
     assert.equal(digest(execFileSync('git',['-C',coreRoot,'show',`HEAD:${BRIDGE_PATH}`])),FONT_COUNT_BRIDGE.originalSha256,'original helper identity changed');
     assert.equal(digest(regularBytes(path.join(coreRoot,'artifacts/published-control/original-lazy-font-counts.mjs'))),FONT_COUNT_BRIDGE.originalSha256);
     assert.equal(digest(regularBytes(path.join(coreRoot,BRIDGE_PATH))),FONT_COUNT_BRIDGE.reviewedSha256,'bridged helper identity changed');
@@ -122,6 +147,12 @@ export function verifyPublishedControlPlan({toolsRoot,coreRoot}){
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
   const [command,toolsRoot,coreRoot]=process.argv.slice(2);
   assert.ok(['stage','verify'].includes(command));
-  if(command==='stage')await publishedGalleryControl(readRegularJson(path.join(toolsRoot,'release-plan.json')));
-  console.log(JSON.stringify((command==='stage'?stagePublishedControlPlan:verifyPublishedControlPlan)({toolsRoot,coreRoot}),null,2));
+  let resolvedPlan;
+  if(command==='stage'){
+    const resolution=await resolvePublishedControl(readRegularJson(path.join(toolsRoot,'release-plan.json')));
+    // The checkout the workflow bound to the registry must be the commit the registry now names, or the staged plan would describe other source.
+    assert.equal(git(coreRoot,'rev-parse','HEAD'),resolution.refs.opf,'published core checkout is not the registry release commit');
+    resolvedPlan=resolution.plan;
+  }
+  console.log(JSON.stringify((command==='stage'?stagePublishedControlPlan:verifyPublishedControlPlan)({toolsRoot,coreRoot,resolvedPlan}),null,2));
 }

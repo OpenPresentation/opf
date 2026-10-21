@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {mkdtempSync,mkdirSync,writeFileSync,rmSync,readFileSync,realpathSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -78,7 +79,9 @@ test('exact published19 runtime uses recorded final registry helpers and refuses
 });
 
 // The plan at the bridge's source commit (editor 0.24.2) and this checkout's plan (the registry's editor 0.24.3) are both the published 0.24 graph.
-for(const [label,planFor] of [['the plan at the reviewed source commit',sourceRoot=>execFileSync('git',['-C',sourceRoot,'show',`${PUBLISHED_0242_TOOLING[0].sourceSha}:release-plan.json`])],['this checkout\'s plan',sourceRoot=>readFileSync(path.join(sourceRoot,'release-plan.json'))]])
+// RR-101: a newer editor patch (the plan is a floor) stays inside the same reviewed bridge; the resolved plan is what the checkout installs.
+const raiseEditor=plan=>{const next=structuredClone(plan);next.packages.find(item=>item.name==='@openpresentation/opf-editor').version='0.24.9';next.verificationRefs['opf-editor']='b'.repeat(40);return next;};
+for(const [label,planFor,resolve] of [['the plan at the reviewed source commit',sourceRoot=>execFileSync('git',['-C',sourceRoot,'show',`${PUBLISHED_0242_TOOLING[0].sourceSha}:release-plan.json`])],['this checkout\'s plan',sourceRoot=>readFileSync(path.join(sourceRoot,'release-plan.json'))],['this checkout\'s plan raised to a newer editor patch',sourceRoot=>readFileSync(path.join(sourceRoot,'release-plan.json')),raiseEditor]])
 test(`published 0.24.2 runs the reviewed installed-code and catalog-generation helpers, and only those files (${label})`,()=>{
  const root=realpathSync(mkdtempSync(path.join(tmpdir(),'fa33-control0242-'))),coreRoot=path.join(root,'core'),toolsRoot=path.join(root,'tools');
  const sourceRoot=fileURLToPath(new URL('..',import.meta.url));
@@ -92,7 +95,9 @@ test(`published 0.24.2 runs the reviewed installed-code and catalog-generation h
   const helper=path.join(coreRoot,PUBLISHED_0242_TOOLING[0].path),originalHelper=readFileSync(helper);
   assert.ok(!originalHelper.toString('utf8').includes('generatedAtRef'),'the published helper lacks the styles rebuild');
   assert.deepEqual(PUBLISHED_0242_TOOLING.map(item=>item.path),['scripts/test-installed-code.mjs','scripts/published-matrix/consumer-dependencies.mjs','scripts/published-matrix/consumer-dependencies.test.mjs','scripts/published-matrix/browser-fixture.test.mjs']);
-  const record=stagePublishedControlPlan({coreRoot,toolsRoot});assert.deepEqual(record.testToolingBridges,PUBLISHED_0242_TOOLING);
+  const resolvedPlan=resolve?.(JSON.parse(planFor(sourceRoot)));
+  const record=stagePublishedControlPlan({coreRoot,toolsRoot,resolvedPlan});assert.deepEqual(record.testToolingBridges,PUBLISHED_0242_TOOLING);
+  if(resolvedPlan)assert.deepEqual(JSON.parse(readFileSync(path.join(coreRoot,'release-plan.json'),'utf8')),resolvedPlan);
   assert.deepEqual(verifyPublishedControlPlan({coreRoot,toolsRoot}),record);
   assert.ok(readFileSync(helper,'utf8').includes('generatedAtRef'),'the bridged helper rebuilds dist/styles.css from the release commit');
   assert.deepEqual(readFileSync(path.join(coreRoot,'artifacts/published-control/original-tooling',PUBLISHED_0242_TOOLING[0].path)),originalHelper);
@@ -100,5 +105,38 @@ test(`published 0.24.2 runs the reviewed installed-code and catalog-generation h
   const bridged=readFileSync(helper);writeFileSync(helper,'tampered');assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}),/helper identity/);writeFileSync(helper,bridged);
   writeFileSync(runtime,'tampered runtime');assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}),/outside/);writeFileSync(runtime,runtimeBytes);
   const metadata=path.join(coreRoot,'artifacts/published-control/metadata.json');writeFileSync(metadata,JSON.stringify({...record,testToolingBridges:[{...PUBLISHED_0242_TOOLING[0],path:'packages/javascript/src/composition.ts'}]}));assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}),/unknown 0.24.2/);
+ }finally{rmSync(root,{recursive:true,force:true});}
+});
+
+// RR-101: the published checkout is staged with the RESOLVED plan (the reviewed plan raised to newer accepted patch releases), and verify binds it.
+test('published control stages and verifies the resolved plan, and refuses a resolved plan outside the reviewed floor',()=>{
+ const root=realpathSync(mkdtempSync(path.join(tmpdir(),'rr101-control-'))),coreRoot=path.join(root,'core'),toolsRoot=path.join(root,'tools');
+ const names=['opf','opf-render','opf-pptx','opf-editor','cli'];
+ const reviewed={packages:names.map(name=>({name:`@openpresentation/${name}`,version:'0.30.1'})),independentPackages:[{name:'@openpresentation/gallery',version:'4.0.0'}],verificationRefs:{...Object.fromEntries(names.map(name=>[name,'a'.repeat(40)])),gallery:'d'.repeat(40)}};
+ const raise=(edit)=>{const next=structuredClone(reviewed);edit(next);return next;};
+ const resolved=raise(plan=>{plan.packages.find(item=>item.name.endsWith('/opf-render')).version='0.30.3';plan.verificationRefs['opf-render']='b'.repeat(40);});
+ try{
+  mkdirSync(coreRoot);mkdirSync(toolsRoot);writeFileSync(path.join(coreRoot,'.gitignore'),'artifacts/\n');
+  writeFileSync(path.join(coreRoot,'release-plan.json'),'{"old":true}\n');writeFileSync(path.join(coreRoot,'source.mjs'),'original\n');
+  execFileSync('git',['init','-q',coreRoot]);execFileSync('git',['-C',coreRoot,'add','.']);execFileSync('git',['-C',coreRoot,'-c','user.name=Fixture','-c','user.email=fixture@example.invalid','commit','-qm','published']);
+  writeFileSync(path.join(toolsRoot,'release-plan.json'),`${JSON.stringify(reviewed,null,2)}\n`);
+  const stagedFile=path.join(coreRoot,'release-plan.json'),resolvedFile=path.join(coreRoot,'artifacts/published-control/resolved-plan.json');
+  const record=stagePublishedControlPlan({coreRoot,toolsRoot,resolvedPlan:resolved});
+  assert.deepEqual(JSON.parse(readFileSync(stagedFile,'utf8')),resolved);assert.deepEqual(readFileSync(resolvedFile),readFileSync(stagedFile));
+  assert.deepEqual(record.reviewedPlan,reviewed);assert.deepEqual(record.resolvedPlan,resolved);assert.notEqual(record.resolvedSha256,record.reviewedSha256);
+  assert.deepEqual(verifyPublishedControlPlan({coreRoot,toolsRoot}),record);
+  // The staged plan, the retained copy and the metadata cannot drift apart or from the reviewed floor.
+  const staged=readFileSync(stagedFile);
+  writeFileSync(stagedFile,readFileSync(path.join(toolsRoot,'release-plan.json')));assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}));writeFileSync(stagedFile,staged);
+  writeFileSync(resolvedFile,'{}');assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}));writeFileSync(resolvedFile,staged);
+  const metadata=path.join(coreRoot,'artifacts/published-control/metadata.json');
+  for(const bad of [raise(plan=>{plan.packages[1].version='0.31.0';}),raise(plan=>{plan.packages[1].version='0.30.0';}),raise(plan=>{plan.independentPackages[0].version='5.0.0';}),raise(plan=>{plan.verificationRefs.opf='main';}),raise(plan=>{plan.extra=true;}),raise(plan=>{plan.packages[1].name='@openpresentation/other';})]){
+   assert.throws(()=>stagePublishedControlPlan({coreRoot,toolsRoot,resolvedPlan:bad}));
+   const bytes=Buffer.from(`${JSON.stringify(bad,null,2)}\n`);writeFileSync(stagedFile,bytes);writeFileSync(resolvedFile,bytes);
+   const digest=createHash('sha256').update(bytes).digest('hex');writeFileSync(metadata,JSON.stringify({...record,resolvedPlan:bad,resolvedSha256:digest}));
+   assert.throws(()=>verifyPublishedControlPlan({coreRoot,toolsRoot}),/floor|changed|immutable|plan/);
+   writeFileSync(stagedFile,staged);writeFileSync(resolvedFile,staged);writeFileSync(metadata,JSON.stringify(record));
+  }
+  assert.deepEqual(verifyPublishedControlPlan({coreRoot,toolsRoot}),record);
  }finally{rmSync(root,{recursive:true,force:true});}
 });

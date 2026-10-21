@@ -210,6 +210,24 @@ original/staged metadata and runtime checks qualify development consumers; they 
 ranges are registry-installable or authorize publication. Ordinary registry and publication gates stay unchanged.
 Core's registry tests use the exact gallery version and integrity recorded in the workspace lockfile.
 
+## Published control and the release plan as a floor (RR-101)
+
+The "Published runtime and reviewed registry graph control" workflow (`published-gallery-control.yml`, run for candidate-gallery pull
+requests) qualifies the published packages, not the plan file: `resolvePublishedControl` in `scripts/candidate-gallery.mjs` reads
+`release-plan.json` as a floor. Each package accepts the registry `latest` when it has the plan's major and minor and a patch greater
+than or equal to the plan's; the independent gallery accepts its major with a minor or patch greater than or equal to the plan's. For a newer
+`latest` it looks up that exact version, requires the matching name and version and a 40 lowercase hex `gitHead`, uses that `gitHead` as the
+source ref and prints `::notice::plan is behind registry: <package> <plan> -> <latest>`. When `latest` equals the plan, the registry
+`gitHead` must still equal `verificationRefs`. The result is a resolved plan (the reviewed plan with versions and `verificationRefs`
+raised); `candidate-gallery-control.mjs stage` writes it into the published checkout (and to `artifacts/published-control/resolved-plan.json`),
+so the installed-code and registry checks install and verify the newer versions, and `verify` binds the staged bytes to the resolved plan, which must stay
+inside the reviewed floor.
+
+So refresh `release-plan.json` (the follow-up docs change after a release) only for a new minor or major of a package or the gallery,
+or when a published-graph bridge (`PUBLISHED_*_TOOLING`) needs a new reviewed source. A patch release no longer blocks in-flight pull requests.
+The notice is the reminder that the plan lags; the next planned refresh moves it forward. The bridge for the published 0.24.2 core still pins that exact
+core source, so a core patch needs a reviewed bridge update.
+
 ## Geometry-moving core releases: lockstep floors
 
 Core composition changes that move geometry (for example opf#169 cover centering) make the preview and the PPTX export drift when `@openpresentation/opf-render` and `@openpresentation/opf-pptx` resolve different core versions (measured: 186-300 pt title offsets on covers).
