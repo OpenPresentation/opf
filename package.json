@@ -34,6 +34,7 @@
     "test:flake-repeat": "node scripts/flake-repeat.mjs",
     "check:ci-shards": "node --test scripts/ci-test-shards.test.mjs scripts/package-ecosystem-plan.test.mjs scripts/ecosystem-scope.test.mjs",
     "check:ci-diet": "node --test scripts/ci-diet.test.mjs",
+    "check:ci-scope": "node --test scripts/ci-scope.test.mjs",
     "check:engines-range": "node --test scripts/check-engines-range.test.mjs && node scripts/check-engines-range.mjs",
     "check:lazy-font-counts": "node --test scripts/lazy-font-counts.test.mjs",
     "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
