@@ -26,6 +26,7 @@
     "check:changed": "node scripts/check-changed.mjs",
     "check:archive-tar": "node --test scripts/archive-tar.test.mjs && node scripts/test-ecosystem-links.mjs",
     "check:agent-tools": "node --test scripts/agent-slot.test.mjs scripts/agent-format.test.mjs scripts/check-changed.test.mjs scripts/package-manager.test.mjs",
+    "check:agent-worktree": "node --test scripts/agent-worktree.test.mjs",
     "check:runners": "node --test scripts/run-tests.test.mjs scripts/run-checks.test.mjs",
     "check:reuse-build": "node --test scripts/reuse-build.test.mjs",
     "test": "node scripts/agent-slot.mjs -- pnpm run test:run",
