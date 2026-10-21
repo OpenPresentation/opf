@@ -1,14 +1,21 @@
 #!/usr/bin/env node
 // Materialize the published gallery's catalog exports for repository checks and example generation.
 // These files are ignored build inputs; the gallery repository owns and publishes the records.
+// MR-10: once the gallery package is imported (packages/gallery/package.json exists) the directory holds the real, tracked
+// package, so this exits cleanly without reading or touching anything. The guard comes before the package imports on purpose.
+import {existsSync} from 'node:fs';
 import {lstat, mkdir, readFile, rm, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-import {catalogDisplay, catalogIndexes, catalogManifest, gallery} from '@openpresentation/gallery';
-import {layoutPreviewIndex, layoutPreviews} from '@openpresentation/gallery/previews';
-import {SNAPSHOT_KINDS, serializeJson} from './catalog-snapshot.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+if (existsSync(path.join(root, 'packages/gallery/package.json'))) {
+  console.log('packages/gallery is the gallery package, not a generated fixture; nothing to materialize.');
+  process.exit(0);
+}
+const {catalogDisplay, catalogIndexes, catalogManifest, gallery} = await import('@openpresentation/gallery');
+const {layoutPreviewIndex, layoutPreviews} = await import('@openpresentation/gallery/previews');
+const {SNAPSHOT_KINDS, serializeJson} = await import('./catalog-snapshot.mjs');
 const generatedRoot = path.join(root, 'packages/gallery');
 const marker = path.join(generatedRoot, '.generated-from-openpresentation-gallery');
 try {
