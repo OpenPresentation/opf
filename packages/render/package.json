@@ -141,6 +141,9 @@
     "test:preview-a11y-browser": "node test/preview-a11y-browser.mjs",
     "test:forced-colors-browser": "node test/forced-colors-browser.mjs artifacts/forced-colors"
   },
+  "opf": {
+    "requiresUnreleasedCore": "0.25.0"
+  },
   "dependencies": {
     "@openpresentation/opf": "^0.24.2",
     "bidi-js": "1.1.0",
