@@ -1,15 +1,15 @@
 # Browser preview and live editing
 
-Editor 0.20.3 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
+Editor 0.24.2 provides an embeddable SVG canvas in `@openpresentation/opf-editor/canvas`. OPF JSON remains the document; the canvas writes validated JSON Patch operations through an `EditorSession`. Draft edits render with the same SVG engine used for standalone previews. Completed edits produce one undoable change.
 
 The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
 ## Install the published packages
 
-Use Node 24 with Core 0.24.2, editor 0.24.0, PPTX 0.24.1, renderer 0.24.3 and Gallery 4.0.0. This is the current published setup; the [quickstart](quickstart.md) is the shared command-line first run:
+Use Node 24 with Core 0.24.2, editor 0.24.2, PPTX 0.24.1, renderer 0.24.3 and Gallery 4.0.0. This is the current published setup; the [quickstart](quickstart.md) is the shared command-line first run:
 
 ```sh
-npm install --save-exact @openpresentation/opf@0.20.3 @openpresentation/opf-render@0.20.2 @openpresentation/opf-editor@0.20.3 @openpresentation/opf-pptx@0.20.3 @openpresentation/gallery@3.0.0
+npm install --save-exact @openpresentation/opf@0.24.2 @openpresentation/opf-render@0.24.3 @openpresentation/opf-editor@0.24.2 @openpresentation/opf-pptx@0.24.1 @openpresentation/gallery@4.0.0
 ```
 
 No paid service or provider account is required. The six agent skills install with `npx @openpresentation/cli@0.20.0 skills install`. See the [quickstart](quickstart.md) for an installed-package workflow and the [compatibility matrix](compatibility-matrix.md) for separately scoped browser and native evidence.
