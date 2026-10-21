@@ -8,15 +8,11 @@ const layouts = JSON.parse(await readFile(new URL('./fixtures/layout-templates-0
 const catalogs = [{source: 'pkg:@openpresentation/gallery@2', layouts}];
 const options = {catalogs, seed: 1, timestamp: '2026-01-01T00:00:00Z', strict: false, provenance: 'full'};
 const dec = new TextDecoder(), enc = new TextEncoder();
-const many = {name: 'Maximum regions', areas: [], regions: {}};
+const many = {name: 'Maximum regions', direction: 'column', regions: []};
 for (let y = 0; y < 12; y++) {
-  const row = [];
-  for (let x = 0; x < 12; x++) {
-    const name = `cell-${y}-${x}`;
-    row.push(name);
-    many.regions[name] = {accepts: x === 11 && y === 11 ? ['text'] : ['text', 'image']};
-  }
-  many.areas.push([...row]);
+  const row = {direction: 'row', regions: []};
+  for (let x = 0; x < 12; x++) row.regions.push({name: `cell-${y}-${x}`, accepts: x === 11 && y === 11 ? ['text'] : ['text', 'image']});
+  many.regions.push(row);
 }
 const indexes = Object.values(regionIndexes(many));
 assert.equal(new Set(indexes).size, 144, 'Maximum custom grid has no placeholder-index collisions across kinds');

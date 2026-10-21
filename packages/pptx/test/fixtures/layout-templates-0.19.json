@@ -1,5 +1,5 @@
 {
-  "$comment": "The 28 built-in layouts of OPF 0.19 as written in docs/programs/release-readiness/0.19-layouts.md (section 6), embedded-record form keyed by id. A test fixture only: replace it with @openpresentation/gallery@^2 once gallery 2.0.0 (RR-80) is published.",
+  "$comment": "The 28 built-in layouts of OPF 0.19 as written in docs/programs/release-readiness/0.19-layouts.md (section 6), embedded-record form keyed by id, written in the FA-33 form (a direction and an ordered regions list). A test fixture only: it is the 0.19 set, not the current Gallery.",
   "source": "https://www.pptx.gallery",
   "layouts": {
     "cover": {
@@ -12,21 +12,13 @@
         "titleAlignment": "center",
         "contentAlignment": "center"
       },
-      "areas": [
-        [
-          "title",
-          "media"
-        ]
-      ],
-      "columns": [
-        1,
-        1
-      ],
-      "rows": [
-        1
-      ],
-      "regions": {
-        "media": {
+      "direction": "row",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "media",
           "accepts": [
             "image",
             "video"
@@ -35,7 +27,7 @@
           "flow": "none",
           "bleed": true
         }
-      }
+      ]
     },
     "section": {
       "name": "Section",
@@ -47,18 +39,12 @@
         "titleAlignment": "center",
         "contentAlignment": "center"
       },
-      "areas": [
-        [
-          "title"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        1
-      ],
-      "regions": {}
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        }
+      ]
     },
     "agenda": {
       "name": "Agenda",
@@ -66,23 +52,13 @@
       "tags": [
         "Openers and closers"
       ],
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "items"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "items": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "items",
           "accepts": [
             "list",
             "text"
@@ -91,7 +67,7 @@
           "flow": "column",
           "listColumns": "auto"
         }
-      }
+      ]
     },
     "statement": {
       "name": "Statement",
@@ -103,23 +79,13 @@
         "titleAlignment": "center",
         "contentAlignment": "center"
       },
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "message"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "message": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "message",
           "accepts": [
             "text",
             "quote",
@@ -129,7 +95,7 @@
           "flow": "none",
           "anchor": "middle"
         }
-      }
+      ]
     },
     "closing": {
       "name": "Closing",
@@ -141,23 +107,15 @@
         "titleAlignment": "center",
         "contentAlignment": "center"
       },
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "details"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        1,
-        "auto"
-      ],
-      "regions": {
-        "details": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title",
+          "size": 1
+        },
+        {
+          "name": "details",
+          "size": "auto",
           "accepts": [
             "text",
             "list",
@@ -166,7 +124,7 @@
           "role": "supporting",
           "flow": "auto"
         }
-      }
+      ]
     },
     "text": {
       "name": "Text",
@@ -174,23 +132,13 @@
       "tags": [
         "Text"
       ],
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "body"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "body": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "body",
           "accepts": [
             "text",
             "list",
@@ -201,7 +149,7 @@
           "role": "primary",
           "flow": "auto"
         }
-      }
+      ]
     },
     "list": {
       "name": "List",
@@ -209,23 +157,13 @@
       "tags": [
         "Text"
       ],
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "body"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "body": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "body",
           "accepts": [
             "list",
             "text",
@@ -235,7 +173,7 @@
           "flow": "auto",
           "listColumns": "auto"
         }
-      }
+      ]
     },
     "quote": {
       "name": "Quote",
@@ -243,23 +181,13 @@
       "tags": [
         "Text"
       ],
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "quotes"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "quotes": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "quotes",
           "accepts": [
             "quote",
             "group"
@@ -267,7 +195,7 @@
           "role": "primary",
           "flow": "grid"
         }
-      }
+      ]
     },
     "two-column": {
       "name": "Two columns",
@@ -275,58 +203,51 @@
       "tags": [
         "Text"
       ],
-      "areas": [
-        [
-          "title",
-          "title"
-        ],
-        [
-          "first",
-          "second"
-        ]
-      ],
-      "columns": [
-        1,
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "first": {
-          "accepts": [
-            "text",
-            "list",
-            "quote",
-            "code",
-            "image",
-            "video",
-            "chart",
-            "table",
-            "metric",
-            "group"
-          ],
-          "role": "primary",
-          "flow": "none"
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
         },
-        "second": {
-          "accepts": [
-            "text",
-            "list",
-            "quote",
-            "code",
-            "image",
-            "video",
-            "chart",
-            "table",
-            "metric",
-            "group"
-          ],
-          "role": "primary",
-          "flow": "none"
+        {
+          "direction": "row",
+          "regions": [
+            {
+              "name": "first",
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "image",
+                "video",
+                "chart",
+                "table",
+                "metric",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            {
+              "name": "second",
+              "accepts": [
+                "text",
+                "list",
+                "quote",
+                "code",
+                "image",
+                "video",
+                "chart",
+                "table",
+                "metric",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "none"
+            }
+          ]
         }
-      }
+      ]
     },
     "pillars": {
       "name": "Pillars",
@@ -337,23 +258,13 @@
       "design": {
         "contentBox": true
       },
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "pillars"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "pillars": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "pillars",
           "accepts": [
             "text",
             "list",
@@ -364,7 +275,7 @@
           "role": "primary",
           "flow": "grid"
         }
-      }
+      ]
     },
     "comparison": {
       "name": "Comparison",
@@ -375,64 +286,54 @@
       "design": {
         "contentBox": true
       },
-      "areas": [
-        [
-          "title",
-          "title"
-        ],
-        [
-          "first",
-          "second"
-        ],
-        [
-          "verdict",
-          "verdict"
-        ]
-      ],
-      "columns": [
-        1,
-        1
-      ],
-      "rows": [
-        "auto",
-        1,
-        "auto"
-      ],
-      "regions": {
-        "first": {
-          "accepts": [
-            "text",
-            "list",
-            "metric",
-            "image",
-            "chart",
-            "table",
-            "group"
-          ],
-          "role": "primary",
-          "flow": "none"
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
         },
-        "second": {
-          "accepts": [
-            "text",
-            "list",
-            "metric",
-            "image",
-            "chart",
-            "table",
-            "group"
-          ],
-          "role": "primary",
-          "flow": "none"
+        {
+          "direction": "row",
+          "regions": [
+            {
+              "name": "first",
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "image",
+                "chart",
+                "table",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            {
+              "name": "second",
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "image",
+                "chart",
+                "table",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "none"
+            }
+          ]
         },
-        "verdict": {
+        {
+          "name": "verdict",
+          "size": "auto",
           "accepts": [
             "text"
           ],
           "role": "supporting",
           "flow": "none"
         }
-      }
+      ]
     },
     "process": {
       "name": "Process",
@@ -444,23 +345,13 @@
         "contentBox": true,
         "contentDirection": "horizontal"
       },
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "steps"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "steps": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "steps",
           "accepts": [
             "timeline",
             "list",
@@ -471,7 +362,7 @@
           "role": "primary",
           "flow": "grid"
         }
-      }
+      ]
     },
     "timeline": {
       "name": "Timeline",
@@ -479,34 +370,22 @@
       "tags": [
         "Groups of items"
       ],
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "timeline"
-        ],
-        [
-          "notes"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1,
-        "auto"
-      ],
-      "regions": {
-        "timeline": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "timeline",
           "accepts": [
             "timeline"
           ],
           "role": "primary",
           "flow": "none"
         },
-        "notes": {
+        {
+          "name": "notes",
+          "size": "auto",
           "accepts": [
             "text",
             "list",
@@ -515,7 +394,7 @@
           "role": "supporting",
           "flow": "auto"
         }
-      }
+      ]
     },
     "faq": {
       "name": "FAQ",
@@ -526,23 +405,13 @@
       "design": {
         "contentBox": true
       },
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "questions"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "questions": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "questions",
           "accepts": [
             "list",
             "text",
@@ -552,7 +421,7 @@
           "flow": "column",
           "listColumns": "auto"
         }
-      }
+      ]
     },
     "metrics": {
       "name": "Metrics",
@@ -563,27 +432,13 @@
       "design": {
         "contentAlignment": "center"
       },
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "metrics"
-        ],
-        [
-          "note"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1,
-        "auto"
-      ],
-      "regions": {
-        "metrics": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "metrics",
           "accepts": [
             "metric",
             "group"
@@ -591,7 +446,9 @@
           "role": "primary",
           "flow": "grid"
         },
-        "note": {
+        {
+          "name": "note",
+          "size": "auto",
           "accepts": [
             "text",
             "list"
@@ -599,7 +456,7 @@
           "role": "supporting",
           "flow": "none"
         }
-      }
+      ]
     },
     "scorecard": {
       "name": "Scorecard",
@@ -610,23 +467,13 @@
       "design": {
         "contentBox": true
       },
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "cards"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "cards": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "cards",
           "accepts": [
             "metric",
             "text",
@@ -636,7 +483,7 @@
           "role": "primary",
           "flow": "grid"
         }
-      }
+      ]
     },
     "image": {
       "name": "Image",
@@ -644,23 +491,13 @@
       "tags": [
         "Visuals"
       ],
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "media"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "media": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "media",
           "accepts": [
             "image",
             "video"
@@ -669,7 +506,7 @@
           "flow": "none",
           "bleed": true
         }
-      }
+      ]
     },
     "image-beside": {
       "name": "Image beside",
@@ -677,45 +514,38 @@
       "tags": [
         "Visuals"
       ],
-      "areas": [
-        [
-          "title",
-          "title"
-        ],
-        [
-          "media",
-          "body"
-        ]
-      ],
-      "columns": [
-        1,
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "media": {
-          "accepts": [
-            "image",
-            "video"
-          ],
-          "role": "media",
-          "flow": "none"
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
         },
-        "body": {
-          "accepts": [
-            "text",
-            "list",
-            "metric",
-            "quote",
-            "group"
-          ],
-          "role": "primary",
-          "flow": "auto"
+        {
+          "direction": "row",
+          "regions": [
+            {
+              "name": "media",
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none"
+            },
+            {
+              "name": "body",
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "quote",
+                "group"
+              ],
+              "role": "primary",
+              "flow": "auto"
+            }
+          ]
         }
-      }
+      ]
     },
     "gallery": {
       "name": "Gallery",
@@ -723,23 +553,13 @@
       "tags": [
         "Visuals"
       ],
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "pictures"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "pictures": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "pictures",
           "accepts": [
             "image",
             "video",
@@ -748,7 +568,7 @@
           "role": "media",
           "flow": "grid"
         }
-      }
+      ]
     },
     "chart": {
       "name": "Chart",
@@ -756,27 +576,13 @@
       "tags": [
         "Visuals"
       ],
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "charts"
-        ],
-        [
-          "note"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1,
-        "auto"
-      ],
-      "regions": {
-        "charts": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "charts",
           "accepts": [
             "chart",
             "group"
@@ -784,14 +590,16 @@
           "role": "primary",
           "flow": "grid"
         },
-        "note": {
+        {
+          "name": "note",
+          "size": "auto",
           "accepts": [
             "text"
           ],
           "role": "supporting",
           "flow": "none"
         }
-      }
+      ]
     },
     "chart-beside": {
       "name": "Chart beside",
@@ -799,44 +607,39 @@
       "tags": [
         "Visuals"
       ],
-      "areas": [
-        [
-          "title",
-          "title"
-        ],
-        [
-          "chart",
-          "notes"
-        ]
-      ],
-      "columns": [
-        3,
-        2
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "chart": {
-          "accepts": [
-            "chart"
-          ],
-          "role": "primary",
-          "flow": "none"
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
         },
-        "notes": {
-          "accepts": [
-            "text",
-            "list",
-            "metric",
-            "quote",
-            "chart"
-          ],
-          "role": "supporting",
-          "flow": "column"
+        {
+          "direction": "row",
+          "regions": [
+            {
+              "name": "chart",
+              "size": 3,
+              "accepts": [
+                "chart"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            {
+              "name": "notes",
+              "size": 2,
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "quote",
+                "chart"
+              ],
+              "role": "supporting",
+              "flow": "column"
+            }
+          ]
         }
-      }
+      ]
     },
     "table": {
       "name": "Table",
@@ -844,41 +647,29 @@
       "tags": [
         "Visuals"
       ],
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "table"
-        ],
-        [
-          "note"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1,
-        "auto"
-      ],
-      "regions": {
-        "table": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "table",
           "accepts": [
             "table"
           ],
           "role": "primary",
           "flow": "column"
         },
-        "note": {
+        {
+          "name": "note",
+          "size": "auto",
           "accepts": [
             "text"
           ],
           "role": "supporting",
           "flow": "none"
         }
-      }
+      ]
     },
     "table-beside": {
       "name": "Table beside",
@@ -886,43 +677,38 @@
       "tags": [
         "Visuals"
       ],
-      "areas": [
-        [
-          "title",
-          "title"
-        ],
-        [
-          "table",
-          "notes"
-        ]
-      ],
-      "columns": [
-        3,
-        2
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "table": {
-          "accepts": [
-            "table"
-          ],
-          "role": "primary",
-          "flow": "none"
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
         },
-        "notes": {
-          "accepts": [
-            "text",
-            "list",
-            "metric",
-            "quote"
-          ],
-          "role": "supporting",
-          "flow": "column"
+        {
+          "direction": "row",
+          "regions": [
+            {
+              "name": "table",
+              "size": 3,
+              "accepts": [
+                "table"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            {
+              "name": "notes",
+              "size": 2,
+              "accepts": [
+                "text",
+                "list",
+                "metric",
+                "quote"
+              ],
+              "role": "supporting",
+              "flow": "column"
+            }
+          ]
         }
-      }
+      ]
     },
     "code": {
       "name": "Code",
@@ -930,41 +716,36 @@
       "tags": [
         "Visuals"
       ],
-      "areas": [
-        [
-          "title",
-          "title"
-        ],
-        [
-          "code",
-          "notes"
-        ]
-      ],
-      "columns": [
-        3,
-        2
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "code": {
-          "accepts": [
-            "code"
-          ],
-          "role": "primary",
-          "flow": "column"
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
         },
-        "notes": {
-          "accepts": [
-            "text",
-            "list"
-          ],
-          "role": "supporting",
-          "flow": "column"
+        {
+          "direction": "row",
+          "regions": [
+            {
+              "name": "code",
+              "size": 3,
+              "accepts": [
+                "code"
+              ],
+              "role": "primary",
+              "flow": "column"
+            },
+            {
+              "name": "notes",
+              "size": 2,
+              "accepts": [
+                "text",
+                "list"
+              ],
+              "role": "supporting",
+              "flow": "column"
+            }
+          ]
         }
-      }
+      ]
     },
     "hero": {
       "name": "Hero",
@@ -972,48 +753,38 @@
       "tags": [
         "Mixed"
       ],
-      "areas": [
-        [
-          "title",
-          "title"
-        ],
-        [
-          "lead",
-          "media"
-        ],
-        [
-          "support",
-          "support"
-        ]
-      ],
-      "columns": [
-        1,
-        1
-      ],
-      "rows": [
-        "auto",
-        2,
-        1
-      ],
-      "regions": {
-        "lead": {
-          "accepts": [
-            "text",
-            "quote",
-            "metric"
-          ],
-          "role": "primary",
-          "flow": "none"
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
         },
-        "media": {
-          "accepts": [
-            "image",
-            "video"
+        {
+          "direction": "row",
+          "regions": [
+            {
+              "name": "lead",
+              "accepts": [
+                "text",
+                "quote",
+                "metric"
+              ],
+              "role": "primary",
+              "flow": "none"
+            },
+            {
+              "name": "media",
+              "accepts": [
+                "image",
+                "video"
+              ],
+              "role": "media",
+              "flow": "none"
+            }
           ],
-          "role": "media",
-          "flow": "none"
+          "size": 2
         },
-        "support": {
+        {
+          "name": "support",
           "accepts": [
             "text",
             "list",
@@ -1023,7 +794,7 @@
           "role": "supporting",
           "flow": "grid"
         }
-      }
+      ]
     },
     "dashboard": {
       "name": "Dashboard",
@@ -1034,34 +805,23 @@
       "design": {
         "contentBox": true
       },
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "kpis"
-        ],
-        [
-          "charts"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        2,
-        3
-      ],
-      "regions": {
-        "kpis": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "kpis",
+          "size": 2,
           "accepts": [
             "metric"
           ],
           "role": "secondary",
           "flow": "grid"
         },
-        "charts": {
+        {
+          "name": "charts",
+          "size": 3,
           "accepts": [
             "chart",
             "table"
@@ -1069,7 +829,7 @@
           "role": "primary",
           "flow": "grid"
         }
-      }
+      ]
     },
     "team": {
       "name": "Team",
@@ -1077,23 +837,13 @@
       "tags": [
         "Mixed"
       ],
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "people"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "people": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "people",
           "accepts": [
             "group",
             "image",
@@ -1103,7 +853,7 @@
           "role": "primary",
           "flow": "grid"
         }
-      }
+      ]
     },
     "logos": {
       "name": "Logos",
@@ -1111,23 +861,13 @@
       "tags": [
         "Mixed"
       ],
-      "areas": [
-        [
-          "title"
-        ],
-        [
-          "logos"
-        ]
-      ],
-      "columns": [
-        1
-      ],
-      "rows": [
-        "auto",
-        1
-      ],
-      "regions": {
-        "logos": {
+      "direction": "column",
+      "regions": [
+        {
+          "name": "title"
+        },
+        {
+          "name": "logos",
           "accepts": [
             "image",
             "text",
@@ -1137,7 +877,7 @@
           "flow": "grid",
           "max": 12
         }
-      }
+      ]
     }
   }
 }

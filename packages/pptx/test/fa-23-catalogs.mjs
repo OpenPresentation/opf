@@ -34,7 +34,7 @@ const collect = async (deck, options = {}) => {
 const brief = ({kind, reference, path, group, source, fallback}) => ({kind, reference, path, group, ...(source !== undefined ? {source} : {}), fallback});
 
 // 2. A layout that only a registered catalog holds resolves in export exactly like the same record embedded in the document.
-const hero = {name: 'Hero', areas: [['title', 'title'], ['primary', 'secondary']], columns: [2, 1], rows: ['auto', 1], regions: {primary: {accepts: ['text']}, secondary: {accepts: ['text']}}};
+const hero = {name: 'Hero', direction: 'column', regions: [{name: 'title'}, {direction: 'row', regions: [{name: 'primary', size: 2, accepts: ['text']}, {name: 'secondary', accepts: ['text']}]}]};
 const ACME = 'pkg:@acme/opf-catalog';
 const acmeCatalog = {source: ACME, layouts: {hero}};
 const slides = [{layout: 'acme:hero', title: 'Two drivers', blocks: [{type: 'text', text: 'Enterprise seats up 31%'}, {type: 'text', text: 'Churn down to 2.1%'}]}];

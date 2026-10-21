@@ -63,6 +63,9 @@
     "test:native-text": "node test/native-text-whitespace.mjs",
     "test:determinism": "node test/determinism.mjs"
   },
+  "opf": {
+    "requiresUnreleasedCore": "0.25.0"
+  },
   "dependencies": {
     "@node-projects/jszip": "4.3.0",
     "@openpresentation/gallery": "^4.0.0",

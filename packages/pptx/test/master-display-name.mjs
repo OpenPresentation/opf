@@ -16,7 +16,7 @@ const cases = [
   {label: 'authored theme', deck: {design: {theme: 'authored'}, slides: [{layout: 'text', title: 'Text', text: 'Body'}]}, theme: catalog.themes.authored.name, masters: 1},
   {label: 'embedded theme', deck: {design: {theme: 'embedded'}, catalogs: {default: {source: defaultCatalog.source, themes: {embedded: embeddedTheme}}}, slides: [{layout: 'text', title: 'Embedded', text: 'Body'}]}, theme: embeddedTheme.name, masters: 1, importCatalog: {...catalog, themes: {...catalog.themes, embedded: embeddedTheme}}},
   {label: 'script profiles and custom layouts', deck: {language: 'ja', design: {theme: 'classic', header: {left: {text: 'Shared header'}}},
-    catalogs: {custom: {layouts: {studio: {name: 'Studio & Notes', areas: [['title'], ['body']], rows: ['auto', 1], regions: {body: {accepts: ['text']}}}}}},
+    catalogs: {custom: {layouts: {studio: {name: 'Studio & Notes', direction: 'column', regions: [{name: 'title'}, {name: 'body', accepts: ['text']}]}}}},
     slides: [{layout: 'text', title: '日本語', text: 'ひらがな'},
       {layout: 'studio', title: '日本語', text: 'カタカナ', design: {fontScheme: 'ms-mincho'}},
       {layout: 'studio', title: 'No header', text: 'Body', design: {fontScheme: 'ms-mincho', header: false}}]},

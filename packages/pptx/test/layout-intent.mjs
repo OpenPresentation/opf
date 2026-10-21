@@ -192,8 +192,8 @@ let cases = 0;
     return xml.replace(/val="[0-9A-F]+"/, `val="${Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()}"`);
   });
   const malformedRecords = [
-    {name: 'Broken', areas: [null]},
-    {...structuredClone(heroA), areas: [['missing-region']]},
+    {name: 'Broken', direction: 'column', regions: [null]},
+    {...structuredClone(heroA), regions: [{name: 'subtitle'}, {name: 'body', accepts: ['text']}]},
     {...structuredClone(heroA), $schema: 'https://example.com/untrusted-layout'}
   ];
   for (const record of malformedRecords) {
@@ -255,7 +255,7 @@ let cases = 0;
 
 // A slide record that overrides a registered layout id never changes other slides' layouts.
 {
-  const override = {...structuredClone(base), name: 'Overridden cover', areas: [['title']], columns: [1], rows: ['auto'], regions: {}};
+  const override = {...structuredClone(base), name: 'Overridden cover', direction: 'column', regions: [{name: 'title'}]};
   const deckC = {$schema: 'https://openpresentation.org/schema/opf/v1', name: 'Deck C', catalogs: custom({'cover': override}),
     slides: [{layout: 'cover', title: 'Override one', subtitle: 'C'}, {layout: 'cover', title: 'Override two', subtitle: 'C'}]};
   assert.equal(validate(deckC, {only: ['format']}).valid, true);
@@ -282,7 +282,7 @@ let cases = 0;
   // this deliberate override; they never override a host's valid record.
   const damagedDocument = await read(modify(exportedC, entries => text(entries, 'ppt/tags/opfDocument.xml', xml => {
     const value = tagValue(enc.encode(xml));
-    value.catalogs.custom.layouts['cover'] = {name: 'Broken', areas: [null]};
+    value.catalogs.custom.layouts['cover'] = {name: 'Broken', direction: 'column', regions: [null]};
     return xml.replace(/val="[0-9A-F]+"/, `val="${Buffer.from(JSON.stringify(value)).toString('hex').toUpperCase()}"`);
   })));
   assert.deepEqual(damagedDocument.provenance, [['invalid-document-provenance', 'catalogs.custom.layouts.cover']]);

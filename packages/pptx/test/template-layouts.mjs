@@ -17,8 +17,7 @@ const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
 const ordered = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false, preserveOrder: true});
 const FIXED = {seed: 1, timestamp: '2026-01-01T00:00:00Z', date: '2026-10-10'};
-// The 28 built-in layouts of OPF 0.19 (core packages/javascript/test/fixtures/layout-templates-0.19.json at RR-79): replace with
-// @openpresentation/gallery@^2 once gallery 2.0.0 (RR-80) is published.
+// The 28 built-in layouts of the default Gallery catalog.
 const templates = defaultCatalog.layouts;
 assert.equal(Object.keys(templates).length, 28);
 // A registered catalog of the 28, as gallery 2.0.0 will be: bare ids resolve to it first.
@@ -56,7 +55,7 @@ const kindOf = region => {
 const IDX_BASE = {obj: 100, body: 300, pic: 500, chart: 700, tbl: 900, media: 1100};
 const indexesOf = record => {
   const regions = new Map(layoutTemplate(record).regions.map(region => [region.name, region])), counts = {};
-  return Object.fromEntries(Object.keys(record.regions).map(name => { const kind = kindOf(regions.get(name)); counts[kind] = (counts[kind] ?? -1) + 1; return [name, IDX_BASE[kind] + counts[kind]]; }));
+  return Object.fromEntries([...regions.keys()].map(name => { const kind = kindOf(regions.get(name)); counts[kind] = (counts[kind] ?? -1) + 1; return [name, IDX_BASE[kind] + counts[kind]]; }));
 };
 const sample = {
   text: () => ({text: 'A short paragraph of body text.'}),
@@ -265,8 +264,8 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
 // catalog's in catalog order and then the embedded custom templates by id, used or not. A second script profile (its own slide
 // master, opf-pptx#168) gets the same set.
 {
-  const custom = {'zz-notes': {name: 'Notes', areas: [['title'], ['notes']], rows: ['auto', 1], regions: {notes: {accepts: ['text', 'list']}}},
-    'aa-split': {name: 'Split', areas: [['title', 'title'], ['start', 'end']], rows: ['auto', 1], regions: {start: {accepts: ['text']}, end: {accepts: ['image']}}}};
+  const custom = {'zz-notes': {name: 'Notes', direction: 'column', regions: [{name: 'title'}, {name: 'notes', accepts: ['text', 'list']}]},
+    'aa-split': {name: 'Split', direction: 'column', regions: [{name: 'title'}, {direction: 'row', regions: [{name: 'start', accepts: ['text']}, {name: 'end', accepts: ['image']}]}]}};
   const deck = {name: 'One template', language: 'ja', catalogs: {custom: {layouts: custom}, gallery: {source: defaultCatalog.source}}, slides: [{layout: 'pillars', title: '日本語の見出し', blocks: [{text: 'ひらがな'}]},
     {title: '日本語の見出し', text: 'カタカナ', design: {fontScheme: 'gallery:ms-mincho'}}]};
   const catalogs = [gallery2, defaultCatalog];
@@ -321,8 +320,8 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
 
 // ---- 3. A region pin round-trips (OPF_SLIDE_V1 records it); a custom template is one more layout.
 const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-split': {name: 'Roadmap split', summary: 'A roadmap with notes over metrics beside it.',
-  areas: [['title', 'title'], ['timeline', 'notes'], ['timeline', 'metrics']], columns: [2, 1], rows: ['auto', 1, 1],
-  regions: {timeline: {accepts: ['timeline'], role: 'primary', flow: 'none'}, notes: {accepts: ['text', 'list'], role: 'secondary', flow: 'column'}, metrics: {accepts: ['metric', 'text'], role: 'supporting', flow: 'grid'}}}}}},
+  direction: 'column', regions: [{name: 'title'}, {direction: 'row', size: 2, regions: [{name: 'timeline', size: 2, accepts: ['timeline'], role: 'primary', flow: 'none'},
+    {direction: 'column', regions: [{name: 'notes', accepts: ['text', 'list'], role: 'secondary', flow: 'column'}, {name: 'metrics', accepts: ['metric', 'text'], role: 'supporting', flow: 'grid'}]}]}]}}}},
   slides: [{layout: 'roadmap-split', title: '2027 roadmap', blocks: [{timeline: {events: [{when: 'Q1', what: 'Pilot'}, {when: 'Q2', what: 'Launch'}]}},
     {metric: {value: 12, label: 'Pilot customers'}}, {metric: {value: '94%', label: 'Retention'}}, {items: ['Hiring two engineers', 'Security review in Q1']},
     {region: 'metrics', text: 'Targets agreed with finance.'}]}]};

@@ -25,7 +25,7 @@
 // `layout-changed`). A block read from a placeholder of a region gets a `region` pin when plain binding would put it
 // elsewhere; content that document provenance restored is never pinned.
 
-import {composeLayoutAreas, composeSlide, layoutTemplate, bindRegions, regionAccepts} from '@openpresentation/opf/composition';
+import {composeLayoutAreas, composeSlide, isLayoutTemplate, layoutTemplate, bindRegions, regionAccepts} from '@openpresentation/opf/composition';
 import {validateCatalogRecord, catalogRecords, resolveReference} from '@openpresentation/opf';
 import {gallery} from '@openpresentation/gallery';
 import {decodeTextTag, encodeTextTag} from './code-provenance.js';
@@ -38,7 +38,7 @@ const LAYOUT_TYPE = 'application/vnd.openxmlformats-officedocument.presentationm
 const TAGS_TYPE = 'application/vnd.openxmlformats-officedocument.presentationml.tags+xml';
 const EMU = 9525;
 // Region placeholder indexes (coordinator decisions on RR-81): a base per placeholder kind plus the region's position among the
-// layout's regions of that kind, in the record's `regions` order: `obj` 100, `body` 300, `pic` 500, `chart` 700, `tbl` 900,
+// layout's regions of that kind, in the record's `regions` order (core's reading order of the region list): `obj` 100, `body` 300, `pic` 500, `chart` 700, `tbl` 900,
 // `media` 1100 (so the first chart region of every layout is 700, its second 701). PowerPoint's Change Layout pairs a slide's
 // placeholders with the new layout's by `idx`, so only regions of one kind pair (Pillars to Text keeps `obj` with `obj`; a chart
 // bound to Chart beside's `chart` region never lands in Table beside's `tbl` region, as it did with one sequence for every kind).
@@ -85,7 +85,7 @@ export const bindsObject = (type, object) => (BINDS[type] ?? []).includes(object
 export function regionIndexes(record, nativeBodyRegion) {
   const regions = new Map(layoutTemplate(record).regions.map(region => [region.name, region]));
   const counts = {};
-  const indexes = Object.fromEntries(Object.keys(record?.regions ?? {}).filter(name => regions.has(name)).map(name => {
+  const indexes = Object.fromEntries([...regions.keys()].map(name => {
     const type = placeholderType(regions.get(name));
     counts[type] = (counts[type] ?? -1) + 1;
     return [name, REGION_IDX_BASE[type] + counts[type]];
@@ -119,7 +119,7 @@ export function recordHash(record) {
  */
 export function slideTemplate(core) {
   const record = core?.resolved?.layout, provenance = core?.resolved?.provenance?.layout;
-  if (!record || !provenance || !Object.hasOwn(record, 'areas')) return undefined;
+  if (!record || !provenance || !isLayoutTemplate(record)) return undefined;
   try { layoutTemplate(record); } catch { return undefined; }
   return {record, id: provenance.id, group: provenance.group, ...(provenance.source !== undefined ? {source: provenance.source} : {}), reference: provenance.reference, origin: provenance.origin,
     key: templateKey(provenance)};
@@ -127,7 +127,7 @@ export function slideTemplate(core) {
 
 const templateKey = ({group, id, source}) => `${group}\u0000${id}\u0000${source ?? ''}`;
 function isTemplate(record) {
-  if (record === null || typeof record !== 'object' || !Object.hasOwn(record, 'areas')) return false;
+  if (record === null || typeof record !== 'object' || !isLayoutTemplate(record)) return false;
   try { layoutTemplate(record); return true; } catch { return false; }
 }
 
