@@ -7,9 +7,9 @@ import {composeSlide} from '../dist/composition.js';
 // Re-cut of the cover half of OpenPresentation/opf#94 onto the image-safe area (FF-26),
 // explicit heading alignment (FF-29) and picture-slot removal.
 const photo = 'data:image/png;base64,iVBORw0KGgo=';
-const titleSubtitle = {id: 'title-subtitle', areas: [["title"]], rows: [1], regions: {}};
-const titleOnly = {id: 'title', areas: [["title"]], rows: [1], regions: {}};
-const text1x = {id: 'text-1x', areas: [["title"],["body-1"]], rows: ["auto",1], regions: {"body-1":{"accepts":["text"],"flow":"none"}}};
+const titleSubtitle = {id: 'title-subtitle', regions: [{name: 'title', size: 1}]};
+const titleOnly = {id: 'title', regions: [{name: 'title', size: 1}]};
+const text1x = {id: 'text-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['text'], flow: 'none'}]};
 const byField = (result, field) => result.items.find(item => item.field === field);
 const headingGroup = result => {
   const headings = result.items.filter(item => ['tag', 'title', 'subtitle'].includes(item.field));
@@ -50,7 +50,7 @@ test('cover layouts vertically center the heading group', () => {
 });
 
 test('heading templates center and empty content regions collapse', () => {
-  const headingsOnly = {id: 'custom-cover', areas: [["title"]], rows: [1], regions: {}};
+  const headingsOnly = {id: 'custom-cover', regions: [{name: 'title', size: 1}]};
   const cover = composeSlide({tag: 'Q1', title: 'Custom cover', subtitle: 'Line'}, {layout: headingsOnly});
   const {top, bottom} = headingGroup(cover);
   assert.ok(Math.abs((top + bottom) / 2 - 360) < 1e-6);
@@ -84,7 +84,7 @@ test('wrapped cover headings recenter as a group and keep line and outline origi
     }
   }
   // Placement lines are the same lines a top-anchored composition produces, translated by the shift.
-  const unshifted = composeSlide({title: 'Short', subtitle: 'Also short', text: 'Body'}, {layout: {id: 'text-1x', areas: [["title"],["body-1"]], rows: ["auto",1], regions: {"body-1":{"accepts":["text"],"flow":"none"}}}, textMeasurement: measurement});
+  const unshifted = composeSlide({title: 'Short', subtitle: 'Also short', text: 'Body'}, {layout: {id: 'text-1x', regions: [{name: 'title'}, {name: 'body-1', accepts: ['text'], flow: 'none'}]}, textMeasurement: measurement});
   const dy = byField(short, 'title').box.y - byField(unshifted, 'title').box.y;
   assert.ok(dy > 0);
   const moved = byField(short, 'title').text.placement.lines, base = byField(unshifted, 'title').text.placement.lines;
@@ -168,7 +168,7 @@ test('placed image bands: the cover centers inside the free area', () => {
 });
 
 test('a flowed image is body and keeps the content origin; a placed image is not body', () => {
-  const layout = {...titleSubtitle, areas: [["title"],["body-1"]], rows: ["auto",1], regions: {"body-1":{"accepts":["image"],"flow":"none"}}};
+  const layout = {...titleSubtitle, regions: [{name: 'title'}, {name: 'body-1', accepts: ['image'], flow: 'none'}]};
   const padding = 0.08 * 720;
   const flowed = composeSlide({title: 'Image slide', subtitle: 'Not a cover', image: {src: photo, alt: 'Harbor'}}, {layout});
   assert.ok(Math.abs(byField(flowed, 'title').box.y - padding) < 1e-6);

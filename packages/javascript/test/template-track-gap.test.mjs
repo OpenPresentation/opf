@@ -16,10 +16,10 @@ for (const [name, width, height, columns, rows] of [
     const names = Array.from({ length: columns * rows }, (_, index) => `r${index}`);
     const kind = columns === 1 ? 'text' : 'image';
     const layout = {
-      areas: Array.from({ length: rows }, (_, row) => names.slice(row * columns, (row + 1) * columns)),
-      rows: Array(rows).fill(1),
-      columns: Array(columns).fill(1),
-      regions: Object.fromEntries(names.map(region => [region, { accepts: [kind], flow: 'none', empty: 'keep' }])),
+      direction: rows === 1 && columns > 1 ? 'row' : 'column',
+      regions: columns === 1 || rows === 1
+        ? names.map(region => ({ name: region, accepts: [kind], flow: 'none', empty: 'keep' }))
+        : Array.from({ length: rows }, (_, row) => ({ direction: 'row', regions: names.slice(row * columns, (row + 1) * columns).map(region => ({ name: region, accepts: [kind], flow: 'none', empty: 'keep' })) })),
     };
     const slide = { layout: 'custom:tracks', composition: { gap: 0.1 }, blocks: names.map((region, index) => ({ region, [kind]: kind === 'text' ? `Row ${index}` : `https://example.invalid/${index}.png` })) };
     assert.equal(validate({ catalogs: { custom: { layouts: { tracks: layout } } }, slides: [slide] }, { only: ['format'] }).valid, true);

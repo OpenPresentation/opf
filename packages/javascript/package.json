@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf",
-  "version": "0.24.2",
+  "version": "0.25.0-next.0",
   "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; in Node, the file API and the CLI defaults register the pptx.gallery catalog of @openpresentation/gallery.",
   "license": "MIT",
   "author": "Open Presentation",
@@ -178,5 +178,8 @@
     "@openpresentation/opf-render": {
       "optional": true
     }
+  },
+  "opf": {
+    "requiresUnreleasedGallery": "5.0.0"
   }
 }

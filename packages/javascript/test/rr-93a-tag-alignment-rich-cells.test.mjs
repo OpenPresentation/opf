@@ -4,7 +4,7 @@ import {composeSlide, layoutTable} from '../dist/composition.js';
 import {validate} from '../dist/validator.js';
 
 const field = (composed, name) => composed.items.find(item => item.field === name);
-const metrics = {id: 'metrics', areas: [['title'], ['metrics']], rows: ['auto', 1], design: {contentAlignment: 'center'}, regions: {metrics: {accepts: ['metric', 'group'], flow: 'grid'}}};
+const metrics = {id: 'metrics', design: {contentAlignment: 'center'}, regions: [{name: 'title'}, {name: 'metrics', accepts: ['metric', 'group'], flow: 'grid'}]};
 const slide = {tag: 'Q3', title: 'Revenue', blocks: [{metric: {value: '42', label: 'Accounts'}}]};
 
 test('the tag follows the title alignment, not content alignment', () => {

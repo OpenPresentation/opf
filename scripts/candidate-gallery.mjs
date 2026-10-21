@@ -22,20 +22,25 @@ export function candidateGalleryTrailer(body) {
   return values[0];
 }
 
+// Each reviewed configuration version names the one Gallery release it stages and, from version 2, the catalog contract
+// (opf.catalogSchema) that release targets: 1 is Gallery 2, 2 is Gallery 3 (nested area arrays), 3 is Gallery 5 (FA-33,
+// layouts as one list of regions).
+const CONTRACTS={1:{gallery:'2.0.0'},2:{gallery:'3.0.0',catalogSchema:3},3:{gallery:'5.0.0',catalogSchema:4}};
 export function galleryConfiguration(manifest,configuration){
   const required=manifest.opf?.requiresUnreleasedGallery;
   if(configuration===undefined&&!Object.hasOwn(manifest.opf??{},'requiresUnreleasedGallery'))return null;
   assert.ok(configuration,'missing reviewed candidate-gallery configuration');
   assert.deepEqual(Object.keys(configuration).sort(),['gallery','version']);
-  assert.ok(configuration.version===1||configuration.version===2,'unsupported candidate configuration version');
-  const current=configuration.version===2;
-  assert.equal(required,current?'3.0.0':'2.0.0','candidate source must explicitly declare the reviewed Gallery version');
+  const contract=Object.hasOwn(CONTRACTS,configuration.version)?CONTRACTS[configuration.version]:undefined;
+  assert.ok(contract,'unsupported candidate configuration version');
+  const current=contract.catalogSchema!==undefined;
+  assert.equal(required,contract.gallery,'candidate source must explicitly declare the reviewed Gallery version');
   assert.deepEqual(Object.keys(configuration.gallery).sort(),current?['catalogSchema','repository','sha','version']:['repository','sha','version']);
   assert.equal(configuration.gallery.repository,'OpenPresentation/gallery');
   assert.equal(configuration.gallery.version,required);
-  if(current)assert.equal(configuration.gallery.catalogSchema,3,'candidate configuration version 2 requires catalog contract 3');
+  if(current)assert.equal(configuration.gallery.catalogSchema,contract.catalogSchema,`candidate configuration version ${configuration.version} requires catalog contract ${contract.catalogSchema}`);
   assert.match(configuration.gallery.sha,/^[0-9a-f]{40}$/,'gallery SHA must be immutable');
-  return {...configuration.gallery,catalogSchema:current?3:2};
+  return {...configuration.gallery,catalogSchema:current?contract.catalogSchema:2};
 }
 
 export async function resolveCandidateGallery({manifest,configuration,event,ref='',input='',pullRequest,eventRepository,api}){

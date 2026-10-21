@@ -15,6 +15,16 @@ export const FONT_COUNT_BRIDGE=Object.freeze({sourceSha:'382ae0102335f536131a6e3
 // It never replaces published runtime, manifests, dependency locks or fixture baselines.
 export const PUBLISHED_019_SOURCE='b3e306d005d3cd0563964d541a834a8a50469536';
 export const PUBLISHED_019_TOOLING=Object.freeze([{"path":"scripts/lazy-font-counts.mjs","sourceSha":"85089bf359a41950e5887d782452dd3884805386","originalSha256":"1dc5e9c5e145439d869fcc557ec3f74984b35eb8bff02eeb3e0552be877ee426","reviewedSha256":"549603abef0f83ce93688adc541eced84ab10b4aaa28324580d339bf67ca35a0"},{"path":"scripts/lazy-font-counts.test.mjs","sourceSha":"85089bf359a41950e5887d782452dd3884805386","originalSha256":"fa45c8a68e150cd654d48c584d8f67fc4091749095d045cd77eadf3b66f3c42a","reviewedSha256":"48862c28f0e25c0b3c2478d9f84edd0f0774111f512abdd26f04403e367ba327"},{"path":"scripts/test-layout-contract-registry.mjs","sourceSha":"85089bf359a41950e5887d782452dd3884805386","originalSha256":"684df604f5bb4d97ba9c75c0b2f16595caa65d9b1194d744e3663d8195c71824","reviewedSha256":"6efd5c564634539e59ec26205085dce2a2a42a6d36841fb43dcb7d575b902a3b"},{"path":"scripts/registry-layout-v2.mjs","sourceSha":"85089bf359a41950e5887d782452dd3884805386","originalSha256":null,"reviewedSha256":"f32eafab2db6b2d1aa36d041d0af2cef02657f2a7ddf7b28f61a465918ac52de"}].map(Object.freeze));
+// FA-33 / RR-101: the 0.24.2 published core predates the fix that rebuilds opf-editor's git-ignored `dist/styles.css` from the
+// release commit (#769), so its own installed-code check cannot bind the editor 0.24.1+ archive to a release commit, and its
+// catalog-generation table (#763) stops at core 0.20 to 0.24 only in later sources. The control runs those helpers (and the test
+// of the table) from the tools checkout instead; every byte of the published runtime stays as published.
+export const PUBLISHED_0242_SOURCE='e6ade17b4fcaf70bc716654d39102a54db015965';
+export const PUBLISHED_0242_TOOLING=Object.freeze([{path:'scripts/test-installed-code.mjs',sourceSha:'8d2f43a9dfb9399be1cd0c66d5373890cc3367c1',originalSha256:'dd713c98b49fe14dca40722424f404d25bb44d2c3e83bcd4d5f80aff1fcfe1b3',reviewedSha256:'6808fd530ec4f9400de53a67e26ecc1024727d54a3eac8b1260134c91537e949'},{path:'scripts/published-matrix/consumer-dependencies.mjs',sourceSha:'8d2f43a9dfb9399be1cd0c66d5373890cc3367c1',originalSha256:'54a93b20d295baaa21163cd14fdd0697cad8ea4ab3653d0159dbea8a6cb8693d',reviewedSha256:'d4c74df425525f48b9dd04e88bb049cbcf521af2c72f6f1ace9d1da49b13a79f'},{path:'scripts/published-matrix/consumer-dependencies.test.mjs',sourceSha:'8d2f43a9dfb9399be1cd0c66d5373890cc3367c1',originalSha256:'60cbdccf6b6e50eab72b74e9f941f6d4965a7b4e045b19236e78584eb5c0b107',reviewedSha256:'4689b8b7efaf168c30d213de6894d0afbd788719c8d744443cb724c6f9ab48e0'},{path:'scripts/published-matrix/browser-fixture.test.mjs',sourceSha:'8d2f43a9dfb9399be1cd0c66d5373890cc3367c1',originalSha256:'f5f8cefcb56cc39f835ce9a5ceba5fb866c139c300f80ec30319a7e7f54a3c62',reviewedSha256:'eed5c2e6cc2361a5f72863a02de64bf51052ffc254cc9cc88cd6e8235ada417d'}]);
+function published0242Plan(plan){
+ const versions=Object.fromEntries((plan.packages??[]).map(item=>[item.name,item.version]));
+ return versions['@openpresentation/opf']==='0.24.2'&&versions['@openpresentation/opf-editor']==='0.24.2';
+}
 function published019Plan(plan){
  const renderer=plan.packages?.find(item=>item.name==='@openpresentation/opf-render')?.version;
  if(renderer!=='0.19.1')return false;
@@ -46,20 +56,21 @@ export function stagePublishedControlPlan({toolsRoot,coreRoot}){
       record.qualification='published runtime with reviewed registry-plan metadata and recorded pinned test-tooling bridge; not pristine source';
     }
   }
-  if(published019Plan(reviewed)){
-    assert.equal(record.sourceSha,PUBLISHED_019_SOURCE,'published 0.19 source identity differs');
-    for(const bridge of PUBLISHED_019_TOOLING){
+  const bridgeSet=published019Plan(reviewed)?{label:'0.19',source:PUBLISHED_019_SOURCE,tooling:PUBLISHED_019_TOOLING}:published0242Plan(reviewed)?{label:'0.24.2',source:PUBLISHED_0242_SOURCE,tooling:PUBLISHED_0242_TOOLING}:null;
+  if(bridgeSet){
+    assert.equal(record.sourceSha,bridgeSet.source,`published ${bridgeSet.label} source identity differs`);
+    for(const bridge of bridgeSet.tooling){
       const file=path.join(coreRoot,bridge.path);
       if(bridge.originalSha256===null)assert.ok(!existsSync(file),'unexpected original test helper');
       else{
-        const original=regularBytes(file);assert.equal(digest(original),bridge.originalSha256,'published 0.19 test preimage differs');
+        const original=regularBytes(file);assert.equal(digest(original),bridge.originalSha256,`published ${bridgeSet.label} test preimage differs`);
         const backup=path.join(coreRoot,'artifacts/published-control/original-tooling',bridge.path);mkdirSync(path.dirname(backup),{recursive:true});writeFileSync(backup,original);
       }
-      const reviewedBytes=execFileSync('git',['-C',toolsRoot,'show',`${bridge.sourceSha}:${bridge.path}`]);assert.equal(digest(reviewedBytes),bridge.reviewedSha256,'reviewed 0.19 tooling blob differs');
+      const reviewedBytes=execFileSync('git',['-C',toolsRoot,'show',`${bridge.sourceSha}:${bridge.path}`]);assert.equal(digest(reviewedBytes),bridge.reviewedSha256,`reviewed ${bridgeSet.label} tooling blob differs`);
       writeFileSync(file,reviewedBytes);
     }
-    record.testToolingBridges=PUBLISHED_019_TOOLING;
-    record.qualification='published 0.19 runtime with recorded exact final-registry test-tooling bridge; not pristine source';
+    record.testToolingBridges=bridgeSet.tooling;
+    record.qualification=`published ${bridgeSet.label} runtime with recorded exact test-tooling bridge; not pristine source`;
   }
   writeFileSync(path.join(coreRoot,'artifacts/published-control/metadata.json'),`${JSON.stringify(record,null,2)}\n`);
   writeFileSync(target,reviewedBytes);
@@ -77,9 +88,10 @@ export function verifyPublishedControlPlan({toolsRoot,coreRoot}){
   const allowed=['release-plan.json'];
   const allowedUntracked=[];
   if(record.testToolingBridges){
-    assert.ok(published019Plan(record.reviewedPlan));assert.equal(record.sourceSha,PUBLISHED_019_SOURCE);
-    assert.deepEqual(record.testToolingBridges,PUBLISHED_019_TOOLING,'unknown 0.19 tooling override');
-    for(const bridge of PUBLISHED_019_TOOLING){
+    const bridgeSet=published019Plan(record.reviewedPlan)?{source:PUBLISHED_019_SOURCE,tooling:PUBLISHED_019_TOOLING,label:'0.19'}:published0242Plan(record.reviewedPlan)?{source:PUBLISHED_0242_SOURCE,tooling:PUBLISHED_0242_TOOLING,label:'0.24.2'}:null;
+    assert.ok(bridgeSet,'tooling bridges are recorded only for a known published graph');assert.equal(record.sourceSha,bridgeSet.source);
+    assert.deepEqual(record.testToolingBridges,bridgeSet.tooling,`unknown ${bridgeSet.label} tooling override`);
+    for(const bridge of bridgeSet.tooling){
       if(bridge.originalSha256===null){
         assert.throws(()=>execFileSync('git',['-C',coreRoot,'show',`HEAD:${bridge.path}`],{stdio:'pipe'}),'original source unexpectedly contained helper');allowedUntracked.push(bridge.path);
       }else{

@@ -10,14 +10,22 @@ const fixture = gallery;
 const { layouts } = fixture;
 const roadmap = {
   name: 'Roadmap split',
-  areas: [['title', 'title'], ['timeline', 'notes'], ['timeline', 'metrics']],
-  columns: [2, 1],
-  rows: ['auto', 1, 1],
-  regions: {
-    timeline: { accepts: ['timeline'], role: 'primary', flow: 'none' },
-    notes: { accepts: ['text', 'list'], role: 'secondary', flow: 'column' },
-    metrics: { accepts: ['metric', 'text'], role: 'supporting', flow: 'grid' },
-  },
+  regions: [
+    { name: 'title' },
+    {
+      direction: 'row',
+      regions: [
+        { name: 'timeline', size: 2, accepts: ['timeline'], role: 'primary', flow: 'none' },
+        {
+          direction: 'column',
+          regions: [
+            { name: 'notes', accepts: ['text', 'list'], role: 'secondary', flow: 'column' },
+            { name: 'metrics', accepts: ['metric', 'text'], role: 'supporting', flow: 'grid' },
+          ],
+        },
+      ],
+    },
+  ],
 };
 const timeline = { timeline: { events: [{ when: 'Q1', what: 'Pilot' }, { when: 'Q2', what: 'Launch' }] } };
 const bound = (result) => Object.fromEntries(result.regions.map((region) => [region.name, region.blocks.map((block) => block.path.replace(/^slides\.0\./, ''))]));
@@ -109,7 +117,7 @@ describe('step 2: role rank by kind, then reading order', () => {
   test('a group is accepted where every one of its leaf kinds is, or where group is', () => {
     const person = { blocks: [image, text('Name')] };
     assert.deepEqual(bound(bindRegions({ blocks: [person] }, layouts.team)), { people: ['blocks.0'] });
-    const custom = { name: 'x', areas: [['a', 'b']], columns: [1, 1], rows: [1], regions: { a: { accepts: ['chart'] }, b: { accepts: ['text', 'image'], role: 'secondary' } } };
+    const custom = { name: 'x', direction: 'row', regions: [{ name: 'a', accepts: ['chart'] }, { name: 'b', accepts: ['text', 'image'], role: 'secondary' }] };
     assert.deepEqual(bound(bindRegions({ blocks: [person] }, custom)), { a: [], b: ['blocks.0'] });
   });
 

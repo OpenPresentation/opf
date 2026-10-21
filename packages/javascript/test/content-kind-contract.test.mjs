@@ -17,7 +17,7 @@ test('composition preserves schema-valid leaf payload kinds, including text bull
 test('quote and timeline layouts declare their native content kinds',()=>{
   for(const type of ['quote','timeline']){
     const layout=layouts.find(layout=>layout.id===type);
-    assert.ok(Object.values(layout.regions).some(region=>region.accepts.includes(type)));
+    assert.ok(layout.regions.some(region=>region.accepts?.includes(type)));
     assert.equal(validateCatalogRecord('layouts',layout).valid,true);
   }
 });

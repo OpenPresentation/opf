@@ -34,7 +34,7 @@ test('accepted outline placement uses the item alignment', () => {
 // A cover has no content region: tag, title and subtitle are one heading group, so a deck that
 // aligns its title and its content differently must not split the group.
 const cover = {tag: 'Compliance', title: 'Compliance Readiness Review', subtitle: 'Tandem BioSystems Compliance'};
-const titleSubtitle = {id: 'title-subtitle', areas: [["title"]], rows: [1], regions: {}};
+const titleSubtitle = {id: 'title-subtitle', regions: [{name: 'title', size: 1}]};
 
 test('cover tag, title and subtitle share titleAlignment', () => {
   for (const layout of [titleSubtitle, undefined]) {

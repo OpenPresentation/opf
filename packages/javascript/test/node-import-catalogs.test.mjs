@@ -9,7 +9,7 @@ import {gallery} from '@openpresentation/gallery';
 import {installIsolatedCore} from '../../../scripts/isolated-core.mjs';
 
 const bytes=reference=>Buffer.concat([Buffer.from([0x50,0x4b,3,4]),Buffer.from(reference)]);
-const custom={source:'https://example.test/registered',layouts:{'host-only':{name:'Host only',areas:[['body']],regions:{body:{accepts:['text'],flow:'column'}}}}};
+const custom={source:'https://example.test/registered',layouts:{'host-only':{name:'Host only',regions:[{name:'body',accepts:['text'],flow:'column'}]}}};
 
 test('Node open/convert import resolves default and registered host layouts, including signals and explicit empty catalogs',async()=>{
  const scratch=await mkdtemp(path.join(tmpdir(),'opf-import-catalogs-'));

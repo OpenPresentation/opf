@@ -4,7 +4,7 @@ import {composeSlide,layoutQuote,layoutMetric,OPFCompositionError} from '../dist
 const box={x:40,y:50,width:600,height:500};
 const quote={text:'Keep the quote and source together.',attribution:'Example author',role:'Example role',source:'Illustrative'};
 const measurement={measure:(text,size)=>[...text].length*size*.5};
-const make=(anchor,flow='column',accepts=['quote','metric','text'])=>({name:'Measured',areas:[['body']],columns:[1],rows:[1],regions:{body:{accepts,flow,anchor,max:flow==='none'?1:12}}});
+const make=(anchor,flow='column',accepts=['quote','metric','text'])=>({name:'Measured',regions:[{name:'body',accepts,flow,anchor,max:flow==='none'?1:12}]});
 const compose=(anchor,blocks,flow='column',extra={})=>composeSlide({blocks,...(extra.contentDirection?{design:{contentDirection:extra.contentDirection}}:{}),...(extra.minFontSize?{composition:{minFontSize:extra.minFontSize}}:{})},{width:960,height:720,layout:make(anchor,flow),textMeasurement:measurement,...extra});
 test('successful quotes keep attribution immediately after measured body and include photo in compact bounds',()=>{
  for(const value of [quote,{...quote,text:[{text:'Rich words',bold:true},' remain intact.']},{...quote,photo:'person.png'}]){

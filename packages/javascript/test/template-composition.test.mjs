@@ -7,6 +7,8 @@ import { THEME_DESIGN_KEYS, composeSlide, gridFlowShape, listColumnBreaks, resol
 // OPF 0.19 (RR-79), design sections 3 to 5: flows, tracks, collapse, bleed, list columns, mirror and the theme level.
 const fixture = gallery;
 const { layouts } = fixture;
+// Every body region (only the named ones when `only` is given) of a region list keeps its space when empty.
+const keepAll = (list, only) => list.map((entry) => entry.regions ? { ...entry, regions: keepAll(entry.regions, only) } : ['title', 'subtitle'].includes(entry.name) || (only && !only.includes(entry.name)) ? entry : { ...entry, empty: 'keep' });
 const near = (a, b, tolerance = 1e-3) => Math.abs(a - b) <= tolerance;
 const text = (value) => ({ text: value });
 const short = (count) => Array.from({ length: count }, (_, index) => text(`Point ${index + 1}`));
@@ -116,21 +118,21 @@ describe('empty regions and headings', () => {
   });
 
   test('empty: keep leaves the space', () => {
-    const record = { ...layouts['image-beside'], regions: { ...layouts['image-beside'].regions, media: { ...layouts['image-beside'].regions.media, empty: 'keep' } } };
+    const record = { ...layouts['image-beside'], regions: keepAll(layouts['image-beside'].regions, ['media']) };
     const result = compose({ title: 'x', blocks: [text('a')] }, record);
     assert.equal(region(result, 'media').collapsed, undefined);
     assert.ok(near(region(result, 'body').box.width, region(result, 'media').box.width));
   });
 
   test('a template without a title area gets an implicit auto row on top', () => {
-    const record = { name: 'x', areas: [['body']], regions: { body: { accepts: ['text'] } } };
+    const record = { name: 'x', regions: [{ name: 'body', accepts: ['text'] }] };
     const result = compose({ title: 'Heading', blocks: [text('a')] }, record);
     assert.deepEqual(result.headingAreas.map((area) => [area.name, area.implicit]), [['title', true]]);
     assert.ok(region(result, 'body').box.y > result.items[0].box.y + result.items[0].box.height);
   });
 
   test('a subtitle area takes the subtitle out of the title group', () => {
-    const record = { name: 'x', areas: [['title', 'subtitle'], ['body', 'body']], columns: [1, 1], rows: ['auto', 1], regions: { body: { accepts: ['text'] } } };
+    const record = { name: 'x', regions: [{ direction: 'row', size: 'auto', regions: [{ name: 'title' }, { name: 'subtitle' }] }, { name: 'body', accepts: ['text'] }] };
     const result = compose({ title: 'T', subtitle: 'S', blocks: [text('a')] }, record);
     const subtitle = result.items.find((item) => item.field === 'subtitle');
     assert.ok(subtitle.box.x >= result.headingAreas.find((area) => area.name === 'subtitle').box.x - 1e-6);
@@ -326,7 +328,7 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     const placements = [{ edge: 'left', size: 0.25 }];
     // Without cards and with cards on the deck (the card insets live in the auto rows too).
     for (const presentation of [{ design: furniture }, { design: { ...furniture, contentBox: true } }]) for (const [id, record] of Object.entries(layouts)) {
-      const kept = { ...record, regions: Object.fromEntries(Object.entries(record.regions).map(([name, region]) => [name, { ...region, empty: 'keep' }])) };
+      const kept = { ...record, regions: keepAll(record.regions) };
       const slide = { title: 'Title', subtitle: 'Subtitle', blocks: [{ image: 'https://example.com/band.png', placement: placements[0] }] };
       const composed = composeSlide(slide, { layout: kept, presentation });
       const { areas } = composeLayoutAreas(record, { presentation, placements });

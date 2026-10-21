@@ -19,7 +19,7 @@ try {
   const original=await readFile(path.join(temp,'deck.opf.json'),'utf8');
   run(['create','deck.opf.json'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),original);
   assert.equal(run(['create','-','--title','Piped']).json.slides[0].title,'Piped');
-  assert.equal(run(['convert','-','copy.json'],{input:'\uFEFF'+original}).json.ok,true);
+  assert.equal(run(['convert','-','copy.json'],{input:`\uFEFF${original}`}).json.ok,true);
   run(['convert','-','never.json'],{input:'{"slides":"bad"}',status:1});
   const validated=run(['validate','deck.opf.json']).json;assert.equal(validated.valid,true);assert.equal(validated.sha256.length,64);assert.equal(validated.schemaValid,true);
   const warning=JSON.stringify({design:{theme:'not-a-bundled-theme'},slides:[{title:'Warning'}]});
@@ -30,7 +30,7 @@ try {
   // (Read from the CLI itself: this file also runs, copied, against an installed CLI with no checkout beside it.)
   {const layouts=run(['catalog','layouts']).json.map(record=>record.id);assert.equal(layouts.length,run(['catalogs']).json.find(kind=>kind.kind==='layouts').count);assert.equal(layouts.length,28,'the full v2 gallery catalog');
    for(const id of ['cover','two-column','process','comparison','dashboard','statement'])assert.ok(layouts.includes(id),id);
-   const legacy=run(['validate','-','--only','format,references'],{input:JSON.stringify({name:'Template layouts',slides:layouts.map((layout,index)=>({title:'Slide '+(index+1),layout}))})}).json;
+   const legacy=run(['validate','-','--only','format,references'],{input:JSON.stringify({name:'Template layouts',slides:layouts.map((layout,index)=>({title:`Slide ${index+1}`,layout}))})}).json;
    assert.equal(legacy.valid,true);assert.deepEqual(legacy.findings,[]);
    assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:JSON.stringify({slides:[{title:'Gallery layout',layout:'comparison'}]})}).json.valid,true);
    assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:JSON.stringify({slides:[{title:'Gallery layout',layout:'two-column'}]})}).json.counts.warning,0);}
@@ -43,7 +43,7 @@ try {
   assert.equal(run(['validate','-','--only','format,references','--fail-on','warning'],{input:'{"language":"en-US","slides":[{"title":"Regional tag"}]}'}).json.counts.warning,0);
   assert.equal(run(['validate','-'],{input:'{"slides":[}',status:1}).json.schemaValid,null);
   assert.ok(run(['validate','-'],{input:'{"slides":[{"title":"Earlier","title":"Later"}]}',status:1}).json.findings.some(issue=>issue.ruleId==='opf/duplicate-key'));
-  const config={catalogs:[{source:'pkg:@house/catalog',layouts:{pratner:{name:'Authoritative custom spelling',areas: [["title"]], rows: [1], regions: {}}}}]},configRaw=JSON.stringify(config);
+  const config={catalogs:[{source:'pkg:@house/catalog',layouts:{pratner:{name:'Authoritative custom spelling',regions: [{name: 'title', size: 1}]}}}]},configRaw=JSON.stringify(config);
   await writeFile(path.join(temp,'house-config.json'),configRaw);
   const configured=run(['validate','target.opf.json','--only','format,references','--config','house-config.json','--fail-on','warning']).json;assert.equal(configured.valid,true);assert.equal(configured.counts.warning,0);assert.match(configured.context.sha256,/^[a-f0-9]{64}$/);assert.equal(configured.sha256,linted.sha256);
   config.contracts=[{path:'/slides/*/layout',allowedValues:['text'],message:'Brand layouts: {{allowed}}.'}];await writeFile(path.join(temp,'house-config.json'),JSON.stringify(config));
@@ -63,12 +63,12 @@ try {
   run(['edit','deck.opf.json','--patch','patch.json','--in-place','--expect-sha256',validated.sha256]);
   // Windows exposes a read-only attribute rather than POSIX owner/group modes.
   if(process.platform!=='win32')assert.equal((await stat(path.join(temp,'deck.opf.json'))).mode & 0o777,0o600);
-  let saved=await readFile(path.join(temp,'deck.opf.json'),'utf8');assert.equal(JSON.parse(saved).slides[1].notes,'Source note');
+  const saved=await readFile(path.join(temp,'deck.opf.json'),'utf8');assert.equal(JSON.parse(saved).slides[1].notes,'Source note');
   await patch([{op:'replace',path:'/slides/0/title',value:'Partial'},{op:'test',path:'/slides/1/id',value:'stale'}]);
   run(['edit','deck.opf.json','--patch','patch.json','--in-place'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),saved);
   await patch([{op:'replace',path:'/slides',value:'bad'}]);run(['edit','deck.opf.json','--patch','patch.json','--in-place'],{status:1});assert.equal(await readFile(path.join(temp,'deck.opf.json'),'utf8'),saved);
   await patch([{op:'copy',from:'/slides/0',path:'/slides/-'},{op:'replace',path:'/slides/2/id',value:'three'},{op:'move',from:'/slides/0',path:'/slides/2'},{op:'remove',path:'/slides/1'}]);
-  let edited=run(['edit','deck.opf.json','--patch','patch.json']).json;assert.deepEqual(edited.slides.map(s=>s.id),['two','slide-1']);
+  const edited=run(['edit','deck.opf.json','--patch','patch.json']).json;assert.deepEqual(edited.slides.map(s=>s.id),['two','slide-1']);
   for (const operations of [
     [{op:'replace',path:'/missing',value:1}], [{op:'add',path:'/missing/child',value:1}],
     [{op:'add',path:'/slides/99',value:{}}], [{op:'remove',path:'/slides/01'}],

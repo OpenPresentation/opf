@@ -19,6 +19,9 @@ Gallery 3 or 4 satisfies catalog compatibility generation 3 (Gallery 4 for core 
 schema versions remain v2. Core 0.19 and later consume the Gallery package and
 do not export `@openpresentation/opf/catalog` or ship a catalog snapshot.
 
+FA-33 (unreleased) replaces `areas` with one ordered list of regions, nested through splits, and needs Gallery 5 (catalog
+compatibility generation 4).
+
 The 0.20 engines share measured quote allocation, the 32 reference pixel
 starting size for lists without an authored size, neutral structural borders
 and default right alignment for numeric table columns. Core and CLI forward

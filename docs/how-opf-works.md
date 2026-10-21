@@ -144,7 +144,7 @@ Region keys on one slide must not overlap, and regions cannot be mixed with a ro
 
 ## Layouts are hints, not contracts
 
-`Slide.layout` optionally references a layout record. The layout's areas and regions describe what the template *exposes* (a title area, chart regions, image treatment) — they do not constrain what the slide may contain. This loose coupling is intentional:
+`Slide.layout` optionally references a layout record. The layout's regions describe what the template *exposes* (a title region, chart regions, image treatment) — they do not constrain what the slide may contain. This loose coupling is intentional:
 
 - A slide may use any region keys or payloads regardless of its declared layout. Validators do not error on a slide/layout mismatch.
 - When `layout` is omitted, engines compose the slide automatically from its payload or region keys; that is not a finding.
@@ -197,9 +197,9 @@ A reference is a bare id (`"two-column"`) or `name:id` (`"acme:hero"`), where th
 
 ```json
 "catalogs": {
-  "default": { "source": "https://www.pptx.gallery", "layouts": { "two-column": { "name": "Two column", "areas": [["title", "title"], ["left", "right"]], "rows": ["auto", 1], "columns": [1, 1], "regions": { "left": { "accepts": ["text"], "flow": "none" }, "right": { "accepts": ["text"], "flow": "none" } } } } },
+  "default": { "source": "https://www.pptx.gallery", "layouts": { "two-column": { "name": "Two column", "regions": [{ "name": "title" }, { "direction": "row", "regions": [{ "name": "left", "accepts": ["text"], "flow": "none" }, { "name": "right", "accepts": ["text"], "flow": "none" }] }] } } },
   "acme": { "source": "pkg:@acme/opf-catalog", "themes": { "brand": { "name": "Brand", "colorScheme": "ocean", "fontScheme": "inter" } } },
-  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "areas": [["title"], ["chart"]], "rows": ["auto", 1], "regions": { "chart": { "accepts": ["chart"], "flow": "none" } } } } }
+  "custom": { "layouts": { "q4-special": { "name": "Q4 special", "regions": [{ "name": "title" }, { "name": "chart", "accepts": ["chart"], "flow": "none" }] } } }
 }
 ```
 

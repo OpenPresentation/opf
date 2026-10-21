@@ -7,7 +7,7 @@ import type { SchemaName } from './schemas.js';
  * @openpresentation/gallery does); the Node defaults refuse a gallery that targets another one. A record schema change that
  * old records no longer validate against raises it.
  */
-export const CATALOG_SCHEMA = 3;
+export const CATALOG_SCHEMA = 4;
 
 /** Kinds of catalog display metadata: published by catalogs for pickers, never referenced by documents. */
 export const catalogDisplayKinds = ['chartTypes', 'languages', 'socialPlatforms'] as const;

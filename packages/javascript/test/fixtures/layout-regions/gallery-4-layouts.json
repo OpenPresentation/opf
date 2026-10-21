@@ -1,0 +1,1319 @@
+{
+  "agenda": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "agenda",
+    "name": "Agenda",
+    "summary": "What the talk covers: the parts, as one list that flows into columns when long.",
+    "tags": [
+      "Openers and closers"
+    ],
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "items"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "items": {
+        "accepts": [
+          "list",
+          "text"
+        ],
+        "role": "primary",
+        "flow": "column",
+        "listColumns": "auto"
+      }
+    },
+    "description": "Set expectations by listing the parts of a talk. Longer agendas flow across columns while preserving their order.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/agenda.svg"
+    }
+  },
+  "chart-beside": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "chart-beside",
+    "name": "Chart beside",
+    "summary": "A chart with the takeaway beside it.",
+    "tags": [
+      "Visuals"
+    ],
+    "areas": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "chart",
+        "notes"
+      ]
+    ],
+    "columns": [
+      3,
+      2
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "chart": {
+        "accepts": [
+          "chart"
+        ],
+        "role": "primary",
+        "flow": "none"
+      },
+      "notes": {
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "quote",
+          "chart"
+        ],
+        "role": "supporting",
+        "flow": "column"
+      }
+    },
+    "description": "Pair a chart with an explanation of its result. Keep the text focused on the pattern or decision supported by the data.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/chart-beside.svg"
+    }
+  },
+  "chart": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "chart",
+    "name": "Chart",
+    "summary": "One to six charts, with an optional note.",
+    "tags": [
+      "Visuals"
+    ],
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "charts"
+      ],
+      [
+        "note"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1,
+      "auto"
+    ],
+    "regions": {
+      "charts": {
+        "accepts": [
+          "chart",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "grid"
+      },
+      "note": {
+        "accepts": [
+          "text"
+        ],
+        "role": "supporting",
+        "flow": "none"
+      }
+    },
+    "description": "Give a chart enough space to show its evidence. Use the title to state the conclusion and labels to explain the measures.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/chart.svg"
+    }
+  },
+  "closing": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "closing",
+    "name": "Closing",
+    "summary": "The last slide: thanks, the call to action and contact details.",
+    "tags": [
+      "Openers and closers"
+    ],
+    "design": {
+      "titleAlignment": "center",
+      "contentAlignment": "center"
+    },
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "details"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      1,
+      "auto"
+    ],
+    "regions": {
+      "details": {
+        "accepts": [
+          "text",
+          "list",
+          "image"
+        ],
+        "role": "supporting",
+        "flow": "auto"
+      }
+    },
+    "description": "End with the action the audience should take. Include contact details or a brief thank-you when useful.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/closing.svg"
+    }
+  },
+  "code": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "code",
+    "name": "Code",
+    "summary": "Source code with the explanation beside it.",
+    "tags": [
+      "Visuals"
+    ],
+    "areas": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "code",
+        "notes"
+      ]
+    ],
+    "columns": [
+      3,
+      2
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "code": {
+        "accepts": [
+          "code"
+        ],
+        "role": "primary",
+        "flow": "column"
+      },
+      "notes": {
+        "accepts": [
+          "text",
+          "list"
+        ],
+        "role": "supporting",
+        "flow": "column"
+      }
+    },
+    "description": "Show a code example or technical excerpt. Keep the excerpt focused and use the title or caption to explain its purpose.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/code.svg"
+    }
+  },
+  "comparison": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "comparison",
+    "name": "Comparison",
+    "summary": "Two options side by side (before and after, pros and cons, us and them), with an optional verdict.",
+    "tags": [
+      "Groups of items"
+    ],
+    "design": {
+      "contentBox": false
+    },
+    "areas": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "first",
+        "second"
+      ],
+      [
+        "verdict",
+        "verdict"
+      ]
+    ],
+    "columns": [
+      1,
+      1
+    ],
+    "rows": [
+      "auto",
+      1,
+      "auto"
+    ],
+    "regions": {
+      "first": {
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "image",
+          "chart",
+          "table",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "none"
+      },
+      "second": {
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "image",
+          "chart",
+          "table",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "none"
+      },
+      "verdict": {
+        "accepts": [
+          "text"
+        ],
+        "role": "supporting",
+        "flow": "none"
+      }
+    },
+    "description": "Compare alternatives using parallel information. Keep the same criteria and level of detail for every option.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/comparison.svg"
+    }
+  },
+  "cover": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "cover",
+    "name": "Cover",
+    "summary": "The opening slide: title, subtitle and an optional picture.",
+    "tags": [
+      "Openers and closers"
+    ],
+    "design": {
+      "titleAlignment": "center",
+      "contentAlignment": "center"
+    },
+    "areas": [
+      [
+        "title",
+        "media"
+      ]
+    ],
+    "columns": [
+      1,
+      1
+    ],
+    "rows": [
+      1
+    ],
+    "regions": {
+      "media": {
+        "accepts": [
+          "image",
+          "video"
+        ],
+        "role": "media",
+        "flow": "none",
+        "bleed": true
+      }
+    },
+    "description": "Open a presentation with its subject and a short introduction. Add a picture when it helps establish the context.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/cover.svg"
+    }
+  },
+  "dashboard": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "dashboard",
+    "name": "Dashboard",
+    "summary": "Headline numbers over charts.",
+    "tags": [
+      "Mixed"
+    ],
+    "design": {
+      "contentBox": false
+    },
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "kpis"
+      ],
+      [
+        "charts"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      2,
+      3
+    ],
+    "regions": {
+      "kpis": {
+        "accepts": [
+          "metric"
+        ],
+        "role": "secondary",
+        "flow": "grid"
+      },
+      "charts": {
+        "accepts": [
+          "chart",
+          "table"
+        ],
+        "role": "primary",
+        "flow": "grid"
+      }
+    },
+    "description": "Bring several related measures and visuals into one overview. Keep labels and units consistent so the audience can scan the state quickly.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/dashboard.svg"
+    }
+  },
+  "faq": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "faq",
+    "name": "FAQ",
+    "summary": "Questions with their answers.",
+    "tags": [
+      "Groups of items"
+    ],
+    "design": {
+      "contentBox": false
+    },
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "questions"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "questions": {
+        "accepts": [
+          "list",
+          "text",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "column",
+        "listColumns": "auto"
+      }
+    },
+    "description": "Answer the questions an audience is likely to ask. Pair each question with a direct answer and group related questions together.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/faq.svg"
+    }
+  },
+  "gallery": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "gallery",
+    "name": "Gallery",
+    "summary": "One to six framed pictures: a screenshot, a diagram, a photo set.",
+    "tags": [
+      "Visuals"
+    ],
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "pictures"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "pictures": {
+        "accepts": [
+          "image",
+          "video",
+          "group"
+        ],
+        "role": "media",
+        "flow": "grid"
+      }
+    },
+    "description": "Show several related visuals together. Use consistent captions and ordering to make the relationship between them clear.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/gallery.svg"
+    }
+  },
+  "hero": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "hero",
+    "name": "Hero",
+    "summary": "A lead message with a picture and supporting points.",
+    "tags": [
+      "Mixed"
+    ],
+    "areas": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "lead",
+        "media"
+      ],
+      [
+        "support",
+        "support"
+      ]
+    ],
+    "columns": [
+      1,
+      1
+    ],
+    "rows": [
+      "auto",
+      2,
+      1
+    ],
+    "regions": {
+      "lead": {
+        "accepts": [
+          "text",
+          "quote",
+          "metric"
+        ],
+        "role": "primary",
+        "flow": "none"
+      },
+      "media": {
+        "accepts": [
+          "image",
+          "video"
+        ],
+        "role": "media",
+        "flow": "none"
+      },
+      "support": {
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "group"
+        ],
+        "role": "supporting",
+        "flow": "grid"
+      }
+    },
+    "description": "Combine a prominent visual or message with supporting content. Use it when one element should lead the audience into the details.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/hero.svg"
+    }
+  },
+  "image-beside": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "image-beside",
+    "name": "Image beside",
+    "summary": "A picture or video beside text.",
+    "tags": [
+      "Visuals"
+    ],
+    "areas": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "media",
+        "body"
+      ]
+    ],
+    "columns": [
+      1,
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "media": {
+        "accepts": [
+          "image",
+          "video"
+        ],
+        "role": "media",
+        "flow": "none"
+      },
+      "body": {
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "quote",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "auto",
+        "anchor": "middle"
+      }
+    },
+    "description": "Explain a visual alongside its supporting text. Use the text to direct attention to the meaningful parts of the image.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/image-beside.svg"
+    },
+    "design": {
+      "imageFit": "contain"
+    }
+  },
+  "image": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "image",
+    "name": "Image",
+    "summary": "One picture edge to edge under an optional title.",
+    "tags": [
+      "Visuals"
+    ],
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "media"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "media": {
+        "accepts": [
+          "image",
+          "video"
+        ],
+        "role": "media",
+        "flow": "none",
+        "bleed": true
+      }
+    },
+    "description": "Let one image carry the message. Add a short title or caption to explain what the audience should notice.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/image.svg"
+    },
+    "design": {
+      "imageFit": "contain"
+    }
+  },
+  "list": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "list",
+    "name": "List",
+    "summary": "Bulleted or numbered points; one long list flows into columns.",
+    "tags": [
+      "Text"
+    ],
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "body"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "body": {
+        "accepts": [
+          "list",
+          "text",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "auto",
+        "listColumns": "auto"
+      }
+    },
+    "description": "Present several related points in a clear sequence. Use bullets for independent points or numbered items for an ordered list.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/list.svg"
+    }
+  },
+  "logos": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "logos",
+    "name": "Logos",
+    "summary": "Customer, partner or sponsor logos in a grid of up to 12.",
+    "tags": [
+      "Mixed"
+    ],
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "logos"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "logos": {
+        "accepts": [
+          "image",
+          "text",
+          "group"
+        ],
+        "role": "media",
+        "flow": "grid",
+        "max": 12
+      }
+    },
+    "description": "Present organizations, partners or customers as a group. Use a consistent visual scale and add context when the relationship is not obvious.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/logos.svg"
+    },
+    "design": {
+      "imageFit": "contain"
+    }
+  },
+  "metrics": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "metrics",
+    "name": "Metrics",
+    "summary": "One to six headline numbers, with an optional note.",
+    "tags": [
+      "Numbers"
+    ],
+    "design": {
+      "contentAlignment": "center"
+    },
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "metrics"
+      ],
+      [
+        "note"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1,
+      "auto"
+    ],
+    "regions": {
+      "metrics": {
+        "accepts": [
+          "metric",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "grid",
+        "anchor": "middle"
+      },
+      "note": {
+        "accepts": [
+          "text",
+          "list"
+        ],
+        "role": "supporting",
+        "flow": "none"
+      }
+    },
+    "description": "Highlight a small set of important numbers. Give each number a label and the context needed to interpret it.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/metrics.svg"
+    }
+  },
+  "pillars": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "pillars",
+    "name": "Pillars",
+    "summary": "Related ideas arranged in equal columns.",
+    "tags": [
+      "Groups of items"
+    ],
+    "design": {
+      "contentBox": false
+    },
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "pillars"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "pillars": {
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "image",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "grid"
+      }
+    },
+    "description": "Show the main themes or principles behind an idea. Give each item a short heading and a comparable amount of detail.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/pillars.svg"
+    }
+  },
+  "process": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "process",
+    "name": "Process",
+    "summary": "Steps in order, in one row.",
+    "tags": [
+      "Groups of items"
+    ],
+    "design": {
+      "contentBox": false,
+      "contentDirection": "horizontal"
+    },
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "steps"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "steps": {
+        "accepts": [
+          "timeline",
+          "list",
+          "text",
+          "metric",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "grid"
+      }
+    },
+    "description": "Explain an ordered sequence of steps. Give each step a clear action and enough context to understand the transition.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/process.svg"
+    }
+  },
+  "quote": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "quote",
+    "name": "Quote",
+    "summary": "One or more quotations with attribution and photo.",
+    "tags": [
+      "Text"
+    ],
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "quotes"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "quotes": {
+        "accepts": [
+          "quote",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "grid",
+        "anchor": "middle"
+      }
+    },
+    "description": "Highlight a quotation and its source. Use the attribution to explain who said it and why their perspective matters.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/quote.svg"
+    }
+  },
+  "scorecard": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "scorecard",
+    "name": "Scorecard",
+    "summary": "Headline measures with their targets and status.",
+    "tags": [
+      "Numbers"
+    ],
+    "design": {
+      "contentBox": false
+    },
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "cards"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "cards": {
+        "accepts": [
+          "metric",
+          "text",
+          "list",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "grid"
+      }
+    },
+    "description": "Summarize performance across comparable measures. State the criteria consistently so the audience can assess the result.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/scorecard.svg"
+    }
+  },
+  "section": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "section",
+    "name": "Section",
+    "summary": "A divider between parts: the section title and an optional subtitle.",
+    "tags": [
+      "Openers and closers"
+    ],
+    "design": {
+      "titleAlignment": "center",
+      "contentAlignment": "center"
+    },
+    "areas": [
+      [
+        "title"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      1
+    ],
+    "regions": {},
+    "description": "Introduce the next part of a presentation. Use the subtitle to connect the new section to the overall argument.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/section.svg"
+    }
+  },
+  "statement": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "statement",
+    "name": "Statement",
+    "summary": "One message, large and alone.",
+    "tags": [
+      "Openers and closers"
+    ],
+    "design": {
+      "titleAlignment": "center",
+      "contentAlignment": "center"
+    },
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "message"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "message": {
+        "accepts": [
+          "text",
+          "quote",
+          "metric"
+        ],
+        "role": "primary",
+        "flow": "none",
+        "anchor": "middle"
+      }
+    },
+    "description": "Give one important assertion room to stand alone. Keep supporting detail on a following slide.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/statement.svg"
+    }
+  },
+  "table-beside": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "table-beside",
+    "name": "Table beside",
+    "summary": "A table with commentary beside it.",
+    "tags": [
+      "Visuals"
+    ],
+    "areas": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "table",
+        "notes"
+      ]
+    ],
+    "columns": [
+      3,
+      2
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "table": {
+        "accepts": [
+          "table"
+        ],
+        "role": "primary",
+        "flow": "none"
+      },
+      "notes": {
+        "accepts": [
+          "text",
+          "list",
+          "metric",
+          "quote"
+        ],
+        "role": "supporting",
+        "flow": "column"
+      }
+    },
+    "description": "Place a table beside its interpretation. Use the supporting text to explain the conclusion without repeating every cell.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/table-beside.svg"
+    }
+  },
+  "table": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "table",
+    "name": "Table",
+    "summary": "A table across the slide, with an optional note.",
+    "tags": [
+      "Visuals"
+    ],
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "table"
+      ],
+      [
+        "note"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1,
+      "auto"
+    ],
+    "regions": {
+      "table": {
+        "accepts": [
+          "table"
+        ],
+        "role": "primary",
+        "flow": "column"
+      },
+      "note": {
+        "accepts": [
+          "text"
+        ],
+        "role": "supporting",
+        "flow": "none"
+      }
+    },
+    "description": "Present structured data that benefits from precise comparison. Use clear row and column headings and concise cell content.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/table.svg"
+    }
+  },
+  "team": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "team",
+    "name": "Team",
+    "summary": "People: photo, name and role cards.",
+    "tags": [
+      "Mixed"
+    ],
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "people"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "people": {
+        "accepts": [
+          "group",
+          "image",
+          "text",
+          "quote"
+        ],
+        "role": "primary",
+        "flow": "grid"
+      }
+    },
+    "description": "Introduce people and their roles. Use consistent names, descriptions and portraits when available.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/team.svg"
+    }
+  },
+  "text": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "text",
+    "name": "Text",
+    "summary": "Prose. Several blocks sit side by side when short and stack when long.",
+    "tags": [
+      "Text"
+    ],
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "body"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "body": {
+        "accepts": [
+          "text",
+          "list",
+          "quote",
+          "code",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "auto"
+      }
+    },
+    "description": "Explain one idea in continuous prose. Use paragraphs or flowing blocks for detail that needs to be read in sequence.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/text.svg"
+    }
+  },
+  "timeline": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "timeline",
+    "name": "Timeline",
+    "summary": "Dated events or a roadmap along one axis, with optional notes.",
+    "tags": [
+      "Groups of items"
+    ],
+    "areas": [
+      [
+        "title"
+      ],
+      [
+        "timeline"
+      ],
+      [
+        "notes"
+      ]
+    ],
+    "columns": [
+      1
+    ],
+    "rows": [
+      "auto",
+      1,
+      "auto"
+    ],
+    "regions": {
+      "timeline": {
+        "accepts": [
+          "timeline"
+        ],
+        "role": "primary",
+        "flow": "none"
+      },
+      "notes": {
+        "accepts": [
+          "text",
+          "list",
+          "metric"
+        ],
+        "role": "supporting",
+        "flow": "auto"
+      }
+    },
+    "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+    }
+  },
+  "two-column": {
+    "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+    "id": "two-column",
+    "name": "Two columns",
+    "summary": "Two independent columns of any content.",
+    "tags": [
+      "Text"
+    ],
+    "areas": [
+      [
+        "title",
+        "title"
+      ],
+      [
+        "first",
+        "second"
+      ]
+    ],
+    "columns": [
+      1,
+      1
+    ],
+    "rows": [
+      "auto",
+      1
+    ],
+    "regions": {
+      "first": {
+        "accepts": [
+          "text",
+          "list",
+          "quote",
+          "code",
+          "image",
+          "video",
+          "chart",
+          "table",
+          "metric",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "none"
+      },
+      "second": {
+        "accepts": [
+          "text",
+          "list",
+          "quote",
+          "code",
+          "image",
+          "video",
+          "chart",
+          "table",
+          "metric",
+          "group"
+        ],
+        "role": "primary",
+        "flow": "none"
+      }
+    },
+    "description": "Place two bodies of content beside each other. Use it for paired explanations or an argument with supporting evidence.",
+    "preview": {
+      "vectorSrc": "https://www.pptx.gallery/layout-previews/two-column.svg"
+    }
+  }
+}
