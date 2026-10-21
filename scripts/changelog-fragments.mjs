@@ -82,6 +82,20 @@ export function selectFragments(fragments, pkg, config) {
   return fragments.filter((f) => f.packages.includes(pkg) || (f.packages.length === 0 && pkg === config.default));
 }
 
+// MR-13: a fragment may name a package only when that package's changelog is in the repository, so a fragment for a
+// package that has not been imported yet fails `check` instead of failing the release-prep assemble. Fragments naming
+// no package go to the default target.
+export function missingChangelogs(root, fragments, config) {
+  const missing = [];
+  for (const fragment of fragments) {
+    for (const pkg of fragment.packages.length ? fragment.packages : [config.default]) {
+      const target = config.targets[pkg];
+      if (target !== undefined && !existsSync(path.join(root, target))) missing.push(`changes/${path.basename(fragment.file)}: package "${pkg}" has no changelog at ${target}`);
+    }
+  }
+  return missing;
+}
+
 export function orderFragments(fragments) {
   const rank = (f) => TYPES.indexOf(f.type);
   return [...fragments].sort((a, b) => rank(a) - rank(b) || (a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0));
@@ -199,6 +213,8 @@ function main(argv) {
   const config = loadConfig(root);
   if (command === 'check') {
     const fragments = readFragments(root, config);
+    const missing = missingChangelogs(root, fragments, config);
+    if (missing.length) throw new Error(missing.join('\n'));
     console.log(`changes/: ${fragments.length} fragment(s) valid`);
     return 0;
   }
