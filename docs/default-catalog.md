@@ -1,12 +1,13 @@
 # Catalogs and the gallery package
 
 OPF 0.15 keeps catalogs out of the engine. A document embeds every record it uses, hosts register the catalogs they
-trust, and core ships no records. pptx.gallery publishes the **default catalog**; its pinned snapshot is the npm
-package **`@openpresentation/gallery`** ([source](https://github.com/OpenPresentation/gallery), RR-78), released on its own version line. Core and the CLI
+trust, and core ships no records. The **default catalog** is the npm package **`@openpresentation/gallery`**, authored and
+released from [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery) (RR-78) on its own version line;
+pptx.gallery presents it and consumes the published package. Core and the CLI
 depend on it and register it in Node; core has no `/catalog` subpath (removed in 0.19, with no alias).
 
 This page is the contract: the document shape, the one resolution rule, how hosts register catalogs, the authoring
-helpers, the diagnostics, and how the gallery package stays tied to pptx.gallery. The design behind it is
+helpers, the diagnostics, and who authors and releases the gallery package. The design behind it is
 [0.15-design.md](programs/format-audit/0.15-design.md).
 
 ## Catalogs in a document
@@ -107,7 +108,7 @@ resolving again.
 | `CATALOG_SCHEMA` | The version of core's catalog record schemas the records target (also `opf.catalogSchema` in its `package.json`) |
 | `catalogDisplay` | Display metadata for pickers: `chartTypes`, `languages` and `socialPlatforms` by id |
 | `catalogIndexes` | Each kind's `index.json` |
-| `catalogManifest` | The pptx.gallery commit the records were synced from, and a content hash per kind |
+| `catalogManifest` | A content hash per kind, and the pptx.gallery commit of the one-time 1.x snapshot (never re-synced: records have been authored in the gallery package since 2.0.0) |
 
 `@openpresentation/gallery/previews` exports the static HTML layout previews: `layoutPreviews`, `layoutPreviewIndex`,
 `layoutPreviewSlugs`, `getLayoutPreview` and `hasLayoutPreview`.
@@ -179,9 +180,12 @@ the gallery's `minimal`, `cool-horizon` and `aptos` records, compiled into code.
 
 ## Ownership
 
-- **pptx.gallery owns every catalog record** and publishes it; each id has one owner. Its display metadata lives under
-  `x-*` members.
-- **The gallery repository owns the pinned snapshot.** Its manifest records the pptx.gallery commit and a content hash per kind. Core materializes ignored validation fixtures from the installed package during `pnpm install`.
+- **The gallery package owns every catalog record.** Since gallery 2.0.0 records, layouts and theme variants are authored
+  by pull requests in [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery); each id has one owner. Its
+  display metadata lives under `x-*` members. pptx.gallery (the site) consumes the published package, adds its own
+  presentation overlay and does not write records.
+- **The gallery repository owns the snapshot and the release.** Its manifest holds a content hash per kind and the commit of the one-time 1.x snapshot from pptx.gallery. Core materializes ignored validation fixtures from the installed package during `pnpm install`.
+- **The move.** The monorepo program ([plan](programs/monorepo/README.md), D13) relocates the package to `packages/gallery` in this repository: records are then authored by pull requests here, the materializer goes, and the package takes the shared version line.
 - **A catalog release never needs a core release.** Hosts register the catalog version they choose; documents carry
   the records they were saved with.
 
@@ -190,7 +194,9 @@ the gallery's `minimal`, `cool-horizon` and `aptos` records, compiled into code.
 RR-78: the same records are published as the npm package
 [`@openpresentation/gallery`](https://www.npmjs.com/package/@openpresentation/gallery) from its own repository,
 [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery), on its own version line (`vX.Y.Z` tags,
-`gallery-publish.yml` there):
+`gallery-publish.yml` there). A record change is an ordinary pull request there (`catalog/<kind>/<id>.json` plus its
+index entry, then `npm run rehash` and `npm run previews`, checked by the "Verify the gallery" CI); the version and
+changelog are set in the pull request and a pushed tag publishes it:
 
 ```js
 import { gallery } from '@openpresentation/gallery';
@@ -296,13 +302,13 @@ Before 0.19, Core stored the snapshot at `spec/catalogs/manifest.json` (schema `
 
 That historical snapshot used `mirror` for every kind and held every record the gallery published (278 layouts at that checkpoint). The current independent Gallery package owns the snapshot and the 28 v2 layout templates; Core consumes the package and materializes ignored validation fixtures. No browser entry of Core imports catalog records (`pnpm check:catalog-free`).
 
-The snapshot never loses an id by accident: the sync refuses a publisher that stopped serving a held id. The one waiver
-is explicit and per id: `--allow-removed <kind>:<id>[,<id>...]` (repeatable) drops exactly those ids and deletes their
-files.
+The 1.x design synchronized the snapshot from pptx.gallery and refused a publisher that stopped serving a held id
+(waived per id with `--allow-removed`). That sync was retired with gallery 2.0.0; a record is now removed by a pull
+request that deletes it and its index entry, and the gallery's stability check requires a major release for it.
 
 ### Updating it
 
-Edit records in pptx.gallery, then synchronize and release them through [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery). This repository consumes that release through its `@openpresentation/gallery` dependency. `pnpm install` writes ignored files under `packages/gallery/` from the installed package; `pnpm check:spec` and `pnpm check:catalog` verify their indexes, manifest and records. Core's browser entries remain catalog-free (`pnpm check:catalog-free`).
+Edit records by pull request in [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery) and release them with its `gallery-publish.yml` (a `vX.Y.Z` tag). This repository consumes that release through its `@openpresentation/gallery` dependency, adopted by a reviewed range and lockfile edit ("adopt gallery X"). `pnpm install` writes ignored files under `packages/gallery/` from the installed package, so do not edit them by hand; `pnpm check:spec` and `pnpm check:catalog` verify their indexes, manifest and records. Core's browser entries remain catalog-free (`pnpm check:catalog-free`). When the monorepo move lands, `packages/gallery` is the tracked package, the materializer is deleted and records change by pull request in this repository.
 
 ## Reconciliation status
 
