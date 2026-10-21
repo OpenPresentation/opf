@@ -2,7 +2,24 @@
   "default": "opf",
   "targets": {
     "opf": "CHANGELOG.md",
-    "cli": "packages/cli/CHANGELOG.md"
+    "cli": "packages/cli/CHANGELOG.md",
+    "render": "packages/render/CHANGELOG.md",
+    "pptx": "packages/pptx/CHANGELOG.md",
+    "editor": "packages/editor/CHANGELOG.md",
+    "gallery": "packages/gallery/CHANGELOG.md"
   },
-  "codePaths": ["packages/javascript/src/", "packages/cli/src/", "spec/schemas/", "spec/catalogs/"]
+  "codePaths": [
+    "packages/javascript/src/",
+    "packages/cli/src/",
+    "packages/render/src/",
+    "packages/render/fonts/",
+    "packages/pptx/src/",
+    "packages/pptx/vendor/",
+    "packages/editor/src/",
+    "packages/gallery/catalog/",
+    "packages/gallery/previews/",
+    "packages/gallery/src/",
+    "spec/schemas/",
+    "spec/catalogs/"
+  ]
 }

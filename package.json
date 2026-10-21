@@ -18,7 +18,7 @@
     "check:registry-layout-v2": "node --test scripts/registry-layout-v2.test.mjs",
     "check:registry-toolchain": "node --test scripts/registry-toolchain.test.mjs",
     "check:parity-wrappers": "node --test scripts/parity-wrappers.test.mjs",
-    "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+    "check:changes": "node --test scripts/changelog-fragments.test.mjs scripts/changes-config.test.mjs && node scripts/changelog-fragments.mjs check",
     "check:publish-source": "node --test scripts/publish-source.test.mjs",
     "check:ci-evidence": "node --test scripts/ci-evidence.test.mjs",
     "check:release-prep": "node --test scripts/release-prep.test.mjs scripts/candidate-gallery-results.test.mjs",
