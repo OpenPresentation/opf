@@ -5,8 +5,8 @@ is the honest supported subset for [the developer quickstart](quickstart.md).
 It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
-**Published set (2026-10-20):** core 0.24.2, renderer 0.24.3, PPTX 0.24.1,
-editor 0.24.2, CLI 0.24.1 and Gallery 4.0.0. `release-plan.json` records each
+**Published set (2026-10-21):** core 0.24.2, renderer 0.24.3, PPTX 0.24.1,
+editor 0.24.3, CLI 0.24.1 and Gallery 4.0.0. `release-plan.json` records each
 version with the registry `gitHead` of its publisher commit.
 Earlier matrices and native observations retain their historical identities.
 Complete native compatibility remains a separate gate.
@@ -37,7 +37,7 @@ imply universal Office or full-catalog visual parity.
 | CLI | 0.24.1 | Core ^0.24.2, Gallery ^4.0.0; optional renderer/PPTX ^0.24.0 |
 | Renderer | 0.24.3 | Core ^0.24.2; optional pinned font/converter peers |
 | PPTX | 0.24.1 | Core ^0.24.0, Gallery ^4.0.0; optional renderer ^0.24.1 |
-| Editor | 0.24.2 | Core ^0.24.2; optional renderer ^0.24.3 |
+| Editor | 0.24.3 | Core ^0.24.2; optional renderer ^0.24.3 |
 | Gallery | 4.0.0 | Independent owner of every default catalog record; 28 intent layouts |
 
 ## Runtime
@@ -208,7 +208,7 @@ acceptance remain open; no new package train or broad native pass is inferred.
 | --- | --- | --- |
 | `@openpresentation/gallery` | 4.0.0 (independently published and verified 2026-10-19; prior 3.0.0, 2.0.0 and 1.0.0 remain historical) | nothing (its `GalleryCatalog` type has the shape of `@openpresentation/opf`'s `Catalog`) |
 
-Gallery 4.0.0 (published and independently verified 2026-10-19) adds theme `variants` and removes the `dark` theme; this checkout and the published set above depend on `^4.0.0`. It still declares catalog compatibility generation 3.
+Gallery 4.0.0 (published and independently verified 2026-10-19) adds theme `variants` and removes the `dark` theme; the published set above depends on `^4.0.0`. It declares catalog compatibility generation 3. Gallery 5.0.0 (published and independently verified; layouts as one list of regions, catalog generation 4) is the range this checkout depends on (`^5.0.0`); the published 0.24 set cannot read it, so the published set stays on Gallery 4.0.0 until the 0.25.0 train.
 
 The gallery (RR-78) is released from its own repository, OpenPresentation/gallery, on its own version line (`vX.Y.Z`
 tags, `gallery-publish.yml` there), outside the lockstep set above and

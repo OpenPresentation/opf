@@ -188,18 +188,21 @@ train: `release-train.mjs` has it in `INDEPENDENT_PACKAGES` (repository `gallery
   published by hand. Against 0.0.1 the stability check runs as a major release and reports no changed record.
 
 From OPF 0.19, core and the CLI consume the independently published Gallery package: their Node defaults register
-`gallery`, and core has no `/catalog` subpath. OPF 0.19 used Gallery 2; OPF 0.20 uses Gallery 3; this checkout depends on Gallery `^4.0.0` (RR-96: theme `variants`, no `dark` theme).
+`gallery`, and core has no `/catalog` subpath. OPF 0.19 used Gallery 2; OPF 0.20 uses Gallery 3; this checkout depends on Gallery `^5.0.0` (FA-33: layouts as one list of regions, `CATALOG_SCHEMA` 4; Gallery 4 added theme `variants` and removed the `dark` theme, RR-96), while the published 0.24 set (and `release-plan.json`) still depends on Gallery `^4.0.0`.
 The current ranges and exact verified set are in the package manifests and [release-plan.json](../release-plan.json).
 A core or CLI release needs a Gallery version its range accepts on npm first. A reviewed registry-adoption PR
 updates those ranges and the authentic lockfile after independent publication verification. Stable release
 preparation follows that adoption; it does not perform the source configuration transition.
 
 FA-33 (layouts as one list of regions) is such a major: core's catalog contract (`CATALOG_SCHEMA`) is 4 and Gallery 5.0.0 targets it, so
-core's `^4.0.0` range cannot ship it. Until Gallery 5.0.0 is published, `packages/javascript/package.json` declares
-`opf.requiresUnreleasedGallery: "5.0.0"`, `.github/candidate-gallery.json` (configuration version 3) names the reviewed
-gallery SHA, and the core pull request body carries `Candidate-Gallery: OpenPresentation/gallery@<sha>`. After Gallery 5.0.0 is
-published and verified, the registry-adoption pull request moves the Gallery ranges to `^5.0.0` with the lockfile and deletes
-both the declaration and the configuration file.
+core's `^4.0.0` range could not ship it. While Gallery 5.0.0 was unpublished, `packages/javascript/package.json` declared
+`opf.requiresUnreleasedGallery: "5.0.0"`, `.github/candidate-gallery.json` (configuration version 3) named the reviewed
+gallery SHA, and the core pull request body carried `Candidate-Gallery: OpenPresentation/gallery@<sha>`. Gallery 5.0.0 is published and
+verified (tag `v5.0.0`, gitHead `eff55fdd9ce712813ef798dd9f2b50a37abada53`), and the registry-adoption pull request (FA-33: adopt gallery 5.0.0)
+moved the ranges in the root, core and CLI manifests to `^5.0.0` with the lockfile and deleted both the declaration and the configuration
+file. `release-plan.json` keeps describing the published set (core 0.24.2 and the Gallery 4.0.0 it depends on) until the 0.25.0 train publishes
+core and the CLI on Gallery 5; then the plan, the published consumer lock and the docs move to the new set, and
+`scripts/test-font-switch-ecosystem.mjs` drops its read of the old grid layout shape.
 
 Before registry adoption, explicit authenticated candidate CI can stage reviewed gallery and engine tarballs
 (`scripts/candidate-gallery-build.mjs`, `scripts/pack-cli-candidate.mjs`, `scripts/pack-ecosystem.mjs`). Its recorded

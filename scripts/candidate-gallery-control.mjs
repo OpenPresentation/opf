@@ -23,7 +23,9 @@ export const PUBLISHED_0242_SOURCE='e6ade17b4fcaf70bc716654d39102a54db015965';
 export const PUBLISHED_0242_TOOLING=Object.freeze([{path:'scripts/test-installed-code.mjs',sourceSha:'8d2f43a9dfb9399be1cd0c66d5373890cc3367c1',originalSha256:'dd713c98b49fe14dca40722424f404d25bb44d2c3e83bcd4d5f80aff1fcfe1b3',reviewedSha256:'6808fd530ec4f9400de53a67e26ecc1024727d54a3eac8b1260134c91537e949'},{path:'scripts/published-matrix/consumer-dependencies.mjs',sourceSha:'8d2f43a9dfb9399be1cd0c66d5373890cc3367c1',originalSha256:'54a93b20d295baaa21163cd14fdd0697cad8ea4ab3653d0159dbea8a6cb8693d',reviewedSha256:'d4c74df425525f48b9dd04e88bb049cbcf521af2c72f6f1ace9d1da49b13a79f'},{path:'scripts/published-matrix/consumer-dependencies.test.mjs',sourceSha:'8d2f43a9dfb9399be1cd0c66d5373890cc3367c1',originalSha256:'60cbdccf6b6e50eab72b74e9f941f6d4965a7b4e045b19236e78584eb5c0b107',reviewedSha256:'4689b8b7efaf168c30d213de6894d0afbd788719c8d744443cb724c6f9ab48e0'},{path:'scripts/published-matrix/browser-fixture.test.mjs',sourceSha:'8d2f43a9dfb9399be1cd0c66d5373890cc3367c1',originalSha256:'f5f8cefcb56cc39f835ce9a5ceba5fb866c139c300f80ec30319a7e7f54a3c62',reviewedSha256:'eed5c2e6cc2361a5f72863a02de64bf51052ffc254cc9cc88cd6e8235ada417d'}]);
 function published0242Plan(plan){
  const versions=Object.fromEntries((plan.packages??[]).map(item=>[item.name,item.version]));
- return versions['@openpresentation/opf']==='0.24.2'&&versions['@openpresentation/opf-editor']==='0.24.2';
+ // The published 0.24 core is 0.24.2; the registry `latest` editor is 0.24.2 or 0.24.3 (plan rolled in #769 and FA-33 adoption). Both are built by the
+ // same release scripts, so the one reviewed bridge covers each; any other editor is an unknown graph.
+ return versions['@openpresentation/opf']==='0.24.2'&&['0.24.2','0.24.3'].includes(versions['@openpresentation/opf-editor']);
 }
 function published019Plan(plan){
  const renderer=plan.packages?.find(item=>item.name==='@openpresentation/opf-render')?.version;
