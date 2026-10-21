@@ -1221,9 +1221,15 @@
   object-fit: contain;
 }
 
-.opf-layout-diagram {
-  display: grid;
+.opf-layout-diagram,
+.opf-layout-split {
+  display: flex;
   gap: 3px;
+  min-width: 0;
+  min-height: 0;
+}
+
+.opf-layout-diagram {
   aspect-ratio: 16 / 9;
 }
 
@@ -1231,6 +1237,7 @@
   display: grid;
   place-items: center;
   min-width: 0;
+  padding: 2px 4px;
   overflow: hidden;
   font: 11px var(--opf-ui-mono);
   color: var(--opf-ui-accent-strong);
@@ -1255,50 +1262,67 @@
 
 .opf-grid-dimensions {
   display: grid;
-  grid-template-columns: 90px 90px 1fr;
+  grid-template-columns: minmax(0, 220px);
   gap: 10px;
 }
 
-.opf-custom-layout-grid {
-  display: grid;
-  gap: 2px;
+.opf-grid-structure {
   padding: 8px;
   background: var(--opf-ui-muted);
   border-radius: var(--opf-ui-radius);
 }
 
-.opf-grid-cell {
-  min-width: 38px;
-  min-height: 38px;
-  padding: 2px;
-  font: 11px var(--opf-ui-mono);
-  color: var(--opf-ui-fg);
-  background: var(--opf-ui-surface);
-  border: 1px solid var(--opf-ui-border-strong);
-  border-radius: var(--opf-ui-radius-sm);
-  cursor: crosshair;
-}
-
-.opf-grid-cell[data-area="title"] {
-  color: var(--opf-ui-accent-strong);
-  background: color-mix(in srgb, var(--opf-ui-accent) 12%, var(--opf-ui-surface));
-}
-
-.opf-grid-cell[data-area="."] {
-  color: var(--opf-ui-muted-fg);
-  background: var(--opf-ui-muted-2);
+.opf-grid-structure .opf-layout-diagram {
+  max-width: 360px;
+  margin: 0 auto;
 }
 
 .opf-grid-regions {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 8px;
 }
 
-.opf-grid-region {
+.opf-grid-list-wrap {
+  display: grid;
+  gap: 6px;
+  justify-items: start;
+}
+
+.opf-grid-list {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.opf-grid-region,
+.opf-grid-split {
+  display: grid;
+  gap: 6px;
   min-width: 0;
+  margin: 0;
   border: 1px solid var(--opf-ui-border);
   border-radius: var(--opf-ui-radius);
+}
+
+.opf-grid-split {
+  border-style: dashed;
+  border-color: var(--opf-ui-border-strong);
+}
+
+.opf-grid-controls,
+.opf-grid-rules {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+}
+
+.opf-grid-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .opf-grid-kinds {

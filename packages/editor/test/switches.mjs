@@ -169,7 +169,7 @@ assert.deepEqual(summary, ALL_DIMENSIONS);
   while (editor.canUndo) editor.undo();
   assert.deepEqual(editor.presentation, baseDeck());
   // A gallery-only layout arrives with its own record.
-  const layout = { id: "gallery-hero", name: "Gallery hero", areas: [["title"], ["body"]], regions: {body: {accepts: ["text"], flow: "auto"}} };
+  const layout = { id: "gallery-hero", name: "Gallery hero", direction: "column", regions: [{ name: "title" }, { name: "body", accepts: ["text"], flow: "auto" }] };
   const hero = switchDimension(editor, "layouts", "gallery-hero", { slideIndex: 0, record: layout });
   assert.equal(hero.patches[0].path, "/catalogs");
   assert.equal(editor.get("slides.0.layout"), "gallery-hero");

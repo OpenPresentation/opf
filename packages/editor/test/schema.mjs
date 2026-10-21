@@ -16,7 +16,7 @@ for(const type of ['theme','solid','gradient','image','pattern']){
  assert.equal(validate({slides:[{title:'Background'}],design:{background:value}}, { only: ["format"] }).valid,true,JSON.stringify(value));
 }
 // An embedded record (catalogs.<group>.<kind>.<id>) is described by its catalog record schema.
-assert.ok(schemaAtPath(deck,'/catalogs/custom/layouts/mine').properties.areas,'an embedded layout record');
+assert.ok(schemaAtPath(deck,'/catalogs/custom/layouts/mine').properties.regions,'an embedded layout record');
 assert.ok(schemaAtPath(deck,'/catalogs/acme/themes/brand').properties.colorScheme,'an embedded theme record');
 const fields=listSchemaFields();assert.ok(fields.length>600);
 for(const [name,schema]of Object.entries(schemas))for(const key of Object.keys(schema.properties??{}))assert.ok(fields.some(f=>f.schema===name&&f.path===`/properties/${key.replace(/~/g,'~0').replace(/\//g,'~1')}`));

@@ -62,7 +62,7 @@ jobs:
   published-control:
     needs: candidate-selection
     if: needs.candidate-selection.outputs.candidate_gallery != ''
-    uses: OpenPresentation/opf/.github/workflows/published-gallery-control.yml@9750c1005ef42296e4ed3cf9b36887d53a21a228
+    uses: OpenPresentation/opf/.github/workflows/published-gallery-control.yml@8d2f43a9dfb9399be1cd0c66d5373890cc3367c1
     with:
       mode: ecosystem
       tools-ref: ${{ needs.candidate-selection.outputs.opf }}

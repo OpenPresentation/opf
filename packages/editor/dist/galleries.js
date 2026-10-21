@@ -184,9 +184,9 @@ function attachDefinition(presentation, descriptor, gallerySource) {
   groups[group][kind] ??= {};
   let record;
   if (kind === "layouts") {
-    if (!Array.isArray(source.areas)) return;
+    if (!Array.isArray(source.regions)) return;
     record = {name: source.label ?? source.name ?? id};
-    for (const key of ['summary', 'description', 'areas', 'columns', 'rows', 'regions', 'overflowRegion', 'design', 'composition', 'tags', 'preview'])
+    for (const key of ['summary', 'description', 'direction', 'anchor', 'regions', 'overflowRegion', 'design', 'composition', 'tags', 'preview'])
       if (source[key] !== undefined) record[key] = structuredClone(source[key]);
   } else if (kind === "fontSchemes") record = fontSchemeRecord(source, id);
   else record = embeddedRecord(source);

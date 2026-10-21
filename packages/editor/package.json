@@ -310,6 +310,9 @@
     "test:export-menu-browser": "node test/export-menu-browser.mjs",
     "test:agent-handoff-browser": "node test/agent-handoff-browser.mjs"
   },
+  "opf": {
+    "requiresUnreleasedCore": "0.25.0"
+  },
   "dependencies": {
     "@codemirror/autocomplete": "6.20.3",
     "@codemirror/commands": "6.11.1",

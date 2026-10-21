@@ -31,16 +31,38 @@ try {
   await grid.getByLabel("Layout ID").fill("review-grid");
   await grid.getByLabel("Name", { exact: true }).fill("Review grid");
   await grid.getByLabel("Summary").fill("Recommendation with notes");
-  await grid.getByLabel("Paint area").fill("notes");
-  await grid.locator(".opf-grid-cell").nth(5).focus();
-  await grid.locator(".opf-grid-cell").nth(5).press("Space");
-  assert.equal(await grid.locator(".opf-grid-cell").nth(5).evaluate((cell) => cell === document.activeElement), true, "keyboard painting retains cell focus");
-  await grid.locator(".opf-grid-cell").nth(8).click();
+  const regionGroup = (label) => grid.getByRole("group", { name: label, exact: true });
+  assert.deepEqual(await grid.locator(".opf-grid-region legend").allTextContents(), ["title", "content"], "regions are listed in reading order");
+  assert.equal(await regionGroup("title").getByLabel("Role").count(), 0, "a heading region takes only a size");
+  // Split the content region: a row split holds it and a new region, and focus moves to the new region's name.
+  await grid.getByRole("button", { name: "Split content" }).click();
+  assert.equal(await grid.locator(".opf-grid-split").count(), 1);
+  assert.equal(await grid.locator("[data-control='name']").evaluateAll((nodes) => nodes.some((node) => node === document.activeElement)), true, "splitting a region focuses the new region");
+  await page.keyboard.press("ControlOrMeta+A");
+  await page.keyboard.type("notes");
+  assert.ok(await grid.locator(".opf-layout-diagram span[data-region='notes']").count() === 1, "the structure preview follows the region name");
+  await regionGroup("content").getByLabel("Size").fill("2");
+  await grid.getByRole("button", { name: "Move notes up" }).click();
+  assert.deepEqual(await grid.locator(".opf-grid-region legend").allTextContents(), ["title", "notes", "content"], "move up reorders the reading order");
+  await grid.getByRole("button", { name: "Move notes down" }).click();
+  await grid.getByRole("button", { name: /Add a region to this row/ }).click();
+  assert.equal(await grid.locator(".opf-grid-region").count(), 4);
+  await grid.getByRole("button", { name: "Remove region-1" }).click();
+  assert.deepEqual(await grid.locator(".opf-grid-region legend").allTextContents(), ["title", "content", "notes"]);
   await grid.getByRole("button", { name: "Save layout" }).click();
   await page.waitForFunction(() => !document.querySelector("dialog.opf-grid-dialog"));
   const readDoc = async () => JSON.parse(await page.locator("#json").inputValue());
   let document = await readDoc();
-  assert.deepEqual(document.catalogs.custom.layouts["review-grid"].areas, [["title", "title", "title"], ["content", "content", "notes"], ["content", "content", "notes"]]);
+  assert.deepEqual(document.catalogs.custom.layouts["review-grid"], {
+    name: "Review grid", summary: "Recommendation with notes", direction: "column",
+    regions: [
+      { name: "title" },
+      { direction: "row", regions: [
+        { name: "content", size: 2, accepts: ["text"], role: "primary", flow: "auto" },
+        { name: "notes", accepts: ["text"], role: "primary", flow: "auto" },
+      ] },
+    ],
+  });
   await page.locator("#choose-layout").click();
   const picker = page.locator("dialog.opf-layout-dialog[open]");
   await picker.getByPlaceholder("Filter layouts").fill("review-grid");
@@ -89,7 +111,7 @@ try {
     await empty.press("Escape");
   }
   assert.deepEqual(errors, []);
-  console.log("0.19 layout browser: custom grid, grouped picker, live preview, region placement and undo passed");
+  console.log("layout browser: region-list editor, grouped picker, live preview, region placement and undo passed");
 } finally {
   await browser?.close();
   await new Promise((resolve) => server.close(resolve));

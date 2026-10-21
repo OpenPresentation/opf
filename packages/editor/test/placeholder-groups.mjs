@@ -18,7 +18,7 @@ for(const [index,slide] of deck.slides.entries()) {
  assert.equal(core.slots,undefined);
 }
 assert.equal(leaves,33);
-const record={name:'Explicit regions',areas:[['title', 'title'], ['body', 'visual']],regions:{body:{accepts:['text'],flow:'auto'},visual:{accepts:['chart'],flow:'none'}}};
+const record={name:'Explicit regions',direction:'column',regions:[{name:'title'},{direction:'row',regions:[{name:'body',accepts:['text'],flow:'auto'},{name:'visual',accepts:['chart'],flow:'none'}]}]};
 assert.match(layoutRegionSummary(record),/body/);
 assert.equal(layoutRegionSummary({}), '');
 const original={catalogs:{custom:{layouts:{'explicit-regions':record}}},slides:[{title:'Only title',notes:'Metadata',blocks:[{text:'Preserve this'}]}]};

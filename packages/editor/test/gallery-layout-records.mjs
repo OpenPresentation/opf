@@ -14,7 +14,7 @@ const apply = (source) =>
     },
   });
 
-const source={id:'photo-pair',name:'Photo pair',areas:[['title', 'title'], ['first', 'second'], ['note', 'note']],columns:[1,1],rows:['auto',1,'auto'],regions:{first:{accepts:['image'],flow:'none'},second:{accepts:['image'],flow:'none'},note:{accepts:['text'],flow:'auto'}},design:{imageFit:'contain'}};
+const source={id:'photo-pair',name:'Photo pair',direction:'column',regions:[{name:'title'},{direction:'row',regions:[{name:'first',accepts:['image'],flow:'none'},{name:'second',accepts:['image'],flow:'none'}]},{name:'note',size:'auto',accepts:['text'],flow:'auto'}],design:{imageFit:'contain'}};
 const document=await apply(source);
 const record=document.catalogs.custom.layouts['photo-pair'];
 const {id,...expected}=source;

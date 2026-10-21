@@ -73,7 +73,7 @@ try{
   checks.push('Dispatched clipboard event preserves observed mixed endings through undo/redo (OS clipboard not claimed)');
 
   const deck='{\r\n  "slides": [{"layout":"text","title":"Keep title","text":"Keep  text"}]\n}';
-  await page.evaluate(code=>mount(code,{'partner-detail':{name:'Partner detail',areas:[['title'], ['body']],regions:{body:{accepts:['text'],flow:'auto'}}}}),deck);
+  await page.evaluate(code=>mount(code,{'partner-detail':{name:'Partner detail',direction:'column',regions:[{name:'title'},{name:'body',accepts:['text'],flow:'auto'}]}}),deck);
   await at('"layout"',1);await source.press('Control+Space');const menu=page.getByRole('dialog',{name:'layout options',exact:true});await menu.waitFor();
   assert.ok((await menu.getByRole('group',{name:'Current layout',exact:true}).innerText()).includes('Text'));
   assert.equal(await menu.getByRole('option').count(),layoutCount);

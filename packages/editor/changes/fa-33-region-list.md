@@ -1,0 +1,4 @@
+---
+type: changed
+---
+FA-33 (needs core with FA-33): layouts are one `direction` plus an ordered, nestable `regions` list instead of the `areas` grid with `columns`, `rows` and a `regions` map. The custom layout editor (`openCustomLayoutEditor`) now edits that list instead of painting a grid: regions in reading order, each with its name, size and rules (accepted kinds, role, flow), move up and down, remove, a Split button that nests regions the other way for two dimensions, a direction choice, and a live structure preview. `layoutFromGrid` is replaced by `layoutFromRegions` (a `direction`, an optional inherited `anchor`, and the region and split entries, all checked). The layout picker draws a nested diagram of the record's regions and splits, `layoutRegionSummary` recognizes a template by its region list, and a gallery layout item is imported in the new form. Slide rendering and PPTX export do not change.

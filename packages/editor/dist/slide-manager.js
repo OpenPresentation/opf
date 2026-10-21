@@ -9,6 +9,7 @@ import {
 import { listSwitchOptions } from "./switches.js";
 import { layoutRegionSummary } from "./layout-templates.js";
 import { groupLayoutChoices } from "./layout-templates.js";
+import { buildLayoutDiagram } from "./layout-diagram.js";
 import { switchDimension } from "./switches.js";
 
 let instances = 0;
@@ -521,13 +522,8 @@ export function createSlideManager(container, options) {
       template.replaceChildren(); currentPreview.replaceChildren();
       if (choice?.record?.preview && typeof choice.record.preview === "string") {
         template.append(el("img", { src: choice.record.preview, alt: `${choice.label} template preview` }));
-      } else if (Array.isArray(choice?.record?.areas)) {
-        const diagram = el("div", { class: "opf-layout-diagram" });
-        diagram.style.gridTemplateAreas = choice.record.areas.map((row) => `"${row.join(" ")}"`).join(" ");
-        diagram.style.gridTemplateColumns = `repeat(${choice.record.areas[0]?.length ?? 1}, 1fr)`;
-        const areas = [...new Set(choice.record.areas.flat())].filter((area) => area !== ".");
-        for (const area of areas) { const part = el("span", { text: area }); part.style.gridArea = area; diagram.append(part); }
-        template.append(diagram);
+      } else if (Array.isArray(choice?.record?.regions)) {
+        template.append(buildLayoutDiagram(document, choice.record));
       }
       if (choice && options.renderLayoutPreview) {
         try { currentPreview.innerHTML = options.renderLayoutPreview(deck(), current(), choice) ?? ""; }

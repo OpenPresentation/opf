@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { validate } from "@openpresentation/opf";
 import { createEditorSession } from "../dist/index.js";
 import { prepareDimensionSwitch, switchDimension } from "../dist/switches.js";
-import { groupLayoutChoices, layoutFromGrid, pinBlockToRegion, prepareCustomLayout, saveCustomLayout } from "../dist/layout-templates.js";
+import { groupLayoutChoices, layoutFromRegions, pinBlockToRegion, prepareCustomLayout, saveCustomLayout } from "../dist/layout-templates.js";
 
 const groups = groupLayoutChoices([
   { id: "two-column", label: "Two columns" }, { id: "cover", label: "Cover" }, { id: "custom:roadmap", label: "Roadmap" },
@@ -11,30 +11,63 @@ assert.deepEqual(groups.map((group) => [group.name, group.choices.map((choice) =
   ["Openers and closers", ["cover"]], ["Text", ["two-column"]], ["Custom layouts", ["custom:roadmap"]],
 ]);
 
-const layout = layoutFromGrid({
+const layout = layoutFromRegions({
   id: "review-grid", name: "Review grid", summary: "Two blocks beside each other",
-  cells: [["title", "title"], ["main", "notes"]],
-  regions: {
-    main: { accepts: ["text"], role: "primary", flow: "none" },
-    notes: { accepts: ["text", "list"], role: "secondary", flow: "column" },
-  },
-  columns: [2, 1], rows: ["auto", 1],
+  regions: [
+    { name: "title" },
+    { direction: "row", regions: [
+      { name: "main", size: 2, accepts: ["text"], role: "primary", flow: "none" },
+      { name: "notes", accepts: ["text", "list"], role: "secondary", flow: "column" },
+    ] },
+  ],
 });
-assert.deepEqual(layout.record.areas, [["title", "title"], ["main", "notes"]]);
-const oldRows = validate({catalogs: {custom: {layouts: {old: {name: "Old row spelling", areas: ["title title", "main notes"], regions: layout.record.regions}}}}, slides: [{title: "Old row spelling"}]});
-assert.equal(oldRows.valid, false);
-assert.ok(oldRows.findings.some(finding => finding.path === "/catalogs/custom/layouts/old/areas/0" && finding.validation?.params?.type === "array"));
-const input = { id: layout.id, name: layout.record.name, regions: layout.record.regions };
-assert.throws(() => layoutFromGrid({ ...input, cells: [["title", "main"], ["main", "title"]] }), /rectangle/);
-assert.throws(() => layoutFromGrid({ ...input, cells: Array.from({ length: 13 }, () => ["main"]) }), /12 by 12/);
+assert.deepEqual(layout.record, {
+  name: "Review grid", summary: "Two blocks beside each other", direction: "column",
+  regions: [
+    { name: "title" },
+    { direction: "row", regions: [
+      { name: "main", size: 2, accepts: ["text"], role: "primary", flow: "none" },
+      { name: "notes", accepts: ["text", "list"], role: "secondary", flow: "column" },
+    ] },
+  ],
+});
+const brokenRecord = validate({catalogs: {custom: {layouts: {broken: {name: "Not a region list", direction: "column", regions: ["title", "main notes"]}}}}, slides: [{title: "Not a region list"}]});
+assert.equal(brokenRecord.valid, false);
+assert.ok(brokenRecord.findings.some(finding => finding.path.startsWith("/catalogs/custom/layouts/broken/regions/0")), "a region entry that is not an object is a finding");
+const input = { id: layout.id, name: layout.record.name };
+const body = { name: "main", accepts: ["text"] };
+// Reading order is the list; anchor, an omitted accepts and a column direction are record-level defaults.
+const quick = layoutFromRegions({ ...input, direction: "row", anchor: "middle", regions: [{ name: "first" }, { name: "second", size: 3 }] });
+assert.deepEqual(quick.record, { name: "Review grid", direction: "row", anchor: "middle", regions: [{ name: "first" }, { name: "second", size: 3 }] });
+assert.equal(layoutFromRegions({ ...input, regions: [{ name: "title" }, body] }).record.direction, "column");
+assert.deepEqual(layoutFromRegions({ ...input, regions: [{ name: "title", size: 1 }, body, { name: "foot", size: "auto" }] }).record.regions.map((entry) => entry.size), [1, undefined, "auto"]);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "main" }, { name: "main" }] }), /unique/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "left" }] }), /reserved/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "Bad Name" }] }), /Invalid region name/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "subtitle" }, body] }), /needs a title/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "title" }] }), /at least one content region/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "title", accepts: ["text"] }, body] }), /takes only a size/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [] }), /1 to 12/);
+assert.throws(() => layoutFromRegions({ ...input, regions: Array.from({ length: 13 }, (_, n) => ({ name: `r-${n}` })) }), /1 to 12/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ ...body, size: 0 }] }), /number above 0/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ ...body, size: 101 }] }), /number above 0/);
+assert.throws(() => layoutFromRegions({ ...input, direction: "row", regions: [{ ...body, size: "auto" }] }), /only in a column/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ direction: "row", regions: [{ ...body, size: "auto" }] }] }), /only in a column/);
+assert.throws(() => layoutFromRegions({ ...input, direction: "diagonal", regions: [body] }), /row or column/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ regions: [body] }] }), /row or column/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "main", accepts: [] }] }), /accepted content kinds/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "main", accepts: ["text"], role: "invalid" }] }), /valid role/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [{ name: "main", accepts: ["text"], flow: "row" }] }), /valid flow/);
+assert.throws(() => layoutFromRegions({ ...input, regions: [body], overflowRegion: "title" }), /not a content region/);
+// Splits nest two deep inside the record's own list (three levels of lists); a third split is too deep.
+const nest = (levels) => levels === 0 ? [{ name: "leaf", accepts: ["text"] }] : [{ direction: levels % 2 ? "row" : "column", regions: nest(levels - 1) }];
+assert.equal(layoutFromRegions({ ...input, regions: nest(2) }).record.regions[0].regions[0].regions[0].name, "leaf");
+assert.throws(() => layoutFromRegions({ ...input, regions: nest(3) }), /at most 3 levels/);
 
-const largest = layoutFromGrid({ id: "largest-grid", name: "Largest", cells: Array.from({ length: 12 }, () => Array(12).fill("main")), regions: { main: { accepts: ["text"], role: "primary", flow: "grid" } } });
-assert.equal(largest.record.areas.length, 12);
-assert.equal(largest.record.areas[0].length, 12);
-assert.throws(() => layoutFromGrid({ ...input, cells: [["main", "main"], ["main"]] }), /rectangular grid/);
-assert.throws(() => layoutFromGrid({ ...input, cells: [["main"]], regions: { main: { accepts: [] } } }), /accepted content kinds/);
-assert.throws(() => layoutFromGrid({ ...input, cells: [["main"]], regions: { main: { accepts: ["text"], role: "invalid" } } }), /valid role/);
-assert.throws(() => layoutFromGrid({ ...input, cells: [["main"]], regions: { main: { accepts: ["text"], flow: "row" } } }), /valid flow/);
+// The widest list: twelve rows of twelve regions (a 12 by 12 grid compiled).
+const largest = layoutFromRegions({ id: "largest-grid", name: "Largest", regions: Array.from({ length: 12 }, (_, y) => ({ direction: "row", regions: Array.from({ length: 12 }, (_, x) => ({ name: `cell-${y}-${x}`, accepts: ["text"], role: "primary", flow: "grid" })) })) });
+assert.equal(largest.record.regions.length, 12);
+assert.equal(largest.record.regions[0].regions.length, 12);
 
 const original = { name: "Layout test", slides: [{ id: "s1", title: "Review", blocks: [{ text: "First" }, { text: "Second" }] }] };
 const snapshot = structuredClone(original);
