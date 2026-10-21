@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.25.0 (2026-10-21)
+
+- FA-33 (needs core with FA-33; no renderer code or pixel changes): the development and test dependency `@openpresentation/gallery` moves from `^4.0.0` to `^5.0.0` (theme variants, layouts as one list of regions, catalog schema 4), so the suites read Gallery 5's records instead of Gallery 4's `areas` layouts. The published package declares no runtime dependency on Gallery; hosts still register the catalogs they choose.
+- FA-33 (needs core with FA-33; no renderer code or pixel changes): layout records are one `direction` plus an ordered, nestable `regions` list instead of the `areas` grid with `columns`, `rows` and a `regions` map. The renderer reads core's composed geometry as before, so every slide draws identically and no slide hash moves (the template baseline's `source.sha256` records the new Gallery 5 record digest, see `test/golden/notes/FA-33.md`); the README describes the new record and the stale 0.19 template fixture, which only tested the old format, is removed.
+
 ## 0.24.3 (2026-10-20)
 
 - RR-97: 0.24.3 is the first published release of the 0.24.2 changes: an unreadable image's warning names the image and says what to do, and the example baseline follows core's examples with their embedded supporting photos. 0.24.2 was tagged but never published, because its baseline needed core 0.24.2's examples, which are now on npm.
