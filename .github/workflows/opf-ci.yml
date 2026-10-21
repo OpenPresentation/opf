@@ -228,6 +228,33 @@ jobs:
       pptx-ref: ${{ needs.gallery.outputs.published_opf_pptx }}
       editor-ref: ${{ needs.gallery.outputs.published_opf_editor }}
       cli-ref: ${{ needs.gallery.outputs.published_cli }}
+  # MR-14: scripts/ci-scope.mjs in shadow mode. Not a required check and not in the needs of `verify`: it only prints what the
+  # monorepo `verify` would run for this change (affected packages, tiers, jobs) next to the real CI, so MR-32 can compare the two.
+  # It reads the diff and the package manifests only (no install), and it never fails the run.
+  ci-scope-shadow:
+    name: ci-scope (shadow)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # A pull_request checkout is the merge commit of the head into the base: HEAD^1 is the base.
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - name: Scope this change (ci-scope)
+        env:
+          PR_LABELS: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: node scripts/ci-scope.mjs --event "$GITHUB_EVENT_NAME" --base HEAD^1 --head HEAD --labels "$PR_LABELS" --github-output --summary --format text
+      - name: Current scope for comparison (ecosystem-scope)
+        run: node scripts/ecosystem-scope.mjs
   verify:
     name: Verify OPF packages
     needs: [gallery, normal, release-prep, candidate, control]
