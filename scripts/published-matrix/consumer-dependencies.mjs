@@ -7,14 +7,16 @@ export function catalogGenerationForCore(core) {
   if (major === 0 && minor < 19) return 1;
   if (major === 0 && minor === 19) return 2;
   if (major === 0 && minor >= 20 && minor <= 24) return 3;
+  if (major === 0 && minor === 25) return 4;
   assert.fail(`No reviewed catalog generation for core ${core}`);
 }
 
-/** The published gallery major a core minor depends on: Gallery 4.0.0 (core 0.24) still declares catalogSchema 3. */
+/** The published gallery major a core minor depends on: Gallery 4.0.0 (core 0.24) still declares catalogSchema 3; Gallery 5 (core 0.25) declares 4. */
 export function galleryMajorForCore(core) {
   const generation = catalogGenerationForCore(core);
   if (generation === 1) return undefined;
-  return Number(core.split('.')[1]) >= 24 ? 4 : generation;
+  const minor = Number(core.split('.')[1]);
+  return minor >= 25 ? 5 : minor >= 24 ? 4 : generation;
 }
 
 export function assertCatalogGeneration(core, generation) {
