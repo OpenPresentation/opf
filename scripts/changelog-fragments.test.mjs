@@ -179,3 +179,19 @@ test('the command line validates fragments, assembles with --dry-run untouched, 
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('--dir selects the directory whose changes/ and changelog are used, whatever the current directory', () => {
+  const root = repo(null, { 'one.md': fragment('added', 'One.') });
+  const elsewhere = mkdtempSync(path.join(tmpdir(), 'changes-cwd-'));
+  try {
+    const run = (...a) => spawnSync(process.execPath, [SCRIPT, ...a, '--dir', root], { cwd: elsewhere, encoding: 'utf8' });
+    assert.match(run('check').stdout, /1 fragment\(s\) valid/);
+    const done = run('assemble', '--version', '2.0.0', '--date', '2026-02-03');
+    assert.equal(done.status, 0, done.stderr);
+    assert.match(readFileSync(path.join(root, 'CHANGELOG.md'), 'utf8'), /## 2\.0\.0 \(2026-02-03\)/);
+    assert.equal(existsSync(path.join(root, 'changes', 'one.md')), false);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+    rmSync(elsewhere, { recursive: true, force: true });
+  }
+});

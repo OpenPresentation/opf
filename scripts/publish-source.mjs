@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // Pure local Git gate for trusted publication. Run immediately after a full-depth checkout, before installing anything.
 // node scripts/publish-source.mjs --manifest packages/javascript/package.json --tag-prefix opf-v --tag-prefix @openpresentation/opf@v
-// Siblings use their own manifest and literal tag prefix. No fetch, API, package installation or publication occurs here.
+// Run it at the repository root: --manifest is a repository-relative path, so one copy serves every package
+// (`--manifest packages/render/package.json --tag-prefix <prefix>`). No fetch, API, package installation or publication occurs here.
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
