@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.25.0 (2026-10-21)
+
+- FA-33: Core and the CLI use gallery 5 (theme variants; layouts as one list of regions). The `@openpresentation/gallery` dependency moves to `^5.0.0` (catalog generation 4), and the unreleased-gallery staging (`opf.requiresUnreleasedGallery` and `.github/candidate-gallery.json`) is gone.
+- The optional peer ranges move to the 0.25 minor: `@openpresentation/opf-render` and `@openpresentation/opf-pptx` `^0.25.0`, matching core 0.25.0.
+- FA-33 (breaking, no migration path): a layout record is one ordered list of regions. `areas`, `columns`, `rows` and the `regions` map are removed from `opf-layout/v2`; a record has a `direction` (`row` or `column`, default `column`) and a `regions` array of regions (`{ name, size?, ...rules }`) and splits (`{ direction, regions, size?, anchor? }`, up to three levels). `size` is a share of the parent (default 1; `auto` only in a column), `accepts` is optional (every body kind and `group`), `anchor` on the record or a split is inherited by body regions, and `title` and `subtitle` are reserved heading regions. Core compiles the tree into the grid composition has always used, so the 28 built-in layouts render identically (an equivalence test proves each compiles to its Gallery 4 grid and rules). A record with `areas`, `columns`, `rows` or a regions map is invalid. `opf/layout-template` and `opf/layout-region` cover the new rules, `layoutEntries` and the compile are in `@openpresentation/opf/composition`, and `CATALOG_SCHEMA` is 4 (Gallery 5). Examples, fixtures, docs and skills are converted.
+
 ## 0.24.1 (2026-10-20)
 
 - RR-97: with opf-pptx 0.24.1 or later, `opf convert deck.opf.json out.pptx` reports an image it cannot read (a missing file, a path outside the deck folder or `--asset-dir`, a file that is no image) as a `pptx/unresolved-asset` warning and writes the deck without that image, instead of stopping with a `pptx/asset-unresolved` error; `--fail-on warning` still rejects it before any file is written. Nothing changes in core code: the CLI's resolver (`forPptx`) still throws `asset-unresolved`, which opf-pptx now turns into the warning. `docs/cli.md` states both behaviors, and the CLI's files test follows the installed opf-pptx version.
