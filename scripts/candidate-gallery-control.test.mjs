@@ -77,7 +77,7 @@ test('exact published19 runtime uses recorded final registry helpers and refuses
  }finally{rmSync(root,{recursive:true,force:true});}
 });
 
-test('published 0.24.2 runs the reviewed installed-code helper that rebuilds the editor styles, and only that file',()=>{
+test('published 0.24.2 runs the reviewed installed-code and catalog-generation helpers, and only those files',()=>{
  const root=realpathSync(mkdtempSync(path.join(tmpdir(),'fa33-control0242-'))),coreRoot=path.join(root,'core'),toolsRoot=path.join(root,'tools');
  const sourceRoot=fileURLToPath(new URL('..',import.meta.url));
  const sourceGit=execFileSync('git',['-C',sourceRoot,'rev-parse','--absolute-git-dir'],{encoding:'utf8'}).trim();
@@ -89,6 +89,7 @@ test('published 0.24.2 runs the reviewed installed-code helper that rebuilds the
   const runtime=path.join(coreRoot,'packages/javascript/src/composition.ts'),runtimeBytes=readFileSync(runtime);
   const helper=path.join(coreRoot,PUBLISHED_0242_TOOLING[0].path),originalHelper=readFileSync(helper);
   assert.ok(!originalHelper.toString('utf8').includes('generatedAtRef'),'the published helper lacks the styles rebuild');
+  assert.deepEqual(PUBLISHED_0242_TOOLING.map(item=>item.path),['scripts/test-installed-code.mjs','scripts/published-matrix/consumer-dependencies.mjs','scripts/published-matrix/consumer-dependencies.test.mjs']);
   const record=stagePublishedControlPlan({coreRoot,toolsRoot});assert.deepEqual(record.testToolingBridges,PUBLISHED_0242_TOOLING);
   assert.deepEqual(verifyPublishedControlPlan({coreRoot,toolsRoot}),record);
   assert.ok(readFileSync(helper,'utf8').includes('generatedAtRef'),'the bridged helper rebuilds dist/styles.css from the release commit');
