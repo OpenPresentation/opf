@@ -113,7 +113,7 @@ await writeFile(path.join(out,'schema-tests.html'),'<!doctype html><title>Schema
 const revision = createHash('sha256').update(await readFile(path.join(out,'playground.js'))).update(await readFile(path.join(out,'playground.css'))).digest('hex').slice(0,12);
 await writeFile(path.join(out,'index.html'),(await readFile(path.join(out,'index.html'),'utf8')).replace('src="playground.js"',`src="playground.js?v=${revision}"`).replace('href="playground.css"',`href="playground.css?v=${revision}"`));
 
-await build({entryPoints:[path.join(root,'scripts/test-data-browser.mjs')],outfile:path.join(out,'data-tests.js'),bundle:true,platform:'browser',format:'esm',alias:{'@openpresentation/opf/data':path.join(root,'packages/javascript/dist/data.js'),'@openpresentation/opf-render/svg':path.resolve(root,'../opf-render/src/svg.js')}});
+await build({entryPoints:[path.join(root,'scripts/test-data-browser.mjs')],outfile:path.join(out,'data-tests.js'),bundle:true,platform:'browser',format:'esm',alias:{'@openpresentation/opf/data':path.join(root,'packages/javascript/dist/data.js'),'@openpresentation/opf-render/svg':path.resolve(root,'packages/render/src/svg.js')}});
 await writeFile(path.join(out,'data-tests.html'),'<!doctype html><title>Data import checks</title><div class="header-actions"></div><pre id="results">Running…</pre><script type="module" src="./data-tests.js"></script>');
 
 await import("./build-rich-text-browser.mjs");

@@ -1,5 +1,5 @@
-import {installDataControls} from '../../opf-editor/examples/data-controls.js';
-import {createEditorSession} from '../../opf-editor/src/index.js';
+import {installDataControls} from '../packages/editor/examples/data-controls.js';
+import {createEditorSession} from '../packages/editor/src/index.js';
 const results=document.querySelector('#results');let count=0;
 const check=(condition,message)=>{if(!condition)throw new Error(message);count++;};
 const base={slides:[{id:'start',title:'Existing',notes:'Keep me',table:{columns:['A','B'],rows:[['original',1]]}}]};

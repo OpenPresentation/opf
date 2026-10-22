@@ -1,6 +1,6 @@
-import {createCanvasEditor} from '../../opf-editor/src/canvas.js';
-import {createEditorSession} from '../../opf-editor/src/index.js';
-import {toSvg} from '../../opf-render/src/svg.js';
+import {createCanvasEditor} from '../packages/editor/src/canvas.js';
+import {createEditorSession} from '../packages/editor/src/index.js';
+import {toSvg} from '../packages/render/src/svg.js';
 const host=document.querySelector('#canvas'),out=document.querySelector('#results');let count=0;
 const check=(value,message)=>{if(!value)throw new Error(message);count++;out.textContent+=`PASS ${message}\n`;};
 const original={name:'Block moves',slides:[{title:'Arrange complete content blocks',notes:'Keep notes',composition:{mode:'row',weights:[2,1,1]},blocks:[{text:[{text:'A: Keep all formatting.',bold:true}]},{composition:{mode:'column'},blocks:[{text:'B: A nested point.'},{text:'C: Another point.'}]},{text:'D: Supporting context.'}]}]};

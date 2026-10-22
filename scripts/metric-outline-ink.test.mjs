@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import test from 'node:test';
 import {insideRect, measureInk, outsideCell, referenceInk} from './metric-outline-ink.mjs';
-const sharp = createRequire(new URL('../../opf-render/package.json', import.meta.url))('sharp');
+const sharp = createRequire(new URL('../packages/render/package.json', import.meta.url))('sharp');
 
 // A deterministic pseudo-random generator, so a failure reproduces.
 function random(seed) {

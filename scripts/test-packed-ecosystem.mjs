@@ -225,7 +225,7 @@ if (!registry) {
   const zipDateIntegrity = 'sha512-' + createHash('sha512').update(zipDateTar).digest('base64');
   if (zipDateLocked?.integrity !== zipDateIntegrity || !zipDateLocked.resolved?.startsWith('file:') || zipDateLocked.link)
     throw new Error('ZIP date verification requires the same installed local PPTX archive');
-  const zipDateRef = spawnSync('git', ['rev-parse', 'HEAD'], {cwd: path.resolve(root, '..', 'opf-pptx'), encoding: 'utf8'});
+  const zipDateRef = spawnSync('git', ['rev-parse', 'HEAD'], {cwd: root, encoding: 'utf8'});
   if (zipDateRef.status !== 0 || !/^[a-f0-9]{40}$/.test(zipDateRef.stdout.trim())) throw new Error('Cannot bind ZIP date source checkout');
   const zipDateEntrypoint = await realpath(createRequire(path.join(consumer, 'package.json')).resolve('@openpresentation/opf-pptx'));
   if (!zipDateEntrypoint.startsWith((await realpath(path.join(consumer, 'node_modules'))) + path.sep)) throw new Error('ZIP date entrypoint must be installed inside this consumer');
@@ -234,7 +234,7 @@ if (!registry) {
   await writeFile(path.join(zipDateArtifacts, 'installed-fixture.mjs.txt'), zipDateHarness);
   await writeFile(path.join(zipDateArtifacts, 'binding.json'), JSON.stringify({
     scope: 'Coordinated candidate preview archive; original public fixture with only two import substitutions. Not registry or native acceptance.',
-    source: {repository: 'opf-pptx', head: zipDateRef.stdout.trim(), file: 'test/zip-date.mjs', sha256: zipDateHash(zipDateSource)},
+    source: {repository: 'opf', directory: 'packages/pptx', head: zipDateRef.stdout.trim(), file: 'test/zip-date.mjs', sha256: zipDateHash(zipDateSource)},
     installedFixtureSha256: zipDateHash(zipDateHarness), importReplacements: 2, artifact: zipDatePackage,
     installedIntegrity: zipDateIntegrity, lockSha256: zipDateHash(zipDateLockBytes), expectedEntrypoint: pathToFileURL(zipDateEntrypoint).href,
     installedEntrypointSha256: zipDateHash(await readFile(zipDateEntrypoint)),
@@ -324,7 +324,7 @@ console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, edita
       // RR-55: the renderer keeps createFontRegistry in an internal module that is not an entry point; the installed file is read by path.
       .replaceAll("'../dist/font-registry.js'","'./node_modules/@openpresentation/opf-render/dist/font-registry.js'")
       .replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'")
-      .replaceAll("new URL('../../opf-render/package.json',import.meta.url)","import.meta.resolve('@openpresentation/opf-render/package.json')");
+      .replaceAll("new URL('../packages/render/package.json',import.meta.url)","import.meta.resolve('@openpresentation/opf-render/package.json')");
     const file=repo+'-font-variants.mjs';
     await writeFile(path.join(consumer,file),source);
     run(process.execPath,[file,'artifacts/'+repo+'-font-variants.json']);
@@ -582,10 +582,10 @@ await writeFile(path.join(browserOut,'packed-canvas-tests.html'),'<!doctype html
 console.log('Packed browser harness built: artifacts/editor/packed-canvas-tests.html (serve alongside demo fonts.json).');
 
 const richHarness=(await readHarness('opf','scripts/test-rich-text-browser.mjs'))
- .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
- .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
- .replace('../../opf-editor/src/rich-text.js','@openpresentation/opf-editor/rich-text')
- .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
+ .replace('../packages/editor/src/canvas.js','@openpresentation/opf-editor/canvas')
+ .replace('../packages/editor/src/index.js','@openpresentation/opf-editor')
+ .replace('../packages/editor/src/rich-text.js','@openpresentation/opf-editor/rich-text')
+ .replace('../packages/render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
 await writeFile(path.join(consumer,'rich-tests.mjs'),hosted(richHarness));
 await build({entryPoints:[path.join(consumer,'rich-tests.mjs')],outfile:path.join(browserOut,'packed-rich-text-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-rich-text-tests.html'),'<!doctype html><meta charset="utf-8"><title>Packed rich-text checks</title><h1>Packed rich-text checks</h1><div id="canvas" style="max-width:1100px"></div><pre id="results"></pre><script type="module" src="./packed-rich-text-tests.js"></script>');
@@ -595,33 +595,33 @@ if(verifyEstimatedRichText){
 }
 
 const layoutHarness=(await readHarness('opf','scripts/test-layout-browser.mjs'))
- .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
- .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
- .replace('../../opf-render/src/svg.js','@openpresentation/opf-render/svg');
+ .replace('../packages/editor/src/canvas.js','@openpresentation/opf-editor/canvas')
+ .replace('../packages/editor/src/index.js','@openpresentation/opf-editor')
+ .replace('../packages/render/src/svg.js','@openpresentation/opf-render/svg');
 await writeFile(path.join(consumer,'layout-tests.mjs'),hosted(layoutHarness));
 await build({entryPoints:[path.join(consumer,'layout-tests.mjs')],outfile:path.join(browserOut,'packed-layout-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-layout-tests.html'),browserHtml('layout','<select id="pointer-mode"><option value="normal">Normal</option><option value="cancel">Cancel</option><option value="conflict">Conflict</option><option value="independent">Independent</option></select><button id="reset">Reset</button><button id="verify">Verify</button><button id="external">External change</button><button id="independent">Independent change</button><div id="pointer-state"></div>'));
 
 const blockHarness=(await readHarness('opf','scripts/test-block-browser.mjs'))
- .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
- .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
- .replace('../../opf-render/src/svg.js','@openpresentation/opf-render/svg');
+ .replace('../packages/editor/src/canvas.js','@openpresentation/opf-editor/canvas')
+ .replace('../packages/editor/src/index.js','@openpresentation/opf-editor')
+ .replace('../packages/render/src/svg.js','@openpresentation/opf-render/svg');
 await writeFile(path.join(consumer,'block-tests.mjs'),hosted(blockHarness));
 await build({entryPoints:[path.join(consumer,'block-tests.mjs')],outfile:path.join(browserOut,'packed-block-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-block-tests.html'),browserHtml('block','<button id="verify">Verify</button><div id="drag-status"></div>'));
 
 const listHarness=(await readHarness('opf','scripts/test-list-browser.mjs'))
- .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
- .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
- .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
+ .replace('../packages/editor/src/canvas.js','@openpresentation/opf-editor/canvas')
+ .replace('../packages/editor/src/index.js','@openpresentation/opf-editor')
+ .replace('../packages/render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
 await writeFile(path.join(consumer,'list-tests.mjs'),hosted(listHarness));
 await build({entryPoints:[path.join(consumer,'list-tests.mjs')],outfile:path.join(browserOut,'packed-list-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-list-tests.html'),browserHtml('list'));
 
 const creationHarness=(await readHarness('opf','scripts/test-create-browser.mjs'))
- .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
- .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
- .replace('../../opf-render/src/svg.js','@openpresentation/opf-render/svg');
+ .replace('../packages/editor/src/canvas.js','@openpresentation/opf-editor/canvas')
+ .replace('../packages/editor/src/index.js','@openpresentation/opf-editor')
+ .replace('../packages/render/src/svg.js','@openpresentation/opf-render/svg');
 await writeFile(path.join(consumer,'create-tests.mjs'),hosted(creationHarness));
 await build({entryPoints:[path.join(consumer,'create-tests.mjs')],outfile:path.join(browserOut,'packed-create-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-create-tests.html'),browserHtml('create'));

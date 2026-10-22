@@ -10,7 +10,7 @@ import path from 'node:path';
 import {galleryArtwork} from './gallery-artwork.mjs';
 
 const root=fileURLToPath(new URL('../',import.meta.url));
-const sharp=createRequire(new URL('../../opf-render/package.json',import.meta.url))('sharp');
+const sharp=createRequire(new URL('../packages/render/package.json',import.meta.url))('sharp');
 const beforeRef='48d2b328fdeb36e52dbf5cc1c8e765a54d2e5066';
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const dimensions={'brand-logo':[320,96],'brand-logo-light':[320,96],'brand-icon':[128,128],'cover-bg':[640,360],watermark:[256,256]};

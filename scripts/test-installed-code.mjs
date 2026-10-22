@@ -24,7 +24,8 @@ const lockBytes=await readFile(path.join(consumer,'package-lock.json')),lock=JSO
 const plan=registry?JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8')):null;
 const manifest=registry?{artifacts:plan.packages.filter(item=>item.name!=='@openpresentation/cli')}:JSON.parse(await readFile(path.join(out,'manifest.json'),'utf8'));
 if(!registry)assert.equal(manifest.published,false,'Candidate mode requires unpublished local archives.');
-const checkout=repo=>repo==='opf'?root:path.resolve(root,'..',repo);
+// MR-23e: the packages are directories of this repository (the registry mode still needs MR-34: its refs are commits of the old repositories).
+const checkout=repo=>repo==='opf'?root:path.join(root,'packages',repo.replace(/^opf-/,''));
 const immutable=(repo,file)=>{
  const ref=plan.verificationRefs[repo];assert.match(ref??'',/^[a-f0-9]{40}$/);
  return execFileSync('git',['show',`${ref}:${file}`],{cwd:checkout(repo),maxBuffer:16*1024*1024});
