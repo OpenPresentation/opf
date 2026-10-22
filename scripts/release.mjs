@@ -6,7 +6,7 @@
 //                            [--no-lockfile] [--dry-run] [--github-output file] [--dir root]
 //       Sets the six package versions, core's peer ranges and PEER_RANGES (src/node/peers.ts), assembles every changes/ fragment
 //       into its package changelog (a package without one gets "No package changes; released with the set."), deletes the
-//       consumed fragments, refreshes the lockfile and re-checks check:versions. Before it writes anything it applies the
+//       consumed fragments (a prerelease touches neither: its notes are assembled from the fragments by `notes`), refreshes the lockfile and re-checks check:versions. Before it writes anything it applies the
 //       gallery stability gate (scripts/gallery-stability.mjs gateVersion: a declared drawing change, a removed record id or a
 //       CATALOG_SCHEMA change needs a minor, never a patch) and the version rules below. --dry-run writes nothing.
 //   node scripts/release.mjs pack <version> --commit <sha> --out <dir>
@@ -27,7 +27,7 @@
 //       For all six: registry manifest, gitHead and provenance source commit = the release commit, provenance workflow
 //       npm-publish.yml on refs/tags/vX.Y.Z, dist-tag, lockstep ranges, signatures, the changelog section.
 //   node scripts/release.mjs notes <version> [--out file]
-//       The GitHub release body: each package's changelog section, grouped by package.
+//       The GitHub release body: each package's changelog section (a prerelease: the pending fragments), grouped by package.
 //   node scripts/release.mjs order
 //       The publish order, one npm name per line.
 //
@@ -215,15 +215,21 @@ export async function planPrepare({ root, input, previous: previousOption, stabi
   if (left.length) throw new Error(`prepare ${version} would leave check:versions failing:\n  - ${left.join('\n  - ')}`);
 
   const notes = [];
-  for (const { key } of PACKAGES) {
-    const target = config.targets[key];
-    if (target === undefined) throw new Error(`changes/config.json has no changelog for "${key}"`);
-    const picked = selectFragments(fragments, key, config);
-    const result = assemble(root, { version, date, summary: picked.length ? '' : NO_CHANGES, package: key }, false);
-    writes.push({ file: path.relative(root, result.file), text: result.text });
-    notes.push(`${key}: ${picked.length ? `${picked.length} fragment(s)` : 'no fragment (released with the set)'}`);
+  let removes = [];
+  // A prerelease writes its notes to the GitHub release only (`notes` assembles them from the fragments): the changelogs and
+  // changes/ stay as they are, so the stable release that follows carries every note.
+  if (isPrerelease(version)) notes.push('prerelease: CHANGELOG files and changes/ untouched (the notes go to the GitHub release)');
+  else {
+    for (const { key } of PACKAGES) {
+      const target = config.targets[key];
+      if (target === undefined) throw new Error(`changes/config.json has no changelog for "${key}"`);
+      const picked = selectFragments(fragments, key, config);
+      const result = assemble(root, { version, date, summary: picked.length ? '' : NO_CHANGES, package: key }, false);
+      writes.push({ file: path.relative(root, result.file), text: result.text });
+      notes.push(`${key}: ${picked.length ? `${picked.length} fragment(s)` : 'no fragment (released with the set)'}`);
+    }
+    removes = fragments.map((fragment) => path.relative(root, fragment.file));
   }
-  const removes = fragments.map((fragment) => path.relative(root, fragment.file));
   return { version, previous, bump: gate.bump, reasons: gate.reasons, tag: tagOf(version), distTag: defaultTag(version), writes, removes, notes };
 }
 
@@ -415,7 +421,7 @@ export async function verifyRelease(deps, version, { tag = defaultTag(version), 
   const config = loadConfig(root);
   const results = [];
   for (const pkg of PACKAGES) {
-    const result = await verifyPackage(deps, pkg, { version, commit, tag: tagOf(version), distTag: tag, siblings: NAMES, changelogHas: (entry, v) => changelogHas(root, config, entry, v) }, { auditSignatures: audit, waitMinutes, pollSeconds });
+    const result = await verifyPackage(deps, pkg, { version, commit, tag: tagOf(version), distTag: tag, siblings: NAMES, changelogHas: isPrerelease(version) ? undefined : (entry, v) => changelogHas(root, config, entry, v) }, { auditSignatures: audit, waitMinutes, pollSeconds });
     deps.log(formatVerify(pkg, version, result));
     results.push({ name: pkg.name, ...result });
   }
@@ -423,14 +429,23 @@ export async function verifyRelease(deps, version, { tag = defaultTag(version), 
 }
 
 /** The GitHub release body: the package changelog sections grouped by package, then the packages released with no change. */
-export function releaseNotes(root, version) {
+export function releaseNotes(root, version, { date = new Date().toISOString().slice(0, 10) } = {}) {
   const config = loadConfig(root);
+  const prerelease = isPrerelease(version);
+  const fragments = prerelease ? readFragments(root, config) : [];
   const sections = [];
   const unchanged = [];
   for (const { key, name } of PACKAGES) {
-    const file = path.join(root, config.targets[key]);
-    const body = existsSync(file) ? extractReleaseNotes(readFileSync(file, 'utf8'), version) : '';
-    if (!body) throw new Error(`${config.targets[key]} has no ${version} section: run prepare`);
+    let body;
+    if (prerelease) {
+      // No changelog section exists yet: the notes are the fragments that the stable release will assemble.
+      const picked = selectFragments(fragments, key, config);
+      body = picked.length ? extractReleaseNotes(assemble(root, { version, date, summary: '', package: key }, false).text, version) : NO_CHANGES;
+    } else {
+      const file = path.join(root, config.targets[key]);
+      body = existsSync(file) ? extractReleaseNotes(readFileSync(file, 'utf8'), version) : '';
+      if (!body) throw new Error(`${config.targets[key]} has no ${version} section: run prepare`);
+    }
     if (body.trim() === NO_CHANGES) unchanged.push(name);
     else sections.push(`## ${name}\n\n${body}`);
   }

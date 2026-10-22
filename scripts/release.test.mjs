@@ -129,27 +129,53 @@ test('sharedLine ignores the gallery and any latest at or above the version (a p
 // ---------------------------------------------------------------------------------------------------------------------
 // prepare
 
-test('prepare plans the first train: one version everywhere, peers, six changelogs, fragments consumed', async () => {
+test('prepare plans a release: one version everywhere, peers, six changelogs, fragments consumed', async () => {
   const { root, cleanup } = fixture({ fragments: { 'a-core': fragment('added', ['opf', 'render'], 'Core and render change.'), 'b-gallery': fragment('added', ['gallery'], 'A new layout.') } });
   try {
-    const plan = await planPrepare({ root, input: '0.26.0-rc.0', stability: noStability, registry: fakeRegistry(), date: '2026-10-23' });
-    assert.equal(plan.version, '0.26.0-rc.0');
+    const plan = await planPrepare({ root, input: '0.26.0', stability: noStability, registry: fakeRegistry(), date: '2026-10-23' });
+    assert.equal(plan.version, '0.26.0');
     assert.equal(plan.previous, '0.25.3');
-    assert.equal(plan.tag, 'v0.26.0-rc.0');
-    assert.equal(plan.distTag, 'next');
+    assert.equal(plan.tag, 'v0.26.0');
+    assert.equal(plan.distTag, 'latest');
     const byFile = Object.fromEntries(plan.writes.map(({ file, text }) => [file, text]));
-    for (const { dir } of PACKAGES) assert.equal(JSON.parse(byFile[`packages/${dir}/package.json`]).version, '0.26.0-rc.0');
-    assert.deepEqual(JSON.parse(byFile['packages/javascript/package.json']).peerDependencies, { '@openpresentation/opf-pptx': '^0.26.0-rc.0', '@openpresentation/opf-render': '^0.26.0-rc.0' });
-    assert.ok(byFile['packages/javascript/src/node/peers.ts'].includes('"^0.26.0-rc.0"'));
+    for (const { dir } of PACKAGES) assert.equal(JSON.parse(byFile[`packages/${dir}/package.json`]).version, '0.26.0');
+    assert.deepEqual(JSON.parse(byFile['packages/javascript/package.json']).peerDependencies, { '@openpresentation/opf-pptx': '^0.26.0', '@openpresentation/opf-render': '^0.26.0' });
+    assert.ok(byFile['packages/javascript/src/node/peers.ts'].includes('"^0.26.0"'));
     // check:versions accepts the result
     const members = PACKAGES.map(({ dir }) => ({ dir: `packages/${dir}`, manifest: JSON.parse(byFile[`packages/${dir}/package.json`]) }));
     assert.deepEqual([...checkVersions(members), ...checkPeerRanges(members, byFile['packages/javascript/src/node/peers.ts'])], []);
     // changelogs: every package has the section; untouched ones say so; touched ones carry the fragment
-    assert.match(byFile['CHANGELOG.md'], /## 0\.26\.0-rc\.0 \(2026-10-23\)\n\n- Core and render change\./);
+    assert.match(byFile['CHANGELOG.md'], /## 0\.26\.0 \(2026-10-23\)\n\n- Core and render change\./);
     assert.match(byFile['packages/render/CHANGELOG.md'], /- Core and render change\./);
     assert.match(byFile['packages/gallery/CHANGELOG.md'], /- A new layout\./);
-    for (const file of ['packages/cli/CHANGELOG.md', 'packages/pptx/CHANGELOG.md', 'packages/editor/CHANGELOG.md']) assert.match(byFile[file], new RegExp(`## 0\\.26\\.0-rc\\.0 \\(2026-10-23\\)\\n\\n${NO_CHANGES}\\n`), file);
+    for (const file of ['packages/cli/CHANGELOG.md', 'packages/pptx/CHANGELOG.md', 'packages/editor/CHANGELOG.md']) assert.match(byFile[file], new RegExp(`## 0\\.26\\.0 \\(2026-10-23\\)\\n\\n${NO_CHANGES}\\n`), file);
     assert.deepEqual(plan.removes.sort(), ['changes/a-core.md', 'changes/b-gallery.md']);
+  } finally {
+    cleanup();
+  }
+});
+
+test('a prerelease sets the versions but leaves every changelog and every fragment alone; its notes come from the fragments', async () => {
+  const { root, cleanup } = fixture({ fragments: { 'a-core': fragment('added', ['opf', 'render'], 'Core and render change.'), 'b-gallery': fragment('fixed', ['gallery'], 'Gallery fix.') } });
+  try {
+    const plan = await planPrepare({ root, input: '0.26.0-rc.0', stability: noStability, registry: fakeRegistry(), date: '2026-10-23' });
+    assert.equal(plan.distTag, 'next');
+    assert.deepEqual(plan.removes, [], 'no fragment is consumed');
+    const files = plan.writes.map(({ file }) => file).sort();
+    assert.deepEqual(files, [...PACKAGES.map(({ dir }) => `packages/${dir}/package.json`), 'packages/javascript/src/node/peers.ts'].sort(), 'CHANGELOG.md and the package changelogs are untouched');
+    assert.ok(plan.writes.every(({ text }) => !text.includes('0.26.0-rc.0 (')), 'no changelog section for the rc');
+    // The GitHub release notes are assembled from the fragments, in memory.
+    for (const { file, text } of plan.writes) writeFileSync(path.join(root, file), text);
+    const body = releaseNotes(root, '0.26.0-rc.0', { date: '2026-10-23' });
+    assert.match(body, /## @openpresentation\/opf\n\n- Core and render change\./);
+    assert.match(body, /## @openpresentation\/opf-render\n\n- Core and render change\./);
+    assert.match(body, /## @openpresentation\/gallery\n\n- Gallery fix\./);
+    assert.match(body, /Released with the set, no changes: `@openpresentation\/opf-pptx`, `@openpresentation\/opf-editor`, `@openpresentation\/cli`\./);
+    assert.ok(existsSync(path.join(root, 'changes/a-core.md')) && readFileSync(path.join(root, 'CHANGELOG.md'), 'utf8').includes('## Unreleased\n\n## 0.25.0'));
+    // The stable release that follows still has every note.
+    const stable = await planPrepare({ root, input: '0.26.0', stability: noStability, registry: fakeRegistry(), date: '2026-10-24' });
+    assert.match(stable.writes.find(({ file }) => file === 'CHANGELOG.md').text, /## 0\.26\.0 \(2026-10-24\)\n\n- Core and render change\./);
+    assert.equal(stable.removes.length, 2);
   } finally {
     cleanup();
   }
@@ -465,6 +491,18 @@ test('smoke installs the six tarballs together with overrides to themselves, the
     assert.deepEqual(seen[0].dependencies, Object.fromEntries(NAMES.map((name) => [name, '0.26.0'])));
     assert.equal(seen[0].overrides, undefined);
     assert.throws(() => smoke(dir, '0.26.0', { deck, exec: () => ({ status: 1, stdout: '', stderr: 'ERESOLVE' }) }), /smoke: npm install .* failed.*ERESOLVE/s);
+  } finally {
+    cleanup();
+  }
+});
+
+test('verifyRelease does not look for a changelog section of a prerelease', async () => {
+  const { root, cleanup } = fixture();
+  try {
+    const entries = Object.fromEntries(NAMES.map((name) => [name, published(name, '0.26.0-rc.0')]));
+    const result = await verifyRelease(verifyDeps(entries, { tags: Object.fromEntries(NAMES.map((name) => [name, { latest: '0.25.0', next: '0.26.0-rc.0' }])) }), '0.26.0-rc.0', { commit: COMMIT, root });
+    assert.ok(result.ok, JSON.stringify(result.results.map((entry) => entry.checks.filter((check) => !check.ok))));
+    assert.ok(result.results.every((entry) => entry.checks.every((check) => check.name !== 'changelog')));
   } finally {
     cleanup();
   }

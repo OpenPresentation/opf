@@ -42,7 +42,7 @@ rehearsal. The jobs:
 3. **prepare** (parallel with gate): `node scripts/release.mjs prepare <version>` in the runner: sets the six versions, core's
    peer ranges and `PEER_RANGES` (`packages/javascript/src/node/peers.ts`), assembles every `changes/` fragment into its package
    changelog (a package without a fragment gets "No package changes; released with the set."), applies the gallery stability gate
-   and the version rules below, refreshes the lockfile, and uploads the result as a patch. A refused version fails here, in two
+   and the version rules below, refreshes the lockfile, and uploads the result as a patch. A **prerelease** (`X.Y.Z-rc.N`) only sets the versions: it leaves every changelog and `changes/` alone, and its GitHub release notes are assembled from the fragments (`release.mjs notes`), so the stable release that follows carries every note. A refused version fails here, in two
    minutes.
 4. **commit and tag** (real release, after gate and prepare): with the GitHub App's token (a bypass actor on the `main` ruleset)
    applies the patch as one commit `release vX.Y.Z` on exactly the commit the gate tested, pushes it to `main`, then pushes the
@@ -118,7 +118,7 @@ npm view @openpresentation/gallery dist-tags --json           # latest is X.Y.Z;
 | `smoke <version> (--dir <dir> \| --registry)` | install the six together, render, resolve, run the CLI |
 | `check-publish <version> [--tag t]` | the pre-publish gate |
 | `publish <version> --dir <dir> [--tag t] [--dry-run]` | the gate, then `npm publish` in dependency order |
-| `verify <version> [--tag t] [--commit sha] [--wait minutes]` | the registry and provenance check |
+| `verify <version> [--tag t] [--commit sha] [--wait minutes]` | the registry and provenance check (a prerelease has no changelog section to check) |
 | `notes <version> [--out file]` | the GitHub release body |
 | `order` | the publish order |
 

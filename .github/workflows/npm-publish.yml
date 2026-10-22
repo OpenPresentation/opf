@@ -248,7 +248,8 @@ jobs:
           node-version: 24
 
       # The tag exists already (pushed by release.yml, or by hand). The notes are the six package changelog sections, grouped by
-      # package. A prerelease is marked so, and never becomes the repository's latest release.
+      # package; a prerelease has no changelog section yet, so its notes come from the pending changes/ fragments. A prerelease is
+      # marked so, and never becomes the repository's latest release.
       - name: Create the release
         env:
           GH_TOKEN: ${{ github.token }}
