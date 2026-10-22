@@ -1,6 +1,6 @@
 # Monorepo CI: design notes for MR-30
 
-Status: drafted 2026-10-22 on `codex/mr-30-ci` (draft pull request [opf#798](https://github.com/OpenPresentation/opf/pull/798), base `monorepo/import`). The workflows cannot run to completion on Actions until MR-23 has wired the workspace (the first run reached `scope`, the matrices, the Playwright containers, the setup action and the dependency builds), so the durations below are **estimates** from that run, the old per-repository CI logs (2026-10-20) and local measurements; MR-32 replaces them with 20 measured runs. Plan: [README.md](README.md) section 4. Tracker: [burndown.md](burndown.md), MR-30 to MR-34.
+Status: drafted 2026-10-22 on `codex/mr-30-ci` (draft pull request [opf#798](https://github.com/OpenPresentation/opf/pull/798), base `monorepo/import`). The workflows have not run to completion on Actions (the first run, before MR-23, reached `scope`, the matrices, the Playwright containers, the setup action and the dependency builds; the branch is now stacked on MR-23 and MR-31 and passes every local step, but runs on Actions only after the import is pushed), so the durations below are **estimates** from that run, the old per-repository CI logs (2026-10-20) and local measurements; MR-32 replaces them with 20 measured runs. Plan: [README.md](README.md) section 4. Tracker: [burndown.md](burndown.md), MR-30 to MR-34.
 
 ## Files
 
@@ -86,18 +86,19 @@ Read as: inside the plan's 5 to 8 minutes for code pull requests, a docs-only on
 
 **Found on the first run:** `pnpm --filter X run test` exits 0 when X matches no package, so before MR-23 the jobs `integration` and `gallery-gates` passed without running anything. Every `pnpm --filter @openpresentation/<name>` call that runs a script now passes `--fail-if-no-match` (guarded by `check:ci-workflows`); only the dependency builds (`<name>^...`, legitimately empty for a package without workspace dependencies) do not.
 
-## What the workflows assume from MR-23
+## What the workflows assume from MR-23 and MR-31
 
-The draft calls only names that exist in the imported tree or that the plan fixes; each one below must hold in the wired workspace, or the workflow changes with it.
+Stacked on MR-23 (23a to 23e) and MR-31 (`codex/mr-30-ci` is based on `codex/mr-31-goldens`, which is based on `codex/mr-23e-root`), so every assumption below is now satisfied by the branch itself; the draft was reconciled with it on 2026-10-22. The one thing still not exercised is Actions itself (the stack runs there only after the owner pushes the import, MR-22).
 
-1. `pnpm-workspace.yaml` lists `packages/gallery`, `javascript`, `cli`, `render`, `pptx`, `editor` and `integration`; the edges are the plan's (`workspace:^` runtime, `workspace:*` dev), so `pnpm --filter "<name>^..." run --if-present build` builds the dependencies (with no workspace dependency it matches nothing and succeeds). The whole workspace is installed in every job, so the lockfile must be complete.
-2. `pnpm --filter @openpresentation/integration run test` exists and runs core's 13 engine tests (`test:ecosystem`, `test:pagination`, `test:layout`, `test:lists`, `test:rich-text`, `test:data`, `test:fonts`, `test:image-treatments`, `test:placeholder-groups`, `test:skills`, `demo:editor`, `build-rich-table-browser`).
-3. Root scripts the nightly calls still exist and pack the six packages from the workspace: `pack:ecosystem`, `test:packed-ecosystem`, `test:packed-browser`, `test:cli:packed`, `test:cli:packed:peers`, `test:registry-ecosystem`, `test:registry-fidelity`, `test:layout-contracts:registry`, `test:developer-quickstart`, `demo:editor`, `check:examples`, `check:breaking`.
-4. Package scripts the legs call: render `typecheck validate test test:contract test:code test:font-preparation test:font-variants test:golden test:variable-font-gate test:browser report:pdf-vector`; pptx `typecheck validate test test:contract test:code test:font-variants test:native-*-controls test:published-import`; editor `typecheck validate test test:contract`; gallery `check:license verify test typecheck pack:dry-run check:previews check:stability`. The scripts may call `npm run` or `pnpm run`; `ci-test-shards.mjs` shards either.
-5. The sibling `scripts/` copies are gone or identical: the legs use the root `scripts/quarantine.mjs` (with `--shard`) and run it in the package directory (`node ../../scripts/quarantine.mjs ...`), and each package keeps `test/quarantine.json` and `test/browser-suites.json`.
-6. The variable-font gate reads `../archive/...` relative to `packages/render`; the draft checks the archived renderer checkpoint out of the old (public, permanent) repository into `packages/archive`. MR-23 can vendor those fixtures and drop the step.
-7. `test/golden.mjs` is part of the renderer's `test` (10 s) and so also of `test:contract`; the `goldens` job repeats it to name the failure and keep the changed slides. MR-31 may exclude it from the shards.
-8. `release-plan.json` stays until MR-34 for `slow-checks.yml` (the published-matrix scripts read it).
+1. **Workspace edges: satisfied (23a).** `pnpm-workspace.yaml` lists the seven projects with the plan's edges, so `pnpm --filter "<name>^..." run --if-present build` builds a package's dependencies. The whole workspace is installed in every job and the lockfile is complete (`pnpm install --frozen-lockfile` is the first step of every job and passes in a fresh clone).
+2. **Integration: satisfied (23a).** `pnpm --filter @openpresentation/integration run test` runs core's engine tests.
+3. **Root scripts the nightly calls: satisfied (23e).** `pack:ecosystem`, `test:packed-ecosystem`, `test:packed-browser`, `test:cli:packed`, `test:cli:packed:peers`, the registry scripts, `demo:editor`, `check:examples` and `check:breaking` exist and pack the six packages from the workspace with `pnpm pack` (`scripts/workspace-pack.mjs`).
+4. **Package scripts the legs call: satisfied (23b to 23d)**, plus `test:golden` (MR-31: it builds the dependencies, then runs `test/golden.mjs`).
+5. **Quarantine: satisfied.** The legs use the root `scripts/quarantine.mjs` (with `--shard`) in the package directory, each package keeps `test/quarantine.json` and `test/browser-suites.json`, and the root `check:quarantine` is `check-all` over the root and every package (23e).
+6. **Build: root `pnpm build` is `pnpm -r --if-present run build` (23e).** The renderer's and PPTX's `dist` are untracked, so a job that reads them builds first. The `lint` legs, `pack-shape`, `node-range` and the nightly consumers run `pnpm build` (every package, topological, about 17 s on Actions); package jobs build only the dependencies of the package under test.
+7. **The variable-font gate: satisfied (23b).** `test:variable-font-gate` and `test/platform-residual-probe.mjs` read `artifacts/render-archive/`, which `packages/render/scripts/fetch-archive-fixtures.mjs` fetches (sparse, blobless, pinned to opf-render 343fb84). The checkout steps of the draft are gone; the nightly's `platform-residual` runs the fetch script.
+8. **Goldens: satisfied (MR-31).** The baseline is `packages/render/test/golden/opf-examples-png.fa-33-region-lists` (the in-repo `examples/` corpus digests to `70b9e5d4`), `test/golden.mjs` is part of the renderer's `test` and `test:contract`, and the `goldens` job runs `test:golden` in the pinned Playwright image to name the failure and keep the changed slides (`OPF_GOLDEN_ARTIFACTS=changed`). `golden.yml` (label `regenerate-goldens` or dispatch) rewrites the baseline in the same image and starts `ci.yml` by name on the pushed commit; `ci.yml` has `workflow_dispatch` for that. The core golden override, `core-golden.mjs`, the ecosystem lock's `golden` field and the three regeneration workflows are deleted in MR-31.
+9. **Still open until MR-34.** `release-plan.json` stays for `slow-checks.yml` (the published-matrix scripts read it); the old workflows named in the table below still run next to the new ones.
 
 ## MR-34, MR-23 and MR-40: what is deleted
 
@@ -115,7 +116,7 @@ The files of the four imported packages' `.github/` (14 workflows and `packages/
 | `ecosystem-roll.yml` | none (lock and roller removed) | MR-34 | yes |
 | `candidate-gallery-qualification.yml` | none | MR-34 | only when called |
 | `published-gallery-control.yml` | none | MR-34 | only when called |
-| `regenerate-core-golden.yml` | `golden.yml` | MR-31 | on label |
+| `regenerate-core-golden.yml` (and the renderer's `regenerate-goldens`, `regenerate-candidate-goldens`) | `golden.yml` | MR-31 (deleted in the stack) | gone |
 | `release-train.yml`, `cli-publish.yml`, `npm-publish.yml` (old) | one `npm-publish.yml` (same file name) | MR-40 | yes |
 | `tracker-refresh.yml` | stays | | |
 

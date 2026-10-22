@@ -111,7 +111,9 @@ jobs:
         if: ${{ matrix.kind == 'docs' }}
         run: node scripts/check-changed.mjs --base "origin/${{ github.base_ref }}"
 
-      - name: Build core and the CLI
+      # `pnpm build` is `pnpm -r --if-present run build`: core, the gallery, the renderer, PPTX, the editor and the CLI (the checks
+      # read the renderer's and PPTX's dist, which are not tracked).
+      - name: Build every package
         if: ${{ matrix.kind != 'docs' }}
         run: pnpm build
 
@@ -270,21 +272,6 @@ jobs:
         with:
           container: 'true'
           build-deps: '@openpresentation/opf-render'
-
-      # MR-23: the variable-font gate reads fixtures from the archived renderer checkpoint of #24 at ../archive (relative to the
-      # package). The old repository stays public, so it is fetched from there; MR-23 may vendor the fixtures instead.
-      - name: Check out the archived #24 fixtures and evidence
-        if: ${{ matrix.kind == 'browser' }}
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: OpenPresentation/opf-render
-          ref: 343fb84223f4383ffe546157c6989ccc505c0acb
-          path: packages/archive
-          persist-credentials: false
-          sparse-checkout: |
-            test/fixtures/font-formats/source-serif
-            docs/evidence/rejected-truetype-rounding-20260915
-          sparse-checkout-cone-mode: true
 
       # The first shard also runs what is not part of the sharded `test` script.
       - name: Quarantine, typecheck, validate and the font checks
@@ -563,7 +550,7 @@ jobs:
       - uses: ./.github/actions/setup-workspace
 
       - name: Build every package
-        run: pnpm --recursive --if-present run build
+        run: pnpm build
 
       - name: Pack dry run of the six published packages
         run: pnpm --filter './packages/**' --filter '!@openpresentation/integration' exec npm pack --dry-run --ignore-scripts --cache "$RUNNER_TEMP/npm-cache"

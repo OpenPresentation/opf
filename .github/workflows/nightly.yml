@@ -298,7 +298,7 @@ jobs:
           node-version: ${{ matrix.node }}
 
       - name: Build every package
-        run: pnpm --recursive --if-present run build
+        run: pnpm build
 
       - name: Typecheck and test (${{ matrix.leg }})
         env:
@@ -362,8 +362,6 @@ jobs:
         run: |
           node --test scripts/metric-outline-ink.test.mjs
           node scripts/test-metric-outline-browser.mjs artifacts/metric-outline-browser
-      - name: Pack dry run of every package
-        run: pnpm --filter './packages/**' --filter '!@openpresentation/integration' exec npm pack --dry-run --ignore-scripts --cache "$RUNNER_TEMP/npm-cache"
       - name: Quarantined tests (non-blocking)
         if: ${{ always() }}
         continue-on-error: true
@@ -463,16 +461,6 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Check out the archived #24 font fixtures
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: OpenPresentation/opf-render
-          ref: 343fb84223f4383ffe546157c6989ccc505c0acb
-          path: packages/archive
-          persist-credentials: false
-          sparse-checkout: test/fixtures/font-formats/source-serif
-          sparse-checkout-cone-mode: true
-
       - uses: ./.github/actions/setup-workspace
         with:
           container: ${{ matrix.container != '' && 'true' || 'false' }}
@@ -482,6 +470,11 @@ jobs:
         if: ${{ runner.os == 'macOS' }}
         working-directory: packages/render
         run: pnpm exec playwright install chromium
+
+      # The #24 fixtures come from the frozen opf-render repository, fetched into artifacts/render-archive (MR-23b).
+      - name: Fetch the archived #24 font fixtures
+        working-directory: packages/render
+        run: node scripts/fetch-archive-fixtures.mjs
 
       - id: variants
         continue-on-error: true
@@ -498,7 +491,7 @@ jobs:
       - id: probe
         continue-on-error: true
         working-directory: packages/render
-        run: node test/platform-residual-probe.mjs ../archive/test/fixtures/font-formats "$REPORT_DIR/issue24-probe.json"
+        run: node test/platform-residual-probe.mjs ../../artifacts/render-archive/test/fixtures/font-formats "$REPORT_DIR/issue24-probe.json"
 
       - name: Record the outcomes and summarize
         if: ${{ always() }}
