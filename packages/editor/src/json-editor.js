@@ -1,6 +1,6 @@
 import { Annotation, Compartment, EditorSelection, EditorState, Prec, StateEffect, StateField, Transaction } from "@codemirror/state";
 import { Decoration, EditorView, drawSelection, keymap, lineNumbers } from "@codemirror/view";
-import { defaultKeymap, history, historyKeymap, indentWithTab, isolateHistory, redo } from "@codemirror/commands";
+import { defaultKeymap, history, historyKeymap, indentWithTab, isolateHistory, redo, undo, undoDepth } from "@codemirror/commands";
 import { HighlightStyle, StreamLanguage, bracketMatching, codeFolding, foldKeymap, indentOnInput, indentUnit, syntaxHighlighting } from "@codemirror/language";
 import { json, jsonParseLinter } from "@codemirror/lang-json";
 import { yaml } from "@codemirror/lang-yaml";
@@ -167,7 +167,7 @@ function skipDelimiter(view, delimiter) {
   return true;
 }
 function mountJsonCodeEditor(parent, options) {
-  const attributes = new Compartment(), indent = new Compartment(), language = new Compartment(), editable = new Compartment();
+  const attributes = new Compartment(), indent = new Compartment(), language = new Compartment(), editable = new Compartment(), historyField = new Compartment();
   const editableExtension = (readOnly) => [EditorState.readOnly.of(Boolean(readOnly)), EditorView.editable.of(!readOnly)];
   let languageName = options.language ?? "json";
   let disposed=false, menu=null, catalogs=options.catalogs??[], generation=0;
@@ -196,6 +196,11 @@ function mountJsonCodeEditor(parent, options) {
       label: option.label, detail: option.detail, info: option.info, boost: option.boost, type: found.kind === "key" ? "property" : "enum", apply: completionApply(found, option),
     })) };
   }
+  // Undo and Redo run CodeMirror's history first. When it has nothing left, the host's fallback may step further (the source pane
+  // routes a whole-document replace to the session); a fallback answers true when it did something.
+  const undoCommand = (target) => undo(target) || Boolean(options.historyFallback?.undo?.());
+  const redoCommand = (target) => redo(target) || Boolean(options.historyFallback?.redo?.());
+  const historyBindings = historyKeymap.map((binding) => binding.run === undo ? { ...binding, run: undoCommand } : binding.run === redo ? { ...binding, run: redoCommand } : binding);
   const completionExtension = options.completions ? [autocompletion({ override: [completionSource], defaultKeymap: false, icons: false, maxRenderedOptions: 60 }), completionKeys] : null;
   let currentIndent = indentation(options.code);
   const contentAttributes = (invalid = options.invalid, describedBy = options.describedBy) => EditorView.contentAttributes.of({
@@ -213,7 +218,7 @@ function mountJsonCodeEditor(parent, options) {
     jsonSource.init(()=>options.code),jsonSourceHistory,
     indent.of(indentUnit.of(currentIndent)),
     indentOnInput(),
-    history(),
+    historyField.of(history()),
     drawSelection(),
     bracketMatching(),
     closeBrackets(),
@@ -233,7 +238,7 @@ function mountJsonCodeEditor(parent, options) {
       // undo steps still available (otherwise it silently performs undo).
       if ((event.metaKey || event.ctrlKey) && event.shiftKey && !event.altKey && event.key.toLowerCase() === "z") {
         event.preventDefault();
-        redo(view);
+        redoCommand(view);
         return true;
       }
       if ((event.metaKey || event.ctrlKey) && event.shiftKey && !event.altKey && event.key.toLowerCase() === "f") {
@@ -262,7 +267,7 @@ function mountJsonCodeEditor(parent, options) {
       indentWithTab,
       ...closeBracketsKeymap,
       ...defaultKeymap,
-      ...historyKeymap,
+      ...historyBindings,
       ...searchKeymap,
       ...foldKeymap
     ]),
@@ -331,6 +336,13 @@ function mountJsonCodeEditor(parent, options) {
       languageName=name;closeOptions();
       view.dispatch({ effects: language.reconfigure(languageExtension(name, completionExtension)) });
     },
+    /** Forget the typed edits CodeMirror can undo (the text they were typed against is gone). Returns nothing; the document is unchanged. */
+    resetHistory(){
+      view.dispatch({ effects: historyField.reconfigure([]) });
+      view.dispatch({ effects: historyField.reconfigure(history()) });
+    },
+    /** How many typed edit groups CodeMirror can still undo. */
+    undoDepth: () => undoDepth(view.state),
     setReadOnly(value){view.dispatch({ effects: editable.reconfigure(editableExtension(value)) });},
     /** The CodeMirror view, for hosts that scroll or measure it. */
     view,

@@ -28,6 +28,12 @@ export interface JsonCodeEditorOptions {
   catalogs?: JsonCatalogContext;
   /** Overrides the built-in menu, allowing an existing host UI to keep its appearance. */
   onOptions?(left?: number, top?: number): void;
+  /**
+   * Cmd/Ctrl+Z and Cmd/Ctrl+Shift+Z (Ctrl+Y) run CodeMirror's history first. When it has nothing left to undo or redo, the fallback runs
+   * and answers true when it did something (false lets the key pass on). The source pane uses it to step the session back over a
+   * whole-document replace.
+   */
+  historyFallback?: { undo?(): boolean; redo?(): boolean };
   onFocus?(): void;
   onHoverField?(path: string | null): void;
   onError?(error: unknown): void;
@@ -39,6 +45,10 @@ export interface JsonCodeEditor {
   setCatalogs(catalogs: JsonCatalogContext): void;
   setLanguage(language: "json" | "yaml" | "markdown"): void;
   setReadOnly(readOnly: boolean): void;
+  /** Forget the typed edits CodeMirror can undo, for when the text they were typed against was replaced. The text is unchanged. */
+  resetHistory(): void;
+  /** How many typed edit groups CodeMirror can still undo. */
+  undoDepth(): number;
   /** The CodeMirror `EditorView`. */
   readonly view: import("@codemirror/view").EditorView;
   openOptions(left?: number, top?: number): Promise<void>;

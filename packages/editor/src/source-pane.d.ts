@@ -65,8 +65,14 @@ export interface SourcePaneOptions {
 }
 
 export interface ReplaceDocumentOptions {
-  /** The JSON text the document was read from. Used when it parses to the document, so its spelling is kept. */
+  /**
+   * The text the document was read from: JSON, YAML or Markdown. When it reads as exactly the document, the pane keeps its spelling (JSON
+   * formatting, YAML comments, Markdown prose layout), shows it while the pane is in that format and brings it back on Undo, Redo and
+   * when the format is switched to it. Text that does not read as the document is ignored.
+   */
   source?: string;
+  /** The format of `source`. Default: inferred, the first of JSON, the pane's format, YAML and Markdown that reads as the document. */
+  format?: SourceFormat;
   /** The file name without extension, as `setName` (the document's own name is not used). */
   name?: string;
   /** Extra `meta` for the session change (`source` defaults to `"replace-document"`). */
@@ -78,10 +84,11 @@ export interface SourcePane {
   /**
    * Open a different document in the session and the pane (a host's example menu, File > Open): `editor.replaceDocument`, so it is one
    * undoable change and no catalog record is forked into `catalogs.custom` (a diff typed or pasted into the pane is an edit; this is not).
-   * `document` is a parsed document or JSON text. The pane shows `options.source` (the JSON text the document was read from, kept byte for
-   * byte; `document` itself when it is text) in JSON and the document written in YAML or Markdown. Undo and Redo bring back each
-   * document's text exactly, in the format that is shown. A document the session refuses throws (`invalid-opf-edit` with `issues`) and
-   * changes nothing. Works in a read-only pane.
+   * `document` is a parsed document or JSON text. The pane shows `options.source` (the text the document was read from in JSON, YAML or
+   * Markdown, kept byte for byte, comments included; `document` itself when it is JSON text) in the format it is in, and the document
+   * written by core's converter when no original text fits. Undo and Redo bring back each document's text exactly, in the format that is
+   * shown, and so do Cmd/Ctrl+Z and Cmd/Ctrl+Shift+Z once the text typed since the load is undone. A document the session refuses throws
+   * (`invalid-opf-edit` with `issues`) and changes nothing. Works in a read-only pane.
    */
   replaceDocument(document: unknown, options?: ReplaceDocumentOptions): EditorChange;
   /** Re-read the document from the session. */

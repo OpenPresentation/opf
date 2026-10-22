@@ -236,6 +236,7 @@ export function createSourcePane(container, options = {}) {
     catalogs: options.catalogs ?? editor.catalogs,
     describedBy: `${id}-findings`,
     onChange: () => schedule(),
+    historyFallback: { undo: () => stepReplace("undo"), redo: () => stepReplace("redo") },
     onError: (error) => options.onError?.(error),
   });
 
@@ -327,17 +328,23 @@ export function createSourcePane(container, options = {}) {
       if (comments > 0 && written.text !== before) transientNotes = [normalizeFinding({ message: `${plural(comments, "comment")} in the YAML ${comments === 1 ? "was" : "were"} dropped when the document changed outside the source.`, severity: "warning" }, "format")];
     }
     // A document `replaceDocument` opened or replaced comes back with the exact text it had.
-    const exact = exactText(format, deck());
-    if (exact !== undefined && exact !== written.text) {
-      try { if (same(readText(format, exact, catalogs()).deck, deck())) { written = { ...written, text: exact }; if (format === "json") jsonText = exact; } }
-      catch { /* The remembered text no longer reads as this document: use the generated one. */ }
-    }
+    written = preferExact(format, deck(), written);
     noteFindings = written.notes;
     if (format !== "json") syncJsonSafe();
     if (written.text !== control.api.getValue()) show(written.text);
     else baseline = written.text;
     renderFindings();
     syncAttributes();
+  }
+  /** The remembered text of `value` in `target` (what `replaceDocument` was given or replaced) when it still reads as `value`; else `written`. */
+  function preferExact(target, value, written) {
+    const exact = exactText(target, value);
+    if (exact === undefined || exact === written.text) return written;
+    try {
+      if (!same(readText(target, exact, catalogs()).deck, value)) return written;
+    } catch { return written; }
+    if (target === "json") jsonText = exact;
+    return { ...written, text: exact };
   }
   function syncJsonSafe() { try { syncJson(deck()); } catch { /* Keep the last JSON. */ } }
 
@@ -346,21 +353,39 @@ export function createSourcePane(container, options = {}) {
     if (event.type === "catalogs") { control.setCatalogs(options.catalogs ?? editor.catalogs); renderFindings(); return; }
     if (applying) return;
     version++;
+    // Undo, Redo, a restore and a whole-document replace by the host move the text under the typed edits CodeMirror remembers; they
+    // would no longer fit it.
+    if (event.type === "undo" || event.type === "redo" || event.type === "restore" || event.meta?.replaceDocument) control.resetHistory();
     fromSession();
   });
 
   // ---- Replacing the whole document ----------------------------------------------------------------------------------
   /**
+   * Which format the text is, among those that read as exactly `opened`: the declared `format` (which must read so), else JSON first
+   * (the form `replaceDocument` always took), then the pane's own format, then the others. Null when none reads as the document.
+   */
+  function sourceFormatOf(text, opened, declared) {
+    const order = declared ? [declared] : [...new Set(["json", format, "yaml", "md"])];
+    for (const candidate of order) {
+      try {
+        const read = readText(candidate, text, catalogs());
+        if (read.deck && same(read.deck, opened)) return candidate;
+      } catch { /* Not this format. */ }
+    }
+    return null;
+  }
+  /**
    * Open `input` (a document, or JSON text) as the whole document with `editor.replaceDocument`: one undoable change, no catalog record
-   * forked. The text shown is `options.source` (or `input` when it is text) in JSON, the document written in YAML or Markdown, and Undo
-   * and Redo bring each document's text back exactly.
+   * forked. The text shown is the original text of the document when `source` (or `input`, when it is JSON text) is that text in the
+   * pane's format, and the document written by core's converter otherwise. The original text of any format is kept for the pane's other
+   * formats and for Undo and Redo, which bring each document's text back exactly.
    */
   function replaceDocument(input, replaceOptions = {}) {
     if (destroyed) throw new Error("The source pane was destroyed.");
+    if (replaceOptions.format !== undefined && !FORMATS.some((entry) => entry.id === replaceOptions.format)) throw new TypeError(`replaceDocument: format must be "json", "yaml" or "md", not ${JSON.stringify(replaceOptions.format)}.`);
     flush();
     const before = deck();
     const beforeText = dirty ? undefined : control.api.getValue();
-    const authored = typeof input === "string" ? input : replaceOptions.source;
     transientNotes = [];
     let change;
     applying = true;
@@ -380,11 +405,21 @@ export function createSourcePane(container, options = {}) {
     rejectionFindings = [];
     dirty = false;
     version++;
+    // The typed edits CodeMirror remembers belong to the document that was replaced.
+    control.resetHistory();
     const opened = deck();
-    let written;
+    // The original text: JSON text given as `input` is that document's JSON; `source` is its text in `format` (inferred when not given).
     let authoredJson = null;
-    if (typeof authored === "string") { try { if (same(JSON.parse(authored), opened) && !findDuplicateKey(authored)) authoredJson = authored; } catch { /* Not the document's JSON: write it. */ } }
+    const originals = [];
+    if (typeof input === "string") originals.push({ text: input, format: "json" });
+    if (typeof replaceOptions.source === "string" && (typeof input !== "string" || replaceOptions.format)) originals.push({ text: replaceOptions.source, format: replaceOptions.format });
+    for (const original of originals) {
+      const kind = sourceFormatOf(original.text, opened, original.format);
+      if (kind === "json") authoredJson ??= original.text;
+      else if (kind) rememberText(kind, opened, original.text);
+    }
     if (replaceOptions.name !== undefined) { name = sanitizeName(replaceOptions.name) || "deck"; updateBar(); }
+    let written;
     try { written = format === "json" && authoredJson !== null ? { text: authoredJson, notes: [] } : write(format, opened); }
     catch (error) {
       syncJsonSafe();
@@ -393,6 +428,8 @@ export function createSourcePane(container, options = {}) {
       return change;
     }
     if (authoredJson !== null) jsonText = authoredJson; else syncJsonSafe();
+    // The text shown now is what Undo and Redo bring back for this document, in the format shown.
+    if (!(format === "json" && authoredJson !== null)) written = preferExact(format, opened, written);
     rememberText(format, opened, written.text);
     rememberText(format, before, beforeText);
     noteFindings = written.notes;
@@ -401,6 +438,29 @@ export function createSourcePane(container, options = {}) {
     renderFindings();
     syncAttributes();
     return change;
+  }
+
+  /**
+   * Cmd/Ctrl+Z and Cmd/Ctrl+Shift+Z (Ctrl+Y) after CodeMirror's own history has nothing left: step the session over a whole-document
+   * replace, as its Undo and Redo buttons do, so the text comes back exactly. Undo steps back over the nearest `replaceDocument` together
+   * with the pane's own edits typed on it (CodeMirror already undid the typing); an edit made elsewhere (the canvas, a panel) stops it.
+   * Redo steps forward over a replace only. Returns whether it did something.
+   */
+  function stepReplace(direction) {
+    if (destroyed || readOnly || typeof editor.exportHistory !== "function") return false;
+    flush();
+    if (dirty || !(direction === "undo" ? editor.canUndo : editor.canRedo)) return false;
+    const history = editor.exportHistory();
+    if (direction === "redo") {
+      if (!history.redo.at(-1)?.meta?.replaceDocument) return false;
+      editor.redo({ source: "source-pane" });
+      return true;
+    }
+    let index = history.undo.length - 1;
+    while (index >= 0 && !history.undo[index].meta?.replaceDocument && history.undo[index].meta?.source === "source-pane") index -= 1;
+    if (index < 0 || !history.undo[index].meta?.replaceDocument) return false;
+    for (let steps = history.undo.length - index; steps > 0; steps -= 1) editor.undo({ source: "source-pane" });
+    return true;
   }
 
   // ---- Format -------------------------------------------------------------------------------------------------------
@@ -413,7 +473,7 @@ export function createSourcePane(container, options = {}) {
     const draft = drafts[target.id];
     if (draft && draft.version === version) written = { text: draft.text, notes: [], draft: true };
     else {
-      try { written = write(target.id, deck()); }
+      try { written = preferExact(target.id, deck(), write(target.id, deck())); }
       catch (error) {
         rejectionFindings = [normalizeFinding({ message: `The document cannot be written as ${target.label}: ${errorText(error)} Fix the findings first.`, kind: "rejected" })];
         renderFindings();

@@ -5,6 +5,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { chromium } from 'playwright';
 import { gallery } from '@openpresentation/gallery';
+import { fromYaml, toYaml } from '@openpresentation/opf/yaml';
+import { toMarkdown } from '@openpresentation/opf/markdown';
 import { prepareSave } from '../dist/index.js';
 
 // RR-98: the source pane (JSON, YAML and Markdown, inline findings) in the example harness, examples/source-pane.html.
@@ -531,6 +533,199 @@ try {
     assert.equal(refused, 'invalid-opf-edit');
     assert.deepEqual(await deck(replaced), tour);
     await replaced.close();
+  }
+
+  // RR-98: keyboard Undo and Redo in the pane agree with the session for a whole-document replace, and YAML and Markdown sources keep
+  // their original text (comments included).
+  {
+    const embedded = (document) => prepareSave(document, { catalogs: [gallery] }).document;
+    const docA = embedded({ name: 'Conference talk', slides: [{ id: 'a1', title: 'Opening', layout: 'cover' }, { id: 'a2', title: 'Body', text: 'Alpha', layout: 'text' }] });
+    const docB = embedded({ name: 'Full feature tour', slides: [{ id: 'b1', title: 'Tour', layout: 'cover' }, { id: 'b2', title: 'More', text: 'Beta' }] });
+    const jsonA = JSON.stringify(docA, null, '\t') + '\n';
+    const jsonB = JSON.stringify(docB, null, 4);
+    const undoKey = 'ControlOrMeta+z', redoKey = 'ControlOrMeta+Shift+z';
+    const focusPane = (page) => page.evaluate(() => demo.pane.editor.api.focus());
+    const depth = (page) => page.evaluate(() => demo.editor.snapshot().undoDepth);
+    const load = (page, document, options) => page.evaluate(([document, options]) => { demo.pane.replaceDocument(document, options); }, [document, options]);
+
+    // JSON: load A, load B; Mod-z restores A's text exactly, Mod-Shift-z restores B's.
+    const keys = await open();
+    const start = await text(keys);
+    await load(keys, docA, { source: jsonA });
+    await load(keys, docB, { source: jsonB });
+    await focusPane(keys);
+    await keys.keyboard.press(undoKey);
+    assert.deepEqual(await deck(keys), docA, 'Mod-z undoes the second load');
+    assert.equal(await text(keys), jsonA, 'and brings the first document back byte for byte');
+    await keys.keyboard.press(redoKey);
+    assert.deepEqual(await deck(keys), docB, 'Mod-Shift-z redoes it');
+    assert.equal(await text(keys), jsonB, 'with its text byte for byte');
+    await keys.keyboard.press(undoKey);
+    await keys.keyboard.press(undoKey);
+    assert.equal(await text(keys), start, 'a second Mod-z reaches the starting source');
+    await keys.keyboard.press(undoKey);
+    assert.equal(await text(keys), start, 'nothing is left to undo: the key does nothing');
+    assert.equal(await depth(keys), 0);
+    await keys.keyboard.press(redoKey);
+    assert.equal(await text(keys), jsonA, 'Mod-Shift-z redoes the first load');
+    await keys.keyboard.press(redoKey);
+    assert.equal(await text(keys), jsonB);
+    await keys.keyboard.press(redoKey);
+    assert.equal(await text(keys), jsonB, 'nothing is left to redo');
+    if (process.platform !== 'darwin') {
+      await keys.keyboard.press('Control+z');
+      await keys.keyboard.press('Control+y');
+      assert.equal(await text(keys), jsonB, 'Ctrl+Y is redo');
+    }
+    assert.deepEqual(await keys.evaluate(() => demo.pane.editor.undoDepth()), 0, 'the load left no typed history behind');
+
+    // Typing after a load: Mod-z undoes the typing first (CodeMirror's history), the next Mod-z the load, Mod-Shift-z the load again.
+    await selectIn(keys, 'Beta');
+    await keys.keyboard.type('Gamma');
+    await waitDeck(keys, (d) => d.slides[1].text === 'GammaBeta' || d.slides[1].text?.includes('Gamma'));
+    const typedDepth = await depth(keys);
+    await keys.keyboard.press(undoKey);
+    await keys.waitForTimeout(300);
+    assert.equal(await text(keys), jsonB, 'Mod-z undoes the typing first and leaves the loaded text as it was');
+    assert.deepEqual(await deck(keys), docB);
+    assert.ok(await depth(keys) >= typedDepth, 'the load itself was not undone by that key');
+    await keys.keyboard.press(undoKey);
+    assert.equal(await text(keys), jsonA, 'the next Mod-z undoes the load');
+    assert.deepEqual(await deck(keys), docA);
+    await keys.keyboard.press(redoKey);
+    assert.equal(await text(keys), jsonB, 'and Mod-Shift-z brings the loaded document back');
+    // The typing, undone by keyboard, redoes with CodeMirror's history before anything else.
+    await keys.keyboard.press(undoKey);
+    await keys.keyboard.press(redoKey);
+    assert.equal(await text(keys), jsonB, 'redo with nothing typed to redo returns to the loaded document');
+
+    // Typed text not yet applied is undone by CodeMirror alone.
+    await selectIn(keys, 'Beta');
+    await keys.keyboard.type('Delta');
+    await keys.keyboard.press(undoKey);
+    await keys.waitForTimeout(300);
+    assert.equal(await text(keys), jsonB, 'typing undone straight away leaves the loaded document');
+    assert.deepEqual(await deck(keys), docB);
+
+    // An edit made elsewhere stops the key: it does not reach back over the canvas edit.
+    await keys.evaluate(() => demo.editor.set('slides.0.title', 'Retitled elsewhere'));
+    const elsewhere = await text(keys);
+    await focusPane(keys);
+    await keys.keyboard.press(undoKey);
+    assert.equal(await text(keys), elsewhere, 'Mod-z in the pane leaves an edit made elsewhere to the session\'s Undo');
+    assert.equal((await deck(keys)).slides[0].title, 'Retitled elsewhere');
+    // The session's own Undo and the key then agree.
+    await keys.evaluate(() => demo.editor.undo());
+    await focusPane(keys);
+    await keys.keyboard.press(undoKey);
+    assert.equal(await text(keys), jsonA, 'after the session undid that edit the key undoes the load');
+    await keys.close();
+
+    // A host that replaces the document on the session itself (not through the pane): the typed history no longer fits and is dropped.
+    const direct = await open();
+    await selectIn(direct, 'Next Steps');
+    await direct.keyboard.type('Typed ');
+    await direct.waitForTimeout(300);
+    await direct.evaluate((document) => demo.editor.replaceDocument(document), docB);
+    await focusPane(direct);
+    assert.equal(await direct.evaluate(() => demo.pane.editor.undoDepth()), 0, 'the typing belongs to the document that was replaced');
+    await direct.keyboard.press(undoKey);
+    await direct.waitForTimeout(100);
+    assert.ok((await deck(direct)).slides.some((slide) => slide.title === 'Typed '), 'Mod-z steps the session back over the host\'s replace');
+    await direct.close();
+
+    // A read-only pane takes no edit keys.
+    const locked = await open();
+    await load(locked, docA, { source: jsonA });
+    await locked.evaluate(() => demo.pane.setReadOnly(true));
+    await focusPane(locked);
+    await locked.keyboard.press(undoKey);
+    assert.equal(await text(locked), jsonA, 'a read-only pane does not step the session back');
+    await locked.close();
+
+    // YAML: the original text, comments included, is shown and comes back on Undo, Redo and the keys.
+    const withComments = (document, note) => {
+      const lines = toYaml(document).yaml.split('\n');
+      return `# ${note}: kept by the pane\n${lines.map((line) => (line.startsWith('slides:') ? `# the slides\n${line}` : line)).join('\n')}`;
+    };
+    const yamlA = withComments(docA, 'Conference talk'), yamlB = withComments(docB, 'Full tour');
+    assert.deepEqual(fromYaml(yamlA).presentation, docA, 'the fixture YAML reads as the document');
+    const yaml = await open('?format=yaml');
+    const yamlStart = await text(yaml);
+    await load(yaml, docA, { source: yamlA });
+    assert.equal(await text(yaml), yamlA, 'the pane shows the YAML as written, comments included');
+    await load(yaml, docB, { source: yamlB, format: 'yaml' });
+    assert.equal(await text(yaml), yamlB, 'an explicit format works the same');
+    assert.deepEqual(await deck(yaml), docB);
+    assert.equal(await depth(yaml), 2, 'each load is one undoable change');
+    await focusPane(yaml);
+    await yaml.keyboard.press(undoKey);
+    assert.equal(await text(yaml), yamlA, 'Mod-z restores the first YAML byte for byte');
+    assert.deepEqual(await deck(yaml), docA);
+    await yaml.keyboard.press(redoKey);
+    assert.equal(await text(yaml), yamlB, 'Mod-Shift-z restores the second');
+    await yaml.getByRole('button', { name: 'Undo', exact: true }).click();
+    assert.equal(await text(yaml), yamlA, 'the Undo button agrees');
+    await yaml.getByRole('button', { name: 'Redo', exact: true }).click();
+    assert.equal(await text(yaml), yamlB, 'and so does Redo');
+    await focusPane(yaml);
+    await yaml.keyboard.press(undoKey);
+    await yaml.keyboard.press(undoKey);
+    assert.equal(await text(yaml), yamlStart, 'the YAML the pane started with comes back');
+    // Typing in the YAML is undone first, and the comments stay.
+    await yaml.keyboard.press(redoKey);
+    await selectIn(yaml, 'Opening');
+    await yaml.keyboard.type('Intro');
+    await waitDeck(yaml, (d) => d.slides[0].title.includes('Intro'));
+    await yaml.keyboard.press(undoKey);
+    await yaml.waitForTimeout(300);
+    assert.equal(await text(yaml), yamlA, 'Mod-z undoes the typed YAML and keeps the comments');
+    assert.deepEqual(await deck(yaml), docA);
+    await yaml.keyboard.press(undoKey);
+    assert.equal(await text(yaml), yamlStart, 'the next Mod-z undoes the load');
+    // A source that is not this document is not shown.
+    const docC = embedded({ name: 'Third', slides: [{ title: 'C' }] });
+    await load(yaml, docC, { source: yamlA });
+    assert.equal(await text(yaml), toYaml(docC).yaml, 'a source for another document is ignored');
+    // JSON text still opens in a YAML pane as the document written in YAML (here the YAML the pane last showed for that very document),
+    // and the JSON comes back with the format.
+    const docD = embedded({ name: 'Fourth', slides: [{ title: 'D' }] });
+    const jsonD = JSON.stringify(docD, null, '\t');
+    await load(yaml, docD, { source: jsonD });
+    assert.equal(await text(yaml), toYaml(docD).yaml);
+    await chooseFormat(yaml, 'JSON');
+    assert.equal(await text(yaml), jsonD, 'the JSON spelling is kept for the JSON format');
+    // A bad format is refused before anything changes.
+    const before = await depth(yaml);
+    assert.equal(await yaml.evaluate(() => { try { demo.pane.replaceDocument({ slides: [] }, { format: 'toml' }); return 'opened'; } catch (error) { return error.name; } }), 'TypeError');
+    assert.equal(await depth(yaml), before);
+    await yaml.close();
+
+    // YAML text given in a JSON pane is kept for the YAML format.
+    const json = await open();
+    await load(json, docA, { source: yamlA });
+    assert.deepEqual(JSON.parse(await text(json)), docA, 'the JSON pane shows the document as JSON');
+    await chooseFormat(json, 'YAML');
+    assert.equal(await text(json), yamlA, 'switching to YAML shows the original YAML with its comments');
+    await json.close();
+
+    // Markdown: the same, with its own prose layout.
+    const markdownA = toMarkdown(docA).markdown.replace(/\n(# |## )/, '\n\n$1');
+    const markdownB = toMarkdown(docB).markdown + '\n';
+    const md = await open('?format=md');
+    const mdStart = await text(md);
+    await load(md, docA, { source: markdownA });
+    await load(md, docB, { source: markdownB });
+    assert.equal(await text(md), markdownB, 'the pane shows the Markdown as written');
+    await focusPane(md);
+    await md.keyboard.press(undoKey);
+    assert.equal(await text(md), markdownA, 'Mod-z restores the first Markdown byte for byte');
+    await md.keyboard.press(redoKey);
+    assert.equal(await text(md), markdownB, 'Mod-Shift-z restores the second');
+    await md.keyboard.press(undoKey);
+    await md.keyboard.press(undoKey);
+    assert.equal(await text(md), mdStart);
+    await md.close();
   }
 
   assert.deepEqual(requests, [], 'the pane makes no network requests');
