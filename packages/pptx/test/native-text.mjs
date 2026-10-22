@@ -8,6 +8,7 @@ import path from 'node:path';
 import sharp from 'sharp';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {fromPptx} from '../dist/index.js';
+import {lockEvidence} from './helpers/lock-evidence.mjs';
 const [mode,directory='artifacts/native-text',caseArgument]=process.argv.slice(2);
 assert.ok(['generate','compare','compare-case'].includes(mode));
 const selectedCase=mode==='compare-case'?Number(caseArgument):null;
@@ -27,7 +28,8 @@ for(const name of ['@openpresentation/opf','@openpresentation/opf-render','@open
   for(const file of name==='@openpresentation/opf'?['composition.js','validator.js','catalogs.js']:(await readdir(path.join(root,'dist'))).filter(file=>file.endsWith('.js')).sort())await visit(file);
   runtime[name+'/package.json']=hash(await readFile(path.join(root,'package.json')));
 }
-for(const file of ['test/native-text.mjs','test/native-text.ps1','test/native-text-fonts.ps1','test/native-process.ps1','test/accepted-text.mjs','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+for(const file of ['test/native-text.mjs','test/native-text.ps1','test/native-text-fonts.ps1','test/native-process.ps1','test/accepted-text.mjs','vendor/pptxgenjs/pptxgen.es.js'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+{const [lockKey,lockHash]=lockEvidence(new URL('../',import.meta.url));runtime[lockKey]=lockHash;}
 const visible=value=>typeof value==='string'?[value]:Array.isArray(value)?value.flatMap(visible):value&&typeof value==='object'?Object.entries(value).flatMap(([key,item])=>['text','title','subtitle','tag','blocks'].includes(key)?visible(item):[]):[];
 if(mode==='generate') {
   const run=spawnSync(process.execPath,[fileURLToPath(new URL('./accepted-text.mjs',import.meta.url))],{env:{...process.env,OPF_TEXT_OUT:output},encoding:'utf8'});

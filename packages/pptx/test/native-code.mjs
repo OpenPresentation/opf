@@ -9,6 +9,7 @@ import {createFontRegistry} from '@openpresentation/opf-render/fonts';
 import {toSvg,resolvePresentation,toPng} from '@openpresentation/opf-render';
 import {validate} from '@openpresentation/opf';
 import {toPptx,fromPptx} from '../dist/index.js';
+import {lockEvidence} from './helpers/lock-evidence.mjs';
 const [mode,directory='artifacts/native-code',selectedDeck]=process.argv.slice(2);
 assert.ok(['generate','compare','compare-deck'].includes(mode));
 if(mode==='compare-deck')assert.ok(['code-1280','code-540'].includes(selectedDeck));
@@ -28,7 +29,8 @@ for(const name of ['@openpresentation/opf','@openpresentation/opf-render','@open
   for(const file of files)await visit(file);
   runtime[name+'/package.json']=hash(await readFile(path.join(root,'package.json')));
 }
-for(const file of ['test/native-code.mjs','test/native-code.ps1','test/native-deck.ps1','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+for(const file of ['test/native-code.mjs','test/native-code.ps1','test/native-deck.ps1','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+{const [lockKey,lockHash]=lockEvidence(new URL('../',import.meta.url));runtime[lockKey]=lockHash;}
 if(mode==='generate') {
   assert.equal(process.platform,'win32');
   const faces=[],fontHashes={},fontFiles=[];

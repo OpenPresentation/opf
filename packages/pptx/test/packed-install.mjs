@@ -5,10 +5,13 @@ import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { packageManagerInvocation } from '../../../scripts/package-manager.mjs';
+import { assertLockstep, packWorkspacePackage } from './helpers/pack-workspace.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
-const npmCli = process.env.npm_execpath;
-assert.ok(npmCli, 'Run through npm run test:packed for portable npm execution.');
-// Narrow control: npm exec -- node test/packed-install.mjs --production-only
+// MR-23c: the candidate and its workspace siblings are packed with `pnpm pack` (the packed manifest, not the workspace: specs, is what
+// is tested) and installed from their tarballs; the version of a lockstep release is not on the registry yet. Run `pnpm run build:deps`
+// first (the test:packed script does).
+// Narrow control: node test/packed-install.mjs --production-only
 const native=process.argv.includes('--native');
 const productionOnly=process.argv.includes('--production-only');
 assert.ok(!productionOnly || !native, 'Production-only control never runs native Office checks.');
@@ -16,12 +19,15 @@ assert.ok(!native||process.platform==='win32','--native requires Windows with Mi
 const temporary = await mkdtemp(path.join(tmpdir(), 'opf-pptx-packed-'));
 const actualTemporary=await realpath(temporary),temporaryParent=await realpath(tmpdir());
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
-const npm = (args, cwd) => execFileSync(process.execPath, [npmCli, ...args], { cwd, encoding: 'utf8', maxBuffer: 5 * 1024 * 1024 });
+const npm = (args, cwd) => { const invocation = packageManagerInvocation('npm', args); return execFileSync(invocation.command, invocation.args, { cwd, encoding: 'utf8', maxBuffer: 5 * 1024 * 1024 }); };
 try {
   const candidateManifest=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
   assert.equal(candidateManifest.dependencies['@rgrove/parse-xml'],'4.2.3','The shipped vendor requires the pinned production XML parser, not a dev dependency.');
   assert.equal(candidateManifest.devDependencies?.['@rgrove/parse-xml'],undefined,'No dev parser may disguise the runtime dependency.');
-  const packed = JSON.parse(npm(['pack', '--json', '--pack-destination', temporary], root))[0];
+  const packed = packWorkspacePackage('@openpresentation/opf-pptx', temporary);
+  const coreName = '@openpresentation/opf', galleryName = '@openpresentation/gallery', renderName = '@openpresentation/opf-render';
+  const core = packWorkspacePackage(coreName, temporary), gallery = packWorkspacePackage(galleryName, temporary);
+  assertLockstep(packed, core); assertLockstep(packed, gallery);
   const shipped = new Set(packed.files.map(file => file.path));
   for (const name of ['pptxgen.es.js', 'LICENSE', 'UPSTREAM.json', 'package.json']) {
     assert.ok(shipped.has(`vendor/pptxgenjs/${name}`), `Missing shipped vendor file: ${name}`);
@@ -33,9 +39,15 @@ try {
   // Core 0.17 declares this package as an optional peer of its /node entry. `npm audit signatures` follows that registry edge
   // to the tarball and asks npm for a version it does not have yet (ETARGET); the override resolves the edge to the tarball too.
   // Core is a direct dependency at this package's range, so npm keeps the one core at the top level next to it.
-  const self = JSON.parse(await readFile(path.join(root, 'package.json'), 'utf8')), coreName = '@openpresentation/opf';
-  await writeFile(path.join(consumer, 'package.json'), JSON.stringify({ private: true, type: 'module', dependencies: { [self.name]: `file:${path.join(temporary, packed.filename)}`, [coreName]: self.dependencies[coreName] }, overrides: { [self.name]: `$${self.name}` } }));
-  npm(['install', '--omit=dev', '--ignore-scripts', '--no-fund', '--no-audit'], consumer);
+  // Every workspace sibling the packed manifest names is installed from its own tarball (direct dependencies, so the overrides can
+  // point the transitive edges at them and npm keeps one core at the top level).
+  const self = packed.manifest, local = [packed, core, gallery];
+  const localDependencies = packages => Object.fromEntries(packages.map(item => [item.name, `file:${item.tarball}`]));
+  const localOverrides = packages => Object.fromEntries(packages.map(item => [item.name, `$${item.name}`]));
+  await writeFile(path.join(consumer, 'package.json'), JSON.stringify({ private: true, type: 'module', dependencies: localDependencies(local), overrides: localOverrides(local) }));
+  // --legacy-peer-deps: the optional peers (the renderer, at the lockstep range) are not on the registry yet, and npm would otherwise try to resolve
+  // them from it (ERESOLVE). Optional peers are not installed either way; this only skips resolving the edge.
+  npm(['install', '--omit=dev', '--ignore-scripts', '--no-fund', '--no-audit', '--legacy-peer-deps'], consumer);
   const installed=path.join(consumer,'node_modules/@openpresentation/opf-pptx'),files={};
   const actualConsumer=await realpath(consumer),actualModules=await realpath(path.join(consumer,'node_modules'));
   assert.equal(actualModules,path.join(actualConsumer,'node_modules'),'Fresh modules cannot alias an ancestor tree');
@@ -43,11 +55,13 @@ try {
   const candidateEntry=productionLock.packages['node_modules/@openpresentation/opf-pptx'];
   assert.equal(candidateEntry.integrity,packed.integrity,'Installed candidate comes from the packed tarball');
   assert.ok(!candidateEntry.link && candidateEntry.resolved.startsWith('file:') && candidateEntry.resolved.endsWith(packed.filename),'Candidate is the tarball, not a source directory alias');
+  for(const item of [core,gallery])assert.equal(productionLock.packages['node_modules/'+item.name].integrity,item.integrity,`${item.name} comes from its packed tarball`);
   assert.equal(productionLock.packages['node_modules/@rgrove/parse-xml'].dev,undefined,'Runtime parser is not a dev-only lock entry');
   for(const {path:file} of packed.files){
     assert.ok(!path.isAbsolute(file)&&!file.split(/[/\\]/).includes('..'));
     const bytes=await readFile(path.join(installed,file));
-    assert.equal(hash(bytes),hash(await readFile(path.join(root,file))),`Installed file differs: ${file}`);files[file]=hash(bytes);
+    // The shipped manifest is the packed one (workspace: specs resolved); every other file is the source file.
+    assert.equal(hash(bytes),hash(file==='package.json'?packed.entries.get(file):await readFile(path.join(root,file))),`Installed file differs: ${file}`);files[file]=hash(bytes);
   }
   const audit = JSON.parse(npm(['audit', '--json'], consumer));
   assert.equal(audit.metadata.vulnerabilities.total, 0);
@@ -105,9 +119,14 @@ console.log('Packed consumer: isolated production parser4.2.3, vendored licenses
   await writeFile(path.join(root,'artifacts/packed-production.json'),JSON.stringify({productionOnly,packed:{filename:packed.filename,integrity:packed.integrity,sha256:hash(await readFile(path.join(temporary,packed.filename)))},candidateVersion:candidateManifest.version,files,consumer:productionIdentity,lock:JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8'))},null,2)+'\n');
   if (!productionOnly) {
   // The basic consumer above also proves the optional renderer can be absent.
-  // Add its exact published fixture version for accepted-layout and native checks.
+  // Add the packed renderer (the same lockstep version, from its own tarball) for accepted-layout and native checks.
   const manifest=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
-  npm(['install','--ignore-scripts','--no-fund','--no-audit',`@openpresentation/opf-render@${manifest.devDependencies['@openpresentation/opf-render']}`],consumer);
+  const render=packWorkspacePackage(renderName,temporary);assertLockstep(packed,render);assertLockstep(render,core);
+  // Core lists the renderer as an optional peer at the lockstep range: a direct dependency plus an override make npm resolve that edge to
+  // the tarball too (the same arrangement as the candidate above).
+  const consumerManifest=JSON.parse(await readFile(path.join(consumer,'package.json'),'utf8'));
+  await writeFile(path.join(consumer,'package.json'),JSON.stringify({...consumerManifest,dependencies:{...consumerManifest.dependencies,...localDependencies([render])},overrides:{...consumerManifest.overrides,...localOverrides([render])}}));
+  npm(['install','--ignore-scripts','--no-fund','--no-audit','--legacy-peer-deps'],consumer);
   // RR-63: from opf-render 0.16 its PNG converter and the font packages of the base and office packs are optional peers, which npm
   // does not install. The copied tests load fonts and rasterize through render, so add them at the versions this package tests with
   // (render 0.15 lists the same versions as dependencies, so this adds nothing there).
@@ -115,9 +134,9 @@ console.log('Packed consumer: isolated production parser4.2.3, vendored licenses
   for(const name of renderPeers)assert.ok(manifest.devDependencies[name],`package.json devDependencies must pin ${name} for the packed consumer`);
   npm(['install','--ignore-scripts','--no-fund','--no-audit',...renderPeers.map(name=>`${name}@${manifest.devDependencies[name]}`)],consumer);
   const lock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8')),dependencies={};
-  for(const name of ['@openpresentation/opf','@openpresentation/opf-render']){
-    const entry=lock.packages['node_modules/'+name];
-    assert.ok(entry.resolved.startsWith('https://registry.npmjs.org/')&&!entry.link);
+  for(const item of [core,render]){
+    const name=item.name,entry=lock.packages['node_modules/'+name];
+    assert.ok(entry.resolved.startsWith('file:')&&!entry.link&&entry.integrity===item.integrity,`${name} is installed from its packed tarball`);
     assert.ok((await realpath(path.join(consumer,'node_modules',name))).startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep));
     dependencies[name]={version:entry.version,resolved:entry.resolved,integrity:entry.integrity};
   }
@@ -136,14 +155,19 @@ console.log('Packed consumer: isolated production parser4.2.3, vendored licenses
       .replaceAll("'../vendor/pptxgenjs/pptxgen.es.js'","'./node_modules/@openpresentation/opf-pptx/vendor/pptxgenjs/pptxgen.es.js'");
     await writeFile(path.join(consumer,file),shared);
     process.stdout.write(execFileSync(process.execPath,[file],{cwd:consumer,encoding:'utf8',
-      env:file==='zip-date.mjs'?{...process.env,OPF_ZIP_DATE_ARTIFACTS:path.join(root,'artifacts/zip-date/packed')}:file==='native-text-whitespace.mjs'?{...process.env,OPF_NATIVE_TEXT_ARTIFACTS:path.join(root,'artifacts/native-text-whitespace/packed')}:file==='native-body-rich-text.mjs'?{...process.env,OPF_NATIVE_BODY_ARTIFACTS:path.join(root,'artifacts/native-body-rich-text/packed')}:file==='native-underline.mjs'?{...process.env,OPF_NATIVE_UNDERLINE_ARTIFACTS:path.join(root,'artifacts/native-underline/packed'),OPF_NATIVE_UNDERLINE_REGISTRY:'1'}:process.env}));
-    registryFixtures.push({file,sha256:hash(Buffer.from(shared)),passed:true,...(file==='native-underline.mjs'?{limitation:'Linked social furniture is unavailable in published core 0.11; its explicit underline-none control is mandatory in the source/current candidate lane.'}:{})});
+      env:file==='zip-date.mjs'?{...process.env,OPF_ZIP_DATE_ARTIFACTS:path.join(root,'artifacts/zip-date/packed')}:file==='native-text-whitespace.mjs'?{...process.env,OPF_NATIVE_TEXT_ARTIFACTS:path.join(root,'artifacts/native-text-whitespace/packed')}:file==='native-body-rich-text.mjs'?{...process.env,OPF_NATIVE_BODY_ARTIFACTS:path.join(root,'artifacts/native-body-rich-text/packed')}:file==='native-underline.mjs'?{...process.env,OPF_NATIVE_UNDERLINE_ARTIFACTS:path.join(root,'artifacts/native-underline/packed')}:process.env}));
+    registryFixtures.push({file,sha256:hash(Buffer.from(shared)),passed:true});
   }
   const withRendererAudit=JSON.parse(npm(['audit','--json'],consumer));assert.equal(withRendererAudit.metadata.vulnerabilities.total,0);
   const signatures=npm(['audit','signatures'],consumer);process.stdout.write(signatures);
   let nativeEvidence,nativeCodeEvidence;
   if(native){
     const tests=path.join(consumer,'test');await mkdir(tests);
+    // MR-23c: the native harnesses record lock evidence through test/helpers/lock-evidence.mjs, which reads scripts/pnpm-lock.mjs. In the
+    // consumer it finds package-lock.json next to the tests and hashes that; the modules just have to resolve.
+    await mkdir(path.join(tests,'helpers'));await mkdir(path.join(consumer,'scripts'));
+    await writeFile(path.join(tests,'helpers/lock-evidence.mjs'),await readFile(path.join(root,'test/helpers/lock-evidence.mjs')));
+    await writeFile(path.join(consumer,'scripts/pnpm-lock.mjs'),await readFile(path.join(root,'scripts/pnpm-lock.mjs')));
     await writeFile(path.join(tests,'native-quote.mjs'),await readFile(path.join(root,'test/native-quote.mjs')));
     await writeFile(path.join(tests,'native-quote-import-contract.mjs'),await readFile(path.join(root,'test/native-quote-import-contract.mjs')));
     const evidence=path.join(root,`artifacts/native-quote-packed-node${process.versions.node.split('.')[0]}`);

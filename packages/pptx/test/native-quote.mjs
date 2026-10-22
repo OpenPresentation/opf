@@ -11,6 +11,7 @@ import {createFontRegistry} from '@openpresentation/opf-render/fonts';
 import sharp from 'sharp';
 import {toPptx, fromPptx} from '@openpresentation/opf-pptx';
 import {assertNativeQuoteImport} from './native-quote-import-contract.mjs';
+import {lockEvidence} from './helpers/lock-evidence.mjs';
 
 const [mode, directory = 'artifacts/native-quote',selectedDeck] = process.argv.slice(2);
 assert.ok(['generate','compare','compare-deck'].includes(mode));
@@ -23,7 +24,8 @@ const json = async file => JSON.parse((await readFile(file,'utf8')).replace(/^\u
 const write = (file,value) => writeFile(path.join(output,file),JSON.stringify(value,null,2)+'\n');
 const runtime = {};
 for(const file of ['package.json',...(await readdir(path.join(root,'dist'),{recursive:true})).filter(file=>file.endsWith('.js')).map(file=>'dist/'+file)]) runtime['@openpresentation/opf-pptx/'+file.split(path.sep).join('/')]=hash(await readFile(path.join(root,file)));
-for(const file of ['test/native-quote.mjs','test/native-quote-import-contract.mjs','test/native-quote.ps1','test/native-deck.ps1','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(path.join(verificationRoot,file)));
+for(const file of ['test/native-quote.mjs','test/native-quote-import-contract.mjs','test/native-quote.ps1','test/native-deck.ps1','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js'])runtime[file]=hash(await readFile(path.join(verificationRoot,file)));
+{const [lockKey,lockHash]=lockEvidence(verificationRoot);runtime[lockKey]=lockHash;}
 for (const name of ['@openpresentation/opf','@openpresentation/opf-render']) {
   const directory=path.dirname(fileURLToPath(import.meta.resolve(name+'/package.json')));
   runtime[name+'/package.json']=hash(await readFile(path.join(directory,'package.json')));

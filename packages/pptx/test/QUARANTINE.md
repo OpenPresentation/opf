@@ -12,10 +12,10 @@ rule that keeps such a test visible without letting it block unrelated work, and
 - **Every entry has** `id` (a test id from `test/browser-suites.json`), `issue` (a link to the tracking issue),
   `owner`, `reason` (one sentence), `added` and `expires` (`YYYY-MM-DD`). `expires` is at most 14 days after `added`.
   A renewal sets a new `added` and `expires` and needs the same approval, so an entry cannot quietly become permanent.
-- **A quarantined test still runs.** `node scripts/quarantine.mjs run-suite <suite>` defers it to a separate, non-blocking
+- **A quarantined test still runs.** `node scripts/quarantine.mjs run-suite <suite> --dir packages/pptx` defers it to a separate, non-blocking
   step (`run-deferred`, `continue-on-error`) that reports its result in the job summary and as an annotation. The blocking
   step passes without it.
-- **An expired entry fails CI.** `node scripts/quarantine.mjs check` (a CI step) fails when an entry is malformed, names an
+- **An expired entry fails CI.** `node scripts/quarantine.mjs check --dir packages/pptx` (the root `check:quarantine`) (a CI step) fails when an entry is malformed, names an
   unknown test, or has passed its `expires` date. An expired entry is also no longer honoured: its test is a gate again.
 - The list starts empty. Removing an entry (the fix landed) needs no approval.
 
@@ -25,10 +25,10 @@ rule that keeps such a test visible without letting it block unrelated work, and
 |---|---|
 | `test/quarantine.json` | The list. `{ "schema": 1, "entries": [] }` when nothing is quarantined. |
 | `test/browser-suites.json` | The browser suites: setup commands and tests with stable ids (a suite with `continueOnFailure` runs every test and fails at the end). CI runs them through `quarantine.mjs run-suite`; the measurement runs the same list. |
-| `scripts/quarantine.mjs` | `check`, `run-suite <suite>`, `run-deferred`. Plain Node, no dependencies. |
-| `scripts/flake-repeat.mjs` | The measurement. Runs each suite N times and writes a pass rate per test. |
-| `scripts/quarantine.test.mjs` | Unit tests of the rule and both scripts (`node --test`). |
-| `.github/workflows/flake-repeat.yml` | The scheduled repeat. |
+| `../../scripts/quarantine.mjs` (repository root) | `check`, `run-suite <suite>`, `run-deferred`, each with `--dir packages/pptx`. Plain Node, no dependencies. |
+| `../../scripts/flake-repeat.mjs` (repository root) | The measurement. Runs each suite N times and writes a pass rate per test. |
+| `../../scripts/quarantine.test.mjs` (repository root) | Unit tests of the rule and both scripts (`node --test`). |
+| `.github/workflows/` (repository root) | The nightly repeat (MR-3x). |
 
 An entry looks like this (an example, not a real entry):
 
@@ -45,10 +45,10 @@ An entry looks like this (an example, not a real entry):
 
 ## Measurement
 
-`.github/workflows/flake-repeat.yml` runs nightly and on demand (`workflow_dispatch`, input `repeat`). It checks out `main`,
-builds what CI builds, and runs every suite in `test/browser-suites.json` five times (suite `browser`: `npm run test:browser`, the one browser step of the CI package job, which runs on Linux and Windows; the repeat measures Linux). The job summary lists the pass rate
+The repository's flake-repeat workflow (folded into the nightly workflow in MR-3x) runs nightly and on demand (`workflow_dispatch`, input `repeat`). It checks out `main`,
+builds what CI builds, and runs every suite in `test/browser-suites.json` five times (suite `browser`: `pnpm run test:browser`, the one browser step of the CI package job, which runs on Linux and Windows; the repeat measures Linux). The job summary lists the pass rate
 and median duration per test, with the tail of each failure, and `flake-repeat.json` is uploaded as an artifact (30 days).
 A test that failed at least once raises a `Flaky test` annotation. The measurement never gates: it exits 0 unless a suite
 cannot be set up.
 
-To run it locally: `node scripts/flake-repeat.mjs --suite <name> --repeat 5`.
+To run it locally: `node ../../scripts/flake-repeat.mjs --dir . --suite <name> --repeat 5` from this package directory (or `node scripts/flake-repeat.mjs --dir packages/pptx --suite <name> --repeat 5` from the root).
