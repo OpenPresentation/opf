@@ -142,7 +142,7 @@ opf/                                  (OpenPresentation/opf, history preserved, 
   changes/        one fragment directory for all six (front matter names the packages)
   scripts/        shared tooling (section 2 lists what goes)
   .github/        workflows (ci, nightly, npm-publish, bump-sites, golden, tracker-refresh), CODEOWNERS, issue templates, ONE dependabot.yml
-  pnpm-workspace.yaml  pnpm-lock.yaml  package.json  biome.json  .nvmrc  .npmrc  .gitattributes  .mailmap
+  pnpm-workspace.yaml  pnpm-lock.yaml  package.json  biome.json  .nvmrc  .gitattributes  .mailmap
   docs/programs/monorepo/   this program (+ commit-map/ and import-verification.md)
 ```
 
@@ -366,7 +366,7 @@ All inside `opf`, no sibling content. Core, the CLI and the current release trai
 
 | ID | Item |
 | --- | --- |
-| MR-10 | Explicit `pnpm-workspace.yaml` list; `.npmrc`; `ignoredBuiltDependencies`; materializer skip-guard (`packages/gallery/package.json` present); `check:workspace-graph` (with the E1/E2/E3 fixtures), `check:pins`, `check:versions`, `check:playwright-pin`; `git+https` repository URL in core and CLI; `scripts/stamp-githead.mjs` (about 40 lines, with a test). |
+| MR-10 | Explicit `pnpm-workspace.yaml` list; `linkWorkspacePackages: false` (in `pnpm-workspace.yaml`); `ignoredBuiltDependencies`; materializer skip-guard (`packages/gallery/package.json` present); `check:workspace-graph` (with the E1/E2/E3 fixtures), `check:pins`, `check:versions`, `check:playwright-pin`; `git+https` repository URL in core and CLI; `scripts/stamp-githead.mjs` (about 40 lines, with a test). |
 | MR-11 | Root-check scoping from S3: Biome `files.includes`, `check:text` (skip binaries, add package directories), `check:engines-range` manifests, `core-golden` prefixes, `check:changed` for six packages. |
 | MR-12 | Unify the shared scripts (changelog-fragments, quarantine, run-tests, publish-source, flake-repeat, check-font-hotlinks) with package-directory parameters; merge tests. |
 | MR-13 | `changes/config.json` targets and `codePaths` for the six packages (`gallery`: `packages/gallery/CHANGELOG.md`, code paths `packages/gallery/catalog/`, `previews/`, `src/`, `scripts/`; drop the stale `spec/catalogs/` entry); `check:changes` validates names. |
