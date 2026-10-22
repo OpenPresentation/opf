@@ -4,6 +4,8 @@
 // Every other test is a gate. The rule (supervisor approval, 14-day expiry) is in test/QUARANTINE.md.
 //
 //   node scripts/quarantine.mjs check                 validate test/quarantine.json against test/browser-suites.json (CI step)
+//   node scripts/quarantine.mjs check-all             `check` for the repository root and every packages/<x> that has a test/quarantine.json
+//                                                     (run from the repository root: the root script `check:quarantine`)
 //   node scripts/quarantine.mjs run-suite <suite>     run a suite's setup and tests in order; quarantined tests are deferred
 //   node scripts/quarantine.mjs run-deferred          run the deferred tests (always-run, continue-on-error step) and report them
 //   node scripts/quarantine.mjs playwright-grep       print the regular expression of the active quarantined Playwright tests
@@ -16,7 +18,7 @@
 // suite commands are relative to; default the current one, so `node ../../scripts/quarantine.mjs ...` and
 // `node scripts/quarantine.mjs --dir packages/render ...` do the same). No dependencies, no network.
 import { spawn } from 'node:child_process';
-import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSpec } from './package-manager.mjs';
@@ -270,6 +272,13 @@ function parseOptions(argv) {
   return options;
 }
 
+/** The directories `check-all` validates, relative to `root`: the root itself and each packages/<x> with a quarantine file. */
+export function quarantineDirectories(root = process.cwd()) {
+  const packages = existsSync(path.join(root, 'packages')) ? readdirSync(path.join(root, 'packages'), { withFileTypes: true }) : [];
+  const own = packages.filter((entry) => entry.isDirectory() && existsSync(path.join(root, 'packages', entry.name, DEFAULT_QUARANTINE))).map((entry) => `packages/${entry.name}`).sort();
+  return [...(existsSync(path.join(root, DEFAULT_QUARANTINE)) ? ['.'] : []), ...own];
+}
+
 export async function main(argv) {
   const options = parseOptions(argv);
   if (options.dir) process.chdir(path.resolve(options.dir));
@@ -282,6 +291,19 @@ export async function main(argv) {
     summary(renderCheck(state, today));
     for (const error of state.errors) { console.error(`error: ${error}`); annotate('error', 'Test quarantine', error); }
     return state.errors.length ? 1 : 0;
+  }
+  if (command === 'check-all') {
+    const directories = quarantineDirectories();
+    if (!directories.length) throw new Error(`check-all found no ${DEFAULT_QUARANTINE} in ${process.cwd()} or its packages/*`);
+    let failed = false;
+    for (const directory of directories) {
+      const state = loadState({ ...files, quarantineFile: path.join(directory, DEFAULT_QUARANTINE), suitesFile: path.join(directory, DEFAULT_SUITES) });
+      const report = renderCheck(state, today).replace('### Test quarantine', `### Test quarantine (${directory === '.' ? 'repository root' : directory})`);
+      console.log(report);
+      summary(report);
+      for (const error of state.errors) { failed = true; console.error(`error: ${directory}: ${error}`); annotate('error', 'Test quarantine', `${directory}: ${error}`); }
+    }
+    return failed ? 1 : 0;
   }
   if (command === 'run-suite') {
     if (!rest[0]) throw new Error('Usage: quarantine.mjs run-suite <suite>');
@@ -297,7 +319,7 @@ export async function main(argv) {
     process.stdout.write(playwrightGrep(state.active.map((id) => id)));
     return 0;
   }
-  throw new Error('Usage: quarantine.mjs check | run-suite <suite> | run-deferred | playwright-grep [--dir <package directory>] [--quarantine file] [--suites file] [--today YYYY-MM-DD]');
+  throw new Error('Usage: quarantine.mjs check | check-all | run-suite <suite> | run-deferred | playwright-grep [--dir <package directory>] [--quarantine file] [--suites file] [--today YYYY-MM-DD]');
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

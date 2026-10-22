@@ -6,46 +6,29 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawnSpec} from '../../../scripts/package-manager.mjs';
-import {DEPENDENCY_FIELDS,concreteRange} from '../../../scripts/workspace-packages.mjs';
-// MR-23d: the editor is packed with `pnpm pack` (it rewrites `workspace:` to the versions the published package carries) and its
+import {packWorkspacePackage} from '../../../scripts/workspace-pack.mjs';
+// MR-23d/23e: the editor is packed with `pnpm pack` (it rewrites `workspace:` to the versions the published package carries) and its
 // packed manifest is the one read below. The consumer installs the packed editor together with the packed workspace packages it
-// needs (gallery, core, renderer, PPTX converter): 0.26.0 is not on the registry before the release, so these tarballs stand for the
-// published dependencies. Every npm and pnpm command goes through spawnSpec, which runs the package manager's JavaScript entrypoint on
-// Windows without a shell and does not need npm_execpath (`pnpm run` sets it to pnpm's own entrypoint).
-const root=fileURLToPath(new URL('../',import.meta.url)),workspace=fileURLToPath(new URL('../../../',import.meta.url));
+// needs (gallery, core, renderer, PPTX converter), all through scripts/workspace-pack.mjs: 0.26.0 is not on the registry before the
+// release, so these tarballs stand for the published dependencies. Every npm command goes through spawnSpec, which runs the package
+// manager's JavaScript entrypoint on Windows without a shell and does not need npm_execpath (`pnpm run` sets it to pnpm's own entrypoint).
+const root=fileURLToPath(new URL('../',import.meta.url));
 const temporary=await mkdtemp(path.join(tmpdir(),'opf-editor-packed-'));
 const actualTemporary=await realpath(temporary),temporaryParent=await realpath(tmpdir());
 const run=(argv,cwd)=>{const {command,args,options}=spawnSpec(argv);return execFileSync(command,args,{...options,cwd,encoding:'utf8',maxBuffer:12*1024*1024});};
 const npm=(args,cwd)=>run(['npm',...args],cwd);
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
-const integrityOf=async file=>'sha512-'+createHash('sha512').update(await readFile(file)).digest('base64');
-// pnpm prints the output of the package's prepack script before its JSON.
-const jsonOf=output=>JSON.parse(output.slice(output.search(/^[{[]/m)));
-const packedManifestText=tarball=>run(['tar','-xzOf',tarball,'package/package.json'],temporary);
-// A workspace package as a dependency candidate: its manifest with `workspace:` ranges made concrete (what pnpm pack writes), the files
-// it publishes, npm pack. Packages are used as built in the workspace (build:deps builds the gallery and core; render and PPTX keep their dist).
-async function packDependency(directory){
- const source=path.join(workspace,'packages',directory),manifest=JSON.parse(await readFile(path.join(source,'package.json'),'utf8'));
- for(const field of DEPENDENCY_FIELDS)if(manifest[field])for(const name of Object.keys(manifest[field]))manifest[field][name]=concreteRange(manifest[field][name],manifest.version);
- const stage=await mkdtemp(path.join(temporary,`stage-${directory}-`));
- for(const entry of [...manifest.files,'README.md','LICENSE'])await cp(path.join(source,entry),path.join(stage,entry),{recursive:true}).catch(error=>{if(error.code!=='ENOENT'||manifest.files.includes(entry))throw error;});
- await writeFile(path.join(stage,'package.json'),JSON.stringify(manifest,null,2)+'\n');
- const packed=JSON.parse(npm(['pack','--json','--ignore-scripts','--pack-destination',temporary],stage))[0];
- return {name:manifest.name,manifest,tarball:path.join(temporary,packed.filename),integrity:packed.integrity};
-}
 try{
  // The editor under test, packed as it publishes; its manifest is read from the tarball, where `workspace:` is already a version.
- const packed=jsonOf(run(['pnpm','pack','--json','--pack-destination',temporary],root));
- const tarball=path.join(temporary,path.basename(packed.filename));packed.integrity=await integrityOf(tarball);
- const manifestText=packedManifestText(tarball),manifest=JSON.parse(manifestText);
- assert.equal(manifest.name,'@openpresentation/opf-editor');
- for(const field of DEPENDENCY_FIELDS)for(const [name,range] of Object.entries(manifest[field]??{}))assert.ok(!range.startsWith('workspace:'),`${field} ${name} is still ${range} in the packed manifest`);
+ // packWorkspacePackage reads the packed manifest from the tarball and fails when it still holds a `workspace:` spec.
+ const packed=packWorkspacePackage('@openpresentation/opf-editor',temporary),tarball=packed.tarball,manifest=packed.manifest;
+ const manifestText=packed.entries.get('package.json').toString('utf8');
  const consumer=path.join(temporary,'consumer');await mkdir(consumer);
  await writeFile(path.join(consumer,'package.json'),JSON.stringify({private:true,type:'module'}));
  // The consumer installs the workspace's candidates for the packages the editor depends on, so its font packages (exact-pinned optional
  // peers of opf-render) are the versions that renderer declares, not the editor's own development pins.
  const candidates=[];
- for(const directory of ['gallery','javascript','render','pptx'])candidates.push(await packDependency(directory));
+ for(const name of ['@openpresentation/gallery','@openpresentation/opf','@openpresentation/opf-render','@openpresentation/opf-pptx'])candidates.push(packWorkspacePackage(name,temporary));
  const candidate=name=>candidates.find(item=>item.name===name);
  const published=candidate('@openpresentation/opf-render').manifest;
  const fontPeers=Object.fromEntries(Object.entries(published.peerDependencies??{}).filter(([name])=>name.startsWith('@expo-google-fonts/')));

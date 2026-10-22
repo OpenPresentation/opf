@@ -6,7 +6,7 @@ import {mkdtemp,mkdir,readFile,writeFile,realpath,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {npm,packageRoot,packWithDependencies,tarEntry} from '../scripts/workspace-pack.mjs';
+import {npm,packageRoot,packWithDependencies} from '../scripts/workspace-pack.mjs';
 const root=packageRoot;
 const temporary=await mkdtemp(path.join(tmpdir(),'opf-render-packed-'));
 const actualTemporary=await realpath(temporary),temporaryParent=await realpath(tmpdir());
@@ -16,14 +16,14 @@ const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 try{
   const {self:packed,core:corePacked,gallery:galleryPacked}=packWithDependencies(temporary);
   const rootManifest=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
-  const tarballs=[packed,corePacked,galleryPacked].map(item=>item.filename);
+  const tarballs=[packed,corePacked,galleryPacked].map(item=>item.tarball);
   // RR-63: the lean install. The tarball alone brings no converter and no font package: SVG output works, and an export or font pack that needs an
   // optional peer says which package to install.
   const lean=path.join(temporary,'lean');await mkdir(lean);
   await writeFile(path.join(lean,'package.json'),JSON.stringify({private:true,type:'module'}));
   npm(['install','--ignore-scripts','--no-fund','--no-audit',...tarballs],lean);
   // The packed manifest, not the source one: its dependency on core is the registry range the workspace specifier became.
-  const packedManifestBytes=tarEntry(packed.filename,'package/package.json'),packedManifest=JSON.parse(packedManifestBytes.toString('utf8'));
+  const packedManifestBytes=packed.entries.get('package.json'),packedManifest=packed.manifest;
   assert.ok(!JSON.stringify(packedManifest).includes('workspace:'),'The packed manifest carries no workspace: specifier');
   assert.equal(packedManifest.dependencies['@openpresentation/opf'],`^${corePacked.version}`);
   for(const absent of ['sharp','@resvg','pdf-lib','@expo-google-fonts','@img'])assert.ok(!existsSync(path.join(lean,'node_modules',absent)),`The lean install holds no ${absent}`);
@@ -46,7 +46,7 @@ console.log('Lean install: SVG works; PNG, raster PDF and font packs name what t
   // to the tarball and asks npm for a version it does not have yet (ETARGET); the override resolves the edge to the tarball too.
   // Core is a direct dependency at this package's range, so npm keeps the one core at the top level next to it.
   const coreName='@openpresentation/opf';
-  await writeFile(path.join(consumer,'package.json'),JSON.stringify({private:true,type:'module',dependencies:{[rootManifest.name]:`file:${packed.filename}`,[coreName]:`file:${corePacked.filename}`,'@openpresentation/gallery':`file:${galleryPacked.filename}`},overrides:{[rootManifest.name]:`$${rootManifest.name}`}}));
+  await writeFile(path.join(consumer,'package.json'),JSON.stringify({private:true,type:'module',dependencies:{[rootManifest.name]:`file:${packed.tarball}`,[coreName]:`file:${corePacked.tarball}`,'@openpresentation/gallery':`file:${galleryPacked.tarball}`},overrides:{[rootManifest.name]:`$${rootManifest.name}`}}));
   const peers=[...Object.keys(rootManifest.peerDependencies)].filter(name=>/^@expo-google-fonts\/(roboto|roboto-mono|arimo|caladea|cousine|gelasio|tinos|noto-sans)$/.test(name)||['sharp','@resvg/resvg-js','pdf-lib'].includes(name)).map(name=>`${name}@${rootManifest.devDependencies[name]}`);
   assert.equal(peers.length,11);
   npm(['install','--ignore-scripts','--no-fund','--no-audit',...peers],consumer);

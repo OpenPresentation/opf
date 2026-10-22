@@ -2,7 +2,8 @@ import type { Catalog, Finding, Fonts, LayoutDiagnostic, UnresolvedReferenceDiag
 export declare const packageName = "@openpresentation/opf-pptx";
 
 export declare const releaseLane: Readonly<{
-  githubRepository: "OpenPresentation/opf-pptx";
+  githubRepository: "OpenPresentation/opf";
+  directory: "packages/pptx";
   npmPackage: "@openpresentation/opf-pptx";
   compatibilityPackage: "@openpresentation/opf";
   rendererPackage: "@openpresentation/opf-render";

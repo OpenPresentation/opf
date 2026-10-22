@@ -9,8 +9,9 @@
     "node": ">=22"
   },
   "scripts": {
-    "test": "pnpm --filter @openpresentation/opf build && node ../../scripts/run-tests.mjs",
-    "test:contract": "pnpm --filter @openpresentation/opf build && node ../../scripts/run-tests.mjs --suite contract"
+    "build:deps": "pnpm --filter \"@openpresentation/integration^...\" --fail-if-no-match run build",
+    "test": "pnpm run build:deps && node ../../scripts/run-tests.mjs",
+    "test:contract": "pnpm run build:deps && node ../../scripts/run-tests.mjs --suite contract"
   },
   "devDependencies": {
     "@expo-google-fonts/arimo": "0.4.3",

@@ -5,7 +5,8 @@ import type { SlideComposition, LayoutDiagnostic, TextMeasurement } from "@openp
 export declare const packageName = "@openpresentation/opf-render";
 
 export declare const releaseLane: Readonly<{
-  githubRepository: "OpenPresentation/opf-render";
+  githubRepository: "OpenPresentation/opf";
+  directory: "packages/render";
   npmPackage: "@openpresentation/opf-render";
   compatibilityPackage: "@openpresentation/opf";
 }>;

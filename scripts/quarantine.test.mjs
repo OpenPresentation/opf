@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { aggregate, fromPlaywrightJson, render } from './flake-repeat.mjs';
-import { playwrightGrep, playwrightIds, splitCommand, validateQuarantine } from './quarantine.mjs';
+import { playwrightGrep, playwrightIds, quarantineDirectories, splitCommand, validateQuarantine } from './quarantine.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const known = new Set(['a', 'b']);
@@ -158,4 +158,30 @@ test('--dir names the package directory for check, run-suite and flake-repeat, w
   assert.equal(flake.status, 0, flake.stderr);
   assert.equal(JSON.parse(readFileSync(path.join(root, 'out/flake-repeat.json'), 'utf8')).tests[0].runs, 2);
   rmSync(elsewhere, { recursive: true, force: true });
+});
+
+test('check-all validates the root and every package that has a quarantine file, and names the package that fails', () => {
+  const root = mkdtempSync(path.join(tmpdir(), 'opf-quarantine-all-'));
+  try {
+    const write = (directory, entries) => {
+      mkdirSync(path.join(root, directory, 'test'), { recursive: true });
+      writeFileSync(path.join(root, directory, 'test/quarantine.json'), JSON.stringify({ schema: 1, entries }));
+    };
+    write('.', []);
+    write('packages/render', []);
+    write('packages/editor', []);
+    mkdirSync(path.join(root, 'packages/cli/test'), { recursive: true }); // no quarantine file: not checked
+    assert.deepEqual(quarantineDirectories(root), ['.', 'packages/editor', 'packages/render']);
+    const run = () => spawnSync(process.execPath, [path.join(here, 'quarantine.mjs'), 'check-all'], { cwd: root, encoding: 'utf8' });
+    const clean = run();
+    assert.equal(clean.status, 0, clean.stderr);
+    assert.match(clean.stdout, /Test quarantine \(packages\/editor\)/);
+    assert.match(clean.stdout, /Test quarantine \(packages\/render\)/);
+    write('packages/render', [{ id: 'x.mjs', issue: 'https://github.com/OpenPresentation/opf/issues/1', owner: 'o', reason: 'r', added: '2020-01-01', expires: '2020-01-02' }]);
+    const failed = run();
+    assert.equal(failed.status, 1);
+    assert.match(failed.stderr, /error: packages\/render: entry 1 \(x\.mjs\)/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });

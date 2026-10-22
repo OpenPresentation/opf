@@ -5,8 +5,8 @@ import { createHash } from 'node:crypto';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { packageManagerInvocation } from '../../../scripts/package-manager.mjs';
-import { assertLockstep, packWorkspacePackage } from './helpers/pack-workspace.mjs';
+import { spawnSpec } from '../../../scripts/package-manager.mjs';
+import { assertLockstep, packWorkspacePackage } from '../../../scripts/workspace-pack.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 // MR-23c: the candidate and its workspace siblings are packed with `pnpm pack` (the packed manifest, not the workspace: specs, is what
 // is tested) and installed from their tarballs; the version of a lockstep release is not on the registry yet. Run `pnpm run build:deps`
@@ -19,7 +19,7 @@ assert.ok(!native||process.platform==='win32','--native requires Windows with Mi
 const temporary = await mkdtemp(path.join(tmpdir(), 'opf-pptx-packed-'));
 const actualTemporary=await realpath(temporary),temporaryParent=await realpath(tmpdir());
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
-const npm = (args, cwd) => { const invocation = packageManagerInvocation('npm', args); return execFileSync(invocation.command, invocation.args, { cwd, encoding: 'utf8', maxBuffer: 5 * 1024 * 1024 }); };
+const npm = (args, cwd) => { const { command, args: argv, options } = spawnSpec(['npm', ...args]); return execFileSync(command, argv, { ...options, cwd, encoding: 'utf8', maxBuffer: 5 * 1024 * 1024 }); };
 try {
   const candidateManifest=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
   assert.equal(candidateManifest.dependencies['@rgrove/parse-xml'],'4.2.3','The shipped vendor requires the pinned production XML parser, not a dev dependency.');

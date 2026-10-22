@@ -48,7 +48,7 @@ Version 0.8.0 also measures `design.contentBox` cards through core's padded inte
 Version 0.8.0 requires core 0.10.0 and uses renderer 0.8.0 for coordinated preview/font measurement. Quotes and code export their accepted internal lines and styles without another fitting pass. [Controlled Windows PowerPoint quote evidence](docs/evidence/shared-quote-integration/comparison.json) records glyph containment, separation, save/reopen and text reimport against its exact source/font hashes. Native quote import restores the quote payload from an unchanged export (see [Quote provenance](#quote-provenance-ff-57)); it does not restore the original typography or readability policy, and an edited or damaged quote imports as editable text blocks. Native chart geometry and general scalar-text wrapping also remain different from preview; editability and valid reimport do not establish raster equivalence.
 
 - Package: `@openpresentation/opf-pptx`
-- Repository: `OpenPresentation/opf-pptx`
+- Repository: `OpenPresentation/opf` (`packages/pptx`)
 - License: MIT
 - Compatibility target: `@openpresentation/opf`
 - Renderer relationship: may use `@openpresentation/opf-render` for chart rasterization, the PNG fallback of SVG pictures and visual verification

@@ -18,4 +18,3 @@ artifacts/
 # Built gallery package (tracked source: packages/gallery/{catalog,previews,src,scripts,test}).
 packages/gallery/dist
 packages/*/*.tgz
-packages/editor/dist/styles.css

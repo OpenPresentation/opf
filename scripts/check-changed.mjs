@@ -139,7 +139,8 @@ function packageSteps(selection) {
   const filter = ['--filter', selection.filter, '--fail-if-no-match'];
   if (selection.scope === 'all') commands.push(slot(pnpm, ...filter, selection.script ?? 'test'));
   else {
-    if (selection.build) commands.push(slot(pnpm, ...filter, 'build'));
+    // The package and what it depends on (dist/ is not tracked, so a fresh worktree has none of them).
+    if (selection.build) commands.push(slot(pnpm, '--filter', `${selection.filter}...`, '--fail-if-no-match', 'run', 'build'));
     const cwd = path.join(root, selection.dir);
     const batch = selection.files.filter((name) => name.endsWith('.test.mjs'));
     if (batch.length) commands.push({ cwd, argv: slot(process.execPath, '--test', ...batch.map((name) => `test/${name}`)) });

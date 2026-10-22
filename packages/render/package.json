@@ -91,7 +91,7 @@
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
-    "build:deps": "pnpm --filter @openpresentation/gallery build && pnpm --filter @openpresentation/opf build",
+    "build:deps": "pnpm --filter \"@openpresentation/opf-render^...\" --fail-if-no-match run build",
     "typecheck": "node scripts/check-syntax.mjs src test scripts",
     "validate": "node scripts/validate-package.mjs",
     "test": "pnpm run build:deps && pnpm run build && pnpm run check:fonts && node ../../scripts/run-tests.mjs && pnpm run build:browser-check && pnpm run check:scripts",

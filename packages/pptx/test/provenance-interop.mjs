@@ -4,7 +4,7 @@ import {mkdtemp, rm, writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
-import {packageManagerInvocation} from '../../../scripts/package-manager.mjs';
+import {spawnSpec} from '../../../scripts/package-manager.mjs';
 import {unzipSync} from 'fflate';
 // OPF 0.15: the gallery ids these decks name (layouts, font schemes, the narrative) resolve from the registered default catalog.
 import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
@@ -19,8 +19,8 @@ const PUBLISHED = '0.11.6';
 const consumer = await mkdtemp(path.join(tmpdir(), 'opf-pptx-interop-'));
 try {
   await writeFile(path.join(consumer, 'package.json'), JSON.stringify({name: 'interop-consumer', private: true, type: 'module'}));
-  const install = packageManagerInvocation('npm', ['install', `@openpresentation/opf-pptx@${PUBLISHED}`, '--no-audit', '--no-fund', '--ignore-scripts']);
-  execFileSync(install.command, install.args, {cwd: consumer, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024});
+  const install = spawnSpec(['npm', 'install', `@openpresentation/opf-pptx@${PUBLISHED}`, '--no-audit', '--no-fund', '--ignore-scripts']);
+  execFileSync(install.command, install.args, {...install.options, cwd: consumer, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024});
   const published = await import(pathToFileURL(path.join(consumer, 'node_modules/@openpresentation/opf-pptx/dist/index.js')).href);
   const dec = new TextDecoder();
   const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';

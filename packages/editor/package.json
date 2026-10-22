@@ -272,7 +272,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "node scripts/build.mjs",
-    "build:deps": "pnpm --filter @openpresentation/gallery build && pnpm --filter @openpresentation/opf build",
+    "build:deps": "pnpm --filter \"@openpresentation/opf-editor^...\" --fail-if-no-match run build",
     "typecheck": "node scripts/check-syntax.mjs src test scripts examples",
     "test": "pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs && pnpm run check:scripts",
     "test:contract": "pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract",

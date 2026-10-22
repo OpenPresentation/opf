@@ -16,8 +16,8 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { chromium } from 'playwright';
-import { packageManagerInvocation } from '../../../scripts/package-manager.mjs';
-import { assertLockstep, packWorkspacePackage } from './helpers/pack-workspace.mjs';
+import { spawnSpec } from '../../../scripts/package-manager.mjs';
+import { assertLockstep, packWorkspacePackage } from '../../../scripts/workspace-pack.mjs';
 import { gateSkipped } from '../scripts/published-core-gate.mjs';
 
 // RR-55: this packs the tarball and installs it with its PUBLISHED dependencies, which cannot work while the package needs an
@@ -30,7 +30,7 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 // MR-23c: npm runs through scripts/package-manager.mjs (the npm that ships with the selected Node on Windows), so this works
 // under `pnpm run` and when scripts/quarantine.mjs runs the command directly. The candidate and the workspace siblings it
 // depends on are packed with `pnpm pack` and installed from their tarballs (the lockstep version is not on the registry yet).
-const npm = (args, cwd) => { const invocation = packageManagerInvocation('npm', args); return execFileSync(invocation.command, invocation.args, { cwd, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }); };
+const npm = (args, cwd) => { const { command, args: argv, options } = spawnSpec(['npm', ...args]); return execFileSync(command, argv, { ...options, cwd, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }); };
 const temporary = await realpath(await mkdtemp(path.join(tmpdir(), 'opf-pptx-bundle-')));
 let browser, server;
 try {

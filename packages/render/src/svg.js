@@ -30,7 +30,8 @@ import { rejectRenamedOptions, selectSlides } from "./slide-sources.js";
 export const packageName = "@openpresentation/opf-render";
 
 export const releaseLane = Object.freeze({
-  githubRepository: "OpenPresentation/opf-render",
+  githubRepository: "OpenPresentation/opf",
+  directory: "packages/render",
   npmPackage: "@openpresentation/opf-render",
   compatibilityPackage: "@openpresentation/opf"
 });

@@ -16,7 +16,8 @@ export interface EditorDiagnosticOptions {
 export declare const packageName = "@openpresentation/opf-editor";
 
 export declare const releaseLane: Readonly<{
-  githubRepository: "OpenPresentation/opf-editor";
+  githubRepository: "OpenPresentation/opf";
+  directory: "packages/editor";
   npmPackage: "@openpresentation/opf-editor";
   compatibilityPackage: "@openpresentation/opf";
   rendererPackage: "@openpresentation/opf-render";

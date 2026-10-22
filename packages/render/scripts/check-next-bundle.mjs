@@ -5,9 +5,9 @@
 // It needs the network (it installs Next.js and React into a temporary directory; neither is a dependency of this repository) and
 // takes a few minutes, so it is not part of `pnpm test`: test/bundler-safe-resolve.mjs is the fast source guard CI runs.
 //   pnpm run test:next-bundle                       Turbopack (the Next.js default)
-//   pnpm run test:next-bundle -- --webpack          Turbopack, then webpack
-//   pnpm run test:next-bundle -- --keep             keep the temporary app and print its path
-//   pnpm run test:next-bundle -- --tarball <file>   check a tarball (a published version, another branch) instead of packing this checkout
+//   pnpm run test:next-bundle --webpack             Turbopack, then webpack
+//   pnpm run test:next-bundle --keep                keep the temporary app and print its path
+//   pnpm run test:next-bundle --tarball <file>      check a tarball (a published version, another branch) instead of packing this checkout
 // The checkout is packed with `pnpm pack` together with core and the gallery (the workspace has no registry copy of the version under
 // development; scripts/workspace-pack.mjs); a --tarball is installed with the core range its own manifest declares, from the registry.
 // OPF_NEXT_VERSION and OPF_REACT_VERSION choose other Next.js and React versions.
@@ -81,7 +81,7 @@ const temporary = mkdtempSync(path.join(tmpdir(), 'opf-render-next-'));
 try {
   // This checkout: render, core and the gallery as tarballs. A --tarball: that file alone, with core from the registry at the range its manifest declares.
   const packed = tarballFlag === -1 ? packWithDependencies(temporary) : undefined;
-  const tarball = packed ? packed.self.filename : path.resolve(argv[tarballFlag + 1]);
+  const tarball = packed ? packed.self.tarball : path.resolve(argv[tarballFlag + 1]);
   const declared = packedManifest(tarball);
   assert.ok(!JSON.stringify(declared).includes('workspace:'), `${tarball} is not a packed manifest (it carries a workspace: specifier)`);
   const app = path.join(temporary, 'app'), core = '@openpresentation/opf';
@@ -89,7 +89,7 @@ try {
   mkdirSync(app);
   writeFileSync(path.join(app, 'package.json'), JSON.stringify({
     private: true, type: 'module',
-    dependencies: { next: NEXT, react: REACT, 'react-dom': REACT, [manifest.name]: `file:${tarball}`, ...(packed ? { [core]: `file:${packed.core.filename}`, '@openpresentation/gallery': `file:${packed.gallery.filename}` } : { [core]: declared.dependencies[core] }), ...Object.fromEntries(fontPeers.map((name) => [name, manifest.devDependencies[name]])) },
+    dependencies: { next: NEXT, react: REACT, 'react-dom': REACT, [manifest.name]: `file:${tarball}`, ...(packed ? { [core]: `file:${packed.core.tarball}`, '@openpresentation/gallery': `file:${packed.gallery.tarball}` } : { [core]: declared.dependencies[core] }), ...Object.fromEntries(fontPeers.map((name) => [name, manifest.devDependencies[name]])) },
     overrides: { [manifest.name]: `$${manifest.name}` },
   }, null, 2));
   for (const [file, text] of Object.entries(FILES)) { mkdirSync(path.dirname(path.join(app, file)), { recursive: true }); writeFileSync(path.join(app, file), text); }

@@ -188,7 +188,7 @@ The headless operations the editor runs are in `@openpresentation/opf-editor/lay
 ## Scope
 
 - Package: `@openpresentation/opf-editor`
-- Repository: `OpenPresentation/opf-editor`
+- Repository: `OpenPresentation/opf` (`packages/editor`)
 - License: MIT
 - Compatibility target: `@openpresentation/opf`
 - Renderer relationship: built on `@openpresentation/opf-render` trace output

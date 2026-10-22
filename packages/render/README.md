@@ -186,7 +186,7 @@ Installed size, measured on Windows with `npm install --ignore-scripts`, unpacke
 ## Scope
 
 - Package: `@openpresentation/opf-render`
-- Repository: `OpenPresentation/opf-render`
+- Repository: `OpenPresentation/opf` (`packages/render`)
 - License: MIT
 - Compatibility target: `@openpresentation/opf`
 - Entry points: root, `/svg`, `/png`, `/pdf`, `/export-browser`, `/fonts-node`, `/fonts-browser`, `/fonts`, `/player`, `/element`, `/element/define`, `/preview-fonts`, `/preview-fonts-node` (see [Install](#install-what-to-add-for-what-rr-63))
@@ -647,8 +647,8 @@ The report (JSON with the per-job records and memory series) and a Markdown summ
 npm ci
 npm install --no-save @openpresentation/opf-pptx@0.18.0   # optional: without it the PPTX leg is skipped
 npm run build
-npm run bench:soak -- --link-renderer                       # 500 jobs per worker at concurrency 1 and 4 (about 35 minutes)
-npm run bench:soak -- --iterations 20 --concurrency 1,2 --decks 6 --script-every 0   # smoke run
+pnpm run bench:soak --link-renderer                       # 500 jobs per worker at concurrency 1 and 4 (about 35 minutes)
+pnpm run bench:soak --iterations 20 --concurrency 1,2 --decks 6 --script-every 0   # smoke run
 ```
 
 ## Development
@@ -663,7 +663,7 @@ pnpm run validate
 pnpm test
 ```
 
-The accepted-text regression `pnpm run test:text` checks 24 combinations of dimensions, alignment, cards and formatting, including exact accepted positions/styles and strict overflow. `pnpm run test:rich-spacing-browser -- <new-output-directory>` compares two unchanged gallery slides with identical open font bytes. `pnpm run test:text-browser -- <new-output-directory>` also checks actual text paint: it currently exits 1 for four portrait/right title cases with one painted pixel beyond the 0.1-pixel cell tolerance in the recorded Windows Edge environment. Its advance/origin checks pass. Font text rectangles, painted-pixel containment, source whitespace and native fidelity are separate results; that historical plain fitting normalized whitespace. Later source-whitespace evidence below supersedes that behavior and has its own reviewed corpus checkpoint.
+The accepted-text regression `pnpm run test:text` checks 24 combinations of dimensions, alignment, cards and formatting, including exact accepted positions/styles and strict overflow. `pnpm run test:rich-spacing-browser <new-output-directory>` compares two unchanged gallery slides with identical open font bytes. `pnpm run test:text-browser <new-output-directory>` also checks actual text paint: it currently exits 1 for four portrait/right title cases with one painted pixel beyond the 0.1-pixel cell tolerance in the recorded Windows Edge environment. Its advance/origin checks pass. Font text rectangles, painted-pixel containment, source whitespace and native fidelity are separate results; that historical plain fitting normalized whitespace. Later source-whitespace evidence below supersedes that behavior and has its own reviewed corpus checkpoint.
 
 `pnpm test` also renders every `examples/**/*.opf.json` deck twice and asserts byte-identical SVG output. Golden PNG drift is checked on every run against all 805 slides from the installed core package, identified by a content digest. Changed or missing corpora fail; Git history cannot skip the gate. To generate a review candidate after an intentional visual change:
 
