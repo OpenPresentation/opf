@@ -1,0 +1,19 @@
+Click entry: 18 browser workflows passed.
+ - title: one click puts a collapsed caret at the clicked glyph half (left and right halves, start, middle, end)
+ - wrapped subtitle: double spaces, tab, wrapped lines and clicks outside the glyphs map to exact source offsets
+ - bullets: a wrapped list item maps line by line
+ - centered and right-aligned titles
+ - footer furniture text
+ - CRLF source: LF input offsets, typing after a click keeps the original line endings
+ - rich text: caret at the click, no select-all, double-click selects a word
+ - press-drag selects a forward, backward and multi-line range without moving anything
+ - while editing: double-click selects a word, triple-click a paragraph, clicks move the caret
+ - clicking another text target commits then enters at the click; an invalid edit refuses
+ - Enter, Space and F2 select all; Escape keeps the box selected
+ - images and charts: click selects, double-click opens properties
+ - layout handles still drag and text beside them still edits
+ - textEntry "dblclick": click selects, double-click places the caret, Enter selects all
+ - untraced text falls back to the positioned textarea layout
+ - a secondary button does not enter editing
+ - reveal shows the slide and selects the nearest target
+ - touch: a tap enters at the tapped character

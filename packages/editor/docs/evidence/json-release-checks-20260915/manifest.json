@@ -1,0 +1,41 @@
+{
+  "baseCommit": "309d4a664b204bb1949bd0bdbeee69160f950a21",
+  "node": "v24.21.0",
+  "npm": "11.19.0",
+  "sourceHashes": {
+    "test/packed-install.mjs": "4840a66be0829fb52abac45aa9134d67e6e4da57504cd2944c88dcf17cc89abf",
+    ".github/workflows/release.yml": "eda37fbbd854569fc62369dabada6b18944e57e7297be31e4b7368f1d4021b72"
+  },
+  "artifacts": [
+    {
+      "file": "packed-command-failure.log",
+      "bytes": 5622,
+      "sha256": "705a48c9bbfd9d24ddb4cd77c00667103ec31b2c6f8b50cf4499a28336630103"
+    },
+    {
+      "file": "installed-json.json",
+      "bytes": 6684,
+      "sha256": "a8cd745ce7548560bff4e65106bf721550e995ecbb42b8c02b38754c8bbefde1"
+    },
+    {
+      "file": "source-json.json",
+      "bytes": 1096,
+      "sha256": "ad5a8f356757e6e28d4dd9c87a6a7d79fc0f05a25ad28431fc76f14fa788e030"
+    },
+    {
+      "file": "source-json.log",
+      "bytes": 2110,
+      "sha256": "6c707b51b4edf7b052bfd77bcc65cf0de668873b18e224fe34b3de5e1610f105"
+    },
+    {
+      "file": "syntax.log",
+      "bytes": 1194,
+      "sha256": "657185ade69bb71c9f530218404e499b5e67e078780fd51bc0b21be60a43abdd"
+    },
+    {
+      "file": "metadata.log",
+      "bytes": 145,
+      "sha256": "5c267533de9423217af62411314f8d442ec1bcbafbdf5a35414946e2e34b9b2c"
+    }
+  ]
+}

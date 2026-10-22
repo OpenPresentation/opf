@@ -1,0 +1,25 @@
+{
+  "files": {
+    "README.md": "88d58b2954cbd1ae25762f2322324715e876db7bf0791f60cea53789f31caeb7",
+    "before-browser.json.gz": "05c8153940152f4252494ddeff3e35c905c6c80edba8d156f117e95e25cb07c8",
+    "before-test.log": "5dff5fa53e198d0651200a75b76b4011b74cf702bbbdd8baa2e5b41f0f70ad05",
+    "before.json": "8c9a452880361ce25b95223725a2cfca6c4583942e0c0f756be1a8a13c581cab",
+    "checkout-estimated.json.gz": "ebd7bc1ae3124df1c4716f11ad3a980851f8640083dc0e7da375e55adeaef59d",
+    "checkout-measured.json.gz": "c7aa6528d5a9fb66ce0eb45eec8cd3050b2af33c9d1f3f303f3efe3a21b11206",
+    "checkout-painted.json.gz": "68e291f07da13d1c9c1a9781b67c25d58cd1bf7c86cd68ae5bdfde91bd821bff",
+    "coordinated-browser.json.gz": "7279e5950ee81cca06a97e00cf490f053430574092401d4ecb81ed2bde7a8e27",
+    "coordinated-manifest.json.gz": "d1c39fcd83c96c74903c86e3f7a1b11ec04be844574e55d267758a3dce615836",
+    "installed-estimated.json.gz": "a37b847c49daff59eae877b66387305535cb35d890b0ca6dd94acf0a3791377a",
+    "installed-measured.json.gz": "22e92ab213650978426d1d5e09cdd01fe00d194fcc4c37edf3f124be64d58f24",
+    "installed-painted.json.gz": "44baabaa4e4070c98a63fe27d4d5abf118d42716561dc7ce3943d68d67e51e01",
+    "installed-runtime-audit.json.gz": "9233184b4dcd5fb3db7ec2d82edcaa540f326a007ae4810c3a88a952f44603cf",
+    "installed-runtime-audit.log.gz": "49166d4fa8579e54ab34fc851c5dda9e7d8c10965d9c55216808878c0e6528df",
+    "opf-rich-coordinated-browser-20260915.log.gz": "90248febbe5b41f9a0220a357ad953fd0b929b97e52e90bf395a49aaec3c3da0",
+    "opf-rich-coordinated-installed-20260915.log.gz": "08390f95cd328b9e4b128b88cfd7c4e0abb918080c5b4fc61aba21bd40a8c066",
+    "opf-rich-coordinated-pack-20260915.log.gz": "5e6f6afc297bde4981df2a9184df75108446a16e1909f70ee99b854357d2f009",
+    "opf-rich-input-before-browser-20260915.log.gz": "ae3c92640c7f32235738448d0c35c2dfcafefd681de93eaf9e86f10a49c3f581",
+    "packed-install-failure.log.gz": "70f0995b60dfb91a049a4aa62cfedd0b5bfcb8499d2eb95fa017935c36c3edb0",
+    "roboto-mark-rejection.json.gz": "02a7b7b0c828f53be54aa172f290877e5e5920876472634745a4631ab7d99771",
+    "source-browser-build-failure.log": "0abb43fe7018c1b2fbbaa1efdb1e0e1bb15eae8ee1026cd8cfa6d41d9dffcbb3"
+  }
+}

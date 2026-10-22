@@ -1,0 +1,72 @@
+{
+  "browser-checkout.json.gz": {
+    "sha256": "607ff4d2b37fd5bf44a8b19fd089f3f99aeac136d6254008c5f236a001b66bc0",
+    "uncompressedSha256": "4e00048cff974bc0ebe603b7ddba5cb50f8a9d407ead2df26e7fea9847edbf29",
+    "bytes": 1066
+  },
+  "browser-installed.json.gz": {
+    "sha256": "8cc5c2149af580459f88a267990f5f11084a183e46e0548d9e76524e06dfbbf8",
+    "uncompressedSha256": "e2234e9b0317229834e1255ffb60667feb99f8986c775ed15224d9cc7606b805",
+    "bytes": 1067
+  },
+  "installed-runtime-audit.json.gz": {
+    "sha256": "1c4681b68b6334c0f94c6ffa0f9798011bd1ea235963edbeaeda9190db6bf5b4",
+    "uncompressedSha256": "0a538dc4fbdc79f6a6fef5c4bde4c6c23cf69bcda0893017aee8f9f9f68584ba",
+    "bytes": 10800
+  },
+  "registry-audit.json.gz": {
+    "sha256": "601bd3b63c7186ad50b7fcb80dda1b91321ef0cd6cf8c5ade368d5ca7f37fb15",
+    "uncompressedSha256": "20c715f3061f8e5af176e12dd2616a4a7b58e22c7eb9670c4ab9ced52a40d970",
+    "bytes": 360
+  },
+  "registry-signatures.log.gz": {
+    "sha256": "e2583ce3edfcc001a12425131d202896337a1e85e2bd7baeecf40c08fd2443b2",
+    "uncompressedSha256": "a57ff87c433e83e945c2e2b001e51b2dc3122386b9b7b1008b65e398910045d0",
+    "bytes": 176
+  },
+  "registry-predecessor-full-test-failure.log.gz": {
+    "sha256": "2a6ad290fd17c4dbec5e744ce4e012e01b1a8d82ca511e271d955ea67a0d7056",
+    "uncompressedSha256": "7c7be16537141ba656d263084421e2bc7c34b7b1e1145fb353d2982cc7bb961f",
+    "bytes": 2138
+  },
+  "coordinated-full-test.log.gz": {
+    "sha256": "aab0d4326d6a9a8c615bb17643fdf484f2651a85270a092496e399e5ddfa90af",
+    "uncompressedSha256": "20c5042025a41129134d53236c916c74080d28c6337c5fddbbfbb7bcc06b4449",
+    "bytes": 2245
+  },
+  "public-types.ts.gz": {
+    "sha256": "eea00065cc6432a203d0919b37b5da757b3fc09c0feecca1ed734e1050af4d72",
+    "uncompressedSha256": "447044e971ba984bae56bdddd648c03416f2fa704802258d7130f620155d2bbf",
+    "bytes": 736
+  },
+  "ci-linux-before-redo.log.gz": {
+    "sha256": "bcf696aa53d1d89aaea8fc81664124f2974be340dcdcdce5082832ec658f2436",
+    "uncompressedSha256": "ec407220ff2794ec7ccbd9b1969fb040b63f281bc76a4a715112ff91417db788",
+    "bytes": 16143
+  },
+  "linux-keymap-before-redo.json.gz": {
+    "sha256": "f9038549de5934c8f1b4d89e95b7564411e2831fe9af004ad03506b9b4e725dc",
+    "uncompressedSha256": "99350608060e3be10559f2b37f6461337316fb065d5bb07c116888c71fc2921f",
+    "bytes": 765
+  },
+  "linux-keymap-after-redo.json.gz": {
+    "sha256": "6660dbcfe5092acd83740558fafcfe7b71457042f5fdad3a740fd5cbf88b0c53",
+    "uncompressedSha256": "8d7e55814c29ff168d0fd544d68e64756705545ffb2e8c29538d6f03b0cfdfca",
+    "bytes": 1095
+  },
+  "windows-keymap-after-redo.json.gz": {
+    "sha256": "ad4bc6fadf804b8e9f7c0f76d7f9400363fd6bfaae8fc6e765afcb5e1832b044",
+    "uncompressedSha256": "bd08d4b457c5ddcab0d4f95871ea179eaf8b5a48d4a78ceb85669422859d25a8",
+    "bytes": 1095
+  },
+  "mac-after-redo.json.gz": {
+    "sha256": "0e55d4d48ed1817521b5c9ac1bfd82d6d7308e6e1f529adfd7d26f1c576777d9",
+    "uncompressedSha256": "e63e97d9f87770ee99431696abd6d9eee143f6671b65595355eb035a2ca476c2",
+    "bytes": 1096
+  },
+  "ci-linux-after-redo.log.gz": {
+    "sha256": "8c0be779c2882259acc64bab8db961097c2d02b37b22e658826d19e02e06363a",
+    "uncompressedSha256": "758dc7f41f978a10fde1d34e114a4b339e53f288d2452cd8d5b0e73bed120eba",
+    "bytes": 263584
+  }
+}

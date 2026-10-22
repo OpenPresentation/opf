@@ -1,0 +1,38 @@
+{
+  "checkedAt": "2026-09-10T07:40:30.383Z",
+  "candidate": "@openpresentation/opf-editor@0.6.0",
+  "published": false,
+  "reports": [
+    {
+      "node": "v20.20.2",
+      "file": "node20.json",
+      "sha256": "97b16c294eee478a2fbc1386f7b51d6541b1fad823fb254daf41cdae255d07cb",
+      "integrity": "sha512-xjVnrpPTjWdkwODFS5Tu+HS4LBOL6S7iYzKhb9tOQb+VIj/RVP3QYLKPuv1TnqBycx9b5OHXdudIremu/gpfUw==",
+      "shippedFileMatches": 32
+    },
+    {
+      "node": "v24.20.0",
+      "file": "node24.json",
+      "sha256": "888d69554c891a95047198a58aea1928db8ef49773daaedab346cf0d01ea42e5",
+      "integrity": "sha512-xjVnrpPTjWdkwODFS5Tu+HS4LBOL6S7iYzKhb9tOQb+VIj/RVP3QYLKPuv1TnqBycx9b5OHXdudIremu/gpfUw==",
+      "shippedFileMatches": 32
+    }
+  ],
+  "visualInspection": {
+    "files": [
+      {
+        "file": "code-selection-1280.png",
+        "sha256": "b94c424213d7504b9e0bd4c1c4a050d5b03a296b754a356f9c5a7f386f1b0b5f"
+      },
+      {
+        "file": "code-selection-540.png",
+        "sha256": "8477fd54436eff295a367c480437efa5ffe6841460fec9140ea8cf4b91ca3056"
+      }
+    ],
+    "sourceHarnessSha256": "d4cf644d14de3e8b9417363a1a9b1ec22060aeed9fdaf7208ebad5883c4d2ca4",
+    "captureHarnessSha256": "ef05ebd79fbb96dca10dab1136bef9037e7eabcff1a769f2c0e2f4712b564224",
+    "runtimeSha256": "35d57747d1671555127a3fb7b871ee819f741f5638cd96a1f0a82cfaebc07e85",
+    "observations": "Real Edge captures of fully selected code after the fix show readable source glyphs in both wide and portrait canvases. The capture harness only adds a canvas screenshot after the source selection assertion. Source/filename computed-color and full workflow assertions are retained in both candidate reports."
+  },
+  "scope": "Local candidate evidence. Actual registry verification follows trusted publication of the reviewed merge."
+}

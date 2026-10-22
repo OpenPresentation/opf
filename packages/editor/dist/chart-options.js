@@ -1,0 +1,318 @@
+// Chart options (RR-35): axis titles, legend position and data labels, plus (FA-09) the chart's text alternative `alt` and (FA-14) the
+// highlight. A chart is `{ type, data, alt?, axisTitles?, legend?, dataLabels?, highlight? }`. These helpers read the fields as form
+// state and edit them as one validated, undoable patch (a few add / replace / remove operations
+// on the chart, one undo step), so the canvas redraws the legend, titles and labels and Undo
+// restores the chart. Which fields a chart offers follows core's support table
+// (`chartOptionSupport`): a pie has no axis titles, area and radar labels have no position
+// choice, and only a pie or doughnut can show percent. A highlight names plotted series and category labels (the
+// choices come from the chart's resolved data, so a dataset chart offers its dataset's columns and rows); a pie
+// highlights slices (categories), an area only series. Nothing here invents text. A combo chart (FA-15) also offers which series are lines (`line`), which lines use the secondary value
+// axis (`secondaryAxis`) and that axis's title. (RR-96) `colors` edits `chart.colors`, the series (or slice) colors by position, each a hex
+// color, a scheme slot such as `accent3` (it keeps following the deck) or a `var:` color variable.
+import { resolveChartData, resolveSlideContext } from "@openpresentation/opf";
+import { chartOptionSupport, chartOptionTarget, chartSeriesPalette } from "@openpresentation/opf/composition";
+import { getValueAtPath, opfPathToJsonPointer, splitOpfPath } from "./index.js";
+import { checkedDocument, fail, same } from "./edit-helpers.js";
+import { checkFormat } from "./checks.js";
+import { isColorRef } from "./background-options.js";
+
+export const CHART_LEGEND_POSITIONS = Object.freeze(["default", "none", "top", "bottom", "left", "right"]);
+export const CHART_LABEL_CONTENT = Object.freeze(["category", "value", "percent"]);
+/** The most colors `chart.colors` takes (the schema's maxItems). */
+export const CHART_COLORS_MAX = 24;
+/** The scheme slots a chart color is offered from, in palette order: the deck's accents. */
+export const CHART_COLOR_SLOTS = Object.freeze(["accent1", "accent2", "accent3", "accent4", "accent5", "accent6"]);
+
+const isObject = (value) => Boolean(value) && typeof value === "object" && !Array.isArray(value);
+const CONTENT_ORDER = CHART_LABEL_CONTENT;
+const POSITIONS = new Set(["center", "inside-end", "inside-base", "outside-end", "above", "below", "left", "right"]);
+
+/** The chart path a selection path points at (`…chart`, `…chart.data.rows.0.1`), or undefined. */
+export function parseChartPath(path) {
+  let parts;
+  try {
+    parts = splitOpfPath(path);
+  } catch {
+    return undefined;
+  }
+  const index = parts.lastIndexOf("chart");
+  return index >= 1 ? parts.slice(0, index + 1).join(".") : undefined;
+}
+
+function chartAt(presentation, chartPath) {
+  const parts = splitOpfPath(chartPath);
+  const chart = getValueAtPath(presentation, parts);
+  if (!isObject(chart) || typeof chart.type !== "string") throw fail("chart-not-found", "Choose a chart (a path ending in .chart).", { chartPath });
+  return { parts, chart };
+}
+
+// The names a highlight can take, from the chart's resolved data: the plotted series (the columns after the category and, on a
+// scatter chart, the X column) and the distinct non-empty row labels. Empty when the data does not resolve.
+function highlightChoices(chart, document) {
+  const none = { series: [], categories: [] };
+  let resolved;
+  try { resolved = resolveChartData(chart, document); } catch { return none; }
+  if (!resolved?.ok || resolved.columns.length < 2) return none;
+  const first = resolved.hasX ? 2 : 1;
+  const label = (cell) => (cell === null || cell === undefined ? "" : String(cell));
+  return { series: resolved.columns.slice(first), categories: [...new Set(resolved.rows.map((row) => label(row[0])).filter(Boolean))] };
+}
+
+// RR-96: what `chart.colors` positions mean on a chart. A series chart colors its plotted series, a pie, doughnut, treemap or funnel
+// its slices or rows (one per data row, to the schema's 24), and a histogram, pareto or waterfall the colors it draws with.
+const SERIES_KINDS = new Set(["bar", "line", "area", "scatter", "radar", "combo"]);
+const ROW_KINDS = new Set(["pie", "doughnut", "treemap", "funnel"]);
+function colorPositions(chart, target, document, combo) {
+  const kind = target?.kind;
+  const label = (cell) => (cell === null || cell === undefined ? "" : String(cell));
+  let by = "colors";
+  let labels = [];
+  if (SERIES_KINDS.has(kind)) {
+    by = "series";
+    labels = combo ? combo.map((entry) => entry.name) : highlightChoices(chart, document).series;
+  } else if (ROW_KINDS.has(kind)) {
+    by = "categories";
+    try {
+      const resolved = resolveChartData(chart, document);
+      if (resolved?.ok) labels = resolved.rows.map((row) => label(row[0]));
+    } catch { /* unresolved data: no positions to name */ }
+  }
+  if (!labels.length) { by = "colors"; labels = CHART_COLOR_SLOTS.map((_, index) => `Color ${index + 1}`); }
+  return { by, labels: labels.slice(0, CHART_COLORS_MAX).map((text, index) => text || `Color ${index + 1}`), slots: CHART_COLOR_SLOTS };
+}
+
+const names = (value) => (Array.isArray(value) ? [...new Set(value.filter((entry) => typeof entry === "string"))] : []);
+
+/**
+ * What the chart options offer for `chart`, and the form state of the fields. `presentation` (optional) resolves a dataset-backed
+ * chart's columns and rows for the highlight choices.
+ * `fields.axisTitles.category` and `.value` say whether the type has that axis; `fields.legend` whether it has a legend;
+ * `fields.dataLabels` the contents and positions it accepts (`positions` is empty when labels have no position choice).
+ * `fields.axisTitles.secondary` is true on a combo chart, whose `combo.series` lists the plotted series ({ name, role, axis });
+ * pass the `presentation` for a dataset-backed chart.
+ */
+export function readChartOptions(chart, presentation) {
+  const target = chartOptionTarget(chart?.type);
+  // A chart type outside the catalog is never restricted: every field is offered (a secondary axis exists only on combo charts).
+  const support = target ? chartOptionSupport(target) : {
+    axisTitles: { category: true, value: true, secondary: false }, legend: true,
+    dataLabels: { supported: true, content: CONTENT_ORDER, positions: [...POSITIONS], defaultPosition: null, defaultOn: false },
+    highlight: { series: true, categories: true },
+  };
+  const titles = isObject(chart?.axisTitles) ? chart.axisTitles : {};
+  const labels = chart?.dataLabels;
+  const labelObject = isObject(labels) ? labels : {};
+  const combo = target?.kind === "combo" ? comboSeries(chart, presentation) : undefined;
+  return {
+    target,
+    fields: {
+      axisTitles: { ...support.axisTitles, secondary: support.axisTitles.secondary === true },
+      legend: support.legend,
+      dataLabels: { ...support.dataLabels, content: [...support.dataLabels.content], positions: [...support.dataLabels.positions] },
+      highlight: { ...support.highlight },
+    },
+    // FA-15: a combo chart's plotted series, each drawn as columns ("bar") or as a line, on the primary or secondary value axis.
+    ...(combo ? { combo: { series: combo } } : {}),
+    choices: highlightChoices(chart, presentation),
+    colors: colorPositions(chart, target, presentation, combo),
+    state: {
+      // RR-96: `chart.colors` as written (a ColorRef per position); [] when absent, so the deck palette applies.
+      colors: Array.isArray(chart?.colors) ? chart.colors.filter((entry) => typeof entry === "string") : [],
+      // FA-09: the text alternative. `decorative` is the empty alt, a reviewed choice, not a missing one.
+      alt: typeof chart?.alt === "string" ? chart.alt : "",
+      decorative: chart?.alt === "",
+      highlight: { series: names(chart?.highlight?.series), categories: names(chart?.highlight?.categories) },
+      axisTitles: { category: typeof titles.category === "string" ? titles.category : "", value: typeof titles.value === "string" ? titles.value : "", secondary: typeof titles.secondary === "string" ? titles.secondary : "" },
+      legend: typeof chart?.legend === "string" ? chart.legend : "default",
+      dataLabels: {
+        // Funnel and treemap label their marks by default, so `dataLabels: false` is what switches them off.
+        on: labels === true || isObject(labels) || (labels === undefined && support.dataLabels.defaultOn),
+        explicit: labels !== undefined,
+        content: Array.isArray(labelObject.content) && labelObject.content.length ? CONTENT_ORDER.filter((part) => labelObject.content.includes(part)) : (labels === undefined && support.dataLabels.defaultOn ? [target?.kind === "treemap" ? "category" : "value"] : ["value"]),
+        position: typeof labelObject.position === "string" ? labelObject.position : "auto",
+        separator: typeof labelObject.separator === "string" ? labelObject.separator : ", ",
+      },
+    },
+  };
+}
+
+/**
+ * FA-15: a combo chart's plotted series ({ name, role, axis }) in the data's plotted order (the mapping, else the columns), with
+ * the role and axis core resolves for each; [] when the data does not resolve.
+ */
+function comboSeries(chart, document) {
+  const resolved = resolveChartData(chart, document);
+  if (!resolved.ok || !Array.isArray(resolved.combo)) return [];
+  const plan = new Map(resolved.columns.slice(1).map((name, index) => [name, resolved.combo[index]]));
+  const { line: _line, secondaryAxis: _secondary, ...plain } = chart;
+  const plotted = resolveChartData({ ...plain, type: "column" }, document);
+  const names = plotted.ok ? plotted.columns.slice(1) : [...plan.keys()];
+  return names.filter((name) => plan.has(name)).map((name) => ({ name, role: plan.get(name)?.role ?? "bar", axis: plan.get(name)?.axis ?? "primary" }));
+}
+
+// FA-15: `line` and `secondaryAxis` for a combo chart from the wanted line and secondary-axis names. `line` is written only when
+// it differs from the default (the last plotted series), names keep the data's order, and only a line can use the secondary axis.
+function comboFields(chart, change, document) {
+  const series = comboSeries(chart, document);
+  const plotted = series.map((entry) => entry.name);
+  const currentLines = series.filter((entry) => entry.role === "line").map((entry) => entry.name);
+  const currentSecondary = series.filter((entry) => entry.axis === "secondary").map((entry) => entry.name);
+  const wanted = (value, current, field) => {
+    if (value === undefined) return current;
+    if (!Array.isArray(value) || value.some((name) => typeof name !== "string")) throw fail("invalid-chart-option", `${field} is a list of series names.`, { [field]: value });
+    const unknown = value.filter((name) => !plotted.includes(name));
+    if (unknown.length) throw fail("invalid-chart-option", `${unknown.map((name) => `'${name}'`).join(", ")} ${unknown.length === 1 ? "is not a plotted series" : "are not plotted series"} of this chart.`, { [field]: value });
+    return value;
+  };
+  const lines = wanted(change.line, currentLines, "line");
+  if (!lines.length) throw fail("invalid-chart-option", "A combo chart draws at least one series as a line; choose a column chart for columns only.", { line: change.line });
+  if (lines.length >= plotted.length) throw fail("invalid-chart-option", "A combo chart keeps at least one series as columns.", { line: change.line });
+  const ordered = plotted.filter((name) => lines.includes(name));
+  const secondary = plotted.filter((name) => ordered.includes(name) && wanted(change.secondaryAxis, currentSecondary, "secondaryAxis").includes(name));
+  const defaultLine = ordered.length === 1 && ordered[0] === plotted[plotted.length - 1];
+  return { line: defaultLine ? undefined : ordered, secondaryAxis: secondary.length ? secondary : undefined };
+}
+
+// The desired value of each field (undefined removes it), from the chart and a patch.
+function desired(chart, change, support, choices, current, document, parts) {
+  const out = {};
+  const combo = support.axisTitles.secondary === true;
+  if (change.line !== undefined || change.secondaryAxis !== undefined) {
+    // Only a combo chart has line series; elsewhere the fields are removed.
+    Object.assign(out, combo ? comboFields(chart, change, document) : { line: undefined, secondaryAxis: undefined });
+  }
+  // The secondary axis title exists only while a series uses the secondary axis.
+  const hasSecondary = combo && (Object.hasOwn(out, "secondaryAxis") ? out.secondaryAxis !== undefined : Array.isArray(chart.secondaryAxis) && chart.secondaryAxis.length > 0);
+  if (change.axisTitles !== undefined || (current.axisTitles.secondary && !hasSecondary)) {
+    const titles = {};
+    for (const axis of ["category", "value", "secondary"]) {
+      const value = change.axisTitles?.[axis] !== undefined ? change.axisTitles[axis] : current.axisTitles[axis];
+      if (typeof value === "string" && value.trim() && support.axisTitles[axis] && (axis !== "secondary" || hasSecondary)) titles[axis] = value.trim();
+    }
+    out.axisTitles = Object.keys(titles).length ? titles : undefined;
+  }
+  if (change.decorative === true) out.alt = "";
+  else if (change.alt !== undefined) out.alt = typeof change.alt === "string" && change.alt.trim() ? change.alt.trim() : undefined;
+  else if (change.decorative === false && chart.alt === "") out.alt = undefined;
+  if (change.legend !== undefined) {
+    if (change.legend !== "default" && !CHART_LEGEND_POSITIONS.includes(change.legend)) throw fail("invalid-chart-option", `'${change.legend}' is not a legend position.`, { legend: change.legend });
+    out.legend = change.legend === "default" || !support.legend ? undefined : change.legend;
+  }
+  if (change.dataLabels !== undefined) {
+    const labels = change.dataLabels;
+    if (labels === null || labels === false || labels === "off") {
+      // false is only meaningful where a construct labels its marks by default; elsewhere no labels is the absence of the field.
+      out.dataLabels = support.dataLabels.defaultOn && labels !== null ? false : undefined;
+    } else if (!support.dataLabels.supported) {
+      out.dataLabels = undefined;
+    } else {
+      const base = isObject(chart.dataLabels) ? chart.dataLabels : {};
+      const merged = labels === true ? {} : { ...base, ...labels };
+      const next = {};
+      const content = Array.isArray(merged.content) ? CONTENT_ORDER.filter((part) => merged.content.includes(part) && support.dataLabels.content.includes(part)) : [];
+      if (content.length && !(content.length === 1 && content[0] === "value")) next.content = content;
+      if (typeof merged.position === "string" && merged.position !== "auto" && support.dataLabels.positions.includes(merged.position)) next.position = merged.position;
+      if (typeof merged.separator === "string" && merged.separator !== ", " && merged.separator !== "") next.separator = merged.separator.replace(/[\r\n]+/g, " ");
+      out.dataLabels = Object.keys(next).length ? next : true;
+    }
+  }
+  if (change.highlight !== undefined) {
+    if (change.highlight === null) out.highlight = undefined;
+    else {
+      const next = {};
+      for (const part of ["series", "categories"]) {
+        const requested = change.highlight[part] !== undefined ? change.highlight[part] : current.highlight[part];
+        if (!Array.isArray(requested) || requested.some((entry) => typeof entry !== "string")) throw fail("invalid-chart-option", `Highlight ${part} must be a list of names.`, { part });
+        const listed = names(requested);
+        // A part the chart type cannot highlight is never written (a pie highlights slices, not series).
+        if (!support.highlight[part] || !listed.length) continue;
+        const unknown = choices[part].length ? listed.find((entry) => !choices[part].includes(entry)) : undefined;
+        if (unknown !== undefined) throw fail("invalid-chart-option", `'${unknown}' is not a ${part === "series" ? "plotted series" : "category label"} of this chart.`, { part, name: unknown });
+        next[part] = listed;
+      }
+      out.highlight = Object.keys(next).length ? next : undefined;
+    }
+  }
+  if (change.colors !== undefined) out.colors = chartColors(change.colors, document, parts);
+  return out;
+}
+
+// RR-96: the `chart.colors` list to write (undefined removes the field). A position left to the deck palette (null or "") is only
+// expressible as the palette color itself, so a gap before a chosen color is filled with the accent slot (the palette's own color for
+// the first six; later ones are its tints, written as that hex), and trailing gaps are dropped, which keeps the palette.
+function chartColors(wanted, document, parts) {
+  if (wanted === null) return undefined;
+  if (!Array.isArray(wanted)) throw fail("invalid-chart-option", "colors is a list of colors by position, or null to remove it.", { colors: wanted });
+  if (wanted.length > CHART_COLORS_MAX) throw fail("invalid-chart-option", `A chart takes at most ${CHART_COLORS_MAX} colors.`, { count: wanted.length });
+  const entries = wanted.map((entry, index) => {
+    if (entry === null || entry === undefined || entry === "") return undefined;
+    if (!isColorRef(entry)) throw fail("invalid-chart-option", `Color ${index + 1} must be a hex color such as #7B241C, a scheme color such as accent3, or var:<id>.`, { index, color: entry });
+    return /^#/.test(entry) ? entry.toUpperCase() : entry;
+  });
+  while (entries.length && entries[entries.length - 1] === undefined) entries.pop();
+  if (!entries.length) return undefined;
+  let palette;
+  return entries.map((entry, index) => {
+    if (entry !== undefined) return entry;
+    if (index < CHART_COLOR_SLOTS.length) return CHART_COLOR_SLOTS[index];
+    palette ??= paletteOf(document, parts);
+    return palette[index];
+  });
+}
+
+// The deck palette of the slide a chart is on (`chartSeriesPalette` of its resolved color scheme), for positions past the six accents.
+function paletteOf(document, parts) {
+  let scheme = {};
+  try {
+    const slide = parts[0] === "slides" ? Number(parts[1]) : 0;
+    scheme = resolveSlideContext(document, Number.isInteger(slide) ? slide : 0, {}).resolved?.colorScheme ?? {};
+  } catch { /* the engine default palette */ }
+  return chartSeriesPalette(scheme);
+}
+
+/**
+ * Prepare one validated patch for a change to the chart's options. `change` is
+ * `{ alt?, decorative?, axisTitles?: { category?, value?, secondary? }, legend?, dataLabels?, highlight?, colors?, line?, secondaryAxis? }`: `alt` is the text alternative (trimmed; empty or `null`
+ * removes it), `decorative: true` writes the empty alt (and wins over `alt`), `decorative: false` removes an empty alt; `axisTitles` entries are strings (empty removes a title),
+ * `legend` is `"default"` (remove the field), `"none"`, `"top"`, `"bottom"`, `"left"` or `"right"`, and `dataLabels` is
+ * `true`, `false` (or `null`, which removes the field), or `{ content?, position?, separator? }` merged over the current labels, and
+ * `highlight` is `null` (remove the field) or `{ series?, categories? }`: each list replaces that part (an empty list removes it, a name the
+ * chart does not have is refused) and the other part is kept. On a combo chart (FA-15), `line` lists the series drawn as lines and
+ * `secondaryAxis` the lines on the secondary value axis, by name; at least one series stays columns and at least one is a line, `line`
+ * is written only when it differs from the default (the last series), and the secondary axis title goes when no series uses that axis.
+ * `colors` (RR-96) is `null` (remove the field) or a list of colors by position (a hex color, a scheme color such as `accent3` that keeps following the deck, or
+ * `var:<id>`; `null` or `""` leaves that position to the deck palette), at most 24; it replaces the whole list, and trailing positions left to the palette are dropped.
+ * Fields the chart type cannot show are never written. The document is not modified.
+ */
+export function prepareChartOptions(presentation, chartPath, change) {
+  const before = checkFormat(presentation);
+  const { parts, chart } = chartAt(presentation, chartPath);
+  const read = readChartOptions(chart, presentation);
+  const wanted = desired(chart, change, read.fields, read.choices, read.state, presentation, parts);
+  const patches = [];
+  for (const [key, value] of Object.entries(wanted)) {
+    const path = opfPathToJsonPointer([...parts, key]);
+    const present = Object.hasOwn(chart, key);
+    if (value === undefined) {
+      if (present) patches.push({ op: "remove", path });
+    } else if (!present) patches.push({ op: "add", path, value: structuredClone(value) });
+    else if (!same(chart[key], value)) patches.push({ op: "replace", path, value: structuredClone(value) });
+  }
+  const next = checkedDocument(presentation, patches, before);
+  return { action: "chart-options", chartPath, changed: patches.length > 0, patches, presentation: next };
+}
+
+function checkEditor(editor) {
+  if (!editor || typeof editor.applyPatch !== "function" || typeof editor.subscribe !== "function") throw fail("invalid-editor", "Expected an editor session created by createEditorSession.");
+}
+
+/** Apply a chart option change to an editor session as one undoable edit. Returns the editor change. */
+export function setChartOptions(editor, chartPath, change, meta = {}) {
+  checkEditor(editor);
+  const prepared = prepareChartOptions(editor.presentation, chartPath, change);
+  const { presentation, patches, ...summary } = prepared;
+  void presentation;
+  if (!prepared.changed) return { ...summary, presentation: editor.presentation, patches: [], inversePatches: [], validation: editor.validation };
+  const applied = editor.applyPatch(patches, { ...meta, source: meta.source ?? "chart-option", action: prepared.action, path: chartPath });
+  return { ...applied, ...summary };
+}

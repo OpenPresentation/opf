@@ -1,0 +1,396 @@
+{
+  "name": "@openpresentation/opf-editor",
+  "version": "0.25.3",
+  "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "engines": {
+    "node": ">=22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenPresentation/opf-editor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf-editor/issues"
+  },
+  "homepage": "https://github.com/OpenPresentation/opf-editor#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "default": "./dist/react.js"
+    },
+    "./svelte": {
+      "types": "./dist/svelte.d.ts",
+      "default": "./dist/svelte.js"
+    },
+    "./package.json": "./package.json",
+    "./styles.css": {
+      "style": "./dist/styles.css",
+      "default": "./dist/styles.css"
+    },
+    "./canvas": {
+      "types": "./dist/canvas.d.ts",
+      "default": "./dist/canvas.js"
+    },
+    "./transfer": {
+      "types": "./dist/transfer.d.ts",
+      "default": "./dist/transfer.js"
+    },
+    "./galleries": {
+      "types": "./dist/galleries.d.ts",
+      "default": "./dist/galleries.js"
+    },
+    "./schema": {
+      "types": "./dist/schema.d.ts",
+      "default": "./dist/schema.js"
+    },
+    "./schema-inspector": {
+      "types": "./dist/schema-inspector.d.ts",
+      "default": "./dist/schema-inspector.js"
+    },
+    "./data": {
+      "types": "./dist/data.d.ts",
+      "default": "./dist/data.js"
+    },
+    "./rich-text": {
+      "types": "./dist/rich-text.d.ts",
+      "default": "./dist/rich-text.js"
+    },
+    "./layout": {
+      "types": "./dist/layout.d.ts",
+      "default": "./dist/layout.js"
+    },
+    "./json-editor": {
+      "types": "./dist/json-editor.d.ts",
+      "default": "./dist/json-editor.js"
+    },
+    "./json-options": {
+      "types": "./dist/json-options.d.ts",
+      "default": "./dist/json-options.js"
+    },
+    "./export": {
+      "types": "./dist/export.d.ts",
+      "default": "./dist/export.js"
+    },
+    "./switches": {
+      "types": "./dist/switches.d.ts",
+      "default": "./dist/switches.js"
+    },
+    "./block-convert": {
+      "types": "./dist/block-convert.d.ts",
+      "default": "./dist/block-convert.js"
+    },
+    "./design-options": {
+      "types": "./dist/design-options.d.ts",
+      "default": "./dist/design-options.js"
+    },
+    "./tables": {
+      "types": "./dist/table-options.d.ts",
+      "default": "./dist/table-options.js"
+    },
+    "./design-controls": {
+      "types": "./dist/design-controls.d.ts",
+      "default": "./dist/design-controls.js"
+    },
+    "./templates": {
+      "types": "./dist/templates.d.ts",
+      "default": "./dist/templates.js"
+    },
+    "./template-panel": {
+      "types": "./dist/template-panel.d.ts",
+      "default": "./dist/template-panel.js"
+    },
+    "./assets": {
+      "types": "./dist/assets.d.ts",
+      "default": "./dist/assets.js"
+    },
+    "./design-variants": {
+      "types": "./dist/design-variants.d.ts",
+      "default": "./dist/design-variants.js"
+    },
+    "./color-slots": {
+      "types": "./dist/color-slots.d.ts",
+      "default": "./dist/color-slots.js"
+    },
+    "./backgrounds": {
+      "types": "./dist/background-options.d.ts",
+      "default": "./dist/background-options.js"
+    },
+    "./image-options": {
+      "types": "./dist/image-options.d.ts",
+      "default": "./dist/image-options.js"
+    },
+    "./review": {
+      "types": "./dist/review.d.ts",
+      "default": "./dist/review.js"
+    },
+    "./review-panel": {
+      "types": "./dist/review-panel.d.ts",
+      "default": "./dist/review-panel.js"
+    },
+    "./content-actions": {
+      "types": "./dist/content-actions.d.ts",
+      "default": "./dist/content-actions.js"
+    },
+    "./image-crop": {
+      "types": "./dist/image-crop.d.ts",
+      "default": "./dist/image-crop.js"
+    },
+    "./image-cropper": {
+      "types": "./dist/image-cropper.d.ts",
+      "default": "./dist/image-cropper.js"
+    },
+    "./find": {
+      "types": "./dist/find-replace.d.ts",
+      "default": "./dist/find-replace.js"
+    },
+    "./find-panel": {
+      "types": "./dist/find-panel.d.ts",
+      "default": "./dist/find-panel.js"
+    },
+    "./data-grid": {
+      "types": "./dist/data-grid.d.ts",
+      "default": "./dist/data-grid.js"
+    },
+    "./chart-data": {
+      "types": "./dist/chart-data.d.ts",
+      "default": "./dist/chart-data.js"
+    },
+    "./grid-text": {
+      "types": "./dist/grid-text.d.ts",
+      "default": "./dist/grid-text.js"
+    },
+    "./slides": {
+      "types": "./dist/slides.d.ts",
+      "default": "./dist/slides.js"
+    },
+    "./outline": {
+      "types": "./dist/outline.d.ts",
+      "default": "./dist/outline.js"
+    },
+    "./slide-manager": {
+      "types": "./dist/slide-manager.d.ts",
+      "default": "./dist/slide-manager.js"
+    },
+    "./layout-templates": {
+      "types": "./dist/layout-templates.d.ts",
+      "default": "./dist/layout-templates.js"
+    },
+    "./layout-editor": {
+      "types": "./dist/layout-editor.d.ts",
+      "default": "./dist/layout-editor.js"
+    },
+    "./layout-tree": {
+      "types": "./dist/layout-tree.d.ts",
+      "default": "./dist/layout-tree.js"
+    },
+    "./outline-view": {
+      "types": "./dist/outline-view.d.ts",
+      "default": "./dist/outline-view.js"
+    },
+    "./persistence": {
+      "types": "./dist/persistence.d.ts",
+      "default": "./dist/persistence.js"
+    },
+    "./persistence-ui": {
+      "types": "./dist/persistence-ui.d.ts",
+      "default": "./dist/persistence-ui.js"
+    },
+    "./chart-options": {
+      "types": "./dist/chart-options.d.ts",
+      "default": "./dist/chart-options.js"
+    },
+    "./chart-options-panel": {
+      "types": "./dist/chart-options-panel.d.ts",
+      "default": "./dist/chart-options-panel.js"
+    },
+    "./numbering": {
+      "types": "./dist/numbering.d.ts",
+      "default": "./dist/numbering.js"
+    },
+    "./numbering-panel": {
+      "types": "./dist/numbering-panel.d.ts",
+      "default": "./dist/numbering-panel.js"
+    },
+    "./annotations": {
+      "types": "./dist/annotations.d.ts",
+      "default": "./dist/annotations.js"
+    },
+    "./source-pane": {
+      "types": "./dist/source-pane.d.ts",
+      "default": "./dist/source-pane.js"
+    },
+    "./presenter": {
+      "types": "./dist/presenter.d.ts",
+      "default": "./dist/presenter.js"
+    },
+    "./read-deck-file": {
+      "types": "./dist/read-deck-file.d.ts",
+      "default": "./dist/read-deck-file.js"
+    },
+    "./export-menu": {
+      "types": "./dist/export-menu.d.ts",
+      "default": "./dist/export-menu.js"
+    },
+    "./agent-handoff": {
+      "types": "./dist/agent-handoff.d.ts",
+      "default": "./dist/agent-handoff.js"
+    },
+    "./agent-handoff-dialog": {
+      "types": "./dist/agent-handoff-dialog.d.ts",
+      "default": "./dist/agent-handoff-dialog.js"
+    },
+    "./slide-navigator": {
+      "types": "./dist/slide-navigator.d.ts",
+      "default": "./dist/slide-navigator.js"
+    },
+    "./thumbnail-strip": {
+      "types": "./dist/thumbnail-strip.d.ts",
+      "default": "./dist/thumbnail-strip.js"
+    },
+    "./thumbnail-cache": {
+      "types": "./dist/thumbnail-cache.d.ts",
+      "default": "./dist/thumbnail-cache.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "node scripts/check-syntax.mjs src test scripts examples",
+    "test": "npm run build && npm run check:font-hotlinks && node scripts/run-tests.mjs && npm run check:runners && npm run check:changes",
+    "test:contract": "npm run build && node scripts/run-tests.mjs --suite contract",
+    "check:runners": "node --test scripts/run-tests.test.mjs",
+    "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+    "validate": "node scripts/validate-package.mjs",
+    "test:packed": "node test/packed-install.mjs",
+    "prepack": "npm run build",
+    "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
+    "check:font-hotlinks:built": "node scripts/check-font-hotlinks.mjs --built dist artifacts/playground",
+    "build:playground": "node scripts/build-playground.mjs",
+    "test:playground": "npm run build:playground && npm run check:font-hotlinks:built && node test/playground-pptx.mjs && node test/playground-script-fonts.mjs artifacts/playground-script-fonts && node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts && node test/playground-base-fonts.mjs artifacts/playground-base-fonts && node test/playground-source.mjs && node test/design-controls-browser.mjs && node test/design-gaps-browser.mjs && node test/chart-options-browser.mjs && node test/persistence-browser.mjs && node test/slides-browser.mjs && node test/slide-navigator-browser.mjs && node test/layout-templates-browser.mjs && node test/layout-editor-browser.mjs && node test/template-panel-browser.mjs && node test/numbering-panel-browser.mjs && node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts && node test/canvas-fonts-browser.mjs artifacts/canvas-fonts && node test/find-replace-browser.mjs && node test/image-crop-browser.mjs && node test/mobile-browser.mjs && node test/review-panel-browser.mjs && node test/review-hook-browser.mjs && node test/source-pane-browser.mjs && node test/playground-download.mjs artifacts/playground-download && node test/export-menu-browser.mjs && node test/agent-handoff-browser.mjs && node test/presenter-browser.mjs && node test/present-button-browser.mjs",
+    "test:code-browser": "node test/code-browser.mjs",
+    "test:selection-browser": "node test/selection-browser.mjs",
+    "test:click-entry-browser": "node test/click-entry-browser.mjs",
+    "test:canvas-a11y-browser": "node test/canvas-a11y-browser.mjs",
+    "test:metric-browser": "node test/metric-browser.mjs",
+    "test:rich-input-browser": "node test/rich-input-browser.mjs",
+    "test:json": "npm run build && node test/json-source.mjs && node test/json-options.mjs",
+    "test:json-browser": "node test/json-editor-browser.mjs",
+    "test:design-controls-browser": "node test/design-controls-browser.mjs",
+    "test:template-panel-browser": "node test/template-panel-browser.mjs",
+    "test:design-gaps-browser": "node test/design-gaps-browser.mjs",
+    "test:data-grid-browser": "node test/data-grid-browser.mjs",
+    "test:data-grid-datasets-browser": "node test/data-grid-datasets-browser.mjs",
+    "test:data-import-dataset-browser": "node test/data-import-dataset-browser.mjs",
+    "test:slides-browser": "node test/slides-browser.mjs",
+    "test:slide-navigator-browser": "node test/slide-navigator-browser.mjs",
+    "test:persistence-browser": "node test/persistence-browser.mjs",
+    "test:find-browser": "node test/find-replace-browser.mjs",
+    "test:crop-browser": "node test/image-crop-browser.mjs",
+    "test:mobile-browser": "node test/mobile-browser.mjs",
+    "test:review-panel-browser": "node test/review-panel-browser.mjs",
+    "test:review-hook-browser": "node test/review-hook-browser.mjs",
+    "test:source-pane-browser": "node test/source-pane-browser.mjs",
+    "test:layout-editor-browser": "node test/layout-editor-browser.mjs",
+    "test:export-license-browser": "node test/export-license-browser.mjs",
+    "test:chart-options-browser": "node test/chart-options-browser.mjs",
+    "test:numbering-panel-browser": "node test/numbering-panel-browser.mjs",
+    "test:presenter-browser": "node test/presenter-browser.mjs",
+    "test:present-button-browser": "node test/present-button-browser.mjs",
+    "test:export-menu-browser": "node test/export-menu-browser.mjs",
+    "test:agent-handoff-browser": "node test/agent-handoff-browser.mjs"
+  },
+  "dependencies": {
+    "@codemirror/autocomplete": "6.20.3",
+    "@codemirror/commands": "6.11.1",
+    "@codemirror/lang-json": "6.0.2",
+    "@codemirror/lang-yaml": "6.1.3",
+    "@codemirror/language": "6.13.1",
+    "@codemirror/lint": "6.9.7",
+    "@codemirror/search": "6.7.2",
+    "@codemirror/state": "6.7.6",
+    "@codemirror/view": "6.43.14",
+    "@lezer/highlight": "1.2.5",
+    "@openpresentation/opf": "^0.25.0",
+    "jsonc-parser": "3.3.1"
+  },
+  "peerDependencies": {
+    "@openpresentation/opf-render": "^0.25.0"
+  },
+  "peerDependenciesMeta": {
+    "@openpresentation/opf-render": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@openpresentation/gallery": "^5.0.0",
+    "@expo-google-fonts/arimo": "0.4.3",
+    "@expo-google-fonts/caladea": "0.4.2",
+    "@expo-google-fonts/cousine": "0.4.3",
+    "@expo-google-fonts/gelasio": "0.4.1",
+    "@expo-google-fonts/noto-color-emoji": "0.4.7",
+    "@expo-google-fonts/noto-emoji": "0.4.8",
+    "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+    "@expo-google-fonts/noto-nastaliq-urdu": "0.4.2",
+    "@expo-google-fonts/noto-sans": "0.4.2",
+    "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+    "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+    "@expo-google-fonts/noto-sans-bengali": "0.4.4",
+    "@expo-google-fonts/noto-sans-devanagari": "0.4.1",
+    "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+    "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+    "@expo-google-fonts/noto-sans-gujarati": "0.4.2",
+    "@expo-google-fonts/noto-sans-gurmukhi": "0.4.1",
+    "@expo-google-fonts/noto-sans-hebrew": "0.4.1",
+    "@expo-google-fonts/noto-sans-jp": "0.4.4",
+    "@expo-google-fonts/noto-sans-kannada": "0.4.3",
+    "@expo-google-fonts/noto-sans-khmer": "0.4.3",
+    "@expo-google-fonts/noto-sans-kr": "0.4.4",
+    "@expo-google-fonts/noto-sans-lao": "0.4.2",
+    "@expo-google-fonts/noto-sans-malayalam": "0.4.2",
+    "@expo-google-fonts/noto-sans-math": "0.4.2",
+    "@expo-google-fonts/noto-sans-mongolian": "0.4.1",
+    "@expo-google-fonts/noto-sans-myanmar": "0.4.2",
+    "@expo-google-fonts/noto-sans-oriya": "0.4.2",
+    "@expo-google-fonts/noto-sans-sc": "0.4.4",
+    "@expo-google-fonts/noto-sans-sinhala": "0.4.2",
+    "@expo-google-fonts/noto-sans-symbols": "0.4.1",
+    "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+    "@expo-google-fonts/noto-sans-syriac": "0.4.2",
+    "@expo-google-fonts/noto-sans-tamil": "0.4.3",
+    "@expo-google-fonts/noto-sans-tc": "0.4.4",
+    "@expo-google-fonts/noto-sans-telugu": "0.4.2",
+    "@expo-google-fonts/noto-sans-thaana": "0.4.2",
+    "@expo-google-fonts/noto-sans-thai": "0.4.2",
+    "@expo-google-fonts/noto-serif-hebrew": "0.4.2",
+    "@expo-google-fonts/noto-serif-tibetan": "0.4.2",
+    "@expo-google-fonts/roboto": "0.4.3",
+    "@expo-google-fonts/roboto-mono": "0.4.2",
+    "@expo-google-fonts/stix-two-math": "0.4.0",
+    "@expo-google-fonts/tinos": "0.4.2",
+    "@openpresentation/opf-pptx": "^0.25.0",
+    "@openpresentation/opf-render": "^0.25.0",
+    "@resvg/resvg-js": "2.6.2",
+    "axe-core": "4.14.0",
+    "esbuild": "0.28.2",
+    "jszip": "3.10.2",
+    "pdf-lib": "1.17.1",
+    "pdfjs-dist": "6.4.299",
+    "playwright": "1.64.0"
+  }
+}

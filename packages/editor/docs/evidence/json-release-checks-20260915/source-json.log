@@ -1,0 +1,53 @@
+
+> @openpresentation/opf-editor@0.6.0 test:json-browser
+> node test/json-editor-browser.mjs /private/tmp/opf-editor-json-release-browser-20260915.json
+
+▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-GCB6LGJM.js" was marked as having no side effects [ignored-bare-import]
+
+    ../opf/packages/javascript/dist/pagination.js:2:7:
+      2 │ import './chunk-GCB6LGJM.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    ../opf/packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-BAWLYSUN.js" was marked as having no side effects [ignored-bare-import]
+
+    ../opf/packages/javascript/dist/pagination.js:3:7:
+      3 │ import './chunk-BAWLYSUN.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    ../opf/packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-GQSK3T7X.js" was marked as having no side effects [ignored-bare-import]
+
+    ../opf/packages/javascript/dist/pagination.js:4:7:
+      4 │ import './chunk-GQSK3T7X.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    ../opf/packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+▲ [WARNING] Ignoring this import because "../opf/packages/javascript/dist/chunk-TWMRZ43O.js" was marked as having no side effects [ignored-bare-import]
+
+    ../opf/packages/javascript/dist/pagination.js:5:7:
+      5 │ import './chunk-TWMRZ43O.js';
+        ╵        ~~~~~~~~~~~~~~~~~~~~~
+
+  "sideEffects" is false in the enclosing "package.json" file:
+
+    ../opf/packages/javascript/package.json:29:2:
+      29 │   "sideEffects": false,
+         ╵   ~~~~~~~~~~~~~
+
+JSON editor: 7 offline browser workflows pass (checkout).

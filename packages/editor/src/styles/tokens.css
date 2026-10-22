@@ -1,0 +1,110 @@
+/*
+ * OPF editor UI tokens (RR-98). Every other file in this stylesheet uses only these `--opf-ui-*` variables.
+ * Values copy the openpresentation.org design system. The host loads Inter and Geist Mono; nothing here fetches a font.
+ * Light is the default. Dark applies under `.dark .opf-ui`, `.opf-ui.dark`, `[data-theme=dark]` (on the root or on any ancestor) and `:root.dark`.
+ */
+:root,
+.opf-ui {
+  --opf-ui-bg: hsl(210 30% 98%);
+  --opf-ui-surface: hsl(0 0% 100%);
+  --opf-ui-muted: hsl(214 28% 93%);
+  --opf-ui-muted-2: hsl(214 28% 96%);
+  --opf-ui-fg: hsl(220 28% 11%);
+  --opf-ui-muted-fg: hsl(218 14% 38%);
+  --opf-ui-accent: hsl(214 57% 28%);
+  --opf-ui-accent-fg: hsl(0 0% 100%);
+  --opf-ui-accent-strong: hsl(214 57% 28%);
+  --opf-ui-border: hsl(214 22% 83%);
+  --opf-ui-border-strong: hsl(214 22% 72%);
+  --opf-ui-ring: hsl(214 57% 28%);
+  --opf-ui-danger: hsl(0 72% 45%);
+  --opf-ui-warn: hsl(28 75% 38%);
+  --opf-ui-success: hsl(152 76% 26%);
+  --opf-ui-code-bg: hsl(220 30% 96%);
+  --opf-ui-code-border: hsl(214 18% 84%);
+
+  --opf-ui-font: Inter, system-ui, sans-serif;
+  --opf-ui-mono: "Geist Mono", ui-monospace, Menlo, monospace;
+
+  --opf-ui-radius-sm: 4px;
+  --opf-ui-radius: 6px;
+  --opf-ui-radius-md: 8px;
+  --opf-ui-radius-lg: 12px;
+
+  --opf-ui-control-h: 32px;
+  --opf-ui-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.1);
+  --opf-ui-ease: 120ms ease;
+
+  color-scheme: light;
+}
+
+:root.dark,
+.dark .opf-ui,
+.opf-ui.dark,
+[data-theme="dark"],
+[data-theme="dark"] .opf-ui {
+  --opf-ui-bg: hsl(220 24% 9%);
+  --opf-ui-surface: hsl(220 22% 11%);
+  --opf-ui-muted: hsl(220 18% 16%);
+  --opf-ui-muted-2: hsl(220 18% 13%);
+  --opf-ui-fg: hsl(210 28% 92%);
+  --opf-ui-muted-fg: hsl(215 13% 68%);
+  --opf-ui-accent: hsl(214 57% 52%);
+  --opf-ui-accent-fg: hsl(220 24% 9%);
+  --opf-ui-accent-strong: hsl(214 74% 72%);
+  --opf-ui-border: hsl(220 17% 24%);
+  --opf-ui-border-strong: hsl(220 17% 34%);
+  --opf-ui-ring: hsl(214 57% 62%);
+  --opf-ui-danger: hsl(0 65% 56%);
+  --opf-ui-warn: hsl(32 80% 70%);
+  --opf-ui-success: hsl(152 60% 70%);
+  --opf-ui-code-bg: hsl(222 22% 13%);
+  --opf-ui-code-border: hsl(220 16% 24%);
+
+  --opf-ui-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+  color-scheme: dark;
+}
+
+/* Touch density: controls grow to 40px, as in the mobile design. */
+.opf-ui[data-density="touch"],
+[data-density="touch"] .opf-ui {
+  --opf-ui-control-h: 40px;
+}
+
+/* Base rules for a mounted component or a whole editor surface. */
+.opf-ui {
+  font-family: var(--opf-ui-font);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--opf-ui-fg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.opf-ui *,
+.opf-ui *::before,
+.opf-ui *::after {
+  box-sizing: border-box;
+}
+
+.opf-ui :focus-visible {
+  outline: 2px solid var(--opf-ui-ring);
+  outline-offset: 2px;
+}
+
+/* Motion is color and border only, and it is off when the person asks for less. */
+@media (prefers-reduced-motion: reduce) {
+  :root,
+  .opf-ui {
+    --opf-ui-ease: 0s linear;
+  }
+
+  .opf-ui,
+  .opf-ui *,
+  .opf-ui *::before,
+  .opf-ui *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+}

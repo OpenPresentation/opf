@@ -1,0 +1,77 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Color References",
+  "description": "Fixture for content color references: color-scheme slot and role names in rich text runs and styled table cells, document variables referenced as var:<id>, and stable ids and extensions below slide level.",
+  "design": { "theme": "classic", "colorScheme": "forest-green" },
+  "variables": {
+    "risk": { "type": "color", "value": "#B42318", "description": "Risk emphasis used across slides." },
+    "highlight": "#0F4C81"
+  },
+  "slides": [
+    {
+      "id": "named-runs",
+      "title": "Scheme Names In Runs",
+      "text": [
+        "Named colors keep this run ",
+        { "text": "theme-portable", "color": "accent2", "bold": true },
+        " while roles like ",
+        { "text": "secondary text", "color": "textSecondary" },
+        " resolve through the effective scheme."
+      ],
+      "extensions": { "authoring": { "locked": false, "note": "Exercise slot and role names." } }
+    },
+    {
+      "id": "variable-runs",
+      "title": "Variables In Runs",
+      "items": [
+        ["Two regions at ", { "text": "85% utilization", "color": "var:risk", "bold": true }],
+        ["Mitigation ships in ", { "text": "November", "color": "var:highlight" }],
+        ["Literal hex still works: ", { "text": "#0F172A ink", "color": "#0F172A" }]
+      ]
+    },
+    {
+      "id": "styled-cells",
+      "title": "References In Table Cells",
+      "table": {
+        "columns": ["Stage", "Status"],
+        "rows": [
+          [
+            "Rollout",
+            {
+              "value": "At risk",
+              "style": {
+                "fill": "surface",
+                "color": "var:risk",
+                "borders": { "bottom": { "color": "accent1", "width": 1 } }
+              }
+            }
+          ],
+          [
+            "Hiring",
+            {
+              "value": [{ "text": "On track", "color": "accent3", "bold": true }],
+              "style": { "fill": "light2" }
+            }
+          ]
+        ]
+      }
+    },
+    {
+      "id": "addressable-payloads",
+      "title": "Ids Below Slide Level",
+      "left": {
+        "id": "kpi-adoption",
+        "metric": { "value": "2.1x", "label": "Adoption", "trend": "up" },
+        "extensions": { "generation": { "source": "adoption.csv" } }
+      },
+      "center+right": {
+        "id": "kpi-detail",
+        "type": "group",
+        "blocks": [
+          { "id": "kpi-margin", "metric": { "value": "68%", "label": "Gross margin" } },
+          { "id": "kpi-note", "text": [{ "text": "Steady since March", "color": "text" }] }
+        ]
+      }
+    }
+  ]
+}

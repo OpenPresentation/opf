@@ -1,0 +1,19 @@
+DIAGNOSTIC_AFTER_CONTROL_A {"value":"12","start":0,"end":0}
+DIAGNOSTIC_AFTER_TYPE {"value":"3312","start":2,"end":2}
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: F2 edit then Enter: {"name":"Data grid","language":"en-US","narrative":"problem-solution","tone":"formal","audience":["executive"],"speaker":{"id":"alice","name":"Alice Chen"},"organization":{"id":"acme","name":"Acme"},"design":{"theme":"classic","fontScheme":"roboto"},"slides":[{"id":"cover","title":"Data grid","subtitle":"Edit the numbers behind the story"},{"id":"data","title":"Data","composition":{"mode":"column"
+    at waitDoc (file:///private/tmp/opf-editor-grid-mac-test/test/rr20-data-grid-diagnostic.mjs:73:47)
+    at async step (file:///private/tmp/opf-editor-grid-mac-test/test/rr20-data-grid-diagnostic.mjs:103:19)
+    at async file:///private/tmp/opf-editor-grid-mac-test/test/rr20-data-grid-diagnostic.mjs:195:3 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: undefined,
+  expected: undefined,
+  operator: 'fail',
+  diff: 'simple'
+}
+
+Node.js v24.21.0
