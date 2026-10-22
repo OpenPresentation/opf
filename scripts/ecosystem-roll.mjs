@@ -7,7 +7,7 @@
 //   node scripts/ecosystem-roll.mjs run [--wait-minutes 150] [--poll-seconds 60]
 //
 // `run` (the ecosystem-roll workflow):
-//   1. reads the four `main` SHAs and builds the candidate lock (the golden rule is below); stops when nothing moved,
+//   1. reads the four `main` SHAs and builds the candidate lock; stops when nothing moved,
 //   2. force-moves the branch `ecosystem-roll/main` to core `main` and commits the candidate lock on it,
 //   3. with GITHUB_TOKEN (ROLLER_TOKEN_KIND=github-token): pushes made with GITHUB_TOKEN start no workflow, but a
 //      workflow_dispatch does, so it dispatches `Coordinated public packages` and `OPF CI` on the branch, waits for
@@ -20,53 +20,35 @@
 //      at once; an App's pull request starts the normal pull_request checks, and they decide.
 // It never writes main: the lock changes only by merging that pull request (and through the merge queue once enabled).
 //
-// The golden: the candidate keeps the lock's golden (core main's lock, which a pull request that moves goldens may
-// have changed), unless opf-render main's ci.yml selects its own baseline with `golden-override`, which then becomes
-// the lock's golden. That override names a renderer baseline directory or, for a coordinated release, a reviewed core
-// fixture (`opf/scripts/fixtures/<name>.sha256.json`, which must exist at the core SHA being rolled). If the coordinated checks fail on the four mains (a renderer change that moved pixels, a broken
-// main, a coupling), nothing is proposed and the run fails with the links: a human fixes main or the golden.
-import { appendFileSync, existsSync } from "node:fs";
+// If the coordinated checks fail on the four mains (a broken main, a coupling), nothing is proposed and the run fails with
+// the links: a human fixes main. MR-31: the lock no longer selects a golden baseline.
+import { appendFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { adoptableGolden, githubApi, goldenOverrideOf, LOCK_FILE, OWNER, parseLock, REPOSITORIES, ROLLER_BRANCH_PREFIX, readLock, validateLock } from "./ecosystem-lock.mjs";
-
-export { goldenOverrideOf };
+import { githubApi, LOCK_FILE, OWNER, parseLock, REPOSITORIES, ROLLER_BRANCH_PREFIX, readLock, validateLock } from "./ecosystem-lock.mjs";
 
 export const ROLL_BRANCH = `${ROLLER_BRANCH_PREFIX}main`;
 export const CORE = `${OWNER}/opf`;
 /** The workflows whose jobs are the required checks of a core pull request. */
 export const CHECK_WORKFLOWS = ["ecosystem-ci.yml", "opf-ci.yml"];
 
-/** The candidate lock for the four `main` SHAs. `renderOverride` is opf-render main's golden-override ("" for none). */
-export function candidateLock(lock, mains, { renderOverride = "", at, run } = {}) {
-  let golden = lock.golden;
-  let adopted = "";
-  if (renderOverride) {
-    // A renderer baseline directory, or a reviewed core fixture: a coordinated release whose renderer pull request
-    // renders core's new examples selects it while core's lock still records the pre-roll renderer's output.
-    // plan() then requires the fixture to exist at the core SHA being rolled. Resolve applies the same rule to a
-    // Depends-On renderer (dependsOnGolden in ecosystem-lock.mjs).
-    const { repository, path: goldenPath, coreFixture } = adoptableGolden(renderOverride, "opf-render main's");
-    golden = { repository, path: goldenPath, note: coreFixture ? "golden adopted from opf-render golden-override (core fixture)" : "opf-render main's own golden selection (golden-override in its ci.yml)" };
-    if (coreFixture) adopted = " Golden adopted from opf-render golden-override (core fixture).";
-  }
+/** The candidate lock for the four `main` SHAs. */
+export function candidateLock(lock, mains, { at, run } = {}) {
   const repositories = Object.fromEntries(REPOSITORIES.map((name) => [name, { sha: mains[name] }]));
   const moved = REPOSITORIES.filter((name) => lock.repositories[name].sha !== mains[name]);
   const candidate = {
     ...lock,
     repositories,
-    golden,
     provenance: {
       source: "roller",
       at,
       ...(run ? { run } : {}),
-      note: `Rolled to the four main branches (${REPOSITORIES.map((name) => `${name} ${mains[name].slice(0, 7)}`).join(", ")}); moved: ${moved.join(", ") || "none"}.${adopted}`,
+      note: `Rolled to the four main branches (${REPOSITORIES.map((name) => `${name} ${mains[name].slice(0, 7)}`).join(", ")}); moved: ${moved.join(", ") || "none"}.`,
     },
   };
   const errors = validateLock(candidate);
   if (errors.length) throw new Error(`the candidate lock is invalid:\n- ${errors.join("\n- ")}`);
-  const goldenChanged = JSON.stringify([golden.repository, golden.path]) !== JSON.stringify([lock.golden.repository, lock.golden.path]);
-  return { candidate, moved, goldenChanged, changed: moved.length > 0 || goldenChanged };
+  return { candidate, moved, changed: moved.length > 0 };
 }
 
 export function serializeLock(lock) {
@@ -84,30 +66,11 @@ async function fileAt(api, repository, file, ref) {
   return { sha: data.sha, text: Buffer.from(data.content, data.encoding === "base64" ? "base64" : "utf8").toString("utf8") };
 }
 
-/**
- * Reads the four mains and builds the candidate from core main's lock (or `lock`, a local lock: the plan-only check of
- * a pull request). The candidate's golden must exist where it comes from: a golden adopted from opf-render's
- * `golden-override` at the rolled SHA of its repository; the lock's own golden at the rolled core SHA, or, for a
- * local lock whose golden lives in core, in that local checkout (`root`), since a pull request adds its fixture
- * before main has it.
- */
-export async function plan(api, { at = new Date().toISOString().replace(/\.\d{3}Z$/, "Z"), run, lock: localLock, root: localRoot, exists = existsSync } = {}) {
+/** Reads the four mains and builds the candidate from core main's lock (or `lock`, a local lock: the plan-only check of a pull request). */
+export async function plan(api, { at = new Date().toISOString().replace(/\.\d{3}Z$/, "Z"), run, lock: localLock } = {}) {
   const mains = await mainShas(api);
   const lock = localLock ?? parseLock((await fileAt(api, "opf", LOCK_FILE, mains.opf)).text, `${CORE}@${mains.opf.slice(0, 12)}:${LOCK_FILE}`);
-  const renderOverride = goldenOverrideOf((await fileAt(api, "opf-render", ".github/workflows/ci.yml", mains["opf-render"])).text);
-  const result = candidateLock(lock, mains, { renderOverride, at, run });
-  const { repository, path: goldenPath } = result.candidate.golden;
-  const adopted = Boolean(renderOverride);
-  if (!adopted && localLock && localRoot && repository === "opf") {
-    if (!exists(path.join(localRoot, goldenPath))) throw new Error(`the lock's golden opf:${goldenPath} does not exist in the checkout ${localRoot}`);
-  } else {
-    const goldenRef = mains[repository];
-    try {
-      await api(`/repos/${OWNER}/${repository}/contents/${goldenPath}?ref=${goldenRef}`);
-    } catch (error) {
-      throw new Error(`the golden ${repository}:${goldenPath} does not exist at ${goldenRef.slice(0, 12)} (${error.message})`);
-    }
-  }
+  const result = candidateLock(lock, mains, { at, run });
   return { mains, lock, ...result };
 }
 
@@ -161,7 +124,7 @@ export function pullRequestBody({ lock, candidate, moved, evidence }) {
 |---|---|---|
 ${rows}
 
-Moved: ${moved.join(", ") || "none"}. Golden: \`${candidate.golden.repository}:${candidate.golden.path}\`.
+Moved: ${moved.join(", ") || "none"}.
 
 ${evidence}
 
@@ -197,7 +160,7 @@ export async function run(api, { tokenKind = "github-token", runUrl, waitMinutes
   }
   const head = await pushCandidate(api, { coreMain: planned.mains.opf, candidate: planned.candidate });
   const compare = `https://github.com/${CORE}/compare/main...${ROLL_BRANCH}`;
-  const title = `RR-50: roll ecosystem.lock.json (${planned.moved.join(", ") || "golden"})`;
+  const title = `RR-50: roll ecosystem.lock.json (${planned.moved.join(", ")})`;
   if (tokenKind === "app") {
     const pull = await openPullRequest(api, { title, body: pullRequestBody({ ...planned, evidence: "Its pull_request checks decide; merge when they are green." }) });
     report(`Candidate lock pushed to ${ROLL_BRANCH} (${head.slice(0, 12)}); pull request: ${pull.url ?? pull.forbidden}`);
@@ -207,7 +170,7 @@ export async function run(api, { tokenKind = "github-token", runUrl, waitMinutes
   const table = checks.results.map((result) => `| ${result.workflow} | ${result.name} | ${result.conclusion} | ${result.url} |`).join("\n");
   const evidence = `Coordinated checks on the four mains (workflow_dispatch on \`${ROLL_BRANCH}\` at \`${head.slice(0, 12)}\`, the head of this pull request):\n\n| workflow | job | result | link |\n|---|---|---|---|\n${table}`;
   if (!checks.green) {
-    report(`### The four mains do not pass together; the lock stays\n\n${evidence}\n\nFix the failing main (or the golden) and run the roller again. Nothing was proposed.`);
+    report(`### The four mains do not pass together; the lock stays\n\n${evidence}\n\nFix the failing main and run the roller again. Nothing was proposed.`);
     return { status: "red", head, checks };
   }
   const pull = await openPullRequest(api, { title, body: pullRequestBody({ ...planned, evidence }) });
@@ -229,9 +192,9 @@ async function main(argv) {
   const api = githubApi();
   if (command === "plan") {
     const lockFile = option(args, "--lock");
-    const planned = await plan(api, lockFile ? { lock: readLock(path.resolve(lockFile)), root: path.dirname(path.resolve(lockFile)) } : {});
+    const planned = await plan(api, lockFile ? { lock: readLock(path.resolve(lockFile)) } : {});
     console.log(serializeLock(planned.candidate));
-    console.log(planned.changed ? `Would roll: ${planned.moved.join(", ") || "golden only"}.` : "Nothing to roll.");
+    console.log(planned.changed ? `Would roll: ${planned.moved.join(", ")}.` : "Nothing to roll.");
     return 0;
   }
   if (command === "run") {

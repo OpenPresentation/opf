@@ -5,7 +5,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { adoptableGolden, ancestry, dependsOnGolden, dependsOnOverrides, goldenSelection, guard, handEditedPins, isSafeRelativePath, outputLines, parseDependsOn, parseLock, pullRequestOfEvent, REPOSITORIES, readLock, resolveDependency, resolveRefs, validateLock } from "./ecosystem-lock.mjs";
+import { ancestry, dependsOnOverrides, guard, handEditedPins, outputLines, parseDependsOn, parseLock, pullRequestOfEvent, REPOSITORIES, readLock, resolveDependency, resolveRefs, validateLock } from "./ecosystem-lock.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const schema = JSON.parse(readFileSync(path.join(root, "scripts/ecosystem-lock.schema.json"), "utf8"));
@@ -15,16 +15,14 @@ function sampleLock(overrides = {}) {
   return {
     version: 1,
     repositories: { opf: { sha: sha("1") }, "opf-render": { sha: sha("2") }, "opf-pptx": { sha: sha("3") }, "opf-editor": { sha: sha("4") } },
-    golden: { repository: "opf", path: "scripts/fixtures/opf-examples-png.audience-ids.sha256.json" },
     provenance: { source: "migration", at: "2026-10-03T03:00:00Z" },
     ...overrides,
   };
 }
 
-test("the checked-in ecosystem.lock.json is valid and its core golden exists", () => {
+test("the checked-in ecosystem.lock.json is valid", () => {
   const lock = readLock(path.join(root, "ecosystem.lock.json"));
   assert.deepEqual(Object.keys(lock.repositories), REPOSITORIES);
-  if (lock.golden.repository === "opf") readFileSync(path.join(root, lock.golden.path));
 });
 
 test("a valid lock has no errors", () => {
@@ -42,8 +40,6 @@ test("the validator rejects malformed locks", () => {
     [sampleLock({ repositories: { ...sampleLock().repositories, opf: { sha: "8a16740" } } }), /opf\.sha must be a full/],
     [sampleLock({ repositories: { ...sampleLock().repositories, opf: { sha: "A".repeat(40) } } }), /opf\.sha must be a full/],
     [sampleLock({ repositories: { ...sampleLock().repositories, opf: { sha: sha("1"), ref: "main" } } }), /unknown field "ref"/],
-    [sampleLock({ golden: { repository: "Data-Advantage/pptx-gallery", path: "x" } }), /golden\.repository/],
-    [sampleLock({ golden: { repository: "opf", path: "../opf-render/test/golden/x" } }), /golden\.path/],
     [sampleLock({ provenance: { source: "hand", at: "2026-10-03T03:00:00Z" } }), /provenance\.source/],
     [sampleLock({ provenance: { source: "roller", at: "yesterday" } }), /provenance\.at/],
     [sampleLock({ provenance: { source: "roller", at: "2026-10-03T03:00:00Z", run: "https://example.com/run/1" } }), /provenance\.run/],
@@ -53,25 +49,10 @@ test("the validator rejects malformed locks", () => {
   assert.throws(() => parseLock(JSON.stringify(sampleLock({ version: 0 }))), /not a valid ecosystem lock/);
 });
 
-test("golden paths stay inside their checkout, and the schema pattern agrees with the validator", () => {
-  const pattern = new RegExp(schema.properties.golden.properties.path.pattern, "u");
-  const good = ["scripts/fixtures/opf-examples-png.audience-ids.sha256.json", "test/golden/opf-examples-png.cover-centering", "a", "a.b/c..d"];
-  const bad = ["", "/abs/path", "C:/x", "a\\b", "../x", "a/../b", "./a", "a/./b", "a//b", "a/", ".", ".."];
-  for (const value of good) {
-    assert.equal(isSafeRelativePath(value), true, value);
-    assert.equal(pattern.test(value), true, `schema: ${value}`);
-  }
-  for (const value of bad) {
-    assert.equal(isSafeRelativePath(value), false, value);
-    assert.equal(value.length > 0 && pattern.test(value), false, `schema: ${value}`);
-  }
-});
-
 test("the schema lists the same repositories, fields and SHA rule as the validator", () => {
   assert.deepEqual(schema.properties.repositories.required, REPOSITORIES);
   assert.deepEqual(Object.keys(schema.properties.repositories.properties), REPOSITORIES);
-  assert.deepEqual(schema.properties.golden.properties.repository.enum, REPOSITORIES);
-  assert.deepEqual(schema.required, ["version", "repositories", "golden", "provenance"]);
+  assert.deepEqual(schema.required, ["version", "repositories", "provenance"]);
   assert.equal(schema.$defs.entry.properties.sha.pattern, "^[0-9a-f]{40}$");
   assert.deepEqual(schema.properties.provenance.properties.source.enum, ["migration", "roller"]);
 });
@@ -116,30 +97,22 @@ test("only the roller's branches may change a locked SHA", () => {
   assert.deepEqual(handEditedPins(base, moved, "codex/rr-99-repin"), [{ repository: "opf-pptx", from: sha("3"), to: sha("9") }]);
   assert.deepEqual(handEditedPins(base, moved, "ecosystem-roll/main"), []);
   assert.deepEqual(handEditedPins(undefined, moved, "codex/rr-99-repin"), []);
-  assert.deepEqual(handEditedPins(base, sampleLock({ golden: { repository: "opf-render", path: "test/golden/x" } }), "codex/rr-99-golden"), []);
+  assert.deepEqual(handEditedPins(base, sampleLock({ provenance: { source: "roller", at: "2026-10-04T03:00:00Z" } }), "codex/rr-99-note"), []);
 });
 
-test("resolve gives the locked SHA for every repository and a workspace-relative golden", () => {
+test("resolve gives the locked SHA for every repository", () => {
   const resolved = resolveRefs(sampleLock(), { consumer: "opf-render" });
   assert.deepEqual(Object.fromEntries(Object.entries(resolved.refs).map(([name, value]) => [name, value.ref])), { opf: sha("1"), "opf-render": sha("2"), "opf-pptx": sha("3"), "opf-editor": sha("4") });
   assert.match(resolved.refs["opf-render"].source, /own head/);
   assert.equal(resolved.refs.opf.source, "lock");
-  assert.equal(resolved.golden.workspacePath, "opf/scripts/fixtures/opf-examples-png.audience-ids.sha256.json");
   assert.deepEqual(outputLines(resolved, "/w/opf/ecosystem.lock.json"), [
     `opf=${sha("1")}`,
     `opf_render=${sha("2")}`,
     `opf_pptx=${sha("3")}`,
     `opf_editor=${sha("4")}`,
-    "golden=opf/scripts/fixtures/opf-examples-png.audience-ids.sha256.json",
-    "golden_source=lock",
     "lock_file=/w/opf/ecosystem.lock.json",
   ]);
   assert.throws(() => resolveRefs(sampleLock(), { consumer: "pptx-gallery" }), /--consumer/);
-});
-
-test("a golden override must name a checkout and stay inside it", () => {
-  assert.deepEqual(goldenSelection(sampleLock(), "opf-render/test/golden/opf-examples-png.cover-centering"), { repository: "opf-render", path: "test/golden/opf-examples-png.cover-centering", source: "override" });
-  for (const bad of ["test/golden/x", "opf-render/../opf/x", "/opf-render/x", "opf-render/"]) assert.throws(() => goldenSelection(sampleLock(), bad), /golden override/, bad);
 });
 
 test("no core workflow pins an OpenPresentation repository by hand (RR-50: the lock is the only source)", () => {
@@ -154,14 +127,13 @@ test("no core workflow pins an OpenPresentation repository by hand (RR-50: the l
         assert.doesNotMatch(next, /^\s*ref:\s*[0-9a-f]{7,40}\s*(#.*)?$/, `${file}:${index + 1}: hand-written SHA for ${line.trim()}`);
       }
     });
-    assert.doesNotMatch(text, /OPF_GOLDEN_BASELINE:\s*\$\{\{\s*github\.workspace\s*\}\}\/(?!\$\{\{)/, `${file}: hand-written golden selection`);
   }
 });
 
 test("the composite action runs this script from the same commit as the lock", () => {
   const action = readFileSync(path.join(root, ".github/actions/ecosystem-refs/action.yml"), "utf8");
   assert.match(action, /node "\$GITHUB_ACTION_PATH\/\.\.\/\.\.\/\.\.\/scripts\/ecosystem-lock\.mjs"/);
-  for (const output of ["opf", "opf_render", "opf_pptx", "opf_editor", "golden", "lock_file"]) assert.match(action, new RegExp(`^  ${output}:\\n`, "m"), output);
+  for (const output of ["opf", "opf_render", "opf_pptx", "opf_editor", "lock_file"]) assert.match(action, new RegExp(`^  ${output}:\\n`, "m"), output);
 });
 
 test("Depends-On trailers: forms, fences, other repositories and duplicates", () => {
@@ -244,48 +216,6 @@ test("Depends-On overrides the lock for that repository only, reads the current 
   // The body cannot be read: the event payload is used and the failure is reported.
   const fallback = await dependsOnOverrides(pullsApi({}), { repository: "OpenPresentation/opf", number: 9, body: "no trailers" }, "opf");
   assert.match(fallback.warnings[0], /using the event payload/);
-});
-
-test("FA-19: a Depends-On renderer's golden-override is adopted with the roller's rule, when its baseline exists", async () => {
-  const ciYaml = (override) => ({ encoding: "base64", content: Buffer.from(`      - uses: ./opf/.github/actions/ecosystem-refs\n        with:\n          golden-override: '${override}'\n`).toString("base64") });
-  const filesApi = (files) => async (route) => {
-    const file = files[route];
-    if (!file) throw Object.assign(new Error("HTTP 404"), { status: 404 });
-    return file;
-  };
-  const render = { repository: "opf-render", number: 151, ref: sha("e"), source: "Depends-On OpenPresentation/opf-render#151 (open; its test merge commit)", state: "open" };
-  const ciRoute = `/repos/OpenPresentation/opf-render/contents/.github/workflows/ci.yml?ref=${sha("e")}`;
-  const fixture = "opf/scripts/fixtures/opf-examples-png.fa-0-14.sha256.json";
-  const lock = sampleLock();
-  const { refs } = resolveRefs(lock, { consumer: "opf", overrides: { "opf-render": render } });
-
-  // Core's own pull request: a core fixture is looked up in this checkout.
-  const seen = [];
-  const adopted = await dependsOnGolden(filesApi({ [ciRoute]: ciYaml(fixture) }), { dependencies: [render], refs, consumer: "opf", root: "/core", exists: (file) => seen.push(file) > 0 });
-  assert.deepEqual(adopted, { repository: "opf", path: "scripts/fixtures/opf-examples-png.fa-0-14.sha256.json", source: "adopted from Depends-On OpenPresentation/opf-render#151 (golden-override in its ci.yml)" });
-  assert.deepEqual(seen, [path.join("/core", "scripts/fixtures/opf-examples-png.fa-0-14.sha256.json")]);
-  const resolved = resolveRefs(lock, { consumer: "opf", overrides: { "opf-render": render }, adoptedGolden: adopted });
-  assert.equal(resolved.golden.workspacePath, fixture);
-  assert.ok(outputLines(resolved, "ecosystem.lock.json").includes("golden_source=adopted from Depends-On OpenPresentation/opf-render#151 (golden-override in its ci.yml)"));
-  // An explicit --golden-override still wins over the adopted golden.
-  assert.equal(resolveRefs(lock, { consumer: "opf", goldenOverride: "opf-render/test/golden/x", adoptedGolden: adopted }).golden.source, "override");
-  await assert.rejects(dependsOnGolden(filesApi({ [ciRoute]: ciYaml(fixture) }), { dependencies: [render], refs, consumer: "opf", root: "/core", exists: () => false }), /does not exist in this checkout/);
-
-  // Another consumer: a renderer baseline is looked up at the Depends-On commit, a core fixture at this run's opf commit.
-  const baseline = `/repos/OpenPresentation/opf-render/contents/test/golden/opf-examples-png.next?ref=${sha("e")}`;
-  const pptxRefs = resolveRefs(lock, { consumer: "opf-pptx", overrides: { "opf-render": render } }).refs;
-  assert.equal((await dependsOnGolden(filesApi({ [ciRoute]: ciYaml("opf-render/test/golden/opf-examples-png.next"), [baseline]: [] }), { dependencies: [render], refs: pptxRefs, consumer: "opf-pptx" })).path, "test/golden/opf-examples-png.next");
-  await assert.rejects(dependsOnGolden(filesApi({ [ciRoute]: ciYaml(fixture) }), { dependencies: [render], refs: pptxRefs, consumer: "opf-pptx" }), new RegExp(`does not exist at opf ${sha("1").slice(0, 12)}`));
-
-  // Nothing to adopt: no renderer dependency, the renderer's own run, or an empty golden-override.
-  assert.equal(await dependsOnGolden(filesApi({}), { dependencies: [], refs, consumer: "opf" }), undefined);
-  assert.equal(await dependsOnGolden(filesApi({}), { dependencies: [render], refs, consumer: "opf-render" }), undefined);
-  assert.equal(await dependsOnGolden(filesApi({ [ciRoute]: ciYaml("") }), { dependencies: [render], refs, consumer: "opf" }), undefined);
-  // The roller's rule: an opf-render baseline directory or a core sha256 fixture, inside its checkout.
-  for (const bad of ["opf-pptx/test/golden/x", "opf/scripts/fixtures/x.json", "opf-render/scripts/x", "opf-render/test/golden/../x", "opf/../opf-render/test/golden/x"]) {
-    assert.throws(() => adoptableGolden(bad), /does not name an opf-render baseline/, bad);
-    await assert.rejects(dependsOnGolden(filesApi({ [ciRoute]: ciYaml(bad) }), { dependencies: [render], refs, consumer: "opf", exists: () => true }), /Depends-On OpenPresentation\/opf-render#151's golden-override/, bad);
-  }
 });
 
 test("only pull_request events carry a pull request", () => {

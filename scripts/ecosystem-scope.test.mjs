@@ -142,7 +142,7 @@ test("the registry checks always run outside pull requests, and on a pull reques
   assert.equal(pr([]), true, "an empty list is unclassified");
   assert.equal(registryForEvent("pull_request", { listChangedFiles: () => { throw new Error("no parent"); } }).registry, true);
   for (const file of [
-    "scripts/test-packed-ecosystem.mjs", "scripts/test-registry-fidelity.mjs", "scripts/registry-golden.mjs", "scripts/fixtures/opf-examples-png.audience-ids.sha256.json",
+    "scripts/test-packed-ecosystem.mjs", "scripts/test-registry-fidelity.mjs", "scripts/registry-golden.mjs", "scripts/fixtures/pr-gate-empty-cancelled-suite.json",
     "release-plan.json", "ecosystem.lock.json", "package.json", "pnpm-lock.yaml", "packages/javascript/package.json", "packages/cli/package.json",
     "packages/cli/test/packed.mjs", ".github/workflows/ecosystem-ci.yml", ".github/actions/ecosystem-refs/action.yml", "test/browser-suites.json",
     "docs/evidence/payload-fit-gaps-2026-09-09.opf.json", "packages/javascript/tsup.config.ts",

@@ -11,25 +11,15 @@
 # re-run the job. In the merge queue the pull request is the queue branch's head pull request (pr-<n> in
 # gh-readonly-queue/<base>/pr-<n>-<sha>); in a batch only its Depends-On applies, so queue a coordinated change alone.
 # Other events (push, workflow_dispatch, schedule) use the lock only.
-# FA-19: a Depends-On opf-render pull request also brings its golden: without golden-override here, the golden-override
-# of that pull request's ci.yml is adopted (scripts/ecosystem-lock.mjs, dependsOnGolden), and the log says so.
 #
 # Needs only `node` on the runner (every GitHub-hosted runner and the pinned Playwright image have it); run it before
 # actions/setup-node if you like.
 name: OpenPresentation ecosystem refs
-description: Resolve the commits of opf, opf-render, opf-pptx and opf-editor (and the golden baseline) from ecosystem.lock.json.
+description: Resolve the commits of opf, opf-render, opf-pptx and opf-editor from ecosystem.lock.json.
 inputs:
   consumer:
     description: The repository whose CI runs this step (opf, opf-render, opf-pptx or opf-editor). It checks out its own head.
     required: true
-  golden-override:
-    description: A workspace-relative baseline (<repository>/<path>) that replaces the lock's golden, e.g. for a renderer pull request that moves pixels. Empty uses the lock.
-    required: false
-    default: ''
-  export-golden:
-    description: "'true' exports OPF_GOLDEN_BASELINE (absolute path under GITHUB_WORKSPACE) to the later steps of the job."
-    required: false
-    default: 'false'
   token:
     description: Token for the GitHub REST API (reads only; the pull request body and its Depends-On pull requests).
     required: false
@@ -47,9 +37,6 @@ outputs:
   opf_editor:
     description: Commit of OpenPresentation/opf-editor to check out.
     value: ${{ steps.resolve.outputs.opf_editor }}
-  golden:
-    description: The golden baseline, relative to the workspace that holds the four checkouts side by side (<repository>/<path>).
-    value: ${{ steps.resolve.outputs.golden }}
   lock_file:
     description: Absolute path of the ecosystem.lock.json that was read.
     value: ${{ steps.resolve.outputs.lock_file }}
@@ -61,10 +48,6 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.token }}
         CONSUMER: ${{ inputs.consumer }}
-        GOLDEN_OVERRIDE: ${{ inputs.golden-override }}
-        EXPORT_GOLDEN: ${{ inputs.export-golden }}
       run: |
         args=(resolve --consumer "$CONSUMER" --github-output)
-        if [ -n "$GOLDEN_OVERRIDE" ]; then args+=(--golden-override "$GOLDEN_OVERRIDE"); fi
-        if [ "$EXPORT_GOLDEN" = true ]; then args+=(--github-env); fi
         node "$GITHUB_ACTION_PATH/../../../scripts/ecosystem-lock.mjs" "${args[@]}"

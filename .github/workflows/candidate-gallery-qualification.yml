@@ -33,7 +33,6 @@ jobs:
         uses: ./opf/.github/actions/ecosystem-refs
         with:
           consumer: opf
-          export-golden: 'true'
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: OpenPresentation/opf-render
@@ -194,7 +193,6 @@ jobs:
         uses: ./opf/.github/actions/ecosystem-refs
         with:
           consumer: opf
-          export-golden: 'true'
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: OpenPresentation/opf-render

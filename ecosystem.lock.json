@@ -1,17 +1,12 @@
 {
   "$schema": "./scripts/ecosystem-lock.schema.json",
-  "$comment": "RR-50: written by the roller (scripts/ecosystem-roll.mjs), not by hand. A pull request may change `golden` (a reviewed golden decision); use a Depends-On: trailer for an unmerged dependency. See docs/ecosystem-development.md.",
+  "$comment": "RR-50: written by the roller (scripts/ecosystem-roll.mjs), not by hand. Use a Depends-On: trailer for an unmerged dependency. See docs/ecosystem-development.md.",
   "version": 1,
   "repositories": {
     "opf": { "sha": "87d71df475754b75e319d9993dcd13808d063ab1" },
     "opf-render": { "sha": "73da4a3cfe2d217406288d221caeecd9d376a744" },
     "opf-pptx": { "sha": "f7510d7760c297ec2b7c5b67c3e346d62d788395" },
     "opf-editor": { "sha": "b8e375592ba7ac2afa8328df8a475cb4f3bc8af5" }
-  },
-  "golden": {
-    "repository": "opf",
-    "path": "scripts/fixtures/opf-examples-png.rr96-color-variants.sha256.json",
-    "note": "golden adopted from opf-render golden-override (core fixture)"
   },
   "provenance": {
     "source": "roller",

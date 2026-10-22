@@ -23,7 +23,7 @@ concurrency:
   # The nightly run has its own group, so a push to main never cancels it (and it never cancels a push).
   group: ecosystem-${{ github.event_name == 'schedule' && 'nightly-' || '' }}${{ github.ref }}
   cancel-in-progress: ${{ github.event_name != 'merge_group' && github.event_name != 'schedule' }}
-# RR-50: no hand-written pins. Every job reads the sibling commits and the golden baseline from ecosystem.lock.json
+# RR-50: no hand-written pins. Every job reads the sibling commits from ecosystem.lock.json
 # (written by the roller; docs/ecosystem-development.md) through .github/actions/ecosystem-refs.
 # RR-53, consumer-driven contracts (ci-cd.md, section 3): scripts/ecosystem-scope.mjs decides the `tier` output. A pull
 # request runs each sibling's `npm run test:contract` (the part of its suite that exercises core's APIs); merge_group,
@@ -122,7 +122,7 @@ jobs:
         id: scope
         working-directory: opf
         run: node scripts/ecosystem-scope.mjs
-      # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
+      # RR-50: the sibling commits come from ecosystem.lock.json at this commit.
       - name: Resolve the coordinated commits from ecosystem.lock.json
         id: refs
         if: steps.scope.outputs.run == 'true'
@@ -190,9 +190,6 @@ jobs:
       - name: Renderer typecheck, validate, test (contract on a pull request, full otherwise), code and font checks against the linked core
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
-        env:
-          # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
         run: node scripts/test-package-ecosystem.mjs --siblings opf-render --tier ${{ steps.scope.outputs.tier }} --test-shard ${{ matrix.shard }}/3
       - name: Check scalar source whitespace and accepted browser advances
         if: steps.scope.outputs.run == 'true' && matrix.shard == 1
@@ -240,7 +237,7 @@ jobs:
         id: scope
         working-directory: opf
         run: node scripts/ecosystem-scope.mjs
-      # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
+      # RR-50: the sibling commits come from ecosystem.lock.json at this commit.
       - name: Resolve the coordinated commits from ecosystem.lock.json
         id: refs
         if: steps.scope.outputs.run == 'true'
@@ -308,9 +305,6 @@ jobs:
       - name: opf-pptx typecheck, validate, test (contract on a pull request, full otherwise), code and font checks against the linked core
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
-        env:
-          # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
         run: node scripts/test-package-ecosystem.mjs --siblings opf-pptx --tier ${{ steps.scope.outputs.tier }} --test-shard ${{ matrix.shard }}/3
       - name: Preserve opf-pptx evidence
         if: always() && steps.scope.outputs.run == 'true'
@@ -342,7 +336,7 @@ jobs:
         id: scope
         working-directory: opf
         run: node scripts/ecosystem-scope.mjs
-      # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
+      # RR-50: the sibling commits come from ecosystem.lock.json at this commit.
       - name: Resolve the coordinated commits from ecosystem.lock.json
         id: refs
         if: steps.scope.outputs.run == 'true'
@@ -410,9 +404,6 @@ jobs:
       - name: opf-editor typecheck, validate, test (contract on a pull request, full otherwise), code and font checks against the linked core
         if: steps.scope.outputs.run == 'true'
         working-directory: opf
-        env:
-          # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
         run: node scripts/test-package-ecosystem.mjs --siblings opf-editor --tier ${{ steps.scope.outputs.tier }}
   # RR-45 (opf#368, item 1): the former serial ecosystem-core job is three parallel shards of one matrix, each with its own
   # setup. `model`: the model, geometry, fonts and CLI suites (with the FF-09 covering array). `installed`: the local
@@ -456,7 +447,7 @@ jobs:
         if: matrix.shard == 'model'
         working-directory: opf
         run: node --test scripts/ecosystem-lock.test.mjs scripts/ecosystem-roll.test.mjs && node scripts/ecosystem-lock.mjs validate
-      # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
+      # RR-50: the sibling commits come from ecosystem.lock.json at this commit.
       - name: Resolve the coordinated commits from ecosystem.lock.json
         id: refs
         if: steps.scope.outputs.run == 'true'
@@ -549,15 +540,10 @@ jobs:
       - name: Model, geometry, fonts, CLI and TypeScript checks
         if: steps.scope.outputs.run == 'true' && matrix.shard == 'model'
         working-directory: opf
-        env:
-          # RR-50: the lock's golden (its `golden.note` and scripts/fixtures/README.md keep the review record).
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
         run: node scripts/test-package-ecosystem.mjs --skip-siblings --core model
       - name: Pack the tarballs and check the packed consumer and browser bundle
         if: steps.scope.outputs.run == 'true' && matrix.shard == 'installed'
         working-directory: opf
-        env:
-          OPF_GOLDEN_BASELINE: ${{ github.workspace }}/${{ steps.refs.outputs.golden }}
         run: node scripts/test-package-ecosystem.mjs --skip-siblings --core packed
       - name: Verify installed type failure propagation
         if: steps.scope.outputs.run == 'true' && matrix.shard == 'installed'
@@ -710,7 +696,7 @@ jobs:
             echo "run=false" >> "$GITHUB_OUTPUT"
             echo "Installed candidates (${{ matrix.os }}): skipped by policy on this pull request or on the merge queue's release-prep fast path (runner $RUNNER_OS). Every other merge_group run, the nightly run and pull requests labelled ecosystem-full or full-ci run it on ${{ matrix.os }}." | tee -a "$GITHUB_STEP_SUMMARY"
           fi
-      # RR-50: the sibling commits and the golden baseline come from ecosystem.lock.json at this commit.
+      # RR-50: the sibling commits come from ecosystem.lock.json at this commit.
       - name: Resolve the coordinated commits from ecosystem.lock.json
         id: refs
         if: steps.scope.outputs.run == 'true'
