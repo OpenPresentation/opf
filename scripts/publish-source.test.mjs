@@ -174,11 +174,10 @@ test('Git failure diagnostics retain status and bounded real stderr', (t) => {
 });
 // END shared owned-workspace controls.
 
-test('both workflows run the unconditional gate before dependency installation with full history', () => {
-  for (const [file, manifest, prefixes] of [
-    ['npm-publish.yml', 'packages/javascript/package.json', ['opf-v', '@openpresentation/opf@v']],
-    ['cli-publish.yml', 'packages/cli/package.json', ['cli-v']],
-  ]) {
+// MR-40: npm-publish.yml is the one publisher of all six packages (scripts/release.mjs checks the release commit instead); only
+// the old CLI workflow still runs this gate, until MR-34 deletes both it and publish-source.mjs.
+test('the retired CLI workflow runs the unconditional gate before dependency installation with full history', () => {
+  for (const [file, manifest, prefixes] of [['cli-publish.yml', 'packages/cli/package.json', ['cli-v']]]) {
     const text = readFileSync(path.join(root, '.github/workflows', file), 'utf8');
     const step = text.indexOf('- name: Verify merged release source');
     assert.ok(step > text.indexOf('fetch-depth: 0'));

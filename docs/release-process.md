@@ -2,20 +2,138 @@
 
 Use Node 24 (`24.x`) for all future source, candidate and registry verification.
 The packages declare the open-ended `engines.node` `>=22` (RR-20, tested on Node 22, 24 and 26 by the `node-range`
-CI jobs, which run in the merge queue and on pull requests labelled `full-ci`); a closed range such as `24.x` makes npm on any other Node silently install an older release, and
+CI legs, which run in the nightly workflow, before every release and on pull requests labelled `full-ci`); a closed range such as `24.x` makes npm on any other Node silently install an older release, and
 `pnpm check:engines-range` fails on one, including in a lockfile that pins a release made after the fix.
 The next releases must document the [Node 24 migration](migrations/node24.md)
 and use new versions. Historical dual-runtime release records remain unchanged.
 
-This document is the release runbook for the public JavaScript package,
-[`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf).
+This document is the release runbook for the six published packages of this repository:
+[`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf) (core, `packages/javascript`),
+`@openpresentation/cli`, `@openpresentation/opf-render`, `@openpresentation/opf-pptx`, `@openpresentation/opf-editor` and
+`@openpresentation/gallery`. They are released together, at one version, with one tag.
 
-The canonical release path is:
+## Release: one click (MR-40)
 
-1. Merge the release commit to `main`.
-2. Push a semver tag whose name matches the package version.
-3. Let GitHub Actions publish to npm through npm trusted publishing.
-4. Verify npm and the GitHub Release the publish workflow creates from the changelog section.
+> Status: the workflows and `scripts/release.mjs` are in place and rehearsed with dry runs. The first real release through them
+> is the canary `0.26.0-rc.0` (MR-41), then 0.26.0 (MR-44). The sections after "Retired per-repository process" below describe
+> the process that released up to 0.25.x from the four old repositories; MR-34 and MR-50 delete them.
+
+**One version, one tag, one workflow.** All six packages carry the same version (`pnpm check:versions`); a release is the tag
+`vX.Y.Z` on a commit of `main`, published by `.github/workflows/npm-publish.yml` in dependency order: gallery, core, render,
+PPTX, editor, CLI. In 0.x a breaking change is a minor release and everything else a patch. Prereleases (`0.26.0-rc.0`) go to
+the dist-tag `next`, releases to `latest`; both are passed explicitly to `npm publish --tag` for every package.
+
+### Run a release
+
+Actions, **Release**, **Run workflow** on `main`:
+
+| Input | Meaning |
+| --- | --- |
+| `version` | `X.Y.Z`, `X.Y.Z-rc.N`, or `patch` / `minor` of the shared line (the highest `latest` of core, CLI, render, PPTX and editor) |
+| `dry-run` | Default **true**: rehearse everything up to `npm publish --dry-run`; nothing is committed, tagged or published. Set false for the real release |
+| `skip-gate` | A dry run only: skip the slow gate |
+
+Run it with `dry-run` true first when the change touches the release machinery; a real release of ordinary changes needs no
+rehearsal. The jobs:
+
+1. **plan**: a real release runs on `main`, and the check `verify` is green for its head (one API call, no waiting).
+2. **gate** (parallel with prepare): `nightly.yml` called on that commit: Windows, macOS, Node 22 and 26, the packed-install and
+   registry consumers. A red leg stops the release before anything is committed or tagged.
+3. **prepare** (parallel with gate): `node scripts/release.mjs prepare <version>` in the runner: sets the six versions, core's
+   peer ranges and `PEER_RANGES` (`packages/javascript/src/node/peers.ts`), assembles every `changes/` fragment into its package
+   changelog (a package without a fragment gets "No package changes; released with the set."), applies the gallery stability gate
+   and the version rules below, refreshes the lockfile, and uploads the result as a patch. A refused version fails here, in two
+   minutes.
+4. **commit and tag** (real release, after gate and prepare): with the GitHub App's token (a bypass actor on the `main` ruleset)
+   applies the patch as one commit `release vX.Y.Z` on exactly the commit the gate tested, pushes it to `main`, then pushes the
+   tag `vX.Y.Z`. If `main` moved during the run, or the tag exists, it stops. A tag pushed with the App's token starts
+   `npm-publish.yml` (a tag pushed with `GITHUB_TOKEN` would not).
+5. **npm-publish.yml** on the tag: `plan` (the tag is on `main`), `build` (one install and build, `pnpm pack` of the six,
+   `scripts/stamp-githead.mjs` adds `gitHead` to each tarball because `pnpm pack` omits it, a smoke test installs the six
+   tarballs together, renders the quickstart deck and runs the CLI), `publish` (the only job with `id-token: write`; the
+   pre-publish gate, then `npm publish <tarball> --access public --provenance --tag <tag>` six times; a version already on npm is
+   skipped), `verify` (below), `release` (the GitHub release, notes grouped by package) and `report` (a failure opens the issue
+   "Release vX.Y.Z failed", labeled `release-failed`).
+6. **follow the publish run** (the Release run waits for it, so it is green only when the whole release is).
+
+Time target: about 20 minutes from the click to six verified packages (measured in MR-44).
+
+### Version rules
+
+- `prepare` refuses a version that is not above the shared line's previous release, and one already on npm for any package
+  (a published version is never reused; fix forward).
+- **The gallery stability rule** (`scripts/gallery-stability.mjs`, `pnpm check:stability`; see
+  [default-catalog.md](default-catalog.md)): a declared drawing change (a `drawing` entry in a gallery fragment), a removed record
+  id or a `CATALOG_SCHEMA` change needs a **minor** release; `prepare` refuses a patch. New records and unchanged drawings go in
+  any release. The baseline is the gallery's `latest` dist-tag, never its highest version.
+- **The publish gate** (`release.mjs check-publish`, run by `publish`): each package's version is above its own registry
+  `latest`, except the gallery, which is compared with the shared line, because its `latest` was 5.0.0 before it joined the
+  shared 0.x line (D16). A stable version needs `latest`, a prerelease must not take it. 5.0.0 and the older gallery versions
+  stay published and are never deprecated; because they are above the shared line, every gallery publish names its tag explicitly.
+- The shared line cannot use 1.0.0 to 5.0.0 (taken by the gallery): the first stable major for all six is 6.0.0.
+
+### Trusted publishing
+
+All six packages have the trusted publisher: GitHub Actions, organization `OpenPresentation`, repository `opf`, workflow filename
+`npm-publish.yml`, no environment (owner steps O1 in `docs/programs/monorepo/owner-steps.md`). npm checks the entry against
+the **top-level** workflow of the run, not against a reusable workflow that contains `npm publish`, so `npm-publish.yml` is the
+workflow that starts on the tag and `release.yml` only pushes the tag. `publish` refuses to publish from any other top-level
+workflow. A publish fails with `E404` or `E403 ... not a trusted publisher` when an entry is wrong: fix the entry and re-run
+the workflow on the tag. There is no `NPM_TOKEN`, and no local publish: the provenance gate applies to every release.
+
+### Retry and failure
+
+A failed `npm-publish.yml` run is fixed and run again on the same tag: Actions, **Publish OPF npm packages**, **Run workflow**,
+ref `vX.Y.Z`, `dry-run` false (or re-run the failed run). Versions already on npm are skipped, so it continues where it stopped.
+A partial publish is safe: the `^X.Y.Z` floors point at packages that exist, because the order is dependency order. A real
+defect in a published version is fixed forward with the next patch and a new tag; tags are never moved. If `prepare` or the gate
+fails, nothing was committed: fix the cause and run the release again.
+
+### Fallback: a release pull request
+
+If no App token is available, or a person prefers review: on a branch run `pnpm release:prepare X.Y.Z`
+(`node scripts/release.mjs prepare X.Y.Z`; it needs `pnpm build` first for the stability gate), open the pull request, merge it
+on green, then on `main` run `git tag vX.Y.Z && git push origin vX.Y.Z`. The publish workflow is the same.
+
+### Verify
+
+The `verify` job runs `node scripts/release.mjs verify X.Y.Z --tag <dist-tag> --commit <release commit> --wait 10` and then the
+smoke test against the registry (`release.mjs smoke X.Y.Z --registry`). For all six packages it checks the registry manifest,
+`gitHead` and the provenance source commit equal to the release commit, the provenance workflow `npm-publish.yml` on
+`refs/tags/vX.Y.Z`, the subject digest, the dist-tag, that no manifest carries a `workspace:` range and every sibling range is
+`^X.Y.Z`, `npm audit signatures`, and that each package changelog has the version's section. By hand:
+
+```sh
+node scripts/release.mjs verify X.Y.Z --tag latest            # exit 0 when all six verify
+npm view @openpresentation/opf@X.Y.Z gitHead dist.attestations.url
+npm view @openpresentation/gallery dist-tags --json           # latest is X.Y.Z; 5.0.0 stays published
+```
+
+### `scripts/release.mjs`
+
+| Command | Does |
+| --- | --- |
+| `prepare <version> [--dry-run] [--no-stability] [--previous V]` | the prepare step above (`--dry-run` writes nothing) |
+| `pack <version> --commit <sha> --out <dir>` | `pnpm pack` of the six, `gitHead` stamped, `release-manifest.json` with digests |
+| `smoke <version> (--dir <dir> \| --registry)` | install the six together, render, resolve, run the CLI |
+| `check-publish <version> [--tag t]` | the pre-publish gate |
+| `publish <version> --dir <dir> [--tag t] [--dry-run]` | the gate, then `npm publish` in dependency order |
+| `verify <version> [--tag t] [--commit sha] [--wait minutes]` | the registry and provenance check |
+| `notes <version> [--out file]` | the GitHub release body |
+| `order` | the publish order |
+
+### Who may release
+
+The owner authorized agents to prepare and publish npm releases on 2026-09-29 (`AGENTS.md`). A release is made only through
+`release.yml` (or the pull-request fallback) and `npm-publish.yml`, only when one is required and only with every gate green;
+agents never publish from a laptop, never skip the gate and never pass a different `--tag` to make a check pass. Dry runs are
+free at any time.
+
+## Retired per-repository process (until MR-34 and MR-50)
+
+Everything below describes how releases up to 0.25.x were made from the four old repositories, with per-package versions,
+the release train script, the gallery lane and CI evidence. It stays until MR-34 deletes the machinery it describes and MR-50
+rewrites the rest of this document for the monorepo.
 
 ## Agent authorization and coordinated release order
 
@@ -247,48 +365,6 @@ It fails closed, with a message that says what changed, when:
 
 To review a set, pack the release (`npm pack @openpresentation/opf-render@<version>`), run `hashFontSet` from `scripts/lazy-font-counts.mjs` over the unpacked `package/` folder, and record the result with the versions you checked. Every existing `LAZY_FONT_COUNTS` entry stays and keeps its own rule.
 
-## Release Preconditions
-
-Before tagging, confirm that the release commit on `main` already contains:
-
-- `packages/javascript/package.json` with the intended version.
-- `CHANGELOG.md` with the matching release section (assembled from `changes/`, see above).
-- Passing `OPF CI` on the release commit.
-
-The publish workflow validates the tag name against
-`packages/javascript/package.json`, so the tag must point at the release commit.
-
-## Tag And Publish
-
-Use the `opf-vX.Y.Z` tag form for the package release:
-
-```sh
-git checkout main
-git pull origin main
-grep '"version"' packages/javascript/package.json
-git tag opf-vX.Y.Z
-git push origin opf-vX.Y.Z
-```
-
-For example, version `0.3.0` used:
-
-```sh
-git tag opf-v0.3.0
-git push origin opf-v0.3.0
-```
-
-Pushing the tag triggers `.github/workflows/npm-publish.yml`. The workflow:
-
-- runs on tags matching `opf-v*` or `@openpresentation/opf@v*`
-- verifies the tag matches `packages/javascript/package.json` and the merged release source (`scripts/publish-source.mjs`)
-- verifies the CI evidence of the tagged commit (`scripts/ci-evidence.mjs`); it re-runs no test (RR-100)
-- installs dependencies with pnpm on Node 24 and builds
-- runs the npm package dry-run check and the isolated packed-install smoke
-- publishes from `packages/javascript` with `npm publish --access public --provenance`
-
-Do not rerun a successful publish for the same version. npm package versions are
-immutable; a second publish for an already-published version should fail.
-
 ## CI evidence and the merge-queue fast path (RR-100)
 
 A release used to test the same commit three or four times: the release-prep PR's CI, the merge queue's run, the push
@@ -348,91 +424,6 @@ change). The one thing it does not inspect is what the lockfile resolves; the pu
 A group that stacks a release-prep entry on a code change has a code diff and runs in full. Every other change, and every
 case the script cannot classify, runs the full queue unchanged. Pull requests, the nightly run and manual runs are never
 fast-pathed.
-
-## Trusted Publishing
-
-npm publishing is configured to use GitHub Actions OIDC trusted publishing, not
-a long-lived npm token.
-
-Expected npm package trusted-publisher settings:
-
-| Setting | Value |
-|---|---|
-| Package | `@openpresentation/opf` |
-| Publisher | GitHub Actions |
-| Organization/repository | `OpenPresentation/opf` |
-| Workflow filename | `npm-publish.yml` |
-| Environment | empty, unless the workflow is later moved behind a GitHub Environment |
-| Permission | `npm publish` |
-
-Expected workflow settings:
-
-```yaml
-permissions:
-  contents: read
-  id-token: write
-```
-
-The publish step should not set `NODE_AUTH_TOKEN`:
-
-```yaml
-- name: Publish to npm
-  working-directory: packages/javascript
-  run: npm publish --access public
-```
-
-If a future release fails with npm authentication errors, check the npm
-trusted-publisher settings first and repair the OIDC workflow. Do not add an
-`NPM_TOKEN` fallback or publish locally; the required trusted-publishing and
-provenance gates still apply.
-
-## Verify The Release
-
-`node scripts/release-train.mjs verify <package>@X.Y.Z` runs every registry check of this section and the provenance
-checks (see "Release train" above). By hand, after the workflow completes, verify npm:
-
-```sh
-npm view @openpresentation/opf version
-```
-
-The output should equal the package version that was tagged.
-
-Spot-check the validator API from a clean project or temporary directory:
-
-```sh
-npm install @openpresentation/opf@X.Y.Z
-node --input-type=module -e "import {validate} from '@openpresentation/opf'; console.log(validate({name:'t', narrative:'not-a-real-id', slides:[{title:'t'}]}, {only:['format','references']}).findings)"
-```
-
-The expected result is one `opf/unresolved-reference` warning for the narrative (no catalog is registered).
-
-## GitHub Release Notes
-
-From 0.18 on, every lockstep package's tag workflow ends in a `release` job that creates a GitHub Release after the npm
-publish (RR-20). The job holds `contents: write`; the publish job keeps only `id-token: write` for provenance. It takes
-the notes from the matching `## X.Y.Z` section of the package's changelog and fails when the section is missing.
-
-| Package | Repository, workflow | Tag | Title | Changelog | Latest |
-| --- | --- | --- | --- | --- | --- |
-| `@openpresentation/opf` | `opf`, `npm-publish.yml` | `opf-vX.Y.Z` | `@openpresentation/opf X.Y.Z` | `CHANGELOG.md` | yes |
-| `@openpresentation/opf-render` | `opf-render`, `npm-publish.yml` | `opf-render-vX.Y.Z` | `@openpresentation/opf-render X.Y.Z` | `CHANGELOG.md` | yes |
-| `@openpresentation/opf-pptx` | `opf-pptx`, `release.yml` | `opf-pptx-vX.Y.Z` | `@openpresentation/opf-pptx X.Y.Z` | `CHANGELOG.md` | yes |
-| `@openpresentation/opf-editor` | `opf-editor`, `release.yml` | `opf-editor-vX.Y.Z` | `@openpresentation/opf-editor X.Y.Z` | `CHANGELOG.md` | yes |
-| `@openpresentation/cli` | `opf`, `cli-publish.yml` | `cli-vX.Y.Z` | `@openpresentation/cli X.Y.Z` | `packages/cli/CHANGELOG.md` | no (core owns it) |
-
-Releases before 0.18 are not backfilled. `verify` requires the release for each of these packages. If release creation
-failed, rerun the failed `release` job (it keeps an existing release and its notes), or create the missing release for
-the existing tag, for example:
-
-```sh
-gh release create opf-render-vX.Y.Z \
-  --repo OpenPresentation/opf-render \
-  --title '@openpresentation/opf-render X.Y.Z' \
-  --notes-file /path/to/release-notes.md \
-  --verify-tag --latest
-```
-
-Use the matching `## X.Y.Z` section of the changelog as the release notes.
 
 ## Troubleshooting
 

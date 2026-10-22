@@ -41,7 +41,7 @@ test(ending+': '+'supported engines and CLI portability use fresh candidate stag
  assert.ok(stage.indexOf('npm install --global npm@11.16.0')<stage.indexOf('npm ci --prefix'));
  assert.match(stage,/fetch-depth: 0/);assert.match(stage,/persist-credentials: false/);
  assert.match(stage,/candidate-gallery-build\.mjs/);
- for(const file of ['npm-publish.yml','cli-publish.yml']){
+ for(const file of ['cli-publish.yml']){ // MR-40: npm-publish.yml is the monorepo publisher and has no candidate gallery
   const source=read(`.github/workflows/${file}`);assert.ok(source.indexOf('candidate-gallery.mjs publication')<source.indexOf('pnpm install --frozen-lockfile'));
  }
 });

@@ -33,6 +33,8 @@
       {"match": ["scripts/archive-tar.mjs", "scripts/link-ecosystem.mjs"], "run": ["check:archive-tar"]},
       {"match": ["spec/schemas/"], "run": ["check:spec", "check:schema-examples", "check:schema-docs", "check:registry-golden", "check:examples", "check:examples-convert", "check:text"]},
       {"match": ["scripts/generate-example-suite.mjs", "scripts/check-generated-examples.mjs", "scripts/gallery-artwork.mjs", "scripts/generate-technical-example-assets.mjs"], "run": ["check:examples", "check:examples-convert"]},
+      {"match": ["scripts/release.mjs", "scripts/release.test.mjs", "scripts/release-registry.mjs", "scripts/release-notes.mjs", "scripts/stamp-githead.mjs", "scripts/changelog-fragments.mjs", "scripts/gallery-stability.mjs", "scripts/check-versions.mjs", "scripts/workspace-pack.mjs"], "run": ["check:release"]},
+      {"match": [".github/workflows/release.yml", ".github/workflows/npm-publish.yml", "scripts/release-workflows.test.mjs", "scripts/release.mjs"], "run": ["check:ci-workflows", "check:release"]},
       {"match": [".github/workflows/ci.yml", ".github/workflows/nightly.yml", ".github/workflows/slow-checks.yml", ".github/actions/setup-workspace/", "scripts/ci-scope.mjs", "scripts/ci-verify.mjs", "scripts/ci-report-issue.mjs"], "run": ["check:ci-workflows", "check:ci-scope", "check:playwright-pin"]},
       {"match": ["spec/"], "run": ["check:spec"]},
       {"match": ["examples/"], "run": ["check:examples", "check:examples-convert", "check:text"]},
