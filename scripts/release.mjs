@@ -12,6 +12,9 @@
 //   node scripts/release.mjs pack <version> --commit <sha> --out <dir>
 //       `pnpm pack` of the six (the build already ran), gitHead stamped into each tarball (scripts/stamp-githead.mjs),
 //       <dir>/release-manifest.json with the name, file and sha512 of each.
+//   node scripts/release.mjs smoke <version> (--dir <tarballs> | --registry)
+//       Installs the six tarballs together in a clean project, renders the quickstart deck with the renderer and the gallery,
+//       resolves every entry point and runs the CLI: the packed shape of the release, before anything is published (--registry: the same from npm, after).
 //   node scripts/release.mjs check-publish <version> [--tag latest|next]
 //       The pre-publish gate: each package's version is above its registry `latest` (the gallery: above the shared line, never
 //       against its own 5.0.0), a stable version goes to `latest` and a prerelease to a different tag.
@@ -346,6 +349,55 @@ async function publish(argv, deps) {
 }
 
 // ---------------------------------------------------------------------------------------------------------------------
+// smoke
+
+const SMOKE_SCRIPT = `
+import { readFileSync } from 'node:fs';
+import { gallery } from '@openpresentation/gallery';
+import { toSvg } from '@openpresentation/opf-render';
+import * as core from '@openpresentation/opf';
+import * as pptx from '@openpresentation/opf-pptx';
+const deck = JSON.parse(readFileSync('deck.opf.json', 'utf8'));
+const svgs = toSvg(deck, { catalogs: [gallery] });
+if (!Array.isArray(svgs) || !svgs.length || !String(svgs[0]).includes('<svg')) throw new Error('the renderer drew no SVG for the quickstart deck');
+if (Object.keys(core).length === 0 || Object.keys(pptx).length === 0) throw new Error('an entry point exports nothing');
+for (const name of ${JSON.stringify(NAMES)}) import.meta.resolve(name);
+console.log('rendered ' + svgs.length + ' slide(s); six entry points resolve');
+`;
+
+/**
+ * Installs the release in a clean project and exercises it. From tarballs (`dir`: the six installed together, with overrides so
+ * their `^<version>` sibling ranges resolve to the tarballs, not to a registry that does not have the version yet) or, with
+ * `registry: true`, from the registry at exactly `version` (the post-publish check). `exec` runs a command:
+ * (command, args, { cwd }) -> { status, stdout, stderr }.
+ */
+export function smoke(dir, version, { deck, registry = false, exec = run, scratch = os.tmpdir() } = {}) {
+  const manifest = registry ? undefined : readReleaseManifest(path.resolve(dir), version);
+  const project = mkdtempSync(path.join(scratch, 'release-smoke-'));
+  try {
+    const dependencies = registry ? Object.fromEntries(NAMES.map((name) => [name, version])) : Object.fromEntries(manifest.packages.map((entry) => [entry.name, `file:${path.resolve(dir, entry.filename)}`]));
+    const overrides = registry ? undefined : Object.fromEntries(NAMES.map((name) => [name, `$${name}`]));
+    writeFileSync(path.join(project, 'package.json'), `${JSON.stringify({ name: 'release-smoke', private: true, type: 'module', dependencies, overrides }, null, 2)}\n`);
+    writeFileSync(path.join(project, 'deck.opf.json'), readFileSync(deck ?? path.join(REPOSITORY_ROOT, 'docs/quickstart/developer-quickstart.opf.json')));
+    writeFileSync(path.join(project, 'smoke.mjs'), SMOKE_SCRIPT);
+    const steps = [
+      ['npm', ['install', '--no-audit', '--no-fund', '--ignore-scripts']],
+      [process.execPath, ['smoke.mjs']],
+      [process.execPath, [path.join('node_modules', '@openpresentation', 'cli', 'dist', 'index.js'), '--version']],
+    ];
+    const log = [];
+    for (const [command, args] of steps) {
+      const result = exec(command, args, { cwd: project });
+      if (result.status !== 0) throw new Error(`smoke: ${path.basename(command)} ${args.join(' ')} failed (exit ${result.status})\n${result.stdout}${result.stderr}`);
+      log.push(`${path.basename(command)} ${args.join(' ')}: ${result.stdout.trim().split('\n').at(-1) ?? ''}`);
+    }
+    return log;
+  } finally {
+    rmSync(project, { recursive: true, force: true });
+  }
+}
+
+// ---------------------------------------------------------------------------------------------------------------------
 // verify and notes
 
 /** True when the package's changelog at `root` has a `## <version>` section (any content). */
@@ -416,6 +468,14 @@ export async function main(argv = process.argv.slice(2), deps = defaultDeps()) {
   if (command === 'prepare') return prepare(rest, deps);
   if (command === 'pack') return pack(rest, deps);
   if (command === 'publish') return publish(rest, deps);
+  if (command === 'smoke') {
+    const options = parseOptions(rest, { value: ['dir', 'deck'], flag: ['registry'] });
+    const [version] = options._;
+    if (!isVersion(version ?? '') || !(options.dir || options.registry)) throw new Error('usage: release.mjs smoke <X.Y.Z> (--dir <tarballs> | --registry) [--deck file]');
+    const log = smoke(options.dir, version, { deck: options.deck, registry: options.registry });
+    for (const line of log) deps.log(line);
+    return log;
+  }
   if (command === 'check-publish') {
     const options = parseOptions(rest, { value: ['tag'] });
     const [version] = options._;
@@ -450,7 +510,7 @@ export async function main(argv = process.argv.slice(2), deps = defaultDeps()) {
     for (const name of NAMES) deps.log(name);
     return NAMES;
   }
-  throw new Error('usage: release.mjs prepare|pack|check-publish|publish|verify|notes|order (see the header of scripts/release.mjs)');
+  throw new Error('usage: release.mjs prepare|pack|smoke|check-publish|publish|verify|notes|order (see the header of scripts/release.mjs)');
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

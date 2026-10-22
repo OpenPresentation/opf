@@ -19,6 +19,7 @@ import {
   publishArgs,
   readReleaseManifest,
   releaseNotes,
+  smoke,
   resolveVersion,
   setPeerHintsText,
   setPeerRangesText,
@@ -435,6 +436,34 @@ test('notes: the release body is grouped by package and names the packages relea
     assert.match(body, /## @openpresentation\/cli\n\n- Shared\./);
     assert.match(body, /Released with the set, no changes: `@openpresentation\/opf-render`, `@openpresentation\/opf-pptx`, `@openpresentation\/opf-editor`\./);
     assert.throws(() => releaseNotes(root, '0.27.0'), /has no 0\.27\.0 section/);
+  } finally {
+    cleanup();
+  }
+});
+
+test('smoke installs the six tarballs together with overrides to themselves, then renders, resolves and runs the CLI', () => {
+  const { dir, cleanup } = tarballs();
+  const deck = path.join(dir, 'deck.json');
+  writeFileSync(deck, '{}');
+  try {
+    const seen = [];
+    const exec = (command, args, options) => {
+      const manifest = JSON.parse(readFileSync(path.join(options.cwd, 'package.json'), 'utf8'));
+      seen.push({ command: path.basename(command), args, dependencies: manifest.dependencies, overrides: manifest.overrides, files: readdirSync(options.cwd).sort() });
+      return { status: 0, stdout: 'ok\n', stderr: '' };
+    };
+    const log = smoke(dir, '0.26.0', { deck, exec });
+    assert.equal(log.length, 3);
+    assert.deepEqual(seen.map((step) => step.args[0]), ['install', 'smoke.mjs', path.join('node_modules', '@openpresentation', 'cli', 'dist', 'index.js')]);
+    assert.deepEqual(Object.keys(seen[0].dependencies), NAMES);
+    assert.ok(Object.values(seen[0].dependencies).every((spec) => spec.startsWith('file:/')));
+    assert.deepEqual(seen[0].overrides, Object.fromEntries(NAMES.map((name) => [name, `$${name}`])));
+    assert.deepEqual(seen[1].files, ['deck.opf.json', 'package.json', 'smoke.mjs']);
+    seen.length = 0;
+    smoke(undefined, '0.26.0', { deck, registry: true, exec });
+    assert.deepEqual(seen[0].dependencies, Object.fromEntries(NAMES.map((name) => [name, '0.26.0'])));
+    assert.equal(seen[0].overrides, undefined);
+    assert.throws(() => smoke(dir, '0.26.0', { deck, exec: () => ({ status: 1, stdout: '', stderr: 'ERESOLVE' }) }), /smoke: npm install .* failed.*ERESOLVE/s);
   } finally {
     cleanup();
   }

@@ -1,122 +1,295 @@
-name: Publish OPF npm package
+name: Publish OPF npm packages
 
+# MR-40 (docs/programs/monorepo/README.md, section 5 and decisions D6, D7, D16): the one workflow that publishes all six packages
+# (@openpresentation/opf, cli, opf-render, opf-pptx, opf-editor, gallery) at one version, through npm trusted publishing (GitHub
+# OIDC) with provenance. It replaces the core-only npm-publish.yml and cli-publish.yml; the file keeps its name because core's
+# trusted-publisher entry names it, and the other five packages get the same entry (docs/programs/monorepo/owner-steps.md, O1).
+#
+# Entries:
+#   - push of a tag `vX.Y.Z` (or `vX.Y.Z-rc.N`): a real release of the commit the tag names. The tag is pushed by release.yml
+#     with the GitHub App's token (a tag pushed with GITHUB_TOKEN starts no workflow), or by hand after a pull-request release
+#     (`pnpm release:prepare X.Y.Z`, merge, `git tag vX.Y.Z && git push origin vX.Y.Z`). The provenance statements name this
+#     workflow on refs/tags/vX.Y.Z, which `release.mjs verify` checks.
+#   - workflow_dispatch on a tag with dry-run=false: the retry path after a failure (versions already on npm are skipped).
+#   - workflow_dispatch with dry-run=true (the default) on any branch: the whole pipeline on a scratch version, up to
+#     `npm publish --dry-run` (no provenance: it needs a real run's OIDC token, so the canary of MR-41 is its rehearsal).
+#
+# Why this is not a reusable workflow called by release.yml: npm validates the trusted publisher against the CALLING workflow's
+# filename, not the reusable one that runs `npm publish` (docs.npmjs.com/trusted-publishers), so release.yml would have to be the
+# publisher on all six packages and its provenance would not name a tag. release.yml pushes the tag instead and watches this run.
+#
+# Jobs: plan -> build -> publish -> verify -> release (report on failure). Only `publish` holds id-token: write and only `release`
+# holds contents: write; no job holds a secret. There is no GitHub environment (D7). TODO(MR-52): bump-sites.yml starts from a
+# workflow_run of this workflow's success (D17, D19) and needs nothing here.
 on:
   push:
-    tags:
-      - "opf-v*"
-      - "@openpresentation/opf@v*"
+    tags: ['v*']
   workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Rehearse only (npm publish --dry-run). false publishes, and only on a tag ref (the retry path).
+        type: boolean
+        default: true
+      version:
+        description: 'Dry run: the scratch version (X.Y.Z or X.Y.Z-rc.N) to prepare locally in the runner. Ignored on a tag.'
+        default: ''
+      dist-tag:
+        description: latest (releases) or next (prereleases). Empty takes the one the version needs.
+        default: ''
+
+permissions:
+  contents: read
 
 concurrency:
   group: publish
   cancel-in-progress: false
 
-permissions:
-  contents: read
-
 jobs:
-  publish:
-    name: Publish @openpresentation/opf
-    runs-on: ubuntu-latest
-    # RR-100: no test re-run; install, build, pack and the packed-install smoke take about 5 minutes.
-    timeout-minutes: 15
-    permissions:
-      actions: read
-      contents: read
-      id-token: write
-
+  plan:
+    name: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.plan.outputs.version }}
+      tag: ${{ steps.plan.outputs.tag }}
+      dry-run: ${{ steps.plan.outputs.dry-run }}
+      dist-tag: ${{ steps.plan.outputs.dist-tag }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
 
-      - name: Verify merged release source
-        run: node scripts/publish-source.mjs --manifest packages/javascript/package.json --tag-prefix opf-v --tag-prefix @openpresentation/opf@v
-
-      # RR-100: the tagged commit's own CI is the evidence (scripts/ci-evidence.mjs, scripts/ci-evidence.json): its merge-queue runs
-      # must have succeeded with the required checks of the main ruleset. Nothing is re-tested below; the steps that remain build and
-      # verify the artifact itself. Fails closed: a missing, running or failed check means no publish.
-      - name: Verify the CI evidence of this commit
+      - name: Decide what this run does
+        id: plan
         env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: node scripts/ci-evidence.mjs --sha "$(git rev-parse HEAD)"
+          EVENT: ${{ github.event_name }}
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+          INPUT_DRY_RUN: ${{ inputs.dry-run }}
+          INPUT_VERSION: ${{ inputs.version }}
+          INPUT_TAG: ${{ inputs.dist-tag }}
+        run: |
+          fail() { echo "::error title=Publish::$1"; exit 1; }
+          if [ "$EVENT" = push ]; then
+            dry=false
+          elif [ "$INPUT_DRY_RUN" = true ]; then
+            dry=true
+          else
+            dry=false
+            [ "$REF_TYPE" = tag ] || fail "a real publish runs on a tag (refs/tags/vX.Y.Z), not on ${REF_TYPE} ${REF_NAME}"
+          fi
+          if [ "$dry" = true ]; then
+            version="$INPUT_VERSION"
+            [ -n "$version" ] || fail "a dry run needs the version to rehearse (for example 0.26.0-rc.0)"
+          else
+            version="${REF_NAME#v}"
+            [ "$REF_NAME" = "v$version" ] || fail "the tag ${REF_NAME} is not vX.Y.Z"
+          fi
+          [[ "$version" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?$ ]] || fail "'$version' is not X.Y.Z or X.Y.Z-prerelease"
+          if [ "$dry" = false ]; then
+            # Never publish from an unmerged branch: the tagged commit must be on main.
+            git merge-base --is-ancestor "$GITHUB_SHA" origin/main || fail "$GITHUB_SHA is not on main; releases are published from main only"
+          fi
+          tag="${INPUT_TAG}"
+          if [ -z "$tag" ]; then
+            case "$version" in *-*) tag=next ;; *) tag=latest ;; esac
+          fi
+          { echo "version=$version"; echo "tag=v$version"; echo "dry-run=$dry"; echo "dist-tag=$tag"; } >> "$GITHUB_OUTPUT"
+          echo "Publishing $version to dist-tag $tag (dry run: $dry)"
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+  build:
+    name: build and pack
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      - name: Setup Node.js
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - uses: ./.github/actions/setup-workspace
+
+      # A rehearsal has no release commit: prepare the scratch version in this runner's checkout (nothing is committed or pushed).
+      - name: Prepare the scratch version (dry run only)
+        if: ${{ needs.plan.outputs.dry-run == 'true' }}
+        env:
+          VERSION: ${{ needs.plan.outputs.version }}
+        run: node scripts/release.mjs prepare "$VERSION" --no-stability --no-lockfile
+
+      - name: Build
+        run: pnpm build
+
+      # pnpm pack of the six, then scripts/stamp-githead.mjs on each tarball: npm records gitHead only when it publishes a
+      # directory, and a tarball publish would otherwise ship none (spike S4 F2).
+      - name: Pack and stamp gitHead
+        env:
+          VERSION: ${{ needs.plan.outputs.version }}
+        run: node scripts/release.mjs pack "$VERSION" --commit "$GITHUB_SHA" --out "$RUNNER_TEMP/tarballs"
+
+      - name: Smoke the tarballs (install together, render, resolve, run the CLI)
+        env:
+          VERSION: ${{ needs.plan.outputs.version }}
+        run: node scripts/release.mjs smoke "$VERSION" --dir "$RUNNER_TEMP/tarballs"
+
+      - name: Keep the tarballs
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: tarballs
+          path: ${{ runner.temp }}/tarballs
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    name: publish
+    needs: [plan, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      # Scripts only: nothing here installs or builds, so the published bytes are exactly the tarballs of `build`.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            /scripts/
+            /changes/
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
-          cache: pnpm
           registry-url: https://registry.npmjs.org
 
       - name: Use a trusted-publishing capable npm
         run: npm install -g npm@11.16.0
 
-      - name: Reject unresolved candidate gallery publication
-        run: node scripts/candidate-gallery.mjs publication
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: tarballs
+          path: ${{ runner.temp }}/tarballs
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      # npm checks the trusted publisher against the top-level workflow: refuse to publish from anything else.
+      - name: Publish in dependency order
+        env:
+          VERSION: ${{ needs.plan.outputs.version }}
+          DIST_TAG: ${{ needs.plan.outputs.dist-tag }}
+          DRY_RUN: ${{ needs.plan.outputs.dry-run }}
+        run: |
+          if [ "$DRY_RUN" = true ]; then
+            node scripts/release.mjs publish "$VERSION" --dir "$RUNNER_TEMP/tarballs" --tag "$DIST_TAG" --dry-run
+          else
+            case "$GITHUB_WORKFLOW_REF" in
+              */.github/workflows/npm-publish.yml@refs/tags/v*) ;;
+              *) echo "::error title=Publish::refusing to publish from $GITHUB_WORKFLOW_REF: only npm-publish.yml on a v* tag is a trusted publisher"; exit 1 ;;
+            esac
+            node scripts/release.mjs publish "$VERSION" --dir "$RUNNER_TEMP/tarballs" --tag "$DIST_TAG"
+          fi
 
-      # RR-100: lint, typecheck, the tests, the breaking-change check, the examples and the skills ran in CI on this exact commit.
-      - name: Build
-        run: pnpm build
+  verify:
+    name: verify the registry
+    needs: [plan, publish]
+    if: ${{ needs.plan.outputs.dry-run != 'true' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            /scripts/
+            /changes/
+            /docs/quickstart/
+            /CHANGELOG.md
+            /packages/*/CHANGELOG.md
+          sparse-checkout-cone-mode: false
 
-      - name: Verify npm package contents
-        run: pnpm --filter @openpresentation/opf pack:dry-run
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
 
-      # RR-100: the portable skills test runs only here (not in CI), so it stays.
-      - name: Verify portable skills
-        run: pnpm test:skills
+      # Registry manifest, gitHead and the provenance source commit equal this commit, provenance workflow npm-publish.yml on the
+      # tag, dist-tag, lockstep ranges, signatures, the changelog section. The attestation bundle lags the packument by minutes:
+      # --wait retries only that and the scratch install, never a result that is there and wrong.
+      - name: Verify all six packages
+        env:
+          VERSION: ${{ needs.plan.outputs.version }}
+          DIST_TAG: ${{ needs.plan.outputs.dist-tag }}
+        run: node scripts/release.mjs verify "$VERSION" --tag "$DIST_TAG" --commit "$GITHUB_SHA" --wait 10 --poll 30
 
-      - name: Verify isolated packed installation
-        run: node packages/javascript/test/packed-install-smoke.mjs
-
-      - name: Publish to npm
-        working-directory: packages/javascript
-        run: npm publish --access public --provenance
+      - name: Smoke the published set from the registry
+        env:
+          VERSION: ${{ needs.plan.outputs.version }}
+        run: node scripts/release.mjs smoke "$VERSION" --registry
 
   release:
-    name: Create GitHub Release
-    needs: publish
-    if: startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    name: GitHub release
+    needs: [plan, verify]
+    if: ${{ needs.plan.outputs.dry-run != 'true' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     permissions:
       contents: write
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: |
+            /scripts/
+            /changes/
+            /CHANGELOG.md
+            /packages/*/CHANGELOG.md
+          sparse-checkout-cone-mode: false
 
-      - name: Extract release notes from CHANGELOG.md
-        run: |
-          VERSION="$(echo "${GITHUB_REF_NAME}" | sed -E 's/^(opf-v|@openpresentation\/opf@v)//')"
-          NOTES_FILE="$(mktemp)"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
 
-          # Matches `## X.Y.Z` and `## X.Y.Z (date)`, the form the changelog assembler writes.
-          node scripts/release-notes.mjs --version "${VERSION}" --out "${NOTES_FILE}"
-
-          if [ ! -s "${NOTES_FILE}" ]; then
-            echo "See [CHANGELOG.md](https://github.com/${GITHUB_REPOSITORY}/blob/${GITHUB_REF_NAME}/CHANGELOG.md) for details." > "${NOTES_FILE}"
-          fi
-
-          echo "NOTES_FILE=${NOTES_FILE}" >> "${GITHUB_ENV}"
-          echo "RELEASE_VERSION=${VERSION}" >> "${GITHUB_ENV}"
-
-      - name: Create GitHub Release
+      # The tag exists already (pushed by release.yml, or by hand). The notes are the six package changelog sections, grouped by
+      # package. A prerelease is marked so, and never becomes the repository's latest release.
+      - name: Create the release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ needs.plan.outputs.version }}
+          TAG: ${{ needs.plan.outputs.tag }}
         run: |
-          if gh release view "${GITHUB_REF_NAME}" --json tagName >/dev/null 2>&1; then
-            echo "Release ${GITHUB_REF_NAME} already exists; preserving its notes."
-          else
-            gh release create "${GITHUB_REF_NAME}" \
-              --title "@openpresentation/opf ${RELEASE_VERSION}" \
-              --notes-file "${NOTES_FILE}" \
-              --verify-tag
+          if gh release view "$TAG" --json tagName >/dev/null 2>&1; then
+            echo "Release $TAG already exists; preserving its notes."
+            exit 0
           fi
+          node scripts/release.mjs notes "$VERSION" --out "$RUNNER_TEMP/notes.md"
+          flags=(--verify-tag)
+          case "$VERSION" in *-*) flags+=(--prerelease) ;; esac
+          gh release create "$TAG" --title "OPF $VERSION" --notes-file "$RUNNER_TEMP/notes.md" "${flags[@]}"
+
+  # A failed release opens (or comments on) one issue "Release vX.Y.Z failed" labeled release-failed; the next green release
+  # closes it. A dry run reports nothing.
+  report:
+    name: report
+    needs: [plan, build, publish, verify, release]
+    if: ${{ always() && needs.plan.outputs.dry-run != 'true' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+          sparse-checkout-cone-mode: true
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: Open, update or close the release-failed issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEEDS: ${{ toJSON(needs) }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          TITLE: Release ${{ github.ref_name }} failed
+        run: node scripts/ci-report-issue.mjs --label release-failed --title "$TITLE"
