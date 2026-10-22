@@ -95,7 +95,7 @@ test('MR-23f: one build step runs after the install and before every check, the 
   assert.ok(end(order.build) < start(order.light));
   // Every step belongs to exactly one phase, so none is dropped or run twice.
   const all = [...order.install, ...order.build, ...order.light, ...order.heavy].sort((a, b) => a - b);
-  assert.deepEqual(all, plan.map((step, index) => index));
+  assert.deepEqual(all, plan.map((_step, index) => index));
 });
 
 test('MR-23f: a change Biome alone handles adds no build, and a skipped step is in no phase', () => {

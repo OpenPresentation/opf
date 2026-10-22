@@ -13,7 +13,7 @@ name: Merge OPF bump
 # It runs when one of the listed workflows completes (workflow_run, on the default branch's copy of this file: it executes no code from
 # the pull request, only the GitHub API). The pull request is merged by whichever completion comes last, because it needs every check in
 # REQUIRED_CHECKS to be green for the pull request's head commit. A red or missing check leaves the pull request open.
-# Checks: `build-and-smoke` is the job of build-and-smoke.yml, drafted beside this file: pptx-gallery has no pull request CI for an arbitrary change (validate-gallery-registry.yml runs on pushes to main). The vendored editor under public/opf-editor is refreshed by hand until MR-52 makes `prepare:gallery:registry` monorepo-aware; until then the bump fails `verify:published-editor` and stays open.
+# Checks: `build-and-smoke` is the job of build-and-smoke.yml, drafted beside this file: pptx-gallery has no pull request CI for an arbitrary change (validate-gallery-registry.yml runs on pushes to main). The vendored editor under public/opf-editor and data/opf-spec.json are rebuilt by bump-sites.yml (scripts/vendor-gallery-editor.mjs --registry, MR-56) and committed into the bump pull request, which is why ALLOWED_FILES below lists them.
 on:
   workflow_run:
     workflows: ["Build and smoke"]

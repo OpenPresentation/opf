@@ -7,7 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { LABELS, NAMES, bumpKind, largest, lockfileCommand, main, manifestsOf, missingFromRegistry, planBump, pullRequestBody, specifierFor, writeBump } from './bump-site.mjs';
+import { LABELS, NAMES, bumpKind, largest, lockfileCommand, VENDORED_PATHS, main, manifestsOf, missingFromRegistry, planBump, pullRequestBody, specifierFor, vendorCommands, vendoredChanges, writeBump } from './bump-site.mjs';
 import { SIX } from './workspace-packages.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
@@ -158,7 +158,7 @@ test('bump-sites.yml: a failure to bump never fails the release: every step that
     assert.match(bump, new RegExp(`id: ${id}\\n(?: {8}if: [^\\n]*\\n)? {8}continue-on-error: true`, 'u'), `${id} continues on error`);
   }
   assert.match(bump, /fail-fast: false/u);
-  assert.match(bump, /name: Report a failed bump\n {8}if: \$\{\{ always\(\) && \(steps\.app\.outcome == 'failure' \|\| steps\.pm\.outcome == 'failure' \|\| steps\.bump\.outcome == 'failure' \|\| steps\.pr\.outcome == 'failure'\) \}\}/u);
+  assert.match(bump, /name: Report a failed bump\n {8}if: \$\{\{ always\(\) && \(steps\.app\.outcome == 'failure' \|\| steps\.pm\.outcome == 'failure' \|\| steps\.tag\.outcome == 'failure' \|\| steps\.bump\.outcome == 'failure' \|\| steps\.pr\.outcome == 'failure'\) \}\}/u);
   assert.match(bump, /GH_TOKEN: \$\{\{ github\.token \}\}\n {10}REPOSITORY/u, 'the issue is opened with the workflow token');
   assert.match(bump, /bump-sites-failed/u);
   assert.match(bump, /issues: write/u);
@@ -199,4 +199,73 @@ test('the site-side workflows: one merge workflow per site, on the site\'s defau
   assert.match(gallery, /\n {2}build-and-smoke:\n {4}name: build-and-smoke\n {4}if: \$\{\{ startsWith\(github\.head_ref, 'bot\/opf-v'\)/u, 'the check the merge workflow requires exists');
   assert.match(gallery, /pnpm verify:published-editor/u);
   assert.match(read('docs/programs/monorepo/site-workflows/pptx-gallery/opf-bump-merge.yml'), /REQUIRED_CHECKS: \|\n {12}build-and-smoke\n/u);
+});
+
+// MR-56: pptx-gallery vendors the editor bundle and the schema reference; the bump pull request carries a rebuilt copy.
+test('MR-56: the vendored editor is rebuilt from the registry at the version and the editor example at the release tag', () => {
+  const [install, prepare] = vendorCommands({ opf: '/work/opf', site: '/work/site', version: '0.26.1', execPath: 'node' });
+  assert.deepEqual(install, ['pnpm', ['install', '--frozen-lockfile', '--ignore-scripts'], '/work/site']);
+  assert.equal(prepare[0], 'node');
+  assert.deepEqual(prepare[1].slice(1), ['--version', '0.26.1', '--ref', 'v0.26.1', '--site', '/work/site']);
+  assert.match(prepare[1][0], /scripts[\\/]vendor-gallery-editor\.mjs$/u);
+  assert.throws(() => vendorCommands({ opf: 'o', site: 's', version: 'v0.26.1' }), /not X\.Y\.Z/u);
+  assert.deepEqual(VENDORED_PATHS, ['public/opf-editor', 'data/opf-spec.json']);
+  const git = (stdout, status = 0) => (command, args) => ({ status, stdout, stderr: 'boom', command, args });
+  assert.equal(vendoredChanges('/s', git(' M public/opf-editor/manifest.json\n?? public/opf-editor/new.ttf\n')), 2);
+  assert.equal(vendoredChanges('/s', git('')), 0);
+  assert.throws(() => vendoredChanges('/s', git('', 128)), /git status failed in \/s: boom/u);
+});
+
+test('MR-56: main --vendor-editor runs the refresh after the pins, counts the vendored files as a change and never merges a refresh by itself', async () => {
+  const calls = [];
+  const vendorExec = (command, args, options) => {
+    calls.push([path.basename(command), args[0], options.cwd]);
+    return { status: 0 };
+  };
+  const written = site({ 'package.json': manifest });
+  const output = path.join(written, 'gh-output');
+  const lines = [];
+  const result = await main(['bump', '--site', written, '--version', '0.26.0', '--write', '--vendor-editor', '/work/opf', '--github-output', output, '--body-file', path.join(written, 'body.md')], {
+    log: (line) => lines.push(line), vendorExec, vendorStatus: () => ({ status: 0, stdout: ' M public/opf-editor/index.html\n M data/opf-spec.json\n' }),
+  });
+  assert.equal(calls.length, 2);
+  assert.deepEqual(calls[0], ['pnpm', 'install', path.resolve(written)]);
+  assert.match(calls[1][1], /vendor-gallery-editor\.mjs$/u);
+  assert.equal(result.vendored, 2);
+  assert.match(readFileSync(output, 'utf8'), /^changed=true\nkind=major\nlabel=needs-review\n$/u);
+  assert.match(readFileSync(path.join(written, 'body.md'), 'utf8'), /vendored editor[^\n]*2 changed paths[^\n]*v0\.26\.0/u);
+  assert.ok(lines.some((line) => /rebuilt from the published 0\.26\.0 packages/u.test(line)));
+
+  // pins already at the version, bundle rebuilt: a change, but not an automatic merge
+  const current = site({ 'package.json': { dependencies: { '@openpresentation/opf': '0.26.0' } } });
+  const again = path.join(current, 'gh-output');
+  const rerun = await main(['bump', '--site', current, '--version', '0.26.0', '--write', '--vendor-editor', '/work/opf', '--github-output', again, '--body-file', path.join(current, 'body.md')], {
+    log() {}, vendorExec, vendorStatus: () => ({ status: 0, stdout: ' M public/opf-editor/index.html\n' }),
+  });
+  assert.equal(rerun.label, 'needs-review');
+  assert.match(readFileSync(again, 'utf8'), /^changed=true\nkind=none\nlabel=needs-review\n$/u);
+  assert.match(readFileSync(path.join(current, 'body.md'), 'utf8'), /only the vendored files changed/u);
+
+  // nothing changed at all: no pull request
+  const same = site({ 'package.json': { dependencies: { '@openpresentation/opf': '0.26.0' } } });
+  const quiet = path.join(same, 'gh-output');
+  await main(['bump', '--site', same, '--version', '0.26.0', '--write', '--vendor-editor', '/work/opf', '--github-output', quiet], { log() {}, vendorExec, vendorStatus: () => ({ status: 0, stdout: '' }) });
+  assert.match(readFileSync(quiet, 'utf8'), /^changed=false\n/u);
+
+  await assert.rejects(main(['bump', '--site', same, '--version', '0.26.0', '--vendor-editor', '/work/opf'], { log() {}, vendorExec }), /needs --write/u);
+  await assert.rejects(main(['bump', '--site', same, '--version', '0.26.0', '--write', '--vendor-editor', '/work/opf'], { log() {}, vendorExec: () => ({ status: 2 }), vendorStatus: () => ({ status: 0, stdout: '' }) }), /failed in/u);
+});
+
+test('MR-56: bump-sites.yml rebuilds the vendored editor in the pptx-gallery leg only, from the release tag, and reports a failure there too', () => {
+  assert.match(bump, /- name: Fetch the release tag\n {8}id: tag\n {8}if: \$\{\{ steps\.app\.outcome == 'success' && matrix\.repo == 'pptx-gallery' \}\}\n {8}continue-on-error: true\n {8}working-directory: opf\n {8}run: git fetch --depth=1 origin "refs\/tags\/v\$VERSION:refs\/tags\/v\$VERSION"/u);
+  assert.match(bump, /VENDOR_EDITOR: \$\{\{ matrix\.repo == 'pptx-gallery' \}\}/u);
+  assert.match(bump, /\[ "\$VENDOR_EDITOR" = true \] && vendor=\(--vendor-editor opf\)/u);
+  assert.match(bump, /--write --refresh-lockfile "\$\{vendor\[@\]\}" --github-output/u);
+  assert.match(bump, /matrix\.repo != 'pptx-gallery' \|\| steps\.tag\.outcome == 'success'/u, 'a missing tag stops the leg before it opens a pull request with a stale bundle');
+  assert.match(bump, /steps\.tag\.outcome == 'failure' \|\| steps\.bump\.outcome == 'failure'/u);
+  assert.match(bump, /git add -A/u, 'the rebuilt files are committed with the pins');
+  const docs = read('docs/programs/monorepo/site-workflows/README.md');
+  assert.doesNotMatch(docs, /not been made monorepo-aware|MR-52 follow-up|refreshes the bundle on the bump branch/u, 'the manual refresh note is gone');
+  assert.match(docs, /pnpm vendor:gallery-editor --version/u);
+  assert.match(read('docs/programs/monorepo/site-workflows/pptx-gallery/opf-bump-merge.yml'), /ALLOWED_FILES: '\^\(package\\\.json\|pnpm-lock\\\.yaml\|public\/opf-editor\/\.\*\|data\/opf-spec\\\.json\)\$'/u, 'the merge allows the vendored files');
 });

@@ -7,11 +7,17 @@
 // style: `0.25.0` becomes `0.26.1`, `^5.0.0` becomes `^0.26.1`), refreshes the site's lockfile and tells the workflow how big the
 // bump is, which decides the label: a patch bump (the same major and minor) is `auto-merge`, anything else `needs-review` (D19).
 //
-//   node scripts/bump-site.mjs bump --site <dir> --version X.Y.Z [--write] [--refresh-lockfile] [--json] [--github-output <file>] [--body-file <file>]
+//   node scripts/bump-site.mjs bump --site <dir> --version X.Y.Z [--write] [--refresh-lockfile] [--vendor-editor <opf checkout>] [--json] [--github-output <file>] [--body-file <file>]
 //   node scripts/bump-site.mjs published <X.Y.Z> [--wait <minutes>]
 //
 // `bump` without `--write` only prints the plan. It never installs dependencies other than through the lockfile refresh
 // (`pnpm install --lockfile-only --ignore-scripts`, or the npm equivalent) and never runs a site's scripts.
+// MR-56, `--vendor-editor <opf checkout>` (pptx.gallery only): the site vendors the editor bundle (public/opf-editor) and the schema
+// reference (data/opf-spec.json) built from the published packages. After the pins and the lockfile it installs the site's dependencies
+// from the lockfile without scripts (the bundle includes the site's own snippet builders) and runs the checkout's
+// scripts/vendor-gallery-editor.mjs --version X.Y.Z --ref vX.Y.Z --site <dir> (`pnpm vendor:gallery-editor`): the libraries come from the registry at that
+// version and the editor example from packages/editor at the release tag, which the checkout must have fetched. The vendored files are
+// then part of the same bump pull request, and a bump whose only change is a refreshed bundle counts as changed.
 // `published` checks that all six packages are on the registry at the version (a bounded wait, for registry propagation only).
 // Plain Node, no dependencies.
 import { spawnSync } from 'node:child_process';
@@ -137,9 +143,37 @@ export function refreshLockfile(siteDir, exec = (command, args, options) => spaw
   if (result.status !== 0) throw new Error(`${command} ${args.join(' ')} failed in ${siteDir} (${result.status})`);
 }
 
+/** The files a site vendors from this repository's packages (MR-56): the editor bundle and the schema reference. */
+export const VENDORED_PATHS = ['public/opf-editor', 'data/opf-spec.json'];
+
+/** The two commands that refresh the vendored editor of a site, as [command, args, cwd]: the lockfile install, then the bundle. */
+export function vendorCommands({ opf, site, version, execPath = process.execPath }) {
+  if (!isVersion(version)) throw new Error(`'${version}' is not X.Y.Z (a bump follows a stable release)`);
+  return [
+    ['pnpm', ['install', '--frozen-lockfile', '--ignore-scripts'], site],
+    [execPath, [path.join(opf, 'scripts', 'vendor-gallery-editor.mjs'), '--version', version, '--ref', `v${version}`, '--site', site], opf],
+  ];
+}
+
+/** Did the vendoring change anything in the site's Git work tree? (the vendored paths only, untracked files included) */
+export function vendoredChanges(site, exec = (command, args, options) => spawnSync(command, args, { ...options, encoding: 'utf8' })) {
+  const result = exec('git', ['status', '--porcelain', '--', ...VENDORED_PATHS], { cwd: site });
+  if (result.error) throw result.error;
+  if (result.status !== 0) throw new Error(`git status failed in ${site}: ${String(result.stderr ?? '').trim()}`);
+  return String(result.stdout ?? '').split('\n').filter(Boolean).length;
+}
+
+export function vendorEditor({ opf, site, version }, exec = (command, args, options) => spawnSync(command, args, { ...options, stdio: 'inherit', shell: process.platform === 'win32' && command === 'pnpm' })) {
+  for (const [command, args, cwd] of vendorCommands({ opf, site, version })) {
+    const result = exec(command, args, { cwd });
+    if (result.error) throw result.error;
+    if (result.status !== 0) throw new Error(`${command} ${args.join(' ')} failed in ${cwd} (${result.status})`);
+  }
+}
+
 /** The pull request body: what moved, what happens next, and where the notes are. */
-export function pullRequestBody(plan, { repository = 'OpenPresentation/opf' } = {}) {
-  const label = LABELS[plan.kind];
+export function pullRequestBody(plan, { repository = 'OpenPresentation/opf', vendored = 0 } = {}) {
+  const label = LABELS[plan.kind] ?? 'needs-review';
   const rows = plan.changes.map((change) => `| \`${change.name}\` | \`${change.from}\` | \`${change.to}\` | \`${change.file}\` |`);
   return [
     `Bumps the \`@openpresentation/*\` pins of this site to **v${plan.version}** (opened by \`bump-sites.yml\` after the release was verified).`,
@@ -150,7 +184,10 @@ export function pullRequestBody(plan, { repository = 'OpenPresentation/opf' } = 
     '| --- | --- | --- | --- |',
     ...rows,
     '',
-    plan.kind === 'patch'
+    ...(vendored > 0 ? [`The vendored editor (\`public/opf-editor\`, ${vendored} changed paths) and the schema reference (\`data/opf-spec.json\`) were rebuilt from the published v${plan.version} packages and the editor example at the tag v${plan.version}.`, ''] : []),
+    plan.kind === 'none'
+      ? `The pins were already at this version; only the vendored files changed (label \`${label}\`): review it, then merge it by hand.`
+      : plan.kind === 'patch'
       ? `This is a **patch** bump (label \`${label}\`): this site's \`opf-bump-merge.yml\` merges it once its \`build-and-smoke\` check has passed.`
       : `This is a **${plan.kind}** bump (label \`${label}\`): a minor or major bump of the shared 0.x line can break a site, so it is not merged automatically. Review it, then merge it by hand.`,
     '',
@@ -191,7 +228,7 @@ function parseArgs(argv, valueFlags, booleanFlags) {
 
 const npmExec = (command, args) => spawnSync(command, args, { encoding: 'utf8', shell: process.platform === 'win32' });
 
-export async function main(argv = process.argv.slice(2), { log = (line) => process.stdout.write(`${line}\n`), exec = npmExec, sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)) } = {}) {
+export async function main(argv = process.argv.slice(2), { log = (line) => process.stdout.write(`${line}\n`), exec = npmExec, sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms)), vendorExec, vendorStatus } = {}) {
   const [command, ...rest] = argv;
   if (command === 'published') {
     const options = parseArgs(rest, ['wait'], []);
@@ -209,8 +246,8 @@ export async function main(argv = process.argv.slice(2), { log = (line) => proce
     }
   }
   if (command === 'bump') {
-    const options = parseArgs(rest, ['site', 'version', 'github-output', 'body-file'], ['write', 'refresh-lockfile', 'json']);
-    if (!options.site || !options.version) throw new Error('usage: bump-site.mjs bump --site <dir> --version X.Y.Z [--write] [--refresh-lockfile] [--json] [--github-output file] [--body-file file]');
+    const options = parseArgs(rest, ['site', 'version', 'github-output', 'body-file', 'vendor-editor'], ['write', 'refresh-lockfile', 'json']);
+    if (!options.site || !options.version) throw new Error('usage: bump-site.mjs bump --site <dir> --version X.Y.Z [--write] [--refresh-lockfile] [--vendor-editor <opf checkout>] [--json] [--github-output file] [--body-file file]');
     const siteDir = path.resolve(options.site);
     const plan = planBump(siteDir, options.version);
     if (plan.unsupported.length > 0) {
@@ -220,15 +257,26 @@ export async function main(argv = process.argv.slice(2), { log = (line) => proce
       writeBump(siteDir, plan);
       if (options['refresh-lockfile']) refreshLockfile(siteDir);
     }
-    const label = LABELS[plan.kind] ?? '';
-    if (options.json) log(JSON.stringify({ ...plan, label }, null, 2));
-    else if (plan.changes.length === 0) log(`${siteDir} is already at ${options.version}`);
-    else for (const change of plan.changes) log(`${change.file}: ${change.name} ${change.from} -> ${change.to} (${change.kind})`);
-    if (options['github-output']) {
-      appendFileSync(options['github-output'], `changed=${plan.changes.length > 0}\nkind=${plan.kind}\nlabel=${label}\n`);
+    let vendored = 0;
+    if (options['vendor-editor']) {
+      if (!options.write) throw new Error('--vendor-editor writes into the site: it needs --write');
+      vendorEditor({ opf: path.resolve(options['vendor-editor']), site: siteDir, version: options.version }, vendorExec);
+      vendored = vendoredChanges(siteDir, vendorStatus);
     }
-    if (options['body-file']) writeFileSync(options['body-file'], pullRequestBody(plan));
-    return { ...plan, label };
+    // Pins already at the version but a rebuilt bundle (a re-run after a fix): nobody reviewed it, so it is not merged automatically.
+    const label = LABELS[plan.kind] ?? (vendored > 0 ? 'needs-review' : '');
+    const changed = plan.changes.length > 0 || vendored > 0;
+    if (options.json) log(JSON.stringify({ ...plan, label, vendored }, null, 2));
+    else if (!changed) log(`${siteDir} is already at ${options.version}`);
+    else {
+      for (const change of plan.changes) log(`${change.file}: ${change.name} ${change.from} -> ${change.to} (${change.kind})`);
+      if (vendored > 0) log(`${VENDORED_PATHS.join(', ')}: rebuilt from the published ${options.version} packages (${vendored} changed paths)`);
+    }
+    if (options['github-output']) {
+      appendFileSync(options['github-output'], `changed=${changed}\nkind=${plan.kind}\nlabel=${label}\n`);
+    }
+    if (options['body-file']) writeFileSync(options['body-file'], pullRequestBody(plan, { vendored }));
+    return { ...plan, label, vendored };
   }
   throw new Error('usage: bump-site.mjs bump|published (see the header of scripts/bump-site.mjs)');
 }

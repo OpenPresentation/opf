@@ -1,13 +1,18 @@
 // A local, canonical OPF snapshot sourced from the sibling gallery's own builders.
+// MR-56: `--site <dir>` names the pptx.gallery checkout (default: the sibling ../pptx-gallery); `--registry --consumer <dir>` bundles
+// against an installed npm consumer of one published set (scripts/registry-consumer.mjs, the esbuild installed there), without
+// release-plan.json. `--registry` alone keeps the release plan's consumer for the scripts that still read it.
 import {createRequire} from 'node:module';
 import {existsSync} from 'node:fs';
 import {readFile,writeFile,mkdir,rm} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../',import.meta.url)),gallery=path.resolve(root,'../pptx-gallery'),out=path.join(root,'artifacts/editor');
+const flag=name=>{const at=process.argv.indexOf(name);if(at===-1)return undefined;if(process.argv[at+1]===undefined||process.argv[at+1].startsWith('--'))throw new Error(`${name} needs a value`);return process.argv[at+1];};
+const root=fileURLToPath(new URL('../',import.meta.url)),gallery=path.resolve(flag('--site')??path.join(root,'../pptx-gallery')),out=path.join(root,'artifacts/editor');
 const require=createRequire(path.join(root,'packages/javascript/package.json'));
-const{build}=createRequire(require.resolve('tsup'))('esbuild');await mkdir(out,{recursive:true});
-const registry = process.argv.includes('--registry') ? await (await import('./registry-toolchain.mjs')).registryToolchain() : null;
+const consumer=flag('--consumer');
+const registry = process.argv.includes('--registry') ? (consumer ? await (await import('./registry-consumer.mjs')).consumerToolchain(path.resolve(consumer)) : await (await import('./registry-toolchain.mjs')).registryToolchain()) : null;
+const{build}=registry?.esbuild??createRequire(require.resolve('tsup'))('esbuild');await mkdir(out,{recursive:true});
 // The open editor demo must also build without the private gallery repository.
 if (process.env.OPF_BUNDLED_GALLERY === '1' || !existsSync(path.join(gallery, 'lib/opf-snippets.ts'))) {
  const {examples} = registry ? await registry.import('@openpresentation/opf/examples') : await import('../packages/javascript/dist/examples.js');
