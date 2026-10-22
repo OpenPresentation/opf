@@ -1001,9 +1001,9 @@ The editor releases with the other five packages of the OPF monorepo at one vers
 
 ## Shared dynamic composition
 
-The current checkout uses `@openpresentation/opf/composition` for portable geometry. Slides can select `auto`, `row`, `column`, or `grid`, set weighted tracks, and request path-specific overflow diagnostics. See the sibling OPF repo's `docs/dynamic-composition.md` for the complete contract.
+The current checkout uses `@openpresentation/opf/composition` for portable geometry. Slides can select `auto`, `row`, `column`, or `grid`, set weighted tracks, and request path-specific overflow diagnostics. See `docs/dynamic-composition.md` at the repository root for the complete contract.
 
-The current editor requires core `^0.15.1`; canvas rendering uses the optional renderer peer `^0.15.0`, and playground PPTX import/export uses `@openpresentation/opf-pptx@^0.15.0`. Clean registry installs support composition without sibling checkouts. For coordinated source development, build OPF and run `node scripts/link-ecosystem.mjs` there; `pnpm test:ecosystem` verifies shared geometry and import/export behavior.
+The editor requires the core, renderer and PPTX converter of its own release (`workspace:^` in this repository, `^<version>` in the published package). In the workspace the packages link to each other, so `pnpm run test:contract` here checks shared geometry and import/export behavior against this checkout's sources.
 
 ## Local interactive demo
 
