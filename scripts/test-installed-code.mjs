@@ -9,6 +9,7 @@ import {fileURLToPath,pathToFileURL} from 'node:url';
 import path from 'node:path';
 import {tar} from './archive-tar.mjs';
 import {packageManagerInvocation} from './package-manager.mjs';
+import {assertReproducible,isRebuilt} from './rebuilt-release-files.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(arg=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(arg)),'Installed verification must not alias packages with a loader.');
 const out=await realpath(path.join(root,'artifacts/npm'));
@@ -28,19 +29,13 @@ const immutable=(repo,file)=>{
  const ref=plan.verificationRefs[repo];assert.match(ref??'',/^[a-f0-9]{40}$/);
  return execFileSync('git',['show',`${ref}:${file}`],{cwd:checkout(repo),maxBuffer:16*1024*1024});
 };
-// Files the release build writes but the repository ignores (opf-editor dist/styles.css, RR-98) are not in the release commit;
-// they are rebuilt from the commit's own build script and sources, so the installed bytes are still bound to that commit.
-const generatedAtRef={'opf-editor':{'dist/styles.css':async(repo,ref)=>{
- const git=args=>execFileSync('git',args,{cwd:checkout(repo),maxBuffer:16*1024*1024});
- const directory=await mkdtemp(path.join(consumer,'immutable-styles-'));assert.ok(within(consumer,await realpath(directory)));
- await mkdir(path.join(directory,'scripts'));await mkdir(path.join(directory,'src/styles'),{recursive:true});
- await writeFile(path.join(directory,'scripts/build-styles.mjs'),git(['show',`${ref}:scripts/build-styles.mjs`]));
- for(const name of git(['ls-tree','--name-only',`${ref}:src/styles/`]).toString('utf8').split('\n').filter(Boolean)) await writeFile(path.join(directory,'src/styles',name),git(['show',`${ref}:src/styles/${name}`]));
- return Buffer.from((await (await import(pathToFileURL(path.join(directory,'scripts/build-styles.mjs')).href)).buildStyles(pathToFileURL(path.join(directory,'src/styles')+path.sep))).css);
-}}};
-const immutableBytes=async(repo,file)=>{
- const generated=generatedAtRef[repo]?.[file];
- return generated?generated(repo,plan.verificationRefs[repo]):immutable(repo,file);
+// Build output the repository does not keep current (opf-editor dist/, RR-101) is bound to the release commit by a reproducible
+// build of the gitHead's sources and lockfile instead of a committed copy; every other file is compared with the commit.
+const rebuildCache=path.join(root,'artifacts/immutable-builds');
+const immutableBytes=async(repo,file,installed)=>{
+ if(!isRebuilt(repo,file))return {bytes:immutable(repo,file),rebuilt:false};
+ await assertReproducible({repo,checkout:checkout(repo),ref:plan.verificationRefs[repo],file,installed,cacheRoot:rebuildCache});
+ return {bytes:installed,rebuilt:true};
 };
 const sourceFile=async(repo,file)=>registry?immutable(repo,file).toString('utf8'):readFile(path.join(checkout(repo),file),'utf8');
 const npm=args=>{const invocation=packageManagerInvocation('npm',args);return execFileSync(invocation.command,invocation.args,{cwd:consumer,encoding:'utf8',maxBuffer:16*1024*1024});};
@@ -68,7 +63,7 @@ for(const item of manifest.artifacts) {
       const actual=await realpath(path.join(installed,file));assert.ok(within(installed,actual));
       const expected=await realpath(path.join(expectedDirectory,file));assert.ok(within(extracted,expected));
       const digest=hash(await readFile(actual));assert.equal(digest,hash(await readFile(expected)),'Installed files differ from registry archive');files[file]=digest;
-      if(repo!=='opf')assert.equal(digest,hash(await immutableBytes(repo,file)),'Installed files differ from immutable release commit');
+      if(repo!=='opf'){const bound=await immutableBytes(repo,file,await readFile(actual));assert.equal(digest,hash(bound.bytes),'Installed files differ from immutable release commit');}
     }
     record={...item,gitHead:metadata.gitHead,installedVersion:pkg.version,integrity:entry.integrity,archiveSha256:hash(tarball),files};
   }else{
