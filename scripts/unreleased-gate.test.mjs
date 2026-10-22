@@ -76,7 +76,8 @@ test('cliPeerGate reads the CLI peer ranges and the peers the CLI entry resolves
 });
 
 test('the CLI peer tests use the gate; the peer ranges of core equal PEER_RANGES, and the CLI ranges equal or lag them', () => {
-  for (const file of ['packages/cli/test/files.mjs', 'packages/cli/test/packed-files.mjs']) assert.match(readFileSync(path.join(root, file), 'utf8'), /cliPeerGate\(/, file);
+  // MR-23e: packed-files.mjs installs the packed workspace peers (same version), so only files.mjs still needs the gate.
+  assert.match(readFileSync(path.join(root, 'packages/cli/test/files.mjs'), 'utf8'), /cliPeerGate\(/, 'files.mjs');
   const manifest = JSON.parse(readFileSync(path.join(root, 'packages/cli/package.json'), 'utf8'));
   // MR-23: the source tree declares workspace:^; the ranges below are what the packages publish as.
   for (const [name, range] of Object.entries(manifest.peerDependencies)) manifest.peerDependencies[name] = concreteRange(range, manifest.version);
