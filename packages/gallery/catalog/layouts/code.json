@@ -1,0 +1,43 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "code",
+  "name": "Code",
+  "summary": "Source code with the explanation beside it.",
+  "tags": [
+    "Visuals"
+  ],
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "direction": "row",
+      "regions": [
+        {
+          "name": "code",
+          "size": 3,
+          "accepts": [
+            "code"
+          ],
+          "role": "primary",
+          "flow": "column"
+        },
+        {
+          "name": "notes",
+          "size": 2,
+          "accepts": [
+            "text",
+            "list"
+          ],
+          "role": "supporting",
+          "flow": "column"
+        }
+      ]
+    }
+  ],
+  "description": "Show a code example or technical excerpt. Keep the excerpt focused and use the title or caption to explain its purpose.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/code.svg"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "odia",
+  "name": "Odia",
+  "code": "ORI",
+  "bcp47": "or",
+  "ooxmlLang": "or-IN",
+  "script": "Orya",
+  "direction": "ltr",
+  "fontScheme": "kalinga",
+  "googleFontScheme": "noto-sans-oriya"
+}

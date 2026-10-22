@@ -1,0 +1,23 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-audience/v1",
+  "id": "engineering-team",
+  "name": "Engineering Team",
+  "summary": "Practitioners building the system; they want depth, mechanism, and tradeoffs.",
+  "description": "Engineers tune out generalities and tune in to specifics. Show benchmarks with conditions, architecture diagrams with constraints, and tradeoffs you actually considered. Internal jargon is fine — assume the room shares it. Leave room for questions; engineering audiences engage best when they can poke at the proposal.",
+  "seniority": "ic",
+  "technicalFluency": "high",
+  "decisionPower": "advisory",
+  "attentionBudgetMinutes": 45,
+  "recommendedNarratives": [
+    "status-update",
+    "challenge-resolution",
+    "innovation",
+    "weekly-progress"
+  ],
+  "recommendedTones": [
+    "technical",
+    "casual",
+    "conversational"
+  ],
+  "tags": ["internal", "engineering", "practitioner"]
+}

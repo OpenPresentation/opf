@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-purpose/v1",
+  "id": "persuade",
+  "name": "Persuade",
+  "summary": "Change belief or win support for a specific argument, idea, or recommendation.",
+  "description": "Use when the audience may be skeptical or undecided. Build a crisp thesis, support it with evidence, address objections, and end with a clear action.",
+  "outcome": "The audience accepts the argument or supports the recommendation.",
+  "successCriteria": [
+    "Main thesis is memorable",
+    "Evidence supports the argument",
+    "Likely objections are handled"
+  ],
+  "recommendedNarratives": ["problem-solution", "persuasive-sales", "golden-circle"],
+  "recommendedTones": ["persuasive", "authoritative"],
+  "tags": ["argument", "support", "belief-change"]
+}

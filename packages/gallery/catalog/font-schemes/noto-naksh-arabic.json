@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "noto-naksh-arabic",
+  "name": "Noto Naskh Arabic",
+  "app": "google-slides",
+  "languageFamily": "cs",
+  "languages": [
+    "fa"
+  ],
+  "major": "Noto Naskh Arabic",
+  "minor": "Noto Naskh Arabic",
+  "textSample": "هذا نص جميل",
+  "type": "sans-serif",
+  "description": "Noto Naskh Arabic is a sans serif OPF font scheme for complex script presentations, using Noto Naskh Arabic for both headings and body text."
+}

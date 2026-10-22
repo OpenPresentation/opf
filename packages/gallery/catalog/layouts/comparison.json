@@ -1,0 +1,64 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "comparison",
+  "name": "Comparison",
+  "summary": "Two options side by side (before and after, pros and cons, us and them), with an optional verdict.",
+  "tags": [
+    "Groups of items"
+  ],
+  "design": {
+    "contentBox": false
+  },
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "direction": "row",
+      "regions": [
+        {
+          "name": "first",
+          "accepts": [
+            "text",
+            "list",
+            "metric",
+            "image",
+            "chart",
+            "table",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        {
+          "name": "second",
+          "accepts": [
+            "text",
+            "list",
+            "metric",
+            "image",
+            "chart",
+            "table",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        }
+      ]
+    },
+    {
+      "name": "verdict",
+      "size": "auto",
+      "accepts": [
+        "text"
+      ],
+      "role": "supporting",
+      "flow": "none"
+    }
+  ],
+  "description": "Compare alternatives using parallel information. Keep the same criteria and level of detail for every option.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/comparison.svg"
+  }
+}

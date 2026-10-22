@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "timeline",
+  "name": "Timeline",
+  "summary": "Dated events or a roadmap along one axis, with optional notes.",
+  "tags": [
+    "Groups of items"
+  ],
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "timeline",
+      "accepts": [
+        "timeline"
+      ],
+      "role": "primary",
+      "flow": "none"
+    },
+    {
+      "name": "notes",
+      "size": "auto",
+      "accepts": [
+        "text",
+        "list",
+        "metric"
+      ],
+      "role": "supporting",
+      "flow": "auto"
+    }
+  ],
+  "description": "Show events or milestones in chronological order. Label each item with a date or stage and a concise description.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/timeline.svg"
+  }
+}

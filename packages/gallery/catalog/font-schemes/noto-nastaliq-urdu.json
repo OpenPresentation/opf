@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "noto-nastaliq-urdu",
+  "name": "Noto Nastaliq Urdu",
+  "app": "google-slides",
+  "languageFamily": "cs",
+  "languages": [
+    "ur",
+    "pa-Arab"
+  ],
+  "major": "Noto Nastaliq Urdu",
+  "minor": "Noto Nastaliq Urdu",
+  "textSample": "یہ خوبصورت ہے",
+  "type": "sans-serif",
+  "description": "Noto Nastaliq Urdu is a sans serif OPF font scheme for complex script presentations, using Noto Nastaliq Urdu for both headings and body text."
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "calibri",
+  "name": "Calibri",
+  "app": "powerpoint",
+  "languageFamily": "latin",
+  "languages": [],
+  "major": "Calibri",
+  "minor": "Calibri",
+  "textSample": "Smooth professional look",
+  "type": "sans-serif",
+  "description": "Calibri is a sans serif OPF font scheme for Latin presentations, using Calibri for both headings and body text."
+}

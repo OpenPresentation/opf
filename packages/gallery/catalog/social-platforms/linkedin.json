@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-social-platform/v1",
+  "id": "linkedin",
+  "name": "LinkedIn",
+  "summary": "Professional social network for individuals and companies.",
+  "description": "LinkedIn distinguishes between member profiles ('/in/<handle>') and company pages ('/company/<handle>'). Renderers should pick the appropriate URL pattern based on whether the parent is an Organization or a Speaker.",
+  "baseUrl": "https://linkedin.com",
+  "profileUrlPattern": "https://linkedin.com/in/{handle}",
+  "companyUrlPattern": "https://linkedin.com/company/{handle}",
+  "handlePrefix": "",
+  "handleExample": "alice-chen",
+  "brandColor": "#0A66C2",
+  "tags": ["professional", "default"]
+}
+

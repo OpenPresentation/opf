@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-purpose/v1",
+  "id": "inform",
+  "name": "Inform",
+  "summary": "Give the audience clear context, facts, or status without asking for a decision.",
+  "description": "Use when the deck needs to make the audience aware of current state, background, or findings. Prioritize clarity, completeness, and accurate framing over persuasion.",
+  "outcome": "The audience understands the situation and can repeat the important facts.",
+  "successCriteria": [
+    "Audience can summarize the key facts",
+    "No immediate decision is required",
+    "Follow-up questions are about implications, not basic context"
+  ],
+  "recommendedNarratives": ["status-update", "focus", "educate"],
+  "recommendedTones": ["formal", "conversational"],
+  "tags": ["awareness", "context", "status"]
+}

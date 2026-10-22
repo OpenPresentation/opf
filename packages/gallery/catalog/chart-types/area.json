@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
+  "id": "area",
+  "name": "Area",
+  "mappings": {
+    "openxml": {
+      "element": "areaChart",
+      "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "Area"
+      }
+    }
+  },
+  "group": "Area",
+  "groupSort": 5,
+  "series": 1,
+  "complexity": "simple"
+}

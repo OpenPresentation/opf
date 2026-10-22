@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "marathi",
+  "name": "Marathi",
+  "code": "MAR",
+  "bcp47": "mr",
+  "ooxmlLang": "mr-IN",
+  "script": "Deva",
+  "direction": "ltr",
+  "fontScheme": "mangal",
+  "googleFontScheme": "noto-sans-devangari"
+}

@@ -1,0 +1,205 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-catalog-index/v1",
+  "kind": "layouts",
+  "version": "1",
+  "description": "The built-in slide layouts of OPF 0.19: 28 region-list templates (opf-layout/v2) named by intent, in six groups (Openers and closers, Text, Groups of items, Numbers, Visuals, Mixed), in picker order. Each entry names the record's id, name, one-line summary and group; the full record (its direction and ordered list of regions) lives in the per-id JSON file alongside this index.",
+  "contentSha256": "50b1cb4e55cf2f23f35ce3db2c40a20ec02a9d9d583da17f5730f8dc41a4dc19",
+  "records": [
+    {
+      "id": "cover",
+      "name": "Cover",
+      "summary": "The opening slide: title, subtitle and an optional picture.",
+      "group": "Openers and closers",
+      "file": "cover.json"
+    },
+    {
+      "id": "section",
+      "name": "Section",
+      "summary": "A divider between parts: the section title and an optional subtitle.",
+      "group": "Openers and closers",
+      "file": "section.json"
+    },
+    {
+      "id": "agenda",
+      "name": "Agenda",
+      "summary": "What the talk covers: the parts, as one list that flows into columns when long.",
+      "group": "Openers and closers",
+      "file": "agenda.json"
+    },
+    {
+      "id": "statement",
+      "name": "Statement",
+      "summary": "One message, large and alone.",
+      "group": "Openers and closers",
+      "file": "statement.json"
+    },
+    {
+      "id": "closing",
+      "name": "Closing",
+      "summary": "The last slide: thanks, the call to action and contact details.",
+      "group": "Openers and closers",
+      "file": "closing.json"
+    },
+    {
+      "id": "text",
+      "name": "Text",
+      "summary": "Prose. Several blocks sit side by side when short and stack when long.",
+      "group": "Text",
+      "file": "text.json"
+    },
+    {
+      "id": "list",
+      "name": "List",
+      "summary": "Bulleted or numbered points; one long list flows into columns.",
+      "group": "Text",
+      "file": "list.json"
+    },
+    {
+      "id": "quote",
+      "name": "Quote",
+      "summary": "One or more quotations with attribution and photo.",
+      "group": "Text",
+      "file": "quote.json"
+    },
+    {
+      "id": "two-column",
+      "name": "Two columns",
+      "summary": "Two independent columns of any content.",
+      "group": "Text",
+      "file": "two-column.json"
+    },
+    {
+      "id": "pillars",
+      "name": "Pillars",
+      "summary": "Related ideas arranged in equal columns.",
+      "group": "Groups of items",
+      "file": "pillars.json"
+    },
+    {
+      "id": "comparison",
+      "name": "Comparison",
+      "summary": "Two options side by side (before and after, pros and cons, us and them), with an optional verdict.",
+      "group": "Groups of items",
+      "file": "comparison.json"
+    },
+    {
+      "id": "process",
+      "name": "Process",
+      "summary": "Steps in order, in one row.",
+      "group": "Groups of items",
+      "file": "process.json"
+    },
+    {
+      "id": "timeline",
+      "name": "Timeline",
+      "summary": "Dated events or a roadmap along one axis, with optional notes.",
+      "group": "Groups of items",
+      "file": "timeline.json"
+    },
+    {
+      "id": "faq",
+      "name": "FAQ",
+      "summary": "Questions with their answers.",
+      "group": "Groups of items",
+      "file": "faq.json"
+    },
+    {
+      "id": "metrics",
+      "name": "Metrics",
+      "summary": "One to six headline numbers, with an optional note.",
+      "group": "Numbers",
+      "file": "metrics.json"
+    },
+    {
+      "id": "scorecard",
+      "name": "Scorecard",
+      "summary": "Headline measures with their targets and status.",
+      "group": "Numbers",
+      "file": "scorecard.json"
+    },
+    {
+      "id": "image",
+      "name": "Image",
+      "summary": "One picture edge to edge under an optional title.",
+      "group": "Visuals",
+      "file": "image.json"
+    },
+    {
+      "id": "image-beside",
+      "name": "Image beside",
+      "summary": "A picture or video beside text.",
+      "group": "Visuals",
+      "file": "image-beside.json"
+    },
+    {
+      "id": "gallery",
+      "name": "Gallery",
+      "summary": "One to six framed pictures: a screenshot, a diagram, a photo set.",
+      "group": "Visuals",
+      "file": "gallery.json"
+    },
+    {
+      "id": "chart",
+      "name": "Chart",
+      "summary": "One to six charts, with an optional note.",
+      "group": "Visuals",
+      "file": "chart.json"
+    },
+    {
+      "id": "chart-beside",
+      "name": "Chart beside",
+      "summary": "A chart with the takeaway beside it.",
+      "group": "Visuals",
+      "file": "chart-beside.json"
+    },
+    {
+      "id": "table",
+      "name": "Table",
+      "summary": "A table across the slide, with an optional note.",
+      "group": "Visuals",
+      "file": "table.json"
+    },
+    {
+      "id": "table-beside",
+      "name": "Table beside",
+      "summary": "A table with commentary beside it.",
+      "group": "Visuals",
+      "file": "table-beside.json"
+    },
+    {
+      "id": "code",
+      "name": "Code",
+      "summary": "Source code with the explanation beside it.",
+      "group": "Visuals",
+      "file": "code.json"
+    },
+    {
+      "id": "hero",
+      "name": "Hero",
+      "summary": "A lead message with a picture and supporting points.",
+      "group": "Mixed",
+      "file": "hero.json"
+    },
+    {
+      "id": "dashboard",
+      "name": "Dashboard",
+      "summary": "Headline numbers over charts.",
+      "group": "Mixed",
+      "file": "dashboard.json"
+    },
+    {
+      "id": "team",
+      "name": "Team",
+      "summary": "People: photo, name and role cards.",
+      "group": "Mixed",
+      "file": "team.json"
+    },
+    {
+      "id": "logos",
+      "name": "Logos",
+      "summary": "Customer, partner or sponsor logos in a grid of up to 12.",
+      "group": "Mixed",
+      "file": "logos.json"
+    }
+  ]
+}

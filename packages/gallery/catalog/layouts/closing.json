@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "closing",
+  "name": "Closing",
+  "summary": "The last slide: thanks, the call to action and contact details.",
+  "tags": [
+    "Openers and closers"
+  ],
+  "design": {
+    "titleAlignment": "center",
+    "contentAlignment": "center"
+  },
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title",
+      "size": 1
+    },
+    {
+      "name": "details",
+      "size": "auto",
+      "accepts": [
+        "text",
+        "list",
+        "image"
+      ],
+      "role": "supporting",
+      "flow": "auto"
+    }
+  ],
+  "description": "End with the action the audience should take. Include contact details or a brief thank-you when useful.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/closing.svg"
+  }
+}

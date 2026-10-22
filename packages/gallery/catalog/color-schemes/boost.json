@@ -1,0 +1,26 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-color-scheme/v1",
+  "id": "boost",
+  "name": "Boost",
+  "accent1": "#FD3223",
+  "accent2": "#0308DB",
+  "accent3": "#4F4955",
+  "accent4": "#A1DB30",
+  "accent5": "#0682FE",
+  "accent6": "#FC03BE",
+  "dark1": "#000000",
+  "dark2": "#2C2C2C",
+  "followedHyperlink": "#CC00CC",
+  "hyperlink": "#0066CC",
+  "light1": "#FFFFFF",
+  "light2": "#EFEFEF",
+  "summary": "High-energy digital accents for demos and launch moments.",
+  "description": "A vivid blue-red digital palette with bright chart accents. Best for product stories that need strong on-screen presence.",
+  "tags": [
+    "digital",
+    "bold",
+    "high-energy",
+    "modern",
+    "technical"
+  ]
+}

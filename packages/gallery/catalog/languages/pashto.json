@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "pashto",
+  "name": "Pashto",
+  "code": "PUS",
+  "bcp47": "ps",
+  "ooxmlLang": "ps-AF",
+  "script": "Arab",
+  "direction": "rtl",
+  "fontScheme": "arial",
+  "googleFontScheme": "noto-sans-arabic"
+}

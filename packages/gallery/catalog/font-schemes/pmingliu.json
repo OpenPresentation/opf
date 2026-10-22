@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "pmingliu",
+  "name": "PMingLiU",
+  "app": "powerpoint",
+  "languageFamily": "ea",
+  "languages": [
+    "zh-Hant"
+  ],
+  "major": "PMingLiU",
+  "minor": "PMingLiU",
+  "textSample": "這是以新細明體字型撰寫的",
+  "type": "serif",
+  "description": "PMingLiU is a serif OPF font scheme for East Asian presentations, using PMingLiU for both headings and body text."
+}

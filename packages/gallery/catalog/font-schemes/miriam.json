@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "miriam",
+  "name": "Miriam",
+  "app": "powerpoint",
+  "languageFamily": "cs",
+  "languages": [
+    "he"
+  ],
+  "major": "Miriam",
+  "minor": "Miriam",
+  "textSample": "זה נכתב בגופן מרים",
+  "type": "sans-serif",
+  "description": "Miriam is a sans serif OPF font scheme for complex script presentations, using Miriam for both headings and body text."
+}

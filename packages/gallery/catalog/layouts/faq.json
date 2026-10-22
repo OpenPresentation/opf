@@ -1,0 +1,33 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "faq",
+  "name": "FAQ",
+  "summary": "Questions with their answers.",
+  "tags": [
+    "Groups of items"
+  ],
+  "design": {
+    "contentBox": false
+  },
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "questions",
+      "accepts": [
+        "list",
+        "text",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "column",
+      "listColumns": "auto"
+    }
+  ],
+  "description": "Answer the questions an audience is likely to ask. Pair each question with a direct answer and group related questions together.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/faq.svg"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
+  "id": "waterfall",
+  "name": "Waterfall",
+  "mappings": {
+    "openxml": {
+      "element": "waterfallChart",
+      "composition": "extension",
+      "notes": "Office extension chart; exact extension markup is renderer-specific."
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "Waterfall"
+      }
+    }
+  },
+  "group": "Other",
+  "groupSort": 13,
+  "series": 1,
+  "complexity": "simple"
+}

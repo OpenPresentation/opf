@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "skeena",
+  "name": "Skeena",
+  "app": "powerpoint",
+  "languageFamily": "latin",
+  "languages": [],
+  "major": "Skeena Display",
+  "minor": "Skeena",
+  "textSample": "Balanced contemporary style",
+  "type": "sans-serif",
+  "description": "Skeena is a sans serif OPF font scheme for Latin presentations, using Skeena Display for headings with Skeena for body text."
+}

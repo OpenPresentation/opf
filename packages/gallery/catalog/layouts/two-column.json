@@ -1,0 +1,58 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "two-column",
+  "name": "Two columns",
+  "summary": "Two independent columns of any content.",
+  "tags": [
+    "Text"
+  ],
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "direction": "row",
+      "regions": [
+        {
+          "name": "first",
+          "accepts": [
+            "text",
+            "list",
+            "quote",
+            "code",
+            "image",
+            "video",
+            "chart",
+            "table",
+            "metric",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        {
+          "name": "second",
+          "accepts": [
+            "text",
+            "list",
+            "quote",
+            "code",
+            "image",
+            "video",
+            "chart",
+            "table",
+            "metric",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        }
+      ]
+    }
+  ],
+  "description": "Place two bodies of content beside each other. Use it for paired explanations or an argument with supporting evidence.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/two-column.svg"
+  }
+}

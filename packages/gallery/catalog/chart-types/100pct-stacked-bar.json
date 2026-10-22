@@ -1,0 +1,22 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
+  "id": "100pct-stacked-bar",
+  "name": "100% Stacked Bar",
+  "mappings": {
+    "openxml": {
+      "element": "barChart",
+      "barDir": "bar",
+      "grouping": "percentStacked",
+      "composition": "single"
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "PercentsStackedBar"
+      }
+    }
+  },
+  "group": "Bar",
+  "groupSort": 4,
+  "series": 2,
+  "complexity": "simple"
+}

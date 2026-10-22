@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-social-platform/v1",
+  "id": "threads",
+  "name": "Threads",
+  "summary": "Text-first social network from Meta, integrated with Instagram identity.",
+  "baseUrl": "https://threads.net",
+  "profileUrlPattern": "https://threads.net/@{handle}",
+  "handlePrefix": "@",
+  "handleExample": "@alicechen",
+  "brandColor": "#000000",
+  "tags": ["microblog", "text"]
+}
+

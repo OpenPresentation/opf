@@ -1,0 +1,33 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "scorecard",
+  "name": "Scorecard",
+  "summary": "Headline measures with their targets and status.",
+  "tags": [
+    "Numbers"
+  ],
+  "design": {
+    "contentBox": false
+  },
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "cards",
+      "accepts": [
+        "metric",
+        "text",
+        "list",
+        "group"
+      ],
+      "role": "primary",
+      "flow": "grid"
+    }
+  ],
+  "description": "Summarize performance across comparable measures. State the criteria consistently so the audience can assess the result.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/scorecard.svg"
+  }
+}

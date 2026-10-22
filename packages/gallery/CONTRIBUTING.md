@@ -1,0 +1,168 @@
+> **This repository is frozen (MR-20).** Contributions now go to [OpenPresentation/opf](https://github.com/OpenPresentation/opf), directory [`packages/gallery`](https://github.com/OpenPresentation/opf/tree/main/packages/gallery); its `CONTRIBUTING.md` and `AGENTS.md` describe the monorepo workflow. Pull requests opened here after the freeze will be closed with a pointer, and open issues and pull requests are moved by the maintainers. Plan: [monorepo move](https://github.com/OpenPresentation/opf/blob/main/docs/programs/monorepo/README.md).
+
+# Contributing
+
+Thank you for helping with the OPF default catalog. This repository publishes one npm package,
+`@openpresentation/gallery`.
+
+## Layout of the repository
+
+| Path | What it is |
+| --- | --- |
+| `catalog/<kind>/` | The records: `index.json` and one `<id>.json` per record, with `$schema` and `id`, no `x-*` members |
+| `catalog/manifest.json` | The pptx.gallery commit the 1.x records come from, and a record count and content hash per kind |
+| `previews/layouts/` | One SVG preview per layout (`@openpresentation/gallery/previews`), written by `scripts/render-previews.mjs` |
+| `src/*.d.ts` | The declarations |
+| `scripts/build.mjs` | Builds `dist/` from `catalog/` and `previews/` |
+| `scripts/sync-gallery-catalog.mjs` | Took the 1.x records from a pptx.gallery checkout; `--verify` and `--rehash` check and rewrite the hashes |
+| `scripts/fixtures.mjs` | The fixture decks of the stability check and the previews |
+| `scripts/render-previews.mjs` | Draws the layout previews with the pinned renderer |
+| `scripts/stability.mjs` | The pixel-stability check |
+| `scripts/check-license.mjs` | The license check |
+
+From 2.0.0 the layouts (`catalog/layouts/`) are written here by pull request: edit a record and its index entry, then
+`npm run rehash` (the index and manifest hashes) and `npm run previews` (the SVG previews). See the README, "Contributing
+a layout". The other kinds are the 1.x records pptx.gallery published; do not edit them by hand.
+
+## Records from pptx.gallery (1.x)
+
+Records are written in [Data-Advantage/pptx-gallery](https://github.com/Data-Advantage/pptx-gallery) and reach this
+repository through one pull request that automation keeps current:
+
+1. A push to pptx.gallery's main that changes a published record (`data/`, `public/<kind>/` or the code that builds
+   them) runs its `.github/workflows/sync-gallery-package.yml`. It can also be started by hand there.
+2. The workflow checks out this repository's main and runs pptx.gallery's `scripts/sync-gallery-package.mjs`, which:
+   - runs this repository's `scripts/sync-gallery-catalog.mjs` against the pptx.gallery commit (validation, hashes, the
+     manifest pin), naming every id pptx.gallery stopped publishing with `--allow-removed`;
+   - stops when nothing but the manifest's commit pin changed: no pull request;
+   - otherwise builds and runs `scripts/stability.mjs` against the previous published release to choose the bump: only
+     new ids is a minor release; a removed id or a record that draws differently is a **major** release; text a drawing
+     never shows is a patch;
+   - sets `version` in `package.json` and `package-lock.json` (from the last published version, never lower than the
+     version already on main) and adds a `CHANGELOG.md` entry under `## Unreleased`.
+3. It commits the result to the branch `sync/pptx-gallery` (recreated from main on every run) and opens or updates the
+   pull request into main. The title names the bump and the version; a major release is flagged at the top of the
+   body.
+
+Review the pull request like any other: CI runs every check, and `check:stability` fails it when the version and the
+drawings disagree. A major release breaks documents and hosts that rely on the old record, so read every listed id.
+Merging publishes nothing: release it as below. The automation never merges, tags or publishes. It authenticates as a
+GitHub App (Contents and Pull requests read and write on this repository) set up by the owner in pptx.gallery.
+
+To preview a sync locally, with this repository at `../gallery` next to a pptx.gallery checkout:
+
+```sh
+node scripts/sync-gallery-package.mjs --gallery-dir ../gallery --dry-run   # in pptx.gallery
+```
+
+It writes into the checkout and prints the would-be pull request; `git checkout -- . && git clean -fd catalog` here
+undoes it.
+
+**2.0.0.** With the OPF 0.19 layout redesign the layouts are written here, and pptx.gallery builds its pages from the
+published package. The sync above stops working on main at 2.0.0 (pptx.gallery publishes the 1.x layouts, so the sync
+refuses to remove the 28 templates) and is retired when pptx.gallery moves to the package.
+
+## Checks
+
+Use Node 24 (`engines.node` is `>=22`) and npm.
+
+```sh
+npm ci
+node scripts/bootstrap-engines.mjs  # only for the release in .github/bootstrap-engines.json (5.0.0): merged engine sources; see below
+npm run check:license     # MIT: LICENSE, package.json, published files
+npm run verify            # every kind hashes to its index and the manifest
+npm test                  # build; every record valid against the selected core; package shape; previews
+npm run typecheck         # the declarations against the selected core's Catalog
+npm run check:previews    # the layout previews are what the pinned opf-render draws (npm run previews rewrites them)
+npm run check:stability   # the version rule against the previous published release
+npm run pack:dry-run      # the package contents
+node scripts/bootstrap-engines.mjs --verify  # unchanged manifests and exact selected engine graph
+```
+
+CI (`.github/workflows/ci.yml`) runs this sequence on every pull request and on main. The release named in
+`.github/bootstrap-engines.json` (5.0.0) uses the [merged-source bootstrap](#merged-engine-bootstrap); its ordinary
+development pins remain unchanged. Other versions use the published `@openpresentation/opf` and `@openpresentation/opf-render` pins in `package.json`. Raise those pins
+in their own pull request after the engine releases are on npm, and regenerate the previews (`npm run previews`)
+there. 2.x needs `@openpresentation/opf` 0.19 or later, the first core that reads `opf-layout/v2`.
+A change to the shape of a layout record (5.0.0: `direction` and an ordered `regions` list, FA-33) is read by the engines before it
+is written here: publish the core that accepts the new form, raise the pins and regenerate the previews in the same pull request
+as the records. The records, tests and fixtures carry only the current form; the 4.0.0 grids live in
+`test/fixtures/layouts-4.0.0.json`, the expected side of `test/layout-equivalence.test.mjs`.
+
+## Versions
+
+New records are a minor release. An id removed or renamed, a change to how an existing record draws, or a change that
+needs a newer record schema is a major release. Text a drawing never shows (names, summaries, tags), the code and the
+declarations are patch changes. `npm run check:stability` decides from the drawings: it fails a minor or patch release
+that changes an existing record's drawing, removes an id or raises `CATALOG_SCHEMA`. A pull request that needs a major
+release sets the major version in `package.json` and `package-lock.json` itself, as the sync pull request does; the
+release pull request then only moves the changelog section. A major release that raises `CATALOG_SCHEMA` is a new
+baseline (2.0.0 over 1.x): the 2.x minor and patch releases are held to it.
+
+Record each change under `## Unreleased` in `CHANGELOG.md`.
+
+## Releasing
+
+Releases use tags of the form **`vX.Y.Z`** (the only package in the repository).
+
+1. A pull request that sets `version` in `package.json` and moves `## Unreleased` under `## X.Y.Z (date)` in
+   `CHANGELOG.md`. Merge it with green CI. A merged sync pull request has already set the version: the release pull
+   request then only moves the changelog section.
+2. Tag the merge commit on main: `git tag vX.Y.Z && git push origin vX.Y.Z`.
+3. `.github/workflows/gallery-publish.yml` refuses a tag that is not `v` plus the version in `package.json`, a tag not on
+   main, and a `package.json` whose `repository` is not OpenPresentation/gallery. It runs every check above and
+   publishes with `npm publish --access public --provenance` through npm trusted publishing (GitHub Actions,
+   OpenPresentation / gallery / `gallery-publish.yml`, no environment; no npm token). A manual run of the workflow runs
+   the checks and publishes nothing.
+4. Check the release: `npm view @openpresentation/gallery@X.Y.Z` and its provenance, or `node scripts/release-train.mjs
+   verify gallery@X.Y.Z` in OpenPresentation/opf.
+
+Never move or re-push a published tag; fix a problem with a new version.
+
+## License
+
+By contributing you agree that your contribution is licensed under the [MIT License](LICENSE) of this repository.
+
+## Merged-engine bootstrap
+
+`.github/bootstrap-engines.json` names one gallery release (`galleryVersion`, with its `catalogSchema`) and the merged
+engine commits it is built against. `scripts/bootstrap-engines.mjs` does nothing for any other version (it prints the
+registry engines) and refuses leftover bootstrap state. The development pins in `package.json` are the published
+`@openpresentation/opf` and `@openpresentation/opf-render` (0.23.0 today); 4.0.0 was built on them.
+
+A release that changes the shape of a record needs engines that read it before those engines are on npm, and the engines'
+own release needs the new gallery (core depends on `@openpresentation/gallery`). The bootstrap breaks that cycle for one
+release. Gallery 3.0.0 used it for catalog schema 3; **5.0.0** uses it for catalog schema 4 (FA-33, the region list), with
+core `d223fc00` (OpenPresentation/opf#756) and opf-render `e5838837` (opf-render#278). The tests then use core's own
+`layoutTemplate` from `@openpresentation/opf/composition` as the compile.
+
+For the named release, `scripts/bootstrap-engines.mjs` reads the file,
+fetches each engine repository's actual default branch, and refuses pins that
+are not full commit hashes reachable from that branch. Merge the engine
+PRs before running these gates; never weaken the ancestry check. A PR head alone cannot satisfy the
+default-branch ancestry gate. The configured core source retains its genuine registry dependency metadata until the
+gallery release is published; bootstrap staging does not make that metadata registry-installable.
+
+After `npm ci`, the script builds this gallery's static records, then builds the
+immutable core and renderer sources with frozen source lockfiles. It stages three
+development tarballs (gallery, core and renderer) preserving their own versions and
+runtime bytes while recording original and staged manifests and integrity. Core
+builds against the exact local gallery. The pinned renderer build only copies
+its source files to dist; it does not load Core. After all three tarballs exist,
+they install together as one selected graph, so no partial engine install can
+resolve unrelated optional peers. The drawing and validation gates use that
+exact installed core and renderer. The tarballs install without changing the gallery's manifest,
+lockfile or emitted catalog bytes. Every existing gallery gate still runs,
+including preview equality and pixel stability. `--verify` binds the engine pins
+and current gallery HEAD, checks exact installed manifests and file inventories,
+and requires the engines and gallery to share one core and one gallery. Identity
+evidence is retained under `node_modules/.gallery-bootstrap-evidence/` and uploaded
+by the workflows. The published gallery remains dependency-free; staged local
+dependency ranges never enter its published manifest. Trusted publishing and the
+merged-ancestor, tag and release gates remain unchanged.
+
+After the engine releases (core 0.25.0, which depends on gallery 5), raise the ordinary registry development pins in
+their own pull request. The bootstrap then stays idle until a release again needs unreleased engines; point the file at
+that release's version, schema and merged commits, or remove the configuration and script and the workflow steps.
+Other gallery versions use the normal npm-ci registry path automatically; candidate sources do not become
+a dependency of later releases.

@@ -1,0 +1,54 @@
+name: CI
+# Every pull request and every push to main: the records against the published @openpresentation/opf, the package, the
+# license and the pixel-stability rule against the previous published release.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  verify:
+    name: Verify the gallery
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Bootstrap gallery 3.0.0 build engines from merged immutable sources
+        run: node scripts/bootstrap-engines.mjs
+      - name: License (MIT)
+        run: npm run check:license
+      - name: Records match their indexes and the manifest
+        run: npm run verify
+      - name: Build and test (records valid against the merged source graph)
+        run: npm test
+      - name: Declarations
+        run: npm run typecheck
+      - name: Layout previews are what the pinned opf-render draws
+        run: npm run check:previews
+      # A minor or patch release draws every existing record exactly as the previous published release does and removes
+      # no id; only a major release may (scripts/stability.mjs, drawn by the pinned published opf-render).
+      - name: Pixel stability against the previous published release
+        run: npm run check:stability
+      - name: Package contents
+        run: npm run pack:dry-run
+      - name: Verify engine resolution and unchanged release manifests
+        run: node scripts/bootstrap-engines.mjs --verify
+
+      - name: Retain development bootstrap identities
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: gallery-bootstrap-closure
+          path: node_modules/.gallery-bootstrap-evidence
+          include-hidden-files: true
+          if-no-files-found: warn

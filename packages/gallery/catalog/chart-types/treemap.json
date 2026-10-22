@@ -1,0 +1,21 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
+  "id": "treemap",
+  "name": "Treemap",
+  "mappings": {
+    "openxml": {
+      "element": "treemapChart",
+      "composition": "extension",
+      "notes": "Office extension chart; exact extension markup is renderer-specific."
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "Treemap"
+      }
+    }
+  },
+  "group": "Treemap",
+  "groupSort": 8,
+  "series": 1,
+  "complexity": "simple"
+}

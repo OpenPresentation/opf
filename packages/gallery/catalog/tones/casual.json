@@ -1,0 +1,31 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-tone/v1",
+  "id": "casual",
+  "name": "Casual",
+  "summary": "Warm, plain-spoken voice for internal updates and customer storytelling.",
+  "description": "Friendly and direct. Use first- and second-person freely; favor short sentences and contractions. Numbers are still welcome — they just sit alongside human-scale framing rather than leading.",
+  "voiceCues": [
+    "Use first and second person.",
+    "Use contractions ('we're', 'it's', 'don't').",
+    "Favor short sentences and active voice.",
+    "Frame metrics with a human-scale anchor when possible."
+  ],
+  "avoid": [
+    "Stiff corporate jargon.",
+    "Long compound sentences.",
+    "Overuse of superlatives.",
+    "Bureaucratic passive voice."
+  ],
+  "samplePhrases": [
+    "We shipped the new dashboard last week, and customers are already moving over.",
+    "Here's where we ended up on hiring this quarter.",
+    "It's been a busy month — here's the recap."
+  ],
+  "recommendedNarratives": [
+    "weekly-progress",
+    "status-update",
+    "company-intro",
+    "focus"
+  ],
+  "tags": ["internal", "warm", "conversational"]
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-chart-type/v1",
+  "id": "combo",
+  "name": "Combo: Column and Line",
+  "summary": "Clustered columns with one or more line series, the lines optionally on a secondary value axis, for an amount beside a rate (revenue and margin %).",
+  "mappings": {
+    "openxml": {
+      "element": "barChart",
+      "barDir": "col",
+      "grouping": "clustered",
+      "composition": "mixed",
+      "series": [
+        {
+          "element": "barChart",
+          "barDir": "col",
+          "grouping": "clustered"
+        },
+        {
+          "element": "lineChart",
+          "grouping": "standard",
+          "marker": true
+        }
+      ],
+      "notes": "One c:plotArea holds a c:barChart (clustered columns, primary axes) and a c:lineChart with markers. When chart.secondaryAxis is set, the secondary line series form a second c:lineChart on a second c:valAx (crosses max, at the right) and a deleted second c:catAx."
+    },
+    "renderers": {
+      "aspose-slides": {
+        "chartType": "ClusteredColumn",
+        "lineSeriesType": "LineWithMarkers"
+      }
+    }
+  },
+  "group": "Combo",
+  "groupSort": 14,
+  "series": 2,
+  "complexity": "simple"
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "dashboard",
+  "name": "Dashboard",
+  "summary": "Headline numbers over charts.",
+  "tags": [
+    "Mixed"
+  ],
+  "design": {
+    "contentBox": false
+  },
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "kpis",
+      "size": 2,
+      "accepts": [
+        "metric"
+      ],
+      "role": "secondary",
+      "flow": "grid"
+    },
+    {
+      "name": "charts",
+      "size": 3,
+      "accepts": [
+        "chart",
+        "table"
+      ],
+      "role": "primary",
+      "flow": "grid"
+    }
+  ],
+  "description": "Bring several related measures and visuals into one overview. Keep labels and units consistent so the audience can scan the state quickly.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/dashboard.svg"
+  }
+}

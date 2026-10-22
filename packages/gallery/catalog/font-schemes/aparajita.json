@@ -1,0 +1,16 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-font-scheme/v1",
+  "id": "aparajita",
+  "name": "Aparajita",
+  "app": "powerpoint",
+  "languageFamily": "cs",
+  "languages": [
+    "hi",
+    "ne"
+  ],
+  "major": "Aparajita",
+  "minor": "Aparajita",
+  "textSample": "यह सुंदर किताब",
+  "type": "sans-serif",
+  "description": "Aparajita is a sans serif OPF font scheme for complex script presentations, using Aparajita for both headings and body text."
+}

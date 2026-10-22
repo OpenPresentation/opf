@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "russian",
+  "name": "Russian",
+  "code": "RUS",
+  "bcp47": "ru",
+  "ooxmlLang": "ru-RU",
+  "script": "Cyrl",
+  "direction": "ltr",
+  "fontScheme": "aptos",
+  "googleFontScheme": "noto-sans"
+}

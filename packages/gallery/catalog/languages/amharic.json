@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "amharic",
+  "name": "Amharic",
+  "code": "AMH",
+  "bcp47": "am",
+  "ooxmlLang": "am-ET",
+  "script": "Ethi",
+  "direction": "ltr",
+  "fontScheme": "nyala",
+  "googleFontScheme": "noto-sans-ethiopic"
+}

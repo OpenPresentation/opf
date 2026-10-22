@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "latvian",
+  "name": "Latvian",
+  "code": "LAV",
+  "bcp47": "lv",
+  "ooxmlLang": "lv-LV",
+  "script": "Latn",
+  "direction": "ltr",
+  "fontScheme": "aptos",
+  "googleFontScheme": "roboto"
+}

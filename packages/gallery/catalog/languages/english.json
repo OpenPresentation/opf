@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-language/v1",
+  "id": "english",
+  "name": "English",
+  "code": "ENG",
+  "bcp47": "en",
+  "ooxmlLang": "en-US",
+  "script": "Latn",
+  "direction": "ltr",
+  "fontScheme": "aptos",
+  "googleFontScheme": "roboto"
+}
