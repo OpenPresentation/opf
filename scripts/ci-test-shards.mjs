@@ -28,9 +28,10 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const DEFAULT_WEIGHT = 4;
 /** Seconds of fixed work that shard 1 also carries (its checks), so the tests spread a little thinner there. */
 export const SHARD_ONE_OVERHEAD = 30;
-/** A build step every shard repeats (each shard needs its own dist). */
-const BUILD_STEP = /^(?:npm|pnpm) run build$/;
-const RUN_TESTS = /^node scripts\/run-tests\.mjs(?: --suite (?:contract|full))?$/;
+/** A build step every shard repeats (each shard needs its own dist, and its dependencies' dist: `build:deps`, MR-23). */
+const BUILD_STEP = /^(?:npm|pnpm) run build(?::deps)?$/;
+/** The run-tests command of a package script: the package's own `scripts/run-tests.mjs`, or the root one (`../../scripts/`, MR-23). */
+const RUN_TESTS = /^node (?:\.\.\/\.\.\/)?scripts\/run-tests\.mjs(?: --suite (?:contract|full))?$/;
 
 /** Parse "2/3" into {index: 2, count: 3}; throws on anything else. */
 export function parseShard(text) {
@@ -110,6 +111,12 @@ export function listArguments(script) {
   return tests ? tests.command.split(/\s+/).slice(2) : [];
 }
 
+/** The path of the run-tests script in a package script, relative to the package directory (`scripts/run-tests.mjs` or the root's). */
+export function runnerPath(script) {
+  const tests = parseChain(script).find((entry) => entry.isTests);
+  return tests ? tests.command.split(/\s+/)[1] : 'scripts/run-tests.mjs';
+}
+
 export function loadWeights(sibling, file = path.join(root, 'scripts', 'ci-test-weights.json')) {
   return JSON.parse(readFileSync(file, 'utf8'))[sibling] ?? {};
 }
@@ -121,7 +128,7 @@ export function planSiblingShard({ siblingRoot, sibling, scriptName, shard, weig
   if (typeof script !== 'string') throw new Error(`${sibling} has no ${scriptName} script`);
   let listLines = [];
   if (parseChain(script).some((entry) => entry.isTests)) {
-    const run = spawnSync(process.execPath, ['scripts/run-tests.mjs', ...listArguments(script), '--list'], { cwd: siblingRoot, encoding: 'utf8' });
+    const run = spawnSync(process.execPath, [runnerPath(script), ...listArguments(script), '--list'], { cwd: siblingRoot, encoding: 'utf8' });
     if (run.status !== 0) throw new Error(`${sibling}: run-tests --list failed (${run.status}): ${run.stderr}`);
     listLines = run.stdout.split('\n').filter((line) => line.trim());
     if (!listLines.length) throw new Error(`${sibling}: run-tests --list printed no tests`);

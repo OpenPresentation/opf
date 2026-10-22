@@ -13,7 +13,7 @@ Status: drafted 2026-10-22 on `codex/mr-30-ci` (draft pull request [opf#798](htt
 | `scripts/ci-scope.mjs` | MR-14, extended: `legs` (the matrix of each package job per tier, `LEG_PLAN`). |
 | `scripts/ci-verify.mjs` | The `verify` verdict: scope-selected jobs must succeed, skipped by scope is success, skipped otherwise is failure, an unreadable scope output fails. |
 | `scripts/ci-report-issue.mjs` | Opens, updates or closes one issue per label with the workflow token (`gh api`); `--dry-run`. |
-| `scripts/ci-test-shards.mjs` | `--package render\|pptx\|editor --script test\|test:contract --shard i/n`: runs shard i of the package's `test` chain in `packages/<id>` (weights in `ci-test-weights.json`, shard 1 carries 100 s of extra steps). The old `--sibling` mode stays until MR-34. |
+| `scripts/ci-test-shards.mjs` | `--package render\|pptx\|editor --script test\|test:contract --shard i/n`: runs shard i of the package's `test` chain in `packages/<id>` (weights in `ci-test-weights.json`, shard 1 carries 100 s of extra steps; it reads the converted package scripts of MR-23: the root `../../scripts/run-tests.mjs` and the repeated `build:deps` step). The old `--sibling` mode stays until MR-34. |
 | `scripts/quarantine.mjs`, `scripts/run-checks.mjs` | `--shard i/n` added (browser suites, root checks). |
 | `scripts/ci-workflows.test.mjs` (`pnpm check:ci-workflows`) | Shape test of the three workflows and the action against the plan and against `ci-scope`. |
 

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { spawnSync } from 'node:child_process';
-import { DEFAULT_WEIGHT, SHARD_ONE_OVERHEAD, SHARDED_PACKAGES, listArguments, listedTestArguments, parseChain, parseShard, partitionTests, planPackageShard, shardCommands } from './ci-test-shards.mjs';
+import { DEFAULT_WEIGHT, SHARD_ONE_OVERHEAD, SHARDED_PACKAGES, listArguments, listedTestArguments, parseChain, parseShard, partitionTests, planPackageShard, runnerPath, shardCommands } from './ci-test-shards.mjs';
 
 const SCRIPT = 'npm run build && npm run check:fonts && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes';
 const CONTRACT = 'npm run build && node scripts/run-tests.mjs --suite contract && npm run build:browser-check';
@@ -121,4 +121,15 @@ test('the command line prints a shard with --package --dry-run and refuses an un
   const bad = spawnSync(process.execPath, [script, '--package', 'cli', '--shard', '1/2', '--dry-run'], { encoding: 'utf8' });
   assert.equal(bad.status, 1);
   assert.match(bad.stderr, /--package must be one of/);
+});
+
+test('the converted package scripts shard: the root run-tests path is the tests command, build:deps repeats in every shard (MR-30 on MR-23)', () => {
+  const script = 'pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract && pnpm run build:browser-check';
+  assert.deepEqual(parseChain(script).filter((entry) => entry.isTests).map((entry) => entry.command), ['node ../../scripts/run-tests.mjs --suite contract']);
+  assert.equal(runnerPath(script), '../../scripts/run-tests.mjs');
+  assert.equal(runnerPath('pnpm run build'), 'scripts/run-tests.mjs');
+  const lines = ['node test/a.mjs', 'node test/b.mjs'];
+  const shards = [1, 2].map((index) => shardCommands({ script, scriptName: 'test:contract', listLines: lines, weights: {}, shard: { index, count: 2 } }).map((entry) => entry.text));
+  assert.deepEqual(shards.map((texts) => texts.filter((text) => text.startsWith('pnpm'))), [['pnpm run build:deps', 'pnpm run build', 'pnpm run build:browser-check'], ['pnpm run build:deps', 'pnpm run build']]);
+  assert.equal(shards.flat().filter((text) => text.startsWith('node test/')).length, 2, 'every listed test runs once');
 });
