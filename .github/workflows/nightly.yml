@@ -96,6 +96,8 @@ jobs:
       - uses: ./.github/actions/setup-workspace
         with:
           build-deps: '@openpresentation/cli'
+          # Core's tests load the renderer and PPTX (its optional peers) from their built dist.
+          build-also: '@openpresentation/opf-render @openpresentation/opf-pptx'
 
       - run: pnpm typecheck
       - run: pnpm --filter @openpresentation/opf --fail-if-no-match run test
