@@ -31,7 +31,7 @@
       {"match": ["scripts/gallery-editor-wasm.mjs", "scripts/gallery-editor-wasm.test.mjs", "scripts/build-registry-gallery-editor.mjs", "scripts/prepare-gallery-editor.mjs"], "run": ["check:gallery-editor-wasm"]},
       {"match": ["scripts/gallery-editor-assets.mjs", "scripts/gallery-editor-assets.test.mjs", "scripts/build-registry-gallery-editor.mjs", "scripts/prepare-gallery-editor.mjs"], "run": ["check:gallery-editor-assets"]},
       {"match": ["scripts/archive-tar.mjs", "scripts/link-ecosystem.mjs"], "run": ["check:archive-tar"]},
-      {"match": ["spec/schemas/"], "run": ["check:spec", "check:schema-examples", "check:schema-docs", "check:core-golden", "check:registry-golden", "check:examples", "check:examples-convert", "check:text"]},
+      {"match": ["spec/schemas/"], "run": ["check:spec", "check:schema-examples", "check:schema-docs", "check:registry-golden", "check:examples", "check:examples-convert", "check:text"]},
       {"match": ["scripts/generate-example-suite.mjs", "scripts/check-generated-examples.mjs", "scripts/gallery-artwork.mjs", "scripts/generate-technical-example-assets.mjs"], "run": ["check:examples", "check:examples-convert"]},
       {"match": ["spec/"], "run": ["check:spec"]},
       {"match": ["examples/"], "run": ["check:examples", "check:examples-convert", "check:text"]},
@@ -50,6 +50,8 @@
       {"match": ["scripts/gallery-stability.mjs", "scripts/gallery-stability-fixtures.mjs", "scripts/gallery-stability.test.mjs", "scripts/changelog-fragments.mjs", "changes/", "packages/gallery/src/", "packages/gallery/package.json"], "run": ["check:stability"]},
       {"match": ["scripts/checks.json", "scripts/run-checks.mjs", "scripts/run-tests.mjs"], "run": ["check:runners"]},
       {"match": ["package.json", "pnpm-lock.yaml", "pnpm-workspace.yaml", "packages/javascript/package.json", "packages/cli/package.json", "packages/render/package.json", "packages/pptx/package.json", "packages/editor/package.json", "packages/gallery/package.json"], "run": ["check:engines-range", "check:runners"]},
+      {"match": ["scripts/golden-update.mjs", "scripts/golden-update.test.mjs", ".github/workflows/golden.yml"], "run": ["check:golden-update"]},
+      {"match": ["scripts/registry-golden.mjs", "scripts/registry-golden.test.mjs", "examples/", "packages/render/scripts/example-baseline.mjs", "packages/render/test/golden/"], "run": ["check:registry-golden"]},
       {"match": ["scripts/monorepo-import.mjs", "scripts/verify-import.mjs", "scripts/monorepo-import.test.mjs"], "run": ["check:monorepo-import"]},
       {"match": ["scripts/agent-worktree.mjs", "scripts/package-manager.mjs"], "run": ["check:agent-worktree"]},
       {"match": ["scripts/agent-slot.mjs", "scripts/agent-format.mjs", "scripts/check-changed.mjs", "scripts/package-manager.mjs", "scripts/run-checks.mjs", ".claude/settings.json"], "run": ["check:agent-tools"]}
