@@ -119,7 +119,7 @@
     "test:font-preparation-browser": "node test/font-preparation-browser.mjs artifacts/font-preparation-browser.json",
     "test:font-variants": "node test/font-variants.mjs",
     "test:font-variants-browser": "node test/font-variants-browser.mjs",
-    "test:variable-font-gate": "node scripts/fetch-archive-fixtures.mjs && node test/platform-residual-probe.mjs artifacts/archive/test/fixtures/font-formats artifacts/variable-font-gate/live.json && node test/variable-font-retained-gate.mjs artifacts/archive/docs/evidence/rejected-truetype-rounding-20260915 artifacts/variable-font-gate/retained.json",
+    "test:variable-font-gate": "node scripts/fetch-archive-fixtures.mjs && node test/platform-residual-probe.mjs ../../artifacts/render-archive/test/fixtures/font-formats artifacts/variable-font-gate/live.json && node test/variable-font-retained-gate.mjs ../../artifacts/render-archive/docs/evidence/rejected-truetype-rounding-20260915 artifacts/variable-font-gate/retained.json",
     "test:aptos-preview-browser": "node test/aptos-preview-browser.mjs artifacts/aptos-preview-browser.json",
     "test:lazy-face-fallback-browser": "node test/lazy-face-fallback-browser.mjs artifacts/lazy-face-fallback",
     "test:lazy-fonts-browser": "node test/lazy-fonts-browser.mjs artifacts/lazy-fonts",
