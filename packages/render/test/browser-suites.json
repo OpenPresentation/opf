@@ -6,19 +6,19 @@
       "tests": [
         {
           "id": "browser:browser",
-          "command": "npm run test:browser"
+          "command": "pnpm run test:browser"
         },
         {
           "id": "browser:player-browser",
-          "command": "npm run test:player-browser"
+          "command": "pnpm run test:player-browser"
         },
         {
           "id": "browser:preview-a11y-browser",
-          "command": "npm run test:preview-a11y-browser"
+          "command": "pnpm run test:preview-a11y-browser"
         },
         {
           "id": "browser:forced-colors-browser",
-          "command": "npm run test:forced-colors-browser"
+          "command": "pnpm run test:forced-colors-browser"
         },
         {
           "id": "browser:web-delivery",
@@ -26,11 +26,11 @@
         },
         {
           "id": "browser:export-browser",
-          "command": "npm run test:export-browser"
+          "command": "pnpm run test:export-browser"
         },
         {
           "id": "browser:code-browser",
-          "command": "npm run test:code-browser"
+          "command": "pnpm run test:code-browser"
         },
         {
           "id": "browser:text-as-paths-a11y-browser",
@@ -42,11 +42,11 @@
         },
         {
           "id": "browser:font-preparation-browser",
-          "command": "npm run test:font-preparation-browser"
+          "command": "pnpm run test:font-preparation-browser"
         },
         {
           "id": "browser:font-variants-browser",
-          "command": "npm run test:font-variants-browser"
+          "command": "pnpm run test:font-variants-browser"
         }
       ]
     },
@@ -55,23 +55,23 @@
       "tests": [
         {
           "id": "browser:aptos-preview-browser",
-          "command": "npm run test:aptos-preview-browser"
+          "command": "pnpm run test:aptos-preview-browser"
         },
         {
           "id": "browser:lazy-fonts-browser",
-          "command": "npm run test:lazy-fonts-browser"
+          "command": "pnpm run test:lazy-fonts-browser"
         },
         {
           "id": "browser:extra-lazy-fonts-browser",
-          "command": "npm run test:extra-lazy-fonts-browser"
+          "command": "pnpm run test:extra-lazy-fonts-browser"
         },
         {
           "id": "browser:latin-family-hosts-browser",
-          "command": "npm run test:latin-family-hosts-browser"
+          "command": "pnpm run test:latin-family-hosts-browser"
         },
         {
           "id": "browser:script-family-hosts-browser",
-          "command": "npm run test:script-family-hosts-browser"
+          "command": "pnpm run test:script-family-hosts-browser"
         },
         {
           "id": "browser:script-name-hosts-browser",
@@ -79,31 +79,31 @@
         },
         {
           "id": "browser:lazy-face-fallback-browser",
-          "command": "npm run test:lazy-face-fallback-browser"
+          "command": "pnpm run test:lazy-face-fallback-browser"
         },
         {
           "id": "browser:script-fonts-browser",
-          "command": "npm run test:script-fonts-browser"
+          "command": "pnpm run test:script-fonts-browser"
         },
         {
           "id": "browser:script-fonts-auto-browser",
-          "command": "npm run test:script-fonts-auto-browser"
+          "command": "pnpm run test:script-fonts-auto-browser"
         },
         {
           "id": "browser:emoji-math-browser",
-          "command": "npm run test:emoji-math-browser"
+          "command": "pnpm run test:emoji-math-browser"
         },
         {
           "id": "browser:script-corpora-browser",
-          "command": "npm run test:script-corpora-browser"
+          "command": "pnpm run test:script-corpora-browser"
         },
         {
           "id": "browser:symbol-fonts-browser",
-          "command": "npm run test:symbol-fonts-browser"
+          "command": "pnpm run test:symbol-fonts-browser"
         },
         {
           "id": "browser:plain-whitespace-browser",
-          "command": "npm run test:plain-whitespace-browser"
+          "command": "pnpm run test:plain-whitespace-browser"
         },
         {
           "id": "browser:harfbuzz-measurement-browser",
@@ -117,11 +117,11 @@
       "tests": [
         {
           "id": "browser:rich-flow-browser",
-          "command": "npm run test:rich-flow-browser"
+          "command": "pnpm run test:rich-flow-browser"
         },
         {
           "id": "browser:rich-spacing-browser",
-          "command": "npm run test:rich-spacing-browser"
+          "command": "pnpm run test:rich-spacing-browser"
         }
       ]
     }
