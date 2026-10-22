@@ -16,6 +16,8 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import { chromium } from 'playwright';
+import { packageManagerInvocation } from '../../../scripts/package-manager.mjs';
+import { assertLockstep, packWorkspacePackage } from './helpers/pack-workspace.mjs';
 import { gateSkipped } from '../scripts/published-core-gate.mjs';
 
 // RR-55: this packs the tarball and installs it with its PUBLISHED dependencies, which cannot work while the package needs an
@@ -25,20 +27,22 @@ if (gateSkipped()) {
   process.exit(0);
 }
 const root = fileURLToPath(new URL('../', import.meta.url));
-// npm_execpath is set under `npm run`; scripts/quarantine.mjs runs the command directly, so fall back to the npm that
-// ships with this Node.
-const npmCli = process.env.npm_execpath?.endsWith('npm-cli.js') ? process.env.npm_execpath
-  : [path.join(path.dirname(process.execPath), '../lib/node_modules/npm/bin/npm-cli.js'), path.join(path.dirname(process.execPath), 'node_modules/npm/bin/npm-cli.js')].find(existsSync);
-assert.ok(npmCli, 'npm-cli.js not found; run through npm run test:browser.');
-const npm = (args, cwd) => execFileSync(process.execPath, [npmCli, ...args], { cwd, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 });
+// MR-23c: npm runs through scripts/package-manager.mjs (the npm that ships with the selected Node on Windows), so this works
+// under `pnpm run` and when scripts/quarantine.mjs runs the command directly. The candidate and the workspace siblings it
+// depends on are packed with `pnpm pack` and installed from their tarballs (the lockstep version is not on the registry yet).
+const npm = (args, cwd) => { const invocation = packageManagerInvocation('npm', args); return execFileSync(invocation.command, invocation.args, { cwd, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024 }); };
 const temporary = await realpath(await mkdtemp(path.join(tmpdir(), 'opf-pptx-bundle-')));
 let browser, server;
 try {
-  const packed = JSON.parse(npm(['pack', '--json', '--pack-destination', temporary], root))[0];
+  const packed = packWorkspacePackage('@openpresentation/opf-pptx', temporary);
+  const core = packWorkspacePackage('@openpresentation/opf', temporary), gallery = packWorkspacePackage('@openpresentation/gallery', temporary);
+  assertLockstep(packed, core); assertLockstep(packed, gallery);
   const consumer = path.join(temporary, 'consumer');
   await mkdir(consumer);
-  await writeFile(path.join(consumer, 'package.json'), JSON.stringify({ private: true, type: 'module' }));
-  npm(['install', '--ignore-scripts', '--no-audit', '--no-fund', path.join(temporary, packed.filename), 'jszip@3.10.2'], consumer);
+  const local = [packed, core, gallery];
+  // --legacy-peer-deps: the optional renderer peer is at the lockstep range, which is not on the registry yet (otherwise ERESOLVE).
+  await writeFile(path.join(consumer, 'package.json'), JSON.stringify({ private: true, type: 'module', overrides: Object.fromEntries(local.map(item => [item.name, `$${item.name}`])) }));
+  npm(['install', '--ignore-scripts', '--no-audit', '--no-fund', '--legacy-peer-deps', ...local.map(item => item.tarball), 'jszip@3.10.2'], consumer);
   assert.ok(existsSync(path.join(consumer, 'node_modules/readable-stream/package.json')), 'the consumer must hold readable-stream for this check to mean anything');
 
   await writeFile(path.join(consumer, 'entry.js'), `import {toPptx, fromPptx} from '@openpresentation/opf-pptx';

@@ -3,7 +3,7 @@
   "suites": {
     "browser": {
       "description": "pnpm run test:browser in package.json: the bundled importer and renderer checked in the pinned browser.",
-      "setup": ["pnpm run build:browser-check"],
+      "setup": ["pnpm run build:deps", "pnpm run build:browser-check"],
       "tests": [
         { "id": "browser:browser-check", "command": "node test/browser-check.mjs" },
         { "id": "browser:packed-bundle", "command": "node test/packed-bundle-browser.mjs" }
