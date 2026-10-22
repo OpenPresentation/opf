@@ -262,18 +262,36 @@ try {
   await page.evaluate(() => window.presenter.stop());
   assert.deepEqual(await exits(), [3, 2, 3], 'stop() calls onExit once, and stopping a stopped presenter does nothing');
 
+  // Closing before the browser answered the full screen request (a quick Esc, the close button, F5 then Esc) must not leave the page in full
+  // screen behind a hidden presenter: the request resolves after stop() saw no full screen to leave, so the presenter gives the screen back then.
+  await page.waitForFunction(() => !document.fullscreenElement);
+  await page.locator('#opener').focus();
+  const early = await page.evaluate(async () => {
+    const answer = window.presenter.start(0);
+    window.presenter.stop();
+    return { answer: await answer, running: window.presenter.isRunning() };
+  });
+  assert.deepEqual(early, { answer: 'overlay', running: false }, 'stop() before the browser answered: the start resolves as overlay and nothing runs');
+  await page.waitForFunction(() => !document.fullscreenElement, undefined, { timeout: 5000 }); // never stays full screen behind the hidden presenter
+  await page.waitForTimeout(300); // a late full screen would show up here
+  assert.equal(await page.evaluate(() => document.fullscreenElement), null, 'full screen did not start after the presentation was closed');
+  assert.equal(await root.isHidden(), true);
+  await focusReturned();
+  assert.deepEqual(await exits(), [3, 2, 3, 0], 'and onExit was called once for it');
+  assert.equal(await page.evaluate(() => window.presenter.isRunning()), false);
+
   // The browser ends full screen with Esc (that key never reaches the page) or the host exits it: the presentation ends with it.
   await open(0);
   await page.keyboard.press('ArrowRight');
   assert.equal(await page.evaluate(() => document.fullscreenElement === window.presenter.element), true);
   await page.evaluate(() => document.exitFullscreen());
   await page.waitForFunction(() => !window.presenter.isRunning());
-  assert.deepEqual(await exits(), [3, 2, 3, 2], 'leaving full screen ends the presentation with onExit(index)');
+  assert.deepEqual(await exits(), [3, 2, 3, 0, 2], 'leaving full screen ends the presentation with onExit(index)');
   await focusReturned();
 
   await open(0);
   await page.evaluate(() => window.presenter.destroy());
-  assert.deepEqual(await exits(), [3, 2, 3, 2, 0], 'destroy() while open exits first');
+  assert.deepEqual(await exits(), [3, 2, 3, 0, 2, 0], 'destroy() while open exits first');
   assert.equal(await page.locator('.opf-presenter').count(), 0, 'and removes the element');
   mark('every way out calls onExit(index): Esc, the button, stop(), leaving full screen, destroy()');
 

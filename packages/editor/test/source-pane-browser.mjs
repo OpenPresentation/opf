@@ -406,8 +406,18 @@ try {
   await typing.keyboard.type(', "lay');
   await popup.waitFor();
   assert.deepEqual(await options().locator('.cm-completionLabel').allInnerTexts(), ['layout'], 'typing a key offers the matching property names');
-  const box = await popup.boundingBox();
-  assert.ok(box && box.x >= 0 && box.y >= 0 && box.x + box.width <= 1200 && box.y + box.height <= 800, 'the popup is inside the page');
+  // CodeMirror places a tooltip after it measures the editor, so the first box can still be at its unplaced position: wait for the placed one.
+  const inside = await popup.evaluate(node => new Promise(resolve => {
+    const started = performance.now();
+    const check = () => {
+      const box = node.getBoundingClientRect();
+      const ok = box.width > 0 && box.x >= 0 && box.y >= 0 && box.x + box.width <= 1200 && box.y + box.height <= 800;
+      if (ok || performance.now() - started > 3000) resolve({ ok, box: [box.x, box.y, box.width, box.height] });
+      else requestAnimationFrame(check);
+    };
+    check();
+  }));
+  assert.ok(inside.ok, `the popup is inside the page (${inside.box})`);
   assert.notEqual(await popup.locator('[aria-selected="true"]').evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(17, 119, 204)', 'the selected option uses the token color, not the default blue');
   await acceptable('layout');
   await typing.keyboard.press('Enter');

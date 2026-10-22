@@ -69,7 +69,7 @@ export function createPresenter(container, options = {}) {
   // Drawn slides by deck index, for the deck object they were drawn from: a new snapshot (an edit) or a new start() draws again.
   let drawn = new Map(), drawnFor;
 
-  let active = false, destroyed = false, current = -1, opener = null, enteredFullscreen = false, leaving = false;
+  let active = false, destroyed = false, current = -1, opener = null, enteredFullscreen = false, leaving = false, returnTo = null;
   let counterTimer, preloadTimer, renderToken = 0, swipe = null, clickGuardUntil = 0;
 
   // ---- the DOM ----------------------------------------------------------------------------------------------------------------------------
@@ -197,13 +197,27 @@ export function createPresenter(container, options = {}) {
     try { attempt = Promise.resolve(request.call(root, { navigationUI: "hide" })); } catch (error) { attempt = Promise.reject(error); }
     return attempt.then(
       () => {
-        if (!active || doc.fullscreenElement !== root) return "overlay";
+        if (doc.fullscreenElement !== root) return "overlay";
+        // stop() ran while the request was pending (a quick Esc or close), so it saw no full screen to leave: give the screen back now, or the
+        // page stays full screen behind a hidden presenter.
+        if (!active) { leaveFullscreen(); return "overlay"; }
         enteredFullscreen = true;
         root.dataset.mode = "fullscreen";
         return "fullscreen";
       },
       () => "overlay",
     );
+  }
+  // Ask the browser to leave full screen; onFullscreenChange then sees `leaving` and does not read the exit as the user's. Focus goes back to the
+  // element that opened the presentation once the exit is done, because the page behind a full screen element takes no focus until then.
+  function leaveFullscreen() {
+    leaving = true;
+    Promise.resolve(doc.exitFullscreen?.()).then(restoreFocus, () => { leaving = false; });
+  }
+  // Only when nobody took focus since: the host may move it in `onExit`.
+  function restoreFocus() {
+    const now = doc.activeElement;
+    if (returnTo?.isConnected && typeof returnTo.focus === "function" && (!now || now === doc.body || now === root)) returnTo.focus({ preventScroll: true });
   }
   // The browser takes full screen away with Esc (that key never reaches the page) or the host exits it: the presentation ends with it.
   function onFullscreenChange() {
@@ -314,19 +328,10 @@ export function createPresenter(container, options = {}) {
     root.hidden = true;
     slide.replaceChildren();
     swipe = null;
-    const back = opener;
+    returnTo = opener;
     opener = null;
-    const restoreFocus = () => {
-      // Only when nobody took focus since: the host may move it in `onExit`.
-      const now = doc.activeElement;
-      if (back?.isConnected && typeof back.focus === "function" && (!now || now === doc.body || now === root)) back.focus({ preventScroll: true });
-    };
     restoreFocus();
-    if (fullscreen) {
-      leaving = true;
-      // The page behind a full screen element takes no focus until the exit is done.
-      Promise.resolve(doc.exitFullscreen?.()).then(restoreFocus, () => { leaving = false; });
-    }
+    if (fullscreen) leaveFullscreen();
     // The deck index the presentation ended on (-1 when no slide was shown: there was nothing to present).
     options.onExit?.(index);
   }
