@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-pptx",
-  "version": "0.25.0",
+  "version": "0.26.0",
   "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
   "license": "MIT",
   "type": "module",
@@ -10,12 +10,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OpenPresentation/opf-pptx.git"
+    "url": "git+https://github.com/OpenPresentation/opf.git",
+    "directory": "packages/pptx"
   },
   "bugs": {
-    "url": "https://github.com/OpenPresentation/opf-pptx/issues"
+    "url": "https://github.com/OpenPresentation/opf/issues"
   },
-  "homepage": "https://github.com/OpenPresentation/opf-pptx#readme",
+  "homepage": "https://github.com/OpenPresentation/opf/tree/main/packages/pptx#readme",
   "publishConfig": {
     "access": "public"
   },
@@ -65,8 +66,8 @@
   },
   "dependencies": {
     "@node-projects/jszip": "4.3.0",
-    "@openpresentation/gallery": "^5.0.0",
-    "@openpresentation/opf": "^0.25.0",
+    "@openpresentation/gallery": "workspace:^",
+    "@openpresentation/opf": "workspace:^",
     "@rgrove/parse-xml": "4.2.3",
     "fast-xml-parser": "^5.8.0",
     "fflate": "^0.8.3",
@@ -74,7 +75,7 @@
     "sharp": "0.35.5"
   },
   "peerDependencies": {
-    "@openpresentation/opf-render": "^0.25.0"
+    "@openpresentation/opf-render": "workspace:^"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
@@ -98,7 +99,7 @@
     "@expo-google-fonts/roboto": "0.4.3",
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf-render": "0.25.0",
+    "@openpresentation/opf-render": "workspace:*",
     "@resvg/resvg-js": "2.6.2",
     "esbuild": "0.28.2",
     "playwright": "1.64.0"

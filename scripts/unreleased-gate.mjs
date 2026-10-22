@@ -11,6 +11,7 @@ import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { compareVersions, floorOf, isVersion } from './release-train.mjs';
+import { concreteRange } from './workspace-packages.mjs';
 
 /** Events on which a coordinated change may still wait for a publish (ecosystem-refs honours Depends-On on them). */
 export const SKIP_EVENTS = new Set(['pull_request', 'merge_group']);
@@ -78,7 +79,7 @@ export function cliPeerGate({ cliRoot, executable, names, installedVersions = {}
   const manifest = JSON.parse(readFileSync(path.join(cliRoot, 'package.json'), 'utf8'));
   const require = createRequire(executable);
   const peers = names.map((name) => {
-    const range = manifest.peerDependencies?.[name];
+    const range = concreteRange(manifest.peerDependencies?.[name], manifest.version);
     if (!range) throw new Error(`${subject} declares no peer range for ${name}`);
     let installed = installedVersions[name];
     if (installed === undefined) {
@@ -115,7 +116,7 @@ export function cliPeerGate({ cliRoot, executable, names, installedVersions = {}
 export function peerCoreGate({ modules, names, coreVersion, event, ref = process.env.GITHUB_REF ?? '' }) {
   const peers = names.map((name) => {
     const manifest = JSON.parse(readFileSync(path.join(modules, ...name.split('/'), 'package.json'), 'utf8'));
-    const range = manifest.dependencies?.['@openpresentation/opf'] ?? manifest.peerDependencies?.['@openpresentation/opf'];
+    const range = concreteRange(manifest.dependencies?.['@openpresentation/opf'] ?? manifest.peerDependencies?.['@openpresentation/opf'], manifest.version);
     return { name, version: manifest.version, range, met: !range || satisfies(coreVersion, range) };
   });
   const unmet = peers.filter((peer) => !peer.met);

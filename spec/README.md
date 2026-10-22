@@ -21,7 +21,7 @@ The gallery package's `catalog/layouts/` contains the 28 v2 intent templates tha
 
 `previews/layouts/` contains one self-contained SVG preview for each template, keyed by the same layout id. Its version-2 index names the SVG filename and exact UTF-8 byte length. Picker thumbnails therefore show the template the slide will use.
 
-The gallery repository owns both records and SVG previews. `pnpm install` materializes ignored copies from the installed package under `packages/gallery/` for schema and tracker checks.
+The gallery package (`packages/gallery`) owns both records and SVG previews; the schema and tracker checks read them there.
 
 ## Consuming this directory
 

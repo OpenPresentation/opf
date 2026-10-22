@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-editor",
-  "version": "0.25.3",
+  "version": "0.26.0",
   "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
   "license": "MIT",
   "type": "module",
@@ -10,12 +10,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OpenPresentation/opf-editor.git"
+    "url": "git+https://github.com/OpenPresentation/opf.git",
+    "directory": "packages/editor"
   },
   "bugs": {
-    "url": "https://github.com/OpenPresentation/opf-editor/issues"
+    "url": "https://github.com/OpenPresentation/opf/issues"
   },
-  "homepage": "https://github.com/OpenPresentation/opf-editor#readme",
+  "homepage": "https://github.com/OpenPresentation/opf/tree/main/packages/editor#readme",
   "publishConfig": {
     "access": "public"
   },
@@ -326,11 +327,11 @@
     "@codemirror/state": "6.7.6",
     "@codemirror/view": "6.43.14",
     "@lezer/highlight": "1.2.5",
-    "@openpresentation/opf": "^0.25.0",
+    "@openpresentation/opf": "workspace:^",
     "jsonc-parser": "3.3.1"
   },
   "peerDependencies": {
-    "@openpresentation/opf-render": "^0.25.0"
+    "@openpresentation/opf-render": "workspace:^"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
@@ -338,7 +339,7 @@
     }
   },
   "devDependencies": {
-    "@openpresentation/gallery": "^5.0.0",
+    "@openpresentation/gallery": "workspace:*",
     "@expo-google-fonts/arimo": "0.4.3",
     "@expo-google-fonts/caladea": "0.4.2",
     "@expo-google-fonts/cousine": "0.4.3",
@@ -383,8 +384,8 @@
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/stix-two-math": "0.4.0",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf-pptx": "^0.25.0",
-    "@openpresentation/opf-render": "^0.25.0",
+    "@openpresentation/opf-pptx": "workspace:*",
+    "@openpresentation/opf-render": "workspace:*",
     "@resvg/resvg-js": "2.6.2",
     "axe-core": "4.14.0",
     "esbuild": "0.28.2",

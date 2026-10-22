@@ -63,3 +63,16 @@ export function loadWorkspace(root) {
 /** The dependency fields pnpm turns into workspace graph edges (peers are not edges). */
 export const EDGE_FIELDS = ['dependencies', 'devDependencies', 'optionalDependencies'];
 export const DEPENDENCY_FIELDS = [...EDGE_FIELDS, 'peerDependencies'];
+
+/**
+ * What a workspace specifier publishes as (`pnpm pack`): `workspace:^` becomes `^<version>`, `workspace:~` `~<version>`,
+ * `workspace:*` the exact version. Scripts that read a manifest's ranges in the source tree (the machinery MR-34 retires)
+ * use this so a `workspace:` range means what the packed package says. Anything else is returned unchanged.
+ */
+export function concreteRange(range, version) {
+  if (typeof range !== 'string' || !range.startsWith('workspace:')) return range;
+  const spec = range.slice('workspace:'.length);
+  if (spec === '^' || spec === '~') return `${spec}${version}`;
+  if (spec === '*') return version;
+  return spec;
+}

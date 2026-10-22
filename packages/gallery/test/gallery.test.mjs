@@ -20,9 +20,12 @@ const canonical = (value) => {
 };
 const strip = (record) => Object.fromEntries(Object.entries(record).filter(([key]) => !key.startsWith("x-")));
 
-test("the package is published from OpenPresentation/gallery with no runtime dependency", () => {
+test("the package is published from OpenPresentation/opf (packages/gallery) with no runtime dependency", () => {
   assert.equal(manifest.name, "@openpresentation/gallery");
-  assert.deepEqual(manifest.repository, { type: "git", url: "git+https://github.com/OpenPresentation/gallery.git" });
+  assert.deepEqual(manifest.repository, { type: "git", url: "git+https://github.com/OpenPresentation/opf.git", directory: "packages/gallery" });
+  assert.deepEqual(manifest.bugs, { url: "https://github.com/OpenPresentation/opf/issues" });
+  assert.equal(manifest.devDependencies?.["@openpresentation/opf"], undefined, "no workspace edge: the engines resolve from the repository root");
+  assert.equal(manifest.devDependencies?.["@openpresentation/opf-render"], undefined);
   assert.equal(manifest.dependencies, undefined, "the gallery has no runtime dependency (core depends on it, never the reverse)");
   assert.equal(manifest.peerDependencies, undefined);
   assert.equal(manifest.opf.catalogSchema, CATALOG_SCHEMA);

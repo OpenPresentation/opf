@@ -5,6 +5,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { SKIP_EVENTS, cliPeerGate, gate, satisfies, mayWait, ROLLER_CANDIDATE_REF, isCoreReleaseRef, peerCoreGate } from './unreleased-gate.mjs';
+import { concreteRange } from './workspace-packages.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -77,12 +78,15 @@ test('cliPeerGate reads the CLI peer ranges and the peers the CLI entry resolves
 test('the CLI peer tests use the gate; the peer ranges of core equal PEER_RANGES, and the CLI ranges equal or lag them', () => {
   for (const file of ['packages/cli/test/files.mjs', 'packages/cli/test/packed-files.mjs']) assert.match(readFileSync(path.join(root, file), 'utf8'), /cliPeerGate\(/, file);
   const manifest = JSON.parse(readFileSync(path.join(root, 'packages/cli/package.json'), 'utf8'));
+  // MR-23: the source tree declares workspace:^; the ranges below are what the packages publish as.
+  for (const [name, range] of Object.entries(manifest.peerDependencies)) manifest.peerDependencies[name] = concreteRange(range, manifest.version);
   const peers = readFileSync(path.join(root, 'packages/javascript/src/node/peers.ts'), 'utf8');
   // RR-62: core's /node engine loads the peers, so core declares them (optional) and PEER_RANGES (its install hints)
   // with the same ranges. Core ships first in a train, so it raises them to the train's sibling minor before its release;
   // until the CLI's release prep raises the CLI's, the CLI's ranges may only lag core's.
   const floor = (r) => r.replace(/^\^/, '').split('.').reduce((n, part) => n * 1000 + Number(part), 0);
-  const core = JSON.parse(readFileSync(path.join(root, 'packages/javascript/package.json'), 'utf8')).peerDependencies;
+  const coreManifest = JSON.parse(readFileSync(path.join(root, 'packages/javascript/package.json'), 'utf8'));
+  const core = Object.fromEntries(Object.entries(coreManifest.peerDependencies).map(([name, range]) => [name, concreteRange(range, coreManifest.version)]));
   assert.deepEqual(Object.keys(core).sort(), Object.keys(manifest.peerDependencies).sort());
   for (const [name, range] of Object.entries(core)) {
     const constant = name.endsWith('opf-render') ? 'RENDER_PACKAGE' : 'PPTX_PACKAGE';

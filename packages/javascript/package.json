@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf",
-  "version": "0.25.0",
+  "version": "0.26.0",
   "description": "Canonical Open Presentation Format schemas, TypeScript types, local validation and composition; in Node, the file API and the CLI defaults register the pptx.gallery catalog of @openpresentation/gallery.",
   "license": "MIT",
   "author": "Open Presentation",
@@ -142,7 +142,7 @@
     "pack:dry-run": "pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
   },
   "dependencies": {
-    "@openpresentation/gallery": "^5.0.0",
+    "@openpresentation/gallery": "workspace:^",
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "jsonc-parser": "3.3.1",
@@ -157,8 +157,6 @@
     "@expo-google-fonts/roboto": "0.4.3",
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf-pptx": "0.25.0",
-    "@openpresentation/opf-render": "0.25.0",
     "@resvg/resvg-js": "2.6.2",
     "@types/node": "^24.13.4",
     "json-schema-to-typescript": "^16.0.0",
@@ -168,8 +166,8 @@
     "typescript": "~5.9.3"
   },
   "peerDependencies": {
-    "@openpresentation/opf-pptx": "^0.25.0",
-    "@openpresentation/opf-render": "^0.25.0"
+    "@openpresentation/opf-pptx": "workspace:^",
+    "@openpresentation/opf-render": "workspace:^"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-pptx": {

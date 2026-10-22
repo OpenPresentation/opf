@@ -3,7 +3,7 @@ import {test} from 'node:test';
 import {validate} from '@openpresentation/opf';
 import {readCatalog} from '../scripts/build.mjs';
 import {editorialDeck} from '../scripts/editorial-previews.mjs';
-import {bodyRegions, templateDeck} from '../scripts/fixtures.mjs';
+import {bodyRegions, templateDeck} from '../../../scripts/gallery-stability-fixtures.mjs';
 
 const {gallery} = await readCatalog();
 for (const [id, record] of Object.entries(gallery.layouts)) {

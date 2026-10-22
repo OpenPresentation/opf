@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "description": "What scripts/run-tests.mjs does not run from test/*.mjs (RR-46): *.test.mjs files always run in one node --test batch. packages/integration holds the tests that need several packages at once (monorepo plan, section 1).",
+  "include": [],
+  "exclude": []
+}

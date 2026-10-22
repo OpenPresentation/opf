@@ -1,8 +1,8 @@
 # Catalogs and the gallery package
 
 OPF 0.15 keeps catalogs out of the engine. A document embeds every record it uses, hosts register the catalogs they
-trust, and core ships no records. The **default catalog** is the npm package **`@openpresentation/gallery`**, authored and
-released from [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery) (RR-78) on its own version line;
+trust, and core ships no records. The **default catalog** is the npm package **`@openpresentation/gallery`**, authored in
+`packages/gallery` of this repository (RR-78, moved in by MR-23) and released with the other packages under one shared version;
 pptx.gallery presents it and consumes the published package. Core and the CLI
 depend on it and register it in Node; core has no `/catalog` subpath (removed in 0.19, with no alias).
 
@@ -181,22 +181,21 @@ the gallery's `minimal`, `cool-horizon` and `aptos` records, compiled into code.
 ## Ownership
 
 - **The gallery package owns every catalog record.** Since gallery 2.0.0 records, layouts and theme variants are authored
-  by pull requests in [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery); each id has one owner. Its
+  by pull requests in `packages/gallery`; each id has one owner. Its
   display metadata lives under `x-*` members. pptx.gallery (the site) consumes the published package, adds its own
   presentation overlay and does not write records.
-- **The gallery repository owns the snapshot and the release.** Its manifest holds a content hash per kind and the commit of the one-time 1.x snapshot from pptx.gallery. Core materializes ignored validation fixtures from the installed package during `pnpm install`.
-- **The move.** The monorepo program ([plan](programs/monorepo/README.md), D13) relocates the package to `packages/gallery` in this repository: records are then authored by pull requests here, the materializer goes, and the package takes the shared version line.
-- **A catalog release never needs a core release.** Hosts register the catalog version they choose; documents carry
-  the records they were saved with.
+- **The gallery package owns the records and releases with the other packages.** `packages/gallery` is a tracked package of this repository (the monorepo program, D13): records, layouts and theme variants are authored by pull request here, its manifest holds a content hash per kind and the commit of the one-time 1.x snapshot from pptx.gallery, and it takes the repository's one shared version line (0.26.0 and later; gallery 1.0.0 to 5.0.0 stay on npm). The earlier `pnpm install` materializer of ignored fixtures is gone.
+- **A host chooses its catalog version.** Hosts register the catalog they choose; documents carry the records they were
+  saved with. The packages are released together, so the pair a release ships (core and the gallery at the same version) is
+  tested together.
 
 ## The `@openpresentation/gallery` package
 
 RR-78: the same records are published as the npm package
-[`@openpresentation/gallery`](https://www.npmjs.com/package/@openpresentation/gallery) from its own repository,
-[OpenPresentation/gallery](https://github.com/OpenPresentation/gallery), on its own version line (`vX.Y.Z` tags,
-`gallery-publish.yml` there). A record change is an ordinary pull request there (`catalog/<kind>/<id>.json` plus its
-index entry, then `npm run rehash` and `npm run previews`, checked by the "Verify the gallery" CI); the version and
-changelog are set in the pull request and a pushed tag publishes it:
+[`@openpresentation/gallery`](https://www.npmjs.com/package/@openpresentation/gallery) from `packages/gallery`, with the
+repository's one shared version (from 0.26.0; the earlier independent line ended at 5.0.0). A record change is an ordinary
+pull request (`catalog/<kind>/<id>.json` plus its index entry, then `pnpm rehash` and `pnpm previews` in the package, checked
+by `pnpm check:changed`); a `changes/<slug>.md` fragment records it and the release workflow publishes it with the rest:
 
 ```js
 import { gallery } from '@openpresentation/gallery';
@@ -304,11 +303,11 @@ That historical snapshot used `mirror` for every kind and held every record the 
 
 The 1.x design synchronized the snapshot from pptx.gallery and refused a publisher that stopped serving a held id
 (waived per id with `--allow-removed`). That sync was retired with gallery 2.0.0; a record is now removed by a pull
-request that deletes it and its index entry, and the gallery's stability check requires a major release for it.
+request that deletes it and its index entry, and the stability check requires the removal to be declared and the release to be a minor version.
 
 ### Updating it
 
-Edit records by pull request in [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery) and release them with its `gallery-publish.yml` (a `vX.Y.Z` tag). This repository consumes that release through its `@openpresentation/gallery` dependency, adopted by a reviewed range and lockfile edit ("adopt gallery X"). `pnpm install` writes ignored files under `packages/gallery/` from the installed package, so do not edit them by hand; `pnpm check:spec` and `pnpm check:catalog` verify their indexes, manifest and records. Core's browser entries remain catalog-free (`pnpm check:catalog-free`). When the monorepo move lands, `packages/gallery` is the tracked package, the materializer is deleted and records change by pull request in this repository.
+Edit records by pull request in `packages/gallery`: change the record and its index entry, run `pnpm --filter @openpresentation/gallery rehash` and `previews`, and add a `changes/<slug>.md` fragment (`packages: [gallery]`; a drawing change is declared with `drawing:`, see `changes/README.md`). The package is released with the other five under the repository's one shared version. `pnpm check:spec` and `pnpm check:catalog` verify the indexes, manifest and records, and `pnpm check:stability` holds a drawing change or a removed id to the declaration rule. Core's browser entries remain catalog-free (`pnpm check:catalog-free`).
 
 ## Reconciliation status
 

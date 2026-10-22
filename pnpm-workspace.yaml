@@ -1,11 +1,15 @@
 packages:
+  - "packages/gallery"
   - "packages/javascript"
   - "packages/cli"
+  - "packages/render"
+  - "packages/pptx"
+  - "packages/editor"
+  - "packages/integration"
 
 # Moved from the package.json "pnpm" field, which pnpm 11 no longer reads (pnpm 10.33
 # still does, so the lockfile is unchanged). Same ranges and targets as before.
 overrides:
-  "@openpresentation/cli>@openpresentation/opf": "workspace:*"
   "esbuild@>=0.27.3 <0.28.1": "0.28.2"
   "js-yaml@>=4.0.0 <4.3.2": "4.3.2"
   "sharp@<0.35.5": "0.35.5"
@@ -14,6 +18,11 @@ overrides:
 # registry specifiers that happen to equal a workspace version would re-create the core <-> engines cycle silently.
 # This lives here, not in .npmrc, because npm warns about pnpm-only keys in .npmrc and "will stop working" with it.
 linkWorkspacePackages: false
+
+# Optional peers are not installed: core and the CLI declare render and pptx as optional peers (`workspace:^`), and with the
+# default pnpm would link them into core's node_modules, re-creating the core <-> engines cycle in the lockfile (guarded by
+# check:workspace-graph). Every peer a package's tests need is also a devDependency of that package (check:pins).
+autoInstallPeers: false
 
 # esbuild gets its binary from optional platform packages; nothing needs its postinstall (silences pnpm's "Ignored build scripts").
 ignoredBuiltDependencies:

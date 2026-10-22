@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {createRequire} from 'node:module';
 import {compareListEditSemantics,nativeListDescription,LIST_EDIT_ACTION} from './compare-list-edit.mjs';
-const require=createRequire(new URL('../../packages/javascript/package.json',import.meta.url));
+const require=createRequire(new URL('../../package.json',import.meta.url));
 const peer=createRequire(require.resolve('@openpresentation/opf-pptx/package.json'));
 const dependencies={...peer('fflate'),...peer('fast-xml-parser')};
 function fixture(){

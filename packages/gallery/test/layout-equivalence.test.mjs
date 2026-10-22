@@ -9,7 +9,7 @@ import path from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { readSnapshotKind } from "../scripts/catalog-snapshot.mjs";
-import { bodyRegions } from "../scripts/fixtures.mjs";
+import { bodyRegions } from "../../../scripts/gallery-stability-fixtures.mjs";
 import { OPFLayoutTemplateError, REGION_KINDS, layoutRegion, layoutTemplate } from "@openpresentation/opf/composition";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");

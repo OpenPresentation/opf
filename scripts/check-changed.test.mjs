@@ -71,12 +71,11 @@ test('buildPlan: a docs-only change runs the text and skill-command checks only;
   assert.equal(buildPlan(['gone.mjs'], { ...env, exists: () => false })[0].skip, true, 'a deleted file is not given to Biome');
 });
 
-// MR-11: the six packages of the monorepo. The engines and the gallery are not in the repository yet, so their directories
-// are absent (a changed file never names them); once imported, a change in one selects that package's tests.
-test('MR-11: PACKAGES lists the six packages of the monorepo, each with its own directory, filter and script', () => {
-  assert.deepEqual(PACKAGES.map((pkg) => pkg.id), ['opf', 'cli', 'render', 'pptx', 'editor', 'gallery']);
-  assert.deepEqual(PACKAGES.map((pkg) => pkg.dir), ['packages/javascript', 'packages/cli', 'packages/render', 'packages/pptx', 'packages/editor', 'packages/gallery']);
-  assert.deepEqual(PACKAGES.map((pkg) => pkg.filter), ['@openpresentation/opf', '@openpresentation/cli', '@openpresentation/opf-render', '@openpresentation/opf-pptx', '@openpresentation/opf-editor', '@openpresentation/gallery']);
+// MR-11, MR-23: the six packages of the monorepo and the private packages/integration; a change in one selects that package's tests.
+test('MR-11: PACKAGES lists the six packages of the monorepo and the integration tests, each with its own directory, filter and script', () => {
+  assert.deepEqual(PACKAGES.map((pkg) => pkg.id), ['opf', 'cli', 'render', 'pptx', 'editor', 'gallery', 'integration']);
+  assert.deepEqual(PACKAGES.map((pkg) => pkg.dir), ['packages/javascript', 'packages/cli', 'packages/render', 'packages/pptx', 'packages/editor', 'packages/gallery', 'packages/integration']);
+  assert.deepEqual(PACKAGES.map((pkg) => pkg.filter), ['@openpresentation/opf', '@openpresentation/cli', '@openpresentation/opf-render', '@openpresentation/opf-pptx', '@openpresentation/opf-editor', '@openpresentation/gallery', '@openpresentation/integration']);
   assert.equal(new Set(PACKAGES.map((pkg) => pkg.dir)).size, PACKAGES.length);
   for (const pkg of PACKAGES) assert.ok(['test', 'test:contract'].includes(pkg.script), `${pkg.id} runs a whole-package script`);
 });

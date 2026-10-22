@@ -1,5 +1,3 @@
-> **Frozen: this repository is moving to [OpenPresentation/opf](https://github.com/OpenPresentation/opf).** `@openpresentation/gallery` is developed there, in [`packages/gallery`](https://github.com/OpenPresentation/opf/tree/main/packages/gallery), together with core, the CLI and the other engines, and releases with them under one shared version from 0.26.0. The npm package name does not change. Please do not open new pull requests here; open issues and pull requests are being moved. File new issues at [OpenPresentation/opf](https://github.com/OpenPresentation/opf/issues) and name the package. Plan: [monorepo move](https://github.com/OpenPresentation/opf/blob/main/docs/programs/monorepo/README.md).
-
 # gallery
 
 The default catalog for Open Presentation: layouts, themes, colour schemes and font schemes for OPF decks, published as
@@ -139,34 +137,35 @@ Core compiles the list to the grid its engine uses, so the same layout draws the
 
 ## Versions
 
-The gallery has its own version line, independent of the OPF engine packages. Releases are tagged `vX.Y.Z`.
+The gallery is released with the other OPF packages under one shared version (core, the CLI, the renderer, the PPTX exporter,
+the editor and this package; from 0.26.0). The gallery's earlier line (1.0.0 to 5.0.0) is not continued: those versions stay
+on npm, and `latest` points at the shared line, so `^5` consumers keep 5.0.0 and get no further catalog fixes. While the
+shared version is 0.x, a breaking change is a minor bump.
 
-- **Minor:** new records. Every existing record draws exactly as in the previous release.
-- **Major:** an id removed or renamed, a change to how an existing record draws, or a change that needs a newer record
-  schema (`CATALOG_SCHEMA`).
-- **Patch:** fixes that change no record's drawing (text a drawing never shows, such as a name or a summary; the package
-  code; the declarations).
+- **New records** are allowed in any release. Every existing record draws exactly as before.
+- **A drawing change, a removed or renamed id, or a new record schema (`CATALOG_SCHEMA`)** is declared in the changelog
+  fragment for the gallery (`drawing: ["layouts:hero"]`) and makes the release a minor version, never a patch.
+- **Text a drawing never shows** (a name, a summary, a tag), the package code and the declarations change no drawing and
+  may ship in a patch.
 
-The pixel-stability check enforces the rule (`npm run check:stability`, `scripts/stability.mjs`). It runs on every pull
-request and before every publish. It takes the highest published version at or below the candidate's, and for every
-layout, theme, colour scheme and font scheme both releases have, it draws a fixture deck with the pinned published
-`@openpresentation/opf` and `@openpresentation/opf-render`, once per release: for a layout, a slide with sample content
-in every region (three blocks in a flowing region, one in a `none` region) and a slide with every region empty, which
-exercises collapse; for a design record, a six-slide sample deck. SVG bytes are compared first; a mismatch is rasterized
-to count the pixels that differ. A changed drawing, a removed id or a new `CATALOG_SCHEMA` fails unless the major version
-goes up. New ids pass. 2.0.0 is a new baseline: it is compared with 1.x for the record only, and every 2.x minor and
-patch is held to the 2.x release below it.
+The stability check enforces the rule (`pnpm check:stability`, `scripts/gallery-stability.mjs` at the repository root). It runs
+on every pull request that touches the records or the engines. The baseline is the `latest` published release. For every
+layout, theme, color scheme and font scheme both releases have, it draws a fixture deck with the workspace
+`@openpresentation/opf-render`, once per release: for a layout, a slide with sample content in every region (three blocks in a
+flowing region, one in a `none` region) and a slide with every region empty, which exercises collapse; for a design record, a
+sample deck. SVG bytes are compared first; a mismatch is rasterized to count the pixels that differ. A changed drawing or a
+removed id that no fragment declares fails; a declared id that did not change warns. New ids pass.
 
 ## Where the records come from
 
-- **Layouts** are written here, in `catalog/layouts/`: one short `opf-layout/v2` record per layout (`direction` and an ordered `regions` list), reviewed as code.
-- **Themes** carry `variants` from 4.0.0 (below), written here with the theme records.
-- **The other kinds** (colour and font schemes, narratives, audiences, purposes, tones and the display kinds) are
-  unchanged from 1.x: the pinned snapshot of the catalog pptx.gallery published at
-  `https://www.pptx.gallery/<kind>/index.json`, with the pptx.gallery commit in `catalog/manifest.json`.
-- `scripts/sync-gallery-catalog.mjs` took the 1.x records from a pptx.gallery checkout (`npm run sync`). pptx.gallery
-  publishes the 1.x layouts, so a sync now refuses to run: it would remove the 28 layouts. pptx.gallery reads its records
-  from this package from 2.0.0, and the sync is retired with that change.
+All records are written here, in `catalog/`, and reviewed as code:
+
+- **Layouts** (`catalog/layouts/`): one short `opf-layout/v2` record per layout (`direction` and an ordered `regions` list).
+- **Themes** carry `variants` (below), written with the theme records.
+- **The other kinds** (color and font schemes, narratives, audiences, purposes, tones and the display kinds) began as a
+  snapshot of the catalog pptx.gallery published at `https://www.pptx.gallery/<kind>/index.json`; the pptx.gallery commit is
+  recorded in `catalog/manifest.json` as history. The one-way sync from pptx.gallery was retired with 2.0.0 and its script is
+  gone; pptx.gallery consumes the published package.
 
 ## Theme variants
 
@@ -184,16 +183,16 @@ value to `design.variant`. There is no separate dark theme: the `dark` theme of 
    `id`, `name`, `summary`, `tags` with its group, `direction`, `regions` and any `design`; see [The record](#the-record)) and add its
    entry (`id`, `name`, `summary`, `group`, `file`) to `catalog/layouts/index.json` in picker order. A new layout gets a
    new id; an existing id never changes meaning.
-2. `npm run rehash` (the index and manifest hashes), then `npm run previews` (its SVG preview).
-3. Run `npm test` and `npm run check:stability`. A new layout is a minor release; if the check reports a changed record,
-   restore it or make the release a major one.
-4. Open a pull request here with a `CHANGELOG.md` entry under `## Unreleased`.
+2. `pnpm rehash` (the index and manifest hashes), then `pnpm previews` (its SVG preview).
+3. Run `pnpm test` and `pnpm check:stability`. A new layout passes; if the check reports a changed record, restore it or
+   declare it in the changelog fragment (a minor release).
+4. Open a pull request with a `changes/<slug>.md` fragment (`packages: [gallery]`).
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the checks, releases and the license.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the checks, the version rule and the license.
 
 ## License
 
-[MIT](LICENSE). The records, the previews and the code are all under it; `npm run check:license` checks it.
+[MIT](LICENSE). The records, the previews and the code are all under it; `pnpm check:license` checks it.
 
 ### Editorial layout defaults
 

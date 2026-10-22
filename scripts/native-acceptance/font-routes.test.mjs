@@ -10,6 +10,7 @@ import {generatePrimaryFixtures} from './generate.mjs';
 import {parseArguments,sealSuite} from './prepare.mjs';
 import {digest} from './identity.mjs';
 const require=createRequire(new URL('../../packages/javascript/package.json',import.meta.url));
+const rootRequire=createRequire(new URL('../../package.json',import.meta.url));
 const Ajv=require('ajv/dist/2020.js').default,addFormats=require('ajv-formats').default;
 const ajv=new Ajv({allErrors:true,strict:false});addFormats(ajv);
 const validate=ajv.compile(JSON.parse(await readFile(new URL('../../spec/schemas/opf.schema.json',import.meta.url),'utf8')));
@@ -58,7 +59,7 @@ test('five schema-valid route fixtures preserve corpus text, explicit upright st
 });
 
 test('measurement rows keep point sizes and upright weights through shared rich-text fitting',async()=>{
- const peer=createRequire(require.resolve('@openpresentation/opf-pptx/package.json'));
+ const peer=createRequire(rootRequire.resolve('@openpresentation/opf-pptx/package.json'));
  const corePeer=createRequire(peer.resolve('@openpresentation/opf/package.json'));
  const {fitRichText}=await import(new URL('./dist/composition.js',pathToFileURL(corePeer.resolve('@openpresentation/opf/package.json'))).href);
  const source=await loadFontRouteSource(selectFontRoutes('all'));

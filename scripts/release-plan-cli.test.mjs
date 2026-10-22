@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 import { cliPeerMismatches, cliSkipNotice, installablePackages, satisfies } from './release-plan-cli.mjs';
+import { concreteRange } from './workspace-packages.mjs';
 
 const plan = ({ render = '0.14.0', pptx = '0.14.0', cli = '0.11.0' } = {}) => ({
   packages: [
@@ -100,6 +101,8 @@ test("this checkout's CLI declares ranges that a plan at their floors satisfies,
   // Before a coordinated release the ranges name the unreleased line (0.15), above the published plan; the plan that
   // releases them carries the siblings at those floors.
   const manifest = JSON.parse(await readFile(new URL('../packages/cli/package.json', import.meta.url), 'utf8'));
+  // MR-23: the source tree declares workspace:^, which publishes as ^<version>.
+  for (const [name, range] of Object.entries(manifest.peerDependencies)) manifest.peerDependencies[name] = concreteRange(range, manifest.version);
   const floor = (name) => manifest.peerDependencies[name].replace(/^[\^~]/, '');
   const released = plan({ cli: manifest.version.replace(/-.*/, ''), render: floor('@openpresentation/opf-render'), pptx: floor('@openpresentation/opf-pptx') });
   assert.equal(await cliSkipNotice(released, { readPeers: reader(manifest.peerDependencies) }), null);

@@ -27,7 +27,7 @@ import { checkJobs, selectChecks } from './run-checks.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BIOME_EXTENSIONS = new Set(['.js', '.mjs', '.cjs', '.jsx', '.ts', '.mts', '.cts', '.tsx', '.json', '.jsonc', '.css']);
 const TYPESCRIPT = /\.(ts|mts|cts)$|(^|\/)tsconfig[^/]*\.json$/;
-// The six packages of the monorepo (docs/programs/monorepo/README.md section 1). `script` is the package script that runs
+// The six packages of the monorepo and the private packages/integration (docs/programs/monorepo/README.md section 1). `script` is the package script that runs
 // the whole package. A package whose directory is not in the repository yet (the engines before their import) never has
 // a changed file, so it adds no step; one that is imported but not in pnpm-workspace.yaml fails instead of passing
 // silently (`--fail-if-no-match`).
@@ -38,6 +38,7 @@ export const PACKAGES = [
   { id: 'pptx', dir: 'packages/pptx', filter: '@openpresentation/opf-pptx', script: 'test:contract' },
   { id: 'editor', dir: 'packages/editor', filter: '@openpresentation/opf-editor', script: 'test:contract' },
   { id: 'gallery', dir: 'packages/gallery', filter: '@openpresentation/gallery', script: 'test' },
+  { id: 'integration', dir: 'packages/integration', filter: '@openpresentation/integration', script: 'test' },
 ];
 const BROWSER = /(^|-)browser(-|\.)/;
 
