@@ -193,7 +193,7 @@ if (verifyColorRefs) {
     (await readHarness('opf-pptx', 'test/color-ref-export.mjs'))
       .replaceAll('"../dist/index.js"', '"@openpresentation/opf-pptx"')
       .replaceAll('"../dist/color-ref.js"', '"./node_modules/@openpresentation/opf-pptx/dist/color-ref.js"')
-      .replaceAll('"../../opf/docs/fixtures/color-references.opf.json"', '"fixtures/core-color-references.opf.json"')
+      .replaceAll('"../../../docs/fixtures/color-references.opf.json"', '"fixtures/core-color-references.opf.json"')
       .replaceAll('  fixture = null;', '  throw new Error("Pinned ColorRef fixture must load; fallback is not registry acceptance");'));
   run(process.execPath, ['color-ref-export.mjs']);
 }
