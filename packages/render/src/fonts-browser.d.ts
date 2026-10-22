@@ -1,0 +1,173 @@
+import type {
+  EnsureResult,
+  FontFaceInput,
+  FontRegistry,
+  FontRegistryOptions,
+  FontsHandle,
+} from "./fonts.js";
+import type { AutoScriptSelection, BundledFontPackage, LazyFont, ScriptSelection } from "./fonts-node.js";
+import type { ToSvgOptions } from "./svg.js";
+export type { LazyFont } from "./fonts-node.js";
+export type { AutoScriptSelection } from "./fonts-node.js";
+export { detectPresentationScripts, autoScriptSelection } from "./fonts-node.js";
+export interface BrowserFontInput extends Omit<FontFaceInput, "data"> {
+  data?: Uint8Array;
+  url?: string;
+  /** Reviewed SHA-256 (hex); verified with Web Crypto before the face is used. */
+  sha256?: string;
+}
+export interface BrowserFontRegistry extends FontRegistry {
+  dispose(): void;
+  /** Every vendored face a host can load on demand: family, style, package-relative file and pinned sha256. */
+  readonly lazyFonts: readonly LazyFont[];
+  /**
+   * Load the vendored faces (for example Intos Display 700 and Intos 400 for a plain deck in the default Aptos scheme) the
+   * presentation draws, resolved as the registry resolves them under its `substitutionPolicy` (nothing is downloaded for a
+   * family the policy would not resolve, nor for a weight or style nothing draws), once each, from `lazyFontsBaseUrl`.
+   * Fetches and verifies every file, then adds the faces to the document and the registry together; on failure nothing
+   * changes and the call can be retried. Call it before measuring a document, and again after edits: an edit that adds a
+   * bold or italic run loads just that face. Besides `signal`, the call takes the `toSvg` options the document resolves
+   * with (`catalogs`, ...) over the loader's `renderOptions`. A document that does not resolve rejects with the error
+   * `toSvg` throws for it. After `dispose()` it rejects with `font-registry-disposed`.
+   */
+  ensureLazyFonts(presentation: unknown, options?: { signal?: AbortSignal } & Partial<ToSvgOptions>): Promise<LazyFont[]>;
+  /**
+   * Synchronous: the vendored faces the presentation draws under the registry's policy that are not loaded yet. Empty means
+   * `ensureLazyFonts` fetches nothing. `renderOptions` are the `toSvg` options the document resolves with (`catalogs`, ...)
+   * over the loader's `renderOptions`. Throws what `toSvg` throws for a document that does not resolve.
+   */
+  pendingLazyFonts(presentation: unknown, renderOptions?: Partial<ToSvgOptions>): LazyFont[];
+
+  /** Load script faces for ISO 15924 codes (or "all") from `scriptBaseUrl`. Resolves with the newly loaded package names. */
+  loadScripts(scripts: ScriptSelection, options?: { signal?: AbortSignal }): Promise<string[]>;
+  /**
+   * Load the script faces the presentation's text needs, once each (FF-19). Cheap when nothing new is
+   * needed. Also loads the CJK face a glyph fallback needs for drawn characters the loaded faces lack. Call it after
+   * edits and render again afterwards: measurements planned earlier do not know the new faces. `signal` belongs to
+   * this call only. `uncovered` lists drawn CJK characters no loaded face covers. At most one CJK face beyond the text's own
+   * scripts is loaded for glyph fallback. If a package fails the others still load and the call rejects with an
+   * OPFFontError whose `details` are `{ loaded: string[]; failed: {package, code, message}[] }`. A failed call (fetch, hash, FontFace load) leaves nothing loaded and can be retried; after
+   * `dispose()` it rejects with `font-registry-disposed`.
+   */
+  ensureScripts(presentation: unknown, options?: { signal?: AbortSignal } & Partial<ToSvgOptions>): Promise<AutoScriptSelection & { loaded: string[]; uncovered: string[] }>;
+  /** Synchronous: package names the presentation needs that are not loaded yet. Empty means `ensureScripts` fetches nothing, so a host can render immediately. Text decides, so a document is analyzed without resolving its layouts; `renderOptions.catalogs` matter for font schemes only the host's catalogs have (FF-41). */
+  pendingScripts(presentation: unknown, renderOptions?: Partial<ToSvgOptions>): string[];
+  /** Names of the script-pack packages loaded so far. */
+  readonly loadedScriptPackages: string[];
+}
+/**
+ * The fonts handle of a browser: the faces you list, registered with the document, and on demand the script and vendored faces a deck
+ * draws. Pass it as `{ fonts }` to `toSvg`, `<opf-deck>` and the player, core `paginate` and `validate`, and the editor.
+ * The registry behind it keeps the lower-level loaders (`ensureLazyFonts`, `ensureScripts`, `loadScripts`, `pendingLazyFonts`, `pendingScripts`).
+ */
+export interface BrowserFontsHandle extends FontsHandle {
+  readonly registry: BrowserFontRegistry;
+  /** Remove every face this handle added from the document. */
+  dispose(): void;
+  /**
+   * Load the vendored and script faces the presentation draws (each hash-verified, all or nothing), repeating while loading changes what
+   * is needed. Cheap when nothing is needed. Besides `signal`, the call takes the `toSvg` options the document resolves with
+   * (`catalogs`, ...) over the loader's `renderOptions`. A document that does not resolve rejects with what `toSvg` throws for it; after
+   * `dispose()` it rejects with `font-registry-disposed`.
+   */
+  ensure(presentation: unknown, options?: { signal?: AbortSignal } & Partial<ToSvgOptions>): Promise<EnsureResult>;
+  /** Synchronous: the vendored files and script packages `ensure` would fetch. Empty means a render can start now. Throws what `toSvg` throws for a document that does not resolve. */
+  pending(presentation: unknown, renderOptions?: Partial<ToSvgOptions>): string[];
+}
+export declare function loadFonts(
+  options?: FontRegistryOptions & {
+    /** The faces to register at startup (the host's startup set; the rest can be `extraLazyFonts`). Each is fetched from `url` or taken from `data`, and verified when it has a `sha256`. */
+    faces?: BrowserFontInput[];
+    document?: Document;
+    fetch?: typeof fetch;
+    signal?: AbortSignal;
+    /**
+     * RR-65: harfbuzzjs's `harfbuzz-subset.wasm` (the URL the host serves it from, its bytes or a compiled WebAssembly.Module). With
+     * it the handle carries `subsets`, and every SVG `toSvg` draws with this handle embeds each face cut to the characters the
+     * slide draws. Without it a browser handle embeds whole faces (the Node handle always subsets).
+     */
+    subsetWasm?: string | URL | ArrayBuffer | ArrayBufferView | WebAssembly.Module;
+    /**
+     * RR-64: harfbuzzjs's `harfbuzz.wasm` (its URL, bytes or a compiled WebAssembly.Module). With it `text: "paths"` shapes outlines, and
+     * `toPdf` the vector PDF's text, with HarfBuzz, as the browser shapes text; without it a browser handle shapes them with fontkit (the
+     * Node handle always uses HarfBuzz).
+     */
+    shapeWasm?: string | URL | ArrayBuffer | ArrayBufferView | WebAssembly.Module;
+    crypto?: { subtle: SubtleCrypto };
+    /** Script faces to load once the registry exists: "auto" (with `presentation`), "all" or ISO 15924 codes. Needs `scriptBaseUrl`. */
+    scripts?: ScriptSelection | "auto";
+    /** The presentation whose text decides `scripts: "auto"`. */
+    presentation?: unknown;
+    /** Where the host serves the installed `@expo-google-fonts/*` packages; script faces are fetched from here, hash-verified. */
+    scriptBaseUrl?: string;
+    /** Where the host serves this package's `fonts` directory, so vendored faces (Intos, the open families) load on demand from `<base>/<package-relative file>` (fonts/intos/..., fonts/<family>/...). */
+    lazyFontsBaseUrl?: string;
+    /**
+     * FF-41: faces the host serves itself, loaded on demand like the vendored ones: hash-verified, all or nothing, in the same
+     * `lazyFacesNeeded` pass (a document that draws a vendored and an extra face fetches both in one `ensureLazyFonts`), removed
+     * by `dispose()`. They appear in `registry.lazyFonts` with `package: "host"`. Typically the faces of a manifest that
+     * `splitStartupFaces` left out of the startup set. Like the vendored faces they are `embed: "used"`: not in `registry.embeddedFonts` (only the startup faces are);
+     * pass `registry.selectEmbeddedFonts(...)` to embed them in a standalone SVG, and then only when a slide's text uses their family.
+     * A missing or malformed `sha256`, a duplicate `url` or an invalid family throws `invalid-font-source`.
+     */
+    extraLazyFonts?: readonly ExtraLazyFont[];
+    /**
+     * FF-41: the `toSvg` options the documents resolve with (`catalogs` above all), the default for `pendingLazyFonts`,
+     * `ensureLazyFonts`, `pendingScripts` and `ensureScripts`. A layout or font scheme id that only the host's catalogs have
+     * resolves the same way here as it does when the host renders. A call's own options win.
+     */
+    renderOptions?: Partial<ToSvgOptions>;
+  },
+): Promise<BrowserFontsHandle>;
+export declare function scriptFontPackages(scripts: ScriptSelection): BundledFontPackage[];
+/** Hash-pinned browser entries for the script pack, served by the host from `baseUrl`. */
+export declare function scriptFontEntries(
+  scripts: ScriptSelection,
+  options: { baseUrl: string },
+): (BrowserFontInput & { url: string; family: string; weight: number; italic: boolean; sha256: string; scripts: string[]; package: string; license: string })[];
+/** Every vendored face of this package: family, style, package-relative file, sha256. */
+export declare function lazyFontList(): readonly LazyFont[];
+/** Hash-pinned browser entries for the vendored faces, served by the host from `baseUrl` at their package-relative paths. */
+export declare function lazyFontEntries(options: { baseUrl?: string }, list?: readonly LazyFont[]): (BrowserFontInput & { url: string; family: string; weight: number; italic: boolean; sha256: string; package: string })[];
+/** A face the host serves itself and loads on demand (FF-41): `sha256` is mandatory, the registry verifies the bytes before use. */
+export interface ExtraLazyFont { family: string; weight: number; italic?: boolean; url: string; sha256: string; license?: string }
+/**
+ * Split faces (a host's manifest, `registry.embeddedFonts`) into the ones a registry starts with and the rest, to pass as
+ * `extraLazyFonts`. The default startup set is Roboto Regular (the renderer's fallback family); `startup` chooses other faces, for
+ * example the ones `presentationFaces` says the first deck draws. Order is kept.
+ */
+export declare function splitStartupFaces<T extends { family: string; weight: number; italic?: boolean }>(faces: readonly T[], options?: { startup?: (face: T) => boolean }): { startup: T[]; rest: T[] };
+/**
+ * The font families a presentation's slides resolve (heading, body and code roles of every slide). `options` are the
+ * `toSvg` options the document resolves with (`catalogs`, ...). A document that does not resolve throws what `toSvg`
+ * throws for it (FF-41: it no longer returns an empty set). This is the role families, not what is drawn: see `presentationFaces`.
+ */
+export declare function presentationFamilies(presentation: unknown, options?: Partial<ToSvgOptions>): Set<string>;
+/** A face request or a drawn face: a family, a weight and a style. */
+export interface FaceRequest { family: string; weight: number; italic: boolean }
+/**
+ * The faces a preview of the presentation draws (FF-41), sorted by family, style and weight: the renderer's own layout and
+ * painting with a recording measurement, so heading and body roles, bold and italic runs, tables, furniture, chart labels and
+ * the code role (only where code is drawn), per-slide overrides and script slots are all followed. Without `registry` the
+ * faces are the styles as the document names them. With `registry` (`{faces, policy, aliases, fallbackFamily}`: the faces a
+ * registry holds or could hold and its substitution options) every style resolves as that registry resolves it, in the two
+ * steps drawing takes (role family, then weight within it), and the result is the faces the registry paints.
+ * `options` are the `toSvg` options the document resolves with; a document that does not resolve throws what `toSvg`
+ * throws for it.
+ */
+export declare function presentationFaces(presentation: unknown, options?: Partial<ToSvgOptions>, registry?: { faces: Iterable<FaceRequest>; policy?: "none" | "metric" | "visual"; aliases?: ReadonlyMap<string, string>; fallbackFamily?: string }): FaceRequest[];
+/**
+ * The vendored faces (of `lazy`) a presentation draws that the registry does not hold. `held` is `registry.describeFaces()`,
+ * `loaded` the lazy files already loaded; `policy`, `aliases` and `fallbackFamily` are the registry's. Face level: only the
+ * drawn faces, so an edit adding a bold run adds one face.
+ */
+export declare function lazyFacesNeeded(presentation: unknown, renderOptions: Partial<ToSvgOptions> | undefined, context: { lazy: readonly LazyFont[]; held: Iterable<FaceRequest>; loaded?: ReadonlySet<string>; policy?: "none" | "metric" | "visual"; aliases?: ReadonlyMap<string, string>; fallbackFamily?: string }): LazyFont[];
+/**
+ * The vendored faces a list of requests needs that the registry does not hold, following the registry's own order and
+ * `policy` (default "visual"): the family itself, an alias target, the declared replacement, then its alternates.
+ * Entries are face requests (`presentationFaces`), resolved as the registry resolves them with every vendored face loaded
+ * over `held` (`registry.describeFaces()`), so only the faces asked for are returned and a partially loaded family still
+ * loads its missing faces; or family names, which mean every face of the family. Without `held` a face request falls back to
+ * family level with `hasFamily`.
+ */
+export declare function lazyFontsFor(entries: Iterable<string | { family: string; weight?: number; italic?: boolean }>, context: { lazy: readonly LazyFont[]; held?: Iterable<FaceRequest>; hasFamily?: (family: string) => boolean; loaded?: ReadonlySet<string>; policy?: "none" | "metric" | "visual"; aliases?: ReadonlyMap<string, string>; fallbackFamily?: string }): LazyFont[];

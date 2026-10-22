@@ -1,0 +1,165 @@
+# Non-blocking platform residual report (font-fidelity-everywhere FF-21, tracking #24).
+# This workflow measures and reports only. Every job is continue-on-error and it is separate
+# from ci.yml, which carries the blocking variable-font gate (npm run test:variable-font-gate:
+# 0.15 px, owner decision 2026-10-01, RR-15). The #24 probe step below uses that same 0.15 px
+# value so the macOS leg shows the margin; static-font residuals still use the 0.1 px reference.
+name: Platform residual (non-blocking)
+# RR-57 (CI diet): a pull request measures the Linux leg only; the macOS leg (10x billing) and the Linux-vs-macOS comparison
+# run on push to main and workflow_dispatch, and on a pull request that carries the label `full-ci` (add it when a change
+# touches OS- or font-rendering-specific code). Any other label starts nothing.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: platform-residual-${{ github.event.pull_request.number || github.ref }}${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && '-ignored' || '' }}
+  cancel-in-progress: true
+env:
+  # Archived renderer checkpoint named in #24; only its hashed Source Serif 4 fixtures are read.
+  ARCHIVE_RENDERER_SHA: 343fb84223f4383ffe546157c6989ccc505c0acb
+jobs:
+  measure:
+    name: measure (${{ matrix.platform }})
+    continue-on-error: true
+    # An unrelated label starts nothing; the macOS leg is in the matrix only where `full-ci` applies (below).
+    if: ${{ github.event.action != 'labeled' || github.event.label.name == 'full-ci' }}
+    strategy:
+      fail-fast: false
+      # The Linux leg uses the same pinned image as ci.yml so it matches the blocking browser checks.
+      # RR-57: a pull request without the label `full-ci` measures the Linux leg only.
+      matrix: ${{ fromJSON((github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'full-ci')) && '{"include":[{"platform":"linux","os":"ubuntu-latest","container":"mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f"},{"platform":"macos","os":"macos-latest","container":""}]}' || '{"include":[{"platform":"linux","os":"ubuntu-latest","container":"mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f"}]}') }}
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: opf-render
+    env:
+      REPORT_DIR: artifacts/platform-residual/${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          path: opf-render
+      - name: Check out archived #24 font fixtures
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.ARCHIVE_RENDERER_SHA }}
+          path: archive
+          persist-credentials: false
+          sparse-checkout: test/fixtures/font-formats/source-serif
+          sparse-checkout-cone-mode: true
+      # RR-50: the same commits as the CI package job: core's ecosystem.lock.json (and a Depends-On: trailer on a pull request).
+      - name: Resolve the coordinated commits from core's ecosystem.lock.json
+        id: refs
+        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main
+        with:
+          consumer: opf-render
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf
+          ref: ${{ steps.refs.outputs.opf }}
+          path: opf
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: opf-render/package-lock.json
+      - run: npm ci
+      # Link only the renderer to the pinned core source (ci.yml links all siblings via
+      # link-ecosystem; the pptx/editor checkouts are not needed for renderer checks).
+      - name: Build and link pinned core
+        id: link
+        continue-on-error: true
+        run: |
+          pnpm --dir ../opf install --frozen-lockfile
+          pnpm --dir ../opf build
+          rm -rf node_modules/@openpresentation/opf
+          ln -s "$(cd ../opf/packages/javascript && pwd)" node_modules/@openpresentation/opf
+          node -e "import('@openpresentation/opf').then(()=>console.log('linked pinned core source'))"
+      - run: npm run build
+      - name: Verify Playwright version
+        run: node -e "if (require('playwright/package.json').version !== '1.64.0') throw new Error('Update the pinned Playwright version with the test package.');"
+      - name: Install Chromium (macOS)
+        if: runner.os == 'macOS'
+        run: npx playwright install chromium
+      - id: variants
+        continue-on-error: true
+        run: node test/font-variants-browser.mjs "$REPORT_DIR/font-variants-browser.json"
+      - id: preparation
+        continue-on-error: true
+        run: node test/font-preparation-browser.mjs "$REPORT_DIR/font-preparation-browser.json"
+      - id: browser
+        continue-on-error: true
+        run: npm run test:browser
+      - id: probe
+        continue-on-error: true
+        run: node test/platform-residual-probe.mjs ../archive/test/fixtures/font-formats "$REPORT_DIR/issue24-probe.json"
+      - name: Record suite outcomes and summarize
+        if: always()
+        env:
+          PLATFORM: ${{ matrix.platform }}
+          VARIANTS: ${{ steps.variants.outcome }}
+          PREPARATION: ${{ steps.preparation.outcome }}
+          BROWSER: ${{ steps.browser.outcome }}
+          PROBE: ${{ steps.probe.outcome }}
+          LINK: ${{ steps.link.outcome }}
+        run: |
+          mkdir -p "$REPORT_DIR"
+          node -e "require('fs').writeFileSync(process.argv[1],JSON.stringify({platform:process.env.PLATFORM,'core-link':process.env.LINK,'font-variants-browser':process.env.VARIANTS,'font-preparation-browser':process.env.PREPARATION,'test:browser':process.env.BROWSER,'issue24-probe':process.env.PROBE},null,2)+'\n')" "$REPORT_DIR/outcomes.json"
+          node scripts/platform-residual-summary.mjs "$REPORT_DIR/summary.md" "$REPORT_DIR/summary.json" "$REPORT_DIR" >/dev/null
+          cat "$REPORT_DIR/summary.md" >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload residual report
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: platform-residual-${{ matrix.platform }}
+          path: opf-render/artifacts/platform-residual/${{ matrix.platform }}/**
+          retention-days: 30
+          if-no-files-found: warn
+  compare:
+    name: compare (linux vs macos)
+    needs: measure
+    # Nothing to compare when the macOS leg did not run (a pull request without the label `full-ci`).
+    if: ${{ always() && (github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'full-ci')) && (github.event.action != 'labeled' || github.event.label.name == 'full-ci') }}
+    continue-on-error: true
+    # RR-40: a fixed image; ubuntu-latest moves to Ubuntu 26 from 2026-10-19. Move to the next LTS in its own PR.
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: platform-residual-*
+          path: reports
+      - name: Summarize Linux vs macOS residual
+        run: |
+          dirs=""
+          for platform in linux macos; do
+            if [ -d "reports/platform-residual-$platform" ]; then dirs="$dirs reports/platform-residual-$platform"; else echo "::warning::No $platform residual report"; fi
+          done
+          if [ -z "$dirs" ]; then echo "No residual reports to compare" >> "$GITHUB_STEP_SUMMARY"; exit 0; fi
+          node scripts/platform-residual-summary.mjs comparison/summary.md comparison/summary.json $dirs >/dev/null
+          cat comparison/summary.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Upload comparison
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: platform-residual-comparison
+          path: comparison/**
+          retention-days: 30
+          if-no-files-found: warn

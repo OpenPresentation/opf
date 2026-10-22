@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/design-and-media/data-storytelling-atlas.opf.json",
+  "entries": {
+    "gallery/design-and-media/data-storytelling-atlas.opf.json#0": {
+      "sha256": "917344e5baa24f95ae7112a3d901dd9799c244953e99962e3c6817a8a80d07ab",
+      "bytes": 5430
+    },
+    "gallery/design-and-media/data-storytelling-atlas.opf.json#1": {
+      "sha256": "f65feb325f0f0a1c201371ccf491c01b9bfea356d96c5c0e7d29e513291cf051",
+      "bytes": 7866
+    },
+    "gallery/design-and-media/data-storytelling-atlas.opf.json#2": {
+      "sha256": "54bdb4f122389df1e1cf8e1f0b446a897742e2de8e73236eee2e996011148050",
+      "bytes": 10223
+    },
+    "gallery/design-and-media/data-storytelling-atlas.opf.json#3": {
+      "sha256": "144bdc29b57f56c17ed9c84929e6e09303367335dbf2ead58fe67a3ad83e3a4f",
+      "bytes": 6470
+    },
+    "gallery/design-and-media/data-storytelling-atlas.opf.json#4": {
+      "sha256": "bfd9ab3f11150870afc6921924c2092eb7b56aae00e923460c647f550308d5ff",
+      "bytes": 7629
+    },
+    "gallery/design-and-media/data-storytelling-atlas.opf.json#5": {
+      "sha256": "9d44806bfef341f5836118d7339fe9c438cd75e9e5e0533b307aa9330b8d68f8",
+      "bytes": 14586
+    },
+    "gallery/design-and-media/data-storytelling-atlas.opf.json#6": {
+      "sha256": "04b8e5c0e52fcf9690fff16cdfe95f0b6c629c7e376098431e5dbeffd214a33a",
+      "bytes": 8615
+    },
+    "gallery/design-and-media/data-storytelling-atlas.opf.json#7": {
+      "sha256": "66a066a4270ce000437f3c8b70aaab227273e7cef0ca8d1824a75c5c701c412d",
+      "bytes": 4505
+    },
+    "gallery/design-and-media/data-storytelling-atlas.opf.json#8": {
+      "sha256": "4695d2808805facc3e98904db93b99dc99a51174497c73f6f77a028531c49247",
+      "bytes": 5142
+    },
+    "gallery/design-and-media/data-storytelling-atlas.opf.json#9": {
+      "sha256": "acab9d950d889d5db495b43e21e6e1be26b6743562f57433ccd6836e3c93f7fd",
+      "bytes": 10442
+    }
+  }
+}

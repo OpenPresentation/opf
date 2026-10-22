@@ -1,0 +1,17 @@
+{
+  "deck": "technical/rich-text-runs.opf.json",
+  "entries": {
+    "technical/rich-text-runs.opf.json#0": {
+      "sha256": "634af326e2606c861a696bb27b2ebea166a1586da2e6c3762516f504a71d875f",
+      "bytes": 3067
+    },
+    "technical/rich-text-runs.opf.json#1": {
+      "sha256": "8e181f36528f993b49a1f81ca8b65f13e9c73d91f6e6a85be81cdc18c693124e",
+      "bytes": 5461
+    },
+    "technical/rich-text-runs.opf.json#2": {
+      "sha256": "b8c1b5cf71c1ee1e82aa408cc05f82320acb02f48fa44b30f88ecf9baf2c2d13",
+      "bytes": 3163
+    }
+  }
+}

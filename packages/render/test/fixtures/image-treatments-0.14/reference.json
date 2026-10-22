@@ -1,0 +1,668 @@
+{
+  "renderer": "0.14.0",
+  "core": "0.14.0",
+  "scale": 0.5,
+  "treatments": {
+    "full-bleed": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "background"
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "shape": "M0 0H1280V720H0Z"
+      }
+    },
+    "text-overlay": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "background",
+        "overlay": {
+          "color": "#000000",
+          "opacity": 0.45
+        }
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "shape": "M0 0H1280V720H0Z",
+        "overlay": "M0 0H1280V720H0Z"
+      }
+    },
+    "caption-overlay": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "background",
+        "overlay": {
+          "color": "dark1",
+          "opacity": 0.6,
+          "edge": "bottom",
+          "size": 0.25
+        }
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "shape": "M0 0H1280V720H0Z",
+        "overlay": "M0 540H1280V720H0Z"
+      }
+    },
+    "side-by-side": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "left",
+        "size": 0.5
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 697.6,
+            "y": 57.6,
+            "width": 524.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 697.6,
+            "y": 147.48,
+            "width": 524.8,
+            "height": 514.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 640,
+          "height": 720
+        },
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 640,
+          "height": 720
+        },
+        "shape": "M0 0H640V720H0Z"
+      }
+    },
+    "masked-shape": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "right",
+        "size": 0.45,
+        "inset": true,
+        "shape": "hexagon"
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 588.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 588.8,
+            "height": 514.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 704,
+          "y": 0,
+          "width": 576,
+          "height": 720
+        },
+        "box": {
+          "x": 761.6,
+          "y": 57.6,
+          "width": 460.8,
+          "height": 604.8
+        },
+        "shape": "M761.6 360L876.8 57.600141L1107.2 57.600141L1222.4 360L1107.2 662.399859L876.8 662.399859Z"
+      }
+    },
+    "circular-crop": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "left",
+        "size": 0.4,
+        "inset": true,
+        "shape": "circle",
+        "border": {
+          "color": "accent1",
+          "width": 4
+        }
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 569.6,
+            "y": 57.6,
+            "width": 652.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 569.6,
+            "y": 147.48,
+            "width": 652.8,
+            "height": 514.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 512,
+          "height": 720
+        },
+        "box": {
+          "x": 57.6,
+          "y": 161.6,
+          "width": 396.8,
+          "height": 396.8
+        },
+        "shape": "M57.6 360A198.4 198.4 0 1 1 454.4 360A198.4 198.4 0 1 1 57.6 360Z"
+      }
+    },
+    "rounded-card": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "right",
+        "size": 0.5,
+        "inset": true,
+        "shape": "rounded",
+        "cornerRadius": 0.08,
+        "border": {
+          "color": "#10182080",
+          "width": 3
+        }
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 524.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 524.8,
+            "height": 514.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 640,
+          "y": 0,
+          "width": 640,
+          "height": 720
+        },
+        "box": {
+          "x": 697.6,
+          "y": 57.6,
+          "width": 524.8,
+          "height": 604.8
+        },
+        "shape": "M697.6 99.584A41.984 41.984 0 0 1 739.584 57.6H1180.416A41.984 41.984 0 0 1 1222.4 99.584V620.416A41.984 41.984 0 0 1 1180.416 662.4H739.584A41.984 41.984 0 0 1 697.6 620.416Z"
+      }
+    },
+    "duotone": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "background",
+        "recolor": {
+          "dark": "accent1",
+          "light": "light1"
+        }
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "shape": "M0 0H1280V720H0Z"
+      }
+    },
+    "background-blur": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "background",
+        "opacity": 0.35
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 720
+        },
+        "shape": "M0 0H1280V720H0Z"
+      }
+    },
+    "image-strip": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "top",
+        "size": 0.3,
+        "recolor": "grayscale"
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 273.6,
+            "width": 1164.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 363.48,
+            "width": 1164.8,
+            "height": 298.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 216
+        },
+        "box": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 216
+        },
+        "shape": "M0 0H1280V216H0Z"
+      }
+    },
+    "collage-grid": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "bottom",
+        "size": 0.35,
+        "overlay": {
+          "color": "accent1",
+          "opacity": 0.3
+        }
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 262.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 0,
+          "y": 468,
+          "width": 1280,
+          "height": 252
+        },
+        "box": {
+          "x": 0,
+          "y": 468,
+          "width": 1280,
+          "height": 252
+        },
+        "shape": "M0 468H1280V720H0Z",
+        "overlay": "M0 468H1280V720H0Z"
+      }
+    },
+    "device-frame": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "right",
+        "size": 0.55,
+        "inset": true,
+        "fill": "fit",
+        "aspectRatio": 1.6,
+        "border": {
+          "color": "dark1",
+          "width": 8
+        }
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 460.8,
+            "height": 131.76
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 213.36,
+            "width": 460.8,
+            "height": 449.04
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 576,
+          "y": 0,
+          "width": 704,
+          "height": 720
+        },
+        "box": {
+          "x": 633.6,
+          "y": 176,
+          "width": 588.8,
+          "height": 368
+        },
+        "shape": "M633.6 176H1222.4V544H633.6Z"
+      }
+    },
+    "cutout-subject": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "right",
+        "size": 0.4,
+        "fill": "fit"
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 652.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 652.8,
+            "height": 514.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 768,
+          "y": 0,
+          "width": 512,
+          "height": 720
+        },
+        "box": {
+          "x": 768,
+          "y": 0,
+          "width": 512,
+          "height": 720
+        },
+        "shape": "M768 0H1280V720H768Z"
+      }
+    },
+    "watermark": {
+      "written014": null,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 147.48,
+            "width": 1164.8,
+            "height": 514.92
+          }
+        }
+      ]
+    },
+    "cinematic-crop": {
+      "written014": {
+        "src": "asset:photo",
+        "position": "top",
+        "size": 0.7,
+        "aspectRatio": 2.39,
+        "opacity": 0.9,
+        "overlay": {
+          "color": "#000000",
+          "opacity": 0.5,
+          "edge": "left",
+          "size": 0.2
+        }
+      },
+      "items": [
+        {
+          "path": "slides.0.title",
+          "box": {
+            "x": 57.6,
+            "y": 561.6,
+            "width": 1164.8,
+            "height": 65.88
+          }
+        },
+        {
+          "path": "slides.0.blocks.0.text",
+          "box": {
+            "x": 57.6,
+            "y": 651.48,
+            "width": 1164.8,
+            "height": 10.92
+          }
+        }
+      ],
+      "frame": {
+        "region": {
+          "x": 0,
+          "y": 0,
+          "width": 1280,
+          "height": 504
+        },
+        "box": {
+          "x": 37.72,
+          "y": -2.842170943040401e-14,
+          "width": 1204.56,
+          "height": 504
+        },
+        "shape": "M37.72 -2.842170943040401e-14H1242.28V504H37.72Z",
+        "overlay": "M37.72 -2.842170943040401e-14H278.632V504H37.72Z"
+      }
+    }
+  }
+}

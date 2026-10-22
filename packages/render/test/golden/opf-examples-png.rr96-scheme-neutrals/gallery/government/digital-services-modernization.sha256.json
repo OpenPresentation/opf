@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/government/digital-services-modernization.opf.json",
+  "entries": {
+    "gallery/government/digital-services-modernization.opf.json#0": {
+      "sha256": "47f9f84e530024befae167485aa2b350325854a64f40d8c8c23fb17e50624e1f",
+      "bytes": 5152
+    },
+    "gallery/government/digital-services-modernization.opf.json#1": {
+      "sha256": "3ddfe8784377700cb2a65eecd4af300ea8f615df39749d18fa2c33744801896a",
+      "bytes": 7764
+    },
+    "gallery/government/digital-services-modernization.opf.json#2": {
+      "sha256": "4664a743ca5eef439da831cb718a2d9479e700ebe1a552a89b5f7be8dec45036",
+      "bytes": 8979
+    },
+    "gallery/government/digital-services-modernization.opf.json#3": {
+      "sha256": "62ab6f831096efd4d84d3a939bc295ca02115f5565ec05fd817021f7eea4ffbd",
+      "bytes": 6201
+    }
+  }
+}

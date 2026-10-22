@@ -1,0 +1,10 @@
+file:///private/tmp/opf-resume-20260929/chart-scale-repair/baseline/test/chart-scale.mjs:30
+          reject(new Error("renderSvg did not complete within 2 seconds after import"));
+                 ^
+
+Error: renderSvg did not complete within 2 seconds after import
+    at Timeout._onTimeout (file:///private/tmp/opf-resume-20260929/chart-scale-repair/baseline/test/chart-scale.mjs:30:18)
+    at listOnTimeout (node:internal/timers:685:17)
+    at process.processTimers (node:internal/timers:618:7)
+
+Node.js v24.21.0

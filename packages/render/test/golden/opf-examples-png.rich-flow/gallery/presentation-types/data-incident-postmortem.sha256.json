@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/presentation-types/data-incident-postmortem.opf.json",
+  "entries": {
+    "gallery/presentation-types/data-incident-postmortem.opf.json#0": {
+      "sha256": "3405fda84669f001ceec5f96f340eb2ddd9950eac057b50c3c831c2d0655a0f3",
+      "bytes": 14362
+    },
+    "gallery/presentation-types/data-incident-postmortem.opf.json#1": {
+      "sha256": "38c7e2e35384e66adbc4789b6d18eda15bad94db106880ed1ad6c3988ddf7d71",
+      "bytes": 17449
+    },
+    "gallery/presentation-types/data-incident-postmortem.opf.json#2": {
+      "sha256": "89afe7d1850c15a319028f1de42430836a65e6a8c97a1124b6110902116bcdf9",
+      "bytes": 10364
+    },
+    "gallery/presentation-types/data-incident-postmortem.opf.json#3": {
+      "sha256": "8e27a517dd626c85686f5e7a01c5cdcb1df8f01e4f69b18f9a3e3ba0a1ff2447",
+      "bytes": 13436
+    },
+    "gallery/presentation-types/data-incident-postmortem.opf.json#4": {
+      "sha256": "869f63a2b97b9567bc0e91fa65d439701c421ba60b25ece6a65df161d17a3409",
+      "bytes": 16139
+    },
+    "gallery/presentation-types/data-incident-postmortem.opf.json#5": {
+      "sha256": "9568437dca061a46231283a022765f1ac8a6a631b042045101fccabcf07b9779",
+      "bytes": 16527
+    }
+  }
+}

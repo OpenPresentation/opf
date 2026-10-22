@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/industries/claims-triage-operating-model.opf.json",
+  "entries": {
+    "gallery/industries/claims-triage-operating-model.opf.json#0": {
+      "sha256": "ff590958388109e8edfcda93e977eb8243667a315be5603d6c278e1f86ec44fa",
+      "bytes": 4531
+    },
+    "gallery/industries/claims-triage-operating-model.opf.json#1": {
+      "sha256": "47a86101c88d3c3096036b29e9cf206b207e7b97cf352435e264374cc5ba08b1",
+      "bytes": 7727
+    },
+    "gallery/industries/claims-triage-operating-model.opf.json#2": {
+      "sha256": "b1078e5e969391e3ed9b15a2b84bacef05e40c8323503ff0d7d0909684082e7b",
+      "bytes": 3229
+    },
+    "gallery/industries/claims-triage-operating-model.opf.json#3": {
+      "sha256": "c4c81045b1b20a7321a230a2eb647adf361ad0d85db970fa1fbd5804369b6d2c",
+      "bytes": 4798
+    }
+  }
+}

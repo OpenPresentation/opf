@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "source": {
+    "repository": "OpenPresentation/opf",
+    "path": "examples",
+    "sha256": "eebb6a52654654684cd5a06aac685b75a5f324018e4e8951e7cec0d361d1b5d6",
+    "decks": 129
+  },
+  "format": "png-sha256",
+  "scale": 0.25,
+  "systemFonts": false
+}

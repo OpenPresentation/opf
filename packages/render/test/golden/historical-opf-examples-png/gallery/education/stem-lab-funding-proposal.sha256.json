@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/education/stem-lab-funding-proposal.opf.json",
+  "entries": {
+    "gallery/education/stem-lab-funding-proposal.opf.json#0": {
+      "sha256": "e3a4f3cdbabd36fb56982616629c4c01dcd547f84e48f92675c58bc8425770a1",
+      "bytes": 3096
+    },
+    "gallery/education/stem-lab-funding-proposal.opf.json#1": {
+      "sha256": "ea05a35e0738072c60960561df8f9e654e6744d78d17d783cc6a6f4d0a131324",
+      "bytes": 6297
+    },
+    "gallery/education/stem-lab-funding-proposal.opf.json#2": {
+      "sha256": "e9a2a01f942a3a023fb8027e631b7b71efd3cc01eda4641d539146bb12aba0d9",
+      "bytes": 3083
+    },
+    "gallery/education/stem-lab-funding-proposal.opf.json#3": {
+      "sha256": "7e56254233c4cc58b6b1b04e73ed38ade44e3f663839c7c3aeacfe4964aa9e97",
+      "bytes": 3963
+    }
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "boundary": "Local candidate, esbuild production minified split ESM, Chromium, HTTP gzip. Bytes separate JavaScript, external fonts and HTML (including inline font data). No native Office or published-artifact claim.",
+  "payloads": {
+    "base": {
+      "svgBytes": 430764,
+      "svgGzipBytes": 228481,
+      "fontRules": 2
+    },
+    "office": {
+      "svgBytes": 430764,
+      "svgGzipBytes": 228481,
+      "fontRules": 2
+    }
+  },
+  "modes": {
+    "standalone": {
+      "htmlGzipBytes": 686617,
+      "jsGzipBytes": 0,
+      "fontRequests": [],
+      "noJavaScriptPixelMatch": true
+    },
+    "shared": {
+      "htmlGzipBytes": 229260,
+      "jsGzipBytes": 0,
+      "fontRequests": [],
+      "noJavaScriptPixelMatch": true
+    },
+    "external": {
+      "htmlGzipBytes": 1021,
+      "jsGzipBytes": 0,
+      "fontRequests": [
+        {
+          "path": "/ssr-font-700.ttf",
+          "bytes": 159900,
+          "gzipBytes": 96901
+        },
+        {
+          "path": "/ssr-font-400.ttf",
+          "bytes": 159108,
+          "gzipBytes": 94727
+        }
+      ],
+      "noJavaScriptPixelMatch": true
+    },
+    "immediate": {
+      "htmlGzipBytes": 229286,
+      "jsGzipBytes": 500021,
+      "fontRequests": [
+        {
+          "path": "/opf-fonts/base/roboto/400Regular/Roboto_400Regular.ttf",
+          "bytes": 159108,
+          "gzipBytes": 94727
+        },
+        {
+          "path": "/opf-fonts/base/roboto/700Bold/Roboto_700Bold.ttf",
+          "bytes": 159900,
+          "gzipBytes": 96901
+        }
+      ],
+      "jsRequests": [
+        {
+          "path": "/bundle/immediate.js",
+          "bytes": 73,
+          "gzipBytes": 79
+        },
+        {
+          "path": "/bundle/chunk-FWKLO47H.js",
+          "bytes": 18607,
+          "gzipBytes": 6909
+        },
+        {
+          "path": "/bundle/chunk-ZTQL74YR.js",
+          "bytes": 1607389,
+          "gzipBytes": 493033
+        }
+      ],
+      "measuredUpgradePixelMatch": true
+    },
+    "deferredBeforeUpgrade": {
+      "htmlGzipBytes": 229322,
+      "jsGzipBytes": 199,
+      "fontRequests": []
+    },
+    "deferred": {
+      "htmlGzipBytes": 229322,
+      "jsGzipBytes": 500355,
+      "fontRequests": [
+        {
+          "path": "/opf-fonts/base/roboto/400Regular/Roboto_400Regular.ttf",
+          "bytes": 159108,
+          "gzipBytes": 94727
+        },
+        {
+          "path": "/opf-fonts/base/roboto/700Bold/Roboto_700Bold.ttf",
+          "bytes": 159900,
+          "gzipBytes": 96901
+        }
+      ],
+      "jsRequests": [
+        {
+          "path": "/bundle/deferred.js",
+          "bytes": 230,
+          "gzipBytes": 199
+        },
+        {
+          "path": "/bundle/element-NGXW425J.js",
+          "bytes": 293,
+          "gzipBytes": 214
+        },
+        {
+          "path": "/bundle/chunk-FWKLO47H.js",
+          "bytes": 18607,
+          "gzipBytes": 6909
+        },
+        {
+          "path": "/bundle/chunk-ZTQL74YR.js",
+          "bytes": 1607389,
+          "gzipBytes": 493033
+        }
+      ],
+      "measuredUpgradePixelMatch": true
+    }
+  },
+  "offlineStandalonePixelMatch": true
+}

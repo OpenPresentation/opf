@@ -1,0 +1,27 @@
+import assert from "node:assert/strict";
+import {loadFonts} from "../dist/fonts-node.js";
+import {OPFFontError} from "../dist/fonts.js";
+import {resolvePresentation, toPng, toSvg} from "./catalog-harness.mjs"; // FA-23: registers the gallery snapshot (the documents name gallery records)
+const handle=await loadFonts({pack: 'base'}),fonts=handle.registry;
+const style={fontFamily:"Roboto",fontWeight:400};
+const measure=fonts.textMeasurement.measure;
+assert.ok(measure("WWW",25,style)>measure("iii",25,style)*3);
+assert.equal(measure("Hello",25,style),measure("Hello",50,style)/2);
+assert.throws(()=>measure("hello",25,{...style,fontFamily:"Not installed"}),OPFFontError);
+assert.throws(()=>measure("你好",25,style),OPFFontError);
+await assert.rejects(loadFonts({pack:'none',faces:[{data:new Uint8Array([0,1,2])}]}),OPFFontError);
+const fallback=(await loadFonts({pack: 'base', fallbackFamily:"Roboto"})).registry;
+assert.equal(fallback.textMeasurement.resolveStyle({...style,fontFamily:"Aptos"}).fontFamily,"Roboto");
+assert.equal(fallback.substitutions[0].requestedFamily,"Aptos");
+fallback.clearSubstitutions();assert.deepEqual(fallback.substitutions,[]);
+const deck={design:{fontScheme:"roboto"},slides:[{title:"Measured typography",text:"AVATAR iii WWW office affine. ".repeat(16)}]};
+const options={fonts:handle};
+const svg=toSvg(deck, 1,options);
+assert.match(svg,/@font-face/);assert.match(svg,/data:font\/ttf;base64,/);
+assert.deepEqual(svg,toSvg(deck, 1,options));
+const png=await toPng(svg,{fonts:handle});
+assert.ok(png.length>1000);
+const geometry=resolvePresentation(deck,options).slides[0].geometry;
+for(const item of geometry.items)if(item.text)for(const line of item.text.lines)assert.ok(measure(line,item.text.fontSize,item.textStyle)<=item.box.width+0.01);
+assert.throws(()=>toSvg(deck, 1,{fonts:{embeddedFonts:[{family:'bad";}',weight:400,dataUrl:'https://example.com/font.ttf'}]}}));
+console.log("Fonts: actual advances, scaling, strict missing fonts/glyphs, explicit substitution, embedding and raster output passed.");

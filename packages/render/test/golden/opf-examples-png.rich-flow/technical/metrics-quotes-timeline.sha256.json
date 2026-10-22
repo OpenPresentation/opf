@@ -1,0 +1,17 @@
+{
+  "deck": "technical/metrics-quotes-timeline.opf.json",
+  "entries": {
+    "technical/metrics-quotes-timeline.opf.json#0": {
+      "sha256": "df9aacf77e87a5e80394347bf81497d0a38dfde86093e732dd9885d9e17318da",
+      "bytes": 4610
+    },
+    "technical/metrics-quotes-timeline.opf.json#1": {
+      "sha256": "498ce04311dbcc3b7ff1101745a735de253e490da66a2f7cecc24428954abd8c",
+      "bytes": 4681
+    },
+    "technical/metrics-quotes-timeline.opf.json#2": {
+      "sha256": "082622eec15316389e2acb6e234d6c4a6818f88d36f3e3be832af067cba15fff",
+      "bytes": 3548
+    }
+  }
+}

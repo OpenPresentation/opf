@@ -1,0 +1,13 @@
+{
+  "deck": "technical/narrative-beats.opf.json",
+  "entries": {
+    "technical/narrative-beats.opf.json#0": {
+      "sha256": "f67058701a76126a1edfbeff7f55571525cebb66be14903ca8c9706fc4f1ec1f",
+      "bytes": 3453
+    },
+    "technical/narrative-beats.opf.json#1": {
+      "sha256": "c10a33c52946f4ac47b6de2a0886aa3f0f600f6d2ce3946968ec9e841deb6b86",
+      "bytes": 5486
+    }
+  }
+}

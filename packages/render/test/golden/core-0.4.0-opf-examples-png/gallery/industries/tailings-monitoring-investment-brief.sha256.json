@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/industries/tailings-monitoring-investment-brief.opf.json",
+  "entries": {
+    "gallery/industries/tailings-monitoring-investment-brief.opf.json#0": {
+      "sha256": "768dee3f8f9f81ea191f3a49f46a1882e160060f1dc5adb052470341293c9415",
+      "bytes": 5758
+    },
+    "gallery/industries/tailings-monitoring-investment-brief.opf.json#1": {
+      "sha256": "2f42ad659eb18a796c0e637c0209ea451f406b7a6b330786d33ff0ab3976e70e",
+      "bytes": 7279
+    },
+    "gallery/industries/tailings-monitoring-investment-brief.opf.json#2": {
+      "sha256": "eac136e76f5039b08d41a09e51b867c619ff2c8efa839d6aac7d5ae4740da948",
+      "bytes": 4058
+    },
+    "gallery/industries/tailings-monitoring-investment-brief.opf.json#3": {
+      "sha256": "8fb9c122acb77a720dfb29786f1722cedb1b16261d5292886b2be5f4d2353355",
+      "bytes": 6293
+    },
+    "gallery/industries/tailings-monitoring-investment-brief.opf.json#4": {
+      "sha256": "006b4f31cb9e233412c4489d91291f08973ef7c380880e38dc13a1f9e1498028",
+      "bytes": 6463
+    },
+    "gallery/industries/tailings-monitoring-investment-brief.opf.json#5": {
+      "sha256": "39e62de56ecb959569c676f7723e890a482f3bf02d928a6ff8efc130725fa7eb",
+      "bytes": 13495
+    },
+    "gallery/industries/tailings-monitoring-investment-brief.opf.json#6": {
+      "sha256": "2bfa212af0b969f8c5941bf2a5cc2faec4e8734f89f0a11f4eabff31737066db",
+      "bytes": 9940
+    },
+    "gallery/industries/tailings-monitoring-investment-brief.opf.json#7": {
+      "sha256": "750ed7e1b8dab65ea54641cccdd1a633020012908ad5d90354eb57659d7cd2ff",
+      "bytes": 3730
+    },
+    "gallery/industries/tailings-monitoring-investment-brief.opf.json#8": {
+      "sha256": "cee2b8bf97970d51cb912ec8ab996807cd60fd4addd58dc6d25910866a9a5a71",
+      "bytes": 4630
+    },
+    "gallery/industries/tailings-monitoring-investment-brief.opf.json#9": {
+      "sha256": "a885017e899ae89e14deb3ce4e20928415fa08cce88ff441a302b3dba396204a",
+      "bytes": 10760
+    }
+  }
+}

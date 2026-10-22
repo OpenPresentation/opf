@@ -1,0 +1,47 @@
+{
+  "upstream": {
+    "package": "@expo-google-fonts/open-sans",
+    "version": "0.4.2",
+    "source": "https://www.npmjs.com/package/@expo-google-fonts/open-sans/v/0.4.2",
+    "integrity": "sha512-gvhPqLXYnltWgll3iBwRGUwf5yN2HCh4mgQmFoQ8oU66LTs23oX4N7T3t0BDsKfP/1Z8F8+4c7wSkA11Nnk4kA=="
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "fbbbcfef55318de350562559b671360de6d597112ecc5c73881b05092db89602",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2020 The Open Sans Project Authors (https://github.com/googlefonts/opensans)",
+  "faces": [
+    {
+      "file": "OpenSans_400Regular.ttf",
+      "family": "Open Sans",
+      "weight": 400,
+      "italic": false,
+      "sha256": "33e93bec67d91c396876db50694213802a39e43a911bb5c22322f0dbdf4d5e43",
+      "npmFile": "400Regular/OpenSans_400Regular.ttf"
+    },
+    {
+      "file": "OpenSans_400Regular_Italic.ttf",
+      "family": "Open Sans",
+      "weight": 400,
+      "italic": true,
+      "sha256": "dd74eb2d271b57ef5c382a97403818715bfb6b1d53d7fa6da9c88336763651fb",
+      "npmFile": "400Regular_Italic/OpenSans_400Regular_Italic.ttf"
+    },
+    {
+      "file": "OpenSans_700Bold.ttf",
+      "family": "Open Sans",
+      "weight": 700,
+      "italic": false,
+      "sha256": "5f4c6f0c6beae94863a099a7a538059c480f91587f1abffc06552e9fa3a44f40",
+      "npmFile": "700Bold/OpenSans_700Bold.ttf"
+    },
+    {
+      "file": "OpenSans_700Bold_Italic.ttf",
+      "family": "Open Sans",
+      "weight": 700,
+      "italic": true,
+      "sha256": "c7e0a936ff0f08b6726cf205126a5e6dd6ae1340111325f7e86cbba1408e82d7",
+      "npmFile": "700Bold_Italic/OpenSans_700Bold_Italic.ttf"
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+package	Run npm test	﻿2026-09-14T21:33:44.1138892Z ##[group]Run npm test
+package	Run npm test	2026-09-14T21:33:44.1139354Z ^[[36;1mnpm test^[[0m
+package	Run npm test	2026-09-14T21:33:44.1139814Z shell: sh -e {0}
+package	Run npm test	2026-09-14T21:33:44.1140151Z env:
+package	Run npm test	2026-09-14T21:33:44.1140969Z   OPF_GOLDEN_BASELINE: /home/runner/work/opf-render/opf-render/opf-render/test/golden/opf-examples-png.timeline.sha256.json
+package	Run npm test	2026-09-14T21:33:44.1142258Z   PNPM_HOME: /github/home/setup-pnpm/node_modules/.bin
+package	Run npm test	2026-09-14T21:33:44.1142780Z ##[endgroup]
+package	Run npm test	2026-09-14T21:33:44.2775523Z 
+package	Run npm test	2026-09-14T21:33:44.2776182Z > @openpresentation/opf-render@0.7.0 test
+package	Run npm test	2026-09-14T21:33:44.2778997Z > npm run build && node test/furniture.mjs && node test/font-outlines.mjs && node test/accepted-text.mjs && node test/image-placeholders.mjs && node test/chart-colors.mjs && node test/smoke.mjs && node test/webp.mjs && node test/jpeg-orientation.mjs && node test/fonts.mjs && node test/office-fonts.mjs && node test/timeline.mjs && node test/quote-footer.mjs && node test/shared-quote.mjs && node test/rich-trace.mjs && node test/rich-table.mjs && node test/golden-gate.mjs && node test/golden.mjs && node test/fonts-browser.mjs && node test/design-preview.mjs && npm run build:browser-check && npm run test:styled-table
+package	Run npm test	2026-09-14T21:33:44.2782085Z 
+package	Run npm test	2026-09-14T21:33:44.3764497Z 
+package	Run npm test	2026-09-14T21:33:44.3765336Z > @openpresentation/opf-render@0.7.0 build
+package	Run npm test	2026-09-14T21:33:44.3765984Z > node scripts/build.mjs
+package	Run npm test	2026-09-14T21:33:44.3766265Z 
+package	Run npm test	2026-09-14T21:33:45.0104945Z Furniture renderer passed: shared readable fields, combined image/text, generated metadata, fit images, local disabling and unresolved-content rejection.
+package	Run npm test	2026-09-14T21:33:46.1101517Z Font outlines: 99 pinned face/text combinations preserve advances, scaling and cache isolation; empty ink, negative bearings, substitution and strict errors pass.
+package	Run npm test	2026-09-14T21:33:47.2350962Z Accepted text: 48 wide/portrait/card/alignment/scalar/rich cases consume exact accepted fits and styles; overflow diagnostics and strict rejection pass.
+package	Run npm test	2026-09-14T21:33:47.5650868Z Image placeholders passed: 7 source-preserving theme, bounded-label/icon, accessible-description, alias override and resolver cases; opacity preserved and asset failures explicit.
+package	Run npm test	2026-09-14T21:33:47.9150865Z Chart colors passed: 40 simple/catalog paths, light/dark/opposite surfaces, retained alpha and unresolved data; no source mutation.
+package	Run npm test	2026-09-14T21:33:49.5940334Z opf-render smoke passed (126 OPF corpus deck(s) rendered).
+package	Run npm test	2026-09-14T21:33:50.7119480Z WebP raster passed: 23 PNG/PDF and fit/crop cases; independent pixels, PDF image streams, alpha/EXIF/first frame, SVG input forms, errors and unchanged source SVG.
+package	Run npm test	2026-09-14T21:33:51.3240476Z JPEG orientation passed: 24 raster/PDF and fit/crop cases across all eight orientations; independent Pillow pixels (max channel difference 2), original orientation-1 bytes and path-specific errors.
+package	Run npm test	2026-09-14T21:33:51.9435688Z Fonts: actual advances, scaling, strict missing fonts/glyphs, explicit substitution, embedding and raster output passed.
+package	Run npm test	2026-09-14T21:33:53.9363764Z Office font policy passed: 24 bundled faces, exact-first lookup, scoped metric claims, theme aliases, explicit approximate fallback, and symbol/math/coverage errors.
+package	Run npm test	2026-09-14T21:33:54.4300500Z Timelines passed: 1/2/4/8 events, wide and portrait slides, measured text and marker containment.
+package	Run npm test	2026-09-14T21:33:57.1448805Z Quote footer passed: 8 fitted long quotes retain separation, 2 oversized cases diagnose/reject in strict mode across wide and portrait canvases.
+package	Run npm test	2026-09-14T21:33:58.1601803Z Shared quote SVG: 4 exact accepted layouts/styles with no extra measurement, reasoned overflow, strict rejection and no tiny-cell omission.
+package	Run npm test	2026-09-14T21:33:58.4763551Z Rich trace passed: leading/trailing blank lines, CRLF, cross-run offsets and measured heights.
+package	Run npm test	2026-09-14T21:33:58.8840613Z Rich table renderer passed: formatted cell/header runs, trace paths, links, empty rich cells, PNG output and strict overflow.
+package	Run npm test	2026-09-14T21:34:01.6351953Z Golden gate passed: missing baseline, pixel drift, source drift, non-mutating candidate generation and empty-corpus rejection.
+package	Run npm test	2026-09-14T21:34:10.1956075Z node:internal/modules/run_main:107
+package	Run npm test	2026-09-14T21:34:10.1956757Z     triggerUncaughtException(
+package	Run npm test	2026-09-14T21:34:10.1957124Z     ^
+package	Run npm test	2026-09-14T21:34:10.1957243Z 
+package	Run npm test	2026-09-14T21:34:10.1957818Z AssertionError [ERR_ASSERTION]: 657 raster baselines changed; see /__w/opf-render/opf-render/opf-render/artifacts/golden/diff.json
+package	Run npm test	2026-09-14T21:34:10.1958643Z 
+package	Run npm test	2026-09-14T21:34:10.1958737Z 657 !== 0
+package	Run npm test	2026-09-14T21:34:10.1958867Z 
+package	Run npm test	2026-09-14T21:34:10.1959135Z     at file:///__w/opf-render/opf-render/opf-render/test/golden.mjs:70:10 {
+package	Run npm test	2026-09-14T21:34:10.1959547Z   generatedMessage: false,
+package	Run npm test	2026-09-14T21:34:10.1959809Z   code: 'ERR_ASSERTION',
+package	Run npm test	2026-09-14T21:34:10.1960059Z   actual: 657,
+package	Run npm test	2026-09-14T21:34:10.1960280Z   expected: 0,
+package	Run npm test	2026-09-14T21:34:10.1960500Z   operator: 'strictEqual',
+package	Run npm test	2026-09-14T21:34:10.1960759Z   diff: 'simple'
+package	Run npm test	2026-09-14T21:34:10.1960978Z }
+package	Run npm test	2026-09-14T21:34:10.1961093Z 
+package	Run npm test	2026-09-14T21:34:10.1961187Z Node.js v24.20.0
+package	Run npm test	2026-09-14T21:34:10.2255366Z ##[error]Process completed with exit code 1.

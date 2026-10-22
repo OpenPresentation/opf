@@ -1,0 +1,9 @@
+<svg aria-label="Chart Primary Override" data-opf-path="slides.2" height="720" role="img" viewBox="0 0 1280 720" width="1280" xmlns="http://www.w3.org/2000/svg">
+<rect data-opf-path="slides.2.design.background" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
+<g data-opf-path="slides.2.title"><text data-opf-line-boundary="end" data-opf-path="slides.2.title" data-opf-source-end="22" data-opf-source-next-start="22" data-opf-source-start="0" fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Chart Primary Override</text></g>
+<g data-opf-path="slides.2.chart"><rect data-opf-path="slides.2.chart" fill="#F3F7FF" height="514.92" stroke="#E3ECF3" stroke-width="1" width="1164.8" x="57.6" y="147.48"/>
+<polyline data-opf-path="slides.2.chart.data" fill="none" points="85.6,328.453 1194.4,175.48" stroke="#015DFE" stroke-width="4"/>
+<circle cx="85.6" cy="328.453" data-opf-path="slides.2.chart.data.rows.0" fill="#015DFE" r="5"/>
+<circle cx="1194.4" cy="175.48" data-opf-path="slides.2.chart.data.rows.1" fill="#015DFE" r="5"/>
+<g data-opf-path="slides.2.chart.data"><text data-opf-line-boundary="end" data-opf-path="slides.2.chart.data" data-opf-source-end="6" data-opf-source-next-start="6" data-opf-source-start="0" fill="#000000" font-family="Aptos, sans-serif" font-size="12" font-weight="400" style="white-space:pre" text-anchor="middle" x="640" xml:space="preserve" y="654.4">W1  W2</text></g></g>
+</svg>

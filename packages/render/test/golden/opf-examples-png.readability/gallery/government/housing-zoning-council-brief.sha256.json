@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/government/housing-zoning-council-brief.opf.json",
+  "entries": {
+    "gallery/government/housing-zoning-council-brief.opf.json#0": {
+      "sha256": "c59c0a5fbdf643d2effdc554413b82a0a3dc0a28532ee37beb523bba1d5a5d27",
+      "bytes": 5354
+    },
+    "gallery/government/housing-zoning-council-brief.opf.json#1": {
+      "sha256": "e32071c8b483b6d795b29d8a08585fb18f9aa7cd8a25030e90e7cad982849c8d",
+      "bytes": 7339
+    },
+    "gallery/government/housing-zoning-council-brief.opf.json#2": {
+      "sha256": "b90e53a2831550524893954b96f8b8162ab04e63ac46a2e5305c9eaef5a8eb37",
+      "bytes": 5048
+    },
+    "gallery/government/housing-zoning-council-brief.opf.json#3": {
+      "sha256": "ecba39b21d5d8ccb185ecb629e054cd43347130d9612ac6ecced72e8cf23be58",
+      "bytes": 6794
+    },
+    "gallery/government/housing-zoning-council-brief.opf.json#4": {
+      "sha256": "6451a5c50a1370c6ee70a54d4675b63ca61b4f646bf3fd4e5c0082556113be7d",
+      "bytes": 5945
+    },
+    "gallery/government/housing-zoning-council-brief.opf.json#5": {
+      "sha256": "141197d164d2b737590020bc288676a15bdabdc819cf2ff9ddab5dd6094abf41",
+      "bytes": 15756
+    },
+    "gallery/government/housing-zoning-council-brief.opf.json#6": {
+      "sha256": "abaf7546b880434384892db4470d697be27c84bc98f0fdfb376de85c6f197eb6",
+      "bytes": 8559
+    },
+    "gallery/government/housing-zoning-council-brief.opf.json#7": {
+      "sha256": "810e26055ea79a50c05a4bb9f33308d9f9ccf92fa4780ab8497cdb8562de97fd",
+      "bytes": 5939
+    },
+    "gallery/government/housing-zoning-council-brief.opf.json#8": {
+      "sha256": "57500da043d77d1b1bb0bd98a2c44beb6a5da8d8e576080cbfa686f47ebae59e",
+      "bytes": 5226
+    },
+    "gallery/government/housing-zoning-council-brief.opf.json#9": {
+      "sha256": "2396c3307ee68ae27b70809c89d57801051a26be99b0f4e46af531ff69db4ed2",
+      "bytes": 10273
+    }
+  }
+}

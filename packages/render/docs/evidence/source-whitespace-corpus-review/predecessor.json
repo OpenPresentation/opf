@@ -1,0 +1,2094 @@
+{
+  "renderer": "c92198b0d0acc94892385a8594fe2879461d64b0",
+  "coreCandidate": {
+    "name": "@openpresentation/opf",
+    "version": "0.4.0-preview.11",
+    "file": "openpresentation-opf-0.4.0-preview.11.tgz",
+    "sha256": "a092f26d022169c66a216e86401f7573c77985c67bd83b87246a953717ff54c6",
+    "bytes": 2340187
+  },
+  "candidateEvidence": "core docs/evidence/mac-rich-flow/followup/mac-node24-candidate-manifest.json at d1660790a7a60e7083b533075230f193058a4e50",
+  "retainedCoreSnapshot": {
+    "file": "predecessor-core-snapshot.tgz",
+    "sha256": "66ca97b59a7accd3982cca66f41aa28b40ca7fc020ac49fb174674f0e124f8a9",
+    "note": "Repacked snapshot of the exact extracted predecessor candidate. Archive metadata differs from the original candidate tarball; all extracted file bytes are retained.",
+    "files": [
+      {
+        "file": "LICENSE",
+        "sha256": "6665f92bf003fd21ca6893e90c757766b7b3ee95735aedada83de2e133b6fdf4"
+      },
+      {
+        "file": "README.md",
+        "sha256": "13a1a2ded15f3fa454bd39ad53889c051fb3b149f68cc64698fd0b62473d8075"
+      },
+      {
+        "file": "dist/catalogs-BnnkUX9O.d.ts",
+        "sha256": "f7d971f05c1bd8b7ce91ba97facef39cbd845e6471bc40c422d1c2073b0bf815"
+      },
+      {
+        "file": "dist/catalogs.d.ts",
+        "sha256": "ada6d51aefc77f449a62e3899d4ef04dd4e169a67de1cd39ae5fccc2e82d06b0"
+      },
+      {
+        "file": "dist/catalogs.js",
+        "sha256": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739"
+      },
+      {
+        "file": "dist/chunk-AFEV7YI7.js",
+        "sha256": "49b47b80d21d17e3e1839da05e0257db3db378ae371b6d3a8f7e729d7468104c"
+      },
+      {
+        "file": "dist/chunk-DA4NWAQV.js",
+        "sha256": "ac4e9b8e38a998aebb074459f0788dcba6cf13f57e5f5b3f1ace472e0161f2cb"
+      },
+      {
+        "file": "dist/chunk-GQSK3T7X.js",
+        "sha256": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45"
+      },
+      {
+        "file": "dist/chunk-NT3IYAYX.js",
+        "sha256": "193a39ad7d395d4f26af96e24aa9d23617afe3f63c9f71ec8b18d2a16c68bf97"
+      },
+      {
+        "file": "dist/chunk-OZULJBSG.js",
+        "sha256": "9e3ce45dc68d39c646449baf4ec9aad7b92d3f69b85a3dfe37540d13820d0d1e"
+      },
+      {
+        "file": "dist/chunk-PIQXLBBJ.js",
+        "sha256": "818578357a214f76a743db8cf63c0903825923e1ba970abf68c21912e59893ba"
+      },
+      {
+        "file": "dist/chunk-SOSOBKQ2.js",
+        "sha256": "b2bcaf1f0e8725c9a8f3fff9b5c996c4e7e63c6bb8dd4d13c2d7609105b02915"
+      },
+      {
+        "file": "dist/chunk-TWMRZ43O.js",
+        "sha256": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4"
+      },
+      {
+        "file": "dist/composition.d.ts",
+        "sha256": "42f44795cfa34f4ef1a931e9ebbcb8138b3c37fa9629b0eaa1791cbd0f4e9498"
+      },
+      {
+        "file": "dist/composition.js",
+        "sha256": "a2d69048632dd6ff5ba4db397acd86e8c9c5c16365633319a24999466ebbd586"
+      },
+      {
+        "file": "dist/data.d.ts",
+        "sha256": "e3a6322a1445932bc6236395999d22ec8b533c5a7f453e8a6c9ec8d0f3d3d142"
+      },
+      {
+        "file": "dist/data.js",
+        "sha256": "ae68ff3088ddcea772573952c572a3c58b8815086c9f81e57939d45848c64b95"
+      },
+      {
+        "file": "dist/docs.d.ts",
+        "sha256": "80367c579659357c6c0fde511706a8512f0152a589fcaaac2d78bf2b41aa94f7"
+      },
+      {
+        "file": "dist/docs.js",
+        "sha256": "24c0314d54ca4e55d5962957b5bf84ed1a095312528b0c87773e89e8f7c04f32"
+      },
+      {
+        "file": "dist/examples.d.ts",
+        "sha256": "ce57766896939fe997cb077fee46a627de96fdc93ee5511b9a05ccbaf458fc32"
+      },
+      {
+        "file": "dist/examples.js",
+        "sha256": "c69ccdcfaa0c4157f27174a3814ac3b6a1874440029b02d27a7fc971fc05fe1a"
+      },
+      {
+        "file": "dist/index.d.ts",
+        "sha256": "2cd4f2c4d40d596271ed1380dc4c38ff81ad581fe7c3f8f40265da56f58bccd1"
+      },
+      {
+        "file": "dist/index.js",
+        "sha256": "258b7b2b6d564158f82fd4a45848dc53b8b506d74b64c96140e2ff23d357160c"
+      },
+      {
+        "file": "dist/pagination.d.ts",
+        "sha256": "42592564e2132e027015f38d1bb866f1a2994edefebd05b25f2646873d0d9b0e"
+      },
+      {
+        "file": "dist/pagination.js",
+        "sha256": "5fad5aee183a2a5fda16fefa31e6b50c0491528ca111bee80081640bd60b50e4"
+      },
+      {
+        "file": "dist/presentation-BMTdX6O1.d.ts",
+        "sha256": "df606e76151db8eefd175d4819e67c3dfea86dc7ef4c0ff1f78f0c9dd804f7b9"
+      },
+      {
+        "file": "dist/previews.d.ts",
+        "sha256": "0c116207a43cc54b1224b55e043ec92846a213b84c52d01ac795562d6c61adb4"
+      },
+      {
+        "file": "dist/previews.js",
+        "sha256": "043037d2d5dfec4d69072415032818d6a6c5e686938fcd644a4f103286033950"
+      },
+      {
+        "file": "dist/repo-readme.d.ts",
+        "sha256": "efa7477233f1982692546f2aaa2b2133546021755b66139970b136a724b45455"
+      },
+      {
+        "file": "dist/repo-readme.js",
+        "sha256": "a8177f828c853554ce636a0ca702efb63d79f96175f5440f35c32e6834ac215a"
+      },
+      {
+        "file": "dist/schemas--QRVBhU1.d.ts",
+        "sha256": "e6bb391134730687afcd5c131d1cca7ac96f737ae59404f82928bd28664dba2b"
+      },
+      {
+        "file": "dist/schemas.d.ts",
+        "sha256": "454f70f6a02b743d7db5c3250e867f161a4118ceb2225cc5bb60f168feb971f5"
+      },
+      {
+        "file": "dist/schemas.js",
+        "sha256": "52f40eb788685649099577a9241adb75c5f18b4a5c8cf1e55215b6fa3f52105c"
+      },
+      {
+        "file": "dist/spec/README.md",
+        "sha256": "4b672bf196dc0537f0879f2d6d437d36f830ab2ea1b40d32ab1d21adbf542f1b"
+      },
+      {
+        "file": "dist/spec/catalogs/audiences/all-hands.json",
+        "sha256": "9ba2d3c8aa291bfb4f89245c2827b360e011d11f2ccf91d7673508fab5aae28f"
+      },
+      {
+        "file": "dist/spec/catalogs/audiences/board.json",
+        "sha256": "120d84f84571e11e7d7c124154489cb9ff5d5ccb991a523d5ffd5bece8dca088"
+      },
+      {
+        "file": "dist/spec/catalogs/audiences/candidates.json",
+        "sha256": "4ee5655e0829dd79273e56d73f1cff4f27f4dc53431ced14d76bbf9c61380dd5"
+      },
+      {
+        "file": "dist/spec/catalogs/audiences/customers.json",
+        "sha256": "29c133badb89080d575485f253fb3f2d1e11fb67d0dc5d2a5a817187c08f686b"
+      },
+      {
+        "file": "dist/spec/catalogs/audiences/engineering-team.json",
+        "sha256": "46b17ce8efb56da87b85bd5a371f0ffc5c0c4201c0acadba41eb2f5a4109037c"
+      },
+      {
+        "file": "dist/spec/catalogs/audiences/executives.json",
+        "sha256": "ee89ce155a4bcdfda5d277d90d537939ecc3055367f86981d4e76bc40ceefeef"
+      },
+      {
+        "file": "dist/spec/catalogs/audiences/index.json",
+        "sha256": "cd50371a42634fca29d486ff874402a9e615892425a06505a33399e1d939e05a"
+      },
+      {
+        "file": "dist/spec/catalogs/audiences/investors.json",
+        "sha256": "71cbe47ab72ac1eeb43db575b65b59c09c7813c5a3a442c1f156d301a19c4ea4"
+      },
+      {
+        "file": "dist/spec/catalogs/audiences/marketing-team.json",
+        "sha256": "a3b6ab645d7fe802a1e59c34f76eaa1339f2d2e9fe00ea37465adce375f75e41"
+      },
+      {
+        "file": "dist/spec/catalogs/audiences/regulators.json",
+        "sha256": "96bf7da430847189bdfd29616c88222e2e8ec35b25e1dde2eb16e1555c7e45ca"
+      },
+      {
+        "file": "dist/spec/catalogs/audiences/sales-team.json",
+        "sha256": "3ba10bb4c4305c34b73193150a071094a91ac51ffeca275035863a0c807764d2"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-bullet-bar-2x.json",
+        "sha256": "d95b0e3ee76168210a2df4a8892e9ddd7f39f12a31b0da9de59f451a0a31bfc4"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-bullet-bar-3x.json",
+        "sha256": "eb33779c0239bc190371446e2165c69b3e40312290cf629da1f944fdf88eb58a"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-bullet-bar.json",
+        "sha256": "73cfd643b82006921d6bf1d174b05e243078459ae8868b6c5b9504dfa52cdb26"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-bullet-column-2x.json",
+        "sha256": "02e8eabf35069fab8a92ecb8da33e4b5f7a6279fe46775c9683f34962c572f47"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-bullet-column-3x.json",
+        "sha256": "99aa740756951d325b6e69077edb9ce474267b16f89157e3afb79f1340091a27"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-bullet-column.json",
+        "sha256": "5eceb8249fd06019387be4bf55104bb6bf04ff7e49758e8c3e5a484bd741ed07"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-progress-bar.json",
+        "sha256": "167ca3640fb35e5f4921c750155f965edfa79539c23253811f58dc0e79ca8ce8"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-stacked-area-2x.json",
+        "sha256": "7d9e39a514a78b6a3394b2d275ad405effd2bb884734ec8963d02ec8f7533852"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-stacked-area-3x.json",
+        "sha256": "bb44ea0034842562b2379c9c81d2b9e6c1bd67866531b3e94c6c8986085e41cc"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-stacked-bar-2x.json",
+        "sha256": "b03a2fad1ff26dc9e7e24254648ba68357791189e9db92fa450b243111b8312c"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-stacked-bar-3x.json",
+        "sha256": "10dbe82c7799138382b69b2269d5b8994f0f1fa1774ea1f2988a9dd1b5bd07dc"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-stacked-column-2x.json",
+        "sha256": "69bbeb7cbe56bf709f0e0e18f69a7fc8499333b8bc16ffd2db61338915f048ad"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/100pct-stacked-column-3x.json",
+        "sha256": "a0c9fe9d007ab29fb5c8c366e1381417d7dc5a180c5546b6df7050f106051cf8"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/area.json",
+        "sha256": "cf9e5870d6fc3734b23e48b1bd6e7d7e3045684782251e6fca812c22f5caed0c"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/australia.json",
+        "sha256": "a195a190b393bf8d4fa150189bd59aea8814e16ed6e691d00832498dcc2018d0"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/bar.json",
+        "sha256": "b04cc651040e59806634642f7ea6a3472673b9a5c83bde80ef3c5a643483ba31"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/box-and-whisker-2x.json",
+        "sha256": "1c1e0e745567976afcf15a4ad6420108ad7326f1fddf5665666b05e52c674982"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/box-and-whisker-3x.json",
+        "sha256": "ea70e73714a8b9f038868b369755245e4e7285c5be2c233749852d650334b5e1"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/box-and-whisker.json",
+        "sha256": "d5754a6f9927a95d218b7d81601a1f1d3c18ae3ccfdb3ee5c4a9d9d48535fdcb"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/bullet-bar-2x.json",
+        "sha256": "ffc8644bfe9ef0135bea958fc3e994067810df4235ebe3e14ddf800b6af972c6"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/bullet-bar-3x.json",
+        "sha256": "c0f5eb0809cf46c91334a22891eea15d24a94d57a4dd0b60fbf1319f89c15cdd"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/bullet-bar.json",
+        "sha256": "fc290febd0f5d8376c04caf198777fc5c11156ae69324c54edd30e73e62596eb"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/bullet-column-2x.json",
+        "sha256": "4860776b8e221e6a961c5ec36f227875ca21e7410d366032a51154ad75b27e4e"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/bullet-column-3x.json",
+        "sha256": "63c8b7efb9fd98d65403ecb03f944ec9c4662e40bf947cb7e610e02248d3d7b7"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/bullet-column.json",
+        "sha256": "74325e56c579183feb810f698c9f59ddb603ecb368f80ff2f3e9e9729ced5bc8"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/canada.json",
+        "sha256": "d26ece629cc8e327c3dc11c433f062ed7154c9567b08eb30295d0bfdbdf0f0dd"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/clustered-bar-2x.json",
+        "sha256": "33acb68bdb16dd9e3ab150bc38e08dc3c9226baa608b4881eb5bf4728243dcc3"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/clustered-column.json",
+        "sha256": "1db8781e5cac1c0de300a3ef4d266117b7862649998d0e82ac8737a3a6d90c43"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/column.json",
+        "sha256": "267adc08c0583b309ea4f80bd2236351bfa5ab21487488284a121ec01f5abf96"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/dot-plot-2x.json",
+        "sha256": "dc5e819307c533d2d2401cbfb8dc92118b2b78871e5ef4903130b59567446d4a"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/dot-plot-3x.json",
+        "sha256": "11b2a15f6c904c15256cfe3114594a014b5dff469ed4a939058ced7c48c459f0"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/dot-plot-4x.json",
+        "sha256": "5990b359380b6335f01b8687016278570637fa6b10e70ca856dad926892ebb75"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/dot-plot-5x.json",
+        "sha256": "67085f350c0be4c892cccd5f3f0dd607e86ae48597cbee63c0749d731b9132a3"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/dot-plot-6x.json",
+        "sha256": "c2d6b04b6f2462166ab9d298c8b1b441ec19d83e64db2bb2f08f15adfe28dcfb"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/dot-plot.json",
+        "sha256": "412ff323d38bac3db8b092a08dc5a89e94f948fbe0ea3f352ec80a5e70cf0337"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/doughnut.json",
+        "sha256": "a2440360e43e8bfdae27e25c2548b90cd8b46a38a225b2c2d6910dbc3a4d991e"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/dumbbell.json",
+        "sha256": "95f97756005f30deb6ef5d886db11d9df0a5f98f98a27506494606604ffe5ad2"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/filled-radar.json",
+        "sha256": "cf66bdf9ccc4f3d245eb37a5ae908360e12edbeb5b6da56af5df648095226986"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/funnel.json",
+        "sha256": "0479fa82e527aa2a6a1397efa371ddae33e97d695150a26ed715d25c01402c0e"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/histogram.json",
+        "sha256": "77f25eabaa18c10f12d73f7d33c90f49723bb881dd95599d048455407a35fb96"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/index.json",
+        "sha256": "75694060511b160f36e4906f2c3b4f1d91eba337bfe25cc7b8d2a48071d96b8f"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/line-2x.json",
+        "sha256": "9c14812a1d0d6d9bd92dfc31df8f9bf602a8f0977970874bcd8670cb4520e36b"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/line-3x.json",
+        "sha256": "22ed84c76eed2aa21f9ae3bb5d719e6c32121749cc45d827d325063623b9fc85"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/line-with-high-low-and-markers.json",
+        "sha256": "11287059838cec223914b1b4d4748d51e2f7c0ceebc8283cea5b1bda5ab2fe43"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/line-with-high-low.json",
+        "sha256": "af895bcff322f7cb43a0405ed16878fbdff0618318762088091405117dd85611"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/line-with-markers-2x.json",
+        "sha256": "e6596538f551549059a17bccd0c3ceb061ec5e9fba7170a825ffd7a6f3bfaedc"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/line-with-markers-3x.json",
+        "sha256": "0e5badc1547ad2728e92530f5df0686595b03cc0bcd230fa5fee59d2321961a5"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/line-with-markers.json",
+        "sha256": "5cf8fe0e7dee42a8c9b18f21859678fbb38e464bb6dc6f82e800c1388e3ddb7a"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/line.json",
+        "sha256": "e2d4ba9ead3be0868896a53bb9d107be89b9ed6e4d6115aa205f160e1395f177"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/pareto.json",
+        "sha256": "0bed000c845c0c9376962562aa07bbb25bbabfa7abf970d92e53103c5c9f764c"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/pie.json",
+        "sha256": "25dcf0fc79f07305aae5a05fa83707fe335b08c1afea5dc21b9ea67ea94384ad"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/radar-with-markers.json",
+        "sha256": "b68e8cfac1ad36b210bbf1c727871ee96ca5ad8e1d1f6e0d2ab543052723c4d7"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/radar.json",
+        "sha256": "3f04e8fdef8a1a61308c03af77df2aa313f42aa7b07599be580af5c41c991d8d"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/scatter.json",
+        "sha256": "a626b364c733a453b955c1402a24c5c29158ef8a08e0ad9ca73e3b52e6f11ebf"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/sparkline-2x.json",
+        "sha256": "fcd48190622fcaa9f9ddb519b62b3d0fd67d9e04ba83f27bd279459541c6b3bc"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/sparkline-3x.json",
+        "sha256": "e43a064fcd56c97848ef1b2224814d9fed01da42d543d668c9f9a95a10d65fd0"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/sparkline-4x.json",
+        "sha256": "68918fce9899a6cb64d791fd44cc4f61eaf8d495df8c31de35372169494a687d"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/sparkline-5x.json",
+        "sha256": "c2a85bcd8c2487d2ad4cd251ae70fbea44e354a59f3a98705c8bc08b511fb84a"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/sparkline-6x.json",
+        "sha256": "ac50339e83de2c2327a1daa56daed0eb16af1e1d5ee57cd02e0269d4d73ab1d4"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/sparkline.json",
+        "sha256": "cb100cdea7941754e1e8ca75d7742518be5e009227b97286bba1b2158b6a9850"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/stacked-area-2x.json",
+        "sha256": "1fbb1673920bb61c2a5876a6087a036b89c37f0bfa896ef6fdb587f0b85f3f44"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/stacked-area-3x.json",
+        "sha256": "e7000ee5c7443ae738a1d39f8bed62c1f3f22e52f56fa973d9116f7b06aeb462"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/stacked-bar-2x.json",
+        "sha256": "9d7abd28428de269dcd7f8a4e63a53daa07d61d5c841cf0a8b4b1fbc3a305e4f"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/stacked-bar-3x.json",
+        "sha256": "c56e07a43e10ccb7cb6bc4af353f59168faaba81381b68e743e3c5b0e6ccbdcc"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/stacked-column-2x.json",
+        "sha256": "e0582894c7769e1d5d2fe7e8462824db18370b90bc96d55fcd8b84f140a61128"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/stacked-column-3x.json",
+        "sha256": "a46149df413d8a39ac5194df0347fc1d6eb261a2da0b2c933e31103875138107"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/stacked-line-2x.json",
+        "sha256": "bc3b4242090eba12902034b84b713c7ecc44f822d4efba291a27158885cecdae"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/stacked-line-3x.json",
+        "sha256": "9dea2f222d39d0d178dae153a0205f9ee253f5f5042b0cd4e28165c3b8b66f79"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/stacked-line-with-markers-2x.json",
+        "sha256": "3713b2e12caf474b14119a847725d88fd691c6f519605ec9a86e71d651e2d503"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/stacked-line-with-markers-3x.json",
+        "sha256": "558f9d02830bcf0bdd9564f7b1b49309373d7dbfcf1ce1efe702ed350e6eacc1"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/treemap-2x.json",
+        "sha256": "036ed249582363a74fa98793080576df65241406bde7493324f69a67ce05657c"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/treemap-3x.json",
+        "sha256": "4a63a099facf3f019da59ec127953439dc21929e53d7eff008bb6cf5f8e83f3b"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/treemap.json",
+        "sha256": "ef68035134c3c9e500467a5a6e81a028fce5f04ff62ed3420de7bde56005c952"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/united-kingdom.json",
+        "sha256": "ba581c2fcaf76ac21da9c11d3fdf31f492c1c48e5add88f26f64f19764bfeb4b"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/united-states.json",
+        "sha256": "a5c7cd6b78e196834b6252d31ca5892e3abdc81ea60aeae396cb6e3187b79903"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/waterfall.json",
+        "sha256": "4dee78c0bfb718651f16723a34e8c8d6fad47911850d5f5f8dcfda48ade0e39d"
+      },
+      {
+        "file": "dist/spec/catalogs/chart-types/world.json",
+        "sha256": "a95c74002345e63a07352049337e904db9647bd2b940768c575cc6f580d4bfa6"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/black-and-white.json",
+        "sha256": "fb2990591f2617961087442cbae434a3defd2f31940f414d97ea221c02d9e8c8"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/bold-red.json",
+        "sha256": "52b1487dca4239735614f0dd0f39ec158cd97fe8f20012a21a9723e9c9d1cd5d"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/boost.json",
+        "sha256": "a28ef7ca65e072f1bf06535bc82233ce3600555627409a2d4322d44681c6b41c"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/burnt-orange.json",
+        "sha256": "a1bad600c60e9e04c95b476222d7c429f0d3982b9e1a735998b11d09654f3226"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/cool-horizon.json",
+        "sha256": "5b8284045d9be1d74ab8e4109ecb9d0a46c97dba1929785ae2d1f6b5c4d65059"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/corporate-blue.json",
+        "sha256": "dd2dbeb54738eb4872471bb5af6b3d3292eef2b20a2ebf631bcc92c5bbad7812"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/deep-purple.json",
+        "sha256": "c3e43dbd0366f4f1bd6f3812d70eee804b455030e9a1a1ab514f3fa0e7c6a9ec"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/forest-green.json",
+        "sha256": "0a548539a46d68f63d3aa4349e55b5ab70f89e62275fced4a9f1721e42e844ed"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/golden-yellow.json",
+        "sha256": "e843d1c472de000226dbe9a1139b34d7afaee736949c8fee8c3ad8e8f1e44c7c"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/index.json",
+        "sha256": "c0f93c97d62333793632b735d95c35d12b1c81becdb9784d4713f6ca1990402f"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/luxury.json",
+        "sha256": "17fd43143232220ae8704dd5ef36c013c28cbca4b53d3ec5fdec78e9925aceac"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/pastel-red.json",
+        "sha256": "d72d7da765ad6950dd61d1cfbdd1baf96dd8c0b9165db5962b8b1462d3a4b1d1"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/slate-gray.json",
+        "sha256": "230026f928166d2090b9496a3e314100b2f92fcfe1a5e007125af4d45711ab2d"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/steel-blue.json",
+        "sha256": "108d7def4ae98e91c8eeb94b87452fee5cee970d6c31823c5940d297b2540120"
+      },
+      {
+        "file": "dist/spec/catalogs/color-schemes/vibes.json",
+        "sha256": "b2d9fab6f2d87e3fafecc79751d76da920f29d22df1e4b6b87df358d1f69d771"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/angsana-new.json",
+        "sha256": "a3637629cbdbc299a35cd380d31e7f895fa3e6c03ed3ec25ae6cbe5305d689cb"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/aparajita.json",
+        "sha256": "16881c205ff6e8f876c666eeb005ac5f319337eb7861241f360912492d970c36"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/aptos.json",
+        "sha256": "10ea7ab20f77c93b5d978e564f885523a909d508877f690d5e0a8002de05a60b"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/arabic-typesetting.json",
+        "sha256": "8c0c8a512279b552aea143547e34024bcc4af3956eba86077ea7bd3cb33f2d5b"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/arial.json",
+        "sha256": "8f949316e836cabec70a0c33fae428a6fb26178d7358801d0fb21a18682cc3df"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/batang.json",
+        "sha256": "910232d32b4e5de9a47248794f39d367e1b6fed97d7288b62afe2a36128e98dc"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/bookman.json",
+        "sha256": "ddb0d0c8abd9fae4e597807b6f301c2d27be391d69fc61fe60c34d3f366e397a"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/calibri.json",
+        "sha256": "14963078234f38731adb102ad2f6fc0a426aa22266c702e6532235bf5bb02fe7"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/century-schoolbook.json",
+        "sha256": "f5733d6777c0051ccb98cb59ccc3801d66e332b231d49d38bfa35e47b0a9e49a"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/consolas.json",
+        "sha256": "69a4330c9308f5d3e7105795e3604792d019163c979c8725cb9a0c9fc1384468"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/constantia.json",
+        "sha256": "cd3d20d0b8018853da31b5248d52da7bef1484bee509f0e2b568f151a6756532"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/courier-new.json",
+        "sha256": "a0542ef8380b2479a34437fb8ea0575ab12dca5e230b5881d47bac4e871f2c25"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/daunpenh.json",
+        "sha256": "2451335324975e8559de0c75aa25bf86e90b82caea6b29b25a936ff90e610b1c"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/david.json",
+        "sha256": "11a6b7c512f7bfd0749186d5881e168218b776b1a9cd49a3c8202bec88401f50"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/dilleniaupc.json",
+        "sha256": "6ca91d29aaf332f5439242515b99fdfc91fecc4a08f8fdca0b7cdde9a5dc5713"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/fangsong.json",
+        "sha256": "ca5a427171a68fa1c53388e6df4ab81fa1ef7af7cc66c935c0518d6cb69766af"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/garamond.json",
+        "sha256": "6ff10b6e33290a7171d948fda4e124849fe10d7eefe3f8bf14c6192f0992aa7a"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/gautami.json",
+        "sha256": "44a8f3a80b12606d07033a3f42ab6a7f3689985cb30ac5326800f1ce4b0b1fbc"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/georgia.json",
+        "sha256": "d203ed500160a2eb1895b5ce38443954ebb96fc8c251a252c2c09205ddd2ee00"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/gisha.json",
+        "sha256": "d82c12ac6b0b0ca54144245cce6735a1ffa1c0a968051ac7103a1848aca22785"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/grandview.json",
+        "sha256": "4592b7fc90fa675eebad93d2279b983ff70e109e0b9d20ac6b1093cd0a52f002"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/gungsuh.json",
+        "sha256": "18aecdcd56de1e45761df2d41885cfac35cf1d863470711befa8b4cf0436ee52"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/impact.json",
+        "sha256": "e57174198c45f8cc6bc1abea76f385e16ec58b3c8491dba208fd296c438b847c"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/index.json",
+        "sha256": "522992e850e427b1c1d47a20eb9d0aa6c2fd0a2770e4bcd591ff15c9d3dc8467"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/kalinga.json",
+        "sha256": "83b0822078f8765b0bcdf93bc395b793f4396bb104958d1ab37c3b5b018b73f2"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/kartika.json",
+        "sha256": "e606839b8ae25a8813c82be8119d65ef7242d2553b72897eb94cd73be0e844ff"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/khmer-ui.json",
+        "sha256": "3bcfdf7d4c11f7b3b2ce4795b9523c699abb986de63a75b04f38cded8d78d0ea"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/latha.json",
+        "sha256": "15a1a508436329cc329d106d964dabaae54a8b1a3b774a9b12ef306774a7b0c3"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/lucida-sans.json",
+        "sha256": "c3d1a0b5c95e535d58af7d756140637a1a97638aa848e44314e7186e3452ca48"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/malgun-gothic.json",
+        "sha256": "2d37051d6fd5afa10a53a07173972c8438b4b2637e099670bf74d0276b5ed8d1"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/mangal.json",
+        "sha256": "25c14cfce9559e2a0cc80434313d2af22632468e2fc7a99e032cbd308b843f02"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/meiryo.json",
+        "sha256": "c81d5d7cdefa42c93885a7d2725285916beabcc310038a8c652d5f3b7fe6085e"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/microsoft-jhenghei.json",
+        "sha256": "8de9d7791aa90d72c4e8518e8a05f79944be83fab1bcac24e37b042a8535ce5f"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/microsoft-yahei.json",
+        "sha256": "0ce095b0b7617531793a152a8ea6c96da5b010ea06dbf5e90c84db9fb906abee"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/mingliu.json",
+        "sha256": "9ddba74b5bfd729f8e611a2f1738daa4177ded46620567b4fcc430669195a290"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/miriam.json",
+        "sha256": "904673f2d8a02b8932618b2560c8019907c5582bbed7c76c7cde40bafaeff8d9"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/montserrat.json",
+        "sha256": "43096c46fa989a6cd7cdc4506599bc1e03f05ac82c96d2023d5eb73f5aaa18cf"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/ms-mincho.json",
+        "sha256": "0289ef66322b195c5170b32876c3627d46732df270a414071f429ca7a92c240b"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/nirmala-ui.json",
+        "sha256": "4eebf3d7dcf727dca76bda5129b322798ea0b1efbc773d7e9c8b1344a42f3d8b"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-naksh-arabic.json",
+        "sha256": "d65ee50f45f388b628184b2edd101544642722d824890ea937f0c393e3b7a695"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-nastaliq-urdu.json",
+        "sha256": "3a1bc9f22981794f9623f51a5538573891e8d4f30dc2640ce285f2e5b86fefd5"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-arabic.json",
+        "sha256": "30525b0f7467f1a34ca000fcb01ad9f04e4e517e7b3bd13cb26d4591df30ce0d"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-armenian.json",
+        "sha256": "cba4492ff0507e94b0260ba92c01a8ad4ff2e7cba9fcaa1b2330570479e5f2a8"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-bengali.json",
+        "sha256": "4a9182f877f3008092c6d64370b68885a42419820ac59c550f51f85c88764bcb"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-devangari.json",
+        "sha256": "1ecebba2043506345efaf748724228c576f477f501f35913c2a884777eea6593"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-ethiopic.json",
+        "sha256": "e5f08fe9296f11c0a0851114df7c0c06d2700dc615679fde4ccb64b852dbb7b4"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-georgian.json",
+        "sha256": "9148a8681134e50aebe9ed795e3d230c9c93a475f0a8873c976bc13473736548"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-gujarati.json",
+        "sha256": "82f259085ebe3aac4ff6e241e77f1ba4780ebdd62f3cf3c1ed209454c87f3179"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-gurmukhi.json",
+        "sha256": "3beedd4223124593fa1522ed0a82fb9557f1067f36be60d63953ece9d06dd6a2"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-hebrew.json",
+        "sha256": "50ca4f93eae5af62e09be0e8bd2186ca68ef9aa96b47d37aaca30421076d6f98"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-jp.json",
+        "sha256": "52733994f5671f5ce199c17217aa43a6472d1a9b828e2d15898bd2e7a2c603ee"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-kannada.json",
+        "sha256": "29fe861a7b6668f1df74feac572bde4ef661e87dce620a4f62d29207c556a96f"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-khmer.json",
+        "sha256": "67caa7b37acf24f5360531bfc5117c6fd90481678b7b904a1f0fa7abffad094f"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-kr.json",
+        "sha256": "57be2cb95cd3c2afc25f3a0aa1b93697bde4d2de6eae780feb79ec462febe5a1"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-malayalam.json",
+        "sha256": "c02f7b88416d48578af6eb6d3b5f55cc4e9aa4659fd2c1dcaccbd9fe3e4e2cb9"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-mongolian.json",
+        "sha256": "9d925880cd4bae3c4b358bd2871ae21a0769d93a526ffaa94621dc4c3d9a87b6"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-oriya.json",
+        "sha256": "3bb9bce20184844d5e539d699d686db2d5f049a8155925cca283b4d6f97a9e31"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-sc.json",
+        "sha256": "41b46cc544185cf94262559d4ba56d0df1aef7d731fa49ae54e8f0c2f9ecbb54"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-tamil.json",
+        "sha256": "4413a9a0424d3c551b8ccc6737fdb693aa805d32954d3c447c3580acdd880cfe"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-tc.json",
+        "sha256": "588812ccbe86f759ad277eeec30617e7020ef86cb7cbe09368e0d736cf32e697"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-telugu.json",
+        "sha256": "7d20e04d6e98ae82d30ed875ae098649bedff1703b12cc2a0f1f44fc21f41018"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans-thai.json",
+        "sha256": "1aad99e8543dc500d1f242c00453b1fab0eabac8606d39d575ac6041c20112e2"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/noto-sans.json",
+        "sha256": "15ddf5b82d51824084cc6ae46a30e29c4b01c5f680974c1dbfe18351eafa512c"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/nyala.json",
+        "sha256": "41683e85057a66605e1346d9cfd054483d135830d2627efff438cc7ac95ec9a4"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/open-sans.json",
+        "sha256": "02a0922f93f3d3978455f5dce064cb5d34ed46327aa977440c74370a5de9c6c7"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/pmingliu.json",
+        "sha256": "a312c774ca9d5bb7a3e65f5ba003aeb1b70e45522858ea82f1c8d0c4934679ad"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/poppins.json",
+        "sha256": "542e7a1688ef5a12b3ac39c42032e247bb704af0206edc6c44cc92ffbdeaedb6"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/pt-serif.json",
+        "sha256": "562bc5a0d1a3c6e22dabac9d23d7490ea1d554ab8af5374be911d759734759cf"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/raavi.json",
+        "sha256": "3832ff212bea7d544f571590e34a344b8809bbd29279b02d5ece3f114238ef3f"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/raleway.json",
+        "sha256": "c5b8741f1c9d02f3783bc2d41b20028e01cde8afd5d6e14ae3ca618b8fbf7b96"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/roboto.json",
+        "sha256": "f913da2a42e6c68468ab04329efeffef2c890a85a1f9163654b4f7ed160dd979"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/rockwell.json",
+        "sha256": "13f28ef15e1c64f017c33465d560c00795ed9bc831a5781ceefe8b689d9b0b89"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/sakkal-majalla.json",
+        "sha256": "7796ac89dd24db8dc5e697e3c4269a3fa1ceeb28d272b09686d9b68219c94b05"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/seaford.json",
+        "sha256": "803e02a9dd859580a990003d5ec34c761172145d36405a6ed7caf8dee414cc3c"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/segoe-ui-light.json",
+        "sha256": "905fd0230e80ea17e83d2d419980dfd2f8787307d8c5e23591c50f7adfaf2df7"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/segoe-ui.json",
+        "sha256": "682efa58e8fbded967c134ceb36c0a2f2224c4c4a878cccee5d3d775d76f9133"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/shonar-bangla.json",
+        "sha256": "ea524690e0c7bfba199db8fc5d8fefd9398e6ebf24c3a3183c50a1a281f87747"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/shruti.json",
+        "sha256": "35474c2af3144b1fbaa8c361ca3de91be106b8a0fd4f464dcfc51fce364e411c"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/simsun.json",
+        "sha256": "0a8a52fc531ebf08595f01a05aabbcda0c0e2928eacedf84d9b8315abcfa6576"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/skeena.json",
+        "sha256": "728cde6697a0e63c0576b71e7d8f13ec1470ddf160e64113061b027a62722ef4"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/sylfaen.json",
+        "sha256": "d1159e04ebe200076275f270818e9f715bc22159d15f344fd71a758a5373dba0"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/tahoma.json",
+        "sha256": "36ec3304e9c61c14ba237d322f6733e38eb698fe8cdc70ce55c79815b31a8b05"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/tenorite.json",
+        "sha256": "9c184484da84d6df6ca26bfdf086588d3405120448c05c83d6b12d664165259a"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/times-new-roman.json",
+        "sha256": "f1d6601347a724f625890d6810817d889954e294fe6252ae20db64fddf9fc351"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/traditional-arabic.json",
+        "sha256": "9f9fd1d303ca44d6d2c57bee8e9aa069d3d83c2b87db57b28662b9699c6c3a2d"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/trebuchet-ms.json",
+        "sha256": "f055d163a8be9624f994c9aae5271aa64ec4f71f02a0c6566993a1e55e1360d9"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/tunga.json",
+        "sha256": "1a14e26b15a6284a32795d0cdd45f18db8d84f2fee3c5332b1b5fea8e0c3cff3"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/verdana.json",
+        "sha256": "00e331f1abb1cebe10ce3ba49aec696e7b726a8b178d50c1daeba3724a541b23"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/vrinda.json",
+        "sha256": "15994c0e0b15f6c3f4a591ac667811310d3e499c8f012722406b37dad5394bdd"
+      },
+      {
+        "file": "dist/spec/catalogs/font-schemes/yu-gothic.json",
+        "sha256": "fe65707ad1cabaafd7ddce7d9f37ce842bf94c3e587848f04bf3ea2bd831d456"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/afrikaans.json",
+        "sha256": "de889be5a26ea950453390d6a741c2dbd09d05b0c0a90daddf85ec921a4b3544"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/albanian.json",
+        "sha256": "4d127bb35e4e7dfb6bfe97539b7eb19c1a0a7739da413cbc6813c048979494d3"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/amharic.json",
+        "sha256": "26256b91e577dc17b7e813d4a869ef7d1d78590ce1ebd2e4232ee8b7ac85a1ae"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/arabic.json",
+        "sha256": "0d53c84834bbfafa46ca20d2ee31793ee1f513dfb2e4d5bb9bb6937648c85c45"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/armenian.json",
+        "sha256": "ea98f9120c05c46c70d25480e85284b462fd632b2b91ed62bf7759262016c2a0"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/aymara.json",
+        "sha256": "bd77db27cc253a31870f14755d2cb82a69830dce0808fe4366a6b79740174a21"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/azerbaijani.json",
+        "sha256": "be5e7cfe3221f1207586ec1bd5bdcdca7295b3e9557b6610d27ac92254400a38"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/bengali.json",
+        "sha256": "cfaa334ee11af1670020cc621183d7a83f46d8b4ac468db992e5fd765f00f6f5"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/berber-latin.json",
+        "sha256": "fb969f9da66c87b64341f47470f3b1bf7ff6de6a08a85e5d12fa61a6b9d9f481"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/bosnian-latin.json",
+        "sha256": "bd131d9eab65bdd4b6e5a313e725be3090ecf88551608cb858908d52315818ac"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/bulgarian.json",
+        "sha256": "7e160ba850e9af693e4067c0faa32257643f5f48a2670ede822732023f096b59"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/catalan.json",
+        "sha256": "ee78ef08a7d3f05f83dad6affdddcbf189df03ddb4066816aa0c5fda147a9be3"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/cebuano.json",
+        "sha256": "a6db884cc7d3d4e495d2dc4b8fb775ae392078ca9ea8bbad498c1b39bfd6dfdb"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/chinese-simplified.json",
+        "sha256": "c64deaafbf822908539912eec1f4e0033fbbef55c5367636f7e82b09420e51bf"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/chinese-traditional.json",
+        "sha256": "30f754be5d60c10fd137c9807200dc6c2c14c47b35cc3227676077e9fc52232d"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/chittagonian.json",
+        "sha256": "c23be8af4eb99a079af6d65ee3feaaaebad0efc5e47d7131e14ebe443782934a"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/croatian.json",
+        "sha256": "183a456f3acbaa33647648bb7aefa3fbf2907976df5036619f3f84b8029a7025"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/czech.json",
+        "sha256": "44d94b6731839398389b24548e610660d8846bf479a2797885e9d2a4ea2051b8"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/danish.json",
+        "sha256": "0630ee8ce70a40bdb295998ca460c21830e40fde8a96dd935ff416bd55dd3fc1"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/dutch.json",
+        "sha256": "971ab61ba0967ffb490f656d458f7a4d5818b45a96ac2620169f198bf0dbba87"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/english-au.json",
+        "sha256": "cc2e3bffdfc7b275166649880d4646faa07e0bc754fa9fab2cafccc53dd15c25"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/english-ca.json",
+        "sha256": "78928ae949e7106c8d996829d99c4d2bcee41594e7cadb983432680b9d173b91"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/english-gb.json",
+        "sha256": "856c07c67b414d63f0ee2af3611368abd178bdd0023cc22f2414c9e21cffe7df"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/english-in.json",
+        "sha256": "b11c678a08f55534a7c50707cd867f1c1e1308a723559040f2ce27e28132b162"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/english-us.json",
+        "sha256": "4aca2fbf36b5ef33223e899dd979f8d2eb8006d25d8d05f539227899ab50bc78"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/english.json",
+        "sha256": "f0d0d6785805a90e40c07adc56803f800d0df7938ee03d61ed11685f20fea8c8"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/estonian.json",
+        "sha256": "0b0e05fcc175afe5e35905f22fc6d9c8d11459c4f75dc3916922a84cb025f57e"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/filipino.json",
+        "sha256": "15ea84d8409764073c1ab8b7fa783b0e60649fabe297512900ebfe7a8e37a050"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/finnish.json",
+        "sha256": "7bc78ab4c6042d74ea4c6b7c50047ba846216aa707b7a01c772a8d13a7b025f3"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/french.json",
+        "sha256": "3039927165e0e5766a11bfa461923909fdf7100e7e71681cc6cb427f86402459"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/fulfulde.json",
+        "sha256": "8384646c1d41166b29f2f4273e9fa3aef8c75d7ae7b0a26da8d183c003b6b5a2"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/galician.json",
+        "sha256": "be0d30b92d49adee414431b4f269e7614378bef8076778e2010fdce351d2fafe"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/georgian.json",
+        "sha256": "001868877af11cad47b97980a5320f40d47d0c655867a9cd69b5d3e06857b6b5"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/german.json",
+        "sha256": "eec5b59d6e6a90691fc13b74eb302d7bdafb5499760298f0ad8fe5fb2fe8d5fa"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/greek.json",
+        "sha256": "4791a4bc0580d033a9f8ca288b602cea58d7fe334e372ff3b5912f94a726e767"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/gujarati.json",
+        "sha256": "4625e9a6d26b3d1366a2874756979e7b4f5d00b9134c417cbd33e2a1cbac5d72"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/hausa.json",
+        "sha256": "fd79ed34d4d928f891b420f11c138a511c64e74e9ae2f1611a28f81d3c9c38fa"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/hebrew.json",
+        "sha256": "302f6e5866b296afb21100cecb820f659e757314822c3af0e1721ec111053f59"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/hindi.json",
+        "sha256": "1c414ed9add577139e9590aeff98861ba3088f38557ed4de60b5db28d8f42691"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/hungarian.json",
+        "sha256": "4d40625bd4596742d8d9bd255cff920b19d39639aba27e53baa41a86bc68079e"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/igbo.json",
+        "sha256": "3a1ae5ba1b42eab23b8b2c2adb4bd6a4c16aa2748e20aa8385dd18ff05f12665"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/index.json",
+        "sha256": "df3caa27a886d6c6bd05ae1db03cc1ed2a73855721e9f6e5d0e9867dc441d459"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/indonesian.json",
+        "sha256": "b81f55356b61be77e4ddb0bd2725715443a0a6e4d41c88fec02d4b9aa0924f52"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/italian.json",
+        "sha256": "8cb6d1c9dc694c6d2254318d6c5c21ab37976a172b9bcc3f7e56308f60ed1e41"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/japanese.json",
+        "sha256": "8a74a6f7ec6c3cd011dd36470cc3d3200bebbee7619cc515d3460302f6f8d3ca"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/kannada.json",
+        "sha256": "a4137501d8ef7c4e2c7cb1f1cbb797c7d8219550dec60efd6e1ad0def6af1522"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/kazakh.json",
+        "sha256": "b7b7e406fd42a61b8542948659f3f026fd6a701ead0ba0be75f49d8e8af87549"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/khmer.json",
+        "sha256": "e5543ededd112f219b7cc5f7be6301ffdcc1475582b3c699af42606f99c97594"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/kinyarwanda.json",
+        "sha256": "2d8bb6de28ec6e5e511efa0e16151dc0c3b24cbdd11f9fb05860a74bcbed1bd9"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/korean.json",
+        "sha256": "78df1a066efc8148aa68532600a4b996af4ac1b6751c042647320f68223d1c2e"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/kurmanji.json",
+        "sha256": "0b6ea730587cd33872c4b4c0edc016551eafcad9bfc3e2bd1a7b4c68b8e26ab6"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/latvian.json",
+        "sha256": "38e705e1afc8a7c19e18e116da20f5ef271138a9251a87d791ed51afb1f3a438"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/lithuanian.json",
+        "sha256": "7a1377cd6d05bb6f70f044a00ecd89338cb915438e16bff7ef5ab7c2dcaaeab6"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/macedonian.json",
+        "sha256": "bf6b26615fca42dc9d2bfb5564bc6913b9ccf6799a1efb792f834cd57e311cb1"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/malagasy.json",
+        "sha256": "7a6e9b750440143d41726925ed8204a792949370b405d58dc73b915223bfcda3"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/malay.json",
+        "sha256": "ec1a664e3ee74e40710e5342a8daf552bd56c5df761d8b47b65b78137c506266"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/malayalam.json",
+        "sha256": "5ce9b492f3e2c007c8905b60f330caa419351a31b3c90cc1493131ad969e19aa"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/maori.json",
+        "sha256": "f3ce300955e4dca41e3a6ea4c578a32ada620469c684ae724987e64a00a59a0a"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/marathi.json",
+        "sha256": "b8932b2629841fad2007ce9fd5f1eb7ee88d8fe47f2f1ddbd539746f328824a6"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/mongolian.json",
+        "sha256": "0ca0a683fd33a5f1c8486492d3e1367419436c21943aa54cb3f11a94a2805188"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/nepali.json",
+        "sha256": "2d785acfae8a14de4f9d920c2d824a2a1bd350ccb22ff37760de7fed2c430817"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/norwegian.json",
+        "sha256": "98bd1f51ad5e2e4bbb9c9cf9dbcf75c8ee9b38e653949ee13f5dcb7dfb62efb6"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/odia.json",
+        "sha256": "925d6bcf62871eebe18452bc753004aed5058af3c7e516918440bd208c03751e"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/oromo.json",
+        "sha256": "de991b5620fd1af1a5c4785c75b09f1523e01bfb208081688423debfd003ea0e"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/pashto.json",
+        "sha256": "b2e4eb8fa767947c4cf90260ec349ac5d8e2b20f7c451bb5a2eeee18e0911d9e"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/persian.json",
+        "sha256": "518d671359d384c688774e819f61ed5a2a53a94f0f1d05183f9d23fc75c76aa1"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/polish.json",
+        "sha256": "003193d1acd15c3a74609aed756b9c3c4a74bdc0b84ccb02b40ff728d186ef18"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/portuguese.json",
+        "sha256": "32a30031ef7b51b9e2924617c5a83d1128f8ed76f2e1b315900da67665cb9bdc"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/punjabi-gurmukhi.json",
+        "sha256": "69d54ea5d708727158bf3956761b22e4380fdec43caff8cb2fc0f7435447e052"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/punjabi-shahmukhi.json",
+        "sha256": "4d76c0822a884f1d09e6135872bcf3539a6d1ad87053ad9f0719e91196006ec1"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/romanian.json",
+        "sha256": "cb9c578d3fbfa73de0ebc78961d49ad0f6314842878f5031a88d966b34faf26c"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/russian.json",
+        "sha256": "8a280f2be323f1d0b72ec7e4028717957f00ab6855d9b0312716cba496db8407"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/serbian-cyrillic.json",
+        "sha256": "cb33ccca774fd51f8ab03220184ba7c1b268865b5b375ebd750c5efab5934469"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/serbian-latin.json",
+        "sha256": "7ddd3ccbe7889bc0ff1e80c16cf9c38a80e579556698e1aba232fe742020431b"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/shona.json",
+        "sha256": "064599aedb052add0a711b44876d54dae2cd1048afb0e656474cb750c009c1c9"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/slovak.json",
+        "sha256": "0bcd44640144441feaaaa5507398dc86d193199cb85fc941e40c73caabc72b85"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/slovenian.json",
+        "sha256": "7707f8e4e4475e02363aaf715b9348ad23c65987dcab02ba989d841553673393"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/somali.json",
+        "sha256": "8af852aa881d1f38396687989da24193dbb95c220a83cce38b01762a7cf39574"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/spanish.json",
+        "sha256": "d1e436a815bacecc28d6e33ff34feb8cc9fbb125a609bdc52086567777c8da25"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/swahili.json",
+        "sha256": "706947692ef63530bf8fadc5515af11a0a01868a7451eba24a3d04e59d39bfd7"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/swedish.json",
+        "sha256": "297796da88d3ea014bee2afd1209371aef4682798805a75576360c24451486fc"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/tagalog.json",
+        "sha256": "b4ef08a74e8e6c359ef8a5d0f2503bda807e75f9007013909ee81c0af70922e8"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/tajik.json",
+        "sha256": "5f21a6effd690154a71a3ef96a0d7ae761a900b66fbbc69880f731a0ada36593"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/tamil.json",
+        "sha256": "6d0e7638aa6281ada26354eea651910dcc409a981987fa1da183d1eaf1c9fd88"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/telugu.json",
+        "sha256": "d06d0643fa3579c3ff91bb918fa99127602502e2d336ecebeef2fc6cc89baf88"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/thai.json",
+        "sha256": "9462fb114d532beb57586c990030eab47338f544a77ab5364aa0d1d3d042c977"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/turkish.json",
+        "sha256": "96b60fb8a4975e573a27eae82d4a31b5aad5b6efcbb75b3d08567dd00330e9a6"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/ukrainian.json",
+        "sha256": "1661a193b2b5cde7d7f1c2ca434a4d6bfb9c6c160e61676908dc747e60b18236"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/urdu.json",
+        "sha256": "23032001ed1f15a5aa1665359fe4ac3d84a5de93b234fdb9530d6e059e1bcc1a"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/uzbek-latin.json",
+        "sha256": "9accb321ef1f0e808686ce07f4b533c3619144826fd3f7e3c29f97c91b91b258"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/vietnamese-quoc-ngu.json",
+        "sha256": "43a568f847272004b4ec99cff20b1b36ce0f46e0a798c456859ecfe48252f9de"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/xhosa.json",
+        "sha256": "80fbb61c1d86b147fb52b32c39af671395bd6392c321081b50261aed1c899060"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/yoruba.json",
+        "sha256": "82400e9fe7506301f556c1e232c8a46f68f43b671c003b4ed20ad4b9590f4cc1"
+      },
+      {
+        "file": "dist/spec/catalogs/languages/zulu.json",
+        "sha256": "a3dbcf8f72f5bc78bde2cf5d8746ca70657c63dd713b65d37856c27a010c6ea4"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/blank.json",
+        "sha256": "316e5abb60a62b1853af0b0d088430cf2e278c3022d3565b238896fd12f443ec"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/chart-1x.json",
+        "sha256": "f32cd3cdca3f229246152749e275534748fed05b34dd010abd3bcef20debf4b4"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/chart-2x.json",
+        "sha256": "28016de2a7647c985f5700077e271413e29a406e7d54005e1563dd88ceba624e"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/chart-3x.json",
+        "sha256": "e0790f0baf100012a47daed465a7b711da94243664b4393cfdc1d5fb6f8c5f6e"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/code-1x.json",
+        "sha256": "df408b80e15d514d3059d2e27eaaa00f44f947e6d49b31b44023a11f95f0568f"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/extract/canonical.json",
+        "sha256": "c9a4bfb7a95fa31c187541df41ea4ea4131e6b709cb9c72faf3cb3f2bd7cb61e"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/image-1x.json",
+        "sha256": "b88afc8769e369ade816b8e716950d468b3105983d57aa4e4845fc750c39d590"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/image-2x.json",
+        "sha256": "08b17a4392b1e0a3c0d2dcdf1174f358a352def3d418ca62a4c3f2663a2eef10"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/image-3x.json",
+        "sha256": "a5ea5b562b2f200512e667008d6fe8109f81a98335ab3484f02059b9dba4788e"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/image-bleed.json",
+        "sha256": "0d96ce0dae6330011590a895b466e63f860649f1fb1116f872350db009dd8121"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/index.json",
+        "sha256": "9be9592415a40604c903fc8ffee57814959ffe551d840be22db301d363401167"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/list-1x.json",
+        "sha256": "78a0b9842e46f9f79bb8ac69494fffa5cf8e3982bc7554d9f09a79f482ce71f1"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/list-2x.json",
+        "sha256": "3b8eac3589da0c7f96ca53ba8c62e3ff825fe1bac3bb7c73ac08ed0cfe11ca1d"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/list-3x.json",
+        "sha256": "1554f6f1fd1cce219afedcf39856a86a2a74687738b3fe0fa89531e8cc15d0ab"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/list-4x.json",
+        "sha256": "e78a903132cb447b0b2ee83b60792bba10433b6db0ec9bc3553985ca47c5213f"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/list-5x.json",
+        "sha256": "47b4cfef29a4d9b599e1083b3b18b0e3d13471a433342d510f3288d8c68fc5e0"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/list-6x.json",
+        "sha256": "48123c15e38a88bfe1550ad8478d2477f545dae412afc97334990e7087261d5c"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/media-1x.json",
+        "sha256": "cd6c1ba747833c0dbab3731a4a8b1d6bf14e2e77f7ca8f14996619184abf63cc"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/number-1x.json",
+        "sha256": "af7c8288cf1cd1344215b7ab52a52514d7b2be0ca2e1553974aab9326b0356e9"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/number-2x.json",
+        "sha256": "1ef0c28db041702cbd669181b2708b260b3ee561bff794c71b11c3541db0ac2c"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/number-3x.json",
+        "sha256": "15388bc8c4b067947e107cf8bd8572ba64c814bc785b8392e925c774f28b0796"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/number-4x.json",
+        "sha256": "0e3ac340bb0ff89dc0bbf639310d4f565dd4f1356242028f44a0bb90ea9d0313"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/number-5x.json",
+        "sha256": "a038f644694d8bc2ffc17891f5cefc60a42ae8368de783f529f628426b20c397"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/number-6x.json",
+        "sha256": "b386f2a829ad484bdaacbe2c6ec557ecaaf76d586cf7f5d2038d4207a8c1c612"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/table-1x.json",
+        "sha256": "00708232f6e8ae6d22236e07680fbb7e9a0e8e220c65a37087c55fda2b3d1928"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/text-1x.json",
+        "sha256": "748c3810aace54874b384e3be97e9dcc5777daf322b3d99aae0aa318a9833fb5"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/text-2x.json",
+        "sha256": "cd83a8b48d0032f3fc4efc9b121d1b89ab8b6d8e8ed07f4adde9f1cd9b9e2010"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/text-3x.json",
+        "sha256": "4ccf3c5e42e8f0254000433cd09fff2456193354465b9e05f8a4dc4bf1676dc1"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/title-subtitle.json",
+        "sha256": "3c753fb4d8903325e43b42ac18376935f142126500ab45fbec8ab2d05b262c95"
+      },
+      {
+        "file": "dist/spec/catalogs/layouts/title.json",
+        "sha256": "1f6197f112fe9a0163ab77eab78b3aadf49e1697b8b440d1eda6509ec0c2aaa7"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/board-meeting.json",
+        "sha256": "075fa8db2489a055510cd88dd7e3f27e46244ed7bac51a6b5d08f627bf6bd789"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/business-narrative.json",
+        "sha256": "88b6b93c88936436a992c36a7dd6c5350fb3696bbcc3acd77e94b205f2b4ff95"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/business-review.json",
+        "sha256": "29007f2e2a70c13dbd61a5f007f9f218de94fd9628c5270affb518a19d93eec4"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/capacity-planning.json",
+        "sha256": "399d0ee86f7490bd4c50dab24d68708ad2b03ccc44e7148044e342738c9bd1a3"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/challenge-resolution.json",
+        "sha256": "bac55b46b1a2fca806e67c2024df9a82a8eff0499d987bd311a589639a3f65f9"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/classic-story.json",
+        "sha256": "6d95d5fdd36c1cd4127f61d6715f0d4e2009e1f00a0920373305f18f084427cd"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/company-intro.json",
+        "sha256": "7da83cfd0946ce112ada39ed09da73f8d7a4a64102dd9bb14919014ab7d8f910"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/conference-talk.json",
+        "sha256": "5d93a75a5cc461d116af3874d74551dfac10d685f6264c0ef761f12e1662114f"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/early-startup-pitch.json",
+        "sha256": "e6b94baee5f8b63a4aa4dfd566f9b86a7ee14debffa9243de6ea59a34f3ae2ad"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/educate.json",
+        "sha256": "dabe1aaaa8f3acaab9622c6416e737a1843ef95bc5113ee6a74fe0dc43550eb1"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/employee-review.json",
+        "sha256": "0b80f090fb04c36b6bad7e02f7c79b6f0eb1d2c2914132285d626465a876b35d"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/failure-analysis.json",
+        "sha256": "f4bfdeaf313389b592c6a5b629254cd3569748480fe4c28aa28191674bf55415"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/focus.json",
+        "sha256": "9bf88aa7bae2d5f6f10f0f07e79c8bce8727508913d13f3e6fe15cd503d4e1eb"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/golden-circle.json",
+        "sha256": "394263953e8ebfcdc96b1df4c3bdb8fd07fe5271cf2b9a5e1226bf515b630f23"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/index.json",
+        "sha256": "ebb36e0e8154650e4e028169da5173ba6f3b20185fee81f47bb732f0925a063e"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/innovation.json",
+        "sha256": "1d15d9467eac4737a8caf80bbc289083204df9407f932ebc5d8f93ed68d63335"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/justice.json",
+        "sha256": "78713a7b83f306ceef762b34057b62e89a5a3635a2ee14cd937435789883ce60"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/marketing-strategy.json",
+        "sha256": "204700ef2bd0bd749862a2802b116bae571029f141bb64524459c5154d36307b"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/performance-improvement-plan.json",
+        "sha256": "38a1d01a44fd691fc0cbcc839de78daf77710bcdb91ae64b198b5dd3f3a2ab3f"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/performance-review.json",
+        "sha256": "170cb6031c281fdb80d607ad92e18dc898c83111be6583fd4167a43c232f292c"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/persuade.json",
+        "sha256": "ec8303cdcda2cf8dadb395cd77cc9ffa1f8abc3a7c1a350956d9bc1c7013d0c0"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/persuasive-sales.json",
+        "sha256": "e0edd0c33cc76368d62dd52dfe6a0a0c29bccecf87af5732ef586b583c41aedd"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/pitch-deck.json",
+        "sha256": "38de5e12b99db2f6ec9cc79f0699a559e602fb2631208d30593b0f5d62b4d07c"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/problem-solution.json",
+        "sha256": "f8a549c2d5435fd0b9ffa531aff2b44817e215cfa5e5295cf075019dddc259ac"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/product-launch.json",
+        "sha256": "99f6259007a78249ad21d2b17b3df8161fb99eda9c4386c6c0c0c1a276536fc0"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/project-proposal.json",
+        "sha256": "37727cd3cdb65cf06697961bc5118d67706a46111b6d87492c686a071c531f9a"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/qbr.json",
+        "sha256": "0602294ba11e630bfbe5c27fabc585ebc51a1d3d0e6b39b3e63a930bbd78a4f0"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/rags-to-riches.json",
+        "sha256": "7d02d1a55951ab7ce897200c1fc8d48c953df15828cbb5ebb7187f8f6e7bbc84"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/reveal.json",
+        "sha256": "8c86c859d71342d69f8549d9b0baced7619c981ba53cd6c38c0e1a4a8920747f"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/scqa.json",
+        "sha256": "df52da08d5e4f1684d4bfe12ec5d27b4bd2add5bb259815601038f55779fa648"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/status-update.json",
+        "sha256": "9009553e5b6d4ab0885d47c5f8ace0d68c5a8d9ffe7badba0bb6b43aaea686c2"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/strategic-advisory.json",
+        "sha256": "3d401034d68cbed9293e5262942b5fbdc5f927b8f75205b7c2990475e78cd2aa"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/strategic-narrative.json",
+        "sha256": "baaa79a4ab1313bcec8acc6677a438167f8547feda6bd302285fe4c0a7a56715"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/survey-analysis.json",
+        "sha256": "b884ca1be2b896fa2cca1531e80595346ad7d7eba7925ed5f04683ba5fcdfa0f"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/survival-story.json",
+        "sha256": "2478009c4f9f642cec50ae1c5f6f23b3dee5d80f0690856b0ccebe9fd8ae311b"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/transformation-arc.json",
+        "sha256": "89119b774d6e7d57928bc15d1d488b698c7b2ec3c02439b4510770681a17a514"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/trend-analysis.json",
+        "sha256": "a985d5727e535fa7e7ec9dd1baa880cc2a937633cfa7a468e2d0a28a9831df1a"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/underdog-victory.json",
+        "sha256": "69cb58a9aba19aa51bb42321180eaf338c005747dada746cdf7b76c1700d43f1"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/venture-pitch.json",
+        "sha256": "b1243fcfbfac67bce5826a122dedeaa14ad14eb30131d9ea2f8dbd2e656c1016"
+      },
+      {
+        "file": "dist/spec/catalogs/narratives/weekly-progress.json",
+        "sha256": "79611b3316688006a85a345db143d4c5fdc11d515273adb6cbea04fa01bbe47f"
+      },
+      {
+        "file": "dist/spec/catalogs/purposes/align.json",
+        "sha256": "c8447001119aa6c22c76498475f282e23ac8f36d1653d44e7b1e13dce2176c6d"
+      },
+      {
+        "file": "dist/spec/catalogs/purposes/decide.json",
+        "sha256": "327dd8f113342ae6069afeaeea552cb78f8b63c90a65366c576faa97b7e51e79"
+      },
+      {
+        "file": "dist/spec/catalogs/purposes/educate.json",
+        "sha256": "e336d565252646b1f64d168065c5f1fe88d41b372cfcbfe99da9624c52e01eae"
+      },
+      {
+        "file": "dist/spec/catalogs/purposes/index.json",
+        "sha256": "c88fe369de6af98c2d9c47adce72814cae4f16a6d7aac36e8089191dd43bb257"
+      },
+      {
+        "file": "dist/spec/catalogs/purposes/inform.json",
+        "sha256": "eec3866699ad6eb126882cb1d16be4cf16ca1f4f3118d44ff458f5fcbc4998a7"
+      },
+      {
+        "file": "dist/spec/catalogs/purposes/persuade.json",
+        "sha256": "d0ab4f97d2fa8428437e36212e6d6576100db3074b9e3b1c39028f7d70cd9edc"
+      },
+      {
+        "file": "dist/spec/catalogs/purposes/pitch.json",
+        "sha256": "6b8f1d95d759612cb22cb2a64cb6e1f5021b05374b5cc5776501360c9f7e3472"
+      },
+      {
+        "file": "dist/spec/catalogs/purposes/plan.json",
+        "sha256": "cf61a62e795d7fd96954453f65f3378a15e19957ebd4768ec05327124a77fbb6"
+      },
+      {
+        "file": "dist/spec/catalogs/purposes/report.json",
+        "sha256": "37f6d0ae0300aa8ea165e305faea41815a62a3d24d7e5711cd20cfe8579844ea"
+      },
+      {
+        "file": "dist/spec/catalogs/purposes/sell.json",
+        "sha256": "013c8e1f30380eb9e426f96a652e1f0bfa3a8a6ca362c36c030745ac7c1756bd"
+      },
+      {
+        "file": "dist/spec/catalogs/social-platforms/bluesky.json",
+        "sha256": "4dc47244ffd1572d396aeda0e5965bc3c6823d473f3d78afaa9632b4229e0585"
+      },
+      {
+        "file": "dist/spec/catalogs/social-platforms/facebook.json",
+        "sha256": "2f14ecb46aacf68853a66110868213cb7ae680f44345b39537aeac9ce08f62a7"
+      },
+      {
+        "file": "dist/spec/catalogs/social-platforms/github.json",
+        "sha256": "9aff751ea24d6d011da6d8918a0584fada08a9afcc044d36522842969ce3f984"
+      },
+      {
+        "file": "dist/spec/catalogs/social-platforms/index.json",
+        "sha256": "bf006d57ead72e3d6eb9fe1015356a42784e058453366427570330ec058e6ff1"
+      },
+      {
+        "file": "dist/spec/catalogs/social-platforms/instagram.json",
+        "sha256": "0de0dae75ced15b5fda964676c488ee51c09ac1d8fa51a8dbb79b89c017e825a"
+      },
+      {
+        "file": "dist/spec/catalogs/social-platforms/linkedin.json",
+        "sha256": "f24437429f6339b78d5803aa24d9545de0538bbbd7f178a3931d37590e63f5c0"
+      },
+      {
+        "file": "dist/spec/catalogs/social-platforms/mastodon.json",
+        "sha256": "bd895af546b4f534c9d4648298ed42bd94752baf1b350407c65ba3a3c3d8186b"
+      },
+      {
+        "file": "dist/spec/catalogs/social-platforms/threads.json",
+        "sha256": "71277473afb1f97eb5bb912df6109a5a6e30979189f3eac81f4798a200aaaffd"
+      },
+      {
+        "file": "dist/spec/catalogs/social-platforms/tiktok.json",
+        "sha256": "0a8b5c7ccb5d1b1654eb40174d05dcb07a2eb11ed2ea47b73de75fe392a23ab5"
+      },
+      {
+        "file": "dist/spec/catalogs/social-platforms/x.json",
+        "sha256": "58c23b46b5b42c813ab2b234d861dc7a0d2a80a8526500bcea9d97d5bf49a86f"
+      },
+      {
+        "file": "dist/spec/catalogs/social-platforms/youtube.json",
+        "sha256": "e16105f583e584d3aa68e8ed38a61488a8e7d92f7989120f23c0b998375020ed"
+      },
+      {
+        "file": "dist/spec/catalogs/themes/bold.json",
+        "sha256": "c6eff3e7ace1738cb0a05e376e4ebc45561d5f6b7fe69843287b852125b94d90"
+      },
+      {
+        "file": "dist/spec/catalogs/themes/classic.json",
+        "sha256": "b823c60da7ecc99b8094662560114fc029401cfc110cc5dc2236dbe80f3d729b"
+      },
+      {
+        "file": "dist/spec/catalogs/themes/dark.json",
+        "sha256": "130b5047be3768c275f98aeff88ad17c3edc811a6c944b4bab67c855b490b00d"
+      },
+      {
+        "file": "dist/spec/catalogs/themes/index.json",
+        "sha256": "7ba73c504ff1dd15322f707c2e8c1d52d5261b0982af04d2211a5d5e97ab74e0"
+      },
+      {
+        "file": "dist/spec/catalogs/themes/minimal.json",
+        "sha256": "c9d54b22ebcb39bc53f9ab82f6fe9a3debdd98821b71c4b492b8f89f6414bce2"
+      },
+      {
+        "file": "dist/spec/catalogs/tones/authoritative.json",
+        "sha256": "895b678eb05c2b3be3d79c9e3d99f726444f20269f0c5679a36bb61ec5a66913"
+      },
+      {
+        "file": "dist/spec/catalogs/tones/casual.json",
+        "sha256": "2d3a293911adfbe749847501fa4f82ea7ed6925f7144d58d92b6b0b3690d8a82"
+      },
+      {
+        "file": "dist/spec/catalogs/tones/conversational.json",
+        "sha256": "98da9eeae9b508e7c27d92ea1905a7d2840f34950c979d7a942be54ae7ce0059"
+      },
+      {
+        "file": "dist/spec/catalogs/tones/formal.json",
+        "sha256": "555cd70038459bf29d233cb4140dca52d005d2047c8f3d9d3d44e1560fb30af6"
+      },
+      {
+        "file": "dist/spec/catalogs/tones/index.json",
+        "sha256": "856bad1ec54343c5223c23c6853d4062f51cf675f57878467c9e809f63054057"
+      },
+      {
+        "file": "dist/spec/catalogs/tones/inspirational.json",
+        "sha256": "afeef81a244bed2cdb9fc5460f7027a77567bf6c68c7c85b34f029ba13a7aa64"
+      },
+      {
+        "file": "dist/spec/catalogs/tones/persuasive.json",
+        "sha256": "cc77e906a705861cc2307245d3f75499c68e31b54017c76149efb2ef8b3a66d5"
+      },
+      {
+        "file": "dist/spec/catalogs/tones/technical.json",
+        "sha256": "6d5c20ec6f29d8dab90c0b93615041b6e6730e58bbeaec7aa7f004e9ea00ac51"
+      },
+      {
+        "file": "dist/spec/openapi.yaml",
+        "sha256": "3c1e5cd58a1cb4cc0267c3f7be02fa4e39238c0aebe60c5c92e1cd4896556325"
+      },
+      {
+        "file": "dist/spec/previews/layouts/action-plan.html",
+        "sha256": "ea15374cddebe0e870b14a4bc15fd913be1bbe7a63fb3936a7dd20f17f244cd5"
+      },
+      {
+        "file": "dist/spec/previews/layouts/agenda.html",
+        "sha256": "270792ff3cc9ba0dc53a7e61d76291f6c7b9c73bc7ccc34eebc9e3b794539481"
+      },
+      {
+        "file": "dist/spec/previews/layouts/appendix-index.html",
+        "sha256": "7b78b363cf7e03fb64d08d303b4c781a40e9e7e189a5f67f469436eeba4b9b8d"
+      },
+      {
+        "file": "dist/spec/previews/layouts/architecture-stack.html",
+        "sha256": "185af7848ecda8f8d326ce607614c9a98a1a9e471e3dd4c73c9bf62ac2010401"
+      },
+      {
+        "file": "dist/spec/previews/layouts/assumptions-dependencies.html",
+        "sha256": "e139c13b3a01d7035231753a34c794c67d1c2696ebb18780b6c6c03baa2cf18f"
+      },
+      {
+        "file": "dist/spec/previews/layouts/before-after.html",
+        "sha256": "4cb870d06d8f8a6a5f6556d3f7a567593a0647bd5a578615bd7290b07cbacec3"
+      },
+      {
+        "file": "dist/spec/previews/layouts/benchmark-target-table.html",
+        "sha256": "8187678aa6a47b97de1af6dedc9d7cef182fd8210c644e6d1f2b599c0d246e6b"
+      },
+      {
+        "file": "dist/spec/previews/layouts/bullet-list.html",
+        "sha256": "880cb33f538757e1268f9d4d2b68e04bc4554970d175976222833868ca4f091a"
+      },
+      {
+        "file": "dist/spec/previews/layouts/business-model-canvas.html",
+        "sha256": "583e3a99c937fae10cc90ab77e009ef6c06be742b2894f258a68a18a227f8a68"
+      },
+      {
+        "file": "dist/spec/previews/layouts/capability-map.html",
+        "sha256": "24eed210a9bd1a3317116873ab99df95a75bd3d81053696dc369b10f93088073"
+      },
+      {
+        "file": "dist/spec/previews/layouts/case-study.html",
+        "sha256": "2f7f99a1e423a207b3f658f95a0457a2dd8f4ea7cec501b2cc462eff57b1f610"
+      },
+      {
+        "file": "dist/spec/previews/layouts/chapter-recap.html",
+        "sha256": "78919dc78bda2989ada61b548e125a407f64d7cb0916d396e33672a946372c54"
+      },
+      {
+        "file": "dist/spec/previews/layouts/circular-lifecycle.html",
+        "sha256": "5a7e60fedf169e00a78323b7ab40809ea48ebe7d5b7f6f13a786809cc5d1c2a8"
+      },
+      {
+        "file": "dist/spec/previews/layouts/comparison.html",
+        "sha256": "9380dcd192c691e55f53992c9f8029505a1656883015681aa4daa9b27bfa232f"
+      },
+      {
+        "file": "dist/spec/previews/layouts/competitive-landscape.html",
+        "sha256": "776170d47fca53a1d78bc1cb9a16336d3bd1afd080ce804f8d38e77f3406ffdf"
+      },
+      {
+        "file": "dist/spec/previews/layouts/customer-journey.html",
+        "sha256": "800b79562eb0977c1712f8d1a31b5d2acc9cadc90d26700bf20c1dee09e4e1de"
+      },
+      {
+        "file": "dist/spec/previews/layouts/customer-logos.html",
+        "sha256": "f9c77e084cde4179a586e9b5fe5c86035f25dcbee36bfcdef5de8c90c350ea6a"
+      },
+      {
+        "file": "dist/spec/previews/layouts/dashboard.html",
+        "sha256": "5e79029ebc8d2093b27b52a3f52de9c95890d5da960a3ddb4a9f2fcd9b912cbc"
+      },
+      {
+        "file": "dist/spec/previews/layouts/data-visualization.html",
+        "sha256": "46b1fbe5ee0a9bb28fe01e00ac2e7aa4f140337737fdb449d105627c3f37900f"
+      },
+      {
+        "file": "dist/spec/previews/layouts/decision-tree.html",
+        "sha256": "d50a0a793062b647cf7159480aad80fcab7be015caae016a0e247be018770e19"
+      },
+      {
+        "file": "dist/spec/previews/layouts/detailed-data-table.html",
+        "sha256": "bb88a50cec4d3d97fb45886cc8b8e17c8f19a51aef71f49568946c163e27bc0d"
+      },
+      {
+        "file": "dist/spec/previews/layouts/ecosystem-map.html",
+        "sha256": "b83ea1dbc951bed3928cdb53ec0f4c20446295b5b49c04cff0e9f6d83020ce8c"
+      },
+      {
+        "file": "dist/spec/previews/layouts/executive-decision.html",
+        "sha256": "8ff1368ff8bc5498bbe5967b33b41308c6bec34d1937baed9b6e875c932910f6"
+      },
+      {
+        "file": "dist/spec/previews/layouts/executive-summary.html",
+        "sha256": "568c75a583f50dbe3652fc305c516ed9522c4f6e2b9caf08f4dcf2842c441752"
+      },
+      {
+        "file": "dist/spec/previews/layouts/faq.html",
+        "sha256": "df23697121798ae0ef4e86d1da4787172a07dae79b31c0ce96b7b669d9a9b30f"
+      },
+      {
+        "file": "dist/spec/previews/layouts/feature-comparison-matrix.html",
+        "sha256": "f31037aac4e66fa36919c4c0a6489f37d3ef8f5a3a502864ca82451fdca7fd5b"
+      },
+      {
+        "file": "dist/spec/previews/layouts/forecast-scenario.html",
+        "sha256": "ec06cc8bda630bae1903d740f568c7bc6a4a874c758e689117f85c0c8896ed38"
+      },
+      {
+        "file": "dist/spec/previews/layouts/funnel-pyramid.html",
+        "sha256": "43a13cb0dde757c1b617b8d8064f12df3eb8d5a2df5a0ab829cfabf7a74b8632"
+      },
+      {
+        "file": "dist/spec/previews/layouts/gantt-project-plan.html",
+        "sha256": "22218b3cbee5117a854526378f5a7d9be1caa0a05754fd0e7c905a8e7e3be643"
+      },
+      {
+        "file": "dist/spec/previews/layouts/geographic-map.html",
+        "sha256": "e0c47265ec0280f0b502035cd40cea7ca60ece38dba145148f590e94d4b69fa7"
+      },
+      {
+        "file": "dist/spec/previews/layouts/heatmap-cohort.html",
+        "sha256": "d40fe34d3a8bb9db142ccab36c43c5b788f3a04fb39e34545109d8636d597bbe"
+      },
+      {
+        "file": "dist/spec/previews/layouts/hub-and-spoke.html",
+        "sha256": "a17f4bc0e8a9fa39ca468d11a6abc5b2a4de816a25e36ade657517ecc33f24ee"
+      },
+      {
+        "file": "dist/spec/previews/layouts/icon-grid.html",
+        "sha256": "bd3f20eec6210b132848ee3079fc2a0cdf71379c0d072a570b875b2f4f869954"
+      },
+      {
+        "file": "dist/spec/previews/layouts/image-focus.html",
+        "sha256": "2e7db3e2ec01957c46f0593718b9dffc1275d5cbe29c4026e972a6028ec088b1"
+      },
+      {
+        "file": "dist/spec/previews/layouts/index.json",
+        "sha256": "0fcbe0460515d122b014bd35c3479ec263c2f96f0987e4feb28003dc934d1d37"
+      },
+      {
+        "file": "dist/spec/previews/layouts/key-takeaway.html",
+        "sha256": "d30464be48673a39a6cbdef4349b5ab5dbe623a40cca242dc7476e5fd5c4806a"
+      },
+      {
+        "file": "dist/spec/previews/layouts/kpi-scorecard.html",
+        "sha256": "c60b4015869184e771bde2820a458d1f8667dd6b4a2df3b7d109333472340756"
+      },
+      {
+        "file": "dist/spec/previews/layouts/logic-tree.html",
+        "sha256": "629e54758ce33bf8f63cfcb12db77118c6ba9794c357689e1023356ef0b15f6c"
+      },
+      {
+        "file": "dist/spec/previews/layouts/market-size.html",
+        "sha256": "7629c8e902b98a40905c2f43ddd96dbff6b3e8af63cfbd015094b538da7009fb"
+      },
+      {
+        "file": "dist/spec/previews/layouts/matrix-quadrant.html",
+        "sha256": "4cb34e2b4eb9cc38f1fcf62e619d469663634c36ef0e8e14bed3e9bd934ca82d"
+      },
+      {
+        "file": "dist/spec/previews/layouts/network-dependency-map.html",
+        "sha256": "b2198fa3aac616ebee3a4d894ae490fe0e9488f548dfe5b29566c370dfabbb03"
+      },
+      {
+        "file": "dist/spec/previews/layouts/one-column-explainer.html",
+        "sha256": "afdb565dc4c8ed4f49122af4d5aa758530d2a6a7d55d102a4e6f6a58c1c07df4"
+      },
+      {
+        "file": "dist/spec/previews/layouts/org-chart.html",
+        "sha256": "d0f0aa265c8c590b737c3b8322ba449f3faea4a7bffb3c30572121151a14cf62"
+      },
+      {
+        "file": "dist/spec/previews/layouts/persona-grid.html",
+        "sha256": "5941918108fba45f9caf7942a676fbd421ac6ffa1565264e8a35961dbaf4e6f3"
+      },
+      {
+        "file": "dist/spec/previews/layouts/photo-grid.html",
+        "sha256": "c80b08d11856b83a04c2dfa945cae97da66fa1c833a5c2cd488d855dc7f88cad"
+      },
+      {
+        "file": "dist/spec/previews/layouts/pricing-table.html",
+        "sha256": "fc1825b77532ba748299fd22b12b2ed91e267561a42afd2c9d36db42462ce1a4"
+      },
+      {
+        "file": "dist/spec/previews/layouts/process-flow.html",
+        "sha256": "1f6918590d6b3a17c320c8da6a3a6f775dd567ba9116f2a11870ba32a934ba4b"
+      },
+      {
+        "file": "dist/spec/previews/layouts/product-feature.html",
+        "sha256": "ab2164898b584600507085f5e675ea8f9b0c3ffc90c466ad183e9c870dd0fd6d"
+      },
+      {
+        "file": "dist/spec/previews/layouts/pros-cons.html",
+        "sha256": "0e3635ad9f921b252799f8dd440f3fa9400b8e3060983a82ad0e37a5875080d6"
+      },
+      {
+        "file": "dist/spec/previews/layouts/qa-discussion.html",
+        "sha256": "cc802d94b12c1ae1926bded0c610340b8da6ef9e10cb7c6287a5473ac352a75d"
+      },
+      {
+        "file": "dist/spec/previews/layouts/quote-highlight.html",
+        "sha256": "1b56a1e48f8ab944cd4e2dd1acfd0e1dd791a8dab514a9fc9af58ffb989a9597"
+      },
+      {
+        "file": "dist/spec/previews/layouts/raci-matrix.html",
+        "sha256": "0b31baf2b64dc323d45399d31cd2ae5cce46bee12ecbe70c6c02202c0d04d5ce"
+      },
+      {
+        "file": "dist/spec/previews/layouts/risk-heatmap.html",
+        "sha256": "d26f7d59d1ae88e4155888ac9bc84e32f36dc67ad9f855ebf32fef23f3fcd180"
+      },
+      {
+        "file": "dist/spec/previews/layouts/roadmap.html",
+        "sha256": "2f04ab50cfbb1997c9e502d288d869363443596dde2f00ff6a0ef46232936c94"
+      },
+      {
+        "file": "dist/spec/previews/layouts/screenshot-walkthrough.html",
+        "sha256": "674f4ad47dc68768ca3d37e363245a04afee4cac16a488f2a6ddfc9a00924f9b"
+      },
+      {
+        "file": "dist/spec/previews/layouts/section-divider.html",
+        "sha256": "0c0907af76150451617a5d696cedd4766c2b398e1d71fbe9c16bb4933ea5e7a0"
+      },
+      {
+        "file": "dist/spec/previews/layouts/single-message-statement.html",
+        "sha256": "f720f3f7a496e16d10d7f144b7a124ed2c361e824716ee874297eced8c41c9e6"
+      },
+      {
+        "file": "dist/spec/previews/layouts/stats-metrics.html",
+        "sha256": "605c866b55c3eab4de51bef36f563a7e9707b404966d1425fb34e02258ea22de"
+      },
+      {
+        "file": "dist/spec/previews/layouts/status-rag.html",
+        "sha256": "6bbcede98219339dfc072568523c7e5bf4cbf58f3f315d59a6576293c450a452"
+      },
+      {
+        "file": "dist/spec/previews/layouts/swimlane-process.html",
+        "sha256": "8a15cdc714d7bd522d2f393196dd01c8f64a4907564fe9c7dbddb975c1b3ad36"
+      },
+      {
+        "file": "dist/spec/previews/layouts/swot-analysis.html",
+        "sha256": "a8b18e76a86150632d359a954d02c9eb049431db7d7d72e78326e099a8a4a1f0"
+      },
+      {
+        "file": "dist/spec/previews/layouts/team-bio.html",
+        "sha256": "3653e43d421873415c97e63940d930d7e6f900070a4b14806fa3da4c17341028"
+      },
+      {
+        "file": "dist/spec/previews/layouts/testimonial-grid.html",
+        "sha256": "e130b1a7f64a62ae22d8ed780e2a1658ebcd1456795214bd95c37747c87a6e78"
+      },
+      {
+        "file": "dist/spec/previews/layouts/thank-you-cta.html",
+        "sha256": "7dc88e16e742b320d8d74100a1658063f883c3af6885c3d454faebd40361a223"
+      },
+      {
+        "file": "dist/spec/previews/layouts/three-column.html",
+        "sha256": "b59de0a4d78fd56b278868ca70cf2f4fa21d2c214f137f7e721d84b2e37a09ee"
+      },
+      {
+        "file": "dist/spec/previews/layouts/timeline.html",
+        "sha256": "aa48854e699117d354754f613d5792b45f26690431bebcbd4fa22c8b4fc2727e"
+      },
+      {
+        "file": "dist/spec/previews/layouts/title-slide.html",
+        "sha256": "e7a75ada7f45474bf6ffab34d6d9169371baefceb284eb7613be4e7c6a8932c1"
+      },
+      {
+        "file": "dist/spec/previews/layouts/two-column.html",
+        "sha256": "2537084a70e1447b8fef782fab71f68208677080aadc6af31c324b41c9e17ee1"
+      },
+      {
+        "file": "dist/spec/previews/layouts/venn-overlap.html",
+        "sha256": "a74b1b1378d07c6805264f333f6b975c3c11648c0aa6e09247b541d6231dc0c1"
+      },
+      {
+        "file": "dist/spec/previews/layouts/waterfall-bridge.html",
+        "sha256": "b2d48b3557469f9115390998e9aac63396b641261a20c85f8e8a647772cebbd4"
+      },
+      {
+        "file": "dist/spec/previews/layouts/wheel-radial.html",
+        "sha256": "61c53d59714b54653582f37931ebdf58b32c7b6d204531e799220bedc169f25e"
+      },
+      {
+        "file": "dist/spec/reference/engine-defaults.json",
+        "sha256": "20913d032340b88b459b0cbc645ea22bc71852a3baa8b52a207fef441781294c"
+      },
+      {
+        "file": "dist/spec/schemas/audience.schema.json",
+        "sha256": "cb0598ea44491f4f8d350a9e8a53bd49ebb31599bda5c2a7d2c9bb8d72214614"
+      },
+      {
+        "file": "dist/spec/schemas/catalog-index.schema.json",
+        "sha256": "397167ea5c369824aba2692e3a416e532ed6056cfcc2ad35bbcde343039216d6"
+      },
+      {
+        "file": "dist/spec/schemas/chart-type.schema.json",
+        "sha256": "9df05881aa42fcfc32ab9dbcd7b20ec072602a57d3778a30b298b7c2c87b76a1"
+      },
+      {
+        "file": "dist/spec/schemas/color-scheme.schema.json",
+        "sha256": "b7b7c9de942f0c30f6555dd85849b5329fcc75f6032dd7b4a70957ee21ac74a2"
+      },
+      {
+        "file": "dist/spec/schemas/font-scheme.schema.json",
+        "sha256": "27a0dfec3688d78a389aa04388e5289100ef0c415689c6865a36405cd5f6dada"
+      },
+      {
+        "file": "dist/spec/schemas/language.schema.json",
+        "sha256": "22fccf3436e3efb7b20c81e764f6944b391fb2eb1165f8351fbabfb050c6a3e6"
+      },
+      {
+        "file": "dist/spec/schemas/layout-preview-index.schema.json",
+        "sha256": "c196c0ea40ea5cea845cff1af5c87d1e0713fff43f452439d2968827ec17fe98"
+      },
+      {
+        "file": "dist/spec/schemas/layout.schema.json",
+        "sha256": "2b6e5be001d7497968c0c9386e6a1624e999c16465025b2ddaca9a295691bb67"
+      },
+      {
+        "file": "dist/spec/schemas/narrative.schema.json",
+        "sha256": "4bbf5aea598ab697387ee11902a2238377f35237cec01073981bd795a1525240"
+      },
+      {
+        "file": "dist/spec/schemas/opf.schema.json",
+        "sha256": "9e01f7b5301bdf9e342453b90aaa4dd386a71665b303cf43b115af1700f871db"
+      },
+      {
+        "file": "dist/spec/schemas/purpose.schema.json",
+        "sha256": "e2995255e5d3e6681e88161286ce92ca11638c38c7054c77e9586e46d840f666"
+      },
+      {
+        "file": "dist/spec/schemas/social-platform.schema.json",
+        "sha256": "22bf1f4f0ae2f55edc2aaea19f3e128001ab1217b4043ffb17801e8bc7668e6c"
+      },
+      {
+        "file": "dist/spec/schemas/theme.schema.json",
+        "sha256": "de476d27d7dd5c0fabc01d31ca6dd9ff087d536fd63ce3f07485d45205bbad20"
+      },
+      {
+        "file": "dist/spec/schemas/tone.schema.json",
+        "sha256": "dfcc72a825c9a201487d1078fb03600dd307a5af73e30a99916544ebe192c4d2"
+      },
+      {
+        "file": "dist/spec-files.d.ts",
+        "sha256": "78e16c22834604c3e02a22b771a55d2e24ace4e90cc8ef0b7353d409cff2d68f"
+      },
+      {
+        "file": "dist/spec-files.js",
+        "sha256": "8302d015b9368a585ee6aea946a18b2f0036396acb963e273baee48a0c4ac817"
+      },
+      {
+        "file": "dist/types.d.ts",
+        "sha256": "6c265542f06fdda65069239acc63037cb4424cc64853d6d4832033252f29433c"
+      },
+      {
+        "file": "dist/types.js",
+        "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      },
+      {
+        "file": "dist/validator.d.ts",
+        "sha256": "a61baa3b578d65e05f328e600cf48efe7eea4df27c202e70cb6d5f0cc154df62"
+      },
+      {
+        "file": "dist/validator.js",
+        "sha256": "fc419645499641ca2e45e3bfde4dba90a951e171bbfdf45125da1057b5805b45"
+      },
+      {
+        "file": "package.json",
+        "sha256": "32c362f27d4d56c0a349972a9302701d0d7e05169a7c5af7f2a1f2b524c54368"
+      }
+    ]
+  }
+}

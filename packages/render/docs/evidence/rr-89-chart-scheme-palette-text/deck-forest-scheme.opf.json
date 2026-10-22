@@ -1,0 +1,212 @@
+{
+  "design": {
+    "colorScheme": {
+      "id": "forest",
+      "dark1": "#10231A",
+      "light1": "#F5F7F2",
+      "dark2": "#2B3A33",
+      "light2": "#E6ECE3",
+      "accent1": "#B45309",
+      "accent2": "#7C2D12",
+      "accent3": "#0F766E",
+      "accent4": "#6D28D9",
+      "accent5": "#BE185D",
+      "accent6": "#4D7C0F",
+      "hyperlink": "#B45309",
+      "followedHyperlink": "#6D28D9"
+    }
+  },
+  "slides": [
+    {
+      "title": "Revenue by region",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rows": [
+            [
+              "Q1",
+              320,
+              210,
+              150
+            ],
+            [
+              "Q2",
+              410,
+              260,
+              190
+            ],
+            [
+              "Q3",
+              520,
+              330,
+              240
+            ],
+            [
+              "Q4",
+              780,
+              450,
+              310
+            ]
+          ]
+        },
+        "axisTitles": {
+          "category": "Quarter",
+          "value": "Revenue ($M)"
+        }
+      }
+    },
+    {
+      "title": "Pipeline by region",
+      "chart": {
+        "type": "bar",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rows": [
+            [
+              "Q1",
+              320,
+              210,
+              150
+            ],
+            [
+              "Q2",
+              410,
+              260,
+              190
+            ],
+            [
+              "Q3",
+              520,
+              330,
+              240
+            ],
+            [
+              "Q4",
+              780,
+              450,
+              310
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Trend",
+      "chart": {
+        "type": "line",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rows": [
+            [
+              "Q1",
+              320,
+              210,
+              150
+            ],
+            [
+              "Q2",
+              410,
+              260,
+              190
+            ],
+            [
+              "Q3",
+              520,
+              330,
+              240
+            ],
+            [
+              "Q4",
+              780,
+              450,
+              310
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Share",
+      "chart": {
+        "type": "pie",
+        "data": {
+          "columns": [
+            "Region",
+            "Share"
+          ],
+          "rows": [
+            [
+              "North",
+              45
+            ],
+            [
+              "South",
+              30
+            ],
+            [
+              "West",
+              25
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Stacked",
+      "chart": {
+        "type": "stacked-column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rows": [
+            [
+              "Q1",
+              320,
+              210,
+              150
+            ],
+            [
+              "Q2",
+              410,
+              260,
+              190
+            ],
+            [
+              "Q3",
+              520,
+              330,
+              240
+            ],
+            [
+              "Q4",
+              780,
+              450,
+              310
+            ]
+          ]
+        },
+        "legend": "bottom"
+      }
+    }
+  ]
+}

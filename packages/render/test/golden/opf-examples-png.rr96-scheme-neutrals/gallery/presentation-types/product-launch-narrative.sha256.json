@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/presentation-types/product-launch-narrative.opf.json",
+  "entries": {
+    "gallery/presentation-types/product-launch-narrative.opf.json#0": {
+      "sha256": "cb9c0f133ce20fd44ad8a6c9c90ce8f1a36337566121933919b2a9723bcc732c",
+      "bytes": 9595
+    },
+    "gallery/presentation-types/product-launch-narrative.opf.json#1": {
+      "sha256": "2f0a91822f95a7f30b4f5140dc20734f257a013428de498193fee1a657a5cc9e",
+      "bytes": 11570
+    },
+    "gallery/presentation-types/product-launch-narrative.opf.json#2": {
+      "sha256": "804f39f1544277cd00d39196fcc1065fdf01030f75df0c060d138a0b277940e6",
+      "bytes": 6436
+    },
+    "gallery/presentation-types/product-launch-narrative.opf.json#3": {
+      "sha256": "3a2e9bf2ed8b2d9db6a3a2d0698efa4d9951f8ab55406cbda56f418d59672c4a",
+      "bytes": 11324
+    },
+    "gallery/presentation-types/product-launch-narrative.opf.json#4": {
+      "sha256": "7679f00e834e08b372a89f370ee5378492542296a7a434e74a34a795610a25d6",
+      "bytes": 12370
+    },
+    "gallery/presentation-types/product-launch-narrative.opf.json#5": {
+      "sha256": "d63f61211b479634bc88b790763713b369ce4791446b933a345ab5fe9154a1e0",
+      "bytes": 19319
+    },
+    "gallery/presentation-types/product-launch-narrative.opf.json#6": {
+      "sha256": "d0df3a44f55cef7923a526cf7a3aee2998ead4b4af764af7819845b178e8037d",
+      "bytes": 14623
+    },
+    "gallery/presentation-types/product-launch-narrative.opf.json#7": {
+      "sha256": "5e2ee8ef46fa76ebf938549383b0154053ee53f7ae12699ba03b243f1612cb14",
+      "bytes": 4832
+    },
+    "gallery/presentation-types/product-launch-narrative.opf.json#8": {
+      "sha256": "2b3e3d310f114c486ffe9fd5ad9d4536a8b3c211593965195a6ed5016de538a4",
+      "bytes": 6487
+    },
+    "gallery/presentation-types/product-launch-narrative.opf.json#9": {
+      "sha256": "23ee9a869ddfe874fefd110709c70580df86bfea74bc3712ba1381914cca7d1a",
+      "bytes": 17223
+    }
+  }
+}

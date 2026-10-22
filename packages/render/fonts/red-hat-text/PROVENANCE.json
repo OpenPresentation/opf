@@ -1,0 +1,47 @@
+{
+  "upstream": {
+    "package": "@expo-google-fonts/red-hat-text",
+    "version": "0.4.1",
+    "source": "https://www.npmjs.com/package/@expo-google-fonts/red-hat-text/v/0.4.1",
+    "integrity": "sha512-PELzskSfcsA/u8T+IeC3cC32mcGJs6dQRl59YqkNRkmzObILVk6uMoZ3Lvj9//q3XhLhZs8ikjUbzBfjO7bmcQ=="
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "435fbfb7e66988b2a06686a4cb966faec733f35d8fe100a1601573c27f3e0bb8",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2024 The Red Hat Project Authors (https://github.com/RedHatOfficial/RedHatFont)",
+  "faces": [
+    {
+      "file": "RedHatText_400Regular.ttf",
+      "family": "Red Hat Text",
+      "weight": 400,
+      "italic": false,
+      "sha256": "65bce50e2d904363a2ade7dac0b381c72638c43fd690a65a35aad1cc874f75cf",
+      "npmFile": "400Regular/RedHatText_400Regular.ttf"
+    },
+    {
+      "file": "RedHatText_400Regular_Italic.ttf",
+      "family": "Red Hat Text",
+      "weight": 400,
+      "italic": true,
+      "sha256": "6da9408ce2ad47d8f4b2881853d92aee45ca52af39b4c28ddedaab1fb91f57c5",
+      "npmFile": "400Regular_Italic/RedHatText_400Regular_Italic.ttf"
+    },
+    {
+      "file": "RedHatText_700Bold.ttf",
+      "family": "Red Hat Text",
+      "weight": 700,
+      "italic": false,
+      "sha256": "a82d498bd5314be56ccb79fb5c2244513a41a5c2b04be56a45751c26a2132a03",
+      "npmFile": "700Bold/RedHatText_700Bold.ttf"
+    },
+    {
+      "file": "RedHatText_700Bold_Italic.ttf",
+      "family": "Red Hat Text",
+      "weight": 700,
+      "italic": true,
+      "sha256": "1f2b2ed57f70ea28bacc1bd3ce3f0b740c5b16a262c61925400f1da5d1045a7c",
+      "npmFile": "700Bold_Italic/RedHatText_700Bold_Italic.ttf"
+    }
+  ]
+}

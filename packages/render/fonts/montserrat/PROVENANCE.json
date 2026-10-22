@@ -1,0 +1,55 @@
+{
+  "upstream": {
+    "package": "@expo-google-fonts/montserrat",
+    "version": "0.4.2",
+    "source": "https://www.npmjs.com/package/@expo-google-fonts/montserrat/v/0.4.2",
+    "integrity": "sha512-Xyq7rKJhhZOE1Xk4wKSSVoUeOkFmQEMhtZ3pdFrgYckGZMs115Apmld1AI8Ju+yrl5GzDdfRCCqRr33dvEDYUA=="
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "8b7141c03fa4f8d44e6345d5d4931709290f0f67875e452e95ac1fd3a027802e",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2024 The Montserrat.Git Project Authors (https://github.com/JulietaUla/Montserrat.git)",
+  "faces": [
+    {
+      "file": "Montserrat_400Regular.ttf",
+      "family": "Montserrat",
+      "weight": 400,
+      "italic": false,
+      "sha256": "ef9cf99f0175bef530b88934bd904fcf56f773cec6fd4dfb8ccaf7ce2bbd395e",
+      "npmFile": "400Regular/Montserrat_400Regular.ttf"
+    },
+    {
+      "file": "Montserrat_400Regular_Italic.ttf",
+      "family": "Montserrat",
+      "weight": 400,
+      "italic": true,
+      "sha256": "7e87c0f96b39fbb919b30aef8991323d0b257649f391e6456bcf03c231448f49",
+      "npmFile": "400Regular_Italic/Montserrat_400Regular_Italic.ttf"
+    },
+    {
+      "file": "Montserrat_700Bold.ttf",
+      "family": "Montserrat",
+      "weight": 700,
+      "italic": false,
+      "sha256": "7fa93d7daa5c2f881a6727229c211782de6b76008fbd6346b3d7664e8fc83f43",
+      "npmFile": "700Bold/Montserrat_700Bold.ttf"
+    },
+    {
+      "file": "Montserrat_700Bold_Italic.ttf",
+      "family": "Montserrat",
+      "weight": 700,
+      "italic": true,
+      "sha256": "001a59b0f2c541080033b83ca6dfacce03095d99caa3594835f51b7c6d9ce758",
+      "npmFile": "700Bold_Italic/Montserrat_700Bold_Italic.ttf"
+    },
+    {
+      "file": "Montserrat_900Black.ttf",
+      "family": "Montserrat",
+      "weight": 900,
+      "italic": false,
+      "sha256": "b48e6741b9889ede4ffe3d8acfda3e6917c62127537b19fe7206cba04e6ebb63",
+      "npmFile": "900Black/Montserrat_900Black.ttf"
+    }
+  ]
+}

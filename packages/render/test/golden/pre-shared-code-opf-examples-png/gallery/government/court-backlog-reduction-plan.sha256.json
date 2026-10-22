@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/government/court-backlog-reduction-plan.opf.json",
+  "entries": {
+    "gallery/government/court-backlog-reduction-plan.opf.json#0": {
+      "sha256": "3235d758dfaaff334053de1696caa8c6c1732061bed00f36cacbe9d0cfa0fd42",
+      "bytes": 6828
+    },
+    "gallery/government/court-backlog-reduction-plan.opf.json#1": {
+      "sha256": "64290273fdeec83ad7338ec1e561fe120e3343e76d0e5588f05389ac1db808d0",
+      "bytes": 8831
+    },
+    "gallery/government/court-backlog-reduction-plan.opf.json#2": {
+      "sha256": "0266286cbda07e5103a82c33db88ec64124a6ba3ef70ecafc0e5333968a2010f",
+      "bytes": 4707
+    },
+    "gallery/government/court-backlog-reduction-plan.opf.json#3": {
+      "sha256": "dc0bbac9b867046d1932b2e0ee13bae8ac9686550602dfb616ef211a1f27d451",
+      "bytes": 7325
+    },
+    "gallery/government/court-backlog-reduction-plan.opf.json#4": {
+      "sha256": "c3ecc4c758ecca339e08b7daa86648b24cf6dfdde619dbb8293a0bf81acd0881",
+      "bytes": 7605
+    },
+    "gallery/government/court-backlog-reduction-plan.opf.json#5": {
+      "sha256": "017746e439d9fc050d1cc5edb23d07c4e70057425684e05771e5971bf97a59c6",
+      "bytes": 8139
+    }
+  }
+}

@@ -1,0 +1,189 @@
+{
+  "node": "v20.20.2",
+  "browser": "153.0.8010.12",
+  "observed": [
+    {
+      "requested": {
+        "fontFamily": "Roboto",
+        "fontWeight": 400,
+        "italic": false
+      },
+      "resolved": {
+        "fontFamily": "Roboto",
+        "fontWeight": 400,
+        "italic": false,
+        "fontFace": {
+          "family": "Roboto",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 637.751953125,
+      "actual": 637.765625,
+      "text": "Office AVATAR 0123 — typography"
+    },
+    {
+      "requested": {
+        "fontFamily": "Roboto",
+        "fontWeight": 500,
+        "italic": false
+      },
+      "resolved": {
+        "fontFamily": "Roboto Medium",
+        "fontWeight": 500,
+        "italic": false,
+        "fontFace": {
+          "family": "Roboto Medium",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 645.5244140625,
+      "actual": 645.53125,
+      "text": "Office AVATAR 0123 — typography"
+    },
+    {
+      "requested": {
+        "fontFamily": "Roboto",
+        "fontWeight": 600,
+        "italic": false
+      },
+      "resolved": {
+        "fontFamily": "Roboto SemiBold",
+        "fontWeight": 600,
+        "italic": false,
+        "fontFace": {
+          "family": "Roboto SemiBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 648.8671875,
+      "actual": 648.875,
+      "text": "Office AVATAR 0123 — typography"
+    },
+    {
+      "requested": {
+        "fontFamily": "Roboto",
+        "fontWeight": 700,
+        "italic": false
+      },
+      "resolved": {
+        "fontFamily": "Roboto",
+        "fontWeight": 700,
+        "italic": false,
+        "fontFace": {
+          "family": "Roboto",
+          "bold": true,
+          "italic": false
+        }
+      },
+      "expected": 651.984375,
+      "actual": 651.984375,
+      "text": "Office AVATAR 0123 — typography"
+    },
+    {
+      "requested": {
+        "fontFamily": "Roboto",
+        "fontWeight": 800,
+        "italic": false
+      },
+      "resolved": {
+        "fontFamily": "Roboto ExtraBold",
+        "fontWeight": 800,
+        "italic": false,
+        "fontFace": {
+          "family": "Roboto ExtraBold",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 655.470703125,
+      "actual": 655.484375,
+      "text": "Office AVATAR 0123 — typography"
+    },
+    {
+      "requested": {
+        "fontFamily": "Roboto",
+        "fontWeight": 400,
+        "italic": true
+      },
+      "resolved": {
+        "fontFamily": "Roboto",
+        "fontWeight": 400,
+        "italic": true,
+        "fontFace": {
+          "family": "Roboto",
+          "bold": false,
+          "italic": true
+        }
+      },
+      "expected": 619.41796875,
+      "actual": 619.421875,
+      "text": "Office AVATAR 0123 — typography"
+    },
+    {
+      "requested": {
+        "fontFamily": "Roboto",
+        "fontWeight": 700,
+        "italic": true
+      },
+      "resolved": {
+        "fontFamily": "Roboto",
+        "fontWeight": 700,
+        "italic": true,
+        "fontFace": {
+          "family": "Roboto",
+          "bold": true,
+          "italic": true
+        }
+      },
+      "expected": 633.2197265625,
+      "actual": 633.234375,
+      "text": "Office AVATAR 0123 — typography"
+    },
+    {
+      "requested": {
+        "fontFamily": "Roboto Mono",
+        "fontWeight": 400,
+        "italic": false
+      },
+      "resolved": {
+        "fontFamily": "Roboto Mono",
+        "fontWeight": 400,
+        "italic": false,
+        "fontFace": {
+          "family": "Roboto Mono",
+          "bold": false,
+          "italic": false
+        }
+      },
+      "expected": 781.3271484375,
+      "actual": 781.328125,
+      "text": "Office AVATAR 0123 — typography"
+    },
+    {
+      "requested": {
+        "fontFamily": "Roboto Mono",
+        "fontWeight": 700,
+        "italic": false
+      },
+      "resolved": {
+        "fontFamily": "Roboto Mono",
+        "fontWeight": 700,
+        "italic": false,
+        "fontFace": {
+          "family": "Roboto Mono",
+          "bold": true,
+          "italic": false
+        }
+      },
+      "expected": 781.3271484375,
+      "actual": 781.328125,
+      "text": "Office AVATAR 0123 — typography"
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "scope": "Actual offline browser painting selects all nine resolved physical styles; native paint and other scripts remain separate."
+}

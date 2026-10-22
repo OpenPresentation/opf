@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/industries/water-stewardship-grower-brief.opf.json",
+  "entries": {
+    "gallery/industries/water-stewardship-grower-brief.opf.json#0": {
+      "sha256": "dd22c93476226b8f0cfee46deca8a5ec849e66e377b097ed2685ce14e0953919",
+      "bytes": 5367
+    },
+    "gallery/industries/water-stewardship-grower-brief.opf.json#1": {
+      "sha256": "b143d372f4c411ec3d51a71c6faa764c98d04feaf6b452454c7ce10224fc792d",
+      "bytes": 7512
+    },
+    "gallery/industries/water-stewardship-grower-brief.opf.json#2": {
+      "sha256": "877d660b022e0d8f76b2fab30dcdf2ca6478f0dfb2690b4128471d90f317cc28",
+      "bytes": 4395
+    },
+    "gallery/industries/water-stewardship-grower-brief.opf.json#3": {
+      "sha256": "ce1f96766fe44ab0752fb84a75bd1ac54df5f6b27bb0be542cf1a1eedded9980",
+      "bytes": 6559
+    },
+    "gallery/industries/water-stewardship-grower-brief.opf.json#4": {
+      "sha256": "de27c59cd6b0dc658c346f9453bc808984c2c274c84812e968021ce17937826e",
+      "bytes": 6149
+    },
+    "gallery/industries/water-stewardship-grower-brief.opf.json#5": {
+      "sha256": "750c10ac95e0d8e274b3662c0a730fb82fb5c40d9b270e0957660f85ea1b0ec7",
+      "bytes": 14015
+    },
+    "gallery/industries/water-stewardship-grower-brief.opf.json#6": {
+      "sha256": "123559985f4c5d1da0bbec14b150d40e28172922cbcb1d75c5ba64382514ef3c",
+      "bytes": 9058
+    },
+    "gallery/industries/water-stewardship-grower-brief.opf.json#7": {
+      "sha256": "10693021b7c0b5b942655988bc886fd5f06070876395f327ae6b5d49695beee0",
+      "bytes": 3544
+    },
+    "gallery/industries/water-stewardship-grower-brief.opf.json#8": {
+      "sha256": "176216ede6474d36a1d268105a2f8622ea5ed4544b94dfad3ca67c6325731536",
+      "bytes": 4874
+    },
+    "gallery/industries/water-stewardship-grower-brief.opf.json#9": {
+      "sha256": "de89949dcb380df09862f52b677ba9f4534bcf2deecba284633ee81c8bd610a6",
+      "bytes": 9816
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/design-and-media/photo-essay-portfolio.opf.json",
+  "entries": {
+    "gallery/design-and-media/photo-essay-portfolio.opf.json#0": {
+      "sha256": "65eade2a8b68e9dac8f23ed986e71eb47f31c68e7e9f2f1fe60d2e2b062ba899",
+      "bytes": 4479
+    },
+    "gallery/design-and-media/photo-essay-portfolio.opf.json#1": {
+      "sha256": "d37541b452c01db50494295fa4396e9790ebd267acd5c2c6c2270da640b8ce41",
+      "bytes": 7094
+    },
+    "gallery/design-and-media/photo-essay-portfolio.opf.json#2": {
+      "sha256": "e520ffe402c1e773755121c80ca271cef33cfa8e455b6c3bcb460aa3f4962205",
+      "bytes": 3778
+    },
+    "gallery/design-and-media/photo-essay-portfolio.opf.json#3": {
+      "sha256": "e1ed715bfaf7061188f7e4c884373bf9cb1ffdce9cc2e4c924e5026902107a66",
+      "bytes": 6409
+    },
+    "gallery/design-and-media/photo-essay-portfolio.opf.json#4": {
+      "sha256": "3f3025f2160ca98ceac9c40dbb7f4019c9643c93df67fa268cbf91e9da5da351",
+      "bytes": 6229
+    },
+    "gallery/design-and-media/photo-essay-portfolio.opf.json#5": {
+      "sha256": "419d7dd0be2dfa4a7483c48b5982b73fd744cb9280a10b78dc664938e597aa9d",
+      "bytes": 13628
+    },
+    "gallery/design-and-media/photo-essay-portfolio.opf.json#6": {
+      "sha256": "9474783310809c9111da9c92ef0fdc68b07c3f18c30e697ec70a69e7b4133392",
+      "bytes": 7861
+    },
+    "gallery/design-and-media/photo-essay-portfolio.opf.json#7": {
+      "sha256": "b7f9db2a1039d100b8375c12a5e2578625b04fa999d2912383f4e602d9a6f61f",
+      "bytes": 3567
+    },
+    "gallery/design-and-media/photo-essay-portfolio.opf.json#8": {
+      "sha256": "1079dbda34a4cb7e7573ec014f9ca9387523741391526ee7b16e5064a6c5983e",
+      "bytes": 4819
+    },
+    "gallery/design-and-media/photo-essay-portfolio.opf.json#9": {
+      "sha256": "a2daa27f11f546328f2b2729e27ecf7ec0e6faba8ee24400aa5da41e172c2f15",
+      "bytes": 9748
+    }
+  }
+}

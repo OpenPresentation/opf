@@ -1,0 +1,195 @@
+{
+  "slides": [
+    {
+      "title": "Revenue by region",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rows": [
+            [
+              "Q1",
+              320,
+              210,
+              150
+            ],
+            [
+              "Q2",
+              410,
+              260,
+              190
+            ],
+            [
+              "Q3",
+              520,
+              330,
+              240
+            ],
+            [
+              "Q4",
+              780,
+              450,
+              310
+            ]
+          ]
+        },
+        "axisTitles": {
+          "category": "Quarter",
+          "value": "Revenue ($M)"
+        }
+      }
+    },
+    {
+      "title": "Pipeline by region",
+      "chart": {
+        "type": "bar",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rows": [
+            [
+              "Q1",
+              320,
+              210,
+              150
+            ],
+            [
+              "Q2",
+              410,
+              260,
+              190
+            ],
+            [
+              "Q3",
+              520,
+              330,
+              240
+            ],
+            [
+              "Q4",
+              780,
+              450,
+              310
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Trend",
+      "chart": {
+        "type": "line",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rows": [
+            [
+              "Q1",
+              320,
+              210,
+              150
+            ],
+            [
+              "Q2",
+              410,
+              260,
+              190
+            ],
+            [
+              "Q3",
+              520,
+              330,
+              240
+            ],
+            [
+              "Q4",
+              780,
+              450,
+              310
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Share",
+      "chart": {
+        "type": "pie",
+        "data": {
+          "columns": [
+            "Region",
+            "Share"
+          ],
+          "rows": [
+            [
+              "North",
+              45
+            ],
+            [
+              "South",
+              30
+            ],
+            [
+              "West",
+              25
+            ]
+          ]
+        }
+      }
+    },
+    {
+      "title": "Stacked",
+      "chart": {
+        "type": "stacked-column",
+        "data": {
+          "columns": [
+            "Quarter",
+            "North",
+            "South",
+            "West"
+          ],
+          "rows": [
+            [
+              "Q1",
+              320,
+              210,
+              150
+            ],
+            [
+              "Q2",
+              410,
+              260,
+              190
+            ],
+            [
+              "Q3",
+              520,
+              330,
+              240
+            ],
+            [
+              "Q4",
+              780,
+              450,
+              310
+            ]
+          ]
+        },
+        "legend": "bottom"
+      }
+    }
+  ]
+}

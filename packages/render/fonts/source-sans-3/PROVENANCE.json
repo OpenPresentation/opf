@@ -1,0 +1,49 @@
+{
+  "upstream": {
+    "source": "https://github.com/adobe-fonts/source-sans/tree/ed1808970eb3c7301c9a523bee26473ba0bb62fa/TTF",
+    "commit": "ed1808970eb3c7301c9a523bee26473ba0bb62fa",
+    "licenseUrl": "https://raw.githubusercontent.com/adobe-fonts/source-sans/ed1808970eb3c7301c9a523bee26473ba0bb62fa/LICENSE.md"
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "89ad2c4f66dd29127527493e729c31e731f111cf10faf5774c3db9275ed0c22c",
+  "reservedFontNames": [
+    "Source"
+  ],
+  "copyright": "Copyright 2010-2022 Adobe (http://www.adobe.com/), with Reserved Font Name 'Source'. All Rights Reserved. Source is a trademark of Adobe in the United States and/or other countries.",
+  "renamedFrom": "Source Sans Pro",
+  "faces": [
+    {
+      "file": "SourceSans3-Regular.ttf",
+      "family": "Source Sans 3",
+      "weight": 400,
+      "italic": false,
+      "sha256": "4644c81b86ec9caaa76b634889968ed3c4f4f52f054855933acc7c2b21e53b0f",
+      "upstreamUrl": "https://raw.githubusercontent.com/adobe-fonts/source-sans/ed1808970eb3c7301c9a523bee26473ba0bb62fa/TTF/SourceSans3-Regular.ttf"
+    },
+    {
+      "file": "SourceSans3-It.ttf",
+      "family": "Source Sans 3",
+      "weight": 400,
+      "italic": true,
+      "sha256": "192afd78f0f54a3c69eaf02d43f4d9a821e9d6110e41d3d25d61a7385cd580e4",
+      "upstreamUrl": "https://raw.githubusercontent.com/adobe-fonts/source-sans/ed1808970eb3c7301c9a523bee26473ba0bb62fa/TTF/SourceSans3-It.ttf"
+    },
+    {
+      "file": "SourceSans3-Bold.ttf",
+      "family": "Source Sans 3",
+      "weight": 700,
+      "italic": false,
+      "sha256": "9214b9d95e4231c609802815c2646c98174e2102d0d37f88978a7f8e71006e6a",
+      "upstreamUrl": "https://raw.githubusercontent.com/adobe-fonts/source-sans/ed1808970eb3c7301c9a523bee26473ba0bb62fa/TTF/SourceSans3-Bold.ttf"
+    },
+    {
+      "file": "SourceSans3-BoldIt.ttf",
+      "family": "Source Sans 3",
+      "weight": 700,
+      "italic": true,
+      "sha256": "7978291fc1bf314db887e0366853b33c5cf2e964c7b95cfb9ce403a6ec46a842",
+      "upstreamUrl": "https://raw.githubusercontent.com/adobe-fonts/source-sans/ed1808970eb3c7301c9a523bee26473ba0bb62fa/TTF/SourceSans3-BoldIt.ttf"
+    }
+  ]
+}

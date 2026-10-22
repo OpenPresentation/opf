@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/international/india-rural-payments-pilot.opf.json",
+  "entries": {
+    "gallery/international/india-rural-payments-pilot.opf.json#0": {
+      "sha256": "961503c5d965ce72d4fa6f185633add9c37ae590174080d68acd83befa7b8dea",
+      "bytes": 3802
+    },
+    "gallery/international/india-rural-payments-pilot.opf.json#1": {
+      "sha256": "6050cbc29c31584dff8fdbec2aeb4925014d42339710737f0304326c657f1e79",
+      "bytes": 6622
+    },
+    "gallery/international/india-rural-payments-pilot.opf.json#2": {
+      "sha256": "404822bc01b60886027d26cd3b64644d53596d257c308512a23b41146858c001",
+      "bytes": 3250
+    },
+    "gallery/international/india-rural-payments-pilot.opf.json#3": {
+      "sha256": "67fe4ce9ae5f72245d49a8bc7e3d123f46ce7649dd5964c4121d5ad473dcdcee",
+      "bytes": 5227
+    }
+  }
+}

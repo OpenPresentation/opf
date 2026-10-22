@@ -1,0 +1,1640 @@
+{
+  "node": "v24.21.0",
+  "browser": "153.0.8010.12",
+  "verifierSha256": "0c6fd832908ad4721a5d9d1a21736940e19d1e8c065befca6e4527c6f9f170e7",
+  "rendererSha256": "ec476bd579a2317471e9b9f7a173e0f7ec5845efe06e77c276d6e0c206273c7e",
+  "results": [
+    {
+      "mode": "estimated",
+      "align": "left",
+      "width": 1280,
+      "height": 720,
+      "fixture": 0,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                -0.0000015258789076710855,
+                0.00007568359376364242,
+                0.000007324218699977791
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 53,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 55,
+              "sourceEnd": 55,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 57,
+              "sourceEnd": 74,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 75,
+              "sourceEnd": 75,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Keep  repeated spaces and a nonbreaking pair A B.  \r\n\r\nFinal é accent  \r"
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "left",
+      "width": 1280,
+      "height": 720,
+      "fixture": 1,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                -0.0000015258789076710855,
+                0.00007568359376364242,
+                0.000007324218699977791
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 25,
+              "tabDifferences": [
+                0.0000061035156235789145,
+                -0.0000015258789005656581,
+                0.000021362304664762632,
+                0.000006103515630684342
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 26,
+              "sourceEnd": 39,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 41,
+              "sourceEnd": 41,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 43,
+              "sourceEnd": 48,
+              "tabDifferences": [
+                -0.0000015258789076710855,
+                -0.0000015258789147765128
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t"
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "left",
+      "width": 720,
+      "height": 1280,
+      "fixture": 0,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                -0.0000015258789076710855,
+                0.00007568359376364242,
+                0.000007324218699977791
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 47,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 47,
+              "sourceEnd": 53,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 55,
+              "sourceEnd": 55,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 57,
+              "sourceEnd": 74,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 75,
+              "sourceEnd": 75,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Keep  repeated spaces and a nonbreaking pair A B.  \r\n\r\nFinal é accent  \r"
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "left",
+      "width": 720,
+      "height": 1280,
+      "fixture": 1,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                -0.0000015258789076710855,
+                0.00007568359376364242,
+                0.000007324218699977791
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 25,
+              "tabDifferences": [
+                0.0000061035156235789145,
+                -0.0000015258789005656581,
+                0.000021362304664762632,
+                0.000006103515630684342
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 26,
+              "sourceEnd": 39,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 41,
+              "sourceEnd": 41,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 43,
+              "sourceEnd": 48,
+              "tabDifferences": [
+                -0.0000015258789076710855,
+                -0.0000015258789147765128
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t"
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "center",
+      "width": 1280,
+      "height": 720,
+      "fixture": 0,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                -0.0000048828125045474735,
+                -0.00014892578121816769,
+                0.000026855468718167685
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 53,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 55,
+              "sourceEnd": 55,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 57,
+              "sourceEnd": 74,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 75,
+              "sourceEnd": 75,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Keep  repeated spaces and a nonbreaking pair A B.  \r\n\r\nFinal é accent  \r"
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "center",
+      "width": 1280,
+      "height": 720,
+      "fixture": 1,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                -0.0000048828125045474735,
+                -0.00014892578121816769,
+                0.000026855468718167685
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 25,
+              "tabDifferences": [
+                -0.00006103515625,
+                0,
+                0,
+                0
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 26,
+              "sourceEnd": 39,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 41,
+              "sourceEnd": 41,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 43,
+              "sourceEnd": 48,
+              "tabDifferences": [
+                0,
+                0
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t"
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "center",
+      "width": 720,
+      "height": 1280,
+      "fixture": 0,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                0.000002746582055124236,
+                0.0000036621094068323146,
+                -0.0000036621094068323146
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 47,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 47,
+              "sourceEnd": 53,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 55,
+              "sourceEnd": 55,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 57,
+              "sourceEnd": 74,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 75,
+              "sourceEnd": 75,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Keep  repeated spaces and a nonbreaking pair A B.  \r\n\r\nFinal é accent  \r"
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "center",
+      "width": 720,
+      "height": 1280,
+      "fixture": 1,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                0.000002746582055124236,
+                0.0000036621094068323146,
+                -0.0000036621094068323146
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 25,
+              "tabDifferences": [
+                -0.00003051757809657829,
+                2.842170943040401e-14,
+                0,
+                0
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 26,
+              "sourceEnd": 39,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 41,
+              "sourceEnd": 41,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 43,
+              "sourceEnd": 48,
+              "tabDifferences": [
+                0,
+                0
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t"
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "right",
+      "width": 1280,
+      "height": 720,
+      "fixture": 0,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                0.00001464843751364242,
+                -0.00006835937483629095,
+                -0.000014648437627329258
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 53,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 55,
+              "sourceEnd": 55,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 57,
+              "sourceEnd": 74,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 75,
+              "sourceEnd": 75,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Keep  repeated spaces and a nonbreaking pair A B.  \r\n\r\nFinal é accent  \r"
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "right",
+      "width": 1280,
+      "height": 720,
+      "fixture": 1,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                0.00001464843751364242,
+                -0.00006835937483629095,
+                -0.000014648437627329258
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 25,
+              "tabDifferences": [
+                -0.00003662109372726263,
+                0.000024414062522737368,
+                0.00002441406240905053,
+                0.00002441406240905053
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 26,
+              "sourceEnd": 39,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 41,
+              "sourceEnd": 41,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 43,
+              "sourceEnd": 48,
+              "tabDifferences": [
+                0.000024414062636424205,
+                0.000024414062636424205
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t"
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "right",
+      "width": 720,
+      "height": 1280,
+      "fixture": 0,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                -6.1035152043587e-7,
+                -0.00006835937494997779,
+                -0.00001464843751364242
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 47,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 47,
+              "sourceEnd": 53,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 55,
+              "sourceEnd": 55,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 57,
+              "sourceEnd": 74,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 75,
+              "sourceEnd": 75,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Keep  repeated spaces and a nonbreaking pair A B.  \r\n\r\nFinal é accent  \r"
+        }
+      ]
+    },
+    {
+      "mode": "estimated",
+      "align": "right",
+      "width": 720,
+      "height": 1280,
+      "fixture": 1,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                -6.1035152043587e-7,
+                -0.00006835937494997779,
+                -0.00001464843751364242
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 25,
+              "tabDifferences": [
+                0.000024414062522737368,
+                -0.0000061035156022626325,
+                0.00005493164064773737,
+                0.000024414062522737368
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 26,
+              "sourceEnd": 39,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 41,
+              "sourceEnd": 41,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 43,
+              "sourceEnd": 48,
+              "tabDifferences": [
+                0.000024414062522737368,
+                0.000024414062522737368
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t"
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "left",
+      "width": 1280,
+      "height": 720,
+      "fixture": 0,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                -0.0000015258789076710855,
+                0.00006103515625,
+                0.00009765624997726263,
+                -0.04730987548828125,
+                0.00043334960935226263,
+                0.0001983642578125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 53,
+              "tabDifferences": [],
+              "advanceDifference": 0.0001220703125,
+              "intrinsicCorrection": 0.01513671875
+            },
+            {
+              "sourceStart": 55,
+              "sourceEnd": 55,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 57,
+              "sourceEnd": 74,
+              "tabDifferences": [],
+              "advanceDifference": -0.0000762939453125,
+              "intrinsicCorrection": 0.013671875
+            },
+            {
+              "sourceStart": 75,
+              "sourceEnd": 75,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Keep  repeated spaces and a nonbreaking pair A B.  \r\n\r\nFinal é accent  \r"
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "left",
+      "width": 1280,
+      "height": 720,
+      "fixture": 1,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                -0.0000015258789076710855,
+                0.00006103515625,
+                0.00009765624997726263,
+                -0.04730987548828125,
+                0.00043334960935226263,
+                0.0001983642578125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 25,
+              "tabDifferences": [
+                0.0000061035156235789145,
+                0.00031280517578125,
+                0.00031127929688068434,
+                0.0001068115234375,
+                0.00043334960938068434,
+                -0.0002384185791015625,
+                0.00018920898438068434,
+                0.0003662109375
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 26,
+              "sourceEnd": 39,
+              "tabDifferences": [],
+              "advanceDifference": 0.0003814697265625,
+              "intrinsicCorrection": 0.01513671875
+            },
+            {
+              "sourceStart": 41,
+              "sourceEnd": 41,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 43,
+              "sourceEnd": 48,
+              "tabDifferences": [
+                0.0003532409667954539,
+                -0.00043487548828125,
+                -0.00008544921874431566,
+                0.00005817413330078125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t"
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "left",
+      "width": 720,
+      "height": 1280,
+      "fixture": 0,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                -0.0000015258789076710855,
+                0.00006103515625,
+                0.00009765624997726263,
+                -0.04730987548828125,
+                0.00043334960935226263,
+                0.0001983642578125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 53,
+              "tabDifferences": [],
+              "advanceDifference": 0.0001220703125,
+              "intrinsicCorrection": 0.01513671875
+            },
+            {
+              "sourceStart": 55,
+              "sourceEnd": 55,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 57,
+              "sourceEnd": 74,
+              "tabDifferences": [],
+              "advanceDifference": -0.0000762939453125,
+              "intrinsicCorrection": 0.013671875
+            },
+            {
+              "sourceStart": 75,
+              "sourceEnd": 75,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Keep  repeated spaces and a nonbreaking pair A B.  \r\n\r\nFinal é accent  \r"
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "left",
+      "width": 720,
+      "height": 1280,
+      "fixture": 1,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                -0.0000015258789076710855,
+                0.00006103515625,
+                0.00009765624997726263,
+                -0.04730987548828125,
+                0.00043334960935226263,
+                0.0001983642578125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 25,
+              "tabDifferences": [
+                0.0000061035156235789145,
+                0.00031280517578125,
+                0.00031127929688068434,
+                0.0001068115234375,
+                0.00043334960938068434,
+                -0.0002384185791015625,
+                0.00018920898438068434,
+                0.0003662109375
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 26,
+              "sourceEnd": 39,
+              "tabDifferences": [],
+              "advanceDifference": 0.0003814697265625,
+              "intrinsicCorrection": 0.01513671875
+            },
+            {
+              "sourceStart": 41,
+              "sourceEnd": 41,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 43,
+              "sourceEnd": 48,
+              "tabDifferences": [
+                0.0003532409667954539,
+                -0.00043487548828125,
+                -0.00008544921874431566,
+                0.00005817413330078125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t"
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "center",
+      "width": 1280,
+      "height": 720,
+      "fixture": 0,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                0.00018310546875,
+                0.00006103515625,
+                0.00030517578125,
+                -0.04730987548828125,
+                -0.0003662109375,
+                0.0001983642578125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 53,
+              "tabDifferences": [],
+              "advanceDifference": 0.0001220703125,
+              "intrinsicCorrection": 0.01513671875
+            },
+            {
+              "sourceStart": 55,
+              "sourceEnd": 55,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 57,
+              "sourceEnd": 74,
+              "tabDifferences": [],
+              "advanceDifference": -0.0000762939453125,
+              "intrinsicCorrection": 0.013671875
+            },
+            {
+              "sourceStart": 75,
+              "sourceEnd": 75,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Keep  repeated spaces and a nonbreaking pair A B.  \r\n\r\nFinal é accent  \r"
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "center",
+      "width": 1280,
+      "height": 720,
+      "fixture": 1,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                0.00018310546875,
+                0.00006103515625,
+                0.00030517578125,
+                -0.04730987548828125,
+                -0.0003662109375,
+                0.0001983642578125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 25,
+              "tabDifferences": [
+                0.000213623046875,
+                0.00031280517578125,
+                -0.000457763671875,
+                0.0001068115234375,
+                -0.00042724609375,
+                -0.0002384185791015625,
+                0.00042724609375,
+                0.0003662109375
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 26,
+              "sourceEnd": 39,
+              "tabDifferences": [],
+              "advanceDifference": 0.0003814697265625,
+              "intrinsicCorrection": 0.01513671875
+            },
+            {
+              "sourceStart": 41,
+              "sourceEnd": 41,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 43,
+              "sourceEnd": 48,
+              "tabDifferences": [
+                -0.00030517578125,
+                -0.00043487548828125,
+                0.000244140625,
+                0.00005817413330078125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t"
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "center",
+      "width": 720,
+      "height": 1280,
+      "fixture": 0,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                0.0001831054687784217,
+                0.00006103515625,
+                0.000274658203125,
+                -0.04730987548828125,
+                -0.0003662109375,
+                0.0001983642578125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 53,
+              "tabDifferences": [],
+              "advanceDifference": 0.0001220703125,
+              "intrinsicCorrection": 0.01513671875
+            },
+            {
+              "sourceStart": 55,
+              "sourceEnd": 55,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 57,
+              "sourceEnd": 74,
+              "tabDifferences": [],
+              "advanceDifference": -0.0000762939453125,
+              "intrinsicCorrection": 0.013671875
+            },
+            {
+              "sourceStart": 75,
+              "sourceEnd": 75,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Keep  repeated spaces and a nonbreaking pair A B.  \r\n\r\nFinal é accent  \r"
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "center",
+      "width": 720,
+      "height": 1280,
+      "fixture": 1,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                0.0001831054687784217,
+                0.00006103515625,
+                0.000274658203125,
+                -0.04730987548828125,
+                -0.0003662109375,
+                0.0001983642578125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 25,
+              "tabDifferences": [
+                0.0002441406250284217,
+                0.00031280517578125,
+                -0.0004577636718465783,
+                0.0001068115234375,
+                -0.000396728515625,
+                -0.0002384185791015625,
+                0.00042724609375,
+                0.0003662109375
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 26,
+              "sourceEnd": 39,
+              "tabDifferences": [],
+              "advanceDifference": 0.0003814697265625,
+              "intrinsicCorrection": 0.01513671875
+            },
+            {
+              "sourceStart": 41,
+              "sourceEnd": 41,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 43,
+              "sourceEnd": 48,
+              "tabDifferences": [
+                -0.00030517578125,
+                -0.00043487548828125,
+                0.000274658203125,
+                0.00005817413330078125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t"
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "right",
+      "width": 1280,
+      "height": 720,
+      "fixture": 0,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                0.00039062500002273737,
+                0.00006103515625,
+                0.00039062499990905053,
+                -0.04730987548828125,
+                -0.00021972656259094947,
+                0.0001983642578125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 53,
+              "tabDifferences": [],
+              "advanceDifference": 0.0001220703125,
+              "intrinsicCorrection": 0.01513671875
+            },
+            {
+              "sourceStart": 55,
+              "sourceEnd": 55,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 57,
+              "sourceEnd": 74,
+              "tabDifferences": [],
+              "advanceDifference": -0.0000762939453125,
+              "intrinsicCorrection": 0.013671875
+            },
+            {
+              "sourceStart": 75,
+              "sourceEnd": 75,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Keep  repeated spaces and a nonbreaking pair A B.  \r\n\r\nFinal é accent  \r"
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "right",
+      "width": 1280,
+      "height": 720,
+      "fixture": 1,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                0.00039062500002273737,
+                0.00006103515625,
+                0.00039062499990905053,
+                -0.04730987548828125,
+                -0.00021972656259094947,
+                0.0001983642578125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 25,
+              "tabDifferences": [
+                0.00039062500002273737,
+                0.00031280517578125,
+                -0.00021972656247726263,
+                0.0001068115234375,
+                -0.00009765625009094947,
+                -0.0002384185791015625,
+                -0.00034179687509094947,
+                0.0003662109375
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 26,
+              "sourceEnd": 39,
+              "tabDifferences": [],
+              "advanceDifference": 0.0003814697265625,
+              "intrinsicCorrection": 0.01513671875
+            },
+            {
+              "sourceStart": 41,
+              "sourceEnd": 41,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 43,
+              "sourceEnd": 48,
+              "tabDifferences": [
+                0.0003906250001364242,
+                -0.00043487548828125,
+                -0.0000976562498635758,
+                0.00005817413330078125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t"
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "right",
+      "width": 720,
+      "height": 1280,
+      "fixture": 0,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                0.0003601074219261591,
+                0.00006103515625,
+                0.00042114257814773737,
+                -0.04730987548828125,
+                -0.00021972656247726263,
+                0.0001983642578125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 53,
+              "tabDifferences": [],
+              "advanceDifference": 0.0001220703125,
+              "intrinsicCorrection": 0.01513671875
+            },
+            {
+              "sourceStart": 55,
+              "sourceEnd": 55,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 57,
+              "sourceEnd": 74,
+              "tabDifferences": [],
+              "advanceDifference": -0.0000762939453125,
+              "intrinsicCorrection": 0.013671875
+            },
+            {
+              "sourceStart": 75,
+              "sourceEnd": 75,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Keep  repeated spaces and a nonbreaking pair A B.  \r\n\r\nFinal é accent  \r"
+        }
+      ]
+    },
+    {
+      "mode": "measured",
+      "align": "right",
+      "width": 720,
+      "height": 1280,
+      "fixture": 1,
+      "items": [
+        {
+          "path": "slides.0.title",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 20,
+              "tabDifferences": [
+                0.0003601074219261591,
+                0.00006103515625,
+                0.00042114257814773737,
+                -0.04730987548828125,
+                -0.00021972656247726263,
+                0.0001983642578125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "  Exact  title\tend  "
+        },
+        {
+          "path": "slides.0.text",
+          "lines": [
+            {
+              "sourceStart": 0,
+              "sourceEnd": 25,
+              "tabDifferences": [
+                0.00045166015627273737,
+                0.00031280517578125,
+                -0.00025024414060226263,
+                0.0001068115234375,
+                -0.00012817382810226263,
+                -0.0002384185791015625,
+                -0.00034179687497726263,
+                0.0003662109375
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 26,
+              "sourceEnd": 39,
+              "tabDifferences": [],
+              "advanceDifference": 0.0003814697265625,
+              "intrinsicCorrection": 0.01513671875
+            },
+            {
+              "sourceStart": 41,
+              "sourceEnd": 41,
+              "tabDifferences": [],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            },
+            {
+              "sourceStart": 43,
+              "sourceEnd": 48,
+              "tabDifferences": [
+                0.00039062500002273737,
+                -0.00043487548828125,
+                -0.00009765624997726263,
+                0.00005817413330078125
+              ],
+              "advanceDifference": null,
+              "intrinsicCorrection": null
+            }
+          ],
+          "restored": "\tLeading tab\tsecond tab  \n  After blank\r\n\r\nTail\t"
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "requests": [],
+  "scope": "24 offline presentation cases / 48 scalar fields, each with title and body; exact source ranges and CR/LF/CRLF reconstruction, explicit tab positions, measured advances and bounded intrinsic corrections. Estimated wrapping remains approximate; no native Office claim."
+}

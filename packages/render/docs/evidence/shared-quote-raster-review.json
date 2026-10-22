@@ -1,0 +1,1336 @@
+{
+  "scope": "All changed 805-corpus raster entries, scale 1 for review; bundled fonts, no system fonts, default estimated width model as the golden gate. Published 0.5.1/core 0.7.0 registry install vs coordinated local source.",
+  "visuallyReviewed": true,
+  "corpus": {
+    "repository": "OpenPresentation/opf",
+    "path": "examples",
+    "sha256": "cbd0d2c7cfdaa01ec6312494179c68fe59ee95206d3b8a2e07f8b69f19ce29bd",
+    "decks": 126
+  },
+  "changedSlides": [
+    {
+      "key": "gallery/business-functions/compliance-readiness-review.opf.json#5",
+      "sourceSha256": "cbad376d12ab109e1690e8df18257e108d16fd786b692ea1119d424171feae5e",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "52f30fc2d40eb0b61c95927c9553323b5a2b936bfd7694b74194e85d92564d9f",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "1ff76eb82f7a0cd931059dc84f4e47162e2cb1556bd50c11ec80851cd59bf34f",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/demand-generation-campaign-brief.opf.json#5",
+      "sourceSha256": "4dd8a7540642686a629acc0833795922feff85c989234a70af963d84b01f1950",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "b3b6d62ace576cdfb60dfc108b6225abf21debdb4bf00962f9f6cc793b81b92c",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "692a0b69f280b30c6b6d7ceeeed63f193466cfd16b65eeb84343d063577603b7",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/engineering-capacity-planning.opf.json#5",
+      "sourceSha256": "82f847fe61982af522643121545c1248f98245b92a75a08d7f6740330bfcc7c3",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "1fe390069400cb4719506a06b5331ead7ec9926efe75532726a68f42c7856ab3",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "287bde90fcdb55e88a62466246d5fd8d815ca03c656429614f5a1d979a99db9e",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/investor-relations-update.opf.json#5",
+      "sourceSha256": "88515e09812598f275fe0da5cada04ff952bc44ed75a603fd87252b89d8553e1",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "11c1bb19b3f02b2c6e03cfee07e48a8f9e4ae223b53e78fc9d221c8a5f8238b0",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "28edbcdb3572afa8f1c6c2296efc33b3373ab0c6fac7f2ce23ead8f35df6bb23",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/model-governance-review.opf.json#5",
+      "sourceSha256": "79b4f739e4c249b0c3ee5c76346f5449958ca2778cd3a5be6b8775d0ac731e58",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "0d845a1a94b3f9dbc2567173be0a23ac149847abfcacce649ef3aa7fcd588098",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "aa29138e05341c677671ec26f8e000c6cd2975d44583531aa49dea04e454eb52",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/pricing-and-packaging-decision.opf.json#5",
+      "sourceSha256": "3503bdca468257d606b9ef2329fc42f2bb713b3e0d27d12982ddc6ed98298c91",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "26a63a07c9acb359b968a979d3d29393f7bf95b3a129ef75ba5db714e80eba73",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "9d19515240b560057d5568a6643de9dad23ed97a491b3d64ddbf330a8103d0ca",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/pricing-and-packaging-decision.opf.json#6",
+      "sourceSha256": "3503bdca468257d606b9ef2329fc42f2bb713b3e0d27d12982ddc6ed98298c91",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "b465ee86c2bc5eae5e09e35d681e453cceb5636aa4a50e1407d3d546e758c8d9",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.6.blocks.1.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "034b077a7d4a5b05eb18f73f86462c9786521ff522700a33775641caff00e012",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#5",
+      "sourceSha256": "c04e9d6c542cc55fc034cb5906a8ebb4147bd3f96ed072b0e29e31b09dfd7031",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "efdc8adf5106ce4b343884153a55172630d3c899e537a9097da6b8f1131b9601",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "921ac6a1de2afc6063a2d689d38e4d1386be806797262561bd914ce393249d33",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#6",
+      "sourceSha256": "c04e9d6c542cc55fc034cb5906a8ebb4147bd3f96ed072b0e29e31b09dfd7031",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "c9d9e0a17dbd0e07797ac1003c1bae80308643479f264ff5d1e98cdc54956fe5",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.6.blocks.1.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "f7b63bc17d66470f5015e3eb814853a2922f1bb08c3379b79e19cee3d2c1b118",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/revenue-forecast-inspection.opf.json#5",
+      "sourceSha256": "7a9bbafb4655c9ed68dc30b6e9963c1bc178408696dcedfcdd3baec08b992c66",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "f116481d0251968549c103890f6bce584801f624f9e7a652ab7c8e0cd4c002a7",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "b3071e7341ef835aaf1c43f8d4a68d47eb12b7f0d917bf1a0cfabc84f3e65c5a",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/s-and-op-exception-review.opf.json#5",
+      "sourceSha256": "0fa933eef88f3897b12cc6a1f47670ceddd40212b059c0b0d93abaf17a26e18d",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "03e203251fe20078c23843fb17b21d7ef19349a52cd1130609897df7cda60fb1",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "2bfb21fbd2f2d02367f38906cc33c7017c8add44579b52eb5f14b6f6b1e0d92e",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/strategy-offsite-pre-read.opf.json#5",
+      "sourceSha256": "5e55b2f476112403afad1a473d70b3b8180defea00ee2082d19259248622c1ef",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "5410f41888ac6b5f28c96dbc6b71a9531cf121dd31bf4da0f3cb6591bee2cdc7",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "a0ad4511903dafbb21a0ebd3192910ad2ab24dc41504d4b26a2cbc66c68c3b9c",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#5",
+      "sourceSha256": "19e4d2974e912efb472993e88c0c34a7da39ced8f40300b49624951d921cf20c",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "96b2db5f8d47187a21f39d121090376ec5125f8794664290d43b5b18207458ee",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "2adac4a96840df03a4f4e6c35b9e4a42ededea5c64de61dfa5d1c1f6c69c7ed7",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#6",
+      "sourceSha256": "19e4d2974e912efb472993e88c0c34a7da39ced8f40300b49624951d921cf20c",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "6057f8a365ea8da17a482de4b2efe5d6be01234c4c0d7933e3b824c6f4c5d50a",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.6.blocks.1.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "83cc94b93f1649f1042c42842a67b8d2f7fbabf564db54e1dd0943b86589c8fd",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/data-storytelling-atlas.opf.json#5",
+      "sourceSha256": "e6d300d0db34ca6790346af2bdf126b615388f827f26b55fe82220f78edca94c",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "075741be7b8ddd88113548f8c426606a2c1ac7aefa3bcf83e00386b6c932a8dd",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "bde53d638a84f122fd62d4c0f16d82045f13fc0cf7d45cdfb9220e9cd7f22960",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#5",
+      "sourceSha256": "67561fc705e5597d1f1bd6b8beb26790dbc82c983b050408f6317a9e0618cab6",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "3a7ef5de56b3244753fea5a43400260de09abd67a8748914a27cd23cd531fe4c",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "943b169010520ac5171bb3207a1386fb9b0d5cb1ae21fb068b88b5f1fe6d193d",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#6",
+      "sourceSha256": "67561fc705e5597d1f1bd6b8beb26790dbc82c983b050408f6317a9e0618cab6",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "796dfece7cfd3a0af356955f563a28748405022b7bdd2674db6cd6ca0c318abf",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.6.blocks.1.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "215ccc6b96b5ef5bd5b468e452f643f50faff46d0923d072fc17ac4fe071df38",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/photo-essay-portfolio.opf.json#5",
+      "sourceSha256": "aa83497e4c9624cb166d7a7a9f5c402ff47a2388bb887433bd17da759bc2f55d",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "b5c4872829bd7342f6f9b30d774a77e0fef2676c1aebe8f9022fd55376dc12f2",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "05e5dbdf2007d4db94f66a12ec8aaaeec130f65ef6496eca50bb086323b8cdcf",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/design-and-media/video-demo-sales-narrative.opf.json#5",
+      "sourceSha256": "d00a49a065d2d80dd6d164e8886c98ac74ffd59f6877513e174611693fcc615e",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "71e7a0dbb4af4df4fc76a33298283b380aa1a6b3ec8f71b2b9e4bb25619aa959",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "96b823ee8e83ba2d0f419885183138611bfc968c6bac93234d99514de8ec4587",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/athletics-budget-review.opf.json#5",
+      "sourceSha256": "75564d92f264b2e289d4c21f4929f9bc185040172f276be20ee9c307e3e5e172",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "5b2481142002130769e3f64ddddf3110ec00208a2813175c809f46b1329e67f4",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "127cdd4b09888888c07839f320896fb2b76d45306f5dd5f00fbf956de5749f0f",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/curriculum-approval-brief.opf.json#5",
+      "sourceSha256": "b33ee2018ce2b8cb71b7cc9b743f6c0b38b41c846a3ec7e63ec525018deb78df",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "d7d3228a25a3e50029648f126b3b5fa1c5f394de413905010731891d70f46873",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "b4ffbef3c4e2820d4a33cc011c5b268174eae6130bd6881be18cb48448a9cc1c",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/curriculum-approval-brief.opf.json#6",
+      "sourceSha256": "b33ee2018ce2b8cb71b7cc9b743f6c0b38b41c846a3ec7e63ec525018deb78df",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "59ca0e529d546cb273051cf145611ab56715d898384eaf72d175dde2578aec70",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.6.blocks.1.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "96bf9ed45db5e2e9fbe70a8d9c3178cc2722835fff83d414900d2148f65b27c6",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/education/workforce-pathway-partnership.opf.json#5",
+      "sourceSha256": "886901e44f1af203cf683a9b2b8fb6ebbac5886b9fabec5db38c1b53958170b3",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "c085f65b440fffa4c02cdfd904653ef1a6812408ee7b1f282f0926ccfb9a3ed0",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "4a9eb89c6178464dd64a348db5136f6abf13ac11c35ffb49e0ab59ae1572bb9c",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/broadband-public-hearing-deck.opf.json#5",
+      "sourceSha256": "59f97acd939db00a86cb4906a87d0a128dbada8b20c3167cece92b6089a4c379",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "8ea025d53b25ff9281882f9cfff3860512168bab26c449cf66eb13447284cc73",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "385aa5bfe63e8be08faa3482a7fc97babc8db03e51c6dedcd1ddedeb5d761cd1",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/housing-zoning-council-brief.opf.json#5",
+      "sourceSha256": "39972276eaf46ca9049c8f9bfadea12768635a814a4fb40fd8033e97999695fc",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "05fe0bd7d17ae1de104ba01411a30f07b9dde3f4a5000b08d8aafd2222f3bc3a",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "0f4503ad8e68400a8ac31dc8efbdabc6b5021f12faa2ecbcd8454a210f5df1b7",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/recycling-participation-campaign.opf.json#5",
+      "sourceSha256": "39a1496710e36cce299da56be2de5e360df9430a4e9898eddfa0a2c7ff803ec1",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "cf07f72ddf62357a87ca4c7482b8a4782e011baf911760382b675131818df0c4",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "461ef7ba2581daeb219440c512a12befa587720ded5986bfac948d4ee609ec9e",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/tax-portal-modernization.opf.json#5",
+      "sourceSha256": "5bc758b8e1d06a95b9182665b61b15c7a011438a8b234255f136209889dc7ef6",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "6387dfbd4599e9b8c3a6a5574ce563017d558a957dce94da6d4c4b0b8ffe9260",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "92ca59b87c6f6e376dd5524a283ae0dc8dbe26ceba51341f1c51cc6744a6b8e2",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/transit-corridor-alternatives.opf.json#5",
+      "sourceSha256": "80bf809dea55388745e89d0c42c33afb2d6e3a16096e6bc151b9cc2f8ab66282",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "6b36c7e03bde04d785ff8bd8c38b37a5b3718797107010f676772ae284d5bc56",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "45cf32fe8397333f6b6ea18aa51d139d7fa92ac3c1b3b89ce85a94edb02473ee",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/wildfire-evacuation-preparedness.opf.json#5",
+      "sourceSha256": "c9673534dce1b8a8ddad3b3c75efad68dc456257b35108a48748328113e9680b",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "91b2ca1973ae4155c77c8de16923e1a6d3728b04ea821d3bb2a85498aee22cd0",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "56b5c251bbb06825088883c55dcd5cff69e7e2ef32e39748e3ab74b49a0e91ba",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/government/workforce-reskilling-initiative.opf.json#5",
+      "sourceSha256": "c4905b9252c76275e5924ba40a3888ff30cad66016de1533c2aeb2e6adf2655e",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "ad5b3afaab1facd559636d6a311b0bc31ed8c93146665c52a9d0c2c2cd526448",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "c26c58853af28b9b67d2781502103ca569fd3cd49759a3714e2800cb5295bb5c",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#5",
+      "sourceSha256": "fd8a7aa780729fe9866d68700a2de97cec6a2f15dd31141e8468ab6940d2ce66",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "d15a68aa798438e1987e9e11eb56396406b5cf4c894902279fe8f382f607b19a",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "20faaf318e905c07c223296e9cd7a717688c1a5dd9c10b917cd442fbc7553bfa",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/battery-line-supplier-readiness.opf.json#5",
+      "sourceSha256": "177dca9f3b0e93aaf7dd8fe08490abaddf92c13d3696a2992e788dc4fcc90b77",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "80863a48f4ab118f9624d0e2e9537676fd27dc96db49a7c2d383eb6d8cd2e593",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "9213744fbb0cd1c759f704b513a0338c529fe97d4cc5d72d4f9bffcff41f7ef6",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/boutique-hotel-revenue-recovery.opf.json#5",
+      "sourceSha256": "0d0a4490de4a6d6f41ef8808664bccdf8de2729827f2a11a6f74bf35067a9fce",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "d46efba6aa11f9c9842f8ecdadec379f4caae9d7c954efc03d7ca2f485b8d5fd",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "afffe40462e1d7e1b15702e0cd9dd078b2ee2d078ad02290944242e88957ef85",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/construction-safety-stand-down.opf.json#5",
+      "sourceSha256": "d559da80cb79af150479ea8a0634000aba6d19324ef34ff490665aa0639c30e4",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "751b14b8119bfba602b32e639811550e7753f71d659668798c4095d6c2e35c11",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "96425613e23ecbce7b7c8d50f9741e6c0a27deb01c9a8522501affecf3937d8b",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#5",
+      "sourceSha256": "a468f0e5aeb3535efc8ab83121af7786c7ca4a77a7aeb8609a6fced6d1d8037a",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "d4cbd9e6ad9ca069f0d5e7e86dcb05623fba5e21a5686a737cefb00bfa5f94db",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "219ff9cd85fc4e74c5d015a4ea1c7b1355f81571064146c8862d150744848c76",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/port-dwell-time-improvement-plan.opf.json#5",
+      "sourceSha256": "dbcba2f6779f3a110c4a1d51f75041c21427efb73dc3eacc72cf4e144858f951",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "a029df183491ac957da5670571ce69880ef4c74bbb933ae04fb52d878e6e4588",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "07806c58b5b0d4830175c5ddf2ae40a9394de8517a22c7fe7d3f952d9192a88b",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/tailings-monitoring-investment-brief.opf.json#5",
+      "sourceSha256": "e1b7b29efde375923d56b4acd3c7777d1085dcaa2e510b5b6c54f755264620a6",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "dd01844bf06178b775d408bbf8a00dc02a4841dab8d927cdd17904c7249b33ac",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "d489dc410bd8982c2161a87ecefc253c183c0e1020c2bb1e454cbe5b2d994d40",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/industries/water-stewardship-grower-brief.opf.json#5",
+      "sourceSha256": "1f2ff8630e88d0cfc3ec3380e1cd30b3cada80a407e334429623aaae89692fdb",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "032c917b000ed0cefc4afc4342e75c82fe42f4aae3d5f661611adb9c7ef23e18",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "ddf9ded17c9230f970eb7131e373c8766755922ddab9aa3626023b8f88c9d413",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/manager-training-deck.opf.json#5",
+      "sourceSha256": "66f56e4146823e32e09a3c4c49eb87da847918915affb7370526c70143671aab",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "967a379c964c99a25dbd05fb24053861431ce56ea8f0becdc64659dea4d79b83",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "082a76a51eaebb27221e15299d28de4e71022c383dfd1fb90569cf2053102d9d",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/product-launch-narrative.opf.json#5",
+      "sourceSha256": "7ed964b43ebcdfb772394951c877fc582d720d831781c7fb448a6a88d388d337",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "ffafd3b173b71247f0455e2ffcf240ccf7a63c0b073004f6bfcb114eb13def04",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "045ab6f262a3591db2d550a53936d3dfbb1b64b9c3e8906cfdcf55d82453cc36",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "key": "gallery/presentation-types/research-findings-report.opf.json#5",
+      "sourceSha256": "e19d7d525b8e88a018970b828c8d81e361c66e509ecd75d21185afd8f935d6d3",
+      "outerBoxesChanged": false,
+      "results": [
+        {
+          "label": "published",
+          "sha256": "ea9f8bc2b6e491240b92d19cd1fbb22e1b4a04166d68c48912b2e4e568fcaea3",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "slides.5.middle+bottom:left.quote",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            },
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        },
+        {
+          "label": "candidate",
+          "sha256": "7aaf037de0594735ab952eb8cdc5dc1e835fc0b08ffadfb34f7664f04595f3bc",
+          "diagnostics": [
+            {
+              "code": "text-overflow",
+              "path": "design.header.right.image",
+              "message": "Text exceeds its cell at the minimum font size; shorten it, increase its space, or split the slide."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "unchangedOuterBoxes": true,
+  "limitations": [
+    "Review accepts quote-footer changes only. Existing contrast, placeholder and rich-text spacing defects remain.",
+    "Regression hashes are not a visual-quality score or native-fidelity proof."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/education/online-program-launch-plan.opf.json",
+  "entries": {
+    "gallery/education/online-program-launch-plan.opf.json#0": {
+      "sha256": "824982b09c062ccd0324c8b601b3d5ce5dd7d7bb25a24e69323bcbe6746ada38",
+      "bytes": 19164
+    },
+    "gallery/education/online-program-launch-plan.opf.json#1": {
+      "sha256": "79778451130059ea3f7dbd52f737f2ba265c8ddfb36b1510b445893ca5ee3940",
+      "bytes": 22389
+    },
+    "gallery/education/online-program-launch-plan.opf.json#2": {
+      "sha256": "a28769039540b08236a062a38374c9d85d8ee284b8da2eab7d7f209815988ac3",
+      "bytes": 15557
+    },
+    "gallery/education/online-program-launch-plan.opf.json#3": {
+      "sha256": "9c6274a040cab485378841fb6f64d679bfc899b7727311690f049c90a498fd40",
+      "bytes": 17216
+    },
+    "gallery/education/online-program-launch-plan.opf.json#4": {
+      "sha256": "79ffa8bb09ac9037bcde47df71d2a8989e92b81ca7764244de65859e3d57cbd9",
+      "bytes": 21986
+    },
+    "gallery/education/online-program-launch-plan.opf.json#5": {
+      "sha256": "39d43484f3197734fe459cce1cde0f7ef4a5b12d0b8365ecc64351a275fb42e6",
+      "bytes": 21160
+    }
+  }
+}

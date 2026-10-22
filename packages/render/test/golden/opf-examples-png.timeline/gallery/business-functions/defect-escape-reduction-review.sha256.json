@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/business-functions/defect-escape-reduction-review.opf.json",
+  "entries": {
+    "gallery/business-functions/defect-escape-reduction-review.opf.json#0": {
+      "sha256": "bdc5024c4629d44e98a0785240c48794b9e9569983a2b4d1a67f72edfc8a80f2",
+      "bytes": 5624
+    },
+    "gallery/business-functions/defect-escape-reduction-review.opf.json#1": {
+      "sha256": "c293e14ae9fc82b229a21cdcb4d3cdef1594245f7c2def6f98a8d01eb4463662",
+      "bytes": 7240
+    },
+    "gallery/business-functions/defect-escape-reduction-review.opf.json#2": {
+      "sha256": "be822a454f1bddbdbe025c0124848a55b2f69bf053826bd4a212a94709d962ab",
+      "bytes": 5014
+    },
+    "gallery/business-functions/defect-escape-reduction-review.opf.json#3": {
+      "sha256": "6ca95a1a1dde7c759089b5d3e3228ab3caa516698b14580895951949cd726f2e",
+      "bytes": 6686
+    },
+    "gallery/business-functions/defect-escape-reduction-review.opf.json#4": {
+      "sha256": "3dbc4363b100ffc25083f64de10a095c9af4a18386340958ff1635f1b6185d73",
+      "bytes": 7018
+    },
+    "gallery/business-functions/defect-escape-reduction-review.opf.json#5": {
+      "sha256": "c1c154248ad6398cb9a49af9d19470856239a2667956c979c24d3bddd67f51cd",
+      "bytes": 6232
+    }
+  }
+}

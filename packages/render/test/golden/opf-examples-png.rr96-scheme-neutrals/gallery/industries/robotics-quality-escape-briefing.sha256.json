@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/industries/robotics-quality-escape-briefing.opf.json",
+  "entries": {
+    "gallery/industries/robotics-quality-escape-briefing.opf.json#0": {
+      "sha256": "ef0522f4fe439e869fa56b3ee099674e0aac8b2cd9e97f2892e0a458c46140d9",
+      "bytes": 5150
+    },
+    "gallery/industries/robotics-quality-escape-briefing.opf.json#1": {
+      "sha256": "b970a0693b7a104f47f523d458a2d1a5fae8974b27848a325168c3e33f7a344d",
+      "bytes": 6101
+    },
+    "gallery/industries/robotics-quality-escape-briefing.opf.json#2": {
+      "sha256": "fcbfe406af56bb0f94389e3a0a3218ca8c75805f115b5c609b0716df13c37918",
+      "bytes": 4755
+    },
+    "gallery/industries/robotics-quality-escape-briefing.opf.json#3": {
+      "sha256": "cc02b4f7d03e772b874c760ff532c6d2f26f20b729050885158bbab636c42995",
+      "bytes": 7155
+    },
+    "gallery/industries/robotics-quality-escape-briefing.opf.json#4": {
+      "sha256": "7ff3976144a2de991265f302c7121df81066109da872cbbbbc828babf96e70e7",
+      "bytes": 6345
+    },
+    "gallery/industries/robotics-quality-escape-briefing.opf.json#5": {
+      "sha256": "f9cdea268d8100202df3d54043105feacc590aaea68288c66130e65a41e6ded9",
+      "bytes": 6127
+    }
+  }
+}

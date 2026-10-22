@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/business-functions/partner-ecosystem-launch-kit.opf.json",
+  "entries": {
+    "gallery/business-functions/partner-ecosystem-launch-kit.opf.json#0": {
+      "sha256": "6cbcebac7ab5efb459a7e904d1e1995d7ef793288d7a1c20d72d5113aa1f18c9",
+      "bytes": 4488
+    },
+    "gallery/business-functions/partner-ecosystem-launch-kit.opf.json#1": {
+      "sha256": "426f6b4c8fea8d070bb1bd872c759a755e237a3175382a2b67856585ed47d8b5",
+      "bytes": 7380
+    },
+    "gallery/business-functions/partner-ecosystem-launch-kit.opf.json#2": {
+      "sha256": "e25e4dee5c4a2a6b2bb1fc9c30e4438f19c377ba80ed0e12c0aa486e9aa7a462",
+      "bytes": 7752
+    },
+    "gallery/business-functions/partner-ecosystem-launch-kit.opf.json#3": {
+      "sha256": "fab8faf6334dfa0e31125c70bac7141fbae8c2cf3cc15ed470382b31bf151044",
+      "bytes": 5994
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/international/german-works-council-update.opf.json",
+  "entries": {
+    "gallery/international/german-works-council-update.opf.json#0": {
+      "sha256": "32766d2277f838ea47280286afd149e3538e5337c501d5274f58a528638c420d",
+      "bytes": 14548
+    },
+    "gallery/international/german-works-council-update.opf.json#1": {
+      "sha256": "b335877ca2355766e03aebba95bffa776657cf4a3457d2c087625fdeeedeb4a7",
+      "bytes": 9669
+    },
+    "gallery/international/german-works-council-update.opf.json#2": {
+      "sha256": "9c5f9eaba247c72fc73908e47d7e7f90fee6e85ca5f7c19256c177757c9a47e3",
+      "bytes": 6928
+    },
+    "gallery/international/german-works-council-update.opf.json#3": {
+      "sha256": "264f4512f7e428e3175f3e03ec3d3ce50aa566a28cc3708f10b03711e87b0a63",
+      "bytes": 9249
+    },
+    "gallery/international/german-works-council-update.opf.json#4": {
+      "sha256": "1159e4c80c7c84555658880cb65f8801a2daefd24b96b575ab1656c1a7fc86f0",
+      "bytes": 8834
+    },
+    "gallery/international/german-works-council-update.opf.json#5": {
+      "sha256": "597ca4a52865cf72cc505d8132c0928327da36299bd871422a85621363d5c2c4",
+      "bytes": 14269
+    }
+  }
+}

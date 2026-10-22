@@ -1,0 +1,21 @@
+{
+  "deck": "technical/slide-sections.opf.json",
+  "entries": {
+    "technical/slide-sections.opf.json#0": {
+      "sha256": "3704b5bace13376ff232cdb8bf6669ab2da60b0e63fc02e42116618756e546d4",
+      "bytes": 3771
+    },
+    "technical/slide-sections.opf.json#1": {
+      "sha256": "afe11c77a2027bd375ffa0f648e09c3a0f5878c163f59c0077ea59f68fe7bec7",
+      "bytes": 3700
+    },
+    "technical/slide-sections.opf.json#2": {
+      "sha256": "1af1a2d39f3bb438c19ac51e4bfa2ec9c56d803ffa72db4f9b36bf7ef6197fa8",
+      "bytes": 2450
+    },
+    "technical/slide-sections.opf.json#3": {
+      "sha256": "40cc1fcfe66ed1d8df9462470572eec4cdec2a68ed1878a92bf932954fbfe468",
+      "bytes": 2930
+    }
+  }
+}

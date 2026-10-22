@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/strategy-offsite-pre-read.opf.json",
+  "entries": {
+    "gallery/business-functions/strategy-offsite-pre-read.opf.json#0": {
+      "sha256": "eb627cae59fd29044b2120ffd73645580d656286a89bb5574418ecfe5185fe36",
+      "bytes": 15650
+    },
+    "gallery/business-functions/strategy-offsite-pre-read.opf.json#1": {
+      "sha256": "b3dc9079932161fb6feb421d386f41de66f31157d9c043978168baeb11c86480",
+      "bytes": 17905
+    },
+    "gallery/business-functions/strategy-offsite-pre-read.opf.json#2": {
+      "sha256": "90bfe8eb9bd23a8af3abf9ee05d764ceda223a89e5cb73b7fea34098337318d1",
+      "bytes": 7453
+    },
+    "gallery/business-functions/strategy-offsite-pre-read.opf.json#3": {
+      "sha256": "318f176df1f412c77f94955be2973f0b244de72177889663eba58b728b4a1a5e",
+      "bytes": 13829
+    },
+    "gallery/business-functions/strategy-offsite-pre-read.opf.json#4": {
+      "sha256": "dc378c2a97055c04f698dc0e0c0f9ec72091494ecafca026c98e5abc9b030087",
+      "bytes": 18252
+    },
+    "gallery/business-functions/strategy-offsite-pre-read.opf.json#5": {
+      "sha256": "035f0e0797a32e0f303c0cc0df5ee69a404c2aced269fcff2c21720530f50fc7",
+      "bytes": 24125
+    },
+    "gallery/business-functions/strategy-offsite-pre-read.opf.json#6": {
+      "sha256": "7ed80336589cc8525865f28bd9a002eac91e590dba0b2ba2252cc072c0263412",
+      "bytes": 16646
+    },
+    "gallery/business-functions/strategy-offsite-pre-read.opf.json#7": {
+      "sha256": "62f8a623de9050cea91787884cf514cffbbdfbaa5decbcff022c66ba6ac8d490",
+      "bytes": 7611
+    },
+    "gallery/business-functions/strategy-offsite-pre-read.opf.json#8": {
+      "sha256": "38a107ad9ceb5a25ce8c9df5a1ab15438a9294691696ad0257d2544b2c9088b5",
+      "bytes": 9050
+    },
+    "gallery/business-functions/strategy-offsite-pre-read.opf.json#9": {
+      "sha256": "1ecb61c609dd37df34d2c365e79186e28e7adcf676bcdfd9568b4b0b43d1322c",
+      "bytes": 23573
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/government/workforce-reskilling-initiative.opf.json",
+  "entries": {
+    "gallery/government/workforce-reskilling-initiative.opf.json#0": {
+      "sha256": "02f709cc3cf3b7fbaddfa81161b5d0c8facebce6951050cfa05c045f6a2b6b6a",
+      "bytes": 20493
+    },
+    "gallery/government/workforce-reskilling-initiative.opf.json#1": {
+      "sha256": "bc926f95d7ca98a337c05d9da03b38dfc2b8a614d61ba05bf9830fc856772ed6",
+      "bytes": 22447
+    },
+    "gallery/government/workforce-reskilling-initiative.opf.json#2": {
+      "sha256": "22aae75ae61524511ddbe85fb8316e279474dc2a99a74679a90c193b96458935",
+      "bytes": 11905
+    },
+    "gallery/government/workforce-reskilling-initiative.opf.json#3": {
+      "sha256": "295f05d9e43be07c4530fb67e9884bfb4fd0e7d098c108a94061a75c7438f98c",
+      "bytes": 19084
+    },
+    "gallery/government/workforce-reskilling-initiative.opf.json#4": {
+      "sha256": "2c236bd90ba6b9f21cd171f10d85c6b76897862e0fc446e6f996c7c7433d5c3d",
+      "bytes": 22699
+    },
+    "gallery/government/workforce-reskilling-initiative.opf.json#5": {
+      "sha256": "e30945e3dca75a405a7df9ef3b0203588fa3c71648304996f59fc7bb3c13862f",
+      "bytes": 29629
+    },
+    "gallery/government/workforce-reskilling-initiative.opf.json#6": {
+      "sha256": "b229adafd6560c3f13afa7b357c43de52f62bbe034a39b68d38c3dae8e179e06",
+      "bytes": 19194
+    },
+    "gallery/government/workforce-reskilling-initiative.opf.json#7": {
+      "sha256": "6dbd3665cdc6a5311ad0d2074446982017949246e99b7bc597963ca50753ed02",
+      "bytes": 9469
+    },
+    "gallery/government/workforce-reskilling-initiative.opf.json#8": {
+      "sha256": "665b5d83429d6c27614543c27e8930b14cd75aa64e9c9919d55e7f7dc4834a57",
+      "bytes": 11312
+    },
+    "gallery/government/workforce-reskilling-initiative.opf.json#9": {
+      "sha256": "8b6fc9c526cf32a4bc01d6be9e362a182a55601d84e47ce9c21bab5b08b6044d",
+      "bytes": 28447
+    }
+  }
+}

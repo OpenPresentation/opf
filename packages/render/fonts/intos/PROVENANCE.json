@@ -1,0 +1,144 @@
+{
+  "upstream": {
+    "repository": "https://github.com/muglug/intos",
+    "commit": "fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+    "release": "1.000",
+    "source": "https://github.com/muglug/intos/tree/fef9315c14da9e4b23b4c3cac8e718998d4e4736",
+    "licenseUrl": "https://raw.githubusercontent.com/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/LICENSE.txt"
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "LICENSE.txt",
+  "licenseSha256": "3b4a605d1a6305360d8dbabf203465bee9b1287f9fba97718e5f3d260813801e",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2013 The Intos Project Authors (https://github.com/muglug/intos)",
+  "faces": [
+    {
+      "file": "Intos-Regular.ttf",
+      "family": "Intos",
+      "weight": 400,
+      "italic": false,
+      "sha256": "4de204b6414d30f9f49b9375dc9b71ccea1683e55ac37de6c8d541abbc760eea",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/Intos-Regular.ttf"
+    },
+    {
+      "file": "Intos-Italic.ttf",
+      "family": "Intos",
+      "weight": 400,
+      "italic": true,
+      "sha256": "8ca602e312af876190610b0416fdfc67f58ee38bcf9e01ce2f0fcc1094d8fbe4",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/Intos-Italic.ttf"
+    },
+    {
+      "file": "Intos-Bold.ttf",
+      "family": "Intos",
+      "weight": 700,
+      "italic": false,
+      "sha256": "8afd148fff67d6426d0d6906d4c6232886aedc81a7832544806e6c93c44340ab",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/Intos-Bold.ttf"
+    },
+    {
+      "file": "Intos-BoldItalic.ttf",
+      "family": "Intos",
+      "weight": 700,
+      "italic": true,
+      "sha256": "dec13afb35718df39f5a422d7ecb2f69bd719c9ae3196508c17021a428578a11",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/Intos-BoldItalic.ttf"
+    },
+    {
+      "file": "IntosDisplay-Regular.ttf",
+      "family": "Intos Display",
+      "weight": 400,
+      "italic": false,
+      "sha256": "b652fdab5e8939540f084529a507ddd158629985b8eee1b553ef05c46d131877",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/IntosDisplay-Regular.ttf"
+    },
+    {
+      "file": "IntosDisplay-Italic.ttf",
+      "family": "Intos Display",
+      "weight": 400,
+      "italic": true,
+      "sha256": "2741bd21a8904acf3ce28aff7a896c0c87777e3d459e1e10ffe085057471bc28",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/IntosDisplay-Italic.ttf"
+    },
+    {
+      "file": "IntosDisplay-Bold.ttf",
+      "family": "Intos Display",
+      "weight": 700,
+      "italic": false,
+      "sha256": "5055714a7215331b7786b10538138baa4dc969a8afe018bbf459f8b5395026d8",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/IntosDisplay-Bold.ttf"
+    },
+    {
+      "file": "IntosDisplay-BoldItalic.ttf",
+      "family": "Intos Display",
+      "weight": 700,
+      "italic": true,
+      "sha256": "1d9e18845be66b00793b8142581898b70ca72425f4d9f498fe4c35f88c39014d",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/IntosDisplay-BoldItalic.ttf"
+    },
+    {
+      "file": "IntosNarrow-Regular.ttf",
+      "family": "Intos Narrow",
+      "weight": 400,
+      "italic": false,
+      "sha256": "ea91acdb933f2f1919df688f154140b851191adf4ecb77f7d931724198ea23c1",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/IntosNarrow-Regular.ttf"
+    },
+    {
+      "file": "IntosNarrow-Italic.ttf",
+      "family": "Intos Narrow",
+      "weight": 400,
+      "italic": true,
+      "sha256": "f2b4745a51b0c0c13d9768caf14017014c299e11a19031f83c1d8c77f4e23c6b",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/IntosNarrow-Italic.ttf"
+    },
+    {
+      "file": "IntosNarrow-Bold.ttf",
+      "family": "Intos Narrow",
+      "weight": 700,
+      "italic": false,
+      "sha256": "59fd6e53b61ae483809ce1d8fc396357ec33d7beedef2e81f87da11551a99e51",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/IntosNarrow-Bold.ttf"
+    },
+    {
+      "file": "IntosNarrow-BoldItalic.ttf",
+      "family": "Intos Narrow",
+      "weight": 700,
+      "italic": true,
+      "sha256": "6e1cb55b955539301ffc51b1a602a3fb9c8411b9082383fd29f555492eb9d079",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/IntosNarrow-BoldItalic.ttf"
+    },
+    {
+      "file": "IntosSerif-Regular.ttf",
+      "family": "Intos Serif",
+      "weight": 400,
+      "italic": false,
+      "sha256": "56351ac7a9d0b66a5d9a0b6c656cefa6fa5cf9fb5e3ee7e44bd1e4e327828d35",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/IntosSerif-Regular.ttf"
+    },
+    {
+      "file": "IntosSerif-Italic.ttf",
+      "family": "Intos Serif",
+      "weight": 400,
+      "italic": true,
+      "sha256": "eed3fa7449ce0fc31fe51569ce056ce483e25ce8f6e2fdda16d6cd36ff231327",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/IntosSerif-Italic.ttf"
+    },
+    {
+      "file": "IntosSerif-Bold.ttf",
+      "family": "Intos Serif",
+      "weight": 700,
+      "italic": false,
+      "sha256": "ad994397ce37c29f8881e9fe6e7fcdc743b643465a96ab4d1e2a02d95784a79f",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/IntosSerif-Bold.ttf"
+    },
+    {
+      "file": "IntosSerif-BoldItalic.ttf",
+      "family": "Intos Serif",
+      "weight": 700,
+      "italic": true,
+      "sha256": "f99eb0845ab26e305ffe58f3baa9c920d676d2204a222d925d4fa001573f53f2",
+      "upstreamUrl": "https://media.githubusercontent.com/media/muglug/intos/fef9315c14da9e4b23b4c3cac8e718998d4e4736/fonts/IntosSerif-BoldItalic.ttf"
+    }
+  ]
+}

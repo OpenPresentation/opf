@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/compliance-readiness-review.opf.json",
+  "entries": {
+    "gallery/business-functions/compliance-readiness-review.opf.json#0": {
+      "sha256": "26375dca07ceaeca6d4ef7ea06ea0971e1e652b592f81d4f20977999900e208d",
+      "bytes": 5115
+    },
+    "gallery/business-functions/compliance-readiness-review.opf.json#1": {
+      "sha256": "d2c2a12ffe60aa490ec992b7aa8908da07491ca82acba8128834ff6864a7f9b0",
+      "bytes": 7325
+    },
+    "gallery/business-functions/compliance-readiness-review.opf.json#2": {
+      "sha256": "283b3a160abff26b78c0fd001cbdd15bb5ac33fee77313a53dac5d17cf9ea712",
+      "bytes": 6034
+    },
+    "gallery/business-functions/compliance-readiness-review.opf.json#3": {
+      "sha256": "751e91d44f8bcfa0e5847a17381dcaf232aabceb2416f04160cc232eb9dc1032",
+      "bytes": 8946
+    },
+    "gallery/business-functions/compliance-readiness-review.opf.json#4": {
+      "sha256": "1b8e93c7d01772bde3ef50f60cf596bb23882be327c91cc34ba87f8b2b9dc92c",
+      "bytes": 7822
+    },
+    "gallery/business-functions/compliance-readiness-review.opf.json#5": {
+      "sha256": "9947ea2ea4aea714618ecce5603d718b46eb21f1a972c60e47c242b3076ba66e",
+      "bytes": 17367
+    },
+    "gallery/business-functions/compliance-readiness-review.opf.json#6": {
+      "sha256": "07b558ffdb3f04a26868fc1c8d60267e2989d0435ab03a03dcaf8458fd82075c",
+      "bytes": 9686
+    },
+    "gallery/business-functions/compliance-readiness-review.opf.json#7": {
+      "sha256": "9ff5c9b1b6f5b80e184f186e61794068b17c50842f9af8f7d977f37b62535856",
+      "bytes": 4485
+    },
+    "gallery/business-functions/compliance-readiness-review.opf.json#8": {
+      "sha256": "82c673cdb2750fc5f5060dd4558a2842a50bcbcfff3e76e52a964afee8c73ed9",
+      "bytes": 5427
+    },
+    "gallery/business-functions/compliance-readiness-review.opf.json#9": {
+      "sha256": "fa979819e5f1d386dab4246ebd6f94c0ec114d8e042dfb512ec2a5ff2f3e6382",
+      "bytes": 11870
+    }
+  }
+}

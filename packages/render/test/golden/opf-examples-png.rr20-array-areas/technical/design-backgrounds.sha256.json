@@ -1,0 +1,25 @@
+{
+  "deck": "technical/design-backgrounds.opf.json",
+  "entries": {
+    "technical/design-backgrounds.opf.json#0": {
+      "sha256": "0d61b6f2b466bcd9c60303094370675e0fb1574772c082f8d7f6392ab03048b3",
+      "bytes": 4215
+    },
+    "technical/design-backgrounds.opf.json#1": {
+      "sha256": "74893c892895868f7ca31b0cb3c9abac6c00bdd3632a7459ed6dc71b343c7f69",
+      "bytes": 3548
+    },
+    "technical/design-backgrounds.opf.json#2": {
+      "sha256": "274fb3d030bd0d57459af4971ecba7d8e0d2bbf79f94a9085a759b5c684fddf5",
+      "bytes": 27390
+    },
+    "technical/design-backgrounds.opf.json#3": {
+      "sha256": "b408e294fba954b95dc247c65fcb53354c0a0eb1990cedc090c309bb29bf39cf",
+      "bytes": 4622
+    },
+    "technical/design-backgrounds.opf.json#4": {
+      "sha256": "52f3d5736639d8e1c73343424a921154deac680c13754f26a6e4c25a4840aa38",
+      "bytes": 5607
+    }
+  }
+}

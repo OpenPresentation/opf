@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/product-roadmap-decision-review.opf.json",
+  "entries": {
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#0": {
+      "sha256": "0699c0bbe0d4f767e019831a292a5133342e454ab2c4fa14b6cd6f5b08a59626",
+      "bytes": 5879
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#1": {
+      "sha256": "aeff4f3373ffe91033b6294fac80547e14d9b6b6fc972baa54c4af8c41e18621",
+      "bytes": 8442
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#2": {
+      "sha256": "de27abd8e3ecddc64687d4872cdc007c1a5713fd7b58a673bdaa2a6cd6abbc05",
+      "bytes": 4812
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#3": {
+      "sha256": "2b32dc5a065533bcd2ad7c3b6aec58fc43a9a0af0f72c5860dc938e075375df5",
+      "bytes": 7073
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#4": {
+      "sha256": "1470faf71fef119e01cf8ef7a2dccc227975c17a16854c3861830cabdb70e994",
+      "bytes": 8179
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#5": {
+      "sha256": "cd093f05143aa6e065ea60cd623714f99c4c209c06d79862ae0023e85ab495db",
+      "bytes": 17358
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#6": {
+      "sha256": "54fda6c0bea6beaee11419ea8107875949092e332cc8c77a37da5872d7b95202",
+      "bytes": 9920
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#7": {
+      "sha256": "2f387b56c809eaa0a299130c0cc5d0ca77bf984c06d392764535da4dcb5de951",
+      "bytes": 4382
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#8": {
+      "sha256": "f341519d36802b5348f4b1db19b7c54fd471fae23bfea996b3e3be0f6b8a12a1",
+      "bytes": 6117
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#9": {
+      "sha256": "3792ca4676bb84d9a99f0936e07b1921dc5a979309845ed1b4b70e053012a15b",
+      "bytes": 11066
+    }
+  }
+}

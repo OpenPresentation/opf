@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/s-and-op-exception-review.opf.json",
+  "entries": {
+    "gallery/business-functions/s-and-op-exception-review.opf.json#0": {
+      "sha256": "26798073fd9c04e3ca429eaf633b372c4615d034928ab2cf30db41f6dbc11b15",
+      "bytes": 40595
+    },
+    "gallery/business-functions/s-and-op-exception-review.opf.json#1": {
+      "sha256": "4e7a43e24179cc9af22bbb82f13b762eb866158b325bd8f32cf8da58b34175e8",
+      "bytes": 45523
+    },
+    "gallery/business-functions/s-and-op-exception-review.opf.json#2": {
+      "sha256": "f9e55e969a54495bdb33d083a1375ec29a4e222e19a32356a3259cc687104c36",
+      "bytes": 37244
+    },
+    "gallery/business-functions/s-and-op-exception-review.opf.json#3": {
+      "sha256": "678c1673c554cd1a30dc9ffbd0768cfae308cb2ba919aeae76dc96b08b462bd9",
+      "bytes": 39672
+    },
+    "gallery/business-functions/s-and-op-exception-review.opf.json#4": {
+      "sha256": "9f424b43b575876dbb1a3814d5f2f96ca30c0262e6e236b222cb1e3b782de7fa",
+      "bytes": 43704
+    },
+    "gallery/business-functions/s-and-op-exception-review.opf.json#5": {
+      "sha256": "9acfd1bb819834bda82d767199c0d49fa1deb9f00e16452d11560b7ef120a720",
+      "bytes": 49680
+    },
+    "gallery/business-functions/s-and-op-exception-review.opf.json#6": {
+      "sha256": "73443f348073cb3537f6c97a9294ffe30bef8dbce5f01d746315f3c4a4a45633",
+      "bytes": 41774
+    },
+    "gallery/business-functions/s-and-op-exception-review.opf.json#7": {
+      "sha256": "9540d4a5c136095312f486c5b824bd08e562bb66b213f803727c0472c437fb55",
+      "bytes": 32243
+    },
+    "gallery/business-functions/s-and-op-exception-review.opf.json#8": {
+      "sha256": "2285dc1457a0c53aeacb8108f4fceba18eefe7d76bf08e94290b64ce2037094d",
+      "bytes": 33056
+    },
+    "gallery/business-functions/s-and-op-exception-review.opf.json#9": {
+      "sha256": "6ce84bbf2e879ac3c83096c9bcb157d6096482c45ba5a63a2edeb0d5006f8087",
+      "bytes": 49735
+    }
+  }
+}

@@ -1,0 +1,5 @@
+
+> @openpresentation/opf-render@0.7.0 test:text-browser
+> node test/accepted-text-browser.mjs
+
+Accepted text browser: 24 offline cases preserve source, accepted origins, natural advances and glyph containment.

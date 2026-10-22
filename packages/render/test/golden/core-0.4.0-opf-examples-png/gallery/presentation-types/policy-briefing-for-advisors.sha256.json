@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/presentation-types/policy-briefing-for-advisors.opf.json",
+  "entries": {
+    "gallery/presentation-types/policy-briefing-for-advisors.opf.json#0": {
+      "sha256": "270d67d2b6c24cd587dc22aec5129593d05980931521402696d2154f45e961cf",
+      "bytes": 4608
+    },
+    "gallery/presentation-types/policy-briefing-for-advisors.opf.json#1": {
+      "sha256": "e97a049368a7c690b05f6251110f72c6bc0513359a79fbebe108b0f3951a0b2d",
+      "bytes": 5725
+    },
+    "gallery/presentation-types/policy-briefing-for-advisors.opf.json#2": {
+      "sha256": "73befe8f530e18f382ca795c32bb91fa73ce3f250ab48ac0e0b2a71fb8ba64f3",
+      "bytes": 3130
+    },
+    "gallery/presentation-types/policy-briefing-for-advisors.opf.json#3": {
+      "sha256": "7294b8609c21d55cc538a7292bbc52f77534ab027372220cd90d1eed8e8c26ff",
+      "bytes": 4862
+    },
+    "gallery/presentation-types/policy-briefing-for-advisors.opf.json#4": {
+      "sha256": "c5654adb3af784c8c3643a0f9404ca567aa7fed86725d906bc6a0a0b09ff852e",
+      "bytes": 5102
+    },
+    "gallery/presentation-types/policy-briefing-for-advisors.opf.json#5": {
+      "sha256": "fb4fcf67b7ff578cd7315cb3e01c9df3d0c994bba14dbe8eb948dc0dd0c93701",
+      "bytes": 11843
+    },
+    "gallery/presentation-types/policy-briefing-for-advisors.opf.json#6": {
+      "sha256": "c1f753ddcc1b8df9a1c03b7245de40a6750851d95468c3990e6cedc615ec1fd6",
+      "bytes": 7574
+    },
+    "gallery/presentation-types/policy-briefing-for-advisors.opf.json#7": {
+      "sha256": "27a20b7edd483845c609d70e31746b0c722283c5c20157390e359b546c5f125a",
+      "bytes": 3346
+    },
+    "gallery/presentation-types/policy-briefing-for-advisors.opf.json#8": {
+      "sha256": "1db72cc3ae4e2f072ef3ae88b93f04b174102b7f24a55c43fb7c0685803e2922",
+      "bytes": 3810
+    },
+    "gallery/presentation-types/policy-briefing-for-advisors.opf.json#9": {
+      "sha256": "bce3f7e2faf77719f9252edf94936465c47edffba1382efe9dc00da34c1129f7",
+      "bytes": 7183
+    }
+  }
+}

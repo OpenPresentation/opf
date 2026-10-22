@@ -1,0 +1,47 @@
+{
+  "upstream": {
+    "package": "@expo-google-fonts/eb-garamond",
+    "version": "0.4.3",
+    "source": "https://www.npmjs.com/package/@expo-google-fonts/eb-garamond/v/0.4.3",
+    "integrity": "sha512-8HsDPKN6vDlzxZLgo3UFcyr4uvtY33TBpM65owySnF8cy8hq0ss8AWmBvT/lMRJ/wfcoaPP8gFQsizPRvr0nqg=="
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "0985066662eb755ed3683ae5482a81a9195b49ce3f7e165cc2388b3dbece7dd7",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2017 The EB Garamond Project Authors (https://github.com/octaviopardo/EBGaramond12)",
+  "faces": [
+    {
+      "file": "EBGaramond_400Regular.ttf",
+      "family": "EB Garamond",
+      "weight": 400,
+      "italic": false,
+      "sha256": "d5baed6e48bf4c99a770e6edc86ddaf67942bb1850491ed54f94d5c2c213531e",
+      "npmFile": "400Regular/EBGaramond_400Regular.ttf"
+    },
+    {
+      "file": "EBGaramond_400Regular_Italic.ttf",
+      "family": "EB Garamond",
+      "weight": 400,
+      "italic": true,
+      "sha256": "228da33df456ec4e0a149f33cfc2264d5bd500bdfcf55ee36710ca8df923cbd6",
+      "npmFile": "400Regular_Italic/EBGaramond_400Regular_Italic.ttf"
+    },
+    {
+      "file": "EBGaramond_700Bold.ttf",
+      "family": "EB Garamond",
+      "weight": 700,
+      "italic": false,
+      "sha256": "8bb7f13020d522de1c441da0a76f05843b74d788c1b16a933af3be4880782d17",
+      "npmFile": "700Bold/EBGaramond_700Bold.ttf"
+    },
+    {
+      "file": "EBGaramond_700Bold_Italic.ttf",
+      "family": "EB Garamond",
+      "weight": 700,
+      "italic": true,
+      "sha256": "0030bda44f15b85f5adee17dc25cb5948c547ecf7f6d06e10723b406cd15a472",
+      "npmFile": "700Bold_Italic/EBGaramond_700Bold_Italic.ttf"
+    }
+  ]
+}

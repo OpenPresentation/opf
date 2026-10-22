@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/product-roadmap-decision-review.opf.json",
+  "entries": {
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#0": {
+      "sha256": "b2137a6662bb74032e4c41ede80d1f345f4d07da152dd5d739cf1cd55180d500",
+      "bytes": 6473
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#1": {
+      "sha256": "84bcabbb9ebe905f71ef89c91cd2ae123063045722bcb8c80cca08aff3c5c286",
+      "bytes": 8662
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#2": {
+      "sha256": "470f834fc22bd13fae9f2ee4454bbc6c551d02c7b800a5dcf57dd9644e6a7454",
+      "bytes": 6052
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#3": {
+      "sha256": "6125660bb7bfd39b619e058aea302a3236c5d539908cf2a4bcbf4561144f0289",
+      "bytes": 7208
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#4": {
+      "sha256": "aaeffca249772e5114c6f397dcd5ff229d31555e9c788946ff4891bea5ec5bec",
+      "bytes": 8413
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#5": {
+      "sha256": "994c58cc82e19f9aacb98f68f4acc1f5203878483779e7b564a32dd1aea09aff",
+      "bytes": 17490
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#6": {
+      "sha256": "a8153cfed3a4f6efd90d15c23cd1f5e07f6aaeafa7ad95e522fe97cebfb86085",
+      "bytes": 13973
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#7": {
+      "sha256": "e9956a35cb91ab79284561943ed4be4808cc20a5f410cf1fc487d2b5269087e5",
+      "bytes": 4323
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#8": {
+      "sha256": "c4481ee77aae38b2d107021970aed1cd229d8d9c581b54e54c12afb46601162f",
+      "bytes": 6431
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#9": {
+      "sha256": "fa9a20cdb1d3ab5bf48e5e51d77511a2400eb14d73d0af48eb58094997fbacd8",
+      "bytes": 11293
+    }
+  }
+}

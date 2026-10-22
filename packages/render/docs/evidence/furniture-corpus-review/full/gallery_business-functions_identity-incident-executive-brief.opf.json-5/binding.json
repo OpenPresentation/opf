@@ -1,0 +1,15 @@
+{
+  "key": "gallery/business-functions/identity-incident-executive-brief.opf.json#5",
+  "records": [
+    {
+      "side": "before",
+      "svgSha256": "8ffbd9a588273e9291b80b77033f4fd8ff19842d50fd64f541625c8babe6c835",
+      "pngSha256": "b085858a06e8e9566dfd162694099506b44cb981a39faf1a9251b6eb1e82b615"
+    },
+    {
+      "side": "after",
+      "svgSha256": "6f4bc8e2abbf3b1f4f42066fd4797ccf3574ce7d2d906b12c3febd2caceedade",
+      "pngSha256": "31939058a22fe843af69b7c348d0e5b731c6439cb27276f3d3a1a53f614b9028"
+    }
+  ]
+}

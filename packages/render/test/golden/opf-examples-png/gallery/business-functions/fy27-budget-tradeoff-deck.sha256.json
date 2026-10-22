@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/business-functions/fy27-budget-tradeoff-deck.opf.json",
+  "entries": {
+    "gallery/business-functions/fy27-budget-tradeoff-deck.opf.json#0": {
+      "sha256": "6a6d13a2fd145ad22ef4772cc20c46bb1452ba9827346252fb5ddac7cf6e66eb",
+      "bytes": 3529
+    },
+    "gallery/business-functions/fy27-budget-tradeoff-deck.opf.json#1": {
+      "sha256": "18e195e488e46c9a1319e6a795564f79e3f7b0b6331be9e845b9395f65b17aea",
+      "bytes": 6024
+    },
+    "gallery/business-functions/fy27-budget-tradeoff-deck.opf.json#2": {
+      "sha256": "310c5af8e9d6ad93b781dc2a1758e759d8fdee662e54b9fb90cdca5dbcede5a9",
+      "bytes": 3196
+    },
+    "gallery/business-functions/fy27-budget-tradeoff-deck.opf.json#3": {
+      "sha256": "030fbd945d689736745ef72d8452c83dedb5a6363bbe089d3909dfa478599ac8",
+      "bytes": 4038
+    }
+  }
+}

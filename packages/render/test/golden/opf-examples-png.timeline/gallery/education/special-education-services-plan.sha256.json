@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/education/special-education-services-plan.opf.json",
+  "entries": {
+    "gallery/education/special-education-services-plan.opf.json#0": {
+      "sha256": "3a87e917f99733c654f86a0a7b394cc850467c84ba7332e902de2a625a3e5694",
+      "bytes": 4354
+    },
+    "gallery/education/special-education-services-plan.opf.json#1": {
+      "sha256": "51f5ed26ad069eaead42113c35182cd40173fc272f4a7ea9f53bfa5a7ce0d875",
+      "bytes": 6516
+    },
+    "gallery/education/special-education-services-plan.opf.json#2": {
+      "sha256": "a79e823c5ccf721474b79e2ccc94a230488bd7e1a16c000d1d0c9de31efc20e8",
+      "bytes": 3005
+    },
+    "gallery/education/special-education-services-plan.opf.json#3": {
+      "sha256": "584c3173bdd138d269b6042be679ab84c93a44df0d64c2e1481ddb72048a114a",
+      "bytes": 4219
+    }
+  }
+}

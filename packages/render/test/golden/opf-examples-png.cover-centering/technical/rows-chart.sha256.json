@@ -1,0 +1,13 @@
+{
+  "deck": "technical/rows-chart.opf.json",
+  "entries": {
+    "technical/rows-chart.opf.json#0": {
+      "sha256": "23202e58dc3e5a58cdf83be8184ab413cba2d2de56cecbc64a1a85f601f4ddd0",
+      "bytes": 5598
+    },
+    "technical/rows-chart.opf.json#1": {
+      "sha256": "b399a6764c7a3867ffcd644643589fb4e1901624808658f88b2f913f9ae83b0c",
+      "bytes": 4054
+    }
+  }
+}

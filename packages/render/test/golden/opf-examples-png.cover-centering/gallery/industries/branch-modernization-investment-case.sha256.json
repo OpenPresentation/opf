@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/industries/branch-modernization-investment-case.opf.json",
+  "entries": {
+    "gallery/industries/branch-modernization-investment-case.opf.json#0": {
+      "sha256": "a1a217a4d8c5b8980984d1c617b0ec5ddddaf9b0c49ffe61709a309c284af15f",
+      "bytes": 4692
+    },
+    "gallery/industries/branch-modernization-investment-case.opf.json#1": {
+      "sha256": "20b1b70e25fa95508f1cb016b7405cb180f54881cdd967d7016eb8558444acd3",
+      "bytes": 6505
+    },
+    "gallery/industries/branch-modernization-investment-case.opf.json#2": {
+      "sha256": "ec7d07eac9ef18ab7841d5e6abb94f1d3fd540db4b34318db0654ff0c8fb6c72",
+      "bytes": 4427
+    },
+    "gallery/industries/branch-modernization-investment-case.opf.json#3": {
+      "sha256": "76ee30d2983cb3a4ec31395a6e636b6b81cb037138bfb1af93de0d4ac5fd3d6a",
+      "bytes": 4223
+    }
+  }
+}

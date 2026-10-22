@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "description": "What scripts/run-tests.mjs does not run from test/*.mjs (RR-46). A new Node test needs no entry; add a file here only when it is a helper, fixture or harness, or a test that another step runs (font-licenses.mjs runs in check:fonts). Files named *-browser*.mjs are browser suites (test/browser-suites.json, scripts/quarantine.mjs) and are skipped by name. RR-53: contractExclude lists the tests the contract suite (npm run test:contract, run by core's pull-request tier) leaves out, each with its reason; every other test of the full run is in the contract.",
+  "include": [
+    "fonts-browser.mjs"
+  ],
+  "nodeTest": [],
+  "exclude": [
+    "accepted-text-fixtures.mjs",
+    "catalog-harness.mjs",
+    "font-licenses.mjs",
+    "font-preparation.mjs",
+    "font-variants.mjs",
+    "furniture-review.mjs",
+    "golden-store.mjs",
+    "latin-family-fixture.mjs",
+    "layout-template-fixture.mjs",
+    "packed-install.mjs",
+    "pdf-helpers.mjs",
+    "platform-residual-probe.mjs",
+    "preview-a11y-fixture.mjs",
+    "probe-text-ink.mjs",
+    "readability-review-sheets.mjs",
+    "review-code-raster.mjs",
+    "review-text-fits.mjs",
+    "rich-flow-review-sheets.mjs",
+    "script-corpora-raster.mjs",
+    "script-family-fixture.mjs",
+    "shared-code.mjs",
+    "shared-metric.mjs",
+    "source-whitespace-review-sheets.mjs",
+    "timeline-review-sheets.mjs",
+    "variable-font-retained-gate.mjs"
+  ],
+  "contractExclude": {
+    "aptos-preview.mjs": "Intos metric-compatibility constants of this package (no core input); full run only.",
+    "bundler-safe-resolve.mjs": "render#199: how the Node entries locate harfbuzzjs, font packages and vendored fonts on disk (renderer packaging, no core input).",
+    "extra-lazy-fonts.mjs": "Host-served lazy font loading and hash validation, renderer internal; the examples are only a loop input.",
+    "latin-family-hosts.mjs": "Per-family Latin font host fixtures: renderer font registry and advances against the fixture model.",
+    "lazy-face-fallback.mjs": "Lazy script-face loading and glyph fallback of the renderer for the Aptos scheme.",
+    "pdf-vector-visual.mjs": "Appearance of the vector PDF writer; the raster golden already renders the same core examples.",
+    "pdf-vector.mjs": "Structure of the vector PDF writer (text extraction, tagging, embedding), renderer internal.",
+    "published-core-gate.mjs": "Version arithmetic of the CI gate on opf.requiresUnreleasedCore (RR-55); package machinery, no core input.",
+    "raster-script-clusters.mjs": "Cluster-by-cluster raster text path of the renderer, no core input.",
+    "script-corpora.mjs": "Per-face shaping qualification of the bundled script faces against HarfBuzz (about a minute), renderer internal; full run only.",
+    "soak.mjs": "Statistics and a smoke run of the manual soak benchmark (scripts/soak.mjs), package tooling; it renders three core examples only as loop input."
+  }
+}

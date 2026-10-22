@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/international/japan-market-entry-readout.opf.json",
+  "entries": {
+    "gallery/international/japan-market-entry-readout.opf.json#0": {
+      "sha256": "8a247ca932b3c092262436fec60cd9ad837e9f6c5381d63e4318a2fc3d467f2d",
+      "bytes": 5072
+    },
+    "gallery/international/japan-market-entry-readout.opf.json#1": {
+      "sha256": "fbb36e92be275f8e486abed637d2b59866957d1fa82c093d89bca106a8a369f7",
+      "bytes": 7880
+    },
+    "gallery/international/japan-market-entry-readout.opf.json#2": {
+      "sha256": "00dcaea24eef4d200fcfadab4287b29b44b538a520e8780ee12bbd9526e1aaac",
+      "bytes": 6836
+    },
+    "gallery/international/japan-market-entry-readout.opf.json#3": {
+      "sha256": "98e48b388f923202361216cd0026f0a8dbabbd9193cf66de3219c1c8ad13f68e",
+      "bytes": 5293
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/industries/food-bank-distribution-capacity-plan.opf.json",
+  "entries": {
+    "gallery/industries/food-bank-distribution-capacity-plan.opf.json#0": {
+      "sha256": "1e90003df2b0fa769951f231b5489583d73e9c1ca50724392918b93751feb02a",
+      "bytes": 4880
+    },
+    "gallery/industries/food-bank-distribution-capacity-plan.opf.json#1": {
+      "sha256": "1f4a013eb805a9bf850b0971aafd7eee3c96563f115f21e7864c1fe53b374930",
+      "bytes": 6629
+    },
+    "gallery/industries/food-bank-distribution-capacity-plan.opf.json#2": {
+      "sha256": "d10be991f23b675a00e55120bad6f5650fb0cd0b68d1dfa8885c4c4b901fbe7c",
+      "bytes": 2794
+    },
+    "gallery/industries/food-bank-distribution-capacity-plan.opf.json#3": {
+      "sha256": "9a42c352bfb82cd0b18471233c0c0dc126a73723eae30995178fdeb4709ab827",
+      "bytes": 4241
+    }
+  }
+}

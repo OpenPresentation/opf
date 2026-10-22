@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/pricing-and-packaging-decision.opf.json",
+  "entries": {
+    "gallery/business-functions/pricing-and-packaging-decision.opf.json#0": {
+      "sha256": "375d75787cdbe0574dbf74cc1d9a35edbeb4eb499f3cd810c8b40a0c0816fb1e",
+      "bytes": 8394
+    },
+    "gallery/business-functions/pricing-and-packaging-decision.opf.json#1": {
+      "sha256": "46450ca2e520bc6a26a19ff357f8f4cd7bb6c167b30fa86b0de97f8e289d8daa",
+      "bytes": 10980
+    },
+    "gallery/business-functions/pricing-and-packaging-decision.opf.json#2": {
+      "sha256": "60603de91d2c5f4a0cc40448dbdfa2c325dc7dd0048591ce2ccd5861a62a165f",
+      "bytes": 7345
+    },
+    "gallery/business-functions/pricing-and-packaging-decision.opf.json#3": {
+      "sha256": "3e9366ec8324e2d901a1c19acff03fc20fe4c7b189eaf849973c021c1b9bce94",
+      "bytes": 11154
+    },
+    "gallery/business-functions/pricing-and-packaging-decision.opf.json#4": {
+      "sha256": "45235a34c1a983fd5d12d85492af69488e51752a8559150b6028ea2e18c31ed4",
+      "bytes": 12125
+    },
+    "gallery/business-functions/pricing-and-packaging-decision.opf.json#5": {
+      "sha256": "ca7f5b7bb2046c70edf58c0192ac58b54d39dff92626a93e026b5dc39595e9bf",
+      "bytes": 23166
+    },
+    "gallery/business-functions/pricing-and-packaging-decision.opf.json#6": {
+      "sha256": "6337457db7e3752f8eafab398f7c48858ef2b807ab4c02557ecbda151c00165e",
+      "bytes": 15611
+    },
+    "gallery/business-functions/pricing-and-packaging-decision.opf.json#7": {
+      "sha256": "8e3b262c8049269987f0f640fc09e8244c2d975c61fa214e524e1fdc39e1c185",
+      "bytes": 5435
+    },
+    "gallery/business-functions/pricing-and-packaging-decision.opf.json#8": {
+      "sha256": "db57386cd5b3f6b1b4ab4caec9a4d2ce9bdc14543c5fcaf886625d635b3efc71",
+      "bytes": 7553
+    },
+    "gallery/business-functions/pricing-and-packaging-decision.opf.json#9": {
+      "sha256": "6d6e19baa39f0a91a8e4e833160c10888a01a5b668bf0d53609b03d27faac938",
+      "bytes": 18768
+    }
+  }
+}

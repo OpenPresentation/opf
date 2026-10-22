@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/design-and-media/kiosk-orientation-deck.opf.json",
+  "entries": {
+    "gallery/design-and-media/kiosk-orientation-deck.opf.json#0": {
+      "sha256": "4b87411c795c3e91859ad3eba345b4b5ad83b5ad4c49c3da8730ad35e77215e5",
+      "bytes": 5400
+    },
+    "gallery/design-and-media/kiosk-orientation-deck.opf.json#1": {
+      "sha256": "22b4153465f417ceb7e6e8f5a696ecdd7afe16c4939c297e20bfebe5b1c626df",
+      "bytes": 8553
+    },
+    "gallery/design-and-media/kiosk-orientation-deck.opf.json#2": {
+      "sha256": "b8fe377a6a01f112434b7c9d54f101edf87b8fd58a0a5a135cb4136556ac1f83",
+      "bytes": 4592
+    },
+    "gallery/design-and-media/kiosk-orientation-deck.opf.json#3": {
+      "sha256": "b18968f46ee7822b1d48e54cc50f0e89e995617bc8796cbca34bd36b381a2f45",
+      "bytes": 7125
+    },
+    "gallery/design-and-media/kiosk-orientation-deck.opf.json#4": {
+      "sha256": "4d9e38bee092326c3e0e27ebc319ef903c81e3d6dd50a1ec659db6b4fb0b09d4",
+      "bytes": 6653
+    },
+    "gallery/design-and-media/kiosk-orientation-deck.opf.json#5": {
+      "sha256": "aa5065f9e11d2d53c555991c53d294ddf642733cd548137d81136515a933f4ed",
+      "bytes": 17677
+    },
+    "gallery/design-and-media/kiosk-orientation-deck.opf.json#6": {
+      "sha256": "8f882d9dea012a97d6ce54754b4c3368e562442f3000ba9725a82a74f4b6a2f3",
+      "bytes": 9960
+    },
+    "gallery/design-and-media/kiosk-orientation-deck.opf.json#7": {
+      "sha256": "ea819d99cacc32405db1a1e3b75818989c1f1823ddb0fa5ae03a24a03cc46a73",
+      "bytes": 4189
+    },
+    "gallery/design-and-media/kiosk-orientation-deck.opf.json#8": {
+      "sha256": "c48066ab848c23f0f83c87036c0802b0b1c79648814ce76341658b820b8c2e16",
+      "bytes": 5478
+    },
+    "gallery/design-and-media/kiosk-orientation-deck.opf.json#9": {
+      "sha256": "489780614b3ba892b3a55c12ff1edb16af5906c5917361f1b0b69a65e1bc7e18",
+      "bytes": 10420
+    }
+  }
+}

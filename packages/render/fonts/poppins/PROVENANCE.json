@@ -1,0 +1,47 @@
+{
+  "upstream": {
+    "package": "@expo-google-fonts/poppins",
+    "version": "0.4.1",
+    "source": "https://www.npmjs.com/package/@expo-google-fonts/poppins/v/0.4.1",
+    "integrity": "sha512-LiX5oEryJqDt3UmWwr4oqf11hGMz/JEffkkNcZ3UtGwyoMFzXmBmTwcrAWrEttxypxmLNmPykDg+CY2VjKve9A=="
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "6be04893d770899a015649c7aa3b582f871b272f8747a92b78b17c3e5c8b2573",
+  "reservedFontNames": [],
+  "copyright": "Copyright 2020 The Poppins Project Authors (https://github.com/itfoundry/Poppins)",
+  "faces": [
+    {
+      "file": "Poppins_400Regular.ttf",
+      "family": "Poppins",
+      "weight": 400,
+      "italic": false,
+      "sha256": "707fdc5c8bab57a90061c6a8ed7b70d5ffb82fc810e994e79f90bace890c255a",
+      "npmFile": "400Regular/Poppins_400Regular.ttf"
+    },
+    {
+      "file": "Poppins_400Regular_Italic.ttf",
+      "family": "Poppins",
+      "weight": 400,
+      "italic": true,
+      "sha256": "3225cec6a018310497ea9ee116aa43b2a833464fed6156dceb9a3a4424bb8613",
+      "npmFile": "400Regular_Italic/Poppins_400Regular_Italic.ttf"
+    },
+    {
+      "file": "Poppins_700Bold.ttf",
+      "family": "Poppins",
+      "weight": 700,
+      "italic": false,
+      "sha256": "7219547ee25334cbac0fe4b3acf0bf631e48ebb622c71af038edaaa652c60875",
+      "npmFile": "700Bold/Poppins_700Bold.ttf"
+    },
+    {
+      "file": "Poppins_700Bold_Italic.ttf",
+      "family": "Poppins",
+      "weight": 700,
+      "italic": true,
+      "sha256": "9d4d9f3c2c289eaec403660ec215bdc45e62b49f978807714bfc31ca7916c8fe",
+      "npmFile": "700Bold_Italic/Poppins_700Bold_Italic.ttf"
+    }
+  ]
+}

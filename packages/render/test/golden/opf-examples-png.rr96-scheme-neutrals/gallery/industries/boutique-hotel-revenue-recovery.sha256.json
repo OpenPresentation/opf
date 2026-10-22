@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/industries/boutique-hotel-revenue-recovery.opf.json",
+  "entries": {
+    "gallery/industries/boutique-hotel-revenue-recovery.opf.json#0": {
+      "sha256": "97c97287734fb60b695d0e0aec58601b456ecc7d2f3052dfe44b54e145504932",
+      "bytes": 5148
+    },
+    "gallery/industries/boutique-hotel-revenue-recovery.opf.json#1": {
+      "sha256": "cff260c5db6cf92a972c289ef84dccb2d88ae8231fc20ed52965b79ba8be253d",
+      "bytes": 6943
+    },
+    "gallery/industries/boutique-hotel-revenue-recovery.opf.json#2": {
+      "sha256": "75f123d494a3a06a258716670991563edeedc4ea318862ab657890c19983f66d",
+      "bytes": 8371
+    },
+    "gallery/industries/boutique-hotel-revenue-recovery.opf.json#3": {
+      "sha256": "cef2053286d3bee23ebd48412cb0a42477bb15d3577ca6fcce4dd70ba9c33781",
+      "bytes": 8558
+    },
+    "gallery/industries/boutique-hotel-revenue-recovery.opf.json#4": {
+      "sha256": "3fb6ca012d1e66d815ef8ef1679bc0119bf158f9483fc5d0d312c8ab55d09759",
+      "bytes": 7107
+    },
+    "gallery/industries/boutique-hotel-revenue-recovery.opf.json#5": {
+      "sha256": "843a3cdfb060a95f637df7b1bc2de4039ec393fa25c4e678318e2b3669f75f67",
+      "bytes": 15248
+    },
+    "gallery/industries/boutique-hotel-revenue-recovery.opf.json#6": {
+      "sha256": "554cf843ff7a0e7d3975e873a3a779ad18e087effc5c648de7d6f941bdf57fed",
+      "bytes": 10067
+    },
+    "gallery/industries/boutique-hotel-revenue-recovery.opf.json#7": {
+      "sha256": "00f55244a5ba4699967c79f2c357402be6b3bf16c67f426cb29ed8b20c5cf00d",
+      "bytes": 4416
+    },
+    "gallery/industries/boutique-hotel-revenue-recovery.opf.json#8": {
+      "sha256": "b7f9da401c284060bab1fc24b81ba8a24c8f40fcfc612f82eaa01ca02a3554f0",
+      "bytes": 5162
+    },
+    "gallery/industries/boutique-hotel-revenue-recovery.opf.json#9": {
+      "sha256": "5ea14936bc1b9da3dd4c2db7e14380287561cc86f69cd92f67549e8cccaef53e",
+      "bytes": 11157
+    }
+  }
+}

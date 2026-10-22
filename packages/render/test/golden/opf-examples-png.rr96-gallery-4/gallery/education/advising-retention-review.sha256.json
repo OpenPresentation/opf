@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/education/advising-retention-review.opf.json",
+  "entries": {
+    "gallery/education/advising-retention-review.opf.json#0": {
+      "sha256": "598fdfc1bd2574d2e0c649270895270945e1f619cb8f9778db54338a048134cd",
+      "bytes": 12089
+    },
+    "gallery/education/advising-retention-review.opf.json#1": {
+      "sha256": "aa655813e69e50398c9ed3592410eb4c60e41594194cde16e69ed1b47f02c5dd",
+      "bytes": 10514
+    },
+    "gallery/education/advising-retention-review.opf.json#2": {
+      "sha256": "c5d47fa5eff4945f1b09a69aa01e8a4401ee6db45c0cdf3f5f7d59f3d697f1b8",
+      "bytes": 8434
+    },
+    "gallery/education/advising-retention-review.opf.json#3": {
+      "sha256": "6a7ca1971b1da7c77dbf965b40e0035796129684045d27ea74a70c75ba2b073a",
+      "bytes": 12234
+    },
+    "gallery/education/advising-retention-review.opf.json#4": {
+      "sha256": "963b86f4460f2e73c565ef123fcc7c82941a95bebde806ac780dca9184b7a3ba",
+      "bytes": 11077
+    },
+    "gallery/education/advising-retention-review.opf.json#5": {
+      "sha256": "5ae19a2c5889631c4f7ab6fded041f3359f39508af89c6b546ad2cbfc2ad833c",
+      "bytes": 11102
+    }
+  }
+}

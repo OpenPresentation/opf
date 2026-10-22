@@ -1,0 +1,18 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: 657 raster baselines changed; see /Users/michael/Source/opf-render/artifacts/furniture-review-20260914/after/diff.json
+
+657 !== 0
+
+    at file:///Users/michael/Source/opf-render/test/golden.mjs:70:10 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 657,
+  expected: 0,
+  operator: 'strictEqual',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

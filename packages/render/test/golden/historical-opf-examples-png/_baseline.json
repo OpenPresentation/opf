@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "source": {
+    "repository": "OpenPresentation/opf",
+    "ref": "29713f534a917e327e5e8fdf9a5ba72b4ae6bdf0",
+    "path": "examples"
+  },
+  "format": "png-sha256",
+  "scale": 0.25
+}

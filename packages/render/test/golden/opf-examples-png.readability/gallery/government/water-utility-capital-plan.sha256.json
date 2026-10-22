@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/government/water-utility-capital-plan.opf.json",
+  "entries": {
+    "gallery/government/water-utility-capital-plan.opf.json#0": {
+      "sha256": "daa266070e1e899e571599d8de3d503bdf7d767ad326daa19701185b64ba288f",
+      "bytes": 14133
+    },
+    "gallery/government/water-utility-capital-plan.opf.json#1": {
+      "sha256": "79d87cc7c53c20a561924157d2a169c5494b27b0f76e603db83c16db9239729a",
+      "bytes": 9681
+    },
+    "gallery/government/water-utility-capital-plan.opf.json#2": {
+      "sha256": "3b7574b2f26d54599a453080926a6ec851bb6cdf67341bfa8e0a2ba7bd5a34fa",
+      "bytes": 6890
+    },
+    "gallery/government/water-utility-capital-plan.opf.json#3": {
+      "sha256": "9dcc8cffe885f1a9f242beb7c3649125b78418a7fb6ce3659b25c9115bbe3971",
+      "bytes": 9210
+    },
+    "gallery/government/water-utility-capital-plan.opf.json#4": {
+      "sha256": "dc5432f10b14dee7aacc1e26caa79857b4e6f2da4668adee9da65650e457276c",
+      "bytes": 8861
+    },
+    "gallery/government/water-utility-capital-plan.opf.json#5": {
+      "sha256": "5932cba5e5ab2ff5d6f384223a480d602d8f842be070d91b6aa4582a9f7995f7",
+      "bytes": 16519
+    },
+    "gallery/government/water-utility-capital-plan.opf.json#6": {
+      "sha256": "32667c62dc59ab69973a870606a9c01c49f8627ec0d51874443cf126d72d33bd",
+      "bytes": 13142
+    },
+    "gallery/government/water-utility-capital-plan.opf.json#7": {
+      "sha256": "9fd8877dd1faf4fdb80fded9d98c122f91d378831bd679cfac25421a4262a6d8",
+      "bytes": 7377
+    },
+    "gallery/government/water-utility-capital-plan.opf.json#8": {
+      "sha256": "f14d2766d9be6baa77d2deff75b8ff943a21715cfabb56a5c7875a1c0351abe6",
+      "bytes": 7948
+    },
+    "gallery/government/water-utility-capital-plan.opf.json#9": {
+      "sha256": "67195e80cd119cc74f0a8baaf9c06dd5798ee3f755e067c53afc5cd18e64f98f",
+      "bytes": 11521
+    }
+  }
+}

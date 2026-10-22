@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/industries/cold-chain-waste-reduction-review.opf.json",
+  "entries": {
+    "gallery/industries/cold-chain-waste-reduction-review.opf.json#0": {
+      "sha256": "23dbed2b127508ad6e44480e1ae940803a3f41b0772a992040aeda2477cc1ca0",
+      "bytes": 4253
+    },
+    "gallery/industries/cold-chain-waste-reduction-review.opf.json#1": {
+      "sha256": "1272ced9214ca270eb333b3a5f217f03f90eee08eeeec696d5f25d85ba6da633",
+      "bytes": 6953
+    },
+    "gallery/industries/cold-chain-waste-reduction-review.opf.json#2": {
+      "sha256": "73ada9421b26f6c0732f6ccdf684d2781d9f90be6fe2a55a7122e1025f366ca4",
+      "bytes": 2675
+    },
+    "gallery/industries/cold-chain-waste-reduction-review.opf.json#3": {
+      "sha256": "af51248b594016c0bf3e90dd9a99452d8ba69ac59a1211f2a5f28dc54690b10a",
+      "bytes": 5426
+    },
+    "gallery/industries/cold-chain-waste-reduction-review.opf.json#4": {
+      "sha256": "26247486e83b28b7bb235c5958196bc9781fe009802422107caa34bbadc5ecab",
+      "bytes": 5582
+    },
+    "gallery/industries/cold-chain-waste-reduction-review.opf.json#5": {
+      "sha256": "6a4dd4b2b298b6a2a278c7368a60ffe3405755c3ab4373a1e9f575e13e20f340",
+      "bytes": 4688
+    }
+  }
+}

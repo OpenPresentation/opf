@@ -1,0 +1,15 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: hans-punctuation: the browser draws 989.71875, the accepted advance is 1026 (font "Noto Sans SC", sans-serif at 54; characters not one em wide: [["，",54.21875],["。",54.234375],["！",54.234375],["？",54.234375],["；",54.234375],["：",54.21875],["引",54.234375],["号",54.21875],["（",54.21875],["括",54.234375],["号",54.234375],["）",54.234375],["《",54.234375],["书",54.234375],["名",54.21875],["》",54.234375],["、",54.234375]])
+    at file:///private/tmp/rr20-held-main-control/test/script-corpora-browser.mjs:112:46 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '==',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

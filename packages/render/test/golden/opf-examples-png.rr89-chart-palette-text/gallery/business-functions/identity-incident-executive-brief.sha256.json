@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/business-functions/identity-incident-executive-brief.opf.json",
+  "entries": {
+    "gallery/business-functions/identity-incident-executive-brief.opf.json#0": {
+      "sha256": "62e3e894a254fbfae831b5450aa9c6cad9cf14494896c3eb3101cce4254c10f5",
+      "bytes": 4368
+    },
+    "gallery/business-functions/identity-incident-executive-brief.opf.json#1": {
+      "sha256": "a559193fd463e5554da46a506eeb9ef1a67c82767e8cb1e5c73c1a57774e81e9",
+      "bytes": 5555
+    },
+    "gallery/business-functions/identity-incident-executive-brief.opf.json#2": {
+      "sha256": "39ee89ea81322901f58a5b52c6c463e17cddf0698d6fe8b4151b8203d2c65035",
+      "bytes": 5187
+    },
+    "gallery/business-functions/identity-incident-executive-brief.opf.json#3": {
+      "sha256": "580dc3526ae3d39a98fe094800341e46917a520a76e38626089bade29f6e6e8c",
+      "bytes": 6666
+    },
+    "gallery/business-functions/identity-incident-executive-brief.opf.json#4": {
+      "sha256": "d3ce04860146aebd6a4a9e2bf2febb89ca1bf433e048deb631ef9b596f8005e2",
+      "bytes": 5951
+    },
+    "gallery/business-functions/identity-incident-executive-brief.opf.json#5": {
+      "sha256": "c3ec6ecbc62bcb42a8a5fb0c7eeb7865b12f0e4fd76d96f7bba048f2f522eaed",
+      "bytes": 5824
+    }
+  }
+}

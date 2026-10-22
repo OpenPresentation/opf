@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/industries/managed-detection-market-update.opf.json",
+  "entries": {
+    "gallery/industries/managed-detection-market-update.opf.json#0": {
+      "sha256": "37c1085a40e68e73ae49dd8fb110fb235890b5f74773a5541ac35d40a1b31ad7",
+      "bytes": 3891
+    },
+    "gallery/industries/managed-detection-market-update.opf.json#1": {
+      "sha256": "e0ba3e6beaff684880e403735fa24f453dab1b9579c927a6d1003d711a815d27",
+      "bytes": 5032
+    },
+    "gallery/industries/managed-detection-market-update.opf.json#2": {
+      "sha256": "ffa49b1f128b5f720fa9e583391a98d637720fdef319146a69f00c26095521bd",
+      "bytes": 4314
+    },
+    "gallery/industries/managed-detection-market-update.opf.json#3": {
+      "sha256": "1d173f72be05ebb3b29b90837114b17cc6a53013fa5af620b5f1bb002d904dfe",
+      "bytes": 3458
+    }
+  }
+}

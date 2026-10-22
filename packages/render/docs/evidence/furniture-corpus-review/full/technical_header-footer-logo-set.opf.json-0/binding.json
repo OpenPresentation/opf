@@ -1,0 +1,15 @@
+{
+  "key": "technical/header-footer-logo-set.opf.json#0",
+  "records": [
+    {
+      "side": "before",
+      "svgSha256": "5db80120fe07108e53b757d00fba928d7f967c13293b1dff054693f4e793e219",
+      "pngSha256": "0d3bd1695e42796adf673c24d42ca619dd6d91b429dcb64a71593a7177cd932e"
+    },
+    {
+      "side": "after",
+      "svgSha256": "db5ca52a01f744f2ad39a0f3d9f67691f16c498c3bd21e0276d2aac1c82affbb",
+      "pngSha256": "0239409ab2039673fa4c54f3b23699cc949a193e014be0986c2d92f3837e8e5a"
+    }
+  ]
+}

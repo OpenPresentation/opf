@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/industries/consulting-margin-recovery-plan.opf.json",
+  "entries": {
+    "gallery/industries/consulting-margin-recovery-plan.opf.json#0": {
+      "sha256": "4047d96b593708138ccaecfa4104b03b63d9afc457d383c88a9bdc125d7aef78",
+      "bytes": 6408
+    },
+    "gallery/industries/consulting-margin-recovery-plan.opf.json#1": {
+      "sha256": "0f418fcd2d2ab59fff170b51cbf8562e57887478fb4acd5de4ba9f215f2453de",
+      "bytes": 8486
+    },
+    "gallery/industries/consulting-margin-recovery-plan.opf.json#2": {
+      "sha256": "52e8844a09639124072d1873d7128d7444a5c95297c6ef55c656dcb2facbfaaf",
+      "bytes": 4597
+    },
+    "gallery/industries/consulting-margin-recovery-plan.opf.json#3": {
+      "sha256": "f8f3d7c7dbee0834e32083de901f603a9082215a82e79ecda871ba42689f8178",
+      "bytes": 6788
+    },
+    "gallery/industries/consulting-margin-recovery-plan.opf.json#4": {
+      "sha256": "f9353f134f587986642a3b81646034f0af77dd024a6910b0f4246bd2bcad62cb",
+      "bytes": 6953
+    },
+    "gallery/industries/consulting-margin-recovery-plan.opf.json#5": {
+      "sha256": "349974c139e64874116dc7ed51d70fe50b25921d254fef256c9941ea9373eb8b",
+      "bytes": 7594
+    }
+  }
+}

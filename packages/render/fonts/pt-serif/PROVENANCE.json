@@ -1,0 +1,50 @@
+{
+  "upstream": {
+    "source": "https://github.com/google/fonts/tree/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/ptserif",
+    "commit": "23e54b51ddffbc7713c583748e3bd86f62b1fa4a",
+    "licenseUrl": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/ptserif/OFL.txt"
+  },
+  "license": "OFL-1.1",
+  "licenseFile": "OFL.txt",
+  "licenseSha256": "ddf311c28ddf5a5ad9747649837346b67bed9d356789c3072bb27dbce49e514d",
+  "reservedFontNames": [
+    "PT Sans",
+    "PT Serif",
+    "ParaType"
+  ],
+  "copyright": "Copyright (c) 2010, ParaType Ltd. (http://www.paratype.com/public),",
+  "faces": [
+    {
+      "file": "PT_Serif-Web-Regular.ttf",
+      "family": "PT Serif",
+      "weight": 400,
+      "italic": false,
+      "sha256": "a4951fade06ff8f09b7673aa81ffb65a8cd409e24d3289a6dc670bc4dda2557a",
+      "upstreamUrl": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/ptserif/PT_Serif-Web-Regular.ttf"
+    },
+    {
+      "file": "PT_Serif-Web-Italic.ttf",
+      "family": "PT Serif",
+      "weight": 400,
+      "italic": true,
+      "sha256": "f57e95ff9dc85691a3b2e193f2028db36f6663939a46c0fc4f286d618b80b7ce",
+      "upstreamUrl": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/ptserif/PT_Serif-Web-Italic.ttf"
+    },
+    {
+      "file": "PT_Serif-Web-Bold.ttf",
+      "family": "PT Serif",
+      "weight": 700,
+      "italic": false,
+      "sha256": "038ba7336bd7ea14f12ad155bed51a4345cac5153275d521dec3ba04021c526e",
+      "upstreamUrl": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/ptserif/PT_Serif-Web-Bold.ttf"
+    },
+    {
+      "file": "PT_Serif-Web-BoldItalic.ttf",
+      "family": "PT Serif",
+      "weight": 700,
+      "italic": true,
+      "sha256": "f003788ba08981eb0988b3557a6f224a53dab49c20e283e8b74d5af3c466f8be",
+      "upstreamUrl": "https://raw.githubusercontent.com/google/fonts/23e54b51ddffbc7713c583748e3bd86f62b1fa4a/ofl/ptserif/PT_Serif-Web-BoldItalic.ttf"
+    }
+  ]
+}

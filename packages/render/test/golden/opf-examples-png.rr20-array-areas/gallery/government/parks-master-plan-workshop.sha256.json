@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/government/parks-master-plan-workshop.opf.json",
+  "entries": {
+    "gallery/government/parks-master-plan-workshop.opf.json#0": {
+      "sha256": "26dd98698ee9e2879555acb79ae93fd6d4dbf12a4364f3b3b06af7d6d515f04a",
+      "bytes": 4831
+    },
+    "gallery/government/parks-master-plan-workshop.opf.json#1": {
+      "sha256": "57670d36dcee4258f972fc20f4dd45f1c8e9ca4ae3f42db23b72d23181b134a7",
+      "bytes": 5845
+    },
+    "gallery/government/parks-master-plan-workshop.opf.json#2": {
+      "sha256": "01bcf04378d305522bba6db26fe08bea843d922a76150ed2ed71089f4c307f1b",
+      "bytes": 4620
+    },
+    "gallery/government/parks-master-plan-workshop.opf.json#3": {
+      "sha256": "f48bb25fd427dca83a188b536481d3ce95e3c0bdbb9bd709bf7bd3e74940c9ce",
+      "bytes": 5234
+    },
+    "gallery/government/parks-master-plan-workshop.opf.json#4": {
+      "sha256": "a99ddc8cb6911b09aec58ec89c3d1d495f1e9a7e965b1f2a7da850e91b583303",
+      "bytes": 6410
+    },
+    "gallery/government/parks-master-plan-workshop.opf.json#5": {
+      "sha256": "f96f28fb39fa237b61e892946d7c54ed127cbb8b6bbbe077fb7ffe0e2e6f2f98",
+      "bytes": 6006
+    }
+  }
+}

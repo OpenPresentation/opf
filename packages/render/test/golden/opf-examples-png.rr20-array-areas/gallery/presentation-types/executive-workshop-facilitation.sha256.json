@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/presentation-types/executive-workshop-facilitation.opf.json",
+  "entries": {
+    "gallery/presentation-types/executive-workshop-facilitation.opf.json#0": {
+      "sha256": "9ee324a4a8c6efc01ff62d3bee3d4f221a48bb118d743f70198b8ef745211271",
+      "bytes": 6021
+    },
+    "gallery/presentation-types/executive-workshop-facilitation.opf.json#1": {
+      "sha256": "db52f1b48ebb776c8c3c34fc978609f951b257aa905b0b209f5c322809b5d132",
+      "bytes": 7316
+    },
+    "gallery/presentation-types/executive-workshop-facilitation.opf.json#2": {
+      "sha256": "ab66a2a8392074811ee024e348528164153caa0a67a5b76cca56a2a96c9e14a2",
+      "bytes": 5269
+    },
+    "gallery/presentation-types/executive-workshop-facilitation.opf.json#3": {
+      "sha256": "25adac9e25ac50a1ce12c8cf48fdfbf270ccc075f58ebc82c036f8130e1b9c26",
+      "bytes": 6435
+    },
+    "gallery/presentation-types/executive-workshop-facilitation.opf.json#4": {
+      "sha256": "e6ff92aa8ef0c164b1a1ae45fca7fb5bd02a3ff72e0ff1f3c3de7e5c0e502a12",
+      "bytes": 7764
+    },
+    "gallery/presentation-types/executive-workshop-facilitation.opf.json#5": {
+      "sha256": "50140ea16a1a61b1a7b8f447b8ee00a67bfb05078eada45d830d570500a67e6b",
+      "bytes": 7936
+    }
+  }
+}

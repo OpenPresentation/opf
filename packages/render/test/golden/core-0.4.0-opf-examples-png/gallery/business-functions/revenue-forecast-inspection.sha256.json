@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/revenue-forecast-inspection.opf.json",
+  "entries": {
+    "gallery/business-functions/revenue-forecast-inspection.opf.json#0": {
+      "sha256": "eee3ed881f4b84c65a33f58554dd591004d990a6bc2ae269b8a5929ee66236c9",
+      "bytes": 7155
+    },
+    "gallery/business-functions/revenue-forecast-inspection.opf.json#1": {
+      "sha256": "0689e1c3c8ffbec42acb3f1d2d21e31002c136059f239c4d5213cffb005ea158",
+      "bytes": 9966
+    },
+    "gallery/business-functions/revenue-forecast-inspection.opf.json#2": {
+      "sha256": "08567a4a603b7e0ab06c577c85e01ddbc2b2c99cc794932281abd61717372017",
+      "bytes": 5445
+    },
+    "gallery/business-functions/revenue-forecast-inspection.opf.json#3": {
+      "sha256": "405d25935f62556ad2c9002af31806994a58e261d5f1b12a41165161c7ec97d6",
+      "bytes": 7586
+    },
+    "gallery/business-functions/revenue-forecast-inspection.opf.json#4": {
+      "sha256": "ba29138bfb41ced561ccea006bea061d2d6bcd78ea1c2ed7fb863a896600fee0",
+      "bytes": 8668
+    },
+    "gallery/business-functions/revenue-forecast-inspection.opf.json#5": {
+      "sha256": "409d942833497eda905cc926ad0e86823262d83e06149a7ba3b6d3d071733529",
+      "bytes": 16840
+    },
+    "gallery/business-functions/revenue-forecast-inspection.opf.json#6": {
+      "sha256": "138efd17888ee968fab6765adf1cdd95238eadfa99d8bac8164e34433e5aec21",
+      "bytes": 10577
+    },
+    "gallery/business-functions/revenue-forecast-inspection.opf.json#7": {
+      "sha256": "7dc19923e51aa3fb71c70646132281644e7b235c2585b3a041051a85faa1333c",
+      "bytes": 3981
+    },
+    "gallery/business-functions/revenue-forecast-inspection.opf.json#8": {
+      "sha256": "11d0ba89084ef7bdd4a74c426fc769e806801b2271c4304c44508cc3ebf9b137",
+      "bytes": 5544
+    },
+    "gallery/business-functions/revenue-forecast-inspection.opf.json#9": {
+      "sha256": "53d370429c10f04c55abc62385e4aefc23657a79b1f3f8cbc055fdb64403e744",
+      "bytes": 12819
+    }
+  }
+}

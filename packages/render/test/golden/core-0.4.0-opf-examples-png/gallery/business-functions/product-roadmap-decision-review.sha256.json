@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/business-functions/product-roadmap-decision-review.opf.json",
+  "entries": {
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#0": {
+      "sha256": "3336aaba05553aa299f80b339575087197e5de464a3a68e4471519dabb5e0efa",
+      "bytes": 5608
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#1": {
+      "sha256": "c64261d46252c130cc9340acdc3067510b11a9a77885ed223084387389b01584",
+      "bytes": 7640
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#2": {
+      "sha256": "71a7feab7d9715e4712981b4d4e4c40f913443659a1cc35ab07b2abf4ea87c4d",
+      "bytes": 3992
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#3": {
+      "sha256": "3a6bca4026fc55fc612d967737e6400f2f0b51a78e1a7822a22314551bc0880d",
+      "bytes": 6252
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#4": {
+      "sha256": "2beac222f978667b873cef3659c50d1adeb438a0a1fdb56c9567c47f5503b93d",
+      "bytes": 6059
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#5": {
+      "sha256": "a523fadd3d9ae37434c14c7c5df9114c08d6198fdcd9bfc57b92935082fe103f",
+      "bytes": 15622
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#6": {
+      "sha256": "d973752d9bdc8c441847c45cc6609fc03c3f6f17aee313d02c6d5921aa09e6f3",
+      "bytes": 9686
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#7": {
+      "sha256": "eccc6939b61be6d8e4a94e386a597036b2331ff2fd3ff049e59722cd5b265e52",
+      "bytes": 3870
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#8": {
+      "sha256": "97146ebe68b1c27c067b7ca6491c679032e6affdf0f83273a9bcf8fcaf6b3e8f",
+      "bytes": 4944
+    },
+    "gallery/business-functions/product-roadmap-decision-review.opf.json#9": {
+      "sha256": "294f8d37e88b90696f3483358fa8c3b1535a2cc6212c93d5b1be0687c675c29b",
+      "bytes": 9670
+    }
+  }
+}

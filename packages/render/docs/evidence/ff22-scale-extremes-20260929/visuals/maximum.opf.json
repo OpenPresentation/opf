@@ -1,0 +1,30 @@
+{
+  "slides": [
+    {
+      "title": "maximum",
+      "chart": {
+        "type": "column",
+        "data": {
+          "columns": [
+            "Category",
+            "Value"
+          ],
+          "rows": [
+            [
+              "First",
+              4.4942328371557893e+307
+            ],
+            [
+              "Second",
+              8.988465674311579e+307
+            ],
+            [
+              "Third",
+              1.7976931348623157e+308
+            ]
+          ]
+        }
+      }
+    }
+  ]
+}

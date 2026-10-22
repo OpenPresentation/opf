@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/government/broadband-public-hearing-deck.opf.json",
+  "entries": {
+    "gallery/government/broadband-public-hearing-deck.opf.json#0": {
+      "sha256": "4c6a6567fb4fe838c103af04dc997ab986023488d12a6b70bd0ea10f1cf8e343",
+      "bytes": 8075
+    },
+    "gallery/government/broadband-public-hearing-deck.opf.json#1": {
+      "sha256": "c2d16bce8f44947af1c818b0b6a927f7b8537659144e83d15c3258d13e5ad343",
+      "bytes": 10177
+    },
+    "gallery/government/broadband-public-hearing-deck.opf.json#2": {
+      "sha256": "2663002d14ad07fbf0e151d2ade9bedbd0ec29eb3f19fe1bbc121d429fb800ce",
+      "bytes": 5339
+    },
+    "gallery/government/broadband-public-hearing-deck.opf.json#3": {
+      "sha256": "d54bb4859c64a3d219d92ce1215ad1cdc77b682c867e98def4584a31d370db0e",
+      "bytes": 8039
+    },
+    "gallery/government/broadband-public-hearing-deck.opf.json#4": {
+      "sha256": "55871f86164c43268b781ef9207f94fc1d357b7abbb3f3f1f099f92d23dc6eae",
+      "bytes": 10141
+    },
+    "gallery/government/broadband-public-hearing-deck.opf.json#5": {
+      "sha256": "fd209727a5f884206cd2da1b1c1033227e14024457ae090f9052651eed7862dd",
+      "bytes": 18923
+    },
+    "gallery/government/broadband-public-hearing-deck.opf.json#6": {
+      "sha256": "c31cf4fb5eeb79df4a94ab8b4a4215b38059be526bd0f92d615907c2c95e3971",
+      "bytes": 14184
+    },
+    "gallery/government/broadband-public-hearing-deck.opf.json#7": {
+      "sha256": "ddc41955a8fb9146ff2414592e77711f6c18ebb739b6644cf7c9fff5d968cea7",
+      "bytes": 4700
+    },
+    "gallery/government/broadband-public-hearing-deck.opf.json#8": {
+      "sha256": "0a23cedafb6793dd92593bdf01c403536efad8a731880723a6accc5ede57a852",
+      "bytes": 6195
+    },
+    "gallery/government/broadband-public-hearing-deck.opf.json#9": {
+      "sha256": "f0e032813b35723c1aec05ab1a55693b9c993626ed881f73cc9c795f190aa3c3",
+      "bytes": 12848
+    }
+  }
+}

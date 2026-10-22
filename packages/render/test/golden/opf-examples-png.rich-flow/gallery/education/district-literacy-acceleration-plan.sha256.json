@@ -1,0 +1,21 @@
+{
+  "deck": "gallery/education/district-literacy-acceleration-plan.opf.json",
+  "entries": {
+    "gallery/education/district-literacy-acceleration-plan.opf.json#0": {
+      "sha256": "aafb8ae54a9dd48db61c7a6c1926b5c7a95fdb3790431db8e45fc2a1cc5959da",
+      "bytes": 4502
+    },
+    "gallery/education/district-literacy-acceleration-plan.opf.json#1": {
+      "sha256": "8c31b3f3088d046be915b3eb78165679866d8c638d02f5b9c68aacf7c48fa37f",
+      "bytes": 6532
+    },
+    "gallery/education/district-literacy-acceleration-plan.opf.json#2": {
+      "sha256": "351c2ecee437b67e98f80614ca52efb8bce7082f81b25eedb6b82926f792cc3f",
+      "bytes": 3153
+    },
+    "gallery/education/district-literacy-acceleration-plan.opf.json#3": {
+      "sha256": "dbd45da4d20d13fb7bfcf3a309728ba266100117ae052e66855261b6ebcb1e54",
+      "bytes": 4075
+    }
+  }
+}

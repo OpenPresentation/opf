@@ -1,0 +1,200 @@
+{
+  "checkedAt": "2026-09-10T06:37:43.119Z",
+  "node": "v20.20.2",
+  "core": {
+    "version": "0.9.0",
+    "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.9.0.tgz",
+    "integrity": "sha512-AnduMR/bPFKJv2fYT+cYEINLkiZmN0xuVBETcNzkU6IC7GdgTyb+x5fCiODHcowfrLIJJEjZ8jZzZJGBrxnX5A==",
+    "license": "MIT",
+    "dependencies": {
+      "ajv": "^8.17.1",
+      "ajv-formats": "^3.0.1"
+    },
+    "engines": {
+      "node": ">=20"
+    }
+  },
+  "packages": {
+    "@openpresentation/opf-render": {
+      "version": "0.7.0",
+      "integrity": "sha512-hA86Bc/KMAh6knQtxxvMv1XOOWj0LhmF2cnJaotBZHYAbllDLYKlMfj6GgnL0ksMAkM+YYf4ykE7RHPv/tJPmw==",
+      "files": {
+        "LICENSE": "e8c5cecaad448c0cab00af38f7ed8b6bb647c77ba79f3c50d20a9ea92e256cd3",
+        "README.md": "91f862f41f9abf03ad2a5cc64011ee743cc1d368918c3b2ddba1eb204a2ed526",
+        "dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+        "dist/fonts-browser.d.ts": "ed7ae512990cde2ae389aa09768a8359ef5ca42b1693f2d994e26496d64a5732",
+        "dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+        "dist/fonts-node.d.ts": "041c4690a08ada2551a07dac9fd1c74c1e8c3181123d533671856ad2088a6030",
+        "dist/fonts-node.js": "0e65abd7438f3a21fd0cb6ea64120d9e866ef3308510910d11b7b863399f8d8b",
+        "dist/fonts.d.ts": "da1619b194ac8628f62bfe6f28fae50fd44094223aaf6608f7c436ded6e49a8a",
+        "dist/fonts.js": "549932e2d013f1f623cd83973b40cbed68c63d52535adb2de6fd921d16bf400c",
+        "dist/index.d.ts": "283f12149d5fed9f6dfc277a08a40157ba435224f8ebdc80a744dab105c8414f",
+        "dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+        "dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c",
+        "dist/raster.js": "6ea807bfd43ddaabea95c1137bc1bcf7d656f2ae9c6d87a7e6d2f867df86ea99",
+        "dist/svg.d.ts": "6eef867d427c2dc401466246d3c3f23935f7742d571d04a8dba0649727a85066",
+        "dist/svg.js": "99d8f2afddcd3717cb4ad5f431bbf08655a0d92657e4ce1826810558afeac18a",
+        "package.json": "116d79bad69d89d2e2cf5794aef0a50a3275f1deb2317b9242fef3f4b204b0e0"
+      }
+    },
+    "@openpresentation/opf-pptx": {
+      "version": "0.7.0",
+      "integrity": "sha512-GyOVAheZsWkr0zDjEnqQQljnIjzKXH2C3no/wJhA4D5VSlXqz4HyyeG+3cBjUYFC94MW0uqYFZsW3TbK9PQmdw==",
+      "files": {
+        "DEPENDENCY-NOTES.md": "22d54e1e337d4225f71598be6c048882e4a2030b2c9703fd30b686ab5a6fb162",
+        "LICENSE": "e8c5cecaad448c0cab00af38f7ed8b6bb647c77ba79f3c50d20a9ea92e256cd3",
+        "README.md": "81360abb535d2bd23d562f83063759feb4d558463cb00f98628a4de5ed429450",
+        "dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+        "dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+        "dist/code-provenance.js": "773b66e21781694a8b140144b35bf8a8e4844cdb4f7e2fb04cefd93d414e7054",
+        "dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+        "dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+        "dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+        "dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+        "dist/index.d.ts": "f7791fbbc717446c9fb1d3d54757bd8443bf05cdb048e38ea907509172d14cdf",
+        "dist/index.js": "e75c473ebb78d1240209bdeec245a020a2f4c269febda4ec7a3067173eb79708",
+        "dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+        "dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+        "dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+        "package.json": "a3da34f5e31a1b9450b400e995f2b9eea4d6df6ff51402ce271cb5e96935b275",
+        "vendor/pptxgenjs/LICENSE": "7a2bfe96150786ed1908b8e63f98ebab88875c1e79e28faff6649e0f11f77e52",
+        "vendor/pptxgenjs/package.json": "15ec5ec45f1001afef85aeacbc2098a05140f5a3e92f1502792c9575694dabc4",
+        "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+        "vendor/pptxgenjs/UPSTREAM.json": "319b973f4a71bb31cb355ad37e428848c26db57ab4c5e3e0c2f48939242c9270"
+      }
+    },
+    "@openpresentation/opf-editor": {
+      "version": "0.6.0",
+      "integrity": "sha512-wHe6j1p06WQysXhHIvaiRAaoZH5d8o5GgDhbT9DEeZiINMaZZ7mZc9k6eWLK8AO9+F+vDWLvFwF0c0qPenvE0w==",
+      "files": {
+        "LICENSE": "e8c5cecaad448c0cab00af38f7ed8b6bb647c77ba79f3c50d20a9ea92e256cd3",
+        "README.md": "39217bcd170386f5d09378891187e865e2d0e288774bdb1fcd13f599fd429e59",
+        "dist/block-controls.js": "21f68e59d44f67069f78b19a2dfa355c0f424973cc138bd6e3b0021b0117702c",
+        "dist/blocks.d.ts": "2f2bcc6ef516ce43e1005d1787c2b07e91df0dcdb6b33bb1e7b6603b9b17ee05",
+        "dist/blocks.js": "f9926a4cb8c2b0380ffbe67055a428d01089873141af401edb72d8ebe6e7cdaf",
+        "dist/canvas-fields.js": "0159649cf54332879cc0f125b19fa52de120a85a9e29d7ea757fea55822f6ef6",
+        "dist/canvas.d.ts": "afafd31860ce913c3efcadf5b2ebb1bfc51e7f1524eb96228bdfc250c7181605",
+        "dist/canvas.js": "2a25c42aa58bb34ed2a910208b62d5456cb3e07333fc0fdbc355a5256174261f",
+        "dist/data.d.ts": "74c193ed7ccadb27d1e11659ec55d51fb6da78d6cd1e5aac97b72e538f6e4dd5",
+        "dist/data.js": "32d3d8d7ca017a574ac791541ab1a2bb024dcff386ff1e5c5c1ac845b33d3dff",
+        "dist/galleries.d.ts": "21db86ccf7c9186391d643c057938ee813d391cd0cbe78f56e2446befcd15373",
+        "dist/galleries.js": "239539250f0bfa1ff02e5a717213bd6f40305221b43a78ff707df3c683208ada",
+        "dist/index.d.ts": "a316bbfa61677c7b395fb11f365ee84085af612121219592a5937d5c7f76a752",
+        "dist/index.js": "4731feaff16f5bfd285e8cf8799a5016fad3ec5a1f736acfba9fa6f73ef8f30b",
+        "dist/layout-handles.js": "e9f9d4197cae2fe07825abc894fd6243ea35c3d70974762d1a9021bd23781414",
+        "dist/layout.d.ts": "73d6212cf549436597dc97d9562faceaf3b171107c74a23210d6958f8893110e",
+        "dist/layout.js": "de8dc48f08a7c4ed6c99fcbcfa3e4508930d7b306827fc2cd29865c190141df8",
+        "dist/react.d.ts": "099fd451da4417bf9b3e6293aabde0b37d121c02f0f09750377d5454a2c708b9",
+        "dist/react.js": "df35ad472e11395a75549281d398171e1b1d345d2631a9f5f16c2f701c53b4f0",
+        "dist/rich-text-input.js": "b29c64566988aaaa541e8e8a38d3ad350dc579e6f03728a03ccc256227293167",
+        "dist/rich-text-toolbar.js": "ca0ceaf4ccd0b5ef0171ca71394424edfe35b56e2333e07e8ca294579374bbec",
+        "dist/rich-text.d.ts": "03f8c69b9c95cf60d858f5eb6394bd3d741db5d7564992d1ee4e266b2ccdb7cf",
+        "dist/rich-text.js": "0479bc3315dcfbffd8463222db265864ee3e4938f8a7e9df5fc7e2a4540d9c28",
+        "dist/schema-inspector.d.ts": "b2a52d4c9dc77c9738fde2be42cdb14267628feae31ec95d840c77a53b11ac46",
+        "dist/schema-inspector.js": "b61ac5c0574edd2f91c6cccb8f8b15d4ee518e354087e260bd649ddd5e943d3e",
+        "dist/schema.d.ts": "e46499fd6c25efc1d0ea22c1bc70aca1b9bd2bfda04161dd38101f11ce4e36e4",
+        "dist/schema.js": "d6882c45665318b8e311a3bd83ed76f87b784f24e8ef5f80566eebae4b0dd765",
+        "dist/svelte.d.ts": "2ce058056bedebdb55c2a923ef007cc683bf7285120e8fe2857736206d87bd98",
+        "dist/svelte.js": "ee6582606f927aeeb2947134e28c234c31a63035c2aef35d009dec5a83450cd4",
+        "dist/transfer.d.ts": "b6ae9315837abfa45eca7bd39d1bd8f77183fdc50ba05145a6f429ed9ddb2e9f",
+        "dist/transfer.js": "5b87f9a36b2a22ed690e21cacb69ce340cc735443758c98143530032b1c46abc",
+        "package.json": "99451edac93433d2a63b85c9cbf633d7144ee89aed68b0498718d4cd94080e99"
+      }
+    }
+  },
+  "verifierSha256": "8b16bf41cfd2f84863a9d832b0b6071d0900b5cbf03692b3414e1b748de2a7e8",
+  "browser": {
+    "browser": "152.0.4191.66",
+    "platform": "win32",
+    "bundleSha256": "dfc6bcaac5633f695f8c1754a0b013ad7be1f730262a601ee3bc42e5d6e9d8a3",
+    "verifierSha256": "8b16bf41cfd2f84863a9d832b0b6071d0900b5cbf03692b3414e1b748de2a7e8",
+    "results": [
+      {
+        "dimensions": {
+          "width": 1280,
+          "height": 720
+        },
+        "exportSha256": "5d47b563974ef155ef39e7d218b10d94914de69d4e59495d3d77d184175e52a4",
+        "exportBytes": 17725,
+        "acceptedLines": 6,
+        "exactCodeRoundTrip": true,
+        "substitutions": [
+          {
+            "requestedFamily": "Aptos Display",
+            "sourceFamily": "Aptos Display",
+            "resolvedFamily": "Roboto",
+            "requestedWeight": 700,
+            "resolvedWeight": 700,
+            "italic": false,
+            "compatibility": "generic"
+          },
+          {
+            "requestedFamily": "Aptos",
+            "sourceFamily": "Aptos",
+            "resolvedFamily": "Roboto",
+            "requestedWeight": 400,
+            "resolvedWeight": 400,
+            "italic": false,
+            "compatibility": "generic"
+          }
+        ]
+      },
+      {
+        "dimensions": {
+          "width": 540,
+          "height": 960
+        },
+        "exportSha256": "08e65dd3fcf218e0bd4573485a38ce6495338738dfd063bbfe895e621a47c4ad",
+        "exportBytes": 17726,
+        "acceptedLines": 6,
+        "exactCodeRoundTrip": true,
+        "substitutions": [
+          {
+            "requestedFamily": "Aptos Display",
+            "sourceFamily": "Aptos Display",
+            "resolvedFamily": "Roboto",
+            "requestedWeight": 700,
+            "resolvedWeight": 700,
+            "italic": false,
+            "compatibility": "generic"
+          },
+          {
+            "requestedFamily": "Aptos",
+            "sourceFamily": "Aptos",
+            "resolvedFamily": "Roboto",
+            "requestedWeight": 400,
+            "resolvedWeight": 400,
+            "italic": false,
+            "compatibility": "generic"
+          }
+        ]
+      }
+    ],
+    "blankTargets": [
+      {
+        "dimensions": {
+          "width": 1280,
+          "height": 720
+        },
+        "acceptedHeight": 537.28,
+        "selectableHeight": 545.28,
+        "noOpPreserved": true,
+        "editUndoPreserved": true
+      },
+      {
+        "dimensions": {
+          "width": 540,
+          "height": 960
+        },
+        "acceptedHeight": 810.96,
+        "selectableHeight": 818.96,
+        "noOpPreserved": true,
+        "editUndoPreserved": true
+      }
+    ],
+    "errors": [],
+    "externalRequests": [],
+    "scope": "Offline candidate canvas: real pointer/keyboard code and filename edits, CRLF no-op/preservation, tab insertion/cancel, undo/redo, one-page pagination/readability undo, browser native export and undoable exact code/metadata/source-boundary reimport. Native formatting, positioning and font scheme are not reconstructed; font fallback uses the existing playground policy and is recorded. No native PowerPoint or raster equivalence claim."
+  },
+  "scope": "Actual freshly installed candidate renderer/PPTX/editor archives with registry core 0.9.0. All shipped candidate files match their release checkouts. Browser uses installed editor dist and installed dependency runtime. Includes blank multiline hit-target height, real pointer editing, no-op preservation and undo on both dimensions, plus the previous full code workflows. This is not publication, native PowerPoint execution or complete-set adoption."
+}

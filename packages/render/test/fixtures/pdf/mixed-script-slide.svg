@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" lang="en-GB" aria-label="Fixture">
+<defs>
+<linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0F172A"/><stop offset="100%" stop-color="#1E3A8A"/></linearGradient>
+<pattern id="p" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M-2 2L2 -2M0 8L8 0M6 10L10 6" stroke="#CBD5E1" stroke-width="2"/></pattern>
+<clipPath id="c"><circle cx="860" cy="90" r="50"/></clipPath>
+</defs>
+<rect width="960" height="540" fill="url(#g)"/>
+<rect x="40" y="150" width="880" height="330" rx="14" fill="url(#p)" stroke="#94A3B8" stroke-width="2" stroke-dasharray="8 4"/>
+<g opacity="0.5"><rect x="780" y="40" width="100" height="100" fill="#F59E0B"/><rect x="820" y="80" width="100" height="100" fill="#38BDF8"/></g>
+<rect x="800" y="40" width="120" height="120" fill="#E11D48" clip-path="url(#c)"/>
+<g data-opf-path="slides.0.title"><text x="48" y="100" fill="#FFFFFF" font-family="Roboto, sans-serif" font-size="48" font-weight="700" xml:space="preserve">Résumé: ﬁnal ﬂow café</text></g>
+<g data-opf-path="slides.0.text"><text x="64" y="200" fill="#0F172A" font-family="Roboto, sans-serif" font-size="26" xml:space="preserve">Quarterly <tspan font-weight="700" fill="#1D4ED8">review</tspan> with kerning: AVATAR To Ty</text>
+<a href="https://openpresentation.org"><text x="64" y="240" fill="#1D4ED8" font-family="Roboto" font-size="26" text-decoration="underline" xml:space="preserve">openpresentation.org</text></a>
+<text x="64" y="290" fill="#0F172A" font-family="Noto Sans JP" font-size="28" xml:space="preserve">日本語のテキストと漢字</text>
+<text x="896" y="340" fill="#0F172A" font-family="Noto Naskh Arabic" font-size="30" text-anchor="end" xml:space="preserve">&#x2067;نمت الإيرادات بنسبة 12%&#x2069;</text>
+<text x="64" y="390" fill="#0F172A" font-family="Noto Sans Hebrew" font-size="28" xml:space="preserve">Mixed &#x2067;שלום עולם&#x2069; text</text>
+<text x="64" y="440" fill="#0F172A" font-family="Roboto" font-size="22" textLength="420" lengthAdjust="spacingAndGlyphs" xml:space="preserve">Stretched to a measured width</text></g>
+<g transform="translate(700 420) rotate(-8)"><text x="0" y="0" fill="#475569" font-family="Roboto Mono" font-size="20" xml:space="preserve">rotated mono</text></g>
+<image aria-label="Specimen picture" x="860" y="200" width="64" height="64" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAB3klEQVQ4yxXMocHQOBgA0IyQETJCR+gIGaEjZITP/ZK4kxeHJA5JHJI6JHFI6k5yr2+Al1KKvznFfyXFnyPF7zPFr5ri55XiR0vxPVJ86ym+jhRfZorPK8W/d4p/dopPT4qPlLIgC7IgC7IgC7IgC7IgC7IgC7IgC7Igv0ERFEERFEERFEERFEERFEERFEERFEERlDc4BIfgEByCQ3AIDsEhOASH4BAcgkNwCA7B8Qan4BScglNwCk7BKTgFp+AUnIJTcApOwSk436AKqqAKqqAKqqAKqqAKqqAKqqAKqqAK6htcgktwCS7BJbgEl+ASXIJLcAkuwSW4BJfgeoMmaIImaIImaIImaIImaIImaIImaIImaG8QghCEIAQhCEEIQhCCEIQgBCEIQQjiDbqgC7qgC7qgC7qgC7qgC7qgC7qgC7qgv8EQDMEQDMEQDMEQDMEQDMEQDMEQDMEQjDeYgimYgimYgimYgimYgimYgimYgimYgvkGS7AES7AES7AES7AES7AES7AES7AES7De4BbcgltwC27BLbgFt+AW3IJbcAtuwS24BfcbbMEWbMEWbMEWbMEWbMEWbMEWbMEWbMF+g0fwCB7BI3gEj+ARPIJH8AgewSN4BI/gETzx8T9pUjMfPwL2egAAAABJRU5ErkJggg=="/>
+<polyline points="600,300 640,260 680,300" fill="none" stroke="#DC2626" stroke-width="4" stroke-linejoin="round"/>
+<path d="M600 440 a40 20 0 1 0 80 0" fill="none" stroke="#16A34A" stroke-width="3"/>
+</svg>

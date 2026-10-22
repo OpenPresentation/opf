@@ -1,0 +1,81 @@
+import assert from 'node:assert/strict';
+import {execFileSync} from 'node:child_process';
+import {readFileSync,mkdtempSync,mkdirSync,symlinkSync,writeFileSync} from 'node:fs';
+import {tmpdir} from 'node:os';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+import {candidatePlan,verifyManifest,verifyHead,allowedPaths,safeTarget,verifyGraph,verifyGuard,regularTree,readArtifact,requireNewBaseline,trustedTemplate,reviewedTemplateKeys,linkSources} from '../scripts/candidate-goldens.mjs';
+const plan=candidatePlan({core:'a'.repeat(40),gallery:'b'.repeat(40),name:'rr-83-v2',selection:'both'});
+for(const core of ['main','a'.repeat(39),'A'.repeat(40),'$(id)'])assert.throws(()=>candidatePlan({...plan,core,name:'x'}));
+for(const name of ['../x','x/y','cover-centering',''])assert.throws(()=>candidatePlan({...plan,name}));
+assert.throws(()=>candidatePlan({...plan,name:'x',selection:'other'}));
+const previous={version:2,format:'png-sha256',scale:.25,systemFonts:false,source:{repository:'OpenPresentation/opf',path:'examples',sha256:'a'.repeat(64),decks:1},entries:{'a#0':{sha256:'a'.repeat(64),bytes:1}}};
+verifyManifest(previous,previous,1);
+for(const next of [{...previous,scale:1},{...previous,entries:{}},{...previous,entries:{'b#0':{sha256:'b'.repeat(64)}}}])assert.throws(()=>verifyManifest(next,previous,1));
+assert.throws(()=>verifyHead('a'.repeat(40),'b'.repeat(40)));verifyHead('a'.repeat(40),'a'.repeat(40));
+allowedPaths(plan,[plan.baseline+'/a.sha256.json',plan.template]);
+for(const file of ['package.json',plan.baseline+'/../x','/tmp/x','test/golden/other.json'])assert.throws(()=>allowedPaths(plan,[file]));
+const text=readFileSync(new URL('../.github/workflows/regenerate-candidate-goldens.yml',import.meta.url),'utf8'),push=text.slice(text.indexOf('\n  push:'));
+assert.doesNotMatch(push,/npm ci|npm run build|test\/golden.mjs|test\/layout-template-goldens.mjs/);
+assert.match(push,/git push/);assert.match(push,/tip.*HEAD/);assert.match(text,/contents: read/);assert.match(text,/807/);assert.match(text,/495/);
+assert.match(text,/env -u OPF_GOLDEN_BASELINE -u OPF_EXAMPLES_DIR -u OPF_GOLDEN_SCALE node test\/golden.mjs/,'unchanged main verifies its actual selected example baseline');
+assert.match(text,/if \[ \"\$SELECTION\" != examples \]; then \(cd guard\/opf-render && node test\/layout-template-goldens.mjs\); fi/,'template generation verifies unchanged main template baseline');
+assert.equal(plan.template, 'test/golden/layout-templates-rr-83-v2.json');
+const rr85 = candidatePlan({core: plan.core, gallery: plan.gallery, name: 'rr85-metric-centering', selection: 'templates'});
+assert.equal(rr85.template, 'test/golden/layout-templates-rr85-metric-centering.json');
+assert.throws(() => allowedPaths(rr85, ['test/golden/layout-templates-rr20-array-areas.json']), /unexpected promotion path/);
+assert.match(text,/OPF_GOLDEN_BASELINE=test\/golden\/opf-examples-png\.rr81-v2-reviewed OPF_GOLDEN_ARTIFACTS=changed/,'candidate review images compare with the historical example baseline');
+const ordinaryRunner = readFileSync(new URL('./golden.mjs',import.meta.url),'utf8');
+assert.match(ordinaryRunner,/process\.env\.OPF_GOLDEN_BASELINE \?\?[\s\S]*?exampleBaseline\(layoutMetric/,
+  'ordinary checks preserve explicit overrides and select the installed metric-default contract');
+assert.doesNotMatch(ordinaryRunner,/rr81-v2-reviewed/,
+  'the candidate-review comparison baseline cannot become the ordinary default');
+console.log('Candidate goldens: immutable graph refs, fixed counts/keysets/metrics, promotion path and stale-head guards passed.');
+const image=/mcr\.microsoft\.com\/playwright:\S+@sha256:[0-9a-f]{64}/.exec(readFileSync(new URL('../.github/workflows/ci.yml',import.meta.url),'utf8'))[0];
+assert.equal([...text.matchAll(/mcr\.microsoft\.com\/playwright:\S+@sha256:[0-9a-f]{64}/g)].every(m=>m[0]===image),true);
+assert.match(text,/default: true/);
+assert.doesNotMatch(text,/opf-pptx|opf-editor/);
+
+const temp=mkdtempSync(path.join(tmpdir(),'candidate-goldens-')),outside=mkdtempSync(path.join(tmpdir(),'candidate-outside-'));
+mkdirSync(path.join(temp,'test'));symlinkSync(outside,path.join(temp,'test/golden'),process.platform==='win32'?'junction':'dir');
+assert.throws(()=>safeTarget(temp,'test/golden/new-baseline'),/aliased/);
+
+for(const next of [{...previous,source:{...previous.source,sha256:'wrong'}},{...previous,source:{...previous.source,decks:0}},{...previous,entries:{'a#0':{sha256:'a'.repeat(64),bytes:-1}}}])assert.throws(()=>verifyManifest(next,previous,1));
+const graph={renderer:'c'.repeat(40),core:plan.core,gallery:plan.gallery,selection:'both',sources:{examples:previous.source.sha256}};
+verifyGraph(graph,plan,'c'.repeat(40),{examples:previous});assert.throws(()=>verifyGraph({...graph,gallery:'d'.repeat(40)},plan,'c'.repeat(40),{examples:previous}));
+verifyGuard(previous,previous);assert.throws(()=>verifyGuard({...previous,scale:1},previous));
+const nested=mkdtempSync(path.join(tmpdir(),'candidate-nested-'));mkdirSync(path.join(nested,'gallery'));symlinkSync(outside,path.join(nested,'gallery/escape'),process.platform==='win32'?'junction':'dir');assert.throws(()=>regularTree(nested),/symlink/);
+assert.throws(()=>readArtifact(path.join(nested,'gallery/escape')),/regular|aliased/);
+
+assert.match(push,/path: tools/);assert.match(push,/tools\/scripts\/candidate-goldens.mjs/);assert.doesNotMatch(push,/node scripts\/candidate-goldens/);
+assert.ok(text.indexOf('Reproduce unchanged main')<text.indexOf('Generate fixed 807'));
+
+assert.throws(()=>verifyManifest({...previous,source:{...previous.source,sha256:'b'.repeat(64)}},previous,1,false,previous.source),/selected source/);
+const dangling=path.join(nested,'dangling.json');symlinkSync(path.join(outside,'missing.json'),dangling);assert.throws(()=>regularTree(dangling),/symlink/);assert.throws(()=>safeTarget(nested,'dangling.json'),/symlink/);
+const danglingNested=path.join(nested,'gallery/dangling.json');symlinkSync(path.join(outside,'missing-again.json'),danglingNested);assert.throws(()=>regularTree(path.join(nested,'gallery')),/symlink/);
+const newRoot=mkdtempSync(path.join(tmpdir(),'candidate-new-'));mkdirSync(path.join(newRoot,'historical'));assert.throws(()=>requireNewBaseline(newRoot,'historical'),/already exists/);
+const wrongTemplate=path.join(newRoot,'template.json');writeFileSync(wrongTemplate,JSON.stringify(previous));assert.throws(()=>trustedTemplate(wrongTemplate),/historical template baseline/);
+const historical=trustedTemplate(fileURLToPath(new URL('./golden/layout-templates-0.19.json',import.meta.url)));
+const templateKeys=reviewedTemplateKeys(historical);
+assert.equal(Object.keys(historical.entries).length,498);
+assert.equal(templateKeys.length,495);
+assert.deepEqual(Object.keys(historical.entries).filter(key=>!templateKeys.includes(key)),['paginated faq 3 long page 1','paginated faq 3 long page 2','paginated faq 3 long page 3']);
+const reviewed={...historical,entries:Object.fromEntries(templateKeys.map(key=>[key,historical.entries[key]]))};
+verifyManifest(reviewed,historical,495,true,undefined,templateKeys);
+const swapped={...reviewed,entries:{...reviewed.entries}};delete swapped.entries[templateKeys[0]];swapped.entries['unreviewed extra case']={...historical.entries[templateKeys[0]]};
+assert.throws(()=>verifyManifest(swapped,historical,495,true,undefined,templateKeys),/dropped or added cases/);
+assert.throws(()=>verifyManifest(historical,historical,495,true,undefined,templateKeys),/corpus count/);
+assert.match(readFileSync(new URL('../scripts/candidate-goldens.mjs',import.meta.url),'utf8'),/catalogSchema,3/);
+const schemaRoot=mkdtempSync(path.join(tmpdir(),'candidate-schema-'));
+const coreDir=path.join(schemaRoot,'opf'),galleryDir=path.join(schemaRoot,'gallery-candidate');
+mkdirSync(coreDir);mkdirSync(galleryDir);mkdirSync(path.join(schemaRoot,'opf-render'));
+const commitPackage=(dir,pkg)=>{
+  writeFileSync(path.join(dir,'package.json'),JSON.stringify(pkg));
+  execFileSync('git',['init','-q'],{cwd:dir});
+  execFileSync('git',['add','package.json'],{cwd:dir});
+  execFileSync('git',['-c','user.name=Candidate Test','-c','user.email=candidate@example.invalid','commit','-qm','fixture'],{cwd:dir});
+  return execFileSync('git',['rev-parse','HEAD'],{cwd:dir,encoding:'utf8'}).trim();
+};
+const coreHead=commitPackage(coreDir,{name:'openpresentation-workspace'});
+const galleryHead=commitPackage(galleryDir,{name:'@openpresentation/gallery',opf:{catalogSchema:2}});
+assert.throws(()=>linkSources(schemaRoot,candidatePlan({core:coreHead,gallery:galleryHead,name:'schema-test'})),/2 !== 3/,'candidate lane rejects gallery schema 2');

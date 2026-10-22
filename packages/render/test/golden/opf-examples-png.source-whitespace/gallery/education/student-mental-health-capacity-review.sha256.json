@@ -1,0 +1,29 @@
+{
+  "deck": "gallery/education/student-mental-health-capacity-review.opf.json",
+  "entries": {
+    "gallery/education/student-mental-health-capacity-review.opf.json#0": {
+      "sha256": "b927915bbc737a800c1b47eacc7543ffffad882a2ac5d4ba7bb8b8543e2a3796",
+      "bytes": 6479
+    },
+    "gallery/education/student-mental-health-capacity-review.opf.json#1": {
+      "sha256": "c26b1ca2e18a47ac65fabf9094101a23e6e8230005a4a0d6c603d4b6c8901d61",
+      "bytes": 8703
+    },
+    "gallery/education/student-mental-health-capacity-review.opf.json#2": {
+      "sha256": "d8d146199ddc393474ae3b56e0da541fcc8efbe20c4c0353aefb0d0d033784a4",
+      "bytes": 4416
+    },
+    "gallery/education/student-mental-health-capacity-review.opf.json#3": {
+      "sha256": "b477cf5ba08f2b414614c0b2ee3ea6c794eb83b6e5b3b324d78b8951df09b8f4",
+      "bytes": 6709
+    },
+    "gallery/education/student-mental-health-capacity-review.opf.json#4": {
+      "sha256": "b674ff345d1acd30a76d98763d8a66cca99056fa7c5ca0f3d796906b8500d6cc",
+      "bytes": 6863
+    },
+    "gallery/education/student-mental-health-capacity-review.opf.json#5": {
+      "sha256": "ce7ea8aadcfb162a08aef2dc05fd49cb33465bf22d06523bd5743084b7b36704",
+      "bytes": 8506
+    }
+  }
+}

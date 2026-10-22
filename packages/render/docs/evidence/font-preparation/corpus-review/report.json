@@ -1,0 +1,1015 @@
+{
+  "source": {
+    "repository": "OpenPresentation/opf",
+    "path": "examples",
+    "sha256": "3a1ed8ad00b30863b5852197a85602263a2238c613020fb891d933f86e124c4b",
+    "decks": 126
+  },
+  "verifiedImages": 1610,
+  "changedSlides": 143,
+  "unchangedSlides": 662,
+  "sheets": 18,
+  "changes": [
+    {
+      "index": 5,
+      "key": "gallery/business-functions/compliance-readiness-review.opf.json#5",
+      "file": "0005.png",
+      "before": "873aa22daa78c181716498c48936727bad3460f26976c46912ab3ba32f745e98",
+      "after": "4e41fe301225e52dcb6f856dba0c66e5f22f3980051bacb1fa574806f0929498"
+    },
+    {
+      "index": 6,
+      "key": "gallery/business-functions/compliance-readiness-review.opf.json#6",
+      "file": "0006.png",
+      "before": "ea740274270757494d7089c40c1d8e76d365e88c4877a7977a10113b2081c2ec",
+      "after": "f4dbc95a5848a9dc491842d23f482ca5daec103d627f852124e21d774c8fe80d"
+    },
+    {
+      "index": 7,
+      "key": "gallery/business-functions/compliance-readiness-review.opf.json#7",
+      "file": "0007.png",
+      "before": "5294c37142c69b9bdb2551bb93229b0a8aedf241796f8677e30e53e2574f2f2a",
+      "after": "97b16a84bb21f459b9afd4dc8b757110791be321332e379b7a88623edf68eb21"
+    },
+    {
+      "index": 21,
+      "key": "gallery/business-functions/data-platform-migration-plan.opf.json#5",
+      "file": "0021.png",
+      "before": "84e6022091bcc21547b348b0bd32f2bcaecd8dcebe4708cc85beb20a70389513",
+      "after": "5053c4da7408829ea4e9946f4771c03b5e422231f0df581c5865ac3a7cff1b75"
+    },
+    {
+      "index": 22,
+      "key": "gallery/business-functions/data-platform-migration-plan.opf.json#6",
+      "file": "0022.png",
+      "before": "b3847166cc5bb8d34ea8f97054a32872d3acc9c353e2f015c76ae776286df996",
+      "after": "4bf32a30fbb95986df82ce4ba1aa86eda561c25e106000f5d994820741b9ef01"
+    },
+    {
+      "index": 23,
+      "key": "gallery/business-functions/data-platform-migration-plan.opf.json#7",
+      "file": "0023.png",
+      "before": "111814a5ae06ca26ae46b406ec39450c2d48bd32f3300b604367401be25e1a74",
+      "after": "8b720e8a02201862f4793ba510b8618580b6a940833a63cd1df25bbf9eb1e246"
+    },
+    {
+      "index": 37,
+      "key": "gallery/business-functions/demand-generation-campaign-brief.opf.json#5",
+      "file": "0037.png",
+      "before": "85a2b0ee8da84ee8b02d21a3d6f2e10230addf33d9399cd831ae4cca38744656",
+      "after": "4891b2eef9db49733f9b506c8287c7e1b58c66e0a1aa140e64875c262f78bb87"
+    },
+    {
+      "index": 38,
+      "key": "gallery/business-functions/demand-generation-campaign-brief.opf.json#6",
+      "file": "0038.png",
+      "before": "e59cc5947361addb743d97b879b7a53021f38980868d82dde27a7d6b99f29a38",
+      "after": "d0a600e01fb0439fe875e1c0429294acae5d901bc78d5e63edcdcd086ee624d7"
+    },
+    {
+      "index": 39,
+      "key": "gallery/business-functions/demand-generation-campaign-brief.opf.json#7",
+      "file": "0039.png",
+      "before": "c7aa447aaa13c3c1e91fb7dab56c7e3d796c0b60b975965de7170ffb414c66f3",
+      "after": "96a3395eee755987f6ce8ac93624137901fe3b65921da0df4b4a24a2623c57f3"
+    },
+    {
+      "index": 51,
+      "key": "gallery/business-functions/engineering-capacity-planning.opf.json#5",
+      "file": "0051.png",
+      "before": "1e10a81736464f9f9074402a4bc8b296b8b862fc13c42492245664432602e792",
+      "after": "4a9b93b123399d7f280297030dc515a92319ece9fe1f195a46813d882114adb9"
+    },
+    {
+      "index": 52,
+      "key": "gallery/business-functions/engineering-capacity-planning.opf.json#6",
+      "file": "0052.png",
+      "before": "9e1e1bd915bab0e971a48d902dc2fc5f032210df78c4927cbe36c952f33b7c24",
+      "after": "1b8c8fbceb6b11553fbe5a694b36e33e27427dca69842df5c0e61e077ab02e4a"
+    },
+    {
+      "index": 53,
+      "key": "gallery/business-functions/engineering-capacity-planning.opf.json#7",
+      "file": "0053.png",
+      "before": "09353fc555b9e72935fdd902f659d4663f5fa74d00cbaaade7c09737f72d2c8e",
+      "after": "99feda5f60d20243ad53921deea03d128afdd872667344647de53fef282936ec"
+    },
+    {
+      "index": 83,
+      "key": "gallery/business-functions/investor-relations-update.opf.json#5",
+      "file": "0083.png",
+      "before": "7a34d478d96f1646352327ebc66c2520136f639d9df2cb2d442a475cfd7f0df4",
+      "after": "c60d2e4a3ed5902a30ce1148681ed5fd6ff5f26d9d89b143ade07c319ed3fce4"
+    },
+    {
+      "index": 84,
+      "key": "gallery/business-functions/investor-relations-update.opf.json#6",
+      "file": "0084.png",
+      "before": "89c83f0907b64d45ed29f9cdb671d7270def5e0c9154b71ad5fa04d9041bb1bc",
+      "after": "15d627872247742906ffe45093953d7e2d1318abf6b7b0be996cc08236d729ac"
+    },
+    {
+      "index": 85,
+      "key": "gallery/business-functions/investor-relations-update.opf.json#7",
+      "file": "0085.png",
+      "before": "48e85ded916b3b17d04d96f88ae848f046b9ead5917e35d2f3c8a445911912b0",
+      "after": "f8ae721bdaa75be9875202478ac1ca27c25a732f70dde43e0c83fa7d1e225efc"
+    },
+    {
+      "index": 93,
+      "key": "gallery/business-functions/model-governance-review.opf.json#5",
+      "file": "0093.png",
+      "before": "2d0e4ff29bd86d00e26b76980a7e1b4e7e8e998b15afc90c8fac6b57e08968c0",
+      "after": "bbd525dfbe6a6a1825507b9d80ab7cb14b3441ff71773e31a69175b64b7cb996"
+    },
+    {
+      "index": 94,
+      "key": "gallery/business-functions/model-governance-review.opf.json#6",
+      "file": "0094.png",
+      "before": "113868b671a1c811b246b894f026b872a682743c625ba6bfddda3175f10430bb",
+      "after": "a00f4a017a4c36bc33b7838cfaa7b0fe9a6ff02a543f1d453b2d20af04a3dcfd"
+    },
+    {
+      "index": 95,
+      "key": "gallery/business-functions/model-governance-review.opf.json#7",
+      "file": "0095.png",
+      "before": "3372105cfba3db2a4829a36b20eee17f9bbac51d3e1283702b88e95271cd2a1b",
+      "after": "ffd99eb902a2400f4df54131c4ca19f614efd4e170482f098c1790862b2d7d84"
+    },
+    {
+      "index": 111,
+      "key": "gallery/business-functions/pricing-and-packaging-decision.opf.json#5",
+      "file": "0111.png",
+      "before": "59acf033484e20b36fe389261c3d630ea27eade606159df32b8db3bedeb892b4",
+      "after": "46266333fe4d66fbfa17dfca481afc65101c6734bd5fd415d9f18099279ce3eb"
+    },
+    {
+      "index": 112,
+      "key": "gallery/business-functions/pricing-and-packaging-decision.opf.json#6",
+      "file": "0112.png",
+      "before": "3e8727614f23fb23d5c9eb3f532d59960c2c1d5004d3f676b77e63ecaf443c2d",
+      "after": "fabc6edb27a103283700a3493b80f6ac42b0501fc0c5791231061e3dcf91aa6c"
+    },
+    {
+      "index": 113,
+      "key": "gallery/business-functions/pricing-and-packaging-decision.opf.json#7",
+      "file": "0113.png",
+      "before": "e4a1fca5396c133077d448e8b9c8065769487c05455a2cb5d0a17547c8e54eac",
+      "after": "7f72379e6e7d3eee6b7610b0e717e1a17889f94abb1c81b25e3ff100787e92de"
+    },
+    {
+      "index": 121,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#5",
+      "file": "0121.png",
+      "before": "8a0e8f1050be651f42e99279833348cc426ad5cff4ce183e6dbcefee29f814f2",
+      "after": "289b43073421bf5862050a440321d633fa88417bd434e75cace2e55d53a637ef"
+    },
+    {
+      "index": 122,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#6",
+      "file": "0122.png",
+      "before": "f04e84592aa475b41b9f03d22872c7830086df43135c792310e2cac1f055cf5e",
+      "after": "8a3241d47c8e420f000e4092498bc669521df2ecc02b512d3d49af5f7a040597"
+    },
+    {
+      "index": 123,
+      "key": "gallery/business-functions/product-roadmap-decision-review.opf.json#7",
+      "file": "0123.png",
+      "before": "1ac85470d2a5e32301406fafe0f8f1a28e094a6a81a391524a59e6d1f3ad8b74",
+      "after": "ad251684ba42fe56f03142a3f8f3fbd7f598646305a1ae237d635c8311aa0ef0"
+    },
+    {
+      "index": 137,
+      "key": "gallery/business-functions/revenue-forecast-inspection.opf.json#5",
+      "file": "0137.png",
+      "before": "19176da250b6418b460ea50c042fa45809c6320017e5beca1f20cd8d37c0c292",
+      "after": "5c05ad97cd9debba106e4ac5c17008dc256a0c7eef471e12acf9bccc058fb5f8"
+    },
+    {
+      "index": 138,
+      "key": "gallery/business-functions/revenue-forecast-inspection.opf.json#6",
+      "file": "0138.png",
+      "before": "5deab11c79bbcf744f311c3af4cfe1bda119ba4ed50bc6d999aae030f6619099",
+      "after": "294458a6005e29e0241063822a80c301c7ecd1b93463abf81775a416fc7c136c"
+    },
+    {
+      "index": 139,
+      "key": "gallery/business-functions/revenue-forecast-inspection.opf.json#7",
+      "file": "0139.png",
+      "before": "336ab3f23f112ac8bcf6b0a39bafd8bac87227fed62d959ecc4b03cce96205bb",
+      "after": "3abdb425ead460dadab944a5b53a3691c0a76c935719d0d15667ea76f5721477"
+    },
+    {
+      "index": 147,
+      "key": "gallery/business-functions/s-and-op-exception-review.opf.json#5",
+      "file": "0147.png",
+      "before": "efd736ebdf08d0ccae14e293c37c7906d9f12ea36e19827bb45049d14bd9b3aa",
+      "after": "b397db973dcd8639ba6569843cb8bf82236f0dd8578b1fc9748890621d15769a"
+    },
+    {
+      "index": 148,
+      "key": "gallery/business-functions/s-and-op-exception-review.opf.json#6",
+      "file": "0148.png",
+      "before": "adcc8ee7912464de3ed4a64956ea6ddf6643bc09aa8d70b08e55011daeaa609b",
+      "after": "1f7e5d1a47cf72cf4de1ab5824766bc6fe876fc19b73180465e53fb11bbd8d99"
+    },
+    {
+      "index": 149,
+      "key": "gallery/business-functions/s-and-op-exception-review.opf.json#7",
+      "file": "0149.png",
+      "before": "a38d42b93eabacbcd8bd1f74dbcc8038245e2930932a41853493a3b8b8dae806",
+      "after": "9b6cef44bb201da14990c5916883915cdd0810e6d4fb4954528995c8e51cfd96"
+    },
+    {
+      "index": 163,
+      "key": "gallery/business-functions/strategy-offsite-pre-read.opf.json#5",
+      "file": "0163.png",
+      "before": "391ea035d19bddf9417a411bb4ca0a93f5c0d1ceb0d1b0d26076d6fde8faa442",
+      "after": "277769ffd9a9e5b7831a0ed54f6e8c4affc15cb81c0c1d937cb974c7588cae18"
+    },
+    {
+      "index": 164,
+      "key": "gallery/business-functions/strategy-offsite-pre-read.opf.json#6",
+      "file": "0164.png",
+      "before": "0aee1c360534c24764037b9d6bc263846c431dbc0fbb509a80b5c1537aa62b28",
+      "after": "7bd5bfbb07fae428ac04ae109c300238ed133e264bbfab97eef60b1510665aaf"
+    },
+    {
+      "index": 165,
+      "key": "gallery/business-functions/strategy-offsite-pre-read.opf.json#7",
+      "file": "0165.png",
+      "before": "2bd043a7ab76954528949a6ae5254b57dbfd7dfbda94a5fa4dc8549128d2b0c5",
+      "after": "1ce4b95499e29e668ce373ec4b18b293bf51211945589ccee7f92b3e4cecb039"
+    },
+    {
+      "index": 173,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#5",
+      "file": "0173.png",
+      "before": "717b532fe97e02278430edf8ef2c16766e3ec6d9f062c5c253f078c7fd8843b0",
+      "after": "def51ed33b72e7fe0a871814a7406385dba99f7eb5a8e47e9f767e10b6d1ead9"
+    },
+    {
+      "index": 174,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#6",
+      "file": "0174.png",
+      "before": "40b6b8a04fd3a1ae100579e56794e53576c495d5c807a9fadc388055b02543e9",
+      "after": "a9cbae93830d1542e963b5bab48a13ba3cc643cb3f1e773df5df16d5f5399272"
+    },
+    {
+      "index": 175,
+      "key": "gallery/business-functions/supplier-risk-heatmap.opf.json#7",
+      "file": "0175.png",
+      "before": "e7c2f1d83ac3dc729319a8f152cabf25fa5c494e4b408dfa06c8549d3671d3f8",
+      "after": "225ff33d3776d5a98c6503997178375645499faaf0a8135f7de4e752f59171a7"
+    },
+    {
+      "index": 195,
+      "key": "gallery/design-and-media/data-storytelling-atlas.opf.json#5",
+      "file": "0195.png",
+      "before": "e0a8cc7d9229c420f01776bdfb8a7dc310bd78d22cd98ea7a71b6e20da646e8a",
+      "after": "82cc18c8fb52d23a55e7746083c1a739eca7cf74e6bc0862df36d4c221a3bd74"
+    },
+    {
+      "index": 196,
+      "key": "gallery/design-and-media/data-storytelling-atlas.opf.json#6",
+      "file": "0196.png",
+      "before": "6639ecd7d424f2e530c5b8eeb9158d67528060842de349fe775ba1b994e515cf",
+      "after": "7d959082f69e710b14c75062d14b98a81023cb5dc661efc8c46bdf54eac1e43f"
+    },
+    {
+      "index": 197,
+      "key": "gallery/design-and-media/data-storytelling-atlas.opf.json#7",
+      "file": "0197.png",
+      "before": "01947845fb9ecc0c9ff1995ab686d46639c9002c7c87686779c5f1f0dfc67f32",
+      "after": "71ca0478c1c26620c4fc6e1a1b818f497850881c361024ad5fc2626beddefbe2"
+    },
+    {
+      "index": 205,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#5",
+      "file": "0205.png",
+      "before": "16044b1fd9df428a1993ae58d11003ecd2d540d929ec111250a2d81f178a330f",
+      "after": "2b23fcec419dde9f95ed67b71c85eb74c2303b0abbb5e45eb0cf315dca3915a7"
+    },
+    {
+      "index": 206,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#6",
+      "file": "0206.png",
+      "before": "95bbf0ea5ed23107e31483051cc56049c5aa1b4d6afddd7e6d6c49286b59111d",
+      "after": "b57169f127865bff9758d4f2534f2fdf043a8d86faf604a54655158f7c9a9a61"
+    },
+    {
+      "index": 207,
+      "key": "gallery/design-and-media/kiosk-orientation-deck.opf.json#7",
+      "file": "0207.png",
+      "before": "ed54bb04e3333c3d20d17434d613f1211357e842443af4414e282338f2d970ad",
+      "after": "ea819d99cacc32405db1a1e3b75818989c1f1823ddb0fa5ae03a24a03cc46a73"
+    },
+    {
+      "index": 215,
+      "key": "gallery/design-and-media/photo-essay-portfolio.opf.json#5",
+      "file": "0215.png",
+      "before": "7178eb06bad119b28d1720658f7eadb449648ba7954d143870221abafef1d53c",
+      "after": "419d7dd0be2dfa4a7483c48b5982b73fd744cb9280a10b78dc664938e597aa9d"
+    },
+    {
+      "index": 216,
+      "key": "gallery/design-and-media/photo-essay-portfolio.opf.json#6",
+      "file": "0216.png",
+      "before": "906c1f0291e35b8591bd6e262017726396a071b04f3123257d3bb3b7a2ce6e94",
+      "after": "9474783310809c9111da9c92ef0fdc68b07c3f18c30e697ec70a69e7b4133392"
+    },
+    {
+      "index": 217,
+      "key": "gallery/design-and-media/photo-essay-portfolio.opf.json#7",
+      "file": "0217.png",
+      "before": "c48dc364e695b0589515d83e65f581bf2c16ffc31a604e86e73ae682ae4454ed",
+      "after": "b7f9db2a1039d100b8375c12a5e2578625b04fa999d2912383f4e602d9a6f61f"
+    },
+    {
+      "index": 225,
+      "key": "gallery/design-and-media/video-demo-sales-narrative.opf.json#5",
+      "file": "0225.png",
+      "before": "994eb5a34c577b69f451cf3413360a18a0899ec37338d5f4cf3090eb3e0e1ea6",
+      "after": "176f356df999fb8fcea097220faccfd117c3d098db6f6e6c311b80d726f8633c"
+    },
+    {
+      "index": 226,
+      "key": "gallery/design-and-media/video-demo-sales-narrative.opf.json#6",
+      "file": "0226.png",
+      "before": "4af23a1396277029cf34f8632c35229f8a65d35d28725d4fa5996211e55c0fca",
+      "after": "40e54005c8a3dde5061e5783b1d5de47c71e49ef7a7371365d2413cd9ffa3e80"
+    },
+    {
+      "index": 227,
+      "key": "gallery/design-and-media/video-demo-sales-narrative.opf.json#7",
+      "file": "0227.png",
+      "before": "08d1222423b636cdb9f9d52ca4c6382857fde68c184cb25cf5877402cd991dff",
+      "after": "b65a4d4e9e4b2bc5b89ad3b19a2de2f2227c027c57380cb8b1cb73b753f21813"
+    },
+    {
+      "index": 259,
+      "key": "gallery/education/athletics-budget-review.opf.json#5",
+      "file": "0259.png",
+      "before": "a6bca0b8a3b0d4c9a073725b39cc4dcb92294261ec649e885b408bdcecdab9bc",
+      "after": "d72d5c5f43bb9714bfa87131c0b1eb67e76c26e95f1e3eb3babdaa7e6d4fba10"
+    },
+    {
+      "index": 260,
+      "key": "gallery/education/athletics-budget-review.opf.json#6",
+      "file": "0260.png",
+      "before": "1c88d336c0e9d1f9ca941d333eced7f7d8f0d01d3fcbb599f7b75a61febcaebd",
+      "after": "fc27bed61e52fdc041fdeaa07a5f487d565ff3d77d8eca2ebd9e0c0536ded071"
+    },
+    {
+      "index": 261,
+      "key": "gallery/education/athletics-budget-review.opf.json#7",
+      "file": "0261.png",
+      "before": "96ba634925573bd0cbb1d4e15be734a1bb27e4aa9777b7532dcb282a4cb9c60b",
+      "after": "a93fca79d39e1623048fce7de5f53ad02d2ea2e62de668ab542a589e40b1394d"
+    },
+    {
+      "index": 275,
+      "key": "gallery/education/curriculum-approval-brief.opf.json#5",
+      "file": "0275.png",
+      "before": "c55f19fc93f4bf326d3faf8c82209824044df294e6db03de3c9b2b81bc1fa56e",
+      "after": "c6ca8533de9b1247cc81f23e73a458f3469fe50c68b058fc84e3325e0635b9e7"
+    },
+    {
+      "index": 276,
+      "key": "gallery/education/curriculum-approval-brief.opf.json#6",
+      "file": "0276.png",
+      "before": "28bcb78c1a39071eabe9e16c9d3079768466149656cd0ca39e63a378072b92fd",
+      "after": "1ed80a4b93a770b7b55f86757c71cd1a2690dddaf7f904871bb7ce48cd40c6f0"
+    },
+    {
+      "index": 277,
+      "key": "gallery/education/curriculum-approval-brief.opf.json#7",
+      "file": "0277.png",
+      "before": "9b305cc69650f425b4e4e8574be289f6b0ff7da25936057958a788957ff59134",
+      "after": "59a1225092b56a61c2b814f4a2f14e7e56643f74d04cd7a2adfe3e277f504e2f"
+    },
+    {
+      "index": 289,
+      "key": "gallery/education/library-modernization-roadmap.opf.json#5",
+      "file": "0289.png",
+      "before": "82d2d9eb69cdf1eaf20994fd500b665f5aaabaf08f0ed233a5f28ce2c04c23b4",
+      "after": "8e8b74beb81e01d5dc593e2c33688ebe4b18bbec32cd619dc10bef370aacfa98"
+    },
+    {
+      "index": 290,
+      "key": "gallery/education/library-modernization-roadmap.opf.json#6",
+      "file": "0290.png",
+      "before": "a49dad2ccf90895b0e61741bc5438af42f1f693a6413f3dbe1e5bce2e46b3ce4",
+      "after": "a579a55f32f33f0dfcf48ed49bac42d87f082a2fa0a989fb0c9a3d23c0ed4ec0"
+    },
+    {
+      "index": 291,
+      "key": "gallery/education/library-modernization-roadmap.opf.json#7",
+      "file": "0291.png",
+      "before": "0853e3f5b14f0433470e03569b1e77c02cd68d275d98dc6faa4f9bd5482fb05c",
+      "after": "a3e0f91aa969af58fef53b2d5f7ee67f9ad66026763e2ae27951a5555dddfda6"
+    },
+    {
+      "index": 329,
+      "key": "gallery/education/workforce-pathway-partnership.opf.json#5",
+      "file": "0329.png",
+      "before": "5586572e5603628e5dc4934aaff9031c3251bb03cc480881d7aeef939e343d10",
+      "after": "bb3c47188cb9b77bb466fe8a98893562ee1d92b0a3529c96b2d251b6d49e08d0"
+    },
+    {
+      "index": 330,
+      "key": "gallery/education/workforce-pathway-partnership.opf.json#6",
+      "file": "0330.png",
+      "before": "c242b792787c96a98ba9923d59e33f3874df20846954bd5a4116ffa270b1f381",
+      "after": "661c44df356f98bdac6c39b13767491b3f3e2fb30cf3ab16823a1439579efa61"
+    },
+    {
+      "index": 331,
+      "key": "gallery/education/workforce-pathway-partnership.opf.json#7",
+      "file": "0331.png",
+      "before": "af4caf4a6b9c432b32f3af31b307235e613b0159a8ab5fee54020077ce3fc97f",
+      "after": "d1a17a0f468b257eefb13443ba7e1eb1e6e4e1676a2790f6d5afae0a5759bec2"
+    },
+    {
+      "index": 339,
+      "key": "gallery/government/broadband-public-hearing-deck.opf.json#5",
+      "file": "0339.png",
+      "before": "efe78bb47f86d7ea2393debcd1a0eb79c4440954856244960c0f29d83ea700b0",
+      "after": "1a1f85913db50fcfed1b85e681983c53abb161525c15655a2ce7095975404be7"
+    },
+    {
+      "index": 340,
+      "key": "gallery/government/broadband-public-hearing-deck.opf.json#6",
+      "file": "0340.png",
+      "before": "2e724a7f573dc5bb36de4463016b05377f8d396d2b28646256b27f426762ef8e",
+      "after": "b2d4a108884efd6846fca82c0125435243622c4762a26e145e5275eeb08fbdfb"
+    },
+    {
+      "index": 341,
+      "key": "gallery/government/broadband-public-hearing-deck.opf.json#7",
+      "file": "0341.png",
+      "before": "d916050d56d69577327328b3d3b60343bd8961935c3a79345763c93cc3d0cdb5",
+      "after": "1b2f281867a1971712333fafe3d0e6c1c556c9db25b217e24592ada4b61106ae"
+    },
+    {
+      "index": 363,
+      "key": "gallery/government/housing-zoning-council-brief.opf.json#5",
+      "file": "0363.png",
+      "before": "edf68362c221f2ed4e6cd103618180fe2c0c1c1ec0ddb6038ceca4daae33d96e",
+      "after": "1fdc141b36630df74086506b2fded368e535f36f2fa35c4a7f149e54f356ec57"
+    },
+    {
+      "index": 364,
+      "key": "gallery/government/housing-zoning-council-brief.opf.json#6",
+      "file": "0364.png",
+      "before": "84b19ba2da042da048e93c11b8d28a7525cefa64d7f32ec317d870e2316a7419",
+      "after": "32f3c336cf28cd8ac520a9b25dcb4c47c9b56e14741314415ebbacc96680e5b3"
+    },
+    {
+      "index": 365,
+      "key": "gallery/government/housing-zoning-council-brief.opf.json#7",
+      "file": "0365.png",
+      "before": "8adef4b6052a7fd3facf891c96bd2a813003c1e277c7142fc6166b521f07b1fd",
+      "after": "a0472b4f4ca00b631a80de883507847a85c465828e6c5264942c3157c409a3d5"
+    },
+    {
+      "index": 385,
+      "key": "gallery/government/recycling-participation-campaign.opf.json#5",
+      "file": "0385.png",
+      "before": "036b724d702fbdf84905d885e2c3aba9f27de8929b1a08ed68a805ee2ad46b27",
+      "after": "c5713af3087a4c3ffafad79366abed7c5ba39513e25ee722ab44997105caf8e7"
+    },
+    {
+      "index": 386,
+      "key": "gallery/government/recycling-participation-campaign.opf.json#6",
+      "file": "0386.png",
+      "before": "8339079d2e2c3167d5f2c0dd2bd49c9378d239e60264914b7c3e3536bc7f2cc0",
+      "after": "24b807e5234c09a57ca27d3737e4d4d8c178e7af2e381b6334492691e69b01a0"
+    },
+    {
+      "index": 387,
+      "key": "gallery/government/recycling-participation-campaign.opf.json#7",
+      "file": "0387.png",
+      "before": "57cac31985e888bdad64e34a39615643c488f9a8942b901293af36cc2aa9198b",
+      "after": "68b37d10e11bf20d92570a7ed09a38c9f10ec95f2e0cb5da4c06a629aae7c330"
+    },
+    {
+      "index": 401,
+      "key": "gallery/government/tax-portal-modernization.opf.json#5",
+      "file": "0401.png",
+      "before": "b46be9614c0c613ad865507e23eaca88a24591f2dadc4b3b0bb82468b3a4cfbf",
+      "after": "ffec508617ad7a7e92cf1fde35dfeb759f0ea63c551d6af7a12769efe78521f7"
+    },
+    {
+      "index": 402,
+      "key": "gallery/government/tax-portal-modernization.opf.json#6",
+      "file": "0402.png",
+      "before": "0fd6d3d06023920d56fb07e9c43a69c72f0274d7d1626d079a84babf01ebcfbf",
+      "after": "d40da1364c3420eeba7d12c8f427883e37d1bb5b3ad7ef92ead5be293c1dfee0"
+    },
+    {
+      "index": 403,
+      "key": "gallery/government/tax-portal-modernization.opf.json#7",
+      "file": "0403.png",
+      "before": "374c2554fddec40c2412e6d6f2c7d0f0b98cccc96698648e253bf6383e61c0d2",
+      "after": "2f9d0497d65d5b0c95d30f73b28fac2561336253544e4260a59b80ee8978b68c"
+    },
+    {
+      "index": 411,
+      "key": "gallery/government/transit-corridor-alternatives.opf.json#5",
+      "file": "0411.png",
+      "before": "f88c4dd3ee8c07fae20cec72cbc9eba26dab2d558f4606e45fd8e64c98ab8763",
+      "after": "5850a59c0579b7af652617ed9a22501dc9b0f64605dd4ef668c21d76bee6eecd"
+    },
+    {
+      "index": 412,
+      "key": "gallery/government/transit-corridor-alternatives.opf.json#6",
+      "file": "0412.png",
+      "before": "7f3e8e9e75b95e8c8b12052920c7823433019465fa5678e43fd9e9823676030d",
+      "after": "20b34f4cf8eb3b997e192e1ca7d08d090c4a75605c88d57d092dbd0a8f6b6ff3"
+    },
+    {
+      "index": 413,
+      "key": "gallery/government/transit-corridor-alternatives.opf.json#7",
+      "file": "0413.png",
+      "before": "f6e39cab3c1f032bea42332312c2003fc36a322a9f9a90a07b6237b4420b1469",
+      "after": "f97b5ea105e3e633611019ed6728b6da2ba82ff7b45638d9e36877401ee020c5"
+    },
+    {
+      "index": 427,
+      "key": "gallery/government/water-utility-capital-plan.opf.json#5",
+      "file": "0427.png",
+      "before": "9da4f3c344b6c7adf6e3305a60462a398edc8b07d5e48c1c0eb666f5c57d6f8b",
+      "after": "f98260262c7ee456564c49b5359d7be72b957db159ff2757ee0d4121d2d9e793"
+    },
+    {
+      "index": 428,
+      "key": "gallery/government/water-utility-capital-plan.opf.json#6",
+      "file": "0428.png",
+      "before": "1ec6c50860c68b8d346077799d527896bba7d6e04af5cfdc6d0dbc545ce64f61",
+      "after": "65ff44181d967af7d2e4647b27f02f04ed4759649a5b7b7a5fd9d0d5ede8a1b7"
+    },
+    {
+      "index": 429,
+      "key": "gallery/government/water-utility-capital-plan.opf.json#7",
+      "file": "0429.png",
+      "before": "d823c12f7c52a119de00d9b4f7dc67527771974296f6526bb5f0ecc749a43441",
+      "after": "9fd8877dd1faf4fdb80fded9d98c122f91d378831bd679cfac25421a4262a6d8"
+    },
+    {
+      "index": 437,
+      "key": "gallery/government/wildfire-evacuation-preparedness.opf.json#5",
+      "file": "0437.png",
+      "before": "52cb0e5f2069502643911ae1244184853fd60b7ea3650bd82be5c0339b58b95d",
+      "after": "f6ff35957d1bdf43b0d2e9fad79a0bab8326c4b421c95cd29146d15a1674bdee"
+    },
+    {
+      "index": 438,
+      "key": "gallery/government/wildfire-evacuation-preparedness.opf.json#6",
+      "file": "0438.png",
+      "before": "88f1a2b9a6e899ddad3bc39c7fea94732715b4aff3206233d1154de638f126fa",
+      "after": "91570acb00848cd59d4f6595cccad9cab60e10e0de3f2c4fa06e79b0a0f828b6"
+    },
+    {
+      "index": 439,
+      "key": "gallery/government/wildfire-evacuation-preparedness.opf.json#7",
+      "file": "0439.png",
+      "before": "3962fb1c89d0a8534232a8e0709c99345eaba5f16b788fd7504f8337d484cc9e",
+      "after": "0390de845b5567aaa1e12bf9b2a500019d1f42526c231cc29f1d3fffdb9de1b5"
+    },
+    {
+      "index": 447,
+      "key": "gallery/government/workforce-reskilling-initiative.opf.json#5",
+      "file": "0447.png",
+      "before": "28659dd4f1423c1343e1bbe760af0e6da75c1b5a554b3c55c8b1b25f49d2e120",
+      "after": "b21f699b47641aa0e8b642d6f43e27eb624db1bc02f0c6130eb5e3775b079d17"
+    },
+    {
+      "index": 448,
+      "key": "gallery/government/workforce-reskilling-initiative.opf.json#6",
+      "file": "0448.png",
+      "before": "755fbcd01c3d1e3a71941091d378b201bf12dc7489d649ed248791847d8b3a21",
+      "after": "c0335205014f0cdd8df980b2bc3c73bd263df17beeb1367df4f7bd563f9d6899"
+    },
+    {
+      "index": 449,
+      "key": "gallery/government/workforce-reskilling-initiative.opf.json#7",
+      "file": "0449.png",
+      "before": "ebfef219eeb5d8d8a102cefee4bf2eedca9fe972d6dca2506bb80c78ffdd2fbc",
+      "after": "fe44d4d15025a59e22943079efa027be6247edc7064d5c1efda50ae8c06ca872"
+    },
+    {
+      "index": 457,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#5",
+      "file": "0457.png",
+      "before": "381864bc92b6b6de8fa6ba28cbfd174920036188df5a43d289ee84a983797561",
+      "after": "c7a82cbe25a21b16cf045f9588a612a95281bef402fec44adc6c96030d8dc890"
+    },
+    {
+      "index": 458,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#6",
+      "file": "0458.png",
+      "before": "e5bb15d8a440252bcad441be72f6dd3ef0ac70c33393e256b9f2af194be5baf6",
+      "after": "a2f4100e626785a0f347dc272d5fdea227106488e84bfb84363c1bfb417cb1f9"
+    },
+    {
+      "index": 459,
+      "key": "gallery/industries/airline-disruption-recovery-review.opf.json#7",
+      "file": "0459.png",
+      "before": "6fc2beb6957b9b8b949c3e310a2e575623eb218616d3942d45161dcf5bc6791b",
+      "after": "df6fb5ddb9494227d943a70eebe456ff7d31d61f30fb423dba9a686ee915205e"
+    },
+    {
+      "index": 471,
+      "key": "gallery/industries/battery-line-supplier-readiness.opf.json#5",
+      "file": "0471.png",
+      "before": "ad8f9bc5eec7384757e6fc7e86595ebf0366c149da192c226b06c89a1f68872a",
+      "after": "8c9ccb108ab4e1d71222559e9a859a3425fcfb04e6c81fe4f57b8743ef6d897c"
+    },
+    {
+      "index": 472,
+      "key": "gallery/industries/battery-line-supplier-readiness.opf.json#6",
+      "file": "0472.png",
+      "before": "da9c7a8ad70547e659e5a35957483286b55fceb40a687a373d47e4ba84228994",
+      "after": "de51acabb4474a950cfd6effc6f95374592bf3ca3fd1138cf4274f4ccdff8cab"
+    },
+    {
+      "index": 473,
+      "key": "gallery/industries/battery-line-supplier-readiness.opf.json#7",
+      "file": "0473.png",
+      "before": "991357c621e3b4c0b6439766503622a51b3a2bdb59f723c4c38b8ec623be023a",
+      "after": "18934eca385bace726c9f2494bf4193c65111e7019e32791e62eab3ca38145c6"
+    },
+    {
+      "index": 481,
+      "key": "gallery/industries/boutique-hotel-revenue-recovery.opf.json#5",
+      "file": "0481.png",
+      "before": "a7616cc662bcda5c7c45490c6b2e8d93c578a692d2d7bb43d9eedf4346984a59",
+      "after": "2b5ffc82e63c612a14787148f8fa2b1728bacd3e290810d52c0f3ebce47562c1"
+    },
+    {
+      "index": 482,
+      "key": "gallery/industries/boutique-hotel-revenue-recovery.opf.json#6",
+      "file": "0482.png",
+      "before": "b69e799c95dfc4b2add8850de48e9836561980acd5db14c3aabf372a3e9c18d7",
+      "after": "07a34315f0fbf9f987f79d8f6c7d7524dbf2f827dee71a36eadd876c91f639de"
+    },
+    {
+      "index": 483,
+      "key": "gallery/industries/boutique-hotel-revenue-recovery.opf.json#7",
+      "file": "0483.png",
+      "before": "cd4b1fa0af5a5a6afe573ea6a6fd402b47d3a53a3239406ad66064a2e104af14",
+      "after": "e54187d4b4850dd0e881f92d6984253809176503dab186ac28aaa0dd431ec6ce"
+    },
+    {
+      "index": 505,
+      "key": "gallery/industries/construction-safety-stand-down.opf.json#5",
+      "file": "0505.png",
+      "before": "2788f6b5075437917353a776b4cd27bac42c50aab50afb7ab2b37182a86d6ae8",
+      "after": "20bedfa34b31d217a25e6384cc71d438b677f003d9bdce7c9b1ec75af5f38eea"
+    },
+    {
+      "index": 506,
+      "key": "gallery/industries/construction-safety-stand-down.opf.json#6",
+      "file": "0506.png",
+      "before": "60111a1cbbb7c264817f970c263b8fba51acdb953099f48372a46b0a952996af",
+      "after": "d293c1f8fa0fdc7e2a59ac418ca5e839ca52d1056130f18925d90f6e97658fbd"
+    },
+    {
+      "index": 507,
+      "key": "gallery/industries/construction-safety-stand-down.opf.json#7",
+      "file": "0507.png",
+      "before": "1291a2de93ee983d52aea835ce3a008d287946ef6c8d9ec4a735fcbb1b640ffc",
+      "after": "cde12eac7cacb30733a03773edf6a03ea8fa6b7a641baac4d4316f35412958c0"
+    },
+    {
+      "index": 547,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#5",
+      "file": "0547.png",
+      "before": "8420db7d2dd25fb4403eb45e34fb0d640387eb862e20c0c7fa3e54a66fe32501",
+      "after": "18d52130b0b252ae4af3c81d64211a6148bf28619584bb263689624f015339a1"
+    },
+    {
+      "index": 548,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#6",
+      "file": "0548.png",
+      "before": "be5e059395954a134dfd116905a4a982cbc88eace8fad5e55e570a6f14b2abeb",
+      "after": "feaccfa213d4d0184132af50507a8e15764adcf22ebba01c9e85bab2c527375b"
+    },
+    {
+      "index": 549,
+      "key": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#7",
+      "file": "0549.png",
+      "before": "69612a14a67a30ea4b46d22ac82033686b1f0f98dca8bc73ced760a52654ff2a",
+      "after": "565f1d2069ddce8411fb82d6e3c40d473e69cf461ca26d59cc6d60d6d862a817"
+    },
+    {
+      "index": 557,
+      "key": "gallery/industries/port-dwell-time-improvement-plan.opf.json#5",
+      "file": "0557.png",
+      "before": "4c32524c0d275db1c125c49f52005cd24417ce5b7ceb7a0715e09ce3a97f73a3",
+      "after": "ef9437c2f89e61ead615a12fa9e055c58e0a3755641642c6d2db276f021705a1"
+    },
+    {
+      "index": 558,
+      "key": "gallery/industries/port-dwell-time-improvement-plan.opf.json#6",
+      "file": "0558.png",
+      "before": "a9e79536da45180f7a244ae3ffea3e0f823fff7bdb102220d0cf274b0969be9a",
+      "after": "f06e24fb528d0c6bf41da36312404fc678749f950411e404ae3301045369c10f"
+    },
+    {
+      "index": 559,
+      "key": "gallery/industries/port-dwell-time-improvement-plan.opf.json#7",
+      "file": "0559.png",
+      "before": "3a1a5333689dafe04daafa3529b0e9d43e2c0f5aa5ead7e551934d05dfc6b07e",
+      "after": "3020fe6f187f42ad91ddbe4379080c07240997858800fde131be1962a664cb0e"
+    },
+    {
+      "index": 595,
+      "key": "gallery/industries/tailings-monitoring-investment-brief.opf.json#5",
+      "file": "0595.png",
+      "before": "990a554cce0b0523e0d890aaf209ed2033ad61c9fb63a337eddbc7d93347f35a",
+      "after": "3dbaaa0c13399d97dba88bbe146542a9d01ad5bb29d6714b86d277052479968b"
+    },
+    {
+      "index": 596,
+      "key": "gallery/industries/tailings-monitoring-investment-brief.opf.json#6",
+      "file": "0596.png",
+      "before": "8439b587dbbffb948121c7b787aba8e55feeb519e5021f5033dab684f621fb25",
+      "after": "e1b252327fff3160e69b5a1f124a13d8f733a1f60e5cd8e593df1ab06fa1d330"
+    },
+    {
+      "index": 597,
+      "key": "gallery/industries/tailings-monitoring-investment-brief.opf.json#7",
+      "file": "0597.png",
+      "before": "8cd019248c23701fb37678b6f60ce398d1c5fbe818f775fb5a3322531c600504",
+      "after": "fb33756a9775d66719baec4aae1c694d9ec1bae9d89e32c97bee4d0b8ffc5097"
+    },
+    {
+      "index": 617,
+      "key": "gallery/industries/water-stewardship-grower-brief.opf.json#5",
+      "file": "0617.png",
+      "before": "97c5ed9355d3d5c1dcccc94c38e35857a5cda5cdd6f217a01945648ae77c9fd4",
+      "after": "a97177eda7b2ad8b67439c7d70c4764b706138f571e2cddec7f229620652d637"
+    },
+    {
+      "index": 618,
+      "key": "gallery/industries/water-stewardship-grower-brief.opf.json#6",
+      "file": "0618.png",
+      "before": "b76ed7aff0fd86587428f38d382aa55a1a1aed0c7a05ff97260aa5ff458bd3e3",
+      "after": "a283fd91bff17490b4d17ae4251094fc1ccf1453bd26b3a931dd6d84a00f0ad0"
+    },
+    {
+      "index": 619,
+      "key": "gallery/industries/water-stewardship-grower-brief.opf.json#7",
+      "file": "0619.png",
+      "before": "ea0fd1a5d84f12a7f329d7f104cd0535bcd3ac44432402ef4421896f2551b333",
+      "after": "10693021b7c0b5b942655988bc886fd5f06070876395f327ae6b5d49695beee0"
+    },
+    {
+      "index": 677,
+      "key": "gallery/presentation-types/manager-training-deck.opf.json#5",
+      "file": "0677.png",
+      "before": "f884f9878fb217dd9c6a4f87c7508459d0194bc2f44836202ae8712e470d2728",
+      "after": "5b9e136a5845a0be3bc23a532a6ec57a81fd0d24a8eac7903a37285a687a108d"
+    },
+    {
+      "index": 678,
+      "key": "gallery/presentation-types/manager-training-deck.opf.json#6",
+      "file": "0678.png",
+      "before": "8ce3ad8d666338f2107c4e5d94d2c30378655ebc9633d58a11c4660f58df6c89",
+      "after": "4fcc5724beb4aa6718c1c26f490503182b4eb3bcd0afeda2b4145ab6ffebd47d"
+    },
+    {
+      "index": 679,
+      "key": "gallery/presentation-types/manager-training-deck.opf.json#7",
+      "file": "0679.png",
+      "before": "3e1e4dbdb3493e99036488a72dbddf6aa5e5466404e807b95b103de1b115b6fd",
+      "after": "594b2d7444337b41e73e0e31796e190a3dfbeb0f98373930c193e74076ea52fd"
+    },
+    {
+      "index": 691,
+      "key": "gallery/presentation-types/policy-briefing-for-advisors.opf.json#5",
+      "file": "0691.png",
+      "before": "2701cf145ffddb30343ef9de82839d0efc0002fba8f4408340472e9871c8d9f5",
+      "after": "731bffa93b680c11c8db887edde9368b5f778d8608c4d6e01df1e85e72cf2918"
+    },
+    {
+      "index": 692,
+      "key": "gallery/presentation-types/policy-briefing-for-advisors.opf.json#6",
+      "file": "0692.png",
+      "before": "8e249440fb269fcad78b6190df8de13f73b1733e23ecd2912c942dec2f3e02dc",
+      "after": "a52dd8b17e3d078bcb7c7eb89790049036a1a98950f67557d0edbf7123b0d122"
+    },
+    {
+      "index": 693,
+      "key": "gallery/presentation-types/policy-briefing-for-advisors.opf.json#7",
+      "file": "0693.png",
+      "before": "770b9217ee37fdd9b3e03a41723165906bc5ab45006dd95dc99042078316f0b0",
+      "after": "96eea2bb30ba3cf3d6d32649e684fb84f60326750323d81123ad7b7b3f85e114"
+    },
+    {
+      "index": 701,
+      "key": "gallery/presentation-types/product-launch-narrative.opf.json#5",
+      "file": "0701.png",
+      "before": "eabea6c7a77d5030b9756b7145f528ad09af338784b73a08083396bfe8c5ff39",
+      "after": "ee6093d59175847284422b96e8a872d5f3c272752baf82bd71ed48c7b1a8f0bd"
+    },
+    {
+      "index": 702,
+      "key": "gallery/presentation-types/product-launch-narrative.opf.json#6",
+      "file": "0702.png",
+      "before": "9f2cc03c81f6559f2b8608bb2247e13055cb4421d3d36fbd396c525d6cc90fac",
+      "after": "432424eaca11e1b6b5a1cc97f54e007d084d032ea722eb9bf19c8747d8be5764"
+    },
+    {
+      "index": 703,
+      "key": "gallery/presentation-types/product-launch-narrative.opf.json#7",
+      "file": "0703.png",
+      "before": "4d274b037935f55958e69481224a49be18ce3bdc84d8c5d7dcb57180ec10a009",
+      "after": "331b086423d0eed7090d6ce13291ffeb030459cf50172ce16d2e0802c2f62c6d"
+    },
+    {
+      "index": 711,
+      "key": "gallery/presentation-types/research-findings-report.opf.json#5",
+      "file": "0711.png",
+      "before": "bbb7c22e57cc0e8b315b2333a3d190a2285e6c15dc4cc363f8d71063e6eaea13",
+      "after": "b940088c3abb80f4425dab214408d889e540735876cbb02ac2b44178a50200fe"
+    },
+    {
+      "index": 712,
+      "key": "gallery/presentation-types/research-findings-report.opf.json#6",
+      "file": "0712.png",
+      "before": "e870162dac63026be5f618a294719c0d0bcfba1be0309331526dbcfda9df1bab",
+      "after": "fbad78911a5cac5cbd3d9069bf71aa983b219e835012b77d11fd71b75119bddc"
+    },
+    {
+      "index": 713,
+      "key": "gallery/presentation-types/research-findings-report.opf.json#7",
+      "file": "0713.png",
+      "before": "c6555ba4aeafdcff96f7fe814d19b4a597ef6d5fd6eddbe1e212c82ae6d65156",
+      "after": "3405c24c65db32eb26a4b9b538426e28f5d5d048ed28bf205ab799742b5f8f1a"
+    },
+    {
+      "index": 720,
+      "key": "technical/asset-source-forms.opf.json#0",
+      "file": "0720.png",
+      "before": "93bb85b7e65ecdf8772b07c35c9c6890fcbb0d40dcc00fd116d1da3085b905eb",
+      "after": "5b547a866122e47fbc7b0469baef4d5b5213bf6cc9c9f901d9ea2ba933337d33"
+    },
+    {
+      "index": 722,
+      "key": "technical/asset-source-forms.opf.json#2",
+      "file": "0722.png",
+      "before": "a892c55cca0ae4c28134762fba7dfbc9a35e920126a974425b23667fe457d01f",
+      "after": "ca17e72fce10faa308e6e8eb1391272e43915fe495199d24f2e0c6bd20ec3005"
+    },
+    {
+      "index": 724,
+      "key": "technical/block-composition.opf.json#0",
+      "file": "0724.png",
+      "before": "240b25bdadaaa8b1afdfa253b8690d86a4d800d52b70ae44e98c41814aa91883",
+      "after": "56e515171975d71e81325726f08711cc63c6b92f288dceb2364176d7e17d4ab2"
+    },
+    {
+      "index": 736,
+      "key": "technical/content-payload-matrix.opf.json#1",
+      "file": "0736.png",
+      "before": "a1e51e2d37a3e1a1ed2bf9ec358effbe1d1dd99fc7ea41f5e10a593a124f328c",
+      "after": "a829c7414a3dd942b66e3dff1b9a88d861b2843fac106ed80f80b28b4d7dd4dd"
+    },
+    {
+      "index": 738,
+      "key": "technical/content-payload-matrix.opf.json#3",
+      "file": "0738.png",
+      "before": "538d476686343ce6e5d33979d163642b4e98918485cb6e8429eaa74882a58303",
+      "after": "82b1f1be4e16e97bc37060899b323301d9f9ab02fcb5662f5e6b196271b79b0d"
+    },
+    {
+      "index": 739,
+      "key": "technical/content-payload-matrix.opf.json#4",
+      "file": "0739.png",
+      "before": "70071c3e716dfcac7c1356c452af6d9212a9c53fd05efbf7b4e92505084c3770",
+      "after": "9418f0370682e5dd139bd143d94e07ef69e9d9e7ff54c0f457b408b46d58ea33"
+    },
+    {
+      "index": 744,
+      "key": "technical/content-payload-matrix.opf.json#9",
+      "file": "0744.png",
+      "before": "3894f43996c8d95b61630aabe7490a9647baaf65e98e068766352b299723341b",
+      "after": "f7c4cd64affbc260985719682103c406a1200809348ebeec105901e5a8d15f95"
+    },
+    {
+      "index": 749,
+      "key": "technical/design-backgrounds.opf.json#3",
+      "file": "0749.png",
+      "before": "d34cdda15106b01fe409dcbad3b7c8c747a51cc6745f030dd17796df9164b4ab",
+      "after": "f2acd6b59793f846ed3fa9662d6823b5034707090ea73a734d0b0a7886e3cb16"
+    },
+    {
+      "index": 755,
+      "key": "technical/full-feature-tour.opf.json#0",
+      "file": "0755.png",
+      "before": "bf403824ef5ba82bac9d4928c3155f03a2bc2049ca87b77fadba996a625c8a5c",
+      "after": "5090f4c606a7613229f4031ecf22f28a7e083c1aa1c5a7cb8a4c41ebec77a4eb"
+    },
+    {
+      "index": 756,
+      "key": "technical/full-feature-tour.opf.json#1",
+      "file": "0756.png",
+      "before": "ada381f84389880950094a7da4140cda832d27f0c9377936e12fb96007807436",
+      "after": "56ea816b905ecc2e1860242eb425d7f24a6d727338269eed7e78d229d65840a3"
+    },
+    {
+      "index": 759,
+      "key": "technical/full-feature-tour.opf.json#4",
+      "file": "0759.png",
+      "before": "2104e58905bf3d3550b2722218976b5d9cbf808c570c15d097f528f0bb55d778",
+      "after": "c51ed3c4072adbfacc13023b73acebff648cf361628c5864d6a7c34b51ca4eba"
+    },
+    {
+      "index": 760,
+      "key": "technical/full-feature-tour.opf.json#5",
+      "file": "0760.png",
+      "before": "e54bc1ee9642d8b66ece040b5eac0e43b9c7c8cbbe411d1222ccf45d9941d84a",
+      "after": "51bb8d7b978ec468bd09e5a3df7b0778ce3e5d028b2e99e0ec751f4ca1bacfd3"
+    },
+    {
+      "index": 762,
+      "key": "technical/full-feature-tour.opf.json#7",
+      "file": "0762.png",
+      "before": "731b442dd7e281e857e62ec8a67eb55bd547dca84ac955e9a37c68868a857ef1",
+      "after": "4817caf957dab70d7deb2288c252729bd2b8196fe1764dccbe059a34425060e1"
+    },
+    {
+      "index": 763,
+      "key": "technical/full-feature-tour.opf.json#8",
+      "file": "0763.png",
+      "before": "7d86befadb975be45438f4f479d97f28eee226204327d12ed87999a8d8593346",
+      "after": "a20ac2aa0f0648f2972e125582cd51b33195ea02e61d15ed8a7573e97edd0421"
+    },
+    {
+      "index": 764,
+      "key": "technical/full-feature-tour.opf.json#9",
+      "file": "0764.png",
+      "before": "b8dbe583533304ff8449b3bf4174509678e6a96ecb75049aff0634d348fe0a43",
+      "after": "b37664538370f9a2d20ddbb8f7b9afb26f0927a65a28b9afb164cabc481652e8"
+    },
+    {
+      "index": 765,
+      "key": "technical/full-feature-tour.opf.json#10",
+      "file": "0765.png",
+      "before": "5a6c6f70eb871827e0829634e60460c91017ce414c2441346ed83426326c6f36",
+      "after": "2fab4d73875e71d6d785c8f701be4a87c61fd5403f64c555c61f094d5da55f5a"
+    },
+    {
+      "index": 768,
+      "key": "technical/header-footer-logo-set.opf.json#0",
+      "file": "0768.png",
+      "before": "0082b058857edb27a605afe82f4db44444211596545066b16feff4f1304a5576",
+      "after": "95ce602175e42327c0121de5c6faf82cbfe31b2b495d32d556995a9b37dbd0b5"
+    },
+    {
+      "index": 771,
+      "key": "technical/media-and-follow-up.opf.json#0",
+      "file": "0771.png",
+      "before": "e244e424faaaa340e3adb4528bb01768017b7475d52b2f7071fc5298dd43d4bd",
+      "after": "74ea1acff92448ab6ff8305a69bd6e3f6ff5739f713e78893c7cdd296aa45f49"
+    },
+    {
+      "index": 775,
+      "key": "technical/metrics-quotes-timeline.opf.json#1",
+      "file": "0775.png",
+      "before": "a340e2836edd64b5c5cc1155cc6002675b9e52cfa6e9e7b8d0d55fa2e2386d57",
+      "after": "498ce04311dbcc3b7ff1101745a735de253e490da66a2f7cecc24428954abd8c"
+    },
+    {
+      "index": 783,
+      "key": "technical/promoted-region-grid.opf.json#1",
+      "file": "0783.png",
+      "before": "b802f25445953002e702fc2222076a549633b55d9712b95fea0942aeea83b846",
+      "after": "3eb3a4d6a183349b827c39e42cb009086af99802f8459a9de97b741afbf8af6d"
+    },
+    {
+      "index": 785,
+      "key": "technical/rich-text-runs.opf.json#0",
+      "file": "0785.png",
+      "before": "436a5bdb1b05f8dcb1bbe380fcef40caf096aeecc66a44538b383712301d02e7",
+      "after": "883e782ed8061081bf07aea54552ac6e77b415247ee4d23d1f2a0568f8941fce"
+    },
+    {
+      "index": 786,
+      "key": "technical/rich-text-runs.opf.json#1",
+      "file": "0786.png",
+      "before": "beeb4996fe1e6c73e2c69f639638cf2cfa0a3170eb2baefa1a81f03455c5fdd1",
+      "after": "da525ff39433567d0fe3422c35a90cc443e0f4b17f408daeaa42b7b1e1b17d4c"
+    },
+    {
+      "index": 796,
+      "key": "technical/slide-design-overrides.opf.json#3",
+      "file": "0796.png",
+      "before": "67f03c960a28dd6a6e4a6e851d669a50cedaac170b02e2c0db8922293c185b89",
+      "after": "e4e3dd1fe52846403fd4884af72ebe2123314842fe966ac5759b4cf62702c52b"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+# RR-90 example baseline for core 0.22 (core opf#717)
+
+Core opf#717 (0.22.0: header and footer zones on the content inset, table text at the body size, the tag following `titleAlignment`, rich numeric cells) moved the ordinary example rasters, but the adoption PR (#257) left the renderer's own ordinary baseline for a follow-up. Renderer main therefore did not reproduce its own baseline against core main: `test/golden.mjs` reported 662 changed rasters (the 0.22.0 publish run failed on it, and so did the guard of `regenerate-candidate-goldens`).
+
+The reviewed `opf-examples-png.rr85-metric-centering.sha256.json` fixture is pinned byte for byte by `test/example-baseline.mjs` and is left alone. The first-use contract gets its own baseline, `opf-examples-png.rr90-first-use-layout/`, selected by `exampleBaseline(alignment, tableSize)` whenever core draws table text at the body size (the same discriminator as the template baselines). It was written by the `regenerate-goldens` workflow in the pinned image (run 39165718045) against core main (opf#717): 662 slides in 87 decks differ from the rr85 baseline, all slides with header or footer furniture or tables; spot-checked `technical/table-cell-types` and `technical/header-footer-logo-set`.
+
+CI itself still compares the ordinary corpus with core's fixture (`ci.yml` `golden-override`), which the workflow could not regenerate (it refuses a core fixture); a temporary override to the renderer directory was used for the run and removed again.
