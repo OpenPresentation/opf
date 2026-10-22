@@ -6,7 +6,7 @@ It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
 **Published set (2026-10-21):** core 0.25.0, renderer 0.25.0, PPTX 0.25.0,
-editor 0.25.3, CLI 0.25.0 and Gallery 5.0.0. `release-plan.json` records each
+editor 0.25.3, CLI 0.25.0 and Gallery 5.0.0. `node scripts/registry-plan.mjs` prints each
 version with the registry `gitHead` of its publisher commit.
 Earlier matrices and native observations retain their historical identities.
 Complete native compatibility remains a separate gate.

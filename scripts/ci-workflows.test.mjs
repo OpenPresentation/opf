@@ -44,7 +44,7 @@ const workflows = readdirSync(workflowDir).filter((name) => name.endsWith('.yml'
 // MR-34: the per-repository, merge-queue and cross-repository workflows are gone. A new workflow is a deliberate addition to
 // this list (and to the plan, docs/programs/monorepo/README.md, section 2).
 test('the workflows and actions are the monorepo set; the retired coordination machinery stays deleted', () => {
-  assert.deepEqual(workflows, ['ci.yml', 'golden.yml', 'nightly.yml', 'npm-publish.yml', 'release.yml', 'slow-checks.yml', 'tracker-refresh.yml']);
+  assert.deepEqual(workflows, ['bump-sites.yml', 'ci.yml', 'golden.yml', 'nightly.yml', 'npm-publish.yml', 'release.yml', 'slow-checks.yml', 'tracker-refresh.yml']);
   // ecosystem-refs is the frozen shim the archived repositories' CI still calls until MR-60.
   assert.deepEqual(readdirSync(path.join(root, '.github/actions')).sort(), ['ecosystem-refs', 'setup-workspace']);
 });

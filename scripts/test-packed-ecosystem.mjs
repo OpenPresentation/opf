@@ -55,8 +55,16 @@ async function readHarnessBytes(repo, file) {
   if (result.status !== 0) throw new Error(`Cannot read ${repo} release harness ${file}: ${result.stderr}`);
   return result.stdout;
 }
+// MR-34: a release commit of an archived repository has the old sibling layout (`../../opf-render/src/x.js`, `../../opf/docs/...`);
+// the rewrites below are written for this repository's layout, so the registry mode first maps the old paths onto it.
+const OLD_LAYOUT = [
+  ['../../opf-editor/', '../packages/editor/'],
+  ['../../opf-render/', '../packages/render/'],
+  ['"../../opf/docs/fixtures/', '"../../../docs/fixtures/'],
+];
 async function readHarness(repo, file) {
-  const source = (await readHarnessBytes(repo, file)).toString('utf8');
+  let source = (await readHarnessBytes(repo, file)).toString('utf8');
+  if (registry) for (const [from, to] of OLD_LAYOUT) source = source.replaceAll(from, to);
   if (repo !== 'opf' && /^test\/.+\.m?js$/.test(file)) await installLocalImports(repo, file, source);
   return source;
 }
