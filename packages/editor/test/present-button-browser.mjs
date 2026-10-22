@@ -246,6 +246,9 @@ try {
   await page.keyboard.press('F5');
   await presenter.waitFor();
   assert.equal(await page.locator('.opf-presenter-live').textContent(), 'Slide 1 of 3');
+  // The overlay shows at once but the browser enters full screen a little later. Closing before it did (a fast runner) makes the wait for
+  // "no full screen element" below pass at once, and the browser then enters full screen, leaves it again and drops the focus the test sets.
+  await page.waitForFunction(() => document.fullscreenElement?.classList.contains('opf-presenter'), undefined, { timeout: 3000 });
   await page.locator('.opf-presenter-close').click();
   await presenter.waitFor({ state: 'hidden' });
   assert.equal(await slideTitle(), 'Alpha');
