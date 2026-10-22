@@ -223,6 +223,8 @@ jobs:
       - uses: ./.github/actions/setup-workspace
         with:
           build-deps: '@openpresentation/opf'
+          # Core's tests load the renderer and PPTX (its optional peers) from their built dist.
+          build-also: '@openpresentation/opf-render @openpresentation/opf-pptx'
 
       - name: Test core
         run: pnpm --filter @openpresentation/opf --fail-if-no-match run test
@@ -273,7 +275,13 @@ jobs:
           container: 'true'
           build-deps: '@openpresentation/opf-render'
 
-      # The first shard also runs what is not part of the sharded `test` script.
+      # The first shard also runs what is not part of the sharded `test` script, and the browser suites run on their own: both read
+      # the package's own dist (`validate`, the font checks, the browser bundles of the tests), which only the `test` script builds.
+      - name: Build the renderer
+        if: ${{ matrix.kind != 'tests' || matrix.index == 1 }}
+        working-directory: packages/render
+        run: pnpm run build
+
       - name: Quarantine, typecheck, validate and the font checks
         if: ${{ matrix.kind == 'tests' && matrix.index == 1 }}
         working-directory: packages/render
@@ -337,6 +345,12 @@ jobs:
         with:
           container: 'true'
           build-deps: '@openpresentation/opf-pptx'
+
+      # The first shard's extra checks and the browser suite read the package's own dist, which only the `test` script builds.
+      - name: Build PPTX
+        if: ${{ matrix.kind != 'tests' || matrix.index == 1 }}
+        working-directory: packages/pptx
+        run: pnpm run build
 
       - name: Quarantine, typecheck, validate and the shared checks
         if: ${{ matrix.kind == 'tests' && matrix.index == 1 }}

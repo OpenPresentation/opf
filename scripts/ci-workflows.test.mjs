@@ -207,7 +207,9 @@ test('the setup action installs the whole frozen workspace (a filtered install w
   assert.match(setup, /cache: pnpm/u);
   assert.match(setup, /if: \$\{\{ inputs\.container != 'true' \}\}\n {6}uses: pnpm\/action-setup@/u);
   assert.match(setup, /if: \$\{\{ inputs\.container == 'true' \}\}/u);
-  assert.match(setup, /pnpm --filter "\$\{PACKAGE\}\^\.\.\." run --if-present build/u);
+  assert.match(setup, /--filter "\$\{PACKAGE\}\^\.\.\."/u);
+  assert.match(setup, /--filter "\$\{name\}\.\.\."/u, 'build-also builds a package and its dependencies');
+  assert.match(setup, /pnpm "\$\{filters\[@\]\}" run --if-present build/u);
 });
 
 test('a pnpm filter that matches no package must fail: pnpm exits 0 on an empty match and a missing package would pass silently', () => {

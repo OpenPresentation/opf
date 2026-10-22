@@ -11,7 +11,8 @@
 #   names instead, a few seconds.
 # - `build-deps` builds the dependencies of one package in topological order (`pnpm --filter "<name>^..." run --if-present build`),
 #   so a package job never builds the package under test twice (its own `test` script builds it). An empty match is fine here
-#   (a package without workspace dependencies); every other `pnpm --filter` in the workflows passes --fail-if-no-match, because
+#   (a package without workspace dependencies); `build-also` builds named packages and their dependencies as well (core's tests load the
+#   renderer and PPTX, its optional peers, which are not workspace dependencies of core); every other `pnpm --filter` in the workflows passes --fail-if-no-match, because
 #   pnpm exits 0 when a filter matches nothing.
 name: Set up the pnpm workspace
 description: pnpm, Node, the pnpm store cache and a frozen install of the whole workspace, optionally building one package's dependencies.
@@ -26,6 +27,10 @@ inputs:
     default: 'false'
   build-deps:
     description: Package name whose dependencies are built after the install; empty builds nothing.
+    required: false
+    default: ''
+  build-also:
+    description: Space-separated package names built after the install together with their own dependencies (optional peers the package under test loads at run time but does not depend on in the workspace graph, such as core's renderer and PPTX).
     required: false
     default: ''
 runs:
@@ -56,8 +61,13 @@ runs:
         pnpm install --frozen-lockfile
 
     - name: Build the dependencies
-      if: ${{ inputs.build-deps != '' }}
+      if: ${{ inputs.build-deps != '' || inputs.build-also != '' }}
       shell: bash
       env:
         PACKAGE: ${{ inputs.build-deps }}
-      run: pnpm --filter "${PACKAGE}^..." run --if-present build
+        ALSO: ${{ inputs.build-also }}
+      run: |
+        filters=()
+        if [ -n "${PACKAGE}" ]; then filters+=(--filter "${PACKAGE}^..."); fi
+        for name in ${ALSO}; do filters+=(--filter "${name}..."); done
+        pnpm "${filters[@]}" run --if-present build

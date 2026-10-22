@@ -125,10 +125,11 @@
       ]
     },
     "browser": {
-      "description": "The standalone browser suites the CI package job runs after test:playground.",
+      "description": "The standalone browser suites the CI package job runs after test:playground (several load artifacts/playground, so the setup builds it: the playground legs are other jobs).",
       "setup": [
         "pnpm run build:deps",
-        "pnpm run build"
+        "pnpm run build",
+        "pnpm run build:playground"
       ],
       "tests": [
         {
