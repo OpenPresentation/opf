@@ -1,16 +1,16 @@
-// The playground suite in test/browser-suites.json must stay the same list as `npm run test:playground`, so quarantine and the flake
+// The playground suite in test/browser-suites.json must stay the same list as `pnpm run test:playground`, so quarantine and the flake
 // measurement see exactly what a developer runs.
 import assert from 'node:assert/strict';
 import { readFileSync, statSync } from 'node:fs';
 import test from 'node:test';
-import { listTests } from './quarantine.mjs';
+import { listTests } from '../../../scripts/quarantine.mjs';
 
 const read = (file) => JSON.parse(readFileSync(new URL(`../${file}`, import.meta.url), 'utf8'));
 const checkStandalone = (entry, scripts) => {
-  const name = entry.command.match(/^npm run (\S+)/)?.[1];
+  const name = entry.command.match(/^pnpm run (\S+)/)?.[1];
   if (name) return assert.ok(scripts[name], `${entry.id}: package.json has no script ${name}`);
   const file = entry.command.match(/^node (test\/[a-zA-Z0-9-]+-browser\.mjs)$/)?.[1];
-  assert.ok(file, `${entry.id}: expected a normal npm script or direct browser test`);
+  assert.ok(file, `${entry.id}: expected a normal pnpm script or direct browser test`);
   assert.ok(statSync(new URL(`../${file}`, import.meta.url)).isFile(), `${entry.id}: missing direct browser test`);
 };
 test('the playground suite is the test:playground script, one test per command', () => {

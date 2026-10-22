@@ -4,8 +4,10 @@
     "playground": {
       "description": "test:playground in package.json, one test per script (a drift test keeps the two in step).",
       "setup": [
-        "npm run build:playground",
-        "npm run check:font-hotlinks:built"
+        "pnpm run build:deps",
+        "pnpm run build",
+        "pnpm run build:playground",
+        "pnpm run check:font-hotlinks:built"
       ],
       "tests": [
         {
@@ -124,6 +126,10 @@
     },
     "browser": {
       "description": "The standalone browser suites the CI package job runs after test:playground.",
+      "setup": [
+        "pnpm run build:deps",
+        "pnpm run build"
+      ],
       "tests": [
         {
           "id": "browser:import-font-wait",
@@ -143,47 +149,47 @@
         },
         {
           "id": "browser:data-grid",
-          "command": "npm run test:data-grid-browser"
+          "command": "pnpm run test:data-grid-browser"
         },
         {
           "id": "browser:data-grid-datasets",
-          "command": "npm run test:data-grid-datasets-browser"
+          "command": "pnpm run test:data-grid-datasets-browser"
         },
         {
           "id": "browser:data-import-dataset",
-          "command": "npm run test:data-import-dataset-browser"
+          "command": "pnpm run test:data-import-dataset-browser"
         },
         {
           "id": "browser:code",
-          "command": "npm run test:code-browser"
+          "command": "pnpm run test:code-browser"
         },
         {
           "id": "browser:selection",
-          "command": "npm run test:selection-browser"
+          "command": "pnpm run test:selection-browser"
         },
         {
           "id": "browser:click-entry",
-          "command": "npm run test:click-entry-browser"
+          "command": "pnpm run test:click-entry-browser"
         },
         {
           "id": "browser:canvas-a11y",
-          "command": "npm run test:canvas-a11y-browser"
+          "command": "pnpm run test:canvas-a11y-browser"
         },
         {
           "id": "browser:json-editor",
-          "command": "npm run test:json-browser -- artifacts/json-editor-browser.json"
+          "command": "pnpm run test:json-browser artifacts/json-editor-browser.json"
         },
         {
           "id": "browser:rich-input-measured",
-          "command": "npm run test:rich-input-browser -- artifacts/rich-input-browser.json measured"
+          "command": "pnpm run test:rich-input-browser artifacts/rich-input-browser.json measured"
         },
         {
           "id": "browser:rich-input-estimated",
-          "command": "npm run test:rich-input-browser -- artifacts/rich-input-browser-estimated.json estimated"
+          "command": "pnpm run test:rich-input-browser artifacts/rich-input-browser-estimated.json estimated"
         },
         {
           "id": "browser:export-license",
-          "command": "npm run test:export-license-browser"
+          "command": "pnpm run test:export-license-browser"
         }
       ]
     }
