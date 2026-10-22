@@ -40,6 +40,7 @@
     "check:ci-shards": "node --test scripts/ci-test-shards.test.mjs scripts/package-ecosystem-plan.test.mjs scripts/ecosystem-scope.test.mjs",
     "check:ci-diet": "node --test scripts/ci-diet.test.mjs",
     "check:ci-scope": "node --test scripts/ci-scope.test.mjs",
+    "check:ci-workflows": "node --test scripts/ci-workflows.test.mjs scripts/ci-verify.test.mjs scripts/ci-report-issue.test.mjs",
     "check:engines-range": "node --test scripts/check-engines-range.test.mjs && node scripts/check-engines-range.mjs",
     "check:workspace-graph": "node --test scripts/check-workspace-graph.test.mjs && node scripts/check-workspace-graph.mjs",
     "check:pins": "node --test scripts/check-pins.test.mjs && node scripts/check-pins.mjs",

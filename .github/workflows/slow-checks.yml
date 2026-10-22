@@ -1,0 +1,300 @@
+name: Slow checks
+
+# MR-30 (docs/programs/monorepo/README.md, section 4): what is too slow, or too far from the commit, for `verify` and is not
+# part of the nightly cross-platform set (nightly.yml): the full golden corpus with every slide kept for review, the published
+# packages installed from the registry on three operating systems (published matrix with its determinism grid, installed parity).
+# None of it is a required check.
+#
+# Triggers: weekly (Monday), on demand, and on a pull request that carries the label `slow-checks` (add it when a change touches
+# scripts/published-matrix, the parity harness or the golden corpus). A scheduled red run opens or updates one issue labeled
+# `slow-checks-red`; a green one closes it.
+#
+# The published-matrix and installed-parity scripts read release-plan.json for the versions they install (they test the
+# registry, not this commit); MR-34 re-points them to the `latest` set when release-plan.json is deleted.
+on:
+  schedule:
+    - cron: '23 5 * * 2'
+  workflow_dispatch:
+    inputs:
+      overrides:
+        description: 'Replace the planned versions for installed parity, e.g. "@openpresentation/opf-pptx@0.14.0" (default: release-plan.json)'
+        required: false
+        default: ''
+  pull_request:
+    types: [labeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: slow-checks-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+  NODE_VERSION: 24.21.0
+  OPF_PARITY_OVERRIDES: ${{ inputs.overrides || vars.OPF_PARITY_OVERRIDES || '' }}
+
+jobs:
+  # The golden gate with every slide of the corpus retained as an artifact for review, and the vector PDF visual report.
+  goldens-full:
+    name: Full goldens
+    if: ${{ github.event_name != 'pull_request' || github.event.label.name == 'slow-checks' }}
+    runs-on: ubuntu-24.04
+    container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+    timeout-minutes: 45
+    env:
+      OPF_GOLDEN_ARTIFACTS: '1'
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          container: 'true'
+          build-deps: '@openpresentation/opf-render'
+
+      - name: Golden hashes of the examples corpus, every slide kept
+        run: pnpm --filter @openpresentation/opf-render run test:golden
+
+      - name: Vector PDF visual report
+        continue-on-error: true
+        run: pnpm --filter @openpresentation/opf-render run report:pdf-vector
+
+      - name: Preserve the corpus
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: goldens-full
+          path: |
+            packages/render/artifacts/golden/**
+            packages/render/artifacts/pdf-vector-visual.json
+          retention-days: 14
+          if-no-files-found: warn
+
+  published-matrix:
+    name: Published matrix (${{ matrix.os }})
+    if: ${{ github.event_name != 'pull_request' || github.event.label.name == 'slow-checks' }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest, macos-latest]
+    defaults:
+      run:
+        shell: bash
+    env:
+      OPF_MATRIX_ENGINES: ${{ github.workspace }}/artifacts/published-matrix/consumer/engines-installed.mjs
+      OPF_MATRIX_OUT: ${{ github.workspace }}/artifacts/published-matrix/out
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+          cache-dependency-path: scripts/published-matrix/consumer/package-lock.json
+
+      - name: Install the published packages and type-check the TypeScript consumer
+        run: node scripts/published-matrix/prepare-consumer.mjs
+
+      - name: Run the TypeScript consumer
+        run: |
+          mkdir -p artifacts/published-matrix/out
+          node artifacts/published-matrix/consumer/dist/consumer.js | tee artifacts/published-matrix/out/consumer.json
+
+      - name: Take the font-switch harness of the published core's release tag
+        run: |
+          core="$(node -p "require('./release-plan.json').packages.find((entry) => entry.name === '@openpresentation/opf').version")"
+          harness="$RUNNER_TEMP/published-harness"
+          git fetch --no-tags --depth=1 origin "refs/tags/opf-v$core:refs/tags/opf-v$core"
+          for file in scripts/test-font-switch-ecosystem.mjs docs/fixtures/image-treatments.opf.json; do
+            mkdir -p "$harness/$(dirname "$file")"
+            git show "opf-v$core:$file" > "$harness/$file"
+          done
+          echo "OPF_FONT_SWITCH_HARNESS=$harness/scripts/test-font-switch-ecosystem.mjs" >> "$GITHUB_ENV"
+
+      - name: Pairwise font-switch matrix
+        run: node "$OPF_FONT_SWITCH_HARNESS"
+
+      - name: Cache the Playwright browser
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            ~/.cache/ms-playwright
+            ~/Library/Caches/ms-playwright
+            ~/AppData/Local/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('scripts/published-matrix/consumer/package-lock.json') }}
+
+      - name: Install headless Chromium (Playwright version pinned by the consumer lockfile)
+        run: |
+          if [ "$RUNNER_OS" = "Linux" ]; then
+            node artifacts/published-matrix/consumer/node_modules/playwright/cli.js install --with-deps chromium
+          else
+            node artifacts/published-matrix/consumer/node_modules/playwright/cli.js install chromium
+          fi
+
+      - name: Headless-browser preview re-render (embedded faces, scheme switch, no host fonts)
+        run: node scripts/published-matrix/browser-check.mjs
+
+      - name: Determinism grid (time zone, locale, clock, host fonts)
+        run: node scripts/published-matrix/determinism.mjs --concurrency 2
+
+      - name: Collect the evidence
+        if: ${{ always() }}
+        run: |
+          cp artifacts/published-matrix/consumer/installed.json artifacts/published-matrix/out/ || true
+          cp artifacts/published-matrix/determinism/determinism.json artifacts/published-matrix/out/ || true
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ always() }}
+        with:
+          name: published-matrix-${{ matrix.os }}
+          path: |
+            artifacts/published-matrix/out/digests.json
+            artifacts/published-matrix/out/consumer.json
+            artifacts/published-matrix/out/installed.json
+            artifacts/published-matrix/out/determinism.json
+            artifacts/published-matrix/out/browser.json
+            artifacts/published-matrix/out/report.json
+          retention-days: 14
+          if-no-files-found: warn
+
+  published-matrix-compare:
+    name: Published matrix, cross-OS comparison
+    needs: published-matrix
+    if: ${{ always() && needs.published-matrix.result != 'cancelled' && needs.published-matrix.result != 'skipped' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: published-matrix-*
+          path: compare
+
+      - name: Compare PPTX bytes and SVG and PNG hashes across systems
+        run: node scripts/published-matrix/compare.mjs compare --out compare/comparison.json
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ always() }}
+        with:
+          name: published-matrix-comparison
+          path: compare/comparison.json
+          retention-days: 14
+          if-no-files-found: warn
+
+  installed-parity:
+    name: Installed parity (${{ matrix.os }})
+    if: ${{ github.event_name != 'pull_request' || github.event.label.name == 'slow-checks' }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest, macos-latest]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install the published packages and lay out the harness
+        run: node scripts/published-matrix/installed-parity.mjs prepare
+
+      - name: Gallery value documents (committed snapshot of the gallery's own builders)
+        run: node scripts/published-matrix/installed-parity.mjs snippets
+
+      - name: Parity audit (PARITY_FONT_HOST=gallery)
+        run: node scripts/published-matrix/installed-parity.mjs parity
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ always() }}
+        with:
+          name: installed-parity-${{ matrix.os }}
+          path: |
+            ${{ runner.temp }}/installed-parity/out/parity-results.json
+            ${{ runner.temp }}/installed-parity/out/PARITY.md
+            ${{ runner.temp }}/installed-parity/out/installed.json
+          retention-days: 14
+          if-no-files-found: warn
+
+  installed-parity-compare:
+    name: Installed parity, cross-OS comparison
+    needs: installed-parity
+    if: ${{ always() && needs.installed-parity.result != 'cancelled' && needs.installed-parity.result != 'skipped' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: installed-parity-*
+          path: compare
+
+      - name: Compare classes and checks across systems
+        run: node scripts/published-matrix/compare-parity.mjs compare --out compare/comparison.json --markdown compare/comparison.md
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: ${{ always() }}
+        with:
+          name: installed-parity-comparison
+          path: |
+            compare/comparison.json
+            compare/comparison.md
+          retention-days: 14
+          if-no-files-found: warn
+
+  report:
+    name: report
+    needs: [goldens-full, published-matrix, published-matrix-compare, installed-parity, installed-parity-compare]
+    if: ${{ always() && github.event_name == 'schedule' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Checkout (scripts only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+          sparse-checkout-cone-mode: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: Open, update or close the slow-checks-red issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEEDS: ${{ toJSON(needs) }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node scripts/ci-report-issue.mjs --label slow-checks-red --title "Slow checks are red"

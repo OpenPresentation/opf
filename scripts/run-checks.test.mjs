@@ -3,7 +3,8 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { checkJobs, runPool, selectChecks } from './run-checks.mjs';
+import { spawnSync } from 'node:child_process';
+import { checkJobs, parseShard, runPool, selectChecks, shardChecks } from './run-checks.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
@@ -53,4 +54,19 @@ test('runPool never runs more than `jobs` at once, runs every check after a fail
   assert.deepEqual(started, ['a', 'b', 'c', 'd', 'e']);
   assert.deepEqual(results.map((result) => [result.name, result.status]), [['a', 0], ['b', 3], ['c', 0], ['d', 0], ['e', 0]]);
   assert.deepEqual(await runPool([], 4, () => { throw new Error('never'); }), []);
+});
+
+test('--shard i/n splits the checks: every check in exactly one shard, in name order (MR-30)', () => {
+  assert.deepEqual(parseShard('2/3'), { index: 2, count: 3 });
+  for (const bad of [undefined, '', '0/2', '3/2', '1/17', 'x', '1/2/3']) assert.throws(() => parseShard(bad), /index\/count/u, String(bad));
+  const names = ['check:a', 'check:b', 'check:c', 'check:d', 'check:e'];
+  assert.deepEqual([1, 2].map((index) => shardChecks(names, { index, count: 2 })), [['check:a', 'check:c', 'check:e'], ['check:b', 'check:d']]);
+  assert.equal(shardChecks(names, null), names);
+  const script = path.join(root, 'scripts', 'run-checks.mjs');
+  const listed = (shard) => spawnSync(process.execPath, [script, '--list', ...(shard ? ['--shard', shard] : [])], { encoding: 'utf8' }).stdout.trim().split('\n');
+  const all = listed();
+  const shards = ['1/3', '2/3', '3/3'].map(listed);
+  assert.deepEqual(shards.flat().sort(), [...all].sort(), 'the shards together are the whole list');
+  assert.equal(new Set(shards.flat()).size, all.length, 'no check twice');
+  assert.notEqual(spawnSync(process.execPath, [script, '--list', '--shard', '4/3'], { encoding: 'utf8' }).status, 0);
 });

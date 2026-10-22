@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { PACKAGE_IDS, PACKAGES, TARGET_GRAPH, changedFiles, classifyPath, findCycle, isGoldenInput, loadGraph, readManifestGraph, renderMarkdown, renderText, run, scope, withDependents } from './ci-scope.mjs';
+import { LEG_PLAN, PACKAGE_IDS, PACKAGES, TARGET_GRAPH, changedFiles, classifyPath, findCycle, isGoldenInput, legsFor, loadGraph, readManifestGraph, renderMarkdown, renderText, run, scope, withDependents } from './ci-scope.mjs';
 
 const byId = Object.fromEntries(PACKAGES.map((pkg) => [pkg.id, pkg]));
 const targetScope = (files, extra = {}) => scope({ files, graph: TARGET_GRAPH, ...extra });
@@ -402,6 +402,39 @@ test('required and skipped partition the jobs; the matrix lists the package jobs
   assert.equal(decision.jobs.lint, 'full', 'lint always runs');
 });
 
+test('legs: every package has a plan for both tiers, a skipped package has no legs, browser suites only run at full', () => {
+  assert.deepEqual(Object.keys(LEG_PLAN).sort(), ['lint', ...PACKAGE_IDS].sort());
+  for (const id of Object.keys(LEG_PLAN)) {
+    assert.deepEqual(legsFor(id, 'skip'), []);
+    for (const tier of ['full', 'contract']) {
+      const legs = legsFor(id, tier);
+      assert.ok(legs.length > 0, `${id} ${tier}`);
+      assert.ok(legs.some((leg) => leg.kind === (id === 'lint' ? 'static' : 'tests')), `${id} ${tier} runs its tests`);
+      for (const leg of legs) assert.deepEqual(Object.keys(leg).sort(), ['count', 'index', 'kind', 'name', 'package', 'tier'], `${id} ${leg.name}`);
+    }
+    if (id !== 'lint') assert.deepEqual(legsFor(id, 'contract').filter((leg) => leg.kind !== 'tests'), [], `${id}: a dependent runs no browser suite`);
+  }
+  assert.deepEqual(legsFor('render', 'full').map((leg) => leg.name), ['tests 1/4', 'tests 2/4', 'tests 3/4', 'tests 4/4', 'browser']);
+  assert.deepEqual(legsFor('editor', 'full').map((leg) => leg.name), ['tests 1/2', 'tests 2/2', 'playground 1/4', 'playground 2/4', 'playground 3/4', 'playground 4/4', 'browser']);
+  assert.deepEqual(legsFor('pptx', 'contract').map((leg) => `${leg.index}/${leg.count}`), ['1/4', '2/4', '3/4', '4/4']);
+  assert.deepEqual(legsFor('lint', 'full').map((leg) => leg.name), ['static', 'checks 1/2', 'checks 2/2']);
+});
+
+test('legs follow the tiers of the decision: only packages that run have legs, forced runs have every leg', () => {
+  const engine = targetScope(['packages/render/src/a.js']);
+  assert.deepEqual(Object.entries(engine.legs).filter(([, legs]) => legs.length).map(([id]) => id), ['lint', 'render', 'pptx', 'editor', 'cli', 'integration']);
+  assert.equal(engine.legs.render.length, 5);
+  assert.equal(engine.legs.lint.length, 3, 'lint always has its legs');
+  assert.equal(engine.legs.pptx.length, 4, 'a dependent runs its contract suite in four shards');
+  assert.deepEqual(engine.legs.gallery, []);
+  const forced = targetScope(['scripts/anything.mjs']);
+  assert.equal(forced.legs.render.length, 5);
+  assert.equal(forced.legs.editor.length, 7);
+  assert.equal(forced.legs.gallery.length, 1);
+  const docs = targetScope(['docs/programs/monorepo/README.md']);
+  assert.deepEqual(Object.entries(docs.legs).filter(([, legs]) => legs.length).map(([id]) => id), ['lint'], 'a docs-only change runs lint and nothing else');
+});
+
 test('isGoldenInput lists the corpus inputs only', () => {
   for (const file of ['packages/render/src/a.js', 'packages/render/fonts/x.woff2', 'packages/render/test/golden/a.sha256.json', 'packages/javascript/src/composition.ts', 'packages/gallery/catalog/a.json', 'examples/a.opf.json', 'spec/reference/font-policy.json']) assert.equal(isGoldenInput(file), true, file);
   for (const file of ['packages/render/test/a.mjs', 'packages/pptx/src/a.js', 'packages/editor/src/a.js', 'packages/cli/src/a.ts', 'docs/cli.md', 'packages/javascript/test/a.mjs']) assert.equal(isGoldenInput(file), false, file);
@@ -446,6 +479,7 @@ test('run: --files, formats, GitHub outputs and the fail-closed fallback when th
     assert.deepEqual(JSON.parse(lines.changed), ['core', 'render']);
     assert.deepEqual(JSON.parse(lines.jobs), decision.jobs);
     assert.deepEqual(JSON.parse(lines.matrix), decision.matrix);
+    assert.deepEqual(JSON.parse(lines.legs), decision.legs);
     assert.equal(lines.forced, 'false');
     assert.match(readFileSync(summary, 'utf8'), /\| render \| full \|/);
     assert.match(run(['--files', 'spec/README.md', '--format', 'text'], {}).text, /^ci-scope: 1 changed path, class core/);

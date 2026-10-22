@@ -182,7 +182,7 @@ Names below were read on `origin/main` (2026-10-21). Each deletion PR carries `g
 | **`pr-gate.mjs`** | shrinks from 1,004 lines to about 150: one batched GraphQL `statusCheckRollup` query, one required check (`verify`), enabling GitHub auto-merge, same CLI flags (`--expect-head`, `--merge`, `--interval`) so agent habits keep working. Deleted: merge-queue enqueue and follow, ejection handling (exit 5), ruleset parsing, supersede and cancelled-run logic, flake-measurement identity. `scripts/measurement-policy.mjs` and `scripts/fixtures/editor-scheduled-measurement.json` (RR-68) are re-keyed to the nightly workflow or deleted (decide in MR-34 by grep). | MR-34 |
 | **Not imported (cleanup commit of MR-23)** | each old repo's `.github/**` (render: `ci.yml`, `flake-repeat.yml`, `npm-publish.yml`, `platform-residual.yml`, `regenerate-candidate-goldens.yml`, `regenerate-goldens.yml`, `dependabot.yml`; pptx and editor: `ci.yml`, `flake-repeat.yml`, `release.yml`, `dependabot.yml`; gallery: `ci.yml`, `gallery-publish.yml`), `package-lock.json` and `.nvmrc` (x4), the duplicated scripts, nested `changes/README.md` and `config.json` (fragments are moved to the root, section 5), root `SECURITY.md` / `CONTRIBUTING.md` duplicates folded into the root files. Keep each package's `LICENSE`. | MR-23 |
 
-Resulting shape: 6 workflow files plus 1 reusable (`ci.yml`, `nightly.yml`, `slow-checks.yml` reusable, `npm-publish.yml`, `bump-sites.yml`, `golden.yml`, `tracker-refresh.yml`) in place of 29 across the five repos; about 1,300 lines of workflow YAML in place of about 6,500 in core alone. The remaining root `check:*` scripts, the registry-facing consumer suites (`test:registry-ecosystem`, `test:registry-fidelity`, `test:developer-quickstart`, `published-matrix.yml`, `installed-parity.yml`, `test-agent-site.mjs`, the `gallery-*` font scripts) and `tracker-refresh.yml` stay.
+Resulting shape: 6 workflow files plus 1 reusable (`ci.yml`, `nightly.yml` (also callable), `slow-checks.yml`, `npm-publish.yml`, `bump-sites.yml`, `golden.yml`, `tracker-refresh.yml`) in place of 29 across the five repos; about 1,300 lines of workflow YAML in place of about 6,500 in core alone. The remaining root `check:*` scripts, the registry-facing consumer suites (`test:registry-ecosystem`, `test:registry-fidelity`, `test:developer-quickstart`, `published-matrix.yml`, `installed-parity.yml`, `test-agent-site.mjs`, the `gallery-*` font scripts) and `tracker-refresh.yml` stay.
 
 ## 3. History import
 
@@ -229,7 +229,7 @@ node scripts/verify-import.mjs "$S" --blame all --determinism --commit-maps docs
 
 ## 4. CI: one fast check, slow checks off the critical path
 
-**`ci.yml`** (`pull_request`, `push` to `main`, `workflow_dispatch`; no `merge_group`) with one required check, **`verify`**, an aggregator job that succeeds only if every job the scope selected succeeded (skipped by scope is success, skipped otherwise is failure). **`nightly.yml`** (schedule, dispatch) and the reusable **`slow-checks.yml`** hold the slow set; **`npm-publish.yml`** calls `slow-checks.yml` once on the release commit.
+**`ci.yml`** (`pull_request`, `push` to `main`, `workflow_dispatch`; no `merge_group`) with one required check, **`verify`**, an aggregator job that succeeds only if every job the scope selected succeeded (skipped by scope is success, skipped otherwise is failure). **`nightly.yml`** (schedule, dispatch, `workflow_call`) holds the slow set and is also what `npm-publish.yml` calls once on the release commit and what `ci.yml` calls for the label `full-ci`; **`slow-checks.yml`** (weekly, dispatch, label `slow-checks`) holds what tests the published packages or needs a long run (published matrix, installed parity, the full golden corpus). MR-30 realized it in that split; file-by-file design notes, the job graph and the timing budget are in [ci-design.md](ci-design.md).
 
 **`verify` contents** (target 5 to 8 minutes p50):
 
@@ -241,7 +241,7 @@ node scripts/verify-import.mjs "$S" --blame all --determinism --commit-maps docs
 
 `verify` also runs on every push to `main`; a red `main` opens an issue (same reporter as the nightly) and the owner's policy is revert first. No "require branches to be up to date" rule: with merge on green, two PRs that are green alone can fail together, and the push run on `main` is what catches it within minutes.
 
-**Slow set (`slow-checks.yml`, nightly and the release gate).** These legs are what today runs in the merge queue and the old nightly, now off the PR path:
+**Slow set (`nightly.yml`, nightly and the release gate).** These legs are what today runs in the merge queue and the old nightly, now off the PR path:
 
 | Leg | Today | Runs in |
 | --- | --- | --- |
@@ -287,7 +287,7 @@ jobs:
              # from changes/ fragments (changelog-fragments.mjs; untouched packages get "no package changes; released with the set"),
              # delete the consumed fragments, the gallery stability gate (MR-35: a declared drawing change, a removed record id or a `CATALOG_SCHEMA` change needs a minor bump, never a patch), the publish gate (version above each package's `latest`, the gallery against the shared line), commit
              # "release vX.Y.Z" and push it to main, output the commit.
-  gate:      # on the release commit: ci-scope forced to "all, full" (verify) and slow-checks.yml (Windows, macOS, Node 22/26, packed-install on the
+  gate:      # on the release commit: ci-scope forced to "all, full" (verify) and nightly.yml (Windows, macOS, Node 22/26, packed-install on the
              # tarballs of `build`), in parallel with `build`. A red leg stops the release before anything is published.
   build:     # one install, one build, `pnpm pack` of the six, scripts/stamp-githead.mjs (adds gitHead = the release commit to each tarball's
              # package.json: pnpm pack and `npm publish <tarball>` omit it, S4), tarball smoke (install all six in a clean consumer, run the
@@ -396,7 +396,7 @@ All inside `opf`, no sibling content. Core, the CLI and the current release trai
 
 | ID | Item | Hours |
 | --- | --- | --- |
-| MR-30 | `ci.yml` with `scope` and the `verify` aggregator; `nightly.yml`, reusable `slow-checks.yml` and the failure-to-issue reporter; shadow (not required) next to the old CI. Re-key or delete the measurement-policy identity. | 5 |
+| MR-30 | `ci.yml` with `scope` and the `verify` aggregator; `nightly.yml` (callable by the release workflow and by the label `full-ci`), `slow-checks.yml` (weekly, published packages) and the failure-to-issue reporter; shadow (not required) next to the old CI. Re-key or delete the measurement-policy identity. | 5 |
 | MR-31 | Golden unification (section 1), digest reconciliation, one `golden.yml`; byte-identical moves. | 3 |
 | MR-32 | Parity and measurement: 20 `verify` runs across the change classes of section 4 with verdicts equal to the old CI, one full nightly, targets measured (slow legs sharded to at most 12 minutes). | 3 |
 | MR-33 | Switch (OWNER, ruleset): remove the merge queue; required checks become `verify` only; delete `opf-ci.yml`, `ecosystem-ci.yml`, `cli-windows.yml`, `engines-range.yml`, the four `flake-repeat.yml`. | 1 |

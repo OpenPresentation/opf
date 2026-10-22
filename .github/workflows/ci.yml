@@ -1,0 +1,616 @@
+name: CI
+
+# MR-30 (docs/programs/monorepo/README.md, section 4; design notes in ci-design.md next to it): the one pull request check.
+#
+# `verify` is the only required check. `scope` (scripts/ci-scope.mjs, no install) decides from the changed paths and the package
+# graph which jobs run and at which tier: the packages a change touches run their whole suite (`full`), their dependents the
+# part that exercises the changed package (`test:contract`), everything else is skipped. A tooling path, an unclassified path,
+# the label `full-ci`, a push to main and a manual run run everything at `full`. `verify` then fails unless every job the scope
+# selected succeeded (scripts/ci-verify.mjs: skipped by scope is success, skipped otherwise is failure).
+#
+# What this workflow does not run, on purpose (decision D15, no merge queue): Windows, macOS, Node 22 and 26, the packed-install
+# and registry consumers. They run in nightly.yml and before every release; the label `full-ci` runs them on a pull request too.
+#
+# Triggers: no merge_group (there is no merge queue), no `labeled` type (an unrelated label must not re-run a required check, and a
+# skipped re-run would replace a red result with a green one; `scope` reads the labels when it runs, so add `full-ci` and re-run).
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One run per pull request, the newest wins. A push to main has a group of its own (its sha) and is never cancelled, so a
+# red commit in a burst of merges is still reported.
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  scope:
+    name: scope
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      tier: ${{ steps.scope.outputs.tier }}
+      slow: ${{ steps.scope.outputs.slow }}
+      jobs: ${{ steps.scope.outputs.jobs }}
+      legs: ${{ steps.scope.outputs.legs }}
+    steps:
+      - name: Checkout (scripts and manifests only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # A pull_request checkout is the merge commit of the head into the base: HEAD^1 is the base.
+          fetch-depth: 2
+          filter: blob:none
+          persist-credentials: false
+          sparse-checkout: |
+            /scripts/
+            /package.json
+            /packages/*/package.json
+          sparse-checkout-cone-mode: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      # Labels are read when the job runs, not from the event payload, so "Re-run all jobs" after adding `full-ci` sees it.
+      - name: Read the labels of the pull request
+        id: labels
+        if: ${{ github.event_name == 'pull_request' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NUMBER: ${{ github.event.pull_request.number }}
+          PAYLOAD: ${{ join(github.event.pull_request.labels.*.name, ',') }}
+        run: |
+          labels="$(gh api "repos/$GITHUB_REPOSITORY/issues/$NUMBER/labels" --jq '[.[].name] | join(",")' 2>/dev/null)" || labels="$PAYLOAD"
+          echo "labels=$labels" >> "$GITHUB_OUTPUT"
+
+      - name: Scope this change
+        id: scope
+        env:
+          LABELS: ${{ steps.labels.outputs.labels }}
+        run: node scripts/ci-scope.mjs --event "$GITHUB_EVENT_NAME" --base HEAD^1 --head HEAD --labels "$LABELS" --github-output --summary --format text
+
+  # Two kinds of leg (LEG_PLAN in scripts/ci-scope.mjs): `static` is Biome, typecheck, the examples and the breaking-change gate;
+  # `checks 1/2` and `checks 2/2` are the root check:* suite split in two (scripts/run-checks.mjs --shard), four checks at a time.
+  lint:
+    name: lint (${{ matrix.name }})
+    needs: scope
+    if: ${{ needs.scope.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.scope.outputs.legs).lint }}
+    env:
+      # scripts/reuse-build.mjs: each package is built once per job and the later steps reuse it (never shared between jobs).
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}-${{ matrix.index }}
+      # The generated trackers are regenerated after merge (tracker-refresh.yml): a pull request only warns about a stale one.
+      OPF_TRACKER_STALE: ${{ github.event_name == 'pull_request' && 'warn' || 'fail' }}
+    steps:
+      - name: Checkout with full history and no file contents (check:breaking reads the release tags)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+
+      - name: Build core and the CLI
+        run: pnpm build
+
+      - name: Lint (Biome)
+        if: ${{ matrix.kind == 'static' }}
+        run: pnpm lint
+
+      - name: Typecheck
+        if: ${{ matrix.kind == 'static' }}
+        run: pnpm typecheck
+
+      - name: Validate examples
+        if: ${{ matrix.kind == 'static' }}
+        run: pnpm run check:examples
+
+      - name: Check for unacknowledged breaking changes
+        if: ${{ matrix.kind == 'static' }}
+        run: pnpm run check:breaking
+
+      # A reminder, never a failure: package code or a schema changed without a changelog fragment.
+      - name: Changelog fragment
+        if: ${{ matrix.kind == 'static' && github.event_name == 'pull_request' }}
+        continue-on-error: true
+        run: node scripts/changelog-fragments.mjs warn-missing --base "origin/${{ github.base_ref }}"
+
+      # Every root check:* script (spec, schema, text, workspace-graph, pins, versions, playwright-pin, changes, engines-range,
+      # catalog, trackers, ...), one log per check (artifacts/checks).
+      - name: Root checks (${{ matrix.name }})
+        if: ${{ matrix.kind == 'checks' }}
+        run: node scripts/run-checks.mjs --shard "${{ matrix.index }}/${{ matrix.count }}"
+
+      - name: Preserve the check logs
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: check-logs-${{ matrix.kind }}-${{ matrix.index }}
+          path: artifacts/checks/*.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  gallery:
+    name: gallery
+    needs: scope
+    if: ${{ needs.scope.result == 'success' && fromJSON(needs.scope.outputs.jobs).gallery != 'skip' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+
+      # The whole workspace: the gallery has no workspace dependency, its engine-dependent tests resolve core and the renderer
+      # from the root devDependencies (plan, finding 11), so those are built here.
+      - uses: ./.github/actions/setup-workspace
+        with:
+          build-deps: '@openpresentation/opf-render'
+
+      - name: License (MIT)
+        run: pnpm --filter @openpresentation/gallery run check:license
+
+      - name: Records match their indexes and the manifest
+        run: pnpm --filter @openpresentation/gallery run verify
+
+      - name: Build and test (records valid against the workspace core and renderer)
+        run: pnpm --filter @openpresentation/gallery run test
+
+      - name: Declarations
+        run: pnpm --filter @openpresentation/gallery run typecheck
+
+      - name: Package contents
+        run: pnpm --filter @openpresentation/gallery run pack:dry-run
+
+  core:
+    name: core
+    needs: scope
+    if: ${{ needs.scope.result == 'success' && fromJSON(needs.scope.outputs.jobs).core != 'skip' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          build-deps: '@openpresentation/opf'
+
+      - name: Test core
+        run: pnpm --filter @openpresentation/opf run test
+
+  cli:
+    name: cli
+    needs: scope
+    if: ${{ needs.scope.result == 'success' && fromJSON(needs.scope.outputs.jobs).cli != 'skip' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          build-deps: '@openpresentation/cli'
+
+      - name: Test the CLI
+        run: pnpm --filter @openpresentation/cli run test
+
+  # render, pptx and editor: a matrix of legs from the scope (see LEG_PLAN in scripts/ci-scope.mjs): `tests` shards (the package's
+  # `test`, or `test:contract` for a dependent) and, for a changed package only, its browser suites. Each runs in the pinned
+  # Playwright image (check:playwright-pin keeps the string identical everywhere).
+  render:
+    name: render (${{ matrix.name }})
+    needs: scope
+    if: ${{ needs.scope.result == 'success' && fromJSON(needs.scope.outputs.jobs).render != 'skip' }}
+    runs-on: ubuntu-24.04
+    container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.scope.outputs.legs).render }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          container: 'true'
+          build-deps: '@openpresentation/opf-render'
+
+      # MR-23: the variable-font gate reads fixtures from the archived renderer checkpoint of #24 at ../archive (relative to the
+      # package). The old repository stays public, so it is fetched from there; MR-23 may vendor the fixtures instead.
+      - name: Check out the archived #24 fixtures and evidence
+        if: ${{ matrix.kind == 'browser' }}
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf-render
+          ref: 343fb84223f4383ffe546157c6989ccc505c0acb
+          path: packages/archive
+          persist-credentials: false
+          sparse-checkout: |
+            test/fixtures/font-formats/source-serif
+            docs/evidence/rejected-truetype-rounding-20260915
+          sparse-checkout-cone-mode: true
+
+      # The first shard also runs what is not part of the sharded `test` script.
+      - name: Quarantine, typecheck, validate and the font checks
+        if: ${{ matrix.kind == 'tests' && matrix.index == 1 }}
+        working-directory: packages/render
+        run: |
+          node ../../scripts/quarantine.mjs check
+          pnpm run typecheck
+          pnpm run validate
+          pnpm run test:code
+          pnpm run test:font-preparation
+          pnpm run test:font-variants
+
+      - name: Test (shard ${{ matrix.index }} of ${{ matrix.count }})
+        if: ${{ matrix.kind == 'tests' }}
+        env:
+          SCRIPT: ${{ matrix.tier == 'full' && 'test' || 'test:contract' }}
+        run: node scripts/ci-test-shards.mjs --package render --script "$SCRIPT" --shard "${{ matrix.index }}/${{ matrix.count }}"
+
+      # RR-47: the browser commands are test/browser-suites.json; a quarantined test is deferred to the non-blocking step below.
+      - name: Browser suites
+        if: ${{ matrix.kind == 'browser' }}
+        working-directory: packages/render
+        run: |
+          node ../../scripts/quarantine.mjs run-suite browser
+          pnpm run test:variable-font-gate
+          node ../../scripts/quarantine.mjs run-suite browser-fonts
+          node ../../scripts/quarantine.mjs run-suite rich
+
+      - name: Quarantined tests (non-blocking)
+        if: ${{ always() && matrix.kind == 'browser' }}
+        continue-on-error: true
+        working-directory: packages/render
+        run: node ../../scripts/quarantine.mjs run-deferred
+
+      - name: Preserve the evidence
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: render-${{ matrix.kind }}-${{ matrix.index }}
+          path: |
+            packages/render/artifacts/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+  pptx:
+    name: pptx (${{ matrix.name }})
+    needs: scope
+    if: ${{ needs.scope.result == 'success' && fromJSON(needs.scope.outputs.jobs).pptx != 'skip' }}
+    runs-on: ubuntu-24.04
+    container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.scope.outputs.legs).pptx }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          container: 'true'
+          build-deps: '@openpresentation/opf-pptx'
+
+      - name: Quarantine, typecheck, validate and the shared checks
+        if: ${{ matrix.kind == 'tests' && matrix.index == 1 }}
+        working-directory: packages/pptx
+        run: |
+          node ../../scripts/quarantine.mjs check
+          pnpm run typecheck
+          pnpm run validate
+          pnpm run test:code
+          pnpm run test:font-variants
+
+      # The native-control checks of a changed package (node tests, no Office); the Windows harness is nightly.
+      - name: Native control checks
+        if: ${{ matrix.kind == 'tests' && matrix.index == 1 && matrix.tier == 'full' }}
+        working-directory: packages/pptx
+        run: |
+          pnpm run test:native-picture-edit-controls
+          pnpm run test:native-font-embed-controls
+          pnpm run test:native-mixed-edit-controls
+          pnpm run test:native-font-inventory-controls
+
+      - name: Test (shard ${{ matrix.index }} of ${{ matrix.count }})
+        if: ${{ matrix.kind == 'tests' }}
+        env:
+          SCRIPT: ${{ matrix.tier == 'full' && 'test' || 'test:contract' }}
+        run: node scripts/ci-test-shards.mjs --package pptx --script "$SCRIPT" --shard "${{ matrix.index }}/${{ matrix.count }}"
+
+      - name: Browser suite
+        if: ${{ matrix.kind == 'browser' }}
+        working-directory: packages/pptx
+        run: node ../../scripts/quarantine.mjs run-suite browser
+
+      - name: Quarantined tests (non-blocking)
+        if: ${{ always() && matrix.kind == 'browser' }}
+        continue-on-error: true
+        working-directory: packages/pptx
+        run: node ../../scripts/quarantine.mjs run-deferred
+
+      - name: Preserve the evidence
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: pptx-${{ matrix.kind }}-${{ matrix.index }}
+          path: |
+            packages/pptx/artifacts/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+  editor:
+    name: editor (${{ matrix.name }})
+    needs: scope
+    if: ${{ needs.scope.result == 'success' && fromJSON(needs.scope.outputs.jobs).editor != 'skip' }}
+    runs-on: ubuntu-24.04
+    container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.scope.outputs.legs).editor }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          container: 'true'
+          build-deps: '@openpresentation/opf-editor'
+
+      - name: Quarantine, typecheck and validate
+        if: ${{ matrix.kind == 'tests' && matrix.index == 1 }}
+        working-directory: packages/editor
+        run: |
+          node ../../scripts/quarantine.mjs check
+          pnpm run typecheck
+          pnpm run validate
+
+      - name: Test (shard ${{ matrix.index }} of ${{ matrix.count }})
+        if: ${{ matrix.kind == 'tests' }}
+        env:
+          SCRIPT: ${{ matrix.tier == 'full' && 'test' || 'test:contract' }}
+        run: node scripts/ci-test-shards.mjs --package editor --script "$SCRIPT" --shard "${{ matrix.index }}/${{ matrix.count }}"
+
+      # The playground suite is 28 tests and about 14 minutes in one job (old per-repository CI, 2026-10-20): four shards of
+      # the quarantine runner (every fourth test), each building the playground from the suite's own setup.
+      - name: Playground browser suite (shard ${{ matrix.index }} of ${{ matrix.count }})
+        if: ${{ matrix.kind == 'playground' }}
+        working-directory: packages/editor
+        run: node ../../scripts/quarantine.mjs run-suite playground --shard "${{ matrix.index }}/${{ matrix.count }}"
+
+      - name: Standalone browser suites
+        if: ${{ matrix.kind == 'browser' }}
+        working-directory: packages/editor
+        run: node ../../scripts/quarantine.mjs run-suite browser
+
+      - name: Quarantined tests (non-blocking)
+        if: ${{ always() && matrix.kind != 'tests' }}
+        continue-on-error: true
+        working-directory: packages/editor
+        run: node ../../scripts/quarantine.mjs run-deferred
+
+      - name: Preserve the evidence
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: editor-${{ matrix.kind }}-${{ matrix.index }}
+          path: |
+            packages/editor/artifacts/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # The tests that need several packages at once (core's 13 engine tests; packages/integration, MR-23). Any package change selects
+  # it at contract tier.
+  integration:
+    name: integration
+    needs: scope
+    if: ${{ needs.scope.result == 'success' && fromJSON(needs.scope.outputs.jobs).integration != 'skip' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          build-deps: '@openpresentation/integration'
+
+      - name: Integration tests
+        run: pnpm --filter @openpresentation/integration run test
+
+  # The raster regression gate on its own, with the changed slides kept as an artifact, when a golden input changed (renderer
+  # source or fonts, the baselines, core's geometry sources, the gallery, the examples, the Playwright pin).
+  goldens:
+    name: goldens
+    needs: scope
+    if: ${{ needs.scope.result == 'success' && fromJSON(needs.scope.outputs.jobs).goldens != 'skip' }}
+    runs-on: ubuntu-24.04
+    container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+    timeout-minutes: 20
+    env:
+      OPF_GOLDEN_ARTIFACTS: changed
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          container: 'true'
+          build-deps: '@openpresentation/opf-render'
+
+      - name: Golden hashes of the examples corpus
+        run: pnpm --filter @openpresentation/opf-render run test:golden
+
+      - name: Preserve the changed slides
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: goldens
+          path: packages/render/artifacts/golden/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # Engine-dependent gallery gates, run from the repository root where core and the renderer are devDependencies of the root
+  # (plan, finding 11): a change in the gallery, core or the renderer re-runs them (the one edge the manifests cannot express).
+  gallery-gates:
+    name: gallery-gates
+    needs: scope
+    if: ${{ needs.scope.result == 'success' && fromJSON(needs.scope.outputs.jobs)['gallery-gates'] != 'skip' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          build-deps: '@openpresentation/opf-render'
+
+      - name: Layout previews are what the workspace renderer draws
+        run: pnpm --filter @openpresentation/gallery run check:previews
+
+      # MR-35: the stability rule of the 0.x line is not written yet; the old rule fails every change on a 0.x version, so this
+      # step reports and does not gate until MR-35 lands (then delete the continue-on-error).
+      - name: Pixel stability against the previous published release
+        continue-on-error: true
+        run: pnpm --filter @openpresentation/gallery run check:stability
+
+  # The shape of the tarballs only (the `files` list and a pack dry run); the packed-install consumers run in nightly.yml.
+  pack-shape:
+    name: pack-shape
+    needs: scope
+    if: ${{ needs.scope.result == 'success' && fromJSON(needs.scope.outputs.jobs)['pack-shape'] != 'skip' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+
+      - name: Build every package
+        run: pnpm --recursive --if-present run build
+
+      - name: Pack dry run of the six published packages
+        run: pnpm --filter './packages/**' --filter '!@openpresentation/integration' exec npm pack --dry-run --ignore-scripts --cache "$RUNNER_TEMP/npm-cache"
+
+  # The label `full-ci` runs the slow set (Windows, macOS, Node 22 and 26, packed-install and registry consumers) on this pull
+  # request too. The called workflow opens no issue here (report: false); its `report` job asks for issues: write, which a
+  # caller has to grant.
+  slow:
+    name: slow set (full-ci)
+    needs: scope
+    if: ${{ needs.scope.result == 'success' && needs.scope.outputs.slow == 'true' }}
+    permissions:
+      contents: read
+      issues: write
+    uses: ./.github/workflows/nightly.yml
+    with:
+      report: false
+
+  verify:
+    name: verify
+    needs: [scope, lint, gallery, core, cli, render, pptx, editor, integration, goldens, gallery-gates, pack-shape, slow]
+    if: ${{ always() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout (scripts only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+          sparse-checkout-cone-mode: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      # Skipped by scope is success, skipped otherwise is failure. `slow` may be skipped unless the label asked for it.
+      - name: Require every job the scope selected
+        env:
+          NEEDS: ${{ toJSON(needs) }}
+          JOBS: ${{ needs.scope.outputs.jobs }}
+          OPTIONAL: ${{ needs.scope.outputs.slow == 'true' && 'none' || 'slow' }}
+        run: node scripts/ci-verify.mjs --optional "$OPTIONAL"
+
+  # A red main opens (or updates) one issue labeled main-red and a green one closes it. Policy: revert first.
+  report-main:
+    name: report main
+    needs: [verify]
+    if: ${{ always() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Checkout (scripts only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+          sparse-checkout-cone-mode: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: Open, update or close the main-red issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEEDS: ${{ toJSON(needs) }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node scripts/ci-report-issue.mjs --label main-red --title "CI is red on main"

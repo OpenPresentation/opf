@@ -186,7 +186,19 @@ export function summary(markdown) {
 }
 const annotate = (level, title, message) => console.log(`::${level} title=${title}::${message.replace(/\r?\n/g, ' ')}`);
 
-export async function runSuite(name, state) {
+/** "2/3" as { index: 2, count: 3 }; MR-30: a browser suite split across CI jobs (`run-suite <suite> --shard 2/3`). */
+export function parseShard(text) {
+  const match = /^(\d+)\/(\d+)$/u.exec(text ?? '');
+  const index = Number(match?.[1]);
+  const count = Number(match?.[2]);
+  if (!match || count < 1 || count > 16 || index < 1 || index > count) throw new Error(`A shard is written index/count, for example 2/3, with 1 <= index <= count <= 16, not ${text}`);
+  return { index, count };
+}
+
+/** The tests of shard `shard` of `tests`: every `count`-th test starting at the shard's index, so the shards together run each test once, in order. */
+export const shardTests = (tests, shard) => (shard ? tests.filter((_, position) => position % shard.count === shard.index - 1) : tests);
+
+export async function runSuite(name, state, shard = null) {
   const definition = state.suites.suites[name];
   if (!definition) throw new Error(`No suite "${name}" in the suites file (have: ${Object.keys(state.suites.suites).join(', ')}).`);
   for (const command of definition.setup ?? []) {
@@ -197,7 +209,7 @@ export async function runSuite(name, state) {
   const honoured = new Set(state.active);
   const deferred = [];
   let failure = 0;
-  for (const test of definition.tests) {
+  for (const test of shardTests(definition.tests, shard)) {
     if (honoured.has(test.id)) {
       console.log(`\n> ${test.id}: quarantined, deferred to the non-blocking step`);
       annotate('notice', 'Quarantined test deferred', `${test.id} runs in the non-blocking quarantine step.`);
@@ -306,11 +318,11 @@ export async function main(argv) {
     return failed ? 1 : 0;
   }
   if (command === 'run-suite') {
-    if (!rest[0]) throw new Error('Usage: quarantine.mjs run-suite <suite>');
+    if (!rest[0]) throw new Error('Usage: quarantine.mjs run-suite <suite> [--shard i/n]');
     // An expired or malformed entry is not honoured: its test runs as a gate (the check step reports the entry).
     const state = loadState(files);
     for (const error of state.errors) annotate('error', 'Test quarantine', error);
-    return runSuite(rest[0], state);
+    return runSuite(rest[0], state, options.shard ? parseShard(options.shard) : null);
   }
   if (command === 'run-deferred') return runDeferred(loadState(files));
   if (command === 'playwright-grep') {
@@ -319,7 +331,7 @@ export async function main(argv) {
     process.stdout.write(playwrightGrep(state.active.map((id) => id)));
     return 0;
   }
-  throw new Error('Usage: quarantine.mjs check | check-all | run-suite <suite> | run-deferred | playwright-grep [--dir <package directory>] [--quarantine file] [--suites file] [--today YYYY-MM-DD]');
+  throw new Error('Usage: quarantine.mjs check | check-all | run-suite <suite> [--shard i/n] | run-deferred | playwright-grep [--dir <package directory>] [--quarantine file] [--suites file] [--today YYYY-MM-DD]');
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

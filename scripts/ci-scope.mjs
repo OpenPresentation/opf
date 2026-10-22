@@ -14,7 +14,9 @@
 //   2. The directly changed packages run the `full` tier. Their transitive dependents, through the workspace graph, run the
 //      `contract` tier (RR-53). A forced run (tooling, an unclassified path, the label `full-ci`, any event other than a
 //      pull request) runs every package at `full`.
-//   3. Extra jobs: `goldens` when a golden input changed, `gallery-gates` (check:previews and check:stability, which run
+//   3. Legs: the package jobs of ci.yml are matrices; LEG_PLAN says how many shards each package's tests get per tier and
+//      which browser suites run (`full` only), and `legs` is the expanded matrix (`fromJSON(needs.scope.outputs.legs).render`).
+//   4. Extra jobs: `goldens` when a golden input changed, `gallery-gates` (check:previews and check:stability, which run
 //      in packages/integration) when gallery, core or render changed (the one edge the manifests cannot express: gallery
 //      has no workspace dependency on an engine), `pack-shape` when any package changed, `lint` always.
 //
@@ -40,6 +42,36 @@ export const PACKAGES = [
   { id: "integration", dir: "packages/integration", name: "@openpresentation/integration" },
 ];
 export const PACKAGE_IDS = PACKAGES.map((pkg) => pkg.id);
+
+/**
+ * MR-30: the legs of each package job per tier, [kind, count]. `tests` is the package's `test` script (full) or
+ * `test:contract` (contract) split into `count` shards by scripts/ci-test-shards.mjs; `playground` and `browser` are the
+ * quarantine runner's browser suites (scripts/quarantine.mjs run-suite <kind> --shard i/n), which only a changed package
+ * (tier full) runs. core, cli, gallery and integration have one `tests` leg whatever the tier (they have no contract suite).
+ * The counts are the starting point sized from the RR-57 weights (scripts/ci-test-weights.json, per shard in seconds with 100 s
+ * of extra steps on shard 1: render full 4 x 250, contract 3 x 210; pptx full 4 x 262, contract 4 x 242 (its contract suite
+ * leaves out only 80 of 948 s); editor 2 x 129) and the editor playground suite (839 s in 28 tests, 4 x 210 s); MR-32 tunes them.
+ */
+export const LEG_PLAN = Object.freeze({
+  // `lint` always runs at full: `static` is Biome, typecheck, the examples and the breaking-change gate; `checks` is the root
+  // check:* suite (scripts/run-checks.mjs --shard i/n), 73 checks, about 60 s on a laptop with four at a time.
+  lint: { full: [["static", 1], ["checks", 2]], contract: [["static", 1], ["checks", 2]] },
+  gallery: { full: [["tests", 1]], contract: [["tests", 1]] },
+  core: { full: [["tests", 1]], contract: [["tests", 1]] },
+  cli: { full: [["tests", 1]], contract: [["tests", 1]] },
+  integration: { full: [["tests", 1]], contract: [["tests", 1]] },
+  render: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 3]] },
+  pptx: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 4]] },
+  editor: { full: [["tests", 2], ["playground", 4], ["browser", 1]], contract: [["tests", 2]] },
+});
+
+/** The matrix entries of one package at one tier: [{ package, tier, kind, index, count, name }]; [] for a skipped package. */
+export function legsFor(id, tier) {
+  if (tier === "skip") return [];
+  return LEG_PLAN[id][tier].flatMap(([kind, count]) =>
+    Array.from({ length: count }, (_, position) => ({ package: id, tier, kind, index: position + 1, count, name: count > 1 ? `${kind} ${position + 1}/${count}` : kind })),
+  );
+}
 
 /**
  * The graph pnpm will see once MR-23 has wired the workspace (plan, section 1): dependencies, devDependencies and
@@ -280,6 +312,7 @@ export function scope({ files, graph, event = "pull_request", labels = [] }) {
     required: Object.entries(jobs).filter(([, tier]) => tier !== "skip").map(([name]) => name),
     skipped: Object.entries(jobs).filter(([, tier]) => tier === "skip").map(([name]) => name),
     matrix: PACKAGE_IDS.filter((id) => tiers[id] !== "skip").map((id) => ({ package: id, tier: tiers[id] })),
+    legs: Object.fromEntries(["lint", ...PACKAGE_IDS].map((id) => [id, legsFor(id, id === "lint" ? jobs.lint : tiers[id])])),
     slow,
     unclassified,
     reasons,
@@ -372,7 +405,7 @@ export function run(argv, env = process.env, cwd = process.cwd()) {
   if (options.githubOutput && env.GITHUB_OUTPUT) {
     appendFileSync(
       env.GITHUB_OUTPUT,
-      [`tier=${decision.tier}`, `forced=${decision.forced}`, `slow=${decision.slow}`, `changed=${JSON.stringify(decision.changed)}`, `affected=${JSON.stringify(decision.affected)}`, `jobs=${JSON.stringify(decision.jobs)}`, `matrix=${JSON.stringify(decision.matrix)}`, `required=${JSON.stringify(decision.required)}`, ""].join("\n"),
+      [`tier=${decision.tier}`, `forced=${decision.forced}`, `slow=${decision.slow}`, `changed=${JSON.stringify(decision.changed)}`, `affected=${JSON.stringify(decision.affected)}`, `jobs=${JSON.stringify(decision.jobs)}`, `matrix=${JSON.stringify(decision.matrix)}`, `legs=${JSON.stringify(decision.legs)}`, `required=${JSON.stringify(decision.required)}`, ""].join("\n"),
     );
   }
   if (options.summary && env.GITHUB_STEP_SUMMARY) appendFileSync(env.GITHUB_STEP_SUMMARY, `${renderMarkdown(decision)}\n`);

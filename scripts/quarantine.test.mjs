@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { aggregate, fromPlaywrightJson, render } from './flake-repeat.mjs';
-import { playwrightGrep, playwrightIds, quarantineDirectories, splitCommand, validateQuarantine } from './quarantine.mjs';
+import { parseShard, playwrightGrep, playwrightIds, quarantineDirectories, shardTests, splitCommand, validateQuarantine } from './quarantine.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const known = new Set(['a', 'b']);
@@ -184,4 +184,24 @@ test('check-all validates the root and every package that has a quarantine file,
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+});
+
+test('--shard i/n runs every n-th test of a suite: the shards together run each test once, in order (MR-30)', () => {
+  assert.deepEqual(parseShard('2/3'), { index: 2, count: 3 });
+  for (const bad of [undefined, '', '0/2', '3/2', '1/17', 'a/b', '1/2/3']) assert.throws(() => parseShard(bad), /index\/count/, String(bad));
+  const tests = ['a', 'b', 'c', 'd', 'e', 'f', 'g'].map((id) => ({ id }));
+  const slices = [1, 2, 3].map((index) => shardTests(tests, { index, count: 3 }).map((entry) => entry.id));
+  assert.deepEqual(slices, [['a', 'd', 'g'], ['b', 'e'], ['c', 'f']]);
+  assert.equal(shardTests(tests, null), tests);
+  const root = scratch();
+  write(root, []);
+  // Suite `s` is pass, fail, last: shard 1/2 runs pass and last and passes; shard 2/2 runs the failing test.
+  const first = cli(root, 'quarantine.mjs', 'run-suite', 's', '--shard', '1/2', '--today', '2026-10-02');
+  assert.equal(first.status, 0, first.stderr);
+  assert.match(first.stdout, /> last/);
+  assert.doesNotMatch(first.stdout, /> fail/);
+  const second = cli(root, 'quarantine.mjs', 'run-suite', 's', '--shard', '2/2', '--today', '2026-10-02');
+  assert.equal(second.status, 3);
+  assert.doesNotMatch(second.stdout, /> pass/);
+  assert.notEqual(cli(root, 'quarantine.mjs', 'run-suite', 's', '--shard', '3/2').status, 0);
 });
