@@ -1,6 +1,6 @@
 # Monorepo CI: design notes for MR-30
 
-Status: drafted 2026-10-22 on `codex/mr-30-ci` (draft pull request, base `monorepo/import`). The workflows cannot run on Actions until MR-23 has wired the workspace, so every duration below is an **estimate** from the old per-repository CI logs (2026-10-20) and from local measurements; MR-32 replaces them with 20 measured runs. Plan: [README.md](README.md) section 4. Tracker: [burndown.md](burndown.md), MR-30 to MR-34.
+Status: drafted 2026-10-22 on `codex/mr-30-ci` (draft pull request [opf#798](https://github.com/OpenPresentation/opf/pull/798), base `monorepo/import`). The workflows cannot run to completion on Actions until MR-23 has wired the workspace (the first run reached `scope`, the matrices, the Playwright containers, the setup action and the dependency builds), so the durations below are **estimates** from that run, the old per-repository CI logs (2026-10-20) and local measurements; MR-32 replaces them with 20 measured runs. Plan: [README.md](README.md) section 4. Tracker: [burndown.md](burndown.md), MR-30 to MR-34.
 
 ## Files
 
@@ -55,33 +55,35 @@ What each class of change runs (from `ci-scope.mjs`, graph = the plan's target g
 
 ## Timing budget (estimate; MR-32 measures)
 
-Fixed cost per job, from the old logs: container initialization 25 to 38 s; checkout of the 508 MiB tree about 30 s (blobless clone, full history, estimate); pnpm 5 to 10 s; `setup-node` with the store cache about 25 s; frozen install about 25 s (linking from the restored store; locally 1 s on a warm store); build of the dependencies about 30 s (core builds in 12 s locally). That is about 2.1 minutes on a host runner and 2.7 in the Playwright container. Work per leg on top of that:
+The only numbers measured on Actions are from the first run of `ci.yml` on the draft pull request (run 39775979434, before MR-23, so only core and the CLI were in the workspace and the package jobs failed at their first test step): `scope` 9 s in all; checkout of the full 508 MiB tree 6 to 11 s; `setup-workspace` 7 to 15 s (cache restore and a frozen install of two packages); building core and the CLI 14 s, building every package 17 s; container initialization 26 s plus 2 to 3 s to stop it; the root checks of one shard 28 s before the failures. A six-package install will take longer (45 font packages, Playwright, resvg, sharp), assumed 35 s. That gives a fixed cost per job of about **1.3 minutes on a host runner and 1.8 in the Playwright container** (job setup 1 s, checkout 10 s, setup 35 s, build of the dependencies 30 s, plus the container). Work per leg on top of that, from the old per-repository logs (2026-10-20), `scripts/ci-test-weights.json` and local runs:
 
-| Leg | Work | Source | Total |
+| Leg | Work | Source | Total (min) |
 | --- | --- | --- | --- |
-| lint `static` | build 0.5 + Biome 2 s + typecheck 8 s (local) + examples and breaking about 1 | local | 3.9 |
-| lint `checks i/2` | build 0.5 + half of 58 s locally, about 1 min on 4 vCPU | local | 3.6 |
-| gallery | build the renderer 0.7 + gates 1.5 (standalone gallery CI 30 to 40 s, S7) | S7 | 4.3 |
-| core / cli | core test 31 s locally, CLI test 88 s locally, about 2x on CI | local | 3.5 / 4.6 |
-| render tests | 250 s per shard of 4 (weights), 210 s per shard of 3 at contract tier | `ci-test-weights.json` | 6.9 / 6.2 |
-| render browser | browser 118 + fonts 66 + gate and rich about 50 s | old CI log | 6.6 |
-| pptx tests | 262 s per shard of 4 (full), 242 s (contract, 868 s total: its contract suite leaves out only 80 s) | weights | 7.1 / 6.7 |
-| editor tests | 129 s per shard of 2 | weights | 4.9 |
-| editor playground | 839 s in one job (old CI), 4 shards of about 210 s plus 30 s playground build | old CI log | 6.7 |
-| integration | build all 1.0 + tests (core's 13 engine tests, **not measured**, assumed 3 to 5 min) | none | 6 to 8 |
-| goldens / pack-shape / gallery-gates | `golden.mjs` takes 10 s; build all 1.5 + pack 0.5; previews and stability 1.5 | weights, S7 | 3.2 / 4.1 / 4.3 |
+| lint `static` | build 0.25, Biome 2 s, typecheck 8 s (local), examples and breaking gate about 1 | local, run 39775979434 | 2.9 |
+| lint `checks i/2` | build 0.25 + half of the 58 s local suite (28 s measured on Actions) | run 39775979434 | 2.1 |
+| gallery | build the renderer 0.5 + gates 1.5 (standalone gallery CI 30 to 40 s, S7) | S7 | 3.3 |
+| core / cli | core test 31 s, CLI test 88 s locally, about 2x on a 4 vCPU runner | local | 2.3 / 3.8 |
+| render tests | 250 s per shard of 4 (full), 210 s per shard of 3 (contract) | weights | 6.0 / 5.3 |
+| render browser | browser 118 + fonts 66 + gate and rich about 50 s | old CI log | 5.7 |
+| pptx tests | 262 s per shard of 4 (full), 242 s (contract: 868 of 948 s, its contract suite leaves out only 80 s) | weights | 6.2 / 5.8 |
+| editor tests | 129 s per shard of 2 | weights | 4.0 |
+| editor playground | 839 s in one job (old CI), 4 shards of about 210 s plus a 30 s playground build | old CI log | 5.8 |
+| integration | build all 1.0 + tests (core's 13 engine tests, **not measured**, assumed 3 to 5 min) | none | 5.3 to 7.3 |
+| goldens, pack-shape, gallery-gates | `golden.mjs` 10 s; build all and pack about 1; previews and stability about 1.5 | weights, S7, run 39775979434 | 2.3, 2.3, 3.5 |
 
-Wall-clock of `verify` is `scope` 0.5 + the longest leg + `verify` 0.4, plus queueing when a run needs more than 20 concurrent jobs (a forced run has 29, a render PR 21):
+Wall-clock of `verify` is `scope` 0.15 + the longest leg + `verify` 0.3, plus queueing when a run needs more than 20 concurrent jobs (a forced run has 29, a render pull request 21):
 
 | Class | Longest leg | Estimate | Plan target p50 / p90 |
 | --- | --- | --- | --- |
-| docs only | lint 3.9 | about 4.8 | 2 / 4 (**missed**) |
-| leaf (editor, CLI) | `integration` 6 to 8, editor playground 6.7 | 7.5 to 9 | 5 / 8 (**p50 missed**) |
-| render or pptx | pptx tests 7.1, render tests 6.9, `integration` | 7.5 to 8.5 | 7 / 11 |
-| core, gallery, `spec/`, `examples/` | pptx contract 6.7, render contract 6.2, `integration` | 7.5 to 8.5 | 8 / 12 |
-| tooling, lockfile, `full-ci` | 29 jobs, queueing | 9 to 11 | 11 / 15 |
+| docs only | lint `static` 2.9 | about 3.4 | 2 / 4 (p50 missed) |
+| leaf (editor, CLI) | editor playground 5.8, `integration` 5.3 to 7.3 | 6.3 to 8.1 | 5 / 8 |
+| render or pptx | pptx tests 6.2, render tests 6.0, `integration` | 6.7 to 8.0 | 7 / 11 |
+| core, gallery, `spec/`, `examples/` | pptx contract 5.8, render contract 5.3, `integration` | 6.3 to 8.0 | 8 / 12 |
+| tooling, lockfile, `full-ci`, main | 29 jobs, queueing | about 8 | 11 / 15 |
 
-Read as: code pull requests land at the upper end of the plan's 5 to 8 minutes, a docs-only one at about 5. How the draft gets there: scoped jobs (a docs change runs one job family, an editor change no renderer shard), tiers (dependents run `test:contract`), sharding balanced by the RR-57 weights so the longest shard and not the sum sets the time (render 901 s, pptx 948 s and the editor playground suite are cut to about 4 minutes of work per shard), one cache of the pnpm store per OS keyed by the lockfile, `cancel-in-progress` per pull request, no Windows, macOS, Node 22 and 26 and no packed-install or registry consumers on the pull request, and one Playwright image string pinned by digest (`check:playwright-pin`) so a golden cannot drift between jobs. The remedies in the order the plan gives them, if MR-32 measures a miss: (1) build core and gallery once and upload `dist` (saves about 0.5 minute per job); (2) a sparse checkout without `docs/evidence` for the jobs that do not read it (core, `lint` and the CLI do; saves about 12 s); (3) narrow `integration` (it imports core, render, pptx and the gallery, not the editor or CLI) or shard it; (4) a docs-only fast path in `lint` that runs `check:changed`'s mapped checks. Measured locally on 2026-10-22 (laptop, warm store): install 1 s, `pnpm lint` 2 s, `pnpm build` 12 s, `pnpm typecheck` 8 s, core tests 31 s, CLI tests 88 s, root checks 58 s with four at a time.
+Read as: inside the plan's 5 to 8 minutes for code pull requests, a docs-only one about 3.4. The unmeasured part is `integration`: if it takes longer than assumed it sets the time of every class. How the draft gets there: scoped jobs (a docs change runs one job family, an editor change no renderer shard), tiers (dependents run `test:contract`), sharding balanced by the RR-57 weights so the longest shard and not the sum sets the time (render 901 s, pptx 948 s and the editor playground suite are cut to about 4 minutes of work per shard), one pnpm store cache per OS keyed by the lockfile, `cancel-in-progress` per pull request, no Windows, macOS, Node 22 and 26 and no packed-install or registry consumers on the pull request, and one Playwright image string pinned by digest (`check:playwright-pin`) so a golden cannot drift between jobs. The remedies in the order the plan gives them, if MR-32 measures a miss: (1) build core and gallery once and upload `dist` (saves about 0.5 minute per job); (2) narrow `integration` (it imports core, render, pptx and the gallery, not the editor or CLI) or shard it; (3) a sparse checkout without `docs/evidence` for jobs that do not read it (core, `lint` and the CLI do; checkout is only 6 to 11 s, so this is last); (4) a docs-only fast path in `lint`. Local measurements, 2026-10-22 (laptop, warm store): `pnpm lint` 2 s, `pnpm build` 12 s, `pnpm typecheck` 8 s, core tests 31 s, CLI tests 88 s, root checks 58 s with four at a time.
+
+**Found on the first run:** `pnpm --filter X run test` exits 0 when X matches no package, so before MR-23 the jobs `integration` and `gallery-gates` passed without running anything. Every `pnpm --filter @openpresentation/<name>` call that runs a script now passes `--fail-if-no-match` (guarded by `check:ci-workflows`); only the dependency builds (`<name>^...`, legitimately empty for a package without workspace dependencies) do not.
 
 ## What the workflows assume from MR-23
 

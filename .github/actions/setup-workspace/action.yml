@@ -10,7 +10,9 @@
 #   per-repository CI runs (opf-pptx, opf-render, 2026-10-20), so pnpm comes from the npm registry at the version `packageManager`
 #   names instead, a few seconds.
 # - `build-deps` builds the dependencies of one package in topological order (`pnpm --filter "<name>^..." run --if-present build`),
-#   so a package job never builds the package under test twice (its own `test` script builds it).
+#   so a package job never builds the package under test twice (its own `test` script builds it). An empty match is fine here
+#   (a package without workspace dependencies); every other `pnpm --filter` in the workflows passes --fail-if-no-match, because
+#   pnpm exits 0 when a filter matches nothing.
 name: Set up the pnpm workspace
 description: pnpm, Node, the pnpm store cache and a frozen install of the whole workspace, optionally building one package's dependencies.
 inputs:

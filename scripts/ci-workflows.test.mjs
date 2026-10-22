@@ -187,3 +187,13 @@ test('the setup action installs the whole frozen workspace (a filtered install w
   assert.match(setup, /if: \$\{\{ inputs\.container == 'true' \}\}/u);
   assert.match(setup, /pnpm --filter "\$\{PACKAGE\}\^\.\.\." run --if-present build/u);
 });
+
+test('a pnpm filter that matches no package must fail: pnpm exits 0 on an empty match and a missing package would pass silently', () => {
+  // Seen on the first Actions run of this workflow, before MR-23: `integration` and `gallery-gates` "succeeded" without running.
+  for (const [name, text] of [['ci.yml', ci], ['nightly.yml', nightly], ['slow-checks.yml', slow]]) {
+    for (const [line] of text.matchAll(/^.*pnpm --filter @openpresentation\/[a-z-]+ .*$/gmu)) {
+      if (/--if-present/u.test(line)) continue;
+      assert.match(line, /--filter @openpresentation\/[a-z-]+ --fail-if-no-match (run|exec) /u, `${name}: ${line.trim()}`);
+    }
+  }
+});

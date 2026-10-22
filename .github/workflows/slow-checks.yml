@@ -57,11 +57,11 @@ jobs:
           build-deps: '@openpresentation/opf-render'
 
       - name: Golden hashes of the examples corpus, every slide kept
-        run: pnpm --filter @openpresentation/opf-render run test:golden
+        run: pnpm --filter @openpresentation/opf-render --fail-if-no-match run test:golden
 
       - name: Vector PDF visual report
         continue-on-error: true
-        run: pnpm --filter @openpresentation/opf-render run report:pdf-vector
+        run: pnpm --filter @openpresentation/opf-render --fail-if-no-match run report:pdf-vector
 
       - name: Preserve the corpus
         if: ${{ always() }}

@@ -165,19 +165,19 @@ jobs:
           build-deps: '@openpresentation/opf-render'
 
       - name: License (MIT)
-        run: pnpm --filter @openpresentation/gallery run check:license
+        run: pnpm --filter @openpresentation/gallery --fail-if-no-match run check:license
 
       - name: Records match their indexes and the manifest
-        run: pnpm --filter @openpresentation/gallery run verify
+        run: pnpm --filter @openpresentation/gallery --fail-if-no-match run verify
 
       - name: Build and test (records valid against the workspace core and renderer)
-        run: pnpm --filter @openpresentation/gallery run test
+        run: pnpm --filter @openpresentation/gallery --fail-if-no-match run test
 
       - name: Declarations
-        run: pnpm --filter @openpresentation/gallery run typecheck
+        run: pnpm --filter @openpresentation/gallery --fail-if-no-match run typecheck
 
       - name: Package contents
-        run: pnpm --filter @openpresentation/gallery run pack:dry-run
+        run: pnpm --filter @openpresentation/gallery --fail-if-no-match run pack:dry-run
 
   core:
     name: core
@@ -199,7 +199,7 @@ jobs:
           build-deps: '@openpresentation/opf'
 
       - name: Test core
-        run: pnpm --filter @openpresentation/opf run test
+        run: pnpm --filter @openpresentation/opf --fail-if-no-match run test
 
   cli:
     name: cli
@@ -221,7 +221,7 @@ jobs:
           build-deps: '@openpresentation/cli'
 
       - name: Test the CLI
-        run: pnpm --filter @openpresentation/cli run test
+        run: pnpm --filter @openpresentation/cli --fail-if-no-match run test
 
   # render, pptx and editor: a matrix of legs from the scope (see LEG_PLAN in scripts/ci-scope.mjs): `tests` shards (the package's
   # `test`, or `test:contract` for a dependent) and, for a changed package only, its browser suites. Each runs in the pinned
@@ -459,7 +459,7 @@ jobs:
           build-deps: '@openpresentation/integration'
 
       - name: Integration tests
-        run: pnpm --filter @openpresentation/integration run test
+        run: pnpm --filter @openpresentation/integration --fail-if-no-match run test
 
   # The raster regression gate on its own, with the changed slides kept as an artifact, when a golden input changed (renderer
   # source or fonts, the baselines, core's geometry sources, the gallery, the examples, the Playwright pin).
@@ -483,7 +483,7 @@ jobs:
           build-deps: '@openpresentation/opf-render'
 
       - name: Golden hashes of the examples corpus
-        run: pnpm --filter @openpresentation/opf-render run test:golden
+        run: pnpm --filter @openpresentation/opf-render --fail-if-no-match run test:golden
 
       - name: Preserve the changed slides
         if: ${{ failure() }}
@@ -514,13 +514,13 @@ jobs:
           build-deps: '@openpresentation/opf-render'
 
       - name: Layout previews are what the workspace renderer draws
-        run: pnpm --filter @openpresentation/gallery run check:previews
+        run: pnpm --filter @openpresentation/gallery --fail-if-no-match run check:previews
 
       # MR-35: the stability rule of the 0.x line is not written yet; the old rule fails every change on a 0.x version, so this
       # step reports and does not gate until MR-35 lands (then delete the continue-on-error).
       - name: Pixel stability against the previous published release
         continue-on-error: true
-        run: pnpm --filter @openpresentation/gallery run check:stability
+        run: pnpm --filter @openpresentation/gallery --fail-if-no-match run check:stability
 
   # The shape of the tarballs only (the `files` list and a pack dry run); the packed-install consumers run in nightly.yml.
   pack-shape:

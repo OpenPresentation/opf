@@ -98,11 +98,11 @@ jobs:
           build-deps: '@openpresentation/cli'
 
       - run: pnpm typecheck
-      - run: pnpm --filter @openpresentation/opf run test
+      - run: pnpm --filter @openpresentation/opf --fail-if-no-match run test
       - run: node packages/javascript/test/packed-install-smoke.mjs
-      - run: pnpm --filter @openpresentation/cli run test
-      - run: pnpm --filter @openpresentation/cli run test:packed
-      - run: pnpm --filter @openpresentation/cli run test:packed:peers
+      - run: pnpm --filter @openpresentation/cli --fail-if-no-match run test
+      - run: pnpm --filter @openpresentation/cli --fail-if-no-match run test:packed
+      - run: pnpm --filter @openpresentation/cli --fail-if-no-match run test:packed:peers
 
   # "Installed candidates": the packed tarballs of the six packages installed in a clean consumer on Windows and macOS, with the
   # installed browser checks (ecosystem-ci.yml `installed-portability`, 45-minute limit there).
@@ -129,7 +129,7 @@ jobs:
       - run: pnpm build
       - run: pnpm pack:ecosystem
       - name: Install Chromium
-        run: pnpm --filter @openpresentation/opf-render exec playwright install chromium
+        run: pnpm --filter @openpresentation/opf-render --fail-if-no-match exec playwright install chromium
       - run: pnpm test:packed-ecosystem
       - run: node scripts/test-packed-types-infrastructure.mjs artifacts/npm/consumer
       - run: pnpm test:packed-browser
@@ -306,21 +306,21 @@ jobs:
           case "$LEG" in
             core)
               pnpm typecheck
-              pnpm --filter @openpresentation/opf run test
-              pnpm --filter @openpresentation/cli run test
-              pnpm --filter @openpresentation/gallery run test
+              pnpm --filter @openpresentation/opf --fail-if-no-match run test
+              pnpm --filter @openpresentation/cli --fail-if-no-match run test
+              pnpm --filter @openpresentation/gallery --fail-if-no-match run test
               ;;
             render-*)
-              pnpm --filter @openpresentation/opf-render run typecheck
+              pnpm --filter @openpresentation/opf-render --fail-if-no-match run typecheck
               node scripts/ci-test-shards.mjs --package render --script test --shard "${LEG#render-}/2"
               ;;
             pptx-*)
-              pnpm --filter @openpresentation/opf-pptx run typecheck
+              pnpm --filter @openpresentation/opf-pptx --fail-if-no-match run typecheck
               node scripts/ci-test-shards.mjs --package pptx --script test --shard "${LEG#pptx-}/2"
               ;;
             editor)
-              pnpm --filter @openpresentation/opf-editor run typecheck
-              pnpm --filter @openpresentation/opf-editor run test
+              pnpm --filter @openpresentation/opf-editor --fail-if-no-match run typecheck
+              pnpm --filter @openpresentation/opf-editor --fail-if-no-match run test
               ;;
           esac
 
@@ -412,7 +412,7 @@ jobs:
       - run: node scripts/test-installed-code-guards.mjs --registry
       - run: pnpm test:registry-fidelity
       - run: node packages/cli/test/packed.mjs --registry
-      - run: pnpm --filter @openpresentation/opf-pptx run test:published-import
+      - run: pnpm --filter @openpresentation/opf-pptx --fail-if-no-match run test:published-import
       - name: Quote, code and metric internals with registry fonts
         run: |
           node scripts/test-quote-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/quote-layout-geometry.json
