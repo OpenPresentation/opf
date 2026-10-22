@@ -24,6 +24,7 @@
     "check:release-prep": "node --test scripts/release-prep.test.mjs scripts/candidate-gallery-results.test.mjs",
     "check:release-notes": "node --test scripts/release-notes.test.mjs",
     "check:changed": "node scripts/check-changed.mjs",
+    "check:rebuilt-release-files": "node --test scripts/rebuilt-release-files.test.mjs",
     "check:archive-tar": "node --test scripts/archive-tar.test.mjs && node scripts/test-ecosystem-links.mjs",
     "check:agent-tools": "node --test scripts/agent-slot.test.mjs scripts/agent-format.test.mjs scripts/check-changed.test.mjs scripts/package-manager.test.mjs",
     "check:agent-worktree": "node --test scripts/agent-worktree.test.mjs",
