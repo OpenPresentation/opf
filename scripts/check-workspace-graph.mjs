@@ -14,7 +14,8 @@
 //     not edges, and it has no devDependency pins on them: the engine tests live in packages/integration);
 //   - a peer on a member is `workspace:^`; a dependency on a member is `workspace:^`, a devDependency `workspace:*`; a
 //     registry specifier for a member's name is a finding;
-//   - `link-workspace-packages` (.npmrc) and `linkWorkspacePackages` (pnpm-workspace.yaml) are not true or deep;
+//   - `linkWorkspacePackages: false` is set in pnpm-workspace.yaml (not .npmrc, which npm warns about for pnpm-only keys);
+//     it is never true or deep there, and a legacy `link-workspace-packages` in .npmrc is not true or deep either;
 //   - a `link:` between members in a pnpm-lock.yaml importer is declared by that importer's manifest and obeys the same
 //     edge rules.
 // Transitional state (until all six packages are members, MR-23): the one registry specifier that exists today,
@@ -143,12 +144,11 @@ function main() {
   const root = path.resolve(process.argv[2] ?? path.join(path.dirname(fileURLToPath(import.meta.url)), '..'));
   const { workspace, members } = loadWorkspace(root);
   const read = (file) => (existsSync(path.join(root, file)) ? readFileSync(path.join(root, file), 'utf8') : null);
-  const npmrc = read('.npmrc');
-  if (npmrc === null || !/^\s*link-workspace-packages\s*=\s*false\s*$/m.test(npmrc)) {
-    console.error('check:workspace-graph FAILED\n  - .npmrc must set link-workspace-packages=false');
+  if (workspace.scalars.linkWorkspacePackages !== 'false') {
+    console.error('check:workspace-graph FAILED\n  - pnpm-workspace.yaml must set linkWorkspacePackages: false');
     process.exit(1);
   }
-  const problems = checkWorkspaceGraph({ members, workspace, npmrc, lock: read('pnpm-lock.yaml') });
+  const problems = checkWorkspaceGraph({ members, workspace, npmrc: read('.npmrc') ?? '', lock: read('pnpm-lock.yaml') });
   if (problems.length) {
     console.error(`check:workspace-graph FAILED (${problems.length})\n  - ${problems.join('\n  - ')}`);
     process.exit(1);

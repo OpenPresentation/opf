@@ -46,7 +46,7 @@ function target() {
   ];
 }
 const get = (members, dir) => members.find((entry) => entry.dir === `packages/${dir}`).manifest;
-const run = (members, options = {}) => checkWorkspaceGraph({ members, workspace: workspaceFor(members), npmrc: 'link-workspace-packages=false\n', ...options });
+const run = (members, options = {}) => checkWorkspaceGraph({ members, workspace: workspaceFor(members), ...options });
 
 test('E0: the target graph is acyclic and passes', () => {
   assert.deepEqual(run(target()), []);
@@ -73,7 +73,7 @@ test('E2: a peer that is not workspace:^ fails', () => {
   assert.deepEqual(run(members), [`${N.pptx}: peer ${N.render} must be workspace:^ (found ^0.26.0)`]);
 });
 
-test('E3: link-workspace-packages true fails in .npmrc and in pnpm-workspace.yaml', () => {
+test('E3: link-workspace-packages true fails in pnpm-workspace.yaml and in a legacy .npmrc', () => {
   const members = target();
   assert.deepEqual(run(members, { npmrc: 'link-workspace-packages=true\n' }), ['.npmrc: link-workspace-packages must not be true']);
   assert.deepEqual(run(members, { npmrc: 'link-workspace-packages=deep\n' }), ['.npmrc: link-workspace-packages must not be true']);

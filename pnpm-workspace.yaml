@@ -10,6 +10,11 @@ overrides:
   "js-yaml@>=4.0.0 <4.3.2": "4.3.2"
   "sharp@<0.35.5": "0.35.5"
 
+# Workspace packages are linked only through the workspace: protocol (guarded by check:workspace-graph, MR-10). Linking
+# registry specifiers that happen to equal a workspace version would re-create the core <-> engines cycle silently.
+# This lives here, not in .npmrc, because npm warns about pnpm-only keys in .npmrc and "will stop working" with it.
+linkWorkspacePackages: false
+
 # esbuild gets its binary from optional platform packages; nothing needs its postinstall (silences pnpm's "Ignored build scripts").
 ignoredBuiltDependencies:
   - esbuild
