@@ -1,3 +1,5 @@
+> **Frozen: this repository is moving to [OpenPresentation/opf](https://github.com/OpenPresentation/opf).** `@openpresentation/opf-render` is developed there, in [`packages/render`](https://github.com/OpenPresentation/opf/tree/main/packages/render), together with core, the CLI and the other engines, and releases with them under one shared version from 0.26.0. The npm package name does not change. Please do not open new pull requests here; open issues and pull requests are being moved. File new issues at [OpenPresentation/opf](https://github.com/OpenPresentation/opf/issues) and name the package. Plan: [monorepo move](https://github.com/OpenPresentation/opf/blob/main/docs/programs/monorepo/README.md).
+
 # OPF Render
 
 **OPF 0.18 (RR-73, RR-74; requires core 0.18).** One shape for every engine: `toX(deck, slides?, options?)`. The second argument is a slide number (one result), a selection (`"1-3"`, `"1,3-5"`, `"2-"`, `[1, 3]`; a list of results) or the options, told apart by type, and slides count from 1. Renamed and removed outright (no aliases); an old option fails with `invalid-render-options` or `invalid-conversion-option` and names its replacement:
