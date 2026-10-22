@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.25.3 (2026-10-22)
+
+- RR-98: the source pane's Cmd/Ctrl+Z and Cmd/Ctrl+Shift+Z (Ctrl+Y) now undo and redo a `pane.replaceDocument` load, and `replaceDocument` keeps the original YAML or Markdown text. The keys first undo the text typed in the pane with CodeMirror's history (which a load, and a session Undo, Redo or restore, now clear); when that has nothing left they step the session over the whole-document replace, as the Undo and Redo buttons do, so the previous text comes back byte for byte (an edit made elsewhere stops the key). `replaceDocument(document, { source, format })` accepts `source` as JSON, YAML or Markdown text (`format` says which; inferred as the first of JSON, the pane's format, YAML and Markdown that reads as exactly the document) and shows those bytes, comments included, in a pane in that format, in Undo and Redo and when the format is switched to it; a `source` that is not this document is ignored and an unknown `format` throws a `TypeError`. `mountJsonCodeEditor` gains `historyFallback`, `resetHistory()` and `undoDepth()`.
+
 ## 0.25.2 (2026-10-22)
 
 - RR-98: closing the presenter before the browser answered its full screen request no longer leaves the page in full screen behind a hidden presentation. A quick Esc or close, or F5 followed straight by Esc, ran `stop()` while the request was still pending, so there was no full screen to leave; the request then resolved and the page stayed full screen with nothing shown (and, in Chromium on macOS, the window stuck in a state where the page took no clicks until the next exit). The presenter now exits full screen as soon as a late request resolves for a presentation that was already closed, and returns focus to the opener afterwards.
