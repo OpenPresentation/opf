@@ -1,3 +1,5 @@
+> **This repository is frozen (MR-20).** Contributions now go to [OpenPresentation/opf](https://github.com/OpenPresentation/opf), directory [`packages/gallery`](https://github.com/OpenPresentation/opf/tree/main/packages/gallery); its `CONTRIBUTING.md` and `AGENTS.md` describe the monorepo workflow. Pull requests opened here after the freeze will be closed with a pointer, and open issues and pull requests are moved by the maintainers. Plan: [monorepo move](https://github.com/OpenPresentation/opf/blob/main/docs/programs/monorepo/README.md).
+
 # Contributing
 
 Thank you for helping with the OPF default catalog. This repository publishes one npm package,

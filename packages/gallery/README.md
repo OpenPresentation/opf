@@ -1,3 +1,5 @@
+> **Frozen: this repository is moving to [OpenPresentation/opf](https://github.com/OpenPresentation/opf).** `@openpresentation/gallery` is developed there, in [`packages/gallery`](https://github.com/OpenPresentation/opf/tree/main/packages/gallery), together with core, the CLI and the other engines, and releases with them under one shared version from 0.26.0. The npm package name does not change. Please do not open new pull requests here; open issues and pull requests are being moved. File new issues at [OpenPresentation/opf](https://github.com/OpenPresentation/opf/issues) and name the package. Plan: [monorepo move](https://github.com/OpenPresentation/opf/blob/main/docs/programs/monorepo/README.md).
+
 # gallery
 
 The default catalog for Open Presentation: layouts, themes, colour schemes and font schemes for OPF decks, published as
