@@ -79,7 +79,8 @@ try {
  if(registryRef)assert.match(registryRef,/^[a-f0-9]{40}$/);
  const sourceManifest=registry?JSON.parse(run('git',['show',`${registryRef}:packages/cli/package.json`],root)):JSON.parse(await readFile(path.join(pkg,'package.json'),'utf8'));
  if(registry)assert.equal(sourceManifest.version,expected.version,'Command tests must belong to the selected CLI version');
- assert.deepEqual(Object.keys(manifest.dependencies??{}),Object.keys(sourceManifest.dependencies??{}),'The installed CLI declares the dependencies of its source');
+ // The names, not their order: npm on Linux lists the installed manifest's dependencies in another order than the packed tarball's.
+ assert.deepEqual(Object.keys(manifest.dependencies??{}).sort(),Object.keys(sourceManifest.dependencies??{}).sort(),'The installed CLI declares the dependencies of its source');
  const bin=path.join(installed,manifest.bin.opf);
  const versions=JSON.parse(run(process.execPath,[bin,'--version'],temp));
  assert.equal(versions.cli,expected.version);
