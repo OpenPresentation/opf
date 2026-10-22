@@ -41,6 +41,13 @@ export function report({ needs, ignore = [], label, title, repo, sha, runUrl, ev
       gh(['api', `repos/${repo}/issues/${open}/comments`, '-f', `body=${text.red}`]);
       return { action: 'commented', issue: open, failed };
     }
+    // Opening the issue must not depend on the label existing (the API drops or auto-creates unknown labels depending on who asks):
+    // create it first. An existing label answers 422, which is the idempotent case.
+    try {
+      gh(['api', '-X', 'POST', `repos/${repo}/labels`, '-f', `name=${label}`, '-f', 'color=B60205', '-f', `description=Opened and closed by ${title.toLowerCase()} reporting (scripts/ci-report-issue.mjs)`]);
+    } catch {
+      // already exists, or the token may not create labels: the issue is opened either way
+    }
     gh(['api', `repos/${repo}/issues`, '-f', `title=${title}`, '-f', `body=${text.red}`, '-f', `labels[]=${label}`]);
     return { action: 'opened', issue: null, failed };
   }

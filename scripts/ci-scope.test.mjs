@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { LEG_PLAN, PACKAGE_IDS, PACKAGES, TARGET_GRAPH, changedFiles, classifyPath, findCycle, isGoldenInput, legsFor, loadGraph, readManifestGraph, renderMarkdown, renderText, run, scope, withDependents } from './ci-scope.mjs';
+import { LEG_PLAN, PACKAGE_IDS, PACKAGES, TARGET_GRAPH, changedFiles, classifyPath, findCycle, isDependencyFile, isGoldenInput, legsFor, loadGraph, readManifestGraph, renderMarkdown, renderText, run, scope, withDependents } from './ci-scope.mjs';
 
 const byId = Object.fromEntries(PACKAGES.map((pkg) => [pkg.id, pkg]));
 const targetScope = (files, extra = {}) => scope({ files, graph: TARGET_GRAPH, ...extra });
@@ -90,11 +90,11 @@ function pnpmSelect(root, filter) {
   return JSON.parse(result.stdout || '[]').map((project) => names.get(project.name) ?? project.name);
 }
 
-test('TARGET_GRAPH is acyclic, gallery has no workspace edge, core only depends on gallery, integration on everything', () => {
+test('TARGET_GRAPH is acyclic, gallery has no workspace edge, core only depends on gallery, integration on what it imports', () => {
   assert.equal(findCycle(TARGET_GRAPH), null);
   assert.deepEqual(TARGET_GRAPH.gallery, []);
   assert.deepEqual(TARGET_GRAPH.core, ['gallery']);
-  assert.deepEqual(new Set(TARGET_GRAPH.integration), new Set(PACKAGE_IDS.filter((id) => id !== 'integration')));
+  assert.deepEqual(new Set(TARGET_GRAPH.integration), new Set(['gallery', 'core', 'render', 'pptx']), 'integration imports core, render, pptx and the gallery, not the editor or the CLI');
   for (const id of PACKAGE_IDS) assert.ok(id in TARGET_GRAPH, id);
   assert.deepEqual(findCycle({ a: ['b'], b: ['c'], c: ['a'] }), ['a', 'b', 'c', 'a']);
 });
@@ -223,8 +223,8 @@ test('S5 scenarios against the real `pnpm --filter "...[base]"`', { skip: pnpmAv
     }
     // The plan's S5 table, spelled out, so a graph change that keeps both sides equal still has to be deliberate.
     const expected = {
-      'editor-only': ['editor', 'integration'],
-      'CLI-only': ['cli', 'integration'],
+      'editor-only': ['editor'],
+      'CLI-only': ['cli'],
       renderer: ['render', 'pptx', 'editor', 'cli', 'integration'],
       PPTX: ['pptx', 'editor', 'cli', 'integration'],
       core: ['core', 'render', 'pptx', 'editor', 'cli', 'integration'],
@@ -263,13 +263,13 @@ test('root-owned paths: pnpm selects only the root project, so the path map deci
 
 test('tiers: changed packages run full, dependents contract, the rest skip', () => {
   const editor = targetScope(['packages/editor/src/a.js']);
-  assert.deepEqual(tiersOf(editor), { editor: 'full', integration: 'contract' });
+  assert.deepEqual(tiersOf(editor), { editor: 'full' }, 'an editor-only change does not select integration');
   assert.equal(editor.tier, 'leaf');
   assert.equal(editor.jobs.goldens, 'skip');
   assert.equal(editor.jobs['gallery-gates'], 'skip');
 
   const cli = targetScope(['packages/cli/src/a.ts']);
-  assert.deepEqual(tiersOf(cli), { cli: 'full', integration: 'contract' });
+  assert.deepEqual(tiersOf(cli), { cli: 'full' }, 'a CLI-only change does not select integration');
   assert.equal(cli.tier, 'leaf');
 
   const render = targetScope(['packages/render/src/charts.js']);
@@ -345,7 +345,7 @@ test('edge case: lockfile only, root configuration, scripts and workflows run ev
     assert.equal(decision.tier, 'all', file);
     assert.deepEqual(decision.affected, PACKAGE_IDS, file);
     for (const id of PACKAGE_IDS) assert.equal(decision.packages[id], 'full', `${file}: ${id}`);
-    assert.deepEqual(decision.skipped, [], file);
+    assert.deepEqual(decision.skipped.filter((job) => job !== 'audit'), [], file); // audit follows the changed files, not the force
     assert.deepEqual(decision.unclassified, [], `${file} is classified`);
   }
 });
@@ -377,7 +377,7 @@ test('edge case: events other than a pull request, the label full-ci and an empt
     const decision = targetScope(['docs/programs/a.md'], { event });
     assert.equal(decision.forced, true, event);
     assert.equal(decision.tier, 'all', event);
-    assert.deepEqual(decision.skipped, [], event);
+    assert.deepEqual(decision.skipped.filter((job) => job !== 'audit'), [], event);
   }
   const labelled = targetScope(['packages/editor/src/a.js'], { labels: ['full-ci'] });
   assert.equal(labelled.forced, true);
@@ -406,10 +406,10 @@ test('legs: every package has a plan for both tiers, a skipped package has no le
   assert.deepEqual(Object.keys(LEG_PLAN).sort(), ['lint', ...PACKAGE_IDS].sort());
   for (const id of Object.keys(LEG_PLAN)) {
     assert.deepEqual(legsFor(id, 'skip'), []);
-    for (const tier of ['full', 'contract']) {
+    for (const tier of id === 'lint' ? ['full', 'docs'] : ['full', 'contract']) {
       const legs = legsFor(id, tier);
       assert.ok(legs.length > 0, `${id} ${tier}`);
-      assert.ok(legs.some((leg) => leg.kind === (id === 'lint' ? 'static' : 'tests')), `${id} ${tier} runs its tests`);
+      assert.ok(legs.some((leg) => leg.kind === (id === 'lint' ? (tier === 'docs' ? 'docs' : 'static') : 'tests')), `${id} ${tier} runs its tests`);
       for (const leg of legs) assert.deepEqual(Object.keys(leg).sort(), ['count', 'index', 'kind', 'name', 'package', 'tier'], `${id} ${leg.name}`);
     }
     if (id !== 'lint') assert.deepEqual(legsFor(id, 'contract').filter((leg) => leg.kind !== 'tests'), [], `${id}: a dependent runs no browser suite`);
@@ -423,6 +423,7 @@ test('legs: every package has a plan for both tiers, a skipped package has no le
 test('legs follow the tiers of the decision: only packages that run have legs, forced runs have every leg', () => {
   const engine = targetScope(['packages/render/src/a.js']);
   assert.deepEqual(Object.entries(engine.legs).filter(([, legs]) => legs.length).map(([id]) => id), ['lint', 'render', 'pptx', 'editor', 'cli', 'integration']);
+  assert.deepEqual(targetScope(['packages/editor/src/a.js']).legs.integration, [], 'an editor-only change runs no integration leg');
   assert.equal(engine.legs.render.length, 5);
   assert.equal(engine.legs.lint.length, 3, 'lint always has its legs');
   assert.equal(engine.legs.pptx.length, 4, 'a dependent runs its contract suite in four shards');
@@ -433,6 +434,20 @@ test('legs follow the tiers of the decision: only packages that run have legs, f
   assert.equal(forced.legs.gallery.length, 1);
   const docs = targetScope(['docs/programs/monorepo/README.md']);
   assert.deepEqual(Object.entries(docs.legs).filter(([, legs]) => legs.length).map(([id]) => id), ['lint'], 'a docs-only change runs lint and nothing else');
+  assert.deepEqual(docs.legs.lint.map((leg) => leg.kind), ['docs'], 'and lint is the one lightweight docs leg');
+  assert.deepEqual(targetScope(['packages/editor/src/a.js']).legs.lint.map((leg) => leg.kind), ['static', 'checks', 'checks']);
+  assert.deepEqual(targetScope(['docs/programs/a.md'], { event: 'push' }).legs.lint.map((leg) => leg.kind), ['static', 'checks', 'checks'], 'a push to main runs the full lint');
+  assert.deepEqual(targetScope(['docs/programs/a.md'], { labels: ['full-ci'] }).legs.lint.map((leg) => leg.kind), ['static', 'checks', 'checks']);
+});
+
+test('audit runs when the lockfile or a package manifest changed, and not because a run was forced', () => {
+  for (const file of ['pnpm-lock.yaml', 'package.json', 'packages/render/package.json', 'packages/javascript/package.json']) assert.equal(isDependencyFile(file), true, file);
+  for (const file of ['packages/render/src/package.json', 'packages/render/package.json.md', 'docs/package.json', 'pnpm-workspace.yaml']) assert.equal(isDependencyFile(file), false, file);
+  assert.equal(targetScope(['pnpm-lock.yaml']).jobs.audit, 'full');
+  assert.equal(targetScope(['packages/editor/package.json', 'packages/editor/src/a.js']).jobs.audit, 'full');
+  for (const input of [{ files: ['packages/editor/src/a.js'] }, { files: ['docs/a.md'] }, { files: ['scripts/a.mjs'] }, { files: ['packages/editor/src/a.js'], event: 'push' }, { files: ['packages/editor/src/a.js'], labels: ['full-ci'] }]) {
+    assert.equal(targetScope(input.files, input).jobs.audit, 'skip', JSON.stringify(input));
+  }
 });
 
 test('isGoldenInput lists the corpus inputs only', () => {

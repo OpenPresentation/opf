@@ -78,8 +78,10 @@ jobs:
           LABELS: ${{ steps.labels.outputs.labels }}
         run: node scripts/ci-scope.mjs --event "$GITHUB_EVENT_NAME" --base HEAD^1 --head HEAD --labels "$LABELS" --github-output --summary --format text
 
-  # Two kinds of leg (LEG_PLAN in scripts/ci-scope.mjs): `static` is Biome, typecheck, the examples and the breaking-change gate;
-  # `checks 1/2` and `checks 2/2` are the root check:* suite split in two (scripts/run-checks.mjs --shard), four checks at a time.
+  # Legs (LEG_PLAN in scripts/ci-scope.mjs): `static` is Biome, typecheck, the examples and the breaking-change gate; `checks 1/2`
+  # and `checks 2/2` are the root check:* suite split in two (scripts/run-checks.mjs --shard), four checks at a time. A docs-only
+  # change (nothing forced) has the one `docs` leg instead: the checks mapped to the changed paths (scripts/check-changed.mjs:
+  # Biome, check:text and the other "changed" rules of scripts/checks.json), no build. A push to main runs the full set.
   lint:
     name: lint (${{ matrix.name }})
     needs: scope
@@ -105,7 +107,12 @@ jobs:
 
       - uses: ./.github/actions/setup-workspace
 
+      - name: Checks mapped to the changed docs
+        if: ${{ matrix.kind == 'docs' }}
+        run: node scripts/check-changed.mjs --base "origin/${{ github.base_ref }}"
+
       - name: Build core and the CLI
+        if: ${{ matrix.kind != 'docs' }}
         run: pnpm build
 
       - name: Lint (Biome)
@@ -144,6 +151,23 @@ jobs:
           path: artifacts/checks/*.log
           retention-days: 7
           if-no-files-found: ignore
+
+  # pnpm audit, when the lockfile or a package manifest changed (a new advisory must not fail an unrelated change; the nightly
+  # audits every night).
+  audit:
+    name: audit
+    needs: scope
+    if: ${{ needs.scope.result == 'success' && fromJSON(needs.scope.outputs.jobs).audit != 'skip' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+
+      - run: pnpm audit
 
   gallery:
     name: gallery
@@ -560,7 +584,7 @@ jobs:
 
   verify:
     name: verify
-    needs: [scope, lint, gallery, core, cli, render, pptx, editor, integration, goldens, gallery-gates, pack-shape, slow]
+    needs: [scope, lint, audit, gallery, core, cli, render, pptx, editor, integration, goldens, gallery-gates, pack-shape, slow]
     if: ${{ always() }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5

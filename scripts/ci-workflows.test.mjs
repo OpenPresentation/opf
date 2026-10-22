@@ -197,3 +197,12 @@ test('a pnpm filter that matches no package must fail: pnpm exits 0 on an empty 
     }
   }
 });
+
+test('lint has a docs leg without a build, and audit is its own job gated by the scope', () => {
+  const lint = job(ci, 'lint').text;
+  assert.match(lint, /matrix\.kind == 'docs'[^\n]*\n\s+run: node scripts\/check-changed\.mjs --base "origin\/\$\{\{ github\.base_ref \}\}"/u);
+  assert.match(lint, /name: Build core and the CLI\n\s+if: \$\{\{ matrix\.kind != 'docs' \}\}/u, 'the docs leg does not build');
+  assert.match(job(ci, 'audit').text, /pnpm audit/u);
+  assert.match(job(nightly, 'audit').text, /pnpm audit/u, 'and the nightly audits every night');
+  assert.match(nightly, /name: editor playground on macOS \(\$\{\{ matrix\.shard \}\}\/2\)/u, 'macOS legs: 1 + 1 + 2 + 1 = 5, the account limit');
+});

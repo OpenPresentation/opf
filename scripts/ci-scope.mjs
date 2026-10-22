@@ -53,9 +53,11 @@ export const PACKAGE_IDS = PACKAGES.map((pkg) => pkg.id);
  * leaves out only 80 of 948 s); editor 2 x 129) and the editor playground suite (839 s in 28 tests, 4 x 210 s); MR-32 tunes them.
  */
 export const LEG_PLAN = Object.freeze({
-  // `lint` always runs at full: `static` is Biome, typecheck, the examples and the breaking-change gate; `checks` is the root
-  // check:* suite (scripts/run-checks.mjs --shard i/n), 73 checks, about 60 s on a laptop with four at a time.
-  lint: { full: [["static", 1], ["checks", 2]], contract: [["static", 1], ["checks", 2]] },
+  // `lint` always runs. Normally: `static` is Biome, typecheck, the examples and the breaking-change gate; `checks` is the root
+  // check:* suite (scripts/run-checks.mjs --shard i/n), 73 checks, about 60 s on a laptop with four at a time. For a docs-only
+  // change (class `docs`, nothing forced) the one `docs` leg runs the checks mapped to the changed paths (scripts/check-changed.mjs:
+  // Biome, check:text and the rest of scripts/checks.json "changed" rules); a push to main runs the full lint.
+  lint: { full: [["static", 1], ["checks", 2]], docs: [["docs", 1]] },
   gallery: { full: [["tests", 1]], contract: [["tests", 1]] },
   core: { full: [["tests", 1]], contract: [["tests", 1]] },
   cli: { full: [["tests", 1]], contract: [["tests", 1]] },
@@ -76,7 +78,8 @@ export function legsFor(id, tier) {
 /**
  * The graph pnpm will see once MR-23 has wired the workspace (plan, section 1): dependencies, devDependencies and
  * optionalDependencies between workspace packages; peers are not edges. Gallery has no workspace edge to an engine, core's
- * optional peers on render and pptx are not edges, and `integration` depends on everything. `check:workspace-graph` (MR-10)
+ * optional peers on render and pptx are not edges, and `integration` depends on what it imports (core, render, pptx and the
+ * gallery; not the editor or the CLI, so a change there does not select it; its manifest says the same). `check:workspace-graph` (MR-10)
  * enforces this shape on the manifests.
  */
 export const TARGET_GRAPH = Object.freeze({
@@ -86,7 +89,7 @@ export const TARGET_GRAPH = Object.freeze({
   pptx: ["core", "gallery", "render"],
   editor: ["core", "gallery", "render", "pptx"],
   cli: ["core", "gallery", "render", "pptx"],
-  integration: ["gallery", "core", "render", "pptx", "editor", "cli"],
+  integration: ["gallery", "core", "render", "pptx"],
 });
 
 /** An edge pnpm links inside the workspace (with link-workspace-packages=false only these specifiers). */
@@ -235,6 +238,8 @@ export const GOLDEN_INPUT_PREFIXES = [
   "spec/reference/",
   "examples/",
 ];
+/** The lockfile or any package manifest: what `pnpm audit` reads. */
+export const isDependencyFile = (file) => file === "pnpm-lock.yaml" || file === "package.json" || /^packages\/[^/]+\/package\.json$/.test(file);
 export const isGoldenInput = (file) => GOLDEN_INPUT_PREFIXES.some((prefix) => file.startsWith(prefix));
 
 // --- The decision -----------------------------------------------------------------------------------------------------
@@ -292,10 +297,14 @@ export function scope({ files, graph, event = "pull_request", labels = [] }) {
   const goldens = forced || files.some(isGoldenInput);
   const galleryGates = forced || ["gallery", "core", "render"].some((id) => changed.has(id));
   const packShape = forced || changedIds.length > 0;
+  // `audit` (pnpm audit): when the lockfile or a package manifest changed; a new advisory must not fail an unrelated change, so
+  // being forced by an event or a tooling path does not select it (the nightly audits every night).
+  const audit = files.some(isDependencyFile);
   const slow = labels.includes("full-ci");
   const jobs = {
     lint: "full",
     ...tiers,
+    audit: audit ? "full" : "skip",
     goldens: goldens ? "full" : "skip",
     "gallery-gates": galleryGates ? "full" : "skip",
     "pack-shape": packShape ? "full" : "skip",
@@ -312,7 +321,7 @@ export function scope({ files, graph, event = "pull_request", labels = [] }) {
     required: Object.entries(jobs).filter(([, tier]) => tier !== "skip").map(([name]) => name),
     skipped: Object.entries(jobs).filter(([, tier]) => tier === "skip").map(([name]) => name),
     matrix: PACKAGE_IDS.filter((id) => tiers[id] !== "skip").map((id) => ({ package: id, tier: tiers[id] })),
-    legs: Object.fromEntries(["lint", ...PACKAGE_IDS].map((id) => [id, legsFor(id, id === "lint" ? jobs.lint : tiers[id])])),
+    legs: Object.fromEntries(["lint", ...PACKAGE_IDS].map((id) => [id, legsFor(id, id === "lint" ? (!forced && changedIds.length === 0 ? "docs" : "full") : tiers[id])])),
     slow,
     unclassified,
     reasons,

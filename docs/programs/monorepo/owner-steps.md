@@ -259,6 +259,8 @@ The functional proof is the `actions/create-github-app-token` step succeeding in
 
 **What and why.** Plan decisions D8 and D15: no merge queue, one required check `verify`, squash merges, no "require branches to be up to date". Agents then merge with GitHub auto-merge when `verify` is green.
 
+**One edit, not two.** Removing the merge queue and switching the required check to `verify` happen in the same ruleset save (steps 3 below). `ci.yml` has no `merge_group` trigger (MR-30), so `verify` must never be required while the queue exists (a queue entry would wait for a check that is never reported).
+
 **When.** After MR-32 (20 measured `verify` runs). **Before** the MR-33 pull request that deletes `opf-ci.yml`, `ecosystem-ci.yml`, `cli-windows.yml`, `engines-range.yml` and the four `flake-repeat.yml` merges: those workflows produce the four old required checks, and a required check that never reports blocks every pull request. The agent tells you when. `verify` must have run on at least one pull request in the last 7 days, or GitHub will not offer it in the check picker (then type it).
 
 **Today's ruleset, for the undo** (id 24382980, target the default branch, no bypass): required checks `packages`, `Installed candidates (windows-latest)`, `Installed candidates (macos-latest)`, `Verify OPF packages` (all from GitHub Actions, integration id 15368), strict policy off, "do not enforce on create" off; merge queue: merge method **Squash**, max entries to build **4**, min entries to merge **1**, max entries to merge **4**, wait for minimum **5** minutes, grouping **All green**, check timeout **180** minutes.

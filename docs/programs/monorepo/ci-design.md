@@ -23,14 +23,15 @@ Status: drafted 2026-10-22 on `codex/mr-30-ci` (draft pull request [opf#798](htt
 
 | Job | Runs when | Legs (full tier) | Contract tier (dependent of a changed package) | Where |
 | --- | --- | --- | --- | --- |
-| `lint` | always | `static` (Biome, typecheck, examples, breaking gate, changelog warning), `checks 1/2`, `checks 2/2` (the 73 root `check:*`) | same | ubuntu-24.04 |
+| `lint` | always | `static` (Biome, typecheck, examples, breaking gate, changelog warning), `checks 1/2`, `checks 2/2` (the 73 root `check:*`); a docs-only change has the one `docs` leg instead (`check-changed.mjs`: Biome, `check:text` and the other mapped checks, no build) | same | ubuntu-24.04 |
+| `audit` | the lockfile or a `package.json` changed (not merely forced) | 1 (`pnpm audit`; the nightly audits every night) | n/a | ubuntu-24.04 |
 | `gallery` | gallery changed | 1 (license, verify, build, test, typecheck, pack dry run) | 1 | ubuntu-24.04 |
 | `core` | core or gallery changed | 1 (`pnpm --filter opf test`) | 1 | ubuntu-24.04 |
 | `cli` | any package it depends on, or itself | 1 | 1 | ubuntu-24.04 |
 | `render` | render or core or gallery | `tests 1..4/4`, `browser` | `tests 1..3/3` (`test:contract`) | Playwright image |
 | `pptx` | pptx or an upstream package | `tests 1..4/4`, `browser` | `tests 1..4/4` | Playwright image |
 | `editor` | editor or an upstream package | `tests 1..2/2`, `playground 1..4/4`, `browser` | `tests 1..2/2` | Playwright image |
-| `integration` | any package | 1 (`packages/integration`) | 1 | ubuntu-24.04 |
+| `integration` | gallery, core, render or pptx changed (its manifest and the target graph: not the editor or CLI) | 1 (`packages/integration`) | 1 | ubuntu-24.04 |
 | `goldens` | a golden input changed | 1 (`test:golden`, changed slides as artifact) | n/a | Playwright image |
 | `gallery-gates` | gallery, core or render changed | 1 (`check:previews`; `check:stability` reports only until MR-35) | n/a | ubuntu-24.04 |
 | `pack-shape` | any package changed | 1 (build all, `npm pack --dry-run` of the six) | n/a | ubuntu-24.04 |
@@ -42,14 +43,14 @@ What each class of change runs (from `ci-scope.mjs`, graph = the plan's target g
 
 | Change | Jobs | Legs |
 | --- | --- | --- |
-| docs, evidence, programs only | `lint` | 3 |
-| editor only | `lint`, `editor`, `integration`*, `pack-shape` | 3 + 7 + 1 + 1 |
-| CLI only | `lint`, `cli`, `integration`*, `pack-shape` | 3 + 1 + 1 + 1 |
+| docs, evidence, programs only | `lint` (docs leg) | 1 |
+| editor only | `lint`, `editor`, `pack-shape` | 3 + 7 + 1 |
+| CLI only | `lint`, `cli`, `pack-shape` | 3 + 1 + 1 |
 | render | `lint`, `render`, `pptx`*, `editor`*, `cli`*, `integration`*, `goldens`, `gallery-gates`, `pack-shape` | 3 + 5 + 4 + 2 + 1 + 1 + 1 + 1 + 1 |
 | pptx | `lint`, `pptx`, `editor`*, `cli`*, `integration`*, `pack-shape` | 3 + 5 + 2 + 1 + 1 + 1 |
 | core, `spec/`, `examples/` | `lint`, `core`, `render`*, `pptx`*, `editor`*, `cli`*, `integration`*, `goldens`, `gallery-gates`, `pack-shape` | 3 + 1 + 3 + 4 + 2 + 1 + 1 + 1 + 1 + 1 |
 | gallery records | the core row plus `gallery` | +1 |
-| `scripts/`, workflows, lockfile, `full-ci`, push to main, dispatch | everything at full | 3 + 1 + 1 + 1 + 5 + 5 + 7 + 1 + 1 + 1 + 1 (27 legs, 29 jobs with `scope` and `verify`) |
+| `scripts/`, workflows, lockfile, `full-ci`, push to main, dispatch | everything at full (`audit` too when the lockfile or a manifest changed) | 3 + 1 + 1 + 1 + 5 + 5 + 7 + 1 + 1 + 1 + 1 (27 legs, 29 jobs with `scope` and `verify`) |
 
 (`*` = contract tier.)
 
@@ -71,17 +72,17 @@ The only numbers measured on Actions are from the first run of `ci.yml` on the d
 | integration | build all 1.0 + tests (core's 13 engine tests, **not measured**, assumed 3 to 5 min) | none | 5.3 to 7.3 |
 | goldens, pack-shape, gallery-gates | `golden.mjs` 10 s; build all and pack about 1; previews and stability about 1.5 | weights, S7, run 39775979434 | 2.3, 2.3, 3.5 |
 
-Wall-clock of `verify` is `scope` 0.15 + the longest leg + `verify` 0.3, plus queueing when a run needs more than 20 concurrent jobs (a forced run has 29, a render pull request 21):
+Wall-clock of `verify` is `scope` 0.15 + the longest leg + `verify` 0.3, plus queueing when a run needs more than 20 concurrent jobs (a forced run has 29, a render pull request 21, an editor-only one 13, a docs-only one 3):
 
 | Class | Longest leg | Estimate | Plan target p50 / p90 |
 | --- | --- | --- | --- |
-| docs only | lint `static` 2.9 | about 3.4 | 2 / 4 (p50 missed) |
-| leaf (editor, CLI) | editor playground 5.8, `integration` 5.3 to 7.3 | 6.3 to 8.1 | 5 / 8 |
+| docs only | lint `docs` leg (1.3 + checks mapped to the changed files about 0.5) | about 2.3 | 2 / 4 |
+| leaf (editor, CLI) | editor playground 5.8 (editor), cli 3.8 (CLI) | 6.3 (editor), 4.3 (CLI) | 5 / 8 |
 | render or pptx | pptx tests 6.2, render tests 6.0, `integration` | 6.7 to 8.0 | 7 / 11 |
 | core, gallery, `spec/`, `examples/` | pptx contract 5.8, render contract 5.3, `integration` | 6.3 to 8.0 | 8 / 12 |
 | tooling, lockfile, `full-ci`, main | 29 jobs, queueing | about 8 | 11 / 15 |
 
-Read as: inside the plan's 5 to 8 minutes for code pull requests, a docs-only one about 3.4. The unmeasured part is `integration`: if it takes longer than assumed it sets the time of every class. How the draft gets there: scoped jobs (a docs change runs one job family, an editor change no renderer shard), tiers (dependents run `test:contract`), sharding balanced by the RR-57 weights so the longest shard and not the sum sets the time (render 901 s, pptx 948 s and the editor playground suite are cut to about 4 minutes of work per shard), one pnpm store cache per OS keyed by the lockfile, `cancel-in-progress` per pull request, no Windows, macOS, Node 22 and 26 and no packed-install or registry consumers on the pull request, and one Playwright image string pinned by digest (`check:playwright-pin`) so a golden cannot drift between jobs. The remedies in the order the plan gives them, if MR-32 measures a miss: (1) build core and gallery once and upload `dist` (saves about 0.5 minute per job); (2) narrow `integration` (it imports core, render, pptx and the gallery, not the editor or CLI) or shard it; (3) a sparse checkout without `docs/evidence` for jobs that do not read it (core, `lint` and the CLI do; checkout is only 6 to 11 s, so this is last); (4) a docs-only fast path in `lint`. Local measurements, 2026-10-22 (laptop, warm store): `pnpm lint` 2 s, `pnpm build` 12 s, `pnpm typecheck` 8 s, core tests 31 s, CLI tests 88 s, root checks 58 s with four at a time.
+Read as: inside the plan's 5 to 8 minutes for code pull requests, a docs-only one about 2.3. The unmeasured part is `integration`: if it takes longer than assumed it sets the time of the engine and core classes (editor-only and CLI-only changes no longer select it). How the draft gets there: scoped jobs (a docs change runs one job family, an editor change no renderer shard), tiers (dependents run `test:contract`), sharding balanced by the RR-57 weights so the longest shard and not the sum sets the time (render 901 s, pptx 948 s and the editor playground suite are cut to about 4 minutes of work per shard), one pnpm store cache per OS keyed by the lockfile, `cancel-in-progress` per pull request, no Windows, macOS, Node 22 and 26 and no packed-install or registry consumers on the pull request, and one Playwright image string pinned by digest (`check:playwright-pin`) so a golden cannot drift between jobs. The remedies in the order the plan gives them, if MR-32 measures a miss: (1) build core and gallery once and upload `dist` (saves about 0.5 minute per job); (2) shard `integration`; (3) a sparse checkout without `docs/evidence` for jobs that do not read it (core, `lint` and the CLI do; checkout is only 6 to 11 s, so this is last); (4) none left for docs: the docs-only fast path is already in. Local measurements, 2026-10-22 (laptop, warm store): `pnpm lint` 2 s, `pnpm build` 12 s, `pnpm typecheck` 8 s, core tests 31 s, CLI tests 88 s, root checks 58 s with four at a time.
 
 **Found on the first run:** `pnpm --filter X run test` exits 0 when X matches no package, so before MR-23 the jobs `integration` and `gallery-gates` passed without running anything. Every `pnpm --filter @openpresentation/<name>` call that runs a script now passes `--fail-if-no-match` (guarded by `check:ci-workflows`); only the dependency builds (`<name>^...`, legitimately empty for a package without workspace dependencies) do not.
 
@@ -122,4 +123,4 @@ Actions: `.github/actions/candidate-gallery` and `candidate-gallery-stage` (MR-3
 
 ## Ordering with the ruleset (MR-33, OWNER)
 
-`ci.yml` has no `merge_group` trigger. While the merge queue exists its required checks are the old ones, so `verify` must not become required before the queue is removed; the ruleset edit that removes the queue and makes `verify` the only required check is one change. The first nightly and slow-checks runs need the labels `nightly-red`, `slow-checks-red`, `main-red` (created by the first issue, or by hand) and `slow-checks`, `full-ci` for pull requests.
+`ci.yml` has no `merge_group` trigger. While the merge queue exists its required checks are the old ones, so `verify` must not become required before the queue is removed; the ruleset edit that removes the queue and makes `verify` the only required check is one change. The labels `nightly-red`, `slow-checks-red` and `slow-checks` were created on 2026-10-22 (`full-ci` and `main-red` existed); `scripts/ci-report-issue.mjs` also creates a label before opening an issue, so an issue never depends on auto-creation. The nightly has five macOS jobs (CLI and core, installed candidates, two editor playground shards, platform residual), the account limit.

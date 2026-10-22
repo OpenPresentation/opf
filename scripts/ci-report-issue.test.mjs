@@ -24,6 +24,9 @@ test('red with no open issue opens one with the label, the failing jobs and the 
   const { calls, gh } = recorder('');
   const result = report({ ...base, needs: needs({ windows: 'failure', macos: 'success' }), gh });
   assert.equal(result.action, 'opened');
+  const labelCall = calls.find((args) => args[3] === 'repos/OpenPresentation/opf/labels' || args.includes('repos/OpenPresentation/opf/labels'));
+  assert.ok(labelCall, 'the label is created before the issue');
+  assert.ok(calls.indexOf(labelCall) < calls.length - 1);
   const create = calls.at(-1);
   assert.deepEqual(create.slice(0, 2), ['api', 'repos/OpenPresentation/opf/issues']);
   assert.ok(create.includes('labels[]=nightly-red'));
@@ -62,7 +65,7 @@ test('run: reads NEEDS and the repository, supports --dry-run and --ignore, and 
   const env = { NEEDS: JSON.stringify(needs({ a: 'failure', flake: 'failure' })), GITHUB_REPOSITORY: 'OpenPresentation/opf', GITHUB_SHA: 'abc', GITHUB_RUN_ID: '9', EVENT: 'schedule' };
   const dry = run(['--label', 'nightly-red', '--title', 'T', '--dry-run'], env);
   assert.equal(dry.action, 'opened');
-  assert.equal(dry.calls.length, 2, 'the lookup and the create, nothing sent');
+  assert.equal(dry.calls.length, 3, 'the lookup, the label and the issue, nothing sent');
   const ignored = run(['--label', 'nightly-red', '--title', 'T', '--ignore', 'a,flake', '--dry-run'], env);
   assert.equal(ignored.action, 'none');
   assert.equal(run(['--label', 'nightly-red', '--title', 'T', '--dry-run'], { ...env, DRY_RUN_OPEN: '7' }).action, 'commented');
@@ -70,4 +73,15 @@ test('run: reads NEEDS and the repository, supports --dry-run and --ignore, and 
   assert.throws(() => run(['--label', 'x', '--title', 'T'], { ...env, NEEDS: 'nope' }), /NEEDS must be the JSON/);
   assert.throws(() => run(['--label', 'x', '--title', 'T'], { NEEDS: '{}' }), /GITHUB_REPOSITORY/);
   assert.throws(() => run(['--bogus'], env), /unknown argument/);
+});
+
+test('a failing label creation (it exists, or no permission) does not stop the issue from being opened', () => {
+  const calls = [];
+  const gh = (args) => {
+    calls.push(args);
+    if (args.includes('repos/OpenPresentation/opf/labels')) throw new Error('gh api failed (1): HTTP 422');
+    return args[1].includes('/issues?') ? '' : '';
+  };
+  assert.equal(report({ ...base, needs: needs({ a: 'failure' }), gh }).action, 'opened');
+  assert.equal(calls.at(-1)[1], 'repos/OpenPresentation/opf/issues');
 });
