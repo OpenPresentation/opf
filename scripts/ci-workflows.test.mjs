@@ -207,6 +207,7 @@ test('the setup action installs the whole frozen workspace (a filtered install w
   assert.match(setup, /cache: pnpm/u);
   assert.match(setup, /if: \$\{\{ inputs\.container != 'true' \}\}\n {6}uses: pnpm\/action-setup@/u);
   assert.match(setup, /if: \$\{\{ inputs\.container == 'true' \}\}/u);
+  assert.match(setup, /git config --global --add safe\.directory "\$GITHUB_WORKSPACE"/u, 'git works in the container (the checkout is not owned by its user)');
   assert.match(setup, /--filter "\$\{PACKAGE\}\^\.\.\."/u);
   assert.match(setup, /--filter "\$\{name\}\.\.\."/u, 'build-also builds a package and its dependencies');
   assert.match(setup, /pnpm "\$\{filters\[@\]\}" run --if-present build/u);

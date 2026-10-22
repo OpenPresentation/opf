@@ -48,6 +48,13 @@ runs:
         npm install --global --no-audit --no-fund "pnpm@${version}"
         pnpm --version
 
+    # The container user (root) does not own the checkout (the runner user does), so a later `git` call (rev-parse HEAD, cat-file) fails
+    # with "dubious ownership" unless the directory is trusted; actions/checkout only does that for its own step.
+    - name: Trust the checkout (container)
+      if: ${{ inputs.container == 'true' }}
+      shell: bash
+      run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
     - name: Set up Node.js
       uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
       with:
