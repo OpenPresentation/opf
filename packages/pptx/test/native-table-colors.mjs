@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {toPptx,fromPptx} from '../dist/index.js';
+import {lockEvidence} from './helpers/lock-evidence.mjs';
 const [mode,directory='artifacts/native-table-colors']=process.argv.slice(2);
 assert.ok(['generate','compare'].includes(mode));
 const output=path.resolve(directory),hash=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -25,7 +26,8 @@ for(const name of ['@openpresentation/opf','@openpresentation/opf-render','@open
  for(const file of files)await visit(file);
  runtime[name+'/package.json']=hash(await readFile(path.join(root,'package.json')));
 }
-for(const file of ['test/native-table-colors.mjs','test/native-table-colors.ps1','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+for(const file of ['test/native-table-colors.mjs','test/native-table-colors.ps1','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+{const [lockKey,lockHash]=lockEvidence(new URL('../',import.meta.url));runtime[lockKey]=lockHash;}
 if(mode==='generate'){
  const cases=[
   ['#F8FAFC','#000000','#000000'],['#0F172A','#FFFFFF','#FFFFFF'],

@@ -8,6 +8,7 @@ import {unzipSync, zipSync, strFromU8, strToU8} from 'fflate';
 import {loadFonts} from '@openpresentation/opf-render/fonts-node';
 import {nativeFurnitureParts} from '../dist/native-furniture.js';
 import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
+import {lockEvidence} from './helpers/lock-evidence.mjs';
 
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const fonts = await loadFonts({pack: 'office'});
@@ -48,7 +49,7 @@ if (record) {
 const base = baseline && JSON.parse(await readFile(path.join(baseline, 'manifest.json')));
 if (base) {
   assert.equal(base.revision, '7f300b42166c55ee14f8f9432e7340ded26f5ee4');
-  assert.equal(base.lockSha256, hash(await readFile(new URL('../package-lock.json', import.meta.url))));
+  assert.equal(base.lockSha256, lockEvidence(new URL('../', import.meta.url))[1]);
 }
 let defaultProof = 0, tokenRemovals = 0;
 const fixtures = new Map();
@@ -100,7 +101,7 @@ for (const mode of modes) for (const [id, deck, expected] of cases) {
 }
 if (record) {
   await writeFile(path.join(record, 'manifest.json'), JSON.stringify({revision: '7f300b42166c55ee14f8f9432e7340ded26f5ee4',
-    lockSha256: hash(await readFile(new URL('../package-lock.json', import.meta.url))), node: process.version, files: recorded}, null, 2) + '\n', {flag: 'wx'});
+    lockSha256: lockEvidence(new URL('../', import.meta.url))[1], node: process.version, files: recorded}, null, 2) + '\n', {flag: 'wx'});
   console.log(`Recorded ${cases.length} clean-main cases (${recorded.length} archives); no candidate claim.`);
 } else {
   for (const value of [null, false, true, '', 'auto', 'Shape', 1, {}, []]) {

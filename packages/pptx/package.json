@@ -41,7 +41,7 @@
     "typecheck": "node scripts/check-syntax.mjs src test scripts",
     "test": "pnpm run build && node ../../scripts/run-tests.mjs && pnpm run build:browser-check && pnpm run check:scripts",
     "test:contract": "pnpm run build && node ../../scripts/run-tests.mjs --suite contract && pnpm run build:browser-check",
-    "check:scripts": "node --test scripts/check-syntax.test.mjs scripts/browser-suites.test.mjs",
+    "check:scripts": "node --test scripts/check-syntax.test.mjs scripts/browser-suites.test.mjs scripts/pnpm-lock.test.mjs",
     "validate": "node scripts/validate-package.mjs",
     "test:packed": "node test/packed-install.mjs && node test/provenance-interop.mjs",
     "test:compare-published": "node test/compare-published.mjs",
