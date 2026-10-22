@@ -8,13 +8,22 @@ import path from 'node:path';
 
 // Registry geometry belongs to the immutable source that qualified the installed release. The examples digest alone
 // cannot distinguish two cores that compose identical documents differently (for example metric default alignment).
-// Like test-packed-ecosystem.mjs's readHarnessBytes, read only blobs at release-plan.json's verificationRefs.opf.
+// Like test-packed-ecosystem.mjs's readHarnessBytes, read only blobs at the registry plan's verificationRefs.opf
+// (scripts/registry-plan.mjs: the commit the published core was built from).
 export function readPublishedCoreGolden({ root, ref, version, digest }) {
   if (!/^[a-f0-9]{40}$/.test(ref ?? '')) throw new Error('Missing immutable registry verification ref for opf');
   const read = (file) => execFileSync('git', ['show', `${ref}:${file}`], { cwd: root, stdio: 'pipe', maxBuffer: 16 * 1024 * 1024 });
   const manifest = JSON.parse(read('packages/javascript/package.json'));
   if (manifest.version !== version) throw new Error(`Registry core verification ref version ${manifest.version} does not match installed ${version}`);
-  const { golden } = JSON.parse(read('ecosystem.lock.json'));
+  // MR-34: a release commit with no ecosystem lock (or none with a golden) has no core golden fixture; its baseline is the
+  // renderer's own (packages/render/test/golden/), which the pinned renderer tests select themselves.
+  let lock;
+  try {
+    lock = read('ecosystem.lock.json');
+  } catch {
+    return undefined;
+  }
+  const { golden } = JSON.parse(lock);
   if (!golden || golden.repository !== 'opf') return undefined;
   const relative = golden.path;
   if (typeof relative !== 'string' || !relative.startsWith('scripts/fixtures/') || path.posix.isAbsolute(relative) || relative.includes('\\') || relative.split('/').some((part) => part === '..' || part === '.')) {

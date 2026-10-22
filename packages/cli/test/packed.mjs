@@ -7,12 +7,14 @@ import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {packWorkspacePackage} from '../../../scripts/workspace-pack.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
-import {satisfies} from '../../../scripts/unreleased-gate.mjs';
+import {satisfies} from '../../../scripts/release-registry.mjs';
+import {registryPlan} from '../../../scripts/registry-plan.mjs';
 import {assertExecOutsideGlobal, globalPrefixLayout} from '../../../scripts/global-prefix.mjs';
 const root=fileURLToPath(new URL('../../../',import.meta.url));
 const pkg=path.join(root,'packages/cli'),out=path.join(root,'artifacts/cli');
 const registry=process.argv.includes('--registry');
-const plan=registry?JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8')):null;
+// MR-34: the published CLI is the registry's `latest` and its release commit the registry's gitHead (scripts/registry-plan.mjs).
+const plan=registry?registryPlan():null;
 const option=name=>process.argv.find(value=>value.startsWith(`${name}=`))?.slice(name.length+1);
 const version=option('--version'),verificationRef=option('--verification-ref');
 assert.ok((!version&&!verificationRef)||(registry&&version&&verificationRef),'Use --registry with both --version=<version> and --verification-ref=<40-character commit>');
@@ -21,7 +23,7 @@ if(verificationRef)assert.match(verificationRef,/^[a-f0-9]{40}$/);
 const expected=registry
  ? (version?{name:'@openpresentation/cli',version}:plan.packages.find(item=>item.name==='@openpresentation/cli'))
  : JSON.parse(await readFile(path.join(pkg,'package.json'),'utf8'));
-assert.ok(expected?.version,'Missing CLI version in the published release plan');
+assert.ok(expected?.version,'Missing CLI version in the published set');
 const registrySpec=`${expected.name}@${expected.version}`;
 const temp=await mkdtemp(path.join(tmpdir(),'opf-cli-installed-'));
 function run(command,args,cwd,env={}) {

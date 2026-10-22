@@ -25,7 +25,6 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {inflateRawSync} from 'node:zlib';
-import {cliPeerGate, report as gateReport} from '../../../scripts/unreleased-gate.mjs';
 import {imagePlaceholderCount} from './helpers/image-placeholders.mjs';
 
 const executable = process.env.OPF_TEST_BIN;
@@ -34,9 +33,6 @@ if (!executable) {
   process.exit(1);
 }
 const bin = realpathSync(executable);
-// Same rule as files.mjs: while the published peers do not satisfy the installed CLI's ranges (a coordinated release not on npm yet), a pull
-// request, merge-queue or roller-candidate run skips with a notice; every other run fails.
-if (!gateReport(cliPeerGate({cliRoot: path.dirname(path.dirname(bin)), executable: bin, names: ['@openpresentation/opf-render', '@openpresentation/opf-pptx']}))) process.exit(0);
 const require = createRequire(bin);
 // RR-74, RR-75: the registry run drives the plan's published CLI, whose flag for "no embedded fonts" is --svg-fonts none before 0.18 and
 // --text system from it (the candidate CLI keeps its 0.17 version until release prep, so its usage says which: 0.18 has opf doctor).

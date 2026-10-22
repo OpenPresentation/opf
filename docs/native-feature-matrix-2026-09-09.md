@@ -38,7 +38,7 @@ Global RGB mean absolute channel differences range from 0.9763 to 6.0587 on a 0â
 - [Quote, timeline, chart and grid spans](evidence/native-feature-matrix/contact-3.png)
 - [Embedded raster image](evidence/native-feature-matrix/contact-4.png)
 
-Regenerate from this GitHub checkout and a fresh registry consumer containing the release-plan packages plus the renderer's raster dependencies:
+Regenerate from this GitHub checkout and a fresh registry consumer containing the published packages plus the renderer's raster dependencies:
 
 ```powershell
 node scripts/test-native-feature-matrix.mjs artifacts/npm/registry-consumer artifacts/native-feature-matrix generate

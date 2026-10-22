@@ -7,13 +7,14 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {layoutMetric,OPFCompositionError} from '../packages/javascript/dist/composition.js';
 import {metricLayoutFixtures} from './metric-layout-fixtures.mjs';
+import {registryPlan,resolveRef} from './registry-plan.mjs';
 
 assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(x=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(x)), 'Run without source aliases or preload/loader arguments.');
 const consumer=path.resolve(process.argv[2]??'artifacts/npm/registry-consumer'),output=process.argv[3];
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const modules=await realpath(path.join(consumer,'node_modules'));
 const lock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8'));
-const plan=JSON.parse(await readFile('release-plan.json','utf8'));
+const plan=registryPlan();
 // The installed-code step verifies the current plan against fresh npm archives.
 // Historical release evidence must never pin a newer consumer to older bytes.
 const baselineFile='artifacts/editor/installed-code-registry-summary.json';
@@ -31,7 +32,7 @@ async function load(name,entrypoint) {
     assert.ok(expected,`Missing verified registry package: ${name}`);
     assert.equal(manifest.version,plan.packages.find(p=>p.name===name).version);
     assert.equal(expected.version,manifest.version,'Registry evidence must match the installed version');
-    assert.equal(expected.gitHead,plan.verificationRefs[name.split('/').at(-1)],'Registry evidence must match the immutable release');
+    assert.equal(resolveRef(name.split('/').at(-1),expected.gitHead),plan.verificationRefs[name.split('/').at(-1)],'Registry evidence must match the immutable release');
     assert.equal(entry.version,manifest.version);assert.ok(!entry.link&&entry.resolved.startsWith('https://registry.npmjs.org/'));
     assert.equal(entry.integrity,expected.integrity,'Registry evidence must match the installed integrity');
     for (const [file,digest] of Object.entries(expected.files)) {

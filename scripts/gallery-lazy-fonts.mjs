@@ -44,7 +44,7 @@ export function galleryLazyFontManifest(renderFonts, rendererVersion) {
 export function galleryLazyFontManifestForExample(renderFonts, rendererVersion, exampleSource) {
   if (!/lazyFontsBaseUrl/.test(exampleSource)) return undefined;
   const manifest = galleryLazyFontManifest(renderFonts, rendererVersion);
-  if (!manifest) throw new Error('The pinned editor example sets lazyFontsBaseUrl but the pinned @openpresentation/opf-render vendors no lazy fonts (Intos and the open families, after 0.10.0). Move release-plan.json to a renderer release that ships them, or pin an editor example that does not load them.');
+  if (!manifest) throw new Error('The pinned editor example sets lazyFontsBaseUrl but the pinned @openpresentation/opf-render vendors no lazy fonts (Intos and the open families, after 0.10.0). Use a renderer release that ships them, or an editor example that does not load them.');
   return manifest;
 }
 

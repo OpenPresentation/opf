@@ -1,6 +1,6 @@
 {
   "$schema": "./scripts/ecosystem-lock.schema.json",
-  "$comment": "RR-50: written by the roller (scripts/ecosystem-roll.mjs), not by hand. Use a Depends-On: trailer for an unmerged dependency. See docs/ecosystem-development.md.",
+  "$comment": "MR-34: frozen. The roller is deleted and nothing writes this file; the archived repositories' CI still resolves their sibling commits from it through .github/actions/ecosystem-refs until MR-60 deletes the action, the script and this file.",
   "version": 1,
   "repositories": {
     "opf": { "sha": "87d71df475754b75e319d9993dcd13808d063ab1" },

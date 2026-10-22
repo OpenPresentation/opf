@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/OpenPresentation/opf/blob/main/scripts/ecosystem-lock.schema.json",
   "title": "OpenPresentation ecosystem lock (RR-50)",
-  "description": "The four OpenPresentation commits that passed the coordinated ecosystem checks together. Written by the roller (scripts/ecosystem-roll.mjs); scripts/ecosystem-lock.mjs validates it with the same rules.",
+  "description": "The four OpenPresentation commits that passed the coordinated ecosystem checks together. Frozen since MR-34: the roller is deleted and the archived repositories' CI is the only reader (until MR-60); scripts/ecosystem-lock.mjs validates it with the same rules.",
   "type": "object",
   "additionalProperties": false,
   "required": ["version", "repositories", "provenance"],

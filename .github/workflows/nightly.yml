@@ -11,16 +11,16 @@ name: Nightly
 #   - workflow_call from ci.yml: the label `full-ci` runs the same legs on a pull request that touches OS- or Node-specific code.
 #
 # Coverage that moved here from the per-repository and merge-queue workflows (nothing disappears, decision D15):
-#   cli-portability     cli-windows.yml (Windows, macOS: core and CLI unit and packed tests)
-#   installed           ecosystem-ci.yml "Installed candidates" (Windows, macOS: packed tarballs, installed browser checks)
+#   cli-portability     the old cli-windows workflow (Windows, macOS: core and CLI unit and packed tests)
+#   installed           the old coordinated-CI "Installed candidates" job (Windows, macOS: packed tarballs, installed browser checks)
 #   pptx-windows        opf-pptx CI on Windows (the sharded suite, the native harness without Office, the browser suite)
 #   editor-macos        opf-editor `macos-playground`
-#   node-range          engines-range.yml and the three sibling `node-range` jobs (Node 22 and 26, all six packages)
+#   node-range          the old engines-range workflow and the three sibling `node-range` jobs (Node 22 and 26, all six packages)
 #   packed-linux        the packed-install and installed-browser steps of the old core `normal` job and of each package job
 #   registry            the registry consumers (published packages against this checkout's harness)
 #   audit               `pnpm audit` (a new advisory must not fail an unrelated pull request, so it moved off verify)
 #   platform-residual   opf-render `platform-residual` (non-blocking, as before)
-#   flake               the four flake-repeat.yml workflows (advisory, Sundays and on demand)
+#   flake               the four per-repository flake-repeat workflows (advisory, Sundays and on demand)
 # Slower checks of the published packages (published matrix, installed parity, determinism grid, full goldens) are in slow-checks.yml.
 on:
   schedule:
@@ -74,7 +74,7 @@ jobs:
           echo "flake=$flake" >> "$GITHUB_OUTPUT"
 
   # Core and the CLI on the other operating systems: install, typecheck, unit suites, the packed install and the packed CLI with
-  # its optional render and PPTX peers (cli-windows.yml, 45-minute limit there).
+  # its optional render and PPTX peers (45-minute limit, as the old cli-windows workflow had).
   cli-portability:
     name: CLI and core (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
@@ -105,7 +105,7 @@ jobs:
       - run: pnpm --filter @openpresentation/cli --fail-if-no-match run test:packed:peers
 
   # "Installed candidates": the packed tarballs of the six packages installed in a clean consumer on Windows and macOS, with the
-  # installed browser checks (ecosystem-ci.yml `installed-portability`, 45-minute limit there).
+  # installed browser checks (45-minute limit, as the old `installed-portability` job had).
   installed:
     name: Installed candidates (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
@@ -381,9 +381,9 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
-  # The exact published packages installed from the registry and checked with this checkout's harnesses (the `registry` shard of
-  # ecosystem-ci.yml and the registry steps of the old package jobs). MR-34 re-points the scripts that still read release-plan.json
-  # to the `latest` set; until the first shared release the registry set is the previous release train.
+  # The exact published packages (the `latest` dist-tag of each: scripts/registry-plan.mjs) installed from the registry and checked
+  # with the harness files of the release commits they were built from (the registry's gitHead, read from this history).
+  # Until the first shared release the published set is the previous release train.
   registry:
     name: Registry consumers
     runs-on: ubuntu-24.04
@@ -405,7 +405,6 @@ jobs:
       - run: pnpm build
       - run: pnpm test:developer-quickstart
       - run: pnpm test:registry-ecosystem
-      - run: pnpm test:layout-contracts:registry
       - run: pnpm test:packed-browser registry
       - run: node scripts/test-packed-browser-guards.mjs
       - run: node scripts/test-installed-code-guards.mjs --registry

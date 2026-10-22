@@ -2,7 +2,7 @@ name: Publish OPF npm packages
 
 # MR-40 (docs/programs/monorepo/README.md, section 5 and decisions D6, D7, D16): the one workflow that publishes all six packages
 # (@openpresentation/opf, cli, opf-render, opf-pptx, opf-editor, gallery) at one version, through npm trusted publishing (GitHub
-# OIDC) with provenance. It replaces the core-only npm-publish.yml and cli-publish.yml; the file keeps its name because core's
+# OIDC) with provenance. It replaced the core-only workflow of this name and the CLI's own publisher; the file keeps its name because core's
 # trusted-publisher entry names it, and the other five packages get the same entry (docs/programs/monorepo/owner-steps.md, O1).
 #
 # Entries:

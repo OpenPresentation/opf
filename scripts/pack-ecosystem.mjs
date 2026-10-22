@@ -6,16 +6,9 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import {previewPackages, previewManifest} from './ecosystem-preview-plan.mjs';
-import {stageGalleryGraph,candidateArtifacts} from './candidate-gallery-pack.mjs';
 const packages = previewPackages(process.argv.slice(2));
-if (process.env.CANDIDATE_GALLERY_REF && process.argv.length > 2) throw new Error('--include-cli is for the ordinary preview graph; candidate Gallery staging already includes CLI');
 const root = fileURLToPath(new URL("../", import.meta.url));
 const out = path.join(root, "artifacts/npm");
-if(!process.env.CANDIDATE_GALLERY_REF)candidateArtifacts(path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..'));
-if(process.env.CANDIDATE_GALLERY_REF){
-  console.log(JSON.stringify(stageGalleryGraph({coreRoot:path.resolve(root),workspace:path.resolve(root,'..'),out}),null,2));
-  process.exit(0);
-}
 
 const versions = Object.fromEntries(
   packages.map(([name, , version]) => [`@openpresentation/${name}`, version]),

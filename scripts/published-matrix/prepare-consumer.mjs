@@ -1,17 +1,20 @@
-// Installs the published OPF packages (versions from release-plan.json) from the npm registry into a standalone TypeScript
-// consumer, checks that the committed lockfile pins exactly those versions and integrity hashes, type-checks the consumer
-// with a pinned TypeScript, and writes `engines-installed.mjs` for the font-switch matrix (RR-04, FF-10).
+// Installs the published OPF packages (the registry's `latest` of each: scripts/registry-plan.mjs; MR-34) from the npm registry
+// into a standalone TypeScript consumer, checks that the resulting lockfile pins exactly those versions with registry integrity
+// hashes, type-checks the consumer with a pinned TypeScript, and writes `engines-installed.mjs` for the font-switch matrix
+// (RR-04, FF-10). The committed package.json and lockfile of the template pin everything that is not an OPF package (TypeScript,
+// Playwright, the font packages as of the last refresh); the OPF packages and the renderer's own pinned peers follow the set.
 //
 //   node scripts/published-matrix/prepare-consumer.mjs [directory] [--update-lock]
 //
-// The default directory is artifacts/published-matrix/consumer. `--update-lock` rewrites the committed
-// package.json versions and package-lock.json from release-plan.json instead of installing.
+// The default directory is artifacts/published-matrix/consumer. `--update-lock` rewrites the committed package.json versions and
+// package-lock.json from the current set instead of installing (run it to move the pinned third-party baseline).
 import assert from 'node:assert/strict';
 import {spawnSync} from 'node:child_process';
 import {cp, mkdir, readFile, rm, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {consumerDependencies, assertConsumerLock, assertInstalledConsumerPackage} from './consumer-dependencies.mjs';
+import {registryPlan} from '../registry-plan.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..', '..');
@@ -28,9 +31,9 @@ function run(command, args, cwd, label = `${command} ${args.join(' ')}`) {
   assert.equal(result.status, 0, `${label} failed (${result.status})`);
 }
 
-const plan = JSON.parse(await readFile(path.join(root, 'release-plan.json'), 'utf8'));
+const plan = registryPlan({ refs: false });
 const planned = Object.fromEntries(PACKAGES.map((name) => [name, plan.packages.find((entry) => entry.name === name)?.version]));
-for (const [name, version] of Object.entries(planned)) assert.match(version ?? '', /^\d+\.\d+\.\d+$/, `release-plan.json lists ${name}`);
+for (const [name, version] of Object.entries(planned)) assert.match(version ?? '', /^\d+\.\d+\.\d+$/, `the registry has no exact ${plan.tag} version of ${name}`);
 
 const consumerPlan = consumerDependencies(planned, plan.independentPackages);
 
@@ -61,19 +64,21 @@ if (updateLock) {
   process.exit(0);
 }
 
+// The template's manifest with the set's OPF versions and the renderer's own pinned peers: everything else stays as committed.
 const manifest = JSON.parse(await readFile(path.join(template, 'package.json'), 'utf8'));
-assert.deepEqual(Object.fromEntries(Object.keys(consumerPlan).map((name) => [name, manifest.dependencies[name]])), consumerPlan, 'scripts/published-matrix/consumer/package.json pins the versions in release-plan.json; run prepare-consumer.mjs --update-lock');
-const lock = JSON.parse(await readFile(path.join(template, 'package-lock.json'), 'utf8'));
-const expectedPeers = lock.packages['node_modules/@openpresentation/opf-render'].peerDependencies ?? {};
-for (const [name, version] of Object.entries(expectedPeers)) assert.equal(manifest.dependencies[name], version, `the consumer installs the renderer peer ${name}@${version}; run prepare-consumer.mjs --update-lock`);
-assertConsumerLock(consumerPlan, lock);
+const renderPeers = npmView(`@openpresentation/opf-render@${planned['@openpresentation/opf-render']}`);
+manifest.dependencies = Object.fromEntries(Object.entries({...manifest.dependencies, ...consumerPlan, ...renderPeers}).sort(([a], [b]) => a.localeCompare(b)));
 
 await rm(target, {recursive: true, force: true});
 await mkdir(target, {recursive: true});
-for (const file of ['package.json', 'package-lock.json', 'tsconfig.json', 'tsconfig.bundler.json', 'tsconfig.emit.json']) await cp(path.join(template, file), path.join(target, file));
+for (const file of ['package-lock.json', 'tsconfig.json', 'tsconfig.bundler.json', 'tsconfig.emit.json']) await cp(path.join(template, file), path.join(target, file));
 await cp(path.join(template, 'src'), path.join(target, 'src'), {recursive: true});
-// Registry tarballs only: no lifecycle scripts, no lockfile changes.
-run(npm, ['ci', '--ignore-scripts', '--no-audit', '--no-fund'], target);
+await writeFile(path.join(target, 'package.json'), `${JSON.stringify(manifest, null, 2)}\n`);
+// Registry tarballs only: no lifecycle scripts. The committed lockfile is the base: entries that still match stay as pinned and
+// npm resolves the OPF packages (and any peer the new renderer moved) to the set.
+run(npm, ['install', '--ignore-scripts', '--no-audit', '--no-fund'], target);
+const lock = JSON.parse(await readFile(path.join(target, 'package-lock.json'), 'utf8'));
+assertConsumerLock(consumerPlan, lock);
 
 const installed = {};
 for (const name of Object.keys(consumerPlan)) {
@@ -100,7 +105,7 @@ export {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPoli
 export {toSvg, toPng} from '@openpresentation/opf-render';
 export {checkTypefaces, fromPptx, toPptx} from '@openpresentation/opf-pptx';
 export {createEditorSession} from '@openpresentation/opf-editor';
-// The harness of the plan core's release tag (published-matrix.yml runs opf-v<core> as released) reads the deck of an editor session through
+// The harness of the published core's release commit (slow-checks.yml runs it as released) reads the deck of an editor session through
 // this accessor; the current harness uses editor.presentation. Drop it when the plan's core tag has a harness without it.
 export const presentationOf = (editor) => editor.presentation;
 ${catalogEngines}

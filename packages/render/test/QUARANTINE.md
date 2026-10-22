@@ -28,7 +28,7 @@ rule that keeps such a test visible without letting it block unrelated work, and
 | `scripts/quarantine.mjs` (repository root) | `check`, `run-suite <suite>`, `run-deferred`, each with `--dir packages/render`. Plain Node, no dependencies. |
 | `scripts/flake-repeat.mjs` (repository root) | The measurement (`--dir packages/render`). Runs each suite N times and writes a pass rate per test. |
 | `scripts/quarantine.test.mjs` (repository root) | Unit tests of the rule and both scripts (`node --test`). |
-| the root nightly workflow | The scheduled repeat (MR-3x folds `flake-repeat.yml` into it). |
+| the root nightly workflow (`.github/workflows/nightly.yml`, job `flake`) | The scheduled repeat. |
 
 An entry looks like this (an example, not a real entry):
 

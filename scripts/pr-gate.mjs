@@ -1,51 +1,48 @@
 #!/usr/bin/env node
-// RR-57: the one shared PR/CI gate. Watch (and optionally merge) pull requests, or wait for a commit's checks, with ONE
-// batched GraphQL query per interval for every target. Agents use this instead of writing their own watcher.
+// The one shared PR/CI gate. Watch (and optionally merge) pull requests, or wait for a commit's checks, with ONE batched GraphQL
+// query per interval for every target. Agents use this instead of writing their own watcher.
 //
-//   node scripts/pr-gate.mjs <owner/repo#N> [more…] [--merge] [--expect-head <sha>]… [--required auto|all|<a,b,…>]
-//                            [--interval 180] [--timeout-minutes 100] [--rerun-once [--rerun-scope failed|all]] [--no-skipped] [--json]
-//   node scripts/pr-gate.mjs --commit <owner/repo@sha> [same options, without --merge/--expect-head]
+//   node scripts/pr-gate.mjs <owner/repo#N> [more…] [--merge] [--expect-head <sha>]… [--required verify|all|<a,b,…>]
+//                            [--interval 180] [--timeout-minutes 100] [--json]
+//   node scripts/pr-gate.mjs --commit <owner/repo@sha> [same options, without --merge and --expect-head]
 //
-// Green: every REQUIRED check (the base branch's ruleset, read once per repository through REST) exists for the current
-// head and completed with success (skipped/neutral pass unless --no-skipped), and the PR's mergeability is computed and
-// not conflicting. Check runs and commit statuses both count; checks for older heads are ignored, and so are superseded
-// runs on the same head: only the newest report of each check counts (per workflow and job name; a re-run or a newer run
-// of the same job replaces the failed one, a newer failure replaces an older success; a CANCELLED check of a run that a newer
-// run of the same workflow superseded is ignored even before the newer run reports that check). Zero checks or a required check
-// that has not registered yet is pending, never green. Without a ruleset (or --required all) every check
-// counts except neutral bots (Cursor Bugbot) and identity-verified scheduled Editor flake measurement; every gating GitHub Actions suite must be complete, and green must hold on two
-// consecutive polls. Red (a required check failed, was cancelled, timed out, hit a startup failure or needs action) stops
-// at once and prints the failing checks with their URLs; --rerun-once re-runs the failed or cancelled workflow runs one
-// time first (default --rerun-scope failed; cancelled runs always restart in full). With --rerun-scope all, restart each
-// failing workflow in full so successful prerequisite jobs, including candidate selection, run again. This is opt-in
-// and sends the same one REST request per workflow run. --merge enqueues into the merge queue (GraphQL, with the expected head; retried for up to 6 minutes while
-// GitHub is still computing mergeability) and follows the queue, re-enqueueing once after an ejection; a repository
-// without a queue is squash-merged. Re-running resumes: a merged PR exits 0 and a queued PR is followed. A PR the queue
-// merges prints "MERGED <label> <sha> (merged by the merge queue)" and exits 0: the queue also records a removal with the
-// reason "merged" for it, which is not an ejection (failed_checks, manual and other reasons are).
+// MR-34: this is the monorepo gate (docs/programs/monorepo/README.md, section 2). There is no merge queue and one required check,
+// `verify` (ci.yml), so the gate is small: it reads the head commit's check runs, waits for `verify`, and with --merge turns on GitHub
+// auto-merge (squash, for the expected head). The merge-queue enqueue and ejection handling, the ruleset parsing, the superseded-run
+// logic, the `Depends-On` handling, the flake-measurement identity and --rerun-once are gone: re-run a failed `verify` with
+// `gh run rerun <run id> --failed`.
 //
-// Exit codes: 0 green, or MERGED (by the queue, by the squash merge, or already merged when the gate started), 1 red,
-// 2 merge conflict (DIRTY), 3 closed without merging, 4 head moved (--expect-head; right after a push GitHub can still
-// serve the previous head, so a different head is re-read up to 3 times, 15 s apart, before it exits 4; once the expected
-// head has been seen, a later change exits 4 at once), 5 merge-queue ejection twice or the merge/enqueue was refused, 64 usage, failed gh auth or a target
-// that does not exist, 75 timeout (prints a RESUME line; re-run it). With several targets the first failure code in argument order wins,
-// then 75 if any target is unfinished. GitHub API: gh's auth; GraphQL only in the poll loop (rateLimit is read on every
-// poll and the gate backs off below 200 points); REST for rulesets (once per repository), --rerun-once, and cached identity verification of candidate Editor measurement runs.
+// Green: the required checks exist for the current head and completed with success (a skipped required check is not green), and the
+// pull request is not conflicting. Only the newest report of each check name counts (a re-run replaces the failed run). Zero checks
+// or a required check that has not registered yet is pending, never green. `--required all` requires every check to pass (neutral
+// bots, Cursor Bugbot, never gate) and green must then hold on two consecutive polls, because a suite can still be adding jobs.
+// Red (a required check failed, was cancelled, timed out, hit a startup failure or needs action) stops at once and prints the failing
+// checks with their URLs.
+//
+// --merge: after the head matches --expect-head (when given), enables GitHub auto-merge for it (squash), so GitHub merges on green
+// even if this process dies, and follows the pull request until it is merged. If auto-merge cannot be enabled (the pull request is
+// already clean, or the repository does not allow auto-merge) the gate squash-merges the expected head itself once the checks are
+// green. Re-running resumes: a merged pull request exits 0 and an enabled auto-merge is followed.
+//
+// Exit codes: 0 green, or MERGED (by auto-merge, by the gate, or already merged when the gate started), 1 red, 2 merge conflict,
+// 3 closed without merging, 4 head moved (--expect-head; right after a push GitHub can still serve the previous head, so a different
+// head is re-read up to 3 times, 15 s apart, before it exits 4; once the expected head has been seen, a later change exits 4 at
+// once), 5 the merge was refused (not a transient answer), 64 usage, failed gh auth or a target that does not exist, 75 timeout
+// (prints a RESUME line; re-run it). With several targets the first failure code in argument order wins, then 75 if any target is
+// unfinished. GitHub API: gh's auth, GraphQL only (rateLimit is read on every poll and the gate backs off below 200 points).
 import { spawnSync } from 'node:child_process';
 import { realpathSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
-import { knownBranchRules, measurementClassifier } from './measurement-policy.mjs';
 
-export const EXIT = { ok: 0, red: 1, dirty: 2, closed: 3, headMoved: 4, ejected: 5, usage: 64, timeout: 75 };
-/** Checks that never gate (advisory bots), in the "all checks" fallback. Shared with release-train's ADVISORY_CHECKS. */
+export const EXIT = { ok: 0, red: 1, dirty: 2, closed: 3, headMoved: 4, refused: 5, usage: 64, timeout: 75 };
+/** Checks that never gate (advisory bots), in `--required all`. */
 export const NEUTRAL_BOTS = new Set(['Cursor Bugbot']);
 export const RED_CONCLUSIONS = new Set(['FAILURE', 'CANCELLED', 'TIMED_OUT', 'STARTUP_FAILURE', 'ACTION_REQUIRED', 'STALE']);
-/** Enqueue/merge refusals that clear on their own once GitHub has computed mergeability or the checks registered. */
+/** Merge refusals that clear on their own once GitHub has computed mergeability or the checks registered. */
 export const TRANSIENT_REFUSAL = /mergeability check has not yet completed|required status checks are expected|has not been computed|try again/i;
-export const DEFAULTS = { interval: 180, minInterval: 60, timeoutMinutes: 100, heartbeatMinutes: 15, retryWindowMinutes: 6, retrySeconds: 60, rateFloor: 200, headLagRetries: 3, headLagSeconds: 15, mergedSettlePolls: 3 };
-
-/** RemovedFromMergeQueueEvent.reason of a successful queue merge (others seen: failed_checks, manual). */
-export const MERGED_REMOVAL = /^merged$/i;
+/** Answers that mean auto-merge is not available for this pull request right now: the gate merges it itself when green. */
+export const NO_AUTO_MERGE = /clean status|auto[- ]?merge is not allowed|auto[- ]?merge is not enabled|not allowed for this repository/i;
+export const DEFAULTS = { interval: 180, minInterval: 60, timeoutMinutes: 100, heartbeatMinutes: 15, retryWindowMinutes: 6, retrySeconds: 60, rateFloor: 200, headLagRetries: 3, headLagSeconds: 15, mergedSettlePolls: 3, pollRetries: 3, pollRetrySeconds: 20, required: 'verify' };
 
 export class UsageError extends Error {}
 
@@ -65,940 +62,390 @@ export function parseTarget(text, { commit = false } = {}) {
   return { kind: 'pr', owner: match[1], name: match[2], number: Number(match[3]) };
 }
 
-export function targetLabel(target) {
-  return target.kind === 'pr' ? `${target.owner}/${target.name}#${target.number}` : `${target.owner}/${target.name}@${target.sha.slice(0, 12)}`;
-}
+export const targetLabel = (target) => (target.kind === 'pr' ? `${target.owner}/${target.name}#${target.number}` : `${target.owner}/${target.name}@${target.sha.slice(0, 12)}`);
 
 export function parseArgs(argv) {
-  const options = { targets: [], merge: false, expectHeads: [], required: 'auto', interval: DEFAULTS.interval, timeoutMinutes: DEFAULTS.timeoutMinutes, json: false, rerunOnce: false, rerunScope: 'failed', allowSkipped: true, help: false };
-  let rerunScopeSpecified = false;
+  const options = { targets: [], merge: false, expectHeads: [], required: DEFAULTS.required, interval: DEFAULTS.interval, timeoutMinutes: DEFAULTS.timeoutMinutes, json: false, commit: false, help: false };
   const value = (index, flag) => {
     if (index >= argv.length || argv[index].startsWith('--')) throw new UsageError(`${flag} needs a value`);
     return argv[index];
   };
+  const number = (text, flag) => {
+    const parsed = Number(text);
+    if (!Number.isFinite(parsed) || parsed <= 0) throw new UsageError(`${flag} wants a positive number, not ${text}`);
+    return parsed;
+  };
+  const words = [];
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
-    if (arg === '--merge') options.merge = true;
+    if (arg === '--help' || arg === '-h') options.help = true;
+    else if (arg === '--merge') options.merge = true;
     else if (arg === '--json') options.json = true;
-    else if (arg === '--rerun-once') options.rerunOnce = true;
-    else if (arg === '--rerun-scope') {
-      const scope = value(++index, arg);
-      if (!['failed', 'all'].includes(scope)) throw new UsageError('--rerun-scope wants failed or all');
-      options.rerunScope = scope;
-      rerunScopeSpecified = true;
-    }
-    else if (arg === '--no-skipped') options.allowSkipped = false;
-    else if (arg === '--help' || arg === '-h') options.help = true;
-    else if (arg === '--commit') options.targets.push(parseTarget(value(++index, arg), { commit: true }));
-    else if (arg === '--expect-head') {
-      const sha = value(++index, arg);
-      if (!/^[0-9a-fA-F]{7,40}$/.test(sha)) throw new UsageError(`--expect-head wants a commit sha, not ${sha}`);
-      options.expectHeads.push(sha.toLowerCase());
-    } else if (arg === '--required') {
-      const text = value(++index, arg);
-      options.required = text === 'auto' || text === 'all' ? text : text.split(',').map((name) => name.trim()).filter(Boolean);
-      if (Array.isArray(options.required) && !options.required.length) throw new UsageError('--required lists no check');
-    } else if (arg === '--interval' || arg === '--timeout-minutes') {
-      const number = Number(value(++index, arg));
-      if (!Number.isFinite(number) || number <= 0) throw new UsageError(`${arg} wants a positive number`);
-      if (arg === '--interval') options.interval = Math.max(DEFAULTS.minInterval, number);
-      else options.timeoutMinutes = number;
+    else if (arg === '--commit') options.commit = true;
+    else if (['--expect-head', '--required', '--interval', '--timeout-minutes'].includes(arg)) {
+      index += 1;
+      const text = value(index, arg);
+      if (arg === '--expect-head') options.expectHeads.push(text.toLowerCase());
+      else if (arg === '--required') options.required = text;
+      else if (arg === '--interval') options.interval = Math.max(DEFAULTS.minInterval, number(text, arg));
+      else options.timeoutMinutes = number(text, arg);
     } else if (arg.startsWith('--')) throw new UsageError(`unknown option ${arg}`);
-    else options.targets.push(parseTarget(arg));
+    else words.push(arg);
   }
   if (options.help) return options;
-  if (rerunScopeSpecified && !options.rerunOnce) throw new UsageError('--rerun-scope requires --rerun-once');
-  if (!options.targets.length) throw new UsageError('name at least one pull request (owner/repo#N) or --commit owner/repo@sha');
-  const prs = options.targets.filter((target) => target.kind === 'pr');
-  if (options.expectHeads.length && options.expectHeads.length !== prs.length) throw new UsageError(`give one --expect-head per pull request (${prs.length}), in the same order`);
-  prs.forEach((target, index) => {
-    target.expectHead = options.expectHeads[index];
-  });
-  const seen = new Set();
-  for (const target of options.targets) {
-    const label = targetLabel(target);
-    if (seen.has(label)) throw new UsageError(`${label} is named twice`);
-    seen.add(label);
-  }
+  if (!words.length) throw new UsageError('no target: a pull request (owner/repo#N) or, with --commit, owner/repo@sha');
+  if (options.commit && (options.merge || options.expectHeads.length)) throw new UsageError('--commit cannot be combined with --merge or --expect-head');
+  options.targets = words.map((word) => parseTarget(word, { commit: options.commit }));
+  if (options.expectHeads.length && options.expectHeads.length !== options.targets.length) throw new UsageError('--expect-head is given once per target, in target order');
+  if (!['all', 'verify'].includes(options.required) && !/^[^,]+(,[^,]+)*$/.test(options.required)) throw new UsageError(`--required is all, a check name or a comma-separated list, not ${options.required}`);
   return options;
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-// GraphQL
+// Checks
 
-const CONTEXT_NODES =
-  'nodes{__typename ... on CheckRun{databaseId name status conclusion detailsUrl startedAt checkSuite{id commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}} ... on StatusContext{context state targetUrl createdAt commit{oid}}}';
-const CHECKS = `statusCheckRollup{state contexts(first:100){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}} checkSuites(first:50){pageInfo{hasNextPage} nodes{id checkRuns(first:1){totalCount} status conclusion app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}}`;
-const SUITE_RUNS = 'checkRuns(first:100){pageInfo{hasNextPage endCursor} nodes{__typename databaseId name status conclusion detailsUrl startedAt checkSuite{id commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}}}';
-const SUITE_FIELDS = `id status conclusion commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}} ${SUITE_RUNS}`;
-/** A cancelled suite with no failed jobs needs real newer same-workflow reports before its inconsistency is superseded. */
-function supersededCancellationWithoutFailedJobs(suite, suites, runsBySuite) {
-  const workflow = suite.workflowRun?.workflow?.name, runId = suite.workflowRun?.databaseId;
-  if (suite.app?.slug !== 'github-actions' || suite.status !== 'COMPLETED' || suite.conclusion !== 'CANCELLED' || !runsBySuite.get(suite.id).every(run => run.status === 'COMPLETED' && ['SUCCESS','SKIPPED'].includes(run.conclusion) && run.checkSuite?.app?.slug === 'github-actions' && run.checkSuite?.workflowRun?.databaseId === runId && run.checkSuite?.workflowRun?.workflow?.name === workflow) || typeof workflow !== 'string' || !workflow || (!Number.isSafeInteger(runId) || runId <= 0)) return false;
-  return suites.some(newer => newer.app?.slug === 'github-actions' && newer.commit.oid === suite.commit.oid && newer.workflowRun?.workflow?.name === workflow && Number.isSafeInteger(newer.workflowRun?.databaseId) && newer.workflowRun.databaseId > runId &&
-    (newer.status !== 'COMPLETED' || newer.conclusion === 'SUCCESS' || (RED_CONCLUSIONS.has(newer.conclusion) && newer.conclusion !== 'CANCELLED')) &&
-    runsBySuite.get(newer.id).some(run => run.checkSuite?.workflowRun?.databaseId === newer.workflowRun.databaseId && run.checkSuite?.workflowRun?.workflow?.name === workflow && (run.status !== 'COMPLETED' || run.conclusion === 'SUCCESS' || (RED_CONCLUSIONS.has(run.conclusion) && run.conclusion !== 'CANCELLED'))));
-}
-/** Actual check runs are authoritative when GitHub has not materialized a rollup. Never synthesize success from a suite. */
-export async function suiteContexts(graphql, owner, name, oid) {
-  const nodes = [], suites = [], runsBySuite = new Map(), seenSuites = new Set(), suiteCursors = new Set();
-  const fetch = async query => {const result = await graphql(query);if(result?.errors?.length) throw new Error('check-suite GraphQL response contains errors');return result;};
-  const validatePage = connection => {if (!Array.isArray(connection?.nodes) || typeof connection.pageInfo?.hasNextPage !== 'boolean') throw new Error('check-suite pagination is incomplete');};
-  const appendRuns = (runs, suiteId) => {
-    for (const run of runs.nodes ?? []) {
-      if (run.checkSuite?.id !== suiteId || run.checkSuite?.commit?.oid !== oid) throw new Error('check run belongs to a different or missing commit');
-      nodes.push(run);
-      runsBySuite.get(suiteId).push(run);
+/** A check run or commit status of a statusCheckRollup context, as { name, state, url, at }. state: SUCCESS, NEUTRAL, SKIPPED, PENDING or a red conclusion. */
+export function normalizeContexts(nodes = []) {
+  const checks = [];
+  for (const node of nodes) {
+    if (node?.__typename === 'CheckRun') {
+      const state = node.status === 'COMPLETED' ? (node.conclusion ?? 'PENDING') : 'PENDING';
+      checks.push({ name: node.name, state, url: node.detailsUrl ?? '', at: node.startedAt ?? '' });
+    } else if (node?.__typename === 'StatusContext') {
+      const state = { SUCCESS: 'SUCCESS', FAILURE: 'FAILURE', ERROR: 'FAILURE' }[node.state] ?? 'PENDING';
+      checks.push({ name: node.context, state, url: node.targetUrl ?? '', at: node.createdAt ?? '' });
     }
-  };
-  let cursor = null;
-  do {
-    const after = cursor ? `,after:${JSON.stringify(cursor)}` : '';
-    const response = await fetch(`query{rateLimit{remaining resetAt cost} repository(owner:${JSON.stringify(owner)},name:${JSON.stringify(name)}){object(oid:${JSON.stringify(oid)}){... on Commit{oid status{contexts{context state targetUrl createdAt}} checkSuites(first:50${after}){pageInfo{hasNextPage endCursor} nodes{${SUITE_FIELDS}}}}}}}`);
-    const commit = response?.data?.repository?.object;
-    if (commit?.oid !== oid) throw new Error('check-suite fallback returned a different commit');
-    if (!cursor) for (const context of commit.status?.contexts ?? []) nodes.push({...context, __typename:'StatusContext', commit:{oid}});
-    const connection = commit.checkSuites;
-    validatePage(connection);
-    for (const suite of connection.nodes ?? []) {
-      if (typeof suite.id !== 'string' || !suite.id) throw new Error('check suite lacks identity');
-      if (suite.commit?.oid !== oid) throw new Error('check suite belongs to a different commit');
-      if (seenSuites.has(suite.id)) throw new Error('duplicate check suite in pagination');
-      seenSuites.add(suite.id);
-      suites.push(suite);
-      runsBySuite.set(suite.id, []);
-      let runs = suite.checkRuns;
-      validatePage(runs);
-      const runCursors = new Set();
-      appendRuns(runs, suite.id);
-      while (runs.pageInfo?.hasNextPage) {
-        if (typeof runs.pageInfo.endCursor !== 'string' || !runs.pageInfo.endCursor) throw new Error('check-run pagination lacks cursor');
-        if (runCursors.has(runs.pageInfo.endCursor)) throw new Error('repeated check-run cursor');
-        runCursors.add(runs.pageInfo.endCursor);
-        const next = await fetch(`query{rateLimit{remaining resetAt cost} node(id:${JSON.stringify(suite.id)}){... on CheckSuite{id commit{oid} checkRuns(first:100,after:${JSON.stringify(runs.pageInfo.endCursor)}){pageInfo{hasNextPage endCursor} nodes{__typename databaseId name status conclusion detailsUrl startedAt checkSuite{id commit{oid} app{slug databaseId} workflowRun{databaseId event runAttempt workflow{name}}}}}}}}`);
-        if (next?.data?.node?.id !== suite.id || next.data.node.commit?.oid !== oid) throw new Error('check-run pagination returned a different suite or commit');
-        runs = next.data.node.checkRuns;
-        validatePage(runs);
-        appendRuns(runs, suite.id);
-      }
-    }
-    if (connection.pageInfo.hasNextPage && (typeof connection.pageInfo.endCursor !== 'string' || !connection.pageInfo.endCursor)) throw new Error('check-suite pagination lacks cursor');
-    cursor = connection.pageInfo.hasNextPage ? connection.pageInfo.endCursor : null;
-    if (cursor && suiteCursors.has(cursor)) throw new Error('repeated check-suite cursor');
-    if (cursor) suiteCursors.add(cursor);
-  } while (cursor);
-  // Read every suite/run page first: a genuine successor may appear after its cancelled predecessor.
-  for (const suite of suites) {
-    const runs = runsBySuite.get(suite.id);
-    if (suite.status === 'COMPLETED' && !['SUCCESS','SKIPPED','NEUTRAL'].includes(suite.conclusion) && !runs.some(run => run.status === 'COMPLETED' && !['SUCCESS','SKIPPED','NEUTRAL'].includes(run.conclusion)) && !supersededCancellationWithoutFailedJobs(suite, suites, runsBySuite)) throw new Error('failed check suite has no corresponding failed check run');
   }
-  return {nodes,suites};
+  return checks;
 }
-const PR_FIELDS = `id number url state merged isDraft mergeCommit{oid} headRefOid baseRefName mergeable mergeStateStatus isInMergeQueue mergeQueueEntry{state position} timelineItems(last:1,itemTypes:[REMOVED_FROM_MERGE_QUEUE_EVENT]){nodes{... on RemovedFromMergeQueueEvent{reason createdAt}}} commits(last:1){nodes{commit{oid ${CHECKS}}}}`;
-const COMMIT_FIELDS = `... on Commit{oid ${CHECKS}}`;
 
-export const ENQUEUE_MUTATION =
-  'mutation($id:ID!,$head:GitObjectID!){enqueuePullRequest(input:{pullRequestId:$id,expectedHeadOid:$head}){mergeQueueEntry{state position}}}';
-export const MERGE_MUTATION =
-  'mutation($id:ID!,$head:GitObjectID!){mergePullRequest(input:{pullRequestId:$id,mergeMethod:SQUASH,expectedHeadOid:$head}){pullRequest{merged mergeCommit{oid}}}}';
+/** Only the newest report of each check name counts: a re-run replaces the failed run, a newer failure replaces an older success. */
+export function latestPerName(checks) {
+  const latest = new Map();
+  for (const check of checks) {
+    const known = latest.get(check.name);
+    if (!known || check.at > known.at || (check.at === known.at && known.state === 'PENDING')) latest.set(check.name, check);
+  }
+  return [...latest.values()];
+}
 
 /**
- * One query for every target: rateLimit, then per repository its default branch, the merge queue of each known base
- * branch (mq0, mq1, …) and each target (t<i>). repos: [{alias, owner, name, bases: [branch…], targets: [target…]}].
+ * { state: 'green' | 'red' | 'pending', failing, pending, missing } for the reported `checks`. `required` is 'all' or a list of
+ * check names. A required check that has not registered (or a skipped one) is pending / not green, never green.
  */
-export function buildPollQuery(repos) {
-  const parts = ['rateLimit{remaining resetAt cost}'];
-  for (const repo of repos) {
-    const inner = ['defaultBranchRef{name}'];
-    repo.bases.forEach((base, index) => {
-      inner.push(`mq${index}: mergeQueue(branch:${JSON.stringify(base)}){id}`);
-    });
-    for (const target of repo.targets) {
-      if (target.kind === 'pr') inner.push(`${target.alias}: pullRequest(number:${target.number}){${PR_FIELDS}}`);
-      else inner.push(`${target.alias}: object(expression:${JSON.stringify(target.sha)}){${COMMIT_FIELDS}}`);
-    }
-    parts.push(`${repo.alias}: repository(owner:${JSON.stringify(repo.owner)},name:${JSON.stringify(repo.name)}){${inner.join(' ')}}`);
-  }
-  return `query{${parts.join(' ')}}`;
+export function evaluateChecks({ checks, required }) {
+  const latest = latestPerName(checks);
+  const considered = required === 'all' ? latest.filter((check) => !NEUTRAL_BOTS.has(check.name)) : latest.filter((check) => required.includes(check.name));
+  const missing = required === 'all' ? (latest.length ? [] : ['(no checks yet)']) : required.filter((name) => !latest.some((check) => check.name === name));
+  const failing = considered.filter((check) => RED_CONCLUSIONS.has(check.state));
+  const pending = considered.filter((check) => check.state === 'PENDING');
+  const notGreen = required === 'all' ? [] : considered.filter((check) => !['SUCCESS', 'PENDING', ...RED_CONCLUSIONS].includes(check.state));
+  if (failing.length) return { state: 'red', failing, pending, missing };
+  if (pending.length || missing.length) return { state: 'pending', failing, pending, missing };
+  if (notGreen.length) return { state: 'red', failing: notGreen, pending, missing };
+  return { state: 'green', failing, pending, missing };
 }
 
-export function moreContextsQuery(owner, name, oid, cursor) {
-  return `query{rateLimit{remaining resetAt cost} repository(owner:${JSON.stringify(owner)},name:${JSON.stringify(name)}){object(oid:${JSON.stringify(oid)}){... on Commit{oid statusCheckRollup{contexts(first:100,after:${JSON.stringify(cursor)}){totalCount pageInfo{hasNextPage endCursor} ${CONTEXT_NODES}}}}}}}`;
-}
+export const describeChecks = (checks) => checks.map((check) => `  ${check.name}: ${check.state}${check.url ? ` ${check.url}` : ''}`).join('\n');
 
 // ---------------------------------------------------------------------------------------------------------------
-// Rules and check evaluation (pure)
+// GraphQL
 
-/** The base branch's rules (REST rules/branches/<base>): the required checks and whether a merge queue is configured. */
-export function summarizeRules(rules) {
-  const required = [];
-  const seen = new Set();
-  for (const rule of Array.isArray(rules) ? rules : []) {
-    if (rule.type !== 'required_status_checks') continue;
-    for (const check of rule.parameters?.required_status_checks ?? []) {
-      const key = `${check.context}\u0000${check.integration_id ?? ''}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      required.push({ context: check.context, integrationId: check.integration_id ?? null });
+const CONTEXTS = `statusCheckRollup { contexts(first: 100) { pageInfo { hasNextPage } nodes { __typename
+  ... on CheckRun { name status conclusion detailsUrl startedAt }
+  ... on StatusContext { context state targetUrl createdAt } } } }`;
+
+/** One query for every target, aliased t0, t1, …, plus the rate limit. Names and numbers are validated by parseTarget. */
+export function buildPollQuery(targets) {
+  const parts = targets.map((target, index) => {
+    const repo = `repository(owner: "${target.owner}", name: "${target.name}")`;
+    if (target.kind === 'pr') {
+      return `t${index}: ${repo} { pullRequest(number: ${target.number}) { id state merged isDraft mergeable headRefOid autoMergeRequest { enabledAt } commits(last: 1) { nodes { commit { oid ${CONTEXTS} } } } } }`;
     }
+    return `t${index}: ${repo} { object(expression: "${target.sha}") { ... on Commit { oid ${CONTEXTS} } } }`;
+  });
+  return `query { ${parts.join('\n')}\n rateLimit { remaining resetAt } }`;
+}
+export const ENABLE_AUTO_MERGE = 'mutation($id: ID!, $head: GitObjectID!) { enablePullRequestAutoMerge(input: { pullRequestId: $id, mergeMethod: SQUASH, expectedHeadOid: $head }) { pullRequest { number } } }';
+export const MERGE = 'mutation($id: ID!, $head: GitObjectID!) { mergePullRequest(input: { pullRequestId: $id, mergeMethod: SQUASH, expectedHeadOid: $head }) { pullRequest { merged mergeCommit { oid } } } }';
+
+/** The view of one polled target: { exists, closed, merged, head, mergeable, autoMerge, id, commitOid, checks, truncated }. */
+export function readTarget(target, data) {
+  const node = data?.repository ?? data;
+  if (target.kind === 'commit') {
+    const commit = node?.object;
+    if (!commit) return { exists: false };
+    const contexts = commit.statusCheckRollup?.contexts;
+    return { exists: true, commitOid: commit.oid, checks: normalizeContexts(contexts?.nodes), truncated: Boolean(contexts?.pageInfo?.hasNextPage) };
   }
-  return { required, hasQueue: Array.isArray(rules) && rules.some((rule) => rule.type === 'merge_queue') };
-}
-
-/**
- * Rollup contexts → [{kind, name, result: success|skipped|pending|failure, conclusion, url, at, id, runId, attempt,
- * workflow, appId}]. workflow is the workflow's name for a GitHub Actions job (null for other apps and statuses): with
- * name it identifies "the same check", of which only the newest report counts (pickLatest).
- */
-export function normalizeContexts(nodes, headOid) {
-  const out = [];
-  for (const node of nodes ?? []) {
-    if (!node) continue;
-    if (node.__typename === 'CheckRun') {
-      const oid = node.checkSuite?.commit?.oid;
-      if (headOid && oid && oid !== headOid) continue;
-      let result = 'failure';
-      if (node.status !== 'COMPLETED') result = 'pending';
-      else if (node.conclusion === 'SUCCESS') result = 'success';
-      else if (node.conclusion === 'SKIPPED' || node.conclusion === 'NEUTRAL') result = 'skipped';
-      out.push({
-        kind: 'check',
-        name: node.name,
-        result,
-        conclusion: node.status === 'COMPLETED' ? node.conclusion : node.status,
-        url: node.detailsUrl ?? null,
-        at: node.startedAt ?? null,
-        id: node.databaseId ?? null,
-        runId: node.checkSuite?.workflowRun?.databaseId ?? null,
-        attempt: node.checkSuite?.workflowRun?.runAttempt ?? null,
-        workflow: node.checkSuite?.workflowRun?.workflow?.name ?? null,
-        appId: node.checkSuite?.app?.databaseId ?? null,
-        appSlug: node.checkSuite?.app?.slug ?? null,
-        suiteId: node.checkSuite?.id ?? null,
-      });
-    } else if (node.__typename === 'StatusContext') {
-      const oid = node.commit?.oid;
-      if (headOid && oid && oid !== headOid) continue;
-      const result = node.state === 'SUCCESS' ? 'success' : node.state === 'PENDING' || node.state === 'EXPECTED' ? 'pending' : 'failure';
-      out.push({ kind: 'status', name: node.context, result, conclusion: node.state, url: node.targetUrl ?? null, at: node.createdAt ?? null, id: null, runId: null, attempt: null, workflow: null, appId: null });
-    }
-  }
-  return out;
-}
-
-/**
- * True when report `item` of a check supersedes report `best` of the same check. Creation order decides when both carry
- * ids: a newer workflow run beats an older one, and within one run a re-run attempt (a new check run, so a higher id) beats
- * the attempt it replaces. Start times are only the fallback (commit statuses have no ids), because a run cancelled or
- * failed before it started has no start time and must not look "newest". Fallback: a queued run (no start time yet) is
- * newest; on a tie a pending one wins.
- */
-// A retry keeps its workflow-run id but creates new check runs. A higher check id
-// plus an observed retry attempt proves creation after an intervening workflow run.
-function retryAfter(item, other) {
-  return item.retryEligible !== false && item.kind === 'check' && other.kind === 'check' && item.workflow != null && item.workflow === other.workflow && item.runId != null && other.runId != null && item.runId < other.runId && item.attempt > 1 && item.id != null && other.id != null && item.id > other.id;
-}
-
-function supersedes(item, best) {
-  if (retryAfter(item, best)) return true;
-  if (retryAfter(best, item)) return false;
-  if (item.runId != null && best.runId != null && item.runId !== best.runId) return item.runId > best.runId;
-  if (item.id != null && best.id != null && item.id !== best.id) return item.id > best.id;
-  const a = item.at ?? '￿';
-  const b = best.at ?? '￿';
-  return a > b || (a === b && item.result === 'pending' && best.result !== 'pending');
-}
-
-/** The newest of several reports of one check. */
-export function pickLatest(list) {
-  let best = null;
-  for (const item of list) if (!best || supersedes(item, best)) best = item;
-  return best;
-}
-
-/**
- * Only the newest report of each check counts: one per (workflow, job name) for GitHub Actions jobs, one per name for
- * other check runs and commit statuses. An earlier failed or cancelled attempt, a cancelled-in-progress run or a run of
- * an older workflow run on the same head is ignored once a newer report of that check exists. Jobs of different
- * workflows that share a name stay separate, so neither can hide the other.
- */
-export function latestPerCheck(checks) {
-  const groups = new Map();
-  for (const check of checks) {
-    const key = `${check.kind}\u0000${check.workflow ?? ''}\u0000${check.name}`;
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(check);
-  }
-  return [...groups.values()].map(pickLatest);
-}
-
-/**
- * A CANCELLED check of a workflow run that a newer run of the same workflow superseded on the same head does not count.
- * Concurrency groups cancel the older run when a second event (a label added right after the PR opened, a push race) starts
- * a new one; the newer run may not have created its check runs yet, so latestPerCheck alone would still see only the
- * cancelled one. A newer run supersedes only while it is live: a run whose check runs are all cancelled, or whose suite
- * completed as CANCELLED, does not hide anything, so the newest run being cancelled still counts as not green. Only
- * cancellations are dropped; a real failure of an older run stays until a newer report of that same check replaces it.
- */
-export function dropSupersededCancellations(checks, suites = []) {
-  checks = checks.map(check => suites.some(suite => suite.workflowRun?.databaseId === check.runId && suite.status === 'COMPLETED' && suite.conclusion === 'CANCELLED') ? {...check, retryEligible: false} : check);
-  const live = new Map();
-  const seen = (workflow, runId) => {
-    if (workflow == null || runId == null) return;
-    if (!live.has(workflow) || live.get(workflow) < runId) live.set(workflow, runId);
-  };
-  for (const check of checks) if (check.kind === 'check' && check.conclusion !== 'CANCELLED') seen(check.workflow, check.runId);
-  for (const suite of suites) {
-    if (suite?.app?.slug !== 'github-actions' || (suite.status === 'COMPLETED' && suite.conclusion === 'CANCELLED')) continue;
-    seen(suite.workflowRun?.workflow?.name, suite.workflowRun?.databaseId);
-  }
-  const retries = checks.filter(check => check.kind === 'check' && check.attempt > 1 && check.conclusion !== 'CANCELLED' && !suites.some(suite => suite.workflowRun?.databaseId === check.runId && suite.status === 'COMPLETED' && suite.conclusion === 'CANCELLED'));
-  return checks.filter(check => !((check.conclusion === 'CANCELLED' && retries.some(retry => retryAfter(retry, check))) || (check.kind === 'check' && check.conclusion === 'CANCELLED' && check.workflow != null && check.runId != null && (live.get(check.workflow) ?? -1) > check.runId)));
-}
-
-/**
- * The verdict on one head's checks. required: [{context, integrationId}] (a ruleset or --required list) or null for
- * "every check except the neutral bots". suites: the commit's check suites (only used in the "all" mode, where a GitHub
- * Actions suite that is not complete means jobs that have not created their check runs yet).
- * Returns {state: green|pending|red, mode, failing: [{name, conclusion, url, runId, id}], pending, missing, passed,
- * advisoryFailing, total}.
- */
-export function evaluateChecks({ checks: reported, required, suites = [], allowSkipped = true, neutral = NEUTRAL_BOTS }) {
-  const mode = required?.length ? 'required' : 'all';
-  const advisory = mode === 'all' ? reported.filter(check => check.measurement) : [];
-  const gatingReported = reported.filter(check => !advisory.includes(check));
-  const gatingSuites = mode === 'all' ? suites.filter(suite => !suite.measurement) : suites;
-  // Advisory suites cannot supersede or qualify retries of a real gating run.
-  const checks = dropSupersededCancellations(gatingReported, gatingSuites);
-  const verdicts = [];
-  const missing = [];
-  const counted = new Set();
-  if (mode === 'required') {
-    for (const req of required) {
-      const candidates = checks.filter((check) => check.name === req.context && (check.kind === 'status' || req.integrationId == null || check.appId == null || check.appId === req.integrationId));
-      counted.add(req.context);
-      const latest = latestPerCheck(candidates);
-      if (latest.length) verdicts.push(...latest);
-      else missing.push(req.context);
-    }
-  } else {
-    for (const check of latestPerCheck(checks.filter((entry) => !neutral.has(entry.name)))) {
-      counted.add(check.name);
-      verdicts.push(check);
-    }
-  }
-  // workflowRun.runAttempt is mutable even on retained check runs. An override
-  // therefore needs the matching current retry suite to complete successfully.
-  const winningChecks = latestPerCheck(checks);
-  const sameCheck = (a,b) => a.kind === b.kind && a.id === b.id && a.runId === b.runId && a.name === b.name && a.workflow === b.workflow;
-  const retryOverrides = gatingReported.filter(check => winningChecks.some(winner => sameCheck(winner,check)) && gatingReported.some(other => retryAfter(check, other) && (
-    (other.name === check.name && verdicts.some(winner => sameCheck(winner,check))) ||
-    (other.conclusion === 'CANCELLED' && (mode === 'all' || counted.has(other.name)) && !verdicts.some(winner => winner.kind === other.kind && winner.workflow === other.workflow && winner.name === other.name && supersedes(winner,other)))
-  )));
-  const retrySuites = retryOverrides.map(check => ({check, suite:gatingSuites.find(suite => suite.app?.slug === 'github-actions' && suite.workflowRun?.databaseId === check.runId && suite.workflowRun?.workflow?.name === check.workflow && suite.workflowRun?.runAttempt === check.attempt)}));
-  const retryFailing = retrySuites.filter(({suite}) => suite?.status === 'COMPLETED' && RED_CONCLUSIONS.has(suite.conclusion)).map(({check,suite}) => ({name:`${check.workflow} retry suite`,conclusion:suite.conclusion,url:check.url,runId:check.runId,id:null}));
-  const passes = (check) => check.result === 'success' || (check.result === 'skipped' && allowSkipped);
-  const failing = verdicts.filter((check) => check.result === 'failure' || (check.result === 'skipped' && !allowSkipped));
-  const pending = verdicts.filter((check) => check.result === 'pending').map((check) => check.name);
-  for (const {check,suite} of retrySuites) if ((suite?.status !== 'COMPLETED' || !['SUCCESS', ...RED_CONCLUSIONS].includes(suite.conclusion)) && !pending.includes(`${check.workflow} retry suite`)) pending.push(`${check.workflow} retry suite`);
-  const passed = verdicts.filter(passes).map((check) => check.name);
-  const advisoryFailing = [...new Set(latestPerCheck([...checks, ...advisory]).filter((check) => !counted.has(check.name) && check.result === 'failure').map((check) => check.name))];
-  const suitesRunning = mode === 'all' ? gatingSuites.filter((suite) => suite?.app?.slug === 'github-actions' && suite.workflowRun && suite.status !== 'COMPLETED').length : 0;
-  let state = 'green';
-  if (failing.length || retryFailing.length) state = 'red';
-  else if (pending.length || missing.length || !verdicts.length || suitesRunning) state = 'pending';
+  const pr = node?.pullRequest;
+  if (!pr) return { exists: false };
+  const last = pr.commits?.nodes?.at(-1)?.commit;
+  const contexts = last?.statusCheckRollup?.contexts;
   return {
-    state,
-    mode,
-    failing: [...failing.map(({ name, conclusion, url, runId, id }) => ({ name, conclusion, url, runId, id })), ...retryFailing],
-    pending,
-    missing,
-    passed,
-    advisoryFailing,
-    advisoryPending: advisory.filter(check => check.result === 'pending').map(check => check.name),
-    advisoryMeasurements: [...new Set([...advisory.map(check => check.name), ...suites.filter(suite => mode === 'all' && suite.measurement).map(() => 'Flake measurement')])],
-    suitesRunning,
-    total: verdicts.length,
+    exists: true,
+    id: pr.id,
+    closed: pr.state === 'CLOSED',
+    merged: pr.merged === true || pr.state === 'MERGED',
+    head: pr.headRefOid,
+    mergeable: pr.mergeable,
+    autoMerge: Boolean(pr.autoMergeRequest),
+    commitOid: last?.oid,
+    checks: normalizeContexts(contexts?.nodes),
+    truncated: Boolean(contexts?.pageInfo?.hasNextPage),
   };
-}
-
-/** A short, stable description of a verdict (it is compared between polls to print only changes). */
-export function describeChecks(checks) {
-  const count = checks.mode === 'required' ? `${checks.passed.length}/${checks.passed.length + checks.pending.length + checks.missing.length + checks.failing.length} required` : `${checks.passed.length}/${checks.total} checks, no ruleset`;
-  const parts = [`checks ${checks.state} (${count})`];
-  if (checks.failing.length) parts.push(`failing: ${checks.failing.map((check) => `${check.name}=${check.conclusion}`).join(', ')}`);
-  if (checks.pending.length) parts.push(`running: ${checks.pending.join(', ')}`);
-  if (checks.missing.length) parts.push(`not reported yet: ${checks.missing.join(', ')}`);
-  if (checks.suitesRunning) parts.push(`${checks.suitesRunning} workflow runs in progress`);
-  if (!checks.total && !checks.missing.length) parts.push('no checks reported');
-  if (checks.advisoryMeasurements?.length) parts.push(`non-gating measurement: ${checks.advisoryMeasurements.join(', ')}`);
-  if (checks.advisoryPending?.length) parts.push(`non-gating measurement running: ${checks.advisoryPending.join(', ')}`);
-  if (checks.advisoryFailing.length) parts.push(`not required, failing: ${checks.advisoryFailing.join(', ')}`);
-  return parts.join('; ');
 }
 
 // ---------------------------------------------------------------------------------------------------------------
 // The gate
 
-function clock(ms) {
-  return new Date(ms).toISOString().slice(11, 19);
-}
-
-function errorText(response) {
-  return (response?.errors ?? []).map((error) => error.message).join('; ');
-}
+const clock = (ms) => `${Math.round(ms / 60000)} min`;
+const messageOf = (error) => String(error?.message ?? error);
 
 /**
- * Runs the gate. deps: {graphql(query, variables) → response JSON, rest(path, {method}) → JSON (throws {status} on an
- * HTTP error), sleep(ms), now() → ms, log(line), err(line)}. Returns {code, results, polls, graphqlCalls, restCalls,
- * resume}.
+ * Polls until every target is decided. `deps`: { graphql(query, variables) → data, now(), sleep(ms), log(text) }.
+ * Returns { code, results: [{ label, code, text }], resume }.
  */
 export async function runGate(options, deps) {
-  const interval = Math.max(DEFAULTS.minInterval, options.interval ?? DEFAULTS.interval) * 1000;
-  const started = deps.now();
-  const deadline = started + (options.timeoutMinutes ?? DEFAULTS.timeoutMinutes) * 60000;
-  const counts = { graphql: 0, rest: 0, polls: 0 };
-  let lastLogAt = started;
-  const say = (line) => {
-    lastLogAt = deps.now();
-    deps.log(`${clock(lastLogAt)} ${line}`);
-  };
-  const graphql = async (query, variables) => {
-    counts.graphql += 1;
-    return deps.graphql(query, variables);
-  };
-  const rest = async (path, init) => {
-    counts.rest += 1;
-    return deps.rest(path, init);
+  const { graphql, now, sleep, log } = deps;
+  const required = options.required === 'all' ? 'all' : options.required.split(',').map((name) => name.trim());
+  const settlePolls = required === 'all' ? 2 : 1;
+  const started = now();
+  const deadline = started + options.timeoutMinutes * 60000;
+  let nextHeartbeat = started + DEFAULTS.heartbeatMinutes * 60000;
+  const states = options.targets.map((target, index) => ({
+    target,
+    label: targetLabel(target),
+    expect: options.expectHeads[index],
+    seenExpected: false,
+    headLag: 0,
+    greenPolls: 0,
+    autoMergeAttempted: false,
+    mergeNow: false,
+    mergeRetryUntil: 0,
+    settled: 0,
+    done: null,
+  }));
+  const finish = (state, code, text) => {
+    state.done = { code, text };
+    log(`${state.label}: ${text}`);
   };
 
-  // Repositories and targets, with stable aliases.
-  const repos = [];
-  const targets = options.targets.map((target, index) => ({ ...target, alias: `t${index}`, label: targetLabel(target), done: null, last: '', head: null, fresh: freshHeadState() }));
-  for (const target of targets) {
-    const key = `${target.owner}/${target.name}`.toLowerCase();
-    let repo = repos.find((entry) => entry.key === key);
-    if (!repo) {
-      repo = { key, alias: `r${repos.length}`, owner: target.owner, name: target.name, bases: [], rules: new Map(), queue: new Map(), defaultBranch: null, targets: [] };
-      repos.push(repo);
+  const attemptMerge = async (state, view) => {
+    // Enable auto-merge once (the expected head only), else merge the head ourselves when green.
+    const head = state.expect ?? view.head;
+    if (!state.autoMergeAttempted && !view.autoMerge) {
+      state.autoMergeAttempted = true;
+      try {
+        await graphql(ENABLE_AUTO_MERGE, { id: view.id, head });
+        log(`${state.label}: auto-merge enabled (squash, head ${head.slice(0, 12)})`);
+        return;
+      } catch (error) {
+        if (NO_AUTO_MERGE.test(messageOf(error))) {
+          state.mergeNow = true;
+          log(`${state.label}: auto-merge is not available (${messageOf(error).split('\n')[0]}); the gate merges when the checks are green`);
+          return;
+        }
+        if (!TRANSIENT_REFUSAL.test(messageOf(error))) throw Object.assign(new Error(messageOf(error)), { refused: true });
+        state.autoMergeAttempted = false;
+        state.mergeRetryUntil ||= now() + DEFAULTS.retryWindowMinutes * 60000;
+        if (now() > state.mergeRetryUntil) throw Object.assign(new Error(messageOf(error)), { refused: true });
+        log(`${state.label}: auto-merge not accepted yet (${messageOf(error).split('\n')[0]}); retrying`);
+      }
     }
-    repo.targets.push(target);
-    target.repo = repo;
-  }
-
-  const finish = (target, code, outcome, line, extra = {}) => {
-    target.done = { code, outcome, ...extra };
-    say(line);
   };
 
-  async function rulesFor(repo, base) {
-    if (repo.rules.has(base)) return repo.rules.get(base);
-    let summary = { required: [], hasQueue: false, source: 'none' };
+  const mergeIfGreen = async (state, view) => {
     try {
-      const path = `repos/${repo.owner}/${repo.name}/rules/branches/${base.split('/').map(encodeURIComponent).join('/')}?per_page=100`;
-      const rules = await rest(path);
-      summary = { ...summarizeRules(rules), source: knownBranchRules(rules) ? 'ruleset' : 'unknown' };
+      const done = await graphql(MERGE, { id: view.id, head: state.expect ?? view.head });
+      const merged = done?.mergePullRequest?.pullRequest;
+      if (merged?.merged) return finish(state, EXIT.ok, `MERGED ${state.label} ${merged.mergeCommit?.oid ?? ''} (merged by the gate)`.trim());
     } catch (error) {
-      if (error?.status !== 404) say(`${repo.owner}/${repo.name}: could not read the rules of ${base} (${error?.message ?? error}); every check counts`);
+      state.mergeRetryUntil = state.mergeRetryUntil || now() + DEFAULTS.retryWindowMinutes * 60000;
+      if (TRANSIENT_REFUSAL.test(messageOf(error)) && now() < state.mergeRetryUntil) return log(`${state.label}: merge not accepted yet (${messageOf(error).split('\n')[0]}); retrying`);
+      return finish(state, EXIT.refused, `merge refused: ${messageOf(error).split('\n')[0]}`);
     }
-    let required;
-    if (Array.isArray(options.required)) required = options.required.map((context) => ({ context, integrationId: null }));
-    else if (options.required === 'all') required = null;
-    else required = summary.required.length ? summary.required : null;
-    const entry = { ...summary, required, policyRequired: summary.required };
-    repo.rules.set(base, entry);
-    if (!repo.bases.includes(base)) repo.bases.push(base);
-    const what = required ? `${required.length} required checks (${required.map((check) => check.context).join(', ')})` : 'no required checks: every check except neutral bots counts';
-    say(`${repo.owner}/${repo.name} ${base}: ${what}${summary.hasQueue ? '; merge queue' : ''}`);
-    return entry;
-  }
+    return undefined;
+  };
 
-  async function fullContexts(repo, commit, required) {
-    const rollup = commit?.statusCheckRollup;
-    if (!rollup) {
-      const fallback = await suiteContexts(graphql, repo.owner, repo.name, commit.oid);
-      commit.checkSuites = {nodes:fallback.suites};
-      return fallback.nodes;
-    }
-    const validatePage = (connection) => {
-      if (!Array.isArray(connection?.nodes) || typeof connection.pageInfo?.hasNextPage !== 'boolean' ||
-          !Number.isSafeInteger(connection.totalCount) || connection.totalCount < 0) throw new Error('rollup pagination is incomplete');
-
-    };
-    validatePage(rollup.contexts);
-    const nodes = [...rollup.contexts.nodes];
-    const totalCount = rollup.contexts.totalCount, cursors = new Set();
-    let page = rollup.contexts.pageInfo;
-    while (page.hasNextPage) {
-      if (typeof page.endCursor !== 'string' || !page.endCursor || cursors.has(page.endCursor)) throw new Error('rollup pagination lacks a fresh cursor');
-      cursors.add(page.endCursor);
-      const response = await graphql(moreContextsQuery(repo.owner, repo.name, commit.oid, page.endCursor));
-      if (response?.errors?.length) throw new Error('rollup pagination response contains errors');
-      const object = response?.data?.repository?.object;
-      if (object?.oid !== commit.oid) throw new Error('rollup pagination returned a different or missing commit');
-      const contexts = object.statusCheckRollup?.contexts;
-      validatePage(contexts);
-      if (contexts.totalCount !== totalCount) throw new Error('rollup count changed during pagination');
-      nodes.push(...contexts.nodes);
-      if (nodes.length > totalCount) throw new Error('rollup pagination exceeds its reported count');
-      page = contexts.pageInfo;
-    }
-    if (nodes.length !== totalCount) throw new Error('rollup pagination does not match its reported count');
-    const identities = new Set();
-    for (const node of nodes) {
-      const identity = node?.__typename === 'CheckRun' && Number.isSafeInteger(node.databaseId) ? `check:${node.databaseId}` :
-        node?.__typename === 'StatusContext' && typeof node.context === 'string' && typeof node.createdAt === 'string' ? `status:${node.context}:${node.createdAt}` : null;
-      if (!identity || identities.has(identity)) throw new Error('rollup context has missing or duplicate identity');
-      identities.add(identity);
-    }
-    const checks = normalizeContexts(nodes, commit.oid);
-    const missingRequired = required?.some(req => !checks.some(check => check.name === req.context && (check.kind === 'status' || req.integrationId == null || check.appId == null || check.appId === req.integrationId)));
-    // Rollups can omit real jobs even when their own pagination is complete.
-    // Counts cover partial jobs within a represented suite; suite pagination and
-    // terminal failures cover omissions that could otherwise falsely green all mode.
-    const incompleteSuites = commit.checkSuites?.pageInfo?.hasNextPage || (commit.checkSuites?.nodes ?? []).some(suite => {
-      const runId = suite.workflowRun?.databaseId;
-      const count = suite.checkRuns?.totalCount;
-      const actualRuns = nodes.filter(node => node.__typename === 'CheckRun' && node.checkSuite?.commit?.oid === commit.oid &&
-        (suite.id ? node.checkSuite?.id === suite.id : runId != null && node.checkSuite?.workflowRun?.databaseId === runId));
-      return (Number.isInteger(count) && new Set(actualRuns.map(node => node.databaseId)).size < count) ||
-        (suite.status === 'COMPLETED' && !['SUCCESS', 'SKIPPED', 'NEUTRAL'].includes(suite.conclusion) && !actualRuns.some(node => node.status === 'COMPLETED' && !['SUCCESS', 'SKIPPED', 'NEUTRAL'].includes(node.conclusion)));
-    });
-    if (missingRequired || incompleteSuites) {
-      const fallback = await suiteContexts(graphql, repo.owner, repo.name, commit.oid);
-      commit.checkSuites = {nodes:fallback.suites};
-      return fallback.nodes;
-    }
-    return nodes;
-  }
-
-  async function rerunFailed(repo, target, checks) {
-    const runs = new Map();
-    for (const check of checks.failing) if (check.runId) runs.set(check.runId, check.conclusion);
-    if (!runs.size) return false;
-    for (const [runId, conclusion] of runs) {
-      const path = `repos/${repo.owner}/${repo.name}/actions/runs/${runId}/${options.rerunScope === 'all' || conclusion === 'CANCELLED' ? 'rerun' : 'rerun-failed-jobs'}`;
-      try {
-        await rest(path, { method: 'POST' });
-        say(`${target.label}: re-ran ${options.rerunScope === 'all' ? 'the complete workflow run' : conclusion === 'CANCELLED' ? 'the cancelled run' : 'the failed jobs of run'} ${runId}`);
-      } catch (error) {
-        say(`${target.label}: could not re-run ${runId}: ${error?.message ?? error}`);
-      }
-    }
-    return true;
-  }
-
-  // A mutation, retried while GitHub says mergeability or the required checks are not settled (up to 6 minutes).
-  async function mutateWithRetry(target, query, variables, field) {
-    const until = Math.min(deadline, deps.now() + DEFAULTS.retryWindowMinutes * 60000);
-    for (let attempt = 1; ; attempt += 1) {
-      let response;
-      try {
-        response = await graphql(query, variables);
-      } catch (error) {
-        response = { errors: [{ message: String(error?.message ?? error) }] };
-      }
-      const value = response?.data?.[field];
-      const message = errorText(response);
-      if (value && !message) return { ok: true, value };
-      if (/already (in|queued|enqueued)|is already in the merge queue/i.test(message)) return { ok: true, already: true, value };
-      if (!TRANSIENT_REFUSAL.test(message) || deps.now() + DEFAULTS.retrySeconds * 1000 > until) return { ok: false, message: message || 'no result' };
-      say(`${target.label}: not ${field === 'enqueuePullRequest' ? 'enqueueable' : 'mergeable'} yet (${message}); retry ${attempt} in ${DEFAULTS.retrySeconds} s`);
-      await deps.sleep(DEFAULTS.retrySeconds * 1000);
-    }
-  }
-
-  const isMeasurement = measurementClassifier(rest);
-
-  async function handleChecks(repo, commit, headOid, rules) {
-    const nodes = commit && commit.oid === headOid ? await fullContexts(repo, commit, rules.required) : [];
-    const normalized = normalizeContexts(nodes, headOid);
-    const suites = (commit?.checkSuites?.nodes ?? []).map(suite => ({...suite}));
-    if (rules.source === 'ruleset' && !rules.required?.length && !rules.policyRequired?.length) {
-      const fullRepo = `${repo.owner}/${repo.name}`;
-      for (const check of normalized) check.measurement = await isMeasurement({repo: fullRepo, sha: headOid, ...check});
-      for (const suite of suites) suite.measurement = await isMeasurement({repo: fullRepo, sha: headOid, suite: true,
-        appId: suite.app?.databaseId, appSlug: suite.app?.slug, suiteId: suite.id, runId: suite.workflowRun?.databaseId, workflow: suite.workflowRun?.workflow?.name, event: suite.workflowRun?.event});
-    }
-    const checks = evaluateChecks({ checks: normalized, required: rules.required, suites, allowSkipped: options.allowSkipped !== false });
-    if (commit && commit.oid !== headOid) checks.note = 'the rollup is for an older commit';
-    return checks;
-  }
-
-  // Red: re-run once (when asked), else stop. Returns true when the target is finished.
-  async function onRed(target, repo, checks) {
-    const fresh = target.fresh;
-    if (options.rerunOnce && !fresh.reran) {
-      fresh.reran = true;
-      if (await rerunFailed(repo, target, checks)) {
-        fresh.rerunIds = new Set(checks.failing.map((check) => check.id).filter(Boolean));
-        fresh.pollsSinceRerun = 0;
-        return false;
-      }
-    }
-    if (fresh.rerunIds && fresh.pollsSinceRerun < 2 && checks.failing.every((check) => check.id && fresh.rerunIds.has(check.id))) return false;
-    const failing = checks.failing.map((check) => `\n  ${check.name} (${check.conclusion}) ${check.url ?? ''}`.trimEnd()).join('');
-    finish(target, EXIT.red, 'red', `RED ${target.label}: required checks failed:${failing}`, { failing: checks.failing });
-    return true;
-  }
-
-  // Confirmation in the "all checks" mode: the same green on two consecutive polls of the same head.
-  function confirmed(target, checks) {
-    if (checks.mode === 'required') return true;
-    const key = `${target.head}:${checks.passed.slice().sort().join(',')}`;
-    if (target.fresh.greenKey === key) return true;
-    target.fresh.greenKey = key;
-    return false;
-  }
-
-  async function handleCommit(target, repo, object) {
-    const base = repo.defaultBranch ?? 'main';
-    const rules = await rulesFor(repo, base);
-    const oid = object.oid;
-    target.head = oid;
-    const checks = await handleChecks(repo, object, oid, rules);
-    if (target.fresh.rerunIds) target.fresh.pollsSinceRerun += 1;
-    const line = describeChecks(checks);
-    if (checks.state === 'red' && (await onRed(target, repo, checks))) return;
-    if (checks.state === 'green' && confirmed(target, checks)) {
-      finish(target, EXIT.ok, 'green', `GREEN ${target.label} ${oid} (${line})`, { head: oid, checks });
-      return;
-    }
-    report(target, `${line}${checks.state === 'green' ? '; confirming at the next poll' : ''}`);
-  }
-
-  const matchesExpected = (target, pr) => !target.expectHead || String(pr.headRefOid).startsWith(target.expectHead);
-
-  // Right after a push GitHub can still serve the previous head. Until the expected head has been seen once, a different
-  // head is re-read a few times (one single-PR query each, headLagSeconds apart) before it counts as moved.
-  async function settleExpectedHead(target, repo, pr) {
-    if (!target.expectHead || target.expectSeen || pr.merged || pr.state !== 'OPEN') return pr;
-    let current = pr;
-    for (let attempt = 1; attempt <= DEFAULTS.headLagRetries && !matchesExpected(target, current); attempt += 1) {
-      say(`${target.label}: head is ${String(current.headRefOid).slice(0, 12)}, expected ${target.expectHead.slice(0, 12)}; re-reading in ${DEFAULTS.headLagSeconds} s (${attempt}/${DEFAULTS.headLagRetries})`);
-      await deps.sleep(DEFAULTS.headLagSeconds * 1000);
-      let response = null;
-      try {
-        response = await graphql(buildPollQuery([{ ...repo, targets: [target] }]));
-      } catch (error) {
-        say(`${target.label}: re-reading the head failed: ${String(error?.message ?? error).slice(0, 200)}`);
-      }
-      const next = response?.data?.[repo.alias]?.[target.alias];
-      if (!next) continue;
-      current = next;
-      if (current.merged || current.state !== 'OPEN') break;
-    }
-    return current;
-  }
-
-  async function handlePr(target, repo, polled) {
-    const pr = await settleExpectedHead(target, repo, polled);
-    if (pr.merged || pr.state === 'MERGED') {
-      // Followed through the queue: the queue's own merge (it also shows as a removal with the reason "merged") is a success.
-      const queue = target.fresh.queued;
-      finish(target, EXIT.ok, 'merged', ['MERGED', target.label, pr.mergeCommit?.oid, queue ? '(merged by the merge queue)' : null].filter(Boolean).join(' '), { head: pr.headRefOid, mergeCommit: pr.mergeCommit?.oid ?? null, via: queue ? 'merge-queue' : undefined });
-      return;
-    }
-    if (pr.state === 'CLOSED') {
-      finish(target, EXIT.closed, 'closed', `CLOSED ${target.label}: closed without merging`, { head: pr.headRefOid });
-      return;
-    }
-    const head = pr.headRefOid;
-    if (!matchesExpected(target, pr)) {
-      finish(target, EXIT.headMoved, 'head-moved', `HEAD-MOVED ${target.label}: expected ${target.expectHead.slice(0, 12)}, the head is now ${head.slice(0, 12)}`, { head });
-      return;
-    }
-    if (target.expectHead) target.expectSeen = true;
-    if (target.head && head !== target.head) {
-      say(`${target.label}: head moved ${target.head.slice(0, 8)} -> ${head.slice(0, 8)}; evaluating the new head`);
-      target.fresh = freshHeadState();
-    }
-    target.head = head;
-    const rules = await rulesFor(repo, pr.baseRefName);
-    const hasQueue = repo.queue.has(pr.baseRefName) ? repo.queue.get(pr.baseRefName) : rules.hasQueue;
-    const commit = pr.commits?.nodes?.[0]?.commit;
-    const checks = await handleChecks(repo, commit, head, rules);
-    const fresh = target.fresh;
-    if (fresh.rerunIds) fresh.pollsSinceRerun += 1;
-    const mergeState = `${pr.mergeable}/${pr.mergeStateStatus}`;
-    const state = [`head ${head.slice(0, 8)}`, describeChecks(checks), `mergeable ${mergeState}`];
-    if (checks.note) state.push(checks.note);
-    if (pr.isDraft) state.push('draft');
-
-    if (pr.mergeable === 'CONFLICTING' || pr.mergeStateStatus === 'DIRTY') {
-      finish(target, EXIT.dirty, 'dirty', `DIRTY ${target.label}: merge conflict with ${pr.baseRefName}; rebase it`, { head });
-      return;
-    }
-
-    if (options.merge) {
-      if (pr.isInMergeQueue) {
-        if (!fresh.queued) fresh.queuedAt = deps.now();
-        fresh.queued = true;
-        fresh.outPolls = 0;
-        report(target, `${state.join('; ')}; in the merge queue (${pr.mergeQueueEntry?.state ?? 'queued'}, position ${pr.mergeQueueEntry?.position ?? '?'})`);
-        return;
-      }
-      if (fresh.queued) {
-        // Not merged and not queued. A successful queue merge also records a removal (reason "merged", the same second as
-        // the merge), and GitHub can show it before the PR reads as merged: wait for the merged state instead of calling it
-        // an ejection. Any other reason (failed_checks, manual, ...) is an ejection at once; with no removal event yet,
-        // confirm on a second poll.
-        const removal = pr.timelineItems?.nodes?.find((node) => node?.createdAt && Date.parse(node.createdAt) >= fresh.queuedAt - 60000);
-        fresh.outPolls += 1;
-        if (removal && MERGED_REMOVAL.test(removal.reason ?? '') && fresh.outPolls < DEFAULTS.mergedSettlePolls) {
-          report(target, `${state.join('; ')}; the merge queue merged it (removal reason "${removal.reason}"); waiting for the merged state`);
-          return;
-        }
-        if (!removal && fresh.outPolls < 2) {
-          report(target, `${state.join('; ')}; not in the merge queue any more (confirming at the next poll)`);
-          return;
-        }
-        fresh.queued = false;
-        fresh.ejections += 1;
-        fresh.ejectReason = MERGED_REMOVAL.test(removal?.reason ?? '') ? 'the queue reported "merged" but the PR never read as merged' : (removal?.reason ?? 'no reason reported');
-        if (fresh.ejections >= 2) {
-          finish(target, EXIT.ejected, 'ejected', `EJECTED ${target.label}: removed from the merge queue twice (${fresh.ejectReason}); look at its merge_group run`, { head, reason: fresh.ejectReason });
-          return;
-        }
-        say(`${target.label}: ejected from the merge queue (${fresh.ejectReason}); re-enqueueing once when green`);
-      }
-    }
-
-    if (checks.state === 'red') {
-      if (await onRed(target, repo, checks)) return;
-      report(target, `${state.join('; ')}; re-run requested, waiting for the new runs`);
-      return;
-    }
-    if (checks.state !== 'green' || pr.mergeable !== 'MERGEABLE') {
-      if (pr.mergeable === 'UNKNOWN') state.push('mergeability not computed yet');
-      report(target, state.join('; '));
-      return;
-    }
-    if (!confirmed(target, checks)) {
-      report(target, `${state.join('; ')}; confirming at the next poll`);
-      return;
-    }
-    if (!options.merge) {
-      finish(target, EXIT.ok, 'green', `GREEN ${target.label} ${head} (${describeChecks(checks)})`, { head, checks });
-      return;
-    }
-    if (pr.isDraft) {
-      report(target, `${state.join('; ')}; waiting for ready for review before merging`);
-      return;
-    }
-    if (hasQueue) {
-      const result = await mutateWithRetry(target, ENQUEUE_MUTATION, { id: pr.id, head }, 'enqueuePullRequest');
-      if (!result.ok) {
-        finish(target, EXIT.ejected, 'refused', `REFUSED ${target.label}: enqueue failed: ${result.message}`, { head, reason: result.message });
-        return;
-      }
-      fresh.queued = true;
-      fresh.queuedAt = deps.now();
-      fresh.outPolls = 0;
-      const entry = result.value?.mergeQueueEntry;
-      say(`${target.label}: ${result.already ? 'already in the merge queue' : `enqueued at ${head.slice(0, 8)} (${entry?.state ?? 'queued'}, position ${entry?.position ?? '?'})`}`);
-      target.last = '';
-      return;
-    }
-    const result = await mutateWithRetry(target, MERGE_MUTATION, { id: pr.id, head }, 'mergePullRequest');
-    const merged = result.value?.pullRequest;
-    if (!result.ok || !merged?.merged) {
-      finish(target, EXIT.ejected, 'refused', `REFUSED ${target.label}: squash merge failed: ${result.message ?? 'not merged'}`, { head, reason: result.message ?? 'not merged' });
-      return;
-    }
-    finish(target, EXIT.ok, 'merged', `MERGED ${target.label} ${merged.mergeCommit?.oid ?? ''}`.trimEnd(), { head, mergeCommit: merged.mergeCommit?.oid ?? null });
-  }
-
-  function report(target, line) {
-    if (line === target.last) return;
-    target.last = line;
-    say(`${target.label} ${line}`);
-  }
-
-  let errorsInRow = 0;
-  let backedOff = false;
   for (;;) {
-    const active = targets.filter((target) => !target.done);
-    const activeRepos = repos.filter((repo) => repo.targets.some((target) => !target.done)).map((repo) => ({ ...repo, targets: repo.targets.filter((target) => !target.done) }));
-    let response = null;
-    try {
-      response = await graphql(buildPollQuery(activeRepos));
-      counts.polls += 1;
-    } catch (error) {
-      if (/gh auth login|HTTP 401|Bad credentials/i.test(String(error?.message ?? error))) throw new UsageError(`GitHub authentication failed: ${String(error?.message ?? error).slice(0, 200)}`);
-      errorsInRow += 1;
-      if (errorsInRow === 1 || errorsInRow % 5 === 0) say(`GraphQL poll failed (${errorsInRow} in a row): ${String(error?.message ?? error).slice(0, 300)}; retrying at the next interval`);
+    const open = states.filter((state) => !state.done);
+    if (!open.length) break;
+    let data;
+    for (let attempt = 1; !data; attempt += 1) {
+      try {
+        data = await graphql(buildPollQuery(open.map((state) => state.target)));
+      } catch (error) {
+        if (attempt >= DEFAULTS.pollRetries) throw new UsageError(`GraphQL poll failed: ${messageOf(error).split('\n')[0]}`);
+        log(`GraphQL poll failed (${messageOf(error).split('\n')[0]}); retrying in ${DEFAULTS.pollRetrySeconds} s`);
+        await sleep(DEFAULTS.pollRetrySeconds * 1000);
+      }
     }
-    if (response && !response.data) {
-      errorsInRow += 1;
-      say(`GraphQL poll returned no data: ${errorText(response).slice(0, 300)}`);
-      response = null;
-    }
-    if (response) {
-      errorsInRow = 0;
-      const missingPaths = new Map((response.errors ?? []).filter((error) => error.path).map((error) => [error.path.join('.'), error.message]));
-      for (const repo of activeRepos) {
-        const data = response.data[repo.alias];
-        const real = repos.find((entry) => entry.key === repo.key);
-        if (data?.defaultBranchRef?.name) real.defaultBranch = data.defaultBranchRef.name;
-        real.bases.forEach((base, index) => {
-          if (data && `mq${index}` in data) real.queue.set(base, Boolean(data[`mq${index}`]));
-        });
-        for (const target of repo.targets) {
-          const original = targets.find((entry) => entry.alias === target.alias);
-          const node = data?.[target.alias];
-          if (!node) {
-            const why = missingPaths.get(`${repo.alias}.${target.alias}`) ?? missingPaths.get(repo.alias) ?? (data ? 'not found' : 'repository not found');
-            finish(original, EXIT.usage, 'not-found', `NOT-FOUND ${original.label}: ${why}`);
+    for (const [index, state] of open.entries()) {
+      const view = readTarget(state.target, data[`t${index}`]);
+      if (!view.exists) {
+        finish(state, EXIT.usage, `${state.label} does not exist (or gh cannot read it)`);
+        continue;
+      }
+      if (view.truncated) log(`${state.label}: more than 100 checks reported; only the first 100 are read`);
+      if (state.target.kind === 'pr') {
+        if (view.merged) {
+          finish(state, EXIT.ok, `MERGED ${state.label} ${view.head?.slice(0, 12) ?? ''} (already merged)`.trim());
+          continue;
+        }
+        if (view.closed) {
+          finish(state, EXIT.closed, `${state.label} was closed without merging`);
+          continue;
+        }
+        if (state.expect) {
+          if (view.head === state.expect) {
+            state.seenExpected = true;
+            state.headLag = 0;
+          } else if (state.seenExpected || state.headLag >= DEFAULTS.headLagRetries) {
+            finish(state, EXIT.headMoved, `head moved: expected ${state.expect.slice(0, 12)}, now ${String(view.head).slice(0, 12)}`);
+            continue;
+          } else {
+            state.headLag += 1;
+            log(`${state.label}: head is ${String(view.head).slice(0, 12)}, expected ${state.expect.slice(0, 12)}; re-reading (${state.headLag}/${DEFAULTS.headLagRetries})`);
             continue;
           }
-          if ((response.errors ?? []).some(error => !error.path ||
-              (error.path[0] === repo.alias && (error.path.length === 1 || error.path[1] === target.alias)))) throw new Error(`partial GraphQL response for ${original.label}`);
-          if (original.kind === 'pr') await handlePr(original, real, node);
-          else await handleCommit(original, real, node);
+        }
+        // The rollup belongs to the last commit; right after a push it can still be the previous head's.
+        if (view.commitOid !== view.head) {
+          log(`${state.label}: checks of ${String(view.commitOid).slice(0, 12)} are not the head's yet`);
+          continue;
         }
       }
-      const rate = response.data.rateLimit;
-      if (rate && rate.remaining < DEFAULTS.rateFloor && targets.some((target) => !target.done)) {
-        const resetAt = Date.parse(rate.resetAt);
-        const wait = Math.max(0, Math.min(deadline - deps.now(), (Number.isFinite(resetAt) ? resetAt - deps.now() : 15 * 60000) + 5000));
-        say(`GraphQL rate limit: ${rate.remaining} points left; backing off until ${rate.resetAt}`);
-        if (wait > 0) await deps.sleep(wait);
-        backedOff = true;
+      const verdict = evaluateChecks({ checks: view.checks, required });
+      if (verdict.state === 'red') {
+        finish(state, EXIT.red, `RED\n${describeChecks(verdict.failing)}`);
+        continue;
       }
+      if (options.merge && state.target.kind === 'pr' && !view.autoMerge && !state.mergeNow) {
+        try {
+          await attemptMerge(state, view);
+        } catch (error) {
+          finish(state, EXIT.refused, `merge refused: ${messageOf(error).split('\n')[0]}`);
+          continue;
+        }
+      }
+      if (verdict.state === 'pending') {
+        state.greenPolls = 0;
+        log(`${state.label}: waiting for ${[...verdict.pending.map((check) => check.name), ...verdict.missing].join(', ')}`);
+        continue;
+      }
+      state.greenPolls += 1;
+      if (state.target.kind === 'pr') {
+        if (view.mergeable === 'CONFLICTING') {
+          finish(state, EXIT.dirty, `${state.label} has merge conflicts`);
+          continue;
+        }
+        if (view.mergeable === 'UNKNOWN') {
+          log(`${state.label}: checks green, mergeability not computed yet`);
+          continue;
+        }
+      }
+      if (state.greenPolls < settlePolls) {
+        log(`${state.label}: green; confirming on the next poll`);
+        continue;
+      }
+      if (state.target.kind === 'commit' || !options.merge) {
+        finish(state, EXIT.ok, `GREEN ${state.label}`);
+        continue;
+      }
+      // Green and mergeable under --merge: auto-merge merges within seconds; after a few polls (or when it is unavailable) merge it here.
+      state.settled += 1;
+      if (state.mergeNow || state.settled > DEFAULTS.mergedSettlePolls) await mergeIfGreen(state, view);
+      else log(`${state.label}: green; waiting for auto-merge`);
     }
-    if (!active.length || targets.every((target) => target.done)) break;
-    const now = deps.now();
-    if (now >= deadline) break;
-    if (backedOff) {
-      backedOff = false;
-      continue;
+    if (states.every((state) => state.done)) break;
+    if (now() >= deadline) break;
+    if (now() >= nextHeartbeat) {
+      nextHeartbeat = now() + DEFAULTS.heartbeatMinutes * 60000;
+      log(`still waiting (${clock(now() - started)} of ${options.timeoutMinutes} min)`);
     }
-    if (now - lastLogAt >= DEFAULTS.heartbeatMinutes * 60000) {
-      say(`heartbeat: ${targets.filter((target) => !target.done).map((target) => `${target.label} ${target.last.split('; ').slice(0, 2).join('; ') || 'waiting'}`).join(' | ')}`);
-    }
-    await deps.sleep(Math.min(interval, deadline - now));
+    const rate = data.rateLimit;
+    const backoff = rate && rate.remaining < DEFAULTS.rateFloor ? Math.min(Math.max(0, Date.parse(rate.resetAt) - now()), 15 * 60000) : 0;
+    if (backoff) log(`GraphQL rate limit low (${rate.remaining}); waiting ${clock(backoff)}`);
+    const wait = Math.max(options.interval * 1000, backoff);
+    // A head that has not caught up yet is re-read sooner than a normal interval.
+    const lagging = states.some((state) => !state.done && state.expect && !state.seenExpected);
+    await sleep(Math.min(wait, deadline - now(), lagging ? DEFAULTS.headLagSeconds * 1000 : Infinity));
   }
 
-  const unfinished = targets.filter((target) => !target.done);
-  let resume = null;
-  if (unfinished.length) {
-    resume = resumeCommand(options, unfinished);
-    for (const target of unfinished) target.done = { code: EXIT.timeout, outcome: 'timeout', head: target.head };
-    say(`TIMEOUT after ${options.timeoutMinutes ?? DEFAULTS.timeoutMinutes} min: ${unfinished.map((target) => target.label).join(', ')} not finished`);
-    say(`RESUME: ${resume}`);
-  }
-  const failure = targets.find((target) => target.done.code !== EXIT.ok && target.done.code !== EXIT.timeout);
-  const code = failure ? failure.done.code : unfinished.length ? EXIT.timeout : EXIT.ok;
-  return {
-    code,
-    results: targets.map((target) => ({ target: target.label, ...target.done, state: target.last || null })),
-    polls: counts.polls,
-    graphqlCalls: counts.graphql,
-    restCalls: counts.rest,
-    minutes: Math.round((deps.now() - started) / 600) / 100,
-    resume,
-  };
+  const results = states.map((state) => ({ label: state.label, code: state.done?.code ?? EXIT.timeout, text: state.done?.text ?? 'still pending' }));
+  const failure = results.find((result) => result.code !== EXIT.ok && result.code !== EXIT.timeout);
+  const code = failure ? failure.code : results.some((result) => result.code === EXIT.timeout) ? EXIT.timeout : EXIT.ok;
+  return { code, results, resume: code === EXIT.timeout ? resumeCommand(options, results.filter((result) => result.code === EXIT.timeout)) : undefined };
 }
 
-function freshHeadState() {
-  return { reran: false, rerunIds: null, pollsSinceRerun: 0, queued: false, queuedAt: 0, outPolls: 0, ejections: 0, ejectReason: null, greenKey: null };
-}
-
-/** The command that resumes the unfinished targets with the same options. */
 export function resumeCommand(options, unfinished) {
-  const args = ['node', 'scripts/pr-gate.mjs'];
-  for (const target of unfinished) args.push(target.kind === 'pr' ? targetLabel(target) : `--commit ${target.owner}/${target.name}@${target.sha}`);
-  if (options.merge) args.push('--merge');
-  for (const target of unfinished) if (target.expectHead) args.push('--expect-head', target.expectHead);
-  if (options.required && options.required !== 'auto') args.push('--required', JSON.stringify(Array.isArray(options.required) ? options.required.join(',') : options.required));
-  if ((options.interval ?? DEFAULTS.interval) !== DEFAULTS.interval) args.push('--interval', String(options.interval));
-  args.push('--timeout-minutes', String(options.timeoutMinutes ?? DEFAULTS.timeoutMinutes));
-  if (options.rerunOnce) {
-    args.push('--rerun-once');
-    if (options.rerunScope === 'all') args.push('--rerun-scope', 'all');
-  }
-  if (options.allowSkipped === false) args.push('--no-skipped');
-  if (options.json) args.push('--json');
-  return args.join(' ');
+  const labels = new Set(unfinished.map((result) => result.label));
+  const targets = options.targets.filter((target) => labels.has(targetLabel(target)));
+  const words = [options.commit ? '--commit' : '', ...targets.map(targetLabel)].filter(Boolean);
+  const heads = options.targets.flatMap((target, index) => (labels.has(targetLabel(target)) && options.expectHeads[index] ? ['--expect-head', options.expectHeads[index]] : []));
+  const flags = [options.merge ? '--merge' : '', `--required ${options.required}`, `--interval ${options.interval}`, `--timeout-minutes ${options.timeoutMinutes}`].filter(Boolean);
+  return `node scripts/pr-gate.mjs ${[...words, ...heads, ...flags].join(' ')}`;
 }
 
 // ---------------------------------------------------------------------------------------------------------------
-// gh-backed dependencies and the CLI
+// gh
 
-function gh(args, input) {
-  const result = spawnSync('gh', args, { input, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024, timeout: 120000 });
-  if (result.error) throw new Error(`gh: ${result.error.message}`);
-  return { status: result.status ?? 1, stdout: result.stdout ?? '', stderr: result.stderr ?? '' };
+function gh(args) {
+  const result = spawnSync('gh', args, { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  if (result.error) throw new UsageError(`cannot run gh: ${result.error.message}`);
+  return result;
 }
 
-export function ghDeps({ json = false } = {}) {
+export function ghDeps() {
+  const auth = gh(['auth', 'status']);
+  if (auth.status !== 0) throw new UsageError('gh is not authenticated (gh auth login)');
   return {
-    async graphql(query, variables = {}) {
-      const result = gh(['api', 'graphql', '--input', '-'], JSON.stringify({ query, variables }));
-      const text = result.stdout.trim();
-      if (text.startsWith('{')) return JSON.parse(text);
-      throw new Error((result.stderr || text || `gh exited ${result.status}`).trim());
-    },
-    async rest(path, { method = 'GET' } = {}) {
-      const result = gh(['api', '-X', method, path]);
-      if (result.status !== 0) {
-        const error = new Error((result.stderr || result.stdout).trim().slice(0, 300));
-        error.status = Number(/HTTP (\d{3})/.exec(result.stderr)?.[1] ?? 0) || null;
-        throw error;
+    graphql: async (query, variables = {}) => {
+      const args = ['api', 'graphql', '-f', `query=${query}`];
+      for (const [key, value] of Object.entries(variables)) args.push('-f', `${key}=${value}`);
+      const result = gh(args);
+      let body;
+      try {
+        body = JSON.parse(result.stdout || '{}');
+      } catch {
+        throw new Error(result.stderr.trim() || result.stdout.trim() || `gh exited ${result.status}`);
       }
-      const text = result.stdout.trim();
-      return text ? JSON.parse(text) : null;
+      // A target that does not exist is NOT_FOUND with a null alias: the gate reports it by name (exit 64), the rest of the batch is kept.
+      const fatal = (body.errors ?? []).filter((error) => error.type !== 'NOT_FOUND');
+      if (fatal.length || (body.errors?.length && !body.data)) throw new Error((fatal.length ? fatal : body.errors).map((error) => error.message).join('; '));
+      if (result.status !== 0 && !body.data) throw new Error(result.stderr.trim() || `gh exited ${result.status}`);
+      return body.data;
     },
-    sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
     now: () => Date.now(),
-    log: json ? (line) => process.stderr.write(`${line}\n`) : (line) => process.stdout.write(`${line}\n`),
+    sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+    log: (text) => console.log(`${new Date().toISOString().slice(11, 19)} ${text}`),
   };
 }
-
-const USAGE = `Usage: node scripts/pr-gate.mjs <owner/repo#N> [more…] [--merge] [--expect-head <sha>]… [--required auto|all|<a,b>]
-                              [--interval 180] [--timeout-minutes 100] [--rerun-once [--rerun-scope failed|all]] [--no-skipped] [--json]
-       node scripts/pr-gate.mjs --commit <owner/repo@sha> [--required …] [--interval …] [--timeout-minutes …] [--json]
-Exit: 0 green/merged (also merged by the queue), 1 red, 2 conflict, 3 closed, 4 head moved (after 3 re-reads), 5 ejected/refused, 64 usage, 75 timeout (re-run the RESUME line).`;
 
 export async function main(argv, depsFactory = ghDeps) {
   let options;
   try {
     options = parseArgs(argv);
+    if (options.help) {
+      console.log('usage: node scripts/pr-gate.mjs <owner/repo#N>… [--merge] [--expect-head <sha>]… [--required verify|all|a,b] [--interval 180] [--timeout-minutes 100] [--json]\n       node scripts/pr-gate.mjs --commit <owner/repo@sha>… (see the header of scripts/pr-gate.mjs)');
+      return EXIT.ok;
+    }
+    const outcome = await runGate(options, depsFactory());
+    if (options.json) console.log(JSON.stringify(outcome, null, 2));
+    if (outcome.resume) console.log(`RESUME ${outcome.resume}`);
+    return outcome.code;
   } catch (error) {
-    if (!(error instanceof UsageError)) throw error;
-    process.stderr.write(`pr-gate: ${error.message}\n${USAGE}\n`);
-    return EXIT.usage;
+    if (error instanceof UsageError) {
+      console.error(error.message);
+      return EXIT.usage;
+    }
+    throw error;
   }
-  if (options.help) {
-    process.stdout.write(`${USAGE}\n`);
-    return EXIT.ok;
-  }
-  if (options.merge && options.targets.some((target) => target.kind === 'commit')) {
-    process.stderr.write('pr-gate: --merge applies to pull requests, not --commit\n');
-    return EXIT.usage;
-  }
-  const deps = depsFactory({ json: options.json });
-  let summary;
-  try {
-    summary = await runGate(options, deps);
-  } catch (error) {
-    if (!(error instanceof UsageError)) throw error;
-    process.stderr.write(`pr-gate: ${error.message}\n`);
-    return EXIT.usage;
-  }
-  if (options.json) process.stdout.write(`${JSON.stringify(summary)}\n`);
-  return summary.code;
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(realpathSync(process.argv[1])).href) {
-  main(process.argv.slice(2)).then(
-    (code) => {
-      process.exitCode = code;
-    },
-    (error) => {
-      process.stderr.write(`pr-gate: ${error?.stack ?? error}\n`);
-      process.exitCode = 1;
-    },
-  );
+  main(process.argv.slice(2)).then((code) => {
+    process.exitCode = code;
+  });
 }

@@ -9,7 +9,6 @@ import {createHash} from 'node:crypto';
 import {packageManagerInvocation} from '../../../scripts/package-manager.mjs';
 import {checkPackedTypes} from '../../../scripts/check-packed-types.mjs';
 import {packWorkspacePackage} from '../../../scripts/workspace-pack.mjs';
-import {assertPublishedGallery} from '../../../scripts/candidate-gallery.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {createRequire} from 'node:module';
 
@@ -17,7 +16,6 @@ const execFile = promisify(execFileCallback);
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifest = JSON.parse(await readFile(path.join(packageRoot,'package.json'),'utf8'));
 const registry = process.argv.includes('--registry');
-if(registry)assertPublishedGallery(manifest);
 const require = createRequire(import.meta.url);
 const nodeTypesVersion = require('@types/node/package.json').version;
 // MR-23e: the renderer, editor and PPTX converter, the gallery and the CLI are workspace packages of the same version as core, so

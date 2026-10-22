@@ -1,8 +1,8 @@
 // MR-30: the shape of the monorepo CI workflows (ci.yml, nightly.yml, slow-checks.yml and the setup action) against the plan
 // (docs/programs/monorepo/README.md, section 4) and against scripts/ci-scope.mjs, whose output decides which jobs run.
-// Text-level on purpose, like ci-diet.test.mjs: the repository has no YAML parser dependency. actionlint covers the syntax.
+// Text-level on purpose: the repository has no YAML parser dependency. actionlint covers the syntax.
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -37,6 +37,28 @@ const needsOf = (entry) => {
   if (!match) return [];
   return match[1].replace(/[[\]]/gu, '').split(',').map((name) => name.trim()).filter(Boolean);
 };
+
+const workflowDir = path.join(root, '.github/workflows');
+const workflows = readdirSync(workflowDir).filter((name) => name.endsWith('.yml')).sort();
+
+// MR-34: the per-repository, merge-queue and cross-repository workflows are gone. A new workflow is a deliberate addition to
+// this list (and to the plan, docs/programs/monorepo/README.md, section 2).
+test('the workflows and actions are the monorepo set; the retired coordination machinery stays deleted', () => {
+  assert.deepEqual(workflows, ['ci.yml', 'golden.yml', 'nightly.yml', 'npm-publish.yml', 'release.yml', 'slow-checks.yml', 'tracker-refresh.yml']);
+  // ecosystem-refs is the frozen shim the archived repositories' CI still calls until MR-60.
+  assert.deepEqual(readdirSync(path.join(root, '.github/actions')).sort(), ['ecosystem-refs', 'setup-workspace']);
+});
+
+test('every job has a timeout-minutes (a hung job must not hold a runner for six hours)', () => {
+  const missing = [];
+  for (const name of workflows) {
+    for (const entry of jobsOf(read(`.github/workflows/${name}`))) {
+      if (/^ {4}uses:/mu.test(entry.text)) continue; // a reusable workflow call cannot set one
+      if (!/^ {4}timeout-minutes:/mu.test(entry.text)) missing.push(`${name}: ${entry.id}`);
+    }
+  }
+  assert.deepEqual(missing, []);
+});
 
 // A change that runs everything (a tooling path): every key the scope can ever name.
 const everything = scope({ files: ['scripts/anything.mjs'], graph: TARGET_GRAPH });

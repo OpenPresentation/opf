@@ -1,9 +1,13 @@
+# MR-34: FROZEN SHIM. Core no longer uses this action (the packages are directories of one repository); the archived opf-render,
+# opf-pptx and opf-editor repositories' CI still calls it as `OpenPresentation/opf/.github/actions/ecosystem-refs@main` until MR-60
+# deletes it with scripts/ecosystem-lock.mjs and ecosystem.lock.json. The roller and the guard are gone; the lock no longer moves.
+#
 # RR-50: the one way every OpenPresentation repository's CI learns which commits of the other three to test against.
 #
 # It reads ecosystem.lock.json from the same commit as this action (core HEAD for core's own workflows, which use
 # `./opf/.github/actions/ecosystem-refs`; core main for the siblings, which use
 # `OpenPresentation/opf/.github/actions/ecosystem-refs@main`), so the lock and its reader always match. The lock is
-# written by the roller, never by hand (docs/ecosystem-development.md, "Coordinated CI: the ecosystem lock").
+# written by the (deleted) roller, never by hand; it is frozen now (docs/ecosystem-development.md, "The ecosystem lock (frozen)").
 #
 # On pull_request and merge_group events it also honours `Depends-On: OpenPresentation/<repository>#<number>` lines in the pull
 # request body: that repository is checked out at the named pull request (its test merge commit while open, its merge

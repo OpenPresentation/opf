@@ -63,7 +63,7 @@ This is an embedded data snapshot, not a live file link. Record the origin with 
 
 `parseTabularData` and `ingest` share the `@openpresentation/opf/data` entry with the chart and table data API: `chartNumber`, `formatDataNumber`, `toExcelNumberFormat`, `fromExcelNumberFormat`, `inlineDatasets`, `resolveChartData`, `resolveTableData` and `tableCellDisplayValue`.
 
-These APIs are published in core 0.11.0 and re-exported by editor 0.8.0; CLI 0.10.0 to 0.17 ship the same command as `import-data` and core ships the function as `importData`; OPF 0.18 renames them to `ingest` and `opf ingest` without aliases. Use the coordinated Node 24 train with core 0.17.0, renderer 0.17.0, editor 0.17.0 and PPTX 0.17.0 for preview/export. Exact pins and compatibility boundaries are in the [compatibility matrix](compatibility-matrix.md) and [release plan](../release-plan.json).
+These APIs are published in core 0.11.0 and re-exported by editor 0.8.0; CLI 0.10.0 to 0.17 ship the same command as `import-data` and core ships the function as `importData`; OPF 0.18 renames them to `ingest` and `opf ingest` without aliases. Use the coordinated Node 24 train with core 0.17.0, renderer 0.17.0, editor 0.17.0 and PPTX 0.17.0 for preview/export. Exact pins and compatibility boundaries are in the [compatibility matrix](compatibility-matrix.md) and the published set (`node scripts/registry-plan.mjs`).
 
 ## Verification
 

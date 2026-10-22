@@ -28,7 +28,7 @@ import {
   stabilityOf,
   verifyRelease,
 } from './release.mjs';
-import { PUBLISH_WORKFLOW, REPOSITORY, SLSA, compareVersions, highest, isPrerelease, isVersion, verifyPackage } from './release-registry.mjs';
+import { PUBLISH_WORKFLOW, REPOSITORY, SLSA, compareVersions, highest, isPrerelease, isVersion, satisfies, verifyPackage } from './release-registry.mjs';
 
 const GALLERY = '@openpresentation/gallery';
 const CORE = '@openpresentation/opf';
@@ -506,4 +506,32 @@ test('verifyRelease does not look for a changelog section of a prerelease', asyn
   } finally {
     cleanup();
   }
+});
+
+test('satisfies: caret, tilde, exact, comparators, x-ranges, hyphen and ||', () => {
+  assert.equal(satisfies('0.13.1', '^0.13.1'), true);
+  assert.equal(satisfies('0.13.9', '^0.13.1'), true);
+  assert.equal(satisfies('0.13.0', '^0.13.1'), false);
+  assert.equal(satisfies('0.14.0', '^0.13.1'), false);
+  assert.equal(satisfies('0.0.3', '^0.0.3'), true);
+  assert.equal(satisfies('0.0.4', '^0.0.3'), false);
+  assert.equal(satisfies('1.9.0', '^1.2.3'), true);
+  assert.equal(satisfies('2.0.0', '^1.2.3'), false);
+  assert.equal(satisfies('0.13.5', '~0.13.1'), true);
+  assert.equal(satisfies('0.14.0', '~0.13.1'), false);
+  assert.equal(satisfies('0.14.0', '0.14.0'), true);
+  assert.equal(satisfies('0.14.1', '0.14.0'), false);
+  assert.equal(satisfies('0.14.2', '0.14'), true);
+  assert.equal(satisfies('0.15.0', '0.14.x'), false);
+  assert.equal(satisfies('3.0.0', '*'), true);
+  assert.equal(satisfies('0.14.0', '>=0.13.0 <0.15.0'), true);
+  assert.equal(satisfies('0.15.0', '>=0.13.0 <0.15.0'), false);
+  assert.equal(satisfies('0.14.0', '>= 0.14.0'), true);
+  assert.equal(satisfies('0.14.0', '>0.14.0'), false);
+  assert.equal(satisfies('0.14.0', '<=0.14.0'), true);
+  assert.equal(satisfies('0.13.5', '0.13.0 - 0.13.9'), true);
+  assert.equal(satisfies('0.14.0', '0.13.0 - 0.13.9'), false);
+  assert.equal(satisfies('0.14.0', '^0.13.1 || ^0.14.0'), true);
+  assert.equal(satisfies('0.14.0-dev.0', '^0.14.0'), false);
+  assert.throws(() => satisfies('0.14.0', 'latest'), /Unsupported version or range/);
 });

@@ -188,8 +188,6 @@ const TOOLING_FILES = new Set([
   ".gitattributes",
   ".npmrc",
   ".gitignore",
-  "ecosystem.lock.json",
-  "release-plan.json",
 ]);
 // Documentation, records and tracking that no package or script reads at run time. `lint` (the root check:* suite) still
 // runs for them, and it is what gates them.

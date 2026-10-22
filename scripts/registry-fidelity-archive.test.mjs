@@ -38,3 +38,27 @@ test('pinned renderer tests retain static script imports while executing install
   rmSync(root,{recursive:true,force:true});
  }
 });
+
+test('a package of the monorepo is archived from its directory at the release commit', () => {
+ const root=mkdtempSync(path.join(tmpdir(),'registry-fidelity-prefix-'));
+ try {
+  const checkout=path.join(root,'source'), output=path.join(root,'verification');
+  for(const folder of [checkout,output])mkdirSync(folder,{recursive:true});
+  for(const folder of ['packages/render/test','packages/render/scripts','packages/render/dist','packages/pptx/test'])mkdirSync(path.join(checkout,folder),{recursive:true});
+  writeFileSync(path.join(checkout,'packages/render/test/golden.mjs'),"console.log('render test');\n");
+  writeFileSync(path.join(checkout,'packages/render/scripts/example-baseline.mjs'),"export const baseline='ref';\n");
+  writeFileSync(path.join(checkout,'packages/render/dist/index.mjs'),"throw new Error('Source runtime must not execute');\n");
+  writeFileSync(path.join(checkout,'packages/pptx/test/other.mjs'),"console.log('other package');\n");
+  const git=(...args)=>execFileSync('git',args,{cwd:checkout,encoding:'utf8',stdio:'pipe'}).trim();
+  git('init','--quiet');git('add','.');
+  git('-c','user.name=Registry fidelity test','-c','user.email=registry-fidelity@example.invalid','commit','--quiet','-m','immutable fixture');
+  archiveRegistryFidelity({checkout,ref:git('rev-parse','HEAD'),repo:'opf-render',directory:output,prefix:'packages/render'});
+  assert.equal(readFileSync(path.join(output,'test/golden.mjs'),'utf8'),"console.log('render test');\n");
+  assert.equal(readFileSync(path.join(output,'scripts/example-baseline.mjs'),'utf8'),"export const baseline='ref';\n");
+  assert.equal(existsSync(path.join(output,'dist')),false,'runtime output is never taken from the commit');
+  assert.equal(existsSync(path.join(output,'packages')),false,'the package directory is stripped');
+  assert.equal(existsSync(path.join(output,'test/other.mjs')),false,'another package is not archived');
+ } finally {
+  rmSync(root,{recursive:true,force:true});
+ }
+});

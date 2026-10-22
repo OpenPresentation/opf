@@ -12,9 +12,8 @@
 // weight only unbalances the shards. A chain this module cannot read (no run-tests command, or more than one) is never split:
 // shard 1 runs the whole script and the other shards run nothing.
 //
-//   node scripts/ci-test-shards.mjs --sibling opf-pptx --script test --shard 2/3 [--dry-run]   (from the core checkout)
-//
-// MR-30: in the monorepo the packages are workspace directories, so ci.yml runs a shard directly:
+// MR-30, MR-34: the packages are workspace directories, so ci.yml runs a shard directly (the old `--sibling <repository>` mode that
+// read a sibling checkout next to this one is gone):
 //   node scripts/ci-test-shards.mjs --package pptx --script test --shard 2/3 [--dry-run]
 // `--package` is render, pptx or editor (packages/<id>; the weights stay keyed by the old repository names). It prints and runs
 // the shard's commands in the package directory; `--dry-run` only prints them. `npm run` and `pnpm run` steps both work.
@@ -121,7 +120,7 @@ export function loadWeights(sibling, file = path.join(root, 'scripts', 'ci-test-
   return JSON.parse(readFileSync(file, 'utf8'))[sibling] ?? {};
 }
 
-/** Read the sibling's package script and test list, and return its shard's commands (used by test-package-ecosystem.mjs). */
+/** Read the sibling's package script and test list, and return its shard's commands (used by `--package`). */
 export function planSiblingShard({ siblingRoot, sibling, scriptName, shard, weights = loadWeights(sibling), overhead }) {
   const scripts = JSON.parse(readFileSync(path.join(siblingRoot, 'package.json'), 'utf8')).scripts;
   const script = scripts[scriptName];
@@ -180,14 +179,7 @@ function main(argv) {
     }
     return 0;
   }
-  const sibling = value('--sibling');
-  const siblingRoot = path.resolve(root, '..', sibling);
-  const commands = planSiblingShard({ siblingRoot, sibling, scriptName, shard });
-  if (argv.includes('--dry-run')) {
-    console.log(commands.map((entry) => entry.text).join('\n'));
-    return 0;
-  }
-  throw new Error('Run shards through scripts/test-package-ecosystem.mjs --test-shard, or with --package (a workspace package); use --dry-run here to print the commands.');
+  throw new Error('--package <render|pptx|editor> is required');
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

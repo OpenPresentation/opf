@@ -2,7 +2,6 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import test from 'node:test';
 import {previewPackages, previewManifest} from './ecosystem-preview-plan.mjs';
-import {satisfies} from './unreleased-gate.mjs';
 
 test('default preview set is the gallery and the four engines; only explicit CLI mode adds the CLI', () => {
   const original = previewPackages();
@@ -30,7 +29,6 @@ test('CLI and engine stages share exact core and compatible preview peers while 
   for (const manifest of [stagedCore, stagedCli]) {
     for (const name of ['@openpresentation/opf-render', '@openpresentation/opf-pptx']) {
       assert.equal(manifest.peerDependencies[name], `^${versions[name]}`);
-      assert.ok(satisfies(versions[name], manifest.peerDependencies[name]));
       assert.deepEqual(manifest.peerDependenciesMeta[name], before[manifest.name === core.name ? 'core' : 'cli'].peerDependenciesMeta[name]);
     }
     assert.ok(!manifest.scripts && !manifest.devDependencies);

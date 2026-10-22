@@ -7,15 +7,15 @@ import {pathToFileURL} from 'node:url';
 import path from 'node:path';
 import {archiveRegistryFidelity} from './registry-fidelity-archive.mjs';
 import {examplesDigest,readPublishedCoreGolden} from './registry-golden.mjs';
-import {installablePackages} from './release-plan-cli.mjs';
+import {registryPlan, SET} from './registry-plan.mjs';
 const root=process.cwd();
-const plan=JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8'));
+// MR-34: the published set is the registry's `latest` of each package (scripts/registry-plan.mjs) (nothing hand-edited).
+const plan=registryPlan();
 const consumer=path.resolve(process.argv[2]??'artifacts/npm/registry-consumer');
 const require=createRequire(path.join(consumer,'package.json'));
 const lock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8'));
 const modules=await realpath(path.join(consumer,'node_modules'));
-// The registry consumer holds the plan's libraries only while the plan's CLI peer ranges conflict with them (release-plan-cli.mjs).
-const installedPackages=await installablePackages(plan);
+const installedPackages=plan.packages;
 for(const item of installedPackages){
  const manifest=JSON.parse(await readFile(require.resolve(item.name+'/package.json'),'utf8'));
  assert.equal(manifest.version,item.version,item.name);
@@ -56,7 +56,7 @@ const suites=[
 for(const [repo,tests] of suites){
  const ref=plan.verificationRefs[repo];assert.match(ref,/^[a-f0-9]{40}$/);
  const directory=path.join(consumer,'fidelity',repo);await mkdir(directory,{recursive:true});
- const archive=archiveRegistryFidelity({checkout:path.resolve(root,'..',repo),ref,repo,directory});
+ const archive=archiveRegistryFidelity({checkout:root,ref,repo,directory,prefix:SET.find(item=>item.key===repo).directory});
  const installed=path.dirname(require.resolve('@openpresentation/'+repo+'/package.json'));
  const shipped=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
  // Newer PPTX smoke fixtures reference the shipped, hash-verified vendor code.

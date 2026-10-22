@@ -18,7 +18,7 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const args = Object.fromEntries(process.argv.slice(2).reduce((pairs, value, index, all) => value.startsWith('--') ? [...pairs, [value.slice(2), all[index + 1]]] : pairs, []));
 
 if (args.dump) {
-  // Child mode: render the corpus with the core named by OPF_CORE_DIST (see scripts/local-opf-loader.mjs).
+  // Child mode: render the corpus with the core named by OPF_CORE_DIST (see scripts/published-matrix/harness-loader/local-opf-loader.mjs).
   const {examples} = await import('@openpresentation/opf/examples');
   const {renderSvgDeck} = await import(pathToFileURL(path.resolve(args.render, 'dist/index.js')).href);
   const out = {};
@@ -33,7 +33,7 @@ const dumps = {};
 try {
   for (const side of ['before', 'after']) {
     dumps[side] = path.join(temp, `${side}.json`);
-    const run = spawnSync(process.execPath, ['--no-warnings', '--import', pathToFileURL(path.resolve(here, '../../../scripts/register-local-opf.mjs')).href, fileURLToPath(import.meta.url), '--render', args.render, '--dump', dumps[side]],
+    const run = spawnSync(process.execPath, ['--no-warnings', '--import', pathToFileURL(path.resolve(here, '../../../scripts/published-matrix/harness-loader/register-local-opf.mjs')).href, fileURLToPath(import.meta.url), '--render', args.render, '--dump', dumps[side]],
       {encoding: 'utf8', env: {...process.env, OPF_CORE_DIST: path.resolve(args[side])}, maxBuffer: 1 << 28});
     if (run.status !== 0) { console.error(run.stderr || run.stdout); process.exit(1); }
   }

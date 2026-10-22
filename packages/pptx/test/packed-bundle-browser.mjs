@@ -18,14 +18,7 @@ import { build } from 'esbuild';
 import { chromium } from 'playwright';
 import { spawnSpec } from '../../../scripts/package-manager.mjs';
 import { assertLockstep, packWorkspacePackage } from '../../../scripts/workspace-pack.mjs';
-import { gateSkipped } from '../scripts/published-core-gate.mjs';
 
-// RR-55: this packs the tarball and installs it with its PUBLISHED dependencies, which cannot work while the package needs an
-// unreleased core (opf.requiresUnreleasedCore, scripts/published-core-gate.mjs; CI's gate step exports OPF_PUBLISHED_CORE_GATE=skip).
-if (gateSkipped()) {
-  console.log('::notice::RR-55: packed browser bundle skipped: the published-core gate says opf.requiresUnreleasedCore is not yet published. Unset OPF_PUBLISHED_CORE_GATE to run it locally.');
-  process.exit(0);
-}
 const root = fileURLToPath(new URL('../', import.meta.url));
 // MR-23c: npm runs through scripts/package-manager.mjs (the npm that ships with the selected Node on Windows), so this works
 // under `pnpm run` and when scripts/quarantine.mjs runs the command directly. The candidate and the workspace siblings it

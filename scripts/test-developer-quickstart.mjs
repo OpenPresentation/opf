@@ -7,14 +7,13 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {promisify} from 'node:util';
 import {packageManagerInvocation} from './package-manager.mjs';
-import {cliSkipNotice, installablePackages} from './release-plan-cli.mjs';
+import {registryPlan} from './registry-plan.mjs';
 
 const execFile = promisify(execFileCallback);
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const plan = JSON.parse(await readFile(path.join(root, 'release-plan.json'), 'utf8'));
-// While the plan's CLI peer ranges conflict with the plan's libraries it is neither installed beside them nor run (release-plan-cli.mjs).
-const cliNotice = await cliSkipNotice(plan);
-const installed = await installablePackages(plan);
+// MR-34: the published set is the registry's `latest` of each package (scripts/registry-plan.mjs) (nothing hand-edited).
+const plan = registryPlan();
+const installed = plan.packages;
 // RR-74: opf-render 0.18 names its engines toSvg, toPng and toPdf; the plan's renderer may still be a 0.17 release (renderSvg, svgToPng, svgToPdf).
 const renderer = plan.packages.find((item) => item.name === '@openpresentation/opf-render')?.version.split('.').map(Number) ?? [0, 0, 0];
 const names = renderer[0] > 0 || renderer[1] >= 18 ? {svg: 'toSvg', png: 'toPng', pdf: 'toPdf'} : {svg: 'renderSvg', png: 'svgToPng', pdf: 'svgToPdf'};
@@ -148,17 +147,15 @@ console.log(JSON.stringify({
 
   await run(process.execPath, ['workflow.mjs'], {cwd: projectDir});
 
-  if (cliNotice) console.log(`SKIP the CLI part of the developer quickstart: ${cliNotice}`);
-  else {
+  {
     const cli = path.join(projectDir, 'node_modules', '@openpresentation', 'cli', 'dist', 'index.js');
     const version = await run(process.execPath, [cli, '--version'], {cwd: projectDir});
     const versionReport = JSON.parse(version.stdout);
     const opfVersion = plan.packages.find((item) => item.name === '@openpresentation/opf')?.version;
     const cliVersion = plan.packages.find((item) => item.name === '@openpresentation/cli')?.version;
     assert.equal(versionReport.cli, cliVersion);
-    // CLI 0.16.0 and later depend on core (RR-62), so --version reports the installed plan core. A plan whose CLI still
-    // bundled its own core (0.15 and earlier) recorded that version as release-plan bundledCore.
-    assert.equal(versionReport.opf, plan.bundledCore?.['@openpresentation/cli'] ?? opfVersion);
+    // CLI 0.16.0 and later depend on core (RR-62), so --version reports the installed core.
+    assert.equal(versionReport.opf, opfVersion);
     const validated = await run(process.execPath, [cli, 'validate', 'deck.opf.json'], {cwd: projectDir});
     assert.equal(JSON.parse(validated.stdout).valid, true);
     await run(process.execPath, [cli, 'paginate', 'deck.opf.json', 'paginated.opf.json'], {cwd: projectDir});
@@ -171,7 +168,7 @@ console.log(JSON.stringify({
     createHash('sha256').update(after).digest('hex'),
     createHash('sha256').update(originalDeck).digest('hex'),
   );
-  console.log(`developer quickstart: published registry install passed${cliNotice ? ' (CLI skipped)' : ''}`);
+  console.log('developer quickstart: published registry install passed');
 } finally {
   await rm(tmpRoot, {recursive: true, force: true});
 }

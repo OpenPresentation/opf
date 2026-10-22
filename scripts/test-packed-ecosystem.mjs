@@ -5,22 +5,15 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import {createHash, randomUUID} from 'node:crypto';
-import {candidateArtifacts,assertInstalledCandidateGraph} from './candidate-gallery-pack.mjs';
-import {assertPublishedGallery} from './candidate-gallery.mjs';
 import {checkPackedTypes} from './check-packed-types.mjs';
 import {LAZY_FONT_COUNTS,REVIEWED_FONT_SETS,hashFontSet,lazyFontCountProblem} from './lazy-font-counts.mjs';
-import {cliSkipNotice, installablePackages} from './release-plan-cli.mjs';
+import {registryPlan, treePath} from './registry-plan.mjs';
 const root = fileURLToPath(new URL("../", import.meta.url)),
   out = path.join(root, "artifacts/npm");
 const librariesOnly = process.argv.includes('--registry-libraries');
 const registry = process.argv.includes('--registry') || librariesOnly;
-if(registry){
-  if(process.env.CANDIDATE_GALLERY_REF)throw Error('candidate artifacts cannot be used for registry qualification');
-}
-const releasePlan = registry ? JSON.parse(await readFile(path.join(root, "release-plan.json"), "utf8")) : null;
-// While the plan's CLI peer ranges conflict with the plan's libraries it is neither installed beside them nor run (release-plan-cli.mjs).
-const cliNotice = registry && !librariesOnly ? await cliSkipNotice(releasePlan) : null;
-if (cliNotice) console.log(`SKIP the CLI part of the registry consumer: ${cliNotice}`);
+// MR-34: the registry set is the `latest` dist-tag of each package (scripts/registry-plan.mjs) (nothing hand-edited).
+const releasePlan = registry ? registryPlan() : null;
 // layoutTable first shipped in core 0.6.0. Keep historical registry plans
 // testable, while requiring the API and its pinned regression suite thereafter.
 const coreVersion = releasePlan?.packages.find(item => item.name === '@openpresentation/opf')?.version.split('.').map(Number);
@@ -51,12 +44,14 @@ const verifyInstalledCliRegression = !registry || coreVersion?.[0] > 0 || coreVe
 const verifyColorRefs = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 11;
 
 async function readHarnessBytes(repo, file) {
-  // MR-23e: the packages are directories of this repository (the registry mode reads the old repositories' commits: MR-34).
+  // MR-23e: the packages are directories of this repository. MR-34: the registry mode reads the file of the release commit the
+  // published package was built from (the registry's gitHead, translated for a package of an archived repository), from this
+  // repository's history: `git show <commit>:packages/<directory>/<file>`.
   const directory = repo === 'opf' ? root : path.join(root, 'packages', repo.replace(/^opf-/, ''));
   if (!registry) return readFile(path.join(directory, file));
   const ref = releasePlan.verificationRefs?.[repo];
   if (!/^[a-f0-9]{40}$/.test(ref ?? '')) throw new Error(`Missing immutable registry verification ref for ${repo}`);
-  const result = spawnSync('git', ['show', `${ref}:${file}`], {cwd:directory});
+  const result = spawnSync('git', ['show', `${ref}:${treePath(repo, file)}`], {cwd: root, maxBuffer: 256 * 1024 * 1024});
   if (result.status !== 0) throw new Error(`Cannot read ${repo} release harness ${file}: ${result.stderr}`);
   return result.stdout;
 }
@@ -96,9 +91,8 @@ async function installLocalImports(repo, file, source) {
 }
 const consumer = path.join(out, librariesOnly ? "registry-libraries-consumer" : registry ? "registry-consumer" : "consumer");
 const manifest = registry
-  ? { artifacts: await installablePackages(releasePlan) }
+  ? { artifacts: releasePlan.packages }
   : JSON.parse(await readFile(path.join(out, "manifest.json"), "utf8"));
-if(!registry&&process.env.CANDIDATE_GALLERY_REF)candidateArtifacts(path.resolve(root));
 if (librariesOnly) manifest.artifacts = manifest.artifacts.filter(item => item.name !== '@openpresentation/cli');
 const renderSourceVersion = registry ? releasePlan.packages.find(item => item.name === '@openpresentation/opf-render')?.version : manifest.artifacts.find(item => item.name === '@openpresentation/opf-render')?.sourceVersion;
 // RR-63: opf-render's PDF/PNG converters and font packages are optional peers (npm does not install them). Each consumer
@@ -453,15 +447,12 @@ if (verifyTableLayout) {
   run(process.execPath, ['--test', 'table-layout.test.mjs']);
 }
 
-if(!registry&&process.env.CANDIDATE_GALLERY_REF)assertInstalledCandidateGraph(path.resolve(root),consumer);
-
 if (registry) {
   for (const item of manifest.artifacts) {
     const installed = JSON.parse(await readFile(path.join(consumer, 'node_modules', item.name, 'package.json'), 'utf8'));
-    assertPublishedGallery(installed);
     if (installed.version !== item.version) throw new Error(`Expected ${item.name}@${item.version}, installed ${installed.version}`);
   }
-  if (!librariesOnly && !cliNotice) {
+  if (!librariesOnly) {
     const cliRoot=path.join(consumer,'node_modules/@openpresentation/cli');
     const cli=JSON.parse(await readFile(path.join(cliRoot,'package.json'),'utf8'));
     const entry=path.join(cliRoot,cli.bin.opf);
@@ -651,4 +642,4 @@ await writeFile(path.join(browserOut,'packed-browser-manifest.json'),JSON.string
   files:Object.fromEntries(await Promise.all(['fonts.json',...browserSuites.flatMap(suite=>[`packed-${suite}-tests.html`,`packed-${suite}-tests.js`])].map(async file=>[file,await hashFile(path.join(browserOut,file))]))),
 },null,2)+'\n');
 if (!registry) await checkPackedTypes(consumer, {downstream: true});
-console.log(librariesOnly ? 'Registry library consumer passed for four exact versions; CLI and complete release verification remain separate.' : registry ? (cliNotice ? `Registry consumer passed for the four exact library versions of the release plan (no local package overrides); the CLI was skipped: ${cliNotice}.` : 'Registry consumer passed for all five exact release-plan versions (no local package overrides).') : 'Local tarball consumer passed; this is not a registry verification.');
+console.log(librariesOnly ? 'Registry library consumer passed for four exact versions; CLI and complete release verification remain separate.' : registry ? 'Registry consumer passed for all five exact versions of the published set (no local package overrides).' : 'Local tarball consumer passed; this is not a registry verification.');

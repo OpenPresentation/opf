@@ -1,32 +1,24 @@
-// RR-50: ecosystem.lock.json, the bot-owned record of the four OpenPresentation commits that passed the coordinated
-// ecosystem checks together (docs/programs/release-readiness/ci-cd.md, section 3).
+// RR-50: ecosystem.lock.json, the record of the four OpenPresentation commits that passed the coordinated ecosystem checks
+// together (docs/programs/release-readiness/ci-cd.md, section 3).
 //
-// The lock holds one full commit SHA per repository (opf, opf-render, opf-pptx, opf-editor). Only the roller
-// (scripts/ecosystem-roll.mjs) writes the SHAs. MR-31: the `golden` selection is gone with the golden overrides; the examples
-// baseline lives in packages/render/test/golden/ and is selected by the renderer itself. The schema is
-// scripts/ecosystem-lock.schema.json; docs/ecosystem-development.md explains the model.
+// MR-34: this file is the FROZEN SHIM of the monorepo program (docs/programs/monorepo/README.md, section 2). The roller that wrote
+// the lock, the guard and core's own use of the lock are deleted; what stays is what the archived repositories' CI still calls
+// through `OpenPresentation/opf/.github/actions/ecosystem-refs@main` until MR-60 deletes the action, this script, the lock and its
+// schema together. Nothing in this repository reads it any more, and nothing writes the lock.
 //
 // Usage:
 //   node scripts/ecosystem-lock.mjs validate [--lock ecosystem.lock.json]
-//   node scripts/ecosystem-lock.mjs guard [--lock ecosystem.lock.json] [--base-lock <file>] [--head-ref <branch>] [--blocking]
 //   node scripts/ecosystem-lock.mjs resolve --consumer <repository> [--lock <file>] [--github-output]
+//   node scripts/ecosystem-lock.mjs depends-on [--body-file <file>]   # prints what a body declares (no network)
 //
-// `resolve` is what every repository's CI runs (through .github/actions/ecosystem-refs): it prints, and writes as step
+// `resolve` is what the archived repositories' CI runs (through .github/actions/ecosystem-refs): it prints, and writes as step
 // outputs, the commit to check out for each of the four repositories (opf, opf_render, opf_pptx, opf_editor).
 //
 // Depends-On (pull_request and merge_group events): a line `Depends-On: OpenPresentation/<repository>#<number>` in the pull
 // request body (read through the REST API, so editing the body and re-running the job picks it up) makes `resolve`
 // check out that pull request instead of the lock entry: its test merge commit while it is open and mergeable, its
 // head otherwise, and its merge commit (on main) once merged. A closed, unmerged dependency fails the step.
-// In the merge queue the pull request is the one named by the queue branch (`gh-readonly-queue/<base>/pr-<n>-<sha>`),
-// so a breaking coordinated change is checked against its open sibling pull requests there too; in a batch of several
-// pull requests only that head pull request's Depends-On applies, so a coordinated change should queue alone.
-//   node scripts/ecosystem-lock.mjs depends-on [--body-file <file>]   # prints what a body declares (no network)
-//
-// `guard` checks, through the GitHub REST API (no clone), that every locked SHA is an ancestor of its repository's
-// main (the REST equivalent of `git merge-base --is-ancestor <sha> main`), and warns when a pull request edits a
-// locked SHA from a branch other than the roller's. It only warns unless `--blocking` is given or
-// ECOSYSTEM_LOCK_GUARD=blocking is set (the migration in ci-cd.md adds it as a warning first).
+// In the merge queue the pull request is the one named by the queue branch (`gh-readonly-queue/<base>/pr-<n>-<sha>`).
 import { appendFileSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -34,8 +26,6 @@ import { fileURLToPath } from "node:url";
 export const OWNER = "OpenPresentation";
 export const REPOSITORIES = ["opf", "opf-render", "opf-pptx", "opf-editor"];
 export const LOCK_FILE = "ecosystem.lock.json";
-/** Branches the roller pushes. A locked SHA changed on any other branch is a hand-edited pin. */
-export const ROLLER_BRANCH_PREFIX = "ecosystem-roll/";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SHA = /^[0-9a-f]{40}$/;
@@ -117,60 +107,8 @@ export function githubApi({ token = process.env.GITHUB_TOKEN ?? process.env.GH_T
   };
 }
 
-/**
- * Whether `sha` is an ancestor of (or equal to) `branch` in OpenPresentation/<repository>, through the compare API:
- * comparing base `sha` with head `branch` reports "ahead" or "identical" exactly when `git merge-base --is-ancestor
- * <sha> <branch>` succeeds, and "behind" or "diverged" when the commit has changes that are not on the branch.
- */
-export async function ancestry(api, repository, sha, branch = "main") {
-  try {
-    const compare = await api(`/repos/${OWNER}/${repository}/compare/${sha}...${branch}`);
-    const onBranch = compare.status === "ahead" || compare.status === "identical";
-    return { repository, sha, onBranch, status: compare.status, behindBy: compare.ahead_by, notInBranch: compare.behind_by };
-  } catch (error) {
-    return { repository, sha, onBranch: false, status: error.status === 404 ? "unknown commit" : "error", error: error.message };
-  }
-}
-
-/** The ancestry of every locked SHA, in REPOSITORIES order. */
-export async function checkAncestry(lock, api) {
-  return Promise.all(REPOSITORIES.map((name) => ancestry(api, name, lock.repositories[name].sha)));
-}
-
-/**
- * Locked SHAs that a pull request changed by hand. The roller's branches (ROLLER_BRANCH_PREFIX) are the only place a
- * SHA may change; a new lock (no base) has nothing to compare.
- */
-export function handEditedPins(baseLock, lock, headRef) {
-  if (!baseLock || !headRef || headRef.startsWith(ROLLER_BRANCH_PREFIX)) return [];
-  return REPOSITORIES.filter((name) => baseLock.repositories?.[name]?.sha !== lock.repositories[name].sha).map((name) => ({
-    repository: name,
-    from: baseLock.repositories?.[name]?.sha,
-    to: lock.repositories[name].sha,
-  }));
-}
-
 function short(sha) {
   return sha ? sha.slice(0, 12) : "(none)";
-}
-
-/** Runs the guard and returns { problems, lines }: `problems` are what would fail a blocking run. */
-export async function guard(lock, api, { baseLock, headRef } = {}) {
-  const lines = [];
-  const problems = [];
-  for (const result of await checkAncestry(lock, api)) {
-    if (result.onBranch) {
-      lines.push(`${result.repository} ${short(result.sha)} is on main (${result.behindBy ?? 0} commits behind).`);
-    } else if (result.status === "behind" || result.status === "diverged") {
-      problems.push(`${result.repository} is locked to ${short(result.sha)}, which is not on ${OWNER}/${result.repository} main (${result.notInBranch} commits not in main). Only the roller writes the lock, from merged commits.`);
-    } else {
-      problems.push(`${result.repository} ${short(result.sha)} could not be checked against main (${result.status}${result.error ? `: ${result.error}` : ""}).`);
-    }
-  }
-  for (const edit of handEditedPins(baseLock, lock, headRef)) {
-    problems.push(`${edit.repository} changed from ${short(edit.from)} to ${short(edit.to)} on branch ${headRef}: locked SHAs are written by the roller (branches ${ROLLER_BRANCH_PREFIX}*), not by hand. Use a Depends-On: trailer for an unmerged dependency.`);
-  }
-  return { problems, lines };
 }
 
 const DEPENDS_ON_LINE = /^\s*Depends-On:\s*(.*)$/i;
@@ -323,28 +261,6 @@ async function main(argv) {
     console.log(`${path.relative(process.cwd(), lockFile) || lockFile} is valid: ${REPOSITORIES.map((name) => `${name} ${short(lock.repositories[name].sha)}`).join(", ")}.`);
     return 0;
   }
-  if (command === "guard") {
-    const lock = readLock(lockFile);
-    const baseLockFile = option(args, "--base-lock");
-    let baseLock;
-    if (baseLockFile) {
-      try {
-        baseLock = parseLock(readFileSync(baseLockFile, "utf8"), baseLockFile);
-      } catch (error) {
-        console.log(`No comparable base lock (${error.message.split("\n")[0]}); the hand-edit check is skipped.`);
-      }
-    }
-    const headRef = option(args, "--head-ref") ?? process.env.GITHUB_HEAD_REF;
-    const blocking = args.includes("--blocking") || process.env.ECOSYSTEM_LOCK_GUARD === "blocking";
-    const { problems, lines } = await guard(lock, githubApi(), { baseLock, headRef });
-    for (const line of lines) console.log(line);
-    for (const problem of problems) annotate(blocking ? "error" : "warning", "Ecosystem lock guard", problem);
-    if (process.env.GITHUB_STEP_SUMMARY && problems.length) {
-      appendFileSync(process.env.GITHUB_STEP_SUMMARY, `### Ecosystem lock guard (${blocking ? "blocking" : "warning only"})\n\n${problems.map((p) => `- ${p}`).join("\n")}\n`);
-    }
-    if (!problems.length) console.log("Every locked SHA is on its repository's main.");
-    return problems.length && blocking ? 1 : 0;
-  }
   if (command === "depends-on") {
     const bodyFile = option(args, "--body-file");
     const parsed = parseDependsOn(bodyFile ? readFileSync(bodyFile, "utf8") : readFileSync(0, "utf8"));
@@ -365,7 +281,7 @@ async function main(argv) {
     }
     return 0;
   }
-  console.error("Usage: node scripts/ecosystem-lock.mjs validate|guard|resolve|depends-on (see the header of this file)");
+  console.error("Usage: node scripts/ecosystem-lock.mjs validate|resolve|depends-on (see the header of this file)");
   return 2;
 }
 

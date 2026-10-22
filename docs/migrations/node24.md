@@ -36,7 +36,7 @@ manager version recorded in that repository's `package.json`.
 
 This is a breaking runtime requirement for the next releases. Allocate new
 versions and include it in release notes; do not republish an existing version.
-`release-plan.json`, registry dependency locks and published-version evidence
+The registry's `latest` set (`node scripts/registry-plan.mjs`), registry dependency locks and published-version evidence
 continue to describe the actual published set until publication succeeds.
 
 Historical Node 20 results, their immutable verifiers and archived runtime bytes

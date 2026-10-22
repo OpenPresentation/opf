@@ -8,8 +8,9 @@
 //   node scripts/published-matrix/installed-parity.mjs parity    [--work <dir>]   parity.mjs + summarize.mjs (PARITY_FONT_HOST=gallery)
 //   node scripts/published-matrix/installed-parity.mjs all        [--work <dir>]
 //
-// Versions come from release-plan.json. OPF_PARITY_OVERRIDES ("<package>@<version>", comma or space separated) replaces
-// individual entries, e.g. a patch release the plan does not list yet. The gallery snippets come from GALLERY_DIR (a
+// Versions come from the registry's `latest` dist-tag of each package (scripts/registry-plan.mjs; MR-34).
+// OPF_PARITY_OVERRIDES ("<package>@<version>", comma or space separated) replaces individual entries, e.g. a patch release the tag
+// does not name yet. The gallery snippets come from GALLERY_DIR (a
 // pptx-gallery checkout, built with the gallery's own builders by gen-snippets.mjs) when it is set, else from the committed
 // snapshot scripts/published-matrix/fixtures/gallery-snippets-<gallery commit>.json.gz of that same build, because
 // pptx-gallery is a private repository that the workflow token cannot read. No tolerance or check of the harness changes.
@@ -23,6 +24,7 @@ import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 import {linkModules} from './link-modules.mjs';
 import {assertParityWorkDirectory} from './parity-work-directory.mjs';
+import {registryPlan} from '../registry-plan.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, '..', '..');
@@ -55,7 +57,7 @@ function capture(file, args, cwd) {
 }
 
 export async function plannedVersions() {
-  const plan = JSON.parse(await readFile(path.join(root, 'release-plan.json'), 'utf8'));
+  const plan = registryPlan({ refs: false });
   const versions = Object.fromEntries(PACKAGES.map((name) => [name, plan.packages.find((entry) => entry.name === name)?.version]));
   for (const spec of (process.env.OPF_PARITY_OVERRIDES ?? '').split(/[\s,]+/).filter(Boolean)) {
     const at = spec.lastIndexOf('@');
@@ -113,7 +115,8 @@ async function prepare() {
   // The harness reads the head of each source from its root package.json gitHead when the root is not a git checkout.
   await writeFile(path.join(sources, 'parity-opf', 'package.json'), JSON.stringify({name: 'parity-opf', private: true, gitHead: installed['@openpresentation/opf'].gitHead}, null, 2));
   await mkdir(path.join(sources, 'parity-opf', 'scripts'), {recursive: true});
-  for (const file of ['register-local-opf.mjs', 'local-opf-loader.mjs']) await cp(path.join(root, 'scripts', file), path.join(sources, 'parity-opf', 'scripts', file));
+  // The two-file loader that points every engine of the harness at the one core (the parity scripts run with --import of it).
+  for (const file of ['register-local-opf.mjs', 'local-opf-loader.mjs']) await cp(path.join(here, 'harness-loader', file), path.join(sources, 'parity-opf', 'scripts', file));
   for (const [name, dir] of [['@openpresentation/opf-render', 'parity-opf-render'], ['@openpresentation/opf-pptx', 'parity-opf-pptx']]) {
     const target = path.join(sources, dir);
     await copyPackage(name, target);

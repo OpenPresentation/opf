@@ -5,7 +5,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { ancestry, dependsOnOverrides, guard, handEditedPins, outputLines, parseDependsOn, parseLock, pullRequestOfEvent, REPOSITORIES, readLock, resolveDependency, resolveRefs, validateLock } from "./ecosystem-lock.mjs";
+import { dependsOnOverrides, outputLines, parseDependsOn, parseLock, pullRequestOfEvent, REPOSITORIES, readLock, resolveDependency, resolveRefs, validateLock } from "./ecosystem-lock.mjs";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const schema = JSON.parse(readFileSync(path.join(root, "scripts/ecosystem-lock.schema.json"), "utf8"));
@@ -57,49 +57,6 @@ test("the schema lists the same repositories, fields and SHA rule as the validat
   assert.deepEqual(schema.properties.provenance.properties.source.enum, ["migration", "roller"]);
 });
 
-function fakeApi(statuses) {
-  const calls = [];
-  const api = async (route) => {
-    calls.push(route);
-    const match = /^\/repos\/OpenPresentation\/([\w.-]+)\/compare\/([0-9a-f]{40})\.\.\.main$/.exec(route);
-    assert.ok(match, route);
-    const status = statuses[match[1]];
-    if (status === 404) throw Object.assign(new Error("HTTP 404 Not Found"), { status: 404 });
-    return { status, ahead_by: status === "identical" ? 0 : 3, behind_by: status === "behind" || status === "diverged" ? 2 : 0 };
-  };
-  return { api, calls };
-}
-
-test("ancestry maps the compare status to merge-base --is-ancestor", async () => {
-  const { api } = fakeApi({ a: "ahead", b: "identical", c: "behind", d: "diverged", e: 404 });
-  assert.equal((await ancestry(api, "a", sha("1"))).onBranch, true);
-  assert.equal((await ancestry(api, "b", sha("1"))).onBranch, true);
-  assert.equal((await ancestry(api, "c", sha("1"))).onBranch, false);
-  assert.equal((await ancestry(api, "d", sha("1"))).onBranch, false);
-  const unknown = await ancestry(api, "e", sha("1"));
-  assert.equal(unknown.onBranch, false);
-  assert.equal(unknown.status, "unknown commit");
-});
-
-test("the guard reports every SHA that is not on main", async () => {
-  const { api, calls } = fakeApi({ opf: "ahead", "opf-render": "diverged", "opf-pptx": "identical", "opf-editor": 404 });
-  const { problems, lines } = await guard(sampleLock(), api);
-  assert.equal(calls.length, 4);
-  assert.equal(problems.length, 2);
-  assert.match(problems[0], /opf-render is locked to 222222222222, which is not on OpenPresentation\/opf-render main \(2 commits not in main\)/);
-  assert.match(problems[1], /opf-editor 444444444444 could not be checked against main \(unknown commit/);
-  assert.equal(lines.length, 2);
-});
-
-test("only the roller's branches may change a locked SHA", () => {
-  const base = sampleLock();
-  const moved = sampleLock({ repositories: { ...base.repositories, "opf-pptx": { sha: sha("9") } } });
-  assert.deepEqual(handEditedPins(base, moved, "codex/rr-99-repin"), [{ repository: "opf-pptx", from: sha("3"), to: sha("9") }]);
-  assert.deepEqual(handEditedPins(base, moved, "ecosystem-roll/main"), []);
-  assert.deepEqual(handEditedPins(undefined, moved, "codex/rr-99-repin"), []);
-  assert.deepEqual(handEditedPins(base, sampleLock({ provenance: { source: "roller", at: "2026-10-04T03:00:00Z" } }), "codex/rr-99-note"), []);
-});
-
 test("resolve gives the locked SHA for every repository", () => {
   const resolved = resolveRefs(sampleLock(), { consumer: "opf-render" });
   assert.deepEqual(Object.fromEntries(Object.entries(resolved.refs).map(([name, value]) => [name, value.ref])), { opf: sha("1"), "opf-render": sha("2"), "opf-pptx": sha("3"), "opf-editor": sha("4") });
@@ -115,18 +72,12 @@ test("resolve gives the locked SHA for every repository", () => {
   assert.throws(() => resolveRefs(sampleLock(), { consumer: "pptx-gallery" }), /--consumer/);
 });
 
-test("no core workflow pins an OpenPresentation repository by hand (RR-50: the lock is the only source)", () => {
+test("no workflow of this repository reads or checks out by the lock any more (MR-34: the shim is for the archived repositories)", () => {
   const directory = path.join(root, ".github/workflows");
   for (const file of readdirSync(directory).filter((name) => name.endsWith(".yml"))) {
     const text = readFileSync(path.join(directory, file), "utf8");
+    assert.doesNotMatch(text, /ecosystem-refs|ecosystem\.lock|ecosystem-lock/, `${file}: the lock and its action are the frozen shim`);
     assert.doesNotMatch(text, /^\s*OPF_(RENDER|PPTX|EDITOR)_REF:/m, `${file}: hand-written sibling pin`);
-    const lines = text.split(/\r?\n/);
-    lines.forEach((line, index) => {
-      if (!/^\s*repository:\s*OpenPresentation\//.test(line)) return;
-      for (const next of lines.slice(index + 1, index + 6)) {
-        assert.doesNotMatch(next, /^\s*ref:\s*[0-9a-f]{7,40}\s*(#.*)?$/, `${file}:${index + 1}: hand-written SHA for ${line.trim()}`);
-      }
-    });
   }
 });
 
