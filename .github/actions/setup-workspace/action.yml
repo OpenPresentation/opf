@@ -1,0 +1,80 @@
+# MR-30: pnpm, Node, the shared pnpm store cache and a frozen install, in one step for every job of ci.yml, nightly.yml and
+# slow-checks.yml (docs/programs/monorepo/README.md, section 4).
+#
+# - The store cache is actions/setup-node's `cache: pnpm`: one cache per OS, keyed by pnpm-lock.yaml, restored by every job
+#   (hard links into node_modules, so an install is a link step and not a download). A lockfile change misses once.
+# - The whole workspace is installed in every job, never a filtered subset: the cache is saved by the first job that misses it,
+#   so a store built from a filtered install would be missing the other packages' dependencies for every later job. (The root
+#   project is installed too, which the root checks and the gallery's engine-dependent gates need.)
+# - `container: true` is for jobs inside the pinned Playwright image: pnpm/action-setup took 2.5 to 5 minutes there in the old
+#   per-repository CI runs (opf-pptx, opf-render, 2026-10-20), so pnpm comes from the npm registry at the version `packageManager`
+#   names instead, a few seconds.
+# - `build-deps` builds the dependencies of one package in topological order (`pnpm --filter "<name>^..." run --if-present build`),
+#   so a package job never builds the package under test twice (its own `test` script builds it). An empty match is fine here
+#   (a package without workspace dependencies); `build-also` builds named packages and their dependencies as well (core's tests load the
+#   renderer and PPTX, its optional peers, which are not workspace dependencies of core); every other `pnpm --filter` in the workflows passes --fail-if-no-match, because
+#   pnpm exits 0 when a filter matches nothing.
+name: Set up the pnpm workspace
+description: pnpm, Node, the pnpm store cache and a frozen install of the whole workspace, optionally building one package's dependencies.
+inputs:
+  node-version:
+    description: Node.js version.
+    required: false
+    default: '24'
+  container:
+    description: "'true' when the job runs inside the Playwright container."
+    required: false
+    default: 'false'
+  build-deps:
+    description: Package name whose dependencies are built after the install; empty builds nothing.
+    required: false
+    default: ''
+  build-also:
+    description: Space-separated package names built after the install together with their own dependencies (optional peers the package under test loads at run time but does not depend on in the workspace graph, such as core's renderer and PPTX).
+    required: false
+    default: ''
+runs:
+  using: composite
+  steps:
+    - name: Install pnpm (host runner)
+      if: ${{ inputs.container != 'true' }}
+      uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+
+    - name: Install pnpm (container)
+      if: ${{ inputs.container == 'true' }}
+      shell: bash
+      run: |
+        version="$(node -p "require('./package.json').packageManager.split('@')[1].split('+')[0]")"
+        npm install --global --no-audit --no-fund "pnpm@${version}"
+        pnpm --version
+
+    # The container user (root) does not own the checkout (the runner user does), so a later `git` call (rev-parse HEAD, cat-file) fails
+    # with "dubious ownership" unless the directory is trusted; actions/checkout only does that for its own step.
+    - name: Trust the checkout (container)
+      if: ${{ inputs.container == 'true' }}
+      shell: bash
+      run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+    - name: Set up Node.js
+      uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: pnpm
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        node -e "console.log('Node', process.version)"
+        pnpm install --frozen-lockfile
+
+    - name: Build the dependencies
+      if: ${{ inputs.build-deps != '' || inputs.build-also != '' }}
+      shell: bash
+      env:
+        PACKAGE: ${{ inputs.build-deps }}
+        ALSO: ${{ inputs.build-also }}
+      run: |
+        filters=()
+        if [ -n "${PACKAGE}" ]; then filters+=(--filter "${PACKAGE}^..."); fi
+        for name in ${ALSO}; do filters+=(--filter "${name}..."); done
+        pnpm "${filters[@]}" run --if-present build

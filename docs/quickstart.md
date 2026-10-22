@@ -12,7 +12,7 @@ shipped versus deferred.
 ## Versions
 
 **Published set (2026-10-21):** core **0.25.0**, CLI **0.25.0**, renderer **0.25.0**,
-PPTX **0.25.0**, editor **0.25.1** and Gallery **5.0.0**. `release-plan.json` records these releases with their registry `gitHead`;
+PPTX **0.25.0**, editor **0.25.1** and Gallery **5.0.0**. `node scripts/registry-plan.mjs` prints these releases with their registry `gitHead`;
 registry identity is separate from the consumer and native checks below. All declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 

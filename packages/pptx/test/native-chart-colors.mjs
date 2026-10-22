@@ -7,6 +7,7 @@ import {unzipSync} from 'fflate';
 import {readChartCache} from './native-chart-cache.mjs';
 import {toPptx,fromPptx} from '../dist/index.js';
 import {colorContrast} from '@openpresentation/opf/composition';
+import {lockEvidence} from './helpers/lock-evidence.mjs';
 const [mode,directory='artifacts/native-chart-colors']=process.argv.slice(2);assert.ok(['generate','compare'].includes(mode));
 const output=path.resolve(directory),hash=b=>createHash('sha256').update(b).digest('hex');await mkdir(output,{recursive:true});
 const json=async file=>JSON.parse((await readFile(path.join(output,file),'utf8')).replace(/^\uFEFF/,''));
@@ -19,7 +20,8 @@ for(const name of ['@openpresentation/opf','@openpresentation/opf-pptx']){
  for(const file of name==='@openpresentation/opf'?['composition.js','validator.js','catalogs.js']:(await readdir(path.join(root,'dist'))).filter(file=>file.endsWith('.js')).sort())await visit(file);
  runtime[name+'/package.json']=hash(await readFile(path.join(root,'package.json')));
 }
-for(const file of ['test/native-chart-colors.mjs','test/native-chart-colors.ps1','test/native-chart-cache.mjs','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+for(const file of ['test/native-chart-colors.mjs','test/native-chart-colors.ps1','test/native-chart-cache.mjs','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js'])runtime[file]=hash(await readFile(new URL('../'+file,import.meta.url)));
+{const [lockKey,lockHash]=lockEvidence(new URL('../',import.meta.url));runtime[lockKey]=lockHash;}
 if(mode==='generate'){
  const slides=[],expected=[];
  for(const [background,surface,labelColor]of [['#000000','#334155','#FFFFFF'],['#000000','#F8FAFC','#000000'],['#FFFFFF','#0F172A','#FFFFFF'],['#000000','#FFFFFF80','#FFFFFF']])for(const type of ['column','pie']){

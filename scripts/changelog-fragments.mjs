@@ -176,9 +176,10 @@ export function assembleChangelog(text, { version, date, summary = '', entries }
   const previous = rest.join('\n').split(/\n## /)[0];
   const loose = /^- .*\n\n- /m.test(previous);
   const bullets = [...leftover, ...entries.map((e) => e.body)];
-  if (!bullets.length) throw new Error('nothing to assemble: no fragments and nothing under ## Unreleased');
+  // MR-40: a package with no change still gets its section when the release passes a summary ("released with the set").
+  if (!bullets.length && !summary.trim()) throw new Error('nothing to assemble: no fragments and nothing under ## Unreleased');
   const title = `## ${version}${date ? ` (${date})` : ''}`;
-  const section = [title, '', ...(summary ? [summary.trim(), ''] : []), bullets.map((b) => `- ${b}`).join(loose ? '\n\n' : '\n')];
+  const section = [title, '', ...(summary ? [summary.trim(), ...(bullets.length ? [''] : [])] : []), ...(bullets.length ? [bullets.map((b) => `- ${b}`).join(loose ? '\n\n' : '\n')] : [])];
   const trimmedHead = head.join('\n').replace(/\s+$/, '');
   const base = `${trimmedHead}\n\n## Unreleased`;
   const tail = rest.join('\n').replace(/^\n+/, '');

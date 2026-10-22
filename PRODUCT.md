@@ -18,7 +18,7 @@ Downstream applications:
 OpenPresentation publishes open-source code and documentation only. It does **not** provide hosted APIs, hosted rendering functions, queues, storage, authentication, jobs, previews, SLAs, telemetry, or managed infrastructure. Downstream applications can wrap the OSS primitives in their own products and services.
 
 - **Role in OpenPresentation OSS:** OPF is the interchange format. It defines the JSON contract between authoring intent and rendered presentations so agents, editors, validators, renderers, and converters can interoperate.
-- **Siblings in OpenPresentation OSS:** [pptx.gallery](https://www.pptx.gallery) provides the human-browsable shared vocabulary. This repository owns the schemas under `spec/` and the core API in `@openpresentation/opf`; the independent [Gallery repository](https://github.com/OpenPresentation/gallery) owns the catalog records published as `@openpresentation/gallery`.
+- **Siblings in OpenPresentation OSS:** [pptx.gallery](https://www.pptx.gallery) provides the human-browsable shared vocabulary. This repository owns the schemas under `spec/` and the core API in `@openpresentation/opf`; the gallery package in this repository (`packages/gallery`) owns the catalog records published as `@openpresentation/gallery`, released with the other packages. pptx.gallery presents the published package and does not author records.
 - **Relationship to downstream applications:** Integrators can use OPF and the toolkit to build hosted services, chatbot or agent workflows, custom editors, internal automation, and self-hosted systems without depending on OpenPresentation-hosted functions.
 - **Relationship to hosted services:** Hosted services are downstream products. They may consume OPF, run the renderer or converters, store files, manage users, or provide workflow UX, but those service layers are outside the OpenPresentation OSS boundary.
 
@@ -65,14 +65,14 @@ Hosted-service clients, managed workflows, and product-specific client libraries
 2. **Canonical OPF packages** — JavaScript first, then Python and Go local-only packages for schemas, catalogs, types/models, and validation.
 3. **Local OPF CLI** — validate, format, and inspect OPF without calling a hosted service.
 4. **Render/edit/convert toolkit** — maintain MIT local libraries for SVG/PNG/PDF rendering, embeddable editing, and PPTX import/export.
-5. **Gallery integration** — OPF documents reference catalog records by id (or `name:id` for a named catalog) and embed the records they use; pptx.gallery publishes the default catalog, and its pinned snapshot ships as the package `@openpresentation/gallery` (its own version line; core depends on it and registers it in Node) for hosts to register.
+5. **Gallery integration** — OPF documents reference catalog records by id (or `name:id` for a named catalog) and embed the records they use; the default catalog is the package `@openpresentation/gallery` (authored in `packages/gallery` and released with the other packages; core depends on it and registers it in Node) for hosts to register, and pptx.gallery presents it.
 6. **Ecosystem adoption** — make OPF the default deck format for agents, editors, self-hosters, and downstream applications.
 
 ## Key Decisions
 
 - **MIT license, always.** The format and client tools must stay open so every AI tool and application can produce OPF. Format lock-in is not the goal — ecosystem adoption is.
 - **Open Presentation Format is the public name.** `OPF` is shorthand, and `*.opf.json` is the recommended filename pattern for complete JSON deck documents.
-- **OpenPresentation owns OSS primitives only.** This repo owns the OPF spec, schemas, examples, local validation packages, and local tooling. The independent Gallery repository owns the catalog records. The render/edit/convert toolkit lives in separate MIT repos and depends on this format package.
+- **OpenPresentation owns OSS primitives only.** This repo owns the OPF spec, schemas, examples, local validation packages, local tooling and the catalog records (`packages/gallery`). The render/edit/convert toolkit lives in this repo too, as separate MIT packages that depend on the format package, released together at one version.
 - **No OpenPresentation-hosted runtime.** OpenPresentation libraries must run without required network calls, hosted callbacks, hidden telemetry, or managed infrastructure assumptions.
 - **Downstream applications own product surfaces.** Auth, storage, collaboration, queues, jobs, previews, billing, analytics, support, and workflow UX belong to integrators building on the OSS primitives.
 - **Stable integration seams matter.** Packages should expose predictable APIs, structured errors, package-addressable assets, custom catalog/font/theme/asset hooks, and documented semver compatibility with `@openpresentation/opf`.

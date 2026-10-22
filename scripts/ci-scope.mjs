@@ -14,7 +14,9 @@
 //   2. The directly changed packages run the `full` tier. Their transitive dependents, through the workspace graph, run the
 //      `contract` tier (RR-53). A forced run (tooling, an unclassified path, the label `full-ci`, any event other than a
 //      pull request) runs every package at `full`.
-//   3. Extra jobs: `goldens` when a golden input changed, `gallery-gates` (check:previews and check:stability, which run
+//   3. Legs: the package jobs of ci.yml are matrices; LEG_PLAN says how many shards each package's tests get per tier and
+//      which browser suites run (`full` only), and `legs` is the expanded matrix (`fromJSON(needs.scope.outputs.legs).render`).
+//   4. Extra jobs: `goldens` when a golden input changed, `gallery-gates` (check:previews and check:stability, which run
 //      in packages/integration) when gallery, core or render changed (the one edge the manifests cannot express: gallery
 //      has no workspace dependency on an engine), `pack-shape` when any package changed, `lint` always.
 //
@@ -42,9 +44,42 @@ export const PACKAGES = [
 export const PACKAGE_IDS = PACKAGES.map((pkg) => pkg.id);
 
 /**
+ * MR-30: the legs of each package job per tier, [kind, count]. `tests` is the package's `test` script (full) or
+ * `test:contract` (contract) split into `count` shards by scripts/ci-test-shards.mjs; `playground` and `browser` are the
+ * quarantine runner's browser suites (scripts/quarantine.mjs run-suite <kind> --shard i/n), which only a changed package
+ * (tier full) runs. core, cli, gallery and integration have one `tests` leg whatever the tier (they have no contract suite).
+ * The counts are the starting point sized from the RR-57 weights (scripts/ci-test-weights.json, per shard in seconds with 100 s
+ * of extra steps on shard 1: render full 4 x 250, contract 3 x 210; pptx full 4 x 262, contract 4 x 242 (its contract suite
+ * leaves out only 80 of 948 s); editor 2 x 129) and the editor playground suite (839 s in 28 tests, 4 x 210 s); MR-32 tunes them.
+ */
+export const LEG_PLAN = Object.freeze({
+  // `lint` always runs. Normally: `static` is Biome, typecheck, the examples and the breaking-change gate; `checks` is the root
+  // check:* suite (scripts/run-checks.mjs --shard i/n), 73 checks, about 60 s on a laptop with four at a time. For a docs-only
+  // change (class `docs`, nothing forced) the one `docs` leg runs the checks mapped to the changed paths (scripts/check-changed.mjs:
+  // Biome, check:text and the rest of scripts/checks.json "changed" rules); a push to main runs the full lint.
+  lint: { full: [["static", 1], ["checks", 2]], docs: [["docs", 1]] },
+  gallery: { full: [["tests", 1]], contract: [["tests", 1]] },
+  core: { full: [["tests", 1]], contract: [["tests", 1]] },
+  cli: { full: [["tests", 1]], contract: [["tests", 1]] },
+  integration: { full: [["tests", 1]], contract: [["tests", 1]] },
+  render: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 3]] },
+  pptx: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 4]] },
+  editor: { full: [["tests", 2], ["playground", 4], ["browser", 1]], contract: [["tests", 2]] },
+});
+
+/** The matrix entries of one package at one tier: [{ package, tier, kind, index, count, name }]; [] for a skipped package. */
+export function legsFor(id, tier) {
+  if (tier === "skip") return [];
+  return LEG_PLAN[id][tier].flatMap(([kind, count]) =>
+    Array.from({ length: count }, (_, position) => ({ package: id, tier, kind, index: position + 1, count, name: count > 1 ? `${kind} ${position + 1}/${count}` : kind })),
+  );
+}
+
+/**
  * The graph pnpm will see once MR-23 has wired the workspace (plan, section 1): dependencies, devDependencies and
  * optionalDependencies between workspace packages; peers are not edges. Gallery has no workspace edge to an engine, core's
- * optional peers on render and pptx are not edges, and `integration` depends on everything. `check:workspace-graph` (MR-10)
+ * optional peers on render and pptx are not edges, and `integration` depends on what it imports (core, render, pptx and the
+ * gallery; not the editor or the CLI, so a change there does not select it; its manifest says the same). `check:workspace-graph` (MR-10)
  * enforces this shape on the manifests.
  */
 export const TARGET_GRAPH = Object.freeze({
@@ -54,7 +89,7 @@ export const TARGET_GRAPH = Object.freeze({
   pptx: ["core", "gallery", "render"],
   editor: ["core", "gallery", "render", "pptx"],
   cli: ["core", "gallery", "render", "pptx"],
-  integration: ["gallery", "core", "render", "pptx", "editor", "cli"],
+  integration: ["gallery", "core", "render", "pptx"],
 });
 
 /** An edge pnpm links inside the workspace (with link-workspace-packages=false only these specifiers). */
@@ -153,8 +188,6 @@ const TOOLING_FILES = new Set([
   ".gitattributes",
   ".npmrc",
   ".gitignore",
-  "ecosystem.lock.json",
-  "release-plan.json",
 ]);
 // Documentation, records and tracking that no package or script reads at run time. `lint` (the root check:* suite) still
 // runs for them, and it is what gates them.
@@ -203,6 +236,8 @@ export const GOLDEN_INPUT_PREFIXES = [
   "spec/reference/",
   "examples/",
 ];
+/** The lockfile or any package manifest: what `pnpm audit` reads. */
+export const isDependencyFile = (file) => file === "pnpm-lock.yaml" || file === "package.json" || /^packages\/[^/]+\/package\.json$/.test(file);
 export const isGoldenInput = (file) => GOLDEN_INPUT_PREFIXES.some((prefix) => file.startsWith(prefix));
 
 // --- The decision -----------------------------------------------------------------------------------------------------
@@ -260,10 +295,14 @@ export function scope({ files, graph, event = "pull_request", labels = [] }) {
   const goldens = forced || files.some(isGoldenInput);
   const galleryGates = forced || ["gallery", "core", "render"].some((id) => changed.has(id));
   const packShape = forced || changedIds.length > 0;
+  // `audit` (pnpm audit): when the lockfile or a package manifest changed; a new advisory must not fail an unrelated change, so
+  // being forced by an event or a tooling path does not select it (the nightly audits every night).
+  const audit = files.some(isDependencyFile);
   const slow = labels.includes("full-ci");
   const jobs = {
     lint: "full",
     ...tiers,
+    audit: audit ? "full" : "skip",
     goldens: goldens ? "full" : "skip",
     "gallery-gates": galleryGates ? "full" : "skip",
     "pack-shape": packShape ? "full" : "skip",
@@ -280,6 +319,7 @@ export function scope({ files, graph, event = "pull_request", labels = [] }) {
     required: Object.entries(jobs).filter(([, tier]) => tier !== "skip").map(([name]) => name),
     skipped: Object.entries(jobs).filter(([, tier]) => tier === "skip").map(([name]) => name),
     matrix: PACKAGE_IDS.filter((id) => tiers[id] !== "skip").map((id) => ({ package: id, tier: tiers[id] })),
+    legs: Object.fromEntries(["lint", ...PACKAGE_IDS].map((id) => [id, legsFor(id, id === "lint" ? (!forced && changedIds.length === 0 ? "docs" : "full") : tiers[id])])),
     slow,
     unclassified,
     reasons,
@@ -372,7 +412,7 @@ export function run(argv, env = process.env, cwd = process.cwd()) {
   if (options.githubOutput && env.GITHUB_OUTPUT) {
     appendFileSync(
       env.GITHUB_OUTPUT,
-      [`tier=${decision.tier}`, `forced=${decision.forced}`, `slow=${decision.slow}`, `changed=${JSON.stringify(decision.changed)}`, `affected=${JSON.stringify(decision.affected)}`, `jobs=${JSON.stringify(decision.jobs)}`, `matrix=${JSON.stringify(decision.matrix)}`, `required=${JSON.stringify(decision.required)}`, ""].join("\n"),
+      [`tier=${decision.tier}`, `forced=${decision.forced}`, `slow=${decision.slow}`, `changed=${JSON.stringify(decision.changed)}`, `affected=${JSON.stringify(decision.affected)}`, `jobs=${JSON.stringify(decision.jobs)}`, `matrix=${JSON.stringify(decision.matrix)}`, `legs=${JSON.stringify(decision.legs)}`, `required=${JSON.stringify(decision.required)}`, ""].join("\n"),
     );
   }
   if (options.summary && env.GITHUB_STEP_SUMMARY) appendFileSync(env.GITHUB_STEP_SUMMARY, `${renderMarkdown(decision)}\n`);

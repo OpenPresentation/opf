@@ -3,7 +3,7 @@ import {test} from 'node:test';
 import {createRequire} from 'node:module';
 import {nativeFontCaptureFlag} from './compare-text.mjs';
 import {explicitUniformTextFonts,compareUniformTextFonts} from './compare-text-fonts.mjs';
-const require=createRequire(new URL('../../packages/javascript/package.json',import.meta.url)),peer=createRequire(require.resolve('@openpresentation/opf-pptx/package.json')),dependencies={...peer('fflate'),...peer('fast-xml-parser')};
+const require=createRequire(new URL('../../package.json',import.meta.url)),peer=createRequire(require.resolve('@openpresentation/opf-pptx/package.json')),dependencies={...peer('fflate'),...peer('fast-xml-parser')};
 function fixture(overrides={}){
  const shape='<p:sp><p:nvSpPr><p:cNvPr name="Metric"/><p:nvPr/></p:nvSpPr><p:spPr><a:xfrm><a:off x="0" y="0"/><a:ext cx="127000" cy="127000"/></a:xfrm></p:spPr><p:txBody><a:lstStyle/><a:p><a:r><a:rPr sz="5700"><a:latin typeface="Roboto ExtraBold"/></a:rPr><a:t>52</a:t></a:r></a:p></p:txBody></p:sp>';
  const parts={

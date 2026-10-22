@@ -13,7 +13,9 @@ import { fileURLToPath } from "node:url";
 import { installIsolatedCore } from "../../../scripts/isolated-core.mjs";
 import { STUB_LOG, installStubPeers, parseStubLog } from "../../../scripts/stub-peers.mjs";
 
-const renderRange = JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8')).peerDependencies['@openpresentation/opf-render'];
+const cliManifest = JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8'));
+// MR-23: the source tree declares workspace:^, which `pnpm pack` publishes as ^<version>.
+const renderRange = cliManifest.peerDependencies['@openpresentation/opf-render'].replace(/^workspace:\^/, `^${cliManifest.version}`);
 assert.match(renderRange,/^\^\d+\.\d+\.\d+$/);
 
 const cliRoot = fileURLToPath(new URL("..", import.meta.url));

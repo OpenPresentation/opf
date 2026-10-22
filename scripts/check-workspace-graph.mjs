@@ -12,8 +12,10 @@
 //   - the graph of workspace:/link:/file: edges (dependencies, devDependencies, optionalDependencies) has no cycle;
 //   - gallery has no edge to any member; core has edges to gallery only (its optional peers on render and pptx are peers,
 //     not edges, and it has no devDependency pins on them: the engine tests live in packages/integration);
-//   - a peer on a member is `workspace:^`; a dependency on a member is `workspace:^`, a devDependency `workspace:*`; a
-//     registry specifier for a member's name is a finding;
+//   - a dependency on a member is `workspace:^`, a devDependency `workspace:*`; a registry specifier for a member's name is a
+//     finding; a peer on a member is `workspace:^` when the package also has the `workspace:*` devDependency that installs it
+//     (`pnpm pack` resolves a workspace: peer through node_modules), and the concrete range `^<member version>` when it cannot
+//     have one: core's optional peers on render and pptx, whose devDependencies would close the cycle core -> pptx -> core;
 //   - `linkWorkspacePackages: false` is set in pnpm-workspace.yaml (not .npmrc, which npm warns about for pnpm-only keys);
 //     it is never true or deep there, and a legacy `link-workspace-packages` in .npmrc is not true or deep either;
 //   - a `link:` between members in a pnpm-lock.yaml importer is declared by that importer's manifest and obeys the same
@@ -91,7 +93,14 @@ export function checkWorkspaceGraph({ members, workspace, npmrc = '', lock = nul
       }
     }
     for (const [to, spec] of Object.entries(manifest.peerDependencies ?? {})) {
-      if (byName.has(to) && spec !== 'workspace:^') problems.push(`${from}: peer ${to} must be workspace:^ (found ${spec})`);
+      if (!byName.has(to)) continue;
+      if (isWorkspaceSpec(manifest.devDependencies?.[to])) {
+        if (spec !== 'workspace:^') problems.push(`${from}: peer ${to} must be workspace:^ (found ${spec})`);
+      } else {
+        // Nothing installs the peer, so `pnpm pack` could not resolve a workspace: range (ERR_PNPM_CANNOT_RESOLVE_WORKSPACE_PROTOCOL).
+        const expected = `^${byName.get(to).manifest.version}`;
+        if (spec !== expected) problems.push(`${from}: peer ${to} has no workspace devDependency (it would close a cycle), so it must be the concrete range ${expected}, the version of ${to} in this workspace (found ${spec})`);
+      }
     }
   }
 

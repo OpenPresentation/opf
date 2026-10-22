@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/government/tax-portal-modernization.opf.json",
+  "entries": {
+    "gallery/government/tax-portal-modernization.opf.json#0": {
+      "sha256": "d68be956fc5f8f22930ef253c086726ea98fcd760e4f5f30bea0c0f4b8d5607b",
+      "bytes": 11436
+    },
+    "gallery/government/tax-portal-modernization.opf.json#1": {
+      "sha256": "e7ff3cff9365e3fd2c589a378409a2c40263c12d3cac49c520fb45302ea0c894",
+      "bytes": 9214
+    },
+    "gallery/government/tax-portal-modernization.opf.json#2": {
+      "sha256": "eb471e96c71cd8c28bb6fbb5cc8f35c8d6bc67698fca8d460e32ea81f42c9792",
+      "bytes": 6329
+    },
+    "gallery/government/tax-portal-modernization.opf.json#3": {
+      "sha256": "3444c5415e6957ff38d71081e9a31b8da4c00f7b71c9c78d8fb5c57320d0802a",
+      "bytes": 10947
+    },
+    "gallery/government/tax-portal-modernization.opf.json#4": {
+      "sha256": "86508884e7b5c4dc03dfd6c2a68294076c0a6ffb68e10d60ed8fa9b7e457a8ab",
+      "bytes": 9748
+    },
+    "gallery/government/tax-portal-modernization.opf.json#5": {
+      "sha256": "3d210073da9499138c0c88e702d7f80d040ee3c54e8d49968ab9582a6034a2dc",
+      "bytes": 19868
+    },
+    "gallery/government/tax-portal-modernization.opf.json#6": {
+      "sha256": "60058d736b1d8bc071583dc02b7775176071048c92725f77d3d621a162641075",
+      "bytes": 12370
+    },
+    "gallery/government/tax-portal-modernization.opf.json#7": {
+      "sha256": "d6ff06e12b9018d5dd2d0983641679912d606a38d5231d522c7f917457e8b22b",
+      "bytes": 24328
+    },
+    "gallery/government/tax-portal-modernization.opf.json#8": {
+      "sha256": "21ea86ce9a4d33fcdb7c617f6ecfd40512eaa45143940c288cd4d91b22e8b0b4",
+      "bytes": 7217
+    },
+    "gallery/government/tax-portal-modernization.opf.json#9": {
+      "sha256": "d1c1a2686f407f5acebc8842c5b1767adfe1507bdd593147a3777f425029a9a9",
+      "bytes": 13439
+    }
+  }
+}

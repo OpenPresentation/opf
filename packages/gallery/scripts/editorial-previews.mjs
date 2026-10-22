@@ -1,6 +1,6 @@
 // Authored picker examples are separate from the exhaustive stability fixtures.
 // All people, quotations and business figures below are illustrative.
-import { templateDeck } from './fixtures.mjs';
+import { templateDeck } from '../../../scripts/gallery-stability-fixtures.mjs';
 
 const TITLES = {
   cover: 'A smaller pilot. A clearer decision.', section: 'Test before scaling',

@@ -1,7 +1,7 @@
-import {createCanvasEditor} from '../../opf-editor/src/canvas.js';
-import {createEditorSession} from '../../opf-editor/src/index.js';
-import {loadFonts} from '../../opf-render/src/fonts-browser.js';
-import {richTextContent} from '../../opf-editor/src/rich-text.js';
+import {createCanvasEditor} from '../packages/editor/src/canvas.js';
+import {createEditorSession} from '../packages/editor/src/index.js';
+import {loadFonts} from '../packages/render/src/fonts-browser.js';
+import {richTextContent} from '../packages/editor/src/rich-text.js';
 const out=document.querySelector('#results'),host=document.querySelector('#canvas');let checks=0;
 const check=(condition,message)=>{if(!condition)throw new Error(message);out.textContent+=`PASS ${message}\n`;checks++;};
 const paint=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));

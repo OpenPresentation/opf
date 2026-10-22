@@ -1,6 +1,6 @@
-import {createCanvasEditor} from '../../opf-editor/src/canvas.js';
-import {createEditorSession} from '../../opf-editor/src/index.js';
-import {toSvg} from '../../opf-render/src/svg.js';
+import {createCanvasEditor} from '../packages/editor/src/canvas.js';
+import {createEditorSession} from '../packages/editor/src/index.js';
+import {toSvg} from '../packages/render/src/svg.js';
 const out=document.querySelector('#results'),host=document.querySelector('#canvas');let checks=0;
 const check=(truth,message)=>{if(!truth)throw new Error(message);checks++;out.textContent+=`PASS ${message}\n`;};
 const paint=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));

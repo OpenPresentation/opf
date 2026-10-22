@@ -5,22 +5,15 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import path from "node:path";
 import {createHash, randomUUID} from 'node:crypto';
-import {candidateArtifacts,assertInstalledCandidateGraph} from './candidate-gallery-pack.mjs';
-import {assertPublishedGallery} from './candidate-gallery.mjs';
 import {checkPackedTypes} from './check-packed-types.mjs';
 import {LAZY_FONT_COUNTS,REVIEWED_FONT_SETS,hashFontSet,lazyFontCountProblem} from './lazy-font-counts.mjs';
-import {cliSkipNotice, installablePackages} from './release-plan-cli.mjs';
+import {registryPlan, treePath} from './registry-plan.mjs';
 const root = fileURLToPath(new URL("../", import.meta.url)),
   out = path.join(root, "artifacts/npm");
 const librariesOnly = process.argv.includes('--registry-libraries');
 const registry = process.argv.includes('--registry') || librariesOnly;
-if(registry){
-  if(process.env.CANDIDATE_GALLERY_REF)throw Error('candidate artifacts cannot be used for registry qualification');
-}
-const releasePlan = registry ? JSON.parse(await readFile(path.join(root, "release-plan.json"), "utf8")) : null;
-// While the plan's CLI peer ranges conflict with the plan's libraries it is neither installed beside them nor run (release-plan-cli.mjs).
-const cliNotice = registry && !librariesOnly ? await cliSkipNotice(releasePlan) : null;
-if (cliNotice) console.log(`SKIP the CLI part of the registry consumer: ${cliNotice}`);
+// MR-34: the registry set is the `latest` dist-tag of each package (scripts/registry-plan.mjs) (nothing hand-edited).
+const releasePlan = registry ? registryPlan() : null;
 // layoutTable first shipped in core 0.6.0. Keep historical registry plans
 // testable, while requiring the API and its pinned regression suite thereafter.
 const coreVersion = releasePlan?.packages.find(item => item.name === '@openpresentation/opf')?.version.split('.').map(Number);
@@ -51,16 +44,27 @@ const verifyInstalledCliRegression = !registry || coreVersion?.[0] > 0 || coreVe
 const verifyColorRefs = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 11;
 
 async function readHarnessBytes(repo, file) {
-  const directory = repo === 'opf' ? root : path.resolve(root, '..', repo);
+  // MR-23e: the packages are directories of this repository. MR-34: the registry mode reads the file of the release commit the
+  // published package was built from (the registry's gitHead, translated for a package of an archived repository), from this
+  // repository's history: `git show <commit>:packages/<directory>/<file>`.
+  const directory = repo === 'opf' ? root : path.join(root, 'packages', repo.replace(/^opf-/, ''));
   if (!registry) return readFile(path.join(directory, file));
   const ref = releasePlan.verificationRefs?.[repo];
   if (!/^[a-f0-9]{40}$/.test(ref ?? '')) throw new Error(`Missing immutable registry verification ref for ${repo}`);
-  const result = spawnSync('git', ['show', `${ref}:${file}`], {cwd:directory});
+  const result = spawnSync('git', ['show', `${ref}:${treePath(repo, file)}`], {cwd: root, maxBuffer: 256 * 1024 * 1024});
   if (result.status !== 0) throw new Error(`Cannot read ${repo} release harness ${file}: ${result.stderr}`);
   return result.stdout;
 }
+// MR-34: a release commit of an archived repository has the old sibling layout (`../../opf-render/src/x.js`, `../../opf/docs/...`);
+// the rewrites below are written for this repository's layout, so the registry mode first maps the old paths onto it.
+const OLD_LAYOUT = [
+  ['../../opf-editor/', '../packages/editor/'],
+  ['../../opf-render/', '../packages/render/'],
+  ['"../../opf/docs/fixtures/', '"../../../docs/fixtures/'],
+];
 async function readHarness(repo, file) {
-  const source = (await readHarnessBytes(repo, file)).toString('utf8');
+  let source = (await readHarnessBytes(repo, file)).toString('utf8');
+  if (registry) for (const [from, to] of OLD_LAYOUT) source = source.replaceAll(from, to);
   if (repo !== 'opf' && /^test\/.+\.m?js$/.test(file)) await installLocalImports(repo, file, source);
   return source;
 }
@@ -95,9 +99,8 @@ async function installLocalImports(repo, file, source) {
 }
 const consumer = path.join(out, librariesOnly ? "registry-libraries-consumer" : registry ? "registry-consumer" : "consumer");
 const manifest = registry
-  ? { artifacts: await installablePackages(releasePlan) }
+  ? { artifacts: releasePlan.packages }
   : JSON.parse(await readFile(path.join(out, "manifest.json"), "utf8"));
-if(!registry&&process.env.CANDIDATE_GALLERY_REF)candidateArtifacts(path.resolve(root));
 if (librariesOnly) manifest.artifacts = manifest.artifacts.filter(item => item.name !== '@openpresentation/cli');
 const renderSourceVersion = registry ? releasePlan.packages.find(item => item.name === '@openpresentation/opf-render')?.version : manifest.artifacts.find(item => item.name === '@openpresentation/opf-render')?.sourceVersion;
 // RR-63: opf-render's PDF/PNG converters and font packages are optional peers (npm does not install them). Each consumer
@@ -192,7 +195,7 @@ if (verifyColorRefs) {
     (await readHarness('opf-pptx', 'test/color-ref-export.mjs'))
       .replaceAll('"../dist/index.js"', '"@openpresentation/opf-pptx"')
       .replaceAll('"../dist/color-ref.js"', '"./node_modules/@openpresentation/opf-pptx/dist/color-ref.js"')
-      .replaceAll('"../../opf/docs/fixtures/color-references.opf.json"', '"fixtures/core-color-references.opf.json"')
+      .replaceAll('"../../../docs/fixtures/color-references.opf.json"', '"fixtures/core-color-references.opf.json"')
       .replaceAll('  fixture = null;', '  throw new Error("Pinned ColorRef fixture must load; fallback is not registry acceptance");'));
   run(process.execPath, ['color-ref-export.mjs']);
 }
@@ -224,7 +227,7 @@ if (!registry) {
   const zipDateIntegrity = 'sha512-' + createHash('sha512').update(zipDateTar).digest('base64');
   if (zipDateLocked?.integrity !== zipDateIntegrity || !zipDateLocked.resolved?.startsWith('file:') || zipDateLocked.link)
     throw new Error('ZIP date verification requires the same installed local PPTX archive');
-  const zipDateRef = spawnSync('git', ['rev-parse', 'HEAD'], {cwd: path.resolve(root, '..', 'opf-pptx'), encoding: 'utf8'});
+  const zipDateRef = spawnSync('git', ['rev-parse', 'HEAD'], {cwd: root, encoding: 'utf8'});
   if (zipDateRef.status !== 0 || !/^[a-f0-9]{40}$/.test(zipDateRef.stdout.trim())) throw new Error('Cannot bind ZIP date source checkout');
   const zipDateEntrypoint = await realpath(createRequire(path.join(consumer, 'package.json')).resolve('@openpresentation/opf-pptx'));
   if (!zipDateEntrypoint.startsWith((await realpath(path.join(consumer, 'node_modules'))) + path.sep)) throw new Error('ZIP date entrypoint must be installed inside this consumer');
@@ -233,7 +236,7 @@ if (!registry) {
   await writeFile(path.join(zipDateArtifacts, 'installed-fixture.mjs.txt'), zipDateHarness);
   await writeFile(path.join(zipDateArtifacts, 'binding.json'), JSON.stringify({
     scope: 'Coordinated candidate preview archive; original public fixture with only two import substitutions. Not registry or native acceptance.',
-    source: {repository: 'opf-pptx', head: zipDateRef.stdout.trim(), file: 'test/zip-date.mjs', sha256: zipDateHash(zipDateSource)},
+    source: {repository: 'opf', directory: 'packages/pptx', head: zipDateRef.stdout.trim(), file: 'test/zip-date.mjs', sha256: zipDateHash(zipDateSource)},
     installedFixtureSha256: zipDateHash(zipDateHarness), importReplacements: 2, artifact: zipDatePackage,
     installedIntegrity: zipDateIntegrity, lockSha256: zipDateHash(zipDateLockBytes), expectedEntrypoint: pathToFileURL(zipDateEntrypoint).href,
     installedEntrypointSha256: zipDateHash(await readFile(zipDateEntrypoint)),
@@ -323,7 +326,7 @@ console.log('Installed font preparation passed layout, edit/undo, SVG/PNG, edita
       // RR-55: the renderer keeps createFontRegistry in an internal module that is not an entry point; the installed file is read by path.
       .replaceAll("'../dist/font-registry.js'","'./node_modules/@openpresentation/opf-render/dist/font-registry.js'")
       .replaceAll("'../dist/index.js'","'@openpresentation/opf-pptx'")
-      .replaceAll("new URL('../../opf-render/package.json',import.meta.url)","import.meta.resolve('@openpresentation/opf-render/package.json')");
+      .replaceAll("new URL('../packages/render/package.json',import.meta.url)","import.meta.resolve('@openpresentation/opf-render/package.json')");
     const file=repo+'-font-variants.mjs';
     await writeFile(path.join(consumer,file),source);
     run(process.execPath,[file,'artifacts/'+repo+'-font-variants.json']);
@@ -452,15 +455,12 @@ if (verifyTableLayout) {
   run(process.execPath, ['--test', 'table-layout.test.mjs']);
 }
 
-if(!registry&&process.env.CANDIDATE_GALLERY_REF)assertInstalledCandidateGraph(path.resolve(root),consumer);
-
 if (registry) {
   for (const item of manifest.artifacts) {
     const installed = JSON.parse(await readFile(path.join(consumer, 'node_modules', item.name, 'package.json'), 'utf8'));
-    assertPublishedGallery(installed);
     if (installed.version !== item.version) throw new Error(`Expected ${item.name}@${item.version}, installed ${installed.version}`);
   }
-  if (!librariesOnly && !cliNotice) {
+  if (!librariesOnly) {
     const cliRoot=path.join(consumer,'node_modules/@openpresentation/cli');
     const cli=JSON.parse(await readFile(path.join(cliRoot,'package.json'),'utf8'));
     const entry=path.join(cliRoot,cli.bin.opf);
@@ -581,10 +581,10 @@ await writeFile(path.join(browserOut,'packed-canvas-tests.html'),'<!doctype html
 console.log('Packed browser harness built: artifacts/editor/packed-canvas-tests.html (serve alongside demo fonts.json).');
 
 const richHarness=(await readHarness('opf','scripts/test-rich-text-browser.mjs'))
- .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
- .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
- .replace('../../opf-editor/src/rich-text.js','@openpresentation/opf-editor/rich-text')
- .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
+ .replace('../packages/editor/src/canvas.js','@openpresentation/opf-editor/canvas')
+ .replace('../packages/editor/src/index.js','@openpresentation/opf-editor')
+ .replace('../packages/editor/src/rich-text.js','@openpresentation/opf-editor/rich-text')
+ .replace('../packages/render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
 await writeFile(path.join(consumer,'rich-tests.mjs'),hosted(richHarness));
 await build({entryPoints:[path.join(consumer,'rich-tests.mjs')],outfile:path.join(browserOut,'packed-rich-text-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-rich-text-tests.html'),'<!doctype html><meta charset="utf-8"><title>Packed rich-text checks</title><h1>Packed rich-text checks</h1><div id="canvas" style="max-width:1100px"></div><pre id="results"></pre><script type="module" src="./packed-rich-text-tests.js"></script>');
@@ -594,33 +594,33 @@ if(verifyEstimatedRichText){
 }
 
 const layoutHarness=(await readHarness('opf','scripts/test-layout-browser.mjs'))
- .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
- .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
- .replace('../../opf-render/src/svg.js','@openpresentation/opf-render/svg');
+ .replace('../packages/editor/src/canvas.js','@openpresentation/opf-editor/canvas')
+ .replace('../packages/editor/src/index.js','@openpresentation/opf-editor')
+ .replace('../packages/render/src/svg.js','@openpresentation/opf-render/svg');
 await writeFile(path.join(consumer,'layout-tests.mjs'),hosted(layoutHarness));
 await build({entryPoints:[path.join(consumer,'layout-tests.mjs')],outfile:path.join(browserOut,'packed-layout-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-layout-tests.html'),browserHtml('layout','<select id="pointer-mode"><option value="normal">Normal</option><option value="cancel">Cancel</option><option value="conflict">Conflict</option><option value="independent">Independent</option></select><button id="reset">Reset</button><button id="verify">Verify</button><button id="external">External change</button><button id="independent">Independent change</button><div id="pointer-state"></div>'));
 
 const blockHarness=(await readHarness('opf','scripts/test-block-browser.mjs'))
- .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
- .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
- .replace('../../opf-render/src/svg.js','@openpresentation/opf-render/svg');
+ .replace('../packages/editor/src/canvas.js','@openpresentation/opf-editor/canvas')
+ .replace('../packages/editor/src/index.js','@openpresentation/opf-editor')
+ .replace('../packages/render/src/svg.js','@openpresentation/opf-render/svg');
 await writeFile(path.join(consumer,'block-tests.mjs'),hosted(blockHarness));
 await build({entryPoints:[path.join(consumer,'block-tests.mjs')],outfile:path.join(browserOut,'packed-block-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-block-tests.html'),browserHtml('block','<button id="verify">Verify</button><div id="drag-status"></div>'));
 
 const listHarness=(await readHarness('opf','scripts/test-list-browser.mjs'))
- .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
- .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
- .replace('../../opf-render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
+ .replace('../packages/editor/src/canvas.js','@openpresentation/opf-editor/canvas')
+ .replace('../packages/editor/src/index.js','@openpresentation/opf-editor')
+ .replace('../packages/render/src/fonts-browser.js','@openpresentation/opf-render/fonts-browser');
 await writeFile(path.join(consumer,'list-tests.mjs'),hosted(listHarness));
 await build({entryPoints:[path.join(consumer,'list-tests.mjs')],outfile:path.join(browserOut,'packed-list-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-list-tests.html'),browserHtml('list'));
 
 const creationHarness=(await readHarness('opf','scripts/test-create-browser.mjs'))
- .replace('../../opf-editor/src/canvas.js','@openpresentation/opf-editor/canvas')
- .replace('../../opf-editor/src/index.js','@openpresentation/opf-editor')
- .replace('../../opf-render/src/svg.js','@openpresentation/opf-render/svg');
+ .replace('../packages/editor/src/canvas.js','@openpresentation/opf-editor/canvas')
+ .replace('../packages/editor/src/index.js','@openpresentation/opf-editor')
+ .replace('../packages/render/src/svg.js','@openpresentation/opf-render/svg');
 await writeFile(path.join(consumer,'create-tests.mjs'),hosted(creationHarness));
 await build({entryPoints:[path.join(consumer,'create-tests.mjs')],outfile:path.join(browserOut,'packed-create-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(browserOut,'packed-create-tests.html'),browserHtml('create'));
@@ -650,4 +650,4 @@ await writeFile(path.join(browserOut,'packed-browser-manifest.json'),JSON.string
   files:Object.fromEntries(await Promise.all(['fonts.json',...browserSuites.flatMap(suite=>[`packed-${suite}-tests.html`,`packed-${suite}-tests.js`])].map(async file=>[file,await hashFile(path.join(browserOut,file))]))),
 },null,2)+'\n');
 if (!registry) await checkPackedTypes(consumer, {downstream: true});
-console.log(librariesOnly ? 'Registry library consumer passed for four exact versions; CLI and complete release verification remain separate.' : registry ? (cliNotice ? `Registry consumer passed for the four exact library versions of the release plan (no local package overrides); the CLI was skipped: ${cliNotice}.` : 'Registry consumer passed for all five exact release-plan versions (no local package overrides).') : 'Local tarball consumer passed; this is not a registry verification.');
+console.log(librariesOnly ? 'Registry library consumer passed for four exact versions; CLI and complete release verification remain separate.' : registry ? 'Registry consumer passed for all five exact versions of the published set (no local package overrides).' : 'Local tarball consumer passed; this is not a registry verification.');

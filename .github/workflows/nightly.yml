@@ -1,0 +1,615 @@
+name: Nightly
+
+# MR-30 (docs/programs/monorepo/README.md, section 4, "Slow set"): everything that is too slow or too wide for `verify`, off the
+# pull request path. It never blocks a PR (nothing here is a required check); a red nightly opens or updates one issue labeled
+# `nightly-red` and the next green one closes it.
+#
+# One file, three entries:
+#   - schedule and workflow_dispatch: the nightly run, with the issue reporter. Sunday's run also runs the flake measurement.
+#   - workflow_call from npm-publish.yml (MR-40): the pre-release gate, run on the release commit before anything is published.
+#     `report: false` (the default for a call): a failure stops the release and opens no nightly issue.
+#   - workflow_call from ci.yml: the label `full-ci` runs the same legs on a pull request that touches OS- or Node-specific code.
+#
+# Coverage that moved here from the per-repository and merge-queue workflows (nothing disappears, decision D15):
+#   cli-portability     the old cli-windows workflow (Windows, macOS: core and CLI unit and packed tests)
+#   installed           the old coordinated-CI "Installed candidates" job (Windows, macOS: packed tarballs, installed browser checks)
+#   pptx-windows        opf-pptx CI on Windows (the sharded suite, the native harness without Office, the browser suite)
+#   editor-macos        opf-editor `macos-playground`
+#   node-range          the old engines-range workflow and the three sibling `node-range` jobs (Node 22 and 26, all six packages)
+#   packed-linux        the packed-install and installed-browser steps of the old core `normal` job and of each package job
+#   registry            the registry consumers (published packages against this checkout's harness)
+#   audit               `pnpm audit` (a new advisory must not fail an unrelated pull request, so it moved off verify)
+#   platform-residual   opf-render `platform-residual` (non-blocking, as before)
+#   flake               the four per-repository flake-repeat workflows (advisory, Sundays and on demand)
+# Slower checks of the published packages (published matrix, installed parity, determinism grid, full goldens) are in slow-checks.yml.
+on:
+  schedule:
+    - cron: '17 2 * * *'
+  workflow_dispatch:
+    inputs:
+      report:
+        description: Open or update the nightly-red issue when a leg fails.
+        type: boolean
+        default: true
+      flake:
+        description: Also run the flake measurement.
+        type: boolean
+        default: false
+      repeat:
+        description: Runs per test for the flake measurement.
+        default: '5'
+  workflow_call:
+    inputs:
+      report:
+        description: Open or update the nightly-red issue (false for a release gate or a pull request).
+        type: boolean
+        default: false
+      flake:
+        description: Also run the flake measurement.
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nightly-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  # Whether the flake measurement runs: on demand, or in the scheduled run of a Sunday.
+  plan:
+    name: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      flake: ${{ steps.plan.outputs.flake }}
+    steps:
+      - id: plan
+        env:
+          ASKED: ${{ inputs.flake == true }}
+        run: |
+          flake=false
+          if [ "$ASKED" = true ] || { [ "$GITHUB_EVENT_NAME" = schedule ] && [ "$(date -u +%u)" = 7 ]; }; then flake=true; fi
+          echo "flake=$flake" >> "$GITHUB_OUTPUT"
+
+  # Core and the CLI on the other operating systems: install, typecheck, unit suites, the packed install and the packed CLI with
+  # its optional render and PPTX peers (45-minute limit, as the old cli-windows workflow had).
+  cli-portability:
+    name: CLI and core (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    defaults:
+      run:
+        shell: bash
+    env:
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}-${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          build-deps: '@openpresentation/cli'
+          # Core's tests load the renderer and PPTX (its optional peers) from their built dist.
+          build-also: '@openpresentation/opf-render @openpresentation/opf-pptx'
+
+      - run: pnpm typecheck
+      - run: pnpm --filter @openpresentation/opf --fail-if-no-match run test
+      - run: node packages/javascript/test/packed-install-smoke.mjs
+      - run: pnpm --filter @openpresentation/cli --fail-if-no-match run test
+      - run: pnpm --filter @openpresentation/cli --fail-if-no-match run test:packed
+      - run: pnpm --filter @openpresentation/cli --fail-if-no-match run test:packed:peers
+
+  # "Installed candidates": the packed tarballs of the six packages installed in a clean consumer on Windows and macOS, with the
+  # installed browser checks (45-minute limit, as the old `installed-portability` job had).
+  installed:
+    name: Installed candidates (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest, macos-latest]
+    defaults:
+      run:
+        shell: bash
+    env:
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}-${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+
+      - run: pnpm build
+      - run: pnpm pack:ecosystem
+      - name: Install Chromium
+        run: pnpm --filter @openpresentation/opf-render --fail-if-no-match exec playwright install chromium
+      - run: pnpm test:packed-ecosystem
+      - run: node scripts/test-packed-types-infrastructure.mjs artifacts/npm/consumer
+      - run: pnpm test:packed-browser
+      - run: node scripts/test-furniture-fields-browser.mjs artifacts/furniture-fields-browser
+
+      - name: Preserve the portability evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: installed-portability-${{ matrix.os }}
+          path: |
+            artifacts/portability/**
+            artifacts/npm/manifest.json
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # opf-pptx on Windows: its suite in three shards (1169 s in one job there, 2026-10-20), the native harness without Office
+  # (-PureRegression), and the browser suite.
+  pptx-windows:
+    name: pptx on Windows (${{ matrix.shard }}/3)
+    runs-on: windows-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          build-deps: '@openpresentation/opf-pptx'
+
+      - name: Test (shard ${{ matrix.shard }} of 3)
+        run: node scripts/ci-test-shards.mjs --package pptx --script test --shard "${{ matrix.shard }}/3"
+
+      - name: Native control checks
+        if: ${{ matrix.shard == 1 }}
+        working-directory: packages/pptx
+        run: |
+          pnpm run test:native-picture-edit-controls
+          pnpm run test:native-font-embed-controls
+          pnpm run test:native-mixed-edit-controls
+          pnpm run test:native-font-inventory-controls
+
+      - name: Bounded native harness without Office
+        if: ${{ matrix.shard == 1 }}
+        shell: powershell
+        working-directory: packages/pptx
+        run: |
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-process-check.ps1 -OutputDirectory artifacts/native-picture-harness/worker
+          if ($LASTEXITCODE -ne 0) { throw 'Native process controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-picture-harness-check.ps1 -ReportPath artifacts/native-picture-harness/check.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native picture harness controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-picture-edit-harness-check.ps1 -ReportPath artifacts/native-picture-harness/edit-check.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native picture edit harness controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-furniture-harness-check.ps1 -ReportPath artifacts/native-picture-harness/furniture-check.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native furniture harness controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-tab-control-v2.ps1 -PureRegression
+          if ($LASTEXITCODE -ne 0) { throw 'Native tab metrics regression failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-font-edit.ps1 -PureRegression
+          if ($LASTEXITCODE -ne 0) { throw 'Native font edit controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-font-embed.ps1 -PureRegression
+          if ($LASTEXITCODE -ne 0) { throw 'Native font embed controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-mixed-edit.ps1 -PureRegression
+          if ($LASTEXITCODE -ne 0) { throw 'Native mixed-size edit controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-font-inventory.ps1 -PureRegression
+          if ($LASTEXITCODE -ne 0) { throw 'Native font inventory controls failed' }
+
+      - name: Browser suite
+        if: ${{ matrix.shard == 1 }}
+        working-directory: packages/pptx
+        run: |
+          pnpm exec playwright install chromium
+          node ../../scripts/quarantine.mjs run-suite browser
+
+      - name: Quarantined tests (non-blocking)
+        if: ${{ always() && matrix.shard == 1 }}
+        continue-on-error: true
+        working-directory: packages/pptx
+        run: node ../../scripts/quarantine.mjs run-deferred
+
+      - name: Preserve the evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: pptx-windows-${{ matrix.shard }}
+          path: |
+            packages/pptx/artifacts/native-picture-harness/**
+            packages/pptx/artifacts/quarantine/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # opf-editor `macos-playground` (40-minute limit there): the playground suite on macOS, in two shards (the account has 5 macOS
+  # runners; with the two portability legs and platform residual this is exactly five).
+  editor-macos:
+    name: editor playground on macOS (${{ matrix.shard }}/2)
+    runs-on: macos-15
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          build-deps: '@openpresentation/opf-editor'
+
+      - name: Install Chromium
+        working-directory: packages/editor
+        run: pnpm exec playwright install chromium
+
+      - name: Playground browser suite (shard ${{ matrix.shard }} of 2)
+        working-directory: packages/editor
+        run: node ../../scripts/quarantine.mjs run-suite playground --shard "${{ matrix.shard }}/2"
+
+      - name: Quarantined tests (non-blocking)
+        if: ${{ always() }}
+        continue-on-error: true
+        working-directory: packages/editor
+        run: node ../../scripts/quarantine.mjs run-deferred
+
+      - name: Preserve the failure evidence
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: editor-macos-${{ matrix.shard }}
+          path: packages/editor/artifacts/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # Node 22 (the oldest supported major) and Node 26 (the current release): install, typecheck and the unit suites of all six
+  # packages; browser, golden and native gates stay on Node 24. The renderer and PPTX suites are split in two shards.
+  node-range:
+    name: Node ${{ matrix.node }} (engines range, ${{ matrix.leg }})
+    runs-on: ubuntu-24.04
+    container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 26]
+        leg: [core, render-1, render-2, pptx-1, pptx-2, editor]
+    env:
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}-${{ matrix.node }}-${{ matrix.leg }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          container: 'true'
+          node-version: ${{ matrix.node }}
+
+      - name: Build every package
+        run: pnpm build
+
+      - name: Typecheck and test (${{ matrix.leg }})
+        env:
+          LEG: ${{ matrix.leg }}
+        run: |
+          case "$LEG" in
+            core)
+              pnpm typecheck
+              pnpm --filter @openpresentation/opf --fail-if-no-match run test
+              pnpm --filter @openpresentation/cli --fail-if-no-match run test
+              pnpm --filter @openpresentation/gallery --fail-if-no-match run test
+              ;;
+            render-*)
+              pnpm --filter @openpresentation/opf-render --fail-if-no-match run typecheck
+              node scripts/ci-test-shards.mjs --package render --script test --shard "${LEG#render-}/2"
+              ;;
+            pptx-*)
+              pnpm --filter @openpresentation/opf-pptx --fail-if-no-match run typecheck
+              node scripts/ci-test-shards.mjs --package pptx --script test --shard "${LEG#pptx-}/2"
+              ;;
+            editor)
+              pnpm --filter @openpresentation/opf-editor --fail-if-no-match run typecheck
+              pnpm --filter @openpresentation/opf-editor --fail-if-no-match run test
+              ;;
+          esac
+
+  # The packed tarballs of the six packages installed in a clean consumer, on Linux in the pinned image, and the installed browser
+  # checks (the "Install and exercise coordinated candidate tarballs" steps of the old package jobs and core's `normal` job).
+  packed-linux:
+    name: Packed install (Linux)
+    runs-on: ubuntu-24.04
+    container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+    timeout-minutes: 45
+    env:
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          container: 'true'
+
+      - run: pnpm build
+      - run: pnpm pack:ecosystem
+      - run: pnpm test:packed-ecosystem
+      - run: pnpm test:packed-browser
+      - run: pnpm test:cli:packed
+      - run: pnpm test:cli:packed:peers
+      - run: node scripts/test-packed-types-infrastructure.mjs artifacts/npm/consumer
+      - run: node scripts/test-installed-code-guards.mjs
+      - run: node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-workflow installed
+      - run: node scripts/test-readability-browser.mjs artifacts/readability-browser installed
+      - run: node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed
+      - run: node scripts/test-furniture-workflow.mjs artifacts/furniture-workflow installed
+      - run: node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
+      - name: Installed tarball browser interactions
+        run: node scripts/quarantine.mjs run-suite installed-browser
+      - name: Accepted metric outlines and offline SVG ink
+        run: |
+          node --test scripts/metric-outline-ink.test.mjs
+          node scripts/test-metric-outline-browser.mjs artifacts/metric-outline-browser
+      - name: Quarantined tests (non-blocking)
+        if: ${{ always() }}
+        continue-on-error: true
+        run: node scripts/quarantine.mjs run-deferred
+
+      - name: Preserve the installed-browser evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: packed-linux
+          path: |
+            artifacts/portability/**
+            artifacts/quarantine/**
+            artifacts/npm/manifest.json
+            artifacts/editor/*report.json
+            artifacts/editor/*failure.png
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # The exact published packages (the `latest` dist-tag of each: scripts/registry-plan.mjs) installed from the registry and checked
+  # with the harness files of the release commits they were built from (the registry's gitHead, read from this history).
+  # Until the first shared release the published set is the previous release train.
+  registry:
+    name: Registry consumers
+    runs-on: ubuntu-24.04
+    container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+    timeout-minutes: 45
+    env:
+      OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          filter: blob:none
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          container: 'true'
+
+      - run: pnpm build
+      - run: pnpm test:developer-quickstart
+      - run: pnpm test:registry-ecosystem
+      - run: pnpm test:packed-browser registry
+      - run: node scripts/test-packed-browser-guards.mjs
+      - run: node scripts/test-installed-code-guards.mjs --registry
+      - run: pnpm test:registry-fidelity
+      - run: node packages/cli/test/packed.mjs --registry
+      - run: pnpm --filter @openpresentation/opf-pptx --fail-if-no-match run test:published-import
+      - name: Quote, code and metric internals with registry fonts
+        run: |
+          node scripts/test-quote-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/quote-layout-geometry.json
+          node scripts/test-code-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/code-layout-geometry.json
+          node scripts/test-code-layout-browser.mjs artifacts/npm/registry-consumer artifacts/code-layout-geometry.json artifacts/code-layout-browser.json
+          node scripts/test-metric-registry-guards.mjs artifacts/npm/registry-consumer
+          node scripts/test-metric-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json
+          node scripts/test-metric-layout-browser.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json artifacts/metric-layout-browser.json
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+
+      - run: pnpm audit
+
+  # opf-render `platform-residual` (non-blocking, as before): the browser suites and the #24 probe on Linux and macOS, compared.
+  platform-residual:
+    name: Platform residual (${{ matrix.platform }})
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+    continue-on-error: true
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: linux
+            os: ubuntu-24.04
+            container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+          - platform: macos
+            os: macos-latest
+            container: ''
+    env:
+      REPORT_DIR: artifacts/platform-residual/${{ matrix.platform }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          container: ${{ matrix.container != '' && 'true' || 'false' }}
+          build-deps: '@openpresentation/opf-render'
+
+      - name: Install Chromium (macOS)
+        if: ${{ runner.os == 'macOS' }}
+        working-directory: packages/render
+        run: pnpm exec playwright install chromium
+
+      # The #24 fixtures come from the frozen opf-render repository, fetched into artifacts/render-archive (MR-23b).
+      - name: Fetch the archived #24 font fixtures
+        working-directory: packages/render
+        run: node scripts/fetch-archive-fixtures.mjs
+
+      - id: variants
+        continue-on-error: true
+        working-directory: packages/render
+        run: node test/font-variants-browser.mjs "$REPORT_DIR/font-variants-browser.json"
+      - id: preparation
+        continue-on-error: true
+        working-directory: packages/render
+        run: node test/font-preparation-browser.mjs "$REPORT_DIR/font-preparation-browser.json"
+      - id: browser
+        continue-on-error: true
+        working-directory: packages/render
+        run: pnpm run test:browser
+      - id: probe
+        continue-on-error: true
+        working-directory: packages/render
+        run: node test/platform-residual-probe.mjs ../../artifacts/render-archive/test/fixtures/font-formats "$REPORT_DIR/issue24-probe.json"
+
+      - name: Record the outcomes and summarize
+        if: ${{ always() }}
+        working-directory: packages/render
+        env:
+          PLATFORM: ${{ matrix.platform }}
+          VARIANTS: ${{ steps.variants.outcome }}
+          PREPARATION: ${{ steps.preparation.outcome }}
+          BROWSER: ${{ steps.browser.outcome }}
+          PROBE: ${{ steps.probe.outcome }}
+        run: |
+          mkdir -p "$REPORT_DIR"
+          node -e "require('fs').writeFileSync(process.argv[1],JSON.stringify({platform:process.env.PLATFORM,'font-variants-browser':process.env.VARIANTS,'font-preparation-browser':process.env.PREPARATION,'test:browser':process.env.BROWSER,'issue24-probe':process.env.PROBE},null,2)+'\n')" "$REPORT_DIR/outcomes.json"
+          node scripts/platform-residual-summary.mjs "$REPORT_DIR/summary.md" "$REPORT_DIR/summary.json" "$REPORT_DIR" >/dev/null
+          cat "$REPORT_DIR/summary.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the residual report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: platform-residual-${{ matrix.platform }}
+          path: packages/render/artifacts/platform-residual/${{ matrix.platform }}/**
+          retention-days: 30
+          if-no-files-found: warn
+
+  # Flake measurement: each browser suite repeated, advisory (never part of the report). Sundays, on demand, and when asked for.
+  flake:
+    name: Flake measurement (${{ matrix.name }})
+    needs: plan
+    if: ${{ needs.plan.outputs.flake == 'true' }}
+    runs-on: ubuntu-24.04
+    container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+    continue-on-error: true
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: installed browser
+            dir: .
+            suites: installed-browser
+          - name: render
+            dir: packages/render
+            suites: browser browser-fonts rich
+          - name: pptx
+            dir: packages/pptx
+            suites: browser
+          - name: editor
+            dir: packages/editor
+            suites: playground browser
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+        with:
+          container: 'true'
+
+      - run: pnpm build
+      - name: Pack the installed packages (installed browser suite only)
+        if: ${{ matrix.dir == '.' }}
+        run: |
+          pnpm demo:editor
+          node scripts/build-rich-table-browser.mjs
+          pnpm pack:ecosystem
+          pnpm test:packed-ecosystem
+      - name: Build the package (package suites)
+        if: ${{ matrix.dir != '.' }}
+        working-directory: ${{ matrix.dir }}
+        run: pnpm run build
+
+      - name: Repeat the suites
+        env:
+          REPEAT: ${{ inputs.repeat || '5' }}
+          DIR: ${{ matrix.dir }}
+          SUITES: ${{ matrix.suites }}
+        run: |
+          for suite in $SUITES; do
+            node scripts/flake-repeat.mjs --dir "$DIR" --suite "$suite" --repeat "$REPEAT" --out "artifacts/flake-repeat/${DIR//\//-}-$suite"
+          done
+
+      - name: Preserve the measurement
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: flake-repeat-${{ matrix.name }}
+          path: ${{ matrix.dir }}/artifacts/flake-repeat/**
+          retention-days: 30
+          if-no-files-found: warn
+
+  # Opens or updates the one nightly-red issue on a red run and closes it on a green one. GITHUB_TOKEN only; no App, no polling.
+  report:
+    name: report
+    needs: [cli-portability, installed, pptx-windows, editor-macos, node-range, packed-linux, registry, audit, platform-residual, flake]
+    if: ${{ always() && (github.event_name == 'schedule' || inputs.report == true) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Checkout (scripts only)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+          sparse-checkout-cone-mode: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: Open, update or close the nightly-red issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEEDS: ${{ toJSON(needs) }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: node scripts/ci-report-issue.mjs --label nightly-red --title "Nightly checks are red" --ignore platform-residual,flake

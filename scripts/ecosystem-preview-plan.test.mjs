@@ -2,13 +2,12 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import test from 'node:test';
 import {previewPackages, previewManifest} from './ecosystem-preview-plan.mjs';
-import {satisfies} from './unreleased-gate.mjs';
 
-test('default preview set remains four engines; only explicit CLI mode adds the fifth package', () => {
+test('default preview set is the gallery and the four engines; only explicit CLI mode adds the CLI', () => {
   const original = previewPackages();
-  assert.deepEqual(original.map(([name]) => name), ['opf', 'opf-render', 'opf-editor', 'opf-pptx']);
-  assert.deepEqual(previewPackages(['--include-cli']).slice(0, 4), original);
-  assert.deepEqual(previewPackages(['--include-cli'])[4], ['cli', 'packages/cli', '0.1.0-preview.11']);
+  assert.deepEqual(original.map(([name]) => name), ['gallery', 'opf', 'opf-render', 'opf-editor', 'opf-pptx']);
+  assert.deepEqual(previewPackages(['--include-cli']).slice(0, 5), original);
+  assert.deepEqual(previewPackages(['--include-cli'])[5], ['cli', 'packages/cli', '0.1.0-preview.11']);
   assert.deepEqual(previewPackages(), original, 'calls do not mutate the default');
   for (const args of [['--unknown'], ['--include-cli', '--include-cli'], ['--include-cli=true'], ['--registry']])
     assert.throws(() => previewPackages(args), /Usage/);
@@ -24,11 +23,12 @@ test('CLI and engine stages share exact core and compatible preview peers while 
   const stagedCli = previewManifest(cli, versions[cli.name], versions);
   assert.deepEqual({core, cli}, before);
   assert.equal(stagedCli.dependencies[core.name], stagedCore.version);
-  assert.equal(stagedCli.dependencies['@openpresentation/gallery'], cli.dependencies['@openpresentation/gallery']);
+  assert.equal(stagedCli.dependencies['@openpresentation/gallery'], versions['@openpresentation/gallery'], 'the gallery is a preview package: core and the CLI stage the exact preview version');
+  assert.equal(stagedCore.dependencies['@openpresentation/gallery'], versions['@openpresentation/gallery']);
+  for (const staged of [stagedCore, stagedCli]) assert.ok(!JSON.stringify(staged).includes('workspace:'), 'no workspace: specifier is staged');
   for (const manifest of [stagedCore, stagedCli]) {
     for (const name of ['@openpresentation/opf-render', '@openpresentation/opf-pptx']) {
       assert.equal(manifest.peerDependencies[name], `^${versions[name]}`);
-      assert.ok(satisfies(versions[name], manifest.peerDependencies[name]));
       assert.deepEqual(manifest.peerDependenciesMeta[name], before[manifest.name === core.name ? 'core' : 'cli'].peerDependenciesMeta[name]);
     }
     assert.ok(!manifest.scripts && !manifest.devDependencies);

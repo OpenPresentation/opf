@@ -6,7 +6,7 @@ import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { aggregate, fromPlaywrightJson, render } from './flake-repeat.mjs';
-import { playwrightGrep, playwrightIds, splitCommand, validateQuarantine } from './quarantine.mjs';
+import { parseShard, playwrightGrep, playwrightIds, quarantineDirectories, shardTests, splitCommand, validateQuarantine } from './quarantine.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const known = new Set(['a', 'b']);
@@ -158,4 +158,50 @@ test('--dir names the package directory for check, run-suite and flake-repeat, w
   assert.equal(flake.status, 0, flake.stderr);
   assert.equal(JSON.parse(readFileSync(path.join(root, 'out/flake-repeat.json'), 'utf8')).tests[0].runs, 2);
   rmSync(elsewhere, { recursive: true, force: true });
+});
+
+test('check-all validates the root and every package that has a quarantine file, and names the package that fails', () => {
+  const root = mkdtempSync(path.join(tmpdir(), 'opf-quarantine-all-'));
+  try {
+    const write = (directory, entries) => {
+      mkdirSync(path.join(root, directory, 'test'), { recursive: true });
+      writeFileSync(path.join(root, directory, 'test/quarantine.json'), JSON.stringify({ schema: 1, entries }));
+    };
+    write('.', []);
+    write('packages/render', []);
+    write('packages/editor', []);
+    mkdirSync(path.join(root, 'packages/cli/test'), { recursive: true }); // no quarantine file: not checked
+    assert.deepEqual(quarantineDirectories(root), ['.', 'packages/editor', 'packages/render']);
+    const run = () => spawnSync(process.execPath, [path.join(here, 'quarantine.mjs'), 'check-all'], { cwd: root, encoding: 'utf8' });
+    const clean = run();
+    assert.equal(clean.status, 0, clean.stderr);
+    assert.match(clean.stdout, /Test quarantine \(packages\/editor\)/);
+    assert.match(clean.stdout, /Test quarantine \(packages\/render\)/);
+    write('packages/render', [{ id: 'x.mjs', issue: 'https://github.com/OpenPresentation/opf/issues/1', owner: 'o', reason: 'r', added: '2020-01-01', expires: '2020-01-02' }]);
+    const failed = run();
+    assert.equal(failed.status, 1);
+    assert.match(failed.stderr, /error: packages\/render: entry 1 \(x\.mjs\)/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('--shard i/n runs every n-th test of a suite: the shards together run each test once, in order (MR-30)', () => {
+  assert.deepEqual(parseShard('2/3'), { index: 2, count: 3 });
+  for (const bad of [undefined, '', '0/2', '3/2', '1/17', 'a/b', '1/2/3']) assert.throws(() => parseShard(bad), /index\/count/, String(bad));
+  const tests = ['a', 'b', 'c', 'd', 'e', 'f', 'g'].map((id) => ({ id }));
+  const slices = [1, 2, 3].map((index) => shardTests(tests, { index, count: 3 }).map((entry) => entry.id));
+  assert.deepEqual(slices, [['a', 'd', 'g'], ['b', 'e'], ['c', 'f']]);
+  assert.equal(shardTests(tests, null), tests);
+  const root = scratch();
+  write(root, []);
+  // Suite `s` is pass, fail, last: shard 1/2 runs pass and last and passes; shard 2/2 runs the failing test.
+  const first = cli(root, 'quarantine.mjs', 'run-suite', 's', '--shard', '1/2', '--today', '2026-10-02');
+  assert.equal(first.status, 0, first.stderr);
+  assert.match(first.stdout, /> last/);
+  assert.doesNotMatch(first.stdout, /> fail/);
+  const second = cli(root, 'quarantine.mjs', 'run-suite', 's', '--shard', '2/2', '--today', '2026-10-02');
+  assert.equal(second.status, 3);
+  assert.doesNotMatch(second.stdout, /> pass/);
+  assert.notEqual(cli(root, 'quarantine.mjs', 'run-suite', 's', '--shard', '3/2').status, 0);
 });

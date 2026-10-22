@@ -12,8 +12,8 @@ import { resolveSlideContext, validate } from '../packages/javascript/dist/index
 import { composeSlide } from '../packages/javascript/dist/composition.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const renderDir = path.resolve(process.env.OPF_RENDER_DIR ?? path.join(root, '../opf-render'));
-const pptxDir = path.resolve(process.env.OPF_PPTX_DIR ?? path.join(root, '../opf-pptx'));
+const renderDir = path.resolve(process.env.OPF_RENDER_DIR ?? path.join(root, 'packages/render'));
+const pptxDir = path.resolve(process.env.OPF_PPTX_DIR ?? path.join(root, 'packages/pptx'));
 const { toSvg } = await import(pathToFileURL(path.join(renderDir, 'dist/index.js')));
 const { toPptx, fromPptx } = await import(pathToFileURL(path.join(pptxDir, 'dist/index.js')));
 const require = createRequire(path.join(pptxDir, 'package.json'));

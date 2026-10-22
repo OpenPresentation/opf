@@ -8,6 +8,8 @@
 // order, so failure output stays readable. Every check runs (no check is skipped after a failure) and any failure fails.
 //   node scripts/run-checks.mjs           run the checks
 //   node scripts/run-checks.mjs --list    print the commands, one per line, and run nothing
+//   node scripts/run-checks.mjs --shard 2/3    MR-30: run every third check, starting at the second (CI splits the checks across jobs;
+//                                              the shards together run each check once)
 import { spawn } from 'node:child_process';
 import { createWriteStream, mkdirSync, readFileSync, realpathSync } from 'node:fs';
 import { availableParallelism } from 'node:os';
@@ -32,6 +34,18 @@ export function selectChecks(scripts, config) {
     .filter((name) => (name.startsWith('check:') && !exclude.includes(name)) || include.includes(name))
     .sort();
 }
+
+/** "2/3" as { index: 2, count: 3 }; anything else throws. */
+export function parseShard(text) {
+  const match = /^(\d+)\/(\d+)$/u.exec(text ?? '');
+  const index = Number(match?.[1]);
+  const count = Number(match?.[2]);
+  if (!match || count < 1 || count > 16 || index < 1 || index > count) throw new Error(`--shard is written index/count, for example 2/3, with 1 <= index <= count <= 16, not ${text}`);
+  return { index, count };
+}
+
+/** The checks of shard `shard` of `names` (sorted): every `count`-th one from the shard's index, so each check is in exactly one shard. */
+export const shardChecks = (names, shard) => (shard ? names.filter((_, position) => position % shard.count === shard.index - 1) : names);
 
 /** How many checks run at once: OPF_CHECKS_JOBS, or min(4, available parallelism). */
 export function checkJobs(env = process.env, cores = availableParallelism()) {
@@ -85,7 +99,8 @@ async function main(argv) {
   const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
   const scripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
   const config = JSON.parse(readFileSync(path.join(root, 'scripts', 'checks.json'), 'utf8'));
-  const names = selectChecks(scripts, config);
+  const shardAt = argv.indexOf('--shard');
+  const names = shardChecks(selectChecks(scripts, config), shardAt >= 0 ? parseShard(argv[shardAt + 1]) : null);
   if (argv.includes('--list')) {
     console.log(names.map((name) => `pnpm run ${name}`).join('\n'));
     return 0;

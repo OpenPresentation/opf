@@ -1,6 +1,6 @@
-import {createCanvasEditor} from '../../opf-editor/src/canvas.js';
-import {createEditorSession} from '../../opf-editor/src/index.js';
-import {toSvg} from '../../opf-render/src/svg.js';
+import {createCanvasEditor} from '../packages/editor/src/canvas.js';
+import {createEditorSession} from '../packages/editor/src/index.js';
+import {toSvg} from '../packages/render/src/svg.js';
 const host=document.querySelector('#canvas'),out=document.querySelector('#results');let checks=0;
 const check=(value,message)=>{if(!value)throw new Error(message);checks++;out.textContent+=`PASS ${message}\n`;};
 const original={name:'Keep deck metadata',slides:[{title:'Build a slide directly',notes:'Retain notes',text:[{text:'Original recommendation',bold:true}]}]};

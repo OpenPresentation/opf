@@ -3,25 +3,24 @@
 // bundle renders what plain Node renders: the same SVG bytes (subset faces, whole faces, text drawn as outlines, the office pack's
 // vendored Intos faces), both HarfBuzz engines loaded and no diagnostics, from a route handler and from a server component.
 // It needs the network (it installs Next.js and React into a temporary directory; neither is a dependency of this repository) and
-// takes a few minutes, so it is not part of `npm test`: test/bundler-safe-resolve.mjs is the fast source guard CI runs.
-//   npm run test:next-bundle                       Turbopack (the Next.js default)
-//   npm run test:next-bundle -- --webpack          Turbopack, then webpack
-//   npm run test:next-bundle -- --keep             keep the temporary app and print its path
-//   npm run test:next-bundle -- --tarball <file>   check a tarball (a published version, another branch) instead of packing this checkout
+// takes a few minutes, so it is not part of `pnpm test`: test/bundler-safe-resolve.mjs is the fast source guard CI runs.
+//   pnpm run test:next-bundle                       Turbopack (the Next.js default)
+//   pnpm run test:next-bundle --webpack             Turbopack, then webpack
+//   pnpm run test:next-bundle --keep                keep the temporary app and print its path
+//   pnpm run test:next-bundle --tarball <file>      check a tarball (a published version, another branch) instead of packing this checkout
+// The checkout is packed with `pnpm pack` together with core and the gallery (the workspace has no registry copy of the version under
+// development; scripts/workspace-pack.mjs); a --tarball is installed with the core range its own manifest declares, from the registry.
 // OPF_NEXT_VERSION and OPF_REACT_VERSION choose other Next.js and React versions.
 import assert from 'node:assert/strict';
 import { execFileSync, spawn } from 'node:child_process';
 import { mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { npm, packWithDependencies, packageRoot, packedManifest } from './workspace-pack.mjs';
 
 const NEXT = process.env.OPF_NEXT_VERSION ?? '16.4.0', REACT = process.env.OPF_REACT_VERSION ?? '19.3.0';
-const root = fileURLToPath(new URL('../', import.meta.url)), npmCli = process.env.npm_execpath;
-assert.ok(npmCli?.endsWith('npm-cli.js'), 'Run with npm run test:next-bundle');
 const argv = process.argv.slice(2), tarballFlag = argv.indexOf('--tarball'), bundlers = ['turbopack', ...(argv.includes('--webpack') ? ['webpack'] : [])];
-const manifest = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'));
-const npm = (args, cwd) => execFileSync(process.execPath, [npmCli, ...args], { cwd, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+const manifest = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8'));
 
 const RENDER = `import { createHash } from "node:crypto";
 import { gallery as defaultCatalog } from "@openpresentation/gallery";
@@ -80,13 +79,17 @@ async function serve(app, port) {
 
 const temporary = mkdtempSync(path.join(tmpdir(), 'opf-render-next-'));
 try {
-  const tarball = tarballFlag === -1 ? path.join(temporary, JSON.parse(npm(['pack', '--json', '--pack-destination', temporary], root))[0].filename) : path.resolve(argv[tarballFlag + 1]);
+  // This checkout: render, core and the gallery as tarballs. A --tarball: that file alone, with core from the registry at the range its manifest declares.
+  const packed = tarballFlag === -1 ? packWithDependencies(temporary) : undefined;
+  const tarball = packed ? packed.self.tarball : path.resolve(argv[tarballFlag + 1]);
+  const declared = packedManifest(tarball);
+  assert.ok(!JSON.stringify(declared).includes('workspace:'), `${tarball} is not a packed manifest (it carries a workspace: specifier)`);
   const app = path.join(temporary, 'app'), core = '@openpresentation/opf';
   const fontPeers = Object.keys(manifest.peerDependencies).filter((name) => /^@expo-google-fonts\/(roboto|roboto-mono|arimo|caladea|cousine|gelasio|tinos|noto-sans)$/.test(name));
   mkdirSync(app);
   writeFileSync(path.join(app, 'package.json'), JSON.stringify({
     private: true, type: 'module',
-    dependencies: { next: NEXT, react: REACT, 'react-dom': REACT, [core]: manifest.dependencies[core], [manifest.name]: `file:${tarball}`, ...Object.fromEntries(fontPeers.map((name) => [name, manifest.devDependencies[name]])) },
+    dependencies: { next: NEXT, react: REACT, 'react-dom': REACT, [manifest.name]: `file:${tarball}`, ...(packed ? { [core]: `file:${packed.core.tarball}`, '@openpresentation/gallery': `file:${packed.gallery.tarball}` } : { [core]: declared.dependencies[core] }), ...Object.fromEntries(fontPeers.map((name) => [name, manifest.devDependencies[name]])) },
     overrides: { [manifest.name]: `$${manifest.name}` },
   }, null, 2));
   for (const [file, text] of Object.entries(FILES)) { mkdirSync(path.dirname(path.join(app, file)), { recursive: true }); writeFileSync(path.join(app, file), text); }

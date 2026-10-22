@@ -7,7 +7,7 @@ import { PassThrough } from 'node:stream';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { selectChecks } from './run-checks.mjs';
-import { PACKAGES, biomeBatches, buildPlan, changedFiles, formatTable, matches, referencedPaths, runCommand, selectChangedChecks, selectPackageTests, splitPaths } from './check-changed.mjs';
+import { PACKAGES, biomeBatches, buildPlan, changedFiles, formatTable, matches, phases, referencedPaths, reuseToken, runCommand, selectChangedChecks, selectPackageTests, splitPaths } from './check-changed.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const scripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
@@ -36,7 +36,7 @@ test('selectChangedChecks maps changed paths to checks', () => {
   const docs = selectChangedChecks(['docs/agent-skills.md'], scripts, config);
   assert.deepEqual(docs, ['check:changes', 'check:skill-commands', 'check:text']);
   const schema = selectChangedChecks(['spec/schemas/opf.schema.json'], scripts, config);
-  for (const name of ['check:schema-docs', 'check:core-golden', 'check:registry-golden', 'check:spec']) assert.ok(schema.includes(name), name);
+  for (const name of ['check:schema-docs', 'check:registry-golden', 'check:spec']) assert.ok(schema.includes(name), name);
   const catalog = selectChangedChecks(['spec/schemas/layout.schema.json'], scripts, config);
   assert.ok(catalog.includes('check:spec'));
   // A check whose command names the changed file runs, with no rule needed.
@@ -57,26 +57,77 @@ test('selectPackageTests runs the whole package for code and only the changed fi
 
 test('buildPlan: a docs-only change runs the text and skill-command checks only; a .ts change adds the type check and the package tests', () => {
   const docs = buildPlan(['docs/agent-skills.md'], env);
-  assert.deepEqual(docs.map((step) => step.name), ['biome', 'pnpm run check:changes', 'pnpm run check:skill-commands', 'pnpm run check:text', 'typecheck']);
-  assert.equal(docs[0].skip, true);
+  assert.deepEqual(docs.map((step) => step.name), ['build', 'biome', 'pnpm run check:changes', 'pnpm run check:skill-commands', 'pnpm run check:text', 'typecheck']);
+  assert.equal(docs.find((step) => step.name === 'biome').skip, true);
   assert.equal(docs.at(-1).skip, true);
 
   const code = buildPlan(['packages/javascript/src/index.ts'], env);
-  assert.deepEqual(code.map((step) => step.name), ['biome', 'pnpm run check:browser-safe', 'pnpm run check:catalog-free', 'pnpm run check:changes', 'pnpm run check:font-hotlinks', 'pnpm run check:text', 'typecheck', 'tests opf']);
+  assert.deepEqual(code.map((step) => step.name), ['build', 'biome', 'pnpm run check:browser-safe', 'pnpm run check:catalog-free', 'pnpm run check:changes', 'pnpm run check:font-hotlinks', 'pnpm run check:text', 'typecheck', 'tests opf']);
   const typecheck = code.find((step) => step.name === 'typecheck');
   assert.ok(typecheck.heavy && typecheck.commands[0].argv.some((part) => part.endsWith('agent-slot.mjs')));
   assert.equal(code.find((step) => step.name === 'biome').biome[0], 'packages/javascript/src/index.ts');
 
+  assert.deepEqual(buildPlan(['x.md'], { ...env, needsInstall: true }).slice(0, 3).map((step) => step.name), ['install', 'build', 'biome'], 'the build follows the install');
   assert.equal(buildPlan(['x.md'], { ...env, needsInstall: true })[0].name, 'install');
-  assert.equal(buildPlan(['gone.mjs'], { ...env, exists: () => false })[0].skip, true, 'a deleted file is not given to Biome');
+  assert.equal(buildPlan(['gone.mjs'], { ...env, exists: () => false }).find((step) => step.name === 'biome').skip, true, 'a deleted file is not given to Biome');
 });
 
-// MR-11: the six packages of the monorepo. The engines and the gallery are not in the repository yet, so their directories
-// are absent (a changed file never names them); once imported, a change in one selects that package's tests.
-test('MR-11: PACKAGES lists the six packages of the monorepo, each with its own directory, filter and script', () => {
-  assert.deepEqual(PACKAGES.map((pkg) => pkg.id), ['opf', 'cli', 'render', 'pptx', 'editor', 'gallery']);
-  assert.deepEqual(PACKAGES.map((pkg) => pkg.dir), ['packages/javascript', 'packages/cli', 'packages/render', 'packages/pptx', 'packages/editor', 'packages/gallery']);
-  assert.deepEqual(PACKAGES.map((pkg) => pkg.filter), ['@openpresentation/opf', '@openpresentation/cli', '@openpresentation/opf-render', '@openpresentation/opf-pptx', '@openpresentation/opf-editor', '@openpresentation/gallery']);
+// MR-23f: the checks import dist/, which a fresh worktree does not have, and two checks that built it ran side by side
+// (tsup cleans dist/): check:skill-commands, check:stability, check:browser-safe and check:native-acceptance failed inside
+// `pnpm check:changed` and passed alone after a build. One build runs first, and the rest reuses it.
+test('MR-23f: one build step runs after the install and before every check, the type check and the package tests', () => {
+  const plan = buildPlan(['packages/javascript/src/index.ts', 'packages/cli/src/index.ts', 'scripts/gallery-stability.mjs', 'scripts/check-skill-commands.mjs'], { ...env, needsInstall: true });
+  const builds = plan.filter((step) => step.build);
+  assert.equal(builds.length, 1, 'exactly one build step');
+  const argv = builds[0].commands[0].argv;
+  assert.deepEqual(argv.slice(-3), ['pnpm', 'run', 'build:packages']);
+  assert.ok(argv.some((part) => part.endsWith('agent-slot.mjs')), 'the build waits for a machine slot like the other heavy commands');
+  const order = phases(plan);
+  assert.equal(order.install.length, 1);
+  assert.equal(order.build.length, 1);
+  assert.ok(order.light.length > 3 && order.heavy.length >= 2, 'checks and heavy steps are in the plan');
+  const start = (list) => Math.min(...list);
+  const end = (list) => Math.max(...list);
+  const names = plan.map((step) => step.name);
+  for (const name of ['pnpm run check:skill-commands', 'pnpm run check:stability', 'pnpm run check:browser-safe']) assert.ok(order.light.includes(names.indexOf(name)), name);
+  // The phases run one after another (install, build, the cheap checks, the heavy steps), so none overlaps another.
+  assert.ok(end(order.install) < start(order.build));
+  assert.ok(end(order.build) < start(order.light));
+  // Every step belongs to exactly one phase, so none is dropped or run twice.
+  const all = [...order.install, ...order.build, ...order.light, ...order.heavy].sort((a, b) => a - b);
+  assert.deepEqual(all, plan.map((_step, index) => index));
+});
+
+test('MR-23f: a change Biome alone handles adds no build, and a skipped step is in no phase', () => {
+  const plan = buildPlan(['x.md'], { ...env, config: { ...config, changed: {} }, scripts: {} });
+  assert.deepEqual(plan.map((step) => step.name), ['biome', 'typecheck']);
+  assert.equal(plan.some((step) => step.build), false);
+  const order = phases(plan);
+  assert.deepEqual([...order.install, ...order.build, ...order.light], []);
+  assert.deepEqual(order.heavy, [0, 1], 'skipped steps still appear, as skipped, in the table');
+});
+
+test('MR-23f: a run reuses its own build and no other run reuses it', () => {
+  assert.notEqual(reuseToken(1, 1), reuseToken(1, 2));
+  assert.notEqual(reuseToken(1, 1), reuseToken(2, 1));
+  assert.match(reuseToken(), /^check-changed-\d+-\d+$/);
+});
+
+test('MR-23f: --plan lists the build before the first check', () => {
+  const run = spawnSync(process.execPath, [path.join(root, 'scripts', 'check-changed.mjs'), '--plan', '--files', 'packages/javascript/src/index.ts'], { cwd: root, encoding: 'utf8' });
+  assert.equal(run.status, 0, run.stderr);
+  const lines = run.stdout.split('\n').filter((line) => line.startsWith('run '));
+  const names = lines.map((line) => line.slice(5).trim());
+  assert.ok(names.includes('build'));
+  assert.ok(names.indexOf('build') < names.indexOf('pnpm run check:changes'));
+  assert.ok(names.indexOf('build') < names.indexOf('typecheck'));
+});
+
+// MR-11, MR-23: the six packages of the monorepo and the private packages/integration; a change in one selects that package's tests.
+test('MR-11: PACKAGES lists the six packages of the monorepo and the integration tests, each with its own directory, filter and script', () => {
+  assert.deepEqual(PACKAGES.map((pkg) => pkg.id), ['opf', 'cli', 'render', 'pptx', 'editor', 'gallery', 'integration']);
+  assert.deepEqual(PACKAGES.map((pkg) => pkg.dir), ['packages/javascript', 'packages/cli', 'packages/render', 'packages/pptx', 'packages/editor', 'packages/gallery', 'packages/integration']);
+  assert.deepEqual(PACKAGES.map((pkg) => pkg.filter), ['@openpresentation/opf', '@openpresentation/cli', '@openpresentation/opf-render', '@openpresentation/opf-pptx', '@openpresentation/opf-editor', '@openpresentation/gallery', '@openpresentation/integration']);
   assert.equal(new Set(PACKAGES.map((pkg) => pkg.dir)).size, PACKAGES.length);
   for (const pkg of PACKAGES) assert.ok(['test', 'test:contract'].includes(pkg.script), `${pkg.id} runs a whole-package script`);
 });

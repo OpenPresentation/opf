@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {loadFonts} from '../../opf-render/dist/fonts-node.js';
-import {toSvg, resolvePresentation} from '../../opf-render/dist/svg.js';
+import {loadFonts} from '../packages/render/dist/fonts-node.js';
+import {toSvg, resolvePresentation} from '../packages/render/dist/svg.js';
 import {composeSlide} from '../packages/javascript/dist/composition.js';
 import {withRecords} from './ecosystem-records.mjs';
 const options={fonts:await loadFonts()},results=[];

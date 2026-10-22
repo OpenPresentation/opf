@@ -7,16 +7,18 @@ export function catalogGenerationForCore(core) {
   if (major === 0 && minor < 19) return 1;
   if (major === 0 && minor === 19) return 2;
   if (major === 0 && minor >= 20 && minor <= 24) return 3;
-  if (major === 0 && minor === 25) return 4;
+  // MR-34: the shared line (docs/programs/monorepo/README.md, D14, D16): all six packages carry one version from 0.26.0, and the
+  // catalog generation stays 4 until a release declares a new one (CATALOG_SCHEMA in packages/gallery).
+  if (major === 0 && minor >= 25) return 4;
   assert.fail(`No reviewed catalog generation for core ${core}`);
 }
 
-/** The published gallery major a core minor depends on: Gallery 4.0.0 (core 0.24) still declares catalogSchema 3; Gallery 5 (core 0.25) declares 4. */
+/** The published gallery major a core minor depends on: Gallery 4.0.0 (core 0.24) still declares catalogSchema 3; Gallery 5 (core 0.25) declares 4; from 0.26 the gallery has core's own version (major 0). */
 export function galleryMajorForCore(core) {
   const generation = catalogGenerationForCore(core);
   if (generation === 1) return undefined;
   const minor = Number(core.split('.')[1]);
-  return minor >= 25 ? 5 : minor >= 24 ? 4 : generation;
+  return minor >= 26 ? 0 : minor >= 25 ? 5 : minor >= 24 ? 4 : generation;
 }
 
 export function assertCatalogGeneration(core, generation) {
@@ -32,6 +34,7 @@ export function consumerDependencies(planned, independentPackages = []) {
   const galleries = independentPackages.filter(item => item.name === '@openpresentation/gallery');
   assert.equal(galleries.length, 1, 'The final registry plan must name exactly one independent gallery');
   assert.match(galleries[0].version ?? '', new RegExp(`^${galleryMajor}\\.\\d+\\.\\d+$`), `Core ${core} requires a published gallery ${galleryMajor} version`);
+  if (Number(core.split('.')[1]) >= 26) assert.equal(galleries[0].version, core, `The shared line publishes the gallery at core's version (${core})`);
   return {...planned, '@openpresentation/gallery': galleries[0].version};
 }
 

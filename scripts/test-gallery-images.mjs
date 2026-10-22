@@ -5,11 +5,11 @@ import {createHash} from 'node:crypto';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import path from 'node:path';
 import {examples} from '../packages/javascript/dist/examples.js';
-import {toSvg} from '../../opf-render/dist/svg.js';
-import {toPptx,fromPptx} from '../../opf-pptx/dist/index.js';
-const requireRender=createRequire(new URL('../../opf-render/package.json',import.meta.url));
+import {toSvg} from '../packages/render/dist/svg.js';
+import {toPptx,fromPptx} from '../packages/pptx/dist/index.js';
+const requireRender=createRequire(new URL('../packages/render/package.json',import.meta.url));
 const {chromium}=requireRender('playwright');
-const {unzipSync}=createRequire(new URL('../../opf-pptx/package.json',import.meta.url))('fflate');
+const {unzipSync}=createRequire(new URL('../packages/pptx/package.json',import.meta.url))('fflate');
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const names=['brand-logo','brand-logo-light','brand-icon','cover-bg','watermark'];
 const output=path.resolve(process.argv[2]??'artifacts/gallery-images.json');await mkdir(path.dirname(output),{recursive:true});
@@ -36,7 +36,7 @@ try{
   results.push({file,sourceSha256:hash(JSON.stringify(source)),images:decoded,media,pptxSha256:hash(pptx),sourcePreserved:true});
  }
  assert.equal(results.length,80);assert.deepEqual(errors,[]);assert.deepEqual(externalRequests,[]);
- const runtime={};for(const file of ['../packages/javascript/dist/examples.js','../../opf-render/dist/svg.js','../../opf-pptx/dist/index.js'])runtime[file]=hash(await readFile(new URL(file,import.meta.url)));
+ const runtime={};for(const file of ['../packages/javascript/dist/examples.js','../packages/render/dist/svg.js','../packages/pptx/dist/index.js'])runtime[file]=hash(await readFile(new URL(file,import.meta.url)));
  await writeFile(output,JSON.stringify({node:process.version,browser:browser.version(),verifierSha256:hash(await readFile(new URL(import.meta.url))),runtime,results,errors,externalRequests,scope:'Each of the 400 embedded gallery artwork assets is isolated on a slide. Actual offline browser SVG decodes the exact image with its description; PPTX export embeds exact PNG bytes and imports them back on the corresponding slide. No imageResolver, local-file fallback or synthetic replacement is used. This does not verify native PowerPoint rendering, native edits, inherited regions/opacity, or complete galleries with unfinished photo/video/data resources.'},null,2)+'\n');
  console.log(`Gallery images passed: ${results.length*5} actual browser decodes, exact PPTX media embeddings and same-slide image-byte reimports; no resolver or substitutions.`);
 }finally{await browser.close();}

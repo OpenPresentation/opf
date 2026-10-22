@@ -1,0 +1,33 @@
+{
+  "name": "@openpresentation/integration",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Tests that need several OPF packages at once (core's file API through the real opf-render and opf-pptx). Never published (monorepo plan, packages/integration).",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build:deps": "pnpm --filter \"@openpresentation/integration^...\" --fail-if-no-match run build",
+    "test": "pnpm run build:deps && node ../../scripts/run-tests.mjs",
+    "test:contract": "pnpm run build:deps && node ../../scripts/run-tests.mjs --suite contract"
+  },
+  "devDependencies": {
+    "@expo-google-fonts/arimo": "0.4.3",
+    "@expo-google-fonts/caladea": "0.4.2",
+    "@expo-google-fonts/cousine": "0.4.3",
+    "@expo-google-fonts/gelasio": "0.4.1",
+    "@expo-google-fonts/noto-sans": "0.4.2",
+    "@expo-google-fonts/roboto": "0.4.3",
+    "@expo-google-fonts/roboto-mono": "0.4.2",
+    "@expo-google-fonts/tinos": "0.4.2",
+    "@openpresentation/gallery": "workspace:*",
+    "@openpresentation/opf": "workspace:*",
+    "@openpresentation/opf-pptx": "workspace:*",
+    "@openpresentation/opf-render": "workspace:*",
+    "@resvg/resvg-js": "2.6.2",
+    "pdf-lib": "1.17.1",
+    "sharp": "0.35.5"
+  }
+}

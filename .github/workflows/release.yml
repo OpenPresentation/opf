@@ -1,0 +1,281 @@
+name: Release
+
+# MR-40 (docs/programs/monorepo/README.md, section 5, decisions D6 and D16): one click releases all six packages.
+#
+#   Actions, Release, Run workflow on main: version (X.Y.Z, X.Y.Z-rc.N, patch or minor), dry-run (default true: nothing is
+#   committed, tagged or published; the pipeline up to `npm publish --dry-run` is rehearsed).
+#
+#   plan     main is the ref, `verify` is green for its head (one API call, no waiting), the version is well formed.
+#   gate     nightly.yml as a workflow_call on the dispatched commit (Windows, macOS, Node 22 and 26, packed-install and registry
+#            consumers). A red leg stops the release before anything is committed or tagged. In parallel with `prepare`.
+#   prepare  scripts/release.mjs prepare in a runner checkout: the six versions, core's peers, six changelogs from changes/, the
+#            gallery stability gate (a patch is refused when a minor is needed), the lockfile. Uploads the result as a patch and
+#            fails fast, so a refused version costs two minutes and not the gate's thirty.
+#   commit   (not a dry run) after gate and prepare: with the GitHub App's token (a bypass actor on the main ruleset, owner steps
+#            O4 and O5) applies the patch as one commit "release vX.Y.Z" on the head the gate tested, pushes it to main and
+#            pushes the tag vX.Y.Z. A tag pushed with the App's token (not GITHUB_TOKEN) starts npm-publish.yml, which builds,
+#            publishes in dependency order with provenance, verifies the registry and creates the GitHub release.
+#   watch    (not a dry run) follows that npm-publish.yml run, so this run is green only when the whole release is.
+#   rehearse (dry run) dispatches npm-publish.yml with dry-run=true on this ref and follows it.
+#
+# The fallback is a release pull request: `pnpm release:prepare X.Y.Z` locally, merge it, push the tag vX.Y.Z (owner steps).
+# npm-publish.yml, not this workflow, is the trusted publisher (it is the workflow npm sees; see its header).
+#   sites    (not a dry run, a stable version) after the publish run succeeded: calls bump-sites.yml, which opens a "bump to vX.Y.Z" pull
+#            request in each of the three site repositories (MR-52, D17, D19). It opens and labels them only; a site's own CI merges a
+#            patch bump. A failed bump opens an issue and never fails this run. A prerelease (a canary) never bumps a site.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: X.Y.Z, X.Y.Z-rc.N (a canary goes to the next dist-tag), patch or minor (of the shared line)
+        required: true
+      dry-run:
+        description: Rehearse only. Nothing is committed, tagged or published.
+        type: boolean
+        default: true
+      skip-gate:
+        description: Skip the slow gate (a dry run only; a real release always runs it).
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    name: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      checks: read
+    outputs:
+      dry-run: ${{ steps.plan.outputs.dry-run }}
+    steps:
+      - name: Check the request
+        id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REF: ${{ github.ref }}
+          SHA: ${{ github.sha }}
+          REPOSITORY: ${{ github.repository }}
+          VERSION: ${{ inputs.version }}
+          DRY_RUN: ${{ inputs.dry-run }}
+          SKIP_GATE: ${{ inputs.skip-gate }}
+        run: |
+          fail() { echo "::error title=Release::$1"; exit 1; }
+          [[ "$VERSION" =~ ^(patch|minor|(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z.-]+)?)$ ]] || fail "'$VERSION' is not X.Y.Z, X.Y.Z-prerelease, patch or minor"
+          if [ "$DRY_RUN" != true ]; then
+            [ "$REF" = refs/heads/main ] || fail "a real release runs on main, not on $REF"
+            [ "$SKIP_GATE" != true ] || fail "the gate is skipped in a dry run only"
+            # main's own CI (a push to main runs everything) must be green for this exact commit: no waiting, fail at once.
+            state="$(gh api "repos/$REPOSITORY/commits/$SHA/check-runs?check_name=verify&filter=latest" --jq '[.check_runs[].conclusion] | if length == 0 then "none" else join(",") end')"
+            [ "$state" = success ] || fail "the check verify is '$state' for $SHA; wait for it to be green on main, then run the release again"
+          fi
+          echo "dry-run=$DRY_RUN" >> "$GITHUB_OUTPUT"
+
+  gate:
+    name: gate
+    needs: plan
+    if: ${{ inputs.skip-gate != true }}
+    # nightly.yml's report job asks for issues: write, which a caller has to grant; with report: false it opens no issue.
+    permissions:
+      contents: read
+      issues: write
+    uses: ./.github/workflows/nightly.yml
+    with:
+      report: false
+
+  prepare:
+    name: prepare
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    outputs:
+      version: ${{ steps.prepare.outputs.version }}
+      tag: ${{ steps.prepare.outputs.tag }}
+      dist-tag: ${{ steps.prepare.outputs.dist-tag }}
+      previous: ${{ steps.prepare.outputs.previous }}
+      bump: ${{ steps.prepare.outputs.bump }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+
+      # The stability gate draws the candidate gallery and the `latest` release with the built renderer.
+      - name: Build
+        run: pnpm build
+
+      # A build must leave the tracked files alone, or the patch below would carry more than the release.
+      - name: The build changed no tracked file
+        run: git diff --exit-code
+
+      - name: Prepare the release
+        id: prepare
+        env:
+          VERSION: ${{ inputs.version }}
+        run: node scripts/release.mjs prepare "$VERSION" --github-output "$GITHUB_OUTPUT"
+
+      - name: Check the result
+        run: |
+          node scripts/check-versions.mjs
+          node scripts/changelog-fragments.mjs check
+          pnpm install --frozen-lockfile --lockfile-only
+
+      - name: Make the release patch
+        env:
+          VERSION: ${{ steps.prepare.outputs.version }}
+          PREVIOUS: ${{ steps.prepare.outputs.previous }}
+          BUMP: ${{ steps.prepare.outputs.bump }}
+          DIST_TAG: ${{ steps.prepare.outputs.dist-tag }}
+        run: |
+          git add -u
+          git diff --cached --binary > "$RUNNER_TEMP/release.patch"
+          {
+            echo "### Release v$VERSION (previous $PREVIOUS, minimum bump $BUMP, dist-tag $DIST_TAG)"
+            echo
+            echo '```'
+            git diff --cached --stat
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: release-patch
+          path: ${{ runner.temp }}/release.patch
+          if-no-files-found: error
+          retention-days: 14
+
+  commit:
+    name: commit and tag
+    needs: [plan, prepare, gate]
+    if: ${{ needs.plan.outputs.dry-run != 'true' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      commit: ${{ steps.push.outputs.commit }}
+    steps:
+      # The App's installation token: a bypass actor on the main ruleset (the release commit lands without a pull request), and a
+      # push made with it starts workflows, which GITHUB_TOKEN pushes never do. Only this job holds it.
+      - name: GitHub App token
+        id: app
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.ECOSYSTEM_APP_ID }}
+          private-key: ${{ secrets.ECOSYSTEM_APP_PRIVATE_KEY }}
+          owner: OpenPresentation
+          repositories: opf
+          permission-contents: write
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ steps.app.outputs.token }}
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: release-patch
+          path: ${{ runner.temp }}/patch
+
+      - name: Commit, push to main and tag
+        id: push
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          TESTED: ${{ github.sha }}
+        run: |
+          fail() { echo "::error title=Release::$1"; exit 1; }
+          # The gate and the patch are for the commit that was dispatched. If main moved, a new commit is untested: stop.
+          [ "$(git rev-parse HEAD)" = "$TESTED" ] || fail "main moved from $TESTED to $(git rev-parse HEAD) during the run; run the release again"
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then fail "the tag $TAG exists: a released version is never reused, fix forward with the next one"; fi
+          git config user.name "opf-release[bot]"
+          git config user.email "opf-release[bot]@users.noreply.github.com"
+          git apply --index "$RUNNER_TEMP/patch/release.patch"
+          git commit -m "release $TAG"
+          git push origin HEAD:main
+          git tag "$TAG"
+          git push origin "$TAG"
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "Pushed release commit $(git rev-parse HEAD) to main and the tag $TAG"
+
+  watch:
+    name: follow the publish run
+    needs: [plan, prepare, commit]
+    if: ${{ needs.plan.outputs.dry-run != 'true' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - name: Follow npm-publish.yml on the tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+        run: |
+          id=""
+          for _ in $(seq 1 20); do
+            id="$(gh run list --repo "$REPOSITORY" --workflow npm-publish.yml --event push --branch "$TAG" --limit 1 --json databaseId --jq '.[0].databaseId // empty')"
+            [ -n "$id" ] && break
+            sleep 15
+          done
+          [ -n "$id" ] || { echo "::error title=Release::no npm-publish.yml run started for $TAG; was the tag pushed with the App token?"; exit 1; }
+          echo "npm-publish.yml run: https://github.com/$REPOSITORY/actions/runs/$id" | tee -a "$GITHUB_STEP_SUMMARY"
+          gh run watch "$id" --repo "$REPOSITORY" --exit-status --interval 30
+
+  sites:
+    name: bump the sites
+    needs: [plan, prepare, watch]
+    # Only after the whole publish run (publish, verify, GitHub release) is green, and only for a stable version.
+    if: ${{ needs.plan.outputs.dry-run != 'true' && !contains(needs.prepare.outputs.version, '-') }}
+    # The caller grants what bump-sites.yml asks for: its failure reporter opens issues. The App's key is passed explicitly.
+    permissions:
+      contents: read
+      issues: write
+    uses: ./.github/workflows/bump-sites.yml
+    with:
+      version: ${{ needs.prepare.outputs.version }}
+      dry-run: false
+    secrets:
+      ECOSYSTEM_APP_PRIVATE_KEY: ${{ secrets.ECOSYSTEM_APP_PRIVATE_KEY }}
+
+  rehearse:
+    name: rehearse the publish
+    needs: [plan, prepare, gate]
+    # A skipped gate (skip-gate) is not a failed one.
+    if: ${{ always() && needs.plan.outputs.dry-run == 'true' && needs.prepare.result == 'success' && needs.gate.result != 'failure' && needs.gate.result != 'cancelled' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      actions: write
+      contents: read
+    steps:
+      - name: Dispatch npm-publish.yml with dry-run=true and follow it
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          REF: ${{ github.ref_name }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+          DIST_TAG: ${{ needs.prepare.outputs.dist-tag }}
+        run: |
+          since="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          gh workflow run npm-publish.yml --repo "$REPOSITORY" --ref "$REF" -f dry-run=true -f "version=$VERSION" -f "dist-tag=$DIST_TAG"
+          id=""
+          for _ in $(seq 1 20); do
+            sleep 10
+            id="$(gh run list --repo "$REPOSITORY" --workflow npm-publish.yml --event workflow_dispatch --branch "$REF" --created ">=$since" --limit 1 --json databaseId --jq '.[0].databaseId // empty')"
+            [ -n "$id" ] && break
+          done
+          [ -n "$id" ] || { echo "::error title=Release::the dry-run dispatch of npm-publish.yml did not start"; exit 1; }
+          echo "npm-publish.yml dry run: https://github.com/$REPOSITORY/actions/runs/$id" | tee -a "$GITHUB_STEP_SUMMARY"
+          gh run watch "$id" --repo "$REPOSITORY" --exit-status --interval 30

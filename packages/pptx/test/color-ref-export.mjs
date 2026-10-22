@@ -58,31 +58,10 @@ const find = (value, key) => !value || typeof value !== "object" ? [] : Array.is
   : Object.entries(value).flatMap(([name, child]) => name === key ? [child].flat() : find(child, key));
 const cellText = (cell) => find(cell, "a:t").flatMap((node) => typeof node === "string" ? [node] : typeof node?.["a:t"] === "string" ? [node["a:t"]] : []);
 
-const fixtureUrl = new URL("../../opf/docs/fixtures/color-references.opf.json", import.meta.url);
-let fixture;
-try {
-  fixture = JSON.parse(await readFile(fixtureUrl, "utf8"));
-} catch {
-  fixture = null;
-}
-
-const exportDeck = fixture ?? {
-  name: "Color References",
-  design: { theme: "classic", colorScheme: "forest-green" },
-  variables: { risk: "#B42318", highlight: "#0F4C81" },
-  slides: [{
-    title: "Scheme Names In Runs",
-    text: [{ text: "theme-portable", color: "accent2", bold: true }],
-  }, {
-    table: {
-      columns: ["Stage", "Status"],
-      rows: [[
-        "Rollout",
-        { value: "At risk", style: { fill: "surface", color: "var:risk", borders: { bottom: { color: "accent1", width: 1 } } } },
-      ]],
-    },
-  }],
-};
+// MR-23c: core's fixture lives in this repository (docs/fixtures at the root). A missing file is an error, never a silent switch to
+// an inline stand-in: that would drop the coverage of the shared fixture without a failing test.
+const fixtureUrl = new URL("../../../docs/fixtures/color-references.opf.json", import.meta.url);
+const exportDeck = JSON.parse(await readFile(fixtureUrl, "utf8"));
 
 const deck = structuredClone(exportDeck);
 const bytes = await toPptx(deck);

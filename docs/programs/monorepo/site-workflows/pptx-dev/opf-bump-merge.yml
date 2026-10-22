@@ -1,0 +1,82 @@
+name: Merge OPF bump
+
+# MR-52 (OpenPresentation/opf, docs/programs/monorepo/README.md, section 6, decision D19). Install as .github/workflows/opf-bump-merge.yml
+# in Data-Advantage/pptx-dev (default branch master). The owner steps O4 and O8 (the GitHub App installed on this repository and the
+# secrets ECOSYSTEM_APP_ID and ECOSYSTEM_APP_PRIVATE_KEY) must be done first.
+#
+# What it does: bump-sites.yml in OpenPresentation/opf opens a "bump to vX.Y.Z" pull request from a bot/opf-v* branch and labels it
+# `auto-merge` (a patch bump) or `needs-review` (a minor or major bump). When this site's own checks have passed on that pull request,
+# this workflow merges it, but only an `auto-merge` one, and with the GitHub App's token: a push made with it starts this site's push and
+# deploy workflows, which a merge made with GITHUB_TOKEN would not. The site has no ruleset and no required check (Free-plan
+# organization), so this workflow is the only gate there is; every condition below fails closed (the pull request just stays open).
+#
+# It runs when one of the listed workflows completes (workflow_run, on the default branch's copy of this file: it executes no code from
+# the pull request, only the GitHub API). The pull request is merged by whichever completion comes last, because it needs every check in
+# REQUIRED_CHECKS to be green for the pull request's head commit. A red or missing check leaves the pull request open.
+# Checks: `verify (ubuntu-latest)` is the Linux leg of application-ci.yml and `build` the job of cloudflare-build.yml; both run on every pull request. MR-52 may group them in one `build-and-smoke` job; then change the names below.
+on:
+  workflow_run:
+    workflows: ["Application compatibility", "Cloudflare build"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: opf-bump-merge-${{ github.event.workflow_run.head_branch }}
+  cancel-in-progress: false
+
+jobs:
+  merge:
+    name: merge
+    # A successful pull request run of a bump branch of this repository, never a fork.
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'pull_request' && startsWith(github.event.workflow_run.head_branch, 'bot/opf-v') && github.event.workflow_run.head_repository.full_name == github.repository }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: GitHub App token
+        id: app
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ secrets.ECOSYSTEM_APP_ID }}
+          private-key: ${{ secrets.ECOSYSTEM_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Merge a green patch bump
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          REPO: ${{ github.repository }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          # One check name per line: the checks that make a bump safe to merge (this site's build and smoke).
+          REQUIRED_CHECKS: |
+            verify (ubuntu-latest)
+            build
+          # The only files a bump may touch (extended regular expression, matched against each changed path).
+          ALLOWED_FILES: '^(package\.json|pnpm-lock\.yaml|opf-reference-layer-pins\.json)$'
+        run: |
+          set -euo pipefail
+          stop() { echo "::notice title=OPF bump::$1"; exit 0; }
+          pr="$(gh pr list --repo "$REPO" --head "$HEAD_BRANCH" --state open --json number,title,baseRefName,headRefOid,labels --jq '.[0] // empty')"
+          [ -n "$pr" ] || stop "no open pull request for $HEAD_BRANCH"
+          number="$(jq -r .number <<<"$pr")"
+          [ "$(jq -r .headRefOid <<<"$pr")" = "$HEAD_SHA" ] || stop "#$number moved on to a newer commit; its newer checks decide"
+          [ "$(jq -r .baseRefName <<<"$pr")" = "$DEFAULT_BRANCH" ] || stop "#$number does not target $DEFAULT_BRANCH"
+          jq -r .title <<<"$pr" | grep -Eq '^bump to v(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$' || stop "#$number is not titled 'bump to vX.Y.Z'"
+          labels="$(jq -r '.labels[].name' <<<"$pr")"
+          grep -qx needs-review <<<"$labels" && stop "#$number is labeled needs-review: a minor or major bump is merged by hand"
+          grep -qx auto-merge <<<"$labels" || stop "#$number has no auto-merge label"
+          # The diff guard: a bump changes manifests and lockfiles, never code.
+          bad="$(gh pr diff "$number" --repo "$REPO" --name-only | grep -Ev "$ALLOWED_FILES" || true)"
+          [ -z "$bad" ] || stop "#$number changes files a bump must not touch: $(tr '\n' ' ' <<<"$bad")"
+          # Every required check must be green for this head commit; a pending one means a later completion will decide.
+          runs="$(gh api "repos/$REPO/commits/$HEAD_SHA/check-runs?per_page=100" --paginate | jq -s '[.[].check_runs[]]')"
+          while IFS= read -r name; do
+            [ -n "$name" ] || continue
+            conclusion="$(jq -r --arg name "$name" '[.[] | select(.name == $name)] | sort_by(.id) | last | .conclusion // "pending"' <<<"$runs")"
+            [ "$conclusion" = success ] || stop "#$number: check '$name' is $conclusion; not merged"
+          done <<<"$REQUIRED_CHECKS"
+          gh pr merge "$number" --repo "$REPO" --squash --delete-branch --match-head-commit "$HEAD_SHA"
+          echo "Merged #$number ($HEAD_BRANCH) with the GitHub App's token." | tee -a "$GITHUB_STEP_SUMMARY"

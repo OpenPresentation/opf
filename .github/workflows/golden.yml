@@ -1,0 +1,156 @@
+name: golden
+
+# MR-31: regenerate the raster golden of the examples corpus for a pull request branch of THIS repository, inside the pinned
+# Playwright image, and push the result as one commit. It is the one replacement of core's regenerate-core-golden, the
+# renderer's regenerate-goldens and regenerate-candidate-goldens, and the ecosystem lock's `golden` selection: the corpus is
+# the repository's `examples/`, the baseline is packages/render/test/golden/ (selected by the renderer, see
+# packages/render/scripts/default-baseline.mjs), and the renderer, core and the gallery are the checkout's own.
+#
+# Start it by adding the `regenerate-goldens` label to a pull request from a branch of this repository, or by running the
+# workflow on that branch (workflow_dispatch). Two jobs, so the code of the branch never holds a write token:
+#   regenerate (contents: read, pinned Playwright image): installs the workspace, runs `pnpm golden:update` (builds core, the
+#     gallery and the renderer, renders every slide of every example, rewrites only the per-deck files whose hashes differ),
+#     and uploads the patch, diff.json and the review sheets of the changed slides;
+#   push (contents: write, no branch code): applies the patch if it touches only packages/render/test/golden/, pushes one
+#     commit to the branch, runs ci.yml on it (a push made with GITHUB_TOKEN starts no workflow) and answers on the pull request.
+# Review stays human: the commit is evidence, not an approval. Look at the changed slides in the artifact before approving.
+# The comparison is never changed here (exact hashes, no tolerance, the baseline's own scale and font policy).
+on:
+  pull_request:
+    types: [labeled]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: golden-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+env:
+  BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
+
+jobs:
+  regenerate:
+    name: Render and rewrite the decks that moved
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.label.name == 'regenerate-goldens' && github.event.pull_request.head.repo.full_name == github.repository) }}
+    runs-on: ubuntu-24.04
+    # The image every Playwright job pins (`pnpm check:playwright-pin`).
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+    timeout-minutes: 30
+    outputs:
+      changed: ${{ steps.patch.outputs.changed }}
+    steps:
+      - name: Never regenerate on the default branch
+        shell: bash
+        run: |
+          if [ "$BRANCH" = "${{ github.event.repository.default_branch }}" ]; then
+            echo "Goldens are regenerated on a pull request branch, never on the default branch." >&2
+            exit 1
+          fi
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.BRANCH }}
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 10.33.2
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      # Refuses anything but GitHub Actions on Linux in the Playwright image (scripts/golden-update.mjs), then renders the
+      # corpus and rewrites only the decks that differ. OPF_GOLDEN_ARTIFACTS=changed keeps only the changed slides.
+      - name: pnpm golden:update
+        run: pnpm golden:update
+
+      - name: Summarize and write the patch
+        id: patch
+        shell: bash
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          artifacts=packages/render/artifacts/golden
+          mkdir -p "$artifacts"
+          git add -A -- packages/render/test/golden
+          git diff --cached --binary -- packages/render/test/golden > "$artifacts/golden.patch"
+          outside="$(git status --porcelain | grep -v ' packages/render/test/golden/' | grep -v ' packages/render/artifacts/' || true)"
+          if [ -n "$outside" ]; then echo "Unexpected changes outside packages/render/test/golden/:" >&2; echo "$outside" >&2; exit 1; fi
+          if [ -s "$artifacts/golden.patch" ]; then echo "changed=true" >> "$GITHUB_OUTPUT"; else echo "changed=false" >> "$GITHUB_OUTPUT"; fi
+          {
+            echo "### golden"
+            echo
+            node -e "const d=require('./$artifacts/diff.json'); console.log(d.changedSlides.length + ' slides in ' + d.changedDecks.length + ' decks changed' + (d.sourceMatches ? '' : '; the corpus digest changed'))"
+            echo
+            echo 'Changed decks:'
+            node -e "for (const d of require('./$artifacts/diff.json').changedDecks) console.log('- ' + d)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the patch, diff.json and the review sheets
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: regenerated-goldens
+          path: |
+            packages/render/artifacts/golden/golden.patch
+            packages/render/artifacts/golden/diff.json
+            packages/render/artifacts/golden/index.html
+            packages/render/artifacts/golden/sheet-*.png
+            packages/render/artifacts/golden/[0-9]*.png
+          retention-days: 14
+          if-no-files-found: warn
+
+  push:
+    name: Push one commit to the branch
+    needs: regenerate
+    if: ${{ needs.regenerate.outputs.changed == 'true' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.BRANCH }}
+          persist-credentials: true
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: regenerated-goldens
+          path: regenerated
+
+      - name: Apply the patch (only packages/render/test/golden/) and push
+        shell: bash
+        run: |
+          paths="$(git apply --numstat regenerated/golden.patch | cut -f3)"
+          [ -n "$paths" ] || { echo "empty patch" >&2; exit 1; }
+          bad="$(printf '%s\n' "$paths" | grep -v '^packages/render/test/golden/' || true)"
+          if [ -n "$bad" ]; then echo "The patch touches paths outside packages/render/test/golden/:" >&2; echo "$bad" >&2; exit 1; fi
+          git apply --index regenerated/golden.patch
+          decks="$(node -e "console.log(require('./regenerated/diff.json').changedDecks.length)")"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -q -m "Regenerate goldens: $decks decks (golden run $GITHUB_RUN_ID)" \
+            -m "Generated by pnpm golden:update in the pinned Playwright image. Evidence (diff.json and the review sheets) is attached to the run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID. A human reviews the changed slides before approving."
+          git push origin "HEAD:refs/heads/$BRANCH"
+
+      # A push made with GITHUB_TOKEN starts no pull_request workflow; workflow_dispatch is the documented exception.
+      - name: Run CI on the new commit, release the label, leave the run link
+        shell: bash
+        run: |
+          gh workflow run ci.yml --ref "$BRANCH"
+          pr="${{ github.event.pull_request.number }}"
+          if [ -n "$pr" ]; then
+            gh pr edit "$pr" --remove-label regenerate-goldens || true
+            gh pr comment "$pr" --body "golden pushed one commit that rewrites only the decks that moved. Review diff.json and the sheets in the run artifacts before approving: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID. CI was dispatched on the new commit."
+          fi

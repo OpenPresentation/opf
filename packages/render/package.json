@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-render",
-  "version": "0.25.0",
+  "version": "0.26.0",
   "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
   "license": "MIT",
   "type": "module",
@@ -10,12 +10,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OpenPresentation/opf-render.git"
+    "url": "git+https://github.com/OpenPresentation/opf.git",
+    "directory": "packages/render"
   },
   "bugs": {
-    "url": "https://github.com/OpenPresentation/opf-render/issues"
+    "url": "https://github.com/OpenPresentation/opf/issues"
   },
-  "homepage": "https://github.com/OpenPresentation/opf-render#readme",
+  "homepage": "https://github.com/OpenPresentation/opf/tree/main/packages/render#readme",
   "publishConfig": {
     "access": "public"
   },
@@ -90,22 +91,21 @@
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
+    "build:deps": "pnpm --filter \"@openpresentation/opf-render^...\" --fail-if-no-match run build",
     "typecheck": "node scripts/check-syntax.mjs src test scripts",
     "validate": "node scripts/validate-package.mjs",
-    "test": "npm run build && npm run check:fonts && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes",
-    "test:contract": "npm run build && npm run check:fonts && node scripts/run-tests.mjs --suite contract && npm run build:browser-check",
-    "check:runners": "node --test scripts/run-tests.test.mjs",
-    "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
-    "check:fonts": "node test/font-licenses.mjs && npm run check:font-hotlinks",
-    "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
-    "test:golden": "npm run build && node test/golden.mjs",
+    "test": "pnpm run build:deps && pnpm run build && pnpm run check:fonts && node ../../scripts/run-tests.mjs && pnpm run build:browser-check && pnpm run check:scripts",
+    "test:contract": "pnpm run build:deps && pnpm run build && pnpm run check:fonts && node ../../scripts/run-tests.mjs --suite contract && pnpm run build:browser-check",
+    "check:fonts": "node test/font-licenses.mjs",
+    "check:scripts": "node --test scripts/check-syntax.test.mjs",
+    "test:golden": "pnpm run build:deps && pnpm run build && node test/golden.mjs",
     "test:packed": "node test/packed-install.mjs",
     "test:next-bundle": "node scripts/check-next-bundle.mjs",
-    "test:browser": "npm run build:browser-check && node test/browser-check.mjs && node test/rich-tab-browser.mjs && node test/rich-tab-estimated-browser.mjs",
-    "golden:update": "npm run build && node test/golden.mjs --update",
+    "test:browser": "pnpm run build:browser-check && node test/browser-check.mjs && node test/rich-tab-browser.mjs && node test/rich-tab-estimated-browser.mjs",
+    "golden:update": "pnpm run build:deps && pnpm run build && node test/golden.mjs --update",
     "golden:promote": "node scripts/golden-promote.mjs",
     "bench:soak": "node scripts/soak.mjs",
-    "prepack": "npm run build",
+    "prepack": "pnpm run build",
     "build:browser-check": "node scripts/build-browser-check.mjs",
     "test:styled-table": "node test/styled-table.mjs",
     "test:pdf-vector": "node test/pdf-vector.mjs && node test/pdf-vector-visual.mjs",
@@ -119,7 +119,7 @@
     "test:font-preparation-browser": "node test/font-preparation-browser.mjs artifacts/font-preparation-browser.json",
     "test:font-variants": "node test/font-variants.mjs",
     "test:font-variants-browser": "node test/font-variants-browser.mjs",
-    "test:variable-font-gate": "node test/platform-residual-probe.mjs ../archive/test/fixtures/font-formats artifacts/variable-font-gate/live.json && node test/variable-font-retained-gate.mjs ../archive/docs/evidence/rejected-truetype-rounding-20260915 artifacts/variable-font-gate/retained.json",
+    "test:variable-font-gate": "node scripts/fetch-archive-fixtures.mjs && node test/platform-residual-probe.mjs ../../artifacts/render-archive/test/fixtures/font-formats artifacts/variable-font-gate/live.json && node test/variable-font-retained-gate.mjs ../../artifacts/render-archive/docs/evidence/rejected-truetype-rounding-20260915 artifacts/variable-font-gate/retained.json",
     "test:aptos-preview-browser": "node test/aptos-preview-browser.mjs artifacts/aptos-preview-browser.json",
     "test:lazy-face-fallback-browser": "node test/lazy-face-fallback-browser.mjs artifacts/lazy-face-fallback",
     "test:lazy-fonts-browser": "node test/lazy-fonts-browser.mjs artifacts/lazy-fonts",
@@ -142,7 +142,7 @@
     "test:forced-colors-browser": "node test/forced-colors-browser.mjs artifacts/forced-colors"
   },
   "dependencies": {
-    "@openpresentation/opf": "^0.25.0",
+    "@openpresentation/opf": "workspace:^",
     "bidi-js": "1.1.0",
     "fontkit": "^2.0.4",
     "harfbuzzjs": "1.6.3",
@@ -341,7 +341,7 @@
     }
   },
   "devDependencies": {
-    "@openpresentation/gallery": "^5.0.0",
+    "@openpresentation/gallery": "workspace:*",
     "@expo-google-fonts/arimo": "0.4.3",
     "@expo-google-fonts/caladea": "0.4.2",
     "@expo-google-fonts/cousine": "0.4.3",

@@ -4,8 +4,8 @@ import path from 'node:path';
 import {fileURLToPath, pathToFileURL} from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const editor = path.resolve(process.env.OPF_EDITOR_ROOT ?? path.join(root, '../opf-editor'));
-const renderer = path.resolve(process.env.OPF_RENDER_ROOT ?? path.join(root, '../opf-render'));
+const editor = path.resolve(process.env.OPF_EDITOR_ROOT ?? path.join(root, 'packages/editor'));
+const renderer = path.resolve(process.env.OPF_RENDER_ROOT ?? path.join(root, 'packages/render'));
 const core=path.join(root,'packages/javascript');
 const pkg=JSON.parse(await readFile(path.join(core,'package.json'),'utf8'));
 const coreAliases={};

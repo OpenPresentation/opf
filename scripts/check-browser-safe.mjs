@@ -137,7 +137,7 @@ async function checkRoot(build) {
 async function main() {
   if (!existsSync(path.join(packageRoot, 'src', 'generated', 'engine-data.ts'))) {
     const generated = spawnSync(process.execPath, ['scripts/generate.mjs'], { cwd: packageRoot, stdio: 'inherit' });
-    for (const script of ['scripts/generate-previews.mjs', 'scripts/generate-content.mjs']) if (generated.status === 0) spawnSync(process.execPath, [script], { cwd: packageRoot, stdio: 'inherit' });
+    if (generated.status === 0) spawnSync(process.execPath, ['scripts/generate-content.mjs'], { cwd: packageRoot, stdio: 'inherit' });
   }
   const requireFromCore = createRequire(path.join(packageRoot, 'package.json'));
   const { build } = createRequire(requireFromCore.resolve('tsup'))('esbuild');

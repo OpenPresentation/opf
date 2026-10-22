@@ -10,7 +10,7 @@ import path from 'node:path';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const output = path.resolve(root, process.argv[2] ?? 'artifacts/furniture-fields-browser');
 const consumer = path.join(root, 'artifacts/npm/consumer');
-const tools = createRequire(new URL('../../opf-render/package.json', import.meta.url));
+const tools = createRequire(new URL('../packages/render/package.json', import.meta.url));
 const installed = createRequire(path.join(consumer, 'package.json'));
 const {build} = tools('esbuild'), {chromium} = tools('playwright');
 const {unzipSync} = installed('fflate');

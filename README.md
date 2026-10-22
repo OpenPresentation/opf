@@ -3,6 +3,8 @@
 [![npm version](https://img.shields.io/npm/v/@openpresentation/opf?label=npm)](https://www.npmjs.com/package/@openpresentation/opf)
 [![npm downloads](https://img.shields.io/npm/dw/@openpresentation/opf)](https://www.npmjs.com/package/@openpresentation/opf)
 [![license](https://img.shields.io/npm/l/@openpresentation/opf)](./LICENSE)
+[![CI](https://github.com/OpenPresentation/opf/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/OpenPresentation/opf/actions/workflows/ci.yml)
+[![nightly](https://github.com/OpenPresentation/opf/actions/workflows/nightly.yml/badge.svg?branch=main)](https://github.com/OpenPresentation/opf/actions/workflows/nightly.yml)
 
 Public npm package: [`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf) (`npm install @openpresentation/opf`).
 
@@ -53,26 +55,27 @@ Your deck can live in git from the first commit. After installing dependencies a
 The canonical JavaScript/TypeScript package is published at [`packages/javascript`](./packages/javascript) as [`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf). The schema is pre-stable (0.x — expect breaking changes between minor versions until 1.0). Its responsibility is local and format-level only:
 
 - export the canonical schemas from [`spec/`](./spec)
-- register the pptx.gallery catalog of [`@openpresentation/gallery`](https://github.com/OpenPresentation/gallery) (a dependency, released on its own version line) as the Node defaults, as the CLI does; a browser host registers it itself
+- register the pptx.gallery catalog of [`@openpresentation/gallery`](./packages/gallery) (a dependency, released with core at the same version) as the Node defaults, as the CLI does; a browser host registers it itself
 - export a typed raw spec file manifest for package-addressable `spec/` content
 - generate TypeScript types, with `Presentation` as the top-level type
 - validate OPF JSON and catalog records locally
 
-In Node (and Bun and Deno) its root also reads and writes files (`convert`, `open`, `save`) and draws them through the optional engines below; in a browser or a worker the same import is a browser-safe build with the same names, where those three reject with `node-only`. Every other entry runs in a browser. It does not generate content with AI, fetch remote catalogs, call hosted APIs, or provide managed services. Render/edit/convert packages live in separate MIT repos that depend on `@openpresentation/opf`. The format package also exposes pure composition geometry so those packages share layout behavior.
+In Node (and Bun and Deno) its root also reads and writes files (`convert`, `open`, `save`) and draws them through the optional engines below; in a browser or a worker the same import is a browser-safe build with the same names, where those three reject with `node-only`. Every other entry runs in a browser. It does not generate content with AI, fetch remote catalogs, call hosted APIs, or provide managed services. Render/edit/convert packages live in this repository as separate MIT packages that depend on `@openpresentation/opf`. The format package also exposes pure composition geometry so those packages share layout behavior.
 
 ## Toolkit libraries
 
-OPF is six packages. **Core** (`@openpresentation/opf`) is the format and its API: it reads and writes the text formats (JSON, YAML, Markdown) and validates, and in Node reads and writes files, through the same import. **The gallery** (`@openpresentation/gallery`) is the pptx.gallery catalog of layouts, themes, colour and font schemes and the other records, released on its own version line; core depends on it and registers it in Node. **The CLI** (`@openpresentation/cli`) is the `opf` command. **Render** (`opf-render`), **PPTX** (`opf-pptx`) and **the editor** (`opf-editor`) are the engines: drawing, PowerPoint and editing, installed as needed. The engines and the editor live in sibling repositories. See [ecosystem development](docs/ecosystem-development.md) for coordinated builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
+OPF is six packages. **Core** (`@openpresentation/opf`) is the format and its API: it reads and writes the text formats (JSON, YAML, Markdown) and validates, and in Node reads and writes files, through the same import. **The gallery** (`@openpresentation/gallery`) is the pptx.gallery catalog of layouts, themes, colour and font schemes and the other records, released with the other packages; core depends on it and registers it in Node. **The CLI** (`@openpresentation/cli`) is the `opf` command. **Render** (`opf-render`), **PPTX** (`opf-pptx`) and **the editor** (`opf-editor`) are the engines: drawing, PowerPoint and editing, installed as needed. All six live in this repository (`packages/`) and are released together at one version. See [ecosystem development](docs/ecosystem-development.md) for local builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
 
-| Repo | Role | Boundary |
+| Package | Role | Boundary |
 |---|---|---|
-| [`gallery`](https://github.com/OpenPresentation/gallery) (`@openpresentation/gallery`) | The pptx.gallery catalog | Catalog records only, no runtime dependency; minor releases add records, a changed or removed record is a major release |
-| `cli` (`@openpresentation/cli`, this repository) | `opf` command | Runs core's Node engine: reads and writes files and calls the engines below as optional peers |
-| `opf-render` | OPF to SVG/PNG/PDF | Local and embeddable rendering library |
-| `opf-editor` | WYSIWYG bindings/components | Headless editor primitives plus optional UI components |
-| `opf-pptx` | OPF to PPTX and PPTX to OPF | Pure local import/export library for browser and server use where supported |
+| [`packages/javascript`](./packages/javascript) (`@openpresentation/opf`) | Core: format, schemas, validation, composition | The format and its API; reads and writes files in Node and draws through the optional engines |
+| [`packages/gallery`](./packages/gallery) (`@openpresentation/gallery`) | The pptx.gallery catalog | Catalog records only, no runtime dependency; records are authored by pull request here, and a changed drawing or a removed record needs a minor release |
+| [`packages/cli`](./packages/cli) (`@openpresentation/cli`) | `opf` command | Runs core's Node engine: reads and writes files and calls the engines below as optional peers |
+| [`packages/render`](./packages/render) (`@openpresentation/opf-render`) | OPF to SVG/PNG/PDF | Local and embeddable rendering library |
+| [`packages/editor`](./packages/editor) (`@openpresentation/opf-editor`) | WYSIWYG bindings/components | Headless editor primitives plus optional UI components |
+| [`packages/pptx`](./packages/pptx) (`@openpresentation/opf-pptx`) | OPF to PPTX and PPTX to OPF | Pure local import/export library for browser and server use where supported |
 
-These repos provide OSS primitives only. Downstream applications own hosting, auth, storage, collaboration, queues, previews, analytics, support, and workflow UX.
+These packages provide OSS primitives only. Downstream applications own hosting, auth, storage, collaboration, queues, previews, analytics, support, and workflow UX.
 
 ## Usage
 
@@ -83,7 +86,7 @@ pnpm add @openpresentation/opf
 # or: npm install @openpresentation/opf
 ```
 
-To work on the package itself, clone this repo and build the workspace:
+To work on the packages, clone this repo and build the workspace (all six packages are in `packages/`; see [CONTRIBUTING](./CONTRIBUTING.md)):
 
 ```sh
 pnpm install
@@ -170,9 +173,9 @@ See [Templates and variables](./docs/templates-and-variables.md) for fillable OP
 | [`docs/footnotes-citations-captions.md`](./docs/footnotes-citations-captions.md) | Citations (`cite`), inline footnotes, the deck `references` list, captions on images, charts, tables and videos, and how every engine draws them. |
 | [`docs/examples.md`](./docs/examples.md) | Guide to the expanded scenario-oriented examples under `examples/gallery/`. |
 | [`docs/live-editor.md`](./docs/live-editor.md) | Browser canvas, live OPF editing, font loading, published packages, and current fidelity limits. |
-| [`docs/release-process.md`](./docs/release-process.md) | Maintainer runbook for tagging, trusted npm publishing, verification, and GitHub release notes. |
+| [`docs/release-process.md`](./docs/release-process.md) | Maintainer runbook for the one-click release: gate, tag, trusted npm publishing of all six packages, verification, GitHub release notes, and the site bumps. |
 | [`spec/schemas/*.schema.json`](./spec/schemas) | Companion schemas for catalog records and sub-objects. |
-| [`@openpresentation/gallery`](https://github.com/OpenPresentation/gallery) | The independently published default catalog and layout previews. |
+| [`packages/gallery`](./packages/gallery) (`@openpresentation/gallery`) | The default catalog and layout previews, released with the other packages. |
 | [`spec/openapi.yaml`](./spec/openapi.yaml) | Optional reference OpenAPI contract for downstream services that choose to expose OPF over HTTP. OpenPresentation does not host this API. |
 | [`examples/technical/`](./examples/technical) | Focused OPF fixtures for validator, renderer, catalog-resolution, design, content-payload, and region behavior. |
 | [`examples/gallery/`](./examples/gallery) | Broader OPF example decks organized by industry, function, education, government, presentation type, international, and design/media scenarios. |

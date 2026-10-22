@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/cli",
-  "version": "0.25.0",
+  "version": "0.26.0",
   "description": "The opf command for agents and scripts: create, validate, edit, convert (PDF, PPTX, PNG, SVG, YAML, Markdown), paginate, embed, fill, ingest and inspect presentation files. Applications use @openpresentation/opf.",
   "license": "MIT",
   "type": "module",
@@ -11,17 +11,18 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "pnpm --filter @openpresentation/opf build && (node ../../scripts/reuse-build.mjs check || (tsup && node ../../scripts/reuse-build.mjs stamp))",
-    "typecheck": "pnpm --filter @openpresentation/opf build && node ../../scripts/typecheck.mjs --noEmit",
+    "build:deps": "pnpm --filter \"@openpresentation/cli^...\" --fail-if-no-match run build",
+    "build": "node ../../scripts/reuse-build.mjs check || (tsup && node ../../scripts/reuse-build.mjs stamp)",
+    "typecheck": "pnpm run build:deps && node ../../scripts/typecheck.mjs --noEmit",
     "clean": "rm -rf dist",
-    "test": "pnpm build && node ../../scripts/run-tests.mjs",
+    "test": "pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs",
     "test:packed": "node test/packed.mjs",
     "test:packed:peers": "node test/packed-files.mjs",
-    "prepack": "pnpm build"
+    "prepack": "pnpm run build:deps && pnpm run build"
   },
   "dependencies": {
-    "@openpresentation/gallery": "^5.0.0",
-    "@openpresentation/opf": "^0.25.0"
+    "@openpresentation/gallery": "workspace:^",
+    "@openpresentation/opf": "workspace:^"
   },
   "devDependencies": {
     "@expo-google-fonts/arimo": "0.4.3",
@@ -32,8 +33,8 @@
     "@expo-google-fonts/roboto": "0.4.3",
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf-pptx": "0.25.0",
-    "@openpresentation/opf-render": "0.25.0",
+    "@openpresentation/opf-pptx": "workspace:*",
+    "@openpresentation/opf-render": "workspace:*",
     "@resvg/resvg-js": "2.6.2",
     "@types/node": "^24.13.4",
     "pdf-lib": "1.17.1",
@@ -47,8 +48,8 @@
     "LICENSE"
   ],
   "peerDependencies": {
-    "@openpresentation/opf-pptx": "^0.25.0",
-    "@openpresentation/opf-render": "^0.25.0"
+    "@openpresentation/opf-pptx": "workspace:^",
+    "@openpresentation/opf-render": "workspace:^"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-pptx": {

@@ -83,7 +83,7 @@ test('generation writes complete fresh receipts and never overwrites an attempt'
 test('furniture-layouts exports inherited carriers on distinct tagged layout variants',async()=>{
   const require=createRequire(process.env.OPF_NATIVE_FIXTURE_CONSUMER
     ?path.join(path.resolve(process.env.OPF_NATIVE_FIXTURE_CONSUMER),'package.json')
-    :new URL('../../packages/javascript/package.json',import.meta.url));
+    :new URL('../../package.json',import.meta.url));
   const {toPptx}=await import(pathToFileURL(require.resolve('@openpresentation/opf-pptx')).href);
   const peer=createRequire(require.resolve('@openpresentation/opf-pptx/package.json'));
   const corePeer=createRequire(peer.resolve('@openpresentation/opf/package.json'));

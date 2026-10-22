@@ -15,7 +15,7 @@ const snippets=await import(pathToFileURL(bundle));
 const load=async name=>JSON.parse(await readFile(path.join(root,`data/${name}.json`),'utf8'));
 let count=0;
 const renderFailures=[];
-const renderer=process.argv.includes("--render") ? await import("../../opf-render/dist/index.js") : null;
+const renderer=process.argv.includes("--render") ? await import("../packages/render/dist/index.js") : null;
 for(const [name,builder] of [
  ['layouts',item=>snippets.buildOpfSnippet('layouts',item.id)],
  ['color-schemes',item=>snippets.buildOpfSnippet('color-schemes',item.id??item.slug)],

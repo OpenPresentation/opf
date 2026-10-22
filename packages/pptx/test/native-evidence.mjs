@@ -3,13 +3,15 @@ import {readFile,readdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {lockEvidence} from './helpers/lock-evidence.mjs';
 export const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 export const json=async file=>JSON.parse((await readFile(file,'utf8')).replace(/^\uFEFF/,''));
 export async function fingerprint(tests,{editor=false}={}){
  const runtime={},root=fileURLToPath(new URL('../',import.meta.url));
- for(const file of [...tests,'test/native-evidence.mjs','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js','package-lock.json'])runtime[file]=sha(await readFile(path.join(root,file)));
+ for(const file of [...tests,'test/native-evidence.mjs','test/native-process.ps1','vendor/pptxgenjs/pptxgen.es.js'])runtime[file]=sha(await readFile(path.join(root,file)));
+ {const [lockKey,lockHash]=lockEvidence(root);runtime[lockKey]=lockHash;}
  for(const name of ['@openpresentation/opf','@openpresentation/opf-render','@openpresentation/opf-pptx',...(editor?['@openpresentation/opf-editor']:[])]){
-  const directory=name.endsWith('/opf-editor')?path.resolve(root,'../opf-editor'):path.dirname(fileURLToPath(import.meta.resolve(name+'/package.json')));
+  const directory=name.endsWith('/opf-editor')?path.resolve(root,'../editor'):path.dirname(fileURLToPath(import.meta.resolve(name+'/package.json')));
   runtime[name+'/package.json']=sha(await readFile(path.join(directory,'package.json')));
   const dist=path.join(directory,'dist'),seen=new Set();
   const visit=async file=>{

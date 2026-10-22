@@ -80,7 +80,8 @@ export {DEFAULT_SIGNAL_LIMITS, SIGNALS_VERSION, isMonospaceFamily} from './impor
 export const packageName = "@openpresentation/opf-pptx";
 
 export const releaseLane = Object.freeze({
-  githubRepository: "OpenPresentation/opf-pptx",
+  githubRepository: "OpenPresentation/opf",
+  directory: "packages/pptx",
   npmPackage: "@openpresentation/opf-pptx",
   compatibilityPackage: "@openpresentation/opf",
   rendererPackage: "@openpresentation/opf-render"

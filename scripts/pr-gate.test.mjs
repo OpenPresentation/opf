@@ -1,1072 +1,281 @@
+// MR-34: scripts/pr-gate.mjs against a fake GraphQL endpoint and a fake clock. Nothing here touches GitHub.
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
 import test from 'node:test';
-import { fileURLToPath } from 'node:url';
-import { buildPollQuery, EXIT, evaluateChecks, normalizeContexts, parseArgs, runGate, suiteContexts, summarizeRules, resumeCommand, UsageError } from './pr-gate.mjs';
-import { measurementClassifier } from './measurement-policy.mjs';
-import { selectChecks } from './run-checks.mjs';
+import { DEFAULTS, ENABLE_AUTO_MERGE, EXIT, MERGE, UsageError, buildPollQuery, describeChecks, evaluateChecks, latestPerName, main, normalizeContexts, parseArgs, parseTarget, resumeCommand, runGate } from './pr-gate.mjs';
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const HEAD = 'a'.repeat(40);
-const NEW = 'c'.repeat(40);
-const OLD = 'b'.repeat(40);
-const T0 = Date.parse('2026-10-07T12:00:00Z');
-const RULES = [
-  { type: 'required_status_checks', parameters: { required_status_checks: [{ context: 'packages', integration_id: 15368 }, { context: 'Verify OPF packages', integration_id: 15368 }] } },
-  { type: 'merge_queue', parameters: { merge_method: 'SQUASH' } },
-];
-const NO_QUEUE_RULES = [RULES[0]];
-const notFound = Object.assign(new Error('HTTP 404'), { status: 404 });
+const OTHER = 'b'.repeat(40);
+const check = (name, conclusion = 'SUCCESS', extra = {}) => ({ __typename: 'CheckRun', name, status: conclusion ? 'COMPLETED' : 'IN_PROGRESS', conclusion, detailsUrl: `https://github.com/o/r/actions/runs/1/job/${name}`, startedAt: '2026-10-22T10:00:00Z', ...extra });
+const status = (context, state) => ({ __typename: 'StatusContext', context, state, targetUrl: '', createdAt: '2026-10-22T10:00:00Z' });
 
-let nextId = 1;
-function run(name, conclusion = 'SUCCESS', { status = 'COMPLETED', oid = HEAD, app = 15368, runId = 900, at = '2026-10-07T11:00:00Z', id = nextId++, workflow = 'CI', attempt = 1 } = {}) {
-  return {
-    __typename: 'CheckRun',
-    databaseId: id,
-    name,
-    status,
-    conclusion: status === 'COMPLETED' ? conclusion : null,
-    detailsUrl: `https://github.com/o/r/actions/runs/${runId}/job/${id}`,
-    startedAt: at,
-    checkSuite: { commit: { oid }, app: { slug: 'github-actions', databaseId: app }, workflowRun: { databaseId: runId, event: 'pull_request', runAttempt: attempt, workflow: { name: workflow } } },
-  };
-}
-const pending = (name, options = {}) => run(name, null, { status: 'IN_PROGRESS', ...options });
-function status(context, state, { oid = HEAD } = {}) {
-  return { __typename: 'StatusContext', context, state, targetUrl: `https://ci.example/${context}`, createdAt: '2026-10-07T11:00:00Z', commit: { oid } };
-}
-const GREEN = () => [run('packages'), run('Verify OPF packages')];
+/** One polled pull request, as GraphQL answers it. */
+const pr = ({ state = 'OPEN', merged = false, mergeable = 'MERGEABLE', head = HEAD, rollupOf = head, contexts = [check('verify')], autoMerge = false, id = 'PR_1' } = {}) => ({
+  repository: { pullRequest: { id, state, merged, isDraft: false, mergeable, headRefOid: head, autoMergeRequest: autoMerge ? { enabledAt: 'x' } : null, commits: { nodes: [{ commit: { oid: rollupOf, statusCheckRollup: { contexts: { pageInfo: { hasNextPage: false }, nodes: contexts } } } }] } } },
+});
+const commitData = (contexts, oid = HEAD) => ({ repository: { object: { oid, statusCheckRollup: { contexts: { pageInfo: { hasNextPage: false }, nodes: contexts } } } } });
 
-function pr({ head = HEAD, contexts = [], mergeable = 'MERGEABLE', mss = 'CLEAN', state = 'OPEN', merged = false, inQueue = false, removedAt = null, removalReason = 'MERGE_GROUP_FAILED', draft = false, suites = [], commitOid = head, mergeCommit = null, more = null }) {
-  return {
-    id: 'PR_1',
-    number: 7,
-    state,
-    merged,
-    isDraft: draft,
-    mergeCommit: mergeCommit ? { oid: mergeCommit } : null,
-    headRefOid: head,
-    baseRefName: 'main',
-    mergeable,
-    mergeStateStatus: mss,
-    isInMergeQueue: inQueue,
-    mergeQueueEntry: inQueue ? { state: 'AWAITING_CHECKS', position: 1 } : null,
-    timelineItems: { nodes: removedAt ? [{ reason: removalReason, createdAt: new Date(removedAt).toISOString() }] : [] },
-    commits: { nodes: [{ commit: { oid: commitOid, statusCheckRollup: { state: 'X', contexts: { totalCount: contexts.length + (more ? 1 : 0), pageInfo: { hasNextPage: Boolean(more), endCursor: more ? 'c1' : null }, nodes: contexts } }, checkSuites: { nodes: suites } } }] },
-  };
-}
-function poll(nodes, { remaining = 4000, resetAt = '2026-10-07T13:00:00Z', queue = true } = {}) {
-  const list = Array.isArray(nodes) ? nodes : [nodes];
-  const repo = { defaultBranchRef: { name: 'main' }, mq0: queue ? { id: 'MQ' } : null };
-  list.forEach((node, index) => {
-    repo[`t${index}`] = node;
-  });
-  return { data: { rateLimit: { remaining, resetAt, cost: 1 }, r0: repo } };
-}
-
-/** Fake gh: polls are served in order (the last one repeats); mutations in order; rules for every rules/branches read. */
-function fake({ polls, mutations = [], rules = RULES, more = null }) {
-  let now = T0;
-  const state = { lines: [], sleeps: [], queries: [], mutations: [], rest: [] };
+/** A fake world: `polls` is a list of answers (one per poll, each an array of per-target data, the last one repeats); mutations are scripted by name. */
+function world({ polls, mutations = {}, interval = 90, timeoutMinutes = 100, merge = false, required = 'verify', expectHeads = [], targets, commit = false } = {}) {
+  const log = [];
+  const calls = { queries: 0, mutations: [], sleeps: [] };
+  let time = 0;
   const deps = {
-    async graphql(query, variables) {
+    now: () => time,
+    sleep: async (ms) => {
+      calls.sleeps.push(ms);
+      time += ms;
+    },
+    log: (text) => log.push(text),
+    graphql: async (query, variables) => {
       if (query.startsWith('mutation')) {
-        state.mutations.push({ query, variables });
-        const next = mutations.shift();
-        if (!next) throw new Error('unexpected mutation');
-        return next;
+        const name = query.includes('enablePullRequestAutoMerge') ? 'enable' : 'merge';
+        calls.mutations.push({ name, variables });
+        const handler = mutations[name];
+        if (!handler) throw new Error(`unexpected ${name}`);
+        return handler(variables, calls.mutations.filter((entry) => entry.name === name).length);
       }
-      if (query.includes('status{contexts')) {
-        const targets = Object.values(state.lastPoll?.data ?? {}).flatMap(repo => repo && typeof repo === 'object' ? Object.values(repo) : []);
-        const commit = targets.map(target => target?.commits?.nodes?.[0]?.commit ?? target).find(target => target?.oid && query.includes(`oid:${JSON.stringify(target.oid)}`));
-        const nodes = commit?.statusCheckRollup?.contexts?.nodes ?? [];
-        return suitePage([fallbackSuite('FAKE',nodes.filter(node => (node.checkSuite?.commit?.oid ?? node.commit?.oid) === commit?.oid))],false,commit?.oid ?? HEAD);
-      }
-      if (query.includes('after:')) return more;
-      state.queries.push(query);
-      const next = polls.length > 1 ? polls.shift() : polls[0];
-      const result = typeof next === 'function' ? next(now) : next;
-      // Older fixture literals omit the queried totalCount; materialize the actual complete-page contract.
-      for (const repo of Object.values(result?.data ?? {})) for (const target of Object.values(repo && typeof repo === 'object' ? repo : {})) {
-        const commit = target?.commits?.nodes?.[0]?.commit ?? target;
-        const contexts = commit?.statusCheckRollup?.contexts;
-        if (contexts && contexts.totalCount === undefined) contexts.totalCount = contexts.nodes.length;
-      }
-      state.lastPoll = result;
-      return result;
+      const answer = polls[Math.min(calls.queries, polls.length - 1)];
+      calls.queries += 1;
+      // The gate asks only for the targets it has not decided: an answer is positional (all targets open) or keyed by label.
+      const asked = [...query.matchAll(/t(\d+): repository\(owner: "([^"]+)", name: "([^"]+)"\) \{ (?:pullRequest\(number: (\d+)\)|object\(expression: "([0-9a-f]+)"\))/g)].map((match) => (match[4] ? `${match[2]}/${match[3]}#${match[4]}` : `${match[2]}/${match[3]}@${match[5]}`));
+      return { ...Object.fromEntries(asked.map((label, index) => [`t${index}`, Array.isArray(answer) ? answer[index] : answer[label]])), rateLimit: { remaining: 4000, resetAt: '2026-10-22T11:00:00Z' } };
     },
-    async rest(url, init = {}) {
-      state.rest.push(`${init.method ?? 'GET'} ${url}`);
-      if (url.includes('/rules/branches/')) {
-        if (rules instanceof Error) throw rules;
-        return rules;
-      }
-      return {};
-    },
-    async sleep(ms) {
-      state.sleeps.push(ms);
-      now += ms;
-    },
-    now: () => now,
-    log: (line) => state.lines.push(line),
   };
-  return { deps, state };
+  const parsed = targets ?? [parseTarget('o/r#7')];
+  const options = { targets: parsed, merge, expectHeads, required, interval, timeoutMinutes, json: false, commit };
+  return { deps, options, log, calls };
 }
-const gate = (argv, deps) => runGate(parseArgs(argv), deps);
-const has = (lines, pattern) => lines.some((line) => pattern.test(line));
+const run = (setup) => runGate(setup.options, setup.deps);
 
-// -- evaluation ---------------------------------------------------------------------------------------------------
-
-test('zero checks is never green, with or without a ruleset', async () => {
-  const required = summarizeRules(RULES).required;
-  assert.equal(evaluateChecks({ checks: [], required }).state, 'pending');
-  assert.equal(evaluateChecks({ checks: [], required: null }).state, 'pending');
-  const { deps, state } = fake({ polls: [poll(pr({ contexts: [] }))], rules: notFound });
-  const result = await gate(['o/r#7', '--timeout-minutes', '7'], deps);
-  assert.equal(result.code, EXIT.timeout);
-  assert.ok(has(state.lines, /no checks reported/));
+test('arguments: targets, flags, one head per target, and what the shrunk gate no longer accepts', () => {
+  assert.deepEqual(parseTarget('OpenPresentation/opf#803'), { kind: 'pr', owner: 'OpenPresentation', name: 'opf', number: 803 });
+  assert.deepEqual(parseTarget('https://github.com/o/r/pull/9/'), { kind: 'pr', owner: 'o', name: 'r', number: 9 });
+  assert.deepEqual(parseTarget('o/r@ABCDEF1234', { commit: true }), { kind: 'commit', owner: 'o', name: 'r', sha: 'abcdef1234' });
+  assert.throws(() => parseTarget('o/r'), UsageError);
+  const options = parseArgs(['o/r#1', 'o/r#2', '--merge', '--expect-head', HEAD, '--expect-head', OTHER.toUpperCase(), '--interval', '10', '--required', 'verify,lint']);
+  assert.equal(options.merge, true);
+  assert.deepEqual(options.expectHeads, [HEAD, OTHER]);
+  assert.equal(options.interval, DEFAULTS.minInterval, 'the interval never goes below the minimum');
+  assert.equal(options.required, 'verify,lint');
+  assert.equal(parseArgs(['o/r#1']).required, 'verify');
+  for (const bad of [[], ['o/r#1', '--expect-head'], ['o/r#1', 'o/r#2', '--expect-head', HEAD], ['--commit', 'o/r@abcdef1', '--merge'], ['o/r#1', '--timeout-minutes', '0'], ['o/r#1', '--bogus']]) assert.throws(() => parseArgs(bad), UsageError, bad.join(' '));
+  for (const gone of ['--rerun-once', '--rerun-scope', '--no-skipped']) assert.throws(() => parseArgs(['o/r#1', gone]), /unknown option/, gone);
 });
 
-test('a failing check that is not required does not block; a failing required check is red with its URL', async () => {
-  const ok = fake({ polls: [poll(pr({ contexts: [...GREEN(), run('lint', 'FAILURE'), run('Cursor Bugbot', 'FAILURE')] }))] });
-  const green = await gate(['o/r#7'], ok.deps);
-  assert.equal(green.code, EXIT.ok);
-  assert.ok(has(ok.state.lines, /^.{8} GREEN o\/r#7 a{40}/));
-
-  const bad = fake({ polls: [poll(pr({ contexts: [run('packages', 'FAILURE', { runId: 42 }), run('Verify OPF packages')] }))] });
-  const red = await gate(['o/r#7'], bad.deps);
-  assert.equal(red.code, EXIT.red);
-  assert.equal(bad.state.queries.length, 1, 'red stops at once, no further polls');
-  assert.ok(has(bad.state.lines, /RED o\/r#7/));
-  assert.ok(has(bad.state.lines, /packages \(FAILURE\) https:\/\/github\.com\/o\/r\/actions\/runs\/42\//));
+test('checks: only the newest report of a name counts; a required check that is missing, pending or skipped is not green', () => {
+  const nodes = [check('verify', 'FAILURE', { startedAt: '2026-10-22T10:00:00Z' }), check('verify', 'SUCCESS', { startedAt: '2026-10-22T10:30:00Z' }), status('legacy/ci', 'SUCCESS')];
+  const checks = normalizeContexts(nodes);
+  assert.deepEqual(latestPerName(checks).map((entry) => [entry.name, entry.state]), [['verify', 'SUCCESS'], ['legacy/ci', 'SUCCESS']]);
+  assert.equal(evaluateChecks({ checks, required: ['verify'] }).state, 'green');
+  // a newer failure replaces an older success
+  assert.equal(evaluateChecks({ checks: normalizeContexts([check('verify', 'SUCCESS'), check('verify', 'FAILURE', { startedAt: '2026-10-22T11:00:00Z' })]), required: ['verify'] }).state, 'red');
+  assert.equal(evaluateChecks({ checks: [], required: ['verify'] }).state, 'pending', 'not registered yet');
+  assert.equal(evaluateChecks({ checks: normalizeContexts([check('lint')]), required: ['verify'] }).state, 'pending', 'another check is not verify');
+  assert.equal(evaluateChecks({ checks: normalizeContexts([check('verify', null)]), required: ['verify'] }).state, 'pending');
+  assert.equal(evaluateChecks({ checks: normalizeContexts([check('verify', 'SKIPPED')]), required: ['verify'] }).state, 'red', 'a skipped verify is not green');
+  for (const conclusion of ['FAILURE', 'CANCELLED', 'TIMED_OUT', 'STARTUP_FAILURE', 'ACTION_REQUIRED']) assert.equal(evaluateChecks({ checks: normalizeContexts([check('verify', conclusion)]), required: ['verify'] }).state, 'red', conclusion);
+  const all = normalizeContexts([check('verify'), check('nightly-leg', 'SKIPPED'), check('Cursor Bugbot', 'FAILURE'), status('ci/legacy', 'PENDING')]);
+  assert.equal(evaluateChecks({ checks: all, required: 'all' }).state, 'pending', 'every check counts in all mode');
+  assert.equal(evaluateChecks({ checks: all.filter((entry) => entry.name !== 'ci/legacy'), required: 'all' }).state, 'green', 'skipped and neutral bots do not block all mode');
+  assert.equal(evaluateChecks({ checks: [], required: 'all' }).state, 'pending', 'zero checks is never green');
+  assert.match(describeChecks(evaluateChecks({ checks: normalizeContexts([check('verify', 'FAILURE')]), required: ['verify'] }).failing), /verify: FAILURE https:\/\/github\.com\/o\/r\/actions/);
 });
 
-test('every red conclusion of a required check is red; cancelled and timed out included', () => {
-  const required = summarizeRules(RULES).required;
-  for (const conclusion of ['FAILURE', 'CANCELLED', 'TIMED_OUT', 'STARTUP_FAILURE', 'ACTION_REQUIRED']) {
-    assert.equal(evaluateChecks({ checks: normalizeContexts([run('packages', conclusion), run('Verify OPF packages')], HEAD), required }).state, 'red', conclusion);
-  }
-  const skipped = normalizeContexts([run('packages', 'SKIPPED'), run('Verify OPF packages', 'NEUTRAL')], HEAD);
-  assert.equal(evaluateChecks({ checks: skipped, required }).state, 'green');
-  assert.equal(evaluateChecks({ checks: skipped, required, allowSkipped: false }).state, 'red');
+test('one batched query names every target and the rate limit', () => {
+  const query = buildPollQuery([parseTarget('o/r#7'), parseTarget('o/s@abcdef1234', { commit: true })]);
+  assert.match(query, /t0: repository\(owner: "o", name: "r"\) \{ pullRequest\(number: 7\)/);
+  assert.match(query, /t1: repository\(owner: "o", name: "s"\) \{ object\(expression: "abcdef1234"\)/);
+  assert.match(query, /statusCheckRollup/);
+  assert.match(query, /rateLimit \{ remaining resetAt \}/);
+  assert.equal((query.match(/^query/gm) ?? []).length, 1);
 });
 
-test('a required check that has not registered yet is pending, not green', async () => {
-  const { deps, state } = fake({ polls: [poll(pr({ contexts: [run('packages')] })), poll(pr({ contexts: GREEN() }))] });
-  const result = await gate(['o/r#7'], deps);
-  assert.equal(result.code, EXIT.ok);
-  assert.equal(state.queries.length, 2);
-  assert.ok(has(state.lines, /not reported yet: Verify OPF packages/));
-});
-
-test('a required check from another app does not satisfy the ruleset', () => {
-  const required = summarizeRules(RULES).required;
-  const checks = normalizeContexts([run('packages', 'SUCCESS', { app: 999 }), run('Verify OPF packages')], HEAD);
-  assert.deepEqual(evaluateChecks({ checks, required }).missing, ['packages']);
-});
-
-test('mergeable UNKNOWN is pending until GitHub has computed it', async () => {
-  const { deps, state } = fake({ polls: [poll(pr({ contexts: GREEN(), mergeable: 'UNKNOWN', mss: 'UNKNOWN' })), poll(pr({ contexts: GREEN() }))] });
-  const result = await gate(['o/r#7'], deps);
-  assert.equal(result.code, EXIT.ok);
-  assert.equal(state.queries.length, 2);
-  assert.ok(has(state.lines, /mergeability not computed yet/));
-});
-
-test('a merge conflict (DIRTY) exits 2 and a closed PR exits 3', async () => {
-  const dirty = fake({ polls: [poll(pr({ contexts: GREEN(), mergeable: 'CONFLICTING', mss: 'DIRTY' }))] });
-  assert.equal((await gate(['o/r#7', '--merge'], dirty.deps)).code, EXIT.dirty);
-  assert.ok(has(dirty.state.lines, /DIRTY o\/r#7/));
-  const closed = fake({ polls: [poll(pr({ state: 'CLOSED' }))] });
-  assert.equal((await gate(['o/r#7'], closed.deps)).code, EXIT.closed);
-});
-
-test('checks reported for an older head are ignored', async () => {
-  const contexts = [run('packages', 'FAILURE', { oid: OLD }), run('Verify OPF packages')];
-  const stale = normalizeContexts(contexts, HEAD);
-  assert.deepEqual(stale.map((check) => check.name), ['Verify OPF packages']);
-  const { deps, state } = fake({ polls: [poll(pr({ contexts })), poll(pr({ contexts: GREEN() }))] });
-  assert.equal((await gate(['o/r#7'], deps)).code, EXIT.ok, 'the old red run does not make the new head red');
-  assert.ok(has(state.lines, /not reported yet: packages/));
-  // A rollup that still belongs to the previous commit counts as no checks at all.
-  const lag = fake({ polls: [poll(pr({ contexts: GREEN(), commitOid: OLD })), poll(pr({ contexts: GREEN() }))] });
-  assert.equal((await gate(['o/r#7'], lag.deps)).code, EXIT.ok);
-  assert.ok(has(lag.state.lines, /rollup is for an older commit/));
-});
-
-test('a new head resets the evaluation without --expect-head and exits 4 with it', async () => {
-  const polls = () => [poll(pr({ contexts: [run('packages'), pending('Verify OPF packages')] })), poll(pr({ head: NEW, contexts: [run('packages', 'SUCCESS', { oid: NEW }), run('Verify OPF packages', 'SUCCESS', { oid: NEW })] }))];
-  const free = fake({ polls: polls() });
-  const result = await gate(['o/r#7'], free.deps);
-  assert.equal(result.code, EXIT.ok);
-  assert.equal(result.results[0].head, NEW);
-  assert.ok(has(free.state.lines, /head moved aaaaaaaa -> cccccccc; evaluating the new head/));
-
-  const pinned = fake({ polls: polls() });
-  assert.equal((await gate(['o/r#7', '--expect-head', HEAD], pinned.deps)).code, EXIT.headMoved);
-  assert.ok(has(pinned.state.lines, /HEAD-MOVED o\/r#7: expected aaaaaaaaaaaa, the head is now cccccccccccc/));
-  const wrongFromStart = fake({ polls: [poll(pr({ contexts: GREEN() }))] });
-  assert.equal((await gate(['o/r#7', '--expect-head', NEW.slice(0, 7)], wrongFromStart.deps)).code, EXIT.headMoved);
-});
-
-test('StatusContext (commit statuses) counts as a check', async () => {
-  const rules = [{ type: 'required_status_checks', parameters: { required_status_checks: [{ context: 'packages' }, { context: 'ci/legacy' }] } }];
-  const required = summarizeRules(rules).required;
-  const at = (state) => evaluateChecks({ checks: normalizeContexts([run('packages'), status('ci/legacy', state)], HEAD), required }).state;
-  assert.equal(at('PENDING'), 'pending');
-  assert.equal(at('EXPECTED'), 'pending');
-  assert.equal(at('ERROR'), 'red');
-  assert.equal(at('FAILURE'), 'red');
-  assert.equal(at('SUCCESS'), 'green');
-  assert.equal(evaluateChecks({ checks: normalizeContexts([run('packages'), status('ci/legacy', 'SUCCESS', { oid: OLD })], HEAD), required }).state, 'pending');
-  const { deps } = fake({ polls: [poll(pr({ contexts: [run('packages'), status('ci/legacy', 'FAILURE')] }))], rules });
-  assert.equal((await gate(['o/r#7'], deps)).code, EXIT.red);
-});
-
-test('without a ruleset every check counts except neutral bots, Actions suites must be complete, and green is confirmed twice', async () => {
-  const suite = (status) => ({ status, conclusion: null, app: { slug: 'github-actions' }, workflowRun: { databaseId: 1, event: 'pull_request' } });
-  const idleApp = { status: 'QUEUED', conclusion: null, app: { slug: 'cursor' }, workflowRun: null };
-  const checks = normalizeContexts([run('build'), pending('Cursor Bugbot')], HEAD);
-  assert.equal(evaluateChecks({ checks, required: null, suites: [suite('IN_PROGRESS')] }).state, 'pending', 'a job behind needs: has no check run yet');
-  assert.equal(evaluateChecks({ checks, required: null, suites: [suite('COMPLETED'), idleApp] }).state, 'green');
-  const { deps, state } = fake({ polls: [poll(pr({ contexts: [run('build')], suites: [suite('COMPLETED')] }))], rules: notFound });
-  assert.equal((await gate(['o/r#7'], deps)).code, EXIT.ok);
-  assert.equal(state.queries.length, 2, 'green on two consecutive polls');
-  assert.ok(has(state.lines, /confirming at the next poll/));
-});
-
-// -- merging ------------------------------------------------------------------------------------------------------
-
-test('--merge enqueues with the expected head and retries while mergeability has not been computed', async () => {
-  const notYet = { data: { enqueuePullRequest: null }, errors: [{ message: 'Pull request mergeability check has not yet completed.' }] };
-  const { deps, state } = fake({
-    polls: [poll(pr({ contexts: GREEN() })), poll(pr({ contexts: GREEN(), inQueue: true })), poll(pr({ state: 'MERGED', merged: true, mergeCommit: 'd'.repeat(40) }))],
-    mutations: [notYet, notYet, { data: { enqueuePullRequest: { mergeQueueEntry: { state: 'QUEUED', position: 2 } } } }],
-  });
-  const result = await gate(['o/r#7', '--merge'], deps);
-  assert.equal(result.code, EXIT.ok);
-  assert.equal(state.mutations.length, 3);
-  assert.ok(state.mutations.every((call) => call.query.includes('enqueuePullRequest') && call.variables.head === HEAD && call.variables.id === 'PR_1'));
-  assert.deepEqual(state.sleeps.slice(0, 2), [60000, 60000]);
-  assert.ok(has(state.lines, /^.{8} MERGED o\/r#7 d{40} \(merged by the merge queue\)$/));
-  assert.equal(state.rest.length, 1, 'REST only for the ruleset, once');
-});
-
-test('the enqueue retry gives up after 6 minutes and exits 5', async () => {
-  const notYet = { data: { enqueuePullRequest: null }, errors: [{ message: 'Required status checks are expected.' }] };
-  const { deps, state } = fake({ polls: [poll(pr({ contexts: GREEN() }))], mutations: Array.from({ length: 20 }, () => notYet) });
-  assert.equal((await gate(['o/r#7', '--merge'], deps)).code, EXIT.ejected);
-  assert.equal(state.mutations.length, 7, 'the first try and 6 retries, a minute apart');
-  assert.ok(has(state.lines, /REFUSED o\/r#7: enqueue failed/));
-});
-
-test('an ejected PR that is still green is re-enqueued once; a second ejection exits 5', async () => {
-  const enqueued = { data: { enqueuePullRequest: { mergeQueueEntry: { state: 'QUEUED', position: 1 } } } };
-  const { deps, state } = fake({
-    polls: [
-      poll(pr({ contexts: GREEN() })),
-      poll(pr({ contexts: GREEN(), inQueue: true })),
-      (now) => poll(pr({ contexts: GREEN(), removedAt: now })),
-      poll(pr({ contexts: GREEN(), inQueue: true })),
-      (now) => poll(pr({ contexts: GREEN(), removedAt: now })),
-    ],
-    mutations: [enqueued, enqueued],
-  });
-  const result = await gate(['o/r#7', '--merge'], deps);
-  assert.equal(result.code, EXIT.ejected);
-  assert.equal(state.mutations.length, 2, 'one re-enqueue only');
-  assert.ok(has(state.lines, /ejected from the merge queue \(MERGE_GROUP_FAILED\); re-enqueueing once/));
-  assert.ok(has(state.lines, /EJECTED o\/r#7: removed from the merge queue twice \(MERGE_GROUP_FAILED\)/));
-});
-
-test('leaving the queue without a removal event is confirmed on a second poll (a merge in progress is not an ejection)', async () => {
-  const { deps, state } = fake({
-    polls: [poll(pr({ contexts: GREEN(), inQueue: true })), poll(pr({ contexts: GREEN() })), poll(pr({ state: 'MERGED', merged: true, mergeCommit: 'e'.repeat(40) }))],
-  });
-  assert.equal((await gate(['o/r#7', '--merge'], deps)).code, EXIT.ok);
-  assert.equal(state.mutations.length, 0, 'an already-queued PR is followed, not enqueued again');
-});
-
-test('a repository without a merge queue is squash-merged with the expected head', async () => {
-  const { deps, state } = fake({
-    polls: [poll(pr({ contexts: GREEN(), mss: 'UNSTABLE' }), { queue: false })],
-    rules: NO_QUEUE_RULES,
-    mutations: [{ data: { mergePullRequest: { pullRequest: { merged: true, mergeCommit: { oid: 'f'.repeat(40) } } } } }],
-  });
-  assert.equal((await gate(['o/r#7', '--merge'], deps)).code, EXIT.ok);
-  assert.match(state.mutations[0].query, /mergePullRequest\(input:\{pullRequestId:\$id,mergeMethod:SQUASH,expectedHeadOid:\$head\}/);
-  assert.ok(has(state.lines, /MERGED o\/r#7 f{40}/));
-});
-
-test('an already-merged PR exits 0 without REST calls or mutations', async () => {
-  const { deps, state } = fake({ polls: [poll(pr({ state: 'MERGED', merged: true, mergeCommit: 'd'.repeat(40) }))] });
-  const result = await gate(['o/r#7', '--merge'], deps);
-  assert.equal(result.code, EXIT.ok);
-  assert.equal(result.results[0].outcome, 'merged');
-  assert.equal(state.rest.length + state.mutations.length, 0);
-});
-
-test('a draft is green without --merge but is not merged', async () => {
-  const plain = fake({ polls: [poll(pr({ contexts: GREEN(), draft: true, mss: 'DRAFT' }))] });
-  assert.equal((await gate(['o/r#7'], plain.deps)).code, EXIT.ok);
-  const merging = fake({ polls: [poll(pr({ contexts: GREEN(), draft: true, mss: 'DRAFT' }))] });
-  assert.equal((await gate(['o/r#7', '--merge', '--timeout-minutes', '5'], merging.deps)).code, EXIT.timeout);
-  assert.equal(merging.state.mutations.length, 0);
-});
-
-// -- RR-67: queue merges, superseded runs, head lag -----------------------------------------------------------------
-
-const MERGE_SHA = 'd'.repeat(40);
-const enqueued = { data: { enqueuePullRequest: { mergeQueueEntry: { state: 'QUEUED', position: 1 } } } };
-
-test('RR-67: a PR the merge queue merged is MERGED (exit 0), also while its removal shows before the merged state', async () => {
-  const { deps, state } = fake({
-    polls: [
-      poll(pr({ contexts: GREEN(), inQueue: true })),
-      // The queue records a removal with the reason "merged" in the same second as the merge; the PR still reads as open.
-      (now) => poll(pr({ contexts: GREEN(), removedAt: now, removalReason: 'merged' })),
-      poll(pr({ state: 'MERGED', merged: true, mergeCommit: MERGE_SHA })),
-    ],
-  });
-  const result = await gate(['o/r#7', '--merge'], deps);
-  assert.equal(result.code, EXIT.ok);
-  assert.equal(result.results[0].outcome, 'merged');
-  assert.equal(result.results[0].via, 'merge-queue');
-  assert.equal(state.queries.length, 3);
-  assert.equal(state.mutations.length, 0);
-  assert.ok(has(state.lines, /the merge queue merged it/));
-  assert.ok(has(state.lines, /MERGED o\/r#7 d{40} \(merged by the merge queue\)/));
-  assert.ok(!has(state.lines, /EJECTED|ejected/));
-
-  // Merged state visible on the very first poll after the removal: no waiting at all.
-  const direct = fake({ polls: [poll(pr({ contexts: GREEN(), inQueue: true })), poll(pr({ state: 'MERGED', merged: true, mergeCommit: MERGE_SHA }))] });
-  assert.equal((await gate(['o/r#7', '--merge'], direct.deps)).code, EXIT.ok);
-});
-
-test('RR-67: a "merged" removal on a PR that never reads as merged is handled as an ejection after a bounded wait', async () => {
-  const { deps, state } = fake({
-    polls: [poll(pr({ contexts: GREEN(), inQueue: true })), (now) => poll(pr({ contexts: GREEN(), removedAt: now, removalReason: 'merged' }))],
-    mutations: [enqueued],
-  });
-  const result = await gate(['o/r#7', '--merge', '--timeout-minutes', '60'], deps);
-  assert.equal(result.code, EXIT.ejected);
-  assert.equal(state.mutations.length, 1, 'one re-enqueue only');
-  assert.ok(has(state.lines, /ejected from the merge queue \(the queue reported "merged" but the PR never read as merged\)/));
-  assert.equal(state.lines.filter((line) => /waiting for the merged state/.test(line)).length >= 2, true, 'it waited before giving up');
-});
-
-test('RR-67: a queue ejection for failed checks or by hand is still EJECTED', async () => {
-  for (const reason of ['failed_checks', 'manual']) {
-    const { deps, state } = fake({
-      polls: [
-        poll(pr({ contexts: GREEN(), inQueue: true })),
-        (now) => poll(pr({ contexts: GREEN(), removedAt: now, removalReason: reason })),
-        poll(pr({ contexts: GREEN(), inQueue: true })),
-        (now) => poll(pr({ contexts: GREEN(), removedAt: now, removalReason: reason })),
-      ],
-      mutations: [enqueued],
-    });
-    const result = await gate(['o/r#7', '--merge'], deps);
-    assert.equal(result.code, EXIT.ejected, reason);
-    assert.equal(result.results[0].outcome, 'ejected');
-    assert.equal(state.mutations.length, 1, 'one re-enqueue only');
-    assert.ok(has(state.lines, new RegExp(`EJECTED o/r#7: removed from the merge queue twice \\(${reason}\\)`)));
-    assert.ok(!has(state.lines, /merged by the merge queue/));
-  }
-});
-
-test('RR-67: a superseded failed run of the same job is ignored once a newer run of it went green', async () => {
-  const required = summarizeRules(RULES).required;
-  // A re-run (same workflow run, attempt 2: a new check run with a higher id) and a newer workflow run.
-  const rerun = normalizeContexts([run('packages', 'FAILURE', { runId: 900, id: 10, attempt: 1 }), run('packages', 'SUCCESS', { runId: 900, id: 11, attempt: 2, at: '2026-10-07T11:05:00Z' }), run('Verify OPF packages', 'SUCCESS', { id: 12 })], HEAD);
-  assert.equal(evaluateChecks({ checks: rerun, required }).state, 'green');
-  const newer = normalizeContexts([run('packages', 'FAILURE', { runId: 900, id: 10 }), run('packages', 'SUCCESS', { runId: 905, id: 20, at: '2026-10-07T11:30:00Z' }), run('Verify OPF packages', 'SUCCESS', { runId: 905, id: 21 })], HEAD);
-  assert.equal(evaluateChecks({ checks: newer, required }).state, 'green');
-  // A run cancelled before it started has no start time; it must not read as the newest report.
-  const cancelled = normalizeContexts([run('packages', 'CANCELLED', { runId: 900, id: 10, at: null }), run('packages', 'SUCCESS', { runId: 905, id: 20 }), run('Verify OPF packages', 'SUCCESS', { runId: 905, id: 21 })], HEAD);
-  assert.equal(evaluateChecks({ checks: cancelled, required }).state, 'green');
-  // The same without a ruleset ("all checks" mode) and through the gate.
-  assert.equal(evaluateChecks({ checks: newer, required: null }).state, 'green');
-  const contexts = [run('packages', 'FAILURE', { runId: 900, id: 10 }), run('Verify OPF packages', 'FAILURE', { runId: 900, id: 11 }), run('packages', 'SUCCESS', { runId: 905, id: 20 }), run('Verify OPF packages', 'SUCCESS', { runId: 905, id: 21 })];
-  const { deps, state } = fake({ polls: [poll(pr({ contexts }))] });
-  const result = await gate(['o/r#7'], deps);
-  assert.equal(result.code, EXIT.ok);
-  assert.ok(has(state.lines, /GREEN o\/r#7/));
-  assert.ok(!has(state.lines, /RED/));
-});
-
-test('RR-67: a newer failed run after an older green run of the same job is RED', async () => {
-  const required = summarizeRules(RULES).required;
-  const checks = normalizeContexts([run('packages', 'SUCCESS', { runId: 900, id: 10 }), run('packages', 'FAILURE', { runId: 905, id: 20, at: '2026-10-07T11:30:00Z' }), run('Verify OPF packages', 'SUCCESS', { runId: 905, id: 21 })], HEAD);
-  const verdict = evaluateChecks({ checks, required });
-  assert.equal(verdict.state, 'red');
-  assert.deepEqual(verdict.failing.map((check) => check.name), ['packages']);
-  const { deps, state } = fake({ polls: [poll(pr({ contexts: [run('packages', 'SUCCESS', { runId: 900, id: 10 }), run('packages', 'FAILURE', { runId: 905, id: 20 }), run('Verify OPF packages')] }))] });
-  assert.equal((await gate(['o/r#7'], deps)).code, EXIT.red);
-  assert.ok(has(state.lines, /RED o\/r#7/));
-});
-
-test('RR-67: jobs with the same name in different workflows do not hide each other', () => {
-  const required = summarizeRules(RULES).required;
-  const checks = normalizeContexts([run('packages', 'FAILURE', { workflow: 'Other', runId: 910, id: 30 }), run('packages', 'SUCCESS', { workflow: 'CI', runId: 905, id: 20 }), run('Verify OPF packages', 'SUCCESS', { id: 21 })], HEAD);
-  assert.equal(evaluateChecks({ checks, required }).state, 'red');
-  assert.equal(evaluateChecks({ checks, required: null }).state, 'red');
-});
-
-const suite = (runId, status, conclusion = null, workflow = 'CI', attempt = 1) => ({ status, conclusion: status === 'COMPLETED' ? conclusion : null, app: { slug: 'github-actions' }, workflowRun: { databaseId: runId, event: 'pull_request', runAttempt: attempt, workflow: { name: workflow } } });
-
-test('#526: a cancelled check of a superseded run is ignored when a newer run of the same workflow exists', async () => {
-  const required = summarizeRules(RULES).required;
-  // Two suites of one workflow on one head: the first cancelled by concurrency, the second green.
-  const green = [run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('Verify OPF packages', 'CANCELLED', { runId: 900, id: 11 }), run('packages', 'SUCCESS', { runId: 905, id: 20 }), run('Verify OPF packages', 'SUCCESS', { runId: 905, id: 21 })];
-  const suites = [suite(900, 'COMPLETED', 'CANCELLED'), suite(905, 'COMPLETED', 'SUCCESS')];
-  assert.equal(evaluateChecks({ checks: normalizeContexts(green, HEAD), required, suites }).state, 'green');
-  assert.equal(evaluateChecks({ checks: normalizeContexts(green, HEAD), required: null, suites }).state, 'green');
-  const done = fake({ polls: [poll(pr({ contexts: green, suites }))] });
-  assert.equal((await gate(['o/r#7'], done.deps)).code, EXIT.ok);
-  assert.ok(!has(done.state.lines, /RED/));
-  // The second run is still running: its jobs are in progress (pending), or it has not created them yet (not reported).
-  const running = [run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('Verify OPF packages', 'CANCELLED', { runId: 900, id: 11 }), pending('packages', { runId: 905, id: 20 }), pending('Verify OPF packages', { runId: 905, id: 21 })];
-  const midway = evaluateChecks({ checks: normalizeContexts(running, HEAD), required, suites: [suites[0], suite(905, 'IN_PROGRESS')] });
-  assert.equal(midway.state, 'pending');
-  assert.deepEqual(midway.pending.sort(), ['Verify OPF packages', 'packages']);
-  const queued = [run('packages', 'SUCCESS', { runId: 905, id: 20 }), run('Verify OPF packages', 'CANCELLED', { runId: 900, id: 11 })];
-  const notYet = evaluateChecks({ checks: normalizeContexts([...queued, run('packages', 'CANCELLED', { runId: 900, id: 10 })], HEAD), required, suites: [suites[0], suite(905, 'IN_PROGRESS')] });
-  assert.equal(notYet.state, 'pending');
-  assert.deepEqual(notYet.missing, ['Verify OPF packages']);
-  const lagging = fake({ polls: [poll(pr({ contexts: [run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('Verify OPF packages', 'CANCELLED', { runId: 900, id: 11 })], suites: [suites[0], suite(905, 'QUEUED')] })), poll(pr({ contexts: green, suites }))] });
-  const outcome = await gate(['o/r#7'], lagging.deps);
+test('green: verify passed for the head and the pull request merges cleanly; no merge without --merge', async () => {
+  const setup = world({ polls: [[pr()]] });
+  const outcome = await run(setup);
   assert.equal(outcome.code, EXIT.ok);
-  assert.equal(lagging.state.queries.length, 2, 'pending, not red, while the newer run has not reported');
-  assert.ok(!has(lagging.state.lines, /RED/));
-  // Without a ruleset the in-progress suite of the newer run keeps the gate pending.
-  const open = evaluateChecks({ checks: normalizeContexts([run('measure (linux)', 'CANCELLED', { runId: 900, id: 10 })], HEAD), required: null, suites: [suites[0], suite(905, 'IN_PROGRESS')] });
-  assert.equal(open.state, 'pending');
+  assert.match(outcome.results[0].text, /^GREEN o\/r#7/);
+  assert.deepEqual(setup.calls.mutations, []);
+  assert.equal(setup.calls.queries, 1);
 });
 
-test('#526: a cancelled check that is the newest run, or has no newer run, still counts as not green', () => {
-  const required = summarizeRules(RULES).required;
-  const alone = normalizeContexts([run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('Verify OPF packages')], HEAD);
-  assert.equal(evaluateChecks({ checks: alone, required, suites: [suite(900, 'COMPLETED', 'CANCELLED')] }).state, 'red');
-  // Newest run cancelled, older run cancelled too: neither hides the other.
-  const both = normalizeContexts([run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('packages', 'CANCELLED', { runId: 905, id: 20 }), run('Verify OPF packages')], HEAD);
-  const verdict = evaluateChecks({ checks: both, required, suites: [suite(900, 'COMPLETED', 'CANCELLED'), suite(905, 'COMPLETED', 'CANCELLED')] });
-  assert.equal(verdict.state, 'red');
-  assert.deepEqual(verdict.failing.map((check) => check.runId), [905]);
-  // A newer run that was itself cancelled before creating any check run does not supersede the older cancellation.
-  const empty = evaluateChecks({ checks: normalizeContexts([run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('Verify OPF packages')], HEAD), required, suites: [suite(900, 'COMPLETED', 'CANCELLED'), suite(905, 'COMPLETED', 'CANCELLED')] });
-  assert.equal(empty.state, 'red');
-  // A newer run of a different workflow does not supersede it, and a real failure of an older run stays red.
-  const other = normalizeContexts([run('packages', 'CANCELLED', { runId: 900, id: 10 }), run('packages', 'SUCCESS', { runId: 950, id: 30, workflow: 'Other' }), run('Verify OPF packages')], HEAD);
-  assert.equal(evaluateChecks({ checks: other, required }).state, 'red');
-  const failed = normalizeContexts([run('packages', 'FAILURE', { runId: 900, id: 10 }), run('Verify OPF packages', 'SUCCESS', { runId: 905, id: 21 })], HEAD);
-  assert.equal(evaluateChecks({ checks: failed, required, suites: [suite(900, 'COMPLETED', 'FAILURE'), suite(905, 'IN_PROGRESS')] }).state, 'red');
+test('pending polls sleep the interval and then go green', async () => {
+  const setup = world({ polls: [[pr({ contexts: [check('verify', null)] })], [pr({ contexts: [check('verify', null)] })], [pr()]], interval: 120 });
+  const outcome = await run(setup);
+  assert.equal(outcome.code, EXIT.ok);
+  assert.deepEqual(setup.calls.sleeps, [120000, 120000]);
+  assert.equal(setup.calls.queries, 3);
 });
 
-test('RR-67: a lagging head with --expect-head is re-read and proceeds once GitHub serves the new head', async () => {
-  const fresh = (oid) => [run('packages', 'SUCCESS', { oid }), run('Verify OPF packages', 'SUCCESS', { oid })];
-  const { deps, state } = fake({ polls: [poll(pr({ head: OLD, contexts: fresh(OLD) })), poll(pr({ head: OLD, contexts: fresh(OLD) })), poll(pr({ head: NEW, contexts: fresh(NEW) }))] });
-  const result = await gate(['o/r#7', '--expect-head', NEW], deps);
-  assert.equal(result.code, EXIT.ok);
-  assert.equal(result.results[0].head, NEW);
-  assert.equal(state.queries.length, 3, 'the poll and two single-PR re-reads');
-  assert.deepEqual(state.sleeps, [15000, 15000]);
-  assert.ok(has(state.lines, /head is bbbbbbbbbbbb, expected cccccccccccc; re-reading in 15 s \(1\/3\)/));
-  assert.ok(!has(state.lines, /HEAD-MOVED/));
-  assert.match(state.queries[1], /^query\{rateLimit.*t0: pullRequest\(number:7\)/);
+test('red stops at once and names the failing check with its URL', async () => {
+  const setup = world({ polls: [[pr({ contexts: [check('lint'), check('verify', 'FAILURE')] })]] });
+  const outcome = await run(setup);
+  assert.equal(outcome.code, EXIT.red);
+  assert.match(outcome.results[0].text, /RED\n {2}verify: FAILURE https:\/\/github\.com\/o\/r\/actions\/runs\/1\/job\/verify/);
+  assert.equal(setup.calls.sleeps.length, 0);
 });
 
-test('RR-67: an expected head that never shows up exits 4 after three re-reads; a head that moves later exits 4 at once', async () => {
-  const lagging = fake({ polls: [poll(pr({ head: OLD, contexts: GREEN() }))] });
-  const result = await gate(['o/r#7', '--expect-head', NEW], lagging.deps);
-  assert.equal(result.code, EXIT.headMoved);
-  assert.equal(lagging.state.queries.length, 4, 'the poll and three re-reads, no more');
-  assert.deepEqual(lagging.state.sleeps, [15000, 15000, 15000]);
-  assert.ok(has(lagging.state.lines, /HEAD-MOVED o\/r#7: expected cccccccccccc, the head is now bbbbbbbbbbbb/));
-
-  // Once the expected head was seen, a different head is a real move: no retries.
-  const moved = fake({ polls: [poll(pr({ head: NEW, contexts: [run('packages', 'SUCCESS', { oid: NEW }), pending('Verify OPF packages', { oid: NEW })] })), poll(pr({ head: OLD, contexts: GREEN() }))] });
-  assert.equal((await gate(['o/r#7', '--expect-head', NEW], moved.deps)).code, EXIT.headMoved);
-  assert.equal(moved.state.queries.length, 2);
-  assert.ok(!moved.state.sleeps.includes(15000));
-
-  // A merged PR is reported as merged, not as a moved head, even if the head differs.
-  const merged = fake({ polls: [poll(pr({ head: OLD, state: 'MERGED', merged: true, mergeCommit: MERGE_SHA }))] });
-  assert.equal((await gate(['o/r#7', '--expect-head', NEW], merged.deps)).code, EXIT.ok);
-  assert.equal(merged.state.queries.length, 1);
+test('a conflicting, closed, already merged or unknown pull request has its own code', async () => {
+  assert.equal((await run(world({ polls: [[pr({ mergeable: 'CONFLICTING' })]] }))).code, EXIT.dirty);
+  assert.equal((await run(world({ polls: [[pr({ state: 'CLOSED' })]] }))).code, EXIT.closed);
+  const merged = await run(world({ polls: [[pr({ state: 'MERGED', merged: true })]] }));
+  assert.equal(merged.code, EXIT.ok);
+  assert.match(merged.results[0].text, /^MERGED o\/r#7/);
+  assert.equal((await run(world({ polls: [[{ repository: { pullRequest: null } }]] }))).code, EXIT.usage);
+  // mergeability not computed yet is waited out, not green
+  const unknown = world({ polls: [[pr({ mergeable: 'UNKNOWN' })], [pr()]] });
+  assert.equal((await run(unknown)).code, EXIT.ok);
+  assert.equal(unknown.calls.queries, 2);
 });
 
-// -- loop behaviour -----------------------------------------------------------------------------------------------
-
-test('timeout exits 75 with a RESUME line, polls once per interval and logs only changes', async () => {
-  const { deps, state } = fake({ polls: [poll(pr({ contexts: [run('packages'), pending('Verify OPF packages')] }))] });
-  const result = await gate(['o/r#7', '--merge', '--timeout-minutes', '10', '--rerun-once'], deps);
-  assert.equal(result.code, EXIT.timeout);
-  assert.ok(state.sleeps.every((ms) => ms <= 180000));
-  assert.equal(state.queries.length, 5, 'polls at 0, 3, 6, 9 and 10 minutes');
-  assert.equal(state.lines.filter((line) => /running: Verify OPF packages/.test(line)).length, 1, 'an unchanged state is printed once');
-  assert.equal(result.resume, 'node scripts/pr-gate.mjs o/r#7 --merge --timeout-minutes 10 --rerun-once');
-  assert.ok(has(state.lines, /RESUME: node scripts\/pr-gate\.mjs o\/r#7 --merge/));
+test('--expect-head: a lagging head is re-read a few times, a moved head exits 4 at once', async () => {
+  const lag = world({ polls: [[pr({ head: OTHER })], [pr({ head: OTHER })], [pr()]], expectHeads: [HEAD] });
+  assert.equal((await run(lag)).code, EXIT.ok, 'GitHub caught up on the third read');
+  assert.deepEqual(lag.calls.sleeps, [15000, 15000], 'a head that has not caught up is re-read after 15 s');
+  const never = world({ polls: [[pr({ head: OTHER })]], expectHeads: [HEAD] });
+  const stuck = await run(never);
+  assert.equal(stuck.code, EXIT.headMoved);
+  assert.equal(never.calls.queries, DEFAULTS.headLagRetries + 1);
+  const moved = world({ polls: [[pr({ contexts: [check('verify', null)] })], [pr({ head: OTHER })]], expectHeads: [HEAD] });
+  assert.equal((await run(moved)).code, EXIT.headMoved);
+  assert.equal(moved.calls.queries, 2, 'once the expected head was seen a change exits at once');
 });
 
-test('a heartbeat is printed every 15 minutes while nothing changes', async () => {
-  const { deps, state } = fake({ polls: [poll(pr({ contexts: [run('packages'), pending('Verify OPF packages')] }))] });
-  await gate(['o/r#7', '--timeout-minutes', '40'], deps);
-  assert.equal(state.lines.filter((line) => line.includes('heartbeat')).length, 2);
+test('the checks of the previous head are not the new head\'s: wait for the rollup to catch up', async () => {
+  const setup = world({ polls: [[pr({ head: OTHER, rollupOf: HEAD })], [pr({ head: OTHER, rollupOf: OTHER })]] });
+  assert.equal((await run(setup)).code, EXIT.ok);
+  assert.equal(setup.calls.queries, 2);
 });
 
-test('the GraphQL rate limit below 200 backs off until resetAt', async () => {
-  const resetAt = new Date(T0 + 20 * 60000).toISOString();
-  const { deps, state } = fake({ polls: [poll(pr({ contexts: [run('packages'), pending('Verify OPF packages')] }), { remaining: 150, resetAt }), poll(pr({ contexts: GREEN() }))] });
-  assert.equal((await gate(['o/r#7'], deps)).code, EXIT.ok);
-  assert.equal(state.sleeps[0], 20 * 60000 + 5000);
-  assert.equal(state.queries.length, 2, 'no extra poll during the back-off');
-  assert.ok(has(state.lines, /rate limit: 150 points left; backing off/));
-});
-
-test('--rerun-once re-runs failed and cancelled runs once, then a second red stops', async () => {
-  const redPoll = () => poll(pr({ contexts: [run('packages', 'FAILURE', { runId: 41 }), run('Verify OPF packages', 'CANCELLED', { runId: 42 })] }));
-  const { deps, state } = fake({
-    polls: [redPoll(), poll(pr({ contexts: [pending('packages', { runId: 41, at: null }), pending('Verify OPF packages', { runId: 42, at: null })] })), poll(pr({ contexts: [run('packages', 'FAILURE', { runId: 41, at: '2026-10-07T12:05:00Z' }), run('Verify OPF packages')] }))],
+test('--merge enables auto-merge for the expected head (squash) and follows the pull request until it is merged', async () => {
+  const setup = world({
+    polls: [[pr({ contexts: [check('verify', null)] })], [pr({ contexts: [check('verify')], autoMerge: true })], [pr({ state: 'MERGED', merged: true, contexts: [check('verify')] })]],
+    merge: true,
+    expectHeads: [HEAD],
+    mutations: { enable: () => ({ enablePullRequestAutoMerge: { pullRequest: { number: 7 } } }) },
   });
-  assert.equal((await gate(['o/r#7', '--rerun-once'], deps)).code, EXIT.red);
-  assert.deepEqual(state.rest.filter((call) => call.startsWith('POST')), ['POST repos/o/r/actions/runs/41/rerun-failed-jobs', 'POST repos/o/r/actions/runs/42/rerun']);
+  const outcome = await run(setup);
+  assert.equal(outcome.code, EXIT.ok);
+  assert.match(outcome.results[0].text, /^MERGED o\/r#7/);
+  assert.deepEqual(setup.calls.mutations, [{ name: 'enable', variables: { id: 'PR_1', head: HEAD } }]);
+  assert.ok(ENABLE_AUTO_MERGE.includes('mergeMethod: SQUASH') && ENABLE_AUTO_MERGE.includes('expectedHeadOid'));
+  assert.ok(MERGE.includes('mergeMethod: SQUASH') && MERGE.includes('expectedHeadOid'));
 });
 
-test('several PRs share one GraphQL query per poll and one ruleset read per repository', async () => {
-  const { deps, state } = fake({ polls: [poll([pr({ contexts: [run('packages')] }), pr({ contexts: GREEN() })]), poll([pr({ contexts: GREEN() })])] });
-  const result = await gate(['o/r#7', 'o/r#8'], deps);
-  assert.equal(result.code, EXIT.ok);
-  assert.equal(state.queries.length, 2);
-  assert.match(state.queries[0], /t0: pullRequest\(number:7\).*t1: pullRequest\(number:8\)/);
-  assert.doesNotMatch(state.queries[1], /number:8/, 'a finished PR is no longer polled');
-  assert.match(state.queries[1], /mq0: mergeQueue\(branch:"main"\)/);
-  assert.equal(state.rest.length, 1);
+test('--merge on a red pull request enables nothing', async () => {
+  const setup = world({ polls: [[pr({ contexts: [check('verify', 'FAILURE')] })]], merge: true });
+  assert.equal((await run(setup)).code, EXIT.red);
+  assert.deepEqual(setup.calls.mutations, []);
 });
 
-test('the first failure wins the exit code of a batch; an unknown PR exits 64', async () => {
-  const { deps } = fake({ polls: [poll([pr({ contexts: GREEN() }), pr({ contexts: GREEN(), mergeable: 'CONFLICTING', mss: 'DIRTY' })])] });
-  assert.equal((await gate(['o/r#7', 'o/r#8'], deps)).code, EXIT.dirty);
-  const missing = fake({ polls: [{ data: { rateLimit: { remaining: 4000 }, r0: { defaultBranchRef: { name: 'main' }, t0: null } }, errors: [{ path: ['r0', 't0'], message: 'Could not resolve to a PullRequest with the number of 99.' }] }] });
-  const result = await gate(['o/r#99'], missing.deps);
-  assert.equal(result.code, EXIT.usage);
-});
-
-test('a gh authentication failure stops at once instead of retrying until the timeout', async () => {
-  const { deps } = fake({ polls: [] });
-  deps.graphql = async () => {
-    throw new Error('To get started with GitHub CLI, please run:  gh auth login');
-  };
-  await assert.rejects(gate(['o/r#7'], deps), UsageError);
-});
-
-test('--commit waits for a commit and reads more than 100 contexts through GraphQL', async () => {
-  const commitPoll = (contexts, more) => ({ data: { rateLimit: { remaining: 4000 }, r0: { defaultBranchRef: { name: 'main' }, t0: pr({ contexts, more }).commits.nodes[0].commit } } });
-  const extra = { data: { repository: { object: { oid: HEAD, statusCheckRollup: { contexts: { totalCount: 2, pageInfo: { hasNextPage: false }, nodes: [run('Verify OPF packages')] } } } } } };
-  const { deps, state } = fake({ polls: [commitPoll([run('packages')], true)], more: extra });
-  const result = await gate(['--commit', `o/r@${HEAD}`], deps);
-  assert.equal(result.code, EXIT.ok);
-  assert.match(state.queries[0], /t0: object\(expression:"a{40}"\)/);
-  assert.ok(has(state.lines, /GREEN o\/r@aaaaaaaaaaaa/));
-});
-
-// -- arguments and wiring ---------------------------------------------------------------------------------------
-
-test('parseArgs validates targets and options', () => {
-  const options = parseArgs(['OpenPresentation/opf#445', 'https://github.com/OpenPresentation/opf-pptx/pull/12', '--interval', '10', '--required', 'a, b', '--json']);
-  assert.deepEqual(options.targets.map((target) => target.number), [445, 12]);
-  assert.equal(options.interval, 60, 'the interval is at least 60 s');
-  assert.deepEqual(options.required, ['a', 'b']);
-  assert.throws(() => parseArgs([]), UsageError);
-  assert.throws(() => parseArgs(['o/r#1', 'o/r#2', '--expect-head', HEAD]), /one --expect-head per pull request/);
-  assert.throws(() => parseArgs(['o/r#1', 'o/r#1']), /twice/);
-  assert.throws(() => parseArgs(['o/r']), UsageError);
-  assert.throws(() => parseArgs(['o/r#1', '--bogus']), /unknown option/);
-  assert.equal(parseArgs(['--commit', 'o/r@ABCDEF1']).targets[0].sha, 'abcdef1');
-});
-
-test('buildPollQuery is one query with rateLimit and escapes names', () => {
-  const query = buildPollQuery([{ alias: 'r0', owner: 'o', name: 'r', bases: ['main'], targets: [{ kind: 'pr', alias: 't0', number: 1 }, { kind: 'commit', alias: 't1', sha: 'abc1234' }] }]);
-  assert.match(query, /^query\{rateLimit\{remaining resetAt cost\} r0: repository\(owner:"o",name:"r"\)/);
-  assert.match(query, /statusCheckRollup\{state contexts\(first:100\)/);
-  assert.match(query, /isInMergeQueue/);
-  assert.match(query, /t1: object\(expression:"abc1234"\)/);
-});
-
-test('check:pr-gate is a root check that run-checks picks up', () => {
-  const scripts = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8')).scripts;
-  const config = JSON.parse(readFileSync(path.join(root, 'scripts', 'checks.json'), 'utf8'));
-  assert.match(scripts['check:pr-gate'], /pr-gate\.test\.mjs/);
-  assert.ok(selectChecks(scripts, config).includes('check:pr-gate'));
-});
-
-// Missing-rollup fallback retains actual individual jobs and the ordinary evaluator/confirmation path.
-const fallbackSuite = (id, runs, more = false) => ({id,commit:{oid:HEAD},app:{slug:'github-actions',databaseId:15368},status:'COMPLETED',conclusion:'SUCCESS',workflowRun:{databaseId:900,workflow:{name:'CI'}},checkRuns:{nodes:runs.map(r=>({...r,checkSuite:{...r.checkSuite,id}})),pageInfo:{hasNextPage:more,endCursor:more?'runs-next':null}}});
-const suitePage = (suites, more = false, oid = HEAD) => ({data:{repository:{object:{oid,status:{contexts:[]},checkSuites:{nodes:suites,pageInfo:{hasNextPage:more,endCursor:more?'suites-next':null}}}}}});
-test('absent rollup pages actual suites/jobs, preserves workflow identity and legacy statuses',async()=>{
- const responses=[suitePage([fallbackSuite('S1',[run('packages')],true)],true),{data:{node:{id:'S1',commit:{oid:HEAD},checkRuns:{nodes:[{...run('neutral','NEUTRAL'),checkSuite:{...run('neutral','NEUTRAL').checkSuite,id:'S1'}}],pageInfo:{hasNextPage:false}}}}},suitePage([fallbackSuite('S2',[run('Verify OPF packages'),run('same','FAILURE',{workflow:'Other'})])])];
- responses[0].data.repository.object.status.contexts=[{context:'legacy',state:'FAILURE'}];
- const queries=[];const result=await suiteContexts(async q=>{queries.push(q);return responses.shift();},'o','r',HEAD);
- assert.equal(queries.length,3);assert.match(queries[1],/node\(id:"S1"\)/);assert.match(queries[2],/after:"suites-next"/);
- const checks=normalizeContexts(result.nodes,HEAD);assert.equal(checks.length,5);
- assert.equal(evaluateChecks({checks,required:null,suites:result.suites}).state,'red');
- assert.equal(evaluateChecks({checks,required:RULES[0].parameters.required_status_checks.map(x=>({context:x.context,integrationId:x.integration_id}))}).state,'green');
- assert.equal(evaluateChecks({checks,required:[{context:'neutral'}],allowSkipped:false}).state,'red');
-});
-test('suite fallback rejects missing/foreign identities and never synthesizes a suite success',async()=>{
- await assert.rejects(suiteContexts(async()=>suitePage([],false,OLD),'o','r',HEAD),/different commit/);
- const foreign=fallbackSuite('S1',[run('packages','SUCCESS',{oid:OLD})]);foreign.checkRuns.nodes=[run('packages','SUCCESS',{oid:OLD})];
- await assert.rejects(suiteContexts(async()=>suitePage([foreign]),'o','r',HEAD),/check run belongs/);
- const failed=fallbackSuite('S1',[]);failed.conclusion='FAILURE';
- await assert.rejects(suiteContexts(async()=>suitePage([failed]),'o','r',HEAD),/failed check suite/);
- const empty=await suiteContexts(async()=>suitePage([fallbackSuite('S1',[])]),'o','r',HEAD);
- assert.equal(evaluateChecks({checks:normalizeContexts(empty.nodes,HEAD),required:null,suites:empty.suites}).state,'pending');
-});
-test('commit gate confirms missing-rollup actual jobs on a second poll',async()=>{
- const commit={oid:HEAD,statusCheckRollup:null,checkSuites:{nodes:[]}};
- const original=fake({polls:[{data:{rateLimit:{remaining:4000},r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});
- const graphql=original.deps.graphql;let fallbackCalls=0;
- original.deps.graphql=async(q,v)=>{if(q.includes('checkSuites(first:50')&&q.includes('status{contexts')){fallbackCalls++;return suitePage([fallbackSuite('S1',GREEN())]);}return graphql(q,v);};
- const result=await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps);
- assert.equal(result.code,EXIT.ok);assert.equal(fallbackCalls,2);assert.ok(has(original.state.lines,/confirming/));
-});
-
-test('fallback refuses partial GraphQL, missing pageInfo, repeated cursors and wrong run suite',async()=>{
- const partial=suitePage([]);partial.errors=[{message:'partial'}];await assert.rejects(suiteContexts(async()=>partial,'o','r',HEAD),/contains errors/);
- const truncated=suitePage([]);delete truncated.data.repository.object.checkSuites.pageInfo;await assert.rejects(suiteContexts(async()=>truncated,'o','r',HEAD),/incomplete/);
- let i=0;await assert.rejects(suiteContexts(async()=>suitePage([fallbackSuite('S'+i++,[])],true),'o','r',HEAD),/repeated check-suite cursor/);
- const wrong=fallbackSuite('S1',GREEN());wrong.checkRuns.nodes[0].checkSuite.id='OTHER';await assert.rejects(suiteContexts(async()=>suitePage([wrong]),'o','r',HEAD),/check run belongs/);
- const pages=[suitePage([fallbackSuite('S1',[],true)]),{data:{node:{id:'S1',commit:{oid:HEAD},checkRuns:{nodes:[],pageInfo:{hasNextPage:true,endCursor:'runs-next'}}}}}];await assert.rejects(suiteContexts(async()=>pages.shift(),'o','r',HEAD),/repeated check-run cursor/);
-});
-
-test('cancelled/null/unknown completed empty suites cannot disappear beside successful jobs',async()=>{
- for (const conclusion of ['CANCELLED',null,'UNRECOGNIZED']) {
-  const incomplete=fallbackSuite('S2',[]);incomplete.conclusion=conclusion;
-  await assert.rejects(suiteContexts(async()=>suitePage([fallbackSuite('S1',GREEN()),incomplete]),'o','r',HEAD),/failed check suite/);
- }
- const placeholder=fallbackSuite('PLACEHOLDER',[]);placeholder.status='QUEUED';placeholder.conclusion=null;placeholder.workflowRun=null;
- const actual=await suiteContexts(async()=>suitePage([placeholder,fallbackSuite('S1',GREEN())]),'o','r',HEAD);
- assert.equal(evaluateChecks({checks:normalizeContexts(actual.nodes,HEAD),required:null,suites:actual.suites}).state,'green');
-});
-
-
-const capturedEmptyCancellation = () => JSON.parse(readFileSync(path.join(root, 'scripts/fixtures/pr-gate-empty-cancelled-suite.json'), 'utf8')).response;
-const capturedSuites = response => response.data.repository.object.checkSuites;
-const capturedReplacement = response => capturedSuites(response).nodes.find(suite => suite.workflowRun.databaseId === 38668474028);
-const capturedEmpty = response => capturedSuites(response).nodes.find(suite => suite.workflowRun.databaseId === 38668473691);
-async function capturedFallback(response) {
- const oid=response.data.repository.object.oid;
- const result=await suiteContexts(async()=>structuredClone(response),'OpenPresentation','opf',oid);
- return {result,verdict:evaluateChecks({checks:normalizeContexts(result.nodes,oid),required:null,suites:result.suites})};
-}
-for(const reverse of [false,true])test(`captured empty cancellation is superseded by real newer jobs, independent of suite order (${reverse?'reversed':'captured'})`,async()=>{
- const response=capturedEmptyCancellation(),connection=capturedSuites(response);
- assert.equal(response.data.repository.object.oid,'32be29f9e05eaec527332a50a16381dd9c832899');
- assert.equal(capturedEmpty(response).checkRuns.nodes.length,0);
- assert.equal(capturedReplacement(response).checkRuns.nodes.length,2);
- if(reverse)connection.nodes.reverse();
- const {result,verdict}=await capturedFallback(response);
- assert.equal(result.suites.length,5);assert.equal(result.nodes.length,6,'only original actual job reports returned');
- assert.equal(verdict.state,'pending');assert.equal(verdict.failing.length,0);
- assert.deepEqual(verdict.pending.sort(),['Node 22 (engines range)','Node 26 (engines range)']);
-});
-test('captured empty cancellation allows actual replacement success and preserves actual replacement failure',async()=>{
- for(const failure of [false,true]){
-  const response=capturedEmptyCancellation(),replacement=capturedReplacement(response);
-  replacement.status='COMPLETED';replacement.conclusion=failure?'FAILURE':'SUCCESS';
-  for(const run of replacement.checkRuns.nodes){run.status='COMPLETED';run.conclusion='SUCCESS';}
-  if(failure)replacement.checkRuns.nodes[0].conclusion='FAILURE';
-  const {verdict}=await capturedFallback(response);
-  assert.equal(verdict.state,failure?'red':'green');
-  if(failure)assert.equal(verdict.failing[0].name,replacement.checkRuns.nodes[0].name);
- }
-});
-const refusedCancellationShapes={
- 'no newer actual jobs':response=>{capturedSuites(response).nodes=capturedSuites(response).nodes.filter(suite=>suite.workflowRun.databaseId!==38668474028);},
- 'different workflow':response=>{const suite=capturedReplacement(response);suite.workflowRun.workflow.name='Other workflow';for(const run of suite.checkRuns.nodes)run.checkSuite.workflowRun.workflow.name='Other workflow';},
- 'different app':response=>{capturedReplacement(response).app.slug='another-app';},
- 'newer cancelled run':response=>{const suite=capturedReplacement(response);suite.status='COMPLETED';suite.conclusion='CANCELLED';for(const run of suite.checkRuns.nodes){run.status='COMPLETED';run.conclusion='CANCELLED';}},
- 'latest empty cancellation':response=>{capturedEmpty(response).workflowRun.databaseId=38668476000;},
- 'newer suite has no reports':response=>{capturedReplacement(response).checkRuns.nodes=[];},
- 'newer reports are only skipped':response=>{const suite=capturedReplacement(response);suite.status='COMPLETED';suite.conclusion='SKIPPED';for(const run of suite.checkRuns.nodes){run.status='COMPLETED';run.conclusion='SKIPPED';}},
- 'newer reports have conflicting workflow identity':response=>{for(const run of capturedReplacement(response).checkRuns.nodes)run.checkSuite.workflowRun.workflow.name='Other workflow';},
- 'empty failure':response=>{capturedEmpty(response).conclusion='FAILURE';},
- 'empty unknown conclusion':response=>{capturedEmpty(response).conclusion='UNRECOGNIZED';},
- 'empty null conclusion':response=>{capturedEmpty(response).conclusion=null;},
-};
-for(const [name,alter] of Object.entries(refusedCancellationShapes))test(`captured empty cancellation stays fail-closed: ${name}`,async()=>{
- const response=capturedEmptyCancellation();alter(response);
- await assert.rejects(capturedFallback(response),/failed check suite has no corresponding failed check run/);
-});
-test('captured genuine successor on a later suite page resolves old empty cancellation',async()=>{
- const first=capturedEmptyCancellation(),second=capturedEmptyCancellation(),nodes=capturedSuites(first).nodes;
- capturedSuites(first).nodes=nodes.slice(0,3);capturedSuites(first).pageInfo={hasNextPage:true,endCursor:'later-suites'};
- capturedSuites(second).nodes=nodes.slice(3);
- const pages=[first,second],queries=[],oid=first.data.repository.object.oid;
- const result=await suiteContexts(async query=>{queries.push(query);return pages.shift();},'OpenPresentation','opf',oid);
- assert.equal(queries.length,2);assert.match(queries[1],/after:"later-suites"/);
- assert.equal(evaluateChecks({checks:normalizeContexts(result.nodes,oid),required:null,suites:result.suites}).state,'pending');
-});
-test('captured genuine successor reports on a later job page resolve old empty cancellation',async()=>{
- const response=capturedEmptyCancellation(),replacement=capturedReplacement(response),jobs=replacement.checkRuns.nodes,oid=response.data.repository.object.oid;
- replacement.checkRuns={nodes:[],pageInfo:{hasNextPage:true,endCursor:'later-jobs'}};
- const pages=[response,{data:{node:{id:replacement.id,commit:{oid},checkRuns:{nodes:jobs,pageInfo:{hasNextPage:false}}}}}],queries=[];
- const result=await suiteContexts(async query=>{queries.push(query);return pages.shift();},'OpenPresentation','opf',oid);
- assert.equal(queries.length,2);assert.match(queries[1],/after:"later-jobs"/);
- assert.equal(evaluateChecks({checks:normalizeContexts(result.nodes,oid),required:null,suites:result.suites}).state,'pending');
-});
-
-
-const capturedSuccessfulCancellation = () => JSON.parse(readFileSync(path.join(root, 'scripts/fixtures/pr-gate-cancelled-successful-jobs.json'), 'utf8')).response;
-const capturedOldCi = response => capturedSuites(response).nodes.find(suite => suite.workflowRun.databaseId === 38668426769);
-const capturedNewCi = response => capturedSuites(response).nodes.find(suite => suite.workflowRun.databaseId === 38668615901);
-for(const reverse of [false,true])test(`captured cancellation with successful/skipped jobs waits for genuine replacement (${reverse?'reversed':'captured'})`,async()=>{
- const response=capturedSuccessfulCancellation();
- assert.equal(response.data.repository.object.oid,'50856e27bee21679a513440c69d4fbeb07a23869');
- assert.deepEqual(capturedOldCi(response).checkRuns.nodes.map(run=>run.conclusion),['SUCCESS','SUCCESS','SKIPPED','SKIPPED','SKIPPED']);
- if(reverse)capturedSuites(response).nodes.reverse();
- const {result,verdict}=await capturedFallback(response);
- assert.equal(result.nodes.length,11,'all actual old and new reports are retained');
- assert.equal(verdict.state,'pending');assert.equal(verdict.failing.length,0);
- assert.deepEqual(verdict.pending.sort(),['Node 22 (engines range)','Node 26 (engines range)','macOS playground','package']);
-});
-test('captured successful-job cancellation preserves replacement red/green and required missing jobs',async()=>{
- for(const failure of [false,true]){
-  const response=capturedSuccessfulCancellation(),replacement=capturedNewCi(response);
-  replacement.status='COMPLETED';replacement.conclusion=failure?'FAILURE':'SUCCESS';
-  for(const run of replacement.checkRuns.nodes)if(run.status!=='COMPLETED'){run.status='COMPLETED';run.conclusion='SUCCESS';}
-  if(failure)replacement.checkRuns.nodes.find(run=>run.name==='package').conclusion='FAILURE';
-  const {result,verdict}=await capturedFallback(response);assert.equal(verdict.state,failure?'red':'green');
-  if(failure)assert.equal(verdict.failing[0].name,'package');
-  assert.equal(evaluateChecks({checks:normalizeContexts(result.nodes,response.data.repository.object.oid),required:[{context:'unreported job'}],suites:result.suites}).state,'pending');
- }
-});
-const refusedSuccessfulCancellationShapes={
- 'no newer reports':response=>{capturedSuites(response).nodes=[capturedOldCi(response)];},
- 'latest cancellation':response=>{capturedOldCi(response).workflowRun.databaseId=38668615902;},
- 'older failure suite':response=>{capturedOldCi(response).conclusion='FAILURE';},
- 'older unknown suite':response=>{capturedOldCi(response).conclusion='UNRECOGNIZED';},
- 'older null suite':response=>{capturedOldCi(response).conclusion=null;},
- 'older unfinished job':response=>{const run=capturedOldCi(response).checkRuns.nodes[0];run.status='IN_PROGRESS';run.conclusion=null;},
- 'older conflicting job identity':response=>{capturedOldCi(response).checkRuns.nodes[0].checkSuite.workflowRun.workflow.name='Other';},
- 'older conflicting job app':response=>{capturedOldCi(response).checkRuns.nodes[0].checkSuite.app.slug='Other';},
- 'newer skipped-only run':response=>{const suite=capturedNewCi(response);suite.status='COMPLETED';suite.conclusion='SKIPPED';for(const run of suite.checkRuns.nodes){run.status='COMPLETED';run.conclusion='SKIPPED';}},
- 'different replacement workflow':response=>{const suite=capturedNewCi(response);suite.workflowRun.workflow.name='Other';for(const run of suite.checkRuns.nodes)run.checkSuite.workflowRun.workflow.name='Other';},
-};
-for(const [name,alter] of Object.entries(refusedSuccessfulCancellationShapes))test(`successful-job cancellation stays fail-closed: ${name}`,async()=>{
- const response=capturedSuccessfulCancellation();alter(response);
- await assert.rejects(capturedFallback(response),/failed check suite has no corresponding failed check run/);
-});
-for(const conclusion of ['FAILURE','UNRECOGNIZED',null])test(`an old ${conclusion} job is retained and blocks until its same-job replacement exists`,async()=>{
- const response=capturedSuccessfulCancellation(),old=capturedOldCi(response).checkRuns.nodes[0];old.name='unreplaced failure';old.conclusion=conclusion;
- const {verdict}=await capturedFallback(response);assert.equal(verdict.state,'red');assert.equal(verdict.failing[0].name,'unreplaced failure');
-});
-
-
-test('rerun scope is explicit, validated, and defaults to failed jobs', () => {
-  assert.equal(parseArgs(['o/r#7', '--rerun-once']).rerunScope, 'failed');
-  for (const scope of ['failed', 'all']) assert.equal(parseArgs(['o/r#7', '--rerun-scope', scope, '--rerun-once']).rerunScope, scope);
-  for (const argv of [['o/r#7', '--rerun-once', '--rerun-scope'], ['o/r#7', '--rerun-once', '--rerun-scope', 'sometimes'], ['o/r#7', '--rerun-scope', 'all']]) assert.throws(() => parseArgs(argv), UsageError);
-});
-
-test('all scope restarts complete workflows once and deduplicates failed jobs', async () => {
-  const red = () => poll(pr({contexts: [run('packages', 'FAILURE', {runId:41}), run('Verify OPF packages', 'TIMED_OUT', {runId:41})]}));
-  const {deps,state} = fake({polls:[red(),red(),red(),red()]});
-  assert.equal((await gate(['o/r#7','--rerun-once','--rerun-scope','all'],deps)).code, EXIT.red);
-  assert.deepEqual(state.rest.filter(call=>call.startsWith('POST')), ['POST repos/o/r/actions/runs/41/rerun']);
-});
-
-test('explicit failed scope preserves failed-only endpoint and run deduplication', async () => {
-  const red = () => poll(pr({contexts: [run('packages', 'FAILURE', {runId:41}), run('Verify OPF packages', 'FAILURE', {runId:41})]}));
-  const {deps,state} = fake({polls:[red(),red(),red(),red()]});
-  assert.equal((await gate(['o/r#7','--rerun-once','--rerun-scope','failed'],deps)).code, EXIT.red);
-  assert.deepEqual(state.rest.filter(call=>call.startsWith('POST')), ['POST repos/o/r/actions/runs/41/rerun-failed-jobs']);
-});
-
-test('resume preserves all rerun scope without changing default resume commands', () => {
-  const options=parseArgs(['o/r#7','--rerun-once','--rerun-scope','all']);
-  const resume=resumeCommand(options,options.targets);
-  assert.match(resume,/--rerun-once --rerun-scope all/);
-  assert.equal(parseArgs(resume.split(' ').slice(2)).rerunScope,'all');
-  assert.equal(resumeCommand(parseArgs(['o/r#7','--rerun-once']),options.targets),'node scripts/pr-gate.mjs o/r#7 --timeout-minutes 100 --rerun-once');
-});
-
-
-test('RR-20: lower-id retry check creation supersedes intervening cancellation, not current failures', async () => {
- const cancelled=run('selection','CANCELLED',{runId:38454969449,id:115495925923});
- const retry=pending('selection',{runId:38454956973,id:115500000000,attempt:2});
- assert.equal(normalizeContexts([retry],HEAD)[0].attempt,2,'queried workflowRun.runAttempt survives normalization');
- const live=[suite(38454969449,'COMPLETED','CANCELLED'),suite(38454956973,'IN_PROGRESS',null,'CI',2)];
- const verdict=contexts=>evaluateChecks({checks:normalizeContexts(contexts,HEAD),required:null,suites:live});
- assert.equal(verdict([cancelled,retry]).state,'pending');
- assert.equal(verdict([cancelled,pending('selection',{runId:38454956973,id:115500000000,attempt:2,oid:'foreign'})]).state,'red');
- assert.equal(verdict([cancelled,pending('selection',{runId:38454956973,id:115500000000,attempt:1})]).state,'red');
- assert.equal(verdict([cancelled,pending('selection',{runId:38454956973,id:115495925900,attempt:2})]).state,'red');
- assert.equal(verdict([cancelled,pending('selection',{runId:38454956973,id:115500000000,attempt:2,workflow:'Other'})]).state,'red');
- assert.equal(verdict([cancelled,run('selection','FAILURE',{runId:38454956973,id:115500000000,attempt:2})]).state,'red');
- assert.equal(verdict([cancelled,run('selection','CANCELLED',{runId:38454956973,id:115500000000,attempt:2})]).state,'red');
- assert.equal(evaluateChecks({checks:normalizeContexts([cancelled,retry],HEAD),required:null,suites:[suite(38454956973,'COMPLETED','CANCELLED')]}).state,'red');
- assert.equal(verdict([cancelled,retry,run('package','FAILURE',{runId:38454969449,id:115495925924})]).state,'red');
- assert.equal(evaluateChecks({checks:normalizeContexts([cancelled,retry],HEAD),required:[{context:'selection'},{context:'package'}],suites:live}).state,'pending','unreported required job cannot go green');
- assert.equal(verdict([cancelled]).state,'red','a queued suite without an observed retry check is insufficient');
- const missing=evaluateChecks({checks:normalizeContexts([cancelled,retry,run('package','CANCELLED',{runId:38454969449,id:115495925924})],HEAD),required:[{context:'selection'},{context:'package'}],suites:live});
- assert.equal(missing.state,'pending');assert.deepEqual(missing.missing,['package'],'superseded required cancellation needs its actual replacement');
- assert.equal(verdict([cancelled,run('package','FAILURE',{runId:38454956973,id:115495925900,attempt:2})]).state,'red','mutable workflow attempt cannot refresh an old job check identity');
-
- assert.equal(verdict([retry,run('selection','CANCELLED',{runId:38454969449,id:115500000002})]).state,'red','a cancellation created after the retry remains current');
-
- const green=[run('selection','SUCCESS',{runId:38454956973,id:115500000000,attempt:2}),run('package','SUCCESS',{runId:38454956973,id:115500000001,attempt:2})];
- const done=fake({rules:[],polls:[poll(pr({contexts:[cancelled,retry],suites:live})),poll(pr({contexts:[cancelled,...green],suites:[suite(38454956973,'COMPLETED','SUCCESS','CI',2)]}))]});
- assert.equal((await gate(['o/r#7'],done.deps)).code,EXIT.ok);
- assert.ok(done.state.queries.length>=3,'green still needs consecutive confirmation');
-});
-
-
-test('RR-20: mutable attempt metadata cannot make retained success qualify an unfinished retry', () => {
- const contexts=normalizeContexts([run('selection','CANCELLED',{runId:905,id:10}),run('selection','SUCCESS',{runId:900,id:20,attempt:2})],HEAD);
- const evaluate=suites=>evaluateChecks({checks:contexts,required:[{context:'selection'}],suites});
- assert.equal(evaluate([]).state,'pending');
- assert.equal(evaluate([suite(900,'IN_PROGRESS',null,'CI',2)]).state,'pending');
- assert.equal(evaluate([suite(900,'COMPLETED','SUCCESS','CI',1)]).state,'pending','old suite attempt cannot qualify current retry');
- assert.equal(evaluate([suite(900,'COMPLETED','SUCCESS','CI',2)]).state,'green');
- for(const conclusion of ['FAILURE','CANCELLED','TIMED_OUT'])assert.equal(evaluate([suite(900,'COMPLETED',conclusion,'CI',2)]).state,'red');
- assert.equal(evaluate([suite(900,'COMPLETED','SUCCESS','Other',2)]).state,'pending');
-});
-
-
-test('RR-20: obsolete retry and unrelated advisory retry do not override current counted verdicts', () => {
- const old=run('selection','SUCCESS',{runId:900,id:20,attempt:2});
- const cancelled=run('selection','CANCELLED',{runId:905,id:10});
- const current=run('selection','SUCCESS',{runId:910,id:30});
- assert.equal(evaluateChecks({checks:normalizeContexts([old,cancelled,current],HEAD),required:[{context:'selection'}],suites:[suite(900,'COMPLETED','FAILURE','CI',2),suite(910,'COMPLETED','SUCCESS')]}).state,'green');
- const advisory=[run('advisory','CANCELLED',{runId:905,id:10}),run('advisory','SUCCESS',{runId:900,id:20,attempt:2})];
- assert.equal(evaluateChecks({checks:normalizeContexts([...advisory,current],HEAD),required:[{context:'selection'}],suites:[suite(900,'IN_PROGRESS',null,'CI',2)]}).state,'green');
- const affected=[run('selection','SUCCESS',{runId:900,id:5,attempt:2}),run('selection','CANCELLED',{runId:905,id:10}),run('advisory','SUCCESS',{runId:900,id:20,attempt:2})];
- assert.equal(evaluateChecks({checks:normalizeContexts(affected,HEAD),required:[{context:'selection'}],suites:[suite(900,'IN_PROGRESS',null,'CI',2)]}).state,'pending','advisory suppression of counted cancellation still needs retry completion');
- assert.equal(evaluateChecks({checks:normalizeContexts([...affected,run('selection','SUCCESS',{runId:950,id:50,workflow:'Other'})],HEAD),required:[{context:'selection'}],suites:[suite(900,'IN_PROGRESS',null,'CI',2)]}).state,'pending','same-name foreign workflow cannot replace suppressed counted cancellation');
-});
-
-
-test('partial nonnull rollup resolves an explicit missing job through actual suites once per poll', async()=>{
- for(const [conclusion,status,expected]of [['SUCCESS','COMPLETED',EXIT.ok],['FAILURE','COMPLETED',EXIT.red],['SUCCESS','IN_PROGRESS',EXIT.timeout]]){
-  const actual=run('Roll the ecosystem lock',conclusion,{status});
-  const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[run('unrelated')],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[]}};
-  const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});
-  const graphql=original.deps.graphql;let calls=0;
-  original.deps.graphql=async(q,v)=>{if(q.includes('status{contexts')){calls++;const suite=fallbackSuite('S1',[actual]);suite.status=status;suite.conclusion=status==='COMPLETED'?conclusion:null;return suitePage([suite]);}return graphql(q,v);};
-  const result=await gate(['--required','Roll the ecosystem lock','--commit',`o/r@${HEAD}`,'--timeout-minutes','1'],original.deps);
-  assert.equal(result.code,expected);assert.ok(calls>0);assert.equal(calls,original.state.queries.filter(q=>q.includes('r0: repository')).length,'one fallback per target poll');
- }
-});
-
-test('partial all-mode rollup cannot hide a second failed job in the same suite',async()=>{
- const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[run('packages')],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[{status:'COMPLETED',conclusion:'FAILURE',workflowRun:{databaseId:900},checkRuns:{totalCount:2}}],pageInfo:{hasNextPage:false}}};
- const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});const graphql=original.deps.graphql;
- original.deps.graphql=async(q,v)=>q.includes('status{contexts')?suitePage([fallbackSuite('S1',[run('packages'),run('other','FAILURE')])]):graphql(q,v);
- const result=await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps);assert.equal(result.code,EXIT.red);
-});
-
-test('partial rollup authoritative fallback refuses a foreign commit',async()=>{
- const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[run('unrelated')],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[]}};
- const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});const graphql=original.deps.graphql;
- original.deps.graphql=async(q,v)=>q.includes('status{contexts')?suitePage([],false,OLD):graphql(q,v);
- await assert.rejects(gate(['--required','Roll the ecosystem lock','--commit',`o/r@${HEAD}`,'--timeout-minutes','1'],original.deps),/different commit/);
-});
-
-
-test('all-mode count deficit fetches hidden jobs even when the rollup and suite say success',async()=>{
- const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[run('packages')],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[{status:'COMPLETED',conclusion:'SUCCESS',workflowRun:{databaseId:900},checkRuns:{totalCount:2}}],pageInfo:{hasNextPage:false}}};
- const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});const graphql=original.deps.graphql;let calls=0;
- original.deps.graphql=async(q,v)=>{if(q.includes('status{contexts')){calls++;return suitePage([fallbackSuite('S1',[run('packages'),run('hidden','FAILURE')])]);}return graphql(q,v);};
- assert.equal((await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps)).code,EXIT.red);assert.equal(calls,1);
-});
-
-test('complete rollups avoid supplementary suite queries and retain confirmation',async()=>{
- const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:GREEN(),pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[{status:'COMPLETED',conclusion:'SUCCESS',workflowRun:{databaseId:900},checkRuns:{totalCount:2}}],pageInfo:{hasNextPage:false}}};
- const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});const graphql=original.deps.graphql;
- original.deps.graphql=async(q,v)=>{assert.ok(!q.includes('status{contexts'),'complete rollup needs no extra query');return graphql(q,v);};
- assert.equal((await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps)).code,EXIT.ok);assert.ok(has(original.state.lines,/confirming/));
-});
-
-
-test('represented terminal failure stays red without another suite query',async()=>{
- const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[run('packages','FAILURE')],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[{status:'COMPLETED',conclusion:'FAILURE',workflowRun:{databaseId:900},checkRuns:{totalCount:1}}],pageInfo:{hasNextPage:false}}};
- const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});const graphql=original.deps.graphql;
- original.deps.graphql=async(q,v)=>{assert.ok(!q.includes('status{contexts'),'actual failed job already represented');return graphql(q,v);};
- assert.equal((await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps)).code,EXIT.red);
-});
-
-test('external suites with null workflow IDs are counted separately by suite identity',async()=>{
- const external=run('external-pass');external.checkSuite={...external.checkSuite,id:'EXT1',workflowRun:null};
- const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[external],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[{id:'EXT1',status:'COMPLETED',conclusion:'SUCCESS',workflowRun:null,checkRuns:{totalCount:1}},{id:'EXT2',status:'COMPLETED',conclusion:'SUCCESS',workflowRun:null,checkRuns:{totalCount:1}}],pageInfo:{hasNextPage:false}}};
- const original=fake({polls:[{data:{r0:{defaultBranchRef:{name:'main'},t0:commit}}}]});const graphql=original.deps.graphql;
- original.deps.graphql=async(q,v)=>q.includes('status{contexts')?suitePage([fallbackSuite('EXT1',[external]),fallbackSuite('EXT2',[run('hidden','FAILURE')])]):graphql(q,v);
- assert.equal((await gate(['--required','all','--commit',`o/r@${HEAD}`],original.deps)).code,EXIT.red);
-});
-
-
-test('explicit required old success cannot hide a newer omitted failure or pending job',async()=>{
- for(const [status,expected]of [['COMPLETED',EXIT.red],['IN_PROGRESS',EXIT.timeout]]){
-  const old=run('required','SUCCESS',{runId:800,id:100});const newer=run('required','FAILURE',{runId:900,id:200,status});
-  const commit={oid:HEAD,statusCheckRollup:{contexts:{nodes:[old],pageInfo:{hasNextPage:false}}},checkSuites:{nodes:[{status:'COMPLETED',conclusion:'SUCCESS',workflowRun:{databaseId:800},checkRuns:{totalCount:1}},{status,conclusion:status==='COMPLETED'?'FAILURE':null,workflowRun:{databaseId:900},checkRuns:{totalCount:1}}],pageInfo:{hasNextPage:false}}};
-  const original=fake({polls:[()=>({data:{r0:{defaultBranchRef:{name:'main'},t0:structuredClone(commit)}}})]});const graphql=original.deps.graphql;
-  original.deps.graphql=async(q,v)=>{if(q.includes('status{contexts')){const first=fallbackSuite('OLD',[old]);first.workflowRun.databaseId=800;const last=fallbackSuite('NEW',[newer]);last.status=status;last.conclusion=status==='COMPLETED'?'FAILURE':null;return suitePage([first,last]);}return graphql(q,v);};
-  assert.equal((await gate(['--required','required','--commit',`o/r@${HEAD}`,'--timeout-minutes','1'],original.deps)).code,expected);
- }
-});
-
-
-// Actual-shape run identity from the observed scheduled measurement, without user/profile metadata.
-const measurementRun = JSON.parse(readFileSync(path.join(root, 'scripts/fixtures/editor-scheduled-measurement.json'), 'utf8'));
-test('RR-68: measurement classification requires full verified identity and caches failures as well as success', async () => {
-  const candidate = {repo:'OpenPresentation/opf-editor',sha:measurementRun.head_sha,name:'Repeat the browser suites',appId:15368,appSlug:'github-actions',suiteId:measurementRun.check_suite_node_id,runId:measurementRun.id};
-  let reads = 0;
-  const classify = measurementClassifier(async route => { reads++; assert.equal(route, `repos/OpenPresentation/opf-editor/actions/runs/${measurementRun.id}`); return measurementRun; });
-  assert.equal(await classify(candidate), true);
-  assert.equal(await classify({...candidate,suite:true,workflow:'Flake measurement',event:'schedule'}), true);
-  assert.equal(reads, 1);
-  for (const change of [{repo:'OpenPresentation/opf'},{name:'packages'},{appId:999},{appSlug:'other'},{suiteId:'other'},{sha:OLD},{runId:null}]) assert.equal(await classify({...candidate,...change}), false, JSON.stringify(change));
-  for (const change of [{workflow_id:1},{path:'.github/workflows/ci.yml'},{event:'pull_request'},{event:'workflow_dispatch'},{head_branch:'feature'},{head_sha:OLD},{check_suite_node_id:'other'},{repository:{full_name:'elsewhere/opf-editor'}},{head_repository:{full_name:'elsewhere/opf-editor'}},{id:1}]) {
-    const classifier = measurementClassifier(async () => ({...measurementRun,...change}));
-    assert.equal(await classifier(candidate), false, JSON.stringify(change));
-  }
-  for (const answer of [null, {}, new Error('metadata unavailable')]) {
-    let calls=0;
-    const classifier=measurementClassifier(async()=>{calls++;if(answer instanceof Error) throw answer;return answer;});
-    assert.equal(await classifier(candidate), false);assert.equal(await classifier(candidate), false);assert.equal(calls,1);
-  }
-});
-
-test('RR-68: observer excludes only verified fallback measurement jobs AND running suites, with visible diagnostics', async () => {
-  async function observe({real='SUCCESS', measurement='IN_PROGRESS', required=null, metadata=measurementRun, sameNameStatus=false, suiteOnly=false, all=false, rulesError=false}={}) {
-    const oid=measurementRun.head_sha;
-    const measurementJob=run('Repeat the browser suites',measurement==='IN_PROGRESS'?null:measurement,{oid,status:measurement==='IN_PROGRESS'?'IN_PROGRESS':'COMPLETED',runId:measurementRun.id,workflow:'Flake measurement'});
-    measurementJob.checkSuite.id=measurementRun.check_suite_node_id;
-    measurementJob.checkSuite.workflowRun.event='schedule';
-    const suite={id:measurementRun.check_suite_node_id,status:measurement==='IN_PROGRESS'?'IN_PROGRESS':'COMPLETED',app:{slug:'github-actions',databaseId:15368},workflowRun:measurementJob.checkSuite.workflowRun};
-    const contexts=[run('packages',real==='IN_PROGRESS'?null:real,{oid,status:real==='IN_PROGRESS'?'IN_PROGRESS':'COMPLETED',workflow:'CI'}),...(suiteOnly?[]:[measurementJob]),...(sameNameStatus?[status('Repeat the browser suites','PENDING',{oid})]:[])];
-    const object=pr({head:oid,contexts,suites:[suite]}).commits.nodes[0].commit;
-    const {deps,state}=fake({polls:[{data:{rateLimit:{remaining:4000},r0:{defaultBranchRef:{name:'main'},t0:object}}}],rules:rulesError==='invalid'?[{}]:rulesError?Object.assign(new Error('not visible'),{status:rulesError===403?403:404}):required?[{type:'required_status_checks',parameters:{required_status_checks:[{context:required}]}}]:[]});
-    let reads=0;
-    const original=deps.rest;deps.rest=async(route,init)=>{if(route.includes('/actions/runs/')){reads++;return metadata;}return original(route,init);};
-    const result=await gate(['--commit',`OpenPresentation/opf-editor@${oid}`,'--timeout-minutes','1',...(all?['--required','all']:[])],deps);
-    return {result,state,reads};
-  }
-  let observed=await observe();assert.equal(observed.result.code,EXIT.ok);assert.equal(observed.reads,1);assert.ok(has(observed.state.lines,/non-gating measurement running/));
-  observed=await observe({measurement:'FAILURE'});assert.equal(observed.result.code,EXIT.ok);assert.ok(has(observed.state.lines,/not required, failing: Repeat the browser suites/));
-  assert.equal((await observe({suiteOnly:true})).result.code,EXIT.ok);
-  for(const options of [{real:'IN_PROGRESS'},{rulesError:true},{rulesError:403},{rulesError:'invalid'},{required:'Repeat the browser suites'},{required:'Repeat the browser suites',all:true},{sameNameStatus:true},{metadata:null},{metadata:{...measurementRun,event:'pull_request'}}]) assert.equal((await observe(options)).result.code,EXIT.timeout,JSON.stringify(options));
-  assert.equal((await observe({rulesError:true})).reads,0);
-  assert.equal((await observe({rulesError:403})).reads,0);
-  assert.equal((await observe({rulesError:'invalid'})).reads,0);
-  assert.equal((await observe({real:'FAILURE'})).result.code,EXIT.red);
-  assert.equal((await observe({measurement:'FAILURE',required:'Repeat the browser suites'})).result.code,EXIT.red);
-});
-
-// A measurement is outside the gating history: its newer suite must not supersede
-// a cancelled real dispatch, even though GitHub gives both the same workflow/job names.
-test('RR-68: scheduled measurement cannot supersede a cancelled non-advisory dispatch on the same commit', async () => {
-  const oid = measurementRun.head_sha;
-  const dispatchRun = {...measurementRun, id:measurementRun.id-1, event:'workflow_dispatch', check_suite_node_id:'CS_dispatch', check_suite_id:measurementRun.check_suite_id-1};
-  for (const includeScheduledJob of [false, true]) {
-    const cancelled = run('Repeat the browser suites','CANCELLED',{oid,runId:dispatchRun.id,workflow:'Flake measurement'});
-    cancelled.checkSuite.id=dispatchRun.check_suite_node_id;
-    cancelled.checkSuite.workflowRun.event='workflow_dispatch';
-    const scheduled = pending('Repeat the browser suites',{oid,runId:measurementRun.id,workflow:'Flake measurement'});
-    scheduled.checkSuite.id=measurementRun.check_suite_node_id;
-    scheduled.checkSuite.workflowRun.event='schedule';
-    const suite = (job,status,conclusion) => ({id:job.checkSuite.id,app:job.checkSuite.app,workflowRun:job.checkSuite.workflowRun,status,conclusion});
-    const contexts = [run('packages','SUCCESS',{oid,workflow:'CI'}),cancelled,...(includeScheduledJob?[scheduled]:[])];
-    const object = pr({head:oid,contexts,suites:[suite(cancelled,'COMPLETED','CANCELLED'),suite(scheduled,'IN_PROGRESS',null)]}).commits.nodes[0].commit;
-    const {deps,state} = fake({polls:[{data:{rateLimit:{remaining:4000},r0:{defaultBranchRef:{name:'main'},t0:object}}}],rules:[]});
-    const original = deps.rest;
-    deps.rest = async (route,init) => route.endsWith(`/actions/runs/${measurementRun.id}`) ? measurementRun :
-      route.endsWith(`/actions/runs/${dispatchRun.id}`) ? dispatchRun : original(route,init);
-    const observed = await gate(['--commit',`OpenPresentation/opf-editor@${oid}`,'--timeout-minutes','1'],deps);
-    assert.equal(observed.code,EXIT.red,`scheduled check materialized: ${includeScheduledJob}`);
-    assert.ok(has(state.lines,/Repeat the browser suites \(CANCELLED\)/));
-  }
-});
-
-test('RR-68: advisory suites cannot qualify a gating retry; required-mode retry semantics are unchanged', () => {
-  const workflow='Flake measurement';
-  const cancelled=run('unrecognized job','CANCELLED',{oid:measurementRun.head_sha,runId:measurementRun.id+1,id:10,workflow});
-  const retried=run('unrecognized job','SUCCESS',{oid:measurementRun.head_sha,runId:measurementRun.id,id:20,attempt:2,workflow});
-  const checks=normalizeContexts([cancelled,retried],measurementRun.head_sha);
-  const measurementSuite={...suite(measurementRun.id,'COMPLETED','SUCCESS',workflow,2),id:measurementRun.check_suite_node_id,measurement:true};
-  measurementSuite.workflowRun.event='schedule';
-  assert.equal(evaluateChecks({checks,required:null,suites:[measurementSuite]}).state,'pending');
-  assert.equal(evaluateChecks({checks,required:[{context:'unrecognized job'}],suites:[measurementSuite]}).state,'green');
-});
-
-
-test('rollup pagination refuses incomplete/error/identity/count/cursor pages without qualifying or mutating', async () => {
-  const first = {oid: HEAD, statusCheckRollup: {contexts: {totalCount: 2, nodes: [status('first', 'SUCCESS')], pageInfo: {hasNextPage: true, endCursor: 'next'}}}, checkSuites: {nodes: []}};
-  const nextPage = () => ({data: {repository: {object: {oid: HEAD, statusCheckRollup: {contexts: {totalCount: 2, nodes: [status('second', 'SUCCESS')], pageInfo: {hasNextPage: false, endCursor: null}}}}}}});
-  const attempt = async (change, initialChange = null) => {
-    const object = structuredClone(first); if (initialChange) initialChange(object);
-    const response = nextPage(); change(response);
-    let now = T0, writes = 0, pages = 0;
-    const deps = {now: () => now, sleep: async ms => {now += ms;}, log: () => {},
-      rest: async (_route, init) => {if (init?.method) writes++; return [];},
-      graphql: async query => {
-        if (query.startsWith('mutation')) {writes++; throw new Error('must not mutate');}
-        if (query.includes('after:')) {pages++; return response;}
-        return {data: {r0: {defaultBranchRef: {name: 'main'}, t0: structuredClone(object)}}};
-      }};
-    let error;
-    try { await gate(['--required', 'all', '--commit', `o/r@${HEAD}`], deps); } catch (caught) {error = caught;}
-    assert.ok(error, 'incomplete pagination cannot qualify');
-    assert.match(error.message, /rollup/); assert.equal(writes, 0); assert.ok(pages <= 2, 'bad cursors cannot create a query loop');
-  };
-  for (const change of [
-    response => {response.errors = [{message: 'partial GraphQL'}];},
-    response => {response.data.repository.object = null;},
-    response => {response.data.repository.object.oid = OLD;},
-    response => {delete response.data.repository.object.statusCheckRollup;},
-    response => {delete response.data.repository.object.statusCheckRollup.contexts.pageInfo;},
-    response => {delete response.data.repository.object.statusCheckRollup.contexts.nodes;},
-    response => {delete response.data.repository.object.statusCheckRollup.contexts.totalCount;},
-    response => {response.data.repository.object.statusCheckRollup.contexts.totalCount = 3;},
-    response => {response.data.repository.object.statusCheckRollup.contexts.nodes = [];},
-    response => {response.data.repository.object.statusCheckRollup.contexts.nodes = [status('first', 'SUCCESS')];},
-    response => {response.data.repository.object.statusCheckRollup.contexts.pageInfo = {hasNextPage: true, endCursor: 'next'};},
-  ]) await attempt(change);
-  for (const change of [
-    object => {object.statusCheckRollup.contexts.pageInfo.endCursor = null;},
-    object => {delete object.statusCheckRollup.contexts.pageInfo;},
-    object => {object.statusCheckRollup.contexts.totalCount = 0;},
-  ]) await attempt(() => {}, change);
-});
-
-test('partial initial target GraphQL errors cannot qualify the available check subset', async () => {
-  const response = poll(pr({contexts: GREEN()}));
-  response.errors = [{path: ['r0', 't0', 'commits'], message: 'partial checks'}];
-  const {deps, state} = fake({polls: [response]});
-  await assert.rejects(gate(['o/r#7', '--merge'], deps), /partial GraphQL response/);
-  assert.equal(state.mutations.length, 0);
-});
-
-test('complete multi-page all-mode rollups retain two-poll confirmation and a failing later status stays red', async () => {
-  for (const failure of [false, true]) {
-    const nodes = Array.from({length: 100}, (_, index) => status(`legacy-${index}`, 'SUCCESS'));
-    const object = {oid: HEAD, statusCheckRollup: {contexts: {nodes, totalCount: 101, pageInfo: {hasNextPage: true, endCursor: 'next'}}}, checkSuites: {nodes: []}};
-    let now = T0, polls = 0, pages = 0;
-    const result = await gate(['--required', 'all', '--commit', `o/r@${HEAD}`], {
-      now: () => now, sleep: async ms => {now += ms;}, log: () => {}, rest: async () => [],
-      graphql: async query => {
-        if (query.includes('after:')) {
-          pages++;
-          return {data: {repository: {object: {oid: HEAD, statusCheckRollup: {contexts: {nodes: [status('last', failure ? 'FAILURE' : 'SUCCESS')], totalCount: 101, pageInfo: {hasNextPage: false}}}}}}};
-        }
-        polls++;
-        return {data: {r0: {defaultBranchRef: {name: 'main'}, t0: structuredClone(object)}}};
+test('--merge: when auto-merge is not available the gate squash-merges the expected head itself once green', async () => {
+  const setup = world({
+    polls: [[pr()]],
+    merge: true,
+    expectHeads: [HEAD],
+    mutations: {
+      enable: () => {
+        throw new Error('Pull request is in clean status');
       },
-    });
-    assert.equal(result.code, failure ? EXIT.red : EXIT.ok);
-    assert.equal(polls, failure ? 1 : 2); assert.equal(pages, polls);
-    if (failure) assert.deepEqual(result.results[0].failing.map(check => check.name), ['last']);
-    else assert.equal(result.results[0].checks.total, 101);
+      merge: () => ({ mergePullRequest: { pullRequest: { merged: true, mergeCommit: { oid: 'c'.repeat(40) } } } }),
+    },
+  });
+  const outcome = await run(setup);
+  assert.equal(outcome.code, EXIT.ok);
+  assert.match(outcome.results[0].text, /^MERGED o\/r#7 c{40} \(merged by the gate\)/);
+  assert.deepEqual(setup.calls.mutations.map((entry) => entry.name), ['enable', 'merge']);
+  assert.equal(setup.calls.mutations[1].variables.head, HEAD);
+});
+
+test('--merge: a refusal that is not transient exits 5; a transient one is retried', async () => {
+  const refused = world({ polls: [[pr()]], merge: true, mutations: { enable: () => { throw new Error('Head branch is not up to date with the base branch'); } } });
+  const outcome = await run(refused);
+  assert.equal(outcome.code, EXIT.refused);
+  assert.match(outcome.results[0].text, /merge refused: Head branch is not up to date/);
+  const transient = world({
+    polls: [[pr()]],
+    merge: true,
+    mutations: {
+      enable: (_variables, call) => {
+        if (call === 1) throw new Error('Pull request mergeability check has not yet completed');
+        return { enablePullRequestAutoMerge: { pullRequest: { number: 7 } } };
+      },
+      merge: () => ({ mergePullRequest: { pullRequest: { merged: true, mergeCommit: { oid: 'd'.repeat(40) } } } }),
+    },
+  });
+  const retried = await run(transient);
+  assert.deepEqual(transient.calls.mutations.map((entry) => entry.name).slice(0, 2), ['enable', 'enable'], 'the enable is tried again on the next poll');
+  assert.equal(retried.code, EXIT.ok);
+});
+
+test('several targets: one query, the first failure in argument order wins; unfinished ones time out with a RESUME line', async () => {
+  const targets = [parseTarget('o/r#1'), parseTarget('o/r#2'), parseTarget('o/s#3')];
+  const mixed = world({ polls: [[pr({ contexts: [check('verify', 'FAILURE')] }), pr({ mergeable: 'CONFLICTING' }), pr()]], targets });
+  const failed = await run(mixed);
+  assert.equal(mixed.calls.queries, 1, 'one GraphQL query for all three');
+  assert.equal(failed.code, EXIT.red, 'argument order: the red pull request is first');
+  assert.deepEqual(failed.results.map((result) => result.code), [EXIT.red, EXIT.dirty, EXIT.ok]);
+
+  const slow = world({ polls: [{ 'o/r#1': pr(), 'o/r#2': pr({ contexts: [check('verify', null)] }), 'o/s#3': pr({ contexts: [check('verify', null)] }) }], targets, timeoutMinutes: 5, expectHeads: [HEAD, HEAD, HEAD], interval: 120 });
+  const timedOut = await run(slow);
+  assert.equal(timedOut.code, EXIT.timeout);
+  assert.deepEqual(timedOut.results.map((result) => result.code), [EXIT.ok, EXIT.timeout, EXIT.timeout]);
+  assert.equal(timedOut.resume, `node scripts/pr-gate.mjs o/r#2 o/s#3 --expect-head ${HEAD} --expect-head ${HEAD} --required verify --interval 120 --timeout-minutes 5`);
+});
+
+test('--commit waits for the required checks of a commit', async () => {
+  const setup = world({ polls: [[commitData([check('verify', null)])], [commitData([check('verify')])]], targets: [parseTarget('o/r@aaaaaaaaaaaa', { commit: true })], commit: true });
+  const outcome = await run(setup);
+  assert.equal(outcome.code, EXIT.ok);
+  assert.match(outcome.results[0].text, /^GREEN o\/r@aaaaaaaaaaaa/);
+  const missing = await run(world({ polls: [[{ repository: { object: null } }]], targets: [parseTarget('o/r@aaaaaaaaaaaa', { commit: true })], commit: true }));
+  assert.equal(missing.code, EXIT.usage);
+  assert.match(resumeCommand({ targets: [parseTarget('o/r@aaaaaaaaaaaa', { commit: true })], expectHeads: [], merge: false, required: 'verify', interval: 180, timeoutMinutes: 100, commit: true }, [{ label: 'o/r@aaaaaaaaaaaa' }]), /^node scripts\/pr-gate\.mjs --commit o\/r@aaaaaaaaaaaa --required verify/);
+});
+
+test('--required all needs green on two consecutive polls; a low rate limit waits for its reset', async () => {
+  const everything = [check('verify'), check('lint')];
+  const setup = world({ polls: [[pr({ contexts: everything })]], required: 'all', interval: 60 });
+  const outcome = await run(setup);
+  assert.equal(outcome.code, EXIT.ok);
+  assert.equal(setup.calls.queries, 2);
+  const limited = world({ polls: [[pr({ contexts: [check('verify', null)] })], [pr()]] });
+  const graphql = limited.deps.graphql;
+  let first = true;
+  limited.deps.graphql = async (query, variables) => {
+    const data = await graphql(query, variables);
+    if (first && query.startsWith('query')) {
+      first = false;
+      return { ...data, rateLimit: { remaining: 10, resetAt: new Date(10 * 60000).toISOString() } };
+    }
+    return data;
+  };
+  assert.equal((await run(limited)).code, EXIT.ok);
+  assert.equal(limited.calls.sleeps[0], 10 * 60000, 'waited until the reset instead of the 90 s interval');
+});
+
+test('a failing poll is retried, then reported as a usage error; main maps usage errors to 64', async () => {
+  const setup = world({ polls: [[pr()]] });
+  let calls = 0;
+  const graphql = setup.deps.graphql;
+  setup.deps.graphql = async (query, variables) => {
+    calls += 1;
+    if (calls < 3) throw new Error('HTTP 502');
+    return graphql(query, variables);
+  };
+  assert.equal((await run(setup)).code, EXIT.ok);
+  const broken = world({ polls: [[pr()]] });
+  broken.deps.graphql = async () => {
+    throw new Error('HTTP 401 Bad credentials');
+  };
+  await assert.rejects(run(broken), (error) => error instanceof UsageError && /GraphQL poll failed: HTTP 401/.test(error.message));
+  const originalError = console.error;
+  const messages = [];
+  console.error = (text) => messages.push(text);
+  try {
+    assert.equal(await main(['o/r#1', '--bogus'], () => assert.fail('no deps for a bad command line')), EXIT.usage);
+  } finally {
+    console.error = originalError;
   }
+  assert.match(messages[0], /unknown option --bogus/);
 });

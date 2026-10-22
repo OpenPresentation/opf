@@ -50,8 +50,8 @@ assert.equal(galleryLazyFontManifestForExample(fake, version, 'fetch("./fonts.js
 assert.equal(galleryLazyFontManifestForExample(fake, version, 'await browserFonts.loadFonts({lazyFontsBaseUrl: "./"})').packages.length, 1);
 assert.throws(() => galleryLazyFontManifestForExample({}, version, 'await browserFonts.loadFonts({lazyFontsBaseUrl: "./"})'), /sets lazyFontsBaseUrl but the pinned @openpresentation\/opf-render vendors no lazy fonts/);
 
-// The renderer checked out beside this repository (when built) yields a manifest that passes the same checks.
-const sibling = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../opf-render/dist/fonts-node.js');
+// The renderer in this workspace (packages/render, when built) yields a manifest that passes the same checks.
+const sibling = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../packages/render/dist/fonts-node.js');
 if (existsSync(sibling)) {
   const siblingFonts = await import(pathToFileURL(sibling).href);
   const real = galleryLazyFontManifest(siblingFonts, '0.11.0');
@@ -63,10 +63,10 @@ if (existsSync(sibling)) {
     // A version without a recorded count passes only with the font files and count of a reviewed set (RR-90).
     const siblingRoot = path.resolve(path.dirname(sibling), '..');
     const fontSet = await hashFontSet({ root: siblingRoot, readdir, readFile, createHash });
-    assertLazyFontCount(JSON.parse(readFileSync(path.join(siblingRoot, 'package.json'), 'utf8')).version, faces, 'sibling opf-render', fontSet);
+    assertLazyFontCount(JSON.parse(readFileSync(path.join(siblingRoot, 'package.json'), 'utf8')).version, faces, 'workspace opf-render', fontSet);
     assert.ok(real.packages.some(item => item.name === 'intos' && item.noticeFile === 'NOTICE.md'));
     assert.equal(real.packages.some(item => item.name === 'carlito'), false, 'Carlito is eager, not lazy');
-    console.log(`Gallery lazy fonts: fake and sibling-renderer manifests verified (${real.packages.length} packages, ${faces} faces).`);
+    console.log(`Gallery lazy fonts: fake and workspace-renderer manifests verified (${real.packages.length} packages, ${faces} faces).`);
     process.exit(0);
   }
 }

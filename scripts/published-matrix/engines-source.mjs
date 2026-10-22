@@ -4,17 +4,17 @@
 // same exports that resolves every package from the consumer's own node_modules instead.
 import {createRequire} from 'node:module';
 
-export {BUNDLED_FONT_MANIFEST, loadFonts} from '../../../opf-render/dist/fonts-node.js';
-export {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor} from '../../../opf-render/dist/fonts.js';
-export {toSvg, toPng} from '../../../opf-render/dist/index.js';
-export {checkTypefaces, fromPptx, toPptx} from '../../../opf-pptx/dist/index.js';
-export {createEditorSession} from '../../../opf-editor/dist/index.js';
+export {BUNDLED_FONT_MANIFEST, loadFonts} from '../../packages/render/dist/fonts-node.js';
+export {createScriptTextMeasurement, designatedFamilies, detectScripts, fontPolicyFor} from '../../packages/render/dist/fonts.js';
+export {toSvg, toPng} from '../../packages/render/dist/index.js';
+export {checkTypefaces, fromPptx, toPptx} from '../../packages/pptx/dist/index.js';
+export {createEditorSession} from '../../packages/editor/dist/index.js';
 // RR-78: the pptx.gallery catalog is the @openpresentation/gallery package (this checkout's packages/gallery).
 export {catalogDisplay, gallery} from '@openpresentation/gallery';
 export {resolveFontFamilies, resolveScriptFonts} from '@openpresentation/opf/composition';
 export {resolveFontScheme, resolveReference, validate} from '@openpresentation/opf';
 
-const require = createRequire(new URL('../../../opf-pptx/package.json', import.meta.url));
+const require = createRequire(new URL('../../packages/pptx/package.json', import.meta.url));
 export const {strToU8, unzipSync, zipSync} = require('fflate');
 export const {XMLValidator} = require('fast-xml-parser');
 export const source = {kind: 'sibling-source'};

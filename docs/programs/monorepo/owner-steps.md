@@ -26,7 +26,7 @@ Read these first; each is repeated at its step.
 1. **The ecosystem GitHub App does not exist yet.** The plan (section 6, OWNER action 6) says to "reuse the ecosystem App" and extend it. `gh api orgs/OpenPresentation/installations` lists only three installations (`claude`, `cursor`, `chatgpt-codex-connector`), `OpenPresentation/opf` has no `ECOSYSTEM_APP_ID` variable and no `ECOSYSTEM_APP_PRIVATE_KEY` secret, and opf#298 (the issue that asked for it) is still open. O4 therefore creates the App. If you created one under another account and it is simply not installed on the organization, skip the creation and do the rest of O4.
 2. **The three site repositories cannot take rulesets or branch protection today.** They are private repositories in `Data-Advantage`, an organization on the Free plan: `gh api repos/Data-Advantage/<repo>/rulesets` and `.../branches/main/protection` both return 403 "Upgrade to GitHub Pro or make this repository public". Without a required check, `gh pr merge --auto` has nothing to wait for and merges at once, and the "Allow auto-merge" setting is gated on the same feature. **Decided (D19, owner, 2026-10-21): each site's own CI merges the bump pull request after its `build-and-smoke` job passes, with the App's token; no ruleset or auto-merge setting is needed.** O8 lists what is left for you.
 3. **`v5` is not a usable dist-tag.** The plan (OWNER action 10) suggests a dist-tag `v5` pointing at gallery 5.0.0. npm refuses it ("Tag name must not be a valid SemVer range", `semver.validRange("v5")` is `>=5.0.0 <6.0.0-0`; checked in the npm 11.19.0 source). O10 uses `legacy-v5`.
-4. **A tag ruleset that restricts creation of `v*` would break the release job.** The `release` job creates the tag with `GITHUB_TOKEN` (plan section 5), and `github-actions[bot]` cannot be a bypass actor. O7 therefore restricts updates and deletions only.
+4. **A tag ruleset may restrict creation of `v*` only with the App on its bypass list.** MR-40 changed the design: `release.yml` pushes the tag `vX.Y.Z` with the App's token (a tag pushed with `GITHUB_TOKEN` starts no workflow, and `npm-publish.yml` must start from the tag push to be the trusted publisher, because npm checks the top-level workflow, not a reusable one). O7 therefore keeps the App in the bypass list; restricting updates and deletions is what the plan needs, and creation can stay open so the pull-request fallback (a person pushes the tag) works.
 5. **"Allow auto-merge" is off on `OpenPresentation/opf`** (`allow_auto_merge: false`). Without the merge queue, `pr-gate.mjs --merge` and every agent merge rely on GitHub auto-merge, so O6 turns it on.
 6. **`OpenPresentation/opf` has an unused `NPM_TOKEN` secret.** No workflow reads it (the plan's invariant is "no `NPM_TOKEN`"). O10 removes it after two OIDC releases.
 7. The current `main` ruleset (id 24382980) has **no bypass actors**, so nobody, the owner included, can push to `main` directly today. O3 and O5 add bypass actors.
@@ -201,7 +201,7 @@ git push origin 'refs/tags/*:refs/tags/*'
 
 ## O4. The GitHub App (before MR-41 for the release commit; before MR-52 for the sites)
 
-**What and why.** One App does two jobs: the `prepare` job of `npm-publish.yml` pushes the release commit to `main` (a bypass actor), and `bump-sites.yml` opens the "bump to vX.Y.Z" pull requests in the three site repositories, and each site's own CI merges a patch bump with the App's token (D19). App-authored pushes and pull requests start workflows; `GITHUB_TOKEN` ones do not. Only `prepare` and `bump-sites.yml` hold the key; `publish` holds no secret. The plan calls this the "ecosystem App"; it does not exist yet (finding 1).
+**What and why.** One App does two jobs: the `commit` job of `release.yml` pushes the release commit to `main` (a bypass actor) and the tag, and `bump-sites.yml` (called by `release.yml` after a stable release, or run by hand) opens the "bump to vX.Y.Z" pull requests in the three site repositories, and each site's own CI merges a patch bump with the App's token (D19). App-authored pushes and pull requests start workflows; `GITHUB_TOKEN` ones do not. Only `release.yml` (its `commit` job, and the `sites` job that passes the key on to `bump-sites.yml`) and `bump-sites.yml` hold the key; `publish` holds no secret. The plan calls this the "ecosystem App"; it does not exist yet (finding 1).
 
 **Create it** (as an organization App: `https://github.com/organizations/OpenPresentation/settings/apps/new`, or Organization settings, Developer settings, **GitHub Apps**, **New GitHub App**):
 
@@ -258,6 +258,8 @@ The functional proof is the `actions/create-github-app-token` step succeeding in
 ## O6. MR-33: the ruleset switch
 
 **What and why.** Plan decisions D8 and D15: no merge queue, one required check `verify`, squash merges, no "require branches to be up to date". Agents then merge with GitHub auto-merge when `verify` is green.
+
+**One edit, not two.** Removing the merge queue and switching the required check to `verify` happen in the same ruleset save (steps 3 below). `ci.yml` has no `merge_group` trigger (MR-30), so `verify` must never be required while the queue exists (a queue entry would wait for a check that is never reported).
 
 **When.** After MR-32 (20 measured `verify` runs). **Before** the MR-33 pull request that deletes `opf-ci.yml`, `ecosystem-ci.yml`, `cli-windows.yml`, `engines-range.yml` and the four `flake-repeat.yml` merges: those workflows produce the four old required checks, and a required check that never reports blocks every pull request. The agent tells you when. `verify` must have run on at least one pull request in the last 7 days, or GitHub will not offer it in the check picker (then type it).
 
@@ -326,7 +328,7 @@ Expected: no `merge_queue` among the types, `checks` is `["verify"]`, `methods` 
 1. Name `release tags v* (MR-40)`; Enforcement **Active**.
 2. Bypass list: the App (O4), mode **Always allow**; optionally yourself.
 3. Target tags: **Add target**, **Include by pattern**, `v*`.
-4. Rules: tick **Restrict updates** and **Restrict deletions**. Do **not** tick **Restrict creations** (finding 4: the `release` job creates `vX.Y.Z` with `GITHUB_TOKEN`; ticking it is only safe if the agent first changes that job to mint the App token, which the plan does not do). Pushing a `v*` tag by hand (the retry path) then still works for you.
+4. Rules: tick **Restrict updates** and **Restrict deletions**. Do **not** tick **Restrict creations** (finding 4: the App, a bypass actor, pushes `vX.Y.Z` in `release.yml`; leaving creation open also keeps the pull-request fallback, where you push the tag, working). Pushing a `v*` tag by hand then still works for you.
 5. **Create**.
 
 **Verify.** `gh api repos/OpenPresentation/opf/rulesets --jq '.[]|[.name,.target,.enforcement]|@tsv'` lists it as `tag active`. **Undo.** Disable or delete the ruleset.
@@ -360,7 +362,7 @@ for r in openpresentation-site pptx-gallery pptx-dev; do
 done
 ```
 
-Two secrets per site. The proof is the dry-run bump of MR-52: a patch bump pull request opened by the App waits for `build-and-smoke`, is merged by the site's CI, and the site's push workflow starts; a minor one stays open with the `needs-review` label.
+Two secrets per site. The agent's drafts of the merge workflows (`opf-bump-merge.yml`, and `build-and-smoke.yml` for pptx-gallery) are in `docs/programs/monorepo/site-workflows/` with install notes; MR-52 lands them by one pull request per site after the App exists. Before the first real release run Actions, **Bump sites** in OpenPresentation/opf once with `dry-run` true (the default) to prove the token and the lockfile refresh; if the label step answers 403, add Issues: write to the App (O4) or create the labels `auto-merge` and `needs-review` in each site. The proof is the dry-run bump of MR-52: a patch bump pull request opened by the App waits for `build-and-smoke`, is merged by the site's CI, and the site's push workflow starts; a minor one stays open with the `needs-review` label.
 
 **Undo.** Delete the two secrets in each site; uninstall the App from the sites: Organization settings, Installed GitHub Apps, **Configure**, remove the repository; disable `bump-sites.yml` (an agent task).
 

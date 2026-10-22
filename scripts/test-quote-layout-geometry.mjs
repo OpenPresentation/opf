@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {layoutQuote,OPFCompositionError} from '../packages/javascript/dist/composition.js';
+import {registryPlan} from './registry-plan.mjs';
 
 assert.ok(!process.env.NODE_OPTIONS && !process.execArgv.some(value=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(value)),
   'Run without preload/loader arguments or NODE_OPTIONS.');
@@ -12,7 +13,7 @@ const consumer=path.resolve(process.argv[2]??'artifacts/npm/registry-consumer');
 const output=process.argv[3];
 const modules=await realpath(path.join(consumer,'node_modules'));
 const lock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8'));
-const plan=JSON.parse(await readFile('release-plan.json','utf8'));
+const plan=registryPlan();
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const checked=new Map();
 async function packageManifest(name) {
@@ -89,7 +90,7 @@ async function fingerprint(file) {
   }
 }
 await fingerprint(path.join(dist,'composition.js'));
-const report={scope:'Unreleased quote-flow core API with the release-plan registry renderer used only to supply existing outer boxes and open-font advances. This probe does not verify the candidate renderer/converter integrations or browser/native raster equivalence.',
+const report={scope:'Unreleased quote-flow core API with the published registry renderer used only to supply existing outer boxes and open-font advances. This probe does not verify the candidate renderer/converter integrations or browser/native raster equivalence.',
   fixtureSha256:hash(fixtureBytes),sourceHashes,runtimeHashes,fontHashes,packages:[...checked.values()].map(({manifest,integrity})=>({name:manifest.name,version:manifest.version,integrity})),results};
 if (output) await writeFile(output,JSON.stringify(report,null,2)+'\n');
 console.log(`Verified ${results.length} wide/portrait quote layouts with exact installed font measurements.`);

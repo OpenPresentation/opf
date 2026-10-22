@@ -10,7 +10,7 @@ import {layoutMetric} from '../packages/javascript/dist/composition.js';
 import {metricLayoutFixtures} from './metric-layout-fixtures.mjs';
 
 assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(x=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(x)), 'Run without source aliases or preload/loader arguments.');
-const [consumer,geometryFile,output,renderer='../opf-render']=process.argv.slice(2);
+const [consumer,geometryFile,output,renderer='packages/render']=process.argv.slice(2);
 assert.ok(consumer&&geometryFile,'Provide the registry consumer and freshly generated candidate geometry report.');
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const geometryBytes=await readFile(geometryFile),geometry=JSON.parse(geometryBytes);

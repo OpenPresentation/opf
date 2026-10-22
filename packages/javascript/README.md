@@ -126,7 +126,7 @@ export function LayoutThumbnail({ slug }: { slug: string }) {
 }
 ```
 
-The preview source lives in [OpenPresentation/gallery](https://github.com/OpenPresentation/gallery); this checkout materializes ignored copies from the installed package for checks.
+The preview source lives in [`packages/gallery`](../gallery) of this repository, which the checks read.
 
 ### Example decks
 

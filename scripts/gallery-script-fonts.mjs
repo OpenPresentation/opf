@@ -38,7 +38,7 @@ export function galleryScriptFontManifest(renderFonts) {
 export function galleryScriptFontManifestForExample(renderFonts, exampleSource) {
   if (!/\.\/script-fonts\//.test(exampleSource)) return undefined;
   const manifest = galleryScriptFontManifest(renderFonts);
-  if (!manifest) throw new Error('The pinned editor example loads ./script-fonts/ but the pinned @openpresentation/opf-render has no script font pack (scriptFontPackages, 0.10.0 and later). Move release-plan.json to a renderer release that has it, or to an editor example that does not load script fonts.');
+  if (!manifest) throw new Error('The pinned editor example loads ./script-fonts/ but the pinned @openpresentation/opf-render has no script font pack (scriptFontPackages, 0.10.0 and later). Use a renderer release that has it, or an editor example that does not load script fonts.');
   return manifest;
 }
 

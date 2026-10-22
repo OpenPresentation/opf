@@ -2,7 +2,7 @@
 // Release notes for a version from a CHANGELOG: the body of its `## X.Y.Z` section, up to the next `## ` heading.
 // The assembler writes `## X.Y.Z (YYYY-MM-DD)` headings (scripts/changelog-fragments.mjs); a bare `## X.Y.Z` is accepted
 // too. The version is matched whole, so 0.18.1 never selects the 0.18.10 section. Used by the "Create GitHub Release" jobs of
-// .github/workflows/npm-publish.yml and cli-publish.yml.
+// .github/workflows/npm-publish.yml.
 //
 //   node scripts/release-notes.mjs --version 0.18.1 [--changelog <path>] [--out notes.md]
 //

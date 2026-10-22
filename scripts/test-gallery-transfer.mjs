@@ -1,6 +1,6 @@
 import {readFile} from 'node:fs/promises';
-import {parseOpfTransfer,prepareOpfImport} from '../../opf-editor/src/transfer.js';
-import {toSvg} from '../../opf-render/dist/svg.js';
+import {parseOpfTransfer,prepareOpfImport} from '../packages/editor/src/transfer.js';
+import {toSvg} from '../packages/render/dist/svg.js';
 const gallery=JSON.parse(await readFile(new URL('../artifacts/editor/gallery.json', import.meta.url),'utf8'));
 let failures=[];
 for(const item of gallery.items){try{const result=prepareOpfImport({slides:[{id:'gallery-preview-1',title:'Existing'}]},parseOpfTransfer(JSON.stringify(item.opf)));toSvg(result.presentation,result.slideIndex+1);}catch(e){failures.push({id:item.id,error:e.message});}}

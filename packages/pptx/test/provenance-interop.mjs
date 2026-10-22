@@ -4,6 +4,7 @@ import {mkdtemp, rm, writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
+import {spawnSpec} from '../../../scripts/package-manager.mjs';
 import {unzipSync} from 'fflate';
 // OPF 0.15: the gallery ids these decks name (layouts, font schemes, the narrative) resolve from the registered default catalog.
 import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
@@ -12,15 +13,14 @@ import {toPptx, fromPptx} from './helpers/default-catalog.mjs';
 // PUBLISHED importer. Importers up to 0.11.6 reject an OPF_DOCUMENT_V1 whose
 // `design`/`metadata` carries a key they do not know (and an OPF_SLIDE_V1 whose
 // `design` does), dropping the whole tag. The new keys therefore live under
-// `supplement`, which those importers ignore. Run through `npm run test:packed`
+// `supplement`, which those importers ignore. Run through `pnpm run test:packed`
 // (needs the npm CLI and registry access).
 const PUBLISHED = '0.11.6';
-const npmCli = process.env.npm_execpath;
-assert.ok(npmCli, 'Run through npm run test:packed for portable npm execution.');
 const consumer = await mkdtemp(path.join(tmpdir(), 'opf-pptx-interop-'));
 try {
   await writeFile(path.join(consumer, 'package.json'), JSON.stringify({name: 'interop-consumer', private: true, type: 'module'}));
-  execFileSync(process.execPath, [npmCli, 'install', `@openpresentation/opf-pptx@${PUBLISHED}`, '--no-audit', '--no-fund', '--ignore-scripts'], {cwd: consumer, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024});
+  const install = spawnSpec(['npm', 'install', `@openpresentation/opf-pptx@${PUBLISHED}`, '--no-audit', '--no-fund', '--ignore-scripts']);
+  execFileSync(install.command, install.args, {...install.options, cwd: consumer, encoding: 'utf8', maxBuffer: 16 * 1024 * 1024});
   const published = await import(pathToFileURL(path.join(consumer, 'node_modules/@openpresentation/opf-pptx/dist/index.js')).href);
   const dec = new TextDecoder();
   const png = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';

@@ -25,7 +25,7 @@ describe("schema $ids", () => {
 describe("catalog export shapes (@openpresentation/gallery, RR-78)", () => {
   test("the root carries no catalog data and core has no /catalog subpath; the gallery package exports the records keyed by kind and id", () => {
     assert.equal(packageJson.exports["./catalog"], undefined, "RR-78: @openpresentation/opf/catalog is removed, with no alias");
-    assert.equal(packageJson.dependencies["@openpresentation/gallery"], "^5.0.0");
+    assert.equal(packageJson.dependencies["@openpresentation/gallery"], "workspace:^", "published as ^X.Y.Z of the release itself (pnpm pack)");
     for (const name of ["catalogs", "catalogEntries", "catalogIndexes", "audiences", "tones", "themes", "layouts", "chartTypes", "narratives", "socialPlatforms", "languages", "colorSchemes", "fontSchemes", "layoutPreviews"])
       assert.equal(root[name], undefined, name);
     assert.equal(gallery.source, "https://www.pptx.gallery");

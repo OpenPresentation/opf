@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "Standalone consumer of the published OPF packages (RR-04, FF-10). Versions here must equal release-plan.json; prepare-consumer.mjs checks.",
+  "description": "Standalone consumer of the published OPF packages (RR-04, FF-10). The OPF packages follow the registry latest set (scripts/registry-plan.mjs): prepare-consumer.mjs rewrites them at run time, and --update-lock moves this committed baseline.",
   "engines": {
     "node": ">=22"
   },

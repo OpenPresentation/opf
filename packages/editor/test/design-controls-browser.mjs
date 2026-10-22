@@ -330,11 +330,13 @@ try {
   // --- the Content tab -------------------------------------------------------------------------------
   await slide(1);
   await page.locator('#tab-content').click();
+  await settle(); // fonts the tab asks for redraw the preview when they arrive; a redraw during the edit below would end it
   // One click on text still starts text editing with the caret where you clicked (the textEntry default).
   const firstText = page.locator('#preview [data-canvas-target][data-opf-path="slides.1.blocks.0.text"]');
   await firstText.click();
   const inline = page.getByRole('textbox', { name: /^Edit .* inline$/ });
   await inline.waitFor();
+  await page.waitForFunction(() => document.activeElement?.className === 'opf-inline-input', undefined, { timeout: 5000 }).catch(() => {}); // the assertion below names the failure
   assert.equal(await page.evaluate(() => document.activeElement.className), 'opf-inline-input', 'one click enters text editing');
   mark('one click on text still enters editing');
   await page.keyboard.press('Escape');

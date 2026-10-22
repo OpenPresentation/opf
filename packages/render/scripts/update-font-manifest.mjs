@@ -23,6 +23,7 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import assert from 'node:assert/strict';
 import {BUNDLED_FONT_MANIFEST} from '../src/font-manifest.js';
+import {spawnSpec} from '../../../scripts/package-manager.mjs';
 import {ALLOWED_FONT_LICENSES,copyrightLine,detectLicenses,pinnedRawUpstream,provenUnmodified,reservedFontNames,upstreamUrl} from './font-license.mjs';
 const require=createRequire(import.meta.url),hash=data=>createHash('sha256').update(data).digest('hex');
 const vendorMode=process.argv.includes('--vendor');
@@ -65,13 +66,12 @@ async function fetchGit(pkg,target){
 async function fetchNpm(pkg,target){
   const work=await mkdtemp(path.join(tmpdir(),'opf-vendor-'));
   try{
-    // Prefer the npm that launched this script; otherwise the npm on PATH (a .cmd shim on Windows).
-    const cli=process.env.npm_execpath?.endsWith('npm-cli.js')?process.env.npm_execpath:undefined;
-    const npm=cli?process.execPath:process.platform==='win32'?'npm.cmd':'npm';
+    // npm and tar run without a shell; on Windows npm and pnpm go through their JavaScript entrypoint (scripts/package-manager.mjs).
+    const npm='npm';
     const run=(command,args)=>{
-      const full=cli&&command===npm?[cli,...args]:args;
-      const result=spawnSync(command,full,{cwd:work,encoding:'utf8',shell:!cli&&process.platform==='win32'&&command===npm});
-      assert.equal(result.status,0,`${command} ${full.join(' ')} failed: ${result.stderr}`);
+      const spec=spawnSpec([command,...args]);
+      const result=spawnSync(spec.command,spec.args,{cwd:work,encoding:'utf8',...spec.options});
+      assert.equal(result.status,0,`${command} ${args.join(' ')} failed: ${result.stderr}`);
       return result.stdout;
     };
     const packed=JSON.parse(run(npm,['pack',`${pkg.name}@${pkg.version}`,'--json','--pack-destination','.','--ignore-scripts']))[0];

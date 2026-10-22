@@ -12,6 +12,12 @@
 // Changed files are the committed difference to the merge base with origin/main, plus uncommitted and untracked files.
 // The typecheck and the package tests run through scripts/agent-slot.mjs (at most OPF_AGENT_SLOTS = 3 at once on the
 // machine). Every step runs; a table of statuses and timings is printed at the end; the exit code is 1 when a step fails.
+// MR-23f, the build: the checks import the packages' dist/ (the gallery, core, the CLI), which is not tracked, so a fresh
+// worktree has none, and the checks that did build it (check:examples-convert builds the CLI, check:browser-safe core)
+// ran two at a time with tsup's `clean` wiping dist/ under the other checks. One `build` step now runs after the install
+// and before every other step (`pnpm run build:packages`), and every later command runs with OPF_REUSE_BUILD set to a
+// token of this run, so the builds that core and the CLI repeat (scripts/reuse-build.mjs) are skipped and no step wipes
+// dist/ while another reads it. The phases are install, build, the cheap checks (two at a time), then the heavy steps.
 //   node scripts/check-changed.mjs                 run
 //   node scripts/check-changed.mjs --plan          print the steps and run nothing
 //   node scripts/check-changed.mjs --base <ref>   measure from the merge base with <ref> instead of origin/main
@@ -27,7 +33,7 @@ import { checkJobs, selectChecks } from './run-checks.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BIOME_EXTENSIONS = new Set(['.js', '.mjs', '.cjs', '.jsx', '.ts', '.mts', '.cts', '.tsx', '.json', '.jsonc', '.css']);
 const TYPESCRIPT = /\.(ts|mts|cts)$|(^|\/)tsconfig[^/]*\.json$/;
-// The six packages of the monorepo (docs/programs/monorepo/README.md section 1). `script` is the package script that runs
+// The six packages of the monorepo and the private packages/integration (docs/programs/monorepo/README.md section 1). `script` is the package script that runs
 // the whole package. A package whose directory is not in the repository yet (the engines before their import) never has
 // a changed file, so it adds no step; one that is imported but not in pnpm-workspace.yaml fails instead of passing
 // silently (`--fail-if-no-match`).
@@ -38,6 +44,7 @@ export const PACKAGES = [
   { id: 'pptx', dir: 'packages/pptx', filter: '@openpresentation/opf-pptx', script: 'test:contract' },
   { id: 'editor', dir: 'packages/editor', filter: '@openpresentation/opf-editor', script: 'test:contract' },
   { id: 'gallery', dir: 'packages/gallery', filter: '@openpresentation/gallery', script: 'test' },
+  { id: 'integration', dir: 'packages/integration', filter: '@openpresentation/integration', script: 'test' },
 ];
 const BROWSER = /(^|-)browser(-|\.)/;
 
@@ -138,7 +145,8 @@ function packageSteps(selection) {
   const filter = ['--filter', selection.filter, '--fail-if-no-match'];
   if (selection.scope === 'all') commands.push(slot(pnpm, ...filter, selection.script ?? 'test'));
   else {
-    if (selection.build) commands.push(slot(pnpm, ...filter, 'build'));
+    // The package and what it depends on (dist/ is not tracked, so a fresh worktree has none of them).
+    if (selection.build) commands.push(slot(pnpm, '--filter', `${selection.filter}...`, '--fail-if-no-match', 'run', 'build'));
     const cwd = path.join(root, selection.dir);
     const batch = selection.files.filter((name) => name.endsWith('.test.mjs'));
     if (batch.length) commands.push({ cwd, argv: slot(process.execPath, '--test', ...batch.map((name) => `test/${name}`)) });
@@ -153,6 +161,7 @@ export function buildPlan(files, env) {
   const { scripts, config, needsInstall, packages } = env;
   const plan = [];
   if (needsInstall) plan.push({ name: 'install', commands: [{ argv: [pnpm, 'install', '--frozen-lockfile', '--prefer-offline'] }] });
+  const buildStep = { name: 'build', build: true, commands: [{ argv: slot(pnpm, 'run', 'build:packages') }] };
   const existing = files.filter((file) => env.exists(file));
   const biomeFiles = existing.filter((file) => BIOME_EXTENSIONS.has(path.extname(file).toLowerCase()));
   if (biomeFiles.length) plan.push({ name: 'biome', light: true, detail: `${biomeFiles.length} files`, biome: biomeFiles });
@@ -165,8 +174,28 @@ export function buildPlan(files, env) {
     const selection = selectPackageTests(pkg, files, packages[pkg.id]);
     if (selection) plan.push(...packageSteps(selection));
   }
+  // Anything but Biome reads dist/ (checks, the type check, the tests), so it is built once, before all of it.
+  if (plan.some((step) => !step.skip && step.name !== 'install' && step.name !== 'biome')) plan.splice(plan[0]?.name === 'install' ? 1 : 0, 0, buildStep);
   return plan;
 }
+
+/**
+ * The order the steps run in, as indexes into the plan: the install, then the one build, then the cheap checks (two at
+ * a time) and last the heavy steps one after another. Nothing in a later phase starts before the earlier one is done,
+ * so no step builds (and cleans) dist/ while another one imports it.
+ */
+export function phases(plan) {
+  const indexes = (keep) => plan.map((step, index) => (keep(step) ? index : -1)).filter((index) => index >= 0);
+  return {
+    install: indexes((step) => step.name === 'install'),
+    build: indexes((step) => step.build),
+    light: indexes((step) => step.light),
+    heavy: indexes((step) => !step.light && !step.build && step.name !== 'install'),
+  };
+}
+
+/** The OPF_REUSE_BUILD token of one run: unique, so no other run (or a stale stamp) ever reuses this run's builds. */
+export const reuseToken = (pid = process.pid, now = Date.now()) => `check-changed-${pid}-${now}`;
 
 function needsInstall() {
   const modules = path.join(root, 'node_modules');
@@ -286,11 +315,14 @@ async function main(argv) {
     results[index] = result;
     console.log(`${result.status === 'skipped' ? '-' : result.status === 'passed' ? 'ok' : 'FAILED'}  ${result.name}${result.skip ? '' : ` (${result.seconds.toFixed(1)} s)`}`);
   };
-  const indexes = (keep) => plan.map((step, index) => (keep(step) ? index : -1)).filter((index) => index >= 0);
-  // Install first, then the cheap steps two at a time, then the heavy ones one after another (each through a slot).
-  for (const index of indexes((step) => step.name === 'install')) await run(index);
-  if (!results.some((result) => result?.status === 'FAILED')) {
-    const light = indexes((step) => step.light);
+  process.env.OPF_REUSE_BUILD = reuseToken(); // every command below inherits it: the build step stamps, the later builds reuse
+  const order = phases(plan);
+  const failedSoFar = () => results.some((result) => result?.status === 'FAILED');
+  // Install first, then the build, then the cheap steps two at a time, then the heavy ones one after another (each through a slot).
+  for (const index of order.install) await run(index);
+  if (!failedSoFar()) for (const index of order.build) await run(index);
+  if (!failedSoFar()) {
+    const light = order.light;
     let next = 0;
     const jobs = Math.min(2, checkJobs());
     await Promise.all(
@@ -298,7 +330,7 @@ async function main(argv) {
         for (let at = next++; at < light.length; at = next++) await run(light[at]);
       }),
     );
-    for (const index of indexes((step) => !step.light && step.name !== 'install')) await run(index);
+    for (const index of order.heavy) await run(index);
   }
   const ordered = results.filter(Boolean);
   const failed = ordered.filter((result) => result.status === 'FAILED');

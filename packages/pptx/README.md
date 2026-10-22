@@ -1,5 +1,3 @@
-> **Frozen: this repository is moving to [OpenPresentation/opf](https://github.com/OpenPresentation/opf).** `@openpresentation/opf-pptx` is developed there, in [`packages/pptx`](https://github.com/OpenPresentation/opf/tree/main/packages/pptx), together with core, the CLI and the other engines, and releases with them under one shared version from 0.26.0. The npm package name does not change. Please do not open new pull requests here; open issues and pull requests are being moved. File new issues at [OpenPresentation/opf](https://github.com/OpenPresentation/opf/issues) and name the package. Plan: [monorepo move](https://github.com/OpenPresentation/opf/blob/main/docs/programs/monorepo/README.md).
-
 # OPF PPTX
 
 Source prototype: `toPptx(deck, {bodyText: "native"})` is an opt-in mode and stays a prototype. It writes one editable paragraph, flat-bullet or numbered-list body per text region (the first is the Body placeholder) and a wrapped plain title as one Title placeholder, with an explicit `native-body-fallback` diagnostic for anything it cannot represent; the default measured output is unchanged. Keynote 15.1.1 was checked for Title and Body controls and reflow after an edit ([evidence](docs/evidence/rr-88-keynote/README.md)); PowerPoint has not been checked, and nothing here claims native raster equivalence. See [Choosing body text mode](#choosing-body-text-mode-since-0220) and the [scope and qualification boundaries](docs/native-body-prototype.md).
@@ -50,7 +48,7 @@ Version 0.8.0 also measures `design.contentBox` cards through core's padded inte
 Version 0.8.0 requires core 0.10.0 and uses renderer 0.8.0 for coordinated preview/font measurement. Quotes and code export their accepted internal lines and styles without another fitting pass. [Controlled Windows PowerPoint quote evidence](docs/evidence/shared-quote-integration/comparison.json) records glyph containment, separation, save/reopen and text reimport against its exact source/font hashes. Native quote import restores the quote payload from an unchanged export (see [Quote provenance](#quote-provenance-ff-57)); it does not restore the original typography or readability policy, and an edited or damaged quote imports as editable text blocks. Native chart geometry and general scalar-text wrapping also remain different from preview; editability and valid reimport do not establish raster equivalence.
 
 - Package: `@openpresentation/opf-pptx`
-- Repository: `OpenPresentation/opf-pptx`
+- Repository: `OpenPresentation/opf` (`packages/pptx`)
 - License: MIT
 - Compatibility target: `@openpresentation/opf`
 - Renderer relationship: may use `@openpresentation/opf-render` for chart rasterization, the PNG fallback of SVG pictures and visual verification
@@ -310,22 +308,18 @@ The package runtime must stay local and deterministic:
 ## Development
 
 ```sh
-npm ci
-npm run build
-npm run typecheck
-npm test
-npm run validate
+pnpm install   # once, at the repository root
+pnpm --filter @openpresentation/opf-pptx build
+pnpm --filter @openpresentation/opf-pptx typecheck
+pnpm --filter @openpresentation/opf-pptx test
+pnpm --filter @openpresentation/opf-pptx validate
 ```
 
 LibreOffice is not a runtime dependency. When it is installed in CI or a local verification environment, generated `.pptx` files can be smoke-opened there as an optional export check.
 
 ## Release Lane
 
-Public npm package publication is handled by `.github/workflows/release.yml` through npm Trusted Publishing (GitHub Actions OIDC) with npm provenance; no npm token is stored. The owner authorized agents to prepare and publish npm releases whenever a release is required (2026-09-29). This authorization does not waive any gate.
-
-1. Open a release-prep PR containing only the version bump, `CHANGELOG.md` (assembled from `changes/` with `node scripts/changelog-fragments.mjs assemble --version X.Y.Z`), dependency ranges, lockfile and current-instruction docs. Publish in dependency order (core, then renderer, then PPTX, then editor): refresh this repo's lockfile only after the required `@openpresentation/opf` and `@openpresentation/opf-render` versions are on the registry (`npm install --package-lock-only`), then run `npm run test:packed` against them.
-2. Merge after CI is green, then publish by pushing the git tag `opf-pptx-v<version>` (or `@openpresentation/opf-pptx@v<version>`) at the merge commit. The workflow verifies that the tag matches `package.json`, that the push-to-`main` run of `ci.yml` on exactly the tagged commit succeeded (`scripts/ci-evidence.mjs`; it fails closed and re-runs no test, RR-100), and the artifact itself (audit, the packed install, `npm pack --dry-run`) before `npm publish --access public --provenance`. A tag pushed while CI still runs fails at the evidence step; re-run the failed job once CI is green. A manual `workflow_dispatch` runs the same job without the tag check and is a fallback only.
-3. Verify with `npm view @openpresentation/opf-pptx@<version> version gitHead dist.attestations` and, from the core repo, `node scripts/test-pptx-publication.mjs <version> <release-commit> <this-checkout>`. Never republish an existing version.
+Packages publish from the OpenPresentation/opf monorepo through npm Trusted Publishing (GitHub Actions OIDC) with npm provenance; no npm token is stored. All six packages share one version and publish together, in dependency order, through the root release workflow described in [`docs/release-process.md`](../../docs/release-process.md) (the unified workflow lands with MR-40; until then the root process applies). Never republish an existing version. Verify a release with `npm view @openpresentation/opf-pptx@<version> version gitHead dist.attestations`.
 
 ## Shared dynamic composition
 
@@ -397,7 +391,7 @@ Set `imageFormat: "preserve"` to embed WebP unchanged when the receiving applica
 
 Node conversion lazily loads the pinned open-source Sharp dependency and requires Node 22 or later. Normal package installation must include platform optional dependencies for its native binaries. Browser bundles select a separate browser decoder using local Blob/image/canvas APIs; Sharp and Node code are excluded. Neither path uploads images or fetches asset URLs. Source-preserving export and ordinary PNG/JPEG/GIF operations do not load Sharp.
 
-`npm test` includes the Node pixel-reference cases and verifies browser bundling. To run the browser pixel checks, run `npm run build:browser-check`, serve this repository locally, and open `/artifacts/webp-fallback/browser/index.html`. The page reports 13 checks covering embedded PNG pixels, alpha, EXIF, the first animation frame, fit/crop, resolver calls and DOM canvas fallback. These are browser export checks, separate from the recorded Keynote viewing evidence.
+`pnpm test` includes the Node pixel-reference cases and verifies browser bundling. To run the browser pixel checks, run `pnpm run build:browser-check`, serve this repository locally, and open `/artifacts/webp-fallback/browser/index.html`. The page reports 13 checks covering embedded PNG pixels, alpha, EXIF, the first animation frame, fit/crop, resolver calls and DOM canvas fallback. These are browser export checks, separate from the recorded Keynote viewing evidence.
 
 
 ## Native background fills
@@ -497,7 +491,7 @@ Conditional borders keep the whole-table outer frame separate from interior hori
 
 Export consumes the same core geometry as SVG. It writes native merged cells and corrects PptxGenJS's padding-unit heuristic and missing dotted/transparent-border options in generated XML. Rich runs retain their own resolved opacity, including opaque overrides within a translucent cell. Tests inspect actual native XML and repeated conversions; native PowerPoint raster parity is not established.
 
-Version 0.5.0 requires core 0.7.0 and renderer 0.5.0 for coordinated previews. `npm run test:styled-table` runs export/import regressions. For local browser verification, set `OPF_CORE_ROOT` to the core repository and `OPF_RENDER_ROOT` to the coordinated renderer worktree when running `npm run build:browser-check`. Serve the repository and open `/artifacts/native-styled-table-import/browser/index.html`. Omit those variables to exercise installed package dependencies.
+Version 0.5.0 requires core 0.7.0 and renderer 0.5.0 for coordinated previews. `pnpm run test:styled-table` runs export/import regressions. For local browser verification, set `OPF_CORE_ROOT` to the core repository and `OPF_RENDER_ROOT` to the coordinated renderer worktree when running `npm run build:browser-check`. Serve the repository and open `/artifacts/native-styled-table-import/browser/index.html`. Omit those variables to exercise installed package dependencies.
 
 Version 0.8.0 exports editable native lines with explicit four-space tab stops. Boundary tags contain no original source words, so native edits and deletions remain authoritative. XML-unrepresentable scalar controls reject with an actionable path rather than silently losing characters. Twenty wide/portrait measured/estimated export cases, current-text mutation controls and damaged-tag fallbacks pass; native Office acceptance remains separate. The coordinated core browser workflow also verifies editing, undo and exact reimport.
 

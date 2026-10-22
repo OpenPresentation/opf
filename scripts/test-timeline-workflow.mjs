@@ -5,9 +5,9 @@ import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {createRequire} from 'node:module';
 import {pathToFileURL} from 'node:url';
-const require=createRequire(new URL('../../opf-render/package.json',import.meta.url));
+const require=createRequire(new URL('../packages/render/package.json',import.meta.url));
 const {build}=require('esbuild'),{chromium}=require('playwright');
-import {loadFonts} from '../../opf-render/dist/fonts-node.js';
+import {loadFonts} from '../packages/render/dist/fonts-node.js';
 import {withRecords} from './ecosystem-records.mjs';
 const output=path.resolve(process.argv[2]??'artifacts/timeline-workflow');
 const installed=process.argv[3]==='installed',consumer=path.resolve(process.argv[4]??'artifacts/npm/consumer');
@@ -28,10 +28,10 @@ await mkdir(output,{recursive:true});
 const prepare=installed?(await import(pathToFileURL(contained(installedRequire.resolve('@openpresentation/opf-render/fonts-node'))).href)).loadFonts:loadFonts;
 const {registry}=await prepare(),hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 let contents=`
- import {createEditorSession} from '../opf-editor/dist/index.js';
- import {createCanvasEditor} from '../opf-editor/dist/canvas.js';
- import {loadFonts} from '../opf-render/dist/fonts-browser.js';
- import {toPptx,fromPptx} from '../opf-pptx/dist/index.js';
+ import {createEditorSession} from './packages/editor/dist/index.js';
+ import {createCanvasEditor} from './packages/editor/dist/canvas.js';
+ import {loadFonts} from './packages/render/dist/fonts-browser.js';
+ import {toPptx,fromPptx} from './packages/pptx/dist/index.js';
  window.verifyTimelineRejected=({deck,measured})=>{try{createEditorSession(deck,{rejectInvalid:true}).composeSlide(0,measured?{fonts}:{});return {rejected:false};}catch(error){return {rejected:error.name==='OPFCompositionError',diagnostics:error.diagnostics};}};
  window.mount=async({deck,faces,measured})=>{
   window.plainCanvas?.destroy();window.fonts?.dispose();window.failures=[];window.lastExport=null;window.lastImport=null;
@@ -42,7 +42,7 @@ let contents=`
   action('undo',()=>editor.undo());action('redo',()=>editor.redo());
   action('export',async()=>{plainCanvas.commit();window.accepted=editor.presentation;window.lastExport=await toPptx(accepted,renderOptions);window.lastImport=await fromPptx(lastExport);});
  };`;
-if(installed)contents=contents.replaceAll('../opf-editor/dist/index.js','@openpresentation/opf-editor').replaceAll('../opf-editor/dist/canvas.js','@openpresentation/opf-editor/canvas').replaceAll('../opf-render/dist/fonts-browser.js','@openpresentation/opf-render/fonts-browser').replaceAll('../opf-pptx/dist/index.js','@openpresentation/opf-pptx');
+if(installed)contents=contents.replaceAll('./packages/editor/dist/index.js','@openpresentation/opf-editor').replaceAll('./packages/editor/dist/canvas.js','@openpresentation/opf-editor/canvas').replaceAll('./packages/render/dist/fonts-browser.js','@openpresentation/opf-render/fonts-browser').replaceAll('./packages/pptx/dist/index.js','@openpresentation/opf-pptx');
 const built=await build({stdin:{resolveDir:installed?consumer:process.cwd(),contents},bundle:true,platform:'browser',format:'iife',write:false,metafile:true});
 if(installed)for(const input of Object.keys(built.metafile.inputs))if(input!=='<stdin>')contained(path.resolve(input));
 const bundle=built.outputFiles[0].text,browser=await chromium.launch(),results=[],rejections=[],errors=[],requests=[];let activeCase;

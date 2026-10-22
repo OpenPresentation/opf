@@ -88,6 +88,9 @@ test('assembleChangelog keeps a multi-line entry together and refuses a duplicat
   assert.match(text, /## 0\.13\.0\n\n- Top line\.\n {4}- nested\n\n## 0\.12\.2/);
   assert.throws(() => assembleChangelog(CHANGELOG, { version: '0.12.2', date: '', entries: [{ body: 'x' }] }), /already has a section/);
   assert.throws(() => assembleChangelog(CHANGELOG, { version: '0.13.0', date: '', entries: [] }), /nothing to assemble/);
+  // MR-40: a package with no change still gets its section when the release passes a summary.
+  const unchanged = assembleChangelog(CHANGELOG, { version: '0.13.0', date: '2026-10-23', summary: 'No package changes; released with the set.', entries: [] }).text;
+  assert.match(unchanged, /## 0\.13\.0 \(2026-10-23\)\n\nNo package changes; released with the set\.\n\n## /);
   assert.throws(() => assembleChangelog(CHANGELOG, { version: 'v1', date: '', entries: [{ body: 'x' }] }), /semantic version/);
 });
 

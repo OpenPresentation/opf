@@ -2,7 +2,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { DEFAULT_WEIGHT, SHARD_ONE_OVERHEAD, listArguments, listedTestArguments, parseChain, parseShard, partitionTests, shardCommands } from './ci-test-shards.mjs';
+import { spawnSync } from 'node:child_process';
+import { DEFAULT_WEIGHT, SHARD_ONE_OVERHEAD, SHARDED_PACKAGES, listArguments, listedTestArguments, parseChain, parseShard, partitionTests, planPackageShard, runnerPath, shardCommands } from './ci-test-shards.mjs';
 
 const SCRIPT = 'npm run build && npm run check:fonts && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes';
 const CONTRACT = 'npm run build && node scripts/run-tests.mjs --suite contract && npm run build:browser-check';
@@ -72,7 +73,7 @@ test('a script that cannot be split is never dropped: shard 1 runs it whole and 
     assert.deepEqual(run(2), []);
     assert.deepEqual(run(3), []);
   }
-  assert.throws(() => shardCommands({ script: 'npm run build && ./run.sh && node scripts/run-tests.mjs', scriptName: 'test', listLines: lines, weights, shard: { index: 1, count: 1 } }), /not an npm or node command/);
+  assert.throws(() => shardCommands({ script: 'npm run build && ./run.sh && node scripts/run-tests.mjs', scriptName: 'test', listLines: lines, weights, shard: { index: 1, count: 1 } }), /not an npm, pnpm or node command/);
 });
 
 test('the committed weights cover the three siblings with positive seconds, and balance three shards of each', () => {
@@ -88,4 +89,47 @@ test('the committed weights cover the three siblings with positive seconds, and 
     assert.ok(Math.max(...loads) - Math.min(...loads) < 20, `${sibling} shards are within 20 s: ${loads}`);
     assert.ok(Math.max(...loads) < 340, `${sibling} shards stay near five minutes: ${loads}`);
   }
+});
+
+test('pnpm run steps shard like npm run steps (the converted package scripts of MR-23)', () => {
+  const script = 'pnpm run build && node scripts/run-tests.mjs && pnpm run build:browser-check && pnpm run check:changes';
+  const shards = [1, 2].map((index) => shardCommands({ script, scriptName: 'test', listLines: lines, weights, shard: { index, count: 2 } }).map((entry) => entry.text));
+  assert.deepEqual(shards[0].filter((text) => text.startsWith('pnpm')), ['pnpm run build', 'pnpm run build:browser-check', 'pnpm run check:changes']);
+  assert.deepEqual(shards[1].filter((text) => text.startsWith('pnpm')), ['pnpm run build']);
+  assert.equal(shardCommands({ script, scriptName: 'test', listLines: lines, weights, shard: { index: 1, count: 1 } }).find((entry) => entry.text === 'pnpm run build').tool, 'pnpm');
+});
+
+test('--package plans a shard of a workspace package: every listed test once across the shards, in the package directory', () => {
+  assert.deepEqual(Object.keys(SHARDED_PACKAGES).sort(), ['editor', 'pptx', 'render']);
+  assert.throws(() => planPackageShard({ id: 'core', scriptName: 'test', shard: { index: 1, count: 2 } }), /--package must be one of/);
+  for (const id of Object.keys(SHARDED_PACKAGES)) {
+    const { packageRoot, commands: first } = planPackageShard({ id, scriptName: 'test', shard: { index: 1, count: 3 } });
+    assert.ok(packageRoot.endsWith(`packages/${id}`));
+    const tests = [1, 2, 3].flatMap((index) => planPackageShard({ id, scriptName: 'test', shard: { index, count: 3 } }).commands.filter((entry) => /test\/[\w.-]+\.mjs$/.test(entry.text)).map((entry) => entry.text));
+    assert.equal(new Set(tests).size, tests.length, `${id}: no test runs twice`);
+    assert.ok(tests.length > 20, `${id}: the shards list the package's tests`);
+    assert.ok(first.length > 0);
+  }
+});
+
+test('the command line prints a shard with --package --dry-run and refuses an unknown package', () => {
+  const script = new URL('./ci-test-shards.mjs', import.meta.url).pathname;
+  const dry = spawnSync(process.execPath, [script, '--package', 'editor', '--script', 'test:contract', '--shard', '1/2', '--dry-run'], { encoding: 'utf8' });
+  assert.equal(dry.status, 0, dry.stderr);
+  assert.match(dry.stdout, /^\+ .*run build/mu);
+  assert.match(dry.stdout, /^\+ node (--test )?test\//mu);
+  const bad = spawnSync(process.execPath, [script, '--package', 'cli', '--shard', '1/2', '--dry-run'], { encoding: 'utf8' });
+  assert.equal(bad.status, 1);
+  assert.match(bad.stderr, /--package must be one of/);
+});
+
+test('the converted package scripts shard: the root run-tests path is the tests command, build:deps repeats in every shard (MR-30 on MR-23)', () => {
+  const script = 'pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract && pnpm run build:browser-check';
+  assert.deepEqual(parseChain(script).filter((entry) => entry.isTests).map((entry) => entry.command), ['node ../../scripts/run-tests.mjs --suite contract']);
+  assert.equal(runnerPath(script), '../../scripts/run-tests.mjs');
+  assert.equal(runnerPath('pnpm run build'), 'scripts/run-tests.mjs');
+  const lines = ['node test/a.mjs', 'node test/b.mjs'];
+  const shards = [1, 2].map((index) => shardCommands({ script, scriptName: 'test:contract', listLines: lines, weights: {}, shard: { index, count: 2 } }).map((entry) => entry.text));
+  assert.deepEqual(shards.map((texts) => texts.filter((text) => text.startsWith('pnpm'))), [['pnpm run build:deps', 'pnpm run build', 'pnpm run build:browser-check'], ['pnpm run build:deps', 'pnpm run build']]);
+  assert.equal(shards.flat().filter((text) => text.startsWith('node test/')).length, 2, 'every listed test runs once');
 });

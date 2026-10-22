@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {test} from 'node:test';
 import {createRequire} from 'node:module';
 import {compareTextObservations,exportedTextShapes} from './compare-text.mjs';
-const require=createRequire(new URL('../../packages/javascript/package.json',import.meta.url));
+const require=createRequire(new URL('../../package.json',import.meta.url));
 const peer=createRequire(require.resolve('@openpresentation/opf-pptx/package.json'));
 const dependencies={...peer('fflate'),...peer('fast-xml-parser')};
 function fixture(){

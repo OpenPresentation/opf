@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-editor",
-  "version": "0.25.3",
+  "version": "0.26.0",
   "description": "Embeddable local OPF editor primitives built on the deterministic renderer.",
   "license": "MIT",
   "type": "module",
@@ -10,12 +10,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OpenPresentation/opf-editor.git"
+    "url": "git+https://github.com/OpenPresentation/opf.git",
+    "directory": "packages/editor"
   },
   "bugs": {
-    "url": "https://github.com/OpenPresentation/opf-editor/issues"
+    "url": "https://github.com/OpenPresentation/opf/issues"
   },
-  "homepage": "https://github.com/OpenPresentation/opf-editor#readme",
+  "homepage": "https://github.com/OpenPresentation/opf/tree/main/packages/editor#readme",
   "publishConfig": {
     "access": "public"
   },
@@ -271,25 +272,24 @@
   "sideEffects": false,
   "scripts": {
     "build": "node scripts/build.mjs",
+    "build:deps": "pnpm --filter \"@openpresentation/opf-editor^...\" --fail-if-no-match run build",
     "typecheck": "node scripts/check-syntax.mjs src test scripts examples",
-    "test": "npm run build && npm run check:font-hotlinks && node scripts/run-tests.mjs && npm run check:runners && npm run check:changes",
-    "test:contract": "npm run build && node scripts/run-tests.mjs --suite contract",
-    "check:runners": "node --test scripts/run-tests.test.mjs",
-    "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+    "test": "pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs && pnpm run check:scripts",
+    "test:contract": "pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract",
     "validate": "node scripts/validate-package.mjs",
-    "test:packed": "node test/packed-install.mjs",
-    "prepack": "npm run build",
-    "check:font-hotlinks": "node --test scripts/check-font-hotlinks.test.mjs && node scripts/check-font-hotlinks.mjs",
-    "check:font-hotlinks:built": "node scripts/check-font-hotlinks.mjs --built dist artifacts/playground",
+    "check:scripts": "node --test scripts/check-syntax.test.mjs scripts/browser-suites.test.mjs",
+    "test:packed": "pnpm run build:deps && node test/packed-install.mjs",
+    "prepack": "pnpm run build",
+    "check:font-hotlinks:built": "node ../../scripts/check-font-hotlinks.mjs --built dist artifacts/playground",
     "build:playground": "node scripts/build-playground.mjs",
-    "test:playground": "npm run build:playground && npm run check:font-hotlinks:built && node test/playground-pptx.mjs && node test/playground-script-fonts.mjs artifacts/playground-script-fonts && node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts && node test/playground-base-fonts.mjs artifacts/playground-base-fonts && node test/playground-source.mjs && node test/design-controls-browser.mjs && node test/design-gaps-browser.mjs && node test/chart-options-browser.mjs && node test/persistence-browser.mjs && node test/slides-browser.mjs && node test/slide-navigator-browser.mjs && node test/layout-templates-browser.mjs && node test/layout-editor-browser.mjs && node test/template-panel-browser.mjs && node test/numbering-panel-browser.mjs && node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts && node test/canvas-fonts-browser.mjs artifacts/canvas-fonts && node test/find-replace-browser.mjs && node test/image-crop-browser.mjs && node test/mobile-browser.mjs && node test/review-panel-browser.mjs && node test/review-hook-browser.mjs && node test/source-pane-browser.mjs && node test/playground-download.mjs artifacts/playground-download && node test/export-menu-browser.mjs && node test/agent-handoff-browser.mjs && node test/presenter-browser.mjs && node test/present-button-browser.mjs",
+    "test:playground": "pnpm run build:deps && pnpm run build && pnpm run build:playground && pnpm run check:font-hotlinks:built && node test/playground-pptx.mjs && node test/playground-script-fonts.mjs artifacts/playground-script-fonts && node test/playground-lazy-fonts.mjs artifacts/playground-lazy-fonts && node test/playground-base-fonts.mjs artifacts/playground-base-fonts && node test/playground-source.mjs && node test/design-controls-browser.mjs && node test/design-gaps-browser.mjs && node test/chart-options-browser.mjs && node test/persistence-browser.mjs && node test/slides-browser.mjs && node test/slide-navigator-browser.mjs && node test/layout-templates-browser.mjs && node test/layout-editor-browser.mjs && node test/template-panel-browser.mjs && node test/numbering-panel-browser.mjs && node test/playground-ensure-fonts.mjs artifacts/playground-ensure-fonts && node test/canvas-fonts-browser.mjs artifacts/canvas-fonts && node test/find-replace-browser.mjs && node test/image-crop-browser.mjs && node test/mobile-browser.mjs && node test/review-panel-browser.mjs && node test/review-hook-browser.mjs && node test/source-pane-browser.mjs && node test/playground-download.mjs artifacts/playground-download && node test/export-menu-browser.mjs && node test/agent-handoff-browser.mjs && node test/presenter-browser.mjs && node test/present-button-browser.mjs",
     "test:code-browser": "node test/code-browser.mjs",
     "test:selection-browser": "node test/selection-browser.mjs",
     "test:click-entry-browser": "node test/click-entry-browser.mjs",
     "test:canvas-a11y-browser": "node test/canvas-a11y-browser.mjs",
     "test:metric-browser": "node test/metric-browser.mjs",
     "test:rich-input-browser": "node test/rich-input-browser.mjs",
-    "test:json": "npm run build && node test/json-source.mjs && node test/json-options.mjs",
+    "test:json": "pnpm run build:deps && pnpm run build && node test/json-source.mjs && node test/json-options.mjs",
     "test:json-browser": "node test/json-editor-browser.mjs",
     "test:design-controls-browser": "node test/design-controls-browser.mjs",
     "test:template-panel-browser": "node test/template-panel-browser.mjs",
@@ -326,11 +326,11 @@
     "@codemirror/state": "6.7.6",
     "@codemirror/view": "6.43.14",
     "@lezer/highlight": "1.2.5",
-    "@openpresentation/opf": "^0.25.0",
+    "@openpresentation/opf": "workspace:^",
     "jsonc-parser": "3.3.1"
   },
   "peerDependencies": {
-    "@openpresentation/opf-render": "^0.25.0"
+    "@openpresentation/opf-render": "workspace:^"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
@@ -338,7 +338,7 @@
     }
   },
   "devDependencies": {
-    "@openpresentation/gallery": "^5.0.0",
+    "@openpresentation/gallery": "workspace:*",
     "@expo-google-fonts/arimo": "0.4.3",
     "@expo-google-fonts/caladea": "0.4.2",
     "@expo-google-fonts/cousine": "0.4.3",
@@ -383,8 +383,8 @@
     "@expo-google-fonts/roboto-mono": "0.4.2",
     "@expo-google-fonts/stix-two-math": "0.4.0",
     "@expo-google-fonts/tinos": "0.4.2",
-    "@openpresentation/opf-pptx": "^0.25.0",
-    "@openpresentation/opf-render": "^0.25.0",
+    "@openpresentation/opf-pptx": "workspace:*",
+    "@openpresentation/opf-render": "workspace:*",
     "@resvg/resvg-js": "2.6.2",
     "axe-core": "4.14.0",
     "esbuild": "0.28.2",

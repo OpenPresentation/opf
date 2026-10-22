@@ -45,7 +45,8 @@ function slideContext(presentation, slideIndex, catalogs, { fonts, catalogs: _ex
 export const packageName = "@openpresentation/opf-editor";
 
 export const releaseLane = Object.freeze({
-  githubRepository: "OpenPresentation/opf-editor",
+  githubRepository: "OpenPresentation/opf",
+  directory: "packages/editor",
   npmPackage: "@openpresentation/opf-editor",
   compatibilityPackage: "@openpresentation/opf",
   rendererPackage: "@openpresentation/opf-render"

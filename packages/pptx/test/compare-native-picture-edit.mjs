@@ -3,6 +3,7 @@ import {createHash} from 'node:crypto';
 import {access, readFile, readdir, realpath, writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {lockEvidence} from './helpers/lock-evidence.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const parse = bytes => JSON.parse(bytes.toString('utf8').replace(/^\uFEFF/, ''));
@@ -56,7 +57,7 @@ if (report && generation) {
     assert.equal(process.version, generation.node);
     assert.equal(await realpath(process.execPath), await realpath(generation.executable));
     const consumer = await realpath(generation.consumer);
-    assert.equal(sha(await readFile(path.join(consumer, 'package-lock.json'))), generation.lockSha256);
+    assert.equal(lockEvidence(consumer)[1], generation.lockSha256);
     assert.deepEqual(Object.keys(generation.bindings).sort(), ['opf', 'opf-editor', 'opf-pptx', 'opf-render'].map(x => '@openpresentation/' + x).sort());
     for (const [name, binding] of Object.entries(generation.bindings)) {
       const packageFile = await realpath(binding.packageFile), packageRoot = path.dirname(packageFile);

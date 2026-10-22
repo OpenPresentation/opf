@@ -14,7 +14,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { verifySnapshot } from "./catalog-snapshot.mjs";
+import { verifySnapshot } from "../packages/gallery/scripts/catalog-snapshot.mjs";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 // RR-78: the catalog records are the @openpresentation/gallery package's (packages/gallery/catalog).

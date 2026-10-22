@@ -20,7 +20,7 @@ Metrics, quotes, code and timelines now follow shared fitting and preview geomet
 
 ## Reproduction
 
-Use fresh GitHub checkouts and the versions in `release-plan.json`; no old-machine artifacts are required. Run `pnpm test:registry-ecosystem` and `pnpm test:registry-fidelity` with Node 20 or 24. On Windows with PowerPoint and local Calibri:
+Use fresh GitHub checkouts and the versions of the published set (`node scripts/registry-plan.mjs`); no old-machine artifacts are required. Run `pnpm test:registry-ecosystem` and `pnpm test:registry-fidelity` with Node 20 or 24. On Windows with PowerPoint and local Calibri:
 
 ```powershell
 node scripts/test-native-feature-matrix.mjs artifacts/npm/registry-consumer artifacts/native-feature-052 generate

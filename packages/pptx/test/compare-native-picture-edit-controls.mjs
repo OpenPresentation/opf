@@ -5,6 +5,7 @@ import os from 'node:os';
 import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {lockEvidence} from './helpers/lock-evidence.mjs';
 
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const parse = bytes => JSON.parse(bytes.toString('utf8').replace(/^\uFEFF/, ''));
@@ -203,7 +204,7 @@ async function writeAlterFixture(dir, {worker = true, stages = true} = {}) {
     node: process.version,
     executable: process.execPath,
     consumer: packageRoot,
-    lockSha256: sha(await readFile(path.join(packageRoot, 'package-lock.json'))),
+    lockSha256: lockEvidence(packageRoot)[1],
     pptxSha256: sourceSha,
     expectedAlt: originalPicture.alternativeText,
     geometryPt: {

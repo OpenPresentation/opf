@@ -3,7 +3,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
-import { packageManagerInvocation, quoteForCmd, spawnSpec } from './package-manager.mjs';
+import { npmEnvironment, packageManagerInvocation, quoteForCmd, spawnSpec } from './package-manager.mjs';
 
 // #525: Windows launchers must not hand the executable or an argument to cmd.exe unquoted ("C:\Program Files\...").
 const WINDOWS_NODE = String.raw`C:\Program Files\nodejs\node.exe`;
@@ -28,13 +28,27 @@ test('spawnSpec spawns as is outside Windows', () => {
   assert.deepEqual(spawnSpec(['pnpm', 'run', 'a b'], { platform: 'linux' }), { command: 'pnpm', args: ['run', 'a b'], options: {} });
 });
 
+test('an npm or npx child does not inherit the npm_config_* variables only pnpm understands (npm warns "Unknown env config" for each)', () => {
+  const env = {
+    PATH: '/bin', npm_config_registry: 'https://registry.example/', npm_config_user_agent: 'pnpm/10', 'npm_config_@scope:registry': 'https://scope.example/',
+    npm_config_overrides: '{}', npm_config_recursive: 'true', npm_config_verify_deps_before_run: 'false', npm_config_npm_globalconfig: '/x', npm_config__jsr_registry: 'https://npm.jsr.io/',
+    npm_config_link_workspace_packages: 'false', npm_config_auto_install_peers: 'false', npm_config_frozen_lockfile: 'true', npm_config_manage_package_manager_versions: 'false',
+  };
+  const kept = { PATH: '/bin', npm_config_registry: 'https://registry.example/', npm_config_user_agent: 'pnpm/10', 'npm_config_@scope:registry': 'https://scope.example/' };
+  assert.deepEqual(npmEnvironment(env), kept);
+  for (const program of ['npm', 'npx', '/usr/bin/npm']) assert.deepEqual(spawnSpec([program, 'view', 'x'], { platform: 'linux', env }).options, { env: kept }, program);
+  assert.deepEqual(spawnSpec(['pnpm', 'run', 'x'], { platform: 'linux', env }).options, {}, 'pnpm keeps its own variables');
+  assert.deepEqual(spawnSpec(['node', 'x.mjs'], { platform: 'linux', env }).options, {});
+  assert.equal(npmEnvironment({ NPM_CONFIG_OVERRIDES: '{}', A: '1' }).NPM_CONFIG_OVERRIDES, undefined);
+});
+
 test('spawnSpec runs pnpm, npm and npx as their JavaScript entrypoint with Node on Windows, with no shell', (t) => {
   const { entries, env } = fakeInstall(t);
   for (const name of ['pnpm', 'pnpm.cmd', 'PNPM.CMD']) {
     assert.deepEqual(spawnSpec([name, 'run', 'check text'], { platform: 'win32', env }), { command: process.execPath, args: [entries.pnpm, 'run', 'check text'], options: {} }, name);
   }
-  assert.deepEqual(spawnSpec(['npm.cmd', 'view', 'x'], { platform: 'win32', env }), { command: process.execPath, args: [entries.npm, 'view', 'x'], options: {} });
-  assert.deepEqual(spawnSpec(['npx', 'tsc'], { platform: 'win32', env }), { command: process.execPath, args: [entries.npx, 'tsc'], options: {} });
+  assert.deepEqual(spawnSpec(['npm.cmd', 'view', 'x'], { platform: 'win32', env }), { command: process.execPath, args: [entries.npm, 'view', 'x'], options: { env } });
+  assert.deepEqual(spawnSpec(['npx', 'tsc'], { platform: 'win32', env }), { command: process.execPath, args: [entries.npx, 'tsc'], options: { env } });
   // `pnpm run` sets npm_execpath to the pnpm that is running it.
   const explicit = path.join(path.dirname(entries.pnpm), 'pnpm.cjs');
   assert.equal(spawnSpec(['pnpm', 'x'], { platform: 'win32', env: { npm_execpath: explicit } }).args[0], explicit);

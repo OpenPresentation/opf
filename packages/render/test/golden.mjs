@@ -4,9 +4,7 @@ import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { examples } from '@openpresentation/opf/examples';
-import {layoutMetric} from '@openpresentation/opf/composition';
-import {exampleBaseline} from '../scripts/example-baseline.mjs';
-import {chartTextSizeDefault, schemeNeutralsDerived, colorVariantsDerived, tableTextSize} from '../scripts/template-baseline.mjs';
+import {defaultExampleBaselinePath} from '../scripts/default-baseline.mjs';
 // FA-23: the renderer registers no catalog. The examples embed the records they use; the harness registers the gallery
 // snapshot as a host does, which changes nothing for a self-contained deck.
 import { gallery as defaultCatalog } from '@openpresentation/gallery';
@@ -16,8 +14,7 @@ import { diffManifests, readBaseline } from './golden-store.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 // RR-52: a baseline is a directory with one file per deck (test/golden/<name>/...). A legacy
 // `<name>.sha256.json` path still selects `<name>/` and a legacy single-file manifest still loads.
-const baselinePath = path.resolve(process.env.OPF_GOLDEN_BASELINE ?? path.join(root,
-  exampleBaseline(layoutMetric(1, {x: 0, y: 0, width: 400, height: 300}).alignment, tableTextSize(), chartTextSizeDefault(), schemeNeutralsDerived(), colorVariantsDerived())));
+const baselinePath = path.resolve(process.env.OPF_GOLDEN_BASELINE ?? defaultExampleBaselinePath());
 const started = performance.now();
 const output = path.resolve(process.env.OPF_GOLDEN_OUT ?? path.join(root, 'artifacts/golden'));
 const update = process.argv.includes('--update');

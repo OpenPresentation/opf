@@ -28,7 +28,7 @@ rule that keeps such a test visible without letting it block unrelated work, and
 | `scripts/quarantine.mjs` | `check`, `run-suite <suite>`, `run-deferred`. Plain Node, no dependencies. |
 | `scripts/flake-repeat.mjs` | The measurement. Runs each suite N times and writes a pass rate per test. |
 | `scripts/quarantine.test.mjs` | Unit tests of the rule and both scripts (`node --test`). |
-| `.github/workflows/flake-repeat.yml` | The scheduled repeat. |
+| `.github/workflows/nightly.yml` (job `flake`) | The scheduled repeat. |
 
 An entry looks like this (an example, not a real entry):
 
@@ -45,7 +45,7 @@ An entry looks like this (an example, not a real entry):
 
 ## Measurement
 
-`.github/workflows/flake-repeat.yml` runs nightly and on demand (`workflow_dispatch`, input `repeat`). It checks out `main`,
+The `flake` job of `.github/workflows/nightly.yml` runs on Sundays and on demand (`workflow_dispatch`, input `repeat`). It checks out `main`,
 builds what CI builds, and runs every suite in `test/browser-suites.json` five times. The job summary lists the pass rate
 and median duration per test, with the tail of each failure, and `flake-repeat.json` is uploaded as an artifact (30 days).
 A test that failed at least once raises a `Flaky test` annotation. The measurement never gates: it exits 0 unless a suite

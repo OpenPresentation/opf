@@ -96,3 +96,57 @@ test('only opf-editor build output is rebuilt; every other file is compared with
   assert.deepEqual(REBUILT['opf-editor'].install, ['npm', ['ci', '--ignore-scripts', '--no-audit', '--no-fund']]);
   assert.deepEqual(REBUILT['opf-editor'].build, ['node', ['scripts/build.mjs']]);
 });
+
+/** The fixture package inside a monorepo-shaped repository: `packages/editor/`, with or without the pnpm workspace around it. */
+async function monorepoFixture({workspace}) {
+  const base = await mkdtemp(path.join(tmpdir(), 'rebuilt-monorepo-'));
+  const repo = path.join(base, 'repo');
+  const pkg = path.join(repo, 'packages/editor');
+  await mkdir(path.join(pkg, 'scripts'), {recursive: true});
+  await mkdir(path.join(pkg, 'src'));
+  await mkdir(path.join(pkg, 'dist'));
+  await writeFile(path.join(pkg, 'package.json'), JSON.stringify({name: '@openpresentation/opf-editor', version: '1.0.0', scripts: {build: 'node scripts/build.mjs'}}));
+  await writeFile(path.join(pkg, 'src/index.txt'), 'replaceDocument');
+  await writeFile(path.join(pkg, 'scripts/build.mjs'), [
+    "import {mkdirSync, readFileSync, writeFileSync} from 'node:fs';",
+    "mkdirSync('dist', {recursive: true});",
+    "writeFileSync('dist/index.js', `export default '${readFileSync('src/index.txt', 'utf8')}';\\n`);",
+  ].join('\n'));
+  await writeFile(path.join(pkg, 'dist/index.js'), "export default '';\n"); // committed, stale
+  if (workspace) {
+    await writeFile(path.join(repo, 'package.json'), JSON.stringify({name: 'workspace', private: true}));
+    await writeFile(path.join(repo, 'pnpm-workspace.yaml'), "packages:\n  - 'packages/*'\n");
+    await writeFile(path.join(repo, 'pnpm-lock.yaml'), "lockfileVersion: '9.0'\n\nimporters:\n\n  .: {}\n\n  packages/editor: {}\n");
+  } else {
+    await writeFile(path.join(pkg, 'package-lock.json'), JSON.stringify({name: '@openpresentation/opf-editor', version: '1.0.0', lockfileVersion: 3, requires: true, packages: {'': {name: '@openpresentation/opf-editor', version: '1.0.0'}}}));
+  }
+  git(repo, 'init', '-q');
+  git(repo, 'add', '-A');
+  git(repo, 'commit', '-q', '-m', 'release');
+  return {base, repo, ref: git(repo, 'rev-parse', 'HEAD'), cacheRoot: path.join(base, 'cache')};
+}
+
+test('a release of the archived repository (package directory with its own lockfile) is rebuilt from that directory', async () => {
+  const {base, repo, ref, cacheRoot} = await monorepoFixture({workspace: false});
+  try {
+    const args = {repo: 'opf-editor', checkout: repo, ref, cacheRoot, packageDirectory: 'packages/editor'};
+    assert.equal((await rebuiltBytes({...args, file: 'dist/index.js'})).toString(), built);
+    await assertReproducible({...args, file: 'dist/index.js', installed: Buffer.from(built)});
+    await assert.rejects(assertReproducible({...args, file: 'dist/index.js', installed: Buffer.from("export default '';\n")}), /not a reproducible build/);
+  } finally {
+    await rm(base, {recursive: true, force: true});
+  }
+});
+
+test('a release of the shared line (pnpm workspace) is rebuilt with the frozen lockfile from the whole commit', async () => {
+  const {base, repo, ref, cacheRoot} = await monorepoFixture({workspace: true});
+  try {
+    const args = {repo: 'opf-editor', checkout: repo, ref, cacheRoot, packageDirectory: 'packages/editor'};
+    assert.equal((await rebuiltBytes({...args, file: 'dist/index.js'})).toString(), built);
+    // A second call reads the cache: the package root is found again inside the cached workspace.
+    assert.equal((await rebuiltBytes({...args, file: 'dist/index.js'})).toString(), built);
+    await assert.rejects(assertReproducible({...args, file: 'dist/index.js', installed: Buffer.from("export default '';\n")}), /not a reproducible build/);
+  } finally {
+    await rm(base, {recursive: true, force: true});
+  }
+});

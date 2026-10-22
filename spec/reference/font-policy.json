@@ -2,7 +2,7 @@
   "$schema": "./font-policy.schema.json",
   "provisionalDecisions": {
     "status": "provisional, owner may revise",
-    "note": "Owner decisions resolved provisionally with the recommended defaults. Changing a decision here is the whole edit: every row whose replacement names this decision takes its family and compatibility from it. A recorded measurement for a different family is ignored (treated as unmeasured) until scripts/measure-font-replacements.mjs is re-run.",
+    "note": "Owner decisions resolved provisionally with the recommended defaults. Changing a decision here is the whole edit: every row whose replacement names this decision takes its family and compatibility from it. A recorded measurement for a different family is ignored (treated as unmeasured) until the measurement is repeated.",
     "decisions": {
       "aptos-preview": {
         "replacement": "Intos",

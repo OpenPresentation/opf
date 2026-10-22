@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
-import {toSvg, resolvePresentation} from '../../opf-render/src/svg.js';
-import {loadFonts} from '../../opf-render/src/fonts-node.js';
-import {toPptx} from '../../opf-pptx/src/index.js';
+import {toSvg, resolvePresentation} from '../packages/render/src/svg.js';
+import {loadFonts} from '../packages/render/src/fonts-node.js';
+import {toPptx} from '../packages/pptx/src/index.js';
 import {embed} from '../packages/javascript/dist/index.js';
 import {gallery} from '@openpresentation/gallery';
-const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));
+const require=createRequire(new URL('../packages/pptx/package.json',import.meta.url));
 const {unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',trimValues:false,parseTagValue:false}),array=value=>Array.isArray(value)?value:value?[value]:[];
 // OPF 0.15: the deck embeds the font scheme it names (core registers no catalog).

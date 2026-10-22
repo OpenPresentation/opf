@@ -15,6 +15,7 @@
       "packages/gallery/scripts/**",
       "packages/gallery/src/**",
       "packages/gallery/test/**",
+      "packages/integration/test/**",
       "scripts/**",
       "!packages/javascript/src/generated",
       "!packages/render",

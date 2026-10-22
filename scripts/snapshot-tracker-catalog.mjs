@@ -3,7 +3,6 @@ import {readFileSync, readdirSync, mkdirSync, writeFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import path from 'node:path';
 import {createRequire} from 'node:module';
-import {execFileSync} from 'node:child_process';
 const root = path.resolve(import.meta.dirname, '..');
 const require = createRequire(import.meta.url);
 const installed = JSON.parse(readFileSync(require.resolve('@openpresentation/gallery/package.json'), 'utf8'));
@@ -20,7 +19,6 @@ for (const file of comparison.files) {
   const bytes = readFileSync(path.join(packageRoot, file.path));
   if (bytes.length !== file.bytes || createHash('sha256').update(bytes).digest('hex') !== file.sha256) throw new Error(`Published package bytes differ: ${file.path}`);
 }
-execFileSync(process.execPath, [path.join(root, 'scripts/materialize-gallery-catalog.mjs')]);
 const files = {};
 function collect(dir, relative = '') {
   for (const entry of readdirSync(dir, {withFileTypes:true}).sort((a,b)=>a.name.localeCompare(b.name))) {

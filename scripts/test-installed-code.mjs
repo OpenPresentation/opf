@@ -10,6 +10,7 @@ import path from 'node:path';
 import {tar} from './archive-tar.mjs';
 import {packageManagerInvocation} from './package-manager.mjs';
 import {assertReproducible,isRebuilt} from './rebuilt-release-files.mjs';
+import {SET,registryPlan,resolveRef,treePath} from './registry-plan.mjs';
 const root=fileURLToPath(new URL('../',import.meta.url));
 assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(arg=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(arg)),'Installed verification must not alias packages with a loader.');
 const out=await realpath(path.join(root,'artifacts/npm'));
@@ -21,20 +22,24 @@ const modules=await realpath(path.join(consumer,'node_modules'));
 assert.ok(within(consumer,modules),'Installed modules must remain inside this consumer');
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 const lockBytes=await readFile(path.join(consumer,'package-lock.json')),lock=JSON.parse(lockBytes);
-const plan=registry?JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8')):null;
+// MR-34: the published set is the registry's `latest` of each package (scripts/registry-plan.mjs) (nothing hand-edited).
+const plan=registry?registryPlan():null;
 const manifest=registry?{artifacts:plan.packages.filter(item=>item.name!=='@openpresentation/cli')}:JSON.parse(await readFile(path.join(out,'manifest.json'),'utf8'));
 if(!registry)assert.equal(manifest.published,false,'Candidate mode requires unpublished local archives.');
-const checkout=repo=>repo==='opf'?root:path.resolve(root,'..',repo);
+// MR-23e: the packages are directories of this repository. MR-34: the registry mode reads each file of the release commit the
+// published package was built from (the registry's gitHead; an archived repository's commit is its import in this history) with
+// `git show <commit>:packages/<directory>/<file>` (scripts/registry-plan.mjs).
+const checkout=repo=>repo==='opf'?root:path.join(root,'packages',repo.replace(/^opf-/,''));
 const immutable=(repo,file)=>{
  const ref=plan.verificationRefs[repo];assert.match(ref??'',/^[a-f0-9]{40}$/);
- return execFileSync('git',['show',`${ref}:${file}`],{cwd:checkout(repo),maxBuffer:16*1024*1024});
+ return execFileSync('git',['show',`${ref}:${treePath(repo,file)}`],{cwd:root,maxBuffer:16*1024*1024});
 };
 // Build output the repository does not keep current (opf-editor dist/, RR-101) is bound to the release commit by a reproducible
 // build of the gitHead's sources and lockfile instead of a committed copy; every other file is compared with the commit.
 const rebuildCache=path.join(root,'artifacts/immutable-builds');
 const immutableBytes=async(repo,file,installed)=>{
  if(!isRebuilt(repo,file))return {bytes:immutable(repo,file),rebuilt:false};
- await assertReproducible({repo,checkout:checkout(repo),ref:plan.verificationRefs[repo],file,installed,cacheRoot:rebuildCache});
+ await assertReproducible({repo,checkout:root,packageDirectory:SET.find(item=>item.key===repo).directory,ref:plan.verificationRefs[repo],file,installed,cacheRoot:rebuildCache});
  return {bytes:installed,rebuilt:true};
 };
 const sourceFile=async(repo,file)=>registry?immutable(repo,file).toString('utf8'):readFile(path.join(checkout(repo),file),'utf8');
@@ -49,7 +54,7 @@ for(const item of manifest.artifacts) {
     assert.ok(entry.resolved?.startsWith('https://registry.npmjs.org/')&&!entry.link,'Use a registry package');
     const repo=item.name.split('/').at(-1),spec=`${item.name}@${item.version}`;
     const metadata=JSON.parse(npm(['view',spec,'--json','--offline=false','--prefer-online']));
-    assert.equal(metadata.gitHead,plan.verificationRefs[repo]);assert.equal(entry.integrity,metadata.dist.integrity,'Registry integrity must match the installed lock');
+    assert.equal(resolveRef(repo,metadata.gitHead),plan.verificationRefs[repo]);assert.equal(entry.integrity,metadata.dist.integrity,'Registry integrity must match the installed lock');
     const packed=JSON.parse(npm(['pack',spec,'--json','--ignore-scripts','--offline=false','--prefer-online']))[0];
     assert.equal(path.basename(packed.filename),packed.filename);
     const archive=path.join(consumer,packed.filename),tarball=await readFile(archive);
@@ -84,7 +89,7 @@ for(const item of manifest.artifacts) {
     }
   }
 }
-const tooling=createRequire(path.resolve(root,'../opf-editor/package.json'));
+const tooling=createRequire(path.resolve(root,'packages/editor/package.json'));
 const toolUrl=name=>pathToFileURL(tooling.resolve(name)).href;
 const run=args=>{
   const result=spawnSync(process.execPath,args,{cwd:consumer,stdio:'inherit'});

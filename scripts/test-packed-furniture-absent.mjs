@@ -2,13 +2,11 @@
 import assert from 'node:assert/strict';
 import {mkdir, mkdtemp, readFile, writeFile, realpath, lstat, readdir, cp} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {spawnSync, execFileSync} from 'node:child_process';
+import {spawnSync} from 'node:child_process';
 import {tmpdir} from 'node:os';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import {createRequire} from 'node:module';
-import {candidateArtifacts} from './candidate-gallery-pack.mjs';
-import {satisfies} from './release-plan-cli.mjs';
 import {furnitureGallery} from './furniture-gallery.mjs';
 import {tar} from './archive-tar.mjs';
 import {packageManagerInvocation} from './package-manager.mjs';
@@ -52,7 +50,6 @@ try {
   receipt.manifestSha256 = hash(manifestBytes);
   assert.equal(manifest.published, false, 'Require unpublished candidate archives, not a registry plan.');
   // RR-78: core depends on @openpresentation/gallery, which the fixture also registers.
-  const candidate=candidateArtifacts(path.resolve(root));
   const names = ['@openpresentation/opf', '@openpresentation/opf-pptx'];
   const selected = names.map(name => {
     const matches = manifest.artifacts.filter(item => item.name === name);
@@ -63,8 +60,7 @@ try {
   assert.equal(path.basename(coreItem.file),coreItem.file);assert.match(coreItem.file,/\.tgz$/);
   const coreBytes=await readFile(path.join(artifacts,coreItem.file));assert.equal(hash(coreBytes),coreItem.sha256,'Core tarball changed before manifest extraction');assert.equal(coreBytes.length,coreItem.bytes);
   const coreManifest=JSON.parse(tar(path.join(artifacts,coreItem.file),'-xOf',['package/package.json']));
-  const gallerySelection=furnitureGallery(manifest,candidate,coreManifest);
-  if(gallerySelection.artifact)selected.unshift(gallerySelection.artifact);
+  selected.unshift(furnitureGallery(manifest,coreManifest).artifact);
   for (const item of selected) {
     assert.equal(path.basename(item.file), item.file); assert.match(item.file, /\.tgz$/);
     const bytes = await readFile(path.join(artifacts, item.file));
@@ -73,7 +69,7 @@ try {
     await writeFile(path.join(copies, item.file), bytes);
   }
   await json(path.join(consumer, 'package.json'), {name: 'opf-renderer-absent-furniture-check', private: true, type: 'module',
-    dependencies: {...Object.fromEntries(selected.map(item => [item.name, `file:../artifacts/${item.file}`])),...(gallerySelection.range?{'@openpresentation/gallery':gallerySelection.range}:{})}});
+    dependencies: {...Object.fromEntries(selected.map(item => [item.name, `file:../artifacts/${item.file}`]))}});
   const fixture = await readFile(new URL('./fixtures/renderer-absent-furniture.mjs', import.meta.url));
   await writeFile(path.join(consumer, 'probe.mjs'), fixture);
   receipt.fixtureSha256 = hash(fixture);
@@ -87,16 +83,6 @@ try {
   receipt.stage = 'bind-installed-files';
   const lockBytes = await readFile(path.join(consumer, 'package-lock.json'));
   const lock = JSON.parse(lockBytes), modules = await realpath(path.join(consumer, 'node_modules'));
-  if(gallerySelection.range){
-    const location=path.join(modules,'@openpresentation/gallery'),installed=await realpath(location),pkg=JSON.parse(await readFile(path.join(location,'package.json'))),locked=lock.packages['node_modules/@openpresentation/gallery'];
-    assert.ok(within(modules,installed));assert.equal((await lstat(location)).isSymbolicLink(),false);
-    assert.equal(pkg.name,'@openpresentation/gallery');assert.ok(satisfies(pkg.version,gallerySelection.range));assert.equal(locked.version,pkg.version);
-    assert.ok(!locked.link&&locked.resolved?.startsWith('https://registry.npmjs.org/')&&locked.integrity?.startsWith('sha512-'));
-    const invocation=packageManagerInvocation('npm',['pack',`@openpresentation/gallery@${pkg.version}`,'--ignore-scripts','--json','--pack-destination',copies]);
-    const packed=JSON.parse(execFileSync(invocation.command,invocation.args,{cwd:consumer,encoding:'utf8'}))[0];
-    const bytes=await readFile(path.join(copies,packed.filename));assert.equal(locked.integrity,'sha512-'+createHash('sha512').update(bytes).digest('base64'));
-    selected.unshift({name:pkg.name,version:pkg.version,file:packed.filename,bytes:bytes.length,sha256:hash(bytes),registry:true});
-  }
   receipt.lockSha256 = hash(lockBytes);
   assert.ok(within(consumer, modules));
   assert.ok(!Object.keys(lock.packages).some(file => /@openpresentation\/(opf-render|opf-editor)(?:\/|$)/.test(file)), 'Renderer/editor must remain absent from the complete lock.');

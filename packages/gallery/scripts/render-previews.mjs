@@ -9,14 +9,25 @@
 // The drawing uses core's portable text measurement and no font files, so it is the same on every OS. Regenerate the
 // previews whenever a layout record or the renderer pin changes.
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { readCatalog } from "./build.mjs";
 import { editorialDeck } from "./editorial-previews.mjs";
-import { loadEngines } from "./stability.mjs";
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const previewsRoot = path.join(packageRoot, "previews", "layouts");
+
+/**
+ * The renderer that draws the previews. The gallery package has no workspace dependency (plan section 1): `opf-render` and
+ * `opf` resolve from the repository root's devDependencies, which Node's lookup reaches from this package directory.
+ */
+async function loadEngines() {
+  const require = createRequire(path.join(packageRoot, "package.json"));
+  const { toSvg } = await import(pathToFileURL(require.resolve("@openpresentation/opf-render")).href);
+  const version = (name) => JSON.parse(readFileSync(require.resolve(`${name}/package.json`), "utf8")).version;
+  return { toSvg, versions: { core: version("@openpresentation/opf"), render: version("@openpresentation/opf-render") } };
+}
 
 export const PREVIEW_INDEX_SCHEMA = "https://openpresentation.org/schema/opf-layout-preview-index/v1";
 

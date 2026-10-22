@@ -2,7 +2,7 @@
 // For each example deck that exports, per slide: how many preview font sizes are off PowerPoint's 0.01 pt grid, and whether
 // the PPTX names a size the preview does not draw.
 //
-//   node --import ./scripts/register-local-opf.mjs docs/programs/release-readiness/rr-16-export-sizes.mjs \
+//   OPF_CORE_DIST=packages/javascript/dist node --import ./scripts/published-matrix/harness-loader/register-local-opf.mjs docs/programs/release-readiness/rr-16-export-sizes.mjs \
 //     --render <opf-render checkout> --pptx <opf-pptx checkout>
 //
 // Set OPF_CORE_DIST to measure another built core (see rr-16-corpus-impact.mjs). Read-only.

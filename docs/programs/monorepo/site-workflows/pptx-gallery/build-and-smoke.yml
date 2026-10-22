@@ -1,0 +1,63 @@
+name: Build and smoke
+
+# MR-52 (OpenPresentation/opf, docs/programs/monorepo/README.md, section 6, decision D19). Install as .github/workflows/build-and-smoke.yml in
+# Data-Advantage/pptx-gallery. pptx-gallery has no pull request CI for an arbitrary change (validate-gallery-registry.yml runs on pushes
+# to main), so the bump pull requests that bump-sites.yml opens get their own check, named `build-and-smoke`, which opf-bump-merge.yml
+# waits for before it merges a patch bump. It runs for bump branches only (bot/opf-v*): the other pull requests are unaffected. Widen
+# the `if` below to run it for every pull request if the owner wants that.
+#
+# The steps are the part of validate-gallery-registry.yml that needs no secret and no production URL: the install from the refreshed
+# lockfile, the checks on the package catalog and the vendored editor (a bump whose public/opf-editor bundle was not refreshed for the
+# new versions fails verify:published-editor here and stays open), the unit tests and the production build.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: build-and-smoke-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-smoke:
+    name: build-and-smoke
+    if: ${{ startsWith(github.head_ref, 'bot/opf-v') && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 10.33.2
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm lint
+
+      - name: Package catalog and exact layout preview invariants
+        run: pnpm check:core-catalog && pnpm verify:layout-previews && pnpm test:package-catalog
+
+      - name: Vendored editor against the pinned packages
+        run: |
+          pnpm prepare:script-fonts
+          pnpm prepare:lazy-fonts
+          pnpm prepare:editor-wasm
+          pnpm verify:published-editor
+
+      - name: Unit tests
+        run: pnpm test
+
+      - name: Production build
+        run: pnpm build
