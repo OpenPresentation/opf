@@ -1,3 +1,4 @@
+// MR-23b: the render workflows this serves (regenerate-goldens.yml, regenerate-candidate-goldens.yml, ci.yml) were not imported into the monorepo; MR-31 reads this script and folds it into the root golden workflow, or deletes it.
 // RR-52: the three GitHub API calls the regenerate-goldens workflow makes after it pushes. Node's fetch only: the
 // pinned Playwright image is not guaranteed to ship curl or gh. The token comes from the environment of that one
 // step (GITHUB_TOKEN), never from a checkout.

@@ -6,7 +6,8 @@ import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {create} from 'fontkit';
 import {loadFonts} from '../dist/fonts-node.js';
-import {toPptx} from '../../opf-pptx/dist/index.js';
+// MR-23b: opf-pptx is the sibling package of this workspace (packages/pptx), built output in its dist/.
+import {toPptx} from '../../pptx/dist/index.js';
 
 const output=path.resolve(process.argv[2]??'artifacts/font-variants');
 await mkdir(output,{recursive:true});
@@ -33,7 +34,7 @@ const source={design:{fontScheme:{id:'variant-audit',major:'Roboto ExtraBold',mi
   slides:[{metric:{value:123,label:'Exact weight metadata',description:'Existing explicit family request'}}]};
 const original=JSON.stringify(source),bytes=await toPptx(source,{fonts});
 assert.equal(JSON.stringify(source),original);
-const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url));
+const require=createRequire(new URL('../../pptx/package.json',import.meta.url));
 const {unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');
 const xml=new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']);
 const tree=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',trimValues:false,parseTagValue:false}).parse(xml),nativeRuns=[];

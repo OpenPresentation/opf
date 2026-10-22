@@ -2,29 +2,30 @@ import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {existsSync} from 'node:fs';
-import {createRequire} from 'node:module';
 import {mkdtemp,mkdir,readFile,writeFile,realpath,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
-import {fileURLToPath,pathToFileURL} from 'node:url';
-const root=fileURLToPath(new URL('../',import.meta.url)),npmCli=process.env.npm_execpath;
-assert.ok(npmCli?.endsWith('npm-cli.js'),'Run with npm run test:packed');
-// The runner already requires npm; use its own semver implementation for declared test dependency ranges.
-const {satisfies}=createRequire(npmCli)('semver');
-assert.ok(satisfies('2.0.1','^2.0.0'));
-assert.ok(!satisfies('3.0.0','^2.0.0')&&!satisfies('2.0.1-next.0','^2.0.0'));
+import {pathToFileURL} from 'node:url';
+import {npm,packageRoot,packWithDependencies,tarEntry} from '../scripts/workspace-pack.mjs';
+const root=packageRoot;
 const temporary=await mkdtemp(path.join(tmpdir(),'opf-render-packed-'));
 const actualTemporary=await realpath(temporary),temporaryParent=await realpath(tmpdir());
-const npm=(args,cwd)=>execFileSync(process.execPath,[npmCli,...args],{cwd,encoding:'utf8',maxBuffer:8*1024*1024});
+// MR-23b: the workspace has no registry copy of this version yet, so render, core and the gallery are packed with `pnpm pack` and installed
+// together (scripts/workspace-pack.mjs).
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 try{
-  const packed=JSON.parse(npm(['pack','--json','--pack-destination',temporary],root))[0];
+  const {self:packed,core:corePacked,gallery:galleryPacked}=packWithDependencies(temporary);
   const rootManifest=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
+  const tarballs=[packed,corePacked,galleryPacked].map(item=>item.filename);
   // RR-63: the lean install. The tarball alone brings no converter and no font package: SVG output works, and an export or font pack that needs an
   // optional peer says which package to install.
   const lean=path.join(temporary,'lean');await mkdir(lean);
   await writeFile(path.join(lean,'package.json'),JSON.stringify({private:true,type:'module'}));
-  npm(['install','--ignore-scripts','--no-fund','--no-audit',path.join(temporary,packed.filename)],lean);
+  npm(['install','--ignore-scripts','--no-fund','--no-audit',...tarballs],lean);
+  // The packed manifest, not the source one: its dependency on core is the registry range the workspace specifier became.
+  const packedManifestBytes=tarEntry(packed.filename,'package/package.json'),packedManifest=JSON.parse(packedManifestBytes.toString('utf8'));
+  assert.ok(!JSON.stringify(packedManifest).includes('workspace:'),'The packed manifest carries no workspace: specifier');
+  assert.equal(packedManifest.dependencies['@openpresentation/opf'],`^${corePacked.version}`);
   for(const absent of ['sharp','@resvg','pdf-lib','@expo-google-fonts','@img'])assert.ok(!existsSync(path.join(lean,'node_modules',absent)),`The lean install holds no ${absent}`);
   await writeFile(path.join(lean,'lean.mjs'),`import assert from 'node:assert/strict';
 import {toSvg} from '@openpresentation/opf-render/svg';
@@ -44,14 +45,14 @@ console.log('Lean install: SVG works; PNG, raster PDF and font packs name what t
   // Core 0.17 declares this package as an optional peer of its /node entry. `npm audit signatures` follows that registry edge
   // to the tarball and asks npm for a version it does not have yet (ETARGET); the override resolves the edge to the tarball too.
   // Core is a direct dependency at this package's range, so npm keeps the one core at the top level next to it.
-  const tarball=`file:${path.join(temporary,packed.filename)}`,coreName='@openpresentation/opf';
-  await writeFile(path.join(consumer,'package.json'),JSON.stringify({private:true,type:'module',dependencies:{[rootManifest.name]:tarball,[coreName]:rootManifest.dependencies[coreName],'@openpresentation/gallery':rootManifest.devDependencies['@openpresentation/gallery']},overrides:{[rootManifest.name]:`$${rootManifest.name}`}}));
+  const coreName='@openpresentation/opf';
+  await writeFile(path.join(consumer,'package.json'),JSON.stringify({private:true,type:'module',dependencies:{[rootManifest.name]:`file:${packed.filename}`,[coreName]:`file:${corePacked.filename}`,'@openpresentation/gallery':`file:${galleryPacked.filename}`},overrides:{[rootManifest.name]:`$${rootManifest.name}`}}));
   const peers=[...Object.keys(rootManifest.peerDependencies)].filter(name=>/^@expo-google-fonts\/(roboto|roboto-mono|arimo|caladea|cousine|gelasio|tinos|noto-sans)$/.test(name)||['sharp','@resvg/resvg-js','pdf-lib'].includes(name)).map(name=>`${name}@${rootManifest.devDependencies[name]}`);
   assert.equal(peers.length,11);
   npm(['install','--ignore-scripts','--no-fund','--no-audit',...peers],consumer);
   const galleryRoot=path.join(consumer,'node_modules/@openpresentation/gallery');
   assert.ok((await realpath(galleryRoot)).startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep),'Packed test gallery must be installed inside its consumer');
-  assert.ok(satisfies(JSON.parse(await readFile(path.join(galleryRoot,'package.json'),'utf8')).version,rootManifest.devDependencies['@openpresentation/gallery']),'Packed fixture gallery must satisfy its declared development range');
+  assert.equal(JSON.parse(await readFile(path.join(galleryRoot,'package.json'),'utf8')).version,galleryPacked.version,'Packed fixture gallery is the workspace gallery (the development dependency is workspace:*)');
   console.log('Packed fixture gallery2 is installed inside the consumer; renderer runtime dependencies remain unchanged.');
   const installed=path.join(consumer,'node_modules/@openpresentation/opf-render');
   const manifest=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
@@ -60,7 +61,8 @@ console.log('Lean install: SVG works; PNG, raster PDF and font packs name what t
   for(const {path:file} of packed.files){
     assert.ok(!path.isAbsolute(file)&&!file.split(/[/\\]/).includes('..'));
     const bytes=await readFile(path.join(installed,file));
-    assert.equal(hash(bytes),hash(await readFile(path.join(root,file))),`Installed package file differs: ${file}`);
+    // package.json is the one packed file that is not a copy of its source: pnpm pack wrote the registry ranges into it.
+    assert.equal(hash(bytes),hash(file==='package.json'?packedManifestBytes:await readFile(path.join(root,file))),`Installed package file differs: ${file}`);
     files[file]=hash(bytes);
   }
   for(const entry of ['dist/index.js','dist/svg.js','dist/png.js','dist/png.d.ts','dist/pdf.js','dist/pdf.d.ts','dist/converters.js','dist/fonts-node.js','dist/fonts-browser.js','dist/svg.d.ts','dist/element.js','dist/element.d.ts','dist/element-define.js','dist/player.js','dist/player.d.ts','dist/deck-runtime.js','dist/preview-fonts.js','dist/preview-fonts-node.js','dist/preview-fonts-cli.js','LICENSE'])assert.ok(files[entry],`Missing public entry: ${entry}`);
@@ -128,7 +130,7 @@ console.log('Player and <opf-deck> entry points load from the installed package.
   process.stdout.write(execFileSync(process.execPath,['player-entries.mjs'],{cwd:consumer,encoding:'utf8'}));
   const lock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8'));
   const core=lock.packages['node_modules/@openpresentation/opf'];
-  assert.ok(core.resolved.startsWith('https://registry.npmjs.org/')&&core.integrity.startsWith('sha512-')&&!core.link);
+  assert.ok(core.resolved.startsWith('file:')&&core.integrity===corePacked.integrity&&!core.link,'Core is the packed workspace tarball');
   const actualCore=await realpath(path.join(consumer,'node_modules/@openpresentation/opf'));
   assert.ok(actualCore.startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep),'Core must be installed inside the clean consumer');
   // Helpers the copied tests import (FA-23: catalog-harness registers the default catalog the way a host does) are installed
@@ -148,14 +150,23 @@ console.log('Player and <opf-deck> entry points load from the installed package.
   }
   const audit=JSON.parse(npm(['audit','--json'],consumer));
   assert.equal(audit.metadata.vulnerabilities.total,0);
-  const signatures=npm(['audit','signatures'],consumer);process.stdout.write(signatures);
+  // `npm audit signatures` asks the registry for every installed name@version, and the workspace packages (installed from tarballs above)
+  // are not on the registry until their release. The registry signatures and provenance of everything else are checked in a consumer that
+  // holds only the third-party dependencies of the packed manifest and the pinned optional peers; the registry install of the published
+  // package is the release workflow's check (MR-40).
+  const registryDeps=path.join(temporary,'registry-deps');await mkdir(registryDeps);
+  const thirdParty=Object.fromEntries([...Object.entries(packedManifest.dependencies).filter(([name])=>!name.startsWith('@openpresentation/')),...peers.map(spec=>[spec.slice(0,spec.lastIndexOf('@')),spec.slice(spec.lastIndexOf('@')+1)])]);
+  assert.ok(Object.keys(thirdParty).length>=15,'The signature consumer holds the third-party dependencies and the pinned peers');
+  await writeFile(path.join(registryDeps,'package.json'),JSON.stringify({private:true,dependencies:thirdParty}));
+  npm(['install','--ignore-scripts','--no-fund','--no-audit'],registryDeps);
+  const signatures=npm(['audit','signatures'],registryDeps);process.stdout.write(signatures);
   await mkdir(path.join(root,'artifacts'),{recursive:true});
   await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({
     node:process.version,package:manifest.name,version:manifest.version,integrity:packed.integrity,
     core:{version:core.version,resolved:core.resolved,integrity:core.integrity},files,knownVulnerabilities:0,
-    boundary:'Clean installed candidate with registry core, byte-matched shipped files and Node quote/code and finite chart-axis and chart-scale regressions, including explicit XML character rejection. Browser glyph tests run separately; this is not native raster equivalence or renderer registry publication.',
+    boundary:'Clean installed candidate with the packed workspace core, byte-matched shipped files and Node quote/code and finite chart-axis and chart-scale regressions, including explicit XML character rejection. Browser glyph tests run separately; this is not native raster equivalence or renderer registry publication.',
   },null,2)+'\n');
-  console.log(`Packed renderer passed: ${Object.keys(files).length} byte-matched files; registry core ${core.version}; ${packed.integrity}`);
+  console.log(`Packed renderer passed: ${Object.keys(files).length} byte-matched files; packed workspace core ${core.version}; ${packed.integrity}`);
 }finally{
   const actual=await realpath(temporary),relative=path.relative(temporaryParent,actual);
   assert.equal(actual,actualTemporary);assert.ok(relative!==''&&!relative.startsWith('..')&&!path.isAbsolute(relative),'Cleanup must stay inside its temporary parent');

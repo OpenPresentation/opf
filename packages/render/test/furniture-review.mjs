@@ -8,12 +8,15 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 import { readBaseline, serialize } from './golden-store.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const core = path.resolve(root, '../opf');
+// MR-23b: core and the renderer are one repository now; `core` is the repository root (core's paths keep their packages/javascript form).
+const core = path.resolve(root, '../..');
 const out = path.resolve(process.env.OPF_FURNITURE_REVIEW_OUT ?? path.join(root, 'artifacts/furniture-review-20260914'));
 const runtime = path.join(out, 'before-runtime');
 const beforeCore = path.join(runtime, 'core');
 const coreRef = 'a3ab4784ed22caffdad8c4e306f9a51b1e954ae9';
-const rendererRef = 'f2f2d51caddddc912588dd4f0f7a9586d3330475';
+// The imported commit of opf-render f2f2d51c (docs/programs/monorepo/commit-map/opf-render.txt); git archive from this directory
+// writes the package-relative paths the predecessor run expects.
+const rendererRef = 'd085377de14a682f99cbc1a3fa97c1b514248684';
 // RR-52: the accepted baseline is a per-deck directory; the old predecessor golden.mjs reads one manifest file, so
 // materialize the byte-identical reassembled manifest next to the review output.
 const acceptedBaseline = path.join(root, 'test/golden/opf-examples-png.timeline.sha256.json');
@@ -57,7 +60,7 @@ if (command === 'prepare') {
   const binding = { node: process.version, before: { core: coreRef, renderer: rendererRef, coreArchiveSha256, rendererArchiveSha256 },
     after: { core: git(core, 'rev-parse', 'HEAD').toString().trim(), renderer: git(root, 'rev-parse', 'HEAD').toString().trim() },
     acceptedBaseline: path.relative(root, baseline), acceptedBaselineSha256: hash(readFileSync(baseline)),
-    coreLockSha256: hash(readFileSync(path.join(core, 'pnpm-lock.yaml'))), rendererLockSha256: hash(readFileSync(path.join(root, 'package-lock.json'))),
+    workspaceLockSha256: hash(readFileSync(path.join(core, 'pnpm-lock.yaml'))),
     verifierSha256: hash(readFileSync(fileURLToPath(import.meta.url))) };
   save('binding.json', binding);
   assert.equal(run('before-build', path.join(beforeCore, 'packages/javascript'), 'pnpm', ['build']), 0);

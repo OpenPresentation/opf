@@ -1,3 +1,4 @@
+// MR-23b: the render workflows this serves (regenerate-goldens.yml, regenerate-candidate-goldens.yml, ci.yml) were not imported into the monorepo; MR-31 reads this script and folds it into the root golden workflow, or deletes it.
 // RR-52: golden PNG hashes are only comparable inside the image CI uses. The regenerate-goldens workflow calls this
 // guard first and refuses to regenerate anywhere else (a laptop, a self-hosted runner, a bare hosted runner, a
 // container whose image is not the one .github/workflows/ci.yml pins).

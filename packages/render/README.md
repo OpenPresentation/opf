@@ -654,28 +654,26 @@ npm run bench:soak -- --iterations 20 --concurrency 1,2 --decks 6 --script-every
 ## Development
 
 ```sh
-npm ci
-npm run build
-npm run typecheck
-npm run validate
-npm test
+pnpm install                  # at the repository root: one lockfile for every package
+cd packages/render
+pnpm run build:deps           # core and the gallery, which the tests import through the workspace
+pnpm run build
+pnpm run typecheck
+pnpm run validate
+pnpm test
 ```
 
-The accepted-text regression `npm run test:text` checks 24 combinations of dimensions, alignment, cards and formatting, including exact accepted positions/styles and strict overflow. `npm run test:rich-spacing-browser -- <new-output-directory>` compares two unchanged gallery slides with identical open font bytes. `npm run test:text-browser -- <new-output-directory>` also checks actual text paint: it currently exits 1 for four portrait/right title cases with one painted pixel beyond the 0.1-pixel cell tolerance in the recorded Windows Edge environment. Its advance/origin checks pass. Font text rectangles, painted-pixel containment, source whitespace and native fidelity are separate results; that historical plain fitting normalized whitespace. Later source-whitespace evidence below supersedes that behavior and has its own reviewed corpus checkpoint.
+The accepted-text regression `pnpm run test:text` checks 24 combinations of dimensions, alignment, cards and formatting, including exact accepted positions/styles and strict overflow. `pnpm run test:rich-spacing-browser -- <new-output-directory>` compares two unchanged gallery slides with identical open font bytes. `pnpm run test:text-browser -- <new-output-directory>` also checks actual text paint: it currently exits 1 for four portrait/right title cases with one painted pixel beyond the 0.1-pixel cell tolerance in the recorded Windows Edge environment. Its advance/origin checks pass. Font text rectangles, painted-pixel containment, source whitespace and native fidelity are separate results; that historical plain fitting normalized whitespace. Later source-whitespace evidence below supersedes that behavior and has its own reviewed corpus checkpoint.
 
-When this repo is checked out beside `openpresentation/opf`, `npm test` also renders every `examples/**/*.opf.json` deck twice and asserts byte-identical SVG output. Golden PNG drift is checked on every run against all 805 slides from the installed core package, identified by a content digest. Changed or missing corpora fail; Git history cannot skip the gate. To generate a review candidate after an intentional visual change:
+`pnpm test` also renders every `examples/**/*.opf.json` deck twice and asserts byte-identical SVG output. Golden PNG drift is checked on every run against all 805 slides from the installed core package, identified by a content digest. Changed or missing corpora fail; Git history cannot skip the gate. To generate a review candidate after an intentional visual change:
 
 ```sh
-npm run golden:update
+pnpm run golden:update
 ```
 
 ## Release Lane
 
-Public npm package publication is handled by `.github/workflows/npm-publish.yml` through npm Trusted Publishing (GitHub Actions OIDC) with npm provenance; no npm token is stored. The owner authorized agents to prepare and publish npm releases whenever a release is required (2026-09-29). This authorization does not waive any gate.
-
-1. Open a release-prep PR containing only the version bump, `CHANGELOG.md` (assembled from `changes/` with `node scripts/changelog-fragments.mjs assemble --version X.Y.Z`), dependency ranges, lockfile and current-instruction docs. Publish in dependency order (core, then renderer and PPTX, then editor): refresh this repo's lockfile only after the required `@openpresentation/opf` version is on the registry (`npm install --package-lock-only`), then run `npm run test:packed` against it.
-2. Merge after CI is green, then publish by pushing the git tag `opf-render-v<version>` (or `@openpresentation/opf-render@v<version>`) at the merge commit. The workflow verifies that the tag matches `package.json`, that the push-to-`main` run of `ci.yml` on exactly the tagged commit succeeded (`scripts/ci-evidence.mjs`; it fails closed and re-runs no test, RR-100), and the artifact itself (audit, the packed install, `npm pack --dry-run`) before `npm publish --access public --provenance`. A tag pushed while CI still runs fails at the evidence step; re-run the failed job once CI is green. A manual `workflow_dispatch` runs the same job without the tag check and is a fallback only.
-3. Verify with `npm view @openpresentation/opf-render@<version> version gitHead dist.attestations` and, from the core repo, `node scripts/test-renderer-publication.mjs <version> <release-commit> <this-checkout>`. Never republish an existing version.
+Public npm package publication is handled by the repository's one `npm-publish.yml` through npm Trusted Publishing (GitHub Actions OIDC) with npm provenance; no npm token is stored. All six packages (core, CLI, gallery, this renderer, opf-pptx and opf-editor) share one version and are released together: see [docs/release-process.md](../../docs/release-process.md) at the repository root. The owner authorized agents to prepare and publish npm releases whenever a release is required (2026-09-29). This authorization does not waive any gate. Fragments for this package are `changes/<slug>.md` files at the repository root with `packages: [render]`. Never republish an existing version.
 
 ## Shared dynamic composition (local development)
 
