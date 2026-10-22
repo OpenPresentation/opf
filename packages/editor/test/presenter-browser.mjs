@@ -35,8 +35,23 @@ try {
       onExit: (index) => window.log.exits.push(index), onSlideChange: (index) => window.log.changes.push(index), ...extra,
     });
   }, [count, hidden, extra]);
+  // Leaving full screen is a request the browser answers later, and a presenter that stopped (or was destroyed by mount) before this one still has
+  // such requests in flight. One that is answered after the next start() takes full screen away from it again, and the new presenter, which did not
+  // ask for that exit, ends the presentation as the user's. Count the requests in flight so a test can wait until the browser answered every one
+  // (document.fullscreenElement is null as soon as the first is, which is too early on a slower machine).
+  await page.evaluate(() => {
+    window.exitsInFlight = 0;
+    const exit = Document.prototype.exitFullscreen;
+    Document.prototype.exitFullscreen = function (...args) {
+      window.exitsInFlight++;
+      const answer = exit.apply(this, args);
+      Promise.resolve(answer).then(() => { window.exitsInFlight--; }, () => { window.exitsInFlight--; });
+      return answer;
+    };
+  });
+  const fullscreenIdle = () => page.waitForFunction(() => !document.fullscreenElement && window.exitsInFlight === 0);
   const open = async (index) => {
-    await page.waitForFunction(() => !document.fullscreenElement); // a stop() before this one is still leaving full screen
+    await fullscreenIdle(); // a stop() before this one is still leaving full screen
     await page.locator('#opener').focus();
     return page.evaluate((i) => window.presenter.start(i), index);
   };
@@ -264,7 +279,7 @@ try {
 
   // Closing before the browser answered the full screen request (a quick Esc, the close button, F5 then Esc) must not leave the page in full
   // screen behind a hidden presenter: the request resolves after stop() saw no full screen to leave, so the presenter gives the screen back then.
-  await page.waitForFunction(() => !document.fullscreenElement);
+  await fullscreenIdle();
   await page.locator('#opener').focus();
   const early = await page.evaluate(async () => {
     const answer = window.presenter.start(0);
