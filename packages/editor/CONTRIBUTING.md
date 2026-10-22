@@ -1,3 +1,5 @@
+> **This repository is frozen (MR-20).** Contributions now go to [OpenPresentation/opf](https://github.com/OpenPresentation/opf), directory [`packages/editor`](https://github.com/OpenPresentation/opf/tree/main/packages/editor); its `CONTRIBUTING.md` and `AGENTS.md` describe the monorepo workflow. Pull requests opened here after the freeze will be closed with a pointer, and open issues and pull requests are moved by the maintainers. Plan: [monorepo move](https://github.com/OpenPresentation/opf/blob/main/docs/programs/monorepo/README.md).
+
 # Contributing
 
 This project is MIT-licensed and follows the OpenPresentation OSS boundary: local deterministic libraries only.

@@ -14,9 +14,7 @@ on:
   merge_group:
   push:
     branches: [main]
-  schedule:
-    # Weekly full run (every leg) on an unchanged main, to notice runner image, registry and dependency drift.
-    - cron: '37 6 * * 1'
+  # MR-20: the weekly schedule was removed with the freeze (this repository moves to OpenPresentation/opf); run the full legs with workflow_dispatch.
   workflow_dispatch:
 permissions:
   contents: read

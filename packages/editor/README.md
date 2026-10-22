@@ -1,3 +1,5 @@
+> **Frozen: this repository is moving to [OpenPresentation/opf](https://github.com/OpenPresentation/opf).** `@openpresentation/opf-editor` is developed there, in [`packages/editor`](https://github.com/OpenPresentation/opf/tree/main/packages/editor), together with core, the CLI and the other engines, and releases with them under one shared version from 0.26.0. The npm package name does not change. Please do not open new pull requests here; open issues and pull requests are being moved. File new issues at [OpenPresentation/opf](https://github.com/OpenPresentation/opf/issues) and name the package. Plan: [monorepo move](https://github.com/OpenPresentation/opf/blob/main/docs/programs/monorepo/README.md).
+
 # OPF Editor
 
 Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs/roadmap-shaping-20260915.md); it is not part of the published runtime.
