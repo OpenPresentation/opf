@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.25.2 (2026-10-22)
+
+- RR-98: closing the presenter before the browser answered its full screen request no longer leaves the page in full screen behind a hidden presentation. A quick Esc or close, or F5 followed straight by Esc, ran `stop()` while the request was still pending, so there was no full screen to leave; the request then resolved and the page stayed full screen with nothing shown (and, in Chromium on macOS, the window stuck in a state where the page took no clicks until the next exit). The presenter now exits full screen as soon as a late request resolves for a presentation that was already closed, and returns focus to the opener afterwards.
+
 ## 0.25.1 (2026-10-21)
 
 - RR-98: opening a document no longer forks its catalog records. Loading an example over another (a host's example menu), File > Open, the gallery handoff and restoring a stored copy replaced the document with an `applyPatch` that the fork-on-edit rule read as an edit of the `catalogs.default` records the two documents share, so slide layouts became `cover-custom`, `text-custom` and so on and the picker showed "Current draft". The session has a first-class `editor.replaceDocument(input, meta?)` (one undoable change that is never read as a catalog edit) and the source pane has `pane.replaceDocument(document, { source, name })`, which keeps the opened JSON as written and brings each document's text back exactly on Undo and Redo, also in YAML and Markdown. The playground's Open as a presentation, the gallery handoff and `createPersistence`'s `restore()` use it. `applyPatch` still forks an edited record.
