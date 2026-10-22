@@ -1,0 +1,45 @@
+{
+  "deck": "gallery/industries/mixed-use-leasing-pipeline-review.opf.json",
+  "entries": {
+    "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#0": {
+      "sha256": "cc7310630f9398977b7f74bc3064e809ff195a1bb48ae122aed4722ab47cb2eb",
+      "bytes": 7216
+    },
+    "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#1": {
+      "sha256": "22dd912cafb910198195dbc7e2cd16a51da907473a535cfaffabde29cac39d9b",
+      "bytes": 8664
+    },
+    "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#2": {
+      "sha256": "f5f9c9dadf583754e80dafa4f78ade416533e3da45f99e7dbfba17f2ca91b940",
+      "bytes": 7281
+    },
+    "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#3": {
+      "sha256": "7683bcc91fe62db5dcf1c946c8c418f19a12c8dc78578b8f7baca1d929c96770",
+      "bytes": 10512
+    },
+    "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#4": {
+      "sha256": "d4e9b0f8f91cab5fdcb8748e0b88b0167530262f82d8b8d3232146a64dc24308",
+      "bytes": 9422
+    },
+    "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#5": {
+      "sha256": "caea34ede4b09e41f99db15f6ae0c75f9d4e82318f6277d1268e9521958ee649",
+      "bytes": 19718
+    },
+    "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#6": {
+      "sha256": "5caeeac21339111c6a984eb5a275b4684ba7f9ffe239a40052d1c9d9524eb134",
+      "bytes": 11108
+    },
+    "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#7": {
+      "sha256": "b4044eae993021bbda9608c217a78fabf5bc9902e698fbfc9579b4d6ba2188e9",
+      "bytes": 4755
+    },
+    "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#8": {
+      "sha256": "492855c1db839b3932acf391223c91ab282ab49a6bdf4eadde4b182d4cb1ca67",
+      "bytes": 6615
+    },
+    "gallery/industries/mixed-use-leasing-pipeline-review.opf.json#9": {
+      "sha256": "bf51edbc1ee721a894a4672ff1d0ad35363ec21e7ed096c29581b50849c0db72",
+      "bytes": 14179
+    }
+  }
+}

@@ -2,6 +2,8 @@
 //
 //   node scripts/golden-promote.mjs [--candidate artifacts/golden/candidate.json] [--baseline <selection>] [--out artifacts/golden]
 //
+// Without --baseline (or OPF_GOLDEN_BASELINE) the promoter selects the same default baseline as test/golden.mjs (default-baseline.mjs).
+//
 // Only the deck files whose hashes differ are rewritten (and decks that left the corpus are removed), so the commit
 // touches exactly the decks that moved. The scale, format and font policy of the baseline are never changed here:
 // the comparison itself is exact hashes at a fixed scale, and a different scale is a different golden. Writes
@@ -12,13 +14,14 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { diffManifests, readBaseline, resolveBaseline, writeBaseline } from '../test/golden-store.mjs';
+import { defaultExampleBaselinePath } from './default-baseline.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const option = (name, fallback) => { const index = args.indexOf(name); return index < 0 ? fallback : args[index + 1]; };
 const out = path.resolve(option('--out', process.env.OPF_GOLDEN_OUT ?? path.join(root, 'artifacts/golden')));
 const candidatePath = path.resolve(option('--candidate', path.join(out, 'candidate.json')));
-const selection = option('--baseline', process.env.OPF_GOLDEN_BASELINE ?? path.join(root, 'test/golden/opf-examples-png.rr81-v2-reviewed.sha256.json'));
+const selection = option('--baseline', process.env.OPF_GOLDEN_BASELINE ?? defaultExampleBaselinePath());
 
 const resolved = resolveBaseline(selection);
 assert.equal(resolved.kind, 'directory', `${selection}: promotion needs a per-deck baseline directory (run scripts/golden-migrate.mjs on a single-file manifest first)`);
