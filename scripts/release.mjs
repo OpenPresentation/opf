@@ -361,8 +361,8 @@ const deck = JSON.parse(readFileSync('deck.opf.json', 'utf8'));
 const svgs = toSvg(deck, { catalogs: [gallery] });
 if (!Array.isArray(svgs) || !svgs.length || !String(svgs[0]).includes('<svg')) throw new Error('the renderer drew no SVG for the quickstart deck');
 if (Object.keys(core).length === 0 || Object.keys(pptx).length === 0) throw new Error('an entry point exports nothing');
-for (const name of ${JSON.stringify(NAMES)}) import.meta.resolve(name);
-console.log('rendered ' + svgs.length + ' slide(s); six entry points resolve');
+for (const name of ${JSON.stringify(NAMES)}) import.meta.resolve(name + '/package.json');
+console.log('rendered ' + svgs.length + ' slide(s); six packages resolve');
 `;
 
 /**
@@ -389,6 +389,11 @@ export function smoke(dir, version, { deck, registry = false, exec = run, scratc
     for (const [command, args] of steps) {
       const result = exec(command, args, { cwd: project });
       if (result.status !== 0) throw new Error(`smoke: ${path.basename(command)} ${args.join(' ')} failed (exit ${result.status})\n${result.stdout}${result.stderr}`);
+      if (args.at(-1) === '--version') {
+        // The CLI prints the versions of itself and of the core it runs: both are this release.
+        const versions = JSON.parse(result.stdout);
+        if (versions.cli !== version || versions.opf !== version) throw new Error(`smoke: the CLI reports cli ${versions.cli} and core ${versions.opf}, the release is ${version}`);
+      }
       log.push(`${path.basename(command)} ${args.join(' ')}: ${result.stdout.trim().split('\n').at(-1) ?? ''}`);
     }
     return log;

@@ -450,7 +450,7 @@ test('smoke installs the six tarballs together with overrides to themselves, the
     const exec = (command, args, options) => {
       const manifest = JSON.parse(readFileSync(path.join(options.cwd, 'package.json'), 'utf8'));
       seen.push({ command: path.basename(command), args, dependencies: manifest.dependencies, overrides: manifest.overrides, files: readdirSync(options.cwd).sort() });
-      return { status: 0, stdout: 'ok\n', stderr: '' };
+      return { status: 0, stdout: args.at(-1) === '--version' ? '{"cli":"0.26.0","opf":"0.26.0"}' : 'ok\n', stderr: '' };
     };
     const log = smoke(dir, '0.26.0', { deck, exec });
     assert.equal(log.length, 3);
@@ -459,6 +459,7 @@ test('smoke installs the six tarballs together with overrides to themselves, the
     assert.ok(Object.values(seen[0].dependencies).every((spec) => spec.startsWith('file:/')));
     assert.deepEqual(seen[0].overrides, Object.fromEntries(NAMES.map((name) => [name, `$${name}`])));
     assert.deepEqual(seen[1].files, ['deck.opf.json', 'package.json', 'smoke.mjs']);
+    assert.throws(() => smoke(dir, '0.26.0', { deck, exec: (_command, args) => ({ status: 0, stdout: args.at(-1) === '--version' ? '{"cli":"0.25.0","opf":"0.26.0"}' : 'ok', stderr: '' }) }), /CLI reports cli 0\.25\.0/);
     seen.length = 0;
     smoke(undefined, '0.26.0', { deck, registry: true, exec });
     assert.deepEqual(seen[0].dependencies, Object.fromEntries(NAMES.map((name) => [name, '0.26.0'])));
