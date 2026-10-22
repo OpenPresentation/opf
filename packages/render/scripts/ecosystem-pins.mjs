@@ -1,3 +1,4 @@
+// MR-23b: the render workflows this serves (regenerate-goldens.yml, regenerate-candidate-goldens.yml, ci.yml) were not imported into the monorepo; MR-31 reads this script and folds it into the root golden workflow, or deletes it.
 // RR-50 (the seam RR-52 left): the regenerate-goldens workflow must rebuild the same coordinated source graph that
 // .github/workflows/ci.yml tests. Neither keeps a copy of the pins:
 //   - the commits of OpenPresentation/opf, opf-pptx and opf-editor come from core's bot-owned ecosystem.lock.json,

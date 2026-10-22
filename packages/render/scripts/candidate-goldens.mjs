@@ -1,3 +1,4 @@
+// MR-23b: the render workflows this serves (regenerate-goldens.yml, regenerate-candidate-goldens.yml, ci.yml) were not imported into the monorepo; MR-31 reads this script and folds it into the root golden workflow, or deletes it.
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
