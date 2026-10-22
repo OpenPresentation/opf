@@ -5,15 +5,14 @@ import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
-import {packCliCandidate} from '../../../scripts/pack-cli-candidate.mjs';
-import {candidateArtifacts,assertInstalledCandidatePeers,assertCandidateExecInstalls} from '../../../scripts/candidate-gallery-pack.mjs';
+import {packWorkspacePackage} from '../../../scripts/workspace-pack.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
 import {satisfies} from '../../../scripts/unreleased-gate.mjs';
 import {assertExecOutsideGlobal, globalPrefixLayout} from '../../../scripts/global-prefix.mjs';
 const root=fileURLToPath(new URL('../../../',import.meta.url));
 const pkg=path.join(root,'packages/cli'),out=path.join(root,'artifacts/cli');
 const registry=process.argv.includes('--registry');
-const plan=JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8'));
+const plan=registry?JSON.parse(await readFile(path.join(root,'release-plan.json'),'utf8')):null;
 const option=name=>process.argv.find(value=>value.startsWith(`${name}=`))?.slice(name.length+1);
 const version=option('--version'),verificationRef=option('--verification-ref');
 assert.ok((!version&&!verificationRef)||(registry&&version&&verificationRef),'Use --registry with both --version=<version> and --verification-ref=<40-character commit>');
@@ -38,10 +37,6 @@ function run(command,args,cwd,env={}) {
 }
 try {
  await mkdir(out,{recursive:true});
- // Candidate artifacts already bind every packed byte to the freshly built source graph.
- // Rebuilding here would replace those qualified bytes; ordinary local packing still builds.
- const candidateGraph=registry?undefined:candidateArtifacts(root);
- if(!registry&&!candidateGraph)run('pnpm',['build'],pkg);
  const cache=path.join(temp,'npm-cache');
  // RR-62: the CLI depends on core (one core: the command runs its Node engine). A local run packs the candidate core
  // with it and installs both; a registry run installs the published CLI, which pulls the published core.
@@ -50,8 +45,9 @@ try {
   packed=JSON.parse(run('npm',['pack',registrySpec,'--json','--ignore-scripts','--pack-destination',out,'--cache',cache],pkg))[0];
   tarball=path.join(out,packed.filename);
  } else {
-  const candidate=await packCliCandidate({cliDirectory:pkg,coreDirectory:path.join(root,'packages/javascript'),destination:out,run,npmArgs:['--cache',cache]});
-  packed=candidate.cli;tarball=candidate.cliTarball;candidateCore=[candidate.coreTarball,...(candidate.additionalTarballs??(candidate.galleryTarball?[candidate.galleryTarball]:[]))];
+  // MR-23e: `pnpm pack` of the three workspace packages (its prepack builds each); the packed CLI asks for `^<version>` of core and the gallery.
+  packed=packWorkspacePackage('@openpresentation/cli',out);tarball=packed.tarball;
+  candidateCore=[packWorkspacePackage('@openpresentation/opf',out).tarball,packWorkspacePackage('@openpresentation/gallery',out).tarball];
  }
  if(registry){
   // Install directly from npm as well as from the inspected tarball so npm can
@@ -72,7 +68,6 @@ try {
  assertExecOutsideGlobal(temp,global);
  run('npm',['install','--global','--prefix',global.prefix,'--ignore-scripts','--no-audit','--no-fund','--cache',cache,tarball,...candidateCore],temp);
  const installed=path.join(global.modules,'@openpresentation/cli');
- if(candidateGraph)assertInstalledCandidatePeers(root,global.modules,['@openpresentation/cli'],candidateGraph.artifacts.find(item=>item.name==='@openpresentation/opf').version);
  const manifest=JSON.parse(await readFile(path.join(installed,'package.json'),'utf8'));
  assert.equal(manifest.version,expected.version);
  assert.ok(!manifest.private);
@@ -112,7 +107,6 @@ try {
  await writeFile(path.join(temp,'AGENTS.md'),'Keep existing project instructions.');
  const npxResult=JSON.parse(run('npm',['exec','--yes','--prefer-online','--ignore-scripts','--cache',cache,'--package',registry?registrySpec:tarball,...candidateCore.flatMap(file=>['--package',file]),'--','opf','skills','install'],temp));
  assert.equal(npxResult.changed.length,6,'npx-style installation must install the bundled skills');
- if(candidateGraph)assertCandidateExecInstalls(root,cache,[]);
  assert.equal(await readFile(path.join(temp,'AGENTS.md'),'utf8'),'Keep existing project instructions.');
  assert.deepEqual(JSON.parse(run(process.execPath,[bin,'skills','install'],temp)).changed,[]);
  assert.ok(JSON.parse(await readFile(path.join(temp,'.agents/skills/opf-author/assets/decision-brief.opf.json'),'utf8')).slides.length);

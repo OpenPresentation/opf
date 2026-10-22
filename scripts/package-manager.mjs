@@ -11,7 +11,7 @@ const PNPM_ONLY_NPM_CONFIG = new Set([
   'recursive', 'overrides', 'verify_deps_before_run', 'manage_package_manager_versions', 'link_workspace_packages',
   'auto_install_peers', 'frozen_lockfile', 'npm_globalconfig', '_jsr_registry', 'workspace_concurrency', 'shared_workspace_lockfile',
   'ignored_built_dependencies', 'only_built_dependencies', 'node_linker', 'hoist', 'hoist_pattern', 'public_hoist_pattern',
-  'package_import_method', 'prefer_workspace_packages', 'save_workspace_protocol', 'dedupe_peer_dependents',
+  'package_import_method', 'fail_if_no_match', 'filter', 'filter_prod', 'workspace_root', 'prefer_workspace_packages', 'save_workspace_protocol', 'dedupe_peer_dependents',
 ]);
 
 /** `env` without the `npm_config_*` variables only pnpm understands, for a child that runs npm or npx. */

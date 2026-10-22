@@ -8,35 +8,22 @@ import { promisify } from "node:util";
 import {createHash} from 'node:crypto';
 import {packageManagerInvocation} from '../../../scripts/package-manager.mjs';
 import {checkPackedTypes} from '../../../scripts/check-packed-types.mjs';
-import {packCliCandidate,preparePackedSmokeCli} from '../../../scripts/pack-cli-candidate.mjs';
-import {candidateArtifacts} from '../../../scripts/candidate-gallery-pack.mjs';
+import {packWorkspacePackage} from '../../../scripts/workspace-pack.mjs';
 import {assertPublishedGallery} from '../../../scripts/candidate-gallery.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
-import {satisfies} from '../../../scripts/unreleased-gate.mjs';
 import {createRequire} from 'node:module';
 
 const execFile = promisify(execFileCallback);
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifest = JSON.parse(await readFile(path.join(packageRoot,'package.json'),'utf8'));
 const registry = process.argv.includes('--registry');
-const candidateGraph=candidateArtifacts(path.resolve(packageRoot,'../..'));
-if(registry){assert.ok(!candidateGraph,'candidate tarballs cannot qualify registry installs');assertPublishedGallery(manifest);}
+if(registry)assertPublishedGallery(manifest);
 const require = createRequire(import.meta.url);
 const nodeTypesVersion = require('@types/node/package.json').version;
-const plan = JSON.parse(await readFile(new URL('../../../release-plan.json', import.meta.url), 'utf8'));
-// The release plan's renderer, editor and PPTX were built for the plan's core. A candidate core of a later minor line (a
-// breaking pre-1.0 release, such as 0.14 over a 0.13 plan) cannot run them; test:packed-ecosystem checks it with the
-// candidate siblings instead, and the release-prep PR moves the plan to the new line, which turns this check back on.
-const line = (version) => String(version).split('.').slice(0, 2).join('.');
-const planCore = plan.packages.find(item => item.name === manifest.name)?.version;
-const sameLine = planCore !== undefined && line(planCore) === line(manifest.version);
-const siblings = plan.packages.filter(item => ['@openpresentation/opf-render', '@openpresentation/opf-editor', '@openpresentation/opf-pptx'].includes(item.name));
-// Core raises its optional peers (the renderer and PPTX of /node) to the next train's line before its own release prep
-// (opf#498); npm then refuses the plan's siblings next to it, so the same skip applies.
-const peersAhead = siblings.filter(item => manifest.peerDependencies?.[item.name] && !satisfies(item.version, manifest.peerDependencies[item.name]));
-const downstream = candidateGraph ? candidateGraph.artifacts.filter(item => siblings.some(sibling => sibling.name === item.name)) : registry || !sameLine || peersAhead.length ? [] : siblings;
-if (!candidateGraph && !registry && !sameLine) process.stdout.write(`core ${manifest.version} is on a newer minor than the release plan's published siblings (${line(planCore)}.x): skipping their install until the ${line(manifest.version)} siblings publish (test:packed-ecosystem covers the candidate siblings).\n`);
-else if (!candidateGraph && !registry && peersAhead.length) process.stdout.write(`core ${manifest.version} declares optional peers ${peersAhead.map(item => `${item.name}@${manifest.peerDependencies[item.name]}`).join(' and ')}, which the release plan's ${peersAhead.map(item => item.version).join('/')} do not satisfy: skipping the published siblings' install until that line publishes (test:packed-ecosystem covers the candidate siblings).\n`);
+// MR-23e: the renderer, editor and PPTX converter, the gallery and the CLI are workspace packages of the same version as core, so
+// the packed install holds their `pnpm pack` tarballs (the version under development is not on the registry). A registry install
+// (--registry) holds core alone.
+const downstream = registry ? [] : ['@openpresentation/opf-render', '@openpresentation/opf-editor', '@openpresentation/opf-pptx'].map(name => ({ name }));
 assert.ok(!process.env.NODE_OPTIONS&&!process.execArgv.some(arg=>/^(--import|--loader|--experimental-loader|--require|-r)(=|$)/.test(arg)),'Standalone package verification must not use source loaders or module aliases');
 const packageSource = registry ? `${manifest.name}@${manifest.version}` : packageRoot;
 const tmpRoot = await mkdtemp(path.join(os.tmpdir(), "opf-packed-smoke-"));
@@ -70,11 +57,14 @@ try {
     `${JSON.stringify({ private: true, type: "module", overrides: {'@openpresentation/opf': '$@openpresentation/opf'} }, null, 2)}\n`,
   );
 
-  const candidateCore=candidateGraph?.artifacts.find(item=>item.name==='@openpresentation/opf');
-  const candidateFile=candidateCore?path.join(packageRoot,'../../artifacts/npm',candidateCore.file):null;
-  const packResult = await run("npm", ["pack", candidateFile??packageSource, "--pack-destination", packDir, '--offline=false', '--prefer-online']);
-  const tgzName = packResult.stdout.trim().split(/\r?\n/).at(-1);
-  assert.ok(tgzName?.endsWith(".tgz"), `npm pack did not return a tarball name: ${packResult.stdout}`);
+  let tgzName;
+  if (registry) {
+    const packResult = await run("npm", ["pack", packageSource, "--pack-destination", packDir, '--offline=false', '--prefer-online']);
+    tgzName = packResult.stdout.trim().split(/\r?\n/).at(-1);
+  } else {
+    tgzName = packWorkspacePackage(manifest.name, packDir).filename;
+  }
+  assert.ok(tgzName?.endsWith(".tgz"), `the pack did not return a tarball name: ${tgzName}`);
 
   const tgzPath = path.join(packDir, tgzName);
   const tarResult = await run("tar", ["-tzf", path.basename(tgzPath)], { cwd: path.dirname(tgzPath) }); // GNU tar reads C:... after -f as host:path
@@ -106,17 +96,11 @@ try {
   // under test (one core: the override below points the CLI's dependency at the candidate core tarball).
   let cliTarball, galleryTarball;
   if (!registry) {
-    await preparePackedSmokeCli({ root: path.resolve(packageRoot, '../..'), build: () => run('pnpm', ['--filter', '@openpresentation/cli', 'build'], { cwd: path.resolve(packageRoot, '../..') }) });
-    const runSync = (command, args, cwd) => {
-      if (command === 'npm') ({command, args} = packageManagerInvocation(command, args));
-      const result = spawnSync(command, args, { cwd, encoding: 'utf8', maxBuffer: 10 * 1024 * 1024 });
-      if (result.error || result.status !== 0) throw new Error(`${command} ${args.join(' ')} failed: ${result.error?.message ?? result.stderr}`);
-      return result.stdout;
-    };
-    // RR-78: core depends on @openpresentation/gallery@^2; its candidate tarball (packed with the CLI's) joins the install.
-    ({ cliTarball, galleryTarball } = await packCliCandidate({ cliDirectory: path.resolve(packageRoot, '../cli'), coreDirectory: packageRoot, destination: path.join(tmpRoot, 'cli-pack'), run: runSync }));
+    cliTarball = packWorkspacePackage('@openpresentation/cli', path.join(tmpRoot, 'cli-pack')).tarball;
+    galleryTarball = packWorkspacePackage('@openpresentation/gallery', path.join(tmpRoot, 'cli-pack')).tarball;
+    for (const item of downstream) item.tarball = packWorkspacePackage(item.name, path.join(tmpRoot, 'downstream-pack')).tarball;
   }
-  await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", registry ? packageSource : tgzPath, ...(cliTarball ? [cliTarball] : []), ...(galleryTarball?[galleryTarball]:[]), `@types/node@${nodeTypesVersion}`, ...downstream.map(item => candidateGraph ? path.join(packageRoot,'../../artifacts/npm',item.file) : `${item.name}@${item.version}`)], { cwd: projectDir });
+  await run("npm", ["install", "--ignore-scripts", "--no-audit", "--no-fund", registry ? packageSource : tgzPath, ...(cliTarball ? [cliTarball] : []), ...(galleryTarball?[galleryTarball]:[]), `@types/node@${nodeTypesVersion}`, ...downstream.map(item => item.tarball)], { cwd: projectDir });
   await checkPackedTypes(projectDir, {downstream: downstream.length > 0, cli: !!cliTarball});
   if (cliTarball) {
     const one = await assertOneCore(path.join(projectDir, 'node_modules'));
