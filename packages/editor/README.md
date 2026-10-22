@@ -9,7 +9,7 @@ Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs
 | You use | Also install |
 | --- | --- |
 | The canvas, the preview, SVG downloads in a browser (the host serves its own font files) | nothing |
-| `loadFonts` from `/fonts-node` (a server, a test, a build script such as `npm run build:playground`) | the font packages of the pack: `@expo-google-fonts/roboto` and `roboto-mono` for `base`; also `arimo`, `caladea`, `cousine`, `gelasio`, `tinos` and `noto-sans` for `office`; a script face (`scripts: 'auto'`) needs its `@expo-google-fonts/noto-*` package. A missing one fails with `font-resource-unavailable` and names it |
+| `loadFonts` from `/fonts-node` (a server, a test, a build script such as `pnpm run build:playground`) | the font packages of the pack: `@expo-google-fonts/roboto` and `roboto-mono` for `base`; also `arimo`, `caladea`, `cousine`, `gelasio`, `tinos` and `noto-sans` for `office`; a script face (`scripts: 'auto'`) needs its `@expo-google-fonts/noto-*` package. A missing one fails with `font-resource-unavailable` and names it |
 | `toPng` / `toPdf` from the Node entries (`/png`, `/pdf`) | `@resvg/resvg-js` (and `sharp`, `pdf-lib` as the renderer's README says); a missing one fails with `converter-missing` |
 | `convert` PDF (vector), PNG, SVG | nothing: the browser entry `@openpresentation/opf-render/export-browser` imports no converter |
 | `convert` raster PDF (`raster: true`) | `pdf-lib`, imported by the page and passed as the `pdfLib` option (`import * as pdfLib from "pdf-lib"`); without it the conversion rejects with `converter-missing` |
@@ -82,7 +82,7 @@ Click a categorical property/value or press `Ctrl+Space`, `Cmd+Space` or `Alt+Do
 
 In OPF 0.19, layout choices change only the template reference and preserve authored content. Empty regions remain available for explicit insertion; choosing a template does not invent blank payloads. The JSON field menu groups templates by intent and describes their supported regions. Hosts apply `replaceFieldOption` or `fieldOptionEdit(context, value)` as one undoable edit and check that `context.source` is still current.
 
-Run `npm run test:json` and `npm run test:json-browser` for the focused model and offline browser checks. The browser runner also accepts a report path followed by a clean installed consumer directory. These checks cover the JSON control; renderer, native PowerPoint and production adoption remain separate acceptance steps.
+Run `pnpm run test:json` and `pnpm run test:json-browser` for the focused model and offline browser checks. The browser runner also accepts a report path followed by a clean installed consumer directory. These checks cover the JSON control; renderer, native PowerPoint and production adoption remain separate acceptance steps.
 
 Version 0.7.0 uses core 0.10.0 and renderer 0.8.0. Code source/metadata edits preserve line endings, literal tabs and cancellation/undo through accepted trace targets. Committed preview uses shared quote/code geometry; the active source textarea uses native browser editing. `paginateSlide` records a one-page readability-policy change in undo history, and an unchanged repeat is a no-op. Coordinated examples use PPTX 0.8.0 for exact code source/metadata recovery. Native formatting, font theme and geometry are not restored; quotes still import as editable text blocks with structure and readability-policy loss.
 
@@ -122,7 +122,7 @@ Methods: `replaceDocument(document, { source?, format?, name?, meta? })` (below)
 - **Styles.** `src/styles/source-pane.css` uses only `--opf-ui-*` tokens under the `opf-source-` prefix. It ships in the editor's `styles.css` (`@openpresentation/opf-editor/styles.css`), which also defines the tokens.
 - **Dependency.** `@codemirror/lang-yaml` (MIT) highlights YAML; Markdown uses a small stream tokenizer built on `@codemirror/language`, so no Markdown, HTML, CSS or JavaScript grammar is added.
 
-Icons are inline paths from [Lucide](https://lucide.dev) (ISC license). The harness is `examples/source-pane.html` (built by `npm run build:playground`); `npm run test:source-pane-browser` drives it.
+Icons are inline paths from [Lucide](https://lucide.dev) (ISC license). The harness is `examples/source-pane.html` (built by `pnpm run build:playground`); `pnpm run test:source-pane-browser` drives it.
 
 ## Layout editor (RR-99)
 
@@ -183,7 +183,7 @@ createLayoutInspector(inspectorHost, { model });
 
 **Keyboard:** arrows move between siblings, Enter goes into a split and Esc goes up; `[` and `]` move a region earlier or later (at the end of a split it leaves the split); Shift with a bracket moves it into the neighboring split; Cmd or Ctrl+D duplicates; Delete deletes. A divider is `role="separator"` with `aria-valuenow` (the first side's share of the pair, in percent) and `aria-valuetext` ("2 : 1"); Arrow keys resize it by half a share (Shift: one), Enter makes the sides equal. The layers panel is `role="tree"` (Up and Down, Right to open or enter, Left to close or go to the parent, Home, End, F2). Every action is also a button in the inspector. Touch density makes controls 40px and the divider hit area wider; below 760px the palette is a row above the canvas and Layers and Inspector are tabs under it.
 
-The headless operations the editor runs are in `@openpresentation/opf-editor/layout-tree` (`splitRegion`, `wrapNodes`, `unwrapNode`, `moveNodes`, `deleteNodes`, `duplicateNodes`, `resizeSizes`, `layoutBoxes` and more): pure functions that return a new record and the paths to select, or throw a `LayoutOperationError` with the reason, and keep a core-valid record core-valid. `npm run test:layout-editor-browser` drives `examples/layout-editor.html` (built by `npm run build:playground`); the playground's Layouts view mounts the same editor on the presentation's custom layouts. Icons are inline paths from [Lucide](https://lucide.dev) (ISC license).
+The headless operations the editor runs are in `@openpresentation/opf-editor/layout-tree` (`splitRegion`, `wrapNodes`, `unwrapNode`, `moveNodes`, `deleteNodes`, `duplicateNodes`, `resizeSizes`, `layoutBoxes` and more): pure functions that return a new record and the paths to select, or throw a `LayoutOperationError` with the reason, and keep a core-valid record core-valid. `pnpm run test:layout-editor-browser` drives `examples/layout-editor.html` (built by `pnpm run build:playground`); the playground's Layouts view mounts the same editor on the presentation's custom layouts. Icons are inline paths from [Lucide](https://lucide.dev) (ISC license).
 
 ## Scope
 
@@ -225,7 +225,7 @@ await canvas.ready;
 // canvas.destroy() when unmounting.
 ```
 
-Load the same font bytes into the browser with `loadFonts` from `@openpresentation/opf-render/fonts-browser` before mounting; the handle it returns is the one `fonts` option of the canvas, `convert` (`/export`), `editor.composeSlide` and `editor.paginateSlide`. The host owns font URLs, storage and collaboration. For non-Latin documents, pass the pinned script pack's location as `scriptBaseUrl` and the canvas calls `fonts.ensure(presentation)` after edits (`scripts: 'auto'`, FF-19): only the faces for the scripts a document draws are fetched, once, hash-verified, for example Noto Sans JP for Japanese; a Latin-only document fetches none. The playground does this from `./script-fonts/`, which `npm run build:playground` fills with the pinned faces. `onDraft` provides live document drafts; the session only changes on commit. Escape cancels. Concurrent edits to the selected payload cancel a stale draft.
+Load the same font bytes into the browser with `loadFonts` from `@openpresentation/opf-render/fonts-browser` before mounting; the handle it returns is the one `fonts` option of the canvas, `convert` (`/export`), `editor.composeSlide` and `editor.paginateSlide`. The host owns font URLs, storage and collaboration. For non-Latin documents, pass the pinned script pack's location as `scriptBaseUrl` and the canvas calls `fonts.ensure(presentation)` after edits (`scripts: 'auto'`, FF-19): only the faces for the scripts a document draws are fetched, once, hash-verified, for example Noto Sans JP for Japanese; a Latin-only document fetches none. The playground does this from `./script-fonts/`, which `pnpm run build:playground` fills with the pinned faces. `onDraft` provides live document drafts; the session only changes on commit. Escape cancels. Concurrent edits to the selected payload cancel a stale draft.
 
 Fonts load before pixels (FF-41). A document can need faces the browser has not loaded yet: script faces for the languages it draws and vendored preview faces for the font families it resolves (Intos for Aptos, Open Sans, Barlow). The handle knows what is missing (`fonts.pending(presentation)`) and loads it (`await fonts.ensure(presentation)`), so the canvas needs no separate gate: with the handle as `fonts` it never renders such a document early: on every path (editor changes, undo and redo, imports, dimension switches, slide changes, in-progress edits) it shows "Loading fonts…", loads the faces and then renders. A load that fails is reported through `onFonts`/`onError` and offers a retry button; nothing retries by itself, and the failed document is not drawn.
 
@@ -291,11 +291,12 @@ The package runtime must stay local and deterministic:
 ## Development
 
 ```sh
-npm ci
-npm run build
-npm run typecheck
-npm test
-npm run validate
+pnpm install --frozen-lockfile   # from the repository root (the OPF monorepo)
+pnpm run build:deps              # gallery and core, which the editor build and tests import
+pnpm run build
+pnpm run typecheck
+pnpm test
+pnpm run validate
 ```
 
 ## Headless Editing
@@ -672,7 +673,7 @@ useEffect(() => {
 
 The playground mounts both panels (the Design tab, and the selection area of the Content tab). One click on text still enters text editing; the panels follow the selection after Escape. Every image field (organization logo, watermark, background image and header/footer zone image) takes an asset reference (suggested from the document's assets), a web address or a data address, and has a file picker and an alt-text field: the chosen file is validated (PNG, JPEG, GIF, WebP or SVG, up to `maxImageBytes`, 2 MiB by default), added to `assets` and used in one undo step, or handed to your app through `onAddAsset`. Alt text is saved on the asset; typed before an upload it is used for that upload.
 
-Run `npm run test:design-controls-browser` (after `npm run build:playground`) for the real-browser check of every control, its keyboard operation and its undo.
+Run `pnpm run test:design-controls-browser` (after `pnpm run build:playground`) for the real-browser check of every control, its keyboard operation and its undo.
 
 ### What a switch does not establish
 
@@ -750,7 +751,7 @@ The editor panels ship one stylesheet. Import it once, next to your own CSS:
 import "@openpresentation/opf-editor/styles.css";
 ```
 
-`npm run build` writes `dist/styles.css`: the token layer (`src/styles/tokens.css`) first, then every other `src/styles/*.css` in alphabetical order. It is plain CSS with no preprocessor, no `@import` and no `url()`: nothing is fetched. The package bundles no fonts either; load Inter and Geist Mono yourself (or leave the fallbacks: `system-ui` and `ui-monospace`). The panels that existed before it (design controls, review, slide manager, find, fill template, numbering, chart options, data grid, crop, the custom layout editor, the JSON editor and the restore banner) are styled with the tokens and nothing else. The find, review, crop and data-grid components still inject a small fallback stylesheet of their own, so they look as before when you do not import `styles.css`; with it, its rules win whichever `<style>` comes last.
+`pnpm run build` writes `dist/styles.css`: the token layer (`src/styles/tokens.css`) first, then every other `src/styles/*.css` in alphabetical order. It is plain CSS with no preprocessor, no `@import` and no `url()`: nothing is fetched. The package bundles no fonts either; load Inter and Geist Mono yourself (or leave the fallbacks: `system-ui` and `ui-monospace`). The panels that existed before it (design controls, review, slide manager, find, fill template, numbering, chart options, data grid, crop, the custom layout editor, the JSON editor and the restore banner) are styled with the tokens and nothing else. The find, review, crop and data-grid components still inject a small fallback stylesheet of their own, so they look as before when you do not import `styles.css`; with it, its rules win whichever `<style>` comes last.
 
 **Tokens.** Every rule reads only `--opf-ui-*` custom properties, defined on `:root` and on `.opf-ui`, light by default. Override any of them on `:root`, on a wrapper with the class `opf-ui`, or on one component's container:
 
@@ -837,7 +838,7 @@ const { files, findings } = await convert(editor.presentation, {
   });
   ```
 
-  `convert` reads `fonts.subsets` and `fonts.outlines` from that handle, so nothing else changes: the same call writes SVG files with the faces cut to what each slide draws (the licence rule above still decides which faces may be embedded, and the renderer cuts only faces whose licence allows a modified version; the others stay whole) and, with `renderOptions: { text: "paths" }`, SVG and PNG files whose text is glyph outlines (no font needed). A PDF is unaffected: it embeds the registry's faces and cuts its own subsets, and it always draws selectable text. `renderOptions.subsetFonts: false` embeds whole faces. The canvas draws with `text: "system"`, which embeds nothing, so it never reads either. The playground does this: `npm run build:playground` copies both files next to the page.
+  `convert` reads `fonts.subsets` and `fonts.outlines` from that handle, so nothing else changes: the same call writes SVG files with the faces cut to what each slide draws (the licence rule above still decides which faces may be embedded, and the renderer cuts only faces whose licence allows a modified version; the others stay whole) and, with `renderOptions: { text: "paths" }`, SVG and PNG files whose text is glyph outlines (no font needed). A PDF is unaffected: it embeds the registry's faces and cuts its own subsets, and it always draws selectable text. `renderOptions.subsetFonts: false` embeds whole faces. The canvas draws with `text: "system"`, which embeds nothing, so it never reads either. The playground does this: `pnpm run build:playground` copies both files next to the page.
 - **Fonts.** The fonts handle loads the faces the deck needs before anything is drawn (a failure rejects with `fonts-unavailable`). Only faces the handle's registry holds are embedded (bundled or hash-pinned, never a system font), only where a slide draws them, as `@font-face` data in each SVG and as subsets in the PDF. A face whose own license text is not OFL, Apache, MIT or UFL is left out and reported (`fonts/export-font-license`).
 - **PDF** is the renderer's vector PDF (selectable text, vector shapes, embedded subsets, tagged structure), `raster: true` is the image-only form. **PNG** is drawn on a canvas from the same SVG (within anti-aliasing of the renderer's resvg PNG) and is limited to 40 megapixels. **SVG** files are standalone (XML header, fonts embedded, no external references).
 - **Files.** A PDF is one file (`pages`, and the one-based `slides` it shows). PNG and SVG give one file per slide, in slide order, each with its one-based `slide`, its `id` and its `width` and `height` in pixels, as core's `convert` does; with `zip: true` they are one archive (`createZip`, no dependency; `entries` names the files in it), even for one slide. `zip` with a PDF, or `raster` with PNG or SVG, rejects with `invalid-option`.
@@ -927,7 +928,7 @@ bindPresentShortcut(document, () => presenter.start(current)); // F5
 
 `createPresentButton(container, { onPresent, disabled, density, variant })` mounts an icon-only button (the Lucide Presentation icon, inlined) named "Present" (`aria-label`), titled "Present (F5)". `variant` is `"quiet"` (the default: a transparent icon in `--opf-ui-muted-fg` that turns `--opf-ui-fg` on `--opf-ui-muted` on hover, like the toolbar's undo and redo, so a lone icon beside a primary Export does not compete with it) or `"primary"` (the filled accent look of the Export menu's trigger). `disabled` is `true` or a reason string (the title); the button stays focusable (`aria-disabled`) and does nothing. It returns `{ element, setDisabled(reason), setDensity(density), setVariant(variant), destroy() }`. `bindPresentShortcut(target, onPresent)` binds F5 (and prevents the browser's reload); it ignores F5 while typing in inputs, selects and editors (CodeMirror, contenteditable), in menus and dialogs, and with a modifier key, and returns a function that removes the listener. `examples/playground.js` wires all three next to the Export menu.
 
-Tests: `npm run test:presenter-browser` and `npm run test:present-button-browser`.
+Tests: `pnpm run test:presenter-browser` and `pnpm run test:present-button-browser`.
 
 ## Opening a deck file (RR-98)
 
@@ -992,11 +993,11 @@ Svelte bindings are isolated under `@openpresentation/opf-editor/svelte` as acti
 
 ## Release Lane
 
-Public npm package publication is handled by `.github/workflows/release.yml` through npm Trusted Publishing (GitHub Actions OIDC) with npm provenance; no npm token is stored. The owner authorized agents to prepare and publish npm releases whenever a release is required (2026-09-29). This authorization does not waive any gate.
+The editor releases with the other five packages of the OPF monorepo at one version, through the repository's release workflow (npm Trusted Publishing from GitHub Actions OIDC, with npm provenance; no npm token is stored). The owner authorized agents to prepare and publish npm releases whenever a release is required (2026-09-29); this authorization does not waive any gate. The steps, the gates and the order are in the root `AGENTS.md` and `docs/release-process.md`. In short:
 
-1. Open a release-prep PR containing only the version bump, `CHANGELOG.md` (assembled from `changes/` with `node scripts/changelog-fragments.mjs assemble --version X.Y.Z`), dependency ranges, lockfile and current-instruction docs. Publish in dependency order (core, then renderer, then PPTX, then editor): refresh this repo's lockfile only after the required `@openpresentation/opf`, `@openpresentation/opf-render` and `@openpresentation/opf-pptx` versions are on the registry (`npm install --package-lock-only`), then run `npm run test:packed` against them.
-2. Merge after CI is green, then publish by pushing the git tag `opf-editor-v<version>` (or `@openpresentation/opf-editor@v<version>`) at the merge commit. The workflow verifies that the tag matches `package.json`, that the push-to-`main` run of `ci.yml` on exactly the tagged commit succeeded (`scripts/ci-evidence.mjs`; it fails closed and re-runs no test, RR-100), and the artifact itself (audit, the packed install, `npm pack --dry-run`) before `npm publish --access public --provenance`. A tag pushed while CI still runs fails at the evidence step; re-run the failed job once CI is green. A manual `workflow_dispatch` runs the same job without the tag check and is a fallback only.
-3. Verify with `npm view @openpresentation/opf-editor@<version> version gitHead dist.attestations` and, from the core repo, `node scripts/test-editor-publication.mjs <version> <release-commit> <this-checkout>`. Never republish an existing version.
+1. A release-prep PR contains only the version bump (all six manifests), `CHANGELOG.md` files assembled from the root `changes/` fragments, dependency ranges, the lockfile and current-instruction docs.
+2. The release workflow rebuilds `dist/` from source (it is not tracked), runs the gates on the release commit and publishes with provenance. Never republish an existing version.
+3. Verify with `npm view @openpresentation/opf-editor@<version> version gitHead dist.attestations`.
 
 ## Shared dynamic composition
 
@@ -1027,7 +1028,7 @@ The playground includes Copy OPF and Import dialogs with paste, file/drop, galle
 
 The **PowerPoint** button commits the current canvas draft and prepares an editable `.pptx` download from that snapshot, using the preview's text measurements. Conversion diagnostics remain visible in the download dialog. Missing/remote images require an explicit host resolver or embedded data; export does not silently fetch them or omit them. Save OPF separately to retain the complete original source. Since 0.14, PPTX export names the font the user selected, so PowerPoint uses it when installed or available as a Microsoft 365 cloud font. The download does not embed font binaries, and license-restricted (proprietary) fonts are never embedded. Arbitrary native positions and unsupported PowerPoint features can change during reimport.
 
-Run `npm ci`, `npm run build:playground`, then serve `artifacts/playground` with a local static server. This example uses the published core/render/PPTX packages and this checkout's editor source; it does not require an account, AI provider or paid service. `npm run test:playground` builds and executes a real browser flow (local Edge on Windows, installed Chromium in CI): author JSON, inline edit, export a native merged table, validate/reimport the actual downloaded file, undo/redo, save OPF and reject malformed input without changing the document. It is browser behavior evidence, not a claim of native PowerPoint raster equivalence.
+Run `pnpm install` at the repository root, then `pnpm run build:deps` and `pnpm run build:playground` here, then serve `artifacts/playground` with a local static server. This example uses the workspace's core/render/PPTX packages and this checkout's editor source; it does not require an account, AI provider or paid service. `pnpm run test:playground` builds and executes a real browser flow (local Edge on Windows, installed Chromium in CI): author JSON, inline edit, export a native merged table, validate/reimport the actual downloaded file, undo/redo, save OPF and reject malformed input without changing the document. It is browser behavior evidence, not a claim of native PowerPoint raster equivalence.
 
 Slide insertion does not merge root speakers, organizations, or narrative metadata. Use Open as a presentation for the full source document. Some gallery presets contain minimal examples. The root OPF workspace's `docs/live-editor.md` documents the complete demo and npm API workflow.
 
@@ -1047,7 +1048,7 @@ Select rendered rich text to format it, or click a rich text block to type (see 
 
 Version 0.7.0: rich input maps the textarea's LF-normalized offsets back to the original source. Typing preserves untouched CRLF/CR endings and surrounding run metadata; newly inserted newlines use the first source line-ending style. The `updateRichTextInput` change offsets are native textarea offsets, while formatting and replacement helpers continue to use original source offsets.
 
-Browser regression checks run with `npm run test:rich-input-browser -- artifacts/rich-input-browser.json measured` (or `estimated`). An optional consumer path after the mode selects an existing coordinated installed consumer; all browser runtime and font-preparation imports must then resolve inside that consumer. See [line-ending acceptance](docs/evidence/rich-input-line-endings-20260915/README.md) for scope and preserved failures.
+Browser regression checks run with `pnpm run test:rich-input-browser artifacts/rich-input-browser.json measured` (or `estimated`). An optional consumer path after the mode selects an existing coordinated installed consumer; all browser runtime and font-preparation imports must then resolve inside that consumer. See [line-ending acceptance](docs/evidence/rich-input-line-endings-20260915/README.md) for scope and preserved failures.
 
 Headless applications and agents can import `formatRichTextRange`, `replaceRichTextRange`, and `richTextContent` from `@openpresentation/opf-editor/rich-text`. The helpers preserve surrounding run metadata and accept UTF-16 offsets on whole grapheme boundaries. A null format value removes an override. Apply the returned value through the editor session or validate the resulting document before saving.
 
