@@ -40,7 +40,7 @@
     "check:ci-shards": "node --test scripts/ci-test-shards.test.mjs scripts/package-ecosystem-plan.test.mjs scripts/ecosystem-scope.test.mjs",
     "check:ci-diet": "node --test scripts/ci-diet.test.mjs",
     "check:ci-scope": "node --test scripts/ci-scope.test.mjs",
-    "check:ci-workflows": "node --test scripts/ci-workflows.test.mjs scripts/release-workflows.test.mjs scripts/ci-verify.test.mjs scripts/ci-report-issue.test.mjs",
+    "check:ci-workflows": "node --test scripts/ci-workflows.test.mjs scripts/release-workflows.test.mjs scripts/bump-sites.test.mjs scripts/ci-verify.test.mjs scripts/ci-report-issue.test.mjs",
     "check:release": "node --test scripts/release.test.mjs",
     "release:prepare": "node scripts/release.mjs prepare",
     "release:verify": "node scripts/release.mjs verify",

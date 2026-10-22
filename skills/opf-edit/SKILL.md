@@ -46,4 +46,4 @@ Commit or cancel an active canvas draft before navigation or imports. Keep a sin
 
 For copy/import, prefer the transfer APIs over concatenating JSON arrays. Preview the prepared result, validate, and apply one undoable change. Inserting slides and replacing a full presentation have different metadata semantics; choose deliberately according to the request.
 
-If an installed package lacks these APIs, use the project's coordinated build or available lower-level interfaces. Do not claim the latest repository APIs exist in an older npm release.
+If an installed package lacks these APIs, use the project's workspace build or available lower-level interfaces. Do not claim the latest repository APIs exist in an older npm release.

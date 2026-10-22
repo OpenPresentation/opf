@@ -20,7 +20,9 @@ name: Release
 #
 # The fallback is a release pull request: `pnpm release:prepare X.Y.Z` locally, merge it, push the tag vX.Y.Z (owner steps).
 # npm-publish.yml, not this workflow, is the trusted publisher (it is the workflow npm sees; see its header).
-# TODO(MR-52): bump-sites.yml follows npm-publish.yml's success through a workflow_run (D17, D19); nothing is called from here.
+#   sites    (not a dry run, a stable version) after the publish run succeeded: calls bump-sites.yml, which opens a "bump to vX.Y.Z" pull
+#            request in each of the three site repositories (MR-52, D17, D19). It opens and labels them only; a site's own CI merges a
+#            patch bump. A failed bump opens an issue and never fails this run. A prerelease (a canary) never bumps a site.
 on:
   workflow_dispatch:
     inputs:
@@ -230,6 +232,22 @@ jobs:
           [ -n "$id" ] || { echo "::error title=Release::no npm-publish.yml run started for $TAG; was the tag pushed with the App token?"; exit 1; }
           echo "npm-publish.yml run: https://github.com/$REPOSITORY/actions/runs/$id" | tee -a "$GITHUB_STEP_SUMMARY"
           gh run watch "$id" --repo "$REPOSITORY" --exit-status --interval 30
+
+  sites:
+    name: bump the sites
+    needs: [plan, prepare, watch]
+    # Only after the whole publish run (publish, verify, GitHub release) is green, and only for a stable version.
+    if: ${{ needs.plan.outputs.dry-run != 'true' && !contains(needs.prepare.outputs.version, '-') }}
+    # The caller grants what bump-sites.yml asks for: its failure reporter opens issues. The App's key is passed explicitly.
+    permissions:
+      contents: read
+      issues: write
+    uses: ./.github/workflows/bump-sites.yml
+    with:
+      version: ${{ needs.prepare.outputs.version }}
+      dry-run: false
+    secrets:
+      ECOSYSTEM_APP_PRIVATE_KEY: ${{ secrets.ECOSYSTEM_APP_PRIVATE_KEY }}
 
   rehearse:
     name: rehearse the publish

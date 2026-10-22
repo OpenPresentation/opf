@@ -201,7 +201,7 @@ git push origin 'refs/tags/*:refs/tags/*'
 
 ## O4. The GitHub App (before MR-41 for the release commit; before MR-52 for the sites)
 
-**What and why.** One App does two jobs: the `prepare` job of `npm-publish.yml` pushes the release commit to `main` (a bypass actor), and `bump-sites.yml` opens the "bump to vX.Y.Z" pull requests in the three site repositories, and each site's own CI merges a patch bump with the App's token (D19). App-authored pushes and pull requests start workflows; `GITHUB_TOKEN` ones do not. Only `prepare` and `bump-sites.yml` hold the key; `publish` holds no secret. The plan calls this the "ecosystem App"; it does not exist yet (finding 1).
+**What and why.** One App does two jobs: the `commit` job of `release.yml` pushes the release commit to `main` (a bypass actor) and the tag, and `bump-sites.yml` (called by `release.yml` after a stable release, or run by hand) opens the "bump to vX.Y.Z" pull requests in the three site repositories, and each site's own CI merges a patch bump with the App's token (D19). App-authored pushes and pull requests start workflows; `GITHUB_TOKEN` ones do not. Only `release.yml` (its `commit` job, and the `sites` job that passes the key on to `bump-sites.yml`) and `bump-sites.yml` hold the key; `publish` holds no secret. The plan calls this the "ecosystem App"; it does not exist yet (finding 1).
 
 **Create it** (as an organization App: `https://github.com/organizations/OpenPresentation/settings/apps/new`, or Organization settings, Developer settings, **GitHub Apps**, **New GitHub App**):
 
@@ -362,7 +362,7 @@ for r in openpresentation-site pptx-gallery pptx-dev; do
 done
 ```
 
-Two secrets per site. The proof is the dry-run bump of MR-52: a patch bump pull request opened by the App waits for `build-and-smoke`, is merged by the site's CI, and the site's push workflow starts; a minor one stays open with the `needs-review` label.
+Two secrets per site. The agent's drafts of the merge workflows (`opf-bump-merge.yml`, and `build-and-smoke.yml` for pptx-gallery) are in `docs/programs/monorepo/site-workflows/` with install notes; MR-52 lands them by one pull request per site after the App exists. Before the first real release run Actions, **Bump sites** in OpenPresentation/opf once with `dry-run` true (the default) to prove the token and the lockfile refresh; if the label step answers 403, add Issues: write to the App (O4) or create the labels `auto-merge` and `needs-review` in each site. The proof is the dry-run bump of MR-52: a patch bump pull request opened by the App waits for `build-and-smoke`, is merged by the site's CI, and the site's push workflow starts; a minor one stays open with the `needs-review` label.
 
 **Undo.** Delete the two secrets in each site; uninstall the App from the sites: Organization settings, Installed GitHub Apps, **Configure**, remove the repository; disable `bump-sites.yml` (an agent task).
 

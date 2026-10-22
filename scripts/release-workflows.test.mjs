@@ -135,7 +135,7 @@ test('release.yml: dispatch with a version and a dry run that defaults to true; 
   assert.match(triggers, /version:\n {8}description: [^\n]*\n {8}required: true/u);
   assert.match(triggers, /dry-run:\n {8}description: [^\n]*\n {8}type: boolean\n {8}default: true/u);
   assert.match(release, /group: release\n {2}cancel-in-progress: false/u);
-  assert.deepEqual(jobsOf(release).map((entry) => entry.id), ['plan', 'gate', 'prepare', 'commit', 'watch', 'rehearse']);
+  assert.deepEqual(jobsOf(release).map((entry) => entry.id), ['plan', 'gate', 'prepare', 'commit', 'watch', 'sites', 'rehearse']);
 });
 
 test('release.yml: the pre-release gate is nightly.yml called with no issue reporting, and the caller grants what nightly asks for', () => {
@@ -166,7 +166,8 @@ test('release.yml: plan demands main and a green verify for a real release; prep
 
 test('release.yml: only the commit job holds the App token; it waits for the gate and the patch, commits the tested head to main and pushes the tag with the token', () => {
   assert.deepEqual(jobsWith(release, /create-github-app-token/u), ['commit']);
-  assert.deepEqual(jobsWith(release, /ECOSYSTEM_APP_PRIVATE_KEY/u), ['commit']);
+  // `sites` passes the key to bump-sites.yml, a reusable workflow that mints its own tokens (bump-sites.test.mjs); nothing else sees it.
+  assert.deepEqual(jobsWith(release, /ECOSYSTEM_APP_PRIVATE_KEY/u), ['commit', 'sites']);
   const commit = job(release, 'commit');
   assert.deepEqual(needsOf(commit), ['plan', 'prepare', 'gate']);
   assert.match(commit.text, /if: \$\{\{ needs\.plan\.outputs\.dry-run != 'true' \}\}/u);
@@ -190,6 +191,16 @@ test('release.yml: a real run follows the publish run on the tag; a dry run disp
   assert.match(rehearse, /needs\.plan\.outputs\.dry-run == 'true'/u);
   assert.match(rehearse, /actions: write/u);
   assert.deepEqual(jobsWith(release, /actions: write/u), ['rehearse']);
+});
+
+test('release.yml: the sites are bumped only after the whole publish run succeeded, for a real stable release, and never fail the release', () => {
+  const sites = job(release, 'sites');
+  assert.deepEqual(needsOf(sites), ['plan', 'prepare', 'watch']);
+  assert.match(sites.text, /if: \$\{\{ needs\.plan\.outputs\.dry-run != 'true' && !contains\(needs\.prepare\.outputs\.version, '-'\) \}\}/u, 'a dry run and a prerelease bump nothing');
+  assert.match(sites.text, /uses: \.\/\.github\/workflows\/bump-sites\.yml/u);
+  assert.match(sites.text, /contents: read\n {6}issues: write/u, 'the caller grants what the failure reporter asks for');
+  assert.match(sites.text, /ECOSYSTEM_APP_PRIVATE_KEY: \$\{\{ secrets\.ECOSYSTEM_APP_PRIVATE_KEY \}\}/u);
+  assert.doesNotMatch(release, /gh pr merge/u);
 });
 
 test('every release.mjs command the workflows call exists, and the workflows name no retired release machinery', () => {

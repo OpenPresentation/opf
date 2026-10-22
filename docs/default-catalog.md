@@ -181,9 +181,11 @@ the gallery's `minimal`, `cool-horizon` and `aptos` records, compiled into code.
 ## Ownership
 
 - **The gallery package owns every catalog record.** Since gallery 2.0.0 records, layouts and theme variants are authored
-  by pull requests in `packages/gallery`; each id has one owner. Its
-  display metadata lives under `x-*` members. pptx.gallery (the site) consumes the published package, adds its own
-  presentation overlay and does not write records.
+  by pull requests in `packages/gallery` (the product statement "pptx.gallery owns every default record" is retired, D11 of the
+  monorepo program: the site presents the catalog, it does not author it); each id has one owner. Its
+  display metadata lives under `x-*` members. pptx.gallery (the site, a separate repository) consumes the published package,
+  adds its own presentation overlay and does not write records. A record that needs an engine change is one pull request,
+  tested by one `verify` run.
 - **The gallery package owns the records and releases with the other packages.** `packages/gallery` is a tracked package of this repository (the monorepo program, D13): records, layouts and theme variants are authored by pull request here, its manifest holds a content hash per kind and the commit of the one-time 1.x snapshot from pptx.gallery, and it takes the repository's one shared version line (0.26.0 and later; gallery 1.0.0 to 5.0.0 stay on npm). The earlier `pnpm install` materializer of ignored fixtures is gone.
 - **A host chooses its catalog version.** Hosts register the catalog they choose; documents carry the records they were
   saved with. The packages are released together, so the pair a release ships (core and the gallery at the same version) is
@@ -204,13 +206,13 @@ validate(document, { catalogs: [gallery] });
 
 `gallery` replaces what `@openpresentation/opf/catalog` exported as `defaultCatalog` (`source` and the eight content kinds, records
 keyed by id without `$schema`, `id` or `x-*`); the package also exports `GALLERY_SOURCE`, `CATALOG_SCHEMA`,
-`catalogDisplay`, `catalogIndexes` and `catalogManifest`, and `/previews`. New records are a minor release; an id removed
-or renamed, a changed drawing or a record schema change is a major release, which that repository's pixel-stability
-check enforces against the previous published release. From OPF 0.19 core and the CLI depend on it
-(`@openpresentation/gallery`, `^5.0.0` in this checkout), core's Node defaults register `gallery`, and core drops `/catalog` and
-`spec/catalogs/`. The registry transition requires a published, independently verified gallery release and a reviewed
-range/lock adoption; explicit candidate staging before that is development qualification only (see
-[the gallery release lane](release-process.md#the-gallery-lane-rr-78)).
+`catalogDisplay`, `catalogIndexes` and `catalogManifest`, and `/previews`. New records go in any release; an id removed
+or renamed, a changed drawing or a record schema change is declared in the `changes/` fragment and makes the release a minor
+one (a patch is refused), which the pixel-stability check (`pnpm check:stability`, against the `latest` release) enforces.
+From OPF 0.19 core and the CLI depend on it (`workspace:^` in this checkout, published as `^X.Y.Z` of the same release), core's
+Node defaults register `gallery`, and core drops `/catalog` and `spec/catalogs/`. Gallery 1.0.0 to 5.0.0 stay on npm and
+are never deprecated, because published core 0.25.0 depends on `^5.0.0`; the shared line cannot use those versions again
+(the first stable major of all six packages is 6.0.0; see [the release process](release-process.md)).
 
 ### Theme variants (gallery 4)
 
@@ -245,7 +247,7 @@ are not OPF records and link their catalog index with `Link: <…/<kind>/index.j
 | `audiences` | `audiences` | `opf-audience/v1` | content, `audience` | mirror |
 | `color-schemes` | `colorSchemes` | `opf-color-scheme/v1` | content, `design.colorScheme` | mirror |
 | `font-schemes` | `fontSchemes` | `opf-font-scheme/v1` | content, `design.fontScheme` | mirror |
-| `layouts` | `layouts` | `opf-layout/v2` since 0.19 | content, `Slide.layout` | authored in the independent Gallery package |
+| `layouts` | `layouts` | `opf-layout/v2` since 0.19 | content, `Slide.layout` | authored in `packages/gallery` |
 | `narratives` | `narratives` | `opf-narrative/v1` | content, `narrative` | mirror |
 | `purposes` | `purposes` | `opf-purpose/v1` | content, `purpose` | mirror |
 | `themes` | `themes` | `opf-theme/v1` | content, `design.theme` | mirror |
@@ -299,7 +301,7 @@ Before 0.19, Core stored the snapshot at `spec/catalogs/manifest.json` (schema `
 }
 ```
 
-That historical snapshot used `mirror` for every kind and held every record the gallery published (278 layouts at that checkpoint). The current independent Gallery package owns the snapshot and the 28 v2 layout templates; Core consumes the package and materializes ignored validation fixtures. No browser entry of Core imports catalog records (`pnpm check:catalog-free`).
+That historical snapshot used `mirror` for every kind and held every record the gallery published (278 layouts at that checkpoint). The `packages/gallery` package owns the snapshot and the 28 v2 layout templates; core consumes the package, and the records are tracked in this repository. No browser entry of Core imports catalog records (`pnpm check:catalog-free`).
 
 The 1.x design synchronized the snapshot from pptx.gallery and refused a publisher that stopped serving a held id
 (waived per id with `--allow-removed`). That sync was retired with gallery 2.0.0; a record is now removed by a pull

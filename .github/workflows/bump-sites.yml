@@ -1,0 +1,242 @@
+name: Bump sites
+
+# MR-52 (docs/programs/monorepo/README.md, section 6, decisions D17 and D19): after a stable release, open one "bump to vX.Y.Z"
+# pull request in each of the three site repositories, with the six @openpresentation pins set to the released version.
+#
+#   release.yml calls this workflow after the whole release (npm-publish.yml: publish, verify, GitHub release) succeeded and the
+#   version is stable. By hand: Actions, Bump sites, Run workflow with the version (dry-run is true by default: the edits are shown
+#   in the job summary and nothing is pushed).
+#
+#   plan   the version is a stable X.Y.Z and all six packages are on the registry at it (a short bounded wait for propagation).
+#   bump   one leg per site (Data-Advantage/openpresentation-site and pptx-gallery on main, pptx-dev on master): a GitHub App
+#          token for that one repository, scripts/bump-site.mjs (sets the pins, keeps each site's specifier style, refreshes
+#          the lockfile with the site's own pnpm), the branch bot/opf-vX.Y.Z and the pull request. A patch bump (the same major
+#          and minor) is labeled `auto-merge`, a minor or major bump `needs-review` (D19). An existing branch and pull request
+#          are updated, an older open bump pull request is closed as superseded.
+#
+# This workflow only opens and labels the pull requests. It never merges one and never calls `gh pr merge --auto`: the sites are
+# private repositories in a Free-plan organization (no rulesets, no required checks), so the merge is the site's own workflow
+# (opf-bump-merge.yml, drafted in docs/programs/monorepo/site-workflows/), which merges an `auto-merge` pull request after its
+# `build-and-smoke` check passed, with the App's token (D19). A pull request opened with the App's token starts the site's CI; one
+# opened with GITHUB_TOKEN would not.
+#
+# A failure to bump never fails the release: every step that can fail is allowed to, and the leg then opens (or comments on) one
+# issue labeled bump-sites-failed in this repository. Only this workflow holds the App's private key besides release.yml's `commit`
+# job (owner steps O4 and O8). It never deploys, logs in to a site host or changes DNS.
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: The released version, X.Y.Z (a prerelease is refused)
+        type: string
+        required: true
+      dry-run:
+        description: Show the edits in the job summary and push nothing.
+        type: boolean
+        default: false
+    secrets:
+      ECOSYSTEM_APP_PRIVATE_KEY:
+        description: The private key of the GitHub App installed on the three site repositories (owner steps O4 and O8)
+        required: true
+  workflow_dispatch:
+    inputs:
+      version:
+        description: The released version, X.Y.Z (the six packages must be on npm at it)
+        required: true
+      dry-run:
+        description: Show the edits in the job summary and push nothing.
+        type: boolean
+        default: true
+      sites:
+        description: Comma-separated subset of openpresentation-site, pptx-gallery, pptx-dev (empty means all three)
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bump-sites-${{ inputs.version }}
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    name: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    outputs:
+      sites: ${{ steps.sites.outputs.sites }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+          sparse-checkout-cone-mode: true
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: The six packages are published at this version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          [[ "$VERSION" =~ ^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)$ ]] || { echo "::error title=Bump sites::'$VERSION' is not a stable X.Y.Z"; exit 1; }
+          node scripts/bump-site.mjs published "$VERSION" --wait 5
+
+      - name: The sites to bump
+        id: sites
+        env:
+          SELECTED: ${{ inputs.sites }}
+        run: |
+          all='[{"repo":"openpresentation-site","branch":"main"},{"repo":"pptx-gallery","branch":"main"},{"repo":"pptx-dev","branch":"master"}]'
+          sites="$(jq -c --arg selected "$SELECTED" '($selected | split(",") | map(gsub("[ ]"; "")) | map(select(length > 0))) as $want | [.[] | select(($want | length) == 0 or (.repo as $repo | $want | index($repo)))]' <<<"$all")"
+          [ "$(jq length <<<"$sites")" -gt 0 ] || { echo "::error title=Bump sites::no site matches '$SELECTED'"; exit 1; }
+          echo "sites=$sites" >> "$GITHUB_OUTPUT"
+
+  bump:
+    name: bump ${{ matrix.repo }}
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJSON(needs.plan.outputs.sites) }}
+    permissions:
+      contents: read
+      issues: write
+    env:
+      VERSION: ${{ inputs.version }}
+      DRY_RUN: ${{ inputs.dry-run }}
+      SITE: Data-Advantage/${{ matrix.repo }}
+      BASE: ${{ matrix.branch }}
+    steps:
+      # The App's installation token for this one site repository (contents and pull requests: write; owner step O8 installs the
+      # App there). A failure here is reported by the last step, never as a failed release.
+      - name: GitHub App token for the site
+        id: app
+        continue-on-error: true
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          app-id: ${{ vars.ECOSYSTEM_APP_ID }}
+          private-key: ${{ secrets.ECOSYSTEM_APP_PRIVATE_KEY }}
+          owner: Data-Advantage
+          repositories: ${{ matrix.repo }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: ${{ steps.app.outcome == 'success' }}
+        with:
+          persist-credentials: false
+          sparse-checkout: scripts
+          sparse-checkout-cone-mode: true
+          path: opf
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: ${{ steps.app.outcome == 'success' }}
+        with:
+          repository: Data-Advantage/${{ matrix.repo }}
+          ref: ${{ matrix.branch }}
+          token: ${{ steps.app.outputs.token }}
+          path: site
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        if: ${{ steps.app.outcome == 'success' }}
+        with:
+          node-version: 24
+
+      # The site's own pnpm, from its `packageManager` field, resolves the lockfile (pnpm 10.33.2 here, pnpm 11 in pptx-dev).
+      - name: Use the site's package manager
+        id: pm
+        if: ${{ steps.app.outcome == 'success' }}
+        continue-on-error: true
+        working-directory: site
+        run: |
+          corepack enable
+          pnpm --version
+
+      - name: Set the pins and refresh the lockfile
+        id: bump
+        if: ${{ steps.pm.outcome == 'success' }}
+        continue-on-error: true
+        run: node opf/scripts/bump-site.mjs bump --site site --version "$VERSION" --write --refresh-lockfile --github-output "$GITHUB_OUTPUT" --body-file "$RUNNER_TEMP/body.md"
+
+      - name: Open or update the pull request
+        id: pr
+        if: ${{ steps.bump.outcome == 'success' && steps.bump.outputs.changed == 'true' }}
+        continue-on-error: true
+        working-directory: site
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          LABEL: ${{ steps.bump.outputs.label }}
+          KIND: ${{ steps.bump.outputs.kind }}
+        run: |
+          set -euo pipefail
+          branch="bot/opf-v$VERSION"
+          title="bump to v$VERSION"
+          other=needs-review; [ "$LABEL" = needs-review ] && other=auto-merge
+          {
+            echo "### $SITE: $title ($KIND bump, label $LABEL)"
+            echo
+            echo '```'
+            git diff --stat
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$DRY_RUN" = true ]; then
+            echo "Dry run: nothing is pushed." | tee -a "$GITHUB_STEP_SUMMARY"
+            git diff -- . ':!pnpm-lock.yaml' ':!package-lock.json' | head -200
+            exit 0
+          fi
+          git config user.name "opf-release[bot]"
+          git config user.email "opf-release[bot]@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add -A
+          git commit -m "$title"
+          git fetch origin "$branch" 2>/dev/null || true
+          git push --force-with-lease="$branch" origin "$branch"
+          # The labels must exist before a pull request can carry them.
+          gh label create auto-merge --repo "$SITE" --force --color 0E8A16 --description "A patch bump of the OPF packages: merged by the site's CI once build-and-smoke passed" >/dev/null
+          gh label create needs-review --repo "$SITE" --force --color D93F0B --description "A minor or major bump of the OPF packages: review it, then merge by hand" >/dev/null
+          number="$(gh pr list --repo "$SITE" --head "$branch" --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$number" ]; then
+            gh pr edit "$number" --repo "$SITE" --title "$title" --body-file "$RUNNER_TEMP/body.md" --add-label "$LABEL" --remove-label "$other"
+          else
+            gh pr create --repo "$SITE" --base "$BASE" --head "$branch" --title "$title" --body-file "$RUNNER_TEMP/body.md" --label "$LABEL"
+            number="$(gh pr list --repo "$SITE" --head "$branch" --state open --json number --jq '.[0].number')"
+          fi
+          echo "$SITE#$number" | tee -a "$GITHUB_STEP_SUMMARY"
+          # An older bump that nobody merged is superseded by this one.
+          gh pr list --repo "$SITE" --state open --search "head:bot/opf-v" --json number,headRefName --jq ".[] | select(.headRefName != \"$branch\" and (.headRefName | startswith(\"bot/opf-v\"))) | .number" | while read -r old; do
+            gh pr close "$old" --repo "$SITE" --comment "Superseded by #$number (v$VERSION)."
+          done
+
+      - name: Already at this version
+        if: ${{ steps.bump.outcome == 'success' && steps.bump.outputs.changed != 'true' }}
+        run: echo "$SITE already pins v$VERSION; nothing to do." | tee -a "$GITHUB_STEP_SUMMARY"
+
+      # A bump that failed (no token, no package manager, an unsupported specifier, a lockfile that does not resolve, a refused
+      # push) opens one issue here and leaves the release green.
+      - name: Report a failed bump
+        if: ${{ always() && (steps.app.outcome == 'failure' || steps.pm.outcome == 'failure' || steps.bump.outcome == 'failure' || steps.pr.outcome == 'failure') }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          FAILED: ${{ steps.app.outcome == 'failure' && 'the GitHub App token' || steps.pm.outcome == 'failure' && 'the package manager' || steps.bump.outcome == 'failure' && 'setting the pins or refreshing the lockfile' || 'opening the pull request' }}
+        run: |
+          label=bump-sites-failed
+          title="Bump sites to v$VERSION failed"
+          gh label create "$label" --repo "$REPOSITORY" --force --color B60205 --description "A site bump after a release could not be made (bump-sites.yml)" >/dev/null 2>&1 || true
+          body="Bumping $SITE to v$VERSION failed at $FAILED: $RUN_URL
+
+          The release itself is not affected. Fix the cause (owner steps O4 and O8 in docs/programs/monorepo/owner-steps.md for the App and its secrets), then run Actions, Bump sites with this version, or bump the site by hand with scripts/bump-site.mjs."
+          existing="$(gh issue list --repo "$REPOSITORY" --label "$label" --state open --json number,title --jq ".[] | select(.title == \"$title\") | .number" | head -1)"
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --repo "$REPOSITORY" --body "$body"
+          else
+            gh issue create --repo "$REPOSITORY" --label "$label" --title "$title" --body "$body"
+          fi

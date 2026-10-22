@@ -210,10 +210,10 @@ acceptance remain open; no new package train or broad native pass is inferred.
 
 Gallery 4.0.0 (published and independently verified 2026-10-19) adds theme `variants` and removes the `dark` theme; core 0.24 and its siblings depended on `^4.0.0`. It declares catalog compatibility generation 3. Gallery 5.0.0 (published and independently verified; layouts as one list of regions, catalog generation 4) is the range core 0.25.0 and this checkout depend on (`^5.0.0`); the published set depends on it from core 0.25.0, and so does CLI 0.25.0 (CLI 0.24.1 and earlier, on Gallery `^4.0.0`, cannot read it).
 
-The gallery (RR-78) is released from its own repository, OpenPresentation/gallery, on its own version line (`vX.Y.Z`
-tags, `gallery-publish.yml` there), outside the lockstep set above and
-recorded under `independentPackages` in `release-plan.json`: new catalog records are a minor release, a removed id or
-a changed drawing a major one ([release process](release-process.md#the-gallery-lane-rr-78)). From OPF 0.19 core and the
+The gallery (RR-78) is the package `packages/gallery` of this repository. Since 0.26.0 it is released with the other five at one
+shared version (`vX.Y.Z` tags, `npm-publish.yml`); until 0.25.0 it was released from its own repository on its own line, which
+ended at 5.0.0 (Gallery 1.0.0 to 5.0.0 stay on npm). New catalog records go in any release; a removed id or a changed drawing needs a
+minor release ([release process](release-process.md)). From OPF 0.19 core and the
 CLI consume the Gallery package (Gallery 2 in OPF 0.19; Gallery 3 in OPF 0.20), and core has no `/catalog` subpath; up to 0.18 core ships the same records as
 `@openpresentation/opf/catalog`.
 

@@ -19,8 +19,8 @@ name: Publish OPF npm packages
 # publisher on all six packages and its provenance would not name a tag. release.yml pushes the tag instead and watches this run.
 #
 # Jobs: plan -> build -> publish -> verify -> release (report on failure). Only `publish` holds id-token: write and only `release`
-# holds contents: write; no job holds a secret. There is no GitHub environment (D7). TODO(MR-52): bump-sites.yml starts from a
-# workflow_run of this workflow's success (D17, D19) and needs nothing here.
+# holds contents: write; no job holds a secret. There is no GitHub environment (D7). The sites are bumped by release.yml, which
+# calls bump-sites.yml after it has watched this run succeed (MR-52, D17, D19); nothing is needed here.
 on:
   push:
     tags: ['v*']

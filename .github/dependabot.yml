@@ -1,3 +1,22 @@
+# The one Dependabot configuration for the whole monorepo (MR-50; docs/programs/monorepo/README.md, section 9, Phase 5; the S4/S5
+# spike in the same program). It replaces the four configs the old repositories carried.
+#
+# - One npm entry at "/": pnpm is detected from pnpm-lock.yaml and pnpm-workspace.yaml, and the workspace members under packages/
+#   are reached from the root. Do not add per-directory entries: several updates against one pnpm-lock.yaml would collide.
+# - Dependabot groups by dependency name, type and update type, never by package, so the groups below follow dependency families
+#   that move together. A dependency goes to the first group that matches, in order. Per-package review comes from the pull
+#   request's file list and CODEOWNERS.
+# - A Playwright bump is more than a version bump: every `container: mcr.microsoft.com/playwright:vX.Y.Z-noble@sha256:...` in
+#   .github/workflows must name the same version and its digest, and Dependabot does not edit those references (its github-actions
+#   ecosystem reads `uses:` only). `pnpm check:playwright-pin` fails the pull request until the image tag and digest are edited in
+#   the same pull request, and goldens must not move (docs/programs/monorepo/README.md, "Goldens stay exact"). That is why Playwright
+#   has its own group: one pull request that a person or an agent finishes by hand, never merged as it arrives.
+# - Font packages (@expo-google-fonts/*) are exact pins with matching exact optional peers (`pnpm check:pins`): a font bump changes
+#   a published peer range, which is a compatibility-contract change and needs the owner's review.
+# - The six workspace packages are linked only through the workspace: protocol (`pnpm check:workspace-graph`) and are published
+#   together by the release workflow, so Dependabot must never bump a specifier of them (core's concrete peer ranges on render and
+#   pptx would otherwise look like registry pins). This is a dependency-name ignore, not an advisory ignore: no advisory id and no
+#   vulnerable version is ever ignored here.
 version: 2
 updates:
   - package-ecosystem: "github-actions"
@@ -21,13 +40,32 @@ updates:
       time: "09:00"
       timezone: "America/Los_Angeles"
     versioning-strategy: increase-if-necessary
-    open-pull-requests-limit: 3
-    # Match the supported Node 24 runtime. This semver rule only limits
-    # routine version updates; do not add ignored advisory IDs or versions.
+    open-pull-requests-limit: 5
     ignore:
+      # Match the supported Node 24 runtime. This semver rule only limits routine version updates; do not add ignored advisory IDs.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      # The six workspace packages (see above).
+      - dependency-name: "@openpresentation/opf"
+      - dependency-name: "@openpresentation/cli"
+      - dependency-name: "@openpresentation/opf-render"
+      - dependency-name: "@openpresentation/opf-pptx"
+      - dependency-name: "@openpresentation/opf-editor"
+      - dependency-name: "@openpresentation/gallery"
     groups:
+      # Order matters: a dependency goes to the first group that matches.
+      playwright:
+        applies-to: version-updates
+        patterns: ["playwright", "playwright-core", "@playwright/*"]
+      expo-google-fonts:
+        applies-to: version-updates
+        patterns: ["@expo-google-fonts/*"]
+      codemirror:
+        applies-to: version-updates
+        patterns: ["@codemirror/*", "@lezer/*"]
+      native-image-pdf:
+        applies-to: version-updates
+        patterns: ["sharp", "@resvg/*", "pdf-lib", "pdfjs-dist"]
       npm-minor-patch:
         applies-to: version-updates
         patterns: ["*"]
