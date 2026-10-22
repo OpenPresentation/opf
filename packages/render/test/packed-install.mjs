@@ -1,42 +1,20 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
-import {existsSync,readFileSync} from 'node:fs';
+import {existsSync} from 'node:fs';
 import {mkdtemp,mkdir,readFile,writeFile,realpath,rm} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
-import {fileURLToPath,pathToFileURL} from 'node:url';
-import {gunzipSync} from 'node:zlib';
-import {packageManagerInvocation} from '../../../scripts/package-manager.mjs';
-const root=fileURLToPath(new URL('../',import.meta.url)),repository=path.resolve(root,'../..');
-// MR-23b: the workspace has no registry copy of this version yet, so the tarballs of this package and of the workspace packages it
-// depends on (core, and the gallery that core depends on) are packed with `pnpm pack`, which writes the registry ranges into the packed
-// manifests (`workspace:^` becomes `^<version>`), and installed together with npm, the client consumers use. Nothing here reads a
-// `workspace:` specifier from a source package.json.
+import {pathToFileURL} from 'node:url';
+import {npm,packageRoot,packWithDependencies,tarEntry} from '../scripts/workspace-pack.mjs';
+const root=packageRoot;
 const temporary=await mkdtemp(path.join(tmpdir(),'opf-render-packed-'));
 const actualTemporary=await realpath(temporary),temporaryParent=await realpath(tmpdir());
-const run=(command,args,cwd)=>{const invocation=packageManagerInvocation(command,args);return execFileSync(invocation.command,invocation.args,{cwd,encoding:'utf8',maxBuffer:64*1024*1024});};
-const npm=(args,cwd)=>run('npm',args,cwd);
-// `pnpm pack --json` prints the lifecycle (prepack build) output first; the JSON object starts on a line of its own.
-const pack=directory=>{
-  const output=run('pnpm',['pack','--json','--pack-destination',temporary],directory),start=output.search(/^\{/m);
-  assert.ok(start>=0,`pnpm pack printed no JSON in ${directory}`);
-  const result=JSON.parse(output.slice(start));
-  return {...result,integrity:`sha512-${createHash('sha512').update(readFileSync(result.filename)).digest('base64')}`};
-};
-// One file of a (gzipped ustar) tarball, so the packed manifest is read from the artifact and never from the source package.json.
-const tarEntry=(tarball,name)=>{
-  const bytes=gunzipSync(readFileSync(tarball));
-  for(let offset=0;offset+512<=bytes.length&&bytes[offset]!==0;){
-    const header=bytes.subarray(offset,offset+512),size=parseInt(header.subarray(124,136).toString('latin1').replace(/\0.*$/,'').trim()||'0',8);
-    if(header.subarray(0,100).toString('utf8').replace(/\0.*$/,'')===name)return bytes.subarray(offset+512,offset+512+size);
-    offset+=512+Math.ceil(size/512)*512;
-  }
-  throw new Error(`${name} is not in ${tarball}`);
-};
+// MR-23b: the workspace has no registry copy of this version yet, so render, core and the gallery are packed with `pnpm pack` and installed
+// together (scripts/workspace-pack.mjs).
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
 try{
-  const packed=pack(root),corePacked=pack(path.join(repository,'packages/javascript')),galleryPacked=pack(path.join(repository,'packages/gallery'));
+  const {self:packed,core:corePacked,gallery:galleryPacked}=packWithDependencies(temporary);
   const rootManifest=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
   const tarballs=[packed,corePacked,galleryPacked].map(item=>item.filename);
   // RR-63: the lean install. The tarball alone brings no converter and no font package: SVG output works, and an export or font pack that needs an
