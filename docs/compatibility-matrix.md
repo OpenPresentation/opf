@@ -6,7 +6,7 @@ It is not universal Office parity and does not describe archived prototypes as
 shipped.
 
 **Published set (2026-10-21):** core 0.25.0, renderer 0.25.0, PPTX 0.25.0,
-editor 0.25.1, CLI 0.25.0 and Gallery 5.0.0. `release-plan.json` records each
+editor 0.25.3, CLI 0.25.0 and Gallery 5.0.0. `release-plan.json` records each
 version with the registry `gitHead` of its publisher commit.
 Earlier matrices and native observations retain their historical identities.
 Complete native compatibility remains a separate gate.
@@ -37,7 +37,7 @@ imply universal Office or full-catalog visual parity.
 | CLI | 0.25.0 | Core ^0.25.0, Gallery ^5.0.0; optional renderer/PPTX ^0.25.0 |
 | Renderer | 0.25.0 | Core ^0.25.0; optional pinned font/converter peers |
 | PPTX | 0.25.0 | Core ^0.25.0, Gallery ^5.0.0; optional renderer ^0.25.0 |
-| Editor | 0.25.1 | Core ^0.25.0; optional renderer ^0.25.0 |
+| Editor | 0.25.3 | Core ^0.25.0; optional renderer ^0.25.0 |
 | Gallery | 5.0.0 | Independent owner of every default catalog record; 28 intent layouts |
 
 ## Runtime
@@ -130,7 +130,7 @@ and PPTX stay optional peers. CLI 0.15.0 and earlier bundled their core.
 
 Install the complete pinned set. A caret range starting at 0.10.1 does not
 include 0.11.x; old consumers can install a second core and do not establish
-ColorRef preview/export support. The selected renderer 0.25.0 and PPTX 0.25.0 and editor 0.25.1 require core ^0.25.0;
+ColorRef preview/export support. The selected renderer 0.25.0 and PPTX 0.25.0 and editor 0.25.3 require core ^0.25.0;
 CLI 0.25.0 accepts core ^0.25.0 (CLI 0.24.1 and earlier accept only core 0.24). Pin core 0.25.0 alongside them and
 verify one installed Core so preview and export use the same composition.
 Core 0.20.2 and later center metrics when alignment is omitted; explicit alignment remains
