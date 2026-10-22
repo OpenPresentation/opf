@@ -278,7 +278,7 @@
     "test:contract": "pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs --suite contract",
     "validate": "node scripts/validate-package.mjs",
     "check:scripts": "node --test scripts/check-syntax.test.mjs scripts/browser-suites.test.mjs",
-    "test:packed": "node test/packed-install.mjs",
+    "test:packed": "pnpm run build:deps && node test/packed-install.mjs",
     "prepack": "pnpm run build",
     "check:font-hotlinks:built": "node ../../scripts/check-font-hotlinks.mjs --built dist artifacts/playground",
     "build:playground": "node scripts/build-playground.mjs",

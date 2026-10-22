@@ -5,40 +5,70 @@ import {mkdtemp,mkdir,readFile,writeFile,realpath,rm,cp,symlink} from 'node:fs/p
 import {tmpdir} from 'node:os';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
-const root=fileURLToPath(new URL('../',import.meta.url)),npmCli=process.env.npm_execpath;
-assert.ok(npmCli?.endsWith('npm-cli.js'),'Run through npm run test:packed.');
+import {spawnSpec} from '../../../scripts/package-manager.mjs';
+import {DEPENDENCY_FIELDS,concreteRange} from '../../../scripts/workspace-packages.mjs';
+// MR-23d: the editor is packed with `pnpm pack` (it rewrites `workspace:` to the versions the published package carries) and its
+// packed manifest is the one read below. The consumer installs the packed editor together with the packed workspace packages it
+// needs (gallery, core, renderer, PPTX converter): 0.26.0 is not on the registry before the release, so these tarballs stand for the
+// published dependencies. Every npm and pnpm command goes through spawnSpec, which runs the package manager's JavaScript entrypoint on
+// Windows without a shell and does not need npm_execpath (`pnpm run` sets it to pnpm's own entrypoint).
+const root=fileURLToPath(new URL('../',import.meta.url)),workspace=fileURLToPath(new URL('../../../',import.meta.url));
 const temporary=await mkdtemp(path.join(tmpdir(),'opf-editor-packed-'));
 const actualTemporary=await realpath(temporary),temporaryParent=await realpath(tmpdir());
-const npm=(args,cwd)=>execFileSync(process.execPath,[npmCli,...args],{cwd,encoding:'utf8',maxBuffer:12*1024*1024});
+const run=(argv,cwd)=>{const {command,args,options}=spawnSpec(argv);return execFileSync(command,args,{...options,cwd,encoding:'utf8',maxBuffer:12*1024*1024});};
+const npm=(args,cwd)=>run(['npm',...args],cwd);
 const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+const integrityOf=async file=>'sha512-'+createHash('sha512').update(await readFile(file)).digest('base64');
+// pnpm prints the output of the package's prepack script before its JSON.
+const jsonOf=output=>JSON.parse(output.slice(output.search(/^[{[]/m)));
+const packedManifestText=tarball=>run(['tar','-xzOf',tarball,'package/package.json'],temporary);
+// A workspace package as a dependency candidate: its manifest with `workspace:` ranges made concrete (what pnpm pack writes), the files
+// it publishes, npm pack. Packages are used as built in the workspace (build:deps builds the gallery and core; render and PPTX keep their dist).
+async function packDependency(directory){
+ const source=path.join(workspace,'packages',directory),manifest=JSON.parse(await readFile(path.join(source,'package.json'),'utf8'));
+ for(const field of DEPENDENCY_FIELDS)if(manifest[field])for(const name of Object.keys(manifest[field]))manifest[field][name]=concreteRange(manifest[field][name],manifest.version);
+ const stage=await mkdtemp(path.join(temporary,`stage-${directory}-`));
+ for(const entry of [...manifest.files,'README.md','LICENSE'])await cp(path.join(source,entry),path.join(stage,entry),{recursive:true}).catch(error=>{if(error.code!=='ENOENT'||manifest.files.includes(entry))throw error;});
+ await writeFile(path.join(stage,'package.json'),JSON.stringify(manifest,null,2)+'\n');
+ const packed=JSON.parse(npm(['pack','--json','--ignore-scripts','--pack-destination',temporary],stage))[0];
+ return {name:manifest.name,manifest,tarball:path.join(temporary,packed.filename),integrity:packed.integrity};
+}
 try{
- const manifest=JSON.parse(await readFile(path.join(root,'package.json'),'utf8'));
- const packed=JSON.parse(npm(['pack','--json','--pack-destination',temporary],root))[0];
+ // The editor under test, packed as it publishes; its manifest is read from the tarball, where `workspace:` is already a version.
+ const packed=jsonOf(run(['pnpm','pack','--json','--pack-destination',temporary],root));
+ const tarball=path.join(temporary,path.basename(packed.filename));packed.integrity=await integrityOf(tarball);
+ const manifestText=packedManifestText(tarball),manifest=JSON.parse(manifestText);
+ assert.equal(manifest.name,'@openpresentation/opf-editor');
+ for(const field of DEPENDENCY_FIELDS)for(const [name,range] of Object.entries(manifest[field]??{}))assert.ok(!range.startsWith('workspace:'),`${field} ${name} is still ${range} in the packed manifest`);
  const consumer=path.join(temporary,'consumer');await mkdir(consumer);
  await writeFile(path.join(consumer,'package.json'),JSON.stringify({private:true,type:'module'}));
- // The consumer installs the published renderer, so its font packages (exact-pinned optional peers of opf-render) are the versions
- // that renderer declares, not the editor's own development pins (which follow the renderer source the ecosystem tests link).
- const renderSpec=manifest.devDependencies['@openpresentation/opf-render'];
- let published=JSON.parse(npm(['view',`@openpresentation/opf-render@${renderSpec}`,'version','peerDependencies','--json'],temporary));
- if(Array.isArray(published))published=published.at(-1);
+ // The consumer installs the workspace's candidates for the packages the editor depends on, so its font packages (exact-pinned optional
+ // peers of opf-render) are the versions that renderer declares, not the editor's own development pins.
+ const candidates=[];
+ for(const directory of ['gallery','javascript','render','pptx'])candidates.push(await packDependency(directory));
+ const candidate=name=>candidates.find(item=>item.name===name);
+ const published=candidate('@openpresentation/opf-render').manifest;
  const fontPeers=Object.fromEntries(Object.entries(published.peerDependencies??{}).filter(([name])=>name.startsWith('@expo-google-fonts/')));
  const installSpec=([name,version])=>`${name}@${fontPeers[name]??version}`;
- npm(['install','--ignore-scripts','--no-audit','--no-fund',path.join(temporary,packed.filename),...Object.entries(manifest.devDependencies).map(installSpec)],consumer);
+ const thirdParty=Object.entries(manifest.devDependencies).filter(([name])=>!candidate(name)&&name!==manifest.name);
+ npm(['install','--ignore-scripts','--no-audit','--no-fund',tarball,...candidates.map(item=>item.tarball),...thirdParty.map(installSpec)],consumer);
  const installed=path.join(consumer,'node_modules/@openpresentation/opf-editor'),files={};
  assert.ok((await realpath(installed)).startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep));
  for(const {path:file} of packed.files){
   assert.ok(!path.isAbsolute(file)&&!file.split(/[/\\]/).includes('..'));
   const bytes=await readFile(path.join(installed,file));
-  assert.equal(hash(bytes),hash(await readFile(path.join(root,file))),`Installed file differs: ${file}`);files[file]=hash(bytes);
+  // package.json is the one file pnpm pack rewrites (workspace: ranges), so it is compared with the tarball's own copy.
+  assert.equal(hash(bytes),file==='package.json'?hash(Buffer.from(manifestText)):hash(await readFile(path.join(root,file))),`Installed file differs: ${file}`);files[file]=hash(bytes);
  }
  const lock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8')),dependencies={};
  for(const name of ['@openpresentation/opf','@openpresentation/opf-render','@openpresentation/opf-pptx']){
-  const entry=lock.packages['node_modules/'+name];
-  assert.ok(entry.resolved.startsWith('https://registry.npmjs.org/')&&!entry.link);
+  const entry=lock.packages['node_modules/'+name],candidateTarball=candidate(name);
+  assert.ok(entry.resolved.startsWith('file:')&&!entry.link,`${name} is installed from the workspace candidate tarball`);
+  assert.equal(entry.integrity,candidateTarball.integrity,`${name} is the packed candidate`);
   assert.ok((await realpath(path.join(consumer,'node_modules',name))).startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep));
   dependencies[name]={version:entry.version,resolved:entry.resolved,integrity:entry.integrity};
  }
- assert.equal(dependencies['@openpresentation/opf-render'].version,published.version,'the consumer resolved the renderer whose peers it installed');
+ assert.equal(dependencies['@openpresentation/opf-render'].version,published.version,'the consumer installed the renderer whose peers it installed');
  for(const [name,version] of Object.entries(fontPeers))if(manifest.devDependencies[name])assert.equal(lock.packages['node_modules/'+name]?.version,version,`${name} is the version the published renderer pins`);
  const fixture=path.join(consumer,'verification');await mkdir(fixture);
  for(const directory of ['test','examples'])await cp(path.join(root,directory),path.join(fixture,directory),{recursive:true});
@@ -64,7 +94,7 @@ try{
  assert.ok(jsonBrowser.checks.includes('V2 metric layout reference preserves subtitle/notes/content and undo/redo atomically'));
  assert.deepEqual(jsonBrowser.errors,[]);assert.deepEqual(jsonBrowser.externalRequests,[]);
  for(const [file,digest] of Object.entries(files))assert.equal(hash(await readFile(path.join(installed,file))),digest,'JSON verification must not rebuild the installed editor');
- await writeFile(path.join(root,`artifacts/packed-json-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,tests:[...tests],jsonBrowser,boundary:'JSON control only, from a byte-matched installed candidate and registry dependencies. Full-package acceptance still requires every subsequent gate and a successful overall command exit.'},null,2)+'\n');
+ await writeFile(path.join(root,`artifacts/packed-json-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,tests:[...tests],jsonBrowser,boundary:'JSON control only, from a byte-matched installed candidate and the workspace candidates of its dependencies (packed tarballs, not yet on the registry). Full-package acceptance still requires every subsequent gate and a successful overall command exit.'},null,2)+'\n');
  for(const file of ['smoke.mjs','component-smoke.mjs','canvas-fields.mjs','transfer.mjs','schema.mjs','rich-text.mjs','layout.mjs','blocks.mjs','styled-table.mjs','switches.mjs','switches-export.mjs','block-convert.mjs','content-actions.mjs','design-options.mjs','table-options.mjs','data-grid.mjs','switches-ui.mjs','assets.mjs','background-options.mjs','image-options.mjs','catalogs.mjs']){
   const output=execFileSync(process.execPath,[path.join(fixture,'test',file)],{cwd:consumer,encoding:'utf8'});
   process.stdout.write(output);tests.push({file,fixtureSha256:hash(await readFile(path.join(fixture,'test',file))),output:output.trim()});
@@ -83,9 +113,13 @@ try{
  assert.deepEqual(richBrowser.errors,[]);assert.deepEqual(richBrowser.externalRequests,[]);
  for(const [file,digest] of Object.entries(files))assert.equal(hash(await readFile(path.join(installed,file))),digest,'Browser verification must not rebuild the installed editor');
  const audit=JSON.parse(npm(['audit','--json'],consumer));assert.equal(audit.metadata.vulnerabilities.total,0);
- const signatures=npm(['audit','signatures'],consumer);process.stdout.write(signatures);
+ // Registry signatures exist only for packages that are on the registry. Before a release the workspace candidates are not, and
+ // `npm audit signatures` fails looking them up, so the check is recorded as skipped until every candidate version is published.
+ const unpublished=[];
+ for(const item of candidates){try{npm(['view',`${item.name}@${item.manifest.version}`,'version'],temporary);}catch{unpublished.push(`${item.name}@${item.manifest.version}`);}}
+ const signatures=unpublished.length?`skipped: ${unpublished.join(', ')} not on the registry yet (the release workflow verifies registry signatures after publication)`:npm(['audit','signatures'],consumer);process.stdout.write(signatures+'\n');
  await mkdir(path.join(root,'artifacts'),{recursive:true});
- await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,tests,browser:browser.trim(),codeBrowser,richBrowser,jsonBrowser,signatureVerification:signatures.trim(),knownVulnerabilities:0,boundary:'Actual installed editor candidate with byte-matched distributables and registry predecessors; eleven model/component suites and offline browser author/edit/paginate/export/reimport/undo, including JSON control/history/catalog menus, code source/metadata preservation, blank multiline targets and rich-input source/selection/formatting/undo. Native PowerPoint and complete-set deployed-site evidence are separate gates.'},null,2)+'\n');
+ await writeFile(path.join(root,`artifacts/packed-consumer-node${process.versions.node.split('.')[0]}.json`),JSON.stringify({node:process.version,name:manifest.name,version:manifest.version,integrity:packed.integrity,files,dependencies,tests,browser:browser.trim(),codeBrowser,richBrowser,jsonBrowser,signatureVerification:signatures.trim(),knownVulnerabilities:0,boundary:'Actual installed editor candidate with byte-matched distributables and the workspace candidates of its dependencies; eleven model/component suites and offline browser author/edit/paginate/export/reimport/undo, including JSON control/history/catalog menus, code source/metadata preservation, blank multiline targets and rich-input source/selection/formatting/undo. Native PowerPoint and complete-set deployed-site evidence are separate gates.'},null,2)+'\n');
  console.log(`Packed editor passed: ${Object.keys(files).length} byte-matched files, ${tests.length} model suites, offline browser workflow; ${packed.integrity}`);
 }finally{
  const actual=await realpath(temporary);assert.equal(actual,actualTemporary);
