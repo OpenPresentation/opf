@@ -3,8 +3,6 @@ name: Flake measurement
 # records a pass rate per test (job summary and the flake-repeat artifact). It measures; it does not gate.
 # Quarantine rule: test/QUARANTINE.md.
 on:
-  schedule:
-    - cron: '19 4 * * *'
   # A change to this workflow runs it once, so the change is verified before it reaches main (a new workflow cannot be dispatched until then).
   pull_request:
     paths: ['.github/workflows/flake-repeat.yml']
