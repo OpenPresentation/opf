@@ -20,7 +20,7 @@ registry identity is separate from the consumer and native checks below. All dec
 node -v   # 24.x (verified); 22 and later are declared
 npm install @openpresentation/opf@0.25.0 \
   @openpresentation/opf-render@0.25.0 \
-  @openpresentation/opf-editor@0.25.1 \
+  @openpresentation/opf-editor@0.25.3 \
   @openpresentation/opf-pptx@0.25.0 \
   @openpresentation/cli@0.25.0 \
   @openpresentation/gallery@5.0.0

@@ -54,7 +54,7 @@
     "@expo-google-fonts/tinos": "0.4.2",
     "@openpresentation/gallery": "5.0.0",
     "@openpresentation/opf": "0.25.0",
-    "@openpresentation/opf-editor": "0.25.1",
+    "@openpresentation/opf-editor": "0.25.3",
     "@openpresentation/opf-pptx": "0.25.0",
     "@openpresentation/opf-render": "0.25.0",
     "@resvg/resvg-js": "^2.6.2",
