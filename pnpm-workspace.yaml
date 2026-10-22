@@ -19,9 +19,10 @@ overrides:
 # This lives here, not in .npmrc, because npm warns about pnpm-only keys in .npmrc and "will stop working" with it.
 linkWorkspacePackages: false
 
-# Optional peers are not installed: core and the CLI declare render and pptx as optional peers (`workspace:^`), and with the
-# default pnpm would link them into core's node_modules, re-creating the core <-> engines cycle in the lockfile (guarded by
-# check:workspace-graph). Every peer a package's tests need is also a devDependency of that package (check:pins).
+# Optional peers are not installed. With the default, pnpm would link each peer into the importer, and core's peers on render and
+# pptx would put core -> pptx -> core into the lockfile (guarded by check:workspace-graph). So core declares them as the concrete
+# range `^<version>` (check:versions keeps it equal to the shared version) and has no devDependencies on them: `pnpm pack` has
+# nothing to resolve. The other packages declare peers as `workspace:^` and install them through `workspace:*` devDependencies.
 autoInstallPeers: false
 
 # esbuild gets its binary from optional platform packages; nothing needs its postinstall (silences pnpm's "Ignored build scripts").

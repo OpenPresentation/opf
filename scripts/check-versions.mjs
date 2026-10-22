@@ -8,9 +8,10 @@
 // part of the set. `scripts/release.mjs prepare` sets the version; this check fails when they differ.
 //
 // Usage: node scripts/check-versions.mjs [root]
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { loadWorkspace, SIX } from './workspace-packages.mjs';
+import { CORE, loadWorkspace, SIX } from './workspace-packages.mjs';
 
 const SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
 
@@ -29,10 +30,34 @@ export function checkVersions(members) {
   return problems;
 }
 
+/**
+ * Core's optional peers on render and pptx are concrete ranges (`^<version>`, see check:workspace-graph) and its install hints,
+ * `PEER_RANGES` in src/node/peers.ts, name the same ranges; `scripts/release.mjs prepare` sets all of them with the version, and
+ * this fails when one is left behind. `hints` is the text of peers.ts (or null when it is not in the workspace).
+ */
+export function checkPeerRanges(members, hints) {
+  const core = members.find(({ manifest }) => manifest.name === CORE);
+  if (!core) return [];
+  const problems = [];
+  const expected = `^${core.manifest.version}`;
+  for (const { name } of SIX.filter(({ name }) => core.manifest.peerDependencies?.[name] !== undefined)) {
+    const peer = core.manifest.peerDependencies[name];
+    const member = members.find((entry) => entry.manifest.name === name);
+    if (member && peer !== `^${member.manifest.version}`) problems.push(`${core.dir}: peer ${name} is ${peer}, the workspace version of ${name} is ${member.manifest.version}`);
+  }
+  const ranges = hints === null ? null : /PEER_RANGES\s*=\s*\{([^}]*)\}/.exec(hints)?.[1];
+  if (hints !== null && ranges === undefined) problems.push(`${core.dir}: PEER_RANGES not found in src/node/peers.ts`);
+  for (const [, version] of ranges ? [...ranges.matchAll(/"([^"]+)"/g)] : []) {
+    if (version !== expected) problems.push(`${core.dir}: PEER_RANGES in src/node/peers.ts has ${version}, core is ${core.manifest.version} (${expected})`);
+  }
+  return problems;
+}
+
 function main() {
   const root = path.resolve(process.argv[2] ?? path.join(path.dirname(fileURLToPath(import.meta.url)), '..'));
   const { members } = loadWorkspace(root);
-  const problems = checkVersions(members);
+  const peers = path.join(root, 'packages/javascript/src/node/peers.ts');
+  const problems = [...checkVersions(members), ...checkPeerRanges(members, existsSync(peers) ? readFileSync(peers, 'utf8') : null)];
   if (problems.length) {
     console.error(`check:versions FAILED (${problems.length})\n  - ${problems.join('\n  - ')}`);
     process.exit(1);

@@ -14,12 +14,14 @@ const N = Object.fromEntries(SIX.map(({ dir, name }) => [dir, name]));
 const member = (dir, manifest) => ({ dir: `packages/${dir}`, manifest: structuredClone(manifest) });
 const workspaceFor = (members, extra = {}) => ({ packages: members.map((entry) => entry.dir), overrides: {}, scalars: {}, ...extra });
 const peers = { [N.render]: 'workspace:^', [N.pptx]: 'workspace:^' };
+// Core cannot have devDependencies on its optional peers (the cycle), so it carries the concrete range `pnpm pack` would write.
+const corePeers = { [N.render]: '^0.26.0', [N.pptx]: '^0.26.0' };
 
 /** E0: the target state after MR-23. */
 function target() {
   return [
     member('gallery', { name: N.gallery, version: '0.26.0' }),
-    member('javascript', { name: N.javascript, version: '0.26.0', dependencies: { [N.gallery]: 'workspace:^' }, peerDependencies: peers }),
+    member('javascript', { name: N.javascript, version: '0.26.0', dependencies: { [N.gallery]: 'workspace:^' }, peerDependencies: corePeers }),
     member('render', { name: N.render, version: '0.26.0', dependencies: { [N.javascript]: 'workspace:^' }, devDependencies: { [N.gallery]: 'workspace:*' } }),
     member('pptx', {
       name: N.pptx,
@@ -71,6 +73,16 @@ test('E2: a peer that is not workspace:^ fails', () => {
   const members = target();
   get(members, 'pptx').peerDependencies = { [N.render]: '^0.26.0' };
   assert.deepEqual(run(members), [`${N.pptx}: peer ${N.render} must be workspace:^ (found ^0.26.0)`]);
+});
+
+test('E4: core\'s peers are the concrete range of the workspace version: workspace:^ cannot be packed, a stale range drifts', () => {
+  const members = target();
+  get(members, 'javascript').peerDependencies = { [N.render]: 'workspace:^', [N.pptx]: '^0.25.0' };
+  const problems = run(members);
+  assert.equal(problems.length, 2, problems.join('\n'));
+  assert.ok(problems.every((problem) => problem.startsWith(`${N.javascript}: peer `) && problem.includes('concrete range ^0.26.0')), problems.join('\n'));
+  assert.ok(problems[0].includes(`${N.render} has no workspace devDependency`) && problems[0].endsWith('(found workspace:^)'));
+  assert.ok(problems[1].endsWith('(found ^0.25.0)'));
 });
 
 test('E3: link-workspace-packages true fails in pnpm-workspace.yaml and in a legacy .npmrc', () => {

@@ -4,7 +4,7 @@ import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { checkVersions } from './check-versions.mjs';
+import { checkPeerRanges, checkVersions } from './check-versions.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const pkg = (dir, name, version, extra = {}) => ({ dir: `packages/${dir}`, manifest: { name, version, ...extra } });
@@ -32,6 +32,18 @@ test('an imported gallery that is not a workspace member is inert, and private p
 
 test('a version that is not semver fails', () => {
   assert.match(checkVersions([pkg('cli', '@openpresentation/cli', 'latest')])[0], /not a semver version/);
+});
+
+test('core\'s peer ranges and PEER_RANGES follow the shared version', () => {
+  const core = (peerVersion) => pkg('javascript', '@openpresentation/opf', '0.26.0', { peerDependencies: { '@openpresentation/opf-render': peerVersion, '@openpresentation/opf-pptx': peerVersion } });
+  const hints = (version) => `export const PEER_RANGES = { [RENDER_PACKAGE]: "${version}", [PPTX_PACKAGE]: "${version}" } as const;`;
+  const members = (peerVersion) => [core(peerVersion), pkg('render', '@openpresentation/opf-render', '0.26.0'), pkg('pptx', '@openpresentation/opf-pptx', '0.26.0')];
+  assert.deepEqual(checkPeerRanges(members('^0.26.0'), hints('^0.26.0')), []);
+  assert.deepEqual(checkPeerRanges(members('^0.26.0'), null), []);
+  assert.equal(checkPeerRanges(members('^0.25.0'), hints('^0.26.0')).length, 2);
+  assert.match(checkPeerRanges(members('^0.26.0'), hints('^0.25.0'))[0], /PEER_RANGES in src\/node\/peers\.ts has \^0\.25\.0, core is 0\.26\.0/);
+  assert.match(checkPeerRanges(members('^0.26.0'), 'nothing')[0], /PEER_RANGES not found/);
+  assert.deepEqual(checkPeerRanges([], hints('^0.25.0')), []);
 });
 
 test('this repository passes check:versions', () => {
