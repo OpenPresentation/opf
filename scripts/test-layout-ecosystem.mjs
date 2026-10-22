@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {mkdir,writeFile} from 'node:fs/promises';
-import {createEditorSession} from '../../opf-editor/src/index.js';
-import {prepareTrackResize,prepareBlockMove,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove} from '../../opf-editor/src/layout.js';
-import {resolvePresentation, toSvg} from '../../opf-render/src/svg.js';
-import {loadFonts} from '../../opf-render/src/fonts-node.js';
-import {toPptx} from '../../opf-pptx/src/index.js';
-const require=createRequire(new URL('../../opf-pptx/package.json',import.meta.url)),{unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');
+import {createEditorSession} from '../packages/editor/src/index.js';
+import {prepareTrackResize,prepareBlockMove,prepareBlockInsert,prepareBlockDuplicate,prepareBlockRemove} from '../packages/editor/src/layout.js';
+import {resolvePresentation, toSvg} from '../packages/render/src/svg.js';
+import {loadFonts} from '../packages/render/src/fonts-node.js';
+import {toPptx} from '../packages/pptx/src/index.js';
+const require=createRequire(new URL('../packages/pptx/package.json',import.meta.url)),{unzipSync}=require('fflate'),{XMLParser}=require('fast-xml-parser');
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false}),list=v=>Array.isArray(v)?v:v?[v]:[];
 const fonts=await loadFonts({pack:'office'}),options={fonts};
 const original={design:{fontScheme:'roboto'},slides:[{title:'Resize while keeping content',composition:{mode:'row',weights:[2,1]},blocks:[{composition:{mode:'column'},blocks:[{text:'Recommendation'},{text:'Supporting evidence remains editable.'}]},{text:'Context and next steps.'}]}]};

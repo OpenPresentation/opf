@@ -44,13 +44,13 @@ assert.equal(galleryScriptFontManifestForExample(fake, 'fetch("./fonts.json")'),
 assert.equal(galleryScriptFontManifestForExample(fake, "scriptBaseUrl:'./script-fonts/'").packages.length, 1);
 assert.throws(() => galleryScriptFontManifestForExample({}, "scriptBaseUrl:'./script-fonts/'"), /loads \.\/script-fonts\/ but the pinned @openpresentation\/opf-render has no script font pack/);
 
-// The renderer checked out beside this repository (when built) yields a manifest that passes the same checks.
-const sibling = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../opf-render/dist/fonts-node.js');
+// The renderer in this workspace (packages/render, when built) yields a manifest that passes the same checks.
+const sibling = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../packages/render/dist/fonts-node.js');
 if (existsSync(sibling)) {
   const real = galleryScriptFontManifest(await import(pathToFileURL(sibling).href));
   if (real) {
     assert.ok(real.packages.length >= 30 && real.packages.every(item => item.license === 'OFL-1.1'));
-    console.log(`Gallery script fonts: fake and sibling-renderer manifests verified (${real.packages.length} packages, ${real.packages.reduce((total, item) => total + item.faces.length, 0)} faces).`);
+    console.log(`Gallery script fonts: fake and workspace-renderer manifests verified (${real.packages.length} packages, ${real.packages.reduce((total, item) => total + item.faces.length, 0)} faces).`);
     process.exit(0);
   }
 }

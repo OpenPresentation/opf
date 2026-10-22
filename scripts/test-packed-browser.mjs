@@ -37,7 +37,7 @@ const server=createServer((request,response)=>{
 });
 await new Promise((resolve,reject)=>{server.once('error',reject);server.listen(0,'127.0.0.1',resolve);});
 const origin=`http://127.0.0.1:${server.address().port}`;
-const {chromium}=createRequire(path.resolve(root,'../opf-render/package.json'))('playwright');
+const {chromium}=createRequire(path.resolve(root,'packages/render/package.json'))('playwright');
 let browser;
 const results=[];
 const paint=page=>page.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));

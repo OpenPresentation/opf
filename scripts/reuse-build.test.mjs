@@ -60,5 +60,6 @@ test('both package builds go through reuse-build and stamp only after the whole 
   const core = JSON.parse(readFileSync(path.join(root, 'packages/javascript/package.json'), 'utf8')).scripts.build;
   const cli = JSON.parse(readFileSync(path.join(root, 'packages/cli/package.json'), 'utf8')).scripts.build;
   assert.match(core, /^node \.\.\/\.\.\/scripts\/reuse-build\.mjs check \|\| \(.*tsup.*&& node \.\.\/\.\.\/scripts\/reuse-build\.mjs stamp\)$/);
-  assert.match(cli, /^pnpm --filter @openpresentation\/opf build && \(node \.\.\/\.\.\/scripts\/reuse-build\.mjs check \|\| \(tsup && node \.\.\/\.\.\/scripts\/reuse-build\.mjs stamp\)\)$/);
+  // The CLI's dependencies are built by its build:deps (MR-23e), not inside the build, so the build is just the reuse guard around tsup.
+  assert.match(cli, /^node \.\.\/\.\.\/scripts\/reuse-build\.mjs check \|\| \(tsup && node \.\.\/\.\.\/scripts\/reuse-build\.mjs stamp\)$/);
 });

@@ -51,7 +51,8 @@ const verifyInstalledCliRegression = !registry || coreVersion?.[0] > 0 || coreVe
 const verifyColorRefs = !registry || coreVersion?.[0] > 0 || coreVersion?.[1] >= 11;
 
 async function readHarnessBytes(repo, file) {
-  const directory = repo === 'opf' ? root : path.resolve(root, '..', repo);
+  // MR-23e: the packages are directories of this repository (the registry mode reads the old repositories' commits: MR-34).
+  const directory = repo === 'opf' ? root : path.join(root, 'packages', repo.replace(/^opf-/, ''));
   if (!registry) return readFile(path.join(directory, file));
   const ref = releasePlan.verificationRefs?.[repo];
   if (!/^[a-f0-9]{40}$/.test(ref ?? '')) throw new Error(`Missing immutable registry verification ref for ${repo}`);

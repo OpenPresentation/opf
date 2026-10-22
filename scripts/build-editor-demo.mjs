@@ -13,7 +13,7 @@ const require = createRequire(
 const { build } = createRequire(require.resolve("tsup"))("esbuild");
 const out = path.join(root, "artifacts/editor");
 const { loadFonts } =
-  await import("../../opf-render/dist/fonts-node.js");
+  await import("../packages/render/dist/fonts-node.js");
 const fontRegistry = await loadFonts({ pack: "office" });
 await mkdir(out, { recursive: true });
 await writeFile(
@@ -23,15 +23,15 @@ await writeFile(
 // The local demo keeps every eager face in fonts.json; an empty base-fonts.json tells the playground (FF-41) there is nothing to load on demand.
 await writeFile(path.join(out, "base-fonts.json"), "[]");
 // Vendored faces (Intos for the default Aptos scheme, the open families) stay out of fonts.json and load on demand.
-const lazy = await emitLazyFonts({ registry: fontRegistry.registry, packageRoot: path.resolve(root, "../opf-render"), out });
+const lazy = await emitLazyFonts({ registry: fontRegistry.registry, packageRoot: path.resolve(root, "packages/render"), out });
 // The same pinned manifest the gallery commits (contract opf-gallery-editor-lazy-fonts/v1), for the renderer built beside this checkout.
-const rendererFonts = await import("../../opf-render/dist/fonts-node.js");
-const rendererVersion = JSON.parse(await readFile(path.resolve(root, "../opf-render/package.json"), "utf8")).version;
+const rendererFonts = await import("../packages/render/dist/fonts-node.js");
+const rendererVersion = JSON.parse(await readFile(path.resolve(root, "packages/render/package.json"), "utf8")).version;
 const lazyManifest = galleryLazyFontManifest(rendererFonts, rendererVersion);
 if (lazyManifest) await writeFile(path.join(out, "lazy-fonts.json"), `${JSON.stringify(lazyManifest, null, 2)}\n`);
 console.log(`Editor fonts: ${fontRegistry.embeddedFonts.length} eager faces in fonts.json; ${lazy.faces} lazy faces (${lazy.bytes} bytes) as separate hash-pinned files.`);
 await build({
-  entryPoints: [path.resolve(root, "../opf-editor/examples/playground.js")],
+  entryPoints: [path.resolve(root, "packages/editor/examples/playground.js")],
   outfile: path.join(out, "playground.js"),
   bundle: true,
   platform: "browser",
@@ -41,29 +41,29 @@ await build({
     // Editor 0.11 loads PDF and PNG export lazily from this subpath; without its own entry the bare-package alias below treats it as a child of svg.js.
     "@openpresentation/opf-render/export-browser": path.resolve(
       root,
-      "../opf-render/src/export-browser.js",
+      "packages/render/src/export-browser.js",
     ),
     "@openpresentation/opf-render/fonts-browser": path.resolve(
       root,
-      "../opf-render/src/fonts-browser.js",
+      "packages/render/src/fonts-browser.js",
     ),
     "@openpresentation/opf-render/fonts": path.resolve(
       root,
-      "../opf-render/src/fonts.js",
+      "packages/render/src/fonts.js",
     ),
     "@openpresentation/opf-render/svg": path.resolve(
       root,
-      "../opf-render/src/svg.js",
+      "packages/render/src/svg.js",
     ),
     "@openpresentation/opf-render": path.resolve(
       root,
-      "../opf-render/src/svg.js",
+      "packages/render/src/svg.js",
     ),
   },
   minify: true,
 });
 await build({
-  entryPoints: [path.resolve(root, "../opf-editor/test/browser-canvas.mjs")],
+  entryPoints: [path.resolve(root, "packages/editor/test/browser-canvas.mjs")],
   outfile: path.join(out, "canvas-tests.js"),
   bundle: true,
   platform: "browser",
@@ -73,19 +73,19 @@ await build({
     // Editor 0.11 loads PDF and PNG export lazily from this subpath; without its own entry the bare-package alias below treats it as a child of svg.js.
     "@openpresentation/opf-render/export-browser": path.resolve(
       root,
-      "../opf-render/src/export-browser.js",
+      "packages/render/src/export-browser.js",
     ),
     "@openpresentation/opf-render/fonts-browser": path.resolve(
       root,
-      "../opf-render/src/fonts-browser.js",
+      "packages/render/src/fonts-browser.js",
     ),
     "@openpresentation/opf-render/svg": path.resolve(
       root,
-      "../opf-render/src/svg.js",
+      "packages/render/src/svg.js",
     ),
     "@openpresentation/opf-render": path.resolve(
       root,
-      "../opf-render/src/svg.js",
+      "packages/render/src/svg.js",
     ),
   },
 });
@@ -94,19 +94,19 @@ await writeFile(
   '<!doctype html><title>Canvas checks</title><h1>Canvas browser regression checks</h1><pre id="results"></pre><div id="canvas" style="width:1280px"></div><script type="module" src="./canvas-tests.js"></script>',
 );
 await copyFile(
-  path.resolve(root, "../opf-editor/examples/playground.html"),
+  path.resolve(root, "packages/editor/examples/playground.html"),
   path.join(out, "index.html"),
 );
 await copyFile(
-  path.resolve(root, "../opf-editor/examples/playground.css"),
+  path.resolve(root, "packages/editor/examples/playground.css"),
   path.join(out, "playground.css"),
 );
 console.log(
   `Editor playground built: ${out}\nServe with: python3 -m http.server 3102 --directory artifacts/editor`,
 );
 
-await copyFile(path.resolve(root, '../opf-editor/examples/galleries.json'), path.join(out, 'galleries.json'));
-await build({entryPoints:[path.resolve(root,'../opf-editor/test/browser-schema.mjs')],outfile:path.join(out,'schema-tests.js'),bundle:true,platform:'browser',format:'esm'});
+await copyFile(path.resolve(root, 'packages/editor/examples/galleries.json'), path.join(out, 'galleries.json'));
+await build({entryPoints:[path.resolve(root,'packages/editor/test/browser-schema.mjs')],outfile:path.join(out,'schema-tests.js'),bundle:true,platform:'browser',format:'esm'});
 await writeFile(path.join(out,'schema-tests.html'),'<!doctype html><title>Schema checks</title><h1>OPF schema inspector browser checks</h1><pre id="results"></pre><div id="inspector"></div><script type="module" src="./schema-tests.js"></script>');
 
 // Refresh browser assets when a local or gallery build changes.

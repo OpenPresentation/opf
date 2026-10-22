@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {ingest,parseTabularData} from '../packages/javascript/dist/data.js';
-import {toSvg} from '../../opf-render/src/svg.js';
-import {toPptx,fromPptx} from '../../opf-pptx/src/index.js';
+import {toSvg} from '../packages/render/src/svg.js';
+import {toPptx,fromPptx} from '../packages/pptx/src/index.js';
 const csv='Quarter,Revenue,Cost\nQ1,12,-4\nQ2,18,7';
 const chart=ingest(csv,{as:'chart'}),table=ingest(csv,{as:'table'});
 for(const type of ['column','bar','line','area']){

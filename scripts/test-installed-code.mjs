@@ -84,7 +84,7 @@ for(const item of manifest.artifacts) {
     }
   }
 }
-const tooling=createRequire(path.resolve(root,'../opf-editor/package.json'));
+const tooling=createRequire(path.resolve(root,'packages/editor/package.json'));
 const toolUrl=name=>pathToFileURL(tooling.resolve(name)).href;
 const run=args=>{
   const result=spawnSync(process.execPath,args,{cwd:consumer,stdio:'inherit'});
