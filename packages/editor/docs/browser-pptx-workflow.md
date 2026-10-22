@@ -8,7 +8,7 @@ This is an example/application change. Core 0.7.0, renderer 0.5.0, editor 0.4.0 
 
 ## Repeatable checks
 
-`npm ci && npm run test:playground` builds a self-contained local demo and starts its own contained static server. Local Windows uses installed Edge; CI installs Chromium with `npx playwright install --with-deps chromium`. After loading the application, the test disables browser networking and exercises:
+`pnpm install && pnpm run test:playground` builds a self-contained local demo and starts its own contained static server. Local Windows uses installed Edge; CI installs Chromium with `npx playwright install --with-deps chromium`. After loading the application, the test disables browser networking and exercises:
 
 - JSON authoring and live preview of a weighted layout with a styled merged table.
 - Active inline title editing committed by opening PowerPoint export.
