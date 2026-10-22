@@ -1,0 +1,17 @@
+
+> openpresentation-workspace@ test:packed-ecosystem /Users/michael/Source/opf
+> node scripts/test-packed-ecosystem.mjs
+
+npm warn Unknown env config "npm-globalconfig". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "verify-deps-before-run". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+npm warn Unknown env config "_jsr-registry". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.
+file:///Users/michael/Source/opf/scripts/test-packed-ecosystem.mjs:78
+    throw new Error(`${command} exited ${result.status}`);
+          ^
+
+Error: npm exited null
+    at run (file:///Users/michael/Source/opf/scripts/test-packed-ecosystem.mjs:78:11)
+    at file:///Users/michael/Source/opf/scripts/test-packed-ecosystem.mjs:80:1
+
+Node.js v24.21.0
+ ELIFECYCLE  Command failed with exit code 1.

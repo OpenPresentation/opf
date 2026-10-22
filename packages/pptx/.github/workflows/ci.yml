@@ -1,0 +1,389 @@
+name: CI
+# RR-57 (CI diet): a pull request runs the Linux `package` job on the current Node (no Windows leg, no Node 22 or 26 legs).
+# The Windows leg and the Node 22 and Node 26 engines-range legs run on push to main, the weekly schedule, workflow_dispatch and the merge
+# queue, and on a pull request that carries the label `full-ci` (add it when a change touches OS- or Node-version-specific
+# code). The `labeled` event starts them without a new push; any other label starts nothing and, being in its own
+# concurrency group, cancels nothing.
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+  # RR-48: ready for the merge queue (a no-op until the owner enables it, opf#297). A queue run has no
+  # pull_request payload, so the concurrency group falls back to its own gh-readonly-queue ref, and a
+  # queue run is never cancelled by a newer push.
+  merge_group:
+  push:
+    branches: [main]
+  # MR-20: the weekly schedule was removed with the freeze (this repository moves to OpenPresentation/opf); run the full legs with workflow_dispatch.
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}${{ github.event.action == 'labeled' && github.event.label.name != 'full-ci' && '-ignored' || github.event_name == 'schedule' && '-schedule' || '' }}
+  cancel-in-progress: ${{ github.event_name != 'merge_group' && github.event_name != 'schedule' }}
+jobs:
+  candidate-selection:
+    name: Resolve reviewed coordinated graph
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      opf: ${{ steps.refs.outputs.opf }}
+      opf_render: ${{ steps.refs.outputs.opf_render }}
+      opf_pptx: ${{ steps.refs.outputs.opf_pptx }}
+      opf_editor: ${{ steps.refs.outputs.opf_editor }}
+      golden: ${{ steps.refs.outputs.golden }}
+      candidate_gallery: ${{ steps.gallery.outputs.candidate_gallery }}
+      published_opf: ${{ steps.gallery.outputs.published_opf }}
+      published_opf_render: ${{ steps.gallery.outputs.published_opf_render }}
+      published_opf_pptx: ${{ steps.gallery.outputs.published_opf_pptx }}
+      published_opf_editor: ${{ steps.gallery.outputs.published_opf_editor }}
+      published_cli: ${{ steps.gallery.outputs.published_cli }}
+    steps:
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
+        with:
+          node-version: 24
+      - id: refs
+        uses: OpenPresentation/opf/.github/actions/ecosystem-refs@main
+        with:
+          consumer: opf-pptx
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          repository: OpenPresentation/opf
+          ref: ${{ steps.refs.outputs.opf }}
+          path: opf
+          persist-credentials: false
+      - id: gallery
+        working-directory: opf
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/candidate-gallery.mjs resolve
+  published-control:
+    needs: candidate-selection
+    if: needs.candidate-selection.outputs.candidate_gallery != ''
+    uses: OpenPresentation/opf/.github/workflows/published-gallery-control.yml@8d2f43a9dfb9399be1cd0c66d5373890cc3367c1
+    with:
+      mode: ecosystem
+      tools-ref: ${{ needs.candidate-selection.outputs.opf }}
+      opf-ref: ${{ needs.candidate-selection.outputs.published_opf }}
+      render-ref: ${{ needs.candidate-selection.outputs.published_opf_render }}
+      pptx-ref: ${{ needs.candidate-selection.outputs.published_opf_pptx }}
+      editor-ref: ${{ needs.candidate-selection.outputs.published_opf_editor }}
+      cli-ref: ${{ needs.candidate-selection.outputs.published_cli }}
+  package:
+    needs: [candidate-selection, published-control]
+    # An unrelated label starts nothing.
+    if: ${{ always() && (github.event.action != 'labeled' || github.event.label.name == 'full-ci') }}
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.os == 'ubuntu-latest' && 'mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f' || '' }}
+    # RR-57: about 2x the p90 (Linux 14 min, Windows 25 min over the last 30 pushes).
+    timeout-minutes: ${{ matrix.os == 'windows-latest' && 50 || 30 }}
+    defaults:
+      run:
+        working-directory: opf-pptx
+        # PowerShell reports only the final native command's exit code in a
+        # multiline step. Bash's Actions wrapper stops on the first failure.
+        shell: bash
+    strategy:
+      fail-fast: false
+      matrix:
+        # RR-57: a pull request without the label `full-ci` runs the Linux leg only (Windows: p50 23 min, p90 25 min).
+        os: ${{ fromJSON((github.event_name != 'pull_request' || contains(github.event.pull_request.labels.*.name, 'full-ci')) && '["ubuntu-latest","windows-latest"]' || '["ubuntu-latest"]') }}
+    steps:
+      - name: Require successful graph selection and published control
+        working-directory: .
+        shell: bash
+        env:
+          SELECTION: ${{ needs.candidate-selection.result }}
+          GALLERY: ${{ needs.candidate-selection.outputs.candidate_gallery }}
+          CONTROL: ${{ needs.published-control.result }}
+        run: |
+          test "$SELECTION" = success
+          if [ -n "$GALLERY" ]; then test "$CONTROL" = success; fi
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          path: opf-pptx
+      # RR-47: an expired or malformed test/quarantine.json entry fails CI. See test/QUARANTINE.md.
+      - name: Check the test quarantine
+        run: node --test scripts/quarantine.test.mjs scripts/browser-suites.test.mjs && node scripts/quarantine.mjs check
+      # RR-46: a reminder, never a failure: src/ changed without a changelog fragment (changes/README.md).
+      - name: Changelog fragment
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        run: node scripts/changelog-fragments.mjs warn-missing --base origin/${{ github.base_ref }}
+      # RR-50: no hand pins. The commits of the other OpenPresentation repositories (and OPF_GOLDEN_BASELINE, exported to
+      # the later steps) come from core's ecosystem.lock.json, written by the roller. A `Depends-On:` trailer in the pull
+      # request body tests an unmerged pull request of another repository instead (core docs/ecosystem-development.md).
+      - name: Export the selected reviewed golden
+        shell: bash
+        env:
+          GOLDEN: ${{ needs.candidate-selection.outputs.golden }}
+        run: echo "OPF_GOLDEN_BASELINE=$GITHUB_WORKSPACE/$GOLDEN" >> "$GITHUB_ENV"
+      # Verify registry dependencies before linking the pinned source graph.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf
+          ref: ${{ needs.candidate-selection.outputs.opf }}
+          path: opf
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf-render
+          ref: ${{ needs.candidate-selection.outputs.opf_render }}
+          path: opf-render
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf-editor
+          ref: ${{ needs.candidate-selection.outputs.opf_editor }}
+          path: opf-editor
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: opf-pptx/package-lock.json
+      # Match trusted publishing: npm 10 re-resolves optional peers in npm 11 locks before sources can be linked.
+      - name: Use the release npm version
+        run: npm install -g npm@11.16.0
+      - name: Install locked coordinated dependencies
+        shell: bash
+        working-directory: .
+        run: |
+          pnpm --dir opf install --frozen-lockfile
+          for repo in opf-render opf-pptx opf-editor; do
+            npm ci --prefix "$repo"
+          done
+      - name: Gate the published-dependency check (RR-55 opf.requiresUnreleasedCore)
+        id: published-core
+        run: node scripts/published-core-gate.mjs
+      - name: Explain candidate gallery published-dependency gate
+        if: needs.candidate-selection.outputs.candidate_gallery != ''
+        run: echo '::notice::The selected Gallery candidate requires the coordinated source graph; the separate published control checks registry dependencies, and candidate packed/browser suites run after linking.'
+      - name: Verify PPTX with published dependencies
+        if: steps.published-core.outputs.skip != 'true' && needs.candidate-selection.outputs.candidate_gallery == ''
+        run: npm run test:packed
+      - name: Resolve and link the explicitly authorized gallery
+        id: candidate-gallery
+        uses: ./opf/.github/actions/candidate-gallery
+      - name: Build and link coordinated sources
+        working-directory: opf
+        shell: bash
+        env:
+          GALLERY: ${{ needs.candidate-selection.outputs.candidate_gallery }}
+          LINKED_GALLERY: ${{ steps.candidate-gallery.outputs.sha }}
+        run: |
+          test "$GALLERY" = "$LINKED_GALLERY"
+          if [ -n "$GALLERY" ]; then
+            node scripts/candidate-gallery-build.mjs
+          else
+            pnpm build
+            node scripts/link-ecosystem.mjs --packages-only
+          fi
+      - run: npm audit
+      - run: npm run typecheck
+      - run: npm run test:native-picture-edit-controls
+      - run: npm run test:native-font-embed-controls
+      - run: npm run test:native-mixed-edit-controls
+      - run: npm run test:native-font-inventory-controls
+      - name: Verify bounded native harness without Office
+        if: runner.os == 'Windows'
+        shell: powershell
+        run: |
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-process-check.ps1 -OutputDirectory artifacts/native-picture-harness/worker
+          if ($LASTEXITCODE -ne 0) { throw 'Native process controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-picture-harness-check.ps1 -ReportPath artifacts/native-picture-harness/check.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native picture harness controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-picture-edit-harness-check.ps1 -ReportPath artifacts/native-picture-harness/edit-check.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native picture edit harness controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-furniture-harness-check.ps1 -ReportPath artifacts/native-picture-harness/furniture-check.json
+          if ($LASTEXITCODE -ne 0) { throw 'Native furniture harness controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-tab-control-v2.ps1 -PureRegression
+          if ($LASTEXITCODE -ne 0) { throw 'Native tab metrics regression failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-font-edit.ps1 -PureRegression
+          if ($LASTEXITCODE -ne 0) { throw 'Native font edit controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-font-embed.ps1 -PureRegression
+          if ($LASTEXITCODE -ne 0) { throw 'Native font embed controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-mixed-edit.ps1 -PureRegression
+          if ($LASTEXITCODE -ne 0) { throw 'Native mixed-size edit controls failed' }
+          & "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-font-inventory.ps1 -PureRegression
+          if ($LASTEXITCODE -ne 0) { throw 'Native font inventory controls failed' }
+      - run: npm run validate
+      - run: npm test
+      # A design-fields export still imports with the released importer without losing provenance (needs the registry).
+      - run: npm run test:published-import
+      - run: npm run test:font-variants
+      - run: npm run test:code
+      - name: Verify Playwright image version
+        run: node -e "if (require('playwright/package.json').version !== '1.64.0') throw new Error('Update the pinned Playwright image with the test package.');"
+      - if: runner.os == 'Windows'
+        run: npx playwright install chromium
+      # RR-47: test/browser-suites.json (the commands of npm run test:browser); a quarantined test is deferred to the non-blocking step below.
+      - name: Browser suite
+        run: node scripts/quarantine.mjs run-suite browser
+      - name: Install and exercise coordinated candidate tarballs
+        working-directory: opf
+        run: |
+          # Git-for-Windows GNU tar (first on PATH under bash) reads C:... as host:path; use Windows bsdtar.
+          if [ "$RUNNER_OS" = Windows ]; then export PATH="/c/Windows/System32:$PATH"; fi
+          if [ -n "$CANDIDATE_GALLERY_REF" ]; then
+            node --input-type=module -e "import assert from 'node:assert/strict'; import {candidateArtifacts} from './scripts/candidate-gallery-pack.mjs'; assert.ok(candidateArtifacts(process.cwd()));"
+          else
+            pnpm pack:ecosystem
+          fi
+          pnpm test:packed-ecosystem
+          pnpm test:packed-browser
+          node scripts/test-plain-whitespace-workflow.mjs artifacts/plain-whitespace-workflow installed
+          node scripts/test-readability-browser.mjs artifacts/readability-browser installed
+          node scripts/test-timeline-workflow.mjs artifacts/timeline-workflow installed
+          node scripts/test-furniture-workflow.mjs artifacts/furniture-workflow installed
+          node ../opf-editor/test/json-editor-browser.mjs artifacts/editor/json-editor-installed.json artifacts/npm/consumer
+          node scripts/test-timeline-acceptance.mjs artifacts/timeline-acceptance.json
+          node scripts/test-installed-code-guards.mjs
+      - run: npm pack --dry-run
+      # RR-47: tests listed in test/quarantine.json run here, after every gate, and are reported without failing the job.
+      - name: Quarantined tests (non-blocking)
+        if: always()
+        continue-on-error: true
+        run: node scripts/quarantine.mjs run-deferred
+      - name: Preserve candidate and raster evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: candidate-opf-pptx-${{ runner.os }}-node24
+          path: |
+            opf-pptx/artifacts/quarantine/**
+            opf/artifacts/plain-whitespace-workflow/**
+            opf/artifacts/readability-browser/**
+            opf/artifacts/timeline-workflow/**
+            opf/artifacts/furniture-workflow/**
+            opf/artifacts/timeline-acceptance.json
+            opf/artifacts/editor/*report.json
+            opf/artifacts/editor/json-editor-installed.json
+            opf/artifacts/editor/*failure.png
+            opf/artifacts/editor/*installed-code*.json
+            opf-render/artifacts/golden/**
+            opf-pptx/artifacts/packed-consumer-node24.json
+            opf-pptx/artifacts/zip-date/**
+            opf-pptx/artifacts/native-text-whitespace/**
+            opf-pptx/artifacts/native-underline/**
+            opf-pptx/artifacts/native-body-rich-text/**
+            opf-pptx/artifacts/native-picture-harness/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+  # RR-20: engines.node is the open-ended ">=22", so the range is tested: the package job above stays on Node 24 (the
+  # development and evidence runtime) and this job repeats install, the published-dependency check, typecheck and the
+  # unit suite on the oldest supported major and the current release. Browser, golden and native gates stay on Node 24.
+  node-range:
+    needs: [candidate-selection, published-control]
+    name: Node ${{ matrix.node }} (engines range)
+    # Not on a plain pull request (see the header); an unrelated label starts nothing.
+    if: ${{ always() && (github.event_name != 'pull_request' || (contains(github.event.pull_request.labels.*.name, 'full-ci') && (github.event.action != 'labeled' || github.event.label.name == 'full-ci'))) }}
+    runs-on: ubuntu-latest
+    container: mcr.microsoft.com/playwright:v1.64.0-noble@sha256:06a9939e57531807f8d5fd76ce44b53165ffb7d7501d87ab10e285c20b1e971f
+    # RR-57: about 2x the p90 (10.6 min).
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 26]
+    defaults:
+      run:
+        working-directory: opf-pptx
+    steps:
+      - name: Require successful graph selection and published control
+        working-directory: .
+        shell: bash
+        env:
+          SELECTION: ${{ needs.candidate-selection.result }}
+          GALLERY: ${{ needs.candidate-selection.outputs.candidate_gallery }}
+          CONTROL: ${{ needs.published-control.result }}
+        run: |
+          test "$SELECTION" = success
+          if [ -n "$GALLERY" ]; then test "$CONTROL" = success; fi
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          path: opf-pptx
+      - name: Export the selected reviewed golden
+        shell: bash
+        env:
+          GOLDEN: ${{ needs.candidate-selection.outputs.golden }}
+        run: echo "OPF_GOLDEN_BASELINE=$GITHUB_WORKSPACE/$GOLDEN" >> "$GITHUB_ENV"
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf
+          ref: ${{ needs.candidate-selection.outputs.opf }}
+          path: opf
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf-render
+          ref: ${{ needs.candidate-selection.outputs.opf_render }}
+          path: opf-render
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: OpenPresentation/opf-editor
+          ref: ${{ needs.candidate-selection.outputs.opf_editor }}
+          path: opf-editor
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: pnpm/action-setup@ea17c68df8912ef543352723c149a84f56e3d413 # v6.1.0
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: opf-pptx/package-lock.json
+      # Match trusted publishing: npm 10 re-resolves optional peers in npm 11 locks before sources can be linked.
+      - name: Use the release npm version
+        run: npm install -g npm@11.16.0
+      - name: Install locked coordinated dependencies
+        shell: bash
+        working-directory: .
+        run: |
+          node -e "console.log('Node', process.version)"
+          pnpm --dir opf install --frozen-lockfile
+          for repo in opf-render opf-pptx opf-editor; do
+            npm ci --prefix "$repo"
+          done
+      - name: Gate the published-dependency check (RR-55 opf.requiresUnreleasedCore)
+        id: published-core
+        run: node scripts/published-core-gate.mjs
+      - name: Explain candidate gallery published-dependency gate
+        if: needs.candidate-selection.outputs.candidate_gallery != ''
+        run: echo '::notice::The selected Gallery candidate requires the coordinated source graph; the separate published control checks registry dependencies, and candidate packed/browser suites run after linking.'
+      - name: Verify PPTX with published dependencies
+        if: steps.published-core.outputs.skip != 'true' && needs.candidate-selection.outputs.candidate_gallery == ''
+        run: npm run test:packed
+      - name: Resolve and link the explicitly authorized gallery
+        id: candidate-gallery
+        uses: ./opf/.github/actions/candidate-gallery
+      - name: Build and link coordinated sources
+        working-directory: opf
+        shell: bash
+        env:
+          GALLERY: ${{ needs.candidate-selection.outputs.candidate_gallery }}
+          LINKED_GALLERY: ${{ steps.candidate-gallery.outputs.sha }}
+        run: |
+          test "$GALLERY" = "$LINKED_GALLERY"
+          if [ -n "$GALLERY" ]; then
+            node scripts/candidate-gallery-build.mjs
+          else
+            pnpm build
+            node scripts/link-ecosystem.mjs --packages-only
+          fi
+      - run: npm run typecheck
+      - run: npm test

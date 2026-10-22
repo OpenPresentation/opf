@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "baselineConverter": "e673f106c2fd38fcb5d51db190649c3855cc1885",
+  "runtime": "Node 24.21.0",
+  "candidateSourceSha256": {
+    "src/index.js": "08b1433f37069f885d0be34d3712f785b563b09c1b7129a90bb2a74e46a757a7",
+    "src/data-provenance.js": "c913226ff1a7f95036dfedfc627fdfa0cfbb6efa8a31b4edafaec084ec832ddb"
+  },
+  "scope": "Full-provenance records for actual row-number adaptations on authored single-column chart data. Binned histogram fallback and two-column scatter structural adaptations are excluded.",
+  "reviewedArchiveCount": 30,
+  "unchangedArchiveCount": 28,
+  "changedEntries": [
+    {
+      "fixture": "rr-54-unchanged",
+      "name": "single-column",
+      "previousSha256": "5162d4b32aa4a96a66809df9a76c636217dbac18d95060daed9d8d36ce42abe0",
+      "reviewedSha256": "5162d4b32aa4a96a66809df9a76c636217dbac18d95060daed9d8d36ce42abe0",
+      "previousMatchesReviewed": true,
+      "currentSha256": "b1f2a15339cf32bac94f7e1f17e463da145108e2bc69eca8ab2a2c79f4a03355",
+      "previousBytes": 25843,
+      "currentBytes": 26257,
+      "addedParts": [
+        "ppt/tags/opfData1.xml"
+      ],
+      "removedParts": [],
+      "changedParts": [
+        "[Content_Types].xml",
+        "ppt/slides/_rels/slide1.xml.rels",
+        "ppt/slides/slide1.xml"
+      ],
+      "normalizedNativeDiff": []
+    },
+    {
+      "fixture": "chartex-fallback-main",
+      "name": "waterfall-single",
+      "previousSha256": "341fc617cd8edd6bdf9790134cc817c1b13f0cf0479f96b23758e55c077b0142",
+      "reviewedSha256": "341fc617cd8edd6bdf9790134cc817c1b13f0cf0479f96b23758e55c077b0142",
+      "previousMatchesReviewed": true,
+      "currentSha256": "c812d346498c0f472942fceecca3c4ff3e8b0ac3237bbbfcd7d66725605dc867",
+      "previousBytes": 81372,
+      "currentBytes": 81787,
+      "addedParts": [
+        "ppt/tags/opfData1.xml"
+      ],
+      "removedParts": [],
+      "changedParts": [
+        "[Content_Types].xml",
+        "ppt/slides/_rels/slide1.xml.rels",
+        "ppt/slides/slide1.xml"
+      ],
+      "normalizedNativeDiff": []
+    }
+  ],
+  "acceptance": "Root independently reviewed and approved the two specific provenance-only archive updates. No native raster or PowerPoint acceptance is claimed.",
+  "validation": [
+    {
+      "command": "node test/rr-54-chart-table-data.mjs",
+      "exitCode": 0,
+      "checks": 42
+    },
+    {
+      "command": "node test/chartex.mjs",
+      "exitCode": 0,
+      "checks": 31
+    },
+    {
+      "command": "node test/row-data-provenance.mjs",
+      "exitCode": 0,
+      "controls": 25
+    }
+  ]
+}

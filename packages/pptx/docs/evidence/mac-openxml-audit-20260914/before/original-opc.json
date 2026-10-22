@@ -1,0 +1,115 @@
+{
+  "scope": "Internal relationship target existence, unique relationship IDs and content-type override target existence. This is not full OPC or native Office conformance.",
+  "results": [
+    {
+      "file": "disabled-furniture.pptx",
+      "sha256": "6a8defbdebe2bc87de5e0b7409c412da68bce8e0a50db19a2fab3a3d488d7b94",
+      "errors": []
+    },
+    {
+      "file": "empty-furniture.pptx",
+      "sha256": "d6da7669550a4287b3a9fd56c2e77c066beecc28fa5041974f8050b83e1cb624",
+      "errors": []
+    },
+    {
+      "file": "furniture-estimated-1280-16-inherited.pptx",
+      "sha256": "d5fc7aaf69254720880b5a1bd357f01473b499ca05c8c535a9c9ff218b61f6e2",
+      "errors": []
+    },
+    {
+      "file": "furniture-estimated-1280-16-local.pptx",
+      "sha256": "76e7010006490eed6f57c4fa03344505309b11dd2fdcca506039ca2f73278c7f",
+      "errors": []
+    },
+    {
+      "file": "furniture-estimated-1280-32-inherited.pptx",
+      "sha256": "7f4d00bcec4b0c0262d889e78637b26fa49ae9b60e4ea8f8e287f8333f18da31",
+      "errors": []
+    },
+    {
+      "file": "furniture-estimated-1280-32-local.pptx",
+      "sha256": "c824ccb3f47ab411709001fe85120abe9c42ac2c6b55909047abfdab34fe38d1",
+      "errors": []
+    },
+    {
+      "file": "furniture-estimated-720-16-inherited.pptx",
+      "sha256": "1944e7c6570b533aa18c779e54bf7deac3c49180eb50471f57d3ca72603de48a",
+      "errors": []
+    },
+    {
+      "file": "furniture-estimated-720-16-local.pptx",
+      "sha256": "e5b3f8b7c484bbdc9c8a6cd0e4cd6941f6ca1c0a4f54c373428b499f87a00adc",
+      "errors": []
+    },
+    {
+      "file": "furniture-estimated-720-32-inherited.pptx",
+      "sha256": "ff31363063b9422e0cdc9532f7bc517df0263ce3420fbba789ea80e89f5ff04a",
+      "errors": []
+    },
+    {
+      "file": "furniture-estimated-720-32-local.pptx",
+      "sha256": "d087e80db1cde331355074c89be8c871c715712f32e83c907b266068ce1edc20",
+      "errors": []
+    },
+    {
+      "file": "furniture-measured-1280-16-inherited.pptx",
+      "sha256": "2c1755d676ce9285ae2bafa98174ddcf9f728c645fd51d36fdeb3d194d13d931",
+      "errors": []
+    },
+    {
+      "file": "furniture-measured-1280-16-local.pptx",
+      "sha256": "aa53845a8178e4f64177f0e4dd37fbd5d11ca869266ebf8f6b09757ec72c9ef1",
+      "errors": []
+    },
+    {
+      "file": "furniture-measured-1280-32-inherited.pptx",
+      "sha256": "ffc93ef860383ba0647d9b3585ed188e15a5b11497859e2b49710eb829bf5409",
+      "errors": []
+    },
+    {
+      "file": "furniture-measured-1280-32-local.pptx",
+      "sha256": "c824ccb3f47ab411709001fe85120abe9c42ac2c6b55909047abfdab34fe38d1",
+      "errors": []
+    },
+    {
+      "file": "furniture-measured-720-16-inherited.pptx",
+      "sha256": "520454b092f44892c24e5f069e5fcc17b9d71a66351d04f50199e1a8653581ac",
+      "errors": []
+    },
+    {
+      "file": "furniture-measured-720-16-local.pptx",
+      "sha256": "63fdc23c86b993a4d5b62a0d78bfe8b70e122e52763592ceb93e31de5a6071ee",
+      "errors": []
+    },
+    {
+      "file": "furniture-measured-720-32-inherited.pptx",
+      "sha256": "f9d4a2b09e6bebb2c9b10d12613dded17a6a7585b5edbe91b1cedbb444b26317",
+      "errors": []
+    },
+    {
+      "file": "furniture-measured-720-32-local.pptx",
+      "sha256": "5fde188220f96947858456dd8c36d0285d82c3d786e340ddc30ff9258307332d",
+      "errors": []
+    },
+    {
+      "file": "image-control.pptx",
+      "sha256": "c588addc4296a95127ee5589d4fc52df2e3fce62d331e034c679d3bb6fe10ae5",
+      "errors": []
+    },
+    {
+      "file": "notes-control.pptx",
+      "sha256": "8594c29f7f12bfd8b9e263110fc84dbbce3f2f3f5fcca41b9ad4c27da52fa8d1",
+      "errors": [
+        {
+          "code": "missing-content-type-part",
+          "part": "/ppt/slideMasters/slideMaster2.xml"
+        }
+      ]
+    },
+    {
+      "file": "plain-control.pptx",
+      "sha256": "4dd235c923eb346ee19ac7ee89a93cce9a355eec7355692259d81c541bb3556d",
+      "errors": []
+    }
+  ]
+}

@@ -1,0 +1,589 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf/v1",
+  "name": "Nested content groups",
+  "description": "RR-83 cross-engine fixture: explicit nested content groups and automatic design.chartPrimary preserve every leaf across core, SVG and native PPTX. Self-contained with no host catalog.",
+  "language": "en",
+  "catalogs": {
+    "default": false
+  },
+  "slides": [
+    {
+      "id": "nested-example",
+      "title": "Revenue grew 18% on two drivers",
+      "blocks": [
+        {
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Enterprise seats up 31%"
+            },
+            {
+              "type": "text",
+              "text": "Churn down to 2.1%"
+            }
+          ],
+          "composition": {
+            "mode": "column",
+            "weights": [
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        }
+      ],
+      "composition": {
+        "mode": "row",
+        "weights": [
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "nested-fewer",
+      "title": "One driver so far",
+      "blocks": [
+        {
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Enterprise seats up 31%"
+            }
+          ],
+          "composition": {
+            "mode": "column",
+            "weights": [
+              1,
+              1
+            ]
+          }
+        }
+      ],
+      "composition": {
+        "mode": "row",
+        "weights": [
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "nested-more",
+      "title": "More content than regions",
+      "blocks": [
+        {
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Enterprise seats up 31%"
+            },
+            {
+              "type": "text",
+              "text": "Churn down to 2.1%"
+            }
+          ],
+          "composition": {
+            "mode": "column",
+            "weights": [
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "text",
+          "text": "Pipeline is the next lever"
+        }
+      ],
+      "composition": {
+        "mode": "row",
+        "weights": [
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "id": "nested-override",
+      "title": "The slide overrides the root weights",
+      "composition": {
+        "mode": "row",
+        "weights": [
+          1,
+          1
+        ]
+      },
+      "blocks": [
+        {
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Enterprise seats up 31%"
+            },
+            {
+              "type": "text",
+              "text": "Churn down to 2.1%"
+            }
+          ],
+          "composition": {
+            "mode": "column",
+            "weights": [
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "three-level",
+      "title": "Business model on one page",
+      "blocks": [
+        {
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Partners"
+            },
+            {
+              "blocks": [
+                {
+                  "type": "text",
+                  "text": "Value proposition"
+                },
+                {
+                  "blocks": [
+                    {
+                      "type": "metric",
+                      "metric": {
+                        "value": 42,
+                        "label": "Segments"
+                      }
+                    },
+                    {
+                      "type": "metric",
+                      "metric": {
+                        "value": 7,
+                        "label": "Channels"
+                      }
+                    }
+                  ],
+                  "composition": {
+                    "mode": "row"
+                  }
+                }
+              ],
+              "composition": {
+                "mode": "column"
+              }
+            },
+            {
+              "type": "text",
+              "text": "Customers"
+            }
+          ],
+          "composition": {
+            "mode": "row",
+            "weights": [
+              1,
+              2,
+              1
+            ]
+          }
+        },
+        {
+          "blocks": [
+            {
+              "type": "text",
+              "text": "Costs"
+            },
+            {
+              "type": "text",
+              "text": "Revenue"
+            }
+          ],
+          "composition": {
+            "mode": "row"
+          }
+        }
+      ],
+      "composition": {
+        "mode": "column",
+        "weights": [
+          3,
+          1
+        ]
+      }
+    },
+    {
+      "id": "chart-left-stacked",
+      "title": "Three charts, one primary",
+      "blocks": [
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "blocks": [
+            {
+              "type": "chart",
+              "chart": {
+                "type": "column",
+                "alt": "Margin by quarter",
+                "data": {
+                  "columns": [
+                    "Quarter",
+                    "Margin"
+                  ],
+                  "rows": [
+                    [
+                      "Q1",
+                      31
+                    ],
+                    [
+                      "Q2",
+                      33
+                    ],
+                    [
+                      "Q3",
+                      34
+                    ]
+                  ]
+                }
+              }
+            },
+            {
+              "type": "chart",
+              "chart": {
+                "type": "column",
+                "alt": "Seats by quarter",
+                "data": {
+                  "columns": [
+                    "Quarter",
+                    "Seats"
+                  ],
+                  "rows": [
+                    [
+                      "Q1",
+                      120
+                    ],
+                    [
+                      "Q2",
+                      135
+                    ],
+                    [
+                      "Q3",
+                      160
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "composition": {
+            "mode": "column"
+          }
+        }
+      ],
+      "composition": {
+        "mode": "row",
+        "weights": [
+          3,
+          2
+        ]
+      }
+    },
+    {
+      "id": "chart-primary-left",
+      "title": "chartPrimary left",
+      "design": {
+        "chartPrimary": "left"
+      },
+      "blocks": [
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "text",
+          "text": "Enterprise seats up 31%"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Churn down",
+            "Pipeline up"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-primary-right",
+      "title": "chartPrimary right",
+      "design": {
+        "chartPrimary": "right"
+      },
+      "blocks": [
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "text",
+          "text": "Enterprise seats up 31%"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Churn down",
+            "Pipeline up"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-primary-top",
+      "title": "chartPrimary top",
+      "design": {
+        "chartPrimary": "top"
+      },
+      "blocks": [
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "text",
+          "text": "Enterprise seats up 31%"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Churn down",
+            "Pipeline up"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chart-primary-bottom",
+      "title": "chartPrimary bottom",
+      "design": {
+        "chartPrimary": "bottom"
+      },
+      "blocks": [
+        {
+          "type": "chart",
+          "chart": {
+            "type": "column",
+            "alt": "Revenue by quarter",
+            "data": {
+              "columns": [
+                "Quarter",
+                "Revenue"
+              ],
+              "rows": [
+                [
+                  "Q1",
+                  4.1
+                ],
+                [
+                  "Q2",
+                  4.5
+                ],
+                [
+                  "Q3",
+                  4.9
+                ]
+              ]
+            }
+          }
+        },
+        {
+          "type": "text",
+          "text": "Enterprise seats up 31%"
+        },
+        {
+          "type": "list",
+          "items": [
+            "Churn down",
+            "Pipeline up"
+          ]
+        }
+      ]
+    }
+  ]
+}

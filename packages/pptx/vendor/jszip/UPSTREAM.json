@@ -1,0 +1,22 @@
+{
+  "name": "@node-projects/jszip",
+  "version": "4.3.0",
+  "license": "(MIT OR GPL-3.0-or-later)",
+  "licenseUsed": "MIT",
+  "tarball": "https://registry.npmjs.org/@node-projects/jszip/-/jszip-4.3.0.tgz",
+  "integrity": "sha512-0rO404bil+Y6h3dNY/d0hMJjVd5sR22Gt8AkqDk8c6h/n0qic4wFzIRYrlNyQ+bduCpyfOKY9NpRYkNLSPJSiA==",
+  "gitHead": "33f1a59eafd0cacef4fce3f351aff33de661425c",
+  "purpose": "Browser builds only. vendor/pptxgenjs/package.json maps the engine's \"@node-projects/jszip\" import here for bundlers that honour the browser field; Node keeps the installed package's lib/index.js. This file is the package's own published bundle of lib/ (esbuild --bundle --minify --format=esm --platform=neutral --external:pako, its prepublish build), which reproduces byte for byte with esbuild 0.28.2. It differs from lib/ only in having no literal require(\"readable-stream\") for bundlers to follow (lib/support.js probes it inside try/catch; in Node ESM the probe always fails).",
+  "files": {
+    "index-min.js": {
+      "source": "package/lib/index-min.js",
+      "bytes": 39128,
+      "sha256": "b97440a20023acacd7476cfeb120275d60dc864ab1e120714f39441f91c61c9a"
+    },
+    "LICENSE.md": {
+      "source": "package/LICENSE.md",
+      "bytes": 33753,
+      "sha256": "566c953c6090b1218ca6217dd7359d45dde46581968586dc607d59a78af6a9c4"
+    }
+  }
+}

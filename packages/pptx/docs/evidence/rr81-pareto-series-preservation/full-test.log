@@ -1,0 +1,454 @@
+
+> @openpresentation/opf-pptx@0.18.1 test
+> npm run build && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes
+
+
+> @openpresentation/opf-pptx@0.18.1 build
+> node scripts/build.mjs
+
+Vendored upstream distribution and license match recorded hashes.
+[1/129] node test/accepted-text.mjs
+Accepted text PPTX: 24 cases / 144 editable lines retain shared anchors, sizes, styles, no-refit and words through import. Native raster and original OPF structure are separate gates.
+[2/129] node test/annotations.mjs
+Annotations passed: 46 native export, parity and round-trip checks.
+[3/129] node test/background-colorref.mjs
+Background ColorRef export checks passed (17).
+[4/129] node test/background-fills.mjs
+Background fills passed: 58 native pattern/picture export, import, inheritance and diagnostic cases.
+[5/129] node test/background-images.mjs
+background images: 11 native picture checks passed
+[6/129] node test/builtin-variables.mjs
+PPTX built-in variables passed: resolution before export, footer variable text, provenance round trip, edits and missing sources.
+[7/129] node --test test/chart-cache-import.mjs
+✔ barChart: reordered sparse caches keep holes, zero and empty labels aligned (17.275083ms)
+✔ lineChart: reordered sparse caches keep holes, zero and empty labels aligned (5.5485ms)
+✔ areaChart: reordered sparse caches keep holes, zero and empty labels aligned (6.209541ms)
+✔ pieChart: reordered sparse caches keep holes, zero and empty labels aligned (4.744666ms)
+✔ doughnutChart: reordered sparse caches keep holes, zero and empty labels aligned (5.109ms)
+✔ radarChart: reordered sparse caches keep holes, zero and empty labels aligned (4.867458ms)
+✔ scatterChart: reordered sparse xVal/yVal caches keep holes, zero and empty X values aligned (5.884458ms)
+✔ scatterChart: a chart without c:xVal is plotted against 1..n (6.14375ms)
+✔ strRef: label indices retain explicit empty and absent values (5.897167ms)
+✔ strLit: label indices retain explicit empty and absent values (4.314208ms)
+✔ numRef: label indices retain explicit empty and absent values (4.273833ms)
+✔ numLit: label indices retain explicit empty and absent values (4.45075ms)
+✔ multiLvlStrRef: label indices retain explicit empty and absent values (4.509791ms)
+✔ empty series name is retained, missing series name still receives a fallback (8.86975ms)
+✔ numRef: empty numeric values and omitted c:v are missing, not zero (4.260458ms)
+✔ numLit: empty numeric values and omitted c:v are missing, not zero (4.245875ms)
+✔ absent ptCount infers extent from indices rather than point order (4.279584ms)
+✔ unsigned integer lexical forms retain their numeric indices (4.337583ms)
+✔ empty caches with a declared extent retain all-missing rows (3.858041ms)
+✔ category and numeric extents are aligned without manufacturing labels or zeros (3.887ms)
+✔ malformed duplicate index rejects with chart part and cache location (3.461042ms)
+✔ malformed missing index rejects with chart part and cache location (3.224375ms)
+✔ malformed negative index rejects with chart part and cache location (3.576875ms)
+✔ malformed fractional index rejects with chart part and cache location (3.276917ms)
+✔ malformed exponent index rejects with chart part and cache location (3.19575ms)
+✔ malformed nonnumeric index rejects with chart part and cache location (3.179625ms)
+✔ malformed huge index rejects with chart part and cache location (3.132375ms)
+✔ malformed index outside declared extent rejects with chart part and cache location (3.176125ms)
+✔ malformed negative count rejects with chart part and cache location (3.789583ms)
+✔ malformed fractional count rejects with chart part and cache location (3.186542ms)
+✔ malformed huge count rejects with chart part and cache location (3.172709ms)
+✔ malformed duplicate count rejects with chart part and cache location (3.168167ms)
+✔ malformed category and name caches are checked too (6.446167ms)
+✔ unchanged dense caches still import ordinary chart values (4.579209ms)
+✔ multiple cache sources and multiple point values are rejected (10.160208ms)
+✔ hierarchical categories are refused instead of becoming extra data rows (3.352708ms)
+✔ largest supported sparse extent is retained without index truncation (118.055125ms)
+✔ combined cache and output-table budgets reject before oversized allocations (8.878625ms)
+✔ duplicate c:numRef containers reject instead of importing missing data (4.7765ms)
+✔ duplicate c:strRef containers reject instead of importing missing data (4.54ms)
+✔ duplicate c:multiLvlStrRef containers reject instead of importing missing data (4.551291ms)
+✔ duplicate c:val containers reject instead of importing missing data (4.581917ms)
+✔ duplicate c:yVal containers reject instead of importing missing data (8.880834ms)
+✔ duplicate c:cat containers reject instead of importing missing data (5.01525ms)
+✔ duplicate c:tx containers reject instead of importing missing data (4.570166ms)
+✔ ordinary numeric export/import/re-export retains scientific-notation cells (33.377416ms)
+✔ val/numRef: complete exponents preserve finite values, zeros and sparse labels (5.0405ms)
+✔ val/numRef: exponent overflow and nonzero underflow refuse the exact logical point (13.127125ms)
+✔ val/numRef: malformed exponents and non-numeric text are gaps under the strict chart number rule (4.0405ms)
+✔ val/numLit: complete exponents preserve finite values, zeros and sparse labels (4.032166ms)
+✔ val/numLit: exponent overflow and nonzero underflow refuse the exact logical point (12.555333ms)
+✔ val/numLit: malformed exponents and non-numeric text are gaps under the strict chart number rule (6.082833ms)
+✔ yVal/numRef: complete exponents preserve finite values, zeros and sparse labels (4.463958ms)
+✔ yVal/numRef: exponent overflow and nonzero underflow refuse the exact logical point (13.103167ms)
+✔ yVal/numRef: malformed exponents and non-numeric text are gaps under the strict chart number rule (4.12225ms)
+✔ yVal/numLit: complete exponents preserve finite values, zeros and sparse labels (4.075583ms)
+✔ yVal/numLit: exponent overflow and nonzero underflow refuse the exact logical point (13.8915ms)
+✔ yVal/numLit: malformed exponents and non-numeric text are gaps under the strict chart number rule (4.086459ms)
+ℹ tests 58
+ℹ suites 0
+ℹ pass 58
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 710.809083
+[8/129] node test/chart-colors.mjs
+Native chart colors passed: 38 charts, explicit chart panel, single alpha fill, axis/legend colors and exact data reimport.
+[9/129] node test/chart-highlight.mjs
+Chart highlight passed: series and point fills, accent1 scheme colour, muted literal, schema order, label contrast, unsupported constructs, preview parity, provenance round trip.
+[10/129] node test/chart-options.mjs
+Chart options: native c:title, c:legendPos and c:dLbls (and the chartex equivalents) in schema order, read back by fromPptx, unchanged without the fields, and in agreement with the preview.
+[11/129] node test/chart-series-order.mjs
+Chart series schema order passed: 131 checks (every classic type in dml-chart.xsd sequence, the line, radar and scatter repairs, the stable rewrite, native import).
+[12/129] node test/chart-text-size.mjs
+Chart text size passed: 534 checks; axis, data label and legend text at the preview's size for 22 chart types on 7 slide and font-size settings, classic and chartex parts and the chartex style part.
+[13/129] node test/chart-types.mjs
+Chart types passed: 56 exports (19 classic Aspose chart types, rejected retired ids) with exact constructs and same-id reimport.
+[14/129] node test/chart-workbook-ranges.mjs
+Chart workbook ranges: 56 workbooks checked (PptxGenJS 10 families incl. bubble, every OPF chart type, anchored-table rule).
+[15/129] node test/chart-workbook-values.mjs
+Chart workbook values: 9 checks passed (8 OPF chart types and the engine's category, scatter and bubble workbooks keep 0; gaps are blank cells).
+[16/129] node test/chart-workbook.mjs
+Chart workbook checks passed: 37 bounded heading/preservation cases, Unicode/whitespace, rich shared strings, unsupported/external/corrupt metadata and deterministic actual export/reimport.
+[17/129] node test/chartex.mjs
+Chartex passed: 31 checks; 7 chartex ids export native cx:chartSpace parts with style parts, content types, relationships and alternate-content frames, agree with core chartTypeRecords, round-trip and are deterministic; the default writes them for the six confirmed constructs and keeps the map on the fallback (chartex: 'fallback' stays byte-identical to main).
+[18/129] node test/color-ref-export.mjs
+ColorRef export passed: scheme slots, roles, variables, styled cells, and invalid run soft-degrade.
+[19/129] node test/color-roles.mjs
+Color roles: 5 decks resolve 8 roles and link runs identically in the preview and the export.
+[20/129] node test/combo-charts.mjs
+Combo charts passed: native bar and line groups, secondary value and category axes, formats, workbook, schema order, import.
+[21/129] node test/content-cards.mjs
+Content cards: 8 wide/portrait/on/off/alpha exports preserve source, shared frame and body bounds, radius and native metric fields; slide false overrides deck true. Native raster fidelity and frame reimport are not established.
+[22/129] node test/content-layout.mjs
+Native content layout passed: 36 payload text lines match actual renderer typography/geometry; 8 long quotes preserve footer separation and 2 oversized quotes reject in strict mode; code styling, quote source and editable timeline markers across two canvas sizes.
+[23/129] node test/content-topology.mjs
+Content topology passed: nested groups, every region family, block ids and extensions, group composition, root payloads with slide type, side-by-side lists, rich text that wraps over several native lines (root, group, region), edited geometry, box mismatches, damaged records, duplicated slides, pasted slides, provenance modes and the record contract.
+[24/129] node test/core-features.mjs
+{"test":"core-features","passed":true,"coreImports":56}
+[25/129] node test/cover-centering.mjs
+Cover centering passed 13 native line placements on 4 covers.
+[26/129] node test/default-font-scheme.mjs
+{"test":"default-font-scheme","passed":true,"lastResort":"engine default"}
+{"test":"default-font-scheme","unresolved":"engine default base and one diagnostic"}
+[27/129] node test/dependency-boundary.mjs
+Backgrounds passed: 39 gradient/solid cases, 990 independently compared SVG/native samples, alpha, overrides, round-trips, native edits, empty/single/descending stops and unsupported-import diagnostics.
+Native background inheritance passed: 70 layout/master/theme/map/reference/diagnostic cases and theme-slot opacity.
+Native Keynote backgrounds passed: 18 PNG comparisons from 12 exported native images, native PPTX import, blank-slide preservation; observed max channel 8, alpha 1, opaque mean 0.37809606481481484.
+Table layout passed: 168 cells, 84 shrink cases, 24 content-sized rows, Roboto/Calibri substitution, two canvas sizes, header/no-header tables, alignment, native rows and source text preservation.
+Variable table rows passed: unchanged short rows, five-line rich cell containment, identical SVG/native row heights and native table extent.
+Table import passed: headers, headerless data, blank rows/headers, repeated round-trips, native edits and XML boolean forms.
+Rich tables passed: canonical headers/cells, SVG traces/styles/links, native editable runs/fonts/styles/point sizes/scripts/hyperlinks, scalar preservation and immutable input.
+Native rich table import passed: styles, alpha, theme fonts/colors, defaults/resets, links, XML child order, fields, whitespace/blank lines, repeated conversion and path-specific diagnostics.
+Native conditional table text styles passed: archive/inline definitions, DrawingML precedence, edge/corner overlaps, band parity, fonts/colors/alpha, direct overrides, repeated conversion, and diagnostics.
+Conditional cell fills passed: band/edge/corner precedence, ordered theme references, placeholder alpha and direct overrides.
+Native conditional table borders passed: outer frame/interior grid, bands/edges/corners, partial/direct overrides, theme lines/alpha, missing-reference masking, repeated conversion and diagnostics.
+Object IDs passed: eight slides mixing tables, text, pictures, charts and lists, deterministic bytes and native import.
+Image fitting passed: 45 SVG/native geometry cases, 9 raster fixtures, contain/cover, slide overrides, byte/alt preservation, host resolution and malformed headers.
+Image orientation passed: all 8 EXIF orientations in contain/cover, native corner transforms, normalized metadata, unchanged pixels and bounded EXIF offsets.
+Picture import passed: 42 orientation/native-edit/EXIF cases, exact source JPEG round-trips, independent pixel permutations, metadata preservation and crop/transform diagnostics.
+Image media types passed: 32 byte/object/data-URI/local/host-path cases, native extensions/content types, byte preservation and imported MIME.
+WebP fallback passed: 36 fit/crop and input-form cases, Pillow pixel references, alpha, EXIF, first animation frame, deterministic output, errors and unchanged source bytes.
+Native decoder boundary passed: ordinary/preserved images work without Sharp; unavailable WebP conversion fails with its OPF path.
+Corpus structure passed: 127 decks, 807 slides, 1372 explicitly substituted images; fallback fonts, valid slide XML, unique IDs, finite geometry, table grids, valid content-type targets and imported slide counts.
+PPTX dependency boundary passed: model suite and data/local/resolved images work without image-size.
+[28/129] node test/design-alignment.mjs
+Design alignment export passed: 280 heading/body lines match the preview's deck/slide titleAlignment and contentAlignment anchors with default and outline measurement.
+[29/129] node test/design-fields.mjs
+Design fields passed: 12 groups (cover and section logo, tones and partner logo, unresolved logo, footer logo reference, picture bullets, accent font, provenance).
+[30/129] node test/determinism.mjs
+{"test":"determinism","passed":true,"node":"v24.21.0","platform":"darwin","arch":"arm64","icu":"78.3","unicode":"17.0","children":45,"staticGuardFiles":57,"graphemeSignature":"121111211112","envGridChangedIcuDefaultLocale":true,"icuDefaultLocalesSeen":["en-US","de-DE","tr-TR","ja-JP"],"scope":"Local single-OS evidence only. Compare this manifest between operating systems for cross-OS identity.","cases":43,"seconds":55}
+[31/129] node test/document-provenance.mjs
+Document provenance passed: package shape, full reference/metadata/layout round trip and re-export, benign rewrites, theme color/font, size, arrangement and background edits with specific diagnostics, duplicated slides, stripped/damaged/invalid tags and per-field fallback, shared furniture tag lists, asset-backed backgrounds via media parts, size limits and omitted-field records, provenance modes and the per-slide layout contract.
+[32/129] node test/engine-text-weights.mjs
+Engine-generated text: unresolved image, quote photo, logo and background placeholders, captions, metric and timeline weights export under the default policy, measured at the drawn face; a missing weight names family, weight and style.
+[33/129] node test/export-chosen-fonts.mjs
+{"test":"export-chosen-fonts","passed":true,"schemes":{"aptos":{"major":"Aptos Display","minor":"Aptos"},"calibri":{"major":"Calibri","minor":"Calibri"},"georgia":{"major":"Georgia","minor":"Georgia"},"times-new-roman":{"major":"Times New Roman","minor":"Times New Roman"},"tahoma":{"major":"Tahoma","minor":"Tahoma"},"consolas":{"major":"Consolas","minor":"Consolas"},"courier-new":{"major":"Courier New","minor":"Courier New"}}}
+[34/129] node test/fa-06-metric-sentiment.mjs
+FA-06 metric sentiment: 54 trend/sentiment/alignment/background combinations exported with the trend's native arrow in the sentiment's colour, matching the preview, and restored on import.
+[35/129] node test/fa-07-links-audience.mjs
+FA-07 links and audience passed: http(s), mailto and tel link natively and import; a single audience object round-trips.
+[36/129] node test/fa-13-conveniences.mjs
+FA-13: presets, code highlight, text watermark, inline code and run language export natively and import back.
+[37/129] node test/fa-23-catalogs-units.mjs
+FA-23 catalog units passed: colour-scheme and theme recovery against registered records, BCP-47 language import, font pitch from records.
+[38/129] node test/fa-23-catalogs.mjs
+FA-23 catalogs passed: no exporter-side catalog lookup, host-only layouts export like embedded ones, unresolved references warn and fail strict export, default:false, in-group nested references, import recovery against registered catalogs, BCP-47 language import, OPFCatalogsOptionError and undeclared catalogs refused.
+[39/129] node test/fa-23-image-drawingml.mjs
+FA-23 image DrawingML: 33 checks passed
+[40/129] node test/font-weight-import.mjs
+{"test":"font-weight-import","passed":true,"words":20}
+[41/129] node test/frame-alt.mjs
+chart alt: classic and chartex frames, decorative marker, import
+[42/129] node test/furniture-fields.mjs
+Furniture fields: live slide numbers, fixed {{deck.slideCount}}, fixed and current dates, native date types, edits and helpers pass. Native Office is a separate gate.
+[43/129] node test/furniture-provenance.mjs
+Furniture provenance: 8 measured/estimated local/inherited wide/portrait cases, 12 damaged-tag controls, edits/clearing/reordering, current images and metadata conflicts pass (38 validated imports). Native Office is a separate gate.
+[44/129] node test/furniture-wrapped-date.mjs
+✔ measured wrapped baseline reports both static paths without native date fields or source mutation (26.520333ms)
+✔ unchanged full-mode wrapped dates recover generated source/format and use a new host date on reexport (46.620708ms)
+✔ same inputs have byte-identical output (10.98775ms)
+✔ references-only/off export no fallback marker and do not regain generated date intent (40.43575ms)
+✔ old or unmarked flattened dates stay literal (12.648042ms)
+✔ edited parseable date stays current literal text through reexport (31.578583ms)
+✔ typed words stays current literal text through reexport (30.437791ms)
+✔ cleared date stays current literal text through reexport (28.959416ms)
+✔ damaged marker version cannot restore generated intent (10.668ms)
+✔ damaged marker reason cannot restore generated intent (11.053083ms)
+✔ damaged marker format cannot restore generated intent (11.336417ms)
+✔ damaged marker fingerprint cannot restore generated intent (11.166625ms)
+✔ damaged marker extra words cannot restore generated intent (11.321708ms)
+✔ damaged marker missing fingerprint cannot restore generated intent (10.960458ms)
+✔ missing boundary conservatively retains ordinary native text (10.766708ms)
+✔ damaged separator conservatively retains ordinary native text (11.099ms)
+✔ duplicate line conservatively retains ordinary native text (11.430917ms)
+✔ missing date shape cannot restore old text (10.806583ms)
+✔ actual current native date field takes precedence over stale static evidence (11.88875ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 355.284542
+[45/129] node test/gallery-layout-alignment.mjs
+Gallery layout alignment passed: 55 flagged layouts (2 now nested) (pptx-gallery 59ff36c), 714 native paragraphs at the preview's alignment, 55 layouts changing only alignment in both engines, 7 chart frames within 0.02 pt, deterministic exports and round trips.
+[46/129] node test/hard-line-breaks.mjs
+Hard line break checks passed: newline inside and between runs, blank lines, CRLF, trimmed spaces, soft wraps with hard breaks, root, group, region and blocks, a PowerPoint-style re-save, edited and damaged records, unprovable runs, plain PPTX, and hard breaks inside list items (root, bullets, group, region, nested levels, descriptions).
+[47/129] node test/heading-provenance.mjs
+Heading provenance: native edits, shape renaming/reordering and 8 damaged/ambiguous group fallbacks preserve visible words.
+Heading role isolation: 16 wide/portrait quote imports, explicit native placeholders and ordinary untagged title/subtitle inference pass.
+[48/129] node test/image-blocks.mjs
+image blocks: 18 native picture checks passed
+[49/129] node test/image-placeholder-group.mjs
+Image placeholder group passed: 32 checks (one p:grpSp in schema order with the accessible name and an identity transform, editable members, a decorative panel, the full-mode record, untouched round trips, ordinary import without a valid record, logo and furniture ungrouped).
+[50/129] node test/image-placeholder.mjs
+Image placeholders passed: 23 label and cross cases match the preview's text, size, weight, colour, position, dashed panel and accessible name, with and without measured fonts.
+[51/129] node test/image-treatments-014.mjs
+image treatments vs 0.14: 11 treatments keep 0.14's frames and paint order; 4 changed by design (caption-overlay, rounded-card, watermark, cinematic-crop)
+[52/129] node test/image-treatments.mjs
+image treatments: 15 native checks passed
+[53/129] node test/import-details.mjs
+Import detail checks passed (44): author arrays, run colour references (variables, scheme slots, roles; provenance, plain PPTX, edits, a PowerPoint-style re-save, damaged records), item descriptions in every container and the bullets key.
+[54/129] node test/import-fabrications.mjs
+Import fabrication checks passed (16).
+[55/129] node test/import-signals.mjs
+import signals: 21 cases passed
+[56/129] node test/layout-design-applied.mjs
+Layout design applied: 9 text lines agree between preview and export for layout-only, deck-over-layout and slide-over-deck alignment; contentBox and imageFit follow the same merge; re-import keeps the layout record.
+[57/129] node test/layout-intent.mjs
+Layout intent passed: 11 groups; OPF_SLIDE_V1 carries the layout record and its group, and import restores layout, type, composition, hints and records with and without document provenance, for pasted slides, conflicting records, tampering and edits.
+[58/129] node test/layout-parity.mjs
+Layout parity passed: 14 heading/body alignments, 18 cover heading alignments and 30 metric lines match the preview with estimated and measured text; media placeholders match the preview surface, badge and caption.
+[59/129] node test/list-inherited-runs.mjs
+List inherited runs passed: 32 checks (untouched list round trips deep-equal, the listRuns record, native edits observed, no record without provenance, malformed records rejected).
+[60/129] node test/list-shape-names.mjs
+List shape names passed: 6 lists, 5 with lines below their box, all lines named for their list path with measured markers intact.
+[61/129] node test/manual-harness-smoke.mjs
+Open XML generator smoke passed: 21 cases, original and reordered controls read back as well-formed XML.
+[62/129] node test/master-bullet-font.mjs
+{"test":"master-bullet-font","passed":true,"masterBullets":9}
+[63/129] node test/master-furniture.mjs
+Master furniture passed: 13 groups (master logo once, an older importer's view, master edits, native date, footer and number beside it, per-tone layouts, a single dark slide, hidden footers, a slide's own header, content over the logo, live fields, third-party masters, per-script masters).
+[64/129] node test/math-emoji.mjs
+PPTX math and emoji: 8 emoji sequences and the math corpus exported with their chosen families and characters; OMML equations import as fallback text with a diagnostic.
+[65/129] node test/media-dedupe.mjs
+50 slides, watermark 203153 B + picture 43388 B: package 492621 B, 2 media parts
+Media dedupe checks passed (3).
+[66/129] node test/media-placeholder.mjs
+Media placeholder passed: 37 groups; identity-only omissions, clickable surfaces, exact caption edits and linked fallback, privacy/current-frame authority, reorder/copy and untrusted tags. Native Office is a separate gate.
+[67/129] node test/metric-provenance.mjs
+Metric provenance: numeric/literal edits, CRLF, role edits, renamed/reordered shapes, eight damaged or ambiguous groups and cross-code identity guards pass.
+[68/129] node test/narrative-provenance.mjs
+[69/129] node test/native-body-rich-text.mjs
+{"passed":42,"failed":0,"output":"/private/tmp/opf-pptx-pareto-preserve-series/artifacts/native-body-rich-text/source"}
+[70/129] node test/native-furniture.mjs
+Native header/footer: 2 measured/estimated exports match core at every placeholder; master, layout, notes master and flags, round trips with and without provenance, dialog edits, inherited placeholders and determinism pass.
+[71/129] node test/native-quote-import-controls.mjs
+Native quote import comparator: 7 positive and 25 corruption controls pass; schema, exact current characters, block order/multiplicity and titles, and the exact restored quote payload (FF-57), without native acceptance.
+[72/129] node test/native-text-whitespace.mjs
+Native text whitespace: 123 passed, 0 failed.
+[73/129] node test/native-underline.mjs
+✔ body-root: true/false/absent, literal/scheme color, hyperlink defaults (126.920167ms)
+✔ body-block: true/false/absent, literal/scheme color, hyperlink defaults (15.094333ms)
+✔ body-region: true/false/absent, literal/scheme color, hyperlink defaults (13.830334ms)
+✔ list-body: true/false/absent, literal/scheme color, hyperlink defaults (13.254208ms)
+✔ list-description: true/false/absent, literal/scheme color, hyperlink defaults (12.243333ms)
+✔ table-header: true/false/absent, literal/scheme color, hyperlink defaults (24.441458ms)
+✔ table-cell: true/false/absent, literal/scheme color, hyperlink defaults (17.0425ms)
+✔ linked furniture retains explicit native underline none (13.592666ms)
+✔ ordinary false/absent underline and hyperlink export control (20.563875ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 259.565
+[74/129] node test/notes-master-theme.mjs
+{"test":"notes-master-theme","passed":true,"decks":3,"corpus":127}
+[75/129] node test/numbered-lists.mjs
+Numbered lists passed: native a:buAutoNum for every style and suffix, preview and native numbers, marker positions and sizes agree (estimated and measured), start only when not 1, import maps auto-numbers back, native counting, unknown schemes, mixed lists, plain lists unchanged.
+[76/129] node test/organization-logos.mjs
+Organization logos passed: 8 groups (onLight/onDark footer logo per slide, partner logo, design.logo false, the cover's full logo, row layout and native placeholders, a wide logo capped beside text, changed and foreign pictures, an undrawn logo).
+[77/129] node test/pareto-multi-series.mjs
+Pareto: all three series survive editable fallback without provenance; explicit native rejects; single-series unchanged.
+[78/129] node test/per-slide-script-fonts.mjs
+{"test":"per-slide-script-fonts","passed":true,"decks":3,"singleProfile":4}
+[79/129] node test/placeholder-groups.mjs
+placeholder groups: 33 leaves of 10 slides exported in their composed boxes (within 0.5 pt); the records round-trip
+[80/129] node test/plain-whitespace.mjs
+20 wide/portrait measured/estimated source exports preserve whitespace, tab-stop XML and exact reimport; native edits, clearing, reordering and seven damaged-group fallbacks pass.
+[81/129] node test/presentation-order.mjs
+{"test":"presentation-order","passed":true,"decks":3}
+[82/129] node test/published-core-gate.mjs
+published-core-gate: ok
+[83/129] node test/quote-photo.mjs
+Quote photo: 16 role/photo combinations round trip exactly in both directions; native ellipse picture with alt text, topology-only tags, edits and deleted-picture degradation.
+[84/129] node test/quote-provenance.mjs
+Quote provenance: 36 exports (9 payload shapes, wide and portrait, default and loaded-font measurement) re-import as exact quote payloads; multiple quotes, quote layouts, determinism, topology-only tags, edited footers/bodies, 6 damaged-group controls degrade to text blocks with a diagnostic.
+[85/129] node test/region-reading-order.mjs
+Promoted regions export in reading order: columns, rows, spans and key-order independence.
+[86/129] node test/registry-glyph-fallback.mjs
+{"test":"registry-glyph-fallback","passed":true,"decks":7,"symbolSchemes":3,"previewGaps":0}
+[87/129] node test/rich-headings.mjs
+Rich headings: export, tags, citation markers, quote body, and import as runs or a string.
+[88/129] node test/rr-07-preview-polish.mjs
+RR-07 preview/export parity: 870 code lines (645 coloured) across 9 languages and 15 schemes, 45 metric trend arrows (geometry, colour, alt text, round trip), 55 pattern presets (native pattFill and preview bitmap).
+[89/129] node test/rr-54-chart-table-data.mjs
+RR-54 chart and table data passed: 42 checks (strict numbers, chart and workbook number formats, dataset/mapping/scatter X equivalence, dataset and formatted tables, full round trip, edits and missing datasets, third-party format codes and chartex, provenance modes, unchanged bytes).
+[90/129] node test/rr-54-data-hardening.mjs
+RR-54 data hardening passed: 19 checks (plain PowerPoint save, hostile records, large cache values, first-series value axis, exported-cell counts, pasted dataset ids, tag limit, radar and scatter series labels).
+[91/129] node test/rr-54-format-respelling.mjs
+rr-54 format re-spelling: 5 checks passed
+[92/129] node test/rr-59-absent-defaults.mjs
+RR-59 absent defaults passed: 21 checks (untouched round trips with and without the defaulted keys, the absent record per mode, tag-only package difference, native edits win, older tags and the schema option, untrusted records).
+[93/129] node test/rr-59-export-integrity.mjs
+RR-59 integrity: unresolved image diagnostics, exact scalar/style table recovery, native edits, hostile evidence, provenance modes and optional-peer custom measurement passed.
+[94/129] node test/rr-59-picture-diagnostics.mjs
+RR-59 picture diagnostics passed: 46 checks (10 picture paths x 5 unresolved source kinds, one unresolved-asset each, the fallback drawn, strictAssets fails).
+[95/129] node test/rr-59-script-measurement.mjs
+RR-59 script measurement: ar-SA, mixed Arabic/Latin, rich run language and slide scheme overrides export with strict pinned fonts and shared line geometry. Native raster parity is separate.
+[96/129] node test/rr-59-table-alt-provenance.mjs
+RR-59 table alt provenance: unchanged, removed and edited frame alt text with authored cells passed.
+[97/129] node test/rtl-layout.mjs
+RTL layout export passed: logical alignment, hanging bullets at the right, per-paragraph line direction, mirrored regions and tables, reversed column charts, en-US Latin runs, notes and master defaults.
+[98/129] node test/script-fonts.mjs
+Script fonts passed: 13 languages across Latin, Cyrillic, Greek, CJK (ja/zh-Hans/zh-Hant/ko), Arabic/Hebrew RTL, Indic and Thai; lang, rtl, theme and run ea/cs, supplements, import and diagnostics.
+[99/129] node test/sections.mjs
+Sections passed: native p14:sectionLst with Default Section runs and deterministic ids, schema order with provenance customer data, import from the list (own export, stripped tags, renamed and moved slides), stored fallback without a list, footer agreement and section-reference-changed, malformed lists and the unit contract.
+[100/129] node test/shape-border-widths.mjs
+{"test":"shape-border-widths","passed":true,"checked":12}
+[101/129] node test/shared-furniture.mjs
+16 furniture exports match accepted editable text boxes, fonts, source lines and images; explicit disabling and strict overflow controls pass.
+[102/129] node test/shared-metric.mjs
+Shared metric PPTX: 36 exact aligned geometry/source/type round trips with editable native lines, strict rejection and 198 XML boundary cases.
+[103/129] node test/shared-quote.mjs
+Shared quote PPTX: 4 wide/portrait decks and 6 native lines match accepted geometry/styles without re-fitting; reimport and strict/unusable-space rejection pass.
+[104/129] node test/shared-timeline.mjs
+16 timeline exports match accepted text boxes, fonts and source; current edits, clearing, reordering, six damaged-group controls multiple timelines and four strict/warn overflow controls pass.
+[105/129] node test/single-column-chart.mjs
+Single-column charts passed: native histogram bins (4 values, constant, single, 1000 values and extremes), 27 chart types exported (row numbers reported, histogram and pareto binned natively), unplottable data reported, ordinary charts unchanged.
+[106/129] node test/single-series-colour.mjs
+Single-series colour passed: 18 charts, single-series column and bar charts write one series colour and no c:dPt; multi-series and pie/doughnut unchanged.
+[107/129] node test/slide-context.mjs
+{"test":"slide-context","passed":true}
+[108/129] node test/slide-variables.mjs
+Slide variables passed: native {{slide.number}} fields with fixed words, fixed {{deck.slideCount}} and {{slide.section}}, body tokens as text, pagination numbers, tokens through the round trip and third-party footers.
+[109/129] node test/socials-furniture.mjs
+Socials furniture passed: linked profile lines, stored-organization re-import, edits, disagreement, orphan and 10 engine platforms.
+[110/129] node test/styled-table-import.mjs
+Styled native table import passed: direct fills/alpha, borders, margins, alignment, dense merges, repeated conversion, header crossing and text-preserving malformed-merge diagnostics.
+[111/129] node test/styled-table.mjs
+Styled native table export passed: merged grid, unique text, full covered rows, colors/alpha, border dashes, zero/fractional padding, alignment, scaled row geometry and determinism.
+Native merge perimeter regression passed: continuation and neighbor edges, transparent dashes, dotted top, hidden bottom and scaling.
+[112/129] node test/svg-image-degrade.mjs
+Unexportable image checks passed (27).
+[113/129] node test/svg-image.mjs
+SVG picture checks passed (24): native svgBlip over a PNG fallback in every image place, determinism, import, sanitizing, sizes, host rasterizer and the no-renderer fallback.
+[114/129] node test/svg-rasterizer-converter-missing.mjs
+svg-rasterizer-converter-missing: converter-missing maps to svg-rasterizer-unavailable with the install command.
+[115/129] node test/symbol-fonts.mjs
+Symbol fonts: measured export (opf-render FF-45) names the chosen families and keeps the codes.
+Symbol fonts: 5 families; a:latin names the chosen family, characters byte for byte in private-use and Windows-1252 form, re-import round-trips; no a:sym written (native verification pending).
+[116/129] node test/table-alt.mjs
+table alt: descr on the table frame, decorative marker, import
+[117/129] node test/table-frame-furniture-order.mjs
+Table frame and furniture order passed: 8 table frames equal the drawn table extent (4 shorter than their box, 4 filling it); 3 slides paint furniture after content in spTree and SVG.
+[118/129] node test/table-powerpoint-save.mjs
+PowerPoint-saved tables import plain (38 checks).
+[119/129] node test/table-theme-colors.mjs
+{"test":"table-theme-colors","passed":true,"schemes":14,"namedReferences":6384,"chromeReferences":2016}
+[120/129] node test/tag-colour.mjs
+default dark2 slide: 10 of 14 catalog schemes take the text colour
+tag colour ok
+[121/129] node test/template-variables.mjs
+Template variables: template plus values exports the same bytes as the hand-written deck; examples, unfilled and invalid inputs behave.
+[122/129] node test/theme-colors.mjs
+{"test":"theme-colors","passed":true,"colorSchemes":14,"themes":4}
+[123/129] node test/theme-script-slots.mjs
+{"test":"theme-script-slots","passed":true,"fontSchemes":89,"combinations":120,"corpusDecks":127,"corpusWrittenSlots":6}
+[124/129] node test/timeline-status.mjs
+Timeline status passed: native ellipses for done, current (ring) and planned, bold and muted text, restored on import and three damaged-ring controls.
+[125/129] node test/typeface-inventory.mjs
+{"test":"typeface-inventory","passed":true,"charts":8,"corpus":{"decks":127,"decksWithCharts":111,"workbooks":160,"typefaces":58320}}
+[126/129] node test/vendor-compat.mjs
+Vendor compatibility: empty shape text bodies, the 4.0.1 notes master and the FF-05 notes theme are restored; a mislabelled raster stays a raster.
+[127/129] node test/watermark.mjs
+Watermark export checks passed (51).
+[128/129] node test/zip-bundle-boundary.mjs
+ZIP bundle boundary passed: browser bundles use the vendored @node-projects/jszip bundle and never import readable-stream; Node loads the installed package.
+[129/129] node test/zip-date.mjs
+ZIP date public fixture: {"node":"v24.21.0","zones":["UTC","America/Los_Angeles","Pacific/Apia"],"validCasesPerZone":13,"invalidCasesPerZone":32,"exports":50,"explicitPostImportTimezoneChange":true,"recursiveLeafParts":38,"preservedDefaultAndUndefined":true,"equalAbsoluteRepresentations":true,"wholeFileTimezoneEquality":true,"nestedWorkbooks":true,"sourceOptionsPreserved":true,"reimport":true,"deterministicRepeat":true}
+run-tests: 129 tests passed
+
+> @openpresentation/opf-pptx@0.18.1 build:browser-check
+> node scripts/build-browser-check.mjs
+
+Browser build passed: browser decoder selected, no Sharp/native inputs. Serve the repository and open /artifacts/webp-fallback/browser/index.html for pixel checks.
+Native rich table import browser bundle ready at /artifacts/native-rich-table-import/browser/index.html.
+Native conditional table style browser bundle ready at /artifacts/native-table-styles/browser/index.html.
+Native styled table browser bundle ready at /artifacts/native-styled-table-import/browser/index.html.
+Native content browser bundle ready at /artifacts/native-content-layout/browser/index.html.
+Chart color/workbook browser bundle ready at /artifacts/chart-colors/browser/index.html.
+Current native body browser bundle ready at /artifacts/native-body-rich-text/browser/index.html.
+
+> @openpresentation/opf-pptx@0.18.1 check:runners
+> node --test scripts/run-tests.test.mjs
+
+✔ selectTests runs the glob in name order minus the excluded files and the browser suites (0.656709ms)
+✔ selectTests fails on a stale or contradictory suites.json instead of silently dropping a test (0.188584ms)
+✔ the browser pattern matches browser suites and not look-alikes (0.064333ms)
+✔ test/suites.json agrees with test/ and every excluded file is a real file (0.380333ms)
+✔ RR-53: the contract suite is the full suite minus contractExclude, and a stale or unexplained exclusion fails (0.165083ms)
+✔ RR-53: test/suites.json contract exclusions are real full-suite tests with reasons, and npm run test:contract runs the contract suite (0.733666ms)
+✔ run-tests stops at the first failing test and lists commands with --list (82.084125ms)
+✔ check-syntax lists sources in a stable order, skips fixtures and reports a syntax error (87.908458ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 204.474042
+
+> @openpresentation/opf-pptx@0.18.1 check:changes
+> node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check
+
+✔ parseFragment reads type, packages and the entry text (0.724791ms)
+✔ parseFragment rejects what would silently corrupt the changelog (0.26475ms)
+✔ assembleChangelog adds a dated section under an empty Unreleased and keeps the older sections byte for byte (0.210333ms)
+✔ assembleChangelog follows a loose list and folds leftover Unreleased bullets in first (0.10925ms)
+✔ assembleChangelog keeps a multi-line entry together and refuses a duplicate or empty release (0.1505ms)
+✔ assembleChangelog adds the Unreleased heading when a changelog lacks one (0.050292ms)
+✔ assemble groups by type (added, changed, fixed) then slug, and deletes the fragments it used (1.2565ms)
+✔ assemble in a monorepo splits fragments by package and keeps a shared one until both changelogs have it (1.772917ms)
+✔ withoutPackage drops one package and reports when none remain (0.101917ms)
+✔ needsFragment warns only for package code without a fragment or a hand edit of the changelog (0.162959ms)
+✔ the command line validates fragments, assembles with --dry-run untouched, and fails on a bad fragment (66.129583ms)
+ℹ tests 11
+ℹ suites 0
+ℹ pass 11
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 104.574958
+changes/: 1 fragment(s) valid

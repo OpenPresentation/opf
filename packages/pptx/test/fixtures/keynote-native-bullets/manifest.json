@@ -1,0 +1,13 @@
+{
+  "kind": "project-authored-keynote-native-body-noop-control",
+  "license": "MIT",
+  "sourceRevision": "8ee257f55c0396b81892337b15bf86805e2730ad",
+  "candidateRevision": "9f159655df6aa5972a8663b94f5d73142a2c07b8",
+  "application": {"name": "Keynote", "version": "15.1.1"},
+  "route": "no-op",
+  "date": "2026-10-15",
+  "nativeAcceptance": false,
+  "file": "native-17.pptx",
+  "bytes": 119365,
+  "sha256": "362b8e291b1355d9d9fe7d1723e931668eaeabea42a8f2c467bc5806193b5c11"
+}

@@ -1,0 +1,1991 @@
+{
+  "node": "v24.20.0",
+  "runtime": {
+    "@openpresentation/opf/dist/composition.js": "6c77b9883ea592f6e67a6fac262e8c1dbd81968e6bd8b13d80cc7fe9f16f073e",
+    "@openpresentation/opf/dist/chunk-JA5W5TVA.js": "9617ee45fd259a0b060831f019f19672e1f5d860a3728b5a126019d6f7cad51c",
+    "@openpresentation/opf/dist/validator.js": "b6b8a02e1ee7f3b3c83382a2cd95bf03976165171c31f68583ee5cadc663db47",
+    "@openpresentation/opf/dist/chunk-ZGV6I23P.js": "a6ecf201e1543162d2ac22ef731cfaf7239160c696455679126ad7883ff0011b",
+    "@openpresentation/opf/dist/chunk-GQSK3T7X.js": "34f518c29c9757bc252b5c13eb5d7db8ada4b477496e6289d8149fb4fdc7cd45",
+    "@openpresentation/opf/dist/chunk-TWMRZ43O.js": "0d35cec97ec7ddaa67fb9f096bc672c927eb68ed5fae5ac27d4dff70d68313f4",
+    "@openpresentation/opf/dist/catalogs.js": "6d74d7b051844728b2622acdb5268472a043544c8b2ca04eb904b1cdf74ec739",
+    "@openpresentation/opf/package.json": "a96c533662c79ad96d96f5bd2092276978f3eba334099c582699ea56b770163a",
+    "@openpresentation/opf-render/dist/font-compatibility.js": "a50ee71748e81cd12ed3aeb6eee92506ebf91ef05021c6ca3f5a100665d03dac",
+    "@openpresentation/opf-render/dist/fonts-browser.js": "d0543d838b2f22a8c70bdc60100d72d3c69e3f8033d5ccedd3523ee63c66b8d4",
+    "@openpresentation/opf-render/dist/fonts.js": "549932e2d013f1f623cd83973b40cbed68c63d52535adb2de6fd921d16bf400c",
+    "@openpresentation/opf-render/dist/fonts-node.js": "0e65abd7438f3a21fd0cb6ea64120d9e866ef3308510910d11b7b863399f8d8b",
+    "@openpresentation/opf-render/dist/index.js": "39c8f2b279ce10873f00289349b84cf9cab7e12c56e9e0d87447bd2406777234",
+    "@openpresentation/opf-render/dist/svg.js": "c1874ee6111ae51471b1e1108d3990a0f423a72c6fab97500f361502102c0a82",
+    "@openpresentation/opf-render/dist/raster.js": "6ea807bfd43ddaabea95c1137bc1bcf7d656f2ae9c6d87a7e6d2f867df86ea99",
+    "@openpresentation/opf-render/dist/raster-images.js": "304cffe5e77553ac1ab590fc5805714dde34e6f69df5dc55e35dbc8df602753c",
+    "@openpresentation/opf-render/package.json": "008ec170dcc22f6fb81fc3faf9b203b73c94f0cb9d4dfb02712c1da5f8251faf",
+    "@openpresentation/opf-pptx/dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+    "@openpresentation/opf-pptx/dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+    "@openpresentation/opf-pptx/dist/code-provenance.js": "1c7af17306cd58bcec1cb72c4333edaebc4b5a5f41a439763e1617c0b8f2d0bf",
+    "@openpresentation/opf-pptx/dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+    "@openpresentation/opf-pptx/dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+    "@openpresentation/opf-pptx/dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+    "@openpresentation/opf-pptx/dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+    "@openpresentation/opf-pptx/dist/index.js": "5e253cafbc99dc0acb1c27c9e6fb7d9657a83b98bc3fc1e51ee98416841da446",
+    "@openpresentation/opf-pptx/dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+    "@openpresentation/opf-pptx/dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+    "@openpresentation/opf-pptx/dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+    "@openpresentation/opf-pptx/package.json": "0b9fe0abb56370bcff6b44a3b8dab8175f3dc05cbf681bfa44b420868cf86b5a",
+    "test/native-code.mjs": "153f3d0f796fb9f2c206742ad32bf5af02d21f224ca4e594086ed42be391b484",
+    "test/native-code.ps1": "8a187f0395542225a6264c257489a84c8a0db0c0f392fcd9cea3e0252a772e43",
+    "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+    "package-lock.json": "8712a65cf988b63cc699a76b85ad026f3ab34bc3ec7e165f6c0789df57c129ff"
+  },
+  "fontHashes": {
+    "cour.ttf": "e4a66a0259718d0c8f4b6e14319b4803ced45afbddf3abba8b8c3e2006856206",
+    "courbd.ttf": "11e629cef937cd08f942aa1bd994a71302dbe2819c72c6d4c183a623acbb421a"
+  },
+  "decks": [
+    {
+      "id": "code-1280",
+      "width": 1280,
+      "height": 720,
+      "document": {
+        "design": {
+          "dimensions": {
+            "widthInches": 13.333333333333334,
+            "heightInches": 7.5
+          },
+          "fontScheme": {
+            "id": "calibri",
+            "heading": {
+              "family": "Courier New"
+            },
+            "body": {
+              "family": "Courier New"
+            },
+            "code": {
+              "family": "Courier New"
+            }
+          }
+        },
+        "slides": [
+          {
+            "composition": {
+              "minFontSize": 24
+            },
+            "code": ""
+          },
+          {
+            "composition": {
+              "minFontSize": 24
+            },
+            "code": "\t\t"
+          },
+          {
+            "composition": {
+              "minFontSize": 24
+            },
+            "code": {
+              "source": "  const value = \"two  spaces\";\r\n\r\nlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtoken\n\treturn value;  \r",
+              "filename": "src\tCaseSensitive.ts",
+              "language": "TypeScript"
+            }
+          },
+          {
+            "composition": {
+              "minFontSize": 24
+            },
+            "code": {
+              "source": "",
+              "filename": "a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/",
+              "language": "Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-"
+            }
+          }
+        ]
+      },
+      "pptxSha256": "7f99ce2be37e62376709b5a07bd42ed8b83522dbe5e1435980e1caf1f4f6e84e",
+      "svgRasterSha256": [
+        "9bd44a927ec498bc37a156c57fc88e768e79a7ea678ad6149f09747bcd8b5772",
+        "9bd44a927ec498bc37a156c57fc88e768e79a7ea678ad6149f09747bcd8b5772",
+        "3c1e992f719fa526e0677e7322d5f6422eac75398ebd1a670a97fde5503ae731",
+        "76b0e96ac32c7ea5a02772f5ba81d731da95fbcae08f2b13dbb1ef1f8b20ddb1"
+      ],
+      "layouts": [
+        {
+          "cell": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 604.8
+          },
+          "algorithm": "code-flow-v1",
+          "textMeasurement": "provided",
+          "parts": [
+            {
+              "role": "language",
+              "path": "slides.0.code",
+              "text": "code",
+              "sources": [],
+              "generated": true,
+              "box": {
+                "x": 75.6,
+                "y": 75.6,
+                "width": 1128.8,
+                "height": 29.28
+              },
+              "requestedFontSize": 24,
+              "minFontSize": 24,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.0.code"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.0.code"
+              },
+              "fit": {
+                "lines": [
+                  "code"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 4,
+                    "nextStart": 4,
+                    "boundary": "end",
+                    "width": 57.609375,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 4,
+                        "x": 0,
+                        "width": 57.609375
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 24,
+                "lineHeight": 29.28,
+                "tabSize": 4,
+                "tabWidth": 57.609375,
+                "overflow": false
+              }
+            },
+            {
+              "role": "body",
+              "path": "slides.0.code",
+              "text": "",
+              "sources": [
+                {
+                  "path": "slides.0.code",
+                  "start": 0,
+                  "end": 0
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 75.6,
+                "y": 116.88,
+                "width": 1128.8,
+                "height": 527.52
+              },
+              "requestedFontSize": 24,
+              "minFontSize": 24,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.0.code"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.0.code"
+              },
+              "fit": {
+                "lines": [
+                  ""
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 0,
+                    "nextStart": 0,
+                    "boundary": "end",
+                    "width": 0,
+                    "segments": []
+                  }
+                ],
+                "fontSize": 24,
+                "lineHeight": 29.28,
+                "tabSize": 4,
+                "tabWidth": 57.609375,
+                "overflow": false
+              }
+            }
+          ],
+          "diagnostics": [],
+          "overflow": false
+        },
+        {
+          "cell": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 604.8
+          },
+          "algorithm": "code-flow-v1",
+          "textMeasurement": "provided",
+          "parts": [
+            {
+              "role": "language",
+              "path": "slides.1.code",
+              "text": "code",
+              "sources": [],
+              "generated": true,
+              "box": {
+                "x": 75.6,
+                "y": 75.6,
+                "width": 1128.8,
+                "height": 29.28
+              },
+              "requestedFontSize": 24,
+              "minFontSize": 24,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.1.code"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.1.code"
+              },
+              "fit": {
+                "lines": [
+                  "code"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 4,
+                    "nextStart": 4,
+                    "boundary": "end",
+                    "width": 57.609375,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 4,
+                        "x": 0,
+                        "width": 57.609375
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 24,
+                "lineHeight": 29.28,
+                "tabSize": 4,
+                "tabWidth": 57.609375,
+                "overflow": false
+              }
+            },
+            {
+              "role": "body",
+              "path": "slides.1.code",
+              "text": "\t\t",
+              "sources": [
+                {
+                  "path": "slides.1.code",
+                  "start": 0,
+                  "end": 2
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 75.6,
+                "y": 116.88,
+                "width": 1128.8,
+                "height": 527.52
+              },
+              "requestedFontSize": 24,
+              "minFontSize": 24,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.1.code"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.1.code"
+              },
+              "fit": {
+                "lines": [
+                  "\t\t"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 2,
+                    "nextStart": 2,
+                    "boundary": "end",
+                    "width": 115.21875,
+                    "segments": [
+                      {
+                        "kind": "tab",
+                        "start": 0,
+                        "end": 1,
+                        "x": 0,
+                        "width": 57.609375
+                      },
+                      {
+                        "kind": "tab",
+                        "start": 1,
+                        "end": 2,
+                        "x": 57.609375,
+                        "width": 57.609375
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 24,
+                "lineHeight": 29.28,
+                "tabSize": 4,
+                "tabWidth": 57.609375,
+                "overflow": false
+              }
+            }
+          ],
+          "diagnostics": [],
+          "overflow": false
+        },
+        {
+          "cell": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 604.8
+          },
+          "algorithm": "code-flow-v1",
+          "textMeasurement": "provided",
+          "parts": [
+            {
+              "role": "filename",
+              "path": "slides.2.code.filename",
+              "text": "src\tCaseSensitive.ts",
+              "sources": [
+                {
+                  "path": "slides.2.code.filename",
+                  "start": 0,
+                  "end": 20
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 75.6,
+                "y": 75.6,
+                "width": 1128.8,
+                "height": 29.28
+              },
+              "requestedFontSize": 24,
+              "minFontSize": 24,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.2.code.filename"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.2.code.filename"
+              },
+              "fit": {
+                "lines": [
+                  "src\tCaseSensitive.ts"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 20,
+                    "nextStart": 20,
+                    "boundary": "end",
+                    "width": 288.046875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 3,
+                        "x": 0,
+                        "width": 43.20703125
+                      },
+                      {
+                        "kind": "tab",
+                        "start": 3,
+                        "end": 4,
+                        "x": 43.20703125,
+                        "width": 14.40234375
+                      },
+                      {
+                        "kind": "text",
+                        "start": 4,
+                        "end": 20,
+                        "x": 57.609375,
+                        "width": 230.4375
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 24,
+                "lineHeight": 29.28,
+                "tabSize": 4,
+                "tabWidth": 57.609375,
+                "overflow": false
+              }
+            },
+            {
+              "role": "language",
+              "path": "slides.2.code.language",
+              "text": "TypeScript",
+              "sources": [
+                {
+                  "path": "slides.2.code.language",
+                  "start": 0,
+                  "end": 10
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 75.6,
+                "y": 112.88,
+                "width": 1128.8,
+                "height": 29.28
+              },
+              "requestedFontSize": 24,
+              "minFontSize": 24,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.2.code.language"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.2.code.language"
+              },
+              "fit": {
+                "lines": [
+                  "TypeScript"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 10,
+                    "nextStart": 10,
+                    "boundary": "end",
+                    "width": 144.0234375,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 10,
+                        "x": 0,
+                        "width": 144.0234375
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 24,
+                "lineHeight": 29.28,
+                "tabSize": 4,
+                "tabWidth": 57.609375,
+                "overflow": false
+              }
+            },
+            {
+              "role": "body",
+              "path": "slides.2.code.source",
+              "text": "  const value = \"two  spaces\";\r\n\r\nlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtoken\n\treturn value;  \r",
+              "sources": [
+                {
+                  "path": "slides.2.code.source",
+                  "start": 0,
+                  "end": 250
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 75.6,
+                "y": 154.16,
+                "width": 1128.8,
+                "height": 490.24
+              },
+              "requestedFontSize": 24,
+              "minFontSize": 24,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.2.code.source"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.2.code.source"
+              },
+              "fit": {
+                "lines": [
+                  "  const value = \"two  spaces\";",
+                  "",
+                  "longtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongto",
+                  "kenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlon",
+                  "gtokenlongtokenlongtokenlongtokenlongtoken",
+                  "\treturn value;  ",
+                  ""
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 30,
+                    "nextStart": 32,
+                    "boundary": "hard",
+                    "width": 432.0703125,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 30,
+                        "x": 0,
+                        "width": 432.0703125
+                      }
+                    ]
+                  },
+                  {
+                    "start": 32,
+                    "end": 32,
+                    "nextStart": 34,
+                    "boundary": "hard",
+                    "width": 0,
+                    "segments": []
+                  },
+                  {
+                    "start": 34,
+                    "end": 112,
+                    "nextStart": 112,
+                    "boundary": "soft",
+                    "width": 1123.3828125,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 34,
+                        "end": 112,
+                        "x": 0,
+                        "width": 1123.3828125
+                      }
+                    ]
+                  },
+                  {
+                    "start": 112,
+                    "end": 190,
+                    "nextStart": 190,
+                    "boundary": "soft",
+                    "width": 1123.3828125,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 112,
+                        "end": 190,
+                        "x": 0,
+                        "width": 1123.3828125
+                      }
+                    ]
+                  },
+                  {
+                    "start": 190,
+                    "end": 232,
+                    "nextStart": 233,
+                    "boundary": "hard",
+                    "width": 604.8984375,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 190,
+                        "end": 232,
+                        "x": 0,
+                        "width": 604.8984375
+                      }
+                    ]
+                  },
+                  {
+                    "start": 233,
+                    "end": 249,
+                    "nextStart": 250,
+                    "boundary": "hard",
+                    "width": 273.64453125,
+                    "segments": [
+                      {
+                        "kind": "tab",
+                        "start": 233,
+                        "end": 234,
+                        "x": 0,
+                        "width": 57.609375
+                      },
+                      {
+                        "kind": "text",
+                        "start": 234,
+                        "end": 249,
+                        "x": 57.609375,
+                        "width": 216.03515625
+                      }
+                    ]
+                  },
+                  {
+                    "start": 250,
+                    "end": 250,
+                    "nextStart": 250,
+                    "boundary": "end",
+                    "width": 0,
+                    "segments": []
+                  }
+                ],
+                "fontSize": 24,
+                "lineHeight": 29.28,
+                "tabSize": 4,
+                "tabWidth": 57.609375,
+                "overflow": false
+              }
+            }
+          ],
+          "diagnostics": [],
+          "overflow": false
+        },
+        {
+          "cell": {
+            "x": 57.6,
+            "y": 57.6,
+            "width": 1164.8,
+            "height": 604.8
+          },
+          "algorithm": "code-flow-v1",
+          "textMeasurement": "provided",
+          "parts": [
+            {
+              "role": "filename",
+              "path": "slides.3.code.filename",
+              "text": "a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/",
+              "sources": [
+                {
+                  "path": "slides.3.code.filename",
+                  "start": 0,
+                  "end": 180
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 75.6,
+                "y": 75.6,
+                "width": 1128.8,
+                "height": 87.84
+              },
+              "requestedFontSize": 24,
+              "minFontSize": 24,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.3.code.filename"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.3.code.filename"
+              },
+              "fit": {
+                "lines": [
+                  "a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long",
+                  "-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/",
+                  "a-long-path/a-long-path/"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 78,
+                    "nextStart": 78,
+                    "boundary": "soft",
+                    "width": 1123.3828125,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 78,
+                        "x": 0,
+                        "width": 1123.3828125
+                      }
+                    ]
+                  },
+                  {
+                    "start": 78,
+                    "end": 156,
+                    "nextStart": 156,
+                    "boundary": "soft",
+                    "width": 1123.3828125,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 78,
+                        "end": 156,
+                        "x": 0,
+                        "width": 1123.3828125
+                      }
+                    ]
+                  },
+                  {
+                    "start": 156,
+                    "end": 180,
+                    "nextStart": 180,
+                    "boundary": "end",
+                    "width": 345.65625,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 156,
+                        "end": 180,
+                        "x": 0,
+                        "width": 345.65625
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 24,
+                "lineHeight": 29.28,
+                "tabSize": 4,
+                "tabWidth": 57.609375,
+                "overflow": false
+              }
+            },
+            {
+              "role": "language",
+              "path": "slides.3.code.language",
+              "text": "Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-",
+              "sources": [
+                {
+                  "path": "slides.3.code.language",
+                  "start": 0,
+                  "end": 240
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 75.6,
+                "y": 171.44,
+                "width": 1128.8,
+                "height": 117.12
+              },
+              "requestedFontSize": 24,
+              "minFontSize": 24,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.3.code.language"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.3.code.language"
+              },
+              "fit": {
+                "lines": [
+                  "Long-language-label-Long-language-label-Long-language-label-Long-language-labe",
+                  "l-Long-language-label-Long-language-label-Long-language-label-Long-language-la",
+                  "bel-Long-language-label-Long-language-label-Long-language-label-Long-language-",
+                  "label-"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 78,
+                    "nextStart": 78,
+                    "boundary": "soft",
+                    "width": 1123.3828125,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 78,
+                        "x": 0,
+                        "width": 1123.3828125
+                      }
+                    ]
+                  },
+                  {
+                    "start": 78,
+                    "end": 156,
+                    "nextStart": 156,
+                    "boundary": "soft",
+                    "width": 1123.3828125,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 78,
+                        "end": 156,
+                        "x": 0,
+                        "width": 1123.3828125
+                      }
+                    ]
+                  },
+                  {
+                    "start": 156,
+                    "end": 234,
+                    "nextStart": 234,
+                    "boundary": "soft",
+                    "width": 1123.3828125,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 156,
+                        "end": 234,
+                        "x": 0,
+                        "width": 1123.3828125
+                      }
+                    ]
+                  },
+                  {
+                    "start": 234,
+                    "end": 240,
+                    "nextStart": 240,
+                    "boundary": "end",
+                    "width": 86.4140625,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 234,
+                        "end": 240,
+                        "x": 0,
+                        "width": 86.4140625
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 24,
+                "lineHeight": 29.28,
+                "tabSize": 4,
+                "tabWidth": 57.609375,
+                "overflow": false
+              }
+            },
+            {
+              "role": "body",
+              "path": "slides.3.code.source",
+              "text": "",
+              "sources": [
+                {
+                  "path": "slides.3.code.source",
+                  "start": 0,
+                  "end": 0
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 75.6,
+                "y": 300.56,
+                "width": 1128.8,
+                "height": 343.84
+              },
+              "requestedFontSize": 24,
+              "minFontSize": 24,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.3.code.source"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.3.code.source"
+              },
+              "fit": {
+                "lines": [
+                  ""
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 0,
+                    "nextStart": 0,
+                    "boundary": "end",
+                    "width": 0,
+                    "segments": []
+                  }
+                ],
+                "fontSize": 24,
+                "lineHeight": 29.28,
+                "tabSize": 4,
+                "tabWidth": 57.609375,
+                "overflow": false
+              }
+            }
+          ],
+          "diagnostics": [],
+          "overflow": false
+        }
+      ]
+    },
+    {
+      "id": "code-540",
+      "width": 540,
+      "height": 960,
+      "document": {
+        "design": {
+          "dimensions": {
+            "widthInches": 5.625,
+            "heightInches": 10
+          },
+          "fontScheme": {
+            "id": "calibri",
+            "heading": {
+              "family": "Courier New"
+            },
+            "body": {
+              "family": "Courier New"
+            },
+            "code": {
+              "family": "Courier New"
+            }
+          }
+        },
+        "slides": [
+          {
+            "composition": {
+              "minFontSize": 24
+            },
+            "code": ""
+          },
+          {
+            "composition": {
+              "minFontSize": 24
+            },
+            "code": "\t\t"
+          },
+          {
+            "composition": {
+              "minFontSize": 24
+            },
+            "code": {
+              "source": "  const value = \"two  spaces\";\r\n\r\nlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtoken\n\treturn value;  \r",
+              "filename": "src\tCaseSensitive.ts",
+              "language": "TypeScript"
+            }
+          },
+          {
+            "composition": {
+              "minFontSize": 24
+            },
+            "code": {
+              "source": "",
+              "filename": "a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/",
+              "language": "Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-"
+            }
+          }
+        ]
+      },
+      "pptxSha256": "509c89d0f7676d779116736e701cb39c5176e626375f6d8afae4a9f40db1045d",
+      "svgRasterSha256": [
+        "911f080062079d875d227bc06cee189d2814dbfb18c15cd8202bedf560fd5645",
+        "911f080062079d875d227bc06cee189d2814dbfb18c15cd8202bedf560fd5645",
+        "6e382b8ccd852e275bf6909edd34e368db502cdccc5a26a80e78e8b95ee988c8",
+        "ae1d958958819e0b9a09c8ed0aa41ae87b78f7d1650804c23d755e2a787e868a"
+      ],
+      "layouts": [
+        {
+          "cell": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 873.6
+          },
+          "algorithm": "code-flow-v1",
+          "textMeasurement": "provided",
+          "parts": [
+            {
+              "role": "language",
+              "path": "slides.0.code",
+              "text": "code",
+              "sources": [],
+              "generated": true,
+              "box": {
+                "x": 61.2,
+                "y": 61.2,
+                "width": 417.6,
+                "height": 21.96
+              },
+              "requestedFontSize": 18,
+              "minFontSize": 18,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.0.code"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.0.code"
+              },
+              "fit": {
+                "lines": [
+                  "code"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 4,
+                    "nextStart": 4,
+                    "boundary": "end",
+                    "width": 43.20703125,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 4,
+                        "x": 0,
+                        "width": 43.20703125
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 18,
+                "lineHeight": 21.96,
+                "tabSize": 4,
+                "tabWidth": 43.20703125,
+                "overflow": false
+              }
+            },
+            {
+              "role": "body",
+              "path": "slides.0.code",
+              "text": "",
+              "sources": [
+                {
+                  "path": "slides.0.code",
+                  "start": 0,
+                  "end": 0
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 61.2,
+                "y": 95.16,
+                "width": 417.6,
+                "height": 803.6400000000001
+              },
+              "requestedFontSize": 18,
+              "minFontSize": 18,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.0.code"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.0.code"
+              },
+              "fit": {
+                "lines": [
+                  ""
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 0,
+                    "nextStart": 0,
+                    "boundary": "end",
+                    "width": 0,
+                    "segments": []
+                  }
+                ],
+                "fontSize": 18,
+                "lineHeight": 21.96,
+                "tabSize": 4,
+                "tabWidth": 43.20703125,
+                "overflow": false
+              }
+            }
+          ],
+          "diagnostics": [],
+          "overflow": false
+        },
+        {
+          "cell": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 873.6
+          },
+          "algorithm": "code-flow-v1",
+          "textMeasurement": "provided",
+          "parts": [
+            {
+              "role": "language",
+              "path": "slides.1.code",
+              "text": "code",
+              "sources": [],
+              "generated": true,
+              "box": {
+                "x": 61.2,
+                "y": 61.2,
+                "width": 417.6,
+                "height": 21.96
+              },
+              "requestedFontSize": 18,
+              "minFontSize": 18,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.1.code"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.1.code"
+              },
+              "fit": {
+                "lines": [
+                  "code"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 4,
+                    "nextStart": 4,
+                    "boundary": "end",
+                    "width": 43.20703125,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 4,
+                        "x": 0,
+                        "width": 43.20703125
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 18,
+                "lineHeight": 21.96,
+                "tabSize": 4,
+                "tabWidth": 43.20703125,
+                "overflow": false
+              }
+            },
+            {
+              "role": "body",
+              "path": "slides.1.code",
+              "text": "\t\t",
+              "sources": [
+                {
+                  "path": "slides.1.code",
+                  "start": 0,
+                  "end": 2
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 61.2,
+                "y": 95.16,
+                "width": 417.6,
+                "height": 803.6400000000001
+              },
+              "requestedFontSize": 18,
+              "minFontSize": 18,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.1.code"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.1.code"
+              },
+              "fit": {
+                "lines": [
+                  "\t\t"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 2,
+                    "nextStart": 2,
+                    "boundary": "end",
+                    "width": 86.4140625,
+                    "segments": [
+                      {
+                        "kind": "tab",
+                        "start": 0,
+                        "end": 1,
+                        "x": 0,
+                        "width": 43.20703125
+                      },
+                      {
+                        "kind": "tab",
+                        "start": 1,
+                        "end": 2,
+                        "x": 43.20703125,
+                        "width": 43.20703125
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 18,
+                "lineHeight": 21.96,
+                "tabSize": 4,
+                "tabWidth": 43.20703125,
+                "overflow": false
+              }
+            }
+          ],
+          "diagnostics": [],
+          "overflow": false
+        },
+        {
+          "cell": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 873.6
+          },
+          "algorithm": "code-flow-v1",
+          "textMeasurement": "provided",
+          "parts": [
+            {
+              "role": "filename",
+              "path": "slides.2.code.filename",
+              "text": "src\tCaseSensitive.ts",
+              "sources": [
+                {
+                  "path": "slides.2.code.filename",
+                  "start": 0,
+                  "end": 20
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 61.2,
+                "y": 61.2,
+                "width": 417.6,
+                "height": 21.96
+              },
+              "requestedFontSize": 18,
+              "minFontSize": 18,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.2.code.filename"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.2.code.filename"
+              },
+              "fit": {
+                "lines": [
+                  "src\tCaseSensitive.ts"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 20,
+                    "nextStart": 20,
+                    "boundary": "end",
+                    "width": 216.03515625,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 3,
+                        "x": 0,
+                        "width": 32.4052734375
+                      },
+                      {
+                        "kind": "tab",
+                        "start": 3,
+                        "end": 4,
+                        "x": 32.4052734375,
+                        "width": 10.8017578125
+                      },
+                      {
+                        "kind": "text",
+                        "start": 4,
+                        "end": 20,
+                        "x": 43.20703125,
+                        "width": 172.828125
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 18,
+                "lineHeight": 21.96,
+                "tabSize": 4,
+                "tabWidth": 43.20703125,
+                "overflow": false
+              }
+            },
+            {
+              "role": "language",
+              "path": "slides.2.code.language",
+              "text": "TypeScript",
+              "sources": [
+                {
+                  "path": "slides.2.code.language",
+                  "start": 0,
+                  "end": 10
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 61.2,
+                "y": 91.16,
+                "width": 417.6,
+                "height": 21.96
+              },
+              "requestedFontSize": 18,
+              "minFontSize": 18,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.2.code.language"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.2.code.language"
+              },
+              "fit": {
+                "lines": [
+                  "TypeScript"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 10,
+                    "nextStart": 10,
+                    "boundary": "end",
+                    "width": 108.017578125,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 10,
+                        "x": 0,
+                        "width": 108.017578125
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 18,
+                "lineHeight": 21.96,
+                "tabSize": 4,
+                "tabWidth": 43.20703125,
+                "overflow": false
+              }
+            },
+            {
+              "role": "body",
+              "path": "slides.2.code.source",
+              "text": "  const value = \"two  spaces\";\r\n\r\nlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtokenlongtoken\n\treturn value;  \r",
+              "sources": [
+                {
+                  "path": "slides.2.code.source",
+                  "start": 0,
+                  "end": 250
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 61.2,
+                "y": 125.12,
+                "width": 417.6,
+                "height": 773.6800000000001
+              },
+              "requestedFontSize": 18,
+              "minFontSize": 18,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.2.code.source"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.2.code.source"
+              },
+              "fit": {
+                "lines": [
+                  "  const value = \"two  spaces\";",
+                  "",
+                  "longtokenlongtokenlongtokenlongtokenlo",
+                  "ngtokenlongtokenlongtokenlongtokenlong",
+                  "tokenlongtokenlongtokenlongtokenlongto",
+                  "kenlongtokenlongtokenlongtokenlongtoke",
+                  "nlongtokenlongtokenlongtokenlongtokenl",
+                  "ongtoken",
+                  "\treturn value;  ",
+                  ""
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 30,
+                    "nextStart": 32,
+                    "boundary": "hard",
+                    "width": 324.052734375,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 30,
+                        "x": 0,
+                        "width": 324.052734375
+                      }
+                    ]
+                  },
+                  {
+                    "start": 32,
+                    "end": 32,
+                    "nextStart": 34,
+                    "boundary": "hard",
+                    "width": 0,
+                    "segments": []
+                  },
+                  {
+                    "start": 34,
+                    "end": 72,
+                    "nextStart": 72,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 34,
+                        "end": 72,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 72,
+                    "end": 110,
+                    "nextStart": 110,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 72,
+                        "end": 110,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 110,
+                    "end": 148,
+                    "nextStart": 148,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 110,
+                        "end": 148,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 148,
+                    "end": 186,
+                    "nextStart": 186,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 148,
+                        "end": 186,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 186,
+                    "end": 224,
+                    "nextStart": 224,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 186,
+                        "end": 224,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 224,
+                    "end": 232,
+                    "nextStart": 233,
+                    "boundary": "hard",
+                    "width": 86.4140625,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 224,
+                        "end": 232,
+                        "x": 0,
+                        "width": 86.4140625
+                      }
+                    ]
+                  },
+                  {
+                    "start": 233,
+                    "end": 249,
+                    "nextStart": 250,
+                    "boundary": "hard",
+                    "width": 205.2333984375,
+                    "segments": [
+                      {
+                        "kind": "tab",
+                        "start": 233,
+                        "end": 234,
+                        "x": 0,
+                        "width": 43.20703125
+                      },
+                      {
+                        "kind": "text",
+                        "start": 234,
+                        "end": 249,
+                        "x": 43.20703125,
+                        "width": 162.0263671875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 250,
+                    "end": 250,
+                    "nextStart": 250,
+                    "boundary": "end",
+                    "width": 0,
+                    "segments": []
+                  }
+                ],
+                "fontSize": 18,
+                "lineHeight": 21.96,
+                "tabSize": 4,
+                "tabWidth": 43.20703125,
+                "overflow": false
+              }
+            }
+          ],
+          "diagnostics": [],
+          "overflow": false
+        },
+        {
+          "cell": {
+            "x": 43.2,
+            "y": 43.2,
+            "width": 453.6,
+            "height": 873.6
+          },
+          "algorithm": "code-flow-v1",
+          "textMeasurement": "provided",
+          "parts": [
+            {
+              "role": "filename",
+              "path": "slides.3.code.filename",
+              "text": "a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/a-long-path/",
+              "sources": [
+                {
+                  "path": "slides.3.code.filename",
+                  "start": 0,
+                  "end": 180
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 61.2,
+                "y": 61.2,
+                "width": 417.6,
+                "height": 109.80000000000001
+              },
+              "requestedFontSize": 18,
+              "minFontSize": 18,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.3.code.filename"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.3.code.filename"
+              },
+              "fit": {
+                "lines": [
+                  "a-long-path/a-long-path/a-long-path/a-",
+                  "long-path/a-long-path/a-long-path/a-lo",
+                  "ng-path/a-long-path/a-long-path/a-long",
+                  "-path/a-long-path/a-long-path/a-long-p",
+                  "ath/a-long-path/a-long-path/"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 38,
+                    "nextStart": 38,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 38,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 38,
+                    "end": 76,
+                    "nextStart": 76,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 38,
+                        "end": 76,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 76,
+                    "end": 114,
+                    "nextStart": 114,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 76,
+                        "end": 114,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 114,
+                    "end": 152,
+                    "nextStart": 152,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 114,
+                        "end": 152,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 152,
+                    "end": 180,
+                    "nextStart": 180,
+                    "boundary": "end",
+                    "width": 302.44921875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 152,
+                        "end": 180,
+                        "x": 0,
+                        "width": 302.44921875
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 18,
+                "lineHeight": 21.96,
+                "tabSize": 4,
+                "tabWidth": 43.20703125,
+                "overflow": false
+              }
+            },
+            {
+              "role": "language",
+              "path": "slides.3.code.language",
+              "text": "Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-Long-language-label-",
+              "sources": [
+                {
+                  "path": "slides.3.code.language",
+                  "start": 0,
+                  "end": 240
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 61.2,
+                "y": 179,
+                "width": 417.6,
+                "height": 153.72
+              },
+              "requestedFontSize": 18,
+              "minFontSize": 18,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.3.code.language"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 700,
+                "italic": false,
+                "path": "slides.3.code.language"
+              },
+              "fit": {
+                "lines": [
+                  "Long-language-label-Long-language-labe",
+                  "l-Long-language-label-Long-language-la",
+                  "bel-Long-language-label-Long-language-",
+                  "label-Long-language-label-Long-languag",
+                  "e-label-Long-language-label-Long-langu",
+                  "age-label-Long-language-label-Long-lan",
+                  "guage-label-"
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 38,
+                    "nextStart": 38,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 0,
+                        "end": 38,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 38,
+                    "end": 76,
+                    "nextStart": 76,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 38,
+                        "end": 76,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 76,
+                    "end": 114,
+                    "nextStart": 114,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 76,
+                        "end": 114,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 114,
+                    "end": 152,
+                    "nextStart": 152,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 114,
+                        "end": 152,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 152,
+                    "end": 190,
+                    "nextStart": 190,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 152,
+                        "end": 190,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 190,
+                    "end": 228,
+                    "nextStart": 228,
+                    "boundary": "soft",
+                    "width": 410.466796875,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 190,
+                        "end": 228,
+                        "x": 0,
+                        "width": 410.466796875
+                      }
+                    ]
+                  },
+                  {
+                    "start": 228,
+                    "end": 240,
+                    "nextStart": 240,
+                    "boundary": "end",
+                    "width": 129.62109375,
+                    "segments": [
+                      {
+                        "kind": "text",
+                        "start": 228,
+                        "end": 240,
+                        "x": 0,
+                        "width": 129.62109375
+                      }
+                    ]
+                  }
+                ],
+                "fontSize": 18,
+                "lineHeight": 21.96,
+                "tabSize": 4,
+                "tabWidth": 43.20703125,
+                "overflow": false
+              }
+            },
+            {
+              "role": "body",
+              "path": "slides.3.code.source",
+              "text": "",
+              "sources": [
+                {
+                  "path": "slides.3.code.source",
+                  "start": 0,
+                  "end": 0
+                }
+              ],
+              "generated": false,
+              "box": {
+                "x": 61.2,
+                "y": 344.72,
+                "width": 417.6,
+                "height": 554.08
+              },
+              "requestedFontSize": 18,
+              "minFontSize": 18,
+              "requestedStyle": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.3.code.source"
+              },
+              "style": {
+                "fontFamily": "Courier New",
+                "fontWeight": 400,
+                "italic": false,
+                "path": "slides.3.code.source"
+              },
+              "fit": {
+                "lines": [
+                  ""
+                ],
+                "sourceLines": [
+                  {
+                    "start": 0,
+                    "end": 0,
+                    "nextStart": 0,
+                    "boundary": "end",
+                    "width": 0,
+                    "segments": []
+                  }
+                ],
+                "fontSize": 18,
+                "lineHeight": 21.96,
+                "tabSize": 4,
+                "tabWidth": 43.20703125,
+                "overflow": false
+              }
+            }
+          ],
+          "diagnostics": [],
+          "overflow": false
+        }
+      ]
+    }
+  ],
+  "scope": "Actual candidate OPF code export with local Courier New reference bytes. Separate SVG raster and native PowerPoint observations; no substitute-font or pixel-equivalence claim."
+}

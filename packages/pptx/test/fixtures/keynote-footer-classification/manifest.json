@@ -1,0 +1,35 @@
+{
+  "kind": "project-authored-keynote-literal-footer-controls",
+  "license": "MIT",
+  "sourceRevision": "4a3d32ea5fb870bbae574974f4e1c19dda00549b",
+  "controlRevision": "42dddedab6b6309b2fc5ebd669fb4cdce670457a",
+  "application": {
+    "name": "Keynote",
+    "version": "15.1.1"
+  },
+  "date": "2026-10-15",
+  "nativeAcceptance": false,
+  "sourceInputs": {
+    "A": "c51e690ca7a895ebd25a41585a2a51e532fcbb5ef86c79e3447b58a269ed47fe",
+    "B": "810be51e93c04b701c5c939354ecac7324cecdaadf76eb3f4089031bb4936a6e"
+  },
+  "fixtures": [
+    {
+      "file": "native-A.pptx",
+      "bytes": 110634,
+      "sha256": "ee772959fc02b118beac5643b89ae8c61215a674a424d0901e718b067d881d44"
+    },
+    {
+      "file": "native-B.pptx",
+      "bytes": 110585,
+      "sha256": "b92df5efc5290e919f750f092a78e330037ffcca788f849ec5d3ef4435c17be8"
+    }
+  ],
+  "beforeImport": {
+    "runtimeRevision": "7f300b42166c55ee14f8f9432e7340ded26f5ee4",
+    "file": "before-imports.json",
+    "bytes": 97177,
+    "sha256": "76127db5d1e3de00d83d0b7fb9945dbeaba63f3753624154f11b7174035ca45c",
+    "scope": "Exact clean-main current archive imports and all diagnostics; regression only, never importer input."
+  }
+}

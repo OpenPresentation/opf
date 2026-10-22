@@ -1,0 +1,27 @@
+{
+  "scope": "Internal relationship target existence, unique relationship IDs and content-type override target existence. This is not full OPC or native Office conformance.",
+  "results": [
+    {
+      "file": "damaged.pptx",
+      "sha256": "e39304b6c884fa58d1ba6a2fc3f897662a9be0ad5c5385327cde302dc8470aec",
+      "errors": [
+        {
+          "code": "duplicate-relationship-id",
+          "part": "_rels/.rels",
+          "id": "rId1"
+        },
+        {
+          "code": "missing-internal-target",
+          "part": "ppt/slides/_rels/slide1.xml.rels",
+          "id": "rId1",
+          "target": "../media/image-1-1.png",
+          "resolvedTarget": "ppt/media/image-1-1.png"
+        },
+        {
+          "code": "missing-content-type-part",
+          "part": "/ppt/media/image-1-1.png"
+        }
+      ]
+    }
+  ]
+}

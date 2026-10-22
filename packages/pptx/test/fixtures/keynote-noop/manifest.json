@@ -1,0 +1,24 @@
+{
+  "kind": "project-authored-keynote-noop-control",
+  "license": "MIT",
+  "sourceRevision": "4a3d32ea5fb870bbae574974f4e1c19dda00549b",
+  "application": {
+    "name": "Keynote",
+    "version": "15.1.1"
+  },
+  "route": "no-op",
+  "date": "2026-10-15",
+  "nativeAcceptance": false,
+  "fixtures": [
+    {
+      "file": "baseline.pptx",
+      "bytes": 172283,
+      "sha256": "c51e690ca7a895ebd25a41585a2a51e532fcbb5ef86c79e3447b58a269ed47fe"
+    },
+    {
+      "file": "keynote-15.1.1-noop.pptx",
+      "bytes": 110634,
+      "sha256": "1203d4f8579eed49bc1f830fd0dacce4dd955163b53d50781a0975d45865919f"
+    }
+  ]
+}

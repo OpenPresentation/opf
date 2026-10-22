@@ -1,0 +1,224 @@
+{
+  "schemaVersion": 1,
+  "caseId": "llmreference-original-long-text",
+  "source": {
+    "file": "llmreference.pptx",
+    "sha256": "a16ba26a8e6822c30b96b47e4d929ed805af0653fcccf9d4682ff7edf08cc29a",
+    "bytes": 97474,
+    "description": "Exact user-provided Downloads/llmreference.pptx retained without re-export, font replacement or package modification. Original authoring source and generation dependency versions have not been established from the native artifact."
+  },
+  "expectedSlideCount": 7,
+  "slideSizeEmu": {
+    "width": 12192000,
+    "height": 6858000
+  },
+  "embeddedFontPrograms": false,
+  "nativeAcceptance": {
+    "keynote": "not-certified-by-this-fixture",
+    "powerpoint": "not-certified-by-this-fixture"
+  },
+  "expectationScope": "OOXML source facts only. Shapes are already split into precomputed line boxes with wrap=none; source box containment does not establish glyph containment or native font availability. Trailing spaces are significant.",
+  "slides": [
+    {
+      "number": 3,
+      "part": "ppt/slides/slide3.xml",
+      "textShapes": [
+        {
+          "id": "2",
+          "name": "OPF heading slides.2.title line 0",
+          "paragraphs": [
+            "What model pages show"
+          ],
+          "explicitBreaks": 0,
+          "latinTypefaces": [
+            "Aptos Display"
+          ],
+          "fontSizesHundredthsPt": [
+            4050
+          ],
+          "wrap": "none",
+          "boxEmu": {
+            "x": 561430,
+            "y": 548640,
+            "width": 11094720,
+            "height": 627507
+          }
+        },
+        {
+          "id": "3",
+          "name": "OPF list slides.2.items line 0",
+          "paragraphs": [
+            "Price from every provider that hosts the model (per-token, and now per-minute for "
+          ],
+          "explicitBreaks": 0,
+          "latinTypefaces": [
+            "Aptos"
+          ],
+          "fontSizesHundredthsPt": [
+            2400
+          ],
+          "wrap": "none",
+          "boxEmu": {
+            "x": 548640,
+            "y": 1404747,
+            "width": 11094720,
+            "height": 371856
+          }
+        },
+        {
+          "id": "4",
+          "name": "OPF list slides.2.items line 1",
+          "paragraphs": [
+            "audio models)"
+          ],
+          "explicitBreaks": 0,
+          "latinTypefaces": [
+            "Aptos"
+          ],
+          "fontSizesHundredthsPt": [
+            2400
+          ],
+          "wrap": "none",
+          "boxEmu": {
+            "x": 883920,
+            "y": 1776603,
+            "width": 10759440,
+            "height": 371856
+          }
+        },
+        {
+          "id": "5",
+          "name": "OPF list slides.2.items line 2",
+          "paragraphs": [
+            "Context window"
+          ],
+          "explicitBreaks": 0,
+          "latinTypefaces": [
+            "Aptos"
+          ],
+          "fontSizesHundredthsPt": [
+            2400
+          ],
+          "wrap": "none",
+          "boxEmu": {
+            "x": 548640,
+            "y": 2233803,
+            "width": 11094720,
+            "height": 371856
+          }
+        },
+        {
+          "id": "6",
+          "name": "OPF list slides.2.items line 3",
+          "paragraphs": [
+            "License and open-weights status"
+          ],
+          "explicitBreaks": 0,
+          "latinTypefaces": [
+            "Aptos"
+          ],
+          "fontSizesHundredthsPt": [
+            2400
+          ],
+          "wrap": "none",
+          "boxEmu": {
+            "x": 548640,
+            "y": 2691003,
+            "width": 11094720,
+            "height": 371856
+          }
+        },
+        {
+          "id": "7",
+          "name": "OPF list slides.2.items line 4",
+          "paragraphs": [
+            "Benchmark scores with sources"
+          ],
+          "explicitBreaks": 0,
+          "latinTypefaces": [
+            "Aptos"
+          ],
+          "fontSizesHundredthsPt": [
+            2400
+          ],
+          "wrap": "none",
+          "boxEmu": {
+            "x": 548640,
+            "y": 3148203,
+            "width": 11094720,
+            "height": 371856
+          }
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "part": "ppt/slides/slide5.xml",
+      "textShapes": [
+        {
+          "id": "2",
+          "name": "OPF heading slides.4.title line 0",
+          "paragraphs": [
+            "How it ships"
+          ],
+          "explicitBreaks": 0,
+          "latinTypefaces": [
+            "Aptos Display"
+          ],
+          "fontSizesHundredthsPt": [
+            4050
+          ],
+          "wrap": "none",
+          "boxEmu": {
+            "x": 548640,
+            "y": 548640,
+            "width": 11094720,
+            "height": 627507
+          }
+        },
+        {
+          "id": "3",
+          "name": "OPF text slides.4.text line 0",
+          "paragraphs": [
+            "Daily data-quality and new-model batches go through validation, tests and a build before each deploy to "
+          ],
+          "explicitBreaks": 0,
+          "latinTypefaces": [
+            "Aptos"
+          ],
+          "fontSizesHundredthsPt": [
+            1875
+          ],
+          "wrap": "none",
+          "boxEmu": {
+            "x": 548640,
+            "y": 1404747,
+            "width": 11094720,
+            "height": 290513
+          }
+        },
+        {
+          "id": "4",
+          "name": "OPF text slides.4.text line 1",
+          "paragraphs": [
+            "Vercel."
+          ],
+          "explicitBreaks": 0,
+          "latinTypefaces": [
+            "Aptos"
+          ],
+          "fontSizesHundredthsPt": [
+            1875
+          ],
+          "wrap": "none",
+          "boxEmu": {
+            "x": 558049,
+            "y": 1695259,
+            "width": 11094720,
+            "height": 290513
+          }
+        }
+      ]
+    }
+  ]
+}

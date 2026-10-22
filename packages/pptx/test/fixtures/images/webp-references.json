@@ -1,0 +1,32 @@
+{
+  "wide.webp": {
+    "width": 120,
+    "height": 60,
+    "rgbaSha256": "2208399ba4d041a0b1d75108a425dd193ff1c5ab3399dfd83cc37c37cfb2c8fa"
+  },
+  "wide-lossy.webp": {
+    "width": 120,
+    "height": 60,
+    "rgbaSha256": "d7353282ebc1786427f7eb94956a6ec3a25e4c124d3f83ebde80444fb78253d9"
+  },
+  "wide-alpha.webp": {
+    "width": 120,
+    "height": 60,
+    "rgbaSha256": "a83e487e7a6137a2362ad418e3163168a63c0c45015e1d8cd5a3d37f564bf53a"
+  },
+  "webp-orientation-6.webp": {
+    "width": 60,
+    "height": 120,
+    "rgbaSha256": "7e77910a32cbb1b0e84c52150fd725ca7c1047c665f0fd14ba4a87357bf25d64"
+  },
+  "webp-orientation-7.webp": {
+    "width": 60,
+    "height": 120,
+    "rgbaSha256": "1e818635569c5261ce7bb8a2600ae26d59bf57fabd0a6c5ccc257ab9362fdb90"
+  },
+  "wide-animated.webp": {
+    "width": 120,
+    "height": 60,
+    "rgbaSha256": "2208399ba4d041a0b1d75108a425dd193ff1c5ab3399dfd83cc37c37cfb2c8fa"
+  }
+}

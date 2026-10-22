@@ -1,0 +1,578 @@
+{
+  "baselineConverter": "0e2ea4982c4bb1280f22763411e681fe0786f4fc",
+  "reviewedManifestSha256": "d0b8735988dbddf6674ed6c6d0f44880ef9c3534c1a11c95dab840d0b3749ac1",
+  "rootReview": "2026-10-14: independently reviewed nine actual candidate archive identities and all 1079 per-part comparisons before fixture edits",
+  "historicalFixtureSourceCommit": "b5c15e8d05824dafbb5bfbdddda21a7e0eae38a1",
+  "sourceSha256": "7455f28b0ad33e3ffd5fcb3186158c4020d021f6455b5b2e793e15b5173bbb90",
+  "changedXml": "p:cSld on generated slideMaster1.xml gains only name=\"pptx.gallery\" (20 XML bytes;14 compressed archive bytes)",
+  "unchanged": [
+    "all ZIP inventories",
+    "all1070 other ZIP parts",
+    "literal diagnostic arrays",
+    "theme identity and recovery",
+    "individual Gallery/custom layout names",
+    "authored deck names",
+    "all earlier fixture metadata and reviews"
+  ],
+  "firstFailure": {
+    "command": "npm test",
+    "exitCode": 1,
+    "unrunTests": 123,
+    "logSha256": "73dfdc2095e7affcb10c01448d4d7fae8421511b8f57b3bf0ebc8bd7579874e5",
+    "literalTail": "AssertionError [ERR_ASSERTION]: treemap-category (fallback): bytes identical to the reviewed archive fixture\n+ actual - expected\n\n+ 'c4e119fd35338b95901e382ec3ec04a70393540fd15caaec5d2f16dfde960944'\n- 'b69933578667102cc1b2ffa59e97574aa90d6e27442c5e59677ff1a0c16a71f2'\n\n    at file:///private/tmp/rr20-pptx-gallery-master-name-61/test/chartex.mjs:407:12 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: 'c4e119fd35338b95901e382ec3ec04a70393540fd15caaec5d2f16dfde960944',\n  expected: 'b69933578667102cc1b2ffa59e97574aa90d6e27442c5e59677ff1a0c16a71f2',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.21.0\nrun-tests: test/chartex.mjs failed (exit 1); 123 test(s) not run\n"
+  },
+  "archives": [
+    {
+      "name": "treemap-category",
+      "before": {
+        "sha256": "b69933578667102cc1b2ffa59e97574aa90d6e27442c5e59677ff1a0c16a71f2",
+        "bytes": 81345
+      },
+      "after": {
+        "sha256": "c4e119fd35338b95901e382ec3ec04a70393540fd15caaec5d2f16dfde960944",
+        "bytes": 81359
+      },
+      "changedParts": [
+        "ppt/slideMasters/slideMaster1.xml"
+      ],
+      "partCount": 114,
+      "partInventorySha256": "ad80d5d555c25b290880d61753244b54ce9d1d593e35810eb0aba5ad2e6da887",
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "name": "histogram-single",
+      "before": {
+        "sha256": "ccf0a5f94b46fa240a5f9aa855b19ab6bc8d552b39fe4aefa8cd471774c5ec6a",
+        "bytes": 81361
+      },
+      "after": {
+        "sha256": "b5b45ac2aa0b6195397716fb62c6402cdfc3d5a2627c5b4e5c7da6689a950fc8",
+        "bytes": 81375
+      },
+      "changedParts": [
+        "ppt/slideMasters/slideMaster1.xml"
+      ],
+      "partCount": 114,
+      "partInventorySha256": "ad80d5d555c25b290880d61753244b54ce9d1d593e35810eb0aba5ad2e6da887",
+      "diagnostics": [
+        "chart-data-adapted/histogram-binned"
+      ]
+    },
+    {
+      "name": "histogram-category",
+      "before": {
+        "sha256": "1f4c9d95b18a3821bcdbf29dd18048d0924838dbd307e3a6980a4190ac9bb479",
+        "bytes": 81346
+      },
+      "after": {
+        "sha256": "22f2785e598c6850f9730be36c3d5ab622442860cb39864babb6607752e1b392",
+        "bytes": 81360
+      },
+      "changedParts": [
+        "ppt/slideMasters/slideMaster1.xml"
+      ],
+      "partCount": 114,
+      "partInventorySha256": "ad80d5d555c25b290880d61753244b54ce9d1d593e35810eb0aba5ad2e6da887",
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "name": "pareto-multi",
+      "before": {
+        "sha256": "e7899a6dd1fc22f5b257a813323f4e63b7d328c63f582d29cea577b8262d5463",
+        "bytes": 81519
+      },
+      "after": {
+        "sha256": "9f3f8dfcd37d6451a5fec95bb9acab85e6ad434b353e598a184b70b045c7c3ab",
+        "bytes": 81533
+      },
+      "changedParts": [
+        "ppt/slideMasters/slideMaster1.xml"
+      ],
+      "partCount": 114,
+      "partInventorySha256": "ad80d5d555c25b290880d61753244b54ce9d1d593e35810eb0aba5ad2e6da887",
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "name": "box-multi",
+      "before": {
+        "sha256": "34d74ee3301b44a5d81ca32fd138966dfae9e93d79ba1752fc9c50a430b6d645",
+        "bytes": 81518
+      },
+      "after": {
+        "sha256": "d85bdfc4dfb590658e7e713b4b1cd62bd91ca941e5fa8d2f084c944707256f11",
+        "bytes": 81532
+      },
+      "changedParts": [
+        "ppt/slideMasters/slideMaster1.xml"
+      ],
+      "partCount": 114,
+      "partInventorySha256": "ad80d5d555c25b290880d61753244b54ce9d1d593e35810eb0aba5ad2e6da887",
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "name": "waterfall-single",
+      "before": {
+        "sha256": "c812d346498c0f472942fceecca3c4ff3e8b0ac3237bbbfcd7d66725605dc867",
+        "bytes": 81787
+      },
+      "after": {
+        "sha256": "c06d10040d366d96db7ffa898a21414c84dee2a489dd4c929213c8e7560dffd0",
+        "bytes": 81801
+      },
+      "changedParts": [
+        "ppt/slideMasters/slideMaster1.xml"
+      ],
+      "partCount": 115,
+      "partInventorySha256": "6f38ec4e062ad846b293939b345be37dcf21b6e3ae27755ab5cd2930feabf3bf",
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/row-numbers"
+      ]
+    },
+    {
+      "name": "funnel-category",
+      "before": {
+        "sha256": "ba1a79407651ef262d15b6b0e1e937177b3d02537960344093a568c89feaa6f4",
+        "bytes": 81345
+      },
+      "after": {
+        "sha256": "58f8167c934e31338c66ae0daeb75c279f7578eefad9ad0879e6f6320ea16ee6",
+        "bytes": 81359
+      },
+      "changedParts": [
+        "ppt/slideMasters/slideMaster1.xml"
+      ],
+      "partCount": 114,
+      "partInventorySha256": "ad80d5d555c25b290880d61753244b54ce9d1d593e35810eb0aba5ad2e6da887",
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "name": "world-category",
+      "before": {
+        "sha256": "e9dec7ca5086812227c171a3d93c45c32ceaf3e4748a55f8a67623c5dca9f914",
+        "bytes": 80164
+      },
+      "after": {
+        "sha256": "d3de3c6c4c6d30fc7be94158afb91dbd5e7dda0ec034a105296af9e8e8e61e05",
+        "bytes": 80178
+      },
+      "changedParts": [
+        "ppt/slideMasters/slideMaster1.xml"
+      ],
+      "partCount": 112,
+      "partInventorySha256": "18804d0be5e977c24d5404fc8f0bc9d2444e5f5232062df0ba775e8620979d11",
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback"
+      ]
+    },
+    {
+      "name": "all-seven",
+      "before": {
+        "sha256": "d5e9369846422d28f3dfb3b32b0009401a41d402412fdbfed106561edd354082",
+        "bytes": 144311
+      },
+      "after": {
+        "sha256": "4906a9d2be4bff9cc89e6314f0ecb45a139ecd58d181a2c3940a2fb214b0c045",
+        "bytes": 144325
+      },
+      "changedParts": [
+        "ppt/slideMasters/slideMaster1.xml"
+      ],
+      "partCount": 168,
+      "partInventorySha256": "de6fe8b29c4b2e8fedae45eadaece8d6b6af45344788c9c4256a2ef4a26fb009",
+      "diagnostics": [
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback",
+        "chart-data-adapted/chartex-fallback"
+      ]
+    }
+  ],
+  "nativeOfficeExecuted": false,
+  "powerPointMenuObserved": false,
+  "rr54Review": {
+    "historicalFixtureSource": {
+      "commit": "438ce8801701f2fa2531ac56537234d274e36aa7",
+      "note": "Original source notes and historical reviews remain byte-for-byte unchanged in test/fixtures/rr-54-unchanged.json; recover complete metadata from baselineConverter."
+    },
+    "reviewedManifestSha256": "4f1431fd30c9b99190bc01fbb621ad57babb27d62fe1b8233470ba6cb849c8c4",
+    "rootReview": "2026-10-14: independently reviewed21 actual candidate archives and all640 part rows before updates; approved only sha256 and rr20Bytes",
+    "changedXml": "only master name attribute:20 XML bytes and13 compressed archive bytes per archive",
+    "secondFailure": {
+      "command": "resume maintained chartex + originally unrun123 suffix",
+      "exitCode": 1,
+      "passedFilesBeforeFailure": 79,
+      "remainingUnrunFiles": 44,
+      "logSha256": "d5976771a53797c86c5e18ff3851844afcd6ad5d5cdffdb47fc3cafbec75a116",
+      "literalTail": "AssertionError [ERR_ASSERTION]: column: locked ZIP bytes (reviewed table and single-column provenance updates)\n+ actual - expected\n\n+ '7aa0692026b3b2f919242d31a39d39b1f1c585caa212dbcdfd9173254ee23680'\n- '1e560fbcdf1df60a94b7adc2241e6e6f4615fe3706a5ba6eeae0bb492337e34b'\n\n    at file:///private/tmp/rr20-pptx-gallery-master-name-61/test/rr-54-chart-table-data.mjs:259:12 {\n  generatedMessage: false,\n  code: 'ERR_ASSERTION',\n  actual: '7aa0692026b3b2f919242d31a39d39b1f1c585caa212dbcdfd9173254ee23680',\n  expected: '1e560fbcdf1df60a94b7adc2241e6e6f4615fe3706a5ba6eeae0bb492337e34b',\n  operator: 'strictEqual',\n  diff: 'simple'\n}\n\nNode.js v24.21.0\nResumed 80/124 maintained tests; exit 1\n"
+    },
+    "archives": [
+      {
+        "name": "column",
+        "before": {
+          "sha256": "1e560fbcdf1df60a94b7adc2241e6e6f4615fe3706a5ba6eeae0bb492337e34b",
+          "bytes": 26006
+        },
+        "after": {
+          "sha256": "7aa0692026b3b2f919242d31a39d39b1f1c585caa212dbcdfd9173254ee23680",
+          "bytes": 26019
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "column-labels",
+        "before": {
+          "sha256": "b5b9b4ed5e9eba7f524bc1e79d09e6911a9977677aca425cf36ae75d5a1e5466",
+          "bytes": 26076
+        },
+        "after": {
+          "sha256": "8af7d565d4d1d87c0987213775df1ec61d9adba45f78419ae2ac8ab855040e1b",
+          "bytes": 26089
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "bar",
+        "before": {
+          "sha256": "56cc21ccafca09b84a4e94914aadd4fc198cdf5baf8242e9c636663f12f2c3b6",
+          "bytes": 26007
+        },
+        "after": {
+          "sha256": "93657ad10758813a01a1c85f7500df1206eadf292552920a1023f073fed7b72b",
+          "bytes": 26020
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "line",
+        "before": {
+          "sha256": "a2e1a876afcb6edfe7ec96e487601c4f2b6c3166f51c04d075a927674b10fdd2",
+          "bytes": 26051
+        },
+        "after": {
+          "sha256": "63dad3d385692423dc33d7f727224bb3efca80401c72cbe16ee219e15c3db3f8",
+          "bytes": 26064
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "area",
+        "before": {
+          "sha256": "ef9da7269e0e68f18f4551c032e9f56e0c54fce8679a3747915b49357cfdf1ac",
+          "bytes": 25960
+        },
+        "after": {
+          "sha256": "686241c9de7b167c3b0ea034958bd46a9d85fcccf56d4d7ef720dcb9b0be4da4",
+          "bytes": 25973
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "stacked-column",
+        "before": {
+          "sha256": "69f4a49e18dabcc1f60425e829c4d14a119dd81d4c81b7100e9af07016a82b99",
+          "bytes": 26015
+        },
+        "after": {
+          "sha256": "5ef7f0647c71e6ac6045996a1e68d0b4d1649ffe61780267df82c9a0d15b3406",
+          "bytes": 26028
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "percent-stacked",
+        "before": {
+          "sha256": "7a840b6466b2405a17ced4a03038aec4ab4493fd16f272ac6a1d3ff5fde8a4ff",
+          "bytes": 26028
+        },
+        "after": {
+          "sha256": "7ca8f27aadfa857ce000eba09d431e51c8563f7ffc4f20df36b2c947da3d207f",
+          "bytes": 26041
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "pie",
+        "before": {
+          "sha256": "669b7fb335ad4c9f19fc08a161241aac35db3624026c0251dd48d93ce0689d3b",
+          "bytes": 25585
+        },
+        "after": {
+          "sha256": "db75f245fce6617979e256c6434e0ea085a19b5c427edac13725f707d683fbd6",
+          "bytes": 25598
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "doughnut",
+        "before": {
+          "sha256": "0e62b593b240a14d6e8f9dcec3a41d148594215a2e7b01174a04db37d8fdd177",
+          "bytes": 25528
+        },
+        "after": {
+          "sha256": "75e6f679988929082d2490232632e9d5cec9fd20b366d82f0722a6c35f4867d6",
+          "bytes": 25541
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "radar",
+        "before": {
+          "sha256": "90450341b61f01309021205470011fccd473dd4349851111e9eb17560f7696c4",
+          "bytes": 25966
+        },
+        "after": {
+          "sha256": "c8468446ec48b97efa2a48fde933807266f7feaec4e25a95999047d60c19330e",
+          "bytes": 25979
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "scatter",
+        "before": {
+          "sha256": "410881392d4538917b6267bcf9a17033bf9d40c2ca52777e47482fe6ffdcff3b",
+          "bytes": 25793
+        },
+        "after": {
+          "sha256": "361431d84ff9d21e4e05f309b4a9cb16e6d9d58cba358aa6d9bd0e1509c3d034",
+          "bytes": 25806
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "scatter-two-columns",
+        "before": {
+          "sha256": "2cd775c0dec5752981a1f4f2ab1e938051933755ab5b35fbe1599a12ff8b2105",
+          "bytes": 25625
+        },
+        "after": {
+          "sha256": "2be801aa7aa86fd301bc7827a29eacd91fc88211b335694e3d23f96da7533bbd",
+          "bytes": 25638
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "single-column",
+        "before": {
+          "sha256": "b1f2a15339cf32bac94f7e1f17e463da145108e2bc69eca8ab2a2c79f4a03355",
+          "bytes": 26257
+        },
+        "after": {
+          "sha256": "9ca25a334f6dbacbad3b5247c966b7ba7cf28358607e24b04c2c9aad05d0d264",
+          "bytes": 26270
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 31,
+        "partInventorySha256": "14f3740516d23f154a77ae6159ac945d328bb0b4cdb8647a8b1e7f4013a1abc2"
+      },
+      {
+        "name": "scatter-labels",
+        "before": {
+          "sha256": "023f4dbd0b332a793dbd2d58d61d3a99205f07ab3cbcaecc91389ed55678b8dc",
+          "bytes": 25636
+        },
+        "after": {
+          "sha256": "486df335d4fc056077b68a203028070abe71b64c8e131d6c436c072277b28b13",
+          "bytes": 25649
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "chartex-native-map",
+        "before": {
+          "sha256": "a86fe9a1868c5f5baa6458b910e64f13239ea857650d24f8b63f2edfe4e4f0a2",
+          "bytes": 25783
+        },
+        "after": {
+          "sha256": "7e8b82c51b06b4d310664486ebd4add092ee179539cc86ab15f0915c9d8b7e27",
+          "bytes": 25796
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 30,
+        "partInventorySha256": "9616b99a4a39a1607cb1ab25a3f048d3db62e9b85e9aad10625b88d50861c0bf"
+      },
+      {
+        "name": "histogram",
+        "before": {
+          "sha256": "9c5eaf31976591354a65ae3c18d0eb8d0d317b246bc8f55490d925055d7b5d0b",
+          "bytes": 28827
+        },
+        "after": {
+          "sha256": "b5464e777e7714e2ec1194a2061d8b978663e4c1682ac7792922b33c07d49e76",
+          "bytes": 28840
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 34,
+        "partInventorySha256": "d3ef11379a103ee338de741fb1fc92672bb4740b28bf07f80ce57a1c8acffc3b"
+      },
+      {
+        "name": "treemap",
+        "before": {
+          "sha256": "74b7ffeb54e09ad04aadfeff1d3bb33f9d486b160d3185e039608c64d1ea3164",
+          "bytes": 28639
+        },
+        "after": {
+          "sha256": "fe916a7783f5ad6b8165f5a4765ef98ffd4f16832f5641d2bba9ad1370f814dc",
+          "bytes": 28652
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 34,
+        "partInventorySha256": "d3ef11379a103ee338de741fb1fc92672bb4740b28bf07f80ce57a1c8acffc3b"
+      },
+      {
+        "name": "waterfall",
+        "before": {
+          "sha256": "f5c5461d35e6b5fec76bab978ac33261a921861a287a64b82cd2be403d1e011d",
+          "bytes": 28732
+        },
+        "after": {
+          "sha256": "3feacdd270484babee91e670a85e713a058f333ec76178bd63663aa77eb111bb",
+          "bytes": 28745
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 34,
+        "partInventorySha256": "d3ef11379a103ee338de741fb1fc92672bb4740b28bf07f80ce57a1c8acffc3b"
+      },
+      {
+        "name": "table",
+        "before": {
+          "sha256": "ae6dc6091451e8644b41b4169ffcc086e278eb81984f1bc83e40375b1666611d",
+          "bytes": 20181
+        },
+        "after": {
+          "sha256": "0f31232d5d63e59110d5d4000c8d98e6b46dc445276d0c8aa503706afcc5c8f4",
+          "bytes": 20194
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 28,
+        "partInventorySha256": "0347ac9d4d724032b5022c3ade43035581ef848247928660e664aec7ff2312d0"
+      },
+      {
+        "name": "styled-table",
+        "before": {
+          "sha256": "c268481a41455583c501b1486405c4997d1ea80333771949d42ffc4976723917",
+          "bytes": 20009
+        },
+        "after": {
+          "sha256": "a26620f7968baf19a46d7bae81db07b9b1b2dbb9ac3e9b1ce1e179f296827005",
+          "bytes": 20022
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 28,
+        "partInventorySha256": "0347ac9d4d724032b5022c3ade43035581ef848247928660e664aec7ff2312d0"
+      },
+      {
+        "name": "mixed-blocks",
+        "before": {
+          "sha256": "2e74592c13f2a91d0eb24baa770af01213da748de9230f43b353377c7ae8148c",
+          "bytes": 26856
+        },
+        "after": {
+          "sha256": "aa6029f7cceaa008b09c15d4c1cfc8dfcc2c43bc1bc8ba8bb3b14706ae3ed637",
+          "bytes": 26869
+        },
+        "changedParts": [
+          "ppt/slideMasters/slideMaster1.xml"
+        ],
+        "partCount": 31,
+        "partInventorySha256": "14f3740516d23f154a77ae6159ac945d328bb0b4cdb8647a8b1e7f4013a1abc2"
+      }
+    ],
+    "remainingSourceScanSha256": "db2cf7c70b940a3dce7206be3a9d047da70838edee378808b1eed653939097af",
+    "remainingFixedArchiveGoldens": 0
+  },
+  "finalQualification": {
+    "canonicalTestFiles": 141,
+    "passedPrefixFromInitialRun": 17,
+    "passedBeforeSecondGoldenFailure": 79,
+    "finalResumePassedFiles": 45,
+    "finalResumeExitCode": 0,
+    "selection": "Unchanged scripts/run-tests.mjs selectTests full-suite discovery; suffix resumes via exported selector, no exclusions added",
+    "qualifiedAfterReviewedGoldenUpdates": true,
+    "originalFullCommandExitCode": 1,
+    "buildBrowserCheck": "passed; bundle-only, no browser/native Office claims",
+    "runnerControls": "8 passed",
+    "fragmentControls": "11 passed",
+    "finalResumeResultsSha256": "d3bf56ec4b6da5a40855e7672284b3ed9908dcd9f2610d74f9139a28fa51d26d",
+    "finalResumeLogSha256": "786c1a27d2dba5cfdd1679dee908ed5871ca3fbf04270c0b86c0aacee58243d2"
+  }
+}

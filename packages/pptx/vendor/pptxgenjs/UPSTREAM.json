@@ -1,0 +1,24 @@
+{
+  "name": "pptxgenjs-plus",
+  "version": "4.3.4",
+  "license": "MIT",
+  "tarball": "https://registry.npmjs.org/pptxgenjs-plus/-/pptxgenjs-plus-4.3.4.tgz",
+  "integrity": "sha512-E4mu3Guf2O5CIzy6nS7tlAv55RyhPWinpsj2MdOM5QZ3XukkSne4oipE1HONTfaVLeJG4rkr2lOk6KhwbU/4mQ==",
+  "provenance": {
+    "repository": "https://github.com/lofcz/pptxgenjs-plus",
+    "ref": "refs/heads/next",
+    "commit": "ecfa5086a7a35dc8cc0faa502a61794a577554d5"
+  },
+  "files": {
+    "pptxgen.es.js": {
+      "source": "package/dist/pptxgen.es.js",
+      "bytes": 1230609,
+      "sha256": "71f89c1bea86cee3c89f9ec948da99ef1f7dacf38fab33a21b6857ca6fb20dd1"
+    },
+    "LICENSE": {
+      "source": "package/LICENSE",
+      "bytes": 1128,
+      "sha256": "09b419524813383278d9353e387b75abec06c184336e5c48974a377804b0239a"
+    }
+  }
+}

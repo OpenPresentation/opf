@@ -1,0 +1,9 @@
+# Original RR-78 scope reconciliation
+
+Read-only local Git audit, 2026-10-11. `original-catalog-scope.json` records every original changed path and exact added-line retention: PPTX229 (35), renderer198 (41), editor148 (54), 130 total. Line retention is mechanical evidence, not semantic equivalence by itself; alias renames and later v2 APIs deliberately replace some original lines.
+
+PPTX remote229 `be161d727bc8fbd01257de819920e6d1f6f88ffd` is unchanged. Local `6b88822` rebases that migration and replaces the placeholder package with genuine gallery1 metadata; it remains unpushed and is not the remote PR. Reviewed complete `25ecc82d` represents registration/test migration; `9bd98a3544fc3a1bbfd6f6d52e3bf925bdfe0e14` adds reviewed Pareto preservation and import-default docs. Original docs/declaration/test changes are represented or deliberately superseded. The old fragment's dev-only/no-catalog claim is obsolete because the importer now loads the installed gallery for foreign mapping; it is not restored.
+
+Renderer198 `bc81895e` registration/docs/declarations are represented by complete `d5723680`; editor148 `5ba0e4ff` by `569a8348`. Their RR-78 fragments are retained with truthful gallery export names. Later editor `ebef8bd` adds only the reviewed macOS test/evidence change. No original PR is closed or rewritten by this reconciliation.
+
+Source-review coverage is complete for these behavioral scopes. Real gallery2 ranges/locks remain intentionally pending, including PPTX's direct runtime gallery dependency. After merged-source bootstrap and genuine gallery2 publication, reviewed registry adoption must update actual ranges/locks and remove staging declarations before final stable preparation. Never restore old placeholder metadata or invent integrity entries. Final source/packed/OS/registry gates and fresh native acceptance remain separate; packet05 is unchanged and retains its historical Pareto limitation.

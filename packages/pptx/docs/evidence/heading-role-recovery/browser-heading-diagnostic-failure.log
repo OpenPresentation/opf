@@ -1,0 +1,17 @@
+node:internal/modules/run_main:107
+    triggerUncaughtException(
+    ^
+
+AssertionError [ERR_ASSERTION]: Error: Native properties import without diagnostics
+    at check (http://127.0.0.1:65487/artifacts/native-styled-table-import/browser/bundle.js:52577:18)
+    at http://127.0.0.1:65487/artifacts/native-styled-table-import/browser/bundle.js:52587:3
+    at file:///Users/michael/Source/opf-pptx/test/browser-check.mjs:37:12 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: 'FAIL: styled native table import',
+  expected: /^PASS:/,
+  operator: 'match',
+  diff: 'simple'
+}
+
+Node.js v24.21.0

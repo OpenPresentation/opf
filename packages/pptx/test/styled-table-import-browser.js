@@ -1,0 +1,52 @@
+import * as pptx from '@openpresentation/opf-pptx';
+import * as render from '@openpresentation/opf-render';
+import {validate} from '@openpresentation/opf';
+import {gallery as defaultCatalog} from '@openpresentation/gallery';
+import {strFromU8, strToU8, unzipSync, zipSync} from 'fflate';
+import {nativeTableBytes} from './table-values.js';
+// OPF 0.15: the gallery ids these documents name resolve from the registered default catalog (no built-in records).
+const host = options => ({catalogs: [defaultCatalog], ...options});
+const toPptx = (deck, options) => pptx.toPptx(deck, host(options)), fromPptx = (bytes, options) => pptx.fromPptx(bytes, host(options));
+const toSvg = (deck, slide, options) => render.toSvg(deck, slide, host(options));
+const out=document.querySelector('pre');let checks=0;
+const check=(ok,message)=>{if(!ok)throw Error(message);checks++;};
+try {
+ const source={design:{theme:'classic',fontScheme:'roboto'},slides:[{title:'Native styled table import',table:{columns:['Team','Stage','Status'],rows:[
+  [{value:'Design',rowSpan:2,style:{fill:'#DBEAFE',verticalAlign:'middle'}},'Preview',{value:[{text:'Ready',bold:true,color:'#166534'}],style:{fill:'#DCFCE7',align:'center'}}],
+  [null,'Editing',{value:'In progress',style:{fill:'#FEF3C7',color:'#92400E',align:'center'}}],
+  [{value:'One native merged cell',colSpan:3,style:{fill:'#F1F5F9',padding:{top:12,bottom:12},borders:{top:{color:'#64748B',width:2,dash:'dash'}}}},null,null]
+ ]}}]};
+ const exportedBytes=nativeTableBytes(await toPptx(source));
+ const diagnostics=[],deck=await fromPptx(exportedBytes,{onDiagnostic:d=>diagnostics.push(d)});
+ // RR-94: an unedited export is quiet; a heading edited in the application still reports its recovery diagnostic once.
+ check(diagnostics.length===0,'Pristine native properties import reports nothing');
+ {
+  const entries=unzipSync(exportedBytes);
+  entries['ppt/slides/slide1.xml']=strToU8(strFromU8(entries['ppt/slides/slide1.xml']).replace('Native styled table import','Edited table import'));
+  const edited=[],editedDeck=await fromPptx(zipSync(entries),{onDiagnostic:d=>edited.push(d)});
+  check(edited.length===1&&edited[0].code==='heading-import-reflow','An edited heading reports one supported heading recovery diagnostic');
+  check(editedDeck.slides[0].title==='Edited table import','The edited heading text is the current title');
+ }
+ check(deck.slides[0].title===source.slides[0].title,'The tagged native heading retains its current title text');
+ check(validate(deck, {only: ['format']}).valid,'Imported document validates');
+ // The root table payload returns as the slide's own field (content topology).
+ const table=deck.slides[0].table??deck.slides[0].blocks?.find(block=>block.table)?.table;
+ check(table.rows[0][0].rowSpan===2&&table.rows[1][0]===null,'Vertical anchor and covered slot');
+ check(table.rows[2][0].colSpan===3&&table.rows[2][1]===null&&table.rows[2][2]===null,'Horizontal anchor and covered slots');
+ check(table.rows[0][0].style.verticalAlign==='middle','Native vertical alignment');
+ check(table.rows[2][0].style.borders.top.dash==='dash','Native dashed border');
+ document.querySelector('main').innerHTML=toSvg(deck, 1,{trace:true});
+ const tableBlock=deck.slides[0].blocks?.findIndex(block=>block.table)??-1;
+ const prefix=deck.slides[0].table!==undefined?'slides.0.table':`slides.0.blocks.${tableBlock}.table`;
+ const rect=document.querySelector(`rect[data-opf-path="${prefix}.rows.0.0"]`);
+ check(rect?.getAttribute('fill')==='#DBEAFE','Imported fill appears on merged SVG rectangle');
+ const rich=document.querySelector(`g[data-opf-path="${prefix}.rows.0.0.value"][data-opf-rich-text]`);
+ check(!!rich,'Merged text retains editable value path');
+ const bounds=rich.getBBox(),area=rect.getBBox();
+ check(bounds.y>=area.y-1&&bounds.y+bounds.height<=area.y+area.height+1,'Merged text stays within its rectangle');
+ check(!document.querySelector(`rect[data-opf-path="${prefix}.rows.1.0"]`),'Covered row has no duplicate rectangle');
+ check(!!document.querySelector('line[stroke="#64748B"][stroke-dasharray]'),'Native border renders as dashed SVG line');
+ const again=await fromPptx(await toPptx(deck));
+ check(JSON.stringify(again.slides[0].table??again.slides[0].blocks?.find(b=>b.table)?.table)===JSON.stringify(table),'Browser native round-trip preserves styled grid');
+ out.textContent=JSON.stringify({passed:true,checks},null,2);document.title='PASS: styled native table import';
+}catch(error){out.textContent=error.stack;document.title='FAIL: styled native table import';console.error(error);}

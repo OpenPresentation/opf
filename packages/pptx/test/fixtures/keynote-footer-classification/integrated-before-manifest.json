@@ -1,0 +1,361 @@
+{
+  "schemaVersion": 1,
+  "kind": "same-final-runtime-minus-classifier-import-control",
+  "license": "MIT",
+  "source": {
+    "revision": "676d2d86ea7182a2fae6ad00214b58cf5383555a",
+    "tree": "7b5738ba1962c6ceb5744da07b7bddfbb0d6db4a",
+    "actualMergedPptxBase": "e0a67c6ee9892c58d15131923156b0ecf51ab14e",
+    "packageVersion": "0.20.3",
+    "sourceCandidate": true,
+    "registryAcceptance": false,
+    "nativeAcceptance": false
+  },
+  "ablation": {
+    "module": "dist/native-footer-classification.js",
+    "sourceSha256": "ee784048e83aadbf6771a434b1adc5bafb1b1a1f0c55a51c567419e9e36b4223",
+    "diagnosticSha256": "0578a65a1f9c0bd5f492a6808cf83e6317cc4da511ee91eed268d7826e849bc5",
+    "insertionAfter": "export function classifyNativeFooters(context, claimed, accepted, occupied, report) {",
+    "insertedText": "\n  return []; // Diagnostic ablation only; never a source candidate or package.",
+    "otherRuntimeFilesExact": 68,
+    "scope": "Diagnostic import control only; never a sealed candidate or package"
+  },
+  "sourceRuntimeFiles": [
+    {
+      "file": "package.json",
+      "sha256": "997e658f5a6467fea68c361494b60c4338f1be57c63cfec64e536890c183c714"
+    },
+    {
+      "file": "dist/annotation-export.js",
+      "sha256": "f45f743368b87e4c5f6f4b3c76d3f6cf3ed3fd2f78be13fce3c69c68b79e641e"
+    },
+    {
+      "file": "dist/annotation-provenance.js",
+      "sha256": "c299b7a89e565dbd22fd3c1189ff2768eeb061630b2fc92bfe364d191c53c618"
+    },
+    {
+      "file": "dist/background-import.js",
+      "sha256": "37e771ca998dac3e681a858dad4e0ca6fd128a18181073e45e4607fa82fd228e"
+    },
+    {
+      "file": "dist/background.js",
+      "sha256": "5e73919fde05f86e37cdcc3fc975e86a3b6175eec5131d2086cdc68a3b286b20"
+    },
+    {
+      "file": "dist/body-text-import.js",
+      "sha256": "466531734a6bc9f526c994dbc8cd21012363ba34adc7690aeec489acc4f01399"
+    },
+    {
+      "file": "dist/card-provenance.js",
+      "sha256": "41b78472f0d8363b98341d9d66529c48f9f821d39bc110b8e43b610205d535fb"
+    },
+    {
+      "file": "dist/chart-data.js",
+      "sha256": "a1f6ebc1c6086ae3b1146a6755f6c41f2e4c4b75235a2d59c650ba2a7dcb88d0"
+    },
+    {
+      "file": "dist/chart-highlight.js",
+      "sha256": "3abf50a27a33ef821dd02933e27ffc9e57628349832ac7781abcc3ad3934bbac"
+    },
+    {
+      "file": "dist/chart-options.js",
+      "sha256": "63f84b29e82298fd4bbd2ca8a203b86de04c2cb7f10d5936f46c8c2ffcbacc6d"
+    },
+    {
+      "file": "dist/chart-order.js",
+      "sha256": "fee0852bf47a347763b600a1ded83a6a54d7cb1221ecdab14d92d6f596a9b543"
+    },
+    {
+      "file": "dist/chart-types.js",
+      "sha256": "8f243872a82f0d07d6615d83b388b38bd807d1a10e50f4f22ef9f9832df0d9dc"
+    },
+    {
+      "file": "dist/chart-workbook.js",
+      "sha256": "2bae0f778910bb433b022ec183b54e7bb69b4d022992492dc823e51003892b92"
+    },
+    {
+      "file": "dist/chartex.js",
+      "sha256": "16f0b568162ce0f9871b6ebea16094c8bb2cbc0713864fb18a16c9edceb747e0"
+    },
+    {
+      "file": "dist/code-provenance.js",
+      "sha256": "36b8756f5bc8cfd7125f532f8a5fb8c70471d2a169cd25a8294abeff5840f143"
+    },
+    {
+      "file": "dist/color-ref.js",
+      "sha256": "1ddf95b4d23cf137e32eab8ab1d5ad83cd092adeca3d4c24b5342f8a27669e2f"
+    },
+    {
+      "file": "dist/content-topology.js",
+      "sha256": "bbc154105e206d676885036d5b18f5b598faee04fa6257415f55ad2ba24fc20b"
+    },
+    {
+      "file": "dist/data-provenance.js",
+      "sha256": "c913226ff1a7f95036dfedfc627fdfa0cfbb6efa8a31b4edafaec084ec832ddb"
+    },
+    {
+      "file": "dist/document-provenance.js",
+      "sha256": "7bebdd04fb9eb79ae8b03c53d49057c4b58cfce538ca7023584886e33a63a18e"
+    },
+    {
+      "file": "dist/font-weights.js",
+      "sha256": "360ec5bb64f237c0f410271efae70d048ccbac79e1d6c6c27a8271a40217653e"
+    },
+    {
+      "file": "dist/format-check.js",
+      "sha256": "837d8668c11adc531a717d3499448e7cbb128f678e1116e745a02532ad4e4edb"
+    },
+    {
+      "file": "dist/frame-alt.js",
+      "sha256": "e790e3d8ef21cad79a1c549ab319bff4bc2d6acd3782582df37713c11c4ff100"
+    },
+    {
+      "file": "dist/furniture-fields.js",
+      "sha256": "142894aa5d2e8b04abd7595c31fb4a1b5e4ea7e381f42d48f1e82bc00be2f244"
+    },
+    {
+      "file": "dist/furniture-provenance.js",
+      "sha256": "729a253f52a78f0f466d11573203c2c6f39bed7182d87d2f015fe97eaaa7f6d1"
+    },
+    {
+      "file": "dist/heading-provenance.js",
+      "sha256": "d76910a273dc183cd7881182a3cb2c10ee6da3f9a90de43557f4064adfe6ff07"
+    },
+    {
+      "file": "dist/image-fallback-browser.js",
+      "sha256": "911a7f6d329a1ab652c7aaca5047acf1db0bdd3cb97917caa016576488d563a4"
+    },
+    {
+      "file": "dist/image-fallback-node.js",
+      "sha256": "9cfc5385c070083c03235d9b11a330265434a6fbd13eeda33bc77634043daad0"
+    },
+    {
+      "file": "dist/image-geometry.js",
+      "sha256": "64d3470d36b70184527a06d0f66ec5e81eae264101cb52dde07fbf2ad180474e"
+    },
+    {
+      "file": "dist/image-import.js",
+      "sha256": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a"
+    },
+    {
+      "file": "dist/image-provenance.js",
+      "sha256": "e776044d16d73fa8d641b9bd5b26ad246d071690831730e4dd51d09d8da8e733"
+    },
+    {
+      "file": "dist/import-signals.js",
+      "sha256": "efd03f841eedf52fc0c10f9c3e9fe9e0a3caaff2fef070d1feb8336993b15334"
+    },
+    {
+      "file": "dist/index.d.ts",
+      "sha256": "6f6c636e656cadf237b865f036eaca1003ca68bf750edec097b25a36c19e82b3"
+    },
+    {
+      "file": "dist/index.js",
+      "sha256": "f662b5b89237b5cdfa8ca880e6873513f8764c3588bf0fc30da98cfdf87355b5"
+    },
+    {
+      "file": "dist/logo-provenance.js",
+      "sha256": "26919d9c2308aeb808b136224776295ab42d4fa269fdd373755ae6d88d00e9ac"
+    },
+    {
+      "file": "dist/master-furniture.js",
+      "sha256": "874762541dcfe6c762dfc8f79d30ed01cf94aadbf31627509bf46cc9279654ed"
+    },
+    {
+      "file": "dist/master-themes.js",
+      "sha256": "74d3ec6c3f7e9d687d3ccd14ec28b21eb2832fb39b203f93db50644a6e874426"
+    },
+    {
+      "file": "dist/media-dedupe.js",
+      "sha256": "7beecb4ad66ba2165f26f26e5ec4c375c76bf1e00048e43885ca35cb18bcaaef"
+    },
+    {
+      "file": "dist/media-provenance.js",
+      "sha256": "f73d0a824fc5a464029bae4bb4711ef92a5c85511cfaa7d20995b57ecf1048f7"
+    },
+    {
+      "file": "dist/metric-provenance.js",
+      "sha256": "28b7a84dc70c3877e73068919f43265de2b22066fe72df45109fa516e65fef86"
+    },
+    {
+      "file": "dist/native-body.js",
+      "sha256": "c580a0e984c9b12f1db6a15befd12b124a13d426ce9ae831a44ddc154c2ce7b1"
+    },
+    {
+      "file": "dist/native-footer-classification.js",
+      "sha256": "ee784048e83aadbf6771a434b1adc5bafb1b1a1f0c55a51c567419e9e36b4223"
+    },
+    {
+      "file": "dist/native-furniture.js",
+      "sha256": "74820a0f90be86dbac36c75078348bca2f909ed0d68cc50dfbe04e746926b6cc"
+    },
+    {
+      "file": "dist/native-text-style.js",
+      "sha256": "ca7b23474307ab9f41c806badaf4c1b80c5cb8d285d7e9f3da2799befa4005ef"
+    },
+    {
+      "file": "dist/numbered-list.js",
+      "sha256": "92dcd93047cfa1a8e9d5da1e5cb6b8eb75eb38fac3b7a2c1b0f300c258179557"
+    },
+    {
+      "file": "dist/package-fonts.js",
+      "sha256": "075722b50fd94f29a46a448044e5ad979bb503e1d6a80b3cfc37e66f921038eb"
+    },
+    {
+      "file": "dist/quote-provenance.js",
+      "sha256": "b0f4e3a656477e9d9c88d7a1dd9f171e5c6f30d3798f413c9fc84570b86b59bf"
+    },
+    {
+      "file": "dist/rich-heading.js",
+      "sha256": "ff769ef5092907d68423b4f9e42f65112258ac3e6937be9664c530bca4982ded"
+    },
+    {
+      "file": "dist/run-colors.js",
+      "sha256": "766277ef5d69c57a364816471c6feb938575ab053231d3b093943f67bd245a40"
+    },
+    {
+      "file": "dist/script-fonts.js",
+      "sha256": "f17c0ca8e54b81f69715871035d7216231fe7b0b362658de1b17b13d1a4a4fac"
+    },
+    {
+      "file": "dist/sections.js",
+      "sha256": "53b140f77568bb7e33fc588fa5c281c5dab7d244015884da9ae0128a1c2021e2"
+    },
+    {
+      "file": "dist/source-run-styles.js",
+      "sha256": "0ed5609f426ea53437b7b49c472e16ae039b59dfc69b51839c52670b95299c2c"
+    },
+    {
+      "file": "dist/svg-image.js",
+      "sha256": "d9f27a1a17a868d2d9a40aac068b521f40806a2d467cb67d5f1edb5ac6d4a552"
+    },
+    {
+      "file": "dist/table-border-import.js",
+      "sha256": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093"
+    },
+    {
+      "file": "dist/table-cell-import.js",
+      "sha256": "3e8fbbf7887d966b2f209eedeca3452fc6b29ad34c326492dc6769e31dd6ba0c"
+    },
+    {
+      "file": "dist/table-import.js",
+      "sha256": "b33f2678374ac8271941c79c4b703c3664d896a6d7f0b32cefd76dced29bae50"
+    },
+    {
+      "file": "dist/template-layouts.js",
+      "sha256": "eecc973ec3154fb193b877b96115ce5c63b164d6b5fb40638e5d4c8408a7bf35"
+    },
+    {
+      "file": "dist/text-provenance.js",
+      "sha256": "8f8c7f14ffbb568eadac9f010215cb619d48c2ab8515172b059dd51f2a816b46"
+    },
+    {
+      "file": "dist/theme-colors.js",
+      "sha256": "546905af1470b0306094baf6902ab7203b82778765b2bd1354b50fd405cb33b0"
+    },
+    {
+      "file": "dist/timeline-provenance.js",
+      "sha256": "c657ff56ee1706a3848978adf170c8ddbc06fe236ece712f83e53ae491a2e725"
+    },
+    {
+      "file": "dist/typeface-inventory.js",
+      "sha256": "2026158b8ec502bfa3edd88f4f8eab28974c66630256f56deac34100a6e5fb5c"
+    },
+    {
+      "file": "dist/vendor-compat.js",
+      "sha256": "1ec89159eeb55511215924740c37cbfb608451cfa4fc795e1badc07857bd2433"
+    },
+    {
+      "file": "dist/watermark-provenance.js",
+      "sha256": "80a06a4f815d227b7946126d43b80a63f966e404369486caea66c3fdcaecf33e"
+    },
+    {
+      "file": "vendor/jszip/index-min.js",
+      "sha256": "b97440a20023acacd7476cfeb120275d60dc864ab1e120714f39441f91c61c9a"
+    },
+    {
+      "file": "vendor/jszip/LICENSE.md",
+      "sha256": "566c953c6090b1218ca6217dd7359d45dde46581968586dc607d59a78af6a9c4"
+    },
+    {
+      "file": "vendor/jszip/UPSTREAM.json",
+      "sha256": "4408fd6f63c4cad1741a68af68b564ef028a5673fe0f9300c0379594806de5d0"
+    },
+    {
+      "file": "vendor/pptxgenjs/LICENSE",
+      "sha256": "09b419524813383278d9353e387b75abec06c184336e5c48974a377804b0239a"
+    },
+    {
+      "file": "vendor/pptxgenjs/package.json",
+      "sha256": "681fa80ad8fc932c3d00e6555ed81561a45f91417ef83d0a67fd3497255fd43a"
+    },
+    {
+      "file": "vendor/pptxgenjs/pptxgen.es.js",
+      "sha256": "71f89c1bea86cee3c89f9ec948da99ef1f7dacf38fab33a21b6857ca6fb20dd1"
+    },
+    {
+      "file": "vendor/pptxgenjs/UPSTREAM.json",
+      "sha256": "b6a153f94d375617a430a05afb94e3dc91a9f896eb53da698fb825f601980768"
+    }
+  ],
+  "dependencies": {
+    "lockSha256": "f0c2f94901742a237fd63a82b57424bf8a58acb42f307b9d0a642c32379bb418",
+    "packages": [
+      {
+        "name": "@openpresentation/opf",
+        "version": "0.20.3",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.20.3.tgz",
+        "integrity": "sha512-Zr9LovRjM+kCQYzWeGuijz53BlCtzPavFO1xm4oApF1bPpF+5/dBSx9GrNaVo6EIYtK1KNWE3S58CLTG3AV2qw==",
+        "payloadSha256": "4bc5b1e9c2928d1222e839cbfe2d6d6fad74b98c595b05355da6744d0c623def"
+      },
+      {
+        "name": "@openpresentation/opf-render",
+        "version": "0.20.2",
+        "tarball": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.20.2.tgz",
+        "integrity": "sha512-iQwliZCZbVp3fr9aLYnE8njz7lZAPSH8Q48OPhp2mevz4xLRZN6eGzJm+vVR3Dy8GYHEog9BJHSVrMnAEGP+NQ==",
+        "payloadSha256": "2ad81e148d59d9b28bd631bba171297ab3d6961641b2a422cb7ed4413992fd23"
+      },
+      {
+        "name": "@openpresentation/gallery",
+        "version": "3.0.0",
+        "tarball": "https://registry.npmjs.org/@openpresentation/gallery/-/gallery-3.0.0.tgz",
+        "integrity": "sha512-fRrKBDZ7Wofod//KxVvqCYvkhVdXR8rI+2jh1jc8uxBVfAhHjYaCaOc1DX8TCVpfLQlbeN4EXnvBfx0LO28HkQ==",
+        "payloadSha256": "d091f4e0ff13344b5843e5db9780a40928f595547473dc0b1eebcc14b48a7d45"
+      }
+    ]
+  },
+  "inputs": [
+    {
+      "file": "native-A.pptx",
+      "bytes": 110634,
+      "sha256": "ee772959fc02b118beac5643b89ae8c61215a674a424d0901e718b067d881d44"
+    },
+    {
+      "file": "native-B.pptx",
+      "bytes": 110585,
+      "sha256": "b92df5efc5290e919f750f092a78e330037ffcca788f849ec5d3ef4435c17be8"
+    }
+  ],
+  "beforeImport": {
+    "file": "integrated-before-imports.json",
+    "bytes": 96151,
+    "sha256": "22ffa5cf98391d1e84b7ca35042f786fd13e44e9d39644b945cf5966b3d82443",
+    "scope": "Complete current A/B documents and ordered diagnostics from the same final runtime with only classifier output disabled; only asserted literal moves/footer addition produce the final importer result"
+  },
+  "historicalControl": {
+    "manifest": "manifest.json",
+    "beforeImport": {
+      "runtimeRevision": "7f300b42166c55ee14f8f9432e7340ded26f5ee4",
+      "file": "before-imports.json",
+      "bytes": 97177,
+      "sha256": "76127db5d1e3de00d83d0b7fb9945dbeaba63f3753624154f11b7174035ca45c",
+      "scope": "Exact clean-main current archive imports and all diagnostics; regression only, never importer input."
+    }
+  },
+  "expectedK11Diagnostic": {
+    "code": "chart-option-adapted",
+    "option": "series.0.line.color",
+    "message": "Line series 'Demand' has explicit native solid paint that is not retained as per-series formatting in OPF; imported chart colors follow its design and semantic highlight.",
+    "path": "slides.10.charts.0.series.0.line.color"
+  }
+}

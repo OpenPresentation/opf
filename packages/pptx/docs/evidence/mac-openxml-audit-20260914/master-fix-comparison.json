@@ -1,0 +1,88 @@
+[
+  {
+    "file": "disabled-furniture.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "empty-furniture.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-estimated-1280-16-inherited.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-estimated-1280-16-local.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-estimated-1280-32-inherited.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-estimated-1280-32-local.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-estimated-720-16-inherited.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-estimated-720-16-local.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-estimated-720-32-inherited.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-estimated-720-32-local.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-measured-1280-16-inherited.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-measured-1280-16-local.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-measured-1280-32-inherited.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-measured-1280-32-local.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-measured-720-16-inherited.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-measured-720-16-local.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-measured-720-32-inherited.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "furniture-measured-720-32-local.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "image-control.pptx",
+    "changedParts": []
+  },
+  {
+    "file": "notes-control.pptx",
+    "changedParts": [
+      "[Content_Types].xml"
+    ]
+  },
+  {
+    "file": "plain-control.pptx",
+    "changedParts": []
+  }
+]

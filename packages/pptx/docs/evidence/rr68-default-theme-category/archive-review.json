@@ -1,0 +1,508 @@
+{
+  "at": "2026-10-15T04:18:21.311Z",
+  "publishedPptx": {
+    "version": "0.20.1",
+    "gitHead": "9690abd12af8d7a4d6f29a28709517f0b6569301"
+  },
+  "candidate": {
+    "base": "373715ad62bd679ad39ba5b8783ec8f11df50065",
+    "sourceIndexSha256": "a3c2e589099e47f589344fc38739eb29433463fb12e6375a379ea5eab9df4c53",
+    "notPublished": true
+  },
+  "cases": [
+    {
+      "name": "treemap-category",
+      "oldSha256": "c4e119fd35338b95901e382ec3ec04a70393540fd15caaec5d2f16dfde960944",
+      "oldBytes": 81359,
+      "currentSha256": "ae8fe51d4d66b62a99d93bbb6023eb6f6c6f35cc4d4f6e3fefae2ea741b7e2a1",
+      "currentBytes": 81368,
+      "parts": 114,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'treemap' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "histogram-single",
+      "oldSha256": "b5b45ac2aa0b6195397716fb62c6402cdfc3d5a2627c5b4e5c7da6689a950fc8",
+      "oldBytes": 81375,
+      "currentSha256": "284f1dfc71d69a4a329f31a7a2e222304902ce2bec3330fb162940c42495a08f",
+      "currentBytes": 81384,
+      "parts": 114,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The histogram's single data column 'Sample' (6 values) was binned into 4 equal-width bins and exported as a column chart of the counts; PowerPoint's own histogram chart is not exported, and the binned counts do not restore the raw values on re-import.",
+          "adaptation": "histogram-binned"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "histogram-category",
+      "oldSha256": "22f2785e598c6850f9730be36c3d5ab622442860cb39864babb6607752e1b392",
+      "oldBytes": 81360,
+      "currentSha256": "5aac69565cc2e153e5646da34354e048182881e55b85d20ea97971eebee81a2d",
+      "currentBytes": 81369,
+      "parts": 114,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'histogram' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "pareto-multi",
+      "oldSha256": "9f3f8dfcd37d6451a5fec95bb9acab85e6ad434b353e598a184b70b045c7c3ab",
+      "oldBytes": 81533,
+      "currentSha256": "81f7e6aa6fa27ff830de689e8cef34a6f55eab3305e06c629a693230da236975",
+      "currentBytes": 81542,
+      "parts": 114,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "box-multi",
+      "oldSha256": "d85bdfc4dfb590658e7e713b4b1cd62bd91ca941e5fa8d2f084c944707256f11",
+      "oldBytes": 81532,
+      "currentSha256": "52a16a6121f8f0a1ff94c9b3bd37f1690785e6c1067de5713f9fa7442283ba22",
+      "currentBytes": 81541,
+      "parts": 114,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'box-and-whisker' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "waterfall-single",
+      "oldSha256": "c06d10040d366d96db7ffa898a21414c84dee2a489dd4c929213c8e7560dffd0",
+      "oldBytes": 81801,
+      "currentSha256": "a03b42e3127a5fc00986126755a3f78561117afbae3490273e6db462a912033b",
+      "currentBytes": 81810,
+      "parts": 115,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'waterfall' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The chart's single data column 'Sample' has no category column, so its 6 values are plotted against their row numbers.",
+          "adaptation": "row-numbers"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "funnel-category",
+      "oldSha256": "58f8167c934e31338c66ae0daeb75c279f7578eefad9ad0879e6f6320ea16ee6",
+      "oldBytes": 81359,
+      "currentSha256": "96c22d8af926d1aaf791f1d330cef86f98e334562d1dd5f921e34ee63353be39",
+      "currentBytes": 81368,
+      "parts": 114,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "a9ad2be8f50a0502eb9bbd9a773b77a40233e406eb5a47bc465384802eac4dcc",
+          "afterSha256": "64cd5e24c2d0f9fb4c56a42859fc11a19fe3853103aac74d9f4eb49ab2df9471",
+          "beforeBytes": 1357,
+          "afterBytes": 1357,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'funnel' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "world-category",
+      "oldSha256": "d3de3c6c4c6d30fc7be94158afb91dbd5e7dda0ec034a105296af9e8e8e61e05",
+      "oldBytes": 80178,
+      "currentSha256": "14cc0210e542eb8412122ccfe8b4fb3e856819ecfdd43da8fb9511f006eb604b",
+      "currentBytes": 80190,
+      "parts": 112,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "ee2da9866ebdaf3e5b2bb86baf5abdba83132b4cf2c1fc572e1f720cb3e45b83",
+          "afterSha256": "d74965e076c212f07fee30679fd4607d26ac9a6171a541fceb9a3ddf546766e8",
+          "beforeBytes": 1352,
+          "afterBytes": 1352,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "f1d905e5616b5c8b0ea42dcc39ca45e932ef9a802595f1f76f554bbcd9bd8ff4",
+          "afterSha256": "db87ff7c4957aada9be25bd8041b50deb5820c20a003935fcd388702b02830a6",
+          "beforeBytes": 8293,
+          "afterBytes": 8293,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "f1d905e5616b5c8b0ea42dcc39ca45e932ef9a802595f1f76f554bbcd9bd8ff4",
+          "afterSha256": "db87ff7c4957aada9be25bd8041b50deb5820c20a003935fcd388702b02830a6",
+          "beforeBytes": 8293,
+          "afterBytes": 8293,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "all-seven",
+      "oldSha256": "4906a9d2be4bff9cc89e6314f0ecb45a139ecd58d181a2c3940a2fb214b0c045",
+      "oldBytes": 144325,
+      "currentSha256": "6b5703e687506ae2966df2e9e71de211b225b5fd3ff170dd0cee46e5f8052aac",
+      "currentBytes": 144333,
+      "parts": 168,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "fcbc01ec6cc7f236fb936173285504c9a4e2ff89d48d0de04ba6f984c50dafca",
+          "afterSha256": "4b90f5d7c7864ca4781ee79cee00bc075e55433dc3723f5b455ac5d1a2d02540",
+          "beforeBytes": 1526,
+          "afterBytes": 1526,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "eb324a9abc00e517592d194d5f379b6754e69ee8a62901417feb08af28219f02",
+          "afterSha256": "0be839b643ec0d97b509396e3238388401071da1794ac0969b329e26db4387c8",
+          "beforeBytes": 8327,
+          "afterBytes": 8327,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.0.chart",
+          "message": "The 'treemap' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.1.chart",
+          "message": "The 'histogram' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.2.chart",
+          "message": "The 'pareto' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.3.chart",
+          "message": "The 'box-and-whisker' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.4.chart",
+          "message": "The 'waterfall' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.5.chart",
+          "message": "The 'funnel' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        },
+        {
+          "code": "chart-data-adapted",
+          "path": "slides.6.chart",
+          "message": "The 'world' chart is a PowerPoint extension (chartex) chart that this exporter does not write; its data is exported as a native clustered column chart instead.",
+          "adaptation": "chartex-fallback"
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "furniture-layouts",
+      "oldSha256": "4b921189bbc921b3226da4fb4d6f2ff1abc8861ec22c625f9fb903d2c8225f71",
+      "oldBytes": 95933,
+      "currentSha256": "c437652b119b64fe97eff55ce715a7fe55725d839df3596fe141982ac7d3b893",
+      "currentBytes": 95942,
+      "parts": 148,
+      "changedParts": [
+        {
+          "part": "docProps/app.xml",
+          "beforeSha256": "7e575c1e75e0de2cf2299a38f7072b90d0de20baeee328c909ff328a8c1efb7b",
+          "afterSha256": "c620d7d5ed84461a256d6505441990eaaddb46601f58c53b7ba288c4a23d8d5c",
+          "beforeBytes": 1381,
+          "afterBytes": 1381,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme1.xml",
+          "beforeSha256": "a35906506402be1a8a37b744314f821c763277da7d72d7e78c91aba6dc002eec",
+          "afterSha256": "f381fe5a6a325fae61db27da3d46b5c0901bdd94f4540abcc3bc482238f32bad",
+          "beforeBytes": 8315,
+          "afterBytes": 8315,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        },
+        {
+          "part": "ppt/theme/theme2.xml",
+          "beforeSha256": "a35906506402be1a8a37b744314f821c763277da7d72d7e78c91aba6dc002eec",
+          "afterSha256": "f381fe5a6a325fae61db27da3d46b5c0901bdd94f4540abcc3bc482238f32bad",
+          "beforeBytes": 8315,
+          "afterBytes": 8315,
+          "onlyDefaultThemeDisplayIdentityChanged": true
+        }
+      ],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [],
+      "diagnosticsByteIdentical": true
+    },
+    {
+      "name": "explicit-theme-control",
+      "oldSha256": "d09c96be71eb53f28f39a7fc668a79e234d784adaabf055a65280551ee56c8ea",
+      "oldBytes": 73834,
+      "currentSha256": "d09c96be71eb53f28f39a7fc668a79e234d784adaabf055a65280551ee56c8ea",
+      "currentBytes": 73834,
+      "parts": 109,
+      "changedParts": [],
+      "allOtherPartsByteIdentical": true,
+      "diagnostics": [
+        {
+          "code": "layout-unplaced",
+          "path": "slides.0.text",
+          "message": "No region of the layout takes this block; it is drawn below the layout's grid. Choose another layout, pin it to a region, or paginate."
+        }
+      ],
+      "diagnosticsByteIdentical": true
+    }
+  ],
+  "nativeUIVerified": false
+}

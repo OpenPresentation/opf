@@ -1,0 +1,194 @@
+{
+  "checkedAt": "2026-09-10T06:59:34.946Z",
+  "candidate": "@openpresentation/opf-pptx@0.7.0",
+  "published": false,
+  "predecessors": {
+    "core": "0.9.0",
+    "renderer": "0.7.0"
+  },
+  "reports": [
+    {
+      "node": "v20.20.2",
+      "packageIntegrity": "sha512-GyOVAheZsWkr0zDjEnqQQljnIjzKXH2C3no/wJhA4D5VSlXqz4HyyeG+3cBjUYFC94MW0uqYFZsW3TbK9PQmdw==",
+      "shippedFileMatches": 20,
+      "knownVulnerabilities": 0,
+      "browser": {
+        "browser": "152.0.4191.66",
+        "suites": [
+          {
+            "suite": "webp-fallback",
+            "passed": true,
+            "cases": 13,
+            "checks": "PPTX PNG embedding, source pixels, alpha, EXIF, first animation frame, fit/crop, resolver once, DOM canvas"
+          },
+          {
+            "suite": "native-rich-table-import",
+            "passed": true,
+            "cases": 20,
+            "checks": "Native XML import, style/default preservation, links, blank lines, repeated conversion and SVG preview"
+          },
+          {
+            "suite": "native-table-styles",
+            "passed": true,
+            "checks": 11
+          },
+          {
+            "suite": "native-styled-table-import",
+            "passed": true,
+            "checks": 12
+          },
+          {
+            "suite": "native-content-layout",
+            "passed": true,
+            "checks": 29,
+            "measurement": "browser-default; loaded fonts and native rasters verified separately"
+          }
+        ]
+      },
+      "logs": {
+        "typecheck": "ec302f8ea3ae82640ed240b48f724ed32ff699d4f079c9b9d560eceb151588e0",
+        "validate": "63e5dfcce0b52b72074f29474561e33861f6fe73cba6d22f4227109096a2ec84",
+        "test": "c5cb1ac925dd39c06b1f4453584c7b98c294ce9a420075bf2ff06f400be1ed5f",
+        "test-code": "e53cb2d3e7ddc0bcc13c88a4f99d90c332e9f40f4126233fd7f932961aaf4933",
+        "test-packed": "135987ca9c520eb53cfb192b9815d2446b8a41230af1606642c89a81d688e657",
+        "test-browser": "ba8ad60821c79d111f8ad2beb9f1289f342acb8baebd84fa546cd2b97e2b9e08"
+      },
+      "evidenceFiles": {
+        "code-node20-generation.json": {
+          "sha256": "bf236908b25f75f379155c2259e22a271836a41b5c5858de0087065094f1680a",
+          "sourceSha256": "bf236908b25f75f379155c2259e22a271836a41b5c5858de0087065094f1680a"
+        },
+        "code-node20-native.json": {
+          "sha256": "d44c19e59020437e368574907078a7e0fabd0b7ba15fcbd9eb97b30c0cfc8ed0",
+          "sourceSha256": "122665d440b4d8290a58a4c42e7ae370a1211a434254ed2e78def474b84a9d83"
+        },
+        "code-node20-comparison.json": {
+          "sha256": "d0a7cea385ffaae02eb0deb92ae37dbe4149c035ede23147ed56594455e1f458",
+          "sourceSha256": "d0a7cea385ffaae02eb0deb92ae37dbe4149c035ede23147ed56594455e1f458"
+        },
+        "quote-node20-comparison.json": {
+          "sha256": "357ad555f15b783fe7552f1aeb91ea0951efc7b19cdc865331284045479e8159",
+          "sourceSha256": "357ad555f15b783fe7552f1aeb91ea0951efc7b19cdc865331284045479e8159"
+        }
+      },
+      "native": {
+        "quoteCases": 12,
+        "codeCases": 8,
+        "exactCodeSlideImports": 24
+      }
+    },
+    {
+      "node": "v24.20.0",
+      "packageIntegrity": "sha512-GyOVAheZsWkr0zDjEnqQQljnIjzKXH2C3no/wJhA4D5VSlXqz4HyyeG+3cBjUYFC94MW0uqYFZsW3TbK9PQmdw==",
+      "shippedFileMatches": 20,
+      "knownVulnerabilities": 0,
+      "browser": {
+        "browser": "152.0.4191.66",
+        "suites": [
+          {
+            "suite": "webp-fallback",
+            "passed": true,
+            "cases": 13,
+            "checks": "PPTX PNG embedding, source pixels, alpha, EXIF, first animation frame, fit/crop, resolver once, DOM canvas"
+          },
+          {
+            "suite": "native-rich-table-import",
+            "passed": true,
+            "cases": 20,
+            "checks": "Native XML import, style/default preservation, links, blank lines, repeated conversion and SVG preview"
+          },
+          {
+            "suite": "native-table-styles",
+            "passed": true,
+            "checks": 11
+          },
+          {
+            "suite": "native-styled-table-import",
+            "passed": true,
+            "checks": 12
+          },
+          {
+            "suite": "native-content-layout",
+            "passed": true,
+            "checks": 29,
+            "measurement": "browser-default; loaded fonts and native rasters verified separately"
+          }
+        ]
+      },
+      "logs": {
+        "typecheck": "ec302f8ea3ae82640ed240b48f724ed32ff699d4f079c9b9d560eceb151588e0",
+        "validate": "63e5dfcce0b52b72074f29474561e33861f6fe73cba6d22f4227109096a2ec84",
+        "test": "c5cb1ac925dd39c06b1f4453584c7b98c294ce9a420075bf2ff06f400be1ed5f",
+        "test-code": "e53cb2d3e7ddc0bcc13c88a4f99d90c332e9f40f4126233fd7f932961aaf4933",
+        "test-packed": "135987ca9c520eb53cfb192b9815d2446b8a41230af1606642c89a81d688e657",
+        "test-browser": "ba8ad60821c79d111f8ad2beb9f1289f342acb8baebd84fa546cd2b97e2b9e08"
+      },
+      "evidenceFiles": {
+        "code-node24-generation.json": {
+          "sha256": "b895d0a9a061e82f36830d1a9dbb6650dfd2052430cc6b6b8718796f7f5a1b7b",
+          "sourceSha256": "b895d0a9a061e82f36830d1a9dbb6650dfd2052430cc6b6b8718796f7f5a1b7b"
+        },
+        "code-node24-native.json": {
+          "sha256": "843796159639ffe0bb4ddd6e2162eb99514160dc93edbbc7c2168b6b0197f7fe",
+          "sourceSha256": "7cfd730a5ec124607531d97376eba1db8fb5d5b0fa10a620c80e2ebd5ce315be"
+        },
+        "code-node24-comparison.json": {
+          "sha256": "5c0dc1a8e426b92965c3523df825ba31c11277e221cc7eb63ab8d16fe0d58605",
+          "sourceSha256": "5c0dc1a8e426b92965c3523df825ba31c11277e221cc7eb63ab8d16fe0d58605"
+        },
+        "quote-node24-comparison.json": {
+          "sha256": "55eb6c999b9613827d34fabf00dd114deff2ba6512fadc517bf880e21eabb962",
+          "sourceSha256": "55eb6c999b9613827d34fabf00dd114deff2ba6512fadc517bf880e21eabb962"
+        }
+      },
+      "native": {
+        "quoteCases": 12,
+        "codeCases": 8,
+        "exactCodeSlideImports": 24
+      }
+    }
+  ],
+  "tabPositions": {
+    "targetsPerRuntime": 4,
+    "maxErrorPoints": 0.0070304870606,
+    "gatePoints": 0.02
+  },
+  "nativeEnvironmentAfterChecks": {
+    "windows": {
+      "revision": 9445,
+      "displayVersion": "25H2",
+      "build": "26200",
+      "product": "Windows 10 Home"
+    },
+    "culture": "en-US",
+    "uiCulture": "en-US",
+    "powerPointVersion": "16.0",
+    "executable": {
+      "fileVersion": "16.0.20326.20132",
+      "sha256": "90fa931172c507b763ba92a82b19d5bc70816e008c5bb87577e1838e8a92e9f9",
+      "productVersion": "16.0.20326.20132"
+    }
+  },
+  "visualInspection": {
+    "files": [
+      {
+        "file": "code-1280-svg-3.png",
+        "sha256": "3c1e992f719fa526e0677e7322d5f6422eac75398ebd1a670a97fde5503ae731"
+      },
+      {
+        "file": "code-1280-native-3.png",
+        "sha256": "e2adc912a3fe8e21bfacdbab69e80cef58b34d2892223838945bbd334d89febd"
+      },
+      {
+        "file": "code-540-svg-4.png",
+        "sha256": "ae1d958958819e0b9a09c8ed0aa41ae87b78f7d1650804c23d755e2a787e868a"
+      },
+      {
+        "file": "code-540-native-4.png",
+        "sha256": "d457dd18e9bc17efc8fb3a60ca85972dbf890998bec5adfd194aeee341776b46"
+      }
+    ],
+    "observations": "Wide source/metadata/tab and portrait long-metadata examples remain contained and preserve line/source structure. Native baselines and glyph raster appearance differ from the SVG raster. These samples establish no pixel-equivalence claim."
+  },
+  "scope": "Complete source, packed and actual browser release checks on both runtimes. Candidate converter files match installed archives; upstream core/renderer are actual registry packages. Native fixtures use locally installed Calibri/Courier New without copying or embedding proprietary font binaries. Code native reports bind executable/Windows/font/runtime bytes. Prepared registry/publication verifiers and final CI/review remain required before this converter can be published."
+}

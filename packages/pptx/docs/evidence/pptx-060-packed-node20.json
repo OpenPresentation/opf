@@ -1,0 +1,42 @@
+{
+  "node": "v20.20.2",
+  "name": "@openpresentation/opf-pptx",
+  "version": "0.6.0",
+  "integrity": "sha512-/hZLV2WS1clDQTD50jLt2V1kM0g/wONKhUPOAD0pTfJTe4ufXFgo/wuVST5CvE7IVhvp1SG09Yz2iICVfqfEXQ==",
+  "files": {
+    "DEPENDENCY-NOTES.md": "22d54e1e337d4225f71598be6c048882e4a2030b2c9703fd30b686ab5a6fb162",
+    "LICENSE": "e8c5cecaad448c0cab00af38f7ed8b6bb647c77ba79f3c50d20a9ea92e256cd3",
+    "README.md": "78f0ffc27728db1abf617c2ccec820d0e5406db66503a4250b5f0f41430a1228",
+    "dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+    "dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+    "dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+    "dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+    "dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+    "dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+    "dist/index.d.ts": "2c86215568e72895ed9817603e9ec664493769777063ea63876c4beeddec4bbf",
+    "dist/index.js": "cca8649a23c79cd499a97872e157158fb24a66bc6e3e89c46882de680976596c",
+    "dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+    "dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+    "dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+    "package.json": "6c8b8e20cb3c73d1e3cf8104ed55939dd7876982ac655969acfbeee2b186caea",
+    "vendor/pptxgenjs/LICENSE": "7a2bfe96150786ed1908b8e63f98ebab88875c1e79e28faff6649e0f11f77e52",
+    "vendor/pptxgenjs/package.json": "15ec5ec45f1001afef85aeacbc2098a05140f5a3e92f1502792c9575694dabc4",
+    "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+    "vendor/pptxgenjs/UPSTREAM.json": "319b973f4a71bb31cb355ad37e428848c26db57ab4c5e3e0c2f48939242c9270"
+  },
+  "dependencies": {
+    "@openpresentation/opf": {
+      "version": "0.8.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.8.0.tgz",
+      "integrity": "sha512-1ubeINQsuD8pFNr542eFYPfzkhcECAcj/mM2pWNN+keFnVoWxePCsFTUtjuSSsvCtpm7QkgxBYRJYtEUmrlkkg=="
+    },
+    "@openpresentation/opf-render": {
+      "version": "0.6.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.6.0.tgz",
+      "integrity": "sha512-rYHS0qetT8FpDqkB8E9KMtwrh6NiB6UzxAeqaCwnMwrIDIEvejKC++Hw2Us4512ZIHRHdwuG42aq6QJodBJOPA=="
+    }
+  },
+  "knownVulnerabilities": 0,
+  "signatureVerification": "audited 61 packages in 0s\n\n61 packages have verified registry signatures\n\n12 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+  "boundary": "Fresh installed candidate, every shipped file byte-matched, actual registry predecessors, optional-renderer absence and shared accepted geometry tested. Native evidence, when present, covers twelve controlled Calibri cases and reports raster differences without an equivalence threshold."
+}

@@ -1,0 +1,53 @@
+{
+  "node": "v24.20.0",
+  "name": "@openpresentation/opf-pptx",
+  "version": "0.7.0",
+  "integrity": "sha512-GyOVAheZsWkr0zDjEnqQQljnIjzKXH2C3no/wJhA4D5VSlXqz4HyyeG+3cBjUYFC94MW0uqYFZsW3TbK9PQmdw==",
+  "files": {
+    "DEPENDENCY-NOTES.md": "22d54e1e337d4225f71598be6c048882e4a2030b2c9703fd30b686ab5a6fb162",
+    "LICENSE": "e8c5cecaad448c0cab00af38f7ed8b6bb647c77ba79f3c50d20a9ea92e256cd3",
+    "README.md": "81360abb535d2bd23d562f83063759feb4d558463cb00f98628a4de5ed429450",
+    "dist/background-import.js": "684f9b38cff01e596774b8120c979c3dbbfada273890f785f7a4e3db88cdcb22",
+    "dist/background.js": "081fb685677ca656341cdce89275331749174ffecd60e71451f26b9f896cca1c",
+    "dist/code-provenance.js": "773b66e21781694a8b140144b35bf8a8e4844cdb4f7e2fb04cefd93d414e7054",
+    "dist/image-fallback-browser.js": "3c7f81d5677dd9a78a0a13fe5a94bbb14cef465031caaeda2c87e8451e9ff491",
+    "dist/image-fallback-node.js": "5ee323d3320420664b5d2c1714e246b04dd0806f459164f9696668552df87565",
+    "dist/image-geometry.js": "e083973a98c2bdf7d7dfce9ef1f6bef252f09ce0d69d987105ee0b73cc13d62e",
+    "dist/image-import.js": "cffccecc223e27d62b6e1aba0cdbe2c1c9aa94874ef898f76906b22e001bbd41",
+    "dist/index.d.ts": "f7791fbbc717446c9fb1d3d54757bd8443bf05cdb048e38ea907509172d14cdf",
+    "dist/index.js": "e75c473ebb78d1240209bdeec245a020a2f4c269febda4ec7a3067173eb79708",
+    "dist/table-border-import.js": "16678e0d93e63474d39daac268016a59517cc36d85dbd8751131f143db01ace5",
+    "dist/table-cell-import.js": "fa17507763a2240564401d7977f4f39bc180e3e6da9d4aa9c36202908e9126d1",
+    "dist/table-import.js": "9ae40bb38dd34c9fc0ae4a3f5a257068ae92bb651ed5d96641c2629ef7106cf1",
+    "package.json": "a3da34f5e31a1b9450b400e995f2b9eea4d6df6ff51402ce271cb5e96935b275",
+    "vendor/pptxgenjs/LICENSE": "7a2bfe96150786ed1908b8e63f98ebab88875c1e79e28faff6649e0f11f77e52",
+    "vendor/pptxgenjs/package.json": "15ec5ec45f1001afef85aeacbc2098a05140f5a3e92f1502792c9575694dabc4",
+    "vendor/pptxgenjs/pptxgen.es.js": "05844c5625e2cda3b449eb967c2246dd57ca57341886a7c28eeebca263b29bd4",
+    "vendor/pptxgenjs/UPSTREAM.json": "319b973f4a71bb31cb355ad37e428848c26db57ab4c5e3e0c2f48939242c9270"
+  },
+  "dependencies": {
+    "@openpresentation/opf": {
+      "version": "0.9.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf/-/opf-0.9.0.tgz",
+      "integrity": "sha512-AnduMR/bPFKJv2fYT+cYEINLkiZmN0xuVBETcNzkU6IC7GdgTyb+x5fCiODHcowfrLIJJEjZ8jZzZJGBrxnX5A=="
+    },
+    "@openpresentation/opf-render": {
+      "version": "0.7.0",
+      "resolved": "https://registry.npmjs.org/@openpresentation/opf-render/-/opf-render-0.7.0.tgz",
+      "integrity": "sha512-eHBMbnmK5bELUmUwJ/qWRtJBIZFkUJsbUvkjzSc6yhNA2JQ2Em/My9+Of4c79y0tXrFCQaZ5xvOkOdtyGUu5Gw=="
+    }
+  },
+  "knownVulnerabilities": 0,
+  "signatureVerification": "audited 61 packages in 0s\n\n61 packages have verified registry signatures\n\n12 packages have verified attestations\n(use --json --include-attestations to view attestation details)",
+  "nativeEvidence": {
+    "report": "artifacts/native-quote-packed-node24/comparison.json",
+    "sha256": "55eb6c999b9613827d34fabf00dd114deff2ba6512fadc517bf880e21eabb962"
+  },
+  "nativeCodeEvidence": {
+    "report": "artifacts/native-code-packed-node24/comparison.json",
+    "sha256": "5c0dc1a8e426b92965c3523df825ba31c11277e221cc7eb63ab8d16fe0d58605",
+    "sourceHarnessSha256": "ddd3db9caa4b29c31ac0d745a82bf607492eb76da254752d765e7b3959a48880",
+    "installedHarnessSha256": "ae0b09e9a6726da7afde2b4c7c16fdcc0b23d77adf4b234a05002f6173bd044d"
+  },
+  "boundary": "Fresh installed candidate, every shipped file byte-matched, actual registry predecessors, optional-renderer absence, shared accepted quote/code geometry and guarded code provenance tested. Native evidence, when present, covers twelve controlled Calibri quote and eight Courier New code cases, including source/metadata edits and save/reopen; raster differences are observations without an equivalence threshold."
+}

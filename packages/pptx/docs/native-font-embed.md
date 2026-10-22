@@ -1,0 +1,154 @@
+# Native font embed harness
+
+This bounded Windows helper is separate from [Gate E native font edit](./native-font-edit.md). It accepts only the four canonical Carlito face hashes, the canonical OFL license hash, registration flags equal to the JSON integer `0`, and the fixture `source.pptx`. It can request font embedding on one owned presentation with PowerPoint [`Presentation.SaveAs`](https://learn.microsoft.com/en-us/office/vba/api/powerpoint.presentation.saveas) file format `24` and third argument `-1` (`msoTrue`).
+
+Gate E continues to call `SaveAs(..., 24, 0)` and does not prove embedding. This helper enumerates the exact edited presentation's bounded `Presentation.Fonts` collection before `SaveAs`. Every reported name must be one of `Carlito`, `Carlito Bold`, `Carlito Italic`, or `Carlito Bold Italic`; base `Carlito` must be present; and every entry must report `Embeddable = -1`. An unexpected name such as the previously observed Aptos fails closed. The helper records the gate, marks the owned source snapshot as already saved, closes that exact owned object without writing its edits, and never calls `SaveAs` for that attempt.
+
+COM `Font.Name`, `Embedded`, and `Embeddable` do not prove which physical TTF drew each glyph. A prior allowlist failure cannot be bypassed by the embed request. The prior Carlito+Aptos observation remains a failure; this worker must reject any unexpected name before `SaveAs`, record exact-owned cleanup, and never retry the attempt.
+
+## Parent-owned lifecycle
+
+The parent matches Gate E safety: indexed COM stages, a 45-second owned worker with a 60-second parameter maximum (`native-process.ps1`), timeout kills only that worker, never Office or descendants, never `Application.Quit`, never closes a presentation this run did not open, and never changes global PowerPoint security. It uses a fresh output directory and never retries an attempt. All copied inputs are hash-checked before any temporary font registration. Carlito session registration uses `native-text-fonts.ps1` with flags `0` in the surviving parent only. A COM failure latches all later Office calls and leaves cleanup unconfirmed; the semantic font-gate failure path may perform only the explicit discard and exact-owned close described above.
+
+## Generate fixture
+
+The plain Gate E fixture uses the default `aptos` font scheme (theme major/minor and slide runs), so this gate is expected to reject it. Use the Gate E generator in Carlito-only mode instead:
+
+```powershell
+node test/native-font-edit-fixture.mjs artifacts/font-embed-fixture-new PATH_TO_REGISTRY_CONSUMER --carlito-only --harness-master-bullet-font
+```
+
+`--carlito-only` changes only the public OPF input: `design.fontScheme = {major: "Carlito", minor: "Carlito"}`. The published exporter then writes Carlito to the theme `majorFont`/`minorFont` latin slots and to every explicit slide run. Masters, layouts, notes and `endParaRPr` use theme references (`+mj-*`/`+mn-*`) or empty `ea`/`cs` slots. Shape names and edit spans are unchanged, so the harness constants still apply. The generator inventories every `typeface=` attribute in `generation.json` (`carlitoOnly.typefaceInventory`) and fails if any latin, ea, cs or sym slot names something other than Carlito, an empty value or a theme reference.
+
+Published exporters up to 0.9.1 leave one exporter-owned residual that OPF input cannot remove: the vendored PptxGenJS slide master sets `<a:buFont typeface="Arial">` on all nine `bodyStyle` levels, and PowerPoint may report that bullet font in `Presentation.Fonts`. `--harness-master-bullet-font` is a harness-owned transform. It is not exporter output. It replaces exactly those nine elements with Carlito, keeps the untouched exporter bytes as `exporter-output.pptx`, and records the transform plus input and output hashes under `carlitoOnly.harnessTransforms`. The theme's per-script `a:font` supplements and the static `docProps/app.xml` "Fonts Used" list (Arial, Calibri) remain as recorded residuals. Static inspection cannot prove what PowerPoint will report.
+
+The unreleased exporter source fixes the bullet residual during package normalization: the nine master `bodyStyle` bullets become `<a:buFont typeface="+mn-lt"/>`, the same theme minor-font reference that each level's text already uses. The vendored PptxGenJS bytes are unchanged. With that exporter, the Carlito-only fixture passes the strict typeface check without the transform, and `--harness-master-bullet-font` fails closed (`found 0`) because there is nothing left to replace. The generator resolves the published registry consumer, so the flag stays necessary until a release with the fix is installed there. Only then should the transform become an assertion that no Arial master bullet is present. Whether PowerPoint's `Presentation.Fonts` then omits Arial still needs a native run. The unreleased exporter also regenerates `docProps/app.xml` "Fonts Used" from the fonts the package uses (FF-08), so the Carlito-only fixture lists only Carlito there; published 0.9.1 still writes the static Arial/Calibri list.
+
+## Supervised embed attempt (Windows)
+
+Do not use this command to override a failed native font allowlist. A plain Gate E (Aptos) fixture predicts a recorded semantic failure with no saved copy. Preserve any failed attempt for review rather than retrying it.
+
+```powershell
+& "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-font-embed.ps1 `
+  -OutputDirectory artifacts/windows-native-font-embed-01 `
+  -InputPresentation artifacts/font-embed-fixture-new/source.pptx `
+  -FontFixtureDirectory artifacts/font-embed-fixture-new
+```
+
+For an attempt that passed the native gate, completed the owned close and parent cleanup, and produced `native-font-embed.pptx`, audit the evidence directory without Office. Select a fresh attempt directory: the audit refuses to overwrite an existing `embed-opc-audit.json`.
+
+```powershell
+node test/native-font-embed-audit.mjs artifacts/windows-native-font-embed-01
+```
+
+For an attempt whose native gate blocked `SaveAs`, run the blocked-evidence mode instead. It writes `blocked-diagnostic-audit.json` with exclusive create, so it too refuses to overwrite an existing file. See [Blocked-evidence audit](#blocked-evidence-audit).
+
+```powershell
+node test/native-font-embed-audit.mjs artifacts/windows-native-font-embed-01 --blocked
+```
+
+## Diagnostic observations (not gates)
+
+The first supervised attempt (September 22, 2026) opened a Carlito-only fixture with no `Aptos` anywhere in the package, applied the Gate E edits, and then saw `Presentation.Fonts` report `Carlito` and `Aptos`. It enumerated the fonts only after all the edits, so it cannot tell whether Aptos was already listed for the unedited file or appeared because of an edit. Two hypotheses are open. In the first, text inserted by `.Text` takes Office's default East Asian or complex-script font, because the theme leaves the `ea` and `cs` slots empty. In the second, PowerPoint lists an application default whatever the edits do. The worker now records bounded, read-only observations that separate these cases. It does not change the edits, their order or their values:
+
+| When | Report field | Stage prefix |
+| --- | --- | --- |
+| Right after open, before any edit | `preEditFontsObservation` (`count`, `entries[]` of `index`/`name`/`embedded`/`embeddable`) | `pre-edit.presentation.fonts.*` |
+| Before any edit | `fontSlotObservations.preEdit` | `pre-edit.title.*`, `pre-edit.body.*`, `pre-edit.body.run-S-L.*` |
+| Right after each range's `.Text` set, before its first `Font2` property set | `postTextFontsObservations.title` / `.body` and `fontSlotObservations.postText` (title, then body) | `post-text.title.*`, `post-text.body.*` |
+| After every title `Font2` property set, before the body `.Text` set | `postFormatFontsObservations.title` and `fontSlotObservations.postFormat` (title only) | `post-format.title.*` |
+| After all edits and after the gated `edited.presentation.fonts.*` inventory, before the gate decision | `fontSlotObservations.postEdit` | `post-edit.title.*`, `post-edit.body.*`, `post-edit.body.run-S-L.*` |
+
+- **Fonts inventories** enumerate names only for a count from 1 to 64; any other count is recorded with no entries.
+- **Font slots.** Each slot record reads `TextRange2.Font` `Name`, `NameAscii`, `NameOther`, `NameFarEast` and `NameComplexScript` for the title, the body and the four requested body spans. Only the ranges that the harness edits are read: before the edits they still hold the unedited fixture text, and afterwards they hold the edited text. No other shape or range is read. A value is a string, or JSON `null` if COM returns nothing. Each record also stores `start`, `length` and the container `textLength`.
+- **Unedited spans.** Before the edit, the fixture body text (`Current content`, 15 characters) does not contain every requested span. A span that lies outside the current text is recorded as `observed: false` with `slots: null` and is never read. After the edits, all four spans must be observed.
+- **COM staging.** Every observation is a staged `Invoke-FontEmbedCom` call with its own `begin`/`success` pair. The calls are read-only property gets (`Fonts`, `Count`, `Name`, `Embedded`, `Embeddable`, `TextFrame2.TextRange`, `Length`, `Font` and the five slot names) and object-returning accessor calls (`Fonts.Item(i)` and `TextRange2.Characters(start, length)`). No setters are called. A COM error latches like any other stage.
+- **Blocked attempts.** The worker writes each observation to `report.json` as soon as it is taken, so a blocked attempt keeps all of them.
+
+How to read the result: if Aptos is already in `preEditFontsObservation`, the edits did not introduce it. If Aptos first appears in `postTextFontsObservations.title`, the title `.Text` set did. In that case, `NameFarEast` or `NameComplexScript` in the matching `fontSlotObservations.postText` record shows which slot changed. If it first appears in `postFormatFontsObservations.title`, the title `Font2` property sets did. If it first appears in `postTextFontsObservations.body`, the body `.Text` set did, because the post-format snapshot separates it from the title formatting. If Aptos appears only in the gated post-edit inventory, a body `Font2` property set is implicated.
+
+These observations are diagnostics, not gates. The only input to `nativeFontsGate`, and so to `SaveAs`, is still the post-edit `nativeFontsObservation`, with the unchanged Carlito allowlist and embeddability rule. Aptos in any observation neither passes nor fails an attempt; Aptos in the post-edit inventory still blocks `SaveAs`. The `-PureRegression` AST check requires exactly one worker gate call, `Get-FontEmbedNativeFontsGate $report.nativeFontsObservation`, and the offline source policy checks the same thing.
+
+The offline source policies in `test/native-font-embed-audit.mjs`, `test/native-mixed-edit-audit.mjs` and `test/native-font-inventory-audit.mjs` share one PowerShell lexer (`test/powershell-scan.mjs`). It reads the verifier left to right once and blanks these comments and literals:
+
+- `#` line comments and `<# #>` block comments.
+- Single-quoted strings, with `''` as the escape.
+- Double-quoted strings, with backtick escapes and `""`. `$(...)` subexpressions stay visible as code, and `${name}` braced variables are skipped as names.
+- `@' '@` and `@" "@` here-strings whose terminator starts a line.
+
+Character offsets and line breaks are preserved. An apostrophe in a comment or a quote inside `${...}` therefore can neither hide a following `$app.Quit()` nor invent a string. The audit fails with `source-scan-unsupported` on syntax the lexer does not model: a `#` or `<#` glued to a preceding word, a backtick escape in code (``i`ex``), a lone carriage return, or an unterminated string, comment, here-string or subexpression.
+
+On that code each harness is checked against an allowlist, not a list of known-bad constructs. A bare word, invoked member, static access or type literal that is not on the harness's reviewed lists fails the audit:
+
+| Kind | Rule |
+| --- | --- |
+| Commands and bare words | Cmdlets and helper functions on the list, or functions declared in the file. Some are scoped to one function (`Add-Member` to the pure-regression fakes) or restricted to one exact form (`New-Object -ComObject PowerPoint.Application`). `ForEach-Object` and `Where-Object` must take exactly one script block, so `ForEach-Object Quit` and `% Quit` fail. |
+| Instance members | Invoked members on the list. `.Invoke()`, `.ExpandString()`, `.AddScript()` and `set_*()` are not on it, which closes `$app.Quit.Invoke()` and `PSObject.Methods['Quit'].Invoke()`. |
+| Static members and properties | Exact `Type::Member` pairs on a type literal. Static access on a variable or an expression (`$t::Create`, `([type]'scriptblock')::Create`) always fails. |
+| Types | Casts, parameter constraints, attributes and static-access targets on the list, so `[powershell]` and `[type]` fail. |
+
+The harness's own PowerShell AST check enforces the same lists (`$script:FontEmbedPolicy*`, `$script:MixedEditPolicy*`, `$script:InventoryPolicy*`), and the controls assert that the Node and PowerShell copies are equal.
+
+Both layers also reject the following, with two exact exemptions:
+
+- **Dynamic code:** `Invoke-Expression`, `iex`, `Add-Type`, `Invoke-Command`, `[scriptblock]::Create`, `InvokeScript`, `NewScriptBlock` and any `$ExecutionContext` reference. They also reject aliases such as `Set-Alias` and `New-Alias`, string-named or variable-named member calls, and any `&` or `.` whose target is not a literal command. `$a=. $y`, `. "$y"` and `& "$y"` are included.
+- **First exemption:** the pure regression may re-evaluate its own two extracted helper definitions with those exact `Invoke-Expression` lines inside `Invoke-*PureRegression`.
+- **Second exemption:** a short list of exact function, operator and variable sites. These are the COM wrapper's `& $Operation` and the script-level dot-sourcing of the two hash-checked helper snapshots, `. $processSnapshot` and `. $fontHelperSnapshot`. The inventory pure regression's local `& $decide` and `& $mutate` are also on its list.
+
+Member assignments (`=`, compound assignment, `++` and `--`) may target only a local report root or a documented COM setter; anything else fails with `com-property-assignment`. A local report root may be bound only to a hashtable literal or to a reviewed exact source. It may not be bound through a multiple assignment, a parameter, a `foreach` variable or a variable-binding common parameter such as `-OutVariable`. A root therefore cannot alias a COM object, and anything else fails with `local-root-binding`. The embed worker's COM setters are the edited range's `Text`, the whole-range and run `Font2` `Name`, `Size`, `Bold` and `Italic`, and `Saved` on the discard-without-save path (`EMBED_SOURCE_POLICY.setters`).
+
+Two further rules make an allowed site trustworthy, and both layers enforce them:
+
+- **Pinned variables.** The variables an allowed invocation site or file-system write depends on are pinned (`pinned` and `pinnedBindings`). These are `$Operation`, the helper snapshots, the owned output, snapshot and pure-regression roots, and the stage, progress, report, saved and PNG paths. Every assignment, `foreach` binding, parameter declaration and increment of a pinned variable must be one of its reviewed exact bindings. For example, `$Operation` must be a `[scriptblock]` parameter of the COM wrapper, so `$processSnapshot = Join-Path $env:TEMP 'evil.ps1'` and `$script:stageFile = $PROFILE` fail.
+- **Exact forms.** Each call of `Remove-Item`, `Set-Content`, `Add-Content`, `Copy-Item`, `New-Item`, `Invoke-OpfNativeWorker` and `Invoke-OpfWithTemporaryFonts` must match one reviewed, whitespace-normalized text (`exactForms`). So must `[IO.File]` writes (`exactApis`) and COM `SaveAs` and `Export` calls (`exactMembers`). An arbitrary `-ScriptPath`, path or splatted argument therefore fails.
+
+Both layers also reject the following:
+
+- A function defined more than once.
+- A drive-qualified variable other than `$env:`, such as `${variable:ExecutionContext}`, `$variable:ExecutionContext` or `${function:...}`.
+- Splatting and redirection.
+- A bare-word argument that is not on the reviewed list.
+
+The independent-review probes in `test/powershell-scan-probes.mjs` are permanent negative controls. The three control suites append every probe to each real harness and require the Node audit to add a failure. On Windows they also require the harness's PowerShell AST check, run offline through `test/native-source-policy-probes.ps1`, to reject it.
+
+`Font2` slot names and `Presentation.Fonts` names are what PowerPoint reports through COM. They do not prove which physical font file drew any glyph, and a reported slot name does not show that the font is installed, embedded or used for rendering.
+
+The offline audit requires these fields to be present, finite and well-typed:
+
+- integer counts, with entry counts that match them
+- string or `null` slot values
+- whole-range records with `start: 1` and `length == textLength`, and span labels that match `report.requested.body.runs`
+
+It also requires every observation stage to be paired and to appear only where expected: pre-edit observations before any `edit.*.set`; each post-text snapshot after its `.Text` set and before that range's `Font2` sets; the post-format title snapshot after every title set and before the body `.Text` set; post-edit slots after the gated inventory and before the gate. It does not allowlist the names observed. Evidence from the attempt-01 harness has none of these fields, so it does not pass this audit.
+
+### Blocked-evidence audit
+
+The default audit accepts only a completed embed save, so on its own it never checks the diagnostics of an attempt whose gate blocked `SaveAs`. The `--blocked` mode checks such an attempt without Office. It writes `blocked-diagnostic-audit.json` with exclusive create. It requires:
+
+- **Lifecycle.** One discarding owned close (`blocked.presentation.fullName.get`, `saved.set` and `close`, then `blocked.presentation.cleanup`) and a final `worker.failure` whose error matches `report.error` and `progress.json`. No `SaveAs` stage and no `native-font-embed.pptx`. `embedFonts.attempted` and `completed` are `false` and `blockedByNativeFontsGate` is `true`. The worker exited nonzero without a timeout, all four font registrations were removed, and all 20 input checks are unchanged.
+- **Gate consistency.** The post-edit inventory is bounded and well-typed. The recorded `nativeFontsGate` must fail and must match, field by field, a recomputation from that inventory (`unexpectedNames`, `unembeddableNames`, counts, `baseFamilyPresent`, `entries`). The `blocked` gate stage error must be `unexpected|unembeddable`.
+- **Stages and diagnostics.** The same pairing, bounds and order rules as above, and the same field checks.
+
+The output never passes the embed audit. It has no `passed` field, and `embedGatePassed` is always `false`. `diagnosticEvidenceValid` states whether the blocked evidence is trustworthy. `fontsTimeline` lists the names each Fonts snapshot reported, in the order they were taken, as a reading aid. The exit code is 0 only when `diagnosticEvidenceValid` is `true`.
+
+**`--blocked` exit 0 is not an embed pass.** It means only that the blocked run's diagnostic evidence is valid. The gate still blocked `SaveAs`, so nothing was embedded. Automation must read `embedGatePassed`, which is always `false` in this mode, and must never treat the exit code of a `--blocked` audit as embed success. The default mode still rejects blocked evidence, and `--blocked` rejects evidence from a completed save.
+
+## Stage records
+
+Successful stage records must serialize `error` as JSON `null`. `Write-FontEmbedStage` keeps its error parameter untyped because a PowerShell `[string]` parameter coerces `$null` to an empty string, which the audit rejects for every stage. The mixed-size harness hit exactly this defect in its first native attempt on 2026-09-22. `-PureRegression` writes one successful and one failed stage and checks their serialized form.
+
+## Non-Office regression
+
+```powershell
+& "$env:WINDIR/System32/WindowsPowerShell/v1.0/powershell.exe" -NoProfile -NonInteractive -File test/native-font-embed.ps1 -PureRegression
+```
+
+```bash
+npm run test:native-font-embed-controls
+```
+
+The audit binds the raw worker, supervisor, progress, registration, request, input snapshot, stage, saved-package, and verifier/helper evidence. It requires one successful native font gate before one paired embed `SaveAs`, one exact owned close, four canonical registrations/removals, unchanged canonical inputs, and a matching saved-package hash. It also validates the font-related OPC structure: unique ZIP member names, content types, unique relationship IDs, internal non-traversing Presentation-to-font relationships, one unique `Carlito` entry with regular/bold/italic/bold-italic references, and exactly four nonempty referenced `.fntdata` parts with no extras or dangling relationships.
+
+The font structure check expects the `p:`/`r:` prefixes and one root declaration for each required namespace. Alternate prefixes or repeated namespace declarations are rejected, even when valid OOXML.
+
+This is structural embedding evidence. The audit records hashes of the raw, possibly obfuscated package parts. It does not deobfuscate them, identify a physical font file, prove that a part equals a permitted fixture TTF, establish per-glyph font identity, or authorize an unknown/additional part. Physical identity remains unresolved until a separate reviewed container/deobfuscation check exists. Font programs are test inputs and must never be published in evidence bundles.

@@ -1,0 +1,112 @@
+{
+  "name": "@openpresentation/opf-pptx",
+  "version": "0.25.0",
+  "description": "Pure local OPF to PPTX export and PPTX to OPF import tooling.",
+  "license": "MIT",
+  "type": "module",
+  "private": false,
+  "engines": {
+    "node": ">=22"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenPresentation/opf-pptx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf-pptx/issues"
+  },
+  "homepage": "https://github.com/OpenPresentation/opf-pptx#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "vendor",
+    "DEPENDENCY-NOTES.md",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "node scripts/check-syntax.mjs src test scripts",
+    "test": "npm run build && node scripts/run-tests.mjs && npm run build:browser-check && npm run check:runners && npm run check:changes",
+    "test:contract": "npm run build && node scripts/run-tests.mjs --suite contract && npm run build:browser-check",
+    "check:runners": "node --test scripts/run-tests.test.mjs",
+    "check:changes": "node --test scripts/changelog-fragments.test.mjs && node scripts/changelog-fragments.mjs check",
+    "validate": "node scripts/validate-package.mjs",
+    "test:packed": "node test/packed-install.mjs && node test/provenance-interop.mjs",
+    "test:compare-published": "node test/compare-published.mjs",
+    "test:published-import": "node test/provenance-interop.mjs",
+    "test:browser": "npm run build:browser-check && node test/browser-check.mjs && node test/packed-bundle-browser.mjs",
+    "prepack": "npm run build",
+    "build:browser-check": "node scripts/build-browser-check.mjs",
+    "test:styled-table": "node test/styled-table.mjs && node test/styled-table-import.mjs",
+    "test:code": "node test/shared-code.mjs && node test/code-provenance.mjs",
+    "test:metric": "node test/shared-metric.mjs && node test/metric-provenance.mjs",
+    "test:font-variants": "node test/font-variants.mjs",
+    "test:timeline": "node test/shared-timeline.mjs",
+    "test:furniture": "node test/shared-furniture.mjs && node test/furniture-provenance.mjs && node test/slide-variables.mjs && node test/furniture-fields.mjs && node test/furniture-wrapped-date.mjs && node test/socials-furniture.mjs && node test/native-furniture.mjs",
+    "test:native-picture-edit-controls": "node test/compare-native-picture-edit-controls.mjs",
+    "test:native-font-embed-controls": "node test/native-font-embed-controls.mjs",
+    "test:native-mixed-edit-controls": "node test/native-mixed-edit-controls.mjs",
+    "test:native-font-inventory-controls": "node test/native-font-inventory-controls.mjs",
+    "test:zip-date": "node test/zip-date.mjs",
+    "test:native-text": "node test/native-text-whitespace.mjs",
+    "test:determinism": "node test/determinism.mjs"
+  },
+  "dependencies": {
+    "@node-projects/jszip": "4.3.0",
+    "@openpresentation/gallery": "^5.0.0",
+    "@openpresentation/opf": "^0.25.0",
+    "@rgrove/parse-xml": "4.2.3",
+    "fast-xml-parser": "^5.8.0",
+    "fflate": "^0.8.3",
+    "pako": "3.0.2",
+    "sharp": "0.35.5"
+  },
+  "peerDependencies": {
+    "@openpresentation/opf-render": "^0.25.0"
+  },
+  "peerDependenciesMeta": {
+    "@openpresentation/opf-render": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@expo-google-fonts/arimo": "0.4.3",
+    "@expo-google-fonts/caladea": "0.4.2",
+    "@expo-google-fonts/carlito": "0.4.1",
+    "@expo-google-fonts/cousine": "0.4.3",
+    "@expo-google-fonts/gelasio": "0.4.1",
+    "@expo-google-fonts/noto-color-emoji": "0.4.7",
+    "@expo-google-fonts/noto-naskh-arabic": "0.4.5",
+    "@expo-google-fonts/noto-sans": "0.4.2",
+    "@expo-google-fonts/noto-sans-arabic": "0.4.3",
+    "@expo-google-fonts/noto-sans-armenian": "0.4.2",
+    "@expo-google-fonts/noto-sans-ethiopic": "0.4.2",
+    "@expo-google-fonts/noto-sans-georgian": "0.4.3",
+    "@expo-google-fonts/noto-sans-symbols-2": "0.4.1",
+    "@expo-google-fonts/roboto": "0.4.3",
+    "@expo-google-fonts/roboto-mono": "0.4.2",
+    "@expo-google-fonts/tinos": "0.4.2",
+    "@openpresentation/opf-render": "0.25.0",
+    "@resvg/resvg-js": "2.6.2",
+    "esbuild": "0.28.2",
+    "playwright": "1.64.0"
+  },
+  "imports": {
+    "#image-fallback": {
+      "browser": "./dist/image-fallback-browser.js",
+      "default": "./dist/image-fallback-node.js"
+    }
+  }
+}

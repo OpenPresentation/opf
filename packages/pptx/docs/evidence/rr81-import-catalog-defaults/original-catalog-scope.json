@@ -1,0 +1,933 @@
+{
+  "pptx": {
+    "base": "d7ae170314b246c5ea3d604b394c4723d69644bf",
+    "original": "be161d727bc8fbd01257de819920e6d1f6f88ffd",
+    "complete": "9bd98a3544fc3a1bbfd6f6d52e3bf925bdfe0e14",
+    "paths": [
+      {
+        "path": "README.md",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "changes/rr-78-gallery-package.md",
+        "originalAddedLines": 4,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": false
+      },
+      {
+        "path": "dist/index.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "package-lock.json",
+        "originalAddedLines": 11,
+        "exactAddedLinesStillPresent": 6,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "package.json",
+        "originalAddedLines": 4,
+        "exactAddedLinesStillPresent": 3,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "src/index.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/chart-types.mjs",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/chartex.mjs",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/color-ref-export.mjs",
+        "originalAddedLines": 4,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/color-roles.mjs",
+        "originalAddedLines": 6,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/content-layout-browser.js",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/default-font-scheme.mjs",
+        "originalAddedLines": 4,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/document-provenance.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/export-chosen-fonts.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/fa-23-catalogs.mjs",
+        "originalAddedLines": 10,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/fixtures/chartex-fallback-main.mjs.txt",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/gallery-layout-alignment.mjs",
+        "originalAddedLines": 4,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/helpers/default-catalog.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/image-treatments-014.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/layout-design-applied.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/layout-intent.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/native-body-rich-text-browser.js",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/notes-master-theme.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/quote-provenance.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/rr-07-preview-polish.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/rr-59-absent-defaults.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/rr-59-picture-diagnostics.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/script-fonts.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/slide-context.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/styled-table-import-browser.js",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/table-theme-colors.mjs",
+        "originalAddedLines": 5,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/tag-colour.mjs",
+        "originalAddedLines": 5,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/theme-colors.mjs",
+        "originalAddedLines": 4,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/theme-script-slots.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/typeface-inventory.mjs",
+        "originalAddedLines": 7,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      }
+    ]
+  },
+  "render": {
+    "base": "443dbb981c8158d89c6656120e39e9efc029db67",
+    "original": "bc81895e96c9068dfcea03533ecf36d236ee75b8",
+    "complete": "d57236802c8746fde430998bf2ddc9d16fe86712",
+    "paths": [
+      {
+        "path": "AGENTS.md",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "README.md",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 3,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "changes/rr-78-gallery-package.md",
+        "originalAddedLines": 4,
+        "exactAddedLinesStillPresent": 3,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "dist/index.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "dist/svg.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "dist/svg.js",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "package-lock.json",
+        "originalAddedLines": 11,
+        "exactAddedLinesStillPresent": 7,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "package.json",
+        "originalAddedLines": 4,
+        "exactAddedLinesStillPresent": 3,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "scripts/build-browser-check.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "scripts/measure-web-delivery.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "src/index.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "src/svg.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "src/svg.js",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/background-color-refs.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/catalog-harness.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/catalogs.mjs",
+        "originalAddedLines": 8,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/chart-catalog.mjs",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/color-references.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/color-roles.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/core-features.mjs",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/default-font-scheme.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/design-preview.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/examples-portable.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/extra-lazy-fonts-browser.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/gallery-layout-alignment.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/golden.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/golden/notes/FA-23.md",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/lazy-face-fallback-browser.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/lazy-faces.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/lazy-fonts-browser.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/lazy-fonts.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/open-fonts.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/preview-polish.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/script-corpora.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/script-fonts-auto-browser.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/shared-code-browser.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/shared-code.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/shared-quote.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/slide-context.mjs",
+        "originalAddedLines": 7,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/theme-slots.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/web-delivery.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      }
+    ]
+  },
+  "editor": {
+    "base": "1d8f63ced8bcf659a9c6750acfa03922abe58d7d",
+    "original": "5ba0e4ffb6205aa09a8f559e854fcee071440417",
+    "complete": "569a83488fe0f833a97f08bba520513b276c38d5",
+    "paths": [
+      {
+        "path": "README.md",
+        "originalAddedLines": 5,
+        "exactAddedLinesStillPresent": 2,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "changes/rr-78-gallery-package.md",
+        "originalAddedLines": 4,
+        "exactAddedLinesStillPresent": 3,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "dist/canvas.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "dist/catalogs.js",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 2,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "dist/design-controls.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "dist/design-controls.js",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "dist/index.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "dist/switches.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "dist/switches.js",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "examples/playground.js",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "package-lock.json",
+        "originalAddedLines": 11,
+        "exactAddedLinesStillPresent": 7,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "package.json",
+        "originalAddedLines": 4,
+        "exactAddedLinesStillPresent": 3,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "src/canvas.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "src/catalogs.js",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 2,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "src/design-controls.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "src/design-controls.js",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "src/index.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "src/switches.d.ts",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "src/switches.js",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/assets.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/background-options.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/browser-canvas.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/canvas-a11y-browser.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/canvas-fonts-browser.mjs",
+        "originalAddedLines": 4,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/catalog-optional-design.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/catalogs.mjs",
+        "originalAddedLines": 15,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/chart-alt.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/chart-highlight.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/chart-options.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/chart-table-data.mjs",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/click-entry-browser.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/combo-charts.mjs",
+        "originalAddedLines": 1,
+        "exactAddedLinesStillPresent": 1,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/component-smoke.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/data-grid.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/default-font-scheme.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/design-options.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/export-license-browser.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/export.mjs",
+        "originalAddedLines": 5,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/image-crop-browser.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/json-editor-browser.mjs",
+        "originalAddedLines": 3,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/json-options.mjs",
+        "originalAddedLines": 8,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/metric-browser.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/narrative-switch.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/playground-pptx.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/selection-browser.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/slide-context.mjs",
+        "originalAddedLines": 9,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/slide-variables.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/slides.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/smoke.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/styled-table-browser.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/switch-fixture.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/switches-ui.mjs",
+        "originalAddedLines": 5,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/table-alt.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      },
+      {
+        "path": "test/table-options.mjs",
+        "originalAddedLines": 2,
+        "exactAddedLinesStillPresent": 0,
+        "removedApiReferences": [],
+        "filePresent": true
+      }
+    ]
+  }
+}

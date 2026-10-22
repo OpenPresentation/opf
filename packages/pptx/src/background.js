@@ -1,0 +1,242 @@
+// SVG uses an object-bounding-box gradient. DrawingML's unscaled angle is
+// measured in slide coordinates. Convert the normal and stop interval together;
+// copying the angle alone changes diagonal gradients on non-square slides.
+const turn = angle => ((angle % 360) + 360) % 360;
+const clamp = value => Math.max(0, Math.min(1, value));
+const list = value => value === undefined ? [] : Array.isArray(value) ? value : [value];
+function color(value, fallback = 'FFFFFF') {
+  if (!/^[\da-f]{6}$/i.test(fallback)) fallback = 'FFFFFF';
+  let hex = typeof value === 'string' ? value.trim().replace(/^#/, '') : fallback;
+  if (/^[\da-f]{3}$/i.test(hex)) hex = [...hex].map(c => c + c).join('');
+  if (!/^[\da-f]{6}([\da-f]{2})?$/i.test(hex)) hex = fallback;
+  return {hex: hex.slice(0, 6).toUpperCase(), alpha: hex.length === 8 ? parseInt(hex.slice(6), 16) / 255 : 1};
+}
+function colorXml(value, opacity, fallback) {
+  const c = color(value, fallback), alpha = Math.round(c.alpha * opacity * 100000);
+  return `<a:srgbClr val="${c.hex}">${alpha === 100000 ? '' : `<a:alpha val="${alpha}"/>`}</a:srgbClr>`;
+}
+
+// ECMA-376 Part 1, 20.1.10.51 ST_PresetPatternVal. OPF pattern presets with
+// these names are DrawingML presets; any other id is engine-defined.
+export const presetPatterns = new Set(['pct5', 'pct10', 'pct20', 'pct25', 'pct30', 'pct40', 'pct50', 'pct60', 'pct70', 'pct75', 'pct80', 'pct90',
+  'horz', 'vert', 'ltHorz', 'ltVert', 'dkHorz', 'dkVert', 'narHorz', 'narVert', 'dashHorz', 'dashVert', 'cross',
+  'dnDiag', 'upDiag', 'ltDnDiag', 'ltUpDiag', 'dkDnDiag', 'dkUpDiag', 'wdDnDiag', 'wdUpDiag', 'dashDnDiag', 'dashUpDiag', 'diagCross',
+  'smCheck', 'lgCheck', 'smGrid', 'lgGrid', 'dotGrid', 'smConfetti', 'lgConfetti', 'horzBrick', 'diagBrick',
+  'solidDmnd', 'openDmnd', 'dotDmnd', 'plaid', 'sphere', 'weave', 'divot', 'shingle', 'wave', 'trellis', 'zigZag']);
+
+// Engine-defined presets drawn by the SVG preview, with their closest DrawingML
+// preset. diagStripe is a 2px rising diagonal on an 8px cell, as wdUpDiag.
+// Import reports the native preset name; it does not guess the OPF alias.
+const patternAliases = {diagStripe: 'wdUpDiag'};
+export const nativePatternPreset = preset => presetPatterns.has(preset) ? preset : Object.hasOwn(patternAliases, preset) ? patternAliases[preset] : undefined;
+
+// The SVG preview paints the pattern background color and foreground marks,
+// defaulting to white and the slide text color. Other engine-defined presets
+// have no DrawingML equivalent; like the preview, only their background color remains.
+// `resolve(reference)` turns a ColorRef (a `var:` variable, a colour-scheme slot or
+// role name) into a hex colour, as for table fills and run colours; literals pass
+// through. `scheme(reference, hex)` names the theme color for an authored slot/role
+// reference whose drawn color the deck theme holds exactly (FF-24); solid, gradient
+// and pattern colors then become a:schemeClr, keeping any background opacity as alpha.
+export function nativeBackgroundFill(background, {width, height}, fallback = 'FFFFFF', foreground = '000000', scheme = () => undefined, resolve = value => value) {
+  if (typeof background === 'string' && /^#[\da-f]{3}(?:[\da-f]{3}(?:[\da-f]{2})?)?$/i.test(background)) background = {type: 'solid', color: background};
+  if (!background || typeof background !== 'object') return null;
+  const opacity = background.opacity ?? 1;
+  const paint = (value, base) => {
+    const hex = resolve(value), c = color(hex, base), themeValue = c.alpha === 1 ? scheme(value, c.hex) : undefined;
+    if (!themeValue) return colorXml(hex, opacity, base);
+    const alpha = Math.round(clamp(opacity) * 100000);
+    return `<a:schemeClr val="${themeValue}">${alpha === 100000 ? '' : `<a:alpha val="${alpha}"/>`}</a:schemeClr>`;
+  };
+  if (background.type === 'solid' || background.type === 'theme') return `<a:solidFill>${background.type === 'theme' ? colorXml(fallback, opacity, fallback) : paint(background.color, fallback)}</a:solidFill>`;
+  if (background.type === 'pattern') {
+    const pattern = background.pattern ?? {}, back = paint(pattern.backgroundColor, 'FFFFFF');
+    const preset = nativePatternPreset(pattern.preset);
+    if (!preset) return `<a:solidFill>${back}</a:solidFill>`;
+    return `<a:pattFill prst="${preset}"><a:fgClr>${paint(pattern.foregroundColor, foreground)}</a:fgClr><a:bgClr>${back}</a:bgClr></a:pattFill>`;
+  }
+  if (background.type !== 'gradient') return null;
+  const stops = background.gradient?.stops ?? [];
+  const radians = turn(background.gradient?.angle ?? 0) * Math.PI / 180;
+  const c = Math.cos(radians), s = Math.sin(radians), span = Math.abs(c) + Math.abs(s);
+  const angle = Math.round(turn(Math.atan2(s / height, c / width) * 180 / Math.PI) * 60000) % 21600000;
+  let prior = 0;
+  const nativeStops = stops.map(stop => {
+    // SVG clamps a descending stop to the preceding position.
+    prior = Math.max(prior, stop.position);
+    const position = Math.round(((prior - .5) / span + .5) * 100000);
+    return `<a:gs pos="${position}">${paint(stop.color, fallback)}</a:gs>`;
+  }).join('');
+  return `<a:gradFill rotWithShape="0"><a:gsLst>${nativeStops}</a:gsLst><a:lin ang="${angle}" scaled="0"/></a:gradFill>`;
+}
+
+const rectXml = (name, rect = {}) => `<a:${name}${['l', 't', 'r', 'b'].filter(key => rect[key]).map(key => ` ${key}="${rect[key]}"`).join('')}/>`;
+const percent = value => Math.round(value * 100000) || 0;
+
+// FA-23: the picture fill of an OPF image background (core SlideComposition.backgroundImage), drawn like the SVG
+// preview. `fitImage` is core's shared fit math (composition `fitImage`), so every engine crops, letterboxes and
+// focuses the same way:
+// - stretch fills the slide (no crop);
+// - cover crops the picture to the slide with the focus point kept in view (a:srcRect, positive insets);
+// - contain centers the whole picture; the fill rectangle insets leave the rest of the slide unfilled;
+// - tile repeats the picture at its intrinsic size (1 picture px = 1 reference px, 1/96 in) from the top-left corner.
+//   With dpi="0", DrawingML sizes a tile from the raster's own resolution (PNG pHYs, JPEG JFIF or EXIF; 96 dpi when
+//   absent), so the tile scale is the raster's dpi / 96 on each axis.
+// A recolor (core backgroundImage.recolor, resolved: {type: 'grayscale'} or {type: 'duotone', dark: {hex}, light: {hex}})
+// is a:grayscl or a:duotone on the blip, then opacity is a:alphaModFix (picture pixels only), as for image blocks.
+export const nativeTileAlignment = {tx: '0', ty: '0', flip: 'none', algn: 'tl'};
+export function nativeTileScale(image) {
+  return {sx: percent((image.dpiX ?? 96) / 96), sy: percent((image.dpiY ?? 96) / 96)};
+}
+export function nativeImageBackgroundFill(relationshipId, image, {fit = 'cover', focus, opacity = 1, recolor, width, height, fitImage}) {
+  const alpha = clamp(opacity);
+  const recolorXml = recolor?.type === 'grayscale' ? '<a:grayscl/>'
+    : recolor?.type === 'duotone' ? `<a:duotone><a:srgbClr val="${recolor.dark.hex}"></a:srgbClr><a:srgbClr val="${recolor.light.hex}"></a:srgbClr></a:duotone>` : '';
+  const blip = `<a:blip r:embed="${relationshipId}">${recolorXml}${alpha === 1 ? '' : `<a:alphaModFix amt="${percent(alpha)}"/>`}</a:blip>`;
+  if (fit === 'tile') {
+    const {sx, sy} = nativeTileScale(image), {tx, ty, flip, algn} = nativeTileAlignment;
+    return `<a:blipFill dpi="0" rotWithShape="1">${blip}<a:tile tx="${tx}" ty="${ty}" sx="${sx}" sy="${sy}" flip="${flip}" algn="${algn}"/></a:blipFill>`;
+  }
+  if (fit === 'stretch') return `<a:blipFill dpi="0" rotWithShape="1">${blip}<a:stretch><a:fillRect/></a:stretch></a:blipFill>`;
+  const frame = {x: 0, y: 0, width, height};
+  const placed = fitImage(frame, fit, image.width / image.height, focus);
+  if (fit === 'contain') {
+    const box = placed.image;
+    const inset = {l: percent(box.x / width), t: percent(box.y / height), r: percent((width - box.x - box.width) / width), b: percent((height - box.y - box.height) / height)};
+    return `<a:blipFill dpi="0" rotWithShape="1">${blip}<a:srcRect/><a:stretch>${rectXml('fillRect', inset)}</a:stretch></a:blipFill>`;
+  }
+  const {left, top, right, bottom} = placed.crop;
+  return `<a:blipFill dpi="0" rotWithShape="1">${blip}${rectXml('srcRect', {l: percent(left), t: percent(top), r: percent(right), b: percent(bottom)})}<a:stretch><a:fillRect/></a:stretch></a:blipFill>`;
+}
+
+// Internal metadata supplied by the ordered XML reader. A Symbol cannot collide
+// with a document attribute, and repeated transforms keep their original order.
+export const colorTransforms = Symbol('DrawingML color transforms');
+const transformNames = new Set(['a:alpha', 'a:alphaMod', 'a:alphaOff', 'a:lum', 'a:lumMod', 'a:lumOff']);
+function luminanceColor(hex) {
+  const rgb = hex.match(/../g).map(value => parseInt(value, 16) / 255);
+  const max = Math.max(...rgb), min = Math.min(...rgb), l = (max + min) / 2, delta = max - min;
+  // Retain hue/saturation across consecutive luminance changes, even when an
+  // intermediate luminance clips to black or white.
+  return {l, saturation: delta === 0 ? 0 : delta / (1 - Math.abs(2 * l - 1)), direction: rgb.map(c => delta ? (c - l) / delta : 0)};
+}
+function luminanceHex({l, saturation, direction}) {
+  const chroma = (1 - Math.abs(2 * l - 1)) * saturation;
+  return '#' + direction.map(c => Math.round(clamp(l + c * chroma) * 255).toString(16).padStart(2, '0')).join('').toUpperCase();
+}
+export function readBackgroundColor(node, context = {}, seen = new Set()) {
+  const kinds = ['a:srgbClr', 'a:sysClr', 'a:schemeClr'].filter(k => node?.[k]);
+  if (kinds.length !== 1) return null;
+  const kind = kinds[0], c = node[kind];
+  if (Array.isArray(c) || Object.keys(c).some(k => !['val', 'lastClr'].includes(k) && !transformNames.has(k))) return null;
+  const entries = Object.entries(c).filter(([key]) => key.startsWith('a:'));
+  // The legacy object shape is safe for one transform only. Never guess the
+  // order of repeated/interleaved operations after an unordered parser.
+  const transforms = c[colorTransforms] ?? (entries.length <= 1 && entries.every(([,value]) => !Array.isArray(value)) ? entries : null);
+  if (!transforms) return null;
+  let resolved;
+  if (kind === 'a:schemeClr') {
+    if (c.val === 'phClr') resolved = context.placeholder;
+    else {
+      const slot = context.mapping?.[c.val] ?? c.val;
+      if (seen.has(slot)) return null;
+      resolved = readBackgroundColor(context.colors?.['a:' + slot], context, new Set([...seen, slot]));
+    }
+  } else {
+    const hex = kind === 'a:sysClr' ? c.lastClr : c.val;
+    if (!/^[\da-f]{6}$/i.test(hex ?? '')) return null;
+    resolved = {hex: '#' + hex.toUpperCase(), alpha: 1, luminance: luminanceColor(hex)};
+  }
+  if (!resolved) return null;
+  let alpha = resolved.alpha;
+  const luminance = {...(resolved.luminance ?? luminanceColor(resolved.hex.slice(1)))};
+  for (const [name, attributes] of transforms) {
+    if (!transformNames.has(name) || !attributes || Object.keys(attributes).some(key => key !== 'val')) return null;
+    const raw = attributes.val;
+    if (!/^[+-]?\d+$/.test(raw ?? '')) return null;
+    const value = Number(raw) / 100000;
+    if (!Number.isFinite(value)) return null;
+    if ((name === 'a:alpha' || name === 'a:lum') && (value < 0 || value > 1)) return null;
+    if (name === 'a:alphaMod' && value < 0) return null;
+    if (name === 'a:alphaOff' && Math.abs(value) > 1) return null;
+    if (name === 'a:alpha') alpha = value;
+    if (name === 'a:alphaMod') alpha = clamp(alpha * value);
+    if (name === 'a:alphaOff') alpha = clamp(alpha + value);
+    if (name === 'a:lum') luminance.l = value;
+    if (name === 'a:lumMod') luminance.l = clamp(luminance.l * value);
+    if (name === 'a:lumOff') luminance.l = clamp(luminance.l + value);
+  }
+  return {hex: luminanceHex(luminance), alpha, luminance};
+}
+
+// A preset pattern with explicit foreground and background colors. ECMA-376
+// defines no default colors, so a pattern missing either one is not guessed.
+function readNativePattern(pattern, report, context) {
+  const foreground = pattern['a:fgClr'] && readBackgroundColor(pattern['a:fgClr'], context);
+  const background = pattern['a:bgClr'] && readBackgroundColor(pattern['a:bgClr'], context);
+  if (!presetPatterns.has(pattern.prst) || !foreground || !background) {
+    report({code: 'unsupported-background-fill', message: 'This native pattern needs a DrawingML preset with resolvable foreground and background colors to become an OPF pattern background.'});
+    return undefined;
+  }
+  const uniform = foreground.alpha === background.alpha;
+  const hex = c => c.hex + (!uniform && c.alpha !== 1 ? Math.round(c.alpha * 255).toString(16).padStart(2, '0').toUpperCase() : '');
+  return {type: 'pattern', pattern: {preset: pattern.prst, foregroundColor: hex(foreground), backgroundColor: hex(background)},
+    ...(uniform && foreground.alpha !== 1 ? {opacity: foreground.alpha} : {})};
+}
+
+// The OPF slot an `a:schemeClr` with no color transform stands for through the color map (`bg1` stays the role), or undefined.
+// (OPF's theme-slot background is one of the four light and dark slots; an accent keeps its resolved color.)
+const SLOT_NAMES_BY_OOXML = {lt1: 'light1', dk1: 'dark1', lt2: 'light2', dk2: 'dark2'};
+function plainSchemeSlot(fill, context) {
+  const node = fill?.['a:schemeClr'];
+  if (!node || Array.isArray(node) || Object.keys(node).some(key => key.startsWith('a:'))) return undefined;
+  if (node.val === 'bg1') return !context.mapping?.bg1 || SLOT_NAMES_BY_OOXML[context.mapping.bg1] ? 'bg1' : undefined;
+  return SLOT_NAMES_BY_OOXML[context.mapping?.[node.val] ?? node.val];
+}
+
+export function readNativeBackground(properties, {width, height}, report = () => {}, context = {}) {
+  if (!properties) return undefined;
+  if (Object.hasOwn(properties, 'a:noFill')) return {type: 'solid', color: '#FFFFFF', opacity: 0};
+  const solid = readBackgroundColor(properties['a:solidFill'], context);
+  if (solid) {
+    // RR-96: a plain scheme color is the theme slot it reaches through the color map (the OPF theme-slot background); bg1 is the variant's own
+    // background, which design.variant already carries, so it imports as no background of its own.
+    const slot = plainSchemeSlot(properties['a:solidFill'], context);
+    if (slot === 'bg1' && solid.alpha === 1) return undefined;
+    if (slot && slot !== 'bg1') return {type: 'theme', slot, ...(solid.alpha === 1 ? {} : {opacity: solid.alpha})};
+    return {type: 'solid', color: solid.hex, ...(solid.alpha === 1 ? {} : {opacity: solid.alpha})};
+  }
+  if (properties['a:pattFill']) return readNativePattern(properties['a:pattFill'], report, context);
+  if (properties['a:blipFill'] && context.image) return context.image(properties['a:blipFill']);
+  const gradient = properties['a:gradFill'];
+  if (!gradient) {
+    report({code: 'unsupported-background-fill', message: 'This native background fill or color cannot be represented by the OPF background importer.'});
+    return undefined;
+  }
+  const unsupported = () => {
+    report({code: 'unsupported-background-gradient', message: 'This native gradient uses geometry or color transforms outside the OPF linear-gradient contract; its background was not imported.'});
+    return undefined;
+  };
+  const lin = gradient['a:lin'];
+  if (!lin || gradient['a:path'] || (gradient.flip && gradient.flip !== 'none')
+    || Object.values(gradient['a:tileRect'] ?? {}).some(value => Number(value) !== 0)) return unsupported();
+  let radians = Number(lin.ang ?? 0) / 60000 * Math.PI / 180;
+  if (!Number.isFinite(radians)) return unsupported();
+  // DrawingML scaled=true first scales the direction by the fill dimensions.
+  if (lin.scaled === '1' || lin.scaled === 'true') radians = Math.atan2(height * Math.sin(radians), width * Math.cos(radians));
+  const angle = turn(Math.atan2(height * Math.sin(radians), width * Math.cos(radians)) * 180 / Math.PI);
+  const a = angle * Math.PI / 180, span = Math.abs(Math.cos(a)) + Math.abs(Math.sin(a));
+  const stops = list(gradient['a:gsLst']?.['a:gs']).map(stop => {
+    const c = readBackgroundColor(stop, context), position = (Number(stop.pos) / 100000 - .5) * span + .5;
+    // Allow only native integer rounding, not a lossy clamping of arbitrary
+    // corner-to-corner gradients that OPF's fixed endpoints cannot represent.
+    if (!c || !Number.isFinite(position) || position < -.00002 || position > 1.00002) return null;
+    return {...c, position: clamp(position)};
+  });
+  // The schema needs at least two stops (DrawingML does too).
+  if (stops.length < 2 || stops.some(stop => !stop)) return unsupported();
+  const alpha = stops[0].alpha, uniform = stops.every(stop => stop.alpha === alpha);
+  return {type: 'gradient', gradient: {angle, stops: stops.map(stop => ({position: stop.position,
+    color: stop.hex + (!uniform && stop.alpha !== 1 ? Math.round(stop.alpha * 255).toString(16).padStart(2, '0').toUpperCase() : '')}))},
+    ...(uniform && alpha !== 1 ? {opacity: alpha} : {})};
+}

@@ -1,0 +1,57 @@
+{
+  "organization": {
+    "id": "primary",
+    "name": "Organization"
+  },
+  "design": {
+    "fontScheme": "roboto",
+    "dimensions": {
+      "widthInches": 13.333333333333334,
+      "heightInches": 7.5
+    },
+    "header": {
+      "left": {
+        "text": " Authored\twords \r\n\r\nlast  \r"
+      },
+      "center": {
+        "organization": true
+      },
+      "right": {
+        "section": true
+      }
+    },
+    "footer": {
+      "left": {
+        "date": " 2026-09-10 "
+      },
+      "right": {
+        "slideNumber": true
+      }
+    }
+  },
+  "slides": [
+    {
+      "title": "Furniture",
+      "section": "Section",
+      "text": "Keep body words.",
+      "composition": {
+        "minFontSize": 32,
+        "overflow": "error"
+      },
+      "design": {
+        "header": {
+          "left": {
+            "image": {
+              "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAA8CAIAAAAiz+n/AAABnElEQVR4nO3Yv0rDUBTH8ZNLXqHBB9CA4O4ibi4+gYuTm/g8bk6CL9HBOaOrCO46O0e0eomxLam5/vo7N7/vVJo/hA+H09Di8fDEvHV6cGfeCtt+gKkkaFCCBiVoUIIGJWhQggYlaFCCBiVoUIIGJWhQggYlaFCl+alu5l+fmln8cvfi1TxUevJd1tPNzIV46Yi4bdvf5xRF0RWn5Q78yu13S0/rHY0DzlbgV7ZhkVsHWuV29RSvKl5CaB1ole2vcVoHRy8Ym0ZlzQW9aMw4p7pDztD16KXBvECIoPNO0BODrpPuDcLtwQKdfYIGVR5d7RlDTco36F4PZ8e27TTRoAQNStATg65uL7v/4idpcbe3+b4RxAKdfYKeHnSVdHtQ7Q0u6Nh467S7PkPo6nOoU8UzznTQlmKBsC0NUmjrWG/KHS9hUyaFts4OGW4dzyRU5oW2n9Zrprt3lFP54znT/v78Ry/n10NOoyV2A71enNzXJXTseefevMW7ozNL0KAEDUrQoAQNStCgBA1K0KAEDUrQoAQNStCgBG2Y3gEQ3Irssa4fzwAAAABJRU5ErkJggg==",
+              "alt": "Header image with text"
+            },
+            "text": ""
+          },
+          "right": {
+            "text": "Local"
+          }
+        }
+      }
+    }
+  ]
+}

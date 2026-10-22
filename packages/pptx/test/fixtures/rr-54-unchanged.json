@@ -1,0 +1,1012 @@
+{
+ "source": {
+  "repository": "OpenPresentation/opf-pptx",
+  "commit": "438ce8801701f2fa2531ac56537234d274e36aa7",
+  "note": "RR-54: toPptx bytes of chart and table decks that use none of the RR-54 fields (no DataColumn objects, datasets, mapping, source or formats, and only strict-decimal or number chart cells), from main before RR-54 (re-pinned to main 4ca079f, the pptxgenjs-plus 4.3.4 migration of opf-pptx#165, whose output change the owner approved). The RR-54 export must keep these bytes exactly. Regenerate only with an owner decision to change the default export. FA-03: the stacked and percent-stacked entries name the clean chart type ids (no -3x suffix), so their titles and tags, and so their bytes, changed; every other entry is unchanged. FA-23 (OPF 0.15, owner-approved breaking spec): every entry regenerated: with zero built-in catalog records the engine-default colour scheme is written as clrScheme name=\"OpenPresentation\" (0.14 named the built-in cool-horizon record \"Cool Horizon\"), and chartex-native-map names the world chart type, since map is no 0.15 chart type. Generated on the FA-20 + FA-22 core branches with zero built-ins; re-run at integration with the released core 0.15. RR-59: the three entries with a table (table, styled-table, mixed-blocks) are repinned because full provenance now records every inline table as authored (the OPF_DATA_V1 tag); previousSha256 keeps the FA-23 hash and nativeSlideSha256 locks the slide XML without its customer-data tags, which is unchanged. RR-59 (AUTO-18, round trip restores absent document defaults): full provenance now records the document-level defaults a document leaves to the engine (OPF_DOCUMENT_V1.absent), so every full-mode export carries the document tag and its slide tags, also when the document states nothing else. Verified part by part against a build of main 3d2698f: with the OPF_DOCUMENT_V1 and OPF_SLIDE_V1 tag parts, their relationships, content-type overrides and custDataLst references removed, every package is byte-identical to main; only the tag parts changed. opf-pptx#175 (chart series in ECMA-376 schema order): the six entries with a line, radar or scatter chart (line, radar, scatter, scatter-two-columns, scatter-labels, mixed-blocks) are repinned because their chart part changed: line series write c:marker before c:dLbls (CT_LineSer), radar series drop the bar-only c:invertIfNegative (CT_RadarSer), and the scatter X c:valAx drops the category-axis-only c:auto, c:lblAlgn and c:noMultiLvlLbl (CT_ValAx). Verified part by part against a build of main d7ae170: ppt/charts/chart1.xml is the only changed part of each package; every other entry is byte-identical. previousSha256 of those six entries is their main d7ae170 hash (mixed-blocks: its FA-23 hash was c5617168f7ff0601b401c939e0d174f70586d02ea0f7268bd36e491398f2eb75); nativeSlideSha256 is unchanged. RR-81: explicit owner-authorized OPF 0.19 default-export update (design section 8), independently reviewed before repinning. Baseline converter 991023c, core fe9fe3fa2c3ad0130e271b73d9853f66e920c1d5, renderer 9fbddcb78dbebcb87355922ca92af7d26c24c48d, Node 24.21.0. All 21 archives add OPF auto titleOnly layout/relation/tag and registrations. Every changed slide XML differs only by native title placeholder and noGrp locks. Chart parts, chart relationships, workbooks, embeddings, themes and diagnostics are unchanged. Three native-slide hashes intentionally reflect those title bindings. Previous RR-81 hashes are retained. Archive acceptance is not native raster acceptance. RR-20 (OPF 0.19 area arrays): approved source-derived archive refresh against frozen core 8f70cf1b52dc4ca4eb246a6f9d065b1403edbf31, gallery 146e477196405fe7d2283008f6fad34c12742599 and candidate PPTX converter. The prior RR-54 SHA is retained in rr20PreviousSha256. Independent 21-case proof: historical published source reproduces all 21 archived bytes under either preserved or new coherent core/gallery graph; 19 candidate archives change, pie and doughnut remain byte-identical. All ZIP part sets/counts are identical; chart parts differ only by neutral 3AC67A to 475569 and four zero-domain minima; table slides only by neutral borders and authored numeric right alignment. Chart/workbook data, slide text and OPF authored data are unchanged. OPF data tags only update evidence hashes and slide tags only native.style hashes. Review receipt: docs/evidence/rr20-array-areas/rr54-archive-review.json. This archive acceptance is not native raster acceptance. RR-20 row-data provenance: independently reviewed and approved update of only single-column against baseline converter e673f106c2fd38fcb5d51db190649c3855cc1885. Adds OPF_DATA_V1 for an authored single column actually plotted against synthetic row numbers. Only that tag, its content-type override, slide relationship and customer-data link change; every native part and all other archives remain byte-identical. Prior hash and size are retained; evidence: docs/evidence/rr20-row-data-provenance/archive-review.json. Native raster acceptance remains separate. Regenerated for RR-94 (tag parts only: text-shape fingerprints and OPF_IMAGE_V1 on every image block). Regenerated for RR-90 (opf-pptx 0.22.1): chart text is core chartTextSize, so chart part text sizes changed.",
+  "rr20RowDataReview": {
+   "baselineConverter": "e673f106c2fd38fcb5d51db190649c3855cc1885",
+   "runtime": "Node 24.21.0",
+   "changedEntry": "single-column",
+   "evidence": "docs/evidence/rr20-row-data-provenance/archive-review.json"
+  },
+  "defaultThemeCategoryReview": {
+   "publishedBaseline": "0.20.1 / 9690abd12af8d7a4d6f29a28709517f0b6569301",
+   "sourceCandidateRuntime": "560571c7ced447484c55c673c8fbeb8f69f838a4",
+   "evidence": "docs/evidence/rr68-default-theme-category/rr54-archive-review.json",
+   "scope": "All 21 same-input archives use the exact bare toPptx caller without registered catalogs. Every old hash/size/part count reproduced. Only default theme root/family and app theme-name metadata changes, plus three table OPF_DATA_V1.environment digests recomputed by unchanged theme/table-style hashing. All other decoded tag fields, native payloads, diagnostics, inventories and the three native-slide digests remain identical. All prior history remains unchanged; source-candidate output is not a registry or native UI acceptance claim."
+  }
+ },
+ "entries": {
+  "column": {
+   "deck": {
+    "slides": [
+     {
+      "title": "column chart",
+      "chart": {
+       "type": "column",
+       "data": {
+        "columns": [
+         "Quarter",
+         "Revenue",
+         "Costs"
+        ],
+        "rows": [
+         [
+          "Q1",
+          12.4,
+          3
+         ],
+         [
+          "Q2",
+          null,
+          "7"
+         ],
+         [
+          "Q3",
+          18,
+          -2.5
+         ],
+         [
+          "Q4",
+          1000000,
+          0
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "99954a11bc017161474a2c577aff23dd31e1a753efd07b3e47d879c131086c19",
+   "rr81PreviousSha256": "85196b38e1c71527b9c7d1c8d527bfbeb2244c182ce6a850634c3ae273f45685",
+   "rr20PreviousSha256": "9267aeb25d11ae9f0a8e5a7ce9e719a2e069c043eb71d7d1ed583e8d7b589532",
+   "rr20PartCount": 30,
+   "rr20Bytes": 26134,
+   "rr90PreviousSha256": "10557a90788debcc5e0045481976b0d44c5eace4d180a16c91bbd88c7b35891c",
+   "rr90PreviousBytes": 26053
+  },
+  "column-labels": {
+   "deck": {
+    "slides": [
+     {
+      "title": "column chart",
+      "chart": {
+       "type": "column",
+       "data": {
+        "columns": [
+         "Quarter",
+         "Revenue",
+         "Costs"
+        ],
+        "rows": [
+         [
+          "Q1",
+          12.4,
+          3
+         ],
+         [
+          "Q2",
+          null,
+          "7"
+         ],
+         [
+          "Q3",
+          18,
+          -2.5
+         ],
+         [
+          "Q4",
+          1000000,
+          0
+         ]
+        ]
+       },
+       "dataLabels": true,
+       "axisTitles": {
+        "category": "Quarter",
+        "value": "USD"
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "ff1731bf1af78da7560f8ee01822c9ee174763773b38db78eeda18f6e78b1e2f",
+   "rr81PreviousSha256": "e1793caa675c7637a6c5c6e81dcde1cb76e7e317d17988ae9c2778d49745cbd6",
+   "rr20PreviousSha256": "7d5fb91df2ecc073fc9e87ee42a9b25c17529c803e2a045bf1a9e05a1524998b",
+   "rr20PartCount": 30,
+   "rr20Bytes": 26218,
+   "rr90PreviousSha256": "7c18db3ff69b3fa0e04a9ad457b3251b7135e8c21baa56272ff0c0709187541f",
+   "rr90PreviousBytes": 26123
+  },
+  "bar": {
+   "deck": {
+    "slides": [
+     {
+      "title": "bar chart",
+      "chart": {
+       "type": "bar",
+       "data": {
+        "columns": [
+         "Quarter",
+         "Revenue",
+         "Costs"
+        ],
+        "rows": [
+         [
+          "Q1",
+          12.4,
+          3
+         ],
+         [
+          "Q2",
+          null,
+          "7"
+         ],
+         [
+          "Q3",
+          18,
+          -2.5
+         ],
+         [
+          "Q4",
+          1000000,
+          0
+         ]
+        ]
+       },
+       "legend": "bottom"
+      }
+     }
+    ]
+   },
+   "sha256": "ed88c1b513ff14dbb51b12a4db2c99d86d05e15e71c857752d97c6d828a442b8",
+   "rr81PreviousSha256": "b067bb96b6ad58a5dc30f3ffc01c6218d0dd3ac3f64edc764ac2e6ae2a8e87cc",
+   "rr20PreviousSha256": "aecf7b2f67b5b39ea5403632456a6cbfe095348850853c2d20462982137ade45",
+   "rr20PartCount": 30,
+   "rr20Bytes": 26135,
+   "rr90PreviousSha256": "71237ab580d86c9c9ae1ec984693666a438bb0050e827fed3c107aaf13e0aa30",
+   "rr90PreviousBytes": 26055
+  },
+  "line": {
+   "deck": {
+    "slides": [
+     {
+      "title": "line chart",
+      "chart": {
+       "type": "line",
+       "data": {
+        "columns": [
+         "Quarter",
+         "Revenue",
+         "Costs"
+        ],
+        "rows": [
+         [
+          "Q1",
+          12.4,
+          3
+         ],
+         [
+          "Q2",
+          null,
+          "7"
+         ],
+         [
+          "Q3",
+          18,
+          -2.5
+         ],
+         [
+          "Q4",
+          1000000,
+          0
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "70a9a36833b37abbe178200c9911807f31718136c79275b6968129ee71473d95",
+   "previousSha256": "4fc5d67908d8de2e60ce18c2db685d57c934a872f06bbc583896d3047aa319cb",
+   "rr81PreviousSha256": "a2fb4e0a308b2e575aa15eab08a1f0abeacfaff5643dd19742a695b5e31f5413",
+   "rr20PreviousSha256": "252bff4cbf7c0f678ae3fc2418c12cea22758d4faa568d2bb46a452b1896640c",
+   "rr20PartCount": 30,
+   "rr20Bytes": 26180,
+   "rr90PreviousSha256": "b545fe8b2d611afd020896577b81a58deecf37e80ccabf15b0f5cd91393c6b1d",
+   "rr90PreviousBytes": 26097
+  },
+  "area": {
+   "deck": {
+    "slides": [
+     {
+      "title": "area chart",
+      "chart": {
+       "type": "area",
+       "data": {
+        "columns": [
+         "Quarter",
+         "Revenue",
+         "Costs"
+        ],
+        "rows": [
+         [
+          "Q1",
+          12.4,
+          3
+         ],
+         [
+          "Q2",
+          null,
+          "7"
+         ],
+         [
+          "Q3",
+          18,
+          -2.5
+         ],
+         [
+          "Q4",
+          1000000,
+          0
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "5f960b18b1b4bcc35e191a1cec3bbb58639f27f702429a67a617aa699993c67c",
+   "rr81PreviousSha256": "ebb99026f09b4375688f73bd314a543c1546d70a17fa5ce5d0a3134d241bd8cc",
+   "rr20PreviousSha256": "41aa8199e5e697cd7cc1fb66da00fa0628b110c883e2f3c8a6ddd7e24cc3e77a",
+   "rr20PartCount": 30,
+   "rr20Bytes": 26084,
+   "rr90PreviousSha256": "9479bbdf42baa254125fc0520531599da8b6869b625cc4da42418f08fdbc3277",
+   "rr90PreviousBytes": 26004
+  },
+  "stacked-column": {
+   "deck": {
+    "slides": [
+     {
+      "title": "stacked-column chart",
+      "chart": {
+       "type": "stacked-column",
+       "data": {
+        "columns": [
+         "Quarter",
+         "Revenue",
+         "Costs"
+        ],
+        "rows": [
+         [
+          "Q1",
+          12.4,
+          3
+         ],
+         [
+          "Q2",
+          null,
+          "7"
+         ],
+         [
+          "Q3",
+          18,
+          -2.5
+         ],
+         [
+          "Q4",
+          1000000,
+          0
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "cef3917afdb2b46c1966b31f9f661b9b167aef871cc298445c7d3ad4206c7b97",
+   "rr81PreviousSha256": "fbf8c62f3f49ebbdfaad0567bbcdc0fbe6d43e257cd6615ff4a4679728f070a1",
+   "rr20PreviousSha256": "496cf08a2068665bc628345bd9f8f08140f4c336a7945bf18ccc03a1c9261ff0",
+   "rr20PartCount": 30,
+   "rr20Bytes": 26138,
+   "rr90PreviousSha256": "e633e97b11bba26c80d74237548b134d093f5986338e081b4463e7dbfe18c49e",
+   "rr90PreviousBytes": 26058
+  },
+  "percent-stacked": {
+   "deck": {
+    "slides": [
+     {
+      "title": "100pct-stacked-column chart",
+      "chart": {
+       "type": "100pct-stacked-column",
+       "data": {
+        "columns": [
+         "Quarter",
+         "Revenue",
+         "Costs"
+        ],
+        "rows": [
+         [
+          "Q1",
+          12.4,
+          3
+         ],
+         [
+          "Q2",
+          null,
+          "7"
+         ],
+         [
+          "Q3",
+          18,
+          -2.5
+         ],
+         [
+          "Q4",
+          1000000,
+          0
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "97f6ce20baadc85d8668f3827876754d2b80881a43637fbcd93f20cf683c1468",
+   "rr81PreviousSha256": "f065e1ade5d975245e4df8c11d5be367ad27ddf53ee2f786527af53ac396b377",
+   "rr20PreviousSha256": "fb4c8e449b37e21083b3d23ae64821d599640bc07286b8e8b71f59d2070fec8c",
+   "rr20PartCount": 30,
+   "rr20Bytes": 26143,
+   "rr90PreviousSha256": "f1b96d02685f92957830ec37151077ced0ad6e5fe11f863b0b59fe654473acaa",
+   "rr90PreviousBytes": 26073
+  },
+  "pie": {
+   "deck": {
+    "slides": [
+     {
+      "title": "pie chart",
+      "chart": {
+       "type": "pie",
+       "data": {
+        "columns": [
+         "Quarter",
+         "Revenue",
+         "Costs"
+        ],
+        "rows": [
+         [
+          "Q1",
+          12.4,
+          3
+         ],
+         [
+          "Q2",
+          null,
+          "7"
+         ],
+         [
+          "Q3",
+          18,
+          -2.5
+         ],
+         [
+          "Q4",
+          1000000,
+          0
+         ]
+        ]
+       },
+       "dataLabels": {
+        "content": [
+         "category",
+         "percent"
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "3cfa0869e6d0c2fd8868a814197ccb6bc6ca0203b499bad1327fbdb5f786ed29",
+   "rr81PreviousSha256": "c09695697b886e3c1af9fb3c32ef0427ff082d8ccf3be059778ca7483c4c510e",
+   "rr20PartCount": 30,
+   "rr20Bytes": 25681,
+   "rr90PreviousSha256": "8a5bdd94d625770f070bd2d47ec6bbf6d69a852e8c56facb3ffc1fb935378299",
+   "rr90PreviousBytes": 25631
+  },
+  "doughnut": {
+   "deck": {
+    "slides": [
+     {
+      "title": "doughnut chart",
+      "chart": {
+       "type": "doughnut",
+       "data": {
+        "columns": [
+         "Quarter",
+         "Revenue",
+         "Costs"
+        ],
+        "rows": [
+         [
+          "Q1",
+          12.4,
+          3
+         ],
+         [
+          "Q2",
+          null,
+          "7"
+         ],
+         [
+          "Q3",
+          18,
+          -2.5
+         ],
+         [
+          "Q4",
+          1000000,
+          0
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "d4052fc62082484d6907a6c65906b946fda81f087c47eb1ffba198f3b671a8b5",
+   "rr81PreviousSha256": "f80a7e3a776b8c72cfb86b811a99e869799a91540377f55eef655461faebd1df",
+   "rr20PartCount": 30,
+   "rr20Bytes": 25620,
+   "rr90PreviousSha256": "1c46e14b031ae6168c6a39d86a22cff958ffb62984c8ee18ebb3c5854195bd23",
+   "rr90PreviousBytes": 25573
+  },
+  "radar": {
+   "deck": {
+    "slides": [
+     {
+      "title": "radar chart",
+      "chart": {
+       "type": "radar",
+       "data": {
+        "columns": [
+         "Quarter",
+         "Revenue",
+         "Costs"
+        ],
+        "rows": [
+         [
+          "Q1",
+          12.4,
+          3
+         ],
+         [
+          "Q2",
+          null,
+          "7"
+         ],
+         [
+          "Q3",
+          18,
+          -2.5
+         ],
+         [
+          "Q4",
+          1000000,
+          0
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "1e5f469b3b64c2ef1139ee83ce64d1a4414ea46b3faa151821db09dd4f891875",
+   "previousSha256": "17afa5c1028516fd59cf3be557b001e0c9b4cf840eeb9aaa74d053dbfc203d68",
+   "rr81PreviousSha256": "da368cb1cf9a602b0faff65b26a5a45209952fb73e0f783dcd101e68ea01f29d",
+   "rr20PreviousSha256": "b54d2a65469360cfe5e73ec0d5fb52db747af46801ff802b6d5746721dbe2b79",
+   "rr20PartCount": 30,
+   "rr20Bytes": 26069,
+   "rr90PreviousSha256": "db6a3e2d5b6c02795149a9373d9208e04806f2032d27fc7962327899894d115c",
+   "rr90PreviousBytes": 26013
+  },
+  "scatter": {
+   "deck": {
+    "slides": [
+     {
+      "title": "scatter chart",
+      "chart": {
+       "type": "scatter",
+       "data": {
+        "columns": [
+         "Point",
+         "X",
+         "Y1",
+         "Y2"
+        ],
+        "rows": [
+         [
+          "a",
+          1,
+          2,
+          3
+         ],
+         [
+          "b",
+          2,
+          4,
+          null
+         ],
+         [
+          "c",
+          3.5,
+          "8",
+          1
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "89646e3b606f2fe238c6fbfea75e9f48ac25c890097fedbb8c90130efbb83525",
+   "previousSha256": "3bc08c644ba443a9fde975c8f9cf39ffa44a4cd0f779c896a7be2ac64332ea9b",
+   "rr81PreviousSha256": "a27ec34c283f59e04ba7ae02b885de0cacc7e0c46191079c6947f699a2c542de",
+   "rr20PreviousSha256": "3929f43b2bcbfc72ce95f06e0e5604bf6fa3fbad145f6e9621d614781f3bf4b8",
+   "rr20PartCount": 30,
+   "rr20Bytes": 25905,
+   "rr90PreviousSha256": "07307458877dae4b4be2038c88e5dae5f0efff27febfb16ab6ec021f9eab1f0c",
+   "rr90PreviousBytes": 25839
+  },
+  "scatter-two-columns": {
+   "deck": {
+    "slides": [
+     {
+      "title": "scatter chart",
+      "chart": {
+       "type": "scatter",
+       "data": {
+        "columns": [
+         "Point",
+         "Y"
+        ],
+        "rows": [
+         [
+          "a",
+          1
+         ],
+         [
+          "b",
+          4
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "0db7a20e4f5a658fc9ec2fc19b7cf8f38f14058786b0a7e1a2c4536bd7ffbf41",
+   "previousSha256": "ce86707121a169b6fb13781f87acb279fd29ce2740640c6ba4f0eb6ea7283af5",
+   "rr81PreviousSha256": "8e216e257f4c9b02bf2e51bf33566ea949dd95d5b84f2aa5b203a9569d8b249c",
+   "rr20PreviousSha256": "edb9d38c631a7eca1cc37f10434b54a86313b36369e2380c0645782fcb725bbd",
+   "rr20PartCount": 30,
+   "rr20Bytes": 25732,
+   "rr90PreviousSha256": "90dc328f75ca4abae5a06c1ee36992f23ec891cd1748535c61666e835f66a726",
+   "rr90PreviousBytes": 25671
+  },
+  "single-column": {
+   "deck": {
+    "slides": [
+     {
+      "title": "column chart",
+      "chart": {
+       "type": "column",
+       "data": {
+        "columns": [
+         "Values"
+        ],
+        "rows": [
+         [
+          3
+         ],
+         [
+          1
+         ],
+         [
+          4
+         ],
+         [
+          1
+         ],
+         [
+          5
+         ],
+         [
+          null
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "a481611020d6bbaa39c4e0b0b1218fb425ae5cd88a5c52b24c5a910e7deb270d",
+   "rr81PreviousSha256": "7184993d0ee22c4e7c90ae9d17b3a2aefe55ec5972a331b117951d727f2d7059",
+   "rr20PreviousSha256": "316edf265b150d7a41515676990d779a2e57accb0fe2f72e9c5203aa24541e54",
+   "rr20PartCount": 31,
+   "rr20Bytes": 26351,
+   "rr20RowDataPreviousSha256": "5162d4b32aa4a96a66809df9a76c636217dbac18d95060daed9d8d36ce42abe0",
+   "rr20RowDataPreviousBytes": 25843,
+   "rr20RowDataPreviousPartCount": 30,
+   "rr90PreviousSha256": "1af25d0530fdd82415b7987fd95d90df0ca8174640cdf94ed058d8a19acd71f0",
+   "rr90PreviousBytes": 26304
+  },
+  "scatter-labels": {
+   "deck": {
+    "slides": [
+     {
+      "title": "scatter chart",
+      "chart": {
+       "type": "scatter",
+       "data": {
+        "columns": [
+         "Point",
+         "X",
+         "Y"
+        ],
+        "rows": [
+         [
+          "a",
+          1,
+          2
+         ],
+         [
+          "b",
+          2,
+          4
+         ]
+        ]
+       },
+       "dataLabels": true
+      }
+     }
+    ]
+   },
+   "sha256": "538b7d98c2b3e3120d39c0cd98a6f08708decc67a3575108321539dfed94fac8",
+   "previousSha256": "e37430a5255bbcd16dfdcb28250a692d0cde3c770a9c8471e8f80ed195e32575",
+   "rr81PreviousSha256": "ad90e489c98bdd271b661bdd74971c0e65c297c9c6ec5ee019d0c4537c6adc5c",
+   "rr20PreviousSha256": "a027fa049d3f679a71d9451c8fda5679c07eea9394e00fdba99744fd9b5ed9e8",
+   "rr20PartCount": 30,
+   "rr20Bytes": 25743,
+   "rr90PreviousSha256": "bb70b79eb88c74dc52ff83276047b6dccc227f162366ca9c6515a0850951e9f9",
+   "rr90PreviousBytes": 25682
+  },
+  "chartex-native-map": {
+   "deck": {
+    "slides": [
+     {
+      "title": "map chart",
+      "chart": {
+       "type": "world",
+       "data": {
+        "columns": [
+         "Region",
+         "Value"
+        ],
+        "rows": [
+         [
+          "France",
+          3
+         ],
+         [
+          "Spain",
+          4
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "b8fd7037f3a48bc001644141092fcad2f36b5c78cc464b8288b49169d22f7e73",
+   "rr81PreviousSha256": "f1be128128cf4c62067070de0f37f61f04cc85743797a1af745f0d2c8fec9849",
+   "rr20PreviousSha256": "a6419c39cdc7fc66a32d77f0db2fe181bf9d35ad56ef96330e6edb827889317d",
+   "rr20PartCount": 30,
+   "rr20Bytes": 25878,
+   "rr90PreviousSha256": "d060611796845bedebd39d8b61bed229755f93aa93f0f505d863c9334a303d4f",
+   "rr90PreviousBytes": 25830
+  },
+  "histogram": {
+   "deck": {
+    "slides": [
+     {
+      "title": "histogram chart",
+      "chart": {
+       "type": "histogram",
+       "data": {
+        "columns": [
+         "Values"
+        ],
+        "rows": [
+         [
+          3
+         ],
+         [
+          1
+         ],
+         [
+          4
+         ],
+         [
+          1
+         ],
+         [
+          5
+         ],
+         [
+          9
+         ],
+         [
+          2
+         ],
+         [
+          6
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "7a658703a76437437afa25183d786b73e0db5f699ff262f61ee16c1313f6b55b",
+   "rr81PreviousSha256": "94207febff494aa3726d8c29013f11b1d6a6c951554df30b29bc5b790f571e15",
+   "rr20PreviousSha256": "c927127b53a5c6b1a77baee28c0b7c17aeb7ae1b1b13d48c2adc835f1d355203",
+   "rr20PartCount": 34,
+   "rr20Bytes": 28933,
+   "rr90PreviousSha256": "00fc9d12f7b08be9f89c8c58e0ffe23541415fdbee6efce073d9d16c52395630",
+   "rr90PreviousBytes": 28870
+  },
+  "treemap": {
+   "deck": {
+    "slides": [
+     {
+      "title": "treemap chart",
+      "chart": {
+       "type": "treemap",
+       "data": {
+        "columns": [
+         "Area",
+         "Size"
+        ],
+        "rows": [
+         [
+          "A",
+          5
+         ],
+         [
+          "B",
+          3
+         ],
+         [
+          "C",
+          2
+         ]
+        ]
+       }
+      }
+     }
+    ]
+   },
+   "sha256": "3b2020f7dd95168de8a9acd2984fa1fc209236d0d4d20e24c0607c4dd1f79e50",
+   "rr81PreviousSha256": "a08a0d0fd687e9b672cdc95973a800ceb9cfee1acc6d3c584e0f1d44183d9c3b",
+   "rr20PreviousSha256": "248252f14f0ad427c628777a97719e94288cfceacc9c8ddfe7b693c640d7d40e",
+   "rr20PartCount": 34,
+   "rr20Bytes": 28767,
+   "rr90PreviousSha256": "ee6e4ccedda6b72d051f0f69aee35bb479459d3a60d67ff010d6cecf44afa1f4",
+   "rr90PreviousBytes": 28686
+  },
+  "waterfall": {
+   "deck": {
+    "slides": [
+     {
+      "title": "waterfall chart",
+      "chart": {
+       "type": "waterfall",
+       "data": {
+        "columns": [
+         "Step",
+         "Delta"
+        ],
+        "rows": [
+         [
+          "Start",
+          10
+         ],
+         [
+          "Up",
+          4
+         ],
+         [
+          "Down",
+          -3
+         ]
+        ]
+       },
+       "dataLabels": true
+      }
+     }
+    ]
+   },
+   "sha256": "397052a755399c5786ebaeb411f8acec38d530b05a649e1302e16c89b1ed31e7",
+   "rr81PreviousSha256": "4d82a4539fd94b5292bf557f14810e7110b84a1dc49ac71d84e83e1b7211f7b9",
+   "rr20PreviousSha256": "85709dcc4c70c5a485bd70a8814bb6cbb8d4a8a493e6093234efc9ec7ffc9fab",
+   "rr20PartCount": 34,
+   "rr20Bytes": 28850,
+   "rr90PreviousSha256": "660b43ce01cbc87cb5d0d832af6ff2196fa9bc05b86b0afcd27ffada570d2c08",
+   "rr90PreviousBytes": 28777
+  },
+  "table": {
+   "deck": {
+    "slides": [
+     {
+      "title": "Table",
+      "table": {
+       "columns": [
+        "Region",
+        "Revenue",
+        "Growth"
+       ],
+       "rows": [
+        [
+         "EMEA",
+         8.2,
+         0.4
+        ],
+        [
+         "APAC",
+         6.1,
+         0.52
+        ],
+        [
+         "LATAM",
+         null,
+         true
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "sha256": "c9f29d663f9135bcd14221b5d1a0ebb27775b183586a8b76a594c4d4498f91e9",
+   "previousSha256": "b5944a1933e425cb2c2a91d71741529922e12c7cbd877500baab0debc424dc25",
+   "nativeSlideSha256": "1685ff79f76dd66d0ad7f3de5ca9e0631eb25e525a04ddebc02acdf96fc8b6be",
+   "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged.",
+   "rr81PreviousSha256": "66ee74dbd87484edceaa5ae690e9ace20218e4b4bf5642801dada33c8299d917",
+   "rr81PreviousNativeSlideSha256": "486aa282abbad8e81942f901daddf29fc0cdc7abd5bf2bb928300084a47ce8fd",
+   "rr20PreviousSha256": "f7204fb6867b288b557dd9fc4265727237aac74bd61f1a52f9f1d7498f852e27",
+   "rr20PartCount": 28,
+   "rr20Bytes": 20274,
+   "rr20PreviousNativeSlideSha256": "1ba4ee539780e772cabf82b46659cffb46c9528c86b2f5e3ed2d36745341ba45",
+   "rr90PreviousSha256": "863685d0e72b6e7ad466226cb6ddb3c68af0fad81fc37fe7bdcc759243c0fc29",
+   "rr90PreviousBytes": 20228,
+   "rr90PreviousNativeSlideSha256": "75191fd6a3bf2aa74ce2b59d6d038918cb334465af0ce0f03470f86dcdc3e316"
+  },
+  "styled-table": {
+   "deck": {
+    "slides": [
+     {
+      "title": "Styled",
+      "table": {
+       "columns": [
+        "Region",
+        {
+         "value": "Revenue",
+         "style": {
+          "align": "right"
+         }
+        }
+       ],
+       "rows": [
+        [
+         "EMEA",
+         {
+          "value": 8.2,
+          "style": {
+           "fill": "#ff0000"
+          }
+         }
+        ],
+        [
+         [
+          {
+           "text": "AP",
+           "bold": true
+          },
+          "AC"
+         ],
+         6.1
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "sha256": "7e63dc309d2009089a90a1e4a38c16d5009db40644add7091d7eb7102157d58d",
+   "previousSha256": "7cc1518cdae8b8b73d114b073402d023733334ae932585e1ebdebf78d85153d4",
+   "nativeSlideSha256": "85850b391b88e4e1af30fee6274a584112621d0b2e18a65fc10bb360650df2b5",
+   "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged.",
+   "rr81PreviousSha256": "0c15e8bfbfa17618a23e1bf404ffb487b55fff0d00f7c95236fd758453aec8d5",
+   "rr81PreviousNativeSlideSha256": "4c976f01f684828f47f98b9da0b4fe701ac1025f5f03552819072da47df047c5",
+   "rr20PreviousSha256": "c2203b92dc12e66d2f7c882ea003035b4cdc42a2abbf85a5e1b013745941d4da",
+   "rr20PartCount": 28,
+   "rr20Bytes": 20107,
+   "rr20PreviousNativeSlideSha256": "8a5db04709c55f68a3e9459bddde772141769830e6daa053c4cf7df951073823",
+   "rr90PreviousSha256": "882a5cf6ded2883b19dd59b535bb6be7f2269adef77e2adef7ddb90558e51f05",
+   "rr90PreviousBytes": 20055,
+   "rr90PreviousNativeSlideSha256": "b74f7d78955d8da43fca63ac9ee1203d4e1b3b7929e445dca3a725e038863de9"
+  },
+  "mixed-blocks": {
+   "deck": {
+    "slides": [
+     {
+      "title": "Mixed",
+      "blocks": [
+       {
+        "chart": {
+         "type": "line",
+         "data": {
+          "columns": [
+           "d",
+           "v"
+          ],
+          "rows": [
+           [
+            "1",
+            2
+           ],
+           [
+            "2",
+            3
+           ]
+          ]
+         }
+        }
+       },
+       {
+        "table": {
+         "rows": [
+          [
+           "a",
+           1
+          ],
+          [
+           "b",
+           2
+          ]
+         ]
+        }
+       }
+      ]
+     }
+    ]
+   },
+   "sha256": "c39b387cfc6f198a90007f26b65e862d12ddfb4aa543ff581bdb4e39f9e4fce2",
+   "previousSha256": "8744ecbad37555637ec72667e4d884db982c0882da3c4c6d21b65df141de2534",
+   "nativeSlideSha256": "6cc3bc70983a1c6a7a4afc48be1e87e28b4972a3225b4b325ae9ea55d3c92124",
+   "change": "RR-59: authored inline-table provenance in the OPF_DATA_V1 tag; native slide XML excluding customer-data tags is unchanged.",
+   "rr81PreviousSha256": "884f2202724f38110ee08308371622d013f34604ea0af6584a66cfeabff1234a",
+   "rr81PreviousNativeSlideSha256": "cf16e2a0717f35272ecac4c58806b1a45db8bca1f224f3211c7e6bfeaafbcbac",
+   "rr20PreviousSha256": "595b3af0478b788077e7233fce2461c2512465058d7188505682c6c2900874e4",
+   "rr20PartCount": 31,
+   "rr20Bytes": 26984,
+   "rr20PreviousNativeSlideSha256": "72b7cbc76ec12a294480c933f66a247dd90449798a0008d3adf3d723fa0591ad",
+   "rr90PreviousSha256": "d66b20b9afc9c15964238285d36eaf9cc783e51009bb29cdf8a00dc6e2b0f9ff",
+   "rr90PreviousBytes": 26900,
+   "rr90PreviousNativeSlideSha256": "f94e0fdc8415833d61bc0d96a67a456d3b7486d3809155182ddaadb9e7224907"
+  }
+ },
+ "rr90FirstUseLayoutReview": {
+  "baselineCore": "origin/main 387dadfc (opf RR-93 diagnostics merged)",
+  "candidateCore": "codex/rr-90-first-use-layout (opf#717: RR-90 table type size, RR-91 footer zones, RR-93a tag and rich cells)",
+  "evidence": "Compared every archive part by part against a build of the same converter (main b62bf23, RR-94) with core main. The 27 chart-only archives change only ppt/slideMasters/slideMaster1.xml: the unused date, footer and slide-number placeholders take core's new footer-zone geometry (content inset, three columns with a 2% gutter). The table, styled-table and mixed-blocks archives also change ppt/slides/slide1.xml (table cell text at the 25 px body size and its row heights) and the ppt/tags/opfData1.xml part that records them. Charts, workbooks, themes, layouts, notes masters and diagnostics are byte-identical."
+ }
+}

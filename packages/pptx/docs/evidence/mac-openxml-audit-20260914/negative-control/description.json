@@ -1,0 +1,10 @@
+{
+  "source": "source-after/reordered/image-control.pptx",
+  "deletedPart": "ppt/media/image-1-1.png",
+  "duplicatedRelationship": "<Relationship Id=\"rId1\" Type=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships/extended-properties\" Target=\"docProps/app.xml\"/>",
+  "expectedErrors": [
+    "duplicate-relationship-id",
+    "missing-internal-target",
+    "missing-content-type-part"
+  ]
+}

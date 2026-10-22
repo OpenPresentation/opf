@@ -1,0 +1,359 @@
+{
+  "core": "8f70cf1b52dc4ca4eb246a6f9d065b1403edbf31",
+  "gallery": "146e477196405fe7d2283008f6fad34c12742599",
+  "archiveProof": {
+    "area": {
+      "partCount": 30,
+      "oldSha256": "41aa8199e5e697cd7cc1fb66da00fa0628b110c883e2f3c8a6ddd7e24cc3e77a",
+      "candidateSha256": "ef9da7269e0e68f18f4551c032e9f56e0c54fce8679a3747915b49357cfdf1ac",
+      "oldBytes": 25960,
+      "candidateBytes": 25960,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "bar": {
+      "partCount": 30,
+      "oldSha256": "aecf7b2f67b5b39ea5403632456a6cbfe095348850853c2d20462982137ade45",
+      "candidateSha256": "56cc21ccafca09b84a4e94914aadd4fc198cdf5baf8242e9c636663f12f2c3b6",
+      "oldBytes": 26007,
+      "candidateBytes": 26007,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "chartex-native-map": {
+      "partCount": 30,
+      "oldSha256": "a6419c39cdc7fc66a32d77f0db2fe181bf9d35ad56ef96330e6edb827889317d",
+      "candidateSha256": "a86fe9a1868c5f5baa6458b910e64f13239ea857650d24f8b63f2edfe4e4f0a2",
+      "oldBytes": 25781,
+      "candidateBytes": 25783,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 1
+        }
+      },
+      "tagChanges": {}
+    },
+    "column": {
+      "partCount": 30,
+      "oldSha256": "9267aeb25d11ae9f0a8e5a7ce9e719a2e069c043eb71d7d1ed583e8d7b589532",
+      "candidateSha256": "1e560fbcdf1df60a94b7adc2241e6e6f4615fe3706a5ba6eeae0bb492337e34b",
+      "oldBytes": 26006,
+      "candidateBytes": 26006,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "column-labels": {
+      "partCount": 30,
+      "oldSha256": "7d5fb91df2ecc073fc9e87ee42a9b25c17529c803e2a045bf1a9e05a1524998b",
+      "candidateSha256": "b5b9b4ed5e9eba7f524bc1e79d09e6911a9977677aca425cf36ae75d5a1e5466",
+      "oldBytes": 26077,
+      "candidateBytes": 26076,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "doughnut": {
+      "partCount": 30,
+      "oldSha256": "0e62b593b240a14d6e8f9dcec3a41d148594215a2e7b01174a04db37d8fdd177",
+      "candidateSha256": "0e62b593b240a14d6e8f9dcec3a41d148594215a2e7b01174a04db37d8fdd177",
+      "oldBytes": 25528,
+      "candidateBytes": 25528,
+      "changedParts": {},
+      "tagChanges": {}
+    },
+    "histogram": {
+      "partCount": 34,
+      "oldSha256": "c927127b53a5c6b1a77baee28c0b7c17aeb7ae1b1b13d48c2adc835f1d355203",
+      "candidateSha256": "9c5eaf31976591354a65ae3c18d0eb8d0d317b246bc8f55490d925055d7b5d0b",
+      "oldBytes": 28823,
+      "candidateBytes": 28827,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 1
+        },
+        "ppt/charts/chartEx1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        },
+        "ppt/charts/style1.xml": {
+          "colorCount": 6,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "line": {
+      "partCount": 30,
+      "oldSha256": "252bff4cbf7c0f678ae3fc2418c12cea22758d4faa568d2bb46a452b1896640c",
+      "candidateSha256": "a2e1a876afcb6edfe7ec96e487601c4f2b6c3166f51c04d075a927674b10fdd2",
+      "oldBytes": 26051,
+      "candidateBytes": 26051,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "mixed-blocks": {
+      "partCount": 31,
+      "oldSha256": "595b3af0478b788077e7233fce2461c2512465058d7188505682c6c2900874e4",
+      "candidateSha256": "2e74592c13f2a91d0eb24baa770af01213da748de9230f43b353377c7ae8148c",
+      "oldBytes": 26851,
+      "candidateBytes": 26856,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        },
+        "ppt/slides/slide1.xml": {
+          "borderColorCount": 16,
+          "numericRightAlignCount": 2,
+          "textsSha256": "e2f210a44bf511c205b0e9b29b7fdf42a638d3b657bc10477b7111d9bf487262"
+        }
+      },
+      "tagChanges": {
+        "ppt/tags/opfData1.xml": {
+          "changedKeys": [
+            "evidence"
+          ],
+          "payloadSha256": "be320720f8e99d390afa46b0275c35d66a871d3c0192c878a6776b186f85338e"
+        },
+        "ppt/tags/opfSlide1.xml": {
+          "changedKeys": [
+            "native.style"
+          ],
+          "old": "1408b3d7e9d91c",
+          "new": "12603b925a1e68"
+        }
+      }
+    },
+    "percent-stacked": {
+      "partCount": 30,
+      "oldSha256": "fb4c8e449b37e21083b3d23ae64821d599640bc07286b8e8b71f59d2070fec8c",
+      "candidateSha256": "7a840b6466b2405a17ced4a03038aec4ab4493fd16f272ac6a1d3ff5fde8a4ff",
+      "oldBytes": 26027,
+      "candidateBytes": 26028,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "pie": {
+      "partCount": 30,
+      "oldSha256": "669b7fb335ad4c9f19fc08a161241aac35db3624026c0251dd48d93ce0689d3b",
+      "candidateSha256": "669b7fb335ad4c9f19fc08a161241aac35db3624026c0251dd48d93ce0689d3b",
+      "oldBytes": 25585,
+      "candidateBytes": 25585,
+      "changedParts": {},
+      "tagChanges": {}
+    },
+    "radar": {
+      "partCount": 30,
+      "oldSha256": "b54d2a65469360cfe5e73ec0d5fb52db747af46801ff802b6d5746721dbe2b79",
+      "candidateSha256": "90450341b61f01309021205470011fccd473dd4349851111e9eb17560f7696c4",
+      "oldBytes": 25966,
+      "candidateBytes": 25966,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "scatter": {
+      "partCount": 30,
+      "oldSha256": "3929f43b2bcbfc72ce95f06e0e5604bf6fa3fbad145f6e9621d614781f3bf4b8",
+      "candidateSha256": "410881392d4538917b6267bcf9a17033bf9d40c2ca52777e47482fe6ffdcff3b",
+      "oldBytes": 25793,
+      "candidateBytes": 25793,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "scatter-labels": {
+      "partCount": 30,
+      "oldSha256": "a027fa049d3f679a71d9451c8fda5679c07eea9394e00fdba99744fd9b5ed9e8",
+      "candidateSha256": "023f4dbd0b332a793dbd2d58d61d3a99205f07ab3cbcaecc91389ed55678b8dc",
+      "oldBytes": 25637,
+      "candidateBytes": 25636,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "scatter-two-columns": {
+      "partCount": 30,
+      "oldSha256": "edb9d38c631a7eca1cc37f10434b54a86313b36369e2380c0645782fcb725bbd",
+      "candidateSha256": "2cd775c0dec5752981a1f4f2ab1e938051933755ab5b35fbe1599a12ff8b2105",
+      "oldBytes": 25626,
+      "candidateBytes": 25625,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "single-column": {
+      "partCount": 30,
+      "oldSha256": "316edf265b150d7a41515676990d779a2e57accb0fe2f72e9c5203aa24541e54",
+      "candidateSha256": "5162d4b32aa4a96a66809df9a76c636217dbac18d95060daed9d8d36ce42abe0",
+      "oldBytes": 25841,
+      "candidateBytes": 25843,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 1
+        }
+      },
+      "tagChanges": {}
+    },
+    "stacked-column": {
+      "partCount": 30,
+      "oldSha256": "496cf08a2068665bc628345bd9f8f08140f4c336a7945bf18ccc03a1c9261ff0",
+      "candidateSha256": "69f4a49e18dabcc1f60425e829c4d14a119dd81d4c81b7100e9af07016a82b99",
+      "oldBytes": 26015,
+      "candidateBytes": 26015,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "styled-table": {
+      "partCount": 28,
+      "oldSha256": "c2203b92dc12e66d2f7c882ea003035b4cdc42a2abbf85a5e1b013745941d4da",
+      "candidateSha256": "c268481a41455583c501b1486405c4997d1ea80333771949d42ffc4976723917",
+      "oldBytes": 20003,
+      "candidateBytes": 20009,
+      "changedParts": {
+        "ppt/slides/slide1.xml": {
+          "borderColorCount": 24,
+          "numericRightAlignCount": 2,
+          "textsSha256": "dadb9d5c7ed21c867baac86ced1a74f515fe43b4cbe10dceb09a20ff698c9254"
+        }
+      },
+      "tagChanges": {
+        "ppt/tags/opfData1.xml": {
+          "changedKeys": [
+            "evidence"
+          ],
+          "payloadSha256": "544d962a6de715d6886fb45b5097990cf8a442b7ee53641a3b5a17e2ab0a6dd7"
+        },
+        "ppt/tags/opfSlide1.xml": {
+          "changedKeys": [
+            "native.style"
+          ],
+          "old": "0303ec3e832564",
+          "new": "1a2af8f77fa2b4"
+        }
+      }
+    },
+    "table": {
+      "partCount": 28,
+      "oldSha256": "f7204fb6867b288b557dd9fc4265727237aac74bd61f1a52f9f1d7498f852e27",
+      "candidateSha256": "ae6dc6091451e8644b41b4169ffcc086e278eb81984f1bc83e40375b1666611d",
+      "oldBytes": 20175,
+      "candidateBytes": 20181,
+      "changedParts": {
+        "ppt/slides/slide1.xml": {
+          "borderColorCount": 48,
+          "numericRightAlignCount": 5,
+          "textsSha256": "8fb7e47e01005d21994c16be9f1d9e38525d3d0a42062622e7a3be9049928055"
+        }
+      },
+      "tagChanges": {
+        "ppt/tags/opfData1.xml": {
+          "changedKeys": [
+            "evidence"
+          ],
+          "payloadSha256": "e07dcfd3cb434a072d294caaa97649ba4d175f8715852e2d7df16c019b8568b4"
+        },
+        "ppt/tags/opfSlide1.xml": {
+          "changedKeys": [
+            "native.style"
+          ],
+          "old": "02afcdb300cd60",
+          "new": "14dffd24775011"
+        }
+      }
+    },
+    "treemap": {
+      "partCount": 34,
+      "oldSha256": "248252f14f0ad427c628777a97719e94288cfceacc9c8ddfe7b693c640d7d40e",
+      "candidateSha256": "74b7ffeb54e09ad04aadfeff1d3bb33f9d486b160d3185e039608c64d1ea3164",
+      "oldBytes": 28636,
+      "candidateBytes": 28639,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 1
+        },
+        "ppt/charts/style1.xml": {
+          "colorCount": 6,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    },
+    "waterfall": {
+      "partCount": 34,
+      "oldSha256": "85709dcc4c70c5a485bd70a8814bb6cbb8d4a8a493e6093234efc9ec7ffc9fab",
+      "candidateSha256": "f5c5461d35e6b5fec76bab978ac33261a921861a287a64b82cd2be403d1e011d",
+      "oldBytes": 28731,
+      "candidateBytes": 28732,
+      "changedParts": {
+        "ppt/charts/chart1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        },
+        "ppt/charts/chartEx1.xml": {
+          "colorCount": 1,
+          "newZeroMin": 0
+        },
+        "ppt/charts/style1.xml": {
+          "colorCount": 6,
+          "newZeroMin": 0
+        }
+      },
+      "tagChanges": {}
+    }
+  }
+}
