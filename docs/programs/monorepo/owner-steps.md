@@ -15,7 +15,7 @@ Conventions: `gh` is logged in as the owner (`michaeljgrimm`, repository admin o
 | O5 | Add the App as a bypass actor on the current `main` ruleset | MR-41 (the release commit to `main`) | 2 min | after O4 |
 | O6 | Switch the ruleset: no merge queue, `verify` only, squash only; repository merge settings | MR-33 | 10 min | after MR-32 |
 | O7 | Optional tag ruleset for `v*` | MR-40 | 3 min | after O3 |
-| O8 | Site repositories: auto-merge and a required `build-and-smoke` | MR-52 | 15 min each | after O4; see the blocker in O8 |
+| O8 | Site repositories: install the App, add its two secrets | MR-52 | 5 min each | after O4 |
 | O9 | Approve the issue transfer | MR-51 | 2 min | after O3 |
 | O10 | Archive the four old repos, remove old publisher entries and loose secrets | MR-60 | 30 min | after the soak (MR-53) |
 
@@ -24,7 +24,7 @@ Conventions: `gh` is logged in as the owner (`michaeljgrimm`, repository admin o
 Read these first; each is repeated at its step.
 
 1. **The ecosystem GitHub App does not exist yet.** The plan (section 6, OWNER action 6) says to "reuse the ecosystem App" and extend it. `gh api orgs/OpenPresentation/installations` lists only three installations (`claude`, `cursor`, `chatgpt-codex-connector`), `OpenPresentation/opf` has no `ECOSYSTEM_APP_ID` variable and no `ECOSYSTEM_APP_PRIVATE_KEY` secret, and opf#298 (the issue that asked for it) is still open. O4 therefore creates the App. If you created one under another account and it is simply not installed on the organization, skip the creation and do the rest of O4.
-2. **The three site repositories cannot take rulesets or branch protection today.** They are private repositories in `Data-Advantage`, an organization on the Free plan: `gh api repos/Data-Advantage/<repo>/rulesets` and `.../branches/main/protection` both return 403 "Upgrade to GitHub Pro or make this repository public". Without a required check, `gh pr merge --auto` has nothing to wait for and merges at once, and the "Allow auto-merge" setting is gated on the same feature. O8 says what to decide.
+2. **The three site repositories cannot take rulesets or branch protection today.** They are private repositories in `Data-Advantage`, an organization on the Free plan: `gh api repos/Data-Advantage/<repo>/rulesets` and `.../branches/main/protection` both return 403 "Upgrade to GitHub Pro or make this repository public". Without a required check, `gh pr merge --auto` has nothing to wait for and merges at once, and the "Allow auto-merge" setting is gated on the same feature. **Decided (D19, owner, 2026-10-21): each site's own CI merges the bump pull request after its `build-and-smoke` job passes, with the App's token; no ruleset or auto-merge setting is needed.** O8 lists what is left for you.
 3. **`v5` is not a usable dist-tag.** The plan (OWNER action 10) suggests a dist-tag `v5` pointing at gallery 5.0.0. npm refuses it ("Tag name must not be a valid SemVer range", `semver.validRange("v5")` is `>=5.0.0 <6.0.0-0`; checked in the npm 11.19.0 source). O10 uses `legacy-v5`.
 4. **A tag ruleset that restricts creation of `v*` would break the release job.** The `release` job creates the tag with `GITHUB_TOKEN` (plan section 5), and `github-actions[bot]` cannot be a bypass actor. O7 therefore restricts updates and deletions only.
 5. **"Allow auto-merge" is off on `OpenPresentation/opf`** (`allow_auto_merge: false`). Without the merge queue, `pr-gate.mjs --merge` and every agent merge rely on GitHub auto-merge, so O6 turns it on.
@@ -201,7 +201,7 @@ git push origin 'refs/tags/*:refs/tags/*'
 
 ## O4. The GitHub App (before MR-41 for the release commit; before MR-52 for the sites)
 
-**What and why.** One App does two jobs: the `prepare` job of `npm-publish.yml` pushes the release commit to `main` (a bypass actor), and `bump-sites.yml` opens and auto-merges the "bump to vX.Y.Z" pull requests in the three site repositories. App-authored pushes and pull requests start workflows; `GITHUB_TOKEN` ones do not. Only `prepare` and `bump-sites.yml` hold the key; `publish` holds no secret. The plan calls this the "ecosystem App"; it does not exist yet (finding 1).
+**What and why.** One App does two jobs: the `prepare` job of `npm-publish.yml` pushes the release commit to `main` (a bypass actor), and `bump-sites.yml` opens the "bump to vX.Y.Z" pull requests in the three site repositories, and each site's own CI merges a patch bump with the App's token (D19). App-authored pushes and pull requests start workflows; `GITHUB_TOKEN` ones do not. Only `prepare` and `bump-sites.yml` hold the key; `publish` holds no secret. The plan calls this the "ecosystem App"; it does not exist yet (finding 1).
 
 **Create it** (as an organization App: `https://github.com/organizations/OpenPresentation/settings/apps/new`, or Organization settings, Developer settings, **GitHub Apps**, **New GitHub App**):
 
@@ -335,38 +335,34 @@ Expected: no `merge_queue` among the types, `checks` is `["verify"]`, `methods` 
 
 ## O8. The three site repositories (MR-52; needs O4's second installation)
 
-Sites: `Data-Advantage/openpresentation-site` (default branch `main`, workflow `site-ci.yml`), `Data-Advantage/pptx-gallery` (`main`), `Data-Advantage/pptx-dev` (default branch **`master`**). Agents add or rename a job `build-and-smoke` in each site's CI by pull request; the sites keep deploying by their own path.
+Sites: `Data-Advantage/openpresentation-site` (default branch `main`, workflow `site-ci.yml`), `Data-Advantage/pptx-gallery` (`main`), `Data-Advantage/pptx-dev` (default branch **`master`**). Agents add or rename a job `build-and-smoke` and a final merge step in each site's CI by pull request; the sites keep deploying by their own path.
 
-**Blocker to decide first (finding 2).** The sites are private repositories in a Free-plan organization, where rulesets, branch protection and so auto-merge-with-a-required-check are unavailable. Pick one:
+**Decided (D19, owner, 2026-10-21): the site's own CI merges.** `bump-sites.yml` only opens the "bump to vX.Y.Z" pull request. In each site, the CI step after `build-and-smoke` merges a patch bump with the GitHub App's token (so the merge starts the site's push and deploy workflows; a `GITHUB_TOKEN` merge would not). The sites are private repositories in a Free-plan organization, so there is no ruleset, no required check and no auto-merge setting, and you do not need any: **do not enable "Allow auto-merge" and do not add a ruleset**. Not chosen: upgrading `Data-Advantage` to the Team plan, and no auto-merge.
 
-| Option | What you do | Effect |
-| --- | --- | --- |
-| **a. Upgrade `Data-Advantage` to the Team plan** (or make the repositories public, or move them to an account on Pro) | `https://github.com/organizations/Data-Advantage/billing/plans`; 3 seats filled today | The steps below work as written. Recommended if the plan's behavior (patch bumps merge themselves on green) matters |
-| **b. Keep the Free plan; let the site CI merge** | nothing now; the agent adds a final job in each site's CI that runs after `build-and-smoke` and merges a pull request titled `bump to v...` whose bump is a patch | Same behavior, no branch protection needed. Costs a few workflow lines per site, and the merge is made with the workflow's token, which does not start the site's own push-triggered workflows (a deploy that triggers on push would then need `workflow_dispatch` or the App token) |
-| **c. No auto-merge** | nothing; `bump-sites.yml` only opens the pull requests | You click merge on each of the three bump pull requests |
+**Steps, per site** (`openpresentation-site`, `pptx-gallery`, `pptx-dev`; after O4 has created the App and its key):
 
-Tell the coordinator which; MR-52 builds that one. The steps below are for option a.
+1. Install the App on the site repository: the `Data-Advantage` installation of the App (O4, step 3), **Configure**, **Only select repositories**, tick the three sites. The App needs **Contents: Read and write** and **Pull requests: Read and write** (already set in O4).
+2. Add the App ID and private key as secrets in the site repository, with the same names as in `OpenPresentation/opf` so the workflows read alike: Settings, Secrets and variables, Actions, **Secrets** tab, **New repository secret**: `ECOSYSTEM_APP_ID` (the App ID, stored as a secret here so the site workflow reads both from `secrets`) and `ECOSYSTEM_APP_PRIVATE_KEY` (the whole `.pem`, including the BEGIN and END lines). Or from a terminal, with the key file at hand:
 
-**Steps, per site** (after the MR-52 pull request that adds `build-and-smoke` has merged and the job has run once, so GitHub knows the check name):
-
-1. Settings, General, Pull Requests: tick **Allow auto-merge**.
-2. Settings, Rules, Rulesets, **New ruleset**, **New branch ruleset**: name `main: build-and-smoke required`; Enforcement **Active**; no bypass; target the default branch (`master` for `pptx-dev`); rules: **Require status checks to pass** with **Add checks** `build-and-smoke` (source GitHub Actions), "Require branches to be up to date" **unticked**; **Block force pushes** ticked. Do not require reviews.
-3. **Create**.
-
-Without step 2, `gh pr merge --auto` merges at once; do not enable auto-merge without it.
+```sh
+for r in openpresentation-site pptx-gallery pptx-dev; do
+  gh secret set ECOSYSTEM_APP_ID -R Data-Advantage/$r --body "<APP_ID>"
+  gh secret set ECOSYSTEM_APP_PRIVATE_KEY -R Data-Advantage/$r < ~/path/to/the-app.private-key.pem
+done
+```
 
 **Verify.**
 
 ```sh
+gh api orgs/Data-Advantage/installations --jq '.installations[]|select(.app_slug=="<APP_SLUG>")|.repository_selection'
 for r in openpresentation-site pptx-gallery pptx-dev; do
-  gh api repos/Data-Advantage/$r --jq '[.name,.allow_auto_merge]|@tsv'
-  gh api repos/Data-Advantage/$r/rulesets --jq '.[]|[.name,.enforcement]|@tsv'
+  gh secret list -R Data-Advantage/$r | grep ECOSYSTEM_APP
 done
 ```
 
-Auto-merge `true`, one active ruleset each (a 403 here means the plan still blocks it). The proof is the dry-run bump of MR-52: a patch bump pull request waits for `build-and-smoke` and then merges by itself; a minor one stays open with the `needs-review` label.
+Two secrets per site. The proof is the dry-run bump of MR-52: a patch bump pull request opened by the App waits for `build-and-smoke`, is merged by the site's CI, and the site's push workflow starts; a minor one stays open with the `needs-review` label.
 
-**Undo.** Disable or delete the ruleset; untick **Allow auto-merge**; disable `bump-sites.yml` (an agent task). Uninstall the App from the sites: Organization settings, Installed GitHub Apps, **Configure**, remove the repository.
+**Undo.** Delete the two secrets in each site; uninstall the App from the sites: Organization settings, Installed GitHub Apps, **Configure**, remove the repository; disable `bump-sites.yml` (an agent task).
 
 ---
 
