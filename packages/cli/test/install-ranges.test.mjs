@@ -13,4 +13,6 @@ for(const [version,range,expected] of [
  ['0.19.1-next.0','^0.19.0-next.0',false],['0.19.0','^0.19.0-next.0',true],
  ['0.19.0-beta.10','^0.19.0-beta.2',true],['0.19.0-beta','^0.19.0-beta.1',false],
  ['0.19.0-beta.1','^0.19.0-beta',true],['0.19.0-1','^0.19.0-alpha',false],
+ ['0.26.0-rc.0','^0.26.0-rc.0',true],['0.26.0-rc.1','^0.26.0-rc.0',true],['0.26.0','^0.26.0-rc.0',true],['0.26.0-0','^0.26.0-rc.0',false],
+ ['0.26.0-beta.3','^0.26.0-rc.0',false],['0.26.0-rc.0','^0.26.0',false],['0.26.1-rc.0','^0.26.0-rc.0',false],
 ])test(`${version} satisfies ${range}: ${expected}`,()=>assert.equal(satisfies(version,range),expected));

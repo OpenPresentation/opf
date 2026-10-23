@@ -11,13 +11,16 @@ import { after, before, describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { installIsolatedCore } from "../../../scripts/isolated-core.mjs";
 import { installStubPeers } from "../../../scripts/stub-peers.mjs";
+import { CARET_RANGE, prereleaseOutside } from "../../../scripts/version-shapes.mjs";
 
 const cliManifest = JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8'));
 // MR-23: the source tree declares workspace:^, which `pnpm pack` publishes as ^<version>.
 const peerRanges = Object.fromEntries(Object.entries(cliManifest.peerDependencies).map(([name, range]) => [name, range.replace(/^workspace:\^/, `^${cliManifest.version}`)]));
-for (const name of ['opf-render','opf-pptx']) assert.match(peerRanges[`@openpresentation/${name}`], /^\^\d+\.\d+\.\d+$/);
+for (const name of ['opf-render','opf-pptx']) assert.match(peerRanges[`@openpresentation/${name}`], CARET_RANGE);
 const renderRange = peerRanges['@openpresentation/opf-render'];
 const renderVersion = renderRange.slice(1);
+// A prerelease the range refuses, whether the tree is at X.Y.Z or at a release candidate X.Y.Z-rc.N (MR-41).
+const outsideVersion = prereleaseOutside(renderRange);
 
 const executable = process.env.OPF_TEST_BIN ?? fileURLToPath(new URL("../dist/index.js", import.meta.url));
 const temp = await realpath(await mkdtemp(path.join(tmpdir(), "opf-doctor-")));
@@ -56,7 +59,7 @@ describe("opf doctor", () => {
     present = await install("present", { stubs: true });
     older = await install("older", { stubs: true, peerVersion: "0.18.0" });
     previous = await install("previous", { stubs: true, peerVersion: "0.19.0" });
-    prerelease = await install("prerelease", { stubs: true, peerVersion: `${renderVersion}-next.0` });
+    prerelease = await install("prerelease", { stubs: true, peerVersion: outsideVersion });
     global = await install("global", { global: true });
   });
 
@@ -92,11 +95,11 @@ describe("opf doctor", () => {
     for (const format of ["json", "yaml", "md"]) assert.deepEqual(report.formats[format], { ready: true, missing: [] });
   });
 
-  test("installed prerelease engines do not satisfy the current stable readiness", () => {
+  test("an installed prerelease outside the range does not satisfy the current readiness", () => {
     const report = JSON.parse(run(prerelease.bin, ["doctor"], { cwd: prerelease.root }).stdout);
     for (const name of ["opf-render", "opf-pptx"]) {
       const fact = report.packages.find(item => item.name === `@openpresentation/${name}`);
-      assert.deepEqual([fact.installed, fact.version, fact.ok], [true, `${renderVersion}-next.0`, false]);
+      assert.deepEqual([fact.installed, fact.version, fact.ok], [true, outsideVersion, false]);
       assert.ok(report.missing.includes(`@openpresentation/${name}@${peerRanges[`@openpresentation/${name}`]}`));
     }
     assert.equal(report.formats["pptx-import"].ready, false);

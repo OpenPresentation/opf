@@ -12,11 +12,12 @@ import { after, before, describe, test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { installIsolatedCore } from "../../../scripts/isolated-core.mjs";
 import { STUB_LOG, installStubPeers, parseStubLog } from "../../../scripts/stub-peers.mjs";
+import { CARET_RANGE } from "../../../scripts/version-shapes.mjs";
 
 const cliManifest = JSON.parse(await readFile(new URL('../package.json',import.meta.url),'utf8'));
 // MR-23: the source tree declares workspace:^, which `pnpm pack` publishes as ^<version>.
 const renderRange = cliManifest.peerDependencies['@openpresentation/opf-render'].replace(/^workspace:\^/, `^${cliManifest.version}`);
-assert.match(renderRange,/^\^\d+\.\d+\.\d+$/);
+assert.match(renderRange,CARET_RANGE);
 
 const cliRoot = fileURLToPath(new URL("..", import.meta.url));
 const executable = process.env.OPF_TEST_BIN ?? path.join(cliRoot, "dist", "index.js");

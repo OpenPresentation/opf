@@ -153,13 +153,14 @@ release itself. Do not hand-edit those ranges, and do not release one package al
 
 ## Renderer font-count gate (RR-90)
 
-The installed-consumer check (`scripts/test-packed-ecosystem.mjs`) and `test:gallery-lazy-fonts` compare the number of vendored faces a renderer lists as lazy fonts with `scripts/lazy-font-counts.mjs`. A renderer release whose fonts did not change needs no new entry. The gate hashes the renderer package's font set, which is 143 files: `dist/font-manifest.js` and every file under `fonts/` (faces, licenses, `PROVENANCE.json`, `NOTICE.md`). An unlisted stable version passes when that hash is in `REVIEWED_FONT_SETS` and its measured count equals the count recorded there.
+The installed-consumer check (`scripts/test-packed-ecosystem.mjs`) and `test:gallery-lazy-fonts` compare the number of vendored faces a renderer lists as lazy fonts with `scripts/lazy-font-counts.mjs`. A renderer release whose fonts did not change needs no new entry. The gate hashes the renderer package's font set, which is 143 files: `dist/font-manifest.js` and every file under `fonts/` (faces, licenses, `PROVENANCE.json`, `NOTICE.md`). An unlisted version, stable or a prerelease (`X.Y.Z-rc.N`), passes when that hash is in `REVIEWED_FONT_SETS` and its measured count equals the count recorded there.
 
 It fails closed, with a message that says what changed, when:
 
 - the font files differ from every reviewed set (the message prints the new hashes): review what changed, then add the set to `REVIEWED_FONT_SETS` and the version's count to `LAZY_FONT_COUNTS`;
 - the font files are a reviewed set but the count differs: find out why the count moved, then add an entry;
-- the version is a prerelease: it always needs its own `LAZY_FONT_COUNTS` entry.
+
+A prerelease is held to the same rule as the stable version: its label neither admits nor refuses it, its font files and count do.
 
 To review a set, pack the release (`npm pack @openpresentation/opf-render@<version>`), run `hashFontSet` from `scripts/lazy-font-counts.mjs` over the unpacked `package/` folder, and record the result with the versions you checked. Every existing `LAZY_FONT_COUNTS` entry stays and keeps its own rule.
 
