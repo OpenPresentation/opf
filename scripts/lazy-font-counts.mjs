@@ -38,8 +38,8 @@ export const LAZY_FONT_COUNTS = Object.freeze({ '0.11.0': Object.freeze([51]), '
  * RR-90: a renderer version that is not in LAZY_FONT_COUNTS still passes when its font files are exactly a set already reviewed. The
  * set is the 143 files the renderer package ships for fonts (dist/font-manifest.js and every file under fonts/: faces, licenses,
  * PROVENANCE.json, NOTICE.md), hashed by `hashFontSet`. A set is reviewed when it is listed in REVIEWED_FONT_SETS with the lazy face
- * count measured for it. Any other change fails closed: a changed or unknown file set, a different count for a reviewed set, or a
- * prerelease (which always needs its own LAZY_FONT_COUNTS entry).
+ * count measured for it. Any other change fails closed: a changed or unknown file set or a different count for a reviewed set. A
+ * prerelease label is not a reason either way (MR-41): X.Y.Z-rc.N passes on the same terms as X.Y.Z, by its font files and count.
  * To review a new set: pack the release, run hashFontSet over the package, read why the files changed, then add the set (and the
  * version's count to LAZY_FONT_COUNTS).
  */
@@ -90,7 +90,6 @@ export function lazyFontCountProblem({ version, count, counts, reviewedSets, fon
   if (expected) return expected.includes(count) ? undefined : `renderer ${version} lists ${count} lazy fonts; expected ${expected.join(' or ')} (scripts/lazy-font-counts.mjs)`;
   const unrecorded = `renderer ${version}: no expected lazy font count is recorded; add it to scripts/lazy-font-counts.mjs`;
   if (!fonts) return unrecorded;
-  if (/-/.test(version)) return `${unrecorded} (a prerelease is never admitted by its font files alone)`;
   const reviewed = reviewedSets[fonts.fontSetSha256];
   if (!reviewed) {
     return `${unrecorded}. Its font files are not a reviewed set (font set sha256 ${fonts.fontSetSha256}, dist/font-manifest.js sha256 ${fonts.manifestSha256}, ${fonts.files} files): the fonts changed. Review the change, then add the set to REVIEWED_FONT_SETS and the count to LAZY_FONT_COUNTS`;

@@ -128,7 +128,8 @@ test('renderer 0.22.1 (unlisted) passes on the reviewed font set and 94 faces, a
   assert.throws(() => assertLazyFontCount('0.22.1', 95, 'renderer', reviewedFonts), /count changed without the fonts/);
   assert.throws(() => assertLazyFontCount('0.22.1', 94, 'renderer', {...reviewedFonts, fontSetSha256: 'd'.repeat(64)}), /not a reviewed set/);
   assert.throws(() => assertLazyFontCount('0.22.1', 94), /no expected lazy font count/);
-  assert.throws(() => assertLazyFontCount('0.22.1-next.0', 94, 'renderer', reviewedFonts), /prerelease/);
+  assertLazyFontCount('0.22.1-next.0', 94, 'renderer', reviewedFonts);
+  assert.throws(() => assertLazyFontCount('0.22.1-next.0', 95, 'renderer', reviewedFonts), /count changed without the fonts/);
 });
 
 test('an unlisted renderer whose font files changed fails and asks for a reviewed entry', () => {
@@ -143,11 +144,13 @@ test('an unlisted renderer with the reviewed font files and a different count fa
   assert.throws(() => assertLazyFontCount('0.22.1', 95, 'renderer', reviewedFonts), /reviewed set of renderer 0\.20\.4/);
 });
 
-test('without a font set an unlisted version still fails closed, and a prerelease is never admitted by its fonts', () => {
+test('without a font set an unlisted version still fails closed, a prerelease like a stable one (MR-41)', () => {
   assert.throws(() => assertLazyFontCount('0.22.1', 94), /no expected lazy font count/);
-  for (const version of ['0.22.1-next.0', '0.20.4-next.0']) {
-    assert.throws(() => assertLazyFontCount(version, 94, 'renderer', reviewedFonts), /no expected lazy font count.*prerelease/);
+  for (const version of ['0.22.1-next.0', '0.20.4-next.0', '0.26.0-rc.0', '1.0.0-rc.12']) {
+    assertLazyFontCount(version, 94, 'renderer', reviewedFonts);
     assert.throws(() => assertLazyFontCount(version, 94), /no expected lazy font count/);
+    assert.throws(() => assertLazyFontCount(version, 94, 'renderer', {...reviewedFonts, fontSetSha256: 'e'.repeat(64)}), /not a reviewed set/);
+    assert.throws(() => assertLazyFontCount(version, 93, 'renderer', reviewedFonts), /count changed without the fonts/);
   }
 });
 

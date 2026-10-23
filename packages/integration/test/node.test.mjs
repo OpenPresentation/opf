@@ -16,6 +16,7 @@ import { after, describe, test } from "node:test";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { installIsolatedCore } from "../../../scripts/isolated-core.mjs";
 import { installStubPeers } from "../../../scripts/stub-peers.mjs";
+import { CARET_RANGE } from "../../../scripts/version-shapes.mjs";
 
 // Zero network: refuse and record any connection or fetch made in this process.
 const network = [];
@@ -542,7 +543,7 @@ process.stdout.write(JSON.stringify(out));
     assert.equal(out.export.name, "OPFExportError");
     assert.equal(out.export.code, "peer-not-installed");
     assert.equal(out.export.package, "@openpresentation/opf-render");
-    assert.match(out.export.range, /^\^0\.\d+\.\d+$/);
+    assert.match(out.export.range, CARET_RANGE);
     assert.match(out.export.message, /npm install @openpresentation\/opf-render@/);
     assert.equal(out.import.name, "OPFImportError");
     assert.equal(out.import.code, "peer-not-installed");
