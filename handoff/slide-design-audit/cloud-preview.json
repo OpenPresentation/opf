@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "audience": "owner-private",
+  "status": "succeeded",
+  "url": "https://opf-slide-design-review.lemonybow16.chatgpt.site",
+  "projectId": "appgprj_6ad84451ba8081918043971a42f90fe1",
+  "versionId": "appgprj_6ad84451ba8081918043971a42f90fe1~appgver_16f1fc18549c81918352c3d3e369f7f2",
+  "deploymentId": "appgdep_6ad84493e3fc8191b3ffa5610c2e57bf",
+  "siteSourceCommit": "08c2e4ac9064e27d5f279e4678ca94d199b4d42a",
+  "deployedAt": "2026-10-21T04:50:58.497081+00:00",
+  "sourceArchiveCommit": "d40473446dc0ec05a9e5d998465785919ac05b26",
+  "sourceArchiveSHA256": "89a1a845658b61b5edc33c78841f4bb3492ecbf9fa5d63d64cfbd94da20ec22e",
+  "originalArchiveUnchanged": true,
+  "links": {
+    "index": "https://opf-slide-design-review.lemonybow16.chatgpt.site/",
+    "proposals": "https://opf-slide-design-review.lemonybow16.chatgpt.site/portable/proposals.html#P01",
+    "galleryColumnsAuto": "https://opf-slide-design-review.lemonybow16.chatgpt.site/portable/report.html",
+    "currentStackComparisons": "https://opf-slide-design-review.lemonybow16.chatgpt.site/portable/integration-20261020/report.html",
+    "stressComparisons": "https://opf-slide-design-review.lemonybow16.chatgpt.site/portable/candidates/sparse-stress/report.html",
+    "firstAutoProposalBatch": "https://opf-slide-design-review.lemonybow16.chatgpt.site/portable/proposals.html#P29",
+    "secondAutoProposalBatch": "https://opf-slide-design-review.lemonybow16.chatgpt.site/portable/proposals.html#P32"
+  },
+  "reviewCounts": {
+    "proposals": 35,
+    "gallery": 28,
+    "columns": 34,
+    "auto": 20,
+    "stress": 21,
+    "currentStackComparisons": 82
+  },
+  "media": {
+    "png": 446,
+    "svg": 426
+  },
+  "approvalState": "All 35 items remain unapproved; P28 is a tracking item with a separate publication decision.",
+  "browserQA": "cloud-preview-browser-qa.json",
+  "restoration": "The complete extracted archive root is the static dist directory. A root index redirects to portable/index.html. All original and portable files are unchanged."
+}

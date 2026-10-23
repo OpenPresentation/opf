@@ -1,0 +1,269 @@
+{
+  "site": "https://opf-slide-design-review.lemonybow16.chatgpt.site",
+  "proposalBatches": [
+    {
+      "batch": 1,
+      "heading": "Proposals \u00b7 Batch 1 of 10 \u00b7 P01, P02, P03",
+      "ids": [
+        "P01",
+        "P02",
+        "P03"
+      ],
+      "images": {
+        "broken": [],
+        "loaded": 9,
+        "total": 9
+      },
+      "nextEnabled": true
+    },
+    {
+      "batch": 2,
+      "heading": "Proposals \u00b7 Batch 2 of 10 \u00b7 P04, P05, P06",
+      "ids": [
+        "P04",
+        "P05",
+        "P06"
+      ],
+      "images": {
+        "broken": [],
+        "loaded": 12,
+        "total": 12
+      },
+      "nextEnabled": true
+    },
+    {
+      "batch": 3,
+      "heading": "Proposals \u00b7 Batch 3 of 10 \u00b7 P07, P08, P09",
+      "ids": [
+        "P07",
+        "P08",
+        "P09"
+      ],
+      "images": {
+        "broken": [],
+        "loaded": 7,
+        "total": 7
+      },
+      "nextEnabled": true
+    },
+    {
+      "batch": 4,
+      "heading": "Proposals \u00b7 Batch 4 of 10 \u00b7 P10, P11, P12",
+      "ids": [
+        "P10",
+        "P11",
+        "P12"
+      ],
+      "images": {
+        "broken": [],
+        "loaded": 6,
+        "total": 6
+      },
+      "nextEnabled": true
+    },
+    {
+      "batch": 5,
+      "heading": "Proposals \u00b7 Batch 5 of 10 \u00b7 P13, P14, P15",
+      "ids": [
+        "P13",
+        "P14",
+        "P15"
+      ],
+      "images": {
+        "broken": [],
+        "loaded": 6,
+        "total": 6
+      },
+      "nextEnabled": true
+    },
+    {
+      "batch": 6,
+      "heading": "Proposals \u00b7 Batch 6 of 10 \u00b7 P16, P17, P18",
+      "ids": [
+        "P16",
+        "P17",
+        "P18"
+      ],
+      "images": {
+        "broken": [],
+        "loaded": 10,
+        "total": 10
+      },
+      "nextEnabled": true
+    },
+    {
+      "batch": 7,
+      "heading": "Proposals \u00b7 Batch 7 of 10 \u00b7 P19, P20, P21",
+      "ids": [
+        "P19",
+        "P20",
+        "P21"
+      ],
+      "images": {
+        "broken": [],
+        "loaded": 3,
+        "total": 3
+      },
+      "nextEnabled": true
+    },
+    {
+      "batch": 8,
+      "heading": "Proposals \u00b7 Batch 8 of 10 \u00b7 P22, P23, P24",
+      "ids": [
+        "P22",
+        "P23",
+        "P24"
+      ],
+      "images": {
+        "broken": [],
+        "loaded": 6,
+        "total": 6
+      },
+      "nextEnabled": true
+    },
+    {
+      "batch": 9,
+      "heading": "Proposals \u00b7 Batch 9 of 10 \u00b7 P25, P26, P27",
+      "ids": [
+        "P25",
+        "P26",
+        "P27"
+      ],
+      "images": {
+        "broken": [],
+        "loaded": 6,
+        "total": 6
+      },
+      "nextEnabled": true
+    },
+    {
+      "batch": 10,
+      "heading": "Proposals \u00b7 Batch 10 of 10 \u00b7 P28, P35",
+      "ids": [
+        "P28",
+        "P35"
+      ],
+      "images": {
+        "broken": [],
+        "loaded": 1,
+        "total": 1
+      },
+      "nextEnabled": true
+    },
+    {
+      "batch": 11,
+      "heading": "Auto mode \u00b7 Batch 1 of 2 \u00b7 P29, P30, P31",
+      "ids": [
+        "P29",
+        "P30",
+        "P31"
+      ],
+      "images": {
+        "broken": [],
+        "loaded": 5,
+        "total": 5
+      },
+      "nextEnabled": true
+    },
+    {
+      "batch": 12,
+      "heading": "Auto mode \u00b7 Batch 2 of 2 \u00b7 P32, P33, P34",
+      "ids": [
+        "P32",
+        "P33",
+        "P34"
+      ],
+      "images": {
+        "broken": [],
+        "loaded": 8,
+        "total": 8
+      },
+      "nextEnabled": false
+    }
+  ],
+  "proposalImageOccurrencesLoaded": 79,
+  "allProposalsRenderedInBatchesOfAtMostThree": true,
+  "autoProposalsLast": true,
+  "allDecisionsRemainPending": true,
+  "additionalReviewChecks": [
+    {
+      "page": "galleryColumnsAuto",
+      "batch": "Auto mode 1 / 7 \u00b7 1, 2, 3",
+      "cards": 3,
+      "images": {
+        "broken": [],
+        "loaded": 7,
+        "total": 7
+      }
+    },
+    {
+      "page": "currentStack",
+      "comparisons": 82,
+      "images": {
+        "broken": [],
+        "loaded": 23,
+        "total": 164
+      },
+      "lazyLoading": true
+    },
+    {
+      "page": "currentStackAutoDeepLink",
+      "heading": "auto \u00b7 batch 7",
+      "lastPair": [
+        {
+          "loaded": true,
+          "src": "../../original/auto/20-mixed-business-review.png"
+        },
+        {
+          "loaded": true,
+          "src": "../../original/integration-20261020/auto/20-mixed-business-review.png"
+        }
+      ]
+    },
+    {
+      "page": "stress",
+      "heading": "Text \u00b7 Batch 1 of 4 \u00b7 3 comparisons",
+      "comparisons": 3,
+      "images": {
+        "broken": [],
+        "loaded": 6,
+        "total": 6
+      }
+    }
+  ],
+  "directImage": {
+    "url": "https://opf-slide-design-review.lemonybow16.chatgpt.site/original/candidates/text/default-before.png",
+    "width": 1280,
+    "height": 720,
+    "loaded": true
+  },
+  "navigationChecks": [
+    "Next three: P01\u2013P03 to P04\u2013P06",
+    "All twelve dropdown batches render their expected stable proposal IDs",
+    "Direct .html#P35 deep link survives host canonicalization and shows P28/P35",
+    "Next from P28/P35 shows Auto P29/P30/P31; Previous returns to P28/P35",
+    "P01 index link returns to P01/P02/P03",
+    "Final Auto P32/P33/P34 disables Next"
+  ],
+  "signIn": "Observed ChatGPT sign-in gate, signed in with the owning account, and verified authenticated pages and direct image access.",
+  "unauthenticatedHTTPChecks": [
+    {
+      "path": "/",
+      "status": 403
+    },
+    {
+      "path": "/portable/proposals.html",
+      "status": 403
+    },
+    {
+      "path": "/original/candidates/text/default-before.png",
+      "status": 403
+    }
+  ],
+  "screenshots": [
+    {
+      "description": "Live P01\u2013P03 batch, pending state and before/after images",
+      "localPath": "/private/tmp/opf-cloud-preview.png"
+    }
+  ]
+}

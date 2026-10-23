@@ -1,0 +1,177 @@
+{
+  "status": "FINAL_INTEGRATED_SOURCE_READY_FOR_CLOUD_HANDOFF",
+  "delivery": {
+    "repository": "https://github.com/OpenPresentation/opf",
+    "branch": "codex/slide-design-audit",
+    "commit": "Provided externally in the cloud task prompt and delivery PR after sealing; deliberately not self-embedded."
+  },
+  "sourceCheckpoints": [
+    {
+      "purpose": "Exact source of 82 current-stack renders",
+      "repository": "https://github.com/OpenPresentation/opf",
+      "branch": "codex/slide-design-audit-render-checkpoint-20261020",
+      "head": "8736ea5ac8b04001f4e1a92b92ff11dba34266d7"
+    },
+    {
+      "purpose": "Original gallery draft before rebase",
+      "repository": "https://github.com/OpenPresentation/gallery",
+      "branch": "codex/slide-design-audit-pre-rebase-20261020",
+      "head": "4e66d5479873671450d06f994c8ec92a93aa198d"
+    }
+  ],
+  "galleryDraft": {
+    "url": "https://github.com/OpenPresentation/gallery/pull/12",
+    "branch": "codex/slide-design-audit",
+    "head": "c3b45105b37ff9fe3d4d76b405e9be5fba4b2908",
+    "base": "cc137fde86dba0cdcc6ff36b448fd0a18246d269",
+    "baseVersion": "4.0.0",
+    "state": "Draft, unmerged",
+    "verification": {
+      "npmCi": "passed",
+      "tests": 142,
+      "types": "passed",
+      "verify": "passed",
+      "license": "passed",
+      "previews": 30,
+      "pack": "passed",
+      "bootstrap": "passed",
+      "stability": "Intentionally refuses the changed closing drawing (27,797 pixels at 960px) and 2 new layouts; not release-ready."
+    }
+  },
+  "principlesDocumentation": {
+    "url": "https://github.com/OpenPresentation/opf/pull/766",
+    "head": "c42b2c35b885a73181ca49f437bb11e9f39970cd",
+    "scope": "Principles-only docs merge explicitly authorized; separate from audit proposals",
+    "state": "Merged to main with owner authorization",
+    "mergeCommit": "e63b1f93f04ff6820c73d4555d3782f5a42bc80b",
+    "sha256": "e64a9f298b8d767cc437d0426f332e66f611ad84f8018bdfe6a54dbfb2845d48"
+  },
+  "finalIntegratedSource": {
+    "repositories": [
+      {
+        "repository": "opf",
+        "remote": "https://github.com/OpenPresentation/opf.git",
+        "branch": "codex/slide-design-audit",
+        "sourceCheckpoint": "2386b25ed3fccfb45705f03cb0999ae1d6a3c9e9",
+        "upstream": "e63b1f93f04ff6820c73d4555d3782f5a42bc80b",
+        "upstreamIsAncestor": true,
+        "trackedWorkingTreeClean": true
+      },
+      {
+        "repository": "opf-render",
+        "remote": "https://github.com/OpenPresentation/opf-render.git",
+        "branch": "main",
+        "sourceCheckpoint": "709ec60c68b39bda1d16c6f0e6d3081a9dcc41da",
+        "upstream": "709ec60c68b39bda1d16c6f0e6d3081a9dcc41da",
+        "upstreamIsAncestor": true,
+        "trackedWorkingTreeClean": true
+      },
+      {
+        "repository": "opf-editor",
+        "remote": "https://github.com/OpenPresentation/opf-editor.git",
+        "branch": "main",
+        "sourceCheckpoint": "9672a3823638449a6f2805be96f718addc07a68a",
+        "upstream": "9672a3823638449a6f2805be96f718addc07a68a",
+        "upstreamIsAncestor": true,
+        "trackedWorkingTreeClean": true
+      },
+      {
+        "repository": "opf-pptx",
+        "remote": "https://github.com/OpenPresentation/opf-pptx.git",
+        "branch": "main",
+        "sourceCheckpoint": "639c66c0052503105eb45becc90dc4184d5d7368",
+        "upstream": "639c66c0052503105eb45becc90dc4184d5d7368",
+        "upstreamIsAncestor": true,
+        "trackedWorkingTreeClean": true
+      },
+      {
+        "repository": "openpresentation-site",
+        "remote": "https://github.com/Data-Advantage/openpresentation-site.git",
+        "branch": "main",
+        "sourceCheckpoint": "43686766934559dbb7214478dac8a03bfd5ede61",
+        "upstream": "43686766934559dbb7214478dac8a03bfd5ede61",
+        "upstreamIsAncestor": true,
+        "trackedWorkingTreeClean": true
+      },
+      {
+        "repository": "pptx-gallery",
+        "remote": "https://github.com/Data-Advantage/pptx-gallery.git",
+        "branch": "main",
+        "sourceCheckpoint": "d6927629d5927706247f6d349b8f6994e575948f",
+        "upstream": "d6927629d5927706247f6d349b8f6994e575948f",
+        "upstreamIsAncestor": true,
+        "trackedWorkingTreeClean": true
+      },
+      {
+        "repository": "pptx-dev",
+        "remote": "https://github.com/Data-Advantage/pptx-dev.git",
+        "branch": "master",
+        "sourceCheckpoint": "8087a6efd7a40d314d734fcfd726a30bb3569548",
+        "upstream": "8087a6efd7a40d314d734fcfd726a30bb3569548",
+        "upstreamIsAncestor": true,
+        "trackedWorkingTreeClean": true
+      },
+      {
+        "repository": "gallery",
+        "remote": "https://github.com/OpenPresentation/gallery.git",
+        "branch": "codex/slide-design-audit",
+        "sourceCheckpoint": "c3b45105b37ff9fe3d4d76b405e9be5fba4b2908",
+        "upstream": "cc137fde86dba0cdcc6ff36b448fd0a18246d269",
+        "upstreamIsAncestor": true,
+        "trackedWorkingTreeClean": true
+      }
+    ],
+    "freshRenderSourceCheckpoint": "8736ea5ac8b04001f4e1a92b92ff11dba34266d7",
+    "engineAndSchemaUnchangedSinceFreshRenders": true,
+    "sourceCheckpoint": "2386b25ed3fccfb45705f03cb0999ae1d6a3c9e9",
+    "upstreamMain": "e63b1f93f04ff6820c73d4555d3782f5a42bc80b"
+  },
+  "approvalState": "All P01\u2013P35 remain individually pending. No blanket engine/schema/default approval, audit-branch merge, or release authorization.",
+  "designGoal": "Blocked awaiting individual proposal decisions; completion of this transport does not complete that goal.",
+  "evidencePointers": {
+    "historicalReview": "portable/report.html",
+    "proposals": "portable/proposals.html",
+    "stress": "portable/candidates/sparse-stress/report.html",
+    "currentStack": "portable/integration-20261020/report.html",
+    "firstCloudAction": "portable/integration-20261020/cloud-continuation.md",
+    "upstreamReassessment": "portable/integration-20261020/upstream-reassessment.md",
+    "sourceVerification": "portable/integration-20261020/verification.json"
+  },
+  "sourceVerification": {
+    "core": {
+      "build": "passed",
+      "check:changed": "passed",
+      "pnpm test": "passed",
+      "rootChecks": 60,
+      "log": "core-full-test.log"
+    },
+    "renderer": {
+      "frozenInstall": "passed",
+      "build": "passed"
+    },
+    "freshRenders": {
+      "gallery": 28,
+      "columns": 34,
+      "auto": 20,
+      "originalSlideContentPreserved": true,
+      "passingGeometryDoesNotEstablishVisualQuality": true
+    },
+    "galleryDraft": {
+      "pullRequest": "https://github.com/OpenPresentation/gallery/pull/12",
+      "head": "c3b45105b37ff9fe3d4d76b405e9be5fba4b2908",
+      "base": "cc137fde86dba0cdcc6ff36b448fd0a18246d269",
+      "testsPassed": 142,
+      "qualifiedPreviews": 30,
+      "bootstrap": "passed",
+      "stability": "release refused as expected for changed closing drawing and two new layouts",
+      "mergeOrReleasePerformed": false
+    }
+  },
+  "transportVerification": {
+    "tool": "verify.py",
+    "report": "verification.json",
+    "negativeControls": "verifier-self-test.json",
+    "archiveIdentity": "archive.sha256; delivery commit supplied externally after sealing",
+    "scope": "Byte/hash integrity and portable links; not design approval or native export fidelity."
+  }
+}
