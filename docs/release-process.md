@@ -51,7 +51,7 @@ rehearsal. The jobs:
 5. **npm-publish.yml** on the tag: `plan` (the tag is on `main`), `build` (one install and build, `pnpm pack` of the six,
    `scripts/stamp-githead.mjs` adds `gitHead` to each tarball because `pnpm pack` omits it, a smoke test installs the six
    tarballs together, renders the quickstart deck and runs the CLI), `publish` (the only job with `id-token: write`; the
-   pre-publish gate, then `npm publish <tarball> --access public --provenance --tag <tag>` six times; a version already on npm is
+   pre-publish gate, then `npm publish <tarball> --access public --provenance --tag <tag>` six times, printing npm's own output, then polling until the registry serves each version (it lags the upload by up to several minutes); a version already on npm is
    skipped), `verify` (below), `release` (the GitHub release, notes grouped by package) and `report` (a failure opens the issue
    "Release vX.Y.Z failed", labeled `release-failed`).
 6. **follow the publish run** (the Release run waits for it, so it is green only when the whole release is).
@@ -117,7 +117,7 @@ npm view @openpresentation/gallery dist-tags --json           # latest is X.Y.Z;
 | `pack <version> --commit <sha> --out <dir>` | `pnpm pack` of the six, `gitHead` stamped, `release-manifest.json` with digests |
 | `smoke <version> (--dir <dir> \| --registry)` | install the six together, render, resolve, run the CLI |
 | `check-publish <version> [--tag t]` | the pre-publish gate |
-| `publish <version> --dir <dir> [--tag t] [--dry-run]` | the gate, then `npm publish` in dependency order |
+| `publish <version> --dir <dir> [--tag t] [--dry-run] [--wait minutes] [--poll seconds] [--expect-staged]` | the gate, then `npm publish` in dependency order: npm's output is printed, the version must be served within `--wait` (default 15 min, after all six uploads), a staged result fails unless `--expect-staged` |
 | `verify <version> [--tag t] [--commit sha] [--wait minutes]` | the registry and provenance check (a prerelease has no changelog section to check) |
 | `notes <version> [--out file]` | the GitHub release body |
 | `order` | the publish order |
@@ -172,6 +172,11 @@ To review a set, pack the release (`npm pack @openpresentation/opf-render@<versi
 - **`E404`, `E403` or `ENEEDAUTH` from `npm publish`**: the trusted publisher of that package is missing or wrong. It must be
   organization `OpenPresentation`, repository `opf`, workflow filename `npm-publish.yml`, no environment, and the `publish` job
   needs `id-token: write`. Fix the entry in npm (owner step O1) and re-run the workflow on the tag.
+- **`publish` fails with "npm accepted X (exit 0) but the registry still does not serve it"** or "npm staged X": npm returned success
+  (or staged the upload) but the version is not installable. Open the package on npmjs.com, Staged Packages tab, or run
+  `npm stage list <name>` as a maintainer: a staged version must be approved with 2FA (`npm stage approve <stage-id>`;
+  trusted-publishing OIDC tokens cannot approve). Otherwise wait for propagation and re-run the workflow on the same tag; the
+  packages already served are skipped.
 - **A version is already on npm**: `publish` skips it; do not try to publish it again. Verify the package and continue.
 - **The gate is red**: the failing leg of `nightly.yml` is in the Release run. Fix it on `main` and release again; nothing was
   committed. A flaky leg is quarantined (`pnpm check:quarantine`), never skipped for a release.

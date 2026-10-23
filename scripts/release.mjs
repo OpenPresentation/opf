@@ -18,11 +18,13 @@
 //   node scripts/release.mjs check-publish <version> [--tag latest|next]
 //       The pre-publish gate: each package's version is above its registry `latest` (the gallery: above the shared line, never
 //       against its own 5.0.0), a stable version goes to `latest` and a prerelease to a different tag.
-//   node scripts/release.mjs publish <version> --dir <tarballs> [--tag latest|next] [--dry-run]
+//   node scripts/release.mjs publish <version> --dir <tarballs> [--tag latest|next] [--dry-run] [--wait minutes] [--poll seconds] [--expect-staged]
 //       check-publish, then `npm publish <tarball> --access public --provenance --tag <tag>` in dependency order (gallery, core,
 //       render, pptx, editor, cli). The tag is explicit for all six (the gallery needs it, D16). A version already on npm is
 //       skipped, so a re-run continues where the last one stopped. --dry-run passes npm's --dry-run (no provenance: it needs
-//       the OIDC token of a real run).
+//       the OIDC token of a real run). npm's stdout and stderr are printed for every package. After the real uploads the registry is
+//       polled (--wait, default 15 min, every --poll, default 10 s) until the version is served: exit 0 from npm only means the
+//       upload was accepted. A result npm reports as staged (awaiting 2FA approval, not published) fails unless --expect-staged.
 //   node scripts/release.mjs verify <version> [--tag latest|next] [--commit sha] [--wait minutes] [--json] [--no-audit]
 //       For all six: registry manifest, gitHead and provenance source commit = the release commit, provenance workflow
 //       npm-publish.yml on refs/tags/vX.Y.Z, dist-tag, lockstep ranges, signatures, the changelog section.
@@ -330,11 +332,37 @@ export function publishArgs(tarball, tag, { dryRun = false } = {}) {
   return ['publish', tarball, '--access', 'public', ...(dryRun ? ['--dry-run'] : ['--provenance']), '--tag', tag];
 }
 
+/**
+ * True when npm's own output says the tarball went to the staging queue (`npm stage publish`: "+ name@x (staged with id ...)",
+ * "has been staged") instead of being published. A staged version is not installable until a maintainer approves it with 2FA.
+ */
+export const npmSaysStaged = (output) => /\(staged\b|\bstaged with id\b|\bhas been staged\b|\bstage[- ]?id\b/i.test(output);
+
+/**
+ * Polls the registry until `name@version` has a manifest: `npm publish` exits 0 when the registry accepted the upload, but the
+ * version is served minutes later (the v0.26.0-rc.0 publish saw 1 to 7 minutes). Returns true when it is
+ * there, false once `deps.now()` passes `deadline` (ms). The first look is immediate.
+ */
+export async function waitForVersion(deps, name, version, { deadline, pollSeconds = 10 }) {
+  for (;;) {
+    if (await deps.registry.manifest(name, version)) return true;
+    if (deps.now() >= deadline) return false;
+    deps.log(`  waiting for ${name}@${version} to appear on the registry...`);
+    await deps.sleep(pollSeconds * 1000);
+  }
+}
+
+/** Everything npm printed: stdout (`+ name@version`) then stderr (notices, warnings). */
+const npmOutput = (result) => `${result.stdout ?? ''}${result.stdout && result.stderr ? '\n' : ''}${result.stderr ?? ''}`.trim();
+
 async function publish(argv, deps) {
-  const options = parseOptions(argv, { value: ['dir', 'tag'], flag: ['dry-run'] });
+  const options = parseOptions(argv, { value: ['dir', 'tag', 'wait', 'poll'], flag: ['dry-run', 'expect-staged'] });
   const [version] = options._;
-  if (!isVersion(version ?? '') || !options.dir) throw new Error('usage: release.mjs publish <X.Y.Z> --dir <tarballs> [--tag latest|next] [--dry-run]');
+  if (!isVersion(version ?? '') || !options.dir) throw new Error('usage: release.mjs publish <X.Y.Z> --dir <tarballs> [--tag latest|next] [--dry-run] [--wait minutes] [--poll seconds] [--expect-staged]');
   const tag = options.tag ?? defaultTag(version);
+  const waitMinutes = Number(options.wait ?? 15);
+  const pollSeconds = Number(options.poll ?? 10);
+  const dryRun = Boolean(options['dry-run']);
   const manifest = readReleaseManifest(path.resolve(options.dir), version);
   const gate = await checkPublish(deps.registry, version, tag);
   if (gate.problems.length) throw new Error(`publish ${version} refused:\n  - ${gate.problems.join('\n  - ')}`);
@@ -345,11 +373,37 @@ async function publish(argv, deps) {
       results.push({ name: entry.name, status: 'skipped' });
       continue;
     }
-    const args = publishArgs(path.resolve(options.dir, entry.filename), tag, { dryRun: options['dry-run'] });
+    const args = publishArgs(path.resolve(options.dir, entry.filename), tag, { dryRun });
     deps.log(`npm ${args.join(' ')}`);
     const result = deps.npm(args, { cwd: path.resolve(options.dir) });
-    if (result.status !== 0) throw new Error(`npm publish of ${entry.name}@${version} failed (exit ${result.status}); the packages before it are on npm, re-run to continue:\n${result.stdout}${result.stderr}`);
-    results.push({ name: entry.name, status: options['dry-run'] ? 'dry-run' : 'published' });
+    const output = npmOutput(result);
+    // npm's own words are the only record of what the registry answered: always print them, failure or not.
+    for (const line of output.split('\n')) if (line) deps.log(`  npm: ${line}`);
+    if (result.status !== 0) throw new Error(`npm publish of ${entry.name}@${version} failed (exit ${result.status}); the packages before it are on npm, re-run to continue:\n${output}`);
+    if (dryRun) {
+      results.push({ name: entry.name, status: 'dry-run' });
+      continue;
+    }
+    if (npmSaysStaged(output)) {
+      if (!options['expect-staged']) throw new Error(`npm staged ${entry.name}@${version} instead of publishing it: it is NOT on the registry until a maintainer approves it with 2FA (Staged Packages tab of https://www.npmjs.com/package/${entry.name}, or \`npm stage approve <stage-id>\`). Pass --expect-staged if staging is intended.\n${output}`);
+      deps.log(`staged ${entry.name}@${version}: awaiting maintainer approval on npm`);
+      results.push({ name: entry.name, status: 'staged' });
+      continue;
+    }
+    results.push({ name: entry.name, status: 'uploaded' });
+  }
+  // The registry serves an uploaded version after a delay (v0.26.0-rc.0: 1 to 7 minutes, in no fixed order), so every upload goes
+  // first and the waits run after them: the total wait is the slowest package, not the sum.
+  const deadline = deps.now() + waitMinutes * 60_000;
+  const missing = [];
+  for (const result of results.filter(({ status }) => status === 'uploaded')) {
+    if (await waitForVersion(deps, result.name, version, { deadline, pollSeconds })) {
+      deps.log(`published ${result.name}@${version}: visible on the registry`);
+      result.status = 'published';
+    } else missing.push(`${result.name}@${version}`);
+  }
+  if (missing.length) {
+    throw new Error(`npm accepted ${missing.join(', ')} (exit 0) but the registry still does not serve ${missing.length === 1 ? 'it' : 'them'} after ${waitMinutes} min. ${missing.length === 1 ? 'It' : 'Each'} may be staged and awaiting maintainer approval (Staged Packages tab of https://www.npmjs.com/package/<name>; \`npm stage list <name>\`), rejected after upload, or just slow. The other packages are on npm; check, then re-run to continue (a version already on npm is skipped).`);
   }
   return results;
 }
@@ -471,9 +525,9 @@ export function parseOptions(argv, { value = [], flag = [] } = {}) {
   return options;
 }
 
-export function defaultDeps(env = process.env) {
+export function defaultDeps(env = process.env, { fetchImpl } = {}) {
   return {
-    registry: npmRegistry(),
+    registry: npmRegistry(fetchImpl ? { fetchImpl } : {}),
     npm: (args, options) => run('npm', args, { ...options, env }),
     pnpm: (args, options) => run(process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm', args, { ...options, env }),
     runStability,
