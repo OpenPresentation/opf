@@ -13,8 +13,10 @@ import {
   PACKAGES,
   checkPublish,
   checkTag,
+  defaultDeps,
   defaultTag,
   main,
+  npmSaysStaged,
   planPrepare,
   publishArgs,
   readReleaseManifest,
@@ -302,38 +304,105 @@ function tarballs(version = '0.26.0') {
   return { dir, cleanup: () => rmSync(dir, { recursive: true, force: true }) };
 }
 
-test('publish runs npm publish per tarball in dependency order with an explicit --tag and --provenance, and skips what is on npm', async () => {
+const nameOfTarball = (file) => PACKAGES.find(({ name }) => path.basename(file).replace(/-\d[^/]*\.tgz$/, '') === name.replace('@', '').replace('/', '-')).name;
+
+/** Deps whose registry serves a version once `npm` has "published" it, `lag` polls later (`never`: names that never appear). */
+function publishDeps({ published = {}, lag = 0, never = [], output = (name) => ({ stdout: `+ ${name}@0.26.0\n`, stderr: 'npm notice publish\n' }), version = '0.26.0', fail } = {}) {
+  const calls = [];
+  const logs = [];
+  const seen = new Map();
+  const base = fakeRegistry({ published });
+  let clock = 0;
+  const registry = {
+    ...base,
+    manifest: async (name, v) => {
+      if (seen.has(name) && v === version) {
+        seen.set(name, seen.get(name) - 1);
+        return seen.get(name) < 0 && !never.includes(name) ? { name, version } : null;
+      }
+      return base.manifest(name, v);
+    },
+  };
+  const deps = {
+    registry,
+    calls,
+    logs,
+    log: (line) => logs.push(line),
+    now: () => clock,
+    sleep: async (ms) => {
+      clock += ms;
+    },
+    npm: (args) => {
+      calls.push(args);
+      const name = nameOfTarball(args[1]);
+      if (fail?.(calls.length)) return { status: 1, stdout: '', stderr: 'E403 not a trusted publisher' };
+      seen.set(name, lag);
+      return { status: 0, ...output(name) };
+    },
+  };
+  return deps;
+}
+
+test('publish runs npm publish per tarball in dependency order with an explicit --tag and --provenance, skips what is on npm, prints npm output and waits for the registry', async () => {
   const { dir, cleanup } = tarballs();
   try {
-    const calls = [];
-    const deps = { registry: fakeRegistry({ published: { [GALLERY]: ['0.26.0'] } }), log() {}, npm: (args) => {
-      calls.push(args);
-      return { status: 0 };
-    } };
+    const deps = publishDeps({ published: { [GALLERY]: ['0.26.0'] }, lag: 2 });
     const results = await main(['publish', '0.26.0', '--dir', dir], deps);
     assert.deepEqual(results.map(({ status }) => status), ['skipped', 'published', 'published', 'published', 'published', 'published']);
-    assert.deepEqual(calls.map((args) => PACKAGES.find(({ name }) => path.basename(args[1]) === `${name.replace('@', '').replace('/', '-')}-0.26.0.tgz`).name), NAMES.slice(1));
-    for (const args of calls) {
+    assert.deepEqual(deps.calls.map((args) => nameOfTarball(args[1])), NAMES.slice(1));
+    for (const args of deps.calls) {
       assert.deepEqual(args.slice(2), ['--access', 'public', '--provenance', '--tag', 'latest']);
       assert.ok(path.isAbsolute(args[1]));
     }
+    // npm's stdout and stderr are in the log, per package, and so is the wait
+    assert.ok(deps.logs.includes(`  npm: + ${CORE}@0.26.0`), deps.logs.join('\n'));
+    assert.ok(deps.logs.includes('  npm: npm notice publish'));
+    assert.ok(deps.logs.includes(`  waiting for ${CORE}@0.26.0 to appear on the registry...`));
+    assert.ok(deps.logs.includes(`published ${CORE}@0.26.0: visible on the registry`));
   } finally {
     cleanup();
   }
 });
 
-test('publish --dry-run passes --dry-run and no --provenance; a prerelease defaults to --tag next', async () => {
+test('publish fails when npm exits 0 but the version never appears on the registry (the v0.26.0-rc.0 core and CLI case)', async () => {
+  const { dir, cleanup } = tarballs();
+  try {
+    const deps = publishDeps({ never: [CORE], output: () => ({ stdout: '', stderr: '' }) });
+    await assert.rejects(main(['publish', '0.26.0', '--dir', dir, '--wait', '2', '--poll', '30'], deps), (error) => {
+      assert.match(error.message, /npm accepted @openpresentation\/opf@0\.26\.0 \(exit 0\) but the registry still does not serve it after 2 min/);
+      assert.match(error.message, /Staged Packages tab of https:\/\/www\.npmjs\.com\/package\/<name>/);
+      return true;
+    });
+    assert.deepEqual(deps.calls.map((args) => nameOfTarball(args[1])), NAMES, 'every package is uploaded before the waiting starts');
+    assert.ok(deps.logs.includes(`published ${GALLERY}@0.26.0: visible on the registry`));
+  } finally {
+    cleanup();
+  }
+});
+
+test('publish fails on a staged result unless --expect-staged, and a staged package is never waited for', async () => {
+  const { dir, cleanup } = tarballs();
+  try {
+    const staged = { never: NAMES, output: (name) => ({ stdout: `+ ${name}@0.26.0 (staged with id abc123)\n`, stderr: '' }) };
+    await assert.rejects(main(['publish', '0.26.0', '--dir', dir], publishDeps(staged)), /npm staged @openpresentation\/gallery@0\.26\.0 instead of publishing it.*npm stage approve/s);
+    const deps = publishDeps(staged);
+    const results = await main(['publish', '0.26.0', '--dir', dir, '--expect-staged'], deps);
+    assert.deepEqual(new Set(results.map(({ status }) => status)), new Set(['staged']));
+    assert.ok(deps.logs.includes(`staged ${CORE}@0.26.0: awaiting maintainer approval on npm`));
+  } finally {
+    cleanup();
+  }
+});
+
+test('publish --dry-run passes --dry-run and no --provenance, waits for nothing; a prerelease defaults to --tag next', async () => {
   assert.deepEqual(publishArgs('/t.tgz', 'next', { dryRun: true }), ['publish', '/t.tgz', '--access', 'public', '--dry-run', '--tag', 'next']);
   const { dir, cleanup } = tarballs('0.26.0-rc.0');
   try {
-    const calls = [];
-    await main(['publish', '0.26.0-rc.0', '--dir', dir, '--dry-run'], { registry: fakeRegistry(), log() {}, npm: (args) => {
-      calls.push(args);
-      return { status: 0 };
-    } });
-    assert.equal(calls.length, 6);
-    for (const args of calls) assert.deepEqual(args.slice(-3), ['--dry-run', '--tag', 'next'].slice(-3));
-    assert.ok(calls.every((args) => !args.includes('--provenance') && args.at(-1) === 'next'));
+    const deps = publishDeps({ never: NAMES, version: '0.26.0-rc.0' });
+    const results = await main(['publish', '0.26.0-rc.0', '--dir', dir, '--dry-run'], deps);
+    assert.equal(deps.calls.length, 6);
+    assert.ok(results.every(({ status }) => status === 'dry-run'));
+    assert.ok(deps.calls.every((args) => !args.includes('--provenance') && args.at(-1) === 'next' && args.includes('--dry-run')));
   } finally {
     cleanup();
   }
@@ -342,13 +411,10 @@ test('publish --dry-run passes --dry-run and no --provenance; a prerelease defau
 test('publish stops at the first failure and says what is already on npm; a changed tarball or a refused gate publishes nothing', async () => {
   const { dir, cleanup } = tarballs();
   try {
-    const calls = [];
-    const failing = { registry: fakeRegistry(), log() {}, npm: (args) => {
-        calls.push(args);
-        return { status: calls.length === 3 ? 1 : 0, stdout: '', stderr: 'E403 not a trusted publisher' };
-      } };
+    const failing = publishDeps({ fail: (call) => call === 3 });
     await assert.rejects(main(['publish', '0.26.0', '--dir', dir], failing), /failed \(exit 1\).*re-run to continue.*E403/s);
-    assert.equal(calls.length, 3, 'nothing after the failed package is published');
+    assert.ok(failing.logs.includes('  npm: E403 not a trusted publisher'), 'a failure prints npm output too');
+    assert.equal(failing.calls.length, 3, 'nothing after the failed package is published');
     const never = { registry: fakeRegistry({ latest: { [CORE]: '0.26.0' } }), log() {}, npm: () => assert.fail('the gate refuses first') };
     await assert.rejects(main(['publish', '0.26.0', '--dir', dir], never), /not above its `latest`/);
     writeFileSync(path.join(dir, 'openpresentation-cli-0.26.0.tgz'), 'tampered');
@@ -357,6 +423,12 @@ test('publish stops at the first failure and says what is already on npm; a chan
   } finally {
     cleanup();
   }
+});
+
+test('npmSaysStaged recognizes npm stage publish output and not a plain publish', () => {
+  assert.ok(npmSaysStaged('+ @openpresentation/opf@0.26.0 (staged with id 8f3c)'));
+  assert.ok(npmSaysStaged('npm notice stage package @x/y@1.0.0 has been staged with tag next'));
+  assert.ok(!npmSaysStaged('+ @openpresentation/opf@0.26.0\nnpm notice Publishing to https://registry.npmjs.org/ with tag next and public access'));
 });
 
 // ---------------------------------------------------------------------------------------------------------------------
@@ -378,13 +450,13 @@ function published(name, version, { gitHead = COMMIT, ref = `refs/tags/v${versio
 }
 
 function verifyDeps(entries, { tags, audit } = {}) {
-  const npm = {
+  const registry = {
     manifest: async (name) => entries[name]?.manifest ?? null,
     distTags: async (name) => tags?.[name] ?? { latest: entries[name]?.manifest.version },
     attestations: async (url) => Object.values(entries).find((entry) => url.endsWith(entry.manifest.name))?.bundle ?? null,
     auditSignatures: (name, version) => audit?.(name, version) ?? { ok: true, report: { verified: [{ name, version, attestations: {} }], invalid: [], missing: [] } },
   };
-  return { npm, now: () => 0, sleep: async () => {}, log() {} };
+  return { registry, now: () => 0, sleep: async () => {}, log() {} };
 }
 
 const expectation = (extra = {}) => ({ version: '0.26.0', commit: COMMIT, tag: 'v0.26.0', distTag: 'latest', siblings: SIBLINGS, ...extra });
@@ -420,7 +492,7 @@ test('verifyPackage waits for the attestation bundle only while it is a 404', as
   const entry = published(CORE, '0.26.0');
   let calls = 0;
   const deps = verifyDeps({ [CORE]: entry });
-  deps.npm.attestations = async () => (++calls < 3 ? null : entry.bundle);
+  deps.registry.attestations = async () => (++calls < 3 ? null : entry.bundle);
   let clock = 0;
   deps.now = () => clock;
   deps.sleep = async (ms) => {
@@ -503,6 +575,38 @@ test('verifyRelease does not look for a changelog section of a prerelease', asyn
     const result = await verifyRelease(verifyDeps(entries, { tags: Object.fromEntries(NAMES.map((name) => [name, { latest: '0.25.0', next: '0.26.0-rc.0' }])) }), '0.26.0-rc.0', { commit: COMMIT, root });
     assert.ok(result.ok, JSON.stringify(result.results.map((entry) => entry.checks.filter((check) => !check.ok))));
     assert.ok(result.results.every((entry) => entry.checks.every((check) => check.name !== 'changelog')));
+  } finally {
+    cleanup();
+  }
+});
+
+test('`release.mjs verify` with the dependency wiring the workflow uses (defaultDeps over a stubbed fetch) verifies a published set', async () => {
+  // v0.26.0-rc.0 failed with "deps.npm.manifest is not a function": the unit tests passed hand-made deps, never defaultDeps().
+  const { root, cleanup } = fixture();
+  try {
+    const version = '0.26.0-rc.0';
+    const entries = Object.fromEntries(NAMES.map((name) => [name, published(name, version)]));
+    const asked = [];
+    const json = (body) => ({ ok: true, status: 200, json: async () => body });
+    const fetchImpl = async (url) => {
+      asked.push(url);
+      const attested = Object.values(entries).find((entry) => url === `https://registry/attestations/${entry.manifest.name}`);
+      if (attested) return json(attested.bundle);
+      const distTags = /^https:\/\/registry\.npmjs\.org\/-\/package\/(.+)\/dist-tags$/.exec(url);
+      if (distTags) return json({ latest: '0.25.0', next: version });
+      const manifest = /^https:\/\/registry\.npmjs\.org\/(.+)\/([^/]+)$/.exec(url);
+      const entry = manifest && entries[decodeURIComponent(manifest[1])];
+      return entry && entry.manifest.version === manifest[2] ? json(entry.manifest) : { ok: false, status: 404 };
+    };
+    const logs = [];
+    const deps = { ...defaultDeps({}, { fetchImpl }), log: (line) => logs.push(line) };
+    const result = await main(['verify', version, '--tag', 'next', '--commit', COMMIT, '--no-audit', '--dir', root], deps);
+    assert.ok(result.ok, logs.join('\n'));
+    assert.equal(asked.filter((url) => url.endsWith(`/${version}`)).length, NAMES.length);
+    assert.ok(logs.includes(`release ${version} verified: all 6 packages`));
+    // a package the registry lacks is reported, not thrown on
+    delete entries[CORE];
+    await assert.rejects(main(['verify', version, '--tag', 'next', '--commit', COMMIT, '--no-audit', '--dir', root], deps), /NOT verified \(@openpresentation\/opf\)/);
   } finally {
     cleanup();
   }

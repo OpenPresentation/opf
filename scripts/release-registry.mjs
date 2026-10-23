@@ -214,7 +214,7 @@ async function settle(deps, what, probe, { waitMinutes = 0, pollSeconds = 30 } =
 const pendingNote = (result, waitMinutes) => (result.timedOut ? ` (still not propagated after ${waitMinutes} min)` : '');
 
 /**
- * Checks one published package. `deps` is { npm, now, sleep, log, scratch? }; `pkg` is { name, changelog? }; `expect` is
+ * Checks one published package. `deps` is { registry (the npmRegistry client), now, sleep, log, scratch? }; `pkg` is { name, changelog? }; `expect` is
  * { version, commit, tag (`vX.Y.Z`), distTag, siblings: [names of the six], changelogHas?: (pkg, version) => boolean }.
  * Returns { ok, checks: [{ name, ok, detail }] }.
  *
@@ -227,7 +227,7 @@ export async function verifyPackage(deps, pkg, expect, { auditSignatures = true,
   const add = (name, ok, detail) => checks.push({ name, ok, detail });
   const patience = { waitMinutes, pollSeconds };
   const { version, commit, tag, distTag } = expect;
-  const manifest = await deps.npm.manifest(pkg.name, version);
+  const manifest = await deps.registry.manifest(pkg.name, version);
   if (!manifest) {
     add('npm version', false, `${pkg.name}@${version} is not on the registry`);
     return { ok: false, checks };
@@ -235,7 +235,7 @@ export async function verifyPackage(deps, pkg, expect, { auditSignatures = true,
   add('npm version', manifest.version === version, `${pkg.name}@${manifest.version}, integrity ${manifest.dist?.integrity ?? 'none'}`);
   add('gitHead', Boolean(commit) && manifest.gitHead === commit, `gitHead ${manifest.gitHead ?? 'missing'} ${manifest.gitHead === commit ? '=' : '!='} release commit ${commit}`);
 
-  const tags = await deps.npm.distTags(pkg.name);
+  const tags = await deps.registry.distTags(pkg.name);
   add('dist-tag', tags[distTag] === version, `${distTag} is ${tags[distTag] ?? 'unset'}${tags[distTag] === version ? '' : `, expected ${version}`}`);
 
   // A published manifest never carries a workspace: specifier, and every sibling range is the lockstep floor ^X.Y.Z (D12, D14).
@@ -257,7 +257,7 @@ export async function verifyPackage(deps, pkg, expect, { auditSignatures = true,
       deps,
       `the attestation bundle of ${pkg.name}@${version}`,
       async () => {
-        const bundle = await deps.npm.attestations(attestations.url);
+        const bundle = await deps.registry.attestations(attestations.url);
         return bundle ? { bundle } : { pending: true, detail: `HTTP 404 from ${attestations.url}` };
       },
       patience,
@@ -286,7 +286,7 @@ export async function verifyPackage(deps, pkg, expect, { auditSignatures = true,
       deps,
       `${pkg.name}@${version} for \`npm audit signatures\``,
       async () => {
-        const result = deps.npm.auditSignatures(pkg.name, version, { scratch: deps.scratch });
+        const result = deps.registry.auditSignatures(pkg.name, version, { scratch: deps.scratch });
         return result.pending ? { ...result, detail: result.error } : result;
       },
       patience,
