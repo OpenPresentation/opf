@@ -76,6 +76,13 @@ assert.ok(labels(complete('{"slides":[{"design":{"theme":"|"}}]}')).length>0,'de
 assert.equal(complete('{"name":"|"}'),null,'a free-text field offers nothing');
 assert.equal(complete('{"extensions":{"layout":"|"}}'),null,'extension keys do not gain behavior by name');
 assert.equal(complete('{"slides":[{"title":"abc"|}]}',{explicit:true}),null,'after a finished value nothing is offered');
+// Asked for (Ctrl+Space) right after a closing quote, the string just ended is the token, as in VS Code; typing there offers nothing.
+const ended=complete('{"slides":[{"layout":"cover"|}]}',{explicit:true});
+assert.deepEqual([ended.kind,ended.quoted,ended.closed,ended.to-ended.from],['value',true,true,'cover'.length],'the finished string is replaced whole');
+assert.ok(labels(ended).includes('cover')&&labels(ended).includes('agenda'),'its field offers its choices');
+assert.equal(complete('{"slides":[{"layout":"cover"|}]}'),null,'typing after a finished string offers nothing');
+assert.equal(complete('{"slides":[{"title":"abc"|}]}',{explicit:true}),null,'a finished free-text string offers nothing');
+assert.ok(labels(complete('{"slides":[{"layout":"cover","ti|"}]}',{explicit:true})).includes('title'),'a key before the end of its string still offers keys');
 // Catalogs the host did not register do not offer their records.
 assert.ok(!labels(complete('{"slides":[{"layout":"|"}]}',{catalogs:[]})).includes('cover'));
 // A draft's own catalog records are offered with their names.

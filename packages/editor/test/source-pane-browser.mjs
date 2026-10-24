@@ -222,13 +222,13 @@ try {
   assert.equal(yamlDownload.suggestedFilename(), 'deck.opf.yaml');
   await page.getByRole('button', { name: 'Copy source' }).click();
   assert.equal(await page.evaluate(() => navigator.clipboard.readText()), await text(page));
-  // Format (fix indentation) rewrites YAML from the document and reports what it dropped.
+  // Format (fix indentation) lays the YAML out and keeps its comments: nothing is dropped, so nothing is reported.
   await selectIn(page, 'name: Minimal OPF Deck');
-  await page.keyboard.type('# a comment\nname:   Minimal OPF Deck');
+  await page.keyboard.type('# a comment\nname:   Minimal OPF Deck   # kept');
   await page.getByRole('button', { name: 'Format (fix indentation)' }).click();
-  await findings.waitFor();
-  assert.match(await findings.locator('.opf-source-finding-message').first().innerText(), /1 comment in the YAML was dropped/);
-  assert.equal((await text(page)).startsWith('name: Minimal OPF Deck\n'), true);
+  await page.getByRole('status').filter({ hasText: 'Formatted' }).waitFor();
+  assert.equal((await text(page)).startsWith('# a comment\nname: Minimal OPF Deck # kept\n'), true, await text(page));
+  assert.equal(await findings.isHidden(), true, 'a comment is not a finding');
   await chooseFormat(page, 'JSON');
 
   // Hooks replace the defaults.
@@ -393,16 +393,7 @@ try {
     demo.pane.editor.api.setSelection(at + needle.length);
     demo.pane.editor.api.focus();
   }, needle);
-  // CodeMirror ignores Enter while the popup is stale (a query for the last keystroke is pending: `cm-tooltip-autocomplete-disabled`) and
-  // for its 75 ms interaction delay after the popup opens, and inserts a newline instead. A key press at that moment is the user's
-  // race, not the test's subject, so wait on the popup's state: a settled, selected option, on a popup that has been open that long.
-  const acceptable = (label, minAge = 150) => typing.waitForFunction(({ label, minAge }) => {
-    const node = document.querySelector('.cm-tooltip-autocomplete');
-    if (!node || node.classList.contains('cm-tooltip-autocomplete-disabled')) return false;
-    if (node.querySelector('[aria-selected="true"] .cm-completionLabel')?.textContent !== label) return false;
-    node.dataset.openedAt ??= String(performance.now());
-    return performance.now() - Number(node.dataset.openedAt) >= minAge;
-  }, { label, minAge }, { timeout: 5000 });
+  // Enter accepts the selected option as soon as the popup shows it: there is no delay to wait out (the popup refilters as you type).
   assert.equal(await typing.locator('.opf-source-code .cm-content').getAttribute('aria-autocomplete'), 'list', 'the editor announces its completion list');
   await cursorAfter('"OWAA Rocks!"');
   await typing.keyboard.type(', "lay');
@@ -421,7 +412,6 @@ try {
   }));
   assert.ok(inside.ok, `the popup is inside the page (${inside.box})`);
   assert.notEqual(await popup.locator('[aria-selected="true"]').evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(17, 119, 204)', 'the selected option uses the token color, not the default blue');
-  await acceptable('layout');
   await typing.keyboard.press('Enter');
   assert.ok((await text(typing)).includes('{ "title": "OWAA Rocks!", "layout":  }'), `a key is completed with its colon: ${await text(typing)}`);
   // The values of that key are offered right away.
@@ -431,22 +421,22 @@ try {
   await typing.keyboard.type('"tex');
   await typing.waitForFunction(() => document.querySelector('.cm-tooltip-autocomplete [aria-selected="true"] .cm-completionLabel')?.textContent === 'text' && document.querySelectorAll('.cm-tooltip-autocomplete [role="option"]').length < 5, null, { timeout: 5000 });
   assert.ok((await options().locator('.cm-completionLabel').allInnerTexts()).includes('text'), 'typing narrows the list');
-  await acceptable('text');
   await typing.keyboard.press('Enter');
   assert.ok((await text(typing)).includes('"layout": "text" }'), `a value replaces the whole token, quotes included: ${await text(typing)}`);
   await popup.waitFor({ state: 'hidden' });
   await waitDeck(typing, (d) => d.slides[0].layout === 'text');
   assert.equal(await typing.locator('.opf-source-findings').isHidden(), true, 'the completed draft is valid');
-  // Escape closes the popup and keeps the typed text; Ctrl+Space still opens the field menu, not the popup.
+  // Escape closes the popup and keeps the typed text; Ctrl+Space opens the list again (the field menu has its own key, Alt+Shift+O).
   await typing.keyboard.press('Backspace');
   await typing.keyboard.press('Backspace');
   await typing.keyboard.type('"');
   await typing.keyboard.press('Escape');
   await popup.waitFor({ state: 'hidden' });
   await typing.keyboard.press('Control+Space');
-  await typing.locator('.json-field-menu').waitFor();
-  assert.equal(await popup.count(), 0, 'Ctrl+Space opens the field menu, not the completion popup');
+  await popup.waitFor();
+  assert.equal(await typing.locator('.json-field-menu').count(), 0, 'Ctrl+Space opens the completion list, not the field menu');
   await typing.keyboard.press('Escape');
+  await popup.waitFor({ state: 'hidden' });
   // An enum value, bare, in a field of the schema: a tone is offered inside quotes.
   await typing.evaluate(() => { demo.pane.editor.api.setSelection(1); demo.pane.editor.api.focus(); });
   await typing.keyboard.type('"tone": "cas');

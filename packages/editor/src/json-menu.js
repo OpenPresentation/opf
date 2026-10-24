@@ -7,7 +7,7 @@ export function mountJsonFieldMenu(parent,api,catalogs,left,top,onClose){
   const context=getJsonFieldContext(source,selection[0],catalogs);
   if(!context)return null;
   const coordinates=api.coordinates();left??=coordinates.left;top??=coordinates.top;
-  const root=doc.createElement('div');root.className='json-field-menu';root.setAttribute('role','dialog');root.setAttribute('aria-label',`${context.label} options`);
+  const root=doc.createElement('div');root.className='json-field-menu';root.setAttribute('role','dialog');root.setAttribute('aria-modal','true');root.setAttribute('aria-label',`${context.label} options`);
   root.style.cssText='position:fixed;z-index:10000;width:380px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);overflow:auto;box-sizing:border-box;padding:12px;background:Canvas;color:CanvasText;border:1px solid GrayText;border-radius:8px;font:13px system-ui;box-shadow:0 8px 28px #0003';
   const add=(tag,text,className,container=root)=>{const node=doc.createElement(tag);if(text!==undefined)node.textContent=text;if(className)node.className=className;container.append(node);return node;};
   const heading=add('div',undefined,'json-field-heading');add('strong',context.label,undefined,heading);
@@ -59,6 +59,13 @@ export function mountJsonFieldMenu(parent,api,catalogs,left,top,onClose){
   search.addEventListener('input',()=>{selected=0;render();});
   root.addEventListener('keydown',event=>{
     if(event.key==='Escape'){event.preventDefault();event.stopPropagation();close(true);}
+    // Tab walks the dialog's two controls and wraps; the options are reached with the arrow keys from the search field. Focus never leaves
+    // the dialog by Tab, so it cannot be left open behind the page.
+    else if(event.key==='Tab'){
+      event.preventDefault();event.stopPropagation();
+      const stops=[closeButton,search],at=stops.indexOf(doc.activeElement);
+      stops[(at+(event.shiftKey?-1:1)+stops.length)%stops.length].focus();
+    }
     else if(event.target===search&&['ArrowDown','ArrowUp'].includes(event.key)){event.preventDefault();selected=Math.max(0,Math.min(choices.length-1,selected+(event.key==='ArrowDown'?1:-1)));highlight();}
     else if(event.target===search&&event.key==='Enter'&&choices[selected]){event.preventDefault();choose(choices[selected]);}
   });

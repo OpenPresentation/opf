@@ -1,16 +1,17 @@
-import { Annotation, Compartment, EditorSelection, EditorState, Prec, StateEffect, StateField, Transaction } from "@codemirror/state";
-import { Decoration, EditorView, drawSelection, keymap, lineNumbers } from "@codemirror/view";
-import { defaultKeymap, history, historyKeymap, indentWithTab, isolateHistory, redo, undo, undoDepth } from "@codemirror/commands";
+import { Annotation, ChangeSet, Compartment, EditorSelection, EditorState, Prec, StateEffect, StateField, Transaction, countColumn } from "@codemirror/state";
+import { Decoration, EditorView, crosshairCursor, drawSelection, keymap, lineNumbers, rectangularSelection } from "@codemirror/view";
+import { defaultKeymap, history, historyKeymap, indentLess, indentMore, insertNewlineAndIndent, isolateHistory, redo, undo, undoDepth } from "@codemirror/commands";
 import { HighlightStyle, StreamLanguage, bracketMatching, codeFolding, foldKeymap, indentOnInput, indentUnit, syntaxHighlighting } from "@codemirror/language";
 import { json, jsonParseLinter } from "@codemirror/lang-json";
 import { yaml } from "@codemirror/lang-yaml";
-import { autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap, startCompletion } from "@codemirror/autocomplete";
+import { acceptCompletion, autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap, completionStatus, moveCompletionSelection, startCompletion } from "@codemirror/autocomplete";
 import { highlightSelectionMatches, search, searchKeymap } from "@codemirror/search";
 import { linter } from "@codemirror/lint";
 import { tags } from "@lezer/highlight";
-import { applyEdits, findNodeAtOffset, format, getNodePath, parseTree } from "jsonc-parser";
+import { findNodeAtOffset, getNodePath, parseTree } from "jsonc-parser";
 import {jsonSource,jsonSourceHistory,setJsonSource} from './json-source.js';
-import {textInputMap,preferredLineEnding} from './text-input.js';
+import {textInputMap} from './text-input.js';
+import {detectIndent,formatJsonSource,whitespaceEdits} from './json-format.js';
 const external = Annotation.define();
 const hoverField = StateEffect.define();
 const activeField = StateField.define({ create: () => null, update: (value, tr) => tr.effects.reduce((value2, effect) => effect.is(hoverField) ? effect.value : value2, value) });
@@ -70,24 +71,83 @@ function languageExtension(name, completions) {
   if (name === "markdown") return markdownLanguage;
   return [json(), linter(jsonParseLinter(), { delay: 500 }), fieldDecorations, completions ?? []];
 }
-// The completion popup keeps CodeMirror's keys (arrows, Enter, Escape) but not Ctrl-Space, which opens the field menu.
-const completionKeys = Prec.highest(keymap.of(completionKeymap.filter((binding) => binding.run !== startCompletion)));
+// Tab or Enter pressed right after a keystroke can arrive before the completion query that keystroke started has answered (with the data
+// loaded it answers within a task or two). Accepting then waits for the answer instead of inserting whitespace or a line over a list that is
+// about to open; when no list comes, `fallback` does what the key does without a list.
+function acceptOrFallBack(isReady, fallback) {
+  return (view) => {
+    if (acceptCompletion(view)) return true;
+    if (completionStatus(view.state) !== "pending" || !isReady()) return false;
+    let tries = 0;
+    const settle = () => {
+      if (!view.dom.isConnected) return;
+      if (completionStatus(view.state) === "pending" && ++tries < 50) { setTimeout(settle, 2); return; }
+      if (!acceptCompletion(view)) fallback(view);
+    };
+    setTimeout(settle, 0);
+    return true;
+  };
+}
+// Completion keys, as in VS Code: Tab and Enter accept the selected suggestion, Escape closes the list, Ctrl+Space (and Cmd+I on macOS) opens it
+// wherever the schema has something to offer, and the arrows, the Page keys and Ctrl+N and Ctrl+P (macOS) move the selection. Without a list,
+// none of them is taken: Tab then inserts whitespace and Enter inserts a line.
+function completionKeys(isReady) {
+  return Prec.highest(keymap.of([
+    ...completionKeymap.filter((binding) => binding.key !== "Enter"),
+    { key: "Enter", run: acceptOrFallBack(isReady, (view) => nextStringItem(view) || insertNewlineAndIndent(view)) },
+    { key: "Tab", run: acceptOrFallBack(isReady, tabCommand) },
+    { mac: "Mod-i", run: startCompletion },
+    { mac: "Ctrl-n", run: moveCompletionSelection(true) },
+    { mac: "Ctrl-p", run: moveCompletionSelection(false) },
+  ]));
+}
 // Accept a completion by rewriting its whole token (quotes included), so a string key, a bare word and a changed value type all land
-// as valid JSON. A key adds ": " when none follows and then offers the values of that key.
+// as valid JSON. A key adds ": " when none follows and then offers the values of that key. The quotes are read from the text when the
+// completion is applied, because the list is reused while the author keeps typing the same token.
 function completionApply(found, option) {
   return (view, completion, from, to) => {
-    const start = found.quoted ? from - 1 : from;
-    const end = found.closed ? to + 1 : to;
+    const { state } = view;
+    const start = found.quoted && state.sliceDoc(from - 1, from) === '"' ? from - 1 : from;
+    const end = found.quoted && state.sliceDoc(to, to + 1) === '"' ? to + 1 : to;
     let insert = JSON.stringify(option.value);
-    const chain = found.kind === "key" && !/^\s*:/.test(view.state.sliceDoc(end, Math.min(view.state.doc.length, end + 200)));
+    const chain = found.kind === "key" && !/^\s*:/.test(state.sliceDoc(end, Math.min(state.doc.length, end + 200)));
     if (chain) insert += ": ";
     view.dispatch({ changes: { from: start, to: end, insert }, selection: { anchor: start + insert.length }, userEvent: "input.complete", scrollIntoView: true });
     if (chain) setTimeout(() => startCompletion(view), 0);
   };
 }
-function indentation(source) {
-  const spaces = source.match(/^[\t ]+(?=\S)/gm) ?? [];
-  return spaces.some((value) => value.includes("	")) ? "	" : " ".repeat(spaces.length ? Math.min(8, ...spaces.map((value) => value.length)) : 2);
+// A quoted token keeps its list for any text between the quotes; a bare word for word characters only.
+const QUOTED_TEXT = /^[^"\\\n\r]*$/;
+const WORD_TEXT = /^[A-Za-z0-9_.-]*$/;
+const DEFAULT_INDENT = "  ";
+const tabWidth = (unit) => (unit === "\t" ? 4 : unit.length);
+// Tab without a completion list (VS Code's `tab`): whitespace goes in at the caret, up to the next tab stop, and replaces a selection inside
+// one line; a selection over several lines, or one line in full, is indented line by line. Every selection range does the same.
+function tabCommand(view) {
+  const { state } = view;
+  if (state.readOnly) return false;
+  const unit = state.facet(indentUnit), size = state.tabSize;
+  const lineWise = state.selection.ranges.some((range) => {
+    if (range.empty) return false;
+    const first = state.doc.lineAt(range.from), last = state.doc.lineAt(range.to);
+    return first.number !== last.number || (range.from === first.from && range.to === first.to && first.length > 0);
+  });
+  if (lineWise) {
+    // Indent the lines; a selection that began at the start of its line still does, so it keeps covering whole lines.
+    const wholeStart = state.selection.ranges.map((range) => !range.empty && range.from === state.doc.lineAt(range.from).from);
+    if (!indentMore(view)) return false;
+    const after = view.state.selection;
+    view.dispatch({ selection: EditorSelection.create(after.ranges.map((range, index) => (wholeStart[index] ? EditorSelection.range(view.state.doc.lineAt(range.from).from, range.to) : range)), after.mainIndex) });
+    return true;
+  }
+  const change = state.changeByRange((range) => {
+    const line = state.doc.lineAt(range.from);
+    const column = countColumn(state.sliceDoc(line.from, range.from), size);
+    const insert = unit === "\t" ? "\t" : " ".repeat(unit.length - (column % unit.length));
+    return { changes: { from: range.from, to: range.to, insert }, range: EditorSelection.cursor(range.from + insert.length) };
+  });
+  view.dispatch(state.update(change, { scrollIntoView: true, userEvent: "input" }));
+  return true;
 }
 function sourceDecorations(state) {
   const ranges = [];
@@ -139,7 +199,7 @@ function nextStringItem(view) {
   const line = state.doc.lineAt(node.offset);
   const existingIndent = /^\s*/.exec(line.text)[0];
   const parentLine = state.doc.lineAt(node.parent.offset);
-  const indent = line.number === parentLine.number ? /^\s*/.exec(parentLine.text)[0] + indentation(source) : existingIndent;
+  const indent = line.number === parentLine.number ? /^\s*/.exec(parentLine.text)[0] + state.facet(indentUnit) : existingIndent;
   const inserted = `,
 ${indent}""${hasNext ? "," : ""}`;
   view.dispatch({
@@ -171,6 +231,11 @@ function mountJsonCodeEditor(parent, options) {
   const editableExtension = (readOnly) => [EditorState.readOnly.of(Boolean(readOnly)), EditorView.editable.of(!readOnly)];
   let languageName = options.language ?? "json";
   let disposed=false, menu=null, catalogs=options.catalogs??[], generation=0;
+  // The indentation unit belongs to the document, not to the text as it is edited: JSON reads it once when a document is opened (here,
+  // and when the host replaces the text), YAML and Markdown always use two spaces. Typing never changes it.
+  let jsonIndent = detectIndent(options.code) ?? DEFAULT_INDENT;
+  const unitOf = (name) => (name === "json" ? jsonIndent : DEFAULT_INDENT);
+  const indentExtension = (name) => [indentUnit.of(unitOf(name)), EditorState.tabSize.of(tabWidth(unitOf(name)))];
   function closeOptions(){generation++;menu?.destroy();menu=null;}
   async function openOptions(left,top){
     closeOptions();
@@ -183,43 +248,60 @@ function mountJsonCodeEditor(parent, options) {
       menu=mountJsonFieldMenu(parent,api,catalogs,left,top,()=>{menu=null;});
     }catch(error){options.onError?.(error);}
   }
-  // Live completions (JSON only, `completions: true`): property names and values at the cursor's JSON path, from the same data as the
-  // field menu. The data loads with the field menu's chunk on first use.
-  async function completionSource(context) {
-    if (disposed || languageName !== "json") return null;
-    let module;
-    try { module = await import('./json-options.js'); } catch (error) { options.onError?.(error); return null; }
-    if (disposed || context.aborted) return null;
-    const found = module.getJsonCompletions(context.state.doc.toString(), context.pos, catalogs, { explicit: context.explicit });
+  // Live completions (JSON only, `completions: true`): property names and values at the cursor's JSON path, from the same data as the field
+  // menu. The data loads with the field menu's chunk, at the first focus or the first query; once loaded, a query answers at once (no
+  // promise), and the list stays valid while the author types within the same token (`validFor`), so typing only refilters it.
+  let optionsModule = null, optionsLoading = null;
+  const loadOptions = () => (optionsLoading ??= import('./json-options.js').then((module) => (optionsModule = module), (error) => { optionsLoading = null; throw error; }));
+  function completionResult(context) {
+    const found = optionsModule.getJsonCompletions(context.state.doc.toString(), context.pos, catalogs, { explicit: context.explicit });
     if (!found) return null;
-    return { from: found.from, to: found.to, filter: true, options: found.options.map((option) => ({
+    return { from: found.from, to: found.to, filter: true, validFor: found.quoted ? QUOTED_TEXT : WORD_TEXT, options: found.options.map((option) => ({
       label: option.label, detail: option.detail, info: option.info, boost: option.boost, type: found.kind === "key" ? "property" : "enum", apply: completionApply(found, option),
     })) };
   }
-  // Undo and Redo run CodeMirror's history first. When it has nothing left, the host's fallback may step further (the source pane
-  // routes a whole-document replace to the session); a fallback answers true when it did something.
+  function completionSource(context) {
+    // One list for one cursor: with several, Tab and Enter keep their plain meaning at every cursor instead of completing at the main one only.
+    if (disposed || languageName !== "json" || context.state.selection.ranges.length > 1) return null;
+    if (optionsModule) return completionResult(context);
+    return loadOptions().then(() => (disposed || context.aborted ? null : completionResult(context)), (error) => { options.onError?.(error); return null; });
+  }
+  // Undo and Redo run CodeMirror's history first. When it has nothing left, the host's fallback may step further (the source pane routes a whole-document replace to the session); a fallback answers true when it did something.
   const undoCommand = (target) => undo(target) || Boolean(options.historyFallback?.undo?.());
   const redoCommand = (target) => redo(target) || Boolean(options.historyFallback?.redo?.());
   const historyBindings = historyKeymap.map((binding) => binding.run === undo ? { ...binding, run: undoCommand } : binding.run === redo ? { ...binding, run: redoCommand } : binding);
-  const completionExtension = options.completions ? [autocompletion({ override: [completionSource], defaultKeymap: false, icons: false, maxRenderedOptions: 60 }), completionKeys] : null;
-  let currentIndent = indentation(options.code);
+  // Accept with no minimum delay: the list is already valid for the typed text, so Tab or Enter right after a keystroke accepts (VS Code does).
+  const completionExtension = options.completions ? [autocompletion({ override: [completionSource], defaultKeymap: false, icons: false, maxRenderedOptions: 60, interactionDelay: 0, activateOnTypingDelay: 0 }), completionKeys(() => optionsModule !== null)] : null;
   const contentAttributes = (invalid = options.invalid, describedBy = options.describedBy) => EditorView.contentAttributes.of({
     "aria-label": options.label,
     "aria-invalid": String(Boolean(invalid)),
     "aria-describedby": describedBy ?? "",
-    "aria-keyshortcuts": "Control+Space Meta+Space Alt+ArrowDown",
+    "aria-keyshortcuts": options.completions ? "Control+Space" : "Control+Space Alt+Shift+O",
     spellcheck: "false",
     autocapitalize: "off",
     autocorrect: "off"
   });
+  // Format the document: the host's command (the source pane formats every language) or, standalone, the JSON formatter.
+  const runFormat = () => { if (options.onFormat) options.onFormat(); else api.format(); return true; };
+  // These chords are read from the event, not from CodeMirror's keymap: Alt changes the character a key produces on macOS, so the physical key counts.
+  const letter = (event, name) => event.code === `Key${name.toUpperCase()}` || event.key.toLowerCase() === name;
+  // Cmd/Ctrl+Shift+F (kept from earlier versions) and VS Code's Shift+Alt+F.
+  const isFormatKey = (event) => event.shiftKey && !((event.metaKey || event.ctrlKey) && event.altKey) && (event.metaKey || event.ctrlKey || event.altKey) && letter(event, "f");
+  // The field menu: Alt+Shift+O, a chord VS Code does not use.
+  const isOptionsKey = (event) => event.altKey && event.shiftKey && !event.metaKey && !event.ctrlKey && letter(event, "o");
   const view = new EditorView({ parent, state: EditorState.create({ doc: options.code, extensions: [
     language.of(languageExtension(languageName, completionExtension)),
     editable.of(editableExtension(options.readOnly)),
     jsonSource.init(()=>options.code),jsonSourceHistory,
-    indent.of(indentUnit.of(currentIndent)),
+    indent.of(indentExtension(languageName)),
     indentOnInput(),
     historyField.of(history()),
     drawSelection(),
+    // Multiple cursors, as in VS Code: Cmd/Ctrl+D, Cmd/Ctrl+Shift+L, Cmd/Ctrl+Alt+Up and Down, Alt+click (and Cmd/Ctrl+click), and Shift+Alt+drag for a column.
+    EditorState.allowMultipleSelections.of(true),
+    EditorView.clickAddsSelectionRange.of((event) => event.altKey || (/Mac|iPhone|iPad/.test(navigator.platform) ? event.metaKey : event.ctrlKey)),
+    rectangularSelection({ eventFilter: (event) => event.altKey && event.shiftKey && event.button === 0 }),
+    crosshairCursor(),
     bracketMatching(),
     closeBrackets(),
     codeFolding(),
@@ -241,9 +323,14 @@ function mountJsonCodeEditor(parent, options) {
         redoCommand(view);
         return true;
       }
-      if ((event.metaKey || event.ctrlKey) && event.shiftKey && !event.altKey && event.key.toLowerCase() === "f") {
+      if (isFormatKey(event)) {
         event.preventDefault();
-        api.format();
+        runFormat();
+        return true;
+      }
+      if (languageName === "json" && isOptionsKey(event)) {
+        event.preventDefault();
+        void openOptions();
         return true;
       }
       return false;
@@ -252,19 +339,10 @@ function mountJsonCodeEditor(parent, options) {
       { key: "Enter", run: nextStringItem },
       { key: '"', run: (view2) => skipDelimiter(view2, '"') },
       { key: ",", run: (view2) => skipDelimiter(view2, ",") },
-      { key: "Mod-Space", run: () => {
-        void openOptions();
-        return true;
-      } },
-      { key: "Ctrl-Space", run: () => {
-        void openOptions();
-        return true;
-      } },
-      { key: "Alt-ArrowDown", run: () => {
-        void openOptions();
-        return true;
-      } },
-      indentWithTab,
+      // The field menu (a searchable dialog of the choices of one field) is on Alt+Shift+O, a chord VS Code does not use. With completions off
+      // it is also on Ctrl+Space, because the list is not there to take that key.
+      ...(options.completions ? [] : [{ key: "Ctrl-Space", run: () => languageName === "json" && (void openOptions(), true) }, { key: "Mod-Space", run: () => languageName === "json" && (void openOptions(), true) }]),
+      { key: "Tab", run: tabCommand, shift: indentLess },
       ...closeBracketsKeymap,
       ...defaultKeymap,
       ...historyBindings,
@@ -272,16 +350,14 @@ function mountJsonCodeEditor(parent, options) {
       ...foldKeymap
     ]),
     EditorView.domEventHandlers({
-      click(event) {
-        if (view.state.selection.main.empty) void openOptions(event.clientX, event.clientY + 12);
-      },
       paste(event){
         if(!event.clipboardData||view.state.selection.ranges.length!==1)return false;
         const text=event.clipboardData.getData('text/plain');
         if(!text)return false;
-        event.preventDefault();api.replace(...api.getSelection(),text);return true;
+        event.preventDefault();api.replace(...api.getSelection(),text,{userEvent:'input.paste'});return true;
       },
       focus() {
+        if (options.completions) void loadOptions().catch(() => {});
         options.onFocus?.();
       },
       mousemove(event) {
@@ -293,6 +369,9 @@ function mountJsonCodeEditor(parent, options) {
     }),
     EditorView.updateListener.of((update) => {
       if(update.docChanged||update.selectionSet)closeOptions();
+      // Tests and hosts wait on this: a completion query is still running.
+      const busy = completionStatus(update.state) === "pending", dom = update.view.dom;
+      if (busy !== (dom.dataset.opfBusy === "1")) { if (busy) dom.dataset.opfBusy = "1"; else delete dom.dataset.opfBusy; }
       if (update.docChanged && !update.transactions.every((tr) => tr.annotation(external))) options.onChange(update.state.field(jsonSource));
     })
   ] }) });
@@ -302,28 +381,53 @@ function mountJsonCodeEditor(parent, options) {
     hasFocus: () => view.hasFocus,
     focus: () => view.focus(),
     setSelection: (from, to=from) => {const map=textInputMap(api.getValue());view.dispatch({ selection: EditorSelection.single(map.toInput(from),map.toInput(to)), scrollIntoView: true });},
-    replace: (from, to, text) => {
+    // `keepSelection` leaves the cursor where the edit maps it (a format keeps it on the same token) instead of moving it to the end of the new text.
+    // `userEvent` names the edit; the default is not "input.complete" or "input.type", which would run indentOnInput over the inserted lines and make
+    // the text differ from the source the edit declares (a pasted block ending in "}" was dropped that way).
+    replace: (from, to, text, { keepSelection = false, userEvent = "input.replace" } = {}) => {
       const source=api.getValue(),map=textInputMap(source),a=map.toInput(from),b=map.toInput(to);
       if(to<from||map.toSource(a)!==from||map.toSource(b)!==to)throw new RangeError('JSON edits must use source boundaries outside a CRLF pair.');
       const insert=textInputMap(text).text,next=source.slice(0,from)+text+source.slice(to);
-      view.dispatch({changes:{from:a,to:b,insert},selection:{anchor:a+insert.length},effects:setJsonSource.of(next),
-        annotations:[Transaction.userEvent.of('input.complete'),isolateHistory.of('full')],scrollIntoView:true});
+      view.dispatch({changes:{from:a,to:b,insert},...(keepSelection?{}:{selection:{anchor:a+insert.length}}),effects:setJsonSource.of(next),
+        annotations:[Transaction.userEvent.of(userEvent),isolateHistory.of('full')],scrollIntoView:true});
     },
+    /** The indentation unit now in effect: a tab character or some spaces. */
+    indentUnit: () => view.state.facet(indentUnit),
     coordinates: () => {
       const rect = view.coordsAtPos(view.state.selection.main.head) ?? parent.getBoundingClientRect();
       return { left: rect.left, top: rect.bottom + 8 };
     },
     format: () => {
-      const source = api.getValue();
-      try {
-        JSON.parse(source);
-      } catch {
-        return false;
-      }
-      const unit = indentation(source);
-      const next = applyEdits(source, format(source, void 0, { insertSpaces: unit !== "	", tabSize: unit.length, eol: preferredLineEnding(source) }));
-      if (source !== next) api.replace(0, source.length, next);
+      if (languageName !== "json") return false;
+      // jsonc-parser formats tokens, so it also lays out a draft that does not parse yet.
+      api.replaceDiff(formatJsonSource(api.getValue(), view.state.facet(indentUnit)));
       return true;
+    },
+    /**
+     * Replace the whole text with `next` as one undoable edit. When `next` differs only in whitespace (a format), each run of whitespace that
+     * changed is its own change, so the cursor stays on its token; otherwise only the part that differs is replaced.
+     */
+    replaceDiff: (next) => {
+      const source = api.getValue();
+      if (source === next) return;
+      const edits = whitespaceEdits(source, next);
+      if (edits) {
+        const map = textInputMap(source);
+        try {
+          const changes = ChangeSet.of(edits.map((edit) => ({ from: map.toInput(edit.from), to: map.toInput(edit.to), insert: textInputMap(edit.insert).text })), view.state.doc.length);
+          view.dispatch({ changes, selection: view.state.selection.map(changes, 1), effects: setJsonSource.of(next), annotations: [Transaction.userEvent.of("input.format"), isolateHistory.of("full")], scrollIntoView: true });
+          return;
+        } catch (error) {
+          // An edit that splits a CRLF pair: replace the differing middle instead.
+          if (!(error instanceof RangeError)) throw error;
+        }
+      }
+      let from = 0, end = source.length, nextEnd = next.length;
+      while (from < end && from < nextEnd && source[from] === next[from]) from++;
+      while (end > from && nextEnd > from && source[end - 1] === next[nextEnd - 1]) { end--; nextEnd--; }
+      if (source[from - 1] === "\r" && source[from] === "\n") from--;
+      if (source[end - 1] === "\r" && source[end] === "\n") { end++; nextEnd++; }
+      api.replace(from, end, next.slice(from, nextEnd), { keepSelection: true, userEvent: "input.format" });
     }
   };
   return {
@@ -334,7 +438,7 @@ function mountJsonCodeEditor(parent, options) {
     setLanguage(name){
       if(name===languageName)return;
       languageName=name;closeOptions();
-      view.dispatch({ effects: language.reconfigure(languageExtension(name, completionExtension)) });
+      view.dispatch({ effects: [language.reconfigure(languageExtension(name, completionExtension)), indent.reconfigure(indentExtension(name))] });
     },
     /** Forget the typed edits CodeMirror can undo (the text they were typed against is gone). Returns nothing; the document is unchanged. */
     resetHistory(){
@@ -350,10 +454,14 @@ function mountJsonCodeEditor(parent, options) {
       if(code!==api.getValue())closeOptions();
       const current = view.state.doc.toString(), normalized=textInputMap(code).text;
       const effects = [attributes.reconfigure(contentAttributes(invalid, describedBy)), hoverField.of(field),setJsonSource.of(code)];
-      const nextIndent = indentation(code);
-      if (nextIndent !== currentIndent) {
-        currentIndent = nextIndent;
-        effects.push(indent.reconfigure(indentUnit.of(nextIndent)));
+      // A different text is a different document (or a rewrite of it by the host): read its indentation again. The same text, which the host
+      // passes after every applied edit to refresh the attributes, keeps the unit.
+      if (current !== normalized) {
+        const detected = detectIndent(code);
+        if (detected && detected !== jsonIndent) {
+          jsonIndent = detected;
+          if (languageName === "json") effects.push(indent.reconfigure(indentExtension("json")));
+        }
       }
       if (current === normalized) {
         view.dispatch({ effects });

@@ -138,11 +138,13 @@ const WORD = /[A-Za-z0-9_.-]/;
 // The token being typed: inside a string (a quote opened earlier on this line) or a bare word. JSON strings never span lines.
 function tokenAt(text, position, explicit) {
     const lineStart = Math.max(text.lastIndexOf("\n", position - 1), text.lastIndexOf("\r", position - 1)) + 1;
-    let open = -1;
+    let open = -1, last = null;
     for (let index = lineStart; index < position; index++) {
-        if (open >= 0) { if (text[index] === "\\") index++; else if (text[index] === '"') open = -1; }
+        if (open >= 0) { if (text[index] === "\\") index++; else if (text[index] === '"') { last = { start: open, end: index }; open = -1; } }
         else if (text[index] === '"') open = index;
     }
+    // Asked for explicitly (Ctrl+Space) right after a closing quote: the string just ended is the token, as in VS Code.
+    if (open < 0 && explicit && last?.end === position - 1) return { quoted: true, closed: true, start: last.start, end: position, from: last.start + 1, to: position - 1 };
     if (open >= 0) {
         let close = -1;
         for (let index = position; index < text.length && text[index] !== "\n" && text[index] !== "\r"; index++) {

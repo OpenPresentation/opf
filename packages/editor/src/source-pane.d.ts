@@ -59,7 +59,7 @@ export interface SourcePaneOptions {
   /** Accessible name of the code editor (default `OPF source`). */
   label?: string;
   catalogs?: JsonCatalogContext;
-  /** Live completions while typing JSON: property names and values (enums, booleans, catalog references) at the cursor's JSON path, from the same data as the field menu. YAML and Markdown keep the menu only. Default true. */
+  /** Live completions while typing JSON: property names and values (enums, booleans, catalog references) at the cursor's JSON path, from the same data as the field menu. Tab and Enter accept the selected item, Escape closes the list, Ctrl+Space (Cmd+I on macOS) opens it; the field menu is on Alt+Shift+O. YAML and Markdown have no completions yet. Default true. */
   completions?: boolean;
   onError?(error: unknown): void;
 }
