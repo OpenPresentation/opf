@@ -9,6 +9,7 @@ import { BLOCK_AS_VALUES, BLOCK_OPTION_KEYS, FENCE_ATTRIBUTES, LINE_KEYWORDS, ME
 import { fromMarkdown } from "@openpresentation/opf/markdown";
 import { yamlContextAt } from "./source-yaml.js";
 import { snippetMarkdown, snippetsForMarkdown } from "./source-snippets.js";
+import { fieldDoc } from "./source-docs.js";
 
 const OPTION_KEY = /^[A-Za-z][A-Za-z0-9_-]*$/;
 const BARE = /^[A-Za-z0-9_-]+$/;
@@ -79,7 +80,6 @@ function skeletonFor(text, scan, slide) {
  */
 export function markdownContextAt(text, position, { explicit = false } = {}) {
   const where = markdownRegionAt(text, position);
-  const { scan } = where;
   switch (where.region) {
     case "front-matter": {
       const base = where.front.yamlFrom;
@@ -93,7 +93,6 @@ export function markdownContextAt(text, position, { explicit = false } = {}) {
     case "body":
       return bodyContext(text, position, where, explicit);
     default:
-      void scan;
       return null;
   }
 }
@@ -157,9 +156,7 @@ function commentContext(text, position, where, explicit) {
   if (!colon) return null;
   const keywordEnd = comment.innerFrom + colon[0].length;
   const innerEnd = comment.closed ? Math.min(comment.innerTo, line.end) : line.end;
-  if (position < keywordEnd || position > innerEnd + 0) {
-    if (!(position === keywordEnd - 0)) return null;
-  }
+  if (position < keywordEnd || position > innerEnd) return null;
   const kind = colon[1];
   const tokens = optionTokens(text, keywordEnd, innerEnd);
   const here = tokens.find((token) => position >= token.start && position <= token.end);
@@ -177,7 +174,7 @@ function commentContext(text, position, where, explicit) {
     }
     return { ...base, mode: "value", key: here.key, token: { quoted: false, closed: false, start: first, end: here.end, from: first, to: here.end } };
   }
-  if (here && !OPTION_KEY.test(text.slice(here.start, here.keyEnd) || "x")) return null;
+  if (here && !OPTION_KEY.test(text.slice(here.start, here.keyEnd))) return null;
   const start0 = here ? here.start : position;
   const end0 = here ? here.keyEnd : position;
   return { ...base, mode: "key", key: undefined, followedByEquals: Boolean(here && here.eq >= 0), token: { quoted: false, closed: false, start: start0, end: end0, from: start0, to: end0 } };
@@ -207,13 +204,13 @@ function fenceContext(text, position, where, explicit) {
     const kind = first;
     if (kind === "chart" && wordIndex === 1 && !/=/.test(typed)) return { format: "md", region: "fence-info", mode: "type", word: kind, token, document: skeletonFor(text, scan, fence.slide), path: [] };
     if (!/=/.test(typed) && (kind === "chart" || kind === "timeline" || !["opf-slide", "opf-block", "metric"].includes(kind))) {
-      const have = new Set(after(text, open, line.end).map((item) => item.key));
+      const have = new Set(optionTokens(text, open, line.end).map((item) => item.key));
       return { format: "md", region: "fence-info", mode: "attribute", word: kind, existing: have, token, document: {}, path: [] };
     }
     return null;
   }
   // The body.
-  if (fence.kind === "metric") return metricContext(text, position, fence, explicit, scan);
+  if (fence.kind === "metric") return metricContext(text, position, fence);
   if (fence.kind === "opf-slide" || fence.kind === "opf-block") {
     const base = fence.bodyFrom;
     const prefix = fence.kind === "opf-slide" ? ["slides", fence.slide] : ["slides", fence.slide, "blocks", 0];
@@ -226,12 +223,7 @@ function fenceContext(text, position, where, explicit) {
   return null;
 }
 
-function after(text, from, to) {
-  return optionTokens(text, from, to);
-}
-
-function metricContext(text, position, fence, explicit, scan) {
-  void scan;
+function metricContext(text, position, fence) {
   const line = lineAt(text, position);
   const before = text.slice(line.start, position);
   const bodyLines = text.slice(fence.bodyFrom, fence.bodyTo).split(/\r\n|\r|\n/);
@@ -449,21 +441,94 @@ export function markdownPlan(context, completion, text, end) {
 }
 
 // ---- hover -------------------------------------------------------------------------------------------------------------------------
+// What a piece of the dialect's syntax stands for, as a card: the schema's words for the field it writes, and how it is written.
+const SYNTAX_FIELDS = {
+  title: { key: "title", written: "# Title" },
+  subtitle: { key: "subtitle", written: "## Subtitle" },
+  notes: { key: "notes", written: "Note: text, to the end of the slide" },
+  items: { key: "items", written: "- item (two spaces per level)" },
+  quote: { key: "quote", written: "> text, then > — Name, Title" },
+  chart: { key: "chart", written: "```chart column, then CSV" },
+  metric: { key: "metric", written: "```metric, then key: value lines" },
+  timeline: { key: "timeline", written: "```timeline, then one event per line" },
+  code: { key: "code", written: "```js title=\"file\"" },
+  image: { key: "image", written: "![alt](src)" },
+  table: { key: "table", written: "| a | b | rows with a | --- | row" },
+};
+function syntaxCard(name, document, extra) {
+  const spec = SYNTAX_FIELDS[name];
+  let info;
+  try { info = describeField(["slides", 0, spec.key], document); } catch { info = null; }
+  const model = info?.known ? fieldDoc(info, spec.key) : { title: spec.key };
+  return { ...model, ...extra, notes: [`Written as ${spec.written}`, ...(extra?.notes ?? [])] };
+}
+
+/** The card for the dialect syntax under `position` (a heading marker, `Note:`, a list marker, a fence word, `---`, `slide:`), as `{ from, to, model }`, or null. */
+function syntaxHoverAt(text, position, where, document) {
+  const line = lineAt(text, position);
+  const column = position - line.start;
+  const card = (name, from, to, extra) => ({ from, to, model: syntaxCard(name, document, extra) });
+  if (where.region === "fence") {
+    if (where.part !== "info") return null;
+    const { fence } = where;
+    const wordFrom = fence.infoFrom, wordTo = fence.infoFrom + fence.word.length;
+    if (position < wordFrom || position > wordTo || !fence.word) return null;
+    if (fence.kind === "opf-slide") return { from: wordFrom, to: wordTo, model: { title: "opf-slide", type: "fence", description: "Slide fields the Markdown has no syntax for (`composition`, `design`, `extensions`, ...), written as YAML. A field set here and in Markdown is an error." } };
+    if (fence.kind === "opf-block") return { from: wordFrom, to: wordTo, model: { title: "opf-block", type: "fence", description: "A content block written as YAML: any content field, `id`, `type` and nested `blocks`." } };
+    return card(fence.kind === "code" ? "code" : fence.kind, wordFrom, wordTo);
+  }
+  if (where.region === "comment") {
+    const comment = where.comment;
+    if (comment.kind !== "slide" && comment.kind !== "block") return null;
+    const word = /^\s*(slide|block)/.exec(text.slice(comment.innerFrom, comment.innerTo));
+    if (!word) return null;
+    const from = comment.innerFrom + word[0].length - word[1].length, to = from + word[1].length;
+    if (position < from || position > to) return null;
+    const keys = (word[1] === "slide" ? SLIDE_OPTION_KEYS : BLOCK_OPTION_KEYS).join(", ");
+    return { from, to, model: { title: `${word[1]}:`, type: "options comment", description: word[1] === "slide" ? `Options of this slide, written as key=value: ${keys}. Values are bare words or JSON strings.` : `Options of the next block: ${keys}. \`as=bullets\` stores a list as bullets, \`region=\` pins it to a region.` } };
+  }
+  if (where.region === "notes") {
+    const match = /^(Notes?):/.exec(line.text);
+    return match && column <= match[1].length + 1 ? card("notes", line.start, line.start + match[1].length + 1) : null;
+  }
+  if (where.region !== "body") return null;
+  if (/^-{3,}[ \t]*$/.test(line.text)) return { from: line.start, to: line.end, model: { title: "---", type: "slide separator", description: "Starts the next slide. Slides are the text between these lines." } };
+  const heading = /^( {0,3})(#{1,6})(?=[ \t])/.exec(line.text);
+  if (heading && column >= heading[1].length && column <= heading[0].length) {
+    const level = heading[2].length;
+    const from = line.start + heading[1].length, to = line.start + heading[0].length;
+    if (level === 1) return card("title", from, to);
+    if (level === 2) return card("subtitle", from, to);
+    return { from, to, model: { title: heading[2], type: "heading", description: "Only # (title) and ## (subtitle) are slide fields: a deeper heading becomes a bold paragraph." } };
+  }
+  const item = /^(\s*)([-*+]|\d{1,9}[.)])(?=[ \t])/.exec(line.text);
+  if (item && column >= item[1].length && column <= item[0].length) return card("items", line.start + item[1].length, line.start + item[0].length);
+  const quote = /^ {0,3}>/.exec(line.text);
+  if (quote && column <= quote[0].length) return card("quote", line.start, line.start + quote[0].length);
+  return null;
+}
+
 /**
- * The card for the front matter key or value, or the option of a slide, under `position`: `{ from, to, model }` or null. `describeFound` is the
- * completion engine's card builder.
+ * The card for what is under `position`: a front matter key or value, a slide option, or the dialect's own syntax (a heading marker, `Note:`, a list
+ * marker, the word of a fence, `---`, `slide:`): `{ from, to, model }` or null. `describeFound` is the completion engine's card builder.
  */
 export function markdownHoverAt(text, position, { catalogs, describeFound }) {
   const where = markdownRegionAt(text, position);
   let inOptions = false;
   if (where.region === "comment") inOptions = where.comment.kind === "slide";
-  if (where.region !== "front-matter" && !inOptions) return null;
-  const found = pathAt(text, "md", position);
-  if (!found?.range || (found.part !== "key" && found.part !== "value")) return null;
-  const source = text.slice(found.range.offset, found.range.offset + found.range.length);
-  let value;
-  if (found.part === "value") value = /^[[{]/.test(source) ? undefined : source.replace(/^"|"$/g, "");
   let document;
-  try { document = fromMarkdown(text, { validate: false }).presentation; } catch { document = { slides: [] }; }
-  return describeFound({ kind: found.part, path: found.path, from: found.range.offset, to: found.range.offset + found.range.length, value, nodeType: /^[[{]/.test(source) ? "array" : "scalar" }, document, catalogs);
+  const deck = () => {
+    if (!document) { try { document = fromMarkdown(text, { validate: false }).presentation; } catch { document = { slides: [] }; } }
+    return document;
+  };
+  if (where.region === "front-matter" || inOptions) {
+    const found = pathAt(text, "md", position);
+    if (found?.range && (found.part === "key" || found.part === "value")) {
+      const source = text.slice(found.range.offset, found.range.offset + found.range.length);
+      const value = found.part === "value" && !/^[[{]/.test(source) ? source.replace(/^"|"$/g, "") : undefined;
+      const card = describeFound({ kind: found.part, path: found.path, from: found.range.offset, to: found.range.offset + found.range.length, value, nodeType: /^[[{]/.test(source) ? "array" : "scalar" }, deck(), catalogs);
+      if (card) return card;
+    }
+  }
+  return syntaxHoverAt(text, position, where, { slides: [{}] });
 }

@@ -13,7 +13,7 @@ import { contextAt, nextSignificant, nodeAt, skeleton, tokenAt } from "./source-
 import { scalarValue, yamlContextAt } from "./source-yaml.js";
 import { markdownContextAt, markdownOptions, markdownPlan, markdownHoverAt } from "./source-markdown.js";
 import { childDoc, docNode, docText, fieldDoc } from "./source-docs.js";
-import { snippetJson, snippetMarkdown, snippetYaml, snippetsFor } from "./source-snippets.js";
+import { snippetJson, snippetYaml, snippetsFor } from "./source-snippets.js";
 
 export { contextAt, tokenAt };
 

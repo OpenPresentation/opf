@@ -158,7 +158,7 @@ function shapeOfValue(value) {
   return { scalar: scalarValue(text) };
 }
 
-/** Apply the entries of one line to the stack: its dashes, then its key (when it has one). Returns `{ frame, entry, shape }` of the last thing the line opened. */
+/** Apply the entries of one line to the stack: its dashes, then its key (when it has one). Returns `{ seq, map }`: the list and the mapping the line is in. */
 function enter(stack, parsed, entry, shape) {
   let frame = null;
   for (const col of parsed.markers) {
@@ -221,10 +221,11 @@ function inComment(line, column) {
 }
 
 /**
- * Walk the lines before `stop` (a line index), returning the stack. Lines inside a block scalar or a flow collection that spans lines, blank
- * lines, comments and document markers change nothing. `inside` tells whether line `stop` itself is inside a block scalar or a flow collection.
+ * Walk the lines before `stop` (a line index), applying each to `stack`. Lines inside a block scalar or a flow collection that spans lines, blank
+ * lines, comments and document markers change nothing. Returns `{ block, flow }`: the column a block scalar's text must be indented past (or -1) and
+ * the depth of an unclosed flow collection (0 when none) at line `stop`, so the caller knows whether that line is inside either.
  */
-function walk(lines, stop, stack, track) {
+function walk(lines, stop, stack) {
   let block = -1;
   let flow = 0;
   for (let number = 0; number < stop; number++) {
@@ -244,7 +245,6 @@ function walk(lines, stop, stack, track) {
     const shape = entry ? shapeOfValue(value) : (parsed.markers.length ? shapeOfValue(value) : undefined);
     if (!entry && !parsed.markers.length) continue;
     enter(stack, parsed, entry, shape);
-    track?.(number, parsed, entry);
     if (shape?.block) block = entry ? parsed.restStart + entry.keyStart : parsed.markers.at(-1);
     else if (shape?.flow) flow = flowDepth(value, 0);
   }
@@ -259,7 +259,6 @@ function walk(lines, stop, stack, track) {
 function flowAt(rest, column) {
   const containers = [];
   let quote = null;
-  let token = "";
   for (let index = 0; index < column; index++) {
     const character = rest[index];
     if (quote) {
@@ -270,7 +269,6 @@ function flowAt(rest, column) {
     if (character === '"' || character === "'") { quote = character; continue; }
     if (character === "[" || character === "{") {
       containers.push({ kind: character === "[" ? "seq" : "map", count: 0, keys: [], key: undefined, expect: character === "[" ? "item" : "key", start: index });
-      token = "";
     } else if ((character === "]" || character === "}") && containers.length) {
       containers.pop();
       const parent = containers.at(-1);
@@ -288,7 +286,6 @@ function flowAt(rest, column) {
         top.expect = "value";
       }
     }
-    token += character;
   }
   return containers.length ? containers : null;
 }

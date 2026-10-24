@@ -175,3 +175,16 @@ markdownCases.push(
   ['M-LST-030', 'R-KEY-04', 'with smartListEnter off Enter after a list item only keeps the indentation', 'md', '  - one|', [K('Enter')], { text: '  - one\n  |' }, { query: '?smartListEnter=off' }],
   ['M-LST-031', 'R-KEY-04', 'with smartListEnter off a quote is not continued', 'md', '> a|', [K('Enter')], { text: '> a\n|' }, { query: '?smartListEnter=off' }],
 );
+
+export const markdownSyntaxHover = [
+  ['M-HOV-004', 'R-HOV-01', 'the # of a title says what it writes', 'md', '# Hello there\n', [['hoverText', '#']], { hover: { open: true, has: ['title', 'Written as # Title'] } }],
+  ['M-HOV-005', 'R-HOV-01', 'the ## of a subtitle', 'md', '# A\n\n## Sub line\n', [['hoverText', '##']], { hover: { open: true, has: ['subtitle'] } }],
+  ['M-HOV-006', 'R-HOV-01', 'a list marker is items', 'md', '# A\n\n- one\n- two\n', [['hoverText', '-']], { hover: { open: true, has: ['items'] } }],
+  ['M-HOV-007', 'R-HOV-01', '"Note:" is the speaker notes', 'md', '# A\n\nNote: say it slowly\n', [['hoverText', 'Note:']], { hover: { open: true, has: ['notes'] } }],
+  ['M-HOV-008', 'R-HOV-01', 'a --- line starts the next slide', 'md', '# A\n\n---\n\n# B\n', [['hoverText', '---']], { hover: { open: true, has: ['slide separator', 'next slide'] } }],
+  ['M-HOV-009', 'R-HOV-01', 'the word of a chart fence is the chart field', 'md', '# A\n\n```chart column\nA,B\nx,1\n```\n', [['hoverText', 'chart']], { hover: { open: true, has: ['chart'] } }],
+  ['M-HOV-010', 'R-HOV-01', 'the word opf-block explains the fence', 'md', '# A\n\n```opf-block\ntype: text\n```\n', [['hoverText', 'opf-block']], { hover: { open: true, has: ['written as YAML'] } }],
+  ['M-HOV-011', 'R-HOV-01', 'slide: in an options comment lists the keys', 'md', '# A\n<!-- slide: id=a -->\n', [['hoverText', 'slide:']], { hover: { open: true, has: ['layout', 'key=value'] } }],
+  ['M-HOV-012', 'R-HOV-01', 'plain prose shows nothing', 'md', '# A\n\nJust some prose here.\n', [['hoverText', 'prose']], { hover: { open: false } }],
+];
+markdownCases.push(...markdownSyntaxHover);
