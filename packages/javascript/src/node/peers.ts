@@ -12,7 +12,7 @@ import { OPFApiError } from "../api-errors.js";
 export const RENDER_PACKAGE = "@openpresentation/opf-render";
 export const PPTX_PACKAGE = "@openpresentation/opf-pptx";
 /** Peer ranges. The CLI checks the features it calls rather than the version, so a newer release in range keeps working. */
-export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.26.5", [PPTX_PACKAGE]: "^0.26.5" } as const;
+export const PEER_RANGES = { [RENDER_PACKAGE]: "^0.26.6", [PPTX_PACKAGE]: "^0.26.6" } as const;
 
 /** The first opf-pptx that reads `bodyText` and `slideNumberFields`. An older one would ignore them silently. */
 export const PPTX_TEXT_OPTIONS_FROM = "0.22.0";

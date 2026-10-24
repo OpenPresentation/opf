@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.26.6 (2026-10-24)
+
+- `@openpresentation/opf/source` is smaller again (201,836 to 175,768 bytes gzipped in a browser bundle): `explain` and `describeFinding` read the rule list from a light metadata module instead of the validation rule implementations, so importing the source tools no longer pulls in the checker (composition, contrast, language tags). `validationRules`, `findValidationRule` and every rule field are unchanged, and `scripts/check-catalog-free.mjs` now fails when the source entry bundles a rule implementation.
+- `describeFinding` names where a repeated key is in plain words instead of a raw path segment: "`title` appears twice in slide 1", "in `design` of slide 2", "at the top level" (it said "in `0`" for a slide, because the parent of the key was a list index).
+
 ## 0.26.5 (2026-10-24)
 
 - Problems in plain words (source editor phase 3): `describeFinding(finding, context)` and `explain(ruleId)` (`@openpresentation/opf/source`, `explain` also from the root) turn any finding into `{ message, next }` ("`titleAlignment` must be left, center or right, but is `middle`. Next: did you mean `center`?") and say what a rule checks, why and how to fix it. Every Ajv keyword of `opf/schema` (expected type, allowed values with a did-you-mean, required members with what to add, unknown properties, patterns through a phrase table `PATTERN_PHRASES`), every `opf/*` rule (77), the YAML reader and the Markdown reader have a sentence and a `next` line. `analyzeYamlSyntax(text)` returns the YAML syntax problems of a text with the edits that repair them. `opf/schema` findings carry patch `fixes` for a missing required property, an enum value, a near-miss property name (or moving it under `extensions`), a string where a list belongs, a number where text belongs and an empty `slides`.
