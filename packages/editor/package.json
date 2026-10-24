@@ -231,6 +231,10 @@
       "types": "./dist/annotations.d.ts",
       "default": "./dist/annotations.js"
     },
+    "./source-worker": {
+      "types": "./dist/source-worker.d.ts",
+      "default": "./dist/source-worker.js"
+    },
     "./source-pane": {
       "types": "./dist/source-pane.d.ts",
       "default": "./dist/source-pane.js"

@@ -308,3 +308,43 @@
 }
 .opf-source-confirm button:hover { background: var(--opf-ui-muted); }
 .opf-source-confirm-accept { font-weight: 600; }
+
+/* Fold gutter (src/source-folding.js) */
+.opf-source-code .cm-foldGutter { width: 16px; }
+.opf-source-code .cm-foldGutter .cm-gutterElement { display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; }
+.opf-source-code .cm-foldGutter .opf-fold-marker { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 100%; color: var(--opf-ui-muted-fg); opacity: 0; transition: opacity var(--opf-ui-ease); }
+.opf-source-code .cm-foldGutter .opf-fold-marker.is-folded,
+.opf-source-code:hover .cm-foldGutter .opf-fold-marker,
+.opf-source-code .cm-foldGutter .opf-fold-marker:hover { opacity: 1; }
+.opf-source-code .cm-foldGutter .opf-fold-marker:hover { color: var(--opf-ui-fg); }
+.opf-source-code .cm-foldPlaceholder { border: 0; background: var(--opf-ui-muted); color: var(--opf-ui-muted-fg); border-radius: var(--opf-ui-radius-sm); padding: 0 5px; margin: 0 2px; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .opf-source-code .cm-foldGutter .opf-fold-marker { transition: none; } }
+@media (forced-colors: active) { .opf-source-code .cm-foldGutter .opf-fold-marker { opacity: 1; } }
+
+/* Outline panel (opt-in `outline` option) */
+.opf-source-body { display: flex; flex: 1; min-height: 0; min-width: 0; }
+.opf-source-body > .opf-source-code { flex: 1; min-width: 0; }
+.opf-source-outline { flex: none; width: 220px; max-width: 40%; overflow: auto; border-right: 1px solid var(--opf-ui-code-border); padding: 4px 0; }
+.opf-source-outline-list { margin: 0; padding: 0; list-style: none; }
+.opf-source-outline-item { display: flex; align-items: baseline; gap: 6px; width: 100%; min-height: 26px; padding: 2px 8px; border: 0; background: transparent; color: var(--opf-ui-fg); text-align: left; font: inherit; cursor: pointer; }
+.opf-source-outline-item:hover { background: var(--opf-ui-muted); }
+.opf-source-outline-item:focus-visible { outline: 2px solid var(--opf-ui-ring); outline-offset: -2px; }
+.opf-source-outline-item[aria-current="true"] { background: var(--opf-ui-muted); font-weight: 600; }
+.opf-source-outline-item.is-section { color: var(--opf-ui-muted-fg); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; }
+.opf-source-outline-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.opf-source-outline-detail { margin-left: auto; flex: none; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; color: var(--opf-ui-muted-fg); }
+.opf-source-outline-empty { padding: 8px 10px; color: var(--opf-ui-muted-fg); }
+@media (forced-colors: active) { .opf-source-outline-item[aria-current="true"] { outline: 1px solid Highlight; } }
+
+/* Forced colors (Windows high contrast): the selection of a list is an outline and a problem keeps its underline and a different shape per severity. */
+@media (forced-colors: active) {
+  .opf-source-code .cm-tooltip-autocomplete > ul > li[aria-selected],
+  .cm-tooltip .opf-fix[aria-selected="true"] { outline: 2px solid Highlight; outline-offset: -2px; forced-color-adjust: none; background: Canvas; color: CanvasText; }
+  .opf-source-code .cm-lintRange-error { text-decoration: underline wavy CanvasText; }
+  .opf-source-code .cm-lintRange-warning { text-decoration: underline dashed CanvasText; }
+  .opf-source-code .cm-lintRange-info { text-decoration: underline dotted CanvasText; }
+  .opf-source-finding { border: 1px solid CanvasText; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cm-tooltip, .cm-tooltip * { animation: none !important; transition: none !important; }
+}

@@ -71,6 +71,16 @@ export interface EditorEvent {
 export interface EditorHistoryEntry { patches: JsonPatchOperation[]; inversePatches: JsonPatchOperation[]; meta?: Record<string, unknown> }
 export interface EditorHistory { undo: EditorHistoryEntry[]; redo: EditorHistoryEntry[] }
 
+/** A validation computed ahead of an `applyPatch`: the report for `document` under `catalogs` (core's `validate` for the editor's categories, `checkFormat`). */
+export interface PrecomputedValidation {
+  document: unknown;
+  validation: ValidationReport;
+  catalogs: readonly Catalog[];
+}
+export interface ApplyPatchOptions {
+  validated?: PrecomputedValidation;
+}
+
 export interface EditorSession {
   paginateSlide(slideIndex: number, options?: PaginationOptions & EditorDiagnosticOptions, meta?: Record<string, unknown>): { change: EditorChange | null; pagination: PaginationResult };
   /** Composes the slide with `{{slide.number}}`, `{{slide.section}}` and `{{deck.slideCount}}` substituted for `options.slideNumber` and `options.slideCount` (default: its place in the open deck and the deck's slide count); the document keeps the tokens. */
@@ -91,7 +101,12 @@ export interface EditorSession {
   set(path: string | string[], value: unknown, meta?: Record<string, unknown>): EditorChange;
   setGroupComposition(path: string, composition: Composition, meta?: Record<string, unknown>): EditorChange;
   setCatalog(path: string | string[], catalogKind: string, id: string, meta?: Record<string, unknown>): EditorChange;
-  applyPatch(operations: JsonPatchOperation[], meta?: Record<string, unknown>): EditorChange;
+  /**
+   * Apply JSON Patch operations as one undoable change. `options.validated` hands in a validation the caller already computed off the main
+   * thread (the source pane's worker): it is used only when `document` equals the patched document exactly and `catalogs` is the session's
+   * current `catalogs` list (the same object); otherwise the session validates the document itself. It is never stored in `meta` or the history.
+   */
+  applyPatch(operations: JsonPatchOperation[], meta?: Record<string, unknown>, options?: ApplyPatchOptions): EditorChange;
   /**
    * Open a different document in the session: the whole document is replaced as one undoable change, and the replacement is never
    * read as an edit of the catalog records the two documents share, so nothing under `catalogs.default` or a named group is forked
