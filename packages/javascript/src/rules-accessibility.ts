@@ -6,7 +6,7 @@ import { tableGrid } from './table.js';
 import { timelineTextColor } from './timeline-status.js';
 import { resolveChartData } from './chart-data.js';
 import type { Finding, FindingFix } from './generated/types/finding.js';
-import { type RuleSlide, type ValidationContext, type ValidationRule, rule } from './rule-context.js';
+import type { RuleSlide, ValidationContext, ValidationRule } from './rule-context.js';
 import {
 	altOf,
 	assetRefs,
@@ -31,6 +31,7 @@ import {
 	visionModels,
 	worstContrast,
 } from './rule-design.js';
+import { altRule, chartAltRule, chartColorRule, chartColorsRule, contrastRule, duplicateTitleRule, languageRule, linkRule, missingTitleRule, onImageRule, poorAltRule, readingOrderRule } from './validation-rule-info.js';
 
 // ----------------------------------------------------------------- contrast
 
@@ -159,35 +160,6 @@ function collectSamples(context: RuleSlide): TextSample[] {
 	return samples;
 }
 
-const contrastRule = rule(
-	'text-contrast',
-	'accessibility',
-	'warning',
-	'Text colour has too little contrast against the background it sits on.',
-	'Low-contrast text is hard or impossible to read for people with low vision, colour-vision differences, glare on a projector or a poor display. WCAG sets 4.5:1 for normal text and 3:1 for large text.',
-	{
-		standard: 'WCAG 2.2 SC 1.4.3 Contrast (Minimum), level AA',
-		thresholds: ['contrastNormal', 'contrastLarge'],
-		cost: 'composition',
-		approximations:
-			'Computed on sRGB colours with the WCAG relative-luminance formula, against the background the preview draws: a solid or theme colour, the card surface, a table cell fill, every colour a gradient takes under the text box (sampled on a 5x5 grid, angle respected), or both colours of a pattern. Anti-aliasing, text shadows and font weight are not modelled. Text colour is the preview\'s (the scheme\'s text role or dark1 on a light background and light1 on a dark one, chosen from the background luminance, where a gradient or picture background uses the scheme\'s default background colour), so a default can fail on a dark gradient. A link with no colour of its own is measured in the scheme\'s hyperlink colour.',
-	},
-);
-const onImageRule = rule(
-	'text-on-image',
-	'accessibility',
-	'info',
-	'Text sits on a background picture whose pixels cannot be measured.',
-	'Contrast over a photograph depends on the photograph. Without a full-frame overlay that guarantees readability for every possible image, the result cannot be certified from the document.',
-	{
-		standard: 'WCAG 2.2 SC 1.4.3 Contrast (Minimum), level AA',
-		thresholds: ['contrastNormal', 'contrastLarge'],
-		cost: 'composition',
-		approximations:
-			'Core never reads picture pixels. The picture is bounded by a grey ramp from black to white, composited through the image opacity and a full-frame design.background overlay; the text passes only when every step of that ramp passes. An edge-banded overlay is not counted.',
-	},
-);
-
 const contrastRules: ValidationRule[] = [
 	{
 		info: contrastRule,
@@ -255,27 +227,6 @@ const contrastRules: ValidationRule[] = [
 const round = (value: number) => Math.round(value * 100) / 100;
 
 // ----------------------------------------------------------------- alt text
-
-const altRule = rule(
-	'missing-alt-text',
-	'accessibility',
-	'warning',
-	'A picture has no alt text and is not marked decorative.',
-	'People using a screen reader get nothing for a picture without alternative text. A picture that is purely decorative should say so with an empty alt (alt: ""), which is an explicit, reviewed choice instead of an omission.',
-	{
-		standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A',
-		approximations:
-			'Checks the alt field of images (image blocks, Slide.image and region images, placed or not), video, organization logos (each shape and background), header/footer images (a logo reference such as var:organization.logo.icon is checked on the organization), quote photos and speaker photos, following asset: references to the assets registry. Whether the text describes the picture well is not judged here (see opf/poor-alt-text). Charts carry `chart.alt` and are checked by opf/chart-text-alternative. Picture backgrounds are decorative unless they carry their own alt, and watermarks are decorative, so neither is checked.',
-	},
-);
-const poorAltRule = rule(
-	'poor-alt-text',
-	'accessibility',
-	'info',
-	'Alt text is a file name, a URL, a generic word or very long.',
-	'Alt text such as "image", "IMG_2041.png" or a 400-character paragraph does not do the job of describing a picture: it is read out and adds noise without information.',
-	{ standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A', approximations: 'Pattern checks only: file extensions and camera-style names, a bare generic word, a URL, a leading "image of", and more than 250 characters. Chart alt text (chart.alt) is checked too: a bare chart word, a URL, a leading "chart of" or more than 250 characters. It cannot tell whether a plausible sentence is accurate.' },
-);
 
 const GENERIC_ALT = /^(image|picture|photo|photograph|graphic|img|icon|figure|screenshot|untitled|alt|alt text|logo)$/i;
 const FILE_ALT = /(\.(png|jpe?g|gif|svg|webp|bmp|tiff?|heic|avif)$)|^(img|dsc|image|screenshot|screen shot|photo|pic)[ _-]?\d+/i;
@@ -363,22 +314,6 @@ const altRules: ValidationRule[] = [
 
 // -------------------------------------------------------------- slide titles
 
-const missingTitleRule = rule(
-	'missing-slide-title',
-	'accessibility',
-	'warning',
-	'A slide has no title.',
-	'Slide titles are how people using a screen reader, an outline view or keyboard navigation find and tell slides apart; PowerPoint\'s own accessibility checker reports a missing title too.',
-	{ standard: 'WCAG 2.2 SC 2.4.2 Page Titled and SC 2.4.6 Headings and Labels, level AA (PowerPoint: "Missing slide title")', approximations: 'Only the slide-level title field counts. Text that merely looks like a heading inside a block does not.' },
-);
-const duplicateTitleRule = rule(
-	'duplicate-slide-title',
-	'accessibility',
-	'info',
-	'Two slides have the same title.',
-	'Identical titles make slides indistinguishable in an outline or a screen reader\'s slide list.',
-	{ approximations: 'Titles are compared case-insensitively with whitespace collapsed. Slides that continue one another are not exempt; give a continuation a distinct title such as "(continued)".' },
-);
 const titleRules: ValidationRule[] = [
 	{
 		info: missingTitleRule,
@@ -420,20 +355,6 @@ const titleRules: ValidationRule[] = [
 ];
 
 // -------------------------------------------------------------- reading order
-
-const readingOrderRule = rule(
-	'reading-order',
-	'accessibility',
-	'warning',
-	'The order content is read differs from the order it appears on the slide.',
-	'Screen readers, keyboard focus and PowerPoint\'s selection pane follow the composed order. When it differs from the visual order (top to bottom, then start to end of the reading direction), the slide is read out of sequence.',
-	{
-		standard: 'WCAG 2.2 SC 1.3.2 Meaningful Sequence, level A (PowerPoint: "Check reading order")',
-		cost: 'composition',
-		approximations:
-			'Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. Headings are expected first. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.',
-	},
-);
 
 const readingOrderRules: ValidationRule[] = [
 	{
@@ -503,14 +424,6 @@ const ordinal = (index: number) => `position ${index + 1}`;
 
 // ----------------------------------------------------------------- link text
 
-const linkRule = rule(
-	'link-text',
-	'accessibility',
-	'warning',
-	'Link text does not say where the link goes.',
-	'People who scan links out of context (a screen reader\'s links list, a link tab order) hear only the text. "click here", "read more" or a long raw URL tells them nothing about the destination.',
-	{ standard: 'WCAG 2.2 SC 2.4.4 Link Purpose (In Context), level A; PowerPoint: "Hyperlink text is not meaningful"', approximations: 'Matches a short list of generic phrases in English (after lower-casing and removing punctuation), blank link text, and raw URLs longer than 40 characters. Adjacent runs sharing one link are read as one link.' },
-);
 const GENERIC_LINKS = new Set(['click here', 'click', 'here', 'link', 'this link', 'this', 'read more', 'more', 'learn more', 'see more', 'more info', 'more information', 'details', 'download', 'url', 'website', 'web site', 'page', 'this page', 'visit', 'go']);
 const linkRules: ValidationRule[] = [
 	{
@@ -545,40 +458,6 @@ const linkRules: ValidationRule[] = [
 ];
 
 // ------------------------------------------------------- charts and language
-
-const chartColorRule = rule(
-	'chart-color-only',
-	'accessibility',
-	'info',
-	'Chart series may be indistinguishable without colour vision.',
-	'OPF charts have no data labels or patterns, so series are told apart by colour alone (and legend order). Colours that look alike to someone with colour-vision deficiency, or when printed in greyscale, make series impossible to tell apart.',
-	{
-		standard: 'WCAG 2.2 SC 1.4.1 Use of Color, level A',
-		thresholds: ['minSeriesColorDifference'],
-		approximations:
-			'Uses the engine\'s series palette (ValidateOptions.chartPalette; default chartSeriesPalette of each slide colour scheme (accent1 to accent6, then their tints), adjusted for the card surface like the preview does) in series order: series i takes colour i, pie/doughnut/treemap/funnel slices take colours per category. Pairs are compared by CIE76 distance after simulating protanopia, deuteranopia, tritanopia (Machado 2009, severity 1) and greyscale. Single-series charts and chart types without a series legend are skipped.',
-	},
-);
-const chartAltRule = rule(
-	'chart-text-alternative',
-	'accessibility',
-	'info',
-	'A chart has no text alternative, or is marked decorative.',
-	'A chart conveys a message; people who cannot see it need the message and ideally the numbers in text. The chart\'s alt field is that text alternative (the preview exposes it as the chart\'s accessible name and the PowerPoint export writes it as the frame\'s alternative text); a sentence or table beside the chart also serves. An empty alt marks a chart decorative, which is reported as info so the choice is reviewed: a chart rarely carries no message.',
-	{ standard: 'WCAG 2.2 SC 1.1.1 Non-text Content, level A', approximations: 'A chart passes when chart.alt has text. Without alt, it passes when the slide has any other text, list, table, quote or metric content besides title and tag, or a subtitle. It does not judge whether alt or that text states the chart\'s point (see opf/poor-alt-text for generic alt text). alt: "" is reported as a decorative chart, whatever else is on the slide.' },
-);
-
-const chartColorsRule = rule(
-	'chart-colors-adjusted',
-	'accessibility',
-	'warning',
-	'A chart colour cannot be used as authored.',
-	'`chart.colors` sets the colour of series 1, 2, 3 and so on. A colour that cannot be resolved (a `var:` colour variable the deck does not define, or a name that is not a colour) is ignored and the deck palette colour of that position is used. A colour with under 3:1 contrast against the chart panel is kept for its hue but drawn lighter or darker, so the chart does not show the colour that was written.',
-	{
-		standard: 'WCAG 2.2 SC 1.4.11 Non-text Contrast, level AA',
-		approximations: 'Resolves each entry like any colour reference (hex, colour-scheme slot or role, `var:` variable) against the slide\'s scheme and compares it with the chart panel (the slide surface colour) by WCAG contrast; 3:1 is the threshold the engines enforce. Translucent colours and unresolved panels are not measured. Colours that look alike to colour-vision deficiency are reported by opf/chart-color-only, which judges the authored colours.',
-	},
-);
 
 /** The deck roles and variables a `chart.colors` entry resolves against. */
 const chartColorContext = (design: ResolvedDesign) => ({
@@ -708,14 +587,6 @@ const chartRules: ValidationRule[] = [
 	},
 ];
 
-const languageRule = rule(
-	'missing-language',
-	'accessibility',
-	'info',
-	'The presentation does not declare its language.',
-	'Screen readers and text-to-speech choose pronunciation and hyphenation from the declared language; spell checkers and translation tools use it too.',
-	{ standard: 'WCAG 2.2 SC 3.1.1 Language of Page, level A', approximations: 'Only the presentation-level `language` is checked, not the language of individual runs (`TextRun.lang`; opf/language-tag checks how those tags are written).' },
-);
 const languageRules: ValidationRule[] = [
 	{
 		info: languageRule,

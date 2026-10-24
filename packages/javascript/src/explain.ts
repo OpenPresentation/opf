@@ -6,7 +6,7 @@ import { RULE_EXPLAIN, exampleText } from "./finding-text-explain.js";
 import { us } from "./finding-text-helpers.js";
 import { SOURCE_EXPLAIN } from "./finding-text-source.js";
 import type { RuleExplanation } from "./finding-text-util.js";
-import { findValidationRule, ruleDocumentation } from "./validation-rules.js";
+import { findValidationRule, ruleDocumentation } from "./validation-rule-info.js";
 
 export type { RuleExplanation } from "./finding-text-util.js";
 
