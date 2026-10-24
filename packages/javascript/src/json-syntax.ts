@@ -973,10 +973,23 @@ class Analyzer {
   /** The edits that remove an entry whose value is missing (key through colon), and the comma that belonged to it. */
   private removeEntry(start: number, end: number): TextEdit[] {
     const { text } = this;
-    const before = [...this.tokens].reverse().find((token) => token.end <= start);
-    const first = this.tokens.find((token) => token.start >= end);
-    const second = first?.kind === "comma" ? this.tokens[this.tokens.indexOf(first) + 1] : first;
-    const entryFollows = (token: Token | undefined): boolean => token !== undefined && (token.kind === "string" || (token.kind === "word" && this.tokens[this.tokens.indexOf(token) + 1]?.kind === "colon"));
+    // The first token that starts at or after `offset` (the tokens are in order, so a binary search).
+    const firstFrom = (offset: number): number => {
+      let low = 0;
+      let high = this.tokens.length;
+      while (low < high) {
+        const middle = (low + high) >> 1;
+        if ((this.tokens[middle] as Token).start < offset) low = middle + 1;
+        else high = middle;
+      }
+      return low;
+    };
+    const startIndex = firstFrom(start);
+    const before = this.tokens[startIndex - 1];
+    const firstIndex = firstFrom(end);
+    const first = this.tokens[firstIndex];
+    const second = first?.kind === "comma" ? this.tokens[firstIndex + 1] : first;
+    const entryFollows = (token: Token | undefined): boolean => token !== undefined && (token.kind === "string" || (token.kind === "word" && this.tokens[firstFrom(token.start) + 1]?.kind === "colon"));
     let from = start;
     let to = end;
     if (first?.kind === "comma") to = first.end;
