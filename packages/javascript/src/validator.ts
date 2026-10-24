@@ -15,6 +15,7 @@ import type { Rec } from './rule-design.js';
 import { splitPointer } from './rule-content.js';
 import type { FindingInput, ValidationContext } from './rule-context.js';
 import { validateAgainstSchema, type SchemaCheckResult } from './schema-check.js';
+import { schemaFixes } from './schema-fixes.js';
 import { buildSlides } from './rule-slides.js';
 import type { Presentation } from './types.js';
 import {
@@ -314,6 +315,10 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 		if (parsed && next.location === undefined && next.scope !== 'context') {
 			const location = parsed.locate(next.path);
 			if (location) next.location = location;
+		}
+		if (next.ruleId === 'opf/schema' && next.fixes === undefined && next.scope !== 'context') {
+			const fixes = schemaFixes(next, document);
+			if (fixes.length) next.fixes = fixes;
 		}
 		finished.push(next);
 	}

@@ -164,7 +164,8 @@ export const firstSentence = (text: unknown): string => /^.*?[.!?](?=\s|$)/.exec
 /** A sentence made to continue after "Next:" (lower-case first letter, no trailing space). */
 export function asNext(text: string): string {
   const trimmed = text.trim();
-  return trimmed.charAt(0).toLowerCase() + trimmed.slice(1);
+  // "Write the title" becomes "write the title"; "CSV", "JSON" and "YAML" keep their capitals.
+  return /^[A-Z][a-z]/.test(trimmed) ? trimmed.charAt(0).toLowerCase() + trimmed.slice(1) : trimmed;
 }
 
 /** Plural: `plural(2, "slide")` is "2 slides". */

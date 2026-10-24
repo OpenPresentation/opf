@@ -21,3 +21,4 @@ export { scanMarkdown } from "./source-markdown.js";
 export { type SourceFormat, type TextEdit, type TextRange, applyTextEdits } from "./source-text.js";
 export { type FindingText, type FindingTextContext, type PatternPhrase, PATTERN_PHRASES, describeFinding, starterValue } from "./finding-text.js";
 export { type RuleExplanation, explain } from "./explain.js";
+export { type AnalyzeYamlOptions, type YamlProblemCode, type YamlSyntaxProblem, analyzeYamlSyntax } from "./yaml/syntax.js";

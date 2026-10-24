@@ -122,8 +122,10 @@ describe("strict dialect", () => {
     const source = "name: a\nslides:\n  - title: [oops\n    text: x\n";
     const found = errors(source).find((d) => d.ruleId === "yaml/syntax");
     assert.ok(found);
-    assert.match(found.message, /^YAML:/);
-    assert.equal(found.location.line >= 3, true);
+    // The reader says what is wrong in plain words and points at the bracket that is never closed (VALIDATOR-HINTS section 9).
+    assert.match(found.message, /^The list that starts with `\[` on line 3 is never closed\.$/);
+    assert.equal(found.help, "Add `]` after the last item.");
+    assert.deepEqual(where(found), [3, 12]);
   });
 
   test("a duplicate key is an error at the repeated key", () => {

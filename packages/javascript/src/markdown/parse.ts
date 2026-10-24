@@ -4,6 +4,7 @@ import { levelsFromIndents, parseCodeFence, parseQuoteLines, splitWhen } from ".
 import { type InlineIssue, matchBracket, parseAttributes, parseInline, parsePlainInline, readDestination, unescapeInline } from "./inline.js";
 import { Ctx, DECIMAL, type Line, type Range, lineRange, readCsv, readYamlMapping, splitLines } from "./support.js";
 import { PROMOTED_REGION_KEY } from "../bind-regions.js";
+import { nearest } from "../finding-text-util.js";
 import { BLOCK_AS_VALUES, BLOCK_OPTION_KEYS, METRIC_KEYS, SLIDE_OPTION_KEYS } from "./dialect.js";
 
 export interface ParseOptions {
@@ -191,7 +192,7 @@ export function parseOptions(text: string, keys: readonly string[], kind: "slide
   let ok = true;
   for (const [key, value] of pairs) {
     if (!keys.includes(key)) {
-      ctx.error("options-unknown-key", `Unknown ${kind} option ${JSON.stringify(key)}.`, `${help} Anything else goes in a fenced opf-${kind} block.`, range);
+      ctx.error("options-unknown-key", `Unknown ${kind} option ${JSON.stringify(key)}.`, `${help} Anything else goes in a fenced opf-${kind} block.`, range, "", nearest(key, keys, 3).close as string[]);
       ok = false;
     } else if (key === "hidden") {
       if (value === true || value === "true") out.hidden = true;
@@ -576,7 +577,7 @@ class SlideParser {
     const { ctx } = this;
     const type = /^[^\s]+/.exec(rest)?.[0];
     if (!type) {
-      ctx.error("chart-type", "A chart block names its type after `chart`.", "Write ```chart column (or line, pie, bar, ...), then the data.", range, this.path);
+      ctx.error("chart-type", "A chart block names its type after `chart`.", "Write ```chart column (or line, pie, bar, ...), then the data.", range, this.path, ["column", "bar", "line", "pie"]);
       return;
     }
     // FA-09: ```chart column alt="What the data shows" (alt="" marks the chart decorative).
