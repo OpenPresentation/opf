@@ -26,6 +26,8 @@ export type { SlideSelection } from "./slide-selection.js";
 // which only the Node build (index.ts) and the Node engine register by default.
 // RR-70: this module is what both builds of the root share; ./index.ts (Node) and ./browser.ts add `open`, `save` and `convert`.
 
+export { explain, type RuleExplanation } from "./explain.js";
+
 export {
   DEFAULT_VALIDATION_THRESHOLDS,
   OPFValidationError,

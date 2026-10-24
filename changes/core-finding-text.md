@@ -1,0 +1,5 @@
+---
+type: added
+packages: [opf]
+---
+Problems in plain words (source editor phase 3): `describeFinding(finding, context)` and `explain(ruleId)` (`@openpresentation/opf/source`, `explain` also from the root) turn any finding into `{ message, next }` ("`titleAlignment` must be left, center or right, but is `middle`. Next: did you mean `center`?") and say what a rule checks, why and how to fix it. Every Ajv keyword of `opf/schema` (expected type, allowed values with a did-you-mean, required members with what to add, unknown properties, patterns through a phrase table `PATTERN_PHRASES`), every `opf/*` rule (77), the YAML reader and the Markdown reader have a sentence and a `next` line. `analyzeYamlSyntax(text)` returns the YAML syntax problems of a text with the edits that repair them. `opf/schema` findings carry patch `fixes` for a missing required property, an enum value, a near-miss property name (or moving it under `extensions`), a string where a list belongs, a number where text belongs and an empty `slides`.

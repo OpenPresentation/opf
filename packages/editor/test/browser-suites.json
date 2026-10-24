@@ -205,6 +205,10 @@
           "command": "node test/source-keyboard-markdown-browser.mjs"
         },
         {
+          "id": "browser:source-diagnostics",
+          "command": "node test/source-diagnostics-browser.mjs"
+        },
+        {
           "id": "browser:export-license",
           "command": "pnpm run test:export-license-browser"
         }

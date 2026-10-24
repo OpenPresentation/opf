@@ -15,11 +15,13 @@ import type { Rec } from './rule-design.js';
 import { splitPointer } from './rule-content.js';
 import type { FindingInput, ValidationContext } from './rule-context.js';
 import { validateAgainstSchema, type SchemaCheckResult } from './schema-check.js';
+import { schemaFixes } from './schema-fixes.js';
 import { buildSlides } from './rule-slides.js';
 import type { Presentation } from './types.js';
 import {
 	DEFAULT_VALIDATION_THRESHOLDS,
 	findValidationRule,
+	ruleDocumentation,
 	ruleImplementations,
 	validationRules,
 } from './validation-rules.js';
@@ -65,7 +67,6 @@ export { promotedRegionKeys } from './schema-check.js';
 
 const SEVERITIES: readonly string[] = ['error', 'warning', 'info'];
 const OPTION_KEYS = ['only', 'ignore', 'severity', 'ignorePaths', 'catalogs', 'contracts', 'thresholds', 'fonts', 'chartPalette', 'template', 'values'];
-const DOCS = 'https://github.com/OpenPresentation/opf/blob/main/docs/validate.md';
 
 const isObject = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 
@@ -280,7 +281,7 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 					path: input.path,
 					message: input.message,
 					help: input.help,
-					definition: `${DOCS}#${info.id.replace('/', '')}`,
+					definition: ruleDocumentation(info.id),
 					...(input.slide ? { slide: input.slide.index, ...(input.slide.id ? { slideId: input.slide.id } : {}) } : {}),
 					...(input.measured ? { measured: input.measured } : {}),
 					...(input.fixes?.length ? { fixes: input.fixes } : {}),
@@ -314,6 +315,10 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 		if (parsed && next.location === undefined && next.scope !== 'context') {
 			const location = parsed.locate(next.path);
 			if (location) next.location = location;
+		}
+		if (next.ruleId === 'opf/schema' && next.fixes === undefined && next.scope !== 'context') {
+			const fixes = schemaFixes(next, document);
+			if (fixes.length) next.fixes = fixes;
 		}
 		finished.push(next);
 	}

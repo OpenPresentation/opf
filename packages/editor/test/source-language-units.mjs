@@ -141,7 +141,7 @@ assert.equal(renderJson({ a: [] }, { comma: true }).text, '{\n\t"a": []\n},${0}'
 const finding = (text, index = 0) => normalizeFinding(validate(text).findings.filter((entry) => entry.ruleId === 'opf/schema' || entry.ruleId === 'opf/unresolved-reference')[index]);
 const context = (text) => {
   const draft = JSON.parse(text);
-  return { unit: '  ', valueAt: (segments) => segments.reduce((value, key) => (value && typeof value === 'object' ? value[key] : undefined), draft), keysOf: () => ['slides', 'name', 'design'], catalogKind: (segments) => (segments.at(-1) === 'layout' ? 'layouts' : undefined), catalogCount: () => 28, starter: (_segments, property) => (property === 'slides' ? [{ title: 'Slide title' }] : '') };
+  return { unit: '  ', valueAt: (segments) => segments.reduce((value, key) => (value && typeof value === 'object' ? value[key] : undefined), draft), keysOf: () => ['slides', 'name', 'design', 'extensions'], catalogKind: (segments) => (segments.at(-1) === 'layout' ? 'layouts' : undefined), catalogCount: () => 28, starter: (_segments, property) => (property === 'slides' ? [{ title: 'Slide title' }] : '') };
 };
 const said = (text, index = 0) => describeFinding(finding(text, index), context(text));
 assert.deepEqual(said('{"slides":[{"title":"a"}],"design":{"titleAlignment":"middle"}}'), { message: '`titleAlignment` must be left, center or right, but is `middle`.', next: 'did you mean `center`?' });
@@ -151,15 +151,17 @@ assert.equal(said('{"name":"x"}').message, 'The deck is missing `slides`.');
 assert.equal(said('{"name":"x"}').next, 'add "slides": [ { "title": "…" } ].');
 assert.equal(said('{"slides":[],"organization":{"name":"a"}}').message, '`organization` is missing `id`.');
 assert.equal(said('{"slides":[]}').message, '`slides` needs at least 1 item.');
-assert.equal(said('{"slides":[{"title":"a","layout":""}]}').message, '`layout` must be a layout id such as `pillars` or `acme:hero` (lowercase letters, digits and hyphens), but it is empty.');
-assert.equal(said('{"slides":[{"title":"a","layout":""}]}').next, 'press Ctrl+Space for the 28 layouts, or remove it to let OPF pick.');
+// VALIDATOR-HINTS example D: an empty layout is plainly empty (phase 3 shortened the phase 1 sentence).
+assert.equal(said('{"slides":[{"title":"a","layout":""}]}').message, '`layout` is empty.');
+assert.equal(said('{"slides":[{"title":"a","layout":""}]}').next, 'press Ctrl+Space for the 28 layouts (an id such as `pillars` or `acme:hero`), or remove it to let OPF pick.');
 assert.equal(said('{"slides":[{"title":"a"}],"design":{"colorScheme":{"accent1":"#12"}}}').message, '`accent1` must be a hex color like `#1F4E79` (3, 6 or 8 hex digits), but is `#12`.');
 assert.equal(said('{"slides":[{"title":42}]}').message, '`title` should be text or a list, but it is a number (`42`).');
 assert.equal(said('{"slides":[{"title":"a"}],"duration":0}').message, '`duration` must be at least 1, but is a number (`0`).');
 assert.equal(said('{"slids":[]}', 1).message, '`slids` is not a property of the deck.');
 assert.equal(said('{"slids":[]}', 1).next, 'did you mean `slides`? To keep custom data, put it under `extensions`.');
 assert.equal(said('{"slides":[{"title":"a","layout":"pilars"}]}').next.startsWith('did you mean `pillars`?'), true);
-assert.equal(describeFinding({ ruleId: 'opf/missing-alt-text', message: 'This picture has no alt text.', help: 'Describe it. Or mark it decorative.', path: '/slides/0/image' }).next, 'describe it.', 'any other finding keeps its sentence and the first of its help');
+assert.match(describeFinding({ ruleId: 'opf/missing-alt-text', message: 'This picture has no alt text.', help: 'Describe it. Or mark it decorative.', path: '/slides/0/image' }).next, /^describe it in `alt`/, 'every rule of core has its own next line');
+assert.equal(describeFinding({ ruleId: 'other/rule', message: 'Odd.', help: 'Describe it. Or mark it decorative.', path: '' }).next, 'describe it.', 'a finding of another producer keeps its sentence and the first of its help');
 assert.equal(distance('middle', 'center') > 2, true);
 assert.deepEqual(nearest('middle', ['left', 'center', 'right']).close, ['center'], 'the alias table');
 assert.deepEqual(nearest('lefft', ['left', 'center', 'right']).close, ['left']);
@@ -208,7 +210,7 @@ const rowsOf = (text) => {
   const rows = rowsOf(text);
   assert.equal(rows.length, 1, 'the missing-property row is merged into the rename');
   assert.equal(text.slice(rows[0].from, rows[0].to), '"slids"');
-  assert.deepEqual(rows[0].fixes.map((fix) => fix.title), ['Rename to slides', 'Remove property']);
+  assert.deepEqual(rows[0].fixes.map((fix) => fix.title), ['Rename to slides', 'Move into extensions', 'Remove property']);
 }
 {
   const text = '{"slides":[{"title":42}],"design":{"theme":"neon-dreams"}}';

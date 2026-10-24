@@ -2,6 +2,7 @@
 // YAML reading and writing for front matter and embedded blocks, CSV for chart data. Internal module.
 import { type ParsedNode, Scalar, YAMLMap, parseDocument, stringify } from "yaml";
 import type { Finding, FindingLocation, FindingSeverity } from "../generated/types/finding.js";
+import { describeYamlErrors } from "../yaml/syntax.js";
 import { type Obj, isRecord, same } from "../convert/shared.js";
 
 /** A half-open range of UTF-16 offsets in the Markdown source. */
@@ -67,14 +68,25 @@ export class Ctx {
     return { offset: range.start, length: Math.max(0, range.end - range.start), line: lo + 1, column: range.start - (this.lineStarts[lo] ?? 0) + 1 };
   }
 
-  report(ruleId: string, severity: FindingSeverity, message: string, help: string, range: Range, path = ""): void {
-    this.findings.push({ ruleId, severity, category: "format", scope: "document", path, message, help, location: this.location(range) });
+  report(ruleId: string, severity: FindingSeverity, message: string, help: string, range: Range, path = "", suggestions?: string[]): void {
+    this.findings.push({
+      ruleId,
+      severity,
+      category: "format",
+      scope: "document",
+      path,
+      message,
+      help,
+      location: this.location(range),
+      ...(suggestions?.length ? { suggestions: suggestions.map((value) => ({ value, label: value, origin: "schema" })) } : {}),
+    });
   }
-  error(rule: string, message: string, help: string, range: Range, path = ""): void {
-    this.report(`markdown/${rule}`, "error", message, help, range, path);
+  /** `suggestions`: values that would fix the finding (a near-miss option name, the chart types), offered by editors as "Change to ...". */
+  error(rule: string, message: string, help: string, range: Range, path = "", suggestions?: string[]): void {
+    this.report(`markdown/${rule}`, "error", message, help, range, path, suggestions);
   }
-  warn(rule: string, message: string, help: string, range: Range, path = ""): void {
-    this.report(`markdown/${rule}`, "warning", message, help, range, path);
+  warn(rule: string, message: string, help: string, range: Range, path = "", suggestions?: string[]): void {
+    this.report(`markdown/${rule}`, "warning", message, help, range, path, suggestions);
   }
   get errors(): number {
     return this.findings.filter((d) => d.severity === "error").length;
@@ -106,15 +118,19 @@ export function readYamlMapping(text: string, base: number, ctx: Ctx, rule: stri
   const keys = new Map<string, Range>();
   const doc = parseDocument(text, { schema: "core", uniqueKeys: true, merge: false, prettyErrors: false });
   let ok = true;
-  for (const error of doc.errors) {
+  for (const problem of describeYamlErrors(text, doc, doc.errors)) {
     ok = false;
-    const [start, end] = error.pos;
-    ctx.error(rule, `YAML: ${error.message.split("\n")[0]}`, "Fix the YAML syntax. Front matter and embedded blocks hold JSON-compatible YAML: mappings, sequences and scalars, no anchors or tags.", { start: base + start, end: base + Math.max(end, start) });
+    ctx.error(rule, problem.message, problem.help, { start: base + problem.start, end: base + Math.max(problem.end, problem.start) });
   }
   if (!ok) return { value: {}, keys, ok };
   if (doc.contents === null) return { value: {}, keys, ok };
   if (!(doc.contents instanceof YAMLMap)) {
-    ctx.error(`${rule}-not-mapping`, "Expected a YAML mapping of keys and values.", "Write `key: value` lines; a list or a bare value is not accepted here.", context);
+    const root = doc.contents as ParsedNode;
+    const where = root.range ? { start: base + root.range[0], end: base + Math.max(root.range[0] + 1, root.range[1]) } : context;
+    if (root instanceof Scalar && typeof root.value === "string" && root.range) {
+      const key = text.slice(root.range[0], root.range[1]).trim();
+      ctx.error(`${rule}-not-mapping`, `\`${key.length > 40 ? `${key.slice(0, 39)}…` : key}\` needs a colon and a value.`, `Write \`${key}: \` and a value, one \`key: value\` line each.`, where);
+    } else ctx.error(`${rule}-not-mapping`, "Expected a YAML mapping of keys and values.", "Write `key: value` lines; a list or a bare value is not accepted here.", where);
     return { value: {}, keys, ok: false };
   }
   for (const pair of doc.contents.items) {

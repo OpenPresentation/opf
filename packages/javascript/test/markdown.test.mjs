@@ -293,8 +293,9 @@ describe("findings carry line and column in the shared Finding format", () => {
     const source = "---\nname: Demo\ndesign: [unclosed\n---\n# A";
     const error = errors(source).find((d) => d.ruleId === "markdown/front-matter");
     assert.ok(error);
-    assert.equal(error.location.line, 4);
-    assert.match(error.message, /^YAML:/);
+    // The reader points at the bracket that is never closed and says so (VALIDATOR-HINTS section 9).
+    assert.equal(error.location.line, 3);
+    assert.match(error.message, /^The list that starts with `\[` on line 3 is never closed\.$/);
     const unterminated = rule("---\nname: x\n# A", "markdown/front-matter-unterminated");
     assert.deepEqual([unterminated.location.line, unterminated.location.column], [1, 1]);
     assert.ok(rule("---\nslides: []\n---\n# A", "markdown/front-matter-slides"));

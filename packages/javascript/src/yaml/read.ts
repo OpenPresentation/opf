@@ -3,6 +3,7 @@
 import { type Alias, type Document, type ParsedNode, type Scalar, type YAMLError, type YAMLMap, type YAMLSeq, Parser, isAlias, isMap, isScalar, isSeq, parseDocument, visit } from "yaml";
 import type { Finding, FindingLocation } from "../generated/types/finding.js";
 import { Ctx, type Range } from "../markdown/support.js";
+import { describeYamlErrors } from "./syntax.js";
 
 /** A finding located in the YAML source: `yaml/<rule>` syntax and dialect errors (category `format`) and the OPF findings of the parsed deck. */
 export type YamlFinding = Finding & { location: FindingLocation };
@@ -79,18 +80,6 @@ function describeError(error: YAMLError): { rule: string; message: string; help:
   }
 }
 
-/** The range of the mapping key that starts at `start`. */
-function keyRangeAt(doc: Document.Parsed, start: number): Range | undefined {
-  let found: Range | undefined;
-  visit(doc, {
-    Pair(_key, pair) {
-      const key = pair.key as ParsedNode | null;
-      if (!found && key?.range && key.range[0] === start) found = { start, end: key.range[1] };
-    },
-  });
-  return found;
-}
-
 type Add = (rule: string, message: string, help: string, range: Range, path?: string) => void;
 
 /** Parse one OPF YAML document in the strict dialect. Never throws; the findings carry what is wrong. */
@@ -117,21 +106,22 @@ export function readYamlDocument(source: string, aliases: boolean, rootKind: "ma
     errors: findings.length,
   });
 
-  for (const error of [...doc.errors, ...doc.warnings.filter((warning) => warning.code === "TAG_RESOLVE_FAILED")]) {
-    const described = describeError(error);
-    const [start, end] = error.pos;
-    add(described.rule, described.message, described.help, (error.code === "DUPLICATE_KEY" ? keyRangeAt(doc, start) : undefined) ?? { start, end: Math.max(start, end) });
+  for (const problem of describeYamlErrors(text, doc, doc.errors)) add(problem.rule, problem.message, problem.help, { start: problem.start, end: problem.end });
+  for (const warning of doc.warnings.filter((entry) => entry.code === "TAG_RESOLVE_FAILED")) {
+    const described = describeError(warning);
+    const [start, end] = warning.pos;
+    add(described.rule, described.message, described.help, { start, end: Math.max(start, end) });
   }
   if (findings.length) return finish({});
 
   const root = doc.contents as ParsedNode | null;
   if (root === null || !root.range) {
-    add("empty", "The input holds no YAML document.", "An OPF file is one YAML mapping: write the deck properties (name, slides, ...) as key: value lines.", { start: 0, end: Math.min(1, text.length) });
+    add("empty", "The document is empty (or everything in it is a comment).", "Write `slides:` and at least one `- title:` line.", { start: 0, end: Math.min(1, text.length) });
     return finish({});
   }
   const rootRange = { start: root.range[0], end: root.range[1] };
   if (rootKind === "mapping" && !isMap(root)) {
-    add("not-mapping", "The document is not a mapping.", "An OPF deck is a YAML mapping of keys and values (name:, slides:, ...), not a list or a single value.", rootRange);
+    add("not-mapping", `The top level must be \`key: value\` lines, but this is ${isSeq(root) ? "a list" : "plain text"}.`, isSeq(root) ? "Put the list under `slides:`." : "Start with `name:` and `slides:` lines.", rootRange);
     return finish({});
   }
   checkTree({ doc, text, aliases, add }, root, [], []);

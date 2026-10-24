@@ -68,7 +68,7 @@ is the same deck as the JSON it converts to: `name`, `language` and `slides` wit
 | No custom tags | `yaml/tag` for `!custom`, `!!binary`, `!!set` and the like. The core tags `!!str`, `!!int`, `!!float`, `!!bool`, `!!null`, `!!map` and `!!seq` are allowed |
 | Finite numbers only | `yaml/number` for `.inf`, `-.inf` and `.nan`, with the hint to quote them |
 | No anchors, aliases or merge keys | `yaml/alias`, with help that points at `aliases: true` |
-| Syntax | `yaml/syntax` for anything the parser rejects, at the position it reports |
+| Syntax | `yaml/syntax` for anything the parser rejects, in plain words and at the place that matters: the quote or bracket that is never closed (not the end of the file), the line that is indented with a tab, the line that is not `key: value`. One finding per root cause; `help` is the next step |
 
 A leading byte order mark and CRLF line endings are accepted. Offsets are UTF-16 units into the text you passed (a BOM counts as one); lines and columns are one-based and ignore the BOM. After the YAML parses, the deck goes through `validate` and each finding (`opf/...` rule ids) is located at the YAML node of the field it names: the value for a scalar, the key through the value for a mapping or a list, and the nearest existing ancestor for something that is missing.
 
@@ -125,6 +125,8 @@ These three exports are not part of the `fromYaml`/`toYaml` pair. They exist so 
 ## Findings
 
 `fromYaml(text, options)` never throws for malformed content. It returns the deck and the [validate](validate.md) report of it, `{ presentation, valid, findings, counts, schemaValid, checks }` (plus `template` and `unfilledVariables` for a deck with content variables), so a YAML file reports exactly what the same deck as JSON text does. `presentation` is a best effort when `valid` is false (an empty object after a YAML error). Each finding is a [Finding](finding-schema-reference.md) (`ruleId`, `severity`, `category`, `path`, `scope`, `message`, `help`) plus `location` (`offset`, `length`, `line`, `column`). Options: `validate` (`true`, the default, checks `format` and `references`; `validate` options pick other rules or categories, and `{}` runs every rule; `false` skips the check, so `schemaValid` is null) and `aliases` (default false).
+
+`analyzeYamlSyntax(text)` (`@openpresentation/opf/source`) returns the same problems with the text edits that repair them (`Convert tabs to spaces`, `Insert ]`, `Add a colon`, `Quote the value`, `Remove the second` of two equal keys, `Insert minimal deck`, `Wrap as slides:`), for editors and agents. `describeFinding(finding)` turns any finding into `{ message, next }`.
 
 YAML errors are `format` findings: `yaml/syntax`, `yaml/empty`, `yaml/not-mapping`, `yaml/multiple-documents`, `yaml/duplicate-key`, `yaml/key`, `yaml/tag`, `yaml/number`, `yaml/alias`, `yaml/alias-limit`, `yaml/alias-cycle`. After one, no OPF check runs (`schemaValid: null`). Ids starting `opf/` are the `validate` findings of the deck, located in the YAML.
 

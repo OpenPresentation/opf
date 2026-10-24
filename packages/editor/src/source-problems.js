@@ -44,6 +44,9 @@ export function buildProblems({ format, text, findings, context = {}, actions = 
     }
     if (finding.kind !== "syntax") fixes.push(...(format === "json" ? fixesForFinding(finding, text, context) : textFixesForFinding(format, finding, text, context)));
     for (const fix of finding.fixes ?? []) { const row = coreFix(fix, actions); if (row) fixes.push(row); }
+    // A repair core ships as a patch and the editor also writes as a text edit is offered once, as the text edit (it keeps comments and layout).
+    const titles = new Set();
+    for (let at = 0; at < fixes.length; at++) { if (titles.has(fixes[at].title)) fixes.splice(at--, 1); else titles.add(fixes[at].title); }
     const row = { finding, index, severity: finding.severity, message, next, rule: finding.ruleId, path: finding.path ?? "", fixes };
     if (range) {
       row.from = range.from;

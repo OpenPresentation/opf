@@ -72,6 +72,27 @@ export function wrapInList(text, segments) {
   return [{ from: offset, to: offset, insert: "[" }, { from: offset + length, to: offset + length, insert: "]" }];
 }
 
+/** One edit that turns `before` into `after` (the span between their common start and common end), for a change several `modify` calls make together. */
+export function diffEdit(before, after) {
+  let start = 0;
+  while (start < before.length && start < after.length && before[start] === after[start]) start++;
+  let end = 0;
+  while (end < before.length - start && end < after.length - start && before[before.length - 1 - end] === after[after.length - 1 - end]) end++;
+  return [{ from: start, to: before.length - end, insert: after.slice(start, after.length - end) }];
+}
+/** Move the property whose value is at `segments` into the `extensions` object of its parent (created when there is none). */
+export function moveIntoExtensions(text, segments, unit = "  ") {
+  const found = nodeAt(text, segments);
+  if (!found || segments.length === 0) return null;
+  const parent = segments.slice(0, -1), name = segments.at(-1);
+  let value;
+  try { value = JSON.parse(text.slice(found.node.offset, found.node.offset + found.node.length)); } catch { return null; }
+  const options = { formattingOptions: formatting(unit, text) };
+  const removed = applySourceEdits(text, asEdits(modify(text, toPath(segments), undefined, options)));
+  const added = applySourceEdits(removed, asEdits(modify(removed, [...toPath(parent), "extensions", name], value, options)));
+  return added === text ? null : diffEdit(text, added);
+}
+
 /**
  * The quick fixes of a schema or reference finding in a JSON text that parses. `context` is the one source-messages.js takes plus
  * `{ unit, starter(segments, property) }` (the value `Add` inserts).
@@ -88,14 +109,17 @@ export function fixesForFinding(finding, text, context = {}) {
   } else if (keyword === "additionalProperties") {
     const name = finding.validation.params?.additionalProperty ?? segments.at(-1);
     for (const value of replacementValues(finding, context)) push(`rename-to:${value}`, `Rename to ${value}`, renameKey(text, segments, value));
+    if (name !== "extensions" && context.keysOf?.(segments.slice(0, -1))?.includes("extensions")) push("move-to-extensions", "Move into extensions", moveIntoExtensions(text, segments, unit));
     push("remove-property", "Remove property", removeAt(text, segments, unit));
-    void name;
   } else if (keyword === "required") {
     const property = finding.validation.params?.missingProperty;
     const starter = context.starter?.(segments, property);
     if (property && starter !== undefined) push(`add:${property}`, `Add \`${property}\``, addProperty(text, segments, property, starter, unit));
   } else if (keyword === "type" && finding.validation.params?.type === "array") {
     push("wrap-in-list", "Wrap in a list", wrapInList(text, segments));
+  } else if ((keyword === "type" && finding.validation.params?.type === "string") || ((keyword === "oneOf" || keyword === "anyOf") && (finding.validation.alternatives ?? []).some((entry) => String(entry).startsWith("string")))) {
+    const value = context.valueAt?.(segments);
+    if (typeof value === "number" || typeof value === "boolean") push("convert-to-string", "Convert to string", changeValue(text, segments, String(value)), { safe: true });
   } else if (keyword === "minItems" && finding.path === "/slides") {
     push("add-slide", "Add a slide", addItem(text, segments, { title: "Slide title" }, unit));
   } else if (finding.ruleId === "opf/duplicate-key") {

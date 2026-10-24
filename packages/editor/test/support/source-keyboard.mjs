@@ -146,7 +146,7 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
           selected: option.getAttribute('aria-selected') === 'true',
           name: option.getAttribute('aria-label') ?? '',
         })) : [];
-        return { open: Boolean(node) && !node.classList.contains('cm-tooltip-autocomplete-disabled'), items, selectedIndex: items.findIndex((item) => item.selected), selected: items.find((item) => item.selected)?.label };
+        return { open: Boolean(node) && !node.classList.contains('cm-tooltip-autocomplete-disabled'), items, selectedIndex: items.findIndex((item) => item.selected), selected: items.find((item) => item.selected)?.label, footer: node?.querySelector('.opf-completion-footer')?.textContent ?? null };
       }),
       /** The problems panel: the count line and the rows. */
       findings: () => page.evaluate(() => (demo.pane.getText(), {
@@ -369,6 +369,11 @@ async function runStep(kb, step) {
     assert.equal((await kb.docs()).shown, args[0], `the documentation panel is ${args[0] ? 'shown' : 'hidden'}`);
     return undefined;
   }
+  if (kind === 'clickDetails') {
+    // The "Details" button of the nth row of the panel.
+    await kb.page.locator('.opf-source-finding-details').nth(args[0]).click();
+    return kb.settle();
+  }
   if (kind === 'openOptionsDialog') return kb.press('Alt+Shift+O');
   throw new Error(`unknown step ${kind}`);
 }
@@ -387,6 +392,14 @@ async function check(kb, expect) {
     if (want.has) assert.ok(contains(labels, want.has), `popup has ${want.has}: ${labels}`);
     if (want.not) for (const item of want.not) assert.ok(!labels.includes(item), `popup lacks ${item}: ${labels}`);
     if (want.first !== undefined) assert.equal(labels[0], want.first, `popup first: ${labels}`);
+    // `order`: the labels appear in the list in this relative order (each must be there).
+    if (want.order) {
+      const places = want.order.map((label) => labels.indexOf(label));
+      assert.ok(places.every((place) => place >= 0), `popup order ${want.order}: not all listed: ${labels}`);
+      assert.deepEqual([...places].sort((a, b) => a - b), places, `popup order ${want.order}: ${labels}`);
+    }
+    // `footer`: the line under the list (a string, or null for none).
+    if (want.footer !== undefined) assert.equal(popup.footer, want.footer, 'popup footer');
     if (want.selected !== undefined) assert.equal(popup.selected, want.selected, 'popup selected');
     if (want.selectedIndex !== undefined) assert.equal(popup.selectedIndex, want.selectedIndex, 'popup selected index');
     if (want.selectedIsLast) assert.equal(popup.selectedIndex, popup.items.length - 1, 'the selection wrapped to the last item');
@@ -449,6 +462,11 @@ async function check(kb, expect) {
       if (want.fixes) for (const title of want.fixes) assert.ok(got.fixes.includes(title), `finding ${index} offers "${title}": ${JSON.stringify(got.fixes)}`);
     }
     if (expect.findings.warnings !== undefined) assert.equal(findings.rows.filter((row) => row.severity === 'warning').length, expect.findings.warnings, `warnings: ${JSON.stringify(findings.rows)}`);
+  }
+  if (expect.explain !== undefined) {
+    const shown = await kb.page.evaluate(() => [...document.querySelectorAll('.opf-source-finding-explain')].filter((node) => !node.hidden).map((node) => node.textContent));
+    assert.ok(shown.length > 0, 'a Details panel is open');
+    for (const item of [expect.explain.has ?? []].flat()) assert.ok(shown.some((text) => text.includes(item)), `the details say ${JSON.stringify(item)}: ${JSON.stringify(shown)}`);
   }
   if (expect.dialog !== undefined) {
     const dialog = await kb.dialog();
