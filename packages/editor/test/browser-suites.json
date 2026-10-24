@@ -209,6 +209,14 @@
           "command": "node test/source-diagnostics-browser.mjs"
         },
         {
+          "id": "browser:source-worker",
+          "command": "node test/source-worker-browser.mjs"
+        },
+        {
+          "id": "browser:source-worker-perf",
+          "command": "node test/source-worker-perf-browser.mjs"
+        },
+        {
           "id": "browser:export-license",
           "command": "pnpm run test:export-license-browser"
         }

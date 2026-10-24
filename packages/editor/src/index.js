@@ -165,7 +165,14 @@ export function createEditorSession(input, options = {}) {
     for (const listener of listeners) listener({ ...event, snapshot });
   }
 
-  function commitPatch(operations, meta = {}) {
+  /**
+   * `validated`: a report the caller already computed for the document the patches produce (`{ document, validation, catalogs }`, see `applyPatch`).
+   * It stands in for `check(next)` only when it is for exactly this document and the session's current catalogs; otherwise the session checks itself.
+   */
+  const validationFor = (validated, document) =>
+    validated && validated.validation && validated.catalogs === catalogs && jsonEqual(validated.document, document) ? validated.validation : check(document);
+
+  function commitPatch(operations, meta = {}, applyOptions = {}) {
     assertPatchOperations(operations);
     let patches = operations.map(normalizeOperation);
     const before = presentation;
@@ -192,7 +199,7 @@ export function createEditorSession(input, options = {}) {
         meta = { ...meta, forked: forks, notice: forks.map(forkNotice).join(" ") };
       }
     }
-    const nextValidation = check(next);
+    const nextValidation = validationFor(applyOptions?.validated, next);
 
     if ((meta.rejectInvalid ?? rejectInvalid) && !nextValidation.valid) {
       throw new OPFEditorError("invalid-opf-edit", "OPF edit produced an invalid document.", {
