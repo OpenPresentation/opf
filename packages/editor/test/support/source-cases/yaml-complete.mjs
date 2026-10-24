@@ -40,7 +40,7 @@ export const yamlTriggers = [
 ];
 
 export const yamlInsert = [
-  ['Y-ACC-001', 'R-CMP-05', 'Tab accepts a key (an object key goes on the next line)', 'yaml', 'name: x\n|', [T('des'), K('Tab')], { text: 'name: x\ndesign:\n  |' }],
+  ['Y-ACC-001', 'R-CMP-05', 'Tab accepts a key (an object key goes on the next line; phase 3: variables, since accepting design starts the design snippet)', 'yaml', 'name: x\n|', [T('variab'), K('Tab')], { text: 'name: x\nvariables:\n  |' }],
   ['Y-ACC-002', 'R-CMP-06', 'Enter accepts, with no race', 'yaml', 'name: x\n|', [FAST('desi', 'Enter', 0)], { has: 'design:' }],
   ['Y-ACC-005', 'R-CMP-06', 'Enter accepts 40 ms after the last key', 'yaml', 'name: x\n|', [FAST('desi', 'Enter', 40)], { has: 'design:' }],
   ['Y-ACC-006', 'R-CMP-06', 'Tab accepts 80 ms after the last key', 'yaml', 'name: x\n|', [FAST('desi', 'Tab', 80)], { has: 'design:' }],
@@ -51,7 +51,7 @@ export const yamlInsert = [
   ['Y-INS-001', 'R-CMP-21', 'a scalar key: "key: " and the caret', 'yaml', 'name: x\n|', [T('descr'), K('Tab')], { text: 'name: x\ndescription: |' }],
   ['Y-INS-002', 'R-CMP-21', 'an enum key chains into the value list', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), wait], { popup: { open: 1, has: ['left', 'center', 'right'] }, text: 'design:\n  titleAlignment: |' }],
   ['Y-INS-003', 'R-CMP-21', 'a list key: "- " on the next line', 'yaml', '|', [T('slid'), K('Tab')], { text: 'slides:\n  - |' }],
-  ['Y-INS-004', 'R-CMP-21', 'an object key with required members', 'yaml', '|', [T('organ'), K('Tab')], { text: 'organization:\n  id: |\n  name: ' }],
+  ['Y-INS-004', 'R-CMP-21', 'an object key with required members (phase 3: organization is a snippet key, its placeholders hold acme and Acme Inc.)', 'yaml', '|', [T('organ'), K('Tab')], { text: 'organization:\n  id: ⟦acme⟧\n  name: Acme Inc.' }],
   ['Y-INS-004b', 'R-CMP-16', 'Tab walks the required members', 'yaml', '|', [T('organ'), K('Tab'), T('acme'), K('Tab'), T('Acme')], { deck: { '/organization/id': 'acme', '/organization/name': 'Acme' } }],
   ['Y-INS-005', 'R-CMP-21', 'an enum value is a plain scalar', 'yaml', 'design:\n  titleAlignment: |', [T('cen'), K('Tab')], { text: 'design:\n  titleAlignment: center|' }],
   ['Y-INS-006', 'R-CMP-21', 'a boolean is true or false', 'yaml', 'slides:\n  - hidden: |', [T('tr'), K('Tab')], { text: 'slides:\n  - hidden: true|' }],
@@ -167,4 +167,92 @@ yamlCases.push(
 
 yamlCases.push(
   ['Y-FMT-017', 'R-FMT-02', 'switching the format closes the question', 'yaml', '# keep\nname: x\nslides:\n  - title: a\n|', [['canonicalize'], ['format', 'json']], { confirm: { open: false }, format: 'json' }],
+);
+
+// Cross references inside the document (SPEC 3.4) in YAML: block and flow style, and a list entry.
+const YSALES = 'datasets:\n  sales:\n    columns: [Quarter, Revenue, {name: Costs}]\n    rows: []\n  pipeline:\n    columns:\n      - Stage\n    rows: []\n';
+const YXREF = [
+  ['asset:', 'assets:\n  logo: logo.png\n  photo:\n    src: p.jpg\nslides:\n  - image: |', ['asset:logo', 'asset:photo']],
+  ['asset: in a quoted value', 'assets:\n  logo: logo.png\nslides:\n  - image: "|"', ['asset:logo']],
+  ['asset: in an image object', 'assets:\n  logo: logo.png\nslides:\n  - image:\n      src: |', ['asset:logo']],
+  ['dataset', `${YSALES}slides:\n  - chart:\n      type: bar\n      data:\n        dataset: |`, ['sales', 'pipeline']],
+  ['dataset of a table', `${YSALES}slides:\n  - table:\n      dataset: |`, ['sales', 'pipeline']],
+  ['dataset columns, block list', `${YSALES}slides:\n  - table:\n      dataset: sales\n      fields:\n        - |`, ['Quarter', 'Revenue', 'Costs']],
+  ['dataset columns, flow list', `${YSALES}slides:\n  - table:\n      dataset: sales\n      fields: [Quarter, |]`, ['Quarter', 'Revenue', 'Costs']],
+  ['dataset column of a mapping', `${YSALES}slides:\n  - chart:\n      type: bar\n      data:\n        dataset: sales\n      mapping:\n        category: |`, ['Quarter', 'Revenue', 'Costs']],
+  ['cite', 'references:\n  - id: smith2020\n    text: Smith\nslides:\n  - title:\n      - text: x\n        cite: |', ['smith2020']],
+  ['cite in a flow list', 'references:\n  - id: smith2020\n    text: Smith\nslides:\n  - title:\n      - text: x\n        cite: [|]', ['smith2020']],
+  ['beat', 'narrative: classic-story\nslides:\n  - beat: |', ['opening', 'closing']],
+  ['region', 'slides:\n  - layout: two-column\n    blocks:\n      - region: |', ['first', 'second', 'left', 'right']],
+  ['var:', 'variables:\n  brand:\n    type: color\n    value: "#123456"\nslides:\n  - title:\n      - text: x\n        color: |', ['var:brand']],
+];
+export const yamlXrefs = [
+  ...YXREF.map(([field, doc, has], index) => [`Y-VAL-X${index + 1}`, 'R-CMP-19', `cross reference ${field}`, 'yaml', doc, [K('Control+Space')], { popup: { open: 1, has } }]),
+  ['Y-VAL-X14', 'R-CMP-19', 'columns come from the dataset the field names', 'yaml', `${YSALES}slides:\n  - table:\n      dataset: pipeline\n      fields:\n        - |`, [K('Control+Space')], { popup: { open: 1, has: ['Stage'], not: ['Revenue'] } }],
+  ['Y-VAL-X15', 'R-CMP-19', 'Tab inserts the plain id', 'yaml', 'assets:\n  logo: a.png\n  photo: b.png\nslides:\n  - image: |', [T('pho'), K('Tab')], { text: 'assets:\n  logo: a.png\n  photo: b.png\nslides:\n  - image: asset:photo|', deck: { '/slides/0/image': 'asset:photo' } }],
+  ['Y-VAL-X16', 'R-CMP-19', 'the value inside quotes keeps them', 'yaml', 'assets:\n  logo: a.png\nslides:\n  - image: "|"', [K('Control+Space'), K('Enter')], { text: 'assets:\n  logo: a.png\nslides:\n  - image: "asset:logo"|' }],
+  ['Y-VAL-X17', 'R-CMP-19', 'a beat is inserted bare', 'yaml', 'narrative: classic-story\nslides:\n  - beat: |', [T('open'), K('Tab')], { has: 'beat: opening', deck: { '/slides/0/beat': 'opening' } }],
+  ['Y-VAL-X18', 'R-CMP-19', 'a document with no assets offers nothing for an image', 'yaml', 'slides:\n  - image: |', [K('Control+Space')], { popup: { open: 0 } }],
+  ['Y-VAL-X19', 'R-CMP-19', '{{ in a text lists the variables and Tab closes the braces', 'yaml', 'variables:\n  brand:\n    type: text\n    value: Acme\nslides:\n  - title: "Hello |"', [T('{{'), K('Tab')], { has: 'title: "Hello {{brand}}"' }],
+  ['Y-VAL-X20', 'R-CMP-19', '{{ in a plain scalar', 'yaml', 'variables:\n  brand:\n    type: text\n    value: Acme\nslides:\n  - title: Hello |', [T('{{br'), K('Enter')], { has: 'title: Hello {{brand}}' }],
+  ['Y-VAL-X21', 'R-CMP-19', 'a list entry of cite is offered the ids too', 'yaml', 'references:\n  - id: smith2020\n    text: Smith\nslides:\n  - title:\n      - text: x\n        cite:\n          - |', [K('Control+Space')], { popup: { open: 1, has: ['smith2020'] } }],
+];
+yamlCases.push(...yamlXrefs);
+
+// Snippets for the keys of a deck (SPEC 5): design, organization, speaker; and a key with its value as one undo step.
+export const yamlSnippets = [
+  ['Y-SNP-001', 'R-CMP-16', 'design: accepting the key writes the three members and opens the theme list', 'yaml', 'name: x\n|', [T('design'), K('Tab')], { popup: { open: 1, has: ['bold', 'classic', 'minimal'] }, text: 'name: x\ndesign:\n  theme: |\n  colorScheme: \n  fontScheme: ' }],
+  ['Y-SNP-002', 'R-CMP-16', 'design: three picks fill the design', 'yaml', 'slides:\n  - title: a\n|', [T('design'), K('Tab'), T('mini'), K('Tab'), K('Tab'), T('boos'), K('Tab'), K('Tab'), T('aptos'), K('Tab')], { deck: { '/design/theme': 'minimal', '/design/colorScheme': 'boost', '/design/fontScheme': 'aptos' }, findings: { errors: 0 } }],
+  ['Y-SNP-003', 'R-CMP-16', 'speaker: the id is a selected placeholder and the name follows (deviation from SPEC 5: the Speaker schema requires both)', 'yaml', 'name: x\n|', [T('speak'), K('Tab')], { text: 'name: x\nspeaker:\n  id: ⟦alice⟧\n  name: Name' }],
+  ['Y-SNP-004', 'R-CMP-16', 'speaker: Tab walks from the id to the name', 'yaml', 'name: x\n|', [T('speak'), K('Tab'), T('ada'), K('Tab'), T('Ada')], { deck: { '/speaker/id': 'ada', '/speaker/name': 'Ada' } }],
+  ['Y-SNP-005', 'R-CMP-16', 'design in a flow mapping of a slide is the plain key', 'yaml', 'slides:\n  - {title: a, |}', [T('design'), K('Tab')], { has: '{title: a, design: ' }],
+  ['Y-SNP-006', 'R-CMP-16', 'design in a slide is the plain key', 'yaml', 'slides:\n  - title: a\n    |', [T('design'), K('Tab')], { text: 'slides:\n  - title: a\n    design:\n      |' }],
+  ['Y-SNP-007', 'R-CMP-16', 'design: the snippet is one undo step', 'yaml', 'name: x\n|', [T('design'), K('Tab')], { undo: [1, 'name: x\ndesign|'] }],
+  ['Y-SNP-008', 'R-CMP-16', 'design: the key is listed once', 'yaml', 'slides: []\n|', [T('des')], { popup: { open: 1, has: ['design', 'description', 'datasets'], count: [3, 3] } }],
+  ['Y-INS-020', 'R-CMP-14', 'chain: accepting the key and its value is one undo step', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), K('Tab')], { undo: [1, 'design:\n  titleA|'] }],
+  ['Y-INS-021', 'R-CMP-14', 'redo puts the key and its value back together', 'yaml', 'design:\n  |', [T('titleA'), K('Tab'), K('Tab')], { undo: [1, 'design:\n  titleA|'], redo: [1, 'design:\n  titleAlignment: left|'] }],
+];
+yamlCases.push(...yamlSnippets);
+
+// Flow collections that run over several lines and quoted scalars that do: the place of the caret is found from the lines above it, on a draft too.
+export const yamlMultiline = [
+  ['Y-FLW-001', 'R-CMP-20', 'a flow list continued on the next line offers the ids', 'yaml', 'audience: [board,\n  |]', [K('Control+Space')], { popup: { open: 1, has: ['customer'] } }],
+  ['Y-FLW-002', 'R-CMP-20', 'a flow mapping continued on the next line offers the keys left', 'yaml', 'design: {theme: minimal,\n  |}', [K('Control+Space')], { popup: { open: 1, has: ['colorScheme', 'fontScheme'], not: ['theme'] } }],
+  ['Y-FLW-003', 'R-CMP-20', 'the value of a key in a continued flow mapping', 'yaml', 'design: {theme: minimal,\n  titleAlignment: |}', [K('Control+Space')], { popup: { open: 1, has: ['left', 'center', 'right'] } }],
+  ['Y-FLW-004', 'R-CMP-20', 'typing in the continuation opens the list', 'yaml', 'audience: [board,\n  |]', [T('cus')], { popup: { open: 1, has: ['customer'] } }],
+  ['Y-FLW-005', 'R-CMP-21', 'Tab accepts in the continuation and keeps the closing bracket', 'yaml', 'audience: [board,\n  |]', [T('cus'), K('Tab')], { text: 'audience: [board,\n  customer|]' }],
+  ['Y-FLW-006', 'R-CMP-20', 'a comment in the first line of the flow collection does not hide the lines below', 'yaml', 'audience: [board, # first\n  |]', [K('Control+Space')], { popup: { open: 1, has: ['customer'] } }],
+  ['Y-FLW-007', 'R-CMP-20', 'a flow mapping after a dash continued on the next line', 'yaml', 'slides:\n  - {title: a,\n    |}', [K('Control+Space')], { popup: { open: 1, has: ['layout', 'items'], not: ['title'] } }],
+  ['Y-FLW-008', 'R-CMP-20', 'three lines of a flow list', 'yaml', 'audience: [board,\n  customer,\n  |]', [K('Control+Space')], { popup: { open: 1, has: ['investor'] } }],
+  ['Y-FLW-009', 'R-CMP-20', 'the keys after a flow collection that ran over lines are found as usual', 'yaml', 'slides:\n  - title: a\n    items: [x,\n      y]\n    |', [K('Control+Space')], { popup: { open: 1, has: ['layout'], not: ['title', 'items'] } }],
+  ['Y-FLW-010', 'R-CMP-20', 'the value of a key in a continued flow mapping after a dash', 'yaml', 'slides:\n  - {title: a,\n    layout: |}', [K('Control+Space')], { popup: { open: 1, has: ['pillars'] } }],
+  ['Y-FLW-011', 'R-CMP-20', 'a flow list left open still offers the ids in its continuation', 'yaml', 'audience: [board,\n  |\nslides: []', [K('Control+Space')], { popup: { open: 1, has: ['customer'] } }],
+  ['Y-FLW-012', 'R-CMP-04', 'text in a flow list of free text opens nothing', 'yaml', 'tags: [a,\n  |]', [T('Rev')], { popup: { open: 0 } }],
+  ['Y-QSC-001', 'R-CMP-19', '{{ inside a quoted scalar that runs over lines lists the variables', 'yaml', 'variables:\n  brand:\n    type: text\n    value: Acme\nslides:\n  - title: "Hello\n      there |"', [T('{{br'), K('Enter')], { has: 'there {{brand}}"' }],
+  ['Y-QSC-002', 'R-CMP-19', '{{ in a plain scalar that runs over lines', 'yaml', 'variables:\n  brand:\n    type: text\n    value: Acme\nslides:\n  - title: Hello\n      there |', [T('{{'), K('Tab')], { has: 'there {{brand}}' }],
+  ['Y-QSC-003', 'R-CMP-20', 'the keys after a quoted scalar that ran over lines are found as usual', 'yaml', 'slides:\n  - title: "first\n      second"\n    |', [K('Control+Space')], { popup: { open: 1, has: ['layout', 'items'], not: ['title'] } }],
+  ['Y-QSC-004', 'R-CMP-20', 'text in the continuation that looks like a key is not one', 'yaml', 'slides:\n  - title: "a\n      layout: b"\n    |', [K('Control+Space')], { popup: { open: 1, has: ['layout'], not: ['title'] } }],
+  ['Y-QSC-005', 'R-CMP-04', 'a continuation line opens nothing else', 'yaml', 'slides:\n  - title: "first\n      sec|ond"', [K('Control+Space')], { popup: { open: 0 } }],
+  ['Y-QSC-006', 'R-CMP-20', 'a single-quoted scalar over lines, with a doubled quote inside', 'yaml', "slides:\n  - title: 'it''s\n      here'\n    |", [K('Control+Space')], { popup: { open: 1, has: ['layout'], not: ['title'] } }],
+  ['Y-QSC-007', 'R-CMP-19', 'a quoted scalar left open still lists variables on its last line', 'yaml', 'variables:\n  brand:\n    type: text\n    value: Acme\nslides:\n  - title: "Hello\n      {{|', [K('Control+Space')], { popup: { open: 1, has: ['brand'] } }],
+  ['Y-QSC-008', 'R-CMP-04', 'a continuation line with no {{ opens nothing even when variables are declared', 'yaml', 'variables:\n  brand:\n    type: text\n    value: Acme\nslides:\n  - title: "Hello\n      there |"', [K('Control+Space')], { popup: { open: 0 } }],
+];
+yamlCases.push(...yamlMultiline);
+
+// Layout regions rank the slide keys, and the footer under a list of records whose catalog is not loaded.
+const YCAT = 'catalogs:\n  acme:\n    source: https://acme.test\n    layouts:\n      bespoke:\n        name: Bespoke\n        regions:\n          - name: title\n';
+export const yamlRank = [
+  ['Y-RNK-001', 'R-CMP-18', 'agenda: title and items come before the subtitle', 'yaml', 'slides:\n  - layout: agenda\n    |', [K('Control+Space')], { popup: { first: 'title', order: ['title', 'items', 'subtitle', 'text'] } }],
+  ['Y-RNK-002', 'R-CMP-18', 'cover: the media region calls for image and video', 'yaml', 'slides:\n  - layout: cover\n    |', [K('Control+Space')], { popup: { order: ['title', 'image', 'video', 'subtitle'] } }],
+  ['Y-RNK-003', 'R-CMP-18', 'keys already set are not offered again', 'yaml', 'slides:\n  - layout: agenda\n    title: a\n    |', [K('Control+Space')], { popup: { first: 'items', not: ['title', 'layout'] } }],
+  ['Y-RNK-004', 'R-CMP-18', 'no layout: the common order holds', 'yaml', 'slides:\n  - |', [K('Control+Space')], { popup: { order: ['title', 'subtitle', 'layout', 'items'] } }],
+  ['Y-VAL-R1', 'R-CMP-19', 'records of a catalog that is not registered: the list says the rest is not loaded', 'yaml', `${YCAT}slides:\n  - layout: |`, [K('Control+Space')], { popup: { open: 1, has: ['acme:bespoke', 'cover'], footer: 'Records from catalog acme are not loaded' } }],
+  ['Y-VAL-R2', 'R-CMP-19', 'a catalog that is registered adds no footer', 'yaml', 'catalogs:\n  gallery:\n    source: https://www.pptx.gallery\n    layouts:\n      bespoke:\n        name: Bespoke\n        regions:\n          - name: title\nslides:\n  - layout: |', [K('Control+Space')], { popup: { open: 1, footer: null } }],
+];
+yamlCases.push(...yamlRank);
+
+yamlCases.push(
+  ['Y-VAL-X22', 'R-A11Y-01', 'each reference has an accessible name with its kind and its place', 'yaml', 'assets:\n  logo: logo.png\nslides:\n  - image: |', [K('Control+Space'), ['waitLabels']], { popup: { ariaNames: [/^asset:logo, reference, logo\.png\. 1 of 1$/] } }],
+  ['Y-VAL-X23', 'R-A11Y-02', 'accepting a reference says what was inserted', 'yaml', 'assets:\n  logo: logo.png\nslides:\n  - image: |', [K('Control+Space'), K('Enter')], { live: 'Inserted asset:logo' }],
+  ['Y-VAL-X24', 'R-CMP-17', 'the documentation panel describes the selected dataset', 'yaml', 'datasets:\n  sales:\n    title: Sales\n    columns: [Quarter, Revenue]\n    rows: []\nslides:\n  - table:\n      dataset: |', [K('Control+Space')], { docs: { shown: true, has: ['sales', 'Quarter, Revenue'] } }],
 );

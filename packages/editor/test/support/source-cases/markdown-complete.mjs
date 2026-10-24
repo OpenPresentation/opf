@@ -21,7 +21,7 @@ export const markdownFrontMatter = [
   ['M-FM-007', 'R-CMP-22', 'the opening line is offered nothing', 'md', '---|\nname: x\n---\n\n# A\n', [K('Control+Space')], { popup: { open: 0 } }],
   ['M-FM-008', 'R-CMP-22', 'keys already in the front matter are not offered', 'md', '---\nname: x\n|\n---\n\n# A\n', [K('Control+Space')], { popup: { open: 1, has: ['design'], not: ['name', 'slides'] } }],
   ['M-FM-009', 'R-CMP-22', 'the front matter of a deck with no slides yet', 'md', '---\n|\n---\n', [K('Control+Space')], { popup: { open: 1, has: ['name'] } }],
-  ['M-FM-010', 'R-CMP-22', 'an object key goes on the next line, indented', 'md', '---\n|\n---\n\n# A\n', [T('desi'), K('Tab')], { text: '---\ndesign:\n  |\n---\n\n# A\n' }],
+  ['M-FM-010', 'R-CMP-22', 'an object key goes on the next line, indented (phase 3: variables, since accepting design starts the design snippet)', 'md', '---\n|\n---\n\n# A\n', [T('variab'), K('Tab')], { text: '---\nvariables:\n  |\n---\n\n# A\n' }],
   ['M-FM-011', 'R-CMP-04', 'a free text value opens nothing', 'md', '---\nname: |\n---\n', [T('Q3')], { popup: { open: 0 } }],
   ['M-FM-012', 'R-CMP-22', 'a comment in the front matter opens nothing', 'md', '---\n# |\n---\n', [T('des')], { popup: { open: 0 } }],
 ];
@@ -208,4 +208,45 @@ markdownCases.push(
   ['M-FOLD-002', 'R-KEY-11', 'fold a fenced block', 'md', '# A\n\n```js|\nx\ny\n```\n', [['press', FOLD], ['expectFolded', 1]], {}],
   ['M-FOLD-003', 'R-KEY-11', 'fold the front matter', 'md', '---|\nname: x\ndesign:\n  theme: minimal\n---\n# A\n', [['press', FOLD], ['expectFolded', 1]], {}],
   ['M-FOLD-004', 'R-KEY-11', 'a --- inside a fence is not a slide end', 'md', '# A|\n\n```yaml\n---\nx: 1\n```\n\ntext\n', [['press', FOLD], ['expectFolded', 1], ['press', UNFOLD], ['expectFolded', 0]], {}],
+);
+
+// Cross references inside the document (SPEC 3.4) in Markdown: the deck is the front matter; the lists are offered in the YAML of the front matter and of
+// the fences, in the options comments and after `{{` in a line of text.
+const MFRONT = '---\nnarrative: classic-story\nassets:\n  logo: logo.png\nreferences:\n  - id: smith2020\n    text: Smith\nvariables:\n  brand:\n    type: text\n    value: Acme\n  tint: "#123456"\ndatasets:\n  sales:\n    columns: [Quarter, Revenue]\n    rows: []\n---\n\n';
+export const markdownXrefs = [
+  ['M-VAL-X1', 'R-CMP-19', 'beat= lists the beats of the narrative in the front matter', 'md', `${MFRONT}# A\n\n<!-- slide: beat=| -->\n`, [K('Control+Space')], { popup: { open: 1, has: ['opening', 'closing'] } }],
+  ['M-VAL-X2', 'R-CMP-19', 'accepting a beat writes it bare', 'md', `${MFRONT}# A\n\n<!-- slide: beat=| -->\n`, [T('open'), K('Tab')], { has: '<!-- slide: beat=opening -->' }],
+  ['M-VAL-X3', 'R-CMP-19', 'an asset in an opf-slide fence', 'md', `${MFRONT}# A\n\n\`\`\`opf-slide\nimage: |\n\`\`\`\n`, [K('Control+Space')], { popup: { open: 1, has: ['asset:logo'] } }],
+  ['M-VAL-X4', 'R-CMP-19', 'a cite id in an opf-block fence', 'md', `${MFRONT}# A\n\n\`\`\`opf-block\ntext:\n  - text: x\n    cite: |\n\`\`\`\n`, [K('Control+Space')], { popup: { open: 1, has: ['smith2020'] } }],
+  ['M-VAL-X5', 'R-CMP-19', 'columns of the dataset a fence names', 'md', `${MFRONT}# A\n\n\`\`\`opf-block\ntable:\n  dataset: sales\n  fields: [|]\n\`\`\`\n`, [K('Control+Space')], { popup: { open: 1, has: ['Quarter', 'Revenue'] } }],
+  ['M-VAL-X6', 'R-CMP-19', '{{ in a line of text lists the variables', 'md', `${MFRONT}# Hello |`, [T('{{')], { popup: { open: 1, has: ['brand', 'tint'] } }],
+  ['M-VAL-X7', 'R-CMP-19', 'Tab closes the braces', 'md', `${MFRONT}# Hello |`, [T('{{br'), K('Tab')], { has: '# Hello {{brand}}' }],
+  ['M-VAL-X8', 'R-CMP-19', 'the front matter lists ids too', 'md', '---\nassets:\n  logo: logo.png\norganization:\n  id: a\n  name: A\n  logo: |\n---\n\n# A\n', [K('Control+Space')], { popup: { open: 1, has: ['asset:logo'] } }],
+  ['M-VAL-X9', 'R-CMP-04', 'Note: lines are verbatim: {{ opens nothing', 'md', `${MFRONT}# A\n\nNote: see |`, [T('{{')], { popup: { open: 0 } }],
+  ['M-VAL-X10', 'R-CMP-19', 'a block region= lists the regions of the layout', 'md', '<!-- slide: layout=two-column -->\n# A\n\n<!-- block: region=| -->\n- x\n', [K('Control+Space')], { popup: { open: 1, has: ['first', 'second'] } }],
+];
+markdownCases.push(...markdownXrefs);
+
+// Snippets for the keys of a deck in the front matter (SPEC 5) and the chain as one undo step.
+markdownCases.push(
+  ['M-SNP-020', 'R-CMP-16', 'design: accepting the key in the front matter writes the three members and opens the theme list', 'md', '---\n|\n---\n\n# A\n', [T('design'), K('Tab')], { popup: { open: 1, has: ['bold', 'classic', 'minimal'] }, text: '---\ndesign:\n  theme: |\n  colorScheme: \n  fontScheme: \n---\n\n# A\n' }],
+  ['M-SNP-021', 'R-CMP-16', 'organization: id and name are placeholders in the front matter', 'md', '---\n|\n---\n\n# A\n', [T('organ'), K('Tab'), T('acme'), K('Tab'), T('Acme')], { deck: { '/organization/id': 'acme', '/organization/name': 'Acme' } }],
+  ['M-SNP-022', 'R-CMP-14', 'chain: an option key and its value are one undo step', 'md', '# A\n\n<!-- slide: | -->\n', [T('lay'), K('Tab'), K('Tab')], { undo: [1, '# A\n\n<!-- slide: lay| -->\n'] }],
+  ['M-SNP-023', 'R-CMP-14', 'chain: a front matter key and its value are one undo step', 'md', '---\ndesign:\n  |\n---\n\n# A\n', [T('titleA'), K('Tab'), K('Tab')], { undo: [1, '---\ndesign:\n  titleA|\n---\n\n# A\n'] }],
+);
+
+markdownCases.push(
+  ['M-FLW-001', 'R-CMP-22', 'a flow list continued on the next line in the front matter', 'md', '---\naudience: [board,\n  |]\n---\n\n# A\n', [K('Control+Space')], { popup: { open: 1, has: ['customer'] } }],
+  ['M-FLW-002', 'R-CMP-22', 'a flow mapping continued on the next line in an opf-slide fence', 'md', '# A\n\n```opf-slide\ndesign: {theme: minimal,\n  |}\n```\n', [K('Control+Space')], { popup: { open: 1, has: ['colorScheme'], not: ['theme'] } }],
+  ['M-FLW-003', 'R-CMP-19', '{{ in a quoted scalar over lines in an opf-block fence', 'md', '---\nvariables:\n  brand:\n    type: text\n    value: Acme\n---\n\n# A\n\n```opf-block\ntext: "Hello\n  there |"\n```\n', [T('{{br'), K('Enter')], { has: 'there {{brand}}"' }],
+);
+
+markdownCases.push(
+  ['M-RNK-001', 'R-CMP-18', 'agenda: title and items come before the subtitle in an opf-slide fence', 'md', '# A\n\n```opf-slide\nlayout: agenda\n|\n```\n', [K('Control+Space')], { popup: { first: 'title', order: ['title', 'items', 'subtitle'] } }],
+  ['M-VAL-R1', 'R-CMP-19', 'layout= says the records of a catalog that is not registered are not loaded', 'md', '---\ncatalogs:\n  acme:\n    source: https://acme.test\n    layouts:\n      bespoke:\n        name: Bespoke\n        regions:\n          - name: title\n---\n\n# A\n<!-- slide: layout=| -->\n', [K('Control+Space')], { popup: { open: 1, has: ['acme:bespoke', 'cover'], footer: 'Records from catalog acme are not loaded' } }],
+);
+
+markdownCases.push(
+  ['M-VAL-X11', 'R-A11Y-01', 'each variable has an accessible name with its kind and its place', 'md', `${MFRONT}# Hello |`, [T('{{'), ['waitLabels']], { popup: { ariaNames: [/^brand, reference, text variable\. 1 of 2$/] } }],
+  ['M-VAL-X12', 'R-A11Y-02', 'accepting a beat says what was inserted', 'md', `${MFRONT}# A\n\n<!-- slide: beat=| -->\n`, [T('open'), K('Tab')], { live: 'Inserted opening' }],
 );

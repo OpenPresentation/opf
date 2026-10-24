@@ -10,6 +10,7 @@ import { fromMarkdown } from "@openpresentation/opf/markdown";
 import { yamlContextAt } from "./source-yaml.js";
 import { snippetMarkdown, snippetsForMarkdown } from "./source-snippets.js";
 import { fieldDoc } from "./source-docs.js";
+import { regionNames } from "./source-references.js";
 
 const OPTION_KEY = /^[A-Za-z][A-Za-z0-9_-]*$/;
 const BARE = /^[A-Za-z0-9_-]+$/;
@@ -270,6 +271,12 @@ function bodyContext(text, position, where, explicit) {
     const start = position - span[2].length;
     return { format: "md", region: "span", token: { quoted: false, closed: false, start, end, from: start, to: end }, existing: used, document: {}, path: [], explicit, opened: span[2] === "" };
   }
+  // `{{` in a line of text: the variables of the document.
+  const variable = /\{\{([A-Za-z0-9._-]*)$/.exec(before);
+  if (variable) {
+    const start = position - variable[1].length;
+    return { format: "md", region: "variable", token: { quoted: false, closed: false, start, end: position, from: start, to: position }, document: {}, path: [] };
+  }
   if (!/^[A-Za-z][A-Za-z-]*$|^$/.test(before)) return null;
   if (before === "" && !explicit) return null;
   // Typing prose is not interrupted: a list opens by itself from the third letter on.
@@ -289,20 +296,8 @@ function bodyContext(text, position, where, explicit) {
 // ---- the options -------------------------------------------------------------------------------------------------------------------
 const kindOption = (label, type, detail, doc, boost, kind, extra = {}) => ({ label, type, detail, boost, opfDoc: doc, opf: { kind, ...extra } });
 
-function regionNames(record) {
-  const names = [];
-  const walk = (regions) => {
-    for (const region of Array.isArray(regions) ? regions : []) {
-      if (typeof region?.name === "string" && region.name !== "title" && region.name !== "subtitle") names.push(region.name);
-      if (region?.regions) walk(region.regions);
-    }
-  };
-  walk(record?.regions);
-  return names;
-}
-
 /** The completion options of a Markdown context: `{ options, validFor? }`, or null. `makers` are the option builders of the completion engine. */
-export function markdownOptions(context, { catalogs, text, explicit, makers }) {
+export function markdownOptions(context, { catalogs, text, explicit, makers, scope }) {
   const { literalOption, boostAt, docNode } = makers;
   const options = [];
   if (context.region === "comment-start") {
@@ -310,7 +305,7 @@ export function markdownOptions(context, { catalogs, text, explicit, makers }) {
     options.push(kindOption("block:", "keyword", "options", "Options of the next block: id, type, as, region.", boostAt(1), "comment", { word: "block:" }));
     return { options, validFor: /^[a-z]*$/ };
   }
-  if (context.region === "options") return optionsOptions(context, { catalogs, makers });
+  if (context.region === "options") return optionsOptions(context, { catalogs, makers, scope });
   if (context.region === "fence-info") {
     if (context.mode === "kind") {
       let order = 0;
@@ -368,7 +363,7 @@ export function markdownOptions(context, { catalogs, text, explicit, makers }) {
   return null;
 }
 
-function optionsOptions(context, { catalogs, makers }) {
+function optionsOptions(context, { catalogs, makers, scope }) {
   const { literalOption, boostAt, docNode } = makers;
   const options = [];
   if (context.mode === "key") {
@@ -399,7 +394,7 @@ function optionsOptions(context, { catalogs, makers }) {
   }
   if (!SLIDE_OPTION_KEYS.includes(key)) return null;
   const pseudo = { format: "md", mode: "value", path: ["slides", context.slide, key], document: context.document, key, token: context.token };
-  const built = makers.valueOptions(pseudo, catalogs);
+  const built = makers.valueOptions(pseudo, catalogs, scope);
   options.push(...built.options);
   return { options, validFor: /^[A-Za-z0-9_:+-]*$/ };
 }
