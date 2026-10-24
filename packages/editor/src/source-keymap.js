@@ -192,7 +192,7 @@ export function strokeText(stroke, platform, { symbols = false } = {}) {
       const letters = [parsed.ctrl && "Ctrl", parsed.alt && "Alt", parsed.shift && "Shift", parsed.meta && "Cmd"].filter(Boolean).map((name) => SYMBOLS[name]).join("");
       return `${letters}${KEY_SYMBOLS[parsed.key === " " ? "Space" : parsed.key] ?? key}`;
     }
-    const words = [parsed.ctrl && "Ctrl", parsed.alt && "Alt", parsed.shift && "Shift", parsed.meta && (platform === "mac" ? "Cmd" : "Win")].filter(Boolean);
+    const words = [parsed.ctrl && "Ctrl", parsed.meta && (platform === "mac" ? "Cmd" : "Win"), parsed.alt && "Alt", parsed.shift && "Shift"].filter(Boolean);
     return [...words, key].join("+");
   }).join(" ");
 }
@@ -287,7 +287,8 @@ export function createKeymap({ platform = platformOf() } = {}) {
     /** Bindings recorded without a title (a bug: every installed binding has a place in the list). */
     unlisted: () => [...unlisted],
     /** `{ id, title, group, keys, symbols, when }` for every installed binding that has keys on `platform` (default: this editor's). */
-    shortcuts(on = platform) {
+    shortcuts(requested) {
+      const on = requested || platform;
       const rows = [];
       for (const row of installed.values()) {
         const keys = [];

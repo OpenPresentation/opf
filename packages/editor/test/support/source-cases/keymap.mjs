@@ -54,5 +54,24 @@ export const keymapCases = [
   ['J-FND-007', 'R-KEY-10', 'F3 finds the next match', 'json', '{\n  "a": "x",\n  "b": "x"\n}', [M('f'), ['type', 'x'], K('Escape'), K('F3'), K('F3')], { text: '{\n  "a": "x",\n  "b": "⟦x⟧"\n}' }],
 ];
 
-// ---- the shortcuts list (R-KEY-12) ----------------------------------------------------------------------------------------------------
-export const keymapAsserts = { platform };
+// ---- the shortcuts list and dialog (R-KEY-12, SPEC 8.6) ---------------------------------------------------------------------------------
+const OUTLINE_KEYS = platform === 'darwin' ? 'Cmd+Shift+O' : 'Ctrl+Shift+O';
+keymapCases.push(
+  ['X-PLT-001', 'R-KEY-12', 'getShortcuts lists every installed binding, none without a title', 'json', DECK, [], { shortcutList: { keys: { 'nav.symbol': [OUTLINE_KEYS], 'fold.all': [platform === 'darwin' ? 'Cmd+K Cmd+0' : 'Ctrl+K Ctrl+0'], 'help.shortcuts': ['F1'] }, minimum: 70 } }],
+  ['X-PLT-002', 'R-KEY-12', 'Windows and Linux: Ctrl+Y redo, Ctrl+G go to line, Ctrl+Shift+[ fold, no Cmd key', 'json', DECK, [], { shortcutList: { platform: 'win', keys: { 'edit.redo': ['Ctrl+Y', 'Ctrl+Shift+Z'], 'nav.line': ['Ctrl+G'], 'fold.fold': ['Ctrl+Shift+['], 'find.replace': ['Ctrl+H'], 'suggest.trigger': ['Ctrl+Space'] }, noKeyMatching: ['Cmd'] } }],
+  ['X-PLT-003', 'R-KEY-12', 'macOS: Cmd+I suggest, Cmd+Alt+[ fold, Cmd+Alt+F replace, Cmd+G find next', 'json', DECK, [], { shortcutList: { platform: 'mac', keys: { 'suggest.trigger': ['Ctrl+Space', 'Cmd+I'], 'fold.fold': ['Cmd+Alt+['], 'find.replace': ['Cmd+Alt+F'], 'find.next': ['Cmd+G'], 'edit.redo': ['Cmd+Shift+Z'] } } }],
+  ['X-PLT-004', 'R-KEY-12', 'Linux lists the same as Windows for the keys the editor owns', 'json', DECK, [], { shortcutList: { platform: 'linux', keys: { 'nav.symbol': ['Ctrl+Shift+O'], 'select.expand': ['Alt+Shift+Right'] }, noKeyMatching: ['Cmd'] } }],
+  ['X-SHC-001', 'R-KEY-12', 'F1 opens the shortcuts dialog with focus in the search field', 'json', DECK, [K('F1')], { shortcuts: { open: 1, focus: 'opf-shortcuts-search', has: 'Fold all' } }],
+  ['X-SHC-002', 'R-KEY-12', 'the Cmd/Ctrl+K Cmd/Ctrl+S chord opens it', 'json', DECK, [CH('s')], { shortcuts: { open: 1, has: ['Go to symbol', OUTLINE_KEYS] } }],
+  ['X-SHC-003', 'R-KEY-12', 'Escape closes it and returns focus to the editor', 'json', DECK, [K('F1'), K('Escape')], { shortcuts: { open: 0 }, focus: 'editor' }],
+  ['X-SHC-004', 'R-KEY-12', 'the ? button opens it and the same key sequence closes it with Escape', 'json', DECK, [['clickShortcutsButton'], K('Escape')], { shortcuts: { open: 0 } }],
+  ['X-SHC-005', 'R-KEY-12', 'typing searches by name', 'json', DECK, [K('F1'), ['type', 'fold all']], { shortcuts: { has: 'Fold all', not: 'Move left' } }],
+  ['X-SHC-006', 'R-KEY-12', 'typing searches by key', 'json', DECK, [K('F1'), ['type', 'F8']], { shortcuts: { has: ['Go to the next problem'], not: 'Fold all' } }],
+  ['X-SHC-007', 'R-KEY-12', 'a search with no match says so', 'json', DECK, [K('F1'), ['type', 'zzzz']], { shortcuts: { status: /^0 shortcuts match/ } }],
+  ['X-SHC-008', 'R-KEY-12', 'Tab stays inside the dialog and wraps', 'json', DECK, [K('F1'), K('Tab'), K('Tab'), K('Tab')], { shortcuts: { open: 1, insideFocus: true } }],
+  ['X-SHC-009', 'R-KEY-12', 'Shift+Tab wraps to the last control', 'json', DECK, [K('F1'), K('Shift+Tab'), K('Shift+Tab'), K('Shift+Tab')], { shortcuts: { open: 1, insideFocus: true } }],
+  ['X-SHC-010', 'R-KEY-12', 'a ? typed in the editor is text', 'json', '{"a": "|"}', [['type', '?']], { text: '{"a": "?|"}', shortcuts: { open: 0 } }],
+  ['X-SHC-011', 'R-KEY-12', 'a ? on a button of the pane opens the dialog', 'json', DECK, [['focusFormatAction'], ['type', '?']], { shortcuts: { open: 1 } }],
+  ['X-SHC-012', 'R-KEY-12', 'it opens in YAML and Markdown too', 'yaml', DECK_YAML, [K('F1')], { shortcuts: { open: 1, has: 'Fold all' } }],
+  ['X-SHC-013', 'R-KEY-12', 'it is announced', 'json', DECK, [K('F1')], { live: 'Keyboard shortcuts, \\d+ shortcuts' }],
+);

@@ -308,3 +308,15 @@
 }
 .opf-source-confirm button:hover { background: var(--opf-ui-muted); }
 .opf-source-confirm-accept { font-weight: 600; }
+
+/* Fold gutter (src/source-folding.js) */
+.opf-source-code .cm-foldGutter { width: 16px; }
+.opf-source-code .cm-foldGutter .cm-gutterElement { display: flex; align-items: center; justify-content: center; padding: 0; cursor: pointer; }
+.opf-source-code .cm-foldGutter .opf-fold-marker { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 100%; color: var(--opf-ui-muted-fg); opacity: 0; transition: opacity var(--opf-ui-ease); }
+.opf-source-code .cm-foldGutter .opf-fold-marker.is-folded,
+.opf-source-code:hover .cm-foldGutter .opf-fold-marker,
+.opf-source-code .cm-foldGutter .opf-fold-marker:hover { opacity: 1; }
+.opf-source-code .cm-foldGutter .opf-fold-marker:hover { color: var(--opf-ui-fg); }
+.opf-source-code .cm-foldPlaceholder { border: 0; background: var(--opf-ui-muted); color: var(--opf-ui-muted-fg); border-radius: var(--opf-ui-radius-sm); padding: 0 5px; margin: 0 2px; cursor: pointer; }
+@media (prefers-reduced-motion: reduce) { .opf-source-code .cm-foldGutter .opf-fold-marker { transition: none; } }
+@media (forced-colors: active) { .opf-source-code .cm-foldGutter .opf-fold-marker { opacity: 1; } }

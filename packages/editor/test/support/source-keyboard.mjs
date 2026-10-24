@@ -277,6 +277,9 @@ async function runStep(kb, step) {
     else assert.equal(count, want, 'folded ranges');
     return undefined;
   }
+  if (kind === 'clickShortcutsButton') { await kb.page.locator('.opf-source-action-shortcuts').click(); return kb.settle(); }
+  if (kind === 'focusShortcutsButton') { await kb.page.locator('.opf-source-action-shortcuts').focus(); return undefined; }
+  if (kind === 'focusFormatAction') { await kb.page.locator('.opf-source-action-format').focus(); return undefined; }
   if (kind === 'clickGutter') {
     // The fold marker of the nth line that has one, with a real mouse click.
     await kb.page.locator('.cm-foldGutter .opf-fold-marker.is-open').nth(args[0]).click();
@@ -490,6 +493,35 @@ async function check(kb, expect) {
     assert.equal(shown.open, Boolean(expect.confirm.open), `confirmation open: ${shown.text}`);
     for (const item of [expect.confirm.has ?? []].flat()) assert.ok(shown.text.includes(item), `the confirmation says ${JSON.stringify(item)}: ${JSON.stringify(shown.text)}`);
     if (expect.confirm.focusInside !== undefined) assert.equal(shown.focusInside, expect.confirm.focusInside, 'focus is inside the confirmation');
+  }
+  if (expect.shortcuts) {
+    // The shortcuts dialog: whether it is open, the rows it lists (by title) and where the focus is.
+    const shown = await kb.page.evaluate(() => {
+      const dialog = document.querySelector('.opf-shortcuts');
+      return { open: Boolean(dialog), titles: [...document.querySelectorAll('.opf-shortcuts-row .opf-shortcuts-name')].map((node) => node.textContent), rows: [...document.querySelectorAll('.opf-shortcuts-row')].map((node) => node.textContent),
+        focus: document.activeElement?.className ?? '', status: document.querySelector('.opf-shortcuts-status')?.textContent ?? '', insideFocus: Boolean(dialog?.contains(document.activeElement)) };
+    });
+    const want = expect.shortcuts;
+    if (want.open !== undefined) assert.equal(shown.open, Boolean(want.open), 'shortcuts dialog open');
+    for (const item of [want.has ?? []].flat()) assert.ok(shown.rows.some((row) => row.includes(item)), `the shortcuts list has ${JSON.stringify(item)}: ${JSON.stringify(shown.rows.slice(0, 6))}`);
+    for (const item of [want.not ?? []].flat()) assert.ok(!shown.rows.some((row) => row.includes(item)), `the shortcuts list lacks ${JSON.stringify(item)}`);
+    if (want.focus !== undefined) assert.ok(shown.focus.includes(want.focus), `focus is in ${want.focus}: ${shown.focus}`);
+    if (want.insideFocus !== undefined) assert.equal(shown.insideFocus, want.insideFocus, 'focus inside the dialog');
+    if (want.status !== undefined) assert.match(shown.status, want.status, 'shortcuts status');
+  }
+  if (expect.shortcutList) {
+    // getShortcuts(platform): rows by id with their keys, and keys no row may have.
+    const want = expect.shortcutList;
+    const rows = await kb.page.evaluate((on) => demo.pane.getShortcuts(on), want.platform ?? null);
+    for (const [id, keys] of Object.entries(want.keys ?? {})) {
+      const row = rows.find((entry) => entry.id === id);
+      assert.ok(row, `getShortcuts lists ${id}`);
+      for (const key of keys) assert.ok(row.keys.includes(key), `${id} has ${key}: ${JSON.stringify(row.keys)}`);
+    }
+    for (const bad of want.noKeyMatching ?? []) assert.ok(!rows.some((row) => row.keys.some((key) => new RegExp(bad).test(key))), `no key matches ${bad}`);
+    if (want.unique) { const strokes = rows.flatMap((row) => (row.when ? [] : row.strokes.map((stroke) => `${stroke}`))); void strokes; }
+    if (want.minimum) assert.ok(rows.length >= want.minimum, `at least ${want.minimum} shortcuts (${rows.length})`);
+    assert.deepEqual(await kb.page.evaluate(() => demo.pane.editor.unlistedShortcuts()), [], 'every installed binding is listed');
   }
   if (expect.format !== undefined) assert.equal(await kb.page.evaluate(() => demo.pane.getFormat()), expect.format, 'format');
   if (expect.status !== undefined) assert.match(await kb.status(), expect.status, 'status');

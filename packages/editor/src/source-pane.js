@@ -35,6 +35,7 @@ const ICONS = {
   Check: '<path d="M20 6 9 17l-5-5"/>',
   CircleX: '<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>',
   Info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+  CircleHelp: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
   Sparkles: '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>',
 };
 function icon(name, size = 14) {
@@ -196,6 +197,8 @@ export function createSourcePane(container, options = {}) {
   const canonicalAction = actionButton("Canonicalize with OPF", "Sparkles", "canonicalize");
   canonicalAction.title = "Canonicalize with OPF: rewrite the text the way OPF writes it (drops comments)";
   const copyAction = actionButton("Copy source", "Copy", "copy");
+  const shortcutsAction = actionButton("Keyboard shortcuts", "CircleHelp", "shortcuts");
+  shortcutsAction.setAttribute("aria-haspopup", "dialog");
   const downloadAction = actionButton("Download source", "Download", "download");
   bar.append(file, actions);
 
@@ -269,6 +272,7 @@ export function createSourcePane(container, options = {}) {
     onChange: () => schedule(),
     onFormat: () => formatDocument(),
     onFocusProblems: () => focusProblems(),
+    onShowShortcuts: options.onShowShortcuts,
     // The pane supplies the problems itself (every finding, with ranges and fixes).
     syntaxProblems: false,
     historyFallback: { undo: () => stepReplace("undo"), redo: () => stepReplace("redo") },
@@ -704,6 +708,18 @@ export function createSourcePane(container, options = {}) {
     return true;
   }
   formatAction.addEventListener("click", () => { formatDocument(); });
+  // The "?" button, and the "?" key from anywhere in the pane that is not a place to type, open the list of shortcuts.
+  const chord = control.getShortcuts().find((row) => row.id === "help.shortcuts")?.keys[0];
+  shortcutsAction.title = `Keyboard shortcuts${chord ? ` (${chord})` : ""}`;
+  shortcutsAction.setAttribute("aria-label", shortcutsAction.title);
+  shortcutsAction.addEventListener("click", () => { control.showShortcuts(); });
+  root.addEventListener("keydown", (event) => {
+    if (event.key !== "?" || event.ctrlKey || event.metaKey || event.altKey || event.defaultPrevented) return;
+    const target = event.target;
+    if (target.closest?.(".cm-editor, input, textarea, select, [contenteditable=true]")) return;
+    event.preventDefault();
+    control.showShortcuts();
+  });
 
   // Canonicalize with OPF: the text rewritten through core's writer (the old Format). Unlike Format it drops comments, so it asks first and says how many.
   function droppedComments(text) {
@@ -1075,6 +1091,12 @@ export function createSourcePane(container, options = {}) {
     },
     /** Open the suggestion list at the caret, as Ctrl+Space does. */
     triggerCompletion: () => control.triggerCompletion(),
+    /** Every key binding of the editor for `platform` ("mac", "win" or "linux"; default: the page's): `{ id, title, group, keys, symbols, strokes, when? }`. */
+    getShortcuts: (platform) => control.getShortcuts(platform),
+    /** Open the keyboard shortcuts dialog (the "?" button, F1, Cmd/Ctrl+K Cmd/Ctrl+S); `onShowShortcuts(shortcuts)` returning true replaces it. */
+    showShortcuts: () => control.showShortcuts(),
+    /** Open the symbol picker (Cmd/Ctrl+Shift+O). */
+    showSymbols: () => control.showSymbols(),
     /** The code editor, for hosts that focus or measure it. */
     editor: control,
     destroy() {

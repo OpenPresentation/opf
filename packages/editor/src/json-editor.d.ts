@@ -55,6 +55,8 @@ export interface JsonEditorApi {
   format(): boolean;
 }
 export interface JsonCodeEditorOptions {
+  /** Called with the shortcuts list when the dialog is about to open; returning `true` means the host shows its own. */
+  onShowShortcuts?(shortcuts: import("./source-pane.js").Shortcut[]): boolean | void;
   code: string;
   label: string;
   onChange(source: string): void;
@@ -125,6 +127,14 @@ export interface JsonCodeEditor {
   triggerCompletion(): boolean;
   /** Whether a suggestion list is open or being asked for. */
   isCompleting(): boolean;
+  /** Every key binding this editor installed, for `platform` (default: the page's): the keyboard shortcuts list. */
+  getShortcuts(platform?: "mac" | "win" | "linux"): import("./source-pane.js").Shortcut[];
+  /** Bindings installed without a title in the list (empty unless a binding was added without a place in source-keymap.js). */
+  unlistedShortcuts(): string[];
+  /** Open the keyboard shortcuts dialog (F1, Cmd/Ctrl+K then Cmd/Ctrl+S). */
+  showShortcuts(): boolean;
+  /** Open the symbol picker (Cmd/Ctrl+Shift+O). */
+  showSymbols(): boolean;
   /** Perform a quick fix. */
   applyFix(fix: EditorFix, problem?: EditorProblem): void;
   setLanguage(language: "json" | "yaml" | "markdown"): void;

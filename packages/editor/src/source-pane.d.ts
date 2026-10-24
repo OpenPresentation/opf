@@ -43,7 +43,25 @@ export interface SourceFile {
   mime: string;
 }
 
+export type ShortcutPlatform = "mac" | "win" | "linux";
+/** One row of the keyboard shortcuts list. */
+export interface Shortcut {
+  id: string;
+  title: string;
+  group: string;
+  /** The keys as words: `Cmd+Shift+O` on macOS, `Ctrl+Shift+O` elsewhere; a chord is two strokes separated by a space (`Cmd+K Cmd+0`). */
+  keys: string[];
+  /** The same keys with the macOS symbols (`⌘⇧O`) on macOS, else the words. */
+  symbols: string[];
+  /** The keys in CodeMirror's notation (`Mod-Shift-o`). */
+  strokes: string[];
+  /** What has to be true for the keys to apply (`the list is open`). */
+  when?: string;
+}
+
 export interface SourcePaneOptions {
+  /** Called with `getShortcuts()` when the shortcuts dialog is about to open; returning `true` means the host shows its own and the editor's dialog stays closed. */
+  onShowShortcuts?(shortcuts: Shortcut[]): boolean | void;
   /** The editor session. Every edit in any format reaches it as a patch (`applyPatch`), so it is validated and undoable. */
   editor: EditorSession;
   /** File name without extension (default `deck`). Spaces and slashes become `-`. */
@@ -136,6 +154,15 @@ export interface SourcePane {
   showProblem(index: number): boolean;
   /** Open the suggestion list at the caret, as Ctrl+Space does. */
   triggerCompletion(): boolean;
+  /**
+   * Every key binding the editor installed, for `platform` (default: the page's), grouped and titled as the shortcuts dialog shows them. The list is produced from the
+   * table that installs the keymap, so it cannot drift from the keys.
+   */
+  getShortcuts(platform?: ShortcutPlatform): Shortcut[];
+  /** Open the keyboard shortcuts dialog (the `?` button, F1, Cmd/Ctrl+K then Cmd/Ctrl+S). `onShowShortcuts` returning true replaces it with the host's own. */
+  showShortcuts(): boolean;
+  /** Open the symbol picker (Cmd/Ctrl+Shift+O). */
+  showSymbols(): boolean;
   /** The underlying code editor (`mountJsonCodeEditor`). */
   readonly editor: JsonCodeEditor;
   destroy(): void;

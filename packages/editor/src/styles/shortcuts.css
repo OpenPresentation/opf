@@ -1,0 +1,92 @@
+/* The keyboard shortcuts dialog (src/source-shortcuts.js). Only --opf-ui-* tokens, no color literals (test/styles.mjs). */
+.opf-shortcuts,
+.opf-shortcuts *,
+.opf-shortcuts *::before,
+.opf-shortcuts *::after { box-sizing: border-box; }
+.opf-shortcuts [hidden] { display: none !important; }
+.opf-shortcuts {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: grid;
+  grid-template-columns: minmax(0, 640px);
+  justify-content: center;
+  align-content: center;
+  padding: 16px;
+  background: color-mix(in srgb, var(--opf-ui-fg) 32%, transparent);
+  font-family: var(--opf-ui-font);
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--opf-ui-fg);
+}
+.opf-shortcuts .opf-shortcuts-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-height: min(720px, calc(100vh - 32px));
+  padding: 16px 18px 12px;
+  overflow: hidden;
+  background: var(--opf-ui-surface);
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-lg);
+  box-shadow: var(--opf-ui-shadow-pop);
+}
+.opf-shortcuts .opf-shortcuts-dialog:focus { outline: none; }
+.opf-shortcuts .opf-shortcuts-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.opf-shortcuts .opf-shortcuts-title { margin: 0; font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+.opf-shortcuts .opf-shortcuts-help { margin: 0; color: var(--opf-ui-muted-fg); }
+.opf-shortcuts .opf-shortcuts-close {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: var(--opf-ui-radius);
+  background: transparent;
+  color: var(--opf-ui-muted-fg);
+  font: inherit;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+.opf-shortcuts .opf-shortcuts-close:hover { background: var(--opf-ui-muted); color: var(--opf-ui-fg); }
+.opf-shortcuts .opf-shortcuts-search {
+  width: 100%;
+  min-height: 34px;
+  padding: 4px 10px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-md);
+  background: var(--opf-ui-bg);
+  color: inherit;
+  font: inherit;
+}
+.opf-shortcuts button:focus-visible,
+.opf-shortcuts input:focus-visible,
+.opf-shortcuts .opf-shortcuts-list:focus-visible { outline: 2px solid var(--opf-ui-ring); outline-offset: 2px; }
+.opf-shortcuts .opf-shortcuts-status { min-height: 18px; color: var(--opf-ui-muted-fg); font-size: 12px; }
+.opf-shortcuts .opf-shortcuts-list { flex: 1; min-height: 120px; overflow: auto; padding-right: 4px; }
+.opf-shortcuts .opf-shortcuts-group { margin: 0 0 12px; }
+.opf-shortcuts .opf-shortcuts-group-title { margin: 8px 0 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--opf-ui-muted-fg); }
+.opf-shortcuts .opf-shortcuts-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 4px 0; border-bottom: 1px solid var(--opf-ui-border); }
+.opf-shortcuts .opf-shortcuts-name { min-width: 0; }
+.opf-shortcuts .opf-shortcuts-when { color: var(--opf-ui-muted-fg); font-size: 12px; }
+.opf-shortcuts .opf-shortcuts-keys { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; flex: none; max-width: 55%; }
+.opf-shortcuts .opf-shortcuts-or { color: var(--opf-ui-muted-fg); font-size: 11px; padding: 0 2px; align-self: center; }
+.opf-shortcuts .opf-shortcuts-key {
+  display: inline-block;
+  min-width: 22px;
+  padding: 1px 6px;
+  border: 1px solid var(--opf-ui-border-strong);
+  border-bottom-width: 2px;
+  border-radius: var(--opf-ui-radius-sm);
+  background: var(--opf-ui-muted);
+  font: 12px var(--opf-ui-mono);
+  text-align: center;
+  white-space: nowrap;
+}
+.opf-shortcuts .opf-shortcuts-none { color: var(--opf-ui-muted-fg); }
+@media (forced-colors: active) {
+  .opf-shortcuts .opf-shortcuts-dialog,
+  .opf-shortcuts .opf-shortcuts-key { border-color: CanvasText; }
+}

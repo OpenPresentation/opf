@@ -459,11 +459,11 @@ function mountJsonCodeEditor(parent, options) {
 
   // CodeMirror's own bindings, kept as they are except where the table gives a key to something else: the expand-selection key is ours, Ctrl+G goes to a
   // line (Find next is F3 and, on macOS, Cmd+G), and Fold All and Unfold All are chords. Undo and Redo run CodeMirror's history, then the host's.
-  const mac = km.platform === "mac";
   const kept = {
     basic: defaultKeymap.filter((binding) => binding.run !== selectParentSyntax && binding.run !== selectLine),
     history: historyKeymap.filter((binding) => binding.run !== undo && binding.run !== redo),
-    search: searchKeymap.filter((binding) => binding.run !== gotoLine && !(binding.key === "Mod-g" && !mac)),
+    // Find next on Cmd+G is macOS only; elsewhere F3 (Ctrl+G is Go to line).
+    search: searchKeymap.filter((binding) => binding.run !== gotoLine).map((binding) => (binding.key === "Mod-g" ? { mac: "Mod-g", run: binding.run, shift: binding.shift, scope: binding.scope } : binding)),
   };
   const mainKeymap = keymap.of([
     ...km.bind("edit.enter", (target) => newlineCommand(target)),
