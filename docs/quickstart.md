@@ -11,20 +11,20 @@ shipped versus deferred.
 
 ## Versions
 
-**Published set (2026-10-21):** core **0.25.0**, CLI **0.25.0**, renderer **0.25.0**,
-PPTX **0.25.0**, editor **0.25.1** and Gallery **5.0.0**. `node scripts/registry-plan.mjs` prints these releases with their registry `gitHead`;
+**Published set (2026-10-24):** core, CLI, renderer, PPTX, editor and Gallery, all at
+the shared version **0.26.1**. `node scripts/registry-plan.mjs` prints these releases with their registry `gitHead`;
 registry identity is separate from the consumer and native checks below. All declare
 `engines.node: >=22`; Node 24 is the toolchain this quickstart is verified on.
 
 ```sh
 node -v   # 24.x (verified); 22 and later are declared
-npm install @openpresentation/opf@0.25.0 \
-  @openpresentation/opf-render@0.25.0 \
-  @openpresentation/opf-editor@0.25.3 \
-  @openpresentation/opf-pptx@0.25.0 \
-  @openpresentation/cli@0.25.0 \
-  @openpresentation/gallery@5.0.0
-# opf-render 0.25 keeps its converters and font packages as optional peers: install the ones you use
+npm install @openpresentation/opf@0.26.1 \
+  @openpresentation/opf-render@0.26.1 \
+  @openpresentation/opf-editor@0.26.1 \
+  @openpresentation/opf-pptx@0.26.1 \
+  @openpresentation/cli@0.26.1 \
+  @openpresentation/gallery@0.26.1
+# opf-render 0.26 keeps its converters and font packages as optional peers: install the ones you use
 # (here the base font pack, PNG and PDF; add @expo-google-fonts/* office or script packs as needed)
 npm install @expo-google-fonts/roboto@0.4.3 @expo-google-fonts/roboto-mono@0.4.2 \
   @resvg/resvg-js@^2.6.2 pdf-lib@^1.17.1 sharp@^0.35.5
