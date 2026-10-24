@@ -38,6 +38,7 @@ const pane = createSourcePane(document.getElementById('pane'), {
   format: query.get('format') ?? 'json',
   density: query.get('density') === 'touch' ? 'touch' : 'comfortable',
   applyDelay: 50,
+  outline: query.get('outline') === 'open' ? 'open' : query.get('outline') === 'on',
   completions: query.get('completions') !== 'off',
   smartListEnter: query.get('smartListEnter') !== 'off',
   onRename: (name) => note({ rename: name }),

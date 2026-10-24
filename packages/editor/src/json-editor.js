@@ -579,6 +579,7 @@ function mountJsonCodeEditor(parent, options) {
       if (busy !== (dom.dataset.opfBusy === "1")) { if (busy) dom.dataset.opfBusy = "1"; else delete dom.dataset.opfBusy; }
       if (update.docChanged && !update.transactions.every((tr) => tr.annotation(external))) options.onChange(update.state.field(jsonSource));
       if (update.docChanged) scheduleSyntax();
+      if (update.selectionSet || update.docChanged) options.onSelectionChange?.();
     })
   ] }) });
   const api = {

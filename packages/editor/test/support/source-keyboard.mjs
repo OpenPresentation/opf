@@ -280,6 +280,9 @@ async function runStep(kb, step) {
   if (kind === 'clickShortcutsButton') { await kb.page.locator('.opf-source-action-shortcuts').click(); return kb.settle(); }
   if (kind === 'focusShortcutsButton') { await kb.page.locator('.opf-source-action-shortcuts').focus(); return undefined; }
   if (kind === 'focusFormatAction') { await kb.page.locator('.opf-source-action-format').focus(); return undefined; }
+  if (kind === 'clickOutline') { await kb.page.locator('.opf-source-outline-item', { hasText: args[0] }).first().click(); return kb.settle(); }
+  if (kind === 'focusOutlineToggle') { await kb.page.locator('.opf-source-action-outline').focus(); return undefined; }
+  if (kind === 'evalPane') { await kb.page.evaluate((name) => demo.pane[name](), args[0]); return kb.settle(); }
   if (kind === 'clickGutter') {
     // The fold marker of the nth line that has one, with a real mouse click.
     await kb.page.locator('.cm-foldGutter .opf-fold-marker.is-open').nth(args[0]).click();
@@ -508,6 +511,34 @@ async function check(kb, expect) {
     if (want.focus !== undefined) assert.ok(shown.focus.includes(want.focus), `focus is in ${want.focus}: ${shown.focus}`);
     if (want.insideFocus !== undefined) assert.equal(shown.insideFocus, want.insideFocus, 'focus inside the dialog');
     if (want.status !== undefined) assert.match(shown.status, want.status, 'shortcuts status');
+  }
+  if (expect.picker) {
+    // The symbol picker: whether it is open, its items (label, kind), the selected one, and where the focus is.
+    const shown = await kb.page.evaluate(() => {
+      const root = document.querySelector('.opf-quickpick');
+      const items = [...document.querySelectorAll('.opf-quickpick-item')].map((node) => ({ label: node.querySelector('.opf-quickpick-label')?.textContent ?? '', detail: node.querySelector('.opf-quickpick-detail')?.textContent ?? '', kind: node.dataset.kind, selected: node.getAttribute('aria-selected') === 'true' }));
+      const input = document.querySelector('.opf-quickpick-input');
+      return { open: Boolean(root), items, inputFocused: document.activeElement === input, active: input?.getAttribute('aria-activedescendant') ?? null, status: document.querySelector('.opf-quickpick-status')?.textContent ?? '' };
+    });
+    const want = expect.picker, labels = shown.items.map((item) => item.label);
+    if (want.open !== undefined) assert.equal(shown.open, Boolean(want.open), `picker open (${labels})`);
+    for (const item of [want.has ?? []].flat()) assert.ok(labels.includes(item), `the picker lists ${JSON.stringify(item)}: ${JSON.stringify(labels)}`);
+    for (const item of [want.not ?? []].flat()) assert.ok(!labels.includes(item), `the picker lacks ${JSON.stringify(item)}`);
+    if (want.labels) assert.deepEqual(labels, want.labels, 'picker items');
+    if (want.selected !== undefined) assert.equal(shown.items.find((item) => item.selected)?.label, want.selected, 'picker selected item');
+    if (want.inputFocused !== undefined) assert.equal(shown.inputFocused, want.inputFocused, 'focus in the picker input');
+    if (want.status !== undefined) assert.match(shown.status, want.status, 'picker status');
+    if (want.kinds) assert.deepEqual(shown.items.map((item) => item.kind), want.kinds, 'picker kinds');
+    if (want.detail) assert.ok(shown.items.some((item) => item.detail.includes(want.detail)), `a picker item has the detail ${want.detail}`);
+  }
+  if (expect.outline) {
+    // The outline panel (harness ?outline=open): rows, the current one, and the API.
+    const shown = await kb.page.evaluate(() => ({ rows: [...document.querySelectorAll('.opf-source-outline-item')].map((node) => node.querySelector('.opf-source-outline-label').textContent), current: [...document.querySelectorAll('.opf-source-outline-item[aria-current]')].map((node) => node.querySelector('.opf-source-outline-label').textContent), api: demo.pane.getOutline().map((symbol) => symbol.label), hidden: document.querySelector('.opf-source-outline')?.hidden ?? true }));
+    const want = expect.outline;
+    if (want.rows) assert.deepEqual(shown.rows, want.rows, 'outline rows');
+    if (want.current !== undefined) assert.deepEqual(shown.current, [].concat(want.current), 'outline current item');
+    if (want.api) assert.deepEqual(shown.api, want.api, 'getOutline labels');
+    if (want.hidden !== undefined) assert.equal(shown.hidden, want.hidden, 'outline hidden');
   }
   if (expect.shortcutList) {
     // getShortcuts(platform): rows by id with their keys, and keys no row may have.

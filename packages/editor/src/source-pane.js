@@ -13,6 +13,7 @@ import { schemaAtPath, schemaVariants } from "./schema.js";
 import { locateText } from "./source-ranges.js";
 import { scanMarkdown, starterValue } from "@openpresentation/opf/source";
 import { listCatalogRecords } from "./catalogs.js";
+import { documentSymbols, symbolAt } from "./source-symbols.js";
 
 // The source pane (RR-98): the OPF document as JSON, YAML or Markdown, with the file name, the format menu, Format, Copy
 // and Download, and the findings under the code. JSON is canonical and keeps its authored bytes (exact-source); YAML and
@@ -36,6 +37,7 @@ const ICONS = {
   CircleX: '<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>',
   Info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
   CircleHelp: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+  List: '<path d="M3 6h.01"/><path d="M8 6h13"/><path d="M3 12h.01"/><path d="M8 12h13"/><path d="M3 18h.01"/><path d="M8 18h13"/>',
   Sparkles: '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>',
 };
 function icon(name, size = 14) {
@@ -197,6 +199,8 @@ export function createSourcePane(container, options = {}) {
   const canonicalAction = actionButton("Canonicalize with OPF", "Sparkles", "canonicalize");
   canonicalAction.title = "Canonicalize with OPF: rewrite the text the way OPF writes it (drops comments)";
   const copyAction = actionButton("Copy source", "Copy", "copy");
+  // The outline panel is opt-in (`outline: true` adds the toggle, `"open"` also shows the panel); the symbol picker (Cmd/Ctrl+Shift+O) is always there.
+  const outlineAction = options.outline ? actionButton("Outline", "List", "outline") : null;
   const shortcutsAction = actionButton("Keyboard shortcuts", "CircleHelp", "shortcuts");
   shortcutsAction.setAttribute("aria-haspopup", "dialog");
   const downloadAction = actionButton("Download source", "Download", "download");
@@ -218,7 +222,12 @@ export function createSourcePane(container, options = {}) {
   const list = el("ul", "opf-source-findings-list", { id: `${id}-findings` });
   findingsRegion.append(toggle, list);
 
-  root.append(bar, confirm, code, findingsRegion, status);
+  const outlinePanel = options.outline ? el("nav", "opf-source-outline", { "aria-label": "Document outline", hidden: "" }) : null;
+  const outlineList = outlinePanel ? el("ul", "opf-source-outline-list") : null;
+  outlinePanel?.append(outlineList);
+  let body = null;
+  if (outlinePanel) { body = el("div", "opf-source-body"); body.append(outlinePanel, code); }
+  root.append(bar, confirm, body ?? code, findingsRegion, status);
   container.append(root);
 
   // ---- Document <-> text --------------------------------------------------------------------------------------------
@@ -272,6 +281,7 @@ export function createSourcePane(container, options = {}) {
     onChange: () => schedule(),
     onFormat: () => formatDocument(),
     onFocusProblems: () => focusProblems(),
+    onSelectionChange: () => scheduleOutline(),
     onShowShortcuts: options.onShowShortcuts,
     // The pane supplies the problems itself (every finding, with ranges and fixes).
     syntaxProblems: false,
@@ -279,8 +289,72 @@ export function createSourcePane(container, options = {}) {
     onError: (error) => options.onError?.(error),
   });
 
+  // ---- Outline ------------------------------------------------------------------------------------------------------
+  let outlineTimer = null, outlineSymbols = [], outlineKey = "";
+  const outlineButtons = () => [...(outlineList?.querySelectorAll(".opf-source-outline-item") ?? [])];
+  function markOutline() {
+    if (!outlineList) return;
+    const caret = control.api.getSelection()[0], here = symbolAt(outlineSymbols, caret);
+    for (const button of outlineButtons()) {
+      const on = button.dataset.id === here?.id;
+      if (on) button.setAttribute("aria-current", "true"); else button.removeAttribute("aria-current");
+    }
+  }
+  function renderOutline() {
+    outlineTimer = null;
+    if (!outlinePanel || destroyed || outlinePanel.hidden) return;
+    outlineSymbols = documentSymbols(format, control.api.getValue());
+    const key = JSON.stringify(outlineSymbols.map((symbol) => [symbol.id, symbol.label, symbol.detail, symbol.depth, symbol.from, symbol.to]));
+    if (key !== outlineKey) {
+      outlineKey = key;
+      outlineList.replaceChildren(...outlineSymbols.map((symbol) => {
+        const item = el("li", "opf-source-outline-row");
+        const button = el("button", `opf-source-outline-item is-${symbol.kind}`, { type: "button", "data-id": symbol.id, "data-kind": symbol.kind, tabindex: "-1" });
+        button.style.paddingLeft = `${8 + symbol.depth * 12}px`;
+        button.append(Object.assign(el("span", "opf-source-outline-label"), { textContent: symbol.label }));
+        if (symbol.detail) button.append(Object.assign(el("span", "opf-source-outline-detail"), { textContent: symbol.detail }));
+        button.addEventListener("click", () => { control.api.setSelection(symbol.from, symbol.to); control.api.focus(); control.api.say(`${symbol.label}, line ${symbol.line}`); });
+        item.append(button);
+        return item;
+      }));
+      if (!outlineSymbols.length) outlineList.append(Object.assign(el("li", "opf-source-outline-empty"), { textContent: "No slides or sections yet." }));
+      outlineButtons()[0]?.setAttribute("tabindex", "0");
+    }
+    markOutline();
+  }
+  /** Redraw the outline soon (after the text changed) or only follow the caret. */
+  let outlineMarkTimer = null;
+  function scheduleOutline(textChanged) {
+    if (!outlinePanel || outlinePanel.hidden || destroyed) return;
+    if (textChanged) { clearTimeout(outlineTimer); outlineTimer = setTimeout(renderOutline, 300); return; }
+    clearTimeout(outlineMarkTimer);
+    outlineMarkTimer = setTimeout(() => { outlineMarkTimer = null; markOutline(); }, 120);
+  }
+  function setOutlineOpen(open) {
+    if (!outlinePanel) return false;
+    outlinePanel.hidden = !open;
+    outlineAction?.setAttribute("aria-expanded", String(open));
+    root.toggleAttribute("data-outline", open);
+    if (open) { outlineKey = ""; renderOutline(); }
+    return true;
+  }
+  outlineAction?.setAttribute("aria-expanded", "false");
+  outlineAction?.setAttribute("aria-controls", `${id}-outline`);
+  outlinePanel?.setAttribute("id", `${id}-outline`);
+  outlineAction?.addEventListener("click", () => { setOutlineOpen(outlinePanel.hidden); if (!outlinePanel.hidden) outlineButtons()[0]?.focus(); });
+  outlineList?.addEventListener("keydown", (event) => {
+    const buttons = outlineButtons(), at = buttons.indexOf(document.activeElement);
+    const move = (to) => { event.preventDefault(); const next = buttons[Math.max(0, Math.min(buttons.length - 1, to))]; buttons.forEach((button) => button.setAttribute("tabindex", "-1")); next?.setAttribute("tabindex", "0"); next?.focus(); };
+    if (event.key === "ArrowDown") move(at + 1);
+    else if (event.key === "ArrowUp") move(at - 1);
+    else if (event.key === "Home") move(0);
+    else if (event.key === "End") move(buttons.length - 1);
+    else if (event.key === "Escape") { event.preventDefault(); control.api.focus(); }
+  });
+
   // ---- Applying edits -----------------------------------------------------------------------------------------------
   function schedule() {
+    scheduleOutline(true);
     closeConfirm(false);
     clearTimeout(timer);
     clearTimeout(syntaxTimer);
@@ -361,6 +435,7 @@ export function createSourcePane(container, options = {}) {
 
   /** Show `value` as the text of the current format, as an external change. */
   function show(value) {
+    scheduleOutline(true);
     closeConfirm(false);
     baseline = value;
     shownInvalid = false;
@@ -664,6 +739,7 @@ export function createSourcePane(container, options = {}) {
   nameInput.addEventListener("blur", commitRename);
 
   function updateBar() {
+    scheduleOutline(true);
     const current = formatOf(format);
     nameButton.textContent = name;
     nameButton.setAttribute("aria-label", `Rename ${name}`);
@@ -1032,6 +1108,7 @@ export function createSourcePane(container, options = {}) {
   }
 
   updateBar();
+  if (options.outline === "open") setOutlineOpen(true);
   root.toggleAttribute("data-readonly", readOnly);
   nameButton.disabled = readOnly;
   formatAction.disabled = readOnly;
@@ -1097,6 +1174,10 @@ export function createSourcePane(container, options = {}) {
     showShortcuts: () => control.showShortcuts(),
     /** Open the symbol picker (Cmd/Ctrl+Shift+O). */
     showSymbols: () => control.showSymbols(),
+    /** The outline of the text as it is now: `{ id, kind, label, detail, depth, from, to, line }` in document order (slides, sections, assets, datasets, variables, references, embedded catalog records). */
+    getOutline: () => documentSymbols(format, control.api.getValue()),
+    /** Show or hide the outline panel (needs the `outline` option); with no argument it toggles. Returns whether the panel is open. */
+    toggleOutline(open) { if (!outlinePanel) return false; setOutlineOpen(open ?? outlinePanel.hidden); return !outlinePanel.hidden; },
     /** The code editor, for hosts that focus or measure it. */
     editor: control,
     destroy() {
@@ -1108,6 +1189,8 @@ export function createSourcePane(container, options = {}) {
       clearTimeout(summaryTimer);
       clearTimeout(syntaxTimer);
       clearTimeout(recheckTimer);
+      clearTimeout(outlineTimer);
+      clearTimeout(outlineMarkTimer);
       unsubscribe();
       document.removeEventListener("pointerdown", outside, true);
       control.destroy();

@@ -90,3 +90,34 @@
   .opf-shortcuts .opf-shortcuts-dialog,
   .opf-shortcuts .opf-shortcuts-key { border-color: CanvasText; }
 }
+
+/* The symbol picker (src/source-outline.js) */
+.opf-quickpick {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  z-index: 40;
+  width: min(480px, calc(100% - 24px));
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px;
+  background: var(--opf-ui-surface);
+  color: var(--opf-ui-fg);
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-lg);
+  box-shadow: var(--opf-ui-shadow-pop);
+  font: 13px var(--opf-ui-font);
+}
+.opf-quickpick-input { width: 100%; min-height: 30px; padding: 3px 8px; border: 1px solid var(--opf-ui-border); border-radius: var(--opf-ui-radius-md); background: var(--opf-ui-bg); color: inherit; font: inherit; }
+.opf-quickpick-input:focus-visible { outline: 2px solid var(--opf-ui-ring); outline-offset: 1px; }
+.opf-quickpick-list { margin: 0; padding: 2px 0 0; list-style: none; max-height: 280px; overflow: auto; }
+.opf-quickpick-item { display: flex; align-items: baseline; gap: 8px; min-height: 26px; padding: 3px 10px; border-radius: var(--opf-ui-radius-sm); cursor: pointer; }
+.opf-quickpick-item.is-selected { background: var(--opf-ui-accent); color: var(--opf-ui-accent-fg); }
+.opf-quickpick-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.opf-quickpick-detail { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 12px; opacity: 0.75; }
+.opf-quickpick-kind { margin-left: auto; font-size: 11px; opacity: 0.75; flex: none; }
+.opf-quickpick-more { padding: 4px 10px; color: var(--opf-ui-muted-fg); font-size: 12px; }
+.opf-quickpick-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (forced-colors: active) { .opf-quickpick-item.is-selected { outline: 2px solid Highlight; } }

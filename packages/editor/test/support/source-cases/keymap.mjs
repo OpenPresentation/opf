@@ -75,3 +75,39 @@ keymapCases.push(
   ['X-SHC-012', 'R-KEY-12', 'it opens in YAML and Markdown too', 'yaml', DECK_YAML, [K('F1')], { shortcuts: { open: 1, has: 'Fold all' } }],
   ['X-SHC-013', 'R-KEY-12', 'it is announced', 'json', DECK, [K('F1')], { live: 'Keyboard shortcuts, \\d+ shortcuts' }],
 );
+
+// ---- the symbol picker and the outline panel (SPEC 8.4) --------------------------------------------------------------------------------
+const OUT = (second = 'o') => ['press', `Mod+Shift+${second}`];
+const WITH_ASSETS = '{\n  "assets": {"logo": "logo.png"},\n  "slides": [\n    {"title": "Q3 Review", "layout": "cover"},\n    {"title": "Highlights"},\n    {"title": [{"text": "Next "}, {"text": "steps"}]}\n  ]\n}';
+const WITH_ASSETS_YAML = 'assets:\n  logo: logo.png\nslides:\n  - title: Q3 Review\n    layout: cover\n  - title: Highlights\n  - title:\n      - text: Next\n      - text: " steps"\n';
+const WITH_ASSETS_MD = '---\nassets:\n  logo: logo.png\n---\n\n<!-- slide: layout=cover -->\n# Q3 Review\n\n---\n\n# Highlights\n\n---\n\n# Next steps\n';
+const SLIDES = ['1. Q3 Review', '2. Highlights', '3. Next steps'];
+keymapCases.push(
+  ['J-OUT-001', 'R-NAV-04', 'Cmd/Ctrl+Shift+O lists the slides and the declared assets, in document order', 'json', WITH_ASSETS, [OUT()], { picker: { open: 1, inputFocused: true, labels: ['assets', 'logo', ...SLIDES], kinds: ['section', 'asset', 'slide', 'slide', 'slide'], detail: 'layout cover' } }],
+  ['J-OUT-002', 'R-NAV-04', 'typing filters; Enter jumps and selects the slide, focus returns to the editor', 'json', WITH_ASSETS, [OUT(), ['type', 'high'], K('Enter')], { picker: { open: 0 }, focus: 'editor', text: '{\n  "assets": {"logo": "logo.png"},\n  "slides": [\n    {"title": "Q3 Review", "layout": "cover"},\n    ⟦{"title": "Highlights"}⟧,\n    {"title": [{"text": "Next "}, {"text": "steps"}]}\n  ]\n}' }],
+  ['J-OUT-003', 'R-NAV-04', 'the items are named by number and title, filtered by every word', 'json', WITH_ASSETS, [OUT(), ['type', 'steps 3']], { picker: { labels: ['3. Next steps'] } }],
+  ['J-OUT-004', 'R-NAV-04', 'Down and Up move the selection and wrap; Enter goes to the selected one', 'json', WITH_ASSETS, [OUT(), K('ArrowUp'), K('Enter')], { text: '{\n  "assets": {"logo": "logo.png"},\n  "slides": [\n    {"title": "Q3 Review", "layout": "cover"},\n    {"title": "Highlights"},\n    ⟦{"title": [{"text": "Next "}, {"text": "steps"}]}⟧\n  ]\n}' }],
+  ['J-OUT-005', 'R-NAV-04', 'the slide the caret is in is selected when the picker opens', 'json', WITH_ASSETS.replace('"Highlights"', '"High|lights"'), [OUT()], { picker: { selected: '2. Highlights' } }],
+  ['J-OUT-006', 'R-NAV-04', 'Escape closes it, the caret stays and focus returns to the editor', 'json', WITH_ASSETS.replace('"Highlights"', '"High|lights"'), [OUT(), K('ArrowDown'), K('Escape')], { picker: { open: 0 }, focus: 'editor', has: '"High', text: WITH_ASSETS.replace('"Highlights"', '"High|lights"') }],
+  ['J-OUT-007', 'R-NAV-04', 'the shortcut again closes the picker', 'json', WITH_ASSETS, [OUT(), OUT()], { picker: { open: 0 }, focus: 'editor' }],
+  ['J-OUT-008', 'R-NAV-04', 'no match says so and Enter does nothing', 'json', WITH_ASSETS, [OUT(), ['type', 'zzzz'], K('Enter')], { picker: { open: 1, labels: [], status: /No symbols match/ } }],
+  ['J-OUT-009', 'R-NAV-04', 'the selection is announced with its place in the list', 'json', WITH_ASSETS, [OUT(), K('ArrowDown'), ['pause', 200]], { live: '. \\d of \\d' }],
+  ['J-OUT-010', 'R-NAV-04', 'it works on broken text', 'json', '{\n  "slides": [\n    {"title": "A",\n    {"title": "B"}\n  ]\n}', [OUT()], { picker: { open: 1 } }],
+  ['J-OUT-011', 'R-NAV-04', 'embedded catalog records are listed', 'json', '{\n  "catalogs": {"custom": {"layouts": {"hero": {"regions": [{"name": "title"}]}}}},\n  "slides": [{"title": "A"}]\n}', [OUT()], { picker: { has: ['layout hero', '1. A'] } }],
+  ['J-OUT-012', 'R-NAV-04', 'a slide without a title is called untitled', 'json', '{"slides": [{"text": "x"}]}', [OUT()], { picker: { labels: ['1. Untitled slide'] } }],
+  ['J-OUT-013', 'R-NAV-04', 'Enter in the picker does not insert a line into the text', 'json', '{|"slides": [{"title": "A"}]}', [OUT(), K('Enter')], { has: ['{"slides"'] }],
+  ['Y-OUT-001', 'R-NAV-04', 'the picker in YAML lists slides with titles made of runs', 'yaml', WITH_ASSETS_YAML, [OUT()], { picker: { labels: ['assets', 'logo', ...SLIDES] } }],
+  ['Y-OUT-002', 'R-NAV-04', 'Enter in YAML selects the slide mapping', 'yaml', WITH_ASSETS_YAML, [OUT(), ['type', 'high'], K('Enter')], { text: 'assets:\n  logo: logo.png\nslides:\n  - title: Q3 Review\n    layout: cover\n  - ⟦title: Highlights⟧\n  - title:\n      - text: Next\n      - text: " steps"\n' }],
+  ['M-OUT-001', 'R-NAV-04', 'the picker in Markdown lists the front matter symbols and the slides by heading', 'md', WITH_ASSETS_MD, [OUT()], { picker: { labels: ['assets', 'logo', ...SLIDES], detail: 'layout cover' } }],
+  ['M-OUT-002', 'R-NAV-04', 'Enter in Markdown selects the whole slide', 'md', WITH_ASSETS_MD, [OUT(), ['type', 'next'], K('Enter')], { text: '---\nassets:\n  logo: logo.png\n---\n\n<!-- slide: layout=cover -->\n# Q3 Review\n\n---\n\n# Highlights\n\n---\n\n⟦# Next steps⟧\n' }],
+  ['M-OUT-003', 'R-NAV-04', 'a # inside a fence is not a title', 'md', '# Real\n\n```sh\n# not a title\n```\n', [OUT()], { picker: { labels: ['1. Real'] } }],
+  ['X-OUT-001', 'R-NAV-04', 'the picker opens from the pane API', 'json', WITH_ASSETS, [['evalPane', 'showSymbols']], { picker: { open: 1 } }],
+);
+export const outlinePanelCases = [
+  ['X-OUT-010', 'R-NAV-04', 'the outline panel lists the symbols and follows the caret', 'json', WITH_ASSETS.replace('"Highlights"', '"High|lights"'), [['pause', 450]], { outline: { rows: ['assets', 'logo', ...SLIDES], current: '2. Highlights', api: ['assets', 'logo', ...SLIDES] } }, { query: '?outline=open', notify: true }],
+  ['X-OUT-011', 'R-NAV-04', 'a click on an item selects the slide and focuses the editor', 'json', WITH_ASSETS, [['pause', 450], ['clickOutline', 'Highlights']], { focus: 'editor', text: '{\n  "assets": {"logo": "logo.png"},\n  "slides": [\n    {"title": "Q3 Review", "layout": "cover"},\n    ⟦{"title": "Highlights"}⟧,\n    {"title": [{"text": "Next "}, {"text": "steps"}]}\n  ]\n}' }, { query: '?outline=open', notify: true }],
+  ['X-OUT-012', 'R-NAV-04', 'typing a new slide title updates the panel', 'json', '{"slides": [{"title": "A|"}]}', [['type', 'bc'], ['pause', 500]], { outline: { rows: ['1. Abc'] } }, { query: '?outline=open', notify: true }],
+  ['X-OUT-013', 'R-NAV-04', 'the panel is closed unless asked for, and the toggle opens it', 'json', WITH_ASSETS, [['focusOutlineToggle'], K('Enter')], { outline: { hidden: false } }, { query: '?outline=on', notify: true }],
+  ['X-OUT-014', 'R-NAV-04', 'with no outline option there is no panel', 'json', WITH_ASSETS, [], { outline: { hidden: true } }],
+  ['X-OUT-015', 'R-NAV-04', 'the panel follows the format', 'yaml', WITH_ASSETS_YAML, [['pause', 450]], { outline: { rows: ['assets', 'logo', ...SLIDES] } }, { query: '?outline=open', notify: true }],
+];
