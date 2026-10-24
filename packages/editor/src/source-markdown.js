@@ -211,6 +211,7 @@ function fenceContext(text, position, where, explicit) {
   }
   // The body.
   if (fence.kind === "metric") return metricContext(text, position, fence);
+  if (fence.kind === "timeline") return timelineContext(text, position);
   if (fence.kind === "opf-slide" || fence.kind === "opf-block") {
     const base = fence.bodyFrom;
     const prefix = fence.kind === "opf-slide" ? ["slides", fence.slide] : ["slides", fence.slide, "blocks", 0];
@@ -221,6 +222,16 @@ function fenceContext(text, position, where, explicit) {
     return { ...context, token: shiftToken(context.token, base) };
   }
   return null;
+}
+
+// A timeline event may start with a task-list mark that sets its status: `[x]` done, `[>]` current ("we are here"), `[ ]` planned.
+function timelineContext(text, position) {
+  const line = lineAt(text, position);
+  const before = text.slice(line.start, position);
+  if (!/^(?:\[[x> ]?\]?)?$/.test(before) || /^\s/.test(line.text)) return null;
+  let end = position;
+  while (end < line.end && /[x> \]]/.test(text[end]) && text[end] !== " ") end++;
+  return { format: "md", region: "timeline", token: { quoted: false, closed: false, start: line.start, end, from: line.start, to: end }, document: {}, path: [] };
 }
 
 function metricContext(text, position, fence) {
@@ -336,6 +347,11 @@ export function markdownOptions(context, { catalogs, text, explicit, makers }) {
     for (const entry of info?.enum ?? []) options.push(literalOption(String(entry.value), JSON.stringify(entry.value), { value: entry.value, doc: entry.description ?? "" }));
     return { options, validFor: /^[A-Za-z0-9_-]*$/ };
   }
+  if (context.region === "timeline") {
+    const marks = [["[x]", "done", "The event is done."], ["[>]", "current", "The event is where the story is now (\"we are here\")."], ["[ ]", "planned", "The event is planned."]];
+    marks.forEach(([mark, word, doc], index) => options.push(kindOption(mark, "keyword", word, doc, boostAt(index), "status", { mark })));
+    return { options, validFor: /^(?:\[[x> ]?\]?)?$/ };
+  }
   if (context.region === "span") {
     // Right after `{` or a space the list opens by itself (the characters that begin a new attribute); Ctrl+Space opens it anywhere in the braces.
     const docs = { bold: "Bold text", italic: "Italic text", underline: "Underlined text", strike: "Struck-through text", sup: "Superscript", sub: "Subscript", color: "Text color: a hex color, a scheme slot or var:name", size: "Font size in points", font: "Font family", lang: "Language of the text (a BCP-47 tag)" };
@@ -427,6 +443,7 @@ export function markdownPlan(context, completion, text, end) {
     return { template: `${completion.opf.key}: `, fields: 0, chain: Boolean(completion.opf.chain) };
   }
   if (context.region === "metric" && kind === "literal") return { template: `${context.needsSpace ? " " : ""}${escapeTemplate(String(completion.opf.value))}`, fields: 0, chain: false };
+  if (kind === "status") return { template: `${completion.opf.mark} `, fields: 0, chain: false };
   if (kind === "spanAttribute") return { template: `${completion.opf.name}${completion.opf.takesValue ? "=" : ""}`, fields: 0, chain: false };
   if (kind === "keyword") return { template: `${escapeTemplate(completion.opf.word)} `, fields: 0, chain: false };
   if (kind === "snippet") {

@@ -191,3 +191,9 @@ export const markdownSyntaxHover = [
   ['M-HOV-012', 'R-HOV-01', 'plain prose shows nothing', 'md', '# A\n\nJust some prose here.\n', [['hoverText', 'prose']], { hover: { open: false } }],
 ];
 markdownCases.push(...markdownSyntaxHover);
+
+markdownCases.push(
+  ['M-FEN-020', 'R-CMP-24', 'a timeline line starts with a status mark on request', 'md', '# A\n\n```timeline\n|\n```\n', [K('Control+Space')], { popup: { open: 1, has: ['[x]', '[>]', '[ ]'] } }],
+  ['M-FEN-021', 'R-CMP-24', 'accepting a status mark writes it and a space', 'md', '# A\n\n```timeline\n|\n```\n', [K('Control+Space'), K('Enter')], { text: '# A\n\n```timeline\n[x] |\n```\n' }],
+  ['M-FEN-022', 'R-CMP-04', 'typing the text of an event opens nothing', 'md', '# A\n\n```timeline\n|\n```\n', [T('2026 Q1')], { popup: { open: 0 } }],
+);
