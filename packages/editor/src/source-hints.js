@@ -6,7 +6,7 @@
 // or on Escape; the arrow keys are not taken. It is a real CodeMirror tooltip (`showTooltip`), mirrored into the live region as one sentence.
 // The reading of the text (`shapeAt`) is plain functions over the text, so it is tested without a browser. Loaded lazily by the code editor.
 import { Prec, StateEffect, StateField } from "@codemirror/state";
-import { keymap, showTooltip } from "@codemirror/view";
+import { EditorView, keymap, showTooltip } from "@codemirror/view";
 import { findNodeAtLocation, getNodeValue, parseTree } from "jsonc-parser";
 import { parseDocument } from "yaml";
 import { describeField } from "@openpresentation/opf/schema";
@@ -326,9 +326,16 @@ const keys = Prec.highest(keymap.of([{
   },
 }]));
 
-/** Adds the hint's field and its Escape key to the editor the first time. */
+// Leaving the editor closes the hint, as it does in VS Code.
+const closeOnBlur = EditorView.domEventHandlers({
+  blur(_event, view) {
+    if (view.state.field(hintField, false)) view.dispatch({ effects: setHint.of(null) });
+  },
+});
+
+/** Adds the hint's field, its Escape key and the close on blur to the editor the first time. */
 function install(view) {
-  if (view.state.field(hintField, false) === undefined) view.dispatch({ effects: StateEffect.appendConfig.of([hintField, keys]) });
+  if (view.state.field(hintField, false) === undefined) view.dispatch({ effects: StateEffect.appendConfig.of([hintField, keys, closeOnBlur]) });
 }
 
 /** Open (or move) the hint on `model`; says it in the live region when it is new or changed. */

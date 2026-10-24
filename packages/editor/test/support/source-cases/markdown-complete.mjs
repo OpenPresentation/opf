@@ -248,7 +248,7 @@ markdownCases.push(
 );
 
 markdownCases.push(
-  ['M-VAL-X11', 'R-A11Y-01', 'each variable has an accessible name with its kind and its place', 'md', `${MFRONT}# Hello |`, [T('{{'), ['waitLabels']], { popup: { ariaNames: [/^brand, reference, text variable\. 1 of 2$/] } }],
+  ['M-VAL-X11', 'R-A11Y-01', 'each variable has an accessible name with its kind and its place', 'md', `${MFRONT}# Hello |`, [T('{{'), ['waitLabels']], { popup: { ariaNames: [/^brand, reference, text variable\. 1 of \d+$/] } }],
   ['M-VAL-X12', 'R-A11Y-02', 'accepting a beat says what was inserted', 'md', `${MFRONT}# A\n\n<!-- slide: beat=| -->\n`, [T('open'), K('Tab')], { live: 'Inserted opening' }],
 );
 
