@@ -126,8 +126,13 @@ npm view @openpresentation/gallery dist-tags --json           # latest is X.Y.Z;
 
 After a **stable** release, `release.yml` calls `.github/workflows/bump-sites.yml` (a prerelease never does). For each of the
 three sites (`Data-Advantage/openpresentation-site` and `Data-Advantage/pptx-gallery` on `main`, `Data-Advantage/pptx-dev` on
-`master`) it opens one pull request, "bump to vX.Y.Z", from the branch `bot/opf-vX.Y.Z`, that sets every `@openpresentation/*`
-pin the site declares to the released version and refreshes the site's lockfile (`scripts/bump-site.mjs`). A patch bump is labeled
+`master`) it opens one pull request, "bump to vX.Y.Z", from the branch `bot/opf-vX.Y.Z`. What a bump touches is the site's own
+business, so each site owns one script, `pnpm opf:bump <X.Y.Z> [--opf <checkout>]` (`scripts/opf-bump.mjs` of the site), that sets its
+`@openpresentation/*` pins, refreshes its lockfile, regenerates every file it derives from the release (a release history from the
+registry and these release notes, a pin mirror, preview fonts, chart previews, the vendored editor bundle, a homepage manifest) and runs
+the checks of its own CI that read them; `scripts/bump-site.mjs` decides the label and calls it (a site without one gets only the
+generic pins and lockfile). A bump needs no human edit to be green; one that does (a release that changes behavior or removes a
+document the site links) fails the site's CI and stays open. A patch bump is labeled
 `auto-merge`; a minor or major bump (a breaking change in 0.x) is labeled `needs-review` and stays open. The workflow only opens
 and labels the pull request and never merges it: the site's own CI merges an `auto-merge` pull request after its
 `build-and-smoke` job passes, using the GitHub App's token so that the merge starts the site's deploy workflows (D19; the sites

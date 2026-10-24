@@ -13,7 +13,7 @@ name: Merge OPF bump
 # It runs when one of the listed workflows completes (workflow_run, on the default branch's copy of this file: it executes no code from
 # the pull request, only the GitHub API). The pull request is merged by whichever completion comes last, because it needs every check in
 # REQUIRED_CHECKS to be green for the pull request's head commit. A red or missing check leaves the pull request open.
-# Checks: `build-and-smoke` is the job of build-and-smoke.yml, drafted beside this file: pptx-gallery has no pull request CI for an arbitrary change (validate-gallery-registry.yml runs on pushes to main). The vendored editor under public/opf-editor and data/opf-spec.json are rebuilt by bump-sites.yml (scripts/vendor-gallery-editor.mjs --registry, MR-56) and committed into the bump pull request, which is why ALLOWED_FILES below lists them.
+# Checks: `build-and-smoke` is the job of build-and-smoke.yml, drafted beside this file: pptx-gallery has no pull request CI for an arbitrary change (validate-gallery-registry.yml runs on pushes to main). Everything the bump regenerates (the vendored editor under public/opf-editor and data/opf-spec.json, the preview fonts, the catalog and the previews) is written by the site's own `pnpm opf:bump` (scripts/opf-bump.mjs of the site, run by bump-sites.yml) and committed into the bump pull request, which is why ALLOWED_FILES below lists them.
 on:
   workflow_run:
     workflows: ["Build and smoke"]
@@ -54,7 +54,9 @@ jobs:
           REQUIRED_CHECKS: |
             build-and-smoke
           # The only files a bump may touch (extended regular expression, matched against each changed path).
-          ALLOWED_FILES: '^(package\.json|pnpm-lock\.yaml|public/opf-editor/.*|data/opf-spec\.json)$'
+          # what the site's own `pnpm opf:bump` writes (scripts/opf-bump.mjs of the site): the pins, the generated catalog, preview and font files
+          # and the vendored editor.
+          ALLOWED_FILES: '^(package\.json|pnpm-lock\.yaml|public/(opf-editor|chart-previews|layout-previews|preview-fonts)/.*|public/(audiences|chart-types|color-schemes|font-schemes|languages|layouts|narratives|purposes|social-platforms|themes|tones)/.*|styles/preview-fonts/.*|data/(opf-spec|preview-fonts|preview-font-replacements|audiences|charts|color-schemes|font-schemes|languages|layouts|narratives|purposes|socials|themes|tones)\.json)$'
         run: |
           set -euo pipefail
           stop() { echo "::notice title=OPF bump::$1"; exit 0; }
