@@ -52,6 +52,27 @@ export async function runNavigationBudgets(suite, { format, limit = 100, taskLim
       console.log(`P-NAV ${format} ${name} on 1000 slides: median ${median(times).toFixed(0)} ms, worst ${Math.max(...times).toFixed(0)} ms (limit ${limit} ms).`);
       assert.ok(Math.max(...times) <= limit, `${format}: ${name} answers within ${limit} ms on 1000 slides (took ${times.map((time) => time.toFixed(0))})`);
     };
+    // After an edit the next command reads the text again (the commands that follow each other on one text share a reading): the cold cost.
+    const cold = async (name, key, after) => {
+      const times = [];
+      for (let round = 0; round < 3; round++) {
+        await page.evaluate(() => { const { api } = demo.pane.editor, end = api.getValue().length; api.focus(); api.replace(end, end, '\n'); api.setSelection(window.__use); });
+        await page.waitForTimeout(800);
+        await page.evaluate(() => {
+          window.__t0 = null; window.__t1 = null;
+          document.addEventListener('keydown', () => { window.__t0 = performance.now(); }, { capture: true, once: true });
+          const watch = new MutationObserver(() => { if (window.__t1 === null && window.__t0 !== null && document.querySelector('.opf-source-live').textContent) { window.__t1 = performance.now(); watch.disconnect(); } });
+          watch.observe(document.querySelector('.opf-source-live'), { childList: true, characterData: true, subtree: true });
+        });
+        await page.keyboard.press(key);
+        await page.waitForFunction(() => window.__t1 !== null, null, { timeout: 5000 });
+        times.push(await page.evaluate(() => { window.__windows.push([window.__t0, window.__t1 + 20]); return window.__t1 - window.__t0; }));
+        await page.keyboard.press(after);
+        await kb.settle();
+      }
+      console.log(`P-NAV ${format} ${name} after an edit on 1000 slides: median ${median(times).toFixed(0)} ms, worst ${Math.max(...times).toFixed(0)} ms (limit ${limit} ms).`);
+      assert.ok(Math.max(...times) <= limit, `${format}: ${name} after an edit answers within ${limit} ms on 1000 slides (took ${times.map((time) => time.toFixed(0))})`);
+    };
     // The first use loads the language chunk: not counted.
     await page.keyboard.press('F12');
     await page.waitForFunction(() => (window.__live ?? []).length > 0);
@@ -59,6 +80,8 @@ export async function runNavigationBudgets(suite, { format, limit = 100, taskLim
     await measure('peek (Alt+F12)', 'Alt+F12', { after: ['Escape'] });
     await measure('references (Shift+F12)', 'Shift+F12', { after: ['Escape'] });
     await measure('rename opens (F2)', 'F2', { after: ['Escape'] });
+    await cold('references (Shift+F12)', 'Shift+F12', 'Escape');
+    await cold('go to definition (F12)', 'F12', 'Escape');
     // Applying a rename that changes a hundred and one places.
     const applied = [];
     for (let round = 0; round < 3; round++) {

@@ -83,6 +83,65 @@ export function readYaml(text, shift = 0) {
   return root;
 }
 
+/** Give the main thread back to the browser (a message to ourselves: a task of its own, with no timer clamp). */
+export const yieldToBrowser = () => new Promise((resolve) => { const channel = new MessageChannel(); channel.port1.onmessage = () => { channel.port1.close(); resolve(); }; channel.port2.postMessage(0); });
+
+const SEGMENT = 24_000, SLICE = 12_000;
+
+/**
+ * A big YAML text read in pieces, with the main thread given back between them, so that a thousand slides never make one task of fifty milliseconds:
+ * the text is cut where a top-level key starts, and the `slides` list where one of its items starts; each piece is read on its own and the nodes
+ * are put together. Null when the text is not shaped like that (a list at the top, several documents, flow style): the caller reads it whole.
+ */
+export async function readYamlInPieces(text) {
+  if (/^(?:---|\.\.\.)/m.test(text) || text.includes("\t") && /^\t/m.test(text)) return null;
+  const starts = [];
+  const key = /^[^\s#\-\[{%&*!?|>'"][^\r\n]*|^["'][^\r\n]*/gm;
+  for (let match = key.exec(text); match; match = key.exec(text)) starts.push(match.index);
+  if (!starts.length || /\S/.test(text.slice(0, starts[0]).replace(/^\s*#[^\n]*$/gm, ""))) return null;
+  const props = [];
+  for (let at = 0; at < starts.length; at++) {
+    const from = starts[at], to = at + 1 < starts.length ? starts[at + 1] : text.length;
+    const piece = text.slice(from, to);
+    let tree = null;
+    if (piece.length > SEGMENT && /^slides\s*:[ \t]*(?:#[^\n]*)?\r?\n/.test(piece)) tree = await readSlidesInPieces(text, from, to);
+    else tree = readYaml(piece, from);
+    if (tree?.t !== "object" || tree.props.length !== 1) return null;
+    props.push(tree.props[0]);
+    if (piece.length > SEGMENT / 4) await yieldToBrowser();
+  }
+  return { t: "object", from: props[0].from, to: props.at(-1).value?.to ?? props.at(-1).to, props };
+}
+
+// `slides:` and then the items of the list, cut where an item starts (a line with the list marker at the indentation of the first item).
+async function readSlidesInPieces(text, from, to) {
+  const head = /^[^\n]*\n/.exec(text.slice(from, to))[0];
+  const headTree = readYaml(head.replace(/\s+$/, ""), from);
+  const first = /^([ \t]*)- /m.exec(text.slice(from + head.length, to));
+  if (headTree?.t !== "object" || headTree.props.length !== 1 || (headTree.props[0].value && !(headTree.props[0].value.t === "scalar" && headTree.props[0].value.value === null)) || !first) return null;
+  const indent = first[1];
+  const marker = new RegExp(`^${indent}- `, "gm");
+  const itemStarts = [];
+  const body = text.slice(from + head.length, to);
+  for (let match = marker.exec(body); match; match = marker.exec(body)) itemStarts.push(from + head.length + match.index);
+  // Anything between the header and the first item must be blank or a comment.
+  if (/\S/.test(body.slice(0, itemStarts[0] - from - head.length).replace(/^\s*#[^\n]*$/gm, ""))) return null;
+  const items = [];
+  let begin = 0;
+  while (begin < itemStarts.length) {
+    let end = begin + 1;
+    while (end < itemStarts.length && itemStarts[end] - itemStarts[begin] < SLICE) end++;
+    const sliceFrom = itemStarts[begin], sliceTo = end < itemStarts.length ? itemStarts[end] : to;
+    const tree = readYaml(text.slice(sliceFrom, sliceTo), sliceFrom);
+    if (tree?.t !== "array" || tree.items.length !== end - begin) return null;
+    items.push(...tree.items);
+    begin = end;
+    await yieldToBrowser();
+  }
+  const prop = headTree.props[0];
+  return { t: "object", from: prop.from, to: items.at(-1).to, props: [{ ...prop, value: { t: "array", from: items[0].from, to: items.at(-1).to, items } }] };
+}
+
 // ---- Markdown -----------------------------------------------------------------------------------------------------------------------
 /** The `key=value` options of the text between `<!--` and `-->` after the `slide:` or `block:` word: `[{ key, from, to, value, cFrom, cTo, quoted }]`. */
 export function readOptions(text, innerFrom, innerTo) {
@@ -159,6 +218,15 @@ export function readMarkdown(text) {
   }
   root.props.push({ key: "slides", from: 0, to: 0, cFrom: 0, cTo: 0, value: { t: "array", from: 0, to: text.length, items: slides } });
   return { root, scan };
+}
+
+/** `readDocument`, reading a big YAML text in pieces (see `readYamlInPieces`) with the main thread given back between them. */
+export async function readDocumentInPieces(text, format) {
+  if (format === "yaml" && text.length > SEGMENT) {
+    const root = await readYamlInPieces(text);
+    if (root) return { root };
+  }
+  return readDocument(text, format);
 }
 
 /** The tree of `text` in `format` ("json", "yaml" or "md"): `{ root, scan? }` with `root` an object node or null. */

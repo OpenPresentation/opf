@@ -3,7 +3,7 @@
 // knows: `{ format, catalogs, say, api, options, view, platform, readOnly, pointer }` (see json-editor.js `featureContext`). The reading of the text is
 // source-navigation-model.js, the widgets are source-navigation-ui.js; this file joins them and says what happened.
 import { layoutRegionSummary } from "./layout-templates.js";
-import { NOUNS, analyze, definitionOf, lineAt, lineByNumber, lineCount, referenceList, renameBlocker, renameEdits, slideNumberAt, symbolAt, symbolKey, validateName } from "./source-navigation-model.js";
+import { NOUNS, analyzeInPieces, definitionOf, lineAt, lineByNumber, lineCount, referenceList, renameBlocker, renameEdits, slideNumberAt, symbolAt, symbolKey, validateName } from "./source-navigation-model.js";
 import { cardPanel, closePanel, peekPanel, referencesPanel, renamePanel, showPanel } from "./source-navigation-ui.js";
 
 const SOURCE_LABEL = "Provided by app";
@@ -21,11 +21,25 @@ function excerpt(line, offset) {
 const labelOf = (symbol) => `${NOUNS[symbol.kind] ?? symbol.kind} ${symbol.id}`;
 const plural = (count, word) => `${count} ${word}${count === 1 ? "" : "s"}`;
 
+// The text read once: the commands that follow each other on the same text (F12, then Alt+F12, then F2 and its Enter) share one reading, and any edit
+// makes the next one read again. A big text is read in pieces with the main thread given back between them, so a command is asynchronous; when the text
+// changed while it was read, it is read again.
+let kept = null;
+async function read(context) {
+  for (let attempt = 0; ; attempt++) {
+    const source = context.api.getValue();
+    if (kept && kept.source === source && kept.format === context.format && kept.catalogs === context.catalogs) return { analysis: kept.analysis, source };
+    const analysis = await analyzeInPieces(source, context.format, { catalogs: context.catalogs });
+    if (attempt < 2 && context.api.getValue() !== source) continue;
+    kept = { source, format: context.format, catalogs: context.catalogs, analysis };
+    return { analysis, source };
+  }
+}
+
 // The symbol under the caret, read from the text as it is now.
-function readCaret(context) {
-  const { api, format, catalogs } = context;
-  const source = api.getValue();
-  const analysis = analyze(source, format, { catalogs });
+async function readCaret(context) {
+  const { api } = context;
+  const { analysis, source } = await read(context);
   const [from, to] = api.getSelection();
   const symbol = symbolAt(analysis, from) ?? (to !== from ? symbolAt(analysis, to) : null);
   return { analysis, symbol, source, offset: from };
@@ -84,32 +98,41 @@ function cardFor(view, context, source, symbol, definition, analysis) {
 // ---- F12 ----------------------------------------------------------------------------------------------------------------------------
 /** F12, Cmd/Ctrl+click: jump to where the id under the caret is defined (or open the record's card). */
 export function goToDefinition(view, context) {
-  const { analysis, symbol, source } = readCaret(context);
+  void goTo(view, context);
+  return true;
+}
+async function goTo(view, context) {
+  const { analysis, symbol, source } = await readCaret(context);
+  if (!view.dom.isConnected) return;
   // A click that finds nothing is a plain click.
   const quiet = context.pointer === true;
-  if (!symbol) { if (!quiet) context.say(`No definition found${wordAt(view, context.api.getSelection()[0]) ? ` for '${wordAt(view, context.api.getSelection()[0])}'` : ""}`); return true; }
+  if (!symbol) { if (!quiet) context.say(`No definition found${wordAt(view, context.api.getSelection()[0]) ? ` for '${wordAt(view, context.api.getSelection()[0])}'` : ""}`); return; }
   const definition = definitionOf(analysis, symbol);
-  if (!definition) { if (!quiet) context.say(`No definition found for '${symbol.id}'`); return true; }
-  if (definition.where === "built-in") { if (!quiet) context.say(`${symbol.id} is a built-in variable; it has no definition in the document`); return true; }
-  if (definition.where === "app") { cardFor(view, context, source, symbol, definition, analysis); return true; }
+  if (!definition) { if (!quiet) context.say(`No definition found for '${symbol.id}'`); return; }
+  if (definition.where === "built-in") { if (!quiet) context.say(`${symbol.id} is a built-in variable; it has no definition in the document`); return; }
+  if (definition.where === "app") { cardFor(view, context, source, symbol, definition, analysis); return; }
   const target = definition.occurrence;
   // On the declaration itself the key lists the uses, as VS Code does.
-  if (target === symbol) { showReferences(view, context, analysis, symbol, source); return true; }
+  if (target === symbol) { showReferences(view, context, analysis, symbol, source); return; }
   jump(context, view, target, `Definition of ${labelOf(symbol)}, line ${lineAt(analysis, target.from).number}`);
-  return true;
 }
 
 // ---- Alt+F12 ------------------------------------------------------------------------------------------------------------------------
 /** Alt+F12: show the definition inline. */
 export function peekDefinition(view, context) {
-  const { analysis, symbol, source } = readCaret(context);
-  if (!symbol) { context.say(`No definition found${wordAt(view, context.api.getSelection()[0]) ? ` for '${wordAt(view, context.api.getSelection()[0])}'` : ""}`); return true; }
+  void peek(view, context);
+  return true;
+}
+async function peek(view, context) {
+  const { analysis, symbol, source } = await readCaret(context);
+  if (!view.dom.isConnected) return;
+  if (!symbol) { context.say(`No definition found${wordAt(view, context.api.getSelection()[0]) ? ` for '${wordAt(view, context.api.getSelection()[0])}'` : ""}`); return; }
   const definition = definitionOf(analysis, symbol);
-  if (!definition) { context.say(`No definition found for '${symbol.id}'`); return true; }
-  if (definition.where === "built-in") { context.say(`${symbol.id} is a built-in variable; it has no definition in the document`); return true; }
-  if (definition.where === "app") { cardFor(view, context, source, symbol, definition, analysis); return true; }
+  if (!definition) { context.say(`No definition found for '${symbol.id}'`); return; }
+  if (definition.where === "built-in") { context.say(`${symbol.id} is a built-in variable; it has no definition in the document`); return; }
+  if (definition.where === "app") { cardFor(view, context, source, symbol, definition, analysis); return; }
   const target = definition.occurrence;
-  if (target === symbol) { showReferences(view, context, analysis, symbol, source); return true; }
+  if (target === symbol) { showReferences(view, context, analysis, symbol, source); return; }
   const label = labelOf(symbol), line = lineAt(analysis, target.from).number;
   const close = () => closePanel(view);
   showPanel(view, peekPanel({
@@ -118,7 +141,6 @@ export function peekDefinition(view, context) {
     onClose: close,
   }), lineAt(analysis, symbol.from).to, source);
   context.say(`Peek definition of ${label}, line ${line}. Enter goes to it, Escape closes.`);
-  return true;
 }
 
 // ---- Shift+F12 ----------------------------------------------------------------------------------------------------------------------
@@ -141,24 +163,37 @@ function showReferences(view, context, analysis, symbol, source) {
 
 /** Shift+F12: list the places that use the id under the caret. */
 export function findReferences(view, context) {
-  const { analysis, symbol, source } = readCaret(context);
-  if (!symbol) { context.say("No references found"); return true; }
-  showReferences(view, context, analysis, symbol, source);
+  void references(view, context);
   return true;
+}
+async function references(view, context) {
+  const { analysis, symbol, source } = await readCaret(context);
+  if (!view.dom.isConnected) return;
+  if (!symbol) { context.say("No references found"); return; }
+  showReferences(view, context, analysis, symbol, source);
 }
 
 // ---- F2 -----------------------------------------------------------------------------------------------------------------------------
 /** F2: rename the id under the caret in its definition and every reference, as one undo step. */
 export function renameSymbol(view, context) {
-  const { analysis, symbol, source } = readCaret(context);
-  if (!symbol) { context.say(context.readOnly ? "Cannot rename: the editor is read-only" : "Cannot rename: there is no id at the caret"); return true; }
+  void rename(view, context);
+  return true;
+}
+async function rename(view, context) {
+  const { analysis, symbol, source } = await readCaret(context);
+  if (!view.dom.isConnected) return;
+  if (!symbol) { context.say(context.readOnly ? "Cannot rename: the editor is read-only" : "Cannot rename: there is no id at the caret"); return; }
   const blocker = renameBlocker(analysis, symbol, { readOnly: view.state.readOnly });
-  if (blocker) { context.say(blocker); return true; }
+  if (blocker) { context.say(blocker); return; }
   const label = labelOf(symbol), key = symbolKey(symbol);
   const close = () => closePanel(view);
-  const apply = (name) => {
+  let applying = false;
+  const apply = async (name) => {
+    if (applying) return;
+    applying = true;
     // Read the text again: the author may have typed since the input opened.
-    const now = analyze(context.api.getValue(), context.format, { catalogs: context.catalogs });
+    const { analysis: now } = await read(context);
+    applying = false;
     // The occurrence the caret was on (the nearest one of the symbol, when the text moved).
     const same = now.occurrences.filter((occurrence) => symbolKey(occurrence) === key);
     const current = same.reduce((best, occurrence) => (!best || Math.abs(occurrence.from - symbol.from) < Math.abs(best.from - symbol.from) ? occurrence : best), null);
@@ -179,5 +214,4 @@ export function renameSymbol(view, context) {
     onSubmit: apply, onClose: close, say: context.say,
   }), lineAt(analysis, symbol.from).to, source);
   context.say(`Rename ${label}. Type the new name and press Enter, or Escape to cancel.`);
-  return true;
 }

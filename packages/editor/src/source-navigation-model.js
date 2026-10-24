@@ -9,7 +9,7 @@
 // Plain functions, no DOM.
 import { catalogKinds, catalogReferenceSites, resolveReference, schemas } from "@openpresentation/opf";
 import { mergeCatalogs } from "./catalogs.js";
-import { childOf, nodeAtPath, plainOf, propOf, readDocument } from "./source-navigation-read.js";
+import { childOf, nodeAtPath, plainOf, propOf, readDocument, readDocumentInPieces, yieldToBrowser } from "./source-navigation-read.js";
 import { columnSourceFor, flatRegions, beatsOf, referenceSiteAt, valueAt } from "./source-references.js";
 
 export const NOUNS = Object.freeze({
@@ -86,8 +86,18 @@ const stringValue = (node) => (node?.t === "string" ? node.value : undefined);
 /**
  * Read `text` (`format`: "json", "yaml" or "md") once: `{ text, format, occurrences, root, catalogs }`. `catalogs` are the registered catalogs of the host.
  */
-export function analyze(text, format, { catalogs = [] } = {}) {
-  const read = readDocument(text, format);
+export function analyze(text, format, options = {}) {
+  return analysisOf(text, format, readDocument(text, format), options);
+}
+
+/** `analyze` for the code editor: a big YAML text is read in pieces, with the main thread given back between them, so no task is as long as the text is big. */
+export async function analyzeInPieces(text, format, options = {}) {
+  const read = await readDocumentInPieces(text, format);
+  await yieldToBrowser();
+  return analysisOf(text, format, read, options);
+}
+
+function analysisOf(text, format, read, { catalogs = [] } = {}) {
   let registered = [];
   try { registered = mergeCatalogs(catalogs); } catch { registered = []; }
   const analysis = { text, format, root: read.root, scan: read.scan, catalogs: registered, occurrences: [], resolved: new Map() };

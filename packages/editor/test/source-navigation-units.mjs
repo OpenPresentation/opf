@@ -7,8 +7,10 @@ import { gallery } from "@openpresentation/gallery";
 import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
 import { applyTextEdits } from "@openpresentation/opf/source";
 import { toYaml } from "@openpresentation/opf/yaml";
-import { analyze, declarationsOf, definitionOf, lineAt, referenceList, renameBlocker, renameEdits, slideNumberAt, symbolAt, validateName } from "../src/source-navigation-model.js";
+import { analyze, analyzeInPieces, declarationsOf, definitionOf, lineAt, referenceList, renameBlocker, renameEdits, slideNumberAt, symbolAt, validateName } from "../src/source-navigation-model.js";
 import { bigDeck } from "./support/source-perf.mjs";
+import { navigationDeck } from "./support/source-nav-perf.mjs";
+import { readYamlInPieces } from "../src/source-navigation-read.js";
 
 const deck = {
   name: "Quarterly {{client}}",
@@ -347,6 +349,32 @@ for (const [format, text] of Object.entries(formats)) {
     const ocean = renameEdits(analysis, use("colorSchemes", "ocean"), "sea");
     const seaDeck = readDeck(applyTextEdits(text, ocean.edits.map((e) => ({ offset: e.from, length: e.to - e.from, insert: e.insert }))), format);
     assert.deepEqual([seaDeck.design.colorScheme.id, seaDeck.catalogs.custom.themes.brand.colorScheme, Object.keys(seaDeck.catalogs.custom.colorSchemes)], ["sea", "sea", ["sea"]], `${format}: an object reference, a theme's reference and the record all change`);
+  }
+}
+
+// ---- a big YAML text read in pieces gives what reading it whole gives ---------------------------------------------------------------------
+{
+  const big = { ...navigationDeck(400), references: [{ id: "gartner", text: "G" }], variables: { client: { type: "text", value: "Acme" } }, datasets: { sales: { columns: ["Quarter", "Revenue"], rows: Array.from({ length: 900 }, (_, index) => [`Q${index}`, index]) } } };
+  big.slides[3].title = [{ text: "Cited {{client}}", cite: "gartner" }];
+  const whole = toYaml(big).yaml;
+  const variants = {
+    "block style": whole,
+    "CRLF": whole.replaceAll("\n", "\r\n"),
+    "comments between the keys": whole.replace(/^(slides:)/m, "# the slides\n$1").replace(/^(assets:)/m, "# assets\n$1"),
+    "slides at the list's own indent": whole.replace(/^slides:\n((?:  .*\n)+)/m, (match, body) => `slides:\n${body.replace(/^  /gm, "")}`),
+    "a flow list of slides": `${whole.replace(/^slides:\n(?:  .*\n)+/m, "")}slides: [{id: tail, title: x}]\n`,
+    "a document marker": `---\n${whole}`,
+    "slides first": `${whole.match(/^slides:\n(?:  .*\n)+/m)[0]}${whole.replace(/^slides:\n(?:  .*\n)+/m, "")}`,
+  };
+  // The usual shapes are read in pieces; the others are read whole.
+  for (const name of ["block style", "CRLF", "comments between the keys", "slides first"]) assert.ok(await readYamlInPieces(variants[name]), `${name}: read in pieces`);
+  for (const name of ["a document marker"]) assert.equal(await readYamlInPieces(variants[name]), null, `${name}: read whole`);
+  for (const [name, text] of Object.entries(variants)) {
+    assert.ok(text.length > 24_000, `${name}: the text is big enough to be read in pieces`);
+    const expected = analyze(text, "yaml", options);
+    const pieces = await analyzeInPieces(text, "yaml", options);
+    assert.deepEqual(pieces.occurrences.map((o) => [o.role, o.kind, o.scope, o.id, o.from, o.to]), expected.occurrences.map((o) => [o.role, o.kind, o.scope, o.id, o.from, o.to]), `${name}: the same ids in the same places`);
+    assert.ok(expected.occurrences.some((o) => o.kind === "slide") || name === "a flow list of slides", `${name}: the corpus has ids`);
   }
 }
 
