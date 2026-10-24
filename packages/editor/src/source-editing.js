@@ -4,6 +4,7 @@
 // They read the text line by line, so they need no parser and work on half-typed text; the main bundle carries them (a few kilobytes).
 import { EditorSelection, EditorState } from "@codemirror/state";
 import { EditorView } from "@codemirror/view";
+import { foldService } from "@codemirror/language";
 import { indentMore } from "@codemirror/commands";
 import { flowDepth, readEntry, readMarkers } from "./source-yaml.js";
 
@@ -221,4 +222,44 @@ export const markdownWrapSelection = EditorView.inputHandler.of((view, _from, _t
   const changes = view.state.changes(selection.ranges.filter((range) => !range.empty).flatMap((range) => [{ from: range.from, insert: text }, { from: range.to, insert: closer }]));
   view.dispatch({ changes, selection: selection.map(changes), userEvent: "input.type", scrollIntoView: true });
   return true;
+});
+
+// ---- Folding in Markdown -----------------------------------------------------------------------------------------------------------
+const SEPARATOR = /^-{3,}[ \t]*$/;
+
+/**
+ * What a line of Markdown can fold (SPEC 6.8): the front matter (from its opening line), a fenced block (from its opening fence), and a slide (from its
+ * first line to the line before the next `---`). A `---` inside a fence or the front matter is not a separator.
+ */
+export const markdownFolding = foldService.of((state, lineStart) => {
+  const { doc } = state;
+  const line = doc.lineAt(lineStart);
+  const text = line.text;
+  const last = (number) => { const end = doc.line(number); return end.to; };
+  // The front matter.
+  if (line.number === 1 && /^---\s*$/.test(text)) {
+    for (let number = 2; number <= doc.lines; number++) if (/^(---|\.\.\.)\s*$/.test(doc.line(number).text)) return number > 2 ? { from: line.to, to: doc.line(number - 1).to } : null;
+    return null;
+  }
+  if (markdownLineKind(doc, line.number) !== "body") return null;
+  // A fenced block.
+  const open = /^( {0,3})(`{3,}|~{3,})(.*)$/.exec(text);
+  if (open && !(open[2][0] === "`" && open[3].includes("`"))) {
+    const close = new RegExp(`^ {0,3}${open[2][0]}{${open[2].length},}\\s*$`);
+    for (let number = line.number + 1; number <= doc.lines; number++) if (close.test(doc.line(number).text)) return number > line.number + 1 ? { from: line.to, to: doc.line(number - 1).to } : null;
+    return line.number < doc.lines ? { from: line.to, to: last(doc.lines) } : null;
+  }
+  // A slide: its first line (the one after the front matter or a separator, blank lines apart) folds the rest of the slide.
+  if (text.trim() === "" || SEPARATOR.test(text)) return null;
+  let before = line.number - 1;
+  while (before >= 1 && doc.line(before).text.trim() === "") before--;
+  const startsSlide = before < 1 || ((SEPARATOR.test(doc.line(before).text) || /^\.\.\.\s*$/.test(doc.line(before).text)) && markdownLineKind(doc, before) === "body");
+  if (!startsSlide) return null;
+  let end = line.number;
+  for (let number = line.number + 1; number <= doc.lines; number++) {
+    if (SEPARATOR.test(doc.line(number).text) && markdownLineKind(doc, number) === "body") break;
+    end = number;
+  }
+  while (end > line.number && doc.line(end).text.trim() === "") end--;
+  return end > line.number ? { from: line.to, to: doc.line(end).to } : null;
 });

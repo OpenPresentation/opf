@@ -265,6 +265,12 @@ async function runStep(kb, step) {
     await kb.page.getByRole('button', { name: 'Format (fix indentation)' }).click();
     return kb.settle();
   }
+  if (kind === 'expectFolded') {
+    // The text a fold hides is replaced by a placeholder: Cmd/Ctrl+Alt+[ folded something.
+    await kb.page.waitForSelector('.cm-foldPlaceholder', { timeout: 2000 }).catch(() => {});
+    assert.equal(await kb.page.locator('.cm-foldPlaceholder').count(), args[0], 'folded ranges');
+    return undefined;
+  }
   if (kind === 'canonicalize') {
     // The "Canonicalize with OPF" button; the confirmation (when comments would be dropped) is answered by 'confirm' or 'cancelConfirm'.
     await kb.page.locator('.opf-source-action-canonicalize').click();

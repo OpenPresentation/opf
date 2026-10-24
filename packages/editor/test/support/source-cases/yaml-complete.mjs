@@ -154,3 +154,8 @@ yamlCases.push(...yamlAccess);
 yamlCases.push(
   ['Y-ENT-020', 'R-KEY-04', 'with smartListEnter off Enter after a list value only keeps the item column', 'yaml', 'audience:\n  - board|', [K('Enter')], { text: 'audience:\n  - board\n  |' }, { query: '?smartListEnter=off' }],
 );
+
+yamlCases.push(
+  ['Y-FOLD-001', 'R-KEY-11', 'Mod+Alt+[ folds a mapping', 'yaml', 'slides:|\n  - title: a\n  - title: b\n', [['press', 'Mod+Alt+['], ['expectFolded', 1]], {}],
+  ['Y-FOLD-002', 'R-KEY-11', 'Mod+Alt+] unfolds it', 'yaml', 'slides:|\n  - title: a\n  - title: b\n', [['press', 'Mod+Alt+['], ['expectFolded', 1], ['press', 'Mod+Alt+]'], ['expectFolded', 0]], {}],
+);

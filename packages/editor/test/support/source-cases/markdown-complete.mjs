@@ -197,3 +197,10 @@ markdownCases.push(
   ['M-FEN-021', 'R-CMP-24', 'accepting a status mark writes it and a space', 'md', '# A\n\n```timeline\n|\n```\n', [K('Control+Space'), K('Enter')], { text: '# A\n\n```timeline\n[x] |\n```\n' }],
   ['M-FEN-022', 'R-CMP-04', 'typing the text of an event opens nothing', 'md', '# A\n\n```timeline\n|\n```\n', [T('2026 Q1')], { popup: { open: 0 } }],
 );
+
+markdownCases.push(
+  ['M-FOLD-001', 'R-KEY-11', 'fold a slide (from its first line to the next ---)', 'md', '---\nname: Q3 Review\n---\n\n# Q3 Review\n\n---\n\n# High|lights\n\n- Revenue up\n- Churn down\n', [['press', 'Mod+Alt+['], ['expectFolded', 1]], {}],
+  ['M-FOLD-002', 'R-KEY-11', 'fold a fenced block', 'md', '# A\n\n```js|\nx\ny\n```\n', [['press', 'Mod+Alt+['], ['expectFolded', 1]], {}],
+  ['M-FOLD-003', 'R-KEY-11', 'fold the front matter', 'md', '---|\nname: x\ndesign:\n  theme: minimal\n---\n# A\n', [['press', 'Mod+Alt+['], ['expectFolded', 1]], {}],
+  ['M-FOLD-004', 'R-KEY-11', 'a --- inside a fence is not a slide end', 'md', '# A|\n\n```yaml\n---\nx: 1\n```\n\ntext\n', [['press', 'Mod+Alt+['], ['expectFolded', 1], ['press', 'Mod+Alt+]'], ['expectFolded', 0]], {}],
+);

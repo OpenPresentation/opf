@@ -14,7 +14,7 @@ import {detectIndent,formatJsonSource,whitespaceEdits} from './json-format.js';
 import {a11yExtension,createAnnouncer} from './source-a11y.js';
 import { forEachDiagnostic } from "@codemirror/lint";
 import {createDiagnostics,editsTransaction} from './source-diagnostics.js';
-import {languageDataFor,markdownBackspace,markdownEnter,markdownTab,markdownToggleComment,markdownWrapSelection,yamlEnter} from './source-editing.js';
+import {languageDataFor,markdownBackspace,markdownEnter,markdownFolding,markdownTab,markdownToggleComment,markdownWrapSelection,yamlEnter} from './source-editing.js';
 const external = Annotation.define();
 const hoverField = StateEffect.define();
 const activeField = StateField.define({ create: () => null, update: (value, tr) => tr.effects.reduce((value2, effect) => effect.is(hoverField) ? effect.value : value2, value) });
@@ -71,7 +71,7 @@ const markdownLanguage = StreamLanguage.define({
 });
 function languageExtension(name, completions) {
   if (name === "yaml") return [yaml(), languageDataFor("yaml"), completions ?? []];
-  if (name === "markdown") return [markdownLanguage, languageDataFor("markdown"), markdownWrapSelection, completions ?? []];
+  if (name === "markdown") return [markdownLanguage, languageDataFor("markdown"), markdownWrapSelection, markdownFolding, completions ?? []];
   return [json(), fieldDecorations, completions ?? []];
 }
 // The name the completion engine knows a language by.
