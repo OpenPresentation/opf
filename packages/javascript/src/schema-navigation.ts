@@ -5,13 +5,17 @@
  * `listSchemaFields`, ...) move here from the editor so that the CLI, agents and every editor read the schemas one way. On top of
  * them, `describeField(path, document?)` answers what a source editor needs at any position (the types, enum values,
  * description, required members and ranked children of the node) and `catalogKindAt(path, document?)` names the catalog a
- * reference field points into, from the `x-opf-catalog` annotation of the schema (an annotation: it never changes validation).
+ * reference field points into, from `schemaCatalogKinds`, core-side metadata kept beside the schemas (the published schemas carry
+ * no vendor keyword, so they compile under strict Ajv; the metadata never changes validation).
  *
  * Browser-safe: no `node:` imports. Types are deliberately loose (`JsonSchema`), the schemas being plain JSON.
  */
 import { type CatalogRecordKind, catalogSchemaNames } from "./catalog-schemas.js";
 import { formatPointer, parsePointer } from "./patch.js";
+import { schemaCatalogKinds } from "./schema-catalog-kinds.js";
 import { schemas } from "./schemas.js";
+
+export { type SchemaNodeKey, schemaCatalogKinds } from "./schema-catalog-kinds.js";
 
 // The schemas are plain JSON of unbounded shape; typing them closely would only restate JSON Schema.
 // biome-ignore lint/suspicious/noExplicitAny: JSON Schema documents are untyped data.
@@ -23,6 +27,14 @@ export type SchemaRoot = JsonSchema;
 const own = (object: unknown, key: string): boolean => object !== null && typeof object === "object" && Object.hasOwn(object, key);
 const documents = new Map<string, JsonSchema>(Object.values(schemas).map((schema) => [(schema as JsonSchema).$id as string, schema as JsonSchema]));
 const presentationSchema = schemas.presentation as JsonSchema;
+
+// The catalog kind of a schema node is metadata beside the schemas (schemaCatalogKinds), never a keyword in them. It is found by
+// the identity of the published node and carried on resolved copies under a symbol, so it survives the spreads that resolve and
+// merge schemas, and stays invisible to JSON.stringify, Ajv and every key walk.
+const CATALOG_KIND = Symbol.for("@openpresentation/opf:catalog-kind");
+const catalogKindOfNode = new WeakMap<object, CatalogRecordKind>();
+type Tagged = { [CATALOG_KIND]?: CatalogRecordKind };
+const kindOfNode = (node: object): CatalogRecordKind | undefined => catalogKindOfNode.get(node) ?? (node as Tagged)[CATALOG_KIND];
 
 /** The segments of a path: an array of segments, a JSON Pointer (starts with `/`, throws on a bad escape) or a dotted path. */
 export function splitOpfPath(path: OpfPath): string[] {
@@ -43,12 +55,21 @@ function readSchemaPointer(target: JsonSchema, pointer: string): JsonSchema | un
   return current;
 }
 
+for (const [key, kind] of Object.entries(schemaCatalogKinds)) {
+  const [name = "", pointer = ""] = key.split("#");
+  const node = readSchemaPointer(schemas[name as keyof typeof schemas] as JsonSchema, pointer);
+  if (node === undefined || node === null || typeof node !== "object") throw new Error(`schemaCatalogKinds: ${key} is not a schema node.`);
+  catalogKindOfNode.set(node, kind);
+}
+
 // A reference that leaves its own document brings that document's relative references along: they are made absolute so that
 // they keep resolving after the result is read against another root.
 function absolutize(schema: unknown, id: string): unknown {
   if (Array.isArray(schema)) return schema.map((item) => absolutize(item, id));
   if (schema === null || typeof schema !== "object") return schema;
   const copy: JsonSchema = {};
+  const kind = kindOfNode(schema);
+  if (kind !== undefined) (copy as Tagged)[CATALOG_KIND] = kind;
   for (const [key, value] of Object.entries(schema)) copy[key] = key === "$ref" && typeof value === "string" && value.startsWith("#") ? `${id}${value}` : absolutize(value, id);
   return copy;
 }
@@ -73,6 +94,12 @@ function mergeAllOf(schema: JsonSchema, root: JsonSchema, seen: Set<string>): Js
 
 /** Follow `$ref` (and merge `allOf`) until the schema is concrete. Siblings of a `$ref` (description, examples, `x-*`) win over the target. */
 export function resolveSchema(schema: JsonSchema | undefined, root: SchemaRoot = presentationSchema, seen: Set<string> = new Set()): JsonSchema {
+  const resolved = resolveNode(schema, root, seen);
+  const kind = schema && typeof schema === "object" ? kindOfNode(schema) : undefined;
+  return kind === undefined ? resolved : { ...resolved, [CATALOG_KIND]: kind };
+}
+
+function resolveNode(schema: JsonSchema | undefined, root: SchemaRoot, seen: Set<string>): JsonSchema {
   if (!schema || typeof schema !== "object") return {};
   if (!schema.$ref) return mergeAllOf(schema, root, seen);
   const ref = schema.$ref as string;
@@ -443,8 +470,8 @@ function enumValues(variants: readonly JsonSchema[], inherited: unknown): EnumVa
 
 function catalogKindOf(schema: JsonSchema, variants: readonly JsonSchema[] = []): CatalogRecordKind | undefined {
   for (const candidate of [schema, ...variants]) {
-    const kind = candidate["x-opf-catalog"];
-    if (typeof kind === "string" && own(catalogSchemaNames, kind)) return kind as CatalogRecordKind;
+    const kind = kindOfNode(candidate);
+    if (kind !== undefined && own(catalogSchemaNames, kind)) return kind;
   }
   return undefined;
 }
@@ -633,7 +660,7 @@ export function describeField(path: OpfPath, document?: unknown): FieldInfo {
 
 /**
  * The catalog kind a field references (`layouts`, `themes`, `colorSchemes`, `fontSchemes`, `narratives`, `audiences`,
- * `purposes`, `tones`), read from the `x-opf-catalog` annotation of the schema at `path`; undefined for every other field.
+ * `purposes`, `tones`), read from `schemaCatalogKinds` for the schema node at `path`; undefined for every other field.
  * Languages are an engine vocabulary, not a catalog: `language` is not a reference.
  */
 export function catalogKindAt(path: OpfPath, document?: unknown): CatalogRecordKind | undefined {

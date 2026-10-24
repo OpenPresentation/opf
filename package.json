@@ -102,6 +102,7 @@
     "lint": "biome check .",
     "check:spec": "node scripts/check-spec-integrity.mjs",
     "check:schema-examples": "node scripts/check-schema-examples.mjs && node --test scripts/check-schema-examples.test.mjs",
+    "check:schema-strict": "node scripts/check-schema-strict.mjs && node --test scripts/check-schema-strict.test.mjs",
     "check:schema-docs": "node scripts/generate-schema-docs.mjs --check",
     "check:catalog": "node --test packages/gallery/test/sync-gallery-catalog.test.mjs && node packages/gallery/scripts/sync-gallery-catalog.mjs --verify",
     "check:catalog-free": "node scripts/check-catalog-free.mjs",
