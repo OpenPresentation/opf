@@ -1,9 +1,9 @@
 // `@openpresentation/opf/schema`: the schema navigation helpers (moved from the editor, same behavior) and the catalog kind of a
-// field, read from the `x-opf-catalog` annotation of the schemas.
+// field, read from `schemaCatalogKinds` (core-side metadata; the published schemas carry no vendor keyword).
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
-import { schemas, validate } from "../dist/index.js";
+import { catalogSchemaNames, schemas, validate } from "../dist/index.js";
 import {
   activeSchema,
   catalogKindAt,
@@ -11,6 +11,7 @@ import {
   listSchemaFields,
   resolveSchema,
   schemaAtPath,
+  schemaCatalogKinds,
   schemaLabel,
   schemaType,
   schemaVariants,
@@ -84,9 +85,8 @@ describe("variants and backgrounds", () => {
     assert.deepEqual(schemaVariants(schemaAtPath({}, "/audience")).filter((variant) => variant.type === "object").map((variant) => schemaLabel(variant)), ["id", "name"]);
   });
   test("resolveSchema keeps the siblings of a $ref over the target", () => {
-    const resolved = resolveSchema({ $ref: "#/$defs/CatalogReference", description: "mine", "x-opf-catalog": "layouts" });
+    const resolved = resolveSchema({ $ref: "#/$defs/CatalogReference", description: "mine" });
     assert.equal(resolved.description, "mine");
-    assert.equal(resolved["x-opf-catalog"], "layouts");
     assert.equal(resolved.type, "string");
     assert.throws(() => resolveSchema({ $ref: "#/$defs/DoesNotExist" }), /Unresolved/);
   });
@@ -174,16 +174,30 @@ describe("catalogKindAt", () => {
     assert.equal(catalogKindAt("/a~2"), undefined);
   });
 
-  test("the annotation names a catalog kind that has a record schema", () => {
-    const seen = new Set();
+  test("every entry of schemaCatalogKinds is a node of its schema and names a kind that has a record schema", () => {
+    for (const [key, kind] of Object.entries(schemaCatalogKinds)) {
+      const [name, pointer] = key.split("#");
+      let node = schemas[name];
+      for (const token of splitOpfPath(pointer)) node = node?.[token];
+      assert.ok(node && typeof node === "object", `${key} is a schema node`);
+      assert.ok(Object.hasOwn(catalogSchemaNames, kind), `${key}: ${kind} has a record schema`);
+    }
+    assert.deepEqual([...new Set(Object.values(schemaCatalogKinds))].sort(), ["audiences", "colorSchemes", "fontSchemes", "layouts", "narratives", "purposes", "themes", "tones"]);
+  });
+
+  test("the published schemas carry no vendor keyword, and resolved copies show none to JSON or key walks", () => {
+    const keys = new Set();
     const visit = (node) => {
       if (Array.isArray(node)) return node.forEach(visit);
       if (node === null || typeof node !== "object") return;
-      if ("x-opf-catalog" in node) seen.add(node["x-opf-catalog"]);
+      for (const key of Object.keys(node)) if (key.startsWith("x-")) keys.add(key);
       Object.values(node).forEach(visit);
     };
     Object.values(schemas).forEach(visit);
-    assert.deepEqual([...seen].sort(), ["audiences", "colorSchemes", "fontSchemes", "layouts", "narratives", "purposes", "themes", "tones"]);
+    assert.deepEqual([...keys], []);
+    const resolved = resolveSchema(schemas.presentation.$defs.Slide.properties.layout);
+    assert.deepEqual(Object.keys(resolved).filter((key) => key.startsWith("x-")), []);
+    assert.equal(JSON.stringify(resolved).includes("layouts\""), false);
   });
 });
 

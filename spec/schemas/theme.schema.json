@@ -50,14 +50,12 @@
       ]
     },
     "colorScheme": {
-      "x-opf-catalog": "colorSchemes",
       "type": "string",
       "pattern": "^(?:[a-z][a-z0-9-]*:)?[a-z][a-z0-9-]*$",
       "description": "The theme's default colour scheme: a reference (a bare id or 'name:id') resolved like design.colorScheme, but in the theme's own catalogs group first.",
       "examples": ["cool-horizon", "boost", "burnt-orange"]
     },
     "fontScheme": {
-      "x-opf-catalog": "fontSchemes",
       "type": "string",
       "pattern": "^(?:[a-z][a-z0-9-]*:)?[a-z][a-z0-9-]*$",
       "description": "The theme's default font scheme: a reference (a bare id or 'name:id') resolved like design.fontScheme, but in the theme's own catalogs group first.",
