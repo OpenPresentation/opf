@@ -44,7 +44,7 @@ const pane = createSourcePane(document.getElementById('pane'), {
   name: 'deck',
   format: query.get('format') ?? 'json',
   density: query.get('density') === 'touch' ? 'touch' : 'comfortable',
-  applyDelay: 50,
+  applyDelay: Number(query.get('applyDelay') ?? 50),
   outline: query.get('outline') === 'open' ? 'open' : query.get('outline') === 'on',
   // The text checks run in a Web Worker (the page's own bundle of src/source-worker.js); ?worker=off keeps them on the main thread. The tests also
   // start it broken (?worker=throw: the factory throws; ?worker=missing: the script URL answers 404) to see the pane fall back to the main thread.

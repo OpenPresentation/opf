@@ -464,13 +464,13 @@ try {
   // ---- touch density ------------------------------------------------------------------------------------------------------------------
   await mount(2, [], '{ density: "touch" }');
   await open(0);
-  assert.deepEqual(await page.locator('.opf-presenter-close').evaluate((node) => { const box = node.getBoundingClientRect(); return [box.width, box.height]; }), [40, 40], 'touch density makes the exit button 40px');
+  assert.deepEqual(await page.locator('.opf-presenter-close').evaluate((node) => { const box = node.getBoundingClientRect(); return [box.width, box.height]; }), [44, 44], 'touch density makes the exit button 44px under a coarse pointer (this page has touch)');
   await page.evaluate(() => window.presenter.stop());
   await mount(2);
   await open(0);
-  assert.deepEqual(await page.locator('.opf-presenter-close').evaluate((node) => { const box = node.getBoundingClientRect(); return [box.width, box.height]; }), [32, 32], 'and it is 32px by default');
+  assert.deepEqual(await page.locator('.opf-presenter-close').evaluate((node) => { const box = node.getBoundingClientRect(); return [box.width, box.height]; }), [44, 44], 'and so does the coarse pointer alone: it is never under 44px for a finger');
   await page.evaluate(() => window.presenter.stop());
-  mark('the exit button is 32px, or 40px with density: "touch"');
+  mark('the exit button is 44px under a coarse pointer, at either density (32px or 40px with a mouse)');
 
   // ---- no network, no errors ----------------------------------------------------------------------------------------------------------
   assert.deepEqual(requests, [], 'presenting makes no network request');

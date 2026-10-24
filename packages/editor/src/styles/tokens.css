@@ -72,6 +72,17 @@
   --opf-ui-control-h: 40px;
 }
 
+/* A coarse pointer (a finger) gets 44px controls, whatever the density: every control built from --opf-ui-control-h grows with it, and
+   src/styles/touch.css lifts the ones that size themselves. Comes after the density rule so it wins at equal specificity. */
+@media (pointer: coarse) {
+  :root,
+  .opf-ui,
+  .opf-ui[data-density="touch"],
+  [data-density="touch"] .opf-ui {
+    --opf-ui-control-h: 44px;
+  }
+}
+
 /* Base rules for a mounted component or a whole editor surface. */
 .opf-ui {
   font-family: var(--opf-ui-font);

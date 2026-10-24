@@ -403,8 +403,9 @@ export function createSourcePane(container, options = {}) {
       if (token !== syntaxToken) return;
       syntaxBusy = false;
       showBusy();
-      // The applied text has its findings already (and they are the final ones).
-      if (found === null || destroyed || format !== "json" || control.api.getValue() !== text || text === baseline) return;
+      // A null answer means the worker dropped the request. The text may equal the applied one: a quick fix and Undo bring the broken text
+      // back while `baseline` still holds it, and its syntax problem must show again at once (checkSyntax has no such guard either).
+      if (found === null || destroyed || format !== "json" || control.api.getValue() !== text) return;
       showSyntax(found);
     }, () => {
       if (token !== syntaxToken) return;

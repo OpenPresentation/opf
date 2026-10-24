@@ -196,6 +196,11 @@ select {
   font-size: 12px;
 }
 
+/* A button with a short label for a narrow screen keeps its full name in aria-label (and title); the long text shows where it fits. */
+.label-short {
+  display: none;
+}
+
 /* ------------------------------------------------------------------ shell and sidebar */
 
 .app-shell {
@@ -2014,5 +2019,87 @@ dialog::backdrop {
 
   .diagnostics-section {
     margin: 0 14px 16px;
+  }
+}
+
+/* ------------------------------------------------------------------ touch (a coarse pointer)
+   Every control has a 44px hit area and every field's text is 16px, so a finger can hit it and iOS Safari does not zoom the page when a
+   field gets focus. The shared panels do the same in @openpresentation/opf-editor/styles.css (touch.css); this is the page's own part.
+   The text typed on the slide (.opf-inline-input) mirrors the slide's type, so it keeps its size: mobile-controls.js stops the zoom
+   while that field is focused. */
+@media (pointer: coarse) {
+  button,
+  summary,
+  select,
+  [role="tab"] {
+    min-height: 44px;
+  }
+
+  button:not(.slide-card, .opf-selection, .opf-thumbs-item) {
+    min-width: 44px;
+  }
+
+  :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="color"], [type="hidden"]), select, textarea):not(.opf-inline-input, .opf-rich-input) {
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  #notes,
+  #json,
+  #import-text,
+  #copy-output,
+  #value,
+  .opf-schema-field textarea {
+    font-size: 16px;
+  }
+
+  #json,
+  #copy-output {
+    line-height: 1.5;
+  }
+
+  select {
+    height: 44px;
+  }
+
+  .zoom-label select {
+    width: 88px;
+    min-height: 44px;
+    padding: 1px 6px;
+    font-size: 16px;
+  }
+
+  .canvas-footer {
+    height: auto;
+    min-height: 44px;
+  }
+
+  .header-actions > button {
+    min-height: 44px;
+  }
+
+  summary {
+    display: list-item;
+    padding-block: calc((44px - 1lh) / 2);
+  }
+
+  .opf-schema-breadcrumbs button,
+  .opf-schema-row button,
+  .opf-schema-actions button,
+  .outline-tool,
+  .outline-input {
+    min-height: 44px;
+  }
+
+  .outline-input,
+  .opf-schema-field input {
+    font-size: 16px;
+  }
+
+  a[href].opf-reference-link,
+  .properties-shortcuts a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
   }
 }

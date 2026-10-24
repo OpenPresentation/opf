@@ -221,6 +221,14 @@
           "command": "node test/source-worker-perf-browser.mjs"
         },
         {
+          "id": "browser:mobile-touch",
+          "command": "node test/mobile-touch-browser.mjs"
+        },
+        {
+          "id": "browser:source-worker-undo",
+          "command": "node test/source-worker-undo-browser.mjs"
+        },
+        {
           "id": "browser:source-navigation",
           "command": "node test/source-navigation-browser.mjs"
         },

@@ -17,6 +17,7 @@ import { forEachDiagnostic } from "@codemirror/lint";
 import {createDiagnostics,editsTransaction} from './source-diagnostics.js';
 import { createKeymap, domKeymap, strokeText } from './source-keymap.js';
 import { fold, foldEverything, foldGutterExtension, foldLevel, foldRecursively, toggleFoldHere, unfold, unfoldEverything, unfoldRecursively } from './source-folding.js';
+import { hangingIndent } from './source-wrap.js';
 import {languageDataFor,markdownBackspace,markdownEnter,markdownFolding,markdownTab,markdownToggleComment,markdownWrapSelection,yamlEnter} from './source-editing.js';
 const external = Annotation.define();
 const hoverField = StateEffect.define();
@@ -551,6 +552,7 @@ function mountJsonCodeEditor(parent, options) {
     attributes.of(contentAttributes()),
     options.lineNumbers ? lineNumbers() : [],
     EditorView.lineWrapping,
+    hangingIndent,
     keydownKeys,
     mainKeymap,
     EditorView.domEventHandlers({
