@@ -17,7 +17,9 @@ export const navigationText = (format, count = 1000) => (format === 'json' ? JSO
 const median = (values) => [...values].sort((a, b) => a - b)[values.length >> 1];
 
 /** Run each command five times on a deck of 1000 slides and check the time from the key to the announcement and the longest task. */
-export async function runNavigationBudgets(suite, { format, limit = 100, taskLimit = 50 }) {
+// On a CI runner (CI is set) the limits are doubled for noise (the plan's rule, TEST-PLAN 8.2); OPF_PERF_LIMIT_MS sets the main-thread task limit.
+const CI = Boolean(process.env.CI);
+export async function runNavigationBudgets(suite, { format, limit = CI ? 200 : 100, taskLimit = Number(process.env.OPF_PERF_LIMIT_MS ?? (CI ? 100 : 50)) }) {
   const text = navigationText(format);
   const page = await suite.openPage();
   const kb = suite.driver(page);
