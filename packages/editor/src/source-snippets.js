@@ -76,6 +76,18 @@ export const SNIPPETS = Object.freeze([
   { prefix: "notes", where: "markdown", key: "notes", description: "Speaker notes for the slide", fragment: ph(1, "Speaker notes") },
 ]);
 
+/**
+ * Snippets a KEY of the deck is accepted as (SPEC 5: `design`, `organization`, `speaker`): not items of the list on their own (`SNIPPETS` holds
+ * those), but what accepting the property writes, as VS Code does for a property with default snippets. The fragment is the value of the key. They hold
+ * the required members of the object, each a tab stop (SPEC 5 lists only `name` for the speaker; the Speaker schema requires an id too), and `design`
+ * opens the list of the catalog at each stop.
+ */
+export const KEY_SNIPPETS = Object.freeze([
+  { prefix: "design", where: "deck-key", key: "design", description: "The design of the deck: a theme, a color scheme and a font scheme", fragment: { theme: ph(1, "", { choice: true }), colorScheme: ph(2, "", { choice: true }), fontScheme: ph(3, "", { choice: true }) } },
+  { prefix: "organization", where: "deck-key", key: "organization", description: "The organization presenting the deck: an id and a name", fragment: { id: ph(1, "acme"), name: ph(2, "Acme Inc.") } },
+  { prefix: "speaker", where: "deck-key", key: "speaker", description: "The person presenting the deck: an id and a name", fragment: { id: ph(1, "alice"), name: ph(2, "Name") } },
+]);
+
 /** The snippets that fit where the caret is: `where` and the path of the node (see source-json.js). */
 export function snippetsFor(mode, path) {
   const last = path.at(-1);
@@ -86,6 +98,14 @@ export function snippetsFor(mode, path) {
     if (snippet.where === "deck") return mode === "value" && path.length === 0;
     return false;
   });
+}
+
+/**
+ * The snippets a key of the object at `path` is accepted as (the deck's `design`, `organization`, `speaker`): not items of their own in the list,
+ * but what accepting that property writes, as VS Code does for a property with default snippets.
+ */
+export function keySnippetsFor(path) {
+  return path.length === 0 ? KEY_SNIPPETS : [];
 }
 
 /** The JSON text of a snippet for insertion: `{ text, fields }`; a dataset is a `"name": { ... }` entry. */

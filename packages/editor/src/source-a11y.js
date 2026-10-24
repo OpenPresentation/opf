@@ -77,7 +77,8 @@ export function a11yExtension(announcer, describe = () => "") {
       const open = completionStatus(state) === "active" && currentCompletions(state).length > 0;
       const selected = open ? selectedCompletion(state) : null;
       if (open && !this.open) {
-        announcer.say(plural(currentCompletions(state).length, "suggestion"));
+        const footer = currentCompletions(state).find((completion) => completion.opfFooter)?.opfFooter;
+        announcer.say(`${plural(currentCompletions(state).length, "suggestion")}${footer ? `. ${footer}` : ""}`);
       } else if (open && selected && selected !== this.selected) {
         clearTimeout(this.timer);
         this.timer = setTimeout(() => {
@@ -98,11 +99,27 @@ export function a11yExtension(announcer, describe = () => "") {
       const { view } = this, { state } = view;
       const completions = currentCompletions(state);
       if (!completions.length) return;
+      this.footer(completions);
       for (const node of view.dom.querySelectorAll(".cm-tooltip-autocomplete [role=option]")) {
         const index = Number(node.id.slice(node.id.lastIndexOf("-") + 1));
         const completion = completions[index];
         if (completion) node.setAttribute("aria-label", optionName(completion, index, completions.length));
       }
+    }
+    // The line under a list of catalog records whose catalog is not loaded (SPEC 4.5): part of the list's own box, after the options.
+    footer(completions) {
+      const tooltip = this.view.dom.querySelector(".cm-tooltip-autocomplete");
+      if (!tooltip) return;
+      const text = completions.find((completion) => completion.opfFooter)?.opfFooter ?? "";
+      let node = tooltip.querySelector(":scope > .opf-completion-footer");
+      if (!text) { node?.remove(); return; }
+      if (!node) {
+        node = tooltip.ownerDocument.createElement("div");
+        node.className = "opf-completion-footer";
+        node.setAttribute("role", "note");
+      }
+      if (node.textContent !== text) node.textContent = text;
+      if (tooltip.lastElementChild !== node) tooltip.append(node);
     }
     destroy() { clearTimeout(this.timer); clearTimeout(this.labelTimer); }
   });

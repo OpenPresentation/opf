@@ -59,8 +59,8 @@ export const jsonInsert = [
   ['J-INS-003', 'R-CMP-12', 'accepting the boolean value completes the pair', 'json', KEY, [T('"templ'), K('Tab'), K('Tab')], { text: '{\n  "slides": [],\n  "template": false|\n}' }],
   ['J-INS-004', 'R-CMP-12', 'an integer key leaves the caret after the colon', 'json', KEY, [T('"durat'), K('Tab')], { text: '{\n  "slides": [],\n  "duration": |\n}' }],
   ['J-INS-005', 'R-CMP-12', 'an array key', 'json', '{\n  "name": "x",\n  |\n}', [T('"slid'), K('Tab')], { text: '{\n  "name": "x",\n  "slides": [|]\n}' }],
-  ['J-INS-006', 'R-CMP-12', 'an object key without required members', 'json', KEY, [T('"design'), K('Tab')], { text: '{\n  "slides": [],\n  "design": {|}\n}' }],
-  ['J-INS-007', 'R-CMP-15', 'an object key with required members writes them as tab stops', 'json', KEY, [T('"organ'), K('Tab')], { text: '{\n  "slides": [],\n  "organization": {\n    "id": "⟦⟧",\n    "name": ""\n  }\n}'.replace('⟦⟧', '|') }],
+  ['J-INS-006', 'R-CMP-12', 'an object key without required members (phase 3: variables, since accepting design starts the design snippet)', 'json', KEY, [T('"variab'), K('Tab')], { text: '{\n  "slides": [],\n  "variables": {|}\n}' }],
+  ['J-INS-007', 'R-CMP-15', 'an object key with required members writes them as tab stops (phase 3: organization is a snippet key, its placeholders hold acme and Acme Inc.)', 'json', KEY, [T('"organ'), K('Tab')], { text: '{\n  "slides": [],\n  "organization": {\n    "id": "⟦acme⟧",\n    "name": "Acme Inc."\n  }\n}' }],
   ['J-INS-008', 'R-CMP-16', 'Tab walks the required members', 'json', KEY, [T('"organ'), K('Tab'), T('acme'), K('Tab'), T('Acme Inc.')], { text: '{\n  "slides": [],\n  "organization": {\n    "id": "acme",\n    "name": "Acme Inc.|"\n  }\n}' }],
   ['J-INS-008b', 'R-CMP-16', 'the last Tab leaves the object', 'json', KEY, [T('"organ'), K('Tab'), T('acme'), K('Tab'), T('Acme Inc.'), K('Tab')], { deck: { '/organization/id': 'acme', '/organization/name': 'Acme Inc.' } }],
   ['J-INS-009', 'R-CMP-13', 'a comma is added when a property follows', 'json', '{\n  "name": "x",\n  |\n  "slides": []\n}', [T('"desc'), K('Tab')], { text: '{\n  "name": "x",\n  "description": "|",\n  "slides": []\n}' }],
@@ -71,6 +71,11 @@ export const jsonInsert = [
   ['J-INS-014', 'R-CMP-12', 'a bare word value is quoted on accept', 'json', '{\n  "slides": [{"layout": |}]\n}', [T('pill'), K('Tab')], { text: '{\n  "slides": [{"layout": "pillars"|}]\n}' }],
   ['J-INS-015', 'R-CMP-12', 'a named catalog group inserts name:id', 'json', '{\n  "catalogs": {"acme": {"source": "https://acme.test", "layouts": {"bespoke": {"name": "Bespoke", "regions": [{"name": "title"}]}}}},\n  "slides": [{"layout": "|"}]\n}', [K('Control+Space'), T('bespo'), K('Enter')], { has: '"layout": "acme:bespoke"' }],
   ['J-INS-016', 'R-CMP-14', 'a key of a closed set chains into the list of its values', 'json', '{\n  "slides": [],\n  "design": {\n    |\n  }\n}', [T('"titleA'), K('Tab')], { popup: { open: 1, has: ['left', 'center', 'right'] }, text: '{\n  "slides": [],\n  "design": {\n    "titleAlignment": "|"\n  }\n}' }],
+  ['J-INS-017', 'R-CMP-14', 'chain: accepting the key and its value is one undo step (VS Code: the accept is one step, the typed prefix stays)', 'json', '{\n  "slides": [],\n  "design": {\n    |\n  }\n}', [T('"titleA'), K('Tab'), K('Tab')], { undo: [1, '{\n  "slides": [],\n  "design": {\n    "titleA|"\n  }\n}'] }],
+  ['J-INS-017b', 'R-CMP-14', 'redo puts the key and its value back together', 'json', '{\n  "slides": [],\n  "design": {\n    |\n  }\n}', [T('"titleA'), K('Tab'), K('Tab')], { undo: [1, '{\n  "slides": [],\n  "design": {\n    "titleA|"\n  }\n}'], redo: [1, '{\n  "slides": [],\n  "design": {\n    "titleAlignment": "left"|\n  }\n}'] }],
+  ['J-INS-017c', 'R-CMP-14', 'text typed between the key and the value keeps the two steps apart', 'json', '{\n  "slides": [],\n  "design": {\n    |\n  }\n}', [T('"titleA'), K('Tab'), T('ce'), K('Tab')], { undo: [1, '{\n  "slides": [],\n  "design": {\n    "titleAlignment": "ce|"\n  }\n}'] }],
+  ['J-INS-017d', 'R-CMP-14', 'a boolean key and its value are one undo step too', 'json', KEY, [T('"templ'), K('Tab'), K('Tab')], { undo: [1, '{\n  "slides": [],\n  "templ|"\n}'] }],
+  ['J-INS-017e', 'R-CMP-14', 'Escape on the value list leaves the key accept as its own step', 'json', '{\n  "slides": [],\n  "design": {\n    |\n  }\n}', [T('"titleA'), K('Tab'), K('Escape'), T('x')], { undo: [2, '{\n  "slides": [],\n  "design": {\n    "titleA|"\n  }\n}'] }],
   ['J-INS-018', 'R-CMP-13', 'a key in the middle of the document replaces the token only', 'json', '{\n  "slides": [],\n  "te|": 1\n}', [K('Control+Space'), T('mpl'), K('Enter')], { has: '"template": 1' }],
   ['J-INS-019', 'R-CMP-12', 'accepting works with a following property on the line', 'json', '{\n  "slides": [], |"name": "x"\n}', [T('"desi'), K('Tab')], { has: '"design": ' }],
   ['J-INS-020', 'R-CMP-12', 'Enter after a string in a list adds an item (kept behavior)', 'json', '{\n  "slides": [{"items": [\n    "One|"\n  ]}]\n}', [K('Enter')], { text: '{\n  "slides": [{"items": [\n    "One",\n    "|"\n  ]}]\n}' }],
@@ -115,6 +120,44 @@ const REFS = [
   ['narrative', '{"slides":[],"narrative":"|"}', ['classic-story']],
   ['embedded theme colorScheme', '{"slides":[],"catalogs":{"custom":{"themes":{"mine":{"colorScheme":"|"}}}}}', ['boost']],
 ];
+// Cross references inside the document (SPEC 3.4; TEST-PLAN 4.4 XREF): the lists are read from the text being edited, so they follow it while the document is a draft.
+const SALES = '"datasets":{"sales":{"columns":["Quarter","Revenue",{"name":"Costs"}],"rows":[["Q1",1,2]]},"pipeline":{"title":"Pipeline","columns":["Stage"],"rows":[]}}';
+const XREF = [
+  ['asset:', '{"assets":{"logo":{"src":"logo.png"},"photo":"./p.jpg"},"slides":[{"image":"|"}]}', ['asset:logo', 'asset:photo']],
+  ['asset: in an image object', '{"assets":{"logo":{"src":"logo.png"}},"slides":[{"image":{"src":"|","alt":"x"}}]}', ['asset:logo']],
+  ['asset: in a design background', '{"assets":{"logo":"a.png"},"slides":[],"design":{"background":{"type":"image","src":"|"}}}', ['asset:logo']],
+  ['dataset', `{${SALES},"slides":[{"chart":{"type":"bar","data":{"dataset":"|"}}}]}`, ['sales', 'pipeline']],
+  ['dataset of a table', `{${SALES},"slides":[{"table":{"dataset":"|"}}]}`, ['sales', 'pipeline']],
+  ['dataset columns of a table', `{${SALES},"slides":[{"table":{"dataset":"sales","fields":["|"]}}]}`, ['Quarter', 'Revenue', 'Costs']],
+  ['dataset columns of a chart', `{${SALES},"slides":[{"chart":{"type":"bar","data":{"dataset":"sales","fields":["Quarter","|"]}}}]}`, ['Quarter', 'Revenue', 'Costs']],
+  ['dataset column of a chart mapping', `{${SALES},"slides":[{"chart":{"type":"bar","data":{"dataset":"sales"},"mapping":{"category":"|"}}}]}`, ['Quarter', 'Revenue', 'Costs']],
+  ['cite', '{"references":[{"id":"smith2020","text":"Smith"},{"id":"lee2021","text":"Lee"}],"slides":[{"title":[{"text":"x","cite":"|"}]}]}', ['smith2020', 'lee2021']],
+  ['cite in a list', '{"references":[{"id":"smith2020","text":"Smith"}],"slides":[{"title":[{"text":"x","cite":["|"]}]}]}', ['smith2020']],
+  ['beat', '{"narrative":"classic-story","slides":[{"beat":"|"}]}', ['opening', 'closing']],
+  ['region', '{"slides":[{"layout":"two-column","blocks":[{"region":"|"}]}]}', ['first', 'second', 'left', 'right']],
+  ['var:', '{"variables":{"brand":{"type":"color","value":"#123456"},"hero":{"type":"image","value":"a.png"}},"slides":[{"title":[{"text":"x","color":"|"}]}]}', ['var:brand']],
+  ['var: in a design color', '{"variables":{"brand":"#123456"},"slides":[],"design":{"background":{"type":"solid","color":"|"}}}', ['var:brand', 'accent1']],
+];
+export const jsonXrefs = [
+  ...XREF.map(([field, doc, has], index) => [`J-VAL-X${index + 1}`, 'R-CMP-19', `cross reference ${field}`, 'json', doc, [K('Control+Space')], { popup: { open: 1, has } }]),
+  ['J-VAL-X27', 'R-CMP-19', 'the columns of a chart with its own data, for a highlighted series', 'json', '{"slides":[{"chart":{"type":"bar","data":{"columns":["Quarter",{"name":"Revenue"}],"rows":[["Q1",1]]},"highlight":{"series":["|"]}}}]}', [K('Control+Space')], { popup: { open: 1, has: ['Quarter', 'Revenue'] } }],
+  ['J-VAL-X28', 'R-CMP-19', 'combo series: line names a column of the dataset', 'json', `{${SALES},"slides":[{"chart":{"type":"combo","data":{"dataset":"sales"},"line":["|"]}}]}`, [K('Control+Space')], { popup: { open: 1, has: ['Quarter', 'Revenue'] } }],
+  ['J-VAL-X29', 'R-CMP-19', 'each option has an accessible name with its kind and its place', 'json', '{"assets":{"logo":"logo.png"},"slides":[{"image":"|"}]}', [K('Control+Space'), ['waitLabels']], { popup: { ariaNames: [/^asset:logo, reference, logo\.png\. 1 of 1$/] } }],
+  ['J-VAL-X30', 'R-CMP-19', 'the documentation panel describes the selected reference', 'json', '{"assets":{"logo":{"src":"logo.png","title":"Logo"}},"slides":[{"image":"|"}]}', [K('Control+Space')], { docs: { shown: true, has: ['asset:logo', 'asset'] } }],
+  ['J-VAL-X31', 'R-A11Y-02', 'accepting a reference says what was inserted', 'json', '{"assets":{"logo":"logo.png"},"slides":[{"image":"|"}]}', [K('Control+Space'), K('Enter')], { live: 'Inserted asset:logo' }],
+  ['J-VAL-X15', 'R-CMP-19', 'only the asset ids of the document, not the other kinds', 'json', '{"assets":{"logo":"a.png"},"references":[{"id":"r1","text":"R"}],"slides":[{"image":"|"}]}', [K('Control+Space')], { popup: { open: 1, has: ['asset:logo'], not: ['r1'] } }],
+  ['J-VAL-X16', 'R-CMP-19', 'columns come from the dataset the field names, not another', 'json', `{${SALES},"slides":[{"table":{"dataset":"pipeline","fields":["|"]}}]}`, [K('Control+Space')], { popup: { open: 1, has: ['Stage'], not: ['Revenue'] } }],
+  ['J-VAL-X17', 'R-CMP-19', 'image variables are offered where an image goes, color variables where a color does', 'json', '{"variables":{"brand":{"type":"color","value":"#123456"},"hero":{"type":"image","value":"a.png"}},"slides":[{"image":"|"}]}', [K('Control+Space')], { popup: { open: 1, has: ['var:hero'], not: ['var:brand'] } }],
+  ['J-VAL-X18', 'R-CMP-19', 'a typed prefix filters the ids and Tab inserts the quoted id', 'json', '{"assets":{"logo":"a.png","photo":"b.png"},"slides":[{"image":"|"}]}', [T('pho'), K('Tab')], { text: '{"assets":{"logo":"a.png","photo":"b.png"},"slides":[{"image":"asset:photo"|}]}', deck: { '/slides/0/image': 'asset:photo' } }],
+  ['J-VAL-X19', 'R-CMP-19', 'a cite id inside a list is inserted in its own quotes', 'json', '{"references":[{"id":"smith2020","text":"Smith"}],"slides":[{"title":[{"text":"x","cite":["|"]}]}]}', [K('Control+Space'), K('Enter')], { has: '"cite":["smith2020"]' }],
+  ['J-VAL-X20', 'R-CMP-19', 'a beat of an unknown narrative offers nothing', 'json', '{"narrative":"no-such-story","slides":[{"beat":"|"}]}', [K('Control+Space')], { popup: { open: 0 } }],
+  ['J-VAL-X21', 'R-CMP-19', 'a document with no assets offers nothing for an image', 'json', '{"slides":[{"image":"|"}]}', [K('Control+Space')], { popup: { open: 0 } }],
+  ['J-VAL-X22', 'R-CMP-19', 'a free text field with no reference opens nothing even with variables declared', 'json', '{"variables":{"brand":{"type":"color","value":"#123456"}},"slides":[{"notes":"|"}]}', [K('Control+Space')], { popup: { open: 0 } }],
+  ['J-VAL-X23', 'R-CMP-19', 'the references follow the draft: an asset added a moment ago is offered', 'json', '{"assets":{"logo":"a.png"},"slides":[{"image":"|"}]}', [['caret', '"logo"', 5], T('x'), ['caret', '"image":"', 9], K('Control+Space')], { popup: { open: 1, has: ['asset:logox'] } }],
+  ['J-VAL-X24', 'R-CMP-19', '{{ in a text lists the variables and Tab closes the braces', 'json', '{"variables":{"brand":{"type":"text","value":"Acme"}},"slides":[{"title":"Hello |"}]}', [T('{{'), K('Tab')], { text: '{"variables":{"brand":{"type":"text","value":"Acme"}},"slides":[{"title":"Hello {{brand}}|"}]}' }],
+  ['J-VAL-X25', 'R-CMP-19', '{{ and a typed prefix pick one variable', 'json', '{"variables":{"brand":{"type":"text","value":"Acme"},"year":{"type":"number","value":2026}},"slides":[{"title":"Hello |"}]}', [T('{{ye'), K('Enter')], { has: '"Hello {{year}}"', popup: { open: 0 } }],
+  ['J-VAL-X26', 'R-CMP-19', 'a { alone in a text opens nothing', 'json', '{"variables":{"brand":{"type":"text","value":"Acme"}},"slides":[{"title":"Hello |"}]}', [T('{')], { popup: { open: 0 } }],
+];
 export const jsonValues = [
   ...ENUMS.map(([field, doc, has], index) => [`J-VAL-E${index + 1}`, 'R-CMP-03', `enum ${field}`, 'json', doc, [K('Control+Space')], { popup: { open: 1, has, count: [has.length, has.length] } }]),
   ...BOOLS.map(([field, doc], index) => [`J-VAL-B${index + 1}`, 'R-CMP-03', `boolean ${field}`, 'json', doc, [K('Control+Space')], { popup: { open: 1, has: ['true', 'false'], count: [2, 2] } }]),
@@ -134,6 +177,30 @@ export const jsonRank = [
   ['J-RNK-008', 'R-CMP-18', 'the deck keys: slides is there, name first', 'json', '{\n  |\n}', [T('"')], { popup: { first: 'slides', has: ['name', 'design', 'language'] } }],
   ['J-RNK-009', 'R-CMP-18', 'a prefix match ranks above a fuzzy one', 'json', '{\n  "slides": [{\n    |\n  }]\n}', [T('"ti')], { popup: { first: 'title' } }],
 ];
+// Layout regions rank the slide keys (SPEC 4.4 item 2): the keys the layout's regions call for that are not set yet come first, after the required ones.
+export const jsonRegionRank = [
+  ['J-RNK-010', 'R-CMP-18', 'agenda: title and items come before the subtitle', 'json', '{\n  "slides": [{\n    "layout": "agenda",\n    |\n  }]\n}', [T('"')], { popup: { first: 'title', order: ['title', 'items', 'subtitle', 'text'] } }],
+  ['J-RNK-011', 'R-CMP-18', 'cover: the media region calls for image and video', 'json', '{\n  "slides": [{\n    "layout": "cover",\n    |\n  }]\n}', [T('"')], { popup: { order: ['title', 'image', 'video', 'subtitle'] } }],
+  ['J-RNK-012', 'R-CMP-18', 'keys the layout calls for that are already set are not offered again', 'json', '{\n  "slides": [{\n    "layout": "agenda",\n    "title": "a",\n    |\n  }]\n}', [T('"')], { popup: { first: 'items', not: ['title', 'layout'] } }],
+  ['J-RNK-013', 'R-CMP-18', 'an unknown layout leaves the common order', 'json', '{\n  "slides": [{\n    "layout": "no-such-layout",\n    |\n  }]\n}', [T('"')], { popup: { order: ['title', 'subtitle', 'items'] } }],
+  ['J-RNK-014', 'R-CMP-18', 'a layout embedded in the document ranks its regions too', 'json', '{\n  "catalogs": {"custom": {"layouts": {"mine": {"name": "Mine", "regions": [{"name": "title"}, {"name": "quote", "accepts": ["quote"]}]}}}},\n  "slides": [{\n    "layout": "mine",\n    |\n  }]\n}', [T('"')], { popup: { order: ['title', 'quote', 'subtitle'] } }],
+  ['J-RNK-015', 'R-CMP-18', 'the ranking is the same twice with a layout', 'json', '{\n  "slides": [{\n    "layout": "agenda",\n    |\n  }]\n}', [T('"'), ['snapshotPopup', 'a'], K('Escape'), K('Control+Space'), ['expectSamePopup', 'a']], {}],
+  ['J-RNK-016', 'R-CMP-18', 'no layout: the common order holds', 'json', '{\n  "slides": [{\n    |\n  }]\n}', [T('"')], { popup: { order: ['title', 'subtitle', 'layout', 'items'] } }],
+  ['J-RNK-017', 'R-CMP-18', 'a prefix that matches ranks by the match, not by the layout', 'json', '{\n  "slides": [{\n    "layout": "agenda",\n    |\n  }]\n}', [T('"sub')], { popup: { first: 'subtitle' } }],
+];
+
+// The line under a list of catalog records whose catalog is not loaded (SPEC 4.5).
+const BESPOKE = '{"name": "Bespoke", "regions": [{"name": "title"}]}';
+export const jsonFooter = [
+  ['J-VAL-R13', 'R-CMP-19', 'records of a catalog that is not registered: the embedded ones are listed and the list says the rest is not loaded', 'json', `{"catalogs":{"acme":{"source":"https://acme.test","layouts":{"bespoke":${BESPOKE}}}},"slides":[{"layout":"|"}]}`, [K('Control+Space')], { popup: { open: 1, has: ['acme:bespoke', 'cover'], footer: 'Records from catalog acme are not loaded' } }],
+  ['J-VAL-R14', 'R-CMP-19', 'a catalog that is registered adds no footer', 'json', `{"catalogs":{"gallery":{"source":"https://www.pptx.gallery","layouts":{"bespoke":${BESPOKE}}}},"slides":[{"layout":"|"}]}`, [K('Control+Space')], { popup: { open: 1, footer: null } }],
+  ['J-VAL-R15', 'R-CMP-19', 'the footer stays while the list is filtered', 'json', `{"catalogs":{"acme":{"source":"https://acme.test","layouts":{"bespoke":${BESPOKE}}}},"slides":[{"layout":"|"}]}`, [K('Control+Space'), T('bes')], { popup: { open: 1, has: ['acme:bespoke'], footer: 'Records from catalog acme are not loaded' } }],
+  ['J-VAL-R16', 'R-CMP-19', 'the footer is read out with the count', 'json', `{"catalogs":{"acme":{"source":"https://acme.test","layouts":{"bespoke":${BESPOKE}}}},"slides":[{"layout":"|"}]}`, [K('Control+Space')], { live: 'suggestions. Records from catalog acme are not loaded' }],
+  ['J-VAL-R17', 'R-CMP-19', 'the custom group is never "not loaded"', 'json', `{"catalogs":{"custom":{"layouts":{"bespoke":${BESPOKE}}}},"slides":[{"layout":"|"}]}`, [K('Control+Space')], { popup: { open: 1, first: 'bespoke', footer: null } }],
+  ['J-VAL-R18', 'R-CMP-19', 'two unregistered groups are named together', 'json', `{"catalogs":{"acme":{"source":"https://acme.test","layouts":{"bespoke":${BESPOKE}}},"zeta":{"source":"https://zeta.test","layouts":{"other":${BESPOKE}}}},"slides":[{"layout":"|"}]}`, [K('Control+Space')], { popup: { open: 1, footer: 'Records from catalog acme, zeta are not loaded' } }],
+  ['J-VAL-R19', 'R-CMP-19', 'a field that is not a catalog reference has no footer', 'json', `{"catalogs":{"acme":{"source":"https://acme.test","layouts":{"bespoke":${BESPOKE}}}},"slides":[],"design":{"titleAlignment":"|"}}`, [K('Control+Space')], { popup: { open: 1, footer: null } }],
+];
+
 export const jsonDocs = [
   ['J-DOC-001', 'R-CMP-17', 'the selected key shows its schema description', 'json', KEY, [T('"desc')], { docs: { shown: true, has: ['description', 'Free-form prose describing what this presentation is about'] } }],
   ['J-DOC-002', 'R-CMP-17', 'layout ids show name, description and regions', 'json', '{\n  "slides": [{"layout": "|"}]\n}', [T('pill')], { docs: { has: ['Pillars', 'Regions: title, pillars'] } }],
@@ -158,8 +225,20 @@ export const jsonSnippets = [
   ['J-SNP-009', 'R-CMP-16', 'the reference snippet in references', 'json', '{\n  "slides": [],\n  "references": [|]\n}', [T('refer'), K('Tab')], { deck: { '/references/0/id': 'smith2020' } }],
   ['J-SNP-010', 'R-CMP-16', 'every slide snippet makes a valid deck', 'json', SLIDES, [T('slide-image'), K('Tab'), K('Tab'), K('Tab'), K('Tab')], { findings: { errors: 0 } }],
   ['J-SNP-011', 'R-CMP-16', 'the dataset snippet in datasets', 'json', '{\n  "slides": [],\n  "datasets": {|}\n}', [T('datas'), K('Tab')], { has: '"sales"' }],
+  ['J-SNP-020', 'R-CMP-16', 'design: accepting the key writes the design snippet and opens the theme list (the plan row J-SNP-007 expected a closed list; SPEC 5 says each stop opens its catalog list)', 'json', KEY, [T('"design'), K('Tab')], { popup: { open: 1, has: ['bold', 'classic', 'minimal'] }, text: '{\n  "slides": [],\n  "design": {\n    "theme": "|",\n    "colorScheme": "",\n    "fontScheme": ""\n  }\n}' }],
+  ['J-SNP-021', 'R-CMP-16', 'design: accepting a theme and Tab opens the color scheme list', 'json', KEY, [T('"design'), K('Tab'), T('mini'), K('Tab'), K('Tab')], { popup: { open: 1, has: ['boost', 'black-and-white'] }, has: '"theme": "minimal"' }],
+  ['J-SNP-022', 'R-CMP-16', 'design: three picks fill the design and leave a valid deck', 'json', '{\n  "slides": [{"title": "a"}],\n  |\n}', [T('"design'), K('Tab'), T('mini'), K('Tab'), K('Tab'), T('boos'), K('Tab'), K('Tab'), T('aptos'), K('Tab')], { deck: { '/design/theme': 'minimal', '/design/colorScheme': 'boost', '/design/fontScheme': 'aptos' }, findings: { errors: 0 } }],
+  ['J-SNP-023', 'R-CMP-16', 'design: Escape keeps the empty stop and Tab goes on', 'json', KEY, [T('"design'), K('Tab'), K('Escape'), K('Tab')], { popup: { open: 1, has: ['boost'] } }],
+  ['J-SNP-024', 'R-CMP-16', 'speaker: the id is a selected placeholder and the name follows (deviation from SPEC 5, which lists only the name: the Speaker schema requires both)', 'json', KEY, [T('"speak'), K('Tab')], { text: '{\n  "slides": [],\n  "speaker": {\n    "id": "⟦alice⟧",\n    "name": "Name"\n  }\n}' }],
+  ['J-SNP-025', 'R-CMP-16', 'speaker: Tab walks from the id to the name', 'json', KEY, [T('"speak'), K('Tab'), T('ada'), K('Tab'), T('Ada')], { deck: { '/speaker/id': 'ada', '/speaker/name': 'Ada' } }],
+  ['J-SNP-026', 'R-CMP-16', 'organization: a comma follows when a property comes after', 'json', '{\n  "slides": [],\n  |\n  "name": "x"\n}', [T('"organ'), K('Tab')], { has: '    "name": "Acme Inc."\n  },\n  "name": "x"' }],
+  ['J-SNP-027', 'R-CMP-16', 'design: the snippet is one undo step', 'json', KEY, [T('"design'), K('Tab')], { undo: [1, '{\n  "slides": [],\n  "design|"\n}'] }],
+  ['J-SNP-028', 'R-CMP-16', 'design: the key is listed once (the snippet is what the key writes, not an item of its own)', 'json', KEY, [T('"des')], { popup: { open: 1, has: ['design', 'description', 'datasets'], count: [3, 3] } }],
+  ['J-SNP-029', 'R-CMP-16', 'design: accepting the snippet announces it and its first stop', 'json', KEY, [T('"design'), K('Tab')], { live: 'Inserted design. Tab stop 1 of 3' }],
+  ['J-SNP-030', 'R-CMP-16', 'design: a key with a colon after it keeps the plain key', 'json', '{\n  "slides": [],\n  "des|": {}\n}', [K('Control+Space'), K('ArrowDown'), K('ArrowDown'), K('Enter')], { not: '"theme"' }],
+  ['J-SNP-031', 'R-CMP-16', 'deck keys in a slide are not snippets: design in a slide is the plain key', 'json', '{\n  "slides": [{\n    |\n  }]\n}', [T('"design'), K('Tab')], { text: '{\n  "slides": [{\n    "design": {|}\n  }]\n}' }],
   ['J-SNP-012', 'R-CMP-16', 'the snippet is one undo step', 'json', SLIDES, [T('slide'), K('Tab')], { undo: [1, '{\n  "slides": [slide|]\n}'] }],
 ];
 
-export const jsonComplete = [...jsonTriggers, ...jsonCtrlSpace, ...jsonInsert, ...jsonValues, ...jsonRank, ...jsonDocs, ...jsonSnippets];
+export const jsonComplete = [...jsonTriggers, ...jsonCtrlSpace, ...jsonInsert, ...jsonValues, ...jsonXrefs, ...jsonRank, ...jsonRegionRank, ...jsonFooter, ...jsonDocs, ...jsonSnippets];
 void M; void WAIT;

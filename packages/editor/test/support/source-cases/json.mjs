@@ -7,9 +7,9 @@ const DESIGN_TEXT = '"design": ';
 
 // ---- accepting, dismissing, navigating the list ---------------------------------------------------------------------------------------
 export const jsonAccept = [
-  ['J-ACC-001', 'R-CMP-05', 'Tab accepts the selected key (F01)', 'json', KEY, [T('"des'), K('Tab')], { acceptedIsSelected: 1, not: '    "des', popup: { open: 0 } }],
-  ['J-ACC-001b', 'R-CMP-05', 'Tab accepts design when it is typed out', 'json', KEY, [T('"desi'), K('Tab')], { has: DESIGN_TEXT, popup: { open: 0 } }],
-  ['J-ACC-002', 'R-CMP-06', 'Enter accepts the selected key', 'json', KEY, [T('"des'), K('Enter')], { acceptedIsSelected: 1, popup: { open: 0 } }],
+  ['J-ACC-001', 'R-CMP-05', 'Tab accepts the selected key (F01; phase 3: description, since accepting design starts the design snippet and opens its theme list)', 'json', KEY, [T('"desc'), K('Tab')], { acceptedIsSelected: 1, not: '    "des', popup: { open: 0 } }],
+  ['J-ACC-001b', 'R-CMP-05', 'Tab accepts description when it is typed out (phase 3: was design, now a snippet key)', 'json', KEY, [T('"descri'), K('Tab')], { has: '"description": ', popup: { open: 0 } }],
+  ['J-ACC-002', 'R-CMP-06', 'Enter accepts the selected key (phase 3: description, since design opens its theme list)', 'json', KEY, [T('"desc'), K('Enter')], { acceptedIsSelected: 1, popup: { open: 0 } }],
   ['J-ACC-003', 'R-CMP-06', 'Enter 0 ms after the last key still accepts (F02)', 'json', KEY, [FAST('"desi', 'Enter', 0)], { has: DESIGN_TEXT }],
   ['J-ACC-004', 'R-CMP-06', 'Enter at 40 ms', 'json', KEY, [FAST('"desi', 'Enter', 40)], { has: DESIGN_TEXT }],
   ['J-ACC-005', 'R-CMP-06', 'Enter at 80 ms', 'json', KEY, [FAST('"desi', 'Enter', 80)], { has: DESIGN_TEXT }],
@@ -17,7 +17,7 @@ export const jsonAccept = [
   ['J-ACC-007', 'R-CMP-06', 'Enter at 160 ms', 'json', KEY, [FAST('"desi', 'Enter', 160)], { has: DESIGN_TEXT }],
   ['J-ACC-008', 'R-CMP-05', 'Tab 0 ms after the last key accepts', 'json', KEY, [FAST('"desi', 'Tab', 0)], { has: DESIGN_TEXT }],
   ['J-ACC-008b', 'R-CMP-05', 'Tab at 120 ms', 'json', KEY, [FAST('"desi', 'Tab', 120)], { has: DESIGN_TEXT }],
-  ['J-ACC-009', 'R-CMP-05', 'Tab never indents the line while the list is open', 'json', KEY, [T('"des'), K('Tab')], { not: '    "' }],
+  ['J-ACC-009', 'R-CMP-05', 'Tab never indents the line while the list is open (phase 3: description)', 'json', KEY, [T('"desc'), K('Tab')], { not: '    "' }],
   ['J-ACC-010', 'R-CMP-07', 'Escape closes the list and keeps the text', 'json', KEY, [T('"des'), K('Escape')], { popup: { open: 0 }, text: '{\n  "slides": [],\n  "des|"\n}' }],
   ['J-ACC-011', 'R-CMP-07', 'a second Escape does not change the text', 'json', KEY, [T('"des'), K('Escape'), WAIT(2200, 'CodeMirror turns Escape then Tab into leaving the editor for 2 s'), K('Escape')], { text: '{\n  "slides": [],\n  "des|"\n}' }],
   ['J-ACC-012', 'R-CMP-08', 'Down then Tab accepts the second item', 'json', KEY, [T('"des'), K('ArrowDown'), K('Tab')], { popup: { open: 0 }, acceptedIsSelected: 1 }],

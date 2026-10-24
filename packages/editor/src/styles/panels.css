@@ -2223,6 +2223,13 @@
   opacity: 0.85;
 }
 
+:root :is(.opf-ui, .opf-json, .opf-code) .cm-tooltip-autocomplete > .opf-completion-footer {
+  padding: 4px 8px;
+  font: 12px/1.4 var(--opf-ui-font);
+  color: var(--opf-ui-muted-fg);
+  border-top: 1px solid var(--opf-ui-border);
+}
+
 :root :is(.opf-ui, .opf-json, .opf-code) .cm-tooltip-autocomplete .cm-completionMatchedText {
   font-weight: 600;
   text-decoration: none;

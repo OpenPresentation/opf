@@ -80,8 +80,9 @@ for (const [name, doc, want] of yamlContexts) {
   assert.equal(Boolean(context.itemStart), Boolean(want.itemStart), `${name}: itemStart`);
   assert.equal(Boolean(context.flow), Boolean(want.flow), `${name}: flow`);
 }
-// Where nothing can be completed: comments, block scalars, prose, document markers, a flow collection over several lines.
-for (const doc of ['name: x # ¦', '# ¦', 'slides:\n  - notes: |\n      ¦', 'slides:\n  - notes: >-\n    two words¦', '---¦', 'a: &anchor ¦', 'a: *ref¦', 'items: [a,\n  ¦', 'a b c¦']) {
+// Where nothing can be completed: comments, block scalars, prose, document markers. (A flow collection over several lines used to be here; phase 3 reads it:
+// see the Y-FLW cases and test/source-completions-units.mjs.)
+for (const doc of ['name: x # ¦', '# ¦', 'slides:\n  - notes: |\n      ¦', 'slides:\n  - notes: >-\n    two words¦', '---¦', 'a: &anchor ¦', 'a: *ref¦', 'a b c¦']) {
   const { text, at } = caret(doc);
   assert.equal(yamlContextAt(text, at, { explicit: true }), null, doc);
 }

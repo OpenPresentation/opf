@@ -11,6 +11,7 @@ import { findNodeAtOffset, getNodePath, parseTree } from "jsonc-parser";
 import {jsonSource,jsonSourceHistory,setJsonSource} from './json-source.js';
 import {textInputMap} from './text-input.js';
 import {detectIndent,formatJsonSource,whitespaceEdits} from './json-format.js';
+import { redoPair, undoPair } from "./source-undo-groups.js";
 import {a11yExtension,createAnnouncer} from './source-a11y.js';
 import { forEachDiagnostic } from "@codemirror/lint";
 import {createDiagnostics,editsTransaction} from './source-diagnostics.js';
@@ -338,8 +339,8 @@ function mountJsonCodeEditor(parent, options) {
     return loadOptions().then(() => (disposed || context.aborted ? null : completionResult(context)), (error) => { options.onError?.(error); return null; });
   }
   // Undo and Redo run CodeMirror's history first. When it has nothing left, the host's fallback may step further (the source pane routes a whole-document replace to the session); a fallback answers true when it did something.
-  const undoCommand = (target) => undo(target) || Boolean(options.historyFallback?.undo?.());
-  const redoCommand = (target) => redo(target) || Boolean(options.historyFallback?.redo?.());
+  const undoCommand = (target) => undoPair(target) || undo(target) || Boolean(options.historyFallback?.undo?.());
+  const redoCommand = (target) => redoPair(target) || redo(target) || Boolean(options.historyFallback?.redo?.());
   const historyBindings = historyKeymap.map((binding) => binding.run === undo ? { ...binding, run: undoCommand } : binding.run === redo ? { ...binding, run: redoCommand } : binding);
   // Accept with no minimum delay: the list is already valid for the typed text, so Tab or Enter right after a keystroke accepts (VS Code does).
   // Screen reader announcements and the problems drawn in the text (squiggles, F8, Cmd/Ctrl+.). The pane supplies the problems.
