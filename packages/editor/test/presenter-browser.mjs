@@ -310,6 +310,36 @@ try {
   assert.equal(await page.locator('.opf-presenter').count(), 0, 'and removes the element');
   mark('every way out calls onExit(index): Esc, the button, stop(), leaving full screen, destroy()');
 
+  // ---- a late exit from an earlier presenter does not end a newer presentation ----------------------------------------------------------
+  // Full screen belongs to the document. A presenter closed before the browser answered its full screen request exits full screen when that
+  // request resolves, which can be after a newer presenter took full screen: the browser then ends the newer one's full screen too. The
+  // newer presentation did not ask for that, so it must not end; it carries on (full screen if it kept it, else as the overlay).
+  for (const wait of [0, 5, 10, 25, 60]) {
+    await fullscreenIdle();
+    await page.waitForTimeout(150);
+    await page.evaluate(() => {
+      window.lateLog = [];
+      const make = (name) => window.opfPresent.createPresenter(document.getElementById('host'), { editor: window.makeEditor(3), fonts: window.fonts, onExit: () => window.lateLog.push(name) });
+      window.first = make('first');
+      window.second = make('second');
+      document.getElementById('opener').focus();
+    });
+    await page.evaluate(() => { window.firstStart = window.first.start(0); });
+    await page.evaluate(() => { window.first.stop(); });
+    if (wait) await page.waitForTimeout(wait);
+    await page.evaluate(() => { document.getElementById('opener').focus(); return window.second.start(0); });
+    await page.waitForTimeout(600); // the first one's late exit has run by now
+    assert.equal(await page.evaluate(() => window.second.isRunning()), true, `a late exit of the first presenter (${wait} ms before the second started) did not end the second presentation`);
+    assert.deepEqual(await page.evaluate(() => window.lateLog), ['first'], 'and the second presenter never called onExit');
+    const mode = await page.locator('.opf-presenter:not([hidden])').getAttribute('data-mode');
+    assert.equal(mode, await page.evaluate(() => (document.fullscreenElement === window.second.element ? 'fullscreen' : 'overlay')), 'its mode says whether it still has full screen');
+    await page.evaluate(() => window.second.stop());
+    assert.deepEqual(await page.evaluate(() => window.lateLog), ['first', 'second'], 'and it ends normally when the user closes it');
+    await page.evaluate(() => { window.first.destroy(); window.second.destroy(); });
+  }
+  await fullscreenIdle();
+  mark('an exit an earlier presenter asked for late does not end the next presentation');
+
   // ---- axe: the open dialog with its counter and exit button shown --------------------------------------------------------------------
   await mount(3);
   await open(0);
