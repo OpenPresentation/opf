@@ -308,6 +308,8 @@
     "test:source-pane-browser": "node test/source-pane-browser.mjs",
     "test:source-keyboard-browser": "node test/source-keyboard-browser.mjs",
     "test:source-keyboard-json-browser": "node test/source-keyboard-json-browser.mjs",
+    "test:source-keyboard-yaml-browser": "node test/source-keyboard-yaml-browser.mjs",
+    "test:source-keyboard-markdown-browser": "node test/source-keyboard-markdown-browser.mjs",
     "test:layout-editor-browser": "node test/layout-editor-browser.mjs",
     "test:export-license-browser": "node test/export-license-browser.mjs",
     "test:chart-options-browser": "node test/chart-options-browser.mjs",

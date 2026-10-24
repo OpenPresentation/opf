@@ -2,7 +2,8 @@
 // column) and the quick fixes that go with it. The pane lists them in the panel and draws them in the text with the same objects.
 import { describeFinding, segmentsOf } from "./source-messages.js";
 import { fixesForFinding } from "./source-fixes.js";
-import { lineColumn, locateJson, partOf } from "./source-ranges.js";
+import { textFixesForFinding } from "./source-fixes-text.js";
+import { lineColumn, locateText, partOf } from "./source-ranges.js";
 
 const SEVERITY_ORDER = { error: 0, warning: 1, info: 2 };
 
@@ -30,8 +31,9 @@ export function buildProblems({ format, text, findings, context = {}, actions = 
     const { message, next } = describeFinding(finding, context);
     let range = null;
     if (finding.range) range = { from: finding.range.from, to: finding.range.to };
-    else if (format === "json" && finding.kind !== "syntax" && finding.path !== undefined && finding.ruleId?.startsWith("opf/")) {
-      const located = locateJson(text, segmentsOf(finding.path), partOf(finding));
+    else if (finding.kind !== "syntax" && finding.path !== undefined && finding.ruleId?.startsWith("opf/")) {
+      // The finding names a field of the document: core finds it in the text of any format.
+      const located = locateText(format, text, segmentsOf(finding.path), partOf(finding));
       if (located) range = { from: located.from, to: located.to };
     }
     if (!range && Number.isInteger(finding.location?.offset)) range = { from: finding.location.offset, to: finding.location.offset + Math.max(0, finding.location.length ?? 0) };
@@ -40,7 +42,7 @@ export function buildProblems({ format, text, findings, context = {}, actions = 
       if (fix.action === "switch-format") fixes.push({ id: fix.id, title: fix.title, safe: fix.safe === true, run: () => actions.switchFormat?.(fix.format) });
       else fixes.push({ ...fix, edits: toEdits(fix.edits) });
     }
-    if (format === "json" && finding.kind !== "syntax") fixes.push(...fixesForFinding(finding, text, context));
+    if (finding.kind !== "syntax") fixes.push(...(format === "json" ? fixesForFinding(finding, text, context) : textFixesForFinding(format, finding, text, context)));
     for (const fix of finding.fixes ?? []) { const row = coreFix(fix, actions); if (row) fixes.push(row); }
     const row = { finding, index, severity: finding.severity, message, next, rule: finding.ruleId, path: finding.path ?? "", fixes };
     if (range) {

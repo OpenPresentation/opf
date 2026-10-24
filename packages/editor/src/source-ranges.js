@@ -14,14 +14,17 @@ export function lineColumn(text, offset) {
 }
 
 /**
- * The range of `segments` in the JSON `text`, or null (core's `locate`, which reads text that does not parse). `part`: "value" (default), "key" (the
- * property name), "entry" (key to the end of the value), "colon" (the key and its colon) or "open" (the first character of the value, the `{` of an
- * object). A path that is not there gives the range of its nearest container, with `exact: false`.
+ * The range of `segments` in `text` of `format` ("json", "yaml" or "md"), or null (core's `locate`, which reads text that does not parse). `part`:
+ * "value" (default), "key" (the property name), "entry" (key to the end of the value), "colon" (the key and its colon) or "open" (the first character
+ * of the value, the `{` of an object). A path that is not there gives the range of its nearest container, with `exact: false`.
  */
-export function locateJson(text, segments, part = "value") {
-  const range = locate(text, "json", segments.map(String), { part });
+export function locateText(format, text, segments, part = "value") {
+  const range = locate(text, format, segments.map(String), { part });
   return range ? { from: range.offset, to: range.offset + range.length, exact: range.exact !== false } : null;
 }
+
+/** `locateText` for JSON. */
+export const locateJson = (text, segments, part = "value") => locateText("json", text, segments, part);
 
 /** The part of the text a finding is about, by what it says (VALIDATOR-HINTS section 4). */
 export function partOf(finding) {

@@ -1,4 +1,4 @@
-// YAML cases of the keyboard test plan that phase 0 closes (Y-TAB, Y-LIN, Y-MUL, Y-FMT). See json.mjs for the row format.
+// YAML cases of the keyboard test plan that phase 0 closes (Y-TAB, Y-LIN, Y-MUL, Y-FMT); phase 2's completion, Enter, pairs, problems and Canonicalize are in yaml-complete.mjs. See json.mjs for the row format.
 import { K, M, MS, P } from '../source-keyboard.mjs';
 
 const DECK_YAML = 'name: Q3 Review\nslides:\n  - title: Q3 Review\n  - title: Highlights\n    items:\n      - Revenue up 12%\n      - Churn down\n';
@@ -11,8 +11,6 @@ export const yamlCases = [
   ['Y-TAB-004b', 'R-IND-01', 'a 6-space line does not make Shift+Tab remove 6', 'yaml', 'a:\n      b: 1|', [K('Shift+Tab')], { text: 'a:\n    b: 1|' }],
   ['Y-TAB-005', 'R-IND-04', 'no tab character is ever inserted', 'yaml', '|', [K('Tab')], { not: '\t' }],
   ['Y-TAB-006', 'R-IND-04', 'Backspace in leading spaces removes one unit', 'yaml', 'a:\n    |', [K('Backspace')], { text: 'a:\n  |' }],
-  ['Y-ACC-001', 'R-CMP-05', 'YAML has no list: Tab inserts spaces', 'yaml', 'na|', [K('Tab')], { text: 'na  |', popup: { open: 0 } }],
-  ['Y-ACC-002', 'R-CMP-03', 'Ctrl+Space does nothing in YAML (completion for YAML is phase 2)', 'yaml', 'na|', [K('Control+Space')], { text: 'na|', popup: { open: 0 }, dialog: { open: false } }],
   ['Y-LIN-001', 'R-KEY-07', 'Alt+Down moves a line down (F13)', 'yaml', 'a: 1|\nb: 2', [K('Alt+ArrowDown')], { text: 'b: 2\na: 1|' }],
   ['Y-LIN-002', 'R-KEY-07', 'Alt+Up moves a line up', 'yaml', 'a: 1\nb: 2|', [K('Alt+ArrowUp')], { text: 'b: 2|\na: 1' }],
   ['Y-MUL-001', 'R-KEY-08', 'Mod+D adds the next occurrence', 'yaml', 'a: x\nb: x|', [M('d'), M('d')], { cursors: 2 }],

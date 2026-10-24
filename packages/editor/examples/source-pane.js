@@ -39,6 +39,7 @@ const pane = createSourcePane(document.getElementById('pane'), {
   density: query.get('density') === 'touch' ? 'touch' : 'comfortable',
   applyDelay: 50,
   completions: query.get('completions') !== 'off',
+  smartListEnter: query.get('smartListEnter') !== 'off',
   onRename: (name) => note({ rename: name }),
   onFormatChange: (format, previous) => note({ format, previous }),
   onFindingSelect: (finding, line) => note({ select: finding.path, line }),
