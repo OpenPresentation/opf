@@ -13,6 +13,11 @@ const cases = only ? markdownCases.filter((row) => only.test(row[0])) : markdown
 try {
   const result = await runCases(suite, cases, { onFailure: (detail) => console.error(`  FAIL ${detail}`) });
   console.log(`Markdown: ${result.passed} cases pass${result.failed.length ? `, ${result.failed.length} fail` : ''} (${engineName} ${suite.browserVersion}, keymap ${platform}).`);
+  if (engineName === 'chromium') {
+    const race = await runCases(suite, cases.filter((row) => /^M-ACC-01/.test(row[0])), { cpuThrottle: 4, onFailure: (detail) => console.error(`  FAIL (4x slower CPU) ${detail}`) });
+    console.log(`Accept race on a 4x slower CPU: ${race.passed} cases pass${race.failed.length ? `, ${race.failed.length} fail` : ''}.`);
+    result.failed.push(...race.failed);
+  }
   // The SPEC's budgets (R-PERF-01..03) on a 300-slide deck written as Markdown: an empty line after slide 150 opens the snippets, a title is typed over.
   if (!only || only.test('P-')) {
     await runBudgets(suite, {

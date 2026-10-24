@@ -12,6 +12,12 @@ const cases = only ? yamlCases.filter((row) => only.test(row[0])) : yamlCases;
 try {
   const result = await runCases(suite, cases, { onFailure: (detail) => console.error(`  FAIL ${detail}`) });
   console.log(`YAML: ${result.passed} cases pass${result.failed.length ? `, ${result.failed.length} fail` : ''} (${engineName} ${suite.browserVersion}, keymap ${platform}).`);
+  // The accept race again with the CPU slowed down four times (Chromium): Tab and Enter right after a keystroke must still accept.
+  if (engineName === 'chromium') {
+    const race = await runCases(suite, cases.filter((row) => /^Y-ACC-00[2-8]/.test(row[0])), { cpuThrottle: 4, onFailure: (detail) => console.error(`  FAIL (4x slower CPU) ${detail}`) });
+    console.log(`Accept race on a 4x slower CPU: ${race.passed} cases pass${race.failed.length ? `, ${race.failed.length} fail` : ''}.`);
+    result.failed.push(...race.failed);
+  }
   // The SPEC's budgets (R-PERF-01..03) on a 300-slide deck written as YAML: a new key line in slide 150 opens the key list, a value is typed over.
   if (!only || only.test('P-')) {
     await runBudgets(suite, {

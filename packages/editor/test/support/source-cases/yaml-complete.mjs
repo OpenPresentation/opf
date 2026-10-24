@@ -37,6 +37,10 @@ export const yamlTriggers = [
 export const yamlInsert = [
   ['Y-ACC-001', 'R-CMP-05', 'Tab accepts a key (an object key goes on the next line)', 'yaml', 'name: x\n|', [T('des'), K('Tab')], { text: 'name: x\ndesign:\n  |' }],
   ['Y-ACC-002', 'R-CMP-06', 'Enter accepts, with no race', 'yaml', 'name: x\n|', [FAST('desi', 'Enter', 0)], { has: 'design:' }],
+  ['Y-ACC-005', 'R-CMP-06', 'Enter accepts 40 ms after the last key', 'yaml', 'name: x\n|', [FAST('desi', 'Enter', 40)], { has: 'design:' }],
+  ['Y-ACC-006', 'R-CMP-06', 'Tab accepts 80 ms after the last key', 'yaml', 'name: x\n|', [FAST('desi', 'Tab', 80)], { has: 'design:' }],
+  ['Y-ACC-007', 'R-CMP-06', 'Enter accepts 120 ms after the last key', 'yaml', 'name: x\n|', [FAST('desi', 'Enter', 120)], { has: 'design:' }],
+  ['Y-ACC-008', 'R-CMP-06', 'Tab accepts 160 ms after the last key', 'yaml', 'name: x\n|', [FAST('desi', 'Tab', 160)], { has: 'design:' }],
   ['Y-ACC-003', 'R-CMP-07', 'Escape closes the list and keeps the text', 'yaml', 'name: x\n|', [T('des'), K('Escape')], { popup: { open: 0 }, text: 'name: x\ndes|' }],
   ['Y-ACC-004', 'R-CMP-05', 'Tab with no list indents', 'yaml', 'name: x|', [K('Tab')], { text: 'name: x |', popup: { open: 0 } }],
   ['Y-INS-001', 'R-CMP-21', 'a scalar key: "key: " and the caret', 'yaml', 'name: x\n|', [T('descr'), K('Tab')], { text: 'name: x\ndescription: |' }],
