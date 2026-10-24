@@ -392,9 +392,9 @@ function mountJsonCodeEditor(parent, options) {
   const modules = { navigation: lazy(() => import('./source-navigation.js')), hints: lazy(() => import('./source-hints.js')), outline: lazy(() => import('./source-outline.js')), shortcuts: lazy(() => import('./source-shortcuts.js')) };
   const featureContext = () => ({ format: formatOf(languageName), catalogs, say, api, options, view, platform: km.platform, getShortcuts: (platform) => km.shortcuts(platform), readOnly: view.state.readOnly });
   /** A command that runs `module[name](view, context)`, loading the module the first time. The key is always taken. */
-  const feature = (moduleName, name) => (target) => {
+  const feature = (moduleName, name, extra) => (target) => {
     const slot = modules[moduleName];
-    const run = () => { if (!disposed) slot.module[name]?.(target, featureContext()); };
+    const run = () => { if (!disposed) slot.module[name]?.(target, extra ? { ...featureContext(), ...extra } : featureContext()); };
     if (slot.module) run(); else slot.load().then(run, (error) => options.onError?.(error));
     return true;
   };
@@ -574,7 +574,7 @@ function mountJsonCodeEditor(parent, options) {
         event.preventDefault();
         target.dispatch({ selection: { anchor: position } });
         target.focus();
-        feature("navigation", "goToDefinition")(target);
+        feature("navigation", "goToDefinition", { pointer: true })(target);
         return true;
       },
       mousemove(event) {

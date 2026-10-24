@@ -254,6 +254,7 @@ export function createSourcePane(container, options = {}) {
     readOnly,
     completions: options.completions !== false,
     smartListEnter: options.smartListEnter,
+    resolvePreview: options.resolvePreview,
     catalogs: options.catalogs ?? editor.catalogs,
     describedBy: `${id}-findings`,
     onChange: () => schedule(),

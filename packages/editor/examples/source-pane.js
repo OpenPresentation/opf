@@ -52,6 +52,8 @@ const pane = createSourcePane(document.getElementById('pane'), {
   completions: query.get('completions') !== 'off',
   smartListEnter: query.get('smartListEnter') !== 'off',
   onError: (error) => errors.push(String(error?.message ?? error)),
+  // ?preview=on: the host supplies a preview for the card of a record only the app provides (F12 on a layout of the default catalog).
+  resolvePreview: query.get('preview') === 'on' ? (kind, id) => { const node = document.createElement('div'); node.className = 'demo-preview'; node.textContent = `Preview of ${kind} ${id}`; return node; } : undefined,
   onRename: (name) => note({ rename: name }),
   onFormatChange: (format, previous) => note({ format, previous }),
   onFindingSelect: (finding, line) => note({ select: finding.path, line }),

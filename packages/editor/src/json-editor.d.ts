@@ -79,6 +79,11 @@ export interface JsonCodeEditorOptions {
   completions?: boolean;
   /** Enter continues a list the way the text writes it: a new string item after a string in a JSON list, the next `- ` in YAML, the next marker in Markdown. Default true; false keeps only the indentation. */
   smartListEnter?: boolean;
+  /**
+   * A preview of a catalog record for the card that F12 and Alt+F12 open on a layout, theme or other record only the app provides: an element, an `https:` or
+   * `data:image/` address, or a promise of either. Optional; the card shows the name, the description and the regions without it.
+   */
+  resolvePreview?: (kind: string, id: string) => HTMLElement | string | undefined | Promise<HTMLElement | string | undefined>;
   catalogs?: JsonCatalogContext;
   /** Overrides the built-in menu, allowing an existing host UI to keep its appearance. */
   onOptions?(left?: number, top?: number): void;
