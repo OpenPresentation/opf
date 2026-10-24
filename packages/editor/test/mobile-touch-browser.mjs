@@ -85,9 +85,9 @@ async function sourcePane(context, engine, width) {
   // A wrapped line hangs under its own indentation in JSON, YAML and Markdown, and the editor never scrolls sideways.
   const hang = await open();
   const cases = [
-    ['json', '{\n  "slides": [\n    {\n      "title": "A very long title that must wrap onto several lines at phone width"\n    }\n  ]\n}\n', '"title": "A very long', 6],
-    ['yaml', 'slides:\n  - title: A very long title that must wrap onto several lines at phone width\n', '- title: A very long', 2],
-    ['md', '# Deck\n\nA very long paragraph line that must wrap onto several lines at phone width, and then some.\n', 'A very long paragraph', 0],
+    ['json', '{\n  "slides": [\n    {\n      "title": "A very long title that must wrap onto several lines at phone width, and then keep going for a good while longer than that"\n    }\n  ]\n}\n', '"title": "A very long', 6],
+    ['yaml', 'slides:\n  - title: A very long title that must wrap onto several lines at phone width, and then keep going for a good while longer than that\n', '- title: A very long', 2],
+    ['md', '# Deck\n\nA very long paragraph line that must wrap onto several lines at phone width, and then some, and then keep going for a good while longer.\n', 'A very long paragraph', 0],
   ];
   for (const [format, text, needle, indent] of cases) {
     await hang.evaluate(([next, value]) => { if (demo.pane.getFormat() !== next) demo.pane.setFormat(next); demo.pane.editor.update(value); }, [format, text]);
