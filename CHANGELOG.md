@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.26.4 (2026-10-24)
+
+- `@openpresentation/opf/source`: `locate` and `pathAt` now read YAML and Markdown as well as JSON, so a finding in a `.opf.yaml` or `.opf.md` text has a range (JSON Pointer to range, caret to path, tolerant of text with syntax errors). YAML uses the `yaml` library's tolerant parse; Markdown uses the ranges the converter records for every part it reads, which now include each list item (`/slides/0/items/2`), and refines a slide option to its `key=value` token and a title or list item to the text after its marker. The new `scanMarkdown(text)` returns the regions of a Markdown deck (front matter, slides, `---` separators, option comments, fences with their kind, info and body, speaker notes) by the converter's own line rules, and the dialect's vocabulary (`SLIDE_OPTION_KEYS`, `BLOCK_OPTION_KEYS`, `FENCE_KINDS`, `METRIC_KEYS`, `SPAN_FLAGS`, `SPAN_VALUES`, ...) is exported so an editor never copies it.
+
 ## 0.26.3 (2026-10-24)
 
 - The published schemas (`spec/schemas`, served at `openpresentation.org/schema/...`) compile under Ajv in its default strict mode again, with no `addKeyword("x-opf-catalog")` and no `--strict=false`. 0.26.2 put a non-validating `x-opf-catalog` annotation into `opf.schema.json` and `theme.schema.json`, which strict Ajv and ajv-cli reject as an unknown keyword. The catalog kind of each reference field now lives in core, as `schemaCatalogKinds` (exported from `@openpresentation/opf/schema`, keyed by schema name and JSON Pointer), and `describeField` and `catalogKindAt` answer exactly as before. New `pnpm check:schema-strict` compiles every published schema with strict Ajv so a vendor keyword cannot return. Validation is unchanged.
