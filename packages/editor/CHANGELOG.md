@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.26.0 (2026-10-24)
+
+- MR-23: the six packages are one pnpm workspace at one shared version, 0.26.0 (the gallery goes backwards from 5.0.0; `latest` moves with an explicit `--tag latest`). Packages depend on each other through `workspace:^`, which `pnpm pack` publishes as `^0.26.0`, so a consumer never mixes minors. Core's install hints and `PEER_RANGES` name `^0.26.0`. The gallery package no longer has a sync from pptx.gallery or a bootstrap for unreleased engines; records are written in `packages/gallery`. No behavior change otherwise.
+- MR-23e: `releaseLane.githubRepository` is `OpenPresentation/opf` (the repository the packages now live in) and `releaseLane` gains `directory` (`packages/editor`, `packages/render`, `packages/pptx`). It was `OpenPresentation/opf-editor`, `OpenPresentation/opf-render` and `OpenPresentation/opf-pptx`, repositories that are archived after the move. The package names and every other field are unchanged.
+
 ## 0.25.3 (2026-10-22)
 
 - RR-98: the source pane's Cmd/Ctrl+Z and Cmd/Ctrl+Shift+Z (Ctrl+Y) now undo and redo a `pane.replaceDocument` load, and `replaceDocument` keeps the original YAML or Markdown text. The keys first undo the text typed in the pane with CodeMirror's history (which a load, and a session Undo, Redo or restore, now clear); when that has nothing left they step the session over the whole-document replace, as the Undo and Redo buttons do, so the previous text comes back byte for byte (an edit made elsewhere stops the key). `replaceDocument(document, { source, format })` accepts `source` as JSON, YAML or Markdown text (`format` says which; inferred as the first of JSON, the pane's format, YAML and Markdown that reads as exactly the document) and shows those bytes, comments included, in a pane in that format, in Undo and Redo and when the format is switched to it; a `source` that is not this document is ignored and an unknown `format` throws a `TypeError`. `mountJsonCodeEditor` gains `historyFallback`, `resetHistory()` and `undoDepth()`.
