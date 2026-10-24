@@ -4,8 +4,6 @@ import type { Payload, TextValue } from './rule-content.js';
 import type { Rec, ResolvedDesign } from './rule-design.js';
 import type {
 	ValidateOptions,
-	ValidationCategory,
-	ValidationRuleCost,
 	ValidationRuleInfo,
 	ValidationThresholds,
 } from './validation-types.js';
@@ -63,12 +61,3 @@ export interface ValidationRule {
 	also?: ValidationRuleInfo[];
 	run(context: ValidationContext): void;
 }
-
-export const rule = (
-	id: string,
-	category: ValidationCategory,
-	severity: FindingSeverity,
-	summary: string,
-	rationale: string,
-	extra: Pick<ValidationRuleInfo, 'standard' | 'approximations' | 'thresholds'> & { cost?: ValidationRuleCost } = {},
-): ValidationRuleInfo => ({ id: `opf/${id}`, name: id, category, severity, cost: extra.cost ?? 'structure', summary, rationale, ...extra });
