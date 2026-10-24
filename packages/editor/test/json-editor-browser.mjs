@@ -51,7 +51,7 @@ try{
   await page.evaluate(()=>mount(''));await source.press('{');assert.equal(await read(),'{}');
   await source.press('Enter');assert.equal(await read(),'{\n  \n}');await source.press('"');await page.keyboard.insertText('slides');await source.press('"');await source.press(':');await source.press('Space');await source.press('[');await source.press('Enter');
   assert.equal(await read(),'{\n  "slides": [\n    \n  ]\n}');await source.press('Tab');assert.ok((await read()).includes('\n      \n'));await source.press('Shift+Tab');
-  await source.press('{');await source.press('Backspace');const paired=await read();await source.press(`${mod}+z`);assert.notEqual(await read(),paired);await source.press(`${mod}+Shift+z`);assert.equal(await read(),paired);
+  await source.press('{');await source.press('x');const paired=await read();assert.ok(paired.includes('{x}'));await source.press(`${mod}+z`);assert.notEqual(await read(),paired);await source.press(`${mod}+Shift+z`);assert.equal(await read(),paired);
   checks.push('Paired delimiters, nested indentation, Tab/outdent and keyboard undo/redo');
 
   const original='{\r\n\t"slides": [{\r\t\t"title": "Keep  spacing",\n\t\t"items": [\r\n\t\t\t"First",\r\t\t\t"Final"\n\t\t]\r\n\t}]\n}';
@@ -86,11 +86,12 @@ try{
   assert.equal(await page.locator(`[id="${active}"]`).innerText(),await menu.getByRole('option').nth(1).innerText(),'ArrowDown from the first option activates the second');
   await menu.getByRole('combobox').fill('partner-detail');assert.equal(await menu.getByRole('option').count(),1);await menu.getByRole('combobox').press('Enter');assert.equal(await read(),deck.replace('text','partner-detail'));
   await source.press(`${mod}+z`);assert.equal(await read(),deck);
-  // A real click on the highlighted key opens the same menu.
-  await page.locator('[data-field="slides[0].layout"]').click();await menu.waitFor();
+  // A click on the highlighted key only places the caret (it opens nothing and keeps the focus in the editor); Alt+Shift+O opens the same menu.
+  await page.locator('[data-field="slides[0].layout"]').click();assert.equal(await menu.count(),0);assert.equal(await page.evaluate(()=>control.api.hasFocus()),true);
+  await source.press('Alt+Shift+O');await menu.waitFor();await menu.getByRole('combobox').press('Escape');assert.equal(await menu.count(),0);assert.equal(await page.evaluate(()=>control.api.hasFocus()),true);
   await page.evaluate(()=>control.update(control.api.getValue().replace('Keep title','External title')));assert.equal(await menu.count(),0);
   await at('"layout"',1);await source.press('Control+Space');await menu.waitFor();await page.evaluate(()=>control.setCatalogs([]));assert.equal(await menu.count(),0);
-  checks.push('Keyboard and pointer catalog menus, filtering, one-token replacement, undo and stale context dismissal');
+  checks.push('Keyboard catalog menus (Ctrl+Space without completions, Alt+Shift+O), a click that opens nothing, filtering, one-token replacement, undo and stale context dismissal');
 
   if(contracts.metric){
     const cover=JSON.stringify({slides:[{layout:'cover',title:'Keep title',subtitle:'Keep subtitle',notes:'Keep notes'}]},null,2);
@@ -105,10 +106,10 @@ try{
     checks.push('V2 metric layout reference preserves subtitle/notes/content and undo/redo atomically');
   }
 
-  await page.evaluate(()=>mount('{"slides":['));await select(5);await source.press('Control+Space');await page.evaluate(()=>control.openOptions());assert.equal(await page.getByRole('dialog').count(),0);assert.equal(await page.evaluate(()=>control.api.format()),false);assert.equal(await read(),'{"slides":[');
+  await page.evaluate(()=>mount('{"slides":['));await select(5);await source.press('Control+Space');await page.evaluate(()=>control.openOptions());assert.equal(await page.getByRole('dialog').count(),0);assert.equal(await page.evaluate(()=>control.api.format()),true);assert.equal(await read(),'{\n  "slides": [');await source.press(`${mod}+z`);assert.equal(await read(),'{"slides":[');
   const compact='{"name":"Keep  spaces","slides":[],"x-value":1.2300}';await page.evaluate(code=>mount(code),compact);await source.press(`${mod}+f`);await page.locator('.cm-search').waitFor();await page.locator('.cm-search input[name="search"]').fill('Keep');await page.locator('.cm-search input[name="search"]').press('Escape');await source.press(`${mod}+Shift+f`);
   assert.deepEqual(JSON.parse(await read()),JSON.parse(compact));assert.ok((await read()).includes('1.2300'));await source.press(`${mod}+z`);assert.equal(await read(),compact);
-  checks.push('Invalid drafts retained, search panel and explicit formatting preserve JSON values and numeric lexemes');
+  checks.push('Invalid drafts are laid out and undone in one step, search panel and explicit formatting preserve JSON values and numeric lexemes');
 
   await page.evaluate(code=>mount(code),deck);await at('"layout"',1);await page.evaluate(async()=>{const pending=control.openOptions();control.destroy();await pending;});assert.equal(await page.getByRole('dialog').count(),0);assert.equal(await source.count(),0);
   await page.evaluate(()=>mount('{"slides":[]}'));assert.equal(await source.count(),1);await page.evaluate(()=>control.destroy());assert.equal(await source.count(),0);

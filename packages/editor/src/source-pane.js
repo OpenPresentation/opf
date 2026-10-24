@@ -5,6 +5,7 @@ import { mountJsonCodeEditor } from "./json-editor.js";
 import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from "./exact-source.js";
 import { lineForPath, lineOfOffset, offsetOfLine } from "./source-lines.js";
 import { errorText, normalizeFinding, rejectionFindings as findingsOfError } from "./source-findings.js";
+import { formatSource } from "./source-format.js";
 
 // The source pane (RR-98): the OPF document as JSON, YAML or Markdown, with the file name, the format menu, Format, Copy
 // and Download, and the findings under the code. JSON is canonical and keeps its authored bytes (exact-source); YAML and
@@ -170,6 +171,8 @@ export function createSourcePane(container, options = {}) {
     return button;
   };
   const formatAction = actionButton("Format (fix indentation)", "Braces", "format");
+  formatAction.title = "Format (fix indentation), Shift+Alt+F";
+  formatAction.setAttribute("aria-keyshortcuts", "Shift+Alt+F");
   const copyAction = actionButton("Copy source", "Copy", "copy");
   const downloadAction = actionButton("Download source", "Download", "download");
   bar.append(file, actions);
@@ -236,6 +239,7 @@ export function createSourcePane(container, options = {}) {
     catalogs: options.catalogs ?? editor.catalogs,
     describedBy: `${id}-findings`,
     onChange: () => schedule(),
+    onFormat: () => formatDocument(),
     historyFallback: { undo: () => stepReplace("undo"), redo: () => stepReplace("redo") },
     onError: (error) => options.onError?.(error),
   });
@@ -601,30 +605,30 @@ export function createSourcePane(container, options = {}) {
     const current = formatOf(format);
     return { name, filename: `${name}.opf.${current.extension}`, text: control.api.getValue(), format: current.id, mime: current.mime };
   }
-  formatAction.addEventListener("click", () => {
+  // Format document: the button and the keys (Shift+Alt+F, Cmd/Ctrl+Shift+F) do the same in every format. Whitespace only: JSON is laid out
+  // token by token (also while it does not parse), YAML keeps its comments, and a rewrite that would change the document is refused.
+  function formatDocument() {
     flush();
-    if (readOnly) return;
-    if (format === "json") { control.api.format(); control.api.focus(); return; }
-    const read = readText(format, control.api.getValue(), catalogs());
-    if (!read.deck) { renderFindings(); return; }
-    let written;
-    try { written = write(format, read.deck); }
-    catch (error) {
-      rejectionFindings = [normalizeFinding({ message: `Cannot rewrite the ${formatOf(format).label}: ${errorText(error)}`, kind: "rejected" })];
-      renderFindings();
-      return;
-    }
+    if (readOnly) return false;
     const before = control.api.getValue();
-    if (written.text !== before) {
-      const comments = format === "yaml" ? scanYamlComments(before).count : 0;
-      control.api.replace(0, before.length, written.text);
-      flush();
-      transientNotes = comments > 0 ? [normalizeFinding({ message: `${plural(comments, "comment")} in the YAML ${comments === 1 ? "was" : "were"} dropped when the text was rewritten.`, severity: "warning" }, "format")] : [];
-      renderedKey = "";
-      renderFindings();
-    }
+    const result = formatSource(format, before, { unit: control.api.indentUnit() });
     control.api.focus();
-  });
+    if (result.error) { announce(result.error); return false; }
+    if (result.text === before) { announce("Already formatted"); return true; }
+    if (format !== "json") {
+      let unchanged = true;
+      try {
+        const was = readText(format, before, catalogs()).deck;
+        unchanged = !was || same(was, readText(format, result.text, catalogs()).deck);
+      } catch { unchanged = false; }
+      if (!unchanged) { announce("Formatting would change the document, so the text was left as it is."); return false; }
+    }
+    control.api.replaceDiff(result.text);
+    flush();
+    announce("Formatted");
+    return true;
+  }
+  formatAction.addEventListener("click", () => { formatDocument(); });
   copyAction.addEventListener("click", async () => {
     const info = currentFile();
     try {

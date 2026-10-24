@@ -7,10 +7,18 @@ export interface JsonEditorApi {
   hasFocus(): boolean;
   focus(): void;
   setSelection(from: number, to?: number): void;
-  /** Replace one source range atomically; boundaries inside CRLF are rejected. */
-  replace(from: number, to: number, text: string): void;
+  /**
+   * Replace one source range atomically; boundaries inside CRLF are rejected. The cursor moves to the end of the inserted text unless
+   * `keepSelection` is set. `userEvent` names the edit (default `"input.replace"`; a paste uses `"input.paste"`): it must not be
+   * `"input.type"` or `"input.complete"`, which re-indent the inserted lines.
+   */
+  replace(from: number, to: number, text: string, options?: { keepSelection?: boolean; userEvent?: string }): void;
+  /** Replace the whole text with `text` as one undoable edit; only what differs changes, and a whitespace-only difference (a format) is one change per run of whitespace, so the cursor stays on its token. */
+  replaceDiff(text: string): void;
+  /** The indentation unit now in effect: a tab character or some spaces (JSON: read once when a document is opened; YAML and Markdown: two spaces). */
+  indentUnit(): string;
   coordinates(): { left: number; top: number };
-  /** Explicit, undoable whitespace formatting; returns false for invalid JSON. */
+  /** Explicit, undoable whitespace formatting of JSON, also while it does not parse; returns false in YAML and Markdown (the source pane formats those). */
   format(): boolean;
 }
 export interface JsonCodeEditorOptions {
@@ -23,7 +31,11 @@ export interface JsonCodeEditorOptions {
   /** Highlighting and behavior: "json" (default) adds the parse linter, field highlights and the option menu. */
   language?: "json" | "yaml" | "markdown";
   readOnly?: boolean;
-  /** Live completion popup in JSON: property names and enum, boolean and catalog values at the cursor's JSON path, from the same data as the field menu (default false here; the source pane turns it on). Ctrl+Space still opens the field menu. */
+  /**
+   * Live completion list in JSON: property names and enum, boolean and catalog values at the cursor's JSON path, from the same data as the field
+   * menu (default false here; the source pane turns it on). Tab and Enter accept the selected item, Escape closes the list, and Ctrl+Space (Cmd+I on
+   * macOS) opens it. The field menu is on Alt+Shift+O; with `completions` off it is also on Ctrl+Space.
+   */
   completions?: boolean;
   catalogs?: JsonCatalogContext;
   /** Overrides the built-in menu, allowing an existing host UI to keep its appearance. */
@@ -34,6 +46,11 @@ export interface JsonCodeEditorOptions {
    * whole-document replace.
    */
   historyFallback?: { undo?(): boolean; redo?(): boolean };
+  /**
+   * Format document (Shift+Alt+F and Cmd/Ctrl+Shift+F). The source pane passes one that formats JSON, YAML and Markdown; without it the keys
+   * format JSON only.
+   */
+  onFormat?(): void;
   onFocus?(): void;
   onHoverField?(path: string | null): void;
   onError?(error: unknown): void;

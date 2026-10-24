@@ -1,0 +1,5 @@
+---
+type: fixed
+packages: [editor]
+---
+Source editor keyboard parity, phase 0 (editing keys): `Alt+Down` moves the line down again in JSON, YAML and Markdown (it was bound to the options dialog and swallowed); `Tab` with no list inserts spaces up to the next tab stop at the caret, replaces a selection inside one line, and indents line by line only for a selection over several lines or one whole line (it shifted the whole line), and `Shift+Tab` outdents the line, as in VS Code; the indentation unit is read once when a document is opened (JSON; YAML and Markdown use two spaces) and no longer drifts to the smallest indentation of the text after every edit, so a single deeply indented line no longer makes `Shift+Tab` remove 6 spaces, and the visual tab width equals the unit (it was 4 with a unit of 2); multiple cursors are on (`Cmd/Ctrl+D`, `Cmd/Ctrl+Shift+L`, `Cmd/Ctrl+Alt+Up` and `Down`, `Alt+click`, `Shift+Alt+drag`, `Escape` to collapse). `aria-keyshortcuts` on the editor now names the keys that open the list. Cases: `J-LIN`, `J-TAB`, `J-IND`, `J-MUL`, `Y-TAB`, `Y-LIN`, `Y-MUL`, `M-TAB`, `M-LIN`, `M-MUL`.

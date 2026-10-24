@@ -189,6 +189,10 @@
           "command": "pnpm run test:rich-input-browser artifacts/rich-input-browser-estimated.json estimated"
         },
         {
+          "id": "browser:source-keyboard",
+          "command": "node test/source-keyboard-browser.mjs"
+        },
+        {
           "id": "browser:export-license",
           "command": "pnpm run test:export-license-browser"
         }
