@@ -19,6 +19,29 @@ const CLICK_GUARD_MS = 450;
 const NEXT_KEYS = new Set(["ArrowRight", " ", "PageDown", "Enter"]);
 const PREVIOUS_KEYS = new Set(["ArrowLeft", "PageUp", "Backspace"]);
 
+// Full screen belongs to the document, not to one presenter: the browser ends whatever is full screen when an exit it was asked for runs, and tells
+// every listener. A presenter that closed early asks for its exit late (when its pending full screen request resolves), possibly after a newer
+// presenter took full screen. So the exits the presenters asked for are counted per document, and any presenter reads a `fullscreenchange` that
+// answers one of them as ours, not as the user leaving full screen.
+const exitRequests = new WeakMap(); // Document -> Set of exits asked for and not yet reported
+const attributedEvents = new WeakMap(); // fullscreenchange Event -> whether it answered an exit a presenter asked for
+function noteExit(doc, win) {
+  let requests = exitRequests.get(doc);
+  if (!requests) exitRequests.set(doc, requests = new Set());
+  const request = {};
+  requests.add(request);
+  // The browser reports an exit with the event; when it does not (the exit was refused, or two exits became one event), stop counting it soon.
+  return { forget: () => requests.delete(request), forgetSoon: () => win.setTimeout(() => requests.delete(request), 500) };
+}
+function answersAnExit(doc, event) {
+  if (attributedEvents.has(event)) return attributedEvents.get(event);
+  const requests = exitRequests.get(doc);
+  const ours = Boolean(requests?.size) && !doc.fullscreenElement;
+  if (ours) requests.delete(requests.values().next().value);
+  attributedEvents.set(event, ours);
+  return ours;
+}
+
 const DEFAULT_LABELS = {
   /** The accessible name of the presenter dialog. */
   dialog: "Presentation",
@@ -69,7 +92,7 @@ export function createPresenter(container, options = {}) {
   // Drawn slides by deck index, for the deck object they were drawn from: a new snapshot (an edit) or a new start() draws again.
   let drawn = new Map(), drawnFor;
 
-  let active = false, destroyed = false, current = -1, opener = null, enteredFullscreen = false, leaving = false, returnTo = null;
+  let active = false, destroyed = false, current = -1, opener = null, enteredFullscreen = false, returnTo = null;
   let counterTimer, preloadTimer, renderToken = 0, swipe = null, clickGuardUntil = 0;
 
   // ---- the DOM ----------------------------------------------------------------------------------------------------------------------------
@@ -208,11 +231,12 @@ export function createPresenter(container, options = {}) {
       () => "overlay",
     );
   }
-  // Ask the browser to leave full screen; onFullscreenChange then sees `leaving` and does not read the exit as the user's. Focus goes back to the
-  // element that opened the presentation once the exit is done, because the page behind a full screen element takes no focus until then.
+  // Ask the browser to leave full screen; onFullscreenChange then sees that the event answers an exit asked for (by this presenter or an earlier
+  // one) and does not read it as the user's. Focus goes back to the element that opened the presentation once the exit is done, because the page
+  // behind a full screen element takes no focus until then.
   function leaveFullscreen() {
-    leaving = true;
-    Promise.resolve(doc.exitFullscreen?.()).then(restoreFocus, () => { leaving = false; });
+    const exit = noteExit(doc, win);
+    Promise.resolve(doc.exitFullscreen?.()).then(() => { exit.forgetSoon(); restoreFocus(); }, exit.forget);
   }
   // Only when nobody took focus since: the host may move it in `onExit`.
   function restoreFocus() {
@@ -220,11 +244,11 @@ export function createPresenter(container, options = {}) {
     if (returnTo?.isConnected && typeof returnTo.focus === "function" && (!now || now === doc.body || now === root)) returnTo.focus({ preventScroll: true });
   }
   // The browser takes full screen away with Esc (that key never reaches the page) or the host exits it: the presentation ends with it.
-  function onFullscreenChange() {
+  function onFullscreenChange(event) {
     if (doc.fullscreenElement === root) return;
-    if (leaving) {
-      // The exit that stop() asked for finished. If the host started again meanwhile, full screen is gone and the overlay carries on.
-      leaving = false;
+    if (answersAnExit(doc, event)) {
+      // An exit that a presenter asked for finished: ours from stop(), or an earlier presenter's that ran after this one took full screen. A
+      // presentation still running carries on as the overlay.
       if (active && enteredFullscreen) { enteredFullscreen = false; root.dataset.mode = "overlay"; }
       return;
     }
