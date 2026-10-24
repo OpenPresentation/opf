@@ -168,6 +168,7 @@ export function issueFinding(
 	const allowed = Array.isArray(issue.params.allowedValues)
 		? issue.params.allowedValues.filter(primitive)
 		: [];
+	const nearest = issue.keyword === 'additionalProperties' ? nearestProperties(issue, entry.schema, precise?.pointer, precise?.schemaName) : [];
 	return finding(ruleId, {
 		...(severity ? { severity } : {}),
 		path,
@@ -186,8 +187,45 @@ export function issueFinding(
 						definition,
 					})),
 				}
-			: {}),
+			: nearest.length
+				? { suggestions: nearest }
+				: {}),
 	});
+}
+
+/** The most near-miss names a "did you mean" offers. */
+const NEAREST_PROPERTIES = 3;
+
+/**
+ * Did-you-mean for an unknown property (`additionalProperties`): the properties the same object's schema declares whose
+ * names are within edit distance 2 (1 for a name of three characters or fewer, or every short name would match), compared
+ * case-insensitively, nearest first, at most three. A suggestion is a name the schema has, never a rewrite of authored content.
+ */
+function nearestProperties(issue: ValidationIssue, fallbackRoot: JsonSchema, pointerToKeyword: string | undefined, schemaName: SchemaName | undefined): FindingSuggestion[] {
+	const typed = issue.params.additionalProperty;
+	if (typeof typed !== 'string' || pointerToKeyword === undefined) return [];
+	const rootEntry = schemaEntries.find((entry) => entry.name === schemaName);
+	let node: unknown = rootEntry?.schema ?? fallbackRoot;
+	const base = pointerToKeyword.split('/').slice(0, -1);
+	for (const token of base.slice(1)) {
+		if (!isRecord(node)) return [];
+		node = node[token.replaceAll('~1', '/').replaceAll('~0', '~')];
+	}
+	if (!isRecord(node) || !isRecord(node.properties)) return [];
+	const root = (rootEntry?.schema ?? fallbackRoot) as JsonSchema,
+		limit = typed.length <= 3 ? 1 : 2,
+		lower = typed.toLowerCase();
+	return Object.keys(node.properties)
+		.map((name) => ({ name, away: distance(lower, name.toLowerCase()) }))
+		.filter(({ name, away }) => name !== typed && away <= limit)
+		.sort((a, b) => a.away - b.away || (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
+		.slice(0, NEAREST_PROPERTIES)
+		.map(({ name }) => ({
+			value: name,
+			label: name,
+			origin: 'schema' as const,
+			definition: `${String(root.$id)}#${base.join('/')}/properties/${name.replaceAll('~', '~0').replaceAll('/', '~1')}`,
+		}));
 }
 
 interface Cursor {

@@ -43,7 +43,7 @@ Every rule is listed, with its category, default severity, cost and the basis it
 
 `validate(input, options?)` takes a parsed presentation (an object) or **strict JSON text**. A string is read as JSON and nothing else: it is never sniffed for YAML or Markdown. When the text begins like YAML (`key: value`, `---`) or Markdown (`#`), the `help` of the syntax finding says to read it with `fromYaml` or `fromMarkdown` first, which return a presentation and call `validate` for you.
 
-With text, a syntax error or a duplicate key comes back with `location` (original-source UTF-16 offset and length, one-based line and column), and so does every finding about a value in the document; a finding about a missing field is located at the object that lacks it. Text that is not JSON reports its syntax errors (`opf/json-syntax`) whatever `only` says, because nothing else can run.
+With text, a syntax error or a duplicate key comes back with `location` (original-source UTF-16 offset and length, one-based line and column), and so does every finding about a value in the document; a finding about a missing field is located at the object that lacks it. Text that is not JSON reports its syntax errors (`opf/json-syntax`) whatever `only` says, because nothing else can run. A syntax finding names the root cause in plain words and not the token where a parser gave up: for `"design":` followed by the next key, one finding `` `design` needs a value. `` located at `"design":` (its `help` says what could come next), not four findings from the token after it. There is one finding per cause, in position order, at most five; the cascade of one mistake is not reported again. `analyzeJsonSyntax` (`@openpresentation/opf/source`, browser-safe) returns the same causes with the fixes that repair each one (`Insert comma`, `Add { }`, `Remove "design"`, ...) for editors; `locate` and `pathAt` in the same module turn a JSON Pointer into a range of the text and a caret into a path. A finding for an unknown property (`opf/schema`, keyword `additionalProperties`) carries up to three `suggestions` of the nearest property names of the same object (edit distance 2, or 1 for names of three characters or fewer; case-insensitive), so `slids` suggests `slides`.
 
 ### Reading a deck in any form
 
@@ -307,7 +307,7 @@ Default severity: **error**. Cost: syntax. The text is not strict JSON.
 
 **Basis.** RFC 8259 (strict JSON: no comments, no trailing commas)
 
-**Approximations.** Only text input is checked. A string is always read as JSON; a text that looks like YAML or Markdown gets a hint to use fromYaml or fromMarkdown first.
+**Approximations.** Only text input is checked. A string is always read as JSON. One finding per root cause, in position order and at most five (a key with no value, a missing comma, a bracket never closed; not the damage each one causes further on): `message` says what is wrong, `help` what to do next and `location` is the range to underline. A text that looks like YAML or Markdown gets one finding with a hint to use fromYaml or fromMarkdown first. Source editors get the same causes with their quick fixes from analyzeJsonSyntax (@openpresentation/opf/source).
 
 ### `opf/duplicate-key`
 

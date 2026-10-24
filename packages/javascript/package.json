@@ -106,6 +106,10 @@
       "types": "./dist/schema.d.ts",
       "import": "./dist/schema.js"
     },
+    "./source": {
+      "types": "./dist/source.d.ts",
+      "import": "./dist/source.js"
+    },
     "./patch": {
       "types": "./dist/patch.d.ts",
       "import": "./dist/patch.js"

@@ -31,7 +31,7 @@ const formatRules: ValidationRuleInfo[] = [
 		'error',
 		'The text is not strict JSON.',
 		'Every OPF tool reads JSON. A misplaced comma, quote, comment or trailing comma makes the file unreadable, and the range says where.',
-		{ cost: 'syntax', standard: 'RFC 8259 (strict JSON: no comments, no trailing commas)', approximations: 'Only text input is checked. A string is always read as JSON; a text that looks like YAML or Markdown gets a hint to use fromYaml or fromMarkdown first.' },
+		{ cost: 'syntax', standard: 'RFC 8259 (strict JSON: no comments, no trailing commas)', approximations: 'Only text input is checked. A string is always read as JSON. One finding per root cause, in position order and at most five (a key with no value, a missing comma, a bracket never closed; not the damage each one causes further on): `message` says what is wrong, `help` what to do next and `location` is the range to underline. A text that looks like YAML or Markdown gets one finding with a hint to use fromYaml or fromMarkdown first. Source editors get the same causes with their quick fixes from analyzeJsonSyntax (@openpresentation/opf/source).' },
 	),
 	rule(
 		'duplicate-key',

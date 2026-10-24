@@ -82,6 +82,8 @@ import {ingest} from '@openpresentation/opf/data';
 import {convertContent, type ConvertedContent} from '@openpresentation/opf/convert';
 import {fromMarkdown, toMarkdown} from '@openpresentation/opf/markdown';
 import {fromYaml, toYaml, OPFYamlError, type YamlFinding} from '@openpresentation/opf/yaml';
+import {describeField, catalogKindAt, type FieldInfo, type FieldChild} from '@openpresentation/opf/schema';
+import {analyzeJsonSyntax, locate, pathAt, type SyntaxProblem, type TextRange} from '@openpresentation/opf/source';
 import {parse, stringify, type DeckFormat, type ParseOptions} from '@openpresentation/opf/deck';
 import {convert, open, save, parseSlideSelection, OPFApiError, OPFExportError, OPFImportError, OPFValidationError as NodeValidationError, type ConvertOptions, type ConvertResult, type ConvertedFile, type SaveResult, type SlideSelection} from '@openpresentation/opf';
 import * as opfNode from '@openpresentation/opf';
@@ -177,6 +179,15 @@ const yamlError: OPFYamlError['code'] = 'invalid-document';
 // @ts-expect-error unknown option must be rejected
 toYaml(deck, {style: 'flow'});
 void yamlSlides; void yamlFinding; void yamlSchemaValid; void yamlText; void yamlError;
+const field: FieldInfo = describeField(['slides', 0, 'title'], deck);
+const fieldChild: FieldChild | undefined = field.children[0];
+const catalog: string | undefined = catalogKindAt(['slides', 0, 'layout']);
+const syntax: SyntaxProblem[] = analyzeJsonSyntax('{"a":', {limit: 3});
+const syntaxRange: TextRange | undefined = locate('{"a": 1}', 'json', '/a', {part: 'key'});
+const caret = pathAt('{"a": 1}', 'json', 6)?.part;
+// @ts-expect-error a part is one of value, key, entry, open and colon
+locate('{}', 'json', '', {part: 'tail'});
+void field; void fieldChild; void catalog; void syntax; void syntaxRange; void caret;
 // @ts-expect-error slides must remain an array
 const invalid: Presentation = {slides: 42};
 // @ts-expect-error unsupported import target must be rejected

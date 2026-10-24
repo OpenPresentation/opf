@@ -5,6 +5,7 @@ const entry = {
   markdown: "src/markdown.ts",
   yaml: "src/yaml.ts",
   schema: "src/schema-navigation.ts",
+  source: "src/source.ts",
   patch: "src/patch.ts",
   diff: "src/diff.ts",
   format: "src/format.ts",
