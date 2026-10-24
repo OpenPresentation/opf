@@ -2291,6 +2291,26 @@
 .opf-fix[aria-selected="true"] { background: var(--opf-ui-accent); color: var(--opf-ui-accent-fg); }
 :root :is(.opf-ui, .opf-json, .opf-code) .cm-tooltip .cm-completionInfo { white-space: normal; }
 
+/* The shape hint (Cmd/Ctrl+Shift+Space): the fields of the object around the caret, each set, next or optional. The state is a word and a mark, not only a color. */
+.cm-tooltip.opf-hint { display: flex; flex-direction: column; min-width: 22em; max-width: 38em; padding: 4px 0; font: 12.5px var(--opf-ui-font); white-space: normal; }
+.opf-hint-head { display: flex; justify-content: space-between; gap: 24px; padding: 2px 12px 5px; border-bottom: 1px solid var(--opf-ui-border); }
+.opf-hint-title { font: 600 12px var(--opf-ui-mono); }
+.opf-hint-aside { color: var(--opf-ui-muted-fg); font-size: 11.5px; white-space: nowrap; }
+.opf-hint-rows { display: flex; flex-direction: column; margin: 0; padding: 3px 0 0; list-style: none; }
+.opf-hint-row { display: grid; grid-template-columns: 8em minmax(0, 1fr) 5.5em; gap: 12px; align-items: baseline; padding: 1px 12px; }
+.opf-hint-key { font: 12px var(--opf-ui-mono); overflow-wrap: anywhere; }
+.opf-hint-description { color: var(--opf-ui-muted-fg); }
+.opf-hint-state { text-align: right; color: var(--opf-ui-muted-fg); font-size: 11.5px; }
+.opf-hint-row[data-state="set"] .opf-hint-state::before { content: "\2713\00a0"; }
+.opf-hint-row[data-state="next"] { background: color-mix(in srgb, var(--opf-ui-accent) 12%, transparent); box-shadow: inset 2px 0 0 var(--opf-ui-accent); }
+.opf-hint-row[data-state="next"] .opf-hint-key,
+.opf-hint-row[data-state="next"] .opf-hint-state { color: var(--opf-ui-accent-strong); font-weight: 600; }
+.opf-hint-row[data-state="next"] .opf-hint-state::before { content: "\25B6\00a0"; }
+/* No animation either way; the rule is explicit so a later one cannot add motion for someone who asked for less. */
+@media (prefers-reduced-motion: reduce) {
+  .cm-tooltip.opf-hint, .cm-tooltip.opf-hint * { animation: none !important; transition: none !important; }
+}
+
 /* Ctrl+Space with the list open hides the documentation panel (and shows it again). */
 .cm-editor.opf-docs-off .cm-completionInfo { display: none; }
 

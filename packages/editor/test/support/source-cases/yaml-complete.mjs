@@ -3,6 +3,7 @@
 // browser. Row format: [id, requirement, title, format, doc, steps, expect, options?]; see support/source-keyboard.mjs. `⟦⟧` is the caret where the
 // text has a `|` of its own (a block scalar).
 import { FAST, K, M, T, platform } from '../source-keyboard.mjs';
+import { phase4Yaml } from './phase4-extras.mjs';
 
 // VS Code's fold keys: Cmd+Alt+[ and ] on macOS, Ctrl+Shift+[ and ] elsewhere (where Ctrl+Alt+[ folds everything). The key is named by its code: a synthetic
 // Shift+[ carries the key "[", which is Indent less, where a real keyboard sends "{".
@@ -256,3 +257,6 @@ yamlCases.push(
   ['Y-VAL-X23', 'R-A11Y-02', 'accepting a reference says what was inserted', 'yaml', 'assets:\n  logo: logo.png\nslides:\n  - image: |', [K('Control+Space'), K('Enter')], { live: 'Inserted asset:logo' }],
   ['Y-VAL-X24', 'R-CMP-17', 'the documentation panel describes the selected dataset', 'yaml', 'datasets:\n  sales:\n    title: Sales\n    columns: [Quarter, Revenue]\n    rows: []\nslides:\n  - table:\n      dataset: |', [K('Control+Space')], { docs: { shown: true, has: ['sales', 'Quarter, Revenue'] } }],
 );
+
+// Phase 4: the shape hint, built-in variables with several cursors, Markdown image targets (phase4-extras.mjs).
+yamlCases.push(...phase4Yaml);

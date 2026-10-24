@@ -1,11 +1,11 @@
 import { Annotation, ChangeSet, Compartment, EditorSelection, EditorState, Prec, StateEffect, StateField, Transaction, countColumn } from "@codemirror/state";
 import { Decoration, EditorView, activateHover, closeHoverTooltips, crosshairCursor, drawSelection, hasHoverTooltips, hoverTooltip, keymap, lineNumbers, rectangularSelection } from "@codemirror/view";
-import { defaultKeymap, deleteCharBackward, toggleTabFocusMode, history, historyKeymap, indentLess, indentMore, insertNewlineAndIndent, isolateHistory, redo, undo, undoDepth } from "@codemirror/commands";
-import { HighlightStyle, StreamLanguage, bracketMatching, codeFolding, foldKeymap, indentOnInput, indentUnit, syntaxHighlighting } from "@codemirror/language";
+import { defaultKeymap, deleteCharBackward, history, historyKeymap, indentLess, indentMore, insertNewlineAndIndent, isolateHistory, redo, selectAll, selectLine, selectParentSyntax, toggleTabFocusMode, undo, undoDepth } from "@codemirror/commands";
+import { HighlightStyle, StreamLanguage, bracketMatching, codeFolding, indentOnInput, indentUnit, syntaxHighlighting } from "@codemirror/language";
 import { json } from "@codemirror/lang-json";
 import { yaml } from "@codemirror/lang-yaml";
-import { acceptCompletion, autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap, completionStatus, currentCompletions, deleteBracketPair, hasNextSnippetField, hasPrevSnippetField, moveCompletionSelection, nextSnippetField, prevSnippetField, startCompletion } from "@codemirror/autocomplete";
-import { highlightSelectionMatches, search, searchKeymap } from "@codemirror/search";
+import { acceptCompletion, autocompletion, closeBrackets, closeBracketsKeymap, closeCompletion, completionStatus, currentCompletions, deleteBracketPair, hasNextSnippetField, hasPrevSnippetField, moveCompletionSelection, nextSnippetField, prevSnippetField, startCompletion } from "@codemirror/autocomplete";
+import { closeSearchPanel, gotoLine, highlightSelectionMatches, openSearchPanel, search, searchKeymap } from "@codemirror/search";
 import { tags } from "@lezer/highlight";
 import { findNodeAtOffset, getNodePath, parseTree } from "jsonc-parser";
 import {jsonSource,jsonSourceHistory,setJsonSource} from './json-source.js';
@@ -15,6 +15,8 @@ import { redoPair, undoPair } from "./source-undo-groups.js";
 import {a11yExtension,createAnnouncer} from './source-a11y.js';
 import { forEachDiagnostic } from "@codemirror/lint";
 import {createDiagnostics,editsTransaction} from './source-diagnostics.js';
+import { createKeymap, domKeymap, strokeText } from './source-keymap.js';
+import { fold, foldEverything, foldGutterExtension, foldLevel, foldRecursively, toggleFoldHere, unfold, unfoldEverything, unfoldRecursively } from './source-folding.js';
 import {languageDataFor,markdownBackspace,markdownEnter,markdownFolding,markdownTab,markdownToggleComment,markdownWrapSelection,yamlEnter} from './source-editing.js';
 const external = Annotation.define();
 const hoverField = StateEffect.define();
@@ -148,27 +150,30 @@ function backspaceInToken(tokenOf) {
 // accepted item always replaces the whole token), Escape closes the list, Ctrl+Space (and Cmd+I on macOS) opens it wherever the schema has
 // something to offer and, with the list open, shows or hides its documentation, and the arrows, the Page keys and Ctrl+N and Ctrl+P (macOS)
 // move the selection. Without a list, none of them is taken: Tab then inserts whitespace (or walks the stops of a snippet) and Enter inserts
-// a line.
-function completionKeys(isReady, tokenOf, onStep, { newline, tab }) {
+// a line. The keys come from the table in source-keymap.js.
+function completionKeys(km, isReady, tokenOf, onStep, { newline, tab }) {
   // Tab and Shift+Tab walk the tab stops of a snippet; the engine says which stop it is and opens the list at a stop that is a choice.
   const walk = (forward, fallback) => (view) => {
     if (forward ? hasNextSnippetField(view.state) && nextSnippetField(view) : hasPrevSnippetField(view.state) && prevSnippetField(view)) { onStep(view, forward); return true; }
     return fallback(view);
   };
   const enter = newline;
+  km.note("suggest.details");
+  km.note("snippet.next");
+  km.note("snippet.previous");
   return Prec.highest([releaseHeldKey, keymap.of([
-    ...completionKeymap.filter((binding) => binding.key !== "Enter" && binding.key !== "Ctrl-Space"),
-    { key: "Ctrl-Space", run: (view) => (listIsOpen(view.state) ? toggleDocs(view) : startCompletion(view)) },
-    { key: "Enter", run: acceptOrFallBack(isReady, enter) },
-    { key: "Shift-Enter", run: acceptOrFallBack(isReady, insertNewlineAndIndent) },
-    { key: "Tab", run: acceptOrFallBack(isReady, walk(true, tab)) },
-    { key: "Shift-Tab", run: acceptOrFallBack(isReady, walk(false, indentLess)) },
+    ...km.bind("suggest.dismiss", closeCompletion),
+    ...km.bind("suggest.next", moveCompletionSelection(true)),
+    ...km.bind("suggest.previous", moveCompletionSelection(false)),
+    ...km.bind("suggest.nextPage", moveCompletionSelection(true, "page")),
+    ...km.bind("suggest.previousPage", moveCompletionSelection(false, "page")),
+    // Ctrl+Space opens the list, or shows and hides the documentation when it is open; Cmd+I (macOS) opens it again.
+    ...km.bind("suggest.trigger", [(view) => (listIsOpen(view.state) ? toggleDocs(view) : startCompletion(view)), startCompletion]),
+    ...km.bind("suggest.accept", [acceptOrFallBack(isReady, walk(true, tab)), acceptOrFallBack(isReady, enter)]),
+    ...km.bind("suggest.acceptReplace", [acceptOrFallBack(isReady, walk(false, indentLess)), acceptOrFallBack(isReady, insertNewlineAndIndent)]),
     { key: "ArrowLeft", run: moveInToken(false, tokenOf) },
     { key: "ArrowRight", run: moveInToken(true, tokenOf) },
     { key: "Backspace", run: backspaceInToken(tokenOf) },
-    { mac: "Mod-i", run: startCompletion },
-    { mac: "Ctrl-n", run: moveCompletionSelection(true) },
-    { mac: "Ctrl-p", run: moveCompletionSelection(false) },
   ])]);
 }
 const DEFAULT_INDENT = "  ";
@@ -280,9 +285,12 @@ function skipDelimiter(view, delimiter) {
 }
 function mountJsonCodeEditor(parent, options) {
   const attributes = new Compartment(), indent = new Compartment(), language = new Compartment(), editable = new Compartment(), historyField = new Compartment();
-  const editableExtension = (readOnly) => [EditorState.readOnly.of(Boolean(readOnly)), EditorView.editable.of(!readOnly)];
+  // A read-only text is not editable, so it takes the keyboard by tabindex: the keys that only read (Find, fold, the hover and the shape hint) work in it.
+  const editableExtension = (readOnly) => [EditorState.readOnly.of(Boolean(readOnly)), EditorView.editable.of(!readOnly), EditorView.contentAttributes.of(readOnly ? { tabindex: "0" } : {})];
   let languageName = options.language ?? "json";
   let disposed=false, menu=null, catalogs=options.catalogs??[], generation=0;
+  // Every key binding is declared in source-keymap.js; `km` records what this editor installs, for getShortcuts() and the shortcuts dialog.
+  const km = createKeymap();
   // The indentation unit belongs to the document, not to the text as it is edited: JSON reads it once when a document is opened (here,
   // and when the host replaces the text), YAML and Markdown always use two spaces. Typing never changes it.
   let jsonIndent = detectIndent(options.code) ?? DEFAULT_INDENT;
@@ -314,7 +322,6 @@ function mountJsonCodeEditor(parent, options) {
     return optionsModule.hoverAt(target.state, position, { catalogs, format: formatOf(languageName) });
   }, { hoverTime: 300 });
   // Cmd/Ctrl+K Cmd/Ctrl+I shows the hover at the caret (VS Code), and says what it holds.
-  let chordStartedAt = 0;
   const showHoverAtCaret = (target) => {
     if (options.hover === false) return false;
     const run = () => {
@@ -341,7 +348,6 @@ function mountJsonCodeEditor(parent, options) {
   // Undo and Redo run CodeMirror's history first. When it has nothing left, the host's fallback may step further (the source pane routes a whole-document replace to the session); a fallback answers true when it did something.
   const undoCommand = (target) => undoPair(target) || undo(target) || Boolean(options.historyFallback?.undo?.());
   const redoCommand = (target) => redoPair(target) || redo(target) || Boolean(options.historyFallback?.redo?.());
-  const historyBindings = historyKeymap.map((binding) => binding.run === undo ? { ...binding, run: undoCommand } : binding.run === redo ? { ...binding, run: redoCommand } : binding);
   // Accept with no minimum delay: the list is already valid for the typed text, so Tab or Enter right after a keystroke accepts (VS Code does).
   // Screen reader announcements and the problems drawn in the text (squiggles, F8, Cmd/Ctrl+.). The pane supplies the problems.
   const announcer = createAnnouncer(parent, options.announce);
@@ -355,7 +361,7 @@ function mountJsonCodeEditor(parent, options) {
       say(`${fix.title} applied`);
     }
   };
-  const diagnostics = createDiagnostics({ getSource: () => view.state.field(jsonSource), say, applyFix: applyProblemFix });
+  const diagnostics = createDiagnostics({ getSource: () => view.state.field(jsonSource), say, applyFix: applyProblemFix, km });
   // On its own (no source pane to supply the problems) the editor underlines the syntax errors of JSON: one per cause, 300 ms after the last key.
   let syntaxTimer = null;
   function scheduleSyntax() {
@@ -376,25 +382,142 @@ function mountJsonCodeEditor(parent, options) {
   const smart = options.smartListEnter !== false;
   const newlineCommand = (target) => (languageName === "json" ? smart && nextStringItem(target) : languageName === "yaml" ? yamlEnter(target, { lists: smart }) : markdownEnter(target, { lists: smart }));
   const tabCommandFor = (target) => (languageName === "markdown" && markdownTab(target)) || tabCommand(target);
-  const completionExtension = options.completions ? [autocompletion({ override: [completionSource], defaultKeymap: false, icons: false, maxRenderedOptions: 60, interactionDelay: 0, activateOnTypingDelay: 0 }), completionKeys(() => optionsModule !== null, (text, position) => optionsModule?.tokenFor(formatOf(languageName), text, position), (target, forward) => optionsModule?.snippetStep(target, forward, { say }), { newline: (target) => newlineCommand(target) || insertNewlineAndIndent(target), tab: (target) => tabCommandFor(target) })] : null;
+  const completionExtension = options.completions ? [autocompletion({ override: [completionSource], defaultKeymap: false, icons: false, maxRenderedOptions: 60, interactionDelay: 0, activateOnTypingDelay: 0 }), completionKeys(km, () => optionsModule !== null, (text, position) => optionsModule?.tokenFor(formatOf(languageName), text, position), (target, forward) => optionsModule?.snippetStep(target, forward, { say }), { newline: (target) => newlineCommand(target) || insertNewlineAndIndent(target), tab: (target) => tabCommandFor(target) })] : null;
+  // Format the document: the host's command (the source pane formats every language) or, standalone, the JSON formatter.
+  const runFormat = () => { if (options.onFormat) options.onFormat(); else api.format(); return true; };
+
+  // ---- Features loaded on first use (go to definition and rename, the shape hint, the symbol picker, the shortcuts dialog). Each module exports commands
+  // `(view, context) => boolean`; the context is what the editor knows.
+  const lazy = (load) => { const slot = { module: null, loading: null, load: () => (slot.loading ??= load().then((module) => (slot.module = module), (error) => { slot.loading = null; throw error; })) }; return slot; };
+  const modules = { navigation: lazy(() => import('./source-navigation.js')), hints: lazy(() => import('./source-hints.js')), outline: lazy(() => import('./source-outline.js')), shortcuts: lazy(() => import('./source-shortcuts.js')) };
+  const featureContext = () => ({ format: formatOf(languageName), catalogs, say, api, options, view, platform: km.platform, getShortcuts: (platform) => km.shortcuts(platform), readOnly: view.state.readOnly });
+  /** A command that runs `module[name](view, context)`, loading the module the first time. The key is always taken. */
+  const feature = (moduleName, name) => (target) => {
+    const slot = modules[moduleName];
+    const run = () => { if (!disposed) slot.module[name]?.(target, featureContext()); };
+    if (slot.module) run(); else slot.load().then(run, (error) => options.onError?.(error));
+    return true;
+  };
+  // After a `{` or a `,` was typed the shape hint may open by itself (source-hints.js decides); it runs once the update that typed the character is done.
+  const autoHint = (target) => {
+    const head = target.state.selection.main.head, typed = target.state.sliceDoc(head - 1, head);
+    if (options.hints === false || (typed !== "{" && typed !== ",")) return;
+    queueMicrotask(() => {
+      const slot = modules.hints, run = () => { if (!disposed) slot.module.autoShapeHint?.(target, featureContext(), typed); };
+      if (slot.module) run(); else slot.load().then(run, (error) => options.onError?.(error));
+    });
+  };
+  const commentCommand = (target) => {
+    if (languageName === "markdown") return markdownToggleComment(target, say);
+    // JSON has no comments: say so instead of doing nothing (YAML and Markdown comment their lines out).
+    if (languageName !== "json") return false;
+    say("JSON has no comments. Use YAML or Markdown for notes.");
+    return true;
+  };
+  // Insert line above (Cmd/Ctrl+Shift+Enter): a new line with the indentation of this one, above it, with the caret on it.
+  const insertLineAbove = (target) => {
+    const { state } = target;
+    if (state.readOnly) return false;
+    const update = state.changeByRange((range) => {
+      const line = state.doc.lineAt(range.from), indent = /^\s*/.exec(line.text)[0];
+      return { changes: { from: line.from, insert: `${indent}\n` }, range: EditorSelection.cursor(line.from + indent.length) };
+    });
+    target.dispatch(state.update(update, { scrollIntoView: true, userEvent: "input" }));
+    return true;
+  };
+  // Expand selection (word, then each enclosing syntax node) and Shrink selection (back, one step at a time) as in VS Code.
+  const expansions = new WeakMap();
+  const expandSelection = (target) => {
+    const before = target.state.selection, main = before.main;
+    const word = main.empty ? target.state.wordAt(main.head) : null;
+    if (word) target.dispatch({ selection: EditorSelection.single(word.from, word.to), scrollIntoView: true, userEvent: "select.expand" });
+    else selectParentSyntax(target);
+    if (target.state.selection.eq(before)) return true;
+    const history = expansions.get(target) ?? [];
+    expansions.set(target, [...(history.length && history.at(-1).after.eq(before) ? history : []), { before, after: target.state.selection }]);
+    return true;
+  };
+  const shrinkSelection = (target) => {
+    const history = expansions.get(target);
+    const last = history?.at(-1);
+    if (!last || !last.after.eq(target.state.selection)) { say("Nothing to shrink"); return true; }
+    history.pop();
+    target.dispatch({ selection: last.before, scrollIntoView: true, userEvent: "select.shrink" });
+    return true;
+  };
+
+  // The keys VS Code reads from the event, so the physical key counts where Alt changes the character (macOS) and a lowercase letter is accepted
+  // with Shift held (some platforms report it): redo, the problems panel, Format, the field menu, the symbol picker and the chords of Cmd/Ctrl+K.
+  // A lowercase "z" with Shift can match CodeMirror's unshifted undo binding first, so redo resolves before it, even with older undo steps still available.
+  km.bindDom("edit.redo", (target) => { redoCommand(target); return true; });
+  km.bindDom("problem.panel", () => Boolean(options.onFocusProblems?.()));
+  km.bindDom("hover.show", (target) => showHoverAtCaret(target));
+  km.bindDom("format.document", () => runFormat());
+  km.bindDom("edit.fieldMenu", () => { if (languageName !== "json") return false; void openOptions(); return true; });
+  // Cmd/Ctrl+L: read from the event because a platform that reports Ctrl+Shift+L as a lowercase "l" would otherwise run it instead of Select All Occurrences.
+  km.bindDom("select.line", (target) => selectLine(target));
+  km.bindDom("nav.symbol", feature("outline", "showSymbolPicker"));
+  km.bindDom("help.shortcuts", feature("shortcuts", "showShortcuts"));
+  const saying = (run) => (target) => run(target, say);
+  km.bindDom("fold.toggle", saying(toggleFoldHere));
+  km.bindDom("fold.foldRecursively", saying(foldRecursively));
+  km.bindDom("fold.unfoldRecursively", saying(unfoldRecursively));
+  km.bindDom("fold.all", saying(foldEverything));
+  km.bindDom("fold.unfoldAll", saying(unfoldEverything));
+  for (let level = 1; level <= 7; level++) km.bindDom(`fold.level${level}`, saying(foldLevel(level)));
+  const keydownKeys = Prec.high(domKeymap(km, say));
+
+  // CodeMirror's own bindings, kept as they are except where the table gives a key to something else: the expand-selection key is ours, Ctrl+G goes to a
+  // line (Find next is F3 and, on macOS, Cmd+G), and Fold All and Unfold All are chords. Undo and Redo run CodeMirror's history, then the host's.
+  const mac = km.platform === "mac";
+  const kept = {
+    basic: defaultKeymap.filter((binding) => binding.run !== selectParentSyntax && binding.run !== selectLine),
+    history: historyKeymap.filter((binding) => binding.run !== undo && binding.run !== redo),
+    search: searchKeymap.filter((binding) => binding.run !== gotoLine && !(binding.key === "Mod-g" && !mac)),
+  };
+  const mainKeymap = keymap.of([
+    ...km.bind("edit.enter", (target) => newlineCommand(target)),
+    ...km.hidden([
+      { key: '"', run: (view2) => languageName === "json" && skipDelimiter(view2, '"') },
+      { key: ",", run: (view2) => languageName === "json" && skipDelimiter(view2, ",") },
+      { key: "Backspace", run: (target) => languageName === "markdown" && markdownBackspace(target) },
+      // The field menu (a searchable dialog of the choices of one field) is on Alt+Shift+O, a chord VS Code does not use. With completions off
+      // it is also on Ctrl+Space, because the list is not there to take that key.
+      ...(options.completions ? [] : [{ key: "Ctrl-Space", run: () => languageName === "json" && (void openOptions(), true) }, { key: "Mod-Space", run: () => languageName === "json" && (void openOptions(), true) }]),
+    ]),
+    ...km.bind("edit.tab", (target) => tabCommandFor(target)),
+    ...km.bind("edit.shiftTab", indentLess),
+    ...km.bind("lines.comment", commentCommand),
+    ...km.bind("lines.insertAbove", insertLineAbove),
+    ...km.bind("focus.toggleTab", toggleTabFocusMode),
+    ...km.bind("nav.line", gotoLine),
+    ...km.bind("select.expand", expandSelection),
+    ...km.bind("select.shrink", shrinkSelection),
+    ...km.bind("find.replace", openSearchPanel),
+    ...km.bind("fold.fold", saying(fold)),
+    ...km.bind("fold.unfold", saying(unfold)),
+    ...km.bind("edit.undo", undoCommand),
+    ...km.bind("hint.shape", feature("hints", "showShapeHint")),
+    ...km.bind("nav.definition", feature("navigation", "goToDefinition")),
+    ...km.bind("nav.peek", feature("navigation", "peekDefinition")),
+    ...km.bind("nav.references", feature("navigation", "findReferences")),
+    ...km.bind("nav.rename", feature("navigation", "renameSymbol")),
+    ...km.hidden(closeBracketsKeymap),
+    ...km.spread(kept.basic),
+    ...km.spread(kept.history),
+    ...km.spread(kept.search),
+  ]);
+  const shortcutAttribute = (ids) => ids.flatMap((id) => km.shortcuts().find((row) => row.id === id)?.strokes.slice(0, 1) ?? []).map((stroke) => strokeText(stroke, km.platform).replace(/Cmd/g, "Meta").replace(/Ctrl/g, "Control")).join(" ");
   const contentAttributes = (invalid = options.invalid, describedBy = options.describedBy) => EditorView.contentAttributes.of({
     "aria-label": options.label,
     "aria-invalid": String(Boolean(invalid)),
     "aria-describedby": describedBy ?? "",
-    "aria-keyshortcuts": options.completions ? "Control+Space F8 Shift+F8 Control+Period Alt+Shift+F" : "Control+Space Alt+Shift+O Alt+Shift+F",
-    "aria-description": options.completions ? "Press Control+Space for suggestions. Press F8 for the next problem. Press Escape then Tab to leave the editor." : "Press Escape then Tab to leave the editor.",
+    "aria-keyshortcuts": shortcutAttribute(["suggest.trigger", "problem.next", "problem.previous", "problem.quickFix", "format.document", "nav.symbol"]),
+    "aria-description": options.completions ? `Press ${strokeText("Ctrl-Space", km.platform).replace("Ctrl", "Control")} for suggestions. Press F8 for the next problem. Press ${strokeText("Mod-k Mod-s", km.platform).replace(/Cmd/g, "Command").replace(/Ctrl/g, "Control")} for the keyboard shortcuts. Press Escape then Tab to leave the editor.` : "Press Escape then Tab to leave the editor.",
     spellcheck: "false",
     autocapitalize: "off",
     autocorrect: "off"
   });
-  // Format the document: the host's command (the source pane formats every language) or, standalone, the JSON formatter.
-  const runFormat = () => { if (options.onFormat) options.onFormat(); else api.format(); return true; };
-  // These chords are read from the event, not from CodeMirror's keymap: Alt changes the character a key produces on macOS, so the physical key counts.
-  const letter = (event, name) => event.code === `Key${name.toUpperCase()}` || event.key.toLowerCase() === name;
-  // Cmd/Ctrl+Shift+F (kept from earlier versions) and VS Code's Shift+Alt+F.
-  const isFormatKey = (event) => event.shiftKey && !((event.metaKey || event.ctrlKey) && event.altKey) && (event.metaKey || event.ctrlKey || event.altKey) && letter(event, "f");
-  // The field menu: Alt+Shift+O, a chord VS Code does not use.
-  const isOptionsKey = (event) => event.altKey && event.shiftKey && !event.metaKey && !event.ctrlKey && letter(event, "o");
   const view = new EditorView({ parent, state: EditorState.create({ doc: options.code, extensions: [
     // The problem menu's keys come before the list's: the two are never open together, and Enter must reach whichever is.
     diagnostics.extension,
@@ -410,14 +533,16 @@ function mountJsonCodeEditor(parent, options) {
     indentOnInput(),
     historyField.of(history()),
     drawSelection(),
-    // Multiple cursors, as in VS Code: Cmd/Ctrl+D, Cmd/Ctrl+Shift+L, Cmd/Ctrl+Alt+Up and Down, Alt+click (and Cmd/Ctrl+click), and Shift+Alt+drag for a column.
+    // Multiple cursors, as in VS Code: Cmd/Ctrl+D, Cmd/Ctrl+Shift+L, Cmd/Ctrl+Alt+Up and Down, Alt+click, and Shift+Alt+drag for a column.
     EditorState.allowMultipleSelections.of(true),
-    EditorView.clickAddsSelectionRange.of((event) => event.altKey || (/Mac|iPhone|iPad/.test(navigator.platform) ? event.metaKey : event.ctrlKey)),
+    // Alt+click adds a cursor (VS Code's default); Cmd/Ctrl+click goes to the definition.
+    EditorView.clickAddsSelectionRange.of((event) => event.altKey),
     rectangularSelection({ eventFilter: (event) => event.altKey && event.shiftKey && event.button === 0 }),
     crosshairCursor(),
     bracketMatching(),
     closeBrackets(),
     codeFolding(),
+    options.fold === false ? [] : foldGutterExtension,
     search({ top: true }),
     highlightSelectionMatches(),
     syntaxHighlighting(highlightStyle),
@@ -425,63 +550,8 @@ function mountJsonCodeEditor(parent, options) {
     attributes.of(contentAttributes()),
     options.lineNumbers ? lineNumbers() : [],
     EditorView.lineWrapping,
-    // Some platforms report a lowercase key even with Shift held. Handle
-    // formatting before the standard Mod-f search binding normalizes the key.
-    Prec.high(EditorView.domEventHandlers({ keydown(event) {
-      // A lowercase "z" with Shift can match CodeMirror's unshifted undo
-      // binding first. Resolve redo before that fallback, even with older
-      // undo steps still available (otherwise it silently performs undo).
-      if ((event.metaKey || event.ctrlKey) && event.shiftKey && !event.altKey && event.key.toLowerCase() === "z") {
-        event.preventDefault();
-        redoCommand(view);
-        return true;
-      }
-      // Cmd/Ctrl+K then Cmd/Ctrl+I (within two seconds) shows the hover at the caret. It is read here, not as a CodeMirror chord, because a chord
-      // that starts with Mod+K would also swallow Mod+Shift+K (delete line).
-      const mod = /Mac|iPhone|iPad/.test(navigator.platform) ? event.metaKey : event.ctrlKey;
-      if (mod && !event.altKey && !event.shiftKey && event.key.toLowerCase() === "k") { chordStartedAt = Date.now(); event.preventDefault(); return true; }
-      else if (mod && !event.altKey && !event.shiftKey && event.key.toLowerCase() === "i" && Date.now() - chordStartedAt < 2000) {
-        chordStartedAt = 0;
-        if (showHoverAtCaret(view)) { event.preventDefault(); return true; }
-      }
-      // The problems panel: Cmd+Shift+M on macOS, Ctrl+Shift+M elsewhere (read from the physical key, as the format chord is).
-      if (mod && event.shiftKey && !event.altKey && event.code === "KeyM" && options.onFocusProblems?.()) { event.preventDefault(); return true; }
-      if (isFormatKey(event)) {
-        event.preventDefault();
-        runFormat();
-        return true;
-      }
-      if (languageName === "json" && isOptionsKey(event)) {
-        event.preventDefault();
-        void openOptions();
-        return true;
-      }
-      return false;
-    } })),
-    keymap.of([
-      { key: "Enter", run: (target) => newlineCommand(target) },
-      { key: '"', run: (view2) => languageName === "json" && skipDelimiter(view2, '"') },
-      { key: ",", run: (view2) => languageName === "json" && skipDelimiter(view2, ",") },
-      { key: "Backspace", run: (target) => languageName === "markdown" && markdownBackspace(target) },
-      // The field menu (a searchable dialog of the choices of one field) is on Alt+Shift+O, a chord VS Code does not use. With completions off
-      // it is also on Ctrl+Space, because the list is not there to take that key.
-      ...(options.completions ? [] : [{ key: "Ctrl-Space", run: () => languageName === "json" && (void openOptions(), true) }, { key: "Mod-Space", run: () => languageName === "json" && (void openOptions(), true) }]),
-      { key: "Tab", run: (target) => tabCommandFor(target), shift: indentLess },
-      // The problems panel (VS Code: Cmd+Shift+M on macOS, Ctrl+Shift+M elsewhere); Ctrl+M (Ctrl+Shift+M on macOS) is VS Code's switch for Tab leaving the editor.
-      // JSON has no comments: say so instead of doing nothing (YAML and Markdown comment their lines out).
-      { key: "Mod-/", run: (target) => {
-        if (languageName === "markdown") return markdownToggleComment(target, say);
-        if (languageName !== "json") return false;
-        say("JSON has no comments. Use YAML or Markdown for notes.");
-        return true;
-      } },
-      { key: "Ctrl-m", mac: "Ctrl-Shift-m", run: toggleTabFocusMode },
-      ...closeBracketsKeymap,
-      ...defaultKeymap,
-      ...historyBindings,
-      ...searchKeymap,
-      ...foldKeymap
-    ]),
+    keydownKeys,
+    mainKeymap,
     EditorView.domEventHandlers({
       paste(event){
         if(!event.clipboardData||view.state.selection.ranges.length!==1)return false;
@@ -491,7 +561,20 @@ function mountJsonCodeEditor(parent, options) {
       },
       focus() {
         if (options.completions) void loadOptions().catch(() => {});
+        if (options.hints !== false) void modules.hints.load().catch(() => {});
         options.onFocus?.();
+      },
+      mousedown(event, target) {
+        // Cmd/Ctrl+click on an id goes to its definition (a click anywhere else is a plain click).
+        const mod = km.platform === "mac" ? event.metaKey : event.ctrlKey;
+        if (!mod || event.altKey || event.shiftKey || event.button !== 0 || event.detail > 1) return false;
+        const position = target.posAtCoords({ x: event.clientX, y: event.clientY });
+        if (position === null) return false;
+        event.preventDefault();
+        target.dispatch({ selection: { anchor: position } });
+        target.focus();
+        feature("navigation", "goToDefinition")(target);
+        return true;
       },
       mousemove(event) {
         options.onHoverField?.(event.target.closest("[data-field]")?.dataset.field ?? null);
@@ -507,6 +590,7 @@ function mountJsonCodeEditor(parent, options) {
       if (busy !== (dom.dataset.opfBusy === "1")) { if (busy) dom.dataset.opfBusy = "1"; else delete dom.dataset.opfBusy; }
       if (update.docChanged && !update.transactions.every((tr) => tr.annotation(external))) options.onChange(update.state.field(jsonSource));
       if (update.docChanged) scheduleSyntax();
+      if (update.docChanged && update.transactions.some((tr) => tr.isUserEvent("input.type"))) autoHint(update.view);
     })
   ] }) });
   const api = {
@@ -590,6 +674,17 @@ function mountJsonCodeEditor(parent, options) {
     triggerQuickFix:()=>diagnostics.openMenu(view),
     /** Open the suggestion list at the caret (Ctrl+Space). */
     triggerCompletion:()=>startCompletion(view),
+    /**
+     * Every key binding this editor installed, for `platform` ("mac", "win" or "linux"; default: the page's): `{ id, title, group, keys, symbols, strokes,
+     * when? }` in the order of the shortcuts list. The same table installs the keys, so the list is the keymap.
+     */
+    getShortcuts:(platform)=>km.shortcuts(platform),
+    /** Bindings the editor installed that have no title in the list (empty unless a binding was added without a place in source-keymap.js). */
+    unlistedShortcuts:()=>km.unlisted(),
+    /** Open the keyboard shortcuts dialog (Cmd/Ctrl+K Cmd/Ctrl+S). */
+    showShortcuts:()=>feature("shortcuts","showShortcuts")(view),
+    /** Open the symbol picker (Cmd/Ctrl+Shift+O). */
+    showSymbols:()=>feature("outline","showSymbolPicker")(view),
     /** Whether a suggestion list is open or being asked for. */
     isCompleting:()=>completionStatus(view.state)!==null,
     /** Perform a fix (its edits as one undoable change, or its own action). */
