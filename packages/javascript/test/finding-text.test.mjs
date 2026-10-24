@@ -257,3 +257,22 @@ describe("patch fixes of schema findings", () => {
     assert.deepEqual(schemaFindings(next), []);
   });
 });
+
+describe("locations in plain words", () => {
+  const twice = (text) => {
+    const found = validate(text, { only: ["format"] }).findings.find((entry) => entry.ruleId === "opf/duplicate-key");
+    assert.ok(found, "a duplicate-key finding");
+    return describeFinding(found, { format: "json" }).message;
+  };
+  test("a repeated key names the slide, the object or the top level, never a list index", () => {
+    assert.equal(twice('{"slides":[],"name":"a","name":"b"}'), "`name` appears twice at the top level. JSON keeps only the last value, so the earlier one is ignored.");
+    assert.match(twice('{"slides":[{"title":"a","title":"b"}]}'), /^`title` appears twice in slide 1\. /);
+    assert.match(twice('{"slides":[{"title":"x"},{"title":"a","title":"b"}]}'), /^`title` appears twice in slide 2\. /);
+    assert.match(twice('{"slides":[],"design":{"theme":"a","theme":"b"}}'), /^`theme` appears twice in `design`\. /);
+    assert.match(twice('{"slides":[{"title":"a","design":{"theme":"a","theme":"b"}}]}'), /^`theme` appears twice in `design` of slide 1\. /);
+    assert.match(twice('{"slides":[{"title":"a","blocks":[{"text":"a","text":"b"}]}]}'), /^`text` appears twice in blocks entry 1 of slide 1\. /);
+  });
+  test("no finding message names a bare list index as a place", () => {
+    for (const text of ['{"slides":[{"title":"a","title":"b"}]}', '{"slides":[{"blocks":[{"text":"a","text":"b"}]}]}']) assert.doesNotMatch(twice(text), /in `\d+`/);
+  });
+});

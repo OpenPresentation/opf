@@ -18,7 +18,7 @@ const describeAll = () =>
 /** name -> [message, next] of the first finding of the case. */
 const GOLDEN = {
   "json-syntax": ["The list `\"slides\": [` on line 1 is never closed.", "add `]` after its last item."],
-  "duplicate-key": ["`name` appears twice in this object. JSON keeps only the last value, so the earlier one is ignored.", "keep one of them, or merge their values into one."],
+  "duplicate-key": ["`name` appears twice at the top level. JSON keeps only the last value, so the earlier one is ignored.", "keep one of them, or merge their values into one."],
   "schema-type": ["`items` should be a list, but it is text (`One string`).", "write [\"One string\"]."],
   "reference-id-duplicate": ["Two references use the id `a` (references 1 and 2).", "give the later one another id (for example `a-2`); runs cite references by id."],
   "cite-unknown-reference": ["`cite: \"smth\"` names a reference that does not exist.", "did you mean `smith`? Or add a reference with the id `smth` under `references`."],

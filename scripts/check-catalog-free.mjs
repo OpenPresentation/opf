@@ -8,6 +8,10 @@
 //   node scripts/check-catalog-free.mjs --report   print the sizes and catalog bytes, never fail
 //   node scripts/check-catalog-free.mjs --update   rewrite the budget from the current sizes (+ headroom)
 //
+// An entry can also list modules it must never bundle (FORBIDDEN_INPUTS): `source` (the editor's text tools: locate,
+// describeFinding, explain) reads the rule metadata (src/validation-rule-info.ts) and never the rule implementations
+// (rules-*.ts, validation-rules.ts, the validator and composition), which cost about 26 KB gzipped.
+//
 // The generated modules are inputs; the script generates them when they are missing. Catalog modules are the gallery
 // package's files (packages/gallery/, or node_modules/@openpresentation/gallery/), and core's former catalog modules
 // (src/generated/catalogs.ts, src/generated/previews.ts, src/catalog.ts, spec/catalogs/) should one come back.
@@ -28,6 +32,13 @@ const CONTENT_ENTRIES = new Set(['examples', 'docs', 'repo-readme']);
  * have neither a catalog rule nor a budget. The browser build of the root (`browser`) has both. scripts/check-browser-safe.mjs
  * proves no other entry reaches them. */
 export const NODE_ENTRIES = new Set(['index', 'node-engine']);
+/** Modules an entry must not bundle, as { entry: { patterns, why } }; a match in the entry's esbuild metafile fails the check. */
+export const FORBIDDEN_INPUTS = {
+  source: {
+    patterns: [/(^|\/)src\/rules-[\w-]+\.ts$/, /(^|\/)src\/validation-rules\.ts$/, /(^|\/)src\/validator\.ts$/, /(^|\/)src\/composition(\/|\.ts$)/],
+    why: 'explain and describeFinding read src/validation-rule-info.ts, not the rule implementations',
+  },
+};
 /** Headroom over the measured gzip size when the budget is rewritten. */
 const HEADROOM = 0.03;
 
@@ -40,7 +51,8 @@ export function tsupEntries(text) {
   return Object.fromEntries([...block.matchAll(/["']?([\w-]+)["']?\s*:\s*["']([^"']+)["']/g)].map((match) => [match[1], match[2]]));
 }
 
-async function measure() {
+/** Bundles each browser entry (only the named ones when `only` is given) and returns its sizes and its input modules. */
+export async function measure(only) {
   // The generated modules are inputs; a fresh checkout generates them first.
   if (!existsSync(path.join(packageRoot, 'src', 'generated', 'engine-data.ts'))) {
     const generated = spawnSync(process.execPath, ['scripts/generate.mjs'], { cwd: packageRoot, stdio: 'inherit' });
@@ -51,7 +63,7 @@ async function measure() {
   const entries = tsupEntries(readFileSync(path.join(packageRoot, 'tsup.config.ts'), 'utf8'));
   const results = {};
   for (const [name, source] of Object.entries(entries).sort(([a], [b]) => a.localeCompare(b))) {
-    if (NODE_ENTRIES.has(name)) continue;
+    if (NODE_ENTRIES.has(name) || (only && !only.includes(name))) continue;
     const result = await build({
       entryPoints: [path.join(packageRoot, source)],
       bundle: true,
@@ -67,7 +79,8 @@ async function measure() {
     const output = Object.values(result.metafile.outputs)[0];
     const catalogBytes = Object.entries(output.inputs).filter(([input]) => isCatalogModule(input)).reduce((sum, [, entry]) => sum + entry.bytesInOutput, 0);
     const catalogModules = Object.keys(output.inputs).filter(isCatalogModule).map((input) => path.relative(packageRoot, path.resolve(input)).split(path.sep).join('/'));
-    results[name] = { minified: code.length, gzip: gzipSync(code, { level: 9 }).length, catalogBytes, catalogModules };
+    const inputs = Object.keys(output.inputs).map((input) => path.relative(packageRoot, path.resolve(input)).split(path.sep).join('/'));
+    results[name] = { minified: code.length, gzip: gzipSync(code, { level: 9 }).length, catalogBytes, catalogModules, inputs };
   }
   return results;
 }
@@ -76,6 +89,9 @@ export function problems(results, budget) {
   const found = [];
   for (const [name, entry] of Object.entries(results)) {
     if (entry.catalogBytes > 0) found.push(`${name}: ${entry.catalogBytes} bytes from catalog modules (${entry.catalogModules.join(', ')}); only the Node entries may register @openpresentation/gallery (RR-78)`);
+    const forbidden = FORBIDDEN_INPUTS[name];
+    const forbiddenInputs = forbidden ? (entry.inputs ?? []).filter((input) => forbidden.patterns.some((pattern) => pattern.test(input))) : [];
+    if (forbiddenInputs.length) found.push(`${name}: bundles ${forbiddenInputs.join(', ')}; ${forbidden.why}`);
     if (CONTENT_ENTRIES.has(name)) continue;
     const limit = budget?.entries?.[name];
     if (limit === undefined) found.push(`${name}: no recorded budget; run node scripts/check-catalog-free.mjs --update`);
@@ -88,7 +104,7 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   const results = await measure();
   const args = process.argv.slice(2);
   if (args.includes('--report')) {
-    console.log(JSON.stringify(results, (key, value) => (key === 'catalogModules' ? undefined : value), 2));
+    console.log(JSON.stringify(results, (key, value) => (key === 'catalogModules' || key === 'inputs' ? undefined : value), 2));
   } else if (args.includes('--update')) {
     const entries = Object.fromEntries(Object.entries(results).filter(([name]) => !CONTENT_ENTRIES.has(name)).map(([name, entry]) => [name, Math.ceil(entry.gzip * (1 + HEADROOM))]));
     const measured = Object.fromEntries(Object.entries(results).map(([name, entry]) => [name, { minified: entry.minified, gzip: entry.gzip }]));

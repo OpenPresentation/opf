@@ -1,105 +1,17 @@
 import { imageBackground } from './composition.js';
 import { intrinsicImageSize } from './image-aspect.js';
 import type { ValidationRule } from './rule-context.js';
-import { rule } from './rule-context.js';
 import { plainText, pointerOfDotted, runsOf, slidePayloads } from './rule-content.js';
 import { type Rec, rec } from './rule-design.js';
 import { resolveNarrative, unreferencedBeats } from './narrative-plan.js';
+import { MAX_FURNITURE_LINES, emptySlideRule, emptyTextRule, furnitureWrapsRule, layoutFailedRule, minFontRule, outsideRule, overflowRule, placeholderRule, regionFullRule, regionKindRule, regionUnknownRule, resolutionRule, unplacedRule, unresolvedRule, unusedBeatRule } from './validation-rule-info.js';
 
 const PX_TO_PT = 0.75;
 const round = (value: number, places = 1) => Math.round(value * 10 ** places) / 10 ** places;
 
 // ------------------------------------------------------------------ layout
 
-const overflowRule = rule(
-	'text-overflow',
-	'layout',
-	'warning',
-	'Text or a table does not fit its space at the smallest allowed size.',
-	'Core composition shrinks text to the readable minimum and then reports what still does not fit. Overflowing text is clipped or runs over other content in the preview and in PowerPoint.',
-	{
-		cost: 'composition',
-		approximations:
-			'Uses composeSlide at the deck\'s slide size with the fonts of the resolved font scheme. Without a host-supplied text measurement (ValidateOptions.fonts.textMeasurement) widths are core\'s portable estimate, which can differ from the real font by a few percent; pass the renderer\'s measurement for font-exact results. A composition that sets overflow: "error" is reported as a warning here, so that `valid` never depends on font metrics; rendering and export still refuse such a slide when it does not fit.',
-	},
-);
-const unresolvedRule = rule(
-	'unresolved-content',
-	'layout',
-	'warning',
-	'Content cannot be drawn as authored.',
-	'composeSlide reports content it cannot place or an effect it does not support (for example a picture bullet without a logo, a date field without a date, or an unsupported image treatment). The preview and the export fall back.',
-	{ cost: 'composition' },
-);
-const layoutFailedRule = rule(
-	'layout-failed',
-	'layout',
-	'warning',
-	'The slide layout could not be computed.',
-	'Composition threw for a slide that passed schema validation, so geometry-based rules (contrast, overflow, reading order, resolution) were skipped for it.',
-	{ cost: 'composition' },
-);
-const minFontRule = rule(
-	'min-font-size',
-	'layout',
-	'warning',
-	'Text is drawn smaller than the readable minimum.',
-	'Small type is unreadable from the back of a room and on a phone. The engine\'s own default floor is 12 pt (16 px); anything much below that was lowered on purpose or by a composition that could not fit the text.',
-	{
-		cost: 'composition',
-		standard: 'Common presentation guidance (12 pt minimum for body text; 18 pt or more is easier to read from a distance).',
-		thresholds: ['minFontSizePt'],
-		approximations: 'Sizes are those composeSlide fitted, expressed on the 13.33 x 7.5 in reference slide (96 px per inch, so 1 px is 0.75 pt; a smaller canvas scales type down with it) and explicit run fontSize values in points. Per payload, the smallest part (a metric label or a quote attribution) is reported. Table cell text (default 11.25 pt), code and header/footer furniture are not checked.',
-	},
-);
-
-const regionUnknownRule = rule(
-	'region-unknown',
-	'layout',
-	'warning',
-	'A block is pinned to a region the layout does not have.',
-	'A region pin (`region` on a root block) names a region of the slide\'s layout. A name the layout does not have is ignored: the block is placed by its kind, which may not be where the author meant.',
-	{ cost: 'composition' },
-);
-const regionKindRule = rule(
-	'region-kind',
-	'layout',
-	'warning',
-	'A block is pinned to a region that does not accept its kind.',
-	'A region says which content kinds it takes. A pin to a region that does not take the block\'s kind is ignored and the block is placed by its kind.',
-	{ cost: 'composition' },
-);
-const regionFullRule = rule(
-	'region-full',
-	'layout',
-	'warning',
-	'A block is pinned to a region that is already full.',
-	'A region holds at most `max` blocks on one slide. A pin to a full region is ignored and the block is placed by its kind.',
-	{ cost: 'composition' },
-);
-const unplacedRule = rule(
-	'layout-unplaced',
-	'layout',
-	'warning',
-	'No region of the layout has room for a block.',
-	'Content is never dropped: a block no region has room for is drawn in the layout\'s overflow region beyond its max (or below the grid), where it crowds the others. Paginate moves it to a continuation slide with the same layout.',
-	{ cost: 'composition' },
-);
 const REGION_RULES = { 'region-unknown': regionUnknownRule, 'region-kind': regionKindRule, 'region-full': regionFullRule, 'layout-unplaced': unplacedRule } as const;
-
-/** A header or footer zone is a band at the slide edge; text past this many lines grows upward into the content. */
-const MAX_FURNITURE_LINES = 2;
-const furnitureWrapsRule = rule(
-	'furniture-wraps',
-	'layout',
-	'warning',
-	`A header or footer zone wraps onto more than ${MAX_FURNITURE_LINES} lines.`,
-	'Header and footer text repeats on every slide in a band at the slide edge. A zone that wraps onto three or more lines grows into the body, and long source lines read poorly at footer size. Footers carry short repeated text (a title, a date, a page number); sources belong in a caption or the speaker notes.',
-	{
-		cost: 'composition',
-		approximations: 'Uses the lines core composed for the zone at the deck\'s slide size; without a host-supplied text measurement (ValidateOptions.fonts.textMeasurement) widths are core\'s portable estimates. A deck-level header or footer is reported once.',
-	},
-);
 
 const layoutRules: ValidationRule[] = [
 	{
@@ -187,14 +99,6 @@ const layoutRules: ValidationRule[] = [
 
 // -------------------------------------------------------------------- fonts
 
-const outsideRule = rule(
-	'font-outside-scheme',
-	'layout',
-	'warning',
-	'Text uses a font family that is not in the deck\'s font scheme.',
-	'The font scheme is the deck\'s font choice. A run that names another family will not follow a font-scheme change, may be missing on the viewer\'s machine, and breaks the deck\'s typographic consistency.',
-	{ approximations: 'Compares the run\'s fontFamily (case-insensitively) with the heading, body, code and accent families of the slide\'s resolved font scheme and the scheme\'s major/minor fonts. Families that the host substitutes are still different names here.' },
-);
 const fontRules: ValidationRule[] = [
 	{
 		info: outsideRule,
@@ -226,19 +130,6 @@ const fontRules: ValidationRule[] = [
 
 // ------------------------------------------------------------------- images
 
-const resolutionRule = rule(
-	'image-resolution',
-	'layout',
-	'warning',
-	'An image has too few pixels for the size it is shown at.',
-	'An image stretched beyond its pixel size looks blurry or blocky on a projector or a high-density screen.',
-	{
-		cost: 'composition',
-		thresholds: ['minImagePpi'],
-		approximations:
-			'Only embedded data: images (and asset: references to them) have readable pixel sizes; URLs and files are never fetched, so they are not checked. The displayed size is the composed frame (cover and stretch are measured as the cover scale, contain as the contain scale). Effective ppi is the image pixels per inch of the 96 px/inch reference slide. SVG is vector and exempt.',
-	},
-);
 const resolutionRules: ValidationRule[] = [
 	{
 		info: resolutionRule,
@@ -275,39 +166,6 @@ const resolutionRules: ValidationRule[] = [
 
 // ------------------------------------------------------------------ content
 
-const placeholderRule = rule(
-	'placeholder-text',
-	'content',
-	'warning',
-	'Placeholder text was left in the deck.',
-	'"Lorem ipsum", "Click to add title", "TBD" and bracketed prompts are scaffolding. Shipping them reads as unfinished work.',
-	{ approximations: 'Case-insensitive patterns for lorem ipsum, template prompts ("Click to add...", "Your title here", "[Insert ...]", a bare "Title" or "Text"), and the markers TBD, TBC, TODO, FIXME and XXX in capitals. A deliberate use of the words is flagged too; disable the rule for that slide with ignorePaths.' },
-);
-const emptyTextRule = rule(
-	'empty-text',
-	'content',
-	'info',
-	'A text field is present but empty.',
-	'An empty title, text block or list item draws nothing, and leaves a hole in the outline and for assistive technology.',
-);
-const emptySlideRule = rule(
-	'empty-slide',
-	'content',
-	'warning',
-	'A slide has no content at all.',
-	'A slide with no title, no content and no picture is almost always an accident of editing. (A deliberately blank slide can use the blank layout.)',
-);
-const unusedBeatRule = rule(
-	'unused-beat',
-	'content',
-	'info',
-	'A beat of the narrative has no slide that references it.',
-	'The narrative is the plan and the slides are the product. When some slides name a beat (slides[].beat) and a beat of the plan has none, the deck skips a step of the story or the plan is out of date.',
-	{
-		approximations:
-			'Resolved like every content reference: the document\'s catalogs groups, then the registered catalogs. A narrative that resolves nowhere is not checked. A deck in which no slide references any beat is not checked either, because it has not linked its slides to the plan. A slide that lists several beats covers each of them.',
-	},
-);
 const PLACEHOLDERS: { pattern: RegExp; label: string }[] = [
 	{ pattern: /lorem ipsum|dolor sit amet|consectetur adipiscing/i, label: 'lorem ipsum' },
 	{ pattern: /\b(click|tap) to (add|edit|enter)\b|\b(add|enter|insert|type) (a |your |the )?(title|subtitle|text|heading|caption|content|name|description)( here)?\s*$/i, label: 'a template prompt' },

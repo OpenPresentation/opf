@@ -87,6 +87,19 @@ export function fieldLabel(segments: readonly string[]): string {
   return code(last);
 }
 
+/**
+ * Where an object is, in plain words, for "appears twice ...": "at the top level", "in slide 1", "in `design`", "in `design` of slide 2". A list index is
+ * never shown as a name (`0` is not a place): it becomes "slide 1" or "`items` entry 1".
+ */
+export function placeWords(segments: readonly string[]): string {
+  if (!segments.length) return "at the top level";
+  const slide = segments[0] === "slides" && segments.length >= 2 && isIndex(segments[1]) ? Number(segments[1]) + 1 : undefined;
+  if (slide !== undefined && segments.length === 2) return `in slide ${slide}`;
+  const last = segments[segments.length - 1] as string;
+  const inner = isIndex(last) ? fieldLabel(segments) : code(last);
+  return slide !== undefined ? `in ${inner} of slide ${slide}` : `in ${inner}`;
+}
+
 /** What an object is called in a sentence ("the deck", "a slide", "`design`"). */
 export function containerName(segments: readonly string[]): string {
   if (!segments.length) return "the deck";
