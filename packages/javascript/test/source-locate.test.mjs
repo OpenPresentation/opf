@@ -1,5 +1,5 @@
 // `locate` and `pathAt`: a JSON Pointer to a range of text and a caret to a path, tolerant of broken text. YAML and Markdown are
-// phase 2 and answer undefined; no range is guessed.
+// in source-locate-formats.test.mjs.
 import assert from "node:assert/strict";
 import { describe, test } from "node:test";
 
@@ -73,10 +73,8 @@ describe("locate", () => {
     assert.equal(locate("", "json", "/a"), undefined);
     assert.equal(locate(text, "json", 42), undefined);
   });
-  test("YAML and Markdown are not located yet (phase 2)", () => {
-    assert.equal(locate("name: x\nslides: []\n", "yaml", "/name"), undefined);
-    assert.equal(locate("# Title\n", "md", "/slides/0/title"), undefined);
-    assert.equal(locate("# Title\n", "markdown", ""), undefined);
+  test("a format that is not JSON, YAML or Markdown is not located", () => {
+    assert.equal(locate("a,b\n", "csv", "/name"), undefined);
   });
 });
 
@@ -127,8 +125,7 @@ describe("pathAt", () => {
     for (let offset = 0; offset <= owner.length; offset++) assert.doesNotThrow(() => pathAt(owner, "json", offset));
     assert.doesNotThrow(() => pathAt("{ [ } ] ,,", "json", 4));
   });
-  test("YAML and Markdown are not addressed yet (phase 2)", () => {
-    assert.equal(pathAt("name: x\n", "yaml", 2), undefined);
-    assert.equal(pathAt("# T\n", "md", 1), undefined);
+  test("a format that is not JSON, YAML or Markdown has no paths", () => {
+    assert.equal(pathAt("a,b\n", "csv", 1), undefined);
   });
 });

@@ -49,3 +49,24 @@ export function applyTextEdits(text: string, edits: readonly TextEdit[]): string
   }
   return result + text.slice(cursor);
 }
+
+/**
+ * A function of one text, remembering its last answers (the newest `size`, compared by value): an editor asks several questions of one text
+ * (the range of each of its findings, the path under the caret) and the parse behind each answer is the same. The answers must not be
+ * changed by their callers.
+ */
+export function rememberByText<T>(read: (text: string) => T, size = 2): (text: string) => T {
+  const kept: { text: string; value: T }[] = [];
+  return (text) => {
+    const at = kept.findIndex((entry) => entry.text === text);
+    if (at >= 0) {
+      const [entry] = kept.splice(at, 1);
+      kept.unshift(entry as { text: string; value: T });
+      return (entry as { text: string; value: T }).value;
+    }
+    const value = read(text);
+    kept.unshift({ text, value });
+    if (kept.length > size) kept.pop();
+    return value;
+  };
+}

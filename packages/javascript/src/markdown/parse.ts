@@ -4,6 +4,7 @@ import { levelsFromIndents, parseCodeFence, parseQuoteLines, splitWhen } from ".
 import { type InlineIssue, matchBracket, parseAttributes, parseInline, parsePlainInline, readDestination, unescapeInline } from "./inline.js";
 import { Ctx, DECIMAL, type Line, type Range, lineRange, readCsv, readYamlMapping, splitLines } from "./support.js";
 import { PROMOTED_REGION_KEY } from "../bind-regions.js";
+import { BLOCK_AS_VALUES, BLOCK_OPTION_KEYS, METRIC_KEYS, SLIDE_OPTION_KEYS } from "./dialect.js";
 
 export interface ParseOptions {
   /**
@@ -14,8 +15,7 @@ export interface ParseOptions {
   split?: "auto" | "rules" | "headings";
 }
 
-export const SLIDE_OPTION_KEYS = ["id", "type", "layout", "section", "tag", "hidden", "beat"] as const;
-export const BLOCK_OPTION_KEYS = ["id", "type", "as", "region"] as const;
+export { BLOCK_OPTION_KEYS, SLIDE_OPTION_KEYS };
 
 // --- line classes ------------------------------------------------------------------------------
 
@@ -23,24 +23,24 @@ const BLANK = /^\s*$/;
 const TIMELINE_STATUS_PREFIX = /^\[([x> ])\]\s+(?=\S)/;
 const TIMELINE_STATUS_OF_MARK: Record<string, string> = { x: "done", ">": "current", " ": "planned" };
 const FENCE_OPEN = /^( {0,3})(`{3,}|~{3,})(.*)$/;
-const SEPARATOR = /^-{3,}[ \t]*$/;
+export const SEPARATOR = /^-{3,}[ \t]*$/;
 const HEADING = /^ {0,3}(#{1,6})(?:[ \t]+(.*?))?[ \t]*$/;
 const QUOTE = /^ {0,3}>/;
 const LIST_ITEM = /^([ \t]*)([-+*]|\d{1,9}[.)])(?:[ \t]+(.*))?$/;
 const TABLE_ROW = /^ {0,3}\|/;
 const TABLE_DELIMITER = /^ {0,3}\|?[ \t]*:?-+:?[ \t]*(?:\|[ \t]*:?-+:?[ \t]*)*\|?[ \t]*$/;
 const IMAGE = /^ {0,3}!\[/;
-const COMMENT = /^ {0,3}<!--/;
-const NOTES = /^(Notes?):[ \t]*(.*)$/;
+export const COMMENT = /^ {0,3}<!--/;
+export const NOTES = /^(Notes?):[ \t]*(.*)$/;
 
 const indentWidth = (space: string): number => [...space].reduce((width, char) => width + (char === "\t" ? 4 : 1), 0);
 
-function fenceClose(open: string): RegExp {
+export function fenceClose(open: string): RegExp {
   return new RegExp(`^ {0,3}${open[0] === "`" ? "`" : "~"}{${open.length},}[ \\t]*$`);
 }
 
 /** Whether a line opens a fence (backtick fences cannot carry a backtick in the info string). */
-function fenceStart(text: string): { fence: string; info: string } | undefined {
+export function fenceStart(text: string): { fence: string; info: string } | undefined {
   const match = FENCE_OPEN.exec(text);
   if (!match) return undefined;
   if (match[2]![0] === "`" && match[3]!.includes("`")) return undefined;
@@ -169,6 +169,8 @@ interface Block {
   payload: Obj;
   options?: Obj;
   range: Range;
+  /** Source ranges of the entries of a list or table block, so a finding about `items/2` points at that line. */
+  parts?: Range[];
   /** The one content key of a native block, when the block is rootable. */
   key?: string;
 }
@@ -205,7 +207,7 @@ export function parseOptions(text: string, keys: readonly string[], kind: "slide
     else if (key in out) {
       ctx.error("options-duplicate", `Option ${key} is given twice.`, help, range);
       ok = false;
-    } else if (key === "as" && value !== "bullets" && value !== "video") {
+    } else if (key === "as" && !BLOCK_AS_VALUES.includes(value as (typeof BLOCK_AS_VALUES)[number])) {
       ctx.error("options-value", `as takes bullets (a list stored as bullets) or video (an image line stored as video), not ${JSON.stringify(value)}.`, help, range);
       ok = false;
     } else out[key] = value;
@@ -277,8 +279,8 @@ class SlideParser {
     this.blocks.push(block);
   }
 
-  private native(key: string, value: unknown, range: Range): void {
-    const block: Block = { payload: { [key]: value }, range, key };
+  private native(key: string, value: unknown, range: Range, parts?: Range[]): void {
+    const block: Block = { payload: { [key]: value }, range, key, ...(parts ? { parts } : {}) };
     this.add(block);
     if (block.options) {
       const as = block.options.as;
@@ -425,6 +427,8 @@ class SlideParser {
       indent: number;
       rows: string[];
       description?: string[];
+      first: number;
+      last: number;
     }
     const entries: Entry[] = [];
     const head = listMarker(lines[first]!.text)!;
@@ -449,7 +453,7 @@ class SlideParser {
           topIndent = Math.min(topIndent, item.indent);
         }
         if (item.ordered) numbered = true;
-        entries.push({ indent: item.indent, rows: [item.content.trim()] });
+        entries.push({ indent: item.indent, rows: [item.content.trim()], first: i, last: i });
         i++;
         continue;
       }
@@ -459,6 +463,7 @@ class SlideParser {
       if (description && indentWidth(description[1]!) > current.indent && !current.description) current.description = [description[2]!.trim()];
       else if (current.description) current.description.push(text.trim());
       else current.rows.push(text);
+      current.last = i;
       i++;
     }
     this.i = i;
@@ -478,7 +483,7 @@ class SlideParser {
       if (level) out.level = level;
       return out;
     });
-    this.native("items", items, range);
+    this.native("items", items, range, entries.map((entry) => lineRange(lines[entry.first]!, lines[entry.last]!)));
   }
 
   // --- tables ----------------------------------------------------------------------------------
@@ -616,7 +621,7 @@ class SlideParser {
 
   private metric(body: Line[], range: Range): void {
     const { ctx } = this;
-    const allowed = ["value", "label", "description", "unit", "delta", "trend", "sentiment"];
+    const allowed: readonly string[] = METRIC_KEYS;
     const help = `A metric block is key: value lines. Keys: ${allowed.join(", ")}. A value is plain text, or a JSON string in double quotes.`;
     const out: Obj = {};
     for (const line of body) {
@@ -744,9 +749,11 @@ class SlideParser {
     if (content.length === 1 && only?.key !== undefined && only.options?.id === undefined && only.options?.type === undefined && only.options?.region === undefined && isContentKey(only.key) && Object.keys(only.payload).length === 1) {
       slide[only.key] = only.payload[only.key];
       ctx.ranges.set(`${path}/${only.key}`, only.range);
+      for (const [k, part] of (only.parts ?? []).entries()) ctx.ranges.set(`${path}/${only.key}/${k}`, part);
     } else if (content.length) {
       slide.blocks = content.map((block, index) => {
         ctx.ranges.set(`${path}/blocks/${index}`, block.range);
+        if (block.key) for (const [k, part] of (block.parts ?? []).entries()) ctx.ranges.set(`${path}/blocks/${index}/${block.key}/${k}`, part);
         const out: Obj = {};
         if (block.options?.id !== undefined) out.id = block.options.id;
         if (block.options?.type !== undefined) out.type = block.options.type;
