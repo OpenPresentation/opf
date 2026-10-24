@@ -58,7 +58,7 @@ const markdown: Record<string, RuleText> = {
     return { message: `The ${fence} fence opened on line ${line(finding)} is never closed.`, next: `add a line with ${fence} to close it.` };
   },
   "markdown/code-fence": (finding) => ({ message: `The code fence opened on line ${line(finding)} could not be read as code.`, next: "close the fence with at least as many backticks as opened it." }),
-  "markdown/chart-type": (finding) => keep(finding, "write ```chart column (also `bar`, `line`, `pie`, …), then the data."),
+  "markdown/chart-type": () => ({ message: "A chart fence needs its type after `chart`.", next: "write ```chart column (also `bar`, `line`, `pie`, …), then the data." }),
   "markdown/chart-attributes": (finding) => keep(finding, 'write ```chart column alt="What the data shows" (`alt` is optional).'),
   "markdown/chart-data": wholeHelp,
   "markdown/chart-ragged": (finding) => keep(finding, "give every row one value per column."),

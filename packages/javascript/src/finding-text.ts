@@ -178,14 +178,19 @@ function describeSchema(finding: Finding, context: FindingTextContext, helpers: 
       if (kind) {
         const word = KIND_WORDS[kind] ?? "catalog";
         const count = context.catalogCount?.(kind);
+        const ids = KIND_EXAMPLES[kind] ?? "`id` or `name:id`";
+        const press = `press ${chord}${count ? ` for the ${count} ${word}s` : " for the available ids"}`;
+        const orRemove = `, or remove it${kind === "layouts" ? " to let OPF pick" : ""}.`;
+        // An empty value is plainly empty; any other is a name that is not an id.
+        if (actual === "") return { message: `${cap(label)} is empty.`, next: `${press} (an id such as ${ids})${orRemove}` };
         return {
-          message: `${cap(label)} must be a ${word} id such as ${KIND_EXAMPLES[kind] ?? "`id` or `name:id`"} (lowercase letters, digits and hyphens), but ${is}.`,
-          next: `press ${chord}${count ? ` for the ${count} ${word}s` : " for the available ids"}, or remove it${kind === "layouts" ? " to let OPF pick" : ""}.`,
+          message: `${cap(label)} must be a ${word} id such as ${ids} (lowercase letters, digits and hyphens), but it is ${describeValue(actual)}.`,
+          next: `${press}${orRemove}`,
         };
       }
       const phrase = PATTERN_PHRASES[pattern];
-      if (phrase) return { message: `${cap(label)} must be ${phrase.what}, but ${is}.`, next: phrase.next };
-      if (hasHex(pattern)) return { message: `${cap(label)} must be a hex color like ${code("#1F4E79")} (3, 6 or 8 hex digits), but ${is}.`, next: "write the color as #RRGGBB." };
+      if (phrase) return { message: `${cap(label)} must be ${phrase.what}, but is ${describeValue(actual)}.`, next: phrase.next };
+      if (hasHex(pattern)) return { message: `${cap(label)} must be a hex color like ${code("#1F4E79")} (3, 6 or 8 hex digits), but is ${describeValue(actual)}.`, next: "write the color as #RRGGBB." };
       return { message: `${cap(label)} does not match the expected format${typeof actual === "string" ? `: ${describeValue(actual)}` : ""}.`, next: "check the schema reference for this field." };
     }
     case "propertyNames": {

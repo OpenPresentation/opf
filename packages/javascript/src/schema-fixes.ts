@@ -41,8 +41,8 @@ export function schemaFixes(finding: Finding, document: unknown): FindingFix[] {
       const allowed = Array.isArray(params.allowedValues) ? (params.allowedValues as unknown[]) : [];
       if (!allowed.length || readAt(document, segments) === undefined) return [];
       const current = readAt(document, segments);
-      const ranked = nearest(current, allowed, MAX_CHANGES);
-      const values = [...new Set([...ranked.close, ...ranked.all])].slice(0, MAX_CHANGES);
+      // The near misses first (an alias such as middle to center, an edit distance of two), then the values in the order the schema lists them.
+      const values = [...new Set([...nearest(current, allowed, MAX_CHANGES).close, ...allowed])].slice(0, MAX_CHANGES);
       return values.map((value) => patch(`change-to:${String(value)}`, `Change to ${String(value)}`, [{ op: "replace", path: finding.path, value }]));
     }
     case "additionalProperties": {

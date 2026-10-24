@@ -258,6 +258,25 @@
   cursor: pointer;
 }
 .opf-source-finding-fix:hover { background: var(--opf-ui-muted); }
+.opf-source-finding-details {
+  min-height: 22px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: var(--opf-ui-radius-sm);
+  background: transparent;
+  color: var(--opf-ui-muted-fg);
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.opf-source-finding-details:hover { background: var(--opf-ui-muted); }
+.opf-source-finding-details[aria-expanded="true"] { text-decoration: none; background: var(--opf-ui-muted); }
+.opf-source-finding-explain { display: flex; flex-direction: column; gap: 4px; margin: 0 6px 6px 28px; padding: 6px 8px; border-left: 2px solid var(--opf-ui-border); color: var(--opf-ui-fg); font-size: 12px; }
+.opf-source-finding-explain[hidden] { display: none; }
+.opf-source-finding-explain-line { margin: 0; overflow-wrap: anywhere; }
+.opf-source-finding-explain-example { font: 11px var(--opf-ui-mono); overflow-wrap: anywhere; white-space: pre-wrap; }
+.opf-source-finding-explain-example code { padding: 1px 4px; border-radius: var(--opf-ui-radius-sm); background: var(--opf-ui-muted); }
+.opf-source-finding-explain-link { color: var(--opf-ui-muted-fg); }
 .opf-source-finding-more { padding: 3px 6px; color: var(--opf-ui-muted-fg); font-size: 12px; }
 
 .opf-source-status { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

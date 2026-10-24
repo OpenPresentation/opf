@@ -51,10 +51,12 @@ describe("schema keywords in plain words", () => {
   test("minItems, an empty layout and a bad hex color", () => {
     assert.equal(said({ slides: [] }, "minItems").message, "`slides` needs at least 1 item.");
     const layout = said({ slides: [{ title: "a", layout: "" }] }, "pattern");
-    assert.match(layout.message, /^`layout` must be a layout id such as `pillars` or `acme:hero` \(lowercase letters, digits and hyphens\), but it is empty\.$/);
-    assert.match(layout.next, /^press Ctrl\+Space/);
+    assert.equal(layout.message, "`layout` is empty.");
+    assert.match(layout.next, /^press Ctrl\+Space for the available ids \(an id such as `pillars` or `acme:hero`\), or remove it to let OPF pick\.$/);
+    const wrong = said({ slides: [{ title: "a", layout: "My Layout" }] }, "pattern");
+    assert.equal(wrong.message, "`layout` must be a layout id such as `pillars` or `acme:hero` (lowercase letters, digits and hyphens), but it is `My Layout`.");
     const color = said({ slides: [{ title: "a" }], design: { colorScheme: { accent1: "#12" } } }, "pattern");
-    assert.equal(color.message, "`accent1` must be a hex color like `#1F4E79` (3, 6 or 8 hex digits), but it is `#12`.");
+    assert.equal(color.message, "`accent1` must be a hex color like `#1F4E79` (3, 6 or 8 hex digits), but is `#12`.");
     assert.equal(color.next, "write the color as #RRGGBB.");
   });
   test("the chord and the count of records come from the caller", () => {
@@ -75,7 +77,7 @@ describe("schema keywords in plain words", () => {
 describe("pattern phrases", () => {
   const patterns = new Set();
   const walk = (node, key) => {
-    if (Array.isArray(node)) node.forEach((entry) => walk(entry));
+    if (Array.isArray(node)) for (const entry of node) walk(entry);
     else if (node && typeof node === "object") for (const [name, value] of Object.entries(node)) walk(value, name);
     else if (key === "pattern" && typeof node === "string") patterns.add(node);
   };
@@ -216,7 +218,7 @@ describe("patch fixes of schema findings", () => {
   test("enum: the nearest values, as replace patches", () => {
     const document = { slides: [{ title: "a" }], design: { titleAlignment: "middle" } };
     const list = fixes(document, "enum");
-    assert.deepEqual(list.map((fix) => fix.title), ["Change to center", "Change to right", "Change to left"]);
+    assert.deepEqual(list.map((fix) => fix.title), ["Change to center", "Change to left", "Change to right"]);
     assert.deepEqual(list[0].patch, [{ op: "replace", path: "/design/titleAlignment", value: "center" }]);
     assert.equal(list[0].kind, "patch");
   });

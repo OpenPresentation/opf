@@ -159,6 +159,8 @@ The writer's canonical form: front matter, then slides joined by a blank line, `
 
 Errors: `front-matter`, `front-matter-not-mapping`, `front-matter-unterminated`, `front-matter-slides`, `no-slides`, `options-syntax`, `options-unknown-key`, `options-value`, `options-duplicate`, `options-orphan`, `options-trailing`, `options-embedded`, `comment-unterminated`, `duplicate-title`, `duplicate-subtitle`, `empty-heading`, `empty-quote`, `image-source`, `fence-unterminated`, `code-fence`, `chart-type`, `chart-attributes`, `chart-data`, `metric-block`, `timeline-attributes`, `timeline-description`, `timeline-events`, `opf-slide`, `opf-slide-not-mapping`, `opf-block`, `opf-block-not-mapping`, `slide-property-conflict`, `span-attributes`. Warnings: `front-matter-comments`, `empty-slide`, `heading-demoted`, `numbered-list`, `table-ragged`, `chart-ragged`, `formatting-dropped`.
 
+The YAML of the front matter and of `opf-slide` and `opf-block` fences is read as `yaml/syntax` is (a tab, a quote or bracket never closed and the like are named in plain words, at the place that matters). `markdown/options-unknown-key` and `markdown/chart-type` carry `suggestions` (the near-miss option names, the chart types), which an editor offers as `Rename to layout` or `Insert column`. `describeFinding(finding)` (`@openpresentation/opf/source`) turns every finding into `{ message, next }`, and `explain(ruleId)` says what a rule checks and why.
+
 ## Command line
 
 ```text

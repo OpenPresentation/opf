@@ -7,10 +7,11 @@ import { errorText, normalizeFinding, rejectionFindings as findingsOfError } fro
 import { formatSource } from "./source-format.js";
 import { buildProblems, summarize } from "./source-problems.js";
 import { analyzeSyntax, findDuplicateKeys } from "./source-syntax.js";
-import { createSchemaValue, schemaAtPath, schemaVariants } from "./schema.js";
-import { catalogKindAt } from "@openpresentation/opf/schema";
+import { withSyntaxFixes } from "./source-fixes-syntax.js";
+import { detailsFor } from "./source-details.js";
+import { schemaAtPath, schemaVariants } from "./schema.js";
 import { locateText } from "./source-ranges.js";
-import { scanMarkdown } from "@openpresentation/opf/source";
+import { scanMarkdown, starterValue } from "@openpresentation/opf/source";
 import { listCatalogRecords } from "./catalogs.js";
 
 // The source pane (RR-98): the OPF document as JSON, YAML or Markdown, with the file name, the format menu, Format, Copy
@@ -75,6 +76,19 @@ function same(a, b) {
 const SEVERITY = { error: 0, warning: 1, info: 2 };
 const plural = (count, word) => `${count} ${word}${count === 1 ? "" : "s"}`;
 
+/** The rule's explanation as the body of a row's Details: what it checks, why, what to do, an example and the documentation link. */
+function fillDetails(body, details) {
+  const line = (label, text) => { const row = el("p", "opf-source-finding-explain-line"); row.append(Object.assign(el("strong"), { textContent: `${label} ` }), document.createTextNode(text)); return row; };
+  body.append(line("Checks:", details.summary), line("Why:", details.why), line("Fix:", details.fix));
+  if (details.schema) body.append(line("Schema:", details.schema));
+  if (details.example) {
+    const example = el("div", "opf-source-finding-explain-example");
+    example.append(Object.assign(el("code"), { textContent: details.example.problem || "(empty)" }), Object.assign(el("span", "opf-source-finding-explain-arrow"), { textContent: " becomes " }), Object.assign(el("code"), { textContent: details.example.fixed }));
+    body.append(example);
+  }
+  if (details.docs && /^https?:/.test(details.docs)) body.append(Object.assign(el("a", "opf-source-finding-explain-link", { href: details.docs, target: "_blank", rel: "noopener noreferrer" }), { textContent: "Documentation" }));
+}
+
 /** Read the text of one format. `{ deck }` on success; `findings` carry the syntax errors (`syntax: true`) or the OPF findings of the parsed deck. */
 function readText(format, text, catalogs) {
   if (format === "json") {
@@ -86,9 +100,12 @@ function readText(format, text, catalogs) {
     return { deck, findings: [] };
   }
   const result = format === "yaml" ? (fromYaml(text, { catalogs })) : fromMarkdown(text, { catalogs });
-  const syntax = result.findings.filter((finding) => !finding.ruleId?.startsWith("opf/"));
-  if (syntax.length) return { syntax: true, findings: syntax.map((finding) => normalizeFinding(finding, "syntax")) };
-  return { deck: result.presentation, findings: result.findings.map((finding) => normalizeFinding(finding, "schema")) };
+  // The reader's own findings: errors stop the document being read; its warnings (a numbered list that became bullets) come with the deck.
+  const readerFindings = result.findings.filter((finding) => !finding.ruleId?.startsWith("opf/"));
+  const errors = readerFindings.filter((finding) => finding.severity === "error");
+  const syntax = (list) => withSyntaxFixes(format, text, list).map((finding) => normalizeFinding(finding, "syntax"));
+  if (errors.length) return { syntax: true, findings: syntax(errors) };
+  return { deck: result.presentation, findings: result.findings.map((finding) => normalizeFinding(finding, "schema")), notes: syntax(readerFindings) };
 }
 
 /**
@@ -126,6 +143,9 @@ export function createSourcePane(container, options = {}) {
   // The problems now shown (rows of source-problems.js), the document they were checked as, and the pause timers of the count announcement and the
   // syntax pass.
   const rowOf = new WeakMap();
+  // The problems whose Details are open (by rule, path and message), so a redraw of the panel keeps them open, and a number per key for the element ids.
+  const detailsOpen = new Set();
+  const detailsKeys = { ids: new Map(), id(key) { if (!this.ids.has(key)) this.ids.set(key, this.ids.size + 1); return this.ids.get(key); } };
   let problemRows = [], lastDraft = null, lastSummary = "No problems", summaryTimer = null, syntaxTimer = null, recheckTimer = null;
   // The exact text of the documents `replaceDocument` replaced and opened, per format, so Undo and Redo show it again byte for byte
   // (a YAML comment, the author's JSON spelling). Keyed by format and document; the oldest entries go first.
@@ -299,7 +319,7 @@ export function createSourcePane(container, options = {}) {
       renderFindings();
       return;
     }
-    syntaxFindings = [];
+    syntaxFindings = read.notes ?? [];
     baseline = source;
     lastDraft = read.deck;
     const before = deck();
@@ -807,13 +827,13 @@ export function createSourcePane(container, options = {}) {
   function problemContext() {
     const draft = lastDraft ?? deck();
     return {
+      document: draft,
+      format,
       unit: control.api.indentUnit(),
       valueAt: (segments) => segments.reduce((value, key) => (value !== null && typeof value === "object" ? value[key] : undefined), draft),
-      schemaAt: (segments) => attempt(() => schemaAtPath(draft, segments), undefined),
       keysOf: (segments) => attempt(() => [...new Set(schemaVariants(schemaAtPath(draft, segments)).flatMap((variant) => Object.keys(variant.properties ?? {})))], []),
-      catalogKind: (segments) => catalogKindAt(segments),
       catalogCount: (kind) => attempt(() => listCatalogRecords(draft, kind, { catalogs: catalogs() }).length, 0),
-      starter: (segments, property) => attempt(() => (property === "slides" ? [{ title: "Slide title" }] : createSchemaValue(schemaAtPath(draft, [...segments, property]))), undefined),
+      starter: (segments, property) => attempt(() => starterValue(draft, segments, property), undefined),
     };
   }
   /** Select the field a core "focus" fix names: its path, else the field inside it, else the nearest place there is one. */
@@ -903,12 +923,31 @@ export function createSourcePane(container, options = {}) {
         options.onFindingSelect?.(finding, target);
       });
       item.append(button);
-      if (row.fixes.length) {
+      const details = detailsFor(finding);
+      if (row.fixes.length || details) {
         const fixes = el("span", "opf-source-finding-fixes");
         for (const fix of row.fixes.slice(0, 3)) {
           const fixButton = Object.assign(el("button", "opf-source-finding-fix", { type: "button", "aria-label": `${fix.title}: ${row.message}` }), { textContent: fix.title });
           fixButton.addEventListener("click", () => applyFix(fix, row));
           fixes.append(fixButton);
+        }
+        if (details) {
+          // The rule's own explanation, behind a disclosure that stays open across the panel's redraws.
+          const key = `${row.rule}|${row.path}|${row.message}`;
+          const body = el("div", "opf-source-finding-explain", { id: `${id}-explain-${detailsKeys.id(key)}`, role: "region", "aria-label": `About ${row.rule}` });
+          const toggleDetails = Object.assign(el("button", "opf-source-finding-details", { type: "button", "aria-expanded": String(detailsOpen.has(key)), "aria-controls": body.id }), { textContent: "Details" });
+          body.hidden = !detailsOpen.has(key);
+          fillDetails(body, details);
+          toggleDetails.addEventListener("click", () => {
+            const open = body.hidden;
+            body.hidden = !open;
+            toggleDetails.setAttribute("aria-expanded", String(open));
+            if (open) detailsOpen.add(key); else detailsOpen.delete(key);
+            if (open) control.api.say(`${details.summary} ${details.fix}`);
+          });
+          fixes.append(toggleDetails);
+          item.append(fixes, body);
+          return item;
         }
         item.append(fixes);
       }
