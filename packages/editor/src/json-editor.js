@@ -296,6 +296,7 @@ function mountJsonCodeEditor(parent, options) {
     return optionsModule.hoverAt(target.state, position, { catalogs });
   }, { hoverTime: 300 });
   // Cmd/Ctrl+K Cmd/Ctrl+I shows the hover at the caret (VS Code), and says what it holds.
+  let chordStartedAt = 0;
   const showHoverAtCaret = (target) => {
     if (languageName !== "json" || options.hover === false) return false;
     const run = () => {
@@ -378,7 +379,6 @@ function mountJsonCodeEditor(parent, options) {
     language.of(languageExtension(languageName, completionExtension)),
     hoverExtension,
     Prec.high(keymap.of([
-      { key: "Mod-k Mod-i", run: showHoverAtCaret },
       { key: "Escape", run: (target) => (hasHoverTooltips(target.state) ? (target.dispatch({ effects: closeHoverTooltips }), true) : false) },
     ])),
     a11yExtension(announcer, (completion) => completion.opfDoc ?? (typeof completion.info === "string" ? completion.info : "")),
@@ -414,6 +414,16 @@ function mountJsonCodeEditor(parent, options) {
         redoCommand(view);
         return true;
       }
+      // Cmd/Ctrl+K then Cmd/Ctrl+I (within two seconds) shows the hover at the caret. It is read here, not as a CodeMirror chord, because a chord
+      // that starts with Mod+K would also swallow Mod+Shift+K (delete line).
+      const mod = /Mac|iPhone|iPad/.test(navigator.platform) ? event.metaKey : event.ctrlKey;
+      if (mod && !event.altKey && !event.shiftKey && event.key.toLowerCase() === "k") { chordStartedAt = Date.now(); event.preventDefault(); return true; }
+      else if (mod && !event.altKey && !event.shiftKey && event.key.toLowerCase() === "i" && Date.now() - chordStartedAt < 2000) {
+        chordStartedAt = 0;
+        if (showHoverAtCaret(view)) { event.preventDefault(); return true; }
+      }
+      // The problems panel: Cmd+Shift+M on macOS, Ctrl+Shift+M elsewhere (read from the physical key, as the format chord is).
+      if (mod && event.shiftKey && !event.altKey && event.code === "KeyM" && options.onFocusProblems?.()) { event.preventDefault(); return true; }
       if (isFormatKey(event)) {
         event.preventDefault();
         runFormat();
@@ -435,7 +445,6 @@ function mountJsonCodeEditor(parent, options) {
       ...(options.completions ? [] : [{ key: "Ctrl-Space", run: () => languageName === "json" && (void openOptions(), true) }, { key: "Mod-Space", run: () => languageName === "json" && (void openOptions(), true) }]),
       { key: "Tab", run: tabCommand, shift: indentLess },
       // The problems panel (VS Code: Cmd+Shift+M on macOS, Ctrl+Shift+M elsewhere); Ctrl+M (Ctrl+Shift+M on macOS) is VS Code's switch for Tab leaving the editor.
-      { key: "Mod-Shift-m", run: () => Boolean(options.onFocusProblems?.()) },
       // JSON has no comments: say so instead of doing nothing (YAML and Markdown comment their lines out).
       { key: "Mod-/", run: () => { if (languageName !== "json") return false; say("JSON has no comments. Use YAML or Markdown for notes."); return true; } },
       { key: "Ctrl-m", mac: "Ctrl-Shift-m", run: toggleTabFocusMode },
