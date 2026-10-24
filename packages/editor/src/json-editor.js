@@ -285,7 +285,8 @@ function skipDelimiter(view, delimiter) {
 }
 function mountJsonCodeEditor(parent, options) {
   const attributes = new Compartment(), indent = new Compartment(), language = new Compartment(), editable = new Compartment(), historyField = new Compartment();
-  const editableExtension = (readOnly) => [EditorState.readOnly.of(Boolean(readOnly)), EditorView.editable.of(!readOnly)];
+  // A read-only text is not editable, so it takes the keyboard by tabindex: the keys that only read (Find, fold, the hover and the shape hint) work in it.
+  const editableExtension = (readOnly) => [EditorState.readOnly.of(Boolean(readOnly)), EditorView.editable.of(!readOnly), EditorView.contentAttributes.of(readOnly ? { tabindex: "0" } : {})];
   let languageName = options.language ?? "json";
   let disposed=false, menu=null, catalogs=options.catalogs??[], generation=0;
   // Every key binding is declared in source-keymap.js; `km` records what this editor installs, for getShortcuts() and the shortcuts dialog.
@@ -396,6 +397,15 @@ function mountJsonCodeEditor(parent, options) {
     const run = () => { if (!disposed) slot.module[name]?.(target, featureContext()); };
     if (slot.module) run(); else slot.load().then(run, (error) => options.onError?.(error));
     return true;
+  };
+  // After a `{` or a `,` was typed the shape hint may open by itself (source-hints.js decides); it runs once the update that typed the character is done.
+  const autoHint = (target) => {
+    const head = target.state.selection.main.head, typed = target.state.sliceDoc(head - 1, head);
+    if (options.hints === false || (typed !== "{" && typed !== ",")) return;
+    queueMicrotask(() => {
+      const slot = modules.hints, run = () => { if (!disposed) slot.module.autoShapeHint?.(target, featureContext(), typed); };
+      if (slot.module) run(); else slot.load().then(run, (error) => options.onError?.(error));
+    });
   };
   const commentCommand = (target) => {
     if (languageName === "markdown") return markdownToggleComment(target, say);
@@ -551,6 +561,7 @@ function mountJsonCodeEditor(parent, options) {
       },
       focus() {
         if (options.completions) void loadOptions().catch(() => {});
+        if (options.hints !== false) void modules.hints.load().catch(() => {});
         options.onFocus?.();
       },
       mousedown(event, target) {
@@ -580,6 +591,7 @@ function mountJsonCodeEditor(parent, options) {
       if (update.docChanged && !update.transactions.every((tr) => tr.annotation(external))) options.onChange(update.state.field(jsonSource));
       if (update.docChanged) scheduleSyntax();
       if (update.selectionSet || update.docChanged) options.onSelectionChange?.();
+      if (update.docChanged && update.transactions.some((tr) => tr.isUserEvent("input.type"))) autoHint(update.view);
     })
   ] }) });
   const api = {

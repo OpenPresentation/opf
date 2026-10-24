@@ -95,6 +95,11 @@ export interface JsonCodeEditorOptions {
   onFormat?(): void;
   /** Hover documentation over keys and catalog ids in JSON, and Cmd/Ctrl+K Cmd/Ctrl+I (default true). */
   hover?: boolean;
+  /**
+   * The shape hint: Cmd/Ctrl+Shift+Space shows the fields of the object around the caret, and typing `{` or `,` between the members of a slide that has a
+   * layout shows it by itself (default true; false turns the automatic one off, the key stays).
+   */
+  hints?: boolean;
   /** Called with every message the live region says (hosts mirror them into a region of their own). */
   announce?(message: string): void;
   /**

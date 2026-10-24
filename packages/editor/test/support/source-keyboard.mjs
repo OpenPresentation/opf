@@ -176,6 +176,18 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
         const nodes = [...document.querySelectorAll('.cm-tooltip')].filter((node) => !node.classList.contains('cm-tooltip-autocomplete') && !node.classList.contains('cm-completionInfo') && node.getBoundingClientRect().width > 0);
         return { open: nodes.length > 0, text: nodes.map((node) => node.textContent).join(' | ') };
       }),
+      /** The shape hint on screen (Cmd/Ctrl+Shift+Space): its title, rows (`key`, `state`, `description`), the key marked next, its role and label. */
+      hint: () => page.evaluate(() => {
+        const node = [...document.querySelectorAll('.cm-tooltip.opf-hint')].find((candidate) => candidate.getBoundingClientRect().width > 0);
+        if (!node) return { open: false, text: '', rows: [] };
+        const rows = [...node.querySelectorAll('.opf-hint-row')].map((row) => ({ key: row.dataset.key, state: row.dataset.state, description: row.querySelector('.opf-hint-description')?.textContent ?? '' }));
+        const box = node.getBoundingClientRect();
+        return {
+          open: true, text: node.textContent, title: node.querySelector('.opf-hint-title')?.textContent ?? '', aside: node.querySelector('.opf-hint-aside')?.textContent ?? '', rows,
+          next: rows.find((row) => row.state === 'next')?.key ?? null, role: node.getAttribute('role'), label: node.getAttribute('aria-label'), animation: getComputedStyle(node).animationName, box: { left: box.left, top: box.top, bottom: box.bottom, right: box.right },
+          isTooltip: Boolean(node.closest('.cm-tooltip')),
+        };
+      }),
       /** The documentation panel beside the selected item: whether it shows, and its text. */
       docs: () => page.evaluate(() => {
         const node = document.querySelector('.cm-tooltip-autocomplete .cm-completionInfo, .cm-tooltip.cm-completionInfo');
@@ -356,6 +368,7 @@ async function runStep(kb, step) {
     return kb.settle();
   }
   if (kind === 'readOnly') { await kb.page.evaluate((value) => demo.pane.setReadOnly(value), args[0]); return kb.settle(); }
+  if (kind === 'emulate') { await kb.page.emulateMedia(args[0]); return undefined; }
   if (kind === 'pause') { await kb.page.waitForTimeout(args[0]); return undefined; }
   if (kind === 'expectRow') {
     const at = await kb.page.evaluate(() => [...document.querySelectorAll('.opf-source-finding')].indexOf(document.activeElement));
@@ -418,6 +431,8 @@ async function check(kb, expect) {
     }
     // `footer`: the line under the list (a string, or null for none).
     if (want.footer !== undefined) assert.equal(popup.footer, want.footer, 'popup footer');
+    // `details`: label -> text its detail has (the grey words after the label).
+    if (want.details) for (const [label, text] of Object.entries(want.details)) assert.ok(popup.items.find((item) => item.label === label)?.detail.includes(text), `popup detail of ${label} has ${JSON.stringify(text)}: ${JSON.stringify(popup.items.find((item) => item.label === label))}`);
     if (want.selected !== undefined) assert.equal(popup.selected, want.selected, 'popup selected');
     if (want.selectedIndex !== undefined) assert.equal(popup.selectedIndex, want.selectedIndex, 'popup selected index');
     if (want.selectedIsLast) assert.equal(popup.selectedIndex, popup.items.length - 1, 'the selection wrapped to the last item');
@@ -446,6 +461,31 @@ async function check(kb, expect) {
     if (expect.hover.open !== undefined) assert.equal(hover.open, Boolean(expect.hover.open), `hover open: ${hover.text}`);
     for (const item of [expect.hover.has ?? []].flat()) assert.ok(hover.text.includes(item), `the hover has ${JSON.stringify(item)}: ${JSON.stringify(hover.text)}`);
     for (const item of [expect.hover.not ?? []].flat()) assert.ok(!hover.text.includes(item), `the hover lacks ${JSON.stringify(item)}: ${JSON.stringify(hover.text)}`);
+  }
+  if (expect.hint) {
+    const hint = await kb.hint(), want = expect.hint;
+    if (want.open !== undefined) assert.equal(hint.open, Boolean(want.open), `hint open: ${hint.text}`);
+    for (const item of [want.has ?? []].flat()) assert.ok(hint.text.includes(item), `the hint has ${JSON.stringify(item)}: ${JSON.stringify(hint.text)}`);
+    for (const item of [want.not ?? []].flat()) assert.ok(!hint.text.includes(item), `the hint lacks ${JSON.stringify(item)}: ${JSON.stringify(hint.text)}`);
+    if (want.next !== undefined) assert.equal(hint.next, want.next, `the row marked next: ${JSON.stringify(hint.rows)}`);
+    if (want.title !== undefined) assert.ok(hint.title.includes(want.title), `hint title ${JSON.stringify(hint.title)}`);
+    if (want.aside !== undefined) assert.ok(hint.aside.includes(want.aside), `hint aside ${JSON.stringify(hint.aside)}`);
+    // `rows`: each named row has this state, in this relative order.
+    if (want.rows) {
+      const keys = hint.rows.map((row) => row.key);
+      for (const [key, state] of want.rows) assert.equal(hint.rows.find((row) => row.key === key)?.state, state, `hint row ${key}: ${JSON.stringify(hint.rows)}`);
+      const places = want.rows.map(([key]) => keys.indexOf(key));
+      assert.deepEqual([...places].sort((a, b) => a - b), places, `hint rows in order ${want.rows.map(([key]) => key)}: ${keys}`);
+    }
+    if (want.role !== undefined) assert.equal(hint.role, want.role, 'hint role');
+    if (want.label !== undefined) assert.match(hint.label ?? '', want.label, 'hint label');
+    if (want.animation !== undefined) assert.equal(hint.animation, want.animation, 'hint animation');
+    if (want.tooltip) assert.ok(hint.isTooltip, 'the hint is a CodeMirror tooltip');
+    // `near`: the caret's line, in px: the hint is above or below it, within this distance.
+    if (want.near) {
+      const caret = await kb.page.evaluate(() => { const { view } = demo.pane.editor, box = view.coordsAtPos(view.state.selection.main.head); return { left: box.left, top: box.top, bottom: box.bottom }; });
+      assert.ok(Math.min(Math.abs(hint.box.bottom - caret.top), Math.abs(hint.box.top - caret.bottom)) <= want.near, `the hint is near the caret: ${JSON.stringify({ hint: hint.box, caret })}`);
+    }
   }
   if (expect.live) {
     const said = await kb.live();

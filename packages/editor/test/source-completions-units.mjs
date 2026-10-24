@@ -145,7 +145,7 @@ const DECK = {
   slides: [{ title: 'a' }],
 };
 const facts = factsOf(DECK);
-assert.deepEqual(facts.assets, [{ id: 'logo', detail: 'logo.png' }, { id: 'photo', detail: 'p.jpg' }]);
+assert.deepEqual(facts.assets, [{ id: 'logo', detail: 'logo.png', src: 'logo.png', mediaType: '' }, { id: 'photo', detail: 'p.jpg', src: 'p.jpg', mediaType: '' }]);
 assert.deepEqual(facts.datasets, [{ id: 'sales', title: 'Sales', columns: ['Quarter', 'Revenue'] }, { id: 'empty', title: '', columns: [] }]);
 assert.deepEqual(facts.variables, [{ id: 'brand', type: 'text' }, { id: 'tint', type: 'color' }, { id: 'hero', type: 'image' }]);
 assert.deepEqual(facts.references, [{ id: 'smith2020', text: 'Smith, 2020.' }]);
@@ -157,7 +157,7 @@ const jsonText = JSON.stringify(DECK);
 const fromJson = factsOf(jsonDeckParts(parseTree(jsonText), getNodeValue));
 assert.deepEqual(fromJson, facts, 'JSON facts');
 const yamlText = 'name: x\nnarrative: classic-story\nassets:\n  logo: logo.png\n  photo:\n    src: p.jpg\n    title: A photo\ndatasets:\n  sales:\n    title: Sales\n    columns:\n      - Quarter\n      - {name: Revenue, format: "$#,##0"}\n    rows:\n      - [Q1, 1]\n  empty:\n    columns: []\n    rows: []\nvariables:\n  brand: {type: text, value: Acme}\n  tint: "#123456"\n  hero: {type: image, value: a.png}\nreferences:\n  - id: smith2020\n    text: Smith, 2020.\nslides:\n  - title: a\n';
-assert.deepEqual(factsOf(yamlDeckParts(yamlText)), { ...facts, references: facts.references }, 'YAML facts');
+assert.deepEqual(factsOf(yamlDeckParts(yamlText)), { ...facts, deck: { name: 'x' } }, 'YAML facts (and the deck name the built-ins read)');
 assert.deepEqual(factsOf(yamlDeckParts('assets:\n  logo: [unclosed\nreferences:\n  - id: ok\n    text: fine\n')).references, [{ id: 'ok', text: 'fine' }], 'a block that does not parse does not hide the others');
 const readFrom = (document) => (path) => valueAt(document, path);
 assert.deepEqual(columnSourceFor({ path: ['slides', 0, 'table', 'fields'] }, readFrom({ slides: [{ table: { dataset: 'sales' } }] })), { dataset: 'sales' });
@@ -217,7 +217,8 @@ for (const [doc, has] of MD_LISTS) {
   const { text, at } = caret('{"variables":{"brand":{"type":"text","value":"A"},"year":{"type":"number","value":1}},"slides":[{"title":"Hi {{br|"}]}');
   const result = completionResult(EditorState.create({ doc: text }), at, { explicit: false, catalogs, format: 'json' });
   assert.ok(result, '{{ opens the variables');
-  assert.deepEqual(result.options.map((option) => option.label).sort(), ['brand', 'year']);
+  assert.deepEqual(result.options.map((option) => option.label).filter((label) => !label.includes('.') && label !== 'speakers'), ['brand', 'year'], 'the declared variables come first, then the built-in ones');
+  assert.deepEqual(result.options.slice(0, 2).map((option) => option.label), ['brand', 'year']);
   assert.equal(text.slice(result.from, result.to), 'br');
   assert.ok(result.validFor('bra') && !result.validFor('br a'));
   assert.deepEqual(result.options[0].opf, { kind: 'variable', name: 'brand' });

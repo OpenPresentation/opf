@@ -11,7 +11,7 @@ import { Document, parse as parseYamlDocument, parseDocument } from "yaml";
 import { pathAt, scanMarkdown } from "@openpresentation/opf/source";
 import { findNodeAtLocation, getNodeValue } from "jsonc-parser";
 import { contextAt, nextSignificant, nodeAt, skeleton, tokenAt } from "./source-json.js";
-import { PROMOTED_REGIONS, beatsOf, columnSourceFor, factsOf, jsonDeckParts, layoutKeys, referenceSiteAt, regionNames, slidePath, valueAt, variableNames, yamlDeckParts } from "./source-references.js";
+import { PROMOTED_REGIONS, beatsOf, builtinVariables, columnSourceFor, factsOf, jsonDeckParts, layoutKeys, referenceSiteAt, regionNames, slidePath, valueAt, variableNames, yamlDeckParts } from "./source-references.js";
 import { beginUndoGroup, finishUndoGroup, takeUndoGroup } from "./source-undo-groups.js";
 import { scalarValue, yamlContextAt } from "./source-yaml.js";
 import { markdownContextAt, markdownOptions, markdownPlan, markdownHoverAt } from "./source-markdown.js";
@@ -290,11 +290,20 @@ function referenceOptions(site, context, catalogs, scope) {
   return options;
 }
 
-// `{{name}}` in a text: the variables the document declares, offered once `{{` is typed. `before` is the text of the value before the caret.
+// `{{name}}` in a text, offered once `{{` is typed: the variables the document declares first, then the built-in ones the engine resolves
+// (`deck.*`, `speaker.*`, `organization.*`, `slide.*`), grouped by prefix, each saying whether the document sets it. `before` is the text of the value
+// before the caret.
 const VARIABLE_OPEN = /\{\{([A-Za-z0-9._-]*)$/;
 function variableOptions(scope) {
+  const facts = scope.facts();
   const options = [];
-  variableNames(scope.facts()).forEach((variable, index) => options.push({ label: variable.id, type: "reference", detail: `${variable.type} variable`, boost: boostAt(index), opfDoc: `The variable ${variable.id}`, opf: { kind: "variable", name: variable.id } }));
+  variableNames(facts).forEach((variable) => options.push({ label: variable.id, type: "reference", detail: `${variable.type} variable`, boost: boostAt(options.length), opfDoc: `The variable ${variable.id}`, opf: { kind: "variable", name: variable.id } }));
+  for (const builtin of builtinVariables(facts)) {
+    options.push({
+      label: builtin.name, type: "reference", detail: builtin.detail, boost: boostAt(options.length), opfDoc: builtin.doc, opf: { kind: "variable", name: builtin.name, builtin: true },
+      info: () => docNode({ title: builtin.name, type: "built-in variable", description: builtin.doc, notes: [builtin.available ? "" : "Not set in this document"].filter(Boolean) }),
+    });
+  }
   return options;
 }
 
@@ -533,13 +542,7 @@ export function applyCompletion(view, completion, fallbackFrom, fallbackTo, say,
   const { state } = view;
   const text = state.doc.toString();
   const main = state.selection.main;
-  if (completion.opf?.kind === "variable") {
-    // `{{na|` becomes `{{name}}`: the name replaces what was typed after the braces and the closing braces are written unless they are there.
-    const to = text.startsWith("}}", fallbackTo) ? fallbackTo + 2 : fallbackTo;
-    const insert = `${completion.opf.name}}}`;
-    view.dispatch({ changes: { from: fallbackFrom, to, insert }, selection: { anchor: fallbackFrom + insert.length }, annotations: [pickedCompletion.of(completion), isolateHistory.of("full")], userEvent: "input.complete", scrollIntoView: true });
-    return;
-  }
+  if (completion.opf?.kind === "variable") { applyVariable(view, completion, fallbackFrom, fallbackTo); return; }
   // A value accepted right after the key that opened its list is one undo step with that key (R-CMP-14).
   const group = takeUndoGroup(view);
   const context = contextFor(format, text, main.head, true);
@@ -591,6 +594,39 @@ export function applyCompletion(view, completion, fallbackFrom, fallbackTo, say,
     snippetRuns.delete(view);
   }
   finish(plan.chain);
+}
+
+/**
+ * `{{na|` becomes `{{name}}`: the name replaces what was typed after the braces and the closing braces are written unless they are there. With
+ * several cursors it does so at each of them, in one undo step. A cursor with no `{{` before it replaces as many characters as the main cursor's typed
+ * name when they are the same text (VS Code applies the item at every cursor the same way), and adds the braces all the same.
+ */
+function applyVariable(view, completion, fallbackFrom, fallbackTo) {
+  const { state } = view;
+  const text = state.doc.toString();
+  const insert = `${completion.opf.name}}}`;
+  const annotations = [pickedCompletion.of(completion), isolateHistory.of("full")];
+  if (state.selection.ranges.length <= 1) {
+    const to = text.startsWith("}}", fallbackTo) ? fallbackTo + 2 : fallbackTo;
+    view.dispatch({ changes: { from: fallbackFrom, to, insert }, selection: { anchor: fallbackFrom + insert.length }, annotations, userEvent: "input.complete", scrollIntoView: true });
+    return;
+  }
+  const typed = text.slice(fallbackFrom, fallbackTo);
+  const sorted = [...state.selection.ranges].sort((a, b) => a.from - b.from);
+  const changes = [], carets = [];
+  let shift = 0;
+  for (const range of sorted) {
+    const head = range.head;
+    const open = VARIABLE_OPEN.exec(text.slice(Math.max(0, head - 200), head));
+    const length = open ? open[1].length : text.slice(head - typed.length, head) === typed ? typed.length : 0;
+    const from = head - length;
+    const to = text.startsWith("}}", head) ? head + 2 : head;
+    changes.push({ from, to, insert });
+    carets.push(from + shift + insert.length);
+    shift += insert.length - (to - from);
+  }
+  const main = sorted.indexOf(state.selection.main);
+  view.dispatch({ changes, selection: EditorSelection.create(carets.map((position) => EditorSelection.cursor(position)), Math.max(0, main)), annotations, userEvent: "input.complete", scrollIntoView: true });
 }
 
 // With several cursors the item goes in at each of them as plain text (no tab stops), each over its own token.
