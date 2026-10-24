@@ -2,7 +2,12 @@
 // writes, Enter and indentation, pairs, comments, problems with their positions, Canonicalize with OPF, hover and undo. Real keyboard events in a real
 // browser. Row format: [id, requirement, title, format, doc, steps, expect, options?]; see support/source-keyboard.mjs. `⟦⟧` is the caret where the
 // text has a `|` of its own (a block scalar).
-import { FAST, K, M, T } from '../source-keyboard.mjs';
+import { FAST, K, M, T, platform } from '../source-keyboard.mjs';
+
+// VS Code's fold keys: Cmd+Alt+[ and ] on macOS, Ctrl+Shift+[ and ] elsewhere (where Ctrl+Alt+[ folds everything). The key is named by its code: a synthetic
+// Shift+[ carries the key "[", which is Indent less, where a real keyboard sends "{".
+const FOLD = platform === 'darwin' ? 'Meta+Alt+[' : 'Control+Shift+BracketLeft';
+const UNFOLD = platform === 'darwin' ? 'Meta+Alt+]' : 'Control+Shift+BracketRight';
 
 const DECK_YAML = 'name: Q3 Review\nslides:\n  - title: Q3 Review\n  - title: Highlights\n    items:\n      - Revenue up 12%\n      - Churn down\n';
 const wait = ['waitPopup'];
@@ -156,6 +161,6 @@ yamlCases.push(
 );
 
 yamlCases.push(
-  ['Y-FOLD-001', 'R-KEY-11', 'Mod+Alt+[ folds a mapping', 'yaml', 'slides:|\n  - title: a\n  - title: b\n', [['press', 'Mod+Alt+['], ['expectFolded', 1]], {}],
-  ['Y-FOLD-002', 'R-KEY-11', 'Mod+Alt+] unfolds it', 'yaml', 'slides:|\n  - title: a\n  - title: b\n', [['press', 'Mod+Alt+['], ['expectFolded', 1], ['press', 'Mod+Alt+]'], ['expectFolded', 0]], {}],
+  ['Y-FOLD-001', 'R-KEY-11', 'Mod+Alt+[ folds a mapping', 'yaml', 'slides:|\n  - title: a\n  - title: b\n', [['press', FOLD], ['expectFolded', 1]], {}],
+  ['Y-FOLD-002', 'R-KEY-11', 'Mod+Alt+] unfolds it', 'yaml', 'slides:|\n  - title: a\n  - title: b\n', [['press', FOLD], ['expectFolded', 1], ['press', UNFOLD], ['expectFolded', 0]], {}],
 );

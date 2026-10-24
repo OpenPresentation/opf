@@ -2,7 +2,12 @@
 // info lines and fences, `Note:` and snippets; lists, quotes, Enter and Tab; pairs and comments; problems with their positions; Canonicalize with OPF;
 // hover. Real keyboard events in a real browser. Row format: [id, requirement, title, format, doc, steps, expect, options?]; see
 // support/source-keyboard.mjs.
-import { FAST, K, M, T } from '../source-keyboard.mjs';
+import { FAST, K, M, T, platform } from '../source-keyboard.mjs';
+
+// VS Code's fold keys: Cmd+Alt+[ and ] on macOS, Ctrl+Shift+[ and ] elsewhere (where Ctrl+Alt+[ folds everything). The key is named by its code: a synthetic
+// Shift+[ carries the key "[", which is Indent less, where a real keyboard sends "{".
+const FOLD = platform === 'darwin' ? 'Meta+Alt+[' : 'Control+Shift+BracketLeft';
+const UNFOLD = platform === 'darwin' ? 'Meta+Alt+]' : 'Control+Shift+BracketRight';
 
 const wait = ['waitPopup'];
 
@@ -199,8 +204,8 @@ markdownCases.push(
 );
 
 markdownCases.push(
-  ['M-FOLD-001', 'R-KEY-11', 'fold a slide (from its first line to the next ---)', 'md', '---\nname: Q3 Review\n---\n\n# Q3 Review\n\n---\n\n# High|lights\n\n- Revenue up\n- Churn down\n', [['press', 'Mod+Alt+['], ['expectFolded', 1]], {}],
-  ['M-FOLD-002', 'R-KEY-11', 'fold a fenced block', 'md', '# A\n\n```js|\nx\ny\n```\n', [['press', 'Mod+Alt+['], ['expectFolded', 1]], {}],
-  ['M-FOLD-003', 'R-KEY-11', 'fold the front matter', 'md', '---|\nname: x\ndesign:\n  theme: minimal\n---\n# A\n', [['press', 'Mod+Alt+['], ['expectFolded', 1]], {}],
-  ['M-FOLD-004', 'R-KEY-11', 'a --- inside a fence is not a slide end', 'md', '# A|\n\n```yaml\n---\nx: 1\n```\n\ntext\n', [['press', 'Mod+Alt+['], ['expectFolded', 1], ['press', 'Mod+Alt+]'], ['expectFolded', 0]], {}],
+  ['M-FOLD-001', 'R-KEY-11', 'fold a slide (from its first line to the next ---)', 'md', '---\nname: Q3 Review\n---\n\n# Q3 Review\n\n---\n\n# High|lights\n\n- Revenue up\n- Churn down\n', [['press', FOLD], ['expectFolded', 1]], {}],
+  ['M-FOLD-002', 'R-KEY-11', 'fold a fenced block', 'md', '# A\n\n```js|\nx\ny\n```\n', [['press', FOLD], ['expectFolded', 1]], {}],
+  ['M-FOLD-003', 'R-KEY-11', 'fold the front matter', 'md', '---|\nname: x\ndesign:\n  theme: minimal\n---\n# A\n', [['press', FOLD], ['expectFolded', 1]], {}],
+  ['M-FOLD-004', 'R-KEY-11', 'a --- inside a fence is not a slide end', 'md', '# A|\n\n```yaml\n---\nx: 1\n```\n\ntext\n', [['press', FOLD], ['expectFolded', 1], ['press', UNFOLD], ['expectFolded', 0]], {}],
 );
