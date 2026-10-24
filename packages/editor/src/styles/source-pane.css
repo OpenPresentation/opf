@@ -335,3 +335,16 @@
 .opf-source-outline-detail { margin-left: auto; flex: none; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; color: var(--opf-ui-muted-fg); }
 .opf-source-outline-empty { padding: 8px 10px; color: var(--opf-ui-muted-fg); }
 @media (forced-colors: active) { .opf-source-outline-item[aria-current="true"] { outline: 1px solid Highlight; } }
+
+/* Forced colors (Windows high contrast): the selection of a list is an outline and a problem keeps its underline and a different shape per severity. */
+@media (forced-colors: active) {
+  .opf-source-code .cm-tooltip-autocomplete > ul > li[aria-selected],
+  .cm-tooltip .opf-fix[aria-selected="true"] { outline: 2px solid Highlight; outline-offset: -2px; forced-color-adjust: none; background: Canvas; color: CanvasText; }
+  .opf-source-code .cm-lintRange-error { text-decoration: underline wavy CanvasText; }
+  .opf-source-code .cm-lintRange-warning { text-decoration: underline dashed CanvasText; }
+  .opf-source-code .cm-lintRange-info { text-decoration: underline dotted CanvasText; }
+  .opf-source-finding { border: 1px solid CanvasText; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cm-tooltip, .cm-tooltip * { animation: none !important; transition: none !important; }
+}
