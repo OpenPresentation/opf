@@ -276,6 +276,7 @@ async function runStep(kb, step) {
     await kb.page.locator('.opf-source-action-canonicalize').click();
     return kb.settle();
   }
+  if (kind === 'format') { await kb.page.evaluate((name) => demo.pane.setFormat(name), args[0]); return kb.settle(); }
   if (kind === 'confirm') { await kb.page.locator('.opf-source-confirm-accept').click(); return kb.settle(); }
   if (kind === 'cancelConfirm') { await kb.page.locator('.opf-source-confirm-cancel').click(); return kb.settle(); }
   if (kind === 'snapshot') { kb.snapshots ??= {}; kb.snapshots[args[0]] = await kb.source(); return undefined; }

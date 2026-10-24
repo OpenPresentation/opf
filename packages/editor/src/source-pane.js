@@ -337,6 +337,7 @@ export function createSourcePane(container, options = {}) {
 
   /** Show `value` as the text of the current format, as an external change. */
   function show(value) {
+    closeConfirm(false);
     baseline = value;
     shownInvalid = false;
     control.update(value, false, null, `${id}-findings`);

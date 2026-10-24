@@ -164,3 +164,7 @@ yamlCases.push(
   ['Y-FOLD-001', 'R-KEY-11', 'Mod+Alt+[ folds a mapping', 'yaml', 'slides:|\n  - title: a\n  - title: b\n', [['press', FOLD], ['expectFolded', 1]], {}],
   ['Y-FOLD-002', 'R-KEY-11', 'Mod+Alt+] unfolds it', 'yaml', 'slides:|\n  - title: a\n  - title: b\n', [['press', FOLD], ['expectFolded', 1], ['press', UNFOLD], ['expectFolded', 0]], {}],
 );
+
+yamlCases.push(
+  ['Y-FMT-017', 'R-FMT-02', 'switching the format closes the question', 'yaml', '# keep\nname: x\nslides:\n  - title: a\n|', [['canonicalize'], ['format', 'json']], { confirm: { open: false }, format: 'json' }],
+);
