@@ -32,6 +32,8 @@ body[data-menu=open] .header-actions{display:flex}
 .canvas-column{flex:1 1 0;min-height:0}
 .canvas-toolbar{height:auto;min-height:44px;flex-wrap:wrap;padding:4px 10px;gap:6px}
 .canvas-toolbar #copy-slide,.canvas-toolbar #undo,.canvas-toolbar #redo,.canvas-toolbar #find-open{display:none}
+.layouts-view{overflow:auto;-webkit-overflow-scrolling:touch}
+.layouts-host{flex:1 0 auto}
 .canvas-scroll{touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}
 .canvas-stage{padding:12px 10px 16px}
 .canvas-caption{display:none}

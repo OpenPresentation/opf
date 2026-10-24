@@ -5,11 +5,11 @@
 //   outside  controls that stick out of the layout viewport,
 //   clipped  controls pushed out of sight sideways by an ancestor (a row that scrolls them away; the slide strip is a scroller by design) or whose text is cut,
 //   overlaps controls that cover each other by more than 2px each way.
-// Not controls: text typed on the slide (.opf-inline-input mirrors the slide's type), the gutter's fold markers and anything inside an SVG.
+// Not controls: text typed on the slide (.opf-inline-input mirrors the slide's type), the gutter's fold markers, the layout canvas's wireframe regions (objects of the drawing, sized by the layout) and anything inside an SVG.
 export function touchAudit() {
   const vw = document.documentElement.clientWidth;
   const selector = 'button, a[href], input:not([type=hidden]), select, textarea, summary, [role=tab], [role=button], [role=menuitem], [role=menuitemradio], [role=option], [role=checkbox], [role=switch], [role=radio], .cm-tooltip-autocomplete li';
-  const skip = '[hidden], dialog:not([open]), svg, .sr-only, .opf-source-status, .opf-source-live, .opf-inline-input, .opf-rich-input, .cm-foldGutter, .opf-fold-marker';
+  const skip = '[hidden], dialog:not([open]), svg, .sr-only, .opf-source-status, .opf-source-live, .opf-inline-input, .opf-rich-input, .cm-foldGutter, .opf-fold-marker, .opf-lx-node';
   const visible = (element) => {
     if (element.closest(skip)) return false;
     for (let node = element; node && node !== document.body; node = node.parentElement) {
