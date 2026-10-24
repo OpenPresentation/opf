@@ -3,6 +3,7 @@
 // hover. Real keyboard events in a real browser. Row format: [id, requirement, title, format, doc, steps, expect, options?]; see
 // support/source-keyboard.mjs.
 import { FAST, K, M, T, platform } from '../source-keyboard.mjs';
+import { phase4Markdown } from './phase4-extras.mjs';
 
 // VS Code's fold keys: Cmd+Alt+[ and ] on macOS, Ctrl+Shift+[ and ] elsewhere (where Ctrl+Alt+[ folds everything). The key is named by its code: a synthetic
 // Shift+[ carries the key "[", which is Indent less, where a real keyboard sends "{".
@@ -250,3 +251,6 @@ markdownCases.push(
   ['M-VAL-X11', 'R-A11Y-01', 'each variable has an accessible name with its kind and its place', 'md', `${MFRONT}# Hello |`, [T('{{'), ['waitLabels']], { popup: { ariaNames: [/^brand, reference, text variable\. 1 of 2$/] } }],
   ['M-VAL-X12', 'R-A11Y-02', 'accepting a beat says what was inserted', 'md', `${MFRONT}# A\n\n<!-- slide: beat=| -->\n`, [T('open'), K('Tab')], { live: 'Inserted opening' }],
 );
+
+// Phase 4: the shape hint, built-in variables with several cursors, Markdown image targets (phase4-extras.mjs).
+markdownCases.push(...phase4Markdown);

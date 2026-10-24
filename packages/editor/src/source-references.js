@@ -185,12 +185,12 @@ export function regionNames(record) {
   return names;
 }
 
-/** The regions of a layout record in reading order (nested ones included) as `{ name, accepts }`. */
+/** The regions of a layout record in reading order (nested ones included) as `{ name, accepts, role?, min? }`. */
 export function flatRegions(record) {
   const out = [];
   const walk = (regions) => {
     for (const region of Array.isArray(regions) ? regions : []) {
-      if (typeof region?.name === "string") out.push({ name: region.name, accepts: Array.isArray(region.accepts) ? region.accepts : [] });
+      if (typeof region?.name === "string") out.push({ name: region.name, accepts: Array.isArray(region.accepts) ? region.accepts : [], ...(typeof region.role === "string" ? { role: region.role } : {}), ...(Number.isFinite(region.min) ? { min: region.min } : {}) });
       if (region?.regions) walk(region.regions);
     }
   };

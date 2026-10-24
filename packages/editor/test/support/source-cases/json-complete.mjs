@@ -2,6 +2,7 @@
 // (exact strings of SPEC 4.6), the values of every kind of field, ranking, the documentation panel and snippets. Row format:
 // [id, requirement, title, format, doc, steps, expect, options?]; see support/source-keyboard.mjs.
 import { K, M, T, WAIT } from '../source-keyboard.mjs';
+import { phase4Json } from './phase4-extras.mjs';
 
 const KEY = '{\n  "slides": [],\n  |\n}';
 const OBJ = KEY;
@@ -242,3 +243,6 @@ export const jsonSnippets = [
 
 export const jsonComplete = [...jsonTriggers, ...jsonCtrlSpace, ...jsonInsert, ...jsonValues, ...jsonXrefs, ...jsonRank, ...jsonRegionRank, ...jsonFooter, ...jsonDocs, ...jsonSnippets];
 void M; void WAIT;
+
+// Phase 4: the shape hint, built-in variables with several cursors, Markdown image targets (phase4-extras.mjs).
+jsonComplete.push(...phase4Json);
