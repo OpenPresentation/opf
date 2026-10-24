@@ -55,6 +55,7 @@ jobs:
             verify (ubuntu-latest)
             build
           # The only files a bump may touch (extended regular expression, matched against each changed path).
+          # what the site's own `pnpm opf:bump` writes (scripts/opf-bump.mjs of the site).
           ALLOWED_FILES: '^(package\.json|pnpm-lock\.yaml|opf-reference-layer-pins\.json)$'
         run: |
           set -euo pipefail

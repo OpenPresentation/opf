@@ -53,8 +53,9 @@ jobs:
           # One check name per line: the checks that make a bump safe to merge (this site's build and smoke).
           REQUIRED_CHECKS: |
             site
-          # The only files a bump may touch (extended regular expression, matched against each changed path).
-          ALLOWED_FILES: '^(package\.json|pnpm-lock\.yaml)$'
+          # The only files a bump may touch (extended regular expression, matched against each changed path): what the site's own
+          # `pnpm opf:bump` writes (scripts/opf-bump.mjs of the site).
+          ALLOWED_FILES: '^(package\.json|pnpm-lock\.yaml|starters/[a-z-]+/package\.json|data/releases\.json|public/homepage-details/manifest\.json)$'
         run: |
           set -euo pipefail
           stop() { echo "::notice title=OPF bump::$1"; exit 0; }

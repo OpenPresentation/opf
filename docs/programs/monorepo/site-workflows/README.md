@@ -38,15 +38,18 @@ The deploy path is the site's own and unchanged; nothing here deploys, logs in t
 2. **Copy the files** by one pull request per site (MR-52). Each file's header says where it goes. Check the workflow names in `workflows:`
    and the check names in `REQUIRED_CHECKS` against the site's CI on the day: a renamed job or workflow silently never merges (it fails
    closed). If MR-52 renames a site's job to `build-and-smoke`, change the two names together.
-3. **pptx-gallery's vendored editor** (MR-56). `public/opf-editor` and `data/opf-spec.json` are built by core's `pnpm vendor:gallery-editor`
-   (`scripts/vendor-gallery-editor.mjs`) from the published packages at the release version and the editor example of `packages/editor/examples` at
-   the release tag (the set is `registryPlan({ tag: 'X.Y.Z' })` of `scripts/registry-plan.mjs`): no sibling checkout and no `release-plan.json`. The `pptx-gallery` leg of `bump-sites.yml` runs it (through
-   `bump-site.mjs bump --vendor-editor`: the site's lockfile install without scripts, then the bundle), and the files are committed into the
-   same bump pull request, so `verify:published-editor` in `build-and-smoke` passes for the new versions; `ALLOWED_FILES` in the merge workflow
-   already lets a patch bump change them. By hand (local): `pnpm vendor:gallery-editor --version X.Y.Z --ref vX.Y.Z --site ../pptx-gallery`
-   (`--ref` defaults to `HEAD`; `--pin opf-editor=X.Y.Z` builds against a published set that is not shared, as 0.25.x was). The bundle is
-   byte-identical to the 0.25.3 one the site holds (checked on 2026-10-22: same file hashes; only `editorExamples.commit` differs because the
-   history was rewritten). The first bump (0.25 to 0.26, and the gallery package from 5.0.0 to 0.26.0) is a `major` bump and needs review anyway.
+3. **The site scripts** (`pnpm opf:bump <X.Y.Z>`, `scripts/opf-bump.mjs` in each site). `bump-site.mjs` runs the script of the site it is pointed at;
+   it does the whole bump of that site, so the pull request needs no human edit to be green:
+   `openpresentation-site` sets the pins of the root and the starters and `opfSource` (the commit of the tag), refreshes the lockfile, updates
+   `data/releases.json` from the registry and the GitHub release notes of the tag, syncs `.opf-source` and regenerates
+   `public/homepage-details/manifest.json`; `pptx-gallery` sets the pins, refreshes the lockfile, runs `import-font-replacements` and `sync-preview-fonts --core-repo <checkout>
+   --core-ref <commit>`, the catalog and preview syncs and `build-chart-previews`, vendors the editor bundle and schema reference
+   (`public/opf-editor`, `data/opf-spec.json`) with `scripts/vendor-gallery-editor.mjs` of the checkout at the tag, and runs the checks of its CI that
+   read them; `pptx-dev` sets the pins, `opf-reference-layer-pins.json` and the lockfile. The checkout of this repository is `--opf <dir>`
+   (`bump-sites.yml` passes its own, with the tag fetched), else `$OPF_CHECKOUT`, else a shallow clone of the tag. By hand, on the default branch
+   of a site: `pnpm opf:bump 0.26.2` (it needs network access to the registry and GitHub). `ALLOWED_FILES` in each merge workflow lists the files
+   a bump may change, which is exactly what that site's script writes; extend it in the same pull request when the script learns a new output. A release that changes behavior a site's tests assert, or an advisory published
+   after the lockfile was resolved, still turns the site's CI red and the pull request stays open for a person.
 4. **Rollback.** Delete the workflow files from the sites (and disable `bump-sites.yml`); the labels and pull requests are harmless.
 5. **Dry run before the first release:** Actions, **Bump sites**, **Run workflow** in OpenPresentation/opf with an already published
    version (dry-run is true by default: the edits and the lockfile diff are shown in the job summary and nothing is pushed), then once
