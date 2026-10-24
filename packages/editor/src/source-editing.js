@@ -227,39 +227,59 @@ export const markdownWrapSelection = EditorView.inputHandler.of((view, _from, _t
 // ---- Folding in Markdown -----------------------------------------------------------------------------------------------------------
 const SEPARATOR = /^-{3,}[ \t]*$/;
 
+const FRONT_END = /^(---|\.\.\.)\s*$/;
+const foldIndexes = new WeakMap();
+
 /**
- * What a line of Markdown can fold (SPEC 6.8): the front matter (from its opening line), a fenced block (from its opening fence), and a slide (from its
- * first line to the line before the next `---`). A `---` inside a fence or the front matter is not a separator.
+ * Every foldable range of a Markdown text, by the number of the line it starts on, from one pass over the lines (SPEC 6.8): the front matter (from its
+ * opening line), a fenced block (from its opening fence) and a slide (from its first line to the last line before the next `---`). A `---` inside a
+ * fence or the front matter is not a separator. A fence that is also the first line of a slide folds as the fence.
  */
-export const markdownFolding = foldService.of((state, lineStart) => {
-  const { doc } = state;
-  const line = doc.lineAt(lineStart);
-  const text = line.text;
-  const last = (number) => { const end = doc.line(number); return end.to; };
-  // The front matter.
-  if (line.number === 1 && /^---\s*$/.test(text)) {
-    for (let number = 2; number <= doc.lines; number++) if (/^(---|\.\.\.)\s*$/.test(doc.line(number).text)) return number > 2 ? { from: line.to, to: doc.line(number - 1).to } : null;
-    return null;
+export function markdownFoldIndex(doc) {
+  const cached = foldIndexes.get(doc);
+  if (cached) return cached;
+  const index = new Map();
+  const range = (line, endLine) => ({ from: doc.line(line).to, to: doc.line(endLine).to });
+  let front = false, fence = null, previous = null, slide = null, frontEnd = 0;
+  const closeSlide = () => { if (slide && slide.last > slide.start) index.set(slide.start, range(slide.start, slide.last)); slide = null; };
+  for (let number = 1; number <= doc.lines; number++) {
+    const text = doc.line(number).text;
+    // What this line is, from the state before it (as markdownLineKind): the opening line of the front matter is body.
+    let kind = "body";
+    if (front) kind = FRONT_END.test(text) ? "body" : "front";
+    else if (fence) kind = new RegExp(`^ {0,3}${fence.char}{${fence.length},}\\s*$`).test(text) ? "body" : fence.yaml ? "yaml-fence" : "fence";
+    const blank = text.trim() === "";
+    if (kind === "body" && !blank) {
+      if (SEPARATOR.test(text)) closeSlide();
+      else {
+        const startsSlide = !previous || ((SEPARATOR.test(previous.text) || /^\.\.\.\s*$/.test(previous.text)) && previous.kind === "body");
+        if (!slide && startsSlide) slide = { start: number, last: number };
+      }
+    }
+    if (slide && !blank && !(kind === "body" && SEPARATOR.test(text))) slide.last = number;
+    if (!blank) previous = { text, kind };
+    // The state after this line.
+    if (number === 1 && /^---\s*$/.test(text)) {
+      front = true;
+      for (let at = 2; at <= doc.lines; at++) if (FRONT_END.test(doc.line(at).text)) { frontEnd = at; break; }
+      if (frontEnd > 2) index.set(1, range(1, frontEnd - 1));
+    } else if (front) {
+      if (FRONT_END.test(text)) front = false;
+    } else if (fence) {
+      if (new RegExp(`^ {0,3}${fence.char}{${fence.length},}\\s*$`).test(text)) {
+        if (number > fence.start + 1) index.set(fence.start, range(fence.start, number - 1));
+        fence = null;
+      }
+    } else {
+      const open = /^( {0,3})(`{3,}|~{3,})(.*)$/.exec(text);
+      if (open && !(open[2][0] === "`" && open[3].includes("`"))) fence = { char: open[2][0], length: open[2].length, yaml: /^\s*opf-(?:slide|block)\b/.test(open[3]), start: number };
+    }
   }
-  if (markdownLineKind(doc, line.number) !== "body") return null;
-  // A fenced block.
-  const open = /^( {0,3})(`{3,}|~{3,})(.*)$/.exec(text);
-  if (open && !(open[2][0] === "`" && open[3].includes("`"))) {
-    const close = new RegExp(`^ {0,3}${open[2][0]}{${open[2].length},}\\s*$`);
-    for (let number = line.number + 1; number <= doc.lines; number++) if (close.test(doc.line(number).text)) return number > line.number + 1 ? { from: line.to, to: doc.line(number - 1).to } : null;
-    return line.number < doc.lines ? { from: line.to, to: last(doc.lines) } : null;
-  }
-  // A slide: its first line (the one after the front matter or a separator, blank lines apart) folds the rest of the slide.
-  if (text.trim() === "" || SEPARATOR.test(text)) return null;
-  let before = line.number - 1;
-  while (before >= 1 && doc.line(before).text.trim() === "") before--;
-  const startsSlide = before < 1 || ((SEPARATOR.test(doc.line(before).text) || /^\.\.\.\s*$/.test(doc.line(before).text)) && markdownLineKind(doc, before) === "body");
-  if (!startsSlide) return null;
-  let end = line.number;
-  for (let number = line.number + 1; number <= doc.lines; number++) {
-    if (SEPARATOR.test(doc.line(number).text) && markdownLineKind(doc, number) === "body") break;
-    end = number;
-  }
-  while (end > line.number && doc.line(end).text.trim() === "") end--;
-  return end > line.number ? { from: line.to, to: doc.line(end).to } : null;
-});
+  // A fence never closed folds to the end of the text.
+  if (fence && fence.start < doc.lines) index.set(fence.start, range(fence.start, doc.lines));
+  closeSlide();
+  foldIndexes.set(doc, index);
+  return index;
+}
+
+export const markdownFolding = foldService.of((state, lineStart) => markdownFoldIndex(state.doc).get(state.doc.lineAt(lineStart).number) ?? null);

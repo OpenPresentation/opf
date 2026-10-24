@@ -123,7 +123,7 @@ export function fixesAtCaret(state, source) {
  * `getSource()` is the original text; `applyFix(fix, problem)` performs a fix (the editor's edits or the pane's own action); `say(message)` is
  * the live region. Returns `{ extension, draw(view, problems), problems(view) }`.
  */
-export function createDiagnostics({ getSource, applyFix, say }) {
+export function createDiagnostics({ getSource, applyFix, say, km }) {
   let announced = null;
   const stepProblem = (forward) => (view) => {
     const source = getSource(), map = textInputMap(source), list = currentProblems(view.state, source);
@@ -165,7 +165,8 @@ export function createDiagnostics({ getSource, applyFix, say }) {
     { key: "Escape", run: whenOpen((view) => view.dispatch({ effects: closeFixes.of(null) })) },
     { key: "Tab", run: whenOpen((view) => view.dispatch({ effects: closeFixes.of(null) })) },
   ]));
-  const plain = keymap.of([
+  // F8, Shift+F8 and the quick fix key are declared in source-keymap.js; the menu's own keys above are modal and not listed.
+  const plain = keymap.of(km ? [...km.bind("problem.next", stepProblem(true)), ...km.bind("problem.previous", stepProblem(false)), ...km.bind("problem.quickFix", openMenu)] : [
     { key: "F8", run: stepProblem(true), shift: stepProblem(false) },
     { key: "Mod-.", run: openMenu },
   ]);

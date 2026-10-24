@@ -24,6 +24,13 @@ await build({
   outfile: fileURLToPath(new URL('source-pane.js', output)),
   bundle: true, platform: 'browser', format: 'esm', minify: true,
 });
+// The source pane's worker (the text checks off the main thread), bundled as its own script next to the page: the harness starts it with
+// `new Worker('./source-worker.js', { type: 'module' })`. A host does the same with `@openpresentation/opf-editor/source-worker`.
+await build({
+  entryPoints: [fileURLToPath(new URL('src/source-worker.js', root))],
+  outfile: fileURLToPath(new URL('source-worker.js', output)),
+  bundle: true, platform: 'browser', format: 'esm', minify: true,
+});
 // RR-99: the layout editor harness, another small page next to the playground.
 await build({
   entryPoints: [fileURLToPath(new URL('examples/layout-editor.js', root))],

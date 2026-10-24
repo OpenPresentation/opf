@@ -43,7 +43,42 @@ export interface SourceFile {
   mime: string;
 }
 
+export type ShortcutPlatform = "mac" | "win" | "linux";
+/** One row of the keyboard shortcuts list. */
+export interface Shortcut {
+  id: string;
+  title: string;
+  group: string;
+  /** The keys as words: `Cmd+Shift+O` on macOS, `Ctrl+Shift+O` elsewhere; a chord is two strokes separated by a space (`Cmd+K Cmd+0`). */
+  keys: string[];
+  /** The same keys with the macOS symbols (`⌘⇧O`) on macOS, else the words. */
+  symbols: string[];
+  /** The keys in CodeMirror's notation (`Mod-Shift-o`). */
+  strokes: string[];
+  /** What has to be true for the keys to apply (`the list is open`). */
+  when?: string;
+}
+
+/** One entry of the outline of a document (the symbol picker and the outline panel). Offsets are source offsets. */
+export interface OutlineSymbol {
+  id: string;
+  kind: "slide" | "section" | "asset" | "dataset" | "variable" | "reference" | "record";
+  /** `3. Highlights` for a slide, the id for an asset, `layout hero` for an embedded catalog record. */
+  label: string;
+  /** `layout cover` for a slide with a layout, the title of a dataset, the catalog group of a record. */
+  detail: string;
+  /** 1 for the entries under a section (assets, datasets, variables, references). */
+  depth: number;
+  from: number;
+  to: number;
+  line: number;
+}
+
 export interface SourcePaneOptions {
+  /** Add an Outline button to the bar and a panel listing the slides and other symbols of the document (`"open"` shows the panel at the start). The symbol picker (Cmd/Ctrl+Shift+O) is always there. */
+  outline?: boolean | "open";
+  /** Called with `getShortcuts()` when the shortcuts dialog is about to open; returning `true` means the host shows its own and the editor's dialog stays closed. */
+  onShowShortcuts?(shortcuts: Shortcut[]): boolean | void;
   /** The editor session. Every edit in any format reaches it as a patch (`applyPatch`), so it is validated and undoable. */
   editor: EditorSession;
   /** File name without extension (default `deck`). Spaces and slashes become `-`. */
@@ -75,6 +110,17 @@ export interface SourcePaneOptions {
   completions?: boolean;
   /** Enter continues a list: a new string item after a string in a JSON list, the next `- ` in YAML, the next marker (or `> `) in Markdown; an empty one ends it. Default true. */
   smartListEnter?: boolean;
+  /**
+   * Run the pane's text checks (reading YAML or Markdown, the syntax pass of JSON and the document validation) in a Web Worker, so typing in a deck
+   * of a thousand slides never blocks the main thread. A function returns the Worker (`() => new Worker(new URL("@openpresentation/opf-editor/source-worker", import.meta.url), { type: "module" })`
+   * with a bundler that supports that form); a Worker is used as given; `true` starts `source-worker.js` beside the package's own module, which works
+   * when a bundler follows `new URL(..., import.meta.url)`. Only the typing delay uses the worker: every explicit action (`getText`, switching the format,
+   * `replaceDocument`, Format, Undo) is applied on the main thread at once. When the worker cannot start, fails or stops answering, the pane checks on the
+   * main thread from then on and `onError` is called once; no edit is lost. Default `false` (everything on the main thread).
+   */
+  worker?: boolean | Worker | (() => Worker);
+  /** A preview for the card F12 and Alt+F12 open on a catalog record only the app provides (see `JsonCodeEditorOptions.resolvePreview`). */
+  resolvePreview?: (kind: string, id: string) => HTMLElement | string | undefined | Promise<HTMLElement | string | undefined>;
   onError?(error: unknown): void;
 }
 
@@ -136,8 +182,25 @@ export interface SourcePane {
   showProblem(index: number): boolean;
   /** Open the suggestion list at the caret, as Ctrl+Space does. */
   triggerCompletion(): boolean;
+  /**
+   * Every key binding the editor installed, for `platform` (default: the page's), grouped and titled as the shortcuts dialog shows them. The list is produced from the
+   * table that installs the keymap, so it cannot drift from the keys.
+   */
+  getShortcuts(platform?: ShortcutPlatform): Shortcut[];
+  /** Open the keyboard shortcuts dialog (the `?` button, F1, Cmd/Ctrl+K then Cmd/Ctrl+S). `onShowShortcuts` returning true replaces it with the host's own. */
+  showShortcuts(): boolean;
+  /** Open the symbol picker (Cmd/Ctrl+Shift+O). */
+  showSymbols(): boolean;
+  /** The outline of the text as it is now, in document order. Works on text that does not parse. */
+  getOutline(): OutlineSymbol[];
+  /** Show or hide the outline panel (needs the `outline` option); without an argument it toggles. Returns whether the panel is open. */
+  toggleOutline(open?: boolean): boolean;
   /** The underlying code editor (`mountJsonCodeEditor`). */
   readonly editor: JsonCodeEditor;
+  /** Resolves when no typed edit waits for its apply delay and no check (a worker's included) is running: the text on screen has been read and applied. */
+  whenIdle(): Promise<void>;
+  /** How the applied edits were checked: how many by the worker and how many on the main thread, and whether the worker can still be used. */
+  checkerStats(): { worker: number; inline: number; available: boolean };
   destroy(): void;
 }
 
