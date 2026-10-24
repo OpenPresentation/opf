@@ -8,7 +8,6 @@
  */
 import type { Finding } from "./generated/types/finding.js";
 import { describeFinding } from "./finding-text.js";
-import { type VariableKind, VARIABLE_KINDS, coerceVariableValue, DEFAULT_VARIABLE_DATE_FORMAT } from "./variables.js";
 import {
   type RuleText,
   KIND_WORDS,
@@ -34,7 +33,6 @@ import {
   match,
   plainList,
   sentence,
-  show,
   unquote,
   unquoteList,
   us,
@@ -245,18 +243,15 @@ const SAMPLE_BY_KIND: Record<string, string> = {
   text: "some text",
 };
 
-const variableInvalidValue: RuleText = (finding, _context, helpers) => {
+const variableInvalidValue: RuleText = (finding) => {
   const found = match(finding.message, /^Value for '(.+?)' \((\w+)\): (.+?)\.?$/);
   const id = text(params(finding).id) ?? found?.[1];
   if (!id) return undefined;
   const kind = found?.[2] ?? "";
-  // The declared value is the culprit only when it fails the declared type itself; otherwise the value came from the host (`values`).
-  const declared = helpers.valueAt(["variables", id, "value"]);
-  const declaredFails = declared !== undefined && (VARIABLE_KINDS as readonly string[]).includes(kind) && !coerceVariableValue(kind as VariableKind, declared).ok;
-  const message = declaredFails
-    ? `${code(id)} is ${kind ? `a ${kind}` : "a typed"} variable, but its value is ${show(declared)}.`
-    : `The value given for ${code(id)} does not fit its type${kind ? ` (${kind})` : ""}${found?.[3] ? `: ${us(found[3])}` : ""}.`;
-  return { message, next: `give it ${SAMPLE_BY_KIND[kind] ?? "a value of the declared type"}.` };
+  return {
+    message: `The value given for ${code(id)} does not fit its type${kind ? ` (${kind})` : ""}${found?.[3] ? `: ${us(found[3])}` : ""}.`,
+    next: `give it ${SAMPLE_BY_KIND[kind] ?? "a value of the declared type"}.`,
+  };
 };
 
 const BUILTINS = ["deck.name", "deck.description", "deck.author", "deck.slideCount", "slide.number", "slide.section", "speakers", "speaker.name", "speaker.title", "speaker.email", "speaker.phone", "speaker.bio", "speaker.photo", "organization.name", "organization.legalName", "organization.tagline", "organization.domain", "organization.email", "organization.phone"];
@@ -282,7 +277,7 @@ const variableFormat: RuleText = (finding, _context, helpers) => {
   const kind = id ? helpers.valueAt(["variables", id, "type"]) : undefined;
   return {
     message: `The format${typeof declared === "string" ? ` ${code(declared)}` : ""} does not apply to ${kind ? `a ${String(kind)}` : "this"} value${id ? ` (${code(id)})` : ""}${reason ? `: it ${sentence(us(reason)).replace(/\.$/, "")}` : ""}.`,
-    next: `change the ${code("format")} of ${id ? code(id) : "the variable"} to one that fits its values, such as ${kind === "date" ? code(DEFAULT_VARIABLE_DATE_FORMAT) : code("#,##0.0")}.`,
+    next: `change the ${code("format")} of ${id ? code(id) : "the variable"} to one that fits its values, such as ${kind === "date" ? code("MMMM d, yyyy") : code("#,##0.0")}.`,
   };
 };
 
