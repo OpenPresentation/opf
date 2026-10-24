@@ -1,4 +1,4 @@
-// MR-41: a prerelease tree passes the same checks as a stable one. `release.mjs prepare X.Y.Z-rc.N` sets six versions and core's
+// MR-41, MR-44: a prerelease tree passes the same checks as a stable one. `release.mjs prepare X.Y.Z-rc.N` sets six versions and core's
 // peer ranges; the 0.26.0-rc.0 pull request failed CI on tests and checks that assumed a stable `X.Y.Z` (the peer range shape in
 // the CLI and integration tests, the lazy font gate refusing every prerelease). This prepares a copy of the real manifests for
 // a stable version and for prereleases (planPrepare reads the repository and writes nothing; the copy is in a temp folder), and
@@ -18,7 +18,13 @@ import { CARET_RANGE, VERSION, prereleaseOutside } from './version-shapes.mjs';
 import { loadWorkspace } from './workspace-packages.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const VERSIONS = ['0.26.0', '0.26.0-rc.0', '0.26.0-rc.12', '0.27.0-beta.3'];
+// The cases come from the tree's own version, so the test passes before and after any release: a tree at 0.26.0-rc.0 or at 0.26.0
+// (whose CHANGELOG already has the 0.26.0 section, which `prepare 0.26.0` would refuse) prepares the next minor and its prereleases.
+const CURRENT = readFileSync(path.join(root, 'packages/javascript/package.json'), 'utf8').match(/"version":\s*"([^"]+)"/)[1];
+const [MAJOR, MINOR, PATCH] = CURRENT.split('-')[0].split('.').map(Number);
+const PREVIOUS = `${MAJOR}.${MINOR}.${PATCH}`;
+const NEXT = `${MAJOR}.${MINOR + 1}.0`;
+const VERSIONS = [NEXT, `${NEXT}-rc.0`, `${NEXT}-rc.12`, `${MAJOR}.${MINOR + 2}.0-beta.3`];
 const reviewed = Object.entries(REVIEWED_FONT_SETS)[0];
 
 /** The files the version checks read, prepared for `version` in a temp folder. */
@@ -30,7 +36,7 @@ async function preparedTree(version) {
     mkdirSync(path.dirname(path.join(tree, file)), { recursive: true });
     cpSync(path.join(root, file), path.join(tree, file));
   }
-  const plan = await planPrepare({ root, input: version, previous: '0.25.0', stability: undefined });
+  const plan = await planPrepare({ root, input: version, previous: PREVIOUS, stability: undefined });
   for (const { file, text } of plan.writes) {
     mkdirSync(path.dirname(path.join(tree, file)), { recursive: true });
     writeFileSync(path.join(tree, file), text);
@@ -89,6 +95,14 @@ for (const version of VERSIONS) {
     assert.equal(compareVersions(outside, version), -1);
   });
 }
+
+test('the cases are derived from the tree: a stable and prerelease versions above its own', () => {
+  assert.match(CURRENT, VERSION);
+  assert.equal(VERSIONS.length, 4);
+  for (const version of VERSIONS) assert.equal(compareVersions(version, PREVIOUS), 1, version);
+  assert.equal(isPrerelease(VERSIONS[0]), false);
+  assert.ok(VERSIONS.slice(1).every(isPrerelease));
+});
 
 test('the shared shapes accept stable and prerelease versions and refuse the rest', () => {
   for (const good of ['0.26.0', '0.26.0-rc.0', '0.27.0-beta.3']) {
