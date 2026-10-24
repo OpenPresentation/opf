@@ -59,7 +59,24 @@ export interface Shortcut {
   when?: string;
 }
 
+/** One entry of the outline of a document (the symbol picker and the outline panel). Offsets are source offsets. */
+export interface OutlineSymbol {
+  id: string;
+  kind: "slide" | "section" | "asset" | "dataset" | "variable" | "reference" | "record";
+  /** `3. Highlights` for a slide, the id for an asset, `layout hero` for an embedded catalog record. */
+  label: string;
+  /** `layout cover` for a slide with a layout, the title of a dataset, the catalog group of a record. */
+  detail: string;
+  /** 1 for the entries under a section (assets, datasets, variables, references). */
+  depth: number;
+  from: number;
+  to: number;
+  line: number;
+}
+
 export interface SourcePaneOptions {
+  /** Add an Outline button to the bar and a panel listing the slides and other symbols of the document (`"open"` shows the panel at the start). The symbol picker (Cmd/Ctrl+Shift+O) is always there. */
+  outline?: boolean | "open";
   /** Called with `getShortcuts()` when the shortcuts dialog is about to open; returning `true` means the host shows its own and the editor's dialog stays closed. */
   onShowShortcuts?(shortcuts: Shortcut[]): boolean | void;
   /** The editor session. Every edit in any format reaches it as a patch (`applyPatch`), so it is validated and undoable. */
@@ -163,6 +180,10 @@ export interface SourcePane {
   showShortcuts(): boolean;
   /** Open the symbol picker (Cmd/Ctrl+Shift+O). */
   showSymbols(): boolean;
+  /** The outline of the text as it is now, in document order. Works on text that does not parse. */
+  getOutline(): OutlineSymbol[];
+  /** Show or hide the outline panel (needs the `outline` option); without an argument it toggles. Returns whether the panel is open. */
+  toggleOutline(open?: boolean): boolean;
   /** The underlying code editor (`mountJsonCodeEditor`). */
   readonly editor: JsonCodeEditor;
   destroy(): void;
