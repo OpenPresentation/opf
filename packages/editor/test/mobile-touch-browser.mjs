@@ -133,6 +133,7 @@ async function sourcePane(context, engine, width) {
   for (const [name, query, run] of states) {
     const page = await open(query);
     await run(page);
+    await page.waitForFunction(() => document.getAnimations().every((animation) => animation.playState !== 'running'), undefined, { timeout: 5000 }).catch(() => {});
     await page.waitForTimeout(250);
     const report = await page.evaluate(touchAudit);
     assert.ok(report.controls >= 4, `${tag(name)}: found its controls (${report.controls})`);
@@ -176,10 +177,13 @@ async function playground(browser, engine, width) {
   for (const [name, run] of states) {
     const page = await open();
     await run(page);
+    // A sheet or a menu may still be sliding (a slow machine starts the transition late): measure when nothing moves.
+    await page.waitForFunction(() => document.getAnimations().every((animation) => animation.playState !== 'running'), undefined, { timeout: 5000 }).catch(() => {});
     await page.waitForTimeout(350);
     const report = await page.evaluate(touchAudit);
     assert.ok(report.controls >= 3, `${tag(name)}: found its controls (${report.controls})`);
-    assertClean({ ...report, overlaps: report.overlaps.filter((entry) => !coveredByPopup(entry)) }, tag(name));
+    const sheetState = await page.evaluate(() => { const node = document.querySelector('.inspector'); const style = getComputedStyle(node); return { sheet: document.body.dataset.sheet ?? null, visibility: style.visibility, transform: style.transform, top: Math.round(node.getBoundingClientRect().top), animations: document.getAnimations().length }; });
+    assertClean({ ...report, overlaps: report.overlaps.filter((entry) => !coveredByPopup(entry)) }, `${tag(name)} ${JSON.stringify(sheetState)}`);
     await page.close();
   }
   checks.push(`${engine} ${width}px: 14 playground states (start, More, Edit, Design, Review, Source, Import, Copy, Properties, Outline, Layouts, Find, Add content, slide menu) have 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control`);
