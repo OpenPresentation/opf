@@ -71,7 +71,8 @@ export const jsonLines = [
   ['J-LIN-004', 'R-KEY-07', 'Mod+Shift+K deletes the line', 'json', '{\n  "a": 1|,\n  "b": 2\n}', [MS('k')], { text: '{\n  "b": 2|\n}' }],
   ['J-LIN-005', 'R-KEY-07', 'Mod+Enter inserts a line below', 'json', '{\n  "a": 1|\n}', [M('Enter')], { text: '{\n  "a": 1\n  |\n}' }],
   ['J-LIN-007', 'R-KEY-07', 'Mod+Backspace deletes to the line start', 'json', '{\n  "a": 1|\n}', [M('Backspace')], { text: '{\n|\n}' }, { plat: 'darwin' }],
-  ['J-LIN-008', 'R-KEY-07', 'Alt+Backspace deletes a word', 'json', '{\n  "title": "hello world|"\n}', [K('Alt+Backspace')], { text: '{\n  "title": "hello |"\n}' }],
+  ['J-LIN-008', 'R-KEY-07', 'Alt+Backspace deletes a word (macOS)', 'json', '{\n  "title": "hello world|"\n}', [K('Alt+Backspace')], { text: '{\n  "title": "hello |"\n}' }, { plat: 'darwin' }],
+  ['J-LIN-008b', 'R-KEY-07', 'Ctrl+Backspace deletes a word (Windows and Linux)', 'json', '{\n  "title": "hello world|"\n}', [K('Control+Backspace')], { text: '{\n  "title": "hello |"\n}' }, { plat: '!darwin' }],
   ['J-LIN-009', 'R-KEY-07', 'Mod+X with an empty selection cuts the line', 'json', '{\n  "a": 1|\n}', [M('x')], { text: '{\n|}' }, { native: true }],
 ];
 
