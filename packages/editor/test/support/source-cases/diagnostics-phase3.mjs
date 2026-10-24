@@ -88,4 +88,11 @@ export const jsonPhase3 = [
   ['J-DIA-071', 'R-DIAG-03', 'the Details stay open while the panel is redrawn', 'json', '{"slides":[{"title":"a"}],"name":"a","name":"b"}', [['waitProblems', 2], ['clickDetails', 0], K('End')], { explain: { has: ['Checks:'] } }, N],
 ];
 
-export const diagnosticsPhase3 = { yaml: [...yamlDiagnostics, ...yamlFixes], md: [...markdownDiagnostics, ...markdownFixes], json: jsonPhase3 };
+// ---- the rules of core, in plain words with a Next line -----------------------------------------------------------------------------------------
+export const jsonRules = [
+  ['J-DIA-081', 'R-DIAG-03', 'a catalog group that is not declared', 'json', '{"slides":[{"title":"a","layout":"acme:hero"}],"language":"en-US"}', [['waitProblems', 1]], { findings: { rows: [{ text: '`acme:hero`', next: 'catalogs.acme', rule: 'opf/undeclared-catalog' }] } }, N],
+  ['J-DIA-082', 'R-DIAG-03', 'an unknown dataset names the datasets there are', 'json', '{"slides":[{"title":"a","table":{"dataset":"sale"}}],"language":"en-US","datasets":{"sales":{"columns":["A"],"rows":[["1"]]}}}', [['waitProblems', 1]], { findings: { rows: [{ text: 'dataset', next: 'sales', rule: 'opf/dataset-unknown' }] } }, N],
+  ['J-DIA-083', 'R-DIAG-03', 'a tooltip carries the message and the Next line', 'json', '{"slides":[{"title":"a","table":{"dataset":"sale"}}],"language":"en-US","datasets":{"sales":{"columns":["A"],"rows":[["1"]]}}}', [['waitProblems', 1], ['hoverProblem', 0]], { hover: { has: ['dataset', 'Next:', 'sales'] } }, N],
+];
+
+export const diagnosticsPhase3 = { yaml: [...yamlDiagnostics, ...yamlFixes], md: [...markdownDiagnostics, ...markdownFixes], json: [...jsonPhase3, ...jsonRules] };

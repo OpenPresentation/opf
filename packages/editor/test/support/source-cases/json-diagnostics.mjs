@@ -27,7 +27,7 @@ export const jsonSchemaDiagnostics = [
   ['J-DIA-033', 'R-DIAG-03', 'an unknown key: did you mean', 'json', '{"slids":[{"title":"a"}]}', [WAIT], { findings: { n: 1, rows: [{ text: '`slids` is not a property of the deck', next: 'did you mean `slides`', fixes: ['Rename to slides', 'Remove property'] }] }, squiggles: [{ text: '"slids"' }] }],
   ['J-DIA-034', 'R-DIAG-03', 'the required-property row is dropped when the rename resolves it', 'json', '{"slids":[]}', [WAIT], { findings: { n: 1 } }],
   ['J-DIA-034b', 'R-DIAG-03', 'it stays when the unknown key is not a near miss', 'json', '{"zzzz":[]}', [['waitProblems', 2]], { findings: { n: 2 } }],
-  ['J-DIA-035', 'R-DIAG-03', 'an empty layout in plain words', 'json', '{"slides":[{"title":"a","layout":""}]}', [WAIT], { findings: { rows: [{ text: '`layout` must be a layout id such as `pillars`', next: 'Ctrl+Space' }] } }],
+  ['J-DIA-035', 'R-DIAG-03', 'an empty layout in plain words', 'json', '{"slides":[{"title":"a","layout":""}]}', [WAIT], { findings: { rows: [{ text: '`layout` is empty', next: 'Ctrl+Space' }] } }],
   ['J-DIA-036', 'R-DIAG-03', 'a hex color', 'json', '{"slides":[{"title":"a"}],"design":{"colorScheme":{"accent1":"#12"}}}', [WAIT], { findings: { rows: [{ text: 'hex color like `#1F4E79`' }] } }],
   ['J-DIA-037', 'R-DIAG-03', 'minItems', 'json', '{"slides":[]}', [WAIT], { findings: { rows: [{ text: '`slides` needs at least 1 item', fixes: ['Add a slide'] }] } }],
   ['J-DIA-038', 'R-DIAG-03', 'a union: the title is a number', 'json', '{"slides":[{"title":42}]}', [WAIT], { findings: { rows: [{ text: '`title` should be text or a list, but it is a number' }] } }],
