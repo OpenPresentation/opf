@@ -6,6 +6,7 @@
 // so a renamed definition or a reworded description fails the test instead of silently dropping a list. Plain functions, no DOM.
 import { parse as parseYaml } from "yaml";
 import { describeField } from "@openpresentation/opf/schema";
+import { listBuiltinVariables } from "@openpresentation/opf";
 
 /**
  * The rules. `definitions`: a field whose own schema is that definition (`$defs` name). `keys` + `phrases`: a string field with one of those property
@@ -65,16 +66,20 @@ export function referenceSiteAt(path, document) {
 const stringOf = (value) => (typeof value === "string" ? value : undefined);
 const columnName = (column) => (typeof column === "string" ? column : isObject(column) && typeof column.name === "string" ? column.name : undefined);
 
+// The top-level parts of a deck the built-in variables read (`{{deck.name}}`, `{{speaker.name}}`, `{{organization.name}}`).
+const BUILTIN_SOURCES = ["name", "description", "author", "speaker", "organization"];
+
 /**
- * The parts of a deck the references read, from the plain value of the top level (`assets`, `datasets`, `variables`, `references`, `narrative`):
- * `{ assets: [{ id, detail }], datasets: [{ id, title, columns }], variables: [{ id, type }], references: [{ id, text }], narrative }`.
- * Anything else the value holds, and anything malformed, is ignored: the text being edited is a draft.
+ * The parts of a deck the references read, from the plain value of the top level (`assets`, `datasets`, `variables`, `references`, `narrative`, and
+ * `name`, `description`, `author`, `speaker`, `organization` for the built-in variables):
+ * `{ assets: [{ id, detail, src, mediaType }], datasets: [{ id, title, columns }], variables: [{ id, type }], references: [{ id, text }], narrative, deck }`
+ * where `deck` holds the built-in sources the draft sets. Anything else the value holds, and anything malformed, is ignored: the text being edited is a draft.
  */
 export function factsOf(deck) {
-  const out = { assets: [], datasets: [], variables: [], references: [], narrative: undefined };
+  const out = { assets: [], datasets: [], variables: [], references: [], narrative: undefined, deck: {} };
   if (!isObject(deck)) return out;
   if (isObject(deck.assets)) {
-    for (const [id, asset] of Object.entries(deck.assets)) out.assets.push({ id, detail: stringOf(asset) ?? stringOf(asset?.src) ?? stringOf(asset?.title) ?? "" });
+    for (const [id, asset] of Object.entries(deck.assets)) out.assets.push({ id, detail: stringOf(asset) ?? stringOf(asset?.src) ?? stringOf(asset?.title) ?? "", src: stringOf(asset) ?? stringOf(asset?.src) ?? "", mediaType: stringOf(asset?.mediaType) ?? "" });
   }
   if (isObject(deck.datasets)) {
     for (const [id, dataset] of Object.entries(deck.datasets)) {
@@ -93,8 +98,11 @@ export function factsOf(deck) {
     for (const reference of deck.references) if (isObject(reference) && typeof reference.id === "string" && reference.id) out.references.push({ id: reference.id, text: stringOf(reference.text) ?? "" });
   }
   out.narrative = stringOf(deck.narrative);
+  for (const key of BUILTIN_SOURCES) if (deck[key] !== undefined) out.deck[key] = deck[key];
   return out;
 }
+
+const TOP_LEVEL = ["assets", "datasets", "variables", "references", "narrative", ...BUILTIN_SOURCES];
 
 /** The top-level parts of a JSON draft the references read (`root` is a jsonc-parser tree), as a plain value for `factsOf`. */
 export function jsonDeckParts(root, getNodeValue) {
@@ -102,7 +110,7 @@ export function jsonDeckParts(root, getNodeValue) {
   if (root?.type !== "object") return deck;
   for (const property of root.children ?? []) {
     const key = property.children?.[0]?.value, value = property.children?.[1];
-    if (!value || !["assets", "datasets", "variables", "references", "narrative"].includes(key)) continue;
+    if (!value || !TOP_LEVEL.includes(key)) continue;
     if (key === "datasets" && value.type === "object") {
       // Only the names and the columns: the rows can be the bulk of a deck.
       deck.datasets = {};
@@ -118,7 +126,6 @@ export function jsonDeckParts(root, getNodeValue) {
   return deck;
 }
 
-const TOP_LEVEL = ["assets", "datasets", "variables", "references", "narrative"];
 
 /** The text of the top-level blocks of a YAML text that hold the keys the references read, parsed (tolerant: a broken block gives nothing). */
 export function yamlDeckParts(text) {
@@ -214,11 +221,51 @@ export function beatsOf(record) {
 }
 
 /**
- * The names of the variables a `{{` in text can reference: the document's own, with their type. (The built-in `organization.*`, `speaker.*` and
- * `deck.*` variables are not offered: they are not declared in the document.)
+ * The names of the variables a `{{` in text can reference that the document declares, with their type. (The built-in ones are `builtinVariables`.)
  */
 export function variableNames(facts) {
   return facts.variables.map((variable) => ({ id: variable.id, type: variable.type }));
+}
+
+const asText = (value) => (typeof value === "string" ? value : Array.isArray(value) ? value.filter((entry) => typeof entry === "string").join(", ") : "");
+const FIELD_WORDS = { legalName: "legal name", slideCount: "slide count" };
+const fieldWord = (field) => FIELD_WORDS[field] ?? field;
+
+/** What a built-in stands for, in a sentence (the name comes from core; the sentence is built from its parts). */
+function builtinSentence(name) {
+  if (name === "speakers") return "The names of every speaker, joined with commas.";
+  const parts = name.split(".");
+  const field = fieldWord(parts.at(-1));
+  if (name === "slide.number") return "The displayed number of this slide, after pagination.";
+  if (name === "slide.section") return "The section of this slide.";
+  if (name === "deck.slideCount") return "The number of slides in the deck, after pagination.";
+  if (parts[0] === "deck") return `The ${field} of the deck.`;
+  if (parts[0] === "speaker") return parts.length === 3 ? `The ${field} of the speaker ${parts[1]}.` : `The ${field} of the first speaker.`;
+  if (parts[0] === "organization") return parts.length === 3 ? `The ${field} of the organization ${parts[1]}.` : `The ${field} of the primary organization.`;
+  return "A built-in variable.";
+}
+
+const GROUP_RANK = { deck: 0, speaker: 1, speakers: 1, organization: 2, slide: 3 };
+
+/**
+ * The built-in variables a `{{` in text can reference (core's `listBuiltinVariables` over the deck parts the draft sets), grouped by prefix: `deck.*`,
+ * `speaker.*` and `speakers`, `organization.*`, then the per-slide ones. A logo is an image used only as a whole field, never inside `{{ }}`, so it is
+ * left out. Each is `{ name, kind, scope, available, doc, detail }`: `available` is false when the draft has no source for it (it resolves to nothing).
+ */
+export function builtinVariables(facts) {
+  let list = [];
+  try { list = listBuiltinVariables({ ...facts.deck, slides: [] }); } catch { list = []; }
+  return list
+    .filter((entry) => !(entry.scope === "slide" && entry.kind === "image"))
+    .map((entry, index) => ({ entry, index }))
+    .sort((a, b) => (GROUP_RANK[a.entry.name.split(".")[0]] ?? 9) - (GROUP_RANK[b.entry.name.split(".")[0]] ?? 9) || a.index - b.index)
+    .map(({ entry }) => {
+      const perSlide = entry.scope === "slide";
+      const shown = asText(entry.value);
+      const detail = perSlide ? "built-in · varies per slide" : entry.available ? `built-in${shown ? ` · ${shown.length > 24 ? `${shown.slice(0, 23)}…` : shown}` : ""}` : "built-in · not set";
+      const note = perSlide ? "" : entry.available ? "" : ` This document does not set it, so it resolves to nothing.`;
+      return { name: entry.name, kind: entry.kind, scope: entry.scope, available: perSlide || entry.available, label: entry.label, detail, doc: `${builtinSentence(entry.name)}${note}` };
+    });
 }
 
 /** The slide a path of a deck sits in: `["slides", n]`, or null. */
