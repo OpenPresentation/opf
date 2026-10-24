@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.26.1 (2026-10-24)
+
+No package changes; released with the set.
+
 ## 0.26.0 (2026-10-24)
 
 - MR-10: `repository.url` is `git+https://github.com/OpenPresentation/opf.git`, the exact form npm requires for trusted publishing and provenance (it was the plain `https://...` form). No behavior change.
