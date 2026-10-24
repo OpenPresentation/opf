@@ -188,7 +188,7 @@ export function strokeText(stroke, platform, { symbols = false } = {}) {
   return stroke.split(" ").map((one) => {
     const parsed = parseStroke(one, platform);
     const key = parsed.key === " " ? "Space" : parsed.key.length === 1 ? parsed.key.toUpperCase() : KEY_WORDS[parsed.key] ?? parsed.key;
-    if (symbols) {
+    if (symbols && platform === "mac") {
       const letters = [parsed.ctrl && "Ctrl", parsed.alt && "Alt", parsed.shift && "Shift", parsed.meta && "Cmd"].filter(Boolean).map((name) => SYMBOLS[name]).join("");
       return `${letters}${KEY_SYMBOLS[parsed.key === " " ? "Space" : parsed.key] ?? key}`;
     }
