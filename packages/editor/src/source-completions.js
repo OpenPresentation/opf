@@ -216,7 +216,13 @@ function settleYamlContext(context, text) {
     try { info = describeField(context.path, context.document); } catch { info = null; }
     const primary = info?.known ? info.variants[info.primary] : undefined;
     if (!info?.known || !primary) return null;
-    if (primary.type !== "object") return { ...context, mode: "item", key: undefined, itemStart: false };
+    if (primary.type !== "object") {
+      // The item is a scalar, not the mapping the line reader pictured: the schema reads the document with an empty string there.
+      let parent = context.document;
+      for (const step of context.path.slice(0, -1)) parent = parent?.[step];
+      if (parent && typeof parent === "object") parent[context.path.at(-1)] = "";
+      return { ...context, mode: "item", key: undefined, itemStart: false };
+    }
   }
   return context;
 }

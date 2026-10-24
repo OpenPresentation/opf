@@ -87,21 +87,20 @@ function acceptOrFallBack(isReady, fallback) {
     if (acceptCompletion(view)) return true;
     if (completionStatus(view.state) !== "pending" || !isReady()) return fallback(view);
     let tries = 0, done = false, timer = 0;
-    const finish = (force) => {
+    const finish = () => {
       if (done) return;
       done = true;
       clearTimeout(timer);
       heldKeys.delete(view);
       if (!view.dom.isConnected) return;
       if (!acceptCompletion(view)) fallback(view);
-      void force;
     };
     const settle = () => {
       if (done || !view.dom.isConnected) return;
       if (completionStatus(view.state) === "pending" && ++tries < 50) { timer = setTimeout(settle, 2); return; }
-      finish(false);
+      finish();
     };
-    heldKeys.set(view, () => finish(true));
+    heldKeys.set(view, finish);
     timer = setTimeout(settle, 0);
     return true;
   };
