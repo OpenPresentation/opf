@@ -102,5 +102,7 @@ test('the real CLI changelog has a section for its latest release, and the versi
   assert.notEqual(notes, '');
   assert.equal(cli(['--version', latest, '--changelog', cliChangelog]).stdout, `${notes}\n`);
   assert.equal(extractReleaseNotes(text, latest.slice(0, -1)), '');
-  assert.equal(cli(['--version', latest]).stdout === `${notes}\n`, false, 'the root changelog is not the CLI changelog');
+  // Without --changelog the root changelog is read; its section can equal the CLI's (e.g. a patch with no package changes).
+  const rootNotes = extractReleaseNotes(readFileSync(path.join(root, 'CHANGELOG.md'), 'utf8'), latest);
+  assert.equal(cli(['--version', latest]).stdout, rootNotes ? `${rootNotes}\n` : '', 'without --changelog the root changelog is read');
 });
