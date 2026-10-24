@@ -221,6 +221,10 @@
           "command": "node test/source-worker-perf-browser.mjs"
         },
         {
+          "id": "browser:source-navigation",
+          "command": "node test/source-navigation-browser.mjs"
+        },
+        {
           "id": "browser:export-license",
           "command": "pnpm run test:export-license-browser"
         }
