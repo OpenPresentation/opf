@@ -79,6 +79,22 @@ export const markdownFixes = [
   ['M-FIX-014', 'R-FIX-01', 'use hidden=true', 'md', '# A\n<!-- slide: hidden=maybe -->\n', [WAIT, ['quickFix', 'Use hidden=true']], { deck: { '/slides/0/hidden': true } }, N],
 ];
 
+// ---- Markdown: the remaining quick fixes (phase 4) -----------------------------------------------------------------------------------------
+markdownFixes.push(
+  ['M-FIX-020', 'R-FIX-01', 'a key set in Markdown and in the opf-slide fence goes from the fence', 'md', '<!-- slide: layout=cover -->\n# A\n\n```opf-slide\nlayout: agenda # mine\nnotes: n\n```\n', [WAIT, ['quickFix', 'Remove layout from the fence']], { has: '```opf-slide\nnotes: n\n```', not: 'agenda', deck: { '/slides/0/layout': 'cover', '/slides/0/notes': 'n' }, findings: { errors: 0 } }, N],
+  ['M-FIX-021', 'R-FIX-01', 'a fence left with nothing is removed with it', 'md', '# A\n\n```opf-slide\ntitle: B\n```\n', [WAIT, ['quickFix', 'Remove title from the fence']], { text: '|# A\n', findings: { errors: 0 } }, N],
+  ['M-FIX-022', 'R-FIX-01', 'an empty quote is removed', 'md', '# A\n\n>\n\ntext\n', [WAIT, ['quickFix', 'Remove the empty quote']], { text: '# A\n\n|text\n', findings: { n: 0 } }, N],
+  ['M-FIX-023', 'R-FIX-01', 'an options comment with no block is removed', 'md', '# A\n\n<!-- block: id=a -->\n', [WAIT, ['quickFix', 'Remove the options comment']], { has: '# A', not: 'block:', findings: { n: 0 } }, N],
+  ['M-FIX-024', 'R-FIX-01', 'text after --> goes to its own line', 'md', '<!-- slide: id=a --> # A\n', [WAIT, ['quickFix', 'Move the text to its own line']], { has: '<!-- slide: id=a -->\n# A', deck: { '/slides/0/title': 'A', '/slides/0/id': 'a' }, findings: { errors: 0 } }, N],
+  ['M-FIX-025', 'R-FIX-01', 'a quote that is never closed is closed before -->', 'md', '# A\n<!-- slide: layout="cover -->\n', [WAIT, ['quickFix', 'Insert closing quote']], { has: 'layout="cover" -->', deck: { '/slides/0/layout': 'cover' } }, N],
+  ['M-FIX-026', 'R-FIX-01', 'an option with no value is dropped', 'md', '# A\n<!-- slide: id=a layout= -->\n', [WAIT, ['quickFix', 'Remove layout=']], { has: '<!-- slide: id=a -->', deck: { '/slides/0/id': 'a' }, findings: { errors: 0 } }, N],
+  ['M-FIX-027', 'R-FIX-01', 'a bad as= is replaced', 'md', '# A\n\n<!-- block: as=foo -->\n- x\n', [WAIT, ['quickFix', 'Use as=bullets']], { has: '<!-- block: as=bullets -->', findings: { errors: 0 } }, N],
+  ['M-FIX-028', 'R-FIX-01', 'an attribute the fence does not take is dropped', 'md', '# A\n\n```chart column foo="x"\nQuarter,Revenue\nQ1,10\n```\n', [WAIT, ['quickFix', 'Remove foo']], { has: '```chart column\nQuarter', findings: { errors: 0 } }, N],
+  ['M-FIX-029', 'R-FIX-01', 'a metric key given twice loses its second line', 'md', '# A\n\n```metric\nvalue: 1\nvalue: 2\n```\n', [WAIT, ['quickFix', 'Remove the second value']], { has: '```metric\nvalue: 1\n```', findings: { errors: 0 } }, N],
+  ['M-FIX-030', 'R-FIX-05', 'the conflict fix is one undo step', 'md', '<!-- slide: layout=cover -->\n# A\n\n```opf-slide\nlayout: agenda\nnotes: n\n```\n', [WAIT, ['quickFix', 'Remove layout from the fence']], { undo: [1, '⟦<!-- slide: layout=cover -->⟧\n# A\n\n```opf-slide\nlayout: agenda\nnotes: n\n```\n'] }, N],
+  ['M-FIX-031', 'R-FIX-01', 'an image with no source is reported and offers no invented one', 'md', '# A\n\n![alt]()\n', [WAIT, ['placeCaret', '![alt]', false], M('.')], { live: 'No quick fixes available', findings: { rows: [{ text: 'no source' }] } }, N],
+);
+
 // ---- JSON: the fixes new in phase 3 ----------------------------------------------------------------------------------------------------------
 export const jsonPhase3 = [
   ['J-FIX-030', 'R-FIX-02', 'move an unknown key into extensions', 'json', '{\n  "slides": [{"title": "a"}],\n  "foo": 1\n}', [WAIT, ['placeCaret', '"foo"', false], ['quickFix', 'Move into extensions']], { deck: { '/extensions/foo': 1 }, findings: { errors: 0 } }, N],
