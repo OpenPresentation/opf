@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## 0.26.0 (2026-10-24)
+
+- MR-23: the six packages are one pnpm workspace at one shared version, 0.26.0 (the gallery goes backwards from 5.0.0; `latest` moves with an explicit `--tag latest`). Packages depend on each other through `workspace:^`, which `pnpm pack` publishes as `^0.26.0`, so a consumer never mixes minors. Core's install hints and `PEER_RANGES` name `^0.26.0`. The gallery package no longer has a sync from pptx.gallery or a bootstrap for unreleased engines; records are written in `packages/gallery`. No behavior change otherwise.
+- MR-23e: `releaseLane.githubRepository` is `OpenPresentation/opf` (the repository the packages now live in) and `releaseLane` gains `directory` (`packages/editor`, `packages/render`, `packages/pptx`). It was `OpenPresentation/opf-editor`, `OpenPresentation/opf-render` and `OpenPresentation/opf-pptx`, repositories that are archived after the move. The package names and every other field are unchanged.
+
 ## 0.25.0 (2026-10-21)
 
 - FA-33 (needs core with FA-33): the dependency `@openpresentation/gallery` moves from `^4.0.0` to `^5.0.0` (theme variants, layouts as one list of regions, catalog schema 4), the same major core resolves, so an installed `@openpresentation/opf-pptx` no longer nests a second Gallery 4 next to core's Gallery 5. Exported and imported decks are unchanged.

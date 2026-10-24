@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+## 0.26.0 (2026-10-24)
+
+- MR-23: the six packages are one pnpm workspace at one shared version, 0.26.0 (the gallery goes backwards from 5.0.0; `latest` moves with an explicit `--tag latest`). Packages depend on each other through `workspace:^`, which `pnpm pack` publishes as `^0.26.0`, so a consumer never mixes minors. Core's install hints and `PEER_RANGES` name `^0.26.0`. The gallery package no longer has a sync from pptx.gallery or a bootstrap for unreleased engines; records are written in `packages/gallery`. No behavior change otherwise.
+
 ## 5.0.0 (2026-10-21)
 
 - **Breaking: layout records are one ordered list of regions; `areas`, `columns`, `rows` and the `regions` map are removed (FA-33).** A record is now `direction` (`"row"` or `"column"`, default `"column"`) and an ordered `regions` array of regions and splits. A region is `{ "name", "size"?, ...rules }` with the rules unchanged (`accepts`, `role`, `flow`, `max`, `bleed`, `listColumns`, `anchor`, `empty`); a split is `{ "direction", "regions", "size"?, "anchor"? }` and nests up to three levels. `size` is a weight (default 1) or `"auto"` (the height the content needs, in a column only), `title` and `subtitle` stay heading regions that take only `size`, `accepts` may be left out for every content kind, and an `anchor` on the record or a split applies to every region under it. All 28 layouts are converted, and each compiles to exactly the grid it had in 4.0.0 (areas, column and row weights, `auto` rows and every region rule, proven in `test/layout-equivalence.test.mjs` against a fixture of the 4.0.0 records), so no layout draws differently and the previews are unchanged. `quote` and `statement` write their `anchor: "middle"` once on the record. There is no old-format alias and no migration API: a custom layout in a deck must be rewritten. `CATALOG_SCHEMA` and `opf.catalogSchema` advance to `4`; the per-kind layout schema version stays `2` (`opf-layout/v2`). Records are validated by a core that reads this form, so this release needs the core release that accepts it.
