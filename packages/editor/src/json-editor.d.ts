@@ -55,6 +55,8 @@ export interface JsonEditorApi {
   format(): boolean;
 }
 export interface JsonCodeEditorOptions {
+  /** Called with the shortcuts list when the dialog is about to open; returning `true` means the host shows its own. */
+  onShowShortcuts?(shortcuts: import("./source-pane.js").Shortcut[]): boolean | void;
   code: string;
   label: string;
   onChange(source: string): void;
@@ -77,6 +79,11 @@ export interface JsonCodeEditorOptions {
   completions?: boolean;
   /** Enter continues a list the way the text writes it: a new string item after a string in a JSON list, the next `- ` in YAML, the next marker in Markdown. Default true; false keeps only the indentation. */
   smartListEnter?: boolean;
+  /**
+   * A preview of a catalog record for the card that F12 and Alt+F12 open on a layout, theme or other record only the app provides: an element, an `https:` or
+   * `data:image/` address, or a promise of either. Optional; the card shows the name, the description and the regions without it.
+   */
+  resolvePreview?: (kind: string, id: string) => HTMLElement | string | undefined | Promise<HTMLElement | string | undefined>;
   catalogs?: JsonCatalogContext;
   /** Overrides the built-in menu, allowing an existing host UI to keep its appearance. */
   onOptions?(left?: number, top?: number): void;
@@ -93,6 +100,11 @@ export interface JsonCodeEditorOptions {
   onFormat?(): void;
   /** Hover documentation over keys and catalog ids in JSON, and Cmd/Ctrl+K Cmd/Ctrl+I (default true). */
   hover?: boolean;
+  /**
+   * The shape hint: Cmd/Ctrl+Shift+Space shows the fields of the object around the caret, and typing `{` or `,` between the members of a slide that has a
+   * layout shows it by itself (default true; false turns the automatic one off, the key stays).
+   */
+  hints?: boolean;
   /** Called with every message the live region says (hosts mirror them into a region of their own). */
   announce?(message: string): void;
   /**
@@ -125,6 +137,14 @@ export interface JsonCodeEditor {
   triggerCompletion(): boolean;
   /** Whether a suggestion list is open or being asked for. */
   isCompleting(): boolean;
+  /** Every key binding this editor installed, for `platform` (default: the page's): the keyboard shortcuts list. */
+  getShortcuts(platform?: "mac" | "win" | "linux"): import("./source-pane.js").Shortcut[];
+  /** Bindings installed without a title in the list (empty unless a binding was added without a place in source-keymap.js). */
+  unlistedShortcuts(): string[];
+  /** Open the keyboard shortcuts dialog (F1, Cmd/Ctrl+K then Cmd/Ctrl+S). */
+  showShortcuts(): boolean;
+  /** Open the symbol picker (Cmd/Ctrl+Shift+O). */
+  showSymbols(): boolean;
   /** Perform a quick fix. */
   applyFix(fix: EditorFix, problem?: EditorProblem): void;
   setLanguage(language: "json" | "yaml" | "markdown"): void;

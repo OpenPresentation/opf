@@ -1,0 +1,1297 @@
+{
+ "valid-json": {
+  "deck": {
+   "name": "Valid",
+   "slides": [
+    {
+     "title": "One",
+     "items": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "title": "Two",
+     "text": "Body.",
+     "notes": "Say it."
+    }
+   ]
+  },
+  "findings": []
+ },
+ "valid-yaml": {
+  "deck": {
+   "name": "Valid",
+   "slides": [
+    {
+     "title": "One",
+     "items": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "title": "Two",
+     "text": "Body.",
+     "notes": "Say it."
+    }
+   ]
+  },
+  "findings": [],
+  "notes": []
+ },
+ "valid-md": {
+  "deck": {
+   "name": "Valid",
+   "slides": [
+    {
+     "title": "One",
+     "items": [
+      "a",
+      "b"
+     ]
+    },
+    {
+     "title": "Two",
+     "text": "Body.",
+     "notes": "Say it."
+    }
+   ]
+  },
+  "findings": [],
+  "notes": []
+ },
+ "layouts-json": {
+  "deck": {
+   "name": "Layouts",
+   "slides": [
+    {
+     "title": "Start",
+     "layout": "cover"
+    },
+    {
+     "title": "Middle",
+     "layout": "no-such-layout",
+     "text": "x"
+    }
+   ],
+   "tone": "formal"
+  },
+  "findings": []
+ },
+ "layouts-yaml": {
+  "deck": {
+   "name": "Layouts",
+   "tone": "formal",
+   "slides": [
+    {
+     "layout": "cover",
+     "title": "Start"
+    },
+    {
+     "layout": "no-such-layout",
+     "title": "Middle",
+     "text": "x"
+    }
+   ]
+  },
+  "findings": [
+   {
+    "path": "/slides/1/layout",
+    "message": "Layout 'no-such-layout' resolves nowhere: it is not embedded in catalogs.custom or catalogs.default and the catalog registered for https://www.pptx.gallery has no such record; the slide composes automatically.",
+    "severity": "warning",
+    "line": 6,
+    "column": 13,
+    "kind": "schema",
+    "ruleId": "opf/unresolved-reference",
+    "help": "Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
+    "category": "references",
+    "location": {
+     "offset": 82,
+     "length": 14,
+     "line": 6,
+     "column": 13
+    },
+    "suggestions": [
+     {
+      "value": "chart",
+      "label": "Chart",
+      "origin": "registered",
+      "definition": "https://www.pptx.gallery#/layouts/chart"
+     },
+     {
+      "value": "dashboard",
+      "label": "Dashboard",
+      "origin": "registered",
+      "definition": "https://www.pptx.gallery#/layouts/dashboard"
+     },
+     {
+      "value": "section",
+      "label": "Section",
+      "origin": "registered",
+      "definition": "https://www.pptx.gallery#/layouts/section"
+     },
+     {
+      "value": "two-column",
+      "label": "Two columns",
+      "origin": "registered",
+      "definition": "https://www.pptx.gallery#/layouts/two-column"
+     },
+     {
+      "value": "closing",
+      "label": "Closing",
+      "origin": "registered",
+      "definition": "https://www.pptx.gallery#/layouts/closing"
+     }
+    ],
+    "lookup": [
+     "opf",
+     "catalog",
+     "layouts"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Catalogs",
+    "slide": 1
+   }
+  ],
+  "notes": []
+ },
+ "layouts-md": {
+  "deck": {
+   "name": "Layouts",
+   "tone": "formal",
+   "slides": [
+    {
+     "layout": "cover",
+     "title": "Start"
+    },
+    {
+     "layout": "no-such-layout",
+     "title": "Middle",
+     "text": "x"
+    }
+   ]
+  },
+  "findings": [
+   {
+    "path": "/slides/1/layout",
+    "message": "Layout 'no-such-layout' resolves nowhere: it is not embedded in catalogs.custom or catalogs.default and the catalog registered for https://www.pptx.gallery has no such record; the slide composes automatically.",
+    "severity": "warning",
+    "line": 11,
+    "column": 1,
+    "kind": "schema",
+    "ruleId": "opf/unresolved-reference",
+    "help": "Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
+    "category": "references",
+    "location": {
+     "offset": 79,
+     "length": 37,
+     "line": 11,
+     "column": 1
+    },
+    "suggestions": [
+     {
+      "value": "chart",
+      "label": "Chart",
+      "origin": "registered",
+      "definition": "https://www.pptx.gallery#/layouts/chart"
+     },
+     {
+      "value": "dashboard",
+      "label": "Dashboard",
+      "origin": "registered",
+      "definition": "https://www.pptx.gallery#/layouts/dashboard"
+     },
+     {
+      "value": "section",
+      "label": "Section",
+      "origin": "registered",
+      "definition": "https://www.pptx.gallery#/layouts/section"
+     },
+     {
+      "value": "two-column",
+      "label": "Two columns",
+      "origin": "registered",
+      "definition": "https://www.pptx.gallery#/layouts/two-column"
+     },
+     {
+      "value": "closing",
+      "label": "Closing",
+      "origin": "registered",
+      "definition": "https://www.pptx.gallery#/layouts/closing"
+     }
+    ],
+    "lookup": [
+     "opf",
+     "catalog",
+     "layouts"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Catalogs",
+    "slide": 1
+   }
+  ],
+  "notes": []
+ },
+ "layouts-json-nocatalog": {
+  "deck": {
+   "name": "Layouts",
+   "slides": [
+    {
+     "title": "Start",
+     "layout": "cover"
+    },
+    {
+     "title": "Middle",
+     "layout": "no-such-layout",
+     "text": "x"
+    }
+   ],
+   "tone": "formal"
+  },
+  "findings": []
+ },
+ "layouts-yaml-nocatalog": {
+  "deck": {
+   "name": "Layouts",
+   "tone": "formal",
+   "slides": [
+    {
+     "layout": "cover",
+     "title": "Start"
+    },
+    {
+     "layout": "no-such-layout",
+     "title": "Middle",
+     "text": "x"
+    }
+   ]
+  },
+  "findings": [
+   {
+    "path": "/tone",
+    "message": "Tone 'formal' resolves nowhere: it is not embedded in catalogs.custom or catalogs.default and no catalog is registered for it; the engine default is used.",
+    "severity": "warning",
+    "line": 2,
+    "column": 7,
+    "kind": "schema",
+    "ruleId": "opf/unresolved-reference",
+    "help": "Embed the record (embed(), or opf embed), register the catalog that defines it, or choose one of the suggested records.",
+    "category": "references",
+    "location": {
+     "offset": 20,
+     "length": 6,
+     "line": 2,
+     "column": 7
+    },
+    "suggestions": [],
+    "lookup": [
+     "opf",
+     "catalog",
+     "tones"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Catalogs"
+   },
+   {
+    "path": "/slides/0/layout",
+    "message": "Layout 'cover' resolves nowhere: it is not embedded in catalogs.custom or catalogs.default and no catalog is registered for it; the slide composes automatically.",
+    "severity": "warning",
+    "line": 4,
+    "column": 13,
+    "kind": "schema",
+    "ruleId": "opf/unresolved-reference",
+    "help": "Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
+    "category": "references",
+    "location": {
+     "offset": 47,
+     "length": 5,
+     "line": 4,
+     "column": 13
+    },
+    "suggestions": [],
+    "lookup": [
+     "opf",
+     "catalog",
+     "layouts"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Catalogs",
+    "slide": 0
+   },
+   {
+    "path": "/slides/1/layout",
+    "message": "Layout 'no-such-layout' resolves nowhere: it is not embedded in catalogs.custom or catalogs.default and no catalog is registered for it; the slide composes automatically.",
+    "severity": "warning",
+    "line": 6,
+    "column": 13,
+    "kind": "schema",
+    "ruleId": "opf/unresolved-reference",
+    "help": "Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
+    "category": "references",
+    "location": {
+     "offset": 82,
+     "length": 14,
+     "line": 6,
+     "column": 13
+    },
+    "suggestions": [],
+    "lookup": [
+     "opf",
+     "catalog",
+     "layouts"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Catalogs",
+    "slide": 1
+   }
+  ],
+  "notes": []
+ },
+ "layouts-md-nocatalog": {
+  "deck": {
+   "name": "Layouts",
+   "tone": "formal",
+   "slides": [
+    {
+     "layout": "cover",
+     "title": "Start"
+    },
+    {
+     "layout": "no-such-layout",
+     "title": "Middle",
+     "text": "x"
+    }
+   ]
+  },
+  "findings": [
+   {
+    "path": "/tone",
+    "message": "Tone 'formal' resolves nowhere: it is not embedded in catalogs.custom or catalogs.default and no catalog is registered for it; the engine default is used.",
+    "severity": "warning",
+    "line": 3,
+    "column": 1,
+    "kind": "schema",
+    "ruleId": "opf/unresolved-reference",
+    "help": "Embed the record (embed(), or opf embed), register the catalog that defines it, or choose one of the suggested records.",
+    "category": "references",
+    "location": {
+     "offset": 18,
+     "length": 12,
+     "line": 3,
+     "column": 1
+    },
+    "suggestions": [],
+    "lookup": [
+     "opf",
+     "catalog",
+     "tones"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Catalogs"
+   },
+   {
+    "path": "/slides/0/layout",
+    "message": "Layout 'cover' resolves nowhere: it is not embedded in catalogs.custom or catalogs.default and no catalog is registered for it; the slide composes automatically.",
+    "severity": "warning",
+    "line": 6,
+    "column": 1,
+    "kind": "schema",
+    "ruleId": "opf/unresolved-reference",
+    "help": "Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
+    "category": "references",
+    "location": {
+     "offset": 36,
+     "length": 28,
+     "line": 6,
+     "column": 1
+    },
+    "suggestions": [],
+    "lookup": [
+     "opf",
+     "catalog",
+     "layouts"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Catalogs",
+    "slide": 0
+   },
+   {
+    "path": "/slides/1/layout",
+    "message": "Layout 'no-such-layout' resolves nowhere: it is not embedded in catalogs.custom or catalogs.default and no catalog is registered for it; the slide composes automatically.",
+    "severity": "warning",
+    "line": 11,
+    "column": 1,
+    "kind": "schema",
+    "ruleId": "opf/unresolved-reference",
+    "help": "Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
+    "category": "references",
+    "location": {
+     "offset": 79,
+     "length": 37,
+     "line": 11,
+     "column": 1
+    },
+    "suggestions": [],
+    "lookup": [
+     "opf",
+     "catalog",
+     "layouts"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Catalogs",
+    "slide": 1
+   }
+  ],
+  "notes": []
+ },
+ "schema-json": {
+  "deck": {
+   "name": "Broken",
+   "slides": [
+    {
+     "title": 42
+    },
+    {
+     "title": "Agenda",
+     "items": "One string, not an array"
+    },
+    {
+     "title": "Extra",
+     "bogus": true
+    }
+   ]
+  },
+  "findings": []
+ },
+ "schema-yaml": {
+  "deck": {
+   "name": "Broken",
+   "slides": [
+    {
+     "title": 42
+    },
+    {
+     "title": "Agenda",
+     "items": "One string, not an array"
+    },
+    {
+     "title": "Extra",
+     "bogus": true
+    }
+   ]
+  },
+  "findings": [
+   {
+    "path": "/slides/0/title",
+    "message": "must be string or array",
+    "severity": "error",
+    "line": 3,
+    "column": 12,
+    "kind": "schema",
+    "ruleId": "opf/schema",
+    "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+    "category": "format",
+    "location": {
+     "offset": 32,
+     "length": 2,
+     "line": 3,
+     "column": 12
+    },
+    "validation": {
+     "path": "/slides/0/title",
+     "message": "must be string or array",
+     "keyword": "oneOf",
+     "schemaPath": "#/properties/title/oneOf",
+     "params": {
+      "passingSchemas": null
+     },
+     "alternatives": [
+      "string: must be string",
+      "array: must be array"
+     ]
+    },
+    "fixes": [
+     {
+      "id": "convert-to-string",
+      "title": "Convert to string",
+      "kind": "patch",
+      "safe": true,
+      "patch": [
+       {
+        "op": "replace",
+        "path": "/slides/0/title",
+        "value": "42"
+       }
+      ]
+     }
+    ],
+    "lookup": [
+     "opf",
+     "schema",
+     "presentation",
+     "/$defs/Slide/properties/title/oneOf"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Slide/properties/title/oneOf",
+    "slide": 0
+   },
+   {
+    "path": "/slides/1/items",
+    "message": "must be array",
+    "severity": "error",
+    "line": 5,
+    "column": 12,
+    "kind": "schema",
+    "ruleId": "opf/schema",
+    "help": "Inspect this schema constraint and preserve unrelated content. Errors inside oneOf/anyOf branches may describe alternatives; retain the intended form.",
+    "category": "format",
+    "location": {
+     "offset": 64,
+     "length": 24,
+     "line": 5,
+     "column": 12
+    },
+    "validation": {
+     "path": "/slides/1/items",
+     "message": "must be array",
+     "keyword": "type",
+     "schemaPath": "#/properties/items/type",
+     "params": {
+      "type": "array"
+     }
+    },
+    "fixes": [
+     {
+      "id": "wrap-in-list",
+      "title": "Wrap in a list",
+      "kind": "patch",
+      "safe": true,
+      "patch": [
+       {
+        "op": "replace",
+        "path": "/slides/1/items",
+        "value": [
+         "One string, not an array"
+        ]
+       }
+      ]
+     }
+    ],
+    "lookup": [
+     "opf",
+     "schema",
+     "presentation",
+     "/$defs/Slide/properties/items/type"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Slide/properties/items/type",
+    "slide": 1
+   },
+   {
+    "path": "/slides/2/bogus",
+    "message": "must NOT have additional properties",
+    "severity": "error",
+    "line": 7,
+    "column": 12,
+    "kind": "schema",
+    "ruleId": "opf/schema",
+    "help": "Review \"bogus\" against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error.",
+    "category": "format",
+    "location": {
+     "offset": 117,
+     "length": 4,
+     "line": 7,
+     "column": 12
+    },
+    "validation": {
+     "path": "/slides/2",
+     "message": "must NOT have additional properties",
+     "keyword": "additionalProperties",
+     "schemaPath": "#/additionalProperties",
+     "params": {
+      "additionalProperty": "bogus"
+     }
+    },
+    "fixes": [
+     {
+      "id": "move-to-extensions",
+      "title": "Move into extensions",
+      "kind": "patch",
+      "safe": false,
+      "patch": [
+       {
+        "op": "add",
+        "path": "/slides/2/extensions",
+        "value": {}
+       },
+       {
+        "op": "move",
+        "from": "/slides/2/bogus",
+        "path": "/slides/2/extensions/bogus"
+       }
+      ]
+     }
+    ],
+    "lookup": [
+     "opf",
+     "schema",
+     "presentation",
+     "/$defs/Slide/additionalProperties"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Slide/additionalProperties",
+    "slide": 2
+   }
+  ],
+  "notes": []
+ },
+ "schema-md": {
+  "deck": {
+   "name": "Broken",
+   "slides": [
+    {
+     "title": "Agenda",
+     "items": [
+      "one"
+     ]
+    }
+   ]
+  },
+  "findings": [],
+  "notes": []
+ },
+ "json-missing-comma": {
+  "syntax": true,
+  "findings": [
+   {
+    "path": "",
+    "message": "Missing comma after `\"name\": \"x\"` (line 2).",
+    "severity": "error",
+    "line": 2,
+    "column": 13,
+    "kind": "syntax",
+    "ruleId": "opf/json-syntax",
+    "next": "add `,` right after it, on line 2.",
+    "range": {
+     "from": 14,
+     "to": 15
+    },
+    "editFixes": [
+     {
+      "id": "insert-comma",
+      "title": "Insert comma",
+      "safe": true,
+      "edits": [
+       {
+        "from": 15,
+        "to": 15,
+        "insert": ","
+       }
+      ],
+      "caret": 16
+     }
+    ]
+   }
+  ]
+ },
+ "json-trailing-comma": {
+  "syntax": true,
+  "findings": [
+   {
+    "path": "",
+    "message": "Trailing comma after `\"slides\": […]`. JSON does not allow a comma after the last property.",
+    "severity": "error",
+    "line": 3,
+    "column": 15,
+    "kind": "syntax",
+    "ruleId": "opf/json-syntax",
+    "next": "remove the comma.",
+    "range": {
+     "from": 31,
+     "to": 32
+    },
+    "editFixes": [
+     {
+      "id": "remove-comma",
+      "title": "Remove comma",
+      "safe": true,
+      "edits": [
+       {
+        "from": 31,
+        "to": 32,
+        "insert": ""
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "json-unclosed-brace": {
+  "syntax": true,
+  "findings": [
+   {
+    "path": "",
+    "message": "The `{` on line 1 (starting `\"name\": \"x\"`) is never closed.",
+    "severity": "error",
+    "line": 1,
+    "column": 1,
+    "kind": "syntax",
+    "ruleId": "opf/json-syntax",
+    "next": "add `}` after its last property, on its own line.",
+    "range": {
+     "from": 0,
+     "to": 1
+    },
+    "editFixes": [
+     {
+      "id": "insert-closer",
+      "title": "Insert ]}",
+      "safe": false,
+      "edits": [
+       {
+        "from": 46,
+        "to": 46,
+        "insert": "]\n}"
+       }
+      ],
+      "caret": 49
+     }
+    ]
+   },
+   {
+    "path": "",
+    "message": "The list `\"slides\": [` on line 3 is never closed.",
+    "severity": "error",
+    "line": 3,
+    "column": 13,
+    "kind": "syntax",
+    "ruleId": "opf/json-syntax",
+    "next": "add `]` after its last item.",
+    "range": {
+     "from": 29,
+     "to": 30
+    },
+    "editFixes": [
+     {
+      "id": "insert-closer",
+      "title": "Insert ]",
+      "safe": false,
+      "edits": [
+       {
+        "from": 46,
+        "to": 46,
+        "insert": "]"
+       }
+      ],
+      "caret": 47
+     }
+    ]
+   }
+  ]
+ },
+ "json-duplicate-key": {
+  "syntax": true,
+  "findings": [
+   {
+    "path": "/name",
+    "message": "Duplicate key \"name\". Remove the repeated key.",
+    "severity": "error",
+    "line": 3,
+    "kind": "syntax",
+    "ruleId": "opf/duplicate-key",
+    "range": {
+     "from": 19,
+     "to": 25
+    },
+    "editFixes": [
+     {
+      "id": "remove-first",
+      "title": "Remove the first",
+      "edits": [
+       {
+        "from": 4,
+        "to": 19,
+        "insert": ""
+       }
+      ]
+     },
+     {
+      "id": "remove-second",
+      "title": "Remove the second",
+      "edits": [
+       {
+        "from": 19,
+        "to": 34,
+        "insert": ""
+       }
+      ]
+     }
+    ],
+    "related": [
+     {
+      "from": 4,
+      "to": 10
+     }
+    ]
+   }
+  ]
+ },
+ "json-not-object": {
+  "syntax": true,
+  "findings": [
+   {
+    "path": "",
+    "message": "The top level must be an object { … }, but this is an array.",
+    "severity": "error",
+    "line": 1,
+    "column": 1,
+    "kind": "syntax",
+    "ruleId": "opf/json-syntax",
+    "next": "wrap it as { \"slides\": [ … ] }.",
+    "range": {
+     "from": 0,
+     "to": 1
+    },
+    "editFixes": [
+     {
+      "id": "wrap-slides",
+      "title": "Wrap in { \"slides\" ... }",
+      "safe": false,
+      "edits": [
+       {
+        "from": 0,
+        "to": 0,
+        "insert": "{ \"slides\": "
+       },
+       {
+        "from": 6,
+        "to": 6,
+        "insert": " }"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "json-empty": {
+  "syntax": true,
+  "findings": [
+   {
+    "path": "",
+    "message": "The document is empty.",
+    "severity": "error",
+    "line": 1,
+    "column": 1,
+    "kind": "syntax",
+    "ruleId": "opf/json-syntax",
+    "next": "start with { \"slides\": [ { \"title\": \"…\" } ] }.",
+    "range": {
+     "from": 0,
+     "to": 0
+    },
+    "editFixes": [
+     {
+      "id": "insert-minimal-deck",
+      "title": "Insert minimal deck",
+      "safe": false,
+      "edits": [
+       {
+        "from": 0,
+        "to": 0,
+        "insert": "{\n  \"slides\": [\n    { \"title\": \"\" }\n  ]\n}\n"
+       }
+      ],
+      "caret": 32
+     }
+    ]
+   }
+  ]
+ },
+ "yaml-tab-indentation": {
+  "syntax": true,
+  "findings": [
+   {
+    "path": "",
+    "message": "Line 3 is indented with a tab. YAML needs spaces.",
+    "severity": "error",
+    "line": 3,
+    "column": 1,
+    "kind": "syntax",
+    "ruleId": "yaml/syntax",
+    "help": "Replace the tab with spaces (two for each level of indentation).",
+    "category": "format",
+    "location": {
+     "offset": 16,
+     "length": 1,
+     "line": 3,
+     "column": 1
+    },
+    "editFixes": [
+     {
+      "id": "tabs-to-spaces",
+      "title": "Convert tabs to spaces",
+      "safe": true,
+      "edits": [
+       {
+        "from": 16,
+        "to": 17,
+        "insert": "  "
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "yaml-unclosed-quote": {
+  "syntax": true,
+  "findings": [
+   {
+    "path": "",
+    "message": "The double quote opened on line 1 is never closed.",
+    "severity": "error",
+    "line": 1,
+    "column": 7,
+    "kind": "syntax",
+    "ruleId": "yaml/syntax",
+    "help": "End the text with a matching \" (a quoted value can continue on the next lines, but it must close).",
+    "category": "format",
+    "location": {
+     "offset": 6,
+     "length": 2,
+     "line": 1,
+     "column": 7
+    },
+    "editFixes": [
+     {
+      "id": "close-quote",
+      "title": "Insert closing quote",
+      "safe": false,
+      "edits": [
+       {
+        "from": 8,
+        "to": 8,
+        "insert": "\""
+       }
+      ],
+      "caret": 9
+     }
+    ]
+   }
+  ]
+ },
+ "yaml-unknown-key": {
+  "deck": {
+   "name": "x",
+   "bogus": 1,
+   "slides": [
+    {
+     "title": "a",
+     "wrong": 2
+    }
+   ]
+  },
+  "findings": [
+   {
+    "path": "/bogus",
+    "message": "must NOT have additional properties",
+    "severity": "error",
+    "line": 2,
+    "column": 8,
+    "kind": "schema",
+    "ruleId": "opf/schema",
+    "help": "Review \"bogus\" against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error.",
+    "category": "format",
+    "location": {
+     "offset": 15,
+     "length": 1,
+     "line": 2,
+     "column": 8
+    },
+    "validation": {
+     "path": "/",
+     "message": "must NOT have additional properties",
+     "keyword": "additionalProperties",
+     "schemaPath": "#/additionalProperties",
+     "params": {
+      "additionalProperty": "bogus"
+     }
+    },
+    "fixes": [
+     {
+      "id": "move-to-extensions",
+      "title": "Move into extensions",
+      "kind": "patch",
+      "safe": false,
+      "patch": [
+       {
+        "op": "add",
+        "path": "/extensions",
+        "value": {}
+       },
+       {
+        "op": "move",
+        "from": "/bogus",
+        "path": "/extensions/bogus"
+       }
+      ]
+     }
+    ],
+    "lookup": [
+     "opf",
+     "schema",
+     "presentation",
+     "/additionalProperties"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/additionalProperties"
+   },
+   {
+    "path": "/slides/0/wrong",
+    "message": "must NOT have additional properties",
+    "severity": "error",
+    "line": 5,
+    "column": 12,
+    "kind": "schema",
+    "ruleId": "opf/schema",
+    "help": "Review \"wrong\" against this object's schema. Preserve custom metadata in document.extensions where appropriate; do not delete authored content to clear this error.",
+    "category": "format",
+    "location": {
+     "offset": 49,
+     "length": 1,
+     "line": 5,
+     "column": 12
+    },
+    "validation": {
+     "path": "/slides/0",
+     "message": "must NOT have additional properties",
+     "keyword": "additionalProperties",
+     "schemaPath": "#/additionalProperties",
+     "params": {
+      "additionalProperty": "wrong"
+     }
+    },
+    "fixes": [
+     {
+      "id": "move-to-extensions",
+      "title": "Move into extensions",
+      "kind": "patch",
+      "safe": false,
+      "patch": [
+       {
+        "op": "add",
+        "path": "/slides/0/extensions",
+        "value": {}
+       },
+       {
+        "op": "move",
+        "from": "/slides/0/wrong",
+        "path": "/slides/0/extensions/wrong"
+       }
+      ]
+     }
+    ],
+    "lookup": [
+     "opf",
+     "schema",
+     "presentation",
+     "/$defs/Slide/additionalProperties"
+    ],
+    "definition": "https://openpresentation.org/schema/opf/v1#/$defs/Slide/additionalProperties",
+    "slide": 0
+   }
+  ],
+  "notes": []
+ },
+ "yaml-flow": {
+  "deck": {
+   "name": "x",
+   "slides": [
+    {
+     "title": "a"
+    },
+    {
+     "title": "b",
+     "items": [
+      "c",
+      "d"
+     ]
+    }
+   ]
+  },
+  "findings": [],
+  "notes": []
+ },
+ "md-unterminated-front-matter": {
+  "syntax": true,
+  "findings": [
+   {
+    "path": "",
+    "message": "The front matter starting on line 1 is not closed.",
+    "severity": "error",
+    "line": 1,
+    "column": 1,
+    "kind": "syntax",
+    "ruleId": "markdown/front-matter-unterminated",
+    "help": "Close it with a line containing only ---, or remove the opening --- (a deck without front matter starts with its first slide).",
+    "category": "format",
+    "location": {
+     "offset": 0,
+     "length": 3,
+     "line": 1,
+     "column": 1
+    },
+    "editFixes": [
+     {
+      "id": "insert-front-matter-end",
+      "title": "Insert ---",
+      "safe": true,
+      "edits": [
+       {
+        "from": 12,
+        "to": 12,
+        "insert": "---\n"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "md-unterminated-fence": {
+  "syntax": true,
+  "findings": [
+   {
+    "path": "/slides/0",
+    "message": "A fenced block is not closed.",
+    "severity": "error",
+    "line": 3,
+    "column": 1,
+    "kind": "syntax",
+    "ruleId": "markdown/fence-unterminated",
+    "help": "Add a closing ``` line.",
+    "category": "format",
+    "location": {
+     "offset": 5,
+     "length": 19,
+     "line": 3,
+     "column": 1
+    },
+    "editFixes": [
+     {
+      "id": "insert-closing-fence",
+      "title": "Insert closing fence",
+      "safe": true,
+      "edits": [
+       {
+        "from": 25,
+        "to": 25,
+        "insert": "```\n"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "md-unknown-slide-option": {
+  "syntax": true,
+  "findings": [
+   {
+    "path": "",
+    "message": "Unknown slide option \"layot\".",
+    "severity": "error",
+    "line": 6,
+    "column": 1,
+    "kind": "syntax",
+    "ruleId": "markdown/options-unknown-key",
+    "help": "A slide options comment reads <!-- slide: id=cover layout=title section=\"Part 1\" hidden -->. Keys: id, type, layout, section, tag, hidden, beat. Anything else goes in a fenced opf-slide block.",
+    "category": "format",
+    "location": {
+     "offset": 21,
+     "length": 27,
+     "line": 6,
+     "column": 1
+    },
+    "suggestions": [
+     {
+      "value": "layout",
+      "label": "layout",
+      "origin": "schema"
+     }
+    ],
+    "editFixes": [
+     {
+      "id": "rename-to:layout",
+      "title": "Rename to layout",
+      "safe": false,
+      "edits": [
+       {
+        "from": 33,
+        "to": 38,
+        "insert": "layout"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ },
+ "md-numbered-list": {
+  "deck": {
+   "name": "x",
+   "slides": [
+    {
+     "title": "A",
+     "items": [
+      "one",
+      "two"
+     ]
+    }
+   ]
+  },
+  "findings": [
+   {
+    "path": "/slides/0",
+    "message": "Numbers in a list are not kept: the Markdown dialect does not read them as `numbering`, so each item became a bullet.",
+    "severity": "warning",
+    "line": 7,
+    "column": 1,
+    "kind": "schema",
+    "ruleId": "markdown/numbered-list",
+    "help": "Add `numbering` to the slide or block in an opf-slide or opf-block fence (docs/numbered-lists.md), write the numbers into the text, or use a bulleted list.",
+    "category": "format",
+    "location": {
+     "offset": 22,
+     "length": 13,
+     "line": 7,
+     "column": 1
+    }
+   }
+  ],
+  "notes": [
+   {
+    "path": "/slides/0",
+    "message": "Numbers in a list are not kept: the Markdown dialect does not read them as `numbering`, so each item became a bullet.",
+    "severity": "warning",
+    "line": 7,
+    "column": 1,
+    "kind": "syntax",
+    "ruleId": "markdown/numbered-list",
+    "help": "Add `numbering` to the slide or block in an opf-slide or opf-block fence (docs/numbered-lists.md), write the numbers into the text, or use a bulleted list.",
+    "category": "format",
+    "location": {
+     "offset": 22,
+     "length": 13,
+     "line": 7,
+     "column": 1
+    },
+    "editFixes": [
+     {
+      "id": "add-numbering",
+      "title": "Add `numbering`",
+      "safe": false,
+      "edits": [
+       {
+        "from": 36,
+        "to": 36,
+        "insert": "\n```opf-slide\nnumbering: arabic\n```\n"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+}

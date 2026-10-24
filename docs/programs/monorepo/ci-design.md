@@ -30,7 +30,7 @@ Status: drafted 2026-10-22 on `codex/mr-30-ci` (draft pull request [opf#798](htt
 | `cli` | any package it depends on, or itself | 1 | 1 | ubuntu-24.04 |
 | `render` | render or core or gallery | `tests 1..4/4`, `browser` | `tests 1..3/3` (`test:contract`) | Playwright image |
 | `pptx` | pptx or an upstream package | `tests 1..4/4`, `browser` | `tests 1..4/4` | Playwright image |
-| `editor` | editor or an upstream package | `tests 1..2/2`, `playground 1..4/4`, `browser` | `tests 1..2/2` | Playwright image |
+| `editor` | editor or an upstream package | `tests 1..2/2`, `playground 1..4/4`, `browser 1..2/2` (two shards since the source editor's keyboard suites, 2026-10-24) | `tests 1..2/2` | Playwright image |
 | `integration` | gallery, core, render or pptx changed (its manifest and the target graph: not the editor or CLI) | 1 (`packages/integration`) | 1 | ubuntu-24.04 |
 | `goldens` | a golden input changed | 1 (`test:golden`, changed slides as artifact) | n/a | Playwright image |
 | `gallery-gates` | gallery, core or render changed | 1 (`check:previews`; `check:stability` reports only until MR-35) | n/a | ubuntu-24.04 |

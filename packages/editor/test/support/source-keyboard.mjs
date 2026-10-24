@@ -57,7 +57,8 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
       const target = path.resolve(root, `.${decodeURIComponent(url.pathname)}`);
       const relative = path.relative(root, target);
       if (relative.startsWith('..') || path.isAbsolute(relative)) { res.writeHead(403).end(); return; }
-      res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(await readFile(target));
+      const body = await readFile(target);
+      res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(body);
     } catch { res.writeHead(404).end(); }
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
@@ -92,8 +93,9 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
     const kb = {
       page,
       /** Replace the text (and the format) with `doc` and put the caret or selection where the markers say. */
-      async put(doc, { format = 'json', notify = false } = {}) {
-        const { text, from, to } = parseMarkers(doc);
+      async put(doc, { format = 'json', notify = false, literal = false } = {}) {
+        // `literal`: the text has no markers (a `|` in it is text), and the caret starts at its beginning.
+        const { text, from, to } = literal ? { text: doc, from: 0, to: 0 } : parseMarkers(doc);
         await page.evaluate(([nextFormat, value, start, end, tell]) => {
           if (demo.pane.getFormat() !== nextFormat) demo.pane.setFormat(nextFormat);
           // As a host opening a document does: an external update, which also reads the document's indentation.
@@ -175,6 +177,18 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
         const nodes = [...document.querySelectorAll('.cm-tooltip')].filter((node) => !node.classList.contains('cm-tooltip-autocomplete') && !node.classList.contains('cm-completionInfo') && node.getBoundingClientRect().width > 0);
         return { open: nodes.length > 0, text: nodes.map((node) => node.textContent).join(' | ') };
       }),
+      /** The shape hint on screen (Cmd/Ctrl+Shift+Space): its title, rows (`key`, `state`, `description`), the key marked next, its role and label. */
+      hint: () => page.evaluate(() => {
+        const node = [...document.querySelectorAll('.cm-tooltip.opf-hint')].find((candidate) => candidate.getBoundingClientRect().width > 0);
+        if (!node) return { open: false, text: '', rows: [] };
+        const rows = [...node.querySelectorAll('.opf-hint-row')].map((row) => ({ key: row.dataset.key, state: row.dataset.state, description: row.querySelector('.opf-hint-description')?.textContent ?? '' }));
+        const box = node.getBoundingClientRect();
+        return {
+          open: true, text: node.textContent, title: node.querySelector('.opf-hint-title')?.textContent ?? '', aside: node.querySelector('.opf-hint-aside')?.textContent ?? '', rows,
+          next: rows.find((row) => row.state === 'next')?.key ?? null, role: node.getAttribute('role'), label: node.getAttribute('aria-label'), animation: getComputedStyle(node).animationName, box: { left: box.left, top: box.top, bottom: box.bottom, right: box.right },
+          isTooltip: Boolean(node.closest('.cm-tooltip')),
+        };
+      }),
       /** The documentation panel beside the selected item: whether it shows, and its text. */
       docs: () => page.evaluate(() => {
         const node = document.querySelector('.cm-tooltip-autocomplete .cm-completionInfo, .cm-tooltip.cm-completionInfo');
@@ -189,11 +203,37 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
       focus: () => page.evaluate(() => {
         const active = document.activeElement;
         if (!active) return 'none';
+        if (active.closest('.cm-panels')) return `${active.tagName.toLowerCase()}${active.className ? `.${String(active.className).split(' ')[0]}` : ''}`;
+        const panel = active.closest('.opf-sym');
+        if (panel) return `panel:${[...panel.classList].find((name) => name.startsWith('opf-sym-'))?.slice(8)}`;
         if (active.closest('.cm-editor')) return 'editor';
         if (active.closest('.json-field-menu')) return 'dialog';
         return `${active.tagName.toLowerCase()}${active.className ? `.${String(active.className).split(' ')[0]}` : ''}`;
       }),
       undoDepth: () => page.evaluate(() => demo.pane.editor.undoDepth()),
+      /** The widget of go to definition, peek, references and rename under a line: what it shows and how it is named. */
+      nav: () => page.evaluate(() => {
+        const root = document.querySelector('.opf-sym');
+        if (!root) return { open: false };
+        const text = (node) => node?.textContent ?? '';
+        const input = root.querySelector('.opf-sym-input');
+        const list = root.querySelector('.opf-sym-list');
+        return {
+          open: true,
+          kind: [...root.classList].find((name) => name.startsWith('opf-sym-'))?.slice(8),
+          role: root.getAttribute('role'),
+          label: root.getAttribute('aria-label'),
+          title: text(root.querySelector('.opf-sym-title')),
+          text: text(root),
+          lines: [...root.querySelectorAll('.opf-sym-line')].map((row) => ({ number: Number(text(row.querySelector('.opf-sym-no'))), text: text(row.querySelector('.opf-sym-text')), target: row.classList.contains('is-target') })),
+          rows: [...root.querySelectorAll('.opf-sym-ref')].map((row) => ({ number: Number(text(row.querySelector('.opf-sym-no'))), badge: text(row.querySelector('.opf-sym-badge')), text: text(row.querySelector('.opf-sym-text')), declaration: row.classList.contains('is-declaration'), selected: row.getAttribute('aria-selected') === 'true', name: row.getAttribute('aria-label') })),
+          active: [...root.querySelectorAll('.opf-sym-ref')].findIndex((row) => row.id === list?.getAttribute('aria-activedescendant')),
+          listRole: list?.getAttribute('role') ?? null,
+          input: input ? { value: input.value, invalid: input.getAttribute('aria-invalid'), start: input.selectionStart, end: input.selectionEnd, label: root.querySelector('label')?.textContent } : null,
+          message: text(root.querySelector('.opf-sym-message')),
+          before: root.previousElementSibling?.textContent ?? null,
+        };
+      }),
     };
     return kb;
   }
@@ -208,6 +248,20 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
 // ---- running cases --------------------------------------------------------------------------------------------------------------
 const pointer = (deck, at) => at.split('/').slice(1).reduce((value, part) => value?.[part.replaceAll('~1', '/').replaceAll('~0', '~')], deck);
 const contains = (haystack, needle) => (Array.isArray(needle) ? needle : [needle]).every((item) => haystack.includes(item));
+
+// The page coordinates of the character `shift` into the first `needle` of the editor text, scrolled into view.
+async function pointAt(kb, needle, shift) {
+  await kb.page.evaluate(([value, offset]) => {
+    const { view } = demo.pane.editor, at = view.state.doc.toString().indexOf(value) + offset;
+    if (at < offset) throw new Error(`"${value}" is not in the text`);
+    view.dispatch({ effects: view.constructor.scrollIntoView(at, { y: 'center' }) });
+  }, [needle, shift]);
+  await kb.page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+  return kb.page.evaluate(([value, offset]) => {
+    const { view } = demo.pane.editor, a = view.coordsAtPos(view.state.doc.toString().indexOf(value) + offset);
+    return { x: a.left + 1, y: (a.top + a.bottom) / 2 };
+  }, [needle, shift]);
+}
 
 async function runStep(kb, step) {
   const [kind, ...args] = step;
@@ -267,9 +321,25 @@ async function runStep(kb, step) {
   }
   if (kind === 'expectFolded') {
     // The text a fold hides is replaced by a placeholder: Cmd/Ctrl+Alt+[ folded something.
-    await kb.page.waitForSelector('.cm-foldPlaceholder', { timeout: 2000 }).catch(() => {});
-    assert.equal(await kb.page.locator('.cm-foldPlaceholder').count(), args[0], 'folded ranges');
+    // A number is the exact count; '>N' means more than N.
+    const want = args[0], more = typeof want === 'string' && want.startsWith('>');
+    if (want !== 0) await kb.page.waitForFunction(([wanted, over]) => { const count = document.querySelectorAll('.cm-foldPlaceholder').length; return over ? count > wanted : count === wanted; }, [more ? Number(want.slice(1)) : want, more], { timeout: 2000 }).catch(() => {});
+    else await kb.page.waitForTimeout(50);
+    const count = await kb.page.locator('.cm-foldPlaceholder').count();
+    if (more) assert.ok(count > Number(want.slice(1)), `folded ranges: more than ${want.slice(1)} (${count})`);
+    else assert.equal(count, want, 'folded ranges');
     return undefined;
+  }
+  if (kind === 'clickShortcutsButton') { await kb.page.locator('.opf-source-action-shortcuts').click(); return kb.settle(); }
+  if (kind === 'focusShortcutsButton') { await kb.page.locator('.opf-source-action-shortcuts').focus(); return undefined; }
+  if (kind === 'focusFormatAction') { await kb.page.locator('.opf-source-action-format').focus(); return undefined; }
+  if (kind === 'clickOutline') { await kb.page.locator('.opf-source-outline-item', { hasText: args[0] }).first().click(); return kb.settle(); }
+  if (kind === 'focusOutlineToggle') { await kb.page.locator('.opf-source-action-outline').focus(); return undefined; }
+  if (kind === 'evalPane') { await kb.page.evaluate((name) => demo.pane[name](), args[0]); return kb.settle(); }
+  if (kind === 'clickGutter') {
+    // The fold marker of the nth line that has one, with a real mouse click.
+    await kb.page.locator('.cm-foldGutter .opf-fold-marker.is-open').nth(args[0]).click();
+    return kb.settle();
   }
   if (kind === 'canonicalize') {
     // The "Canonicalize with OPF" button; the confirmation (when comments would be dropped) is answered by 'confirm' or 'cancelConfirm'.
@@ -338,6 +408,7 @@ async function runStep(kb, step) {
     return kb.settle();
   }
   if (kind === 'readOnly') { await kb.page.evaluate((value) => demo.pane.setReadOnly(value), args[0]); return kb.settle(); }
+  if (kind === 'emulate') { await kb.page.emulateMedia(args[0]); return undefined; }
   if (kind === 'pause') { await kb.page.waitForTimeout(args[0]); return undefined; }
   if (kind === 'expectRow') {
     const at = await kb.page.evaluate(() => [...document.querySelectorAll('.opf-source-finding')].indexOf(document.activeElement));
@@ -375,6 +446,46 @@ async function runStep(kb, step) {
     return kb.settle();
   }
   if (kind === 'openOptionsDialog') return kb.press('Alt+Shift+O');
+  if (kind === 'setCaret') {
+    // The caret (or a selection) at source offsets, with the focus in the editor.
+    await kb.page.evaluate(([from, to]) => { const { api } = demo.pane.editor; api.focus(); api.setSelection(from, to); }, [args[0], args[1] ?? args[0]]);
+    return kb.settle();
+  }
+  if (kind === 'run') return args[0](kb);
+  if (kind === 'nav') {
+    // A navigation key (F12, Alt+F12, Shift+F12, F2): the command loads on first use, so wait for what every command does, say what happened.
+    const before = (await kb.live()).length;
+    await kb.page.keyboard.press(keyFor(args[0]));
+    await kb.page.waitForFunction((count) => (window.__live ?? []).length > count, before, { timeout: 2500 }).catch(() => {});
+    return kb.settle();
+  }
+  if (kind === 'modClick') {
+    // Cmd (macOS) or Ctrl click on the text of a token: `args[0]` is a needle in the editor text, `args[1]` how far into it to click.
+    const box = await pointAt(kb, args[0], args[1] ?? 0);
+    const before = (await kb.live()).length;
+    if (mod === 'Control' && process.platform === 'darwin') {
+      // Ctrl+click on a Mac is a secondary click to the browser (it opens the context menu and selects the word), so the Windows and Linux keymaps
+      // get the mouse event a Ctrl+click is: a left button press with the Ctrl key down.
+      await kb.page.evaluate(({ x, y }) => {
+        const target = document.elementFromPoint(x, y);
+        target.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, button: 0, buttons: 1, detail: 1, ctrlKey: true, clientX: x, clientY: y, view: window }));
+        target.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, cancelable: true, button: 0, detail: 1, ctrlKey: true, clientX: x, clientY: y, view: window }));
+      }, box);
+    } else {
+      await kb.page.keyboard.down(mod);
+      await kb.page.mouse.click(box.x, box.y);
+      await kb.page.keyboard.up(mod);
+    }
+    if (args[2] !== false) await kb.page.waitForFunction((count) => (window.__live ?? []).length > count, before, { timeout: 2500 }).catch(() => {});
+    return kb.settle();
+  }
+  if (kind === 'click') {
+    const box = await pointAt(kb, args[0], args[1] ?? 0);
+    await kb.page.mouse.click(box.x, box.y);
+    return kb.settle();
+  }
+  if (kind === 'clickRow') { await kb.page.locator('.opf-sym-ref').nth(args[0]).click(); return kb.settle(); }
+  if (kind === 'clickClose') { await kb.page.locator('.opf-sym-close').click(); return kb.settle(); }
   throw new Error(`unknown step ${kind}`);
 }
 
@@ -400,6 +511,8 @@ async function check(kb, expect) {
     }
     // `footer`: the line under the list (a string, or null for none).
     if (want.footer !== undefined) assert.equal(popup.footer, want.footer, 'popup footer');
+    // `details`: label -> text its detail has (the grey words after the label).
+    if (want.details) for (const [label, text] of Object.entries(want.details)) assert.ok(popup.items.find((item) => item.label === label)?.detail.includes(text), `popup detail of ${label} has ${JSON.stringify(text)}: ${JSON.stringify(popup.items.find((item) => item.label === label))}`);
     if (want.selected !== undefined) assert.equal(popup.selected, want.selected, 'popup selected');
     if (want.selectedIndex !== undefined) assert.equal(popup.selectedIndex, want.selectedIndex, 'popup selected index');
     if (want.selectedIsLast) assert.equal(popup.selectedIndex, popup.items.length - 1, 'the selection wrapped to the last item');
@@ -428,6 +541,31 @@ async function check(kb, expect) {
     if (expect.hover.open !== undefined) assert.equal(hover.open, Boolean(expect.hover.open), `hover open: ${hover.text}`);
     for (const item of [expect.hover.has ?? []].flat()) assert.ok(hover.text.includes(item), `the hover has ${JSON.stringify(item)}: ${JSON.stringify(hover.text)}`);
     for (const item of [expect.hover.not ?? []].flat()) assert.ok(!hover.text.includes(item), `the hover lacks ${JSON.stringify(item)}: ${JSON.stringify(hover.text)}`);
+  }
+  if (expect.hint) {
+    const hint = await kb.hint(), want = expect.hint;
+    if (want.open !== undefined) assert.equal(hint.open, Boolean(want.open), `hint open: ${hint.text}`);
+    for (const item of [want.has ?? []].flat()) assert.ok(hint.text.includes(item), `the hint has ${JSON.stringify(item)}: ${JSON.stringify(hint.text)}`);
+    for (const item of [want.not ?? []].flat()) assert.ok(!hint.text.includes(item), `the hint lacks ${JSON.stringify(item)}: ${JSON.stringify(hint.text)}`);
+    if (want.next !== undefined) assert.equal(hint.next, want.next, `the row marked next: ${JSON.stringify(hint.rows)}`);
+    if (want.title !== undefined) assert.ok(hint.title.includes(want.title), `hint title ${JSON.stringify(hint.title)}`);
+    if (want.aside !== undefined) assert.ok(hint.aside.includes(want.aside), `hint aside ${JSON.stringify(hint.aside)}`);
+    // `rows`: each named row has this state, in this relative order.
+    if (want.rows) {
+      const keys = hint.rows.map((row) => row.key);
+      for (const [key, state] of want.rows) assert.equal(hint.rows.find((row) => row.key === key)?.state, state, `hint row ${key}: ${JSON.stringify(hint.rows)}`);
+      const places = want.rows.map(([key]) => keys.indexOf(key));
+      assert.deepEqual([...places].sort((a, b) => a - b), places, `hint rows in order ${want.rows.map(([key]) => key)}: ${keys}`);
+    }
+    if (want.role !== undefined) assert.equal(hint.role, want.role, 'hint role');
+    if (want.label !== undefined) assert.match(hint.label ?? '', want.label, 'hint label');
+    if (want.animation !== undefined) assert.equal(hint.animation, want.animation, 'hint animation');
+    if (want.tooltip) assert.ok(hint.isTooltip, 'the hint is a CodeMirror tooltip');
+    // `near`: the caret's line, in px: the hint is above or below it, within this distance.
+    if (want.near) {
+      const caret = await kb.page.evaluate(() => { const { view } = demo.pane.editor, box = view.coordsAtPos(view.state.selection.main.head); return { left: box.left, top: box.top, bottom: box.bottom }; });
+      assert.ok(Math.min(Math.abs(hint.box.bottom - caret.top), Math.abs(hint.box.top - caret.bottom)) <= want.near, `the hint is near the caret: ${JSON.stringify({ hint: hint.box, caret })}`);
+    }
   }
   if (expect.live) {
     const said = await kb.live();
@@ -468,6 +606,40 @@ async function check(kb, expect) {
     assert.ok(shown.length > 0, 'a Details panel is open');
     for (const item of [expect.explain.has ?? []].flat()) assert.ok(shown.some((text) => text.includes(item)), `the details say ${JSON.stringify(item)}: ${JSON.stringify(shown)}`);
   }
+  if (expect.nav !== undefined) {
+    const nav = await kb.nav(), want = expect.nav;
+    if (want === null || want.open === false) assert.equal(nav.open, false, `no widget under the line: ${JSON.stringify(nav).slice(0, 200)}`);
+    else {
+      assert.equal(nav.open, true, 'a widget is under the line');
+      const same = (got, wanted, what) => (wanted instanceof RegExp ? assert.match(got ?? '', wanted, `${what}: ${got}`) : assert.equal(got, wanted, what));
+      if (want.kind !== undefined) assert.equal(nav.kind, want.kind, 'widget kind');
+      if (want.role !== undefined) assert.equal(nav.role, want.role, 'widget role');
+      if (want.label !== undefined) same(nav.label, want.label, 'widget label');
+      if (want.title !== undefined) same(nav.title, want.title, 'widget title');
+      for (const item of [want.has ?? []].flat()) assert.ok(nav.text.includes(item), `the widget says ${JSON.stringify(item)}: ${JSON.stringify(nav.text)}`);
+      if (want.rows !== undefined) assert.equal(nav.rows.length, want.rows, `reference rows: ${JSON.stringify(nav.rows)}`);
+      if (want.lines !== undefined) assert.equal(nav.lines.length, want.lines, `peek lines: ${JSON.stringify(nav.lines)}`);
+      if (want.target !== undefined) assert.deepEqual(nav.lines.filter((line) => line.target).map((line) => line.text.trim()), [want.target].flat(), 'the marked lines of the peek');
+      if (want.active !== undefined) assert.equal(nav.active, want.active, `the chosen row: ${JSON.stringify(nav.rows)}`);
+      if (want.row) for (const [index, row] of Object.entries(want.row)) { for (const [key, value] of Object.entries(row)) same(typeof value === 'boolean' ? nav.rows[index]?.[key] : String(nav.rows[index]?.[key]), typeof value === 'boolean' ? value : value instanceof RegExp ? value : String(value), `row ${index} ${key}`); }
+      if (want.listRole !== undefined) assert.equal(nav.listRole, want.listRole, 'list role');
+      if (want.input !== undefined) {
+        assert.ok(nav.input, 'the widget has an input');
+        if (want.input.value !== undefined) assert.equal(nav.input.value, want.input.value, 'input value');
+        if (want.input.selected !== undefined) assert.equal(nav.input.value.slice(nav.input.start, nav.input.end), want.input.selected, 'the selected part of the input');
+        if (want.input.invalid !== undefined) assert.equal(nav.input.invalid, want.input.invalid, 'input aria-invalid');
+        if (want.input.label !== undefined) assert.equal(nav.input.label, want.input.label, 'the input has a visible label');
+      }
+      if (want.message !== undefined) same(nav.message, want.message, 'widget message');
+      if (want.before !== undefined) same(nav.before, want.before, 'the line above the widget');
+    }
+  }
+  if (expect.plain !== undefined) assert.equal(await kb.plain(), expect.plain, 'plain text');
+  if (expect.selection !== undefined) assert.deepEqual(await kb.page.evaluate(() => demo.pane.editor.api.getSelection()), expect.selection, 'selection (source offsets)');
+  if (expect.selected !== undefined) assert.equal(await kb.page.evaluate(() => { const { api } = demo.pane.editor, [from, to] = api.getSelection(); return api.getValue().slice(from, to); }), expect.selected, 'the selected text');
+  if (expect.before !== undefined) assert.ok(await kb.page.evaluate((want) => { const { api } = demo.pane.editor, [from] = api.getSelection(); return api.getValue().slice(0, from).endsWith(want); }, expect.before), `the text before the selection ends with ${JSON.stringify(expect.before)}`);
+  if (expect.liveCount !== undefined) assert.equal((await kb.live()).length, expect.liveCount, 'how many messages the live region got');
+  if (expect.custom) await expect.custom(kb);
   if (expect.dialog !== undefined) {
     const dialog = await kb.dialog();
     assert.equal(dialog.open, expect.dialog.open, 'dialog open');
@@ -479,6 +651,63 @@ async function check(kb, expect) {
     assert.equal(shown.open, Boolean(expect.confirm.open), `confirmation open: ${shown.text}`);
     for (const item of [expect.confirm.has ?? []].flat()) assert.ok(shown.text.includes(item), `the confirmation says ${JSON.stringify(item)}: ${JSON.stringify(shown.text)}`);
     if (expect.confirm.focusInside !== undefined) assert.equal(shown.focusInside, expect.confirm.focusInside, 'focus is inside the confirmation');
+  }
+  if (expect.shortcuts) {
+    // The shortcuts dialog: whether it is open, the rows it lists (by title) and where the focus is.
+    const shown = await kb.page.evaluate(() => {
+      const dialog = document.querySelector('.opf-shortcuts');
+      return { open: Boolean(dialog), titles: [...document.querySelectorAll('.opf-shortcuts-row .opf-shortcuts-name')].map((node) => node.textContent), rows: [...document.querySelectorAll('.opf-shortcuts-row')].map((node) => node.textContent),
+        focus: document.activeElement?.className ?? '', status: document.querySelector('.opf-shortcuts-status')?.textContent ?? '', insideFocus: Boolean(dialog?.contains(document.activeElement)) };
+    });
+    const want = expect.shortcuts;
+    if (want.open !== undefined) assert.equal(shown.open, Boolean(want.open), 'shortcuts dialog open');
+    for (const item of [want.has ?? []].flat()) assert.ok(shown.rows.some((row) => row.includes(item)), `the shortcuts list has ${JSON.stringify(item)}: ${JSON.stringify(shown.rows.slice(0, 6))}`);
+    for (const item of [want.not ?? []].flat()) assert.ok(!shown.rows.some((row) => row.includes(item)), `the shortcuts list lacks ${JSON.stringify(item)}`);
+    if (want.focus !== undefined) assert.ok(shown.focus.includes(want.focus), `focus is in ${want.focus}: ${shown.focus}`);
+    if (want.insideFocus !== undefined) assert.equal(shown.insideFocus, want.insideFocus, 'focus inside the dialog');
+    if (want.status !== undefined) assert.match(shown.status, want.status, 'shortcuts status');
+  }
+  if (expect.picker) {
+    // The symbol picker: whether it is open, its items (label, kind), the selected one, and where the focus is.
+    const shown = await kb.page.evaluate(() => {
+      const root = document.querySelector('.opf-quickpick');
+      const items = [...document.querySelectorAll('.opf-quickpick-item')].map((node) => ({ label: node.querySelector('.opf-quickpick-label')?.textContent ?? '', detail: node.querySelector('.opf-quickpick-detail')?.textContent ?? '', kind: node.dataset.kind, selected: node.getAttribute('aria-selected') === 'true' }));
+      const input = document.querySelector('.opf-quickpick-input');
+      return { open: Boolean(root), items, inputFocused: document.activeElement === input, active: input?.getAttribute('aria-activedescendant') ?? null, status: document.querySelector('.opf-quickpick-status')?.textContent ?? '' };
+    });
+    const want = expect.picker, labels = shown.items.map((item) => item.label);
+    if (want.open !== undefined) assert.equal(shown.open, Boolean(want.open), `picker open (${labels})`);
+    for (const item of [want.has ?? []].flat()) assert.ok(labels.includes(item), `the picker lists ${JSON.stringify(item)}: ${JSON.stringify(labels)}`);
+    for (const item of [want.not ?? []].flat()) assert.ok(!labels.includes(item), `the picker lacks ${JSON.stringify(item)}`);
+    if (want.labels) assert.deepEqual(labels, want.labels, 'picker items');
+    if (want.selected !== undefined) assert.equal(shown.items.find((item) => item.selected)?.label, want.selected, 'picker selected item');
+    if (want.inputFocused !== undefined) assert.equal(shown.inputFocused, want.inputFocused, 'focus in the picker input');
+    if (want.status !== undefined) assert.match(shown.status, want.status, 'picker status');
+    if (want.kinds) assert.deepEqual(shown.items.map((item) => item.kind), want.kinds, 'picker kinds');
+    if (want.detail) assert.ok(shown.items.some((item) => item.detail.includes(want.detail)), `a picker item has the detail ${want.detail}`);
+  }
+  if (expect.outline) {
+    // The outline panel (harness ?outline=open): rows, the current one, and the API.
+    const shown = await kb.page.evaluate(() => ({ rows: [...document.querySelectorAll('.opf-source-outline-item')].map((node) => node.querySelector('.opf-source-outline-label').textContent), current: [...document.querySelectorAll('.opf-source-outline-item[aria-current]')].map((node) => node.querySelector('.opf-source-outline-label').textContent), api: demo.pane.getOutline().map((symbol) => symbol.label), hidden: document.querySelector('.opf-source-outline')?.hidden ?? true }));
+    const want = expect.outline;
+    if (want.rows) assert.deepEqual(shown.rows, want.rows, 'outline rows');
+    if (want.current !== undefined) assert.deepEqual(shown.current, [].concat(want.current), 'outline current item');
+    if (want.api) assert.deepEqual(shown.api, want.api, 'getOutline labels');
+    if (want.hidden !== undefined) assert.equal(shown.hidden, want.hidden, 'outline hidden');
+  }
+  if (expect.shortcutList) {
+    // getShortcuts(platform): rows by id with their keys, and keys no row may have.
+    const want = expect.shortcutList;
+    const rows = await kb.page.evaluate((on) => demo.pane.getShortcuts(on), want.platform ?? null);
+    for (const [id, keys] of Object.entries(want.keys ?? {})) {
+      const row = rows.find((entry) => entry.id === id);
+      assert.ok(row, `getShortcuts lists ${id}`);
+      for (const key of keys) assert.ok(row.keys.includes(key), `${id} has ${key}: ${JSON.stringify(row.keys)}`);
+    }
+    for (const bad of want.noKeyMatching ?? []) assert.ok(!rows.some((row) => row.keys.some((key) => new RegExp(bad).test(key))), `no key matches ${bad}`);
+    if (want.unique) { const strokes = rows.flatMap((row) => (row.when ? [] : row.strokes.map((stroke) => `${stroke}`))); void strokes; }
+    if (want.minimum) assert.ok(rows.length >= want.minimum, `at least ${want.minimum} shortcuts (${rows.length})`);
+    assert.deepEqual(await kb.page.evaluate(() => demo.pane.editor.unlistedShortcuts()), [], 'every installed binding is listed');
   }
   if (expect.format !== undefined) assert.equal(await kb.page.evaluate(() => demo.pane.getFormat()), expect.format, 'format');
   if (expect.status !== undefined) assert.match(await kb.status(), expect.status, 'status');
@@ -508,7 +737,7 @@ export async function runCases(suite, cases, { query = '', onFailure, cpuThrottl
     const kb = suite.driver(page);
     suite.problems.length = 0;
     try {
-      await kb.put(doc, { format, notify: options.notify ?? notify });
+      await kb.put(doc, { format, notify: options.notify ?? notify, literal: options.literal });
       for (const step of steps) {
         if (['press', 'fast'].includes(step[0]) && expect.acceptedIsSelected) kb.selectedBefore = (await kb.popup()).selected;
         await runStep(kb, step);

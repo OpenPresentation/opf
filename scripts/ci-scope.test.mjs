@@ -415,7 +415,7 @@ test('legs: every package has a plan for both tiers, a skipped package has no le
     if (id !== 'lint') assert.deepEqual(legsFor(id, 'contract').filter((leg) => leg.kind !== 'tests'), [], `${id}: a dependent runs no browser suite`);
   }
   assert.deepEqual(legsFor('render', 'full').map((leg) => leg.name), ['tests 1/4', 'tests 2/4', 'tests 3/4', 'tests 4/4', 'browser']);
-  assert.deepEqual(legsFor('editor', 'full').map((leg) => leg.name), ['tests 1/2', 'tests 2/2', 'playground 1/4', 'playground 2/4', 'playground 3/4', 'playground 4/4', 'browser']);
+  assert.deepEqual(legsFor('editor', 'full').map((leg) => leg.name), ['tests 1/2', 'tests 2/2', 'playground 1/4', 'playground 2/4', 'playground 3/4', 'playground 4/4', 'browser 1/2', 'browser 2/2']);
   assert.deepEqual(legsFor('pptx', 'contract').map((leg) => `${leg.index}/${leg.count}`), ['1/4', '2/4', '3/4', '4/4']);
   assert.deepEqual(legsFor('lint', 'full').map((leg) => leg.name), ['static', 'checks 1/2', 'checks 2/2']);
 });
@@ -430,7 +430,7 @@ test('legs follow the tiers of the decision: only packages that run have legs, f
   assert.deepEqual(engine.legs.gallery, []);
   const forced = targetScope(['scripts/anything.mjs']);
   assert.equal(forced.legs.render.length, 5);
-  assert.equal(forced.legs.editor.length, 7);
+  assert.equal(forced.legs.editor.length, 8);
   assert.equal(forced.legs.gallery.length, 1);
   const docs = targetScope(['docs/programs/monorepo/README.md']);
   assert.deepEqual(Object.entries(docs.legs).filter(([, legs]) => legs.length).map(([id]) => id), ['lint'], 'a docs-only change runs lint and nothing else');

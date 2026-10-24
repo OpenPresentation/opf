@@ -1,0 +1,75 @@
+/*
+ * Go to definition, peek, references and rename (source-navigation.js): one block widget under the line of the symbol. Tokens only. The declaration is
+ * marked by a word, an arrow and a heavier line as well as by color, and nothing animates.
+ */
+.opf-sym {
+  box-sizing: border-box;
+  margin: 4px 0 6px 12px;
+  padding: 6px 10px 8px;
+  border: 1px solid var(--opf-ui-border-strong);
+  border-left: 3px solid var(--opf-ui-accent);
+  border-radius: var(--opf-ui-radius);
+  background: var(--opf-ui-surface);
+  color: var(--opf-ui-fg);
+  box-shadow: var(--opf-ui-shadow-pop);
+  font: 12px/1.45 var(--opf-ui-font);
+  text-align: start;
+  white-space: normal;
+  cursor: default;
+}
+.opf-sym:focus-visible,
+.opf-sym-list:focus-visible { outline: 2px solid var(--opf-ui-ring); outline-offset: 1px; }
+.opf-sym-head { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.opf-sym-title { flex: 1 1 auto; min-width: 0; font-weight: 600; overflow-wrap: anywhere; }
+.opf-sym-where { color: var(--opf-ui-muted-fg); }
+.opf-sym-close {
+  flex: none;
+  min-height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-sm);
+  background: var(--opf-ui-muted-2);
+  color: var(--opf-ui-fg);
+  font: inherit;
+  cursor: pointer;
+}
+.opf-sym-close:hover { background: var(--opf-ui-muted); }
+.opf-sym-close:focus-visible,
+.opf-sym-input:focus-visible { outline: 2px solid var(--opf-ui-ring); outline-offset: 1px; }
+.opf-sym-lines, .opf-sym-list { margin: 6px 0 0; padding: 0; list-style: none; max-height: 260px; overflow: auto; }
+.opf-sym-line, .opf-sym-ref { display: flex; align-items: baseline; gap: 8px; min-width: 0; padding: 1px 4px; border-radius: var(--opf-ui-radius-sm); }
+.opf-sym-no { flex: none; min-width: 3ch; color: var(--opf-ui-muted-fg); font-family: var(--opf-ui-mono); text-align: end; }
+.opf-sym-mark { flex: none; width: 1ch; color: var(--opf-ui-accent-strong); }
+.opf-sym-text { flex: 1 1 auto; min-width: 0; font-family: var(--opf-ui-mono); white-space: pre-wrap; overflow-wrap: anywhere; }
+.opf-sym-line.is-target { background: var(--opf-ui-muted-2); font-weight: 600; }
+.opf-sym-ref { cursor: pointer; }
+.opf-sym-ref:hover { background: var(--opf-ui-muted-2); }
+.opf-sym-ref[aria-selected="true"] { background: var(--opf-ui-accent); color: var(--opf-ui-accent-fg); }
+.opf-sym-ref[aria-selected="true"] .opf-sym-no,
+.opf-sym-ref[aria-selected="true"] .opf-sym-badge { color: inherit; }
+.opf-sym-badge { flex: none; min-width: 6.5em; color: var(--opf-ui-muted-fg); font-size: 11px; }
+.opf-sym-ref.is-declaration .opf-sym-badge { font-weight: 600; }
+.opf-sym-hint { margin: 6px 0 0; color: var(--opf-ui-muted-fg); font-size: 11px; }
+.opf-sym-field { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
+.opf-sym-label { flex: none; color: var(--opf-ui-muted-fg); }
+.opf-sym-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: var(--opf-ui-control-h);
+  padding: 0 8px;
+  border: 1px solid var(--opf-ui-border-strong);
+  border-radius: var(--opf-ui-radius-sm);
+  background: var(--opf-ui-bg);
+  color: var(--opf-ui-fg);
+  font: 13px var(--opf-ui-mono);
+}
+.opf-sym-input[aria-invalid="true"] { border-color: var(--opf-ui-danger); }
+.opf-sym-message { min-height: 1.45em; margin-top: 4px; }
+.opf-sym-message.is-error { color: var(--opf-ui-danger); font-weight: 600; }
+.opf-sym-message.is-error::before { content: "Error: "; }
+.opf-sym-preview { margin-top: 6px; }
+.opf-sym-image { display: block; max-width: 100%; max-height: 160px; border: 1px solid var(--opf-ui-border); border-radius: var(--opf-ui-radius-sm); }
+@media (forced-colors: active) {
+  .opf-sym { border: 1px solid CanvasText; }
+  .opf-sym-ref[aria-selected="true"] { outline: 2px solid Highlight; }
+}

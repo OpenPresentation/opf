@@ -1,18 +1,19 @@
-import { fromYaml, scanYamlComments, toYaml } from "@openpresentation/opf/yaml";
-import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
+import { scanYamlComments, toYaml } from "@openpresentation/opf/yaml";
+import { toMarkdown } from "@openpresentation/opf/markdown";
 import { mountJsonCodeEditor } from "./json-editor.js";
 import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, updateJsonSource } from "./exact-source.js";
 import { lineForPath, offsetOfLine } from "./source-lines.js";
 import { errorText, normalizeFinding, rejectionFindings as findingsOfError } from "./source-findings.js";
 import { formatSource } from "./source-format.js";
 import { buildProblems, summarize } from "./source-problems.js";
-import { analyzeSyntax, findDuplicateKeys } from "./source-syntax.js";
-import { withSyntaxFixes } from "./source-fixes-syntax.js";
+import { checkSyntaxOnly, markdownNotes, markdownNotesOf, readSource as readText } from "./source-check.js";
+import { createSourceChecker } from "./source-checker.js";
 import { detailsFor } from "./source-details.js";
 import { schemaAtPath, schemaVariants } from "./schema.js";
 import { locateText } from "./source-ranges.js";
 import { scanMarkdown, starterValue } from "@openpresentation/opf/source";
 import { listCatalogRecords } from "./catalogs.js";
+import { documentSymbols, symbolAt } from "./source-symbols.js";
 
 // The source pane (RR-98): the OPF document as JSON, YAML or Markdown, with the file name, the format menu, Format, Copy
 // and Download, and the findings under the code. JSON is canonical and keeps its authored bytes (exact-source); YAML and
@@ -35,6 +36,8 @@ const ICONS = {
   Check: '<path d="M20 6 9 17l-5-5"/>',
   CircleX: '<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>',
   Info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+  CircleHelp: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+  List: '<path d="M3 6h.01"/><path d="M8 6h13"/><path d="M3 12h.01"/><path d="M8 12h13"/><path d="M3 18h.01"/><path d="M8 18h13"/>',
   Sparkles: '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>',
 };
 function icon(name, size = 14) {
@@ -89,25 +92,6 @@ function fillDetails(body, details) {
   if (details.docs && /^https?:/.test(details.docs)) body.append(Object.assign(el("a", "opf-source-finding-explain-link", { href: details.docs, target: "_blank", rel: "noopener noreferrer" }), { textContent: "Documentation" }));
 }
 
-/** Read the text of one format. `{ deck }` on success; `findings` carry the syntax errors (`syntax: true`) or the OPF findings of the parsed deck. */
-function readText(format, text, catalogs) {
-  if (format === "json") {
-    const problems = analyzeSyntax(text);
-    if (problems.length) return { syntax: true, findings: problems.map((problem) => normalizeFinding(problem, "syntax")) };
-    const deck = JSON.parse(text);
-    const duplicates = findDuplicateKeys(text);
-    if (duplicates.length) return { syntax: true, findings: duplicates };
-    return { deck, findings: [] };
-  }
-  const result = format === "yaml" ? (fromYaml(text, { catalogs })) : fromMarkdown(text, { catalogs });
-  // The reader's own findings: errors stop the document being read; its warnings (a numbered list that became bullets) come with the deck.
-  const readerFindings = result.findings.filter((finding) => !finding.ruleId?.startsWith("opf/"));
-  const errors = readerFindings.filter((finding) => finding.severity === "error");
-  const syntax = (list) => withSyntaxFixes(format, text, list).map((finding) => normalizeFinding(finding, "syntax"));
-  if (errors.length) return { syntax: true, findings: syntax(errors) };
-  return { deck: result.presentation, findings: result.findings.map((finding) => normalizeFinding(finding, "schema")), notes: syntax(readerFindings) };
-}
-
 /**
  * Mount the source pane in `container`.
  *
@@ -146,6 +130,11 @@ export function createSourcePane(container, options = {}) {
   // The problems whose Details are open (by rule, path and message), so a redraw of the panel keeps them open, and a number per key for the element ids.
   const detailsOpen = new Set();
   const detailsKeys = { ids: new Map(), id(key) { if (!this.ids.has(key)) this.ids.set(key, this.ids.size + 1); return this.ids.get(key); } };
+  // The text checks may run in a Web Worker (options.worker): `checker` is null without one. `checkToken` numbers the check the pane still wants (a flush,
+  // an external change or a newer edit cancels the one in flight), `checkBusy` and `syntaxBusy` say the newest worker request of each kind is in flight, `stats` what answered the applied edits.
+  const checker = options.worker ? createSourceChecker({ worker: options.worker, onError: (error) => options.onError?.(error) }) : null;
+  let checkToken = 0, syntaxToken = 0, checkBusy = false, syntaxBusy = false;
+  const stats = { worker: 0, inline: 0 };
   let problemRows = [], lastDraft = null, lastSummary = "No problems", summaryTimer = null, syntaxTimer = null, recheckTimer = null;
   // The exact text of the documents `replaceDocument` replaced and opened, per format, so Undo and Redo show it again byte for byte
   // (a YAML comment, the author's JSON spelling). Keyed by format and document; the oldest entries go first.
@@ -196,6 +185,10 @@ export function createSourcePane(container, options = {}) {
   const canonicalAction = actionButton("Canonicalize with OPF", "Sparkles", "canonicalize");
   canonicalAction.title = "Canonicalize with OPF: rewrite the text the way OPF writes it (drops comments)";
   const copyAction = actionButton("Copy source", "Copy", "copy");
+  // The outline panel is opt-in (`outline: true` adds the toggle, `"open"` also shows the panel); the symbol picker (Cmd/Ctrl+Shift+O) is always there.
+  const outlineAction = options.outline ? actionButton("Outline", "List", "outline") : null;
+  const shortcutsAction = actionButton("Keyboard shortcuts", "CircleHelp", "shortcuts");
+  shortcutsAction.setAttribute("aria-haspopup", "dialog");
   const downloadAction = actionButton("Download source", "Download", "download");
   bar.append(file, actions);
 
@@ -215,7 +208,12 @@ export function createSourcePane(container, options = {}) {
   const list = el("ul", "opf-source-findings-list", { id: `${id}-findings` });
   findingsRegion.append(toggle, list);
 
-  root.append(bar, confirm, code, findingsRegion, status);
+  const outlinePanel = options.outline ? el("nav", "opf-source-outline", { "aria-label": "Document outline", hidden: "" }) : null;
+  const outlineList = outlinePanel ? el("ul", "opf-source-outline-list") : null;
+  outlinePanel?.append(outlineList);
+  let body = null;
+  if (outlinePanel) { body = el("div", "opf-source-body"); body.append(outlinePanel, code); }
+  root.append(bar, confirm, body ?? code, findingsRegion, status);
   container.append(root);
 
   // ---- Document <-> text --------------------------------------------------------------------------------------------
@@ -231,14 +229,6 @@ export function createSourcePane(container, options = {}) {
     if (target === "yaml") return { text: toYaml(value).yaml, notes: [] };
     const result = toMarkdown(value);
     return { text: result.markdown, notes: markdownNotes(result.report) };
-  }
-  function markdownNotes(report) {
-    const notes = report.embedded.map((part) => normalizeFinding({ path: part.path, message: `Markdown has no syntax for this, so it is kept as YAML in a fenced block (${part.reason}).`, severity: "warning" }, "format"));
-    for (const entry of report.loss) {
-      const at = entry.indexOf(": ");
-      notes.push(normalizeFinding({ path: at > 0 ? entry.slice(0, at) : "", message: `Left out of the Markdown: ${at > 0 ? entry.slice(at + 2) : entry}.`, severity: "warning" }, "format"));
-    }
-    return notes;
   }
 
   if (typeof options.source === "string") {
@@ -264,53 +254,179 @@ export function createSourcePane(container, options = {}) {
     readOnly,
     completions: options.completions !== false,
     smartListEnter: options.smartListEnter,
+    resolvePreview: options.resolvePreview,
     catalogs: options.catalogs ?? editor.catalogs,
     describedBy: `${id}-findings`,
     onChange: () => schedule(),
     onFormat: () => formatDocument(),
     onFocusProblems: () => focusProblems(),
+    onSelectionChange: () => scheduleOutline(),
+    onShowShortcuts: options.onShowShortcuts,
     // The pane supplies the problems itself (every finding, with ranges and fixes).
     syntaxProblems: false,
     historyFallback: { undo: () => stepReplace("undo"), redo: () => stepReplace("redo") },
     onError: (error) => options.onError?.(error),
   });
 
+  // ---- Outline ------------------------------------------------------------------------------------------------------
+  let outlineTimer = null, outlineSymbols = [], outlineKey = "";
+  const outlineButtons = () => [...(outlineList?.querySelectorAll(".opf-source-outline-item") ?? [])];
+  function markOutline() {
+    if (!outlineList) return;
+    const caret = control.api.getSelection()[0], here = symbolAt(outlineSymbols, caret);
+    for (const button of outlineButtons()) {
+      const on = button.dataset.id === here?.id;
+      if (on) button.setAttribute("aria-current", "true"); else button.removeAttribute("aria-current");
+    }
+  }
+  function renderOutline() {
+    outlineTimer = null;
+    if (!outlinePanel || destroyed || outlinePanel.hidden) return;
+    outlineSymbols = documentSymbols(format, control.api.getValue());
+    const key = JSON.stringify(outlineSymbols.map((symbol) => [symbol.id, symbol.label, symbol.detail, symbol.depth, symbol.from, symbol.to]));
+    if (key !== outlineKey) {
+      outlineKey = key;
+      outlineList.replaceChildren(...outlineSymbols.map((symbol) => {
+        const item = el("li", "opf-source-outline-row");
+        const button = el("button", `opf-source-outline-item is-${symbol.kind}`, { type: "button", "data-id": symbol.id, "data-kind": symbol.kind, tabindex: "-1" });
+        button.style.paddingLeft = `${8 + symbol.depth * 12}px`;
+        button.append(Object.assign(el("span", "opf-source-outline-label"), { textContent: symbol.label }));
+        if (symbol.detail) button.append(Object.assign(el("span", "opf-source-outline-detail"), { textContent: symbol.detail }));
+        button.addEventListener("click", () => { control.api.setSelection(symbol.from, symbol.to); control.api.focus(); control.api.say(`${symbol.label}, line ${symbol.line}`); });
+        item.append(button);
+        return item;
+      }));
+      if (!outlineSymbols.length) outlineList.append(Object.assign(el("li", "opf-source-outline-empty"), { textContent: "No slides or sections yet." }));
+      outlineButtons()[0]?.setAttribute("tabindex", "0");
+    }
+    markOutline();
+  }
+  /** Redraw the outline soon (after the text changed) or only follow the caret. */
+  let outlineMarkTimer = null;
+  function scheduleOutline(textChanged) {
+    if (!outlinePanel || outlinePanel.hidden || destroyed) return;
+    if (textChanged) { clearTimeout(outlineTimer); outlineTimer = setTimeout(renderOutline, 300); return; }
+    clearTimeout(outlineMarkTimer);
+    outlineMarkTimer = setTimeout(() => { outlineMarkTimer = null; markOutline(); }, 120);
+  }
+  function setOutlineOpen(open) {
+    if (!outlinePanel) return false;
+    outlinePanel.hidden = !open;
+    outlineAction?.setAttribute("aria-expanded", String(open));
+    root.toggleAttribute("data-outline", open);
+    if (open) { outlineKey = ""; renderOutline(); }
+    return true;
+  }
+  outlineAction?.setAttribute("aria-expanded", "false");
+  outlineAction?.setAttribute("aria-controls", `${id}-outline`);
+  outlinePanel?.setAttribute("id", `${id}-outline`);
+  outlineAction?.addEventListener("click", () => { setOutlineOpen(outlinePanel.hidden); if (!outlinePanel.hidden) outlineButtons()[0]?.focus(); });
+  outlineList?.addEventListener("keydown", (event) => {
+    const buttons = outlineButtons(), at = buttons.indexOf(document.activeElement);
+    const move = (to) => { event.preventDefault(); const next = buttons[Math.max(0, Math.min(buttons.length - 1, to))]; buttons.forEach((button) => button.setAttribute("tabindex", "-1")); next?.setAttribute("tabindex", "0"); next?.focus(); };
+    if (event.key === "ArrowDown") move(at + 1);
+    else if (event.key === "ArrowUp") move(at - 1);
+    else if (event.key === "Home") move(0);
+    else if (event.key === "End") move(buttons.length - 1);
+    else if (event.key === "Escape") { event.preventDefault(); control.api.focus(); }
+  });
+
   // ---- Applying edits -----------------------------------------------------------------------------------------------
   function schedule() {
+    scheduleOutline(true);
     closeConfirm(false);
     clearTimeout(timer);
     clearTimeout(syntaxTimer);
     if (delay === 0) { flush(); return; }
-    timer = setTimeout(flush, delay);
+    timer = setTimeout(checker ? flushViaWorker : flush, delay);
     // Syntax problems come first, 150 ms after the last key: the rest of the checking waits for the apply delay.
-    if (delay > 150) syntaxTimer = setTimeout(checkSyntax, 150);
+    if (delay > 150) syntaxTimer = setTimeout(checker ? checkSyntaxViaWorker : checkSyntax, 150);
   }
   /** Show or clear the syntax problems of the text now, without applying it to the document. */
   function checkSyntax() {
     syntaxTimer = null;
     if (destroyed || format !== "json") return;
-    const problems = analyzeSyntax(control.api.getValue());
-    if (!problems.length) {
+    showSyntax(checkSyntaxOnly(control.api.getValue()));
+  }
+  function showSyntax(found) {
+    if (!found.length) {
       if (!syntaxFindings.length) return;
       syntaxFindings = [];
       renderFindings();
       return;
     }
-    syntaxFindings = problems.map((problem) => normalizeFinding(problem, "syntax"));
+    syntaxFindings = found;
     renderFindings();
+  }
+  // The newest request of each kind is the one the pane waits for; an older reply that arrives later is ignored and must not count.
+  const showBusy = () => { if (checkBusy || syntaxBusy) root.dataset.opfChecking = "1"; else root.removeAttribute("data-opf-checking"); };
+  /** Drop the worker requests in flight: their replies are ignored (a flush, an external change or the end of the pane). */
+  function cancelChecks() {
+    checkToken++;
+    syntaxToken++;
+    if (checkBusy || syntaxBusy) { checkBusy = false; syntaxBusy = false; showBusy(); }
+  }
+  /** The apply delay is over: check the text in the worker, then apply it as `flush` would (inline at once when the worker is not usable). */
+  function flushViaWorker() {
+    timer = null;
+    if (destroyed || control.api.getValue() === baseline) return;
+    if (!checker.available) { flush(); return; }
+    const source = control.api.getValue(), fmt = format, used = catalogs(), token = ++checkToken;
+    checkBusy = true;
+    showBusy();
+    checker.check(fmt, source, used).then((result) => {
+      if (token !== checkToken) return;
+      checkBusy = false;
+      showBusy();
+      if (destroyed) return;
+      // A newer edit has its own timer; a null answer means the worker dropped the request, so the text is checked here.
+      if (control.api.getValue() !== source || format !== fmt) return;
+      if (result === null) { flush(); return; }
+      // The catalogs changed meanwhile: the answer is for the old ones.
+      if (catalogs() !== used) { flushViaWorker(); return; }
+      applyEdit(source, { read: result, catalogs: used });
+    }, () => {
+      if (token !== checkToken) return;
+      checkBusy = false;
+      showBusy();
+      if (!destroyed) flush();
+    });
+  }
+  function checkSyntaxViaWorker() {
+    syntaxTimer = null;
+    if (destroyed || format !== "json") return;
+    if (!checker.available) { checkSyntax(); return; }
+    const text = control.api.getValue(), token = ++syntaxToken;
+    syntaxBusy = true;
+    showBusy();
+    checker.syntax(text).then((found) => {
+      if (token !== syntaxToken) return;
+      syntaxBusy = false;
+      showBusy();
+      // The applied text has its findings already (and they are the final ones).
+      if (found === null || destroyed || format !== "json" || control.api.getValue() !== text || text === baseline) return;
+      showSyntax(found);
+    }, () => {
+      if (token !== syntaxToken) return;
+      syntaxBusy = false;
+      showBusy();
+      if (!destroyed) checkSyntax();
+    });
   }
   /** Apply any edit still waiting for its delay. */
   function flush() {
     clearTimeout(timer);
     timer = null;
+    cancelChecks();
     if (destroyed || control.api.getValue() === baseline) return;
     applyEdit();
   }
 
-  function applyEdit() {
-    const source = control.api.getValue();
+  /** Apply the text: `answer` is the worker's `{ read, catalogs }` for it, else the text is read here. */
+  function applyEdit(source = control.api.getValue(), answer) {
     transientNotes = [];
-    const read = readText(format, source, catalogs());
+    const read = answer ? answer.read : readText(format, source, catalogs());
+    if (answer) stats.worker++; else stats.inline++;
     rejectionFindings = [];
     if (!read.deck) {
       syntaxFindings = read.findings;
@@ -328,7 +444,8 @@ export function createSourcePane(container, options = {}) {
       try {
         // Remember the spelling of the document being replaced so Undo restores it exactly, then keep what was typed.
         syncJson(before);
-        editor.applyPatch([{ op: "replace", path: "", value: read.deck }], { source: "source-pane", format });
+        // The worker has validated this very deck already: the session takes its report instead of checking again on the main thread.
+        editor.applyPatch([{ op: "replace", path: "", value: read.deck }], { source: "source-pane", format }, answer && read.validation ? { validated: { document: read.deck, validation: read.validation, catalogs: answer.catalogs } } : undefined);
       } catch (error) {
         dirty = true;
         // Every issue of the refusal is its own finding, with its path; a format's own findings stand in when the error names none.
@@ -342,12 +459,13 @@ export function createSourcePane(container, options = {}) {
     dirty = false;
     if (format === "json") jsonText = source;
     else syncJson(deck());
-    if (format === "md") refreshNotes();
+    if (format === "md") refreshNotes(answer?.read.markdownNotes, read.deck);
     renderFindings();
     syncAttributes();
   }
-  function refreshNotes() {
-    try { noteFindings = markdownNotes(toMarkdown(deck()).report); } catch { noteFindings = []; }
+  /** What the Markdown cannot hold, for the document now. The worker's answer (`computed`) is for `read`, so it stands in when the session kept that document. */
+  function refreshNotes(computed, read) {
+    noteFindings = computed && same(read, deck()) ? computed : markdownNotesOf(deck());
   }
   /** `aria-invalid` follows the findings: set while any finding is an error (syntax, a refused draft, the session's or the host's), cleared with them. */
   function syncAttributes() {
@@ -357,6 +475,7 @@ export function createSourcePane(container, options = {}) {
 
   /** Show `value` as the text of the current format, as an external change. */
   function show(value) {
+    scheduleOutline(true);
     closeConfirm(false);
     baseline = value;
     shownInvalid = false;
@@ -365,6 +484,7 @@ export function createSourcePane(container, options = {}) {
   function fromSession(notice) {
     clearTimeout(timer);
     timer = null;
+    cancelChecks();
     for (const key of Object.keys(drafts)) delete drafts[key];
     syntaxFindings = [];
     rejectionFindings = [];
@@ -660,6 +780,7 @@ export function createSourcePane(container, options = {}) {
   nameInput.addEventListener("blur", commitRename);
 
   function updateBar() {
+    scheduleOutline(true);
     const current = formatOf(format);
     nameButton.textContent = name;
     nameButton.setAttribute("aria-label", `Rename ${name}`);
@@ -704,6 +825,18 @@ export function createSourcePane(container, options = {}) {
     return true;
   }
   formatAction.addEventListener("click", () => { formatDocument(); });
+  // The "?" button, and the "?" key from anywhere in the pane that is not a place to type, open the list of shortcuts.
+  const chord = control.getShortcuts().find((row) => row.id === "help.shortcuts")?.keys[0];
+  shortcutsAction.title = `Keyboard shortcuts${chord ? ` (${chord})` : ""}`;
+  shortcutsAction.setAttribute("aria-label", shortcutsAction.title);
+  shortcutsAction.addEventListener("click", () => { control.showShortcuts(); });
+  root.addEventListener("keydown", (event) => {
+    if (event.key !== "?" || event.ctrlKey || event.metaKey || event.altKey || event.defaultPrevented) return;
+    const target = event.target;
+    if (target.closest?.(".cm-editor, input, textarea, select, [contenteditable=true]")) return;
+    event.preventDefault();
+    control.showShortcuts();
+  });
 
   // Canonicalize with OPF: the text rewritten through core's writer (the old Format). Unlike Format it drops comments, so it asks first and says how many.
   function droppedComments(text) {
@@ -1016,6 +1149,7 @@ export function createSourcePane(container, options = {}) {
   }
 
   updateBar();
+  if (options.outline === "open") setOutlineOpen(true);
   root.toggleAttribute("data-readonly", readOnly);
   nameButton.disabled = readOnly;
   formatAction.disabled = readOnly;
@@ -1075,17 +1209,39 @@ export function createSourcePane(container, options = {}) {
     },
     /** Open the suggestion list at the caret, as Ctrl+Space does. */
     triggerCompletion: () => control.triggerCompletion(),
+    /** Every key binding of the editor for `platform` ("mac", "win" or "linux"; default: the page's): `{ id, title, group, keys, symbols, strokes, when? }`. */
+    getShortcuts: (platform) => control.getShortcuts(platform),
+    /** Open the keyboard shortcuts dialog (the "?" button, F1, Cmd/Ctrl+K Cmd/Ctrl+S); `onShowShortcuts(shortcuts)` returning true replaces it. */
+    showShortcuts: () => control.showShortcuts(),
+    /** Open the symbol picker (Cmd/Ctrl+Shift+O). */
+    showSymbols: () => control.showSymbols(),
+    /** The outline of the text as it is now: `{ id, kind, label, detail, depth, from, to, line }` in document order (slides, sections, assets, datasets, variables, references, embedded catalog records). */
+    getOutline: () => documentSymbols(format, control.api.getValue()),
+    /** Show or hide the outline panel (needs the `outline` option); with no argument it toggles. Returns whether the panel is open. */
+    toggleOutline(open) { if (!outlinePanel) return false; setOutlineOpen(open ?? outlinePanel.hidden); return !outlinePanel.hidden; },
     /** The code editor, for hosts that focus or measure it. */
     editor: control,
+    /** Resolves once no edit is waiting for its delay and no check is running (a worker's included): the text on screen has been read and applied. */
+    whenIdle() {
+      return new Promise((resolve) => {
+        const poll = () => { if (destroyed || (timer === null && syntaxTimer === null && !checkBusy && !syntaxBusy)) resolve(); else setTimeout(poll, 4); };
+        poll();
+      });
+    },
+    /** How the applied edits were checked: `worker` and `inline` counts, and whether the worker is still usable (`available`). */
+    checkerStats: () => ({ worker: stats.worker, inline: stats.inline, available: Boolean(checker?.available) }),
     destroy() {
       if (destroyed) return;
       flush();
       destroyed = true;
+      checker?.dispose();
       clearTimeout(timer);
       clearTimeout(copyTimer);
       clearTimeout(summaryTimer);
       clearTimeout(syntaxTimer);
       clearTimeout(recheckTimer);
+      clearTimeout(outlineTimer);
+      clearTimeout(outlineMarkTimer);
       unsubscribe();
       document.removeEventListener("pointerdown", outside, true);
       control.destroy();

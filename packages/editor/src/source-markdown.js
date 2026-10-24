@@ -258,6 +258,21 @@ function metricContext(text, position, fence) {
 }
 
 // ---- the body ----------------------------------------------------------------------------------------------------------------------
+// `![alt](` and what is typed of the target after it (no space or closing parenthesis yet).
+const IMAGE_TARGET = /!\[(?:[^\]\\\n]|\\.)*\]\(([^)\s]*)$/;
+const VIDEO_EXTENSIONS = /\.(?:mp4|m4v|mov|webm|ogv|mkv)(?:[?#].*)?$/i;
+
+/** Whether the nearest line above `lineStart` that is not blank is a block options comment with `as=video` (the image line below it is a video). */
+function videoLineAbove(text, start) {
+  for (let at = start; at > 0;) {
+    const line = lineAt(text, at - 1);
+    at = line.start;
+    if (line.text.trim() === "") continue;
+    return /^\s*<!--\s*block\s*:/.test(line.text) && /\bas=("video"|video)(?=\s|-->)/.test(line.text);
+  }
+  return false;
+}
+
 function bodyContext(text, position, where, explicit) {
   const { scan } = where;
   const line = lineAt(text, position);
@@ -270,6 +285,14 @@ function bodyContext(text, position, where, explicit) {
     const used = new Set([...span[1].matchAll(/([A-Za-z0-9_-]+)/g)].map((entry) => entry[1].toLowerCase()));
     const start = position - span[2].length;
     return { format: "md", region: "span", token: { quoted: false, closed: false, start, end, from: start, to: end }, existing: used, document: {}, path: [], explicit, opened: span[2] === "" };
+  }
+  // `![alt](` in a line of text: the target of an image (an asset of the document, or an image variable).
+  const image = IMAGE_TARGET.exec(before);
+  if (image) {
+    const start = position - image[1].length;
+    let end = position;
+    while (end < line.end && !/[\s)]/.test(text[end])) end++;
+    return { format: "md", region: "image", video: videoLineAbove(text, line.start), closed: text[end] === ")", token: { quoted: false, closed: false, start, end, from: start, to: end }, document: {}, path: [] };
   }
   // `{{` in a line of text: the variables of the document.
   const variable = /\{\{([A-Za-z0-9._-]*)$/.exec(before);
@@ -346,6 +369,23 @@ export function markdownOptions(context, { catalogs, text, explicit, makers, sco
     const marks = [["[x]", "done", "The event is done."], ["[>]", "current", "The event is where the story is now (\"we are here\")."], ["[ ]", "planned", "The event is planned."]];
     marks.forEach(([mark, word, doc], index) => options.push(kindOption(mark, "keyword", word, doc, boostAt(index), "status", { mark })));
     return { options, validFor: /^(?:\[[x> ]?\]?)?$/ };
+  }
+  if (context.region === "image") {
+    // The assets of the document first (the videos first for a video line), then the image variables.
+    const facts = scope?.facts() ?? { assets: [], variables: [] };
+    const isVideo = (asset) => asset.mediaType.startsWith("video/") || VIDEO_EXTENSIONS.test(asset.src);
+    const assets = [...facts.assets].sort((a, b) => (context.video ? Number(isVideo(b)) - Number(isVideo(a)) : 0));
+    for (const asset of assets) {
+      const value = `asset:${asset.id}`;
+      const detail = asset.detail || "asset";
+      options.push({ label: value, type: "reference", detail, boost: boostAt(options.length), opfDoc: asset.detail, opf: { kind: "imageTarget", value }, info: () => docNode({ title: value, type: "asset", description: asset.detail || undefined, notes: [context.video && isVideo(asset) ? "A video" : ""].filter(Boolean) }) });
+    }
+    for (const variable of facts.variables) {
+      if (variable.type !== "image") continue;
+      const value = `var:${variable.id}`;
+      options.push({ label: value, type: "reference", detail: "image variable", boost: boostAt(options.length), opfDoc: `The image variable ${variable.id}`, opf: { kind: "imageTarget", value }, info: () => docNode({ title: value, type: "image variable" }) });
+    }
+    return { options, validFor: /^[A-Za-z0-9_.:+-]*$/ };
   }
   if (context.region === "span") {
     // Right after `{` or a space the list opens by itself (the characters that begin a new attribute); Ctrl+Space opens it anywhere in the braces.
@@ -438,6 +478,7 @@ export function markdownPlan(context, completion, text, end) {
     return { template: `${completion.opf.key}: `, fields: 0, chain: Boolean(completion.opf.chain) };
   }
   if (context.region === "metric" && kind === "literal") return { template: `${context.needsSpace ? " " : ""}${escapeTemplate(String(completion.opf.value))}`, fields: 0, chain: false };
+  if (kind === "imageTarget") return { template: `${escapeTemplate(completion.opf.value)}${context.closed ? "" : ")"}`, fields: 0, chain: false };
   if (kind === "status") return { template: `${completion.opf.mark} `, fields: 0, chain: false };
   if (kind === "spanAttribute") return { template: `${completion.opf.name}${completion.opf.takesValue ? "=" : ""}`, fields: 0, chain: false };
   if (kind === "keyword") return { template: `${escapeTemplate(completion.opf.word)} `, fields: 0, chain: false };
@@ -454,7 +495,7 @@ export function markdownPlan(context, completion, text, end) {
 
 // ---- hover -------------------------------------------------------------------------------------------------------------------------
 // What a piece of the dialect's syntax stands for, as a card: the schema's words for the field it writes, and how it is written.
-const SYNTAX_FIELDS = {
+export const SYNTAX_FIELDS = {
   title: { key: "title", written: "# Title" },
   subtitle: { key: "subtitle", written: "## Subtitle" },
   notes: { key: "notes", written: "Note: text, to the end of the slide" },
