@@ -7,6 +7,8 @@ import {
 } from 'jsonc-parser';
 import type { Finding, FindingLocation } from './generated/types/finding.js';
 import { finding, parts, pointer } from './check-document.js';
+import { analyzeJsonSyntax } from './json-syntax.js';
+import { createLocator } from './source-text.js';
 
 /**
  * The text half of `validate(string)`: strict JSON syntax, duplicate keys and the source range of any path. Internal
@@ -24,18 +26,6 @@ export interface ParsedSource {
 	locate(path: string): FindingLocation | undefined;
 }
 
-const YAML_START = /^[A-Za-z_][\w.-]*\s*:(?:\s|$)/;
-
-/** What the text looks like when it is not JSON, so the finding can point at the right converter. */
-function hint(source: string): string {
-	const text = source.replace(/^\uFEFF/, '').trimStart();
-	if (text.startsWith('{') || text.startsWith('[') || text === '') return '';
-	if (text.startsWith('---') || (!text.startsWith('#') && YAML_START.test(text)))
-		return ' This looks like YAML: read it with fromYaml, then validate the presentation it returns.';
-	if (text.startsWith('#')) return ' This looks like Markdown: read it with fromMarkdown, then validate the presentation it returns.';
-	return '';
-}
-
 export function parseSource(source: string): ParsedSource {
 	const errors: ParseError[] = [],
 		tree = parseTree(
@@ -47,39 +37,29 @@ export function parseSource(source: string): ParsedSource {
 				allowEmptyContent: false,
 			},
 		);
-	const lineStarts = [0];
-	for (let i = 0; i < source.length; i++) {
-		if (source[i] === '\r') {
-			if (source[i + 1] === '\n') i++;
-			lineStarts.push(i + 1);
-		} else if (source[i] === '\n') lineStarts.push(i + 1);
-	}
-	const location = (offset: number, length: number): FindingLocation => {
-		let lo = 0,
-			hi = lineStarts.length;
-		while (lo + 1 < hi) {
-			const mid = (lo + hi) >> 1;
-			if ((lineStarts[mid] ?? 0) <= offset) lo = mid;
-			else hi = mid;
-		}
-		return {
-			offset,
-			length,
-			line: lo + 1,
-			column: offset - (lineStarts[lo] ?? 0) + 1,
-		};
-	};
+	const location = createLocator(source);
 	if (errors.length || !tree) {
-		const note = hint(source);
+		// One finding per root cause, in plain words (the recovery analyzer, src/json-syntax.ts). If the analyzer finds nothing in
+		// text the parser rejects, the parser's own errors are reported instead, so a syntax error is never silent.
+		const problems = analyzeJsonSyntax(source);
 		return {
-			syntax: errors.map((error, index) =>
-				finding('opf/json-syntax', {
-					path: '',
-					message: printParseErrorCode(error.error),
-					help: `Repair the JSON syntax at this source range. No content or whitespace has been rewritten.${index === 0 ? note : ''}`,
-					location: location(error.offset, error.length),
-				}),
-			),
+			syntax: problems.length
+				? problems.map((problem) =>
+						finding('opf/json-syntax', {
+							path: '',
+							message: problem.message,
+							help: problem.next,
+							location: problem.range,
+						}),
+					)
+				: errors.map((error) =>
+						finding('opf/json-syntax', {
+							path: '',
+							message: printParseErrorCode(error.error),
+							help: 'Repair the JSON syntax at this source range. No content or whitespace has been rewritten.',
+							location: location(error.offset, error.length),
+						}),
+					),
 			duplicates: [],
 			locate: () => undefined,
 		};

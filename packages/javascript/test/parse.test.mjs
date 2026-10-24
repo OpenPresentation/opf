@@ -172,7 +172,10 @@ describe("located findings", () => {
     const first = result.findings[0];
     assert.equal(first.ruleId, "opf/json-syntax");
     assert.equal(first.severity, "error");
-    assert.ok(first.location.line >= 3 && first.location.column >= 1);
+    // One finding per root cause, at the bracket that is never closed (the object on line 1, the list on line 3), in position order.
+    assert.deepEqual(result.findings.map((found) => found.location.line), [1, 3]);
+    assert.ok(first.location.column >= 1);
+    assert.match(first.message, /never closed/);
     assert.equal(result.checks.schema, "not-run");
   });
 
