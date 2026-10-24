@@ -49,9 +49,8 @@ test('a fragment may name any of the six packages, several at once, or none; any
   assert.throws(() => parseFragment('a.md', fragment('[render, nope]'), config), /unknown package "nope"/);
 });
 
-test('the fragments in changes/ today are valid under the six-package config', () => {
+test('the fragments in changes/ today are valid under the six-package config (none is valid: changes/ is empty right after a release)', () => {
   const fragments = readFragments(root, config);
-  assert.ok(fragments.length > 0);
   assert.deepEqual(missingChangelogs(root, fragments, config), []);
 });
 
@@ -95,4 +94,11 @@ test('check:changes fails on an unknown package name, and on a package whose cha
   const importedRun = check(imported);
   assert.equal(importedRun.status, 0, importedRun.stderr);
   assert.match(importedRun.stdout, /2 fragment\(s\) valid/);
+});
+
+test('check:changes passes with no fragment at all (changes/ is empty right after a release)', (t) => {
+  const empty = temporaryRepo(t, { 'CHANGELOG.md': '# Changelog\n\n## Unreleased\n' });
+  const run = check(empty);
+  assert.equal(run.status, 0, run.stderr);
+  assert.match(run.stdout, /0 fragment\(s\) valid/);
 });
