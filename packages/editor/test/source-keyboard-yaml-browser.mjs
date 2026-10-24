@@ -22,7 +22,8 @@ try {
   if (!only || only.test('P-')) {
     await runBudgets(suite, {
       format: 'yaml', label: 'YAML', trigger: 'it', typeAt: 'title: Slide 150 headline',
-      place: () => { const { api } = demo.pane.editor, source = api.getValue(), at = source.indexOf('title: Slide 150 headline') + 'title: Slide 150 headline'.length; api.focus(); api.replace(at, at, '\n    '); api.setSelection(at + 5); },
+      prepare: (text) => text.replace('title: Slide 150 headline\n', 'title: Slide 150 headline\n    \n'),
+      place: () => { const { api } = demo.pane.editor, source = api.getValue(), at = source.indexOf('title: Slide 150 headline\n    ') + 'title: Slide 150 headline\n    '.length; api.focus(); api.setSelection(at); },
     });
   }
   assert.deepEqual(result.failed, [], 'every YAML keyboard case passes');

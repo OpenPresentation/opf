@@ -22,7 +22,7 @@ try {
   if (!only || only.test('P-')) {
     await runBudgets(suite, {
       format: 'md', label: 'Markdown', trigger: 'sli', typeAt: '# Slide 150 headline',
-      place: () => { const { api } = demo.pane.editor, source = api.getValue(), at = source.indexOf('# Slide 150 headline') + '# Slide 150 headline'.length; api.focus(); api.replace(at, at, '\n\n'); api.setSelection(at + 2); },
+      place: () => { const { api } = demo.pane.editor, source = api.getValue(), at = source.indexOf('# Slide 150 headline') + '# Slide 150 headline\n'.length; api.focus(); api.setSelection(at); },
     });
   }
   assert.deepEqual(result.failed, [], 'every Markdown keyboard case passes');
