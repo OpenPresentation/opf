@@ -119,6 +119,8 @@ export interface SourcePaneOptions {
    * main thread from then on and `onError` is called once; no edit is lost. Default `false` (everything on the main thread).
    */
   worker?: boolean | Worker | (() => Worker);
+  /** A preview for the card F12 and Alt+F12 open on a catalog record only the app provides (see `JsonCodeEditorOptions.resolvePreview`). */
+  resolvePreview?: (kind: string, id: string) => HTMLElement | string | undefined | Promise<HTMLElement | string | undefined>;
   onError?(error: unknown): void;
 }
 
