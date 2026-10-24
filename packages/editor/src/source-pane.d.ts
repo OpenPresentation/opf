@@ -110,6 +110,15 @@ export interface SourcePaneOptions {
   completions?: boolean;
   /** Enter continues a list: a new string item after a string in a JSON list, the next `- ` in YAML, the next marker (or `> `) in Markdown; an empty one ends it. Default true. */
   smartListEnter?: boolean;
+  /**
+   * Run the pane's text checks (reading YAML or Markdown, the syntax pass of JSON and the document validation) in a Web Worker, so typing in a deck
+   * of a thousand slides never blocks the main thread. A function returns the Worker (`() => new Worker(new URL("@openpresentation/opf-editor/source-worker", import.meta.url), { type: "module" })`
+   * with a bundler that supports that form); a Worker is used as given; `true` starts `source-worker.js` beside the package's own module, which works
+   * when a bundler follows `new URL(..., import.meta.url)`. Only the typing delay uses the worker: every explicit action (`getText`, switching the format,
+   * `replaceDocument`, Format, Undo) is applied on the main thread at once. When the worker cannot start, fails or stops answering, the pane checks on the
+   * main thread from then on and `onError` is called once; no edit is lost. Default `false` (everything on the main thread).
+   */
+  worker?: boolean | Worker | (() => Worker);
   onError?(error: unknown): void;
 }
 
@@ -186,6 +195,10 @@ export interface SourcePane {
   toggleOutline(open?: boolean): boolean;
   /** The underlying code editor (`mountJsonCodeEditor`). */
   readonly editor: JsonCodeEditor;
+  /** Resolves when no typed edit waits for its apply delay and no check (a worker's included) is running: the text on screen has been read and applied. */
+  whenIdle(): Promise<void>;
+  /** How the applied edits were checked: how many by the worker and how many on the main thread, and whether the worker can still be used. */
+  checkerStats(): { worker: number; inline: number; available: boolean };
   destroy(): void;
 }
 

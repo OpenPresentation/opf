@@ -1,13 +1,13 @@
-import { fromYaml, scanYamlComments, toYaml } from "@openpresentation/opf/yaml";
-import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
+import { scanYamlComments, toYaml } from "@openpresentation/opf/yaml";
+import { toMarkdown } from "@openpresentation/opf/markdown";
 import { mountJsonCodeEditor } from "./json-editor.js";
 import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, updateJsonSource } from "./exact-source.js";
 import { lineForPath, offsetOfLine } from "./source-lines.js";
 import { errorText, normalizeFinding, rejectionFindings as findingsOfError } from "./source-findings.js";
 import { formatSource } from "./source-format.js";
 import { buildProblems, summarize } from "./source-problems.js";
-import { analyzeSyntax, findDuplicateKeys } from "./source-syntax.js";
-import { withSyntaxFixes } from "./source-fixes-syntax.js";
+import { checkSyntaxOnly, markdownNotes, markdownNotesOf, readSource as readText } from "./source-check.js";
+import { createSourceChecker } from "./source-checker.js";
 import { detailsFor } from "./source-details.js";
 import { schemaAtPath, schemaVariants } from "./schema.js";
 import { locateText } from "./source-ranges.js";
@@ -92,25 +92,6 @@ function fillDetails(body, details) {
   if (details.docs && /^https?:/.test(details.docs)) body.append(Object.assign(el("a", "opf-source-finding-explain-link", { href: details.docs, target: "_blank", rel: "noopener noreferrer" }), { textContent: "Documentation" }));
 }
 
-/** Read the text of one format. `{ deck }` on success; `findings` carry the syntax errors (`syntax: true`) or the OPF findings of the parsed deck. */
-function readText(format, text, catalogs) {
-  if (format === "json") {
-    const problems = analyzeSyntax(text);
-    if (problems.length) return { syntax: true, findings: problems.map((problem) => normalizeFinding(problem, "syntax")) };
-    const deck = JSON.parse(text);
-    const duplicates = findDuplicateKeys(text);
-    if (duplicates.length) return { syntax: true, findings: duplicates };
-    return { deck, findings: [] };
-  }
-  const result = format === "yaml" ? (fromYaml(text, { catalogs })) : fromMarkdown(text, { catalogs });
-  // The reader's own findings: errors stop the document being read; its warnings (a numbered list that became bullets) come with the deck.
-  const readerFindings = result.findings.filter((finding) => !finding.ruleId?.startsWith("opf/"));
-  const errors = readerFindings.filter((finding) => finding.severity === "error");
-  const syntax = (list) => withSyntaxFixes(format, text, list).map((finding) => normalizeFinding(finding, "syntax"));
-  if (errors.length) return { syntax: true, findings: syntax(errors) };
-  return { deck: result.presentation, findings: result.findings.map((finding) => normalizeFinding(finding, "schema")), notes: syntax(readerFindings) };
-}
-
 /**
  * Mount the source pane in `container`.
  *
@@ -149,6 +130,11 @@ export function createSourcePane(container, options = {}) {
   // The problems whose Details are open (by rule, path and message), so a redraw of the panel keeps them open, and a number per key for the element ids.
   const detailsOpen = new Set();
   const detailsKeys = { ids: new Map(), id(key) { if (!this.ids.has(key)) this.ids.set(key, this.ids.size + 1); return this.ids.get(key); } };
+  // The text checks may run in a Web Worker (options.worker): `checker` is null without one. `checkToken` numbers the check the pane still wants (a flush,
+  // an external change or a newer edit cancels the one in flight), `waiting` counts the worker requests in flight, `stats` what answered the applied edits.
+  const checker = options.worker ? createSourceChecker({ worker: options.worker, onError: (error) => options.onError?.(error) }) : null;
+  let checkToken = 0, syntaxToken = 0, waiting = 0;
+  const stats = { worker: 0, inline: 0 };
   let problemRows = [], lastDraft = null, lastSummary = "No problems", summaryTimer = null, syntaxTimer = null, recheckTimer = null;
   // The exact text of the documents `replaceDocument` replaced and opened, per format, so Undo and Redo show it again byte for byte
   // (a YAML comment, the author's JSON spelling). Keyed by format and document; the oldest entries go first.
@@ -243,14 +229,6 @@ export function createSourcePane(container, options = {}) {
     if (target === "yaml") return { text: toYaml(value).yaml, notes: [] };
     const result = toMarkdown(value);
     return { text: result.markdown, notes: markdownNotes(result.report) };
-  }
-  function markdownNotes(report) {
-    const notes = report.embedded.map((part) => normalizeFinding({ path: part.path, message: `Markdown has no syntax for this, so it is kept as YAML in a fenced block (${part.reason}).`, severity: "warning" }, "format"));
-    for (const entry of report.loss) {
-      const at = entry.indexOf(": ");
-      notes.push(normalizeFinding({ path: at > 0 ? entry.slice(0, at) : "", message: `Left out of the Markdown: ${at > 0 ? entry.slice(at + 2) : entry}.`, severity: "warning" }, "format"));
-    }
-    return notes;
   }
 
   if (typeof options.source === "string") {
@@ -359,36 +337,92 @@ export function createSourcePane(container, options = {}) {
     clearTimeout(timer);
     clearTimeout(syntaxTimer);
     if (delay === 0) { flush(); return; }
-    timer = setTimeout(flush, delay);
+    timer = setTimeout(checker ? flushViaWorker : flush, delay);
     // Syntax problems come first, 150 ms after the last key: the rest of the checking waits for the apply delay.
-    if (delay > 150) syntaxTimer = setTimeout(checkSyntax, 150);
+    if (delay > 150) syntaxTimer = setTimeout(checker ? checkSyntaxViaWorker : checkSyntax, 150);
   }
   /** Show or clear the syntax problems of the text now, without applying it to the document. */
   function checkSyntax() {
     syntaxTimer = null;
     if (destroyed || format !== "json") return;
-    const problems = analyzeSyntax(control.api.getValue());
-    if (!problems.length) {
+    showSyntax(checkSyntaxOnly(control.api.getValue()));
+  }
+  function showSyntax(found) {
+    if (!found.length) {
       if (!syntaxFindings.length) return;
       syntaxFindings = [];
       renderFindings();
       return;
     }
-    syntaxFindings = problems.map((problem) => normalizeFinding(problem, "syntax"));
+    syntaxFindings = found;
     renderFindings();
+  }
+  const working = (delta) => {
+    waiting += delta;
+    if (waiting > 0) root.dataset.opfChecking = "1";
+    else root.removeAttribute("data-opf-checking");
+  };
+  /** Drop the worker requests in flight: their replies are ignored (a flush, an external change or the end of the pane). */
+  function cancelChecks() {
+    checkToken++;
+    syntaxToken++;
+    if (waiting) { waiting = 0; root.removeAttribute("data-opf-checking"); }
+  }
+  /** The apply delay is over: check the text in the worker, then apply it as `flush` would (inline at once when the worker is not usable). */
+  function flushViaWorker() {
+    timer = null;
+    if (destroyed || control.api.getValue() === baseline) return;
+    if (!checker.available) { flush(); return; }
+    const source = control.api.getValue(), fmt = format, used = catalogs(), token = ++checkToken;
+    working(1);
+    checker.check(fmt, source, used).then((result) => {
+      if (token !== checkToken) return;
+      working(-1);
+      if (destroyed) return;
+      // A newer edit has its own timer; a null answer means the worker dropped the request, so the text is checked here.
+      if (control.api.getValue() !== source || format !== fmt) return;
+      if (result === null) { flush(); return; }
+      // The catalogs changed meanwhile: the answer is for the old ones.
+      if (catalogs() !== used) { flushViaWorker(); return; }
+      applyEdit(source, { read: result, catalogs: used });
+    }, () => {
+      if (token !== checkToken) return;
+      working(-1);
+      if (!destroyed) flush();
+    });
+  }
+  function checkSyntaxViaWorker() {
+    syntaxTimer = null;
+    if (destroyed || format !== "json") return;
+    if (!checker.available) { checkSyntax(); return; }
+    const text = control.api.getValue(), token = ++syntaxToken;
+    working(1);
+    checker.syntax(text).then((found) => {
+      if (token !== syntaxToken) return;
+      working(-1);
+      // The applied text has its findings already (and they are the final ones).
+      if (found === null || destroyed || format !== "json" || control.api.getValue() !== text || text === baseline) return;
+      showSyntax(found);
+    }, () => {
+      if (token !== syntaxToken) return;
+      working(-1);
+      if (!destroyed) checkSyntax();
+    });
   }
   /** Apply any edit still waiting for its delay. */
   function flush() {
     clearTimeout(timer);
     timer = null;
+    cancelChecks();
     if (destroyed || control.api.getValue() === baseline) return;
     applyEdit();
   }
 
-  function applyEdit() {
-    const source = control.api.getValue();
+  /** Apply the text: `answer` is the worker's `{ read, catalogs }` for it, else the text is read here. */
+  function applyEdit(source = control.api.getValue(), answer) {
     transientNotes = [];
-    const read = readText(format, source, catalogs());
+    const read = answer ? answer.read : readText(format, source, catalogs());
+    if (answer) stats.worker++; else stats.inline++;
     rejectionFindings = [];
     if (!read.deck) {
       syntaxFindings = read.findings;
@@ -406,7 +440,8 @@ export function createSourcePane(container, options = {}) {
       try {
         // Remember the spelling of the document being replaced so Undo restores it exactly, then keep what was typed.
         syncJson(before);
-        editor.applyPatch([{ op: "replace", path: "", value: read.deck }], { source: "source-pane", format });
+        // The worker has validated this very deck already: the session takes its report instead of checking again on the main thread.
+        editor.applyPatch([{ op: "replace", path: "", value: read.deck }], { source: "source-pane", format }, answer && read.validation ? { validated: { document: read.deck, validation: read.validation, catalogs: answer.catalogs } } : undefined);
       } catch (error) {
         dirty = true;
         // Every issue of the refusal is its own finding, with its path; a format's own findings stand in when the error names none.
@@ -420,12 +455,13 @@ export function createSourcePane(container, options = {}) {
     dirty = false;
     if (format === "json") jsonText = source;
     else syncJson(deck());
-    if (format === "md") refreshNotes();
+    if (format === "md") refreshNotes(answer?.read.markdownNotes, read.deck);
     renderFindings();
     syncAttributes();
   }
-  function refreshNotes() {
-    try { noteFindings = markdownNotes(toMarkdown(deck()).report); } catch { noteFindings = []; }
+  /** What the Markdown cannot hold, for the document now. The worker's answer (`computed`) is for `read`, so it stands in when the session kept that document. */
+  function refreshNotes(computed, read) {
+    noteFindings = computed && same(read, deck()) ? computed : markdownNotesOf(deck());
   }
   /** `aria-invalid` follows the findings: set while any finding is an error (syntax, a refused draft, the session's or the host's), cleared with them. */
   function syncAttributes() {
@@ -444,6 +480,7 @@ export function createSourcePane(container, options = {}) {
   function fromSession(notice) {
     clearTimeout(timer);
     timer = null;
+    cancelChecks();
     for (const key of Object.keys(drafts)) delete drafts[key];
     syntaxFindings = [];
     rejectionFindings = [];
@@ -1180,10 +1217,20 @@ export function createSourcePane(container, options = {}) {
     toggleOutline(open) { if (!outlinePanel) return false; setOutlineOpen(open ?? outlinePanel.hidden); return !outlinePanel.hidden; },
     /** The code editor, for hosts that focus or measure it. */
     editor: control,
+    /** Resolves once no edit is waiting for its delay and no check is running (a worker's included): the text on screen has been read and applied. */
+    whenIdle() {
+      return new Promise((resolve) => {
+        const poll = () => { if (destroyed || (timer === null && syntaxTimer === null && waiting === 0)) resolve(); else setTimeout(poll, 4); };
+        poll();
+      });
+    },
+    /** How the applied edits were checked: `worker` and `inline` counts, and whether the worker is still usable (`available`). */
+    checkerStats: () => ({ worker: stats.worker, inline: stats.inline, available: Boolean(checker?.available) }),
     destroy() {
       if (destroyed) return;
       flush();
       destroyed = true;
+      checker?.dispose();
       clearTimeout(timer);
       clearTimeout(copyTimer);
       clearTimeout(summaryTimer);

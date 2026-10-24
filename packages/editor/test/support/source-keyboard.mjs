@@ -57,7 +57,8 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
       const target = path.resolve(root, `.${decodeURIComponent(url.pathname)}`);
       const relative = path.relative(root, target);
       if (relative.startsWith('..') || path.isAbsolute(relative)) { res.writeHead(403).end(); return; }
-      res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(await readFile(target));
+      const body = await readFile(target);
+      res.writeHead(200, { 'Content-Type': types[path.extname(target)] ?? 'application/octet-stream' }).end(body);
     } catch { res.writeHead(404).end(); }
   });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
