@@ -1,6 +1,6 @@
 import type { EditorChange, EditorSession } from "./index.js";
 import type { JsonCatalogContext } from "./json-options.js";
-import type { JsonCodeEditor } from "./json-editor.js";
+import type { EditorProblem, JsonCodeEditor } from "./json-editor.js";
 
 /** The source formats of the pane: `json` is canonical; `yaml` and `md` are core's `@openpresentation/opf/yaml` and `/markdown`. */
 export type SourceFormat = "json" | "yaml" | "md";
@@ -18,6 +18,18 @@ export interface SourceFinding {
   /** `schema` (the default count label), `syntax`, `format` (a note about what the format cannot hold) or `rejected` (the session refused the edit). */
   kind?: string;
   ruleId?: string;
+  /** A one-based column, with `line`. */
+  column?: number;
+  /**
+   * What core's findings carry beyond the sentence, kept and used: `validation` (the schema keyword and its parameters) and `suggestions` write the
+   * plain-words message and its "Next" hint and offer "Change to ..." fixes; `location` ranges the squiggle; `fixes` of kind `patch` and `focus` become
+   * quick fixes; `help` is the hint when nothing better is known.
+   */
+  help?: string;
+  location?: { offset: number; length: number; line?: number; column?: number };
+  validation?: { keyword?: string; params?: Record<string, unknown>; alternatives?: string[] };
+  suggestions?: { value: unknown; label?: string }[];
+  fixes?: { id: string; title: string; kind: "patch" | "focus"; safe?: boolean; patch?: unknown[]; focus?: { path?: string; field?: string } }[];
 }
 
 /** What a host receives when the pane copies or downloads. */
@@ -59,7 +71,7 @@ export interface SourcePaneOptions {
   /** Accessible name of the code editor (default `OPF source`). */
   label?: string;
   catalogs?: JsonCatalogContext;
-  /** Live completions while typing JSON: property names and values (enums, booleans, catalog references) at the cursor's JSON path, from the same data as the field menu. Tab and Enter accept the selected item, Escape closes the list, Ctrl+Space (Cmd+I on macOS) opens it; the field menu is on Alt+Shift+O. YAML and Markdown have no completions yet. Default true. */
+  /** Live completions while typing JSON: property names from the schema and values (enums, booleans, catalog ids, templates, snippets) at the cursor's JSON path. Tab and Enter accept the selected item, Escape closes the list, Ctrl+Space (Cmd+I on macOS) opens it; the field menu is on Alt+Shift+O. Hover documentation, squiggles with quick fixes (Cmd/Ctrl+.) and F8 come with it. YAML and Markdown have no completions yet. Default true. */
   completions?: boolean;
   onError?(error: unknown): void;
 }
@@ -106,6 +118,16 @@ export interface SourcePane {
   setName(name: string): void;
   setDensity(density: SourcePaneDensity): void;
   setReadOnly(readOnly: boolean): void;
+  /** The problems drawn in the text now, in position order, at source offsets. */
+  getProblems(): EditorProblem[];
+  /** Select the next problem in the text (F8) and say what it is; wraps. */
+  nextProblem(): boolean;
+  /** Select the previous problem (Shift+F8). */
+  previousProblem(): boolean;
+  /** Select problem number `index` (zero-based, position order) and say what it is. Returns false when there is none. */
+  showProblem(index: number): boolean;
+  /** Open the suggestion list at the caret, as Ctrl+Space does. */
+  triggerCompletion(): boolean;
   /** The underlying code editor (`mountJsonCodeEditor`). */
   readonly editor: JsonCodeEditor;
   destroy(): void;

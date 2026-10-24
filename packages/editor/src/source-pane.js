@@ -1,11 +1,16 @@
-import { parse as parseJsonc, printParseErrorCode } from "jsonc-parser";
 import { fromYaml, scanYamlComments, toYaml } from "@openpresentation/opf/yaml";
 import { fromMarkdown, toMarkdown } from "@openpresentation/opf/markdown";
 import { mountJsonCodeEditor } from "./json-editor.js";
-import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, findDuplicateKey, updateJsonSource } from "./exact-source.js";
-import { lineForPath, lineOfOffset, offsetOfLine } from "./source-lines.js";
+import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, updateJsonSource } from "./exact-source.js";
+import { lineForPath, offsetOfLine } from "./source-lines.js";
 import { errorText, normalizeFinding, rejectionFindings as findingsOfError } from "./source-findings.js";
 import { formatSource } from "./source-format.js";
+import { buildProblems, summarize } from "./source-problems.js";
+import { analyzeSyntax, findDuplicateKeys } from "./source-syntax.js";
+import { createSchemaValue, schemaAtPath, schemaVariants } from "./schema.js";
+import { catalogKindAt } from "@openpresentation/opf/schema";
+import { locateJson } from "./source-ranges.js";
+import { listCatalogRecords } from "./catalogs.js";
 
 // The source pane (RR-98): the OPF document as JSON, YAML or Markdown, with the file name, the format menu, Format, Copy
 // and Download, and the findings under the code. JSON is canonical and keeps its authored bytes (exact-source); YAML and
@@ -68,27 +73,15 @@ function same(a, b) {
 const SEVERITY = { error: 0, warning: 1, info: 2 };
 const plural = (count, word) => `${count} ${word}${count === 1 ? "" : "s"}`;
 
-const JSON_ERRORS = { InvalidSymbol: "Invalid symbol", InvalidNumberFormat: "Invalid number", PropertyNameExpected: "Property name expected", ValueExpected: "Value expected", ColonExpected: "Colon expected", CommaExpected: "Comma expected", CloseBraceExpected: "Closing brace expected", CloseBracketExpected: "Closing bracket expected", EndOfFileExpected: "End of file expected", InvalidCommentToken: "Comments are not allowed in JSON", UnexpectedEndOfComment: "Unexpected end of comment", UnexpectedEndOfString: "Unexpected end of string", UnexpectedEndOfNumber: "Unexpected end of number", InvalidUnicode: "Invalid unicode escape", InvalidEscapeCharacter: "Invalid escape character", InvalidCharacter: "Invalid character" };
-
 /** Read the text of one format. `{ deck }` on success; `findings` carry the syntax errors (`syntax: true`) or the OPF findings of the parsed deck. */
 function readText(format, text, catalogs) {
   if (format === "json") {
-    try {
-      const deck = JSON.parse(text);
-      if (!isObject(deck)) return { syntax: true, findings: [normalizeFinding({ message: "An OPF document is a JSON object.", line: 1 }, "syntax")] };
-      const duplicate = findDuplicateKey(text);
-      if (duplicate) {
-        const path = pointer([...duplicate.path, duplicate.key]);
-        return { syntax: true, findings: [normalizeFinding({ path, message: `Duplicate key "${duplicate.key}". Remove the repeated key.` }, "syntax")] };
-      }
-      return { deck, findings: [] };
-    } catch (error) {
-      const errors = [];
-      parseJsonc(text, errors, { allowTrailingComma: false, disallowComments: true });
-      const first = errors[0];
-      const message = first ? `${JSON_ERRORS[printParseErrorCode(first.error)] ?? printParseErrorCode(first.error)}.` : `${error.message}.`;
-      return { syntax: true, findings: [normalizeFinding({ message, line: first ? lineOfOffset(text, first.offset) : 1 }, "syntax")] };
-    }
+    const problems = analyzeSyntax(text);
+    if (problems.length) return { syntax: true, findings: problems.map((problem) => normalizeFinding(problem, "syntax")) };
+    const deck = JSON.parse(text);
+    const duplicates = findDuplicateKeys(text);
+    if (duplicates.length) return { syntax: true, findings: duplicates };
+    return { deck, findings: [] };
   }
   const result = format === "yaml" ? (fromYaml(text, { catalogs })) : fromMarkdown(text, { catalogs });
   const syntax = result.findings.filter((finding) => !finding.ruleId?.startsWith("opf/"));
@@ -128,6 +121,10 @@ export function createSourcePane(container, options = {}) {
   // Whether the findings include an error, and what the editor's `aria-invalid` currently says (null: not yet set).
   let invalid = false, shownInvalid = null;
   const lineCache = { key: "", values: new Map() };
+  // The problems now shown (rows of source-problems.js), the document they were checked as, and the pause timers of the count announcement and the
+  // syntax pass.
+  const rowOf = new WeakMap();
+  let problemRows = [], lastDraft = null, lastSummary = "No problems", summaryTimer = null, syntaxTimer = null, recheckTimer = null;
   // The exact text of the documents `replaceDocument` replaced and opened, per format, so Undo and Redo show it again byte for byte
   // (a YAML comment, the author's JSON spelling). Keyed by format and document; the oldest entries go first.
   const exactTexts = new Map();
@@ -240,6 +237,9 @@ export function createSourcePane(container, options = {}) {
     describedBy: `${id}-findings`,
     onChange: () => schedule(),
     onFormat: () => formatDocument(),
+    onFocusProblems: () => focusProblems(),
+    // The pane supplies the problems itself (every finding, with ranges and fixes).
+    syntaxProblems: false,
     historyFallback: { undo: () => stepReplace("undo"), redo: () => stepReplace("redo") },
     onError: (error) => options.onError?.(error),
   });
@@ -247,8 +247,25 @@ export function createSourcePane(container, options = {}) {
   // ---- Applying edits -----------------------------------------------------------------------------------------------
   function schedule() {
     clearTimeout(timer);
+    clearTimeout(syntaxTimer);
     if (delay === 0) { flush(); return; }
     timer = setTimeout(flush, delay);
+    // Syntax problems come first, 150 ms after the last key: the rest of the checking waits for the apply delay.
+    if (delay > 150) syntaxTimer = setTimeout(checkSyntax, 150);
+  }
+  /** Show or clear the syntax problems of the text now, without applying it to the document. */
+  function checkSyntax() {
+    syntaxTimer = null;
+    if (destroyed || format !== "json") return;
+    const problems = analyzeSyntax(control.api.getValue());
+    if (!problems.length) {
+      if (!syntaxFindings.length) return;
+      syntaxFindings = [];
+      renderFindings();
+      return;
+    }
+    syntaxFindings = problems.map((problem) => normalizeFinding(problem, "syntax"));
+    renderFindings();
   }
   /** Apply any edit still waiting for its delay. */
   function flush() {
@@ -272,6 +289,7 @@ export function createSourcePane(container, options = {}) {
     }
     syntaxFindings = [];
     baseline = source;
+    lastDraft = read.deck;
     const before = deck();
     if (!same(read.deck, before)) {
       applying = true;
@@ -319,6 +337,7 @@ export function createSourcePane(container, options = {}) {
     rejectionFindings = [];
     transientNotes = [];
     dirty = false;
+    lastDraft = null;
     let written;
     try { written = write(format, deck()); }
     catch (error) {
@@ -504,6 +523,28 @@ export function createSourcePane(container, options = {}) {
     return true;
   }
 
+  /** Read the text as `next` (it is that format already: a YAML deck pasted into the JSON pane) without rewriting it. */
+  function switchFormatKeepingText(next) {
+    const target = formatOf(next);
+    if (destroyed || target.id === format) return;
+    flush();
+    const previous = format;
+    format = target.id;
+    transientNotes = [];
+    rejectionFindings = [];
+    syntaxFindings = [];
+    noteFindings = [];
+    control.setLanguage(target.language);
+    updateBar();
+    baseline = null;
+    flush();
+    renderedKey = "";
+    renderFindings();
+    syncAttributes();
+    control.api.focus();
+    options.onFormatChange?.(format, previous);
+  }
+
   // ---- Menu ---------------------------------------------------------------------------------------------------------
   const menuOpen = () => !menu.hidden;
   function openMenu(focus = "checked") {
@@ -674,14 +715,14 @@ export function createSourcePane(container, options = {}) {
     for (const group of [syntaxFindings, rejectionFindings, transientNotes, noteFindings, host]) {
       const keys = [];
       for (const finding of group) {
-        const key = `${finding.severity}|${finding.path}|${finding.message}`;
+        const key = `${finding.severity}|${finding.path}|${finding.message}|${finding.range?.from ?? ""}`;
         if (seen.has(key)) continue;
         keys.push(key);
         all.push(finding);
       }
       for (const key of keys) seen.add(key);
     }
-    return all.map((finding, index) => ({ finding, index })).sort((a, b) => SEVERITY[a.finding.severity] - SEVERITY[b.finding.severity] || a.index - b.index).map((entry) => entry.finding);
+    return all;
   }
   function lineOf(finding) {
     const value = control.api.getValue();
@@ -692,23 +733,75 @@ export function createSourcePane(container, options = {}) {
     if (!lineCache.values.has(cacheKey)) lineCache.values.set(cacheKey, finding.path === "" ? null : lineForPath(format, value, finding.path));
     return lineCache.values.get(cacheKey) ?? explicit ?? null;
   }
+  // What the messages and the quick fixes read: the document being checked (the typed draft, else the session's) and its schema.
+  const attempt = (run, fallback) => { try { return run(); } catch { return fallback; } };
+  function problemContext() {
+    const draft = lastDraft ?? deck();
+    return {
+      unit: control.api.indentUnit(),
+      valueAt: (segments) => segments.reduce((value, key) => (value !== null && typeof value === "object" ? value[key] : undefined), draft),
+      schemaAt: (segments) => attempt(() => schemaAtPath(draft, segments), undefined),
+      keysOf: (segments) => attempt(() => [...new Set(schemaVariants(schemaAtPath(draft, segments)).flatMap((variant) => Object.keys(variant.properties ?? {})))], []),
+      catalogKind: (segments) => catalogKindAt(segments),
+      catalogCount: (kind) => attempt(() => listCatalogRecords(draft, kind, { catalogs: catalogs() }).length, 0),
+      starter: (segments, property) => attempt(() => (property === "slides" ? [{ title: "Slide title" }] : createSchemaValue(schemaAtPath(draft, [...segments, property]))), undefined),
+    };
+  }
+  /** Select the field a core "focus" fix names: its path, else the field inside it, else the nearest place there is one. */
+  function focusField(focus) {
+    flush();
+    const text = control.api.getValue();
+    const segments = String(focus.path ?? "").replace(/^\//, "").split("/").filter(Boolean).map((part) => part.replaceAll("~1", "/").replaceAll("~0", "~"));
+    if (format === "json") {
+      const wanted = focus.field ? locateJson(text, [...segments, focus.field], "value") : null;
+      const where = wanted?.exact ? wanted : locateJson(text, segments, "value");
+      if (where) { control.api.setSelection(where.from, where.to); control.api.focus(); return; }
+    }
+    focusPath(focus.path ?? "");
+  }
+  const fixActions = {
+    applyPatch(patch) {
+      flush();
+      try { editor.applyPatch(patch, { source: "source-pane", format }); } catch (error) { rejectionFindings = findingsOfError(error); renderedKey = ""; renderFindings(); }
+      control.api.focus();
+    },
+    focusField,
+    switchFormat(next) { switchFormatKeepingText(next); },
+  };
+  /** Problems the author is in the middle of typing (a key with a list of keys open next to it) are not shown yet. */
+  function withheld(row) {
+    if (row.finding.kind !== "syntax" || row.from === undefined || !control.isCompleting()) return false;
+    const [caret] = control.api.getSelection();
+    return caret >= row.from - 1 && caret <= row.to + 1;
+  }
   function renderFindings() {
     paintFindings();
     if (!destroyed && invalid !== shownInvalid) syncAttributes();
   }
   function paintFindings() {
     if (destroyed) return;
-    const all = collect();
-    const rows = all.map((finding) => ({ finding, line: lineOf(finding) }));
-    invalid = rows.some((row) => row.finding.severity === "error");
-    const key = JSON.stringify([format, collapsed, rows.map(({ finding, line }) => [finding.severity, finding.path, finding.message, finding.kind, line])]);
+    const text = control.api.getValue();
+    let rows = buildProblems({ format, text, findings: collect(), context: problemContext(), actions: fixActions, lineOf });
+    const hidden = rows.filter(withheld);
+    if (hidden.length) {
+      rows = rows.filter((row) => !hidden.includes(row));
+      clearTimeout(recheckTimer);
+      recheckTimer = setTimeout(() => { if (!destroyed) { renderedKey = ""; renderFindings(); } }, 600);
+    }
+    problemRows = rows;
+    invalid = rows.some((row) => row.severity === "error");
+    const key = JSON.stringify([format, collapsed, rows.map((row) => [row.severity, row.path, row.message, row.next, row.finding.kind, row.line, row.column, row.from, row.to, row.fixes.map((fix) => fix.title)])]);
     if (key === renderedKey) return;
     renderedKey = key;
+    // The same problems are drawn in the text, with their tooltips and quick fixes.
+    control.setProblems(rows.filter((row) => row.from !== undefined).flatMap((row) => [row, ...(row.finding.related ?? []).map((range) => ({ ...row, from: range.from, to: range.to }))])
+      .map((row) => ({ from: row.from, to: row.to, severity: row.severity, message: row.message, next: row.next, rule: row.rule, fixes: row.fixes })));
+    announceSummary(rows);
     findingsRegion.hidden = rows.length === 0;
     root.dataset.findings = String(rows.length);
     if (!rows.length) { list.replaceChildren(); return; }
-    const errors = rows.filter((row) => row.finding.severity === "error");
-    const warnings = rows.filter((row) => row.finding.severity === "warning");
+    const errors = rows.filter((row) => row.severity === "error");
+    const warnings = rows.filter((row) => row.severity === "warning");
     const infos = rows.length - errors.length - warnings.length;
     const parts = [];
     if (errors.length) parts.push(plural(errors.length, errors.every((row) => row.finding.kind === "schema" || !row.finding.kind) ? "schema error" : "error"));
@@ -721,25 +814,88 @@ export function createSourcePane(container, options = {}) {
     toggle.setAttribute("aria-expanded", String(!collapsed));
     list.hidden = collapsed;
     const shown = rows.slice(0, 200);
-    list.replaceChildren(...shown.map(({ finding, line }) => {
+    list.replaceChildren(...shown.map((row) => {
+      const { finding } = row;
       const item = el("li", "opf-source-finding-item");
-      const button = el("button", "opf-source-finding", { type: "button", "data-severity": finding.severity });
+      const button = el("button", "opf-source-finding", { type: "button", "data-severity": row.severity });
       if (finding.kind) button.dataset.kind = finding.kind;
-      const path = finding.path ? el("code", "opf-source-finding-path") : null;
-      if (path) path.textContent = finding.path;
-      const message = Object.assign(el("span", "opf-source-finding-message"), { textContent: finding.message });
-      const where = Object.assign(el("span", "opf-source-finding-line"), { textContent: line ? `Ln ${line}` : "" });
-      button.append(...(path ? [path] : []), message, where);
+      const word = row.severity === "error" ? "Error" : row.severity === "warning" ? "Warning" : "Note";
+      const severity = Object.assign(el("span", "opf-source-finding-severity"), { textContent: `${word}: ` });
+      const path = row.path ? el("code", "opf-source-finding-path") : null;
+      if (path) path.textContent = row.path;
+      const message = Object.assign(el("span", "opf-source-finding-message"), { textContent: row.message });
+      const next = row.next ? Object.assign(el("span", "opf-source-finding-next"), { textContent: `Next: ${row.next}` }) : null;
+      const where = Object.assign(el("span", "opf-source-finding-line"), { textContent: row.line ? (row.column ? `Ln ${row.line}, Col ${row.column}` : `Ln ${row.line}`) : "" });
+      const rule = row.rule ? Object.assign(el("span", "opf-source-finding-rule"), { textContent: row.rule }) : null;
+      rowOf.set(button, row);
+      const head = el("span", "opf-source-finding-head");
+      head.append(...(path ? [path] : []), message);
+      button.append(severity, head, ...(next ? [next] : []), where, ...(rule ? [rule] : []));
       button.addEventListener("click", () => {
-        const target = focusPath(finding.path, finding);
+        const target = selectRow(row);
         options.onFindingSelect?.(finding, target);
       });
       item.append(button);
+      if (row.fixes.length) {
+        const fixes = el("span", "opf-source-finding-fixes");
+        for (const fix of row.fixes.slice(0, 3)) {
+          const fixButton = Object.assign(el("button", "opf-source-finding-fix", { type: "button", "aria-label": `${fix.title}: ${row.message}` }), { textContent: fix.title });
+          fixButton.addEventListener("click", () => applyFix(fix, row));
+          fixes.append(fixButton);
+        }
+        item.append(fixes);
+      }
       return item;
     }));
     if (rows.length > shown.length) list.append(Object.assign(el("li", "opf-source-finding-more"), { textContent: `${rows.length - shown.length} more not shown.` }));
   }
   toggle.addEventListener("click", () => { collapsed = !collapsed; renderedKey = ""; renderFindings(); });
+  /** "2 problems: 1 error, 1 warning" in the live region once the problems stop changing for a moment. */
+  function announceSummary(rows) {
+    const summary = summarize(rows);
+    clearTimeout(summaryTimer);
+    if (summary === lastSummary) return;
+    summaryTimer = setTimeout(() => { if (!destroyed) { lastSummary = summary; control.api.say(summary); } }, 600);
+  }
+  /** Run a fix of a row: its edits as one undoable change in the text, or its own action. */
+  function applyFix(fix, row) {
+    if (readOnly) return;
+    control.applyFix(fix, row);
+  }
+  /** Put the caret on a row's place in the text, selecting the range when it has one. Returns the line. */
+  function selectRow(row) {
+    flush();
+    const text = control.api.getValue();
+    if (row.from !== undefined) {
+      control.api.setSelection(Math.min(row.from, text.length), Math.min(row.to, text.length));
+      control.api.focus();
+      return row.line ?? 1;
+    }
+    return focusPath(row.path, row.finding);
+  }
+  // The panel with the keyboard: arrows, Home and End move between rows, Escape returns to the code, Cmd/Ctrl+. applies the first fix of the row.
+  list.addEventListener("keydown", (event) => {
+    const rows = [...list.querySelectorAll(".opf-source-finding")];
+    const at = rows.indexOf(document.activeElement);
+    const move = (to) => { event.preventDefault(); rows[Math.max(0, Math.min(rows.length - 1, to))]?.focus(); };
+    if (event.key === "ArrowDown") move(at + 1);
+    else if (event.key === "ArrowUp") move(at - 1);
+    else if (event.key === "Home") move(0);
+    else if (event.key === "End") move(rows.length - 1);
+    else if (event.key === "Escape") { event.preventDefault(); control.api.focus(); }
+    else if (event.key === "." && (event.metaKey || event.ctrlKey) && at >= 0) {
+      const row = rowOf.get(rows[at]);
+      const fix = row?.fixes[0];
+      if (fix) { event.preventDefault(); applyFix(fix, row); } else control.api.say("No quick fixes available");
+    }
+  });
+  /** Move focus to the first problem of the panel (Cmd/Ctrl+Shift+M in the code). */
+  function focusProblems() {
+    if (findingsRegion.hidden) { control.api.say("No problems"); return true; }
+    if (collapsed) { collapsed = false; renderedKey = ""; renderFindings(); }
+    list.querySelector(".opf-source-finding")?.focus();
+    return true;
+  }
 
   // ---- Public API ---------------------------------------------------------------------------------------------------
   function focusPath(path, finding) {
@@ -792,6 +948,23 @@ export function createSourcePane(container, options = {}) {
       formatAction.disabled = readOnly;
       control.setReadOnly(readOnly);
     },
+    /** The problems drawn in the text now, in position order: `{ from, to, severity, message, next, rule, fixes }` at source offsets. */
+    getProblems: () => control.getProblems(),
+    /** Select the next problem in the text (F8) and say what it is; wraps. */
+    nextProblem: () => control.nextProblem(),
+    /** Select the previous problem in the text (Shift+F8); wraps. */
+    previousProblem: () => control.previousProblem(),
+    /** Select problem number `index` (zero-based, position order) and say what it is. */
+    showProblem(index) {
+      const problems = control.getProblems(), problem = problems[index];
+      if (!problem) return false;
+      control.api.setSelection(problem.from, problem.to);
+      control.api.focus();
+      control.api.say(`${problem.severity === "error" ? "Error" : problem.severity === "warning" ? "Warning" : "Note"}: ${problem.message}`);
+      return true;
+    },
+    /** Open the suggestion list at the caret, as Ctrl+Space does. */
+    triggerCompletion: () => control.triggerCompletion(),
     /** The code editor, for hosts that focus or measure it. */
     editor: control,
     destroy() {
@@ -800,6 +973,9 @@ export function createSourcePane(container, options = {}) {
       destroyed = true;
       clearTimeout(timer);
       clearTimeout(copyTimer);
+      clearTimeout(summaryTimer);
+      clearTimeout(syntaxTimer);
+      clearTimeout(recheckTimer);
       unsubscribe();
       document.removeEventListener("pointerdown", outside, true);
       control.destroy();

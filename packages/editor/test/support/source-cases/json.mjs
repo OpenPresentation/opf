@@ -157,7 +157,7 @@ export const jsonFormat = [
 // ---- whole sessions, by keyboard only ------------------------------------------------------------------------------------------------------
 export const jsonFlows = [
   ['J-FLOW-001', 'R-CMP-05', 'a slide written with keys only: braces, a key, a string, a catalog value', 'json', '{\n  "name": "x",\n  "slides": [\n    |\n  ]\n}',
-    [T('{'), K('Enter'), T('"titl'), K('Tab'), T('"Hello'), K('End'), T(','), K('Enter'), T('"lay'), K('Tab'), T('cov'), K('Enter')],
+    [T('{'), K('Enter'), T('"titl'), K('Tab'), T('Hello'), K('End'), T(','), K('Enter'), T('"lay'), K('Tab'), T('cov'), K('Enter')],
     { deck: { '/slides/0/title': 'Hello', '/slides/0/layout': 'cover' }, findings: { errors: 0 } }],
   ['J-FLOW-002', 'R-CMP-14', 'a key chains into the list of its values and Tab takes the first', 'json', '{\n  "slides": [{"title": "a"}],\n  "design": {\n    |\n  }\n}',
     [T('"titleA'), K('Tab'), ['waitPopup'], K('Tab')],
