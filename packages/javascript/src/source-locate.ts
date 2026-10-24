@@ -1,6 +1,8 @@
 import { type Node, findNodeAtOffset, getNodePath, parseTree } from "jsonc-parser";
 import { parsePointer } from "./patch.js";
+import { locateMarkdown, pathAtMarkdown } from "./source-markdown.js";
 import { type SourceFormat, type TextRange, createLocator } from "./source-text.js";
+import { locateYaml, pathAtYaml } from "./source-yaml.js";
 
 /** Which part of a node `locate` returns. */
 export type LocatePart =
@@ -28,7 +30,9 @@ export interface PathAtResult {
   range?: TextRange;
 }
 
+const indexOrKey = (segment: string): string | number => (/^(?:0|[1-9][0-9]*)$/.test(segment) ? Number(segment) : segment);
 const isJson = (format: SourceFormat): boolean => format === "json";
+const isMarkdown = (format: SourceFormat): boolean => format === "md" || format === "markdown";
 
 // A BOM is replaced by a space so that offsets stay the ones of the editor's text.
 const parseText = (text: string) => parseTree(text.startsWith("﻿") ? ` ${text.slice(1)}` : text, [], { allowTrailingComma: true, allowEmptyContent: true, disallowComments: false });
@@ -72,15 +76,28 @@ function partOf(value: Node | undefined, property: Node | undefined, part: Locat
  * underlined in the source. Tolerant: it reads text with syntax errors, comments and trailing commas as far as it can be read.
  * When the node does not exist, the range is that of the nearest ancestor that does, with `exact: false`.
  *
- * Phase 1 reads JSON. YAML and Markdown return `undefined` (phase 2): no range is guessed.
+ * JSON, YAML and Markdown. YAML is read with the `yaml` library's tolerant parse, so a text with syntax errors is located as far as it
+ * can be read. Markdown uses the ranges the converter records for every part it reads (the ones its findings are located by): a
+ * slide, its title, a list item, a block, the `layout=` of an options comment, the keys of the front matter and of the YAML in
+ * `opf-slide` and `opf-block` fences. A slide field the Markdown writes as a line (`# Title`, `- item`) has `value` = the text after
+ * the marker, `key` = the marker and `entry` = the line.
  */
 export function locate(text: string, format: SourceFormat, pointer: string | readonly (string | number)[], options: LocateOptions = {}): TextRange | undefined {
-  if (!isJson(format)) return undefined;
   const segments = segmentsOf(pointer);
-  const root = segments ? parseText(text) : undefined;
-  if (!segments || !root) return undefined;
+  if (!segments) return undefined;
   const part = options.part ?? "value";
   const place = createLocator(text);
+  if (format === "yaml") {
+    const found = locateYaml(text, segments, part);
+    return found ? { ...place(found.offset, found.length), ...(found.exact ? {} : { exact: false }) } : undefined;
+  }
+  if (isMarkdown(format)) {
+    const found = locateMarkdown(text, segments, part);
+    return found ? { ...place(found.offset, found.length), ...(found.exact ? {} : { exact: false }) } : undefined;
+  }
+  if (!isJson(format)) return undefined;
+  const root = parseText(text);
+  if (!root) return undefined;
   let value: Node | undefined = root;
   let property: Node | undefined;
   let depth = 0;
@@ -105,13 +122,18 @@ export function locate(text: string, format: SourceFormat, pointer: string | rea
 }
 
 /**
- * The document path and the kind of position at a character offset (a caret between characters). JSON only (phase 1); YAML and
- * Markdown return `undefined`. Tolerant of broken text.
+ * The document path and the kind of position at a character offset (a caret between characters), in JSON, YAML or Markdown.
+ * Tolerant of broken text. In YAML a position on the whitespace of a blank line is `none` after the last node and `between` inside
+ * a collection; in Markdown a position outside the front matter and the slides is `none`.
  */
 export function pathAt(text: string, format: SourceFormat, offset: number): PathAtResult | undefined {
+  const place = createLocator(text);
+  if (format === "yaml" || isMarkdown(format)) {
+    const found = format === "yaml" ? pathAtYaml(text, offset) : pathAtMarkdown(text, offset);
+    return { path: found.path.map(indexOrKey), part: found.part, ...(found.range ? { range: place(found.range.offset, found.range.length) } : {}) };
+  }
   if (!isJson(format)) return undefined;
   const root = parseText(text);
-  const place = createLocator(text);
   const none: PathAtResult = { path: [], part: "none" };
   if (!root || offset < root.offset || offset > root.offset + root.length) return none;
   const node = findNodeAtOffset(root, offset, true);

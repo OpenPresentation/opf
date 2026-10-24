@@ -14,8 +14,10 @@ import type { Finding, FindingLocation, FindingReport } from "./generated/types/
 import { NOT_CHECKED } from "./not-checked.js";
 import { type ValidateOptions, type ValidationReport, validate } from "./validator.js";
 import { type EmbeddedPart, emitSlide } from "./markdown/emit.js";
-import { type ParseOptions, emptySegment, frontMatter, isOutline, parseSlide, readYamlMapping, splitSegments } from "./markdown/parse.js";
-import { Ctx, OPFMarkdownError, lineRange, splitLines, writeYaml } from "./markdown/support.js";
+import type { ParseOptions } from "./markdown/parse.js";
+import { readMarkdown } from "./markdown/read.js";
+import { Ctx, OPFMarkdownError, writeYaml } from "./markdown/support.js";
+import { readYamlMapping } from "./markdown/parse.js";
 
 export { OPFMarkdownError } from "./markdown/support.js";
 export type { EmbeddedPart } from "./markdown/emit.js";
@@ -45,47 +47,10 @@ export interface FromMarkdownResult extends ValidationReport {
 export function fromMarkdown(markdown: string, options: FromMarkdownOptions = {}): FromMarkdownResult {
   if (typeof markdown !== "string") throw new TypeError("fromMarkdown expects a string.");
   checkCatalogsOption(options.catalogs, "fromMarkdown");
+  const { ctx, document } = readMarkdown(markdown, options);
   const source = markdown;
-  const ctx = new Ctx(source);
-  let lines = splitLines(source);
-  if (lines[0]?.text.startsWith("﻿")) lines = [{ ...lines[0], text: lines[0].text.slice(1), start: lines[0].start + 1 }, ...lines.slice(1)];
-  const front: Obj = {};
+  const slides = document.slides as Obj[];
   let report: Omit<ValidationReport, "findings" | "counts" | "valid"> = { schemaValid: null, checks: NOT_CHECKED };
-  let body = lines;
-  const matter = frontMatter(lines);
-  if (matter === "unterminated") {
-    ctx.error("front-matter-unterminated", "The front matter starting on line 1 is not closed.", "Close it with a line containing only ---, or remove the opening --- (a deck without front matter starts with its first slide).", lineRange(lines[0]!));
-    body = lines.slice(1);
-  } else if (matter) {
-    const range = { start: matter.yaml.start, end: matter.yaml.end };
-    const parsed = readYamlMapping(source.slice(range.start, range.end), range.start, ctx, "front-matter", range);
-    ctx.ranges.set("", range);
-    if (parsed.ok && !Object.keys(parsed.value).length && source.slice(range.start, range.end).trim()) ctx.warn("front-matter-comments", "The text between the first two --- lines is only YAML comments, so it was not read as slide content.", "A deck that starts with a slide must not start with a --- line: only front matter may open the file. Remove the first --- or add the deck properties.", range);
-    for (const [key, value] of Object.entries(parsed.value)) {
-      if (key === "slides") ctx.error("front-matter-slides", "The front matter cannot hold `slides`: slides are the Markdown that follows it.", "Remove the slides key and write the slides below the front matter, separated by ---.", parsed.keys.get("slides") ?? range, "/slides");
-      else Object.defineProperty(front, key, { value, enumerable: true, writable: true, configurable: true });
-    }
-    for (const [key, found] of parsed.keys) ctx.ranges.set(`/${key.replaceAll("~", "~0").replaceAll("/", "~1")}`, found);
-    body = lines.slice(matter.end);
-  }
-
-  const document: Obj = { ...(options.defaults ?? {}), ...front };
-  // `auto` (RR-75): an outline (no `---` line, two or more `# ` headings outside fences, comments and notes) is cut at its headings.
-  const split = options.split ?? "auto";
-  const segments = splitSegments(body, split === "headings" || (split === "auto" && isOutline(body)) ? "headings" : "rules");
-  const slides: Obj[] = [];
-  segments.forEach((segment, index) => {
-    if (emptySegment(segment)) {
-      const edge = index === 0 || index === segments.length - 1;
-      if (!edge) {
-        const around = segment[0] ?? segments[index + 1]?.[0] ?? segments[index - 1]?.at(-1);
-        if (around) ctx.warn("empty-slide", "Two --- lines in a row give an empty slide, which was skipped.", "Remove the extra ---, or write <!-- slide --> to keep an empty slide.", lineRange(around));
-      }
-      return;
-    }
-    slides.push(parseSlide(ctx, segment, slides.length));
-  });
-  document.slides = slides;
 
   if (!slides.length) ctx.error("no-slides", "The Markdown has no slides.", "Write at least one slide: a # title or any content, with --- between slides.", { start: 0, end: Math.min(1, source.length) }, "/slides");
   else if (options.validate !== false) {
