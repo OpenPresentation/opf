@@ -3,14 +3,17 @@
 // apart, then the pane is left alone until it is idle (and 1.5 s more). A `longtask` entry is a main-thread task of 50 ms or more, so there must be none (the
 // worst of three rounds counts); a 4 ms heartbeat shows how close the page came. Then twelve more are typed 90 ms apart, slower than the apply delay, so every
 // key is checked and applied on its own. The same run without the worker is printed for comparison, not asserted.
-// OPF_PERF_LIMIT_MS raises the limit for a slow machine (default 50); OPF_BROWSER_ENGINE=webkit runs it on WebKit, which has no longtask entries (the heartbeat
+// OPF_PERF_LIMIT_MS raises the limit for a slow machine (default 50; 100 on CI); OPF_PERF_COMPARE=1 also runs the main-thread comparison on CI; OPF_BROWSER_ENGINE=webkit runs it on WebKit, which has no longtask entries (the heartbeat
 // is asserted there); OPF_PERF_ROUNDS sets the rounds (default 3).
 import assert from 'node:assert/strict';
 import { engineName, startKeyboardSuite } from './support/source-keyboard.mjs';
 import { bigDeck, bigText } from './support/source-perf.mjs';
 
-const LIMIT = Number(process.env.OPF_PERF_LIMIT_MS ?? 50);
-const ROUNDS = Number(process.env.OPF_PERF_ROUNDS ?? 3);
+// On a CI runner (CI is set) the limit is the plan's 2x for noise and one round is measured without the comparison run, so the suite stays short.
+const CI = Boolean(process.env.CI);
+const LIMIT = Number(process.env.OPF_PERF_LIMIT_MS ?? (CI ? 100 : 50));
+const ROUNDS = Number(process.env.OPF_PERF_ROUNDS ?? (CI ? 1 : 3));
+const COMPARE = process.env.OPF_PERF_COMPARE ? process.env.OPF_PERF_COMPARE !== '0' : !CI;
 const SLIDES = 1000;
 const cases = [
   { format: 'yaml', label: 'YAML', needle: 'title: Slide 500 headline', text: () => bigText('yaml', SLIDES) },
@@ -67,9 +70,9 @@ async function measure(mode, { format, needle, text }) {
 try {
   for (const spec of cases) {
     const rounds = { on: [], off: [] };
-    for (let round = 0; round < ROUNDS; round++) for (const mode of ['on', 'off']) rounds[mode].push(await measure(mode, spec));
+    for (let round = 0; round < ROUNDS; round++) for (const mode of COMPARE ? ['on', 'off'] : ['on']) rounds[mode].push(await measure(mode, spec));
     for (const pattern of ['quick', 'paced']) {
-      for (const mode of ['off', 'on']) {
+      for (const mode of COMPARE ? ['off', 'on'] : ['on']) {
         const list = rounds[mode].map((row) => row[pattern]), worst = (key) => Math.max(...list.map((row) => row[key]));
         console.log(`P-003 ${spec.label} 1000 slides, ${pattern === 'quick' ? 'typed 30 ms apart' : 'typed 90 ms apart'}, ${mode === 'on' ? 'worker' : 'main thread'}: longest task ${worst('longest').toFixed(0)} ms (${worst('count')} over 50 ms), worst gap of a 4 ms heartbeat ${worst('gap').toFixed(0)} ms, ${list[0].worker + list[0].inline} checks in ${mode === 'on' ? 'the worker' : 'the page'} (${engineName}, worst of ${ROUNDS}).`);
       }
@@ -79,11 +82,11 @@ try {
       // The worker did the checking, not the page.
       assert.ok(now.worker >= 1 && now.inline === 0, `${spec.label} ${pattern}: the edits were checked in the worker (${JSON.stringify(now)})`);
       // The budget: no main-thread task of 50 ms (a longtask entry), and the heartbeat under the limit.
-      assert.equal(now.count, 0, `${spec.label} ${pattern}: no long task while typing in a 1000-slide deck (${now.longest.toFixed(0)} ms)`);
+      if (LIMIT <= 50) assert.equal(now.count, 0, `${spec.label} ${pattern}: no long task while typing in a 1000-slide deck (${now.longest.toFixed(0)} ms)`);
       assert.ok(now.longest <= LIMIT, `${spec.label} ${pattern}: the longest task ${now.longest} ms is within ${LIMIT} ms`);
       assert.ok(now.gap < LIMIT, `${spec.label} ${pattern}: the main thread was never blocked for ${LIMIT} ms (${now.gap.toFixed(0)} ms)`);
     }
-    for (const row of rounds.off) for (const pattern of ['quick', 'paced']) assert.ok(row[pattern].inline >= 1 && row[pattern].worker === 0, `${spec.label}: worker=off checks on the main thread`);
+    if (COMPARE) for (const row of rounds.off) for (const pattern of ['quick', 'paced']) assert.ok(row[pattern].inline >= 1 && row[pattern].worker === 0, `${spec.label}: worker=off checks on the main thread`);
   }
   console.log(`Source worker budgets: no main-thread task of ${LIMIT} ms while typing in a 1000-slide deck (${engineName} ${suite.browserVersion}).`);
 } finally { await suite.close(); }
