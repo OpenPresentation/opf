@@ -220,16 +220,40 @@ function inComment(line, column) {
   return false;
 }
 
+/** The quote character of a quoted scalar that `value` opens and does not close, or null (a quoted scalar may run over several lines). */
+export function openQuote(value) {
+  const text = value.trimStart();
+  const quote = text[0];
+  if (quote !== '"' && quote !== "'") return null;
+  return closesQuote(text.slice(1), quote) ? null : quote;
+}
+
+/** Whether `text` (the rest of a quoted scalar) holds its closing quote. */
+function closesQuote(text, quote) {
+  for (let index = 0; index < text.length; index++) {
+    if (quote === '"' && text[index] === "\\") { index++; continue; }
+    if (text[index] === quote) {
+      if (quote === "'" && text[index + 1] === "'") { index++; continue; }
+      return true;
+    }
+  }
+  return false;
+}
+
 /**
- * Walk the lines before `stop` (a line index), applying each to `stack`. Lines inside a block scalar or a flow collection that spans lines, blank
- * lines, comments and document markers change nothing. Returns `{ block, flow }`: the column a block scalar's text must be indented past (or -1) and
- * the depth of an unclosed flow collection (0 when none) at line `stop`, so the caller knows whether that line is inside either.
+ * Walk the lines before `stop` (a line index), applying each to `stack`. Lines inside a block scalar, a flow collection or a quoted scalar that span
+ * lines, blank lines, comments and document markers change nothing. Returns `{ block, flow, quote, open }`: the column a block scalar's text must be
+ * indented past (or -1), the depth of an unclosed flow collection (0 when none), the quote of an unclosed quoted scalar (or null) at line `stop`, so
+ * the caller knows whether that line is inside any of them, and for a flow collection `open`: the line it began on and where it sits in the stack.
  */
 function walk(lines, stop, stack) {
   let block = -1;
   let flow = 0;
+  let quote = null;
+  let open = null;
   for (let number = 0; number < stop; number++) {
     const text = lines[number].text;
+    if (quote) { if (closesQuote(text, quote)) quote = null; continue; }
     if (text.trim() === "") continue;
     const indent = text.length - text.trimStart().length;
     if (block >= 0) {
@@ -244,11 +268,14 @@ function walk(lines, stop, stack) {
     const value = entry ? parsed.rest.slice(entry.valueStart) : parsed.rest;
     const shape = entry ? shapeOfValue(value) : (parsed.markers.length ? shapeOfValue(value) : undefined);
     if (!entry && !parsed.markers.length) continue;
-    enter(stack, parsed, entry, shape);
+    const placed = enter(stack, parsed, entry, shape);
     if (shape?.block) block = entry ? parsed.restStart + entry.keyStart : parsed.markers.at(-1);
-    else if (shape?.flow) flow = flowDepth(value, 0);
+    else if (shape?.flow) {
+      flow = flowDepth(value, 0);
+      open = flow > 0 ? { number, parsed, entry, value, placed } : null;
+    } else if (shape && "scalar" in shape) quote = openQuote(value);
   }
-  return { block, flow };
+  return { block, flow, quote, open };
 }
 
 // ---- flow collections on one line --------------------------------------------------------------------------------------------------
@@ -401,7 +428,13 @@ function keyToken(text, line, restStart, position) {
  * colon yet. Options: `explicit` (Ctrl+Space also takes an empty place), `prefix` (the path of the node the text is the body of, for YAML in a fence of
  * a Markdown slide), `exclude` (keys never offered, the `slides` of front matter).
  */
-export function yamlContextAt(text, position, { explicit = false, prefix = [], exclude = [] } = {}) {
+export function yamlContextAt(text, position, options = {}) {
+  const context = readContext(text, position, options);
+  // The text the context was read from, and the path it is the body of: the references the value lists offer are looked up in it.
+  return context ? { ...context, sourceText: text, prefix: options.prefix ?? [] } : null;
+}
+
+function readContext(text, position, { explicit = false, prefix = [], exclude = [] }) {
   const lines = linesOf(text);
   const number = lineIndex(lines, position);
   const line = lines[number];
@@ -414,8 +447,10 @@ export function yamlContextAt(text, position, { explicit = false, prefix = [], e
   const state = walk(lines, number, stack);
   const lineIndent = lineText.length - lineText.trimStart().length;
   if (state.block >= 0 && (trimmedLine === "" ? column > state.block : lineIndent > state.block)) return null;
-  if (state.flow > 0) return null;
   const before = lineText.slice(0, column);
+  // A line inside a quoted scalar that began above: text, in which only `{{` of a variable is completed.
+  if (state.quote) return continuationContext({ text, line, position, before, explicit });
+  if (state.flow > 0) return flowContinuation({ text, lines, number, line, position, column, explicit, prefix, exclude, open: state.open });
   const parsed = readMarkers(before);
   // The key is read from the whole line: a colon after the caret that ends the key (`top:le|ft: x`) is not the colon before it.
   const whole = readMarkers(lineText);
@@ -423,6 +458,53 @@ export function yamlContextAt(text, position, { explicit = false, prefix = [], e
   const entry = found && column > whole.restStart + found.colon ? readEntry(parsed.rest) : null;
   const shared = { text, lines, number, line, position, parsed, explicit, exclude, prefix, stack, lineIndent };
   return entry ? valueContext({ ...shared, entry }) : keyOrItemContext(shared);
+}
+
+const VARIABLE_OPEN = /\{\{[A-Za-z0-9._-]*$/;
+
+/**
+ * A line of text that continues a scalar begun on a line above (a quoted scalar left open, or a sentence that runs on): nothing to complete in it
+ * except the name of a variable after `{{`. The context is a value in the text sense (`multiline`), with no path.
+ */
+function continuationContext({ text, line, position, before, explicit }) {
+  if (!VARIABLE_OPEN.test(before)) return null;
+  let end = position;
+  while (end < line.end && /[A-Za-z0-9._-]/.test(text[end])) end++;
+  const start = line.start + (line.text.length - line.text.trimStart().length);
+  return { format: "yaml", mode: "value", multiline: true, token: { quoted: true, closed: false, start, end, from: start, to: end }, path: [], key: undefined, existing: new Set(), document: {}, itemStart: false, flow: false, needsSpace: false, column: 0, indent: 0, explicit };
+}
+
+// The text of a line without its comment (a `#` after a space, outside quotes).
+function withoutComment(text) {
+  let quote = null;
+  for (let index = 0; index < text.length; index++) {
+    const character = text[index];
+    if (quote) {
+      if (quote === '"' && character === "\\") index++;
+      else if (character === quote) quote = null;
+    } else if (character === '"' || character === "'") {
+      if (index === 0 || /[\s[{,:-]/.test(text[index - 1])) quote = character;
+    } else if (character === "#" && (index === 0 || isSpace(text[index - 1]))) return text.slice(0, index);
+  }
+  return text;
+}
+
+/**
+ * A caret on a line inside a flow collection that began on an earlier line (`tags: [a,` / `  b, |]`, `{theme: minimal,` / `  |}`): the lines from
+ * the opening one to the caret are read as one text, so the containers open at the caret and the keys and items before it are known as on one line.
+ */
+function flowContinuation({ text, lines, number, line, position, column, explicit, prefix, exclude, open }) {
+  if (!open) return null;
+  const first = lines[open.number].text;
+  const start = open.entry ? open.parsed.restStart + open.entry.valueStart : open.parsed.restStart;
+  const middle = lines.slice(open.number + 1, number).map((item) => withoutComment(item.text).trim());
+  const joined = [withoutComment(first.slice(start)).trimStart(), ...middle, line.text.slice(0, column).trimStart()].join(" ");
+  const flow = flowAt(joined, joined.length);
+  if (!flow) return null;
+  const { map, seq } = open.placed;
+  const frame = open.entry ? map : seq;
+  const base = open.entry ? [...map.path, open.entry.key] : [...seq.path, seq.count - 1];
+  return flowContext({ text, line, position, flow, base, frame, lines, explicit, prefix, exclude });
 }
 
 function valueContext({ text, lines, line, position, parsed, entry, explicit, prefix, stack, lineIndent, exclude }) {
@@ -465,7 +547,10 @@ function keyOrItemContext({ text, lines, number, line, position, parsed, explici
   }
   const quoteOpen = rest[0] === '"' || rest[0] === "'";
   // The word before the caret is a plain key (or the start of a scalar item) or an unfinished quoted key; anything else (a sentence) is prose.
-  if (!quoteOpen && rest !== "" && !/^[A-Za-z0-9_.$+:-]+$/.test(rest)) return null;
+  if (!quoteOpen && rest !== "" && !/^[A-Za-z0-9_.$+:-]+$/.test(rest)) {
+    // A sentence that runs on from a scalar above: only a variable (`{{`) is completed in it.
+    return parsed.markers.length ? null : continuationContext({ text, line, position, before: lineText.slice(0, position - line.start), explicit });
+  }
   let seq = null;
   for (const col of parsed.markers) { seq = stack.seqAt(col); seq.items[seq.count - 1] = { open: true }; }
   const frame = stack.mapAt(parsed.restStart);
