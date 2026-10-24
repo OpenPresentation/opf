@@ -63,7 +63,7 @@ test('strokeText: words and symbols per platform', () => {
   assert.equal(strokeText('Ctrl-Space', 'mac'), 'Ctrl+Space');
   assert.equal(strokeText('Alt-ArrowDown', 'mac'), 'Alt+Down');
   assert.equal(strokeText('Alt-A', 'mac'), 'Alt+Shift+A', 'an upper-case letter is Shift');
-  assert.equal(strokeText('Mod-Shift-o', 'mac', { symbols: true }), '⌘⇧O');
+  assert.equal(strokeText('Mod-Shift-o', 'mac', { symbols: true }), '⇧⌘O');
   assert.equal(strokeText('Escape', 'win', { symbols: true }), 'Esc');
 });
 
