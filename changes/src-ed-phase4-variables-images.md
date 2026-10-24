@@ -1,5 +1,0 @@
----
-type: added
-packages: [editor]
----
-Source editor completions (phase 4): after `{{` the list offers the document's own variables first, then the built-in variables the engine resolves (`deck.*`, `speaker.*`, `speakers`, `organization.*` and `speaker.<id>.*` / `organization.<id>.*`, then `slide.number`, `slide.section`, `deck.slideCount`), grouped by prefix, with the names read from core's `listBuiltinVariables`; each says whether the document sets it (its value, or "not set": it resolves to nothing) and `{{org` filters to `organization.name`, `organization.legalName`, ... in JSON, YAML and Markdown text. Accepting a variable with several cursors now replaces the typed name and closes the braces at every cursor, in one undo step. In Markdown, `![alt](` offers `asset:<id>` for every asset of the front matter and `var:<id>` for the image variables (the videos first on a line after `<!-- block: as=video -->`), filters as you type, replaces only the target, closes the `)` when the pair rule did not, and Ctrl+Space works inside the parentheses.
