@@ -1,0 +1,212 @@
+/*
+ * Touch: a coarse pointer (a finger) gets a 44px hit area on every control, and the text in a field is 16px so iOS Safari does not
+ * zoom the page when the field gets focus. tokens.css already raises --opf-ui-control-h to 44px under `(pointer: coarse)`, which lifts every
+ * control that is sized by it; this file lifts the ones that size themselves (compact buttons, rows, menu items, completion items) and
+ * keeps the visual look: the padding grows, the type does not. The code in an editor stays at its own size: it is not a field.
+ * Tokens only, no color literals (test/styles.mjs).
+ */
+@media (pointer: coarse) {
+  /* ---- fields: 16px, 44px ------------------------------------------------------------------------------------------------------ */
+  :is(.opf-ui, .opf-source, .opf-json, .opf-code, .opf-shortcuts, .opf-quickpick, .opf-sym)
+    :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="color"], [type="button"], [type="submit"], [type="reset"], [type="image"]), select, textarea):not(.opf-inline-input, .opf-rich-input) {
+    font-size: 16px;
+  }
+  :is(.opf-ui, .opf-source, .opf-json, .opf-code, .opf-shortcuts, .opf-quickpick, .opf-sym)
+    :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="color"], [type="button"], [type="submit"], [type="reset"], [type="image"]), select):not(.opf-inline-input, .opf-rich-input) {
+    min-height: 44px;
+  }
+  /* WebKit sizes a native select by its text unless the height is set. */
+  :is(.opf-ui, .opf-source, .opf-json, .opf-code) select {
+    height: 44px;
+  }
+  .opf-ui input[type="file"] {
+    min-height: 44px;
+  }
+
+  /* ---- the source pane ---------------------------------------------------------------------------------------------------------- */
+  .opf-source,
+  .opf-source[data-density="touch"] {
+    --_h: 44px;
+    --_bar: 52px;
+  }
+  .opf-source-name,
+  .opf-source-format {
+    min-height: var(--_h);
+  }
+  .opf-source-name {
+    min-width: 44px;
+  }
+  .opf-source-finding {
+    min-height: var(--_h);
+  }
+  .opf-source-finding-fix,
+  .opf-source-finding-details {
+    min-height: var(--_h);
+    padding: 0 12px;
+  }
+  .opf-source-finding-fixes {
+    gap: 6px;
+  }
+  .opf-source-outline-item {
+    min-height: var(--_h);
+  }
+  .opf-source-finding-explain-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .opf-sym-close {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .opf-sym-ref {
+    min-height: 44px;
+    align-items: center;
+  }
+  .opf-shortcuts .opf-shortcuts-close {
+    width: 44px;
+    height: 44px;
+  }
+  .opf-shortcuts .opf-shortcuts-search,
+  .opf-quickpick-input {
+    min-height: 44px;
+  }
+  .opf-quickpick-item {
+    min-height: 44px;
+    align-items: center;
+  }
+
+  /* ---- CodeMirror's lists and panels (completions, problems, quick fixes, search) ---------------------------------------------- */
+  :root :is(.opf-ui, .opf-source, .opf-json, .opf-code) .cm-tooltip.cm-tooltip-autocomplete > ul > li {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 44px;
+    padding: 2px 12px;
+  }
+  :root :is(.opf-ui, .opf-source, .opf-json, .opf-code) .cm-tooltip-autocomplete .cm-completionLabel {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .cm-tooltip .opf-fix {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 3px 12px;
+  }
+  .cm-tooltip-lint .cm-diagnosticAction {
+    min-height: 44px;
+    padding: 0 14px;
+  }
+  :root .cm-panels .cm-panel.cm-search :is(input, button, label) {
+    min-height: 44px;
+  }
+  :root .cm-panels .cm-panel.cm-search :is(input[type="text"], input:not([type])) {
+    font-size: 16px;
+  }
+  /* The find and replace fields take a row of their own each, the buttons and options wrap beneath, the close button stays in the corner. */
+  :root .cm-panels .cm-panel.cm-search {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 52px 6px 8px;
+  }
+  :root .cm-panels .cm-panel.cm-search br {
+    display: none;
+  }
+  :root .cm-panels .cm-panel.cm-search input[type="text"],
+  :root .cm-panels .cm-panel.cm-search input:not([type]) {
+    flex: 1 1 100%;
+    min-width: 0;
+    margin: 0;
+  }
+  :root .cm-panels .cm-panel.cm-search button,
+  :root .cm-panels .cm-panel.cm-search label {
+    margin: 0;
+  }
+  :root .cm-panels .cm-panel.cm-search label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  :root .cm-panels .cm-panel.cm-search button {
+    min-width: 44px;
+  }
+  :root .cm-panels .cm-panel.cm-search button[name="close"] {
+    top: 0;
+    right: 4px;
+  }
+
+  /* ---- menus, dialogs and the compact controls of the panels --------------------------------------------------------------------- */
+  .opf-export .opf-export-close {
+    width: 44px;
+    height: 44px;
+  }
+  .opf-export[data-density="touch"] .opf-export-trigger,
+  .opf-export[data-density="touch"] .opf-export-item,
+  .opf-export .opf-export-item {
+    min-height: 44px;
+  }
+  .opf-export .opf-export-status-action {
+    height: 44px;
+  }
+  .opf-handoff[data-density="touch"] .opf-handoff-button,
+  .opf-handoff .opf-handoff-button {
+    height: 44px;
+  }
+  .opf-handoff[data-density="touch"] .opf-handoff-target,
+  .opf-handoff .opf-handoff-target {
+    height: 44px;
+    padding: 0 14px;
+  }
+  .opf-handoff[data-density="touch"] .opf-handoff-x,
+  .opf-handoff .opf-handoff-x {
+    width: 44px;
+    height: 44px;
+  }
+  .opf-nav[data-density="touch"] .opf-nav-button,
+  .opf-nav .opf-nav-button {
+    width: 44px;
+    height: 44px;
+  }
+  .opf-thumbs[data-density="touch"] .opf-thumbs-item,
+  .opf-thumbs .opf-thumbs-item {
+    min-height: 44px;
+  }
+  :root .opf-review-fix {
+    min-height: 44px;
+    padding: 0 12px;
+  }
+  :root .opf-find button.opf-find-close,
+  :root .opf-find button[aria-label="Previous match"],
+  :root .opf-find button[aria-label="Next match"] {
+    min-width: 44px;
+  }
+  .opf-dc-group > summary,
+  .opf-template-insert-section summary {
+    min-height: 44px;
+    padding-block: calc((44px - 1lh) / 2);
+  }
+  .opf-dc-check {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 10px;
+  }
+  .opf-dc-check > input {
+    flex: none;
+    width: 22px;
+    height: 22px;
+    margin: 0;
+  }
+  .opf-dc-check > label {
+    display: flex;
+    align-items: center;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 44px;
+  }
+}

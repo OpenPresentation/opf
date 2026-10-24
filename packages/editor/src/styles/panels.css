@@ -2126,6 +2126,52 @@
   border-right: 1px solid var(--opf-ui-code-border);
 }
 
+/* A wrapped line continues under its own indentation (src/source-wrap.js, VS Code's wrappingIndent "indent"): `opf-hang-<n>` says how many
+   columns, the first line keeps its place (a negative text-indent of the same width) and every continuation line starts n columns in.
+   The hang is capped at 40% of the line so a deeply nested line still leaves room for text at 320px. Text inside an inline widget does not
+   inherit the negative indent. `--opf-line-start` is the line's own left padding (the source pane sets it to 2px). */
+.cm-line.opf-hang-0 { --opf-hang: 0; }
+.cm-line.opf-hang-1 { --opf-hang: 1; }
+.cm-line.opf-hang-2 { --opf-hang: 2; }
+.cm-line.opf-hang-3 { --opf-hang: 3; }
+.cm-line.opf-hang-4 { --opf-hang: 4; }
+.cm-line.opf-hang-5 { --opf-hang: 5; }
+.cm-line.opf-hang-6 { --opf-hang: 6; }
+.cm-line.opf-hang-7 { --opf-hang: 7; }
+.cm-line.opf-hang-8 { --opf-hang: 8; }
+.cm-line.opf-hang-9 { --opf-hang: 9; }
+.cm-line.opf-hang-10 { --opf-hang: 10; }
+.cm-line.opf-hang-11 { --opf-hang: 11; }
+.cm-line.opf-hang-12 { --opf-hang: 12; }
+.cm-line.opf-hang-13 { --opf-hang: 13; }
+.cm-line.opf-hang-14 { --opf-hang: 14; }
+.cm-line.opf-hang-15 { --opf-hang: 15; }
+.cm-line.opf-hang-16 { --opf-hang: 16; }
+.cm-line.opf-hang-17 { --opf-hang: 17; }
+.cm-line.opf-hang-18 { --opf-hang: 18; }
+.cm-line.opf-hang-19 { --opf-hang: 19; }
+.cm-line.opf-hang-20 { --opf-hang: 20; }
+.cm-line.opf-hang-21 { --opf-hang: 21; }
+.cm-line.opf-hang-22 { --opf-hang: 22; }
+.cm-line.opf-hang-23 { --opf-hang: 23; }
+.cm-line.opf-hang-24 { --opf-hang: 24; }
+.cm-line.opf-hang-25 { --opf-hang: 25; }
+.cm-line.opf-hang-26 { --opf-hang: 26; }
+.cm-line.opf-hang-27 { --opf-hang: 27; }
+.cm-line.opf-hang-28 { --opf-hang: 28; }
+.cm-line.opf-hang-29 { --opf-hang: 29; }
+.cm-line.opf-hang-30 { --opf-hang: 30; }
+.cm-line.opf-hang-31 { --opf-hang: 31; }
+.cm-line.opf-hang-32 { --opf-hang: 32; }
+:is(.opf-ui, .opf-json, .opf-code) .cm-line {
+  padding-left: calc(var(--opf-line-start, 6px) + min(calc(var(--opf-hang, 0) * 1ch), 40%));
+  text-indent: calc(-1 * min(calc(var(--opf-hang, 0) * 1ch), 40%));
+}
+
+:is(.opf-ui, .opf-json, .opf-code) .cm-line > * {
+  text-indent: 0;
+}
+
 :is(.opf-ui, .opf-json, .opf-code) .cm-activeLine,
 :is(.opf-ui, .opf-json, .opf-code) .cm-line.is-hover {
   background: color-mix(in srgb, var(--opf-ui-accent) 8%, transparent);

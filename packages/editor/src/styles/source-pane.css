@@ -17,11 +17,13 @@
 .opf-source [hidden] { display: none !important; }
 .opf-source button { font: inherit; color: inherit; }
 
-/* Bar: file name, format menu, actions */
+/* Bar: file name, format menu, actions. It wraps: where the name, the format and the actions do not fit on one row (a narrow pane, or 44px
+   buttons under a coarse pointer), the actions drop to their own row on the right instead of squeezing the name. */
 .opf-source-bar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 14px;
+  gap: 0 14px;
   flex: none;
   min-height: var(--_bar);
   padding: 0 8px 0 14px;
@@ -152,7 +154,7 @@
 .opf-source-code .cm-scroller { overflow: auto; font: 400 13.5px/22px var(--opf-ui-mono); }
 .opf-source[data-density="touch"] .opf-source-code .cm-scroller { font-size: 13px; line-height: 21px; }
 .opf-source-code .cm-content { padding: 16px 16px 16px 4px; caret-color: var(--opf-ui-fg); }
-.opf-source-code .cm-line { padding: 0 2px; }
+.opf-source-code .cm-line { --opf-line-start: 2px; padding-top: 0; padding-right: 2px; padding-bottom: 0; }
 .opf-source-code .cm-gutters { border: 0; background: transparent; color: color-mix(in srgb, var(--opf-ui-muted-fg) 60%, transparent); }
 .opf-source-code .cm-lineNumbers .cm-gutterElement { min-width: 30px; padding: 0 12px 0 0; text-align: right; font-size: 11px; }
 .opf-source-code .cm-activeLine { background: transparent; }

@@ -122,7 +122,7 @@
 .opf-lx[data-compact="true"] { min-height: 0; height: auto; }
 .opf-lx[data-compact="true"] .opf-lx-main { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; }
 .opf-lx[data-compact="true"] .opf-lx-palette-host { overflow-x: auto; border-bottom: 1px solid var(--opf-ui-border); }
-.opf-lx[data-compact="true"] .opf-lx-palette { flex-direction: row; flex: 1; padding: 4px 8px; border-right: 0; }
+.opf-lx[data-compact="true"] .opf-lx-palette { flex-direction: row; flex-wrap: wrap; justify-content: center; flex: 1; padding: 4px 8px; border-right: 0; }
 .opf-lx[data-compact="true"] .opf-lx-tool-gap { width: 1px; height: auto; margin: 4px; }
 .opf-lx[data-compact="true"] .opf-lx-viewport { min-height: 220px; }
 .opf-lx[data-compact="true"] .opf-lx-side { border-left: 0; border-top: 1px solid var(--opf-ui-border); }

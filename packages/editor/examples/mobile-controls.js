@@ -12,7 +12,8 @@ html,body{overscroll-behavior:none}
 .mobile-only{display:inline-flex}
 .app-shell{display:flex;flex-direction:column;height:100dvh;min-height:0;overflow:hidden;padding-bottom:calc(var(--bar-h) + env(safe-area-inset-bottom))}
 .sidebar{flex:0 0 auto;position:static;max-height:none;flex-direction:row;flex-wrap:wrap;align-items:center;border-right:0;border-bottom:1px solid var(--opf-ui-border)}
-.workspace-brand{flex:1 1 auto;height:44px}
+.workspace-brand{flex:1 1 0;min-width:0;height:44px}
+.workspace-brand strong{min-width:0;overflow:hidden;text-overflow:ellipsis}
 .workspace-badge,.sidebar-section,.sidebar-bottom{display:none}
 .sidebar .add-slide{order:1;margin:0 4px 0 0;padding:4px 8px;font-size:12px;gap:4px;min-height:36px}
 .slide-list{order:2;flex:1 1 100%;display:flex;flex-direction:row;gap:8px;overflow-x:auto;overflow-y:hidden;padding:2px 10px 8px;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
@@ -31,11 +32,14 @@ body[data-menu=open] .header-actions{display:flex}
 .canvas-column{flex:1 1 0;min-height:0}
 .canvas-toolbar{height:auto;min-height:44px;flex-wrap:wrap;padding:4px 10px;gap:6px}
 .canvas-toolbar #copy-slide,.canvas-toolbar #undo,.canvas-toolbar #redo,.canvas-toolbar #find-open{display:none}
+.layouts-view{overflow:auto;-webkit-overflow-scrolling:touch}
+.layouts-host{flex:1 0 auto}
 .canvas-scroll{touch-action:pan-x pan-y;-webkit-overflow-scrolling:touch}
 .canvas-stage{padding:12px 10px 16px}
 .canvas-caption{display:none}
 .canvas-footer{padding:0 12px}
 body[data-sheet] .sidebar,body[data-sheet] .document-bar{display:none}
+body[data-sheet] .canvas-footer{visibility:hidden}
 body[data-sheet] .canvas-scroll{padding-bottom:min(46dvh,420px)}
 .inspector{position:fixed;left:0;right:0;bottom:calc(var(--bar-h) + env(safe-area-inset-bottom));width:auto;max-height:min(46dvh,420px);border:0;border-top:1px solid var(--opf-ui-border);border-radius:14px 14px 0 0;box-shadow:var(--opf-ui-shadow-pop);z-index:40;overscroll-behavior:contain;transform:translateY(calc(100% + var(--bar-h)));visibility:hidden;transition:transform .2s ease,visibility 0s linear .2s}
 body[data-sheet] .inspector{transform:none;visibility:visible;transition:transform .2s ease}
@@ -55,9 +59,26 @@ body[data-sheet] .inspector{transform:none;visibility:visible;transition:transfo
 dialog{max-width:100vw;max-height:100dvh}
 button,select,input[type=text],input[type=number],textarea{touch-action:manipulation}
 }
+@media (max-width:480px){
+.workspace-brand{gap:6px;padding:0 0 0 10px}
+.slide-toolbar{gap:0;margin:0}
+.slide-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;overflow:visible;padding:0 10px 6px}
+.slide-actions .add-slide{width:100%;margin:0;padding:4px 6px;color:var(--opf-ui-fg);background:var(--opf-ui-surface);border-color:var(--opf-ui-border);justify-content:center;gap:0;font-size:12px;line-height:1.15;text-align:center;white-space:nowrap}
+.slide-actions .add-slide .icon{display:none}
+.slide-actions .label-long{display:none}
+.slide-actions .label-short{display:inline}
+.document-bar{padding:4px 12px}
+.canvas-toolbar{padding:6px 10px}
+.canvas-toolbar .view-switch{display:flex;flex:1 1 100%}
+.canvas-toolbar .view-switch button{flex:1 1 0;min-width:0;padding:0 4px}
+.canvas-toolbar .history-actions{display:flex;flex:1 1 100%;gap:6px}
+.canvas-toolbar .history-actions>button{flex:1 1 0;min-width:0;padding:0 8px}
+}
 @media (max-width:900px) and (pointer:coarse){
 .canvas-toolbar button,.document-bar button,.sidebar .add-slide,.inspector button,.inspector select,.inspector input{min-height:44px}
-.inspector textarea,.inspector input[type=text],.inspector input[type=number],.inspector select,.document-bar input{font-size:16px}
+.sheet-close{min-width:44px}
+.header-actions>button{min-width:44px}
+.canvas-footer{height:auto;min-height:44px}
 }
 `;
 
@@ -84,7 +105,8 @@ export function installMobileControls() {
   more.setAttribute('aria-expanded', 'false');
   more.setAttribute('aria-controls', 'header-actions');
   document.querySelector('.header-actions').id ||= 'header-actions';
-  document.querySelector('.document-bar').append(more);
+  // It sits with the slide actions in the canvas toolbar, so the document name keeps the whole width of its row.
+  (document.querySelector('.canvas-toolbar .history-actions') ?? document.querySelector('.document-bar')).append(more);
   more.addEventListener('click', () => {
     const open = document.body.dataset.menu !== 'open';
     if (open) document.body.dataset.menu = 'open'; else delete document.body.dataset.menu;

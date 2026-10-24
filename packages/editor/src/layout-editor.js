@@ -140,9 +140,13 @@ export function createLayoutEditor(container, options = {}) {
   paint();
 
   // The container's width decides the layout: wide shows the palette, canvas and side panels; narrow stacks them with tabs.
-  const measure = () => { root.dataset.compact = String((container.clientWidth || root.clientWidth || COMPACT_WIDTH) < COMPACT_WIDTH); };
+  const measure = () => {
+    const compact = String((container.clientWidth || root.clientWidth || COMPACT_WIDTH) < COMPACT_WIDTH);
+    if (root.dataset.compact !== compact) root.dataset.compact = compact;
+  };
+  // The switch changes the editor's own height, so a host whose height follows it would loop inside the observer: the change is made a frame later.
   let observer = null;
-  if (typeof win.ResizeObserver === "function") { observer = new win.ResizeObserver(measure); observer.observe(container); }
+  if (typeof win.ResizeObserver === "function") { observer = new win.ResizeObserver(() => win.requestAnimationFrame(measure)); observer.observe(container); }
   measure();
 
   root.addEventListener("keydown", (event) => { handleGlobalShortcut(event, model); });
