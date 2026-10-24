@@ -3,22 +3,7 @@ import { listCatalogRecords } from "./catalogs.js";
 import { resolveSchema, schemaAtPath, schemaVariants } from "./schema.js";
 import { findNodeAtOffset, getNodePath, parse as parseJsonc, parseTree } from "jsonc-parser";
 import { LAYOUT_INTENT_GROUPS, layoutRegionSummary } from "./layout-templates.js";
-// The catalog kind a field references (OPF 0.15: every content kind is `id` or `name:id`), read from where the field sits.
-const ROOT_REFERENCES = { narrative: "narratives", audience: "audiences", purpose: "purposes", tone: "tones" };
-const DESIGN_REFERENCES = { theme: "themes", colorScheme: "colorSchemes", fontScheme: "fontSchemes" };
-function catalogAtPath(path) {
-    const parts = path.map(String);
-    // A reference's object form names its record with `id`; an audience array's entries are references too.
-    const field = parts.at(-1) === "id" ? parts.slice(0, -1) : parts;
-    const tail = /^\d+$/.test(field.at(-1) ?? "") && field.at(-2) === "audience" ? field.slice(0, -1) : field;
-    const key = tail.at(-1);
-    if (tail.length === 3 && tail[0] === "slides" && key === "layout") return "layouts";
-    if (tail.length === 1 && ROOT_REFERENCES[key]) return ROOT_REFERENCES[key];
-    if (DESIGN_REFERENCES[key] && ((tail.length === 2 && tail[0] === "design") || (tail.length === 4 && tail[0] === "slides" && tail[2] === "design"))) return DESIGN_REFERENCES[key];
-    // Inside an embedded record: a theme's colour or font scheme.
-    if (tail.length === 5 && tail[0] === "catalogs" && tail[2] === "themes" && (key === "colorScheme" || key === "fontScheme")) return DESIGN_REFERENCES[key];
-    return undefined;
-}
+import { catalogKindAt } from "@openpresentation/opf/schema";
 const sourceDetails = {
     "Loaded catalog": ["Provided by app", "Records from a catalog this app registered; nothing is fetched from a URL. Saving embeds the record in the document."],
     "Document catalog": ["In this document", "Embedded in this document’s catalogs. Takes precedence over the app’s records with the same reference."],
@@ -44,7 +29,8 @@ function describeOptions(choices, records, current, catalog) {
 function fieldOptions(presentation, path, loadedCatalogs, { string, boolean }) {
     const schema = schemaAtPath(presentation, path.map(String));
     const variants = schemaVariants(schema);
-    const catalog = catalogAtPath(path);
+    // A reference's object form names its record with `id`: the field is the reference.
+    const segments = path.map(String), catalog = catalogKindAt(segments.at(-1) === "id" ? segments.slice(0, -1) : segments, presentation);
     const options = new Map();
     const records = new Map();
     // A document group whose source no registered catalog matches: its records beyond the embedded ones are not available here.
@@ -136,7 +122,7 @@ export function fieldOptionEdit(context, value) {
 const PLACEHOLDER = "__opf_completion__";
 const WORD = /[A-Za-z0-9_.-]/;
 // The token being typed: inside a string (a quote opened earlier on this line) or a bare word. JSON strings never span lines.
-function tokenAt(text, position, explicit) {
+export function tokenAt(text, position, explicit) {
     const lineStart = Math.max(text.lastIndexOf("\n", position - 1), text.lastIndexOf("\r", position - 1)) + 1;
     let open = -1, last = null;
     for (let index = lineStart; index < position; index++) {

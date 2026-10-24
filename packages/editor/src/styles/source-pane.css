@@ -207,13 +207,17 @@
 .opf-source-findings-toggle[aria-expanded="false"] > .opf-source-icon { transform: rotate(-90deg); }
 .opf-source-findings-icon { display: inline-grid; place-items: center; }
 .opf-source-findings-list { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 0 8px 8px; list-style: none; overflow: auto; }
+.opf-source-finding-item { display: flex; flex-direction: column; }
 .opf-source-finding {
-  display: flex;
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr) auto;
+  grid-template-areas: "icon head where" "icon next rule";
   align-items: baseline;
-  gap: 8px;
+  column-gap: 8px;
+  row-gap: 1px;
   width: 100%;
   min-height: calc(var(--_h) - 4px);
-  padding: 3px 6px;
+  padding: 4px 6px;
   border: 0;
   border-radius: var(--opf-ui-radius-sm);
   background: transparent;
@@ -223,6 +227,12 @@
   transition: background-color var(--opf-ui-ease);
 }
 .opf-source-finding:hover { background: var(--opf-ui-muted); }
+/* The severity is a shape as well as a color; the word is for screen readers. */
+.opf-source-finding::before { grid-area: icon; align-self: start; color: var(--opf-ui-danger); font-size: 11px; line-height: 1.7; content: "\2716"; }
+.opf-source-finding[data-severity="warning"]::before { color: var(--opf-ui-warn); content: "\25B2"; }
+.opf-source-finding[data-severity="info"]::before { color: var(--opf-ui-muted-fg); content: "\25CF"; }
+.opf-source-finding-severity { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.opf-source-finding-head { grid-area: head; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; min-width: 0; }
 .opf-source-finding-path {
   flex: none;
   padding: 1px 5px;
@@ -233,8 +243,21 @@
 }
 .opf-source-finding[data-severity="warning"] .opf-source-finding-path { background: color-mix(in srgb, var(--opf-ui-warn) 12%, transparent); color: var(--opf-ui-warn); }
 .opf-source-finding[data-severity="info"] .opf-source-finding-path { background: var(--opf-ui-muted); color: var(--opf-ui-muted-fg); }
-.opf-source-finding-message { min-width: 0; color: var(--opf-ui-muted-fg); overflow-wrap: anywhere; }
-.opf-source-finding-line { flex: none; margin-left: auto; color: var(--opf-ui-muted-fg); font: 11px var(--opf-ui-mono); }
+.opf-source-finding-message { min-width: 0; color: var(--opf-ui-fg); overflow-wrap: anywhere; }
+.opf-source-finding-next { grid-area: next; min-width: 0; color: var(--opf-ui-muted-fg); overflow-wrap: anywhere; }
+.opf-source-finding-line { grid-area: where; justify-self: end; color: var(--opf-ui-muted-fg); font: 11px var(--opf-ui-mono); white-space: nowrap; }
+.opf-source-finding-rule { grid-area: rule; justify-self: end; color: var(--opf-ui-muted-fg); font: 10.5px var(--opf-ui-mono); }
+.opf-source-finding-fixes { display: flex; flex-wrap: wrap; gap: 4px; padding: 0 6px 4px 28px; }
+.opf-source-finding-fix {
+  min-height: 22px;
+  padding: 0 8px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-sm);
+  background: var(--opf-ui-surface);
+  font-size: 12px;
+  cursor: pointer;
+}
+.opf-source-finding-fix:hover { background: var(--opf-ui-muted); }
 .opf-source-finding-more { padding: 3px 6px; color: var(--opf-ui-muted-fg); font-size: 12px; }
 
 .opf-source-status { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

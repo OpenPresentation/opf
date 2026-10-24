@@ -72,6 +72,14 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
 
   async function openPage(query = '') {
     const page = await context.newPage();
+    // Every message the live region gets, in order (the region clears itself after 1.5 s).
+    await page.addInitScript(() => {
+      window.__live = [];
+      new MutationObserver(() => {
+        const text = document.querySelector('.opf-source-live')?.textContent?.replace(/\u200b/g, '') ?? '';
+        if (text && window.__live.at(-1) !== text) window.__live.push(text);
+      }).observe(document, { subtree: true, childList: true, characterData: true });
+    });
     page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`));
     page.on('console', (message) => { if (message.type() === 'error') problems.push(`console: ${message.text()}`); });
     await page.goto(`${origin}/source-pane.html${query}`);
@@ -84,17 +92,19 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
     const kb = {
       page,
       /** Replace the text (and the format) with `doc` and put the caret or selection where the markers say. */
-      async put(doc, { format = 'json' } = {}) {
+      async put(doc, { format = 'json', notify = false } = {}) {
         const { text, from, to } = parseMarkers(doc);
-        await page.evaluate(([nextFormat, value, start, end]) => {
+        await page.evaluate(([nextFormat, value, start, end, tell]) => {
           if (demo.pane.getFormat() !== nextFormat) demo.pane.setFormat(nextFormat);
           // As a host opening a document does: an external update, which also reads the document's indentation.
           const control = demo.pane.editor;
           control.api.focus();
           control.update(value);
+          // `notify`: the pane is told the text changed (a paste of the whole text), so it checks it and draws its problems.
+          if (tell) control.api.replace(0, value.length, value);
           control.resetHistory();
           control.api.setSelection(start, end);
-        }, [format, text, from, to]);
+        }, [format, text, from, to, notify]);
         await kb.settle();
       },
       async press(key) { await page.keyboard.press(keyFor(key)); await kb.settle(); },
@@ -134,6 +144,7 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
           label: option.querySelector('.cm-completionLabel')?.textContent ?? '',
           detail: option.querySelector('.cm-completionDetail')?.textContent ?? '',
           selected: option.getAttribute('aria-selected') === 'true',
+          name: option.getAttribute('aria-label') ?? '',
         })) : [];
         return { open: Boolean(node) && !node.classList.contains('cm-tooltip-autocomplete-disabled'), items, selectedIndex: items.findIndex((item) => item.selected), selected: items.find((item) => item.selected)?.label };
       }),
@@ -141,8 +152,35 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
       findings: () => page.evaluate(() => (demo.pane.getText(), {
         hidden: document.querySelector('.opf-source-findings')?.hidden ?? true,
         count: document.querySelector('.opf-source-findings-count')?.textContent ?? '',
-        rows: [...document.querySelectorAll('.opf-source-finding')].map((row) => ({ severity: row.dataset.severity, text: row.querySelector('.opf-source-finding-message')?.textContent ?? '', line: row.querySelector('.opf-source-finding-line')?.textContent ?? '' })),
+        rows: [...document.querySelectorAll('.opf-source-finding')].map((row) => {
+          const where = /^Ln (\d+)(?:, Col (\d+))?/.exec(row.querySelector('.opf-source-finding-line')?.textContent ?? '');
+          return {
+            severity: row.dataset.severity,
+            text: row.querySelector('.opf-source-finding-message')?.textContent ?? '',
+            next: (row.querySelector('.opf-source-finding-next')?.textContent ?? '').replace(/^Next: /, ''),
+            line: where ? Number(where[1]) : undefined,
+            col: where?.[2] ? Number(where[2]) : undefined,
+            rule: row.querySelector('.opf-source-finding-rule')?.textContent ?? '',
+            path: row.querySelector('.opf-source-finding-path')?.textContent ?? '',
+            fixes: [...(row.closest('li')?.querySelectorAll('.opf-source-finding-fix') ?? [])].map((button) => button.textContent),
+          };
+        }),
       })),
+      /** The problems drawn in the text: severity, range and the text covered. */
+      squiggles: () => page.evaluate(() => (demo.pane.getText(), demo.pane.getProblems().map((problem) => ({ severity: problem.severity, from: problem.from, to: problem.to, message: problem.message, next: problem.next, text: demo.pane.editor.api.getValue().slice(problem.from, problem.to), fixes: (problem.fixes ?? []).map((fix) => fix.title) })))),
+      /** Everything the live region said so far. */
+      live: () => page.evaluate(() => window.__live ?? []),
+      /** The hover and lint tooltips on screen (not the completion list). */
+      hover: () => page.evaluate(() => {
+        const nodes = [...document.querySelectorAll('.cm-tooltip')].filter((node) => !node.classList.contains('cm-tooltip-autocomplete') && !node.classList.contains('cm-completionInfo') && node.getBoundingClientRect().width > 0);
+        return { open: nodes.length > 0, text: nodes.map((node) => node.textContent).join(' | ') };
+      }),
+      /** The documentation panel beside the selected item: whether it shows, and its text. */
+      docs: () => page.evaluate(() => {
+        const node = document.querySelector('.cm-tooltip-autocomplete .cm-completionInfo, .cm-tooltip.cm-completionInfo');
+        const shown = Boolean(node) && getComputedStyle(node).display !== 'none' && node.getBoundingClientRect().width > 0;
+        return { shown, text: shown ? node.textContent : '' };
+      }),
       dialog: () => page.evaluate(() => {
         const node = document.querySelector('.json-field-menu');
         return { open: Boolean(node), focusInside: Boolean(node?.contains(document.activeElement)) };
@@ -229,9 +267,99 @@ async function runStep(kb, step) {
   }
   if (kind === 'snapshot') { kb.snapshots ??= {}; kb.snapshots[args[0]] = await kb.source(); return undefined; }
   if (kind === 'expectSame') { assert.equal(await kb.source(), kb.snapshots[args[0]], 'the second run changed the text again (not idempotent)'); return undefined; }
+  if (kind === 'chord') {
+    // A two-key chord (Cmd+K Cmd+I): the keys one after the other.
+    for (const key of args) await kb.page.keyboard.press(keyFor(key));
+    return kb.settle();
+  }
+  if (kind === 'hoverText') {
+    // The pointer over the text of a token, long enough for the tooltip (300 ms by default) to show.
+    const box = await kb.page.evaluate((needle) => {
+      const { view, api } = demo.pane.editor, at = view.state.doc.toString().indexOf(needle);
+      if (at < 0) throw new Error(`"${needle}" is not in the text`);
+      const a = view.coordsAtPos(at + Math.min(1, needle.length)), b = view.coordsAtPos(at + needle.length - 1) ?? a;
+      void api;
+      return { x: (a.left + (b?.right ?? a.right)) / 2, y: (a.top + a.bottom) / 2 };
+    }, args[0]);
+    await kb.page.mouse.move(box.x - 30, box.y + 40);
+    await kb.page.mouse.move(box.x, box.y, { steps: 4 });
+    await kb.page.waitForFunction(() => [...document.querySelectorAll('.cm-tooltip')].some((node) => !node.classList.contains('cm-tooltip-autocomplete') && node.getBoundingClientRect().width > 0), null, { timeout: 2500 }).catch(() => {});
+    return undefined;
+  }
+  if (kind === 'quickFix') {
+    // Cmd/Ctrl+. at the caret, then the action by its title with the arrows and Enter. With no fix at the caret the author presses F8 first.
+    await kb.press('Mod+.');
+    if (!(await kb.page.locator('.opf-fixes').count())) { await kb.press('F8'); await kb.press('Mod+.'); }
+    const titles = await kb.page.evaluate(() => [...document.querySelectorAll('.opf-fixes .opf-fix')].map((node) => node.textContent));
+    const index = titles.indexOf(args[0]);
+    assert.ok(index >= 0, `the quick fix "${args[0]}" is offered: ${JSON.stringify(titles)}`);
+    for (let step = 0; step < index; step++) await kb.press('ArrowDown');
+    return kb.press('Enter');
+  }
+  if (kind === 'hoverProblem') {
+    // The pointer over the first character of the nth problem, long enough for its tooltip.
+    const box = await kb.page.evaluate((index) => {
+      const problem = demo.pane.getProblems()[index], view = demo.pane.editor.view;
+      const at = demo.pane.editor.view.state.doc.toString().length >= 0 ? problem.from : 0;
+      const a = view.coordsAtPos(Math.min(at + 0, view.state.doc.length)), b = view.coordsAtPos(Math.min(problem.to, view.state.doc.length)) ?? a;
+      return { x: Math.max(a.left + 1, (a.left + b.right) / 2 - 2), y: (a.top + a.bottom) / 2 };
+    }, args[0] ?? 0);
+    await kb.page.mouse.move(box.x - 30, box.y + 40);
+    await kb.page.mouse.move(box.x, box.y, { steps: 4 });
+    await kb.page.waitForFunction(() => [...document.querySelectorAll('.cm-tooltip')].some((node) => !node.classList.contains('cm-tooltip-autocomplete') && node.getBoundingClientRect().width > 0), null, { timeout: 2500 }).catch(() => {});
+    return undefined;
+  }
+  if (kind === 'placeCaret') {
+    // The caret at the start of a needle (or its end when `end`), for problems that are not under the caret yet.
+    await kb.page.evaluate(([needle, end]) => { const { api } = demo.pane.editor, at = api.getValue().indexOf(needle); if (at < 0) throw new Error(`"${needle}" is not in the source`); api.focus(); api.setSelection(at + (end ? needle.length : 0)); }, [args[0], args[1]]);
+    return kb.settle();
+  }
+  if (kind === 'waitProblems') {
+    // The pane checks the text 150 ms after the last key (syntax) and 250 ms in the harness (the rest): wait for the problems, not for a time.
+    await kb.page.waitForFunction((count) => demo.pane.getProblems().length >= count, args[0] ?? 1, { timeout: 4000 });
+    return kb.settle();
+  }
+  if (kind === 'waitNoProblems') {
+    await kb.page.waitForFunction(() => (demo.pane.getText(), demo.pane.getProblems().length === 0), null, { timeout: 4000 });
+    return kb.settle();
+  }
+  if (kind === 'readOnly') { await kb.page.evaluate((value) => demo.pane.setReadOnly(value), args[0]); return kb.settle(); }
+  if (kind === 'pause') { await kb.page.waitForTimeout(args[0]); return undefined; }
+  if (kind === 'expectRow') {
+    const at = await kb.page.evaluate(() => [...document.querySelectorAll('.opf-source-finding')].indexOf(document.activeElement));
+    assert.equal(at, args[0], 'the focused row of the panel');
+    return undefined;
+  }
+  if (kind === 'clickRowFix') {
+    await kb.page.locator('.opf-source-finding-fix', { hasText: args[0] }).first().click();
+    return kb.settle();
+  }
+  if (kind === 'waitLive') {
+    await kb.page.waitForFunction((pattern) => (window.__live ?? []).some((message) => new RegExp(pattern).test(message)), args[0], { timeout: 2500 }).catch(() => {});
+    return undefined;
+  }
+  if (kind === 'waitLabels') {
+    // The accessible names of the options are set a moment after the list shows.
+    await kb.page.waitForFunction(() => [...document.querySelectorAll('.cm-tooltip-autocomplete [role="option"]')].every((option) => option.getAttribute('aria-label')), null, { timeout: 2000 });
+    return undefined;
+  }
+  if (kind === 'snapshotPopup') { kb.popups ??= {}; kb.popups[args[0]] = (await kb.popup()).items.map((item) => item.label); return undefined; }
+  if (kind === 'expectSamePopup') { assert.deepEqual((await kb.popup()).items.map((item) => item.label), kb.popups[args[0]], 'the same input gives the same list'); return undefined; }
+  if (kind === 'expectDocs') {
+    // The panel is positioned a frame after the selection changes.
+    await kb.page.waitForFunction((want) => {
+      const node = document.querySelector('.cm-tooltip-autocomplete .cm-completionInfo, .cm-tooltip.cm-completionInfo');
+      const shown = Boolean(node) && getComputedStyle(node).display !== 'none' && node.getBoundingClientRect().width > 0;
+      return shown === want;
+    }, args[0], { timeout: 2000 }).catch(() => {});
+    assert.equal((await kb.docs()).shown, args[0], `the documentation panel is ${args[0] ? 'shown' : 'hidden'}`);
+    return undefined;
+  }
   if (kind === 'openOptionsDialog') return kb.press('Alt+Shift+O');
   throw new Error(`unknown step ${kind}`);
 }
+
+const page_attrs = (page, selector, names) => page.evaluate(([css, list]) => { const node = document.querySelector(css); return Object.fromEntries(list.map((name) => [name, node?.getAttribute(name)])); }, [selector, names]);
 
 async function check(kb, expect) {
   const text = await kb.text();
@@ -248,8 +376,46 @@ async function check(kb, expect) {
     if (want.selected !== undefined) assert.equal(popup.selected, want.selected, 'popup selected');
     if (want.selectedIndex !== undefined) assert.equal(popup.selectedIndex, want.selectedIndex, 'popup selected index');
     if (want.selectedIsLast) assert.equal(popup.selectedIndex, popup.items.length - 1, 'the selection wrapped to the last item');
+    if (want.ariaNames) want.ariaNames.forEach((pattern, index) => assert.match(popup.items[index]?.name ?? '', pattern, `option ${index} accessible name`));
     if (want.count) assert.ok(popup.items.length >= want.count[0] && popup.items.length <= want.count[1], `popup count ${popup.items.length} in ${want.count}`);
   }
+  if (expect.docs) {
+    const docs = await kb.docs();
+    if (expect.docs.shown !== undefined) assert.equal(docs.shown, expect.docs.shown, 'documentation panel shown');
+    for (const item of [expect.docs.has ?? []].flat()) assert.ok(docs.text.includes(item), `the documentation has ${JSON.stringify(item)}: ${JSON.stringify(docs.text)}`);
+  }
+  if (expect.squiggles) {
+    const squiggles = await kb.squiggles();
+    if (Array.isArray(expect.squiggles)) {
+      assert.equal(squiggles.length, expect.squiggles.length, `squiggles: ${JSON.stringify(squiggles)}`);
+      expect.squiggles.forEach((want, index) => {
+        const got = squiggles[index];
+        if (want.text !== undefined) assert.equal(got.text, want.text, `squiggle ${index} covers ${JSON.stringify(got.text)}`);
+        if (want.sev !== undefined) assert.equal(got.severity, want.sev, `squiggle ${index} severity`);
+        if (want.has !== undefined) assert.ok(got.message.includes(want.has), `squiggle ${index} says ${JSON.stringify(got.message)}`);
+      });
+    }
+  }
+  if (expect.hover) {
+    const hover = await kb.hover();
+    if (expect.hover.open !== undefined) assert.equal(hover.open, Boolean(expect.hover.open), `hover open: ${hover.text}`);
+    for (const item of [expect.hover.has ?? []].flat()) assert.ok(hover.text.includes(item), `the hover has ${JSON.stringify(item)}: ${JSON.stringify(hover.text)}`);
+    for (const item of [expect.hover.not ?? []].flat()) assert.ok(!hover.text.includes(item), `the hover lacks ${JSON.stringify(item)}: ${JSON.stringify(hover.text)}`);
+  }
+  if (expect.live) {
+    const said = await kb.live();
+    assert.ok(said.some((message) => new RegExp(expect.live).test(message)), `the live region said ${expect.live}: ${JSON.stringify(said)}`);
+  }
+  if (expect.attrs) {
+    for (const [selector, wanted] of Object.entries(expect.attrs)) {
+      const got = await page_attrs(kb.page, selector, Object.keys(wanted));
+      for (const [name, value] of Object.entries(wanted)) {
+        if (value instanceof RegExp) assert.match(got[name] ?? '', value, `${selector} ${name}`);
+        else assert.equal(got[name], value, `${selector} ${name}`);
+      }
+    }
+  }
+  if (expect.gutter) assert.ok(await kb.page.locator(expect.gutter).count() > 0, `the gutter has ${expect.gutter}`);
   if (expect.cursors !== undefined) assert.equal(await kb.cursors(), expect.cursors, 'cursors');
   if (expect.deck) {
     const deck = await kb.deck();
@@ -259,6 +425,15 @@ async function check(kb, expect) {
     const findings = await kb.findings();
     if (expect.findings.hidden !== undefined) assert.equal(findings.hidden, expect.findings.hidden, `findings hidden (${findings.count})`);
     if (expect.findings.errors !== undefined) assert.equal(findings.rows.filter((row) => row.severity === 'error').length, expect.findings.errors, `errors: ${JSON.stringify(findings.rows)}`);
+    if (expect.findings.n !== undefined) assert.equal(findings.rows.length, expect.findings.n, `findings: ${JSON.stringify(findings.rows)}`);
+    for (const [index, want] of (expect.findings.rows ?? []).entries()) {
+      const got = findings.rows[index];
+      assert.ok(got, `finding ${index} exists: ${JSON.stringify(findings.rows)}`);
+      for (const key of ['sev', 'severity']) if (want[key] !== undefined) assert.equal(got.severity, want[key], `finding ${index} severity`);
+      for (const key of ['line', 'col']) if (want[key] !== undefined) assert.equal(got[key], want[key], `finding ${index} ${key}: ${JSON.stringify(got)}`);
+      for (const key of ['text', 'next', 'rule', 'path']) if (want[key] !== undefined) assert.ok(got[key].includes(want[key]), `finding ${index} ${key} has ${JSON.stringify(want[key])}: ${JSON.stringify(got[key])}`);
+      if (want.fixes) for (const title of want.fixes) assert.ok(got.fixes.includes(title), `finding ${index} offers "${title}": ${JSON.stringify(got.fixes)}`);
+    }
     if (expect.findings.warnings !== undefined) assert.equal(findings.rows.filter((row) => row.severity === 'warning').length, expect.findings.warnings, `warnings: ${JSON.stringify(findings.rows)}`);
   }
   if (expect.dialog !== undefined) {
@@ -267,6 +442,7 @@ async function check(kb, expect) {
     if (expect.dialog.focusInside !== undefined) assert.equal(dialog.focusInside, expect.dialog.focusInside, 'focus is inside the dialog');
   }
   if (expect.focus !== undefined) assert.equal(await kb.focus(), expect.focus, 'focus');
+  if (expect.format !== undefined) assert.equal(await kb.page.evaluate(() => demo.pane.getFormat()), expect.format, 'format');
   if (expect.status !== undefined) assert.match(await kb.status(), expect.status, 'status');
   if (expect.acceptedIsSelected) assert.ok(kb.selectedBefore && plain.includes(kb.selectedBefore), `the text has the item that was selected (${kb.selectedBefore}): ${plain}`);
   if (expect.undo) {
@@ -280,7 +456,7 @@ async function check(kb, expect) {
  * Run `cases` on `suite` (a `startKeyboardSuite()` result). Each case gets a fresh page. Returns `{ passed, failed }`; a failure is the
  * case id and its message, so the whole table is reported, not just the first row.
  */
-export async function runCases(suite, cases, { query = '', onFailure, cpuThrottle = 1 } = {}) {
+export async function runCases(suite, cases, { query = '', onFailure, cpuThrottle = 1, notify = false } = {}) {
   const failed = [];
   let passed = 0;
   for (const [id, requirement, title, format, doc, steps, expect, options = {}] of cases) {
@@ -294,7 +470,7 @@ export async function runCases(suite, cases, { query = '', onFailure, cpuThrottl
     const kb = suite.driver(page);
     suite.problems.length = 0;
     try {
-      await kb.put(doc, { format });
+      await kb.put(doc, { format, notify: options.notify ?? notify });
       for (const step of steps) {
         if (['press', 'fast'].includes(step[0]) && expect.acceptedIsSelected) kb.selectedBefore = (await kb.popup()).selected;
         await runStep(kb, step);

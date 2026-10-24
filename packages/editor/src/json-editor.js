@@ -1,17 +1,19 @@
 import { Annotation, ChangeSet, Compartment, EditorSelection, EditorState, Prec, StateEffect, StateField, Transaction, countColumn } from "@codemirror/state";
-import { Decoration, EditorView, crosshairCursor, drawSelection, keymap, lineNumbers, rectangularSelection } from "@codemirror/view";
-import { defaultKeymap, history, historyKeymap, indentLess, indentMore, insertNewlineAndIndent, isolateHistory, redo, undo, undoDepth } from "@codemirror/commands";
+import { Decoration, EditorView, activateHover, closeHoverTooltips, crosshairCursor, drawSelection, hasHoverTooltips, hoverTooltip, keymap, lineNumbers, rectangularSelection } from "@codemirror/view";
+import { defaultKeymap, deleteCharBackward, toggleTabFocusMode, history, historyKeymap, indentLess, indentMore, insertNewlineAndIndent, isolateHistory, redo, undo, undoDepth } from "@codemirror/commands";
 import { HighlightStyle, StreamLanguage, bracketMatching, codeFolding, foldKeymap, indentOnInput, indentUnit, syntaxHighlighting } from "@codemirror/language";
-import { json, jsonParseLinter } from "@codemirror/lang-json";
+import { json } from "@codemirror/lang-json";
 import { yaml } from "@codemirror/lang-yaml";
-import { acceptCompletion, autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap, completionStatus, moveCompletionSelection, startCompletion } from "@codemirror/autocomplete";
+import { acceptCompletion, autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap, completionStatus, currentCompletions, deleteBracketPair, hasNextSnippetField, hasPrevSnippetField, moveCompletionSelection, nextSnippetField, prevSnippetField, startCompletion } from "@codemirror/autocomplete";
 import { highlightSelectionMatches, search, searchKeymap } from "@codemirror/search";
-import { linter } from "@codemirror/lint";
 import { tags } from "@lezer/highlight";
 import { findNodeAtOffset, getNodePath, parseTree } from "jsonc-parser";
 import {jsonSource,jsonSourceHistory,setJsonSource} from './json-source.js';
 import {textInputMap} from './text-input.js';
 import {detectIndent,formatJsonSource,whitespaceEdits} from './json-format.js';
+import {a11yExtension,createAnnouncer} from './source-a11y.js';
+import { forEachDiagnostic } from "@codemirror/lint";
+import {createDiagnostics,editsTransaction} from './source-diagnostics.js';
 const external = Annotation.define();
 const hoverField = StateEffect.define();
 const activeField = StateField.define({ create: () => null, update: (value, tr) => tr.effects.reduce((value2, effect) => effect.is(hoverField) ? effect.value : value2, value) });
@@ -69,7 +71,7 @@ const markdownLanguage = StreamLanguage.define({
 function languageExtension(name, completions) {
   if (name === "yaml") return yaml();
   if (name === "markdown") return markdownLanguage;
-  return [json(), linter(jsonParseLinter(), { delay: 500 }), fieldDecorations, completions ?? []];
+  return [json(), fieldDecorations, completions ?? []];
 }
 // Tab or Enter pressed right after a keystroke can arrive before the completion query that keystroke started has answered (with the data
 // loaded it answers within a task or two). Accepting then waits for the answer instead of inserting whitespace or a line over a list that is
@@ -77,7 +79,7 @@ function languageExtension(name, completions) {
 function acceptOrFallBack(isReady, fallback) {
   return (view) => {
     if (acceptCompletion(view)) return true;
-    if (completionStatus(view.state) !== "pending" || !isReady()) return false;
+    if (completionStatus(view.state) !== "pending" || !isReady()) return fallback(view);
     let tries = 0;
     const settle = () => {
       if (!view.dom.isConnected) return;
@@ -88,37 +90,69 @@ function acceptOrFallBack(isReady, fallback) {
     return true;
   };
 }
-// Completion keys, as in VS Code: Tab and Enter accept the selected suggestion, Escape closes the list, Ctrl+Space (and Cmd+I on macOS) opens it
-// wherever the schema has something to offer, and the arrows, the Page keys and Ctrl+N and Ctrl+P (macOS) move the selection. Without a list,
-// none of them is taken: Tab then inserts whitespace and Enter inserts a line.
-function completionKeys(isReady) {
+// The documentation panel beside the selected item is shown by default (VS Code's `suggest.showInlineDetails`); Ctrl+Space with the list open
+// hides or shows it (`toggleSuggestionDetails`). The choice is the editor's, not the list's, so it stays across lists.
+function toggleDocs(view) {
+  const hidden = view.dom.classList.toggle("opf-docs-off");
+  view.dom.dataset.opfDocs = hidden ? "off" : "on";
+  return true;
+}
+const listIsOpen = (state) => completionStatus(state) === "active" && currentCompletions(state).length > 0;
+// Left and Right inside the word being completed move the caret and keep the list, which then filters by the text before the caret (VS Code).
+// A move that leaves the word (or the line) is the plain move, which closes the list. The move is dispatched as typing without a change, which
+// is the one transaction the completion state keeps its result for.
+function moveInToken(forward, tokenOf) {
+  return (view) => {
+    const { state } = view, range = state.selection.main;
+    if (!listIsOpen(state) || state.selection.ranges.length !== 1 || !range.empty) return false;
+    const target = view.moveByChar(range, forward);
+    if (target.head === range.head) return false;
+    const text = state.doc.toString(), here = tokenOf(text, range.head), there = tokenOf(text, target.head);
+    if (!here || !there || here.start !== there.start) return false;
+    view.dispatch({ selection: { anchor: target.head }, userEvent: "input.type", scrollIntoView: true });
+    // Ask again at the new caret, so the list filters by the text before it.
+    startCompletion(view);
+    return true;
+  };
+}
+// Backspace with the list open deletes and asks again, so the list widens as the word shrinks (the completion state alone closes the list
+// when the caret goes back past the place it was opened).
+function backspaceInToken(tokenOf) {
+  return (view) => {
+    if (!listIsOpen(view.state) || view.state.selection.ranges.length !== 1 || !view.state.selection.main.empty) return false;
+    if (!(deleteBracketPair(view) || deleteCharBackward(view))) return false;
+    const { state } = view;
+    if (tokenOf(state.doc.toString(), state.selection.main.head)) startCompletion(view);
+    return true;
+  };
+}
+// Completion keys, as in VS Code: Tab and Enter accept the selected suggestion (Shift+Tab and Shift+Enter accept it too: in a JSON string the
+// accepted item always replaces the whole token), Escape closes the list, Ctrl+Space (and Cmd+I on macOS) opens it wherever the schema has
+// something to offer and, with the list open, shows or hides its documentation, and the arrows, the Page keys and Ctrl+N and Ctrl+P (macOS)
+// move the selection. Without a list, none of them is taken: Tab then inserts whitespace (or walks the stops of a snippet) and Enter inserts
+// a line.
+function completionKeys(isReady, tokenOf, onStep) {
+  // Tab and Shift+Tab walk the tab stops of a snippet; the engine says which stop it is and opens the list at a stop that is a choice.
+  const walk = (forward, fallback) => (view) => {
+    if (forward ? hasNextSnippetField(view.state) && nextSnippetField(view) : hasPrevSnippetField(view.state) && prevSnippetField(view)) { onStep(view, forward); return true; }
+    return fallback(view);
+  };
+  const enter = (view) => nextStringItem(view) || insertNewlineAndIndent(view);
   return Prec.highest(keymap.of([
-    ...completionKeymap.filter((binding) => binding.key !== "Enter"),
-    { key: "Enter", run: acceptOrFallBack(isReady, (view) => nextStringItem(view) || insertNewlineAndIndent(view)) },
-    { key: "Tab", run: acceptOrFallBack(isReady, tabCommand) },
+    ...completionKeymap.filter((binding) => binding.key !== "Enter" && binding.key !== "Ctrl-Space"),
+    { key: "Ctrl-Space", run: (view) => (listIsOpen(view.state) ? toggleDocs(view) : startCompletion(view)) },
+    { key: "Enter", run: acceptOrFallBack(isReady, enter) },
+    { key: "Shift-Enter", run: acceptOrFallBack(isReady, insertNewlineAndIndent) },
+    { key: "Tab", run: acceptOrFallBack(isReady, walk(true, tabCommand)) },
+    { key: "Shift-Tab", run: acceptOrFallBack(isReady, walk(false, indentLess)) },
+    { key: "ArrowLeft", run: moveInToken(false, tokenOf) },
+    { key: "ArrowRight", run: moveInToken(true, tokenOf) },
+    { key: "Backspace", run: backspaceInToken(tokenOf) },
     { mac: "Mod-i", run: startCompletion },
     { mac: "Ctrl-n", run: moveCompletionSelection(true) },
     { mac: "Ctrl-p", run: moveCompletionSelection(false) },
   ]));
 }
-// Accept a completion by rewriting its whole token (quotes included), so a string key, a bare word and a changed value type all land
-// as valid JSON. A key adds ": " when none follows and then offers the values of that key. The quotes are read from the text when the
-// completion is applied, because the list is reused while the author keeps typing the same token.
-function completionApply(found, option) {
-  return (view, completion, from, to) => {
-    const { state } = view;
-    const start = found.quoted && state.sliceDoc(from - 1, from) === '"' ? from - 1 : from;
-    const end = found.quoted && state.sliceDoc(to, to + 1) === '"' ? to + 1 : to;
-    let insert = JSON.stringify(option.value);
-    const chain = found.kind === "key" && !/^\s*:/.test(state.sliceDoc(end, Math.min(state.doc.length, end + 200)));
-    if (chain) insert += ": ";
-    view.dispatch({ changes: { from: start, to: end, insert }, selection: { anchor: start + insert.length }, userEvent: "input.complete", scrollIntoView: true });
-    if (chain) setTimeout(() => startCompletion(view), 0);
-  };
-}
-// A quoted token keeps its list for any text between the quotes; a bare word for word characters only.
-const QUOTED_TEXT = /^[^"\\\n\r]*$/;
-const WORD_TEXT = /^[A-Za-z0-9_.-]*$/;
 const DEFAULT_INDENT = "  ";
 const tabWidth = (unit) => (unit === "\t" ? 4 : unit.length);
 // Tab without a completion list (VS Code's `tab`): whitespace goes in at the caret, up to the next tab stop, and replaces a selection inside
@@ -248,21 +282,40 @@ function mountJsonCodeEditor(parent, options) {
       menu=mountJsonFieldMenu(parent,api,catalogs,left,top,()=>{menu=null;});
     }catch(error){options.onError?.(error);}
   }
-  // Live completions (JSON only, `completions: true`): property names and values at the cursor's JSON path, from the same data as the field
-  // menu. The data loads with the field menu's chunk, at the first focus or the first query; once loaded, a query answers at once (no
-  // promise), and the list stays valid while the author types within the same token (`validFor`), so typing only refilters it.
+  // Live completions (JSON only, `completions: true`): property names and values at the cursor's JSON path, from the schema and the catalogs, with
+  // templates and snippets (source-completions.js). The engine loads at the first focus or the first query; once loaded, a query answers at once
+  // (no promise), and the list stays valid while the author types within the same token (`validFor`), so typing only refilters it.
   let optionsModule = null, optionsLoading = null;
-  const loadOptions = () => (optionsLoading ??= import('./json-options.js').then((module) => (optionsModule = module), (error) => { optionsLoading = null; throw error; }));
+  const loadOptions = () => (optionsLoading ??= import('./source-completions.js').then((module) => (optionsModule = module), (error) => { optionsLoading = null; throw error; }));
+  const applyOption = (target, completion, from, to) => optionsModule.applyCompletion(target, completion, from, to, say);
+  // Hover: the schema's words over a key, the record's over a catalog id. A problem under the pointer is the lint tooltip's (message, next, fixes).
+  const problemAt = (state, position) => { let hit = false; forEachDiagnostic(state, (_diagnostic, from, to) => { if (position >= from && position <= to) hit = true; }); return hit; };
+  const hoverExtension = options.hover === false ? [] : hoverTooltip(async (target, position) => {
+    if (disposed || languageName !== "json" || problemAt(target.state, position)) return null;
+    if (!optionsModule) { try { await loadOptions(); } catch { return null; } }
+    return optionsModule.hoverAt(target.state, position, { catalogs });
+  }, { hoverTime: 300 });
+  // Cmd/Ctrl+K Cmd/Ctrl+I shows the hover at the caret (VS Code), and says what it holds.
+  const showHoverAtCaret = (target) => {
+    if (languageName !== "json" || options.hover === false) return false;
+    const run = () => {
+      const position = target.state.selection.main.head;
+      const found = optionsModule.hoverModelAt(target.state, position, { catalogs });
+      if (!found) { say("No hover information here"); return; }
+      activateHover(target, found.from, 1, { tooltip: hoverExtension, until: (tr) => tr.docChanged || (tr.selection !== undefined && tr.newSelection.main.head !== position) });
+      say(optionsModule.docText(found.model));
+    };
+    if (optionsModule) run(); else loadOptions().then(run, () => {});
+    return true;
+  };
   function completionResult(context) {
-    const found = optionsModule.getJsonCompletions(context.state.doc.toString(), context.pos, catalogs, { explicit: context.explicit });
+    const found = optionsModule.completionResult(context.state, context.pos, { explicit: context.explicit, catalogs });
     if (!found) return null;
-    return { from: found.from, to: found.to, filter: true, validFor: found.quoted ? QUOTED_TEXT : WORD_TEXT, options: found.options.map((option) => ({
-      label: option.label, detail: option.detail, info: option.info, boost: option.boost, type: found.kind === "key" ? "property" : "enum", apply: completionApply(found, option),
-    })) };
+    for (const option of found.options) option.apply = applyOption;
+    return found;
   }
   function completionSource(context) {
-    // One list for one cursor: with several, Tab and Enter keep their plain meaning at every cursor instead of completing at the main one only.
-    if (disposed || languageName !== "json" || context.state.selection.ranges.length > 1) return null;
+    if (disposed || languageName !== "json" || context.state.readOnly) return null;
     if (optionsModule) return completionResult(context);
     return loadOptions().then(() => (disposed || context.aborted ? null : completionResult(context)), (error) => { options.onError?.(error); return null; });
   }
@@ -271,12 +324,42 @@ function mountJsonCodeEditor(parent, options) {
   const redoCommand = (target) => redo(target) || Boolean(options.historyFallback?.redo?.());
   const historyBindings = historyKeymap.map((binding) => binding.run === undo ? { ...binding, run: undoCommand } : binding.run === redo ? { ...binding, run: redoCommand } : binding);
   // Accept with no minimum delay: the list is already valid for the typed text, so Tab or Enter right after a keystroke accepts (VS Code does).
-  const completionExtension = options.completions ? [autocompletion({ override: [completionSource], defaultKeymap: false, icons: false, maxRenderedOptions: 60, interactionDelay: 0, activateOnTypingDelay: 0 }), completionKeys(() => optionsModule !== null)] : null;
+  // Screen reader announcements and the problems drawn in the text (squiggles, F8, Cmd/Ctrl+.). The pane supplies the problems.
+  const announcer = createAnnouncer(parent, options.announce);
+  const say = (message) => announcer.say(message);
+  const applyProblemFix = (fix, problem) => {
+    if (disposed || view.state.readOnly) return;
+    if (typeof fix.run === "function") { fix.run(api, problem); return; }
+    if (fix.edits?.length) {
+      view.dispatch(editsTransaction(view.state, api.getValue(), fix.edits, { caret: fix.caret, select: fix.select }));
+      view.focus();
+      say(`${fix.title} applied`);
+    }
+  };
+  const diagnostics = createDiagnostics({ getSource: () => view.state.field(jsonSource), say, applyFix: applyProblemFix });
+  // On its own (no source pane to supply the problems) the editor underlines the syntax errors of JSON: one per cause, 300 ms after the last key.
+  let syntaxTimer = null;
+  function scheduleSyntax() {
+    if (options.syntaxProblems === false) return;
+    clearTimeout(syntaxTimer);
+    syntaxTimer = setTimeout(async () => {
+      if (disposed || languageName !== "json") return;
+      try {
+        const { analyzeSyntax } = await import('./source-syntax.js');
+        if (disposed || languageName !== "json") return;
+        const source = api.getValue();
+        diagnostics.draw(view, analyzeSyntax(source).map((problem) => ({ from: problem.range.from, to: problem.range.to, severity: "error", message: problem.message, next: problem.next, rule: problem.ruleId,
+          fixes: (problem.editFixes ?? []).filter((fix) => !fix.action).map((fix) => ({ id: fix.id, title: fix.title, safe: fix.safe, edits: fix.edits, caret: fix.caret })) })));
+      } catch (error) { options.onError?.(error); }
+    }, 300);
+  }
+  const completionExtension = options.completions ? [autocompletion({ override: [completionSource], defaultKeymap: false, icons: false, maxRenderedOptions: 60, interactionDelay: 0, activateOnTypingDelay: 0 }), completionKeys(() => optionsModule !== null, (text, position) => optionsModule?.tokenAt(text, position, false), (target, forward) => optionsModule?.snippetStep(target, forward, { say }))] : null;
   const contentAttributes = (invalid = options.invalid, describedBy = options.describedBy) => EditorView.contentAttributes.of({
     "aria-label": options.label,
     "aria-invalid": String(Boolean(invalid)),
     "aria-describedby": describedBy ?? "",
-    "aria-keyshortcuts": options.completions ? "Control+Space" : "Control+Space Alt+Shift+O",
+    "aria-keyshortcuts": options.completions ? "Control+Space F8 Shift+F8 Control+Period Alt+Shift+F" : "Control+Space Alt+Shift+O Alt+Shift+F",
+    "aria-description": options.completions ? "Press Control+Space for suggestions. Press F8 for the next problem. Press Escape then Tab to leave the editor." : "Press Escape then Tab to leave the editor.",
     spellcheck: "false",
     autocapitalize: "off",
     autocorrect: "off"
@@ -290,7 +373,15 @@ function mountJsonCodeEditor(parent, options) {
   // The field menu: Alt+Shift+O, a chord VS Code does not use.
   const isOptionsKey = (event) => event.altKey && event.shiftKey && !event.metaKey && !event.ctrlKey && letter(event, "o");
   const view = new EditorView({ parent, state: EditorState.create({ doc: options.code, extensions: [
+    // The problem menu's keys come before the list's: the two are never open together, and Enter must reach whichever is.
+    diagnostics.extension,
     language.of(languageExtension(languageName, completionExtension)),
+    hoverExtension,
+    Prec.high(keymap.of([
+      { key: "Mod-k Mod-i", run: showHoverAtCaret },
+      { key: "Escape", run: (target) => (hasHoverTooltips(target.state) ? (target.dispatch({ effects: closeHoverTooltips }), true) : false) },
+    ])),
+    a11yExtension(announcer, (completion) => completion.opfDoc ?? (typeof completion.info === "string" ? completion.info : "")),
     editable.of(editableExtension(options.readOnly)),
     jsonSource.init(()=>options.code),jsonSourceHistory,
     indent.of(indentExtension(languageName)),
@@ -343,6 +434,11 @@ function mountJsonCodeEditor(parent, options) {
       // it is also on Ctrl+Space, because the list is not there to take that key.
       ...(options.completions ? [] : [{ key: "Ctrl-Space", run: () => languageName === "json" && (void openOptions(), true) }, { key: "Mod-Space", run: () => languageName === "json" && (void openOptions(), true) }]),
       { key: "Tab", run: tabCommand, shift: indentLess },
+      // The problems panel (VS Code: Cmd+Shift+M on macOS, Ctrl+Shift+M elsewhere); Ctrl+M (Ctrl+Shift+M on macOS) is VS Code's switch for Tab leaving the editor.
+      { key: "Mod-Shift-m", run: () => Boolean(options.onFocusProblems?.()) },
+      // JSON has no comments: say so instead of doing nothing (YAML and Markdown comment their lines out).
+      { key: "Mod-/", run: () => { if (languageName !== "json") return false; say("JSON has no comments. Use YAML or Markdown for notes."); return true; } },
+      { key: "Ctrl-m", mac: "Ctrl-Shift-m", run: toggleTabFocusMode },
       ...closeBracketsKeymap,
       ...defaultKeymap,
       ...historyBindings,
@@ -373,6 +469,7 @@ function mountJsonCodeEditor(parent, options) {
       const busy = completionStatus(update.state) === "pending", dom = update.view.dom;
       if (busy !== (dom.dataset.opfBusy === "1")) { if (busy) dom.dataset.opfBusy = "1"; else delete dom.dataset.opfBusy; }
       if (update.docChanged && !update.transactions.every((tr) => tr.annotation(external))) options.onChange(update.state.field(jsonSource));
+      if (update.docChanged) scheduleSyntax();
     })
   ] }) });
   const api = {
@@ -393,6 +490,15 @@ function mountJsonCodeEditor(parent, options) {
     },
     /** The indentation unit now in effect: a tab character or some spaces. */
     indentUnit: () => view.state.facet(indentUnit),
+    /** Say `message` in the editor's live region. */
+    say,
+    /**
+     * Apply several edits as one undoable change. `edits` are `{ from, to, insert }` in source offsets of the text as it is now; `caret` (or
+     * `select: [from, to]`) is a position in the text after the edits.
+     */
+    applyEdits(edits, { caret, select, userEvent } = {}) {
+      view.dispatch(editsTransaction(view.state, api.getValue(), edits, { caret, select, userEvent }));
+    },
     coordinates: () => {
       const rect = view.coordsAtPos(view.state.selection.main.head) ?? parent.getBoundingClientRect();
       return { left: rect.left, top: rect.bottom + 8 };
@@ -434,6 +540,23 @@ function mountJsonCodeEditor(parent, options) {
     api,
     openOptions,
     setCatalogs(value){catalogs=value??[];closeOptions();},
+    /**
+     * Draw the problems in the text: `{ from, to, severity, message, next?, rule?, fixes? }` with source offsets into the current text. A fix is
+     * `{ id, title, safe?, edits?, caret?, select?, run? }`.
+     */
+    setProblems(problems){if(!disposed)diagnostics.draw(view,problems??[]);},
+    /** The problems drawn now, in position order, at their current source offsets. */
+    getProblems:()=>diagnostics.problems(view).map(({diagnostic,...problem})=>problem),
+    nextProblem:()=>diagnostics.next(view),
+    previousProblem:()=>diagnostics.previous(view),
+    /** Open the quick fix list for the problems at the caret (Cmd/Ctrl+.). */
+    triggerQuickFix:()=>diagnostics.openMenu(view),
+    /** Open the suggestion list at the caret (Ctrl+Space). */
+    triggerCompletion:()=>startCompletion(view),
+    /** Whether a suggestion list is open or being asked for. */
+    isCompleting:()=>completionStatus(view.state)!==null,
+    /** Perform a fix (its edits as one undoable change, or its own action). */
+    applyFix:(fix,problem)=>applyProblemFix(fix,problem),
     /** Switch the highlighting between "json" (with its parse linter, field highlights and option menu), "yaml" and "markdown". */
     setLanguage(name){
       if(name===languageName)return;
@@ -479,7 +602,7 @@ function mountJsonCodeEditor(parent, options) {
         annotations: [external.of(true), Transaction.addToHistory.of(false)]
       });
     },
-    destroy: () => {if(disposed)return;disposed=true;closeOptions();view.destroy();}
+    destroy: () => {if(disposed)return;disposed=true;clearTimeout(syntaxTimer);closeOptions();announcer.destroy();view.destroy();}
   };
 }
 export {

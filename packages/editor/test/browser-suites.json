@@ -193,6 +193,10 @@
           "command": "node test/source-keyboard-browser.mjs"
         },
         {
+          "id": "browser:source-keyboard-json",
+          "command": "node test/source-keyboard-json-browser.mjs"
+        },
+        {
           "id": "browser:export-license",
           "command": "pnpm run test:export-license-browser"
         }

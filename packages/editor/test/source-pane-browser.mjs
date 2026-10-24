@@ -85,8 +85,8 @@ try {
   await page.keyboard.type('"What This Shows" "x",');
   const findings = page.locator('.opf-source-findings');
   await findings.waitFor();
-  assert.match(await findings.locator('.opf-source-findings-count').innerText(), /1 error/);
-  assert.match(await findings.locator('.opf-source-finding-line').first().innerText(), /^Ln \d+$/);
+  assert.match(await findings.locator('.opf-source-findings-count').innerText(), /^2 errors$/, 'a value then a string with no comma: the missing comma and the string read as a key with no colon');
+  assert.match(await findings.locator('.opf-source-finding-line').first().innerText(), /^Ln \d+(, Col \d+)?$/);
   assert.equal((await deck(page)).slides[1].title, 'What This Shows', 'invalid JSON never reaches the session');
   // Deleting everything is an error too; an outside change then replaces the draft.
   await page.evaluate(() => demo.pane.editor.api.focus());
@@ -266,7 +266,7 @@ try {
     return result;
   });
   assert.equal(refused.title, 'T', 'a refused edit never reaches the document');
-  assert.match(refused.text, /must be string/);
+  assert.match(refused.text, /`title` should be text or a list, but it is a number/);
   assert.deepEqual(refused.kinds, ['rejected']);
   assert.equal(refused.after, 'Fine');
   assert.equal(refused.hidden, true);
@@ -292,7 +292,7 @@ try {
   const shown = await rows.locator('.opf-source-finding-line').allInnerTexts();
   const brokenText = await text(broken);
   const expected = path => brokenText.slice(0, brokenText.indexOf(path)).split('\n').length;
-  assert.deepEqual(shown, [`Ln ${expected('"title": 42')}`, `Ln ${expected('"items":')}`]);
+  assert.deepEqual(shown.map(value => value.replace(/, Col \d+$/, '')), [`Ln ${expected('"title": 42')}`, `Ln ${expected('"items":')}`]);
   await rows.nth(1).click();
   assert.equal(await line(broken), expected('"items":'), 'a row moves the cursor to its line');
   await rows.nth(0).click();
@@ -309,7 +309,7 @@ try {
   // setFindings: the host passes core validator output, with its own line.
   await broken.evaluate(() => demo.pane.setFindings([{ ruleId: 'opf/schema', severity: 'warning', path: '/name', message: 'Host note', line: 2 }]));
   assert.equal(await list.locator('.opf-source-findings-count').innerText(), '1 warning');
-  assert.equal(await rows.locator('.opf-source-finding-line').innerText(), 'Ln 2');
+  assert.match(await rows.locator('.opf-source-finding-line').innerText(), /^Ln 2(, Col \d+)?$/);
   await broken.evaluate(() => demo.pane.setFindings([]));
   await list.waitFor({ state: 'hidden' });
   await broken.evaluate(() => demo.pane.setFindings(null));
@@ -376,7 +376,7 @@ try {
   assert.ok(strict.messages.every(message => message.length > 0));
   assert.deepEqual(strict.kinds, ['rejected', 'rejected', 'rejected']);
   const strictLines = path => strict.text.slice(0, strict.text.indexOf(path)).split('\n').length;
-  assert.deepEqual(strict.lines, [`Ln ${strictLines('"title": 42')}`, `Ln ${strictLines('"items":')}`, `Ln ${strictLines('"unknown"')}`], 'each issue has its line');
+  assert.deepEqual(strict.lines.map(value => value.replace(/, Col \d+$/, '')), [`Ln ${strictLines('"title": 42')}`, `Ln ${strictLines('"items":')}`, `Ln ${strictLines('"unknown"')}`], 'each issue has its line');
   assert.equal(strict.fixedInvalid, 'false', 'accepting the next draft clears aria-invalid');
   assert.equal(strict.fixedHidden, true);
   assert.equal(strict.sessionInvalid, 'true', 'errors in the session document set aria-invalid');
@@ -413,23 +413,22 @@ try {
   assert.ok(inside.ok, `the popup is inside the page (${inside.box})`);
   assert.notEqual(await popup.locator('[aria-selected="true"]').evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(17, 119, 204)', 'the selected option uses the token color, not the default blue');
   await typing.keyboard.press('Enter');
-  assert.ok((await text(typing)).includes('{ "title": "OWAA Rocks!", "layout":  }'), `a key is completed with its colon: ${await text(typing)}`);
+  assert.ok((await text(typing)).includes('{ "title": "OWAA Rocks!", "layout": "" }'), `a key is completed with its colon and the quotes of its value: ${await text(typing)}`);
   // The values of that key are offered right away.
   await popup.waitFor();
   const layouts = await options().locator('.cm-completionLabel').allInnerTexts();
   assert.ok(layouts.includes('text') && layouts.includes('cover') && layouts.length > 10, `a catalog field offers its records: ${layouts}`);
-  await typing.keyboard.type('"tex');
+  await typing.keyboard.type('tex');
   await typing.waitForFunction(() => document.querySelector('.cm-tooltip-autocomplete [aria-selected="true"] .cm-completionLabel')?.textContent === 'text' && document.querySelectorAll('.cm-tooltip-autocomplete [role="option"]').length < 5, null, { timeout: 5000 });
   assert.ok((await options().locator('.cm-completionLabel').allInnerTexts()).includes('text'), 'typing narrows the list');
   await typing.keyboard.press('Enter');
-  assert.ok((await text(typing)).includes('"layout": "text" }'), `a value replaces the whole token, quotes included: ${await text(typing)}`);
+  assert.ok((await text(typing)).includes('"layout": "text" }'), `a value replaces what is between the quotes: ${await text(typing)}`);
   await popup.waitFor({ state: 'hidden' });
   await waitDeck(typing, (d) => d.slides[0].layout === 'text');
   assert.equal(await typing.locator('.opf-source-findings').isHidden(), true, 'the completed draft is valid');
   // Escape closes the popup and keeps the typed text; Ctrl+Space opens the list again (the field menu has its own key, Alt+Shift+O).
-  await typing.keyboard.press('Backspace');
-  await typing.keyboard.press('Backspace');
-  await typing.keyboard.type('"');
+  await typing.keyboard.type(', "');
+  await popup.waitFor();
   await typing.keyboard.press('Escape');
   await popup.waitFor({ state: 'hidden' });
   await typing.keyboard.press('Control+Space');
