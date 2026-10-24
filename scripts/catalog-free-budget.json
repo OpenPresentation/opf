@@ -12,6 +12,7 @@
     "markdown": 287975,
     "pagination": 241349,
     "patch": 238523,
+    "schema": 72931,
     "schemas": 66667,
     "spec-files": 582,
     "symbol-font-encodings": 36084,
@@ -75,6 +76,10 @@
     "repo-readme": {
       "minified": 16569,
       "gzip": 6109
+    },
+    "schema": {
+      "minified": 262678,
+      "gzip": 70806
     },
     "schemas": {
       "minified": 246196,

@@ -4,6 +4,7 @@ const entry = {
   deck: "src/deck.ts",
   markdown: "src/markdown.ts",
   yaml: "src/yaml.ts",
+  schema: "src/schema-navigation.ts",
   patch: "src/patch.ts",
   diff: "src/diff.ts",
   format: "src/format.ts",

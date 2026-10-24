@@ -62,12 +62,14 @@
       "examples": ["Bob Lee", ["Bob Lee", "Carla Diaz"]]
     },
     "audience": {
+      "x-opf-catalog": "audiences",
       "oneOf": [
         { "type": "string" },
         { "$ref": "#/$defs/Audience" },
         {
           "type": "array",
           "items": {
+            "x-opf-catalog": "audiences",
             "oneOf": [
               { "type": "string" },
               { "$ref": "#/$defs/Audience" }
@@ -96,6 +98,7 @@
       ]
     },
     "purpose": {
+      "x-opf-catalog": "purposes",
       "oneOf": [
         { "type": "string" },
         { "$ref": "#/$defs/Purpose" }
@@ -124,6 +127,7 @@
       ]
     },
     "tone": {
+      "x-opf-catalog": "tones",
       "oneOf": [{ "$ref": "#/$defs/CatalogReference" }, { "$ref": "#/$defs/Tone" }],
       "description": "Desired tone for the presentation. Accepts either:\n- A tones reference: a bare id ('formal') or 'name:id' for a record of a named catalogs group.\n- An inline Tone object for custom tone metadata or overrides on a referenced record. Object form has the fields of https://openpresentation.org/schema/opf-tone/v1.\n\nA reference resolves like every content reference (see catalogs); one that resolves nowhere is the warning opf/unresolved-reference. Nothing is drawn from the tone.",
       "examples": [
@@ -181,6 +185,7 @@
       "default": false
     },
     "narrative": {
+      "x-opf-catalog": "narratives",
       "$ref": "#/$defs/CatalogReference",
       "description": "The deck's narrative plan, by reference: a bare narratives id ('classic-story') or 'name:id' for a record of a named catalogs group ('acme:founder-pitch'). The deck holds only this pointer; the plan (the arc, its beats and what each beat must do) lives in the record, which has the fields of https://openpresentation.org/schema/opf-narrative/v1. A narrative the document defines itself is a record in catalogs.custom.narratives, referenced here by its key.\n\nSlides link themselves to beats with slides[].beat. Core validate warns about a slides[].beat id the resolved narrative does not define and about a root 'duration' outside its 'duration' range, and reports a beat that no slide references. The preview and the PPTX export draw nothing from the narrative; opf-pptx stores the reference for round-trip.\n\nThe reference resolves like every content reference (see catalogs); one that resolves nowhere is the warning opf/unresolved-reference, never an error.\n\nDeck-level concerns that are not part of the storyline (audience, tone, takeaway, duration) live as siblings on the presentation root.",
       "examples": ["classic-story", "problem-solution", "scqa", "pitch-deck", "acme:founder-pitch"]
@@ -277,6 +282,7 @@
       ],
       "properties": {
         "id": {
+          "x-opf-catalog": "audiences",
           "$ref": "#/$defs/CatalogReference",
           "description": "Optional audiences reference (a bare id or 'name:id') resolved before applying the inline overrides.",
           "examples": ["executive", "board", "engineering-team"]
@@ -339,6 +345,7 @@
       ],
       "properties": {
         "id": {
+          "x-opf-catalog": "purposes",
           "$ref": "#/$defs/CatalogReference",
           "description": "Optional purposes reference (a bare id or 'name:id') resolved before applying the inline overrides.",
           "examples": ["inform", "decide", "align", "persuade", "educate"]
@@ -418,10 +425,12 @@
           "examples": ["Latn", "Cyrl", "Grek", "Arab", "Hebr", "Jpan", "Kore", "Hans", "Hant", "Deva", "Thai"]
         },
         "fontScheme": {
+          "x-opf-catalog": "fontSchemes",
           "$ref": "#/$defs/CatalogReference",
           "description": "Font-scheme reference (a bare id or 'name:id') for this language's script slot when targeting PowerPoint output. Its major/minor families fill the language's script slot (eastAsian or complexScript, chosen by 'script') unless the effective design font scheme sets that slot itself; the latin slot always follows the design font scheme. Without it, engines use the default script fonts of their language vocabulary."
         },
         "googleFontScheme": {
+          "x-opf-catalog": "fontSchemes",
           "$ref": "#/$defs/CatalogReference",
           "description": "Font-scheme reference (a bare id or 'name:id') used in place of 'fontScheme' when resolving script fonts for Google Slides output."
         },
@@ -449,6 +458,7 @@
       ],
       "properties": {
         "id": {
+          "x-opf-catalog": "tones",
           "$ref": "#/$defs/CatalogReference",
           "description": "Optional tones reference (a bare id or 'name:id') resolved before applying the inline overrides.",
           "examples": ["formal", "casual", "technical", "persuasive"]
@@ -648,11 +658,13 @@
       "description": "Visual design system applied to the presentation; individual slides may override fields via Slide.design.",
       "properties": {
         "theme": {
+          "x-opf-catalog": "themes",
           "$ref": "#/$defs/CatalogReference",
           "description": "Theme for the deck: a themes reference, a bare id ('minimal') or 'name:id' ('acme:brand'). The theme supplies the default colour scheme, font scheme, background and dimensions; design.colorScheme, design.fontScheme, design.background and design.dimensions override it field by field. A reference that resolves nowhere is the warning opf/unresolved-reference and engines use the engine default theme.",
           "examples": ["minimal", "classic", "bold", "acme:brand"]
         },
         "colorScheme": {
+          "x-opf-catalog": "colorSchemes",
           "oneOf": [
             { "type": "string" },
             { "$ref": "#/$defs/ColorScheme" }
@@ -666,6 +678,7 @@
           ]
         },
         "fontScheme": {
+          "x-opf-catalog": "fontSchemes",
           "oneOf": [
             { "type": "string" },
             { "$ref": "#/$defs/FontScheme" }
@@ -785,6 +798,7 @@
       "description": "Color palette used by the design system. Every slot and role is a hex color ('#RGB', '#RRGGBB' or '#RRGGBBAA'); a color-scheme name or a 'var:<id>' reference is not valid here, because those resolve through the scheme. The slot fields (accent1-accent6, dark1, dark2, light1, light2, hyperlink, followedHyperlink) mirror color-scheme.schema.json (https://openpresentation.org/schema/opf-color-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML slots - the 12-slot PowerPoint theme model that round-trips directly to OOXML. Use these for full control over the palette as PowerPoint sees it.\n- Abstract roles (primary, secondary, accent, background, surface, text, textSecondary) - OPF-specific semantic aliases the engine maps onto the OOXML slots. Convenient for inline overrides without thinking in slot numbers; not part of the catalog record schema.\n\nIn design.colorScheme, 'id' resolves a colorSchemes record as the base; slot and role overrides on the same object take precedence over the resolved scheme. The string form of design.colorScheme is equivalent to setting only 'id'.",
       "properties": {
         "id": {
+          "x-opf-catalog": "colorSchemes",
           "$ref": "#/$defs/CatalogReference",
           "description": "Colour-scheme reference (a bare id or 'name:id') resolved as the base; slot and role overrides on the surrounding ColorScheme object take precedence over the resolved scheme.",
           "examples": ["cool-horizon", "boost", "burnt-orange", "ocean-depth", "corporate-blue"]
@@ -891,6 +905,7 @@
       "description": "Typography selections used by the design system. The pair fields (major, minor) and refinement fields (type, app, languageFamily) mirror font-scheme.schema.json (https://openpresentation.org/schema/opf-font-scheme/v1) so library records and inline OPF overrides are interchangeable on those fields.\n\nTwo parallel models are supported and may be mixed:\n- OOXML pairs (major, minor) - heading and body family names that round-trip directly to PowerPoint majorFont/minorFont entries.\n- Abstract roles (heading, body, accent, code) - OPF-specific font family names the engine maps onto the OOXML pair when serializing. Convenient for inline overrides and for adding accent/code roles that don't have a direct OOXML slot. Catalog records may also carry 'code' (for example the consolas and courier-new records); heading, body and accent are not part of the catalog record schema. A role is a family name only: weight, style and tracking come from the text styles, and PowerPoint has no numeric weight.\n\nIn design.fontScheme, 'id' resolves a fontSchemes record as the base; pair and role overrides on the same object take precedence over the resolved scheme. The string form of design.fontScheme is equivalent to setting only 'id'.",
       "properties": {
         "id": {
+          "x-opf-catalog": "fontSchemes",
           "$ref": "#/$defs/CatalogReference",
           "description": "Font-scheme reference (a bare id or 'name:id') resolved as the base; field overrides on the surrounding FontScheme object take precedence over the resolved scheme.",
           "examples": ["aptos", "tenorite", "seaford", "noto-sans", "modern-sans", "classic-serif"]
@@ -1937,6 +1952,7 @@
           "description": "Optional reference to one or more beats of the deck's narrative (each value is the id of a beat in the narrative record that the root 'narrative' resolves to). A single string declares the slide's primary beat; an array declares that one slide covers multiple beats. Declares the slide's role in the story arc; does not constrain ordering or structure. Core validate warns about a beat id the resolved narrative does not define, and reports a beat that no slide references. Slides without a beat are valid; multiple slides may share a beat."
         },
         "layout": {
+          "x-opf-catalog": "layouts",
           "$ref": "#/$defs/CatalogReference",
           "description": "Optional layout: a layouts reference, a bare id ('pillars') or 'name:id' ('acme:hero'), or 'auto'. When omitted or 'auto', the slide is composed with no layout record: engines arrange title, subtitle, tag and content automatically, a slide with no body payload is a cover (vertically centered), and design hints apply; there is no finding. 'auto' is reserved, so no catalog may define a layout of that id, and opf format drops it. A layout is a grid template (layout.schema.json): the slide's content stays flat and binds to the layout's regions by reading order, role and kind, a block may pin itself to a region with 'region', and an empty region collapses. A reference that resolves nowhere is the warning opf/unresolved-reference (and the 'unresolved-reference' diagnostic of resolveSlideContext), the slide composes automatically, and a strict export fails. A layout id of the 0.18 default catalog that 0.19 no longer has is such a reference: 0.19 has no migration path for layouts. A layout never changes what a slide contains, and engines never substitute a different layout.",
           "examples": ["cover", "pillars", "chart-beside", "auto", "acme:hero"]

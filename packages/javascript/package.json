@@ -102,6 +102,10 @@
       "types": "./dist/yaml.d.ts",
       "import": "./dist/yaml.js"
     },
+    "./schema": {
+      "types": "./dist/schema.d.ts",
+      "import": "./dist/schema.js"
+    },
     "./patch": {
       "types": "./dist/patch.d.ts",
       "import": "./dist/patch.js"
