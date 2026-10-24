@@ -498,6 +498,7 @@ function mountJsonCodeEditor(parent, options) {
     ...km.bind("fold.unfold", saying(unfold)),
     ...km.bind("edit.undo", undoCommand),
     ...km.bind("hint.shape", feature("hints", "showShapeHint")),
+    ...(km.note("hint.close"), []),
     ...km.bind("nav.definition", feature("navigation", "goToDefinition")),
     ...km.bind("nav.peek", feature("navigation", "peekDefinition")),
     ...km.bind("nav.references", feature("navigation", "findReferences")),

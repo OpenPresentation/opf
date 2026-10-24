@@ -48,6 +48,7 @@ export const TABLE = Object.freeze([
   entry("problem.panel", "Move focus to the problems panel", "Problems and fixes", [{ key: "Mod-Shift-m" }], { dom: true }),
   // Hover and hints
   entry("hover.show", "Show the hover at the caret", "Hover and hints", [{ key: "Mod-k Mod-i" }], { dom: true }),
+  entry("hint.close", "Close the hint", "Hover and hints", [{ key: "Escape" }], { when: "a hint is shown", installedWith: "hint.shape" }),
   entry("hint.shape", "Show the shape of the slide (parameter hints)", "Hover and hints", [{ key: "Mod-Shift-Space" }]),
   // Go to
   entry("nav.definition", "Go to definition", "Go to", [{ key: "F12" }, { key: "Mod-Click" }], { clickOnly: ["Mod-Click"] }),
