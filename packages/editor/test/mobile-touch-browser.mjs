@@ -3,6 +3,8 @@
 // top bar and bottom bar fit a phone ("Galleries" is whole, the document name has its own row, the zoom does not sit on the notes).
 // The viewport is a fixed layout viewport (`isMobile: false`): an `isMobile` viewport widens itself to fit overflowing content, which would hide
 // the sideways scroll this test looks for. Touch is on (`hasTouch`), so `(pointer: coarse)` holds; the test asserts it.
+// CI runs the core states (every page load costs seconds, and the browser job has a time limit): Chromium at 320 and 390px, WebKit at 320px, the
+// three browser/width runs side by side. OPF_TOUCH_FULL=1 runs every state in both engines at both widths (what the audit behind the PR used).
 // OPF_TOUCH_ENGINES=chromium,webkit picks the engines (default both); OPF_WEBKIT_EXECUTABLE points at a WebKit build you already have.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -32,6 +34,8 @@ const launchers = {
 };
 const engines = (process.env.OPF_TOUCH_ENGINES ?? 'chromium,webkit').split(',');
 const widths = [320, 390];
+const full = process.env.OPF_TOUCH_FULL === '1';
+const widthsFor = (engine) => (full || engine === 'chromium' ? widths : [320]);
 const checks = [];
 const problems = [];
 
@@ -130,7 +134,9 @@ async function sourcePane(context, engine, width) {
       await page.locator('.cm-search input').first().waitFor();
     }],
   ];
+  const sourceCore = new Set(['JSON', 'YAML (Canonicalize)', 'format menu', 'problems with a fix and details', 'completion list', 'search panel']);
   for (const [name, query, run] of states) {
+    if (!full && !(sourceCore.has(name) && (engine === 'chromium' || ['JSON', 'problems with a fix and details'].includes(name)))) continue;
     const page = await open(query);
     await run(page);
     await page.waitForFunction(() => document.getAnimations().every((animation) => animation.playState !== 'running'), undefined, { timeout: 5000 }).catch(() => {});
@@ -141,7 +147,7 @@ async function sourcePane(context, engine, width) {
     if (name === 'rename') assert.ok(await page.evaluate(() => parseFloat(getComputedStyle(document.querySelector('.opf-source-name-input')).fontSize) >= 16), `${tag(name)}: the name field is 16px`);
     await page.close();
   }
-  checks.push(`${engine} ${width}px: the source pane's bar, menu, rename field, outline, problems, fix and detail buttons, completion list and search panel are all 44px, fields 16px, nothing overlaps`);
+  checks.push(`${engine} ${width}px: the source pane's bar, menu, problems, fix and detail buttons, completion list and search panel (all states with OPF_TOUCH_FULL=1) are all 44px, fields 16px, nothing overlaps`);
 }
 
 async function playground(browser, engine, width) {
@@ -174,7 +180,9 @@ async function playground(browser, engine, width) {
     ['the Add content panel', async (page) => { await page.locator('#insert-content').click(); }],
     ['the slide menu', async (page) => { await page.locator('button.slide-tool[data-action]').last().click(); }],
   ];
+  const core = new Set(['the start', 'the Edit sheet (selection, text, notes)', 'the Design sheet with every group open', 'the More menu', 'the Import dialog, Gallery tab', 'the Layouts view', 'the Find panel']);
   for (const [name, run] of states) {
+    if (!full && !(core.has(name) && (engine === 'chromium' || ['the start', 'the Edit sheet (selection, text, notes)', 'the Design sheet with every group open', 'the Layouts view'].includes(name)))) continue;
     const page = await open();
     await run(page);
     // A sheet or a menu may still be sliding (a slow machine starts the transition late): measure when nothing moves.
@@ -186,7 +194,7 @@ async function playground(browser, engine, width) {
     assertClean({ ...report, overlaps: report.overlaps.filter((entry) => !coveredByPopup(entry)) }, `${tag(name)} ${JSON.stringify(sheetState)}`);
     await page.close();
   }
-  checks.push(`${engine} ${width}px: 14 playground states (start, More, Edit, Design, Review, Source, Import, Copy, Properties, Outline, Layouts, Find, Add content, slide menu) have 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control`);
+  checks.push(`${engine} ${width}px: the playground states (${full ? 'start, More, Edit, Design, Review, Source, Import, Copy, Properties, Outline, Layouts, Find, Add content, slide menu' : 'start, Edit, Design, and on Chromium More, Import, Layouts, Find'}) have 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control`);
 
   // The top bar and the footer, by name.
   const page = await open();
@@ -232,21 +240,22 @@ async function playground(browser, engine, width) {
 }
 
 try {
+  const browsers = new Map();
   for (const engine of engines) {
-    let browser;
-    try { browser = await launchers[engine](); } catch (error) {
+    try { browsers.set(engine, await launchers[engine]()); } catch (error) {
       if (engine === 'webkit' && !process.env.CI && !process.env.OPF_WEBKIT_EXECUTABLE) { console.log(`Skipping WebKit: ${error.message.split('\n')[0]}`); continue; }
       throw error;
     }
-    try {
-      for (const width of widths) {
-        const context = await browser.newContext({ viewport: { width, height: 740 }, deviceScaleFactor: 2, hasTouch: true, isMobile: false });
-        await sourcePane(context, engine, width);
-        await context.close();
-        await playground(browser, engine, width);
-      }
-    } finally { await browser.close(); }
   }
+  try {
+    // One run per engine and width, side by side: a run only waits for its own page loads.
+    await Promise.all([...browsers].flatMap(([engine, browser]) => widthsFor(engine).map(async (width) => {
+      const context = await browser.newContext({ viewport: { width, height: 740 }, deviceScaleFactor: 2, hasTouch: true, isMobile: false });
+      await sourcePane(context, engine, width);
+      await context.close();
+      await playground(browser, engine, width);
+    })));
+  } finally { for (const browser of browsers.values()) await browser.close(); }
   assert.deepEqual(problems, [], 'no page or console error');
-  console.log(`Mobile and touch (${engines.join(', ')}; ${widths.join(' and ')}px): ${checks.length} groups.\n  ${checks.join('\n  ')}`);
+  console.log(`Mobile and touch (${[...browsers.keys()].join(', ')}; ${full ? 'full' : 'core states'}): ${checks.length} groups.\n  ${checks.sort().join('\n  ')}`);
 } finally { server.close(); }
