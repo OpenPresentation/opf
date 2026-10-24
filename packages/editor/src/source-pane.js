@@ -131,9 +131,9 @@ export function createSourcePane(container, options = {}) {
   const detailsOpen = new Set();
   const detailsKeys = { ids: new Map(), id(key) { if (!this.ids.has(key)) this.ids.set(key, this.ids.size + 1); return this.ids.get(key); } };
   // The text checks may run in a Web Worker (options.worker): `checker` is null without one. `checkToken` numbers the check the pane still wants (a flush,
-  // an external change or a newer edit cancels the one in flight), `waiting` counts the worker requests in flight, `stats` what answered the applied edits.
+  // an external change or a newer edit cancels the one in flight), `checkBusy` and `syntaxBusy` say the newest worker request of each kind is in flight, `stats` what answered the applied edits.
   const checker = options.worker ? createSourceChecker({ worker: options.worker, onError: (error) => options.onError?.(error) }) : null;
-  let checkToken = 0, syntaxToken = 0, waiting = 0;
+  let checkToken = 0, syntaxToken = 0, checkBusy = false, syntaxBusy = false;
   const stats = { worker: 0, inline: 0 };
   let problemRows = [], lastDraft = null, lastSummary = "No problems", summaryTimer = null, syntaxTimer = null, recheckTimer = null;
   // The exact text of the documents `replaceDocument` replaced and opened, per format, so Undo and Redo show it again byte for byte
@@ -358,16 +358,13 @@ export function createSourcePane(container, options = {}) {
     syntaxFindings = found;
     renderFindings();
   }
-  const working = (delta) => {
-    waiting += delta;
-    if (waiting > 0) root.dataset.opfChecking = "1";
-    else root.removeAttribute("data-opf-checking");
-  };
+  // The newest request of each kind is the one the pane waits for; an older reply that arrives later is ignored and must not count.
+  const showBusy = () => { if (checkBusy || syntaxBusy) root.dataset.opfChecking = "1"; else root.removeAttribute("data-opf-checking"); };
   /** Drop the worker requests in flight: their replies are ignored (a flush, an external change or the end of the pane). */
   function cancelChecks() {
     checkToken++;
     syntaxToken++;
-    if (waiting) { waiting = 0; root.removeAttribute("data-opf-checking"); }
+    if (checkBusy || syntaxBusy) { checkBusy = false; syntaxBusy = false; showBusy(); }
   }
   /** The apply delay is over: check the text in the worker, then apply it as `flush` would (inline at once when the worker is not usable). */
   function flushViaWorker() {
@@ -375,10 +372,12 @@ export function createSourcePane(container, options = {}) {
     if (destroyed || control.api.getValue() === baseline) return;
     if (!checker.available) { flush(); return; }
     const source = control.api.getValue(), fmt = format, used = catalogs(), token = ++checkToken;
-    working(1);
+    checkBusy = true;
+    showBusy();
     checker.check(fmt, source, used).then((result) => {
       if (token !== checkToken) return;
-      working(-1);
+      checkBusy = false;
+      showBusy();
       if (destroyed) return;
       // A newer edit has its own timer; a null answer means the worker dropped the request, so the text is checked here.
       if (control.api.getValue() !== source || format !== fmt) return;
@@ -388,7 +387,8 @@ export function createSourcePane(container, options = {}) {
       applyEdit(source, { read: result, catalogs: used });
     }, () => {
       if (token !== checkToken) return;
-      working(-1);
+      checkBusy = false;
+      showBusy();
       if (!destroyed) flush();
     });
   }
@@ -397,16 +397,19 @@ export function createSourcePane(container, options = {}) {
     if (destroyed || format !== "json") return;
     if (!checker.available) { checkSyntax(); return; }
     const text = control.api.getValue(), token = ++syntaxToken;
-    working(1);
+    syntaxBusy = true;
+    showBusy();
     checker.syntax(text).then((found) => {
       if (token !== syntaxToken) return;
-      working(-1);
+      syntaxBusy = false;
+      showBusy();
       // The applied text has its findings already (and they are the final ones).
       if (found === null || destroyed || format !== "json" || control.api.getValue() !== text || text === baseline) return;
       showSyntax(found);
     }, () => {
       if (token !== syntaxToken) return;
-      working(-1);
+      syntaxBusy = false;
+      showBusy();
       if (!destroyed) checkSyntax();
     });
   }
@@ -1221,7 +1224,7 @@ export function createSourcePane(container, options = {}) {
     /** Resolves once no edit is waiting for its delay and no check is running (a worker's included): the text on screen has been read and applied. */
     whenIdle() {
       return new Promise((resolve) => {
-        const poll = () => { if (destroyed || (timer === null && syntaxTimer === null && waiting === 0)) resolve(); else setTimeout(poll, 4); };
+        const poll = () => { if (destroyed || (timer === null && syntaxTimer === null && !checkBusy && !syntaxBusy)) resolve(); else setTimeout(poll, 4); };
         poll();
       });
     },

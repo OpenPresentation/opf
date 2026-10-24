@@ -264,6 +264,24 @@ try {
     await page.close();
   }
 
+  // W-007: on a slow machine a check takes longer than the gap between two keys, so requests overlap; the older answers are dropped and the pane still becomes idle.
+  {
+    const page = await openHarness('on');
+    await put(page, 'yaml', bigText('yaml', 300));
+    if (engineName === 'chromium') await (await page.context().newCDPSession(page)).send('Emulation.setCPUThrottlingRate', { rate: 8 });
+    await page.evaluate(() => { const { api } = demo.pane.editor; const at = api.getValue().indexOf('title: Slide 150 headline'); api.focus(); api.setSelection(at + 'title: Slide 150 headline'.length); });
+    for (const character of 'abcdefghij') { await page.keyboard.type(character); await page.waitForTimeout(30); }
+    const idle = await page.evaluate(() => Promise.race([demo.pane.whenIdle().then(() => true), new Promise((resolve) => setTimeout(() => resolve(false), 20000))]));
+    assert.equal(idle, true, 'the pane becomes idle after overlapping worker checks');
+    assert.equal(await page.evaluate(() => document.querySelector('.opf-source').hasAttribute('data-opf-checking')), false, 'the checking flag is cleared');
+    // (Under an 8x slower CPU the browser sometimes puts a typed key out of order, with the worker off as well: the letters are checked, not their order.)
+    const title = await page.evaluate(() => demo.editor.presentation.slides[149].title);
+    assert.equal(title.slice(0, 18), 'Slide 150 headline');
+    assert.equal([...title.slice(18)].sort().join(''), 'abcdefghij', 'every typed letter reached the document');
+    console.log('W-007 overlapping worker checks on a slow CPU: the pane becomes idle and applies the last text.');
+    await page.close();
+  }
+
   // The 1000-slide decks load and show no problem with the worker (their timing is in the perf suite).
   {
     const page = await openHarness('on');

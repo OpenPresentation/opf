@@ -34,7 +34,7 @@ async function measure(mode, { format, needle, text }) {
       const control = demo.pane.editor;
       control.api.focus(); control.update(source); control.api.replace(0, source.length, source); control.resetHistory();
     }, [format, value]);
-    await page.evaluate(() => demo.pane.whenIdle());
+    await page.evaluate(() => Promise.race([demo.pane.whenIdle(), new Promise((_, reject) => setTimeout(() => reject(new Error('the pane did not become idle in 60 s')), 60000))]));
     await page.waitForFunction(() => demo.pane.getProblems().length === 0 && document.querySelector('.opf-source-findings')?.hidden !== false);
     await page.waitForTimeout(500);
     await page.evaluate((marker) => {
@@ -49,7 +49,7 @@ async function measure(mode, { format, needle, text }) {
     const collect = () => page.evaluate(() => { const long = window.__long.splice(0), gaps = window.__gaps.splice(0); return { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...gaps) }; });
     const type = async (characters, spacing, tail) => {
       for (const character of characters) { await page.keyboard.type(character); await page.waitForTimeout(spacing); }
-      await page.evaluate(() => demo.pane.whenIdle());
+      await page.evaluate(() => Promise.race([demo.pane.whenIdle(), new Promise((_, reject) => setTimeout(() => reject(new Error('the pane did not become idle in 60 s')), 60000))]));
       await page.waitForTimeout(tail);
       return collect();
     };
