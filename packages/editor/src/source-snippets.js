@@ -56,7 +56,7 @@ const columns = (first, second) => [ph(first, "Category"), ph(second, "Value")];
 
 /**
  * The snippets. `where`: "slide" (an entry of `slides`), "reference" (an entry of `references`), "dataset" (a new key of `datasets`), "deck" (a blank
- * document), "deck-key" (a new key of the deck: `key` is its name, the fragment its value). `fragment` is the OPF fragment; for "dataset" `name` is the entry's key.
+ * document). `fragment` is the OPF fragment; for "dataset" `name` is the entry's key.
  */
 export const SNIPPETS = Object.freeze([
   { prefix: "slide", where: "slide", description: "A slide with a title and a list", fragment: { title: ph(1, "Slide title"), items: [ph(2, "First point")] } },
@@ -71,13 +71,21 @@ export const SNIPPETS = Object.freeze([
   { prefix: "section", where: "slide", description: "A section divider", fragment: { layout: "section", title: ph(1, "Section title") } },
   { prefix: "reference", where: "reference", description: "A reference a slide can cite", fragment: { id: ph(1, "smith2020"), text: ph(2, "Citation") } },
   { prefix: "dataset", where: "dataset", description: "A table of data that charts and tables can share", name: ph(1, "sales"), fragment: { columns: [ph(2, "Category"), ph(3, "Value")], rows: [[ph(4, "A"), ph(5, "1", { raw: true })]] } },
-  // Keys of a deck that take an object: written with their required members as tab stops (SPEC 5 lists only `name` for the speaker; the Speaker schema requires an id too). `design` opens the list of the catalog at each stop.
-  { prefix: "design", where: "deck-key", key: "design", description: "The design of the deck: a theme, a color scheme and a font scheme", fragment: { theme: ph(1, "", { choice: true }), colorScheme: ph(2, "", { choice: true }), fontScheme: ph(3, "", { choice: true }) } },
-  { prefix: "organization", where: "deck-key", key: "organization", description: "The organization presenting the deck: an id and a name", fragment: { id: ph(1, "acme"), name: ph(2, "Acme Inc.") } },
-  { prefix: "speaker", where: "deck-key", key: "speaker", description: "The person presenting the deck: an id and a name", fragment: { id: ph(1, "alice"), name: ph(2, "Name") } },
   { prefix: "deck", where: "deck", description: "A starter deck", fragment: { name: ph(1, "Deck name"), slides: [{ title: ph(2, "Title") }] } },
   // Speaker notes in Markdown: a `Note:` line (JSON and YAML have the `notes` property for it).
   { prefix: "notes", where: "markdown", key: "notes", description: "Speaker notes for the slide", fragment: ph(1, "Speaker notes") },
+]);
+
+/**
+ * Snippets a KEY of the deck is accepted as (SPEC 5: `design`, `organization`, `speaker`): not items of the list on their own (`SNIPPETS` holds
+ * those), but what accepting the property writes, as VS Code does for a property with default snippets. The fragment is the value of the key. They hold
+ * the required members of the object, each a tab stop (SPEC 5 lists only `name` for the speaker; the Speaker schema requires an id too), and `design`
+ * opens the list of the catalog at each stop.
+ */
+export const KEY_SNIPPETS = Object.freeze([
+  { prefix: "design", where: "deck-key", key: "design", description: "The design of the deck: a theme, a color scheme and a font scheme", fragment: { theme: ph(1, "", { choice: true }), colorScheme: ph(2, "", { choice: true }), fontScheme: ph(3, "", { choice: true }) } },
+  { prefix: "organization", where: "deck-key", key: "organization", description: "The organization presenting the deck: an id and a name", fragment: { id: ph(1, "acme"), name: ph(2, "Acme Inc.") } },
+  { prefix: "speaker", where: "deck-key", key: "speaker", description: "The person presenting the deck: an id and a name", fragment: { id: ph(1, "alice"), name: ph(2, "Name") } },
 ]);
 
 /** The snippets that fit where the caret is: `where` and the path of the node (see source-json.js). */
@@ -97,7 +105,7 @@ export function snippetsFor(mode, path) {
  * but what accepting that property writes, as VS Code does for a property with default snippets.
  */
 export function keySnippetsFor(path) {
-  return path.length === 0 ? SNIPPETS.filter((snippet) => snippet.where === "deck-key") : [];
+  return path.length === 0 ? KEY_SNIPPETS : [];
 }
 
 /** The JSON text of a snippet for insertion: `{ text, fields }`; a dataset is a `"name": { ... }` entry. */

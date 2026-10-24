@@ -11,7 +11,7 @@ import { parse as parseYaml } from 'yaml';
 import { getNodeValue, parseTree } from 'jsonc-parser';
 import { completionResult, unloadedFooter } from '../dist/source-completions.js';
 import { REFERENCE_RULES, beatsOf, columnSourceFor, factsOf, flatRegions, jsonDeckParts, layoutKeys, referenceSiteAt, regionNames, valueAt, yamlDeckParts } from '../dist/source-references.js';
-import { SNIPPETS, keySnippetsFor, snippetJson, snippetYaml, snippetsFor } from '../dist/source-snippets.js';
+import { KEY_SNIPPETS, SNIPPETS, keySnippetsFor, snippetJson, snippetYaml, snippetsFor } from '../dist/source-snippets.js';
 import { openQuote, yamlContextAt } from '../dist/source-yaml.js';
 
 const catalogs = [gallery];
@@ -282,7 +282,7 @@ assert.deepEqual(snippetJson(keySnippetsFor([])[0]).fields, [{ index: 1, text: '
   const deck = { slides: [{ title: 'a' }], organization: { id: 'acme', name: 'Acme Inc.' }, speaker: { id: 'alice', name: 'Name' }, design: { theme: 'minimal', colorScheme: 'boost', fontScheme: 'aptos' } };
   assert.deepEqual(validate(deck, { catalogs }).findings.filter((finding) => finding.severity === 'error'), [], 'the values of the snippets make a valid deck');
 }
-for (const snippet of SNIPPETS) assert.ok(['slide', 'reference', 'dataset', 'deck', 'deck-key', 'markdown'].includes(snippet.where), `${snippet.prefix}: known place`);
+for (const snippet of KEY_SNIPPETS) assert.ok(snippet.key && snippet.where === 'deck-key' && !SNIPPETS.includes(snippet), `${snippet.prefix}: a key snippet, not an item of the list`);
 // A property accepted with a snippet writes the snippet (JSON, YAML); a key that already has its colon, or sits in a flow mapping, stays plain.
 {
   const { text, at } = caret('{\n  "slides": [],\n  "des|"\n}');
