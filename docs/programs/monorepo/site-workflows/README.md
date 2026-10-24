@@ -42,7 +42,7 @@ The deploy path is the site's own and unchanged; nothing here deploys, logs in t
    it does the whole bump of that site, so the pull request needs no human edit to be green:
    `openpresentation-site` sets the pins of the root and the starters and `opfSource` (the commit of the tag), refreshes the lockfile, updates
    `data/releases.json` from the registry and the GitHub release notes of the tag, syncs `.opf-source` and regenerates
-   `public/homepage-details/manifest.json`; `pptx-gallery` sets the pins, refreshes the lockfile, runs `sync-preview-fonts --core-repo <checkout>
+   `public/homepage-details/manifest.json`; `pptx-gallery` sets the pins, refreshes the lockfile, runs `import-font-replacements` and `sync-preview-fonts --core-repo <checkout>
    --core-ref <commit>`, the catalog and preview syncs and `build-chart-previews`, vendors the editor bundle and schema reference
    (`public/opf-editor`, `data/opf-spec.json`) with `scripts/vendor-gallery-editor.mjs` of the checkout at the tag, and runs the checks of its CI that
    read them; `pptx-dev` sets the pins, `opf-reference-layer-pins.json` and the lockfile. The checkout of this repository is `--opf <dir>`

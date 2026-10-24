@@ -56,7 +56,7 @@ jobs:
           # The only files a bump may touch (extended regular expression, matched against each changed path).
           # what the site's own `pnpm opf:bump` writes (scripts/opf-bump.mjs of the site): the pins, the generated catalog, preview and font files
           # and the vendored editor.
-          ALLOWED_FILES: '^(package\.json|pnpm-lock\.yaml|public/(opf-editor|chart-previews|layout-previews|preview-fonts)/.*|public/(audiences|chart-types|color-schemes|font-schemes|languages|layouts|narratives|purposes|social-platforms|themes|tones)/.*|styles/preview-fonts/.*|data/(opf-spec|preview-fonts|preview-font-replacements|audiences|charts|color-schemes|font-schemes|languages|layouts|narratives|purposes|socials|themes|tones)\.json)$'
+          ALLOWED_FILES: '^(package\.json|pnpm-lock\.yaml|public/(opf-editor|chart-previews|layout-previews|preview-fonts)/.*|public/(audiences|chart-types|color-schemes|font-schemes|languages|layouts|narratives|purposes|social-platforms|themes|tones)/.*|styles/preview-fonts/.*|data/(opf-spec|font-replacements|preview-fonts|preview-font-replacements|audiences|charts|color-schemes|font-schemes|languages|layouts|narratives|purposes|socials|themes|tones)\.json)$'
         run: |
           set -euo pipefail
           stop() { echo "::notice title=OPF bump::$1"; exit 0; }
