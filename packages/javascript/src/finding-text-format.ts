@@ -17,6 +17,7 @@ import {
   fieldLabel,
   isRecord,
   nearest,
+  placeWords,
 } from "./finding-text-util.js";
 import {
   chooseNext,
@@ -50,7 +51,7 @@ const jsonSyntax: RuleText = (finding) => ({
 /** `opf/duplicate-key`: VALIDATOR-HINTS section 6. The JSON Pointer's last segment is the key. */
 const duplicateKey: RuleText = (finding, _context, helpers) => {
   const key = helpers.segments.at(-1) ?? unquote(match(finding.message, /^Duplicate JSON property (".*")\.$/)?.[1]);
-  const owner = helpers.segments.length > 1 ? `in ${code(helpers.segments.at(-2))}` : "in this object";
+  const owner = placeWords(helpers.segments.slice(0, -1));
   return {
     message: `${code(key)} appears twice ${owner}. JSON keeps only the last value, so the earlier one is ignored.`,
     next: "keep one of them, or merge their values into one.",
