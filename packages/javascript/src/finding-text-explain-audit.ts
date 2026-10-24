@@ -6,6 +6,7 @@ import { CHART, type ExplainDetail, ex } from "./finding-text-explain-util.js";
 const WHITE = { background: { type: "solid", color: "#FFFFFF" } };
 const ROADMAP = { name: "Roadmap", regions: [{ name: "title" }, { direction: "row", regions: [{ name: "timeline", accepts: ["timeline"], max: 1 }, { name: "notes", accepts: ["text", "list"], flow: "column" }] }] };
 const TIMELINE = { timeline: { events: [{ when: "Q1", what: "Pilot" }, { when: "Q2", what: "Launch" }] } };
+const PERSON = (n: number) => ({ blocks: [{ image: { src: `https://example.com/${n}.png`, alt: `Person ${n}` } }, { text: `Person ${n}` }], composition: { mode: "column" } });
 const SERIES = (count: number) => ({ columns: ["Quarter", ...Array.from({ length: count }, (_, i) => `S${i + 1}`)], rows: [["Q1", ...Array.from({ length: count }, (_, i) => i + 1)]] });
 
 export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
@@ -16,8 +17,8 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   ),
   "opf/text-on-image": ex(
     "Add a full-frame overlay to the background image, or put the text on a solid or gradient background or a card, so contrast does not depend on the picture.",
-    { title: "Welcome", design: { background: { type: "image", src: "https://example.com/hero.jpg" } } },
-    { title: "Welcome", design: { background: { type: "image", src: "https://example.com/hero.jpg", overlay: { color: "#FFFFFF", opacity: 1 } } } },
+    { design: WHITE, slides: [{ title: "Welcome", design: { background: { type: "image", src: "https://example.com/hero.jpg" } } }] },
+    { design: WHITE, slides: [{ title: "Welcome", design: { background: { type: "image", src: "https://example.com/hero.jpg", overlay: { color: "#FFFFFF", opacity: 1 } } } }] },
   ),
   "opf/missing-alt-text": ex(
     "Describe the picture in `alt`, or write `alt: \"\"` when it is only decoration.",
@@ -40,9 +41,9 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { slides: [{ title: "Results: Q1", text: "Q1" }, { title: "Results: Q2", text: "Q2" }] },
   ),
   "opf/reading-order": ex(
-    "Reorder the blocks so the order they are read in follows the order they appear in, or choose a layout that puts the title first.",
-    { title: "Plan", blocks: [{ text: "Second thing to read", region: "right" }, { text: "First thing to read", region: "left" }] },
-    { title: "Plan", blocks: [{ text: "First thing to read", region: "left" }, { text: "Second thing to read", region: "right" }] },
+    "Reorder or regroup the blocks so the order they are read in follows the order they appear in, or choose a layout that puts the title first.",
+    { title: "Team", composition: { mode: "row" }, blocks: [PERSON(1), PERSON(2)] },
+    { title: "Team", composition: { mode: "column" }, blocks: [PERSON(1), PERSON(2)] },
   ),
   "opf/link-text": ex(
     "Make the link text say where the link goes, for example the name of the page or file.",
@@ -116,7 +117,7 @@ export const AUDIT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   ),
   "opf/furniture-wraps": ex(
     "Shorten the header or footer text, or move part of it to another zone. Headers and footers should fit on two lines.",
-    { design: { footer: { left: { text: "A footer that keeps going and going and going and going and going and going and going and going and going and going" } } }, slides: [{ title: "Welcome" }] },
+    { design: { footer: { left: { text: "A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going" }, center: { text: "Confidential" }, right: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
     { design: { footer: { left: { text: "Acme, confidential" }, right: { text: "{{slide.number}}" } } }, slides: [{ title: "Welcome" }] },
   ),
   "opf/font-outside-scheme": ex(

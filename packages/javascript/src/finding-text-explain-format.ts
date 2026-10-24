@@ -84,9 +84,9 @@ export const FORMAT_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
     { title: "Revenue", table: { columns: [{ name: "Revenue", format: "$#,##0" }], rows: [[12]] } },
   ),
   "opf/variable-invalid-value": ex(
-    "Give the variable a value of its declared type: a plain number for `number`, a date for `date`, a hex color for `color`.",
-    { variables: { seats: { type: "number", value: "many" } }, slides: [{ title: "{{seats}} seats" }] },
-    { variables: { seats: { type: "number", value: 40 } }, slides: [{ title: "{{seats}} seats" }] },
+    "Give the variable a value of its declared type: a plain number for `number`, a date for `date`, a hex color for `color`. The values are what a host passes when it fills the deck (`validate` option `values`, `opf fill`); a declared `value` of the wrong type is reported by the schema.",
+    { values: { seats: "many" } },
+    { values: { seats: 40 } },
   ),
   "opf/variable-unknown-builtin": ex(
     "Use a built-in that exists (`deck.name`, `deck.description`, `deck.author`, `speaker.name`, `organization.name`, `slide.number`, ...), or declare your own variable under `variables`.",

@@ -130,10 +130,10 @@ const readingOrder: RuleText = (finding) => {
       next: "move the title above the content, or choose a layout that puts the title first.",
     };
   }
-  const found = match(finding.message, /^Reading order differs from visual order: ("(?:[^"\\]|\\.)*") is read at (\w+) but appears at (\w+)\./);
+  const found = match(finding.message, /^Reading order differs from visual order: ("(?:[^"\\]|\\.)*") is read at (position \d+) but appears at (position \d+)\./);
   if (!found) return undefined;
   return {
-    message: `${code(unquote(found[1]))} is read ${found[2]} but appears ${found[3]}${onSlide(finding)}, so a screen reader reads the slide out of order.`,
+    message: `${code(unquote(found[1]))} is read at ${found[2]} but appears at ${found[3]}${onSlide(finding)}, so a screen reader reads the slide out of order.`,
     next: "reorder the blocks so the reading order follows what people see, or pin them to layout regions.",
   };
 };

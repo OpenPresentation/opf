@@ -42,7 +42,7 @@ export const REFERENCES_EXPLAIN: Readonly<Record<string, ExplainDetail>> = {
   "opf/catalog-record": ex(
     "Fix the record the way the message says (it names the field and what it should be). References to an invalid record are reported too until it is valid.",
     { catalogs: { custom: { themes: { mine: { name: "Mine", background: "light1" } } } }, slides: [{ title: "Welcome" }] },
-    { catalogs: { custom: { themes: { mine: { name: "Mine", background: { type: "solid", color: "#FFFFFF" } } } } }, slides: [{ title: "Welcome" }] },
+    { catalogs: { custom: { themes: { mine: { name: "Mine", background: { type: "theme", slot: "light1" } } } } }, slides: [{ title: "Welcome" }] },
   ),
   "opf/layout-template": ex(
     "Correct the region list: 1 to 12 entries, a `direction` of `row` or `column`, numeric sizes above 0 (or `auto` only in a column), and at most three levels of splits.",

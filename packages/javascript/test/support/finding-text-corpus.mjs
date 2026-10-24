@@ -22,6 +22,7 @@ const png = (width, height) => {
 	bytes.writeUInt32BE(height, 20);
 	return `data:image/png;base64,${bytes.toString('base64')}`;
 };
+const person = (n) => ({ blocks: [{ image: { src: `https://example.com/${n}.png`, alt: `Person ${n}` } }, { text: `Person ${n}` }], composition: { mode: 'column' } });
 const withGallery = { catalogs: [gallery] };
 const footer = { left: { text: 'A footer that keeps going and going and going and going and going and going and going and going and going and going and going and going' }, center: { text: 'Centre' }, right: { text: '{{slide.number}}' } };
 
@@ -99,6 +100,7 @@ export const CASES = [
 	{ name: 'region-kind', rule: 'opf/region-kind', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', text: 'b' }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'region-full', rule: 'opf/region-full', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'layout-unplaced', rule: 'opf/layout-unplaced', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
+	{ name: 'reading-order', rule: 'opf/reading-order', input: deck([{ title: 'Team', composition: { mode: 'row' }, blocks: [person(1), person(2)] }]) },
 	{ name: 'furniture-wraps', rule: 'opf/furniture-wraps', input: { language: 'en-US', design: { footer }, slides: [{ title: 'Results', text: 'Revenue grew.' }] } },
 	{ name: 'font-outside-scheme', rule: 'opf/font-outside-scheme', input: deck([{ title: 'T', text: [{ text: 'x', fontFamily: 'Comic Sans MS' }] }], { design: { fontScheme: 'aptos' } }) },
 	{ name: 'image-resolution', rule: 'opf/image-resolution', input: deck([{ title: 'T', image: { src: png(100, 100), alt: 'x' } }]) },
@@ -137,7 +139,7 @@ export const HAND_BUILT = [
 	},
 	{
 		name: 'reading-order-differs',
-		finding: finding('opf/reading-order', 'warning', 'accessibility', '/slides/1/blocks/0', 'Reading order differs from visual order: "blocks.0" is read at 1st but appears at 2nd. Composed order: blocks.0, blocks.1; visual order: blocks.1, blocks.0.', { slide: 1, measured: { firstMismatch: 0, composed: 2 } }),
+		finding: finding('opf/reading-order', 'warning', 'accessibility', '/slides/1/blocks/0', 'Reading order differs from visual order: "blocks.0" is read at position 1 but appears at position 2. Composed order: blocks.0, blocks.1; visual order: blocks.1, blocks.0.', { slide: 1, measured: { firstMismatch: 0, composed: 2 } }),
 		document: deck([{ title: 'A', text: 'a' }, { title: 'B', blocks: [{ text: 'x' }, { text: 'y' }] }]),
 	},
 	{

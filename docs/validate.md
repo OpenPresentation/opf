@@ -209,6 +209,12 @@ Promoted region keys (`left`, `center`, `right`, `top:left` and the rest) are co
 
 `opf/variable-unfilled` is one rule for a required variable that has no value. In a deck that is not a template it is an error (the deck is incomplete), so `valid` is false; in a template (`"template": true` in the document, or `template: true` in the options) it is a warning, because a template is incomplete on purpose; `unfilledVariables` lists the ids either way. In a document that declares no content variables, a `{{id}}` token left in a string (outside `variables`, `extensions`, `catalogs` and `assets`) is a warning. A `var:` colour that names no declared variable is `opf/variable-reference-unknown`. It is a `format` rule, so `only: ['format']` (what pagination, patching, conversion and every write command run) rejects a deck with an unfilled required variable. Fill a template with `opf fill` or `resolveVariables`, or pass `values`, to clear the findings.
 
+## Plain-words text and `explain`
+
+A finding is written for tools: `message` is the rule's own sentence or an Ajv phrase, `help` is advice for an agent. To show a finding to a person, `describeFinding(finding, { document })` (from `@openpresentation/opf/source`) returns `{ message, next }`: `message` says what is wrong, with fields in backticks and no JSON Pointers ("`titleAlignment` must be left, center or right, but is `middle`."), and `next` is the continuation of "Next:" ("did you mean `center`?"). Every `opf/*` rule has its text, written from the structured data the finding carries (`path`, `validation.params`, `measured`, `suggestions`, `fixes`, the slide) and from the document, for example the datasets, assets or columns that do exist; a finding from another producer keeps its own sentence and the first sentence of its `help`. The call is pure, never throws and does not change the finding.
+
+`explain(ruleId)` (from the package root and `@openpresentation/opf/source`) returns what a rule checks and how to fix it: `{ id, name, category, severity, summary, rationale, fix, example, docs }`, where `example` is a small `{ problem, fixed, language }` pair of OPF fragments and `docs` is the rule's anchor in this guide. It accepts `opf/text-contrast` and `text-contrast`, and returns `undefined` for an id it does not know.
+
 ## Rules
 
 The reference below is generated from the rule registry (`validationRules`); `node scripts/build-validate-docs.mjs --check` (and a core test) fails when it drifts.
