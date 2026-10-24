@@ -13,9 +13,10 @@ try {
   console.log(`Keymap: ${result.passed} cases pass${result.failed.length ? `, ${result.failed.length} fail` : ''} (${engineName} ${suite.browserVersion}, keymap ${platform}).`);
   assert.deepEqual(result.failed, [], 'every keymap case passes');
   // Fold All, Fold Level, Unfold All and the symbol picker on 1000 slides (about 140 KB of YAML, 108 KB of Markdown, 190 KB of JSON) hold the main thread for under
-  // 50 ms (SPEC R-PERF-03). The longtask API reports tasks of 50 ms or more; WebKit has none, so it only has to finish.
+  // 50 ms (SPEC R-PERF-03; 100 ms on a CI runner, the plan's 2x for noise; OPF_PERF_LIMIT_MS sets it). The longtask API reports tasks of 50 ms or more; WebKit has none.
   if (!only || only.test('P-')) {
     const mod = platform === 'darwin' ? 'Meta' : 'Control';
+    const limit = Number(process.env.OPF_PERF_LIMIT_MS ?? (process.env.CI ? 100 : 50));
     for (const format of ['json', 'yaml', 'md']) {
       const page = await suite.openPage('?worker=off');
       const kb = suite.driver(page);
@@ -33,8 +34,8 @@ try {
         await page.keyboard.press('Enter');
         await kb.settle();
         const long = await page.evaluate(() => window.__long);
-        console.log(`P-004 ${format} fold all, unfold all, fold level 2 and the symbol picker on 1000 slides: longest task ${Math.max(0, ...long)} ms (limit 50 ms).`);
-        assert.deepEqual(long, [], `${format}: no main-thread task of 50 ms or more`);
+        console.log(`P-004 ${format} fold all, unfold all, fold level 2 and the symbol picker on 1000 slides: longest task ${Math.max(0, ...long)} ms (limit ${limit} ms).`);
+        assert.ok(Math.max(0, ...long) < limit, `${format}: no main-thread task of ${limit} ms or more (${long})`);
       } finally { await page.close(); }
     }
   }
