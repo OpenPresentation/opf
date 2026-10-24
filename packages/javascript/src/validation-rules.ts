@@ -224,3 +224,10 @@ export function ruleInfo(id: string): ValidationRuleInfo {
 	if (!found) throw new Error(`Validation rule ${JSON.stringify(id)} is not registered.`);
 	return found;
 }
+
+const VALIDATE_DOCS = 'https://github.com/OpenPresentation/opf/blob/main/docs/validate.md';
+
+/** The documentation link of a rule: docs/validate.md at the rule's heading. It is the `definition` of the rule's findings and the `docs` of `explain`. */
+export function ruleDocumentation(id: string): string {
+	return `${VALIDATE_DOCS}#${id.replace('/', '')}`;
+}

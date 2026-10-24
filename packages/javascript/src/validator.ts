@@ -20,6 +20,7 @@ import type { Presentation } from './types.js';
 import {
 	DEFAULT_VALIDATION_THRESHOLDS,
 	findValidationRule,
+	ruleDocumentation,
 	ruleImplementations,
 	validationRules,
 } from './validation-rules.js';
@@ -65,7 +66,6 @@ export { promotedRegionKeys } from './schema-check.js';
 
 const SEVERITIES: readonly string[] = ['error', 'warning', 'info'];
 const OPTION_KEYS = ['only', 'ignore', 'severity', 'ignorePaths', 'catalogs', 'contracts', 'thresholds', 'fonts', 'chartPalette', 'template', 'values'];
-const DOCS = 'https://github.com/OpenPresentation/opf/blob/main/docs/validate.md';
 
 const isObject = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value);
 
@@ -280,7 +280,7 @@ function validateDocument(document: unknown, run: Resolved, parsed?: ParsedSourc
 					path: input.path,
 					message: input.message,
 					help: input.help,
-					definition: `${DOCS}#${info.id.replace('/', '')}`,
+					definition: ruleDocumentation(info.id),
 					...(input.slide ? { slide: input.slide.index, ...(input.slide.id ? { slideId: input.slide.id } : {}) } : {}),
 					...(input.measured ? { measured: input.measured } : {}),
 					...(input.fixes?.length ? { fixes: input.fixes } : {}),
