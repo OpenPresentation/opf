@@ -131,7 +131,7 @@ test('createKeymap: bindDom builds the strokes of a chord, spread titles CodeMir
 
 test('no key is installed outside the table: keymap.of is only used in the files that read it from there', () => {
   const dir = new URL('../src/', import.meta.url);
-  const allowed = new Set(['json-editor.js', 'source-diagnostics.js', 'source-keymap.js', 'source-hints.js' /* its own modal Escape, listed as hint.close */]);
+  const allowed = new Set(['json-editor.js', 'source-diagnostics.js', 'source-keymap.js', 'source-hints.js' /* its own modal Escape, listed as hint.close */, 'source-navigation-ui.js' /* the Escape of the peek, references and rename widgets, listed as nav.close */]);
   for (const name of readdirSync(dir).filter((file) => file.endsWith('.js'))) {
     const text = readFileSync(new URL(name, dir), 'utf8');
     const uses = (text.match(/\bkeymap\.of\(/g) ?? []).length;

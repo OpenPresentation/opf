@@ -55,6 +55,7 @@ export const TABLE = Object.freeze([
   entry("nav.peek", "Peek definition", "Go to", [{ key: "Alt-F12" }]),
   entry("nav.references", "Find references", "Go to", [{ key: "Shift-F12" }]),
   entry("nav.rename", "Rename symbol", "Go to", [{ key: "F2" }]),
+  entry("nav.close", "Close the peek, the references or the rename input", "Go to", [{ key: "Escape" }], { when: "one of them is open", installedWith: "nav.definition" }),
   entry("nav.symbol", "Go to symbol in the document (outline)", "Go to", [{ key: "Mod-Shift-o" }], { dom: true }),
   entry("nav.line", "Go to line", "Go to", [{ key: "Ctrl-g" }, { key: "Mod-Alt-g" }]),
   entry("nav.bracket", "Jump to the matching bracket", "Go to", [{ key: "Mod-Shift-\\" }]),
