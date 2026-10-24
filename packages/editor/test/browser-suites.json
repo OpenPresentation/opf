@@ -197,6 +197,14 @@
           "command": "node test/source-keyboard-json-browser.mjs"
         },
         {
+          "id": "browser:source-keyboard-yaml",
+          "command": "node test/source-keyboard-yaml-browser.mjs"
+        },
+        {
+          "id": "browser:source-keyboard-markdown",
+          "command": "node test/source-keyboard-markdown-browser.mjs"
+        },
+        {
           "id": "browser:export-license",
           "command": "pnpm run test:export-license-browser"
         }

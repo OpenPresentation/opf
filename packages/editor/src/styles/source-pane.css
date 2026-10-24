@@ -266,3 +266,26 @@
   .opf-source *,
   .opf-source *::before { transition: none !important; }
 }
+
+/* Canonicalize with OPF: the question before a rewrite that drops comments. */
+.opf-source-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  flex: none;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--opf-ui-code-border);
+  background: color-mix(in srgb, var(--opf-ui-warn) 8%, transparent);
+}
+.opf-source-confirm-text { margin: 0; flex: 1 1 18em; min-width: 0; }
+.opf-source-confirm button {
+  height: var(--_h);
+  padding: 0 12px;
+  border: 1px solid var(--opf-ui-code-border);
+  border-radius: var(--opf-ui-radius);
+  background: var(--opf-ui-muted-2);
+  cursor: pointer;
+}
+.opf-source-confirm button:hover { background: var(--opf-ui-muted); }
+.opf-source-confirm-accept { font-weight: 600; }

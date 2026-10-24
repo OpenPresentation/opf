@@ -142,7 +142,7 @@ try {
   assert.match(await text(page), /```opf-slide\ndesign:\n {2}layout: title\n```/, 'the part Markdown cannot express is kept as an embedded fence');
   await warning.click();
   const focused = await line(page);
-  assert.equal(await page.evaluate(n => demo.pane.editor.view.state.doc.line(n).text, focused), '```opf-slide', 'the row moves the cursor to the fence');
+  assert.equal(await page.evaluate(n => demo.pane.editor.view.state.doc.line(n).text, focused), 'design:', 'the row moves the cursor to the part, found inside the fence');
   assert.equal(await warning.locator('.opf-source-finding-line').innerText(), `Ln ${focused}`);
   assert.equal(await page.evaluate(() => demo.log.at(-1).select), '/slides/0/design');
   await selectIn(page, 'layout: title');
@@ -447,12 +447,13 @@ try {
   await typing.keyboard.type('x');
   await typing.waitForTimeout(300);
   assert.equal(await popup.count(), 0, 'a free text field has no completions');
-  // YAML keeps the menu only.
+  // YAML has live completions too: the keys of a slide after a list dash.
   await chooseFormat(typing, 'YAML');
   await typing.evaluate(() => { demo.pane.editor.api.setSelection(demo.pane.getText().length); demo.pane.editor.api.focus(); });
   await typing.keyboard.type('\n  - lay');
-  await typing.waitForTimeout(300);
-  assert.equal(await popup.count(), 0, 'YAML has no live completions');
+  await popup.waitFor();
+  assert.ok((await options().locator('.cm-completionLabel').allInnerTexts()).includes('layout'), 'YAML completes the keys of a slide');
+  await typing.keyboard.press('Escape');
   await typing.close();
   // completions: false turns the popup off in JSON too.
   const off = await open('?completions=off');

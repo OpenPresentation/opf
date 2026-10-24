@@ -50,7 +50,7 @@ assert.equal(lineForPath('md', markdown, '/design/theme'), lineOf(markdown, 'the
 assert.equal(lineForPath('md', markdown, '/slides/0/title'), lineOf(markdown, '# A'));
 assert.equal(lineForPath('md', markdown, '/slides/1/subtitle'), lineOf(markdown, '## sub'));
 assert.equal(lineForPath('md', markdown, '/slides/1/items/1'), lineOf(markdown, '- y'));
-assert.equal(lineForPath('md', markdown, '/slides/1/design'), lineOf(markdown, '```opf-slide'), 'an embedded part points at its fence');
+assert.equal(lineForPath('md', markdown, '/slides/1/design'), lineOf(markdown, '```opf-slide') + 1, 'an embedded part points at its key inside the fence');
 assert.equal(lineForPath('md', markdown, '/slides/2/notes'), lineOf(markdown, 'Note: n'));
-assert.equal(lineForPath('md', markdown, '/slides/9'), null);
+assert.equal(lineForPath('md', markdown, '/slides/9'), lineForPath('md', markdown, '/slides'), 'a slide the text does not have points at the slides');
 console.log('Source pane line lookup: JSON, YAML and Markdown.');

@@ -1,4 +1,4 @@
-// Markdown cases of the keyboard test plan that phase 0 closes (M-FMT, M-LIN, M-MUL). See json.mjs for the row format.
+// Markdown cases of the keyboard test plan that phase 0 closes (M-FMT, M-LIN, M-MUL); phase 2's completion, lists, pairs, problems and Canonicalize are in markdown-complete.mjs. See json.mjs for the row format.
 import { K, M, MS, P } from '../source-keyboard.mjs';
 
 const DECK_MD = '---\nname: Q3 Review\n---\n\n# Q3 Review\n\n---\n\n# Highlights\n\n- Revenue up 12%\n- Churn down\n';
@@ -18,5 +18,4 @@ export const markdownCases = [
   ['M-MUL-001', 'R-KEY-08', 'Mod+D works in Markdown', 'md', 'x| a\nx b', [M('d'), M('d')], { cursors: 2 }],
   ['M-TAB-001', 'R-KEY-01', 'Tab inserts up to the next stop (2) at the caret', 'md', 'a|', [K('Tab')], { text: 'a |' }],
   ['M-TAB-002', 'R-IND-01', 'the unit stays 2 whatever one list line has (F15)', 'md', '- a\n      - deep\n|', [K('Tab'), K('Shift+Tab')], { text: '- a\n      - deep\n|' }],
-  ['M-ACC-001', 'R-CMP-03', 'Ctrl+Space does nothing in Markdown (completion for Markdown is phase 2)', 'md', '# A|', [K('Control+Space')], { text: '# A|', popup: { open: 0 }, dialog: { open: false } }],
 ];

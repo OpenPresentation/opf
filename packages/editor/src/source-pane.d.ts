@@ -71,8 +71,10 @@ export interface SourcePaneOptions {
   /** Accessible name of the code editor (default `OPF source`). */
   label?: string;
   catalogs?: JsonCatalogContext;
-  /** Live completions while typing JSON: property names from the schema and values (enums, booleans, catalog ids, templates, snippets) at the cursor's JSON path. Tab and Enter accept the selected item, Escape closes the list, Ctrl+Space (Cmd+I on macOS) opens it; the field menu is on Alt+Shift+O. Hover documentation, squiggles with quick fixes (Cmd/Ctrl+.) and F8 come with it. YAML and Markdown have no completions yet. Default true. */
+  /** Live completions while typing JSON: property names from the schema and values (enums, booleans, catalog ids, templates, snippets) at the cursor's JSON path. Tab and Enter accept the selected item, Escape closes the list, Ctrl+Space (Cmd+I on macOS) opens it; the field menu is on Alt+Shift+O. Hover documentation, squiggles with quick fixes (Cmd/Ctrl+.) and F8 come with it. The same for YAML and Markdown (front matter, slide and block options, fences, `Note:` and snippets). Default true. */
   completions?: boolean;
+  /** Enter continues a list: a new string item after a string in a JSON list, the next `- ` in YAML, the next marker (or `> `) in Markdown; an empty one ends it. Default true. */
+  smartListEnter?: boolean;
   onError?(error: unknown): void;
 }
 
@@ -110,10 +112,16 @@ export interface SourcePane {
   /** Switch format. Returns false, and says why in the findings, when the document cannot be written in it. Does not call `onFormatChange`. */
   setFormat(format: SourceFormat): boolean;
   getFormat(): SourceFormat;
-  /** Move the cursor to the line of a JSON Pointer (or dotted OPF path) in the current format; best effort for YAML and Markdown. Returns the line. */
+  /** Move the cursor to the line of a JSON Pointer (or dotted OPF path) in the current format (core's `locate` finds it in JSON, YAML and Markdown). Returns the line. */
   focusPath(path: string): number;
   /** The text as shown, with any pending edit applied first. */
   getText(): string;
+  /**
+   * Canonicalize with OPF: rewrite the YAML or Markdown text from the document with core's writer (the old behavior of Format). It drops comments, so it
+   * asks first when there are any (an inline confirmation naming how many); `confirmed: true` has asked already. Returns "applied", "unchanged",
+   * "confirm" (waiting for the answer) or "refused" (JSON, read-only, or text that does not read as a document).
+   */
+  canonicalize(options?: { confirmed?: boolean }): "applied" | "unchanged" | "confirm" | "refused";
   getName(): string;
   setName(name: string): void;
   setDensity(density: SourcePaneDensity): void;

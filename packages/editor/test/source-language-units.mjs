@@ -117,6 +117,7 @@ const wrap = (snippet) => {
   if (snippet.where === 'slide') return { slides: [value] };
   if (snippet.where === 'reference') return { slides: [{ title: 'a' }], references: [value] };
   if (snippet.where === 'dataset') return { slides: [{ title: 'a' }], datasets: { [snippet.name.text]: value } };
+  if (snippet.where === 'markdown') return { slides: [{ title: 'a', [snippet.key]: value }] };
   return value;
 };
 for (const snippet of SNIPPETS) {
@@ -133,7 +134,7 @@ assert.deepEqual(snippetsFor('item', ['slides', 0]).map((snippet) => snippet.pre
 assert.deepEqual(snippetsFor('item', ['references', 0]).map((snippet) => snippet.prefix), ['reference']);
 assert.deepEqual(snippetsFor('value', []).map((snippet) => snippet.prefix), ['deck']);
 assert.deepEqual(snippetsFor('key', ['datasets']).map((snippet) => snippet.prefix), ['dataset']);
-assert.deepEqual(snippetsFor('key', []), []);
+assert.deepEqual(snippetsFor('key', []), [], 'JSON and YAML have properties for the deck keys');
 assert.equal(renderJson({ a: [] }, { comma: true }).text, '{\n\t"a": []\n},${0}');
 
 // ---- problem text and quick fixes ---------------------------------------------------------------------------------------------------------------

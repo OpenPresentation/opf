@@ -1,4 +1,5 @@
 import { parseTree } from "jsonc-parser";
+import { locate } from "@openpresentation/opf/source";
 
 // Line lookup for a JSON Pointer in the three source formats of the source pane (RR-98). All functions return a
 // one-based line number, or null when the path cannot be placed. JSON is exact; YAML and Markdown are best effort:
@@ -197,6 +198,9 @@ export function lineForPath(format, text, path) {
   const segments = pathSegments(path);
   if (!segments.length) return 1;
   try {
+    // Core reads the text of every format and knows where a path is; the line heuristics below are for text it cannot place.
+    const found = format === "json" ? null : locate(text, format, segments);
+    if (found) return found.line;
     return format === "json" ? jsonLine(text, segments)
       : format === "yaml" ? yamlLine(text, segments)
       : markdownLine(text, segments);

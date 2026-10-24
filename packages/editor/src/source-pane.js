@@ -9,7 +9,8 @@ import { buildProblems, summarize } from "./source-problems.js";
 import { analyzeSyntax, findDuplicateKeys } from "./source-syntax.js";
 import { createSchemaValue, schemaAtPath, schemaVariants } from "./schema.js";
 import { catalogKindAt } from "@openpresentation/opf/schema";
-import { locateJson } from "./source-ranges.js";
+import { locateText } from "./source-ranges.js";
+import { scanMarkdown } from "@openpresentation/opf/source";
 import { listCatalogRecords } from "./catalogs.js";
 
 // The source pane (RR-98): the OPF document as JSON, YAML or Markdown, with the file name, the format menu, Format, Copy
@@ -33,6 +34,7 @@ const ICONS = {
   Check: '<path d="M20 6 9 17l-5-5"/>',
   CircleX: '<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>',
   Info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+  Sparkles: '<path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>',
 };
 function icon(name, size = 14) {
   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -170,10 +172,18 @@ export function createSourcePane(container, options = {}) {
   const formatAction = actionButton("Format (fix indentation)", "Braces", "format");
   formatAction.title = "Format (fix indentation), Shift+Alt+F";
   formatAction.setAttribute("aria-keyshortcuts", "Shift+Alt+F");
+  // The old Format (a rewrite through OPF's own writer) is its own command: it drops the comments of YAML and Markdown, so it asks first.
+  const canonicalAction = actionButton("Canonicalize with OPF", "Sparkles", "canonicalize");
+  canonicalAction.title = "Canonicalize with OPF: rewrite the text the way OPF writes it (drops comments)";
   const copyAction = actionButton("Copy source", "Copy", "copy");
   const downloadAction = actionButton("Download source", "Download", "download");
   bar.append(file, actions);
 
+  const confirm = el("div", "opf-source-confirm", { role: "alertdialog", "aria-labelledby": `${id}-confirm-text`, hidden: "" });
+  const confirmText = el("p", "opf-source-confirm-text", { id: `${id}-confirm-text` });
+  const confirmAccept = Object.assign(el("button", "opf-source-confirm-accept", { type: "button" }), { textContent: "Canonicalize anyway" });
+  const confirmCancel = Object.assign(el("button", "opf-source-confirm-cancel", { type: "button" }), { textContent: "Cancel" });
+  confirm.append(confirmText, confirmAccept, confirmCancel);
   const code = el("div", "opf-source-code");
   const status = el("div", "opf-source-status", { role: "status", "aria-live": "polite" });
 
@@ -185,7 +195,7 @@ export function createSourcePane(container, options = {}) {
   const list = el("ul", "opf-source-findings-list", { id: `${id}-findings` });
   findingsRegion.append(toggle, list);
 
-  root.append(bar, code, findingsRegion, status);
+  root.append(bar, confirm, code, findingsRegion, status);
   container.append(root);
 
   // ---- Document <-> text --------------------------------------------------------------------------------------------
@@ -233,6 +243,7 @@ export function createSourcePane(container, options = {}) {
     language: formatOf(format).language,
     readOnly,
     completions: options.completions !== false,
+    smartListEnter: options.smartListEnter,
     catalogs: options.catalogs ?? editor.catalogs,
     describedBy: `${id}-findings`,
     onChange: () => schedule(),
@@ -246,6 +257,7 @@ export function createSourcePane(container, options = {}) {
 
   // ---- Applying edits -----------------------------------------------------------------------------------------------
   function schedule() {
+    closeConfirm(false);
     clearTimeout(timer);
     clearTimeout(syntaxTimer);
     if (delay === 0) { flush(); return; }
@@ -632,6 +644,7 @@ export function createSourcePane(container, options = {}) {
     nameButton.setAttribute("aria-label", `Rename ${name}`);
     formatLabel.textContent = `.opf.${current.extension}`;
     root.dataset.format = current.id;
+    canonicalAction.hidden = current.id === "json";
     for (const item of menuItems) item.setAttribute("aria-checked", String(item.dataset.format === current.id));
   }
 
@@ -670,6 +683,61 @@ export function createSourcePane(container, options = {}) {
     return true;
   }
   formatAction.addEventListener("click", () => { formatDocument(); });
+
+  // Canonicalize with OPF: the text rewritten through core's writer (the old Format). Unlike Format it drops comments, so it asks first and says how many.
+  function droppedComments(text) {
+    if (format === "yaml") return scanYamlComments(text).count;
+    if (format !== "md") return 0;
+    const scan = scanMarkdown(text);
+    let count = scan.comments.filter((comment) => comment.kind === "comment").length;
+    if (scan.frontMatter) count += scanYamlComments(text.slice(scan.frontMatter.yamlFrom, scan.frontMatter.yamlTo)).count;
+    for (const fence of scan.fences) if (fence.kind === "opf-slide" || fence.kind === "opf-block") count += scanYamlComments(text.slice(fence.bodyFrom, fence.bodyTo)).count;
+    return count;
+  }
+  let pendingCanonical = null;
+  function closeConfirm(returnFocus) {
+    if (confirm.hidden) return;
+    confirm.hidden = true;
+    pendingCanonical = null;
+    if (returnFocus) control.api.focus();
+  }
+  /** Rewrite the text through OPF's own writer. Asks first when that drops comments (`confirmed: true` has asked already). Returns "applied", "unchanged", "confirm" (waiting for the answer) or "refused". */
+  function canonicalize({ confirmed = false } = {}) {
+    flush();
+    if (readOnly || format === "json" || destroyed) return "refused";
+    if (dirty) { announce("Fix the errors first: the text cannot be read as a document."); control.api.say("Fix the errors first: the text cannot be read as a document."); return "refused"; }
+    let written;
+    try { written = write(format, deck()); } catch (error) { announce(`Cannot canonicalize: ${errorText(error)}`); return "refused"; }
+    const before = control.api.getValue();
+    if (written.text === before) { announce("Already canonical"); control.api.say("Already canonical"); return "unchanged"; }
+    const count = droppedComments(before);
+    if (count > 0 && !confirmed) {
+      pendingCanonical = written.text;
+      confirmText.textContent = `Canonicalizing rewrites the text the way OPF writes it, and drops ${plural(count, "comment")}. Undo brings ${count === 1 ? "it" : "them"} back.`;
+      confirm.hidden = false;
+      confirmAccept.focus();
+      control.api.say(confirmText.textContent);
+      return "confirm";
+    }
+    closeConfirm(false);
+    control.api.replaceDiff(written.text);
+    flush();
+    control.api.focus();
+    announce("Canonicalized");
+    control.api.say(count > 0 ? `Canonicalized. ${plural(count, "comment")} dropped.` : "Canonicalized");
+    return "applied";
+  }
+  canonicalAction.addEventListener("click", () => { canonicalize(); });
+  confirmAccept.addEventListener("click", () => { closeConfirm(false); canonicalize({ confirmed: true }); });
+  confirmCancel.addEventListener("click", () => closeConfirm(true));
+  confirm.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); closeConfirm(true); }
+    else if (event.key === "Tab") {
+      const order = [confirmAccept, confirmCancel], at = order.indexOf(document.activeElement);
+      event.preventDefault();
+      order[(at + (event.shiftKey ? order.length - 1 : 1)) % order.length].focus();
+    }
+  });
   copyAction.addEventListener("click", async () => {
     const info = currentFile();
     try {
@@ -752,11 +820,9 @@ export function createSourcePane(container, options = {}) {
     flush();
     const text = control.api.getValue();
     const segments = String(focus.path ?? "").replace(/^\//, "").split("/").filter(Boolean).map((part) => part.replaceAll("~1", "/").replaceAll("~0", "~"));
-    if (format === "json") {
-      const wanted = focus.field ? locateJson(text, [...segments, focus.field], "value") : null;
-      const where = wanted?.exact ? wanted : locateJson(text, segments, "value");
-      if (where) { control.api.setSelection(where.from, where.to); control.api.focus(); return; }
-    }
+    const wanted = focus.field ? locateText(format, text, [...segments, focus.field], "value") : null;
+    const where = wanted?.exact ? wanted : locateText(format, text, segments, "value");
+    if (where) { control.api.setSelection(where.from, where.to); control.api.focus(); return; }
     focusPath(focus.path ?? "");
   }
   const fixActions = {
@@ -913,6 +979,7 @@ export function createSourcePane(container, options = {}) {
   root.toggleAttribute("data-readonly", readOnly);
   nameButton.disabled = readOnly;
   formatAction.disabled = readOnly;
+  canonicalAction.disabled = readOnly;
   renderFindings();
   syncAttributes();
 
@@ -936,6 +1003,8 @@ export function createSourcePane(container, options = {}) {
     getFormat: () => format,
     /** Move the cursor to the line of a JSON Pointer in the current format (best effort for YAML and Markdown). Returns the line. */
     focusPath: (path) => focusPath(path),
+    /** Canonicalize with OPF (rewrite through core's writer; asks before dropping comments). See `canonicalize` in the pane. */
+    canonicalize,
     /** The source text exactly as shown, with any edit still waiting applied first. */
     getText() { flush(); return control.api.getValue(); },
     getName: () => name,
@@ -946,6 +1015,7 @@ export function createSourcePane(container, options = {}) {
       root.toggleAttribute("data-readonly", readOnly);
       nameButton.disabled = readOnly;
       formatAction.disabled = readOnly;
+      canonicalAction.disabled = readOnly;
       control.setReadOnly(readOnly);
     },
     /** The problems drawn in the text now, in position order: `{ from, to, severity, message, next, rule, fixes }` at source offsets. */

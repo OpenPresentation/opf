@@ -65,13 +65,18 @@ export interface JsonCodeEditorOptions {
   language?: "json" | "yaml" | "markdown";
   readOnly?: boolean;
   /**
-   * Live completion list in JSON (default false here; the source pane turns it on): property names from the schema, ranked with the required and the
+   * Live completion list in JSON, YAML and Markdown (default false here; the source pane turns it on): in JSON property names from the schema, ranked with the required and the
    * common ones first, and values (enums, booleans, catalog ids, `{}` and `[]` templates with their required members, snippets for slides and the like)
    * at the cursor's JSON path. Typing a quote, a word, `:` or the space after it opens the list; Ctrl+Space (Cmd+I on macOS) opens it anywhere (with
    * the list open it shows or hides the documentation). Tab and Enter (and Shift+Tab, Shift+Enter) accept the selected item, Escape closes the list,
-   * Left, Right and Backspace inside the word keep it open. The field menu is on Alt+Shift+O; with `completions` off it is also on Ctrl+Space.
+   * Left, Right and Backspace inside the word keep it open. The field menu is on Alt+Shift+O; with `completions` off it is also on Ctrl+Space. YAML offers the
+   * same from a line-and-indent reader (block and flow style, after a list dash); Markdown offers the front matter and fence YAML, slide and block
+   * options, fence info lines, metric fences, `Note:` and snippets (see the source pane in the README). Enter, Tab, Backspace, pairs and Cmd/Ctrl+/
+   * follow the language: YAML indents the way its text is built, Markdown continues lists and quotes, nests a list item with Tab and comments with `<!-- -->`.
    */
   completions?: boolean;
+  /** Enter continues a list the way the text writes it: a new string item after a string in a JSON list, the next `- ` in YAML, the next marker in Markdown. Default true; false keeps only the indentation. */
+  smartListEnter?: boolean;
   catalogs?: JsonCatalogContext;
   /** Overrides the built-in menu, allowing an existing host UI to keep its appearance. */
   onOptions?(left?: number, top?: number): void;

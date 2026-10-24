@@ -2,6 +2,8 @@
 // OPF fragment with numbered placeholders and rendered per format (JSON here; YAML and Markdown follow in phase 2), then handed to CodeMirror's
 // snippet engine, which walks the tab stops. Plain functions, no DOM.
 
+import { Document as YamlDocument } from "yaml";
+
 const PLACEHOLDER = Symbol("opf-placeholder");
 
 /**
@@ -70,6 +72,8 @@ export const SNIPPETS = Object.freeze([
   { prefix: "reference", where: "reference", description: "A reference a slide can cite", fragment: { id: ph(1, "smith2020"), text: ph(2, "Citation") } },
   { prefix: "dataset", where: "dataset", description: "A table of data that charts and tables can share", name: ph(1, "sales"), fragment: { columns: [ph(2, "Category"), ph(3, "Value")], rows: [[ph(4, "A"), ph(5, "1", { raw: true })]] } },
   { prefix: "deck", where: "deck", description: "A starter deck", fragment: { name: ph(1, "Deck name"), slides: [{ title: ph(2, "Title") }] } },
+  // Speaker notes in Markdown: a `Note:` line (JSON and YAML have the `notes` property for it).
+  { prefix: "notes", where: "markdown", key: "notes", description: "Speaker notes for the slide", fragment: ph(1, "Speaker notes") },
 ]);
 
 /** The snippets that fit where the caret is: `where` and the path of the node (see source-json.js). */
@@ -86,8 +90,143 @@ export function snippetsFor(mode, path) {
 
 /** The JSON text of a snippet for insertion: `{ text, fields }`; a dataset is a `"name": { ... }` entry. */
 export function snippetJson(snippet, { comma = false } = {}) {
+  if (snippet.key !== undefined) {
+    const body = renderJson(snippet.fragment, { comma });
+    return { text: `${JSON.stringify(snippet.key)}: ${body.text}`, fields: body.fields };
+  }
   if (snippet.where !== "dataset") return renderJson(snippet.fragment, { comma });
   const body = renderJson(snippet.fragment, { comma });
   const key = `"${field(snippet.name)}"`;
   return { text: `${key}: ${body.text}`, fields: [{ index: snippet.name.index, text: snippet.name.text }, ...body.fields].sort((a, b) => a.index - b.index) };
+}
+
+// ---- YAML ------------------------------------------------------------------------------------------------------------------------------
+const yamlText = (text) => {
+  try { return new YamlDocument(text).toString({ lineWidth: 0 }).trimEnd(); } catch { return JSON.stringify(text); }
+};
+// A placeholder as YAML: its text between the markers, quoted when plain YAML would read it as another type or as syntax (`42`, `a: b`).
+function yamlField(placeholder) {
+  const marker = (text) => `\${${placeholder.index}${text ? `:${escapeText(text)}` : ""}}`;
+  const text = placeholder.text || (placeholder.choice ? (placeholder.value ?? "") : "");
+  if (placeholder.raw || !text) return marker(text);
+  return yamlText(text) === text ? marker(text) : `"${marker(JSON.stringify(text).slice(1, -1))}"`;
+}
+
+/** The lines of a mapping as `[{ depth, text }]` (block style; lists of lists and `columns` in flow style), recording placeholders in `fields`. */
+function yamlLines(mapping, depth, fields) {
+  const scalar = (value) => {
+    if (isPlaceholder(value)) {
+      fields.push({ index: value.index, text: value.text || (value.choice ? (value.value ?? "") : ""), ...(value.choice ? { choice: true } : {}) });
+      return yamlField(value);
+    }
+    if (value === null) return "null";
+    return typeof value === "string" ? yamlText(value) : String(value);
+  };
+  const flow = (value) => (Array.isArray(value) ? `[${value.map(flow).join(", ")}]` : scalar(value));
+  const isCollection = (value) => value !== null && typeof value === "object" && !isPlaceholder(value);
+  const lines = [];
+  for (const [key, item] of Object.entries(mapping)) {
+    if (!isCollection(item)) { lines.push({ depth, text: `${key}: ${scalar(item)}` }); continue; }
+    if (Array.isArray(item)) {
+      if (!item.length) { lines.push({ depth, text: `${key}: []` }); continue; }
+      if (key === "columns") { lines.push({ depth, text: `${key}: ${flow(item)}` }); continue; }
+      lines.push({ depth, text: `${key}:` });
+      for (const entry of item) {
+        if (Array.isArray(entry)) lines.push({ depth: depth + 1, text: `- ${flow(entry)}` });
+        else if (isCollection(entry)) {
+          const inner = yamlLines(entry, depth + 2, fields);
+          if (inner.length) inner[0] = { depth: depth + 1, text: `- ${inner[0].text}` };
+          lines.push(...inner);
+        } else lines.push({ depth: depth + 1, text: `- ${scalar(entry)}` });
+      }
+      continue;
+    }
+    if (!Object.keys(item).length) { lines.push({ depth, text: `${key}: {}` }); continue; }
+    lines.push({ depth, text: `${key}:` }, ...yamlLines(item, depth + 1, fields));
+  }
+  return lines;
+}
+
+/**
+ * `{ text, fields }`: a fragment as block-style YAML with CodeMirror snippet markers. The first line starts where the caret is (after a dash or
+ * at a key position); the others are indented relative to the line the caret is on, and `dash` more columns when the caret follows a list dash.
+ * `entry` writes the fragment as the value of that key; `name` (a placeholder) writes it under a key the author names.
+ */
+export function renderYaml(fragment, { dash = 0, entry, name } = {}) {
+  const fields = [];
+  let lines;
+  if (name !== undefined) {
+    fields.push({ index: name.index, text: name.text });
+    lines = [{ depth: 0, text: `${yamlField(name)}:` }, ...yamlLines(fragment, 1, fields)];
+  } else if (entry !== undefined) lines = yamlLines({ [entry]: fragment }, 0, fields);
+  else lines = yamlLines(fragment, 0, fields);
+  const pad = " ".repeat(dash);
+  const text = lines.map((line, index) => (index === 0 ? line.text : `${pad}${"  ".repeat(line.depth)}${line.text}`)).join("\n");
+  return { text: `${text}\${0}`, fields: fields.sort((a, b) => a.index - b.index) };
+}
+
+/** The YAML text of a snippet for insertion: `{ text, fields }`. `dash` is the width of the list dash the caret follows (2), else 0. */
+export function snippetYaml(snippet, { dash = 0 } = {}) {
+  if (snippet.key !== undefined) return renderYaml(snippet.fragment, { dash, entry: snippet.key });
+  if (snippet.where === "dataset") return renderYaml(snippet.fragment, { dash, name: snippet.name });
+  return renderYaml(snippet.fragment, { dash });
+}
+
+// ---- Markdown --------------------------------------------------------------------------------------------------------------------------
+// A placeholder as Markdown text: the marker with its text (a choice starts with its default, `column`).
+function mdField(placeholder, fields) {
+  const text = placeholder.text || (placeholder.choice ? (placeholder.value ?? "") : "");
+  fields.push({ index: placeholder.index, text, ...(placeholder.choice ? { choice: true } : {}) });
+  return `\${${placeholder.index}${text ? `:${escapeText(text)}` : ""}}`;
+}
+
+const SLIDE_OPTION_FIELDS = ["id", "type", "layout", "section", "tag"];
+
+/**
+ * `{ text, fields }`: a slide fragment as the Markdown dialect writes it (options comment, `#` title, blocks, `Note:`), with CodeMirror snippet
+ * markers. `separator` puts `---` and a blank line first (a slide after another). A `notes` snippet is one `Note:` line. The shape follows
+ * core's writer, so the result reads back as the slide the fragment describes.
+ */
+export function renderMarkdown(fragment, { separator = false, entry } = {}) {
+  const fields = [];
+  const value = (item) => (isPlaceholder(item) ? mdField(item, fields) : item === null || item === undefined ? "" : String(item));
+  if (entry === "notes") return { text: `Note: ${value(fragment)}\${0}`, fields };
+  const blocks = [];
+  const options = [];
+  for (const key of SLIDE_OPTION_FIELDS) if (typeof fragment[key] === "string" || isPlaceholder(fragment[key])) options.push(`${key}=${value(fragment[key])}`);
+  // The options comment sits directly above what follows it, as core writes it.
+  const lead = options.length ? `<!-- slide: ${options.join(" ")} -->` : "";
+  if (fragment.title !== undefined) blocks.push(`${lead ? `${lead}\n` : ""}# ${value(fragment.title)}`);
+  else if (lead) blocks.push(lead);
+  if (fragment.subtitle !== undefined) blocks.push(`## ${value(fragment.subtitle)}`);
+  const bullets = (items) => items.map((item) => `- ${value(item)}`).join("\n");
+  const csv = (rows) => rows.map((row) => row.map((cell) => value(cell)).join(",")).join("\n");
+  if (fragment.text !== undefined) blocks.push(value(fragment.text));
+  if (Array.isArray(fragment.items)) blocks.push(bullets(fragment.items));
+  for (const region of ["left", "right"]) {
+    if (fragment[region]) blocks.push(`<!-- block: region=${region} -->\n${bullets(fragment[region].items ?? [])}`);
+  }
+  if (fragment.image) blocks.push(`![${value(fragment.image.alt)}](${value(fragment.image.src)})`);
+  if (fragment.chart) blocks.push(`\`\`\`chart ${value(fragment.chart.type)}\n${csv([fragment.chart.data.columns, ...fragment.chart.data.rows])}\n\`\`\``);
+  if (fragment.quote) blocks.push(`> ${value(fragment.quote.text)}${fragment.quote.attribution === undefined ? "" : `\n> — ${value(fragment.quote.attribution)}`}`);
+  if (fragment.metric) blocks.push(`\`\`\`metric\nvalue: ${value(fragment.metric.value)}\nlabel: ${value(fragment.metric.label)}\n\`\`\``);
+  if (fragment.table) {
+    const row = (cells) => `| ${cells.map((cell) => value(cell)).join(" | ")} |`;
+    blocks.push([row(fragment.table.columns), row(fragment.table.columns.map(() => "---")), ...fragment.table.rows.map(row)].join("\n"));
+  }
+  if (fragment.code) blocks.push(`\`\`\`${value(fragment.code.language)}\n${value(fragment.code.source)}\n\`\`\``);
+  if (fragment.notes !== undefined) blocks.push(`Note: ${value(fragment.notes)}`);
+  const body = blocks.join("\n\n");
+  return { text: `${separator ? "---\n\n" : ""}${body}\${0}`, fields: fields.sort((a, b) => a.index - b.index) };
+}
+
+/** The Markdown text of a snippet for insertion at the start of a line: `{ text, fields }`. `separator`: a slide follows another. */
+export function snippetMarkdown(snippet, { separator = false } = {}) {
+  if (snippet.key !== undefined) return renderMarkdown(snippet.fragment, { entry: snippet.key });
+  return renderMarkdown(snippet.fragment, { separator });
+}
+
+/** The snippets of the Markdown body: a slide of each kind and the speaker notes. */
+export function snippetsForMarkdown() {
+  return SNIPPETS.filter((snippet) => snippet.where === "slide" || snippet.where === "markdown");
 }

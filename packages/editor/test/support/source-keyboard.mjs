@@ -265,6 +265,13 @@ async function runStep(kb, step) {
     await kb.page.getByRole('button', { name: 'Format (fix indentation)' }).click();
     return kb.settle();
   }
+  if (kind === 'canonicalize') {
+    // The "Canonicalize with OPF" button; the confirmation (when comments would be dropped) is answered by 'confirm' or 'cancelConfirm'.
+    await kb.page.locator('.opf-source-action-canonicalize').click();
+    return kb.settle();
+  }
+  if (kind === 'confirm') { await kb.page.locator('.opf-source-confirm-accept').click(); return kb.settle(); }
+  if (kind === 'cancelConfirm') { await kb.page.locator('.opf-source-confirm-cancel').click(); return kb.settle(); }
   if (kind === 'snapshot') { kb.snapshots ??= {}; kb.snapshots[args[0]] = await kb.source(); return undefined; }
   if (kind === 'expectSame') { assert.equal(await kb.source(), kb.snapshots[args[0]], 'the second run changed the text again (not idempotent)'); return undefined; }
   if (kind === 'chord') {
@@ -442,6 +449,12 @@ async function check(kb, expect) {
     if (expect.dialog.focusInside !== undefined) assert.equal(dialog.focusInside, expect.dialog.focusInside, 'focus is inside the dialog');
   }
   if (expect.focus !== undefined) assert.equal(await kb.focus(), expect.focus, 'focus');
+  if (expect.confirm !== undefined) {
+    const shown = await kb.page.evaluate(() => { const node = document.querySelector('.opf-source-confirm'); return { open: Boolean(node) && !node.hidden, text: node?.textContent ?? '', focusInside: Boolean(node?.contains(document.activeElement)) }; });
+    assert.equal(shown.open, Boolean(expect.confirm.open), `confirmation open: ${shown.text}`);
+    for (const item of [expect.confirm.has ?? []].flat()) assert.ok(shown.text.includes(item), `the confirmation says ${JSON.stringify(item)}: ${JSON.stringify(shown.text)}`);
+    if (expect.confirm.focusInside !== undefined) assert.equal(shown.focusInside, expect.confirm.focusInside, 'focus is inside the confirmation');
+  }
   if (expect.format !== undefined) assert.equal(await kb.page.evaluate(() => demo.pane.getFormat()), expect.format, 'format');
   if (expect.status !== undefined) assert.match(await kb.status(), expect.status, 'status');
   if (expect.acceptedIsSelected) assert.ok(kb.selectedBefore && plain.includes(kb.selectedBefore), `the text has the item that was selected (${kb.selectedBefore}): ${plain}`);
@@ -464,7 +477,7 @@ export async function runCases(suite, cases, { query = '', onFailure, cpuThrottl
     if (options.engines && !options.engines.includes(engineName)) continue;
     // `native`: the key reaches the browser's own clipboard command, which only the machine's own modifier triggers.
     if (options.native && platform !== process.platform) continue;
-    const page = await suite.openPage(query);
+    const page = await suite.openPage(options.query ?? query);
     // Chromium only: slow the CPU down so a race that "usually" works shows up.
     if (cpuThrottle > 1 && engineName === 'chromium') await (await page.context().newCDPSession(page)).send('Emulation.setCPUThrottlingRate', { rate: cpuThrottle });
     const kb = suite.driver(page);
