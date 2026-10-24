@@ -205,6 +205,10 @@
           "command": "node test/source-keyboard-markdown-browser.mjs"
         },
         {
+          "id": "browser:source-keymap",
+          "command": "node test/source-keymap-browser.mjs"
+        },
+        {
           "id": "browser:source-diagnostics",
           "command": "node test/source-diagnostics-browser.mjs"
         },

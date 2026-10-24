@@ -189,6 +189,7 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
       focus: () => page.evaluate(() => {
         const active = document.activeElement;
         if (!active) return 'none';
+        if (active.closest('.cm-panels')) return `${active.tagName.toLowerCase()}${active.className ? `.${String(active.className).split(' ')[0]}` : ''}`;
         if (active.closest('.cm-editor')) return 'editor';
         if (active.closest('.json-field-menu')) return 'dialog';
         return `${active.tagName.toLowerCase()}${active.className ? `.${String(active.className).split(' ')[0]}` : ''}`;
@@ -267,9 +268,19 @@ async function runStep(kb, step) {
   }
   if (kind === 'expectFolded') {
     // The text a fold hides is replaced by a placeholder: Cmd/Ctrl+Alt+[ folded something.
-    await kb.page.waitForSelector('.cm-foldPlaceholder', { timeout: 2000 }).catch(() => {});
-    assert.equal(await kb.page.locator('.cm-foldPlaceholder').count(), args[0], 'folded ranges');
+    // A number is the exact count; '>N' means more than N.
+    const want = args[0], more = typeof want === 'string' && want.startsWith('>');
+    if (want !== 0) await kb.page.waitForFunction(([wanted, over]) => { const count = document.querySelectorAll('.cm-foldPlaceholder').length; return over ? count > wanted : count === wanted; }, [more ? Number(want.slice(1)) : want, more], { timeout: 2000 }).catch(() => {});
+    else await kb.page.waitForTimeout(50);
+    const count = await kb.page.locator('.cm-foldPlaceholder').count();
+    if (more) assert.ok(count > Number(want.slice(1)), `folded ranges: more than ${want.slice(1)} (${count})`);
+    else assert.equal(count, want, 'folded ranges');
     return undefined;
+  }
+  if (kind === 'clickGutter') {
+    // The fold marker of the nth line that has one, with a real mouse click.
+    await kb.page.locator('.cm-foldGutter .opf-fold-marker.is-open').nth(args[0]).click();
+    return kb.settle();
   }
   if (kind === 'canonicalize') {
     // The "Canonicalize with OPF" button; the confirmation (when comments would be dropped) is answered by 'confirm' or 'cancelConfirm'.
