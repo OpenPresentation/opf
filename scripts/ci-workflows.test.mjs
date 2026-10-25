@@ -166,10 +166,14 @@ test('nightly.yml: schedule, dispatch and call; never a pull request or push; ev
   assert.doesNotMatch(triggers, /pull_request|push:|merge_group/u);
   assert.match(nightly, /os: \[windows-latest, macos-latest\]/u);
   assert.match(nightly, /node: \[22, 26\]/u);
-  for (const id of ['cli-portability', 'installed', 'pptx-windows', 'editor-macos', 'node-range', 'packed-linux', 'registry', 'audit', 'platform-residual', 'flake', 'report']) assert.ok(jobsOf(nightly).some((entry) => entry.id === id), `nightly.yml has ${id}`);
+  for (const id of ['cli-portability', 'installed', 'pptx-windows', 'editor-macos', 'node-range', 'packed-linux', 'registry', 'npm12-consumer', 'audit', 'platform-residual', 'flake', 'report']) assert.ok(jobsOf(nightly).some((entry) => entry.id === id), `nightly.yml has ${id}`);
   assert.match(nightly, /name: Installed candidates \(\$\{\{ matrix\.os \}\}\)/u, 'the old check name is kept');
   assert.match(job(nightly, 'pptx-windows').text, /native-tab-control-v2\.ps1 -PureRegression/u);
   assert.match(job(nightly, 'editor-macos').text, /runs-on: macos-15/u);
+  // MR-30: npm 12's install-time defaults (no install scripts, no git or remote dependencies) are checked on the packed packages, at an exact npm 12.
+  assert.match(job(nightly, 'npm12-consumer').text, /NPM12_VERSION: 12\.\d+\.\d+\n/u, 'npm 12 is pinned to an exact version');
+  assert.match(job(nightly, 'npm12-consumer').text, /pnpm test:npm12-consumer/u);
+  assert.doesNotMatch(job(nightly, 'npm12-consumer').text, /ignore-scripts|allow-scripts|dangerously/u, 'the leg never re-enables scripts');
 });
 
 test('nightly.yml reports only a scheduled run or one that asked for it, ignores the advisory jobs and needs every leg', () => {

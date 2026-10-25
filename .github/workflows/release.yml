@@ -6,7 +6,7 @@ name: Release
 #   committed, tagged or published; the pipeline up to `npm publish --dry-run` is rehearsed).
 #
 #   plan     main is the ref, `verify` is green for its head (one API call, no waiting), the version is well formed.
-#   gate     nightly.yml as a workflow_call on the dispatched commit (Windows, macOS, Node 22 and 26, packed-install and registry
+#   gate     nightly.yml as a workflow_call on the dispatched commit (Windows, macOS, Node 22 and 26, packed-install, registry and npm 12
 #            consumers). A red leg stops the release before anything is committed or tagged. In parallel with `prepare`.
 #   prepare  scripts/release.mjs prepare in a runner checkout: the six versions, core's peers, six changelogs from changes/, the
 #            gallery stability gate (a patch is refused when a minor is needed), the lockfile. Uploads the result as a patch and
