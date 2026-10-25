@@ -18,6 +18,7 @@ name: Nightly
 #   node-range          the old engines-range workflow and the three sibling `node-range` jobs (Node 22 and 26, all six packages)
 #   packed-linux        the packed-install and installed-browser steps of the old core `normal` job and of each package job
 #   registry            the registry consumers (published packages against this checkout's harness)
+#   npm12-consumer      the six packed packages installed by npm 12 with its defaults (no install scripts, no git or remote dependencies)
 #   audit               `pnpm audit` (a new advisory must not fail an unrelated pull request, so it moved off verify)
 #   platform-residual   opf-render `platform-residual` (non-blocking, as before)
 #   flake               the four per-repository flake-repeat workflows (advisory, Sundays and on demand)
@@ -422,6 +423,34 @@ jobs:
           node scripts/test-metric-layout-geometry.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json
           node scripts/test-metric-layout-browser.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json artifacts/metric-layout-browser.json
 
+  # npm 12 ("npm install-time security", GitHub changelog 2026-07-08) installs no dependency's install scripts and refuses git and
+  # remote dependencies by default. The six packages, packed the way they publish, installed into a clean project by npm 12 with those
+  # defaults (scripts/test-npm12-consumer.mjs): it fails when any package in the tree needs an install script or a git or remote
+  # source, then the CLI and the library convert a deck to SVG, PNG, PDF and PPTX. npm 12 is installed to a prefix of its own so the
+  # runner's npm serves the other steps; the version is exact (bump it here when a newer npm 12 should be the one users get).
+  npm12-consumer:
+    name: npm 12 consumer
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      NPM12_VERSION: 12.2.1
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/setup-workspace
+
+      - run: pnpm build
+
+      - name: Install npm ${{ env.NPM12_VERSION }}
+        run: npm install --global --prefix "$RUNNER_TEMP/npm12" --no-audit --no-fund "npm@${NPM12_VERSION}"
+
+      - name: Install the packed packages with npm 12's defaults and convert
+        env:
+          OPF_NPM_VERSION: ${{ env.NPM12_VERSION }}
+        run: PATH="$RUNNER_TEMP/npm12/bin:$PATH" pnpm test:npm12-consumer
+
   audit:
     name: Dependency audit
     runs-on: ubuntu-24.04
@@ -587,7 +616,7 @@ jobs:
   # Opens or updates the one nightly-red issue on a red run and closes it on a green one. GITHUB_TOKEN only; no App, no polling.
   report:
     name: report
-    needs: [cli-portability, installed, pptx-windows, editor-macos, node-range, packed-linux, registry, audit, platform-residual, flake]
+    needs: [cli-portability, installed, pptx-windows, editor-macos, node-range, packed-linux, registry, npm12-consumer, audit, platform-residual, flake]
     if: ${{ always() && (github.event_name == 'schedule' || inputs.report == true) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 5

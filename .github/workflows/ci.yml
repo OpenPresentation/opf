@@ -8,8 +8,8 @@ name: CI
 # the label `full-ci`, a push to main and a manual run run everything at `full`. `verify` then fails unless every job the scope
 # selected succeeded (scripts/ci-verify.mjs: skipped by scope is success, skipped otherwise is failure).
 #
-# What this workflow does not run, on purpose (decision D15, no merge queue): Windows, macOS, Node 22 and 26, the packed-install
-# and registry consumers. They run in nightly.yml and before every release; the label `full-ci` runs them on a pull request too.
+# What this workflow does not run, on purpose (decision D15, no merge queue): Windows, macOS, Node 22 and 26, the packed-install,
+# registry and npm 12 consumers. They run in nightly.yml and before every release; the label `full-ci` runs them on a pull request too.
 #
 # Triggers: no merge_group (there is no merge queue), no `labeled` type (an unrelated label must not re-run a required check, and a
 # skipped re-run would replace a red result with a green one; `scope` reads the labels when it runs, so add `full-ci` and re-run).
@@ -569,7 +569,7 @@ jobs:
       - name: Pack dry run of the six published packages
         run: pnpm --filter './packages/**' --filter '!@openpresentation/integration' exec npm pack --dry-run --ignore-scripts --cache "$RUNNER_TEMP/npm-cache"
 
-  # The label `full-ci` runs the slow set (Windows, macOS, Node 22 and 26, packed-install and registry consumers) on this pull
+  # The label `full-ci` runs the slow set (Windows, macOS, Node 22 and 26, packed-install, registry and npm 12 consumers) on this pull
   # request too. The called workflow opens no issue here (report: false); its `report` job asks for issues: write, which a
   # caller has to grant.
   slow:

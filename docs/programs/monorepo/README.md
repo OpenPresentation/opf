@@ -250,6 +250,7 @@ node scripts/verify-import.mjs "$S" --blame all --determinism --commit-maps docs
 | Node 22 and 26: install, typecheck, unit suite over all six | `engines-range.yml`, three sibling `node-range` jobs | nightly, release gate |
 | Packed-install consumers: `pack:ecosystem`, `test:packed-ecosystem`, `test:packed-browser`, the quickstart, the sibling `test:packed` suites, on tarballs built from the commit | core `normal` job | nightly, release gate (on the build job's tarballs) |
 | Published-matrix consumers: `published-matrix.yml`, `installed-parity.yml`, `test:registry-ecosystem`, `test:registry-fidelity` against the registry `latest` set | weekly and queue when scoped | nightly; after publish, a consumer smoke on the just-published set inside the release run |
+| npm 12 consumer (`npm12-consumer`): the six `pnpm pack` tarballs installed by an exact npm 12 with its defaults (no install scripts, no git or remote dependencies; `test:npm12-consumer`), then the CLI and the library convert to SVG, PNG, PDF and PPTX | new (2026-10-24) | nightly, release gate |
 | Flake measurement (four `flake-repeat.yml`) | four workflows | one nightly job; advisory |
 
 - **A nightly failure opens an issue automatically and never blocks PRs.** A final `report` job (`issues: write`, `GITHUB_TOKEN` only) creates or updates one issue labeled `nightly-red` listing the failing legs and the run URL, and closes it on the next green nightly. No App and no polling.

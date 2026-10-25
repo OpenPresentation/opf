@@ -37,8 +37,8 @@ Run it with `dry-run` true first when the change touches the release machinery; 
 rehearsal. The jobs:
 
 1. **plan**: a real release runs on `main`, and the check `verify` is green for its head (one API call, no waiting).
-2. **gate** (parallel with prepare): `nightly.yml` called on that commit: Windows, macOS, Node 22 and 26, the packed-install and
-   registry consumers. A red leg stops the release before anything is committed or tagged.
+2. **gate** (parallel with prepare): `nightly.yml` called on that commit: Windows, macOS, Node 22 and 26, the packed-install,
+   registry and npm 12 consumers. A red leg stops the release before anything is committed or tagged.
 3. **prepare** (parallel with gate): `node scripts/release.mjs prepare <version>` in the runner: sets the six versions, core's
    peer ranges and `PEER_RANGES` (`packages/javascript/src/node/peers.ts`), assembles every `changes/` fragment into its package
    changelog (a package without a fragment gets "No package changes; released with the set."), applies the gallery stability gate
