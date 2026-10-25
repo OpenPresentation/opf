@@ -22,10 +22,10 @@ const server = createServer(async (req, res) => {
 });
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 let browser, page;
+const errors = [];
 try {
   browser = await chromium.launch({ channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined });
   page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
-  const errors = [];
   // Diagnostics: the inline editor commits on blur, so record every focus change with the window's focus state.
   await page.addInitScript(() => {
     window.__focusLog = [];

@@ -223,29 +223,38 @@ export function createPersistence(editor, options = {}) {
     if (!firstDirtyAt) firstDirtyAt = at;
     clearTimeout(timer);
     const wait = Math.max(0, Math.min(debounceMs, firstDirtyAt + maxWaitMs - at));
-    timer = setTimeout(() => { void flush(); }, wait);
+    timer = setTimeout(() => { void flushNow(false); }, wait);
   }
   /** Write the document now (cancelling the debounce) and resolve when it is stored. Resolves false when nothing could be written. */
   function flush() {
+    return flushNow(true);
+  }
+  // The debounce timer writes what is committed and leaves an edit in progress alone: committing it would close the inline editor
+  // under the user's hands, a moment after an earlier change (the timer starts at that change) and long before they stop typing.
+  // The draft is not lost: the page is still open, and every flush that precedes leaving (unload, page hide, `flush()`, `markSaved()`)
+  // commits it first.
+  function flushNow(commitDraft) {
     clearTimeout(timer);
     firstDirtyAt = 0;
     if (destroyed) return Promise.resolve(false);
-    // Commit synchronously, including a draft in an otherwise untouched session. The lifecycle
-    // warning below must see that edit before it decides whether leaving would lose work.
-    // A commit emits a change; clear its debounce again and avoid recursive host flush hooks.
-    if (preparingFlush) return chain;
-    preparingFlush = true;
-    try {
-      if (options.beforeFlush?.() === false) throw new Error("Commit or cancel the active draft first.");
-      flushRefused = false;
-    } catch (error) {
-      flushRefused = true;
-      setStatus({ state: "error", error: "draft", message: `Autosave could not commit the active draft (${String(error?.message ?? error)}). Keep this page open to recover your work.` });
-      return Promise.resolve(false);
-    } finally {
-      preparingFlush = false;
-      clearTimeout(timer);
-      firstDirtyAt = 0;
+    if (commitDraft) {
+      // Commit synchronously, including a draft in an otherwise untouched session. The lifecycle
+      // warning below must see that edit before it decides whether leaving would lose work.
+      // A commit emits a change; clear its debounce again and avoid recursive host flush hooks.
+      if (preparingFlush) return chain;
+      preparingFlush = true;
+      try {
+        if (options.beforeFlush?.() === false) throw new Error("Commit or cancel the active draft first.");
+        flushRefused = false;
+      } catch (error) {
+        flushRefused = true;
+        setStatus({ state: "error", error: "draft", message: `Autosave could not commit the active draft (${String(error?.message ?? error)}). Keep this page open to recover your work.` });
+        return Promise.resolve(false);
+      } finally {
+        preparingFlush = false;
+        clearTimeout(timer);
+        firstDirtyAt = 0;
+      }
     }
     if (!touched) return chain.then(() => true);
     chain = chain.then(writeRecord, writeRecord);
