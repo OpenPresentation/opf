@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.26.8 (2026-10-25)
+
+- The hanging indent of wrapped lines (0.26.7) no longer makes the source pane and the JSON editor slow: the stylesheet capped the hang with a percentage, which made the style and layout of every line very expensive (filling an 848-line document took 8.5 s instead of 0.56 s). The cap, still 40% of the line, is now worked out in columns from the measured width, in the editor's measure cycle, and the stylesheet has no percentage.
+
 ## 0.26.7 (2026-10-24)
 
 - Mobile and touch (320 to 430px). A wrapped line in the source pane and the JSON editor now continues under its own indentation (two columns in, or under the text of a list item) in JSON, YAML and Markdown, capped at 40% of the line, with no sideways scroll. Under a coarse pointer (`(pointer: coarse)`) every control of the editor has a 44px hit area (toolbar and source-pane buttons, tabs, Format and Canonicalize, problem rows, fix and detail buttons, completion items, quick fixes, the find panel, dialog buttons, the slide navigator and thumbnails, the export and hand-off menus, the schema inspector) and every input, select and textarea is 16px, so a host no longer overrides sizes with CSS (`--opf-ui-control-h` is 44px there, whatever the density; the new `touch.css` lifts the controls that size themselves; the code keeps its size). The source-pane bar wraps its actions onto a second row instead of squeezing the file name, and the layout editor's tool palette wraps at 320px. In the playground (as vendored on pptx.gallery): "Browse galleries" and "Add with layout…" show as "Galleries" and "Layout…" on a phone (the full names stay in `aria-label`), the document name has its own full-width 16px row, More joins Add content and Arrange, the zoom select is 16px and out of the way of the notes field, and the slide actions are three equal 44px buttons instead of a row that scrolls off the screen.
