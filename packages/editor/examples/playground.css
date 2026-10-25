@@ -2039,6 +2039,11 @@ dialog::backdrop {
     min-width: 44px;
   }
 
+  /* The view switch's buttons sit 2px under the control height for the border they share; a finger gets all of it. */
+  .view-switch button {
+    min-height: var(--opf-ui-control-h);
+  }
+
   :is(input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"], [type="color"], [type="hidden"]), select, textarea):not(.opf-inline-input, .opf-rich-input) {
     min-height: 44px;
     font-size: 16px;
