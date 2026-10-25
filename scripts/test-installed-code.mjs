@@ -34,11 +34,15 @@ const immutable=(repo,file)=>{
  const ref=plan.verificationRefs[repo];assert.match(ref??'',/^[a-f0-9]{40}$/);
  return execFileSync('git',['show',`${ref}:${treePath(repo,file)}`],{cwd:root,maxBuffer:16*1024*1024});
 };
-// Build output the repository does not keep current (opf-editor dist/, RR-101) is bound to the release commit by a reproducible
-// build of the gitHead's sources and lockfile instead of a committed copy; every other file is compared with the commit.
+// Build output the release commit does not keep current (opf-editor dist/, RR-101) or does not hold at all (every package's dist/
+// on the shared line, which commits none) is bound to the release commit by a reproducible build of the gitHead's sources and
+// lockfile instead of a committed copy; every other file is compared with the commit.
+const hasPath=(repo,file)=>spawnSync('git',['cat-file','-e',`${plan.verificationRefs[repo]}:${file}`],{cwd:root,stdio:'ignore'}).status===0;
+const tracked=(repo,file)=>hasPath(repo,treePath(repo,file));
+const sharedLine=repo=>hasPath(repo,'pnpm-workspace.yaml');
 const rebuildCache=path.join(root,'artifacts/immutable-builds');
 const immutableBytes=async(repo,file,installed)=>{
- if(!isRebuilt(repo,file))return {bytes:immutable(repo,file),rebuilt:false};
+ if(!isRebuilt(repo,file,{tracked:tracked(repo,file),sharedLine:sharedLine(repo)}))return {bytes:immutable(repo,file),rebuilt:false};
  await assertReproducible({repo,checkout:root,packageDirectory:SET.find(item=>item.key===repo).directory,ref:plan.verificationRefs[repo],file,installed,cacheRoot:rebuildCache});
  return {bytes:installed,rebuilt:true};
 };
@@ -68,7 +72,7 @@ for(const item of manifest.artifacts) {
       const actual=await realpath(path.join(installed,file));assert.ok(within(installed,actual));
       const expected=await realpath(path.join(expectedDirectory,file));assert.ok(within(extracted,expected));
       const digest=hash(await readFile(actual));assert.equal(digest,hash(await readFile(expected)),'Installed files differ from registry archive');files[file]=digest;
-      if(repo!=='opf'){const bound=await immutableBytes(repo,file,await readFile(actual));assert.equal(digest,hash(bound.bytes),'Installed files differ from immutable release commit');}
+      if(repo!=='opf'){const bound=await immutableBytes(repo,file,await readFile(actual));assert.equal(digest,hash(bound.bytes),`Installed files differ from immutable release commit: ${item.name}/${file}`);}
     }
     record={...item,gitHead:metadata.gitHead,installedVersion:pkg.version,integrity:entry.integrity,archiveSha256:hash(tarball),files};
   }else{

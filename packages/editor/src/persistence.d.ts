@@ -63,7 +63,7 @@ export interface PersistenceOptions {
   onRestorePrompt?: (offer: RestoreOffer, actions: { restore(): Promise<boolean>; discard(): Promise<boolean> }) => RestoreChoice | Promise<RestoreChoice>;
   /** Called on every status change, for an indicator. */
   onStatus?: (status: AutosaveStatus) => void;
-  /** Called synchronously before each explicit, debounced or lifecycle flush, even before any session edit. Commit the active draft; returning false or throwing refuses the write and reports a draft error. */
+  /** Called synchronously before each explicit or lifecycle flush (`flush()`, `markSaved()`, `beforeunload`, `pagehide`), even before any session edit. The debounced autosave does not call it: it writes the committed document and leaves an edit in progress alone. Commit the active draft; returning false or throwing refuses the write and reports a draft error. */
   beforeFlush?: () => boolean | void;
   /** Warn before the page closes while the document is `dirty` (default true). */
   warnOnUnload?: boolean;

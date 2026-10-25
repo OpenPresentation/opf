@@ -707,7 +707,7 @@ const persistence = createPersistence(editor, {
   storage: "indexeddb",               // default; or "localstorage", "memory", false, or your own { get, set, delete } adapter
   onRestorePrompt: ui.prompt,         // or return "restore" | "discard" | "later" (or a promise) yourself
   onStatus: ui.status,                // "Saved on this device at 2:03 PM", or why autosave is off
-  beforeFlush: () => canvas.commit(), // commit a draft before every write and before the page unloads
+  beforeFlush: () => canvas.commit(), // commit a draft before an explicit flush and before the page unloads (the debounced write leaves a draft alone)
 });
 await persistence.ready;              // { available, offered }: storage opened and read (it does not wait for the user's decision)
 await persistence.markSaved();        // after the host saved the document somewhere of its own: not unsaved, and the stored copy says so
