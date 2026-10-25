@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.26.10 (2026-10-25)
+
+- The layout editor's touch targets are 44px under a coarse pointer, at any width: the zoom buttons (were 40px), the validity button (38px), the inspector's Row and Column segments (42px), the remove button of a design hint (40px) and the Bleed checkbox (its label is now the 44px target) no longer sit a few pixels under the control height. The `--opf-lx-*` sizing yields the full control height under `(pointer: coarse)` (`--opf-lx-zoom-btn`, `--opf-lx-pill`, `--opf-lx-seg`, `--opf-lx-row`, `--opf-lx-chip`), so a host needs no override; a mouse keeps the compact sizes. `test/mobile-touch-browser.mjs` now audits the layout editor state by state and runs at an 820px touch tablet width.
+- The presenter no longer loses full screen, or reads the user's Esc as its own exit, when a presentation is closed and opened again quickly: a closed presenter whose full screen request is answered after a newer one asked no longer requests an exit that would end the newer full screen (a refused newer request gives the screen back instead), the exits the presenters asked for are matched to their `fullscreenchange` by order instead of a 500 ms timer so an Esc right after is the user's, and focus returns to the opener even when the browser refuses the exit or reports the end of full screen after the exit settled.
+- The playground's Slide, Sorter, Outline and Layouts view switch is 44px tall under a coarse pointer at 901px and wider (an iPad in landscape); its buttons were 42px, two pixels under the control height. `test/mobile-touch-browser.mjs` now audits the playground at a 1024px touch size.
+
 ## 0.26.9 (2026-10-25)
 
 - Autosave no longer commits an inline edit in progress: the debounced write stores the committed document and leaves the draft alone, so a change made a moment before no longer closes the inline editor under the user (on a slow machine the 800 ms debounce fired mid-typing and ended the edit). `flush()`, `markSaved()`, `beforeunload` and `pagehide` still call `beforeFlush` first, so a draft is committed before the page goes.
