@@ -212,7 +212,8 @@ jobs:
     needs: [plan, prepare, commit]
     if: ${{ needs.plan.outputs.dry-run != 'true' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 75
+    # build (30 at most) + publish (30) + verify (120: the registry wait is up to 60 minutes) + release, with room to spare
+    timeout-minutes: 210
     permissions:
       actions: read
       contents: read

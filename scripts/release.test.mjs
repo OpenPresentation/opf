@@ -11,6 +11,8 @@ import {
   NAMES,
   NO_CHANGES,
   PACKAGES,
+  REGISTRY_WAIT_MINUTES,
+  backoffSeconds,
   checkPublish,
   checkTag,
   defaultDeps,
@@ -20,6 +22,7 @@ import {
   planPrepare,
   publishArgs,
   readReleaseManifest,
+  registryLagMessage,
   releaseNotes,
   smoke,
   resolveVersion,
@@ -29,8 +32,9 @@ import {
   sharedLine,
   stabilityOf,
   verifyRelease,
+  waitForRegistry,
 } from './release.mjs';
-import { PUBLISH_WORKFLOW, REPOSITORY, SLSA, compareVersions, highest, isPrerelease, isVersion, publishedRange, satisfies, verifyPackage } from './release-registry.mjs';
+import { PUBLISH_WORKFLOW, REPOSITORY, SLSA, compareVersions, highest, isPrerelease, isVersion, npmRegistry, publishedRange, satisfies, verifyPackage } from './release-registry.mjs';
 
 const GALLERY = '@openpresentation/gallery';
 const CORE = '@openpresentation/opf';
@@ -311,12 +315,14 @@ function publishDeps({ published = {}, lag = 0, never = [], output = (name) => (
   const calls = [];
   const logs = [];
   const seen = new Map();
+  const bustedLooks = [];
   const base = fakeRegistry({ published });
   let clock = 0;
   const registry = {
     ...base,
-    manifest: async (name, v) => {
+    manifest: async (name, v, options) => {
       if (seen.has(name) && v === version) {
+        if (options?.bust) bustedLooks.push(name);
         seen.set(name, seen.get(name) - 1);
         return seen.get(name) < 0 && !never.includes(name) ? { name, version } : null;
       }
@@ -327,6 +333,10 @@ function publishDeps({ published = {}, lag = 0, never = [], output = (name) => (
     registry,
     calls,
     logs,
+    bustedLooks,
+    get clock() {
+      return clock;
+    },
     log: (line) => logs.push(line),
     now: () => clock,
     sleep: async (ms) => {
@@ -343,11 +353,11 @@ function publishDeps({ published = {}, lag = 0, never = [], output = (name) => (
   return deps;
 }
 
-test('publish runs npm publish per tarball in dependency order with an explicit --tag and --provenance, skips what is on npm, prints npm output and waits for the registry', async () => {
+test('publish runs npm publish per tarball in dependency order with an explicit --tag and --provenance, skips what is on npm, prints npm output and, given --wait, polls the registry', async () => {
   const { dir, cleanup } = tarballs();
   try {
     const deps = publishDeps({ published: { [GALLERY]: ['0.26.0'] }, lag: 2 });
-    const results = await main(['publish', '0.26.0', '--dir', dir], deps);
+    const results = await main(['publish', '0.26.0', '--dir', dir, '--wait', '5', '--poll', '15'], deps);
     assert.deepEqual(results.map(({ status }) => status), ['skipped', 'published', 'published', 'published', 'published', 'published']);
     assert.deepEqual(deps.calls.map((args) => nameOfTarball(args[1])), NAMES.slice(1));
     for (const args of deps.calls) {
@@ -357,24 +367,37 @@ test('publish runs npm publish per tarball in dependency order with an explicit 
     // npm's stdout and stderr are in the log, per package, and so is the wait
     assert.ok(deps.logs.includes(`  npm: + ${CORE}@0.26.0`), deps.logs.join('\n'));
     assert.ok(deps.logs.includes('  npm: npm notice publish'));
-    assert.ok(deps.logs.includes(`  waiting for ${CORE}@0.26.0 to appear on the registry...`));
+    assert.ok(deps.logs.some((line) => line.startsWith(`  not served yet: ${CORE}`)), deps.logs.join('\n'));
     assert.ok(deps.logs.includes(`published ${CORE}@0.26.0: visible on the registry`));
+    assert.ok(deps.bustedLooks.length > 0, 'every look is a cache-busting one');
   } finally {
     cleanup();
   }
 });
 
-test('publish fails when npm exits 0 but the version never appears on the registry (the v0.26.0-rc.0 core and CLI case)', async () => {
+test('publish: a package npm accepted but the registry does not serve yet is pending, not a failure; the rest is still published in order (the v0.26.9 core case)', async () => {
   const { dir, cleanup } = tarballs();
   try {
     const deps = publishDeps({ never: [CORE], output: () => ({ stdout: '', stderr: '' }) });
-    await assert.rejects(main(['publish', '0.26.0', '--dir', dir, '--wait', '2', '--poll', '30'], deps), (error) => {
-      assert.match(error.message, /npm accepted @openpresentation\/opf@0\.26\.0 \(exit 0\) but the registry still does not serve it after 2 min/);
-      assert.match(error.message, /Staged Packages tab of https:\/\/www\.npmjs\.com\/package\/<name>/);
-      return true;
-    });
-    assert.deepEqual(deps.calls.map((args) => nameOfTarball(args[1])), NAMES, 'every package is uploaded before the waiting starts');
+    const results = await main(['publish', '0.26.0', '--dir', dir], deps);
+    assert.deepEqual(results.map(({ name, status }) => [name, status]), NAMES.map((name) => [name, name === CORE ? 'pending' : 'published']));
+    assert.deepEqual(deps.calls.map((args) => nameOfTarball(args[1])), NAMES, 'every package is uploaded, in dependency order, even with core pending');
     assert.ok(deps.logs.includes(`published ${GALLERY}@0.26.0: visible on the registry`));
+    assert.ok(deps.logs.some((line) => line.startsWith(`pending ${CORE}@0.26.0: npm accepted it (exit 0)`) && line.includes('not a failure')), deps.logs.join('\n'));
+    assert.ok(deps.logs.some((line) => line.includes(`await-registry 0.26.0\` waits up to ${REGISTRY_WAIT_MINUTES} min`)));
+    assert.equal(deps.clock, 0, 'publish does not sleep by default: the wait belongs to the verify job');
+  } finally {
+    cleanup();
+  }
+});
+
+test('publish: a re-run skips versions already on npm even when the earlier run left one pending', async () => {
+  const { dir, cleanup } = tarballs();
+  try {
+    const deps = publishDeps({ published: Object.fromEntries(NAMES.map((name) => [name, ['0.26.0']])) });
+    const results = await main(['publish', '0.26.0', '--dir', dir], deps);
+    assert.ok(results.every(({ status }) => status === 'skipped'));
+    assert.equal(deps.calls.length, 0);
   } finally {
     cleanup();
   }
@@ -423,6 +446,118 @@ test('publish stops at the first failure and says what is already on npm; a chan
   } finally {
     cleanup();
   }
+});
+
+// ---------------------------------------------------------------------------------------------------------------------
+// the registry wait
+
+/** A registry that serves `name@version` once the fake clock reaches `appearsAt[name]` ms; `flaky` names fail with HTTP 503 until `flakyUntil`. */
+function lagRegistry(appearsAt, { flaky = [], flakyUntil = 0 } = {}) {
+  const clock = { now: 0 };
+  const looks = [];
+  const logs = [];
+  const sleeps = [];
+  const deps = {
+    clock,
+    looks,
+    logs,
+    sleeps,
+    registry: {
+      manifest: async (name, version, options) => {
+        looks.push({ at: clock.now, name, version, bust: Boolean(options?.bust) });
+        if (flaky.includes(name) && clock.now < flakyUntil) throw new Error(`GET /${name}/${version}: HTTP 503`);
+        return clock.now >= (appearsAt[name] ?? 0) ? { name, version } : null;
+      },
+    },
+    now: () => clock.now,
+    sleep: async (ms) => {
+      sleeps.push(ms / 1000);
+      clock.now += ms;
+    },
+    log: (line) => logs.push(line),
+  };
+  return deps;
+}
+
+const minutes = (count) => count * 60_000;
+
+test('backoffSeconds starts at the poll interval, grows by half and stops at the cap', () => {
+  assert.deepEqual([0, 1, 2, 3, 4, 5, 6, 7].map((attempt) => backoffSeconds(attempt, 15, 120)), [15, 23, 34, 51, 76, 114, 120, 120]);
+  assert.equal(backoffSeconds(0, 0, 120), 1, 'never a zero-second busy loop');
+  assert.equal(backoffSeconds(3, 10, 20), 20);
+});
+
+test('waitForRegistry: one cache-busting look and no sleeping when everything is served or the budget is 0', async () => {
+  const served = lagRegistry({});
+  const result = await waitForRegistry(served, NAMES, '0.26.0', { waitMinutes: 60 });
+  assert.deepEqual(result.pending, []);
+  assert.deepEqual(Object.keys(result.visible), NAMES);
+  assert.equal(served.looks.length, 6);
+  assert.ok(served.looks.every((look) => look.bust && look.at === 0), 'every look asks with the cache-busting option');
+  assert.deepEqual(served.sleeps, []);
+  const lagging = lagRegistry({ [CORE]: minutes(20) });
+  const single = await waitForRegistry(lagging, NAMES, '0.26.0', { waitMinutes: 0 });
+  assert.deepEqual(single.pending, [CORE]);
+  assert.deepEqual(lagging.sleeps, [], 'a zero budget looks once and returns');
+});
+
+test('waitForRegistry: core served after 20 minutes is waited for with backoff, asking only for what is still missing', async () => {
+  const deps = lagRegistry({ [CORE]: minutes(20) });
+  const result = await waitForRegistry(deps, NAMES, '0.26.9', { waitMinutes: 60, pollSeconds: 15, maxPollSeconds: 120 });
+  assert.deepEqual(result.pending, []);
+  assert.ok(result.visible[CORE] >= minutes(20) && result.visible[CORE] < minutes(22), `core visible after ${result.visible[CORE]} ms`);
+  assert.equal(result.visible[GALLERY], 0);
+  assert.deepEqual(deps.sleeps.slice(0, 7), [15, 23, 34, 51, 76, 114, 120]);
+  assert.ok(deps.sleeps.slice(6).every((seconds) => seconds === 120), 'the interval stops growing at --max-poll');
+  assert.deepEqual([...new Set(deps.looks.filter((look) => look.at > 0).map((look) => look.name))], [CORE], 'served packages are not asked again');
+  assert.ok(deps.logs.some((line) => line.startsWith(`  ${CORE}@0.26.9 is served by the registry (after 2`)), deps.logs.join('\n'));
+  assert.ok(deps.logs.some((line) => /not served yet: @openpresentation\/opf; waited 0s of 60 min, next look in 15s/.test(line)));
+});
+
+test('waitForRegistry: the budget is a hard limit, the last look happens at the deadline and a lookup error counts as not served yet', async () => {
+  const deps = lagRegistry({ [CORE]: minutes(90) }, { flaky: [GALLERY], flakyUntil: minutes(2) });
+  const result = await waitForRegistry(deps, NAMES, '0.26.9', { waitMinutes: 10, pollSeconds: 15, maxPollSeconds: 120 });
+  assert.deepEqual(result.pending, [CORE]);
+  assert.ok(result.visible[GALLERY] >= minutes(2), 'a 503 from the registry is retried, not thrown');
+  assert.equal(deps.clock.now, minutes(10), 'sleeps are clamped to the deadline, so the budget is not overrun');
+  assert.equal(deps.looks.filter((look) => look.name === CORE).at(-1).at, minutes(10), 'the final look is at the deadline');
+  assert.ok(deps.logs.some((line) => line.includes('registry lookup failed (GET /@openpresentation/gallery/0.26.9: HTTP 503)')));
+});
+
+test('await-registry: succeeds once all six are served (default budget 60 minutes) and fails with the staged guidance only after the budget', async () => {
+  const slow = lagRegistry({ [CORE]: minutes(22) });
+  const result = await main(['await-registry', '0.26.9'], slow);
+  assert.ok(result.visible[CORE] >= minutes(22));
+  assert.ok(slow.logs.includes(`waiting up to ${REGISTRY_WAIT_MINUTES} min for the registry to serve 6 packages at 0.26.9`));
+  assert.ok(slow.logs.includes('the registry serves all 6 packages at 0.26.9'));
+
+  const staged = lagRegistry({ [CORE]: minutes(500) });
+  await assert.rejects(main(['await-registry', '0.26.9', '--wait', '30', '--poll', '30', '--max-poll', '60'], staged), (error) => {
+    assert.match(error.message, /npm accepted @openpresentation\/opf@0\.26\.9 \(exit 0\) but the registry still does not serve it after 30 min/);
+    assert.match(error.message, /may be staged and awaiting maintainer approval \(Staged Packages tab of https:\/\/www\.npmjs\.com\/package\/<name>; `npm stage list <name>`\)/);
+    assert.match(error.message, /re-run the failed jobs/);
+    return true;
+  });
+  assert.equal(staged.clock.now, minutes(30));
+  assert.ok(staged.sleeps.every((seconds) => seconds <= 60));
+  assert.match(registryLagMessage([CORE, GALLERY], '0.26.9', 5), /npm accepted @openpresentation\/opf@0\.26\.9, @openpresentation\/gallery@0\.26\.9 \(exit 0\) but the registry still does not serve them after 5 min\. Each may be staged/);
+  await assert.rejects(main(['await-registry', 'latest'], slow), /usage: release\.mjs await-registry/);
+});
+
+test('npmRegistry.manifest: bust adds a unique query string to the version document; every request is no-cache', async () => {
+  const requests = [];
+  const fetchImpl = async (url, init) => {
+    requests.push({ url, headers: init.headers });
+    return { status: 404, ok: false, json: async () => ({}) };
+  };
+  const registry = npmRegistry({ fetchImpl });
+  assert.equal(await registry.manifest(CORE, '0.26.9'), null);
+  assert.equal(await registry.manifest(CORE, '0.26.9', { bust: true }), null);
+  assert.equal(await registry.manifest(CORE, '0.26.9', { bust: true }), null);
+  assert.equal(requests[0].url, 'https://registry.npmjs.org/@openpresentation%2fopf/0.26.9');
+  assert.match(requests[1].url, /^https:\/\/registry\.npmjs\.org\/@openpresentation%2fopf\/0\.26\.9\?cachebust=[0-9a-z]+$/);
+  assert.notEqual(requests[1].url, requests[2].url, 'two looks never share a URL');
+  assert.ok(requests.every((request) => request.headers['cache-control'] === 'no-cache'));
 });
 
 test('npmSaysStaged recognizes npm stage publish output and not a plain publish', () => {
