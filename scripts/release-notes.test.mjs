@@ -101,7 +101,10 @@ test('the real CLI changelog has a section for its latest release, and the versi
   const notes = extractReleaseNotes(text, latest);
   assert.notEqual(notes, '');
   assert.equal(cli(['--version', latest, '--changelog', cliChangelog]).stdout, `${notes}\n`);
-  assert.equal(extractReleaseNotes(text, latest.slice(0, -1)), '');
+  // A prefix of the version must not match its section. When the prefix is a release of its own (0.26.1 next to 0.26.10) it
+  // has its own section and the synthetic cases above cover the whole-version match.
+  const prefix = latest.slice(0, -1);
+  if (!new RegExp(`^## ${escapeRegExp(prefix)} \\(`, 'm').test(text)) assert.equal(extractReleaseNotes(text, prefix), '');
   // Without --changelog the root changelog is read; its section can equal the CLI's (e.g. a patch with no package changes).
   const rootNotes = extractReleaseNotes(readFileSync(path.join(root, 'CHANGELOG.md'), 'utf8'), latest);
   assert.equal(cli(['--version', latest]).stdout, rootNotes ? `${rootNotes}\n` : '', 'without --changelog the root changelog is read');
