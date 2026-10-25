@@ -31,6 +31,13 @@ try {
   const errors = [], requests = [];
   const open = async (query = '') => {
     const page = await context.newPage();
+    // OPF_CPU_THROTTLE=<rate> slows every page down by that factor (Chromium), to shake out timing assumptions.
+    if (Number(process.env.OPF_CPU_THROTTLE) > 1) await (await context.newCDPSession(page)).send('Emulation.setCPUThrottlingRate', { rate: Number(process.env.OPF_CPU_THROTTLE) });
+    // OPF_WORKER_DELAY=<ms> makes every message to a worker arrive a random 0 to <ms> late, as on a starved runner: an edit is then applied late.
+    if (Number(process.env.OPF_WORKER_DELAY) > 0) await page.addInitScript((delay) => {
+      const post = Worker.prototype.postMessage;
+      Worker.prototype.postMessage = function (...args) { setTimeout(() => post.apply(this, args), delay * Math.random()); };
+    }, Number(process.env.OPF_WORKER_DELAY));
     page.on('pageerror', error => errors.push(error.message));
     page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
     page.on('request', request => { if (/^https?:/.test(request.url()) && !request.url().startsWith(origin)) requests.push(request.url()); });
@@ -40,6 +47,8 @@ try {
   };
   const text = page => page.evaluate(() => demo.pane.getText());
   const deck = page => page.evaluate(() => demo.editor.presentation);
+  // Resolves once the pane has applied what is typed: no edit waits for its delay and no worker check is running (the end of a state, not a number of milliseconds).
+  const settled = page => page.evaluate(() => demo.pane.whenIdle());
   const waitDeck = (page, check, arg) => page.waitForFunction(`(${check})(demo.editor.presentation, ${JSON.stringify(arg ?? null)})`, null, { timeout: 5000 });
   const selectIn = async (page, needle) => {
     await page.evaluate(needle => {
@@ -482,7 +491,7 @@ try {
     assert.equal(await text(replaced), conferenceText, 'the pane shows the example as written');
     assert.equal(await replaced.evaluate(() => demo.pane.getName()), 'conference-talk');
     await replaced.evaluate(([document, source]) => demo.pane.replaceDocument(document, { source }), [tour, tourText]);
-    await replaced.waitForTimeout(400);
+    await settled(replaced);
     const opened = await deck(replaced);
     assert.deepEqual(opened, tour, 'the second example is exactly the document');
     assert.deepEqual(customIds(opened), [], 'no catalog record is forked');
@@ -575,7 +584,7 @@ try {
     await waitDeck(keys, (d) => d.slides[1].text === 'GammaBeta' || d.slides[1].text?.includes('Gamma'));
     const typedDepth = await depth(keys);
     await keys.keyboard.press(undoKey);
-    await keys.waitForTimeout(300);
+    await settled(keys);
     assert.equal(await text(keys), jsonB, 'Mod-z undoes the typing first and leaves the loaded text as it was');
     assert.deepEqual(await deck(keys), docB);
     assert.ok(await depth(keys) >= typedDepth, 'the load itself was not undone by that key');
@@ -593,7 +602,7 @@ try {
     await selectIn(keys, 'Beta');
     await keys.keyboard.type('Delta');
     await keys.keyboard.press(undoKey);
-    await keys.waitForTimeout(300);
+    await settled(keys);
     assert.equal(await text(keys), jsonB, 'typing undone straight away leaves the loaded document');
     assert.deepEqual(await deck(keys), docB);
 
@@ -615,12 +624,13 @@ try {
     const direct = await open();
     await selectIn(direct, 'Next Steps');
     await direct.keyboard.type('Typed ');
-    await direct.waitForTimeout(300);
+    // The typing is the session's edit before the host replaces the document: wait until the pane has applied it (a timer and a worker check
+    // after the last key), or the replace finds nothing to step back over and drops the typing with the rest of the pane's text.
+    await waitDeck(direct, (d) => d.slides.some((slide) => slide.title === 'Typed '));
     await direct.evaluate((document) => demo.editor.replaceDocument(document), docB);
     await focusPane(direct);
     assert.equal(await direct.evaluate(() => demo.pane.editor.undoDepth()), 0, 'the typing belongs to the document that was replaced');
     await direct.keyboard.press(undoKey);
-    await direct.waitForTimeout(100);
     assert.ok((await deck(direct)).slides.some((slide) => slide.title === 'Typed '), 'Mod-z steps the session back over the host\'s replace');
     await direct.close();
 
@@ -668,7 +678,7 @@ try {
     await yaml.keyboard.type('Intro');
     await waitDeck(yaml, (d) => d.slides[0].title.includes('Intro'));
     await yaml.keyboard.press(undoKey);
-    await yaml.waitForTimeout(300);
+    await settled(yaml);
     assert.equal(await text(yaml), yamlA, 'Mod-z undoes the typed YAML and keeps the comments');
     assert.deepEqual(await deck(yaml), docA);
     await yaml.keyboard.press(undoKey);
