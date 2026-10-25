@@ -30,7 +30,7 @@ import {
   stabilityOf,
   verifyRelease,
 } from './release.mjs';
-import { PUBLISH_WORKFLOW, REPOSITORY, SLSA, compareVersions, highest, isPrerelease, isVersion, satisfies, verifyPackage } from './release-registry.mjs';
+import { PUBLISH_WORKFLOW, REPOSITORY, SLSA, compareVersions, highest, isPrerelease, isVersion, publishedRange, satisfies, verifyPackage } from './release-registry.mjs';
 
 const GALLERY = '@openpresentation/gallery';
 const CORE = '@openpresentation/opf';
@@ -610,6 +610,15 @@ test('`release.mjs verify` with the dependency wiring the workflow uses (default
   } finally {
     cleanup();
   }
+});
+
+test('publishedRange: what pnpm pack writes for a workspace specifier', () => {
+  assert.equal(publishedRange('workspace:^', '0.26.8'), '^0.26.8');
+  assert.equal(publishedRange('workspace:~', '0.26.8'), '~0.26.8');
+  assert.equal(publishedRange('workspace:*', '0.26.8'), '0.26.8');
+  assert.equal(publishedRange('workspace:^0.26.0', '0.26.8'), '^0.26.0');
+  assert.equal(publishedRange('^0.25.1', '0.26.8'), '^0.25.1');
+  assert.equal(satisfies('0.26.8', publishedRange('workspace:^', '0.26.8')), true);
 });
 
 test('satisfies: caret, tilde, exact, comparators, x-ranges, hyphen and ||', () => {

@@ -47,11 +47,16 @@ for (const refusal of [()=>false,()=>{throw new Error('Invalid active draft');}]
   refuse=false;assert.equal(await p.flush(),true);assert.equal((await storage.get(key)).presentation.slides[0].title,'Committed work');p.destroy();
 }
 {
+  // The debounce timer writes the committed document and never commits a draft in progress (it would close the inline editor under
+  // the user); the flush that precedes leaving, or an explicit one, commits it first.
   const editor=createEditorSession(document());const storage=createMemoryStorage();let calls=0;
   const p=controller(editor,storage,{debounceMs:5,beforeFlush(){calls++;if(editor.get('slides.0.title')!=='Draft after trigger')editor.set('slides.0.title','Draft after trigger');}});await p.ready;
   editor.set('slides.0.title','Trigger');
   for(let i=0;i<50&&!await storage.get(key);i++)await new Promise(resolve=>setTimeout(resolve,5));
-  assert.equal((await storage.get(key)).presentation.slides[0].title,'Draft after trigger');assert.equal(calls,1);p.destroy();
+  assert.equal((await storage.get(key)).presentation.slides[0].title,'Trigger');assert.equal(calls,0,'the debounced write does not call beforeFlush');
+  assert.equal(editor.get('slides.0.title'),'Trigger','the draft was not committed by the timer');
+  assert.equal(await p.flush(),true);assert.equal(calls,1);
+  assert.equal((await storage.get(key)).presentation.slides[0].title,'Draft after trigger');p.destroy();
 }
 {
   const editor=createEditorSession(document());const memory=createMemoryStorage();let release,started;
@@ -70,4 +75,4 @@ for (const refusal of [()=>false,()=>{throw new Error('Invalid active draft');}]
   assert.equal(calls,1);assert.equal(event.defaultPrevented,true);assert.equal(p.status.error,'draft');
   win.dispatchEvent(new Event('pagehide'));assert.equal(calls,2);p.destroy();
 }
-console.log('Session boundaries passed: isolated reads, explicit empty catalogs, fresh/debounced/refused/serialized flushes and one lifecycle hook.');
+console.log('Session boundaries passed: isolated reads, explicit empty catalogs, fresh/refused/serialized flushes and a debounce that leaves a draft alone and one lifecycle hook.');

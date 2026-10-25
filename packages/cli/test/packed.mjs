@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {spawnSync} from 'node:child_process';
 import {packWorkspacePackage} from '../../../scripts/workspace-pack.mjs';
 import {assertOneCore} from '../../../scripts/check-one-core.mjs';
-import {satisfies} from '../../../scripts/release-registry.mjs';
+import {publishedRange,satisfies} from '../../../scripts/release-registry.mjs';
 import {registryPlan} from '../../../scripts/registry-plan.mjs';
 import {assertExecOutsideGlobal, globalPrefixLayout} from '../../../scripts/global-prefix.mjs';
 const root=fileURLToPath(new URL('../../../',import.meta.url));
@@ -96,7 +96,7 @@ try {
   // core tarball is installed with it), and the CLI must resolve the one copy.
   const one=await assertOneCore(path.dirname(path.dirname(installed)),{application:false});
   assert.equal(versions.opf,(await readFile(path.join(one.copy,'package.json'),'utf8').then(JSON.parse)).version,'opf --version reports the one installed core');
-  if(registry)assert.ok(satisfies(one.version,sourceManifest.dependencies['@openpresentation/opf']),'The installed core must satisfy the CLI dependency range at the release commit');
+  if(registry)assert.ok(satisfies(one.version,publishedRange(sourceManifest.dependencies['@openpresentation/opf'],sourceManifest.version)),'The installed core must satisfy the CLI dependency range at the release commit');
   // The engines are optional peers of the CLI and of core: npm installs neither for you.
   for(const peer of ['@openpresentation/opf-render','@openpresentation/opf-pptx'])assert.ok(!existsSync(path.join(path.dirname(path.dirname(installed)),...peer.split('/')))&&!existsSync(path.join(one.copy,'node_modules',...peer.split('/'))),`${peer} must not be installed without being asked for`);
  } else {
