@@ -193,7 +193,7 @@ jobs:
     needs: [plan, publish]
     if: ${{ needs.plan.outputs.dry-run != 'true' }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -209,6 +209,16 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
+
+      # `publish` is green once npm ACCEPTED all six uploads; the registry serves a version later (v0.26.9: core about 20 minutes
+      # after npm exited 0). That lag is waited out here, not failed in `publish`: each package's own version document is polled
+      # with no-cache and a unique query string, with backoff, for up to 60 minutes. Only a version still missing after that fails
+      # (staged and awaiting approval, rejected after upload, or an outage), with the staged-package guidance.
+      - name: Wait for the registry to serve all six packages
+        timeout-minutes: 65
+        env:
+          VERSION: ${{ needs.plan.outputs.version }}
+        run: node scripts/release.mjs await-registry "$VERSION" --wait 60 --poll 15 --max-poll 120
 
       # Registry manifest, gitHead and the provenance source commit equal this commit, provenance workflow npm-publish.yml on the
       # tag, dist-tag, lockstep ranges, signatures, the changelog section. The attestation bundle lags the packument by minutes:

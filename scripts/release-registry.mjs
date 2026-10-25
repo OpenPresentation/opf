@@ -169,7 +169,11 @@ export function run(command, args, options = {}) {
   return result;
 }
 
-/** A minimal npm registry client on fetch. `manifest` is null for a version the registry does not have. */
+/**
+ * A minimal npm registry client on fetch. `manifest` is null for a version the registry does not have. Every request sends
+ * `Cache-Control: no-cache`; `manifest(name, version, { bust: true })` also adds a unique query string, so a CDN edge that cached
+ * the earlier 404 of a version that was just published (the v0.26.9 core case) cannot answer a poll with it.
+ */
 export function npmRegistry({ registry = 'https://registry.npmjs.org', fetchImpl = globalThis.fetch, exec = run } = {}) {
   const encode = (name) => name.replace('/', '%2f');
   async function get(url) {
@@ -179,7 +183,7 @@ export function npmRegistry({ registry = 'https://registry.npmjs.org', fetchImpl
     return response.json();
   }
   return {
-    manifest: (name, version) => get(`${registry}/${encode(name)}/${version}`),
+    manifest: (name, version, { bust = false } = {}) => get(`${registry}/${encode(name)}/${version}${bust ? `?cachebust=${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}` : ''}`),
     distTags: async (name) => (await get(`${registry}/-/package/${encode(name)}/dist-tags`)) ?? {},
     attestations: (url) => get(url),
     /** `npm audit signatures` on a scratch project that installs exactly name@version. */

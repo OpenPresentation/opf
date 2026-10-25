@@ -111,6 +111,16 @@ test('npm-publish.yml: publish installs and builds nothing, uses npm 11.16.0 on 
 test('npm-publish.yml: verify checks the registry against this commit and waits only for propagation; release creates the GitHub release once', () => {
   const verify = job(publish, 'verify').text;
   assert.match(verify, /release\.mjs verify "\$VERSION" --tag "\$DIST_TAG" --commit "\$GITHUB_SHA" --wait 10/u);
+  // The registry lags the upload (v0.26.9: core ~20 min after npm exited 0): the wait is a verify step with a 60 minute budget,
+  // before the checks, and the publish job neither waits nor fails for it.
+  assert.match(verify, /release\.mjs await-registry "\$VERSION" --wait 60 /u);
+  assert.ok(verify.indexOf('release.mjs await-registry') < verify.indexOf('release.mjs verify'), 'the registry wait comes first');
+  const budget = Number(/await-registry[^\n]*--wait (\d+)/u.exec(verify)[1]);
+  assert.ok(Number(/^ {4}timeout-minutes: (\d+)/mu.exec(verify)[1]) >= budget + 40, 'the job timeout covers the registry wait plus the checks');
+  assert.ok(Number(/^ {8}timeout-minutes: (\d+)/mu.exec(verify)[1]) > budget, 'the wait step outlives its own budget');
+  assert.doesNotMatch(job(publish, 'publish').text, /--wait/u, 'publish does not wait for registry visibility');
+  assert.match(releaseScript, /export const REGISTRY_WAIT_MINUTES = 60;/u);
+  assert.ok(Number(/^ {4}timeout-minutes: (\d+)/mu.exec(job(release, 'watch').text)[1]) >= 30 + 30 + Number(/^ {4}timeout-minutes: (\d+)/mu.exec(verify)[1]), 'release.yml follows the publish run for at least build + publish + verify');
   assert.match(verify, /release\.mjs smoke "\$VERSION" --registry/u);
   const entry = job(publish, 'release').text;
   assert.match(entry, /gh release view "\$TAG"/u);

@@ -22,9 +22,16 @@
 //       check-publish, then `npm publish <tarball> --access public --provenance --tag <tag>` in dependency order (gallery, core,
 //       render, pptx, editor, cli). The tag is explicit for all six (the gallery needs it, D16). A version already on npm is
 //       skipped, so a re-run continues where the last one stopped. --dry-run passes npm's --dry-run (no provenance: it needs
-//       the OIDC token of a real run). npm's stdout and stderr are printed for every package. After the real uploads the registry is
-//       polled (--wait, default 15 min, every --poll, default 10 s) until the version is served: exit 0 from npm only means the
-//       upload was accepted. A result npm reports as staged (awaiting 2FA approval, not published) fails unless --expect-staged.
+//       the OIDC token of a real run). npm's stdout and stderr are printed for every package. After the real uploads the registry
+//       is looked at once per package (--wait minutes, default 0, polls longer): exit 0 from npm means the upload was accepted, and
+//       the registry serves it later (v0.26.9: core took about 20 minutes). A package that is not served yet is PENDING, not a
+//       failure: the job goes green and `await-registry` waits for it. A result npm reports as staged (awaiting 2FA approval, not
+//       published) fails unless --expect-staged.
+//   node scripts/release.mjs await-registry <version> [--wait minutes] [--poll seconds] [--max-poll seconds]
+//       Waits until all six packages are served at <version> (default budget 60 minutes): the version's registry document is
+//       requested with Cache-Control: no-cache and a unique query string, the interval starts at --poll (default 15 s), grows by
+//       half each round up to --max-poll (default 120 s), and only the packages still missing are asked again. Fails only when
+//       the budget is spent, with the staged-package guidance.
 //   node scripts/release.mjs verify <version> [--tag latest|next] [--commit sha] [--wait minutes] [--json] [--no-audit]
 //       For all six: registry manifest, gitHead and provenance source commit = the release commit, provenance workflow
 //       npm-publish.yml on refs/tags/vX.Y.Z, dist-tag, lockstep ranges, signatures, the changelog section.
@@ -338,18 +345,54 @@ export function publishArgs(tarball, tag, { dryRun = false } = {}) {
  */
 export const npmSaysStaged = (output) => /\(staged\b|\bstaged with id\b|\bhas been staged\b|\bstage[- ]?id\b/i.test(output);
 
+/** The registry wait of `await-registry` when `--wait` is not given: long enough for the slowest propagation seen (v0.26.9: ~20 min). */
+export const REGISTRY_WAIT_MINUTES = 60;
+
+/** Seconds before look number `attempt` (0 for the first retry): `pollSeconds`, then half again each round, never above `maxPollSeconds`. */
+export const backoffSeconds = (attempt, pollSeconds, maxPollSeconds) => Math.min(maxPollSeconds, Math.max(1, Math.round(pollSeconds * 1.5 ** attempt)));
+
+const elapsedText = (ms) => (ms < 90_000 ? `${Math.round(ms / 1000)}s` : `${Math.round(ms / 60_000)} min`);
+
 /**
- * Polls the registry until `name@version` has a manifest: `npm publish` exits 0 when the registry accepted the upload, but the
- * version is served minutes later (the v0.26.0-rc.0 publish saw 1 to 7 minutes). Returns true when it is
- * there, false once `deps.now()` passes `deadline` (ms). The first look is immediate.
+ * Polls the registry until every one of `names` serves `version`, or `waitMinutes` have passed (0: one look, no sleeping).
+ * `npm publish` exits 0 when the registry accepted the upload, but it serves the version later (v0.26.0-rc.0: 1 to 7 minutes,
+ * v0.26.9: about 20). The first look is immediate; each look asks the registry for the version's own document with a unique
+ * query string (`deps.registry.manifest(name, version, { bust: true })`, sent with no-cache), so neither the npm CLI cache nor a
+ * CDN's cached 404 can answer it. A package already served is not asked again; a lookup that errors counts as not served yet.
+ * Returns { visible: { [name]: ms until served }, pending: [names still not served] } and never throws for lag.
  */
-export async function waitForVersion(deps, name, version, { deadline, pollSeconds = 10 }) {
-  for (;;) {
-    if (await deps.registry.manifest(name, version)) return true;
-    if (deps.now() >= deadline) return false;
-    deps.log(`  waiting for ${name}@${version} to appear on the registry...`);
-    await deps.sleep(pollSeconds * 1000);
+export async function waitForRegistry(deps, names, version, { waitMinutes = 0, pollSeconds = 15, maxPollSeconds = 120 } = {}) {
+  const start = deps.now();
+  const deadline = start + waitMinutes * 60_000;
+  const visible = {};
+  let pending = [...names];
+  for (let attempt = 0; ; attempt += 1) {
+    const stillPending = [];
+    for (const name of pending) {
+      let served = false;
+      try {
+        served = Boolean(await deps.registry.manifest(name, version, { bust: true }));
+      } catch (error) {
+        deps.log(`  ${name}@${version}: registry lookup failed (${error.message ?? error}); counted as not served yet`);
+      }
+      if (served) {
+        visible[name] = deps.now() - start;
+        deps.log(`  ${name}@${version} is served by the registry (after ${elapsedText(visible[name])})`);
+      } else stillPending.push(name);
+    }
+    pending = stillPending;
+    const now = deps.now();
+    if (!pending.length || now >= deadline) return { visible, pending };
+    const seconds = Math.min(backoffSeconds(attempt, pollSeconds, maxPollSeconds), Math.ceil((deadline - now) / 1000));
+    deps.log(`  not served yet: ${pending.join(', ')}; waited ${elapsedText(now - start)} of ${waitMinutes} min, next look in ${seconds}s`);
+    await deps.sleep(seconds * 1000);
   }
+}
+
+/** The failure of a registry wait whose budget is spent: staged, rejected after upload, or the registry is very slow. */
+export function registryLagMessage(pending, version, waitMinutes) {
+  const one = pending.length === 1;
+  return `npm accepted ${pending.map((name) => `${name}@${version}`).join(', ')} (exit 0) but the registry still does not serve ${one ? 'it' : 'them'} after ${waitMinutes} min. ${one ? 'It' : 'Each'} may be staged and awaiting maintainer approval (Staged Packages tab of https://www.npmjs.com/package/<name>; \`npm stage list <name>\`), rejected after upload, or the registry is unusually slow. The other packages are on npm; check, then re-run the failed jobs (a version already on npm is skipped).`;
 }
 
 /** Everything npm printed: stdout (`+ name@version`) then stderr (notices, warnings). */
@@ -360,8 +403,8 @@ async function publish(argv, deps) {
   const [version] = options._;
   if (!isVersion(version ?? '') || !options.dir) throw new Error('usage: release.mjs publish <X.Y.Z> --dir <tarballs> [--tag latest|next] [--dry-run] [--wait minutes] [--poll seconds] [--expect-staged]');
   const tag = options.tag ?? defaultTag(version);
-  const waitMinutes = Number(options.wait ?? 15);
-  const pollSeconds = Number(options.poll ?? 10);
+  const waitMinutes = Number(options.wait ?? 0);
+  const pollSeconds = Number(options.poll ?? 15);
   const dryRun = Boolean(options['dry-run']);
   const manifest = readReleaseManifest(path.resolve(options.dir), version);
   const gate = await checkPublish(deps.registry, version, tag);
@@ -392,18 +435,19 @@ async function publish(argv, deps) {
     }
     results.push({ name: entry.name, status: 'uploaded' });
   }
-  // The registry serves an uploaded version after a delay (v0.26.0-rc.0: 1 to 7 minutes, in no fixed order), so every upload goes
-  // first and the waits run after them: the total wait is the slowest package, not the sum.
-  const deadline = deps.now() + waitMinutes * 60_000;
-  const missing = [];
-  for (const result of results.filter(({ status }) => status === 'uploaded')) {
-    if (await waitForVersion(deps, result.name, version, { deadline, pollSeconds })) {
-      deps.log(`published ${result.name}@${version}: visible on the registry`);
-      result.status = 'published';
-    } else missing.push(`${result.name}@${version}`);
-  }
-  if (missing.length) {
-    throw new Error(`npm accepted ${missing.join(', ')} (exit 0) but the registry still does not serve ${missing.length === 1 ? 'it' : 'them'} after ${waitMinutes} min. ${missing.length === 1 ? 'It' : 'Each'} may be staged and awaiting maintainer approval (Staged Packages tab of https://www.npmjs.com/package/<name>; \`npm stage list <name>\`), rejected after upload, or just slow. The other packages are on npm; check, then re-run to continue (a version already on npm is skipped).`);
+  // The registry serves an uploaded version after a delay (v0.26.0-rc.0: 1 to 7 minutes, v0.26.9: about 20 for core, in no fixed
+  // order). npm accepted the upload, so a version that is not served yet is PENDING, not a failure: the job stays green, the
+  // remaining packages were published in dependency order above, and the verify job's `await-registry` waits for the rest with
+  // its own budget. Only a version still missing after that budget fails, with the staged-package guidance.
+  const uploaded = results.filter(({ status }) => status === 'uploaded');
+  if (uploaded.length) {
+    const { visible, pending } = await waitForRegistry(deps, uploaded.map(({ name }) => name), version, { waitMinutes, pollSeconds });
+    for (const result of uploaded) {
+      result.status = result.name in visible ? 'published' : 'pending';
+      if (result.status === 'published') deps.log(`published ${result.name}@${version}: visible on the registry`);
+      else deps.log(`pending ${result.name}@${version}: npm accepted it (exit 0) and the registry does not serve it yet; this is not a failure, the verify job waits for it`);
+    }
+    if (pending.length) deps.log(`${pending.length} of ${uploaded.length} uploaded package(s) not served yet; \`release.mjs await-registry ${version}\` waits up to ${REGISTRY_WAIT_MINUTES} min for them in the verify job`);
   }
   return results;
 }
@@ -559,6 +603,17 @@ export async function main(argv = process.argv.slice(2), deps = defaultDeps()) {
     deps.log(`ok: ${version} may be published (shared line ${gate.previous}, ${gate.skip.length} of 6 already on npm)`);
     return gate;
   }
+  if (command === 'await-registry') {
+    const options = parseOptions(rest, { value: ['wait', 'poll', 'max-poll'] });
+    const [version] = options._;
+    if (!isVersion(version ?? '')) throw new Error('usage: release.mjs await-registry <X.Y.Z> [--wait minutes] [--poll seconds] [--max-poll seconds]');
+    const waitMinutes = Number(options.wait ?? REGISTRY_WAIT_MINUTES);
+    deps.log(`waiting up to ${waitMinutes} min for the registry to serve ${NAMES.length} packages at ${version}`);
+    const { visible, pending } = await waitForRegistry(deps, NAMES, version, { waitMinutes, pollSeconds: Number(options.poll ?? 15), maxPollSeconds: Number(options['max-poll'] ?? 120) });
+    if (pending.length) throw new Error(registryLagMessage(pending, version, waitMinutes));
+    deps.log(`the registry serves all ${NAMES.length} packages at ${version}`);
+    return { visible };
+  }
   if (command === 'verify') {
     const options = parseOptions(rest, { value: ['tag', 'commit', 'wait', 'poll', 'dir'], flag: ['json', 'no-audit'] });
     const [version] = options._;
@@ -584,7 +639,7 @@ export async function main(argv = process.argv.slice(2), deps = defaultDeps()) {
     for (const name of NAMES) deps.log(name);
     return NAMES;
   }
-  throw new Error('usage: release.mjs prepare|pack|smoke|check-publish|publish|verify|notes|order (see the header of scripts/release.mjs)');
+  throw new Error('usage: release.mjs prepare|pack|smoke|check-publish|publish|await-registry|verify|notes|order (see the header of scripts/release.mjs)');
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

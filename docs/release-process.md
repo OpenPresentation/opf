@@ -51,8 +51,9 @@ rehearsal. The jobs:
 5. **npm-publish.yml** on the tag: `plan` (the tag is on `main`), `build` (one install and build, `pnpm pack` of the six,
    `scripts/stamp-githead.mjs` adds `gitHead` to each tarball because `pnpm pack` omits it, a smoke test installs the six
    tarballs together, renders the quickstart deck and runs the CLI), `publish` (the only job with `id-token: write`; the
-   pre-publish gate, then `npm publish <tarball> --access public --provenance --tag <tag>` six times, printing npm's own output, then polling until the registry serves each version (it lags the upload by up to several minutes); a version already on npm is
-   skipped), `verify` (below), `release` (the GitHub release, notes grouped by package) and `report` (a failure opens the issue
+   pre-publish gate, then `npm publish <tarball> --access public --provenance --tag <tag>` six times, printing npm's own output; a version already on npm is
+   skipped. Once npm accepted an upload the package is published: if the registry does not serve it yet it is logged as
+   **pending**, which is not a failure, and the job goes on), `verify` (below: it first waits for the registry), `release` (the GitHub release, notes grouped by package) and `report` (a failure opens the issue
    "Release vX.Y.Z failed", labeled `release-failed`).
 6. **follow the publish run** (the Release run waits for it, so it is green only when the whole release is).
 
@@ -97,11 +98,25 @@ on green, then on `main` run `git tag vX.Y.Z && git push origin vX.Y.Z`. The pub
 
 ### Verify
 
-The `verify` job runs `node scripts/release.mjs verify X.Y.Z --tag <dist-tag> --commit <release commit> --wait 10` and then the
-smoke test against the registry (`release.mjs smoke X.Y.Z --registry`). For all six packages it checks the registry manifest,
+The registry serves an accepted upload some time after `npm publish` exits 0: 1 to 7 minutes for v0.26.0-rc.0 and about 20 for core
+in v0.26.9. That lag is waited out in the `verify` job, never failed in `publish` (a lagging package used to fail the publish job
+and skip verify and the GitHub release; a manual `gh run rerun --failed` was the fix). The `verify` job runs, in order:
+
+1. `node scripts/release.mjs await-registry X.Y.Z --wait 60 --poll 15 --max-poll 120`: for each package still missing, requests
+   the version's own registry document (`/@scope%2fname/X.Y.Z`) with `Cache-Control: no-cache` and a unique query string, so
+   neither the npm CLI cache nor a CDN's cached 404 answers. The first look is immediate; the interval starts at 15 s, grows by
+   half each round up to 120 s, and each round logs which packages are still missing and for how long. A served package is not
+   asked again. Only when the 60 minute budget is spent does it fail, with the staged-package guidance (see Troubleshooting). A
+   lookup that errors (HTTP 5xx) counts as not served yet.
+2. `node scripts/release.mjs verify X.Y.Z --tag <dist-tag> --commit <release commit> --wait 10 --poll 30`, which waits only for the
+   attestation bundle and the scratch install (a few more minutes), and then the smoke test against the registry
+   (`release.mjs smoke X.Y.Z --registry`).
+
+For all six packages `verify` checks the registry manifest,
 `gitHead` and the provenance source commit equal to the release commit, the provenance workflow `npm-publish.yml` on
 `refs/tags/vX.Y.Z`, the subject digest, the dist-tag, that no manifest carries a `workspace:` range and every sibling range is
-`^X.Y.Z`, `npm audit signatures`, and that each package changelog has the version's section. By hand:
+`^X.Y.Z`, `npm audit signatures`, and that each package changelog has the version's section. If the budget is spent, re-run the
+failed jobs (`gh run rerun --failed`): `publish` is not repeated, because it succeeded. By hand:
 
 ```sh
 node scripts/release.mjs verify X.Y.Z --tag latest            # exit 0 when all six verify
@@ -117,7 +132,8 @@ npm view @openpresentation/gallery dist-tags --json           # latest is X.Y.Z;
 | `pack <version> --commit <sha> --out <dir>` | `pnpm pack` of the six, `gitHead` stamped, `release-manifest.json` with digests |
 | `smoke <version> (--dir <dir> \| --registry)` | install the six together, render, resolve, run the CLI |
 | `check-publish <version> [--tag t]` | the pre-publish gate |
-| `publish <version> --dir <dir> [--tag t] [--dry-run] [--wait minutes] [--poll seconds] [--expect-staged]` | the gate, then `npm publish` in dependency order: npm's output is printed, the version must be served within `--wait` (default 15 min, after all six uploads), a staged result fails unless `--expect-staged` |
+| `publish <version> --dir <dir> [--tag t] [--dry-run] [--wait minutes] [--poll seconds] [--expect-staged]` | the gate, then `npm publish` in dependency order: npm's output is printed; after all six uploads each package gets one registry look (`--wait`, default 0, polls longer) and one not served yet is logged **pending**, never a failure; a staged result fails unless `--expect-staged` |
+| `await-registry <version> [--wait minutes] [--poll seconds] [--max-poll seconds]` | waits (default 60 min, backoff 15 s to 120 s, cache-busting) until the registry serves all six; fails only when the budget is spent |
 | `verify <version> [--tag t] [--commit sha] [--wait minutes]` | the registry and provenance check (a prerelease has no changelog section to check) |
 | `notes <version> [--out file]` | the GitHub release body |
 | `order` | the publish order |
@@ -177,11 +193,12 @@ To review a set, pack the release (`npm pack @openpresentation/opf-render@<versi
 - **`E404`, `E403` or `ENEEDAUTH` from `npm publish`**: the trusted publisher of that package is missing or wrong. It must be
   organization `OpenPresentation`, repository `opf`, workflow filename `npm-publish.yml`, no environment, and the `publish` job
   needs `id-token: write`. Fix the entry in npm (owner step O1) and re-run the workflow on the tag.
-- **`publish` fails with "npm accepted X (exit 0) but the registry still does not serve it"** or "npm staged X": npm returned success
-  (or staged the upload) but the version is not installable. Open the package on npmjs.com, Staged Packages tab, or run
-  `npm stage list <name>` as a maintainer: a staged version must be approved with 2FA (`npm stage approve <stage-id>`;
-  trusted-publishing OIDC tokens cannot approve). Otherwise wait for propagation and re-run the workflow on the same tag; the
-  packages already served are skipped.
+- **`verify` fails at "Wait for the registry" with "npm accepted X (exit 0) but the registry still does not serve it after 60
+  min"**, or `publish` fails with "npm staged X": npm returned success (or staged the upload) but the version is not installable.
+  Ordinary registry lag never gets here: it is logged as pending in `publish` and waited out in `verify`. Open the package on
+  npmjs.com, Staged Packages tab, or run `npm stage list <name>` as a maintainer: a staged version must be approved with 2FA
+  (`npm stage approve <stage-id>`; trusted-publishing OIDC tokens cannot approve). Otherwise check npm's status page and, once
+  the version is served, re-run the failed jobs of the run (`gh run rerun --failed`); the packages already served are skipped.
 - **A version is already on npm**: `publish` skips it; do not try to publish it again. Verify the package and continue.
 - **The gate is red**: the failing leg of `nightly.yml` is in the Release run. Fix it on `main` and release again; nothing was
   committed. A flaky leg is quarantined (`pnpm check:quarantine`), never skipped for a release.
