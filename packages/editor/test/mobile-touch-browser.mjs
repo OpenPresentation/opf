@@ -4,7 +4,8 @@
 // notes). The layout editor (examples/layout-editor.html) is audited the same way, state by state: the zoom buttons, the validity button, the
 // inspector's segments, checkbox and remove buttons, the menus. The tablet is `(pointer: coarse)` at a width past the phone layout: touch.css and
 // the component styles key on the pointer, not the width, so a finger on a tablet gets the same 44px; the same page with a mouse keeps the
-// compact sizes (checked at the end).
+// compact sizes (checked at the end). A 1024px touch landscape screen (Chromium) audits the playground's start, where the
+// slide toolbar's own controls (the view switch, Undo, Redo) show.
 // The viewport is a fixed layout viewport (`isMobile: false`): an `isMobile` viewport widens itself to fit overflowing content, which would hide
 // the sideways scroll this test looks for. Touch is on (`hasTouch`), so `(pointer: coarse)` holds; the test asserts it.
 // CI runs the core states (every page load costs seconds, and the browser job has a time limit): Chromium at 320, 390 and 820px, WebKit at 320px,
@@ -324,6 +325,28 @@ async function fineLayoutEditor(browser) {
   await context.close();
 }
 
+/** A touch laptop-width screen (an iPad in landscape, 1024px): past the playground's phone layout (900px), where the slide toolbar's own controls show. */
+async function landscapeTablet(browser) {
+  const context = await browser.newContext({ viewport: { width: 1024, height: 768 }, deviceScaleFactor: 2, hasTouch: true, isMobile: false });
+  const tag = (name) => `chromium 1024px playground, ${name}`;
+  const page = await context.newPage();
+  page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`));
+  page.on('console', (message) => { if (message.type() === 'error' && !/Failed to load resource/.test(message.text())) problems.push(`console: ${message.text()}`); });
+  await page.goto(`${origin}/index.html`);
+  await page.locator('#preview svg').waitFor({ timeout: 60000 });
+  await page.waitForFunction(() => !/Loading fonts/.test(document.querySelector('#status').textContent), undefined, { timeout: 60000 });
+  assert.equal(await page.evaluate(() => matchMedia('(pointer: coarse)').matches), true, `${tag('page')}: a coarse pointer`);
+  await page.waitForTimeout(350);
+  const report = await page.evaluate(touchAudit);
+  assert.ok(report.controls >= 20, `${tag('start')}: found its controls (${report.controls})`);
+  // The slide thumbnails are a scroller by design.
+  assertClean({ ...report, clipped: report.clipped.filter((entry) => !/opf-thumbs/.test(entry)) }, tag('start'));
+  const heights = await page.evaluate(() => ['view-slide', 'view-sorter', 'view-outline', 'view-layouts', 'undo', 'redo'].map((id) => [id, document.getElementById(id).getBoundingClientRect().height]));
+  for (const [id, height] of heights) assert.ok(height >= 43.5, `${tag(id)}: is 44px tall (${height})`);
+  checks.push('chromium 1024px: the playground at a touch landscape width (the view switch, Undo and Redo and the rest of the start) has 44px controls, 16px fields, no sideways scroll, no cut-off or overlapping control');
+  await context.close();
+}
+
 try {
   const browsers = new Map();
   for (const engine of engines) {
@@ -344,7 +367,7 @@ try {
         })();
         await Promise.all([sourceRun, playground(browser, engine, size), layoutEditor(browser, engine, size)]);
       })),
-      ...(browsers.has('chromium') ? [fineLayoutEditor(browsers.get('chromium'))] : []),
+      ...(browsers.has('chromium') ? [fineLayoutEditor(browsers.get('chromium')), landscapeTablet(browsers.get('chromium'))] : []),
     ]);
   } finally { for (const browser of browsers.values()) await browser.close(); }
   assert.deepEqual(problems, [], 'no page or console error');
