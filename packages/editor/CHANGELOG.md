@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.26.9 (2026-10-25)
+
+- Autosave no longer commits an inline edit in progress: the debounced write stores the committed document and leaves the draft alone, so a change made a moment before no longer closes the inline editor under the user (on a slow machine the 800 ms debounce fired mid-typing and ended the edit). `flush()`, `markSaved()`, `beforeunload` and `pagehide` still call `beforeFlush` first, so a draft is committed before the page goes.
+
 ## 0.26.8 (2026-10-25)
 
 - The hanging indent of wrapped lines (0.26.7) no longer makes the source pane and the JSON editor slow: the stylesheet capped the hang with a percentage, which made the style and layout of every line very expensive (filling an 848-line document took 8.5 s instead of 0.56 s). The cap, still 40% of the line, is now worked out in columns from the measured width, in the editor's measure cycle, and the stylesheet has no percentage.

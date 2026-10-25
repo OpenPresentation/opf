@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.26.9 (2026-10-25)
+
+No package changes; released with the set.
+
 ## 0.26.8 (2026-10-25)
 
 No package changes; released with the set.
