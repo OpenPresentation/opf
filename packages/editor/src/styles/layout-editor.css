@@ -12,6 +12,10 @@
   --opf-lx-slot: 20px;
   --opf-lx-pad: 16px;
   --opf-lx-chip: calc(var(--opf-ui-control-h) - 4px);
+  /* Compact controls sit a little under --opf-lx-h so they sit quietly beside it: the zoom buttons, the validity pill, the segments. */
+  --opf-lx-zoom-btn: calc(var(--opf-lx-h) - 4px);
+  --opf-lx-pill: calc(var(--opf-lx-h) - 6px);
+  --opf-lx-seg: calc(var(--opf-lx-h) - 2px);
   font-family: var(--opf-ui-font);
   font-size: 13px;
   color: var(--opf-ui-fg);
@@ -83,7 +87,7 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: calc(var(--opf-lx-h) - 6px);
+  height: var(--opf-lx-pill);
   padding: 0 10px;
   background: transparent;
   border: 1px solid var(--opf-ui-border);
@@ -497,8 +501,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: calc(var(--opf-lx-h) - 4px);
-  height: calc(var(--opf-lx-h) - 4px);
+  width: var(--opf-lx-zoom-btn);
+  height: var(--opf-lx-zoom-btn);
   padding: 0;
   background: transparent;
   border: 0;
@@ -687,7 +691,7 @@ input.opf-lx-input[data-field="max"] { font-family: var(--opf-ui-mono); font-siz
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: calc(var(--opf-lx-h) - 2px);
+  height: var(--opf-lx-seg);
   padding: 0 12px;
   background: transparent;
   border: 0;
@@ -769,6 +773,30 @@ input.opf-lx-input[data-field="max"] { font-family: var(--opf-ui-mono); font-siz
 .opf-lx-canvas[data-density="touch"] .opf-lx-divider[data-fixed="false"]::after { background: color-mix(in srgb, var(--opf-ui-accent) 45%, transparent); }
 .opf-lx-canvas[data-density="touch"] .opf-lx-label { --opf-lx-chip-h: 19px; font-size: 12px; line-height: 18px; }
 .opf-lx[data-density="touch"] .opf-lx-actions { grid-template-columns: minmax(0, 1fr); }
+
+/* A coarse pointer (a finger): every control sized from these tokens is a 44px target, at any width. --opf-lx-h already follows
+   --opf-ui-control-h (44px under a coarse pointer, tokens.css); the compact controls that sit a few pixels under it, and the rows and
+   chips, take its full height. A fine pointer keeps the compact look. Fields and the other controls that size themselves: touch.css. */
+@media (pointer: coarse) {
+  .opf-lx,
+  .opf-lx-palette,
+  .opf-lx-canvas,
+  .opf-lx-layers,
+  .opf-lx-inspector {
+    --opf-lx-row: var(--opf-lx-h);
+    --opf-lx-chip: var(--opf-lx-h);
+    --opf-lx-zoom-btn: var(--opf-lx-h);
+    --opf-lx-pill: var(--opf-lx-h);
+    --opf-lx-seg: var(--opf-lx-h);
+  }
+  /* A checkbox is hit through its label: the label is the 44px target and the box a little larger (as .opf-dc-check in touch.css). */
+  .opf-lx-field-check .opf-lx-label-text {
+    display: flex;
+    align-items: center;
+    min-height: var(--opf-lx-h);
+  }
+  .opf-lx-check { width: 22px; height: 22px; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   .opf-lx *,
