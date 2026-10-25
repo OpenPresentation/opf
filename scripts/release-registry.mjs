@@ -145,6 +145,18 @@ export function satisfies(version, range) {
   return match !== null && results.some(Boolean);
 }
 
+/**
+ * The range a manifest of the shared line publishes for `range`: what `pnpm pack` writes for a `workspace:` specifier at `version`
+ * (`workspace:^` is `^version`, `workspace:~` is `~version`, `workspace:*` is `version`; `workspace:<range>` is the range). Any
+ * other range is published as it is. A check of a release commit's source manifest against the registry reads its ranges through this.
+ */
+export function publishedRange(range, version) {
+  const match = /^workspace:(.*)$/.exec(String(range));
+  if (!match) return range;
+  const [, spec] = match;
+  return spec === '^' || spec === '~' ? `${spec}${version}` : spec === '*' ? version : spec;
+}
+
 // ---------------------------------------------------------------------------------------------------------------------
 // The registry
 

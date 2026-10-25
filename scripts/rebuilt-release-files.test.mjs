@@ -86,12 +86,18 @@ test('a failing build is reported with its output and leaves no half-built cache
   }
 });
 
-test('only opf-editor build output is rebuilt; every other file is compared with the commit', () => {
+test('build output is rebuilt (the editor always, the others only when the commit does not track it); every other file is compared with the commit', () => {
   assert.ok(isRebuilt('opf-editor', 'dist/index.js'));
   assert.ok(isRebuilt('opf-editor', 'dist/styles.css'));
   assert.ok(!isRebuilt('opf-editor', 'package.json'));
   assert.ok(!isRebuilt('opf-editor', 'README.md'));
-  assert.ok(!isRebuilt('opf-render', 'dist/index.js'));
+  assert.ok(isRebuilt('opf-editor', 'dist/index.js', {tracked: true}));
+  for (const repo of ['opf-render', 'opf-pptx', 'gallery']) {
+    assert.ok(isRebuilt(repo, 'dist/raster.js'), `${repo}: an untracked dist/ file is rebuilt`);
+    assert.ok(!isRebuilt(repo, 'dist/raster.js', {tracked: true}), `${repo}: a tracked dist/ file is compared with the commit`);
+    assert.ok(!isRebuilt(repo, 'package.json'));
+    assert.ok(!isRebuilt(repo, 'fonts/x.woff2'));
+  }
   assert.ok(!isRebuilt('opf', 'dist/index.js'));
   assert.deepEqual(REBUILT['opf-editor'].install, ['npm', ['ci', '--ignore-scripts', '--no-audit', '--no-fund']]);
   assert.deepEqual(REBUILT['opf-editor'].build, ['node', ['scripts/build.mjs']]);
@@ -146,6 +152,26 @@ test('a release of the shared line (pnpm workspace) is rebuilt with the frozen l
     // A second call reads the cache: the package root is found again inside the cached workspace.
     assert.equal((await rebuiltBytes({...args, file: 'dist/index.js'})).toString(), built);
     await assert.rejects(assertReproducible({...args, file: 'dist/index.js', installed: Buffer.from("export default '';\n")}), /not a reproducible build/);
+  } finally {
+    await rm(base, {recursive: true, force: true});
+  }
+});
+
+test('a release of the shared line: package.json is the packed manifest plus gitHead, compared as data; one workspace build serves every package', async () => {
+  const {base, repo, ref, cacheRoot} = await monorepoFixture({workspace: true});
+  try {
+    const args = {repo: 'opf-editor', checkout: repo, ref, cacheRoot, packageDirectory: 'packages/editor'};
+    assert.ok(isRebuilt('opf-editor', 'package.json', {sharedLine: true}));
+    assert.ok(!isRebuilt('opf-editor', 'package.json'), 'an archived repository publishes its package.json as committed');
+    const expected = JSON.parse((await rebuiltBytes({...args, file: 'package.json'})).toString());
+    assert.equal(expected.name, '@openpresentation/opf-editor');
+    assert.equal(expected.gitHead, ref);
+    // The same manifest in another key order is the same manifest; a different value is not.
+    const reordered = Object.fromEntries(Object.entries(expected).reverse());
+    await assertReproducible({...args, file: 'package.json', installed: Buffer.from(JSON.stringify(reordered, null, 2))});
+    await assert.rejects(assertReproducible({...args, file: 'package.json', installed: Buffer.from(JSON.stringify({...expected, gitHead: 'f'.repeat(40)}))}), /not a reproducible build/);
+    // Another package of the same commit reads the one build (its recipe is the shared workspace one).
+    assert.equal(await rebuiltTree({...args, repo: 'opf-render', packageDirectory: 'packages/editor'}), await rebuiltTree(args));
   } finally {
     await rm(base, {recursive: true, force: true});
   }
