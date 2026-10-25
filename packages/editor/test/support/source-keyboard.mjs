@@ -6,7 +6,7 @@
 // says it is idle (`data-opf-busy` on `.cm-editor` is set while a completion query is pending). The only waits are the ones a
 // case asks for by name, where elapsed time is the point of the test.
 //
-// OPF_BROWSER_ENGINE=chromium|webkit|firefox picks the browser (default chromium; OPF_BROWSER_EXECUTABLE points at a browser build you already have); OPF_KEYBOARD_PLATFORM=darwin|win32|linux picks the
+// OPF_CPU_THROTTLE=<rate> slows the pages down (Chromium); OPF_BROWSER_ENGINE=chromium|webkit|firefox picks the browser (default chromium; OPF_BROWSER_EXECUTABLE points at a browser build you already have); OPF_KEYBOARD_PLATFORM=darwin|win32|linux picks the
 // keymap the page sees (default: this machine), so one runner covers all three key maps on any machine.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
@@ -81,6 +81,8 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
         if (text && window.__live.at(-1) !== text) window.__live.push(text);
       }).observe(document, { subtree: true, childList: true, characterData: true });
     });
+    // OPF_CPU_THROTTLE=<rate> slows every page down by that factor (Chromium, Chrome DevTools Protocol), to shake out timing assumptions in a case.
+    if (engineName === 'chromium' && Number(process.env.OPF_CPU_THROTTLE) > 1) await (await context.newCDPSession(page)).send('Emulation.setCPUThrottlingRate', { rate: Number(process.env.OPF_CPU_THROTTLE) });
     page.on('pageerror', (error) => problems.push(`pageerror: ${error.message}`));
     page.on('console', (message) => { if (message.type() === 'error') problems.push(`console: ${message.text()}`); });
     await page.goto(`${origin}/source-pane.html${query}`);
@@ -107,6 +109,9 @@ export async function startKeyboardSuite({ viewport = { width: 1200, height: 800
           control.resetHistory();
           control.api.setSelection(start, end);
         }, [format, text, from, to, notify]);
+        // The pane checks the text it was told about (in the worker, taking as long as the machine needs) and may apply it to the session: wait for that, so
+        // a case never races its own starting document (a slow machine answered after the first key, and the session findings of the starting text appeared).
+        if (notify) await page.evaluate(() => demo.pane.whenIdle());
         await kb.settle();
       },
       async press(key) { await page.keyboard.press(keyFor(key)); await kb.settle(); },

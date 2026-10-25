@@ -45,6 +45,9 @@ async function measure(mode, { format, needle, text }) {
       const { api } = demo.pane.editor, at = api.getValue().indexOf(marker);
       api.focus(); api.setSelection(at + marker.length);
     }, needle);
+    // The caret was moved with a scroll into view: let the editor draw that (two frames) before the first key. A key that arrives in the same frame is read
+    // by CodeMirror before the page has the caret settled and lands after the keys that follow it (the first letter ended up last).
+    await suite.driver(page).settle();
     const before = await page.evaluate(() => demo.pane.checkerStats());
     const collect = () => page.evaluate(() => { const long = window.__long.splice(0), gaps = window.__gaps.splice(0); return { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...gaps) }; });
     const type = async (characters, spacing, tail) => {
