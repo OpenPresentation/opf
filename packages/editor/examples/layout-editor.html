@@ -17,6 +17,14 @@ body { margin: 0; background: var(--opf-ui-bg); color: var(--opf-ui-fg); font: 1
 #p-palette { grid-area: palette; } #p-canvas { grid-area: canvas; } #p-layers { grid-area: layers; } #p-inspector { grid-area: inspector; }
 body.arranged .parts { display: grid; } body.arranged #editor { display: none; }
 details { font: 11.5px ui-monospace, Menlo, monospace; }
+/* A finger: 44px targets, and the page grows with the editor (a phone is shorter than the editor) instead of the editor spilling over the log. */
+@media (pointer: coarse) {
+  .bar button { min-height: 44px; }
+  summary { display: list-item; padding-block: calc((44px - 1lh) / 2); }
+  .harness { height: auto; min-height: 100vh; }
+  #editor { flex: none; }
+  .parts { flex: none; height: 900px; }
+}
 pre { margin: 4px 0 0; max-height: 160px; overflow: auto; padding: 6px; border: 1px solid var(--opf-ui-border); border-radius: 6px; background: var(--opf-ui-surface); }
 </style>
 </head>
