@@ -35,28 +35,15 @@ try {
       onExit: (index) => window.log.exits.push(index), onSlideChange: (index) => window.log.changes.push(index), ...extra,
     });
   }, [count, hidden, extra]);
-  // Leaving full screen is a request the browser answers later, and a presenter that stopped (or was destroyed by mount) before this one still has
-  // such requests in flight. One that is answered after the next start() takes full screen away from it again, and the new presenter, which did not
-  // ask for that exit, ends the presentation as the user's. Count the requests in flight so a test can wait until the browser answered every one
-  // (document.fullscreenElement is null as soon as the first is, which is too early on a slower machine).
-  await page.evaluate(() => {
-    window.exitsInFlight = 0;
-    const exit = Document.prototype.exitFullscreen;
-    Document.prototype.exitFullscreen = function (...args) {
-      window.exitsInFlight++;
-      const answer = exit.apply(this, args);
-      Promise.resolve(answer).then(() => { window.exitsInFlight--; }, () => { window.exitsInFlight--; });
-      return answer;
-    };
-  });
-  const fullscreenIdle = () => page.waitForFunction(() => !document.fullscreenElement && window.exitsInFlight === 0);
+  // The page behind a full screen element takes no focus, so the opener can be focused once full screen has ended.
+  const fullscreenOver = () => page.waitForFunction(() => !document.fullscreenElement);
   const open = async (index) => {
-    await fullscreenIdle(); // a stop() before this one is still leaving full screen
+    await fullscreenOver();
     await page.locator('#opener').focus();
     return page.evaluate((i) => window.presenter.start(i), index);
   };
 
-  await page.evaluate(() => { window.realRequest = Element.prototype.requestFullscreen; window.realWebkit = Element.prototype.webkitRequestFullscreen; });
+  await page.evaluate(() => { window.realExit = Document.prototype.exitFullscreen; window.realRequest = Element.prototype.requestFullscreen; window.realWebkit = Element.prototype.webkitRequestFullscreen; });
   const realFullscreen = () => page.evaluate(() => { Element.prototype.requestFullscreen = window.realRequest; Element.prototype.webkitRequestFullscreen = window.realWebkit; });
 
   // ---- structure, start and the dialog semantics ----------------------------------------------------------------------------------------
@@ -279,7 +266,7 @@ try {
 
   // Closing before the browser answered the full screen request (a quick Esc, the close button, F5 then Esc) must not leave the page in full
   // screen behind a hidden presenter: the request resolves after stop() saw no full screen to leave, so the presenter gives the screen back then.
-  await fullscreenIdle();
+  await fullscreenOver();
   await page.locator('#opener').focus();
   const early = await page.evaluate(async () => {
     const answer = window.presenter.start(0);
@@ -315,8 +302,6 @@ try {
   // request resolves, which can be after a newer presenter took full screen: the browser then ends the newer one's full screen too. The
   // newer presentation did not ask for that, so it must not end; it carries on (full screen if it kept it, else as the overlay).
   for (const wait of [0, 5, 10, 25, 60]) {
-    await fullscreenIdle();
-    await page.waitForTimeout(150);
     await page.evaluate(() => {
       window.lateLog = [];
       const make = (name) => window.opfPresent.createPresenter(document.getElementById('host'), { editor: window.makeEditor(3), fonts: window.fonts, onExit: () => window.lateLog.push(name) });
@@ -337,8 +322,102 @@ try {
     assert.deepEqual(await page.evaluate(() => window.lateLog), ['first', 'second'], 'and it ends normally when the user closes it');
     await page.evaluate(() => { window.first.destroy(); window.second.destroy(); });
   }
-  await fullscreenIdle();
   mark('an exit an earlier presenter asked for late does not end the next presentation');
+
+  // ---- the same race, made deterministic ----------------------------------------------------------------------------------------------
+  // A scripted Fullscreen API: nothing is answered until the test answers it, so the order the browser answers in is the test's choice. `fs.grant(n)`
+  // answers the n-th request (the element becomes full screen, `fullscreenchange` fires, the promise resolves), `fs.refuse(n)` rejects it,
+  // `fs.finishExit(n)` answers the n-th exit (full screen ends, as the browser does for whatever is full screen then) and `fs.userExit()` is Esc.
+  await fullscreenOver();
+  await page.evaluate(() => {
+    // The real browser may still report an earlier exit: only the scripted events reach the presenters here.
+    window.dropRealEvents = (event) => { if (event.isTrusted) event.stopImmediatePropagation(); };
+    document.addEventListener('fullscreenchange', window.dropRealEvents, true);
+    const state = { element: null, requests: [], exits: [] };
+    const change = () => document.dispatchEvent(new Event('fullscreenchange'));
+    const nth = (list, n) => { const item = list[n]; if (!item || item.done) throw new Error(`no pending call ${n}`); item.done = true; return item; };
+    window.fs = {
+      requests: state.requests, exits: state.exits,
+      grant(n) { const item = nth(state.requests, n); state.element = item.element; change(); item.resolve(); },
+      refuse(n) { nth(state.requests, n).reject(new TypeError('Fullscreen is not allowed here.')); },
+      finishExit(n, { event = true } = {}) { const item = nth(state.exits, n); state.element = null; if (event) change(); item.resolve(); },
+      rejectExit(n) { nth(state.exits, n).reject(new TypeError('Not in full screen.')); },
+      userExit() { state.element = null; change(); },
+    };
+    Object.defineProperty(document, 'fullscreenElement', { configurable: true, get: () => state.element });
+    Element.prototype.requestFullscreen = function () { return new Promise((resolve, reject) => state.requests.push({ element: this, resolve, reject })); };
+    Document.prototype.exitFullscreen = function () { return new Promise((resolve, reject) => state.exits.push({ resolve, reject })); };
+    window.pair = (names = ['first', 'second']) => {
+      window.lateLog = [];
+      const [a, b] = names.map((name) => window.opfPresent.createPresenter(document.getElementById('host'), { editor: window.makeEditor(3), fonts: window.fonts, onExit: () => window.lateLog.push(name) }));
+      window.first = a; window.second = b;
+    };
+    window.settle = () => new Promise((resolve) => setTimeout(resolve, 0));
+  });
+  const scripted = (source) => page.evaluate(`(async () => { ${source} })()`);
+  const cleanUp = () => page.evaluate(() => { window.first?.destroy(); window.second?.destroy(); window.first = window.second = undefined; window.fs.requests.length = 0; window.fs.exits.length = 0; window.fs.userExit(); });
+
+  // The closed presenter's request is answered after the next presenter asked: the next request replaces the full screen element, so the closed
+  // one must not ask to exit (that exit would run after the new request and end the new presentation's full screen).
+  await scripted(`pair(); first.start(0); first.stop(); window.secondStart = second.start(0);`);
+  await scripted(`fs.grant(0); await settle();`);
+  assert.equal(await page.evaluate(() => window.fs.exits.length), 0, 'a closed presenter whose request a newer one has overtaken asks for no exit');
+  const kept = await scripted(`fs.grant(1); const mode = await secondStart; await settle(); return { mode, running: second.isRunning(), full: document.fullscreenElement === second.element, attr: second.element.dataset.mode, exits: fs.exits.length, log: lateLog.slice() };`);
+  assert.deepEqual(kept, { mode: 'fullscreen', running: true, full: true, attr: 'fullscreen', exits: 0, log: ['first'] }, 'the newer presenter keeps full screen');
+  await scripted(`fs.userExit(); await settle();`);
+  assert.deepEqual(await page.evaluate(() => ({ running: window.second.isRunning(), log: window.lateLog })), { running: false, log: ['first', 'second'] }, 'and the user leaving full screen still ends it');
+  await cleanUp();
+
+  // The newer request is refused: the screen the closed presenter's element holds is given back, once, and the newer presentation is the overlay.
+  await scripted(`pair(); first.start(0); first.stop(); window.secondStart = second.start(0); fs.grant(0); await settle();`);
+  const refused = await scripted(`fs.refuse(1); const mode = await secondStart; await settle(); return { mode, exits: fs.exits.length, running: second.isRunning() };`);
+  assert.deepEqual(refused, { mode: 'overlay', exits: 1, running: true }, 'a refused newer request gives back the full screen the closed presenter left behind');
+  await scripted(`fs.finishExit(0); await settle();`);
+  assert.deepEqual(await page.evaluate(() => ({ fullscreen: document.fullscreenElement, running: window.second.isRunning(), log: window.lateLog })), { fullscreen: null, running: true, log: ['first'] }, 'and the overlay carries on');
+  await cleanUp();
+
+  // The exit the closed presenter asked for runs after the newer presentation took full screen (the browser did not know the order): it is not the
+  // user leaving, the presentation carries on as the overlay, and it ends normally.
+  await scripted(`pair(); first.start(0); fs.grant(0); await settle(); first.stop(); window.secondStart = second.start(0); fs.grant(1); await secondStart;`);
+  await scripted(`fs.finishExit(0); await settle();`);
+  assert.deepEqual(await page.evaluate(() => ({ running: window.second.isRunning(), mode: window.second.element.dataset.mode, log: window.lateLog })), { running: true, mode: 'overlay', log: ['first'] }, 'a late exit of the closed presenter does not end the newer one');
+  await scripted(`second.stop();`);
+  assert.deepEqual(await page.evaluate(() => window.lateLog), ['first', 'second']);
+  await cleanUp();
+
+  // An exit answered with its event after its promise (as Chrome does) or the other way round is the presenter's own either way, and the next
+  // time the user leaves full screen is theirs, however soon: the earlier exit is not waited for any longer.
+  for (const eventFirst of [true, false]) {
+    const outcome = await scripted(`pair(); first.start(0); fs.grant(0); await settle(); first.stop();
+      ${eventFirst ? 'fs.finishExit(0);' : 'fs.finishExit(0, { event: false }); await settle(); document.dispatchEvent(new Event("fullscreenchange"));'}
+      await settle();
+      second.start(0); fs.grant(1); await settle();
+      const before = second.isRunning();
+      fs.userExit(); await settle();
+      return { before, after: second.isRunning(), log: lateLog.slice() };`);
+    assert.deepEqual(outcome, { before: true, after: false, log: ['first', 'second'] }, `the user leaving full screen right after an earlier presenter's exit ends the presentation (${eventFirst ? 'event, then promise' : 'promise, then event'})`);
+    await cleanUp();
+  }
+
+  // An exit that is refused (full screen was already over) still gives focus back to the opener.
+  const focus = await scripted(`pair(); const opener = document.getElementById('opener'); opener.focus(); first.start(0); fs.grant(0); await settle();
+    first.stop(); document.activeElement.blur(); fs.rejectExit(0); await settle(); fs.userExit(); await settle();
+    return document.activeElement === opener;`);
+  assert.equal(focus, true, 'focus goes back to the opener even when the exit was refused');
+  await cleanUp();
+
+  // Full screen refused or unavailable (iPhone Safari has no API for a div) never leaves a stuck state: the overlay runs, and a later start still asks.
+  const unavailable = await scripted(`pair(); const original = Element.prototype.requestFullscreen; Element.prototype.requestFullscreen = undefined;
+    const mode = await first.start(0); const running = first.isRunning(); first.stop();
+    Element.prototype.requestFullscreen = original;
+    const again = first.start(0); fs.grant(0); const second = await again; first.stop(); fs.finishExit(0); await settle();
+    return { mode, running, second, exits: fs.exits.length };`);
+  assert.deepEqual(unavailable, { mode: 'overlay', running: true, second: 'fullscreen', exits: 1 }, 'no Fullscreen API: the overlay, and a later start goes full screen');
+  await cleanUp();
+  await page.evaluate(() => { delete document.fullscreenElement; document.removeEventListener('fullscreenchange', window.dropRealEvents, true); });
+  await realFullscreen();
+  await page.evaluate(() => { Document.prototype.exitFullscreen = window.realExit; });
+  mark('a closed presenter\'s late full screen request or exit never ends or shrinks the next presentation (scripted browser answers)');
 
   // ---- axe: the open dialog with its counter and exit button shown --------------------------------------------------------------------
   await mount(3);

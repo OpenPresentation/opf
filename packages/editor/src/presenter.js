@@ -19,25 +19,40 @@ const CLICK_GUARD_MS = 450;
 const NEXT_KEYS = new Set(["ArrowRight", " ", "PageDown", "Enter"]);
 const PREVIOUS_KEYS = new Set(["ArrowLeft", "PageUp", "Backspace"]);
 
-// Full screen belongs to the document, not to one presenter: the browser ends whatever is full screen when an exit it was asked for runs, and tells
-// every listener. A presenter that closed early asks for its exit late (when its pending full screen request resolves), possibly after a newer
-// presenter took full screen. So the exits the presenters asked for are counted per document, and any presenter reads a `fullscreenchange` that
-// answers one of them as ours, not as the user leaving full screen.
-const exitRequests = new WeakMap(); // Document -> Set of exits asked for and not yet reported
+// Full screen belongs to the document, not to one presenter, and the browser answers a request later than it was made. Two things follow, and
+// both are kept per document so that presenters (any number can be mounted) see the same facts.
+// 1. An exit a presenter asked for can run after a newer presenter took full screen, and the browser then ends that one's full screen too.
+//    A presenter whose request resolved after it was closed therefore leaves full screen only when no newer request is in flight (that request
+//    replaces it); otherwise it marks its element abandoned, and the newer presenter gives the screen back if its own request does not get it.
+// 2. The `fullscreenchange` an exit answers must not read as the user leaving. The exits presenters asked for are listed until their event is
+//    seen and the exit has settled, in whichever order those two happen. An event that finds the screen taken by an element drops the exits that
+//    already settled, since events arrive in the order of the changes: a later exit event is the user's, however soon it follows.
+const documentStates = new WeakMap(); // Document -> { requests (counted), inFlight (their numbers, until answered), exits, abandoned (elements) }
 const attributedEvents = new WeakMap(); // fullscreenchange Event -> whether it answered an exit a presenter asked for
-function noteExit(doc, win) {
-  let requests = exitRequests.get(doc);
-  if (!requests) exitRequests.set(doc, requests = new Set());
-  const request = {};
-  requests.add(request);
-  // The browser reports an exit with the event; when it does not (the exit was refused, or two exits became one event), stop counting it soon.
-  return { forget: () => requests.delete(request), forgetSoon: () => win.setTimeout(() => requests.delete(request), 500) };
+function stateOf(doc) {
+  let state = documentStates.get(doc);
+  if (!state) documentStates.set(doc, state = { requests: 0, inFlight: new Set(), exits: new Set(), abandoned: new WeakSet() });
+  return state;
+}
+function noteExit(doc) {
+  const { exits } = stateOf(doc);
+  const exit = { settled: false, seen: false };
+  exits.add(exit);
+  return {
+    // The browser reports an exit with an event; when none came (the exit was refused, or two exits became one event) it is not waited for.
+    settle: (done) => { if (!done || exit.seen) exits.delete(exit); else exit.settled = true; },
+  };
 }
 function answersAnExit(doc, event) {
   if (attributedEvents.has(event)) return attributedEvents.get(event);
-  const requests = exitRequests.get(doc);
-  const ours = Boolean(requests?.size) && !doc.fullscreenElement;
-  if (ours) requests.delete(requests.values().next().value);
+  const { exits } = stateOf(doc);
+  let ours = false;
+  if (doc.fullscreenElement) {
+    for (const exit of exits) if (exit.settled) exits.delete(exit);
+  } else {
+    const exit = [...exits].find((candidate) => !candidate.seen);
+    if (exit) { ours = true; if (exit.settled) exits.delete(exit); else exit.seen = true; }
+  }
   attributedEvents.set(event, ours);
   return ours;
 }
@@ -92,7 +107,7 @@ export function createPresenter(container, options = {}) {
   // Drawn slides by deck index, for the deck object they were drawn from: a new snapshot (an edit) or a new start() draws again.
   let drawn = new Map(), drawnFor;
 
-  let active = false, destroyed = false, current = -1, opener = null, enteredFullscreen = false, returnTo = null;
+  let active = false, destroyed = false, current = -1, opener = null, enteredFullscreen = false, returnTo = null, pendingRequests = 0;
   let counterTimer, preloadTimer, renderToken = 0, swipe = null, clickGuardUntil = 0;
 
   // ---- the DOM ----------------------------------------------------------------------------------------------------------------------------
@@ -216,36 +231,57 @@ export function createPresenter(container, options = {}) {
   function enterFullscreen() {
     const request = root.requestFullscreen ?? root.webkitRequestFullscreen;
     if (typeof request !== "function" || doc.fullscreenEnabled === false) return Promise.resolve("overlay");
+    const state = stateOf(doc);
+    const ticket = ++state.requests;
+    state.inFlight.add(ticket);
+    pendingRequests++;
+    state.abandoned.delete(root);
+    const answered = () => { state.inFlight.delete(ticket); pendingRequests--; };
     let attempt;
     try { attempt = Promise.resolve(request.call(root, { navigationUI: "hide" })); } catch (error) { attempt = Promise.reject(error); }
     return attempt.then(
       () => {
-        if (doc.fullscreenElement !== root) return "overlay";
-        // stop() ran while the request was pending (a quick Esc or close), so it saw no full screen to leave: give the screen back now, or the
-        // page stays full screen behind a hidden presenter.
-        if (!active) { leaveFullscreen(); return "overlay"; }
+        answered();
+        if (doc.fullscreenElement !== root) return reclaimAbandoned();
+        if (!active) {
+          // stop() ran while the request was pending (a quick Esc or close), so it saw no full screen to leave: give the screen back now, or the
+          // page stays full screen behind a hidden presenter. Not when a newer request is still in flight: it replaces this element, and an exit asked
+          // for now would run after it and end the newer presenter's full screen.
+          if ([...state.inFlight].some((newer) => newer > ticket)) state.abandoned.add(root); else leaveFullscreen();
+          return "overlay";
+        }
         enteredFullscreen = true;
         root.dataset.mode = "fullscreen";
         return "fullscreen";
       },
-      () => "overlay",
+      () => { answered(); return reclaimAbandoned(); },
     );
   }
-  // Ask the browser to leave full screen; onFullscreenChange then sees that the event answers an exit asked for (by this presenter or an earlier
-  // one) and does not read it as the user's. Focus goes back to the element that opened the presentation once the exit is done, because the page
-  // behind a full screen element takes no focus until then.
-  function leaveFullscreen() {
-    const exit = noteExit(doc, win);
-    Promise.resolve(doc.exitFullscreen?.()).then(() => { exit.forgetSoon(); restoreFocus(); }, exit.forget);
+  // This presenter did not get the screen (refused, or taken by another element): if an earlier, closed presenter's element still holds it
+  // because that presenter left the exit to this request, give it back.
+  function reclaimAbandoned() {
+    const holder = doc.fullscreenElement, { abandoned } = stateOf(doc);
+    if (holder && holder !== root && abandoned.has(holder)) { abandoned.delete(holder); leaveFullscreen(); } else if (!active) restoreFocus();
+    return "overlay";
   }
-  // Only when nobody took focus since: the host may move it in `onExit`.
+  // Ask the browser to leave full screen; onFullscreenChange then sees that the event answers an exit asked for (by this presenter or an earlier
+  // one) and does not read it as the user's. Focus goes back to the element that opened the presentation once the exit is done (or refused: the
+  // screen was already gone), because the page behind a full screen element takes no focus until then.
+  function leaveFullscreen() {
+    const exit = noteExit(doc);
+    Promise.resolve(doc.exitFullscreen?.()).then(() => { exit.settle(true); restoreFocus(); }, () => { exit.settle(false); restoreFocus(); });
+  }
+  // Only when nobody took focus since: the host may move it in `onExit`. While the screen is still full screen the page behind takes no focus, and
+  // a browser reports the end of an exit's promise before the end of full screen; so the element is kept until the `fullscreenchange` that ends it (and while a request of this presenter is unanswered: it may still take the screen).
   function restoreFocus() {
     const now = doc.activeElement;
     if (returnTo?.isConnected && typeof returnTo.focus === "function" && (!now || now === doc.body || now === root)) returnTo.focus({ preventScroll: true });
+    if (!doc.fullscreenElement && !pendingRequests) returnTo = null;
   }
   // The browser takes full screen away with Esc (that key never reaches the page) or the host exits it: the presentation ends with it.
   function onFullscreenChange(event) {
     if (doc.fullscreenElement === root) return;
+    if (!active && !doc.fullscreenElement) restoreFocus();
     if (answersAnExit(doc, event)) {
       // An exit that a presenter asked for finished: ours from stop(), or an earlier presenter's that ran after this one took full screen. A
       // presentation still running carries on as the overlay.
@@ -321,6 +357,7 @@ export function createPresenter(container, options = {}) {
     const wanted = slideIndex ?? options.slideIndex ?? 0;
     if (active) { show(wanted); return Promise.resolve(root.dataset.mode); }
     active = true;
+    returnTo = null;
     opener = doc.activeElement && doc.activeElement !== doc.body ? doc.activeElement : null;
     current = -1;
     drawn = new Map();
