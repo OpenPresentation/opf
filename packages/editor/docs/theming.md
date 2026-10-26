@@ -41,7 +41,7 @@ Rules every component follows, and a host can rely on:
 - `surface` is the card, popover and pane background, `background` the page behind them, `muted` and `mutedAlt` the quiet fills (hover, selected row, code-free toolbars), `border` and `borderStrong` the rules and the input outlines.
 - `accent` fills the one primary action and marks the current item; `accentText` is the text on it; `accentStrong` is the accent as text or a link on a surface; `focus` is the 2px focus ring.
 - `danger`, `warning` and `success` are text and icon colors on a surface, never fills.
-- The chrome keeps WCAG AA contrast between `text` and `surface`, `textMuted` and `surface`, and `accentText` and `accent` as long as the values you give do: check yours in both schemes.
+- The package's own values are chosen for WCAG AA contrast in these pairs; when you change one, check the pair in both schemes: `text` on `surface`, `textMuted` on `surface`, `accentStrong` on `surface` and `accentText` on `accent`.
 
 ## `theme` on `createOpfEditor` (and `<OpfEditor>`)
 

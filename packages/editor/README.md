@@ -32,7 +32,7 @@ import { OpfEditor, useOpfDocument } from "@openpresentation/opf-editor/react";
 const document = useOpfDocument(editor); // also useOpfSelection(editor), useOpfEditor(options)
 ```
 
-[docs/embedding.md](docs/embedding.md) lists the layouts, `panels`, `slots` (your own arrangement), every option, the handle, the events and the React bindings; [docs/theming.md](docs/theming.md) is the token contract (surface, text, accent, border, radius and font, light and dark) and the `theme` option. `examples/playground.js` and openpresentation.org's playground are built on it.
+[docs/embedding.md](docs/embedding.md) lists the layouts, `panels`, `slots` (your own arrangement), every option, the handle, the events and the React bindings; [docs/theming.md](docs/theming.md) is the token contract (surface, text, accent, border, radius and font, light and dark) and the `theme` option. `examples/playground.js` is a thin user of it.
 
 ## Install the editor and optional export dependencies (RR-63)
 
