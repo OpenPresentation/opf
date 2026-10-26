@@ -134,7 +134,8 @@ try {
     await page.mouse.click(frame.x + frame.width - 3, line.y);
     const first = await state();
     assert.equal(first.start, first.end);
-    assert.ok(first.start >= spaced.indexOf('lines ') + 5 && first.start <= spaced.indexOf('lines ') + 6, 'a click right of a wrapped line lands at that line end');
+    // The subtitle is balanced (WI-4): its first line ends before "several", not after "lines" as the greedy wrap did.
+    assert.ok(first.start >= spaced.indexOf('several') - 1 && first.start <= spaced.indexOf('several') + 1, 'a click right of a wrapped line lands at that line end');
     await discard();
     const last = await point('slides.0.subtitle', 'indeed', 5, 'right');
     await page.mouse.click(frame.x + frame.width - 3, frame.y + frame.height - 2);

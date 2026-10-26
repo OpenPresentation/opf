@@ -216,12 +216,12 @@ try {
     assert.deepEqual([visible(restored.text),restored.attribution,restored.source],['Edited quote body','Reviewer','Recorded interview']);
   } else {
     // Earlier opf-pptx releases imported the native lines as text blocks.
-    assert.deepEqual(quoteImport.slides[0].blocks.map(block=>visible(block.text)),['"Edited quote body"','Reviewer - Recorded interview']);
+    assert.deepEqual(quoteImport.slides[0].blocks.map(block=>visible(block.text)),['\u201cEdited quote body\u201d','Reviewer \u2013 Recorded interview']);
   }
   // The font scheme and pagination policy are not part of the quote provenance. Keep this boundary explicit in evidence.
   assert.ok(quoteSlide.quote===undefined||quoteSlide.blocks===undefined,'The quote is one payload: the root field or one block, never both');
   const quoteXml=await (await JSZip.loadAsync(quoteBytes)).file('ppt/slides/slide1.xml').async('string');
-  assert.match(quoteXml,/Reviewer - Recorded interview/);
+  assert.match(quoteXml,/Reviewer \u2013 Recorded interview/);
   assert.match(quoteXml,/sz="1800"/,'Native source text uses the accepted 24px/18pt size');
   await button('Import').click();
   await page.getByRole('tab',{name:'File',exact:true}).click();

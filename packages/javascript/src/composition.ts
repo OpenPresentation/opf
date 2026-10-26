@@ -3292,14 +3292,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const proseMeasure = (node: Pending, cellWidth: number): { size: number; width: number } => {
     const role = contentNominalSize(node.field) * scale;
     if (node.field !== 'text' || node.children || !node.auto) return { size: role, width: cellWidth };
-    // The host's measurement when it can measure the text with the deck's face (a run in another script is planned by its own
-    // run style, not here), the core estimate otherwise: the decision only picks a size and a width.
-    const measure = widthFor('text', node.path);
-    const linesAt = (width: number, size: number) => {
-      try {
-        return flatten(node.value).split('\n').reduce((sum, paragraph) => sum + Math.max(1, wrapText(paragraph, Math.max(1, width), size, measure).length), 0);
-      } catch { return estimatedLines(node.value, width, size); }
-    };
+    // Core's own estimate, never the host's measurement (as `flow: auto` does): every engine picks the same width and size, and no
+    // face is asked for just to decide this.
+    const linesAt = (width: number, size: number) => estimatedLines(node.value, width, size);
     const measureAt = (size: number) => Math.min(cellWidth, PROSE_MEASURE_CHARS * AVERAGE_CHARACTER_EM * size);
     const lead = LEAD_NOMINAL_SIZE * scale;
     if (node.lone && lead > role && linesAt(measureAt(lead), lead) <= 2) return { size: lead, width: linesAt(cellWidth, lead) <= 1 ? cellWidth : measureAt(lead) };

@@ -43,7 +43,7 @@ try {
   // The root quote payload returns as the slide's own field (content topology).
   check(JSON.stringify(imported.slides[1].quote) === JSON.stringify(source.slides[1].quote) && imported.slides[1].blocks === undefined, 'Quote text, attribution and source survive browser export/reimport (FF-57)');
   document.querySelector('main').innerHTML = svgs[1];
-  check(document.querySelector('main').textContent.includes('Reviewer - Interview'), 'Quote attribution/source appears in actual preview DOM');
+  check(document.querySelector('main').textContent.includes('Reviewer \u2013 Interview'), 'Quote attribution/source appears in actual preview DOM');
   for(const width of [1280,540])for(const heading of ['title','subtitle','tag']) {
     const quote={design:{fontScheme:'roboto',dimensions:{widthInches:width/96,heightInches:(width===540?960:720)/96}},slides:[{[heading]:'Known heading',quote:{text:'Keep the complete body line. '.repeat(6),attribution:'Reviewer',source:'Interview'}}]};
     const layout=resolvePresentation(quote).slides[0].geometry.items.find(item=>item.quoteLayout).quoteLayout;
