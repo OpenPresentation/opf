@@ -51,7 +51,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { assemble, loadConfig, readFragments, selectFragments } from './changelog-fragments.mjs';
 import { checkPeerRanges, checkVersions } from './check-versions.mjs';
-import { gateVersion } from './gallery-stability.mjs';
+import { gateVersion, RELEASE_DRAWING_FILE, releaseDrawingRecord } from './gallery-stability.mjs';
 import { compareVersions, formatVerify, highest, isPrerelease, isVersion, npmRegistry, parseVersion, run, verifyPackage } from './release-registry.mjs';
 import { extractReleaseNotes } from './release-notes.mjs';
 import { stampGitHead } from './stamp-githead.mjs';
@@ -239,6 +239,10 @@ export async function planPrepare({ root, input, previous: previousOption, stabi
       notes.push(`${key}: ${picked.length ? `${picked.length} fragment(s)` : 'no fragment (released with the set)'}`);
     }
     removes = fragments.map((fragment) => path.relative(root, fragment.file));
+    // The release commit has no fragments left, so check:stability reads the gallery's declarations from this record instead.
+    if (existsSync(path.join(root, 'packages/gallery/package.json'))) {
+      writes.push({ file: RELEASE_DRAWING_FILE, text: `${JSON.stringify(releaseDrawingRecord(version, fragments), null, 2)}\n` });
+    }
   }
   return { version, previous, bump: gate.bump, reasons: gate.reasons, tag: tagOf(version), distTag: defaultTag(version), writes, removes, notes };
 }

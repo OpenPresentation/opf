@@ -262,14 +262,35 @@ export function compareReleases(previous, candidate, engines) {
   return result;
 }
 
-/** The `<kind>:<id>` entries the gallery fragments declare (`drawing`), each with the slugs that declare it. */
+/** The `<kind>:<id>` entries the gallery fragments declare (`drawing`), each with the sources that declare it. */
 export function declaredDrawing(fragments) {
   const declared = new Map();
   for (const fragment of fragments) {
     if (!fragment.packages?.includes("gallery")) continue;
-    for (const entry of fragment.drawing ?? []) declared.set(entry, [...(declared.get(entry) ?? []), fragment.slug]);
+    const source = fragment.source ?? `changes/${fragment.slug}.md`;
+    for (const entry of fragment.drawing ?? []) declared.set(entry, [...(declared.get(entry) ?? []), source]);
   }
   return declared;
+}
+
+// A release folds its fragments into the changelogs and deletes them (`release.mjs prepare`), so the release commit would show
+// every declared drawing change as undeclared. Prepare therefore records the gallery's declarations for the version it sets here,
+// and the comparison of that release tree against the previous release counts them like fragments: it still draws and compares
+// every record, and an id the release did not declare still fails.
+export const RELEASE_DRAWING_FILE = "packages/gallery/release-drawing.json";
+
+/** The record prepare writes: `{ version, drawing }`, the sorted `<kind>:<id>` entries the release's gallery fragments declared. */
+export function releaseDrawingRecord(version, fragments) {
+  return { version, drawing: [...declaredDrawing(fragments).keys()].sort() };
+}
+
+/** The release's declarations as a fragment, when the record names `version` (the candidate's); otherwise none. */
+export function releaseDeclarations(root, version) {
+  const file = path.join(root, RELEASE_DRAWING_FILE);
+  if (!existsSync(file)) return [];
+  const record = JSON.parse(readFileSync(file, "utf8"));
+  if (record.version !== version || !Array.isArray(record.drawing)) return [];
+  return [{ slug: `release-${version}`, source: `${RELEASE_DRAWING_FILE} (${version})`, packages: ["gallery"], drawing: record.drawing }];
 }
 
 /** What `result` says changed and must be declared: `[{ key, removed, how }]`, one per id that draws differently or is gone. */
@@ -301,7 +322,7 @@ export function judge(result, fragments = []) {
   const touched = new Set([...changes.map((change) => change.key), ...Object.entries(result.content).flatMap(([kind, ids]) => ids.map((id) => `${kind}:${id}`))]);
   const stale = baseline ? [] : [...declared.keys()].filter((key) => !touched.has(key));
   const problems = undeclared.map((change) => `${change.key}: ${change.how}; declare it in a changes/ fragment for the gallery (drawing: ["${change.key}"]) or restore it`);
-  const warnings = stale.map((key) => `${key}: declared in ${declared.get(key).map((slug) => `changes/${slug}.md`).join(", ")} but it did not change against ${result.previous}`);
+  const warnings = stale.map((key) => `${key}: declared in ${declared.get(key).join(", ")} but it did not change against ${result.previous}`);
   return { ok: problems.length === 0, problems, warnings, changes, undeclared, stale, declared: [...declared.keys()], baseline };
 }
 
@@ -399,7 +420,7 @@ export async function main(argv = process.argv.slice(2), deps = {}) {
   const baseline = resolveBaseline({ baselineDir: option(argv, "--baseline-dir"), baselineVersion: option(argv, "--baseline-version"), offline: argv.includes("--offline"), cacheDir: option(argv, "--cache-dir"), deps: deps.registry });
   const previous = await loadPackage(baseline.dir);
   const config = loadConfig(root);
-  const fragments = config.targets?.gallery === undefined ? [] : readFragments(root, config);
+  const fragments = config.targets?.gallery === undefined ? [] : [...readFragments(root, config), ...releaseDeclarations(root, candidate.version)];
   const result = compareReleases(previous, candidate, deps.engines ?? (await loadEngines(repoRoot)));
   const verdict = judge(result, fragments);
   const bump = minimumBump({ fragments, stability: result });
