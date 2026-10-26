@@ -1,0 +1,30 @@
+name: Full CI
+
+# The label `full-ci` runs the slow set (Windows, macOS, Node 22 and 26, packed-install, registry and npm 12 consumers: nightly.yml)
+# on a pull request that touches OS- or Node-specific code. It was a job of ci.yml, which GitHub listed as a skipped check on every
+# pull request that did not carry the label; as a workflow of its own, triggered by the label, an unlabeled pull request shows no
+# entry for it. (Adding any other label shows one "skipped" entry, as slow-checks.yml does: the label is only known inside the run.)
+#
+# It is not a required check and not a part of `verify`: a pull request with the label waits for it by name (`node scripts/pr-gate.mjs
+# --required all`). The label also makes ci.yml run everything at full tier (scope reads it when it runs: add the label, then re-run
+# ci.yml). The run starts when the label is added; after a push, remove and add the label again, or run this workflow by hand on the
+# branch (Actions, Full CI, Run workflow). The called workflow opens no issue here (report: false); its `report` job asks for
+# issues: write, which a caller has to grant.
+on:
+  pull_request:
+    types: [labeled]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  slow:
+    name: slow set (only with the full-ci label)
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.label.name == 'full-ci' }}
+    permissions:
+      contents: read
+      issues: write
+    uses: ./.github/workflows/nightly.yml
+    with:
+      report: false

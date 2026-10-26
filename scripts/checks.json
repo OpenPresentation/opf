@@ -35,7 +35,7 @@
       {"match": ["scripts/release.mjs", "scripts/release.test.mjs", "scripts/release-registry.mjs", "scripts/release-notes.mjs", "scripts/stamp-githead.mjs", "scripts/changelog-fragments.mjs", "scripts/gallery-stability.mjs", "scripts/check-versions.mjs", "scripts/workspace-pack.mjs"], "run": ["check:release"]},
       {"match": [".github/workflows/release.yml", ".github/workflows/npm-publish.yml", "scripts/release-workflows.test.mjs", "scripts/release.mjs"], "run": ["check:ci-workflows", "check:release"]},
       {"match": [".github/workflows/bump-sites.yml", "docs/programs/monorepo/site-workflows/", "scripts/bump-site.mjs", "scripts/bump-sites.test.mjs"], "run": ["check:ci-workflows"]},
-      {"match": [".github/workflows/ci.yml", ".github/workflows/nightly.yml", ".github/workflows/slow-checks.yml", ".github/actions/setup-workspace/", "scripts/ci-scope.mjs", "scripts/ci-verify.mjs", "scripts/ci-report-issue.mjs"], "run": ["check:ci-workflows", "check:ci-scope", "check:playwright-pin"]},
+      {"match": [".github/workflows/ci.yml", ".github/workflows/nightly.yml", ".github/workflows/full-ci.yml", ".github/workflows/slow-checks.yml", ".github/actions/setup-workspace/", "scripts/ci-scope.mjs", "scripts/ci-verify.mjs", "scripts/ci-report-issue.mjs"], "run": ["check:ci-workflows", "check:ci-scope", "check:playwright-pin"]},
       {"match": ["spec/"], "run": ["check:spec"]},
       {"match": ["examples/"], "run": ["check:examples", "check:examples-convert", "check:text"]},
       {"match": ["scripts/ci-test-shards.mjs", "scripts/ci-test-weights.json"], "run": ["check:ci-shards"]},

@@ -14,11 +14,15 @@
 //   2. The directly changed packages run the `full` tier. Their transitive dependents, through the workspace graph, run the
 //      `contract` tier (RR-53). A forced run (tooling, an unclassified path, the label `full-ci`, any event other than a
 //      pull request) runs every package at `full`.
-//   3. Legs: the package jobs of ci.yml are matrices; LEG_PLAN says how many shards each package's tests get per tier and
-//      which browser suites run (`full` only), and `legs` is the expanded matrix (`fromJSON(needs.scope.outputs.legs).render`).
+//   3. Legs: ci.yml has ONE job, `check`, whose matrix is `legs` (`fromJSON(needs.scope.outputs.legs)`): one entry per leg of
+//      every selected job, so a job the scope did not select has no entry and GitHub shows no "skipped" check for it. LEG_PLAN says
+//      how many shards each package's tests get per tier and which browser suites run (`full` only); JOB_SHAPE says how each job
+//      runs (container, checkout depth, timeout, what to build first), and each leg carries both. `lint` always has legs, so the
+//      matrix is never empty (an empty matrix would make the whole job a skipped check).
 //   4. Extra jobs: `goldens` when a golden input changed, `gallery-gates` (check:previews and check:stability, which run
 //      in packages/integration) when gallery, core or render changed (the one edge the manifests cannot express: gallery
-//      has no workspace dependency on an engine), `pack-shape` when any package changed, `lint` always.
+//      has no workspace dependency on an engine), `pack-shape` when any package changed, `audit` when the lockfile, the
+//      workspace file or a package manifest changed (and on every push), `lint` always.
 //
 // The graph is swappable (loadGraph): `manifests` reads the package manifests exactly as pnpm's filter graph does
 // (dependencies, devDependencies and optionalDependencies that use workspace:, link: or file:; peers are not edges),
@@ -67,11 +71,67 @@ export const LEG_PLAN = Object.freeze({
   editor: { full: [["tests", 2], ["playground", 4], ["browser", 2]], contract: [["tests", 2]] },
 });
 
-/** The matrix entries of one package at one tier: [{ package, tier, kind, index, count, name }]; [] for a skipped package. */
-export function legsFor(id, tier) {
+/** The jobs that are not packages and have one `tests` leg (they have no tiers: a skipped one has no leg at all). */
+export const SINGLE_JOBS = ["audit", "goldens", "gallery-gates", "pack-shape"];
+
+/**
+ * How each job runs, besides what it runs (LEG_PLAN): `browser` jobs run in the pinned Playwright image (the image string
+ * itself stays in ci.yml, where check:playwright-pin reads it), `history` jobs check out the full history without file contents
+ * (check:breaking and the stability gate read the release tags), `buildDeps` and `buildAlso` are the setup action's inputs,
+ * `reuse` jobs build each package once (scripts/reuse-build.mjs) and `artifacts` is what a failed leg uploads.
+ */
+export const JOB_SHAPE = Object.freeze({
+  lint: { history: true, timeout: 20, reuse: true, artifacts: "artifacts/checks/*.log" },
+  audit: { timeout: 10 },
+  // The gallery has no workspace dependency, its engine-dependent tests resolve core and the renderer from the root devDependencies.
+  gallery: { history: true, timeout: 20, buildDeps: "@openpresentation/opf-render" },
+  // Core's tests load the renderer and PPTX (its optional peers) from their built dist.
+  core: { history: true, timeout: 20, buildDeps: "@openpresentation/opf", buildAlso: "@openpresentation/opf-render @openpresentation/opf-pptx", reuse: true },
+  cli: { history: true, timeout: 20, buildDeps: "@openpresentation/cli", reuse: true },
+  render: { browser: true, timeout: 30, buildDeps: "@openpresentation/opf-render", artifacts: "packages/render/artifacts/**" },
+  pptx: { browser: true, timeout: 30, buildDeps: "@openpresentation/opf-pptx", artifacts: "packages/pptx/artifacts/**" },
+  editor: { browser: true, timeout: 30, buildDeps: "@openpresentation/opf-editor", artifacts: "packages/editor/artifacts/**" },
+  integration: { history: true, timeout: 25, buildDeps: "@openpresentation/integration", reuse: true },
+  goldens: { browser: true, timeout: 20, buildDeps: "@openpresentation/opf-render", artifacts: "packages/render/artifacts/golden/**" },
+  "gallery-gates": { history: true, timeout: 20, buildDeps: "@openpresentation/opf-render" },
+  "pack-shape": { timeout: 20, reuse: true },
+});
+
+/** The order of the legs in the matrix (and of the checks in a pull request). */
+export const JOB_ORDER = ["lint", "audit", "gallery", "core", "cli", "render", "pptx", "editor", "integration", "goldens", "gallery-gates", "pack-shape"];
+
+/**
+ * The legs of one job at one tier, with everything the single matrix job needs:
+ * [{ id, job, name, kind, index, count, tier, browser, fetchDepth, filter, timeout, buildDeps, buildAlso, reuse, artifacts }].
+ * `id` is unique in a run (the artifact and the build-reuse token use it), `name` is the check name: `render (tests 1/4)`, `lint
+ * (static)`, and just the job name (`core`) when the job has one leg. [] for a skipped job.
+ */
+export function legsFor(job, tier) {
   if (tier === "skip") return [];
-  return LEG_PLAN[id][tier].flatMap(([kind, count]) =>
-    Array.from({ length: count }, (_, position) => ({ package: id, tier, kind, index: position + 1, count, name: count > 1 ? `${kind} ${position + 1}/${count}` : kind })),
+  const plan = SINGLE_JOBS.includes(job) ? [["tests", 1]] : LEG_PLAN[job][tier];
+  const shape = JOB_SHAPE[job];
+  const total = plan.reduce((sum, [, count]) => sum + count, 0);
+  return plan.flatMap(([kind, count]) =>
+    Array.from({ length: count }, (_, position) => {
+      const leg = count > 1 ? `${kind} ${position + 1}/${count}` : kind;
+      return {
+        id: `${job}-${leg.replace("/", "-").replace(" ", "-")}`,
+        job,
+        name: total > 1 || job === "lint" ? `${job} (${leg})` : job,
+        kind,
+        index: position + 1,
+        count,
+        tier,
+        browser: shape.browser === true,
+        fetchDepth: shape.history ? 0 : 1,
+        filter: shape.history ? "blob:none" : "",
+        timeout: shape.timeout,
+        buildDeps: shape.buildDeps ?? "",
+        buildAlso: shape.buildAlso ?? "",
+        reuse: shape.reuse === true,
+        artifacts: shape.artifacts ?? "",
+      };
+    }),
   );
 }
 
@@ -236,8 +296,8 @@ export const GOLDEN_INPUT_PREFIXES = [
   "spec/reference/",
   "examples/",
 ];
-/** The lockfile or any package manifest: what `pnpm audit` reads. */
-export const isDependencyFile = (file) => file === "pnpm-lock.yaml" || file === "package.json" || /^packages\/[^/]+\/package\.json$/.test(file);
+/** The lockfile, the workspace file (its overrides and catalog) or any package manifest: what `pnpm audit` reads. */
+export const isDependencyFile = (file) => file === "pnpm-lock.yaml" || file === "pnpm-workspace.yaml" || file === "package.json" || /^packages\/[^/]+\/package\.json$/.test(file);
 export const isGoldenInput = (file) => GOLDEN_INPUT_PREFIXES.some((prefix) => file.startsWith(prefix));
 
 // --- The decision -----------------------------------------------------------------------------------------------------
@@ -295,10 +355,10 @@ export function scope({ files, graph, event = "pull_request", labels = [] }) {
   const goldens = forced || files.some(isGoldenInput);
   const galleryGates = forced || ["gallery", "core", "render"].some((id) => changed.has(id));
   const packShape = forced || changedIds.length > 0;
-  // `audit` (pnpm audit): when the lockfile or a package manifest changed; a new advisory must not fail an unrelated change, so
-  // being forced by an event or a tooling path does not select it (the nightly audits every night).
-  const audit = files.some(isDependencyFile);
-  const slow = labels.includes("full-ci");
+  // `audit` (pnpm audit): when the lockfile, the workspace file or a package manifest changed, and on every push (to main). A new
+  // advisory must not fail an unrelated pull request, so the label full-ci or a tooling path does not select it (the nightly audits
+  // every night).
+  const audit = event === "push" || files.some(isDependencyFile);
   const jobs = {
     lint: "full",
     ...tiers,
@@ -318,9 +378,7 @@ export function scope({ files, graph, event = "pull_request", labels = [] }) {
     jobs,
     required: Object.entries(jobs).filter(([, tier]) => tier !== "skip").map(([name]) => name),
     skipped: Object.entries(jobs).filter(([, tier]) => tier === "skip").map(([name]) => name),
-    matrix: PACKAGE_IDS.filter((id) => tiers[id] !== "skip").map((id) => ({ package: id, tier: tiers[id] })),
-    legs: Object.fromEntries(["lint", ...PACKAGE_IDS].map((id) => [id, legsFor(id, id === "lint" ? (!forced && changedIds.length === 0 ? "docs" : "full") : tiers[id])])),
-    slow,
+    legs: JOB_ORDER.flatMap((job) => legsFor(job, job === "lint" ? (!forced && changedIds.length === 0 ? "docs" : "full") : (jobs[job] ?? "skip"))),
     unclassified,
     reasons,
   };
@@ -341,7 +399,7 @@ export function renderText(decision) {
   lines.push(`changed:  ${decision.changed.join(", ") || "(no package)"}`);
   lines.push(`affected: ${decision.affected.join(", ") || "(no package)"}`);
   lines.push(`jobs:     ${Object.entries(decision.jobs).map(([name, tier]) => `${name}=${tier}`).join(" ")}`);
-  if (decision.slow) lines.push("slow:     the slow set runs (label full-ci)");
+  lines.push(`legs:     ${decision.legs.length} (${decision.legs.map((leg) => leg.name).join(", ")})`);
   return lines.join("\n");
 }
 
@@ -412,7 +470,7 @@ export function run(argv, env = process.env, cwd = process.cwd()) {
   if (options.githubOutput && env.GITHUB_OUTPUT) {
     appendFileSync(
       env.GITHUB_OUTPUT,
-      [`tier=${decision.tier}`, `forced=${decision.forced}`, `slow=${decision.slow}`, `changed=${JSON.stringify(decision.changed)}`, `affected=${JSON.stringify(decision.affected)}`, `jobs=${JSON.stringify(decision.jobs)}`, `matrix=${JSON.stringify(decision.matrix)}`, `legs=${JSON.stringify(decision.legs)}`, `required=${JSON.stringify(decision.required)}`, ""].join("\n"),
+      [`tier=${decision.tier}`, `forced=${decision.forced}`, `changed=${JSON.stringify(decision.changed)}`, `affected=${JSON.stringify(decision.affected)}`, `jobs=${JSON.stringify(decision.jobs)}`, `legs=${JSON.stringify(decision.legs)}`, `required=${JSON.stringify(decision.required)}`, ""].join("\n"),
     );
   }
   if (options.summary && env.GITHUB_STEP_SUMMARY) appendFileSync(env.GITHUB_STEP_SUMMARY, `${renderMarkdown(decision)}\n`);

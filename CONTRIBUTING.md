@@ -67,7 +67,7 @@ Bug fixes, generator script changes, and documentation improvements can go strai
 
 ### Pull requests that span packages
 
-A change that touches several packages is one pull request with one `changes/<slug>.md` fragment naming each affected package. There is no `Depends-On`, no lock-roll pull request and no merge queue: the one required check, **`verify`**, runs the affected packages together, and a pull request merges (squash) when it is green. Slow cross-platform and Node-range legs run nightly and before every release, not on pull requests; add the `full-ci` label if your change is OS- or Node-version-specific. `verify` also runs on every push to `main`.
+A change that touches several packages is one pull request with one `changes/<slug>.md` fragment naming each affected package. There is no `Depends-On`, no lock-roll pull request and no merge queue: the one required check, **`verify`**, runs the affected packages together, and a pull request merges (squash) when it is green. Slow cross-platform and Node-range legs run nightly and before every release, not on pull requests; add the `full-ci` label if your change is OS- or Node-version-specific (it starts the `full-ci.yml` workflow; remove and add it again after a push). `verify` also runs on every push to `main`.
 
 ### Tests and scripts
 

@@ -1,4 +1,4 @@
-// MR-30: the failure reporter of nightly.yml and ci.yml (a red main): open once, comment while red, close when green.
+// MR-30: the failure reporter of nightly.yml and of the verify job of ci.yml (a red main): open once, comment while red, close when green.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { failing, messageFor, report, run } from './ci-report-issue.mjs';
