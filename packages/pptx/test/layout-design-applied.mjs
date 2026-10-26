@@ -26,10 +26,11 @@ const layout = design => ({name: 'Design layout', design, direction: 'column', r
 const deckOf = (design, slide, deckDesign = {}) => ({design: {fontScheme: 'roboto', ...deckDesign}, catalogs: embedLayout(layout(design)), slides: [{layout: 'design-layout', title: 'Layout title', subtitle: 'Layout subtitle', text: 'Layout body text', ...slide}]});
 const slideXml = async deck => decoder.decode(unzipSync(await toPptx(deck, {seed: 1, timestamp: '2026-01-01T00:00:00Z', zipDate: '2026-01-01T00:00:00Z'}))['ppt/slides/slide1.xml']);
 
-// The effective alignment per field, stated independently of core.
+// The effective alignment per field, stated independently of core. WI-2: the subtitle sits in the title area, so it follows
+// titleAlignment unless the slide's own design sets contentAlignment (the third case).
 const cases = [
-  ['layout only', deckOf({titleAlignment: 'right', contentAlignment: 'center'}), {title: 'right', subtitle: 'center', text: 'center'}],
-  ['deck over layout (per key)', deckOf({titleAlignment: 'right', contentAlignment: 'center'}, {}, {titleAlignment: 'left'}), {title: 'left', subtitle: 'center', text: 'center'}],
+  ['layout only', deckOf({titleAlignment: 'right', contentAlignment: 'center'}), {title: 'right', subtitle: 'right', text: 'center'}],
+  ['deck over layout (per key)', deckOf({titleAlignment: 'right', contentAlignment: 'center'}, {}, {titleAlignment: 'left'}), {title: 'left', subtitle: 'left', text: 'center'}],
   ['slide over deck over layout', deckOf({titleAlignment: 'right', contentAlignment: 'center'}, {design: {contentAlignment: 'right'}}, {titleAlignment: 'left', contentAlignment: 'left'}), {title: 'left', subtitle: 'right', text: 'right'}],
 ];
 let compared = 0;

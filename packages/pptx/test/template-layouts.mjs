@@ -306,12 +306,16 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
     const shapes = placeholders(text(parts, layoutOf(parts, index + 1)));
     for (const region of geometry.regions) {
       assert.equal(region.collapsed, undefined, `${slide.layout}.${region.name} is filled`);
-      assert.deepEqual(shapes.find(item => item.name === region.name).box, boxOf(region.box), `${slide.layout}.${region.name} (contentBox ${contentBox}): the placeholder is the slide's region box`);
+      // WI-2: `quote` sizes its quotations `auto`, so the slide's region is as tall as the quotation and the stack (title included) is
+      // centred around it; the empty layout can only hold two body lines, so its placeholders agree in x and width only.
+      const placed = shapes.find(item => item.name === region.name).box, expected = boxOf(region.box);
+      assert.deepEqual(slide.layout === 'quote' ? [placed[0], placed[2]] : placed, slide.layout === 'quote' ? [expected[0], expected[2]] : expected, `${slide.layout}.${region.name} (contentBox ${contentBox}): the placeholder is the slide's region box`);
       compared++;
     }
     const heading = geometry.headingAreas.find(area => area.name === 'title');
     const title = shapes.find(item => ['title', 'ctrTitle'].includes(item.type));
-    assert.deepEqual(title.box, boxOf(['cover', 'section'].includes(slide.layout) ? heading.parts.title : heading.box), `${slide.layout}: the title placeholder`);
+    const titleBox = boxOf(['cover', 'section'].includes(slide.layout) ? heading.parts.title : heading.box);
+    assert.deepEqual(slide.layout === 'quote' ? [title.box[0], title.box[2]] : title.box, slide.layout === 'quote' ? [titleBox[0], titleBox[2]] : titleBox, `${slide.layout}: the title placeholder`);
   }
   assert.ok(compared >= 35, `${compared} regions compared`);
   }

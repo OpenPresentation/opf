@@ -19,10 +19,11 @@ const layout = (design, placeholders = [{ type: 'title' }, { type: 'subtitle' },
 const deckOf = (record, slide = {}, deckDesign = {}) => ({ design: { fontScheme: 'roboto', ...deckDesign }, catalogs: { custom: { layouts: { 'design-layout': record } } }, slides: [{ layout: 'design-layout', title: 'Layout title', subtitle: 'Layout subtitle', text: 'Layout body text', ...slide }] });
 const texts = (svg, path) => [...svg.matchAll(/<text\b[^>]*>/g)].map(match => match[0]).filter(tag => attr(tag, 'data-opf-path') === path);
 
-// Alignment: layout only, deck over layout, slide over deck, per key.
+// Alignment: layout only, deck over layout, slide over deck, per key. WI-2: the subtitle sits in the title area and follows
+// titleAlignment unless the slide's own design sets contentAlignment (the third case).
 const cases = [
-  ['layout only', deckOf(layout({ titleAlignment: 'right', contentAlignment: 'center' })), { title: 'right', subtitle: 'center', text: 'center' }],
-  ['deck over layout', deckOf(layout({ titleAlignment: 'right', contentAlignment: 'center' }), {}, { titleAlignment: 'left' }), { title: 'left', subtitle: 'center', text: 'center' }],
+  ['layout only', deckOf(layout({ titleAlignment: 'right', contentAlignment: 'center' })), { title: 'right', subtitle: 'right', text: 'center' }],
+  ['deck over layout', deckOf(layout({ titleAlignment: 'right', contentAlignment: 'center' }), {}, { titleAlignment: 'left' }), { title: 'left', subtitle: 'left', text: 'center' }],
   ['slide over deck over layout', deckOf(layout({ titleAlignment: 'right', contentAlignment: 'center' }), { design: { contentAlignment: 'right' } }, { titleAlignment: 'left', contentAlignment: 'left' }), { title: 'left', subtitle: 'right', text: 'right' }],
   ['no value anywhere', deckOf(layout({})), { title: 'left', subtitle: 'left', text: 'left' }],
 ];

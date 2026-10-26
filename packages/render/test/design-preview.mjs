@@ -21,7 +21,7 @@ console.log('Design preview: header/footer zones, inheritance suppression, angle
 assert.match(toSvg({design:{titleAlignment:'right',contentAlignment:'center',contentBox:true},slides:[{title:'Right',text:'Center'}]}, 1),/text-anchor="end"/);
 
 // Titles follow design.titleAlignment only (unset: left, as core composition
-// places them, RR-93a: and the tag, which sits over the title); subtitle and body text follow contentAlignment. Default
+// places them, RR-93a: and the tag, which sits over the title; WI-2: and the subtitle in the title area); body text follows contentAlignment; a slide's own contentAlignment keeps the tag and subtitle on the content. Default
 // estimated measurement and accepted outline placement must agree.
 {
   const {loadFonts}=await import('../src/fonts-node.js');
@@ -29,8 +29,8 @@ assert.match(toSvg({design:{titleAlignment:'right',contentAlignment:'center',con
   const anchors=svg=>Object.fromEntries([...svg.matchAll(/<text\b[^>]*>/g)].map(m=>m[0]).filter(tag=>/data-opf-path="slides\.0\.(title|subtitle|tag|text)"/.test(tag)).map(tag=>[tag.match(/data-opf-path="slides\.0\.(\w+)"/)[1],tag.match(/text-anchor="(\w+)"/)?.[1]??'start']));
   const slide={tag:'Tag',title:'Title',subtitle:'Subtitle',text:'Body'};
   for(const options of [{},{fonts: prepared}]){
-    assert.deepEqual(anchors(toSvg({design:{fontScheme:'roboto',contentAlignment:'center'},slides:[slide]}, 1,{...options,trace:true,catalogs})),{tag:'start',title:'start',subtitle:'middle',text:'middle'});
+    assert.deepEqual(anchors(toSvg({design:{fontScheme:'roboto',contentAlignment:'center'},slides:[slide]}, 1,{...options,trace:true,catalogs})),{tag:'start',title:'start',subtitle:'start',text:'middle'});
     assert.deepEqual(anchors(toSvg({design:{fontScheme:'roboto',contentAlignment:'right',titleAlignment:'center'},slides:[{...slide,design:{titleAlignment:'right',contentAlignment:'left'}}]}, 1,{...options,trace:true,catalogs})),{tag:'start',title:'end',subtitle:'start',text:'start'});
   }
-  console.log('Design preview alignment: titles use titleAlignment (default left) and headings/body use contentAlignment with estimated and outline measurement.');
+  console.log('Design preview alignment: the heading group uses titleAlignment (default left) and body uses contentAlignment with estimated and outline measurement.');
 }

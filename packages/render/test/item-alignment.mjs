@@ -39,7 +39,7 @@ assert.equal(resolvePresentation(deck).slides[2].geometry.items[0].alignment, 'l
 // A cover has no content region: its tag, title and subtitle are one heading group, so a deck that
 // aligns title and content differently draws all three at the title's alignment (the "Compliance
 // Readiness Review" cover drew a left title over a centered tag and subtitle). Only the slide's own
-// contentAlignment keeps them apart, and slides with body content keep the title/content split.
+// contentAlignment keeps them apart, and so does the subtitle of a slide with body content (WI-2).
 const coverText = {tag: 'Compliance', title: 'Compliance Readiness Review', subtitle: 'Tandem BioSystems Compliance'};
 const coverDeck = {design: {fontScheme: 'roboto', titleAlignment: 'left', contentAlignment: 'center'}, slides: [
   {layout: 'title-subtitle', ...coverText},
@@ -59,9 +59,9 @@ assert.deepEqual(coverSlides[0].geometry.items.map(item => item.alignment), ['le
 assert.deepEqual(coverAnchors(0), ['start', 'start', 'start'], 'cover heading group shares the title alignment in the preview');
 assert.deepEqual(coverSlides[1].geometry.items.map(item => item.alignment), ['right', 'left', 'right']);
 assert.deepEqual(coverAnchors(1), ['end', 'start', 'end'], 'slide contentAlignment keeps an explicit split');
-// RR-93a: the tag sits over the title, so it follows titleAlignment on a content slide too; the subtitle keeps contentAlignment.
-assert.deepEqual(coverSlides[2].geometry.items.slice(0, 3).map(item => item.alignment), ['left', 'left', 'center']);
-assert.deepEqual(coverAnchors(2), ['start', 'start', 'middle'], 'slides with body content keep contentAlignment for the subtitle; the tag follows the title');
+// RR-93a, WI-2: the tag and the subtitle sit in the title area, so they follow titleAlignment on a content slide too.
+assert.deepEqual(coverSlides[2].geometry.items.slice(0, 3).map(item => item.alignment), ['left', 'left', 'left']);
+assert.deepEqual(coverAnchors(2), ['start', 'start', 'start'], 'slides with body content keep the heading group on the title alignment');
 
 // Metric lines without tabs anchor at the accepted alignment edge, like the
 // native PPTX metric paragraphs; left metrics and tabbed lines keep their origins.

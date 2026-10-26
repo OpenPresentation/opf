@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "agenda-split",
+  "name": "Agenda beside",
+  "summary": "A concise agenda beside its title and introduction.",
+  "tags": [
+    "Openers and closers"
+  ],
+  "direction": "row",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "name": "items",
+      "accepts": [
+        "list",
+        "text"
+      ],
+      "role": "primary",
+      "flow": "column",
+      "listColumns": "auto",
+      "anchor": "middle"
+    }
+  ],
+  "description": "Introduce a concise agenda with the title and introduction on one side and the parts of the talk beside them. Use Agenda for detailed entries that need the full slide width.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/agenda-split.svg"
+  }
+}

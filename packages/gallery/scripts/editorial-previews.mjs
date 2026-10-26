@@ -12,7 +12,7 @@ const TITLES = {
   table: 'Compare outcomes on consistent measures', 'table-beside': 'Team B needs targeted support',
   dashboard: 'Pilot performance at a glance', faq: 'What the pilot involves',
   process: 'Three steps from evidence to decision', team: 'Give each workstream a clear owner',
-  agenda: 'From the problem to the next decision', comparison: 'Choose the smallest useful test',
+  agenda: 'From the problem to the next decision', 'agenda-split': 'Three parts, one decision', comparison: 'Choose the smallest useful test',
   pillars: 'Three conditions for a useful pilot', timeline: 'Six weeks to an informed decision',
   'image-beside': 'Explain what the audience should notice', image: 'Give the visual room to speak',
   gallery: 'Compare three visual directions', hero: 'One team. One outcome.',
@@ -74,7 +74,7 @@ export function editorialDeck(id, record) {
     if (id === 'faq') payload = labelled(QUESTIONS[index % 3]);
     else if (id === 'process') payload = { ...labelled(STEPS[index % 3], { start: index % 3 + 1 }), numbering: 'arabic' };
     else if (id === 'team') payload = labelled(PEOPLE[index % 3]);
-    else if (id === 'agenda') payload = { items: ['Define the problem', 'Review the pilot evidence', 'Agree the next decision'] };
+    else if (id === 'agenda' || id === 'agenda-split') payload = { items: ['Define the problem', 'Review the pilot evidence', 'Agree the next decision'] };
     else if (id === 'pillars') payload = labelled(PILLARS[index % 3]);
     else if (id === 'comparison') payload = { text: ['Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline.', 'Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs.', 'Recommendation: establish the evidence with Option A before committing to Option B.'][index % 3] };
     else if (kind === 'metric') payload = { metric: id === 'scorecard' ? { ...METRICS[index % 3], description: ['Target: 50 participants', 'Target: at least 80%', 'Target: under 7 min'][index % 3] } : METRICS[index % 3] };
@@ -115,7 +115,7 @@ export function editorialDeck(id, record) {
   });
   // A team example need not invent portraits. Use names and responsibilities honestly.
   // Charts and tables show one analytical object per region instead of three tiny copies.
-  if (['chart', 'chart-beside', 'table', 'table-beside', 'quote', 'agenda', 'closing', 'code', 'timeline', 'image-beside'].includes(id)) {
+  if (['chart', 'chart-beside', 'table', 'table-beside', 'quote', 'agenda', 'agenda-split', 'closing', 'code', 'timeline', 'image-beside'].includes(id)) {
     const seen = new Set();
     slide.blocks = slide.blocks.filter(block => {
       if (seen.has(block.region)) return false;

@@ -8,13 +8,14 @@
   ],
   "design": {
     "titleAlignment": "center",
-    "contentAlignment": "center"
+    "contentAlignment": "center",
+    "imageFit": "contain"
   },
   "direction": "column",
+  "anchor": "middle",
   "regions": [
     {
-      "name": "title",
-      "size": 1
+      "name": "title"
     },
     {
       "name": "details",

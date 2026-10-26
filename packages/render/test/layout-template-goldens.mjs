@@ -8,7 +8,7 @@ import {layoutMetric} from '@openpresentation/opf/composition';
 import {chartTextSizeDefault, readTemplateBaseline, schemeNeutralsDerived, colorVariantsDerived, tableTextSize} from '../scripts/template-baseline.mjs';
 import { featureDecks, fixture, layouts, paginatedDecks, templateDeck } from './layout-template-fixture.mjs';
 
-// OPF 0.19 (RR-81): SVG and PNG goldens of the 28 built-in layout templates, each with 1 to 6 blocks of short and of long
+// OPF 0.19 (RR-81): SVG and PNG goldens of the 29 built-in layout templates, each with 1 to 6 blocks of short and of long
 // content (test/layout-template-fixture.mjs, the slides core's composition goldens compose) and the feature slides (lists
 // in columns, bled regions beside cards, mirrored templates) and the pages core's paginate makes of every sample slide
 // that overflows (the paginated group), at 1280 x 720 with bundled
