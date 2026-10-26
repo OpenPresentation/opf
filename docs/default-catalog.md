@@ -301,7 +301,7 @@ Before 0.19, Core stored the snapshot at `spec/catalogs/manifest.json` (schema `
 }
 ```
 
-That historical snapshot used `mirror` for every kind and held every record the gallery published (278 layouts at that checkpoint). The `packages/gallery` package owns the snapshot and the 29 v2 layout templates; core consumes the package, and the records are tracked in this repository. No browser entry of Core imports catalog records (`pnpm check:catalog-free`).
+That historical snapshot used `mirror` for every kind and held every record the gallery published (278 layouts at that checkpoint). The `packages/gallery` package owns the snapshot and the 30 v2 layout templates; core consumes the package, and the records are tracked in this repository. No browser entry of Core imports catalog records (`pnpm check:catalog-free`).
 
 The 1.x design synchronized the snapshot from pptx.gallery and refused a publisher that stopped serving a held id
 (waived per id with `--allow-removed`). That sync was retired with gallery 2.0.0; a record is now removed by a pull

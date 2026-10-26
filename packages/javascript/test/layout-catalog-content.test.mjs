@@ -6,7 +6,7 @@ import {layouts} from './support/catalog.mjs';
 // points at the SVG the gallery publishes for it.
 describe('bundled layout records are described', () => {
   test('every record has a summary, a description, tags and a vector preview', () => {
-    assert.equal(layouts.length, 29, 'the full v2 gallery catalog');
+    assert.equal(layouts.length, 30, 'the full v2 gallery catalog');
     for (const record of layouts) {
       assert.ok(record.summary?.trim(), `${record.id}: summary`);
       assert.ok(record.description?.trim(), `${record.id}: description`);

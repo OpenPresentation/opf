@@ -30,7 +30,7 @@ Cover slides vertically center the combined tag/title/subtitle group in the free
 
 ## Adaptive layout templates (OPF 0.19)
 
-A layout record is one ordered list of regions, declared once in reading order, and describes the content each body region accepts. The 29 built-in layouts are named by intent, such as `cover`, `text`, `chart`, `list`, `metrics` and `image-beside`. `layout: "auto"` explicitly asks for automatic composition; omitting `layout` does the same. See [Layout templates](layout-templates.md) for the record shape, the built-ins, region binding and overflow rules.
+A layout record is one ordered list of regions, declared once in reading order, and describes the content each body region accepts. The 30 built-in layouts are named by intent, such as `cover`, `text`, `chart`, `list`, `metrics` and `image-beside`. `layout: "auto"` explicitly asks for automatic composition; omitting `layout` does the same. See [Layout templates](layout-templates.md) for the record shape, the built-ins, region binding and overflow rules.
 
 ```json
 {

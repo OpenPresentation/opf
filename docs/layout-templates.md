@@ -10,7 +10,7 @@ A layout record (`https://openpresentation.org/schema/opf-layout/v2`) is an ordi
 and a deck's own layouts are records of this one schema; a custom layout is embedded under `catalogs.custom.layouts` (or
 a named catalog group) and referenced by id like any other. This page is the reference for what core implements.
 
-> The 29 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
+> The 30 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
 > lists documented below; Gallery 4 and earlier used a grid of area names (`areas`). Use coordinated core and Gallery
 > versions. V1 layout records, including `placeholders` and placeholder groups, remain unsupported; there are no aliases or
 > migration API.
@@ -185,7 +185,7 @@ into the grid it has always composed with, and composition, the renderer, the PP
 
 Nested sizes are relative to the entry's own parent, so a split of `{ "size": 2 }` beside a region of `{ "size": 1 }` is
 twice as large, whatever its children's sizes. Because the grid is shared, the gaps between regions are the grid's gaps: a
-row of two regions inside a column puts one gap between the two columns, as the cell grid does. The 29 built-in layouts
+row of two regions inside a column puts one gap between the two columns, as the cell grid does. The 30 built-in layouts
 compile to exactly the grids they had in Gallery 4, so nothing they draw moved.
 
 ## Binding content to regions
@@ -286,4 +286,4 @@ reaches the slide edge as on a slide; `false` gives its cell inside the content 
 0.19 breaks layouts: there is no migration path. A layout id of the 0.18 default catalog that 0.19 does not have is an
 unknown layout like any other (`opf/unresolved-reference`: the slide composes automatically and a strict export fails).
 Six 0.18 ids are also 0.19 built-ins and resolve to them: `agenda`, `comparison`, `dashboard`, `faq`, `timeline` and
-`two-column`. The release notes list the 29 built-ins.
+`two-column`. The release notes list the 30 built-ins.

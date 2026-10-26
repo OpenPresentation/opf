@@ -9,7 +9,7 @@ It holds every layout, theme, colour scheme, font scheme, narrative, audience, p
 never fetch records: a host registers the catalogs it trusts, and this package is the catalog every OPF host registers by
 default.
 
-**2.x is the catalog of OPF 0.19.** Its layouts are the 29 OPF 0.19 layouts named by intent, written as templates
+**2.x is the catalog of OPF 0.19.** Its layouts are the 30 OPF 0.19 layouts named by intent, written as templates
 (`opf-layout/v2`). 1.x holds the 278 OPF 0.18 layouts. 2.0.0 changed the layouts with no migration path: see
 [Layouts](#layouts) and the [changelog](CHANGELOG.md).
 

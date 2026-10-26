@@ -13,7 +13,7 @@ const sample = (kind, index) => kind === 'group'
   ? { blocks: [payload('image', index, 'short'), { text: ['Ana Ruiz, Chief Executive', 'Sam Lee, Head of Product', 'Kai Moreau, Engineering Lead'][index % 3] }] }
   : payload(kind === 'video' ? 'image' : kind, index, 'short');
 
-test('the 29 templates, filled as the gallery fixtures fill them, have no opf/reading-order finding', () => {
+test('the 30 templates, filled as the gallery fixtures fill them, have no opf/reading-order finding', () => {
   const found = [];
   for (const [id, record] of Object.entries(layouts)) {
     const blocks = [], used = {};

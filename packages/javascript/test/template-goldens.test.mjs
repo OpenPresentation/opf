@@ -4,7 +4,7 @@ import { test } from 'node:test';
 import { composeSlide } from '../dist/composition.js';
 import { layouts, sampleSlide } from './support/template-samples.mjs';
 
-// OPF 0.19 (RR-79): composition goldens of the 29 built-in templates, each with 1 to 6 blocks of short and of long
+// OPF 0.19 (RR-79): composition goldens of the 30 built-in templates, each with 1 to 6 blocks of short and of long
 // content, at the 1280 x 720 reference size with core's estimated measurement. The templates are the design doc's
 // published by @openpresentation/gallery 2.x. A change to these goldens is a change to how every 0.19 slide draws: review the diff, and
 // regenerate with OPF_UPDATE_GOLDENS=1 node --test test/template-goldens.test.mjs.
@@ -24,8 +24,8 @@ for (const [id, record] of Object.entries(layouts)) {
   for (const size of ['short', 'long']) for (let count = 1; count <= 6; count++) actual[`${id} ${count} ${size}`] = summary(composeSlide(sampleSlide(record, count, size), { layout: record }));
 }
 
-test('composition goldens: 29 templates x 1 to 6 blocks x short and long content', () => {
-  assert.equal(Object.keys(actual).length, 29 * 6 * 2);
+test('composition goldens: 30 templates x 1 to 6 blocks x short and long content', () => {
+  assert.equal(Object.keys(actual).length, 30 * 6 * 2);
   if (process.env.OPF_UPDATE_GOLDENS === '1') writeFileSync(goldenUrl, `${JSON.stringify(actual, null, 1)}\n`);
   const golden = JSON.parse(readFileSync(goldenUrl, 'utf8'));
   for (const key of Object.keys(golden)) assert.deepEqual(actual[key], golden[key], key);
