@@ -304,7 +304,7 @@ _No named properties._
 
 - Type: `oneOf:number / const:"auto"`
 - Required fields: none
-- Purpose: The region's or split's share along its parent's direction: a number above 0 and up to 100 that siblings share in proportion (the gap is taken out first), default 1; or 'auto', the length the content needs at the starting text size (at most half the content box; a split sized auto is as tall as its tallest content, and every row of a column split sized auto is auto too; auto regions with no content take no space)....
+- Purpose: The region's or split's share along its parent's direction: a number above 0 and up to 100 that siblings share in proportion (the gap is taken out first), default 1; or 'auto', the length the content needs at the starting text size (up to the space the heading rows and the content of the numeric rows leave; auto rows that do not all fit shrink together, each giving up the same fraction of what it can give up above...
 
 _No named properties._
 

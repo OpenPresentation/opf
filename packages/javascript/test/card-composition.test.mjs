@@ -24,7 +24,8 @@ test('cards preserve outer tracks, regions and headings while measuring a rounde
 });
 
 test('slide false overrides host cards; nested leaves receive one inset and preserve group geometry',()=>{
-  const slide={blocks:[{composition:{padding:.1,mode:'column'},blocks:[{text:'A'},{text:'B'}]}]};
+  // Explicit weights keep the column's tracks (WI-1 stacks an unweighted column at its blocks' natural heights).
+  const slide={blocks:[{composition:{padding:.1,mode:'column',weights:[1,1]},blocks:[{text:'A'},{text:'B'}]}]};
   const plain=composeSlide(slide),boxed=composeSlide(slide,{contentBox:true});
   assert.deepEqual(boxed.groups,plain.groups);assert.deepEqual(boxed.flows,plain.flows);
   assert.deepEqual(boxed.items.map(i=>i.frameBox),plain.items.map(i=>i.box));

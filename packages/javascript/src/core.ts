@@ -177,6 +177,7 @@ export { chartNumber, formatDataNumber, numberFormatError, toExcelNumberFormat, 
 export type { DataCellValue, DataColumn, DataSourceRef, Dataset, DatasetRef, ChartMapping, ChartComboSeries, DataTextRun, DataTableValue, DataStyledCell, DataTableCell, DataTableHeader, DataDiagnostic, DataDiagnosticCode, DataResolveOptions, ResolvedChartData, ResolvedTableData, ChartNumberFix, ChartNumberFixOperation, ChartNumberFixOptions } from './chart-data.js';
 
 export { FONT_POLICY, applyFontPolicyDecisions, fontPolicyFor, fontAvailabilityDiagnostics } from './font-policy.js';
+export { resolveDrawnFontFamilies } from './drawn-font-families.js';
 export type {
   FontAvailability,
   FontAvailabilityCode,

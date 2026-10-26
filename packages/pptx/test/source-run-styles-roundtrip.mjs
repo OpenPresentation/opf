@@ -43,6 +43,10 @@ for(const replacement of ['A fresh idea','Changed']){
  const result=await fromPptx(zipSync(entries));
  assert.equal(textRuns(result).map(run=>typeof run==='string'?run:run.text).join(''),source.slides[0].blocks[0].text[0].text.replace('A clear idea',replacement));
 }
+// WI-1: the auto note is measured as it is placed, so the run draws at its nominal 24 (it was fitted to 23.04, the
+// regression this fixture reported); without provenance the import keeps whatever size the slide XML draws.
+const nativeSize=(()=>{const xml=strFromU8(unzipSync(reportedBytes)['ppt/slides/slide1.xml']),before=xml.slice(0,xml.indexOf('A clear idea'));const size=/sz="(\d+)"/.exec(before.slice(before.lastIndexOf('<a:rPr')));assert.ok(size,'the note run is in the slide XML');return Number(size[1])/100;})();
+assert.equal(nativeSize,24,'the auto note draws at its nominal 24');
 for(const mode of ['missing','tampered']){
  const entries=unzipSync(reportedBytes);
  for(const path of Object.keys(entries).filter(path=>/ppt\/tags\/.*\.xml$/.test(path))){
@@ -52,7 +56,7 @@ for(const mode of ['missing','tampered']){
   else entries[path]=strToU8(xml.replace(/val="[A-F0-9]+"/, 'val="FF"'));
  }
  const result=await fromPptx(zipSync(entries));
- assert.ok(textRuns(result).some(run=>run.fontSize===23.04),`${mode} provenance keeps fitted native size23.04`);
+ assert.ok(textRuns(result).some(run=>run.fontSize===nativeSize),`${mode} provenance keeps the native size ${nativeSize}`);
 }
 for(const invalid of [{fontSize:-1},{color:42},{color:'var:brand'},{keepColor:false},{fontFamily:{}},{unexpected:true}]){
  const entries=unzipSync(reportedBytes);let changed=false;
@@ -68,6 +72,6 @@ for(const invalid of [{fontSize:-1},{color:42},{color:'var:brand'},{keepColor:fa
  assert.ok(changed);const issues=[];
  const result=await fromPptx(zipSync(entries),{onDiagnostic:issue=>issues.push(issue)});
  assert.ok(issues.some(issue=>issue.code==='invalid-document-provenance'));
- assert.ok(textRuns(result).some(run=>run.fontSize===23.04));
+ assert.ok(textRuns(result).some(run=>run.fontSize===nativeSize));
 }
 console.log('Missing/tampered/malformed provenance retains valid native formatting PASS');

@@ -30,18 +30,47 @@ export interface PaginatedDeck {
  */
 export async function paginateDeck(deck: unknown, options: PaginateDeckOptions): Promise<PaginatedDeck> {
 	const catalogs = options.catalogs ?? defaultCatalogs();
+	const measuring = await measuringFonts(deck, options);
+	try {
+		return { result: paginate(deck, { ...(measuring.fonts ? { fonts: measuring.fonts } : {}), catalogs }), ...(measuring.estimated ? { estimated: measuring.estimated } : {}) };
+	} finally {
+		measuring.release();
+	}
+}
+
+export interface MeasuringFontsOptions {
+	/** Folders of `.ttf` and `.otf` files, loaded before the bundled pack (as `--fonts`). They need opf-render. */
+	fontFolders?: readonly string[];
+	/** Receives the font diagnostics. */
+	reporter: Reporter;
+	/** Name options as the command's flags in messages. */
+	flags?: boolean;
+}
+
+export interface MeasuringFonts {
+	/** The fonts `opf convert` draws `deck` with; absent when the layout can only be estimated. */
+	fonts?: Fonts;
+	/** Why there are no fonts: the missing or too old peer (`peer-not-installed`, `peer-too-old`) that measuring needs. */
+	estimated?: OPFApiError;
+	/** Returns a shared handle; call it when the measurement is done. */
+	release(): void;
+}
+
+/**
+ * The fonts the CLI measures a deck with (`opf paginate`, `opf validate`; WI-1, P24): opf-render's office pack, prepared once per
+ * process and shared, plus any `fontFolders`, as `opf convert` draws. Without opf-render (or with one too old) the result has no
+ * fonts and says why in `estimated`. With `fontFolders` the fonts are required, so a missing renderer throws.
+ */
+export async function measuringFonts(deck: unknown, options: MeasuringFontsOptions): Promise<MeasuringFonts> {
 	const folders = options.fontFolders ?? [];
-	let lease: Awaited<ReturnType<typeof leaseSharedFonts>> | undefined;
 	try {
 		const renderer = await loadRenderer();
 		const userFonts = await listFontDirectories([...folders], options.flags ? "--fonts" : "fonts");
-		lease = await leaseSharedFonts(renderer, deck, userFonts, options.reporter);
+		const lease = await leaseSharedFonts(renderer, deck, userFonts, options.reporter);
 		const handle = lease?.handle ?? (await prepareFonts(renderer, deck, userFonts, options.reporter)).handle;
-		return { result: paginate(deck, { fonts: handle as Fonts, catalogs }) };
+		return { fonts: handle as Fonts, release: () => lease?.release() };
 	} catch (error) {
-		if (error instanceof OPFApiError && (error.code === "peer-not-installed" || error.code === "peer-too-old") && !folders.length) return { result: paginate(deck, { catalogs }), estimated: error };
+		if (error instanceof OPFApiError && (error.code === "peer-not-installed" || error.code === "peer-too-old") && !folders.length) return { estimated: error, release: () => {} };
 		throw error;
-	} finally {
-		lease?.release();
 	}
 }

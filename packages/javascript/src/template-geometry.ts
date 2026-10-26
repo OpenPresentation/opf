@@ -184,6 +184,8 @@ export interface RowDemand {
   size: number | 'auto';
   /** The height the row's content needs at the starting size (0 for an empty row). */
   need: number;
+  /** The height it needs at the smallest size it may take (WI-1); 0 or absent: it can shrink to nothing. */
+  floor?: number;
   /** `heading`: an auto row sized by a heading area; `below`: the implicit row of content no region took; `body`: anything else. */
   kind: 'heading' | 'body' | 'below';
 }
@@ -192,21 +194,44 @@ export interface RowDemand {
  * Row heights of a slide's template grid, so that no row with content is squeezed to nothing (RR-79, RR-81 review):
  * 1. A heading `auto` row takes what its headings need, at most half the content box.
  * 2. The numeric rows keep at least what their content needs, up to half of the space under the headings.
- * 3. The other `auto` rows take what they need (at most half the content box each; the implicit row below the grid has no
- *    such cap) from what is left; when that is not enough they shrink together, in proportion to their needs.
+ * 3. The other `auto` rows take what they need from what is left (WI-1: no fixed cap, so dense content in an `auto` row
+ *    keeps its starting size while the space is there); when that is not enough they shrink together, each giving up the
+ *    same fraction of what it can give up above its floor (shareHeights), so a one-line note keeps nearly its need beside
+ *    a dense neighbour and no row overflows while the floors fit.
  * 4. The numeric rows share the rest in proportion to their sizes. An `auto` row with nothing in it has no height and no gap.
  */
 export function allocateRows(rows: readonly RowDemand[], total: number, gap: number): number[] {
-  const auto = rows.map(row => row.size === 'auto' ? Math.max(0, Math.min(row.need, row.kind === 'below' ? total : total / 2)) : 0);
+  const auto = rows.map(row => row.size === 'auto' ? Math.max(0, Math.min(row.need, row.kind === 'heading' ? total / 2 : total)) : 0);
   const visible = rows.filter((row, index) => row.size !== 'auto' || auto[index]! > 0).length;
   const headings = rows.reduce((sum, row, index) => sum + (row.kind === 'heading' ? auto[index]! : 0), 0);
   const space = Math.max(0, total - headings - Math.max(0, visible - 1) * gap);
   const numeric = rows.reduce<number>((sum, row) => sum + (row.size === 'auto' ? 0 : row.size), 0);
   const numericNeed = rows.reduce((sum, row) => sum + (row.size === 'auto' ? 0 : Math.max(0, row.need)), 0);
   const reserve = numeric > 0 ? Math.min(numericNeed, space / 2) : 0;
-  const body = rows.reduce((sum, row, index) => sum + (row.size === 'auto' && row.kind !== 'heading' ? auto[index]! : 0), 0);
-  const factor = body > space - reserve && body > 0 ? Math.max(0, space - reserve) / body : 1;
-  const heights = rows.map((row, index) => row.size === 'auto' ? (row.kind === 'heading' ? auto[index]! : auto[index]! * factor) : 0);
+  const bodyRows = rows.flatMap((row, index) => row.size === 'auto' && row.kind !== 'heading' ? [index] : []);
+  const fitted = shareHeights(bodyRows.map(index => auto[index]!), bodyRows.map(index => rows[index]!.floor ?? 0), Math.max(0, space - reserve));
+  const heights = rows.map((row, index) => row.size === 'auto' ? (row.kind === 'heading' ? auto[index]! : fitted[bodyRows.indexOf(index)]!) : 0);
   const rest = Math.max(0, space - heights.reduce((sum, height, index) => sum + (rows[index]!.kind === 'heading' ? 0 : height), 0));
   return rows.map((row, index) => row.size === 'auto' ? heights[index]! : numeric > 0 ? rest * row.size / numeric : 0);
+}
+
+/**
+ * Heights for lengths that share `total` (WI-1): `needs[i]` is what entry i needs at its starting size and `floors[i]` what
+ * it needs at the smallest size it may take (missing floors are 0). When the needs fit, each entry takes its need and the
+ * rest is left over. Otherwise every entry gives up the same fraction of what it can give up (need minus floor), so no
+ * entry is squeezed below its floor while the floors fit, and an entry that cannot shrink (a one-line note) keeps nearly
+ * its need. When even the floors do not fit, the entries share `total` in proportion to their floors.
+ */
+export function shareHeights(needs: readonly number[], floors: readonly number[], total: number): number[] {
+  const space = Math.max(0, total);
+  const need = needs.map(value => Number.isFinite(value) ? Math.max(0, value) : 0);
+  const floor = need.map((value, index) => Math.min(value, Math.max(0, Number.isFinite(floors[index]) ? floors[index]! : 0)));
+  const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);
+  const needed = sum(need), lowest = sum(floor);
+  if (needed <= space) return need;
+  if (lowest < space) {
+    const give = (needed - space) / (needed - lowest);
+    return need.map((value, index) => value - give * (value - floor[index]!));
+  }
+  return lowest > 0 ? floor.map(value => value * space / lowest) : need.map(() => 0);
 }

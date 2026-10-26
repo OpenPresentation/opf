@@ -7,7 +7,8 @@ import { readdir, readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { type Finding, type FindingSeverity, type ValidateOptions, type ValidationReport, type ValidationRuleInfo, findValidationRule, validationCategories, validationRules } from "@openpresentation/opf";
 import { type CommandSpec, oneOf, parseArgs, printHelp } from "./args.js";
-import { assetRoot, localAssetProblems } from "@openpresentation/opf/internal/engine";
+import { Reporter, assetRoot, localAssetProblems, measuringFonts, readDeckReport } from "@openpresentation/opf/internal/engine";
+import { installHint } from "./install.js";
 import { cliCatalogs } from "./catalogs.js";
 import { reaches } from "./check.js";
 import { checkText, deckFormatFlag, inputFormatOf } from "./deck.js";
@@ -39,6 +40,9 @@ sha256, ... }, or for several { command, ok, files: [reports], counts }; text pr
 ::error/::warning/::notice workflow annotations. Exit codes: 0 no finding at or above --fail-on, 1 findings at or above it (or
 a file that is not valid JSON, YAML or Markdown), 2 usage, configuration or I/O error; the worst over every file. Validate is
 read-only and local; it reads local images only to check they exist, and never fetches images, fonts or catalogs.
+Layout is measured with the fonts opf convert draws with when @openpresentation/opf-render is installed (checks.layout
+"measured"); without it the layout rules use core's estimate (checks.layout "estimated") and the report's hint says how to
+measure.
 
 Examples:
   opf validate deck.opf.json
@@ -91,6 +95,8 @@ export function formatText(report: ValidationReport, file: string): string {
 	// A blank line separates the findings from the summary; a report with none is just the summary.
 	if (lines.length) lines.push("");
 	lines.push(`${file}: ${report.findings.length} finding${report.findings.length === 1 ? "" : "s"} (${error} error${error === 1 ? "" : "s"}, ${warning} warning${warning === 1 ? "" : "s"}, ${info} info). Checked: ${ran.join(", ") || "nothing"}.`);
+	const hint = (report as ValidationReport & { hint?: string }).hint;
+	if (hint) lines.push(`    hint: ${hint}`);
 	return `${lines.join("\n")}\n`;
 }
 
@@ -171,6 +177,11 @@ async function expand(inputs: string[]): Promise<string[]> {
 	return files;
 }
 
+// Rules that read composed geometry or measured text; validating with only format, references and policy needs no fonts.
+const MEASURED_CATEGORIES = ["accessibility", "layout", "content"];
+const measures = (only: readonly string[] | undefined) =>
+	!only?.length || only.some((name) => MEASURED_CATEGORIES.includes(name) || MEASURED_CATEGORIES.includes(findValidationRule(name)?.category ?? ""));
+
 /** Run `opf validate`. Prints the report (or the rule list) and sets the exit code; usage errors are thrown for the caller to print. */
 export async function run(args: string[], host: Host): Promise<void> {
 	const parsed = parseArgs(spec, args);
@@ -214,8 +225,21 @@ export async function run(args: string[], host: Host): Promise<void> {
 		try {
 			raw = await readText(file);
 			try {
-				const checked = checkText(raw, inputFormatOf(file, raw, from), settings);
+				// WI-1 (P24): measure with the fonts convert draws with, as paginate does, so a layout that fails or overflows
+				// in the drawn deck is not hidden by the estimate; without opf-render the report says the layout was estimated.
+				const format = inputFormatOf(file, raw, from);
+				const measuring = measures(settings.only) ? await measuringFonts(readDeckReport(raw, { format, validate: false }).presentation, { reporter: new Reporter(), flags: true }) : undefined;
+				let checked: ReturnType<typeof checkText>;
+				try {
+					checked = checkText(raw, format, measuring?.fonts ? { ...settings, fonts: measuring.fonts } : settings);
+				} finally {
+					measuring?.release();
+				}
 				report = checked.report;
+				if (measuring?.estimated && report.checks.layout === "estimated") {
+					const install = installHint("svg")?.install;
+					report = { ...report, hint: `Layout was estimated: ${(measuring.estimated.details as { package?: string } | undefined)?.package ?? "@openpresentation/opf-render"} is not installed, so text was measured with core's portable estimate rather than the fonts opf convert draws with. To measure it, install it${install ? `: ${install}` : "."}` } as ValidationReport;
+				}
 				// The same folder convert reads: --asset-dir, else the deck's own (the working directory for stdin). --only asks for named rules, so it skips this check.
 				if (checked.deck && !only.length && skipAssets.size < ASSET_RULES.length) {
 					let directory: string | undefined;
