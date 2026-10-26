@@ -77,6 +77,19 @@ export interface ThemeController {
 /** Apply a theme to the editor mounted in `root`. `createOpfEditor` does this for `options.theme` and `handle.setTheme`. */
 export declare function createThemeController(root: HTMLElement, theme?: OpfEditorTheme): ThemeController;
 
+/**
+ * The options for composing slide `slideIndex` of `deck` with the fonts handle `fonts`: its text measurement, made script-aware for this document
+ * (Japanese under Aptos measures with Noto Sans JP, where the plain strict measurement would throw). Pass the result to the session's
+ * `composeSlide` and `paginateSlide`, and the same `catalogs` the editor was given. Without a handle it is `{}`, and a handle without a
+ * measurement is passed through.
+ */
+export declare function layoutOptionsFor(
+  fonts: EditorFonts | undefined,
+  deck: unknown,
+  slideIndex: number,
+  catalogs?: readonly Catalog[],
+): { fonts?: EditorFonts };
+
 /** What a host's own acquire function returns: the handle and the way to give it back. */
 export interface OpfEditorFontsLease {
   fonts: EditorFonts;

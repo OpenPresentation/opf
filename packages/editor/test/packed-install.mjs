@@ -1,12 +1,14 @@
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
-import {mkdtemp,mkdir,readFile,writeFile,realpath,rm,cp,symlink} from 'node:fs/promises';
+import {mkdtemp,mkdir,readFile,readdir,writeFile,realpath,rm,cp,symlink} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import path from 'node:path';
+import {createRequire} from 'node:module';
 import {fileURLToPath} from 'node:url';
 import {spawnSpec} from '../../../scripts/package-manager.mjs';
 import {packWorkspacePackage} from '../../../scripts/workspace-pack.mjs';
+import {UNEXPORTED_EDITOR_MODULES,editorSpecifier,sourceImports} from '../../../scripts/gallery-editor-imports.mjs';
 // MR-23d/23e: the editor is packed with `pnpm pack` (it rewrites `workspace:` to the versions the published package carries) and its
 // packed manifest is the one read below. The consumer installs the packed editor together with the packed workspace packages it
 // needs (gallery, core, renderer, PPTX converter), all through scripts/workspace-pack.mjs: 0.26.0 is not on the registry before the
@@ -43,6 +45,26 @@ try{
   const bytes=await readFile(path.join(installed,file));
   // package.json is the one file pnpm pack rewrites (workspace: ranges), so it is compared with the tarball's own copy.
   assert.equal(hash(bytes),file==='package.json'?hash(Buffer.from(manifestText)):hash(await readFile(path.join(root,file))),`Installed file differs: ${file}`);files[file]=hash(bytes);
+ }
+ // The pptx.gallery vendoring step rewrites every ../src/<module>.js import of the examples to @openpresentation/opf-editor/<module> and
+ // bundles the example against the published package. Resolve each rewritten specifier through the installed package's "exports", as that
+ // bundle does: a module the tarball does not export (v0.27.0: workspace-measure) fails here, not in the site's build after the release.
+ {
+  const {build}=createRequire(path.join(consumer,'package.json'))('esbuild'),unresolved=[],resolved=new Set();
+  const specifiers=new Set();
+  for(const file of (await readdir(path.join(root,'examples'))).filter(name=>name.endsWith('.js')))
+   for(const module of sourceImports(await readFile(path.join(root,'examples',file),'utf8')))specifiers.add(editorSpecifier(module));
+  assert.ok(specifiers.has('@openpresentation/opf-editor/workspace'),'the scan found the playground imports');
+  await build({stdin:{contents:[...specifiers].map(specifier=>`import ${JSON.stringify(specifier)};`).join('\n'),resolveDir:consumer,loader:'js'},bundle:true,write:false,logLevel:'silent',format:'esm',platform:'browser',
+   plugins:[{name:'resolve-only',setup(build){build.onResolve({filter:/^@openpresentation\/opf-editor(\/|$)/},async args=>{
+    if(args.pluginData?.nested)return undefined;// build.resolve runs the plugins again: the nested call takes esbuild's own resolution
+    // The two modules the package ships but does not export are bundled by file path (scripts/registry-toolchain.mjs): the file must be in the tarball.
+    if(UNEXPORTED_EDITOR_MODULES.includes(args.path)){const file=path.join(installed,'dist',`${args.path.split('/').pop()}.js`);await readFile(file);resolved.add(args.path);return {path:file,external:true};}
+    const result=await build.resolve(args.path,{resolveDir:consumer,kind:args.kind,pluginData:{nested:true}});
+    if(result.errors.length){unresolved.push(`${args.path}: ${result.errors.map(error=>error.text).join('; ')}`);return {path:args.path,external:true};}
+    resolved.add(args.path);return {path:result.path,external:true};})}}]});
+  assert.deepEqual(unresolved,[],`The editor examples import entries the packed editor does not export:\n${unresolved.join('\n')}`);
+  assert.equal(resolved.size,specifiers.size);
  }
  const lock=JSON.parse(await readFile(path.join(consumer,'package-lock.json'),'utf8')),dependencies={};
  for(const name of ['@openpresentation/opf','@openpresentation/opf-render','@openpresentation/opf-pptx']){

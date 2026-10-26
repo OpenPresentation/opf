@@ -87,6 +87,7 @@
     "test:gallery-lazy-fonts": "node scripts/test-gallery-lazy-fonts.mjs",
     "check:gallery-editor-wasm": "node --test scripts/gallery-editor-wasm.test.mjs",
     "check:gallery-editor-assets": "node --test scripts/gallery-editor-assets.test.mjs",
+    "check:gallery-editor-imports": "node --test scripts/gallery-editor-imports.test.mjs",
     "check:registry-consumer": "node --test scripts/registry-consumer.test.mjs",
     "check:npm12-consumer": "node --test scripts/npm12-consumer.test.mjs",
     "prepare:gallery": "node scripts/prepare-gallery-editor.mjs",
