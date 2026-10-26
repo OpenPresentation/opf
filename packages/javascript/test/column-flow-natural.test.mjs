@@ -2,6 +2,7 @@ import { gallery } from '@openpresentation/gallery';
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { composeSlide } from '../dist/composition.js';
+import { paginateSlide } from '../dist/pagination.js';
 
 // WI-1 (P31): a region whose blocks flow in a column stacks them at the heights they need, one gap apart, and its anchor
 // places the stack, instead of giving every block an equal share (which left 248 px between a one-line paragraph and its
@@ -69,4 +70,24 @@ test('a column with explicit weights keeps its tracks', () => {
   const result = composeSlide({ title: 'T', blocks: [{ composition: { mode: 'column', weights: [1, 1] }, blocks: [{ text: 'A' }, { text: long }] }] });
   const [a, b] = result.items.filter((item) => item.field === 'text');
   assert.ok(Math.abs(a.box.height - b.box.height) < 0.01);
+});
+
+// A stacked block's cell is as tall as its content, like a template's auto row: a one-line paragraph's short cell is not a
+// small cell, so strict overflow accepts the slide and paginate keeps it on one page (the 0.28.0 release candidate split
+// a slide of two one-line notes in two). A cell an equal share leaves too short, or one a crowded stack squeezes below its need, is
+// still reported.
+test('a stacked one-line block is not a small cell; a squeezed or equal-share cell that is too short still is', () => {
+  const short = (count) => Array.from({ length: count }, (_, index) => ({ text: `Note ${index + 1}.` }));
+  const nested = { title: 'Give the main idea room', composition: { mode: 'row', weights: [2, 1], overflow: 'error' }, blocks: [{ composition: { mode: 'column' }, blocks: [{ text: 'Recommendation: fund the next milestone.' }, { text: 'The implementation stays shared across browser preview and PowerPoint export.' }] }, { text: 'Context, constraints, and the next decision.' }] };
+  for (const slide of [{ title: 'Two notes', composition: { mode: 'column' }, blocks: short(2) }, nested]) {
+    const result = composeSlide(slide);
+    assert.ok(result.items.some((item) => item.field === 'text' && item.box.height < 60), 'a stacked one-line cell is shorter than the small-cell height');
+    assert.deepEqual(result.diagnostics, []);
+    assert.equal(paginateSlide(slide).slides.length, 1);
+  }
+  for (const [composition, count] of [[{ mode: 'column', weights: Array(12).fill(1) }, 12], [{ mode: 'column' }, 16]]) {
+    const crowded = { title: 'Crowded notes', composition, blocks: short(count) };
+    assert.ok(composeSlide(crowded).diagnostics.some((issue) => issue.code === 'small-cell'), JSON.stringify(composition));
+    assert.ok(paginateSlide(crowded).slides.length > 1);
+  }
 });
