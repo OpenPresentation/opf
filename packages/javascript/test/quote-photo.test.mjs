@@ -22,7 +22,7 @@ test('schema accepts role and photo and rejects other keys', () => {
 test('role is its own footer line and the source follows the last line', () => {
   const result = layoutQuote(quote,cell,{path:'slides.0.quote'});
   const footer = result.parts[1];
-  assert.equal(footer.text,'Priya Raman\nHead of Platform, Acme - Interview, March 2026');
+  assert.equal(footer.text,'Priya Raman\nHead of Platform, Acme – Interview, March 2026');
   assert.equal(footer.fit.lines.length,2);
   assert.deepEqual(footer.sources.map(range=>range.path),['slides.0.quote.attribution','slides.0.quote.role','slides.0.quote.source']);
   for (const range of footer.sources) {
@@ -31,14 +31,14 @@ test('role is its own footer line and the source follows the last line', () => {
   }
   assert.equal(result.photo,undefined);
   assert.equal(layoutQuote({text:'Body',role:'Head of Platform'},cell).parts[1].text,'Head of Platform');
-  assert.equal(layoutQuote({text:'Body',role:'Head',source:'Interview'},cell).parts[1].text,'Head - Interview');
+  assert.equal(layoutQuote({text:'Body',role:'Head',source:'Interview'},cell).parts[1].text,'Head – Interview');
 });
 
 test('without a role or photo the quote layout is the compact footer-only layout', () => {
   const plain = {text:quote.text,attribution:quote.attribution,source:quote.source};
   const result = layoutQuote(plain,cell,{path:'slides.0.quote'});
   assert.equal('photo' in result,false);
-  assert.equal(result.parts[1].text,'Priya Raman - Interview, March 2026');
+  assert.equal(result.parts[1].text,'Priya Raman – Interview, March 2026');
   assert.equal(result.parts[0].box.x,58);
   assert.equal(result.parts[0].box.y,78);
   assert.ok(Math.abs(result.parts[1].box.y-result.parts[0].box.y-result.parts[0].box.height-18)<1e-8);
@@ -171,5 +171,5 @@ test('the testimonial reference deck validates, audits clean of alt findings and
   assert.ok(long.items.find(item=>item.field==='quote').quoteLayout.photo);
   assert.equal(roleOnly.items.find(item=>item.field==='quote').quoteLayout.photo,undefined);
   assert.equal(plain.items.find(item=>item.field==='quote').quoteLayout.photo,undefined);
-  assert.equal(plain.items.find(item=>item.field==='quote').quoteLayout.parts[1].text,'VP Operations, Acme Corp - Customer interview');
+  assert.equal(plain.items.find(item=>item.field==='quote').quoteLayout.parts[1].text,'VP Operations, Acme Corp – Customer interview');
 });

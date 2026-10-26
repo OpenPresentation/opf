@@ -169,7 +169,7 @@ try{
   await passed('A rich title opens the rich input, keeps its run formatting while typing and undoes exactly');
   await mount(headings);await beginAt('quote.text');assert.equal(await input().inputValue(),'Cut it by 40%');
   const quoteTrace=await page.locator('.opf-canvas-preview [data-opf-path="slides.0.quote.text"] [data-opf-text-start]').evaluateAll(nodes=>nodes.map(node=>({text:node.textContent,start:Number(node.dataset.opfTextStart),end:Number(node.dataset.opfTextEnd)})));
-  assert.deepEqual(quoteTrace.map(part=>part.text).join(''),'"Cut it by 40%"');
+  assert.deepEqual(quoteTrace.map(part=>part.text).join(''),'\u201cCut it by 40%\u201d');
   assert.equal(quoteTrace.find(part=>part.text.includes('40%')).start,10,'a rich quote body traces offsets of the authored text, not of the drawn quotation marks');
   await select(13);await input().pressSequentially('!');await commit();
   assert.deepEqual(await page.evaluate(()=>editor.get('slides.0.quote.text')),['Cut it by ',{text:'40%!',italic:true}]);

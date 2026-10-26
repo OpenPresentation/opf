@@ -1,5 +1,5 @@
 {
-  "$comment": "Core 0.14 composition of docs/fixtures/image-treatments.opf.json (the slide picture geometry of each slide at 1280x720, theme classic), frozen by FA-22 so 0.15 image blocks and backgrounds can be checked against the 0.14 frames.",
+  "$comment": "Core 0.14 composition of docs/fixtures/image-treatments.opf.json (the slide picture geometry of each slide at 1280x720, theme classic), frozen by FA-22 so 0.15 image blocks and backgrounds can be checked against the 0.14 frames. The heading frames of the ten treatments with a subtitle follow the WI-4 subtitle size (28 px instead of 25 px); the picture frames are unchanged.",
   "treatments": {
     "full-bleed": {
       "position": "background",
@@ -41,15 +41,15 @@
       "headings": [
         {
           "x": 57.6,
-          "y": 305.81,
+          "y": 303.98,
           "width": 1164.8,
           "height": 65.88
         },
         {
           "x": 57.6,
-          "y": 383.69,
+          "y": 381.86,
           "width": 1164.8,
-          "height": 30.5
+          "height": 34.16
         }
       ]
     },
@@ -93,15 +93,15 @@
       "headings": [
         {
           "x": 57.6,
-          "y": 305.81,
+          "y": 303.98,
           "width": 1164.8,
           "height": 65.88
         },
         {
           "x": 57.6,
-          "y": 383.69,
+          "y": 381.86,
           "width": 1164.8,
-          "height": 30.5
+          "height": 34.16
         }
       ]
     },
@@ -129,15 +129,15 @@
       "headings": [
         {
           "x": 646.4,
-          "y": 305.81,
+          "y": 286.9,
           "width": 576,
           "height": 65.88
         },
         {
           "x": 646.4,
-          "y": 383.69,
+          "y": 364.78,
           "width": 576,
-          "height": 30.5
+          "height": 68.32
         }
       ]
     },
@@ -220,15 +220,15 @@
       "headings": [
         {
           "x": 57.6,
-          "y": 290.56,
+          "y": 286.9,
           "width": 524.8,
           "height": 65.88
         },
         {
           "x": 57.6,
-          "y": 368.44,
+          "y": 364.78,
           "width": 524.8,
-          "height": 61
+          "height": 68.32
         }
       ]
     },
@@ -256,15 +256,15 @@
       "headings": [
         {
           "x": 569.6,
-          "y": 305.81,
+          "y": 303.98,
           "width": 652.8,
           "height": 65.88
         },
         {
           "x": 569.6,
-          "y": 383.69,
+          "y": 381.86,
           "width": 652.8,
-          "height": 30.5
+          "height": 34.16
         }
       ]
     },
@@ -339,15 +339,15 @@
       "headings": [
         {
           "x": 57.6,
-          "y": 305.81,
+          "y": 303.98,
           "width": 1164.8,
           "height": 65.88
         },
         {
           "x": 57.6,
-          "y": 383.69,
+          "y": 381.86,
           "width": 1164.8,
-          "height": 30.5
+          "height": 34.16
         }
       ]
     },
@@ -391,15 +391,15 @@
       "headings": [
         {
           "x": 57.6,
-          "y": 305.81,
+          "y": 303.98,
           "width": 1164.8,
           "height": 65.88
         },
         {
           "x": 57.6,
-          "y": 383.69,
+          "y": 381.86,
           "width": 1164.8,
-          "height": 30.5
+          "height": 34.16
         }
       ]
     },
@@ -427,15 +427,15 @@
       "headings": [
         {
           "x": 57.6,
-          "y": 197.81,
+          "y": 195.98,
           "width": 1164.8,
           "height": 65.88
         },
         {
           "x": 57.6,
-          "y": 275.69,
+          "y": 273.86,
           "width": 1164.8,
-          "height": 30.5
+          "height": 34.16
         }
       ]
     },
@@ -497,15 +497,15 @@
       "headings": [
         {
           "x": 57.6,
-          "y": 290.56,
+          "y": 286.9,
           "width": 524.8,
           "height": 65.88
         },
         {
           "x": 57.6,
-          "y": 368.44,
+          "y": 364.78,
           "width": 524.8,
-          "height": 61
+          "height": 68.32
         }
       ]
     },
@@ -533,15 +533,15 @@
       "headings": [
         {
           "x": 57.6,
-          "y": 290.56,
+          "y": 286.9,
           "width": 524.8,
           "height": 65.88
         },
         {
           "x": 57.6,
-          "y": 368.44,
+          "y": 364.78,
           "width": 524.8,
-          "height": 61
+          "height": 68.32
         }
       ]
     },

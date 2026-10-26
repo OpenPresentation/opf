@@ -200,7 +200,7 @@ In the Markdown dialect, `<!-- block: region=metrics -->` pins a block; a promot
 | `none` | One block fills the region. |
 | `grid` | By count: 1 fills; 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in four columns. Rows and columns swap in a portrait region. A short last row keeps the column width and is centred. |
 | `column` | Stacked at the heights the blocks need, one gap apart, and placed by the region's `anchor`. Charts, pictures, tables, timelines and videos take what the measured blocks (text, lists, quotes, metrics, code) leave. Blocks that do not fit share the region: each gives up the same fraction of what it can give up above its height at the minimum font size. A group's blocks in one column stack the same way. |
-| `auto` | `grid` unless a block is long: more than 6 lines (code: 12, table: 6 rows) in its grid cell at the starting size, counted with core's estimate, never a host font. |
+| `auto` | `grid` unless a block is long: more than 6 lines (code: 12, table: 6 rows) in its grid cell at the starting size (28 px for prose), counted with core's estimate, never a host font. In an `auto` region a paragraph that wraps takes a reading measure of about 70 average characters of its size (never at the cost of size; it follows the content alignment) and a lone block of up to two lines uses the 32 px lead size. |
 
 `design.contentDirection` makes every flowing region one row or one column. A slide's own `composition.mode`, `columns` and
 `weights` arrange its first primary flowing region with the 0.18 modes, above `contentDirection`. A list in a region
@@ -222,6 +222,8 @@ Columns share the content width in proportion. Rows are allocated so that no row
    An empty region with `empty: "keep"` holds two lines of body text in an `auto` row (plus the card insets on a slide
    that draws cards, as a filled region does).
 4. The numeric rows share the rest in proportion to their sizes.
+
+Paragraphs and lists of one stacked column that do not fit at their role sizes shrink together to the largest one size that fits, and read at that one size.
 
 Blocks drawn side by side as peers (regions of one role in the same rows, such as the columns of `two-column` or
 `comparison`, and the blocks of one row of a `grid` or `row` flow) share one size per kind: their prose, and their lists,

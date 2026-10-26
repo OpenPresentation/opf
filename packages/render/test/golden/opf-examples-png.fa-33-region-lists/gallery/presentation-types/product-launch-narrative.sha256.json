@@ -2,12 +2,12 @@
   "deck": "gallery/presentation-types/product-launch-narrative.opf.json",
   "entries": {
     "gallery/presentation-types/product-launch-narrative.opf.json#0": {
-      "sha256": "cb9c0f133ce20fd44ad8a6c9c90ce8f1a36337566121933919b2a9723bcc732c",
-      "bytes": 9595
+      "sha256": "11d0028ec9daf1a3f9a3a4b89506eae85fe64b178bdd0cccfe5b30f0a3cf4946",
+      "bytes": 9634
     },
     "gallery/presentation-types/product-launch-narrative.opf.json#1": {
-      "sha256": "2f0a91822f95a7f30b4f5140dc20734f257a013428de498193fee1a657a5cc9e",
-      "bytes": 11570
+      "sha256": "f740fab7f7ee1d307c1e6bd26e12b557e0a72d9e4829d91741af4142c68fa38d",
+      "bytes": 12313
     },
     "gallery/presentation-types/product-launch-narrative.opf.json#2": {
       "sha256": "f6f640316dee2145ab84f43c85c9db227980169ec3c89e156541077a7198c459",
@@ -22,20 +22,20 @@
       "bytes": 12370
     },
     "gallery/presentation-types/product-launch-narrative.opf.json#5": {
-      "sha256": "e9af5b49da8835e0b08e06159131587589284a2e8b96e75000271e82b462255a",
-      "bytes": 19546
+      "sha256": "50ad09d1bc86d2afc2eb0b4e90f67c9f8f3c58d3d0451f329d54d35dac72a285",
+      "bytes": 19516
     },
     "gallery/presentation-types/product-launch-narrative.opf.json#6": {
-      "sha256": "3c5209fa7e08864b4b7d1784b53abdfd9de6aaf07b4a690ca0553ea26dd38180",
-      "bytes": 14196
+      "sha256": "93224ef6243442c4b876da829c0272f6368125dcf2e53c6c435097517addb5db",
+      "bytes": 15013
     },
     "gallery/presentation-types/product-launch-narrative.opf.json#7": {
       "sha256": "c3579a52de21e4a6e628fea2e1018e2ec1c1932fd9bc5cafbeb245769bc49cf6",
       "bytes": 20433
     },
     "gallery/presentation-types/product-launch-narrative.opf.json#8": {
-      "sha256": "a0669f3e5b34cdd5a8c1e49eb7a1431d7f16b7f6332592c192a9ab1b8799c549",
-      "bytes": 6469
+      "sha256": "1c5715f8e021c2488c70b99d77f6d507fb3a586b15d53fcdd4c30c7aff9bfb86",
+      "bytes": 8515
     },
     "gallery/presentation-types/product-launch-narrative.opf.json#9": {
       "sha256": "23ee9a869ddfe874fefd110709c70580df86bfea74bc3712ba1381914cca7d1a",

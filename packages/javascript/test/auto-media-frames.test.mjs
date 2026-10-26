@@ -11,14 +11,14 @@ const near = (a, b, message) => assert.ok(Math.abs(a - b) <= 0.51, `${message ??
 const note = 'The pilot team reviews the site context alongside the proposed work. A shared visual reference helps explain access constraints, seasonal conditions, and the sequence of activities.';
 const chart = { chart: { type: 'line', data: { columns: ['Month', 'Minutes'], rows: [['Apr', 44], ['May', 39], ['Jun', 33], ['Jul', 29], ['Aug', 24], ['Sep', 19]] } } };
 
-test('an image and an explanation: the picture is whole, 16:9, at the cell top; the text keeps 25 px', () => {
+test('an image and an explanation: the picture is whole, 16:9, at the cell top; the text keeps its 28 px', () => {
   const result = composeSlide({ title: 'Keep field context visible during planning', blocks: [{ image: svg(1600, 900) }, { text: note }] });
   const image = result.items.find((item) => item.field === 'image'), text = result.items.find((item) => item.field === 'text' && item.text.fontSize < 54);
   assert.equal(image.image.fit, 'contain');
   near(image.image.box.width / image.image.box.height, 16 / 9);
   near(image.image.box.y, image.box.y, 'top of its cell');
   assert.deepEqual(image.image.picture.crop, { left: 0, top: 0, right: 0, bottom: 0 });
-  assert.equal(text.text.fontSize, 25);
+  assert.equal(text.text.fontSize, 28);
   assert.deepEqual(result.diagnostics, []);
 });
 
@@ -31,7 +31,7 @@ test('an image pair and a note: both pictures are whole and frame to the picture
     near(image.image.box.width / image.image.box.height, 16 / 9);
     near(image.image.box.y, image.box.y);
   }
-  assert.equal(result.items.find((item) => item.field === 'text' && item.text.fontSize < 54).text.fontSize, 25);
+  assert.equal(result.items.find((item) => item.field === 'text' && item.text.fontSize < 54).text.fontSize, 28);
 });
 
 test('an explicit fit on the block or in the slide design is kept', () => {

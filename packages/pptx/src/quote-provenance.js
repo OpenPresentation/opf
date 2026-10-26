@@ -3,6 +3,7 @@ import {isValidFormat} from './format-check.js';
 import {attachTextTags,decodeTextTag,groupUnchanged} from './code-provenance.js';
 import {sourceLineParagraphs} from './text-provenance.js';
 import {cleanBase,headingValue,joinRichLines,unwrapQuoteRuns} from './rich-heading.js';
+import {unwrapQuoteMarks} from '@openpresentation/opf/composition';
 
 // FF-57: a `quote` payload exports as native text lines (a body part and an optional footer part). Each line shape carries an
 // OPF_QUOTE_V1 tag, so an unchanged export imports back as {quote: ...} instead of loose text blocks. Like timelines, only topology
@@ -11,10 +12,11 @@ import {cleanBase,headingValue,joinRichLines,unwrapQuoteRuns} from './rich-headi
 // FA-12: a quote with a `photo` also exports one native picture (an ellipse), tagged with the same group; import restores `photo` from
 // that picture's current bytes and description, and `role` from the footer.
 const TAG='OPF_QUOTE_V1',REL='http://schemas.openxmlformats.org/officeDocument/2006/relationships/tags';
-const SEPARATOR=' - ',FIELDS=['attribution','role','source'];
+// Core joins the source with an en dash (WI-4); a file exported before then holds a hyphen, which import still reads.
+const SEPARATOR=' \u2013 ',LEGACY_SEPARATOR=' - ',FIELDS=['attribution','role','source'];
 // Every non-empty footer field list, in core's order (attribution, role, source).
 const FOOTERS=['["attribution"]','["role"]','["source"]','["attribution","role"]','["attribution","source"]','["role","source"]','["attribution","role","source"]'];
-// Core joins the role to the line above with a line break and the source with " - ".
+// Core joins the role to the line above with a line break and the source with " \u2013 ".
 const separatorBefore=field=>field==='role'?'\n':SEPARATOR;
 const parser=new XMLParser({ignoreAttributes:false,attributeNamePrefix:'',parseTagValue:false,trimValues:false});
 const decoder=new TextDecoder('utf-8',{fatal:true}),array=value=>value===undefined?[]:Array.isArray(value)?value:[value];
@@ -22,7 +24,7 @@ export const attachQuoteTags=(entries,records)=>attachTextTags(entries,records,T
 export const quotePhotoName=group=>`OPF quote photo ${group}`;
 
 // The manifest rides on the first body line. `footer` lists which fields the footer part joins (core writes the attribution, the role
-// on its own line and the source after " - ", skipping an absent field) and, from two fields on, where each separator starts, so an
+// on its own line and the source after " \u2013 ", skipping an absent field) and, from two fields on, where each separator starts, so an
 // unchanged footer splits back exactly. `photo` records that a headshot picture belongs to the quote.
 export function quoteManifest(value,layout) {
   const shorthand=typeof value==='string',fields=shorthand?[]:FIELDS.filter(field=>value[field]);
@@ -55,7 +57,7 @@ function validateManifest(manifest) {
   return count;
 }
 
-const unwrap=text=>text.length>=2&&text.startsWith('"')&&text.endsWith('"')?text.slice(1,-1):text;
+const unwrap=unwrapQuoteMarks;
 // Split the current footer text back into fields. A separator whose recorded position no longer matches is searched for from the end of
 // the previous field; a footer with a missing separator keeps everything as the attribution.
 function footerFields(text,footer,report) {
@@ -64,8 +66,10 @@ function footerFields(text,footer,report) {
   const out={};let from=0;
   for(let index=1;index<fields.length;index++){
     const separator=separatorBefore(fields[index]),recorded=footer.splits[index-1];
-    const at=recorded>=from&&text.startsWith(separator,recorded)?recorded:text.indexOf(separator,from);
-    if(at<0){
+    const legacy=separator===SEPARATOR?LEGACY_SEPARATOR:separator,both=[separator,legacy];
+    const found=both.find(candidate=>recorded>=from&&text.startsWith(candidate,recorded));
+    const at=found!==undefined?recorded:Math.min(...both.map(candidate=>text.indexOf(candidate,from)).filter(position=>position>=0),Infinity);
+    if(at===Infinity){
       report({code:'quote-footer-merged',message:'The quote footer no longer separates its attribution, role and source; the current text is kept as the attribution.'});
       return {attribution:text};
     }

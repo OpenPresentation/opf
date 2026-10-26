@@ -40,7 +40,7 @@ assert.match(first, /Annual report/);
 assert.match(second, /Annual report/);
 // Quote: the body keeps the straight quotation marks around the runs, the colored run keeps its color, the footer is plain text.
 assert.match(second, /data-opf-rich-text="true"/);
-assert.match(second, /<tspan[^>]*>(&quot;|")Cut review time by <\/tspan>/);
+assert.match(second, /<tspan[^>]*>(“|&quot;|")Cut review time by <\/tspan>/);
 assert.match(second, /<tspan[^>]*fill="#1D4ED8"[^>]*>40%<\/tspan>/);
 assert.match(second, /Ada, VP Operations/);
 // A string heading draws as plain text, without rich-text lines.

@@ -28,8 +28,8 @@ test('complete quote layout preserves source ranges, requested/resolved styles a
       assert.equal(part.text.slice(range.outputStart,range.outputEnd),original.slice(range.start,range.end));
     }
   }
-  assert.deepEqual(result.parts[0].fit,fitText(`"${value.text}"`,result.parts[0].box,28,16,(text,size)=>[...text].length*size*.5));
-  assert.deepEqual(result.parts[1].fit,fitText(`${value.attribution} - ${value.source}`,result.parts[1].box,17,16,(text,size)=>[...text].length*size*.5));
+  assert.deepEqual(result.parts[0].fit,fitText(`“${value.text}”`,result.parts[0].box,40,16,(text,size)=>[...text].length*size*.5));
+  assert.deepEqual(result.parts[1].fit,fitText(`${value.attribution} – ${value.source}`,result.parts[1].box,17,16,(text,size)=>[...text].length*size*.5));
   assert.ok(seen.some(style=>style.fontWeight===600&&style.path==='slides.3.quote.text'));
   assert.ok(seen.some(style=>style.fontWeight===500&&style.path==='slides.3.quote'));
   assert.ok(seen.every(style=>style.fontFamily.startsWith('Resolved ')));
@@ -41,7 +41,7 @@ test('shorthand and empty metadata preserve schema paths without an invented foo
     assert.equal(result.parts.length,1);
     assert.equal(result.parts[0].box.height,result.parts[0].fit.lines.length*result.parts[0].fit.lineHeight);
     assert.equal(result.parts[0].sources[0].path,typeof value==='string'?'slides.2.left.quote':'slides.2.left.quote.text');
-    assert.equal(result.parts[0].text,`"${typeof value==='string'?value:value.text}"`);
+    assert.equal(result.parts[0].text,`“${typeof value==='string'?value:value.text}”`);
     assert.equal(result.textMeasurement,'estimated');
   }
 });
@@ -50,7 +50,7 @@ test('body and footer share available space before shrinking text or changing th
   const expanded=layoutQuote({text:'Short body',attribution:'Long attribution '.repeat(60)},cell);
   assert.equal(expanded.overflow,false);
   assert.ok(expanded.parts[1].box.height>40);
-  assert.equal(expanded.parts[0].fit.fontSize,28);
+  assert.equal(expanded.parts[0].fit.fontSize,40);
   assert.equal(expanded.parts[1].fit.fontSize,17);
   assert.equal(expanded.algorithm,'quote-flow-v1');
   const compact=layoutQuote({text:'Keep the complete body. '.repeat(10),attribution:'Author'},{x:0,y:0,width:300,height:230});

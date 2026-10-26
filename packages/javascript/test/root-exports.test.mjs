@@ -30,6 +30,8 @@ const compositionNames = [
   "PATTERN_PRESETS", "PATTERN_PRESET_ALIASES", "PATTERN_TILE_SIZE", "patternBitmap", "patternRuns", "resolvePatternPreset",
   "niceScale", "maxIntervalsFor", "stackCategoryValues", "chartValueAxis", "chartTextSize", "CHART_TEXT_PX", "chartOptionSupport", "chartOptionTarget", "resolveChartOptions", "formatChartLabelNumber", "formatChartLabelPercent", "chartLabelText", "DEFAULT_CHART_LABEL_SEPARATOR",
   "resolveScriptFonts", "resolveSlideDirection", "scriptFontRole", "paragraphDirection", "paragraphDirectionAt", "physicalAlignment",
+  "PROSE_NOMINAL_SIZE", "LIST_NOMINAL_SIZE", "LEAD_NOMINAL_SIZE", "TABLE_NOMINAL_SIZE", "QUOTE_NOMINAL_SIZE", "CODE_NOMINAL_SIZE", "QUOTE_SOURCE_SEPARATOR",
+  "QUOTE_MARKS", "ASCII_QUOTE_MARKS", "quoteMarksFor", "quoteLanguage", "unwrapQuoteMarks", "isWrappedInQuoteMarks",
 ];
 const symbolNames = ["SYMBOL_FONT_ENCODINGS", "SYMBOL_FONT_FAMILIES", "symbolFontEncodingFor", "isSymbolEncodedFamily", "symbolCodeOf", "symbolUnicodeFor", "symbolCodeForUnicode", "mapSymbolText"];
 // App-level data helpers stay at the root (the editor and hosts call them) and on /data.

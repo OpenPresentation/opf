@@ -98,7 +98,7 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) for (
   const slide = parser.parse(new TextDecoder().decode(unzipSync(bytes)['ppt/slides/slide1.xml']));
   const shapes = all(slide,'p:sp').filter(shape=>all(shape,'a:t').length);
   const value = shape=>all(shape,'a:t').map(content).join('');
-  const footer = shapes.find(shape=>value(shape)==='A reviewer - Recorded interview');
+  const footer = shapes.find(shape=>value(shape)==='A reviewer \u2013 Recorded interview');
   assert.ok(footer,'Native footer text retained');
   const footerTop = Number(all(footer,'a:xfrm')[0]['a:off'].y);
   const body = shapes.filter(shape=>shape!==footer && value(shape)!=='A quote and its source');

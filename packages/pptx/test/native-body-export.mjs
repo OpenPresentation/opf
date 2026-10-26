@@ -63,7 +63,7 @@ assert.match(body, /<a:noAutofit\/>/);
 assert.ok(!/normAutofit|spAutoFit|p:tags/.test(body));
 assert.equal((body.match(/<a:p>/g) ?? []).length, 4, 'Hard and blank/trailing paragraphs survive');
 assert.match(body, /<a:defRPr[^>]*><a:solidFill>/, 'Defaults use valid run-property color structure');
-assert.match(body, /<a:endParaRPr[^>]*sz="1875"/);
+assert.match(body, /<a:endParaRPr[^>]*sz="2100"/);
 assert.match(body, /<a:latin typeface="Roboto"/);
 assert.match(decode(native.entries, layoutPart(native.entries)), /type="tx"/);
 assert.match(decode(native.entries, part), /<p:ph type="title"\/>/, 'Accepted title remains a real title');

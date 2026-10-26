@@ -102,10 +102,10 @@ describe('quote text', () => {
   test('layoutQuote fits a rich body through the rich-text layouter and joins the quotation marks to the end runs', () => {
     const layout = layoutQuote({ text: ['Cut review time by ', { text: '40%', bold: true }, ' in a quarter'], attribution: 'Ada' }, box, { path: 'slides.0.quote' });
     const body = layout.parts[0];
-    assert.equal(body.text, '"Cut review time by 40% in a quarter"');
+    assert.equal(body.text, '“Cut review time by 40% in a quarter”');
     assert.equal(body.runs.length, 3, 'run indexes do not shift');
-    assert.equal(body.runs[0], '"Cut review time by ');
-    assert.equal(body.runs[2], ' in a quarter"');
+    assert.equal(body.runs[0], '“Cut review time by ');
+    assert.equal(body.runs[2], ' in a quarter”');
     assert.ok(body.fit.richLines);
     assert.equal(body.sources[0].path, 'slides.0.quote.text');
     assert.equal(layout.overflow, false);

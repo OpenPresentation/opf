@@ -15,3 +15,5 @@ colour scheme's default slide background, so the 0.14 deck set that colour (ligh
 
 `test/image-treatments.mjs` renders the 0.15 documents and compares them with these files. Do not regenerate them: the
 0.15 renderer cannot draw a slideImage, which is the point of keeping them.
+
+WI-4 (the subtitle draws at 28 px, up from 25 px): the PNGs of the treatments with a subtitle were redrawn by the current renderer, because the text pixels moved. The frames, the pictures and `reference.json` (the 0.14 boxes of the picture frames and outlines) are unchanged; the paint order and the heading frames follow `packages/javascript/test/fixtures/image-treatments-0.14.json`.

@@ -54,7 +54,8 @@ const names = Object.keys(decks);
 const render = (fonts, name) => toSvg(structuredClone(decks[name]), { fonts }).join('\0');
 const alone = {};
 for (const name of names) alone[name] = render(await fresh(), name);
-assert.ok(alone['bn-body'].includes('textLength="354.9"'), 'the Bengali body is drawn at its browser width');
+// The subtitle is 28 px (WI-4): 354.9 x 28 / 25.
+assert.ok(alone['bn-body'].includes('textLength="397.488"'), 'the Bengali body is drawn at its browser width');
 for (const [label, order] of [['in order', names], ['in reverse', [...names].reverse()], ['interleaved', names.filter((_, index) => index % 2).concat(names.filter((_, index) => !(index % 2)))]]) {
   const fonts = await fresh();
   for (const name of order) assert.equal(render(fonts, name), alone[name], `${name} rendered ${label} after ${order.slice(0, order.indexOf(name)).join(', ') || 'nothing'} equals ${name} rendered alone`);

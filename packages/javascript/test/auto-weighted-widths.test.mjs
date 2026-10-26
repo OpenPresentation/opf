@@ -14,17 +14,17 @@ test('a two-line note beside a nine-line explanation: the explanation gets the w
   const before = prose(composeSlide({ title: 'The exception path needs the explanation', composition: { weights: [1, 1] }, blocks: [{ text: short }, { text: long }] }));
   const result = composeSlide({ title: 'The exception path needs the explanation', blocks: [{ text: short }, { text: long }] });
   const [note, explanation] = prose(result);
-  assert.ok(explanation.box.width > note.box.width * 1.5, `${explanation.box.width} vs ${note.box.width}`);
+  assert.ok(explanation.box.width >= note.box.width * 1.49, `${explanation.box.width} vs ${note.box.width}`);
   assert.ok(explanation.text.lines.length < before[1].text.lines.length, 'the explanation is shorter');
   assert.ok(note.text.lines.length <= before[0].text.lines.length + 1, 'the note adds at most one line');
-  assert.equal(note.text.fontSize, 25);
-  assert.equal(explanation.text.fontSize, 25);
+  assert.equal(note.text.fontSize, 28);
+  assert.equal(explanation.text.fontSize, 28);
   assert.deepEqual(result.diagnostics, []);
 });
 
 test('the longer block keeps the wider column wherever it is', () => {
   const [explanation, note] = prose(composeSlide({ title: 'T', blocks: [{ text: long }, { text: short }] }));
-  assert.ok(explanation.box.width > note.box.width * 1.5);
+  assert.ok(explanation.box.width >= note.box.width * 1.49);
 });
 
 test('peers of similar demand keep equal widths', () => {

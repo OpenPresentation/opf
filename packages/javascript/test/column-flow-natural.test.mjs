@@ -16,8 +16,8 @@ test('unequal prose: one gap between the paragraphs, not an equal share each', (
   assert.equal(result.regions.find((region) => region.name === 'body').arrangement, 'column');
   assert.ok(Math.abs(tall.box.y - (short.box.y + short.box.height) - gap) < 0.01, `${tall.box.y - short.box.y - short.box.height}`);
   assert.ok(short.box.height < 60, 'the one-line paragraph is as tall as its line');
-  assert.equal(short.text.fontSize, 25);
-  assert.equal(tall.text.fontSize, 25);
+  assert.equal(short.text.fontSize, 28);
+  assert.equal(tall.text.fontSize, 28);
 });
 
 test('blocks that do not fit share the column; none gets less than it needs at the minimum size', () => {
@@ -26,7 +26,9 @@ test('blocks that do not fit share the column; none gets less than it needs at t
   const body = result.items.filter((item) => item.region === 'body');
   const region = result.regions.find((entry) => entry.name === 'body').box;
   const bottom = body.at(-1).box.y + body.at(-1).box.height;
-  assert.ok(Math.abs(bottom - (region.y + region.height)) < 0.01, 'the stack fills the region');
+  assert.ok(bottom <= region.y + region.height + 0.01, 'the stack stays inside the region');
+  // WI-4: paragraphs of one stacked column that do not fit at 28 px shrink together to one size.
+  assert.equal(new Set(body.map((item) => item.text.fontSize)).size, 1, body.map((item) => item.text.fontSize).join('/'));
   assert.deepEqual(result.diagnostics, [], 'nothing overflows while the blocks fit at the minimum size');
   assert.ok(body[0].box.height < body[1].box.height / 2, 'the one-line block is not given an equal share');
 });

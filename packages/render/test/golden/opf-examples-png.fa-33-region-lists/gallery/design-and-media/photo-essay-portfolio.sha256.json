@@ -2,12 +2,12 @@
   "deck": "gallery/design-and-media/photo-essay-portfolio.opf.json",
   "entries": {
     "gallery/design-and-media/photo-essay-portfolio.opf.json#0": {
-      "sha256": "7b287a50997306b1a204ab015d1af34947d2ab789f892ada7cc789c6d2678bc6",
-      "bytes": 5364
+      "sha256": "65064c2ddcb39fd1bbaf9cee5164209807c2e9893f8fd87bc0f577c10d4ee4b2",
+      "bytes": 5491
     },
     "gallery/design-and-media/photo-essay-portfolio.opf.json#1": {
-      "sha256": "be426523154c8782349ac713d8ff5ee58ac3bee68aba05f165e00c1ac8fd0ed5",
-      "bytes": 7271
+      "sha256": "e24dd7bb1ee2cb7c9d5804d5e60a24e50aa8303e69724aa75a7d114290e592bf",
+      "bytes": 7874
     },
     "gallery/design-and-media/photo-essay-portfolio.opf.json#2": {
       "sha256": "b48456d31f3f563c243457bec2a62b1fb0b6264182800be2aae95a52619fedbb",
@@ -22,20 +22,20 @@
       "bytes": 7954
     },
     "gallery/design-and-media/photo-essay-portfolio.opf.json#5": {
-      "sha256": "d7c4fd72de1261b2dcfbedfcc155aa5683e0783d707932222a0684040fe6ecf9",
-      "bytes": 16257
+      "sha256": "428a1f75bce7894f35467472a6bf7c54d6f3db2846ba7f7fbbae6bb37e3c2fe2",
+      "bytes": 17550
     },
     "gallery/design-and-media/photo-essay-portfolio.opf.json#6": {
-      "sha256": "4a5bcf4353418dde6483799ea3912de8e5fd0effa07d8e5ca9af06afa6dd9f36",
-      "bytes": 8922
+      "sha256": "52ff642a631505a692867e16dcc841cba8e2f410122453dd39080f148481525b",
+      "bytes": 10131
     },
     "gallery/design-and-media/photo-essay-portfolio.opf.json#7": {
       "sha256": "6be395502cda295f226a5eb6240d49f6e8a7feaa5e241dc916d8feea3d073294",
       "bytes": 3946
     },
     "gallery/design-and-media/photo-essay-portfolio.opf.json#8": {
-      "sha256": "2097d4f1bf57f9bd25a3b4bf790c73b512b17d294dead5c035d1367624d77b35",
-      "bytes": 5244
+      "sha256": "fd604493db285432dea86bad2498a6f55c1cc1c8364b324f9a259f51aae3e280",
+      "bytes": 6224
     },
     "gallery/design-and-media/photo-essay-portfolio.opf.json#9": {
       "sha256": "cf821c1430731cbc755e3e9d6faabe03754e240d11eb60d99498d4b35589e6da",

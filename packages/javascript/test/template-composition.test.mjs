@@ -318,7 +318,7 @@ describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout pla
     const { contentBox, areas } = composeLayoutAreas(layouts.comparison);
     assert.deepEqual(areas.map((area) => [area.name, area.heading]), [['title', true], ['first', false], ['second', false], ['verdict', false]]);
     const verdict = areas.find((area) => area.name === 'verdict').box;
-    assert.ok(near(verdict.height, 2 * 25 * 1.22), 'two body lines without decorative card insets');
+    assert.ok(near(verdict.height, 2 * 28 * 1.22), 'two body lines without decorative card insets');
     assert.ok(near(verdict.y + verdict.height, contentBox.y + contentBox.height));
     const cover = composeLayoutAreas(layouts.cover, { mirror: true }).areas;
     assert.ok(cover.find((area) => area.name === 'media').box.x < cover.find((area) => area.name === 'title').box.x, 'mirrored');

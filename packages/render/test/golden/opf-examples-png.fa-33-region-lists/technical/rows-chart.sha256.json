@@ -2,12 +2,12 @@
   "deck": "technical/rows-chart.opf.json",
   "entries": {
     "technical/rows-chart.opf.json#0": {
-      "sha256": "0b54381fec9e3b7d32ee62b133ee6d4ed293ed5849b1b90eb337a4f75ffcf285",
-      "bytes": 5144
+      "sha256": "35f60c8dc3fa7c5757995f9e1a23cf526d925292e11cf692cdeb9df4a21ce740",
+      "bytes": 5244
     },
     "technical/rows-chart.opf.json#1": {
-      "sha256": "176328582a576ad636dd24667e13b1e33e0cac0f4c19326c42b8cd21ddc4f894",
-      "bytes": 4643
+      "sha256": "8b4b39d9b688505a3c53b5c9c5bbc92ad6a406089c1f386947ed0f75becdd680",
+      "bytes": 4686
     }
   }
 }

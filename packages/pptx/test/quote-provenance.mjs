@@ -85,15 +85,15 @@ const rebuilt=async mutate=>{const entries=structuredClone(controlEntries);await
 const editXml=(entries,change)=>{entries['ppt/slides/slide1.xml']=encode(change(slideXml(entries)));};
 const edited=await rebuilt(entries=>editXml(entries,xml=>xml.replace('Secret body words.','Edited body words.')));
 assert.deepEqual(quoteBlocks(edited.imported.slides[0]).map(block=>block.quote),[{text:'Edited body words.',attribution:'Hidden attribution',source:'Hidden source'}]);
-const footerEdited=await rebuilt(entries=>editXml(entries,xml=>xml.replace('Hidden attribution - Hidden source','New name - New source')));
+const footerEdited=await rebuilt(entries=>editXml(entries,xml=>xml.replace('Hidden attribution \u2013 Hidden source','New name - New source')));
 assert.deepEqual(quoteBlocks(footerEdited.imported.slides[0]).map(block=>block.quote),[{text:'Secret body words.',attribution:'New name',source:'New source'}]);
-const merged=await rebuilt(entries=>editXml(entries,xml=>xml.replace('Hidden attribution - Hidden source','Just one edited line')));
+const merged=await rebuilt(entries=>editXml(entries,xml=>xml.replace('Hidden attribution \u2013 Hidden source','Just one edited line')));
 assert.deepEqual(quoteBlocks(merged.imported.slides[0]).map(block=>block.quote),[{text:'Secret body words.',attribution:'Just one edited line'}]);
 assert.ok(merged.diagnostics.some(d=>d.code==='quote-footer-merged'));
-const cleared=await rebuilt(entries=>editXml(entries,xml=>xml.replace('Hidden attribution - Hidden source','')));
+const cleared=await rebuilt(entries=>editXml(entries,xml=>xml.replace('Hidden attribution \u2013 Hidden source','')));
 assert.deepEqual(quoteBlocks(cleared.imported.slides[0]).map(block=>block.quote),[{text:'Secret body words.'}]);
 assert.ok(!JSON.stringify(cleared.imported).includes('Hidden'),'clearing a footer cannot restore its old words');
-const unquoted=await rebuilt(entries=>editXml(entries,xml=>xml.replace('&quot;Secret body words.&quot;','Plain words.')));
+const unquoted=await rebuilt(entries=>editXml(entries,xml=>xml.replace('\u201cSecret body words.\u201d','Plain words.')));
 assert.deepEqual(quoteBlocks(unquoted.imported.slides[0]).map(block=>block.quote)[0].text,'Plain words.');
 
 // 7. Damaged or unknown shapes degrade to ordinary text blocks with a diagnostic and never invent a quote.
@@ -110,7 +110,7 @@ for(const [name,change] of damages){
  assert.ok(result.diagnostics.some(d=>d.code==='invalid-quote-provenance'),name);
  assert.ok(!quoteBlocks(result.imported.slides[0]).length,name);
  const text=JSON.stringify(result.imported);
- assert.ok(text.includes(name==='missing-anchor-line'?'Hidden attribution - Hidden source':'Secret body words.'),`${name}: the remaining current native text is kept`);
+ assert.ok(text.includes(name==='missing-anchor-line'?'Hidden attribution \u2013 Hidden source':'Secret body words.'),`${name}: the remaining current native text is kept`);
  if(name==='missing-footer')assert.ok(!text.includes('Hidden'),'a deleted footer stays deleted');
 }
 // A corrupted manifest is rejected, and a tag from another format is ignored.

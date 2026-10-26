@@ -20,10 +20,12 @@ const deck = {
       text: ['تم تصدير هذا العرض إلى ', {text: 'PowerPoint 365', bold: true}, ' بنجاح. زر الموقع ', {text: 'https://openpresentation.org/docs', underline: true}, ' وراجع الملف ', {text: 'report-2026.pptx', bold: true}, ' المرفق.']},
     {id: 'list', title: 'قائمة المهام',
       items: ['فتح الملف في PowerPoint 365 والتحقق من الخطوط', 'إطلاق الإصدار v2.0 في الربع الثالث', 'نشر الدليل على https://openpresentation.org', 'التحقق من اتجاه النص (RTL) في كل شريحة']},
+    // WI-4: the paragraph's body is 28 px and wraps; the file name sits in a paragraph of its own so its run boundary stays on one line.
+    {id: 'tail', title: 'الملف', text: ['وراجع الملف ', {text: 'report-2026.pptx', bold: true}, ' المرفق.']},
   ],
 };
 const fonts = await loadFonts({pack: 'office', scripts: 'auto', presentation: deck, renderOptions: {catalogs}});
-const [paragraphSvg, listSvg] = toSvg(structuredClone(deck), {fonts, trace: true});
+const [paragraphSvg, listSvg, tailSvg] = toSvg(structuredClone(deck), {fonts, trace: true});
 
 const ARABIC = /\p{Script=Arabic}/u, LATIN = /[A-Za-z0-9]/;
 const ISOLATES = /[⁦-⁩]/gu;
@@ -79,15 +81,15 @@ function chunks(svg) {
   }
   const all = chunks(paragraphSvg);
   // Arabic run "... X " then Latin run "Y": in a right-to-left line the Latin run sits left of the Arabic one, a space apart.
-  const pairs = [['ملخص الإصدار', 'PowerPoint 365', 'title'], ['إلى', 'PowerPoint 365', 'body'], ['الموقع', 'https://openpresentation.org/docs', 'body'], ['الملف', 'report-2026.pptx', 'body']];
-  for (const [arabic, latin, field] of pairs) {
-    const inField = all.filter(chunk => chunk.path?.endsWith(field === 'title' ? '.title' : '.text'));
+  const pairs = [['ملخص الإصدار', 'PowerPoint 365', 'title'], ['إلى', 'PowerPoint 365', 'body'], ['الموقع', 'https://openpresentation.org/docs', 'body'], ['الملف', 'report-2026.pptx', 'body', chunks(tailSvg)]];
+  for (const [arabic, latin, field, source = all] of pairs) {
+    const inField = source.filter(chunk => chunk.path?.endsWith(field === 'title' ? '.title' : '.text'));
     const before = inField.find(chunk => chunk.visible.trimEnd().endsWith(arabic) && ARABIC.test(chunk.visible));
     const after = inField.find(chunk => chunk.visible.trim() === latin);
     assert.ok(before && after, `${field}: found the runs "${arabic}" and "${latin}"`);
     assert.ok(before.textLength !== undefined && after.textLength !== undefined, `${field}: both runs are pinned to their measured advance`);
     const gap = before.x - after.right;
-    // A space is 0.2 to 0.3 em in Intos and Noto Naskh Arabic; the title is 54 px, the body 25 px (Arabic drawn at 0.64 of it).
+    // A space is 0.2 to 0.3 em in Intos and Noto Naskh Arabic; the title is 54 px, the body 28 px (Arabic drawn at 0.64 of it).
     assert.ok(gap > 2.5, `${field}: "${latin}" ends a space before "${arabic}" starts (gap ${gap.toFixed(2)} px)`);
   }
 }

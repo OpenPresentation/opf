@@ -2,12 +2,12 @@
   "deck": "gallery/presentation-types/policy-briefing-for-advisors.opf.json",
   "entries": {
     "gallery/presentation-types/policy-briefing-for-advisors.opf.json#0": {
-      "sha256": "6edf53c8c8293f4e6854b01a5e676d379ca85d561c292dae0314facb0adeaba9",
-      "bytes": 5857
+      "sha256": "556d056fd8038392cd78e323485f0d9c1b6596dc457aec36aa5173bc643624d3",
+      "bytes": 5967
     },
     "gallery/presentation-types/policy-briefing-for-advisors.opf.json#1": {
-      "sha256": "17da13e12fb52e7f44ede9a12aeeebc2b58e19b24009f9e54e82810df2266d1b",
-      "bytes": 6514
+      "sha256": "e3585c1e65f1d1961cd10c3d98aa3f69fbb2b72c1d387d0d849df4db843fc89a",
+      "bytes": 6971
     },
     "gallery/presentation-types/policy-briefing-for-advisors.opf.json#2": {
       "sha256": "1a59e61e4247a1c37e55b53b6443e6aeef4ae5b58ad98a3bf9cfbb261a4f6c2b",
@@ -22,20 +22,20 @@
       "bytes": 7018
     },
     "gallery/presentation-types/policy-briefing-for-advisors.opf.json#5": {
-      "sha256": "8af03d0510e19718f0efc5e0706f98286a4fc1b2b0f5575d1015d77c9da15f32",
-      "bytes": 13674
+      "sha256": "469e967431fa2b840c752b3290a5c1a86f6eb0b975909437b24dede73b6425c1",
+      "bytes": 13570
     },
     "gallery/presentation-types/policy-briefing-for-advisors.opf.json#6": {
-      "sha256": "d43bd43a57e77c41fba22e61da19a14fd243d83611cc369845f765d2161cc328",
-      "bytes": 11085
+      "sha256": "c7404118889c3111bfcbf6f995507c171875cf02dc636335f2a6cba3429d3c9b",
+      "bytes": 11670
     },
     "gallery/presentation-types/policy-briefing-for-advisors.opf.json#7": {
       "sha256": "d0a84366cfb453759144fe959070a602cb496c4b9af0da6fc32860cfd16007f2",
       "bytes": 4064
     },
     "gallery/presentation-types/policy-briefing-for-advisors.opf.json#8": {
-      "sha256": "fbcbf9213aa5b7bf9385b1944191c95cdcca30a203028a845d67582373a72f5a",
-      "bytes": 5121
+      "sha256": "3da1bb3b76c87027355f44e048871f135e5cfbec2f28fea78f687165e17972d6",
+      "bytes": 5664
     },
     "gallery/presentation-types/policy-briefing-for-advisors.opf.json#9": {
       "sha256": "c883090d78e2dd426ff92e5364aa9870d54196f87d6ebe5dc7ecc52f5b63c87e",

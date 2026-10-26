@@ -13,7 +13,7 @@ test('successful quotes keep attribution immediately after measured body and inc
   const footerTop=Math.min(footer.box.y,result.photo?.box.y??Infinity);
   assert.ok(Math.abs(footerTop-bodyBottom-18)<.01);assert.ok(result.bounds.height<box.height/2);
   for(const part of result.parts)assert.ok(part.box.y+part.box.height<=box.y+box.height);
-  assert.equal(footer.text,'Example author\nExample role - Illustrative');
+  assert.equal(footer.text,'Example author\nExample role – Illustrative');
  }
 });
 test('metric occupied bounds include value and every visible metadata part without reserving the whole cell',()=>{
@@ -49,7 +49,7 @@ test('grid anchors each measured cell, including one-item flow none, while chart
 });
 test('strict quote overflow still refuses and complete text survives failed compact fitting',()=>{
  const value={text:'Long quoted words '.repeat(200),attribution:'Retained author'};
- const failed=layoutQuote(value,{x:0,y:0,width:100,height:80});assert.equal(failed.overflow,true);assert.equal(failed.parts[0].text,`"${value.text}"`);
+ const failed=layoutQuote(value,{x:0,y:0,width:100,height:80});assert.equal(failed.overflow,true);assert.equal(failed.parts[0].text,`“${value.text}”`);
  assert.throws(()=>layoutQuote(value,{x:0,y:0,width:100,height:80},{overflow:'error'}),OPFCompositionError);
 });
 
