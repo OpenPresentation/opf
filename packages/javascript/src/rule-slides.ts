@@ -77,7 +77,7 @@ export function buildSlides(document: Rec, options: ValidateOptions): RuleSlide[
 			const result: Composed = { layoutDiagnostics: [] };
 			// WI-1 (P24): compose with the role families the renderer draws (resolveDrawnFontFamilies), so a weight the open
 			// replacement lacks draws its nearest weight here too instead of failing the slide's layout.
-			let fontFamilies: FontFamilies | undefined;
+			let fontFamilies: Partial<FontFamilies> | undefined;
 			const compose = (input: Rec, withLayout: Rec | undefined): SlideComposition => {
 				const options = resolved().options;
 				fontFamilies ??= options.fontFamilies && resolveDrawnFontFamilies(options.fontFamilies, options.textMeasurement);
