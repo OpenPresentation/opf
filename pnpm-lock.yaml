@@ -462,8 +462,8 @@ importers:
         specifier: ~5.9.3
         version: 5.9.3
       workerd:
-        specifier: 1.20261014.1
-        version: 1.20261014.1
+        specifier: 1.20261023.1
+        version: 1.20261023.1
 
   packages/pptx:
     dependencies:
@@ -812,22 +812,10 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@cloudflare/workerd-darwin-64@1.20261014.1':
-    resolution: {integrity: sha512-/HXDaNdMXHUmVhPk2rBo3ldsNw8A8MA/C747jlyMsG2/T7l0ELnaKSBTBViiWbiGHKKq12UlNs10t9pJ4WbrHQ==}
-    engines: {node: '>=16'}
-    cpu: [x64]
-    os: [darwin]
-
   '@cloudflare/workerd-darwin-64@1.20261023.1':
     resolution: {integrity: sha512-lsEx0i7nR0PNG/erUFFHmQmiidEhLfDE5uQmAL9421/y4/ycuxDDOSaxu3VGGYFFPK5sduyUeMmjIlX4CwOBFg==}
     engines: {node: '>=16'}
     cpu: [x64]
-    os: [darwin]
-
-  '@cloudflare/workerd-darwin-arm64@1.20261014.1':
-    resolution: {integrity: sha512-7DPV79dmESwKOfO2IezcPthofhbcPGeKLN9LsmJhyZB5dwpriGbcf6WGY43hx4603AcfWvrXXHbYnDAlDYhO0w==}
-    engines: {node: '>=16'}
-    cpu: [arm64]
     os: [darwin]
 
   '@cloudflare/workerd-darwin-arm64@1.20261023.1':
@@ -836,22 +824,10 @@ packages:
     cpu: [arm64]
     os: [darwin]
 
-  '@cloudflare/workerd-linux-64@1.20261014.1':
-    resolution: {integrity: sha512-QnbpqeQDCF2JhD/nkL1xFl5KutpJX566sKTFWkjx9+yTHAOucWhv0FVN6GcLI/dgWZiJiL7b8XPzcx6GB5S+Bg==}
-    engines: {node: '>=16'}
-    cpu: [x64]
-    os: [linux]
-
   '@cloudflare/workerd-linux-64@1.20261023.1':
     resolution: {integrity: sha512-VHQ6jKFSihjR2+x1buby8XTdBLLJztVnYiB7OLOTYO8aDXB+c1Rd2410PdgFuFYc4AgFEk6PCJLyCLL5L1KBnw==}
     engines: {node: '>=16'}
     cpu: [x64]
-    os: [linux]
-
-  '@cloudflare/workerd-linux-arm64@1.20261014.1':
-    resolution: {integrity: sha512-gF+fqopjvqcixsf9vJKmO9LZQbFCX7LU4U3oaD8aJxtqqmgg/uAxfrRa2H9VkhOUN/t7h4OKcgCoie+am8N29Q==}
-    engines: {node: '>=16'}
-    cpu: [arm64]
     os: [linux]
 
   '@cloudflare/workerd-linux-arm64@1.20261023.1':
@@ -859,12 +835,6 @@ packages:
     engines: {node: '>=16'}
     cpu: [arm64]
     os: [linux]
-
-  '@cloudflare/workerd-windows-64@1.20261014.1':
-    resolution: {integrity: sha512-7xutlLWls8NuaSN50RhJZBd1b31wlGz2N/ZbHU7tT9LF9ze0oS6JbmgNz0eXgYuOVO5S6P+aA3YzizCX9BiWMA==}
-    engines: {node: '>=16'}
-    cpu: [x64]
-    os: [win32]
 
   '@cloudflare/workerd-windows-64@1.20261023.1':
     resolution: {integrity: sha512-279WLVjNsMycAwr0EZNiNEf0l2SY6NUtsN80NwZzbTHzakmiN+WSx4w38muxPm+PAU0oSPPAPXKVD+H6Hya8xw==}
@@ -2625,11 +2595,6 @@ packages:
     engines: {node: '>= 8'}
     hasBin: true
 
-  workerd@1.20261014.1:
-    resolution: {integrity: sha512-ezxOegcmR1pFvz30nzgTlych4se01s50GkdC68Ea0aJPIS4gDc0xcic162SLdV1KqXTltANCzRryImxPkjssqQ==}
-    engines: {node: '>=16'}
-    hasBin: true
-
   workerd@1.20261023.1:
     resolution: {integrity: sha512-NeofJFyaYNpqKpFRJW3ApuonaerPd6/JWlfTtLDYf2A6ygqrDEFnYgEXmc0hhOxqnJsSM+kXJN6VebPojzRrsg==}
     engines: {node: '>=16'}
@@ -2706,31 +2671,16 @@ snapshots:
   '@biomejs/cli-win32-x64@2.6.3':
     optional: true
 
-  '@cloudflare/workerd-darwin-64@1.20261014.1':
-    optional: true
-
   '@cloudflare/workerd-darwin-64@1.20261023.1':
-    optional: true
-
-  '@cloudflare/workerd-darwin-arm64@1.20261014.1':
     optional: true
 
   '@cloudflare/workerd-darwin-arm64@1.20261023.1':
     optional: true
 
-  '@cloudflare/workerd-linux-64@1.20261014.1':
-    optional: true
-
   '@cloudflare/workerd-linux-64@1.20261023.1':
     optional: true
 
-  '@cloudflare/workerd-linux-arm64@1.20261014.1':
-    optional: true
-
   '@cloudflare/workerd-linux-arm64@1.20261023.1':
-    optional: true
-
-  '@cloudflare/workerd-windows-64@1.20261014.1':
     optional: true
 
   '@cloudflare/workerd-windows-64@1.20261023.1':
@@ -4255,14 +4205,6 @@ snapshots:
   which@2.0.2:
     dependencies:
       isexe: 2.0.0
-
-  workerd@1.20261014.1:
-    optionalDependencies:
-      '@cloudflare/workerd-darwin-64': 1.20261014.1
-      '@cloudflare/workerd-darwin-arm64': 1.20261014.1
-      '@cloudflare/workerd-linux-64': 1.20261014.1
-      '@cloudflare/workerd-linux-arm64': 1.20261014.1
-      '@cloudflare/workerd-windows-64': 1.20261014.1
 
   workerd@1.20261023.1:
     optionalDependencies:
