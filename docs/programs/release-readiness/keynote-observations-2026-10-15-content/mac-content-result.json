@@ -1,0 +1,200 @@
+{
+  "route": "content-edits",
+  "application": {
+    "name": "Keynote",
+    "version": "15.1.1 (7044.0.273)",
+    "os": "26.6.2"
+  },
+  "directions": {
+    "opf-to-pptx-to-keynote": {
+      "status": "failed",
+      "observations": [
+        {
+          "text": "Root CUA edited a fresh 17-slide normally packed9f native-body derivative. Body paragraphs, rich text, flat-list bullets, chart data/color, table cells, image replacement and presenter notes were exercised. K04 unsupported nested measured fallback visibly overlapped after Return/indent; batch stopped. K06 not run; two K09 mask drags had no effect. No full route pass."
+        }
+      ]
+    },
+    "keynote-save-and-reopen": {
+      "status": "observed-only",
+      "observations": [
+        {
+          "text": "Actual working.key reopened17 rows. Only K04/K17 visually rereviewed: K04 overlap persisted; K17 four bullets and bold visible. No resave."
+        }
+      ]
+    },
+    "keynote-to-pptx": {
+      "status": "observed-only",
+      "observations": [
+        {
+          "text": "Actual native-export.pptx exported and reopened17 rows, no observed font/repair warning. Only K04/K17 rereviewed. K17 capture had intermittent missing glyph regions at90%;75% zoom redraw showed all4items/title/footer. Cause unresolved. K04 overlap persisted at75%. No resave."
+        }
+      ]
+    },
+    "keynote-pptx-to-opf": {
+      "status": "failed",
+      "observations": [
+        {
+          "text": "Original maintained62a inspection retained4findings:2K06 NOTRUN and2false table-cell.value traversal findings. Separately reviewed table-harness successor removes only the2false table findings, retaining2K06 failures; original report unchanged. Current native chart series paint accent1\u2192accent4 is retained in PPTX but silently absent from OPF; tracked follow-up underway. Source-only66a comparison recovers inherited Body Arial18/white and semantic4-item K17 list; new candidate native qualification not performed."
+        }
+      ]
+    }
+  },
+  "actions": [
+    {
+      "id": "paragraph",
+      "status": "observed-only",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "KN_EDIT_PARAGRAPH and Return third paragraph KN_NEW_PARAGRAPH; second sentence/paragraph retained in current native/imported payloads."
+      ]
+    },
+    {
+      "id": "rich-text",
+      "status": "observed-only",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "Bold words changed to Bold edited; italic and bold italic retained. Packed9f import drops inherited Body font/color; source-only66a correction separately reviewed."
+      ]
+    },
+    {
+      "id": "list",
+      "status": "failed",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "K04 marker replaced, Return inserted KN_NEW_NESTED_ITEM and native Increase Indent applied. First measured text box grows into Parent item visibly; same overlap on both reopens. Unsupported nested/description measured fallback Body0; stopped batch."
+      ]
+    },
+    {
+      "id": "long-text",
+      "status": "observed-only",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "KN_EDIT_LONG appended with Return. Eleven visible lines within native Body frame at90%; current words retained."
+      ]
+    },
+    {
+      "id": "long-list",
+      "status": "not-run",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "K06 append not run after confirmed K04 layout failure."
+      ]
+    },
+    {
+      "id": "replace-image",
+      "status": "observed-only",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "K08 native Replace used sealed replacement.png; current image SHA6ac383a69a05cf8edf786f2b555784bb2454d89d617ebcea4384588c8140fe1f matches; AX frame858.3x429.1points unchanged."
+      ]
+    },
+    {
+      "id": "crop-image",
+      "status": "automation-limited",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "K09 native Edit Mask opened; two drag attempts did not change underlying crop. Caption/frame unchanged; no crop-edit pass."
+      ]
+    },
+    {
+      "id": "chart-data",
+      "status": "observed-only",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "K10 Edit Chart Data changed Revenue Q2 24\u2192900; native chart visibly updated and current native/import data12,900,18 retained."
+      ]
+    },
+    {
+      "id": "chart-style",
+      "status": "failed",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "K11 native series Style preset changed blue41\u2192blue-green77; actual line paint accent1\u2192accent4 resolves #2874A6\u2192#7BDBB2, marker remains accent1, data10,20,15 unchanged. Import silently loses local series paint; no preservation/parity claim."
+      ]
+    },
+    {
+      "id": "table-cell",
+      "status": "observed-only",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "K12 exact first body row/first column KN_EDIT_CELL newline present in native and current import. Initial appended edit repaired through verified cell editing focus; original comparator false finding retained separately."
+      ]
+    },
+    {
+      "id": "table-style",
+      "status": "observed-only",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "K13 exact first body row/second column Bold edited cell remains bold and following plain run retained. Original cell.value comparator false finding retained separately."
+      ]
+    },
+    {
+      "id": "notes",
+      "status": "observed-only",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "K16 presenter notes KN_EDIT_NOTES appended through verified notes focus; slide body unchanged. Initial unintended18th slide/title edit fully undone; final17rows verified."
+      ]
+    },
+    {
+      "id": "flat-list",
+      "status": "observed-only",
+      "evidence": [
+        "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json"
+      ],
+      "observations": [
+        "K17 KN_EDIT_FLAT_LIST+Return KN_NEW_FLAT_ITEM gives4native bullets/bold preserved on .key reopen. Packed9f import flattens to text; source-only66a recovers4semantic items/Arial24/white. PPTX redraw limitation recorded above."
+      ]
+    }
+  ],
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "outputs": [
+    {
+      "file": "/private/tmp/opf-keynote-body-native-content-edits-61-01/editable.pptx",
+      "bytes": 179242,
+      "sha256": "12b93850c8703ab4e1a4ef5fd45a73ba56dc94b3c151c7ceed1743ba1793b017"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-body-native-content-edits-61-01/working.key",
+      "bytes": 1342065,
+      "sha256": "dc3e23981c054878bf71227196b900e698618e9cb6a603d50298dcf14f4be1b1"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-body-native-content-edits-61-01/native-export.pptx",
+      "bytes": 120110,
+      "sha256": "e8c4c69a622510187eabbba5afb32e683b631d49a12a1959bf08e70b566ff0a9"
+    }
+  ],
+  "limitations": [
+    "K04 visual overlap is a failure; K06 not run; K09 crop automation limited.",
+    "Only K04/K17 visually reviewed on reopens; no full visual/font/pixel acceptance.",
+    "Packed9f native evidence and source-only66a import evidence are distinct.",
+    "Windows remainder explicitly deferred by human."
+  ],
+  "updatedAt": "2026-10-15T22:11:53.358264+00:00"
+}

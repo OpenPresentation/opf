@@ -1,0 +1,99 @@
+{
+  "scope": "Frozen supervisor-attributed partial Mac results and offline source comparison; this copy performs no native action, source integration, registry/deployment qualification or acceptance upgrade.",
+  "capturedAt": "2026-10-15T22:17:08.859Z",
+  "copied": [
+    {
+      "file": "mac-content-result.json",
+      "source": "/private/tmp/opf-keynote-body-native-content-edits-61-01/result.json",
+      "bytes": 8216,
+      "sha256": "cd5873c3d98a2615737f558ff1c12c91b726b9652d37b1248ef2d2ff587b9d9c",
+      "observedUpdatedAt": "2026-10-15T22:11:53.358264+00:00"
+    },
+    {
+      "file": "source-comparison.json",
+      "source": "/private/tmp/opf-keynote-mac-content-source-comparison-61-01/report.json",
+      "bytes": 23197,
+      "sha256": "81431aeeca16540cdec07ada9f18a53abbb36b1633dde81e3af6c48421dee4f5",
+      "observedUpdatedAt": "2026-10-15T22:01:24.714Z"
+    },
+    {
+      "file": "mac-layout-partial-result.json",
+      "source": "/private/tmp/opf-keynote-body-native-layout-structure-61-01/result.json",
+      "bytes": 2968,
+      "sha256": "7a9d0577aa83fbd3c7907943216b490e5d6c7cdd8a3058af9b48ed520d941160",
+      "observedUpdatedAt": "2026-10-15T22:14:46.608740+00:00"
+    },
+    {
+      "file": "table-inspector-receipt.json",
+      "source": "/private/tmp/opf-keynote-table-inspector-review-61-01/receipt.json",
+      "bytes": 3431,
+      "sha256": "7bf453b1165e1967f17b72eefb3d977acf94664632734367782226d484a5c42d",
+      "observedUpdatedAt": null
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "/private/tmp/opf-keynote-body-native-content-edits-61-01/editable.pptx",
+      "bytes": 179242,
+      "sha256": "12b93850c8703ab4e1a4ef5fd45a73ba56dc94b3c151c7ceed1743ba1793b017",
+      "verified": true
+    },
+    {
+      "file": "/private/tmp/opf-keynote-body-native-content-edits-61-01/working.key",
+      "bytes": 1342065,
+      "sha256": "dc3e23981c054878bf71227196b900e698618e9cb6a603d50298dcf14f4be1b1",
+      "verified": true
+    },
+    {
+      "file": "/private/tmp/opf-keynote-body-native-content-edits-61-01/native-export.pptx",
+      "bytes": 120110,
+      "sha256": "e8c4c69a622510187eabbba5afb32e683b631d49a12a1959bf08e70b566ff0a9",
+      "verified": true
+    },
+    {
+      "file": "/private/tmp/opf-keynote-body-native-layout-structure-61-01/editable.pptx",
+      "bytes": 179242,
+      "sha256": "12b93850c8703ab4e1a4ef5fd45a73ba56dc94b3c151c7ceed1743ba1793b017",
+      "verified": true
+    }
+  ],
+  "layoutOutputsVerified": [],
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "historicalEvidence": "The separate keynote-observations-2026-10-15 checkpoint files remain byte-identical to 0d8082d7.",
+  "sourceQualification": {
+    "pack": {
+      "pr": 268,
+      "revision": "e470c0ab2234690ee73c67496d9d3d0fa94ea939",
+      "draft": true,
+      "packageTests": 147
+    },
+    "body": {
+      "pr": 269,
+      "revision": "66a81452c30e79161f7640e6087f4780d279c4d9",
+      "draft": true,
+      "packageTests": 145
+    },
+    "image": {
+      "pr": 270,
+      "revision": "a920619",
+      "draft": true,
+      "packageTests": 143
+    },
+    "footerOption": {
+      "pr": 271,
+      "revision": "389a5f9546aa52b277bd54f453c0124ec1f53c75",
+      "draft": true,
+      "packageTests": 143
+    },
+    "attribution": "Root-reported accepted source heads and full-suite outcomes; not new native qualification. The source-only comparison uses66a while actual Mac files were created with normally packed9f."
+  },
+  "rootReportedCoordination": {
+    "core683": "95be60f0245085015860c1755c092d5b5ccb91d6",
+    "renderer248": "3fa6943a8ad6e48f83324728fd814cc1c64bf1ec",
+    "officialRoll": 38812616227,
+    "result": "failed solely on stale generated tracker count84→85; official bot PR684 normal gate pending",
+    "windows": "Explicit human deferral/HOLD",
+    "footerClassifier": "independent source review accepted; ONE full suite in progress at this checkpoint; native qualification pending"
+  }
+}

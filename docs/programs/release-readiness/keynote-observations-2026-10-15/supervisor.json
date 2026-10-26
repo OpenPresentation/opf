@@ -1,0 +1,102 @@
+{
+  "item": "RR-85",
+  "state": "Renderer248 source official template baseline accepted; sole normal gate pendingpackage. Core683 refreshed with Depends-On248; awaitrenderermerge before coreenqueue. NoRR85release/deployyet.",
+  "source": {
+    "branch": "codex/rr-85-metric-centering",
+    "commit": "5b9118cc60f6352e2cdb675fe14a041635bc16ca",
+    "worktree": "/private/tmp/opf-metric-center-61",
+    "checkChanged": "11/11 pass",
+    "fullTest": "pass: 122 core files+6 scripts, CLI22 files/199 tests+2 scripts,47rootchecks",
+    "trackerPolicy": "documented PR warning; no tracker regeneration",
+    "pr": "https://github.com/OpenPresentation/opf/pull/683",
+    "observerSession": null,
+    "observerLog": "/private/tmp/opf-rr85-source-gate.log",
+    "finalChanged": "11/11 pass at official bot head",
+    "gate": "terminalREDexit1; onlyrenderer failure; allothercomponents successful peraggregator",
+    "currentState": "PR683 closed/reopened to refresh maintained Depends-On248; same5b head. Noactivecoreobserver; startafterrender248merge."
+  },
+  "site": {
+    "branch": "codex/rr-85-homepage-builtin",
+    "commit": "926438ace18fb4bd2c02b0c33a2159051f23eec1",
+    "worktree": "/private/tmp/opf-homepage-builtin-61",
+    "checks": "production675pagebuild,typecheck,20lessonhashes,packagechecks,10browsertests pass against current published graph; adoption/final rebuild pending",
+    "adoptionWorktree": "/private/tmp/opf-rr85-site-adoption-61",
+    "adoptionFeatureCommit": "65ccac7",
+    "status": "samecurrentmain09b6f94; reviewedfeaturecherrypick exacttree; narrowlyreviewed reusabletutorialhookawaitscommit; finalrealregistryadoptionpending"
+  },
+  "golden": {
+    "run": 38799406038,
+    "url": "https://github.com/OpenPresentation/opf/actions/runs/38799406038",
+    "attempt1": "failed branch checkout before push completed; keychain helper stalled; no rendering",
+    "attempt2": "PASS; full main reproducibility guard; four of807slides changed;803unchanged",
+    "watchSession": null,
+    "watchLog": "/private/tmp/opf-rr85-golden-gate.log",
+    "dispatchCI": false,
+    "review": "root and independent Sol reviewer accepted all four candidate PNGs; no before-PNG claim"
+  },
+  "releaseCandidates": {
+    "core": "0.20.2",
+    "render": "0.20.1",
+    "pptx": "0.20.3",
+    "editor": "0.20.3",
+    "cli": "unchanged0.20.0",
+    "gallery": "unchanged3.0.0"
+  },
+  "keynote": {
+    "approved": true,
+    "scope": "maintained tests/fixes/opt-in native body mode; default unchanged; no direct.key or advanced effects",
+    "packWorktree": "/private/tmp/opf-keynote-qualification-61",
+    "prototypeWorktree": "/private/tmp/opf-keynote-body-61",
+    "Windows": "baseline16nativePowerPointno-op/lifecycle accepted bounded,0staticfindings/42unchangedsourceimportdiagnostics;paired17prototypecontenteditsactiveatlastsnapshot;latesthostsnapshotconnectionunavailable,noadditionalactionknown",
+    "MacKeynote": "15.1.1(7044.0.273)",
+    "newNativeFeatureTests": "native17 imported inKeynote;5requiredBodycontrolsrecognized,K05wrapfits,K06measuredfallbackfits,K17bulletsfit;fresh.key/PPTXexportcomplete,reopenblockednewMaclock",
+    "packCommit": "4a3d32ea5fb870bbae574974f4e1c19dda00549b",
+    "suite": "/private/tmp/opf-keynote-arial-baseline-61-01",
+    "suiteSha256": "bf1da823e5ba3983d36ea21a7649189bf26c41bd17252b9a1e58cf40d07a2dfe",
+    "nativeProgress": "baseline16fresh.key+PPTXsave/reopendone bounded;words/notes preserved,16notesfield+16footerimport findings;imagefooteroccluded. Native17newactualPPTX362b8e...5c11,119365bytes,35semanticfindings(17notesfields+17footercontent+K17listflattening);nosilentwaivers",
+    "prototype": "draft269at9fsource/model/fulltests accepted;currentmasterbulletlookupfixsource independentlyaccepted,onefullrunbeforecommit/push;keepoutRR85",
+    "packPR": "https://github.com/OpenPresentation/opf-pptx/pull/268",
+    "packChecks": "143 package files/typecheck289/packagevalidation allpass; exacthead4a3d32e; full-ci requested; held fromRR85release",
+    "prototypeCommit": "9f159655df6aa5972a8663b94f5d73142a2c07b8",
+    "prototypeChecks": "143 package files/typecheck287/validation/focused allpass; default8/8bytecontrols identical; source/model independentlyaccepted",
+    "WindowsConsumer": "C:/opf-work/rr86/consumer-01; genuinecore0.20.1/render0.20.0/PPTX0.20.2/Gallery3.0.0; realURL/SRI/onesharedcore verified",
+    "WindowsAssignment": "paired17normallypacked9f+tracked8eeGittooling;native-body no-op thencontentedits thenlayoutstructureonlyaftereachbatchsuccess;unrelatedPowerPointwindowpreserved",
+    "prototypePR": "https://github.com/OpenPresentation/opf-pptx/pull/269",
+    "prototypeState": "draft pushed at9f159655; nativepending; packextension innewworktree",
+    "MacNativeResults": [
+      "/private/tmp/opf-keynote-arial-noop-61-01/result.json",
+      "/private/tmp/opf-keynote-body-native-no-op-61-01/result.json"
+    ],
+    "packExtension": "8ee\u2192503semanticcomparator\u219242ddfootercontrols\u219262aK17assertion;reviewed;integratingexistingdraft268heldoutofRR85",
+    "footerControl": "Aexactc51;B810be51e16ftrtokensonly;rootindependent260partproof;causalMacUIpendingunlock",
+    "imageFitPR": "https://github.com/OpenPresentation/opf-pptx/pull/270",
+    "imageFitState": "drafta920619;143files/fulltests/source reviewaccepted;K08preOfficefalsefitdiag42\u219241;nativeacceptancepending",
+    "lockState": "Mac lockedagain afterNative17save/export;asyncunlockrequestpending"
+  },
+  "ciBlocker": {
+    "job": "ecosystem-render",
+    "error": "gallery-layout-alignment.mjs number-1x assumes former left default",
+    "log": "/private/tmp/opf-rr85-ecosystem-render-failure.log",
+    "owner": "metric_default_impl_61",
+    "plan": "renderer regression fix; maintained Depends-On; official roller after source merge",
+    "templates": "23/495expectedtemplatehashchanges; separatebaseline required; oldbaseline immutable",
+    "officialPlan": "maintainedcandidateworkflow newnamedtemplate target; source5b9118cc and gallery146e477catalogtree0341937d matchesrelease940633a",
+    "rendererAgent": "metric_default_impl_61",
+    "independentReview": "review_release_61"
+  },
+  "updatedAt": "2026-10-15T21:14:48.747399+00:00",
+  "renderer": {
+    "pr": "https://github.com/OpenPresentation/opf-render/pull/248",
+    "head": "3da07146546a547b0ad9557411b0ec170983d55d",
+    "officialDryRun": 38803863717,
+    "officialWriteRun": 38804809429,
+    "changedTemplates": 23,
+    "unchangedTemplates": 472,
+    "oldBaselineSha256": "a0c1c0aeba728963c8636b3974c57f9ba816167e9d369c7320b8ef9be831a20c",
+    "observerSession": 51712,
+    "observerLog": "/private/tmp/opf-rr85-renderer-source-gate.log",
+    "lastLocalLog": "21:13:26 heartbeat;5/6checks,packagepending"
+  },
+  "releasePlanCurrent": "/private/tmp/opf-rr85-release-plan-current.json",
+  "releasePlanState": "all4versions unpublished,notag/noopenprep; realfloorchangesasintended;sourcegatesandrollfirst"
+}

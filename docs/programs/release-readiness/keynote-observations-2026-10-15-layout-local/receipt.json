@@ -1,0 +1,247 @@
+{
+  "schemaVersion": 1,
+  "capturedAt": "2026-10-15T23:31:00Z",
+  "scope": "Exact copied Root-attributed partial Mac layout observations plus one prior maintained offline inspection. No new UI/native run, current integrated-candidate, registry or deployment acceptance.",
+  "docsBase": "0f16ba7cd1f3c7f48b3de6d11cef0b80ba7cb51a",
+  "copiedJson": [
+    {
+      "source": "/private/tmp/opf-keynote-layout-local-61-02/result.json",
+      "copy": "mac-layout-local-result.json",
+      "bytes": 8023,
+      "sha256": "0adfd8ba7d0498b2f0e8fdc0a8d54994948f87bb7d44aab29ca2416ed679d616"
+    },
+    {
+      "source": "/private/tmp/opf-keynote-layout-local-inspection-61-02/inspection.json",
+      "copy": "layout-static-inspection.json",
+      "bytes": 187429,
+      "sha256": "5e6decb54e769b3f237d8b19b35d5639b8033b5a39c2de96f970a9f989e23d2d"
+    },
+    {
+      "source": "/private/tmp/opf-keynote-layout-local-inspection-61-02/import-diagnostics.json",
+      "copy": "layout-import-diagnostics.json",
+      "bytes": 6525,
+      "sha256": "98318f64aa42ff946bb705bbc10f0c11397fe4785f5592b1d02d4d75680b586b"
+    }
+  ],
+  "actualInputsAndOutputsVerified": [
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/editable.pptx",
+      "bytes": 179242,
+      "sha256": "12b93850c8703ab4e1a4ef5fd45a73ba56dc94b3c151c7ceed1743ba1793b017"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/working.key",
+      "bytes": 1343584,
+      "sha256": "8b1016a9ea9e89761aecc156ff09718947a9b95ddde7171fcc441cfb6ff22729"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/native-export.pptx",
+      "bytes": 120583,
+      "sha256": "6dc32958ae2a5597b4500b6e150f17eb8e230a0a0cbd9d00226fb9c97b0ee062"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/new-native-body.png",
+      "bytes": 209637,
+      "sha256": "f404382a035a3a8bff922efc1e6373281c54cc8b32bdb37f1633492f3cc61e4a"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/key-reopen-new.png",
+      "bytes": 211920,
+      "sha256": "d1624120f45f9186168ae89267e02ae147243016ec72214bd877e49e6fb94e7c"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/reorder-k14.png",
+      "bytes": 230174,
+      "sha256": "23160e0f9fa44a2bc64bd12aaef4860dc92432d73c845fd6ef5feb66ba125002"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/reorder-k15.png",
+      "bytes": 231505,
+      "sha256": "2e1a28973ea950959c078e52564d703dc6fe5195264506734e59853b2a6b2bdb"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-new.png",
+      "bytes": 211993,
+      "sha256": "6484eebcceddfd84139c65c18fa4f5798710f10c8831164e87ad719f00f0db4c"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-k14.png",
+      "bytes": 229723,
+      "sha256": "3dd0f398844285948c0196df3478f8c3d1c1bc0a5f5b92b4169adaad1da1f9b0"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-k15.png",
+      "bytes": 230548,
+      "sha256": "7d660ed408210d9abd64d7106f0763709e54ac0734bf6d340b1df004679a3be0"
+    }
+  ],
+  "boundedOriginalEvidenceReferences": [
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/key-reopen-k14.ax.txt",
+      "bytes": 9231,
+      "sha256": "f08ed412008e2e32f2aa41e10cf8d383eaa81a66bd2bfe040385342a3f414284",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/key-reopen-new.ax.txt",
+      "bytes": 8777,
+      "sha256": "798a8ce087ca6e46793297e2ca4a092be9d4a21f2c2cac45c9d7f5df58b6cc96",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/key-reopen-new.png",
+      "bytes": 211920,
+      "sha256": "d1624120f45f9186168ae89267e02ae147243016ec72214bd877e49e6fb94e7c",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/new-native-body.png",
+      "bytes": 209637,
+      "sha256": "f404382a035a3a8bff922efc1e6373281c54cc8b32bdb37f1633492f3cc61e4a",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-k14.ax.txt",
+      "bytes": 9168,
+      "sha256": "202a262e8e1059f7fba1c15014c09d01b156a71d1b84f7c959046475f079e928",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-k14.png",
+      "bytes": 229723,
+      "sha256": "3dd0f398844285948c0196df3478f8c3d1c1bc0a5f5b92b4169adaad1da1f9b0",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-k15.ax.txt",
+      "bytes": 9172,
+      "sha256": "7e956cd490c7e57c360f1a5ece58984b033ed988a64b03194a9316fa0cbfa938",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-k15.png",
+      "bytes": 230548,
+      "sha256": "7d660ed408210d9abd64d7106f0763709e54ac0734bf6d340b1df004679a3be0",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-new.ax.txt",
+      "bytes": 8714,
+      "sha256": "866b58d30c288ca9c0eb15f604be808738c8c070ad9972332d9a0ac5f229a44e",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-new.png",
+      "bytes": 211993,
+      "sha256": "6484eebcceddfd84139c65c18fa4f5798710f10c8831164e87ad719f00f0db4c",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/reorder-k14.ax.txt",
+      "bytes": 9265,
+      "sha256": "a382450432c5b4fa07ab1e9e1f156a921242268a52d99e23564acaf6c9e871bf",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/reorder-k14.png",
+      "bytes": 230174,
+      "sha256": "23160e0f9fa44a2bc64bd12aaef4860dc92432d73c845fd6ef5feb66ba125002",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/reorder-k15.ax.txt",
+      "bytes": 9269,
+      "sha256": "dd4dcfdb4c0f39fc652841a0e1f52db0ae2712b4a0881a5f74085bda59eb0c9b",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/reorder-k15.png",
+      "bytes": 231505,
+      "sha256": "2e1a28973ea950959c078e52564d703dc6fe5195264506734e59853b2a6b2bdb",
+      "copiedIntoRepository": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-inspection-61-02/imported.opf.json",
+      "bytes": 36615,
+      "sha256": "463d6ae29538c9a1ec9a06c9d6992a5e56570dcb5c572547abe02284203be62a",
+      "copiedIntoRepository": false
+    }
+  ],
+  "staticInspection": {
+    "tooling": "e470c0ab2234690ee73c67496d9d3d0fa94ea939",
+    "consumer": "/private/tmp/opf-keynote-candidate-61/consumer",
+    "candidateRevision": "9f159655df6aa5972a8663b94f5d73142a2c07b8",
+    "nativeSlides": 18,
+    "importedSlides": 18,
+    "findings": 0,
+    "importDiagnostics": 21,
+    "limit": "K07 reapply unrun; number field caches empty; no overall route or3b candidate native acceptance."
+  },
+  "k04Diagnosis": {
+    "source": "Existing K04 Root result + actual edited native-export XML; no new native run",
+    "inputSha256": "12b93850c8703ab4e1a4ef5fd45a73ba56dc94b3c151c7ceed1743ba1793b017",
+    "editedExportSha256": "e8c4c69a622510187eabbba5afb32e683b631d49a12a1959bf08e70b566ff0a9",
+    "firstEditedShape": {
+      "yEmu": 1410112,
+      "heightEmu": 701230,
+      "paragraphs": 2
+    },
+    "parentShapeYEmu": 1867312,
+    "frameOverlapEmu": 244030,
+    "measuredListFunctionSha256Unchanged9f66a3b": "e3e875a6ca49c71ce9178090135e8c361c1b3cc48e646b9abfb3c4a7d2a4e36a",
+    "nativeBodySourceSha256Same66a3b": "c580a0e984c9b12f1db6a15befd12b124a13d426ce9ae831a44ddc154c2ce7b1",
+    "status": "Structural diagnosis and planned issue payload only; no issue created, source fix or native PowerPoint claim."
+  },
+  "rootReportedRR85": {
+    "core683": "95be60f0245085015860c1755c092d5b5ccb91d6",
+    "renderer248": "3fa6943a8ad6e48f83324728fd814cc1c64bf1ec",
+    "tracker684": "6b2b188cad5ca9875d9536ef894a8d22f3595cd9",
+    "trackerTree": "9b0d892d62e0f1f5320fec9364654d00df157e23",
+    "trackerReviewedTreeEqual": true,
+    "sourceRollRetry": 38822712607,
+    "sourceRollStatus": "running; Root sole gate24633",
+    "releasePrep685": "MERGE HOLD until official lock actual merge",
+    "registryTargets": {
+      "core": "0.20.2",
+      "renderer": "0.20.1",
+      "pptx": "0.20.3",
+      "editor": "0.20.3"
+    },
+    "publicationAndSiteAdoption": "targets not published; new site adoptions not deployed at this checkpoint",
+    "windows": "Human deferred/HOLD"
+  },
+  "preservedHistoricalFiles": {
+    "docs/programs/release-readiness/keynote-source-update-2026-10-15-2221.json": "ca0c83cb4793dfa52e1d8948314fcf19e7835c4621304dc62965c6f0d5b89b2b",
+    "docs/programs/release-readiness/keynote-observations-2026-10-15/mac-baseline-result.json": "c3eec491278e06c905dc31433e42db73044bbacacca109394ece2ebfcd6650c3",
+    "docs/programs/release-readiness/keynote-observations-2026-10-15/supervisor.json": "4694ae7ca597b6aa11284d2382d3108ddd522477c7157172e2a5a782ff07f4b4",
+    "docs/programs/release-readiness/keynote-observations-2026-10-15/mac-native-body-result.json": "f4a0f09087a0200c1296940cff0826df75160551d0994a307a62b7583c8705c0",
+    "docs/programs/release-readiness/keynote-observations-2026-10-15/receipt.json": "34d08eaf031a3956760ea3226083af260b95c2461be98773c532858bdf47d111",
+    "docs/programs/release-readiness/keynote-observations-2026-10-15-content/table-inspector-receipt.json": "7bf453b1165e1967f17b72eefb3d977acf94664632734367782226d484a5c42d",
+    "docs/programs/release-readiness/keynote-observations-2026-10-15-content/mac-layout-partial-result.json": "7a9d0577aa83fbd3c7907943216b490e5d6c7cdd8a3058af9b48ed520d941160",
+    "docs/programs/release-readiness/keynote-observations-2026-10-15-content/mac-content-result.json": "cd5873c3d98a2615737f558ff1c12c91b726b9652d37b1248ef2d2ff587b9d9c",
+    "docs/programs/release-readiness/keynote-observations-2026-10-15-content/source-comparison.json": "81431aeeca16540cdec07ada9f18a53abbb36b1633dde81e3af6c48421dee4f5",
+    "docs/programs/release-readiness/keynote-observations-2026-10-15-content/receipt.json": "58e345830ed82a20f39997a83ca9c48d632631970c64886b8e3c94db972d5766",
+    "docs/programs/release-readiness/HANDOFF.md": "d68bba61bc0de285a25d76d925eb0f1bdf884787bf6b7ef7ff439cc99f18fb4f"
+  },
+  "preservedDocsBeforeAppend": {
+    "README.md": {
+      "bytes": 79082,
+      "sha256": "a3d12577c29c2cefdf62502717710552e3c128cd6a0ae10c514ca08c416b1054"
+    },
+    "burndown.md": {
+      "bytes": 323283,
+      "sha256": "8afbf27d6259f60e3ae93ba0148f39b3d7539f69c2b8d1c33e2439208a2dffcc"
+    },
+    "keynote-integration-plan.md": {
+      "bytes": 26803,
+      "sha256": "b00801b49da5018de9a2a0112ee8fd60f4507dfcb2aaffaee5621975c35c0e6f"
+    }
+  },
+  "subsequentOfflineCaptureReview": {
+    "status": "unresolved; not a screenshot-based full-word or fit acceptance",
+    "attribution": "Independent read-only reviewers of identical hashed PNGs disagree about which native-export-reopen glyph regions look incomplete: reviewer reports new3/K15, documenter sees K14. Root23:29 copied result is preserved verbatim, including its broader screenshot wording.",
+    "independentCurrentWordEvidence": "Paired AX and actual native XML retain current title/body words; live3/15/16 are legible and agree with AX.",
+    "limits": "No content-loss diagnosis, native redraw cause, new UI run or overall/native3b acceptance inferred.",
+    "rootResponse": "Root separately re-viewed the exact same-hash three PNGs and reports complete words in all three. Model image-view interpretations disagree; separately dated offline Swift Vision OCR clarification is pending. No OCR or UI ran for this documentation change."
+  }
+}

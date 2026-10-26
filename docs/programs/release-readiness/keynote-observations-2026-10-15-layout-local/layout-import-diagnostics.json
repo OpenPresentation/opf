@@ -1,0 +1,107 @@
+[
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.0.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.1.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.2.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.3.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.4.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.5.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.6.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.7.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.8.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.9.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.10.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.11.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.12.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.13.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.14.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.15.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.16.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "furniture-import-reflow",
+    "path": "slides.17.design",
+    "message": "Complete furniture roles retain current text, source line boundaries, image content and unambiguous metadata. Native formatting, positioning, crop and other presentation metadata are not reconstructed; review the reflowed furniture."
+  },
+  {
+    "code": "unsupported-image-crop",
+    "message": "Native picture crop is not represented by the imported OPF asset; the full image was retained.",
+    "path": "slides.9.pictures.0"
+  },
+  {
+    "code": "unsupported-table-cell-style",
+    "message": "The native table style background is not represented; supported character styles are retained.",
+    "path": "slides.12.tables.0"
+  },
+  {
+    "code": "unsupported-table-cell-style",
+    "message": "The native table style background is not represented; supported character styles are retained.",
+    "path": "slides.13.tables.0"
+  }
+]

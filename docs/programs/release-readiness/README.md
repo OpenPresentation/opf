@@ -14,6 +14,8 @@ The final selected artifacts are genuinely verified: **Core 0.20.3 / renderer 0.
 
 RR-86 is **in progress** under the approved maintained Keynote tests/compatibility fixes and opt-in Body/footer scope. Draft [PPTX #277](https://github.com/OpenPresentation/opf-pptx/pull/277) source 1a84 has accepted source/package/default/preview evidence, nine actual Body shapes/five capability witnesses, and retained false round-trip equality with 44 measured / 37 native findings. Fresh Mac qualification remains pending while locked; physical Windows remains on human HOLD. The separately reviewed local registry-sealer tooling is unexecuted against real artifacts; current published P3 still lacks native Body. No native prototype is shipped or accepted.
 
+The 2026-10-15 [RR-86 Keynote integration plan](keynote-integration-plan.md) and its native observation JSON are kept as historical evidence from before the monorepo; its repository and pull request references name the former separate repositories, and its status text is superseded by the paragraph above.
+
 Official final roll 38898626339 was dispatched once from 041 at 12:09:57Z; child refs/results and generated lock are unobserved here. The last complete census remains 11:33 (seven draft PRs/42 issues); Editor #176 creation and actual merge are later overlays, not a refreshed global count. [Compact current checkpoint](../../evidence/rr-85-final-published-set-2026-10-16/checkpoint.json). Earlier sections below retain their exact dates and bytes.
 
 ## Current scoped checkpoint — 2026-10-16 10:12 UTC (draft)

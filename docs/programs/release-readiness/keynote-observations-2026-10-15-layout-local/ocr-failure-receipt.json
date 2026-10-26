@@ -1,0 +1,35 @@
+{
+  "createdAt": "2026-10-15T23:35:59.582881+00:00",
+  "scope": "Attempted offline Apple Vision OCR of exactly three existing saved PNG artifacts, no native application interaction or source modification.",
+  "status": "unavailable-in-this-execution",
+  "exitCode": 133,
+  "error": "Swift/ErrorType.swift:254: Fatal error: Error raised at top level: Foundation._GenericObjCError.nilError",
+  "runtime": "Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)",
+  "recognitionRequested": {
+    "framework": "Apple Vision VNRecognizeTextRequest",
+    "recognitionLevel": "accurate",
+    "recognitionLanguages": [
+      "en-US"
+    ],
+    "usesLanguageCorrection": false
+  },
+  "filesVerifiedAfterAttempt": [
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-new.png",
+      "bytes": 211993,
+      "sha256": "6484eebcceddfd84139c65c18fa4f5798710f10c8831164e87ad719f00f0db4c"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-k14.png",
+      "bytes": 229723,
+      "sha256": "3dd0f398844285948c0196df3478f8c3d1c1bc0a5f5b92b4169adaad1da1f9b0"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-k15.png",
+      "bytes": 230548,
+      "sha256": "7d660ed408210d9abd64d7106f0763709e54ac0734bf6d340b1df004679a3be0"
+    }
+  ],
+  "recognizedResultsProduced": false,
+  "limits": "No OCR result or confidence/box evidence was produced. This failure is not evidence about image contents, Keynote correctness, missing glyphs, fonts, or visual/native acceptance. Cause of execution failure not established; no install/network/native app retry."
+}

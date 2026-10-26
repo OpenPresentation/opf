@@ -1,0 +1,69 @@
+{
+  "route": "no-op",
+  "application": {
+    "name": "Keynote",
+    "version": "15.1.1 (7044.0.273)",
+    "os": "26.6.2"
+  },
+  "directions": {
+    "opf-to-pptx-to-keynote": {
+      "status": "observed-only",
+      "observations": [
+        {
+          "case": "K01/K02/K03/K05/K06/K07/K17",
+          "text": "Root CUA import at90%:17slides, no observed font/repair warning. K02/K03/K05/K07/K17 recognized as one Body each, Body checked, native-body layout variants. K02 bothparas fit; K05tenwrappedlines fit; K06explicit measuredfallback Body0,14entries/twocolumns fit; K17oneBody3bullets fit. K03AX fullrichwords present; selectedbody showsfullsecondparagraph; unselectedscreenshots inconsistently omit portionsofglyphs. CurrentXML/import retainsfullsentence. Cause of visualcapture/redraw anomaly unresolved; no exactvisual/fontparity claim."
+        }
+      ]
+    },
+    "keynote-save-and-reopen": {
+      "status": "not-run",
+      "observations": [
+        {
+          "case": "save-only",
+          "text": "Saved new working.key in this attempt and verified actualfileURL. Reopen not executed: Mac locked again before close/open action. No claim that saved.key was reopened."
+        }
+      ]
+    },
+    "keynote-to-pptx": {
+      "status": "observed-only",
+      "observations": [
+        {
+          "case": "export",
+          "text": "File > ExportTo > PowerPoint exported fresh native-export.pptx and exportprogress sheet closed. PPTXreopen notyet executed because Maclocked."
+        }
+      ]
+    },
+    "keynote-pptx-to-opf": {
+      "status": "failed",
+      "observations": [
+        {
+          "case": "static-roundtrip",
+          "text": "Reviewedsemantic inspector50367d0 reports34findings:17notes-page generatedslidenumremovals+17literalfooter-as-content importgaps; authored body/noteswords intact. All5requiredBodies retained. K17actualmaster-inheritedbullets become one importednewline textblock: additionalreal semanticgap outside original34 assertions. Separatefix/inspector regression underway. No failure waived.",
+          "inspection": "/private/tmp/opf-keynote-body-native-noop-inspection-61-01/inspection.json"
+        }
+      ]
+    }
+  },
+  "actions": [],
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "interruption": "Mac locked again after successful save/export; human unlock requested. Edit/layout and reopen checks remain not-run.",
+  "outputs": [
+    {
+      "file": "/private/tmp/opf-keynote-body-native-no-op-61-01/editable.pptx",
+      "bytes": 179242,
+      "sha256": "12b93850c8703ab4e1a4ef5fd45a73ba56dc94b3c151c7ceed1743ba1793b017"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-body-native-no-op-61-01/working.key",
+      "bytes": 1336314,
+      "sha256": "8e7de9ad3a3496350ac0a24f4b63e5039cebdc5265f7036967e67599f2894975"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-body-native-no-op-61-01/native-export.pptx",
+      "bytes": 119365,
+      "sha256": "362b8e291b1355d9d9fe7d1723e931668eaeabea42a8f2c467bc5806193b5c11"
+    }
+  ],
+  "updatedAt": "2026-10-15T21:09:30.024307+00:00"
+}

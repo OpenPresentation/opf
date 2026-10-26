@@ -1,0 +1,38 @@
+{
+  "scope": "Separately dated Root-reported source qualification update; no new native, packed, registry, deployment or integrated-graph acceptance.",
+  "recordedAt": "2026-10-15T22:21:24Z",
+  "footerClassifier": {
+    "pullRequest": "https://github.com/OpenPresentation/opf-pptx/pull/273",
+    "revision": "304324e5a389562b7b4b091e7caab9fdd9ef7f38",
+    "sourceQualified": true,
+    "packageTestFilesPassed": 143,
+    "focusedControlsPassed": 84,
+    "defaultExportByteProof": {
+      "measured": { "equal": 8, "cases": 8 },
+      "estimated": { "equal": 8, "cases": 8 }
+    },
+    "nativeQualified": false
+  },
+  "localIntegration": {
+    "revision": "6914d47d622a19d11c9bceccf3c4533f79c9757e",
+    "state": "in preparation; semantic snapshot interactions under review",
+    "fullSuiteRun": false,
+    "candidatePacked": false,
+    "nativeQualified": false
+  },
+  "chartSeriesPaint": {
+    "issue": "https://github.com/OpenPresentation/opf-pptx/issues/272",
+    "preservationGapRemains": true,
+    "diagnosticOnlySourceReview": "accepted independently",
+    "fullSuite": "pending"
+  },
+  "earlierFrozenEvidence": {
+    "receipt": "keynote-observations-2026-10-15-content/receipt.json",
+    "sha256": "58e345830ed82a20f39997a83ca9c48d632631970c64886b8e3c94db972d5766",
+    "unchanged": true
+  },
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "windowsContinuation": "human-deferred / HOLD",
+  "trackingBranchRemoteHold": "Local commit only; no push, pull request or merge before the RR-85 release floor train is published."
+}
