@@ -46,7 +46,7 @@ try {
   await studio.getByRole("treeitem", { name: /^content/ }).locator("> .opf-lx-row").click();
   await studio.getByLabel("Size", { exact: true }).fill("2");
   await studio.getByRole("button", { name: "Save to deck" }).click();
-  await page.waitForFunction(() => /Saved review-grid/.test(document.querySelector("#layouts-status").textContent));
+  await page.waitForFunction(() => /Saved review-grid/.test(document.querySelector("[data-opf-layouts=status]").textContent));
   const readDoc = async () => JSON.parse(await page.locator("#json").inputValue());
   let document = await readDoc();
   assert.deepEqual(document.catalogs.custom.layouts["review-grid"], {
@@ -62,7 +62,7 @@ try {
   // Saving the same id again is refused for a new layout, and replaces it when the layout was opened from the deck.
   await studio.getByLabel("Layout to edit").selectOption("review-grid");
   await studio.getByRole("button", { name: "Save to deck" }).click();
-  assert.match(await page.locator("#layouts-status").textContent(), /Saved review-grid/);
+  assert.match(await page.locator("[data-opf-layouts=status]").textContent(), /Saved review-grid/);
   await page.locator("#view-slide").click();
   await page.locator("#preview svg").waitFor();
   await page.locator("#choose-layout").click();

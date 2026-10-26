@@ -514,13 +514,14 @@ export function installTransferControls({
           toSvg(result.presentation, result.slideIndex + 1, { catalogs: editor.catalogs, fonts, text: "system" });
           // A host font/resolver callback can edit the session during rendering.
           if (!current()) return;
-          setSlideIndex(result.slideIndex);
           // Opening a document ("replace") is not an edit of the catalog records it shares with the current one: no fork (RR-98).
           if (action === "replace") editor.replaceDocument(result.presentation, { source: "import", rejectInvalid: true });
           else editor.applyPatch([{ op: "replace", path: "", value: result.presentation }], {
             source: "import",
             rejectInvalid: true,
           });
+          // The slide the import is shown on, once the document that has it is in.
+          setSlideIndex(result.slideIndex);
           closeImport();
           status(`OPF imported${renameNote(result)} · Undo restores the previous document`);
         },
