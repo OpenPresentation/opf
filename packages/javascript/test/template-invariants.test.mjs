@@ -14,7 +14,7 @@ const meet = (a, b) => a.x < b.x + b.width - tolerance && a.x + a.width > b.x + 
 const HEADINGS = new Set(['title', 'subtitle', 'tag']);
 const cases = Object.entries(layouts).flatMap(([id, record]) => ['short', 'long'].flatMap((size) => [1, 2, 3, 4, 5, 6].map((count) => ({ key: `${id} ${count} ${size}`, id, record, slide: sampleSlide(record, count, size) }))));
 
-describe('geometry invariants over the 28 templates x 1 to 6 short and long blocks', () => {
+describe('geometry invariants over the 29 templates x 1 to 6 short and long blocks', () => {
   test('no item crosses a heading or another region, and every item lies inside its region', () => {
     const problems = [];
     for (const { key, record, slide } of cases) {

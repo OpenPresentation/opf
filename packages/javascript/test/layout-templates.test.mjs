@@ -205,7 +205,7 @@ describe('the template rules (opf/layout-template, opf/layout-region)', () => {
 });
 
 describe('no migration path from the 0.18 ids (owner decision, 2026-10-10)', () => {
-  // The 0.19 catalog: the 28 templates under the default catalog's source, so a removed 0.18 id resolves nowhere.
+  // The 0.19 catalog: the 29 templates under the default catalog's source, so a removed 0.18 id resolves nowhere.
   const gallery2 = { source: 'https://www.pptx.gallery', layouts };
 
   test('a former id such as list-2x is an unknown layout: opf/unresolved-reference, automatic composition', async () => {

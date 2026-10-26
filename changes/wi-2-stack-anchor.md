@@ -1,0 +1,5 @@
+---
+type: added
+packages: [opf, editor]
+---
+WI-2 (spec and composition; no existing record changes): a layout record that is a column whose `regions` entries are all sized `auto` (headings included) now places the whole stack, title and subtitle included, by the record's own `anchor`: `middle` centers it and `bottom` sits it at the foot in the content box's leftover height, `top` (the default) is today's result. Until now `anchor` only moved body content inside its region and never the title, and a record had no way to center a title with its supporting text. A record with any numeric entry, a row record and a split's `anchor` behave as before, and `LayoutTemplate.stack` reports the resolved anchor. The Layout Studio's layout Anchor field says so when the layout qualifies. Custom records that combine an all-`auto` column with a non-top record `anchor` (the anchor had no visible effect on the title before) now move as a stack; none of the 129 example decks and none of the gallery's records did before this change.

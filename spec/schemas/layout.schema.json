@@ -77,7 +77,7 @@
         "middle",
         "bottom"
       ],
-      "description": "Vertical position of the content of every body region when it is shorter than the region. A split's 'anchor' replaces it for the regions under that split, and a region's own 'anchor' replaces both. Only 'anchor' is inherited, and only by body regions: the heading regions 'title' and 'subtitle' never take it, and the other region rules stay per region. Default 'top'."
+      "description": "Vertical position of the content of every body region when it is shorter than the region. A split's 'anchor' replaces it for the regions under that split, and a region's own 'anchor' replaces both. Only 'anchor' is inherited, and only by body regions: the heading regions 'title' and 'subtitle' never take it, and the other region rules stay per region. One exception places the whole slide: when the record is a column and every entry of its 'regions' list is sized 'auto' (heading regions included), the record has no numeric row to hold the leftover height, so its 'anchor' places the whole stack, title and subtitle included, in the content box's leftover height: 'middle' centres it, 'bottom' sits it at the foot, 'top' (default) starts it at the top as before. A record with any numeric entry, a row record and an anchor on a split keep the rule above. Default 'top'."
     },
     "regions": {
       "type": "array",
@@ -220,7 +220,7 @@
           "const": "auto"
         }
       ],
-      "description": "The region's or split's share along its parent's direction: a number above 0 and up to 100 that siblings share in proportion (the gap is taken out first), default 1; or 'auto', the length the content needs at the starting text size (up to the space the heading rows and the content of the numeric rows leave; auto rows that do not all fit shrink together, each giving up the same fraction of what it can give up above its content's length at the minimum font size; a split sized auto is as tall as its tallest content, and every row of a column split sized auto is auto too; auto regions with no content take no space). 'auto' is allowed only on an entry of a column; in a row it is the validate finding opf/layout-template. The default for a heading region is 'auto' in a column and 1 in a row.",
+      "description": "The region's or split's share along its parent's direction: a number above 0 and up to 100 that siblings share in proportion (the gap is taken out first), default 1; or 'auto', the length the content needs at the starting text size (up to the space the heading rows and the content of the numeric rows leave; auto rows that do not all fit shrink together, each giving up the same fraction of what it can give up above its content's length at the minimum font size; a split sized auto is as tall as its tallest content, and every row of a column split sized auto is auto too; auto regions with no content take no space). 'auto' is allowed only on an entry of a column; in a row it is the validate finding opf/layout-template. When every entry of a column record is 'auto', the record's 'anchor' places the whole stack. The default for a heading region is 'auto' in a column and 1 in a row.",
       "examples": [
         1,
         2,

@@ -724,7 +724,7 @@ Default severity: **warning**. Cost: composition. The order content is read diff
 
 **Basis.** WCAG 2.2 SC 1.3.2 Meaningful Sequence, level A (PowerPoint: "Check reading order")
 
-**Approximations.** Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. Headings are expected first. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.
+**Approximations.** Compares the composed content order with a visual order recomputed from the composed boxes: items whose vertical centres fall in the same row are ordered along the reading direction (a right-to-left deck is checked by rows only), rows from top to bottom. Headings are expected first. Content drawn entirely above the title, over the columns of the title, is reported; content in a column beside the title is read after it. Free-form overlap is not analysed. On a slide with a template layout (OPF 0.19) the expected order is the binding order instead (the regions in reading order, then the blocks of each region), and items outside a region (placed images, the row below the grid) are not compared.
 
 ### `opf/link-text`
 

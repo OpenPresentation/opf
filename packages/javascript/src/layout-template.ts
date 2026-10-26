@@ -83,6 +83,12 @@ export interface LayoutTemplate {
   /** Whether the template has a `title` region and a `subtitle` region. */
   title: boolean;
   subtitle: boolean;
+  /**
+   * The record's `anchor` when it places the whole stack: the record is a column whose entries are all sized `auto` and its
+   * `anchor` is `middle` or `bottom`. The stack, headings included, then sits in the content box's leftover height. Absent
+   * otherwise (including `top`, where the stack starts at the top as it always did).
+   */
+  stack?: 'middle' | 'bottom';
 }
 
 /** A problem with a template: `layout-template` for the tree itself, `layout-region` for the regions. */
@@ -273,6 +279,9 @@ function parse(layout: unknown): Parsed {
     areas.push({ name: node.name, row: box.top, column: box.left, rowSpan: box.bottom - box.top + 1, columnSpan: box.right - box.left + 1, heading: headingNames.has(node.name) });
   } } };
   order(children);
+  // A column of nothing but auto entries has no numeric track to hold the leftover height: the record's anchor places the stack.
+  const stackAnchor = anchorOf(value.anchor);
+  const stack = direction === 'column' && children.length > 0 && children.every(node => node.size === 'auto') && stackAnchor !== undefined && stackAnchor !== 'top' ? stackAnchor : undefined;
   const overflowRegion = typeof value.overflowRegion === 'string' ? value.overflowRegion : regions.find(entry => entry.role === 'primary' && entry.flow !== 'none')?.name;
   return {
     issues,
@@ -285,6 +294,7 @@ function parse(layout: unknown): Parsed {
       ...(overflowRegion !== undefined ? { overflowRegion } : {}),
       title: names.has('title'),
       subtitle: names.has('subtitle'),
+      ...(stack ? { stack } : {}),
     },
   };
 }

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 
 export function verifyV2LayoutChoices({gallery,previews,validate,editor}) {
- const expected='cover section agenda statement closing text list quote two-column pillars comparison process timeline faq metrics scorecard image image-beside gallery chart chart-beside table table-beside code hero dashboard team logos'.split(' ');
- const ids=Object.keys(gallery.layouts);assert.deepEqual(ids,expected,'gallery2 canonical intent layout set and order');assert.equal(ids.length,28,'complete gallery2 layout set');
+ const expected='cover section agenda agenda-split statement closing text list quote two-column pillars comparison process timeline faq metrics scorecard image image-beside gallery chart chart-beside table table-beside code hero dashboard team logos'.split(' ');
+ const ids=Object.keys(gallery.layouts);assert.deepEqual(ids,expected,'gallery2 canonical intent layout set and order');assert.equal(ids.length,29,'complete gallery2 layout set');
  assert.deepEqual(Object.keys(previews.layoutPreviews).sort(),ids.toSorted(),'preview ownership/key set');
  assert.deepEqual(previews.layoutPreviewIndex.records.map(r=>r.id),ids,'preview/catalog order');
  const slide={layout:'text',title:'Keep title',subtitle:'Keep subtitle',notes:'Keep notes',blocks:[{text:'Keep supporting text'},{metric:{value:'42',label:'Keep metric'}},{quote:{text:'Keep quote',attribution:'Keep author'}}]};

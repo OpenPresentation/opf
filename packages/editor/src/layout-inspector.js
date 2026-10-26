@@ -145,11 +145,12 @@ export function createLayoutInspector(container, options = {}) {
     return holder;
   }
 
-  function anchorField(path, inherited, current, onChange) {
+  function anchorField(path, inherited, current, onChange, stack = false) {
     const names = { top: "Top", middle: "Middle", bottom: "Bottom" };
     const shown = inherited ? `Inherited · ${names[inherited.value ?? "top"].toLowerCase()}${inherited.from === "default" ? " (default)" : inherited.from === "split" ? " (from the split)" : " (from the layout)"}` : "None · top";
     const input = select([["", shown], ...LAYOUT_ANCHORS.map((value) => [value, names[value]])], current ?? "", { onChange: (value) => onChange(value || undefined), name: "anchor" });
-    const wrap = field("Anchor", input, { help: current === undefined ? (inherited ? "Not set here, so this follows the nearest split or the layout." : "Regions without their own anchor sit at the top.") : "Set here. Choose the first option to inherit again.", path, field: "anchor", labelFor: undefined });
+    const note = stack ? "Every entry is auto-sized, so this places the whole stack, title included. Top starts it at the top." : undefined;
+    const wrap = field("Anchor", input, { help: note ?? (current === undefined ? (inherited ? "Not set here, so this follows the nearest split or the layout." : "Regions without their own anchor sit at the top.") : "Set here. Choose the first option to inherit again."), path, field: "anchor", labelFor: undefined });
     wrap.dataset.inherited = String(current === undefined);
     return wrap;
   }
@@ -164,7 +165,7 @@ export function createLayoutInspector(container, options = {}) {
       field("Name", textInput(record.name, { name: "name", placeholder: "My layout", onInput: (value) => model.setLayoutProperty("name", value) }), { path: [], field: "name" }),
       field("Summary", textInput(record.summary, { name: "summary", multiline: true, placeholder: "When to use this layout", onInput: (value) => model.setLayoutProperty("summary", value) }), { path: [], field: "summary" }),
       field("Direction", segmented([["row", "Row", "Columns2"], ["column", "Column", "Rows2"]], record.direction === "row" ? "row" : "column", { label: "Direction", name: "direction", onPick: (value) => model.setLayoutProperty("direction", value) }), { group: true, path: [], field: "direction", help: "Row places the regions side by side; column stacks them." }),
-      anchorField([], null, record.anchor, (value) => model.setLayoutProperty("anchor", value)),
+      anchorField([], null, record.anchor, (value) => model.setLayoutProperty("anchor", value), record.direction !== "row" && (record.regions ?? []).length > 0 && record.regions.every((entry) => effectiveSize(entry, "column") === "auto")),
     );
     const bodyNames = model.record.regions ? flatBody(record) : [];
     props.append(field("Overflow region", select([["", "Default · the first primary region"], ...bodyNames.map((name) => [name, name])], record.overflowRegion ?? "", { name: "overflowRegion", onChange: (value) => model.setLayoutProperty("overflowRegion", value || undefined) }), { path: [], field: "overflowRegion", help: "Where content that no region accepts goes." }));

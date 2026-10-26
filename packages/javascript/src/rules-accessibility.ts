@@ -365,8 +365,11 @@ const readingOrderRules: ValidationRule[] = [
 				if (!composition) continue;
 				const body = composition.items.filter((item) => !['title', 'subtitle', 'tag'].includes(item.field));
 				const title = composition.items.find((item) => item.field === 'title');
-				if (title && body.some((item) => item.box.y + item.box.height <= title.box.y + 1)) {
-					const above = body.find((item) => item.box.y + item.box.height <= title.box.y + 1)!;
+				// Above means over the title's own columns: content in a column beside the title (a title and a list side by side) is
+				// read after it left to right, whatever its height.
+				const isAbove = (item: (typeof body)[number]) => item.box.y + item.box.height <= title!.box.y + 1 && item.box.x < title!.box.x + title!.box.width && title!.box.x < item.box.x + item.box.width;
+				if (title && body.some(isAbove)) {
+					const above = body.find(isAbove)!;
 					context.report(readingOrderRule, {
 						path: pointerOfDotted(above.path),
 						slide,
