@@ -20,6 +20,9 @@ const HARNESS = `<!doctype html><html lang="en"><head><meta charset="utf-8"><tit
   #layer > *, .opf-kit-drop, .opf-kit-ratio, .opf-kit-cut { position: absolute; }
   #host { position: relative; width: 400px; height: 200px; }
   .opf-kit-menu { position: absolute; }
+  /* As in the studios, a drag never selects text: a selection left by one drag makes the next press start the browser's own drag and drop
+     of that text (it takes the pointer, so the page sees pointercancel and no more moves). */
+  #list { user-select: none; -webkit-user-select: none; }
   #list li { height: 24px; }
 </style></head><body>
 <main>
@@ -193,6 +196,7 @@ try {
       const list = document.getElementById('list');
       const dom = kit.createDom(document);
       window.dragLog = [];
+      window.pointerLog = [];
       const drag = window.dragKit = kit.createDragController({
         doc: document,
         onStart: (press) => ({ id: press.payload, ghost: kit.dragGhost(dom, document.getElementById('host'), press.payload) }),
@@ -202,33 +206,64 @@ try {
         onDrop: (session) => dragLog.push(`drop ${session.id} on ${session.over}`),
         onEscape: () => dragLog.push('escape'),
       });
-      list.addEventListener('pointerdown', (event) => { drag.press(event, event.target.dataset.id); list.setPointerCapture(event.pointerId); });
-      list.addEventListener('pointermove', (event) => drag.move(event));
-      list.addEventListener('pointerup', (event) => drag.release(event));
+      const note = (event) => { pointerLog.push(`${event.type} ${Math.round(event.clientX)},${Math.round(event.clientY)} ${event.target?.dataset?.id ?? event.target?.id ?? event.target?.nodeName}`); if (pointerLog.length > 60) pointerLog.shift(); };
+      list.addEventListener('pointerdown', (event) => { note(event); drag.press(event, event.target.dataset.id); list.setPointerCapture(event.pointerId); });
+      list.addEventListener('pointermove', (event) => { note(event); drag.move(event); });
+      list.addEventListener('pointerup', (event) => { note(event); drag.release(event); });
+      // A host forwards pointercancel too (the browser took the pointer): the drag ends as cancelled instead of staying open.
+      list.addEventListener('pointercancel', (event) => { note(event); drag.cancel(); });
+      for (const type of ['dragstart', 'selectstart']) document.addEventListener(type, (event) => pointerLog.push(`${type} ${event.target?.nodeName}`), true);
     });
-    const a = await page.locator('#list li[data-id="a"]').boundingBox();
-    const c = await page.locator('#list li[data-id="c"]').boundingBox();
-    await page.mouse.move(a.x + 10, a.y + 10);
+    const center = async (id) => { const box = await page.locator(`#list li[data-id="${id}"]`).boundingBox(); return { x: box.x + 10, y: box.y + box.height / 2 }; };
+    const a = await center('a'), b = await center('b'), c = await center('c');
+    // What the page saw, printed when a wait times out (CI's container is not reproducible on a laptop).
+    const state = (target) => page.evaluate((point) => ({
+      active: window.dragKit.active ? { id: window.dragKit.active.id, over: window.dragKit.active.over ?? null } : null,
+      pending: window.dragKit.pending ? { x: window.dragKit.pending.x, y: window.dragKit.pending.y, payload: window.dragKit.pending.payload } : null,
+      log: [...dragLog],
+      pointer: pointerLog.slice(-12),
+      selection: String(getSelection()),
+      ghosts: document.querySelectorAll('.opf-kit-ghost').length,
+      at: point ? document.elementsFromPoint(point.x, point.y).slice(0, 4).map((node) => node.dataset?.id ?? node.id ?? node.nodeName) : null,
+      c: (() => { const r = document.querySelector('#list li[data-id="c"]').getBoundingClientRect(); return [r.left, r.top, r.width, r.height].map(Math.round); })(),
+    }), target ?? null);
+    const until = async (label, predicate, target) => {
+      try { await page.waitForFunction(predicate, null, { timeout: 10000 }); }
+      catch (error) { throw new Error(`${label}: timed out; the page saw ${JSON.stringify(await state(target))}`, { cause: error }); }
+    };
+    // Explicit moves, each waiting until the controller reports it (pointer moves arrive on animation frames, after a key press sent later).
+    const dragTo = async (from, to) => {
+      await page.mouse.move(from.x, from.y);
+      await page.mouse.down();
+      await until('the press', () => window.dragKit.pending !== null || window.dragKit.active !== null, from);
+      await page.mouse.move(from.x, from.y + 8);
+      await until('the drag start (past 4px)', () => window.dragKit.active !== null, { x: from.x, y: from.y + 8 });
+      await page.mouse.move(b.x, b.y);
+      await until('the move over b', () => window.dragKit.active?.over === 'b', b);
+      await page.mouse.move(to.x, to.y);
+      await until('the move over c', () => window.dragKit.active?.over === 'c', to);
+    };
+    const clean = async (label) => {
+      const now = await state();
+      assert.deepEqual([now.active, now.pending, now.ghosts, now.selection], [null, null, 0, ''], `${label}: nothing left over (${JSON.stringify(now)})`);
+    };
+    await page.mouse.move(a.x, a.y);
     await page.mouse.down();
-    await page.mouse.move(a.x + 12, a.y + 12);
+    await page.mouse.move(a.x + 2, a.y + 2);
     await page.mouse.up();
     assert.deepEqual(await page.evaluate(() => dragLog), [], 'a 3px wobble is a click, not a drag');
-    await page.mouse.down();
-    // Chromium delivers pointer moves aligned to animation frames, after a key press sent later, so the test waits for the controller to have
-    // seen the move onto c (its state), never for a fixed time.
-    const overC = () => page.waitForFunction(() => window.dragKit.active?.over === 'c');
-    await page.mouse.move(c.x + 10, c.y + 10, { steps: 5 });
-    await overC();
+    await clean('after the click');
+    await dragTo(a, c);
     assert.equal(await page.locator('.opf-kit-ghost').textContent(), 'a', 'the label follows the pointer');
     await page.mouse.up();
-    await page.mouse.move(a.x + 10, a.y + 10);
-    await page.mouse.down();
-    await page.mouse.move(c.x + 10, c.y + 10, { steps: 5 });
-    await overC();
+    await until('the drop', () => window.dragKit.active === null && dragLog.includes('drop a on c'));
+    await clean('between the two drags');
+    await dragTo(a, c);
     await page.keyboard.press('Escape');
+    await until('the cancel', () => window.dragKit.active === null);
     await page.mouse.up();
     assert.deepEqual(await page.evaluate(() => dragLog), ['start a', 'ended', 'drop a on c', 'start a', 'cancelled', 'escape']);
-    assert.equal(await page.locator('.opf-kit-ghost').count(), 0);
+    await clean('after the cancel');
   }
 
   // 5. The layers tree by keyboard: items with level, place, selection and expansion; one tab stop; arrows, expand, collapse, Enter.
