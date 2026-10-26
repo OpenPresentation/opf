@@ -64,6 +64,8 @@ const { files } = await opf.convert(deck, { format: "pptx" }); // bytes, nothing
 
 Drawing and PowerPoint go through the optional peers `@openpresentation/opf-render` and `@openpresentation/opf-pptx`, which core loads the first time a call needs them; npm does not install them for you. The root has conditional exports (OPF 0.18 removed `/node`): `node`, `bun` and `deno` get this full build, and `browser`, `worker`, `workerd` and `default` get a browser-safe build with the same names and the same types, where `open`, `save` and `convert` reject with `OPFApiError` code `node-only`. Every other subpath runs in a browser. `parseSlideSelection(3 | "1-3" | [1, 3], total)` reads slide selections in both. See [OPF files in Node](../../docs/node.md).
 
+On Cloudflare Workers, Vercel Edge and other hosts that refuse code generation from strings, `validate` runs validators compiled at build time instead of compiling the schemas with Ajv. The `workerd`, `worker` and `edge-light` conditions choose them, so a Worker needs no alias and no option; code bundled for Node that runs on a worker (and a page under a strict Content-Security-Policy) imports `@openpresentation/opf/precompiled` once. The verdicts and findings are the same, and a CI lane runs the package in the real `workerd` runtime. See [Edge runtimes](../../docs/node.md#edge-runtimes-validators-that-never-compile-code).
+
 Use focused imports when you only need one surface:
 
 ```ts

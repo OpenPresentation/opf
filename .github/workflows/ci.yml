@@ -205,6 +205,10 @@ jobs:
       - name: Package contents
         run: pnpm --filter @openpresentation/gallery --fail-if-no-match run pack:dry-run
 
+  # Core's tests include the workerd lane (CE-01, packages/javascript/test/workerd.test.mjs): the package bundled the way Wrangler does and
+  # run in the real workerd runtime (the `workerd` npm package, no Cloudflare account), where runtime code generation is refused.
+  # A change to core, or to the gallery it depends on, selects this job, so it selects the lane. OPF_REQUIRE_WORKERD makes a missing
+  # workerd binary a failure here instead of a skip.
   core:
     name: core
     needs: scope
@@ -213,6 +217,7 @@ jobs:
     timeout-minutes: 20
     env:
       OPF_REUSE_BUILD: ${{ github.run_id }}-${{ github.run_attempt }}-${{ github.job }}
+      OPF_REQUIRE_WORKERD: '1'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -226,7 +231,7 @@ jobs:
           # Core's tests load the renderer and PPTX (its optional peers) from their built dist.
           build-also: '@openpresentation/opf-render @openpresentation/opf-pptx'
 
-      - name: Test core
+      - name: Test core (with the workerd lane)
         run: pnpm --filter @openpresentation/opf --fail-if-no-match run test
 
   cli:

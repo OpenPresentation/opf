@@ -1,5 +1,7 @@
-import type Ajv2020 from "ajv/dist/2020.js";
-import type { ErrorObject, ValidateFunction } from "ajv/dist/2020.js";
+import type { ErrorObject } from "ajv/dist/2020.js";
+
+import { original } from "./branch-schema.js";
+import type { SchemaEngine } from "./schema-engine.js";
 
 /**
  * RR-93: best match for the errors of a oneOf / anyOf. Ajv (allErrors) reports every rejected branch, so one bad value in a union
@@ -11,43 +13,9 @@ import type { ErrorObject, ValidateFunction } from "ajv/dist/2020.js";
  */
 export type UnionError = ErrorObject & { alternatives?: string[] };
 
-const compiled = new WeakMap<object, ValidateFunction>();
-const origin = new WeakMap<object, object>();
-
 const isUnion = (error: ErrorObject) => (error.keyword === "oneOf" || error.keyword === "anyOf") && Array.isArray(error.schema);
 const key = (error: ErrorObject) => `${error.instancePath}\u0000${error.keyword}\u0000${error.message}\u0000${JSON.stringify(error.params)}`;
 const depth = (pointer: string) => (pointer ? pointer.split("/").length - 1 : 0);
-const original = (node: unknown): unknown => {
-	let current = node;
-	while (current && typeof current === "object" && origin.has(current)) current = origin.get(current);
-	return current;
-};
-
-// A branch's local references ('#/$defs/X') point at the schema it was written in; qualify them so the branch compiles on its own.
-function qualify(node: unknown, rootId: string): unknown {
-	if (Array.isArray(node)) {
-		const copy = node.map((item) => qualify(item, rootId));
-		origin.set(copy, node);
-		return copy;
-	}
-	if (node && typeof node === "object") {
-		const copy: Record<string, unknown> = {};
-		for (const [name, value] of Object.entries(node)) copy[name] = name === "$ref" && typeof value === "string" && value.startsWith("#") ? rootId + value : qualify(value, rootId);
-		origin.set(copy, node);
-		return copy;
-	}
-	return node;
-}
-
-function branchValidator(ajv: Ajv2020, rootId: string, branch: object): ValidateFunction {
-	let validate = compiled.get(branch);
-	if (!validate) {
-		validate = ajv.compile(qualify(branch, rootId) as object);
-		compiled.set(branch, validate);
-	}
-	return validate;
-}
-
 function branchLabel(branch: Record<string, unknown>, index: number): string {
 	if (typeof branch.$ref === "string") return branch.$ref.slice(branch.$ref.lastIndexOf("/") + 1);
 	if (typeof branch.type === "string") return branch.type;
@@ -72,12 +40,12 @@ interface Analysis {
 }
 
 /** Collapse the oneOf / anyOf errors of a verbose Ajv error list into the best-matching branch (see the file comment). */
-export function bestMatchErrors(ajv: Ajv2020, rootId: string, errors: ErrorObject[]): UnionError[] {
+export function bestMatchErrors(engine: SchemaEngine, rootId: string, errors: ErrorObject[]): UnionError[] {
 	const unions = errors.filter(isUnion);
 	if (!unions.length) return errors;
 	const analyses: Analysis[] = [];
 	for (const union of unions) {
-		const analysis = analyze(ajv, rootId, union);
+		const analysis = analyze(engine, rootId, union);
 		if (analysis) analyses.push(analysis);
 	}
 	if (!analyses.length) return errors;
@@ -95,20 +63,22 @@ export function bestMatchErrors(ajv: Ajv2020, rootId: string, errors: ErrorObjec
 	return result;
 }
 
-function analyze(ajv: Ajv2020, rootId: string, union: ErrorObject): Analysis | undefined {
+function analyze(engine: SchemaEngine, rootId: string, union: ErrorObject): Analysis | undefined {
 	const branches = union.schema as unknown[];
 	const base = depth(union.instancePath);
 	const results: { label: string; errors: ErrorObject[] }[] = [];
 	for (const [index, branch] of branches.entries()) {
 		if (!branch || typeof branch !== "object") return undefined;
-		const validate = branchValidator(ajv, rootId, branch);
+		const validate = engine.branch(branch, rootId);
+		// An engine without a validator for this branch (a branch the schemas do not hold) leaves the union as Ajv said.
+		if (!validate) return undefined;
 		// One branch accepts the value: the union failed for another reason (oneOf with several matches), so leave it as Ajv said.
 		if (validate(union.data) === true) return undefined;
 		const raw = (validate.errors ?? []).map((error) => ({ ...error, instancePath: union.instancePath + error.instancePath }) as ErrorObject);
 		results.push({ label: branchLabel(branch as Record<string, unknown>, index), errors: raw });
 	}
 	const span = new Set([key(union), ...results.flatMap((result) => result.errors.map(key))]);
-	const reduced = results.map((result) => ({ label: result.label, errors: bestMatchErrors(ajv, rootId, result.errors) }));
+	const reduced = results.map((result) => ({ label: result.label, errors: bestMatchErrors(engine, rootId, result.errors) }));
 	const mismatch = (error: ErrorObject) => {
 		const level = depth(error.instancePath) - base;
 		return (level === 0 && (error.keyword === "type" || isUnion(error))) || (level === 1 && error.keyword === "const");
