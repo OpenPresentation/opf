@@ -51,6 +51,8 @@ The package's conditional exports pick the build:
 | `bun`, `deno`, `node` | the full build (`dist/index.js`) | work on files, and `convert` also returns bytes |
 | `workerd` (Cloudflare), `worker`, `browser`, `default` | the browser-safe build (`dist/browser.js`) | reject with `OPFApiError` code `node-only` |
 
+The condition also decides how `validate` runs the JSON Schemas; see [Edge runtimes](#edge-runtimes-validators-that-never-compile-code).
+
 - **One type surface.** Both builds share `dist/index.d.ts` (the `types` condition, first in the map), so TypeScript sees the
   same declarations under `NodeNext` and `Bundler` resolution; the file functions are documented there as Node only. The
   declarations need no Node types.
@@ -63,6 +65,43 @@ The package's conditional exports pick the build:
 - **Bundlers** pick the browser build for a browser target and the full build for a Node target. A bundler that sets neither
   condition gets `default`, the browser-safe build: for a Node bundle, add the `node` condition (Rollup's node-resolve
   `exportConditions: ["node"]`, esbuild's `platform: "node"`).
+
+## Edge runtimes: validators that never compile code
+
+`validate` checks a document against the JSON Schemas with Ajv, and Ajv compiles each schema to JavaScript with `new Function` the
+first time it is used. Cloudflare Workers, Vercel Edge and a page under a Content-Security-Policy without `unsafe-eval` refuse
+code generation from strings (Workers: "Code generation from strings disallowed for this context", while a request is handled), so
+on those hosts the package ships the same validators compiled at build time (Ajv's standalone code generation, `scripts/validators-codegen.mjs`).
+They give the same verdicts and the same findings: `test/precompiled-validators.test.mjs` compares them with Ajv on every example deck,
+on catalog records and on random mutants of both, and on every `oneOf` and `anyOf` branch of the schemas.
+
+The choice is made by the package's export conditions, through the internal `#schema-engine` import (package.json `imports`), so a
+host needs no alias, no build step and no option:
+
+| Condition | Validators |
+| --- | --- |
+| `workerd` (Cloudflare Workers), `worker`, `edge-light` (Vercel Edge) | precompiled; no code is generated at runtime |
+| `node`, `bun`, `deno`, `browser`, `default` | Ajv, compiled on the first `validate` of the process |
+
+Wrangler and OpenNext set `workerd`, `worker` and `browser` when they bundle a Worker, and the Edge runtime of Next.js sets `edge-light`,
+so a Worker needs nothing from you. Two cases do not get them by condition. Code that runs on a worker but was bundled for Node (a
+Next.js route handler that Turbopack or webpack resolved with the `node` condition before OpenNext packaged it, for one), and a browser
+page under a strict Content-Security-Policy. Import the precompiled validators once, before the first `validate`:
+
+```ts
+import "@openpresentation/opf/precompiled"; // installs the build-time validators for this process; it exports nothing
+```
+
+The price is size: the precompiled validators add about 78 KB gzipped (1.4 MB minified, mostly generated code) to the browser-safe
+build, which is why the browser keeps Ajv by default. On the first `validate` they save the time Ajv spends compiling the schemas
+(the first `validate` took about 100 ms with Ajv and about 10 ms precompiled in Node). A schema you compile yourself with Ajv is not covered: the precompiled build validates the OPF schemas that
+ship in the package.
+
+The `workerd` CI lane (`packages/javascript/test/workerd.test.mjs`, in the core job of `ci.yml`) bundles the package the way Wrangler
+does, runs it in the real `workerd` runtime from the `workerd` npm package (no Cloudflare account, no login), validates the example
+decks, and requires the findings to equal Node's. A control in the same file bundles a Worker without the worker conditions and
+requires workerd to refuse it, so the lane fails if the default validators go back to runtime compilation. Fonts, rasterizing and the
+in-memory `convert` are not part of this lane yet (CE-02, CE-03 in `docs/programs/cloud-editor/`).
 
 ## The stack
 

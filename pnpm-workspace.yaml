@@ -25,6 +25,8 @@ linkWorkspacePackages: false
 # nothing to resolve. The other packages declare peers as `workspace:^` and install them through `workspace:*` devDependencies.
 autoInstallPeers: false
 
-# esbuild gets its binary from optional platform packages; nothing needs its postinstall (silences pnpm's "Ignored build scripts").
+# esbuild and workerd get their binaries from optional platform packages; nothing needs their postinstall (silences pnpm's
+# "Ignored build scripts"). workerd runs core's tests of the edge validators (CE-01).
 ignoredBuiltDependencies:
   - esbuild
+  - workerd

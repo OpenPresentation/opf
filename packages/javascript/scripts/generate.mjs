@@ -2,6 +2,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { compile } from "json-schema-to-typescript";
+import { precompiledValidatorsSource } from "./validators-codegen.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const packageRoot = path.resolve(__dirname, "..");
@@ -121,6 +122,10 @@ async function generateSchemas() {
   lines.push("];", "");
 
   await fs.writeFile(path.join(generatedRoot, "schemas.ts"), lines.join("\n"));
+
+  // CE-01: the same schemas compiled to JavaScript at build time, for the hosts that refuse code generation.
+  const byName = Object.fromEntries(schemas.map(({ name, schema }) => [name, schema]));
+  await fs.writeFile(path.join(generatedRoot, "precompiled-validators.ts"), precompiledValidatorsSource(byName));
 }
 
 function asUnion(values) {

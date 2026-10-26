@@ -1,5 +1,4 @@
-import Ajv2020, { type ErrorObject, type ValidateFunction } from "ajv/dist/2020.js";
-import addFormats from "ajv-formats";
+import type { ErrorObject, ValidateFunction } from "ajv/dist/2020.js";
 
 import type { Catalog } from "./catalog-refs.js";
 import { catalogSchemaNames, type CatalogRecordKind } from "./catalog-schemas.js";
@@ -13,6 +12,7 @@ import { codeHighlightLines } from "./code-highlight.js";
 import { isRecord, pathFor, promotedRegionKeys, visitContentPayloads } from "./content-walk.js";
 import {tableGrid} from "./table.js";
 import { numberingFindings } from "./numbering.js";
+import { schemaEngine } from "#schema-engine";
 import { schemas, type SchemaName } from "./schemas.js";
 import { bestMatchErrors, type UnionError } from "./union-errors.js";
 import { rememberValidationDefinition } from './validation-definitions.js';
@@ -56,8 +56,6 @@ export interface SchemaCheckResult {
 export type SchemaOrKind = SchemaName | CatalogRecordKind;
 
 const schemaNameByCatalogKind: Readonly<Record<CatalogRecordKind, SchemaName>> = catalogSchemaNames;
-
-let ajv: Ajv2020 | undefined;
 
 export { promotedRegionKeys } from "./content-walk.js";
 
@@ -164,27 +162,6 @@ const rowSpans: Record<string, readonly number[]> = {
   "top+middle+bottom": [0, 1, 2],
 };
 
-function getAjv(): Ajv2020 {
-  if (ajv) {
-    return ajv;
-  }
-
-  const instance = new Ajv2020({
-    allErrors: true,
-    verbose: true,
-    strict: false,
-    allowUnionTypes: true,
-  });
-  addFormats(instance);
-
-  for (const schema of Object.values(schemas)) {
-    instance.addSchema(schema);
-  }
-
-  ajv = instance;
-  return instance;
-}
-
 function isSchemaName(value: unknown): value is SchemaName {
   return typeof value === "string" && hasOwn(schemas, value);
 }
@@ -198,19 +175,13 @@ function resolveValidator(schemaOrKind: SchemaOrKind): {
   schemaName: SchemaName;
   catalogKind?: CatalogRecordKind;
 } {
-  const instance = getAjv();
-
   if (isSchemaName(schemaOrKind)) {
-    const schema = schemas[schemaOrKind];
-    const validator = instance.getSchema(schema.$id as string) ?? instance.compile(schema);
-    return { validate: validator, schemaName: schemaOrKind };
+    return { validate: schemaEngine().root(schemaOrKind), schemaName: schemaOrKind };
   }
 
   if (isCatalogKind(schemaOrKind)) {
     const schemaName = schemaNameByCatalogKind[schemaOrKind];
-    const schema = schemas[schemaName];
-    const validator = instance.getSchema(schema.$id as string) ?? instance.compile(schema);
-    return { validate: validator, schemaName, catalogKind: schemaOrKind };
+    return { validate: schemaEngine().root(schemaName), schemaName, catalogKind: schemaOrKind };
   }
 
   throw new TypeError(`Unknown schema or catalog kind ${JSON.stringify(schemaOrKind)}.`);
@@ -953,7 +924,6 @@ function typedVariableErrors(errors: ErrorObject[], value: unknown): ErrorObject
   if (!errors.some((error) => error.instancePath.startsWith("/variables/"))) return errors;
   const variables = value.variables;
   const kept = errors.filter((error) => !error.instancePath.startsWith("/variables/"));
-  const schemaId = schemas.presentation.$id as string;
   for (const [id, entry] of Object.entries(variables)) {
     if (typeof entry === "string") {
       if (!hexColorPattern.test(entry)) kept.push(variableIssue(id, "", "type", "must be a hex color string or a variable object", {}));
@@ -969,7 +939,7 @@ function typedVariableErrors(errors: ErrorObject[], value: unknown): ErrorObject
       continue;
     }
     const definition = `${kind.charAt(0).toUpperCase()}${kind.slice(1)}Variable`;
-    const check = getAjv().getSchema(`${schemaId}#/$defs/${definition}`);
+    const check = schemaEngine().definition("presentation", definition);
     if (!check || check(entry) === true) continue;
     for (const error of check.errors ?? []) {
       kept.push({ ...error, instancePath: `/variables/${id.replaceAll("~", "~0").replaceAll("/", "~1")}${error.instancePath}`, schemaPath: `#/$defs/${definition}${error.schemaPath.replace(/^#/, "")}` });
@@ -996,7 +966,6 @@ function pointerValue(root: unknown, pointer: string): unknown {
 const datasetTableMessage = (field: string) => `'${field}' is not allowed on a dataset-backed table: it takes its headers, rows and column formats from the dataset`;
 function dataUnionErrors(errors: ErrorObject[], value: unknown): ErrorObject[] {
   let kept = errors;
-  const schemaId = schemas.presentation.$id as string;
   for (const union of errors) {
     if (union.keyword !== "oneOf") continue;
     const chartData = /\/chart\/data$/.test(union.instancePath) && /\/properties\/data\/oneOf$/.test(union.schemaPath);
@@ -1007,7 +976,7 @@ function dataUnionErrors(errors: ErrorObject[], value: unknown): ErrorObject[] {
     const branch = chartData
       ? hasOwn(target, "dataset") ? "DatasetRef" : hasOwn(target, "rows") ? "ChartData" : undefined
       : hasOwn(target, "value") ? "StyledTableCell" : hasOwn(target, "name") ? "DataColumn" : undefined;
-    const check = branch ? getAjv().getSchema(`${schemaId}#/$defs/${branch}`) : undefined;
+    const check = branch ? schemaEngine().definition("presentation", branch) : undefined;
     if (!check || check(target) === true) continue;
     const branchErrors = (check.errors ?? []).map((error) => ({ ...error, instancePath: `${union.instancePath}${error.instancePath}`, schemaPath: `#/$defs/${branch}${error.schemaPath.replace(/^#/, "")}` }));
     const prefix = `${union.instancePath}/`;
@@ -1062,7 +1031,7 @@ export function validateAgainstSchema(value: unknown, schemaOrKind: SchemaOrKind
   const valid = resolved.validate(subject) === true;
   const ajvErrors = valid ? [] : typedVariableErrors(resolved.validate.errors ?? [], subject);
   const specific = resolved.schemaName === "presentation" ? dataUnionErrors(ajvErrors, subject) : ajvErrors;
-  const mapped = bestMatchErrors(getAjv(), schemas[resolved.schemaName].$id as string, specific).map(toIssue);
+  const mapped = bestMatchErrors(schemaEngine(), schemas[resolved.schemaName].$id as string, specific).map(toIssue);
   const errors = mapped;
   // OPF 0.19: the template rules a schema cannot express (opf/layout-template, opf/layout-region), on a record the schema accepts.
   if (resolved.schemaName === "layout" && valid) for (const issue of layoutTemplateIssues(subject)) errors.push(semanticIssue(issue.path, issue.message, { code: issue.code }));

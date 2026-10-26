@@ -397,17 +397,35 @@ console.log('Installed root under Node: convert, open and save on files and in m
       await writeFile(path.join(projectDir,'browser-probe.mjs'),`import * as opf from '@openpresentation/opf';
 export const names = Object.keys(opf).sort();
 export const code = await opf.convert('deck.opf.md','deck.pdf').then(() => 'resolved', error => error.code);
+export const report = opf.validate({ name: 'Packed', language: 'en-US', slides: [{ title: 'One' }, { title: 3 }] }, { only: ['format'] });
 `);
-      for (const [label, options] of [['browser', {platform: 'browser'}], ['worker', {platform: 'neutral', mainFields: ['module', 'main'], conditions: ['worker', 'workerd']}]]) {
+      // CE-01: a worker bundle validates with the validators compiled at build time, a browser bundle with Ajv.
+      for (const [label, options, engine] of [['browser', {platform: 'browser'}, 'ajv'], ['worker', {platform: 'neutral', mainFields: ['module', 'main'], conditions: ['worker', 'workerd']}, 'precompiled']]) {
         const bundled = await esbuild.build({entryPoints: [path.join(projectDir, 'browser-probe.mjs')], absWorkingDir: projectDir, bundle: true, write: false, format: 'esm', metafile: true, logLevel: 'silent', ...options});
         const inputs = Object.keys(bundled.metafile.inputs).map(input => input.split('\\').join('/'));
         assert.ok(inputs.includes('node_modules/@openpresentation/opf/dist/browser.js') && !inputs.includes('node_modules/@openpresentation/opf/dist/index.js'), `${label}: the installed root resolves to the browser build`);
+        assert.ok(inputs.includes(`node_modules/@openpresentation/opf/dist/schema-engine-${engine}.js`) && !inputs.includes(`node_modules/@openpresentation/opf/dist/schema-engine-${engine === 'ajv' ? 'precompiled' : 'ajv'}.js`), `${label}: the installed package loads the ${engine} schema engine`);
         await writeFile(path.join(projectDir, `browser-probe.${label}.mjs`), bundled.outputFiles[0].contents);
         const probe = await import(pathToFileURL(path.join(projectDir, `browser-probe.${label}.mjs`)).href);
+        assert.equal(probe.report.valid, false, `${label}: validate rejects a slide whose title is a number`);
         assert.equal(probe.code, 'node-only', `${label}: convert rejects with node-only`);
         assert.ok(probe.names.includes('open') && probe.names.includes('parseSlideSelection'), `${label}: the browser build has the same names`);
       }
-      console.log('Installed root in a browser and a worker bundle: the browser build, whose convert rejects with node-only.');
+      // The installed package, run the way Node resolves it under the worker conditions with code generation from strings disallowed
+      // (what a Worker does while it handles a request): validate must not compile anything.
+      await writeFile(path.join(projectDir,'no-codegen.mjs'),`import * as opf from '@openpresentation/opf';
+const report = opf.validate({ name: 'Packed', language: 'en-US', slides: [{ title: 'One' }, { title: 3 }] }, { only: ['format'] });
+if (report.valid || !report.findings.length) throw new Error('validate should reject a numeric title');
+try { new Function('return 1'); throw new Error('code generation was not disallowed'); } catch (error) { if (!(error instanceof EvalError)) throw error; }
+console.log('validate ran with no code generation');
+`);
+      for (const flags of [['--conditions=workerd'], ['--conditions=edge-light']]) {
+        const noCodegen = await run(process.execPath, ['--disallow-code-generation-from-strings', ...flags, 'no-codegen.mjs'], {cwd: projectDir});
+        assert.match(noCodegen.stdout, /validate ran with no code generation/, `${flags[0]}: the installed package validates without code generation`);
+      }
+      const precompiledImport = await writeFile(path.join(projectDir,'precompiled-import.mjs'),`import '@openpresentation/opf/precompiled';\nawait import('./no-codegen.mjs');\n`).then(() => run(process.execPath, ['--disallow-code-generation-from-strings', 'precompiled-import.mjs'], {cwd: projectDir}));
+      assert.match(precompiledImport.stdout, /validate ran with no code generation/, '@openpresentation/opf/precompiled: the installed package validates without code generation');
+      console.log('Installed root in a browser and a worker bundle: the browser build (Ajv in the browser, precompiled validators in the worker), whose convert rejects with node-only; validate runs with no code generation under workerd, edge-light and the precompiled import.');
     }
   }
   for (const file of ['quote-layout.test.mjs','quote-composition.test.mjs','code-layout.test.mjs','code-composition.test.mjs']) {

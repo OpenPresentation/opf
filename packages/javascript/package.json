@@ -26,7 +26,9 @@
     "slides"
   ],
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/precompiled.js"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
@@ -47,6 +49,10 @@
     "./validator": {
       "types": "./dist/validator.d.ts",
       "import": "./dist/validator.js"
+    },
+    "./precompiled": {
+      "types": "./dist/precompiled.d.ts",
+      "import": "./dist/precompiled.js"
     },
     "./types": {
       "types": "./dist/types.d.ts",
@@ -135,6 +141,15 @@
       "node": "./dist/node-engine.js"
     }
   },
+  "imports": {
+    "#schema-engine": {
+      "types": "./src/schema-engine-ajv.ts",
+      "workerd": "./dist/schema-engine-precompiled.js",
+      "worker": "./dist/schema-engine-precompiled.js",
+      "edge-light": "./dist/schema-engine-precompiled.js",
+      "default": "./dist/schema-engine-ajv.js"
+    }
+  },
   "files": [
     "dist",
     "README.md",
@@ -151,6 +166,7 @@
     "build": "node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)",
     "typecheck": "pnpm run build:deps && pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
     "test": "pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs",
+    "test:workerd": "pnpm run build:deps && pnpm run build && node --test test/workerd.test.mjs",
     "test:packed": "node test/packed-install-smoke.mjs",
     "pack:dry-run": "pnpm run build:deps && pnpm run build && npm pack --dry-run --cache /tmp/opf-npm-cache"
   },
@@ -176,7 +192,8 @@
     "pdf-lib": "1.17.1",
     "sharp": "0.35.5",
     "tsup": "^8.5.1",
-    "typescript": "~5.9.3"
+    "typescript": "~5.9.3",
+    "workerd": "1.20261014.1"
   },
   "peerDependencies": {
     "@openpresentation/opf-pptx": "^0.26.10",

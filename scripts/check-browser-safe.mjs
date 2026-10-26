@@ -10,7 +10,8 @@
 //   2. The package root through its conditional exports. The built package is bundled as an application imports it,
 //      `import * as opf from "@openpresentation/opf"`, for the browser (platform browser), for a worker (conditions `worker` and
 //      `workerd`, no `browser`) and for a bundler with no runtime condition (`default`). Each bundle must reach dist/browser.js
-//      and not the Node build, import no builtin and no peer, and, when run, export the Node build's names with `open`, `save`
+//      and not the Node build, load the schema engine its conditions name (CE-01: the precompiled validators for `worker`, `workerd` and
+//      `edge-light`, Ajv otherwise), import no builtin and no peer, and, when run, export the Node build's names with `open`, `save`
 //      and `convert` rejecting with `OPFApiError` `node-only`. Under platform node the root must reach the Node build.
 //
 //   node scripts/check-browser-safe.mjs
@@ -20,7 +21,7 @@ import { createRequire } from 'node:module';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { NODE_ENTRIES, tsupEntries } from './check-catalog-free.mjs';
+import { NODE_ENTRIES, schemaEnginePlugin, tsupEntries } from './check-catalog-free.mjs';
 import { packageManagerInvocation } from './package-manager.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -49,11 +50,21 @@ export function entryProblems(name, output) {
 
 /** The bundles of the package root: how each target bundles it and which build it must reach. */
 export const ROOT_TARGETS = [
-  { name: 'browser', options: { platform: 'browser' }, build: 'browser' },
-  { name: 'worker', options: { platform: 'neutral', mainFields: ['module', 'main'], conditions: ['worker', 'workerd'] }, build: 'browser' },
-  { name: 'default', options: { platform: 'neutral', mainFields: ['module', 'main'] }, build: 'browser' },
-  { name: 'node', options: { platform: 'node' }, build: 'node' },
+  { name: 'browser', options: { platform: 'browser' }, build: 'browser', engine: 'ajv' },
+  // CE-01: a worker (`workerd`, `worker`) and Vercel Edge (`edge-light`) refuse code generation, so they load the precompiled validators.
+  { name: 'worker', options: { platform: 'neutral', mainFields: ['module', 'main'], conditions: ['worker', 'workerd'] }, build: 'browser', engine: 'precompiled' },
+  { name: 'edge-light', options: { platform: 'neutral', mainFields: ['module', 'main'], conditions: ['edge-light', 'worker', 'browser'] }, build: 'browser', engine: 'precompiled' },
+  { name: 'default', options: { platform: 'neutral', mainFields: ['module', 'main'] }, build: 'browser', engine: 'ajv' },
+  { name: 'node', options: { platform: 'node' }, build: 'node', engine: 'ajv' },
 ];
+
+/** CE-01: which schema engine a bundle of the package reached, from its metafile inputs: `ajv`, `precompiled`, both or neither. */
+export function reachedEngine(inputs) {
+  const files = Object.keys(inputs ?? {}).map(slash);
+  const ajv = files.some((input) => /(^|\/)packages\/javascript\/dist\/schema-engine-ajv\.js$/.test(input));
+  const precompiled = files.some((input) => /(^|\/)packages\/javascript\/dist\/schema-engine-precompiled\.js$/.test(input));
+  return ajv && precompiled ? 'both' : ajv ? 'ajv' : precompiled ? 'precompiled' : 'neither';
+}
 
 /** Which build of the root a bundle reached, from its metafile inputs: `node`, `browser`, both or neither. */
 export function reachedBuild(inputs) {
@@ -68,6 +79,8 @@ export function rootProblems(target, output) {
   const found = [];
   const reached = reachedBuild(output.inputs);
   if (reached !== target.build) found.push(`root (${target.name}): reaches the ${reached} build, not the ${target.build} build`);
+  const engine = reachedEngine(output.inputs);
+  if (target.engine && engine !== target.engine) found.push(`root (${target.name}): loads the ${engine} schema engine, not the ${target.engine} one (package.json "imports" #schema-engine)`);
   if (target.build === 'browser') {
     const imports = (output.imports ?? []).map((item) => item.path);
     const builtins = [...new Set(imports.filter(isBuiltin))];
@@ -156,6 +169,7 @@ async function main() {
       logLevel: 'silent',
       // Keep builtins and peers visible: a bundle that reaches one lists it in `imports`.
       external: EXTERNAL,
+      plugins: [schemaEnginePlugin()],
     });
     const output = Object.values(result.metafile.outputs)[0];
     if (NODE_ENTRIES.has(name)) {

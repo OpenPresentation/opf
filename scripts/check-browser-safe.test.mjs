@@ -2,8 +2,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
-import { entryProblems, isNodeModule, reachedBuild, rootProblems, ROOT_TARGETS } from './check-browser-safe.mjs';
-import { NODE_ENTRIES, tsupEntries } from './check-catalog-free.mjs';
+import { entryProblems, isNodeModule, reachedBuild, reachedEngine, rootProblems, ROOT_TARGETS } from './check-browser-safe.mjs';
+import { NODE_ENTRIES, schemaEngineSource, tsupEntries } from './check-catalog-free.mjs';
 
 test('a browser entry that imports a builtin, a peer or an engine module fails, and a clean one passes', () => {
   assert.deepEqual(entryProblems('browser', { imports: [{ path: 'yaml' }], inputs: { 'packages/javascript/src/browser.ts': {}, 'packages/javascript/src/core.ts': {} } }), []);
@@ -21,16 +21,43 @@ test('engine modules are src/node/, the Node build src/index.ts and src/node-eng
 
 test('a root bundle must reach the build its target names, and a browser one no builtin or peer', () => {
   const byName = Object.fromEntries(ROOT_TARGETS.map((target) => [target.name, target]));
-  assert.deepEqual(Object.keys(byName), ['browser', 'worker', 'default', 'node']);
+  assert.deepEqual(Object.keys(byName), ['browser', 'worker', 'edge-light', 'default', 'node']);
   assert.deepEqual(byName.worker.options.conditions, ['worker', 'workerd']);
   assert.equal(reachedBuild({ '../packages/javascript/dist/browser.js': {}, '../packages/javascript/dist/chunk-A.js': {} }), 'browser');
   assert.equal(reachedBuild({ 'packages\\javascript\\dist\\index.js': {} }), 'node');
   assert.equal(reachedBuild({ 'packages/javascript/dist/index.js': {}, 'packages/javascript/dist/browser.js': {} }), 'both');
   assert.equal(reachedBuild({}), 'neither');
-  assert.deepEqual(rootProblems(byName.browser, { imports: [], inputs: { 'packages/javascript/dist/browser.js': {} } }), []);
+  const engine = { 'packages/javascript/dist/schema-engine-ajv.js': {} };
+  assert.deepEqual(rootProblems(byName.browser, { imports: [], inputs: { 'packages/javascript/dist/browser.js': {}, ...engine } }), []);
   assert.match(rootProblems(byName.worker, { imports: [], inputs: { 'packages/javascript/dist/index.js': {} } })[0], /reaches the node build, not the browser build/);
-  assert.match(rootProblems(byName.browser, { imports: [{ path: 'node:fs/promises' }], inputs: { 'packages/javascript/dist/browser.js': {} } })[0], /Node builtins/);
-  assert.deepEqual(rootProblems(byName.node, { imports: [{ path: 'node:fs/promises' }], inputs: { 'packages/javascript/dist/index.js': {} } }), []);
+  assert.match(rootProblems(byName.browser, { imports: [{ path: 'node:fs/promises' }], inputs: { 'packages/javascript/dist/browser.js': {}, ...engine } })[0], /Node builtins/);
+  assert.deepEqual(rootProblems(byName.node, { imports: [{ path: 'node:fs/promises' }], inputs: { 'packages/javascript/dist/index.js': {}, ...engine } }), []);
+});
+
+test('a root bundle must load the schema engine its conditions name (CE-01)', () => {
+  const byName = Object.fromEntries(ROOT_TARGETS.map((target) => [target.name, target]));
+  const reach = (build, engine) => ({ [`packages/javascript/dist/${build}.js`]: {}, [`packages/javascript/dist/schema-engine-${engine}.js`]: {} });
+  assert.equal(reachedEngine(reach('browser', 'ajv')), 'ajv');
+  assert.equal(reachedEngine(reach('browser', 'precompiled')), 'precompiled');
+  assert.equal(reachedEngine({ 'packages\\javascript\\dist\\schema-engine-precompiled.js': {}, 'packages/javascript/dist/schema-engine-ajv.js': {} }), 'both');
+  assert.equal(reachedEngine({}), 'neither');
+  assert.deepEqual(rootProblems(byName.worker, { imports: [], inputs: reach('browser', 'precompiled') }), []);
+  assert.deepEqual(rootProblems(byName['edge-light'], { imports: [], inputs: reach('browser', 'precompiled') }), []);
+  assert.deepEqual(rootProblems(byName.default, { imports: [], inputs: reach('browser', 'ajv') }), []);
+  // The regression the workerd lane exists for: a worker that falls back to runtime compilation.
+  assert.match(rootProblems(byName.worker, { imports: [], inputs: reach('browser', 'ajv') })[0], /loads the ajv schema engine, not the precompiled one/);
+  assert.match(rootProblems(byName.browser, { imports: [], inputs: reach('browser', 'precompiled') })[0], /loads the precompiled schema engine, not the ajv one/);
+});
+
+test('#schema-engine resolves like a bundler resolves the package imports map', () => {
+  const imports = { '#schema-engine': { types: './src/a.ts', workerd: './dist/b.js', 'edge-light': './dist/b.js', default: './dist/a.js' } };
+  const entries = { a: 'src/a.ts', b: 'src/b.ts' };
+  const resolve = (...conditions) => schemaEngineSource(conditions, imports, entries).replace(/^.*\/packages\/javascript\//, '');
+  assert.equal(resolve(), 'src/a.ts');
+  assert.equal(resolve('browser'), 'src/a.ts');
+  assert.equal(resolve('worker', 'workerd'), 'src/b.ts');
+  assert.equal(resolve('edge-light', 'browser'), 'src/b.ts');
+  assert.throws(() => schemaEngineSource([], { '#schema-engine': { default: './dist/missing.js' } }, entries), /not a tsup entry/);
 });
 
 test('the tsup config names the two root builds and the CLI engine', () => {

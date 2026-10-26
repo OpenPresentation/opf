@@ -45,6 +45,27 @@ const HEADROOM = 0.03;
 export const isCatalogModule = (input) =>
   /(^|\/)packages\/gallery\/|(^|\/)node_modules\/@openpresentation\/gallery\/|(^|\/)src\/generated\/(catalogs|previews)\.ts$|(^|\/)src\/catalog\.ts$|(^|\/)spec\/catalogs\//.test(input.split(path.sep).join('/'));
 
+/**
+ * CE-01: the source file `#schema-engine` (package.json "imports") resolves to under the given export conditions, as a bundler
+ * resolves it: the first key of the map that is one of the conditions, else `default`. The built target (`./dist/<entry>.js`) is
+ * mapped back to the tsup entry's source, so a bundle of the sources measures the engine the published package would load.
+ */
+export function schemaEngineSource(conditions = [], imports = JSON.parse(readFileSync(path.join(packageRoot, 'package.json'), 'utf8')).imports, entries = tsupEntries(readFileSync(path.join(packageRoot, 'tsup.config.ts'), 'utf8'))) {
+  const map = imports['#schema-engine'];
+  const key = Object.keys(map).find((name) => name !== 'types' && (name === 'default' || conditions.includes(name)));
+  const entry = /^\.\/dist\/(.+)\.js$/.exec(map[key])?.[1];
+  if (!entry || !entries[entry]) throw new Error(`#schema-engine under ${conditions.join(', ') || 'no conditions'} resolves to ${map[key]}, which is not a tsup entry`);
+  return path.join(packageRoot, entries[entry]);
+}
+
+/** An esbuild plugin that resolves `#schema-engine` in a bundle of the sources (the package's own imports map points at dist/). */
+export const schemaEnginePlugin = (conditions = []) => ({
+  name: 'schema-engine',
+  setup(build) {
+    build.onResolve({ filter: /^#schema-engine$/ }, () => ({ path: schemaEngineSource(conditions) }));
+  },
+});
+
 /** The tsup entries of the core package, as { name: source }. */
 export function tsupEntries(text) {
   const block = /entry\s*[:=]\s*\{([\s\S]*?)\}/.exec(text)?.[1] ?? '';
@@ -74,6 +95,7 @@ export async function measure(only) {
       write: false,
       metafile: true,
       logLevel: 'silent',
+      plugins: [schemaEnginePlugin()],
     });
     const code = result.outputFiles[0].contents;
     const output = Object.values(result.metafile.outputs)[0];

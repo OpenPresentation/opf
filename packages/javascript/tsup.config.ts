@@ -30,10 +30,16 @@ const entry = {
   // condition only). No other entry imports them.
   browser: "src/browser.ts",
   "node-engine": "src/node-engine.ts",
+  // CE-01: the two schema engines `#schema-engine` (package.json "imports") chooses between by export condition. The shared
+  // modules import the specifier and tsup leaves it as written, so the host's bundler or runtime picks the engine.
+  "schema-engine-ajv": "src/schema-engine-ajv.ts",
+  "schema-engine-precompiled": "src/schema-engine-precompiled.ts",
+  // CE-01: `import "@openpresentation/opf/precompiled"` installs the precompiled engine where the conditions did not choose it.
+  precompiled: "src/precompiled.ts",
 };
 
 // One type surface (RR-70): dist/index.d.ts declares both builds of the root, so the browser build ships no declarations.
-const { browser: _browser, ...typed } = entry;
+const { browser: _browser, "schema-engine-ajv": _ajv, "schema-engine-precompiled": _precompiled, ...typed } = entry;
 
 export default defineConfig({
   entry,
@@ -46,7 +52,10 @@ export default defineConfig({
   target: "es2022",
   platform: "neutral",
   // Only the Node build and the CLI engine import node: builtins; scripts/check-browser-safe.mjs proves the others never do.
-  external: [/^node:/],
+  external: [/^node:/, /^#schema-engine$/],
+  // CE-01: the precompiled validators are CommonJS that require two helpers of ajv and ajv-formats. Bundle them, so the
+  // edge build has no `require` and no dependency left to resolve.
+  noExternal: [/^ajv\/dist\/runtime\//, /^ajv-formats\/dist\/formats$/],
   outExtension() {
     return { js: ".js" };
   },

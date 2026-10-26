@@ -1,0 +1,5 @@
+---
+type: added
+packages: [opf]
+---
+CE-01: `validate` runs with no runtime code generation on edge runtimes. The package ships validators compiled at build time (Ajv standalone code, the same schemas, options and formats), and the `workerd`, `worker` and `edge-light` export conditions load them through an internal `#schema-engine` import, so Cloudflare Workers and Vercel Edge need no alias and no build step; Node, Bun, Deno and the browser keep Ajv. They give the same verdicts and findings, which `test/precompiled-validators.test.mjs` checks against Ajv on every example deck, on catalog records and on random mutants of both, and on every `oneOf` and `anyOf` branch. `import "@openpresentation/opf/precompiled"` installs them where the conditions did not (code bundled for Node that runs on a worker, a page under a strict Content-Security-Policy), at about 78 KB gzipped more than the Ajv build. A new CI lane runs the package in the real `workerd` runtime and requires the example decks' findings to equal Node's. See docs/node.md, "Edge runtimes".
