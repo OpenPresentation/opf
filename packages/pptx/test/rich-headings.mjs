@@ -51,7 +51,7 @@ assert.ok(geometry.items.find(item => item.field === 'title').text.richLines.len
 // Quote: the lines carry the quote tags and the quotation marks.
 const quoteLines = shapes(slideXml(1)).filter(shape => shape.name.startsWith('OPF quote '));
 assert.ok(quoteLines.length >= 2, 'a rich quote body and its footer export as tagged lines');
-assert.match(quoteLines.map(shape => runs(shape.raw).map(run => run.text).join("")).join("").replaceAll("&quot;", "\""), /^"Cut review time by 40% in a quarter"Ada, VP Operations$/);
+assert.match(quoteLines.map(shape => runs(shape.raw).map(run => run.text).join("")).join("").replaceAll("&quot;", "\""), /^\u201cCut review time by 40% in a quarter\u201dAda, VP Operations$/);
 // A string heading keeps the plain path: no rich lines are needed for it.
 assert.ok(shapes(slideXml(2)).some(shape => shape.name.startsWith('OPF heading slides.2.title')));
 

@@ -7,6 +7,7 @@
 // are joined with the boundaries their tags record; soft wraps insert nothing and hard boundaries keep their separator.
 
 import {splitWeightFace} from './font-weights.js';
+import {isWrappedInQuoteMarks, unwrapQuoteMarks} from '@openpresentation/opf/composition';
 
 const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
 // The run properties that describe how a heading looks. `link` and `text` are never defaults.
@@ -88,11 +89,11 @@ export function headingValue(parts, base) {
   return merged.map(run => Object.keys(run).length === 1 ? run.text : run);
 }
 
-/** Remove the opening and closing quotation mark an exported quote body carries (core joins them to the first and last run). */
+/** Remove the opening and closing quotation mark an exported quote body carries (core joins them to the first and last run; the pair follows the deck language, or is the older ASCII pair). */
 export function unwrapQuoteRuns(value) {
-  if (!Array.isArray(value)) return typeof value === 'string' && value.length >= 2 && value.startsWith('"') && value.endsWith('"') ? value.slice(1, -1) : value;
+  if (!Array.isArray(value)) return typeof value === 'string' ? unwrapQuoteMarks(value) : value;
   const text = run => typeof run === 'string' ? run : run.text;
-  if (!value.length || !text(value[0]).startsWith('"') || !text(value.at(-1)).endsWith('"') || (value.length === 1 && text(value[0]).length < 2)) return value;
+  if (!value.length || !isWrappedInQuoteMarks(text(value[0])[0] + text(value.at(-1)).at(-1)) || (value.length === 1 && text(value[0]).length < 2)) return value;
   const runs = value.map(run => typeof run === 'string' ? run : {...run});
   const edit = (index, change) => {
     const run = runs[index];

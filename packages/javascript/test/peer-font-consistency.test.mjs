@@ -28,7 +28,7 @@ test('dense comparison options share one size; the verdict below keeps its own',
   const result = composeSlide({ title: 'Choose the smallest useful test', blocks: [{ region: 'first', text: option('Option A', 4) }, { region: 'second', text: option('Option B', 6) }, { region: 'verdict', text: 'Start with Option A.' }] }, { layout: layouts.comparison });
   const [first, second, verdict] = ['first', 'second', 'verdict'].map((name) => result.items.find((item) => item.region === name));
   assert.equal(first.text.fontSize, second.text.fontSize);
-  assert.equal(verdict.text.fontSize, 25);
+  assert.equal(verdict.text.fontSize, 28);
 });
 
 test('peers in one row of a grid flow share one size; text and lists keep their own sizes', () => {
@@ -42,5 +42,5 @@ test('peers in one row of a grid flow share one size; text and lists keep their 
 test('regions of different roles side by side are not peers', () => {
   const record = { name: 'Beside', direction: 'row', regions: [{ name: 'main', accepts: ['text'], role: 'primary', flow: 'none', size: 2 }, { name: 'aside', accepts: ['text'], role: 'supporting', flow: 'none' }] };
   const result = composeSlide({ blocks: [{ region: 'main', text: 'Short.' }, { region: 'aside', text: 'A long aside that has to shrink to fit its narrow column, with enough words to need several lines at the starting size and then some more. '.repeat(4) }] }, { layout: record });
-  assert.equal(result.items.find((item) => item.region === 'main').text.fontSize, 25);
+  assert.equal(result.items.find((item) => item.region === 'main').text.fontSize, 28);
 });

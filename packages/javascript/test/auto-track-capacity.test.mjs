@@ -17,9 +17,10 @@ const passages = [
 const heading = { title: 'Learn before scaling', subtitle: 'Illustrative example' };
 const sizes = (result) => result.items.filter((item) => item.region === 'body').map((item) => item.text.fontSize);
 
-test('three detailed passages in an all-auto stack keep the 25 px starting size', () => {
+test('three detailed passages in an all-auto stack share one size (WI-4: they do not fit at 28 px, and none is left at 23 or 25)', () => {
   const result = composeSlide({ ...heading, blocks: passages.map((text) => ({ text })) }, { layout: allAuto });
-  assert.deepEqual(sizes(result), [25, 25, 25]);
+  const [first, second, third] = sizes(result);
+  assert.ok(first === second && second === third && first >= 20, `one shared size, not a spread: ${sizes(result)}`);
   assert.deepEqual(result.diagnostics, []);
   const body = result.regions.find((region) => region.name === 'body');
   assert.ok(body.box.height > result.contentBox.height / 2, 'the auto row is not capped at half the content box');
@@ -30,7 +31,7 @@ test('a code payload in an auto row does not overflow', () => {
   const result = composeSlide({ ...heading, code: { language: 'javascript', filename: 'review-policy.js', source } }, { layout: allAuto });
   assert.deepEqual(result.diagnostics, []);
   const code = result.items.find((item) => item.field === 'code');
-  assert.equal(code.codeLayout.parts.find((part) => part.role === 'body').fit.fontSize, 18);
+  assert.equal(code.codeLayout.parts.find((part) => part.role === 'body').fit.fontSize, 22);
 });
 
 test('dense comparison options in an auto row keep at least 20 px, and the verdict follows them within one gap', () => {

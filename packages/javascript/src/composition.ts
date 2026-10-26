@@ -13,6 +13,7 @@ export {visualReadingOrder,type ReadingBox} from './reading-order.js';
 export {intrinsicImageAspect,intrinsicImageSize} from './image-aspect.js';
 import {paragraphDirection,paragraphDirectionAt,physicalAlignment,type PhysicalAlignment,type TextDirection} from './direction.js';
 import {resolveSlideDirection,type ScriptMeasurementProfile} from './script-fonts.js';
+import {quoteLanguage,quoteMarksFor,type QuoteMarks} from './quote-marks.js';
 import {ENGINE_DEFAULT_FONT_SCHEME,SOCIAL_PLATFORMS} from './engine-vocabularies.js';
 export {CHART_TYPES,ENGINE_DEFAULT_CHART_TYPES,ENGINE_DEFAULT_COLOR_SCHEME,ENGINE_DEFAULT_FONT_SCHEME,ENGINE_DEFAULT_THEME,LANGUAGES,SOCIAL_PLATFORMS,type LanguageVocabulary,type SocialPlatformVocabulary} from './engine-vocabularies.js';
 export {CATALOG_REFERENCE_PATTERN,OPFCatalogsOptionError,OPFUnresolvedReferenceError,catalogGroupSource,catalogKinds,catalogRecords,catalogReferenceSites,parseReference,resolveReference,unresolvedReference,type Catalog,type CatalogKind,type CatalogOptions,type CatalogRecords,type CatalogReferenceSite,type RecordProvenance,type ResolvedReference,type UnresolvedReferenceDiagnostic} from './catalog-refs.js';
@@ -30,6 +31,7 @@ export {applyLuminance, clrMapAttributes, colorMapFor, isColorVariant, normalize
 export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartLeadFromScheme, chartSeriesPalette, resolveChartColors, chartHighlightColors, CHART_SERIES_TINT_MIX, CHART_LEAD_MIN_CONTRAST, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_SERIES_TIER_SIZE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST} from './color.js';
 export type {ChartColorContext, ChartPaletteOptions, ColorAccentSlot, ColorMap, ColorVariant, ColorVariantBackground, ColorVariantInput, SchemeColor, SchemeNeutrals, ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
 export {resolveScriptFonts, resolveSlideDirection, scriptFontRole} from './script-fonts.js';
+export {QUOTE_MARKS, ASCII_QUOTE_MARKS, quoteMarksFor, quoteLanguage, unwrapQuoteMarks, isWrappedInQuoteMarks, type QuoteMarks} from './quote-marks.js';
 export type {ResolveScriptFontsOptions, ResolvedScriptFonts, ScriptFontApp, ScriptFontSlots, ScriptFontSource, ScriptFontSupplement, ScriptMeasurementProfile, ScriptRole} from './script-fonts.js';
 export {CODE_HIGHLIGHT_LANGUAGES, CODE_HIGHLIGHT_MAX_LENGTH, CODE_PANEL_BACKGROUND, CODE_PANEL_FOREGROUND, CODE_SYNTAX_MIN_CONTRAST, codeLineRuns, codeSyntaxPalette, codeSyntaxPaletteForRoles, codeSyntaxPaletteForScheme, resolveCodeLanguage, tokenizeCode} from './code-syntax.js';
 export type {CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind} from './code-syntax.js';
@@ -1060,8 +1062,71 @@ export function layoutFurniture(input: unknown, options: ComposeSlideOptions = {
 }
 
 const textSegments = new Intl.Segmenter("und", { granularity: "grapheme" });
+/**
+ * WI-4: the type roles of the content scale, in reference pixels (a 13.333 x 7.5 in slide is 1280 x 720). Prose and a subtitle ask for 28 px
+ * (21 pt) and a list item for 32 px; a lone short block uses the 32 px lead size. Each fits down to the readability floor
+ * (`composition.minFontSize`, 16 px by default) and an explicit run size wins.
+ */
+export const PROSE_NOMINAL_SIZE = 28, LIST_NOMINAL_SIZE = 32, LEAD_NOMINAL_SIZE = 32, TABLE_NOMINAL_SIZE = 25;
+/** WI-4: a quote body asks for 40 px and fits down (to 28 px and below); a code body asks for 22 px and fits down to the floor. */
+export const QUOTE_NOMINAL_SIZE = 40, CODE_NOMINAL_SIZE = 22;
+/** The code body size before WI-4: the size taken when the 22 px request would wrap lines it keeps whole. */
+const LEGACY_CODE_NOMINAL_SIZE = 18;
+/** Joins a quote's attribution and source (an en dash with a space on each side); import reads the older ' - ' too. */
+export const QUOTE_SOURCE_SEPARATOR = ' \u2013 ';
+/** A prose cell is no wider than this many average characters of its body size in auto mode (WI-4, P34). */
+const PROSE_MEASURE_CHARS = 70, AVERAGE_CHARACTER_EM = .5;
 /** A line may exceed its box by this much (reference pixels) before it wraps: the overflow tests already allow it, and an exact fit (a monospace line of 0.6 em cells filling the box) must not wrap one word early on a rounding error. */
 const WRAP_TOLERANCE = .01;
+/** A line of a greedy wrap, as the balancer reads it: its source range and whether a paragraph (a hard break or the end) follows it. */
+interface WrappedLine { start: number; end: number; hard: boolean }
+/** A sentence or clause end (with closing marks): a break after it reads better than one in the middle of a phrase. */
+const SENTENCE_END = /[.!?\u2026\u3002\uff01\uff1f]["'\u201d\u2019)\]\u00bb]*$/u, CLAUSE_END = /[,;:\u2013\u2014\u060c\u061b\uff0c\u3001\uff1b\uff1a]["'\u201d\u2019)\]\u00bb]*$/u;
+/** The balancer reads at most this many words per paragraph; a longer heading keeps its greedy wrap. */
+const BALANCE_MAX_WORDS = 48;
+/**
+ * WI-4 (P15), the `text-wrap: balance` rule for headings. Each wrapped paragraph of a greedy wrap keeps its line count (and so its
+ * size); the balancer picks the break set of that many lines that minimizes the variance of the line widths, with a small credit
+ * for a line that ends a sentence or a clause, so "A smaller pilot. A clearer decision." breaks after "pilot." and not after "A".
+ * Every line stays within `boxWidth`. Returns the word-start offsets that begin a new line, `undefined` when nothing wraps.
+ */
+function balancedBreaks(text:string,lines:readonly WrappedLine[],widthOf:(start:number,end:number)=>number,boxWidth:number):Set<number>|undefined {
+  const forced=new Set<number>();
+  const paragraph=(group:readonly WrappedLine[])=>{
+    const count=group.length;
+    if (count<2) return;
+    const from=group[0]!.start,to=group.at(-1)!.end;
+    const words=[...text.slice(from,to).matchAll(/(?:[^\s]|\u00a0|\u202f|\ufeff)+/gu)].map(match=>({start:from+match.index!,end:from+match.index!+match[0].length,text:match[0]}));
+    const total=words.length;
+    if (total<count||total>BALANCE_MAX_WORDS) return;
+    const cache=new Map<number,number>(),span=(first:number,last:number)=>{
+      const key=first*(BALANCE_MAX_WORDS+1)+last;
+      let value=cache.get(key);
+      if (value===undefined) {value=widthOf(words[first]!.start,words[last-1]!.end);cache.set(key,value);}
+      return value;
+    };
+    const target=span(0,total)/count;
+    if (!(target>0)) return;
+    const credit=(last:number)=>last>=total?0:SENTENCE_END.test(words[last-1]!.text)?.02:CLAUSE_END.test(words[last-1]!.text)?.01:0;
+    // best[line][last]: the least cost of setting words[0, last) in `line` lines.
+    const best:number[][]=Array.from({length:count+1},()=>Array<number>(total+1).fill(Infinity)),from_:number[][]=Array.from({length:count+1},()=>Array<number>(total+1).fill(-1));
+    best[0]![0]=0;
+    for (let line=1;line<=count;line++) for (let last=line;last<=total-(count-line);last++) for (let first=line-1;first<last;first++) {
+      const before=best[line-1]![first]!;
+      if (before===Infinity) continue;
+      const width=span(first,last);
+      if (width>boxWidth+WRAP_TOLERANCE) continue;
+      const cost=before+((width-target)/target)**2-credit(last);
+      if (cost<best[line]![last]!) {best[line]![last]=cost;from_[line]![last]=first;}
+    }
+    if (best[count]![total]===Infinity) return;
+    for (let line=count,last=total;line>1;line--) {const first=from_[line]![last]!;forced.add(words[first]!.start);last=first;}
+  };
+  let group:WrappedLine[]=[];
+  for (const line of lines) {group.push(line);if(line.hard){paragraph(group);group=[];}}
+  paragraph(group);
+  return forced.size?forced:undefined;
+}
 /** Whitespace that can hang at a soft line break: every space except the no-break spaces and the zero-width no-break space. */
 const HANGING_SPACE = /[^\S\r\n\u00a0\u202f\ufeff]/u;
 
@@ -1089,11 +1154,11 @@ export function measureText(text: string, fontSize: number): number {
 export function wrapText(text: string, width: number, fontSize: number, measure: MeasureTextWidth = measureText): string[] {
   return fitSourceText(text,{x:0,y:0,width,height:Number.MAX_VALUE},fontSize,fontSize,1,measure,true,false).lines;
 }
-export function fitText(text: string, box: LayoutBox, requestedSize = 25, minFontSize = 16, measure: MeasureTextWidth = measureText, direction?: TextDirection): SourceTextFit {
+export function fitText(text: string, box: LayoutBox, requestedSize = PROSE_NOMINAL_SIZE, minFontSize = 16, measure: MeasureTextWidth = measureText, direction?: TextDirection, balance = false): SourceTextFit {
   if (![box.width, box.height, requestedSize, minFontSize].every(Number.isFinite) || box.width <= 0 || box.height <= 0 || requestedSize <= 0 || minFontSize <= 0) {
     throw new RangeError("Text dimensions and font sizes must be finite and positive.");
   }
-  return fitSourceText(text,box,Math.max(requestedSize,minFontSize),minFontSize,1,measure,true,true,direction);
+  return fitSourceText(text,box,Math.max(requestedSize,minFontSize),minFontSize,1,measure,true,true,direction,balance);
 }
 
 /**
@@ -1196,13 +1261,15 @@ export interface QuoteLayoutOptions {
   direction?: TextDirection;
   /** Marker text for a rich body run by its dotted path (`<path>.text.<runIndex>`); composeSlide supplies the deck numbering. */
   citationMarker?: (runPath: string) => string | undefined;
+  /** BCP-47 tag of the deck language: it picks the quotation marks (`quoteMarksFor`). Without one the marks are English (“…”). */
+  language?: string;
 }
 /** The displayed runs of a rich quote body: the quotation marks join the first and last run. */
-function quoteBodyRuns(runs: readonly (string | RichTextRun)[]): (string | RichTextRun)[] {
-  if (!runs.length) return ['""'];
+function quoteBodyRuns(runs: readonly (string | RichTextRun)[], marks: QuoteMarks): (string | RichTextRun)[] {
+  if (!runs.length) return [marks.open + marks.close];
   const last = runs.length - 1;
   return runs.map((run, index) => {
-    const before = index === 0 ? '"' : '', after = index === last ? '"' : '';
+    const before = index === 0 ? marks.open : '', after = index === last ? marks.close : '';
     return typeof run === 'string' ? before + run + after : {...run, text: before + run.text + after};
   });
 }
@@ -1242,22 +1309,24 @@ export function layoutQuote(value: string | QuoteContent, box: LayoutBox, option
     parts.push(part);
     return part;
   };
-  // Footer lines: the attribution, the role on its own line below it, and the source after ' - ' on the last line.
+  // Footer lines: the attribution, the role on its own line below it, and the source after an en dash on the last line.
   let footer = '';
   const footerSources:QuoteTextSource[] = [];
   for (const field of ['attribution','role','source'] as const) {
     const text = quote[field];
     if (!text) continue;
-    if (footer) footer += field === 'role' ? '\n' : ' - ';
+    if (footer) footer += field === 'role' ? '\n' : QUOTE_SOURCE_SEPARATOR;
     footerSources.push(source(`${path}.${field}`,text,footer.length));
     footer += text;
   }
   const hasPhoto = photoValue !== undefined, hasFooter = footer !== '', hasBlock = hasPhoto || hasFooter;
   const photoPath = `${path}.photo`, rtl = options.direction === 'rtl';
   const bodyPath = shorthand ? path : `${path}.text`;
-  const body = add('body',`"${quoteText}"`,[source(bodyPath,quoteText,1)],
+  // WI-4 (P17): the body asks for the quote role size and fits down; the marks are the deck language's typographic pair.
+  const marks = quoteMarksFor(options.language);
+  const body = add('body',`${marks.open}${quoteText}${marks.close}`,[source(bodyPath,quoteText,marks.open.length)],
     {x:box.x+18,y:box.y+18,width:box.width-36,height:box.height-(hasBlock?94:36)},
-    28,options.fontFamilies?.accent??options.fontFamilies?.heading??'sans-serif',600,bodyPath,richBody?quoteBodyRuns(richBody):undefined);
+    QUOTE_NOMINAL_SIZE,options.fontFamilies?.accent??options.fontFamilies?.heading??'sans-serif',600,bodyPath,richBody?quoteBodyRuns(richBody,marks):undefined);
   const attribution = hasFooter ? add('footer',footer,footerSources,
     {x:box.x+18,y:box.y+box.height-58,width:box.width-36,height:40},
     17,options.fontFamilies?.body??'sans-serif',500,path) : undefined;
@@ -1817,6 +1886,8 @@ export interface CodeLayoutDiagnostic extends LayoutDiagnostic {
   parts: CodeTextPart['role'][];
 }
 export interface CodeLayout {
+  /** The panel the code needs at the allocated width: the cell's width and as much height as the insets, metadata and source lines take (at most the cell). */
+  bounds: LayoutBox;
   algorithm: 'code-flow-v1';
   textMeasurement: 'estimated' | 'provided';
   parts: CodeTextPart[];
@@ -1831,9 +1902,9 @@ function fitCodeText(text:string,box:LayoutBox,size:number,minimum:number,step:n
 }
 
 /** Retain exact source ranges and position tabs without passing control characters to a font shaper. */
-function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,prose=false,snap=true,direction?:TextDirection):SourceTextFit {
+function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step:number,measure:MeasureTextWidth,prose=false,snap=true,direction?:TextDirection,balance=false):SourceTextFit {
   const directionAt=direction==='rtl'?paragraphDirectionAt(text,'rtl'):undefined;
-  const layout=(fontSize:number):CodeTextFit=>{
+  const layout=(fontSize:number,forced?:ReadonlySet<number>):CodeTextFit=>{
     const tabWidth=measure(' ',fontSize)*4;
     if (!Number.isFinite(tabWidth)||text.includes('\t')&&tabWidth<=0) throw new RangeError('Text tabs require a positive finite measured space advance.');
     const measureLine=(start:number,end:number,record=false)=>{
@@ -1869,6 +1940,8 @@ function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step
       if (token.index===undefined) throw new Error('Missing code token source offset.');
       const a=token.index,b=a+token[0].length;
       if (/^[\r\n]/.test(token[0])) {push(a,b,'hard');continue;}
+      // A break the balancer chose (headings): the line ends before this word.
+      if (forced?.has(a) && end>start && /\S/u.test(text.slice(start,end))) push(a,a,'soft');
       if (width(start,b)<=box.width+WRAP_TOLERANCE) {end=b;continue;}
       // A space that does not fit hangs at the end of the line instead of starting the next one.
       if (prose && end>start && /\S/u.test(text.slice(start,end)) && HANGING_SPACE.test(token[0][0]!)) {if(hangFrom<0)hangFrom=end;end=b;continue;}
@@ -1891,7 +1964,16 @@ function fitSourceText(text:string,box:LayoutBox,size:number,minimum:number,step
       ...(directionAt?{directions:sourceLines.map(line=>directionAt(line.start))}:{}),
       overflow:sourceLines.length*lineHeight>box.height+.01||sourceLines.some(line=>line.width>box.width+.01)};
   };
-  return fitAtSizes(layout,size,minimum,step,snap);
+  // WI-4 (P15): a heading keeps the line count and the size of its greedy wrap and balances the breaks (balancedBreaks).
+  const balanced=(fontSize:number):CodeTextFit=>{
+    const greedy=layout(fontSize);
+    if (!balance||greedy.overflow||greedy.sourceLines.length<2) return greedy;
+    const widthOf=(start:number,end:number)=>{let x=0;for (const [index,segment] of text.slice(start,end).split('\t').entries()) {if(index)x=(Math.floor(x/(measure(' ',fontSize)*4)+1e-9)+1)*measure(' ',fontSize)*4;if(segment)x+=measure(segment,fontSize);}return x;};
+    const forced=balancedBreaks(text,greedy.sourceLines.map(line=>({start:line.start,end:line.end,hard:line.boundary!=='soft'})),widthOf,box.width);
+    const result=forced?layout(fontSize,forced):greedy;
+    return result.sourceLines.length===greedy.sourceLines.length&&!result.overflow?result:greedy;
+  };
+  return fitAtSizes(balance?balanced:layout,size,minimum,step,snap);
 }
 
 /** Shared filename/language/body allocation. Consumers must reuse the accepted fits and styles. */
@@ -1910,7 +1992,7 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
   const add=(role:CodeTextPart['role'],text:string,partPath:string,generated=false)=>{
     const requestedStyle:TextStyle={fontFamily:options.fontFamilies?.code??'monospace',fontWeight:role==='body'?400:700,italic:false,path:partPath};
     const part:CodeTextPart={role,path:partPath,text,sources:generated?[]:[{path:partPath,start:0,end:text.length}],generated,box:{...inner},
-      requestedFontSize:gridFontSize((role==='body'?18:14)*scale,minimum),minFontSize:minimum,requestedStyle,
+      requestedFontSize:gridFontSize((role==='body'?CODE_NOMINAL_SIZE:14)*scale,minimum),minFontSize:minimum,requestedStyle,
       style:resolveTextStyle({...requestedStyle},options.textMeasurement)};
     parts.push(part);return part;
   };
@@ -1919,8 +2001,18 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
   if (!parts.length) add('language','code',path,true);
   const body=add('body',code.source,shorthand?path:`${path}.source`),headers=parts.filter(part=>part!==body);
   const usable=(area:LayoutBox)=>[area.x,area.y,area.width,area.height].every(Number.isFinite)&&area.width>0&&area.height>0;
-  const fit=(part:CodeTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum)=>usable(area)
-    ?fitCodeText(part.text,area,size,floor,scale,textWidthMeasurer(part.style,options.textMeasurement)):undefined;
+  const measureCode=textWidthMeasurer(body.style,options.textMeasurement);
+  const fit=(part:CodeTextPart,area:LayoutBox,size=part.requestedFontSize,floor=minimum)=>{
+    if (!usable(area)) return undefined;
+    const wanted=fitCodeText(part.text,area,size,floor,scale,textWidthMeasurer(part.style,options.textMeasurement));
+    // WI-4 (P21): a code body asks for 22 px, but not at the price of wrapping lines that the former 18 px kept whole (a narrow column
+    // would break `function` from its name): the earlier size is taken when it wraps fewer lines and fits.
+    const wraps=(value:CodeTextFit)=>value.sourceLines.filter(line=>line.boundary==='soft').length;
+    const legacy=gridFontSize(LEGACY_CODE_NOMINAL_SIZE*scale,minimum);
+    if (part.role!=='body'||part.requestedFontSize<=legacy||!wraps(wanted)) return wanted;
+    const earlier=fitCodeText(part.text,area,legacy,floor,scale,measureCode);
+    return !earlier.overflow&&wraps(earlier)<wraps(wanted)?earlier:wanted;
+  };
   if (usable(inner)) {
     // There are at most two metadata parts and four nominal/floor combinations.
     const combinations=headers.reduce<{part:CodeTextPart;size:number}[][]>((choices,part)=>
@@ -1943,6 +2035,8 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
       if (!selected||!overflow&&(selected.overflow||score<selected.score)||overflow&&selected.overflow) selected={allocations,score,overflow};
     }
     if (selected) for (const {part,box,fit} of selected.allocations) {part.box=box;part.fit=fit;}
+    // WI-4 (P21): a body that needs less than its space takes only what its lines need; the panel hugs it (`bounds`).
+    if (selected&&!selected.overflow&&body.fit) body.box={...body.box,height:Math.min(body.box.height,body.fit.lines.length*body.fit.lineHeight)};
   }
   const report=(reason:CodeLayoutDiagnostic['reason'],part:CodeTextPart,roles:CodeTextPart['role'][],message:string)=>
     diagnostics.push({code:'text-overflow',reason,path:part.path,parts:roles,message});
@@ -1961,7 +2055,10 @@ export function layoutCode(value:string|CodeContent,box:LayoutBox,options:CodeLa
     }
   }
   if (diagnostics.length&&options.overflow==='error') throw new OPFCompositionError(diagnostics);
-  return {algorithm:'code-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,diagnostics,overflow:diagnostics.length>0};
+  // The panel a code body needs: the insets around the metadata and the source lines (the whole cell when the layout failed).
+  const bottom=body.fit&&!body.fit.overflow?body.box.y+body.box.height+18:box.y+box.height;
+  const bounds={x:box.x,y:box.y,width:box.width,height:Math.min(box.height,Math.max(bottom-box.y,0))};
+  return {bounds,algorithm:'code-flow-v1',textMeasurement:options.textMeasurement?'provided':'estimated',parts,diagnostics,overflow:diagnostics.length>0};
 }
 
 export interface RichTextRun {
@@ -2005,10 +2102,16 @@ export interface RichTextOptions {
    * composeSlide supplies the deck numbering from `slideCitations`; a marker fragment is emitted after the run.
    */
   citationMarker?: (runPath: string) => string | undefined;
+  /**
+   * WI-4: balance the wrapped lines of a heading: after the greedy wrap, keep its size and line count and choose the break set that
+   * minimizes the variance of the line widths (a line that ends a sentence or clause is favored), so the last line is not a
+   * stranded word. Explicit line breaks stay; a size is never reduced to balance, and a heading that would need another line stays greedy.
+   */
+  balance?: boolean;
 }
 
 /** Fit mixed styles without flattening font metrics. Run fontSize is in points. */
-export function fitRichText(input: readonly (string | RichTextRun)[], box: LayoutBox, requestedSize = 25, minFontSize = 16, options: RichTextOptions = {style:{fontFamily:'sans-serif',fontWeight:400}}): RichTextFit {
+export function fitRichText(input: readonly (string | RichTextRun)[], box: LayoutBox, requestedSize = PROSE_NOMINAL_SIZE, minFontSize = 16, options: RichTextOptions = {style:{fontFamily:'sans-serif',fontWeight:400}}): RichTextFit {
   if (![box.width,box.height,requestedSize,minFontSize].every(value=>Number.isFinite(value)&&value>0)) throw new RangeError('Rich text dimensions and font sizes must be finite and positive.');
   const layout=richTextLayouter(input,box,requestedSize,options,minFontSize);
   return fitAtSizes(layout,requestedSize,richMinimum(input,requestedSize,minFontSize));
@@ -2025,7 +2128,7 @@ function richMinimum(input:readonly (string|RichTextRun)[],requested:number,mini
   return visible?floor:minimum;
 }
 function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutBox, requestedSize: number, options: RichTextOptions, minimum=0): (fontSize:number)=>RichTextFit {
-  let offset=0;
+  let offset=0,lastWidth:(start:number,end:number)=>number=()=>0,lastRanges:{start:number;end:number}[]=[];
   const source=input.map((value,runIndex)=>{
     const run:RichTextRun=typeof value==='string'?{text:value}:value;
     if(typeof run?.text!=='string'||(run.fontSize!==undefined&&(!Number.isFinite(run.fontSize)||run.fontSize<=0))) throw new RangeError('Rich text runs need text and a positive finite font size.');
@@ -2041,7 +2144,7 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
   // Every painted size (the base size and each run's, scripts included) is on the 0.01 pt grid; a size at or above the floor never drops below it.
   const paint=(raw:number)=>raw>=minimum-1e-6?gridFontSize(raw,minimum):snapFontSizeDown(raw);
   const directionAt=options.direction==='rtl'?paragraphDirectionAt(whole,'rtl'):undefined;
-  const layout=(rawFontSize:number):RichTextFit=>{
+  const build=(rawFontSize:number,forced?:ReadonlySet<number>):RichTextFit=>{
     // The authored size ratios follow the unsnapped request; only the painted result is snapped.
     const fontSize=paint(rawFontSize),ratio=rawFontSize/requestedSize;
     const fragments=(start:number,end:number):RichTextFragment[]=>{
@@ -2083,6 +2186,8 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
     for(const match of whole.matchAll(/\r\n|\r|\n|[^\S\r\n\u00a0\u202f\ufeff]+|(?:[^\s]|\u00a0|\u202f|\ufeff)+/gu)){
       const start=match.index!,end=start+match[0].length;
       if(/^[\r\n]/.test(match[0])){push(start);lineStart=end;lineEnd=end;continue;}
+      // A break the balancer chose (headings): the line ends before this word.
+      if(forced?.has(start)&&lineEnd>lineStart&&/\S/u.test(whole.slice(lineStart,lineEnd)))push(start);
       if(width(lineStart,end)<=box.width+WRAP_TOLERANCE){lineEnd=end;continue;}
       // Wrap at word boundaries; retain whitespace in the source ranges. RR-17: whitespace that does not fit hangs at the end of the line
       // (the source stays lossless and the next line never starts with a space); hanging whitespace is not part of the line's width.
@@ -2114,8 +2219,18 @@ function richTextLayouter(input: readonly (string | RichTextRun)[], box: LayoutB
         y += height;
       }
     }
-    return {lines:ranges.map(range=>whole.slice(range.start,range.end)),fontSize,lineHeight:Math.max(fontSize*1.22,...richLines.map(line=>line.height)),richLines,height:y,overflow:y>box.height+.01||richLines.some(line=>line.width>box.width+.01),
+    const fit:RichTextFit={lines:ranges.map(range=>whole.slice(range.start,range.end)),fontSize,lineHeight:Math.max(fontSize*1.22,...richLines.map(line=>line.height)),richLines,height:y,overflow:y>box.height+.01||richLines.some(line=>line.width>box.width+.01),
       ...(directionAt?{directions:ranges.map(range=>directionAt(range.start))}:{})};
+    lastWidth=width;lastRanges=ranges;
+    return fit;
+  };
+  // WI-4 (P15): a heading keeps the line count and the size of its greedy wrap and balances the breaks (balancedBreaks).
+  const layout=(rawFontSize:number):RichTextFit=>{
+    const greedy=build(rawFontSize);
+    if(!options.balance||greedy.overflow||greedy.richLines.length<2)return greedy;
+    const forced=balancedBreaks(whole,lastRanges.map(range=>({start:range.start,end:range.end,hard:/^[\r\n]/.test(whole.slice(range.end,range.end+1))||range.end>=whole.length})),lastWidth,box.width);
+    const result=forced?build(rawFontSize,forced):greedy;
+    return result.richLines.length===greedy.richLines.length&&!result.overflow?result:greedy;
   };
   return layout;
 }
@@ -2174,7 +2289,7 @@ export interface ListFitOptions extends RichTextOptions {
 }
 
 /** Reference-pixel starting size; explicit rich runs retain their authored sizes. */
-function contentNominalSize(field:string):number { return field==='items'||field==='bullets'?32:25; }
+function contentNominalSize(field:string):number { return field==='items'||field==='bullets'?LIST_NOMINAL_SIZE:field==='table'?TABLE_NOMINAL_SIZE:PROSE_NOMINAL_SIZE; }
 
 /** Shared hanging indents, mixed-run fitting and description spacing for list payloads. */
 export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=contentNominalSize('items'),minFontSize=16,options:ListFitOptions={style:{fontFamily:'sans-serif',fontWeight:400}}):ListFit {
@@ -2604,15 +2719,17 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const richOptions = (style: TextStyle): RichTextOptions => ({style,textMeasurement:options.textMeasurement,...(options.fontFamilies?.code?{codeFontFamily:options.fontFamilies.code}:{}),...(citationMarker?{citationMarker}:{}),...(rtl?{direction:'rtl' as const}:{})});
   const fitPlacedText = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,explicitAlignment?:'left'|'center'|'right'):TextFit|RichTextFit => {
     const style=styleFor(field,path),rich=(field==='text'||headings.has(field))&&Array.isArray(value);
-    if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,richOptions(style)):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement),textDirection);
+    // WI-4 (P15): a wrapped title or subtitle is balanced (same size, same line count); body text keeps the greedy wrap.
+    const balance=field==='title'||field==='subtitle',textOptions=balance?{...richOptions(style),balance}:richOptions(style);
+    if(!options.textMeasurement?.outlineBounds)return rich?fitRichText(value,box,size,minimum,textOptions):fitText(text,box,size,minimum,textWidthMeasurer(style,options.textMeasurement),textDirection,balance);
     const alignment=explicitAlignment??alignmentFor(field);
-    const richLayout=rich?richTextLayouter(value,box,size,richOptions(style),minimum):undefined;
+    const richLayout=rich?richTextLayouter(value,box,size,textOptions,minimum):undefined;
     const measure=textWidthMeasurer(style,options.textMeasurement),floor=snapFontSizeUp(rich?richMinimum(value,size,minimum):minimum),start=Math.max(size,floor);
     // The nominal heading/body range fits within 64 reference-pixel steps; the
     // last trial always evaluates the explicit floor even with unusual callers.
     for(let trial=0;trial<=64;trial++) {
       const raw=start-trial*scale,last=trial===64||raw<=floor,fontSize=last?floor:gridFontSize(raw,floor);
-      const fit=richLayout?richLayout(fontSize):fitText(text,box,fontSize,fontSize,measure,textDirection);
+      const fit=richLayout?richLayout(fontSize):fitText(text,box,fontSize,fontSize,measure,textDirection,balance);
       const richLines='richLines' in fit?(fit as RichTextFit).richLines:undefined;
       const lines:TextLineInk[]=richLines?richLines.map(line=>{
         let outline:LayoutBox|null=null;
@@ -2736,7 +2853,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // A template places its headings in its title (and subtitle) area: composeTemplate below.
   for (const field of useTemplate ? [] : ["tag", "title", "subtitle"]) {
     if (!slide[field] || (Array.isArray(slide[field]) && !annotationText(slide[field]))) continue;
-    const requested = (field === "title" ? 54 : field === "tag" ? 16 : 25) * scale;
+    const requested = (field === "title" ? 54 : field === "tag" ? 16 : PROSE_NOMINAL_SIZE) * scale;
     const maxHeight = Math.max(height * (field === "title" ? 0.26 : field === "subtitle" ? 0.12 : 0.045),minSize*1.22+2*rasterPadding);
     const box = { x: area.left + padding, y, width: area.right - area.left - padding * 2, height: maxHeight };
     // A TextRun[] heading wraps and fits like rich body text (richTextLayouter); a string keeps the plain fitter.
@@ -2775,7 +2892,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   }
   const contentBox ={ x: area.left + padding, y, width: area.right - area.left - padding * 2, height: Math.max(scale, bodyBottom - y) };
   // Automatic chartPrimary uses a synthetic content group without its own OPF path; it records no group, flow or decision.
-  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string };
+  type Pending = { field: string; type: string; value: unknown; path: string; payload: Record<string, unknown>; children?: Pending[]; composition?: Composition; region?: [number[], number[]]; synthetic?: boolean; caption?: unknown; captionPath?: string; host?: Record<string, any>; hostPath?: string; auto?: boolean; lone?: boolean };
   const collect = (host: Record<string, any>, basePath: string, depth = 0, ancestors: unknown[] = []): Pending[] => {
     if (Array.isArray(host.blocks)) {
       if (depth >= MAX_COMPOSITION_DEPTH || ancestors.includes(host)) throw new RangeError(`Content groups must be acyclic and nest at most ${MAX_COMPOSITION_DEPTH} levels.`);
@@ -2825,9 +2942,15 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const frame = acceptedBox(box), padding = Math.min(12 * scale, frame.width / 4, frame.height / 4);
     return acceptedBox({x:frame.x+padding,y:frame.y+padding,width:frame.width-2*padding,height:frame.height-2*padding});
   };
+  // The deck language tag the quote marks follow, resolved on first use.
+  let languageTag: string | undefined | null = null;
+  const deckLanguage = (): string | undefined => {
+    if (languageTag === null) languageTag = quoteLanguage(options.presentation, options.slideIndex);
+    return languageTag;
+  };
   const measureQuote = (node: Pending, box: LayoutBox, settings: Composition) => layoutQuote(node.value as string | QuoteContent, acceptedBox(box), {
     fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,direction:textDirection,
-    ...(citationMarker?{citationMarker}:{}),
+    ...(citationMarker?{citationMarker}:{}),...(deckLanguage()!==undefined?{language:deckLanguage()!}:{}),
   });
   const measureCode = (node: Pending, box: LayoutBox, settings: Composition) => layoutCode(node.value as string | CodeContent, acceptedBox(box), {
     fontFamilies:options.fontFamilies,textMeasurement:options.textMeasurement,scale,minFontSize:settings.minFontSize,path:node.path,
@@ -2864,8 +2987,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       score += reduction + (internal.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += internal.overflow ? 1000 : 0; }
     } else if (text) {
-      const fit = fitContent(node.field,node.value,text,box,contentNominalSize(node.field)*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering);
-      const reduction = Math.max(0,snapFontSizeDown(contentNominalSize(node.field) * scale) - fit.fontSize) / scale;
+      const prose = proseMeasure(node, box.width);
+      const fit = fitContent(node.field,node.value,text,{...box,width:prose.width},prose.size,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering);
+      const reduction = Math.max(0,snapFontSizeDown(prose.size) - fit.fontSize) / scale;
       score += reduction + (fit.overflow ? 1000 : 0);
       if (penalties) { penalties.fontReduction += reduction; penalties.textOverflow += fit.overflow ? 1000 : 0; }
     }
@@ -2906,6 +3030,18 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const needs = nodes.map((node, index) => elastic[index] ? share : naturalHeight(node, area.width, cards, undefined, settings));
     const floors = nodes.map((node, index) => elastic[index] ? share : naturalHeight(node, area.width, cards, undefined, settings, true));
     let heights = shareHeights(needs, floors, space);
+    // WI-4: prose and lists that do not fit at their role sizes shrink together to the largest one size that fits, instead of each
+    // block taking the size its share of the column happens to allow (23, 21 and 25 px in one column).
+    const textual = nodes.every(node => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets'));
+    if (textual && nodes.length > 1 && needs.reduce((sum, size) => sum + size, 0) > space + 1e-6) {
+      const floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale), start = Math.max(...nodes.map(node => proseMeasure(node, area.width).size));
+      for (let size = start; ; size -= scale) {
+        const trial = Math.max(floor, snapFontSizeDown(size));
+        const natural = nodes.map(node => naturalHeight(node, area.width, cards, undefined, settings, false, Math.min(trial, proseMeasure(node, area.width).size)));
+        if (natural.reduce((sum, height) => sum + height, 0) <= space + 1e-6) { heights = natural; break; }
+        if (trial <= floor) break;
+      }
+    }
     // A chart or picture never gets less than the equal share it had before WI-1, even when the measured blocks cannot fit at
     // the minimum size: the text overflows either way, and the drawing stays legible.
     if (stretch && heights.some((size, index) => elastic[index] && size < share - 1e-9)) {
@@ -2962,6 +3098,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const actualGap = gapOverride ?? (settings === rootSettings ? gap : localGap);
     let cols = defaultColumns(count, area, settings);
     const hasRegions = nodes.some(node => node.region);
+    // WI-4 (P34): auto mode keeps a reading measure for prose, and a lone short block asks for the lead size (proseMeasure).
+    if (!hasRegions && (mode === 'auto' || nodes.length === 1)) for (const node of nodes) { node.auto = true; node.lone = nodes.length === 1 && reserved === 0; }
     const candidates: CompositionCandidate[] | undefined = decisions && recorded ? [] : undefined;
     // WI-1: one column of blocks is placed stacked at the heights they need (stackedBoxes), never smaller per block than the
     // equal rows the candidates are scored on; weights on a column win.
@@ -2990,14 +3128,16 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const mirrored = (box: LayoutBox): LayoutBox => rtl ? { ...box, x: area.x + area.width - (box.x - area.x) - box.width } : box;
     const boxes = grid.boxes.map(mirrored);
     if (recorded && !hasRegions) flows.push({path: containerPath, box: {...area}, composition: {...settings}, columns: rtl ? grid.columns.map(track => ({offset: area.width - track.offset - track.size, size: track.size})) : grid.columns, rows: grid.rows, gap: grid.gap, itemCount: nodes.length, slotCount: count});
-    const rowItems = new Map<number, number[]>();
+    const rowItems = new Map<number, number[]>(), stack: number[] = [];
     nodes.forEach((node, index) => {
       const box = node.region ? mirrored(regionBox(node.region, area, actualGap)) : boxes[index]!;
       const first = items.length;
       placeNode(node, box, settings);
       if (!hasRegions && cols > 1 && !node.children) rowItems.set(Math.floor(index / cols), [...rowItems.get(Math.floor(index / cols)) ?? [], ...range(first, items.length)]);
+      else if (!hasRegions && cols === 1 && stacks && !node.children) stack.push(...range(first, items.length));
     });
     for (const set of rowItems.values()) peerSets.push(set);
+    if (stack.length > 1) peerSets.push(stack);
   };
   // OPF 0.19: the template region the next items are drawn in (ComposedItem.region), set while a region is composed.
   let regionTag: string | undefined, templateCell = false;
@@ -3038,7 +3178,19 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const timelineLayout = node.field === 'timeline' ? measureTimeline(node,box,settings) : undefined;
     const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
     const columns = textValue !== undefined && !internal ? listColumnsFor(node, box, settings, listColumns) : undefined;
-    const text = internal ? body?.fit : columns ? (columns.length > 1 ? mergeListColumns(columns) : columns[0]!.text) : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,contentNominalSize(node.field)*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering) : undefined;
+    // WI-4 (P34): a prose block in auto mode keeps a reading measure, placed by the content alignment. The measure never costs
+    // size: a block that fits less well in it than across its whole cell takes the cell.
+    const floorSize = snapFontSizeUp((settings.minFontSize??16)*scale);
+    const prose = textValue !== undefined && !internal ? proseMeasure(node, box.width) : undefined, wholeBox = box;
+    if (prose && prose.width < box.width - .5) {
+      const side = alignmentFor(node.field), atEnd = rtl ? side === 'left' : side === 'right';
+      box = { ...box, x: side === 'center' ? box.x + (box.width - prose.width) / 2 : atEnd ? box.x + box.width - prose.width : box.x, width: prose.width };
+    }
+    let text = internal ? body?.fit : columns ? (columns.length > 1 ? mergeListColumns(columns) : columns[0]!.text) : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,prose?.size ?? contentNominalSize(node.field)*scale,floorSize,node.path,node.payload.numbering) : undefined;
+    if (prose && box !== wholeBox && text && textValue !== undefined) {
+      const wide = fitContent(node.field,node.value,textValue,wholeBox,prose.size,floorSize,node.path,node.payload.numbering);
+      if (wide.fontSize > text.fontSize + 1e-9 || (text.overflow && !wide.overflow)) { text = wide; box = wholeBox; }
+    }
     // WI-3 (P23): a video draws in a 16:9 frame, the largest that fits its cell, placed by the region's anchor. In automatic
     // composition (no layout) a chart is at most 4:3, so a tall cell does not stretch it (P32).
     if (node.field === 'video') box = roundBox(containedBox(box, VIDEO_ASPECT, anchor));
@@ -3046,7 +3198,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, imageContext(undefined, anchor)) : undefined;
     if (caption) settleCaption(caption, image?.box ?? box, anchor);
     const chart = node.field === 'chart' ? composeChart(node, box, settings) : undefined;
-    items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box, ...(image ? {image} : {}), ...(chart ? {chart} : {}),
+    items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:codeLayout&&!codeLayout.overflow?{...acceptedBox(box),height:Math.min(acceptedBox(box).height,round(codeLayout.bounds.height))}:internal?acceptedBox(box):box, ...(image ? {image} : {}), ...(chart ? {chart} : {}),
       ...(frameBox ? {frameBox} : {}),
       text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
       ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
@@ -3110,7 +3262,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   };
   // OPF 0.19, "long" for `flow: auto`: more than 6 lines at the starting body size in the cell the grid would give the
   // block, counted with core's own estimate (never the host's measurement), so every engine picks the same arrangement.
-  const LONG_LINES = 6, LONG_CODE_LINES = 12, startSize = 25 * scale;
+  const LONG_LINES = 6, LONG_CODE_LINES = 12, startSize = PROSE_NOMINAL_SIZE * scale;
   const estimatedLines = (value: unknown, cellWidth: number, size: number): number =>
     flatten(value).split('\n').reduce((sum, paragraph) => sum + Math.max(1, wrapText(paragraph, Math.max(1, cellWidth), size).length), 0);
   const isLong = (node: Pending, cellWidth: number): boolean => {
@@ -3135,6 +3287,25 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (node.field === 'code') return String(typeof node.value === 'string' ? node.value : record(node.value).source ?? '').split('\n').length > LONG_CODE_LINES;
     return false;
   };
+  // WI-4 (P34): in auto mode a prose block is no wider than about 70 average characters of its size, and a lone block that stays within
+  // two lines at the lead size asks for that size. Everything else keeps its role size and the width its cell gives it.
+  const proseMeasure = (node: Pending, cellWidth: number): { size: number; width: number } => {
+    const role = contentNominalSize(node.field) * scale;
+    if (node.field !== 'text' || node.children || !node.auto) return { size: role, width: cellWidth };
+    // The host's measurement when it can measure the text with the deck's face (a run in another script is planned by its own
+    // run style, not here), the core estimate otherwise: the decision only picks a size and a width.
+    const measure = widthFor('text', node.path);
+    const linesAt = (width: number, size: number) => {
+      try {
+        return flatten(node.value).split('\n').reduce((sum, paragraph) => sum + Math.max(1, wrapText(paragraph, Math.max(1, width), size, measure).length), 0);
+      } catch { return estimatedLines(node.value, width, size); }
+    };
+    const measureAt = (size: number) => Math.min(cellWidth, PROSE_MEASURE_CHARS * AVERAGE_CHARACTER_EM * size);
+    const lead = LEAD_NOMINAL_SIZE * scale;
+    if (node.lone && lead > role && linesAt(measureAt(lead), lead) <= 2) return { size: lead, width: linesAt(cellWidth, lead) <= 1 ? cellWidth : measureAt(lead) };
+    // A block that is one line across its whole cell keeps that line; only text that wraps takes the reading measure.
+    return { size: role, width: linesAt(cellWidth, role) <= 1 ? cellWidth : measureAt(role) };
+  };
   // The height a node needs at `cellWidth` at the starting size: sizes the `auto` rows of a template and the stack of an
   // anchored region. Text is measured; other payloads use a fixed estimate (pictures and charts at 16:10).
   // Blocks whose height is measured from their content (a group when all its blocks are); the others take any height.
@@ -3142,14 +3313,14 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const measuredNode = (node: Pending): boolean => node.children ? node.children.length > 0 && node.children.every(measuredNode) : MEASURED_FIELDS.has(node.field);
   // `atFloor` (WI-1): the height at the minimum font size instead, which says how far the block can shrink; text and lists
   // are measured there, other payloads scale their need by the minimum over the starting size.
-  const naturalHeight = (node: Pending, cellWidth: number, cards: boolean, metricReferenceHeight?: number, naturalSettings: Composition = composition, atFloor = false): number => {
+  const naturalHeight = (node: Pending, cellWidth: number, cards: boolean, metricReferenceHeight?: number, naturalSettings: Composition = composition, atFloor = false, sizeOverride?: number): number => {
     const pad = cards ? 2 * Math.min(12 * scale, cellWidth / 4) : 0, inner = Math.max(scale, cellWidth - pad);
     if (node.children) return node.children.reduce((sum, child) => sum + naturalHeight(child, cellWidth, false, undefined, naturalSettings, atFloor), 0) + gap * Math.max(0, node.children.length - 1) + pad;
     const floorSize = snapFontSizeUp((naturalSettings.minFontSize ?? 16) * scale);
     let content: number;
     if (node.field === 'text' || node.field === 'items' || node.field === 'bullets') {
-      const size=atFloor ? floorSize : contentNominalSize(node.field)*scale;
-      const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { x: 0, y: 0, width: inner, height: 1e6 }, size, size, node.path, node.payload.numbering);
+      const prose = proseMeasure(node, inner), size=sizeOverride ?? (atFloor ? floorSize : prose.size);
+      const fit = fitContent(node.field, node.value, contentText(node.field, node.value) ?? '', { x: 0, y: 0, width: atFloor || sizeOverride !== undefined ? inner : prose.width, height: 1e6 }, size, size, node.path, node.payload.numbering);
       // WI-1: the height the placed text takes (its outlines and raster padding included), the same measure the fit that
       // places it checks, so a box of this height holds the text at the starting size instead of one grid step smaller.
       content = Math.max('height' in fit && typeof fit.height === 'number' ? fit.height : fit.lines.length * fit.lineHeight, fit.placement?.height ?? 0);
@@ -3181,6 +3352,11 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       return parts.length === 1 ? parts[0]! : { field: 'blocks', type: 'group', value: parts.map(part => part.payload), path: bound.path, payload: {}, children: parts, composition: { mode: 'column' }, synthetic: true };
     };
     const contents = new Map<string, Pending[]>(binding.regions.map(entry => [entry.name, [...entry.blocks, ...entry.overflow].map(unitOf)]));
+    // WI-4 (P34): the blocks of a `flow: auto` region are in auto mode; a region with one block makes it the lone block.
+    for (const region of plan.regions) {
+      const units = contents.get(region.name) ?? [];
+      if (region.flow === 'auto') for (const unit of units) { unit.auto = true; unit.lone = units.length === 1; }
+    }
     // Content of a layout with no overflow region: an implicit auto row below the grid. Not an area name, so it never meets one.
     const BELOW = '(below)';
     const belowUnits = binding.below.map(unitOf);
@@ -3217,7 +3393,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       const list: ComposedItem[] = [];
       let top = y;
       for (const field of fields) {
-        const requested = (field === 'title' ? 54 : field === 'tag' ? 16 : 25) * scale;
+        const requested = (field === 'title' ? 54 : field === 'tag' ? 16 : PROSE_NOMINAL_SIZE) * scale;
         const maxHeight = Math.max(height * (field === 'title' ? 0.26 : field === 'subtitle' ? 0.12 : 0.045), minSize * 1.22 + 2 * rasterPadding);
         const box = { x, y: top, width: areaWidth, height: maxHeight };
         const text = fitPlacedText(field, slide[field], annotationText(slide[field]), box, requested, minSize, `${path}.${field}`);
@@ -3243,9 +3419,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     // What a region needs in an auto row: its arrangement at the area's width, each row as tall as its tallest block.
     const regionNeed = (name: string, areaWidth: number, atFloor = false): number => {
       const units = unitsOf(name), region = name === BELOW ? belowRegion : regionOf.get(name)!;
-      // A kept empty region holds its place: two lines of body text in an auto row, inside a card's insets when the slide
+      // A kept empty region holds its place: two lines of body text (WI-4: at the lead size in a `flow: auto` region, where a lone block uses it) in an auto row, inside a card's insets when the slide
       // draws cards, as a filled region's text would be (naturalHeight). It gives way first (its floor is 0).
-      if (!units.length) return region.empty === 'keep' && !atFloor ? 2 * startSize * 1.22 + (hasCards && !region.bleed ? 2 * Math.min(12 * scale, areaWidth / 4) : 0) : 0;
+      if (!units.length) return region.empty === 'keep' && !atFloor ? 2 * (region.flow === 'auto' ? LEAD_NOMINAL_SIZE * scale : startSize) * 1.22 + (hasCards && !region.bleed ? 2 * Math.min(12 * scale, areaWidth / 4) : 0) : 0;
       const shape = flowShape(arrangementOf(region, units, { x: 0, y: 0, width: areaWidth, height: areaWidth / 4 }), units.length, true);
       const cellWidth = (areaWidth - gap * (shape.columns - 1)) / shape.columns, cards = hasCards && !region.bleed;
       let total = 0, index = 0;
@@ -3362,12 +3538,15 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         // the starting size tries columns before it shrinks (RR-81 review: the region's tools before overflow).
         const shape = flowShape(arrangement, units.length, cell.width >= cell.height), rowItems: number[][] = shape.perRow.map(() => []);
         const rowOf = (index: number) => { let row = 0; for (let seen = shape.perRow[0] ?? 0; index >= seen; seen += shape.perRow[++row] ?? Infinity); return row; };
+        const stack: number[] = [];
         units.forEach((unit, index) => {
           const first = items.length;
           placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' || stacked ? undefined : referenceHeights[index], region.anchor);
-          if (!unit.children) { rowItems[rowOf(index)]?.push(...range(first, items.length)); leafItems.push(...range(first, items.length)); }
+          if (!unit.children) { rowItems[rowOf(index)]?.push(...range(first, items.length)); leafItems.push(...range(first, items.length)); stack.push(...range(first, items.length)); }
         });
         if (arrangement !== 'column') peerSets.push(...rowItems.filter((_, row) => (shape.perRow[row] ?? 0) > 1));
+        // WI-4: the paragraphs and lists of one stacked column read at one size (stackedBoxes sizes the stack for it).
+        else if (stacked && stack.length > 1) peerSets.push(stack);
         return arrangement;
       } finally { regionTag = undefined; templateCell = false; }
     };

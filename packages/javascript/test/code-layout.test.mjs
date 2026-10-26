@@ -91,12 +91,12 @@ test('tabs use measured space stops and never send control tabs to the font-widt
   assert.equal(resolved.length,result.parts.length);
   assert.ok(result.parts.every(part=>part.requestedStyle.fontFamily==='Requested Code'&&part.style.fontFamily==='Resolved Code'));
   assert.ok(seen.every(style=>style.fontFamily==='Resolved Code'));
-  assert.equal(body.fit.tabWidth,36);
-  assert.deepEqual(body.fit.sourceLines.map(line=>line.width),[45,81]);
+  assert.equal(body.fit.tabWidth,44);
+  assert.deepEqual(body.fit.sourceLines.map(line=>line.width),[55,99]);
   assert.deepEqual(body.fit.sourceLines[0].segments,[
-    {kind:'text',start:0,end:1,x:0,width:9},
-    {kind:'tab',start:1,end:2,x:9,width:27},
-    {kind:'text',start:2,end:3,x:36,width:9},
+    {kind:'text',start:0,end:1,x:0,width:11},
+    {kind:'tab',start:1,end:2,x:11,width:33},
+    {kind:'text',start:2,end:3,x:44,width:11},
   ]);
   assertSource(body);
   assert.throws(()=>layoutCode('\t',cell,{textMeasurement:{measure:()=>0}}),/positive finite measured space/);

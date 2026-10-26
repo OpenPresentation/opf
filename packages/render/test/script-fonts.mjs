@@ -67,7 +67,7 @@ assert.equal(typeof core.paragraphDirection,'function','the linked core exports 
   ];
   const rendered=(text,language)=>{
     const svg=toSvg({$schema:'https://openpresentation.org/schema/opf/v1',name:'direction',language,design:{fontScheme:'roboto'},slides:[{title:'T',text}]}, 1);
-    const body=/<text [^>]*font-size="25"[^>]*>([\s\S]*?)<\/text>/.exec(svg)[1];
+    const body=/<text [^>]*font-size="(?:28|32)"[^>]*>([\s\S]*?)<\/text>/.exec(svg)[1];
     // The renderer wraps an RTL paragraph in RLI...PDI; no sample text itself ends with PDI.
     return body.startsWith(RLI)&&body.endsWith(PDI)?'rtl':'ltr';
   };
@@ -184,7 +184,7 @@ assert.match(arabicMixed,/>English only line\.</);
 // including lines with only Latin words, and each paragraph decides on its own.
 const paragraphDeck=deck('ar','roboto','Title','مرحبا '+'English words wrap here '.repeat(12)+'\nSecond paragraph in English.');
 const svg=toSvg(paragraphDeck, 1, {fonts: fonts});
-const body=[...svg.matchAll(/<text [^>]*font-size="25"[^>]*>([\s\S]*?)<\/text>/g)].map(match=>match[1]);
+const body=[...svg.matchAll(/<text [^>]*font-size="(?:28|32)"[^>]*>([\s\S]*?)<\/text>/g)].map(match=>match[1]);
 assert.ok(body.length>=3,'the RTL paragraph wraps');
 assert.ok(body.slice(0,-1).every(line=>line.includes('\u2067')),'every wrapped line of the RTL paragraph is isolated');
 assert.ok(body.slice(0,-1).some(line=>!/[؀-ۿ]/.test(line)),'a wrapped RTL-paragraph line holds only Latin words');
