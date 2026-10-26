@@ -11,7 +11,7 @@ import type { Presenter } from "./presenter.js";
 import type { ReviewFinding, ReviewHook } from "./review.js";
 import type { ReviewPanel, ReviewPanelOptions } from "./review-panel.js";
 import type { SlideManager } from "./slide-manager.js";
-import type { SourceFormat, SourceFile, SourcePane, SourcePaneOptions } from "./source-pane.js";
+import type { SourceCursor, SourceFormat, SourceFile, SourcePane, SourcePaneOptions } from "./source-pane.js";
 
 export type OpfEditorLayout = "full" | "canvas" | "source";
 export type OpfEditorView = "slide" | "sorter" | "outline" | "layouts";
@@ -181,6 +181,8 @@ export interface OpfEditorSourceOptions {
   checks?: { only?: readonly string[]; [key: string]: unknown };
   outline?: SourcePaneOptions["outline"];
   applyDelay?: number;
+  /** Milliseconds of quiet before a `cursor` event (default 50). */
+  cursorDelay?: number;
   completions?: boolean;
   label?: string;
   catalogs?: SourcePaneOptions["catalogs"];
@@ -253,6 +255,8 @@ export interface OpfEditorOptions {
 
   onChange?(detail: OpfEditorEvents["change"]): void;
   onSelection?(detail: OpfEditorEvents["selection"]): void;
+  /** The caret of the source pane moved to another place in the text. The same as `on: { cursor }`. */
+  onCursor?(detail: OpfEditorEvents["cursor"]): void;
   onError?(error: Error, detail: Omit<OpfEditorEvents["error"], "error">): void;
   onReady?(detail: OpfEditorEvents["ready"]): void;
   /** Listeners by event name; the same as calling `on` before anything happens. */
@@ -274,6 +278,12 @@ export interface OpfEditorEvents {
   /** The document changed (an edit in the canvas or the source, undo, redo, a loaded document). Not fired for a catalogs change. */
   change: { document: unknown; canUndo: boolean; canRedo: boolean; event: EditorEvent };
   selection: { path: string; value: unknown; slideIndex: number; element: Element | undefined };
+  /**
+   * The caret or selection of the source pane moved, in JSON, YAML or Markdown, also while the pane has no focus: the path under it as a JSON Pointer
+   * and by id, and the selection in source offsets. Quiet for `source.cursorDelay` first and not repeated for a place already reported; the detail is
+   * frozen. For the rest of the pane (`revealPath`, `setDecorations`, `getCursor`) use `editor.sourcePane`.
+   */
+  cursor: SourceCursor;
   /** The slide changed (0-based). */
   slide: { index: number; count: number };
   view: { view: OpfEditorView; previous: OpfEditorView };
@@ -346,6 +356,8 @@ export interface OpfEditor {
   readonly readOnly: boolean;
   /** False while the text in the source pane is not a valid deck: the slide shows the last valid one. */
   readonly inSync: boolean;
+  /** The latest `cursor` event, or `null` before the first (and without a source pane). The same object until the next event. */
+  readonly sourceCursor: SourceCursor | null;
   /** The latest verdict on the text of the source pane (what the last `source` event carried), or `null` before the first. */
   readonly sourceState: OpfEditorSourceState | null;
   readonly lastError: Error | undefined;

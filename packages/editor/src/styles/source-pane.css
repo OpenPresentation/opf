@@ -171,6 +171,16 @@
 .opf-source-code .tok-comment { font-style: italic; }
 .opf-source-code .code-key.is-active { background: color-mix(in srgb, var(--opf-ui-accent) 10%, transparent); border-radius: var(--opf-ui-radius-sm); }
 .opf-source-code .cm-line.is-hover { background: color-mix(in srgb, var(--opf-ui-accent) 6%, transparent); }
+/* CE-17: decorations a host draws (setDecorations) and the flash of revealPath; the host styles any other kind as .opf-source-decoration-<kind>. */
+.opf-source-code .opf-source-decoration { background: color-mix(in srgb, var(--opf-ui-accent) 16%, transparent); border-radius: var(--opf-ui-radius-sm); }
+.opf-source-code .opf-source-decoration-error { background: color-mix(in srgb, var(--opf-ui-danger) 18%, transparent); }
+.opf-source-code .opf-source-decoration-warning { background: color-mix(in srgb, var(--opf-ui-warn) 20%, transparent); }
+.opf-source-code .opf-source-decoration-info { background: color-mix(in srgb, var(--opf-ui-accent) 10%, transparent); }
+.opf-source-code .opf-source-decoration-added { background: color-mix(in srgb, var(--opf-ui-success) 20%, transparent); }
+.opf-source-code .opf-source-decoration-changed { background: color-mix(in srgb, var(--opf-ui-warn) 14%, transparent); }
+.opf-source-code .cm-line.opf-source-flash { animation: opf-source-flash 1.2s ease-out; }
+@keyframes opf-source-flash { from { background: color-mix(in srgb, var(--opf-ui-accent) 32%, transparent); } to { background: transparent; } }
+@media (prefers-reduced-motion: reduce) { .opf-source-code .cm-line.opf-source-flash { animation: none; background: color-mix(in srgb, var(--opf-ui-accent) 20%, transparent); } }
 .opf-source-code .cm-panels { background: var(--opf-ui-surface); color: var(--opf-ui-fg); border-color: var(--opf-ui-border); }
 .opf-source-code .cm-tooltip { background: var(--opf-ui-surface); border: 1px solid var(--opf-ui-border); border-radius: var(--opf-ui-radius); color: var(--opf-ui-fg); }
 .opf-source-code .cm-lintRange-error { background-image: none; text-decoration: underline wavy var(--opf-ui-danger); }

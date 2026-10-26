@@ -64,7 +64,7 @@ Slot names: `source`, `canvas`, `slide` (the element hidden while another view s
 | `renderOptions`, `imageResolver` | extra `toSvg` options for every draw, and the renderer's hook that turns an asset reference into an address |
 | `onAddAsset` | stores an uploaded image yourself and returns its reference (the design controls' hook) |
 | `variables` | `"authored"` (default) shows `{{variables}}` as written; `"resolved"` fills them in, except in a template deck, and routes a press on filled-in text to its properties form |
-| `source` | `format`, `name`, `text`, `worker` (the Web Worker for the pane's text checks: `true`, a `Worker` or a function), `checks`, `outline`, `applyDelay`, `onCopy`, `onDownload`, `onRename`, `resolvePreview` |
+| `source` | `format`, `name`, `text`, `worker` (the Web Worker for the pane's text checks: `true`, a `Worker` or a function), `checks`, `outline`, `applyDelay`, `cursorDelay`, `onCopy`, `onDownload`, `onRename`, `resolvePreview` |
 | `canvas` | more options for the canvas: `textEntry`, `imageTools`, `layoutEditing` |
 | `export` | more options for the Export menu: `exportPptx(deck, { signal, onProgress })`, `items`, `label`, `onDownload` |
 | `review`, `find`, `design` | `true`, or the options of that panel (`review.hook` is the hosted reviewer) |
@@ -72,29 +72,58 @@ Slot names: `source`, `canvas`, `slide` (the element hidden while another view s
 | `readOnly` | refuse every write from the editor's parts and lock the slide and the code; the host's own writes to `editor.session` still work |
 | `density`, `exportMode` | `"comfortable" | "touch" | "auto"` (follows the pointer); `"menu" | "sheet" | "auto"` (the sheet at 900px and under) |
 | `theme` | see [theming](theming.md) |
-| `onChange`, `onSelection`, `onError`, `onReady`, `on` | callbacks and listeners |
+| `onChange`, `onSelection`, `onCursor`, `onError`, `onReady`, `on` | callbacks and listeners |
 
 ## The handle
 
-`getDocument()` (frozen, replaced on every change, so a store snapshot) · `setDocument(document, { text, format, name, rebase })` (opens a document as one undoable change that forks no catalog record; the source pane shows `text` as written; a document the session refuses becomes a draft in the pane and the call returns `false`) · `session` · `canvas` · `sourcePane` and the other parts · `slideIndex`, `setSlide(index)`, `goTo(index, path)`, `select(path)` · `view`, `views`, `setView(view)` · `undo()`, `redo()`, `commit()` · `focus("source" | "canvas")` · `present()` · `openFind()` · `readSource()` · `setReadOnly`, `setTheme`, `setDensity`, `setExportMode` · `status(message)` · `on(event, listener)` (returns the unsubscribe) and `off` · `ready` · `destroy()`.
+`getDocument()` (frozen, replaced on every change, so a store snapshot) · `setDocument(document, { text, format, name, rebase })` (opens a document as one undoable change that forks no catalog record; the source pane shows `text` as written; a document the session refuses becomes a draft in the pane and the call returns `false`) · `session` · `canvas` · `sourcePane` and the other parts · `slideIndex`, `setSlide(index)`, `goTo(index, path)`, `select(path)` · `view`, `views`, `setView(view)` · `undo()`, `redo()`, `commit()` · `focus("source" | "canvas")` · `present()` · `openFind()` · `readSource()` · `sourceCursor` · `setReadOnly`, `setTheme`, `setDensity`, `setExportMode` · `status(message)` · `on(event, listener)` (returns the unsubscribe) and `off` · `ready` · `destroy()`.
 
-Events: `mounted` (the parts exist; the first update may still wait for fonts), `ready` (the first update is done), `change` (`{ document, canUndo, canRedo, event }`), `selection`, `slide`, `view`, `source` (the verdict on the text: `valid`, `invalid` or `syntax`), `checking`, `fonts`, `geometry`, `sync` (after every update once fonts are ready, with the slide's geometry and layout notes computed when read), `render`, `draft`, `commit`, `cancel`, `status`, `error`, `kept`, `rename`, `export`, `persistence`, `review`, `panel`, `destroy`. An exception thrown by a listener is reported to `error` and does not stop the others.
+Events: `mounted` (the parts exist; the first update may still wait for fonts), `ready` (the first update is done), `change` (`{ document, canUndo, canRedo, event }`), `selection`, `cursor` (the caret of the source pane, below), `slide`, `view`, `source` (the verdict on the text: `valid`, `invalid` or `syntax`), `checking`, `fonts`, `geometry`, `sync` (after every update once fonts are ready, with the slide's geometry and layout notes computed when read), `render`, `draft`, `commit`, `cancel`, `status`, `error`, `kept`, `rename`, `export`, `persistence`, `review`, `panel`, `destroy`. An exception thrown by a listener is reported to `error` and does not stop the others.
 
 While the text in the source pane is not a valid deck, the editor says so (`editor.inSync` is `false`): the slide shows the last valid document and is locked, Export, Present and Undo wait for the fix.
 
+## The source pane's hooks (CE-17)
+
+A host that replaces its own code editor with the source pane needs to know where the caret is, to scroll to a field without taking the focus, and to mark fields of its own. All three work in JSON, YAML and Markdown, through core's `pathAt` and `locate`. The event is on the handle; the methods are on `editor.sourcePane` (undefined in a layout without a source pane).
+
+```js
+// Where is the caret? { pointer, idPath, from, to, head, part, format }, told when it moves (after `source.cursorDelay`, default 50 ms, of quiet).
+editor.on("cursor", ({ pointer, idPath, from, to }) => showFieldDocs(pointer));
+editor.sourceCursor;                 // the latest event, or null
+editor.sourcePane.getCursor();       // read at once
+
+// Scroll a field or a range into view without moving the caret or the focus (`focus`, `select`, `flash` and `align` are options).
+editor.sourcePane.revealPath("/slides/12/title");
+editor.sourcePane.revealPath({ from: 120, to: 180 }, { align: "nearest" });
+
+// Marks and line classes of your own, in sets (groups) you replace or clear; the editor's own squiggles and highlights are separate.
+editor.sourcePane.setDecorations(
+  [{ path: "/slides/3/title", kind: "error", label: "Title is too long" }, { path: "/slides/4", kind: "added", line: true }],
+  { group: "validation" },
+);
+editor.sourcePane.setDecorations([{ path: "/slides/7/text", kind: "agent" }], { group: "agent" });
+editor.sourcePane.clearDecorations("agent");   // or clearDecorations() for every set
+```
+
+- **`cursor`** is `{ pointer, idPath, from, to, head, part, format }`. `pointer` is the JSON Pointer of the field under the caret (`/slides/0/title`; on a property name or a value it is that property, between members it is the container, and `""` outside the content). `idPath` is the same place addressed by id (`/slides/@intro/title`), read from the session's document, so it survives a reorder; an element without an id keeps its index, and while the text does not read as a document `idPath` is the pointer. `from` and `to` are the selection and `head` the end the caret is at, in source offsets (UTF-16 positions in `getText()`, a CRLF counting as two). `part` is `key`, `value`, `between` or `none`. The event is not told while a typed edit waits to be applied (so `idPath` names the right slide), is coalesced over `cursorDelay`, is not repeated for a place already told, and is told also while the pane has no focus (a reveal that selects, a click, a format switch). The detail is frozen. The `onCursor` option is the same as `on: { cursor }`.
+- **`revealPath(target, options?)`** takes a pointer (or dotted path) or `{ from, to }`. It scrolls the start of the target into view, opening any fold around it, and moves neither the caret nor the focus, unlike `focusPath`. Options: `focus` (also focus the code), `select` (also select the range, which emits `cursor`), `align` (`center`, the default, `start` or `nearest`), `flash` (mark the first line for a moment) and `part` (which part of a field a path means: `entry`, the default, `value`, `key`, `open` or `colon`). It returns `{ from, to, line, exact }` (`exact` is false when only the nearest container could be placed) or `null`.
+- **`setDecorations(list, { group })`** draws one set, replacing the set of that `group` (default `default`); `[]` or `null` clears it. An item is `{ path, part?, kind?, label?, line? }` or `{ range: { from, to }, kind?, label?, line? }`. A path stays on its field as the text is edited and the format is switched, and is not drawn while the text has no such field; a range follows the text as positions, like a selection. `kind` becomes the class `opf-source-decoration-<kind>` (`highlight`, `error`, `warning`, `info`, `added` and `changed` have a look in the stylesheet; style any other kind yourself, the `--opf-ui-*` tokens work in it), `label` is the tooltip of a mark, and `line: true` puts the class on every line the range touches. `getDecorations(group?)` lists what is drawn now at the current offsets. The sets are the host's: the editor's own problems, field highlights and selection are untouched, and `clearDecorations()` removes only the host's.
+
 ## React
 
+
 ```jsx
-import { OpfEditor, useOpfDocument, useOpfSelection } from "@openpresentation/opf-editor/react";
+import { OpfEditor, useOpfCursor, useOpfDocument, useOpfSelection } from "@openpresentation/opf-editor/react";
 
 function Editor() {
   const [editor, setEditor] = React.useState(null);
   const document = useOpfDocument(editor);      // replaced on every change
   const selection = useOpfSelection(editor);    // { path, value } | null
+  const cursor = useOpfCursor(editor);          // { pointer, idPath, from, to, ... } | null: the caret of the source pane
   return (
     <>
       <OpfEditor className="editor" style={{ height: 720 }} document={deck} fonts={loadFonts} catalogs={[gallery]}
-        theme={theme} readOnly={locked} onEditor={setEditor} onChange={save} />
+        theme={theme} readOnly={locked} onEditor={setEditor} onChange={save} onCursor={showFieldDocs} />
       <p>{document?.name} · {selection?.path}</p>
     </>
   );

@@ -33,6 +33,7 @@ export declare function createOPFReactComponents(React: {
 
 // ---- CE-06: the embeddable editor ---------------------------------------------------------------------------------------------------------
 import type { CSSProperties, ForwardRefExoticComponent, MutableRefObject, RefAttributes } from "react";
+import type { SourceCursor } from "./source-pane.js";
 import type { OpfEditor as OpfEditorHandle, OpfEditorOptions, OpfEditorSlots } from "./workspace.js";
 
 /** A slot is an element, or a React ref to one (resolved when the editor mounts). */
@@ -62,5 +63,8 @@ export declare function useOpfDocument(editor: OpfEditorHandle | null | undefine
 
 /** The content last selected on the canvas, or `null`. */
 export declare function useOpfSelection(editor: OpfEditorHandle | null | undefined): { path: string; value: unknown } | null;
+
+/** The path under the caret of the source pane, the latest `cursor` event (`pointer`, `idPath`, `from`, `to`, ...), or `null` before the first. */
+export declare function useOpfCursor(editor: OpfEditorHandle | null | undefined): SourceCursor | null;
 
 export type { OpfEditorHandle };

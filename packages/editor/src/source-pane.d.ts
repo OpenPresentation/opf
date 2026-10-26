@@ -74,7 +74,74 @@ export interface OutlineSymbol {
   line: number;
 }
 
+/**
+ * Where the caret is in the text (CE-17), in any of the three formats. Offsets are source offsets: UTF-16 positions in the text as `getText()` returns it.
+ */
+export interface SourceCursor {
+  /** The JSON Pointer of the field under the caret (`/slides/0/title`; `""` outside the document's content). On a property name or value it is that property; between members it is the container. */
+  pointer: string;
+  /** The same place addressed by id (`/slides/@intro/title`), read from the session's document; the pointer itself where an element has no id, or while the text does not read as a document. */
+  idPath: string;
+  /** The start and end of the main selection (equal for a plain caret). */
+  from: number;
+  to: number;
+  /** The end of the selection the caret is at; `pointer` is read here. */
+  head: number;
+  /** What the caret is on: a property name (`key`), a value, whitespace or punctuation inside a container (`between`), or outside the document (`none`). */
+  part: "key" | "value" | "between" | "none";
+  format: SourceFormat;
+}
+
+/** One mark or line class a host draws in the text (CE-17), by path or by range. */
+export interface SourceDecoration {
+  /** A JSON Pointer (or dotted OPF path). The decoration follows the field when slides move, and is not drawn while the text has no such field. */
+  path?: string;
+  /** Which part of the field a `path` marks: the value (default), its `key`, the whole `entry` (key through value), the `open` bracket or the `colon`. */
+  part?: "value" | "key" | "entry" | "open" | "colon";
+  /** Source offsets, instead of a path. They follow the text as it is edited, as text positions, and are not placed again when the format changes. */
+  range?: { from: number; to?: number };
+  /** The class `opf-source-decoration-<kind>`; the built-in looks are `highlight` (default), `error`, `warning`, `info`, `added` and `changed`. Any other kind is styled by the host. */
+  kind?: string;
+  /** The browser tooltip of a mark. */
+  label?: string;
+  /** Put the class on every line the range touches (a `.cm-line`) instead of marking the text. */
+  line?: boolean;
+}
+
+/** A host decoration as drawn now (`getDecorations`). */
+export interface SourceDecorationInfo {
+  group: string;
+  kind: string;
+  label?: string;
+  path?: string;
+  /** The current source offsets; a line decoration spans from the first line's start to the last line's end. */
+  from: number;
+  to: number;
+  line: boolean;
+}
+
+export interface RevealOptions {
+  /** Also focus the code editor (default false: the page's focus stays where it is). */
+  focus?: boolean;
+  /** Also select the range (default false: the caret stays; this also emits a `cursor` event). */
+  select?: boolean;
+  /** Where the start of the range lands: `center` (default), `start` (the top) or `nearest` (the least scrolling). */
+  align?: "center" | "start" | "nearest";
+  /** Mark the first line for a moment. */
+  flash?: boolean;
+  /** Which part of the field a path means (default `entry`: the key through the end of its value). */
+  part?: SourceDecoration["part"];
+}
+
 export interface SourcePaneOptions {
+  /**
+   * The caret or selection moved (also while the pane has no focus), or the text under it changed: the path under the caret. Called after `cursorDelay` of
+   * quiet and not at all for a position it already reported; while a typed edit waits to be applied it waits too, so `idPath` is read from the document
+   * the text reads as. `getCursor()` reads the position at once.
+   */
+  onCursor?(cursor: SourceCursor): void;
+  /** Milliseconds of quiet before `onCursor` is called (default 50; 0 is the next tick). */
+  cursorDelay?: number;
   /** Add an Outline button to the bar and a panel listing the slides and other symbols of the document (`"open"` shows the panel at the start). The symbol picker (Cmd/Ctrl+Shift+O) is always there. */
   outline?: boolean | "open";
   /** Called with `getShortcuts()` when the shortcuts dialog is about to open; returning `true` means the host shows its own and the editor's dialog stays closed. */
@@ -160,6 +227,24 @@ export interface SourcePane {
   getFormat(): SourceFormat;
   /** Move the cursor to the line of a JSON Pointer (or dotted OPF path) in the current format (core's `locate` finds it in JSON, YAML and Markdown). Returns the line. */
   focusPath(path: string): number;
+  /** The path under the caret now (see `SourceCursor`), read at once and also while the pane has no focus. */
+  getCursor(): SourceCursor;
+  /**
+   * Scroll a JSON Pointer (or dotted path) or a range `{ from, to }` (source offsets) into view without moving the caret or the focus, which
+   * `focusPath` does. Folded text around the start is opened. Returns the range revealed, its one-based line, and whether the path is exactly in the
+   * text (`false`: the nearest container was revealed); `null` when the path cannot be placed at all.
+   */
+  revealPath(target: string | { from: number; to?: number }, options?: RevealOptions): { from: number; to: number; line: number; exact: boolean } | null;
+  /**
+   * Draw marks or line classes of your own, by path or range, kept apart from the editor's own decorations (squiggles, field highlights, the outline's
+   * marker). `group` (default `default`) names a set; a call replaces the whole set, so validation issues and the paths an agent touched can be
+   * two groups. `[]` or `null` clears the set. A decoration with neither a path nor a range throws a `TypeError`.
+   */
+  setDecorations(decorations: readonly SourceDecoration[] | null, options?: { group?: string }): void;
+  /** Clear the decorations of `group`, or all of the host's without an argument. */
+  clearDecorations(group?: string): void;
+  /** The host decorations drawn now, at their current offsets, in position order; of `group`, or all. */
+  getDecorations(group?: string): SourceDecorationInfo[];
   /** The text as shown, with any pending edit applied first. */
   getText(): string;
   /**

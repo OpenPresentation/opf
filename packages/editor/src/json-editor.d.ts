@@ -29,6 +29,18 @@ export interface EditorProblem {
   fixes?: EditorFix[];
 }
 
+/** One host decoration of the code editor (CE-17): a mark over `from..to`, or the class on every line it touches. Offsets are source offsets. */
+export interface EditorDecoration {
+  from: number;
+  to?: number;
+  className: string;
+  /** The browser tooltip of a mark. */
+  title?: string;
+  line?: boolean;
+  /** Kept as given, for `getDecorations`. */
+  data?: unknown;
+}
+
 /** All offsets address the original source in UTF-16, including CRLF pairs. */
 export interface JsonEditorApi {
   /** Say `message` in the editor's live region (screen readers). */
@@ -37,6 +49,8 @@ export interface JsonEditorApi {
   applyEdits(edits: SourceEdit[], options?: { caret?: number; select?: [number, number]; userEvent?: string }): void;
   getValue(): string;
   getSelection(): [number, number];
+  /** The end of the main selection the caret is at (equal to both ends of `getSelection()` for a plain caret), in source offsets. */
+  getHead(): number;
   hasFocus(): boolean;
   focus(): void;
   setSelection(from: number, to?: number): void;
@@ -115,6 +129,10 @@ export interface JsonCodeEditorOptions {
   /** Cmd/Ctrl+Shift+M: move focus to the host's problems list. Answer true when it did. */
   onFocusProblems?(): boolean;
   onFocus?(): void;
+  /** The selection or the text changed (every change, also one the host made). */
+  onSelectionChange?(): void;
+  /** The text changed (also by `update`). */
+  onDocChange?(): void;
   onHoverField?(path: string | null): void;
   onError?(error: unknown): void;
 }
@@ -153,6 +171,21 @@ export interface JsonCodeEditor {
   resetHistory(): void;
   /** How many typed edit groups CodeMirror can still undo. */
   undoDepth(): number;
+  /**
+   * CE-17: scroll the start of `from..to` (source offsets) into view without moving the selection or the focus. `align` is "center" (default),
+   * "start" or "nearest" (the least scrolling). `select` also selects the range and `focus` also focuses the editor. Folded text around the start is opened.
+   */
+  reveal(from: number, to?: number, options?: { align?: "center" | "start" | "nearest"; select?: boolean; focus?: boolean }): void;
+  /**
+   * CE-17: draw decorations a host owns, kept apart from the editor's own. `key` names a set and a call replaces that set; an empty list
+   * removes it. Each item is a mark over `from..to` (source offsets), or with `line` the class on every line it touches. The decorations
+   * move with the text as it is edited.
+   */
+  setDecorations(key: string, list: readonly EditorDecoration[]): void;
+  /** CE-17: remove the decoration set `key`, or every set when `key` is omitted. */
+  clearDecorations(key?: string): void;
+  /** CE-17: the decorations drawn now, at their current source offsets, in position order. A `line` decoration is one entry over all its lines. */
+  getDecorations(key?: string): (EditorDecoration & { key: string; to: number })[];
   /** The CodeMirror `EditorView`. */
   readonly view: import("@codemirror/view").EditorView;
   openOptions(left?: number, top?: number): Promise<void>;

@@ -2,7 +2,7 @@ import { scanYamlComments, toYaml } from "@openpresentation/opf/yaml";
 import { toMarkdown } from "@openpresentation/opf/markdown";
 import { mountJsonCodeEditor } from "./json-editor.js";
 import { MAX_EXACT_SOURCE_LENGTH, createSourceMemory, updateJsonSource } from "./exact-source.js";
-import { lineForPath, offsetOfLine } from "./source-lines.js";
+import { lineForPath, lineOfOffset, offsetOfLine, pathSegments } from "./source-lines.js";
 import { errorText, normalizeFinding, rejectionFindings as findingsOfError } from "./source-findings.js";
 import { formatSource } from "./source-format.js";
 import { buildProblems, summarize } from "./source-problems.js";
@@ -11,7 +11,8 @@ import { createSourceChecker } from "./source-checker.js";
 import { detailsFor } from "./source-details.js";
 import { schemaAtPath, schemaVariants } from "./schema.js";
 import { locateText } from "./source-ranges.js";
-import { scanMarkdown, starterValue } from "@openpresentation/opf/source";
+import { pathAt, scanMarkdown, starterValue } from "@openpresentation/opf/source";
+import { toIdPointer } from "@openpresentation/opf/ids";
 import { listCatalogRecords } from "./catalogs.js";
 import { documentSymbols, symbolAt } from "./source-symbols.js";
 
@@ -135,6 +136,11 @@ export function createSourcePane(container, options = {}) {
   const checker = options.worker ? createSourceChecker({ worker: options.worker, onError: (error) => options.onError?.(error) }) : null;
   let checkToken = 0, syntaxToken = 0, checkBusy = false, syntaxBusy = false;
   const stats = { worker: 0, inline: 0 };
+  // CE-17: the cursor event's pause and what it last said, and the host's decoration groups (below, with the cursor and the decorations).
+  const cursorDelay = Math.max(0, options.cursorDelay ?? 50);
+  let cursorTimer = null, cursorKey = "", cursorWaiting = false;
+  const hostGroups = new Map();
+  let decorationTimer = null, flashTimer = null;
   let problemRows = [], lastDraft = null, lastSummary = "No problems", summaryTimer = null, syntaxTimer = null, recheckTimer = null;
   // The exact text of the documents `replaceDocument` replaced and opened, per format, so Undo and Redo show it again byte for byte
   // (a YAML comment, the author's JSON spelling). Keyed by format and document; the oldest entries go first.
@@ -260,7 +266,8 @@ export function createSourcePane(container, options = {}) {
     onChange: () => schedule(),
     onFormat: () => formatDocument(),
     onFocusProblems: () => focusProblems(),
-    onSelectionChange: () => scheduleOutline(),
+    onSelectionChange: () => { scheduleOutline(); scheduleCursor(); },
+    onDocChange: () => scheduleDecorations(),
     onShowShortcuts: options.onShowShortcuts,
     // The pane supplies the problems itself (every finding, with ranges and fixes).
     syntaxProblems: false,
@@ -667,6 +674,7 @@ export function createSourcePane(container, options = {}) {
     dirty = false;
     control.setLanguage(target.language);
     show(written.text);
+    refreshDecorations();
     if (format === "md") refreshNotes();
     // A draft the document never accepted is checked and applied again, so its findings come back with it.
     if (written.draft) { baseline = null; flush(); }
@@ -689,6 +697,7 @@ export function createSourcePane(container, options = {}) {
     syntaxFindings = [];
     noteFindings = [];
     control.setLanguage(target.language);
+    refreshDecorations();
     updateBar();
     baseline = null;
     flush();
@@ -1137,6 +1146,115 @@ export function createSourcePane(container, options = {}) {
     return true;
   }
 
+  // ---- Cursor (CE-17) -----------------------------------------------------------------------------------------------
+  // The document path under the caret in the text as shown, for any format (core's `pathAt` reads text that does not parse). `idPath` is the same place
+  // addressed by id, read from the session's document: while the text is a draft that has not been applied, the event waits for the apply (the
+  // pointer into a deck the session has not got yet would name another slide), and while the text does not read as a document `idPath` is the pointer.
+  function readCursor() {
+    const text = control.api.getValue();
+    const [from, to] = control.api.getSelection();
+    const head = control.api.getHead();
+    const found = attempt(() => pathAt(text, format, head), undefined);
+    const at = pointer(found?.path ?? []);
+    return { pointer: at, idPath: attempt(() => toIdPointer(deck(), at), at), from, to, head, part: found?.part ?? "none", format };
+  }
+  const settled = () => timer === null && syntaxTimer === null && !checkBusy && !syntaxBusy;
+  function scheduleCursor() {
+    if (destroyed || !options.onCursor) return;
+    clearTimeout(cursorTimer);
+    cursorTimer = setTimeout(emitCursor, cursorDelay);
+  }
+  function emitCursor() {
+    cursorTimer = null;
+    if (destroyed) return;
+    if (!settled()) {
+      if (!cursorWaiting) { cursorWaiting = true; idle().then(() => { cursorWaiting = false; scheduleCursor(); }); }
+      return;
+    }
+    const detail = readCursor();
+    const key = JSON.stringify([detail.format, detail.from, detail.to, detail.head, detail.pointer, detail.idPath, detail.part]);
+    if (key === cursorKey) return;
+    cursorKey = key;
+    try { options.onCursor?.(detail); } catch (error) { options.onError?.(error); }
+  }
+
+  // ---- Host decorations and reveal (CE-17) --------------------------------------------------------------------------------
+  // A host's marks and line classes live in the code editor's own sets (`host:range:<group>` and `host:path:<group>`), apart from the editor's
+  // squiggles and field highlights. A range follows the text as it is edited; a path is found again after each edit (and at once when the format
+  // changes), so it stays on its field when slides move.
+  const kindClass = (kind) => `opf-source-decoration opf-source-decoration-${String(kind || "highlight").toLowerCase().replace(/[^a-z0-9_-]+/g, "-")}`;
+  const hostItem = (group, spec, from, to) => ({ from, to, line: Boolean(spec.line), className: kindClass(spec.kind), title: spec.label, data: { group, kind: spec.kind || "highlight", ...(spec.path !== undefined ? { path: spec.path } : {}) } });
+  function drawPaths(group) {
+    const entry = hostGroups.get(group);
+    if (!entry) return;
+    const text = control.api.getValue();
+    const items = [];
+    for (const spec of entry.paths) {
+      const found = attempt(() => locateText(format, text, pathSegments(spec.path), spec.part ?? "value"), null);
+      if (found?.exact) items.push(hostItem(group, spec, found.from, found.to));
+    }
+    control.setDecorations(`host:path:${group}`, items);
+  }
+  function refreshDecorations() {
+    clearTimeout(decorationTimer);
+    decorationTimer = null;
+    if (!destroyed) for (const [group, entry] of hostGroups) if (entry.paths.length) drawPaths(group);
+  }
+  function scheduleDecorations() {
+    if (destroyed || ![...hostGroups.values()].some((entry) => entry.paths.length)) return;
+    clearTimeout(decorationTimer);
+    decorationTimer = setTimeout(refreshDecorations, 120);
+  }
+  function clearGroup(group) {
+    hostGroups.delete(group);
+    control.clearDecorations(`host:range:${group}`);
+    control.clearDecorations(`host:path:${group}`);
+  }
+  function setHostDecorations(list, { group = "default" } = {}) {
+    if (destroyed) return;
+    const specs = list === null || list === undefined ? [] : list;
+    if (!Array.isArray(specs)) throw new TypeError("setDecorations needs a list of decorations (or null to clear).");
+    const ranges = [], paths = [];
+    for (const spec of specs) {
+      if (typeof spec?.path === "string") paths.push(spec);
+      else if (Number.isFinite(spec?.range?.from) && Number.isFinite(spec?.range?.to ?? spec.range.from)) ranges.push(spec);
+      else throw new TypeError("A decoration needs a path (a JSON Pointer) or a range ({ from, to } in source offsets).");
+    }
+    if (!specs.length) { clearGroup(group); return; }
+    hostGroups.set(group, { paths });
+    control.setDecorations(`host:range:${group}`, ranges.map((spec) => hostItem(group, spec, spec.range.from, spec.range.to ?? spec.range.from)));
+    drawPaths(group);
+  }
+  function revealTarget(target, { focus = false, select = false, align = "center", flash = false, part = "entry" } = {}) {
+    let range;
+    if (typeof target === "string") {
+      const found = attempt(() => locateText(format, control.api.getValue(), pathSegments(target), part), null);
+      if (!found) return null;
+      range = found;
+    } else if (Number.isFinite(target?.from)) {
+      const size = control.api.getValue().length;
+      const from = Math.min(size, Math.max(0, target.from));
+      range = { from, to: Math.min(size, Math.max(from, Number.isFinite(target.to) ? target.to : from)), exact: true };
+    } else throw new TypeError("revealPath needs a JSON Pointer or a range ({ from, to } in source offsets).");
+    control.reveal(range.from, range.to, { align, select, focus });
+    if (flash) {
+      control.setDecorations("flash", [{ from: range.from, to: range.from, line: true, className: "opf-source-flash" }]);
+      clearTimeout(flashTimer);
+      flashTimer = setTimeout(() => { flashTimer = null; if (!destroyed) control.clearDecorations("flash"); }, 1200);
+    }
+    return { from: range.from, to: range.to, line: lineOfOffset(control.api.getValue(), range.from), exact: range.exact };
+  }
+  function hostDecorationList(group) {
+    return control.getDecorations().filter((item) => item.key.startsWith("host:") && (group === undefined || item.data.group === group))
+      .map((item) => ({ group: item.data.group, kind: item.data.kind, ...(item.title ? { label: item.title } : {}), ...(item.data.path !== undefined ? { path: item.data.path } : {}), from: item.from, to: item.to, line: item.line }));
+  }
+  function idle() {
+    return new Promise((resolve) => {
+      const poll = () => { if (destroyed || settled()) resolve(); else setTimeout(poll, 4); };
+      poll();
+    });
+  }
+
   // ---- Public API ---------------------------------------------------------------------------------------------------
   function focusPath(path, finding) {
     flush();
@@ -1220,15 +1338,36 @@ export function createSourcePane(container, options = {}) {
     getOutline: () => documentSymbols(format, control.api.getValue()),
     /** Show or hide the outline panel (needs the `outline` option); with no argument it toggles. Returns whether the panel is open. */
     toggleOutline(open) { if (!outlinePanel) return false; setOutlineOpen(open ?? outlinePanel.hidden); return !outlinePanel.hidden; },
+    /**
+     * CE-17: the path under the caret: `{ pointer, idPath, from, to, head, part, format }` (offsets are source offsets), also when the pane has no focus.
+     * Read now, without waiting for the pending edit or the pause `onCursor` uses.
+     */
+    getCursor: () => readCursor(),
+    /**
+     * CE-17: scroll a JSON Pointer (or dotted path) or a range `{ from, to }` into view without moving the caret or the focus; folded text is opened.
+     * `focus` and `select` do move them. `align`: "center" (default), "start" or "nearest"; `flash` marks the first line for a moment; `part`: which part of
+     * the field a path means (default `entry`: the key through its value). Returns the range, its line and whether the path is exactly there, or `null`.
+     */
+    revealPath: revealTarget,
+    /**
+     * CE-17: draw marks (or line classes) a host owns, by path or range, apart from the editor's own decorations. `group` (default `default`) names a set, and a
+     * call replaces it. A range follows the text as it is edited; a path is placed again after each edit, and not drawn while the text has no such field.
+     * `[]` or `null` clears the set.
+     */
+    setDecorations: setHostDecorations,
+    /** CE-17: clear the decorations of `group`, or every host decoration without an argument. */
+    clearDecorations(group) {
+      if (destroyed) return;
+      if (group !== undefined) { clearGroup(group); return; }
+      for (const name of [...hostGroups.keys()]) clearGroup(name);
+      control.clearDecorations();
+    },
+    /** CE-17: the host decorations drawn now at their current offsets: `{ group, kind, label?, path?, from, to, line }`. */
+    getDecorations: (group) => hostDecorationList(group),
     /** The code editor, for hosts that focus or measure it. */
     editor: control,
     /** Resolves once no edit is waiting for its delay and no check is running (a worker's included): the text on screen has been read and applied. */
-    whenIdle() {
-      return new Promise((resolve) => {
-        const poll = () => { if (destroyed || (timer === null && syntaxTimer === null && !checkBusy && !syntaxBusy)) resolve(); else setTimeout(poll, 4); };
-        poll();
-      });
-    },
+    whenIdle: idle,
     /** How the applied edits were checked: `worker` and `inline` counts, and whether the worker is still usable (`available`). */
     checkerStats: () => ({ worker: stats.worker, inline: stats.inline, available: Boolean(checker?.available) }),
     destroy() {
@@ -1243,6 +1382,9 @@ export function createSourcePane(container, options = {}) {
       clearTimeout(recheckTimer);
       clearTimeout(outlineTimer);
       clearTimeout(outlineMarkTimer);
+      clearTimeout(cursorTimer);
+      clearTimeout(decorationTimer);
+      clearTimeout(flashTimer);
       unsubscribe();
       document.removeEventListener("pointerdown", outside, true);
       control.destroy();

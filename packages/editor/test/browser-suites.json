@@ -251,6 +251,10 @@
         {
           "id": "browser:selection-contrast",
           "command": "node test/selection-contrast-browser.mjs"
+        },
+        {
+          "id": "browser:source-hooks",
+          "command": "node test/source-hooks-browser.mjs"
         }
       ]
     }

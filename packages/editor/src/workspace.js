@@ -152,6 +152,7 @@ export function createOpfEditor(element, options = {}) {
   for (const [name, listener] of Object.entries(options.on ?? {})) on(name, listener);
   if (options.onChange) on("change", options.onChange);
   if (options.onSelection) on("selection", options.onSelection);
+  if (options.onCursor) on("cursor", options.onCursor);
   if (options.onError) on("error", ({ error, ...detail }) => options.onError(error, detail));
   if (options.onReady) on("ready", options.onReady);
 
@@ -222,6 +223,7 @@ export function createOpfEditor(element, options = {}) {
   let drafting = false;
   let openedText;
   let sourceState = null;
+  let sourceCursor = null;
   let fontsFailure;
   let refreshToken = 0;
   let lastRefresh = Promise.resolve();
@@ -540,6 +542,7 @@ export function createOpfEditor(element, options = {}) {
     return {
       ...(configured.outline !== undefined ? { outline: configured.outline } : {}),
       ...(configured.applyDelay !== undefined ? { applyDelay: configured.applyDelay } : {}),
+      ...(configured.cursorDelay !== undefined ? { cursorDelay: configured.cursorDelay } : {}),
       ...(configured.completions !== undefined ? { completions: configured.completions } : {}),
       ...(configured.catalogs !== undefined ? { catalogs: configured.catalogs } : {}),
       ...(configured.name !== undefined ? { name: configured.name } : {}),
@@ -554,6 +557,11 @@ export function createOpfEditor(element, options = {}) {
       onRename: (name) => {
         configured.onRename?.(name);
         emit("rename", { name });
+      },
+      // CE-17: the path under the caret of the source pane, as `cursor` events.
+      onCursor: (detail) => {
+        sourceCursor = Object.freeze(detail);
+        emit("cursor", sourceCursor);
       },
       getFindings: ({ format, text: shown }) => {
         reportedText = shown;
@@ -1092,6 +1100,9 @@ export function createOpfEditor(element, options = {}) {
       return inSync;
     },
     /** The latest verdict on the text of the source pane (what the last `source` event carried), or `null` before the first. */
+    get sourceCursor() {
+      return sourceCursor;
+    },
     get sourceState() {
       return sourceState;
     },

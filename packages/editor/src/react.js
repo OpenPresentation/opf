@@ -116,7 +116,7 @@ function resolveSlots(slots) {
 }
 
 // The props that are not editor options.
-const COMPONENT_PROPS = new Set(["className", "style", "id", "onEditor", "children", "slots", "onChange", "onSelection", "onError", "onReady"]);
+const COMPONENT_PROPS = new Set(["className", "style", "id", "onEditor", "children", "slots", "onChange", "onSelection", "onCursor", "onError", "onReady"]);
 
 function splitProps(props) {
   const options = {};
@@ -128,7 +128,7 @@ function splitProps(props) {
 /**
  * Create and destroy one editor in the element `container.current` points at. The options are read once, when the editor mounts (change the
  * `key` of the component to mount another); `theme`, `readOnly`, `view`, `density` and `exportMode` follow later renders. The callbacks
- * (`onChange`, `onSelection`, `onError`, `onReady`) always call the latest function passed. Returns the editor once it is mounted, else `null`.
+ * (`onChange`, `onSelection`, `onCursor`, `onError`, `onReady`) always call the latest function passed. Returns the editor once it is mounted, else `null`.
  */
 function useMountedEditor(container, props, onEditor) {
   const [editor, setEditor] = useState(null);
@@ -150,6 +150,7 @@ function useMountedEditor(container, props, onEditor) {
         slots: resolveSlots(latest.current.slots),
         onChange: (detail) => current().onChange?.(detail),
         onSelection: (detail) => current().onSelection?.(detail),
+        onCursor: (detail) => current().onCursor?.(detail),
         onError: (error, detail) => current().onError?.(error, detail),
         onReady: (detail) => current().onReady?.(detail),
       });
@@ -215,4 +216,10 @@ export function useOpfDocument(editor) {
 export function useOpfSelection(editor) {
   const subscribe = useCallback(subscribeTo(editor, "selection"), [editor]);
   return useSyncExternalStore(subscribe, () => (editor ? editor.selection : null), () => null);
+}
+
+/** The path under the caret of the source pane (the latest `cursor` event: `{ pointer, idPath, from, to, ... }`), or `null` before the first. */
+export function useOpfCursor(editor) {
+  const subscribe = useCallback(subscribeTo(editor, "cursor"), [editor]);
+  return useSyncExternalStore(subscribe, () => (editor ? editor.sourceCursor : null), () => null);
 }
