@@ -1,0 +1,81 @@
+{
+  "route": "layout-structure",
+  "application": {
+    "name": "Keynote",
+    "version": "15.1.1 (7044.0.273)",
+    "os": "26.6.2"
+  },
+  "directions": {
+    "opf-to-pptx-to-keynote": {
+      "status": "partial",
+      "observations": [
+        {
+          "text": "Root opened a fresh17-slide native9f layout-structure copy, no observed font/repair warning. K01 Appearance Title/Body/SlideNumber controls actually toggle corresponding objects and undo restores. A MenuSlide NewSlide created a Cover Title/Body+placeholder-picture derivative atposition2,18rows. Native Text thumbnail selection via AX onlyscrolls; chooser clipped near screenbottom. Mac locked before markerinput/otherlayout/reorder/save/export. No completed structural route."
+        }
+      ]
+    },
+    "keynote-save-and-reopen": {
+      "status": "not-run",
+      "observations": []
+    },
+    "keynote-to-pptx": {
+      "status": "not-run",
+      "observations": []
+    },
+    "keynote-pptx-to-opf": {
+      "status": "not-run",
+      "observations": []
+    }
+  },
+  "actions": [
+    {
+      "id": "placeholder-ui",
+      "status": "partial",
+      "evidence": [],
+      "observations": [
+        "K01 Titleoff removedtitle and CmdZrestoredactualtitle/Title1. Bodyon addedrealBodyprompt and CmdZremoved/Body0. SlideNumberoff removedfield and CmdZrestoredattachment1/Number1. K02/K14 specificchecks notyetperformed."
+      ]
+    },
+    {
+      "id": "new-slide",
+      "status": "partial",
+      "evidence": [],
+      "observations": [
+        "Imported28cataloglayouts+Text/TwoColumns/ImageBeside/List native-body variants listed. AXthumbnail clicks/scrolldown failedtoactivate intendedTextnativebody; recordautomationlimit. MenuSlide\u2192NewSlide succeeded once,18rows, newCover title/body+nativepictureplaceholder atpos2. KN_NEW_TITLE/KN_NEW_BODY nottyped. Do notclaimTextlayoutselected."
+      ]
+    },
+    {
+      "id": "reapply",
+      "status": "not-run",
+      "evidence": [],
+      "observations": [
+        "Not run before Mac lock."
+      ]
+    },
+    {
+      "id": "reorder",
+      "status": "not-run",
+      "evidence": [],
+      "observations": [
+        "Not run before Mac lock."
+      ]
+    }
+  ],
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "interruption": "Mac locked again; automaticunlockfailed. Humanunlockrequestedasync. Windows remainder separately human deferred/HOLD.",
+  "observedCurrentWindow": {
+    "title": "editable",
+    "url": "file:///Users/michael/Library/Mobile%20Documents/com~apple~Keynote/Documents/editable.key",
+    "scope": "Native app reported autoassigned URL; no local working.key/export save verified for this attempt."
+  },
+  "inputs": [
+    {
+      "file": "/private/tmp/opf-keynote-body-native-layout-structure-61-01/editable.pptx",
+      "bytes": 179242,
+      "sha256": "12b93850c8703ab4e1a4ef5fd45a73ba56dc94b3c151c7ceed1743ba1793b017"
+    }
+  ],
+  "outputsVerified": [],
+  "updatedAt": "2026-10-15T22:14:46.608740+00:00"
+}

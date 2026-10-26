@@ -1,0 +1,6669 @@
+{
+  "scope": "Offline inspection of the actual native-exported PPTX; no UI, font, raster or native acceptance claim.",
+  "route": "layout-structure",
+  "input": {
+    "file": "/private/tmp/opf-keynote-layout-local-61-02/native-export.pptx",
+    "bytes": 120583,
+    "sha256": "6dc32958ae2a5597b4500b6e150f17eb8e230a0a0cbd9d00226fb9c97b0ee062"
+  },
+  "packages": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.20.1",
+      "directory": "/private/tmp/opf-keynote-candidate-61/consumer/node_modules/@openpresentation/opf",
+      "files": [
+        {
+          "path": "package.json",
+          "bytes": 5195,
+          "sha256": "42c1ca9878b6552b59c39c64e631d8f87f8c5103b16eef05145c288d2fe6671b"
+        },
+        {
+          "path": "dist/browser.js",
+          "bytes": 3795,
+          "sha256": "b14c8922bd94cf8cf54934219e54895877c8bc9f5fd64f933883e2688e80b452"
+        },
+        {
+          "path": "dist/catalog-refs-CSHevLn1.d.ts",
+          "bytes": 7324,
+          "sha256": "e792a8eb9a83e169150f1fd0918f0bb3146fc14635d009b334c62d5530ef5c52"
+        },
+        {
+          "path": "dist/chart-data-BnNqgnC-.d.ts",
+          "bytes": 11060,
+          "sha256": "90e199b6f716aac5d39fb5b528574c41e2a797207dc9aef1866234f728206170"
+        },
+        {
+          "path": "dist/chunk-2AGWO7RM.js",
+          "bytes": 47263,
+          "sha256": "7467e3eab32fc9db3f0dfff0fef3adfbb531cfd349c4ac2add82cb6b3665150a"
+        },
+        {
+          "path": "dist/chunk-2XJUXMBS.js",
+          "bytes": 12493,
+          "sha256": "f3fe6e13cb6531207c56374410d64e50aabe8d7d4ba2dea774c5194652e41747"
+        },
+        {
+          "path": "dist/chunk-32MHL3B3.js",
+          "bytes": 3788,
+          "sha256": "5964a70f61c40d9c59baa43ee537b22d7874931874f7ecd02eaada12daefabf8"
+        },
+        {
+          "path": "dist/chunk-4FBXVST6.js",
+          "bytes": 15633,
+          "sha256": "0bd8517a5ca27095e2332d870dc437989a327555ded567ce2f35155ef0ea3a92"
+        },
+        {
+          "path": "dist/chunk-7QUAOKS6.js",
+          "bytes": 207285,
+          "sha256": "6b0acfac686567c3becddfcef152383fb7c1d2c562a17e41cd0845d83e5aad0e"
+        },
+        {
+          "path": "dist/chunk-BDXJYO6R.js",
+          "bytes": 19442,
+          "sha256": "55d71e193cb637791571f63c54accfd5dc5e0726b94fbf694e9c405c193a6a97"
+        },
+        {
+          "path": "dist/chunk-BYEIFHWS.js",
+          "bytes": 910,
+          "sha256": "a325dc65a426a16821393ef942f653c50e6f7347777fa5a54f8a68fd783cb4d4"
+        },
+        {
+          "path": "dist/chunk-F7PLNWHQ.js",
+          "bytes": 157769,
+          "sha256": "ef122ad1185c83102a0436af5fb6dc474558719b6d8faef2a471b6574c875124"
+        },
+        {
+          "path": "dist/chunk-JMYM44I4.js",
+          "bytes": 58098,
+          "sha256": "3fa7947f4aeb39c5d28100dce0a7e724737b93c40532468681e7c02164e4c81c"
+        },
+        {
+          "path": "dist/chunk-L6RRLN6Q.js",
+          "bytes": 27677,
+          "sha256": "f52f00e47237acabe0f67ae7c767c60b6eb9e4b417b0d81a5e452833339a5a77"
+        },
+        {
+          "path": "dist/chunk-NZDWCYDI.js",
+          "bytes": 3008,
+          "sha256": "6cedafb20603e4dbeb5f58115ade0d9845c78631a50f553f40b3a7a0d148b6a7"
+        },
+        {
+          "path": "dist/chunk-P6LMWUXV.js",
+          "bytes": 7833,
+          "sha256": "94c0f216860937ab90e61e34b09e6114e9e53401b92e57c354989de65b4b6845"
+        },
+        {
+          "path": "dist/chunk-RFJ5TR3V.js",
+          "bytes": 84224,
+          "sha256": "ac1b27bc18324446812a05429bda0eba3221809acf76609105ad01e1c711bb65"
+        },
+        {
+          "path": "dist/chunk-UA5EROLC.js",
+          "bytes": 5033,
+          "sha256": "188b93f75805f4954bc857a8d896fbe6036823d42c0b37f65b06421b9ef8882e"
+        },
+        {
+          "path": "dist/chunk-UAXSW6VV.js",
+          "bytes": 431466,
+          "sha256": "5550cd04b1e9b5d4fb2cfda597a4afc35be0864e966a18e2eda654bf85ea0bd8"
+        },
+        {
+          "path": "dist/chunk-UJSAR6GF.js",
+          "bytes": 5655,
+          "sha256": "57eb2cf7b2398ddb590d27a021de6f7b8dd337d93f643868abbae4c70b23938d"
+        },
+        {
+          "path": "dist/chunk-VEHLQVGQ.js",
+          "bytes": 345638,
+          "sha256": "d56e2374412f750e15cd6b9760ad7f2e2d1b28d9fed130d3ea9b14b80c205703"
+        },
+        {
+          "path": "dist/chunk-W7G5LSXI.js",
+          "bytes": 6461,
+          "sha256": "8050324485a54c72a9ca6136744e5cd00817a118840712057a7abb4184691d2f"
+        },
+        {
+          "path": "dist/chunk-ZU5EQ23T.js",
+          "bytes": 4562,
+          "sha256": "c941a4c072ac82c3b3aa1ddb57a19c9813afad621c1828578b746c8629e6a731"
+        },
+        {
+          "path": "dist/composition-MFjGwuN_.d.ts",
+          "bytes": 151744,
+          "sha256": "3064a3465bcad3df299e52458f5dc090bba8aa5e56edfb163a1b67afad1812b6"
+        },
+        {
+          "path": "dist/composition.d.ts",
+          "bytes": 9765,
+          "sha256": "9b23510e979115a27a4de87f19d71ce74a8a1781aee29a5939f869e07f752de9"
+        },
+        {
+          "path": "dist/composition.js",
+          "bytes": 3623,
+          "sha256": "5baa5a4970c256e1635182190bc73c52a0ef70f07d4af08d44276e305d062b0d"
+        },
+        {
+          "path": "dist/conversion-DDd1mdIj.d.ts",
+          "bytes": 27537,
+          "sha256": "b7e0572a2e1bb2b08ef8a4349ab4da97811bd72976cab7c69a150a2a1386930f"
+        },
+        {
+          "path": "dist/conversion-WHN4D4WH.js",
+          "bytes": 685,
+          "sha256": "5730c785bc61027c458257ba2216f1f38442d1fa4e7922e4de1aff4ca6a06b8b"
+        },
+        {
+          "path": "dist/convert.d.ts",
+          "bytes": 15108,
+          "sha256": "17e3169df1bfcd3a56cdbfdc4c8ddee8d2f3252a8fab6a2a4e7263a9597ad8f0"
+        },
+        {
+          "path": "dist/convert.js",
+          "bytes": 61016,
+          "sha256": "198fdcdfc6ffef7e974dfe02e4e594860c5a1e85090ffd8bc4ff784a0609c944"
+        },
+        {
+          "path": "dist/data.d.ts",
+          "bytes": 2633,
+          "sha256": "855d7f9df258aee64842eadd717f13f412b7af00c8b02dd1899c2dc790659b37"
+        },
+        {
+          "path": "dist/data.js",
+          "bytes": 413,
+          "sha256": "1033e061a9b7d37d2d4ae1a66f9f52937511ff5e8826923c6fc0655548a395ee"
+        },
+        {
+          "path": "dist/deck-report-DldBcTHe.d.ts",
+          "bytes": 2418,
+          "sha256": "9e650db048617e633daf37acc02b7b2aec1774a9e333a9a5d1580c4d84d7c593"
+        },
+        {
+          "path": "dist/deck.d.ts",
+          "bytes": 2944,
+          "sha256": "9c9ddc20823256436bab3cc70506dc8832d76a3801a812341147eb6e4c4b4e87"
+        },
+        {
+          "path": "dist/deck.js",
+          "bytes": 354,
+          "sha256": "306c45405964c62cb323549fa506fbd184efdc734621d0f1ad79a7ca969e5875"
+        },
+        {
+          "path": "dist/diff.d.ts",
+          "bytes": 6024,
+          "sha256": "0a76a44d91e1d01c9963dc970d3d6933bbf397fa769c0f2d34a2835cb6cea536"
+        },
+        {
+          "path": "dist/diff.js",
+          "bytes": 241,
+          "sha256": "222b425841dd4f52224209e4951aea628f3045e2e2b200443538581d045c6793"
+        },
+        {
+          "path": "dist/docs.d.ts",
+          "bytes": 671,
+          "sha256": "80367c579659357c6c0fde511706a8512f0152a589fcaaac2d78bf2b41aa94f7"
+        },
+        {
+          "path": "dist/docs.js",
+          "bytes": 1315240,
+          "sha256": "49ca96fa716c3faa74374a6e0a66ef1d701f9e1ac7d3700b346b9e66df8af308"
+        },
+        {
+          "path": "dist/examples.d.ts",
+          "bytes": 2141,
+          "sha256": "6ab33c520646f4009f3f982d34fcd246517b4635d1cff22e3cec3622695c38bd"
+        },
+        {
+          "path": "dist/examples.js",
+          "bytes": 5585153,
+          "sha256": "cae643dfb463933a0c603f427e48d73a71b97b9a6ef051f811900e1c79f057e0"
+        },
+        {
+          "path": "dist/finding-CT_f_vbD.d.ts",
+          "bytes": 7991,
+          "sha256": "35597bd168c7f555510bbf7aa997240591f7f323bfa4dcacb0ccf1ee44754888"
+        },
+        {
+          "path": "dist/font-policy.d.ts",
+          "bytes": 7938,
+          "sha256": "a68d0e245fb71433b286a75f897de891ca7876204dc482d0c7fb3e1131a4d304"
+        },
+        {
+          "path": "dist/font-policy.js",
+          "bytes": 121,
+          "sha256": "f6b5acb03edaf769f72400c0ddd88756a6b4cc6aea116a762605064dc315f831"
+        },
+        {
+          "path": "dist/format.d.ts",
+          "bytes": 940,
+          "sha256": "a8fb2b91433191bcf747a83400e335c559512b59c8d44ea20b479082efba566c"
+        },
+        {
+          "path": "dist/format.js",
+          "bytes": 127,
+          "sha256": "9463882b7b1297b57ce76e77e380ddb0cabb70b0d7f7699407350608775cd9e5"
+        },
+        {
+          "path": "dist/index.d.ts",
+          "bytes": 36641,
+          "sha256": "2b69648e12a1e69923ef5ec4fa24df8cabc06caf9c429f67d53a8d366a6a4953"
+        },
+        {
+          "path": "dist/index.js",
+          "bytes": 4788,
+          "sha256": "50de610c9a9f088003e25bf1ce1d42eb2c8aebe15ec7c615bb1f234c4052bd27"
+        },
+        {
+          "path": "dist/json-BFSdESOE.d.ts",
+          "bytes": 827,
+          "sha256": "e42487d6802977bc25edd5ba56177caf5ebe95da82cf5606d9dad086df233b78"
+        },
+        {
+          "path": "dist/markdown.d.ts",
+          "bytes": 5208,
+          "sha256": "97d0db501c7d6c0512e803a6912697f2d2149d36ea8006ad2b8bc9971b45f703"
+        },
+        {
+          "path": "dist/markdown.js",
+          "bytes": 270,
+          "sha256": "0705b14aed3cf848439dc49841b4fcb96aec2af3ae142e214184c21e704b74fb"
+        },
+        {
+          "path": "dist/node-engine.d.ts",
+          "bytes": 8854,
+          "sha256": "6b02f10370d61ac0f0748ca1dac43daf12d00828dc392960f1d8fe37b095141c"
+        },
+        {
+          "path": "dist/node-engine.js",
+          "bytes": 2455,
+          "sha256": "eaee51d614524a12e41eb60c5ca27e649d407696321dfae81714d0b18a0b1028"
+        },
+        {
+          "path": "dist/pagination-BKsZIEcA.d.ts",
+          "bytes": 7738,
+          "sha256": "5520ee31bfc20576f85548a3aaa5e202ed2e0ce7e6293403a772122d1e331808"
+        },
+        {
+          "path": "dist/pagination.d.ts",
+          "bytes": 373,
+          "sha256": "e875a203455bc65e5b9065690c7e5f5eb18886da6ca9103a05b9d31c8001c05a"
+        },
+        {
+          "path": "dist/pagination.js",
+          "bytes": 173,
+          "sha256": "02f352b8e4ea1778a4a30969f8d69a354a0408564587b129f2b41f8ed190a229"
+        },
+        {
+          "path": "dist/patch.d.ts",
+          "bytes": 5056,
+          "sha256": "74705352dd8f2c39b5d6a5a96179e1efdafb05e905931bc7e4d3f3426619e497"
+        },
+        {
+          "path": "dist/patch.js",
+          "bytes": 384,
+          "sha256": "9757527ec62f67d5f5a97a0f4573f246c7f920afd70e510d6bcc233d7d61203e"
+        },
+        {
+          "path": "dist/presentation-B_e2Djga.d.ts",
+          "bytes": 185853,
+          "sha256": "f07b7b1acff2a37715640c9d0a94dbd6dd7f6bff41b54f9e16d8d4687654af09"
+        },
+        {
+          "path": "dist/repo-readme.d.ts",
+          "bytes": 139,
+          "sha256": "efa7477233f1982692546f2aaa2b2133546021755b66139970b136a724b45455"
+        },
+        {
+          "path": "dist/repo-readme.js",
+          "bytes": 16367,
+          "sha256": "1860dc3569731f0e94a87f32d1b02f6ead7b3eb3d40b20dbcfc90673cc416482"
+        },
+        {
+          "path": "dist/schemas.d.ts",
+          "bytes": 11950,
+          "sha256": "9961791b7fdfeb05bce20a3cc3b9d71fea89e340203274af30006683dc1c2fe7"
+        },
+        {
+          "path": "dist/schemas.js",
+          "bytes": 202,
+          "sha256": "6431b4ef9b16985ec606bfacca97af2b66b88927aa21b96642b07e2c58928102"
+        },
+        {
+          "path": "dist/spec-files.d.ts",
+          "bytes": 1518,
+          "sha256": "b4255ceea26317ce0654fa56268a8e347128afe1bf60c839909a8aa8612367ad"
+        },
+        {
+          "path": "dist/spec-files.js",
+          "bytes": 85,
+          "sha256": "73367981f93d9213c79a295cddb1673e8c2026e52dd0eb6f16259920656b41b9"
+        },
+        {
+          "path": "dist/spec/openapi.yaml",
+          "bytes": 24151,
+          "sha256": "523bbb95ce43b5213b6f1aa963f8c3392b7ccef41e8c6faee24bffb1e0d7df79"
+        },
+        {
+          "path": "dist/spec/README.md",
+          "bytes": 5999,
+          "sha256": "764ffec2a30b383a7787d758db70b40872d78e01bdb410aae549d8aac21196e1"
+        },
+        {
+          "path": "dist/spec/reference/engine-defaults.json",
+          "bytes": 1341,
+          "sha256": "9faa8e4a2aec0e138d26f603ab6a0f55d7715e8f0bb0792cca2b5476adca9d6f"
+        },
+        {
+          "path": "dist/spec/reference/engine-vocabularies.json",
+          "bytes": 33487,
+          "sha256": "32257373b6a6171056f198ec4cb87b6bcf3418e9a9c37c3072cc98ab00f8dc53"
+        },
+        {
+          "path": "dist/spec/reference/font-policy.json",
+          "bytes": 154307,
+          "sha256": "1692b0702cf9a37afc69b4de1b0b12dbb7f25546b13ebcc2edeed845c847b611"
+        },
+        {
+          "path": "dist/spec/reference/font-policy.schema.json",
+          "bytes": 10295,
+          "sha256": "0e5a1132c08e80f561b0734e9eeb28d0238d3bd5481f8c0b69f85c774a64d837"
+        },
+        {
+          "path": "dist/spec/reference/symbol-font-encodings.json",
+          "bytes": 318426,
+          "sha256": "64f18aa6a2674125d08af6e3d23275a2c9d4318e2aa4718b2b4b8e264582834d"
+        },
+        {
+          "path": "dist/spec/reference/symbol-font-encodings.schema.json",
+          "bytes": 7451,
+          "sha256": "a2f27e92b29106fd4c1eb8cc2158618bf1bad0e5b2090fb0830b8e9ec13eb74e"
+        },
+        {
+          "path": "dist/spec/schemas/audience.schema.json",
+          "bytes": 5925,
+          "sha256": "11a842909d015fb4f66161d55fb6c13fea27b6af92d8b81ce5606641a609a29a"
+        },
+        {
+          "path": "dist/spec/schemas/catalog-index.schema.json",
+          "bytes": 4525,
+          "sha256": "97460dc055080271ca4dd0e118db696eadc56e93bb95ca9b6b03982c14479384"
+        },
+        {
+          "path": "dist/spec/schemas/catalog-manifest.schema.json",
+          "bytes": 3472,
+          "sha256": "e772c4280812dc84693070ea38fa033c2d42660c5decf47154fa89281ad003e1"
+        },
+        {
+          "path": "dist/spec/schemas/chart-type.schema.json",
+          "bytes": 9776,
+          "sha256": "31115a16fdb69dc95290e73a819693bc2793a1e98323a0feecc88becb909b8e4"
+        },
+        {
+          "path": "dist/spec/schemas/color-scheme.schema.json",
+          "bytes": 7093,
+          "sha256": "1a73147919ccc1c1eb9918404af88ff4c7b259c1da38fc465aa9a3d6495cc0ee"
+        },
+        {
+          "path": "dist/spec/schemas/finding.schema.json",
+          "bytes": 10553,
+          "sha256": "bcae8b87f78d7f711b596c0ae6e62fc802c35fd2e96634c6827ee969f866c2eb"
+        },
+        {
+          "path": "dist/spec/schemas/font-scheme.schema.json",
+          "bytes": 9896,
+          "sha256": "6286c88cdf9b727481a4c6972ad92989996cf0c8cf0e5e402f13332b18e1e462"
+        },
+        {
+          "path": "dist/spec/schemas/language.schema.json",
+          "bytes": 7014,
+          "sha256": "7d77a9e74bc5b3fc969598abb7fbce78cef0422ec1001ac285a1a88270dc9d65"
+        },
+        {
+          "path": "dist/spec/schemas/layout-preview-index.schema.json",
+          "bytes": 2248,
+          "sha256": "3bb09714bceb8c1e02cbf92db709b1c419c91750296b25a9a034d50f565c62e8"
+        },
+        {
+          "path": "dist/spec/schemas/layout.schema.json",
+          "bytes": 17820,
+          "sha256": "943ac52234f3e20b07e3a019f143e0e02a8b3f2118bc7125eb8f0feb57e8ed47"
+        },
+        {
+          "path": "dist/spec/schemas/narrative.schema.json",
+          "bytes": 8313,
+          "sha256": "2930de17f4b58fbe12654435f45fd67ab852dee0d77fb4773b533e49b6da4fee"
+        },
+        {
+          "path": "dist/spec/schemas/opf.schema.json",
+          "bytes": 217057,
+          "sha256": "aef7115bee726d011449b61beff5fc6245e4205e7f76d16a5bb31f8b9a543d38"
+        },
+        {
+          "path": "dist/spec/schemas/purpose.schema.json",
+          "bytes": 3876,
+          "sha256": "4a152c3bcb4ee713c81c4f0254bd311911a6c1911bf1278bcdeb0b372fe9a569"
+        },
+        {
+          "path": "dist/spec/schemas/social-platform.schema.json",
+          "bytes": 5610,
+          "sha256": "dd3ff564095dad2d88456b7b5997b4ece789d4404e0238c997d6f953ae64eaff"
+        },
+        {
+          "path": "dist/spec/schemas/theme.schema.json",
+          "bytes": 8094,
+          "sha256": "95613b3dc21dd481f5fa9381a55fd15e8db2730ca52d8b10662a4cb141da2587"
+        },
+        {
+          "path": "dist/spec/schemas/tone.schema.json",
+          "bytes": 5435,
+          "sha256": "0284b55a803279aa6a608f62b375aaab14f637126dabd3febfc81cad3502a4c9"
+        },
+        {
+          "path": "dist/symbol-font-encodings.d.ts",
+          "bytes": 5701,
+          "sha256": "0a6e3068bbfafabb7182299f6a2d0c54888d40c249e559204ae6da110c8f9308"
+        },
+        {
+          "path": "dist/symbol-font-encodings.js",
+          "bytes": 424000,
+          "sha256": "5336e48bf89cfaa1109e41c3eb933d72d51da96a61a814f67e9dc9bd098b6f42"
+        },
+        {
+          "path": "dist/types.d.ts",
+          "bytes": 60542,
+          "sha256": "0025350bf795db14e4ce11507ead625b93a46abc662c7902b75c0b4e845f5435"
+        },
+        {
+          "path": "dist/types.js",
+          "bytes": 1,
+          "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+        },
+        {
+          "path": "dist/validation-types-DtN8X_HZ.d.ts",
+          "bytes": 15484,
+          "sha256": "413b03c92eed540c18f542fcec11d2510f741074b851fd34a0c21742b806d35a"
+        },
+        {
+          "path": "dist/validator-1d29Z3YY.d.ts",
+          "bytes": 5778,
+          "sha256": "170b72b0c6ee43e0bf5e22ab742ddeaf3505eadcfb18247ffead653b71e72ff1"
+        },
+        {
+          "path": "dist/validator.d.ts",
+          "bytes": 805,
+          "sha256": "00ff4206f1a2dec9052f918ad766a83bc2ad106aeac3f5d1fa25f1b2b1eac0b6"
+        },
+        {
+          "path": "dist/validator.js",
+          "bytes": 331,
+          "sha256": "78f21014c8bfd0cbc05d9549cd60baf25866f46acc048f6a4b52ab5bb1149193"
+        },
+        {
+          "path": "dist/yaml.d.ts",
+          "bytes": 6094,
+          "sha256": "ceb98be78ba4f91ae380467e56be2bb91315eaa4f7dfb5d954f7d4d6ae4e668f"
+        },
+        {
+          "path": "dist/yaml.js",
+          "bytes": 300,
+          "sha256": "6b1c2f71e258a7831bbcc4b0b4bb71227df7e535eeb090d4fdd71b02f63dd968"
+        }
+      ],
+      "sha256": "e42bc681401a16612b48a6ea4802c9f6f425e306104563d3ffec5d774c9f3ae9"
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.20.0",
+      "directory": "/private/tmp/opf-keynote-candidate-61/consumer/node_modules/@openpresentation/opf-render",
+      "files": [
+        {
+          "path": "package.json",
+          "bytes": 15389,
+          "sha256": "e2b3e10a6a5805fe8c941c52376d87ef05e1a6eb6c465d27120c091a00731ad3"
+        },
+        {
+          "path": "dist/annotations.js",
+          "bytes": 4097,
+          "sha256": "14ff09f55fe92c96e3cece9235d8050d4e457e01679b3167f14fda23e22d5738"
+        },
+        {
+          "path": "dist/chart-options.js",
+          "bytes": 10198,
+          "sha256": "c383eaca8d6493f2619552693a3f556f240df22995a4721b8ee545312fa99f6e"
+        },
+        {
+          "path": "dist/charts.js",
+          "bytes": 93742,
+          "sha256": "6b0394530f61d4aacb7695eeac1c7e05ed3a243875891ef3df357d69fe5ab5f1"
+        },
+        {
+          "path": "dist/color-fonts.js",
+          "bytes": 2435,
+          "sha256": "bd65c25d0c4ad6f7c6a1e59dd6ecc5a543a3e21fe0859c9cb852a8d3eaca8468"
+        },
+        {
+          "path": "dist/converters.js",
+          "bytes": 2679,
+          "sha256": "5390e6545f344088a24ad4383ed10a2005ca49e6e341b317997950b1e17c486b"
+        },
+        {
+          "path": "dist/deck-runtime.js",
+          "bytes": 18105,
+          "sha256": "d5352fcc2395cf5db62bcdbe46ac86170ed0a4b1b5a2d36521a49b52c7c54dc2"
+        },
+        {
+          "path": "dist/drawn-faces.js",
+          "bytes": 2865,
+          "sha256": "3ba6046997336f4278cf94e66ecfa9e942511c959e8dd7ecbd0b94ff524afe4f"
+        },
+        {
+          "path": "dist/element-define.d.ts",
+          "bytes": 11,
+          "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+        },
+        {
+          "path": "dist/element-define.js",
+          "bytes": 314,
+          "sha256": "4a3ae5cc04f57bac3b622eff4342f833376a928f20b1078313aa12a5c2fbedba"
+        },
+        {
+          "path": "dist/element.d.ts",
+          "bytes": 5061,
+          "sha256": "dbe3727b829dfb46c6db7cddef1f1ffc6c6a6745738174ae1240a83e85404b6d"
+        },
+        {
+          "path": "dist/element.js",
+          "bytes": 35509,
+          "sha256": "68857bd5cec1c20e8c7bddecc1fdf2b9af6b206905dd890ab02d28bf966c54b3"
+        },
+        {
+          "path": "dist/export-browser.d.ts",
+          "bytes": 3787,
+          "sha256": "f8bfd3a7bc4e44eea75ed3cdc610b63e246472c931797f0b638264fc15f36c40"
+        },
+        {
+          "path": "dist/export-browser.js",
+          "bytes": 15104,
+          "sha256": "cfe0c211b6df08c33eb939829a58c29901199ae4f1452d67e43bb579a59d80c8"
+        },
+        {
+          "path": "dist/font-compatibility.js",
+          "bytes": 9574,
+          "sha256": "0b0be7d18b7d519d905849de3e16423ecd3567fd353a088dc582fd7632218d3a"
+        },
+        {
+          "path": "dist/font-fstype.js",
+          "bytes": 3542,
+          "sha256": "5c60126e48ca99c8be104c4305ed80cfb8b7d63795ea0aeb88e7596aceaf6869"
+        },
+        {
+          "path": "dist/font-manifest.js",
+          "bytes": 110526,
+          "sha256": "16d0b4141054f42c66f3aa9a4f146362693825689c442c8ee693832b729fa699"
+        },
+        {
+          "path": "dist/font-registry.js",
+          "bytes": 32901,
+          "sha256": "a15f6f44437436856171c03e19c0897272bf53be72122c281d6c3272f75b03c5"
+        },
+        {
+          "path": "dist/font-subset.js",
+          "bytes": 9956,
+          "sha256": "0895481579fb98de0f3e535c0fe4157add39fbd14732ae680d3ab11c3aef30cc"
+        },
+        {
+          "path": "dist/fonts-browser.d.ts",
+          "bytes": 14108,
+          "sha256": "a96b7562ff094a6770acaa346df1d7880614ff2e09d56bb86a4d1c4d2fc318f4"
+        },
+        {
+          "path": "dist/fonts-browser.js",
+          "bytes": 22606,
+          "sha256": "84980d17d47304ec4646830385f5daa94ac734113ded3139c796599c6f8ed659"
+        },
+        {
+          "path": "dist/fonts-node.d.ts",
+          "bytes": 8629,
+          "sha256": "2c80c2c811ce76a8a4922bd26c1b76272e3da4eadebbf00958f6a3c7180d5faa"
+        },
+        {
+          "path": "dist/fonts-node.js",
+          "bytes": 24199,
+          "sha256": "dee0a31e6086b7061582cea772f6331c091cbed49396eab1de1ebba94da1baab"
+        },
+        {
+          "path": "dist/fonts.d.ts",
+          "bytes": 14702,
+          "sha256": "d82fab823de32d2030548e50da6d647d7820bdb59006a02ea6945fa043a0a36f"
+        },
+        {
+          "path": "dist/fonts.js",
+          "bytes": 1409,
+          "sha256": "230dd980941d2392cde8181b5d02405278004e4c81444afa00e6920777e01d2b"
+        },
+        {
+          "path": "dist/hb-shape.js",
+          "bytes": 7333,
+          "sha256": "88e5b31209805ca95a04e270560acdd8d214192ce7a268243a8c432c2e62ebf2"
+        },
+        {
+          "path": "dist/index.d.ts",
+          "bytes": 18122,
+          "sha256": "22fea5118ba853f1d78fdfb09b1c3f908ed98fc2d0e157a7e703acfeb99001f1"
+        },
+        {
+          "path": "dist/index.js",
+          "bytes": 67,
+          "sha256": "571367765a59c7cffe60606b4a6de2358832a106332c199b4dc9b64859a2c459"
+        },
+        {
+          "path": "dist/lazy-font-list.js",
+          "bytes": 4834,
+          "sha256": "51ae79039afd67f23c569218234b778f81d0115b59bb2a76de593af43a09b266"
+        },
+        {
+          "path": "dist/lazy-fonts.js",
+          "bytes": 12708,
+          "sha256": "77f6f5c56d38ad3b8560a7668d267f46f1a79ab450c9aaba0d0d8e2a2f8936c5"
+        },
+        {
+          "path": "dist/node-resolve.js",
+          "bytes": 1796,
+          "sha256": "0c0abd267065c7a3b702ee36ca338344ebdb2dbb466afaedb42a487260aa3f7f"
+        },
+        {
+          "path": "dist/pdf-fonts.js",
+          "bytes": 16436,
+          "sha256": "7c1b031b8e7d5bfe58748c38556d54485e0e2f94f2463e197beb029bb1ae1781"
+        },
+        {
+          "path": "dist/pdf-style.js",
+          "bytes": 26153,
+          "sha256": "c7f5f84a6d42502e8b46c96e3fdde0a2510834adc14db9693c036e4012203041"
+        },
+        {
+          "path": "dist/pdf-subset.js",
+          "bytes": 8232,
+          "sha256": "d5f78c128380d1570e0c299ce0d530188aa37f010c6e23d36b605f236fb029a1"
+        },
+        {
+          "path": "dist/pdf-text.js",
+          "bytes": 17334,
+          "sha256": "ad942dd2e7187cb4878cea2088913d260dbaf8e351732ccf72a5d68a9a7cd758"
+        },
+        {
+          "path": "dist/pdf-vector.js",
+          "bytes": 71125,
+          "sha256": "a0cd88ce4083410925569b361fd751907877ed1e003f1a33b693c0b0064c0e39"
+        },
+        {
+          "path": "dist/pdf-writer.js",
+          "bytes": 6009,
+          "sha256": "0add8171eee8446b2817c0800821a1394dd76102d4735c9b306ae4a5dcec8ad6"
+        },
+        {
+          "path": "dist/pdf-xml.js",
+          "bytes": 3847,
+          "sha256": "778acbc775c3a508d5fd7484cdecae1f566a11d8fb8d044f7ce57200e08cd669"
+        },
+        {
+          "path": "dist/pdf.d.ts",
+          "bytes": 112,
+          "sha256": "27386c86cc10b91fe4c7f6fe3306c18344962723b37c9abf0d3361487bed0dc1"
+        },
+        {
+          "path": "dist/pdf.js",
+          "bytes": 448,
+          "sha256": "d2eaef8eb54f130b0c242f9c35562b06fd9f038d617e7da4630a2cb14a78146c"
+        },
+        {
+          "path": "dist/player.d.ts",
+          "bytes": 4668,
+          "sha256": "85ab76661fd08056c915deef089a405c4c53efc70a7b7f84772644a88939e22a"
+        },
+        {
+          "path": "dist/player.js",
+          "bytes": 40971,
+          "sha256": "56434862f15805818bbda69b62a7cd46a26c1a09ce73b75c74e209ba63b96357"
+        },
+        {
+          "path": "dist/png.d.ts",
+          "bytes": 84,
+          "sha256": "ce179217342929bfdc163560ba139249a72f94e00be3b4ddc5214826ecf34e6b"
+        },
+        {
+          "path": "dist/png.js",
+          "bytes": 345,
+          "sha256": "488f4b5196459a1ccf8fc8a9bf04579fa965d1bea5064f7eaa9aeb078fe4bfe5"
+        },
+        {
+          "path": "dist/preview-fonts-cli.js",
+          "bytes": 1213,
+          "sha256": "c8c3746309f8418af924b660cca9f525886917c3368054b268ac63961edd4698"
+        },
+        {
+          "path": "dist/preview-fonts-node.d.ts",
+          "bytes": 842,
+          "sha256": "7c25a049c3df2317379cf9dc3a3bcf13d5ddde6bbbd6bb59a978acd6905239ee"
+        },
+        {
+          "path": "dist/preview-fonts-node.js",
+          "bytes": 5446,
+          "sha256": "5863537db697ad38c5c772a013857ef4d62dc4e81e330764860035e0c2f314ae"
+        },
+        {
+          "path": "dist/preview-fonts.d.ts",
+          "bytes": 1569,
+          "sha256": "8b96826a8b2f7b53f65dd686e3a2e4469aa92b97c9bfc7fed885f9056e6bc572"
+        },
+        {
+          "path": "dist/preview-fonts.js",
+          "bytes": 4587,
+          "sha256": "52a5714a38fae3c16621b26bd5e3b12d4146c6d49b1b1d56af67b2f825227d47"
+        },
+        {
+          "path": "dist/raster-images.js",
+          "bytes": 5367,
+          "sha256": "293265c5b833f52d0ad642af8c14754f9d9c2a3e575ecfda059d036c4319f303"
+        },
+        {
+          "path": "dist/raster-text.js",
+          "bytes": 34635,
+          "sha256": "1acc0cf65a15406ef823c521ac462e43ac8a2fd5f31f5c3e4d3df7ec41cfea14"
+        },
+        {
+          "path": "dist/raster.js",
+          "bytes": 12058,
+          "sha256": "cffc7d1da6229264355b84cf53527805da4f4d382ec6f78735688f2f3aea5705"
+        },
+        {
+          "path": "dist/script-font-pack.js",
+          "bytes": 16507,
+          "sha256": "bd9505c1c88d3d25fbda8fc07d39aef374e242c3a8e5f739c07c5199bbcf9b90"
+        },
+        {
+          "path": "dist/script-fonts.js",
+          "bytes": 51054,
+          "sha256": "fb6258c314522a272965dd16748b29ac1b757f851e9652b47d80007b699782fb"
+        },
+        {
+          "path": "dist/sha256.js",
+          "bytes": 3035,
+          "sha256": "39fed065ca4c33c5e097e40bf7e87eefd7b359601df1a6e58e131c27ea96cd6b"
+        },
+        {
+          "path": "dist/slide-sources.js",
+          "bytes": 2976,
+          "sha256": "bb989439e821c66552d637b75d5f7f9a70e02bb0f6e13762d0bb8691855923d3"
+        },
+        {
+          "path": "dist/svg.d.ts",
+          "bytes": 11022,
+          "sha256": "9bf3249d611c825f966393fd1f326995101970534c982f1b447b092d6ba82e8e"
+        },
+        {
+          "path": "dist/svg.js",
+          "bytes": 140372,
+          "sha256": "862476c442a84ada6f88e14cc23c0a35fc733b2ade0681b031450aacc3340a2e"
+        },
+        {
+          "path": "dist/symbol-fonts.js",
+          "bytes": 3986,
+          "sha256": "70d09798a3e53f5227b8000f478e9a6fba8a8bee2cd4074bb9d998c302829ad7"
+        },
+        {
+          "path": "dist/text-paths.js",
+          "bytes": 20837,
+          "sha256": "1c671b8751fd1c765338220a2022fa6517703c1406b9281866d81540dba1b6da"
+        }
+      ],
+      "sha256": "ba941ae7e506674904b294bea5b58a1c46761678501efce32e84cf3c04f45794"
+    },
+    {
+      "name": "@openpresentation/opf-pptx",
+      "version": "0.20.2",
+      "directory": "/private/tmp/opf-keynote-candidate-61/consumer/node_modules/@openpresentation/opf-pptx",
+      "files": [
+        {
+          "path": "package.json",
+          "bytes": 4594,
+          "sha256": "10a767a919ffacce09f6e707b8aff668ec9d097f78bacafe25d5b4e3024ae76d"
+        },
+        {
+          "path": "dist/annotation-export.js",
+          "bytes": 7203,
+          "sha256": "f45f743368b87e4c5f6f4b3c76d3f6cf3ed3fd2f78be13fce3c69c68b79e641e"
+        },
+        {
+          "path": "dist/annotation-provenance.js",
+          "bytes": 17091,
+          "sha256": "c299b7a89e565dbd22fd3c1189ff2768eeb061630b2fc92bfe364d191c53c618"
+        },
+        {
+          "path": "dist/background-import.js",
+          "bytes": 11213,
+          "sha256": "37e771ca998dac3e681a858dad4e0ca6fd128a18181073e45e4607fa82fd228e"
+        },
+        {
+          "path": "dist/background.js",
+          "bytes": 15785,
+          "sha256": "5e73919fde05f86e37cdcc3fc975e86a3b6175eec5131d2086cdc68a3b286b20"
+        },
+        {
+          "path": "dist/body-text-import.js",
+          "bytes": 7839,
+          "sha256": "62d1fffda2f682d9c1ba969b80545b5514bc605b937d85ad329defba56c625a0"
+        },
+        {
+          "path": "dist/card-provenance.js",
+          "bytes": 3588,
+          "sha256": "41b78472f0d8363b98341d9d66529c48f9f821d39bc110b8e43b610205d535fb"
+        },
+        {
+          "path": "dist/chart-data.js",
+          "bytes": 8863,
+          "sha256": "a1f6ebc1c6086ae3b1146a6755f6c41f2e4c4b75235a2d59c650ba2a7dcb88d0"
+        },
+        {
+          "path": "dist/chart-highlight.js",
+          "bytes": 7943,
+          "sha256": "3abf50a27a33ef821dd02933e27ffc9e57628349832ac7781abcc3ad3934bbac"
+        },
+        {
+          "path": "dist/chart-options.js",
+          "bytes": 19345,
+          "sha256": "63f84b29e82298fd4bbd2ca8a203b86de04c2cb7f10d5936f46c8c2ffcbacc6d"
+        },
+        {
+          "path": "dist/chart-order.js",
+          "bytes": 4252,
+          "sha256": "fee0852bf47a347763b600a1ded83a6a54d7cb1221ecdab14d92d6f596a9b543"
+        },
+        {
+          "path": "dist/chart-types.js",
+          "bytes": 11877,
+          "sha256": "8f243872a82f0d07d6615d83b388b38bd807d1a10e50f4f22ef9f9832df0d9dc"
+        },
+        {
+          "path": "dist/chart-workbook.js",
+          "bytes": 13167,
+          "sha256": "2bae0f778910bb433b022ec183b54e7bb69b4d022992492dc823e51003892b92"
+        },
+        {
+          "path": "dist/chartex.js",
+          "bytes": 30362,
+          "sha256": "16f0b568162ce0f9871b6ebea16094c8bb2cbc0713864fb18a16c9edceb747e0"
+        },
+        {
+          "path": "dist/code-provenance.js",
+          "bytes": 16263,
+          "sha256": "36b8756f5bc8cfd7125f532f8a5fb8c70471d2a169cd25a8294abeff5840f143"
+        },
+        {
+          "path": "dist/color-ref.js",
+          "bytes": 3767,
+          "sha256": "1ddf95b4d23cf137e32eab8ab1d5ad83cd092adeca3d4c24b5342f8a27669e2f"
+        },
+        {
+          "path": "dist/content-topology.js",
+          "bytes": 41218,
+          "sha256": "bbc154105e206d676885036d5b18f5b598faee04fa6257415f55ad2ba24fc20b"
+        },
+        {
+          "path": "dist/data-provenance.js",
+          "bytes": 37422,
+          "sha256": "c913226ff1a7f95036dfedfc627fdfa0cfbb6efa8a31b4edafaec084ec832ddb"
+        },
+        {
+          "path": "dist/document-provenance.js",
+          "bytes": 94732,
+          "sha256": "7bebdd04fb9eb79ae8b03c53d49057c4b58cfce538ca7023584886e33a63a18e"
+        },
+        {
+          "path": "dist/font-weights.js",
+          "bytes": 3259,
+          "sha256": "360ec5bb64f237c0f410271efae70d048ccbac79e1d6c6c27a8271a40217653e"
+        },
+        {
+          "path": "dist/format-check.js",
+          "bytes": 594,
+          "sha256": "837d8668c11adc531a717d3499448e7cbb128f678e1116e745a02532ad4e4edb"
+        },
+        {
+          "path": "dist/frame-alt.js",
+          "bytes": 3846,
+          "sha256": "e790e3d8ef21cad79a1c549ab319bff4bc2d6acd3782582df37713c11c4ff100"
+        },
+        {
+          "path": "dist/furniture-fields.js",
+          "bytes": 11519,
+          "sha256": "63720cb612042a7fc5a52dd9858dfa6989921aee9153307091f764ce99dee1cf"
+        },
+        {
+          "path": "dist/furniture-provenance.js",
+          "bytes": 41784,
+          "sha256": "d0d7af4a7b9349e11b064524c9333d902f29c106bb65ed991421420c6493bc40"
+        },
+        {
+          "path": "dist/heading-provenance.js",
+          "bytes": 4221,
+          "sha256": "d76910a273dc183cd7881182a3cb2c10ee6da3f9a90de43557f4064adfe6ff07"
+        },
+        {
+          "path": "dist/image-fallback-browser.js",
+          "bytes": 2338,
+          "sha256": "911a7f6d329a1ab652c7aaca5047acf1db0bdd3cb97917caa016576488d563a4"
+        },
+        {
+          "path": "dist/image-fallback-node.js",
+          "bytes": 3044,
+          "sha256": "9cfc5385c070083c03235d9b11a330265434a6fbd13eeda33bc77634043daad0"
+        },
+        {
+          "path": "dist/image-geometry.js",
+          "bytes": 10359,
+          "sha256": "64d3470d36b70184527a06d0f66ec5e81eae264101cb52dde07fbf2ad180474e"
+        },
+        {
+          "path": "dist/image-import.js",
+          "bytes": 5776,
+          "sha256": "898704890944137909c5d48c7d1b3b16e4f06403bd745240d0f6b21f7c8c444a"
+        },
+        {
+          "path": "dist/image-provenance.js",
+          "bytes": 23081,
+          "sha256": "66486be720fbc6dd5939f549ddd541c118f6bcb63ea7b208024cad2405de2353"
+        },
+        {
+          "path": "dist/import-signals.js",
+          "bytes": 44035,
+          "sha256": "efd03f841eedf52fc0c10f9c3e9fe9e0a3caaff2fef070d1feb8336993b15334"
+        },
+        {
+          "path": "dist/index.d.ts",
+          "bytes": 33636,
+          "sha256": "e97d6ff641bb601c895d4c1e0c0476fd89e14fb36939e37b580950081c1c4421"
+        },
+        {
+          "path": "dist/index.js",
+          "bytes": 324969,
+          "sha256": "26e8c2f56caebb403e4a3b0afcf07b7dfeb536c13d61418706e83aa6f64a865e"
+        },
+        {
+          "path": "dist/logo-provenance.js",
+          "bytes": 11171,
+          "sha256": "26919d9c2308aeb808b136224776295ab42d4fa269fdd373755ae6d88d00e9ac"
+        },
+        {
+          "path": "dist/master-furniture.js",
+          "bytes": 24218,
+          "sha256": "874762541dcfe6c762dfc8f79d30ed01cf94aadbf31627509bf46cc9279654ed"
+        },
+        {
+          "path": "dist/master-themes.js",
+          "bytes": 10369,
+          "sha256": "74d3ec6c3f7e9d687d3ccd14ec28b21eb2832fb39b203f93db50644a6e874426"
+        },
+        {
+          "path": "dist/media-dedupe.js",
+          "bytes": 2702,
+          "sha256": "7beecb4ad66ba2165f26f26e5ec4c375c76bf1e00048e43885ca35cb18bcaaef"
+        },
+        {
+          "path": "dist/media-provenance.js",
+          "bytes": 16905,
+          "sha256": "f73d0a824fc5a464029bae4bb4711ef92a5c85511cfaa7d20995b57ecf1048f7"
+        },
+        {
+          "path": "dist/metric-provenance.js",
+          "bytes": 7424,
+          "sha256": "28b7a84dc70c3877e73068919f43265de2b22066fe72df45109fa516e65fef86"
+        },
+        {
+          "path": "dist/native-body.js",
+          "bytes": 8489,
+          "sha256": "c580a0e984c9b12f1db6a15befd12b124a13d426ce9ae831a44ddc154c2ce7b1"
+        },
+        {
+          "path": "dist/native-furniture.js",
+          "bytes": 19303,
+          "sha256": "e203d240505ccf93b1372b59aa5244f98180d63920b7d3dcc8022dae05973bcb"
+        },
+        {
+          "path": "dist/native-text-style.js",
+          "bytes": 5730,
+          "sha256": "7c48d9554b04601c9721da64e432681cf26fde2f8744ad53955cd5f485ef24dd"
+        },
+        {
+          "path": "dist/numbered-list.js",
+          "bytes": 7284,
+          "sha256": "92dcd93047cfa1a8e9d5da1e5cb6b8eb75eb38fac3b7a2c1b0f300c258179557"
+        },
+        {
+          "path": "dist/package-fonts.js",
+          "bytes": 9791,
+          "sha256": "075722b50fd94f29a46a448044e5ad979bb503e1d6a80b3cfc37e66f921038eb"
+        },
+        {
+          "path": "dist/quote-provenance.js",
+          "bytes": 10693,
+          "sha256": "b0f4e3a656477e9d9c88d7a1dd9f171e5c6f30d3798f413c9fc84570b86b59bf"
+        },
+        {
+          "path": "dist/rich-heading.js",
+          "bytes": 7673,
+          "sha256": "ff769ef5092907d68423b4f9e42f65112258ac3e6937be9664c530bca4982ded"
+        },
+        {
+          "path": "dist/run-colors.js",
+          "bytes": 8828,
+          "sha256": "766277ef5d69c57a364816471c6feb938575ab053231d3b093943f67bd245a40"
+        },
+        {
+          "path": "dist/script-fonts.js",
+          "bytes": 34631,
+          "sha256": "f17c0ca8e54b81f69715871035d7216231fe7b0b362658de1b17b13d1a4a4fac"
+        },
+        {
+          "path": "dist/sections.js",
+          "bytes": 6466,
+          "sha256": "53b140f77568bb7e33fc588fa5c281c5dab7d244015884da9ae0128a1c2021e2"
+        },
+        {
+          "path": "dist/source-run-styles.js",
+          "bytes": 4535,
+          "sha256": "0ed5609f426ea53437b7b49c472e16ae039b59dfc69b51839c52670b95299c2c"
+        },
+        {
+          "path": "dist/svg-image.js",
+          "bytes": 19754,
+          "sha256": "d9f27a1a17a868d2d9a40aac068b521f40806a2d467cb67d5f1edb5ac6d4a552"
+        },
+        {
+          "path": "dist/table-border-import.js",
+          "bytes": 3629,
+          "sha256": "10dc23b93881d691be62bb5f171678d61cdf77675a628f86f58a58ee962e7093"
+        },
+        {
+          "path": "dist/table-cell-import.js",
+          "bytes": 9869,
+          "sha256": "3e8fbbf7887d966b2f209eedeca3452fc6b29ad34c326492dc6769e31dd6ba0c"
+        },
+        {
+          "path": "dist/table-import.js",
+          "bytes": 10040,
+          "sha256": "b33f2678374ac8271941c79c4b703c3664d896a6d7f0b32cefd76dced29bae50"
+        },
+        {
+          "path": "dist/template-layouts.js",
+          "bytes": 41125,
+          "sha256": "eecc973ec3154fb193b877b96115ce5c63b164d6b5fb40638e5d4c8408a7bf35"
+        },
+        {
+          "path": "dist/text-provenance.js",
+          "bytes": 3960,
+          "sha256": "8f8c7f14ffbb568eadac9f010215cb619d48c2ab8515172b059dd51f2a816b46"
+        },
+        {
+          "path": "dist/theme-colors.js",
+          "bytes": 14849,
+          "sha256": "546905af1470b0306094baf6902ab7203b82778765b2bd1354b50fd405cb33b0"
+        },
+        {
+          "path": "dist/timeline-provenance.js",
+          "bytes": 7820,
+          "sha256": "c657ff56ee1706a3848978adf170c8ddbc06fe236ece712f83e53ae491a2e725"
+        },
+        {
+          "path": "dist/typeface-inventory.js",
+          "bytes": 14925,
+          "sha256": "2026158b8ec502bfa3edd88f4f8eab28974c66630256f56deac34100a6e5fb5c"
+        },
+        {
+          "path": "dist/vendor-compat.js",
+          "bytes": 10914,
+          "sha256": "1ec89159eeb55511215924740c37cbfb608451cfa4fc795e1badc07857bd2433"
+        },
+        {
+          "path": "dist/watermark-provenance.js",
+          "bytes": 13027,
+          "sha256": "80a06a4f815d227b7946126d43b80a63f966e404369486caea66c3fdcaecf33e"
+        },
+        {
+          "path": "vendor/jszip/index-min.js",
+          "bytes": 39128,
+          "sha256": "b97440a20023acacd7476cfeb120275d60dc864ab1e120714f39441f91c61c9a"
+        },
+        {
+          "path": "vendor/jszip/LICENSE.md",
+          "bytes": 33753,
+          "sha256": "566c953c6090b1218ca6217dd7359d45dde46581968586dc607d59a78af6a9c4"
+        },
+        {
+          "path": "vendor/jszip/UPSTREAM.json",
+          "bytes": 1345,
+          "sha256": "4408fd6f63c4cad1741a68af68b564ef028a5673fe0f9300c0379594806de5d0"
+        },
+        {
+          "path": "vendor/pptxgenjs/LICENSE",
+          "bytes": 1128,
+          "sha256": "09b419524813383278d9353e387b75abec06c184336e5c48974a377804b0239a"
+        },
+        {
+          "path": "vendor/pptxgenjs/package.json",
+          "bytes": 161,
+          "sha256": "681fa80ad8fc932c3d00e6555ed81561a45f91417ef83d0a67fd3497255fd43a"
+        },
+        {
+          "path": "vendor/pptxgenjs/pptxgen.es.js",
+          "bytes": 1230609,
+          "sha256": "71f89c1bea86cee3c89f9ec948da99ef1f7dacf38fab33a21b6857ca6fb20dd1"
+        },
+        {
+          "path": "vendor/pptxgenjs/UPSTREAM.json",
+          "bytes": 806,
+          "sha256": "b6a153f94d375617a430a05afb94e3dc91a9f896eb53da698fb825f601980768"
+        }
+      ],
+      "sha256": "e12445920b88c951b0ae889a8eec3ce443a2009586580d69ebb8b36e8ea6141d"
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "directory": "/private/tmp/opf-keynote-candidate-61/consumer/node_modules/@openpresentation/gallery",
+      "files": [
+        {
+          "path": "CHANGELOG.md",
+          "bytes": 5501,
+          "sha256": "5c2594a81400c0079d61f6795ff8c11d3b5f760ab703d45232bd36c887b81578"
+        },
+        {
+          "path": "dist/index.d.ts",
+          "bytes": 4089,
+          "sha256": "98e1040f95101d67b738cfbf70a30ed56a1bdc1b9cb8f33f23581efe255b2115"
+        },
+        {
+          "path": "dist/index.js",
+          "bytes": 332518,
+          "sha256": "745579b9d7576360e8335a00d5bb41d7b85923579d636fe16eb65f341727ca11"
+        },
+        {
+          "path": "dist/previews.d.ts",
+          "bytes": 1692,
+          "sha256": "178e24df4a902aa351368ea49d3e967e927993ffb2a02eff9d5558cede5a3364"
+        },
+        {
+          "path": "dist/previews.js",
+          "bytes": 117586,
+          "sha256": "f1819da7819c3030b7c7a435bda32cca061c46c9404c449b992bf197e09702e2"
+        },
+        {
+          "path": "LICENSE",
+          "bytes": 1073,
+          "sha256": "c977d11e7e9de5bd31ab787b9a302475c0487837c66f665c174d9f92b18937d2"
+        },
+        {
+          "path": "package.json",
+          "bytes": 2184,
+          "sha256": "bc5ba5e099ece0fe39d4c3c1ca8e00493ee5757b8a48d122b677091cd3f61f5c"
+        },
+        {
+          "path": "README.md",
+          "bytes": 10472,
+          "sha256": "6538fbab9e41aedbc2dd9167ab1e6b0100b4cea93fbc7217565ebc02aed1c862"
+        }
+      ],
+      "sha256": "76e9b36be7b7508d595b2501c77ca054951e43f0439770f27b34ebf03239da8d"
+    }
+  ],
+  "inspection": {
+    "slides": [
+      {
+        "number": 1,
+        "part": "ppt/slides/slide1.xml",
+        "text": [
+          "Keynote qualification",
+          "K01 Title and subtitle",
+          "Native layout baseline"
+        ],
+        "marker": "K01",
+        "shapes": [
+          {
+            "name": "OPF furniture 0 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.0.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K01 Title and subtitle"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0",
+              "anchor": "t"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "2888035"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF heading slides.0.subtitle line 0",
+            "placeholder": null,
+            "text": [
+              "Native layout baseline"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "4971374",
+                "y": "3629843"
+              },
+              "a:ext": {
+                "cx": "2249252",
+                "cy": "259222"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 0 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11199950",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "127001",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K01 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 0 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.0.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K01 Title and subtitle"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.0.subtitle line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Native layout baseline"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 0 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 316",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 317",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K01 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 2,
+        "part": "ppt/slides/slide2.xml",
+        "text": [
+          "Keynote qualification",
+          "K02 Paragraph editing",
+          "KN_ORIGINAL_PARAGRAPH. Keep this second sentence.",
+          "A second authored paragraph."
+        ],
+        "marker": "K02",
+        "shapes": [
+          {
+            "name": "OPF furniture 1 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.1.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K02 Paragraph editing"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF native body slides.1.text",
+            "placeholder": {
+              "type": "body",
+              "idx": "1"
+            },
+            "text": [
+              "KN_ORIGINAL_PARAGRAPH. Keep this second sentence.",
+              "A second authored paragraph."
+            ],
+            "paragraphs": 2,
+            "paragraphProperties": [
+              {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "122000"
+                  }
+                },
+                "a:buSzTx": "",
+                "a:buNone": "",
+                "marL": "0",
+                "indent": "0"
+              },
+              {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "122000"
+                  }
+                },
+                "a:buSzTx": "",
+                "a:buNone": "",
+                "marL": "0",
+                "indent": "0"
+              }
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "1410112"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "4856193"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 1 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11200174",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "127001",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K02 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 1 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.1.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K02 Paragraph editing"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF native body slides.1.text",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "KN_ORIGINAL_PARAGRAPH. Keep this second sentence.",
+                "A second authored paragraph."
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 1 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 323",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 324",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K02 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 3,
+        "part": "ppt/slides/slide3.xml",
+        "text": [
+          "KN_NEW_TITLE",
+          "KN_NEW_BODY"
+        ],
+        "marker": null,
+        "shapes": [
+          {
+            "name": "KN_NEW_TITLE",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "KN_NEW_TITLE"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": null,
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "KN_NEW_BODY",
+            "placeholder": {
+              "type": "body",
+              "idx": "1"
+            },
+            "text": [
+              "KN_NEW_BODY"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": null,
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "Slide Number",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11199950",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "127001",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [],
+        "notes": [],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "KN_NEW_TITLE",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "KN_NEW_TITLE"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "KN_NEW_BODY",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "KN_NEW_BODY"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Slide Number",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [],
+          "fields": {}
+        }
+      },
+      {
+        "number": 4,
+        "part": "ppt/slides/slide4.xml",
+        "text": [
+          "Keynote qualification",
+          "K03 Rich text",
+          "Bold words",
+          " and ",
+          "italic words",
+          " and ",
+          "bold italic words",
+          "A second rich paragraph."
+        ],
+        "marker": "K03",
+        "shapes": [
+          {
+            "name": "OPF furniture 2 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.2.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K03 Rich text"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF native body slides.2.text",
+            "placeholder": {
+              "type": "body",
+              "idx": "1"
+            },
+            "text": [
+              "Bold words",
+              " and ",
+              "italic words",
+              " and ",
+              "bold italic words",
+              "A second rich paragraph."
+            ],
+            "paragraphs": 2,
+            "paragraphProperties": [
+              {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "122000"
+                  }
+                },
+                "a:buSzTx": "",
+                "a:buNone": "",
+                "a:defRPr": {
+                  "b": "1"
+                },
+                "marL": "0",
+                "indent": "0"
+              },
+              {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "122000"
+                  }
+                },
+                "a:buSzTx": "",
+                "a:buNone": "",
+                "marL": "0",
+                "indent": "0"
+              }
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "1404746"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "4861559"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 2 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11199206",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "127001",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K03 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 2 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.2.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K03 Rich text"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF native body slides.2.text",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "Bold words and italic words and bold italic words",
+                "A second rich paragraph."
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 2 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 334",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 335",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K03 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 5,
+        "part": "ppt/slides/slide5.xml",
+        "text": [
+          "Keynote qualification",
+          "K04 List editing",
+          "KN_ORIGINAL_LIST",
+          "Parent item",
+          "Description remains attached.",
+          "Nested child",
+          "Final item"
+        ],
+        "marker": "K04",
+        "shapes": [
+          {
+            "name": "OPF furniture 3 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.3.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K04 List editing"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF list slides.3.items line 0",
+            "placeholder": null,
+            "text": [
+              "KN_ORIGINAL_LIST"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "1410112"
+              },
+              "a:ext": {
+                "cx": "3210690",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.3.items line 1",
+            "placeholder": null,
+            "text": [
+              "Parent item"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "1867312"
+              },
+              "a:ext": {
+                "cx": "1906509",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.3.items line 2",
+            "placeholder": null,
+            "text": [
+              "Description remains attached."
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "883919",
+                "y": "2275745"
+              },
+              "a:ext": {
+                "cx": "3204742",
+                "cy": "271506"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1900
+            ]
+          },
+          {
+            "name": "OPF list slides.3.items line 3",
+            "placeholder": null,
+            "text": [
+              "Nested child"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              {
+                "a:buClr": {
+                  "a:srgbClr": {
+                    "val": "FFFFFF"
+                  }
+                },
+                "a:buSzPts": {
+                  "val": "2400"
+                },
+                "a:buFont": {
+                  "typeface": "Arial"
+                },
+                "a:buChar": {
+                  "char": "◦"
+                },
+                "a:defRPr": {
+                  "a:solidFill": {
+                    "a:srgbClr": {
+                      "val": "FFFFFF"
+                    }
+                  },
+                  "sz": "2400"
+                },
+                "lvl": "1",
+                "marL": "670560",
+                "indent": "-335280"
+              }
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "2666010"
+              },
+              "a:ext": {
+                "cx": "2360554",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.3.items line 4",
+            "placeholder": null,
+            "text": [
+              "Final item"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "3123210"
+              },
+              "a:ext": {
+                "cx": "1669129",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF furniture 3 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11196975",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "127001",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K04 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 3 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.3.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K04 List editing"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.3.items line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "KN_ORIGINAL_LIST"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.3.items line 1",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Parent item"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.3.items line 2",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Description remains attached."
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.3.items line 3",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Nested child"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.3.items line 4",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Final item"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 3 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 345",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 346",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K04 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 6,
+        "part": "ppt/slides/slide6.xml",
+        "text": [
+          "Keynote qualification",
+          "K05 Long paragraph",
+          "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. "
+        ],
+        "marker": "K05",
+        "shapes": [
+          {
+            "name": "OPF furniture 4 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.4.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K05 Long paragraph"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF native body slides.4.text",
+            "placeholder": {
+              "type": "body",
+              "idx": "1"
+            },
+            "text": [
+              "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. "
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "1410112"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "4856193"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 4 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11198909",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "127001",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K05 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 4 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.4.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K05 Long paragraph"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF native body slides.4.text",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. A native editor should preserve words, spacing and paragraph boundaries while a user edits the content. "
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 4 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 352",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 353",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K05 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 7,
+        "part": "ppt/slides/slide7.xml",
+        "text": [
+          "Keynote qualification",
+          "K06 Long list",
+          "Agenda item 1 with a few more words",
+          "Agenda item 2 with a few more words",
+          "Agenda item 3 with a few more words",
+          "Agenda item 4 with a few more words",
+          "Agenda item 5 with a few more words",
+          "Agenda item 6 with a few more words",
+          "Agenda item 7 with a few more words",
+          "Agenda item 8 with a few more words",
+          "Agenda item 9 with a few more words",
+          "Agenda item 10 with a few more ",
+          "words",
+          "Agenda item 11 with a few more ",
+          "words",
+          "Agenda item 12 with a few more ",
+          "words",
+          "Agenda item 13 with a few more ",
+          "words",
+          "Agenda item 14 with a few more ",
+          "words"
+        ],
+        "marker": "K06",
+        "shapes": [
+          {
+            "name": "OPF furniture 5 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.5.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K06 Long list"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF list slides.5.items line 0",
+            "placeholder": null,
+            "text": [
+              "Agenda item 1 with a few more words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "1410112"
+              },
+              "a:ext": {
+                "cx": "5430313",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 1",
+            "placeholder": null,
+            "text": [
+              "Agenda item 2 with a few more words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "1867312"
+              },
+              "a:ext": {
+                "cx": "5430313",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 2",
+            "placeholder": null,
+            "text": [
+              "Agenda item 3 with a few more words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "2324512"
+              },
+              "a:ext": {
+                "cx": "5430313",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 3",
+            "placeholder": null,
+            "text": [
+              "Agenda item 4 with a few more words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "2781712"
+              },
+              "a:ext": {
+                "cx": "5430313",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 4",
+            "placeholder": null,
+            "text": [
+              "Agenda item 5 with a few more words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "3238912"
+              },
+              "a:ext": {
+                "cx": "5430313",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 5",
+            "placeholder": null,
+            "text": [
+              "Agenda item 6 with a few more words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "3696113"
+              },
+              "a:ext": {
+                "cx": "5430313",
+                "cy": "345629"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 6",
+            "placeholder": null,
+            "text": [
+              "Agenda item 7 with a few more words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "4153313"
+              },
+              "a:ext": {
+                "cx": "5430313",
+                "cy": "345629"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 7",
+            "placeholder": null,
+            "text": [
+              "Agenda item 8 with a few more words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "4610513"
+              },
+              "a:ext": {
+                "cx": "5430313",
+                "cy": "345629"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 8",
+            "placeholder": null,
+            "text": [
+              "Agenda item 9 with a few more words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "5067713"
+              },
+              "a:ext": {
+                "cx": "5430313",
+                "cy": "345629"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 9",
+            "placeholder": null,
+            "text": [
+              "Agenda item 10 with a few more "
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6210299",
+                "y": "1410112"
+              },
+              "a:ext": {
+                "cx": "4786780",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 10",
+            "placeholder": null,
+            "text": [
+              "words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6545580",
+                "y": "1781968"
+              },
+              "a:ext": {
+                "cx": "825749",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 11",
+            "placeholder": null,
+            "text": [
+              "Agenda item 11 with a few more "
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6210299",
+                "y": "2239168"
+              },
+              "a:ext": {
+                "cx": "4764158",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 12",
+            "placeholder": null,
+            "text": [
+              "words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6545580",
+                "y": "2611024"
+              },
+              "a:ext": {
+                "cx": "825749",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 13",
+            "placeholder": null,
+            "text": [
+              "Agenda item 12 with a few more "
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6210299",
+                "y": "3068224"
+              },
+              "a:ext": {
+                "cx": "4786780",
+                "cy": "345630"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 14",
+            "placeholder": null,
+            "text": [
+              "words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6545580",
+                "y": "3440081"
+              },
+              "a:ext": {
+                "cx": "825749",
+                "cy": "345629"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 15",
+            "placeholder": null,
+            "text": [
+              "Agenda item 13 with a few more "
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6210299",
+                "y": "3897281"
+              },
+              "a:ext": {
+                "cx": "4786780",
+                "cy": "345629"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 16",
+            "placeholder": null,
+            "text": [
+              "words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6545580",
+                "y": "4269137"
+              },
+              "a:ext": {
+                "cx": "825749",
+                "cy": "345629"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 17",
+            "placeholder": null,
+            "text": [
+              "Agenda item 14 with a few more "
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6210299",
+                "y": "4726337"
+              },
+              "a:ext": {
+                "cx": "4786780",
+                "cy": "345629"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF list slides.5.items line 18",
+            "placeholder": null,
+            "text": [
+              "words"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6545580",
+                "y": "5098193"
+              },
+              "a:ext": {
+                "cx": "825749",
+                "cy": "345629"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF furniture 5 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11199206",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "127001",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K06 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 5 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.5.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K06 Long list"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 1 with a few more words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 1",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 2 with a few more words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 2",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 3 with a few more words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 3",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 4 with a few more words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 4",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 5 with a few more words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 5",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 6 with a few more words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 6",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 7 with a few more words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 7",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 8 with a few more words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 8",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 9 with a few more words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 9",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 10 with a few more "
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 10",
+              "placeholderRole": null,
+              "paragraphs": [
+                "words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 11",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 11 with a few more "
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 12",
+              "placeholderRole": null,
+              "paragraphs": [
+                "words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 13",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 12 with a few more "
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 14",
+              "placeholderRole": null,
+              "paragraphs": [
+                "words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 15",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 13 with a few more "
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 16",
+              "placeholderRole": null,
+              "paragraphs": [
+                "words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 17",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Agenda item 14 with a few more "
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF list slides.5.items line 18",
+              "placeholderRole": null,
+              "paragraphs": [
+                "words"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 5 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 377",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 378",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K06 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 8,
+        "part": "ppt/slides/slide8.xml",
+        "text": [
+          "Keynote qualification",
+          "K07 Layout and reapply",
+          "Left-column story remains visible.",
+          "24",
+          "teams in the pilot"
+        ],
+        "marker": "K07",
+        "shapes": [
+          {
+            "name": "OPF furniture 6 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.6.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K07 Layout and reapply"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF native body slides.6.blocks.0.text",
+            "placeholder": {
+              "type": "body",
+              "sz": "half",
+              "idx": "1"
+            },
+            "text": [
+              "Left-column story remains visible."
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "1407852"
+              },
+              "a:ext": {
+                "cx": "5433062",
+                "cy": "4858453"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF metric 1 value line 1",
+            "placeholder": null,
+            "text": [
+              "24"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6210299",
+                "y": "1407853"
+              },
+              "a:ext": {
+                "cx": "817899",
+                "cy": "814518"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              5700
+            ]
+          },
+          {
+            "name": "OPF metric 1 label line 1",
+            "placeholder": null,
+            "text": [
+              "teams in the pilot"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6216508",
+                "y": "2405310"
+              },
+              "a:ext": {
+                "cx": "1644813",
+                "cy": "246938"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1700
+            ]
+          },
+          {
+            "name": "OPF furniture 6 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11200174",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "127001",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K07 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 6 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.6.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K07 Layout and reapply"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF native body slides.6.blocks.0.text",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "Left-column story remains visible."
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF metric 1 value line 1",
+              "placeholderRole": null,
+              "paragraphs": [
+                "24"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF metric 1 label line 1",
+              "placeholderRole": null,
+              "paragraphs": [
+                "teams in the pilot"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 6 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 386",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 387",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K07 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 9,
+        "part": "ppt/slides/slide9.xml",
+        "text": [
+          "Keynote qualification",
+          "K08 Replace this picture"
+        ],
+        "marker": "K08",
+        "shapes": [
+          {
+            "name": "OPF furniture 7 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.7.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K08 Replace this picture"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 7 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11199133",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "127001",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [
+          {
+            "part": "ppt/media/image1.png",
+            "sha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+            "crop": []
+          }
+        ],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K08 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 7 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.7.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K08 Replace this picture"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:pic",
+              "name": "OPF image 1",
+              "placeholderRole": "pic",
+              "paragraphs": [],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 7 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 393",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 394",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K08 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 10,
+        "part": "ppt/slides/slide10.xml",
+        "text": [
+          "Keynote qualification",
+          "K09 Crop this picture",
+          "Keep this caption while adjusting the crop."
+        ],
+        "marker": "K09",
+        "shapes": [
+          {
+            "name": "OPF furniture 8 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.8.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K09 Crop this picture"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF native body slides.8.blocks.1.text",
+            "placeholder": {
+              "type": "body",
+              "sz": "half",
+              "idx": "1"
+            },
+            "text": [
+              "Keep this caption while adjusting the crop."
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "6210299",
+                "y": "1407852"
+              },
+              "a:ext": {
+                "cx": "5433062",
+                "cy": "4858453"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 8 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11144513",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "182216",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [
+          {
+            "part": "ppt/media/image1.png",
+            "sha256": "2608d745f3d1dddc963dafe9b517bc7af9e983e7318bf59bd520415589c36905",
+            "crop": [
+              {
+                "l": "0",
+                "t": "0",
+                "r": "44087",
+                "b": "0"
+              }
+            ]
+          }
+        ],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K09 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 8 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.8.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K09 Crop this picture"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:pic",
+              "name": "OPF image 2",
+              "placeholderRole": "pic",
+              "paragraphs": [],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF native body slides.8.blocks.1.text",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "Keep this caption while adjusting the crop."
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 8 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 401",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 402",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K09 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 11,
+        "part": "ppt/slides/slide11.xml",
+        "text": [
+          "Keynote qualification",
+          "K10 Column chart data"
+        ],
+        "marker": "K10",
+        "shapes": [
+          {
+            "name": "OPF furniture 9 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.9.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K10 Column chart data"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 9 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11154559",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "170905",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [
+          {
+            "part": "ppt/charts/chart1.xml",
+            "series": [
+              {
+                "name": "Revenue",
+                "categories": [
+                  "Q1",
+                  "Q2",
+                  "Q3"
+                ],
+                "values": [
+                  12,
+                  24,
+                  18
+                ]
+              }
+            ],
+            "values": [
+              12,
+              24,
+              18
+            ],
+            "explicitColors": [
+              "FFFFFF",
+              "888888",
+              "FFFFFF",
+              "475569",
+              "888888",
+              "FFFFFF",
+              "011842"
+            ]
+          }
+        ],
+        "tables": [],
+        "notes": [
+          "K10 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 9 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.9.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K10 Column chart data"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:graphicFrame",
+              "name": "OPF chart 1",
+              "placeholderRole": null,
+              "paragraphs": [],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 9 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 408",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 409",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K10 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 12,
+        "part": "ppt/slides/slide12.xml",
+        "text": [
+          "Keynote qualification",
+          "K11 Line chart style"
+        ],
+        "marker": "K11",
+        "shapes": [
+          {
+            "name": "OPF furniture 10 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.10.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K11 Line chart style"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 10 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11144735",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "182216",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [
+          {
+            "part": "ppt/charts/chart2.xml",
+            "series": [
+              {
+                "name": "Demand",
+                "categories": [
+                  "Jan",
+                  "Feb",
+                  "Mar"
+                ],
+                "values": [
+                  10,
+                  20,
+                  15
+                ]
+              }
+            ],
+            "values": [
+              10,
+              20,
+              15
+            ],
+            "explicitColors": [
+              "FFFFFF",
+              "888888",
+              "FFFFFF",
+              "475569",
+              "888888",
+              "FFFFFF",
+              "011842"
+            ]
+          }
+        ],
+        "tables": [],
+        "notes": [
+          "K11 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 10 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.10.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K11 Line chart style"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:graphicFrame",
+              "name": "OPF chart 2",
+              "placeholderRole": null,
+              "paragraphs": [],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 10 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 415",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 416",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K11 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 13,
+        "part": "ppt/slides/slide13.xml",
+        "text": [
+          "Keynote qualification",
+          "K12 Table cell edit",
+          "Team",
+          "Count",
+          "KN_ORIGINAL_CELL",
+          "12",
+          "Beta",
+          "24"
+        ],
+        "marker": "K12",
+        "shapes": [
+          {
+            "name": "OPF furniture 11 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.11.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K12 Table cell edit"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 11 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11144959",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "182216",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [
+          {
+            "rows": [
+              [
+                [
+                  "Team"
+                ],
+                [
+                  "Count"
+                ]
+              ],
+              [
+                [
+                  "KN_ORIGINAL_CELL"
+                ],
+                [
+                  "12"
+                ]
+              ],
+              [
+                [
+                  "Beta"
+                ],
+                [
+                  "24"
+                ]
+              ]
+            ]
+          }
+        ],
+        "notes": [
+          "K12 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 11 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.11.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K12 Table cell edit"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:graphicFrame",
+              "name": "OPF table 1",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Team",
+                "Count",
+                "KN_ORIGINAL_CELL",
+                "12",
+                "Beta",
+                "24"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 11 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 422",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 423",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K12 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 14,
+        "part": "ppt/slides/slide14.xml",
+        "text": [
+          "Keynote qualification",
+          "K13 Rich table edit",
+          "Label",
+          "Note",
+          "Alpha",
+          "Bold cell",
+          " and plain",
+          "Beta",
+          "Keep this row"
+        ],
+        "marker": "K13",
+        "shapes": [
+          {
+            "name": "OPF furniture 12 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.12.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K13 Rich table edit"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 12 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11143991",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "182216",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [
+          {
+            "rows": [
+              [
+                [
+                  "Label"
+                ],
+                [
+                  "Note"
+                ]
+              ],
+              [
+                [
+                  "Alpha"
+                ],
+                [
+                  "Bold cell",
+                  " and plain"
+                ]
+              ],
+              [
+                [
+                  "Beta"
+                ],
+                [
+                  "Keep this row"
+                ]
+              ]
+            ]
+          }
+        ],
+        "notes": [
+          "K13 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 12 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.12.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K13 Rich table edit"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:graphicFrame",
+              "name": "OPF table 2",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Label",
+                "Note",
+                "Alpha",
+                "Bold cell and plain",
+                "Beta",
+                "Keep this row"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 12 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 429",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 430",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K13 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 15,
+        "part": "ppt/slides/slide15.xml",
+        "text": [
+          "Keynote qualification",
+          "K15 Number reorder B",
+          "This slide moves before K14; observe the native slide number."
+        ],
+        "marker": "K15",
+        "shapes": [
+          {
+            "name": "OPF furniture 14 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.14.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K15 Number reorder B"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF native body slides.14.text",
+            "placeholder": {
+              "type": "body",
+              "idx": "1"
+            },
+            "text": [
+              "This slide moves before K14; observe the native slide number."
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "1404746"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "4861559"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 14 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11143694",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "182216",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K15 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 14 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.14.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K15 Number reorder B"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF native body slides.14.text",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "This slide moves before K14; observe the native slide number."
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 14 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 436",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 437",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K15 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 16,
+        "part": "ppt/slides/slide16.xml",
+        "text": [
+          "Keynote qualification",
+          "K14 Number reorder A",
+          "Move this slide after K15; observe the native slide number."
+        ],
+        "marker": "K14",
+        "shapes": [
+          {
+            "name": "OPF furniture 13 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859988",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419126",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.13.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K14 Number reorder A"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF native body slides.13.text",
+            "placeholder": {
+              "type": "body",
+              "idx": "1"
+            },
+            "text": [
+              "Move this slide after K15; observe the native slide number."
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "1404746"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "4861559"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 13 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11141759",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "182216",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K14 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 13 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.13.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K14 Number reorder A"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF native body slides.13.text",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "Move this slide after K15; observe the native slide number."
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 13 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 443",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 444",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K14 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 17,
+        "part": "ppt/slides/slide17.xml",
+        "text": [
+          "Keynote qualification",
+          "K16 Notes and final control",
+          "Untouched final control. Notes are edited separately."
+        ],
+        "marker": "K16",
+        "shapes": [
+          {
+            "name": "OPF furniture 15 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.15.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K16 Notes and final control"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF native body slides.15.text",
+            "placeholder": {
+              "type": "body",
+              "idx": "1"
+            },
+            "text": [
+              "Untouched final control. Notes are edited separately."
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "1404746"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "4861559"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF furniture 15 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11143991",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "182216",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K16 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 15 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.15.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K16 Notes and final control"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF native body slides.15.text",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "Untouched final control. Notes are edited separately."
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 15 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 450",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 451",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K16 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      },
+      {
+        "number": 18,
+        "part": "ppt/slides/slide18.xml",
+        "text": [
+          "Keynote qualification",
+          "K17 Flat bullet body",
+          "KN_ORIGINAL_FLAT_LIST",
+          "Bold flat item",
+          "Final flat item."
+        ],
+        "marker": "K17",
+        "shapes": [
+          {
+            "name": "OPF furniture 16 part 0 line 0",
+            "placeholder": null,
+            "text": [
+              "Keynote qualification"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "a:spAutoFit": "",
+              "wrap": "none",
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "859987",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "1419127",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              1200
+            ]
+          },
+          {
+            "name": "OPF heading slides.16.title line 0",
+            "placeholder": {
+              "type": "title"
+            },
+            "text": [
+              "K17 Flat bullet body"
+            ],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "548640"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "627508"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          },
+          {
+            "name": "OPF native body slides.16.items",
+            "placeholder": {
+              "type": "body",
+              "idx": "1"
+            },
+            "text": [
+              "KN_ORIGINAL_FLAT_LIST",
+              "Bold flat item",
+              "Final flat item."
+            ],
+            "paragraphs": 3,
+            "paragraphProperties": [
+              {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "122000"
+                  }
+                },
+                "a:spcBef": {
+                  "a:spcPts": {
+                    "val": "500"
+                  }
+                },
+                "a:defRPr": {
+                  "sz": "2400"
+                },
+                "marL": "335280",
+                "indent": "-335280"
+              },
+              {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "122000"
+                  }
+                },
+                "a:spcBef": {
+                  "a:spcPts": {
+                    "val": "500"
+                  }
+                },
+                "a:defRPr": {
+                  "b": "1",
+                  "sz": "2400"
+                },
+                "marL": "335280",
+                "indent": "-335280"
+              },
+              {
+                "a:lnSpc": {
+                  "a:spcPct": {
+                    "val": "122000"
+                  }
+                },
+                "a:spcBef": {
+                  "a:spcPts": {
+                    "val": "500"
+                  }
+                },
+                "a:defRPr": {
+                  "sz": "2400"
+                },
+                "marL": "335280",
+                "indent": "-335280"
+              }
+            ],
+            "bodyProperties": {
+              "lIns": "0",
+              "tIns": "0",
+              "rIns": "0",
+              "bIns": "0"
+            },
+            "geometryEmu": {
+              "a:off": {
+                "x": "548639",
+                "y": "1407852"
+              },
+              "a:ext": {
+                "cx": "11094722",
+                "cy": "4858453"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": [
+              2400
+            ]
+          },
+          {
+            "name": "OPF furniture 16 part 1 line 0",
+            "placeholder": {
+              "type": "sldNum",
+              "sz": "quarter",
+              "idx": "2"
+            },
+            "text": [],
+            "paragraphs": 1,
+            "paragraphProperties": [
+              ""
+            ],
+            "bodyProperties": "",
+            "geometryEmu": {
+              "a:off": {
+                "x": "11144959",
+                "y": "6380603"
+              },
+              "a:ext": {
+                "cx": "182216",
+                "cy": "172816"
+              }
+            },
+            "explicitLatinTypefaces": [],
+            "explicitSizesHundredthsPt": []
+          }
+        ],
+        "pictures": [],
+        "charts": [],
+        "tables": [],
+        "notes": [
+          "K17 speaker notes: preserve this sentence."
+        ],
+        "textSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 16 part 0 line 0",
+              "placeholderRole": null,
+              "paragraphs": [
+                "Keynote qualification"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF heading slides.16.title line 0",
+              "placeholderRole": "title",
+              "paragraphs": [
+                "K17 Flat bullet body"
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF native body slides.16.items",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "KN_ORIGINAL_FLAT_LIST",
+                "Bold flat item",
+                "Final flat item."
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "OPF furniture 16 part 1 line 0",
+              "placeholderRole": "sldNum",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {
+                "slidenum": 1
+              }
+            }
+          ],
+          "fields": {
+            "slidenum": 1
+          }
+        },
+        "notesSemantics": {
+          "objects": [
+            {
+              "kind": "p:sp",
+              "name": "Shape 457",
+              "placeholderRole": "sldImg",
+              "paragraphs": [
+                ""
+              ],
+              "fields": {}
+            },
+            {
+              "kind": "p:sp",
+              "name": "Shape 458",
+              "placeholderRole": "body",
+              "paragraphs": [
+                "K17 speaker notes: preserve this sentence."
+              ],
+              "fields": {}
+            }
+          ],
+          "fields": {}
+        }
+      }
+    ],
+    "layouts": [
+      {
+        "part": "ppt/slideLayouts/slideLayout1.xml",
+        "placeholders": [
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout10.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "sz": "half",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout11.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout12.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "sz": "half",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout13.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout14.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout15.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout16.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout17.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout18.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "pic",
+            "idx": "21"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout19.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "pic",
+            "sz": "half",
+            "idx": "21"
+          },
+          {
+            "type": "body",
+            "sz": "half",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout2.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "sz": "quarter",
+            "idx": "1"
+          },
+          {
+            "type": "pic",
+            "idx": "21"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout20.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "pic",
+            "idx": "21"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout21.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout22.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "sz": "half",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout23.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "sz": "quarter",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout24.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "sz": "half",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout25.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "sz": "half",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout26.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "sz": "quarter",
+            "idx": "1"
+          },
+          {
+            "type": "pic",
+            "sz": "quarter",
+            "idx": "21"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout27.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "sz": "half",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout28.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout29.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout3.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "sz": "half",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout30.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout31.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "sz": "half",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout32.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "pic",
+            "sz": "half",
+            "idx": "21"
+          },
+          {
+            "type": "body",
+            "sz": "half",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout33.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout4.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout5.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout6.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "sz": "quarter",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout7.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout8.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideLayouts/slideLayout9.xml",
+        "placeholders": [
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          },
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          }
+        ]
+      },
+      {
+        "part": "ppt/slideMasters/slideMaster1.xml",
+        "placeholders": [
+          {
+            "type": "sldNum",
+            "sz": "quarter",
+            "idx": "2"
+          },
+          {
+            "type": "title"
+          },
+          {
+            "type": "body",
+            "idx": "1"
+          }
+        ]
+      }
+    ],
+    "nativeChartCount": 2,
+    "nativeTableCount": 2,
+    "archiveParts": 159
+  },
+  "failures": [],
+  "staticAssertionsPassed": true,
+  "nativeAcceptance": false
+}

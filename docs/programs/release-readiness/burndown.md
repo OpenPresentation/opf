@@ -390,6 +390,8 @@ Owner subsequently confirmed Actions budget increased; canonical reruns on exact
 
 **RR-86 Keynote qualification.** Maintain reproducible current-content Keynote lifecycle, editing and structure controls for the approved compatibility fixes and opt-in whole native Body paragraphs/flat bullets, with measured defaults preserved. Bound unsupported nested/description/multicolumn composition, literal footer visibility, unsupported chart paint, native fonts/wrapping and notes-field adaptations with diagnostics/evidence or explicit scoped disposition. Preserve current edits/deletions across provenance modes, meaningful negatives, default-byte controls and immutable historical fixtures. Source/package/preview success does not establish native acceptance. A real registry-native17 claim requires genuinely verified publisher/archive/runtime identity and actual Body/fallback checks; fresh Mac/native criteria remain pending and Windows stays on explicit human HOLD.
 
+Historical evidence: the [2026-10-15 Keynote integration plan](keynote-integration-plan.md) and its observation JSON predate the monorepo and name the former separate repositories; its status text is not current.
+
 ## Progress log
 
 Append-only. One dated line per state change.

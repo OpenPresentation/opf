@@ -1,0 +1,154 @@
+{
+  "route": "layout-structure",
+  "application": {
+    "name": "Keynote",
+    "version": "15.1.1 (7044.0.273)",
+    "os": "26.6.2"
+  },
+  "directions": {
+    "opf-to-pptx-to-keynote": {
+      "status": "partial",
+      "observations": [
+        {
+          "text": "Fresh maintained17-slide copy imported through exact local file Open. Initial AX still showed prior iCloud window while import was asynchronous; a later full AX verified separate unsaved editable2 with17original rows. Explicit Save As created /private/tmp/opf-keynote-layout-local-61-02/working.key. No font/repair warning observed. Original input hash remains exact."
+        }
+      ]
+    },
+    "keynote-save-and-reopen": {
+      "status": "observed-only",
+      "observations": [
+        {
+          "text": "Actual local working.key saved, closed and reopened18rows in original/current reordered sequence. New native Text Body slide at3 visually rereviewed: both markers and live3 visible; K15=15 and K14=16 checked through native AX. Only the new slide visually captured after .key reopen; no broad all-slide visual claim. No edits/resave during reopened inspection."
+        }
+      ]
+    },
+    "keynote-to-pptx": {
+      "status": "observed-only",
+      "observations": [
+        {
+          "text": "Actual native-export.pptx exported120583bytes, then independently opened through exact local Open path. Opening progress87% observed before completed18-row native-export window; no font/repair warning observed. Root visually rereviewed/captured only new slide3 Title/Body/live3, K14at16/live16, K15at15/live15. All three actual screenshots show current words in frame. Closed only this reopened test export, without resaving; earlier ambiguous iCloud test window preserved."
+        }
+      ]
+    },
+    "keynote-pptx-to-opf": {
+      "status": "observed-only",
+      "observations": [
+        {
+          "text": "One maintained e470 inspector with sealed normally packed9f consumer:18native/imported slides, staticAssertionsPassed true, failures[],21 import diagnostics retained. New title+Body marker/current words and exact K15beforeK14 relationship order retained. Dynamic sldNum fields have empty caches, so displayed15/16 evidence comes from Root actual native UI rather than XML. K07 action unrun, no overall route pass."
+        }
+      ]
+    }
+  },
+  "actions": [
+    {
+      "id": "placeholder-ui",
+      "status": "partial",
+      "evidence": [],
+      "observations": [
+        "K01 initial Title1/Body0/SlideNumber1; K02 real single Body and controls all1, actual number3 while temporary Cover existed. K14 controls not yet inspected in this new attempt. Prior K01 actual toggle/undo observations remain in the separate original attempt, not repeated here.",
+        "K14 andK15 both real singleBody andTitle/Body/SlideNumber all1; actuallive15/16 changes observed. No new K01 toggle repeated; prior firstattempt remains separately attributed."
+      ]
+    },
+    {
+      "id": "new-slide",
+      "status": "observed-only",
+      "evidence": [
+        "/private/tmp/opf-keynote-layout-local-61-02/new-native-body.png",
+        "/private/tmp/opf-keynote-layout-local-61-02/key-reopen-new.png",
+        "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-new.png"
+      ],
+      "observations": [
+        "Toolbar imported layout picker lists28catalog+4native-body variants. Semantic thumbnail and one screenshot-coordinate activation had no effect; attempted alternate unverified coordinate was rejected by automatic approval review and not executed. Native Scroll Down action did scroll correctly; no successful picker selection claimed.",
+        "Slide > New Slide from K01 initially created Cover with actual Title/Body+picture. Both markers were entered and saved, then only that temporary Cover was removed, with17original rows verified. Selecting existing K02 Text(native body) and Slide > New Slide created exactlyone replacement atposition3,18rows. Native Title and Body accepted KN_NEW_TITLE/KN_NEW_BODY; selected layout Text(native body), Title/Body/SlideNumber all1, live number3. Saved locally. Screenshot new-native-body.png shows actual current words in frame. No duplicate remains.",
+        "Actual .key reopen and independent actual PPTX reopen retain new Title/Body markers, Text(native body), Title/Body/Number1, live3. Both selected new-slide views visually captured; no edit/resave on reopens."
+      ]
+    },
+    {
+      "id": "reapply",
+      "status": "not-run",
+      "evidence": [],
+      "observations": [
+        "Not run yet; primary release gate progressed and takes priority."
+      ]
+    },
+    {
+      "id": "reorder",
+      "status": "observed-only",
+      "evidence": [
+        "/private/tmp/opf-keynote-layout-local-61-02/reorder-k14.png",
+        "/private/tmp/opf-keynote-layout-local-61-02/reorder-k15.png",
+        "/private/tmp/opf-keynote-layout-local-61-02/key-reopen-k14.ax.txt",
+        "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-k14.png",
+        "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-k15.png"
+      ],
+      "observations": [
+        "K14 selected atposition15/live15 withTitle/Body/Number1. Native Cut removed only K14,17rows; K15thenposition15/live15. Native Paste afterK15 restored18rows, K14position16/live16. Saved locally. Actual.key reopen showedK15live15/K14live16 via nativeAX. ActualPPTXreopen physically rereviewed/captured both K14=16 andK15=15. No edits/resave on reopens."
+      ]
+    }
+  ],
+  "nativeAcceptance": false,
+  "registryAcceptance": false,
+  "updatedAt": "2026-10-15T23:29:14.735367+00:00",
+  "inputs": [
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/editable.pptx",
+      "bytes": 179242,
+      "sha256": "12b93850c8703ab4e1a4ef5fd45a73ba56dc94b3c151c7ceed1743ba1793b017"
+    }
+  ],
+  "outputsVerified": [
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/working.key",
+      "bytes": 1343584,
+      "sha256": "8b1016a9ea9e89761aecc156ff09718947a9b95ddde7171fcc441cfb6ff22729"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/native-export.pptx",
+      "bytes": 120583,
+      "sha256": "6dc32958ae2a5597b4500b6e150f17eb8e230a0a0cbd9d00226fb9c97b0ee062"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/new-native-body.png",
+      "bytes": 209637,
+      "sha256": "f404382a035a3a8bff922efc1e6373281c54cc8b32bdb37f1633492f3cc61e4a"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/key-reopen-new.png",
+      "bytes": 211920,
+      "sha256": "d1624120f45f9186168ae89267e02ae147243016ec72214bd877e49e6fb94e7c"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/reorder-k14.png",
+      "bytes": 230174,
+      "sha256": "23160e0f9fa44a2bc64bd12aaef4860dc92432d73c845fd6ef5feb66ba125002"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/reorder-k15.png",
+      "bytes": 231505,
+      "sha256": "2e1a28973ea950959c078e52564d703dc6fe5195264506734e59853b2a6b2bdb"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-new.png",
+      "bytes": 211993,
+      "sha256": "6484eebcceddfd84139c65c18fa4f5798710f10c8831164e87ad719f00f0db4c"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-k14.png",
+      "bytes": 229723,
+      "sha256": "3dd0f398844285948c0196df3478f8c3d1c1bc0a5f5b92b4169adaad1da1f9b0"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-layout-local-61-02/pptx-reopen-k15.png",
+      "bytes": 230548,
+      "sha256": "7d660ed408210d9abd64d7106f0763709e54ac0734bf6d340b1df004679a3be0"
+    }
+  ],
+  "inspection": {
+    "report": "/private/tmp/opf-keynote-layout-local-inspection-61-02/inspection.json",
+    "sha256": "5e6decb54e769b3f237d8b19b35d5639b8033b5a39c2de96f970a9f989e23d2d",
+    "tooling": "e470c0ab2234690ee73c67496d9d3d0fa94ea939",
+    "failures": 0,
+    "importDiagnostics": 21,
+    "scope": "Static maintained assertions only; K07 unrun and no overall native/current3b qualification."
+  }
+}

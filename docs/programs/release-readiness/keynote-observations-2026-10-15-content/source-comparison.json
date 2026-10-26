@@ -1,0 +1,813 @@
+{
+  "scope": "Offline maintained inspection and SOURCE-ONLY66a versus original installed9f comparison. No pack/install/new native/registry qualification; no route acceptance.",
+  "capturedAt": "2026-10-15T22:01:24.714Z",
+  "input": {
+    "file": "/private/tmp/opf-keynote-body-native-content-edits-61-01/native-export.pptx",
+    "bytes": 120110,
+    "sha256": "e8c4c69a622510187eabbba5afb32e683b631d49a12a1959bf08e70b566ff0a9"
+  },
+  "tooling": {
+    "revision": "62a26897744ce7603989cda18bd5a83a547120a3",
+    "maintainedInspection": "/private/tmp/opf-keynote-mac-content-inspection-61-01",
+    "maintainedFailuresUnchanged": [
+      "long-list: expected edited text missing",
+      "long-list: edited marker missing from current imported slide payload",
+      "table-cell: edited marker missing from current imported slide payload",
+      "table-style: edited marker missing from current imported slide payload"
+    ]
+  },
+  "candidateReceipt": {
+    "file": "/private/tmp/opf-keynote-candidate-61/candidate.json",
+    "sha256": "fc7af6166707e8922ab2064d6b306ff268d9e0105c8453462bf33aaeafe1752a",
+    "source": {
+      "directory": "/private/tmp/opf-keynote-body-61",
+      "revision": "9f159655df6aa5972a8663b94f5d73142a2c07b8",
+      "clean": true
+    },
+    "tarball": {
+      "file": "/private/tmp/opf-keynote-candidate-61/openpresentation-opf-pptx-0.20.2.tgz",
+      "bytes": 732409,
+      "sha256": "e1fcb1b4303ca8acc13c0e68893a28c8bac47ae689b2129a907655f51023f4e4",
+      "integrity": "sha512-SYxeHRXywJcmX0V3ZVMVCSAOj3KY233/fdZg89F32pST3WEIJiFec15kpRHi/d9p4ULLSd+MScish+F7gafvIQ=="
+    }
+  },
+  "source": {
+    "directory": "/private/tmp/opf-keynote-body-style-inheritance-61",
+    "revision": "66a81452c30e79161f7640e6087f4780d279c4d9",
+    "clean": true,
+    "files": [
+      {
+        "file": "dist/index.js",
+        "bytes": 324969,
+        "sha256": "26e8c2f56caebb403e4a3b0afcf07b7dfeb536c13d61418706e83aa6f64a865e"
+      },
+      {
+        "file": "dist/body-text-import.js",
+        "bytes": 11697,
+        "sha256": "466531734a6bc9f526c994dbc8cd21012363ba34adc7690aeec489acc4f01399"
+      },
+      {
+        "file": "dist/native-body.js",
+        "bytes": 8489,
+        "sha256": "c580a0e984c9b12f1db6a15befd12b124a13d426ce9ae831a44ddc154c2ce7b1"
+      }
+    ]
+  },
+  "sameDependencyGraph": [
+    {
+      "name": "@openpresentation/opf",
+      "version": "0.20.1",
+      "sha256": "e42bc681401a16612b48a6ea4802c9f6f425e306104563d3ffec5d774c9f3ae9",
+      "directory": "/private/tmp/opf-keynote-body-style-inheritance-61/node_modules/@openpresentation/opf",
+      "allSealedFilesEqual": true
+    },
+    {
+      "name": "@openpresentation/opf-render",
+      "version": "0.20.0",
+      "sha256": "ba941ae7e506674904b294bea5b58a1c46761678501efce32e84cf3c04f45794",
+      "directory": "/private/tmp/opf-keynote-body-style-inheritance-61/node_modules/@openpresentation/opf-render",
+      "allSealedFilesEqual": true
+    },
+    {
+      "name": "@openpresentation/gallery",
+      "version": "3.0.0",
+      "sha256": "76e9b36be7b7508d595b2501c77ca054951e43f0439770f27b34ebf03239da8d",
+      "directory": "/private/tmp/opf-keynote-body-style-inheritance-61/node_modules/@openpresentation/gallery",
+      "allSealedFilesEqual": true
+    }
+  ],
+  "sourceComparison": {
+    "changedPaths": [
+      "slides.1.blocks.0.text",
+      "slides.2.blocks.0.text.0.italic",
+      "slides.2.blocks.0.text.0.underline",
+      "slides.2.blocks.0.text.0.strikethrough",
+      "slides.2.blocks.0.text.0.fontSize",
+      "slides.2.blocks.0.text.0.superscript",
+      "slides.2.blocks.0.text.0.subscript",
+      "slides.2.blocks.0.text.0.fontFamily",
+      "slides.2.blocks.0.text.0.color",
+      "slides.2.blocks.0.text.1.italic",
+      "slides.2.blocks.0.text.1.underline",
+      "slides.2.blocks.0.text.1.strikethrough",
+      "slides.2.blocks.0.text.1.fontSize",
+      "slides.2.blocks.0.text.1.superscript",
+      "slides.2.blocks.0.text.1.subscript",
+      "slides.2.blocks.0.text.1.fontFamily",
+      "slides.2.blocks.0.text.1.color",
+      "slides.2.blocks.0.text.2.underline",
+      "slides.2.blocks.0.text.2.strikethrough",
+      "slides.2.blocks.0.text.2.fontSize",
+      "slides.2.blocks.0.text.2.superscript",
+      "slides.2.blocks.0.text.2.subscript",
+      "slides.2.blocks.0.text.2.fontFamily",
+      "slides.2.blocks.0.text.2.color",
+      "slides.2.blocks.0.text.3.italic",
+      "slides.2.blocks.0.text.3.underline",
+      "slides.2.blocks.0.text.3.strikethrough",
+      "slides.2.blocks.0.text.3.fontSize",
+      "slides.2.blocks.0.text.3.superscript",
+      "slides.2.blocks.0.text.3.subscript",
+      "slides.2.blocks.0.text.3.fontFamily",
+      "slides.2.blocks.0.text.3.color",
+      "slides.2.blocks.0.text.4.underline",
+      "slides.2.blocks.0.text.4.strikethrough",
+      "slides.2.blocks.0.text.4.fontSize",
+      "slides.2.blocks.0.text.4.superscript",
+      "slides.2.blocks.0.text.4.subscript",
+      "slides.2.blocks.0.text.4.fontFamily",
+      "slides.2.blocks.0.text.4.color",
+      "slides.2.blocks.0.text.6",
+      "slides.4.blocks.0.text",
+      "slides.6.blocks.0.text",
+      "slides.8.blocks.0.text",
+      "slides.13.blocks.0.text",
+      "slides.14.blocks.0.text",
+      "slides.15.blocks.0.text",
+      "slides.16.blocks.0.type",
+      "slides.16.blocks.0.text",
+      "slides.16.blocks.0.items"
+    ],
+    "diagnosticsIdentical": true,
+    "diagnosticCounts": {
+      "before": 21,
+      "after": 21
+    },
+    "currentNotesIdentical": true,
+    "currentChartTablePayloadsIdentical": true,
+    "maintainedSourceImportedFindings": [
+      "long-list: edited marker missing from current imported slide payload",
+      "table-cell: edited marker missing from current imported slide payload",
+      "table-style: edited marker missing from current imported slide payload"
+    ]
+  },
+  "actions": [
+    {
+      "id": "paragraph",
+      "nativeMarker": true,
+      "oldMarkerAbsent": true,
+      "current9f": "\nKN_EDIT_PARAGRAPH. Keep this second sentence.\nA second authored paragraph.\nKN_NEW_PARAGRAPH\nKeynote qualification",
+      "current66a": "\nKN_EDIT_PARAGRAPH. Keep this second sentence.\nA second authored paragraph.\nKN_NEW_PARAGRAPH\nKeynote qualification",
+      "ui": "Root observed marker and Return third paragraph"
+    },
+    {
+      "id": "rich-text",
+      "nativeMarker": true,
+      "oldMarkerAbsent": true,
+      "current9f": {
+        "type": "text",
+        "text": [
+          {
+            "text": "Bold edited",
+            "bold": true
+          },
+          {
+            "text": " and ",
+            "bold": false
+          },
+          {
+            "text": "italic words",
+            "bold": false,
+            "italic": true
+          },
+          {
+            "text": " and ",
+            "bold": false
+          },
+          {
+            "text": "bold italic words",
+            "bold": true,
+            "italic": true
+          },
+          "\n",
+          "A second rich paragraph."
+        ]
+      },
+      "current66a": {
+        "type": "text",
+        "text": [
+          {
+            "text": "Bold edited",
+            "bold": true,
+            "italic": false,
+            "underline": false,
+            "strikethrough": false,
+            "fontSize": 18,
+            "superscript": false,
+            "subscript": false,
+            "fontFamily": "Arial",
+            "color": "#FFFFFF"
+          },
+          {
+            "text": " and ",
+            "bold": false,
+            "italic": false,
+            "underline": false,
+            "strikethrough": false,
+            "fontSize": 18,
+            "superscript": false,
+            "subscript": false,
+            "fontFamily": "Arial",
+            "color": "#FFFFFF"
+          },
+          {
+            "text": "italic words",
+            "bold": false,
+            "italic": true,
+            "underline": false,
+            "strikethrough": false,
+            "fontSize": 18,
+            "superscript": false,
+            "subscript": false,
+            "fontFamily": "Arial",
+            "color": "#FFFFFF"
+          },
+          {
+            "text": " and ",
+            "bold": false,
+            "italic": false,
+            "underline": false,
+            "strikethrough": false,
+            "fontSize": 18,
+            "superscript": false,
+            "subscript": false,
+            "fontFamily": "Arial",
+            "color": "#FFFFFF"
+          },
+          {
+            "text": "bold italic words",
+            "bold": true,
+            "italic": true,
+            "underline": false,
+            "strikethrough": false,
+            "fontSize": 18,
+            "superscript": false,
+            "subscript": false,
+            "fontFamily": "Arial",
+            "color": "#FFFFFF"
+          },
+          "\n",
+          {
+            "text": "A second rich paragraph.",
+            "bold": false,
+            "italic": false,
+            "underline": false,
+            "strikethrough": false,
+            "fontSize": 18,
+            "superscript": false,
+            "subscript": false,
+            "fontFamily": "Arial",
+            "color": "#FFFFFF"
+          }
+        ]
+      },
+      "ui": "Root observed bold edited and italic retained"
+    },
+    {
+      "id": "list",
+      "nativeMarkers": [
+        "Keynote qualification",
+        "K04 List editing",
+        "KN_EDIT_LIST",
+        "KN_NEW_NESTED_ITEM",
+        "Parent item",
+        "Description remains attached.",
+        "Nested child",
+        "Final item"
+      ],
+      "importedLists": [
+        {
+          "items": [
+            [
+              {
+                "text": "KN_EDIT_LIST",
+                "fontSize": 24,
+                "color": "#FFFFFF"
+              }
+            ],
+            {
+              "text": [
+                {
+                  "text": "KN_NEW_NESTED_ITEM",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ],
+              "level": 1
+            }
+          ]
+        },
+        {
+          "items": [
+            [
+              {
+                "text": "Parent item",
+                "fontSize": 24,
+                "color": "#FFFFFF"
+              },
+              {
+                "text": "Description remains attached.",
+                "fontSize": 19,
+                "color": "#F0F0F0"
+              }
+            ],
+            {
+              "text": [
+                {
+                  "text": "Nested child",
+                  "fontSize": 24,
+                  "color": "#FFFFFF"
+                }
+              ],
+              "level": 1
+            },
+            [
+              {
+                "text": "Final item",
+                "fontSize": 24,
+                "color": "#FFFFFF"
+              }
+            ]
+          ]
+        }
+      ],
+      "ui": "FAIL: Root observed visible first measured text box overlap with Parent item, persisting on both reopens; stop batch"
+    },
+    {
+      "id": "long-text",
+      "nativeMarker": true,
+      "current66aMarker": true,
+      "ui": "Root observed Return paragraph fitting frame"
+    },
+    {
+      "id": "long-list",
+      "nativeMarker": false,
+      "current66aMarker": false,
+      "ui": "NOT RUN after K04 failure"
+    },
+    {
+      "id": "replace-image",
+      "nativeReplacementHash": "6ac383a69a05cf8edf786f2b555784bb2454d89d617ebcea4384588c8140fe1f",
+      "expectedReplacementHash": "6ac383a69a05cf8edf786f2b555784bb2454d89d617ebcea4384588c8140fe1f",
+      "nativeFrameUnchanged": true,
+      "ui": "Root observed Replace with retained AX frame858.3x429.1"
+    },
+    {
+      "id": "crop-image",
+      "nativeFrameAndCropUnchanged": true,
+      "ui": "NOT PASSED: two mask drags did not change crop; automation limit, caption/frame retained"
+    },
+    {
+      "id": "chart-data",
+      "nativeSeries": [
+        {
+          "name": "Revenue",
+          "categories": [
+            "Q1",
+            "Q2",
+            "Q3"
+          ],
+          "values": [
+            12,
+            900,
+            18
+          ]
+        }
+      ],
+      "current9f": [
+        {
+          "type": "column",
+          "data": {
+            "columns": [
+              "Category",
+              "Revenue"
+            ],
+            "rows": [
+              [
+                "Q1",
+                12
+              ],
+              [
+                "Q2",
+                900
+              ],
+              [
+                "Q3",
+                18
+              ]
+            ]
+          }
+        }
+      ],
+      "current66a": [
+        {
+          "type": "column",
+          "data": {
+            "columns": [
+              "Category",
+              "Revenue"
+            ],
+            "rows": [
+              [
+                "Q1",
+                12
+              ],
+              [
+                "Q2",
+                900
+              ],
+              [
+                "Q3",
+                18
+              ]
+            ]
+          }
+        }
+      ],
+      "ui": "Root observed Revenue Q2 24 to900 and visible chart update"
+    },
+    {
+      "id": "chart-style",
+      "beforeNativeLinePaint": {
+        "a:schemeClr": {
+          "val": "accent1"
+        }
+      },
+      "afterNativeLinePaint": {
+        "a:schemeClr": {
+          "val": "accent4"
+        }
+      },
+      "dataUnchanged": true,
+      "imported9fChart": [
+        {
+          "type": "line",
+          "data": {
+            "columns": [
+              "Category",
+              "Demand"
+            ],
+            "rows": [
+              [
+                "Jan",
+                10
+              ],
+              [
+                "Feb",
+                20
+              ],
+              [
+                "Mar",
+                15
+              ]
+            ]
+          }
+        }
+      ],
+      "imported66aChart": [
+        {
+          "type": "line",
+          "data": {
+            "columns": [
+              "Category",
+              "Demand"
+            ],
+            "rows": [
+              [
+                "Jan",
+                10
+              ],
+              [
+                "Feb",
+                20
+              ],
+              [
+                "Mar",
+                15
+              ]
+            ]
+          }
+        }
+      ],
+      "priorAndCurrentImportedChartEqual": true,
+      "priorAndCurrentImportedDeckDesignEqual": true,
+      "ui": "Root observed blue41 toblue-green77 per-series preset; values intended unchanged"
+    },
+    {
+      "id": "table-cell",
+      "nativeCell": [
+        "KN_EDIT_CELL\n"
+      ],
+      "current9fCell": {
+        "value": [
+          {
+            "text": "KN_EDIT_CELL\n",
+            "bold": false,
+            "italic": false,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "color": "#FFFFFF"
+          }
+        ],
+        "style": {
+          "fill": "#011842",
+          "align": "left",
+          "verticalAlign": "top",
+          "padding": {
+            "top": 8,
+            "right": 8,
+            "bottom": 8,
+            "left": 8
+          },
+          "borders": {
+            "left": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            },
+            "right": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            },
+            "top": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            },
+            "bottom": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            }
+          }
+        }
+      },
+      "current66aCell": {
+        "value": [
+          {
+            "text": "KN_EDIT_CELL\n",
+            "bold": false,
+            "italic": false,
+            "fontSize": 12,
+            "fontFamily": "Arial",
+            "color": "#FFFFFF"
+          }
+        ],
+        "style": {
+          "fill": "#011842",
+          "align": "left",
+          "verticalAlign": "top",
+          "padding": {
+            "top": 8,
+            "right": 8,
+            "bottom": 8,
+            "left": 8
+          },
+          "borders": {
+            "left": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            },
+            "right": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            },
+            "top": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            },
+            "bottom": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            }
+          }
+        }
+      },
+      "maintainedMarkerFindingRetained": true,
+      "classification": "Comparator misses cell.value rich wrappers; current KN_EDIT_CELL\\n is present"
+    },
+    {
+      "id": "table-style",
+      "nativeCell": [
+        "Bold edited cell",
+        " and plain"
+      ],
+      "current9fCell": {
+        "value": [
+          {
+            "text": "Bold edited cell",
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Arial",
+            "color": "#FFFFFF"
+          },
+          {
+            "text": " and plain",
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "color": "#FFFFFF"
+          }
+        ],
+        "style": {
+          "fill": "#011842",
+          "align": "left",
+          "verticalAlign": "top",
+          "padding": {
+            "top": 8,
+            "right": 8,
+            "bottom": 8,
+            "left": 8
+          },
+          "borders": {
+            "left": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            },
+            "right": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            },
+            "top": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            },
+            "bottom": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            }
+          }
+        }
+      },
+      "current66aCell": {
+        "value": [
+          {
+            "text": "Bold edited cell",
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Arial",
+            "color": "#FFFFFF"
+          },
+          {
+            "text": " and plain",
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "color": "#FFFFFF"
+          }
+        ],
+        "style": {
+          "fill": "#011842",
+          "align": "left",
+          "verticalAlign": "top",
+          "padding": {
+            "top": 8,
+            "right": 8,
+            "bottom": 8,
+            "left": 8
+          },
+          "borders": {
+            "left": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            },
+            "right": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            },
+            "top": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            },
+            "bottom": {
+              "color": "#475569",
+              "width": 1.3333333333333333
+            }
+          }
+        }
+      },
+      "boldEditedRetained": true,
+      "plainRetained": true,
+      "maintainedMarkerFindingRetained": true,
+      "classification": "Comparator misses cell.value rich wrappers; both current runs are present"
+    },
+    {
+      "id": "notes",
+      "current9f": "K16 speaker notes: preserve this sentence.\nKN_EDIT_NOTES",
+      "current66a": "K16 speaker notes: preserve this sentence.\nKN_EDIT_NOTES",
+      "bodyWordsUnchanged": true,
+      "ui": "Root observed final notes appended; transient18th slide undone; final17 slides"
+    },
+    {
+      "id": "flat-list",
+      "current9f": {
+        "type": "text",
+        "text": [
+          {
+            "text": "KN_EDIT_FLAT_LIST",
+            "fontSize": 24
+          },
+          "\n",
+          {
+            "text": "Bold flat item",
+            "bold": true,
+            "fontSize": 24
+          },
+          "\n",
+          {
+            "text": "Final flat item.",
+            "fontSize": 24
+          },
+          "\n",
+          {
+            "text": "KN_NEW_FLAT_ITEM",
+            "fontSize": 24
+          }
+        ]
+      },
+      "current66a": {
+        "type": "list",
+        "items": [
+          [
+            {
+              "text": "KN_EDIT_FLAT_LIST",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strikethrough": false,
+              "fontSize": 24,
+              "superscript": false,
+              "subscript": false,
+              "fontFamily": "Arial",
+              "color": "#FFFFFF"
+            }
+          ],
+          [
+            {
+              "text": "Bold flat item",
+              "bold": true,
+              "italic": false,
+              "underline": false,
+              "strikethrough": false,
+              "fontSize": 24,
+              "superscript": false,
+              "subscript": false,
+              "fontFamily": "Arial",
+              "color": "#FFFFFF"
+            }
+          ],
+          [
+            {
+              "text": "Final flat item.",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strikethrough": false,
+              "fontSize": 24,
+              "superscript": false,
+              "subscript": false,
+              "fontFamily": "Arial",
+              "color": "#FFFFFF"
+            }
+          ],
+          [
+            {
+              "text": "KN_NEW_FLAT_ITEM",
+              "bold": false,
+              "italic": false,
+              "underline": false,
+              "strikethrough": false,
+              "fontSize": 24,
+              "superscript": false,
+              "subscript": false,
+              "fontFamily": "Arial",
+              "color": "#FFFFFF"
+            }
+          ]
+        ]
+      },
+      "semanticLists66a": 1,
+      "itemCount66a": 4,
+      "currentWords66a": [
+        "KN_EDIT_FLAT_LIST",
+        "Bold flat item",
+        "Final flat item.",
+        "KN_NEW_FLAT_ITEM"
+      ],
+      "ui": "Root observed four bullets and bold on .key reopen; PPTX showed four items/Body1 in AX and allwords/title/footer after one75% redraw; capture cause unresolved"
+    }
+  ],
+  "rootReopenObservations": {
+    "workingKey": "Actual path reopened17 rows; only K04/K17 visually rereviewed: overlap persists/four bullets and bold visible",
+    "nativePptx": "Actual path reopened17 rows/no observed font-repair warning; K17 AX4items Body1, intermittent90% glyph omissions; one75% redraw all4/title/footer visible; K04 at75% still overlaps Parent item Body0",
+    "editsOrResave": false,
+    "otherSlidesRereviewed": false,
+    "closedOnlyOwnedNativeExport": true
+  },
+  "knownRouteLimits": [
+    "K04 native visual overlap is a layout failure and stopped batch",
+    "K06 append not run",
+    "K09 mask drag had no effect; no crop pass",
+    "Original maintained four findings retained, including two table traversal false negatives",
+    "No global/native/registry/physical-font or pixel-parity acceptance"
+  ],
+  "nativeAcceptance": false,
+  "registryAcceptance": false
+}

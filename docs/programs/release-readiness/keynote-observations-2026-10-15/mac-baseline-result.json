@@ -1,0 +1,105 @@
+{
+  "route": "no-op",
+  "application": {
+    "name": "Keynote",
+    "version": "15.1.1 (7044.0.273)",
+    "os": "26.6.2"
+  },
+  "directions": {
+    "opf-to-pptx-to-keynote": {
+      "status": "failed",
+      "observations": [
+        {
+          "case": "K01\u2013K16",
+          "status": "observed-only",
+          "text": "Root reviewed all16 original native slides at90% after human unlock. No missing-font or repair warning observed. Long paragraph/list words fit their slides. Existing measured output uses Title and SlideNumber controls and Body unchecked. K08 literal footer appears occluded under the image while native number8 remains visible; not a complete visual pass."
+        }
+      ]
+    },
+    "keynote-save-and-reopen": {
+      "status": "passed",
+      "observations": [
+        {
+          "case": "lifecycle",
+          "text": "Saved fresh working.key via Keynote Save UI, closed only owned copy, reopened same absolute file. Actual URL and16 navigator rows confirmed; K16 words/number retained. Other15slides not visually rereviewed after.key reopen."
+        }
+      ]
+    },
+    "keynote-to-pptx": {
+      "status": "passed",
+      "observations": [
+        {
+          "case": "lifecycle",
+          "text": "Exported fresh native-export.pptx via File > ExportTo > PowerPoint UI; closed owned.key and reopened actual native-export.16navigator rows, no repair/font warning observed. OnlyK05/K06/K08 rereviewed afterPPTX reopen; longtext/list fit and K08footer occlusion persists. Archive validity and full native visual acceptance are separate."
+        }
+      ]
+    },
+    "keynote-pptx-to-opf": {
+      "status": "failed",
+      "observations": [
+        {
+          "case": "static-roundtrip",
+          "text": "Original inspection retained32 flat-text comparison failures. Separately reviewed semantic inspector50367d0 has0authored-body/notes-word failures,16notes-page generated-field removals and16literal-footer-as-content importer gaps. Actual live slide-number fields survive without cached text; nativeUI shows numbers. No findings waived.",
+          "inspection": "/private/tmp/opf-keynote-arial-noop-semantic-inspection-61-01/inspection.json"
+        }
+      ]
+    }
+  },
+  "actions": [
+    {
+      "action": "no-op",
+      "status": "failed",
+      "text": "Lifecycle executed; compatibility/visual findings above prevent global acceptance. No content/layout actions executed in this route."
+    }
+  ],
+  "nativeAcceptance": false,
+  "history": [
+    {
+      "retainedInitialInterruption": "Mac locked during screenshot; automatic unlock failed. Unlock requested asynchronously. No edits/save/reopen/export acceptance.",
+      "initialDirections": {
+        "opf-to-pptx-to-keynote": {
+          "status": "not-run",
+          "observations": [
+            {
+              "case": "K01",
+              "status": "observed-only",
+              "text": "Fresh editable.pptx derivative opened. Navigator lists16 slides. No missing-font warning sheet observed. Appearance: Title1 Body0 SlideNumber1; imported Cover layout. AX shows genuine Title and Slide fields and separate subtitle. Screenshot attempt failed because Mac locked; remaining visual and lifecycle checks not run.",
+              "evidence": "root CUA open result; current-turn baseline AX capture"
+            }
+          ]
+        },
+        "keynote-save-and-reopen": {
+          "status": "not-run",
+          "observations": []
+        },
+        "keynote-to-pptx": {
+          "status": "not-run",
+          "observations": []
+        },
+        "keynote-pptx-to-opf": {
+          "status": "not-run",
+          "observations": []
+        }
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "file": "/private/tmp/opf-keynote-arial-noop-61-01/editable.pptx",
+      "bytes": 172283,
+      "sha256": "c51e690ca7a895ebd25a41585a2a51e532fcbb5ef86c79e3447b58a269ed47fe"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-arial-noop-61-01/working.key",
+      "bytes": 1287999,
+      "sha256": "58ff5166bc797989d69537a5768612e0c47acccea468fa03c2aa19d70666188c"
+    },
+    {
+      "file": "/private/tmp/opf-keynote-arial-noop-61-01/native-export.pptx",
+      "bytes": 110634,
+      "sha256": "1203d4f8579eed49bc1f830fd0dacce4dd955163b53d50781a0975d45865919f"
+    }
+  ],
+  "updatedAt": "2026-10-15T21:06:34.501495+00:00",
+  "evidenceScope": "Root CUA native observations in supervisor conversation, generated native artifacts and retained separate static reports; no physical-font/pixel parity claim."
+}

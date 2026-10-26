@@ -1,0 +1,90 @@
+{
+  "scope": "Offline qualification harness correction; no runtime/native fidelity or acceptance claim",
+  "source": {
+    "directory": "/private/tmp/opf-keynote-table-inspection-61",
+    "base": "62a26897744ce7603989cda18bd5a83a547120a3",
+    "uncommitted": true,
+    "files": [
+      {
+        "file": "scripts/keynote-qualification/pack.mjs",
+        "bytes": 53090,
+        "sha256": "af921faabf2629da75c0fdbace5484580d27e968cd850caa757544a22a60bc42"
+      },
+      {
+        "file": "test/keynote-table-inspection.mjs",
+        "bytes": 5934,
+        "sha256": "1ae71245662f2553e0d7fc6ca0d1894023b2858e178d27153b2dc4d4897496e3"
+      },
+      {
+        "file": "docs/keynote-qualification.md",
+        "bytes": 19336,
+        "sha256": "d92bb33657664ddfba55786bfe3ca9c64389105610eef012d92d871d3a7f838f"
+      },
+      {
+        "file": "changes/rr-86-keynote-table-inspection.md",
+        "bytes": 388,
+        "sha256": "58f089928081bb83199709b490b1f29d049edfc4ebfbf03f196824feb89f4ab1"
+      }
+    ]
+  },
+  "actualInput": {
+    "file": "/private/tmp/opf-keynote-body-native-content-edits-61-01/native-export.pptx",
+    "bytes": 120110,
+    "sha256": "e8c4c69a622510187eabbba5afb32e683b631d49a12a1959bf08e70b566ff0a9"
+  },
+  "inspectionFiles": [
+    {
+      "file": "inspection.json",
+      "original": {
+        "path": "/private/tmp/opf-keynote-mac-content-inspection-61-01/inspection.json",
+        "bytes": 186788,
+        "sha256": "8e4e2a2ee79afee536e2f74479b5f3fcec03c4bd1fc66dc4ce8a7d884aec08b4"
+      },
+      "current": {
+        "path": "/private/tmp/opf-keynote-mac-content-table-inspection-61-01/inspection.json",
+        "bytes": 186633,
+        "sha256": "2f477cb67fcfb38b25d947f4fdfd05495c8a88db217e9e76238bc9baf7e8f65e"
+      }
+    },
+    {
+      "file": "imported.opf.json",
+      "original": {
+        "path": "/private/tmp/opf-keynote-mac-content-inspection-61-01/imported.opf.json",
+        "bytes": 36823,
+        "sha256": "42375fe5a6a4a75f5d24c330b2ea008e85f0bc152650068eac88de6468bbd4f8"
+      },
+      "current": {
+        "path": "/private/tmp/opf-keynote-mac-content-table-inspection-61-01/imported.opf.json",
+        "bytes": 36823,
+        "sha256": "42375fe5a6a4a75f5d24c330b2ea008e85f0bc152650068eac88de6468bbd4f8"
+      }
+    },
+    {
+      "file": "import-diagnostics.json",
+      "original": {
+        "path": "/private/tmp/opf-keynote-mac-content-inspection-61-01/import-diagnostics.json",
+        "bytes": 6389,
+        "sha256": "8b7dd84b7b3854635a58c9b24950ad3226154044c79d26182217bb8c1abcd58b"
+      },
+      "current": {
+        "path": "/private/tmp/opf-keynote-mac-content-table-inspection-61-01/import-diagnostics.json",
+        "bytes": 6389,
+        "sha256": "8b7dd84b7b3854635a58c9b24950ad3226154044c79d26182217bb8c1abcd58b"
+      }
+    }
+  ],
+  "originalReportPreserved": true,
+  "runtimeImportedOpfBytesExact": true,
+  "runtimeDiagnosticBytesExact": true,
+  "allOtherInspectionFieldsExact": true,
+  "removedOnly": [
+    "table-cell: edited marker missing from current imported slide payload",
+    "table-style: edited marker missing from current imported slide payload"
+  ],
+  "remainingFindings": [
+    "long-list: expected edited text missing",
+    "long-list: edited marker missing from current imported slide payload"
+  ],
+  "rootAttributedStatus": "K06 long-list edit was NOT RUN; both native and imported missing-marker findings remain.",
+  "nativeAcceptance": false
+}

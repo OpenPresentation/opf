@@ -1,0 +1,76 @@
+{
+  "scope": "Frozen root-attributed observations, not a new native run, source integration, registry or deployment acceptance. Binary artifacts remain outside the repository.",
+  "capturedAt": "2026-10-15T21:16:49.144Z",
+  "copied": [
+    {
+      "file": "supervisor.json",
+      "source": "/private/tmp/opf-rr85-supervisor.json",
+      "bytes": 6917,
+      "sha256": "4694ae7ca597b6aa11284d2382d3108ddd522477c7157172e2a5a782ff07f4b4",
+      "observedUpdatedAt": "2026-10-15T21:14:48.747399+00:00"
+    },
+    {
+      "file": "mac-baseline-result.json",
+      "source": "/private/tmp/opf-keynote-arial-noop-61-01/result.json",
+      "bytes": 4501,
+      "sha256": "c3eec491278e06c905dc31433e42db73044bbacacca109394ece2ebfcd6650c3",
+      "observedUpdatedAt": "2026-10-15T21:06:34.501495+00:00"
+    },
+    {
+      "file": "mac-native-body-result.json",
+      "source": "/private/tmp/opf-keynote-body-native-no-op-61-01/result.json",
+      "bytes": 3065,
+      "sha256": "f4a0f09087a0200c1296940cff0826df75160551d0994a307a62b7583c8705c0",
+      "observedUpdatedAt": "2026-10-15T21:09:30.024307+00:00"
+    }
+  ],
+  "artifacts": [
+    {
+      "file": "/private/tmp/opf-keynote-arial-noop-61-01/editable.pptx",
+      "bytes": 172283,
+      "sha256": "c51e690ca7a895ebd25a41585a2a51e532fcbb5ef86c79e3447b58a269ed47fe",
+      "verifiedAgainstActualFile": true,
+      "binaryCopied": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-arial-noop-61-01/working.key",
+      "bytes": 1287999,
+      "sha256": "58ff5166bc797989d69537a5768612e0c47acccea468fa03c2aa19d70666188c",
+      "verifiedAgainstActualFile": true,
+      "binaryCopied": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-arial-noop-61-01/native-export.pptx",
+      "bytes": 110634,
+      "sha256": "1203d4f8579eed49bc1f830fd0dacce4dd955163b53d50781a0975d45865919f",
+      "verifiedAgainstActualFile": true,
+      "binaryCopied": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-body-native-no-op-61-01/editable.pptx",
+      "bytes": 179242,
+      "sha256": "12b93850c8703ab4e1a4ef5fd45a73ba56dc94b3c151c7ceed1743ba1793b017",
+      "verifiedAgainstActualFile": true,
+      "binaryCopied": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-body-native-no-op-61-01/working.key",
+      "bytes": 1336314,
+      "sha256": "8e7de9ad3a3496350ac0a24f4b63e5039cebdc5265f7036967e67599f2894975",
+      "verifiedAgainstActualFile": true,
+      "binaryCopied": false
+    },
+    {
+      "file": "/private/tmp/opf-keynote-body-native-no-op-61-01/native-export.pptx",
+      "bytes": 119365,
+      "sha256": "362b8e291b1355d9d9fe7d1723e931668eaeabea42a8f2c467bc5806193b5c11",
+      "verifiedAgainstActualFile": true,
+      "binaryCopied": false
+    }
+  ],
+  "baselineSuite": {
+    "source": "/private/tmp/opf-keynote-arial-baseline-61-01/suite.json",
+    "bytes": 101716,
+    "sha256": "bf1da823e5ba3983d36ea21a7649189bf26c41bd17252b9a1e58cf40d07a2dfe"
+  }
+}
