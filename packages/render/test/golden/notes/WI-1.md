@@ -47,4 +47,10 @@ The review sheets were inspected:
 
 ## Example corpus
 
-CORPUS
+The `golden` workflow (run 40298942822, pinned Playwright image) changed **82 of 818 slides in 42 decks** (commit `abb321db3`). The source digest is unchanged. All 82 contain a metric: 41 are promoted-region slides, 20 are `dashboard`, 20 are `chart-beside`, and 1 is an automatic composition (`technical/block-composition.opf.json#0`). The corpus has 85 metric slides, so 3 do not move; they already drew their value at 76 px.
+
+The cause is rule 3: metric values that `min(76, 0.28 × box height)` held at roughly 34 to 69 px now ask for 76 px and fit down only where the box cannot hold them. A walk of every changed slide found no slide without a metric.
+
+Rules 1, 2, 4 and 5 move no corpus slide. The corpus decks embed their own layout records and have no `auto` note rows, all-auto stacks or same-role peer columns that fit at different sizes.
+
+The review sheets in the run artifact were inspected: `compliance-readiness-review#5`, `data-platform-migration-plan#5`, the dashboard and chart-beside evidence packs, and the dark variants. Each shows larger metric values and no other change.
