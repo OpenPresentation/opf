@@ -66,7 +66,8 @@ const geometry = index => composeSlide(document.slides[index], { presentation: d
 {
   const slide = svg(1), core = geometry(1);
   const image = elements(slide, /<image [^>]*>/g)[0], imageItem = core.items[1];
-  for (const key of ['x', 'y', 'width', 'height']) assert.equal(number(image[key]), imageItem.box[key]);
+  // WI-3: a contained picture's frame is the picture's own rectangle at the top of the media box.
+  for (const key of ['x', 'y', 'width', 'height']) assert.equal(number(image[key]), imageItem.image.box[key]);
   const bands = elements(slide, /<g[^>]*data-opf-caption="(below|above)"[^>]*>/g);
   assert.deepEqual(bands.map(band => [band['data-opf-caption'], band['data-opf-caption-of']]), [['below', 'slides.1.blocks.0.image'], ['above', 'slides.1.blocks.1.table']]);
   for (const [index, band] of bands.entries()) for (const key of ['x', 'y', 'width', 'height']) assert.equal(number(band[`data-opf-box-${key}`]), core.items[index + 1].caption.box[key]);

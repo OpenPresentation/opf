@@ -134,6 +134,13 @@ Content that does not fit retains its allocation and overflow diagnostics. Neste
 charts, tables and explicit slide composition overrides keep their existing allocation behavior; an anchor is not
 a promise to measure arbitrary content.
 
+Pictures shown whole and videos follow the anchor too (WI-3). A picture with `fit: "contain"` (a layout's `imageFit`, or the
+block's own) takes a frame of its own proportions, as wide as its cell allows and centered across, and sits at the region's
+anchor down the cell, so a landscape picture beside text starts on the text's first line instead of floating in the middle of
+a tall cell. A video draws in a 16:9 frame, the largest that fits its cell, placed the same way. A frame the block shapes with
+`aspectRatio` or a circle stays centered, and `cover` and `stretch` fill the cell. `image-beside` and `logos` write
+`anchor: "middle"` on their media regions to keep their centered look.
+
 ### Validation
 
 The schema checks types, enums and ranges; an embedded record that fails it is `opf/catalog-record`. `validate` adds:

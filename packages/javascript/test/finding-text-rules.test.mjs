@@ -67,7 +67,7 @@ const GOLDEN = {
   "region-full": ["Region `timeline` already holds 1 block, which is all it takes.", "pin the block to another region with room, or remove `region`."],
   "furniture-wraps": ["The footer left text wraps onto 3 lines (2 at most); headers and footers should be short.", "shorten it, or move part of it to another zone."],
   "font-outside-scheme": ["`Comic Sans MS` isn't in this deck's font scheme (Aptos Display / Aptos), so it won't follow a scheme change.", "remove `fontFamily` to use the scheme font, or add the font to the font scheme."],
-  "image-resolution": ["This image is 100×100 px, shown at about 8 ppi; 96 are needed to look sharp.", "use a file of about 1162×519 px or larger, or show it smaller."],
+  "image-resolution": ["This image is 100×100 px, shown at about 19 ppi; 96 are needed to look sharp.", "use a file of about 519×519 px or larger, or show it smaller."],
   "chart-value-not-numeric": ["`about 12` is text, so it is plotted as a gap.", "write a number (12, -3.5, 1e6) and put units, currency or percent in the column `format`."],
   "code-highlight-out-of-range": ["Highlight line 7 is past the last line (3), so it marks nothing.", "change it to a line from 1 to 3, or remove the entry."],
   "code-highlight-range-reversed": ["Highlight 3–1 ends before it starts, so it marks no line.", "write [1, 3]."],

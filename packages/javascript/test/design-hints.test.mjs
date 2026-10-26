@@ -131,12 +131,14 @@ test('template geometry is authoritative while design hints retain their precede
   assert.deepEqual(overridden.items.map(item=>item.box),control.items.map(item=>item.box));
 });
 
-test('the effective imageFit is the fit of every image item that sets none, cover by default', () => {
+test('the effective imageFit is the fit of every image item that sets none: cover in a layout, contain in automatic composition', () => {
   const record = layout('contain')({imageFit: 'contain'});
   const fit = (slide, options) => composeSlide(slide, options).items.find(item => item.field === 'image').image.fit;
   assert.equal(composeSlide({title: 'T', image: asset('x')}, {layout: record}).design.imageFit, 'contain');
   assert.equal(fit({title: 'T', image: asset('x')}, {layout: record}), 'contain');
   assert.equal(fit({title: 'T', image: asset('x')}, {layout: record, presentation: {design: {imageFit: 'stretch'}}}), 'stretch');
-  assert.equal(fit({title: 'T', image: asset('x')}, {}), 'cover');
+  // WI-3 (P33): a slide with no layout shows its pictures whole; a layout record without an imageFit keeps the engine default.
+  assert.equal(fit({title: 'T', image: asset('x')}, {}), 'contain');
+  assert.equal(fit({title: 'T', image: asset('x')}, {layout: {id: 'plain', regions: [{name: 'title'}, {name: 'body-1', accepts: ['image'], flow: 'none'}]}}), 'cover');
   assert.equal(composeSlide({title: 'T'}, {}).design.imageFit, undefined);
 });

@@ -95,7 +95,7 @@ export const CASES = [
 	{ name: 'unresolved-content', rule: 'opf/unresolved-content', input: deck([{ title: 'T', items: ['a', 'b'] }], { design: { listBullet: 'image' } }) },
 	{ name: 'layout-failed', rule: 'opf/layout-failed', input: deck([{ title: 'T', layout: 'broken', text: 'x' }]), options: { catalogs: [{ source: 'pkg:@host/layouts', layouts: { broken: { name: 'Broken', regions: [{ name: 'title', size: 1 }], composition: { padding: 5 } } } }] } },
 	{ name: 'min-font-size-run', rule: 'opf/min-font-size', input: deck([{ title: 'T', text: [{ text: 'tiny', fontSize: 8 }, ' ok'] }]) },
-	{ name: 'min-font-size-composed', rule: 'opf/min-font-size', input: deck([{ title: 'T', composition: { minFontSize: 8 }, blocks: [{ text: 'word '.repeat(500) }, { text: 'b' }] }]) },
+	{ name: 'min-font-size-composed', rule: 'opf/min-font-size', input: deck([{ title: 'T', composition: { minFontSize: 8 }, blocks: [{ text: 'word '.repeat(1000) }, { text: 'b' }] }]) },
 	{ name: 'region-unknown', rule: 'opf/region-unknown', input: deck([{ layout: 'r', blocks: [{ region: 'timelin', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'region-kind', rule: 'opf/region-kind', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', text: 'b' }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },
 	{ name: 'region-full', rule: 'opf/region-full', input: deck([{ layout: 'r', blocks: [{ region: 'timeline', ...timeline }, { region: 'timeline', ...timeline }] }], { catalogs: { custom: { layouts: { r: roadmap } } } }) },

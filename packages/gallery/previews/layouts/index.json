@@ -49,6 +49,11 @@
       "bytes": 1806
     },
     {
+      "id": "three-column",
+      "file": "three-column.svg",
+      "bytes": 3204
+    },
+    {
       "id": "pillars",
       "file": "pillars.svg",
       "bytes": 3527
@@ -86,12 +91,12 @@
     {
       "id": "image",
       "file": "image.svg",
-      "bytes": 1487
+      "bytes": 1496
     },
     {
       "id": "image-beside",
       "file": "image-beside.svg",
-      "bytes": 2150
+      "bytes": 2149
     },
     {
       "id": "gallery",
@@ -141,7 +146,7 @@
     {
       "id": "logos",
       "file": "logos.svg",
-      "bytes": 2250
+      "bytes": 2274
     }
   ]
 }

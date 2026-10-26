@@ -18,7 +18,7 @@ const catalogRoot = path.join(root, "catalog");
 /** The built-in layouts of OPF 0.19 (the 0.19 layouts design, section 6), in picker order. */
 const LAYOUT_IDS = [
   "cover", "section", "agenda", "statement", "closing",
-  "text", "list", "quote", "two-column",
+  "text", "list", "quote", "two-column", "three-column",
   "pillars", "comparison", "process", "timeline", "faq",
   "metrics", "scorecard",
   "image", "image-beside", "gallery", "chart", "chart-beside", "table", "table-beside", "code",

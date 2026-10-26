@@ -63,9 +63,12 @@ for (const { keys, deck } of decks) {
         const picture = own.find((tag) => tag.name === 'image');
         assert.ok(picture, `${key}: ${item.path} draws its picture`);
         const box = { x: Number(attr(picture.attrs, 'x')), y: Number(attr(picture.attrs, 'y')), width: Number(attr(picture.attrs, 'width')), height: Number(attr(picture.attrs, 'height')) };
-        assert.deepEqual(box, { x: item.box.x, y: item.box.y, width: item.box.width, height: item.box.height }, `${key}: ${item.path} picture box`);
-        const edges = [box.x <= 0.01, box.y <= 0.01, box.x + box.width >= geometry.width - 0.01, box.y + box.height >= geometry.height - 0.01].filter(Boolean).length;
-        assert.ok(edges >= 2, `${key}: ${item.path} bleeds to the slide edge (${JSON.stringify(box)})`);
+        // WI-3: a picture shown whole is drawn in its own frame at the top of the bled cell, which is core's `item.image.box`.
+        assert.deepEqual(box, { x: item.image.box.x, y: item.image.box.y, width: item.image.box.width, height: item.image.box.height }, `${key}: ${item.path} picture box`);
+        assert.ok(item.image.box.x >= item.box.x - 0.01 && item.image.box.y >= item.box.y - 0.01 && item.image.box.x + item.image.box.width <= item.box.x + item.box.width + 0.01, `${key}: ${item.path} frame inside the bled cell`);
+        // The bled cell, which holds the whole picture, reaches the slide edge; a contained picture's own frame sits inside it.
+        const cell = item.box, edges = [cell.x <= 0.01, cell.y <= 0.01, cell.x + cell.width >= geometry.width - 0.01, cell.y + cell.height >= geometry.height - 0.01].filter(Boolean).length;
+        assert.ok(edges >= 2, `${key}: ${item.path} bleeds to the slide edge (${JSON.stringify(cell)})`);
       }
       // A list in columns: every column core broke it into is drawn in its own box, with every item exactly once and the
       // numbering continuing across the columns.
@@ -235,5 +238,5 @@ for (const id of Object.keys(layouts)) for (const alignment of Object.keys(ancho
   assert.ok(drawn, `${id}/${alignment}: actual aligned text was checked`);
   aligned++;
 }
-assert.equal(aligned, 84);
+assert.equal(aligned, 87);
 console.log(`Gallery2 alignment: ${aligned} registered layout/alignment cases preserve traced anchors.`);

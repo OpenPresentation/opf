@@ -253,19 +253,33 @@ describe('captions', () => {
   const block = (payload, caption) => ({ title: 'Caption', blocks: [{ ...payload, caption }] });
   const payloads = { image: { image: png }, chart: { chart: { type: 'bar', data: { columns: ['a', 's'], rows: [['x', 1], ['y', 2]] } } }, table: { table: { columns: ['A', 'B'], rows: [[1, 2]] } }, video: { video: 'https://example.com/v.mp4' } };
   test('a caption band is reserved below the media inside the block region, in every captionable payload', () => {
+    const cell = composeSlide(block({ text: 'cell' })).items[1].box;
     for (const [field, payload] of Object.entries(payloads)) {
       const plain = composeSlide(block(payload)), captioned = composeSlide(block(payload, 'Figure 1. Something'));
-      const region = plain.items[1].box, item = captioned.items[1], caption = item.caption;
+      // The block's cell: a video and a contained picture draw smaller than it, so read it from a plain text block.
+      const region = field === 'video' || field === 'image' ? cell : plain.items[1].box, item = captioned.items[1], caption = item.caption;
       assert.ok(caption, field);
       assert.equal(caption.path, 'slides.0.blocks.0.caption');
       assert.equal(caption.position, 'below');
       assert.equal(caption.alignment, 'left');
       assert.equal(caption.text, 'Figure 1. Something');
-      assert.deepEqual(caption.mediaBox, item.box);
-      assert.equal(item.box.x, region.x); assert.equal(item.box.width, region.width); assert.equal(item.box.y, region.y);
+      // WI-3: a video draws in a 16:9 frame and a contained picture in its own frame, both at the top of the media area; the
+      // band closes up under the frame instead of staying at the region bottom.
+      const framed = field === 'video' || field === 'image';
+      if (!framed) assert.deepEqual(caption.mediaBox, item.box);
+      else {
+        const frame = field === 'image' ? item.image.box : item.box;
+        assert.ok(frame.x >= caption.mediaBox.x - 1e-6 && frame.x + frame.width <= caption.mediaBox.x + caption.mediaBox.width + 1e-6, `${field}: the frame is inside the media area`);
+        assert.ok(Math.abs(frame.y - caption.mediaBox.y) < 1e-6, `${field}: top-aligned`);
+        assert.ok(caption.box.y >= frame.y + frame.height - 1e-6 && caption.box.y - (frame.y + frame.height) < 20, `${field}: the band follows the frame`);
+      }
+      assert.equal(item.box.y, region.y);
       assert.equal(caption.box.x, region.x); assert.equal(caption.box.width, region.width);
-      assert.ok(Math.abs(caption.box.y + caption.box.height - (region.y + region.height)) < 1e-6, 'band ends at the region bottom');
-      assert.ok(item.box.y + item.box.height < caption.box.y, 'media ends above the band');
+      if (!framed) {
+        assert.equal(item.box.x, region.x); assert.equal(item.box.width, region.width);
+        assert.ok(Math.abs(caption.box.y + caption.box.height - (region.y + region.height)) < 1e-6, 'band ends at the region bottom');
+      }
+      assert.ok(item.box.y + item.box.height < caption.box.y + 1e-6, 'media ends above the band');
       assert.equal(caption.fontSize, 16);
       assert.equal(caption.fit.lines.length, 1);
       assert.deepEqual(captioned.diagnostics, plain.diagnostics);

@@ -69,6 +69,13 @@
       "file": "two-column.json"
     },
     {
+      "id": "three-column",
+      "name": "Three columns",
+      "summary": "Three independent columns of any content.",
+      "group": "Text",
+      "file": "three-column.json"
+    },
+    {
       "id": "pillars",
       "name": "Pillars",
       "summary": "Related ideas arranged in equal columns.",

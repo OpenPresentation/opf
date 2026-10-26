@@ -15,9 +15,9 @@ const base = { name: 'Probe', regions: [{ name: 'title' }, { name: 'body', accep
 const two = { name: 'Two', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'a', accepts: ['text'], flow: 'none' }, { name: 'b', accepts: ['text'] }] }] };
 const regionsOf = (...regions) => ({ ...base, regions });
 
-describe('the 28 built-in templates (design section 6)', () => {
-  test('there are 28, in six groups, and every one has a title area', () => {
-    assert.equal(Object.keys(layouts).length, 28);
+describe('the 29 built-in templates (design section 6)', () => {
+  test('there are 29, in six groups, and every one has a title area', () => {
+    assert.equal(Object.keys(layouts).length, 29);
     assert.deepEqual([...new Set(Object.values(layouts).map((record) => record.tags[0]))], ['Openers and closers', 'Text', 'Groups of items', 'Numbers', 'Visuals', 'Mixed']);
     for (const [id, record] of Object.entries(layouts)) assert.ok(JSON.stringify(record.regions).includes('"title"'), id);
   });

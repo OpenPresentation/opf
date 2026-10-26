@@ -27,7 +27,7 @@ test('FAQ and process teach their intent; team does not mislabel landscape pictu
 });
 test('only compact presentation intents opt into vertical centering', () => {
   for (const id of ['metrics', 'quote', 'image-beside']) assert.ok(bodyRegions(gallery.layouts[id]).some(([, region]) => region.anchor === 'middle'));
-  for (const id of ['two-column', 'chart', 'table', 'dashboard', 'list', 'faq']) {
+  for (const id of ['two-column', 'three-column', 'chart', 'table', 'dashboard', 'list', 'faq']) {
     assert.ok(bodyRegions(gallery.layouts[id]).every(([, region]) => !region.anchor || region.anchor === 'top'), id);
   }
 });

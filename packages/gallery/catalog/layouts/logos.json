@@ -20,6 +20,7 @@
       ],
       "role": "media",
       "flow": "grid",
+      "anchor": "middle",
       "max": 12
     }
   ],

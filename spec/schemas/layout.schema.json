@@ -392,7 +392,7 @@
             "middle",
             "bottom"
           ],
-          "description": "Vertical position of the region's content when it is shorter than the region. Replaces the 'anchor' of the record and of the splits around it. Default: the nearest of those that sets one, else 'top'."
+          "description": "Vertical position of the region's content when it is shorter than the region. Replaces the 'anchor' of the record and of the splits around it. Default: the nearest of those that sets one, else 'top'. A picture shown whole (fit 'contain') and a video, whose 16:9 frame is the largest that fits the cell, sit at the anchor inside the cell."
         },
         "empty": {
           "type": "string",

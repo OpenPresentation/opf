@@ -445,7 +445,7 @@ test('opf/min-font-size: explicit small runs and a lowered composition floor', (
 	assert.equal(small[0].fixes[0].focus.field, 'fontSize');
 	assert.ok(!has(deck([{ title: 'T', text: [{ text: 'fine', fontSize: 14 }] }]), 'min-font-size'));
 	assert.ok(has(deck([{ title: 'T', text: [{ text: 'tiny', fontSize: 11.5 }] }]), 'min-font-size', { thresholds: { minFontSizePt: 14 } }));
-	const shrunk = deck([{ title: 'T', composition: { minFontSize: 8 }, blocks: [{ text: 'word '.repeat(500) }, { text: 'b' }] }]);
+	const shrunk = deck([{ title: 'T', composition: { minFontSize: 8 }, blocks: [{ text: 'word '.repeat(1000) }, { text: 'b' }] }]);
 	assert.ok(has(shrunk, 'min-font-size'));
 });
 

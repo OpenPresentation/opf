@@ -18,6 +18,18 @@ const { records } = await readSnapshotKind(path.join(root, "catalog"), "layouts"
 const RULE_ORDER = ["accepts", "role", "flow", "max", "bleed", "listColumns", "anchor", "empty"];
 /** Kinds a record accepts beyond its 4.0.0 rule (appended, in this order): a deliberate widening, never a silent one. */
 const ACCEPTS_ADDED = { "team/people": ["list"] }; // WI-6: a name with its role and description is one `items` entry
+/** Records that did not exist in 4.0.0: they have no grid to be equal to. */
+const ADDED = new Set(["three-column"]);
+/** The generic column layouts take any content: their regions list every kind, which no other record does (WI-3). */
+const EVERY_KIND = new Set(["two-column", "three-column"]);
+/** Every content kind the regions accept, written out so editors can name the keys of a region (WI-3). */
+const EVERY = ["text", "list", "quote", "code", "image", "video", "chart", "table", "metric", "timeline", "group"];
+/** WI-3: rules changed after 4.0.0, per record and region (declared in changes/). */
+const CHANGED = {
+  "two-column": { first: { accepts: EVERY }, second: { accepts: EVERY } },
+  "image-beside": { media: { anchor: "middle" } },
+  logos: { logos: { anchor: "middle" } },
+};
 
 /** Track weights as shares of their numeric total (core compiles to relative numbers; `auto` stays `auto`). */
 const shares = (weights) => {
@@ -39,7 +51,7 @@ function assertSameGrid(record, before) {
   assertShares(shares(compiled.rows), shares(before.rows ?? before.areas.map(() => 1)), `${record.id}: rows`);
   assert.deepEqual(compiled.regions.map((region) => region.name), Object.keys(before.regions), `${record.id}: reading order`);
   for (const region of compiled.regions) {
-    const rule = { ...before.regions[region.name] };
+    const rule = { ...before.regions[region.name], ...CHANGED[record.id]?.[region.name] };
     rule.accepts = [...rule.accepts, ...(ACCEPTS_ADDED[`${record.id}/${region.name}`] ?? [])];
     // A key the 4.0.0 record wrote must be equal; a key it left out must be the engine default, never an inherited value.
     const defaults = layoutRegion(region.name, { accepts: rule.accepts, role: rule.role, flow: rule.flow });
@@ -48,12 +60,12 @@ function assertSameGrid(record, before) {
   return compiled;
 }
 
-test("the fixture is the 28 gallery 4.0.0 layouts", () => {
-  assert.deepEqual(records.map((record) => record.id), Object.keys(old));
-  assert.equal(records.length, 28);
+test("the fixture is the 28 gallery 4.0.0 layouts, and the records since are the added ones", () => {
+  assert.deepEqual(records.filter((record) => !ADDED.has(record.id)).map((record) => record.id), Object.keys(old));
+  assert.equal(records.length, 28 + ADDED.size);
 });
 
-for (const record of records) {
+for (const record of records.filter((entry) => !ADDED.has(entry.id))) {
   test(`${record.id}: the region list compiles to the 4.0.0 grid and rules`, () => {
     assertSameGrid(record, old[record.id]);
   });
@@ -71,23 +83,24 @@ for (const record of records) {
   });
 }
 
-test("rules are kept exactly: nothing but `accepts` is inherited or dropped, and `accepts` is never the full set", () => {
+test("rules are kept exactly: nothing but `accepts` is inherited or dropped, and `accepts` is the full set only in the generic columns", () => {
   for (const record of records) {
-    assertSameGrid(record, old[record.id]);
+    if (!ADDED.has(record.id)) assertSameGrid(record, old[record.id]);
     const written = (list) => list.flatMap((entry) => (entry.regions ? written(entry.regions) : [entry]));
     for (const entry of written(record.regions)) {
       if (entry.name === "title" || entry.name === "subtitle") assert.deepEqual(Object.keys(entry).filter((key) => key !== "name" && key !== "size"), [], `${record.id}/${entry.name}: a heading takes only size`);
+      else if (EVERY_KIND.has(record.id)) assert.deepEqual([...entry.accepts].sort(), [...REGION_KINDS].sort(), `${record.id}/${entry.name} accepts every kind`);
       else assert.ok(entry.accepts && entry.accepts.length < REGION_KINDS.length, `${record.id}/${entry.name} has no reason to omit accepts`);
     }
   }
 });
 
-test("an anchor is written once at the record when every body region shares it, and the records that nest are the seven known", () => {
+test("an anchor is written once at the record when every body region shares it, and the records that nest are the eight known", () => {
   assert.deepEqual(records.filter((record) => record.anchor).map((record) => [record.id, record.anchor]), [["statement", "middle"], ["quote", "middle"]]);
   for (const record of records.filter((entry) => entry.anchor)) assert.ok(bodyRegions(record).every(([, rule]) => rule.anchor === "middle"));
   const nested = records.filter((record) => JSON.stringify(record.regions).includes('"direction"')).map((record) => record.id);
   // Five nest only because the title stays an explicit heading region above a row of two; comparison and hero are 2D beyond it.
-  assert.deepEqual(nested.sort(), ["chart-beside", "code", "comparison", "hero", "image-beside", "table-beside", "two-column"]);
+  assert.deepEqual(nested.sort(), ["chart-beside", "code", "comparison", "hero", "image-beside", "table-beside", "three-column", "two-column"]);
 });
 
 test("the compile rejects a tree the spec forbids", () => {

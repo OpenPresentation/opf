@@ -62,7 +62,7 @@ try {
     report.decoded.push({orientation, ...decoded});
     if (decoded.max > 2) throw new Error(`Orientation ${orientation}: decoded pixels differ from Pillow`);
     for (const imageFit of ['contain', 'cover']) {
-      const svg = toSvg({design: {imageFit}, slides: [{image: jpeg}]}, 1);
+      const svg = toSvg({design: {imageFit}, slides: [{blocks: [{type: 'image', image: jpeg, aspectRatio: 1}]}]}, 1);
       const actual = await pixels(svg);
       const expected = await pixels(referenceSvg(svg, orientation, imageFit, originalPng));
       const metric = difference(actual, expected);
