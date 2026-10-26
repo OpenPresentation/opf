@@ -113,7 +113,7 @@ export function createCanvasEditor(container, options = {}) {
   notice.hidden = true;
   const style = doc.createElement("style");
   style.textContent =
-    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus{outline:none}.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
+    ".opf-canvas-preview>svg{display:block;width:100%;height:auto}.opf-canvas [data-canvas-target]{cursor:text}.opf-canvas .opf-inline-input::selection{background:#8975d933;color:var(--opf-inline-selection-color,transparent)}.opf-canvas [data-canvas-target]:focus,.opf-canvas .opf-selection:focus{outline:none}.opf-canvas [data-canvas-target]:hover>.opf-selection{stroke:#9c90df}.opf-canvas [data-canvas-selected]>.opf-selection,.opf-canvas [data-canvas-target]:focus-visible>.opf-selection,.opf-canvas .opf-selection:focus-visible{stroke:#7765d0}.opf-canvas [data-canvas-target][data-canvas-editing]>.opf-selection{stroke:none}.opf-canvas button:focus-visible,.opf-canvas textarea:focus-visible,.opf-canvas input:focus-visible{outline:2px solid #8170d5;outline-offset:2px}";
   root.append(style, preview, overlay, notice);
   container.replaceChildren(root);
   const report = (error) => {
@@ -166,6 +166,14 @@ export function createCanvasEditor(container, options = {}) {
     return targets().find(
       (node) => node.getAttribute("data-opf-path") === path,
     );
+  }
+  // A target that holds other targets (a table with its cells, a chart with its labels) is a plain group, so it is never focusable
+  // itself (axe nested-interactive); keyboard focus for it lives on its selection handle, the first child. A leaf target takes focus.
+  function handleOf(node) {
+    return node?.getAttribute("role") === "group" ? node.querySelector(":scope > .opf-selection[tabindex]") : null;
+  }
+  function focusTarget(node, options = { preventScroll: false }) {
+    (handleOf(node) ?? node)?.focus?.(options);
   }
   function choose(path) {
     selectedPath = path;
@@ -350,7 +358,12 @@ export function createCanvasEditor(container, options = {}) {
         // A touch tap has no pointerdown entry (a touch press may start a scroll): it enters on the click itself.
         const kind = editKind(path);
         if (textEntry === "click" && event.detail > 0 && (kind === "text" || kind === "rich-text")) startEdit(path, { point: event });
-        else choose(path);
+        else {
+          choose(path);
+          // A press on a container's own drawing (not on a child target) used to focus the container; now it focuses its handle.
+          const handle = handleOf(node);
+          if (handle && !event.target.closest?.(".opf-selection")) handle.focus({ preventScroll: true });
+        }
       });
       node.addEventListener("dblclick", (event) => {
         event.preventDefault();
@@ -367,6 +380,21 @@ export function createCanvasEditor(container, options = {}) {
         }
       });
       if (path === selectedPath) node.setAttribute("data-canvas-selected", "");
+    }
+    // WCAG 4.1.2 / axe nested-interactive: an interactive element must not contain interactive descendants. A target that holds
+    // other targets is a named group; the button and the tab stop move to its selection handle (the transparent rect that already
+    // covers it and takes its pointer presses), so the container stays selectable by click, Tab and Enter, and its children stay buttons.
+    for (const node of svg.querySelectorAll("g[data-canvas-target]")) {
+      if (!node.querySelector("[data-canvas-target]")) continue;
+      const handle = node.querySelector(":scope > .opf-selection");
+      if (!handle) continue;
+      const field = node.getAttribute("data-opf-path").split(".").at(-1);
+      handle.setAttribute("role", "button");
+      handle.setAttribute("tabindex", "0");
+      handle.setAttribute("aria-label", node.getAttribute("aria-label"));
+      node.setAttribute("role", "group");
+      node.removeAttribute("tabindex");
+      node.setAttribute("aria-label", `${field.charAt(0).toUpperCase()}${field.slice(1)}`);
     }
     layoutHandles.update(presentation, geometry);
     blockControls.update(presentation, geometry);
@@ -924,7 +952,7 @@ export function createCanvasEditor(container, options = {}) {
       options.propertiesContainer?.replaceChildren();
       clearNotice();
       render();
-      getTarget(edit.path)?.focus();
+      focusTarget(getTarget(edit.path));
       options.onCommit?.({ path: edit.path, editor });
       return true;
     } catch (error) {
@@ -949,7 +977,7 @@ export function createCanvasEditor(container, options = {}) {
     options.propertiesContainer?.replaceChildren();
     if (clear) clearNotice();
     render();
-    getTarget(path)?.focus();
+    focusTarget(getTarget(path));
     options.onCancel?.({ path });
   }
   function setSlide(index) {
@@ -984,7 +1012,7 @@ export function createCanvasEditor(container, options = {}) {
       if (!node) continue;
       choose(candidate);
       node.scrollIntoView?.({ block: "nearest", inline: "nearest" });
-      if (focus) node.focus?.({ preventScroll: true });
+      if (focus) focusTarget(node, { preventScroll: true });
       return candidate;
     }
     return null;
