@@ -1018,12 +1018,13 @@ export function createDesignControls(container, options = {}) {
     };
     const bullet = selectField("list-bullet", "List bullets", {
       empty: "Default (character)",
-      help: "Picture bullets draw the logo as the marker and need a logo.",
-      onChange: (value) => run(() => setDesignOption(editor, "listBullet", value === "" ? null : value, scoped()), value === "image" ? "Picture bullets on." : "Character bullets."),
+      help: "Picture bullets draw the logo as the marker and need a logo. No bullets draws no marker and no indent, for label-and-description lists.",
+      onChange: (value) => run(() => setDesignOption(editor, "listBullet", value === "" ? null : value, scoped()), value === "image" ? "Picture bullets on." : value === "none" ? "No bullets." : "Character bullets."),
     });
     bullet.setOptions([
       { value: "character", label: "Character" },
       { value: "image", label: "Picture (the logo)" },
+      { value: "none", label: "None (no bullets)" },
     ]);
     const accent = textField("accent-font", "Accent font", {
       placeholder: "Font family name",

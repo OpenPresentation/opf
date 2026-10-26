@@ -62,7 +62,7 @@ const ENUMS = Object.freeze({
   contentAlignment: ["left", "center", "right"],
   contentDirection: ["horizontal", "vertical"],
   chartPrimary: ["none", "top", "bottom", "left", "right"],
-  listBullet: ["character", "image"],
+  listBullet: ["character", "image", "none"],
   imageFit: ["cover", "contain", "stretch"],
 });
 

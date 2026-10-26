@@ -17,9 +17,9 @@ for (const [id, record] of Object.entries(gallery.layouts)) {
 }
 test('FAQ and process teach their intent; team does not mislabel landscape pictures as portraits', () => {
   const slide = id => editorialDeck(id, gallery.layouts[id]).slides[0];
-  assert.ok(slide('faq').blocks.every(block => /\?\n/.test(block.text)));
-  assert.ok(slide('process').blocks.every(block => /^\d\. /.test(block.text)));
-  assert.ok(slide('team').blocks.every(block => block.text.split('\n').length === 3 && !block.image));
+  assert.ok(slide('faq').blocks.every(block => /\?$/.test(block.items[0].text) && block.items[0].description));
+  assert.ok(slide('process').blocks.every(block => block.numbering === 'arabic' && !/^\d/.test(block.items[0].text)));
+  assert.ok(slide('team').blocks.every(block => block.items[0].description.split('\n').length === 2 && !block.image));
   assert.equal(slide('chart').blocks.filter(block => block.chart).length, 1);
   assert.equal(slide('table').blocks.filter(block => block.table).length, 1);
   const metrics = slide('metrics').blocks.filter(block => block.metric).map(block => block.metric.label);

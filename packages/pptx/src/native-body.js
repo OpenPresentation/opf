@@ -47,7 +47,7 @@ function planOne(item, geometry, automatic, reject) {
   let values, numbering;
   if (list) {
     const entries = item.text?.listEntries;
-    if (item.bulletImage || !entries?.length || entries.some(entry => entry.level !== 0 || entry.description) ||
+    if (item.bulletImage || !entries?.length || entries.some(entry => entry.level !== 0 || entry.description || entry.marker?.none) ||
       item.value.some(entry => entry && !Array.isArray(entry) && typeof entry === 'object' && Object.keys(entry).some(key => key !== 'text' && key !== 'level'))) {
       reject('unsupported-list'); return undefined;
     }

@@ -2115,8 +2115,10 @@ export interface ListEntryLayout {
    * The entry marker: the bullet glyph, or for a numbered list (`numbering`) the formatted number such as `iv.`.
    * A numbered marker also carries `number` and its measured `width`; its `style` is the list style with the weight and
    * slant of the entry's first run, as PowerPoint draws an auto-number in the first run's character formatting.
+   * With `design.listBullet: "none"` (and no numbering) the marker draws nothing: `none` is true, `text` is empty and `indent` is 0;
+   * `x`, `y` and `style` still say where the entry's first baseline and font are.
    */
-  marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number;number?:ListNumber;width?:number;anchor?:'end'};
+  marker:{text:string;x:number;y:number;fontSize:number;style:TextStyle;indent:number;number?:ListNumber;width?:number;anchor?:'end';none?:true};
   /** Paragraph direction of this entry. Present only when the list was fitted for a right-to-left deck. */
   direction?:TextDirection;
   /** Picture bullet replacing the marker glyph; drawn in `bulletBox`. Marker geometry is unchanged. */
@@ -2145,6 +2147,12 @@ export interface ListFitOptions extends RichTextOptions {
   numbering?:NumberingInput;
   /** Picture bullet for every entry (effective `design.listBullet: "image"` with a resolved icon logo). */
   bulletImage?:ListBulletImage;
+  /**
+   * `'none'` (effective `design.listBullet: "none"`): no marker and no hanging indent, so each entry starts at the left edge of
+   * the list box and the marker of every entry is `{ none: true, text: '', indent: 0 }`. Nested levels still step in by 1.1 em.
+   * A numbered list ignores it and keeps its numbers.
+   */
+  bullet?:'none';
 }
 
 /** Reference-pixel starting size; explicit rich runs retain their authored sizes. */
@@ -2176,10 +2184,12 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
     // One hanging indent for the whole list: 1.1 em, or for numbers the widest marker plus 0.3 em.
     const markerStyles=numbers?source.map(item=>resolveTextStyle(markerStyleFor(item),options.textMeasurement)):[];
     const markerWidths=numbers?numbers.map((number,index)=>textWidthMeasurer(markerStyles[index]!,options.textMeasurement)(number.text,fontSize)):[];
+    const none=options.bullet==='none'&&!numbers;
     const hanging=numbers?Math.max(fontSize*1.1,Math.max(0,...markerWidths)+fontSize*.3):fontSize*1.1;
     for(const item of source){
       const rtl=item.direction==='rtl';
-      const indent=hanging,offset=Math.min(box.width,item.level*indent),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
+      // No marker: no hanging indent either; a nested level still steps in by one marker width.
+      const indent=none?0:hanging,offset=Math.min(box.width,item.level*hanging),x=rtl?box.x:box.x+offset+indent,width=Math.max(1,rtl?box.width-offset-indent:box.x+box.width-x);
       if(offset+indent>=box.width)overflow=true;
       const textBox={x,y,width,height:box.height};
       const style={...options.style,path:item.textPath};
@@ -2193,10 +2203,10 @@ export function fitList(input:readonly ListValue[],box:LayoutBox,requestedSize=c
       }
       overflow ||= text.overflow||!!description?.overflow;
       const number=numbers?.[item.index];
-      const marker={text:number?number.text:['•','◦','▪'][item.level%3]!,x:rtl?box.x+box.width-offset:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
+      const marker={text:number?number.text:none?'':['•','◦','▪'][item.level%3]!,x:rtl?box.x+box.width-offset:box.x+offset,y:textBox.y+(text.richLines[0]?.baseline??fontSize),fontSize,style:number?markerStyles[item.index]!:resolveTextStyle(style,options.textMeasurement),indent,...(number?{number,width:markerWidths[item.index]!}:{}),...(none?{none:true as const}:{}),...(rtl?{anchor:'end' as const}:{})},side=fontSize*PICTURE_BULLET_SCALE;
       entries.push({index:item.index,level:item.level,value:item.value,descriptionValue:item.descriptionValue,textPath:item.textPath,descriptionPath:item.descriptionPath,text,textBox,description,descriptionBox,marker,
         ...(item.direction?{direction:item.direction}:{}),
-        ...(options.bulletImage&&!number?{bulletImage:options.bulletImage,bulletBox:{x:rtl?marker.x-side:marker.x,y:marker.y-side,width:side,height:side}}:{})});
+        ...(options.bulletImage&&!number&&!none?{bulletImage:options.bulletImage,bulletBox:{x:rtl?marker.x-side:marker.x,y:marker.y-side,width:side,height:side}}:{})});
       if(item.index<source.length-1)y+=fontSize*.28;
     }
     const height=y-box.y;
@@ -2563,6 +2573,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     fontWeight: field === "title" ? 700 : 400, path,
   }, options.textMeasurement);
   const listBullet = hints.listBullet !== undefined ? { value: hints.listBullet, path: hints.paths.listBullet! } : undefined;
+  const noListBullet = listBullet?.value === 'none';
   const bulletImage: ListBulletImage | undefined = listBullet?.value === 'image' ? (() => {
     const resolved = resolveLogo(options.presentation, slide, { shape: 'icon', onDark: options.darkBackground, slideIndex: options.slideIndex });
     return resolved ? { source: resolved.source, path: resolved.path } : undefined;
@@ -2614,7 +2625,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // A numbered list (`numbering` on the payload) draws numbers, never the picture bullet.
   const fitContent = (field:string,value:unknown,text:string,box:LayoutBox,size:number,minimum:number,path:string,numbering?:unknown) => field === 'text'
     ? fitPlacedText(field,value,text,box,size,minimum,path)
-    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{...richOptions(styleFor(field,path)),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:{})})
+    : (field==='items'||field==='bullets') ? fitList(value as ListValue[],box,size,minimum,{...richOptions(styleFor(field,path)),...(numbering!==undefined?{numbering:numbering as NumberingInput}:bulletImage?{bulletImage}:noListBullet?{bullet:'none' as const}:{})})
     : fitText(text,box,size,minimum,widthFor(field,path),field==='code'?undefined:textDirection);
   const path = `slides.${options.slideIndex ?? 0}`;
   // RR-34: captions and footnotes fit through the same placed fitter as body text (outline placement included).
@@ -2977,7 +2988,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (mode === undefined || mode === 1) return undefined;
     const start = contentNominalSize(node.field) * scale, floor = snapFontSizeUp((settings.minFontSize ?? 16) * scale);
     const numbering = node.payload.numbering as NumberingInput | undefined;
-    const listOptions: ListFitOptions = { ...richOptions(styleFor(node.field, node.path)), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : {}) };
+    const listOptions: ListFitOptions = { ...richOptions(styleFor(node.field, node.path)), ...(numbering !== undefined ? { numbering } : bulletImage ? { bulletImage } : noListBullet ? { bullet: 'none' as const } : {}) };
     const columnGap = (count: number) => Math.min(gap, box.width / (count * 2));
     const columnBoxes = (count: number): LayoutBox[] => {
       const between = columnGap(count), columnWidth = (box.width - between * (count - 1)) / count;

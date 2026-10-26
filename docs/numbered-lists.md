@@ -53,7 +53,7 @@ Core composes the marker, the preview draws it and the exporter writes it; none 
 - `ListEntryLayout.marker.text` is the formatted number (`iv.`), at the marker position of the bullet it replaces: left edge at the entry's level offset, baseline of the entry's first line. `marker.number` carries the counted value, the style actually drawn, the suffix and an `adapted` flag, and `marker.width` is the measured advance.
 - The marker's `style` is the list style with the first run's weight and slant. PowerPoint draws an auto-number with the character formatting of the paragraph's first run, so an entry that starts with a bold run draws a bold number; the marker is measured the same way.
 - The hanging indent is one value for the whole list: the larger of 1.1 em (the bullet indent) and the widest marker in the list plus 0.3 em. Wide markers (`viii.`, `10.`, `(iv)`) therefore never reach their text, and every level steps by that same indent. An unnumbered list keeps 1.1 em.
-- A numbered list draws numbers even when `design.listBullet` is `image`; the picture bullet is for bulleted lists.
+- A numbered list draws numbers even when `design.listBullet` is `image` or `none`; those values are for bulleted lists.
 
 `formatListNumber(value, style, suffix)`, `listNumbers(items, numbering)`, `resolveNumbering` and `numberingAtLevel` are exported (`@openpresentation/opf/composition`) so hosts, the exporter and tests compute the same numbers.
 

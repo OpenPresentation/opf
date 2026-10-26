@@ -6,6 +6,9 @@
   "tags": [
     "Mixed"
   ],
+  "design": {
+    "listBullet": "none"
+  },
   "direction": "column",
   "regions": [
     {
@@ -17,7 +20,8 @@
         "group",
         "image",
         "text",
-        "quote"
+        "quote",
+        "list"
       ],
       "role": "primary",
       "flow": "grid"

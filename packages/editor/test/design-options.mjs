@@ -84,6 +84,8 @@ const cases = [
   { option: "imageFit", value: "contain", slide: 2, patch: { op: "add", path: "/design/imageFit", value: "contain" } },
   // listBullet "image" needs a logo to draw; the fixture gives the organization one first.
   { option: "listBullet", value: "image", slide: 1, setup: (editor) => setOrganizationLogo(editor, "all", "asset:logo"), patch: { op: "add", path: "/design/listBullet", value: "image" }, preview: true },
+  // listBullet "none" draws no marker and no indent (label-and-description lists) and needs no logo.
+  { option: "listBullet", value: "none", slide: 1, patch: { op: "add", path: "/design/listBullet", value: "none" }, preview: true },
 ];
 for (const entry of cases) {
   const editor = session();

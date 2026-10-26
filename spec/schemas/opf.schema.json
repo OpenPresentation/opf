@@ -771,8 +771,8 @@
         },
         "listBullet": {
           "type": "string",
-          "enum": ["character", "image"],
-          "description": "Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the theme's design.listBullet, then the layout record's design.listBullet, then 'character'. 'character' (the default) draws the glyph marker. 'image' draws the primary organization's icon logo (or the organization and shape design.logo names; the onDark value on dark backgrounds) as a picture bullet: a square with side 0.65 times the marker's font size whose bottom sits on the marker baseline, so list geometry does not change. Without a logo the glyph is drawn and the engine reports unresolved-content at this field."
+          "enum": ["character", "image", "none"],
+          "description": "Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the theme's design.listBullet, then the layout record's design.listBullet, then 'character'. 'character' (the default) draws the glyph marker. 'image' draws the primary organization's icon logo (or the organization and shape design.logo names; the onDark value on dark backgrounds) as a picture bullet: a square with side 0.65 times the marker's font size whose bottom sits on the marker baseline, so list geometry does not change. Without a logo the glyph is drawn and the engine reports unresolved-content at this field. 'none' draws no marker and no hanging indent, so each entry's text (and its description) starts at the left edge of the list: use it for label-and-description lists such as pillars, team members and questions with answers. Nested levels keep their indent. A list that sets numbering still draws its numbers."
         },
         "mirror": {
           "type": "boolean",

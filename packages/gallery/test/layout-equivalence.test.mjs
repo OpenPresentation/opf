@@ -16,6 +16,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const old = JSON.parse(readFileSync(path.join(root, "test", "fixtures", "layouts-4.0.0.json"), "utf8"));
 const { records } = await readSnapshotKind(path.join(root, "catalog"), "layouts");
 const RULE_ORDER = ["accepts", "role", "flow", "max", "bleed", "listColumns", "anchor", "empty"];
+/** Kinds a record accepts beyond its 4.0.0 rule (appended, in this order): a deliberate widening, never a silent one. */
+const ACCEPTS_ADDED = { "team/people": ["list"] }; // WI-6: a name with its role and description is one `items` entry
 
 /** Track weights as shares of their numeric total (core compiles to relative numbers; `auto` stays `auto`). */
 const shares = (weights) => {
@@ -37,7 +39,8 @@ function assertSameGrid(record, before) {
   assertShares(shares(compiled.rows), shares(before.rows ?? before.areas.map(() => 1)), `${record.id}: rows`);
   assert.deepEqual(compiled.regions.map((region) => region.name), Object.keys(before.regions), `${record.id}: reading order`);
   for (const region of compiled.regions) {
-    const rule = before.regions[region.name];
+    const rule = { ...before.regions[region.name] };
+    rule.accepts = [...rule.accepts, ...(ACCEPTS_ADDED[`${record.id}/${region.name}`] ?? [])];
     // A key the 4.0.0 record wrote must be equal; a key it left out must be the engine default, never an inherited value.
     const defaults = layoutRegion(region.name, { accepts: rule.accepts, role: rule.role, flow: rule.flow });
     for (const key of RULE_ORDER) assert.deepEqual(region[key], rule[key] ?? defaults[key], `${record.id}/${region.name}.${key}`);
