@@ -2,6 +2,38 @@
 
 Unfinished prepared shaping work is preserved in the [September 15 roadmap](docs/roadmap-shaping-20260915.md); it is not part of the published runtime.
 
+## Embed the editor (CE-06)
+
+One call mounts the whole editor, over one session and one fonts handle: the source pane, the canvas, the slide row, Present, Export, the sorter, the outline, Layout Studio, Review, Find and autosave, each part optional.
+
+```js
+import "@openpresentation/opf-editor/styles.css";
+import { createOpfEditor } from "@openpresentation/opf-editor/workspace";
+
+const editor = createOpfEditor(element, {
+  document,                          // an OPF object or its JSON text, or `session` to adopt one
+  catalogs: [gallery],
+  fonts,                             // the renderer's fonts handle, a lease { fonts, release }, a promise or a function of either
+  persistence: { key: "my-deck" },   // optional autosave and restore prompt
+  theme: { colorScheme: "auto", tokens: { accent: "hsl(262 60% 38%)" } },
+  onChange: ({ document }) => save(document),
+});
+await editor.ready;
+editor.setView("outline");
+editor.destroy();
+```
+
+From React 18 or 19 (StrictMode-safe, renders an empty container on the server):
+
+```jsx
+import { OpfEditor, useOpfDocument } from "@openpresentation/opf-editor/react";
+
+<OpfEditor document={deck} fonts={loadFonts} catalogs={[gallery]} theme={theme} onEditor={setEditor} />;
+const document = useOpfDocument(editor); // also useOpfSelection(editor), useOpfEditor(options)
+```
+
+[docs/embedding.md](docs/embedding.md) lists the layouts, `panels`, `slots` (your own arrangement), every option, the handle, the events and the React bindings; [docs/theming.md](docs/theming.md) is the token contract (surface, text, accent, border, radius and font, light and dark) and the `theme` option. `examples/playground.js` is a thin user of it.
+
 ## Install the editor and optional export dependencies (RR-63)
 
 `@openpresentation/opf-render` is an optional peer of the editor, and from render 0.16 its heavy pieces are optional peers too, so install only what you use. The editor itself draws with `@openpresentation/opf-render/svg` and loads fonts with `/fonts-browser`, which need nothing else. Add:
@@ -786,10 +818,11 @@ import "@openpresentation/opf-editor/styles.css";
 
 `pnpm run build` writes `dist/styles.css`: the token layer (`src/styles/tokens.css`) first, then every other `src/styles/*.css` in alphabetical order. It is plain CSS with no preprocessor, no `@import` and no `url()`: nothing is fetched. The package bundles no fonts either; load Inter and Geist Mono yourself (or leave the fallbacks: `system-ui` and `ui-monospace`). The panels that existed before it (design controls, review, slide manager, find, fill template, numbering, chart options, data grid, crop, the custom layout editor, the JSON editor and the restore banner) are styled with the tokens and nothing else. The find, review, crop and data-grid components still inject a small fallback stylesheet of their own, so they look as before when you do not import `styles.css`; with it, its rules win whichever `<style>` comes last.
 
-**Tokens.** Every rule reads only `--opf-ui-*` custom properties, defined on `:root` and on `.opf-ui`, light by default. Override any of them on `:root`, on a wrapper with the class `opf-ui`, or on one component's container:
+**Tokens.** Every rule reads only `--opf-ui-*` custom properties, defined on `:root` and on `.opf-ui`, light by default. The whole contract, with light and dark values and what each token is for, is in [docs/theming.md](docs/theming.md). `createOpfEditor({ theme })` sets them for you; by hand, set them on the `.opf-ui` elements themselves (every component root carries the class and declares its own defaults, so a value set on a wrapper does not reach it) with a selector that outranks `.dark .opf-ui`:
 
 ```css
-.my-editor.opf-ui {
+html .opf-ui,
+html.dark .opf-ui {
   --opf-ui-accent: hsl(262 60% 38%);
   --opf-ui-accent-strong: hsl(262 60% 38%);
   --opf-ui-ring: hsl(262 60% 38%);
@@ -811,7 +844,7 @@ import "@openpresentation/opf-editor/styles.css";
 
 Put the class `opf-ui` on an element that wraps a mounted component to get the base rules: the font, the text color, `box-sizing: border-box`, a 2px `--opf-ui-ring` outline with a 2px offset on `:focus-visible`, and no transitions under `prefers-reduced-motion: reduce`.
 
-**Dark mode.** The dark values apply under `.dark .opf-ui`, `.opf-ui.dark`, `[data-theme="dark"]` (on the root or any ancestor) and `:root.dark`. The host decides when: toggle `class="dark"` or `data-theme="dark"` on `<html>`, or on the wrapper. The stylesheet does not read `prefers-color-scheme`, so a host that wants to follow the system setting sets the attribute from `matchMedia("(prefers-color-scheme: dark)")`. Dark also sets `color-scheme: dark`, so native controls follow.
+**Dark mode.** The dark values apply under `.dark .opf-ui`, `.opf-ui.dark`, `[data-theme="dark"]` (on the root or any ancestor) and `:root.dark`; `[data-theme="light"]` on an ancestor or on the surface forces light inside a dark page. The host decides when: toggle `class="dark"` or `data-theme="dark"` on `<html>`, or on the wrapper. The stylesheet does not read `prefers-color-scheme`; `createOpfEditor({ theme: { colorScheme: "auto" } })` follows it for you, and a host that mounts components itself sets the attribute from `matchMedia("(prefers-color-scheme: dark)")`. Dark also sets `color-scheme: dark`, so native controls follow.
 
 **Touch.** `data-density="touch"` on an `.opf-ui` element raises `--opf-ui-control-h` from 32px to 40px for everything inside it (the mobile design). The new components take the same value as a `density: "comfortable" | "touch"` option.
 
@@ -992,7 +1025,9 @@ Put the opened document in the session with `editor.replaceDocument(document)` (
 
 ## Optional React Bindings
 
-React bindings are isolated under `@openpresentation/opf-editor/react` and require the host app to pass its React runtime. The core package does not add React to the critical path.
+React bindings are isolated under `@openpresentation/opf-editor/react`; React (18 or later) is an optional peer, needed only by that entry point. The core package does not add React to the critical path.
+
+`<OpfEditor>`, `useOpfEditor`, `useOpfDocument` and `useOpfSelection` mount and read the embeddable editor ([Embed the editor](#embed-the-editor-ce-06)). The older factory below builds two controls over a session you already have, with the React you pass:
 
 ```jsx
 import { createOPFReactComponents } from "@openpresentation/opf-editor/react";

@@ -76,6 +76,16 @@ for (const [entry, file] of [["./export-menu", "export-menu"], ["./agent-handoff
   assert.equal(pkg.exports[entry].types, `./dist/${file}.d.ts`);
 }
 
+// CE-06: the embeddable editor and its React bindings; React is an optional peer that only the /react entry point needs.
+for (const [entry, file] of [["./workspace", "workspace"], ["./canvas-variables", "canvas-variables"]]) {
+  assert.ok(pkg.exports?.[entry], `Must expose ${entry} as a separate entry point (CE-06).`);
+  assert.equal(pkg.exports[entry].default, `./dist/${file}.js`);
+  assert.equal(pkg.exports[entry].types, `./dist/${file}.d.ts`);
+}
+assert.equal(pkg.peerDependencies?.react, ">=18", "React 18 or later is a peer of the React bindings.");
+assert.deepEqual(pkg.peerDependenciesMeta?.react, { optional: true }, "React must stay an optional peer: only ./react needs it.");
+assert.ok(!pkg.dependencies?.react && !pkg.dependencies?.["react-dom"], "React must not be a dependency.");
+
 for (const forbidden of forbiddenDependencyNames) {
   assert.ok(!deps[forbidden], `Forbidden critical-path dependency: ${forbidden}`);
 }

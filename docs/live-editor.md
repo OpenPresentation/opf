@@ -4,6 +4,11 @@ Editor 0.26.1 provides an embeddable SVG canvas in `@openpresentation/opf-editor
 
 The published canvas covers the interactions below; complete PowerPoint feature coverage remains separate work. “Pixel perfect” is a fidelity target with specific prerequisites and remaining gaps described below.
 
+
+## The whole editor in one call
+
+`@openpresentation/opf-editor/workspace` mounts everything the sections below build by hand (the canvas, the source pane, the slide navigator and thumbnails, Present, Export, the sorter, the outline, Layout Studio, Review, Find and autosave) over one session and one fonts handle: `createOpfEditor(element, { document, catalogs, fonts })`. `@openpresentation/opf-editor/react` has `<OpfEditor>` and the hooks `useOpfEditor`, `useOpfDocument` and `useOpfSelection` for React 18 and 19. The chrome reads `--opf-ui-*` tokens that a `theme` option sets. See [Embedding the editor](../packages/editor/docs/embedding.md) and [Theming the editor chrome](../packages/editor/docs/theming.md).
+
 ## Install the published packages
 
 Use Node 24 with Core, editor, PPTX, renderer and Gallery 0.26.1. This is the current published setup; the [quickstart](quickstart.md) is the shared command-line first run:

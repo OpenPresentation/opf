@@ -205,7 +205,9 @@
   "table-alt.mjs": 1.0,
   "table-options.mjs": 1.5,
   "templates.mjs": 0.5,
-  "transfer.mjs": 0.5
+  "transfer.mjs": 0.5,
+  "workspace-ssr.mjs": 0.6,
+  "workspace-units.mjs": 0.5
  },
  "opf-pptx": {
   "accepted-text.mjs": 4.0,
