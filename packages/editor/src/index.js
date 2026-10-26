@@ -1,6 +1,7 @@
 import { commitCatalogControl } from "./catalog-control.js";
 import { paginateSlide } from "@openpresentation/opf/pagination";
 import { OPFPatchError, applyPatch as applyCorePatch, applyPatchWithInverse, formatPointer, invertPatch, jsonEqual, parsePointer, readPointer } from "@openpresentation/opf/patch";
+import { OPFIdError, assignIds, documentHash, toIdPatch } from "@openpresentation/opf/ids";
 import { collectReservedPresentationIds } from "./presentation-ids.js";
 import { composeSlide } from "@openpresentation/opf/composition";
 import { catalogKinds, resolveSlideContext, stats } from "@openpresentation/opf";
@@ -157,6 +158,18 @@ export function createEditorSession(input, options = {}) {
   const redoStack = [];
   const listeners = new Set();
   const rejectInvalid = Boolean(options.rejectInvalid);
+  // CE-04: with `idPaths`, every event and change also carries the same patches addressed by id (`/slides/@intro/title`), which stay
+  // true when slides and blocks move, for hosts that sync or comment by id. Each is written against the document it applies to.
+  // It costs one walk of each patch over a copy of the document, so it is off by default.
+  const idPaths = Boolean(options.idPaths);
+  const idForms = (fields) => {
+    if (!idPaths) return {};
+    const out = {};
+    if (fields.patches) out.idPatches = toIdPatch(fields.patches[0], fields.patches[1]);
+    if (fields.inversePatches) out.idInversePatches = toIdPatch(fields.inversePatches[0], fields.inversePatches[1]);
+    if (fields.redoPatches) out.idRedoPatches = toIdPatch(fields.redoPatches[0], fields.redoPatches[1]);
+    return out;
+  };
   let snapshotCache;
 
   function emit(event) {
@@ -178,7 +191,8 @@ export function createEditorSession(input, options = {}) {
     const before = presentation;
     let next, inversePatches;
     try {
-      ({ presentation: next, inverse: inversePatches } = applyPatchWithInverse(before, patches));
+      // `expectHash` (CE-04) is the precondition of this edit: the session's document must still be the one the caller hashed.
+      ({ presentation: next, inverse: inversePatches } = applyPatchWithInverse(before, patches, applyOptions?.expectHash === undefined ? {} : { expectHash: applyOptions.expectHash }));
     } catch (error) {
       throw editorPatchError(error);
     }
@@ -215,10 +229,12 @@ export function createEditorSession(input, options = {}) {
     validation = nextValidation;
     undoStack.push({ patches: clonePatchOperations(patches), inversePatches, meta });
     redoStack.length = 0;
+    const ids = idForms({ patches: [before, patches], inversePatches: [next, inversePatches] });
     emit({
       type: "patch",
       patches: clonePatchOperations(patches),
       inversePatches: clonePatchOperations(inversePatches),
+      ...ids,
       validation,
       meta
     });
@@ -227,6 +243,7 @@ export function createEditorSession(input, options = {}) {
       presentation: clone(presentation),
       patches: clonePatchOperations(patches),
       inversePatches: clonePatchOperations(inversePatches),
+      ...ids,
       validation,
       ...(forks.length ? { forked: forks, notice: meta.notice } : {})
     };
@@ -250,7 +267,7 @@ export function createEditorSession(input, options = {}) {
     setCatalogs(next, meta = {}) {
       catalogs = mergeCatalogs(next);
       validation = check(presentation);
-      emit({ type: "catalogs", patches: [], validation, meta });
+      emit({ type: "catalogs", patches: [], ...(idPaths ? { idPatches: [] } : {}), validation, meta });
       return catalogs;
     },
     get canUndo() {
@@ -323,6 +340,27 @@ export function createEditorSession(input, options = {}) {
     },
     applyPatch: commitPatch,
     /**
+     * The content hash of the open document (core's `documentHash`): pass it as `applyPatch(ops, meta, { expectHash })` to apply an edit
+     * only while the document is still the one the hash was taken from. Reads the session's document without copying it.
+     */
+    documentHash() {
+      return documentHash(presentation);
+    },
+    /**
+     * Give every slide and block without an `id` one (core's `assignIds`) as ONE undoable edit, and return the change, or `null` when
+     * every slide and block already has an id. `options` are core's (`generate`); `meta.source` defaults to `"assign-ids"`.
+     */
+    assignIds(assignOptions = {}, meta = {}) {
+      let result;
+      try {
+        result = assignIds(presentation, assignOptions);
+      } catch (error) {
+        throw error instanceof OPFIdError ? new OPFEditorError(error.code, error.message, { path: error.path }) : error;
+      }
+      if (!result.patch.length) return null;
+      return commitPatch(result.patch, { ...meta, source: meta.source ?? "assign-ids" });
+    },
+    /**
      * Open a different document in the session (a host's example menu, File > Open, "start over"): the whole document is replaced as ONE
      * undoable change (Undo restores the previous document, Redo the new one). Unlike an `applyPatch` that replaces the root, this is
      * never read as the user editing the catalog records the two documents share: records under `catalogs.default` or a named group
@@ -386,19 +424,22 @@ export function createEditorSession(input, options = {}) {
       redoStack.length = 0;
       undoStack.push(...undo.map(entry));
       redoStack.push(...redo.map(entry));
-      emit({ type: "restore", patches: [], validation, meta });
+      emit({ type: "restore", patches: [], ...(idPaths ? { idPatches: [] } : {}), validation, meta });
       return { presentation: clone(presentation), patches: [], validation };
     },
     undo(meta = {}) {
       const entry = undoStack.pop();
       if (!entry) return null;
+      const before = presentation;
       presentation = applyJsonPatch(presentation, entry.inversePatches);
       validation = check(presentation);
       redoStack.push(entry);
+      const ids = idForms({ patches: [before, entry.inversePatches], redoPatches: [presentation, entry.patches] });
       emit({
         type: "undo",
         patches: clonePatchOperations(entry.inversePatches),
         redoPatches: clonePatchOperations(entry.patches),
+        ...ids,
         validation,
         meta
       });
@@ -406,19 +447,23 @@ export function createEditorSession(input, options = {}) {
         presentation: clone(presentation),
         patches: clonePatchOperations(entry.inversePatches),
         redoPatches: clonePatchOperations(entry.patches),
+        ...ids,
         validation
       };
     },
     redo(meta = {}) {
       const entry = redoStack.pop();
       if (!entry) return null;
+      const before = presentation;
       presentation = applyJsonPatch(presentation, entry.patches);
       validation = check(presentation);
       undoStack.push(entry);
+      const ids = idForms({ patches: [before, entry.patches], inversePatches: [presentation, entry.inversePatches] });
       emit({
         type: "redo",
         patches: clonePatchOperations(entry.patches),
         inversePatches: clonePatchOperations(entry.inversePatches),
+        ...ids,
         validation,
         meta
       });
@@ -426,6 +471,7 @@ export function createEditorSession(input, options = {}) {
         presentation: clone(presentation),
         patches: clonePatchOperations(entry.patches),
         inversePatches: clonePatchOperations(entry.inversePatches),
+        ...ids,
         validation
       };
     }
@@ -725,6 +771,7 @@ function editorPatchError(error) {
   if (error.operation !== undefined) details.operation = error.operation;
   if (error.index !== undefined) details.index = error.index;
   if (error.validation) details.issues = errorFindings(error.validation);
+  if (error.code === "patch-hash-mismatch") Object.assign(details, { expected: error.expected, actual: error.actual });
   return new OPFEditorError(error.code, error.message, details);
 }
 

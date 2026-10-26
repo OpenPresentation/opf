@@ -10,6 +10,7 @@ Four deterministic, local pieces share one implementation: no network, no model 
 | Semantic diff of two documents | `@openpresentation/opf/diff` | `opf diff` |
 | Three-way merge with conflict objects | `@openpresentation/opf/diff` | `opf merge` |
 | Canonical key order and layout | `@openpresentation/opf/format` | `opf format` |
+| Ids, id-addressed paths, document hash, patch scope | `@openpresentation/opf/ids` (the patch parts also on `/patch`) | |
 
 ## One patch module
 
@@ -31,10 +32,74 @@ applyPatch(after, inverse); // deep-equals `presentation`: this is the undo patc
 
 - All six RFC 6902 operations: `add`, `remove`, `replace`, `move`, `copy`, `test`. Unknown members of an operation are ignored (RFC 6902 section 4); unknown `op` values are errors.
 - Pointers are strict RFC 6901. `-` is accepted only as the final token of an `add`, `move` target or `copy` target. Array indexes are canonical decimal (`01`, `-1` and `1.0` are errors). `parsePointer`, `formatPointer`, `escapePointerToken`, `pointerFromPath` (a pointer, an OPF dotted path such as `slides.0.title`, or a segment array) and `splitPointer` give every caller the same path handling; build pointers with `formatPointer` rather than joining unescaped keys.
-- Errors are `OPFPatchError` with a stable `code` (`patch-test-failed`, `patch-path-missing`, `patch-parent-missing`, `invalid-array-index`, `invalid-json-pointer`, `invalid-patch`, `invalid-patch-operation`, `unsupported-patch-operation`, `patch-invalid-move`, `patch-root-remove`, `patch-invalid-document`), the failing operation's `index` and `path`, and a message that starts with `Operation <n>:`.
+- Errors are `OPFPatchError` with a stable `code` (`patch-test-failed`, `patch-path-missing`, `patch-parent-missing`, `invalid-array-index`, `invalid-json-pointer`, `invalid-patch`, `invalid-patch-operation`, `unsupported-patch-operation`, `patch-invalid-move`, `patch-root-remove`, `patch-invalid-document`, `patch-id-not-found`, `patch-id-ambiguous`, `invalid-expect-hash`, `patch-hash-mismatch`), the failing operation's `index` and `path`, and a message that starts with `Operation <n>:`.
 - `test` fails on a missing path, and compares by JSON value: member order is irrelevant, `0` equals `-0`, arrays compare in order. `move` onto itself is a no-op; moving a value into its own descendant is an error; removing the document root is an error. A `__proto__` key is data and never reaches a prototype.
 - Optional schema validation of the result: `applyPatch(presentation, patch, { validate: true })` (or a custom validator; add `strict: true` to reject warnings) throws `OPFPatchValidationError` with the full validation report when the final document is invalid. Intermediate states are not validated, so a patch may pass through an invalid state. `opf edit` validates the saved document itself, as before.
 - Inverse patches: `applyPatchWithInverse` and `invertPatch` return operations that restore the input exactly, in reverse order, with concrete array indexes (the inverse of an `add` at `-` removes the real index). `test` has no inverse. The editor stores these in its undo stack.
+
+## Ids, id-addressed paths, hashes and patch scope
+
+Indexes move: `/slides/3/blocks/1` is another block once a slide is inserted above it. Anything that edits with other people or other programs (remote patches, comments, review, an agent's proposal) needs paths that name the thing, and a way to say "only if nothing changed". Slides and content payloads (blocks, groups, regions) already have an optional `id`, unique among slide and payload ids; these pieces build on it. They live in `@openpresentation/opf/ids` and on the package root (the pointer, hash and `expectHash` parts are also on `/patch`); all of them are deterministic, offline and browser-safe.
+
+### `assignIds`
+
+```ts
+import { assignIds } from "@openpresentation/opf/ids";
+
+const { document, patch, assigned } = assignIds(presentation);
+// document: a copy where every slide and payload has an id
+// patch:    the same change as `add` operations (`/slides/0/id`, ...), for an editor to apply as one undoable edit
+// assigned: [{ pointer: "/slides/0", kind: "slide", id: "slide-1" }, ...]
+```
+
+Missing ids are filled in document order (slides, then each slide's blocks, nested groups and promoted regions), as `slide-1`, `slide-2`, ... and `block-1`, `block-2`, ..., skipping ids already in use, so the same document always gets the same ids and the result is valid against the schema. An existing id is never changed. Pass `generate({ kind, pointer, node, parentId })` to choose the ids yourself (a UUID, a slug of the title); it must return a non-empty string no slide or payload uses, or `assignIds` throws `OPFIdError` (`invalid-id`, `duplicate-id`). The id is added as the node's last member; `format` puts it in canonical order. List items, table rows and runs have no id.
+
+### Id-addressed paths
+
+In an array, the pointer token `@intro` is the element whose `id` is `intro`: `/slides/@kpis/blocks/@note/text`. It is a valid RFC 6901 pointer, so every JSON Pointer tool can carry it; it resolves in OPF's own `readPointer`, `getAtPointer`, `applyPatch` (every operation, `from` and `path`) and the editor's `get`, `set` and `applyPatch`.
+
+```ts
+import { applyPatch, resolveIdPointer, toIdPointer, resolveIdPatch, toIdPatch } from "@openpresentation/opf/patch";
+
+resolveIdPointer(doc, "/slides/@kpis/blocks/@note/text"); // "/slides/1/blocks/1/text"
+toIdPointer(doc, "/slides/1/blocks/1/text");              // "/slides/@kpis/blocks/@note/text"
+applyPatch(doc, [{ op: "replace", path: "/slides/@kpis/blocks/@note/text", value: "Edited" }]);
+toIdPatch(doc, patch);      // every index that names an element with an id, operation by operation
+resolveIdPatch(doc, patch); // the reverse: every id token as the index it has when its operation runs
+```
+
+- **Why `@`.** It is legal in a pointer token and in a URI fragment (`#/slides/@intro`) without percent-encoding; `{id:intro}` would need `%7B` and `%7D` there. Arrays have no other use for a token that is not an index, and the token is read as an id only where the value is an array, so an object key such as an extension's `@context` is still a plain key. An id that begins with `@` is written `@@id`; `/` and `~` in an id escape as in any pointer (`~1`, `~0`).
+- **Resolution.** `resolveIdPointer` throws `patch-id-not-found` for an id no element has and `patch-id-ambiguous` for an id several elements of the array share (an invalid document; `readPointer` reports it as not found). A path that does not exist is not an error: only the id tokens are resolved. `toIdPointer` writes an id token only where the element's `id` is a non-empty string no other element of the array has; other indexes stay.
+- **`move` and insertion.** An id as the last token of `add`, `copy` or `move` inserts before that element (an index does the same). A `move` resolves its destination after the value has left, as RFC 6902 reads an index. The `patch` and `inverse` that `applyPatchWithInverse` returns keep the paths as written and in index form respectively: an inverse never depends on ids.
+- **`toIdPatch`** writes each operation against the document it applies to, so a host that syncs by id sends a patch that still means the same thing after the receiver has reordered. Where an operation inserts, the last token stays an index (or `-`): there is no element yet to name; its ancestors are named by the ids they have before the insertion.
+
+### `documentHash` and `expectHash`
+
+```ts
+import { documentHash, applyPatch, OPFPatchHashError } from "@openpresentation/opf/patch";
+
+const hash = documentHash(doc); // "sha256:" + 64 hex digits
+applyPatch(doc, patch, { expectHash: hash }); // throws OPFPatchHashError (code patch-hash-mismatch) when doc is not the document hashed; nothing is applied
+```
+
+The hash is SHA-256 over the document's canonical JSON: the members of every object sorted by UTF-16 code unit at every depth (RFC 8785), no whitespace. Two documents hash alike exactly when `jsonEqual` calls them equal: key order, a JSON, YAML or Markdown round trip, and formatting do not matter; any content change, including array order, does. (`format` is not the canonical form here: it keeps keys the schema does not declare in their written order, which is right for a file and wrong for an identity.) The digest is pure JavaScript and synchronous, with no Node import and no Web Crypto, so it is the same in Node, browsers and edge runtimes and can be checked inside the synchronous `applyPatch`. `expectHash` also takes the bare 64-digit hex; a value that is not a hash throws `invalid-expect-hash`. `edit(deck, patch, { expectHash })` takes it too. A server that holds the document answers a client's patch with `expectHash` as optimistic concurrency, without writing its own etag code. This is not the CLI's `--expect-sha256`, which is the digest of a file's bytes.
+
+### `touches`
+
+```ts
+import { touches } from "@openpresentation/opf/ids";
+
+const scope = touches(patch, document);
+scope.writes; // [{ operation: 1, op: "replace", pointer: "/slides/1/title", idPointer: "/slides/@kpis/title", kind: "slide", ids: ["kpis"], slideIds: ["kpis"] }]
+scope.reads;  // `test`, and the source of `copy`
+scope.ids, scope.slideIds, scope.kinds;
+```
+
+What a patch reads and writes, for conflict detection and permission checks. With the `document` the patch was made for, the patch is walked operation by operation, so every `pointer` is the index path as it is when its operation runs, every `idPointer` is its id form, and a `remove`, `replace` or `move` of a slide or group lists the ids inside it. Without a document, the pointers are as written and `ids` holds the id tokens and the ids of the values the operations insert. A patch that does not apply throws the error `applyPatch` throws. `kind` is the part of the deck a location belongs to: `document`, `slide-order` (the `slides` array, or a slide added, removed or moved), `slide`, `block` (a payload or the `blocks` array that holds it), `design`, `assets`, `catalogs` or `metadata`.
+
+Two patches made against the same document conflict when a write of one has the same `idPointer` as, or sits inside or above, a location the other reads or writes, or the other destroys what is in its `ids`. A `move` changes where an element sits, not what is inside it: do not count the descendants of a `move` location. A permission check reads `kind`, `slideIds` and `ids` of `writes` (moves included). What counts as a conflict and who may touch what stays with the host; the library only reports the scope.
+
+The editor reports the same patches by id (`createEditorSession(doc, { idPaths: true })`), accepts `expectHash` on `applyPatch` and assigns ids as one edit (`session.assignIds()`); see the editor README.
 
 ## Diff
 
@@ -124,4 +189,5 @@ CLI: `opf format <file|-> [output|-]` or `opf format <file>... (-i | --check)`, 
 
 - It is structural, not visual: a diff of two decks says nothing about whether either composes, overflows or exports well.
 - Merge treats text as a value: two edits to different words of the same string are a conflict, not a text merge.
-- Similarity matching is a heuristic with a documented threshold. When it matters, give slides stable ids; ids are always trusted over content.
+- Similarity matching is a heuristic with a documented threshold. When it matters, give slides stable ids (`assignIds`); ids are always trusted over content.
+- `touches` and the hash do not transform or rebase a patch over another: that is a later item of the cloud-editor program. They give a host what it needs to detect that a rebase is required.

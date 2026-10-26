@@ -111,6 +111,10 @@ Two browser-safe subpaths for source editors, the CLI and agents. `@openpresenta
 
 Added in 0.12.0 (not in 0.11.4 or earlier): `@openpresentation/opf/patch` is the one RFC 6902 implementation the CLI and the editor share (`applyPatch`, `applyPatchWithInverse`, `invertPatch`, strict pointer helpers, optional schema validation of the result); `@openpresentation/opf/diff` has `diff` (slide matching by id, content and similarity, moves, a readable report and a JSON Patch) and `merge` (three-way merge with conflict objects that never drop a side); `@openpresentation/opf/format` has `format` (canonical key order and layout, idempotent). See [the guide](../../docs/patch-diff-merge-format.md).
 
+### Ids, document hash and patch scope (CE-04, CE-05)
+
+`@openpresentation/opf/ids` (all of it also on the package root, the pointer and hash parts also on `/patch`) makes edits addressable and checkable. `assignIds(document, { generate? })` fills the missing `id` of slides and content payloads deterministically (`{ document, patch, assigned }`; existing ids are never changed). In an array, the pointer token `@intro` names the element whose `id` is `intro`, so `/slides/@intro/blocks/@kpi/text` survives reordering: `applyPatch` and `readPointer` resolve it, `resolveIdPointer` and `toIdPointer` convert a pointer, `resolveIdPatch` and `toIdPatch` a whole patch. `documentHash(document)` is `sha256:` and a SHA-256 of the key-sorted JSON (pure JavaScript, the same in Node, browsers and edge runtimes); `applyPatch(document, patch, { expectHash })` and `edit(deck, patch, { expectHash })` apply only to the document that hash was taken from, else throw `OPFPatchHashError` and change nothing. `touches(patch, document?)` returns the pointers (index and id form), ids, slide ids and kinds a patch reads and writes, for conflict detection and permission checks. See [the guide](../../docs/patch-diff-merge-format.md#ids-id-addressed-paths-hashes-and-patch-scope).
+
 ### Layout previews
 
 `@openpresentation/gallery/previews` ships pre-rendered SVG thumbnails for the

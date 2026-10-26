@@ -356,6 +356,25 @@ editor.redo();
 
 `createSvgTraceBinding` only reads `data-opf-path`; it does not require a hosted service, a second renderer, storage, analytics, auth, or product chrome. Host applications decide how selected paths appear in their own inspector UI.
 
+### Ids, id-addressed events and `expectHash` (CE-04)
+
+Slides and blocks can carry an `id` (core's `assignIds` fills the missing ones; `editor.assignIds()` does it as one undoable edit and returns `null` when none is missing). A path may name an element by id instead of by index, `slides.@intro.title` or `/slides/@intro/blocks/@kpi/text`, in `get`, `set` and `applyPatch`; the session resolves it against the open document.
+
+By default the events are unchanged and carry index paths. Create the session with `idPaths: true` and every change and every `subscribe` event also carries the same patches addressed by id, each written against the document it applies to:
+
+```js
+const editor = createEditorSession(doc, { idPaths: true });
+editor.subscribe((event) => {
+  event.patches;          // [{ op: "replace", path: "/slides/1/blocks/1/text", value: "Edited" }]
+  event.idPatches;        // [{ op: "replace", path: "/slides/@kpis/blocks/@note/text", value: "Edited" }]
+  event.idInversePatches; // patch events; undo events have idPatches and idRedoPatches
+});
+```
+
+The id form still means the same thing on a replica whose slides are in another order, so a host can send it to a sync server or attach comments to it. Elements without an `id` keep their indexes, and an insertion keeps its index (or `-`) as the last token. It costs one extra walk of each patch.
+
+`editor.documentHash()` is core's `documentHash` of the open document (`sha256:` and 64 hex digits, independent of key order). Pass it to `editor.applyPatch(ops, meta, { expectHash })` and the edit applies only while the document is still that one; otherwise it throws an `OPFEditorError` with code `patch-hash-mismatch` (`details.expected`, `details.actual`), changes nothing and emits nothing.
+
 ## Catalog Controls
 
 Catalog helpers commit catalog references (`id` or `name:id`) that resolve in the document or the session's registered catalogs, instead of accepting freeform incompatible values:
