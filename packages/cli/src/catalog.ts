@@ -8,16 +8,17 @@ import { type CommandSpec, nearest, parseArgs, printHelp } from "./args.js";
 import { usage } from "./errors.js";
 import { json } from "./io.js";
 import type { Host } from "./runtime.js";
+import { OPF_VERSION } from "./version.js";
 
 const print = (value: unknown): void => void process.stdout.write(json(value));
 
-export const schemasSpec: CommandSpec = { name: "schemas", usage: ["opf schemas"], summary: "List the OPF schemas.", positional: [0, 0], help: "Prints [{ name, file, id }] for every schema; opf schema <name> prints one." };
+export const schemasSpec: CommandSpec = { name: "schemas", usage: ["opf schemas"], summary: "List the OPF schemas.", positional: [0, 0], help: "Prints [{ name, file, id, version }] for every schema; opf schema <name> prints one. version is the @openpresentation/opf release the schema came from: the v1 in an id is the pre-1.0 line and may change in any 0.x minor release (docs/schema-versioning.md)." };
 export const schemaSpec: CommandSpec = {
 	name: "schema",
 	usage: ["opf schema [name] [JSON-Pointer]"],
 	summary: "Print a schema (presentation by default), or the part at a JSON Pointer.",
 	positional: [0, 2],
-	help: "Example:\n  opf schema presentation /properties/slides",
+	help: "A whole schema carries the @openpresentation/opf version it came from in its $comment; a part at a JSON Pointer is printed as it is.\n\nExample:\n  opf schema presentation /properties/slides",
 };
 export const catalogsSpec: CommandSpec = { name: "catalogs", usage: ["opf catalogs"], summary: "List the catalog kinds of the default catalog, with counts.", positional: [0, 0], help: "Prints [{ kind, count, source }] for the record kinds, the display kinds and the bundled examples." };
 export const catalogSpec: CommandSpec = {
@@ -39,7 +40,7 @@ Examples:
 export async function runSchemas(args: string[], _host: Host): Promise<void> {
 	const parsed = parseArgs(schemasSpec, args);
 	if (parsed === "help") return printHelp(schemasSpec);
-	print(schemaEntries.map((entry) => ({ name: entry.name, file: entry.file, id: entry.schema.$id })));
+	print(schemaEntries.map((entry) => ({ name: entry.name, file: entry.file, id: entry.schema.$id, version: OPF_VERSION })));
 }
 
 export async function runSchema(args: string[], _host: Host): Promise<void> {
@@ -51,7 +52,10 @@ export async function runSchema(args: string[], _host: Host): Promise<void> {
 		const guess = nearest(name, schemaEntries.map((item) => item.name));
 		throw usage(`Unknown schema ${name}.${guess ? ` Did you mean ${guess}?` : ""} Run opf schemas.`, "unknown-schema");
 	}
-	print(getAtPointer(entry.schema, parsed.positional[1] ?? ""));
+	const pointer = parsed.positional[1] ?? "";
+	// A whole schema names the release it came from in its `$comment` (a validator ignores it); a part is printed exactly as it is.
+	if (pointer === "") return print({ ...entry.schema, $comment: `${typeof entry.schema.$comment === "string" ? `${entry.schema.$comment} ` : ""}This copy is from @openpresentation/opf ${OPF_VERSION}.` });
+	print(getAtPointer(entry.schema, pointer));
 }
 
 export async function runCatalogs(args: string[], _host: Host): Promise<void> {

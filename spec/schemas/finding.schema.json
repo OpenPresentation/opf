@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf-finding/v1",
+  "$comment": "The v1 in the $id is the pre-1.0 line, not a frozen contract: this schema may change in any 0.x minor release. The release that produced this copy is the version of the @openpresentation/opf package it came from (opf --version; opf schemas lists it next to each id). See docs/schema-versioning.md.",
   "title": "Validation results",
   "description": "Errors, warnings and suggested fixes.",
   "type": "object",

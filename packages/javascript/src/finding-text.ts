@@ -14,6 +14,7 @@
  * Pure and browser-safe. The reader of the text (a person) is addressed in American English, with fields in backticks.
  */
 import type { Finding } from "./generated/types/finding.js";
+import { chartShapeHelp } from "./chart-shape.js";
 import { RULE_TEXT } from "./finding-text-rules.js";
 import { SOURCE_TEXT } from "./finding-text-source.js";
 import {
@@ -134,6 +135,8 @@ function describeSchema(finding: Finding, context: FindingTextContext, helpers: 
     case "required": {
       const property = String(params.missingProperty ?? "");
       const where = containerName(segments);
+      const shape = property === "data" ? chartShapeHelp(actual) : undefined;
+      if (shape) return { message: shape.message, next: shape.next };
       const schema = context.schemaAt ? context.schemaAt([...segments, property]) : attempt(() => schemaAtPath(context.document, [...segments, property]), undefined);
       if (format === "json") {
         const sample = property === "slides" ? '[ { "title": "…" } ]' : starterText(schema, property, "json");

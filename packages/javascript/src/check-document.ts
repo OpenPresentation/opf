@@ -23,6 +23,8 @@ import { describeDurationRange, durationOutsideNarrative, durationRangeInverted,
 import { chartNumberFixesByCell, unusedDatasets, type ChartNumberFix } from './chart-data.js';
 import { isRecord, pathFor, visitContentPayloads } from './content-walk.js';
 import { ruleInfo } from './validation-rules.js';
+import { chartShapeHelp, chartShapePatch, FOREIGN_CHART_KEYS } from './chart-shape.js';
+import { splitPointer } from './rule-content.js';
 import type { Finding, FindingSeverity, FindingSuggestion } from './generated/types/finding.js';
 import type { Contract, ValidateOptions } from './validation-types.js';
 
@@ -512,6 +514,41 @@ const HELP: Record<string, string> = {
 };
 
 /**
+ * The Chart.js / ECharts mistake (`categories`/`series`/`labels`/`datasets` and no `data`): the missing-`data` finding says what the
+ * author should write, with their own values converted, and the additional-property findings that only repeat the same mistake are dropped.
+ * Other unknown keys of the same chart stay reported.
+ */
+function collapseChartShape(document: unknown, findings: Finding[]): void {
+	const chartAt = (path: string): unknown => {
+		let node: unknown = document;
+		for (const segment of splitPointer(path)) node = Array.isArray(node) ? node[Number(segment)] : isRecord(node) ? node[segment] : undefined;
+		return node;
+	};
+	const collapsed = new Set<string>();
+	for (const [index, entry] of findings.entries()) {
+		if (entry.ruleId !== 'opf/schema' || entry.validation?.keyword !== 'required' || entry.validation.params.missingProperty !== 'data') continue;
+		const chart = chartAt(entry.path);
+		const hint = chartShapeHelp(chart);
+		if (!hint) continue;
+		const patch = chartShapePatch(chart, entry.path);
+		findings[index] = {
+			...entry,
+			message: hint.message,
+			help: hint.help,
+			...(patch ? { fixes: [{ id: 'convert-chart-data', title: 'Convert to data: { columns, rows }', kind: 'patch' as const, safe: false, patch }] } : {}),
+		};
+		collapsed.add(entry.path);
+	}
+	if (!collapsed.size) return;
+	for (let index = findings.length - 1; index >= 0; index--) {
+		const entry = findings[index];
+		if (entry?.ruleId !== 'opf/schema' || entry.validation?.keyword !== 'additionalProperties') continue;
+		const at = entry.path.lastIndexOf('/');
+		if (collapsed.has(entry.path.slice(0, at)) && FOREIGN_CHART_KEYS.includes(entry.path.slice(at + 1))) findings.splice(index, 1);
+	}
+}
+
+/**
  * The engine's issues as findings. Errors are `format` findings (the schema rule, or the semantic rule that names its
  * code); warnings that name a code (data, chart options, variables, numbering, colours) are findings of that rule.
  * The catalog-id warnings are left to `referenceFindings`, which resolves them against the full local context.
@@ -523,6 +560,7 @@ export function engineFindings(document: unknown, engine: SchemaCheckResult, ena
 		const ruleId = issueRuleId(issue);
 		if (enabled(ruleId)) findings.push(issueFinding(issue, ruleId));
 	}
+	collapseChartShape(document, findings);
 	// RR-54: the migration fix of each chart value column whose text cells share one display style, by cell path.
 	let numberFixes: Map<string, ChartNumberFix> | undefined;
 	for (const issue of engine.warnings) {
@@ -641,6 +679,19 @@ export function undeclaredCatalogFindings(document: unknown): Finding[] {
 	return findings;
 }
 
+const KIND_PLURAL: Record<CatalogKind, string> = { layouts: 'layouts', themes: 'themes', colorSchemes: 'color schemes', fontSchemes: 'font schemes', narratives: 'narratives', audiences: 'audiences', purposes: 'purposes', tones: 'tones' };
+
+/**
+ * The start of an unresolved reference's help: "Did you mean 'two-column'?" when a record is a near miss (the same edit distance the
+ * schema's did-you-mean uses), else the nearest records that do exist. Empty when no catalog is registered, so there is nothing to name.
+ */
+function nearestRecords(kind: CatalogKind, reference: string, candidates: string[]): string {
+	if (!candidates.length) return '';
+	const close = candidates.filter((value) => distance(reference, value) <= Math.max(2, Math.floor(reference.length / 4))).slice(0, 3);
+	const quote = (values: string[]) => values.map((value) => `'${value}'`).join(', ');
+	return close.length ? `Did you mean ${quote(close)}? ` : `The nearest ${KIND_PLURAL[kind]} that exist: ${quote(candidates.slice(0, 3))}. `;
+}
+
 /** The unresolved content references, one finding each, with the nearest records as suggestions. */
 function contentReferenceFindings(document: unknown, options: CatalogOptions, findings: Finding[]): void {
 	const invalid = embeddedRecordFindings(document, options, findings);
@@ -667,10 +718,11 @@ function contentReferenceFindings(document: unknown, options: CatalogOptions, fi
 			finding('opf/unresolved-reference', {
 				path,
 				message: diagnostic.message,
-				help:
+				help: `${nearestRecords(site.kind, site.reference, suggestions.map((entry) => entry.value))}${
 					site.kind === 'layouts'
 						? 'Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.'
-						: 'Embed the record (embed(), or opf embed), register the catalog that defines it, or choose one of the suggested records.',
+						: 'Embed the record (embed(), or opf embed), register the catalog that defines it, or choose one of the suggested records.'
+				}`,
 				definition: `${schemas.presentation.$id}#/$defs/Catalogs`,
 				lookup: ['opf', 'catalog', site.kind],
 				suggestions,

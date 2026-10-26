@@ -45,7 +45,7 @@ const formatRules: ValidationRuleInfo[] = [
 		'error',
 		'The document breaks the OPF schema or a structural rule the schema cannot express.',
 		'The schema is the contract every engine, exporter and editor relies on. A field of the wrong type, a missing required field, an unknown property or content fields that cannot be mixed make the document ambiguous or undrawable.',
-		{ standard: SCHEMA, approximations: 'All alternatives of a union are reported, with the failing schema location in `validation`. A required variable with no value is reported by `opf/variable-unfilled`, in the same category.' },
+		{ standard: SCHEMA, approximations: 'All alternatives of a union are reported, with the failing schema location in `validation`. A required variable with no value is reported by `opf/variable-unfilled`, in the same category. A chart written in the Chart.js or ECharts shape (`categories` and `series`, or `labels` and `datasets`, and no `data`) is one finding on the chart whose hint shows its own values as `data: { columns, rows }`, with a patch fix; the additional-property findings that repeat it are dropped.' },
 	),
 	rule('reference-id-duplicate', 'format', 'error', 'Two references share an id.', 'A citation names a reference by id; a repeated id makes it ambiguous which entry is cited.', { standard: SCHEMA }),
 	rule('cite-unknown-reference', 'format', 'error', 'A citation names a reference that does not exist.', 'A cited id with no entry in `references` has nothing to show in the footnote area.', { standard: SCHEMA }),
@@ -129,7 +129,7 @@ const referenceRules: ValidationRuleInfo[] = [
 		'warning',
 		'A content reference resolves nowhere.',
 		'A layout, theme, colour scheme, font scheme, narrative, audience, purpose or tone reference that neither the document embeds nor a registered catalog defines falls back: a slide composes automatically, a design uses the engine default. A strict export fails instead. A slide with no layout is automatic composition and is never reported.',
-		{ standard: SCHEMA, approximations: 'Resolved like every engine resolves it: catalogs.custom, then the records embedded under catalogs.default, then the catalog registered for its source (the first registered catalog when `default` is omitted); `name:id` in catalogs.<name>, then the catalog registered for its source. Nothing is fetched. Free-form audience and purpose text is not a reference.' },
+		{ standard: SCHEMA, approximations: 'Resolved like every engine resolves it: catalogs.custom, then the records embedded under catalogs.default, then the catalog registered for its source (the first registered catalog when `default` is omitted); `name:id` in catalogs.<name>, then the catalog registered for its source. Nothing is fetched. Free-form audience and purpose text is not a reference. It is a warning, not an error, because catalogs are open and a host may register the id; `--fail-on warning` is the check that a deck is done. With a catalog registered, the hint names the nearest records that exist ("Did you mean `two-column`?").' },
 	),
 	rule(
 		'catalog-record-not-in-source',

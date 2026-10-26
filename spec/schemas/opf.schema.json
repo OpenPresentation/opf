@@ -1,6 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://openpresentation.org/schema/opf/v1",
+  "$comment": "The v1 in the $id is the pre-1.0 line, not a frozen contract: this schema may change in any 0.x minor release. The release that produced this copy is the version of the @openpresentation/opf package it came from (opf --version; opf schemas lists it next to each id). See docs/schema-versioning.md.",
   "title": "Presentation",
   "description": "Open-source JSON format for describing PowerPoint presentations. Agents describe narratives, content, audience, reusable assets, and design — the engine handles OOXML complexity.\n\nContent references (Slide.layout, design.theme, design.colorScheme / design.colorScheme.id, design.fontScheme / design.fontScheme.id, narrative, audience, purpose and tone, and the colorScheme / fontScheme a theme record names) point at catalog records. Each is a bare 'id' or a 'name:id' whose prefix names a group in 'catalogs'. A bare id resolves in catalogs.custom, then in the records embedded under catalogs.default, then in the catalog the host registered for catalogs.default.source (or the host's default catalog when 'default' is omitted); 'name:id' resolves in catalogs.<name>, then in the catalog the host registered for its source. A reference that resolves nowhere is the warning opf/unresolved-reference, and the slide uses automatic composition or the engine default. Engines never fetch a catalog: a saved document embeds every record it uses, and hosts register any other catalog by its source string. See docs/default-catalog.md.\n\nchart.type, the language tag and the keys of Organization.socials / Speaker.socials are engine vocabularies, validated directly with no catalog lookup. When a document names no theme, colour scheme or font scheme, every engine uses the same small engine defaults (spec/reference/engine-defaults.json). Asset references use 'asset:<id>' strings that point into the top-level assets registry, and content color fields (rich-text runs, styled table cells) accept hex values, color-scheme slot/role names, or 'var:<id>' references into the top-level variables map.",
   "type": "object",
@@ -3157,7 +3158,7 @@
     },
     "Chart": {
       "type": "object",
-      "description": "Chart content. The chart object keeps chart-specific fields together so slides and regions do not expose loose chart fields.",
+      "description": "Chart content. The chart object keeps chart-specific fields together so slides and regions do not expose loose chart fields. OPF charts are `{ type, data }` where `data` is `{ columns, rows }`: the first column holds the category labels and every further column is one series. There are no `categories`, `series`, `labels` or `datasets` keys (the Chart.js and ECharts shape); write them as columns and rows. Example: `{ \"type\": \"column\", \"data\": { \"columns\": [\"Quarter\", \"Decks\"], \"rows\": [[\"Q1\", 3], [\"Q2\", 8], [\"Q3\", 21]] } }`.",
       "additionalProperties": false,
       "required": ["type", "data"],
       "properties": {
@@ -3390,7 +3391,7 @@
     },
     "ChartData": {
       "type": "object",
-      "description": "Inline tabular data driving a chart. The first column usually supplies category/x-axis labels; subsequent columns are plotted measures unless 'chart.mapping' or a chart type maps them differently. Value cells are numbers; a string is read only in strict decimal syntax ('12', '-3.5', '1e6'), and anything else ('12%', '$5', '(5)', '1,234') is a gap and a 'chart-value-not-numeric' warning.",
+      "description": "Inline tabular data driving a chart, written as `{ \"columns\": [\"Quarter\", \"Decks\"], \"rows\": [[\"Q1\", 3], [\"Q2\", 8]] }`: one column of labels plus one column per series, not separate `categories` and `series` lists. The first column usually supplies category/x-axis labels; subsequent columns are plotted measures unless 'chart.mapping' or a chart type maps them differently. Value cells are numbers; a string is read only in strict decimal syntax ('12', '-3.5', '1e6'), and anything else ('12%', '$5', '(5)', '1,234') is a gap and a 'chart-value-not-numeric' warning.",
       "additionalProperties": false,
       "required": ["columns", "rows"],
       "properties": {

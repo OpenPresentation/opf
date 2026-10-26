@@ -979,7 +979,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `type`, `data`
-- Purpose: Chart content. The chart object keeps chart-specific fields together so slides and regions do not expose loose chart fields.
+- Purpose: Chart content. The chart object keeps chart-specific fields together so slides and regions do not expose loose chart fields. OPF charts are `{ type, data }` where `data` is `{ columns, rows }`: the first column holds the category labels and every further column is one series. There are no `categories`, `series`, `labels` or `datasets` keys (the Chart.js and ECharts shape); write them as columns and rows. Example: `{ "type": "column", "data": { "columns": ["Quarter", "Decks"], "rows": [["Q1",...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
@@ -1054,7 +1054,7 @@ _No named properties._
 
 - Type: `object`
 - Required fields: `columns`, `rows`
-- Purpose: Inline tabular data driving a chart. The first column usually supplies category/x-axis labels; subsequent columns are plotted measures unless 'chart.mapping' or a chart type maps them differently. Value cells are numbers; a string is read only in strict decimal syntax ('12', '-3.5', '1e6'), and anything else ('12%', '$5', '(5)', '1,234') is a gap and a 'chart-value-not-numeric' warning.
+- Purpose: Inline tabular data driving a chart, written as `{ "columns": ["Quarter", "Decks"], "rows": [["Q1", 3], ["Q2", 8]] }`: one column of labels plus one column per series, not separate `categories` and `series` lists. The first column usually supplies category/x-axis labels; subsequent columns are plotted measures unless 'chart.mapping' or a chart type maps them differently. Value cells are numbers; a string is read only in strict decimal syntax ('12', '-3.5', '1e6'), and anything else ('12%', '$...
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
