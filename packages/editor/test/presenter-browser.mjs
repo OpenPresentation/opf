@@ -43,7 +43,21 @@ try {
     return page.evaluate((i) => window.presenter.start(i), index);
   };
 
-  await page.evaluate(() => { window.realExit = Document.prototype.exitFullscreen; window.realRequest = Element.prototype.requestFullscreen; window.realWebkit = Element.prototype.webkitRequestFullscreen; });
+  await page.evaluate(() => { window.realRequest = Element.prototype.requestFullscreen; window.realWebkit = Element.prototype.webkitRequestFullscreen; });
+  // The real exits asked for and not answered yet. A browser can answer an exit well after `fullscreenElement` is null (macOS CI, 2026-10-26: one
+  // still pending through the scripted section below, whose dropped real event left it unseen, so it took the scripted Esc for itself).
+  await page.evaluate(() => {
+    const exit = Document.prototype.exitFullscreen;
+    window.realExitsPending = 0;
+    window.trackedExit = function () {
+      window.realExitsPending++;
+      const done = () => { window.realExitsPending--; };
+      const answer = Promise.resolve(exit.call(this));
+      answer.then(done, done);
+      return answer;
+    };
+    Document.prototype.exitFullscreen = window.trackedExit;
+  });
   const realFullscreen = () => page.evaluate(() => { Element.prototype.requestFullscreen = window.realRequest; Element.prototype.webkitRequestFullscreen = window.realWebkit; });
 
   // ---- structure, start and the dialog semantics ----------------------------------------------------------------------------------------
@@ -329,6 +343,9 @@ try {
   // answers the n-th request (the element becomes full screen, `fullscreenchange` fires, the promise resolves), `fs.refuse(n)` rejects it,
   // `fs.finishExit(n)` answers the n-th exit (full screen ends, as the browser does for whatever is full screen then) and `fs.userExit()` is Esc.
   await fullscreenOver();
+  // Full screen is over once the browser answered every real exit too: an exit still pending would be one the presenters wait to see an event for,
+  // and the scripted section drops the real event, so it would read the scripted user's exit as that one.
+  await page.waitForFunction(() => window.realExitsPending === 0);
   await page.evaluate(() => {
     // The real browser may still report an earlier exit: only the scripted events reach the presenters here.
     window.dropRealEvents = (event) => { if (event.isTrusted) event.stopImmediatePropagation(); };
@@ -416,7 +433,7 @@ try {
   await cleanUp();
   await page.evaluate(() => { delete document.fullscreenElement; document.removeEventListener('fullscreenchange', window.dropRealEvents, true); });
   await realFullscreen();
-  await page.evaluate(() => { Document.prototype.exitFullscreen = window.realExit; });
+  await page.evaluate(() => { Document.prototype.exitFullscreen = window.trackedExit; });
   mark('a closed presenter\'s late full screen request or exit never ends or shrinks the next presentation (scripted browser answers)');
 
   // ---- axe: the open dialog with its counter and exit button shown --------------------------------------------------------------------
