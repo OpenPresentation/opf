@@ -49,6 +49,11 @@ const deck = {design: {fontScheme: 'roboto'}, slides: [
     {metric: {value: 42, label: 'Answer', unit: '%'}},
     {timeline: [{when: 'Now', what: 'Prototype'}, {what: 'Review'}]},
   ]},
+  // Charts that draw labels as their own editing targets (a container with targets inside it): nested-interactive, below.
+  {title: 'Chart slide', composition: {mode: 'grid', columns: 2}, blocks: [
+    {chart: {type: 'waterfall', data: {columns: ['Step', 'Value'], rows: [['Start', 100], ['Expansion', 24], ['Churn', -8], ['End', 116]]}}},
+    {chart: {type: 'combo', line: ['Margin'], secondaryAxis: ['Margin'], data: {columns: ['Quarter', 'Revenue', 'Margin'], rows: [['Q1', 12.4, 0.31], ['Q2', 18.1, 0.34]]}}},
+  ]},
 ]};
 
 const browser = await chromium.launch({channel: process.platform === 'win32' ? 'msedge' : undefined, ...(process.env.OPF_BROWSER_EXECUTABLE_PATH ? {executablePath:process.env.OPF_BROWSER_EXECUTABLE_PATH} : {})});
@@ -64,7 +69,7 @@ try {
     const svg = document.querySelector('#canvas svg');
     const targets = [...svg.querySelectorAll('[data-canvas-target]')].map((node) => ({
       path: node.getAttribute('data-opf-path'), role: node.getAttribute('role'), tabindex: node.getAttribute('tabindex'),
-      label: node.getAttribute('aria-label'), hiddenSelf: node.getAttribute('aria-hidden'), hiddenAncestor: Boolean(node.parentElement.closest('[aria-hidden="true"]')),
+      label: node.getAttribute('aria-label'), holdsTargets: Boolean(node.querySelector('[data-canvas-target]')), handle: node.querySelector(':scope > .opf-selection[role="button"]')?.getAttribute('tabindex') ?? null, hiddenSelf: node.getAttribute('aria-hidden'), hiddenAncestor: Boolean(node.parentElement.closest('[aria-hidden="true"]')),
     }));
     return {
       role: svg.getAttribute('role'), label: svg.getAttribute('aria-label'), roledescription: svg.getAttribute('aria-roledescription'),
@@ -78,8 +83,9 @@ try {
   const paths = facts.targets.map((target) => target.path);
   for (const path of ['slides.0.title', 'slides.0.blocks.0.image', 'slides.0.blocks.1.image', 'slides.0.blocks.2.chart', 'slides.0.blocks.3.chart']) assert.ok(paths.includes(path), `${path} is an editing target (${paths})`);
   for (const target of facts.targets) {
-    assert.deepEqual([target.role, target.tabindex, target.hiddenSelf, target.hiddenAncestor], ['button', '0', null, false], `${target.path} is a focusable button outside any hidden group`);
-    assert.ok(target.label?.startsWith('Edit '), `${target.path} has a name: ${target.label}`);
+    if (target.holdsTargets) assert.deepEqual([target.role, target.tabindex, target.handle, target.hiddenSelf, target.hiddenAncestor], ['group', null, '0', null, false], `${target.path} holds targets: a group whose handle is the focusable button`);
+    else assert.deepEqual([target.role, target.tabindex, target.hiddenSelf, target.hiddenAncestor], ['button', '0', null, false], `${target.path} is a focusable button outside any hidden group`);
+    assert.ok(target.holdsTargets ? target.label : target.label?.startsWith('Edit '), `${target.path} has a name: ${target.label}`);
   }
   // The browser exposes them: a button per target (the empty-alt picture and chart included), found by role and name.
   const snapshot = await page.locator('#canvas').ariaSnapshot();
@@ -95,10 +101,59 @@ try {
     await page.evaluate((slide) => cv.setSlide(slide), index);
     const mismatches = await page.evaluate(() => window.axe.run(document.querySelector('#canvas'), {runOnly: {type: 'rule', values: ['label-content-name-mismatch']}}).then((result) => result.violations.flatMap((violation) => violation.nodes.map((node) => node.target.join(' ') + ' ' + node.html.slice(0, 160)))));
     assert.deepEqual(mismatches, [], `${title}: every editing target's name contains its visible text`);
-    const names = await page.evaluate(() => [...document.querySelectorAll('#canvas [data-canvas-target]')].map((node) => node.getAttribute('aria-label')));
+    const names = await page.evaluate(() => [...document.querySelectorAll('#canvas [data-canvas-target]')].map((node) => (node.querySelector(':scope > .opf-selection[role="button"]') ?? node).getAttribute('aria-label')));
     assert.ok(names.length > 0 && names.every((name) => name.startsWith('Edit ')), `${title}: targets are named "Edit <field>: ..." (${names})`);
     if (index === 1) assert.ok(names.some((name) => name.includes('would no longer contain it.')), 'a long paragraph is named in full, not cut off');
   }
+  // axe nested-interactive: an interactive element must not contain interactive descendants. A target that holds other targets (a
+  // table with its cells, a code block with its filename, a list with its items, a timeline, a chart with its labels) is a named group
+  // that is not focusable; its selection handle (the first child) is the button and the tab stop, and the targets inside stay buttons.
+  const containerPaths = [[1, 'slides.1.blocks.3.table'], [1, 'slides.1.blocks.1.items'], [2, 'slides.2.blocks.0.code'], [2, 'slides.2.blocks.1.metric'], [2, 'slides.2.blocks.2.timeline'], [1, 'slides.1.blocks.2.quote'], [3, 'slides.3.blocks.0.chart'], [3, 'slides.3.blocks.1.chart']];
+  const containerStates = [];
+  for (const [index, title] of [[0, 'Media slide'], [1, 'Text slide'], [2, 'More text'], [3, 'Chart slide']]) {
+    await page.evaluate((slide) => cv.setSlide(slide), index);
+    const violations = await page.evaluate(() => window.axe.run(document.querySelector('#canvas'), {runOnly: {type: 'rule', values: ['nested-interactive', 'aria-hidden-focus', 'aria-allowed-role', 'button-name', 'aria-required-children']}}).then((result) => result.violations.flatMap((violation) => violation.nodes.map((node) => violation.id + ' ' + node.target.join(' ') + ' ' + node.html.slice(0, 120)))));
+    assert.deepEqual(violations, [], `${title}: no nested interactive control and no other canvas ARIA violation`);
+    const states = await page.evaluate(() => [...document.querySelectorAll('#canvas g[data-canvas-target]')].filter((node) => node.querySelector('[data-canvas-target]')).map((node) => {
+      const handle = node.querySelector(':scope > .opf-selection');
+      return {path: node.getAttribute('data-opf-path'), role: node.getAttribute('role'), tabindex: node.getAttribute('tabindex'), label: node.getAttribute('aria-label'),
+        handleRole: handle?.getAttribute('role'), handleTabindex: handle?.getAttribute('tabindex'), handleLabel: handle?.getAttribute('aria-label'),
+        buttonsInside: node.querySelectorAll('[role="button"]').length, interactiveAncestors: [...node.querySelectorAll('[role="button"]')].filter((button) => button.closest('[role="button"]') !== button).length};
+    }));
+    containerStates.push(...states);
+    for (const state of states) {
+      assert.deepEqual([state.role, state.tabindex], ['group', null], `${title}: ${state.path} holds targets, so it is a group and not focusable`);
+      assert.ok(state.label && !state.label.startsWith('Edit '), `${title}: ${state.path} group has a short name (${state.label})`);
+      assert.deepEqual([state.handleRole, state.handleTabindex], ['button', '0'], `${title}: ${state.path} handle is the button and the tab stop`);
+      assert.ok(state.handleLabel?.startsWith('Edit '), `${title}: ${state.path} handle is named (${state.handleLabel})`);
+      assert.equal(state.interactiveAncestors, 0, `${title}: ${state.path} no button inside a button`);
+    }
+  }
+  const containerSeen = new Set(containerStates.map((state) => state.path));
+  for (const [, path] of containerPaths) assert.ok(containerSeen.has(path), `${path} is a container with targets in the checked states (${[...containerSeen]})`);
+  // A container stays selectable by keyboard and by pointer: Tab reaches its handle then its children; Enter on the handle edits it;
+  // clicking the handle or the container's own drawing selects it and keeps focus on the handle.
+  await page.evaluate(() => cv.setSlide(1));
+  const table = '#canvas g[data-opf-path="slides.1.blocks.3.table"]';
+  await page.locator(`${table} > .opf-selection`).focus();
+  assert.equal(await page.evaluate(() => document.activeElement?.getAttribute('aria-label')?.startsWith('Edit table')), true, 'the table handle takes keyboard focus');
+  await page.keyboard.press('Tab');
+  assert.equal(await page.evaluate(() => document.activeElement?.getAttribute('data-opf-path')), 'slides.1.blocks.3.table.columns.0', 'Tab moves from the table handle to its first cell');
+  await page.keyboard.press('Shift+Tab');
+  assert.equal(await page.evaluate(() => document.activeElement?.classList.contains('opf-selection') && document.activeElement.parentNode.getAttribute('data-opf-path')), 'slides.1.blocks.3.table', 'Shift+Tab returns to the table handle');
+  await page.keyboard.press('Enter');
+  assert.equal(await page.evaluate(() => cv.editingPath), 'slides.1.blocks.3.table', 'Enter on the handle edits the container');
+  await page.evaluate(() => cv.cancel());
+  assert.equal(await page.evaluate(() => document.activeElement?.classList.contains('opf-selection') && document.activeElement.parentNode.getAttribute('data-opf-path')), 'slides.1.blocks.3.table', 'cancelling returns focus to the container handle');
+  await page.evaluate(() => { document.activeElement.blur(); });
+  await page.locator(`${table} > .opf-selection`).click({position: {x: 3, y: 3}});
+  assert.equal(await page.evaluate(() => document.querySelector('#canvas [data-canvas-selected]')?.getAttribute('data-opf-path')), 'slides.1.blocks.3.table', 'clicking the handle selects the container');
+  await page.evaluate(() => { document.activeElement.blur(); cv.select(null); });
+  await page.evaluate((selector) => document.querySelector(selector + ' > .opf-selection').dispatchEvent(new MouseEvent('click', {bubbles: true, detail: 1})), table);
+  assert.equal(await page.evaluate(() => document.querySelector('#canvas [data-canvas-selected]')?.getAttribute('data-opf-path')), 'slides.1.blocks.3.table', 'a click on the container selects it');
+  assert.equal(await page.evaluate(() => cv.reveal('slides.1.blocks.3.table.rows.0.0', {focus: true})), 'slides.1.blocks.3.table.rows.0.0', 'reveal selects the cell');
+  assert.equal(await page.evaluate(() => cv.reveal('slides.1.blocks.3.table', {focus: true})), 'slides.1.blocks.3.table');
+  assert.equal(await page.evaluate(() => document.activeElement?.classList.contains('opf-selection')), true, 'reveal with focus lands on the container handle');
   // RR-87: failed construction returns no handle, so every owned observer/global listener must already be released.
   await page.evaluate(() => cv.destroy());
   const cleanup = await page.evaluate(() => {
