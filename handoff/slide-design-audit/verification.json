@@ -1,0 +1,18 @@
+{
+  "valid": true,
+  "checked": {
+    "hashes": 2703,
+    "jsonFiles": 866,
+    "htmlFiles": 5,
+    "localReferences": 4691,
+    "embeddedJsonBlocks": 3
+  },
+  "reviewCounts": {
+    "proposals": 35,
+    "gallery": 28,
+    "columns": 34,
+    "auto": 20,
+    "stress": 21
+  },
+  "errors": []
+}

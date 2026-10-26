@@ -1,0 +1,226 @@
+{
+  "status": "All 35 proposals remain individually pending; export does not approve any item.",
+  "reviewMethod": "Discuss and approve the complete batch per layout or logical item, one item at a time.",
+  "sharedEngineSchemaDefaultApproval": false,
+  "auditBranchMergeApproval": false,
+  "releaseApproval": false,
+  "separatelyAuthorized": "Principles-only documentation merge to main; handled separately by the primary agent.",
+  "contentConstraints": [
+    "Text #6: preserve content; longer prose is rejected as a design fix.",
+    "List #7: consider whole title-and-body group centering while preserving proximity; avoid isolated-body centering."
+  ],
+  "currentStackRefreshRequired": true,
+  "overallDesignGoal": "Blocked awaiting individual proposal decisions; transport completion does not achieve the overall goal.",
+  "items": [
+    {
+      "id": "P01",
+      "title": "Text: center the compact heading and prose group",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve the sparse whole-group placement direction only. The current record is rejected as a blanket default; shared track-sizing work P27 remains a separate decision."
+    },
+    {
+      "id": "P02",
+      "title": "List: center the heading and list together",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve sparse whole-group placement only. The current record is rejected as a blanket default; P27 is separate. The five-row separator refinement protects empty-body behavior."
+    },
+    {
+      "id": "P03",
+      "title": "Closing: bring the next step beside the call to action",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Review this isolated closing-layout draft. No OPF engine changes."
+    },
+    {
+      "id": "P04",
+      "title": "Agenda: add a title-beside-list option",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Review addition of agenda-split only; do not replace agenda."
+    },
+    {
+      "id": "P05",
+      "title": "Statement: keep assertion and support together",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Discuss this target independently. The current candidate is rejected for release; shared nominal-size handling requires a specific engine decision."
+    },
+    {
+      "id": "P06",
+      "title": "Comparison: keep the verdict near its evidence",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Discuss a robust comparison fix. The present compact-row prototype is not approved for release; any changed shared track sizing is an engine decision."
+    },
+    {
+      "id": "P07",
+      "title": "FAQ: compact independent question/answer pairs",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve FAQ flow changes only. Do not silently parse newlines into question labels."
+    },
+    {
+      "id": "P08",
+      "title": "Pillars: express headings and explanations semantically",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Review this example/layout work item individually; no automatic newline parsing or shared typography change."
+    },
+    {
+      "id": "P09",
+      "title": "Process: distinguish step names from explanations",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Review this example/layout work item individually; no automatic newline parsing or shared typography change."
+    },
+    {
+      "id": "P10",
+      "title": "Team: distinguish names, roles and descriptions",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Review this example/layout work item individually; no automatic newline parsing or shared typography change."
+    },
+    {
+      "id": "P11",
+      "title": "Two-column: accept timelines in both regions",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Review the timeline-binding correction alone. No engine change."
+    },
+    {
+      "id": "P12",
+      "title": "Generic columns: preserve full pictures by default",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Review only the generic column layout image default; do not change global or auto image behavior."
+    },
+    {
+      "id": "P13",
+      "title": "Add a genuine generic three-column layout",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Review addition of the generic intent only. No implicit engine behavior changes."
+    },
+    {
+      "id": "P14",
+      "title": "Image: make the description match the actual fit",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve the catalog wording correction only, without changing the crop."
+    },
+    {
+      "id": "P15",
+      "title": "Balance heading lines without changing the words",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve content-preserving automatic heading balancing only. No rewriting or general font-size change."
+    },
+    {
+      "id": "P16",
+      "title": "Coordinate body and list type roles",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve body/list role work only. Tables, code, quotes, headings and placement are separate proposals."
+    },
+    {
+      "id": "P17",
+      "title": "Give quotations appropriate prominence",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve quote-role typography only; no changes to quotation content or all-body text."
+    },
+    {
+      "id": "P18",
+      "title": "Tune accent contrast by role and background",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Discuss role-aware contrast work independently. No blanket white default and no automatic recoloring of explicit themes."
+    },
+    {
+      "id": "P19",
+      "title": "Charts: prioritize readable labels and useful plot area",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve chart readability defaults only. Preserve data values and explicit author choices; any automatic axis-range change must be intentional, evaluated and disclosed."
+    },
+    {
+      "id": "P20",
+      "title": "Tables: readable evidence and content-aware columns",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve table defaults only. Do not remove data to meet a column count."
+    },
+    {
+      "id": "P21",
+      "title": "Code: readable source in proportionate panels",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve code rendering defaults only. No source editing or execution."
+    },
+    {
+      "id": "P22",
+      "title": "Timelines: preserve readable event detail",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve timeline readability work only; automatic region allocation remains P29/P32."
+    },
+    {
+      "id": "P23",
+      "title": "Video: useful landscape placeholders and labels",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve existing video-placeholder treatment only. No new media fields or playback claims."
+    },
+    {
+      "id": "P24",
+      "title": "Use consistent font context for validation and rendering",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve the font-context consistency investigation/fix only; do not change slide typography or replace font assets."
+    },
+    {
+      "id": "P25",
+      "title": "Support labels and descriptions without mandatory bullets",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Discuss marker-free semantic label/description support as its own OPF item. No new schema or renderer behavior is authorized until this scope is individually approved."
+    },
+    {
+      "id": "P26",
+      "title": "Preserve metric nominal size in compact regions",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve metric measurement/placement consistency in content-sized regions only. Statement replacement remains P05."
+    },
+    {
+      "id": "P27",
+      "title": "Give content-sized tracks enough room for dense content",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve content-sized track capacity only. Comparison template replacement remains P06; nested group stacking remains P31."
+    },
+    {
+      "id": "P28",
+      "title": "Qualify the catalog drafts before release",
+      "decision": "Tracking item; publication is a separate decision",
+      "approvalScope": "Track release preparation separately from visual design approvals. No package publication or production deployment is authorized by this card."
+    },
+    {
+      "id": "P35",
+      "title": "Metrics: align the title and subtitle on one axis",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve only the metrics layout heading-alignment change. No shared engine, palette, type-size or body-position changes."
+    },
+    {
+      "id": "P29",
+      "title": "Auto: allocate mixed widths from actual content needs",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve content-aware automatic width selection only. No default typography, crop or explicit layout width changes."
+    },
+    {
+      "id": "P30",
+      "title": "Auto: center an incomplete final row",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve incomplete-row automatic placement only; do not approve compact row heights or font changes."
+    },
+    {
+      "id": "P31",
+      "title": "Auto and groups: stack related children compactly",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve compact stacking within semantic groups only. No all-slide centering, shared body typography or general template-track sizing change."
+    },
+    {
+      "id": "P32",
+      "title": "Auto: score useful payload proportions",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve automatic payload-aware frame scoring only; no global media-fit or schema change."
+    },
+    {
+      "id": "P33",
+      "title": "Auto: preserve pictures unless cropping is explicit",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve automatic omitted-fit picture behavior only. Preserve explicit authored crops and gallery image-grid intent."
+    },
+    {
+      "id": "P34",
+      "title": "Auto: compose sparse slides as deliberate groups",
+      "decision": "Awaiting individual decision",
+      "approvalScope": "Approve automatic sparse-slide arrangement research only. No universal centering, title rewrite or typography change."
+    }
+  ]
+}

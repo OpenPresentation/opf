@@ -1,0 +1,21 @@
+{
+  "valid": true,
+  "verifierSha256": "27222263a459559a1c805cb8efc731fdab6c819d62752a11b09e306e7201ce2d",
+  "testedFinalExtractedVerifier": true,
+  "tests": [
+    {
+      "case": "missing HTML image",
+      "exitCode": 1,
+      "detectedBrokenReference": true,
+      "hashOnlyFailure": false
+    },
+    {
+      "case": "missing JSON image/data reference",
+      "exitCode": 1,
+      "detectedBrokenReference": true,
+      "hashOnlyFailure": false
+    }
+  ],
+  "cleanRestorationExitCode": 0,
+  "sourceEvidenceUntouched": true
+}
