@@ -51,7 +51,7 @@
     {
       "id": "pillars",
       "file": "pillars.svg",
-      "bytes": 2576
+      "bytes": 3527
     },
     {
       "id": "comparison",
@@ -61,7 +61,7 @@
     {
       "id": "process",
       "file": "process.svg",
-      "bytes": 2969
+      "bytes": 5329
     },
     {
       "id": "timeline",
@@ -71,7 +71,7 @@
     {
       "id": "faq",
       "file": "faq.svg",
-      "bytes": 1998
+      "bytes": 2643
     },
     {
       "id": "metrics",
@@ -136,7 +136,7 @@
     {
       "id": "team",
       "file": "team.svg",
-      "bytes": 3125
+      "bytes": 4388
     },
     {
       "id": "logos",
