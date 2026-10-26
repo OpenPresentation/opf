@@ -18,7 +18,7 @@ depends on the exact bytes the engine writes: a semver-compatible pptxgenjs-plus
 without an opf-pptx change, which the hash record rules out.
 
 Runtime dependencies follow the vendored file's imports: `jszip` 3.10.2 is replaced by `@node-projects/jszip` 4.3.0
-(the JSZip fork pptxgenjs-plus imports), plus `@rgrove/parse-xml` 4.2.3 (static import, OMML and XML validation) and
+(the JSZip fork pptxgenjs-plus imports), plus `@rgrove/parse-xml` 5.0.0 (static import, OMML and XML validation) and
 `pako` 3.0.2 (JSZip's deflate; also lazily imported by the engine for WOFF fonts, which opf-pptx never embeds). All are
 pinned exactly, like `jszip` was. opf-pptx's own reading and writing of packages stays on `fflate`: the vendored engine
 is the only user of a JSZip, so there are still exactly two ZIP implementations (the engine's and opf-pptx's), as
