@@ -20,7 +20,8 @@ assert.deepEqual(accepted.slides[0].quote,before.slides[0].quote);
 const item=resolvePresentation(accepted,options).slides[0].geometry.items.find(item=>item.field==='quote');
 assert.ok(item.quoteLayout.parts.every(part=>part.fit.fontSize>=24));
 assert.equal(item.text,item.quoteLayout.parts[0].fit);
-assert.match(toSvg(accepted,1,options),/Reviewer - Recorded interview/);
+// WI-4 (0.28.0): quotes are typographic, with curly marks and an en dash between attribution and source.
+assert.match(toSvg(accepted,1,options),/Reviewer \u2013 Recorded interview/);
 assert.equal(editor.paginateSlide(0,options).change,null);
 editor.undo();assert.deepEqual(editor.presentation,before);
 editor.redo();assert.deepEqual(editor.presentation,accepted);
@@ -33,5 +34,5 @@ const visible=text=>Array.isArray(text)?text.map(run=>typeof run==='string'?run:
 // opf-pptx with content topology (spec-gap P1) returns the root quote payload as slides.0.quote; earlier releases return blocks.
 const blocks=imported.slides[0].quote!==undefined?[{type:'quote',quote:imported.slides[0].quote}]:imported.slides[0].blocks;
 if(blocks.length===1&&blocks[0].type==='quote')assert.deepEqual(blocks[0].quote,accepted.slides[0].quote);
-else assert.deepEqual(blocks.map(block=>visible(block.text)),['"Retain the selected source."','Reviewer - Recorded interview']);
+else assert.deepEqual(blocks.map(block=>visible(block.text)),['\u201cRetain the selected source.\u201d','Reviewer \u2013 Recorded interview']);
 console.log('Packed quote editor passed: accepted one-page policy, source preservation, actual fonts, SVG/PPTX, undo/redo and editable native text reimport. An unchanged quote re-imports as its quote payload (FF-57); earlier opf-pptx releases return native text lines.');
