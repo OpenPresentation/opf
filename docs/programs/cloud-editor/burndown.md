@@ -4,7 +4,7 @@ Goal and boundary: [README.md](README.md). Status values: `todo`, `in-progress`,
 
 | ID | Item | Package | Acceptance | Status |
 | --- | --- | --- | --- | --- |
-| CE-01 | Precompiled validators by default on edge runtimes, with a `workerd` CI lane | core, CI | `validate` runs under `workerd`/`worker` conditions with no runtime code generation; CI runs it in workerd on the example decks | todo |
+| CE-01 | Precompiled validators by default on edge runtimes, with a `workerd` CI lane | core, CI | `validate` runs under `workerd`/`worker` conditions with no runtime code generation; CI runs it in workerd on the example decks | done | [opf#863](https://github.com/OpenPresentation/opf/pull/863). The `workerd`, `worker` and `edge-light` conditions load validators compiled at build time (`#schema-engine` in package.json `imports`); `import "@openpresentation/opf/precompiled"` installs them elsewhere. The lane is `packages/javascript/test/workerd.test.mjs` in the `core` job. The browser keeps Ajv: the precompiled build adds about 78 KB gzipped. pptx.dev drops its `ajv/dist/2020.js` alias after the next release |
 | CE-02 | Fonts from bytes; a rasterizer interface with a resvg-wasm adapter | render, pptx | `toPng`, `toPdf` and `toPptx` (with raster fallbacks) run in workerd on five example decks in CI | todo |
 | CE-03 | In-memory `convert` outside Node | core | `convert` works with bytes in workerd and browsers | todo |
 | CE-04 | `assignIds`, id-addressed paths, `documentHash`, `expectHash` | core, editor | Missing ids filled deterministically; a patch with a stale `expectHash` is rejected; the editor emits id paths | todo |
@@ -25,3 +25,4 @@ Goal and boundary: [README.md](README.md). Status values: `todo`, `in-progress`,
 
 - 2026-10-25: program opened; the first host is pptx.dev.
 - 2026-10-26: CE-06 in review: `createOpfEditor` (`@openpresentation/opf-editor/workspace`), `<OpfEditor>` and the hooks (`/react`), the `--opf-ui-*` token contract and the `theme` option are in the opf PR, and `examples/playground.js` is a thin user of them. openpresentation.org's playground runs on the SDK in a draft PR (Data-Advantage/openpresentation-site) that waits for the editor release. Done when both are merged and released.
+- 2026-10-25: CE-01 done in opf#863: precompiled validators by default under the `workerd`, `worker` and `edge-light` conditions, an explicit `@openpresentation/opf/precompiled` import for other hosts, and a `workerd` lane in the core job. Probes for CE-02: `toSvg` and `toPptx` run in workerd for a one-slide deck (`toPptx` with `nodejs_compat`); their bundles are 4.8 MB and 8.8 MB unminified.
