@@ -767,7 +767,7 @@
         "imageFit": {
           "type": "string",
           "enum": ["cover", "contain", "stretch"],
-          "description": "Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture centered in the frame, 'stretch' scales it to the frame exactly. Effective value: the slide's design, then the deck's design, then the theme's design.imageFit, then the layout record's design.imageFit, then 'cover'. Backgrounds set their own fit."
+          "description": "Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture in a frame of its own proportions, centered across and placed down the cell by the region's anchor (top by default), 'stretch' scales it to the frame exactly. Effective value: the slide's design, then the deck's design, then the theme's design.imageFit, then the layout record's design.imageFit, then 'cover'; a slide composed with no layout shows its pictures whole ('contain') instead. Backgrounds set their own fit."
         },
         "listBullet": {
           "type": "string",
@@ -2316,7 +2316,7 @@
         "fit": {
           "type": "string",
           "enum": ["cover", "contain", "stretch"],
-          "description": "Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture centered; 'stretch' scales it to the frame exactly. Default: the effective design.imageFit, else 'cover'."
+          "description": "Image payloads only. How the picture fills its frame: 'cover' fills it and crops what overflows around focus; 'contain' shows the whole picture, in a frame of its own proportions placed at the region's anchor (top by default); 'stretch' scales it to the frame exactly. Default: the effective design.imageFit, else 'cover' in a layout and 'contain' on a slide with no layout."
         },
         "focus": {
           "$ref": "#/$defs/ImageFocus",

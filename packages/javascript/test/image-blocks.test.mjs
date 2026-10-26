@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
-import { composeSlide, imageShape } from '../dist/composition.js';
+import { composeSlide, fitImage, imageShape } from '../dist/composition.js';
 import { resolveSlideContext } from '../dist/index.js';
 import { check, errorsOf } from './support/validation.mjs';
 
@@ -19,25 +19,26 @@ test('every image item carries its picture geometry; an untreated block draws in
   const item = imageOf(compose({}));
   assert.deepEqual(item.image.region, item.box);
   assert.deepEqual(item.image.box, item.box);
-  assert.equal(item.image.fit, 'cover');
+  assert.equal(item.image.fit, 'contain', 'automatic composition shows the whole picture (WI-3)');
   assert.deepEqual(item.image.focus, { x: 0.5, y: 0.5 });
   assert.equal(item.image.shape.preset, 'rect');
   for (const key of ['border', 'opacity', 'recolor', 'overlay', 'placement']) assert.equal(item.image[key], undefined, key);
   // Slide.image is shorthand for one image block, and region payloads carry the same geometry.
-  assert.equal(imageOf(composeSlide({ title: 'Heading', image: photo })).image.fit, 'cover');
+  assert.equal(imageOf(composeSlide({ title: 'Heading', image: photo })).image.fit, 'contain');
+  assert.equal(imageOf(compose({}, { layout: { name: 'Plain', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['image'], role: 'primary', flow: 'none' }] } })).image.fit, 'cover', 'a layout keeps the engine default');
   assert.ok(imageOf(composeSlide({ title: 'Heading', left: { image: photo, shape: 'circle' }, right: { text: 'Body' } })).image.shape.preset === 'ellipse');
   // The payload reports the block's own options for editors.
   assert.deepEqual(imageOf(compose({ fit: 'contain', shape: 'rounded' })).payload, { type: 'image', image: photo, fit: 'contain', shape: 'rounded' });
 });
 
-test('fit: the block, then design.imageFit of the slide, the deck and the layout, then cover', () => {
+test('fit: the block, then design.imageFit of the slide, the deck and the layout, then cover (contain with no layout)', () => {
   const fit = (block, slide, presentation, layout) => imageOf(compose(block, { ...(presentation ? { presentation: { design: presentation } } : {}), ...(layout ? { layout: { design: layout } } : {}) }, slide ? { design: slide } : {})).image.fit;
-  assert.equal(fit({}), 'cover');
+  assert.equal(fit({}), 'contain');
   assert.equal(fit({}, undefined, undefined, { imageFit: 'contain' }), 'contain');
   assert.equal(fit({}, undefined, { imageFit: 'stretch' }, { imageFit: 'contain' }), 'stretch');
   assert.equal(fit({}, { imageFit: 'cover' }, { imageFit: 'stretch' }), 'cover');
   assert.equal(fit({ fit: 'contain' }, { imageFit: 'cover' }), 'contain');
-  assert.equal(fit({ fit: 'nonsense' }), 'cover');
+  assert.equal(fit({ fit: 'nonsense' }), 'contain');
 });
 
 test('aspect ratio and circle shape the frame inside the region', () => {
@@ -163,7 +164,17 @@ test('frame treatments behind 0.14 headings (caption-overlay, rounded-card, wate
     const geometry = composeTreatment(slide, { title: undefined, subtitle: undefined, ...(inset ? {} : { composition: { padding: 0 } }) });
     const item = imageOf(geometry);
     const { position, region, headings, ...frame } = expected;
-    assert.deepEqual(frameOf(item.image), frame, id);
+    if (item.image.fit === 'contain' && item.image.picture) {
+      // WI-3: a contained picture's frame is the picture's own rectangle at the top of its cell; the picture and every treatment
+      // draw where 0.14 drew them, so the whole picture lands on the 0.14 frame's centered contain rectangle.
+      const whole = fitImage(frame.box, 'contain', item.image.picture.image.width / item.image.picture.image.height);
+      near(item.image.picture.image.width, whole.image.width, `${id} picture width`);
+      near(item.image.picture.image.x, whole.image.x, `${id} picture x`);
+      near(item.image.picture.image.y, whole.image.y, `${id} picture y`);
+      const { box, shape, ...rest } = frameOf(item.image), { box: _box, shape: _shape, ...expectedRest } = frame;
+      assert.deepEqual(rest, expectedRest, id);
+      assert.deepEqual(box, item.image.picture.image, `${id}: the frame is the picture`);
+    } else assert.deepEqual(frameOf(item.image), frame, id);
     // With its headings, the block composes below them like any content picture.
     const titled = imageOf(composeTreatment(slide));
     assert.ok(titled.image.box.y > 100, `${id} sits in the content area`);

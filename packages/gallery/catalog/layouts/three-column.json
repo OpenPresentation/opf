@@ -1,0 +1,81 @@
+{
+  "$schema": "https://openpresentation.org/schema/opf-layout/v2",
+  "id": "three-column",
+  "name": "Three columns",
+  "summary": "Three independent columns of any content.",
+  "tags": [
+    "Text"
+  ],
+  "design": {
+    "imageFit": "contain"
+  },
+  "direction": "column",
+  "regions": [
+    {
+      "name": "title"
+    },
+    {
+      "direction": "row",
+      "regions": [
+        {
+          "name": "first",
+          "accepts": [
+            "text",
+            "list",
+            "quote",
+            "code",
+            "image",
+            "video",
+            "chart",
+            "table",
+            "metric",
+            "timeline",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        {
+          "name": "second",
+          "accepts": [
+            "text",
+            "list",
+            "quote",
+            "code",
+            "image",
+            "video",
+            "chart",
+            "table",
+            "metric",
+            "timeline",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        },
+        {
+          "name": "third",
+          "accepts": [
+            "text",
+            "list",
+            "quote",
+            "code",
+            "image",
+            "video",
+            "chart",
+            "table",
+            "metric",
+            "timeline",
+            "group"
+          ],
+          "role": "primary",
+          "flow": "none"
+        }
+      ]
+    }
+  ],
+  "description": "Place three independent bodies of content beside each other. Keep equivalent comparisons parallel and use fewer columns when content needs more width. Pictures remain visible in full unless an explicit fit overrides the layout default.",
+  "preview": {
+    "vectorSrc": "https://www.pptx.gallery/layout-previews/three-column.svg"
+  }
+}

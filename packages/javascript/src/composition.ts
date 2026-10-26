@@ -669,7 +669,7 @@ export function fitImage(frame: LayoutBox, fit: ImageFit, aspect: number, focus:
     left: round((frame.x - image.x) / width), top: round((frame.y - image.y) / height),
     right: round((image.x + width - frame.x - frame.width) / width), bottom: round((image.y + height - frame.y - frame.height) / height),
   };
-  for (const key of ['left', 'top', 'right', 'bottom'] as const) if (Object.is(crop[key], -0)) crop[key] = 0;
+  for (const key of ['left', 'top', 'right', 'bottom'] as const) if (Math.abs(crop[key]) < 1e-9) crop[key] = 0;
   return { image: roundBox(image), crop };
 }
 
@@ -710,21 +710,40 @@ function composeOverlay(value: unknown, frame: LayoutBox, shape: ImageShape, pat
   return { path, color: overlay.color, opacity, ...(edge ? { edge } : {}), box, shape: edge ? imageShape('rectangle', box) : shape };
 }
 
+/** The offset of a block shorter than its cell by `spare`: 0 at the top, half at the middle, all of it at the bottom. */
+function anchoredOffset(spare: number, anchor: RegionAnchor): number {
+  return Math.max(0, anchor === 'middle' ? spare / 2 : anchor === 'bottom' ? spare : 0);
+}
+
+/** The largest box of `aspect` (width / height) that fits `cell`, centered across and placed by `anchor` along the height. */
+function containedBox(cell: LayoutBox, aspect: number, anchor: RegionAnchor): LayoutBox {
+  const width = Math.min(cell.width, cell.height * aspect), height = width / aspect;
+  return { x: cell.x + (cell.width - width) / 2, y: cell.y + anchoredOffset(cell.height - height, anchor), width, height };
+}
+
 /**
  * Picture geometry of one image block in its region (FA-22): the frame (the frame area, then the aspect ratio), the mask,
  * the line, opacity, recolor and overlay: the treatments 0.14 drew on the slide picture, applied to image blocks.
  */
-function composeImage(host: Record<string, any>, hostPath: string, region: LayoutBox, frameArea: LayoutBox, context: { fit?: ImageFit; scale: number; mirrorSide: (side: string) => string; diagnostics: LayoutDiagnostic[]; assets: unknown; placement?: ComposedPlacement }): ComposedImage {
+function composeImage(host: Record<string, any>, hostPath: string, region: LayoutBox, frameArea: LayoutBox, context: { fit?: ImageFit; scale: number; mirrorSide: (side: string) => string; diagnostics: LayoutDiagnostic[]; assets: unknown; placement?: ComposedPlacement; anchor?: RegionAnchor }): ComposedImage {
   const kindName: ImageShape['kind'] = Object.hasOwn(IMAGE_SHAPES, host.shape) ? host.shape : 'rectangle';
   const { scale } = context;
+  const fit: ImageFit = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : context.fit ?? 'cover';
+  const pictureAspect = intrinsicImageAspect(host.image, context.assets);
   let box: LayoutBox = { ...frameArea };
   const aspect = kindName === 'circle' ? 1 : finite(host.aspectRatio, Number.MIN_VALUE, 10);
   if (aspect) {
     const frameWidth = Math.min(box.width, box.height * aspect), frameHeight = frameWidth / aspect;
     box = { x: box.x + (box.width - frameWidth) / 2, y: box.y + (box.height - frameHeight) / 2, width: frameWidth, height: frameHeight };
+  } else if (context.anchor && fit === 'contain' && pictureAspect) {
+    // WI-3 (P12): a contained picture is the whole picture, so its frame is the picture's own shape inside the cell.
+    const frameWidth = Math.min(box.width, box.height * pictureAspect);
+    box = { x: box.x + (box.width - frameWidth) / 2, y: box.y, width: frameWidth, height: frameWidth / pictureAspect };
   }
+  // ... and it sits at the region's anchor (top, middle or bottom of the cell) instead of always centered. A frame the block sets
+  // with aspectRatio or a circle shape stays centered, as the schema says.
+  if (context.anchor && fit === 'contain' && !aspect && box.height < frameArea.height) box.y = frameArea.y + anchoredOffset(frameArea.height - box.height, context.anchor);
   box = roundBox(box);
-  const fit: ImageFit = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : context.fit ?? 'cover';
   const focus = imageFocus(host.focus);
   const shape = imageShape(kindName, box, finite(host.cornerRadius, 0, 0.5));
   const result: ComposedImage = { region: roundBox(region), box, fit, focus, shape };
@@ -737,7 +756,6 @@ function composeImage(host: Record<string, any>, hostPath: string, region: Layou
   const overlay = composeOverlay(host.overlay, box, shape, `${hostPath}.overlay`, context.mirrorSide, context.diagnostics);
   if (overlay) result.overlay = overlay;
   if (context.placement) result.placement = context.placement;
-  const pictureAspect = intrinsicImageAspect(host.image, context.assets);
   if (pictureAspect) result.picture = fitImage(box, fit, pictureAspect, focus);
   return result;
 }
@@ -2638,7 +2656,9 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const backgroundImage = resolveBackgroundImage(slide, options.presentation, options.themeBackground, width, height, path, mirrorSide, imageDiagnostics);
   const regions = Object.keys(slide).filter(key => regionParts(key)).sort();
   const assets = record(options.presentation).assets;
-  const imageContext = (placement?: ComposedPlacement) => ({ fit: hints.imageFit, scale, mirrorSide, diagnostics: imageDiagnostics, assets, ...(placement ? { placement } : {}) });
+  // WI-3 (P33): a slide composed with no layout shows its pictures whole unless a design or the block sets a fit: the default
+  // fit of automatic composition is `contain`, a placed (edge) picture and every layout keep the engine default `cover`.
+  const imageContext = (placement?: ComposedPlacement, anchor?: RegionAnchor) => ({ fit: hints.imageFit ?? (!placement && autoComposition() ? 'contain' as const : undefined), scale, mirrorSide, diagnostics: imageDiagnostics, assets, ...(placement ? { placement } : {}), ...(anchor ? { anchor } : {}) });
   // FA-22 placement. The top-level image nodes are the image blocks of `blocks` (not groups) or the root image; promoted
   // regions have none. The n-th takes its own placement, else the n-th layout image placeholder's (FA-26: image regions are
   // counted in reading order through placeholder groups, and only a top-level one carries a placement). Each band takes its
@@ -2695,6 +2715,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // OPF 0.19: a template slide with promoted regions composes them as in 0.18 (headings on top, regions below); the
   // template's body regions are not used. Any other template slide composes through its regions.
   const useTemplate = template !== undefined && !regions.length;
+  const autoComposition = (): boolean => !hasLayoutRecord && !regions.length;
   // A template slide with no body content is a cover: its regions collapse and the template places the headings.
   const isCover = !hasBodyPayload && (useTemplate || !hasLayoutRecord);
   coverGroup = isCover;
@@ -2821,13 +2842,22 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   });
   // RR-34: a captioned leaf is scored and placed on the media box that remains after its caption band.
   const captionOf = (node: Pending, box: LayoutBox) => node.caption !== undefined && node.captionPath ? layoutCaption(node.caption, box, node.captionPath, annotationOptions) : undefined;
+  // The proportions of a picture an automatic composition shows whole (fit contain, no frame shape of its own) when core can read them.
+  const wholePictureAspect = (node: Pending): number | undefined => {
+    const host = node.host;
+    if (node.field !== 'image' || !host || !autoComposition() || host.aspectRatio !== undefined || host.shape === 'circle') return undefined;
+    const fit = (IMAGE_FITS as readonly unknown[]).includes(host.fit) ? host.fit : hints.imageFit ?? 'contain';
+    return fit === 'contain' ? intrinsicImageAspect(host.image, assets) : undefined;
+  };
   const leafScore = (node: Pending, box: LayoutBox, settings: Composition, penalties?: CompositionPenalties): number => {
     box = payloadBox(box);
     const captioned = captionOf(node, box);
     if (captioned) box = captioned.mediaBox;
     const text = contentText(node.field, node.value);
-    let score = Math.abs(Math.log(box.width / box.height / 1.6)) + (captioned?.overflow ? 1000 : 0);
-    if (penalties) { penalties.cellProportions += Math.abs(Math.log(box.width / box.height / 1.6)); if (captioned?.overflow) penalties.textOverflow += 1000; }
+    // WI-3 (P32): a picture shown whole is best in a cell of its own proportions; every other block is scored against 16:10.
+    const proportions = Math.abs(Math.log(box.width / box.height / (wholePictureAspect(node) ?? 1.6)));
+    let score = proportions + (captioned?.overflow ? 1000 : 0);
+    if (penalties) { penalties.cellProportions += proportions; if (captioned?.overflow) penalties.textOverflow += 1000; }
     if (node.field === 'quote' || node.field === 'code' || node.field === 'metric' || node.field === 'timeline') {
       const internal = node.field === 'quote' ? measureQuote(node,box,settings) : node.field === 'code' ? measureCode(node,box,settings) : node.field === 'metric' ? measureMetric(node,box,settings) : measureTimeline(node,box,settings);
       const reduction = internal.parts.reduce((sum,part)=>sum+(part.fit ? (part.requestedFontSize-part.fit.fontSize)/scale : 0),0);
@@ -2889,6 +2919,41 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     let y = area.y + Math.max(0, anchor === 'middle' ? (area.height - used) / 2 : anchor === 'bottom' ? area.height - used : 0);
     return heights.map(size => { const box = { x: area.x, y, width: area.width, height: size }; y += size + between; return box; });
   };
+  // WI-3, automatic composition only: the widths of a single row of two or three blocks follow what the blocks need.
+  //  - P32: a picture shown whole in a cell wider than its proportions allow takes only the width its frame needs; the width it
+  //    does not use goes to the blocks beside it (a portrait picture no longer leaves a band).
+  //  - P29: two text blocks whose measured demand differs by at least 2.5x split the row 55:45 to 70:30 in favor of the longer one,
+  //    when that shortens the longer block and adds the shorter at most one line; peers keep equal widths.
+  // Explicit weights, a layout and every other row keep the equal tracks.
+  const WEIGHTED_DEMAND_RATIO = 2.5, WEIGHTED_SHARES = [.55, .6, .65, .7];
+  const autoRowWeights = (nodes: Pending[], count: number, cols: number, area: LayoutBox, rowGap: number, settings: Composition): number[] | undefined => {
+    if (!autoComposition() || settings.weights?.length || count < 2 || count > 3 || cols !== count || nodes.length !== count) return undefined;
+    const equal = gridGeometry(count, area, cols, rowGap, [], false).boxes;
+    const wholeWidths = nodes.map((node, index) => {
+      const aspect = node.caption === undefined ? wholePictureAspect(node) : undefined;
+      return aspect === undefined ? undefined : Math.min(equal[index]!.width, equal[index]!.height * aspect);
+    });
+    const media = wholeWidths.flatMap((width, index) => width !== undefined && width < equal[index]!.width - scale ? [index] : []);
+    const others = nodes.flatMap((_, index) => wholeWidths[index] === undefined ? [index] : []);
+    if (media.length && others.length) {
+      const freed = media.reduce((sum, index) => sum + equal[index]!.width - wholeWidths[index]!, 0);
+      return nodes.map((_, index) => media.includes(index) ? wholeWidths[index]! : equal[index]!.width + freed / others.length);
+    }
+    const prose = (node: Pending) => !node.children && node.caption === undefined && (node.field === 'text' || node.field === 'items' || node.field === 'bullets');
+    if (count !== 2 || !nodes.every(prose)) return undefined;
+    const need = (node: Pending, width: number) => naturalHeight(node, width, hasCards, undefined, settings);
+    const heights = nodes.map((node, index) => need(node, equal[index]!.width));
+    const long = heights[0]! >= heights[1]! ? 0 : 1, short = 1 - long;
+    if (heights[long]! < WEIGHTED_DEMAND_RATIO * heights[short]!) return undefined;
+    const total = equal[0]!.width + equal[1]!.width, line = contentNominalSize(nodes[short]!.field) * scale * 1.3;
+    let best: { share: number; height: number } | undefined;
+    for (const share of WEIGHTED_SHARES) {
+      const longHeight = need(nodes[long]!, total * share), shortHeight = need(nodes[short]!, total * (1 - share));
+      if (shortHeight > heights[short]! + line || longHeight > heights[long]! - line * .5) continue;
+      if (!best || longHeight < best.height - 1e-6) best = { share, height: longHeight };
+    }
+    return best ? (long === 0 ? [best.share, 1 - best.share] : [1 - best.share, best.share]) : undefined;
+  };
   const arrange = (nodes: Pending[], area: LayoutBox, settings: Composition, reserved = 0, gapOverride?: number, containerPath = path, recorded = true): void => {
     const count = Math.max(nodes.length, reserved);
     if (!count) return;
@@ -2915,7 +2980,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     if (recorded) decisions?.push({path:containerPath,mode:hasRegions?'regions':mode,
       reason:hasRegions?'promoted-regions':settings === rootSettings && chartPrimary ? 'chart-primary' : mode==='auto'?'lowest-score':'configured-mode',
       ...(hasRegions?{}:{selectedColumns:cols}),candidates:candidates ?? []});
-    const grid = gridGeometry(count, area, cols, actualGap, settings.weights ?? [], mode === "column");
+    const grid = gridGeometry(count, area, cols, actualGap, (mode === 'auto' && !hasRegions ? autoRowWeights(nodes, count, cols, area, actualGap, settings) : undefined) ?? settings.weights ?? [], mode === "column");
     if (cols === 1 && stacks) {
       grid.boxes = stackedBoxes(nodes, area, actualGap, settings);
       grid.rows = grid.boxes.map(box => ({ offset: box.y - area.y, size: box.height }));
@@ -2944,7 +3009,17 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const valueAxis = chartValueAxis(node.value, resolved, {width: box.width, height: box.height, scale, minFontSize: settings.minFontSize});
     return valueAxis ? {valueAxis} : undefined;
   };
-  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number): void => {
+  // WI-3: a contained picture and a video frame sit at the region's anchor inside the cell the flow gave them (top by default),
+  // and the caption band closes up under a top-anchored frame.
+  const VIDEO_ASPECT = 16 / 9, CHART_MAX_ASPECT_RATIO = 3 / 4;
+  const settleCaption = (caption: ComposedCaption, frame: LayoutBox, anchor: RegionAnchor): void => {
+    if (caption.position === 'above' || anchor !== 'top') return;
+    const target = round(frame.y + frame.height + caption.fontSize * .4), dy = target - caption.box.y;
+    if (dy >= -.01) return;
+    caption.box = { ...caption.box, y: target };
+    caption.fit = translateTextFit(caption.fit, dy);
+  };
+  const placeNode = (node: Pending, box: LayoutBox, settings: Composition, cards = hasCards, listColumns?: 'auto' | 1, metricReferenceHeight?: number, anchor: RegionAnchor = 'top'): void => {
     if (node.children) {
       const own = inheritedSettings(settings, node.composition), inner = inset(box, own);
       if (!node.synthetic) groups.push({ path: node.path, box, contentBox: inner, composition: own });
@@ -2964,7 +3039,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const internal = quoteLayout ?? codeLayout ?? metricLayout ?? timelineLayout, body = internal?.parts.find(part=>part.role==='body'||part.role==='value');
     const columns = textValue !== undefined && !internal ? listColumnsFor(node, box, settings, listColumns) : undefined;
     const text = internal ? body?.fit : columns ? (columns.length > 1 ? mergeListColumns(columns) : columns[0]!.text) : textValue !== undefined ? fitContent(node.field,node.value,textValue,box,contentNominalSize(node.field)*scale,snapFontSizeUp((settings.minFontSize??16)*scale),node.path,node.payload.numbering) : undefined;
-    const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, imageContext()) : undefined;
+    // WI-3 (P23): a video draws in a 16:9 frame, the largest that fits its cell, placed by the region's anchor. In automatic
+    // composition (no layout) a chart is at most 4:3, so a tall cell does not stretch it (P32).
+    if (node.field === 'video') box = roundBox(containedBox(box, VIDEO_ASPECT, anchor));
+    else if (node.field === 'chart' && !templateCell && modeFor(settings) === 'auto' && box.height > box.width * CHART_MAX_ASPECT_RATIO) box = roundBox({ ...box, height: box.width * CHART_MAX_ASPECT_RATIO });
+    const image = node.field === 'image' ? composeImage(node.host ?? {}, node.hostPath ?? node.path, box, box, imageContext(undefined, anchor)) : undefined;
+    if (caption) settleCaption(caption, image?.box ?? box, anchor);
     const chart = node.field === 'chart' ? composeChart(node, box, settings) : undefined;
     items.push({ path: node.path, field: node.field, type: node.type, value: node.value, payload: node.payload, box:internal?acceptedBox(box):box, ...(image ? {image} : {}), ...(chart ? {chart} : {}),
       ...(frameBox ? {frameBox} : {}),
@@ -3284,7 +3364,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
         const rowOf = (index: number) => { let row = 0; for (let seen = shape.perRow[0] ?? 0; index >= seen; seen += shape.perRow[++row] ?? Infinity); return row; };
         units.forEach((unit, index) => {
           const first = items.length;
-          placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' || stacked ? undefined : referenceHeights[index]);
+          placeNode(unit, boxes[index]!, settings, cards, region.listColumns, region.anchor === 'top' || stacked ? undefined : referenceHeights[index], region.anchor);
           if (!unit.children) { rowItems[rowOf(index)]?.push(...range(first, items.length)); leafItems.push(...range(first, items.length)); }
         });
         if (arrangement !== 'column') peerSets.push(...rowItems.filter((_, row) => (shape.perRow[row] ?? 0) > 1));

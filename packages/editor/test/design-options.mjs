@@ -136,8 +136,9 @@ for (const entry of cases) {
   presentation.slides[2].blocks[1] = { image: "asset:photo" };
   const editor = session(presentation);
   const before = svg(editor.presentation, 2);
-  setDesignOption(editor, "imageFit", "contain", { slideIndex: 2 });
-  assert.equal(editor.get("slides.2.design.imageFit"), "contain");
+  // A slide with no layout shows its picture whole by default (WI-3), so cover is the fit that changes the preview.
+  setDesignOption(editor, "imageFit", "cover", { slideIndex: 2 });
+  assert.equal(editor.get("slides.2.design.imageFit"), "cover");
   assert.notEqual(svg(editor.presentation, 2), before, "imageFit: the preview changes");
 }
 

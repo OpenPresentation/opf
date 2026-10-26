@@ -6,7 +6,7 @@ const TITLES = {
   cover: 'A smaller pilot. A clearer decision.', section: 'Test before scaling',
   statement: 'Start small enough to learn quickly', closing: 'Agree the pilot team and start date',
   text: 'Learn before scaling', list: 'Make the next step explicit',
-  'two-column': 'Opportunity and constraints',
+  'two-column': 'Opportunity and constraints', 'three-column': 'Scope, evidence and the next decision',
   quote: 'A shared view makes decisions easier', metrics: 'Pilot outcomes in three measures',
   chart: 'Completion rose through the pilot', 'chart-beside': 'The largest gain came in week four',
   table: 'Compare outcomes on consistent measures', 'table-beside': 'Team B needs targeted support',

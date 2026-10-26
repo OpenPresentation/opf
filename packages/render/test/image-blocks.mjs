@@ -34,12 +34,12 @@ const element = (svg, name, filter = '') => [...svg.matchAll(new RegExp(`<${name
 const imageTag = svg => element(svg, 'image');
 let checked = 0;
 
-// Fit: cover (the default), contain and stretch draw in the frame (item.image.box) with the matching preserveAspectRatio.
-for (const [fit, aspect] of [[undefined, 'xMidYMid slice'], ['cover', 'xMidYMid slice'], ['contain', 'xMidYMid meet'], ['stretch', 'none']]) {
+// Fit: contain (the default with no layout, WI-3), cover and stretch draw in the frame (item.image.box) with the matching preserveAspectRatio.
+for (const [fit, aspect] of [[undefined, 'xMidYMid meet'], ['cover', 'xMidYMid slice'], ['contain', 'xMidYMid meet'], ['stretch', 'none']]) {
   const deck = deckWith({ image: split, ...(fit ? { fit } : {}) });
   const item = imageOf(deck), svg = toSvg(deck, 1, { trace: true });
   const tag = imageTag(svg);
-  assert.equal(item.image.fit, fit ?? 'cover');
+  assert.equal(item.image.fit, fit ?? 'contain');
   assert.deepEqual(['x', 'y', 'width', 'height'].map(name => Number(attr(tag, name))), ['x', 'y', 'width', 'height'].map(key => item.image.box[key]), `${fit}: frame`);
   assert.equal(attr(tag, 'preserveAspectRatio'), aspect, `${fit}: preserveAspectRatio`);
   assert.equal(attr(tag, 'data-opf-path'), item.path);
@@ -51,7 +51,7 @@ checked++;
 
 // Focus: a cover crop away from the center places the whole picture by core's fit math and clips it to the frame.
 {
-  const deck = deckWith({ image: split, focus: { x: 0, y: 0.5 } });
+  const deck = deckWith({ image: split, fit: 'cover', focus: { x: 0, y: 0.5 } });
   const item = imageOf(deck), svg = toSvg(deck, 1);
   const frame = item.image.box, placement = item.image.picture ?? fitImage(frame, 'cover', 2, { x: 0, y: 0.5 });
   const viewport = element(svg, 'svg', 'overflow="hidden"');
@@ -80,7 +80,7 @@ checked++;
 // A picture the host's imageResolver supplies: core cannot read it at compose time (no item.image.picture), so the renderer
 // places it with core's intrinsicImageAspect of the resolved source and the same fit math.
 {
-  const deck = deckWith({ image: './split.png', focus: { x: 0, y: 0.5 } });
+  const deck = deckWith({ image: './split.png', fit: 'cover', focus: { x: 0, y: 0.5 } });
   const item = imageOf(deck);
   assert.equal(item.image.picture, undefined, 'core reads no aspect from a relative path');
   const tag = imageTag(toSvg(deck, 1, { imageResolver: src => src === './split.png' ? split : undefined }));

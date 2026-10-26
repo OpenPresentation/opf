@@ -16,8 +16,8 @@ for (const [name,width,height] of fixtures) {
  assert.deepEqual(rasterDimensions(bytes),{width,height},name);
  const mime=name.endsWith('.jpg')?'jpeg':name.split('.').at(-1), uri=`data:image/${mime};base64,${bytes.toString('base64')}`;
  for (const [deckMode,slideMode] of [[undefined,undefined],['contain',undefined],['cover',undefined],['cover','contain'],['contain','cover']]) {
-  // 0.15: design.imageFit (cover, contain, stretch) is the default fit of image blocks; cover when nothing sets it.
-  const mode=slideMode??deckMode??'cover';
+  // 0.15: design.imageFit (cover, contain, stretch) is the default fit of image blocks; contain with no layout when nothing sets it (WI-3).
+  const mode=slideMode??deckMode??'contain';
   const deck={design:{...(deckMode?{imageFit:deckMode}:{})},slides:[{design:slideMode?{imageFit:slideMode}:{},image:{src:uri,alt:'Four quadrants and a circle'}}]};
   const svg=toSvg(deck, 1,{trace:true});
   const image=find(parser.parse(svg),'image')[0];

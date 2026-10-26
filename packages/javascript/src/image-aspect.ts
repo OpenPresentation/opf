@@ -46,17 +46,39 @@ const u16le = (b: Uint8Array, i: number) => at(b, i) | (at(b, i + 1) << 8);
 const u24le = (b: Uint8Array, i: number) => at(b, i) | (at(b, i + 1) << 8) | (at(b, i + 2) << 16);
 const ascii = (b: Uint8Array, i: number, n: number) => String.fromCharCode(...b.subarray(i, i + n));
 
+/** The EXIF Orientation (1 to 8) of an APP1 segment whose payload runs from `start` to `end`, when it has one. */
+function exifOrientation(b: Uint8Array, start: number, end: number): number | undefined {
+  if (end > b.length || ascii(b, start, 4) !== 'Exif' || at(b, start + 4) !== 0) return undefined;
+  const tiff = start + 6, little = ascii(b, tiff, 2) === 'II';
+  if (!little && ascii(b, tiff, 2) !== 'MM') return undefined;
+  const u16 = (index: number) => little ? u16le(b, index) : u16be(b, index);
+  const u32 = (index: number) => little ? (u16le(b, index) | (u16le(b, index + 2) << 16)) >>> 0 : u32be(b, index);
+  const directory = tiff + u32(tiff + 4);
+  if (directory + 2 > end) return undefined;
+  for (let entry = 0, count = u16(directory); entry < count && directory + 2 + entry * 12 + 12 <= end; entry++) {
+    const at12 = directory + 2 + entry * 12;
+    if (u16(at12) === 0x0112) { const value = u16(at12 + 8); return value >= 1 && value <= 8 ? value : undefined; }
+  }
+  return undefined;
+}
+
 function rasterDimensions(b: Uint8Array): Dimensions | undefined {
   if (b.length >= 24 && u32be(b, 0) === 0x89504e47 && ascii(b, 12, 4) === 'IHDR') return {width: u32be(b, 16), height: u32be(b, 20)};
   if (b.length >= 10 && (ascii(b, 0, 6) === 'GIF87a' || ascii(b, 0, 6) === 'GIF89a')) return {width: u16le(b, 6), height: u16le(b, 8)};
   if (b.length >= 4 && b[0] === 0xff && b[1] === 0xd8) {
-    let i = 2;
+    let i = 2, orientation = 1;
     while (i + 9 < b.length) {
       if (at(b, i) !== 0xff) { i++; continue; }
       const marker = at(b, i + 1);
       if (marker === 0xff) { i++; continue; }
       if (marker === 0xd8 || marker === 0x01 || (marker >= 0xd0 && marker <= 0xd7)) { i += 2; continue; }
-      if (marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc) return {height: u16be(b, i + 5), width: u16be(b, i + 7)};
+      if (marker === 0xe1) orientation = exifOrientation(b, i + 4, i + 2 + u16be(b, i + 2)) ?? orientation;
+      if (marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc) {
+        const height = u16be(b, i + 5), width = u16be(b, i + 7);
+        // EXIF orientations 5 to 8 turn the picture a quarter: the proportions shown are the stored ones swapped (WI-3: a contained
+        // picture's frame follows them).
+        return orientation >= 5 ? {width: height, height: width} : {width, height};
+      }
       i += 2 + u16be(b, i + 2);
     }
     return undefined;

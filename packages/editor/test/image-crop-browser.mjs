@@ -26,7 +26,8 @@ try {
   });
   const source = {
     name: 'Crop fixture',
-    design: { theme: 'classic', fontScheme: 'roboto' },
+    // Cropping is for pictures that fill their frame; with no layout a picture is shown whole by default (WI-3), so the fixture asks for cover.
+    design: { theme: 'classic', fontScheme: 'roboto', imageFit: 'cover' },
     assets: { photo: { src: png, alt: 'A red and blue picture', title: 'photo.png', mediaType: 'image/png' } },
     slides: [
       { id: 'block', title: 'Block picture', blocks: [{ image: { src: 'asset:photo', alt: 'A red and blue picture' } }, { text: 'Beside the picture' }] },

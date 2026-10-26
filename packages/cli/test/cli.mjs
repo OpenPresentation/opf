@@ -28,7 +28,7 @@ try {
   assert.equal(run(['validate','-'],{input:'{"slides":"bad"}',status:1}).json.valid,false);
   // The CLI registers the default catalog (OPF 0.15, FA-21): the full gallery catalog, so every layout id it lists resolves.
   // (Read from the CLI itself: this file also runs, copied, against an installed CLI with no checkout beside it.)
-  {const layouts=run(['catalog','layouts']).json.map(record=>record.id);assert.equal(layouts.length,run(['catalogs']).json.find(kind=>kind.kind==='layouts').count);assert.equal(layouts.length,28,'the full v2 gallery catalog');
+  {const layouts=run(['catalog','layouts']).json.map(record=>record.id);assert.equal(layouts.length,run(['catalogs']).json.find(kind=>kind.kind==='layouts').count);assert.equal(layouts.length,29,'the full v2 gallery catalog');
    for(const id of ['cover','two-column','process','comparison','dashboard','statement'])assert.ok(layouts.includes(id),id);
    const legacy=run(['validate','-','--only','format,references'],{input:JSON.stringify({name:'Template layouts',slides:layouts.map((layout,index)=>({title:`Slide ${index+1}`,layout}))})}).json;
    assert.equal(legacy.valid,true);assert.deepEqual(legacy.findings,[]);

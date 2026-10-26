@@ -2,7 +2,7 @@
 // Every template a slide uses becomes one p:sldLayout with a placeholder per area of the empty layout (composeLayoutAreas),
 // tagged OPF_LAYOUT_V1; slides relate to it; the lone picture, chart or table of a `none` region binds to its placeholder.
 // Import maps the layout back (a slide added in PowerPoint, Change Layout) and pins a block typed into a region placeholder
-// where plain binding would move it. The 28 built-in templates round-trip deep-equal, embedded and from a registered catalog.
+// where plain binding would move it. The 29 built-in templates round-trip deep-equal, embedded and from a registered catalog.
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {isDeepStrictEqual} from 'node:util';
@@ -17,10 +17,10 @@ const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships
 const parser = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false});
 const ordered = new XMLParser({ignoreAttributes: false, attributeNamePrefix: '', parseTagValue: false, trimValues: false, preserveOrder: true});
 const FIXED = {seed: 1, timestamp: '2026-01-01T00:00:00Z', date: '2026-10-10'};
-// The 28 built-in layouts of the default Gallery catalog.
+// The 29 built-in layouts of the default Gallery catalog.
 const templates = defaultCatalog.layouts;
-assert.equal(Object.keys(templates).length, 28);
-// A registered catalog of the 28, as gallery 2.0.0 will be: bare ids resolve to it first.
+assert.equal(Object.keys(templates).length, 29);
+// A registered catalog of the 29, as gallery 2.0.0 will be: bare ids resolve to it first.
 const gallery2 = Object.freeze({source: 'pkg:@openpresentation/gallery@2', layouts: templates});
 const png = async name => `data:image/png;base64,${Buffer.from(await readFile(new URL(`./fixtures/images/${name}`, import.meta.url))).toString('base64')}`;
 const wide = await png('wide.png'), square = await png('square.png');
@@ -137,17 +137,17 @@ function checkOrder(xml, label) {
 }
 let checked = 0;
 
-// ---- 1. The 28 templates, each on a filled slide and on an empty one, embedded under catalogs.custom.layouts.
+// ---- 1. The 29 templates, each on a filled slide and on an empty one, embedded under catalogs.custom.layouts.
 const embedded = {name: 'Templates', catalogs: {custom: {layouts: templates}}, slides: [...contentSlides(), ...emptySlides()]};
 const {bytes, entries, diagnostics} = await exportDeck(embedded);
 assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.code)), [], 'No layout or region diagnostics.');
 {
   const layouts = layoutParts(entries);
-  assert.equal(layouts.length, 29, 'The master layout and one slide layout per template.');
+  assert.equal(layouts.length, 30, 'The master layout and one slide layout per template.');
   assert.equal(layoutTag(entries, layouts[0]), undefined, 'The master\'s own layout stays untagged (automatic slides and 0.18 records).');
   const master = 'ppt/slideMasters/slideMaster1.xml', masterXml = text(entries, master);
   const listed = [...masterXml.matchAll(/<p:sldLayoutId id="(\d+)" r:id="([^"]+)"\/>/g)];
-  assert.equal(listed.length, 29);
+  assert.equal(listed.length, 30);
   const ids = [...text(entries, 'ppt/presentation.xml').matchAll(/<p:sldMasterId id="(\d+)"/g), ...listed].map(match => Number(match[1]));
   assert.equal(new Set(ids).size, ids.length, 'Master and layout ids are unique.');
   assert.ok(listed.every(match => Number(match[1]) >= 2147483648), 'Layout ids are in the reserved range.');
@@ -207,7 +207,7 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
     assert.ok(checkOrder(xml, path) > 10, `${path} is in schema order`);
   }
   assert.deepEqual([...byId.keys()], Object.keys(templates).sort(), 'Every embedded template has its layout, by id.');
-  // Change Layout pairs placeholders by idx: across all 28 layouts an idx always names one placeholder kind.
+  // Change Layout pairs placeholders by idx: across all 29 layouts an idx always names one placeholder kind.
   const kinds = new Map();
   for (const path of layouts.slice(1)) for (const shape of placeholders(text(entries, path)).filter(item => Number(item.idx) >= 100)) {
     assert.equal(kinds.get(shape.idx) ?? shape.type, shape.type, `idx ${shape.idx} is one kind in every layout`);
@@ -242,7 +242,7 @@ assert.deepEqual(diagnostics.filter(item => /layout|region|packaging/.test(item.
 }
 {
   const {imported} = await read(bytes);
-  assert.ok(isDeepStrictEqual(imported, embedded), 'The embedded 28 templates round-trip deep-equal.');
+  assert.ok(isDeepStrictEqual(imported, embedded), 'The embedded 29 templates round-trip deep-equal.');
   checked++;
 }
 
@@ -458,9 +458,9 @@ const roadmap = {name: 'Roadmap review', catalogs: {custom: {layouts: {'roadmap-
   assert.match(text(parts, 'ppt/slides/slide3.xml'), /<p:ph type="title"\/>/);
   // Registering v2 templates exposes the templates and OPF auto on automatic slides. This is the intentional 0.19 contract.
   const registered = await exportDeck(deck, {catalogs: [gallery2, defaultCatalog]});
-  assert.equal(layoutParts(registered.entries).length, 30);
+  assert.equal(layoutParts(registered.entries).length, 31);
   assert.equal(layoutTag(registered.entries, layoutOf(registered.entries, 3)).id, 'auto');
   checked++;
 }
 
-console.log(`Template layouts passed (${checked}): 28 templates as native slide layouts (placeholder per area, types, geometry, OPF_LAYOUT_V1, schema order), every reachable template in catalog order on every master, bound placeholder objects, embedded and registered round trips, region pins, list columns, Change Layout, a slide added in PowerPoint, no provenance, furniture variants, a damaged tag and automatic titleOnly layouts.`);
+console.log(`Template layouts passed (${checked}): 29 templates as native slide layouts (placeholder per area, types, geometry, OPF_LAYOUT_V1, schema order), every reachable template in catalog order on every master, bound placeholder objects, embedded and registered round trips, region pins, list columns, Change Layout, a slide added in PowerPoint, no provenance, furniture variants, a damaged tag and automatic titleOnly layouts.`);

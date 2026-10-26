@@ -20,8 +20,8 @@ for (const source of [base64(rect), `data:image/svg+xml;utf8,${encodeURIComponen
   const [image] = images(svg);
   assert.ok(image, 'drawn as an image');
   assert.equal(attr(image, 'href'), base64(rect), 'normalized to base64');
-  // The engine default fit (design.imageFit, FA-22) is cover.
-  assert.match(image, /preserveAspectRatio="xMidYMid slice"/);
+  // A slide with no layout shows its picture whole (WI-3); a layout keeps the engine default, cover.
+  assert.match(image, /preserveAspectRatio="xMidYMid meet"/);
   assert.equal(attr(image, 'aria-label'), 'Chart');
   assert.deepEqual(diagnostics, []);
   assert.ok(!svg.includes('data-opf-asset-status'));
@@ -29,9 +29,11 @@ for (const source of [base64(rect), `data:image/svg+xml;utf8,${encodeURIComponen
 }
 
 // The box and the fit are the raster's: an SVG and a PNG of the same content get the same image element geometry.
+// A contained picture's frame follows its proportions (WI-3), so the two pictures share the SVG's 2:1.
+const raster2to1 = `data:image/png;base64,${(await sharp({create: {width: 120, height: 60, channels: 3, background: {r: 0, g: 204, b: 0}}}).png().toBuffer()).toString('base64')}`;
 for (const fill of ['contain', 'cover', 'stretch']) {
   const make = source => ({design: {imageFit: fill}, slides: [{title: 'T', layout: 'image-1x', image: {src: source, alt: 'x'}}]});
-  const [vector] = images(toSvg(make(base64(rect)), 1, {trace: true})), [bitmap] = images(toSvg(make(raster), 1, {trace: true}));
+  const [vector] = images(toSvg(make(base64(rect)), 1, {trace: true})), [bitmap] = images(toSvg(make(raster2to1), 1, {trace: true}));
   for (const name of ['x', 'y', 'width', 'height', 'preserveAspectRatio']) assert.equal(attr(vector, name), attr(bitmap, name), `${fill} ${name}`);
   checked++;
 }

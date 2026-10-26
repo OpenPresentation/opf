@@ -29,7 +29,7 @@ const sha256 = (value) => createHash('sha256').update(value).digest('hex');
 const started = performance.now();
 
 const ids = Object.keys(layouts);
-assert.equal(ids.length, 28, 'the 0.19 built-in set has 28 layouts');
+assert.equal(ids.length, 29, 'the 0.19 built-in set has 29 layouts');
 const next = {
   version: 1,
   source: { fixture: '@openpresentation/gallery layouts (see layout-template-fixture.mjs)', sha256: sha256(JSON.stringify(fixture)), templates: ids.length },
@@ -50,7 +50,7 @@ for (const { keys, deck } of [...ids.map(templateDeck), ...features, ...paginate
     if (JSON.stringify(previous?.entries?.[keys[index]]) !== JSON.stringify(entry)) changed.push({ key: keys[index], png });
   }
 }
-assert.equal(Object.keys(next.entries).length, 28 * 6 * 2 + [...features, ...paginated].reduce((sum, { keys }) => sum + keys.length, 0));
+assert.equal(Object.keys(next.entries).length, 29 * 6 * 2 + [...features, ...paginated].reduce((sum, { keys }) => sum + keys.length, 0));
 
 if (update || promote) {
   mkdirSync(output, { recursive: true });
@@ -74,5 +74,5 @@ if (update || promote) {
   for (const key of ['version', 'format', 'scale', 'systemFonts', 'trace']) assert.equal(next[key], previous[key], `Template golden ${key} changed`);
   assert.deepEqual(Object.keys(next.entries), Object.keys(previous.entries), 'Template golden keys changed');
   assert.deepEqual(changed.map(({ key }) => key), [], `Template goldens moved (${changed.length} slides); run --update and review artifacts/template-goldens.`);
-  console.log(`Template goldens passed: ${Object.keys(next.entries).length} slides, 28 templates (${((performance.now() - started) / 1000).toFixed(1)} s).`);
+  console.log(`Template goldens passed: ${Object.keys(next.entries).length} slides, 29 templates (${((performance.now() - started) / 1000).toFixed(1)} s).`);
 }

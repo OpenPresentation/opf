@@ -1050,7 +1050,8 @@
                     "video"
                   ],
                   "role": "media",
-                  "flow": "none"
+                  "flow": "none",
+                  "anchor": "middle"
                 },
                 {
                   "name": "body",

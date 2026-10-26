@@ -24,8 +24,8 @@ for (const [id, record] of Object.entries(layouts)) {
   for (const size of ['short', 'long']) for (let count = 1; count <= 6; count++) actual[`${id} ${count} ${size}`] = summary(composeSlide(sampleSlide(record, count, size), { layout: record }));
 }
 
-test('composition goldens: 28 templates x 1 to 6 blocks x short and long content', () => {
-  assert.equal(Object.keys(actual).length, 28 * 6 * 2);
+test('composition goldens: 29 templates x 1 to 6 blocks x short and long content', () => {
+  assert.equal(Object.keys(actual).length, 29 * 6 * 2);
   if (process.env.OPF_UPDATE_GOLDENS === '1') writeFileSync(goldenUrl, `${JSON.stringify(actual, null, 1)}\n`);
   const golden = JSON.parse(readFileSync(goldenUrl, 'utf8'));
   for (const key of Object.keys(golden)) assert.deepEqual(actual[key], golden[key], key);

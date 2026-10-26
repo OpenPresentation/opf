@@ -53,7 +53,7 @@ The string shorthand `"asset:hero"` (or any source starting with `asset:`, `http
 
 | Property | Meaning | Native PPTX | SVG preview |
 |---|---|---|---|
-| `fit` | `cover` fills the frame and crops around `focus`. `contain` shows the whole picture. `stretch` scales it to the frame. Default: the effective `design.imageFit` (the slide's, the deck's, then the layout's), else `cover`. | `a:srcRect`: positive insets crop, negative insets pad | the shared placement (`fitImage`) |
+| `fit` | `cover` fills the frame and crops around `focus`. `contain` shows the whole picture. `stretch` scales it to the frame. Default: the effective `design.imageFit` (the slide's, the deck's, then the layout's), else `cover` in a layout and `contain` on a slide with no layout. A contained picture has a frame of its own proportions at the region's anchor (top by default). | `a:srcRect`: positive insets crop, negative insets pad | the shared placement (`fitImage`) |
 | `focus` | `{ x, y }`: the point a `cover` crop keeps in view. | `a:srcRect` | the same placement |
 | `aspectRatio` | The largest centered frame with this width/height ratio (`circle` uses 1). | frame geometry | frame geometry |
 | `shape` | `rectangle`, `rounded`, `circle` or `hexagon`. | `a:prstGeom` `rect` / `roundRect` / `ellipse` / `hexagon` with core's guide values | `clipPath` with core's outline of the same preset formula |
