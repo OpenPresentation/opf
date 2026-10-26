@@ -54,10 +54,16 @@ async function measure(mode, { format, needle, text }) {
     await page.waitForFunction(() => demo.pane.getProblems().length === 0 && document.querySelector('.opf-source-findings')?.hidden !== false);
     await page.waitForTimeout(500);
     await page.evaluate((marker) => {
-      window.__long = []; window.__gaps = [];
+      window.__long = []; window.__gaps = []; window.__checks = [];
       try { new PerformanceObserver((list) => { for (const entry of list.getEntries()) window.__long.push(entry.duration); }).observe({ entryTypes: ['longtask'] }); } catch { /* No longtask entries on this engine. */ }
       let last = performance.now();
-      window.__beat = setInterval(() => { const now = performance.now(); window.__gaps.push(now - last - 4); last = now; }, 4);
+      window.__beat = setInterval(() => { const now = performance.now(); window.__gaps.push([now, now - last - 4]); last = now; }, 4);
+      // The pane marks `data-opf-checking` while a worker request is in flight: the span between the mark and its removal is when only the worker is working.
+      let opened = null;
+      new MutationObserver(() => {
+        const now = performance.now(), on = Boolean(document.querySelector('[data-opf-checking]'));
+        if (on && opened === null) opened = now; else if (!on && opened !== null) { window.__checks.push([opened, now]); opened = null; }
+      }).observe(document, { attributes: true, attributeFilter: ['data-opf-checking'], subtree: true });
       const { api } = demo.pane.editor, at = api.getValue().indexOf(marker);
       api.focus(); api.setSelection(at + marker.length);
     }, needle);
@@ -68,7 +74,11 @@ async function measure(mode, { format, needle, text }) {
       const post = Worker.prototype.postMessage;
       Worker.prototype.postMessage = function (...args) { const end = performance.now() + ms; while (performance.now() < end); return post.apply(this, args); };
     }, BURN);
-    const collect = () => page.evaluate(() => { const long = window.__long.splice(0), gaps = window.__gaps.splice(0); return { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...gaps) }; });
+    const collect = () => page.evaluate(() => {
+      const long = window.__long.splice(0), beats = window.__gaps.splice(0), spans = window.__checks.splice(0);
+      const inflight = beats.filter(([end]) => spans.some(([from, to]) => end >= from && end <= to)).map(([, gap]) => gap);
+      return { longest: Math.max(0, ...long), count: long.length, gap: Math.max(0, ...beats.map(([, gap]) => gap)), flight: spans.length ? Math.max(0, ...inflight) : null };
+    });
     // One pattern is a series of bursts. A burst is typed, then the pane is left alone until it has checked and applied it (`whenIdle`) plus a moment for the paint
     // that follows, and only then is the next burst typed. That makes every burst exactly one sample of "typing, then a check", whatever the machine's speed; with
     // keys typed on a timer, a slow runner merged them into one check (one sample, paced run: `1 checks in the worker`).
@@ -102,7 +112,7 @@ try {
     for (const pattern of ['quick', 'paced']) {
       for (const mode of rounds.off.length ? ['off', 'on'] : ['on']) {
         const gaps = series(mode, pattern, 'gap').sort((x, y) => x - y), longs = series(mode, pattern, 'longest');
-        console.log(`P-003 ${spec.label} 1000 slides, ${pattern === 'quick' ? 'bursts of three keys 30 ms apart' : 'single keys 90 ms apart'}, ${mode === 'on' ? (WORKER_OFF ? 'worker run made on the main thread' : 'worker') : 'main thread'}: typical block ${median(gaps).toFixed(0)} ms, worst ${gaps.at(-1).toFixed(0)} ms (${gaps.length} edits; longest task ${Math.max(...longs).toFixed(0)} ms), ${rounds[mode].reduce((sum, row) => sum + row[pattern].worker + row[pattern].inline, 0)} checks in ${mode === 'on' ? 'the worker' : 'the page'} (${engineName}).`);
+        console.log(`P-003 ${spec.label} 1000 slides, ${pattern === 'quick' ? 'bursts of three keys 30 ms apart' : 'single keys 90 ms apart'}, ${mode === 'on' ? (WORKER_OFF ? 'worker run made on the main thread' : 'worker') : 'main thread'}: typical block ${median(gaps).toFixed(0)} ms, edits ${JSON.stringify(series(mode, pattern, 'gap').map(Math.round))}, in flight ${JSON.stringify(series(mode, pattern, 'flight').map((value) => (value === null ? null : Math.round(value))))}, worst ${gaps.at(-1).toFixed(0)} ms (${gaps.length} edits; longest task ${Math.max(...longs).toFixed(0)} ms), ${rounds[mode].reduce((sum, row) => sum + row[pattern].worker + row[pattern].inline, 0)} checks in ${mode === 'on' ? 'the worker' : 'the page'} (${engineName}).`);
       }
     }
     // The worker did the checking, not the page, and with the worker off the page did.
