@@ -27,8 +27,9 @@ assert.doesNotMatch(svg, /data-opf-path="slides\.0\.table\.rows\.0\.0\.style\.bo
 assert.ok(svg.search(/stroke="#fedcba80"/i) > svg.lastIndexOf('<rect'));
 const geometry = composeSlide(document.slides[0]);
 const item = geometry.items.find(item => item.field === 'table');
-const merged = layoutTable(table, item.box).rows[0].cells[0];
-assert.equal(merged.box.width, item.box.width * 2/3);
+const mergedLayout = layoutTable(table, item.box), merged = mergedLayout.rows[0].cells[0];
+// WI-5: column widths follow content; the merged cell is its first two columns.
+assert.ok(Math.abs(merged.box.width - (mergedLayout.columnWidths[0] + mergedLayout.columnWidths[1])) < 1e-6);
 assert.equal(merged.box.height, 108);
 assert.ok((await toPng(svg)).length > 1000);
 assert.deepEqual(document, before);
@@ -87,9 +88,12 @@ for (const width of [0,2]) {
     [null,{value:'C',style:{borders:{left:{color:'#a100a1',width}}}}],
     [null,'D']
   ]}}]}, 1,{trace:true});
-  const mergeEdges = lines(split).filter(line => line['data-opf-path'] === 'slides.0.table.rows.0.0.style.borders.right');
-  assert.equal(mergeEdges.length,2,'long implicit edge split above and below explicit neighbor');
-  assert.equal(Number(mergeEdges[1].y1)-Number(mergeEdges[0].y2),54);
+  // WI-5 (P20): a table draws no vertical rule by default, so there is no long implicit merge edge to split: only the explicit
+  // border of C is drawn (and nothing at all for width 0), and the neighbours add no vertical line beside it.
+  assert.equal(lines(split).filter(line => line['data-opf-path'] === 'slides.0.table.rows.0.0.style.borders.right').length,0,'no implicit vertical edge');
   assert.equal(lines(split).filter(line => line.stroke?.toLowerCase() === '#a100a1').length,width ? 1 : 0);
+  const column = Number(lines(split).find(line => line['data-opf-path'] === 'slides.0.table.rows.1.1.style.borders.left')?.x1 ?? NaN);
+  assert.equal(lines(split).filter(line => line.x1 === line.x2 && !(line.stroke?.toLowerCase() === '#a100a1')).length,0,'every other line is horizontal');
+  assert.ok(width === 0 || Number.isFinite(column));
 }
 console.log('Styled table renderer passed: spans, fills/alpha, shared border precedence and suppression, scalar/rich vertical alignment, editable paths, run overrides and rasterization.');

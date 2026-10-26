@@ -72,6 +72,8 @@ const rowsOf = xml => [...xml.matchAll(/<a:tr\b[\s\S]*?<\/a:tr>/g)].map(row => [
   };
 }));
 const edgeColors = cell => Object.values(cell.borders);
+// WI-5 (P20): the default rules of a table are the top and bottom edges of each cell.
+const ruleColors = cell => [cell.borders.T, cell.borders.B];
 
 // 1. Every catalog color scheme on four theme backgrounds: every named slot or role
 // is a scheme reference for fill, text and all four borders, and resolves to exactly
@@ -123,8 +125,10 @@ for (const record of records.colorSchemes) {
       }
       assert.equal(cell.fill.val, r === 0 ? 'accent1' : 'bg2', `${where} fill role (the surface role; the clrMap points it at the dark or light surface)`);
       // RR-96: the structural border is the derived neutral, tx1 over bg1 (lumMod/lumOff on tx1), so it follows a variant.
-      assert.ok(edgeColors(cell).every(color => color.kind === 'scheme' && color.val === 'tx1' && color.lumMod !== undefined), `${where} neutral scheme borders`);
-      assert.deepEqual(edgeColors(cell).map(color => resolve(color, theme)), Array(4).fill(resolveColorRoles(record, {variant: {background: slot ?? 'dark2'}}).border.slice(1)), 'structural borders are the scheme-derived neutral (tx1 over bg1 of the slide variant)');
+      // WI-5 (P20): the structural rules are horizontal only: the top and bottom edges draw, the left and right ones have no line.
+      assert.deepEqual([cell.borders.L, cell.borders.R], [undefined, undefined], `${where} no vertical rules`);
+      assert.ok(ruleColors(cell).every(color => color.kind === 'scheme' && color.val === 'tx1' && color.lumMod !== undefined), `${where} neutral scheme borders`);
+      assert.deepEqual(ruleColors(cell).map(color => resolve(color, theme)), Array(2).fill(resolveColorRoles(record, {variant: {background: slot ?? 'dark2'}}).border.slice(1)), 'structural borders are the scheme-derived neutral (tx1 over bg1 of the slide variant)');
       if (r > 0) assert.equal(cell.color.val, 'tx1', `${where} body text is the text role, which the clrMap pairs with the surface`);
       // RR-96: header text is bg1 or tx1, whichever reads better on the accent (core readableSchemeColor), so it follows a variant.
       else { assert.ok(['bg1', 'tx1'].includes(cell.color.val), `${where} header text is bg1 or tx1`); assert.ok([theme.lt1, theme.dk1, theme.lt2, theme.dk2].includes(resolve(cell.color, theme)), `${where} header text is a light or dark slot`); }

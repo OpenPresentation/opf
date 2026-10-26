@@ -11,7 +11,11 @@ test('short table rows preserve baseline geometry and missing cells',()=>{
  assert.equal(geometry.overflow,false);
  assert.deepEqual(geometry.rows.map(row=>row.box.height),[54,54,54]);
  assert.equal(geometry.height,162);
- assert.deepEqual(geometry.rows[2].cells[1].textBox,{x:340,y:136,width:300,height:42});
+ // WI-5: column widths follow content (the second column asks for more than the first), and fill the table.
+ const [first,second]=geometry.columnWidths;
+ assert.ok(Math.abs(first+second-box.width)<.001);
+ const empty=geometry.rows[2].cells[1].textBox;
+ assert.ok(Math.abs(empty.x-(box.x+first+10))<.001&&Math.abs(empty.width-(second-20))<.001&&empty.y===136&&empty.height===42);
  assert.equal(geometry.rows[0].cells[1].path,'slides.0.table.columns.1');
  assert.equal(geometry.rows[2].cells[1].path,'slides.0.table.rows.1.1');
 });

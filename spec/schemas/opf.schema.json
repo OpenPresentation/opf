@@ -3724,7 +3724,7 @@
               "$ref": "#/$defs/TableCellBorder"
             }
           },
-          "description": "Independent cell edges. Omitted edges retain the table theme border; width 0 removes an edge."
+          "description": "Independent cell edges. An omitted edge keeps the table's default rule: a line under every row (and over the first row), none between columns. Width 0 removes an edge."
         }
       },
       "description": "Cell appearance. Sizes use reference pixels at a 720-pixel canvas short edge and scale with the slide."

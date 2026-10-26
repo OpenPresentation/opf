@@ -77,7 +77,10 @@ describe('stackCategoryValues', () => {
 describe('chartTextSize', () => {
 	test('20 px for a roomy box, shrunk by a small one, never below minFontSize', () => {
 		assert.equal(chartTextSize({ width: 1000, height: 600, scale: 1 }), 20);
-		assert.equal(chartTextSize({ width: 1000, height: 300, scale: 1 }), 16);
+		// WI-5: a box with room for it (at least 216 x 288 reference pixels) floors at 18 px, not 16.
+		assert.equal(chartTextSize({ width: 1000, height: 300, scale: 1 }), 18);
+		assert.equal(chartTextSize({ width: 1000, height: 200, scale: 1 }), 16);
+		assert.equal(chartTextSize({ width: 250, height: 600, scale: 1 }), 16);
 		assert.equal(chartTextSize({ width: 1000, height: 380, scale: 1 }), 20);
 		assert.equal(chartTextSize({ width: 560, height: 600, scale: 1, minFontSize: 12 }), 18);
 		assert.equal(chartTextSize({ width: 100, height: 100, scale: 1 }), 16);
@@ -108,8 +111,8 @@ describe('chartValueAxis', () => {
 	});
 
 	test('stacked totals set the bound; 100% charts get a fractional percent axis', () => {
-		assert.deepEqual(axisOf(chartOf([[100, 200], [300, 150]], 'stacked-column')), { min: 0, max: 450, majorUnit: 50 });
-		assert.deepEqual(axisOf(chartOf([[1, 2], [3, 4]], '100pct-stacked-column')), { min: 0, max: 1, majorUnit: 0.1, percent: true });
+		assert.deepEqual(axisOf(chartOf([[100, 200], [300, 150]], 'stacked-column')), { min: 0, max: 500, majorUnit: 100 });
+		assert.deepEqual(axisOf(chartOf([[1, 2], [3, 4]], '100pct-stacked-column')), { min: 0, max: 1, majorUnit: 0.2, percent: true });
 	});
 
 	test('a short chart gets fewer, larger intervals; the slide scale and minFontSize move the density', () => {
@@ -117,9 +120,9 @@ describe('chartValueAxis', () => {
 		const tall = axisOf(chart, { width: 800, height: 450, scale: 1 });
 		const short = axisOf(chart, { width: 800, height: 200, scale: 1 });
 		assert.equal(tall.majorUnit, 100);
-		assert.equal(axisOf(chart, { width: 800, height: 300, scale: 1 }).majorUnit, 100);
-		assert.equal(short.majorUnit, 200);
-		assert.equal(axisOf(chart, { width: 800, height: 150, scale: 1 }).majorUnit, 500);
+		assert.equal(axisOf(chart, { width: 800, height: 300, scale: 1 }).majorUnit, 200);
+		assert.equal(short.majorUnit, 500);
+		assert.equal(axisOf(chart, { width: 800, height: 150, scale: 1 }).majorUnit, 1000);
 		assert.equal(axisOf(chart, { width: 800, height: 450, scale: 1, minFontSize: 40 }).majorUnit, 200);
 		assert.equal(axisOf(chart, { width: 1600, height: 900, scale: 2 }).majorUnit, 100);
 		assert.equal(CHART_TEXT_PX, 20);
@@ -131,7 +134,7 @@ describe('chartValueAxis', () => {
 		const plain = axisOf(base, geometry);
 		const crowded = axisOf({ ...base, legend: 'bottom', axisTitles: { category: 'Quarter' } }, geometry);
 		assert.ok(crowded.majorUnit >= plain.majorUnit);
-		assert.equal(axisOf({ ...base, legend: 'bottom', axisTitles: { category: 'Quarter' } }, { width: 800, height: 450, scale: 1 }).majorUnit, 100);
+		assert.equal(axisOf({ ...base, legend: 'bottom', axisTitles: { category: 'Quarter' } }, { width: 800, height: 450, scale: 1 }).majorUnit, 200);
 	});
 
 	test('other types, unresolved data and bad geometry give no axis', () => {
@@ -143,7 +146,7 @@ describe('chartValueAxis', () => {
 	});
 
 	test('gaps and non-numeric cells are not plotted', () => {
-		assert.deepEqual(axisOf(chartOf([[10, null, 'x', 90]])), { min: 0, max: 100, majorUnit: 10 });
+		assert.deepEqual(axisOf(chartOf([[10, null, 'x', 90]])), { min: 0, max: 100, majorUnit: 20 });
 	});
 });
 
@@ -171,7 +174,7 @@ describe('composition exposes the axis on the chart item', () => {
 	test('the slide scale follows the canvas, and a dataset chart is resolved too', () => {
 		const document = { datasets: { sales: { columns: ['Quarter', 'Sales'], rows: [['Q1', 120], ['Q2', 480], ['Q3', 790]] } }, slides: [slide({ type: 'column', data: { dataset: 'sales' } })] };
 		const item = chartItem(composeSlide(document.slides[0], { width: 1920, height: 1080, presentation: document, slideIndex: 0 }));
-		assert.deepEqual(item.chart.valueAxis, { min: 0, max: 900, majorUnit: 100 });
+		assert.deepEqual(item.chart.valueAxis, { min: 0, max: 1000, majorUnit: 200 });
 	});
 
 	test('other chart types and non-chart items carry no chart', () => {

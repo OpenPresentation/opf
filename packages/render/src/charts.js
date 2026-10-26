@@ -4,14 +4,15 @@
 // The table below is carried here so the preview stays synchronous and self-contained; test/chart-catalog.mjs checks it
 // against core's CHART_TYPES. Each type renders the construct PowerPoint shows for the exported chart; any other value
 // returns null so the caller keeps its legacy single-series preview.
-import { chartHighlightColors, chartHighlightMarks, chartNumber, chartPaletteForFill, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
+import { chartHighlightColors, chartHighlightMarks, chartLeadFromScheme, chartNumber, chartPaletteForFill, chartSeriesPalette as coreChartSeriesPalette, chartTextSize, CHART_MAX_INTERVALS, chartIntervalsFor, formatDataNumber, maxIntervalsFor, niceScale, stackCategoryValues, numberFormatError, resolveChartData, resolveTextStyle, textColorForFill, textWidthMeasurer } from "@openpresentation/opf/composition";
 import { drawAxisTitles, drawBarLabel, drawCenteredLabel, drawPointLabel, drawSliceLabel, labelString, outsideLabelReserve, reportOptionDiagnostics, reserveAxisTitles, resolveOptions } from "./chart-options.js";
 
 // The series colours for a chart panel: core's `chartSeriesPalette` (the deck colour scheme's accents, RR-89, with the chart's own
 // `colors` entries replacing their positions) adjusted by core's `chartPaletteForFill` (contrast against the panel without letting
 // two series merge). The PPTX export and the validator use the same pair, so the preview draws the colours they write.
+// WI-5 (P18, D3): series 1 from the scheme reaches 4.5:1 on a dark panel (an authored `colors[0]` keeps its colour).
 export function chartSeriesPalette(surface, colorScheme, colors, context) {
-  return chartPaletteForFill(surface, coreChartSeriesPalette(colorScheme, colors, context));
+  return chartPaletteForFill(surface, coreChartSeriesPalette(colorScheme, colors, context), { legibleLead: chartLeadFromScheme(colors, colorScheme, context) });
 }
 
 // FA-14: chart.highlight. Core resolves which series and categories are named (chartHighlightMarks) and the two colours
@@ -116,7 +117,8 @@ export function renderCatalogChart(item, box, bound, options, svg) {
   const data = render ? chartData(item, bound) : null;
   if (!data || !data.rows.length || data.columns.length < (CHARTEX_KINDS.has(spec.kind) ? 1 : 2)) return null;
   const c = chartContext(item, box, bound, options, svg, data);
-  c.mark("rect", { x: box.x, y: box.y, width: box.width, height: box.height, fill: c.surface, stroke: bound.design.colors.border, "stroke-width": 1 }, item.path);
+  // WI-5 (P19): the panel is a fill only; the axes and gridlines draw the plot, so there is no outer frame (the PPTX chart area has no line either).
+  c.mark("rect", { x: box.x, y: box.y, width: box.width, height: box.height, fill: c.surface }, item.path);
   // RR-35: a chart with axis titles, a legend position or data labels reserves their space before the plot is laid out. A chart
   // with none of them skips this block entirely, so its output is unchanged.
   const resolved = resolveOptions(item.value, spec);
@@ -633,7 +635,7 @@ function categoryScale(c, dataMin, dataMax, length, labelExtent, percent) {
     const scale = scaleFrom(axis.min, axis.max, axis.majorUnit);
     if (scale.ticks.every(Number.isFinite)) return scale;
   }
-  return niceScale(dataMin, dataMax, maxIntervalsFor(length, labelExtent), { percent });
+  return niceScale(dataMin, dataMax, chartIntervalsFor(length, labelExtent, c.u), { percent });
 }
 
 function renderCategoryChart(c, spec) {
@@ -860,7 +862,7 @@ function renderComboChart(c, spec) {
   const tickWidthOf = (scale, format) => Math.max(...scale.ticks.map((tick) => c.width(formatTick(tick, false, format)))) + fontPx * 0.5;
   const axis = planCategoryAxis(c, entries, (reserve) => {
     const height = Math.max(1, box.y + box.height - pad - reserve - top);
-    const intervals = maxIntervalsFor(height, c.lineHeight * 1.2);
+    const intervals = chartIntervalsFor(height, c.lineHeight * 1.2, c.u);
     const scale = niceScale(primaryMin, primaryMax, intervals);
     const secondary = secondaryLines.length ? niceScale(secondaryMin, secondaryMax, intervals) : null;
     const primaryWidth = tickWidthOf(scale, primaryFormat), secondaryWidth = secondary ? tickWidthOf(secondary, secondaryFormat) : 0;
@@ -1004,12 +1006,12 @@ function renderScatterChart(c) {
   const legendWidth = seriesLegend(c, series, "marker");
   const top = box.y + pad + c.lineHeight / 2, bottom = box.y + box.height - pad - c.lineHeight;
   const height = Math.max(1, bottom - top);
-  const yScale = niceScale(ys.length ? Math.min(...ys) : 0, ys.length ? Math.max(...ys) : 1, maxIntervalsFor(height, c.lineHeight * 1.2));
+  const yScale = niceScale(ys.length ? Math.min(...ys) : 0, ys.length ? Math.max(...ys) : 1, chartIntervalsFor(height, c.lineHeight * 1.2, c.u));
   const tickWidth = Math.max(...yScale.ticks.map((tick) => c.width(formatTick(tick, false, yFormat)))) + fontPx * 0.5;
   const plot = { x: box.x + pad + tickWidth, y: top, height };
   plot.width = Math.max(1, box.x + box.width - pad - legendWidth - fontPx - plot.x);
   const xLabelWidth = Math.max(c.width(formatTick(xs.length ? Math.max(...xs) : 1, false, xFormat)), c.width(formatTick(xs.length ? Math.min(...xs) : 0, false, xFormat))) + fontPx;
-  const scaleForX = (w) => niceScale(xs.length ? Math.min(...xs) : 0, xs.length ? Math.max(...xs) : 1, maxIntervalsFor(w, xLabelWidth));
+  const scaleForX = (w) => niceScale(xs.length ? Math.min(...xs) : 0, xs.length ? Math.max(...xs) : 1, chartIntervalsFor(w, xLabelWidth, c.u));
   let xScale = scaleForX(plot.width);
   // RR-54: a formatted X axis keeps its end labels inside the chart.
   if (xFormat !== undefined) ({ x: plot.x, width: plot.width, scale: xScale } = insetForEndLabels(c, plot.x, plot.width, xFormat, scaleForX));
@@ -1193,6 +1195,12 @@ export function histogramBins(values) {
   }
 }
 
+// WI-5: the plot is laid out before its axis is fitted, so the tick-label column is sized from the labels any of the axes the plot could end up with
+// (one to CHART_MAX_INTERVALS intervals) would draw, not from a ten-interval scale that the final, sparser axis may exceed ("100" after "90").
+function probeTicks(dataMin, dataMax) {
+  return [...new Set(Array.from({ length: CHART_MAX_INTERVALS }, (_, index) => niceScale(dataMin, dataMax, index + 1).ticks).flat())];
+}
+
 // Vertical layout shared by the axis-bearing constructs: category labels below,
 // value ticks on the left (and a percentage axis on the right for pareto).
 function chartexPlot(c, { categories, legendWidth = 0, tickLabels = [], percentAxis = false }) {
@@ -1238,9 +1246,9 @@ function renderHistogramChart(c, spec) {
   const total = bars.reduce((sum, bar) => sum + Math.max(0, bar.value), 0);
   if (!Number.isFinite(total)) throw chartAggregateError(c.path, "cumulative total");
   const dataMax = bars.length ? Math.max(...bars.map((bar) => bar.value)) : 1, dataMin = bars.length ? Math.min(0, ...bars.map((bar) => bar.value)) : 0;
-  const probe = niceScale(dataMin, dataMax, 10);
+  const probe = { ticks: probeTicks(dataMin, dataMax) };
   const { plot, band } = chartexPlot(c, { categories: bars.map((bar) => ({ name: bar.name, path: bar.labelPath })), tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format)), percentAxis: pareto });
-  const scale = niceScale(dataMin, dataMax, maxIntervalsFor(plot.height, c.lineHeight * 1.2));
+  const scale = niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
   const { at, crossing } = valueAxis(c, plot, scale, format);
   const width = band / 1.06, offset = (band - width) / 2;
   bars.forEach((bar, i) => {
@@ -1254,7 +1262,7 @@ function renderHistogramChart(c, spec) {
   });
   if (pareto && bars.length) {
     // Percentage axis on the right, 0-100%, and the cumulative line through the bar centres.
-    const percent = niceScale(0, 1, maxIntervalsFor(plot.height, c.lineHeight * 1.2), { percent: true });
+    const percent = niceScale(0, 1, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u), { percent: true });
     const right = plot.x + plot.width;
     axisLine(c, right, plot.y, right, plot.y + plot.height);
     for (const tick of percent.ticks) {
@@ -1285,9 +1293,9 @@ function renderWaterfallChart(c) {
   }).filter(Boolean);
   const extents = bars.flatMap((bar) => [bar.from, bar.to]);
   const dataMin = extents.length ? Math.min(0, ...extents) : 0, dataMax = extents.length ? Math.max(0, ...extents) : 1;
-  const probe = niceScale(dataMin, dataMax, 10);
+  const probe = { ticks: probeTicks(dataMin, dataMax) };
   const { plot, band } = chartexPlot(c, { categories: categories.map((name, i) => ({ name, path: `${c.path}.data.rows.${i}.0` })), tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format)) });
-  const scale = niceScale(dataMin, dataMax, maxIntervalsFor(plot.height, c.lineHeight * 1.2));
+  const scale = niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
   const { at } = valueAxis(c, plot, scale, format);
   const width = band / 1.5, offset = (band - width) / 2;
   bars.forEach((bar, k) => {
@@ -1443,9 +1451,9 @@ function renderBoxWhiskerChart(c) {
   const all = boxes.flat().flatMap((entry) => entry.stats ? [entry.stats.low, entry.stats.high, ...entry.stats.outliers] : []);
   const dataMin = all.length ? Math.min(...all) : 0, dataMax = all.length ? Math.max(...all) : 1;
   const legendWidth = seriesLegend(c, series);
-  const probe = niceScale(dataMin, dataMax, 10);
+  const probe = { ticks: probeTicks(dataMin, dataMax) };
   const { plot, band } = chartexPlot(c, { categories: groups.map((group) => ({ name: group.name, path: lone ? c.path : `${c.path}.data.rows.${group.first}.0` })), legendWidth, tickLabels: probe.ticks.map((tick) => formatTick(tick, false, format)) });
-  const scale = niceScale(dataMin, dataMax, maxIntervalsFor(plot.height, c.lineHeight * 1.2));
+  const scale = niceScale(dataMin, dataMax, chartIntervalsFor(plot.height, c.lineHeight * 1.2, c.u));
   const { at } = valueAxis(c, plot, scale, format);
   const group = band / 2, width = group / series.length, offset = (band - group) / 2;
   series.forEach((s, j) => {

@@ -1,4 +1,5 @@
 import { ENGINE_DEFAULT_COLOR_SCHEME } from './engine-vocabularies.js';
+import { legible } from './legible-color.js';
 
 const schemeColorSlots = new Set([
   'accent1', 'accent2', 'accent3', 'accent4', 'accent5', 'accent6',
@@ -541,6 +542,17 @@ const tierOf = (index: number): number => Math.floor(index / CHART_SERIES_TIER_S
 /** Cost, in CIE L* points of movement, of each point a placement falls short of the separation from a neighbouring series. */
 const CHART_SERIES_SHORTFALL_WEIGHT = 8;
 
+/** WI-5 (P18, D3): the contrast series 1 reaches on a dark chart surface when it comes from the scheme (see {@link ChartPaletteOptions.legibleLead}). */
+export const CHART_LEAD_MIN_CONTRAST = 4.5;
+
+export interface ChartPaletteOptions {
+  /**
+   * Lift series 1 to {@link CHART_LEAD_MIN_CONTRAST} (4.5:1) on a dark `fill` (WI-5, P18, decision D3). Pass it only when series 1 comes from the
+   * deck scheme: {@link chartLeadFromScheme}. An authored `chart.colors[0]` and a host palette keep their colour.
+   */
+  legibleLead?: boolean;
+}
+
 /** Series colours for a chart drawn on `fill`: the palette in order, each colour adjusted for contrast
  * (`chartColorForFill`) without letting the adjustment merge series.
  *
@@ -569,8 +581,13 @@ const CHART_SERIES_SHORTFALL_WEIGHT = 8;
  * It depends only on the surface and the palette, so every chart on a surface gets the same series colours,
  * and preview and export (which both call this function) draw the same ones.
  */
-export function chartPaletteForFill(fill: string, palette: readonly string[]): string[] {
+export function chartPaletteForFill(fill: string, palette: readonly string[], options: ChartPaletteOptions = {}): string[] {
   const opaqueFill = colorContrast(fill, fill) !== undefined;
+  if (options.legibleLead && opaqueFill && isDarkColor(fill) && palette.length > 0) {
+    // WI-5 (P18, D3): series 1, drawn on a dark surface from the scheme, reaches 4.5:1 (the default blue on navy is 3.42:1). The other series are placed around it.
+    const lead = normalizeHexColor(palette[0]);
+    if (lead) palette = [legible(lead, normalizeHexColor(fill)!, CHART_LEAD_MIN_CONTRAST), ...palette.slice(1)];
+  }
   const preferredLab = palette.map(color => { const channels = opaqueChannels(color); return channels ? labOf(channels) : undefined; });
   const adjusted = palette.map(color => chartColorForFill(fill, color));
   // Colours the surface keeps stay put; only the ones it moves are placed again.
@@ -650,6 +667,14 @@ export function chartSeriesPalette(colorScheme: Record<string, unknown> = {}, co
     palette[index] = color;
   });
   return palette;
+}
+
+/**
+ * Whether series 1 of a chart comes from the deck scheme (accent1 of the variant) rather than from an authored `chart.colors[0]`:
+ * the series {@link chartPaletteForFill} may lift with `legibleLead`. Pass the chart's own `colors` and the same scheme and context as {@link chartSeriesPalette}.
+ */
+export function chartLeadFromScheme(colors: unknown, colorScheme: Record<string, unknown> = {}, context: ChartColorContext = {}): boolean {
+  return resolveChartColors(colors, colorScheme, context)[0] === undefined;
 }
 
 /** What a `chart.colors` entry resolves against: the deck's role colours and `variables`, as for any ColorRef. */

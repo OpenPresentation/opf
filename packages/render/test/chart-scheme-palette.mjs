@@ -13,7 +13,8 @@ const attrs = (svg, tag, path) => [...svg.matchAll(new RegExp(`<${tag}\\b([^>]*)
 // Series follow the colour scheme: a deck with its own accents draws them, and the cool-horizon default is no longer fixed.
 for (const type of ['column', 'bar', 'line', 'area']) {
   const input = deck({type, data}, scheme), bound = resolvePresentation(input).slides[0];
-  const expected = chartPaletteForFill(bound.design.colors.surface, chartSeriesPalette(bound.design.colorScheme)).slice(0, 3);
+  // WI-5: series 1 from the scheme reaches 4.5:1 on a dark panel (legibleLead), as the preview draws it.
+  const expected = chartPaletteForFill(bound.design.colors.surface, chartSeriesPalette(bound.design.colorScheme), {legibleLead: true}).slice(0, 3);
   const svg = toSvg(input, 1, {trace: true});
   const marks = attrs(svg, type === 'line' ? 'polyline' : type === 'area' ? 'path' : 'rect', /\.chart\.data\./);
   const colors = new Set(marks.map((a) => (a.fill !== 'none' && a.fill !== undefined ? a.fill : a.stroke).toUpperCase()));

@@ -1,4 +1,4 @@
-import { chartPaletteForFill, chartSeriesPalette, colorContrast, normalizeHexColor, resolveChartColors } from './color.js';
+import { chartLeadFromScheme, chartPaletteForFill, chartSeriesPalette, colorContrast, normalizeHexColor, resolveChartColors } from './color.js';
 import { type ComposedItem, type LayoutBox, type TextMeasurement, textWidthMeasurer } from './composition.js';
 import type { ResolvedDesign } from './rule-design.js';
 import { readingRows, visualReadingOrder } from './reading-order.js';
@@ -485,7 +485,8 @@ const chartRules: ValidationRule[] = [
 					const count = slices ? data.rows.length : data.columns.length - 1;
 					if (count < 2) continue;
 					const surface = slide.design.colors.surface;
-					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme, chart.colors, chartColorContext(slide.design)));
+					const paletteContext = chartColorContext(slide.design);
+					const palette = chartPaletteForFill(surface, context.chartPalette ?? chartSeriesPalette(slide.design.colorScheme, chart.colors, paletteContext), { legibleLead: context.chartPalette === undefined && chartLeadFromScheme(chart.colors, slide.design.colorScheme, paletteContext) });
 					if (!palette.length) continue;
 					const used = Array.from({ length: Math.min(count, 24) }, (_, i) => palette[i % palette.length]!);
 					const pairs: { a: number; b: number; model: string; difference: number }[] = [];

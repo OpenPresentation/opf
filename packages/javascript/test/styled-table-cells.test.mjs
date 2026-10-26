@@ -73,16 +73,19 @@ test('span rectangles preserve dense column indexes and editable value paths', (
   assert.equal(geometry.overflow, false);
   assert.deepEqual(geometry.rows.map(row => row.cells.length), [2, 1, 3]);
   const cell = geometry.rows[0].cells[0];
-  assert.deepEqual(cell.box, {x: 10, y: 20, width: 400, height: 108});
+  // WI-5: column widths follow content; the merged cell spans its first two columns, and the three columns fill the table's width.
+  const [first, second, third] = geometry.columnWidths;
+  assert.ok(Math.abs(first + second + third - box.width) < .001);
+  assert.deepEqual(cell.box, {x: 10, y: 20, width: first + second, height: 108});
   assert.equal(cell.sourcePath, 'slides.0.table.rows.0.0');
   assert.equal(cell.path, cell.sourcePath + '.value');
   assert.equal(cell.textBox.x, 40);
-  assert.equal(cell.textBox.width, 350);
+  assert.ok(Math.abs(cell.textBox.width - (first + second - 50)) < .001);
   assert.equal(cell.textBox.y + cell.fit.height, cell.box.y + cell.box.height - 6);
-  assert.equal(geometry.rows[1].cells[0].box.x, 410);
+  assert.ok(Math.abs(geometry.rows[1].cells[0].box.x - (10 + first + second)) < .001);
   const scaled = layoutTable(table, {x: 5, y: 10, width: 300, height: 300}, {scale: .5, textMeasurement: measurement});
   for (const [i, row] of geometry.rows.entries()) for (const [j, original] of row.cells.entries()) {
-    for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(scaled.rows[i].cells[j].box[key] * 2 - original.box[key]) < .001);
+    for (const key of ['x', 'y', 'width', 'height']) assert.ok(Math.abs(scaled.rows[i].cells[j].box[key] * 2 - original.box[key]) < .05); // content widths follow the snapped type size, 12.4933 against 12.5 px
   }
 });
 

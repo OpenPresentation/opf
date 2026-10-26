@@ -47,7 +47,7 @@ for(const fixture of cases)for(const type of ['column','bar','line','area','pie'
   assert.equal(new Set(fills).size,3,'distinct series colours on '+surface+': '+fills);
   for(const [a,b] of [[0,1],[1,2]])assert.ok(Math.abs(lightness(fills[a])-lightness(fills[b]))>=9,surface+': series '+(a+1)+' and '+(b+1)+' are '+fills[a]+' and '+fills[b]+', too close in lightness');
   for(const color of fills)assert.ok(colorContrast(color,surface)>=3,color+' on '+surface);
-  assert.deepEqual(fills,chartPaletteForFill(surface,chartSeriesPalette(resolvePresentation(schemeInput(surface,'column')).slides[0].design.colorScheme)).slice(0,3),'preview colours are the shared palette function colours');
+  assert.deepEqual(fills,chartPaletteForFill(surface,chartSeriesPalette(resolvePresentation(schemeInput(surface,'column')).slides[0].design.colorScheme),{legibleLead:true}).slice(0,3),'preview colours are the shared palette function colours');
   checked++;
  }
 }

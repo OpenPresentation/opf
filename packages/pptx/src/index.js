@@ -52,8 +52,8 @@ import { prepareSvg, svgDataUriBytes, svgRasterScale, svgBlipRelationship, attac
 import { chartPaletteSchemes, applyChartSchemeColors } from './chart-scheme-colors.js';
 import { rasterMetadata, pictureTransform, normalizeImageOrientation } from './image-geometry.js';
 import {
-  catalogRecords, clrMapAttributes, normalizeColorVariant, chartPaletteForFill, chartSeriesPalette, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
-  ENGINE_DEFAULT_FONT_SCHEME, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
+  catalogRecords, clrMapAttributes, normalizeColorVariant, chartLeadFromScheme, chartPaletteForFill, chartSeriesPalette, chartTextSize as coreChartTextSize, codeHighlightBands, codeHighlightColors, codeHighlightLines, codeSyntaxPaletteForRoles, readableSchemeColor, codeLineNumbers, codeLineRuns, codeSyntaxPaletteForScheme, composeSlide,
+  ENGINE_DEFAULT_FONT_SCHEME, defaultSlideBackground, fitImage, fitText, layoutTable, layoutWatermark, metricTrendMark, metricValueColor, resolveCanvasDimensions, resolveColorRoles, resolveFontFamilies,
   resolveChartColors, resolveReference, resolveScriptFonts, resolveTextStyle, textColorForFill, textWidthMeasurer, timelineMarkerShapes, timelineTextColor, tokenizeCode
 } from "@openpresentation/opf/composition";
 import { colorContext, resolveColorRefValue, resolveExportColor, resolveVariableColors } from "./color-ref.js";
@@ -2928,7 +2928,8 @@ function addChartPayload(slide, chart, region, context, options = {}, path = "ch
   // `chart.colors` scheme slot or role) is written as a schemeClr, so re-theming in PowerPoint recolours the series.
   const colorContext = {roles: context.roles, variables: context.variables, accents: context.roles.map?.accents};
   const preferredPalette = chartSeriesPalette(context.colorScheme, chart.colors, colorContext);
-  const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette);
+  // WI-5 (P18, D3): series 1 from the scheme reaches 4.5:1 on a dark panel, as the preview draws it; a lifted colour is written as srgbClr.
+  const adjustedPalette = chartPaletteForFill(panelFill, preferredPalette, {legibleLead: chartLeadFromScheme(chart.colors, context.colorScheme, colorContext)});
   const palette = adjustedPalette.map(color=>normalizeHex(color));
   const paletteSchemes = chartPaletteSchemes(chart.colors, preferredPalette, adjustedPalette, (reference, hex) => schemeColorValue(reference, `#${hex}`, context), context.roles.map?.accents);
   Object.assign(context.chartHeadings.get(objectName), {palette, paletteSchemes, circular});
@@ -3131,7 +3132,7 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
   recordPayloadData(context, objectName, 'table', presentation, path, layout);
   // FA-27: the table's text alternative (the frame's descr; the empty string is PowerPoint's decorative marker).
   if (typeof authoredTable?.alt === 'string') context.frameAlts.set(objectName, authoredTable.alt);
-  if (layout.rows.some(row => row.cells.some(cell => Object.keys(cell.style ?? {}).length))) context.tableCells.set(objectName, {layout, scale, context, defaultBorder:{color:`#${context.colors.border}`,width:1/scale}});
+  if (layout.rows.some(row => row.cells.some(cell => Object.keys(cell.style ?? {}).length))) context.tableCells.set(objectName, {layout, scale, context, defaultBorder:{color:`#${context.colors.border}`,width:1/scale}, hiddenBorder:{color:'#000000',width:0}});
   slide.addTable(rows, {
     objectName,
     x: region.x,
@@ -3142,12 +3143,14 @@ function addTablePayload(slide, authoredTable, region, context, options, path, p
     // frame height is the row total so the XML matches what both engines draw.
     h: layout.height / 96,
     rowH: layout.rows.map(row => row.box.height / 96),
-    colW: Array(columnCount).fill(region.w / columnCount),
+    // WI-5 (P20): the column widths core sized from content, the same ones the preview draws (logical column order, as a:tblGrid lists them).
+    colW: layout.columnWidths.map(width => width / 96),
     autoPage: false,
     fontFace: context.fonts.body,
     fontSize: 15 * scale * 0.75,
     color: context.colors.text,
-    border: { type: "solid", color: context.colors.border, pt: 0.75 },
+    // WI-5 (P20): horizontal rules only (top and bottom of every cell), as the preview draws them; an explicit cell border is written over this.
+    border: [{ type: "solid", color: context.colors.border, pt: 0.75 }, { type: "none" }, { type: "solid", color: context.colors.border, pt: 0.75 }, { type: "none" }],
     margin: [6 * scale, 7.5 * scale, 3 * scale, 7.5 * scale],
     valign: "top"
   });
@@ -3439,7 +3442,7 @@ function addMetricPayload(slide,value,layout,context,path,options) {
   const group=String(context.metricTags.size+1),manifest=metricManifest(value,layout,group);
   // RR-07: a trend colours the trend and delta text and adds one native arrow shape, from core's accepted geometry.
   const trendMark=metricTrendMark(layout,{background:`#${normalizeHex(context.colors.background)}`,...(context.roles.neutrals?.trendNeutral ? {neutral: context.roles.neutrals.trendNeutral.hex} : {})});
-  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'?context.colors.accent:context.textColor;
+  const partColor=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color.slice(1):part.role==='value'?metricValueColor(`#${normalizeHex(context.colors.accent)}`,`#${normalizeHex(context.colors.background)}`).slice(1).toUpperCase():context.textColor;
   for (const [partIndex,part] of layout.parts.entries()) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFPptxError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before exporting.`,{path:part.path});
@@ -4681,7 +4684,7 @@ function normalizePartBytes(path, bytes, context, renameMaps, entries, imageMeta
             // Anchor-only styling truncates dashes and restores hidden segments.
             const perimeter = {left:currentColumn === owner.column, right:currentColumn === owner.column + owner.colSpan - 1,
               top:currentRow === owner.row, bottom:currentRow === owner.row + owner.rowSpan - 1};
-            const style = cell ? {...cell.style} : {borders:Object.fromEntries(Object.keys(perimeter).map(edge => [edge,perimeter[edge] ? owner.style?.borders?.[edge] ?? table.defaultBorder : {color:'#000000',width:0}]))};
+            const style = cell ? {...cell.style} : {borders:Object.fromEntries(Object.keys(perimeter).map(edge => [edge,perimeter[edge] ? owner.style?.borders?.[edge] ?? (edge === 'left' || edge === 'right' ? table.hiddenBorder : table.defaultBorder) : {color:'#000000',width:0}]))};
             style.borders = {...style.borders};
             // Native shared-edge precedence can let an implicit neighbor cover
             // an explicit merge border. Give both physical sides that border.

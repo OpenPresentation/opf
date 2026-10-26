@@ -3,7 +3,7 @@
 import {
   layoutTable, fitList, fitRichText, composeSlide, resolveTextStyle, textWidthMeasurer, fitText, textColorForFill, chartColorForFill,
   resolveColorRef as resolveCoreColorRef, resolveScriptFonts, paragraphDirection, physicalAlignment, patternRuns,
-  metricTrendMark as coreMetricTrendMark, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
+  metricTrendMark as coreMetricTrendMark, metricValueColor, tokenizeCode, codeLineRuns, codeSyntaxPaletteForRoles, readableSchemeColor, resolveChartData,
   timelineMarkerShapes, timelineTextColor, layoutWatermark,
   codeHighlightLines, codeLineNumbers, codeHighlightBands, codeHighlightColors, fitImage, intrinsicImageAspect, intrinsicImageSize,
   ENGINE_DEFAULT_THEME, ENGINE_DEFAULT_COLOR_SCHEME, ENGINE_DEFAULT_FONT_SCHEME, ENGINE_DEFAULT_CHART_TYPES
@@ -1390,7 +1390,7 @@ function renderMetric(item, box, bound, options) {
   const children=[];
   // RR-07: a trend draws an arrow beside its word and colours the trend and delta text, from core's accepted geometry.
   const trendMark=metricTrendMark(layout,bound,options);
-  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'?bound.design.colors.primary:bound.design.colors.text;
+  const partFill=part=>trendMark&&(part.role==='trend'||part.role==='delta')?trendMark.color:part.role==='value'?metricValueColor(bound.design.colors.primary,bound.design.backgroundColor??bound.design.colors.background):bound.design.colors.text;
   for (const part of layout.parts) {
     const invalid=/[\u0000-\u0008\u000B\u000C\u000E-\u001F\uD800-\uDFFF\uFFFE\uFFFF]/u.exec(part.text);
     if (invalid) throw new OPFRenderError('invalid-metric-text',`Metric text contains U+${invalid[0].codePointAt(0).toString(16).toUpperCase().padStart(4,'0')} at UTF-16 offset ${invalid.index}, which XML cannot represent; edit that character before rendering.`,{path:part.path});
@@ -1494,7 +1494,8 @@ function renderTable(item, box, bound, options) {
   const children = [];
   // RR-54: a dataset table has no rows or columns of its own to point at; every cell reports the table's authored path.
   const own = isDatasetTable(item, bound) ? () => item.path : (path) => path;
-  const separateBorders = layout.rows.some(row => row.cells.some(cell => cell.style?.borders));
+  // WI-5 (P20): a table draws horizontal rules only by default (the header rule and a rule under every row, as the PPTX export writes them).
+  // A vertical edge is drawn only where a cell sets that border; an explicit border always wins over the default for its edge.
   const defaultEdges = [], explicitEdges = [];
   for (const row of layout.rows) for (const cell of row.cells) {
     const style = cell.style ?? {};
@@ -1511,15 +1512,16 @@ function renderTable(item, box, bound, options) {
       x: stableNumber(cell.box.x), y: stableNumber(cell.box.y),
       width: stableNumber(cell.box.width), height: stableNumber(cell.box.height),
       fill,
-      stroke: separateBorders ? undefined : bound.design.colors.border, "stroke-width":separateBorders ? undefined : 1,
       ...traceAttrs(options, own(cell.sourcePath ?? cell.path))
     }));
-    if (separateBorders) {
+    {
       const {x, y, width, height} = cell.box;
       const edges = {top:[x,y,x+width,y],right:[x+width,y,x+width,y+height],bottom:[x,y+height,x+width,y+height],left:[x,y,x,y+height]};
       for (const [edge, coordinates] of Object.entries(edges)) {
         const border = style.borders?.[edge];
-        (border ? explicitEdges : defaultEdges).push({coordinates, border, path:own(`${cell.sourcePath ?? cell.path}.style.borders.${edge}`)});
+        // Default rules: under every cell, and over the first row only (a lower row's top edge is the rule under the row above).
+        if (!border && (edge === "left" || edge === "right" || (edge === "top" && cell.row !== 0))) continue;
+        (border ? explicitEdges : defaultEdges).push({coordinates, border, path:own(border ? `${cell.sourcePath ?? cell.path}.style.borders.${edge}` : (cell.sourcePath ?? cell.path))});
       }
     }
     // Core layout has already applied vertical alignment to cell.textBox.y.

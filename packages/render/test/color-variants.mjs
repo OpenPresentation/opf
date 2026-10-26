@@ -45,7 +45,8 @@ const rolesOf = (input) => resolvePresentation(input).slides[0].design.roles;
     const lines = tags(svg, 'line');
     assert.ok(lines.some((line) => line.stroke === roles.neutrals.gridline.hex), 'gridlines are the gridline neutral');
     assert.ok(lines.some((line) => line.stroke === roles.neutrals.axisLine.hex), 'axis lines are the axis neutral');
-    assert.ok(tags(svg, 'rect').some((rect) => rect.stroke === roles.border), 'the chart frame is the border neutral');
+    // WI-5 (P19): the chart panel is a fill only: no outer frame, the axes and gridlines draw the plot.
+    assert.ok(!tags(svg, 'rect').some((rect) => rect.stroke === roles.border), 'the chart has no outer frame');
     assert.ok(!/#888888|#CBD5E1|#475569|#F9F9F9/i.test(svg), 'no fixed neutral literal is drawn');
   }
   assert.notEqual(darkRoles.neutrals.gridline.hex, lightRoles.neutrals.gridline.hex, 'the gridline neutral follows the variant');
