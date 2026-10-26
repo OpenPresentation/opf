@@ -193,7 +193,7 @@
     "sharp": "0.35.5",
     "tsup": "^8.5.1",
     "typescript": "~5.9.3",
-    "workerd": "1.20261014.1"
+    "workerd": "1.20261023.1"
   },
   "peerDependencies": {
     "@openpresentation/opf-pptx": "^0.27.0",
