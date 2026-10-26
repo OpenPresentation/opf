@@ -54,7 +54,7 @@
     "@types/node": "^24.13.4",
     "tsup": "^9.0.0",
     "typescript": "~5.9.3",
-    "workerd": "1.20261014.1"
+    "workerd": "1.20261023.1"
   },
   "peerDependencies": {
     "@openpresentation/opf-render": "workspace:^"

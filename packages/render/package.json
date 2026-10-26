@@ -145,7 +145,7 @@
     "@openpresentation/opf": "workspace:^",
     "bidi-js": "1.1.0",
     "fontkit": "^2.0.4",
-    "harfbuzzjs": "1.6.3",
+    "harfbuzzjs": "1.6.4",
     "pako": "3.0.2"
   },
   "peerDependencies": {
@@ -388,7 +388,7 @@
     "@expo-google-fonts/tinos": "0.4.2",
     "@hyzyla/pdfium": "2.1.13",
     "@jspawn/qpdf-wasm": "0.0.2",
-    "@napi-rs/canvas": "1.0.11",
+    "@napi-rs/canvas": "1.0.13",
     "@resvg/resvg-js": "2.6.2",
     "axe-core": "4.14.0",
     "esbuild": "0.28.2",
