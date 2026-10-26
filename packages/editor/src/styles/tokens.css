@@ -19,7 +19,7 @@
   --opf-ui-border-strong: hsl(214 22% 72%);
   --opf-ui-ring: hsl(214 57% 28%);
   --opf-ui-danger: hsl(0 72% 45%);
-  --opf-ui-warn: hsl(28 75% 38%);
+  --opf-ui-warn: hsl(28 75% 30%);
   --opf-ui-success: hsl(152 76% 26%);
   --opf-ui-code-bg: hsl(220 30% 96%);
   --opf-ui-code-border: hsl(214 18% 84%);
@@ -90,7 +90,7 @@
   --opf-ui-border-strong: hsl(214 22% 72%);
   --opf-ui-ring: hsl(214 57% 28%);
   --opf-ui-danger: hsl(0 72% 45%);
-  --opf-ui-warn: hsl(28 75% 38%);
+  --opf-ui-warn: hsl(28 75% 30%);
   --opf-ui-success: hsl(152 76% 26%);
   --opf-ui-code-bg: hsl(220 30% 96%);
   --opf-ui-code-border: hsl(214 18% 84%);

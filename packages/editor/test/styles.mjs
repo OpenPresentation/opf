@@ -27,7 +27,7 @@ const COLORS = {
   "--opf-ui-border-strong": ["hsl(214 22% 72%)", "hsl(220 17% 34%)"],
   "--opf-ui-ring": ["hsl(214 57% 28%)", "hsl(214 57% 62%)"],
   "--opf-ui-danger": ["hsl(0 72% 45%)", "hsl(0 65% 56%)"],
-  "--opf-ui-warn": ["hsl(28 75% 38%)", "hsl(32 80% 70%)"],
+  "--opf-ui-warn": ["hsl(28 75% 30%)", "hsl(32 80% 70%)"],
   "--opf-ui-success": ["hsl(152 76% 26%)", "hsl(152 60% 70%)"],
   "--opf-ui-code-bg": ["hsl(220 30% 96%)", "hsl(222 22% 13%)"],
   "--opf-ui-code-border": ["hsl(214 18% 84%)", "hsl(220 16% 24%)"],
