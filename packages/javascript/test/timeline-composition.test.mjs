@@ -31,11 +31,11 @@ test('timeline tries a vertical arrangement before accepting unreadable narrow l
   const description='Keep every source detail while measuring enough readable space for the complete milestone.';
   const value={events:[{when:'Q1',what:'Pilot',description},{when:'Q2',what:'Expand',description}]};
   const result=layoutTimeline(value,{x:10,y:20,width:180,height:440});
-  assert.equal(result.overflow,false);assert.equal(result.arrangement,'vertical');assert.equal(result.attempts,2);
+  assert.equal(result.overflow,false);assert.equal(result.arrangement,'vertical');assert.equal(result.attempts,1);
   assert.deepEqual(result.parts.map(part=>part.text),value.events.flatMap(event=>[event.when,event.what,event.description]));
   assert.equal(result.connector.x1,result.connector.x2);assert.ok(result.connector.y2>result.connector.y1);
   const compact=layoutTimeline(value,{x:10,y:20,width:180,height:400});
-  assert.equal(compact.overflow,false);assert.equal(compact.arrangement,'vertical');assert.equal(compact.attempts,4);
+  assert.equal(compact.overflow,false);assert.equal(compact.arrangement,'vertical');assert.equal(compact.attempts,2);
   assert.ok(compact.parts.every(part=>part.fit.fontSize>=16));
 });
 

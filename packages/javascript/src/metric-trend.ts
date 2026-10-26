@@ -8,6 +8,7 @@
  * defaults to the conventional reading of the trend (up positive, down negative, flat neutral).
  */
 import type { MetricLayout } from './composition.js';
+import { isDarkColor } from './color.js';
 import { legible, luminance, normalize } from './legible-color.js';
 
 export type MetricTrend = 'up' | 'down' | 'flat';
@@ -22,6 +23,21 @@ function metricEffectiveSentiment(trend: MetricTrend, sentiment?: MetricSentimen
 /** The DrawingML preset geometry that draws each trend (`a:prstGeom prst`). */
 export const METRIC_TREND_SHAPES: Readonly<Record<MetricTrend, 'upArrow' | 'downArrow' | 'rightArrow'>> = Object.freeze({ up: 'upArrow', down: 'downArrow', flat: 'rightArrow' });
 export const METRIC_TREND_MIN_CONTRAST = 4.5;
+/** WI-5 (P18, decision D3): the contrast a metric value keeps on a dark surface when it takes its colour from the scheme. */
+export const METRIC_VALUE_MIN_CONTRAST = 4.5;
+
+/**
+ * The colour a metric value draws in: `color` (the scheme's primary), lifted with {@link legible} to {@link METRIC_VALUE_MIN_CONTRAST}
+ * (4.5:1) against `background` when the background is dark ({@link isDarkColor}) and the colour falls short. A light surface and a colour that
+ * already reaches 4.5:1 return `color` unchanged, and so does a value that is not an opaque hex (the palette is kept; only the
+ * default blue on the default navy, 3.42:1, was in question). A metric value never has an explicit colour of its own, so the preview and the PPTX
+ * export both call this for every value, with the same two inputs.
+ */
+export function metricValueColor(color: string, background: string): string {
+  const foreground = normalize(color), surface = normalize(background);
+  if (!foreground || !surface || !isDarkColor(surface)) return color;
+  return legible(foreground, surface, METRIC_VALUE_MIN_CONTRAST);
+}
 
 export interface MetricTrendColorOptions {
   /** The slide background the metric text sits on. */

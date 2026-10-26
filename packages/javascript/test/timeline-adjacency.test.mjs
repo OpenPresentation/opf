@@ -40,7 +40,7 @@ test('narrow and dense timelines preserve complete long fields and explicit floo
   const value=Array.from({length:6},(_,index)=>({when:`Phase ${index+1}`,what:`Milestone ${index+1}`,description:'Keep every detail, including the long explanation and its original whitespace.\nNext line.'}));
   const copy=structuredClone(value);
   const result=layoutTimeline(value,{x:0,y:0,width:220,height:1500},{minFontSize:18});
-  assert.equal(result.overflow,false);assert.equal(result.arrangement,'vertical');assert.equal(result.attempts,2);
+  assert.equal(result.overflow,false);assert.equal(result.arrangement,'vertical');assert.equal(result.attempts,1);
   assert.deepEqual(result.parts.map(part=>part.text),value.flatMap(event=>[event.when,event.what,event.description]));
   for(const part of result.parts){assert.ok(part.fit.fontSize>=18);assert.equal(part.fit.sourceLines.map(line=>part.text.slice(line.start,line.nextStart)).join(''),part.text);}
   assert.deepEqual(value,copy);

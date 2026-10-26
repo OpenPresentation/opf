@@ -47,8 +47,11 @@ for (const align of ['left', 'center', 'right']) {
     }
     assert.ok(Math.abs(Number(transform['a:ext']['@_cx']) / 9525 - item.box.width) < 0.001, 'Native table width matches shared geometry');
     const nativeTable = find(xml, 'a:tbl')[0];
-    for (const column of array(nativeTable['a:tblGrid']['a:gridCol'])) {
-      assert.ok(Math.abs(Number(column['@_w']) / 9525 - item.box.width / 2) < 0.001, 'Native column widths match preview cells');
+    // WI-5 (P20): column widths follow content (core's layoutTable), and the native grid writes the ones the preview draws.
+    for (const [index, column] of array(nativeTable['a:tblGrid']['a:gridCol']).entries()) {
+      const firstRow = withHeaders ? `${item.path}.columns.${index}` : `${item.path}.rows.0.${index}`;
+      const preview = find(svg, 'rect').find(rect => rect['@_data-opf-path'] === firstRow);
+      assert.ok(Math.abs(Number(column['@_w']) / 9525 - Number(preview['@_width'])) < 0.01, 'Native column widths match preview cells');
     }
 
     const rows = array(nativeTable['a:tr']);
@@ -69,7 +72,11 @@ for (const align of ['left', 'center', 'right']) {
         // RR-96: a scheme color resolves through the master color map and its luminance transforms.
         const nativeColor = fill => fill['a:srgbClr']?.['@_val'] ?? colorHex({'a:schemeClr': {val: fill['a:schemeClr']['@_val'], ...(fill['a:schemeClr']['a:lumMod'] && {'a:lumMod': {val: fill['a:schemeClr']['a:lumMod']['@_val']}}), ...(fill['a:schemeClr']['a:lumOff'] && {'a:lumOff': {val: fill['a:schemeClr']['a:lumOff']['@_val']}})}}, themeSlots, masterMap);
         assert.equal(nativeColor(cell['a:tcPr']['a:solidFill']), rectangle['@_fill'].slice(1), 'Native cell fill matches the theme preview');
-        assert.equal(nativeColor(cell['a:tcPr']['a:lnL']['a:solidFill']), rectangle['@_stroke'].slice(1), 'Native cell border matches the theme preview');
+        // WI-5 (P20): horizontal rules only, in the preview and in the native table.
+        const rules = find(svg, 'line').filter(line => line['@_data-opf-path'] === path);
+        assert.ok(rules.length >= 1 && rules.every(line => line['@_y1'] === line['@_y2']), 'The preview draws a rule under every cell and no vertical rule');
+        assert.ok(cell['a:tcPr']['a:lnL']['a:noFill'] !== undefined && cell['a:tcPr']['a:lnR']['a:noFill'] !== undefined, 'Native cell has no vertical rule');
+        assert.equal(nativeColor(cell['a:tcPr']['a:lnB']['a:solidFill']), rules.at(-1)['@_stroke'].slice(1), 'Native cell rule matches the theme preview');
         const value = expectedRows[r][c];
         assert.equal(find(cell, 'a:t').join(''), String(value ?? ''), 'Native cells preserve original values without inserting wrap characters');
         if (!text.length) continue;

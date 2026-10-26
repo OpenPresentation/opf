@@ -82,8 +82,8 @@ let checked = 0;
 // 5. The axis of each category type, and none for the others.
 {
   assert.deepEqual(axis(await chartXml({type: 'line', data: {columns: ['Q', 'A'], rows: [['Q1', 980], ['Q2', 1000]]}})), {min: '975', max: '1005', majorUnit: '5'});
-  assert.deepEqual(axis(await chartXml({type: 'stacked-column', data: {columns: ['Q', 'A', 'B'], rows: [['Q1', 100, 300], ['Q2', 200, 150]]}})), {min: '0', max: '450', majorUnit: '50'});
-  assert.deepEqual(axis(await chartXml({type: '100pct-stacked-column', data: small})), {min: '0', max: '1', majorUnit: '0.1'});
+  assert.deepEqual(axis(await chartXml({type: 'stacked-column', data: {columns: ['Q', 'A', 'B'], rows: [['Q1', 100, 300], ['Q2', 200, 150]]}})), {min: '0', max: '500', majorUnit: '100'});
+  assert.deepEqual(axis(await chartXml({type: '100pct-stacked-column', data: small})), {min: '0', max: '1', majorUnit: '0.2'});
   assert.deepEqual(axis(await chartXml({type: 'area', data: small})), {min: '0', max: '800', majorUnit: '100'});
   const bar = axis(await chartXml({type: 'bar', data: small}));
   assert.equal(bar.min, '0');

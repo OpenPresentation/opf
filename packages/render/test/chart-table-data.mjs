@@ -25,7 +25,7 @@ const chartDoc = (chart, extra = {}) => doc({ title: 'Chart', chart }, extra);
 // ---------------------------------------------------------------------------------------------------------------------
 // 0. Traced SVG digests for one chart per type, a legacy sketch, and a styled table (RR54_PRINT_DIGESTS=1 prints them).
 //    RR-20 changes only the neutral structural stroke in 30 SVGs; the styled table also right-aligns two numeric cells.
-//    Old and new full SVG strings were compared before these reviewed digests changed. RR-90 (core): table cells ask for the 25 px body size, so only the styled table's digest changed (b0bbca64..., was d5d091b9...); the SVG differs in the cell text sizes and row heights. Further drift needs a reason.
+//    Old and new full SVG strings were compared before these reviewed digests changed. RR-90 (core): table cells ask for the 25 px body size, so only the styled table's digest changed (b0bbca64..., was d5d091b9...); the SVG differs in the cell text sizes and row heights. WI-5: the chart panel has no outer frame, the axis has fewer intervals and series 1 is lifted on a dark panel, so every chart digest changed except the legacy sketch; the styled table draws horizontal rules only and sizes its columns from content. Further drift needs a reason.
 //    Full old/new SVG comparisons are recorded in the RR-20 source qualification. FA-03: the eight stacked types lost their -3x suffix; the SVG names the chart type in data-opf-chart, so only those digests changed, and rendering with the old id string put back reproduces the previous digests. FA-30: the slide root became a labelled group (role="group", aria-roledescription="slide") and decorative shapes gained aria-hidden, so every digest changed; with those attributes taken out and role="img" put back on the root the SVG reproduces the previous digests, so only accessibility attributes differ.
 
 const CATALOG_TYPES = ['column', 'stacked-column', '100pct-stacked-column', 'bar', 'stacked-bar', '100pct-stacked-bar', 'line', 'line-with-markers', 'stacked-line', 'stacked-line-with-markers', 'area', 'stacked-area', '100pct-stacked-area', 'pie', 'doughnut', 'scatter', 'radar', 'radar-with-markers', 'filled-radar', 'treemap', 'histogram', 'pareto', 'box-and-whisker', 'waterfall', 'funnel', 'world', 'sketch'];
@@ -44,37 +44,37 @@ if (process.env.RR54_PRINT_DIGESTS) {
   process.exit(0);
 }
 const REVIEWED_SVG_DIGESTS = {
-  'column': '05b8e3bdbcb38644886bf340',
-  'stacked-column': 'c1abc4aa098d98bf75fd4807',
-  '100pct-stacked-column': '04519770491743a9a89deccc',
-  'bar': 'bb13398b37f4d3f96e3c6eec',
-  'stacked-bar': '93190acff973def989af7346',
-  '100pct-stacked-bar': '5a91e8e7575f2311727157d2',
-  'line': '60c75c68e058b96f4763acb2',
-  'line-with-markers': '66bc2ea0b58e0d731d1a9b4f',
-  'stacked-line': '0c93d5389954395b88ed0c4b',
-  'stacked-line-with-markers': '762dc3ec93809c82dc656617',
-  'area': 'abe4a796d8681da69d9b5293',
-  'stacked-area': '8e3abdf9b550bd2413ca00a7',
-  '100pct-stacked-area': '239439b293fd40bff5146867',
-  'pie': 'aa7c7cc7324bf7b67f6bf784',
-  'doughnut': 'f662d16bdf03d6fe0ea2b28d',
-  'scatter': '0eba4f3df97b134171e0bb8d',
-  'radar': 'a3bee840381ee4f29e3809db',
-  'radar-with-markers': 'f5bfcf8730bb70b6f296b6d1',
-  'filled-radar': 'd1cccee8ed1229e030c1e812',
-  'treemap': '6b4fbe7431e2df1e0be30bbf',
-  'histogram': '00a7db18108787b13a563842',
-  'pareto': '21e64f102cf2015b3f636878',
-  'box-and-whisker': 'a7b9d11dec3ec23d13006f13',
-  'waterfall': 'b92a0f682cb1455547b08ff1',
-  'funnel': '3b4cc1678b8f09db6445e331',
-  'world': '6cb0620b24059e9effbcfa67',
+  'column': 'fb128f6d9c0952ea5f7c2b8b',
+  'stacked-column': '13f469a0a5539210a9be086b',
+  '100pct-stacked-column': 'f2a4c0aa6901d418349cdf1d',
+  'bar': 'f081a531ba14dd92af1f0dea',
+  'stacked-bar': '3898c05ae250099d1b88092e',
+  '100pct-stacked-bar': '77d7af0e74386a5008f531b0',
+  'line': '4e049010a014c589293c8201',
+  'line-with-markers': '94c13dee2f00162e5e1def91',
+  'stacked-line': '5db483fecd9ebbbc553cee08',
+  'stacked-line-with-markers': 'b93068b1189a59e26c30fa49',
+  'area': '953dbb486c9a5fa60b06664e',
+  'stacked-area': '3729d23047156aa29d9e0510',
+  '100pct-stacked-area': 'a469181ef0ea6030e4e3f2a4',
+  'pie': '55c5efd61f537c7661832bda',
+  'doughnut': '56b34d406247bcfb2a3a63bb',
+  'scatter': '02e3984b895538c32e5b9999',
+  'radar': 'bb7f58b7bbbd201bd1e472e8',
+  'radar-with-markers': '52183c8f9a287b894de0693e',
+  'filled-radar': 'caedf67c1fe2690cc6010378',
+  'treemap': '2c895cdeda9683eb3bfb132a',
+  'histogram': 'e4a1342012db24e6c5585283',
+  'pareto': '95edbf1194c4cf628820387a',
+  'box-and-whisker': 'ceed23fbab6ad690535d9eba',
+  'waterfall': 'ab9c183844839f83248d407c',
+  'funnel': '914c2a6f14ecf2935cb70a9c',
+  'world': 'c963880f5b9404c2977115a3',
   'sketch': '412f5a537d5291557428c038',
-  'column-no-options': 'ec2938a332c92fa36b0768cd',
-  'line-string-numbers': 'e3b6700b505cfa220cc56f23',
-  'histogram-lone-column': 'f01f88fa88d00f3dbdaffa48',
-  'table-styled': '9479bfae0ef978636282e6f1'
+  'column-no-options': 'e87e4160bc93d0357543b5ca',
+  'line-string-numbers': '5b9f209587da4eeb4dd68403',
+  'histogram-lone-column': 'cb6da441b29d1de04c896913',
+  'table-styled': 'b90e4faf6d93e7d88e6a5aed',
 };
 assert.deepEqual(digests, REVIEWED_SVG_DIGESTS, 'documents without the new fields retain the reviewed traced SVG output');
 

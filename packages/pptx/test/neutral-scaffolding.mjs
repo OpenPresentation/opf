@@ -9,7 +9,9 @@ const doc={design,slides:[{table:{columns:['Team','Amount'],rows:[['A',5.8],['B'
 const parts=await exportXml(doc);assert.deepEqual(doc,before);const xml=parts['ppt/slides/slide1.xml'];const cells=[...xml.matchAll(/<a:tc\b[\s\S]*?<\/a:tc>/g)].map(m=>m[0]);
 assert.match(cells[1],/<a:pPr[^>]*algn="r"/,'numeric-column header follows numeric edge');
 assert.match(cells[3],/<a:pPr[^>]*algn="r"/);assert.match(cells[2],/<a:pPr[^>]*algn="l"/);// RR-96: the table rule is the derived neutral (tx1 at 20% over bg1: black on white is CCCCCC), written as a scheme colour.
-assert.match(cells[3],/<a:lnL[^>]*><a:solidFill><a:schemeClr val="tx1"><a:lumMod val="20000"\/><a:lumOff val="80000"\/><\/a:schemeClr>/);
+// WI-5 (P20): horizontal rules only: the bottom and top edges carry the rule, the left and right edges draw nothing.
+assert.match(cells[3],/<a:lnB[^>]*><a:solidFill><a:schemeClr val="tx1"><a:lumMod val="20000"\/><a:lumOff val="80000"\/><\/a:schemeClr>/);
+assert.match(cells[3],/<a:lnL[^>]*><a:noFill\/>/);
 assert.equal(colorHex({'a:schemeClr':{val:'tx1','a:lumMod':{val:'20000'},'a:lumOff':{val:'80000'}}},{dk1:'000000',lt1:'FFFFFF'}),'CCCCCC','the rule neutral resolves to CCCCCC on this black-on-white deck');
 assert.doesNotMatch(cells[3],/<a:schemeClr val="accent5"/);
 const explicit=structuredClone(doc);explicit.slides[0].table.rows[0][1]={value:5.8,style:{align:'center',borders:{bottom:{color:'accent5',width:2}}}};const styled=(await exportXml(explicit))['ppt/slides/slide1.xml'];assert.match(styled,/<a:pPr[^>]*algn="ctr"/);assert.match(styled,/<a:schemeClr val="accent5"/);

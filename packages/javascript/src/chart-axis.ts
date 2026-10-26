@@ -31,9 +31,22 @@ export interface ChartValueAxis {
  */
 export const CHART_TEXT_PX = 20;
 
+/** WI-5: the smallest chart text a box that has room for it draws, in slide pixels at the 1280 x 720 reference (it was the 16 px minimum). */
+export const CHART_TEXT_FLOOR_PX = 18;
+/** WI-5: a box at least this tall (12 lines of {@link CHART_TEXT_FLOOR_PX} text) has room for the 18 px floor, in reference pixels. */
+const CHART_FLOOR_MIN_HEIGHT = 12 * CHART_TEXT_FLOOR_PX;
+/** WI-5: a box at least this wide (16 ems of {@link CHART_TEXT_FLOOR_PX} text) has room for the 18 px floor, in reference pixels. */
+const CHART_FLOOR_MIN_WIDTH = 16 * CHART_TEXT_FLOOR_PX;
+/** WI-5: value-axis intervals are at least this far apart (reference pixels), so a short axis shows fewer ticks instead of a crowded scale. */
+export const CHART_MIN_TICK_SPACING_PX = 48;
+/** WI-5: a value axis has at most this many intervals (nine labels), however long it is: 0 to 100% in fives is a scale, 0 to 90% in tens is a ruler. */
+export const CHART_MAX_INTERVALS = 8;
+
 /**
  * RR-90: the unscaled chart text size for a chart box: {@link CHART_TEXT_PX}, shrunk only when the box is small (the text is at most
- * 1/18 of the box height and 1/30 of its width, whole pixels) and never below `minFontSize` (default 16). `width` and `height` are the box in
+ * 1/18 of the box height and 1/30 of its width, whole pixels) and never below `minFontSize` (default 16). WI-5: a box with room for it
+ * (at least 216 x 288 reference pixels) keeps {@link CHART_TEXT_FLOOR_PX} (18) as its floor, so a three-column or dashboard chart draws 18 px text
+ * where it drew 16. `width` and `height` are the box in
  * canvas pixels and `scale` is `min(slide width, slide height) / 720`. The preview and the axis density both call it, so the
  * axis core computes matches the text the preview draws.
  */
@@ -41,7 +54,9 @@ export function chartTextSize(geometry: { width: number; height: number; scale: 
   const { width, height, scale } = geometry;
   const minimum = geometry.minFontSize ?? 16;
   if (![width, height, scale].every(Number.isFinite) || width <= 0 || height <= 0 || scale <= 0) return Math.max(CHART_TEXT_PX, minimum);
-  return Math.max(Math.floor(Math.min(CHART_TEXT_PX, height / scale / 18, width / scale / 30)), minimum);
+  const roomy = Math.floor(Math.min(CHART_TEXT_PX, height / scale / 18, width / scale / 30));
+  const roomForFloor = height / scale >= CHART_FLOOR_MIN_HEIGHT && width / scale >= CHART_FLOOR_MIN_WIDTH;
+  return Math.max(roomy, minimum, roomForFloor ? CHART_TEXT_FLOOR_PX : 0);
 }
 
 function clean(value: number): number {
@@ -122,6 +137,16 @@ function normalizedScale(dataMin: number, dataMax: number, limit: number): Chart
 /** How many intervals a value axis `length` pixels long can carry when each tick label needs `labelExtent` pixels: 1 to 10. */
 export function maxIntervalsFor(length: number, labelExtent: number): number {
   return Math.max(1, Math.min(10, Math.floor(length / Math.max(1, labelExtent))));
+}
+
+/**
+ * WI-5 (P19): how many intervals a chart's value axis `length` pixels long carries: {@link maxIntervalsFor} with a label extent of at least
+ * {@link CHART_MIN_TICK_SPACING_PX} at the slide `scale`, and at most {@link CHART_MAX_INTERVALS}. A chart beside a text column
+ * or one of three peer columns, whose axis is a few hundred pixels long, then draws 0 to 100% in steps of 20 and not 0 to 90% in steps of 10.
+ */
+export function chartIntervalsFor(length: number, labelExtent: number, scale: number): number {
+  const spacing = CHART_MIN_TICK_SPACING_PX * (Number.isFinite(scale) && scale > 0 ? scale : 1);
+  return Math.min(CHART_MAX_INTERVALS, maxIntervalsFor(length, Math.max(labelExtent, spacing)));
 }
 
 // ---------------------------------------------------------------------------------------------------------------------------
@@ -214,8 +239,8 @@ export interface ChartAxisGeometry {
  * horizontal category labels out:
  *
  * - column, line, area: box height - 2 x pad - 1.5 x line height (the top margin plus the category labels), less one line height
- *   for a category axis title and one line height plus a pad for a top or bottom legend (a one-row legend), over labels 1.2 line
- *   heights tall;
+ *   for a category axis title and one line height plus a pad for a top or bottom legend (a one-row legend), over intervals
+ *   1.2 line heights tall ({@link chartIntervalsFor}: at least 48 reference pixels, at most 8 intervals);
  * - bar: the width left of a category gutter of 30% of the box, minus the padding, over labels `4 x text size` wide.
  *
  * with pad = 10 x scale, text size = {@link chartTextSize} x scale and line height = 1.5 x text size. Rotated or
@@ -250,6 +275,6 @@ export function chartValueAxis(chart: unknown, resolved: ResolvedChartData, geom
   const legendBand = options.legend === 'top' || options.legend === 'bottom' ? lineHeight + pad : 0;
   const titleBand = options.axisTitles.category ? lineHeight : 0;
   const length = spec.horizontal ? width * 0.7 - 2 * pad - fontPx : height - 2 * pad - lineHeight * 1.5 - legendBand - titleBand;
-  const fitted = niceScale(dataMin, dataMax, maxIntervalsFor(Math.max(1, length), spec.horizontal ? 4 * fontPx : lineHeight * 1.2), { percent });
+  const fitted = niceScale(dataMin, dataMax, chartIntervalsFor(Math.max(1, length), spec.horizontal ? 4 * fontPx : lineHeight * 1.2, scale), { percent });
   return { min: fitted.min, max: fitted.max, majorUnit: fitted.step, ...(percent ? { percent: true as const } : {}) };
 }

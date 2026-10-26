@@ -2,16 +2,16 @@
   "deck": "technical/chart-type-sampler.opf.json",
   "entries": {
     "technical/chart-type-sampler.opf.json#0": {
-      "sha256": "cf9b23cbb9346720d13698ba8fff23eb6d8d4914e4ff60fbbe95adcaf768c0ba",
-      "bytes": 8467
+      "sha256": "90b2d4af8d432b56e07f54911bcdeb7eb3024d5db452a64fc9eb1954c09c10d2",
+      "bytes": 6603
     },
     "technical/chart-type-sampler.opf.json#1": {
-      "sha256": "525e59e47995002b99f3e7b070f3e812752f804cf7594391a24d40baeb348927",
-      "bytes": 6663
+      "sha256": "6cee3725d2112570e560fcf8358cee7d64f48022fb8febb3e08b79418d419064",
+      "bytes": 6312
     },
     "technical/chart-type-sampler.opf.json#2": {
-      "sha256": "11823e75e9c1042c4fe3428321efe6383cf37dea5f0a79679b55a0bea34067eb",
-      "bytes": 8147
+      "sha256": "b5b4464f6d9d6ec7471ac1eea04c8ae7d9b278794b9fded1fa91b3012eff5999",
+      "bytes": 7920
     }
   }
 }

@@ -17,6 +17,6 @@ for(const type of ['column','bar'])for(const values of [[5.8,6.7],[-5.8,-6.7],[-
  const input={design:doc.design,slides:[{chart:{type,data:{columns:['Category','Value'],rows:values.map((v,i)=>[String(i),v])}}}]};
  const output=toSvg(input,1,{trace:true});const bars=[...output.matchAll(/<rect\b([^>]*data-opf-path="slides\.0\.chart\.data\.rows\.\d+\.1"[^>]*)\/>/g)].map(m=>attrs(m[1]));assert.equal(bars.length,2);
  if(values[0]*values[1]>0){const lengths=bars.map(b=>Number(b[type==='bar'?'width':'height']));assert.ok(Math.abs(lengths[1]/lengths[0]-Math.abs(values[1]/values[0]))<.001,'bar magnitudes reflect values from zero, not truncated domain');}
- assert.ok(output.includes(`stroke="${BORDER}"`));assert.deepEqual(input.slides[0].chart.data.rows,values.map((v,i)=>[String(i),v]));
+ assert.ok(!output.includes(`stroke="${BORDER}"`),'WI-5: no outer chart frame');assert.deepEqual(input.slides[0].chart.data.rows,values.map((v,i)=>[String(i),v]));
 }
 console.log('Neutral SVG rules, numeric/explicit alignment and positive/negative/mixed zero-baseline bars passed.');

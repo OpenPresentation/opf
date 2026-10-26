@@ -27,13 +27,13 @@ export type {LogoShape,LogoVariant,ResolvedLogo,ResolveLogoOptions} from './logo
 export {DEFAULT_FURNITURE_DATE_FORMAT,formatFurnitureDate,type FurnitureField} from './furniture-fields.js';
 export {tableGrid,tableRowBoundaries,type TableCellStyle,type TableBorder,type TableGrid,type TableGridCell,type TableGridIssue} from './table.js';
 export {applyLuminance, clrMapAttributes, colorMapFor, isColorVariant, normalizeColorVariant, readableSchemeColor, NEUTRAL_SHARES} from './color.js';
-export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartSeriesPalette, resolveChartColors, chartHighlightColors, CHART_SERIES_TINT_MIX, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_SERIES_TIER_SIZE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST} from './color.js';
-export type {ChartColorContext, ColorAccentSlot, ColorMap, ColorVariant, ColorVariantBackground, ColorVariantInput, SchemeColor, SchemeNeutrals, ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
+export {colorContrast, textColorForFill, chartColorForFill, chartPaletteForFill, chartLeadFromScheme, chartSeriesPalette, resolveChartColors, chartHighlightColors, CHART_SERIES_TINT_MIX, CHART_LEAD_MIN_CONTRAST, normalizeHexColor, resolveColorRef, resolveColorRoles, defaultSlideBackground, isDarkColor, surfaceAltColor, CHART_SERIES_MIN_LIGHTNESS_STEP, CHART_SERIES_MIN_DIFFERENCE, CHART_SERIES_TIER_SIZE, CHART_HIGHLIGHT_MUTED_MIX, CHART_HIGHLIGHT_MUTED_MIN_CONTRAST, DARK_BACKGROUND_LUMINANCE, SURFACE_ALT_MIX, SURFACE_ALT_MIN_CONTRAST} from './color.js';
+export type {ChartColorContext, ChartPaletteOptions, ColorAccentSlot, ColorMap, ColorVariant, ColorVariantBackground, ColorVariantInput, SchemeColor, SchemeNeutrals, ResolveColorRefOptions, ResolveColorRefRoles, ResolveColorRolesOptions, ResolvedColorRoles} from './color.js';
 export {resolveScriptFonts, resolveSlideDirection, scriptFontRole} from './script-fonts.js';
 export type {ResolveScriptFontsOptions, ResolvedScriptFonts, ScriptFontApp, ScriptFontSlots, ScriptFontSource, ScriptFontSupplement, ScriptMeasurementProfile, ScriptRole} from './script-fonts.js';
 export {CODE_HIGHLIGHT_LANGUAGES, CODE_HIGHLIGHT_MAX_LENGTH, CODE_PANEL_BACKGROUND, CODE_PANEL_FOREGROUND, CODE_SYNTAX_MIN_CONTRAST, codeLineRuns, codeSyntaxPalette, codeSyntaxPaletteForRoles, codeSyntaxPaletteForScheme, resolveCodeLanguage, tokenizeCode} from './code-syntax.js';
 export type {CodeRun, CodeSyntaxPalette, CodeSyntaxPaletteOptions, CodeSyntaxPaletteTheme, CodeToken, CodeTokenKind} from './code-syntax.js';
-export {METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, metricTrendColor, metricTrendMark, metricTrendPoints} from './metric-trend.js';
+export {METRIC_TREND_MIN_CONTRAST, METRIC_TREND_SHAPES, METRIC_VALUE_MIN_CONTRAST, metricTrendColor, metricTrendMark, metricTrendPoints, metricValueColor} from './metric-trend.js';
 export type {MetricSentiment, MetricTrend, MetricTrendColorOptions, MetricTrendMark} from './metric-trend.js';
 export {TIMELINE_OUTLINE_MIN_CONTRAST, TIMELINE_STATUSES, TIMELINE_TEXT_MIN_CONTRAST, timelineMarkerShapes, timelineTextColor} from './timeline-status.js';
 export type {TimelineMarkerShape, TimelineStatusColors} from './timeline-status.js';
@@ -1575,6 +1575,10 @@ export function layoutMetric(value: string | number | MetricContent, box: Layout
 /** Progress of a timeline event (FA-11). Engines draw it from the deck's colors; see `timelineMarkerShapes`. */
 export type TimelineStatus = 'done' | 'current' | 'planned';
 const TIMELINE_STATUS_VALUES: readonly string[] = ['done', 'current', 'planned'];
+/** WI-5 (P22): an alternating event narrower than this many ems of the label size is composed vertically instead. */
+const TIMELINE_NARROW_EM = 8;
+/** WI-5 (P22): the vertical arrangement of a narrow timeline may reduce its text by up to this many reference pixels before the usual search. */
+const TIMELINE_NARROW_REDUCTIONS = 4;
 /** The 'current' ring is this multiple of the marker radius. */
 const TIMELINE_RING_RATIO = 1.6;
 export interface TimelineEvent { when?: string; what: string; description?: string; status?: TimelineStatus }
@@ -1669,8 +1673,12 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
   let reductionLimit=0;
   for(const part of source)reductionLimit=Math.max(reductionLimit,(part.requestedFontSize-minimum)/scale);
   const reductions=Math.min(24,Math.ceil(reductionLimit));
-  for(let reduction=0;reduction<=reductions;reduction++){
-    for(const arrangement of ['alternating','vertical'] as const){
+  // WI-5 (P22): an alternating timeline gives each event `box.width / events` of width. Below 8 ems of the label size the labels wrap one word per
+  // line, so the timeline is composed vertically (events stacked down the cell, the same markers, statuses and order). The full-width
+  // timeline keeps its alternating arrangement.
+  const labelSize=source.find(part=>part.role==='what')?.requestedFontSize??gridFontSize(22*scale,minimum);
+  const narrow=timeline.events.length>1&&box.width/Math.max(2,timeline.events.length)<TIMELINE_NARROW_EM*labelSize;
+  const tryArrangement=(arrangement:TimelineLayout['arrangement'],reduction:number):boolean=>{
       attempts++;
       const parts:TimelineTextPart[]=[],markers:TimelineLayout['markers']=[],diagnostics:TimelineLayoutDiagnostic[]=[];
       let score=0;
@@ -1727,9 +1735,15 @@ export function layoutTimeline(value: readonly TimelineEvent[] | TimelineContent
       const first=markers[0]!,last=markers.at(-1)!,connector=rtl?{x1:Math.min(first.x,last.x),y1:first.y,x2:Math.max(first.x,last.x),y2:last.y}:{x1:first.x,y1:first.y,x2:last.x,y2:last.y};
       const candidate={arrangement,parts,markers,connector,diagnostics,score};
       if(!selected||score<selected.score)selected=candidate;
-      if(!diagnostics.length)break;
+      return !diagnostics.length;
+  };
+  let settled=false;
+  // A narrow cell tries the vertical arrangement first, with up to a few pixels of size reduction, before the usual search.
+  if(narrow)for(let reduction=0;reduction<=Math.min(reductions,TIMELINE_NARROW_REDUCTIONS)&&!settled;reduction++)settled=tryArrangement('vertical',reduction);
+  for(let reduction=0;reduction<=reductions&&!settled;reduction++){
+    for(const arrangement of ['alternating','vertical'] as const){
+      if(tryArrangement(arrangement,reduction)){settled=true;break;}
     }
-    if(!selected!.diagnostics.length)break;
   }
   const {score,...result}=selected!;
   if(result.diagnostics.length&&options.overflow==='error')throw new OPFCompositionError(result.diagnostics);
@@ -2242,7 +2256,17 @@ export interface TableCellLayout {
   direction?: TextDirection;
 }
 export interface TableRowLayout { box: LayoutBox; cells: TableCellLayout[] }
-export interface TableLayout { rows: TableRowLayout[]; columnCount: number; height: number; overflow: boolean }
+export interface TableLayout {
+  rows: TableRowLayout[]; columnCount: number; height: number; overflow: boolean;
+  /**
+   * WI-5 (P20): the width of each grid column in canvas pixels, in logical column order (the first column is the rightmost in a right-to-left
+   * deck). They sum to the table's width. Each column is as wide as its content asks, but never narrower than its longest unbreakable
+   * word at the table's type size, and the preview and the PPTX export draw the same widths.
+   */
+  columnWidths: number[];
+  /** WI-5: true when a word is wider than its cell at the type size the table settled on (the last resort of a table that cannot fit), so a line breaks inside the word. */
+  splitsWords: boolean;
+}
 
 /** Shared cell geometry and font fitting for SVG, native PPTX and pagination.
  * Short rows retain their 54px preferred height. Multiline rows use the space
@@ -2269,15 +2293,16 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     const shown = tableCellDisplayValue(cell.input as DataTableCell, formats[cell.column]);
     if (shown !== cell.input) cell.value = typeof shown === 'object' && shown !== null && !Array.isArray(shown) ? shown.value : shown;
   }
-  const columnCount=grid.columnCount,cellWidth=box.width/columnCount;
+  const columnCount=grid.columnCount;
   const cells=grid.rows.flat().map(cell=>{
     const padding={top:8,right:10,bottom:4,left:10,...cell.style.padding};
-    const width=cellWidth*cell.colSpan-(padding.left+padding.right)*scale;
+    const width=0;
     const style={fontFamily:options.fontFamily??'sans-serif',fontWeight:cell.header||cell.style.bold?700:400,italic:false,path:cell.valuePath};
     const numericDefault = numeric.has(cell) || ((cell.header || Array.isArray(cell.value)) && cell.colSpan === 1 && numericColumns.has(cell.column));
     const alignment = cell.style.align ?? options.alignment ?? (numericDefault ? (options.direction === 'rtl' ? 'left' : 'right') : 'left');
     return {...cell,padding,width,textStyle:style,alignment};
   });
+  const columnWidths=Array<number>(columnCount).fill(box.width/columnCount);
   const cellMinimum=(cell:typeof cells[number])=>Array.isArray(cell.value)?richMinimum(cell.value,requested,minimum):minimum;
   // RR-90: every cell is set at one trial size (the table shrinks together toward the floor, see the loop below). A run's own
   // fontSize stays relative to the nominal size, so `requested` is the reference and `trial` the size the cells are drawn at.
@@ -2289,6 +2314,55 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
       ? richTextLayouter(cell.value,textBox,requested,{style:cell.textStyle,...(options.codeFontFamily?{codeFontFamily:options.codeFontFamily}:{}),textMeasurement:options.textMeasurement,uniformLineHeight:true,direction:options.direction},minimum)(size)
       : fitText(flatten(cell.value),textBox,size,size,textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement),options.direction);
   };
+  // WI-5 (P20): column widths from content. A column's minimum is its longest unbreakable word (a run of non-space characters) at the trial size,
+  // plus the cell padding; its maximum is its longest line on one line. Every column gets its maximum when they all fit, else its minimum plus a
+  // share of the rest by how much more it asks for. When even the minimums do not fit the table, the trial size shrinks (see the loop below).
+  const horizontalPadding=(cell:typeof cells[number])=>(cell.padding.left+cell.padding.right)*scale;
+  const measureText=(cell:typeof cells[number])=>textWidthMeasurer(resolveTextStyle(cell.textStyle,options.textMeasurement),options.textMeasurement);
+  const wordSplit=/[^\S\u00a0\u202f\ufeff]+/u;
+  const demand=(cell:typeof cells[number])=>{
+    const measure=measureText(cell),size=cellSize(cell);
+    let widest=0,longest=0;
+    for(const line of flatten(cell.value).split(/\r\n|\r|\n/)){
+      longest=Math.max(longest,measure(line.replace(/\t/g,'    '),size));
+      for(const word of line.split(wordSplit)){
+        if(!word)continue;
+        // Text without word spaces (Han, kana, Thai ...) breaks between characters: its smallest piece is one character.
+        widest=Math.max(widest,UNSPACED_SCRIPT.test(word)?Math.max(...[...word].map(character=>measure(character,size))):measure(word,size));
+      }
+    }
+    const padding=horizontalPadding(cell),slack=.5*scale;
+    return {min:widest>0?widest+padding+slack:padding,max:Math.max(longest+padding+slack,padding)};
+  };
+  const sizeColumns=()=>{
+    const min=Array<number>(columnCount).fill(0),max=Array<number>(columnCount).fill(0),demands=cells.map(demand);
+    cells.forEach((cell,index)=>{if(cell.colSpan===1){min[cell.column]=Math.max(min[cell.column]!,demands[index]!.min);max[cell.column]=Math.max(max[cell.column]!,demands[index]!.max);}});
+    // A spanning cell asks its columns, together, for its own minimum and maximum: any shortfall is shared equally.
+    cells.forEach((cell,index)=>{if(cell.colSpan>1)for(const [need,target] of [[demands[index]!.min,min],[demands[index]!.max,max]] as const){
+      const columns=Array.from({length:cell.colSpan},(_,offset)=>cell.column+offset),have=columns.reduce((sum,column)=>sum+target[column]!,0);
+      if(need>have)for(const column of columns)target[column]!+=(need-have)/cell.colSpan;
+    }});
+    const total=box.width,sum=(values:number[])=>values.reduce((a,b)=>a+b,0);
+    for(let column=0;column<columnCount;column++)max[column]=Math.max(max[column]!,min[column]!,1);
+    const minTotal=sum(min),maxTotal=sum(max);
+    let widths:number[];
+    if(maxTotal<=total)widths=max.map(value=>value+(total-maxTotal)*value/maxTotal);
+    else if(minTotal<=total){
+      // Short columns keep what they ask for and the long ones share the rest evenly: one level, clamped to each column's [minimum, maximum].
+      let low=0,high=total;
+      for(let step=0;step<60;step++){const level=(low+high)/2;if(sum(min.map((value,column)=>Math.min(max[column]!,Math.max(value,level))))>total)high=level;else low=level;}
+      widths=min.map((value,column)=>Math.min(max[column]!,Math.max(value,low)));
+      const rest=total-sum(widths),open=widths.map((value,column)=>value>min[column]!+1e-9&&value<max[column]!-1e-9);
+      const target=open.indexOf(true);
+      if(target>=0)widths[target]!+=rest;else widths[widths.indexOf(Math.max(...widths))]!+=rest;
+    }
+    else widths=min.map(value=>value*total/Math.max(minTotal,Number.EPSILON));
+    columnWidths.splice(0,columnCount,...widths);
+    for(const cell of cells)cell.width=sum(columnWidths.slice(cell.column,cell.column+cell.colSpan))-horizontalPadding(cell);
+    return min;
+  };
+  // Whether some word is wider than its cell at the current trial size: the text would break inside the word.
+  const splitsWords=()=>cells.some(cell=>demand(cell).min-.5*scale>cell.width+horizontalPadding(cell)+.01);
   const textHeight=(fit:TextFit|RichTextFit)=>'height' in fit?fit.height:fit.lines.length*fit.lineHeight;
   const required=(cell:typeof cells[number],natural:boolean)=>{
     const floor=cellMinimum(cell),size=gridFontSize(natural?Math.max(trial,floor):floor,floor);
@@ -2321,7 +2395,9 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
   let overflow=false;
   const rows:TableRowLayout[]=heights.map((height,r)=>({box:{x:box.x,y:ys[r]!,width:box.width,height},cells:[]}));
   for(const cell of cells){
-    const cellBox={x:box.x+(options.direction==='rtl'?columnCount-cell.column-cell.colSpan:cell.column)*cellWidth,y:ys[cell.row]!,width:cell.colSpan*cellWidth,height:ys[cell.row+cell.rowSpan]!-ys[cell.row]!};
+    // Physical position: a right-to-left table starts at the right edge, so the columns after the cell's span come first.
+    const before=options.direction==='rtl'?columnWidths.slice(cell.column+cell.colSpan):columnWidths.slice(0,cell.column);
+    const cellBox={x:box.x+before.reduce((a,b)=>a+b,0),y:ys[cell.row]!,width:columnWidths.slice(cell.column,cell.column+cell.colSpan).reduce((a,b)=>a+b,0),height:ys[cell.row+cell.rowSpan]!-ys[cell.row]!};
     const available=cellBox.height-(cell.padding.top+cell.padding.bottom)*scale;
     const fit=fitCell(cell,available),height=textHeight(fit);
     const offset=cell.style.verticalAlign==='bottom'?Math.max(0,available-height):cell.style.verticalAlign==='middle'?Math.max(0,(available-height)/2):0;
@@ -2329,14 +2405,16 @@ export function layoutTable(value: unknown, box: LayoutBox, options: TableLayout
     overflow ||= cell.width<=0||available<=0||fit.overflow;
     rows[cell.row]!.cells.push({value:cell.value,input:cell.input,path:cell.valuePath,sourcePath:cell.path,style:cell.style,alignment:cell.alignment,row:cell.row,column:cell.column,rowSpan:cell.rowSpan,colSpan:cell.colSpan,header:cell.header,rich:Array.isArray(cell.value),box:cellBox,textBox,textStyle:resolveTextStyle(cell.textStyle,options.textMeasurement),fit,...(fit.directions?{direction:fit.directions[0]}:{})});
   }
-  return {rows,columnCount,height:sum(heights),overflow};
+  return {rows,columnCount,height:sum(heights),overflow,columnWidths:[...columnWidths],splitsWords:false};
   };
   // Largest size first, one reference pixel at a time: the first size at which the text and rows fit the box is the table's size.
   for(let step=0;;step++){
     const raw=requested-step*scale,last=step===64||raw<=minimum;
     trial=last?snapFontSizeUp(minimum):gridFontSize(raw,minimum);
-    const layout=place();
-    if(last||!layout.overflow)return layout;
+    sizeColumns();
+    const layout=place(),splits=splitsWords();
+    // A word that does not fit its column shrinks the table, within the fit rules, before any line breaks inside it.
+    if(last||(!layout.overflow&&!splits))return {...layout,splitsWords:splits};
   }
 }
 function tableOverflows(value: unknown, box: LayoutBox, scale: number, settings: Composition, options: ComposeSlideOptions, path?: string): boolean {
@@ -3236,7 +3314,7 @@ export function resolveCanvasDimensions(input: unknown): { width: number; height
   return { width, height };
 }
 // RR-92: the value axis (scale, intervals and the axis of a category chart), shared by the preview and the PPTX export.
-export {niceScale,maxIntervalsFor,stackCategoryValues,chartValueAxis,chartTextSize,CHART_TEXT_PX} from './chart-axis.js';
+export {niceScale,maxIntervalsFor,stackCategoryValues,chartValueAxis,chartTextSize,chartIntervalsFor,CHART_TEXT_PX,CHART_TEXT_FLOOR_PX,CHART_MIN_TICK_SPACING_PX,CHART_MAX_INTERVALS} from './chart-axis.js';
 export type {ChartScale,ChartValueAxis,ChartAxisGeometry} from './chart-axis.js';
 export {chartOptionSupport,chartOptionTarget,resolveChartOptions,chartHighlightMarks,formatChartLabelNumber,formatChartLabelPercent,chartLabelText,DEFAULT_CHART_LABEL_SEPARATOR} from './chart-options.js';
 export type {ChartOptionKind,ChartOptionTarget,ChartOptionSupport,ChartOptionDiagnostic,ChartLegendPosition,ChartLabelContent,ChartLabelPosition,ResolvedChartDataLabels,ResolvedChartHighlight,ChartHighlightMarks,ResolvedChartOptions} from './chart-options.js';

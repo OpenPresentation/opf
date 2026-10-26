@@ -1214,7 +1214,7 @@ _No named properties._
 | `align` | no | `enum:left \| center \| right` | Horizontal text alignment inside the cell. |
 | `verticalAlign` | no | `enum:top \| middle \| bottom` | Vertical alignment inside the padded cell box. |
 | `padding` | no | `ref:TableCellPadding` |  |
-| `borders` | no | `object` | Independent cell edges. Omitted edges retain the table theme border; width 0 removes an edge. |
+| `borders` | no | `object` | Independent cell edges. An omitted edge keeps the table's default rule: a line under every row (and over the first row), none between columns. Width 0 removes an edge. |
 
 
 ### TableCellPadding

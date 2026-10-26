@@ -71,7 +71,10 @@ for (const dimensions of [{widthInches: 1280 / 96, heightInches: 720 / 96}, {wid
   assert.equal(named(5, 'OPF image placeholder 1').width, '9525');
   // Control: table cell borders keep the table API's pt (0.75 pt = 9525 EMU).
   const table = decoder.decode(unzipSync(await toPptx(source, {seed: 1}))['ppt/slides/slide7.xml']);
-  const borders = [...table.matchAll(/<a:ln[LRTB] w="(\d+)"/g)].map(match => match[1]);
-  assert.ok(borders.length >= 4 && borders.every(width => width === '9525'), `table borders stay 0.75 pt: ${borders}`);
+  // WI-5 (P20): rules are horizontal only; the left and right edges are written at width 0 (no line).
+  const borders = [...table.matchAll(/<a:ln([LRTB]) w="(\d+)"/g)].map(match => ({edge: match[1], width: match[2]}));
+  const drawn = borders.filter(border => border.edge === 'T' || border.edge === 'B');
+  assert.ok(drawn.length >= 2 && drawn.every(border => border.width === '9525'), `table rules stay 0.75 pt: ${JSON.stringify(drawn)}`);
+  assert.ok(borders.filter(border => border.edge === 'L' || border.edge === 'R').every(border => border.width === '0'), 'no vertical rules');
 }
 console.log(JSON.stringify({test: 'shape-border-widths', passed: true, checked}));

@@ -61,7 +61,7 @@ for(const fixture of cases)for(const type of ['column','bar','line','area','pie'
   assert.equal(fills.length,3,'three native series on '+surface);
   assert.equal(new Set(fills).size,3,'distinct native series colours on '+surface+': '+fills);
   for(const [a,b] of [[0,1],[1,2]])assert.ok(Math.abs(lightness(fills[a])-lightness(fills[b]))>=9,surface+': native series '+(a+1)+' and '+(b+1)+' are '+fills[a]+' and '+fills[b]+', too close in lightness');
-  assert.deepEqual(fills,chartPaletteForFill(surface,palette).slice(0,3),'native colours are the shared palette function colours on '+surface);
+  assert.deepEqual(fills,chartPaletteForFill(surface,palette,{legibleLead:true}).slice(0,3),'native colours are the shared palette function colours on '+surface);
   checked++;
  }
 }

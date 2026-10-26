@@ -199,8 +199,13 @@ describe('tables', () => {
   it('lays the columns out from the right', () => {
     const ltr = layoutTable(table, box), rtl = layoutTable(table, box, {direction: 'rtl'});
     const header = layout => layout.rows[0].cells.map(cell => cell.box.x);
-    assert.deepEqual(header(ltr), [50, 250, 450]);
-    assert.deepEqual(header(rtl), [450, 250, 50]);
+    // WI-5: column widths follow content, so positions are cumulative widths (the same widths in both directions).
+    const [a, b, c] = ltr.columnWidths;
+    assert.deepEqual(rtl.columnWidths, ltr.columnWidths);
+    assert.ok(Math.abs(a + b + c - box.width) < .001);
+    const close = (actual, expected) => assert.ok(actual.every((value, index) => Math.abs(value - expected[index]) < .001), `${actual} vs ${expected}`);
+    close(header(ltr), [50, 50 + a, 50 + a + b]);
+    close(header(rtl), [50 + b + c, 50 + c, 50]);
     assert.equal(rtl.rows[0].cells[0].column, 0, 'columns keep their logical index');
     assert.equal(rtl.rows[0].cells[0].direction, 'rtl');
     assert.equal(rtl.rows[2].cells[0].direction, 'ltr', 'a Latin cell is left to right');
@@ -212,8 +217,9 @@ describe('tables', () => {
     const merged = {columns: ['a', 'b', 'c'], rows: [[{value: 'wide', colSpan: 2}, null, 'c']]};
     const rtl = layoutTable(merged, box, {direction: 'rtl'});
     const wide = rtl.rows[1].cells.find(cell => cell.colSpan === 2);
-    assert.equal(wide.box.x, 250);
-    assert.equal(wide.box.width, 400);
+    const [a, b, c] = rtl.columnWidths;
+    assert.ok(Math.abs(wide.box.x - (50 + c)) < .001);
+    assert.ok(Math.abs(wide.box.width - (a + b)) < .001);
   });
 });
 
@@ -231,7 +237,9 @@ describe('metric and timeline', () => {
 
   it('runs a timeline right to left', () => {
     const events = [{when: '2024', what: 'بداية'}, {when: '2025', what: 'نمو'}, {when: '2026', what: 'توسع'}];
-    const ltr = layoutTimeline(events, box), rtl = layoutTimeline(events, box, {direction: 'rtl'});
+    // A cell wide enough for three events side by side (a narrower one composes vertically, WI-5).
+    const wide = {...box, width: 900};
+    const ltr = layoutTimeline(events, wide), rtl = layoutTimeline(events, wide, {direction: 'rtl'});
     const xs = layout => layout.markers.map(marker => marker.x);
     assert.ok(xs(ltr)[0] < xs(ltr)[2]);
     assert.ok(xs(rtl)[0] > xs(rtl)[2], 'the first event is at the right');
