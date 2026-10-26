@@ -29,4 +29,4 @@ The review sheets were walked. Every changed slide has one of:
 - code at 22 px where the column is wide enough, in a panel that hugs the snippet ("Decision Rule");
 - a wrapped title with balanced lines.
 
-No slide changed in colour, fonts or drawing code, and no slide gained an overflow diagnostic.
+No slide changed in colour, fonts or drawing code.
