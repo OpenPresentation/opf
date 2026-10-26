@@ -53,7 +53,7 @@ The review sheets were inspected:
 
 ## Example corpus
 
-Before the rebase on WI-5, the `golden` workflow (run 40298942822, pinned Playwright image) changed **82 of 818 slides in 42 decks**, with the source digest unchanged. After the rebase it was dispatched again on the combined head; that result is CORPUS2. All 82 contain a metric: 41 are promoted-region slides, 20 are `dashboard`, 20 are `chart-beside`, and 1 is an automatic composition (`technical/block-composition.opf.json#0`). The corpus has 85 metric slides, so 3 do not move; they already drew their value at 76 px.
+Before the rebase on WI-5, the `golden` workflow (run 40298942822, pinned Playwright image) changed **82 of 818 slides in 42 decks**, with the source digest unchanged. After the rebase it was dispatched again on the combined head; that run (40307873797, commit `53b6b97d6`) changed the same **82 of 818 slides in the same 42 decks**, measured against main's WI-5 baseline. All 82 contain a metric: 41 are promoted-region slides, 20 are `dashboard`, 20 are `chart-beside`, and 1 is an automatic composition (`technical/block-composition.opf.json#0`). The corpus has 85 metric slides, so 3 do not move; they already drew their value at 76 px.
 
 The cause is rule 3: metric values that `min(76, 0.28 × box height)` held at roughly 34 to 69 px now ask for 76 px and fit down only where the box cannot hold them. A walk of every changed slide found no slide without a metric.
 
