@@ -39,7 +39,7 @@
     "@types/node": "^24.13.4",
     "pdf-lib": "1.17.1",
     "sharp": "0.35.5",
-    "tsup": "^8.5.1",
+    "tsup": "^9.0.0",
     "typescript": "~5.9.3"
   },
   "files": [
