@@ -190,11 +190,14 @@ export function prepareSceneMove(presentation, scene, keys, targetKey, index, op
   let at = index;
   while (at < list.length && moved.has(list[at])) at += 1;
   const anchor = list[at];
+  const order = [...list];
   const pruned = [];
   for (const object of objects) detach(slide, parentMap, object, pruned, owner);
   const into = owner.blocks;
-  if (target.kind !== "slide") for (const object of objects) delete object.region;
   into.splice(anchor ? into.indexOf(anchor) : into.length, 0, ...objects);
+  // The same order in the same container is no move (and does not convert implicit content for nothing).
+  if (!pruned.length && into.length === order.length && into.every((object, place) => object === order[place])) return unchanged(presentation, { paths: sources.map((node) => node.path) });
+  if (target.kind !== "slide") for (const object of objects) delete object.region;
   if (jsonEqual(work.slides[scene.slideIndex], presentation.slides[scene.slideIndex])) return unchanged(presentation, { paths: sources.map((node) => node.path) });
   const changedOwners = converted.length || pruned.length ? [scene.node(scene.slideKey).path] : [...sourceOwners, targetOwner];
   const patches = slidePatch(presentation, work, scene, changedOwners);

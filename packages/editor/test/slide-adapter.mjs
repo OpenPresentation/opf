@@ -178,6 +178,7 @@ const content = (adapter, key) => adapter.scene().contentChildren(key ?? adapter
   const { adapter, session } = context;
   const [text, list] = content(adapter);
   assert.deepEqual([text.kind, text.key, list.key], ["implicit", "/slides/@one/text", "/slides/@one/items"]);
+  assert.equal(adapter.trialMove([list.key], "/slides/@one", 2).noop, true, "a drop in place does not convert implicit content for nothing");
   const moved = roundTrip(context, "move", [list.key], "/slides/@one", 0);
   assert.deepEqual(moved.keys, ["/slides/@one/blocks/0"], "the converted list is block 0");
   assert.deepEqual(session.presentation.slides[0].blocks, [{ items: ["First", "Second"] }, { text: "Lead paragraph." }]);
