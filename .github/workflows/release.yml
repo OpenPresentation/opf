@@ -1,6 +1,6 @@
 name: Release
 
-# MR-40 (docs/programs/monorepo/README.md, section 5, decisions D6 and D16): one click releases all six packages.
+# MR-40 (docs/programs/monorepo/README.md, section 5, decisions D6 and D16): one click releases all seven packages.
 #
 #   Actions, Release, Run workflow on main: version (X.Y.Z, X.Y.Z-rc.N, patch or minor), dry-run (default true: nothing is
 #   committed, tagged or published; the pipeline up to `npm publish --dry-run` is rehearsed).
@@ -8,7 +8,7 @@ name: Release
 #   plan     main is the ref, `verify` is green for its head (one API call, no waiting), the version is well formed.
 #   gate     nightly.yml as a workflow_call on the dispatched commit (Windows, macOS, Node 22 and 26, packed-install, registry and npm 12
 #            consumers). A red leg stops the release before anything is committed or tagged. In parallel with `prepare`.
-#   prepare  scripts/release.mjs prepare in a runner checkout: the six versions, core's peers, six changelogs from changes/, the
+#   prepare  scripts/release.mjs prepare in a runner checkout: the seven versions, core's peers, seven changelogs from changes/, the
 #            gallery stability gate (a patch is refused when a minor is needed), the lockfile. Uploads the result as a patch and
 #            fails fast, so a refused version costs two minutes and not the gate's thirty.
 #   commit   (not a dry run) after gate and prepare: with the GitHub App's token (a bypass actor on the main ruleset, owner steps

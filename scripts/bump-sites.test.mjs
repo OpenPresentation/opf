@@ -8,7 +8,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { LABELS, NAMES, bumpKind, changedPaths, largest, lockfileCommand, main, manifestsOf, missingFromRegistry, planBump, pullRequestBody, runSiteScript, siteScript, siteScriptCommand, specifierFor, writeBump } from './bump-site.mjs';
-import { SIX } from './workspace-packages.mjs';
+import { PUBLISHED } from './workspace-packages.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = (relative) => readFileSync(path.join(root, relative), 'utf8');
@@ -32,7 +32,7 @@ const manifest = {
 };
 
 test('the script knows the six packages of the workspace and no others', () => {
-  assert.deepEqual([...NAMES].sort(), SIX.map(({ name }) => name).sort());
+  assert.deepEqual([...NAMES].sort(), PUBLISHED.map(({ name }) => name).sort());
 });
 
 test('bumpKind: patch is the same major and minor; a minor of 0.x, a new major and any move down are not', () => {

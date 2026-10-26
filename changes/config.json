@@ -6,11 +6,13 @@
     "render": "packages/render/CHANGELOG.md",
     "pptx": "packages/pptx/CHANGELOG.md",
     "editor": "packages/editor/CHANGELOG.md",
-    "gallery": "packages/gallery/CHANGELOG.md"
+    "gallery": "packages/gallery/CHANGELOG.md",
+    "mcp": "packages/mcp/CHANGELOG.md"
   },
   "codePaths": [
     "packages/javascript/src/",
     "packages/cli/src/",
+    "packages/mcp/src/",
     "packages/render/src/",
     "packages/render/fonts/",
     "packages/pptx/src/",

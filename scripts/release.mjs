@@ -1,26 +1,26 @@
 #!/usr/bin/env node
-// MR-40 (monorepo plan, section 5 "Release: one click"): the release script of the six published packages. One version for all
-// six, one tag `vX.Y.Z`, one publisher workflow (`.github/workflows/npm-publish.yml`). The workflows call these commands:
+// MR-40 (monorepo plan, section 5 "Release: one click"): the release script of the seven published packages. One version for all
+// seven, one tag `vX.Y.Z`, one publisher workflow (`.github/workflows/npm-publish.yml`). The workflows call these commands:
 //
 //   node scripts/release.mjs prepare <version|patch|minor> [--previous V] [--stability file | --no-stability] [--date D]
 //                            [--no-lockfile] [--dry-run] [--github-output file] [--dir root]
-//       Sets the six package versions, core's peer ranges and PEER_RANGES (src/node/peers.ts), assembles every changes/ fragment
+//       Sets the seven package versions, core's peer ranges and PEER_RANGES (src/node/peers.ts), assembles every changes/ fragment
 //       into its package changelog (a package without one gets "No package changes; released with the set."), deletes the
 //       consumed fragments (a prerelease touches neither: its notes are assembled from the fragments by `notes`), refreshes the lockfile and re-checks check:versions. Before it writes anything it applies the
 //       gallery stability gate (scripts/gallery-stability.mjs gateVersion: a declared drawing change, a removed record id or a
 //       CATALOG_SCHEMA change needs a minor, never a patch) and the version rules below. --dry-run writes nothing.
 //   node scripts/release.mjs pack <version> --commit <sha> --out <dir>
-//       `pnpm pack` of the six (the build already ran), gitHead stamped into each tarball (scripts/stamp-githead.mjs),
+//       `pnpm pack` of the seven (the build already ran), gitHead stamped into each tarball (scripts/stamp-githead.mjs),
 //       <dir>/release-manifest.json with the name, file and sha512 of each.
 //   node scripts/release.mjs smoke <version> (--dir <tarballs> | --registry)
-//       Installs the six tarballs together in a clean project, renders the quickstart deck with the renderer and the gallery,
-//       resolves every entry point and runs the CLI: the packed shape of the release, before anything is published (--registry: the same from npm, after).
+//       Installs the seven tarballs together in a clean project, renders the quickstart deck with the renderer and the gallery,
+//       resolves every entry point and runs the CLI and the MCP server's binary: the packed shape of the release, before anything is published (--registry: the same from npm, after).
 //   node scripts/release.mjs check-publish <version> [--tag latest|next]
 //       The pre-publish gate: each package's version is above its registry `latest` (the gallery: above the shared line, never
 //       against its own 5.0.0), a stable version goes to `latest` and a prerelease to a different tag.
 //   node scripts/release.mjs publish <version> --dir <tarballs> [--tag latest|next] [--dry-run] [--wait minutes] [--poll seconds] [--expect-staged]
 //       check-publish, then `npm publish <tarball> --access public --provenance --tag <tag>` in dependency order (gallery, core,
-//       render, pptx, editor, cli). The tag is explicit for all six (the gallery needs it, D16). A version already on npm is
+//       render, pptx, editor, cli, mcp). The tag is explicit for all seven (the gallery needs it, D16). A version already on npm is
 //       skipped, so a re-run continues where the last one stopped. --dry-run passes npm's --dry-run (no provenance: it needs
 //       the OIDC token of a real run). npm's stdout and stderr are printed for every package. After the real uploads the registry
 //       is looked at once per package (--wait minutes, default 0, polls longer): exit 0 from npm means the upload was accepted, and
@@ -28,12 +28,12 @@
 //       failure: the job goes green and `await-registry` waits for it. A result npm reports as staged (awaiting 2FA approval, not
 //       published) fails unless --expect-staged.
 //   node scripts/release.mjs await-registry <version> [--wait minutes] [--poll seconds] [--max-poll seconds]
-//       Waits until all six packages are served at <version> (default budget 60 minutes): the version's registry document is
+//       Waits until all seven packages are served at <version> (default budget 60 minutes): the version's registry document is
 //       requested with Cache-Control: no-cache and a unique query string, the interval starts at --poll (default 15 s), grows by
 //       half each round up to --max-poll (default 120 s), and only the packages still missing are asked again. Fails only when
 //       the budget is spent, with the staged-package guidance.
 //   node scripts/release.mjs verify <version> [--tag latest|next] [--commit sha] [--wait minutes] [--json] [--no-audit]
-//       For all six: registry manifest, gitHead and provenance source commit = the release commit, provenance workflow
+//       For all seven: registry manifest, gitHead and provenance source commit = the release commit, provenance workflow
 //       npm-publish.yml on refs/tags/vX.Y.Z, dist-tag, lockstep ranges, signatures, the changelog section.
 //   node scripts/release.mjs notes <version> [--out file]
 //       The GitHub release body: each package's changelog section (a prerelease: the pending fragments), grouped by package.
@@ -41,8 +41,8 @@
 //       The publish order, one npm name per line.
 //
 // Version rules (prepare): X.Y.Z or X.Y.Z-<prerelease> (the canary 0.26.0-rc.0 goes to `next`), or `patch` / `minor` of the
-// shared line. "Previous" is the shared line's last release: the highest `latest` of the five packages that were never above it
-// (core, CLI, renderer, PPTX, editor), not the gallery, whose 5.0.0 is above the shared 0.x line (D16). Nothing is published
+// shared line. "Previous" is the shared line's last release: the highest `latest` of the six packages that were never above it
+// (core, CLI, renderer, PPTX, editor, MCP), not the gallery, whose 5.0.0 is above the shared 0.x line (D16). Nothing is published
 // from here: the workflows do that.
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -55,7 +55,7 @@ import { gateVersion } from './gallery-stability.mjs';
 import { compareVersions, formatVerify, highest, isPrerelease, isVersion, npmRegistry, parseVersion, run, verifyPackage } from './release-registry.mjs';
 import { extractReleaseNotes } from './release-notes.mjs';
 import { stampGitHead } from './stamp-githead.mjs';
-import { CORE, GALLERY, SIX } from './workspace-packages.mjs';
+import { CORE, GALLERY, PUBLISHED } from './workspace-packages.mjs';
 
 export const REPOSITORY_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const NO_CHANGES = 'No package changes; released with the set.';
@@ -63,10 +63,10 @@ export const DIST_TAGS = ['latest', 'next'];
 const PEERS_FILE = 'packages/javascript/src/node/peers.ts';
 
 /**
- * The six packages in publish order: dependency order, spelled out and not left to pnpm's (spike S4, F7). The gallery goes first
+ * The seven packages in publish order: dependency order, spelled out and not left to pnpm's (spike S4, F7). The gallery goes first
  * (core depends on it, and a misconfigured trusted-publisher entry then fails before anything else is published, MR-41), then
- * core, the renderer and PPTX (PPTX reads the renderer), the editor (reads both) and the CLI (depends on core, peers on the
- * renderer and PPTX). `key` is the name of its changelog in changes/config.json.
+ * core, the renderer and PPTX (PPTX reads the renderer), the editor (reads both), the CLI (depends on core, peers on the
+ * renderer and PPTX) and the MCP server (depends on core and the gallery, peers on the renderer; the CLI only runs it when installed). `key` is the name of its changelog in changes/config.json.
  */
 export const PACKAGES = [
   { key: 'gallery', dir: 'gallery', name: GALLERY },
@@ -75,13 +75,14 @@ export const PACKAGES = [
   { key: 'pptx', dir: 'pptx', name: '@openpresentation/opf-pptx' },
   { key: 'editor', dir: 'editor', name: '@openpresentation/opf-editor' },
   { key: 'cli', dir: 'cli', name: '@openpresentation/cli' },
+  { key: 'mcp', dir: 'mcp', name: '@openpresentation/mcp' },
 ];
 export const NAMES = PACKAGES.map((pkg) => pkg.name);
-/** The five packages that were never above the shared line; the gallery is compared against them. */
+/** The six packages that were never above the shared line; the gallery is compared against them. */
 export const SHARED_LINE = PACKAGES.filter((pkg) => pkg.name !== GALLERY);
 export const tagOf = (version) => `v${version}`;
 
-for (const { name } of SIX) if (!NAMES.includes(name)) throw new Error(`release.mjs does not list ${name}`);
+for (const { name } of PUBLISHED) if (!NAMES.includes(name)) throw new Error(`release.mjs does not list ${name}`);
 
 // ---------------------------------------------------------------------------------------------------------------------
 // Pure text edits
@@ -93,7 +94,7 @@ export function setVersionText(text, version) {
   return text.replace(pattern, `$1"${version}"`);
 }
 
-/** Core's package.json with every peer on one of the six set to `^<version>` (the optional peers are concrete ranges, D12). */
+/** Core's package.json with every peer on one of the seven set to `^<version>` (the optional peers are concrete ranges, D12). */
 export function setPeerRangesText(text, version) {
   const block = /("peerDependencies"\s*:\s*\{)([^}]*)(\})/;
   if (!block.test(text)) return text;
@@ -132,14 +133,14 @@ export function checkTag(version, tag) {
 // ---------------------------------------------------------------------------------------------------------------------
 // Registry state
 
-/** `{ [name]: latest version | undefined }` for the six. */
+/** `{ [name]: latest version | undefined }` for the seven (a package never published, the MCP server before its first release, has none). */
 export async function latestVersions(registry) {
   const entries = await Promise.all(PACKAGES.map(async ({ name }) => [name, (await registry.distTags(name)).latest]));
   return Object.fromEntries(entries);
 }
 
 /**
- * The shared line's last release: the highest `latest` below `version` among the five packages that never left the 0.x line.
+ * The shared line's last release: the highest `latest` below `version` among the six packages that never left the 0.x line.
  * A `latest` at or above `version` is a package this release already published (a re-run) or a mistake the per-package rule of
  * `checkPublish` reports, so it does not move the line.
  */
@@ -466,11 +467,11 @@ const svgs = toSvg(deck, { catalogs: [gallery] });
 if (!Array.isArray(svgs) || !svgs.length || !String(svgs[0]).includes('<svg')) throw new Error('the renderer drew no SVG for the quickstart deck');
 if (Object.keys(core).length === 0 || Object.keys(pptx).length === 0) throw new Error('an entry point exports nothing');
 for (const name of ${JSON.stringify(NAMES)}) import.meta.resolve(name + '/package.json');
-console.log('rendered ' + svgs.length + ' slide(s); six packages resolve');
+console.log('rendered ' + svgs.length + ' slide(s); seven packages resolve');
 `;
 
 /**
- * Installs the release in a clean project and exercises it. From tarballs (`dir`: the six installed together, with overrides so
+ * Installs the release in a clean project and exercises it. From tarballs (`dir`: the seven installed together, with overrides so
  * their `^<version>` sibling ranges resolve to the tarballs, not to a registry that does not have the version yet) or, with
  * `registry: true`, from the registry at exactly `version` (the post-publish check). `exec` runs a command:
  * (command, args, { cwd }) -> { status, stdout, stderr }.
@@ -488,12 +489,16 @@ export function smoke(dir, version, { deck, registry = false, exec = run, scratc
       ['npm', ['install', '--no-audit', '--no-fund', '--ignore-scripts']],
       [process.execPath, ['smoke.mjs']],
       [process.execPath, [path.join('node_modules', '@openpresentation', 'cli', 'dist', 'index.js'), '--version']],
+      [process.execPath, [path.join('node_modules', '@openpresentation', 'mcp', 'dist', 'bin.js'), '--version']],
     ];
     const log = [];
     for (const [command, args] of steps) {
       const result = exec(command, args, { cwd: project });
       if (result.status !== 0) throw new Error(`smoke: ${path.basename(command)} ${args.join(' ')} failed (exit ${result.status})\n${result.stdout}${result.stderr}`);
-      if (args.at(-1) === '--version') {
+      if (args.at(-1) === '--version' && args[0].includes('mcp')) {
+        // The MCP server prints its own version.
+        if (result.stdout.trim() !== version) throw new Error(`smoke: opf-mcp reports ${result.stdout.trim()}, the release is ${version}`);
+      } else if (args.at(-1) === '--version') {
         // The CLI prints the versions of itself and of the core it runs: both are this release.
         const versions = JSON.parse(result.stdout);
         if (versions.cli !== version || versions.opf !== version) throw new Error(`smoke: the CLI reports cli ${versions.cli} and core ${versions.opf}, the release is ${version}`);

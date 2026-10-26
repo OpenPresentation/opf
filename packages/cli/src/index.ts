@@ -18,6 +18,7 @@ import * as fill from "./fill.js";
 import * as format from "./format.js";
 import * as ingest from "./ingest.js";
 import { json } from "./io.js";
+import * as mcp from "./mcp-command.js";
 import * as paginate from "./paginate.js";
 import { type Host, countsOf, envelope, printReport } from "./runtime.js";
 import { type SkillBundle, SkillsError, manageSkills } from "./skills.js";
@@ -74,6 +75,7 @@ const COMMANDS: [CommandSpec, Runner][] = [
 	[catalog.catalogsSpec, catalog.runCatalogs],
 	[catalog.catalogSpec, catalog.runCatalog],
 	[skillsSpec, (args) => runSkills(args)],
+	[mcp.spec, mcp.run],
 ];
 const byName = new Map(COMMANDS.map(([spec, runner]) => [spec.name, { spec, runner }]));
 

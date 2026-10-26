@@ -44,6 +44,19 @@ target is `~/.agents/skills`. See [agent skill installation](https://github.com/
 for the complete target mapping and update behavior. The installer preserves AGENTS.md and unrelated configuration and refuses to
 overwrite locally modified or unmanaged folders. `status` compares against the invoked CLI's bundled version without a network lookup.
 
+## Use OPF from an MCP client
+
+```sh
+claude mcp add opf -- npx -y @openpresentation/mcp     # Claude Code; Cursor and others: command npx, args -y @openpresentation/mcp
+```
+
+The MCP server for OPF is its own package, [`@openpresentation/mcp`](https://github.com/OpenPresentation/opf/blob/main/docs/mcp.md),
+so the CLI stays lean: it has no MCP code and no dependency on it. An agent that speaks [MCP](https://modelcontextprotocol.io) learns
+and checks OPF through it without shelling out and parsing text (`start_here`, `validate_deck`, `get_schema`, `search_catalog`,
+`convert`, `search_docs` and more; the docs, schemas, examples, catalog records and skills as `opf://` resources). `opf mcp` runs it
+when it is installed beside the CLI or in the working directory; without it, `opf mcp` prints `npx -y @openpresentation/mcp` and
+exits with 2.
+
 ## The conventions every command shares
 
 - **One output convention.** A command that writes a deck takes an optional output after its inputs and writes stdout without one

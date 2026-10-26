@@ -9,6 +9,7 @@ Conventions: `gh` is logged in as the owner (`michaeljgrimm`, repository admin o
 | # | Step | Needed by (blocks) | Time | Can start |
 | --- | --- | --- | --- | --- |
 | O1 | npm trusted publishers: add five entries, check core's | MR-41 (canary) | 10 min each | now |
+| O1b | `@openpresentation/mcp`: publish a placeholder once, then add its trusted publisher (the package must exist first) | the first release that includes the MCP server (0.27.0) | 10 min | before that release |
 | O2 | Optional "restrict updates" ruleset on the four old repos | MR-20 (freeze), before the MR-21 re-run | 5 min | when the freeze PRs have merged |
 | O3 | Push the verified import to `main` (two options) | MR-22 | 10 min | when the agent says the import is verified |
 | O4 | Create the GitHub App, install it, store its two secrets | MR-41 (bypass), MR-52 (sites) | 20 min | now |
@@ -35,9 +36,9 @@ Read these first; each is repeated at its step.
 
 ## O1. npm trusted publishers (MR-41 needs them; start any time)
 
-**What and why.** The single `npm-publish.yml` in `OpenPresentation/opf` publishes all six packages through GitHub OIDC. npm accepts a publish only if the package has a trusted-publisher entry that names exactly that repository and workflow file. Add the new entry **beside** the old one (npm allows up to 10 per package) and keep the old entries until O10, so a failed canary needs no owner action. npm does not validate an entry when you save it; a typo shows up only at publish time, which is why MR-41 publishes a canary first.
+**What and why.** The single `npm-publish.yml` in `OpenPresentation/opf` publishes all seven packages through GitHub OIDC (the seventh, `@openpresentation/mcp`, needs O1b first). npm accepts a publish only if the package has a trusted-publisher entry that names exactly that repository and workflow file. Add the new entry **beside** the old one (npm allows up to 10 per package) and keep the old entries until O10, so a failed canary needs no owner action. npm does not validate an entry when you save it; a typo shows up only at publish time, which is why MR-41 publishes a canary first.
 
-**The values, identical for all six** (the plan chose no environment, D7):
+**The values, identical for all seven** (the plan chose no environment, D7):
 
 | Field | Value |
 | --- | --- |
@@ -82,6 +83,51 @@ for p in opf cli opf-render opf-pptx opf-editor gallery; do echo "== $p"; npm tr
 Every package must list an entry with repository `OpenPresentation/opf` and file `npm-publish.yml`, no environment; the four packages with old entries list two. The proof that the values are right is the canary in MR-41 (`npm view @openpresentation/<p>@0.26.0-rc.0 gitHead` and the provenance statement naming `npm-publish.yml` on the tag). A wrong entry shows as `E404`/`E403 ... not a trusted publisher` in the publish job; fix the entry and re-run the workflow, nothing else changes.
 
 **Undo.** `npm trust list @openpresentation/<p>` shows each entry's id; `npm trust revoke @openpresentation/<p> --id <id>` removes it (browser: the entry's **Delete** button). Removing only the new entry returns the package to today's state.
+
+---
+
+## O1b. `@openpresentation/mcp`: the first publish of a new package name (before the release that includes it)
+
+**What and why.** `@openpresentation/mcp` joined the shared-version set in the MCP server pull request (seven packages, not six). It is not on the registry (`npm view @openpresentation/mcp` is a 404), and npm cannot hold a trusted-publisher entry for a name that does not exist: npm's trusted-publishers page configures the entry in the package's settings, and the `npm trust` command's prerequisites say "The package you're configuring must already exist on the npm registry". The docs describe no "pending publisher" for a name that is not yet taken (PyPI has one). So the name must be created once by you, and only then can `npm-publish.yml` publish it with provenance like the other six. Agents never publish, so this one-time step is yours. Checked 2026-10-26 against docs.npmjs.com/trusted-publishers and docs.npmjs.com/cli/v11/commands/npm-trust, and `npm view @openpresentation/mcp` (404).
+
+**Timing.** The trusted-publisher page also says a new entry must complete its first successful publish within 2 days, or it expires (delete it and add it again). So do part A (the placeholder) any time, and part B (the entry) shortly before you click **Release**; if the release is delayed past two days, re-add the entry.
+
+**Part A: create the name** (in a terminal of your own; a placeholder, never the real package, so nothing is published from a laptop that the release process would otherwise build):
+
+```sh
+npm login                                   # your account, with 2FA, member of the OpenPresentation organization
+d=$(mktemp -d) && cd "$d"
+cat > package.json <<'JSON'
+{
+  "name": "@openpresentation/mcp",
+  "version": "0.0.1",
+  "description": "Placeholder: the OPF MCP server is published from OpenPresentation/opf by its release workflow.",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/OpenPresentation/opf.git", "directory": "packages/mcp" },
+  "publishConfig": { "access": "public" }
+}
+JSON
+echo "Placeholder. See https://github.com/OpenPresentation/opf/blob/main/docs/mcp.md" > README.md
+npm publish --access public --tag placeholder
+```
+
+`--tag placeholder` keeps `latest` unset (and if npm sets it anyway, 0.0.1 is below every release, which the publish gate accepts). The `repository.url` must match the GitHub repository exactly (npm checks it for trusted publishing); the real package carries the same value. Check: `npm view @openpresentation/mcp dist-tags` lists `placeholder: 0.0.1`.
+
+**Part B: the trusted publisher** (the same entry as O1, for the new package):
+
+1. Open `https://www.npmjs.com/package/@openpresentation/mcp/access` (or the package, then **Settings**), section **Trusted Publisher**.
+2. Choose **GitHub Actions**. Organization or user `OpenPresentation`, Repository `opf`, Workflow filename `npm-publish.yml`, Environment empty; allow `npm publish` (do not tick stage publish). Click **Set up connection** and confirm with your 2FA code.
+
+Or, with npm 11.15 or later (the local one is 11.19.0):
+
+```sh
+npm trust github "@openpresentation/mcp" --repo OpenPresentation/opf --file npm-publish.yml --allow-publish
+npm trust list "@openpresentation/mcp"
+```
+
+**Verify.** `npm trust list "@openpresentation/mcp"` shows repository `OpenPresentation/opf`, file `npm-publish.yml`, no environment. The proof is the release itself: `release.mjs verify` checks the registry manifest, `gitHead` and provenance of all seven packages, mcp included, and `npm-publish.yml` stops at the first package it cannot publish (the order ends with mcp, so a typo here fails last, after the other six are published; re-run the workflow to continue).
+
+**Undo.** `npm trust revoke "@openpresentation/mcp" --id <id>` (id from `npm trust list`). The placeholder version stays on the registry (a published version number is never reused; npm limits unpublishing after 72 hours), which is harmless: it is below every release.
 
 ---
 
@@ -304,7 +350,7 @@ The functional proof is the `actions/create-github-app-token` step succeeding in
 - **Allow auto-merge**: tick (finding 5; required for every agent merge without a queue).
 - **Allow merge commits**: untick. **Allow rebase merging**: untick. **Allow squash merging**: stays ticked, message settings unchanged.
 - **Automatically delete head branches**: tick (optional; keeps the branch list short).
-- Risk 14 of the plan: confirm nobody else has write access, because the ruleset now governs six packages: `gh api repos/OpenPresentation/opf/collaborators --jq '.[].login'` should list only you (it does on 2026-10-21, and the same for the four old repositories).
+- Risk 14 of the plan: confirm nobody else has write access, because the ruleset now governs seven packages: `gh api repos/OpenPresentation/opf/collaborators --jq '.[].login'` should list only you (it does on 2026-10-21, and the same for the four old repositories).
 
 **Verify.**
 

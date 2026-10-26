@@ -16,10 +16,10 @@ name: Nightly
 #   installed           the old coordinated-CI "Installed candidates" job (Windows, macOS: packed tarballs, installed browser checks)
 #   pptx-windows        opf-pptx CI on Windows (the sharded suite, the native harness without Office, the browser suite)
 #   editor-macos        opf-editor `macos-playground`
-#   node-range          the old engines-range workflow and the three sibling `node-range` jobs (Node 22 and 26, all six packages)
+#   node-range          the old engines-range workflow and the three sibling `node-range` jobs (Node 22 and 26, all seven packages)
 #   packed-linux        the packed-install and installed-browser steps of the old core `normal` job and of each package job
 #   registry            the registry consumers (published packages against this checkout's harness)
-#   npm12-consumer      the six packed packages installed by npm 12 with its defaults (no install scripts, no git or remote dependencies)
+#   npm12-consumer      the seven packed packages installed by npm 12 with its defaults (no install scripts, no git or remote dependencies)
 #   audit               `pnpm audit` (a new advisory must not fail an unrelated pull request, so it moved off verify)
 #   platform-residual   opf-render `platform-residual` (non-blocking, as before)
 #   flake               the four per-repository flake-repeat workflows (advisory, Sundays and on demand)
@@ -75,7 +75,7 @@ jobs:
           if [ "$ASKED" = true ] || { [ "$GITHUB_EVENT_NAME" = schedule ] && [ "$(date -u +%u)" = 7 ]; }; then flake=true; fi
           echo "flake=$flake" >> "$GITHUB_OUTPUT"
 
-  # Core and the CLI on the other operating systems: install, typecheck, unit suites, the packed install and the packed CLI with
+  # Core, the CLI and the MCP server on the other operating systems: install, typecheck, unit suites, the packed install and the packed CLI with
   # its optional render and PPTX peers (45-minute limit, as the old cli-windows workflow had).
   cli-portability:
     name: CLI and core (${{ matrix.os }})
@@ -107,8 +107,10 @@ jobs:
       - run: pnpm --filter @openpresentation/cli --fail-if-no-match run test
       - run: pnpm --filter @openpresentation/cli --fail-if-no-match run test:packed
       - run: pnpm --filter @openpresentation/cli --fail-if-no-match run test:packed:peers
+      # The MCP server (stdio and, where workerd has a binary, the Worker lane) on the other operating systems.
+      - run: pnpm --filter @openpresentation/mcp --fail-if-no-match run test
 
-  # "Installed candidates": the packed tarballs of the six packages installed in a clean consumer on Windows and macOS, with the
+  # "Installed candidates": the packed tarballs of the seven packages installed in a clean consumer on Windows and macOS, with the
   # installed browser checks (45-minute limit, as the old `installed-portability` job had).
   installed:
     name: Installed candidates (${{ matrix.os }})
@@ -277,7 +279,7 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
-  # Node 22 (the oldest supported major) and Node 26 (the current release): install, typecheck and the unit suites of all six
+  # Node 22 (the oldest supported major) and Node 26 (the current release): install, typecheck and the unit suites of all seven
   # packages; browser, golden and native gates stay on Node 24. The renderer and PPTX suites are split in two shards.
   node-range:
     name: Node ${{ matrix.node }} (engines range, ${{ matrix.leg }})
@@ -313,6 +315,7 @@ jobs:
               pnpm typecheck
               pnpm --filter @openpresentation/opf --fail-if-no-match run test
               pnpm --filter @openpresentation/cli --fail-if-no-match run test
+              pnpm --filter @openpresentation/mcp --fail-if-no-match run test
               pnpm --filter @openpresentation/gallery --fail-if-no-match run test
               ;;
             render-*)
@@ -329,7 +332,7 @@ jobs:
               ;;
           esac
 
-  # The packed tarballs of the six packages installed in a clean consumer, on Linux in the pinned image, and the installed browser
+  # The packed tarballs of the seven packages installed in a clean consumer, on Linux in the pinned image, and the installed browser
   # checks (the "Install and exercise coordinated candidate tarballs" steps of the old package jobs and core's `normal` job).
   packed-linux:
     name: Packed install (Linux)
@@ -425,7 +428,7 @@ jobs:
           node scripts/test-metric-layout-browser.mjs artifacts/npm/registry-consumer artifacts/metric-layout-geometry.json artifacts/metric-layout-browser.json
 
   # npm 12 ("npm install-time security", GitHub changelog 2026-07-08) installs no dependency's install scripts and refuses git and
-  # remote dependencies by default. The six packages, packed the way they publish, installed into a clean project by npm 12 with those
+  # remote dependencies by default. The seven packages, packed the way they publish, installed into a clean project by npm 12 with those
   # defaults (scripts/test-npm12-consumer.mjs): it fails when any package in the tree needs an install script or a git or remote
   # source, then the CLI and the library convert a deck to SVG, PNG, PDF and PPTX. npm 12 is installed to a prefix of its own so the
   # runner's npm serves the other steps; the version is exact (bump it here when a newer npm 12 should be the one users get).

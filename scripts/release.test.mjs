@@ -41,7 +41,7 @@ const CORE = '@openpresentation/opf';
 const sha = (text) => createHash('sha512').update(text).digest();
 
 // ---------------------------------------------------------------------------------------------------------------------
-// A fixture workspace: six manifests at one version, core's peers and PEER_RANGES, six changelogs, changes/.
+// A fixture workspace: seven manifests at one version, core's peers and PEER_RANGES, seven changelogs, changes/.
 
 function fixture({ version = '0.26.0', fragments = {}, changelogVersions = {} } = {}) {
   const root = mkdtempSync(path.join(os.tmpdir(), 'release-test-'));
@@ -56,7 +56,7 @@ function fixture({ version = '0.26.0', fragments = {}, changelogVersions = {} } 
   }
   write('packages/javascript/src/node/peers.ts', `export const PEER_RANGES = { [RENDER_PACKAGE]: "^${version}", [PPTX_PACKAGE]: "^${version}" } as const;\n`);
   write('pnpm-workspace.yaml', `packages:\n${PACKAGES.map(({ dir }) => `  - "packages/${dir}"`).join('\n')}\n`);
-  const targets = { opf: 'CHANGELOG.md', cli: 'packages/cli/CHANGELOG.md', render: 'packages/render/CHANGELOG.md', pptx: 'packages/pptx/CHANGELOG.md', editor: 'packages/editor/CHANGELOG.md', gallery: 'packages/gallery/CHANGELOG.md' };
+  const targets = { opf: 'CHANGELOG.md', cli: 'packages/cli/CHANGELOG.md', render: 'packages/render/CHANGELOG.md', pptx: 'packages/pptx/CHANGELOG.md', editor: 'packages/editor/CHANGELOG.md', gallery: 'packages/gallery/CHANGELOG.md', mcp: 'packages/mcp/CHANGELOG.md' };
   write('changes/config.json', `${JSON.stringify({ default: 'opf', targets, codePaths: ['packages/'] })}\n`);
   for (const [key, file] of Object.entries(targets)) write(file, `# Changelog\n\n## Unreleased\n\n## ${changelogVersions[key] ?? '0.25.0'} (2026-10-21)\n\n- earlier\n`);
   for (const [slug, text] of Object.entries(fragments)) write(`changes/${slug}.md`, text);
@@ -92,8 +92,8 @@ test('versions: precedence, prerelease, the highest', () => {
   assert.equal(defaultTag('0.26.0'), 'latest');
 });
 
-test('the publish order is dependency order, gallery first, CLI last, and covers exactly the six', () => {
-  assert.deepEqual(NAMES, [GALLERY, CORE, '@openpresentation/opf-render', '@openpresentation/opf-pptx', '@openpresentation/opf-editor', '@openpresentation/cli']);
+test('the publish order is dependency order, gallery first, the MCP server last, and covers exactly the seven', () => {
+  assert.deepEqual(NAMES, [GALLERY, CORE, '@openpresentation/opf-render', '@openpresentation/opf-pptx', '@openpresentation/opf-editor', '@openpresentation/cli', '@openpresentation/mcp']);
 });
 
 test('text edits change the version, core peers and PEER_RANGES and nothing else', () => {
@@ -102,7 +102,7 @@ test('text edits change the version, core peers and PEER_RANGES and nothing else
   assert.ok(setVersionText(manifest, '0.27.0').includes('"zod": "^0.26.0"'));
   const peers = setPeerRangesText(manifest, '0.27.0');
   assert.ok(peers.includes('"@openpresentation/opf-pptx": "^0.27.0"'));
-  assert.ok(peers.includes('"left-pad": "^0.26.0"'), 'a peer outside the six is not touched');
+  assert.ok(peers.includes('"left-pad": "^0.26.0"'), 'a peer outside the seven is not touched');
   assert.equal(setPeerHintsText('export const PEER_RANGES = { [R]: "^0.26.0", [P]: "^0.26.0" } as const;', '0.27.0'), 'export const PEER_RANGES = { [R]: "^0.27.0", [P]: "^0.27.0" } as const;');
   assert.throws(() => setPeerHintsText('nothing', '0.27.0'), /PEER_RANGES/);
   assert.throws(() => setVersionText('{}', '1.0.0'), /no top-level/);
@@ -135,7 +135,7 @@ test('sharedLine ignores the gallery and any latest at or above the version (a p
 // ---------------------------------------------------------------------------------------------------------------------
 // prepare
 
-test('prepare plans a release: one version everywhere, peers, six changelogs, fragments consumed', async () => {
+test('prepare plans a release: one version everywhere, peers, seven changelogs, fragments consumed', async () => {
   const { root, cleanup } = fixture({ fragments: { 'a-core': fragment('added', ['opf', 'render'], 'Core and render change.'), 'b-gallery': fragment('added', ['gallery'], 'A new layout.') } });
   try {
     const plan = await planPrepare({ root, input: '0.26.0', stability: noStability, registry: fakeRegistry(), date: '2026-10-23' });
@@ -154,7 +154,7 @@ test('prepare plans a release: one version everywhere, peers, six changelogs, fr
     assert.match(byFile['CHANGELOG.md'], /## 0\.26\.0 \(2026-10-23\)\n\n- Core and render change\./);
     assert.match(byFile['packages/render/CHANGELOG.md'], /- Core and render change\./);
     assert.match(byFile['packages/gallery/CHANGELOG.md'], /- A new layout\./);
-    for (const file of ['packages/cli/CHANGELOG.md', 'packages/pptx/CHANGELOG.md', 'packages/editor/CHANGELOG.md']) assert.match(byFile[file], new RegExp(`## 0\\.26\\.0 \\(2026-10-23\\)\\n\\n${NO_CHANGES}\\n`), file);
+    for (const file of ['packages/cli/CHANGELOG.md', 'packages/pptx/CHANGELOG.md', 'packages/editor/CHANGELOG.md', 'packages/mcp/CHANGELOG.md']) assert.match(byFile[file], new RegExp(`## 0\\.26\\.0 \\(2026-10-23\\)\\n\\n${NO_CHANGES}\\n`), file);
     assert.deepEqual(plan.removes.sort(), ['changes/a-core.md', 'changes/b-gallery.md']);
   } finally {
     cleanup();
@@ -176,7 +176,7 @@ test('a prerelease sets the versions but leaves every changelog and every fragme
     assert.match(body, /## @openpresentation\/opf\n\n- Core and render change\./);
     assert.match(body, /## @openpresentation\/opf-render\n\n- Core and render change\./);
     assert.match(body, /## @openpresentation\/gallery\n\n- Gallery fix\./);
-    assert.match(body, /Released with the set, no changes: `@openpresentation\/opf-pptx`, `@openpresentation\/opf-editor`, `@openpresentation\/cli`\./);
+    assert.match(body, /Released with the set, no changes: `@openpresentation\/opf-pptx`, `@openpresentation\/opf-editor`, `@openpresentation\/cli`, `@openpresentation\/mcp`\./);
     assert.ok(existsSync(path.join(root, 'changes/a-core.md')) && readFileSync(path.join(root, 'CHANGELOG.md'), 'utf8').includes('## Unreleased\n\n## 0.25.0'));
     // The stable release that follows still has every note.
     const stable = await planPrepare({ root, input: '0.26.0', stability: noStability, registry: fakeRegistry(), date: '2026-10-24' });
@@ -358,7 +358,7 @@ test('publish runs npm publish per tarball in dependency order with an explicit 
   try {
     const deps = publishDeps({ published: { [GALLERY]: ['0.26.0'] }, lag: 2 });
     const results = await main(['publish', '0.26.0', '--dir', dir, '--wait', '5', '--poll', '15'], deps);
-    assert.deepEqual(results.map(({ status }) => status), ['skipped', 'published', 'published', 'published', 'published', 'published']);
+    assert.deepEqual(results.map(({ status }) => status), ['skipped', 'published', 'published', 'published', 'published', 'published', 'published']);
     assert.deepEqual(deps.calls.map((args) => nameOfTarball(args[1])), NAMES.slice(1));
     for (const args of deps.calls) {
       assert.deepEqual(args.slice(2), ['--access', 'public', '--provenance', '--tag', 'latest']);
@@ -423,7 +423,7 @@ test('publish --dry-run passes --dry-run and no --provenance, waits for nothing;
   try {
     const deps = publishDeps({ never: NAMES, version: '0.26.0-rc.0' });
     const results = await main(['publish', '0.26.0-rc.0', '--dir', dir, '--dry-run'], deps);
-    assert.equal(deps.calls.length, 6);
+    assert.equal(deps.calls.length, 7);
     assert.ok(results.every(({ status }) => status === 'dry-run'));
     assert.ok(deps.calls.every((args) => !args.includes('--provenance') && args.at(-1) === 'next' && args.includes('--dry-run')));
   } finally {
@@ -492,7 +492,7 @@ test('waitForRegistry: one cache-busting look and no sleeping when everything is
   const result = await waitForRegistry(served, NAMES, '0.26.0', { waitMinutes: 60 });
   assert.deepEqual(result.pending, []);
   assert.deepEqual(Object.keys(result.visible), NAMES);
-  assert.equal(served.looks.length, 6);
+  assert.equal(served.looks.length, 7);
   assert.ok(served.looks.every((look) => look.bust && look.at === 0), 'every look asks with the cache-busting option');
   assert.deepEqual(served.sleeps, []);
   const lagging = lagRegistry({ [CORE]: minutes(20) });
@@ -524,12 +524,12 @@ test('waitForRegistry: the budget is a hard limit, the last look happens at the 
   assert.ok(deps.logs.some((line) => line.includes('registry lookup failed (GET /@openpresentation/gallery/0.26.9: HTTP 503)')));
 });
 
-test('await-registry: succeeds once all six are served (default budget 60 minutes) and fails with the staged guidance only after the budget', async () => {
+test('await-registry: succeeds once all seven are served (default budget 60 minutes) and fails with the staged guidance only after the budget', async () => {
   const slow = lagRegistry({ [CORE]: minutes(22) });
   const result = await main(['await-registry', '0.26.9'], slow);
   assert.ok(result.visible[CORE] >= minutes(22));
-  assert.ok(slow.logs.includes(`waiting up to ${REGISTRY_WAIT_MINUTES} min for the registry to serve 6 packages at 0.26.9`));
-  assert.ok(slow.logs.includes('the registry serves all 6 packages at 0.26.9'));
+  assert.ok(slow.logs.includes(`waiting up to ${REGISTRY_WAIT_MINUTES} min for the registry to serve 7 packages at 0.26.9`));
+  assert.ok(slow.logs.includes('the registry serves all 7 packages at 0.26.9'));
 
   const staged = lagRegistry({ [CORE]: minutes(500) });
   await assert.rejects(main(['await-registry', '0.26.9', '--wait', '30', '--poll', '30', '--max-poll', '60'], staged), (error) => {
@@ -641,8 +641,8 @@ test('verifyPackage waits for the attestation bundle only while it is a 404', as
   assert.match(late.checks.find((check) => check.name === 'SLSA provenance').detail, /still not propagated after 1 min/);
 });
 
-test('verifyRelease checks all six in order and reports the failing ones', async () => {
-  const { root, cleanup } = fixture({ changelogVersions: { opf: '0.26.0', cli: '0.26.0', render: '0.26.0', pptx: '0.26.0', editor: '0.26.0', gallery: '0.26.0' } });
+test('verifyRelease checks all seven in order and reports the failing ones', async () => {
+  const { root, cleanup } = fixture({ changelogVersions: { opf: '0.26.0', cli: '0.26.0', render: '0.26.0', pptx: '0.26.0', editor: '0.26.0', gallery: '0.26.0', mcp: '0.26.0' } });
   try {
     const entries = Object.fromEntries(NAMES.map((name) => [name, published(name, '0.26.0')]));
     const ok = await verifyRelease(verifyDeps(entries), '0.26.0', { commit: COMMIT, root });
@@ -667,14 +667,14 @@ test('notes: the release body is grouped by package and names the packages relea
     assert.match(body, /^## @openpresentation\/gallery\n\n### |^## @openpresentation\/gallery\n\n- Gallery fix\./m);
     assert.match(body, /## @openpresentation\/opf\n\n- Shared\./);
     assert.match(body, /## @openpresentation\/cli\n\n- Shared\./);
-    assert.match(body, /Released with the set, no changes: `@openpresentation\/opf-render`, `@openpresentation\/opf-pptx`, `@openpresentation\/opf-editor`\./);
+    assert.match(body, /Released with the set, no changes: `@openpresentation\/opf-render`, `@openpresentation\/opf-pptx`, `@openpresentation\/opf-editor`, `@openpresentation\/mcp`\./);
     assert.throws(() => releaseNotes(root, '0.27.0'), /has no 0\.27\.0 section/);
   } finally {
     cleanup();
   }
 });
 
-test('smoke installs the six tarballs together with overrides to themselves, then renders, resolves and runs the CLI', () => {
+test('smoke installs the seven tarballs together with overrides to themselves, then renders, resolves and runs the CLI and the MCP server', () => {
   const { dir, cleanup } = tarballs();
   const deck = path.join(dir, 'deck.json');
   writeFileSync(deck, '{}');
@@ -683,16 +683,18 @@ test('smoke installs the six tarballs together with overrides to themselves, the
     const exec = (command, args, options) => {
       const manifest = JSON.parse(readFileSync(path.join(options.cwd, 'package.json'), 'utf8'));
       seen.push({ command: path.basename(command), args, dependencies: manifest.dependencies, overrides: manifest.overrides, files: readdirSync(options.cwd).sort() });
-      return { status: 0, stdout: args.at(-1) === '--version' ? '{"cli":"0.26.0","opf":"0.26.0"}' : 'ok\n', stderr: '' };
+      const mcp = args[0].includes('mcp');
+      return { status: 0, stdout: args.at(-1) === '--version' ? (mcp ? '0.26.0\n' : '{"cli":"0.26.0","opf":"0.26.0"}') : 'ok\n', stderr: '' };
     };
     const log = smoke(dir, '0.26.0', { deck, exec });
-    assert.equal(log.length, 3);
-    assert.deepEqual(seen.map((step) => step.args[0]), ['install', 'smoke.mjs', path.join('node_modules', '@openpresentation', 'cli', 'dist', 'index.js')]);
+    assert.equal(log.length, 4);
+    assert.deepEqual(seen.map((step) => step.args[0]), ['install', 'smoke.mjs', path.join('node_modules', '@openpresentation', 'cli', 'dist', 'index.js'), path.join('node_modules', '@openpresentation', 'mcp', 'dist', 'bin.js')]);
     assert.deepEqual(Object.keys(seen[0].dependencies), NAMES);
     assert.ok(Object.values(seen[0].dependencies).every((spec) => spec.startsWith('file:/')));
     assert.deepEqual(seen[0].overrides, Object.fromEntries(NAMES.map((name) => [name, `$${name}`])));
     assert.deepEqual(seen[1].files, ['deck.opf.json', 'package.json', 'smoke.mjs']);
-    assert.throws(() => smoke(dir, '0.26.0', { deck, exec: (_command, args) => ({ status: 0, stdout: args.at(-1) === '--version' ? '{"cli":"0.25.0","opf":"0.26.0"}' : 'ok', stderr: '' }) }), /CLI reports cli 0\.25\.0/);
+    assert.throws(() => smoke(dir, '0.26.0', { deck, exec: (_command, args) => ({ status: 0, stdout: args.at(-1) === '--version' ? (args[0].includes('mcp') ? '0.26.0' : '{"cli":"0.25.0","opf":"0.26.0"}') : 'ok', stderr: '' }) }), /CLI reports cli 0\.25\.0/);
+    assert.throws(() => smoke(dir, '0.26.0', { deck, exec: (_command, args) => ({ status: 0, stdout: args.at(-1) === '--version' ? (args[0].includes('mcp') ? '0.25.0' : '{"cli":"0.26.0","opf":"0.26.0"}') : 'ok', stderr: '' }) }), /opf-mcp reports 0\.25\.0/);
     seen.length = 0;
     smoke(undefined, '0.26.0', { deck, registry: true, exec });
     assert.deepEqual(seen[0].dependencies, Object.fromEntries(NAMES.map((name) => [name, '0.26.0'])));
@@ -738,7 +740,7 @@ test('`release.mjs verify` with the dependency wiring the workflow uses (default
     const result = await main(['verify', version, '--tag', 'next', '--commit', COMMIT, '--no-audit', '--dir', root], deps);
     assert.ok(result.ok, logs.join('\n'));
     assert.equal(asked.filter((url) => url.endsWith(`/${version}`)).length, NAMES.length);
-    assert.ok(logs.includes(`release ${version} verified: all 6 packages`));
+    assert.ok(logs.includes(`release ${version} verified: all 7 packages`));
     // a package the registry lacks is reported, not thrown on
     delete entries[CORE];
     await assert.rejects(main(['verify', version, '--tag', 'next', '--commit', COMMIT, '--no-audit', '--dir', root], deps), /NOT verified \(@openpresentation\/opf\)/);

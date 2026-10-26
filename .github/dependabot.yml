@@ -13,7 +13,7 @@
 #   has its own group: one pull request that a person or an agent finishes by hand, never merged as it arrives.
 # - Font packages (@expo-google-fonts/*) are exact pins with matching exact optional peers (`pnpm check:pins`): a font bump changes
 #   a published peer range, which is a compatibility-contract change and needs the owner's review.
-# - The six workspace packages are linked only through the workspace: protocol (`pnpm check:workspace-graph`) and are published
+# - The seven workspace packages are linked only through the workspace: protocol (`pnpm check:workspace-graph`) and are published
 #   together by the release workflow, so Dependabot must never bump a specifier of them (core's concrete peer ranges on render and
 #   pptx would otherwise look like registry pins). This is a dependency-name ignore, not an advisory ignore: no advisory id and no
 #   vulnerable version is ever ignored here.
@@ -45,13 +45,14 @@ updates:
       # Match the supported Node 24 runtime. This semver rule only limits routine version updates; do not add ignored advisory IDs.
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
-      # The six workspace packages (see above).
+      # The seven workspace packages (see above).
       - dependency-name: "@openpresentation/opf"
       - dependency-name: "@openpresentation/cli"
       - dependency-name: "@openpresentation/opf-render"
       - dependency-name: "@openpresentation/opf-pptx"
       - dependency-name: "@openpresentation/opf-editor"
       - dependency-name: "@openpresentation/gallery"
+      - dependency-name: "@openpresentation/mcp"
     groups:
       # Order matters: a dependency goes to the first group that matches.
       playwright:

@@ -7,10 +7,11 @@ CI legs, which run in the nightly workflow, before every release and on pull req
 The next releases must document the [Node 24 migration](migrations/node24.md)
 and use new versions. Historical dual-runtime release records remain unchanged.
 
-This document is the release runbook for the six published packages of this repository:
+This document is the release runbook for the seven published packages of this repository:
 [`@openpresentation/opf`](https://www.npmjs.com/package/@openpresentation/opf) (core, `packages/javascript`),
-`@openpresentation/cli`, `@openpresentation/opf-render`, `@openpresentation/opf-pptx`, `@openpresentation/opf-editor` and
-`@openpresentation/gallery`. They are released together, at one version, with one tag.
+`@openpresentation/cli`, `@openpresentation/opf-render`, `@openpresentation/opf-pptx`, `@openpresentation/opf-editor`,
+`@openpresentation/gallery` and `@openpresentation/mcp` (the MCP server, first published with 0.27.0; its first publish needs the
+trusted-publisher entry of `docs/programs/monorepo/owner-steps.md`, O1b). They are released together, at one version, with one tag.
 
 ## Release: one click
 
@@ -18,9 +19,9 @@ This document is the release runbook for the six published packages of this repo
 > is the canary `0.26.0-rc.0` (MR-41), then 0.26.0 (MR-44). Releases up to 0.25.x were made from the four old repositories with
 > a per-package train; that process is retired and not described here.
 
-**One version, one tag, one workflow.** All six packages carry the same version (`pnpm check:versions`); a release is the tag
+**One version, one tag, one workflow.** All seven packages carry the same version (`pnpm check:versions`); a release is the tag
 `vX.Y.Z` on a commit of `main`, published by `.github/workflows/npm-publish.yml` in dependency order: gallery, core, render,
-PPTX, editor, CLI. In 0.x a breaking change is a minor release and everything else a patch. Prereleases (`0.26.0-rc.0`) go to
+PPTX, editor, CLI, MCP. In 0.x a breaking change is a minor release and everything else a patch. Prereleases (`0.26.0-rc.0`) go to
 the dist-tag `next`, releases to `latest`; both are passed explicitly to `npm publish --tag` for every package.
 
 ### Run a release
@@ -39,7 +40,7 @@ rehearsal. The jobs:
 1. **plan**: a real release runs on `main`, and the check `verify` is green for its head (one API call, no waiting).
 2. **gate** (parallel with prepare): `nightly.yml` called on that commit: Windows, macOS, Node 22 and 26, the packed-install,
    registry and npm 12 consumers. A red leg stops the release before anything is committed or tagged.
-3. **prepare** (parallel with gate): `node scripts/release.mjs prepare <version>` in the runner: sets the six versions, core's
+3. **prepare** (parallel with gate): `node scripts/release.mjs prepare <version>` in the runner: sets the seven versions, core's
    peer ranges and `PEER_RANGES` (`packages/javascript/src/node/peers.ts`), assembles every `changes/` fragment into its package
    changelog (a package without a fragment gets "No package changes; released with the set."), applies the gallery stability gate
    and the version rules below, refreshes the lockfile, and uploads the result as a patch. A **prerelease** (`X.Y.Z-rc.N`) only sets the versions: it leaves every changelog and `changes/` alone, and its GitHub release notes are assembled from the fragments (`release.mjs notes`), so the stable release that follows carries every note. A refused version fails here, in two
@@ -48,16 +49,16 @@ rehearsal. The jobs:
    applies the patch as one commit `release vX.Y.Z` on exactly the commit the gate tested, pushes it to `main`, then pushes the
    tag `vX.Y.Z`. If `main` moved during the run, or the tag exists, it stops. A tag pushed with the App's token starts
    `npm-publish.yml` (a tag pushed with `GITHUB_TOKEN` would not).
-5. **npm-publish.yml** on the tag: `plan` (the tag is on `main`), `build` (one install and build, `pnpm pack` of the six,
-   `scripts/stamp-githead.mjs` adds `gitHead` to each tarball because `pnpm pack` omits it, a smoke test installs the six
+5. **npm-publish.yml** on the tag: `plan` (the tag is on `main`), `build` (one install and build, `pnpm pack` of the seven,
+   `scripts/stamp-githead.mjs` adds `gitHead` to each tarball because `pnpm pack` omits it, a smoke test installs the seven
    tarballs together, renders the quickstart deck and runs the CLI), `publish` (the only job with `id-token: write`; the
-   pre-publish gate, then `npm publish <tarball> --access public --provenance --tag <tag>` six times, printing npm's own output; a version already on npm is
+   pre-publish gate, then `npm publish <tarball> --access public --provenance --tag <tag>` seven times, printing npm's own output; a version already on npm is
    skipped. Once npm accepted an upload the package is published: if the registry does not serve it yet it is logged as
    **pending**, which is not a failure, and the job goes on), `verify` (below: it first waits for the registry), `release` (the GitHub release, notes grouped by package) and `report` (a failure opens the issue
    "Release vX.Y.Z failed", labeled `release-failed`).
 6. **follow the publish run** (the Release run waits for it, so it is green only when the whole release is).
 
-Time target: about 20 minutes from the click to six verified packages (measured in MR-44).
+Time target: about 20 minutes from the click to seven verified packages (measured in MR-44).
 
 ### Version rules
 
@@ -71,11 +72,11 @@ Time target: about 20 minutes from the click to six verified packages (measured 
   `latest`, except the gallery, which is compared with the shared line, because its `latest` was 5.0.0 before it joined the
   shared 0.x line (D16). A stable version needs `latest`, a prerelease must not take it. 5.0.0 and the older gallery versions
   stay published and are never deprecated; because they are above the shared line, every gallery publish names its tag explicitly.
-- The shared line cannot use 1.0.0 to 5.0.0 (taken by the gallery): the first stable major for all six is 6.0.0.
+- The shared line cannot use 1.0.0 to 5.0.0 (taken by the gallery): the first stable major for all seven is 6.0.0.
 
 ### Trusted publishing
 
-All six packages have the trusted publisher: GitHub Actions, organization `OpenPresentation`, repository `opf`, workflow filename
+All seven packages have the trusted publisher: GitHub Actions, organization `OpenPresentation`, repository `opf`, workflow filename
 `npm-publish.yml`, no environment (owner steps O1 in `docs/programs/monorepo/owner-steps.md`). npm checks the entry against
 the **top-level** workflow of the run, not against a reusable workflow that contains `npm publish`, so `npm-publish.yml` is the
 workflow that starts on the tag and `release.yml` only pushes the tag. `publish` refuses to publish from any other top-level
@@ -112,14 +113,14 @@ and skip verify and the GitHub release; a manual `gh run rerun --failed` was the
    attestation bundle and the scratch install (a few more minutes), and then the smoke test against the registry
    (`release.mjs smoke X.Y.Z --registry`).
 
-For all six packages `verify` checks the registry manifest,
+For all seven packages `verify` checks the registry manifest,
 `gitHead` and the provenance source commit equal to the release commit, the provenance workflow `npm-publish.yml` on
 `refs/tags/vX.Y.Z`, the subject digest, the dist-tag, that no manifest carries a `workspace:` range and every sibling range is
 `^X.Y.Z`, `npm audit signatures`, and that each package changelog has the version's section. If the budget is spent, re-run the
 failed jobs (`gh run rerun --failed`): `publish` is not repeated, because it succeeded. By hand:
 
 ```sh
-node scripts/release.mjs verify X.Y.Z --tag latest            # exit 0 when all six verify
+node scripts/release.mjs verify X.Y.Z --tag latest            # exit 0 when all seven verify
 npm view @openpresentation/opf@X.Y.Z gitHead dist.attestations.url
 npm view @openpresentation/gallery dist-tags --json           # latest is X.Y.Z; 5.0.0 stays published
 ```
@@ -129,8 +130,8 @@ npm view @openpresentation/gallery dist-tags --json           # latest is X.Y.Z;
 | Command | Does |
 | --- | --- |
 | `prepare <version> [--dry-run] [--no-stability] [--previous V]` | the prepare step above (`--dry-run` writes nothing) |
-| `pack <version> --commit <sha> --out <dir>` | `pnpm pack` of the six, `gitHead` stamped, `release-manifest.json` with digests |
-| `smoke <version> (--dir <dir> \| --registry)` | install the six together, render, resolve, run the CLI |
+| `pack <version> --commit <sha> --out <dir>` | `pnpm pack` of the seven, `gitHead` stamped, `release-manifest.json` with digests |
+| `smoke <version> (--dir <dir> \| --registry)` | install the seven together, render, resolve, run the CLI |
 | `check-publish <version> [--tag t]` | the pre-publish gate |
 | `publish <version> --dir <dir> [--tag t] [--dry-run] [--wait minutes] [--poll seconds] [--expect-staged]` | the gate, then `npm publish` in dependency order: npm's output is printed; after all six uploads each package gets one registry look (`--wait`, default 0, polls longer) and one not served yet is logged **pending**, never a failure; a staged result fails unless `--expect-staged` |
 | `await-registry <version> [--wait minutes] [--poll seconds] [--max-poll seconds]` | waits (default 60 min, backoff 15 s to 120 s, cache-busting) until the registry serves all six; fails only when the budget is spent |
@@ -168,7 +169,7 @@ free at any time.
 ## Geometry-moving core releases
 
 Core composition changes that move geometry make the preview and the PPTX export drift when the renderer and the exporter resolve
-different core versions. This cannot happen between the packages of this repository: all six are released at one version, and
+different core versions. This cannot happen between the packages of this repository: all seven are released at one version, and
 their runtime dependencies and peers on each other are `workspace:^`, published as `^X.Y.Z`, so the floor of every sibling is the
 release itself. Do not hand-edit those ranges, and do not release one package alone.
 

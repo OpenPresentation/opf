@@ -20,15 +20,15 @@
 //     it is never true or deep there, and a legacy `link-workspace-packages` in .npmrc is not true or deep either;
 //   - a `link:` between members in a pnpm-lock.yaml importer is declared by that importer's manifest and obeys the same
 //     edge rules.
-// Transitional state (until all six packages are members, MR-23): the one registry specifier that exists today,
+// Transitional state (until all seven packages are members, MR-23): the one registry specifier that exists today,
 // `@openpresentation/cli` depending on `@openpresentation/opf` as `^X.Y.Z`, is accepted while a pnpm-workspace.yaml
-// override maps it to `workspace:*`. Once all six are members the override is no longer accepted.
+// override maps it to `workspace:*`. Once all seven are members the override is no longer accepted.
 //
 // Usage: node scripts/check-workspace-graph.mjs [root]
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { CORE, EDGE_FIELDS, GALLERY, loadWorkspace, SIX } from './workspace-packages.mjs';
+import { CORE, EDGE_FIELDS, GALLERY, loadWorkspace, PUBLISHED } from './workspace-packages.mjs';
 
 const isWorkspaceSpec = (spec) => typeof spec === 'string' && /^(workspace:|link:|file:)/.test(spec);
 
@@ -68,7 +68,7 @@ export function parseLockImporters(text) {
 export function checkWorkspaceGraph({ members, workspace, npmrc = '', lock = null }) {
   const problems = [];
   const byName = new Map(members.map((member) => [member.manifest.name, member]));
-  const strict = SIX.every(({ name }) => byName.has(name));
+  const strict = PUBLISHED.every(({ name }) => byName.has(name));
 
   for (const entry of workspace.packages) {
     if (entry.includes('*')) problems.push(`pnpm-workspace.yaml: the packages list must name each package, not a glob (${entry}); a glob breaks pnpm install --frozen-lockfile once imported manifests exist`);
