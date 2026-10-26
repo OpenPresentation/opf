@@ -212,7 +212,7 @@ _No named properties._
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. Effective value: the slide's design, then the deck's design, then the theme's design.contentDirection, then the layout re... |
 | `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content. Effective value: slide design, then deck design, then the layout record's design.chartPrimary. It applies to automatic slides only; a template layout says t... |
 | `imageFit` | no | `enum:cover \| contain \| stretch` | Default fit of image blocks (and Slide.image) that set no fit of their own: 'cover' fills the frame and crops what overflows around the block's focus, 'contain' shows the whole picture centered in the frame, 'stretch'... |
-| `listBullet` | no | `enum:character \| image` | Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the theme's design.listBullet, then the layout record's design.listBullet, then 'character'. 'character' (the... |
+| `listBullet` | no | `enum:character \| image \| none` | Marker style for items and bullets lists. Effective value: the slide's design, then the deck's design, then the theme's design.listBullet, then the layout record's design.listBullet, then 'character'. 'character' (the... |
 | `mirror` | no | `boolean` | Draw the slide's template layout mirrored (OPF 0.19): each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Bin... |
 
 

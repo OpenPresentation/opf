@@ -365,7 +365,7 @@ _No named properties._
 | `contentDirection` | no | `enum:horizontal \| vertical` | Axis along which parallel body content is arranged: 'vertical' is a column, 'horizontal' a row. On a layout slide it turns every flowing region into one row or one column; the slide's own composition.mode, columns and... |
 | `chartPrimary` | no | `enum:none \| top \| bottom \| left \| right` | Where the primary chart sits relative to supporting content on automatic slides. Template layouts express this arrangement with their regions; chartPrimary does not override a template. |
 | `imageFit` | no | `enum:cover \| contain \| stretch` | Default fit of the slide's image blocks: 'cover' fills the frame and crops around focus, 'contain' shows the whole picture, 'stretch' scales it to the frame. |
-| `listBullet` | no | `enum:character \| image` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet. |
+| `listBullet` | no | `enum:character \| image \| none` | Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet, 'none' draws no marker and no hanging indent (label-and-description lists). |
 | `mirror` | no | `boolean` | Draw the layout mirrored: each row's cells and the column sizes reversed, so a 'beside' layout puts its picture, chart or table at the end. Logical: a right-to-left deck mirrors on top. Binding and reading order do no... |
 
 #### Composition

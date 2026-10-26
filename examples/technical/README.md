@@ -20,6 +20,6 @@ The relative image paths these fixtures name (`./assets/logo.svg`, `./assets/cov
 - Chart series colors: the deck palette, `chart.colors` by position (a color-scheme slot or a hex color, on a column chart and on a pie) and `highlight` winning over it ([`chart-colors.opf.json`](./chart-colors.opf.json)).
 - Styled tables: `bold` on a cell style (a bold cell keeps its number `format`), a rich cell in a numeric column, and a `padding` object ([`table-cell-types.opf.json`](./table-cell-types.opf.json)).
 - Color variants: `design.variant`, per slide, `tone` on a picture background, and the neutrals that follow ([`color-variants.opf.json`](./color-variants.opf.json), from core 0.23.0).
-- Design backgrounds, logo sets, headers, footers, watermarks, and slide-level overrides.
+- Design backgrounds, logo sets, headers, footers, watermarks, and slide-level overrides (including `design.listBullet: "none"` for a label with its description, [`slide-design-overrides.opf.json`](./slide-design-overrides.opf.json)).
 - Metadata array forms for organizations, speakers, authors, and takeaways.
 - Custom narrative records, slide beat links and catalog override surfaces.

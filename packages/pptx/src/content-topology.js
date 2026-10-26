@@ -375,7 +375,9 @@ export function listLineRoles(items, omit = () => {}) {
   const lists = [];
   for (const item of items ?? []) {
     if (!['items', 'bullets'].includes(item?.field) || !Array.isArray(item?.text?.listEntries)) continue;
-    if (!item.text.listEntries.some(entry => entry.description?.richLines?.length)) continue;
+    // A list without markers (design.listBullet: none) records its roles too: without a bullet, the first line of an entry is
+    // only known from this record.
+    if (!item.text.listEntries.some(entry => entry.description?.richLines?.length || entry.marker?.none)) continue;
     const lines = [];
     item.text.listEntries.forEach((entry, index) => {
       for (const [role, text] of [['text', entry.text], ['description', entry.description]])

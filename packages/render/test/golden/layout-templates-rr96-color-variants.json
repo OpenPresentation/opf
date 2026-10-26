@@ -2,7 +2,7 @@
  "version": 1,
  "source": {
   "fixture": "@openpresentation/gallery layouts (see layout-template-fixture.mjs)",
-  "sha256": "0f2637e845d838070c4f26a5bb295e1e107c3397feff3a713af06ac2b31ae148",
+  "sha256": "3f0a627ea97c26aef94bdf819f16eeaf7f17197e277191b9fcad6b41a0b09ab8",
   "templates": 28
  },
  "format": "svg-png-sha256",
@@ -791,64 +791,64 @@
    "bytes": 15057
   },
   "faq 1 short": {
-   "svg": "0b4edc42bcf94e43470b85d936528bb31a45dfb0031c8fdcda74ae73c382aeef",
-   "png": "0c572c975dbcdff034a0156f9e8430ee3976773d111dfc2cd156f9a23af8fea6",
-   "bytes": 1829
+   "svg": "0a0f9b5d5398c9632f79a669c39262e60073f6160570c72ebe4baa29811d6d6e",
+   "png": "c206cd1473efdb9be7d462956dfb0fad5ab8d0d3288581a7dbe194ade4f800a3",
+   "bytes": 1816
   },
   "faq 2 short": {
-   "svg": "8035c307169f9b35a794562e8ecf101152f11e0aa7f9ba7be084e33656ed2ffe",
-   "png": "0f69c9129ca93cefa1172e04067a1714bbfcc7f22ab0746f2a8dd8170e8811f6",
-   "bytes": 2698
+   "svg": "78926d6e1ac44c87c0ff53383cc498515ecae0696692adca1865d42f5b358455",
+   "png": "e9d60a9633ce4ab7da16716153ff64500e93030a8c09b16fd547586f676b6990",
+   "bytes": 2704
   },
   "faq 3 short": {
-   "svg": "53586e76dbe192eefff955c6fe1903dcd01c4014d5a6b6ee7008aadd238c42b6",
-   "png": "24c1e573d539212df2b5d7db443137acda08f3bb08baa1382a337a50d14e56a2",
-   "bytes": 2871
+   "svg": "08504095e40c9731edbc3b0ed934abff0a6fc232ea3c12ffc647db70f55e8146",
+   "png": "62265cac310df23ff30171d1e02fa55fbd878a732edb12dd296c9afb299cacb8",
+   "bytes": 2804
   },
   "faq 4 short": {
-   "svg": "5cf7466e6c10f6fa3a06afdbd69f75ac6ea6ceeed6a5df7782fe3b2a03522183",
-   "png": "b1d4ebc88843ad1f48d2a440509bfe26504354c5684067b781a369523608f5e0",
-   "bytes": 4751
+   "svg": "e7a29ed9ea95f9e7b1bc1a378c75dc3f925101e9878b61ed3a7583f9fc25f7d9",
+   "png": "4eed58da8de3141df027a948ad96b208bc75b2d9892c6ea40fcc6f7bc962a9f2",
+   "bytes": 4729
   },
   "faq 5 short": {
-   "svg": "2a091af1590cfb85b3c2e20b43077fe4f9967d868b91e9c115f29b3df28cbe85",
-   "png": "d219e83cfcf93be13eb780d1ec588988dbcd66b68dc1236b77536e8ef5c41350",
-   "bytes": 4389
+   "svg": "09c07922701725a3a85b83275e76709a4ed20b33d539079bc611b981b76bb146",
+   "png": "bdf659da38d85bd304ab89b522c63b2b973bbdd0bffa5939f478b63439eae07b",
+   "bytes": 4341
   },
   "faq 6 short": {
-   "svg": "485a61672187da9c3e1fe56b615ef9aace297c06e79e2fb76198aa6bc1a00576",
-   "png": "ab0a16dc43b9325313ec6b6d95239505b047df8825b3dee84b312e78eaa416ec",
-   "bytes": 6028
+   "svg": "748150c705f6992e4f071277f394f761f87dbdb40cc6ca84601910cef723698b",
+   "png": "f20d07830064e84a15bcd534cbd9bb033f78f042bd38e68f2566850605a7bbe8",
+   "bytes": 5953
   },
   "faq 1 long": {
-   "svg": "2b18e4d4d68de2d78817d9bf9dc4084d871a26785992988d34b0b3468bc8151f",
-   "png": "2cf99ccb1ab30a710ebd919643fac638665f3482d16d6031c703193eddc04628",
-   "bytes": 16356
+   "svg": "4e4bbc032bd8336cb7ada3eb69260e898780d179b0d7a8109425d9cda5108108",
+   "png": "ddda71da2d778f81c9148e9ea6fefc31a64e6f6a6fd9ff71a4fe23b824fe413a",
+   "bytes": 16184
   },
   "faq 2 long": {
-   "svg": "386416a528a05d18fcabca571601f6c2db8f46ca5e78f113490ebfb39c8644fa",
-   "png": "8a428873393a5a4c5c2347e43114a5bc7a38c2fd452660bad6db955d3eb1e5e1",
-   "bytes": 13623
+   "svg": "edc782bc237e0ad61b822ab3ca9916d8d2425929e8b25043598a132d4c173921",
+   "png": "0315b3a366bec5a56237b25857df8c87bc55c897e619f27f46463323c5aa2699",
+   "bytes": 14456
   },
   "faq 3 long": {
-   "svg": "adcbefe77a8b2d88b0965ce341c56a6d7cd22042d922bc64f9f09359030f897b",
-   "png": "70446374df93a6a1ec0047727cc8a86a7f7e9e25a76a9b24346a900d922c47eb",
-   "bytes": 16861
+   "svg": "2a70765c32936a12123ee39c8fe45ca5787c82541e585c1063cf9284365af60c",
+   "png": "b166e7d11e77451b512181024e3f09e98b026959f8b76df8837cb94dcbe1b24c",
+   "bytes": 16356
   },
   "faq 4 long": {
-   "svg": "bff6aac2b450f40c8536a5fb0f5e9d54473d1e7920c46f0376ac2be6e2ae7189",
-   "png": "21a48b54bc54e0f605fde0c627d9dea4f39ff5c5f2baa8503a881c129c44624f",
-   "bytes": 21211
+   "svg": "df68e43da3b97791ec9282c8841fa545c6185731b5cc739b822651324190164b",
+   "png": "e5ef16b3b8fa9cd25c368ad87a7ba584dcb031e95678b45c733bc94ac93e1e58",
+   "bytes": 20799
   },
   "faq 5 long": {
-   "svg": "2e7611867f2515dce3dda0d9cede0213357d554523852285858fbaf1163a8db6",
-   "png": "1950cecb45ac7d1f45c116a75b2e0aa09ddb85f22635797a48e674d58905f8c1",
-   "bytes": 25686
+   "svg": "af0609891dca04004df52c2d43ae8344c56df03ae0da1e324f5305f7d51292f5",
+   "png": "cab0ad1ba0c8caa01c92f33866f36dd863433196e81753d6f819fa3155398f57",
+   "bytes": 25021
   },
   "faq 6 long": {
-   "svg": "968e4da85773a67d689a0574c6daa6c0084d7994c43e052192226aa74e7954ab",
-   "png": "284b663e96a5189ff5d21904094a55dde3be8266de80b71c62af4968c38ca9e0",
-   "bytes": 23694
+   "svg": "6c2e99a30c83dd01653f91622709428ca5fe9611a5f627df7807877d27b05c40",
+   "png": "ef2a7a5f909fb3587a21d0e366b6676d30c0e00bcb53c8b11f2bd6118c3eb587",
+   "bytes": 23130
   },
   "metrics 1 short": {
    "svg": "9f94400c1f346a2f80d23b10c6083cf39a6780fd4fb6c8b7033ca2bfcaef77ce",
@@ -1706,9 +1706,9 @@
    "bytes": 13558
   },
   "feature faq described-10": {
-   "svg": "b0bc88e003057dcc6792a4952b9e5123f1d14fbfc92e803fc01f5d4f4f88c592",
-   "png": "8d039268c0e421e7e4e4bace337c34b2274526baa693bc6fd761d417eb6991b8",
-   "bytes": 16385
+   "svg": "c34f4398d11f847ce46c6b77fd9f1a95efa60819ab10e58019dbcc907efe883e",
+   "png": "ab57b8bc6cd6a91325cf1a317aa526f16a1d57ef533e7eb292d08f57baeba649",
+   "bytes": 17200
   },
   "feature text fixed-columns-3": {
    "svg": "ab5a7aa39cbb474d457bda0038493fbae5555ff4baec47e1fb3d4b94e9010554",
@@ -2086,69 +2086,69 @@
    "bytes": 8465
   },
   "paginated faq 4 long page 1": {
-   "svg": "c0d2b6dd0413331661883fd5a1627c0cbd841c5719fd49abbef7880416a78d8a",
-   "png": "66bf45fe83fc7bc9bb3aeeacaf386bf31c969b76e1fd60a8bc4b7ed8800de3e7",
-   "bytes": 15954
+   "svg": "0edfbbf0402a8e7400918295a9c90d80e1f474e7e620581a2391771a68834cf4",
+   "png": "6bda92918573aab98137a469dd9c5b56f0d7d578aa44d9b7c9269d95d959c7c5",
+   "bytes": 17216
   },
   "paginated faq 4 long page 2": {
-   "svg": "c500a9caf571c0d7bd5b532685f0eb673630cea369cbe6823804cd454be786c0",
-   "png": "4eae2024809ebd6853731bcaaef0b341f1d3645d4d9eb0ff20ed2d7755c267cc",
-   "bytes": 16343
+   "svg": "81f536e3c87588251900c340ed90092bd8c6c6f3d4be18f9b3cbe3ec0c5bb379",
+   "png": "adafde4c32998fbf8e584e8315a5190cd417fb042badcc5caab87b5581a3b296",
+   "bytes": 18197
   },
   "paginated faq 4 long page 3": {
-   "svg": "b7e4ee165bd2a9d3a075d4f4cad448743f4c2d9cb013b3f0b086fb970b3469de",
-   "png": "f53de3ccb5d740be83f5f451d5b8a25270e37c2c7533812972546d069840bc78",
-   "bytes": 14714
+   "svg": "da4459ab50a5f96e2564b25b37e7e405b4c5b5b4aac7e5bdf0f0e23e2d4d70a8",
+   "png": "b3c091ac9abdd150128d3e10ca6d2d4c0a6aa073712b3c3867949819181cd655",
+   "bytes": 14687
   },
   "paginated faq 4 long page 4": {
-   "svg": "d0561acfaae89c50dc8adea3a514608742bf5092e1d12d3e21e49dadfba76ba9",
-   "png": "12d2f9e971c5f070ae243bf72db3495523792977bd7fcf801eea4a8321ce0a11",
-   "bytes": 10846
+   "svg": "d39c79c2eae1e5eb28aa57048ff9314ea90f465a5a742976772968e9f47c2bbc",
+   "png": "0fdfec757aa53560f3bb548fbc9b828225f46edaa341e7b4dc3796ba36d6d9cb",
+   "bytes": 10867
   },
   "paginated faq 5 long page 1": {
-   "svg": "77981233d2d17238d129d55ea17d9013f597e129f626ad1fb926ea9b0d65f0cb",
-   "png": "57fd75da8a59ea5566f1544d93e5b09b02fdfdedb5177c7ee74d2b68869b122b",
-   "bytes": 17757
+   "svg": "19f6f03d89e6583808ea90f7f9b074be58960bdc4fb35305589f94b76b10ef0a",
+   "png": "27c4faedfbf09788d4f445efcb7cd60bc2ad79e15f3d68c597332fcad2864ac7",
+   "bytes": 18361
   },
   "paginated faq 5 long page 2": {
-   "svg": "f6953ca6365660d07cf6ff3c8062e3405e8602189d9f2726ac399f9455d73de0",
-   "png": "470c32bdb4c739f1ff8d0ad0d74022bcf6a277875363aa1124f42ca53eb08c08",
-   "bytes": 16105
+   "svg": "923f943ae5740590fe75aa30b33b6ce528337f6a1cbab73a0ff5eb0912531cfc",
+   "png": "fb142287f5eb66a413c9050580146558a4f013f56e74161a5f70be225ec03668",
+   "bytes": 16914
   },
   "paginated faq 5 long page 3": {
-   "svg": "469dd2cb162a3ddb255b0b6273b9648d4c955540f3f996b5ff61f49816061e61",
-   "png": "f5805cdc3de53050d74f1eeb56d46c7a16797fff19c37908e7270eda44b058ef",
-   "bytes": 16478
+   "svg": "7991d8248d42e4bfc41d9b291b5e0ca3ff047d01aaf7092c141cdc7da78bd6bc",
+   "png": "d07bc73ae63fb999364446a6cbbeeeb744c1f10a231bb5582e6c0c754d2b70f1",
+   "bytes": 17422
   },
   "paginated faq 5 long page 4": {
-   "svg": "3b9d66f3a7a483275a7b3bcf248b5a823a1a24c337d620f1f5712cab6b1b1958",
-   "png": "2cf99ccb1ab30a710ebd919643fac638665f3482d16d6031c703193eddc04628",
-   "bytes": 16356
+   "svg": "721848af023a0b6c69f0c25049f23ee3c6cb15e040469b916417f9257723d015",
+   "png": "ddda71da2d778f81c9148e9ea6fefc31a64e6f6a6fd9ff71a4fe23b824fe413a",
+   "bytes": 16184
   },
   "paginated faq 6 long page 1": {
-   "svg": "c0d2b6dd0413331661883fd5a1627c0cbd841c5719fd49abbef7880416a78d8a",
-   "png": "66bf45fe83fc7bc9bb3aeeacaf386bf31c969b76e1fd60a8bc4b7ed8800de3e7",
-   "bytes": 15954
+   "svg": "0edfbbf0402a8e7400918295a9c90d80e1f474e7e620581a2391771a68834cf4",
+   "png": "6bda92918573aab98137a469dd9c5b56f0d7d578aa44d9b7c9269d95d959c7c5",
+   "bytes": 17216
   },
   "paginated faq 6 long page 2": {
-   "svg": "c500a9caf571c0d7bd5b532685f0eb673630cea369cbe6823804cd454be786c0",
-   "png": "4eae2024809ebd6853731bcaaef0b341f1d3645d4d9eb0ff20ed2d7755c267cc",
-   "bytes": 16343
+   "svg": "81f536e3c87588251900c340ed90092bd8c6c6f3d4be18f9b3cbe3ec0c5bb379",
+   "png": "adafde4c32998fbf8e584e8315a5190cd417fb042badcc5caab87b5581a3b296",
+   "bytes": 18197
   },
   "paginated faq 6 long page 3": {
-   "svg": "b7e4ee165bd2a9d3a075d4f4cad448743f4c2d9cb013b3f0b086fb970b3469de",
-   "png": "f53de3ccb5d740be83f5f451d5b8a25270e37c2c7533812972546d069840bc78",
-   "bytes": 14714
+   "svg": "da4459ab50a5f96e2564b25b37e7e405b4c5b5b4aac7e5bdf0f0e23e2d4d70a8",
+   "png": "b3c091ac9abdd150128d3e10ca6d2d4c0a6aa073712b3c3867949819181cd655",
+   "bytes": 14687
   },
   "paginated faq 6 long page 4": {
-   "svg": "bf5c1c517faaf12625797b8dcab35bc6d2241fdf8b0eecefd317f4ae89d29cce",
-   "png": "3899d1a78afeb965423d0855754fd82722ae4325a0dc1ad5ddc58ed6352413f4",
-   "bytes": 16116
+   "svg": "127088b3462b8d690abc556feb95a8a175928cb2d7cdfb700f4ddec16fc8e735",
+   "png": "20e0e5b222813882f8aad41e723604b147ee1c9a866623d1874926d20caa5199",
+   "bytes": 18254
   },
   "paginated faq 6 long page 5": {
-   "svg": "abd2fb4c7062aead0edcd69f76e4680edba5e54419d6bb400cf6d719d1d4663b",
-   "png": "1e160f1d31d6f398d62a6f852a213942119adf3a4cb8c37c6e567f8c6c18c5cd",
-   "bytes": 15406
+   "svg": "f1193c4beef7f94181226ee9899cbad2a9fa098c54dac9b4080fd145fb45814f",
+   "png": "58881e4bdf13e33df5f8e22557b16e9a40a1d7152aa00ad85977a4938a6f2041",
+   "bytes": 17063
   },
   "paginated image-beside 6 long page 1": {
    "svg": "199dd7c081629769461539740676a494e0df7486f9673aaba5d40862a17562c8",

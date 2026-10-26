@@ -291,6 +291,11 @@ try {
   assert.match(await error() + await status(), /Picture bullets use the organization's icon logo/, 'picture bullets without a logo are explained');
   await page.locator('#design-controls .opf-dc-warnings').first().waitFor({ state: 'attached' });
   mark('picture bullets warn when no logo is set');
+  // No bullets: a label-and-description list draws no marker and no indent; it needs no logo, so the picture-bullet warning goes.
+  assert.ok((await field(design, 'List bullets').locator('option').allTextContents()).includes('None (no bullets)'), 'the control offers no bullets');
+  await step('no bullets', () => field(design, 'List bullets').selectOption('none'), current => current.design.listBullet === 'none');
+  assert.equal(await page.locator('#design-controls .opf-dc-warnings li').filter({ hasText: /Picture bullets/ }).count(), 0, 'no bullets raise no picture-bullet warning');
+  mark('no bullets offered and set');
   // Header and footer zones, with the logo warning (Insert logo writes a var:organization.logo reference as the zone's image).
   await field(design, 'Edit').selectOption('header');
   await field(design, 'Zone').selectOption('left');

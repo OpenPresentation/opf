@@ -79,6 +79,26 @@
           }
         }
       ]
+    },
+    {
+      "title": "No-Bullet Label Lists Override",
+      "design": {
+        "listBullet": "none"
+      },
+      "items": [
+        {
+          "text": "Clear scope",
+          "description": "Two teams and one workflow keep the pilot focused."
+        },
+        {
+          "text": "Consistent measures",
+          "description": "Track completion and task time against a baseline."
+        },
+        {
+          "text": "An explicit decision",
+          "description": "Agree the evidence needed before expanding."
+        }
+      ]
     }
   ],
   "assets": {

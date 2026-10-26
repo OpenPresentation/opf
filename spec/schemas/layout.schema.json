@@ -466,9 +466,10 @@
           "type": "string",
           "enum": [
             "character",
-            "image"
+            "image",
+            "none"
           ],
-          "description": "Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet."
+          "description": "Marker style of lists: 'character' draws the glyph, 'image' draws the deck's icon logo as a picture bullet, 'none' draws no marker and no hanging indent (label-and-description lists)."
         },
         "mirror": {
           "type": "boolean",

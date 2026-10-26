@@ -1480,11 +1480,15 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
   const merged = new Map(), consumed = new Set();
   for (const [path, entries] of lists) {
     entries.sort((a, b) => a.line - b.line);
-    if (!entries[0].item.paragraphs[0].bullet) continue;
     const expectedRoles = roles?.get(path);
-    const validRoles = expectedRoles && expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && Boolean(item.paragraphs[0].bullet) === expectedRoles[index][2]);
+    // design.listBullet: none writes no bullet at all (a:buNone): the list is unambiguous only through its recorded roles, whose
+    // first lines start the entries. Without that record the shapes stay as they are.
+    const unbulleted = entries.every(({item}) => !item.paragraphs[0].bullet);
+    if (!entries[0].item.paragraphs[0].bullet && !(unbulleted && expectedRoles?.[0]?.[2])) continue;
+    const validRoles = expectedRoles && expectedRoles.length === entries.length && entries.every(({item, line}, index) => line === index && (unbulleted || Boolean(item.paragraphs[0].bullet) === expectedRoles[index][2]));
     const lineRoles = validRoles ? expectedRoles : null;
     if (expectedRoles && !validRoles) report({code: 'list-line-role-changed', message: `The line topology of ${path} changed; list roles were not restored.`});
+    if (unbulleted && !validRoles) continue;
     const look = runs?.get(path), textLook = cleanBase(look?.text), descriptionLook = cleanBase(look?.description);
     // The line's runs without the inherited look, or the paragraph's own richText when there is no record for this kind of line.
     // Each run is cleaned on its own and none merge, so the runs stay the slots the run colour record counts (src/run-colors.js);
@@ -1512,7 +1516,7 @@ function mergeOpfListShapes(items, breaks = null, report = () => {}, runs = null
       const [paragraph] = item.paragraphs, current = paragraphs.at(-1);
       const gap = recorded?.get(line);
       const join = (a, b) => gap === undefined ? joinRich(a, b) : joinWrappedText([a, b], [gap]);
-      if (paragraph.bullet) { paragraphs.push({...paragraph, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
+      if (unbulleted ? lineRoles?.[line][2] : paragraph.bullet) { paragraphs.push({...paragraph, bullet: true, richText: own(paragraph, textLook)}); size = paragraph.maxFontSize; }
       else if (paragraph.text === '') { /* a blank line of the entry: no text, no description */ }
       else if (lineRoles ? lineRoles[line][1] === 'description' : paragraph.maxFontSize < size - 0.01) {
         const text = own(paragraph, descriptionLook) ?? paragraph.text;
@@ -2554,7 +2558,9 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
   for(const entry of fit.listEntries){
     const addLines=(text,box,color,native,withBullet)=>{
       text.richLines.forEach((line,index)=>{
-        const first=withBullet&&index===0,level=Math.min(8,entry.level),inset=first?entry.marker.indent*(level+1):0;
+        // design.listBullet: none (entry.marker.none): the first line has no marker, no inset and no hanging indent (a:buNone); core
+        // already moved a nested level's text box, so the paragraph carries no indent level.
+        const first=withBullet&&index===0,markerless=first&&entry.marker.none===true,level=Math.min(8,entry.level),inset=first&&!markerless?entry.marker.indent*(level+1):0;
         // Right to left (RR-05): the bullet column is at the right, so the first line's box extends right to hold it and the paragraph
         // is rtl with its text aligned to the right; marL/indent are the start-side margin and hanging indent in PowerPoint.
         const entryRtl=entry.direction==='rtl';
@@ -2563,8 +2569,8 @@ async function addMeasuredList(slide,fit,context,path,bulletImage,presentation,s
         const lineAlign=physicalAlignment('left',lineDirection);
         const objectName=`OPF list ${path} line ${lineNumber++}`;
         const number=first?entry.marker.number:undefined;
-        if(first)context.listMarkers.set(objectName,{fontFamily:entry.marker.style.fontFamily,fontSize:entry.marker.fontSize*.75,color:pptxColor(context.textColor),picture:number?false:picture});
-        const paragraph=first?{bullet:number?{type:'number',style:autoNumScheme(number.style,number.suffix),startAt:number.value,indent:entry.marker.indent*.75}:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false};
+        if(first&&!markerless)context.listMarkers.set(objectName,{fontFamily:entry.marker.style.fontFamily,fontSize:entry.marker.fontSize*.75,color:pptxColor(context.textColor),picture:number?false:picture});
+        const paragraph=first&&!markerless?{bullet:number?{type:'number',style:autoNumScheme(number.style,number.suffix),startAt:number.value,indent:entry.marker.indent*.75}:{characterCode:entry.marker.text.codePointAt(0).toString(16).padStart(4,'0'),indent:entry.marker.indent*.75},indentLevel:level}:{bullet:false};
         const runs=richLineRuns(line,color,native,context,path);
         if(!runs.length)runs.push({text:'',options:{}});
         // Keep paragraph intent identical across runs. ZIP normalization below

@@ -7,7 +7,8 @@
     "Groups of items"
   ],
   "design": {
-    "contentBox": false
+    "contentBox": false,
+    "listBullet": "none"
   },
   "direction": "column",
   "regions": [

@@ -14,7 +14,7 @@ export interface DesignHints {
   contentDirection?: 'horizontal' | 'vertical';
   chartPrimary?: 'none' | 'top' | 'bottom' | 'left' | 'right';
   imageFit?: 'cover' | 'contain' | 'stretch';
-  listBullet?: 'character' | 'image';
+  listBullet?: 'character' | 'image' | 'none';
   /** A layout template drawn mirrored: each row's cells and the column sizes reversed (OPF 0.19). Logical, so a right-to-left deck mirrors on top. */
   mirror?: boolean;
 }
@@ -45,7 +45,7 @@ export interface ResolveDesignHintsOptions {
 const ALIGNMENTS = ['left', 'center', 'right'];
 const VALUES: { [K in DesignHintKey]: readonly unknown[] | 'boolean' } = {
   titleAlignment: ALIGNMENTS, contentAlignment: ALIGNMENTS, contentBox: 'boolean', contentDirection: ['horizontal', 'vertical'],
-  chartPrimary: ['none', 'top', 'bottom', 'left', 'right'], imageFit: ['cover', 'contain', 'stretch'], listBullet: ['character', 'image'], mirror: 'boolean',
+  chartPrimary: ['none', 'top', 'bottom', 'left', 'right'], imageFit: ['cover', 'contain', 'stretch'], listBullet: ['character', 'image', 'none'], mirror: 'boolean',
 };
 const themeKeys: ReadonlySet<string> = new Set(THEME_DESIGN_KEYS);
 /** A value the schema allows for the key; anything else is skipped, so the next level answers. */

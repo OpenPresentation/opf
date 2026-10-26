@@ -24,21 +24,30 @@ const METRICS = [
   { value: '84%', label: 'Task completion', description: 'Up from 68% at baseline' },
   { value: '6.2', unit: 'min', label: 'Median task time', description: 'Down from 9.4 min' },
 ];
+// Each pair is a label and its explanation as the two roles of one list entry (`items: [{ text, description }]`), not two lines of one
+// string. The words and their order are the ones the examples always showed.
 const QUESTIONS = [
   ['Who takes part?', 'Two field teams, with 52 participants in total.'],
   ['How long does it run?', 'Six weeks, including a baseline measurement.'],
   ['What happens next?', 'Review completion and task time before expanding.'],
 ];
+// The step number is the list's numbering (`numbering: 'arabic'`, counted from the step's `start`), not text typed into the label.
 const STEPS = [
-  ['1. Establish a baseline', 'Measure the current completion rate and task time.'],
-  ['2. Run the pilot', 'Test with two teams and review feedback each week.'],
-  ['3. Decide what to scale', 'Compare outcomes with the baseline and agree the next step.'],
+  ['Establish a baseline', 'Measure the current completion rate and task time.'],
+  ['Run the pilot', 'Test with two teams and review feedback each week.'],
+  ['Decide what to scale', 'Compare outcomes with the baseline and agree the next step.'],
 ];
 const PEOPLE = [
-  ['Ana Ruiz', 'Pilot lead', 'Coordinates the two teams and weekly reviews.'],
-  ['Sam Lee', 'Product lead', 'Turns participant feedback into product changes.'],
-  ['Kai Moreau', 'Analytics lead', 'Measures completion and task time consistently.'],
+  ['Ana Ruiz', 'Pilot lead\nCoordinates the two teams and weekly reviews.'],
+  ['Sam Lee', 'Product lead\nTurns participant feedback into product changes.'],
+  ['Kai Moreau', 'Analytics lead\nMeasures completion and task time consistently.'],
 ];
+const PILLARS = [
+  ['Clear scope', 'Two teams and one workflow keep the pilot focused.'],
+  ['Consistent measures', 'Track completion and task time against a baseline.'],
+  ['An explicit decision', 'Agree the evidence needed before expanding.'],
+];
+const labelled = ([text, description], extra = {}) => ({ items: [{ text, description, ...extra }] });
 const chart = (index) => ({ chart: {
   type: index ? 'line' : 'column', axisTitles: { category: 'Week', value: 'Task completion' },
   data: { columns: ['Week', { name: 'Task completion', format: '0%' }],
@@ -62,11 +71,11 @@ export function editorialDeck(id, record) {
     const index = counts[kind] ?? 0;
     counts[kind] = index + 1;
     let payload;
-    if (id === 'faq') payload = { text: QUESTIONS[index % 3].join('\n') };
-    else if (id === 'process') payload = { text: STEPS[index % 3].join('\n') };
-    else if (id === 'team') payload = { text: PEOPLE[index % 3].join('\n') };
+    if (id === 'faq') payload = labelled(QUESTIONS[index % 3]);
+    else if (id === 'process') payload = { ...labelled(STEPS[index % 3], { start: index % 3 + 1 }), numbering: 'arabic' };
+    else if (id === 'team') payload = labelled(PEOPLE[index % 3]);
     else if (id === 'agenda') payload = { items: ['Define the problem', 'Review the pilot evidence', 'Agree the next decision'] };
-    else if (id === 'pillars') payload = { text: ['Clear scope\nTwo teams and one workflow keep the pilot focused.', 'Consistent measures\nTrack completion and task time against a baseline.', 'An explicit decision\nAgree the evidence needed before expanding.'][index % 3] };
+    else if (id === 'pillars') payload = labelled(PILLARS[index % 3]);
     else if (id === 'comparison') payload = { text: ['Option A: focused pilot\nTwo teams, six weeks. Low setup cost and a clear baseline.', 'Option B: broad rollout\nAll teams, three months. Wider reach with greater coordination needs.', 'Recommendation: establish the evidence with Option A before committing to Option B.'][index % 3] };
     else if (kind === 'metric') payload = { metric: id === 'scorecard' ? { ...METRICS[index % 3], description: ['Target: 50 participants', 'Target: at least 80%', 'Target: under 7 min'][index % 3] } : METRICS[index % 3] };
     else if (kind === 'chart') payload = index === 0 ? chart(0) : { chart: { type: 'bar', axisTitles: { value: 'Median task time (min)' }, data: { columns: ['Team', { name: 'Median task time (min)', format: '0.0' }], rows: [['A', 5.8], ['B', 6.7]] } } };
