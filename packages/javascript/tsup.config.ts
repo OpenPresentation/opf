@@ -7,6 +7,7 @@ const entry = {
   schema: "src/schema-navigation.ts",
   source: "src/source.ts",
   patch: "src/patch.ts",
+  ids: "src/ids.ts",
   diff: "src/diff.ts",
   format: "src/format.ts",
   convert: "src/convert.ts",

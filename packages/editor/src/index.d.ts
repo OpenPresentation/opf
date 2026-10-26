@@ -1,6 +1,7 @@
 import type { PaginationOptions, PaginationResult } from "@openpresentation/opf/pagination";
 import type { Composition, ComposeSlideOptions, SlideComposition } from "@openpresentation/opf/composition";
 import type { Catalog, Fonts, PresentationStats, SlideContextDiagnostic, StatsOptions, ValidationReport } from "@openpresentation/opf";
+import type { AssignIdsOptions } from "@openpresentation/opf/ids";
 export * from "./catalogs.js";
 /**
  * What the editor adds to the options of `composeSlide` and `paginateSlide`: `fonts` is the renderer's fonts handle (`loadFonts()`), whose
@@ -31,7 +32,10 @@ export declare const runtimePolicy: Readonly<{
   deterministicLocalExecution: true;
 }>;
 
-/** RFC 6902 operations, executed by core's `@openpresentation/opf/patch`. Paths are JSON Pointers or dotted OPF paths. */
+/**
+ * RFC 6902 operations, executed by core's `@openpresentation/opf/patch`. Paths are JSON Pointers or dotted OPF paths. In an array, a
+ * token `@id` names the element whose `id` is `id` (`/slides/@intro/title`, or `slides.@intro.title` as an OPF path).
+ */
 export type JsonPatchOperation =
   | { op: "add"; path: string; value: unknown }
   | { op: "replace"; path: string; value: unknown }
@@ -54,6 +58,14 @@ export interface EditorChange {
   patches: JsonPatchOperation[];
   inversePatches?: JsonPatchOperation[];
   redoPatches?: JsonPatchOperation[];
+  /**
+   * With the session option `idPaths`: `patches`, `inversePatches` and `redoPatches` addressed by id (`/slides/@intro/title`), each
+   * written against the document it applies to (core's `toIdPatch`). Elements without an `id` keep their indexes; an insertion keeps
+   * its index (or `-`) as the last token.
+   */
+  idPatches?: JsonPatchOperation[];
+  idInversePatches?: JsonPatchOperation[];
+  idRedoPatches?: JsonPatchOperation[];
   validation: ValidationReport;
 }
 
@@ -63,6 +75,10 @@ export interface EditorEvent {
   patches: JsonPatchOperation[];
   inversePatches?: JsonPatchOperation[];
   redoPatches?: JsonPatchOperation[];
+  /** With the session option `idPaths`: the id-addressed form of `patches`, `inversePatches` and `redoPatches` (see `EditorChange`). `[]` for `restore` and `catalogs`. */
+  idPatches?: JsonPatchOperation[];
+  idInversePatches?: JsonPatchOperation[];
+  idRedoPatches?: JsonPatchOperation[];
   validation: ValidationReport;
   meta?: Record<string, unknown>;
   snapshot: EditorSnapshot;
@@ -79,6 +95,12 @@ export interface PrecomputedValidation {
 }
 export interface ApplyPatchOptions {
   validated?: PrecomputedValidation;
+  /**
+   * Apply the edit only while the open document is the one this hash (`session.documentHash()` or core's `documentHash`) was taken
+   * from. A document that changed since throws an `OPFEditorError` with code `patch-hash-mismatch` and `details.expected` and
+   * `details.actual`; nothing is applied. A value that is not a hash throws `invalid-expect-hash`.
+   */
+  expectHash?: string;
 }
 
 export interface EditorSession {
@@ -107,6 +129,14 @@ export interface EditorSession {
    * current `catalogs` list (the same object); otherwise the session validates the document itself. It is never stored in `meta` or the history.
    */
   applyPatch(operations: JsonPatchOperation[], meta?: Record<string, unknown>, options?: ApplyPatchOptions): EditorChange;
+  /** The content hash of the open document (core's `documentHash`: `sha256:` and 64 hex digits, independent of key order). Use it as `applyPatch`'s `expectHash`. */
+  documentHash(): string;
+  /**
+   * Give every slide and block without an `id` one (core's `assignIds`) as one undoable edit. Returns the change, or `null` when every
+   * slide and block already has an id. `meta.source` defaults to `"assign-ids"`. A `generate` that returns an unusable id throws an
+   * `OPFEditorError` with code `invalid-id` or `duplicate-id`.
+   */
+  assignIds(options?: AssignIdsOptions, meta?: Record<string, unknown>): EditorChange | null;
   /**
    * Open a different document in the session: the whole document is replaced as one undoable change, and the replacement is never
    * read as an edit of the catalog records the two documents share, so nothing under `catalogs.default` or a named group is forked
@@ -128,6 +158,12 @@ export interface CreateEditorSessionOptions {
   rejectInvalid?: boolean;
   /** The host's catalogs (for example `[gallery]` from `@openpresentation/gallery`): resolution, validation, pickers, embedding. */
   catalogs?: readonly Catalog[];
+  /**
+   * Also report every change and event by id: `idPatches`, `idInversePatches` and `idRedoPatches` next to `patches`,
+   * `inversePatches` and `redoPatches`, so a host can sync, comment or merge by `/slides/@intro/blocks/@kpi/text`
+   * instead of by indexes that move. Default false (the events are unchanged); it costs one extra walk of each patch.
+   */
+  idPaths?: boolean;
 }
 
 export interface CatalogOption {

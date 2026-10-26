@@ -34,7 +34,7 @@ CLI 0.10.0 with core 0.12.0 (not in CLI 0.9.2 or core 0.11.4; check `opf --help`
 
 ## Precise edits
 
-Resolve a stable slide ID to its current array index immediately before creating a patch. Use JSON Pointer for keys containing dots, slashes, or tildes (`~1` escapes `/`; `~0` escapes `~`). Use `test` operations or the host's revision check when edits were based on an earlier snapshot. Do not overwrite newer changes with a stale whole-document copy.
+Name elements by id where the document has ids: an array token `@intro` is the element with that `id` (`/slides/@intro/title`), which `applyPatch` and the editor resolve and which survives reordering; `assignIds` fills missing ids and `documentHash` with `expectHash` is the revision guard for API patches (added after core 0.26.10; check the installed package). Otherwise resolve a stable slide ID to its current array index immediately before creating a patch. Use JSON Pointer for keys containing dots, slashes, or tildes (`~1` escapes `/`; `~0` escapes `~`). Use `test` operations or the host's revision check when edits were based on an earlier snapshot. Do not overwrite newer changes with a stale whole-document copy.
 
 Group related changes in one validated transaction and preserve undo/redo. Validate the resulting complete document, not just the changed scalar. Preview after design or layout changes because valid JSON can still overflow or reference unavailable assets.
 

@@ -12,6 +12,8 @@ export interface EditOptions {
 	catalogs?: readonly Catalog[];
 	/** `false` skips the check of the result (work in progress). Default true. */
 	validate?: boolean;
+	/** Apply the patch only to the deck whose `documentHash` this is; a different deck throws `OPFPatchHashError` before anything is applied. */
+	expectHash?: string;
 }
 
 export interface EditResult {
@@ -25,7 +27,7 @@ export interface EditResult {
 
 /** Apply a JSON Patch (`add`, `remove`, `replace`, `move`, `copy`, `test`) to a deck and check the result's format and references. */
 export function edit(deck: unknown, patch: unknown, options: EditOptions = {}): EditResult {
-	const result = applyPatchWithInverse(deck, patch);
+	const result = applyPatchWithInverse(deck, patch, options.expectHash === undefined ? {} : { expectHash: options.expectHash });
 	const presentation = result.presentation as Presentation;
 	if (options.validate === false) return { presentation, findings: [], inverse: result.inverse };
 	const report = validate(presentation, { only: ["format", "references"], ...(options.catalogs ? { catalogs: options.catalogs } : {}) });
