@@ -23,9 +23,12 @@ test('three peer lists share one size', () => {
   assert.deepEqual(result.diagnostics, []);
 });
 
+// WI-2 sizes the gallery comparison's options `auto`, so its verdict shrinks with them; this test keeps the numeric option row.
+const numericOptions = { ...layouts.comparison, regions: layouts.comparison.regions.map((entry) => entry.direction ? Object.fromEntries(Object.entries(entry).filter(([key]) => key !== 'size')) : entry) };
+
 test('dense comparison options share one size; the verdict below keeps its own', () => {
   const option = (name, repeat) => `${name}\n${'Each team must complete training, collect baseline evidence, assign an accountable owner and confirm support capacity before this option can proceed. '.repeat(repeat)}`;
-  const result = composeSlide({ title: 'Choose the smallest useful test', blocks: [{ region: 'first', text: option('Option A', 4) }, { region: 'second', text: option('Option B', 6) }, { region: 'verdict', text: 'Start with Option A.' }] }, { layout: layouts.comparison });
+  const result = composeSlide({ title: 'Choose the smallest useful test', blocks: [{ region: 'first', text: option('Option A', 4) }, { region: 'second', text: option('Option B', 6) }, { region: 'verdict', text: 'Start with Option A.' }] }, { layout: numericOptions });
   const [first, second, verdict] = ['first', 'second', 'verdict'].map((name) => result.items.find((item) => item.region === name));
   assert.equal(first.text.fontSize, second.text.fontSize);
   assert.equal(verdict.text.fontSize, 28);
@@ -43,4 +46,14 @@ test('regions of different roles side by side are not peers', () => {
   const record = { name: 'Beside', direction: 'row', regions: [{ name: 'main', accepts: ['text'], role: 'primary', flow: 'none', size: 2 }, { name: 'aside', accepts: ['text'], role: 'supporting', flow: 'none' }] };
   const result = composeSlide({ blocks: [{ region: 'main', text: 'Short.' }, { region: 'aside', text: 'A long aside that has to shrink to fit its narrow column, with enough words to need several lines at the starting size and then some more. '.repeat(4) }] }, { layout: record });
   assert.equal(result.items.find((item) => item.region === 'main').text.fontSize, 28);
+});
+
+test('the gallery comparison (auto rows) shares one option size and keeps dense options at 20 px or more', () => {
+  const option = (name, repeat) => `${name}\n${'Each team must complete training, collect baseline evidence, assign an accountable owner and confirm support capacity before this option can proceed. '.repeat(repeat)}`;
+  const result = composeSlide({ title: 'Choose the smallest useful test', blocks: [{ region: 'first', text: option('Option A', 4) }, { region: 'second', text: option('Option B', 6) }, { region: 'verdict', text: 'Start with Option A.' }] }, { layout: layouts.comparison });
+  const [first, second, verdict] = ['first', 'second', 'verdict'].map((name) => result.items.find((item) => item.region === name));
+  assert.equal(first.text.fontSize, second.text.fontSize);
+  assert.ok(first.text.fontSize >= 20, String(first.text.fontSize));
+  assert.ok(verdict.text.fontSize >= 20 && verdict.text.fontSize <= 25);
+  assert.deepEqual(result.diagnostics, []);
 });

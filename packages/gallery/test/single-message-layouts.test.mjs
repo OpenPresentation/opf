@@ -46,8 +46,7 @@ test('statement keeps a quote and a metric support with the title', () => {
   for (const block of [{ quote: { text: 'We can now see where people need help.', attribution: 'Pilot lead' } }, { metric: { value: '84%', label: 'Task completion' } }]) {
     const result = compose('statement', { title: 'Start small enough to learn quickly', subtitle: SUB, blocks: [block] });
     const body = result.items.find((item) => item.field === 'quote' || item.field === 'metric');
-    // A metric is measured at its capped size until WI-1 (P26) lands, which leaves it some air inside its own cell.
-    assert.ok(body.box.y - bottomOf(field(result, 'subtitle')) <= (body.field === 'metric' ? 2.5 * GAP : GAP + 1), Object.keys(block)[0]);
+    assert.ok(body.box.y - bottomOf(field(result, 'subtitle')) <= GAP + 1, Object.keys(block)[0]);
     assert.ok(Math.abs(centred(result)) < 30, `${Object.keys(block)[0]}: roughly centred`);
   }
 });
