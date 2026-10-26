@@ -239,6 +239,14 @@
         {
           "id": "browser:export-license",
           "command": "pnpm run test:export-license-browser"
+        },
+        {
+          "id": "browser:workspace",
+          "command": "node test/workspace-browser.mjs"
+        },
+        {
+          "id": "browser:workspace-react",
+          "command": "node test/workspace-react-browser.mjs"
         }
       ]
     }

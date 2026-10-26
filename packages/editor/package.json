@@ -270,6 +270,14 @@
     "./thumbnail-cache": {
       "types": "./dist/thumbnail-cache.d.ts",
       "default": "./dist/thumbnail-cache.js"
+    },
+    "./workspace": {
+      "types": "./dist/workspace.d.ts",
+      "default": "./dist/workspace.js"
+    },
+    "./canvas-variables": {
+      "types": "./dist/canvas-variables.d.ts",
+      "default": "./dist/canvas-variables.js"
     }
   },
   "types": "./dist/index.d.ts",
@@ -322,7 +330,9 @@
     "test:presenter-browser": "node test/presenter-browser.mjs",
     "test:present-button-browser": "node test/present-button-browser.mjs",
     "test:export-menu-browser": "node test/export-menu-browser.mjs",
-    "test:agent-handoff-browser": "node test/agent-handoff-browser.mjs"
+    "test:agent-handoff-browser": "node test/agent-handoff-browser.mjs",
+    "test:workspace-browser": "node test/workspace-browser.mjs",
+    "test:workspace-react-browser": "node test/workspace-react-browser.mjs"
   },
   "dependencies": {
     "@codemirror/autocomplete": "6.20.3",
@@ -340,10 +350,14 @@
     "yaml": "^2.9.1"
   },
   "peerDependencies": {
-    "@openpresentation/opf-render": "workspace:^"
+    "@openpresentation/opf-render": "workspace:^",
+    "react": ">=18"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
+      "optional": true
+    },
+    "react": {
       "optional": true
     }
   },
@@ -401,6 +415,10 @@
     "jszip": "3.10.2",
     "pdf-lib": "1.17.1",
     "pdfjs-dist": "6.4.299",
-    "playwright": "1.64.0"
+    "playwright": "1.64.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-18": "npm:react@18.3.1",
+    "react-dom-18": "npm:react-dom@18.3.1"
   }
 }

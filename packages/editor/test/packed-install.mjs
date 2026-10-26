@@ -33,7 +33,8 @@ try{
  const published=candidate('@openpresentation/opf-render').manifest;
  const fontPeers=Object.fromEntries(Object.entries(published.peerDependencies??{}).filter(([name])=>name.startsWith('@expo-google-fonts/')));
  const installSpec=([name,version])=>`${name}@${fontPeers[name]??version}`;
- const thirdParty=Object.entries(manifest.devDependencies).filter(([name])=>!candidate(name)&&name!==manifest.name);
+ // An `npm:` alias (react-18, react-dom-18) is only for the repository's React 18 browser test, and npm would refuse its peer on React 18 beside React 19.
+ const thirdParty=Object.entries(manifest.devDependencies).filter(([name,spec])=>!candidate(name)&&name!==manifest.name&&!String(spec).startsWith('npm:'));
  npm(['install','--ignore-scripts','--no-audit','--no-fund',tarball,...candidates.map(item=>item.tarball),...thirdParty.map(installSpec)],consumer);
  const installed=path.join(consumer,'node_modules/@openpresentation/opf-editor'),files={};
  assert.ok((await realpath(installed)).startsWith((await realpath(path.join(consumer,'node_modules')))+path.sep));

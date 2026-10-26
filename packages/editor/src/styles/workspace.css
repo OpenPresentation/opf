@@ -1,0 +1,261 @@
+/* The embeddable editor (CE-06): the default arrangement `createOpfEditor` builds for `layout: "full" | "canvas" | "source"`.
+   Uses only --opf-ui-* tokens. A host that passes its own `slots` ignores all of this except the `data-` attributes. */
+.opf-workspace {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: var(--opf-ui-bg);
+  color: var(--opf-ui-fg);
+  font-family: var(--opf-ui-font);
+}
+/* A host that arranges the page itself gets no box from the editor. */
+.opf-workspace[data-opf-layout="slots"] {
+  display: contents;
+}
+.opf-ws-bar {
+  display: flex;
+  flex: none;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--opf-ui-border);
+  background: var(--opf-ui-surface);
+}
+.opf-ws-group,
+.opf-ws-views {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.opf-ws-spacer {
+  flex: 1 1 0;
+}
+.opf-ws-button {
+  box-sizing: border-box;
+  min-height: var(--opf-ui-control-h);
+  padding: 0 12px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius);
+  background: var(--opf-ui-surface);
+  color: var(--opf-ui-fg);
+  font: 500 13px/1 var(--opf-ui-font);
+  cursor: pointer;
+  transition: color var(--opf-ui-ease), background-color var(--opf-ui-ease), border-color var(--opf-ui-ease);
+}
+.opf-ws-button:hover:not(:disabled) {
+  background: var(--opf-ui-muted);
+}
+.opf-ws-button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.opf-ws-button[aria-pressed="true"],
+.opf-ws-button[aria-expanded="true"] {
+  border-color: var(--opf-ui-accent);
+  background: var(--opf-ui-muted);
+  color: var(--opf-ui-accent-strong);
+}
+.opf-ws-autosave {
+  max-width: 240px;
+  color: var(--opf-ui-muted-fg);
+  font-size: 12px;
+  line-height: 1.3;
+}
+.opf-ws-banner {
+  flex: none;
+}
+.opf-ws-banner[hidden] {
+  display: none;
+}
+.opf-ws-body {
+  display: flex;
+  flex: 1 1 0;
+  min-height: 0;
+}
+.opf-ws-source {
+  display: flex;
+  flex: 0 1 42%;
+  min-width: 280px;
+  min-height: 0;
+  border-right: 1px solid var(--opf-ui-border);
+  background: var(--opf-ui-surface);
+}
+.opf-ws-source-host {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+}
+.opf-ws-main {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+.opf-ws-find {
+  flex: none;
+  padding: 8px 12px 0;
+}
+.opf-ws-find[hidden] {
+  display: none;
+}
+.opf-ws-stage {
+  display: flex;
+  flex: 1 1 0;
+  flex-direction: column;
+  min-height: 0;
+  padding: 12px;
+  overflow: auto;
+}
+.opf-ws-frame {
+  display: grid;
+  flex: 1 1 0;
+  place-items: center;
+  min-height: 0;
+}
+.opf-ws-frame[hidden],
+.opf-ws-view[hidden] {
+  display: none;
+}
+.opf-ws-canvas {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-sm);
+  background: var(--opf-ui-surface);
+}
+.opf-ws-view {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: auto;
+}
+.opf-ws-dock {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0 12px 8px;
+}
+.opf-ws-status {
+  flex: none;
+  margin: 0;
+  padding: 4px 12px 8px;
+  color: var(--opf-ui-muted-fg);
+  font-size: 12px;
+}
+.opf-ws-side {
+  display: flex;
+  flex: 0 0 300px;
+  flex-direction: column;
+  min-height: 0;
+  border-left: 1px solid var(--opf-ui-border);
+  background: var(--opf-ui-surface);
+  overflow: auto;
+}
+.opf-ws-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px 8px 0;
+  border-bottom: 1px solid var(--opf-ui-border);
+}
+.opf-ws-tab {
+  min-height: var(--opf-ui-control-h);
+  padding: 0 12px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--opf-ui-muted-fg);
+  font: 500 13px/1 var(--opf-ui-font);
+  cursor: pointer;
+}
+.opf-ws-tab[aria-selected="true"] {
+  border-bottom-color: var(--opf-ui-accent);
+  color: var(--opf-ui-fg);
+}
+.opf-ws-panel {
+  padding: 12px;
+}
+.opf-ws-panel[hidden] {
+  display: none;
+}
+/* Layout Studio inside the workspace. */
+.opf-ws-layouts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.opf-ws-layouts-bar {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+.opf-ws-layouts-bar select,
+.opf-ws-layouts-bar button {
+  min-height: var(--opf-ui-control-h);
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius);
+  background: var(--opf-ui-surface);
+  color: var(--opf-ui-fg);
+  font: 500 13px/1 var(--opf-ui-font);
+}
+.opf-ws-layouts-bar button {
+  padding: 0 12px;
+  cursor: pointer;
+}
+.opf-ws-layouts-bar button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.opf-ws-layouts-pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--opf-ui-muted-fg);
+  font-size: 12px;
+}
+.opf-ws-layouts-status {
+  color: var(--opf-ui-muted-fg);
+  font-size: 12px;
+}
+.opf-ws-layouts-host {
+  flex: 1 1 0;
+  min-height: 0;
+}
+/* A phone: the parts stack, the source above the slide, the side panel below. */
+@media (max-width: 760px) {
+  .opf-ws-body {
+    flex-direction: column;
+    overflow: auto;
+  }
+  .opf-ws-source {
+    flex: none;
+    min-width: 0;
+    height: 40vh;
+    border-right: 0;
+    border-bottom: 1px solid var(--opf-ui-border);
+  }
+  .opf-ws-main {
+    flex: none;
+  }
+  .opf-ws-stage {
+    flex: none;
+    min-height: 40vh;
+  }
+  .opf-ws-side {
+    flex: none;
+    border-left: 0;
+    border-top: 1px solid var(--opf-ui-border);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .opf-ws-button {
+    transition: none;
+  }
+}

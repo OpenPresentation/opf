@@ -124,6 +124,23 @@ assert.ok(all.some((block) => block.selectors.includes(".opf-ui *") && /box-sizi
 assert.ok(all.some((block) => block.selectors.includes(".opf-ui :focus-visible") && /outline:\s*2px solid var\(--opf-ui-ring\)/.test(block.body) && /outline-offset:\s*2px/.test(block.body)));
 assert.match(css, /@media \(prefers-reduced-motion: reduce\)/);
 
+// 4b. A surface that forces light (data-theme="light" under a dark page) repeats the light values; docs/theming.md lists the same values as the stylesheet.
+const forcedLight = all.find((block) => block.selectors.includes('[data-theme="light"] .opf-ui') && /--opf-ui-bg:/.test(block.body));
+assert.ok(forcedLight, 'tokens.css restores the light values under [data-theme="light"]');
+for (const selector of ['[data-theme="light"].opf-ui', '.dark [data-theme="light"] .opf-ui', '[data-theme="dark"] [data-theme="light"].opf-ui']) assert.ok(forcedLight.selectors.includes(selector), `forced light applies under ${selector}`);
+for (const [name, [lightValue]] of Object.entries(COLORS)) assert.equal(declared(forcedLight.body, name), lightValue, `${name} forced light`);
+assert.equal(declared(forcedLight.body, "--opf-ui-shadow-pop"), OTHER["--opf-ui-shadow-pop"][0], "the shadow forced light");
+const themingDoc = readFileSync(path.join(root, "docs", "theming.md"), "utf8");
+const rows = [...themingDoc.matchAll(/^\| [A-Za-z]+ \| `[a-zA-Z]+` \| `(--opf-ui-[a-z0-9-]+)` \| (.+?) \| (.+?) \|$/gm)];
+assert.equal(rows.length, Object.keys({ ...COLORS, ...OTHER }).length, "docs/theming.md has one row for every token");
+const unwrap = (cell) => cell.replace(/^`|`$/g, "").replace(/ \(.*\)$/, "").replace(/`/g, "");
+for (const [, token, lightCell, darkCell] of rows) {
+  const expected = COLORS[token] ?? OTHER[token];
+  const [lightValue, darkValue = lightValue] = Array.isArray(expected) ? expected : [expected];
+  assert.equal(unwrap(lightCell), lightValue, `docs/theming.md: ${token} light`);
+  assert.equal(darkCell === "same" ? lightValue : unwrap(darkCell), darkValue, `docs/theming.md: ${token} dark`);
+}
+
 // 5. The other files use only the tokens: no color literals, and every --opf-ui-* variable they read exists.
 const defined = new Set(Object.keys({ ...COLORS, ...OTHER }));
 for (const name of files.filter((name) => name !== "tokens.css")) {
