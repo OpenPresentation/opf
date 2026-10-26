@@ -40,6 +40,15 @@ test('a chart in a column takes what the measured blocks leave', () => {
   assert.ok(drawn.box.height > 300, `${drawn.box.height}`);
 });
 
+test('under overflow a chart keeps at least the equal share it had before', () => {
+  const chart = { chart: { type: 'column', data: { columns: ['Q', 'V'], rows: [['Q1', 1], ['Q2', 2]] } } };
+  const record = { name: 'Column', direction: 'column', regions: [{ name: 'title' }, { name: 'body', accepts: ['text', 'chart'], role: 'primary', flow: 'column' }] };
+  const result = composeSlide({ title: 'T', blocks: [{ text: long.repeat(3) }, chart, { text: long.repeat(3) }] }, { layout: record });
+  const region = result.regions.find((entry) => entry.name === 'body').box;
+  const drawn = result.items.find((item) => item.field === 'chart');
+  assert.ok(drawn.box.height >= (region.height - 2 * gap) / 3 - 0.01, `${drawn.box.height}`);
+});
+
 test('a group label sits directly above its list', () => {
   // Three peer columns of groups (the audit's homogeneous-group-3col): each group stacks its label over its list.
   const group = (label, items) => ({ blocks: [{ text: label }, { items }] });
