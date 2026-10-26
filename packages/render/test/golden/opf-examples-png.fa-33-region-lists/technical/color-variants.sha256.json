@@ -2,8 +2,8 @@
   "deck": "technical/color-variants.opf.json",
   "entries": {
     "technical/color-variants.opf.json#0": {
-      "sha256": "2a22f67639377225663ccd2da00fae81ec8219f57141212c90ee0b9cb05e96ac",
-      "bytes": 8645
+      "sha256": "3bddf2064ece0fb283f78ddb4100291fce11252520f7be20299749f7699abae0",
+      "bytes": 8635
     },
     "technical/color-variants.opf.json#1": {
       "sha256": "39878a960e4babcb732f407b10f9635fd0cd17b79423673ca7f17df992f712ac",
@@ -26,8 +26,8 @@
       "bytes": 4339
     },
     "technical/color-variants.opf.json#6": {
-      "sha256": "5943fc1b2af9353420a10be492a74cb3e6c84d90346c3c0df354159039c54458",
-      "bytes": 4310
+      "sha256": "c84631e349c8c9c3de7998819ad4601411cf6511763eb3e6fbd6df4011a8dda1",
+      "bytes": 5046
     }
   }
 }

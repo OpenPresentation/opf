@@ -2,12 +2,12 @@
   "deck": "gallery/design-and-media/data-storytelling-atlas.opf.json",
   "entries": {
     "gallery/design-and-media/data-storytelling-atlas.opf.json#0": {
-      "sha256": "9675c29493fb6b6cf10fd6f163a9c024de4c7cb347dbb410dc406be03b3b20e1",
-      "bytes": 5415
+      "sha256": "2a47491800f99aa9c2b84aee95eb31eceaf08e2d5ebd4c937829a85c7dfd46a6",
+      "bytes": 5516
     },
     "gallery/design-and-media/data-storytelling-atlas.opf.json#1": {
-      "sha256": "a0579f461953c04bee17b52c7ce5eefbedb5bac74fd5ab11085ce7320d14233e",
-      "bytes": 7810
+      "sha256": "ce31c379443e4d6780245b178327da1e5128d9d6c86aa3947f733e643a377e5e",
+      "bytes": 8566
     },
     "gallery/design-and-media/data-storytelling-atlas.opf.json#2": {
       "sha256": "ad2caa8670e9e286d008434824de96b13432f10a64dbf6c5aa0ee8e5f3cff164",
@@ -22,20 +22,20 @@
       "bytes": 8240
     },
     "gallery/design-and-media/data-storytelling-atlas.opf.json#5": {
-      "sha256": "00b5d2b22c6ad42e0d8d7027493aa03c8a1730eb362d1eaeceb6b071beb56637",
-      "bytes": 15552
+      "sha256": "297c3cb02b1ef880eeffc41c6c834884a98add1a2db49be7620b8eb830a6aeed",
+      "bytes": 15524
     },
     "gallery/design-and-media/data-storytelling-atlas.opf.json#6": {
-      "sha256": "681f5f4a06eecb2c1164f36d957c3ee1172ca9d357d277b56d32e4903e46b5d0",
-      "bytes": 8614
+      "sha256": "5fb5c4d3a9ad6359d9cfe48ef739e1f29e81c973ba15ef3dbfeea79f2439076f",
+      "bytes": 9456
     },
     "gallery/design-and-media/data-storytelling-atlas.opf.json#7": {
       "sha256": "0a09dcba7c19bfe12eee5b2e9ec684987b0914a00220b8826414022d8f772581",
       "bytes": 15019
     },
     "gallery/design-and-media/data-storytelling-atlas.opf.json#8": {
-      "sha256": "bccd6b01cf2d6ee53494c2f0a11b47d85331f3675a88a6f49b515a285cbac5f8",
-      "bytes": 5125
+      "sha256": "745316f115af9ad600aa4d0c4aa35000b93feb17fc92732f0628935afbd39f26",
+      "bytes": 6191
     },
     "gallery/design-and-media/data-storytelling-atlas.opf.json#9": {
       "sha256": "9c18aef5dfbb586fefc8a756998c30c5fccce5fa8d8232d1bd0b775d877da15e",

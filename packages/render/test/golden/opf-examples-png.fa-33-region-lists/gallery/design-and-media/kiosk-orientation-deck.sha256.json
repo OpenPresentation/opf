@@ -2,12 +2,12 @@
   "deck": "gallery/design-and-media/kiosk-orientation-deck.opf.json",
   "entries": {
     "gallery/design-and-media/kiosk-orientation-deck.opf.json#0": {
-      "sha256": "3fd3ba674f1ca4858823a912fa44a27352913eac7f7e8e80c9b9447b1e9cd022",
-      "bytes": 6050
+      "sha256": "beed866447d55ff7f3bc0247919fc5c67c3dae945e0d21bc26c9eb25cfd03876",
+      "bytes": 6289
     },
     "gallery/design-and-media/kiosk-orientation-deck.opf.json#1": {
-      "sha256": "617c1aa9f57498ae1f805c4e8393062299372d52a948f4e46da2e8dbe55ad15a",
-      "bytes": 8993
+      "sha256": "4cb9f9f3a9fd9b79a52d4bc9cfce4b6db13fe9c6b07c1907fc1cd3cd906e1a46",
+      "bytes": 9731
     },
     "gallery/design-and-media/kiosk-orientation-deck.opf.json#2": {
       "sha256": "aad9fde7695d0cecb9512310297ebea093095db815dfdd2aed9344e4d6195fff",
@@ -22,20 +22,20 @@
       "bytes": 9536
     },
     "gallery/design-and-media/kiosk-orientation-deck.opf.json#5": {
-      "sha256": "9f88427d72202f6fef20204102d91069549972e7637f8c9285a2c2c03b07ed22",
-      "bytes": 19816
+      "sha256": "841fd7e9ebcfee22951a215aca81fa65cab25c0a7d699562c2ddf49f1514b47c",
+      "bytes": 20274
     },
     "gallery/design-and-media/kiosk-orientation-deck.opf.json#6": {
-      "sha256": "f42e84731dbcbe4efe63cfc9f8f2e88a0c8cb745a361543016247dc3ffee5987",
-      "bytes": 11694
+      "sha256": "b0b8816863f63690bf96247eaa82eff97e6cf4219195c282a2d9752389b1faf3",
+      "bytes": 12507
     },
     "gallery/design-and-media/kiosk-orientation-deck.opf.json#7": {
       "sha256": "3ffd87dd6050c5daa2b35ebc1c55c6838a634d0de6acd3513a73291588b50ddf",
       "bytes": 5147
     },
     "gallery/design-and-media/kiosk-orientation-deck.opf.json#8": {
-      "sha256": "525816066524b076dca167663a366eb80f82c2c0a808d2decbe548d4b62e0b68",
-      "bytes": 6583
+      "sha256": "e801598680817c423a4794f685489379128012c3ebe739a09863e0d8d3bf5ace",
+      "bytes": 7501
     },
     "gallery/design-and-media/kiosk-orientation-deck.opf.json#9": {
       "sha256": "42c9285fdd74ab9233ab071abcd827f269daf3d375d0a8e588a91e6a00119c72",

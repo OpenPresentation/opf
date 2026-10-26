@@ -2,12 +2,12 @@
   "deck": "gallery/presentation-types/manager-training-deck.opf.json",
   "entries": {
     "gallery/presentation-types/manager-training-deck.opf.json#0": {
-      "sha256": "a5415132f64947386a551b9497e9734c505873a5a56f716017eb31a60439f231",
-      "bytes": 4855
+      "sha256": "7880de2f90d552395c30a6dab75c7ab85e2ef30ecab72d233864a8bfd7451c7c",
+      "bytes": 4952
     },
     "gallery/presentation-types/manager-training-deck.opf.json#1": {
-      "sha256": "826ecfef39e0f50a1cc5fae5fa231b7e9dd5a4bc49abcae35a1d4370a966a982",
-      "bytes": 7603
+      "sha256": "e2f7b7af339a27767c5dd832a8dedf724b1bf1931b209c73465f7dcc1292b239",
+      "bytes": 8365
     },
     "gallery/presentation-types/manager-training-deck.opf.json#2": {
       "sha256": "5a11c08c0f1c3491059603f65df26bfa71da630aa374f5d883067b5478c07ac1",
@@ -22,20 +22,20 @@
       "bytes": 8339
     },
     "gallery/presentation-types/manager-training-deck.opf.json#5": {
-      "sha256": "643e33bf9a47133fc184336c62bbf446bf09081ccad3169ef4750eacfb515f0d",
-      "bytes": 17158
+      "sha256": "a56ba06b8a6d30604fbd66a767d32cc208bfc2e5b1b0f8a9e3a3de5787da2281",
+      "bytes": 17307
     },
     "gallery/presentation-types/manager-training-deck.opf.json#6": {
-      "sha256": "b78647ceee25c3c1d96fb6231d8a25b0fc1486edde4306db1204860c2c3f1b6a",
-      "bytes": 11714
+      "sha256": "33d1e8cb82315c901db486c684b894cbbc6a74b8e7329c44bcb4fb95fca10715",
+      "bytes": 12823
     },
     "gallery/presentation-types/manager-training-deck.opf.json#7": {
       "sha256": "f94f5f23b806565c8dc9a08e798cb74d7011c309343d826d188549d0273e8219",
       "bytes": 19127
     },
     "gallery/presentation-types/manager-training-deck.opf.json#8": {
-      "sha256": "ec90e767e25b39f2e866173ddb214e75e1e4b4f24b472fa002403bd1b30e4b1a",
-      "bytes": 6081
+      "sha256": "4e74d9ce1353d0cf0d34614e378de3346dfb552d6c91c6a5f1bdbb5f91707cf4",
+      "bytes": 7026
     },
     "gallery/presentation-types/manager-training-deck.opf.json#9": {
       "sha256": "2a212e87d86a9a8d927c0dea55201d96fc9b5b30c6693d659568789b170af73c",

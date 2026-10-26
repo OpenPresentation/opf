@@ -2,12 +2,12 @@
   "deck": "gallery/education/curriculum-approval-brief.opf.json",
   "entries": {
     "gallery/education/curriculum-approval-brief.opf.json#0": {
-      "sha256": "775da9dfbdebbe7d01eee0a20acd3df2a03b2ea5df7f00ba916f4c1611d4a845",
-      "bytes": 6771
+      "sha256": "a018e0174475d82337bb124811c6bba9f151eb994cd74f29c2ce9e754bd8072c",
+      "bytes": 7006
     },
     "gallery/education/curriculum-approval-brief.opf.json#1": {
-      "sha256": "4408a67cbda02cbfc12550da337dbec31778dfba9d6c0a204e7913ff2a6cacd7",
-      "bytes": 8320
+      "sha256": "0939a1e88b28eaa4f0f5b97d34ffe54b73403299a07370b31092c5d0d58ace68",
+      "bytes": 9159
     },
     "gallery/education/curriculum-approval-brief.opf.json#2": {
       "sha256": "a087914f7c3dd404bf8d9cf665c8501a51c1758a4f165c3910c58098c8cbefcf",
@@ -22,20 +22,20 @@
       "bytes": 9687
     },
     "gallery/education/curriculum-approval-brief.opf.json#5": {
-      "sha256": "d918bae080c34b6723aed8c6a623facef8860e05307ead52aa1c82a562f81095",
-      "bytes": 18088
+      "sha256": "ff513d371de151a2c92725d76564798c2241fb2ee4ee33f26fed8e0c8f475086",
+      "bytes": 18535
     },
     "gallery/education/curriculum-approval-brief.opf.json#6": {
-      "sha256": "9a66b0b977d3df401a14417bb87e15bc89d2934ed7fbb1289e282286be9c7fd3",
-      "bytes": 11959
+      "sha256": "1085830fc17d43fdb620f01a20eb08b5d51c384f9313c089f2b9738dbe30a643",
+      "bytes": 12728
     },
     "gallery/education/curriculum-approval-brief.opf.json#7": {
       "sha256": "222b1b09516cfe974d42d51ca6b17ba33d85ff79bc4da14f445317a64b6f9041",
       "bytes": 4522
     },
     "gallery/education/curriculum-approval-brief.opf.json#8": {
-      "sha256": "3907c31de8f5337dbb8e568cab7ee04722f73242c0a1037eb0ef3391109e57e2",
-      "bytes": 6526
+      "sha256": "d0ba82285d97e39534b89e26b6e1c636cccadbc1ed52f06d2b4754d79124a286",
+      "bytes": 7442
     },
     "gallery/education/curriculum-approval-brief.opf.json#9": {
       "sha256": "5bd9802048dbc518709f9140ef77f73c54d086420e84730e613cee326b03d5ca",

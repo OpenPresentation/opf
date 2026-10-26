@@ -2,12 +2,12 @@
   "deck": "gallery/government/broadband-public-hearing-deck.opf.json",
   "entries": {
     "gallery/government/broadband-public-hearing-deck.opf.json#0": {
-      "sha256": "5eb53d772ae7aad0aa60aba4cdb3c9487db6d6dbc40b3290da78a98e7e9fa468",
-      "bytes": 8075
+      "sha256": "cfeffdd9af28d1d550ff6272add9008c265fceda6602ec16fa75f78de1cd892c",
+      "bytes": 8353
     },
     "gallery/government/broadband-public-hearing-deck.opf.json#1": {
-      "sha256": "68f3b8ccf60c89fde1deeafe504e3ceb7b091903d2f7f18619f065917c2a5ad3",
-      "bytes": 10180
+      "sha256": "a1805001bd3b1094e5212ca3f8ef5af17d03349ccfa23fbe1b2d2fe9bd4af147",
+      "bytes": 11111
     },
     "gallery/government/broadband-public-hearing-deck.opf.json#2": {
       "sha256": "e3709f96b949bd35ee0293216e7a2e4bf9d07328e7ab247adc2368be1e88fb6a",
@@ -22,20 +22,20 @@
       "bytes": 11026
     },
     "gallery/government/broadband-public-hearing-deck.opf.json#5": {
-      "sha256": "9b1794276f4459f3af1398ebbc6c383d4fb4441eb919d8bad30e2a205a3fea8f",
-      "bytes": 21840
+      "sha256": "a1f794e554965536ad8003e04574c9b13d53d0e9b961fbdecb885b4e491d681c",
+      "bytes": 24048
     },
     "gallery/government/broadband-public-hearing-deck.opf.json#6": {
-      "sha256": "9f5bdddd7ea86b080862c67d7d40e0de648d3e6b3410583705ca157dccb93100",
-      "bytes": 14222
+      "sha256": "4dae2b94f56b63b5ab4896df8cfd774e1a020ebf27f48843b59d11cdc9b9ff19",
+      "bytes": 15657
     },
     "gallery/government/broadband-public-hearing-deck.opf.json#7": {
       "sha256": "847031be11d32bc32f8271e344e46e9ceb1e08b3a311e4dac775a6af8da7b3dd",
       "bytes": 5249
     },
     "gallery/government/broadband-public-hearing-deck.opf.json#8": {
-      "sha256": "282875fef3daf442e185686416785f9eb0b024878e313aac739978bcae097473",
-      "bytes": 6244
+      "sha256": "f136a7d9e7c9403a6688ffacb0b1e68494a2ab9622c82474798041bde221bc32",
+      "bytes": 7362
     },
     "gallery/government/broadband-public-hearing-deck.opf.json#9": {
       "sha256": "ee0a9d9b9ffd68acd8608852cdfd50a17bdb0f57c8d85089420b14246e84cc68",

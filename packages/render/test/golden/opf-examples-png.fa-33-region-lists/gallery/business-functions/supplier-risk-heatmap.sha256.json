@@ -2,12 +2,12 @@
   "deck": "gallery/business-functions/supplier-risk-heatmap.opf.json",
   "entries": {
     "gallery/business-functions/supplier-risk-heatmap.opf.json#0": {
-      "sha256": "5ff4958a9a0aa1283e65a9761ea27d21d88c323a2c1eb8ae58bedb35b390631d",
-      "bytes": 5986
+      "sha256": "69e5ca671e87d88e4aaf21580fbc52e5d8c6a4a5486bb25533c506760415737d",
+      "bytes": 6117
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#1": {
-      "sha256": "716ce92da698040efd1e7a35e68717cfda6a4600529398723185040721774e8e",
-      "bytes": 8423
+      "sha256": "4604b0723b3d19efb59f0fde56dc4267f0dc20f7e3f73c6c3bb39ba09d656abc",
+      "bytes": 9164
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#2": {
       "sha256": "283ccb71939dd4ea229eca4996d67b2a8182ac8c1cf3e4ecf5f6a8ba1b39cb0d",
@@ -22,20 +22,20 @@
       "bytes": 9087
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#5": {
-      "sha256": "ecbf3ca0ee2b7d2f231105a6bae2a27d388c116ef1233053528fd6375cf688b3",
-      "bytes": 19192
+      "sha256": "c8e10eb11833eb1aed1d35fb1bdbf4a12c76b15b9badab29b3d26cd7593966e3",
+      "bytes": 19354
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#6": {
-      "sha256": "17e7c5a79342ab7adba1eb1da8f81f8515d0a778f032da4d622693bf59a3f838",
-      "bytes": 10390
+      "sha256": "ad0195cb89b873d41ae3c1c43dc9e5bd2b9899674e6f6759dd3771909625609c",
+      "bytes": 11571
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#7": {
       "sha256": "2f886d02fd70754127860fa9471dbfad8877b82e33273cfbdfdfece1d016a29f",
       "bytes": 20168
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#8": {
-      "sha256": "b1b907c758280bbdd4202db08276adb6aa875b41ab55a601d9e215a959e24218",
-      "bytes": 6445
+      "sha256": "8e3d259cc0062fcbdd2bb08f3849ac8863ccaead4fc744dc61bfbfe23bc6a1f4",
+      "bytes": 7170
     },
     "gallery/business-functions/supplier-risk-heatmap.opf.json#9": {
       "sha256": "a519cb3979b7fce388e7a832b2944c9da99ec08c4bb035365389b61d760c3acc",
