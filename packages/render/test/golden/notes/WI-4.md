@@ -17,3 +17,16 @@ Core's composition goldens of the same samples (`packages/javascript/test/fixtur
 - 182 of 336 cases changed;
 - 393 composed text sizes went up and 30 went down. The downs are all `long` stress samples where stacked lists and prose now share one size;
 - text-overflow diagnostics went from 210 to 222: three overfull samples (`comparison 6 long`, `timeline 4 long`, `timeline 5 long`) gain an overflow at the minimum size, because their numeric row keeps the larger need of 28 px prose.
+
+## Example corpus
+
+The `golden` workflow (run 40326170816, pinned Playwright image) changed **365 slides in 123 decks**; the source digest is unchanged. A local run in this checkout's own environment counted the same 365.
+
+The review sheets were walked. Every changed slide has one of:
+
+- body prose or a subtitle at 28 px instead of 25 px (the "Why This Matters" slides, the covers and section openers, the notes under charts and tables);
+- a quote body at 40 px (fitted down in narrow cells) in curly quotes, with an en dash before the source ("Evidence Pack" and "Operating Model" slides);
+- code at 22 px where the column is wide enough, in a panel that hugs the snippet ("Decision Rule");
+- a wrapped title with balanced lines.
+
+No slide changed in colour, fonts or drawing code, and no slide gained an overflow diagnostic.
