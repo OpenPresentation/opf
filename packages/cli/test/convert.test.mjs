@@ -285,3 +285,5 @@ describe("drawing, through stub peers", () => {
     }
   });
 });
+
+// CI probe (throwaway): one test file changed, to list the checks a one-package change shows.
