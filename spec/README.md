@@ -17,7 +17,7 @@ New to the format? Read [`docs/how-opf-works.md`](../docs/how-opf-works.md) firs
 
 ## Layout templates and previews
 
-The gallery package's `catalog/layouts/` contains the 28 v2 intent templates that `Slide.layout` resolves against. They are ordered lists of regions with content rules, nested for two dimensions; examples include `cover`, `text`, `chart` and `two-column`.
+The gallery package's `catalog/layouts/` contains the 30 v2 intent templates that `Slide.layout` resolves against. They are ordered lists of regions with content rules, nested for two dimensions; examples include `cover`, `text`, `chart` and `two-column`.
 
 `previews/layouts/` contains one self-contained SVG preview for each template, keyed by the same layout id. Its version-2 index names the SVG filename and exact UTF-8 byte length. Picker thumbnails therefore show the template the slide will use.
 

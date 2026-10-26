@@ -11,9 +11,9 @@ test('composed metrics default to center and other items default to left alignme
   assert.deepEqual(alignments(composeSlide(slide)), [['title', 'left'], ['subtitle', 'left'], ['text', 'left'], ['metric', 'center'], ['items', 'left']]);
 });
 
-test('title follows titleAlignment and every other item follows contentAlignment', () => {
+test('the heading group follows titleAlignment and every other item follows contentAlignment', () => {
   const composed = composeSlide(slide, {titleAlignment: 'center', contentAlignment: 'right'});
-  assert.deepEqual(alignments(composed), [['title', 'center'], ['subtitle', 'right'], ['text', 'right'], ['metric', 'right'], ['items', 'right']]);
+  assert.deepEqual(alignments(composed), [['title', 'center'], ['subtitle', 'center'], ['text', 'right'], ['metric', 'right'], ['items', 'right']]);
   assert.equal(composed.items[3].metricLayout.alignment, 'right');
   // The title never inherits content alignment.
   assert.equal(composeSlide(slide, {contentAlignment: 'center'}).items[0].alignment, 'left');
@@ -54,9 +54,9 @@ test('cover slide design contentAlignment still sets tag and subtitle explicitly
   assert.deepEqual(alignments(composeSlide({...cover, design: {titleAlignment: 'center'}}, {contentAlignment: 'right'})), [['tag', 'center'], ['title', 'center'], ['subtitle', 'center']]);
 });
 
-test('slides with body content keep contentAlignment for the subtitle, while the tag follows the title (RR-93a)', () => {
+test('slides with body content keep the heading group on titleAlignment: tag and subtitle follow the title (RR-93a, WI-2)', () => {
   const composed = composeSlide({...cover, text: 'Body copy'}, {titleAlignment: 'left', contentAlignment: 'center'});
-  assert.deepEqual(alignments(composed), [['tag', 'left'], ['title', 'left'], ['subtitle', 'center'], ['text', 'center']]);
+  assert.deepEqual(alignments(composed), [['tag', 'left'], ['title', 'left'], ['subtitle', 'left'], ['text', 'center']]);
 });
 
 test('cover accepted outline placement follows the shared alignment', () => {

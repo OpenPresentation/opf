@@ -138,10 +138,10 @@
       "definition": "https://www.pptx.gallery#/layouts/two-column"
      },
      {
-      "value": "closing",
-      "label": "Closing",
+      "value": "agenda-split",
+      "label": "Agenda beside",
       "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/closing"
+      "definition": "https://www.pptx.gallery#/layouts/agenda-split"
      }
     ],
     "lookup": [
@@ -214,10 +214,10 @@
       "definition": "https://www.pptx.gallery#/layouts/two-column"
      },
      {
-      "value": "closing",
-      "label": "Closing",
+      "value": "agenda-split",
+      "label": "Agenda beside",
       "origin": "registered",
-      "definition": "https://www.pptx.gallery#/layouts/closing"
+      "definition": "https://www.pptx.gallery#/layouts/agenda-split"
      }
     ],
     "lookup": [

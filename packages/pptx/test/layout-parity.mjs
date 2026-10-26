@@ -92,15 +92,16 @@ assert.equal(metricLines, 30);
 // A cover has no content region: tag, title and subtitle are one heading group, so a deck that aligns
 // title and content differently writes the same `algn` for all three (the "Compliance Readiness
 // Review" cover wrote a left title over a centered tag and subtitle). Only the slide's own
-// contentAlignment keeps them apart, and slides with body content keep the title/content split.
+// contentAlignment keeps them apart, and so does the subtitle of a slide with body content (WI-2); body text keeps the content alignment.
 const coverText = {tag: 'Compliance', title: 'Compliance Readiness Review', subtitle: 'Tandem BioSystems Compliance'};
 const coverDeck = {design: {fontScheme: 'roboto', titleAlignment: 'left', contentAlignment: 'center'}, slides: [
   {layout: 'cover', ...coverText},
   {layout: 'cover', ...coverText, design: {contentAlignment: 'right'}},
   {...coverText, text: 'Body copy'},
 ]};
-// RR-93a: on a content slide the tag follows the title (titleAlignment); only the subtitle keeps contentAlignment.
-const coverExpected = [['l', 'l', 'l'], ['r', 'l', 'r'], ['l', 'l', 'ctr']];
+// RR-93a, WI-2: on a content slide the tag and the subtitle (both in the title area) follow the title (titleAlignment); only the
+// slide's own contentAlignment keeps them on the content.
+const coverExpected = [['l', 'l', 'l'], ['r', 'l', 'r'], ['l', 'l', 'l']];
 let coverChecks = 0;
 for (const options of [{}, {fonts}]) {
   const native = await slideXml(coverDeck, options), preview = toSvg(coverDeck, options);

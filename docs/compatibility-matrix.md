@@ -38,7 +38,7 @@ imply universal Office or full-catalog visual parity.
 | Renderer | 0.26.1 | Core ^0.26.1; optional pinned font/converter peers |
 | PPTX | 0.26.1 | Core ^0.26.1, Gallery ^0.26.1; optional renderer ^0.26.1 |
 | Editor | 0.26.1 | Core ^0.26.1; optional renderer ^0.26.1 |
-| Gallery | 0.26.1 | Owner of every default catalog record; 28 intent layouts; same records as 5.0.0 |
+| Gallery | 0.26.1 | Owner of every default catalog record; 30 intent layouts; same records as 5.0.0 |
 
 ## Runtime
 

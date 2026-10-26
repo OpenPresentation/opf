@@ -7,6 +7,11 @@ import { THEME_DESIGN_KEYS, composeSlide, gridFlowShape, listColumnBreaks, resol
 // OPF 0.19 (RR-79), design sections 3 to 5: flows, tracks, collapse, bleed, list columns, mirror and the theme level.
 const fixture = gallery;
 const { layouts } = fixture;
+// The 0.26.10 forms of `comparison` and `statement`, kept as engine samples: a numeric option row beside an auto verdict, and an
+// anchored message in a numeric region. WI-2 redrew the gallery records as auto stacks (single-message-layouts.test.mjs).
+const bodyKinds = ['text', 'list', 'metric', 'image', 'chart', 'table', 'group'];
+const comparisonBefore = { id: 'comparison', design: { contentBox: false }, direction: 'column', regions: [{ name: 'title' }, { direction: 'row', regions: [{ name: 'first', accepts: bodyKinds, role: 'primary', flow: 'none' }, { name: 'second', accepts: bodyKinds, role: 'primary', flow: 'none' }] }, { name: 'verdict', size: 'auto', accepts: ['text'], role: 'supporting', flow: 'none' }] };
+const statementBefore = { id: 'statement', design: { titleAlignment: 'center', contentAlignment: 'center' }, direction: 'column', anchor: 'middle', regions: [{ name: 'title' }, { name: 'message', accepts: ['text', 'quote', 'metric'], role: 'primary', flow: 'none' }] };
 // Every body region (only the named ones when `only` is given) of a region list keeps its space when empty.
 const keepAll = (list, only) => list.map((entry) => entry.regions ? { ...entry, regions: keepAll(entry.regions, only) } : ['title', 'subtitle'].includes(entry.name) || (only && !only.includes(entry.name)) ? entry : { ...entry, empty: 'keep' });
 const near = (a, b, tolerance = 1e-3) => Math.abs(a - b) <= tolerance;
@@ -78,7 +83,7 @@ describe('tracks', () => {
   });
 
   test('an auto row whose areas are all empty has no height and no gap', () => {
-    const result = compose({ title: 'x', blocks: [text('a'), text('b')] }, layouts.comparison);
+    const result = compose({ title: 'x', blocks: [text('a'), text('b')] }, comparisonBefore);
     const verdict = region(result, 'verdict'), first = region(result, 'first');
     assert.equal(verdict.box.height, 0);
     assert.ok(near(first.box.y + first.box.height, result.contentBox.y + result.contentBox.height, 1e-6));
@@ -251,7 +256,7 @@ describe('one long list in columns', () => {
 
 describe('anchor', () => {
   test('statement\'s message sits in the middle of its region', () => {
-    const result = compose({ title: 'x', blocks: [text('The one thing to remember.')] }, layouts.statement);
+    const result = compose({ title: 'x', blocks: [text('The one thing to remember.')] }, statementBefore);
     const message = cells(result, 'message')[0], box = region(result, 'message').box;
     assert.ok(message.box.height < box.height);
     assert.ok(near(message.box.y - box.y, box.y + box.height - (message.box.y + message.box.height), 1));
@@ -315,7 +320,7 @@ describe('geometry.regions', () => {
 describe('composeLayoutAreas: the empty layout, as a PowerPoint slide layout places its placeholders', () => {
   test('nothing collapses; auto rows hold one title line or two body lines', async () => {
     const { composeLayoutAreas } = await import('../dist/composition.js');
-    const { contentBox, areas } = composeLayoutAreas(layouts.comparison);
+    const { contentBox, areas } = composeLayoutAreas(comparisonBefore);
     assert.deepEqual(areas.map((area) => [area.name, area.heading]), [['title', true], ['first', false], ['second', false], ['verdict', false]]);
     const verdict = areas.find((area) => area.name === 'verdict').box;
     assert.ok(near(verdict.height, 2 * 28 * 1.22), 'two body lines without decorative card insets');

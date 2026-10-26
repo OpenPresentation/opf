@@ -257,9 +257,9 @@ export interface ComposedItem {
   /** Effective container settings, including inherited readability constraints. */
   composition: Composition;
   /**
-   * Resolved horizontal text alignment for this item: titleAlignment for the
-   * title and the tag, contentAlignment for every other item (slide design, deck design or host, theme design,
-   * layout design, then center for metrics or left for other items). Engines anchor native and preview text to this value.
+   * Resolved horizontal text alignment for this item: titleAlignment for the title, the tag and a subtitle that sits in
+   * the title area (not a layout's own 'subtitle' region), contentAlignment for every other item (slide design, deck design
+   * or host, theme design, layout design, then center for metrics or left for other items). Engines anchor native and preview text to this value.
    */
   alignment: 'left' | 'center' | 'right';
   /**
@@ -2694,11 +2694,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   if(!Number.isFinite(rasterPadding)||rasterPadding<0)throw new RangeError('Text raster padding must be finite and nonnegative.');
   // One alignment resolution for placement, internal payload layouts and consumers.
   // The tag (eyebrow) sits over the title, so it follows titleAlignment on every slide (left when none is resolved,
-  // like the title). A cover (no body payload) has no content region, so its subtitle also belongs to the heading group.
-  // Only a slide's own design.contentAlignment keeps them apart. Set once cover detection has run.
-  let coverGroup = false;
+  // like the title). The subtitle is part of the same heading group whenever it sits in the title area (a cover, or any slide
+  // whose layout has no 'subtitle' region of its own), so it follows titleAlignment too: one alignment axis for the group.
+  // Only a slide's own design.contentAlignment keeps them apart. Set once the template is known.
+  let subtitleInGroup = true;
   const alignmentFor = (field: string): 'left' | 'center' | 'right' =>
-    (field === 'title' || ((field === 'tag' || (coverGroup && field === 'subtitle')) && hints.sources.contentAlignment !== 'slide')
+    (field === 'title' || ((field === 'tag' || (subtitleInGroup && field === 'subtitle')) && hints.sources.contentAlignment !== 'slide')
       ? hints.titleAlignment : hints.contentAlignment) ?? (field === 'metric' ? 'center' : 'left');
   // The tag (eyebrow) takes the accent family when the font scheme defines one; the quote body does the same in layoutQuote.
   const styleFor = (field: string, path: string): TextStyle => resolveTextStyle({
@@ -2835,7 +2836,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   const autoComposition = (): boolean => !hasLayoutRecord && !regions.length;
   // A template slide with no body content is a cover: its regions collapse and the template places the headings.
   const isCover = !hasBodyPayload && (useTemplate || !hasLayoutRecord);
-  coverGroup = isCover;
+  subtitleInGroup = !(useTemplate && template?.subtitle === true);
   // Cover and section slides draw the primary organization's full logo (or the design.logo override) at the top-left of the free area, below any header
   // furniture; the heading group then centers in the remaining span. Content slides never get one.
   let logo: ComposedLogo | undefined;
@@ -3435,9 +3436,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const demands = rowSizes.map((size, row): RowDemand => {
       let need = 0, floor = 0, heading = false, below = false;
       for (const [name, rect] of rects) {
-        if (size === 'auto' ? rect.row !== row || rect.rowSpan !== 1 : row < rect.row || row >= rect.row + rect.rowSpan) continue;
+        // An empty neighbour that collapsed into an area can leave it spanning auto rows only (every row of a column of auto
+        // entries): the area's first row then holds all of its height. An area that spans a numeric row keeps its sizes.
+        const autoSpan = size === 'auto' && rect.rowSpan > 1 && rect.row === row && rowSizes.slice(rect.row, rect.row + rect.rowSpan).every(entry => entry === 'auto');
+        if (size === 'auto' ? rect.row !== row || (rect.rowSpan !== 1 && !autoSpan) : row < rect.row || row >= rect.row + rect.rowSpan) continue;
         if (size !== 'auto' && rect.rowSpan > 1 && rowSizes.slice(rect.row, rect.row + rect.rowSpan).some(entry => entry === 'auto')) continue;
-        const value = areaNeed(name, rect) / rect.rowSpan;
+        const value = areaNeed(name, rect) / (autoSpan ? 1 : rect.rowSpan);
         // WI-1: how far a body auto row can shrink, its content at the minimum font size (allocateRows, shareHeights).
         if (size === 'auto' && name !== 'title' && name !== 'subtitle') floor = Math.max(floor, regionNeed(name, spanWidth(rect), true));
         if (value > need) { need = value; heading = name === 'title' || name === 'subtitle'; below = name === BELOW; }
@@ -3448,9 +3452,12 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const rowY: number[] = [];
     // A row with no height sits at the end of the row above it, not after its gap.
     heights.reduce((y, size, row) => { rowY.push(size > 0 || !heights.slice(0, row).some(above => above > 0) ? y : y - gap); return size > 0 ? y + size + gap : y; }, 0);
+    // A column of auto rows with an anchor (`template.stack`): the whole stack, headings included, sits in the leftover height.
+    const stackUsed = heights.reduce((sum, size) => sum + size, 0) + gap * Math.max(0, heights.filter(size => size > 0).length - 1);
+    const stackShift = plan.stack === undefined ? 0 : Math.max(0, frame.height - stackUsed) * (plan.stack === 'middle' ? .5 : 1);
     const logical = (rect: CellRect): LayoutBox => {
-      const last = rect.row + rect.rowSpan - 1, y = frame.y + rowY[rect.row]!;
-      return { x: frame.x + columnX[rect.column]!, y, width: spanWidth(rect), height: Math.max(0, frame.y + rowY[last]! + heights[last]! - y) };
+      const last = rect.row + rect.rowSpan - 1, y = frame.y + stackShift + rowY[rect.row]!;
+      return { x: frame.x + columnX[rect.column]!, y, width: spanWidth(rect), height: Math.max(0, frame.y + stackShift + rowY[last]! + heights[last]! - y) };
     };
     // design.mirror reverses each row's cells and the column sizes; a right-to-left deck mirrors the drawing on top.
     const flip = (hints.mirror === true) !== rtl;

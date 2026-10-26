@@ -748,7 +748,7 @@
         "contentAlignment": {
           "type": "string",
           "enum": ["left", "center", "right"],
-          "description": "Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.contentAlignment, then the engine default. The tag follows titleAlignment (and a cover's subtitle with it) unless the slide's own design sets contentAlignment."
+          "description": "Default horizontal alignment for body/content regions in resolved layouts. Effective value: the slide's design, then the deck's design, then the theme's design.contentAlignment, then the layout record's design.contentAlignment, then the engine default. The tag follows titleAlignment (and so does a subtitle in the title area, as on a cover) unless the slide's own design sets contentAlignment."
         },
         "contentBox": {
           "type": "boolean",

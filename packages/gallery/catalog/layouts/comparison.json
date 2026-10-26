@@ -16,6 +16,7 @@
     },
     {
       "direction": "row",
+      "size": "auto",
       "regions": [
         {
           "name": "first",

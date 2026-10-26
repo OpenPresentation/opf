@@ -21,12 +21,14 @@ test('the tag follows the title alignment, not content alignment', () => {
   assert.equal(field(own, 'title').alignment, 'left');
 });
 
-test('the tag keeps the slide\'s own contentAlignment and the subtitle is unchanged', () => {
+test('the tag and the title-area subtitle keep the slide\'s own contentAlignment, and otherwise follow the title', () => {
   const withContent = composeSlide({...slide, subtitle: 'Sub', design: {contentAlignment: 'center'}}, {layout: metrics});
   assert.equal(field(withContent, 'tag').alignment, 'center');
   const body = composeSlide({...slide, subtitle: 'Sub', text: 'Body'}, {titleAlignment: 'left', contentAlignment: 'center'});
   assert.equal(field(body, 'tag').alignment, 'left');
-  assert.equal(field(body, 'subtitle').alignment, 'center');
+  // WI-2 (P35): the subtitle in the title area follows titleAlignment like the tag; only the slide's own design keeps it on the content.
+  assert.equal(field(body, 'subtitle').alignment, 'left');
+  assert.equal(field(withContent, 'subtitle').alignment, 'center');
 });
 
 const box = {x: 0, y: 0, width: 800, height: 400};

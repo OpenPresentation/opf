@@ -10,7 +10,7 @@ A layout record (`https://openpresentation.org/schema/opf-layout/v2`) is an ordi
 and a deck's own layouts are records of this one schema; a custom layout is embedded under `catalogs.custom.layouts` (or
 a named catalog group) and referenced by id like any other. This page is the reference for what core implements.
 
-> The 28 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
+> The 30 built-in templates come from the matching `@openpresentation/gallery` package. Core and Gallery 5 use the region
 > lists documented below; Gallery 4 and earlier used a grid of area names (`areas`). Use coordinated core and Gallery
 > versions. V1 layout records, including `placeholders` and placeholder groups, remain unsupported; there are no aliases or
 > migration API.
@@ -77,7 +77,7 @@ the supporting content.
 | --- | --- |
 | `direction` | `row` (side by side, left to right in reading order) or `column` (stacked, top to bottom). Default `column`. |
 | `regions` | 1 to 12 entries in reading order, each a region or a split. |
-| `anchor` | Vertical position of the content of every body region under the record (or split) that does not set its own. Inherited by body regions only, never by `title` or `subtitle`. |
+| `anchor` | Vertical position of the content of every body region under the record (or split) that does not set its own. Inherited by body regions only, never by `title` or `subtitle`. Exception: on a column record whose entries are all `auto`, it places the whole stack (see Choosing an anchor). |
 | `overflowRegion` | Where content no region accepts goes. Omitted: the first `primary` region whose flow is not `none`. |
 | `design` | The layout's design defaults (below). |
 | `composition` | Only `gap`, `padding`, `minFontSize` and `overflow`, with their 0.18 meaning. |
@@ -123,8 +123,26 @@ once on the record (or on a split) when every region under it shares it: body re
 wins, and the heading regions never inherit it.
 
 Use middle anchoring for a compact statement, quotation, headline metric or short explanation beside a visual. Keep
-substantial text, lists, charts and tables top-aligned so readers can compare common starting positions. The title
-remains in its own heading region. Anchoring does not enlarge short text to fill unused space.
+substantial text, lists, charts and tables top-aligned so readers can compare common starting positions. A region's
+anchor never moves the title: it stays in its own heading region. Anchoring does not enlarge short text to fill unused space.
+
+#### Placing the whole group
+
+A single-message slide (a statement, a closing, a quotation) reads best when the title and what belongs to it sit together
+in the middle of the slide. A column has no numeric row to hold the leftover height when **every entry of the record's
+`regions` list is sized `auto`** (`title`, `subtitle` and the body regions alike), so the record's `anchor` then places
+the whole stack, headings included, in the content box's leftover height: `middle` centres it, `bottom` sits it at the foot,
+`top` (the default) starts it at the top. Empty optional regions collapse and take no space, so a title-only slide centres
+the title alone.
+
+```json
+{ "id": "closing", "direction": "column", "anchor": "middle",
+  "regions": [ { "name": "title" }, { "name": "details", "size": "auto", "accepts": ["text", "list", "image"], "flow": "auto" } ] }
+```
+
+The rule applies only to the record's own `anchor` on a column record with all-`auto` entries (an `auto` split counts as an
+`auto` entry). A record with any numeric entry, a row record, and a split's own `anchor` keep the behaviour above, so no
+existing record changes until it opts in. `LayoutTemplate.stack` reports the resolved anchor.
 
 The measured-content implementation supports text/list leaves and uncaptioned quote/metric leaves. A quote keeps
 its body, attribution and photo together. A metric keeps its value and metadata together without reducing the
@@ -167,7 +185,7 @@ into the grid it has always composed with, and composition, the renderer, the PP
 
 Nested sizes are relative to the entry's own parent, so a split of `{ "size": 2 }` beside a region of `{ "size": 1 }` is
 twice as large, whatever its children's sizes. Because the grid is shared, the gaps between regions are the grid's gaps: a
-row of two regions inside a column puts one gap between the two columns, as the cell grid does. The 28 built-in layouts
+row of two regions inside a column puts one gap between the two columns, as the cell grid does. The 30 built-in layouts
 compile to exactly the grids they had in Gallery 4, so nothing they draw moved.
 
 ## Binding content to regions
@@ -268,4 +286,4 @@ reaches the slide edge as on a slide; `false` gives its cell inside the content 
 0.19 breaks layouts: there is no migration path. A layout id of the 0.18 default catalog that 0.19 does not have is an
 unknown layout like any other (`opf/unresolved-reference`: the slide composes automatically and a strict export fails).
 Six 0.18 ids are also 0.19 built-ins and resolve to them: `agenda`, `comparison`, `dashboard`, `faq`, `timeline` and
-`two-column`. The release notes list the 28 built-ins.
+`two-column`. The release notes list the 30 built-ins.

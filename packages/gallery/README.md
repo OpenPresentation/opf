@@ -9,7 +9,7 @@ It holds every layout, theme, colour scheme, font scheme, narrative, audience, p
 never fetch records: a host registers the catalogs it trusts, and this package is the catalog every OPF host registers by
 default.
 
-**2.x is the catalog of OPF 0.19.** Its layouts are the 28 OPF 0.19 layouts named by intent, written as templates
+**2.x is the catalog of OPF 0.19.** Its layouts are the 30 OPF 0.19 layouts named by intent, written as templates
 (`opf-layout/v2`). 1.x holds the 278 OPF 0.18 layouts. 2.0.0 changed the layouts with no migration path: see
 [Layouts](#layouts) and the [changelog](CHANGELOG.md).
 
@@ -67,6 +67,7 @@ automatically. A deck's own layouts are records of the same schema under `catalo
 | `cover` | The opening slide: title, subtitle and an optional picture. |
 | `section` | A divider between parts: the section title and an optional subtitle. |
 | `agenda` | What the talk covers: the parts, as one list that flows into columns when long. |
+| `agenda-split` | A concise agenda beside its title and introduction. |
 | `statement` | One message, large and alone. |
 | `closing` | The last slide: thanks, the call to action and contact details. |
 | **Text** | |
