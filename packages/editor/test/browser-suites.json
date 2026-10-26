@@ -255,6 +255,10 @@
         {
           "id": "browser:source-hooks",
           "command": "node test/source-hooks-browser.mjs"
+        },
+        {
+          "id": "browser:studio-kit",
+          "command": "node test/studio-kit-browser.mjs"
         }
       ]
     }

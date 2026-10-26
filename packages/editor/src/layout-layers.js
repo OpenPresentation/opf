@@ -1,10 +1,12 @@
 // The layers panel of the layout editor (RR-99): the tree outline of splits and regions in reading order (role="tree"). Select, rename,
 // drag to reorder or to move between splits, and see which nodes have findings; the findings are listed under the tree.
+// CE-18: the tree items, the tree keyboard, the drag controller and the drop place are the studio kit's (src/studio-kit/).
 import { createLayoutModel } from "./layout-model.js";
-import { LayoutOperationError, isHeading, isPrefix, isSplit, moveNodes, nodeAt, pathKey, samePath } from "./layout-tree.js";
-import { SIZE_LABEL, createDom, handleGlobalShortcut, handleSelectionShortcut, isTypingTarget, nextId, nodeMenuItems, openMenu } from "./layout-editor-ui.js";
-
-const DRAG_DISTANCE = 4;
+import { trialMove } from "./layout-adapter.js";
+import { isHeading, isPrefix, isSplit, nodeAt, pathKey, samePath } from "./layout-tree.js";
+import { SIZE_LABEL, createDom, handleGlobalShortcut, handleSelectionShortcut, isHandled, isTypingTarget, nextId, nodeMenuItems, openMenu } from "./layout-editor-ui.js";
+import { hitRow, rovingTabStop, rowDropMode, showTreeDrop, treeItem, treeKeyAction } from "./studio-kit/tree.js";
+import { createDragController } from "./studio-kit/drag.js";
 const parsePath = (text) => (text === "" || text === undefined ? [] : text.split(".").map(Number));
 
 /**
@@ -36,8 +38,6 @@ export function createLayoutTree(container, options = {}) {
   container.append(root);
 
   const collapsed = new Set();
-  let drag = null;
-  let pending = null;
   let menu = null;
   let renameInput = null;
 
@@ -46,10 +46,11 @@ export function createLayoutTree(container, options = {}) {
 
   function build(path, entry, level, direction, position) {
     const rootItem = path.length === 0, split = !rootItem && isSplit(entry);
-    const li = el("li", "opf-lx-item", { role: "treeitem", "aria-level": level, "data-path": pathKey(path), "data-kind": rootItem ? "layout" : split ? "split" : "region" });
-    li.setAttribute("aria-selected", String(isSelected(path)));
-    if (rootItem || split) li.setAttribute("aria-expanded", String(!collapsed.has(pathKey(path))));
-    if (!rootItem) { li.setAttribute("aria-setsize", String(position.size)); li.setAttribute("aria-posinset", String(position.index + 1)); }
+    const li = treeItem(dom, {
+      level, selected: isSelected(path), expanded: rootItem || split ? !collapsed.has(pathKey(path)) : undefined,
+      setsize: rootItem ? undefined : position.size, posinset: rootItem ? undefined : position.index + 1,
+      attributes: { "data-path": pathKey(path), "data-kind": rootItem ? "layout" : split ? "split" : "region" },
+    });
     const issues = model.findingsFor(path);
     const within = model.findingsWithin(path);
     const row = el("div", "opf-lx-row", { "data-selected": String(isSelected(path)), "data-finding": issues.length ? "error" : within.length ? "within" : "" });
@@ -96,7 +97,7 @@ export function createLayoutTree(container, options = {}) {
     list.replaceChildren(build([], model.record, 1, "column", { index: 0, size: 1 }));
     const primary = model.primary ?? [];
     const stop = itemOf(primary) ?? itemOf([]);
-    for (const item of list.querySelectorAll(".opf-lx-item")) item.tabIndex = item === stop ? 0 : -1;
+    rovingTabStop(list.querySelectorAll(".opf-lx-item"), stop);
     if (focusedKey !== undefined) { const next = itemOf(primary) ?? itemOf(parsePath(focusedKey)) ?? stop; next?.focus({ preventScroll: true }); }
     paintFindings();
     syncRename();
@@ -174,7 +175,7 @@ export function createLayoutTree(container, options = {}) {
   });
   list.addEventListener("focusin", (event) => {
     const item = event.target.closest?.(".opf-lx-item");
-    if (!item || event.target !== item || drag || pending) return;
+    if (!item || event.target !== item || dragger.active || dragger.pending) return;
     const path = parsePath(item.dataset.path);
     if (!path.length) { if (model.selection.length) model.select([]); } else if (!isSelected(path)) model.select([path]);
   });
@@ -197,76 +198,64 @@ export function createLayoutTree(container, options = {}) {
     const path = rowPath(event);
     if (!path?.length) return;
     const paths = model.selection.some((entry) => samePath(entry, path)) ? model.selection.map((entry) => [...entry]) : [path];
-    pending = { x: event.clientX, y: event.clientY, paths, id: event.pointerId };
+    dragger.press(event, { paths });
   });
-  list.addEventListener("pointermove", (event) => {
-    if (pending && !drag && Math.hypot(event.clientX - pending.x, event.clientY - pending.y) > DRAG_DISTANCE) startDrag();
-    if (drag) moveDrag(event);
+  list.addEventListener("pointermove", (event) => { dragger.move(event); });
+  list.addEventListener("pointerup", (event) => { dragger.release(event); });
+  list.addEventListener("pointercancel", () => { dragger.cancel(); });
+  list.addEventListener("touchmove", (event) => { if (dragger.active && event.cancelable) event.preventDefault(); }, { passive: false });
+  // The kit's drag controller: a press past 4px drags the rows; each move finds the drop place; the release moves once; Escape cancels.
+  const dragger = createDragController({
+    doc,
+    onStart(press) {
+      list.setPointerCapture?.(press.id);
+      return { paths: press.payload.paths, drop: null };
+    },
+    onStarted(drag) {
+      root.dataset.dragging = "true";
+      for (const path of drag.paths) itemOf(path)?.classList.add("is-dragging");
+    },
+    onMove(drag, event) {
+      const found = dropAt(drag, event);
+      drag.drop = found;
+      for (const node of list.querySelectorAll("[data-into]")) node.removeAttribute("data-into");
+      showTreeDrop(dropMark, scroller, found && { mode: found.mode, state: found.reason ? "refused" : found.noop ? "same" : "ok", reason: found.reason, box: found.box });
+      if (found?.mode === "into") found.item.setAttribute("data-into", "true");
+    },
+    onEnd() {
+      dropMark.hidden = true;
+      delete root.dataset.dragging;
+      for (const node of list.querySelectorAll(".is-dragging, [data-into]")) { node.classList.remove("is-dragging"); node.removeAttribute("data-into"); }
+    },
+    onDrop(drag) {
+      const outcome = drag.drop, paths = drag.paths;
+      if (!outcome || !paths) return;
+      if (outcome.reason) { model.notify(outcome.reason, "error"); return; }
+      if (outcome.noop) return;
+      model.move(paths, outcome.listPath, outcome.index);
+    },
+    onEscape: () => model.notify("Move cancelled."),
   });
-  list.addEventListener("pointerup", (event) => { if (drag) finishDrag(event); pending = null; });
-  list.addEventListener("pointercancel", () => { endDrag(); pending = null; });
-  list.addEventListener("touchmove", (event) => { if (drag && event.cancelable) event.preventDefault(); }, { passive: false });
-  function startDrag() {
-    drag = { paths: pending.paths, drop: null };
-    list.setPointerCapture?.(pending.id);
-    root.dataset.dragging = "true";
-    doc.addEventListener("keydown", dragKey, true);
-    for (const path of drag.paths) itemOf(path)?.classList.add("is-dragging");
-  }
-  function dropAt(event) {
+  function dropAt(drag, event) {
     const rows = [...list.querySelectorAll(".opf-lx-item")].map((item) => ({ item, path: parsePath(item.dataset.path), row: item.firstElementChild }));
-    const hit = rows.find(({ row }) => { const box = row.getBoundingClientRect(); return event.clientY >= box.top && event.clientY <= box.bottom; });
+    const hit = hitRow(rows, event.clientY);
     if (!hit || drag.paths.some((path) => isPrefix(path, hit.path))) return null;
     const box = hit.row.getBoundingClientRect();
     const fraction = (event.clientY - box.top) / (box.height || 1);
     const entry = hit.path.length ? nodeAt(model.record, hit.path) : model.record;
-    let listPath, index, mode;
-    if (!hit.path.length) { listPath = []; index = model.record.regions.length; mode = "into"; }
-    else if (isSplit(entry) && fraction >= 0.3 && fraction <= 0.7) { listPath = hit.path; index = (entry.regions ?? []).length; mode = "into"; }
-    else { listPath = hit.path.slice(0, -1); index = hit.path[hit.path.length - 1] + (fraction < 0.5 ? 0 : 1); mode = fraction < 0.5 ? "before" : "after"; }
-    let reason = "", noop = false;
-    try { noop = JSON.stringify(moveNodes(model.record, drag.paths, listPath, index).record) === JSON.stringify(model.record); } catch (error) { if (!(error instanceof LayoutOperationError)) throw error; reason = error.message; }
+    const mode = rowDropMode(fraction, { root: !hit.path.length, container: hit.path.length > 0 && isSplit(entry) });
+    let listPath, index;
+    if (!hit.path.length) { listPath = []; index = model.record.regions.length; }
+    else if (mode === "into") { listPath = hit.path; index = (entry.regions ?? []).length; }
+    else { listPath = hit.path.slice(0, -1); index = hit.path[hit.path.length - 1] + (mode === "before" ? 0 : 1); }
+    const { reason, noop } = trialMove(model.record, drag.paths, listPath, index);
     return { listPath, index, mode, reason, noop, box, item: hit.item };
   }
-  function moveDrag(event) {
-    const found = dropAt(event);
-    drag.drop = found;
-    for (const node of list.querySelectorAll("[data-into]")) node.removeAttribute("data-into");
-    if (!found) { dropMark.hidden = true; return; }
-    const parent = scroller.getBoundingClientRect();
-    dropMark.hidden = false;
-    dropMark.dataset.mode = found.mode;
-    dropMark.dataset.state = found.reason ? "refused" : found.noop ? "same" : "ok";
-    dropMark.title = found.reason;
-    const top = found.mode === "after" ? found.box.bottom : found.mode === "before" ? found.box.top : found.box.top;
-    dropMark.style.top = `${top - parent.top + scroller.scrollTop}px`;
-    dropMark.style.left = `${found.box.left - parent.left}px`;
-    dropMark.style.width = `${found.box.width}px`;
-    dropMark.style.height = found.mode === "into" ? `${found.box.height}px` : "0px";
-    if (found.mode === "into") found.item.setAttribute("data-into", "true");
-  }
-  function finishDrag() {
-    const outcome = drag?.drop, paths = drag?.paths;
-    endDrag();
-    if (!outcome || !paths) return;
-    if (outcome.reason) { model.notify(outcome.reason, "error"); return; }
-    if (outcome.noop) return;
-    model.move(paths, outcome.listPath, outcome.index);
-  }
-  function endDrag() {
-    doc.removeEventListener("keydown", dragKey, true);
-    dropMark.hidden = true;
-    delete root.dataset.dragging;
-    for (const node of list.querySelectorAll(".is-dragging, [data-into]")) { node.classList.remove("is-dragging"); node.removeAttribute("data-into"); }
-    drag = null;
-    pending = null;
-  }
-  function dragKey(event) { if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); endDrag(); model.notify("Move cancelled."); } }
 
   // --- keyboard (the WAI-ARIA tree pattern) -------------------------------------------------------------------------------------------------
   const visibleItems = () => [...list.querySelectorAll(".opf-lx-item")];
   list.addEventListener("keydown", (event) => {
-    if (event.opfLayoutHandled || event.target.closest?.(".opf-lx-rename")) return;
+    if (isHandled(event) || event.target.closest?.(".opf-lx-rename")) return;
     if (handleGlobalShortcut(event, model)) return;
     if (isTypingTarget(event.target)) return;
     const item = event.target.closest?.(".opf-lx-item");
@@ -275,31 +264,25 @@ export function createLayoutTree(container, options = {}) {
     if (event.key === "Escape") {
       event.preventDefault();
       if (menu) { menu.close(); return; }
-      if (drag) { endDrag(); return; }
+      if (dragger.active) { dragger.cancel(); return; }
       if (path.length) { const parent = path.slice(0, -1); model.select(parent.length ? [parent] : []); itemOf(parent)?.focus({ preventScroll: true }); }
       return;
     }
     if (path.length && handleSelectionShortcut(event, model, "layers")) return;
-    const items = visibleItems();
-    const at = items.indexOf(item);
-    const go = (target) => { event.preventDefault(); target?.focus(); };
-    if (event.key === "ArrowDown") go(items[Math.min(items.length - 1, at + 1)]);
-    else if (event.key === "ArrowUp") go(items[Math.max(0, at - 1)]);
-    else if (event.key === "Home") go(items[0]);
-    else if (event.key === "End") go(items[items.length - 1]);
-    else if (event.key === "ArrowRight") {
-      if (item.hasAttribute("aria-expanded")) {
-        if (item.getAttribute("aria-expanded") === "false") { event.preventDefault(); toggle(path); itemOf(path)?.focus(); } else go(item.querySelector(":scope > ul > .opf-lx-item"));
-      }
-    } else if (event.key === "ArrowLeft") {
-      if (item.getAttribute("aria-expanded") === "true" && (path.length || false)) { event.preventDefault(); toggle(path); itemOf(path)?.focus(); }
-      else if (path.length) go(itemOf(path.slice(0, -1)));
-    } else if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      if (path.length) model.select([path]); else model.select([]);
-    } else if (event.key === "ContextMenu" || (event.key === "F10" && event.shiftKey)) {
-      if (!path.length) return;
-      event.preventDefault();
+    const action = treeKeyAction(event, item, visibleItems(), {
+      expandable: item.hasAttribute("aria-expanded"),
+      expanded: item.getAttribute("aria-expanded") === "true",
+      collapsible: path.length > 0,
+      parent: path.length ? itemOf(path.slice(0, -1)) : null,
+      firstChild: item.querySelector(":scope > ul > .opf-lx-item"),
+      menu: path.length > 0,
+    });
+    if (!action) return;
+    event.preventDefault();
+    if (action.type === "focus") action.target?.focus();
+    else if (action.type === "expand" || action.type === "collapse") { toggle(path); itemOf(path)?.focus(); }
+    else if (action.type === "activate") { if (path.length) model.select([path]); else model.select([]); }
+    else if (action.type === "menu") {
       const box = item.firstElementChild.getBoundingClientRect();
       openRowMenu({ x: box.left + 24, y: box.bottom }, item);
     }
@@ -308,7 +291,7 @@ export function createLayoutTree(container, options = {}) {
   const unsubscribe = model.subscribe((event) => {
     if (event.type === "notice" || event.type === "tool") return;
     if (event.type === "view") { root.dataset.density = model.density; return; }
-    if (drag && event.type === "record") return;
+    if (dragger.active && event.type === "record") return;
     render();
   });
   render();
@@ -322,7 +305,7 @@ export function createLayoutTree(container, options = {}) {
     beginRename(path) { model.requestRename(path, "layers"); },
     destroy() {
       unsubscribe();
-      endDrag();
+      dragger.cancel();
       menu?.close({ restore: false });
       root.remove();
       if (ownModel) model.destroy();

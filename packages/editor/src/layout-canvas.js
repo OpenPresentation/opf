@@ -2,21 +2,22 @@
 // split, insert, add the heading regions, pan, and preview with sample content; drag a divider to resize, drag a region to reorder or move
 // it into another split; a context menu and the keyboard do the same. The boxes are positioned from `layoutBoxes` (layout-tree.js), so
 // the canvas keeps no tree of its own: every edit is a command on the shared model, and every pointer gesture is one history step.
+// CE-18: the viewport, overlay, drag, divider and keymap behavior is the studio kit's (src/studio-kit/), over the layout adapter.
 import { createLayoutModel } from "./layout-model.js";
+import { createLayoutAdapter } from "./layout-adapter.js";
 import { LAYOUT_TOOL_DEFS } from "./layout-palette.js";
 import { sampleDeck } from "./layout-samples.js";
 import { whenFontsReady } from "./font-gate.js";
+import { isHeading, isPrefix, isSplit, listAt, nodeAt, pathKey, resizeSizes, samePath, setPairSizes } from "./layout-tree.js";
 import {
-  LayoutOperationError, effectiveSize, isHeading, isPrefix, isSplit, layoutBoxes, listAt, moveNodes, nodeAt, pathKey, resizeSizes, samePath, setPairSizes,
-} from "./layout-tree.js";
-import {
-  SIZE_LABEL, buildWireframe, createDom, handleGlobalShortcut, handleSelectionShortcut, isTypingTarget, nextId, nodeMenuItems, openMenu, pct,
+  SIZE_LABEL, buildWireframe, createDom, handleGlobalShortcut, handleSelectionShortcut, isHandled, isTypingTarget, markHandled, nextId, nodeMenuItems, openMenu, pct,
 } from "./layout-editor-ui.js";
+import { createViewport } from "./studio-kit/viewport.js";
+import { boxesAt, createKeyedLayer, createOverlay, dividerKeyAction, paintBadge, paintDivider, paintSelectable, ratioLabel, setBox } from "./studio-kit/overlay.js";
+import { createDragController, dragGhost, trackPointer } from "./studio-kit/drag.js";
 
 const ZOOMS = [0.5, 0.75, 1, 1.25, 1.5, 2, 3];
-const DRAG_DISTANCE = 4;
 const HEADING_ITEMS = [{ name: "title", label: "Title region" }, { name: "subtitle", label: "Subtitle region" }];
-const inside = (box, p, slack = 0) => p.x >= box.x - slack && p.x <= box.x + box.w + slack && p.y >= box.y - slack && p.y <= box.y + box.h + slack;
 
 /**
  * Mount the canvas in `container`. Options: `model` (shared state; one is created from the other options when omitted), `toSvg` and `fonts`
@@ -30,6 +31,7 @@ export function createLayoutCanvas(container, options = {}) {
   const { el } = dom;
   const ownModel = !options.model;
   const model = options.model ?? createLayoutModel(options);
+  const adapter = createLayoutAdapter(model);
   const id = nextId("opf-lx-canvas");
 
   const root = el("div", "opf-lx-canvas opf-ui", { "data-density": model.density, "data-tool": model.tool });
@@ -42,13 +44,8 @@ export function createLayoutCanvas(container, options = {}) {
   implicit.append(el("span", "opf-lx-implicit-label", { text: "title · implicit" }));
   const layer = el("div", "opf-lx-layer");
   const overlay = el("div", "opf-lx-overlay");
-  const cut = el("div", "opf-lx-cut", { "aria-hidden": "true" });
-  const drop = el("div", "opf-lx-drop", { "aria-hidden": "true" });
-  const ratio = el("div", "opf-lx-ratio", { "aria-hidden": "true" });
-  cut.hidden = true;
-  drop.hidden = true;
-  ratio.hidden = true;
-  overlay.append(cut, drop, ratio);
+  // The kit overlay: the split tools' cut guide, the drop line and the ratio badge.
+  const marks = createOverlay(dom, overlay, { guide: "cut" });
   content.append(implicit, layer, overlay);
   frame.append(rendered, content);
   stage.append(frame);
@@ -68,14 +65,9 @@ export function createLayoutCanvas(container, options = {}) {
   root.append(banner, viewport, footer);
   container.append(root);
 
-  const keyed = new Map();
-  let geo = layoutBoxes(model.record);
+  const keyed = createKeyedLayer(layer);
+  let geo = adapter.geometry();
   let hover = null;
-  let zoom = 1;
-  let spaceHeld = false;
-  let drag = null;
-  let pending = null;
-  let pan = null;
   let divider = null;
   let menu = null;
   let renameInput = null;
@@ -84,22 +76,27 @@ export function createLayoutCanvas(container, options = {}) {
   let previewTimer = 0;
   let lastPreview = "";
 
+  // --- the kit viewport (zoom and pan) and the drag controller ----------------------------------------------------------------
+  const viewportKit = createViewport(viewport, {
+    root, steps: ZOOMS, zoomVar: "--opf-lx-zoom", panEnabled: () => model.tool === "hand",
+    onZoom: (value) => { zoomLabel.textContent = `${Math.round(value * 100)}%`; },
+  });
+  const dragger = createDragController({
+    doc,
+    onStart: (press) => startDrag(press),
+    onStarted: () => { root.dataset.dragging = "true"; paintHover(); render(); },
+    onMove: (session, event) => moveDrag(session, event),
+    onEnd: (session) => endDrag(session),
+    onDrop: (session) => finishDrag(session),
+    onEscape: () => model.notify("Move cancelled."),
+  });
+
   // --- geometry helpers -------------------------------------------------------------------------------------------------------
-  const unit = (event) => {
-    const box = content.getBoundingClientRect();
-    return { x: (event.clientX - box.left) / (box.width || 1), y: (event.clientY - box.top) / (box.height || 1) };
-  };
+  const unit = (event) => viewportKit.toUnit(event, content);
   const boxOf = (path) => geo.nodes.find((box) => samePath(box.path, path));
-  const chainAt = (point, skip) => geo.nodes.filter((box) => inside(box, point, 0.0005) && !(skip && skip(box))).sort((a, b) => a.depth - b.depth);
+  const chainAt = (point, skip) => boxesAt(geo.nodes, point, { skip });
   const nodeElement = (path) => keyed.get(`n:${pathKey(path)}`);
   const isSelected = (path) => model.selection.some((entry) => samePath(entry, path));
-
-  function setBox(node, box, pad = 0) {
-    node.style.left = pct(box.x - pad);
-    node.style.top = pct(box.y - pad);
-    node.style.width = pct(box.w + 2 * pad);
-    node.style.height = pct(box.h + 2 * pad);
-  }
 
   // --- the descriptions a screen reader hears ---------------------------------------------------------------------------------
   function describeNode(box) {
@@ -113,12 +110,6 @@ export function createLayoutCanvas(container, options = {}) {
   }
 
   // --- render ---------------------------------------------------------------------------------------------------------------
-  function ensure(key, create, seen) {
-    let node = keyed.get(key);
-    if (!node) { node = create(); keyed.set(key, node); }
-    seen.add(key);
-    return node;
-  }
   function makeNode() {
     const node = el("div", "opf-lx-node");
     node.append(el("span", "opf-lx-label", { "aria-hidden": "true" }));
@@ -147,14 +138,14 @@ export function createLayoutCanvas(container, options = {}) {
   function render() {
     // Focus that is on a box (or the frame) follows the selection afterwards; a divider, slot, menu or field keeps its own.
     const keepFocus = doc.activeElement === frame || Boolean(doc.activeElement?.classList?.contains("opf-lx-node"));
-    geo = layoutBoxes(model.record);
-    const seen = new Set();
-    const order = [];
+    geo = adapter.geometry();
+    const pass = keyed.begin();
+    const drag = dragger.active;
     const primary = model.primary;
     const tabStop = primary && boxOf(primary) ? pathKey(primary) : geo.nodes[0] ? pathKey(geo.nodes[0].path) : null;
     for (const box of geo.nodes) {
       const key = `n:${pathKey(box.path)}`;
-      const node = ensure(key, makeNode, seen);
+      const node = pass.ensure(key, makeNode);
       const split = isSplit(box.entry);
       const issues = model.findingsFor(box.path);
       node.dataset.path = pathKey(box.path);
@@ -164,21 +155,14 @@ export function createLayoutCanvas(container, options = {}) {
       else { node.dataset.name = box.entry.name; delete node.dataset.direction; }
       node.dataset.heading = !split && isHeading(box.entry) ? "true" : "false";
       node.dataset.finding = issues.length ? issues[0].severity : model.findingsWithin(box.path).length ? "within" : "";
-      node.classList.toggle("is-selected", isSelected(box.path));
       node.classList.toggle("is-dragging", Boolean(drag?.valid?.some((path) => isPrefix(path, box.path))));
-      node.setAttribute("role", split ? "group" : "button");
-      node.setAttribute("aria-label", describeNode(box));
-      if (split) node.removeAttribute("aria-pressed"); else node.setAttribute("aria-pressed", String(isSelected(box.path)));
-      node.tabIndex = pathKey(box.path) === tabStop ? 0 : -1;
-      setBox(node, box);
+      paintSelectable(node, { box, selected: isSelected(box.path), pressable: !split, label: describeNode(box), tabStop: pathKey(box.path) === tabStop });
       // The name and size are a chip outside the box's top edge (a split's tag sits at the top right), so they never cover the content drawn
       // inside. The words come from data attributes (CSS content), so the box's own accessible name is the one description a screen reader hears.
       const label = node.firstElementChild;
       label.dataset.text = split ? (box.entry.direction === "row" ? "row" : "column") : box.entry.name;
       label.dataset.size = SIZE_LABEL(box.entry, box.direction);
-      let badge = node.querySelector(":scope > .opf-lx-badge");
-      if (issues.length && !badge) { badge = el("span", "opf-lx-badge", { "aria-hidden": "true" }); badge.append(dom.icon("CircleX", 14)); node.append(badge); }
-      if (badge) { if (issues.length) badge.title = issues.map((issue) => issue.message).join("\n"); else badge.remove(); }
+      paintBadge(dom, node, issues.map((issue) => issue.message));
       let wire = node.querySelector(":scope > .opf-lx-wire");
       const wanted = model.preview && !split;
       const wireKey = wanted ? JSON.stringify([isHeading(box.entry), box.entry.accepts, box.entry.flow, box.entry.max]) : "";
@@ -189,43 +173,29 @@ export function createLayoutCanvas(container, options = {}) {
         wire.dataset.key = wireKey;
         node.append(wire);
       }
-      order.push(node);
     }
     // Dividers: the gap between two siblings.
     for (const info of geo.dividers) {
       const key = `d:${pathKey(info.listPath)}:${info.index}`;
-      const node = ensure(key, () => makeDivider(key), seen);
+      const node = pass.ensure(key, () => makeDivider(key));
       node._info = info;
-      node.dataset.orientation = info.direction === "row" ? "vertical" : "horizontal";
       node.dataset.depth = String(info.depth);
-      node.dataset.fixed = info.draggable ? "false" : "true";
       node.dataset.active = divider?.key === key ? "true" : "false";
-      setBox(node, info);
-      node.setAttribute("role", "separator");
-      node.setAttribute("aria-orientation", info.direction === "row" ? "vertical" : "horizontal");
       const first = [...info.listPath, info.index], second = [...info.listPath, info.index + 1];
-      if (info.draggable) {
-        const total = info.a + info.b;
-        node.tabIndex = model.tool === "select" || model.tool === "hand" ? 0 : -1;
-        node.setAttribute("aria-label", `Resize ${model.describe(first)} and ${model.describe(second)}`);
-        node.setAttribute("aria-valuemin", "0");
-        node.setAttribute("aria-valuemax", "100");
-        node.setAttribute("aria-valuenow", String(Math.round(info.a / total * 100)));
-        node.setAttribute("aria-valuetext", `${trim(info.a)} : ${trim(info.b)}`);
-        node.removeAttribute("aria-disabled");
-        node.title = "Drag to resize. Double-click to make both sides equal.";
-      } else {
-        node.removeAttribute("tabindex");
-        for (const name of ["aria-label", "aria-valuemin", "aria-valuemax", "aria-valuenow", "aria-valuetext", "title"]) node.removeAttribute(name);
-        node.setAttribute("aria-disabled", "true");
-      }
-      order.push(node);
+      paintDivider(node, {
+        box: info, orientation: info.direction === "row" ? "vertical" : "horizontal", draggable: info.draggable,
+        tabbable: model.tool === "select" || model.tool === "hand",
+        label: info.draggable ? `Resize ${model.describe(first)} and ${model.describe(second)}` : undefined,
+        valueNow: info.draggable ? Math.round(info.a / (info.a + info.b) * 100) : undefined,
+        valueText: info.draggable ? ratioLabel(info.a, info.b) : undefined,
+        title: "Drag to resize. Double-click to make both sides equal.",
+      });
     }
     // Insert slots, only for the Insert tool.
     if (model.tool === "insert" && !model.readOnly) {
       geo.slots.forEach((slot) => {
         const key = `s:${pathKey(slot.listPath)}:${slot.index}`;
-        const node = ensure(key, makeSlot, seen);
+        const node = pass.ensure(key, makeSlot);
         node._info = slot;
         node.dataset.orientation = slot.direction === "row" ? "vertical" : "horizontal";
         node.dataset.depth = String(slot.depth);
@@ -239,16 +209,9 @@ export function createLayoutCanvas(container, options = {}) {
         node.style.top = slot.direction === "row" ? pct(thick.y) : `calc(${pct(thick.y)} - var(--opf-lx-slot) / 2)`;
         node.style.width = slot.direction === "row" ? "var(--opf-lx-slot)" : pct(thick.w);
         node.style.height = slot.direction === "row" ? pct(thick.h) : "var(--opf-lx-slot)";
-        order.push(node);
       });
     }
-    for (const [key, node] of keyed) if (!seen.has(key)) { node.remove(); keyed.delete(key); }
-    let cursor = null;
-    for (const node of order) {
-      const expected = cursor ? cursor.nextSibling : layer.firstChild;
-      if (node.parentNode !== layer || expected !== node) layer.insertBefore(node, expected);
-      cursor = node;
-    }
+    pass.done();
     // The implicit title band and the layout-level findings.
     implicit.hidden = !geo.implicitTitle;
     if (geo.implicitTitle) setBox(implicit, geo.implicitTitle);
@@ -267,11 +230,9 @@ export function createLayoutCanvas(container, options = {}) {
     schedulePreview();
     if (keepFocus) syncFocus();
   }
-  const trim = (value) => String(Math.round(value * 1000) / 1000);
 
   function paintHover() {
-    for (const node of layer.querySelectorAll(".opf-lx-node[data-hover]")) node.removeAttribute("data-hover");
-    if (hover && !drag && !divider) nodeElement(hover)?.setAttribute("data-hover", "true");
+    marks.hover(layer, hover && !dragger.active && !divider ? nodeElement(hover) : null);
   }
   function paintStatus() {
     const notice = model.notice;
@@ -280,7 +241,7 @@ export function createLayoutCanvas(container, options = {}) {
     status.dataset.live = notice && notice.kind !== "error" ? "true" : "false";
     alert.textContent = notice?.kind === "error" ? notice.message : "";
     alert.hidden = !alert.textContent;
-    zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
+    zoomLabel.textContent = `${Math.round(viewportKit.zoom * 100)}%`;
   }
   /** Put DOM focus on the selected box (or the frame, when nothing is selected), after the structure changed under it. */
   function syncFocus() {
@@ -303,24 +264,7 @@ export function createLayoutCanvas(container, options = {}) {
     }
     return deepest;
   }
-  const panMode = () => model.tool === "hand" || spaceHeld;
-
-  viewport.addEventListener("pointerdown", (event) => {
-    if (!panMode() || (event.pointerType === "mouse" && event.button !== 0)) return;
-    event.preventDefault();
-    event.stopPropagation();
-    pan = { x: event.clientX, y: event.clientY, left: viewport.scrollLeft, top: viewport.scrollTop };
-    root.dataset.panning = "true";
-    viewport.setPointerCapture?.(event.pointerId);
-  }, true);
-  viewport.addEventListener("pointermove", (event) => {
-    if (!pan) return;
-    viewport.scrollLeft = pan.left - (event.clientX - pan.x);
-    viewport.scrollTop = pan.top - (event.clientY - pan.y);
-  });
-  const endPan = () => { pan = null; delete root.dataset.panning; };
-  viewport.addEventListener("pointerup", endPan);
-  viewport.addEventListener("pointercancel", endPan);
+  const panMode = () => viewportKit.panMode;
 
   content.addEventListener("pointerdown", (event) => {
     if (event.target.closest?.(".opf-lx-divider, .opf-lx-slot, .opf-lx-menu, .opf-lx-rename") || panMode()) return;
@@ -345,7 +289,7 @@ export function createLayoutCanvas(container, options = {}) {
     focusPrimary();
     if (model.readOnly) return;
     const paths = isSelected(hit.path) ? model.selection.map((path) => [...path]) : [hit.path];
-    pending = { x: event.clientX, y: event.clientY, id: event.pointerId, paths, type: event.pointerType };
+    dragger.press(event, { paths });
     content.setPointerCapture?.(event.pointerId);
   });
   // The margin of the slide, outside the content box: a click there selects the layout.
@@ -356,8 +300,7 @@ export function createLayoutCanvas(container, options = {}) {
     frame.focus({ preventScroll: true });
   });
   content.addEventListener("pointermove", (event) => {
-    if (pending && !drag && Math.hypot(event.clientX - pending.x, event.clientY - pending.y) > DRAG_DISTANCE) startDrag();
-    if (drag) { moveDrag(event); return; }
+    if (dragger.move(event)) return;
     if (event.pointerType === "touch") return;
     // Hover: the node a click would select, and the guide of the split tools.
     const point = unit(event);
@@ -369,11 +312,8 @@ export function createLayoutCanvas(container, options = {}) {
     paintCut();
   });
   content.addEventListener("pointerleave", () => { hover = null; paintHover(); paintCut(); });
-  content.addEventListener("pointerup", (event) => {
-    if (drag) { finishDrag(event); return; }
-    pending = null;
-  });
-  content.addEventListener("pointercancel", () => { cancelDrag(); pending = null; });
+  content.addEventListener("pointerup", (event) => { dragger.release(event); });
+  content.addEventListener("pointercancel", () => { dragger.cancel(); });
   content.addEventListener("dblclick", (event) => {
     if (model.tool !== "select" || event.target.closest?.(".opf-lx-divider, .opf-lx-slot, .opf-lx-rename") || model.readOnly) return;
     const region = [...chainAt(unit(event))].reverse().find((box) => !isSplit(box.entry));
@@ -382,11 +322,7 @@ export function createLayoutCanvas(container, options = {}) {
   function paintCut() {
     const tool = model.tool;
     const box = (tool === "split-row" || tool === "split-column") && hover ? boxOf(hover) : null;
-    cut.hidden = !box;
-    if (!box) return;
-    if (tool === "split-row") Object.assign(cut.style, { left: pct(box.x + box.w / 2), top: pct(box.y), width: "0", height: pct(box.h) });
-    else Object.assign(cut.style, { left: pct(box.x), top: pct(box.y + box.h / 2), width: pct(box.w), height: "0" });
-    cut.dataset.axis = tool === "split-row" ? "row" : "column";
+    if (box) marks.showGuide(box, tool === "split-row" ? "row" : "column"); else marks.hideGuide();
   }
   function focusPrimary() {
     const primary = model.primary;
@@ -394,20 +330,15 @@ export function createLayoutCanvas(container, options = {}) {
     (node ?? frame).focus({ preventScroll: true });
   }
 
-  // --- drag a region to reorder it or move it into a split ----------------------------------------------------------------------
-  function startDrag() {
-    if (!pending || model.readOnly) { pending = null; return; }
-    const paths = pending.paths.filter((path) => nodeAt(model.record, path));
-    if (!paths.length) { pending = null; return; }
-    const ghost = el("div", "opf-lx-ghost", { "aria-hidden": "true", text: paths.length > 1 ? `${paths.length} regions` : model.describe(paths[0]) });
-    root.append(ghost);
-    drag = { paths, valid: paths, ghost, drop: null };
-    root.dataset.dragging = "true";
-    doc.addEventListener("keydown", dragKey, true);
-    paintHover();
-    render();
+  // --- drag a region to reorder it or move it into a split (the kit's drag controller) ------------------------------------------
+  function startDrag(press) {
+    if (model.readOnly) return null;
+    const paths = press.payload.paths.filter((path) => nodeAt(model.record, path));
+    if (!paths.length) return null;
+    const ghost = dragGhost(dom, root, paths.length > 1 ? `${paths.length} regions` : model.describe(paths[0]));
+    return { paths, valid: paths, ghost, drop: null };
   }
-  function dropAt(point) {
+  function dropAt(drag, point) {
     const skip = (box) => drag.paths.some((path) => isPrefix(path, box.path));
     const chain = chainAt(point, skip);
     const hit = chain[chain.length - 1];
@@ -427,55 +358,35 @@ export function createLayoutCanvas(container, options = {}) {
       index = hit.path[hit.path.length - 1] + (after ? 1 : 0);
     }
     const slot = geo.slots.find((entry) => samePath(entry.listPath, listPath) && entry.index === index);
-    let reason = "";
-    let noop = false;
-    try {
-      const moved = moveNodes(model.record, drag.paths, listPath, index);
-      noop = JSON.stringify(moved.record) === JSON.stringify(model.record);
-    } catch (error) {
-      if (!(error instanceof LayoutOperationError)) throw error;
-      reason = error.message;
-    }
+    const { reason, noop } = adapter.trialMove(drag.paths, listPath, index);
     return { listPath, index, slot, into, reason, noop };
   }
-  function moveDrag(event) {
-    drag.ghost.style.left = `${event.clientX - root.getBoundingClientRect().left + 12}px`;
-    drag.ghost.style.top = `${event.clientY - root.getBoundingClientRect().top + 12}px`;
-    const found = dropAt(unit(event));
+  function moveDrag(drag, event) {
+    drag.ghost.moveTo(event);
+    const found = dropAt(drag, unit(event));
     drag.drop = found;
-    for (const node of layer.querySelectorAll("[data-into]")) node.removeAttribute("data-into");
-    if (!found?.slot) { drop.hidden = true; return; }
-    drop.hidden = false;
-    drop.dataset.orientation = found.slot.direction === "row" ? "vertical" : "horizontal";
-    drop.dataset.state = found.reason ? "refused" : found.noop ? "same" : "ok";
-    drop.title = found.reason;
+    marks.into(layer, null);
+    if (!found?.slot) { marks.hideDrop(); return; }
     const slot = found.slot;
-    if (slot.direction === "row") Object.assign(drop.style, { left: pct(slot.x), top: pct(slot.y), width: "0", height: pct(slot.h) });
-    else Object.assign(drop.style, { left: pct(slot.x), top: pct(slot.y), width: pct(slot.w), height: "0" });
-    if (found.into && !found.reason) nodeElement(found.into)?.setAttribute("data-into", "true");
+    marks.showDrop(slot, { orientation: slot.direction === "row" ? "vertical" : "horizontal", state: found.reason ? "refused" : found.noop ? "same" : "ok", reason: found.reason });
+    if (found.into && !found.reason) marks.into(layer, nodeElement(found.into));
   }
-  function finishDrag() {
-    const outcome = drag?.drop;
-    const paths = drag?.paths;
-    endDrag();
+  function finishDrag(drag) {
+    const outcome = drag.drop;
+    const paths = drag.paths;
     if (!outcome || !paths) return;
     if (outcome.reason) { model.notify(outcome.reason, "error"); return; }
     if (outcome.noop) return;
     model.move(paths, outcome.listPath, outcome.index);
     focusPrimary();
   }
-  function endDrag() {
-    doc.removeEventListener("keydown", dragKey, true);
-    drag?.ghost.remove();
-    drag = null;
-    pending = null;
-    drop.hidden = true;
+  function endDrag(drag) {
+    drag.ghost.remove();
+    marks.hideDrop();
     delete root.dataset.dragging;
-    for (const node of layer.querySelectorAll("[data-into]")) node.removeAttribute("data-into");
+    marks.into(layer, null);
     render();
   }
-  function cancelDrag() { if (drag) endDrag(); }
-  function dragKey(event) { if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); cancelDrag(); model.notify("Move cancelled."); } }
 
   // --- dividers ------------------------------------------------------------------------------------------------------------------
   function startResize(event, node) {
@@ -483,52 +394,44 @@ export function createLayoutCanvas(container, options = {}) {
     if (!info?.draggable || model.readOnly || panMode() || (event.pointerType === "mouse" && event.button !== 0)) return;
     event.preventDefault();
     event.stopPropagation();
-    if (!model.beginGesture("Resized")) return;
+    // One gesture through the adapter: each move previews a draft record, the release commits one step, Escape or a cancel restores.
+    if (!adapter.begin("Resized")) return;
     const startRecord = model.record;
     divider = { key: node.dataset.key, info, startRecord, node, id: event.pointerId };
     node.setPointerCapture?.(event.pointerId);
     node.focus({ preventScroll: true });
     node.dataset.active = "true";
-    const onMove = (move) => {
-      const p = unit(move);
-      const along = info.direction === "row" ? p.x : p.y;
-      const fraction = (along - info.pairStart) / info.pairLength;
-      const sizes = resizeSizes(startRecord, info.listPath, info.index, fraction, { free: move.shiftKey });
-      if (!sizes) return;
-      const next = setPairSizes(startRecord, info.listPath, info.index, sizes.a, sizes.b).record;
-      model.updateGesture(next, `Resize ${sizes.label}`);
-      ratio.hidden = false;
-      ratio.textContent = sizes.label;
-      ratio.style.left = pct(info.x + info.w / 2);
-      ratio.style.top = pct(info.y + info.h / 2);
-      divider.label = sizes.label;
-    };
-    const finish = (commit) => {
-      node.removeEventListener("pointermove", onMove);
-      node.removeEventListener("pointerup", onUp);
-      node.removeEventListener("pointercancel", onCancel);
-      doc.removeEventListener("keydown", onKey, true);
-      ratio.hidden = true;
-      const label = divider?.label;
-      divider = null;
-      if (commit) model.endGesture(label ? `Resized to ${label}` : "Resized"); else model.cancelGesture();
-      node.dataset.active = "false";
-    };
-    const onUp = () => finish(true);
-    const onCancel = () => finish(false);
-    const onKey = (key) => { if (key.key === "Escape") { key.preventDefault(); key.stopPropagation(); finish(false); } };
-    node.addEventListener("pointermove", onMove);
-    node.addEventListener("pointerup", onUp);
-    node.addEventListener("pointercancel", onCancel);
-    doc.addEventListener("keydown", onKey, true);
+    trackPointer(node, {
+      doc,
+      onMove(move) {
+        const p = unit(move);
+        const along = info.direction === "row" ? p.x : p.y;
+        const fraction = (along - info.pairStart) / info.pairLength;
+        const sizes = resizeSizes(startRecord, info.listPath, info.index, fraction, { free: move.shiftKey });
+        if (!sizes) return;
+        const next = setPairSizes(startRecord, info.listPath, info.index, sizes.a, sizes.b).record;
+        adapter.preview(next, `Resize ${sizes.label}`);
+        marks.showRatio(sizes.label, { x: info.x + info.w / 2, y: info.y + info.h / 2 });
+        divider.label = sizes.label;
+      },
+      onEnd(commit) {
+        marks.hideRatio();
+        const label = divider?.label;
+        divider = null;
+        if (commit) adapter.commit(label ? `Resized to ${label}` : "Resized"); else adapter.cancel();
+        node.dataset.active = "false";
+      },
+    });
   }
   function dividerKey(event, node) {
     const info = node._info;
-    if (!info?.draggable || event.altKey || event.metaKey || event.ctrlKey) return;
-    const keys = info.direction === "row" ? ["ArrowLeft", "ArrowRight"] : ["ArrowUp", "ArrowDown"];
-    const step = event.key === keys[0] ? -1 : event.key === keys[1] ? 1 : 0;
-    if (step) { event.preventDefault(); event.stopPropagation(); model.nudge(info.listPath, info.index, step, event.shiftKey); return; }
-    if (event.key === "Enter") { event.preventDefault(); event.stopPropagation(); model.equalize(info.listPath, info.index); }
+    if (!info?.draggable) return;
+    const action = dividerKeyAction(event, info.direction === "row" ? "vertical" : "horizontal");
+    if (!action) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (action.type === "nudge") model.nudge(info.listPath, info.index, action.step, action.big);
+    else model.equalize(info.listPath, info.index);
   }
 
   // --- context menu ----------------------------------------------------------------------------------------------------------------
@@ -600,24 +503,11 @@ export function createLayoutCanvas(container, options = {}) {
     });
   }
 
-  // --- zoom ------------------------------------------------------------------------------------------------------------------------
-  function setZoom(value) {
-    const next = Math.max(ZOOMS[0], Math.min(ZOOMS[ZOOMS.length - 1], value));
-    zoom = next;
-    root.style.setProperty("--opf-lx-zoom", String(zoom));
-    root.dataset.zoomed = String(zoom !== 1);
-    zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
-  }
-  const stepZoom = (direction) => {
-    const at = ZOOMS.findIndex((value) => value >= zoom - 1e-9);
-    const index = direction > 0 ? (ZOOMS[at] > zoom + 1e-9 ? at : at + 1) : at - 1;
-    setZoom(ZOOMS[Math.max(0, Math.min(ZOOMS.length - 1, index))]);
-  };
-  zoomOut.addEventListener("click", () => stepZoom(-1));
-  zoomIn.addEventListener("click", () => stepZoom(1));
-  zoomFit.addEventListener("click", () => setZoom(1));
-  viewport.addEventListener("wheel", (event) => { if (event.ctrlKey || event.metaKey) { event.preventDefault(); stepZoom(event.deltaY < 0 ? 1 : -1); } }, { passive: false });
-  setZoom(1);
+  // --- zoom (the kit viewport: Ctrl or Cmd with the wheel steps it; Fit is 100%, the frame fitted to the canvas) -----------------------
+  const setZoom = (value) => { viewportKit.setZoom(value); };
+  zoomOut.addEventListener("click", () => viewportKit.step(-1));
+  zoomIn.addEventListener("click", () => viewportKit.step(1));
+  zoomFit.addEventListener("click", () => viewportKit.fit());
 
   // --- preview with the host's renderer ---------------------------------------------------------------------------------------------
   function schedulePreview() {
@@ -667,26 +557,25 @@ export function createLayoutCanvas(container, options = {}) {
   content.addEventListener("mousedown", (event) => { if (!event.target.closest?.(".opf-lx-rename")) event.preventDefault(); });
   content.addEventListener("focusin", (event) => {
     const node = event.target.closest?.(".opf-lx-node");
-    if (node && node.dataset.path !== undefined && !pending && !drag) {
+    if (node && node.dataset.path !== undefined && !dragger.pending && !dragger.active) {
       const path = node.dataset.path.split(".").map(Number);
       if (!isSelected(path)) model.select([path]);
     }
   });
   root.addEventListener("keydown", (event) => {
-    if (event.target === renameInput || event.opfLayoutHandled) return;
+    if (event.target === renameInput || isHandled(event)) return;
     if (event.key === " " && !isTypingTarget(event.target) && (event.target === frame || event.target.closest?.(".opf-lx-node, .opf-lx-viewport")) && !event.repeat) {
       event.preventDefault();
-      spaceHeld = true;
-      root.dataset.space = "true";
+      viewportKit.holdSpace(true);
       return;
     }
     if (handleGlobalShortcut(event, model)) return;
     if (isTypingTarget(event.target)) return;
     if (event.key === "Escape") {
       event.preventDefault();
-      event.opfLayoutHandled = true;
+      markHandled(event);
       if (menu) { menu.close(); return; }
-      if (drag) { cancelDrag(); return; }
+      if (dragger.active) { dragger.cancel(); return; }
       if (model.tool !== "select") { model.setTool("select"); return; }
       model.selectParent();
       focusPrimary();
@@ -717,8 +606,8 @@ export function createLayoutCanvas(container, options = {}) {
       openContextMenu({ x: box.left + (at ? (at.x + at.w / 2) * box.width : 40), y: box.top + (at ? (at.y + at.h / 2) * box.height : 40) }, node ?? frame);
     }
   });
-  root.addEventListener("keyup", (event) => { if (event.key === " " && spaceHeld) { spaceHeld = false; delete root.dataset.space; } });
-  root.addEventListener("focusout", () => { spaceHeld = false; delete root.dataset.space; });
+  root.addEventListener("keyup", (event) => { if (event.key === " ") viewportKit.holdSpace(false); });
+  root.addEventListener("focusout", () => { viewportKit.holdSpace(false); });
 
   const unsubscribe = model.subscribe((event) => {
     if (event.type === "notice") { paintStatus(); return; }
@@ -732,13 +621,14 @@ export function createLayoutCanvas(container, options = {}) {
     model,
     refresh: render,
     setZoom,
-    getZoom: () => zoom,
+    getZoom: () => viewportKit.zoom,
     focus() { focusPrimary(); },
     destroy() {
       unsubscribe();
       win.clearTimeout(previewTimer);
       previewToken++;
-      cancelDrag();
+      dragger.cancel();
+      viewportKit.destroy();
       menu?.close({ restore: false });
       headingMenu?.close({ restore: false });
       root.remove();

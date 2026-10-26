@@ -1,18 +1,21 @@
 // The state shared by the parts of the layout editor (RR-99): the record being edited, the selection, the active tool, live validation
 // by core, and the editor's own undo history. The palette, canvas, layers and inspector are views of one model, so a host that lays
 // them out differently only passes the same model to each. Every change goes through a command here, which runs a pure operation of
-// `layout-tree.js`, validates the result and records one history step. No DOM, no network.
+// `layout-tree.js`, validates the result and records one history step. The selection, the gesture and the snapshot history are the
+// studio kit's (CE-18), over the layout's index paths (src/layout-adapter.js). No DOM, no network.
 import { validateCatalogRecord } from "@openpresentation/opf";
 import { layoutTemplateIssues } from "@openpresentation/opf/composition";
 import {
-  LayoutOperationError, clone, deleteNodes, duplicateNodes, equalizePair, insertRegion, isSplit, listAt, moveIntoSibling, moveNodes, nodeAt, nodes, nudgePair,
+  LayoutOperationError, clone, deleteNodes, duplicateNodes, equalizePair, insertRegion, isSplit, moveIntoSibling, moveNodes, nodeAt, nodes, nudgePair,
   parentDirection, removeDesignHint, reorderNode, samePath, setLayoutProperty, setProperty, splitRegion, toggleHeading, unwrapNode, wrapNodes,
 } from "./layout-tree.js";
+import { createSelection } from "./studio-kit/selection.js";
+import { layoutSelectionAdapter } from "./layout-adapter.js";
+import { createGesture, createHistory } from "./studio-kit/gesture.js";
 
 /** The `$schema` of a layout record; core's catalog validation expects it. */
 export const LAYOUT_SCHEMA = "https://openpresentation.org/schema/opf-layout/v2";
 export const LAYOUT_TOOLS = Object.freeze(["select", "split-row", "split-column", "insert", "heading", "hand"]);
-const COALESCE_MS = 1500;
 const isObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
 
 /** A blank layout: a title and one content region. */
@@ -69,7 +72,6 @@ export function createLayoutModel(options = {}) {
   const listeners = new Set();
   const state = {
     record: normalize(options.record ?? blankLayoutRecord()),
-    selection: [],
     tool: "select",
     preview: false,
     density: options.density === "touch" ? "touch" : "comfortable",
@@ -78,37 +80,49 @@ export function createLayoutModel(options = {}) {
     notice: null,
     renaming: null,
   };
-  const history = { entries: [], index: 0 };
-  const limit = options.historyLimit ?? 200;
-  let gesture = null;
+  const history = createHistory({ limit: options.historyLimit ?? 200 });
   let destroyed = false;
   let onChange = options.onChange;
   state.findings = validateLayoutRecord(state.record);
-  history.entries.push({ record: clone(state.record), selection: [] });
+  history.reset({ record: clone(state.record), selection: [] });
 
   const emit = (event) => { if (!destroyed) for (const listener of [...listeners]) listener({ ...event, model }); };
   const notice = (message, kind = "info") => { state.notice = message ? { message, kind, at: Date.now() } : null; emit({ type: "notice" }); };
   const validate = () => { state.findings = validateLayoutRecord(state.record); };
-  const existing = (paths) => (paths ?? []).filter((path) => path.length && nodeAt(state.record, path));
-  const snapshot = () => ({ record: clone(state.record), selection: state.selection.map((path) => [...path]) });
+  const selection = createSelection(layoutSelectionAdapter(() => state.record), { onChange: ({ source }) => emit({ type: "selection", source }) });
+  const snapshot = () => ({ record: clone(state.record), selection: selection.snapshot() });
   const fire = () => { try { onChange?.(clone(state.record)); } catch (error) { console.error(error); } };
-
-  function push(snap, coalesce) {
-    const head = history.entries[history.index];
-    const now = Date.now();
-    if (coalesce && head?.coalesce === coalesce && now - head.time < COALESCE_MS && history.index === history.entries.length - 1 && history.index > 0) {
-      history.entries[history.index] = { ...snap, coalesce, time: now };
-      return;
-    }
-    history.entries.length = history.index + 1;
-    history.entries.push({ ...snap, coalesce, time: now });
-    if (history.entries.length > limit) history.entries.shift(); else history.index++;
-  }
+  const push = (snap, coalesce) => history.push(snap, coalesce);
+  // A drag is one step: drafts show the record (no history, no onChange); the end pushes one snapshot; a cancel puts the start back.
+  const gesture = createGesture({
+    snapshot: () => ({ record: state.record, selection: selection.items }),
+    preview(record, message) {
+      state.record = record;
+      validate();
+      state.notice = message ? { message, kind: "info", at: Date.now(), live: true } : state.notice;
+      emit({ type: "record", source: "gesture" });
+    },
+    commit(start, { message }) {
+      if (JSON.stringify(start.record) === JSON.stringify(state.record)) { emit({ type: "record", source: "gesture-end" }); return false; }
+      selection.prune();
+      push(snapshot());
+      state.notice = { message, kind: "info", at: Date.now() };
+      emit({ type: "record", source: "gesture-end", message: state.notice.message });
+      fire();
+      return true;
+    },
+    restore(start) {
+      state.record = start.record;
+      selection.replace(start.selection);
+      validate();
+      emit({ type: "record", source: "gesture-cancel" });
+    },
+  });
 
   /** Run `operation(record)` -> `{ record, selection }`; a refusal is a notice, and nothing changes. */
   function run(message, operation, { coalesce } = {}) {
     if (state.readOnly) { notice("This layout is read only.", "error"); return false; }
-    if (gesture) return false;
+    if (gesture.active) return false;
     let outcome;
     try { outcome = operation(state.record); } catch (error) {
       if (error instanceof LayoutOperationError) { notice(error.message, "error"); return false; }
@@ -116,8 +130,8 @@ export function createLayoutModel(options = {}) {
     }
     if (JSON.stringify(outcome.record) === JSON.stringify(state.record)) { if (outcome.selection) select(outcome.selection); return false; }
     state.record = outcome.record;
-    if (outcome.selection) state.selection = outcome.selection.filter((path) => nodeAt(state.record, path));
-    else state.selection = existing(state.selection);
+    if (outcome.selection) selection.replace(outcome.selection.filter((path) => nodeAt(state.record, path)));
+    else selection.prune();
     validate();
     push(snapshot(), coalesce);
     state.notice = message ? { message: typeof message === "function" ? message(outcome) : message, kind: "info", at: Date.now() } : null;
@@ -126,18 +140,12 @@ export function createLayoutModel(options = {}) {
     return true;
   }
 
-  function select(paths, { source } = {}) {
-    const next = existing(paths).map((path) => [...path]);
-    if (next.length === state.selection.length && next.every((path, index) => samePath(path, state.selection[index]))) return false;
-    state.selection = next;
-    emit({ type: "selection", source });
-    return true;
-  }
+  const select = (paths, options) => selection.set(paths, options);
 
   const model = {
     get record() { return state.record; },
-    get selection() { return state.selection; },
-    get primary() { return state.selection[state.selection.length - 1] ?? null; },
+    get selection() { return selection.items; },
+    get primary() { return selection.primary; },
     get tool() { return state.tool; },
     get preview() { return state.preview; },
     get density() { return state.density; },
@@ -145,7 +153,7 @@ export function createLayoutModel(options = {}) {
     get findings() { return state.findings; },
     get notice() { return state.notice; },
     get renaming() { return state.renaming; },
-    get gesturing() { return gesture !== null; },
+    get gesturing() { return gesture.active; },
 
     subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); },
     setOnChange(callback) { onChange = callback; },
@@ -153,45 +161,22 @@ export function createLayoutModel(options = {}) {
     /** Replace the record (a layout the host loaded). Resets the selection and, by default, the history; does not call `onChange`. */
     setRecord(record, { keepHistory = false } = {}) {
       state.record = normalize(record);
-      state.selection = [];
-      gesture = null;
+      selection.replace([]);
+      gesture.reset();
       state.renaming = null;
       validate();
-      if (keepHistory) { history.entries.length = history.index + 1; history.entries.push({ ...snapshot(), time: Date.now() }); history.index++; }
-      else { history.entries = [{ ...snapshot() }]; history.index = 0; }
+      if (keepHistory) history.append(snapshot());
+      else history.reset(snapshot());
       emit({ type: "load" });
     },
 
     select,
     /** Shift-click: add a sibling of the selection, else replace it. */
-    selectAdd(path) {
-      const current = state.selection;
-      if (!current.length || !existing([path]).length) return select([path]);
-      const parent = path.slice(0, -1);
-      if (!samePath(current[0].slice(0, -1), parent)) return select([path]);
-      const has = current.some((entry) => samePath(entry, path));
-      return select(has ? current.filter((entry) => !samePath(entry, path)) : [...current, path]);
-    },
-    selectParent() {
-      const path = model.primary;
-      if (!path) return false;
-      return select(path.length > 1 ? [path.slice(0, -1)] : []);
-    },
-    selectChild() {
-      const path = model.primary;
-      const node = path && nodeAt(state.record, path);
-      if (!node || !isSplit(node) || !node.regions?.length) return false;
-      return select([[...path, 0]]);
-    },
+    selectAdd: (path) => selection.add(path),
+    selectParent: () => selection.selectParent(),
+    selectChild: () => selection.selectChild(),
     /** Move the selection to a sibling (`delta` -1 or 1), or to the first entry when nothing is selected. */
-    selectSibling(delta) {
-      const path = model.primary;
-      if (!path) return select(state.record.regions.length ? [[0]] : []);
-      const list = listAt(state.record, path.slice(0, -1));
-      const at = path[path.length - 1] + delta;
-      if (!list || at < 0 || at >= list.length) return false;
-      return select([[...path.slice(0, -1), at]]);
-    },
+    selectSibling: (delta) => selection.selectSibling(delta),
     setTool(tool) {
       if (!LAYOUT_TOOLS.includes(tool) || state.tool === tool) return false;
       state.tool = tool;
@@ -224,42 +209,17 @@ export function createLayoutModel(options = {}) {
 
     // --- gestures: a drag is one step ---
     beginGesture(label) {
-      if (state.readOnly || gesture) return false;
-      gesture = { label, record: state.record, selection: state.selection };
-      return true;
+      if (state.readOnly || gesture.active) return false;
+      return gesture.begin(label);
     },
     /** Show a record while the gesture runs (no history, no `onChange`). */
-    updateGesture(record, message) {
-      if (!gesture) return;
-      state.record = record;
-      validate();
-      state.notice = message ? { message, kind: "info", at: Date.now(), live: true } : state.notice;
-      emit({ type: "record", source: "gesture" });
-    },
-    endGesture(message) {
-      if (!gesture) return false;
-      const { record, label } = gesture;
-      gesture = null;
-      if (JSON.stringify(record) === JSON.stringify(state.record)) { emit({ type: "record", source: "gesture-end" }); return false; }
-      state.selection = existing(state.selection);
-      push(snapshot());
-      state.notice = { message: message ?? label, kind: "info", at: Date.now() };
-      emit({ type: "record", source: "gesture-end", message: state.notice.message });
-      fire();
-      return true;
-    },
-    cancelGesture() {
-      if (!gesture) return;
-      state.record = gesture.record;
-      state.selection = gesture.selection;
-      gesture = null;
-      validate();
-      emit({ type: "record", source: "gesture-cancel" });
-    },
+    updateGesture(record, message) { gesture.update(record, message); },
+    endGesture: (message) => gesture.end(message),
+    cancelGesture() { gesture.cancel(); },
 
     // --- history ---
-    canUndo: () => history.index > 0 && !gesture,
-    canRedo: () => history.index < history.entries.length - 1 && !gesture,
+    canUndo: () => history.canUndo() && !gesture.active,
+    canRedo: () => history.canRedo() && !gesture.active,
     undo() { return jump(-1); },
     redo() { return jump(1); },
 
@@ -277,12 +237,11 @@ export function createLayoutModel(options = {}) {
   };
 
   function jump(step) {
-    const target = history.index + step;
-    if (gesture || target < 0 || target >= history.entries.length) return false;
-    history.index = target;
-    const entry = history.entries[target];
+    if (gesture.active) return false;
+    const entry = history.go(step);
+    if (!entry) return false;
     state.record = clone(entry.record);
-    state.selection = existing(entry.selection);
+    selection.replace(selection.existing(entry.selection));
     validate();
     state.notice = { message: step < 0 ? "Undid the last change" : "Redid the change", kind: "info", at: Date.now() };
     emit({ type: "record", source: "history", message: state.notice.message });

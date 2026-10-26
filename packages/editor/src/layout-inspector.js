@@ -1,11 +1,13 @@
 // The inspector of the layout editor (RR-99): the properties of the selection, as form fields. With nothing selected it edits the layout
 // (id, name, summary, direction, default anchor, overflow region, design hints); a split has a direction, size and anchor; a region has
 // its name, size, accepted kinds, role, flow, max, anchor, bleed, list columns and empty rule. Every field is a command on the shared
-// model, so it is validated by core and undoable like a drag on the canvas.
+// model, so it is validated by core and undoable like a drag on the canvas. CE-18: the panel is the studio kit's inspector frame (one
+// section per selection kind) with the kit's field builders.
 import { createLayoutModel } from "./layout-model.js";
 import { LAYOUT_ANCHORS, LAYOUT_REGION_FLOWS, LAYOUT_REGION_KINDS, LAYOUT_REGION_ROLES } from "./layout-templates.js";
 import { effectiveSize, inheritedAnchor, isHeading, isSplit, listAt, parseSize } from "./layout-tree.js";
 import { KIND_ICONS, createDom, handleGlobalShortcut, nextId } from "./layout-editor-ui.js";
+import { createFields, createInspectorFrame } from "./studio-kit/inspector.js";
 
 const cap = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 const SIZE_ERROR = "A size is a number above 0 and up to 100, or auto.";
@@ -31,72 +33,32 @@ export function createLayoutInspector(container, options = {}) {
   root.append(head, body);
   container.append(root);
 
-  let editing = false;
-  let checks = [];
-  /** Text and number fields keep their focus and caret while the person types, so an edit from one does not redraw the panel; the other controls do. */
-  const edit = (callback) => { editing = true; try { callback(); } finally { editing = false; } };
-
-  // --- field builders --------------------------------------------------------------------------------------------------------------
-  /** A labeled field. `path`/`field` tie it to core's findings: they show under the field and mark it invalid. */
-  function field(label, control, { help, path, field: key, labelFor, group, target } = {}) {
-    const wrap = el("div", "opf-lx-field", { "data-field-name": key ?? "" });
-    const fieldId = `${id}-${nextId("f")}`;
-    const focusTarget = target ?? control;
-    if (group) {
-      const caption = el("span", "opf-lx-label-text", { id: `${fieldId}-label`, text: label });
-      control.setAttribute("aria-labelledby", `${fieldId}-label`);
-      if (!control.getAttribute("role")) control.setAttribute("role", "group");
-      wrap.append(caption);
-    } else {
-      if (!labelFor && !control.id) control.id = fieldId;
-      wrap.append(el("label", "opf-lx-label-text", { for: labelFor ?? control.id, text: label }));
-    }
-    wrap.append(control);
-    if (help) { const note = el("p", "opf-lx-help", { id: `${fieldId}-help`, text: help }); wrap.append(note); if (!group) focusTarget.setAttribute("aria-describedby", note.id); }
-    const error = el("p", "opf-lx-field-error", { id: `${fieldId}-error`, role: "status", "aria-live": "polite" });
-    error.hidden = true;
-    wrap.append(error);
-    if (path && key) {
-      checks.push(() => {
-        const issues = model.findingsFor(path, key);
-        error.hidden = !issues.length;
-        error.replaceChildren();
-        if (issues.length) error.append(dom.icon("CircleX", 14), el("span", "", { text: issues.map((issue) => issue.message).join(" ") }));
-        wrap.dataset.invalid = String(Boolean(issues.length));
-        if (!group) { if (issues.length) { focusTarget.setAttribute("aria-invalid", "true"); focusTarget.setAttribute("aria-errormessage", error.id); } else { focusTarget.removeAttribute("aria-invalid"); focusTarget.removeAttribute("aria-errormessage"); } }
-      });
-    }
-    return Object.assign(wrap, { error });
-  }
-  function textInput(value, { onInput, name, pattern, placeholder, multiline } = {}) {
-    const input = el(multiline ? "textarea" : "input", "opf-lx-input", { type: multiline ? undefined : "text", "data-field": name, pattern, placeholder, spellcheck: "false", autocomplete: "off", rows: multiline ? 2 : undefined });
-    input.value = value ?? "";
-    input.addEventListener("input", () => edit(() => onInput(input.value)));
-    return input;
-  }
-  function select(entries, current, { onChange, name }) {
-    const input = el("select", "opf-lx-select", { "data-field": name });
-    for (const [value, label] of entries) { const option = el("option", "", { value, text: label }); input.append(option); }
-    input.value = current;
-    input.addEventListener("change", () => onChange(input.value));
-    return input;
-  }
-  function segmented(entries, current, { onPick, label, name }) {
-    const wrap = el("div", "opf-lx-segmented", { role: "group", "aria-label": label });
-    for (const [value, text, iconName] of entries) {
-      const button = dom.button("opf-lx-segment", { text, iconName, size: 14, pressed: value === current, attributes: { "data-field": `${name}-${value}`, "data-value": value } });
-      button.addEventListener("click", () => { if (value !== current) onPick(value); });
-      wrap.append(button);
-    }
-    return wrap;
-  }
-  const actionButton = (text, iconName, run, { label, disabled, shortcut } = {}) => {
-    const button = dom.button("opf-lx-action", { text, iconName, size: 14, attributes: { "aria-label": label, "aria-keyshortcuts": shortcut } });
-    button.disabled = Boolean(disabled) || model.readOnly;
-    button.addEventListener("click", () => run());
-    return button;
-  };
-  const section = (label) => { const node = el("div", "opf-lx-section"); if (label) node.append(el("h3", "opf-lx-section-title", { text: label })); return node; };
+  // --- the kit's inspector frame and field builders ----------------------------------------------------------------------------------
+  // Text and number fields keep their focus and caret while the person types, so an edit from one does not redraw the panel; the other controls do.
+  const single = () => (model.selection.length === 1 ? model.nodeAt(model.selection[0]) : null);
+  const frame = createInspectorFrame(body, {
+    context: () => ({ paths: model.selection, entry: single() }),
+    sections: [
+      { id: "layout", when: ({ paths, entry }) => paths.length === 0 || (paths.length === 1 && !entry), render: () => layoutView() },
+      { id: "multi", when: ({ paths }) => paths.length > 1, render: (_, { paths }) => multiView(paths) },
+      { id: "split", when: ({ entry }) => Boolean(entry) && isSplit(entry), render: (_, { paths, entry }) => splitView(paths[0], entry) },
+      { id: "heading", when: ({ entry }) => Boolean(entry) && !isSplit(entry) && isHeading(entry), render: (_, { paths, entry }) => headingView(paths[0], entry) },
+      { id: "region", when: ({ entry }) => Boolean(entry) && !isSplit(entry) && !isHeading(entry), render: (_, { paths, entry }) => regionView(paths[0], entry) },
+    ],
+    after: ({ paths }) => {
+      // Findings that point at the node but at no field shown here.
+      const shown = new Set([...body.querySelectorAll("[data-field-name]")].map((node) => node.dataset.fieldName));
+      const loose = model.findingsFor(paths.length === 1 ? paths[0] : []).filter((finding) => !finding.field || !shown.has(finding.field));
+      if (loose.length && paths.length <= 1) {
+        const list = el("ul", "opf-lx-loose", { "aria-label": "Other findings" });
+        for (const finding of loose) { const item = el("li", "opf-lx-field-error"); item.append(dom.icon("CircleX", 14), el("span", "", { text: finding.message })); list.append(item); }
+        body.append(list);
+      }
+      root.dataset.density = model.density;
+    },
+  });
+  const edit = (callback) => frame.edit(callback);
+  const { field, textInput, select, segmented, actionButton, section } = createFields(dom, frame, { idPrefix: id, issues: (path, key) => model.findingsFor(path, key), readOnly: () => model.readOnly });
 
   // --- the size field: a number, and Auto where the parent is a column -----------------------------------------------------------------
   function sizeField(path, entry) {
@@ -292,40 +254,14 @@ export function createLayoutInspector(container, options = {}) {
     body.append(el("p", "opf-lx-help", { text: `${paths.length} siblings are selected. Wrap them in a row or column, duplicate them or delete them.` }), actions(paths, {}));
   }
 
-  function render() {
-    const active = doc.activeElement;
-    const focusKey = body.contains(active) ? active.dataset?.field : undefined;
-    checks = [];
-    body.replaceChildren();
-    const paths = model.selection;
-    if (!paths.length) layoutView();
-    else if (paths.length > 1) multiView(paths);
-    else {
-      const entry = model.nodeAt(paths[0]);
-      if (!entry) layoutView();
-      else if (isSplit(entry)) splitView(paths[0], entry);
-      else if (isHeading(entry)) headingView(paths[0], entry);
-      else regionView(paths[0], entry);
-    }
-    // Findings that point at the node but at no field shown here.
-    const shown = new Set([...body.querySelectorAll("[data-field-name]")].map((node) => node.dataset.fieldName));
-    const loose = model.findingsFor(paths.length === 1 ? paths[0] : []).filter((finding) => !finding.field || !shown.has(finding.field));
-    if (loose.length && paths.length <= 1) {
-      const list = el("ul", "opf-lx-loose", { "aria-label": "Other findings" });
-      for (const finding of loose) { const item = el("li", "opf-lx-field-error"); item.append(dom.icon("CircleX", 14), el("span", "", { text: finding.message })); list.append(item); }
-      body.append(list);
-    }
-    root.dataset.density = model.density;
-    update();
-    if (focusKey) body.querySelector(`[data-field="${focusKey}"]`)?.focus({ preventScroll: true });
-  }
-  function update() { for (const check of checks) check(); }
+  const render = () => frame.render();
+  const update = () => frame.update();
 
   root.addEventListener("keydown", (event) => { handleGlobalShortcut(event, model); });
   const unsubscribe = model.subscribe((event) => {
     if (event.type === "notice" || event.type === "tool" || event.type === "rename") return;
     if (event.type === "view") { root.dataset.density = model.density; render(); return; }
-    if (editing) { update(); return; }
+    if (frame.editing) { update(); return; }
     render();
   });
   render();

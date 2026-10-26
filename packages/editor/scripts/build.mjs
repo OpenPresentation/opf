@@ -14,5 +14,15 @@ for (const entry of await readdir(src)) {
   }
 }
 
+// CE-18: the studio kit is a folder of internal modules (src/studio-kit/), copied as it is; no package subpath exports it yet.
+for (const folder of ["studio-kit"]) {
+  await mkdir(new URL(`${folder}/`, dist), { recursive: true });
+  for (const entry of await readdir(new URL(`${folder}/`, src))) {
+    if (entry.endsWith(".js") || entry.endsWith(".d.ts")) {
+      await copyFile(new URL(`${folder}/${entry}`, src), new URL(`${folder}/${entry}`, dist));
+    }
+  }
+}
+
 // RR-98: dist/styles.css is the token layer plus the component styles, generated from src/styles/*.css (see scripts/build-styles.mjs).
 await writeFile(new URL("styles.css", dist), (await buildStyles(new URL("styles/", src))).css);
