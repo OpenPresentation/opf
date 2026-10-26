@@ -3,9 +3,9 @@ import { readFile, realpath, writeFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { registryPlan } from './registry-plan.mjs';
+import { UNEXPORTED_EDITOR_MODULES } from './gallery-editor-imports.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const UNEXPORTED_EDITOR_MODULES = ['@openpresentation/opf-editor/exact-source', '@openpresentation/opf-editor/font-gate'];
 
 
 /** Every registry entry must be a real file within this consumer, never an ancestor or escaped link. */

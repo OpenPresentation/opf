@@ -36,6 +36,8 @@ import { retainedSlideIndex } from "./slide-retention.js";
 import { createSourceMemory, updateJsonSource } from "./exact-source.js";
 
 export { THEME_TOKENS, createThemeController, normalizeTheme, normalizeThemeTokens } from "./workspace-theme.js";
+// The script-aware measurement options for composing one slide: a host that calls `composeSlide` or `paginateSlide` on the session passes these (the playground does).
+export { layoutOptionsFor } from "./workspace-measure.js";
 
 const VIEWS = Object.freeze(["slide", "sorter", "outline", "layouts"]);
 const MUTATORS = new Set(["set", "setGroupComposition", "setCatalog", "setCatalogs", "applyPatch", "replaceDocument", "restoreState", "undo", "redo", "setComposition", "paginateSlide"]);

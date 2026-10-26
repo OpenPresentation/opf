@@ -22,6 +22,7 @@
       {"match": ["scripts/native-acceptance/"], "run": ["check:native-acceptance"]},
       {"match": ["scripts/pack-ecosystem.mjs", "scripts/ecosystem-preview-plan.mjs", "scripts/ecosystem-preview-plan.test.mjs"], "run": ["check:preview-packaging"]},
       {"match": ["scripts/gallery-editor-wasm.mjs", "scripts/gallery-editor-wasm.test.mjs", "scripts/vendor-gallery-editor.mjs", "scripts/prepare-gallery-editor.mjs"], "run": ["check:gallery-editor-wasm"]},
+      {"match": ["scripts/gallery-editor-imports.mjs", "scripts/gallery-editor-imports.test.mjs", "scripts/vendor-gallery-editor.mjs", "scripts/registry-toolchain.mjs", "packages/editor/examples/", "packages/editor/package.json"], "run": ["check:gallery-editor-imports"]},
       {"match": ["scripts/gallery-editor-assets.mjs", "scripts/gallery-editor-assets.test.mjs", "scripts/vendor-gallery-editor.mjs", "scripts/prepare-gallery-editor.mjs"], "run": ["check:gallery-editor-assets"]},
       {"match": ["scripts/registry-consumer.mjs", "scripts/registry-consumer.test.mjs", "scripts/vendor-gallery-editor.mjs", "scripts/registry-plan.mjs", "scripts/build-gallery-snapshot.mjs", "scripts/build-gallery-snapshot.test.mjs"], "run": ["check:registry-consumer", "check:gallery-snapshot"]},
       {"match": ["scripts/archive-tar.mjs"], "run": ["check:archive-tar"]},

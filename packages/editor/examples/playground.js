@@ -11,8 +11,7 @@ import {installTransferControls} from './transfer-controls.js';
 import { saveDocument } from '../src/index.js';
 // CE-06: the editor library mounts the canvas, the slide row, the sorter, the outline, Layout Studio, Present, Export and the autosave over one session
 // and one fonts handle (src/workspace.js). This page keeps what is the playground's own: the inspector, the source dialog, the data grid, import and the panels.
-import { createOpfEditor } from '../src/workspace.js';
-import { layoutOptionsFor } from '../src/workspace-measure.js';
+import { createOpfEditor, layoutOptionsFor } from '../src/workspace.js';
 // FA-23: the editor library ships no catalog data. This app is the host: it registers the default catalog owned and
 // published by pptx.gallery and hands the session's one list to every render, check, embed and export.
 import { catalogDisplay, gallery as defaultCatalog } from '@openpresentation/gallery';
@@ -48,7 +47,7 @@ const catalogs = [defaultCatalog];
 const renderOptions = () => ({ catalogs: editor.catalogs });
 const pendingFonts = deck => { try { return fonts.pending(deck, renderOptions()); } catch { return []; } };
 // The session's composeSlide and paginateSlide take the handle's plain measurement, and that one is strict: they get the same per-document,
-// script-aware measurement the canvas draws with (src/workspace-measure.js).
+// script-aware measurement the canvas draws with (layoutOptionsFor in src/workspace.js).
 const layoutFor = (deck,index) => layoutOptionsFor(fonts, deck, index, editor.catalogs);
 const element = id => document.getElementById(id);
 const startDeck = {

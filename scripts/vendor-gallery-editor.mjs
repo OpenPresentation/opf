@@ -10,6 +10,7 @@ import { galleryEditorWasmManifest } from './gallery-editor-wasm.mjs';
 import { galleryScriptFontManifestForExample } from './gallery-script-fonts.mjs';
 import { galleryLazyFontManifestForExample } from './gallery-lazy-fonts.mjs';
 import { linkedLocalAssets, packageAssetSources, versionLinkedAssets, verifyLinkedAssets } from './gallery-editor-assets.mjs';
+import { rewriteEditorExampleImports } from './gallery-editor-imports.mjs';
 import { exampleUsesBaseFonts, splitBaseFonts, verifyBaseFonts } from './gallery-base-fonts.mjs';
 
 // MR-56: vendors the editor bundle (public/opf-editor) and the schema reference (data/opf-spec.json) into a pptx.gallery checkout from the
@@ -73,8 +74,7 @@ for (let index = 0; index < exampleQueue.length; index += 1) {
     if (!exampleSeen.has(match[1])) { exampleSeen.add(match[1]); exampleQueue.push(match[1]); }
   }
   exampleSources[file] = sha256(result.stdout);
-  const content = file.endsWith('.js') ? result.stdout.replace(/(['"])\.\.\/src\/([^'"/]+)\.js\1/g,
-    (_, quote, module) => `${quote}@openpresentation/opf-editor${module === 'index' ? '' : '/' + module}${quote}`) : result.stdout;
+  const content = file.endsWith('.js') ? rewriteEditorExampleImports(result.stdout) : result.stdout;
   await writeFile(path.join(source, file), content);
 }
 const bundle = await build({

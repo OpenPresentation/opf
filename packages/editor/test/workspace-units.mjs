@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { THEME_TOKENS, normalizeTheme, normalizeThemeTokens } from '../dist/workspace.js';
+import { THEME_TOKENS, layoutOptionsFor as publicLayoutOptionsFor, normalizeTheme, normalizeThemeTokens } from '../dist/workspace.js';
 import { retainedSlideIndex } from '../dist/slide-retention.js';
 import { parseSourceText, reportSource } from '../dist/workspace-source.js';
 import { layoutOptionsFor, describeFontChange, fontSubstitutionNotes } from '../dist/workspace-measure.js';
@@ -73,6 +73,7 @@ assert.equal(warned.status.kind, 'valid');
 assert.ok(warned.status.warnings >= 1, 'a reference that resolves nowhere is a warning, not an error');
 
 // ---- measurement and font notes -------------------------------------------------------------------------------------------------------------
+assert.equal(publicLayoutOptionsFor, layoutOptionsFor, 'the public ./workspace entry exports the helper the playground example imports');
 assert.deepEqual(layoutOptionsFor(undefined, {}, 0, []), {}, 'no fonts handle: nothing to measure with');
 const plain = { textMeasurement: () => ({ width: 1, height: 1 }) };
 assert.deepEqual(layoutOptionsFor({ registry: {} }, {}, 0, []), { fonts: { registry: {} } }, 'a handle without a measurement is passed through');
