@@ -2209,9 +2209,9 @@
   "region body 652,213.4,570.4,449 column 3",
   "item title - 57.6,57.6,1164.8,131.8 54px",
   "item blocks.1.image media 57.6,213.4,570.4,449",
-  "item blocks.0.text body 652,213.4,570.4,138.6 22px",
-  "item blocks.2.text body 652,376,570.4,138.6 22px",
-  "item blocks.3.image body 652,538.6,570.4,123.8"
+  "item blocks.0.text body 652,213.4,570.4,133.7 22px",
+  "item blocks.2.text body 652,371,570.4,133.7 22px",
+  "item blocks.3.image body 652,528.7,570.4,133.7"
  ],
  "image-beside 5 long": [
   "area title 57.6,57.6,1164.8,131.8",
@@ -2219,10 +2219,10 @@
   "region body 652,213.4,570.4,449 column 4",
   "item title - 57.6,57.6,1164.8,131.8 54px",
   "item blocks.1.image media 57.6,213.4,570.4,449",
-  "item blocks.0.text body 652,213.4,570.4,102.6 21px",
-  "item blocks.2.text body 652,340,570.4,102.6 21px",
-  "item blocks.3.image body 652,466.6,570.4,69.2",
-  "item blocks.4.text body 652,559.8,570.4,102.6 21px"
+  "item blocks.0.text body 652,213.4,570.4,94.3 19px",
+  "item blocks.2.text body 652,331.6,570.4,94.3 19px",
+  "item blocks.3.image body 652,449.9,570.4,94.3",
+  "item blocks.4.text body 652,568.1,570.4,94.3 19px"
  ],
  "image-beside 6 long": [
   "area title 57.6,57.6,1164.8,131.8",
@@ -2230,11 +2230,11 @@
   "region body 652,213.4,570.4,449 column 5",
   "item title - 57.6,57.6,1164.8,131.8 54px",
   "item blocks.1.image media 57.6,213.4,570.4,449",
-  "item blocks.0.text body 652,213.4,570.4,87 17px",
-  "item blocks.2.text body 652,324.4,570.4,87 17px",
-  "item blocks.3.image body 652,435.4,570.4,46",
-  "item blocks.4.text body 652,505.4,570.4,87 17px",
-  "item blocks.5.image body 652,616.4,570.4,46"
+  "item blocks.0.text body 652,213.4,570.4,70.6 16px",
+  "item blocks.2.text body 652,308,570.4,70.6 16px",
+  "item blocks.3.image body 652,402.6,570.4,70.6",
+  "item blocks.4.text body 652,497.2,570.4,70.6 16px",
+  "item blocks.5.image body 652,591.8,570.4,70.6"
  ],
  "gallery 1 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -2539,9 +2539,9 @@
   "region notes 766.1,213.4,456.3,449 column 3",
   "item title - 57.6,57.6,1164.8,131.8 54px",
   "item blocks.0.chart chart 57.6,213.4,684.5,449",
-  "item blocks.1.text notes 766.1,213.4,456.3,145.6 21px",
-  "item blocks.2.chart notes 766.1,383,456.3,109.9",
-  "item blocks.3.text notes 766.1,516.8,456.3,145.6 21px"
+  "item blocks.1.text notes 766.1,213.4,456.3,133.7 21px",
+  "item blocks.2.chart notes 766.1,371,456.3,133.7",
+  "item blocks.3.text notes 766.1,528.7,456.3,133.7 21px"
  ],
  "chart-beside 5 long": [
   "area title 57.6,57.6,1164.8,131.8",
@@ -2549,10 +2549,10 @@
   "region notes 766.1,213.4,456.3,449 column 4",
   "item title - 57.6,57.6,1164.8,131.8 54px",
   "item blocks.0.chart chart 57.6,213.4,684.5,449",
-  "item blocks.1.text notes 766.1,213.4,456.3,121.8 19px",
-  "item blocks.2.chart notes 766.1,359.1,456.3,66.8",
-  "item blocks.3.text notes 766.1,449.9,456.3,121.8 19px",
-  "item blocks.4.chart notes 766.1,595.6,456.3,66.8"
+  "item blocks.1.text notes 766.1,213.4,456.3,94.3 17px",
+  "item blocks.2.chart notes 766.1,331.6,456.3,94.3",
+  "item blocks.3.text notes 766.1,449.9,456.3,94.3 17px",
+  "item blocks.4.chart notes 766.1,568.1,456.3,94.3"
  ],
  "chart-beside 6 long": [
   "area title 57.6,57.6,1164.8,131.8",
@@ -2560,11 +2560,14 @@
   "region notes 766.1,213.4,456.3,449 column 5",
   "item title - 57.6,57.6,1164.8,131.8 54px",
   "item blocks.0.chart chart 57.6,213.4,684.5,449",
-  "item blocks.1.text notes 766.1,213.4,456.3,91.2 17px",
-  "item blocks.2.chart notes 766.1,328.6,456.3,39.7",
-  "item blocks.3.text notes 766.1,392.3,456.3,91.2 17px",
-  "item blocks.4.chart notes 766.1,507.5,456.3,39.7",
-  "item blocks.5.text notes 766.1,571.2,456.3,91.2 17px"
+  "item blocks.1.text notes 766.1,213.4,456.3,70.6 16px",
+  "item blocks.2.chart notes 766.1,308,456.3,70.6",
+  "item blocks.3.text notes 766.1,402.6,456.3,70.6 16px",
+  "item blocks.4.chart notes 766.1,497.2,456.3,70.6",
+  "item blocks.5.text notes 766.1,591.8,456.3,70.6 16px",
+  "diagnostic text-overflow blocks.1.text",
+  "diagnostic text-overflow blocks.3.text",
+  "diagnostic text-overflow blocks.5.text"
  ],
  "table 1 short": [
   "area title 57.6,57.6,1164.8,65.9",
@@ -2672,10 +2675,10 @@
   "region table 57.6,213.4,1164.8,333.5 column 4",
   "region note 57.6,570.9,1164.8,91.5 column 1",
   "item title - 57.6,57.6,1164.8,131.8 54px",
-  "item blocks.0.table table 57.6,213.4,1164.8,59.7",
-  "item blocks.2.table table 57.6,297.1,1164.8,59.7",
-  "item blocks.3.text table 57.6,380.8,1164.8,82.4 22px",
-  "item blocks.4.table table 57.6,487.2,1164.8,59.7",
+  "item blocks.0.table table 57.6,213.4,1164.8,65.4",
+  "item blocks.2.table table 57.6,302.7,1164.8,65.4",
+  "item blocks.3.text table 57.6,392.1,1164.8,65.4 22px",
+  "item blocks.4.table table 57.6,481.5,1164.8,65.4",
   "item blocks.1.text note 57.6,570.9,1164.8,91.5 25px",
   "diagnostic text-overflow blocks.0.table",
   "diagnostic text-overflow blocks.2.table",
@@ -2686,11 +2689,11 @@
   "region table 57.6,213.4,1164.8,333.5 column 5",
   "region note 57.6,570.9,1164.8,91.5 column 1",
   "item title - 57.6,57.6,1164.8,131.8 54px",
-  "item blocks.0.table table 57.6,213.4,1164.8,35.6",
-  "item blocks.2.table table 57.6,273,1164.8,35.6",
-  "item blocks.3.text table 57.6,332.7,1164.8,65.3 22px",
-  "item blocks.4.table table 57.6,422,1164.8,35.6",
-  "item blocks.5.text table 57.6,481.6,1164.8,65.3 22px",
+  "item blocks.0.table table 57.6,213.4,1164.8,47.5",
+  "item blocks.2.table table 57.6,284.9,1164.8,47.5",
+  "item blocks.3.text table 57.6,356.4,1164.8,47.5 19px",
+  "item blocks.4.table table 57.6,427.9,1164.8,47.5",
+  "item blocks.5.text table 57.6,499.4,1164.8,47.5 19px",
   "item blocks.1.text note 57.6,570.9,1164.8,91.5 25px",
   "diagnostic text-overflow blocks.0.table",
   "diagnostic text-overflow blocks.2.table",

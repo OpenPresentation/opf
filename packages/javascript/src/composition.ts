@@ -2855,7 +2855,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   };
   // WI-1: blocks stacked in one column of `area` at the heights they need, one gap apart, from the top (anchor `top`,
   // `middle` or `bottom` places a stack that fits). Text, lists, quotes, metrics and code are measured; charts, pictures,
-  // tables, timelines and videos ask for an equal share and take whatever the measured blocks leave. When the needs do not
+  // tables, timelines and videos keep at least an equal share and take whatever the measured blocks leave. When the needs do not
   // fit, every block gives up the same fraction of what it can give up above its height at the minimum font size
   // (shareHeights), so a short block keeps nearly its need and none overflows while the floors fit.
   const stackedBoxes = (nodes: Pending[], area: LayoutBox, requestedGap: number, settings: Composition, cards = hasCards, anchor: 'top' | 'middle' | 'bottom' = 'top'): LayoutBox[] => {
@@ -2863,8 +2863,15 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const space = Math.max(0, area.height - between * (nodes.length - 1)), share = space / nodes.length;
     const elastic = nodes.map(node => !measuredNode(node)), stretch = elastic.filter(Boolean).length;
     const needs = nodes.map((node, index) => elastic[index] ? share : naturalHeight(node, area.width, cards, undefined, settings));
-    const floors = nodes.map((node, index) => elastic[index] ? share / 2 : naturalHeight(node, area.width, cards, undefined, settings, true));
+    const floors = nodes.map((node, index) => elastic[index] ? share : naturalHeight(node, area.width, cards, undefined, settings, true));
     let heights = shareHeights(needs, floors, space);
+    // A chart or picture never gets less than the equal share it had before WI-1, even when the measured blocks cannot fit at
+    // the minimum size: the text overflows either way, and the drawing stays legible.
+    if (stretch && heights.some((size, index) => elastic[index] && size < share - 1e-9)) {
+      const measured = nodes.flatMap((_, index) => elastic[index] ? [] : [index]);
+      const rest = shareHeights(measured.map(index => needs[index]!), measured.map(index => floors[index]!), space - stretch * share);
+      heights = nodes.map((_, index) => elastic[index] ? share : rest[measured.indexOf(index)]!);
+    }
     const spare = space - heights.reduce((sum, size) => sum + size, 0);
     if (stretch && spare > 0) heights = heights.map((size, index) => elastic[index] ? size + spare / stretch : size);
     const used = heights.reduce((sum, size) => sum + size, 0) + between * (nodes.length - 1);

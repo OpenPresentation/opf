@@ -10,32 +10,38 @@ Core changes how content is sized; the renderer draws what core composes. Every 
 
 ## Template baseline (`layout-templates-rr96-color-variants.json`)
 
-`node test/layout-template-goldens.mjs --update`, reviewed, then `--promote`: 138 of 485 slides changed, and the source digest is unchanged. The 64 `paginated` slides are pages that core's `paginate` makes from overflowing samples; pagination composes with the same rules, so its pages move with them. The other 74 changes are the template cases:
+Rebased on WI-5 (#870), then `node test/layout-template-goldens.mjs --update`, reviewed, and `--promote`d. 129 of 485 slides changed against main's baseline (the WI-5 one); the source digest is unchanged.
+
+- **Paginated (64).** These are pages that core's `paginate` makes from overflowing samples. Pagination composes with the same rules, so its pages move with them.
+- **Template cases (65)**, by template:
 
 | Template | Slides |
 | --- | --- |
 | `dashboard` | 10 |
 | `statement` | 10 |
-| `chart-beside` | 8 |
 | `scorecard` | 6 |
-| `table` | 6 |
+| `chart-beside` | 5 |
 | `code` | 5 |
-| `image-beside` | 4 |
 | `metrics` | 4 |
 | `timeline` | 4 |
 | `closing` | 4 |
 | `agenda` | 3 |
 | `faq` | 3 |
+| `table` | 3 |
 | `table-beside` | 3 |
 | `text` | 1 |
 | `list` | 1 |
 | `comparison` | 1 |
+| `image-beside` | 1 |
 | `feature` | 1 |
 
-Core's composition goldens of the same samples (`packages/javascript/test/fixtures/template-goldens-0.19.json`) moved in 72 of 336 cases:
+In a column that mixes text with a chart or picture, the chart or picture never gets less than the equal share it had on main. So the overfull `chart-beside`, `image-beside` and `table` long samples keep main's geometry for their drawings.
 
-- overflow diagnostics went from 416 to 399;
-- 94 composed text sizes went up and 5 went down. The 5 downs are overfull stress cases (`comparison 6 long`, `timeline 4 long`, `timeline 5 long`), where rows now shrink together instead of one row overflowing.
+Core's composition goldens of the same samples (`packages/javascript/test/fixtures/template-goldens-0.19.json`):
+
+- 64 of 336 cases changed;
+- overflow diagnostics went from 416 to 402;
+- 81 composed text sizes went up and 5 went down. The 5 downs are overfull stress cases (`comparison 6 long`, `timeline 4/5 long`), where rows now shrink together instead of one of them overflowing.
 
 The review sheets were inspected:
 
@@ -47,7 +53,7 @@ The review sheets were inspected:
 
 ## Example corpus
 
-The `golden` workflow (run 40298942822, pinned Playwright image) changed **82 of 818 slides in 42 decks** (commit `abb321db3`). The source digest is unchanged. All 82 contain a metric: 41 are promoted-region slides, 20 are `dashboard`, 20 are `chart-beside`, and 1 is an automatic composition (`technical/block-composition.opf.json#0`). The corpus has 85 metric slides, so 3 do not move; they already drew their value at 76 px.
+Before the rebase on WI-5, the `golden` workflow (run 40298942822, pinned Playwright image) changed **82 of 818 slides in 42 decks**, with the source digest unchanged. After the rebase it was dispatched again on the combined head; that result is CORPUS2. All 82 contain a metric: 41 are promoted-region slides, 20 are `dashboard`, 20 are `chart-beside`, and 1 is an automatic composition (`technical/block-composition.opf.json#0`). The corpus has 85 metric slides, so 3 do not move; they already drew their value at 76 px.
 
 The cause is rule 3: metric values that `min(76, 0.28 × box height)` held at roughly 34 to 69 px now ask for 76 px and fit down only where the box cannot hold them. A walk of every changed slide found no slide without a metric.
 
