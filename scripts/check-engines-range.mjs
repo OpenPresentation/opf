@@ -34,9 +34,9 @@ export const CLOSED_RANGE_RELEASES = {
 // Workspace packages published to npm: their range must equal the root package.json's.
 export const PUBLISHED_MANIFESTS = ['packages/javascript/package.json', 'packages/cli/package.json'];
 
-// MR-11: the other four packages of the monorepo (docs/programs/monorepo/README.md section 1). Each is held to the same
+// MR-11: the other packages of the monorepo (the MCP server too, from 0.27.0) (docs/programs/monorepo/README.md section 1). Each is held to the same
 // rule as soon as its manifest is tracked, which is the imported state; before the import there is nothing to read.
-export const IMPORTED_MANIFESTS = ['packages/render/package.json', 'packages/pptx/package.json', 'packages/editor/package.json', 'packages/gallery/package.json'];
+export const IMPORTED_MANIFESTS = ['packages/render/package.json', 'packages/pptx/package.json', 'packages/editor/package.json', 'packages/gallery/package.json', 'packages/mcp/package.json'];
 
 // Evidence of an imported package (packages/<x>/docs/evidence) records history like the root's.
 const IGNORED = [/^(?:packages\/[^/]+\/)?docs\/evidence\//, /(^|\/)fixtures\//, /(^|\/)node_modules\//, /^artifacts\//];

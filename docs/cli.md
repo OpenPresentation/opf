@@ -29,6 +29,7 @@ installed package versions give the same bytes on every operating system.
 | `opf schemas`, `opf schema [name] [pointer]` | The OPF schemas. `opf schemas` lists the `@openpresentation/opf` version each came from next to its id, and `opf --version` names the schema id ([schema versioning](schema-versioning.md)). |
 | `opf catalogs`, `opf catalog <kind> [id]`, `opf catalog examples [slug]` | The pptx.gallery catalog (`@openpresentation/gallery`) and the bundled example decks. |
 | `opf skills <install\|update\|status>` | The six bundled agent skills. |
+| `opf mcp` | Runs the MCP server of `@openpresentation/mcp` on stdio when that package is installed; otherwise prints `npx -y @openpresentation/mcp` and exits 2. See [the MCP server](mcp.md). |
 
 `opf <command> --help` (or `-h`, or `opf help <command>`) prints a command's flags and examples.
 

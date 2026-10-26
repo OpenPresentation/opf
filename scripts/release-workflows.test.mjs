@@ -8,7 +8,7 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { NAMES, PACKAGES } from './release.mjs';
 import { PUBLISH_WORKFLOW } from './release-registry.mjs';
-import { SIX } from './workspace-packages.mjs';
+import { PUBLISHED } from './workspace-packages.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = (relative) => readFileSync(path.join(root, relative), 'utf8');
@@ -41,8 +41,8 @@ const needsOf = (entry) => {
 const jobsWith = (text, pattern) => jobsOf(text).filter((entry) => pattern.test(entry.text)).map((entry) => entry.id);
 
 test('the six packages: the script and the workspace agree, and the publisher workflow the verifier expects exists', () => {
-  assert.deepEqual([...NAMES].sort(), SIX.map(({ name }) => name).sort());
-  assert.deepEqual(PACKAGES.map(({ dir }) => dir).sort(), SIX.map(({ dir }) => dir).sort());
+  assert.deepEqual([...NAMES].sort(), PUBLISHED.map(({ name }) => name).sort());
+  assert.deepEqual(PACKAGES.map(({ dir }) => dir).sort(), PUBLISHED.map(({ dir }) => dir).sort());
   assert.equal(PUBLISH_WORKFLOW, '.github/workflows/npm-publish.yml');
   assert.ok(existsSync(path.join(root, PUBLISH_WORKFLOW)));
 });

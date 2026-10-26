@@ -2,6 +2,7 @@ packages:
   - "packages/gallery"
   - "packages/javascript"
   - "packages/cli"
+  - "packages/mcp"
   - "packages/render"
   - "packages/pptx"
   - "packages/editor"

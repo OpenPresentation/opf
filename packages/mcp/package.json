@@ -1,0 +1,86 @@
+{
+  "name": "@openpresentation/mcp",
+  "version": "0.27.0",
+  "description": "An MCP server for OPF: learn the format (docs, schemas, the default catalog, examples and agent skills as resources and tools), validate and convert decks. Runs locally on stdio (opf-mcp) or hosted on an edge runtime.",
+  "license": "MIT",
+  "author": "Open Presentation",
+  "homepage": "https://github.com/OpenPresentation/opf/blob/main/docs/mcp.md",
+  "keywords": [
+    "opf",
+    "open-presentation-format",
+    "mcp",
+    "model-context-protocol",
+    "presentation",
+    "agents"
+  ],
+  "type": "module",
+  "bin": {
+    "opf-mcp": "./dist/bin.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./server": {
+      "types": "./dist/server.d.ts",
+      "default": "./dist/server.js"
+    },
+    "./stdio": {
+      "types": "./dist/stdio.d.ts",
+      "default": "./dist/stdio.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build:deps": "pnpm --filter \"@openpresentation/mcp^...\" --fail-if-no-match run build",
+    "build": "node ../../scripts/reuse-build.mjs check || (tsup && node ../../scripts/reuse-build.mjs stamp)",
+    "typecheck": "pnpm run build:deps && node ../../scripts/typecheck.mjs --noEmit",
+    "clean": "rm -rf dist",
+    "test": "pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs",
+    "prepack": "pnpm run build:deps && pnpm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "@openpresentation/gallery": "workspace:^",
+    "@openpresentation/opf": "workspace:^",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@openpresentation/cli": "workspace:*",
+    "@openpresentation/opf-render": "workspace:*",
+    "@types/node": "^24.13.4",
+    "tsup": "^9.0.0",
+    "typescript": "~5.9.3",
+    "workerd": "1.20261014.1"
+  },
+  "peerDependencies": {
+    "@openpresentation/opf-render": "workspace:^"
+  },
+  "peerDependenciesMeta": {
+    "@openpresentation/opf-render": {
+      "optional": true
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=22"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OpenPresentation/opf.git",
+    "directory": "packages/mcp"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenPresentation/opf/issues"
+  }
+}

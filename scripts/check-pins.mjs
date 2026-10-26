@@ -3,7 +3,7 @@
 //
 // Fonts (`@expo-google-fonts/*`) and the devDependencies that mirror an optional peer (`sharp`, `@resvg/resvg-js`, `pdf-lib`)
 // are exact versions in package.json, not `catalog:` entries, because scripts and tests read them as literals. Two ways
-// they can go wrong once six manifests share a lockfile, both caught here, for the root manifest and the workspace members:
+// they can go wrong once seven manifests share a lockfile, both caught here, for the root manifest and the workspace members:
 //   - the same package pinned to two different exact versions in two manifests (dependencies, devDependencies and
 //     optionalDependencies; a peer pin is compared with the devDependency that mirrors it, below);
 //   - a package whose exact peer pin differs from, or has no, matching devDependency in the same manifest (the peer
@@ -15,13 +15,13 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { EDGE_FIELDS, loadWorkspace, SIX } from './workspace-packages.mjs';
+import { EDGE_FIELDS, loadWorkspace, PUBLISHED } from './workspace-packages.mjs';
 
 const EXACT = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
 
 /** Findings for manifests: [{dir, manifest}]. */
 export function checkPins(manifests) {
-  const workspaceNames = new Set(SIX.map(({ name }) => name));
+  const workspaceNames = new Set(PUBLISHED.map(({ name }) => name));
   const problems = [];
   const pins = new Map(); // dependency name -> Map(version -> [where])
   for (const { dir, manifest } of manifests) {

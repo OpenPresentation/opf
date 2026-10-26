@@ -1,9 +1,9 @@
 name: Publish OPF npm packages
 
-# MR-40 (docs/programs/monorepo/README.md, section 5 and decisions D6, D7, D16): the one workflow that publishes all six packages
-# (@openpresentation/opf, cli, opf-render, opf-pptx, opf-editor, gallery) at one version, through npm trusted publishing (GitHub
+# MR-40 (docs/programs/monorepo/README.md, section 5 and decisions D6, D7, D16): the one workflow that publishes all seven packages
+# (@openpresentation/opf, cli, opf-render, opf-pptx, opf-editor, gallery, mcp) at one version, through npm trusted publishing (GitHub
 # OIDC) with provenance. It replaced the core-only workflow of this name and the CLI's own publisher; the file keeps its name because core's
-# trusted-publisher entry names it, and the other five packages get the same entry (docs/programs/monorepo/owner-steps.md, O1).
+# trusted-publisher entry names it, and the other six packages get the same entry (docs/programs/monorepo/owner-steps.md, O1).
 #
 # Entries:
 #   - push of a tag `vX.Y.Z` (or `vX.Y.Z-rc.N`): a real release of the commit the tag names. The tag is pushed by release.yml
@@ -16,7 +16,7 @@ name: Publish OPF npm packages
 #
 # Why this is not a reusable workflow called by release.yml: npm validates the trusted publisher against the CALLING workflow's
 # filename, not the reusable one that runs `npm publish` (docs.npmjs.com/trusted-publishers), so release.yml would have to be the
-# publisher on all six packages and its provenance would not name a tag. release.yml pushes the tag instead and watches this run.
+# publisher on all seven packages and its provenance would not name a tag. release.yml pushes the tag instead and watches this run.
 #
 # Jobs: plan -> build -> publish -> verify -> release (report on failure). Only `publish` holds id-token: write and only `release`
 # holds contents: write; no job holds a secret. There is no GitHub environment (D7). The sites are bumped by release.yml, which
@@ -120,7 +120,7 @@ jobs:
       - name: Build
         run: pnpm build
 
-      # pnpm pack of the six, then scripts/stamp-githead.mjs on each tarball: npm records gitHead only when it publishes a
+      # pnpm pack of the seven, then scripts/stamp-githead.mjs on each tarball: npm records gitHead only when it publishes a
       # directory, and a tarball publish would otherwise ship none (spike S4 F2).
       - name: Pack and stamp gitHead
         env:
@@ -210,11 +210,11 @@ jobs:
         with:
           node-version: 24
 
-      # `publish` is green once npm ACCEPTED all six uploads; the registry serves a version later (v0.26.9: core about 20 minutes
+      # `publish` is green once npm ACCEPTED all seven uploads; the registry serves a version later (v0.26.9: core about 20 minutes
       # after npm exited 0). That lag is waited out here, not failed in `publish`: each package's own version document is polled
       # with no-cache and a unique query string, with backoff, for up to 60 minutes. Only a version still missing after that fails
       # (staged and awaiting approval, rejected after upload, or an outage), with the staged-package guidance.
-      - name: Wait for the registry to serve all six packages
+      - name: Wait for the registry to serve all seven packages
         timeout-minutes: 65
         env:
           VERSION: ${{ needs.plan.outputs.version }}
@@ -223,7 +223,7 @@ jobs:
       # Registry manifest, gitHead and the provenance source commit equal this commit, provenance workflow npm-publish.yml on the
       # tag, dist-tag, lockstep ranges, signatures, the changelog section. The attestation bundle lags the packument by minutes:
       # --wait retries only that and the scratch install, never a result that is there and wrong.
-      - name: Verify all six packages
+      - name: Verify all seven packages
         env:
           VERSION: ${{ needs.plan.outputs.version }}
           DIST_TAG: ${{ needs.plan.outputs.dist-tag }}
@@ -257,7 +257,7 @@ jobs:
         with:
           node-version: 24
 
-      # The tag exists already (pushed by release.yml, or by hand). The notes are the six package changelog sections, grouped by
+      # The tag exists already (pushed by release.yml, or by hand). The notes are the seven package changelog sections, grouped by
       # package; a prerelease has no changelog section yet, so its notes come from the pending changes/ fragments. A prerelease is
       # marked so, and never becomes the repository's latest release.
       - name: Create the release

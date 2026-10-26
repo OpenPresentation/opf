@@ -1,13 +1,13 @@
 name: Bump sites
 
 # MR-52 (docs/programs/monorepo/README.md, section 6, decisions D17 and D19): after a stable release, open one "bump to vX.Y.Z"
-# pull request in each of the three site repositories, with the six @openpresentation pins set to the released version.
+# pull request in each of the three site repositories, with the seven @openpresentation pins set to the released version.
 #
 #   release.yml calls this workflow after the whole release (npm-publish.yml: publish, verify, GitHub release) succeeded and the
 #   version is stable. By hand: Actions, Bump sites, Run workflow with the version (dry-run is true by default: the edits are shown
 #   in the job summary and nothing is pushed).
 #
-#   plan   the version is a stable X.Y.Z and all six packages are on the registry at it (a short bounded wait for propagation).
+#   plan   the version is a stable X.Y.Z and all seven packages are on the registry at it (a short bounded wait for propagation).
 #   bump   one leg per site (Data-Advantage/openpresentation-site and pptx-gallery on main, pptx-dev on master): a GitHub App
 #          token for that one repository, then scripts/bump-site.mjs, which runs the site's OWN script (`pnpm run opf:bump X.Y.Z
 #          --opf opf`, scripts/opf-bump.mjs of the site: its pins, its lockfile, every file it generates from the release, and the
@@ -46,7 +46,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: The released version, X.Y.Z (the six packages must be on npm at it)
+        description: The released version, X.Y.Z (the seven packages must be on npm at it)
         required: true
       dry-run:
         description: Show the edits in the job summary and push nothing.
@@ -84,7 +84,7 @@ jobs:
         with:
           node-version: 24
 
-      - name: The six packages are published at this version
+      - name: The seven packages are published at this version
         env:
           VERSION: ${{ inputs.version }}
         run: |

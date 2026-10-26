@@ -224,11 +224,11 @@ test('S5 scenarios against the real `pnpm --filter "...[base]"`', { skip: pnpmAv
     // The plan's S5 table, spelled out, so a graph change that keeps both sides equal still has to be deliberate.
     const expected = {
       'editor-only': ['editor'],
-      'CLI-only': ['cli'],
-      renderer: ['render', 'pptx', 'editor', 'cli', 'integration'],
-      PPTX: ['pptx', 'editor', 'cli', 'integration'],
-      core: ['core', 'render', 'pptx', 'editor', 'cli', 'integration'],
-      'cross-cutting': ['core', 'render', 'pptx', 'editor', 'cli', 'integration'],
+      'CLI-only': ['cli', 'mcp'],
+      renderer: ['render', 'pptx', 'editor', 'cli', 'mcp', 'integration'],
+      PPTX: ['pptx', 'editor', 'cli', 'mcp', 'integration'],
+      core: ['core', 'render', 'pptx', 'editor', 'cli', 'mcp', 'integration'],
+      'cross-cutting': ['core', 'render', 'pptx', 'editor', 'cli', 'mcp', 'integration'],
       'gallery records': PACKAGE_IDS,
       integration: ['integration'],
     };
@@ -269,29 +269,29 @@ test('tiers: changed packages run full, dependents contract, the rest skip', () 
   assert.equal(editor.jobs['gallery-gates'], 'skip');
 
   const cli = targetScope(['packages/cli/src/a.ts']);
-  assert.deepEqual(tiersOf(cli), { cli: 'full' }, 'a CLI-only change does not select integration');
+  assert.deepEqual(tiersOf(cli), { cli: 'full', mcp: 'contract' }, 'a CLI-only change selects the MCP server (it compares itself with `opf`) and not integration');
   assert.equal(cli.tier, 'leaf');
 
   const render = targetScope(['packages/render/src/charts.js']);
-  assert.deepEqual(tiersOf(render), { render: 'full', pptx: 'contract', editor: 'contract', cli: 'contract', integration: 'contract' });
+  assert.deepEqual(tiersOf(render), { render: 'full', pptx: 'contract', editor: 'contract', cli: 'contract', mcp: 'contract', integration: 'contract' });
   assert.equal(render.tier, 'engine');
   assert.equal(render.jobs.goldens, 'full');
   assert.equal(render.jobs['gallery-gates'], 'full');
 
   const pptx = targetScope(['packages/pptx/src/native-body.js']);
-  assert.deepEqual(tiersOf(pptx), { pptx: 'full', editor: 'contract', cli: 'contract', integration: 'contract' });
+  assert.deepEqual(tiersOf(pptx), { pptx: 'full', editor: 'contract', cli: 'contract', mcp: 'contract', integration: 'contract' });
   assert.equal(pptx.tier, 'engine');
   assert.equal(pptx.jobs.goldens, 'skip', 'pptx changes do not touch the golden corpus');
   assert.equal(pptx.jobs['gallery-gates'], 'skip');
 
   const core = targetScope(['packages/javascript/src/annotations.ts']);
-  assert.deepEqual(tiersOf(core), { core: 'full', render: 'contract', pptx: 'contract', editor: 'contract', cli: 'contract', integration: 'contract' });
+  assert.deepEqual(tiersOf(core), { core: 'full', render: 'contract', pptx: 'contract', editor: 'contract', cli: 'contract', mcp: 'contract', integration: 'contract' });
   assert.equal(core.tier, 'core');
   assert.equal(core.jobs.goldens, 'full');
   assert.equal(core.jobs['gallery-gates'], 'full');
 
   const cross = targetScope(['packages/javascript/src/a.ts', 'packages/render/src/a.js', 'packages/editor/src/a.js']);
-  assert.deepEqual(tiersOf(cross), { core: 'full', render: 'full', editor: 'full', pptx: 'contract', cli: 'contract', integration: 'contract' });
+  assert.deepEqual(tiersOf(cross), { core: 'full', render: 'full', editor: 'full', pptx: 'contract', cli: 'contract', mcp: 'contract', integration: 'contract' });
   assert.deepEqual(cross.changed, ['core', 'render', 'editor']);
 });
 
@@ -392,7 +392,7 @@ test('edge case: events other than a pull request, the label full-ci and an empt
 test('required and skipped partition the jobs; the legs name the jobs that run', () => {
   const decision = targetScope(['packages/render/src/a.js']);
   assert.deepEqual([...decision.required, ...decision.skipped].sort(), Object.keys(decision.jobs).sort());
-  assert.deepEqual([...new Set(decision.legs.map((leg) => leg.job))], ['lint', 'cli', 'render', 'pptx', 'editor', 'integration', 'goldens', 'gallery-gates', 'pack-shape']);
+  assert.deepEqual([...new Set(decision.legs.map((leg) => leg.job))], ['lint', 'cli', 'mcp', 'render', 'pptx', 'editor', 'integration', 'goldens', 'gallery-gates', 'pack-shape']);
   assert.equal(decision.jobs.lint, 'full', 'lint always runs');
 });
 
@@ -438,7 +438,7 @@ test('a leg carries everything the matrix job needs, and its id is unique', () =
 test('legs follow the decision: only jobs that run have legs, forced runs have every leg, and the matrix is never empty', () => {
   const jobsOf = (decision) => [...new Set(decision.legs.map((leg) => leg.job))];
   const engine = targetScope(['packages/render/src/a.js']);
-  assert.deepEqual(jobsOf(engine), ['lint', 'cli', 'render', 'pptx', 'editor', 'integration', 'goldens', 'gallery-gates', 'pack-shape']);
+  assert.deepEqual(jobsOf(engine), ['lint', 'cli', 'mcp', 'render', 'pptx', 'editor', 'integration', 'goldens', 'gallery-gates', 'pack-shape']);
   assert.deepEqual(jobsOf(targetScope(['packages/editor/src/a.js'])), ['lint', 'editor', 'pack-shape'], 'an editor-only change runs no cli, integration, goldens or gallery leg');
   assert.equal(engine.legs.filter((leg) => leg.job === 'render').length, 5);
   assert.equal(engine.legs.filter((leg) => leg.job === 'lint').length, 3, 'lint always has its legs');

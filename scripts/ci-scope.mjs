@@ -35,7 +35,7 @@ import { appendFileSync, existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
-/** The six published packages and the private integration package, in dependency order (also the output order). */
+/** The seven published packages and the private integration package, in dependency order (also the output order). */
 export const PACKAGES = [
   { id: "gallery", dir: "packages/gallery", name: "@openpresentation/gallery" },
   { id: "core", dir: "packages/javascript", name: "@openpresentation/opf" },
@@ -43,6 +43,7 @@ export const PACKAGES = [
   { id: "pptx", dir: "packages/pptx", name: "@openpresentation/opf-pptx" },
   { id: "editor", dir: "packages/editor", name: "@openpresentation/opf-editor" },
   { id: "cli", dir: "packages/cli", name: "@openpresentation/cli" },
+  { id: "mcp", dir: "packages/mcp", name: "@openpresentation/mcp" },
   { id: "integration", dir: "packages/integration", name: "@openpresentation/integration" },
 ];
 export const PACKAGE_IDS = PACKAGES.map((pkg) => pkg.id);
@@ -51,7 +52,7 @@ export const PACKAGE_IDS = PACKAGES.map((pkg) => pkg.id);
  * MR-30: the legs of each package job per tier, [kind, count]. `tests` is the package's `test` script (full) or
  * `test:contract` (contract) split into `count` shards by scripts/ci-test-shards.mjs; `playground` and `browser` are the
  * quarantine runner's browser suites (scripts/quarantine.mjs run-suite <kind> --shard i/n), which only a changed package
- * (tier full) runs. core, cli, gallery and integration have one `tests` leg whatever the tier (they have no contract suite).
+ * (tier full) runs. core, cli, mcp, gallery and integration have one `tests` leg whatever the tier (they have no contract suite).
  * The counts are the starting point sized from the RR-57 weights (scripts/ci-test-weights.json, per shard in seconds with 100 s
  * of extra steps on shard 1: render full 4 x 250, contract 3 x 210; pptx full 4 x 262, contract 4 x 242 (its contract suite
  * leaves out only 80 of 948 s); editor 2 x 129) and the editor playground suite (839 s in 28 tests, 4 x 210 s); MR-32 tunes them.
@@ -65,6 +66,7 @@ export const LEG_PLAN = Object.freeze({
   gallery: { full: [["tests", 1]], contract: [["tests", 1]] },
   core: { full: [["tests", 1]], contract: [["tests", 1]] },
   cli: { full: [["tests", 1]], contract: [["tests", 1]] },
+  mcp: { full: [["tests", 1]], contract: [["tests", 1]] },
   integration: { full: [["tests", 1]], contract: [["tests", 1]] },
   render: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 3]] },
   pptx: { full: [["tests", 4], ["browser", 1]], contract: [["tests", 4]] },
@@ -88,6 +90,8 @@ export const JOB_SHAPE = Object.freeze({
   // Core's tests load the renderer and PPTX (its optional peers) from their built dist.
   core: { history: true, timeout: 20, buildDeps: "@openpresentation/opf", buildAlso: "@openpresentation/opf-render @openpresentation/opf-pptx", reuse: true },
   cli: { history: true, timeout: 20, buildDeps: "@openpresentation/cli", reuse: true },
+  // The MCP server's tests compare it with the built `opf` (a dev dependency) and run it in workerd.
+  mcp: { timeout: 20, buildDeps: "@openpresentation/mcp", reuse: true },
   render: { browser: true, timeout: 30, buildDeps: "@openpresentation/opf-render", artifacts: "packages/render/artifacts/**" },
   pptx: { browser: true, timeout: 30, buildDeps: "@openpresentation/opf-pptx", artifacts: "packages/pptx/artifacts/**" },
   editor: { browser: true, timeout: 30, buildDeps: "@openpresentation/opf-editor", artifacts: "packages/editor/artifacts/**" },
@@ -98,7 +102,7 @@ export const JOB_SHAPE = Object.freeze({
 });
 
 /** The order of the legs in the matrix (and of the checks in a pull request). */
-export const JOB_ORDER = ["lint", "audit", "gallery", "core", "cli", "render", "pptx", "editor", "integration", "goldens", "gallery-gates", "pack-shape"];
+export const JOB_ORDER = ["lint", "audit", "gallery", "core", "cli", "mcp", "render", "pptx", "editor", "integration", "goldens", "gallery-gates", "pack-shape"];
 
 /**
  * The legs of one job at one tier, with everything the single matrix job needs:
@@ -149,6 +153,7 @@ export const TARGET_GRAPH = Object.freeze({
   pptx: ["core", "gallery", "render"],
   editor: ["core", "gallery", "render", "pptx"],
   cli: ["core", "gallery", "render", "pptx"],
+  mcp: ["core", "gallery", "render", "cli"],
   integration: ["gallery", "core", "render", "pptx"],
 });
 

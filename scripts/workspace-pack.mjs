@@ -14,11 +14,11 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 import { packageManagerInvocation } from './package-manager.mjs';
-import { DEPENDENCY_FIELDS, SIX } from './workspace-packages.mjs';
+import { DEPENDENCY_FIELDS, PUBLISHED } from './workspace-packages.mjs';
 
 export const REPOSITORY_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-/** npm name -> directory (relative to the repository root) of the six published packages. */
-export const PACKAGE_DIRECTORIES = Object.fromEntries(SIX.map(({ dir, name }) => [name, `packages/${dir}`]));
+/** npm name -> directory (relative to the repository root) of the seven published packages. */
+export const PACKAGE_DIRECTORIES = Object.fromEntries(PUBLISHED.map(({ dir, name }) => [name, `packages/${dir}`]));
 
 /** The regular files of a .tgz (npm layout: every path under `package/`) as a Map of path -> Buffer, in archive order. */
 export function readTarball(file) {

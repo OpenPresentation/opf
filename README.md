@@ -71,7 +71,7 @@ In Node (and Bun and Deno) its root also reads and writes files (`convert`, `ope
 
 ## Toolkit libraries
 
-OPF is six packages. **Core** (`@openpresentation/opf`) is the format and its API: it reads and writes the text formats (JSON, YAML, Markdown) and validates, and in Node reads and writes files, through the same import. **The gallery** (`@openpresentation/gallery`) is the pptx.gallery catalog of layouts, themes, colour and font schemes and the other records, released with the other packages; core depends on it and registers it in Node. **The CLI** (`@openpresentation/cli`) is the `opf` command. **Render** (`opf-render`), **PPTX** (`opf-pptx`) and **the editor** (`opf-editor`) are the engines: drawing, PowerPoint and editing, installed as needed. All six live in this repository (`packages/`) and are released together at one version. See [ecosystem development](docs/ecosystem-development.md) for local builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
+OPF is seven packages. **Core** (`@openpresentation/opf`) is the format and its API: it reads and writes the text formats (JSON, YAML, Markdown) and validates, and in Node reads and writes files, through the same import. **The gallery** (`@openpresentation/gallery`) is the pptx.gallery catalog of layouts, themes, colour and font schemes and the other records, released with the other packages; core depends on it and registers it in Node. **The CLI** (`@openpresentation/cli`) is the `opf` command. **The MCP server** (`@openpresentation/mcp`, `npx -y @openpresentation/mcp`) lets an MCP-native agent learn OPF (docs, schemas, catalog, examples and skills as resources) and validate and convert decks. **Render** (`opf-render`), **PPTX** (`opf-pptx`) and **the editor** (`opf-editor`) are the engines: drawing, PowerPoint and editing, installed as needed. All seven live in this repository (`packages/`) and are released together at one version. See [ecosystem development](docs/ecosystem-development.md) for local builds and verification, and [dynamic composition](docs/dynamic-composition.md) for portable layout rules.
 
 | Package | Role | Boundary |
 |---|---|---|
@@ -93,7 +93,7 @@ pnpm add @openpresentation/opf
 # or: npm install @openpresentation/opf
 ```
 
-To work on the packages, clone this repo and build the workspace (all six packages are in `packages/`; see [CONTRIBUTING](./CONTRIBUTING.md)):
+To work on the packages, clone this repo and build the workspace (all seven packages are in `packages/`; see [CONTRIBUTING](./CONTRIBUTING.md)):
 
 ```sh
 pnpm install
@@ -180,7 +180,7 @@ See [Templates and variables](./docs/templates-and-variables.md) for fillable OP
 | [`docs/footnotes-citations-captions.md`](./docs/footnotes-citations-captions.md) | Citations (`cite`), inline footnotes, the deck `references` list, captions on images, charts, tables and videos, and how every engine draws them. |
 | [`docs/examples.md`](./docs/examples.md) | Guide to the expanded scenario-oriented examples under `examples/gallery/`. |
 | [`docs/live-editor.md`](./docs/live-editor.md) | Browser canvas, live OPF editing, font loading, published packages, and current fidelity limits. |
-| [`docs/release-process.md`](./docs/release-process.md) | Maintainer runbook for the one-click release: gate, tag, trusted npm publishing of all six packages, verification, GitHub release notes, and the site bumps. |
+| [`docs/release-process.md`](./docs/release-process.md) | Maintainer runbook for the one-click release: gate, tag, trusted npm publishing of all seven packages, verification, GitHub release notes, and the site bumps. |
 | [`spec/schemas/*.schema.json`](./spec/schemas) | Companion schemas for catalog records and sub-objects. |
 | [`packages/gallery`](./packages/gallery) (`@openpresentation/gallery`) | The default catalog and layout previews, released with the other packages. |
 | [`spec/openapi.yaml`](./spec/openapi.yaml) | Optional reference OpenAPI contract for downstream services that choose to expose OPF over HTTP. OpenPresentation does not host this API. |

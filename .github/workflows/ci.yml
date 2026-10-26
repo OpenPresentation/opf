@@ -139,7 +139,7 @@ jobs:
         if: ${{ matrix.job == 'lint' && matrix.kind == 'docs' }}
         run: node scripts/check-changed.mjs --base "origin/${{ github.base_ref }}"
 
-      # `pnpm build` is `pnpm -r --if-present run build`: core, the gallery, the renderer, PPTX, the editor and the CLI (the checks
+      # `pnpm build` is `pnpm -r --if-present run build`: core, the gallery, the renderer, PPTX, the editor, the CLI and the MCP server (the checks
       # read the renderer's and PPTX's dist, which are not tracked).
       - name: Build every package
         if: ${{ (matrix.job == 'lint' && matrix.kind != 'docs') || matrix.job == 'pack-shape' }}
@@ -218,6 +218,16 @@ jobs:
       - name: Test the CLI
         if: ${{ matrix.job == 'cli' }}
         run: pnpm --filter @openpresentation/cli --fail-if-no-match run test
+
+      # --- mcp ----------------------------------------------------------------------------------------------------------------
+
+      # The MCP server's tests spawn it, compare it with the built `opf`, and bundle it for a Worker and run it in workerd (the
+      # `workerd` npm package, no Cloudflare account). OPF_REQUIRE_WORKERD makes a missing workerd binary a failure here.
+      - name: Test the MCP server (with the workerd lane)
+        if: ${{ matrix.job == 'mcp' }}
+        env:
+          OPF_REQUIRE_WORKERD: '1'
+        run: pnpm --filter @openpresentation/mcp --fail-if-no-match run test
 
       # --- render, pptx and editor: `tests` shards (the package's `test`, or `test:contract` for a dependent) and, for a changed
       # package only, its browser suites ---------------------------------------------------------------------------------------
@@ -366,7 +376,7 @@ jobs:
 
       # --- pack-shape ---------------------------------------------------------------------------------------------------------
 
-      - name: Pack dry run of the six published packages
+      - name: Pack dry run of the seven published packages
         if: ${{ matrix.job == 'pack-shape' }}
         run: pnpm --filter './packages/**' --filter '!@openpresentation/integration' exec npm pack --dry-run --ignore-scripts --cache "$RUNNER_TEMP/npm-cache"
 

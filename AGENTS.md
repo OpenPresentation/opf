@@ -13,19 +13,20 @@ Use only the skills relevant to the user's task; ordinary repository maintenance
 
 ## Repository map
 
-`OpenPresentation/opf` is one pnpm workspace that publishes six npm packages at one shared version (from 0.26.0; in 0.x a breaking change is a minor bump and everything else a patch). A change that spans packages is one pull request tested by one CI run.
+`OpenPresentation/opf` is one pnpm workspace that publishes seven npm packages at one shared version (from 0.26.0; in 0.x a breaking change is a minor bump and everything else a patch). A change that spans packages is one pull request tested by one CI run.
 
 | Directory | Package | What it is |
 | --- | --- | --- |
 | `packages/javascript` | `@openpresentation/opf` | Core: schemas, validation, composition geometry, text formats, the Node file API. Its types and generated content are produced from `spec/` at build time; never edit generated output |
 | `packages/gallery` | `@openpresentation/gallery` | The default catalog: layouts, themes, color and font schemes and the other records, with layout previews |
 | `packages/cli` | `@openpresentation/cli` | The `opf` command |
+| `packages/mcp` | `@openpresentation/mcp` | The MCP server for learning and validating OPF (`npx -y @openpresentation/mcp`): tools, resources and prompts over the bundled docs, schemas, catalog, examples and skills. Edge-safe library entries (`.`, `./server`) and a stdio bin; `opf mcp` runs it when installed. Docs: `docs/mcp.md` |
 | `packages/render` | `@openpresentation/opf-render` | SVG, PNG and PDF rendering; the font packs; the golden corpus (`packages/render/test/golden/`) |
 | `packages/pptx` | `@openpresentation/opf-pptx` | PPTX export and import (vendored PptxGenJS, byte-exact) |
 | `packages/editor` | `@openpresentation/opf-editor` | The headless editor and its browser playground |
 | `packages/integration` | private, never published | The tests that need several packages at once |
 
-Shared at the root: `spec/` (schemas and engine reference data, the source of truth for the format), `skills/`, `examples/`, `docs/`, `changes/` (changelog fragments for all six packages), `scripts/` (shared tooling and the root `check:*` suite), `.github/` (workflows, one `dependabot.yml`). Only the three sites (openpresentation.org, pptx.gallery, pptx.dev) live in other repositories; they consume the published packages and are bumped by `bump-sites.yml` after a release. The former `opf-render`, `opf-pptx`, `opf-editor` and `gallery` repositories are archived and read-only; references such as `opf-render#199` in old docs name them.
+Shared at the root: `spec/` (schemas and engine reference data, the source of truth for the format), `skills/`, `examples/`, `docs/`, `changes/` (changelog fragments for all seven packages), `scripts/` (shared tooling and the root `check:*` suite), `.github/` (workflows, one `dependabot.yml`). Only the three sites (openpresentation.org, pptx.gallery, pptx.dev) live in other repositories; they consume the published packages and are bumped by `bump-sites.yml` after a release. The former `opf-render`, `opf-pptx`, `opf-editor` and `gallery` repositories are archived and read-only; references such as `opf-render#199` in old docs name them.
 
 **Gallery records.** Records are authored by pull request in `packages/gallery` (`catalog/<kind>/<id>.json` plus its index entry and previews) together with whatever engine change they need, and released with everything else; the gallery package owns every default record. pptx.gallery presents the published `@openpresentation/gallery` package and its own overlay and does not write records. Do not edit generated fixtures, trackers or previews by hand; see `docs/default-catalog.md`.
 
@@ -35,7 +36,7 @@ The owner authorized agents to publish npm packages on 2026-09-29 ("yes, prepare
 
 ## Changelog, tests and generated trackers
 
-- Changelog: add a fragment `changes/<slug>.md` (front matter `type: added|changed|fixed`, `packages: [opf, cli, render, pptx, editor, gallery]`; see `changes/README.md`) in the PR that makes the change; never edit a `CHANGELOG.md` or `## Unreleased` by hand. The release workflow assembles the fragments. CI warns when package code changes without a fragment.
+- Changelog: add a fragment `changes/<slug>.md` (front matter `type: added|changed|fixed`, `packages: [opf, cli, render, pptx, editor, gallery, mcp]`; see `changes/README.md`) in the PR that makes the change; never edit a `CHANGELOG.md` or `## Unreleased` by hand. The release workflow assembles the fragments. CI warns when package code changes without a fragment.
 - Tests: a package test is one new `test/*.mjs` (a package's `scripts/run-tests.mjs` run discovers it; `test/suites.json` lists only helpers and separately-run files) and a root check is one new `check:*` script (`scripts/run-checks.mjs`; `scripts/checks.json`). Do not add test lists to `package.json`.
 - Generated trackers (gallery and font): do not regenerate them in an unrelated PR. CI only warns about a stale tracker on a PR; the "Tracker refresh" workflow regenerates them after merge into `bot/tracker-refresh`. Regenerate in your PR only when it changes a tracker generator, overrides or tests. Details: `CONTRIBUTING.md`.
 - Goldens (`packages/render/test/golden/`) are exact hashes. Regenerate them only with the `golden.yml` workflow (or the `regenerate-goldens` label) in the pinned Playwright image, never by hand and never with a changed tolerance; see `docs/ecosystem-development.md`.
@@ -60,7 +61,7 @@ GitHub API: every agent on the account shares one REST quota (5000 an hour), and
 
 Cross-repository work is tracked in `docs/programs/`. Before starting program work, read the program's `README.md` (goal, definition of done, invariants, resume protocol) and `burndown.md` (item IDs, acceptance criteria, status, progress log). Name branches `codex/ff-<nn>-<slug>` (for example `codex/ff-07-script-slots`), start PR titles with the item ID (`FF-07: `), and update the burndown row and progress log when an item changes state. Release readiness uses `codex/rr-<nn>-<slug>` branches and `RR-<nn>: ` PR titles.
 
-- [Monorepo](docs/programs/monorepo/README.md) (approved 2026-10-20, plan v2 decided 2026-10-21; branches `codex/mr-<nn>-<slug>`, PR titles `MR-<nn>: `): the six packages in this repository with one shared version, one `verify` check and a one-click release; the program also covers the cutover, the sites' auto-update, archiving the old repositories and the owner steps. Read its `owner-steps.md` before any item that needs an npm, GitHub or ruleset setting.
+- [Monorepo](docs/programs/monorepo/README.md) (approved 2026-10-20, plan v2 decided 2026-10-21; branches `codex/mr-<nn>-<slug>`, PR titles `MR-<nn>: `): the seven packages in this repository with one shared version, one `verify` check and a one-click release; the program also covers the cutover, the sites' auto-update, archiving the old repositories and the owner steps. Read its `owner-steps.md` before any item that needs an npm, GitHub or ruleset setting.
 - [Font fidelity everywhere](docs/programs/font-fidelity-everywhere/README.md): every pptx.gallery dimension previews and exports with only the developer's chosen fonts, in PowerPoint and on every OS and runtime.
   Per-font status, priorities and next actions: [font tracker](docs/programs/font-fidelity-everywhere/font-tracker.md) (`pnpm check:font-tracker`; rebuild with `pnpm build:font-tracker`).
 - [Release readiness](docs/programs/release-readiness/README.md) (opened 2026-10-01): every package, the CLI and the three sites release-ready, with shipped features verified natively, gaps closed or descoped with issues, CI green and cross-platform, and a release-readiness note for the owner. Progress: `pnpm report:release`. It carries the open font-fidelity items; font fidelity above is in closure (its goal state is reached and its remaining items are tracked as RR items).

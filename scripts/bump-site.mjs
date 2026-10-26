@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// MR-52 (docs/programs/monorepo/README.md, section 6, D17 and D19): bump a site repository to a release of the six packages.
+// MR-52 (docs/programs/monorepo/README.md, section 6, D17 and D19): bump a site repository to a release of the seven packages.
 //
 // The three sites (Data-Advantage/openpresentation-site, pptx-gallery, pptx-dev) pin the packages they use: exact versions for most,
 // a caret range for the gallery. After a stable release `bump-sites.yml` checks a site out and runs this script, which tells the
@@ -22,15 +22,15 @@
 // site without one, edits the pins and (with `--refresh-lockfile`) refreshes the lockfile with `pnpm install --lockfile-only
 // --ignore-scripts` or the npm equivalent. `changed` is what Git sees in the site afterwards. A bump that changes nothing but
 // regenerated files (the pins were already at the version) is never merged automatically: nobody reviewed it.
-// `published` checks that all six packages are on the registry at the version (a bounded wait, for registry propagation only).
+// `published` checks that all seven packages are on the registry at the version (a bounded wait, for registry propagation only).
 // Plain Node, no dependencies.
 import { spawnSync } from 'node:child_process';
 import { appendFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { SIX, parseWorkspaceYaml } from './workspace-packages.mjs';
+import { PUBLISHED, parseWorkspaceYaml } from './workspace-packages.mjs';
 
-export const NAMES = SIX.map(({ name }) => name);
+export const NAMES = PUBLISHED.map(({ name }) => name);
 export const SECTIONS = ['dependencies', 'devDependencies', 'optionalDependencies'];
 /** JSON files a site keeps beside its manifest that mirror the pins (pptx-dev's opf-reference-layer-pins.json). */
 export const MIRRORS = [{ file: 'opf-reference-layer-pins.json', key: 'packages' }];
@@ -200,7 +200,7 @@ export function pullRequestBody(plan, { repository = 'OpenPresentation/opf', gen
   ].join('\n');
 }
 
-/** Are all six packages on the registry at `version`? Returns the packages still missing. */
+/** Are all seven packages on the registry at `version`? Returns the packages still missing. */
 export function missingFromRegistry(version, exec) {
   const missing = [];
   for (const name of NAMES) {

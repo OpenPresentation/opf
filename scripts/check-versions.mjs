@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// MR-10 (monorepo plan D14, section 1 "One version"): the six published packages carry ONE version.
+// MR-10 (monorepo plan D14, section 1 "One version"): the seven published packages carry ONE version.
 //
-// Checked for the workspace members among core, cli, render, pptx, editor and gallery (a package directory that exists
+// Checked for the workspace members among core, cli, render, pptx, editor, gallery and mcp (a package directory that exists
 // but is not listed in pnpm-workspace.yaml is inert, so an imported gallery still at its last independent version 5.0.0
 // is not compared until its wire-up, MR-23, lists it and sets the shared version; D16: the gallery goes backwards from 5.0.0
 // to the shared line, which npm allows with an explicit --tag latest). Private packages (packages/integration) are not
@@ -11,13 +11,13 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { CORE, loadWorkspace, SIX } from './workspace-packages.mjs';
+import { CORE, loadWorkspace, PUBLISHED } from './workspace-packages.mjs';
 
 const SEMVER = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
 
 /** Findings for members: [{dir, manifest}]. */
 export function checkVersions(members) {
-  const published = new Set(SIX.map(({ name }) => name));
+  const published = new Set(PUBLISHED.map(({ name }) => name));
   const set = members.filter(({ manifest }) => published.has(manifest.name));
   const problems = [];
   for (const { dir, manifest } of set) {
@@ -40,7 +40,7 @@ export function checkPeerRanges(members, hints) {
   if (!core) return [];
   const problems = [];
   const expected = `^${core.manifest.version}`;
-  for (const { name } of SIX.filter(({ name }) => core.manifest.peerDependencies?.[name] !== undefined)) {
+  for (const { name } of PUBLISHED.filter(({ name }) => core.manifest.peerDependencies?.[name] !== undefined)) {
     const peer = core.manifest.peerDependencies[name];
     const member = members.find((entry) => entry.manifest.name === name);
     if (member && peer !== `^${member.manifest.version}`) problems.push(`${core.dir}: peer ${name} is ${peer}, the workspace version of ${name} is ${member.manifest.version}`);
@@ -62,7 +62,7 @@ function main() {
     console.error(`check:versions FAILED (${problems.length})\n  - ${problems.join('\n  - ')}`);
     process.exit(1);
   }
-  const set = members.filter(({ manifest }) => SIX.some(({ name }) => name === manifest.name));
+  const set = members.filter(({ manifest }) => PUBLISHED.some(({ name }) => name === manifest.name));
   console.log(`check:versions ok: ${set.length} published packages at ${set[0]?.manifest.version ?? 'n/a'}`);
 }
 

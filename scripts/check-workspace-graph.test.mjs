@@ -7,10 +7,10 @@ import path from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 import { checkWorkspaceGraph, parseLockImporters } from './check-workspace-graph.mjs';
-import { parseWorkspaceYaml, SIX } from './workspace-packages.mjs';
+import { parseWorkspaceYaml, PUBLISHED } from './workspace-packages.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const N = Object.fromEntries(SIX.map(({ dir, name }) => [dir, name]));
+const N = Object.fromEntries(PUBLISHED.map(({ dir, name }) => [dir, name]));
 const member = (dir, manifest) => ({ dir: `packages/${dir}`, manifest: structuredClone(manifest) });
 const workspaceFor = (members, extra = {}) => ({ packages: members.map((entry) => entry.dir), overrides: {}, scalars: {}, ...extra });
 const peers = { [N.render]: 'workspace:^', [N.pptx]: 'workspace:^' };
@@ -43,6 +43,13 @@ function target() {
       dependencies: { [N.javascript]: 'workspace:^', [N.gallery]: 'workspace:^' },
       devDependencies: { [N.render]: 'workspace:*', [N.pptx]: 'workspace:*' },
       peerDependencies: peers,
+    }),
+    member('mcp', {
+      name: N.mcp,
+      version: '0.26.0',
+      dependencies: { [N.javascript]: 'workspace:^', [N.gallery]: 'workspace:^' },
+      devDependencies: { [N.cli]: 'workspace:*', [N.render]: 'workspace:*' },
+      peerDependencies: { [N.render]: 'workspace:^' },
     }),
     member('integration', { name: '@openpresentation/integration', private: true, devDependencies: Object.fromEntries(Object.values(N).map((name) => [name, 'workspace:*'])) }),
   ];
@@ -134,7 +141,7 @@ test('today: two members, cli -> opf as a registry range with the pnpm override,
   assert.deepEqual(run(members), [`${N.cli}: dependencies ${N.javascript} is the registry specifier ^0.25.0; a workspace package is workspace:^`]);
 });
 
-test('the override is no longer accepted once all six are members', () => {
+test('the override is no longer accepted once all seven are members', () => {
   const members = target();
   get(members, 'cli').dependencies[N.javascript] = '^0.26.0';
   const overrides = { [`${N.cli}>${N.javascript}`]: 'workspace:*' };

@@ -1,4 +1,4 @@
-// MR-13: changes/config.json names the six packages of the monorepo (docs/programs/monorepo/README.md sections 1 and 5):
+// MR-13: changes/config.json names the seven packages of the monorepo (docs/programs/monorepo/README.md sections 1 and 5):
 // one fragment directory, one changelog per package, `check:changes` rejects a name that is not one of them.
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
@@ -19,10 +19,11 @@ const PACKAGES = {
   pptx: { changelog: 'packages/pptx/CHANGELOG.md', dir: 'packages/pptx' },
   editor: { changelog: 'packages/editor/CHANGELOG.md', dir: 'packages/editor' },
   gallery: { changelog: 'packages/gallery/CHANGELOG.md', dir: 'packages/gallery' },
+  mcp: { changelog: 'packages/mcp/CHANGELOG.md', dir: 'packages/mcp' },
 };
 const fragment = (packages, type = 'fixed') => `---\ntype: ${type}\n${packages === undefined ? '' : `packages: ${packages}\n`}---\nMR-13: an entry.\n`;
 
-test('the config names the six packages, the root changelog for core and packages/<x>/CHANGELOG.md for the others', () => {
+test('the config names the seven packages, the root changelog for core and packages/<x>/CHANGELOG.md for the others', () => {
   assert.equal(config.default, 'opf');
   assert.deepEqual(Object.keys(config.targets).sort(), Object.keys(PACKAGES).sort());
   for (const [name, { changelog }] of Object.entries(PACKAGES)) assert.equal(config.targets[name], changelog, name);
@@ -37,9 +38,9 @@ test('every package has code paths, and each stays inside its own directory', ()
   for (const prefix of config.codePaths) assert.doesNotMatch(prefix, /\/(test|docs|scripts)\//);
 });
 
-test('a fragment may name any of the six packages, several at once, or none; any other name fails', () => {
+test('a fragment may name any of the seven packages, several at once, or none; any other name fails', () => {
   for (const name of Object.keys(PACKAGES)) assert.deepEqual(parseFragment('a.md', fragment(`[${name}]`), config).packages, [name]);
-  assert.deepEqual(parseFragment('a.md', fragment('[opf, cli, render, pptx, editor, gallery]'), config).packages, Object.keys(PACKAGES));
+  assert.deepEqual(parseFragment('a.md', fragment('[opf, cli, render, pptx, editor, gallery, mcp]'), config).packages, Object.keys(PACKAGES));
   assert.deepEqual(parseFragment('a.md', fragment('[]'), config).packages, []);
   assert.deepEqual(parseFragment('a.md', fragment(undefined), config).packages, []);
   for (const unknown of ['core', 'javascript', 'opf-render', 'opf-pptx', 'opf-editor', '@openpresentation/gallery', 'Render', 'integration', 'sites']) {
@@ -49,13 +50,13 @@ test('a fragment may name any of the six packages, several at once, or none; any
   assert.throws(() => parseFragment('a.md', fragment('[render, nope]'), config), /unknown package "nope"/);
 });
 
-test('the fragments in changes/ today are valid under the six-package config (none is valid: changes/ is empty right after a release)', () => {
+test('the fragments in changes/ today are valid under the seven-package config (none is valid: changes/ is empty right after a release)', () => {
   const fragments = readFragments(root, config);
   assert.deepEqual(missingChangelogs(root, fragments, config), []);
 });
 
-test('code in any of the six packages asks for a fragment; tests, docs and evidence do not', () => {
-  const code = ['packages/javascript/src/a.ts', 'packages/cli/src/a.ts', 'packages/render/src/a.js', 'packages/render/fonts/x/X.ttf', 'packages/pptx/src/a.js', 'packages/pptx/vendor/pptxgenjs/a.js', 'packages/editor/src/a.js', 'packages/gallery/catalog/layouts/hero.json', 'packages/gallery/previews/layouts/hero.svg', 'packages/gallery/src/index.d.ts', 'spec/schemas/opf.schema.json'];
+test('code in any of the seven packages asks for a fragment; tests, docs and evidence do not', () => {
+  const code = ['packages/javascript/src/a.ts', 'packages/cli/src/a.ts', 'packages/render/src/a.js', 'packages/render/fonts/x/X.ttf', 'packages/pptx/src/a.js', 'packages/pptx/vendor/pptxgenjs/a.js', 'packages/editor/src/a.js', 'packages/gallery/catalog/layouts/hero.json', 'packages/gallery/previews/layouts/hero.svg', 'packages/gallery/src/index.d.ts', 'packages/mcp/src/server.ts', 'spec/schemas/opf.schema.json'];
   for (const file of code) assert.equal(needsFragment([file], config), true, file);
   for (const file of ['packages/render/test/a.mjs', 'packages/pptx/docs/evidence/a.png', 'packages/editor/README.md', 'packages/gallery/scripts/build.mjs', 'packages/gallery/test/a.test.mjs', 'docs/a.md', 'scripts/a.mjs']) {
     assert.equal(needsFragment([file], config), false, file);
@@ -82,7 +83,7 @@ test('check:changes fails on an unknown package name, and on a package whose cha
   const unknown = temporaryRepo(t, { 'CHANGELOG.md': '# Changelog\n\n## Unreleased\n', 'changes/a.md': fragment('[renderer]') });
   const unknownRun = check(unknown);
   assert.equal(unknownRun.status, 1);
-  assert.match(unknownRun.stderr, /changes\/a\.md: unknown package "renderer" \(known: opf, cli, render, pptx, editor, gallery\)/);
+  assert.match(unknownRun.stderr, /changes\/a\.md: unknown package "renderer" \(known: opf, cli, render, pptx, editor, gallery, mcp\)/);
 
   // Before the import the render package has no changelog: the fragment would fail the release-prep assemble, so it fails here.
   const early = temporaryRepo(t, { 'CHANGELOG.md': '# Changelog\n\n## Unreleased\n', 'changes/a.md': fragment('[opf, render]') });

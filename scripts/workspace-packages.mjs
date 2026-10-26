@@ -1,4 +1,4 @@
-// MR-10: what the workspace checks (check:workspace-graph, check:pins, check:versions) share: the six published packages,
+// MR-10: what the workspace checks (check:workspace-graph, check:pins, check:versions) share: the seven published packages,
 // a reader for the few pnpm-workspace.yaml settings the checks need, and the list of workspace members with their manifests.
 //
 // A package directory that exists but is not listed in pnpm-workspace.yaml (an imported package before its wire-up, MR-22
@@ -6,14 +6,15 @@
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 
-/** The six published packages (plan section 1): directory under packages/ and npm name. */
-export const SIX = [
+/** The seven published packages (plan section 1, and `@openpresentation/mcp` from 0.27.0): directory under packages/ and npm name. */
+export const PUBLISHED = [
   { dir: 'javascript', name: '@openpresentation/opf' },
   { dir: 'cli', name: '@openpresentation/cli' },
   { dir: 'render', name: '@openpresentation/opf-render' },
   { dir: 'pptx', name: '@openpresentation/opf-pptx' },
   { dir: 'editor', name: '@openpresentation/opf-editor' },
   { dir: 'gallery', name: '@openpresentation/gallery' },
+  { dir: 'mcp', name: '@openpresentation/mcp' },
 ];
 export const CORE = '@openpresentation/opf';
 export const GALLERY = '@openpresentation/gallery';
