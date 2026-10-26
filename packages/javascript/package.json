@@ -163,7 +163,7 @@
     "clean": "rm -rf dist src/generated",
     "generate": "node scripts/generate.mjs && node scripts/generate-content.mjs",
     "build:deps": "pnpm --filter \"@openpresentation/opf^...\" --fail-if-no-match run build",
-    "build": "node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)",
+    "build": "node ../../scripts/reuse-build.mjs check || (pnpm run generate && tsup && node scripts/minify-precompiled.mjs && node scripts/copy-spec.mjs && node ../../scripts/reuse-build.mjs stamp)",
     "typecheck": "pnpm run build:deps && pnpm run generate && node ../../scripts/typecheck.mjs --noEmit",
     "test": "pnpm run build:deps && pnpm run build && node ../../scripts/run-tests.mjs",
     "test:workerd": "pnpm run build:deps && pnpm run build && node --test test/workerd.test.mjs",

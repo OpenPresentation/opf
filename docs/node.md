@@ -93,7 +93,8 @@ import "@openpresentation/opf/precompiled"; // installs the build-time validator
 ```
 
 The price is size: the precompiled validators add about 78 KB gzipped (1.4 MB minified, mostly generated code) to the browser-safe
-build, which is why the browser keeps Ajv by default. On the first `validate` they save the time Ajv spends compiling the schemas
+build, which is why the browser keeps Ajv by default. In the package they are one minified chunk of `dist/` (1.5 MB, 121 KB gzipped;
+the schemas are shared with the rest of the package, not copied), which adds about 125 KB to the tarball. On the first `validate` they save the time Ajv spends compiling the schemas
 (the first `validate` took about 100 ms with Ajv and about 10 ms precompiled in Node). A schema you compile yourself with Ajv is not covered: the precompiled build validates the OPF schemas that
 ship in the package.
 

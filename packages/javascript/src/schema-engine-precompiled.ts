@@ -10,6 +10,9 @@ import { schemas, type SchemaName } from "./schemas.js";
  * same schemas, options and formats as `schema-engine-ajv.ts`; nothing here compiles code, so it runs where `new Function` is
  * refused. An error's `parentSchema` is the object in `schemas`, as in the Ajv build.
  */
+/** Found in the built chunk by scripts/minify-precompiled.mjs, which minifies it. */
+export const precompiledMarker = "opf-precompiled-validators";
+
 let branches: WeakMap<object, ValidateFunction> | undefined;
 
 /** The branch objects of the schemas, found by the place the generator recorded, on first use. */
