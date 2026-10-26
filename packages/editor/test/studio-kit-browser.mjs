@@ -193,7 +193,7 @@ try {
       const list = document.getElementById('list');
       const dom = kit.createDom(document);
       window.dragLog = [];
-      const drag = kit.createDragController({
+      const drag = window.dragKit = kit.createDragController({
         doc: document,
         onStart: (press) => ({ id: press.payload, ghost: kit.dragGhost(dom, document.getElementById('host'), press.payload) }),
         onStarted: (session) => dragLog.push(`start ${session.id}`),
@@ -214,12 +214,17 @@ try {
     await page.mouse.up();
     assert.deepEqual(await page.evaluate(() => dragLog), [], 'a 3px wobble is a click, not a drag');
     await page.mouse.down();
+    // Chromium delivers pointer moves aligned to animation frames, after a key press sent later, so the test waits for the controller to have
+    // seen the move onto c (its state), never for a fixed time.
+    const overC = () => page.waitForFunction(() => window.dragKit.active?.over === 'c');
     await page.mouse.move(c.x + 10, c.y + 10, { steps: 5 });
+    await overC();
     assert.equal(await page.locator('.opf-kit-ghost').textContent(), 'a', 'the label follows the pointer');
     await page.mouse.up();
     await page.mouse.move(a.x + 10, a.y + 10);
     await page.mouse.down();
     await page.mouse.move(c.x + 10, c.y + 10, { steps: 5 });
+    await overC();
     await page.keyboard.press('Escape');
     await page.mouse.up();
     assert.deepEqual(await page.evaluate(() => dragLog), ['start a', 'ended', 'drop a on c', 'start a', 'cancelled', 'escape']);
