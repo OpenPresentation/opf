@@ -1,4 +1,4 @@
-// The npm 12 consumer leg (nightly.yml, job `npm12-consumer`): the six packages, packed the way they publish, installed into a clean
+// The npm 12 consumer leg (nightly.yml, job `npm12-consumer`): the seven packages, packed the way they publish, installed into a clean
 // project by npm 12 with npm 12's own defaults (no install scripts, no git or remote dependencies), then the CLI and the library
 // convert a deck to SVG, PNG, PDF and PPTX and read the PPTX back. See scripts/npm12-consumer.mjs for what npm 12 changes.
 //
@@ -20,7 +20,7 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 const out = path.join(root, 'artifacts/npm12');
 const consumer = path.join(out, 'consumer');
 const NAMES = Object.keys(PACKAGE_DIRECTORIES);
-assert.equal(NAMES.length, 6, 'the six published packages');
+assert.equal(NAMES.length, 7, 'the seven published packages');
 
 await rm(out, { recursive: true, force: true });
 await mkdir(consumer, { recursive: true });
@@ -40,7 +40,7 @@ if (process.env.OPF_NPM_VERSION) assert.equal(version, process.env.OPF_NPM_VERSI
 for (const [key, expected] of Object.entries(NPM12_DEFAULTS)) assert.equal(npm(['config', 'get', key]).stdout.trim(), expected, `npm config ${key} is not the npm 12 default`);
 console.log(`npm ${version} (node ${process.version}), install-time defaults: ${JSON.stringify(NPM12_DEFAULTS)}`);
 
-// 2. The six packages as `pnpm pack` publishes them. A packed manifest never asks for an install script or a non-registry source.
+// 2. The seven packages as `pnpm pack` publishes them. A packed manifest never asks for an install script or a non-registry source.
 const packed = NAMES.map((name) => packWorkspacePackage(name, out));
 const problems = packed.flatMap((item) => manifestHazards(item.manifest, `${item.name}@${item.version}`));
 assert.deepEqual(problems, [], `packed manifests need install scripts or a git or remote source:\n  ${problems.join('\n  ')}`);
@@ -108,4 +108,4 @@ const [svg, png, pdf, pptx] = await Promise.all(['svg', 'png', 'pdf', 'pptx'].ma
 const back = await opf.open(pptx.files[0].bytes);
 process.stdout.write(JSON.stringify({svg: svg.files.length, png: png.files.length, pdf: new TextDecoder().decode(pdf.files[0].bytes.subarray(0, 5)), slides: back.slides.length, editor: Boolean(import.meta.resolve('@openpresentation/opf-editor'))}));`);
 assert.deepEqual(JSON.parse(node([probe])), { svg: 1, png: 1, pdf: '%PDF-', slides: 1, editor: true });
-console.log(`npm ${version}: the six packages install with its defaults and the CLI and library convert to SVG, PNG, PDF and PPTX (${pathToFileURL(await realpath(consumer)).href})`);
+console.log(`npm ${version}: the seven packages install with its defaults and the CLI and library convert to SVG, PNG, PDF and PPTX (${pathToFileURL(await realpath(consumer)).href})`);
