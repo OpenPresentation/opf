@@ -26,7 +26,7 @@ installed package versions give the same bytes on every operating system.
 | `opf fill <template> <data> [output]` | A template's variables filled: one deck per record (the output is a name pattern), or `--combine`. The second argument is always the data (`-` for stdin). |
 | `opf ingest <data> [output] --as table\|chart` | CSV, TSV or JSON rows as a table or chart slide, alone or added `--into` a deck. |
 | `opf doctor [deck]` | Which formats this install can write, and the one command that installs what is missing. |
-| `opf schemas`, `opf schema [name] [pointer]` | The OPF schemas. |
+| `opf schemas`, `opf schema [name] [pointer]` | The OPF schemas. `opf schemas` lists the `@openpresentation/opf` version each came from next to its id, and `opf --version` names the schema id ([schema versioning](schema-versioning.md)). |
 | `opf catalogs`, `opf catalog <kind> [id]`, `opf catalog examples [slug]` | The pptx.gallery catalog (`@openpresentation/gallery`) and the bundled example decks. |
 | `opf skills <install\|update\|status>` | The six bundled agent skills. |
 

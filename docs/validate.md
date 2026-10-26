@@ -187,6 +187,8 @@ A file ending `.yaml` or `.yml` (or stdin with `--from yaml`) is read as YAML th
 
 `--fail-on` is the one way to say "fail on warnings" on every command that checks a document: `--fail-on warning`. Other commands (`create`, `edit`, `fill`, `paginate`, `embed`, `ingest`, `convert`) check only `format` and `references` of what they write and take `--fail-on` the same way.
 
+**Done means `--fail-on warning` passes.** A layout, theme or other catalog id that resolves nowhere is the warning `opf/unresolved-reference`, not an error, because catalogs are open and a host may register the id; so a deck with a made-up `layout` still reports `ok: true` and exits 0 by default. Agents and CI should treat a deck as finished only when `opf validate deck.opf.json --fail-on warning` exits 0. The finding's hint names the nearest records that exist ("Did you mean 'two-column'?").
+
 ## How contrast is computed
 
 `opf/text-contrast` reasons about the colours the preview draws, because a check against a different colour than the one on screen is worse than none.
@@ -331,7 +333,7 @@ Default severity: **error**. Cost: structure. The document breaks the OPF schema
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
-**Approximations.** All alternatives of a union are reported, with the failing schema location in `validation`. A required variable with no value is reported by `opf/variable-unfilled`, in the same category.
+**Approximations.** All alternatives of a union are reported, with the failing schema location in `validation`. A required variable with no value is reported by `opf/variable-unfilled`, in the same category. A chart written in the Chart.js or ECharts shape (`categories` and `series`, or `labels` and `datasets`, and no `data`) is one finding on the chart whose hint shows its own values as `data: { columns, rows }`, with a patch fix; the additional-property findings that repeat it are dropped.
 
 ### `opf/reference-id-duplicate`
 
@@ -558,7 +560,7 @@ Default severity: **warning**. Cost: structure. A content reference resolves now
 
 **Basis.** spec/schemas/opf.schema.json (JSON Schema 2020-12) and the semantic rules of OPF
 
-**Approximations.** Resolved like every engine resolves it: catalogs.custom, then the records embedded under catalogs.default, then the catalog registered for its source (the first registered catalog when `default` is omitted); `name:id` in catalogs.<name>, then the catalog registered for its source. Nothing is fetched. Free-form audience and purpose text is not a reference.
+**Approximations.** Resolved like every engine resolves it: catalogs.custom, then the records embedded under catalogs.default, then the catalog registered for its source (the first registered catalog when `default` is omitted); `name:id` in catalogs.<name>, then the catalog registered for its source. Nothing is fetched. Free-form audience and purpose text is not a reference. It is a warning, not an error, because catalogs are open and a host may register the id; `--fail-on warning` is the check that a deck is done. With a catalog registered, the hint names the nearest records that exist ("Did you mean `two-column`?").
 
 ### `opf/catalog-record-not-in-source`
 

@@ -1,6 +1,6 @@
 # OPF format card
 
-A self-contained authoring reference for agents and humans writing `*.opf.json` documents, sized for pasting into a model's context. The canonical contract is the JSON Schema (`https://openpresentation.org/schema/opf/v1`, in [`spec/schemas/opf.schema.json`](../spec/schemas/opf.schema.json)); this card compresses it. Validate with `validate` from `@openpresentation/opf` or `opf validate <file>` ([validate](validate.md)).
+A self-contained authoring reference for agents and humans writing `*.opf.json` documents, sized for pasting into a model's context. The canonical contract is the JSON Schema (`https://openpresentation.org/schema/opf/v1`, in [`spec/schemas/opf.schema.json`](../spec/schemas/opf.schema.json)); this card compresses it. Validate with `validate` from `@openpresentation/opf` or `opf validate <file>` ([validate](validate.md)); treat the deck as done only when `opf validate <file> --fail-on warning` passes, since an unknown layout id is only a warning. `v1` in the schema id is the pre-1.0 line, which changes across 0.x releases ([schema versioning](schema-versioning.md)).
 
 ## Document shape
 
@@ -28,7 +28,7 @@ A slide carries `title` / `subtitle` / `tag` / `notes` / `section` / `beat` / `l
 
 `composition` (on a slide or group) arranges children: `{ "mode": "auto|grid|row|column", "columns": 1-12, "weights": [..], "gap": 0-0.1, "padding": 0-0.2, "minFontSize": 8-32, "overflow": "warn|error" }`. Weights are relative track sizes; gap/padding are fractions of the canvas short edge. Engines own placement — there is no x/y.
 
-Payload notes: chart is `{ "type": "<chart-type id>", "data": { "columns": [...], "rows": [...] } }` or `{ "data": { "dataset": "<id>" } }`; table rows may hold scalars, `TextRun[]`, or styled cells `{ "value", "style": { "fill", "color", "align", "borders", ... }, "colSpan", "rowSpan" }`; `metric`/`quote`/`code` accept string shorthand; list nesting uses `level` on items, not nested payloads.
+Payload notes: chart (never the Chart.js `categories`/`series`/`labels`/`datasets` shape; the first column holds the labels, each further column is one series) is `{ "type": "<chart-type id>", "data": { "columns": [...], "rows": [...] } }` or `{ "data": { "dataset": "<id>" } }`; table rows may hold scalars, `TextRun[]`, or styled cells `{ "value", "style": { "fill", "color", "align", "borders", ... }, "colSpan", "rowSpan" }`; `metric`/`quote`/`code` accept string shorthand; list nesting uses `level` on items, not nested payloads.
 
 ## Rich text and color references
 

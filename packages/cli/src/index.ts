@@ -2,7 +2,7 @@
 // The `opf` command (RR-75: one convert command, one output convention, --from/--to, doctor, multi-file validate, per-command
 // help and errors that state the fix). Each command lives in its own module with its spec (usage, flags, help) and `run`; this
 // file dispatches, prints `opf --help` and `--version`, and turns every failure into one JSON error report with a `code`.
-import { OPFDataImportError, OPFPatchError, OPFValidationError } from "@openpresentation/opf";
+import { OPFDataImportError, OPFPatchError, OPFValidationError, schemaEntries } from "@openpresentation/opf";
 import { OPFApiError } from "@openpresentation/opf/internal/engine";
 import { type CommandSpec, REMOVED_COMMANDS, nearest, parseArgs, printHelp } from "./args.js";
 import * as catalog from "./catalog.js";
@@ -134,7 +134,7 @@ async function main(argv: string[]): Promise<string | undefined> {
 	}
 	if (first === "--version" || first === "-v") {
 		if (rest.length) throw usage("--version takes no arguments.");
-		process.stdout.write(json({ cli: CLI_VERSION, opf: OPF_VERSION }));
+		process.stdout.write(json({ cli: CLI_VERSION, opf: OPF_VERSION, schema: schemaEntries.find((entry) => entry.name === "presentation")?.schema.$id }));
 		return undefined;
 	}
 	if (first === "help") {
