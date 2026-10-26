@@ -3,6 +3,7 @@ import {tableRowBoundaries} from './table.js';
 import { composeSlide, type ComposeSlideOptions, type Fonts, type LayoutDiagnostic } from './composition.js';
 import { checkCatalogsOption, type Catalog, type CatalogOptions } from './catalog-refs.js';
 import { resolveSlideContext, type SlideContextDiagnostic } from './slide-context.js';
+import { resolveDrawnFontFamilies } from './drawn-font-families.js';
 import { resolveSlideScriptMeasurement } from './script-measurement.js';
 import { visitContentPayloads } from './content-walk.js';
 import { assertValid } from './validator.js';
@@ -150,7 +151,8 @@ export function paginateSlide(input: unknown, options: PaginationOptions = {}): 
   const {fonts,catalogs,minFontSize:_minFontSize,maxSlides:_maxSlides,reservedIds:_reservedIds,...engineOptions} = options;
   // opf#485: measure script runs in the slide's script fonts, as the renderer and the exporter do.
   const textMeasurement = fonts?.textMeasurement && options.presentation !== undefined ? resolveSlideScriptMeasurement(options.presentation, sourceIndex, fonts.textMeasurement, {...(catalogs!==undefined?{catalogs}:{}),...(options.fontFamilies?{fontFamilies:options.fontFamilies}:{})}) : fonts?.textMeasurement;
-  const composeOptions: ComposeSlideOptions = {...engineOptions,...(textMeasurement?{textMeasurement}:{})};
+  // WI-1 (P24): the role families the renderer draws, so pages break where the drawn slide overflows.
+  const composeOptions: ComposeSlideOptions = {...engineOptions,...(textMeasurement?{textMeasurement}:{}),...(textMeasurement&&engineOptions.fontFamilies?{fontFamilies:resolveDrawnFontFamilies(engineOptions.fontFamilies,textMeasurement)}:{})};
   // FA-31: pages are measured with the slide-scoped built-ins substituted for their final number and the deck's slide
   // count, but returned with the tokens kept, so the output stays a source document.
   const presentationSlides = options.presentation?.slides;

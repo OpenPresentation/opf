@@ -220,7 +220,7 @@
           "const": "auto"
         }
       ],
-      "description": "The region's or split's share along its parent's direction: a number above 0 and up to 100 that siblings share in proportion (the gap is taken out first), default 1; or 'auto', the length the content needs at the starting text size (at most half the content box; a split sized auto is as tall as its tallest content, and every row of a column split sized auto is auto too; auto regions with no content take no space). 'auto' is allowed only on an entry of a column; in a row it is the validate finding opf/layout-template. The default for a heading region is 'auto' in a column and 1 in a row.",
+      "description": "The region's or split's share along its parent's direction: a number above 0 and up to 100 that siblings share in proportion (the gap is taken out first), default 1; or 'auto', the length the content needs at the starting text size (up to the space the heading rows and the content of the numeric rows leave; auto rows that do not all fit shrink together, each giving up the same fraction of what it can give up above its content's length at the minimum font size; a split sized auto is as tall as its tallest content, and every row of a column split sized auto is auto too; auto regions with no content take no space). 'auto' is allowed only on an entry of a column; in a row it is the validate finding opf/layout-template. The default for a heading region is 'auto' in a column and 1 in a row.",
       "examples": [
         1,
         2,
@@ -362,7 +362,7 @@
             "column",
             "auto"
           ],
-          "description": "How several blocks share the region: 'none' one block fills it; 'grid' by count (1 fills, 2 side by side, 3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6 as 3 x 2, 7 to 12 in four columns; rows and columns swap in a portrait region; a short last row is centred); 'column' stacked with equal heights; 'auto' a grid when every block is short and a column when any block is long (more than 6 estimated lines in its grid cell at the starting size). design.contentDirection turns every flowing region into one row or one column. Default 'auto'."
+          "description": "How several blocks share the region: 'none' one block fills it; 'grid' by count (1 fills, 2 side by side, 3 in a row, 4 as 2 x 2, 5 as 3 + 2, 6 as 3 x 2, 7 to 12 in four columns; rows and columns swap in a portrait region; a short last row is centred); 'column' stacked at the heights the blocks need, one gap apart, and placed by the region's anchor (charts, pictures, tables, timelines and videos take what the measured blocks leave; blocks that do not fit share the region, each giving up the same fraction of what it can give up above its height at the minimum font size); 'auto' a grid when every block is short and a column when any block is long (more than 6 estimated lines in its grid cell at the starting size). design.contentDirection turns every flowing region into one row or one column. Default 'auto'."
         },
         "max": {
           "type": "integer",

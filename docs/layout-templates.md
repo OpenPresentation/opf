@@ -89,8 +89,8 @@ An entry of `regions` is one of three things:
 - a **split**: `{ "direction": "row" | "column", "regions": [...], "size"?, "anchor"? }`, a nested list.
 
 `size` is a number above 0 and up to 100 (default 1). Siblings share their parent's length in proportion, separated by the
-gap, so `2` and `1` are two thirds and one third. `"auto"` is the height the content needs, at most half the content box,
-and an `auto` region with no content takes no space; it is allowed only on an entry of a `column` (a `row` has no height
+gap, so `2` and `1` are two thirds and one third. `"auto"` is the height the content needs, up to the space the headings and
+the numeric rows' content leave (see Tracks), and an `auto` region with no content takes no space; it is allowed only on an entry of a `column` (a `row` has no height
 to ask for), and elsewhere it is the validate finding `opf/layout-template`.
 
 `title` and `subtitle` are reserved heading regions: `title` holds the tag, title and subtitle stacked, and a `subtitle`
@@ -192,7 +192,7 @@ In the Markdown dialect, `<!-- block: region=metrics -->` pins a block; a promot
 | --- | --- |
 | `none` | One block fills the region. |
 | `grid` | By count: 1 fills; 2, 3 in a row; 4 as 2 x 2; 5 as 3 + 2; 6 as 3 x 2; 7 to 12 in four columns. Rows and columns swap in a portrait region. A short last row keeps the column width and is centred. |
-| `column` | Stacked, equal heights. |
+| `column` | Stacked at the heights the blocks need, one gap apart, and placed by the region's `anchor`. Charts, pictures, tables, timelines and videos take what the measured blocks (text, lists, quotes, metrics, code) leave. Blocks that do not fit share the region: each gives up the same fraction of what it can give up above its height at the minimum font size. A group's blocks in one column stack the same way. |
 | `auto` | `grid` unless a block is long: more than 6 lines (code: 12, table: 6 rows) in its grid cell at the starting size, counted with core's estimate, never a host font. |
 
 `design.contentDirection` makes every flowing region one row or one column. A slide's own `composition.mode`, `columns` and
@@ -208,11 +208,17 @@ Columns share the content width in proportion. Rows are allocated so that no row
 1. A heading `auto` row takes what its headings need, at most half the content box.
 2. The numeric rows keep at least what their content needs at the starting size, up to half of the space under the
    headings.
-3. The other `auto` rows take what they need (at most half the content box each; the implicit row below the grid, which
-   holds what no region took, has no such cap) from what is left, and shrink together in proportion when it is not enough.
+3. The other `auto` rows take what they need from what is left (the implicit row below the grid holds what no region
+   took). When that is not enough they shrink together: each gives up the same fraction of what it can give up above its
+   content's height at the minimum font size, so a one-line note keeps nearly its need beside a dense row, and no row
+   overflows while those heights fit.
    An empty region with `empty: "keep"` holds two lines of body text in an `auto` row (plus the card insets on a slide
    that draws cards, as a filled region does).
 4. The numeric rows share the rest in proportion to their sizes.
+
+Blocks drawn side by side as peers (regions of one role in the same rows, such as the columns of `two-column` or
+`comparison`, and the blocks of one row of a `grid` or `row` flow) share one size per kind: their prose, and their lists,
+are refitted at the smallest size any of them fitted at.
 
 Composed content never crosses a heading or another region and never leaves its region's box. What still does not fit
 uses the design's tools in order: text fits down to `minFontSize`, lists flow into columns where the region allows, blocks

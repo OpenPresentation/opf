@@ -13,14 +13,13 @@ import {
 import {
   hasContentVariables,
   isTemplate,
+  resolveDrawnFontFamilies,
   resolveSlideContext,
   resolveVariables,
   validate
 } from "@openpresentation/opf";
 import { adjustedFontSize, baselineShift, createScriptFonts } from "./script-fonts.js";
 import { disabledFeaturesStyle } from "./font-compatibility.js";
-import { isSymbolEncodedFamily } from "./symbol-fonts.js";
-import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { isDatasetChart, isDatasetTable, renderCatalogChart } from "./charts.js";
 import { renderCaption, renderFootnotes } from "./annotations.js";
 import { drawnFaces } from "./drawn-faces.js";
@@ -598,10 +597,8 @@ function bindSlide(presentation, index, context) {
   // A symbol-encoded family (Symbol, Wingdings, Webdings; FF-45) keeps its name too: each run resolves it again and the script-font planner
   // maps the run's private-use codes through the symbol table (symbol-fonts.js), as it does for a symbol run. Resolving the role to the open
   // symbol face here would drop the encoding, and the codes would reach a face with no glyph for them (missing-glyph).
-  for (const role of ["heading","body","code","accent"]) if (design.fonts[role] !== undefined) {
-    const named = design.fonts[role], resolved = resolveTextStyle({fontFamily:named,fontWeight:role === "heading" ? 700 : 400},textMeasurement).fontFamily;
-    design.fonts[role] = isSymbolEncodedFamily(named) || fontPolicyFor(named)?.replacement?.weight !== undefined && resolved.toLowerCase() !== named.toLowerCase() ? named : resolved;
-  }
+  // The rule is core's resolveDrawnFontFamilies, which validate and paginate compose with too (WI-1, P24).
+  design.fonts = resolveDrawnFontFamilies(design.fonts, textMeasurement);
   const geometry = composeSlide(slide, { ...slideContext.options, fontFamilies: design.fonts, textRasterPadding:context.options.textRasterPadding, textMeasurement });
   return {
     scriptFonts,

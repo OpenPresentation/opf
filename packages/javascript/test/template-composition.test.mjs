@@ -84,9 +84,11 @@ describe('tracks', () => {
     assert.ok(near(first.box.y + first.box.height, result.contentBox.y + result.contentBox.height, 1e-6));
   });
 
-  test('an auto row is at most half the content box', () => {
+  test('an auto row takes what it needs, and a numeric row with content keeps its need up to half the space (WI-1)', () => {
     const result = compose({ title: 'x', blocks: [{ metric: { value: 1, label: 'a' } }, text(long.repeat(6))] }, layouts.metrics);
-    assert.ok(region(result, 'note').box.height <= result.contentBox.height / 2 + 1e-6);
+    const note = region(result, 'note'), metrics = region(result, 'metrics');
+    assert.ok(note.box.height > result.contentBox.height / 2, 'no fixed half-box cap on a body auto row');
+    assert.ok(metrics.box.height >= 120, 'the metric row is not squeezed to nothing');
   });
 });
 

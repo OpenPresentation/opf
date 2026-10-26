@@ -1,4 +1,5 @@
-import { OPFCompositionError, composeSlide, resolveFontFamilies, type LayoutDiagnostic, type SlideComposition, type TextMeasurement } from './composition.js';
+import { type FontFamilies, OPFCompositionError, composeSlide, resolveFontFamilies, type LayoutDiagnostic, type SlideComposition, type TextMeasurement } from './composition.js';
+import { resolveDrawnFontFamilies } from './drawn-font-families.js';
 import type { RuleSlide } from './rule-context.js';
 import { pointer, slidePayloads, textValues } from './rule-content.js';
 import { type Rec, resolveDesign } from './rule-design.js';
@@ -74,7 +75,14 @@ export function buildSlides(document: Rec, options: ValidateOptions): RuleSlide[
 		const layout = lazy(() => resolved().options.layout as Rec | undefined);
 		const composed = lazy((): Composed => {
 			const result: Composed = { layoutDiagnostics: [] };
-			const compose = (input: Rec, withLayout: Rec | undefined): SlideComposition => composeSlide(input, { ...resolved().options, layout: withLayout } as never);
+			// WI-1 (P24): compose with the role families the renderer draws (resolveDrawnFontFamilies), so a weight the open
+			// replacement lacks draws its nearest weight here too instead of failing the slide's layout.
+			let fontFamilies: FontFamilies | undefined;
+			const compose = (input: Rec, withLayout: Rec | undefined): SlideComposition => {
+				const options = resolved().options;
+				fontFamilies ??= options.fontFamilies && resolveDrawnFontFamilies(options.fontFamilies, options.textMeasurement);
+				return composeSlide(input, { ...options, ...(fontFamilies ? { fontFamilies } : {}), layout: withLayout } as never);
+			};
 			try {
 				result.composition = compose(resolved().slide, layout());
 				result.layoutDiagnostics.push(...result.composition.diagnostics.map((diagnostic: LayoutDiagnostic) => ({ diagnostic, strict: false })));

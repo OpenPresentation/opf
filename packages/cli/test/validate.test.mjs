@@ -30,7 +30,22 @@ describe("opf validate", () => {
     assert.equal(r.status, 0, r.stderr);
     assert.ok(r.stdout.includes("clean.opf.json: 0 findings (0 errors, 0 warnings, 0 info). Checked: "), r.stdout);
     assert.ok(r.stdout.includes("accessibility"), r.stdout);
+    // WI-1 (P24): with opf-render installed (it is in this workspace) the layout is measured with the fonts convert draws with;
+    // without it the summary says the layout was estimated and the hint names the install command.
+    if (r.stdout.includes("layout (measured)")) return;
     assert.ok(r.stdout.includes("layout (estimated)"), r.stdout);
+    assert.match(r.stdout, /hint: Layout was estimated: .*install/);
+  });
+
+  test("measured layout: the fonts convert draws with, so a weight the open replacement lacks still lays out", () => {
+    // A metric value asks Aptos Display at 800 and a quote Aptos at 600; Intos (their stand-in) has 400 and 700 only.
+    const file = write("weights.opf.json", { name: "Weights", language: "en-US", slides: [
+      { title: "Revenue", metric: { value: "42%", label: "Growth" } },
+      { title: "Voice", quote: { text: "Ship the smallest useful thing.", attribution: "A. Author" } },
+    ] });
+    const report = JSON.parse(run(["validate", file]).stdout);
+    if (report.checks.layout !== "measured") return; // opf-render is not installed here
+    assert.deepEqual(report.findings.filter((d) => d.ruleId === "opf/layout-failed"), []);
   });
 
   test("findings: JSON report with locations, file hash and rule ids; exit follows --fail-on", () => {
@@ -52,7 +67,7 @@ describe("opf validate", () => {
     assert.match(report.sha256, /^[a-f0-9]{64}$/);
     assert.match(report.opfVersion, /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/);
     assert.deepEqual(report.counts, { error: 0, warning: 1, info: 1 });
-    assert.equal(report.checks.layout, "estimated");
+    assert.ok(["measured", "estimated"].includes(report.checks.layout));
     assert.equal(report.diagnostics, undefined);
     assert.equal(report.errors, undefined);
     assert.equal(run(["validate", file, "--fail-on", "warning"]).status, 1);
