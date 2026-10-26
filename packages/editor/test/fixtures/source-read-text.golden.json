@@ -104,7 +104,7 @@
     "column": 13,
     "kind": "schema",
     "ruleId": "opf/unresolved-reference",
-    "help": "Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
+    "help": "The nearest layouts that exist: 'chart', 'dashboard', 'section'. Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
     "category": "references",
     "location": {
      "offset": 82,
@@ -180,7 +180,7 @@
     "column": 1,
     "kind": "schema",
     "ruleId": "opf/unresolved-reference",
-    "help": "Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
+    "help": "The nearest layouts that exist: 'chart', 'dashboard', 'section'. Embed the layout record (embed(), or opf embed), register the catalog that defines it, choose one of the suggested layouts, or remove the reference to compose the slide automatically.",
     "category": "references",
     "location": {
      "offset": 79,
