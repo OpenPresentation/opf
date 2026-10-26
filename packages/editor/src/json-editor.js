@@ -1,7 +1,7 @@
-import { Annotation, ChangeSet, Compartment, EditorSelection, EditorState, Prec, StateEffect, StateField, Transaction, countColumn } from "@codemirror/state";
+import { Annotation, ChangeSet, Compartment, EditorSelection, EditorState, Prec, RangeSet, StateEffect, StateField, Transaction, countColumn } from "@codemirror/state";
 import { Decoration, EditorView, activateHover, closeHoverTooltips, crosshairCursor, drawSelection, hasHoverTooltips, hoverTooltip, keymap, lineNumbers, rectangularSelection } from "@codemirror/view";
 import { defaultKeymap, deleteCharBackward, history, historyKeymap, indentLess, indentMore, insertNewlineAndIndent, isolateHistory, redo, selectAll, selectLine, selectParentSyntax, toggleTabFocusMode, undo, undoDepth } from "@codemirror/commands";
-import { HighlightStyle, StreamLanguage, bracketMatching, codeFolding, indentOnInput, indentUnit, syntaxHighlighting } from "@codemirror/language";
+import { HighlightStyle, StreamLanguage, bracketMatching, codeFolding, foldedRanges, indentOnInput, indentUnit, syntaxHighlighting, unfoldEffect } from "@codemirror/language";
 import { json } from "@codemirror/lang-json";
 import { yaml } from "@codemirror/lang-yaml";
 import { acceptCompletion, autocompletion, closeBrackets, closeBracketsKeymap, closeCompletion, completionStatus, currentCompletions, deleteBracketPair, hasNextSnippetField, hasPrevSnippetField, moveCompletionSelection, nextSnippetField, prevSnippetField, startCompletion } from "@codemirror/autocomplete";
@@ -229,6 +229,23 @@ function sourceDecorations(state) {
   for (const from of lines) ranges.push(Decoration.line({ class: "is-hover" }).range(from));
   return Decoration.set(ranges, true);
 }
+// CE-17: decorations a host owns, kept apart from the editor's own (field highlights, problems): one set per key, mapped through every edit, so a
+// mark stays on its text while the author types. `setHostDecorations.of({ key, set })` replaces the set of `key` (`set` null removes it).
+const setHostDecorations = StateEffect.define();
+const hostDecorations = StateField.define({
+  create: () => new Map(),
+  update(value, tr) {
+    let next = value;
+    if (tr.docChanged) next = new Map([...value].map(([key, set]) => [key, set.map(tr.changes)]));
+    for (const effect of tr.effects) {
+      if (!effect.is(setHostDecorations)) continue;
+      if (next === value) next = new Map(value);
+      if (effect.value.set) next.set(effect.value.key, effect.value.set); else next.delete(effect.value.key);
+    }
+    return next;
+  },
+  provide: (field) => EditorView.decorations.from(field, (value) => RangeSet.join([...value.values()])),
+});
 const fieldDecorations = StateField.define({
   create: sourceDecorations,
   update: (value, tr) => tr.docChanged || tr.effects.some((effect) => effect.is(hoverField)) ? sourceDecorations(tr.state) : value,
@@ -552,6 +569,7 @@ function mountJsonCodeEditor(parent, options) {
     highlightSelectionMatches(),
     syntaxHighlighting(highlightStyle),
     activeField,
+    hostDecorations,
     attributes.of(contentAttributes()),
     options.lineNumbers ? lineNumbers() : [],
     EditorView.lineWrapping,
@@ -597,12 +615,15 @@ function mountJsonCodeEditor(parent, options) {
       if (update.docChanged && !update.transactions.every((tr) => tr.annotation(external))) options.onChange(update.state.field(jsonSource));
       if (update.docChanged) scheduleSyntax();
       if (update.selectionSet || update.docChanged) options.onSelectionChange?.();
+      if (update.docChanged) options.onDocChange?.();
       if (update.docChanged && update.transactions.some((tr) => tr.isUserEvent("input.type"))) autoHint(update.view);
     })
   ] }) });
   const api = {
     getValue: () => view.state.field(jsonSource),
     getSelection: () => {const map=textInputMap(api.getValue());return [map.toSource(view.state.selection.main.from),map.toSource(view.state.selection.main.to)];},
+    // The end of the selection the caret is at (the head), in source offsets: where a path under the cursor is read.
+    getHead: () => textInputMap(api.getValue()).toSource(view.state.selection.main.head),
     hasFocus: () => view.hasFocus,
     focus: () => view.focus(),
     setSelection: (from, to=from) => {const map=textInputMap(api.getValue());view.dispatch({ selection: EditorSelection.single(map.toInput(from),map.toInput(to)), scrollIntoView: true });},
@@ -710,6 +731,63 @@ function mountJsonCodeEditor(parent, options) {
     /** How many typed edit groups CodeMirror can still undo. */
     undoDepth: () => undoDepth(view.state),
     setReadOnly(value){view.dispatch({ effects: editable.reconfigure(editableExtension(value)) });},
+    /**
+     * CE-17: scroll the start of `from..to` (source offsets) into view without moving the selection or the focus. `align`: "center" (default),
+     * "start" or "nearest" (the least scrolling). `select` also selects the range, `focus` also focuses the editor; folded text around the start is opened.
+     */
+    reveal(from, to = from, { align = "center", select = false, focus = false } = {}) {
+      if (disposed) return;
+      const source = api.getValue(), map = textInputMap(source);
+      const a = map.toInput(Math.min(source.length, Math.max(0, from))), b = map.toInput(Math.min(source.length, Math.max(0, to)));
+      const effects = [];
+      foldedRanges(view.state).between(a, a, (start, end) => { effects.push(unfoldEffect.of({ from: start, to: end })); });
+      effects.push(EditorView.scrollIntoView(a, { y: align === "nearest" ? "nearest" : align === "start" ? "start" : "center" }));
+      view.dispatch({ effects, ...(select ? { selection: EditorSelection.single(a, b) } : {}) });
+      if (focus) view.focus();
+    },
+    /**
+     * CE-17: draw decorations a host owns, kept apart from the editor's own. `key` names a set (a call replaces that set); `list` is
+     * `{ from, to, className, title?, line?, data? }` in source offsets: a mark over the range, or with `line` the class on every line it touches.
+     * `data` is kept for `getDecorations`. An empty list removes the set.
+     */
+    setDecorations(key, list) {
+      if (disposed) return;
+      const source = api.getValue(), map = textInputMap(source), ranges = [];
+      const at = (offset) => map.toInput(Math.min(source.length, Math.max(0, offset)));
+      (list ?? []).forEach((item, id) => {
+        const a = at(item.from), b = Math.max(a, at(item.to ?? item.from));
+        const spec = { opf: { id, className: item.className, title: item.title, line: Boolean(item.line), data: item.data } };
+        if (item.line) {
+          const last = view.state.doc.lineAt(b).number;
+          for (let number = view.state.doc.lineAt(a).number; number <= last; number++) ranges.push(Decoration.line({ class: item.className, ...spec }).range(view.state.doc.line(number).from));
+        } else if (b > a) {
+          ranges.push(Decoration.mark({ class: item.className, attributes: item.title ? { title: item.title } : undefined, ...spec }).range(a, b));
+        }
+      });
+      view.dispatch({ effects: setHostDecorations.of({ key, set: ranges.length ? Decoration.set(ranges, true) : null }) });
+    },
+    /** CE-17: remove the decoration set `key`, or every host set when `key` is omitted. */
+    clearDecorations(key) {
+      if (disposed) return;
+      const keys = key === undefined ? [...view.state.field(hostDecorations).keys()] : [key];
+      view.dispatch({ effects: keys.map((name) => setHostDecorations.of({ key: name, set: null })) });
+    },
+    /** CE-17: the decorations drawn now at their current source offsets, `{ key, from, to, className, title, line, data }`, in position order (a `line` one is one entry over all its lines). */
+    getDecorations(key) {
+      const map = textInputMap(api.getValue()), out = [], lines = new Map();
+      for (const [name, set] of view.state.field(hostDecorations)) {
+        if (key !== undefined && name !== key) continue;
+        set.between(0, view.state.doc.length, (from, to, value) => {
+          const info = value.spec.opf;
+          if (!info) return;
+          const entry = { key: name, from: map.toSource(from), to: map.toSource(info.line ? view.state.doc.lineAt(from).to : to), className: info.className, title: info.title, line: info.line, data: info.data };
+          if (!info.line) { out.push(entry); return; }
+          const id = `${name}\0${info.id}`, seen = lines.get(id);
+          if (seen) seen.to = Math.max(seen.to, entry.to); else { lines.set(id, entry); out.push(entry); }
+        });
+      }
+      return out.sort((a, b) => a.from - b.from || a.to - b.to);
+    },
     /** The CodeMirror view, for hosts that scroll or measure it. */
     view,
     update(code, invalid=false, field=null, describedBy) {

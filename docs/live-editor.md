@@ -7,7 +7,7 @@ The published canvas covers the interactions below; complete PowerPoint feature 
 
 ## The whole editor in one call
 
-`@openpresentation/opf-editor/workspace` mounts everything the sections below build by hand (the canvas, the source pane, the slide navigator and thumbnails, Present, Export, the sorter, the outline, Layout Studio, Review, Find and autosave) over one session and one fonts handle: `createOpfEditor(element, { document, catalogs, fonts })`. `@openpresentation/opf-editor/react` has `<OpfEditor>` and the hooks `useOpfEditor`, `useOpfDocument` and `useOpfSelection` for React 18 and 19. The chrome reads `--opf-ui-*` tokens that a `theme` option sets. See [Embedding the editor](../packages/editor/docs/embedding.md) and [Theming the editor chrome](../packages/editor/docs/theming.md).
+`@openpresentation/opf-editor/workspace` mounts everything the sections below build by hand (the canvas, the source pane, the slide navigator and thumbnails, Present, Export, the sorter, the outline, Layout Studio, Review, Find and autosave) over one session and one fonts handle: `createOpfEditor(element, { document, catalogs, fonts })`. `@openpresentation/opf-editor/react` has `<OpfEditor>` and the hooks `useOpfEditor`, `useOpfDocument`, `useOpfSelection` and `useOpfCursor` for React 18 and 19. The chrome reads `--opf-ui-*` tokens that a `theme` option sets. The source pane tells the host where the caret is (`cursor` event: pointer, id path, selection), reveals a field without taking focus (`sourcePane.revealPath`) and draws the host's own marks (`sourcePane.setDecorations`). See [Embedding the editor](../packages/editor/docs/embedding.md) and [Theming the editor chrome](../packages/editor/docs/theming.md).
 
 ## Install the published packages
 
