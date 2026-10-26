@@ -415,7 +415,7 @@
     "jszip": "3.10.2",
     "pdf-lib": "1.17.1",
     "pdfjs-dist": "6.4.299",
-    "playwright": "1.64.0",
+    "playwright": "1.64.1",
     "react": "19.3.1",
     "react-dom": "19.3.1",
     "react-18": "npm:react@18.3.1",
