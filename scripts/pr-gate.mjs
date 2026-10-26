@@ -151,9 +151,17 @@ export const describeChecks = (checks) => checks.map((check) => `  ${check.name}
 // ---------------------------------------------------------------------------------------------------------------
 // GraphQL
 
-const CONTEXTS = `statusCheckRollup { contexts(first: 100) { pageInfo { hasNextPage } nodes { __typename
+const CONTEXT_NODES = `nodes { __typename
   ... on CheckRun { name status conclusion detailsUrl startedAt }
-  ... on StatusContext { context state targetUrl createdAt } } } }`;
+  ... on StatusContext { context state targetUrl createdAt } }`;
+const CONTEXTS = `statusCheckRollup { contexts(first: 100) { pageInfo { hasNextPage endCursor } ${CONTEXT_NODES} } }`;
+/** Pages of 100 read after the first before the gate gives up on a rollup (1,100 checks in all, far above a full-ci run's ~50). */
+export const MAX_CONTEXT_PAGES = 10;
+
+/** The next page of one commit's rollup, asked only when the first page of the poll said hasNextPage. owner/name are validated by parseTarget. */
+export function moreContextsQuery(target, oid, cursor) {
+  return `query { repository(owner: "${target.owner}", name: "${target.name}") { object(oid: ${JSON.stringify(oid)}) { ... on Commit { oid statusCheckRollup { contexts(first: 100, after: ${JSON.stringify(cursor)}) { pageInfo { hasNextPage endCursor } ${CONTEXT_NODES} } } } } } }`;
+}
 
 /** One query for every target, aliased t0, t1, …, plus the rate limit. Names and numbers are validated by parseTarget. */
 export function buildPollQuery(targets) {
@@ -169,14 +177,14 @@ export function buildPollQuery(targets) {
 export const ENABLE_AUTO_MERGE = 'mutation($id: ID!, $head: GitObjectID!) { enablePullRequestAutoMerge(input: { pullRequestId: $id, mergeMethod: SQUASH, expectedHeadOid: $head }) { pullRequest { number } } }';
 export const MERGE = 'mutation($id: ID!, $head: GitObjectID!) { mergePullRequest(input: { pullRequestId: $id, mergeMethod: SQUASH, expectedHeadOid: $head }) { pullRequest { merged mergeCommit { oid } } } }';
 
-/** The view of one polled target: { exists, closed, merged, head, mergeable, autoMerge, id, commitOid, checks, truncated }. */
+/** The view of one polled target: { exists, closed, merged, head, mergeable, autoMerge, id, commitOid, checks, truncated, endCursor }. */
 export function readTarget(target, data) {
   const node = data?.repository ?? data;
   if (target.kind === 'commit') {
     const commit = node?.object;
     if (!commit) return { exists: false };
     const contexts = commit.statusCheckRollup?.contexts;
-    return { exists: true, commitOid: commit.oid, checks: normalizeContexts(contexts?.nodes), truncated: Boolean(contexts?.pageInfo?.hasNextPage) };
+    return { exists: true, commitOid: commit.oid, checks: normalizeContexts(contexts?.nodes), truncated: Boolean(contexts?.pageInfo?.hasNextPage), endCursor: contexts?.pageInfo?.endCursor };
   }
   const pr = node?.pullRequest;
   if (!pr) return { exists: false };
@@ -193,7 +201,31 @@ export function readTarget(target, data) {
     commitOid: last?.oid,
     checks: normalizeContexts(contexts?.nodes),
     truncated: Boolean(contexts?.pageInfo?.hasNextPage),
+    endCursor: contexts?.pageInfo?.endCursor,
   };
+}
+
+/**
+ * The checks of a view whose first page said hasNextPage: reads the further pages of the same commit and returns every check. Throws
+ * (the gate then judges nothing this poll, never a partial list) when a page is malformed, repeats a cursor, belongs to another
+ * commit, or the rollup is longer than MAX_CONTEXT_PAGES further pages.
+ */
+export async function readAllChecks(target, view, graphql) {
+  const checks = [...view.checks];
+  const cursors = new Set();
+  let cursor = view.endCursor;
+  for (let page = 0; page < MAX_CONTEXT_PAGES; page += 1) {
+    if (typeof cursor !== 'string' || !cursor || cursors.has(cursor)) throw new Error('the check rollup has another page but no fresh cursor');
+    cursors.add(cursor);
+    const commit = (await graphql(moreContextsQuery(target, view.commitOid, cursor)))?.repository?.object;
+    if (commit?.oid !== view.commitOid) throw new Error('the next rollup page is of a different or missing commit');
+    const contexts = commit.statusCheckRollup?.contexts;
+    if (!Array.isArray(contexts?.nodes) || typeof contexts.pageInfo?.hasNextPage !== 'boolean') throw new Error('the next rollup page is malformed');
+    checks.push(...normalizeContexts(contexts.nodes));
+    if (!contexts.pageInfo.hasNextPage) return checks;
+    cursor = contexts.pageInfo.endCursor;
+  }
+  throw new Error(`the check rollup has more than ${100 * (MAX_CONTEXT_PAGES + 1)} checks`);
 }
 
 // ---------------------------------------------------------------------------------------------------------------
@@ -287,7 +319,6 @@ export async function runGate(options, deps) {
         finish(state, EXIT.usage, `${state.label} does not exist (or gh cannot read it)`);
         continue;
       }
-      if (view.truncated) log(`${state.label}: more than 100 checks reported; only the first 100 are read`);
       if (state.target.kind === 'pr') {
         if (view.merged) {
           finish(state, EXIT.ok, `MERGED ${state.label} ${view.head?.slice(0, 12) ?? ''} (already merged)`.trim());
@@ -313,6 +344,16 @@ export async function runGate(options, deps) {
         // The rollup belongs to the last commit; right after a push it can still be the previous head's.
         if (view.commitOid !== view.head) {
           log(`${state.label}: checks of ${String(view.commitOid).slice(0, 12)} are not the head's yet`);
+          continue;
+        }
+      }
+      if (view.truncated) {
+        // More than 100 checks: read the rest (one extra query per page, only now) or judge nothing; a partial list could hide a failure or a newer re-run.
+        try {
+          view.checks = await readAllChecks(state.target, view, graphql);
+        } catch (error) {
+          state.greenPolls = 0;
+          log(`${state.label}: more than 100 checks and the rest could not be read (${messageOf(error).split('\n')[0]}); not judged this poll`);
           continue;
         }
       }

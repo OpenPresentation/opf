@@ -1,7 +1,7 @@
 // MR-34: scripts/pr-gate.mjs against a fake GraphQL endpoint and a fake clock. Nothing here touches GitHub.
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { DEFAULTS, ENABLE_AUTO_MERGE, EXIT, MERGE, UsageError, buildPollQuery, describeChecks, evaluateChecks, latestPerName, main, normalizeContexts, parseArgs, parseTarget, resumeCommand, runGate } from './pr-gate.mjs';
+import { DEFAULTS, ENABLE_AUTO_MERGE, EXIT, MAX_CONTEXT_PAGES, MERGE, UsageError, buildPollQuery, describeChecks, evaluateChecks, latestPerName, main, moreContextsQuery, normalizeContexts, parseArgs, parseTarget, resumeCommand, runGate } from './pr-gate.mjs';
 
 const HEAD = 'a'.repeat(40);
 const OTHER = 'b'.repeat(40);
@@ -15,9 +15,9 @@ const pr = ({ state = 'OPEN', merged = false, mergeable = 'MERGEABLE', head = HE
 const commitData = (contexts, oid = HEAD) => ({ repository: { object: { oid, statusCheckRollup: { contexts: { pageInfo: { hasNextPage: false }, nodes: contexts } } } } });
 
 /** A fake world: `polls` is a list of answers (one per poll, each an array of per-target data, the last one repeats); mutations are scripted by name. */
-function world({ polls, mutations = {}, interval = 90, timeoutMinutes = 100, merge = false, required = 'verify', expectHeads = [], targets, commit = false } = {}) {
+function world({ polls, pages = [], mutations = {}, interval = 90, timeoutMinutes = 100, merge = false, required = 'verify', expectHeads = [], targets, commit = false } = {}) {
   const log = [];
-  const calls = { queries: 0, mutations: [], sleeps: [] };
+  const calls = { queries: 0, mutations: [], sleeps: [], pageQueries: [] };
   let time = 0;
   const deps = {
     now: () => time,
@@ -34,6 +34,12 @@ function world({ polls, mutations = {}, interval = 90, timeoutMinutes = 100, mer
         if (!handler) throw new Error(`unexpected ${name}`);
         return handler(variables, calls.mutations.filter((entry) => entry.name === name).length);
       }
+      if (query.includes(', after: ')) {
+        // A follow-up page of one rollup: `pages` is a list of answers (a function gets the query), one per page query.
+        calls.pageQueries.push(query);
+        const page = pages[Math.min(calls.pageQueries.length - 1, pages.length - 1)];
+        return typeof page === 'function' ? page(query) : page;
+      }
       const answer = polls[Math.min(calls.queries, polls.length - 1)];
       calls.queries += 1;
       // The gate asks only for the targets it has not decided: an answer is positional (all targets open) or keyed by label.
@@ -46,6 +52,81 @@ function world({ polls, mutations = {}, interval = 90, timeoutMinutes = 100, mer
   return { deps, options, log, calls };
 }
 const run = (setup) => runGate(setup.options, setup.deps);
+
+/** A first page that says there is more: `contexts` is the page, `cursor` where the next one starts. */
+const firstPage = (contexts, cursor = 'c1', oid = HEAD) => {
+  const data = pr({ head: oid, contexts });
+  data.repository.pullRequest.commits.nodes[0].commit.statusCheckRollup.contexts.pageInfo = { hasNextPage: true, endCursor: cursor };
+  return data;
+};
+/** A later page, as a follow-up query answers it. */
+const laterPage = (contexts, { next = null, oid = HEAD } = {}) => ({ repository: { object: { oid, statusCheckRollup: { contexts: { pageInfo: { hasNextPage: Boolean(next), endCursor: next }, nodes: contexts } } } } });
+const filler = (count) => Array.from({ length: count }, (_, index) => check(`job-${index}`));
+
+test('the first page holds 100 contexts, comfortably above a full-ci run of about 50 checks, and its cursor is read', () => {
+  const query = buildPollQuery([parseTarget('o/r#7')]);
+  assert.match(query, /contexts\(first: 100\) \{ pageInfo \{ hasNextPage endCursor \}/);
+  assert.ok(100 >= 2 * 50, 'a full-ci PR reports about 50 checks; the page is at least twice that');
+  assert.match(moreContextsQuery(parseTarget('o/r#7'), HEAD, 'c"1'), /object\(oid: "a{40}"\).*contexts\(first: 100, after: "c\\"1"\)/);
+});
+
+test('more than 100 checks: the gate reads the next pages before it judges, so a failure or a re-run on a later page counts', async () => {
+  // red hidden on page 2 (--required all would have gone green on the first 100)
+  const hidden = world({ required: 'all', polls: [[firstPage(filler(100))]], pages: [laterPage([check('late-leg', 'FAILURE')])] });
+  const red = await run(hidden);
+  assert.equal(red.code, EXIT.red);
+  assert.match(red.results[0].text, /late-leg: FAILURE/);
+  assert.equal(hidden.calls.pageQueries.length, 1);
+  assert.match(hidden.calls.pageQueries[0], /after: "c1"/);
+  // verify first reported failed on page 1, re-run succeeded on page 2: the newest report wins
+  const rerun = await run(world({ polls: [[firstPage([check('verify', 'FAILURE', { startedAt: '2026-10-22T10:00:00Z' }), ...filler(99)])]], pages: [laterPage([check('verify', 'SUCCESS', { startedAt: '2026-10-22T11:00:00Z' })])] }));
+  assert.equal(rerun.code, EXIT.ok);
+  // verify only on the third page: pages are followed until hasNextPage is false
+  const third = world({ polls: [[firstPage(filler(100))]], pages: [laterPage(filler(100), { next: 'c2' }), laterPage([check('verify')])] });
+  assert.equal((await run(third)).code, EXIT.ok);
+  assert.equal(third.calls.pageQueries.length, 2);
+  assert.match(third.calls.pageQueries[1], /after: "c2"/);
+  assert.equal(third.calls.queries, 1, 'one batched poll; extra pages only because the rollup needed them');
+  // a rollup that fits one page costs no extra query
+  const small = world({ polls: [[pr()]] });
+  await run(small);
+  assert.equal(small.calls.pageQueries.length, 0);
+});
+
+test('commit targets page the rollup too', async () => {
+  const first = commitData(filler(100));
+  first.repository.object.statusCheckRollup.contexts.pageInfo = { hasNextPage: true, endCursor: 'c1' };
+  const setup = world({ polls: [[first]], pages: [laterPage([check('verify')])], targets: [parseTarget('o/r@aaaaaaaaaaaa', { commit: true })], commit: true });
+  assert.equal((await run(setup)).code, EXIT.ok);
+});
+
+test('an incomplete rollup page fails closed: nothing is judged, never green or red from a partial list', async () => {
+  const cases = {
+    'a failed page query': () => {
+      throw new Error('502 Bad Gateway');
+    },
+    'a page of another commit': laterPage([check('verify')], { oid: OTHER }),
+    'a missing commit': { repository: { object: null } },
+    'a malformed page': { repository: { object: { oid: HEAD, statusCheckRollup: { contexts: { nodes: [check('verify')] } } } } },
+    'a repeated cursor': laterPage(filler(100), { next: 'c1' }),
+    'a next page without a cursor': { repository: { object: { oid: HEAD, statusCheckRollup: { contexts: { pageInfo: { hasNextPage: true }, nodes: filler(1) } } } } },
+  };
+  for (const [name, page] of Object.entries(cases)) {
+    // verify succeeded and a failure is on the unread page; the gate must not report green, and never red from the part it has either
+    const setup = world({ timeoutMinutes: 5, polls: [[firstPage([check('verify'), ...filler(99)])]], pages: [page] });
+    const outcome = await run(setup);
+    assert.equal(outcome.code, EXIT.timeout, name);
+    assert.ok(setup.log.some((line) => /not judged this poll/.test(line)), name);
+  }
+  // a rollup longer than MAX_CONTEXT_PAGES further pages is refused too
+  let issued = 0;
+  const endless = world({ timeoutMinutes: 2, polls: [[firstPage(filler(100))]], pages: [() => laterPage(filler(100), { next: `n${issued++}` })] });
+  assert.equal((await run(endless)).code, EXIT.timeout);
+  assert.equal(endless.calls.pageQueries.length, MAX_CONTEXT_PAGES * endless.calls.queries, 'at most MAX_CONTEXT_PAGES further pages per poll; the next poll tries again');
+  // a transient page failure heals on the next poll
+  const heals = world({ polls: [[firstPage(filler(100))]], pages: [() => { throw new Error('502'); }, laterPage([check('verify')])] });
+  assert.equal((await run(heals)).code, EXIT.ok);
+});
 
 test('arguments: targets, flags, one head per target, and what the shrunk gate no longer accepts', () => {
   assert.deepEqual(parseTarget('OpenPresentation/opf#803'), { kind: 'pr', owner: 'OpenPresentation', name: 'opf', number: 803 });
