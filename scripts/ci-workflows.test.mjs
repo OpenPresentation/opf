@@ -1,4 +1,4 @@
-// MR-30: the shape of the monorepo CI workflows (ci.yml, nightly.yml, slow-checks.yml and the setup action) against the plan
+// MR-30: the shape of the monorepo CI workflows (ci.yml, full-ci.yml, nightly.yml, slow-checks.yml and the setup action) against the plan
 // (docs/programs/monorepo/README.md, section 4) and against scripts/ci-scope.mjs, whose output decides which jobs run.
 // Text-level on purpose: the repository has no YAML parser dependency. actionlint covers the syntax.
 import assert from 'node:assert/strict';
@@ -6,12 +6,13 @@ import { readFileSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
-import { LEG_PLAN, PACKAGE_IDS, TARGET_GRAPH, scope } from './ci-scope.mjs';
+import { JOB_SHAPE, LEG_PLAN, TARGET_GRAPH, scope } from './ci-scope.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const read = (relative) => readFileSync(path.join(root, relative), 'utf8');
 const ci = read('.github/workflows/ci.yml');
 const nightly = read('.github/workflows/nightly.yml');
+const fullCi = read('.github/workflows/full-ci.yml');
 const slow = read('.github/workflows/slow-checks.yml');
 const setup = read('.github/actions/setup-workspace/action.yml');
 
@@ -44,7 +45,7 @@ const workflows = readdirSync(workflowDir).filter((name) => name.endsWith('.yml'
 // MR-34: the per-repository, merge-queue and cross-repository workflows are gone. A new workflow is a deliberate addition to
 // this list (and to the plan, docs/programs/monorepo/README.md, section 2).
 test('the workflows and actions are the monorepo set; the retired coordination machinery stays deleted', () => {
-  assert.deepEqual(workflows, ['bump-sites.yml', 'ci.yml', 'golden.yml', 'nightly.yml', 'npm-publish.yml', 'release.yml', 'slow-checks.yml', 'tracker-refresh.yml']);
+  assert.deepEqual(workflows, ['bump-sites.yml', 'ci.yml', 'full-ci.yml', 'golden.yml', 'nightly.yml', 'npm-publish.yml', 'release.yml', 'slow-checks.yml', 'tracker-refresh.yml']);
   // ecosystem-refs is the frozen shim the archived repositories' CI still calls until MR-60.
   assert.deepEqual(readdirSync(path.join(root, '.github/actions')).sort(), ['ecosystem-refs', 'setup-workspace']);
 });
@@ -75,68 +76,99 @@ test('ci.yml: pull_request, push to main and workflow_dispatch only: no merge qu
   assert.match(ci, /^permissions:\n {2}contents: read$/mu);
 });
 
-test('verify: the one required job, named verify, always runs and waits for every job the scope can select', () => {
-  const ids = jobsOf(ci).map((entry) => entry.id);
+test('verify: the one required job, named verify, always runs and waits for the scope and the matrix job', () => {
   assert.equal(jobsOf(ci).filter((entry) => /^ {4}name: verify$/mu.test(entry.text)).length, 1, 'exactly one job is named verify');
   const verify = job(ci, 'verify');
   assert.match(verify.text, /^ {4}if: \$\{\{ always\(\) \}\}$/mu);
-  const needs = needsOf(verify);
-  for (const key of Object.keys(everything.jobs)) assert.ok(needs.includes(key), `verify needs the job ${key} the scope names`);
-  assert.ok(needs.includes('scope'));
-  assert.ok(needs.includes('slow'), 'verify waits for the full-ci call of the slow set');
-  for (const id of ids) if (!['verify', 'report-main'].includes(id)) assert.ok(needs.includes(id), `verify needs ${id}`);
-  assert.deepEqual(needs.filter((id) => !ids.includes(id)), [], 'verify needs only jobs of this file');
-  assert.match(verify.text, /node scripts\/ci-verify\.mjs --optional "\$OPTIONAL"/u);
+  assert.deepEqual(needsOf(verify).sort(), ['check', 'scope'], 'verify needs the matrix job that holds every leg, and the scope');
+  assert.match(verify.text, /node scripts\/ci-verify\.mjs$/mu);
   assert.match(verify.text, /NEEDS: \$\{\{ toJSON\(needs\) \}\}/u);
   assert.match(verify.text, /JOBS: \$\{\{ needs\.scope\.outputs\.jobs \}\}/u);
+  assert.match(verify.text, /LEGS: \$\{\{ needs\.scope\.outputs\.legs \}\}/u, 'verify checks the legs against the jobs the scope selected');
 });
 
-test('every job the scope can select has a job of that id, gated on its own key of the scope output', () => {
-  const ids = jobsOf(ci).map((entry) => entry.id);
+test('no skipped checks: ci.yml is scope, one matrix job and verify; no job but verify has an `if:`, so none is ever listed as skipped', () => {
+  assert.deepEqual(jobsOf(ci).map((entry) => entry.id), ['scope', 'check', 'verify']);
+  for (const entry of jobsOf(ci)) {
+    if (entry.id === 'verify') continue;
+    assert.doesNotMatch(entry.text, /^ {4}if:/mu, `${entry.id} has no job-level if (a false one is a skipped check)`);
+  }
+  assert.doesNotMatch(ci, /^ {2}(slow|report-main|audit|gallery|core|cli|render|pptx|editor|integration|goldens|gallery-gates|pack-shape|lint):/mu, 'the per-package jobs are legs of the matrix');
+  assert.doesNotMatch(ci, /fromJSON\(needs\.scope\.outputs\.jobs\)/u, 'nothing is gated on the skip value of the scope any more');
+  assert.doesNotMatch(ci, /uses: \.\/\.github\/workflows\//u, 'the slow set is its own workflow (full-ci.yml)');
+});
+
+test('the matrix job: its matrix is the legs of the scope, named like the old jobs, with the legs deciding how each runs', () => {
+  const check = job(ci, 'check').text;
+  assert.deepEqual(needsOf(job(ci, 'check')), ['scope']);
+  assert.match(check, /^ {4}name: \$\{\{ matrix\.name \}\}$/mu);
+  assert.match(check, /^ {4}timeout-minutes: \$\{\{ matrix\.timeout \}\}$/mu);
+  assert.match(check, /fail-fast: false/u, 'a red leg does not cancel the others');
+  assert.ok(check.includes('include: ${{ fromJSON(needs.scope.outputs.legs) }}'), 'the matrix is the scope output');
+  assert.match(check, /container: \$\{\{ matrix\.browser && 'mcr\.microsoft\.com\/playwright:v\d+\.\d+\.\d+-noble@sha256:[0-9a-f]{64}' \|\| '' \}\}/u, 'the browser legs run in the pinned Playwright image, the others on the host');
+  assert.match(check, /fetch-depth: \$\{\{ matrix\.fetchDepth \}\}/u);
+  assert.match(check, /filter: \$\{\{ matrix\.filter \}\}/u);
+  assert.match(check, /container: \$\{\{ matrix\.browser && 'true' \|\| 'false' \}\}/u, 'the setup action knows it runs in the container');
+  assert.match(check, /build-deps: \$\{\{ matrix\.buildDeps \}\}/u);
+  assert.match(check, /build-also: \$\{\{ matrix\.buildAlso \}\}/u);
+  assert.match(check, /OPF_REUSE_BUILD: \$\{\{ matrix\.reuse && format\('\{0\}-\{1\}-\{2\}', github\.run_id, github\.run_attempt, matrix\.id\) \|\| '' \}\}/u);
+  assert.match(check, /OPF_TRACKER_STALE: \$\{\{ matrix\.job == 'lint' && github\.event_name == 'pull_request' && 'warn' \|\| 'fail' \}\}/u, 'only lint downgrades a stale tracker');
+  assert.match(check, /run-checks\.mjs --shard "\$\{\{ matrix\.index \}\}\/\$\{\{ matrix\.count \}\}"/u, 'the check legs run their shard');
+  assert.match(check, /name: evidence-\$\{\{ matrix\.id \}\}/u, 'artifact names are unique per leg');
+});
+
+test('every job and leg kind the scope can emit has a step that runs it, and every step is guarded by its job', () => {
+  const check = job(ci, 'check').text;
+  const steps = check.slice(check.indexOf('\n    steps:\n')).split(/\n {6}- /u).slice(1);
+  const unguarded = steps.filter((step) => !/\bif: /u.test(step)).map((step) => step.split('\n')[0]);
+  assert.deepEqual(unguarded, ['name: Checkout', 'uses: ./.github/actions/setup-workspace'], 'only the checkout and the setup are common to every leg');
   for (const key of Object.keys(everything.jobs)) {
-    assert.ok(ids.includes(key), `ci.yml has a job ${key}`);
-    if (key === 'lint') continue; // always runs
-    const entry = job(ci, key);
-    const gate = key.includes('-') ? `fromJSON(needs.scope.outputs.jobs)['${key}'] != 'skip'` : `fromJSON(needs.scope.outputs.jobs).${key} != 'skip'`;
-    assert.ok(entry.text.includes(gate), `${key} is gated on ${gate}`);
-    assert.ok(entry.text.includes("needs.scope.result == 'success'"), `${key} does not evaluate the scope output when scope failed`);
-    assert.deepEqual(needsOf(entry), ['scope'], key);
+    assert.ok(check.includes(`matrix.job == '${key}'`), `the matrix job has steps for ${key}`);
+    assert.ok(everything.legs.some((leg) => leg.job === key) || key === 'audit', `a forced run has legs of ${key}`);
   }
-});
-
-test('the matrix jobs take their legs from the scope, one job per package of LEG_PLAN that has a browser or shard matrix', () => {
-  assert.ok(job(ci, 'lint').text.includes('include: ${{ fromJSON(needs.scope.outputs.legs).lint }}'), 'lint reads its legs');
-  assert.match(job(ci, 'lint').text, /run-checks\.mjs --shard "\$\{\{ matrix\.index \}\}\/\$\{\{ matrix\.count \}\}"/u, 'the check legs run their shard');
-  for (const id of ['render', 'pptx', 'editor']) {
-    assert.ok(job(ci, id).text.includes(`include: \${{ fromJSON(needs.scope.outputs.legs).${id} }}`), `${id} reads its legs`);
-    assert.match(job(ci, id).text, /container: mcr\.microsoft\.com\/playwright:v\d+\.\d+\.\d+-noble@sha256:[0-9a-f]{64}/u, `${id} runs in the pinned Playwright image`);
-  }
-  // The jobs that are not matrices have one `tests` leg in the plan.
-  for (const id of PACKAGE_IDS.filter((entry) => !['render', 'pptx', 'editor'].includes(entry))) {
-    assert.deepEqual(LEG_PLAN[id].full, [['tests', 1]], id);
-    assert.deepEqual(LEG_PLAN[id].contract, [['tests', 1]], id);
-  }
-  // Each kind a plan names is handled by a step of its job.
+  assert.deepEqual(Object.keys(JOB_SHAPE).filter((key) => !check.includes(`matrix.job == '${key}'`)), [], 'every job of the plan has steps');
+  // Each kind a plan names is handled by a step of its job (a step that names no kind runs for every leg of the job).
+  const handles = (step, id, kind) => step.includes(`matrix.job == '${id}'`) && (!step.includes('matrix.kind') || step.includes(`matrix.kind == '${kind}'`) || (step.includes("matrix.kind != 'tests'") && kind !== 'tests'));
   for (const [id, plan] of Object.entries(LEG_PLAN)) {
     for (const kind of new Set(Object.values(plan).flatMap((legs) => legs.map(([name]) => name)))) {
-      if (!['render', 'pptx', 'editor'].includes(id)) continue;
-      assert.ok(job(ci, id).text.includes(`matrix.kind == '${kind}'`) || job(ci, id).text.includes(`matrix.kind != 'tests'`), `${id} has a step for its ${kind} leg`);
+      assert.ok(steps.some((step) => handles(step, id, kind)), `${id} has a step for its ${kind} leg`);
     }
   }
+  assert.match(check, /name: Audit the dependencies\n\s+if: \$\{\{ matrix\.job == 'audit' \}\}\n\s+run: pnpm audit/u);
+});
+
+test('the legs of the browser jobs run in the Playwright image and the others do not', () => {
+  const browser = Object.entries(JOB_SHAPE).filter(([, shape]) => shape.browser).map(([id]) => id).sort();
+  assert.deepEqual(browser, ['editor', 'goldens', 'pptx', 'render']);
+  assert.ok(everything.legs.filter((leg) => leg.browser).every((leg) => browser.includes(leg.job)));
 });
 
 test('ci.yml runs on Linux only and keeps the slow set out of the pull request path', () => {
   assert.doesNotMatch(ci, /windows-|macos-/u, 'Windows and macOS are nightly legs');
   assert.doesNotMatch(ci, /node-version: (22|26)\b/u, 'Node 22 and 26 are nightly legs');
   assert.doesNotMatch(ci, /test:packed|pack:ecosystem|test:registry|published-matrix|installed-parity/u, 'the packed-install and registry consumers are nightly');
-  const call = job(ci, 'slow');
+  assert.doesNotMatch(ci, /uses: .*nightly\.yml/u, 'ci.yml does not call the nightly set');
+});
+
+test('full-ci.yml: the label full-ci runs the slow set in a workflow of its own, so an unlabeled pull request shows no entry', () => {
+  const triggers = triggersOf(fullCi);
+  assert.match(triggers, /^ {2}pull_request:\n {4}types: \[labeled\]/mu, 'only when a label is added');
+  assert.match(triggers, /^ {2}workflow_dispatch:/mu);
+  assert.doesNotMatch(triggers, /push:|merge_group|synchronize|schedule/u, 'a push must not run (and skip) a job on a pull request without the label');
+  assert.deepEqual(jobsOf(fullCi).map((entry) => entry.id), ['slow']);
+  const call = job(fullCi, 'slow');
+  assert.match(call.text, /^ {4}name: slow set \(only with the full-ci label\)$/mu, 'the name says why it runs');
+  assert.match(call.text, /github\.event\.label\.name == 'full-ci'/u);
   assert.match(call.text, /uses: \.\/\.github\/workflows\/nightly\.yml/u);
   assert.match(call.text, /report: false/u);
-  assert.match(call.text, /needs\.scope\.outputs\.slow == 'true'/u);
+  assert.match(call.text, /issues: write/u, 'the called nightly report job asks for it, so the caller grants it');
+  assert.match(fullCi, /^permissions:\n {2}contents: read$/mu);
+  assert.match(nightly, /^ {2}workflow_call:/mu);
+  assert.match(read('scripts/ci-scope.mjs'), /label full-ci/u, 'the label still makes ci.yml run everything at full');
 });
 
 test('every third-party action is pinned to a commit and every composite run step names its shell', () => {
-  for (const [name, text] of [['ci.yml', ci], ['nightly.yml', nightly], ['slow-checks.yml', slow], ['setup-workspace', setup]]) {
+  for (const [name, text] of [['ci.yml', ci], ['full-ci.yml', fullCi], ['nightly.yml', nightly], ['slow-checks.yml', slow], ['setup-workspace', setup]]) {
     for (const [, action] of text.matchAll(/^\s*(?:-\s+)?uses:\s*(\S+)/gmu)) {
       if (action.startsWith('./')) continue;
       assert.match(action, /@[0-9a-f]{40}$/u, `${name}: ${action} is not pinned to a commit`);
@@ -148,16 +180,20 @@ test('every third-party action is pinned to a commit and every composite run ste
 });
 
 test('issues: write is granted only to the reporters and to the caller of the reusable nightly', () => {
-  for (const [name, text] of [['ci.yml', ci], ['nightly.yml', nightly], ['slow-checks.yml', slow]]) {
+  for (const [name, text] of [['ci.yml', ci], ['full-ci.yml', fullCi], ['nightly.yml', nightly], ['slow-checks.yml', slow]]) {
     assert.match(text, /^permissions:\n {2}contents: read$/mu, `${name}: the default token is read-only`);
     for (const entry of jobsOf(text)) {
-      if (/issues: write/u.test(entry.text)) assert.ok(['report', 'report-main', 'slow'].includes(entry.id), `${name}: ${entry.id} asks for issues: write`);
+      if (/issues: write/u.test(entry.text)) assert.ok(['report', 'verify', 'slow'].includes(entry.id), `${name}: ${entry.id} asks for issues: write`);
     }
   }
   assert.match(job(nightly, 'report').text, /issues: write/u);
   assert.match(job(slow, 'report').text, /issues: write/u);
-  assert.match(job(ci, 'report-main').text, /github\.ref == 'refs\/heads\/main'/u);
-  for (const text of [nightly, slow, ci]) assert.doesNotMatch(text, /secrets\.|create-github-app-token/u, 'the reporters use the workflow token only');
+  // The red-main reporter is the last step of verify (a `report main` job would be listed as skipped on every pull request).
+  const verify = job(ci, 'verify').text;
+  assert.match(verify, /name: Open, update or close the main-red issue\n\s+if: \$\{\{ always\(\) && github\.event_name == 'push' && github\.ref == 'refs\/heads\/main' \}\}\n\s+continue-on-error: true/u, 'only on a push to main, and it never fails verify');
+  assert.match(verify, /ci-report-issue\.mjs --label main-red/u);
+  assert.match(verify, /format\('\{\{"verify":\{\{"result":"\{0\}"\}\}\}\}', job\.status\)/u, 'the reporter reads the status of the job, the verdict included');
+  for (const text of [nightly, slow, ci, fullCi]) assert.doesNotMatch(text, /secrets\.|create-github-app-token/u, 'the reporters use the workflow token only');
 });
 
 test('nightly.yml: schedule, dispatch and call; never a pull request or push; every cross-platform leg of the old CI is here', () => {
@@ -200,7 +236,7 @@ test('slow-checks.yml: weekly, on demand, or by the label slow-checks; its jobs 
 });
 
 test('the pinned Playwright image is one string in the three workflows', () => {
-  const images = new Set([...`${ci}${nightly}${slow}`.matchAll(/mcr\.microsoft\.com\/playwright:[^\s'"]+/gu)].map((match) => match[0]));
+  const images = new Set([...`${ci}${nightly}${slow}${fullCi}`.matchAll(/mcr\.microsoft\.com\/playwright:[^\s'"]+/gu)].map((match) => match[0]));
   assert.equal(images.size, 1, [...images].join(' '));
 });
 
@@ -227,11 +263,11 @@ test('a pnpm filter that matches no package must fail: pnpm exits 0 on an empty 
   }
 });
 
-test('lint has a docs leg without a build, and audit is its own job gated by the scope', () => {
-  const lint = job(ci, 'lint').text;
-  assert.match(lint, /matrix\.kind == 'docs'[^\n]*\n\s+run: node scripts\/check-changed\.mjs --base "origin\/\$\{\{ github\.base_ref \}\}"/u);
-  assert.match(lint, /name: Build every package\n\s+if: \$\{\{ matrix\.kind != 'docs' \}\}/u, 'the docs leg does not build');
-  assert.match(job(ci, 'audit').text, /pnpm audit/u);
+test('lint has a docs leg without a build, and audit is a leg that exists only when the scope selects it', () => {
+  const check = job(ci, 'check').text;
+  assert.match(check, /matrix\.job == 'lint' && matrix\.kind == 'docs'[^\n]*\n\s+run: node scripts\/check-changed\.mjs --base "origin\/\$\{\{ github\.base_ref \}\}"/u);
+  assert.match(check, /name: Build every package\n\s+if: \$\{\{ \(matrix\.job == 'lint' && matrix\.kind != 'docs'\) \|\| matrix\.job == 'pack-shape' \}\}/u, 'the docs leg does not build');
+  assert.match(check, /pnpm audit/u);
   assert.match(job(nightly, 'audit').text, /pnpm audit/u, 'and the nightly audits every night');
   assert.match(nightly, /name: editor playground on macOS \(\$\{\{ matrix\.shard \}\}\/2\)/u, 'macOS legs: 1 + 1 + 2 + 1 = 5, the account limit');
 });

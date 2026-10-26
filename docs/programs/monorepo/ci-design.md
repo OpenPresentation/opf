@@ -6,12 +6,13 @@ Status: drafted 2026-10-22 on `codex/mr-30-ci` (draft pull request [opf#798](htt
 
 | File | What it is |
 | --- | --- |
-| `.github/workflows/ci.yml` | `pull_request`, `push` to `main`, `workflow_dispatch`. The one required check is the job `verify`. No `merge_group`, no `labeled` type. |
-| `.github/workflows/nightly.yml` | `schedule` (02:17 UTC), `workflow_dispatch` and `workflow_call`. Windows, macOS, Node 22 and 26, packed-install, registry consumers, the npm 12 consumer (`npm12-consumer`: the six packed packages installed by an exact npm 12 with its defaults, which skip install scripts and refuse git and remote dependencies), `pnpm audit`, platform residual, flake measurement (Sundays). Opens or updates the issue `nightly-red`. Called by `ci.yml` for the label `full-ci` and, from MR-40, by `npm-publish.yml` as the pre-release gate (`report: false`). |
+| `.github/workflows/ci.yml` | `pull_request`, `push` to `main`, `workflow_dispatch`. Three jobs: `scope`, `check` (one matrix job holding every leg) and `verify`, the one required check. No `merge_group`, no `labeled` type, and no job with an `if:` apart from `verify`'s `always()` (see [No skipped checks](#no-skipped-checks)). |
+| `.github/workflows/full-ci.yml` | The label `full-ci` (`pull_request` `labeled`) or `workflow_dispatch`: calls `nightly.yml` (`report: false`) as `slow set (only with the full-ci label)`. Not part of `verify`. |
+| `.github/workflows/nightly.yml` | `schedule` (02:17 UTC), `workflow_dispatch` and `workflow_call`. Windows, macOS, Node 22 and 26, packed-install, registry consumers, the npm 12 consumer (`npm12-consumer`: the six packed packages installed by an exact npm 12 with its defaults, which skip install scripts and refuse git and remote dependencies), `pnpm audit`, platform residual, flake measurement (Sundays). Opens or updates the issue `nightly-red`. Called by `full-ci.yml` for the label `full-ci` and, from MR-40, by `npm-publish.yml` as the pre-release gate (`report: false`). |
 | `.github/workflows/slow-checks.yml` | Tuesday 05:23 UTC, dispatch, or the label `slow-checks`. Full golden corpus with every slide kept, published matrix with the determinism grid, installed parity (the last two are ports of `published-matrix.yml` and `installed-parity.yml`). Issue `slow-checks-red` on a red schedule. |
 | `.github/actions/setup-workspace/action.yml` | pnpm, Node 24, the pnpm store cache (`setup-node` `cache: pnpm`), `pnpm install --frozen-lockfile` of the whole workspace, optional build of one package's dependencies. In the Playwright container pnpm comes from the npm registry (the old per-repository logs show `pnpm/action-setup` taking 2.5 to 5 minutes there). |
-| `scripts/ci-scope.mjs` | MR-14, extended: `legs` (the matrix of each package job per tier, `LEG_PLAN`). |
-| `scripts/ci-verify.mjs` | The `verify` verdict: scope-selected jobs must succeed, skipped by scope is success, skipped otherwise is failure, an unreadable scope output fails. |
+| `scripts/ci-scope.mjs` | MR-14, extended: `legs`, the flat matrix of every selected job (`LEG_PLAN` says which legs a package has per tier, `JOB_SHAPE` how each job runs: container, checkout, timeout, builds). |
+| `scripts/ci-verify.mjs` | The `verify` verdict: every job the scope selected has legs in the matrix and the matrix job succeeded, a job it skipped has no leg, an empty matrix or an unreadable scope output fails. |
 | `scripts/ci-report-issue.mjs` | Opens, updates or closes one issue per label with the workflow token (`gh api`); `--dry-run`. |
 | `scripts/ci-test-shards.mjs` | `--package render\|pptx\|editor --script test\|test:contract --shard i/n`: runs shard i of the package's `test` chain in `packages/<id>` (weights in `ci-test-weights.json`, shard 1 carries 100 s of extra steps; it reads the converted package scripts of MR-23: the root `../../scripts/run-tests.mjs` and the repeated `build:deps` step). The old `--sibling` mode stays until MR-34. |
 | `scripts/quarantine.mjs`, `scripts/run-checks.mjs` | `--shard i/n` added (browser suites, root checks). |
@@ -19,12 +20,14 @@ Status: drafted 2026-10-22 on `codex/mr-30-ci` (draft pull request [opf#798](htt
 
 ## Job graph of `ci.yml`
 
-`scope` (no install, about 30 s) runs `ci-scope.mjs` and publishes `jobs` (tier per job) and `legs` (matrix per job). Every other job `needs: scope` and is gated on its own key of `jobs`; `verify` needs all of them and runs `always()`.
+`scope` (no install, about 30 s) runs `ci-scope.mjs` and publishes `jobs` (tier per job) and `legs` (the matrix: one entry per leg of every selected job). `check` is one job whose matrix is `legs`; each entry carries its job, leg kind and shard, whether it runs in the Playwright image, its checkout depth, timeout and what to build first, and the steps of `check` are guarded by `matrix.job` and `matrix.kind`. `verify` needs `scope` and `check` and runs `always()`. The check names are the old job names (`lint (static)`, `render (tests 1/4)`, `core`, `goldens`).
+
+The "job" column below is the `job` of a leg, not a workflow job.
 
 | Job | Runs when | Legs (full tier) | Contract tier (dependent of a changed package) | Where |
 | --- | --- | --- | --- | --- |
 | `lint` | always | `static` (Biome, typecheck, examples, breaking gate, changelog warning), `checks 1/2`, `checks 2/2` (the 73 root `check:*`); a docs-only change has the one `docs` leg instead (`check-changed.mjs`: Biome, `check:text` and the other mapped checks, no build) | same | ubuntu-24.04 |
-| `audit` | the lockfile or a `package.json` changed (not merely forced) | 1 (`pnpm audit`; the nightly audits every night) | n/a | ubuntu-24.04 |
+| `audit` | the lockfile, `pnpm-workspace.yaml` or a `package.json` changed, or a push to `main` (not merely forced by the label or a tooling path) | 1 (`pnpm audit`; the nightly audits every night) | n/a | ubuntu-24.04 |
 | `gallery` | gallery changed | 1 (license, verify, build, test, typecheck, pack dry run) | 1 | ubuntu-24.04 |
 | `core` | core or gallery changed | 1 (`pnpm --filter opf test`) | 1 | ubuntu-24.04 |
 | `cli` | any package it depends on, or itself | 1 | 1 | ubuntu-24.04 |
@@ -35,9 +38,7 @@ Status: drafted 2026-10-22 on `codex/mr-30-ci` (draft pull request [opf#798](htt
 | `goldens` | a golden input changed | 1 (`test:golden`, changed slides as artifact) | n/a | Playwright image |
 | `gallery-gates` | gallery, core or render changed | 1 (`check:previews`; `check:stability` reports only until MR-35) | n/a | ubuntu-24.04 |
 | `pack-shape` | any package changed | 1 (build all, `npm pack --dry-run` of the six) | n/a | ubuntu-24.04 |
-| `slow` | label `full-ci` | the nightly set via `workflow_call` (`report: false`) | n/a | see nightly |
-| `verify` | always | `scripts/ci-verify.mjs` | | ubuntu-24.04 |
-| `report-main` | push to `main` | opens/closes the issue `main-red` | | ubuntu-24.04 |
+| `verify` (a job of its own) | always | `scripts/ci-verify.mjs`; on a push to `main` its last step opens, updates or closes the issue `main-red` (a `report main` job would be listed as skipped on every pull request) | | ubuntu-24.04 |
 
 What each class of change runs (from `ci-scope.mjs`, graph = the plan's target graph):
 
@@ -50,9 +51,26 @@ What each class of change runs (from `ci-scope.mjs`, graph = the plan's target g
 | pptx | `lint`, `pptx`, `editor`*, `cli`*, `integration`*, `pack-shape` | 3 + 5 + 2 + 1 + 1 + 1 |
 | core, `spec/`, `examples/` | `lint`, `core`, `render`*, `pptx`*, `editor`*, `cli`*, `integration`*, `goldens`, `gallery-gates`, `pack-shape` | 3 + 1 + 3 + 4 + 2 + 1 + 1 + 1 + 1 + 1 |
 | gallery records | the core row plus `gallery` | +1 |
-| `scripts/`, workflows, lockfile, `full-ci`, push to main, dispatch | everything at full (`audit` too when the lockfile or a manifest changed) | 3 + 1 + 1 + 1 + 5 + 5 + 7 + 1 + 1 + 1 + 1 (27 legs, 29 jobs with `scope` and `verify`) |
+| `scripts/`, workflows, lockfile, `full-ci`, push to main, dispatch | everything at full (`audit` too when the lockfile, the workspace file or a manifest changed, or on a push; the label also starts `full-ci.yml`) | 3 + 1 + 1 + 1 + 5 + 5 + 7 + 1 + 1 + 1 + 1 (27 legs, 29 jobs with `scope` and `verify`) |
 
 (`*` = contract tier.)
+
+## No skipped checks
+
+GitHub lists a job whose `if:` is false as a **skipped** check, so the first version of `ci.yml` (one job per package, each with an `if:`) showed up to ten "skipped" entries on a pull request that touched one package, plus `audit`, `slow set (full-ci)` and `report main` on every pull request. They were harmless (`verify` is the only required check and counted skipped-by-scope as success) and noisy. What a pull request shows now is what ran, and nothing else:
+
+| What was skipped | What replaced it |
+| --- | --- |
+| a package job the scope did not select (up to 10) | no entry. The per-package jobs are legs of **one** matrix job, `check`, and `scope` writes the matrix from the selection (`fromJSON(needs.scope.outputs.legs)`), so an unselected job has no matrix entry and no check. |
+| `audit` | a leg `audit`, present only when the lockfile, `pnpm-workspace.yaml` or a package manifest changed, or on a push (an entry in the same matrix, not a job with an `if:`; a step inside another leg would have made `lint (static)` longer, the leg runs in parallel). |
+| `slow set (full-ci)` | its own workflow, `full-ci.yml`, started by the label (`pull_request` `labeled`) or by hand, so a pull request without the label has no entry for it. It is no longer a need of `verify`: with the label, wait for it with `pr-gate --required all`. Adding another label shows one skipped `slow set` entry (`slow-checks.yml` behaves the same way), because the label is only known inside the run. After a push the set does not re-run by itself: remove and add the label again, or run the workflow on the branch. |
+| `report main` | a last step of `verify` (`if:` push to `main`, `continue-on-error`). A skipped step is not a check. |
+
+**Why an empty matrix cannot be the pattern.** An `include` list that is empty makes the job itself skipped (or an error), and a job-level `if: needs.scope.outputs.x != '[]'` is exactly the skipped entry this removes. So there is no per-package matrix that can be empty: one matrix holds everything, and `lint` is always selected (a docs-only change gets the one `docs` leg), so the matrix has at least one entry for every possible change. `scripts/ci-scope.test.mjs` asserts that for every kind of change, and `ci-verify.mjs` fails on an empty matrix. The remaining `scope` failure case (the matrix job skipped because `scope` failed) is red anyway.
+
+**What `verify` still guarantees** (`scripts/ci-verify.mjs`, tested): `scope` succeeded; every job the scope selected has at least one leg in the matrix (a selected job without legs, or legs of a job the scope skipped, means the workflow and the scope drifted apart); `check`, which succeeds only when every leg succeeded, succeeded (a red, cancelled or skipped leg makes it not succeed); no other job that `verify` waits for failed. A change under `scripts/`, `.github/`, the lockfile or the workspace files still runs everything at full.
+
+**Adding a job.** Add it to `JOB_SHAPE` (and `JOB_ORDER`, and `LEG_PLAN` when it has shards or tiers) in `scripts/ci-scope.mjs`, decide when the scope selects it, and add steps to `check` guarded by `matrix.job == '<job>'`. Do not add a job with an `if:` to `ci.yml`: `scripts/ci-workflows.test.mjs` fails on it. The container of a leg is an expression (`matrix.browser && '<image>' || ''`; an empty container runs on the host).
 
 ## Timing budget (estimate; MR-32 measures)
 

@@ -8,7 +8,8 @@ name: Nightly
 #   - schedule and workflow_dispatch: the nightly run, with the issue reporter. Sunday's run also runs the flake measurement.
 #   - workflow_call from npm-publish.yml (MR-40): the pre-release gate, run on the release commit before anything is published.
 #     `report: false` (the default for a call): a failure stops the release and opens no nightly issue.
-#   - workflow_call from ci.yml: the label `full-ci` runs the same legs on a pull request that touches OS- or Node-specific code.
+#   - workflow_call from full-ci.yml: the label `full-ci` runs the same legs on a pull request that touches OS- or Node-specific code
+#     (a workflow of its own so an unlabeled pull request shows no skipped check for it).
 #
 # Coverage that moved here from the per-repository and merge-queue workflows (nothing disappears, decision D15):
 #   cli-portability     the old cli-windows workflow (Windows, macOS: core and CLI unit and packed tests)
