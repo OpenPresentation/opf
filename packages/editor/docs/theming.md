@@ -21,7 +21,7 @@ The editor's chrome (the source pane, the slide row, the export menu, the presen
 | Border | `border` | `--opf-ui-border` | `hsl(214 22% 83%)` | `hsl(220 17% 24%)` |
 | Border | `borderStrong` | `--opf-ui-border-strong` | `hsl(214 22% 72%)` | `hsl(220 17% 34%)` |
 | Status | `danger` | `--opf-ui-danger` | `hsl(0 72% 45%)` | `hsl(0 65% 56%)` |
-| Status | `warning` | `--opf-ui-warn` | `hsl(28 75% 38%)` | `hsl(32 80% 70%)` |
+| Status | `warning` | `--opf-ui-warn` | `hsl(28 75% 30%)` | `hsl(32 80% 70%)` |
 | Status | `success` | `--opf-ui-success` | `hsl(152 76% 26%)` | `hsl(152 60% 70%)` |
 | Code | `codeBackground` | `--opf-ui-code-bg` | `hsl(220 30% 96%)` | `hsl(222 22% 13%)` |
 | Code | `codeBorder` | `--opf-ui-code-border` | `hsl(214 18% 84%)` | `hsl(220 16% 24%)` |
@@ -42,6 +42,7 @@ Rules every component follows, and a host can rely on:
 - `accent` fills the one primary action and marks the current item; `accentText` is the text on it; `accentStrong` is the accent as text or a link on a surface; `focus` is the 2px focus ring.
 - `danger`, `warning` and `success` are text and icon colors on a surface, never fills.
 - The package's own values are chosen for WCAG AA contrast in these pairs; when you change one, check the pair in both schemes: `text` on `surface`, `textMuted` on `surface`, `accentStrong` on `surface` and `accentText` on `accent`.
+- A selection in a code surface is `accent` at 16% over what is behind it; the text keeps its own colors, so `text`, `textMuted`, `accentStrong` and `warning` must keep 4.5:1 against that tint as well (`test/selection-contrast-browser.mjs` measures it in both schemes). The code views are flagged dark for CodeMirror when the tokens resolve to a dark `color-scheme` and follow a later change of the page, so a host never sets that itself.
 
 ## `theme` on `createOpfEditor` (and `<OpfEditor>`)
 

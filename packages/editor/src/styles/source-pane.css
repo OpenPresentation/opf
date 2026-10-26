@@ -158,8 +158,7 @@
 .opf-source-code .cm-gutters { border: 0; background: transparent; color: color-mix(in srgb, var(--opf-ui-muted-fg) 60%, transparent); }
 .opf-source-code .cm-lineNumbers .cm-gutterElement { min-width: 30px; padding: 0 12px 0 0; text-align: right; font-size: 11px; }
 .opf-source-code .cm-activeLine { background: transparent; }
-.opf-source-code .cm-selectionBackground,
-.opf-source-code .cm-focused .cm-selectionBackground { background: color-mix(in srgb, var(--opf-ui-accent) 16%, transparent); }
+/* The selection color is the shared one in panels.css (JSON editor section). */
 .opf-source-code .cm-cursor { border-left-color: var(--opf-ui-fg); }
 .opf-source-code .tok-key { color: var(--opf-ui-accent-strong); }
 .opf-source-code .tok-str { color: var(--opf-ui-fg); }

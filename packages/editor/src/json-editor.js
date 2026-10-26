@@ -18,6 +18,7 @@ import {createDiagnostics,editsTransaction} from './source-diagnostics.js';
 import { createKeymap, domKeymap, strokeText } from './source-keymap.js';
 import { fold, foldEverything, foldGutterExtension, foldLevel, foldRecursively, toggleFoldHere, unfold, unfoldEverything, unfoldRecursively } from './source-folding.js';
 import { hangingIndent } from './source-wrap.js';
+import { colorSchemeExtension } from './source-color-scheme.js';
 import {languageDataFor,markdownBackspace,markdownEnter,markdownFolding,markdownTab,markdownToggleComment,markdownWrapSelection,yamlEnter} from './source-editing.js';
 const external = Annotation.define();
 const hoverField = StateEffect.define();
@@ -535,6 +536,8 @@ function mountJsonCodeEditor(parent, options) {
     indentOnInput(),
     historyField.of(history()),
     drawSelection(),
+    // The dark flag follows the surface's color scheme: CodeMirror paints the selection (and the tooltips and panels) by it.
+    colorSchemeExtension(parent),
     // Multiple cursors, as in VS Code: Cmd/Ctrl+D, Cmd/Ctrl+Shift+L, Cmd/Ctrl+Alt+Up and Down, Alt+click, and Shift+Alt+drag for a column.
     EditorState.allowMultipleSelections.of(true),
     // Alt+click adds a cursor (VS Code's default); Cmd/Ctrl+click goes to the definition.

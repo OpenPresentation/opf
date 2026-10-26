@@ -2184,9 +2184,21 @@
   background: color-mix(in srgb, var(--opf-ui-accent) 8%, transparent);
 }
 
-:is(.opf-ui, .opf-json, .opf-code) .cm-selectionBackground,
-:is(.opf-ui, .opf-json, .opf-code) .cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground {
-  background: color-mix(in srgb, var(--opf-ui-accent) 20%, transparent);
+/* The selection is a layer behind the text, so the text keeps its own colors: the tint is light enough that every token color (test/selection-contrast-browser.mjs
+   measures each) keeps 4.5:1 against it, focused or not, in the light and the dark scheme. The focused rule of CodeMirror's base theme
+   (`&light.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground`, `#d7d4f0` for light and `#233` for dark) has five classes, so
+   the second selector has six and wins whichever stylesheet loads last; src/source-color-scheme.js flags the view dark so the rest of the base theme follows. */
+:is(.opf-ui, .opf-json, .opf-code) .cm-editor .cm-selectionLayer .cm-selectionBackground,
+:is(.opf-ui, .opf-json, .opf-code) .cm-editor.cm-focused > .cm-scroller > .cm-selectionLayer .cm-selectionBackground {
+  background: color-mix(in srgb, var(--opf-ui-accent) 16%, transparent);
+}
+
+/* A selection that is not drawn by CodeMirror (the handoff prompt, the data grid's text areas, the numbering preview) uses the browser's own, and a browser's
+   default highlight is not made for our surfaces: the same tint, with the text color the surface already has, is 4.5:1 or better in both schemes. */
+:is(.opf-json, .opf-code, .opf-source-code, .opf-handoff-box, .opf-numbering-preview) ::selection,
+:is(.opf-handoff-prompt, .opf-numbering-preview, .opf-grid details textarea)::selection {
+  background: color-mix(in srgb, var(--opf-ui-accent) 16%, transparent);
+  color: var(--opf-ui-fg);
 }
 
 :is(.opf-ui, .opf-json, .opf-code) .cm-selectionMatch {
