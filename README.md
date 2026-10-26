@@ -1,3 +1,10 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/brand/opf-logo-dark.svg">
+    <img src="docs/brand/opf-logo.svg" alt="Open Presentation Format" width="64" height="64">
+  </picture>
+</p>
+
 # Open Presentation Format (OPF)
 
 [![npm version](https://img.shields.io/npm/v/@openpresentation/opf?label=npm)](https://www.npmjs.com/package/@openpresentation/opf)

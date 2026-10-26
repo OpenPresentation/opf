@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 64 64" role="img" aria-label="Open Presentation Format">
+  <rect width="64" height="64" rx="14" fill="#1F4270"/>
+  <g transform="translate(5 5) scale(0.84375)">
+    <path d="M15 12C12 12 11 13.5 11 16.5V27C11 29.8 10 32 6.5 32C10 32 11 34.2 11 37V47.5C11 50.5 12 52 15 52M49 12C52 12 53 13.5 53 16.5V27C53 29.8 54 32 57.5 32C54 32 53 34.2 53 37V47.5C53 50.5 52 52 49 52" fill="none" stroke="#FFFFFF" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect x="20.5" y="22" width="23" height="20" rx="4" fill="#FFFFFF"/>
+  </g>
+</svg>
