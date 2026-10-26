@@ -1,0 +1,5 @@
+---
+type: changed
+packages: [editor]
+---
+CE-19: groundwork for the Studio, with no change to any published entry point. A slide scene model (`src/slide-scene.js`) reads one slide and its composed layout geometry as a tree of nodes (the slide, its headings, layout or promoted regions, groups, blocks, their parts and implicit content), keyed by id path so keys survive other people's edits, with boxes in slide units, containers with their tracks, a hit chain, the click target with deep select and a drop target that is always a container and an index, never a position. `src/slide-adapter.js` puts it behind the studio kit's document adapter over an editor session: reorder blocks and slides, move into and out of groups and layout regions, group and ungroup, duplicate, delete, track resize (written as the container's `composition.weights`), and copy and paste of blocks and slides, each one validated patch and one undo step guarded by `expectHash`, with gestures that preview drafts without writing to the document. Internal for now (no package subpath).
