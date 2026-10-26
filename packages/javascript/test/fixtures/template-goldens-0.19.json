@@ -1868,8 +1868,8 @@
   "area title 57.6,57.6,1164.8,131.8",
   "region questions 57.6,213.4,1164.8,449 column 2",
   "item title - 57.6,57.6,1164.8,131.8 54px",
-  "item blocks.0.items questions 57.6,213.4,1164.8,204.4 17px cols=3",
-  "item blocks.1.items questions 57.6,441.8,1164.8,204.4 17px cols=3"
+  "item blocks.0.items questions 57.6,213.4,1164.8,204.4 18px cols=3",
+  "item blocks.1.items questions 57.6,441.8,1164.8,204.4 18px cols=3"
  ],
  "faq 3 long": [
   "area title 57.6,57.6,1164.8,131.8",
