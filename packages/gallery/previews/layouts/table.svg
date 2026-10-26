@@ -2,30 +2,46 @@
 <rect aria-hidden="true" fill="#FFFFFF" height="720" opacity="1" width="1280" x="0" y="0"/>
 <g><text fill="#000000" font-family="Aptos Display, sans-serif" font-size="54" font-weight="700" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="111.6">Compare outcomes on consistent measures</text></g>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="160.48">Illustrative example • fictional data</text></g>
-<g><rect aria-hidden="true" fill="#2874A6" height="54" stroke="#CCCCCC" stroke-width="1" width="291.2" x="57.6" y="189.98"/>
+<g><rect aria-hidden="true" fill="#2874A6" height="54" width="135.113" x="57.6" y="189.98"/>
 <g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="700" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="222.98">Team</text></g>
-<rect aria-hidden="true" fill="#2874A6" height="54" stroke="#CCCCCC" stroke-width="1" width="291.2" x="348.8" y="189.98"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="700" style="white-space:pre" text-anchor="end" x="630" xml:space="preserve" y="222.98">Participants</text></g>
-<rect aria-hidden="true" fill="#2874A6" height="54" stroke="#CCCCCC" stroke-width="1" width="291.2" x="640" y="189.98"/>
-<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="700" style="white-space:pre" text-anchor="end" x="921.2" xml:space="preserve" y="222.98">Completion</text></g>
-<rect aria-hidden="true" fill="#2874A6" height="54" stroke="#CCCCCC" stroke-width="1" width="291.2" x="931.2" y="189.98"/>
+<rect aria-hidden="true" fill="#2874A6" height="54" width="325.861" x="192.713" y="189.98"/>
+<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="700" style="white-space:pre" text-anchor="end" x="508.575" xml:space="preserve" y="222.98">Participants</text></g>
+<rect aria-hidden="true" fill="#2874A6" height="54" width="278.174" x="518.575" y="189.98"/>
+<g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="700" style="white-space:pre" text-anchor="end" x="786.749" xml:space="preserve" y="222.98">Completion</text></g>
+<rect aria-hidden="true" fill="#2874A6" height="54" width="425.651" x="796.749" y="189.98"/>
 <g><text fill="#FFFFFF" font-family="Aptos, sans-serif" font-size="25" font-weight="700" style="white-space:pre" text-anchor="end" x="1212.4" xml:space="preserve" y="222.98">Median time (min)</text></g>
-<rect aria-hidden="true" fill="#F0F0F0" height="54" stroke="#CCCCCC" stroke-width="1" width="291.2" x="57.6" y="243.98"/>
+<rect aria-hidden="true" fill="#F0F0F0" height="54" width="135.113" x="57.6" y="243.98"/>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="276.98">A</text></g>
-<rect aria-hidden="true" fill="#F0F0F0" height="54" stroke="#CCCCCC" stroke-width="1" width="291.2" x="348.8" y="243.98"/>
-<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="end" x="630" xml:space="preserve" y="276.98">28</text></g>
-<rect aria-hidden="true" fill="#F0F0F0" height="54" stroke="#CCCCCC" stroke-width="1" width="291.2" x="640" y="243.98"/>
-<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="end" x="921.2" xml:space="preserve" y="276.98">89%</text></g>
-<rect aria-hidden="true" fill="#F0F0F0" height="54" stroke="#CCCCCC" stroke-width="1" width="291.2" x="931.2" y="243.98"/>
+<rect aria-hidden="true" fill="#F0F0F0" height="54" width="325.861" x="192.713" y="243.98"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="end" x="508.575" xml:space="preserve" y="276.98">28</text></g>
+<rect aria-hidden="true" fill="#F0F0F0" height="54" width="278.174" x="518.575" y="243.98"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="end" x="786.749" xml:space="preserve" y="276.98">89%</text></g>
+<rect aria-hidden="true" fill="#F0F0F0" height="54" width="425.651" x="796.749" y="243.98"/>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="end" x="1212.4" xml:space="preserve" y="276.98">5.8</text></g>
-<rect aria-hidden="true" fill="#F0F0F0" height="54" stroke="#CCCCCC" stroke-width="1" width="291.2" x="57.6" y="297.98"/>
+<rect aria-hidden="true" fill="#F0F0F0" height="54" width="135.113" x="57.6" y="297.98"/>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="67.6" xml:space="preserve" y="330.98">B</text></g>
-<rect aria-hidden="true" fill="#F0F0F0" height="54" stroke="#CCCCCC" stroke-width="1" width="291.2" x="348.8" y="297.98"/>
-<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="end" x="630" xml:space="preserve" y="330.98">24</text></g>
-<rect aria-hidden="true" fill="#F0F0F0" height="54" stroke="#CCCCCC" stroke-width="1" width="291.2" x="640" y="297.98"/>
-<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="end" x="921.2" xml:space="preserve" y="330.98">79%</text></g>
-<rect aria-hidden="true" fill="#F0F0F0" height="54" stroke="#CCCCCC" stroke-width="1" width="291.2" x="931.2" y="297.98"/>
-<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="end" x="1212.4" xml:space="preserve" y="330.98">6.7</text></g></g>
+<rect aria-hidden="true" fill="#F0F0F0" height="54" width="325.861" x="192.713" y="297.98"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="end" x="508.575" xml:space="preserve" y="330.98">24</text></g>
+<rect aria-hidden="true" fill="#F0F0F0" height="54" width="278.174" x="518.575" y="297.98"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="end" x="786.749" xml:space="preserve" y="330.98">79%</text></g>
+<rect aria-hidden="true" fill="#F0F0F0" height="54" width="425.651" x="796.749" y="297.98"/>
+<g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="end" x="1212.4" xml:space="preserve" y="330.98">6.7</text></g>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="57.6" x2="192.713" y1="189.98" y2="189.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="57.6" x2="192.713" y1="243.98" y2="243.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="192.713" x2="518.575" y1="189.98" y2="189.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="192.713" x2="518.575" y1="243.98" y2="243.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="518.575" x2="796.749" y1="189.98" y2="189.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="518.575" x2="796.749" y1="243.98" y2="243.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="796.749" x2="1222.4" y1="189.98" y2="189.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="796.749" x2="1222.4" y1="243.98" y2="243.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="57.6" x2="192.713" y1="297.98" y2="297.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="192.713" x2="518.575" y1="297.98" y2="297.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="518.575" x2="796.749" y1="297.98" y2="297.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="796.749" x2="1222.4" y1="297.98" y2="297.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="57.6" x2="192.713" y1="351.98" y2="351.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="192.713" x2="518.575" y1="351.98" y2="351.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="518.575" x2="796.749" y1="351.98" y2="351.98"/>
+<line aria-hidden="true" stroke="#CCCCCC" stroke-width="1" x1="796.749" x2="1222.4" y1="351.98" y2="351.98"/></g>
 <g><text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="626.4">Test with two teams for six weeks. Measure task completion and time before deciding what to </text>
 <text fill="#000000" font-family="Aptos, sans-serif" font-size="25" font-weight="400" style="white-space:pre" text-anchor="start" x="57.6" xml:space="preserve" y="656.9">scale.</text></g>
 </svg>
