@@ -48,12 +48,13 @@ test('regions of different roles side by side are not peers', () => {
   assert.equal(result.items.find((item) => item.region === 'main').text.fontSize, 28);
 });
 
-test('the gallery comparison (auto rows) shares one option size and keeps dense options at 20 px or more', () => {
+test('the gallery comparison (auto rows) shares one option size and keeps the size of its numeric-row form', () => {
   const option = (name, repeat) => `${name}\n${'Each team must complete training, collect baseline evidence, assign an accountable owner and confirm support capacity before this option can proceed. '.repeat(repeat)}`;
   const result = composeSlide({ title: 'Choose the smallest useful test', blocks: [{ region: 'first', text: option('Option A', 4) }, { region: 'second', text: option('Option B', 6) }, { region: 'verdict', text: 'Start with Option A.' }] }, { layout: layouts.comparison });
   const [first, second, verdict] = ['first', 'second', 'verdict'].map((name) => result.items.find((item) => item.region === name));
   assert.equal(first.text.fontSize, second.text.fontSize);
-  assert.ok(first.text.fontSize >= 20, String(first.text.fontSize));
-  assert.ok(verdict.text.fontSize >= 20 && verdict.text.fontSize <= 25);
+  const numeric = composeSlide({ title: 'Choose the smallest useful test', blocks: [{ region: 'first', text: option('Option A', 4) }, { region: 'second', text: option('Option B', 6) }, { region: 'verdict', text: 'Start with Option A.' }] }, { layout: numericOptions }).items.find((item) => item.region === 'first');
+  assert.equal(first.text.fontSize, numeric.text.fontSize, 'auto rows do not cost the dense options any size');
+  assert.ok(verdict.text.fontSize >= 20, String(verdict.text.fontSize));
   assert.deepEqual(result.diagnostics, []);
 });

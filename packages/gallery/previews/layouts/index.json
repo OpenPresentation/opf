@@ -19,6 +19,11 @@
       "bytes": 2013
     },
     {
+      "id": "agenda-split",
+      "file": "agenda-split.svg",
+      "bytes": 2176
+    },
+    {
       "id": "statement",
       "file": "statement.svg",
       "bytes": 969
@@ -26,7 +31,7 @@
     {
       "id": "closing",
       "file": "closing.svg",
-      "bytes": 976
+      "bytes": 975
     },
     {
       "id": "text",
@@ -41,7 +46,7 @@
     {
       "id": "quote",
       "file": "quote.svg",
-      "bytes": 1209
+      "bytes": 1210
     },
     {
       "id": "two-column",
