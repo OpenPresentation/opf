@@ -6,16 +6,27 @@
 //
 // Why samples and a median. One heartbeat gap cannot tell the pane's work from a stall of a shared runner: a single gap of 101 ms against a limit of 100 ms
 // failed CI once. The pane's work is done once per edit, so it shows in every sample; a stall shows in a few. The verdict (test/support/block-budget.mjs, with
-// unit tests in test/source-block-budget.mjs) therefore judges the typical sample, the median, not the worst. For YAML and Markdown, where the main-thread check
-// is a long task, the same edits are also run with `?worker=off` in the same job, and the worker's median must be at most 60% of that run's median: the budget
-// follows the runner's speed (a fixed limit is too slack on a fast machine and too tight on a slow one), and checking on the main thread fails it wherever the
-// suite runs. Where there is no measurable comparison (JSON, whose main-thread check is cheap, or OPF_PERF_COMPARE=0) the median must be within the limit
-// (50 ms; 100 ms on CI). No single edit may block for three limits. No retries.
+// unit tests in test/source-block-budget.mjs) therefore judges the typical sample, the median, not the worst.
+//
+// What the median is compared with. For YAML and Markdown, where the main-thread check is a long task, the same edits are also run with `?worker=off` in the
+// same job (the main-thread run), so the budget follows the runner's speed and core count instead of a fixed number. Two judgments, neither of which depends on
+// how many cores the runner has:
+//  - while the worker's request is in flight (the pane sets `data-opf-checking`) the main thread has nothing of the check to do: the typical block there must be
+//    at most 40% of the main-thread run's (0 to 11 ms against 63 to 139 ms on CI); a check that also runs on the main thread fills that span. Most edits must have
+//    had a request in flight, so a check that never reached the worker fails, too.
+//  - the typical block of the whole edit (typed, checked, applied, painted) must be at most 85% of the main-thread run's. That is 17 to 36% on a fast machine
+//    and a good 2-vCPU runner, 65 to 70% on a bad one (two of three runs of one job, where receiving, applying and painting the answer took 50 to 70 ms instead of
+//    10 to 20), and about 100% with the check on the main thread. A check that is only part of the work that stays on the main thread (a re-validation after the
+//    answer) is the one regression this budget sees only when it is most of the main-thread cost.
+// Where there is no measurable comparison (JSON, whose main-thread check is cheap, or OPF_PERF_COMPARE=0) the median must be within the limit (50 ms; 100 ms on
+// CI). No single edit may block for three limits. No retries.
 //
 // OPF_PERF_LIMIT_MS sets the limit for a typical edit; OPF_PERF_COMPARE=0 skips the main-thread run (then the limit judges); OPF_PERF_ROUNDS
 // repeats the whole measurement (default 1; the samples of all rounds count); OPF_CPU_THROTTLE=<rate> slows Chromium down; OPF_BROWSER_ENGINE=webkit runs it on WebKit.
-// To see that the test can fail: OPF_PERF_WORKER_OFF=1 makes the worker's run on the main thread, as if the pane checked there (YAML must fail), and
-// OPF_PERF_BURN_MS=45 keeps the worker but holds the main thread for that long at every request to it, as work added to every edit (YAML must fail).
+// To see that the test can fail (YAML must fail): OPF_PERF_WORKER_OFF=1 makes the worker's run on the main thread, as if the pane checked there;
+// OPF_PERF_BURN_MS=<ms> keeps the worker but holds the main thread that long at every request to it, as a check done twice (it fails from about 40% of the
+// main-thread check: 25 ms passes, 45 ms fails, unthrottled; 100 ms at throttle 3). To see that a bad runner passes: OPF_PERF_SLOW_APPLY_MS=<ms> holds the main
+// thread that long right after every answer of the worker (about 70% of the main-thread run passes: 26 ms unthrottled; about 90% fails: 40 ms).
 import assert from 'node:assert/strict';
 import { engineName, startKeyboardSuite } from './support/source-keyboard.mjs';
 import { assertBlockBudget, median } from './support/block-budget.mjs';
@@ -28,6 +39,7 @@ const ROUNDS = Number(process.env.OPF_PERF_ROUNDS ?? 1);
 const COMPARE = process.env.OPF_PERF_COMPARE !== '0';
 const WORKER_OFF = process.env.OPF_PERF_WORKER_OFF === '1';
 const BURN = Number(process.env.OPF_PERF_BURN_MS ?? 0);
+const SLOW_APPLY = Number(process.env.OPF_PERF_SLOW_APPLY_MS ?? 0);
 const SLIDES = 1000;
 const TAIL = 150;
 const PATTERNS = { quick: { bursts: 4, size: 3, spacing: 30 }, paced: { bursts: 12, size: 1, spacing: 90 } };
@@ -74,6 +86,15 @@ async function measure(mode, { format, needle, text }) {
       const post = Worker.prototype.postMessage;
       Worker.prototype.postMessage = function (...args) { const end = performance.now() + ms; while (performance.now() < end); return post.apply(this, args); };
     }, BURN);
+    // A slow runner receives, applies and paints the worker's answer slowly (50 to 70 ms in two of three CI runs of one job, 10 to 20 ms in the third): the same
+    // hold on the main thread right after each answer (a listener added to the worker comes after the pane's, which has applied the answer by then).
+    if (SLOW_APPLY > 0 && mode === 'on') await page.evaluate((ms) => {
+      const post = Worker.prototype.postMessage, seen = new WeakSet();
+      Worker.prototype.postMessage = function (...args) {
+        if (!seen.has(this)) { seen.add(this); this.addEventListener('message', () => { const end = performance.now() + ms; while (performance.now() < end); }); }
+        return post.apply(this, args);
+      };
+    }, SLOW_APPLY);
     const collect = () => page.evaluate(() => {
       const long = window.__long.splice(0), beats = window.__gaps.splice(0), spans = window.__checks.splice(0);
       const inflight = beats.filter(([end]) => spans.some(([from, to]) => end >= from && end <= to)).map(([, gap]) => gap);
@@ -118,7 +139,7 @@ try {
     // The worker did the checking, not the page, and with the worker off the page did.
     if (!WORKER_OFF) for (const row of rounds.on) for (const pattern of ['quick', 'paced']) assert.ok(row[pattern].worker >= PATTERNS[pattern].bursts && row[pattern].inline === 0, `${spec.label} ${pattern}: the edits were checked in the worker (${row[pattern].worker} in the worker, ${row[pattern].inline} in the page)`);
     for (const row of rounds.off) for (const pattern of ['quick', 'paced']) assert.ok(row[pattern].inline >= PATTERNS[pattern].bursts && row[pattern].worker === 0, `${spec.label} ${pattern}: worker=off checks on the main thread`);
-    for (const pattern of ['quick', 'paced']) assertBlockBudget(`${spec.label} ${pattern}`, { samples: series('on', pattern, 'gap'), limit: LIMIT, baseline: rounds.off.length ? series('off', pattern, 'gap') : undefined });
+    for (const pattern of ['quick', 'paced']) assertBlockBudget(`${spec.label} ${pattern}`, { samples: series('on', pattern, 'gap'), flight: series('on', pattern, 'flight'), limit: LIMIT, baseline: rounds.off.length ? series('off', pattern, 'gap') : undefined });
   }
   console.log(`Source worker budgets: a typical edit in a 1000-slide deck blocks the main thread for less than ${LIMIT} ms (${engineName} ${suite.browserVersion}).`);
 } finally { await suite.close(); }
