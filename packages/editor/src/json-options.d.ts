@@ -9,7 +9,8 @@ export interface JsonFieldOption {
   /** User-facing provenance; source remains stable for existing consumers. */
   sourceLabel?: string;
   sourceDescription?: string;
-  layoutGroup?: 'Current layout' | 'Openers and closers' | 'Text' | 'Groups of items' | 'Numbers' | 'Visuals' | 'Mixed' | 'Custom layouts';
+  /** `Current layout`, the layout record's catalog group (for the Gallery: Openers and closers, Text, Groups of items, Numbers, Visuals or Mixed), or `Custom layouts`. */
+  layoutGroup?: string;
   /** Region names, accepted kinds and flow from the v2 template. */
   regions?: string;
 }
