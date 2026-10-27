@@ -3,7 +3,8 @@
 // flagged dark and the base theme's focused rule out-specified ours. Every surface below is real: the source pane (JSON, YAML, Markdown), the standalone
 // JSON editor, the agent handoff prompt and the other native text surfaces. Each is selected by keyboard and by mouse, focused and not, in both
 // schemes. The test reads the computed selection background (composited over what it is drawn on) and the computed color of every piece of text under
-// it, and asserts 4.5:1 for each; the native `::selection` of a text area is read the same way.
+// it, and asserts 4.5:1 for each; the native `::selection` of a text area is read the same way. The other occurrences of a selected word (CodeMirror's
+// selection matches) are measured too, for a word in a string and for a key, whose color is the lightest in the dark scheme.
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { fileURLToPath } from 'node:url';
@@ -19,7 +20,7 @@ const entry = `
   import { createAgentHandoffDialog } from './src/agent-handoff-dialog.js';
   const deck = { name: 'Selection deck', slides: [
     { id: 'one', title: 'Revenue grew 34% in every region', text: 'The enterprise segment led the quarter.', notes: 'Say it slowly.' },
-    { id: 'two', title: 'Next steps', items: ['Hire two engineers', 'Ship the beta'], hidden: false },
+    { id: 'two', title: 'Next steps', items: ['Hire two engineers', 'Ship the beta', 'Revenue review'], hidden: false },
   ] };
   window.deck = deck;
   window.mountPane = (format) => {
@@ -90,6 +91,22 @@ const helpers = () => {
         const color = parse(getComputedStyle(text.parentElement).color);
         out.items.push({ text: text.data.trim().slice(0, 24), foreground: hex(color), background: hex(under), ratio: ratio(over(color, under), under) });
         break;
+      }
+    }
+    return out;
+  };
+  // The other occurrences of the selected word (`.cm-selectionMatch`, not the selection itself): each run of text inside a mark against the mark's
+  // tint over what it is drawn on.
+  window.measureMatches = (editor) => {
+    const marks = [...editor.querySelectorAll('.cm-selectionMatch:not(.cm-selectionMatch-main)')];
+    const out = { marks: marks.length, cssBackground: marks[0] && getComputedStyle(marks[0]).backgroundColor, items: [] };
+    for (const mark of marks) {
+      const under = over(parse(getComputedStyle(mark).backgroundColor), backdrop(mark));
+      const walker = document.createTreeWalker(mark, NodeFilter.SHOW_TEXT);
+      for (let text = walker.nextNode(); text; text = walker.nextNode()) {
+        if (!text.data.trim()) continue;
+        const color = parse(getComputedStyle(text.parentElement).color);
+        out.items.push({ text: text.data.trim().slice(0, 24), foreground: hex(color), background: hex(under), ratio: ratio(over(color, under), under) });
       }
     }
     return out;
@@ -173,6 +190,32 @@ try {
           await record(name, scheme, `${how} ${focused ? 'focused' : 'blurred'}`, measured);
           if (focused) classes[`${name}/${scheme}`] = measured.editorClass;
         }
+      }
+    }
+  }
+  // The other occurrences of a selected word are tinted (highlightSelectionMatches): their text keeps 4.5:1 on the tint, in both schemes and every
+  // code surface, for a word in a string ("Revenue": a title and a list item) and for a key ("title", where the key color is the lightest text
+  // in the dark scheme: 4.2:1 there before the tint was lowered).
+  for (const scheme of ['dark', 'light']) {
+    for (const [name, mount, selector] of surfaces) {
+      for (const word of name.includes('Markdown') ? ['Revenue'] : ['Revenue', 'title']) {
+        await setScheme(page, scheme);
+        await mount();
+        await page.evaluate(([target, text]) => {
+          const view = document.querySelector(target);
+          const api = window.json && view.closest('.opf-json') ? window.json.api : window.pane.editor.api;
+          const at = api.getValue().indexOf(text);
+          api.focus();
+          api.setSelection(at, at + text.length);
+        }, [`${selector} .cm-content`, word]);
+        await page.waitForFunction((target) => document.querySelector(target).closest('.cm-editor').querySelector('.cm-selectionMatch:not(.cm-selectionMatch-main)'), `${selector} .cm-content`);
+        const measured = await page.evaluate((target) => window.measureMatches(document.querySelector(target).closest('.cm-editor')), `${selector} .cm-content`);
+        assert.ok(measured.marks > 0 && measured.items.length > 0, `${name} ${scheme}: the other occurrence of "${word}" is marked`);
+        for (const item of measured.items) {
+          if (item.ratio < worst.ratio) worst = { ...item, surface: name, scheme, how: `word match "${word}"` };
+          assert.ok(item.ratio >= 4.5, `${name} (${scheme}, word match "${word}"): "${item.text}" ${item.foreground} on match ${item.background} is ${item.ratio.toFixed(2)}:1, below 4.5:1 (match CSS ${measured.cssBackground})`);
+        }
+        rows.push(`${name.padEnd(18)} ${scheme.padEnd(5)} match ${word.padEnd(12)} tint ${measured.items[0].background}, ${measured.items.length} runs, min ${Math.min(...measured.items.map((item) => item.ratio)).toFixed(2)}:1`);
       }
     }
   }
