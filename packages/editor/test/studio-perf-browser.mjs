@@ -72,10 +72,11 @@ try {
   // The work, which no runner's speed changes: at most one slide composed for its faces and one slide design resolved per edit.
   assert.ok(work.slides <= rounds, `${rounds} commits of one slide composed ${work.slides} slides for the font gate (at most one per edit)`);
   assert.ok(work.designs <= rounds, `${rounds} commits of one slide resolved ${work.designs} slide designs (at most one per edit)`);
-  // The time: STUDIO-SPEC's 150ms at p95. A CI runner measures about 1.8 times a developer laptop (about 230ms against 125ms), so on CI the
-  // bound is twice the budget; a commit that composes the whole deck again (about 400ms here, 740ms on CI) fails either. OPF_STUDIO_COMMIT_LIMIT_MS
-  // sets the bound.
-  const budget = Number(process.env.OPF_STUDIO_COMMIT_LIMIT_MS ?? (process.env.CI ? 300 : 150));
+  // The time: STUDIO-SPEC's 150ms at p95 on a developer laptop (115 to 125ms measured). A shared CI runner is two to three times slower
+  // (316ms on the first CI run, its selection paint 2.7 times the laptop's), so on CI the bound is three times the budget; a commit that
+  // composes the whole deck again (about 400ms on a laptop, 740ms on CI) fails either, and the work count above catches it on any machine.
+  // OPF_STUDIO_COMMIT_LIMIT_MS sets the bound.
+  const budget = Number(process.env.OPF_STUDIO_COMMIT_LIMIT_MS ?? (process.env.CI ? 450 : 150));
   assert.ok(p95(commit) < budget, `a drop commit p95 under ${budget}ms: ${p95(commit).toFixed(1)}ms`);
 
   // The filmstrip draws only the visible thumbnails, and more as it scrolls.
