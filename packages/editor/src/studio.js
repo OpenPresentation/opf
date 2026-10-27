@@ -659,9 +659,10 @@ export function createStudio(ctx) {
     const command = commands.match(event, s, { scope: "canvas" }) ?? commands.match(event, s, { scope: "global" });
     return Boolean(command && command.group !== "Tools");
   };
+  // One command's state and shortcut, without evaluating the whole registry (the Design panel asks for several on every selection).
   s.commandState = (id) => {
-    const info = commands.list(s, { win }).find((entry) => entry.id === id);
-    return info ? { enabled: info.enabled, reason: info.reason, shortcut: info.shortcut } : { enabled: false, reason: "Unknown command." };
+    const [info] = commands.menu([id], s, { win });
+    return info ? { enabled: !info.disabled, reason: info.title ?? "", shortcut: info.hint ?? "" } : { enabled: false, reason: "Unknown command." };
   };
   s.run = (id) => runCommand(id);
   function runCommand(id, event) {
