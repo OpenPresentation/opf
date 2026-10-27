@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/mcp",
-  "version": "0.27.0",
+  "version": "0.28.0",
   "description": "An MCP server for OPF: learn the format (docs, schemas, the default catalog, examples and agent skills as resources and tools), validate and convert decks. Runs locally on stdio (opf-mcp) or hosted on an edge runtime.",
   "license": "MIT",
   "author": "Open Presentation",

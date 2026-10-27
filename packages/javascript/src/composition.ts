@@ -3024,6 +3024,10 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
   // tables, timelines and videos keep at least an equal share and take whatever the measured blocks leave. When the needs do not
   // fit, every block gives up the same fraction of what it can give up above its height at the minimum font size
   // (shareHeights), so a short block keeps nearly its need and none overflows while the floors fit.
+  // The leaves stackedBoxes gave the whole height they need at their role size. Like a template's auto row, such a cell is as tall
+  // as its content, so a one-line paragraph's short cell is not "too small" (small-cell made paginate split a slide that fits). A
+  // block the stack had to squeeze below its need is not one of them.
+  const contentSized = new WeakSet<Pending>();
   const stackedBoxes = (nodes: Pending[], area: LayoutBox, requestedGap: number, settings: Composition, cards = hasCards, anchor: 'top' | 'middle' | 'bottom' = 'top'): LayoutBox[] => {
     const between = Math.max(0, Math.min(requestedGap, area.width / 2, area.height / (nodes.length * 2)));
     const space = Math.max(0, area.height - between * (nodes.length - 1)), share = space / nodes.length;
@@ -3053,6 +3057,7 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
     const spare = space - heights.reduce((sum, size) => sum + size, 0);
     if (stretch && spare > 0) heights = heights.map((size, index) => elastic[index] ? size + spare / stretch : size);
     const used = heights.reduce((sum, size) => sum + size, 0) + between * (nodes.length - 1);
+    nodes.forEach((node, index) => { if (!node.children && !elastic[index] && heights[index]! >= needs[index]! - 1e-6) contentSized.add(node); });
     let y = area.y + Math.max(0, anchor === 'middle' ? (area.height - used) / 2 : anchor === 'bottom' ? area.height - used : 0);
     return heights.map(size => { const box = { x: area.x, y, width: area.width, height: size }; y += size + between; return box; });
   };
@@ -3204,8 +3209,8 @@ export function composeSlide(input: unknown, options: ComposeSlideOptions = {}):
       text, textStyle: body?.style ?? styleFor(node.field,node.path), composition: settings, alignment: alignmentFor(node.field), ...(quoteLayout?{quoteLayout}:{}), ...(codeLayout?{codeLayout}:{}), ...(metricLayout?{metricLayout}:{}), ...(timelineLayout?{timelineLayout}:{}),
       ...(bulletImage && node.payload.numbering === undefined && (node.field === 'items' || node.field === 'bullets') ? {bulletImage} : {}), ...(caption ? {caption} : {}),
       ...(regionTag !== undefined ? {region: regionTag} : {}), ...(columns && columns.length > 1 ? {listColumns: columns} : {}) });
-    // A template's auto row is as tall as its content needs, so only its width can make a cell too small.
-    if (box.width < 100 * scale || (!templateCell && box.height < 60 * scale)) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
+    // A template's auto row, and a block a stacked column gave its whole need, is as tall as its content, so only its width can make the cell too small.
+    if (box.width < 100 * scale || (!templateCell && !contentSized.has(node) && box.height < 60 * scale)) diagnostics.push({ code: "small-cell", path: node.path, message: "Content cell is too small for comfortable reading; use fewer blocks or a different composition." });
   };
   // OPF 0.19, one long list: 1, 2 then 3 equal columns at the starting size, and the first count at which it fits, as
   // long as a column stays a quarter of the slide wide. Breaks fall between items (a nested item stays with its parent)

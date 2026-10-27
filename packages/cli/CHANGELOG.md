@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.28.0 (2026-10-26)
+
+- Agent guidance from the 2026-10-26 outside audit: a chart written in the Chart.js or ECharts shape (`categories` and `series`, or `labels` and `datasets`, and no `data`) is one `opf/schema` finding whose hint shows the author's own values as `data: { columns, rows }`, with a patch fix, instead of a missing-`data` error plus one additional-property error per key; the `Chart` and `ChartData` schema descriptions state the shape with a one-line example. Every schema carries a `$comment` that says `v1` is the pre-1.0 line and may change in any 0.x minor release, `opf schemas` lists the `@openpresentation/opf` version beside each schema id, `opf schema` names it in the whole schema's `$comment`, `opf --version` names the schema id, and `docs/schema-versioning.md` explains how to pin it.
+- `opf mcp` runs the OPF MCP server of `@openpresentation/mcp` on stdio when that package is installed beside the CLI or in the working directory; otherwise it prints `npx -y @openpresentation/mcp` and exits with 2. The CLI has no MCP code and no dependency on the package.
+- WI-1 (P24): `validate` and `paginate` compose with the role families the renderer draws (new `resolveDrawnFontFamilies`, which `toSvg` now uses too), so a weight the open replacement lacks draws its nearest weight, recorded as a visual substitution, instead of failing the slide. With `loadFonts({ pack: 'office' })` every metric, quote and timeline slide of the default Aptos scheme reported `opf/layout-failed` and skipped its geometry checks (54 of the 291 slide-design audit renders) while `toSvg` drew it; a family no font resolves still fails. `opf validate` now measures with the fonts `opf convert` draws with when `@openpresentation/opf-render` is installed (`checks.layout: "measured"`), as `opf paginate` does; without it the report says the layout was estimated and how to install the renderer.
+
 ## 0.27.0 (2026-10-26)
 
 No package changes; released with the set.

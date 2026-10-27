@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 import * as built from "@openpresentation/gallery";
 import { DRAWING_KINDS, parseFragment } from "./changelog-fragments.mjs";
 import { OTHER_KINDS, VISUAL_KINDS } from "./gallery-stability-fixtures.mjs";
-import { compareReleases, declaredDrawing, formatResult, gateVersion, judge, loadEngines, main, minimumBump, resolveBaseline, satisfiesBump } from "./gallery-stability.mjs";
+import { compareReleases, declaredDrawing, formatResult, gateVersion, judge, loadEngines, main, minimumBump, RELEASE_DRAWING_FILE, releaseDeclarations, releaseDrawingRecord, resolveBaseline, satisfiesBump } from "./gallery-stability.mjs";
 
 const SCRIPT = fileURLToPath(new URL("./gallery-stability.mjs", import.meta.url));
 const scratch = mkdtempSync(path.join(tmpdir(), "opf-gallery-stability-"));
@@ -176,9 +176,26 @@ test("the removed-id and schema reasons need no fragment: the release type reads
   assert.equal(gateVersion({ previousVersion: "0.26.0", version: "0.27.0", stability: removed }).ok, true);
 });
 
-test("declaredDrawing counts only gallery fragments and names every declaring slug", () => {
+test("declaredDrawing counts only gallery fragments and names every declaring fragment", () => {
   const declared = declaredDrawing([fragment("a", 'drawing: ["layouts:hero"]'), fragment("b", 'drawing: ["layouts:hero", "tones:formal"]'), { slug: "c", packages: ["opf"], drawing: ["themes:minimal"] }]);
-  assert.deepEqual([...declared], [["layouts:hero", ["a", "b"]], ["tones:formal", ["b"]]]);
+  assert.deepEqual([...declared], [["layouts:hero", ["changes/a.md", "changes/b.md"]], ["tones:formal", ["changes/b.md"]]]);
+});
+
+test("a prepared release's recorded declarations count like its fragments, and only for that version", () => {
+  const root = mkdtempSync(path.join(tmpdir(), "opf-release-drawing-"));
+  try {
+    mkdirSync(path.join(root, "packages", "gallery"), { recursive: true });
+    const record = releaseDrawingRecord("0.28.0", [fragment("b", 'drawing: ["layouts:quote", "layouts:hero"]'), { slug: "c", packages: ["opf"], drawing: ["themes:minimal"] }]);
+    assert.deepEqual(record, { version: "0.28.0", drawing: ["layouts:hero", "layouts:quote"] });
+    writeFileSync(path.join(root, RELEASE_DRAWING_FILE), `${JSON.stringify(record)}\n`);
+    const declared = declaredDrawing(releaseDeclarations(root, "0.28.0"));
+    assert.deepEqual([...declared.keys()], ["layouts:hero", "layouts:quote"]);
+    assert.deepEqual(declared.get("layouts:quote"), [`${RELEASE_DRAWING_FILE} (0.28.0)`]);
+    assert.deepEqual(releaseDeclarations(root, "0.28.1"), [], "a record for another version declares nothing");
+    assert.deepEqual(releaseDeclarations(path.join(root, "missing"), "0.28.0"), []);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 // ---------------------------------------------------------------------------------------------------------------------

@@ -21,7 +21,13 @@ try{
  const glyphs=container=>[...container.querySelectorAll('text')].map(n=>[n.textContent,n.getAttribute('x'),n.getAttribute('y'),n.getAttribute('font-size')]);
  check(JSON.stringify(glyphs(host))===JSON.stringify(glyphs(reference)),'resized canvas uses standalone renderer geometry');
  editor.undo();check(JSON.stringify(editor.presentation)===JSON.stringify(original)&&!editor.canUndo,'one undo restores the resize');
- key(handle('slides.0.blocks.0'),'ArrowDown',true);check(editor.get('slides.0.blocks.0.composition.weights.0')===1.1,'nested row sizing uses its own container');
+ // WI-1 (0.28.0): a group's blocks in one column stack at the heights they need, so the one-line block's row is drawn shorter than its
+ // two-line sibling's (it was an equal share, so the nudge used to give exactly 1.1). A resize writes explicit weights for the pair from the
+ // drawn proportion: Shift+ArrowDown gives the leading row 5 points more of the pair than it was drawn with.
+ const nested=handle('slides.0.blocks.0'),drawn=Number(nested.getAttribute('aria-valuenow'));
+ check(drawn>5&&drawn<45,'nested rows are drawn at the heights their content needs');
+ key(nested,'ArrowDown',true);const nestedWeights=editor.get('slides.0.blocks.0.composition.weights')??[];
+ check(nestedWeights.length===2&&Math.abs(nestedWeights[0]+nestedWeights[1]-2)<1e-9&&Math.abs(100*nestedWeights[0]/2-(drawn+5))<=0.5,'nested row sizing uses its own container');
  check(JSON.stringify(editor.get('slides.0.composition'))===JSON.stringify(original.slides[0].composition),'nested resize preserves parent weights');editor.undo();
  const auto={slides:[{composition:{mode:'auto'},blocks:[{text:'A'},{text:'B'},{text:'C'},{text:'D'}]}]};editor.applyPatch([{op:'replace',path:'',value:auto}]);
  check(!!handle(),'automatic flow exposes its chosen column boundary');key(handle(),'ArrowRight');check(editor.get('slides.0.composition.mode')==='grid','resizing automatic flow freezes a grid');editor.undo();

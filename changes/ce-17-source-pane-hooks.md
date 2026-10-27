@@ -1,5 +1,0 @@
----
-type: added
-packages: [editor]
----
-CE-17: host hooks on the source pane, so a host can replace its own code editor with it. A `cursor` event (`{ pointer, idPath, from, to, head, part, format }`, in JSON, YAML and Markdown, coalesced and not repeated) on `createOpfEditor` (`on: { cursor }`, the `onCursor` option, `source.cursorDelay`, `editor.sourceCursor`) and in React (`onCursor` prop, `useOpfCursor`); `pane.getCursor()` and `onCursor` on the pane. `pane.revealPath(pointer | { from, to }, { focus?, select?, align?, flash?, part? })` scrolls a field or range into view without moving the caret or the focus (`focusPath` still does). `pane.setDecorations(list, { group? })`, `clearDecorations(group?)` and `getDecorations(group?)` draw the host's own marks and line classes by path or range (`opf-source-decoration-<kind>`), kept apart from the editor's own decorations; paths stay on their fields as the text is edited and the format is switched. `JsonCodeEditor` gains `reveal`, `setDecorations`, `clearDecorations`, `getDecorations` and `api.getHead()`.

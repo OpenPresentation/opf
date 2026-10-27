@@ -237,6 +237,9 @@ test('prepare refuses a patch when a drawing change is declared, a record id was
     assert.equal(plan.bump, 'minor');
     const gallery = plan.writes.find(({ file }) => file === 'packages/gallery/CHANGELOG.md').text;
     assert.match(gallery, /Drawing change.*`layouts:hero`/);
+    // The release commit has no fragments, so check:stability reads the declarations from this record.
+    const record = plan.writes.find(({ file }) => file === 'packages/gallery/release-drawing.json');
+    assert.deepEqual(JSON.parse(record.text), { version: '0.27.0', drawing: ['layouts:hero'] });
   } finally {
     cleanup();
   }
