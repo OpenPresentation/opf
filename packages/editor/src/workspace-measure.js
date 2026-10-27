@@ -1,16 +1,18 @@
-// CE-06 (promoted from examples/playground.js): text measurement and font notes shared by the workspace parts.
-import { createScriptTextMeasurement } from "@openpresentation/opf-render/fonts";
+// CE-06 (promoted from examples/playground.js): text measurement and font notes shared by the workspace parts. No renderer import: the script
+// planner comes with the fonts handle (`textMeasurement.forScripts`, the renderer's font registry), so the `/workspace` entry, which re-exports
+// `layoutOptionsFor`, loads no renderer code for a host that mounts only the source pane.
 import { resolveScriptFonts } from "@openpresentation/opf/composition";
 
 /**
  * The layout options for composing slide `index` of `deck`: the fonts handle's measurement, made script-aware for this document (Japanese
  * under Aptos measures with Noto Sans JP, where the plain strict measurement would throw "cannot display U+65E5" with every face loaded).
- * A fonts handle without a measurement is passed through.
+ * A fonts handle without a measurement, or whose measurement has no script planner (`forScripts`), is passed through.
  */
 export function layoutOptionsFor(fonts, deck, index, catalogs) {
   if (!fonts?.textMeasurement) return fonts ? { fonts } : {};
+  if (typeof fonts.textMeasurement.forScripts !== "function") return { fonts };
   try {
-    return { fonts: { textMeasurement: createScriptTextMeasurement(fonts.textMeasurement, resolveScriptFonts(deck, { slideIndex: index, catalogs })) } };
+    return { fonts: { textMeasurement: fonts.textMeasurement.forScripts(resolveScriptFonts(deck, { slideIndex: index, catalogs })) } };
   } catch {
     return { fonts };
   }

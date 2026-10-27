@@ -7,38 +7,49 @@
 // A host picks a layout: `"full"` (a bar, the source, the slide, the slide row and a side panel are built for it), `"canvas"`, `"source"`,
 // or `slots`, an object of its own elements, one per part, for a host that arranges the page itself. Each part is optional (`panels`).
 // Nothing here fetches anything, stores anything on its own or talks to a service; the host supplies fonts, catalogs and storage.
-import { toSvg } from "@openpresentation/opf-render/svg";
 import { OPFEditorError, createEditorSession, mergeCatalogs } from "./index.js";
-import { createCanvasEditor } from "./canvas.js";
 import { whenFontsReady } from "./font-gate.js";
 import { createSourcePane } from "./source-pane.js";
-import { createSlideNavigator } from "./slide-navigator.js";
-import { createThumbnailStrip } from "./thumbnail-strip.js";
-import { createThumbnailCache } from "./thumbnail-cache.js";
-import { createSlideManager } from "./slide-manager.js";
-import { createOutlineView } from "./outline-view.js";
-import { createExportMenu } from "./export-menu.js";
-import { bindPresentShortcut, createPresentButton, createPresenter } from "./presenter.js";
-import { createReviewPanel } from "./review-panel.js";
-import { createFindPanel, installFindShortcuts } from "./find-panel.js";
-import { createDesignControls } from "./design-controls.js";
 import { createPersistence } from "./persistence.js";
 import { createPersistenceUi } from "./persistence-ui.js";
-import { prepareDimensionSwitch } from "./switches.js";
-import { mergeSlides, splitSlideByBlocks } from "./content-actions.js";
-import { installCanvasVariableEditing } from "./canvas-variables.js";
-import { createLayoutStudio } from "./workspace-layouts.js";
-import { fontSubstitutionNotes, layoutOptionsFor } from "./workspace-measure.js";
 import { buildWorkspaceShell } from "./workspace-shell.js";
+import { fontSubstitutionNotes, layoutOptionsFor } from "./workspace-measure.js";
 import { SOURCE_CHECKS, copyText, downloadSourceFile, lf, reportSource } from "./workspace-source.js";
 import { createThemeController } from "./workspace-theme.js";
 import { retainedSlideIndex } from "./slide-retention.js";
 import { createSourceMemory, updateJsonSource } from "./exact-source.js";
-import { buildStudioShell, createStudio } from "./studio.js";
 
 export { THEME_TOKENS, createThemeController, normalizeTheme, normalizeThemeTokens } from "./workspace-theme.js";
 // The script-aware measurement options for composing one slide: a host that calls `composeSlide` or `paginateSlide` on the session passes these (the playground does).
 export { layoutOptionsFor } from "./workspace-measure.js";
+
+// The slide and everything around it (the renderer, the canvas, the slide row, the presenter, Export, Review, Find, Design and the views) load
+// on demand, in one chunk (`workspace-parts.js`): a host that mounts only the source pane never loads the renderer. Its factories are bound
+// here once the chunk has arrived, before any part is mounted.
+let toSvg, createCanvasEditor, createSlideNavigator, createThumbnailStrip, createThumbnailCache, createSlideManager, createOutlineView, createExportMenu;
+let bindPresentShortcut, createPresentButton, createPresenter, createReviewPanel, createFindPanel, installFindShortcuts, createDesignControls;
+let prepareDimensionSwitch, mergeSlides, splitSlideByBlocks, installCanvasVariableEditing, createLayoutStudio, buildStudioShell, createStudio;
+let partsModule;
+let partsLoaded = false;
+function loadParts() {
+  partsModule ??= import("./workspace-parts.js").then((parts) => {
+    ({ toSvg, createCanvasEditor, createSlideNavigator, createThumbnailStrip, createThumbnailCache, createSlideManager, createOutlineView, createExportMenu } = parts);
+    ({ bindPresentShortcut, createPresentButton, createPresenter, createReviewPanel, createFindPanel, installFindShortcuts, createDesignControls } = parts);
+    ({ prepareDimensionSwitch, mergeSlides, splitSlideByBlocks, installCanvasVariableEditing, createLayoutStudio, buildStudioShell, createStudio } = parts);
+    partsLoaded = true;
+  });
+  // A chunk that failed to load is asked for again by the next editor.
+  partsModule.catch(() => {
+    partsModule = undefined;
+  });
+  return partsModule;
+}
+/**
+ * Whether the parts to mount need the slide chunk: any part but the source pane, its autosave and the history buttons, that has an element to
+ * mount in (the presenter mounts in the overlay).
+ */
+const SOURCE_ONLY_PARTS = new Set(["source", "persistence", "history"]);
+const needsSlideParts = (parts, slots) => Object.entries(parts).some(([name, on]) => on && !SOURCE_ONLY_PARTS.has(name) && (name === "present" || Boolean(slots[name])));
 
 const VIEWS = Object.freeze(["slide", "sorter", "outline", "layouts"]);
 const MUTATORS = new Set(["set", "setGroupComposition", "setCatalog", "setCatalogs", "applyPatch", "replaceDocument", "restoreState", "undo", "redo", "setComposition", "paginateSlide"]);
@@ -115,7 +126,9 @@ function resolveParts(options, layout, slots) {
 }
 
 /**
- * Mount the editor in `element`. Returns the handle at once; with a `fonts` promise the parts mount when it resolves (`ready` settles then).
+ * Mount the editor in `element`. Returns the handle at once; the parts mount once a `fonts` promise has resolved and, for a layout that shows
+ * slides, once the slide chunk has loaded (`mounted` is emitted then, and `ready` settles after the first update). A source-only editor whose
+ * fonts are at hand mounts before this returns.
  * See `workspace.d.ts` for the options and the handle.
  */
 export function createOpfEditor(element, options = {}) {
@@ -190,20 +203,26 @@ export function createOpfEditor(element, options = {}) {
   let slots = { ...given };
   let controls = {};
   let studioShell = null;
-  if (layout === "slots") root.setAttribute("data-opf-layout", "slots");
-  else if (studioLayout) {
-    // CE-20: the Studio builds its own shell; a host's slots add parts to it (`topbarEnd`, `overlay`).
+  let overlay = root;
+  // CE-20: the Studio builds its own shell; a host's slots add parts to it (`topbarEnd`, `overlay`). Its code is in the slide chunk, so the Studio
+  // shell is built once that has loaded, right before the parts mount.
+  function buildStudio() {
     const built = buildStudioShell(root, { parts, layout, labels: options.labels, studio: options.studio, slots: given });
     const { topbarEnd: _placed, ...rest } = given;
     slots = { ...built.slots, ...rest };
     controls = built.controls;
     studioShell = built.shell;
-  } else {
+    overlay = slots.overlay ?? root;
+  }
+  if (layout === "slots") root.setAttribute("data-opf-layout", "slots");
+  else if (!studioLayout) {
     const built = buildWorkspaceShell(root, { parts, views, layout, labels: options.labels });
     slots = { ...built.slots, ...given };
     controls = built.controls;
   }
-  const overlay = slots.overlay ?? root;
+  overlay = slots.overlay ?? root;
+  // The slide chunk is loaded before the parts mount, unless only the source pane (with its autosave) is mounted. The Studio always needs it.
+  const slideParts = studioLayout || needsSlideParts(parts, slots);
 
   // ---- state ------------------------------------------------------------------------------------------------------------------
   let fonts;
@@ -841,7 +860,7 @@ export function createOpfEditor(element, options = {}) {
     slides = session.presentation.slides ?? [];
     authoredTemplate = session.presentation.template === true;
     if (parts.canvas && slots.canvas) mountCanvas();
-    thumbnailCache = createThumbnailCache({ toSvg, getOptions: () => ({ ...renderOptions(), fonts, text: "system", trace: false }) });
+    if (slideParts) thumbnailCache = createThumbnailCache({ toSvg, getOptions: () => ({ ...renderOptions(), fonts, text: "system", trace: false }) });
     mountSlideRow();
     if (parts.slides && slots.slides) slideManager = createSlideManager(slots.slides, { ...slideManagerOptions(), ...(slots.slideToolbar ? { toolbar: slots.slideToolbar } : {}) });
     if (parts.source && slots.source) {
@@ -1108,15 +1127,28 @@ export function createOpfEditor(element, options = {}) {
     } catch (error) {
       if (error?.code !== "invalid-opf-edit") throw error;
       // A document the session refuses is no document to open: show its text with its findings, as a draft the person can fix.
-      if (pane && text !== undefined) {
-        if (openOptions.format && pane.getFormat() !== openOptions.format) pane.setFormat(openOptions.format);
-        const api = pane.editor.api;
-        api.replace(0, api.getValue().length, text);
-        pane.getText();
-        if (openOptions.name !== undefined) pane.setName(openOptions.name);
-      }
+      if (pane && text !== undefined) pane.setSourceText(text, { ...(openOptions.format ? { format: openOptions.format } : {}), ...(openOptions.name !== undefined ? { name: openOptions.name } : {}) });
       return false;
     }
+  }
+  // Raw text in the source pane (a file as it was read, a draft that does not parse), without converting it: what the person would get by
+  // pasting it over everything. True when the session now holds its document; false when it stays a draft with its problems.
+  function setSourceText(text, openOptions = {}) {
+    if (destroyed || !mounted) throw new OPFEditorError("not-ready", "The editor is not mounted yet. Await `ready` first.");
+    if (!pane) throw new OPFEditorError("no-source-pane", "This editor has no source pane.");
+    if (readOnly) throw new OPFEditorError("read-only", "This editor is read-only.");
+    if (typeof text !== "string") throw new TypeError("setSourceText needs the source text as a string.");
+    // An open canvas edit is committed first; the text then replaces it.
+    if (canvas?.commit() === false) return false;
+    drafting = false;
+    openedText = undefined;
+    const applied = pane.setSourceText(text, {
+      ...(openOptions.format ? { format: openOptions.format } : {}),
+      ...(openOptions.name !== undefined ? { name: openOptions.name } : {}),
+    });
+    // Text the host loaded is not the person's work: it is not autosaved or warned about until it is edited.
+    if (applied && openOptions.rebase !== false) persistence?.rebase();
+    return applied;
   }
 
   let fontsRef = { value: undefined };
@@ -1236,6 +1268,7 @@ export function createOpfEditor(element, options = {}) {
       return session.snapshot().presentation;
     },
     setDocument,
+    setSourceText,
     setView,
     setSlide: go,
     goTo,
@@ -1336,6 +1369,7 @@ export function createOpfEditor(element, options = {}) {
 
   // ---- start ------------------------------------------------------------------------------------------------------------------
   function mount(resolved) {
+    if (studioLayout && !studioShell) buildStudio();
     fonts = resolved;
     density = densityFor(options.density);
     exportMode = exportModeFor(options.exportMode);
@@ -1376,15 +1410,20 @@ export function createOpfEditor(element, options = {}) {
     };
     try {
       fontsRef = fontsSource(options.fonts);
-      if (isThenable(fontsRef.value)) {
-        say(MESSAGES.loadingFonts);
-        Promise.resolve(fontsRef.value).then((resolved) => {
+      const chunk = slideParts && !partsLoaded ? loadParts() : null;
+      if (isThenable(fontsRef.value) || chunk) {
+        if (isThenable(fontsRef.value)) say(MESSAGES.loadingFonts);
+        Promise.all([fontsRef.value, chunk]).then(([resolved]) => {
           try {
             start(resolved);
           } catch (error) {
             fail(error);
           }
-        }, fail);
+        }, (error) => {
+          // The slide chunk did not load: fonts that did arrive are given back.
+          Promise.resolve(fontsRef.value).then((resolved) => fontsRef.use(resolved).release?.(), () => {});
+          fail(error);
+        });
       } else start(fontsRef.value);
     } catch (error) {
       fail(error);

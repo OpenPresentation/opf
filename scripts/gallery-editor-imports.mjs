@@ -8,10 +8,11 @@ const SOURCE_IMPORT = /(['"])\.\.\/src\/([^'"/]+)\.js\1/g;
 
 /**
  * Editor modules that the published package ships as dist/<module>.js but does not list in "exports" (opf-editor 0.10.0). The vendoring step
- * bundles them by file path (registry-toolchain.mjs). Do not add to this list: export the module, or import a public entry instead.
- * The check fails when a listed module becomes exported, so the entry is removed with the workaround.
+ * bundles them by file path (registry-toolchain.mjs), as it does a module that only a later release exports. Do not add to this list: export
+ * the module, or import a public entry instead. The check fails when a listed module becomes exported, so the entry is removed with the
+ * workaround. (`exact-source` left the list when it became the public entry `@openpresentation/opf-editor/exact-source`.)
  */
-export const UNEXPORTED_EDITOR_MODULES = ['@openpresentation/opf-editor/exact-source', '@openpresentation/opf-editor/font-gate'];
+export const UNEXPORTED_EDITOR_MODULES = ['@openpresentation/opf-editor/font-gate'];
 
 /** The package specifier a source module is rewritten to: the root for `index`, `@openpresentation/opf-editor/<module>` otherwise. */
 export const editorSpecifier = (module) => `@openpresentation/opf-editor${module === 'index' ? '' : `/${module}`}`;

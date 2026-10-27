@@ -84,6 +84,13 @@
   border-right: 1px solid var(--opf-ui-border);
   background: var(--opf-ui-surface);
 }
+/* Only the source pane (`layout: "source"`): it fills the editor, on a phone too. */
+.opf-ws-body > .opf-ws-source:only-child {
+  flex: 1 1 auto;
+  height: auto;
+  min-width: 0;
+  border: 0;
+}
 .opf-ws-source-host {
   flex: 1 1 auto;
   min-width: 0;

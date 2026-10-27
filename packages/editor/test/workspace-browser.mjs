@@ -152,6 +152,38 @@ try {
   await ev(() => window.ed.undo());
   mark('setDocument opens a document as one undoable change, keeps its text, and lists a refused document as a draft');
 
+  // setSourceText: raw text in the pane, without converting it, in its own format; text that does not read as a document stays a draft.
+  const raw = await ev(async (d) => {
+    const editor = window.opfWs.createOpfEditor(window.makeHost('raw-host'), { document: d, layout: 'source', ...window.base() });
+    await editor.ready;
+    const out = {};
+    const yamlText = '# kept comment\nname: From YAML\ndesign:\n  theme: classic\n  fontScheme: roboto\nslides:\n  - id: y\n    title: Yaml slide\n';
+    out.yaml = { applied: editor.setSourceText(yamlText, { format: 'yaml', name: 'raw' }), name: editor.getDocument().name, text: editor.readSource().text === yamlText, format: editor.readSource().format, file: editor.getName(), inSync: editor.inSync };
+    const broken = '{\n  "name": "Broken",\n  "slides": [\n';
+    out.broken = { applied: editor.setSourceText(broken, { format: 'json' }), name: editor.getDocument().name, text: editor.readSource().text === broken, draft: editor.readSource().draft, format: editor.readSource().format, inSync: editor.inSync, problems: editor.sourcePane.getProblems().length > 0 };
+    const crlf = '{\r\n  "name": "CRLF",\r\n  "slides": [ { "id": "c", "title": "C" } ]\r\n}\r\n';
+    out.crlf = { applied: editor.setSourceText(crlf), name: editor.getDocument().name, text: editor.readSource().text === crlf, inSync: editor.inSync };
+    // One undoable change: Undo brings the YAML deck back.
+    editor.undo();
+    out.undo = editor.getDocument().name;
+    editor.setReadOnly(true);
+    try { editor.setSourceText('{}'); } catch (error) { out.readOnly = error.code; }
+    editor.destroy();
+    const slideOnly = window.opfWs.createOpfEditor(window.makeHost('raw-host'), { document: d, layout: 'canvas', ...window.base() });
+    await slideOnly.ready;
+    try { slideOnly.setSourceText('{}'); } catch (error) { out.noPane = error.code; }
+    slideOnly.destroy();
+    document.querySelector('#raw-host')?.remove();
+    return out;
+  }, deck());
+  assert.deepEqual(raw.yaml, { applied: true, name: 'From YAML', text: true, format: 'yaml', file: 'raw', inSync: true }, 'YAML text is shown as written (its comment kept) and applied');
+  assert.deepEqual(raw.broken, { applied: false, name: 'From YAML', text: true, draft: true, format: 'json', inSync: false, problems: true }, 'text that does not parse is a draft; the document keeps the last valid one');
+  assert.deepEqual(raw.crlf, { applied: true, name: 'CRLF', text: true, inSync: true }, 'the bytes stay as given, CRLF included');
+  assert.equal(raw.undo, 'From YAML', 'Undo steps back over the loaded text');
+  assert.equal(raw.readOnly, 'read-only');
+  assert.equal(raw.noPane, 'no-source-pane');
+  mark('setSourceText loads raw text (YAML with comments, a draft that does not parse, CRLF JSON) without converting it');
+
   // ---- theme -----------------------------------------------------------------------------------------------------------------------------
   const token = (selector, name) => page.locator(selector).first().evaluate((node, prop) => getComputedStyle(node).getPropertyValue(prop).trim(), name);
   await ev(() => window.ed.setTheme({ tokens: { accent: 'rgb(10, 20, 30)', font: 'Georgia, serif', radius: '11px', '--opf-ui-border': 'rgb(1, 2, 3)' }, dark: { background: 'rgb(5, 6, 7)', surface: 'rgb(8, 9, 10)' } }));
@@ -405,7 +437,18 @@ try {
     editor.destroy();
     ({ host, editor } = await make({ layout: 'source' }));
     out.source = { source: !!host.querySelector('.opf-source'), canvas: !!host.querySelector('.opf-canvas'), canvasHandle: editor.canvas === undefined, doc: editor.getDocument().slides.length, typed: editor.setDocument({ name: 'N', design: { theme: 'classic', fontScheme: 'roboto' }, slides: [{ id: 'q', title: 'Q' }] }) };
+    // Only the source pane is built: no slide stage, no status column, and the pane fills the editor.
+    out.sourceShell = {
+      built: [...host.querySelectorAll('[data-opf-slot]')].map((node) => node.dataset.opfSlot),
+      main: !!host.querySelector('.opf-ws-main, .opf-ws-stage, .opf-ws-frame, .opf-ws-dock, .opf-ws-bar'),
+      fills: Math.round(host.querySelector('.opf-ws-source').getBoundingClientRect().width) === Math.round(host.getBoundingClientRect().width),
+    };
     editor.destroy();
+    // The source layout mounts at once when the fonts are at hand (it loads no slide chunk); the full layout waits for that chunk.
+    const quick = window.opfWs.createOpfEditor(window.makeHost(), { document: d, layout: 'source' });
+    out.sourceSync = quick.mounted && Boolean(quick.sourcePane);
+    await quick.ready;
+    quick.destroy();
     ({ host, editor } = await make({ panels: { source: false, review: false, find: false, present: false, export: false, thumbnails: false, navigator: false, layouts: false, outline: false, sorter: false }, view: 'slide' }));
     out.minimal = { source: !!host.querySelector('.opf-source'), review: !!host.querySelector('[role=tab]'), export: !!host.querySelector('.opf-export'), present: !!host.querySelector('.opf-present-button'), thumbs: !!host.querySelector('.opf-thumbs-item'), nav: !!host.querySelector('.opf-nav'), views: editor.views, canvas: !!host.querySelector('.opf-canvas svg'), find: !!host.querySelector('[data-opf-action=find]') };
     editor.destroy();
@@ -419,6 +462,8 @@ try {
   }, deck());
   assert.deepEqual(layouts.canvas, { source: false, canvas: true, thumbs: 3, bar: true, undo: true, export: false, views: ['slide'] });
   assert.deepEqual(layouts.source, { source: true, canvas: false, canvasHandle: true, doc: 3, typed: true });
+  assert.deepEqual(layouts.sourceShell, { built: ['source'], main: false, fills: true }, 'layout "source" builds the source pane alone');
+  assert.equal(layouts.sourceSync, true, 'a source-only editor mounts synchronously');
   assert.deepEqual(layouts.minimal, { source: false, review: false, export: false, present: false, thumbs: false, nav: false, views: ['slide'], canvas: true, find: false });
   assert.deepEqual(layouts.initial, { view: 'outline', outline: true, tabs: ['Design:true', 'Review:false'], design: true });
   assert.match(layouts.badView, /not available/);

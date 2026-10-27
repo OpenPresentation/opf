@@ -78,6 +78,28 @@ assert.deepEqual(layoutOptionsFor(undefined, {}, 0, []), {}, 'no fonts handle: n
 const plain = { textMeasurement: () => ({ width: 1, height: 1 }) };
 assert.deepEqual(layoutOptionsFor({ registry: {} }, {}, 0, []), { fonts: { registry: {} } }, 'a handle without a measurement is passed through');
 assert.equal(typeof layoutOptionsFor(plain, { slides: [{ title: 'x' }] }, 0, [gallery]).fonts, 'object');
+// The script planner comes with the handle's measurement (the renderer's registry has `forScripts`): it is asked for this deck's scripts.
+const asked = [];
+const planned = { measure: () => ({ width: 1 }), forScripts: (profile) => { asked.push(profile); return { planned: true }; } };
+assert.deepEqual(layoutOptionsFor({ textMeasurement: planned }, { slides: [{ title: 'x' }] }, 0, [gallery]), { fonts: { textMeasurement: { planned: true } } });
+assert.equal(asked.length, 1, 'forScripts is asked once, with the resolved script fonts of the slide');
+const noPlanner = { textMeasurement: { measure: () => ({ width: 1 }) } };
+assert.deepEqual(layoutOptionsFor(noPlanner, { slides: [{ title: 'x' }] }, 0, [gallery]), { fonts: noPlanner }, 'a measurement without a planner is passed through');
+{
+  // With the renderer's real handle the options measure exactly as the renderer's own createScriptTextMeasurement does.
+  const { loadFonts } = await import('@openpresentation/opf-render/fonts-node');
+  const { createScriptTextMeasurement } = await import('@openpresentation/opf-render/fonts');
+  const { resolveScriptFonts } = await import('@openpresentation/opf/composition');
+  const real = await loadFonts({ pack: 'office' });
+  const text = 'Héllo Wörld, Ελληνικά — mixed';
+  const greek = { name: 'G', language: 'el-GR', slides: [{ title: text }] };
+  const options = layoutOptionsFor(real, greek, 0, [gallery]);
+  const reference = createScriptTextMeasurement(real.textMeasurement, resolveScriptFonts(greek, { slideIndex: 0, catalogs: [gallery] }));
+  const style = { fontFamily: 'Roboto', fontWeight: 400 };
+  assert.notEqual(options.fonts.textMeasurement, real.textMeasurement, 'the measurement is planned for the slide');
+  assert.equal(options.fonts.textMeasurement.measure(text, 24, style), reference.measure(text, 24, style), 'the same widths as createScriptTextMeasurement');
+  assert.ok(options.fonts.textMeasurement.measure(text, 24, style) > 0);
+}
 assert.match(describeFontChange({ requestedFamily: 'Calibri', resolvedFamily: 'Carlito', compatibility: 'metric', resolvedWeight: 400 }), /Calibri → Carlito · Metric substitute/);
 assert.match(describeFontChange({ requestedFamily: 'Roboto', resolvedFamily: 'Roboto', requestedWeight: 500, resolvedWeight: 400 }), /that weight is not available/);
 assert.deepEqual(fontSubstitutionNotes({ substitutions: [

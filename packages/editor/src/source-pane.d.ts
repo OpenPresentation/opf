@@ -222,6 +222,14 @@ export interface SourcePane {
    * (`invalid-opf-edit` with `issues`) and changes nothing. Works in a read-only pane.
    */
   replaceDocument(document: unknown, options?: ReplaceDocumentOptions): EditorChange;
+  /**
+   * Load raw source text as the pane's whole text, as if pasted over everything: a file as it was read, a draft that does not parse. Nothing is
+   * converted; the bytes stay as given (line endings included; a leading byte order mark is dropped). `options.format` switches the pane to the
+   * text's format first (without writing the document in it), `options.name` renames the file. Text that reads as a document the session
+   * accepts is applied at once as one undoable edit; anything else stays as a draft with its problems and the session keeps its last valid
+   * document. Returns true when the session now holds the text's document. Throws in a read-only pane.
+   */
+  setSourceText(text: string, options?: { format?: SourceFormat; name?: string }): boolean;
   /** Re-read the document from the session. */
   refresh(): void;
   /** Replace the host findings; `null` returns to the session's own validation. */

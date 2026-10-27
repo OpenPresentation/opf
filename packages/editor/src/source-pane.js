@@ -708,6 +708,44 @@ export function createSourcePane(container, options = {}) {
     options.onFormatChange?.(format, previous);
   }
 
+  /**
+   * Put `text` in the pane as its whole source, in `next` (default the pane's format), as if the person had pasted it over everything: no
+   * conversion, the bytes as given (line endings included; a byte order mark is dropped). Text that reads as a document the session accepts is
+   * applied at once (one undoable edit; Undo in the code brings the old text back); anything else stays in the pane as a draft with its problems,
+   * and the session keeps its last valid document. Returns true when the session now holds the text's document.
+   */
+  function setSourceText(text, { format: next, name: nextName } = {}) {
+    if (destroyed) throw new Error("The source pane was destroyed.");
+    if (typeof text !== "string") throw new TypeError("setSourceText needs the source text as a string.");
+    if (next !== undefined && !FORMATS.some((entry) => entry.id === next)) throw new TypeError(`setSourceText: format must be "json", "yaml" or "md", not ${JSON.stringify(next)}.`);
+    if (readOnly) throw new Error("The source pane is read-only.");
+    flush();
+    closeConfirm(false);
+    const previous = format;
+    for (const key of Object.keys(drafts)) delete drafts[key];
+    transientNotes = [];
+    rejectionFindings = [];
+    syntaxFindings = [];
+    if (next !== undefined && next !== format) {
+      format = next;
+      noteFindings = [];
+      control.setLanguage(formatOf(next).language);
+      refreshDecorations();
+    }
+    if (nextName !== undefined) name = sanitizeName(nextName) || "deck";
+    updateBar();
+    control.api.replace(0, control.api.getValue().length, text.replace(/^\uFEFF/, ""));
+    control.api.setSelection(0);
+    // Read and apply it now, also when it is the text already shown (in another format, say).
+    baseline = null;
+    flush();
+    renderedKey = "";
+    renderFindings();
+    syncAttributes();
+    if (format !== previous) options.onFormatChange?.(format, previous);
+    return !dirty;
+  }
+
   // ---- Menu ---------------------------------------------------------------------------------------------------------
   const menuOpen = () => !menu.hidden;
   function openMenu(focus = "checked") {
@@ -1293,6 +1331,11 @@ export function createSourcePane(container, options = {}) {
       renderedKey = "";
       renderFindings();
     },
+    /**
+     * Load raw source text (a file, a paste, a draft that does not parse) as the pane's whole text, in `options.format`, without converting it.
+     * Returns true when it read as a document the session accepted, false when it stays a draft with its problems. See `setSourceText` above.
+     */
+    setSourceText,
     /** Switch the source format ("json", "yaml" or "md"). Returns false when the document cannot be written in it. */
     setFormat: (next) => setFormatInternal(next, false),
     getFormat: () => format,
