@@ -42,7 +42,7 @@ Rules every component follows, and a host can rely on:
 - `accent` fills the one primary action and marks the current item; `accentText` is the text on it; `accentStrong` is the accent as text or a link on a surface; `focus` is the 2px focus ring.
 - `danger`, `warning` and `success` are text and icon colors on a surface, never fills.
 - The package's own values are chosen for WCAG AA contrast in these pairs; when you change one, check the pair in both schemes: `text` on `surface`, `textMuted` on `surface`, `accentStrong` on `surface` and `accentText` on `accent`.
-- A selection in a code surface is `accent` at 16% over what is behind it; the text keeps its own colors, so `text`, `textMuted`, `accentStrong` and `warning` must keep 4.5:1 against that tint as well (`test/selection-contrast-browser.mjs` measures it in both schemes). The code views are flagged dark for CodeMirror when the tokens resolve to a dark `color-scheme` and follow a later change of the page, so a host never sets that itself.
+- A selection in a code surface is `accent` at 16% over what is behind it; the text keeps its own colors, so `text`, `textMuted`, `accentStrong` and `warning` must keep 4.5:1 against that tint as well (`test/selection-contrast-browser.mjs` measures it in both schemes). The other occurrences of a selected word are `warning` at 16% with a `warning` underline, and the code colors keep 4.5:1 on that tint too (a key in the dark scheme is the closest, 5.3:1). The code views are flagged dark for CodeMirror when the tokens resolve to a dark `color-scheme` and follow a later change of the page, so a host never sets that itself.
 
 ## `theme` on `createOpfEditor` (and `<OpfEditor>`)
 
