@@ -1,6 +1,6 @@
 {
   "name": "@openpresentation/opf-render",
-  "version": "0.28.0",
+  "version": "0.29.0",
   "description": "Deterministic local OPF renderer for SVG, PNG, and PDF output.",
   "license": "MIT",
   "type": "module",

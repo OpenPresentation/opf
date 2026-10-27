@@ -1,15 +1,4 @@
 {
-  "version": "0.28.0",
-  "drawing": [
-    "layouts:closing",
-    "layouts:comparison",
-    "layouts:faq",
-    "layouts:image-beside",
-    "layouts:logos",
-    "layouts:pillars",
-    "layouts:quote",
-    "layouts:statement",
-    "layouts:team",
-    "layouts:two-column"
-  ]
+  "version": "0.29.0",
+  "drawing": []
 }

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.29.0 (2026-10-27)
+
+No package changes; released with the set.
+
 ## 0.28.0 (2026-10-26)
 
 - WI-2: the `agenda-split` layout (Agenda beside), a concise agenda beside its title and introduction, listed after `agenda` in the Openers and closers group. Detailed entries stay on `agenda`, which keeps the full slide width. The catalog has 29 layouts and a preview for the new one.
