@@ -171,6 +171,9 @@ async function playground(browser, engine, { width, height }) {
     await page.goto(`${origin}/index.html`);
     await page.locator('#preview svg').waitFor({ timeout: 60000 });
     await page.waitForFunction(() => !/Loading fonts/.test(document.querySelector('#status').textContent), undefined, { timeout: 60000 });
+    // The slide parts (the add, layout and gallery buttons among them) mount after their lazily loaded chunk, so a preview on screen
+    // does not yet mean the whole top bar is there.
+    await page.waitForFunction(() => ['#add', '#add-layout', '#browse-gallery', '#more-actions'].every((selector) => document.querySelector(selector)), undefined, { timeout: 60000 });
     assert.equal(await page.evaluate(() => matchMedia('(pointer: coarse)').matches), true, `${tag('page')}: a coarse pointer`);
     return page;
   };
