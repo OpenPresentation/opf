@@ -351,13 +351,17 @@
   },
   "peerDependencies": {
     "@openpresentation/opf-render": "workspace:^",
-    "react": ">=18"
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "peerDependenciesMeta": {
     "@openpresentation/opf-render": {
       "optional": true
     },
     "react": {
+      "optional": true
+    },
+    "react-dom": {
       "optional": true
     }
   },

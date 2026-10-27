@@ -263,6 +263,18 @@
         {
           "id": "browser:studio",
           "command": "node test/studio-browser.mjs"
+        },
+        {
+          "id": "browser:studio-react",
+          "command": "node test/studio-react-browser.mjs"
+        },
+        {
+          "id": "browser:studio-touch",
+          "command": "node test/studio-touch-browser.mjs"
+        },
+        {
+          "id": "browser:studio-perf",
+          "command": "node test/studio-perf-browser.mjs"
         }
       ]
     }

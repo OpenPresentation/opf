@@ -464,8 +464,8 @@ export function drawnTracks(flow) {
   if (!(room > 0) || slack <= room * 0.005 || sizes.some((size) => !(size > 0))) return plain;
   const raw = [...sizes];
   raw[raw.length - 1] += slack;
-  // Whole-number-ish weights (the smallest at least 1, so the halves the snapping uses are fine enough), never over core's 100.
-  let unit = Math.max(tracks.length / room, 1 / Math.min(...raw));
+  // Whole-number-ish weights (the smallest at least 2, so the halves the snapping uses are fine enough), never over core's 100.
+  let unit = Math.max(tracks.length / room, 2 / Math.min(...raw));
   if (Math.max(...raw) * unit > 100) unit = 100 / Math.max(...raw);
   const weights = raw.map((size) => Math.max(0.001, round3(size * unit)));
   return { weights, drawn: true, scale: (boundary) => (sizes[boundary] + sizes[boundary + 1]) / (raw[boundary] + raw[boundary + 1]) };

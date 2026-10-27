@@ -73,6 +73,9 @@ export function createCanvasEditor(container, options = {}) {
   // are not loaded yet is never rendered: the canvas has the handle load them first and shows "Loading fonts…" meanwhile. Without a
   // handle every document renders at once, with core's portable text estimate.
   const handle = options.fonts, fonts = fontGate(handle);
+  // The document as the session holds it now: its frozen snapshot, one object per version, so the font gate's answer for it is reused
+  // (CE-20; the session's \`presentation\` copies the whole deck on every read).
+  const current = () => editor.snapshot?.().presentation ?? editor.presentation;
   // The renderer draws with the session's registered catalogs (plus any `renderOptions.catalogs`): the same list core resolves with.
   const resolveOptions = () => ({ ...renderOptions, catalogs: mergeCatalogs(editor.catalogs, renderOptions.catalogs) });
   // RR-61: the handle measures, and the canvas embeds no face: the browser handle already added its faces to the page, so
@@ -243,7 +246,7 @@ export function createCanvasEditor(container, options = {}) {
   function show(target) {
     if (disposed) return;
     const token = ++showToken;
-    return whenFontsReady(fonts, target ?? editor.presentation, {
+    return whenFontsReady(fonts, target ?? current(), {
       renderOptions: resolveOptions(),
       isCurrent: () => !disposed && token === showToken,
       loading: (pending) => fontsState("loading", pending),
@@ -260,7 +263,7 @@ export function createCanvasEditor(container, options = {}) {
   }
   // Renders now when the document's fonts are loaded (errors throw to the caller), otherwise after loading them.
   function renderFor(presentation) {
-    if (fonts?.pending(presentation ?? editor.presentation, resolveOptions()).length) show(presentation);
+    if (fonts?.pending(presentation ?? current(), resolveOptions()).length) show(presentation);
     else render(presentation);
   }
   // The text an editing target draws: its outermost <text> elements, whitespace collapsed (the renderer's <title> and <desc> are not drawn).
@@ -272,7 +275,7 @@ export function createCanvasEditor(container, options = {}) {
       .replace(/\s+/g, " ")
       .trim();
   }
-  function render(presentation = editor.presentation) {
+  function render(presentation = current()) {
     if (disposed) return;
     requireFonts(presentation);
     showToken++;
@@ -288,7 +291,8 @@ export function createCanvasEditor(container, options = {}) {
     // the roledescription rather than announce "Editable slide, slide".
     svg.removeAttribute("aria-roledescription");
     svg.removeAttribute("aria-labelledby");
-    const geometry = resolvePresentation(presentation, drawOptions()).slides[
+    // Only the slide on show is bound (CE-20): a long deck is not composed slide by slide for one draw.
+    const geometry = resolvePresentation(presentation, drawOptions(), { slides: [slideIndex] }).slides[
       slideIndex
     ].geometry;
     const candidates = [...svg.querySelectorAll("[data-opf-path]")];
@@ -501,6 +505,7 @@ export function createCanvasEditor(container, options = {}) {
       geometry = resolvePresentation(
         active.draft ?? editor.presentation,
         drawOptions(),
+        { slides: [slideIndex] },
       ).slides[slideIndex].geometry;
     const item = geometry.items.find((item) => item.path === active.path);
     const metricLayout=geometry.items.find(item=>item.metricLayout?.parts.some(part=>part.path===active.path))?.metricLayout;

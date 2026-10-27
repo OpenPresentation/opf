@@ -334,7 +334,8 @@ export function createStudio(ctx) {
     if (destroyed) return;
     selectionSource = source;
     paint();
-    layers?.paintSelection({ focus: source === "keyboard" && root.querySelector(`.${PREFIX}-tree`)?.contains(doc.activeElement) });
+    // Focus in the layers follows the selection (an edit made from the layers keeps the focus on its result).
+    layers?.paintSelection({ focus: shell.layersHost.contains(doc.activeElement) });
     design?.refresh();
     syncActionBar();
     if (source !== "source" && !quiet) revealInSource();
@@ -347,13 +348,19 @@ export function createStudio(ctx) {
     const path = primary ? (primary.path === "" ? undefined : dottedPath(primary.path)) : undefined;
     return { items, primary, source, path, value: path ? ui.get(path) : undefined, slideIndex: ctx.slideIndex() };
   }
+  // The list is made once per selection (and scene), so a host's store snapshot (`useOpfSelection`) is stable between changes.
+  let selectionCache = { items: null, scene: null, list: [] };
   Object.defineProperty(s, "selection", {
     get() {
-      return selection.items.map((key) => {
+      const current = scene();
+      if (selectionCache.items === selection.items && selectionCache.scene === current) return selectionCache.list;
+      const list = Object.freeze(selection.items.map((key) => {
         const node = scene().node(key) ?? slideNodeFor(key);
         const path = node?.path ?? adapter.pathOf(key) ?? "";
-        return { key, path, ...(key.includes("@") ? { idPath: key.split("#")[0] } : {}), kind: node?.kind ?? (isSlideKey(key) ? "slide" : "block") };
-      });
+        return Object.freeze({ key, path, ...(key.includes("@") ? { idPath: key.split("#")[0] } : {}), kind: node?.kind ?? (isSlideKey(key) ? "slide" : "block") });
+      }));
+      selectionCache = { items: selection.items, scene: current, list };
+      return list;
     },
   });
 
@@ -432,7 +439,7 @@ export function createStudio(ctx) {
     listen(separator, "pointerdown", (event) => {
       if (event.button !== 0) return;
       event.preventDefault();
-      separator.setPointerCapture?.(event.pointerId);
+      try { separator.setPointerCapture?.(event.pointerId); } catch { /* a pointer that cannot be captured (a synthetic one) */ }
       const start = { x: event.clientX, y: event.clientY, value: sizes[name] };
       const box = (name === "stack" ? shell.left : shell.center).getBoundingClientRect();
       const vertical = name === "stack" || (name === "split" && sourceMode === "bottom");
@@ -1169,6 +1176,7 @@ export function createStudio(ctx) {
     const previous = layout;
     layout = next;
     applyPreset();
+    ctx.mountSlideRow?.();
     paint();
     layers.render();
     design.refresh();
@@ -1200,13 +1208,15 @@ export function createStudio(ctx) {
     for (const item of config.fileItems ?? []) items.push({ label: item.label, onSelect: () => item.run(ctx.handle) });
     show(items, shell.file, "File");
   }
-  function insertItems({ drag = true } = {}) {
+  function insertItems({ drag = true, target } = {}) {
     return STUDIO_INSERT_KINDS.map((kind) => {
-      const verdict = commands.list(s, { win }).find((entry) => entry.id === `studio.insert.${kind}`);
+      // Into a given region (its placeholder's +): its own verdict and place.
+      const regionVerdict = target ? (s.readOnly ? "This editor is read-only." : s.insertVerdict(kind, target)) : null;
+      const verdict = target ? { enabled: regionVerdict === true, reason: regionVerdict === true ? "" : regionVerdict } : commands.list(s, { win }).find((entry) => entry.id === `studio.insert.${kind}`);
       return {
         label: STUDIO_INSERT_LABELS[kind], description: STUDIO_INSERT_HINTS[kind], icon: INSERT_ICONS[kind],
         disabled: !verdict.enabled, title: verdict.reason || undefined,
-        onSelect: () => runCommand(`studio.insert.${kind}`),
+        onSelect: () => (target ? s.insert(kind, { target, index: 0 }) : runCommand(`studio.insert.${kind}`)),
         pointerdown: drag ? (event, _item, menuHandle) => insertPress(event, kind, menuHandle) : undefined,
       };
     });
@@ -1225,7 +1235,7 @@ export function createStudio(ctx) {
     doc.addEventListener("pointermove", move, true);
     doc.addEventListener("pointerup", stop, true);
   }
-  s.openInsertMenu = (anchor = shell.insert) => show(insertItems(), anchor, "Insert", { className: `${PREFIX}-insertmenu` });
+  s.openInsertMenu = (anchor = shell.insert, { target } = {}) => show(insertItems({ target, drag: !target }), anchor, target ? `Insert into ${scene().node(target)?.label ?? "region"}` : "Insert", { className: `${PREFIX}-insertmenu` });
   function layoutChoices() {
     return listSwitchOptions(ui.presentation, "layouts", { catalogs: ctx.catalogs() });
   }
@@ -1423,9 +1433,15 @@ export function createStudio(ctx) {
     if (!ctx.inSync() && ctx.pane) { if (sourceMode === "off") s.toggleSource(); ctx.pane.editor?.api?.focus?.(); return; }
     if (shell.tabs.review) { if (root.dataset.width === "narrow") openSheet("review"); else showTab("review", { focus: true }); }
   });
-  // The name: the source pane's name (the file name rules).
-  listen(shell.name, "change", () => { ctx.setName(shell.name.value.trim()); announce(`Renamed to ${ctx.getName() ?? shell.name.value}`); });
-  listen(shell.name, "keydown", (event) => { if (event.key === "Enter") { event.preventDefault(); shell.name.blur(); } if (event.key === "Escape") { shell.name.value = ctx.getName() ?? ""; shell.name.blur(); } });
+  // The name: the presentation's `name`, one undoable change (the source pane keeps its own file name).
+  const deckName = () => { const value = ui.get("/name"); return typeof value === "string" ? value : ""; };
+  listen(shell.name, "change", () => {
+    const value = shell.name.value.trim();
+    if (value === deckName()) return;
+    if (s.writeValue("/name", value || undefined, value ? `Renamed to ${value}` : "Name removed")) return;
+    shell.name.value = deckName();
+  });
+  listen(shell.name, "keydown", (event) => { if (event.key === "Enter") { event.preventDefault(); shell.name.blur(); } if (event.key === "Escape") { shell.name.value = deckName(); shell.name.blur(); } });
   function syncBar() {
     const list = commands.list(s, { win });
     const state = (id) => list.find((entry) => entry.id === id);
@@ -1435,7 +1451,7 @@ export function createStudio(ctx) {
     const slideState = state("studio.slide.new");
     shell.addSlide.disabled = !slideState?.enabled;
     shell.addSlide.title = slideState?.enabled ? "Add a slide" : slideState?.reason ?? "";
-    if (doc.activeElement !== shell.name) shell.name.value = ctx.getName() ?? ui.get("/name") ?? "";
+    if (doc.activeElement !== shell.name) shell.name.value = deckName();
     shell.name.readOnly = s.readOnly;
   }
 

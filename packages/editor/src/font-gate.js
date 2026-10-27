@@ -30,8 +30,27 @@ const GATE = Symbol("opf-editor.fontGate");
 export function fontGate(fonts) {
   if (!fonts || typeof fonts !== "object") return undefined;
   if (fonts[GATE]) return fonts;
+  // CE-20: "nothing is pending" for one document object and the same options stays true (faces are never unloaded), so it is remembered:
+  // the canvas, the workspace and the thumbnails ask about the same frozen snapshot several times per edit, and on a long deck each
+  // answer composes every slide.
+  const settled = new WeakMap();
+  const sameOptions = (a = {}, b = {}) => {
+    const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+    for (const key of keys) {
+      const x = a[key], y = b[key];
+      if (x === y) continue;
+      if (Array.isArray(x) && Array.isArray(y) && x.length === y.length && x.every((entry, at) => entry === y[at])) continue;
+      return false;
+    }
+    return true;
+  };
   const pending = (presentation, renderOptions) => {
-    try { return fonts.pending?.(presentation, renderOptions) ?? []; } catch { return []; /* the renderer reports the document itself when it renders */ }
+    const known = presentation && typeof presentation === "object" ? settled.get(presentation) : undefined;
+    if (known?.some((options) => sameOptions(options, renderOptions))) return [];
+    let found;
+    try { found = fonts.pending?.(presentation, renderOptions) ?? []; } catch { return []; /* the renderer reports the document itself when it renders */ }
+    if (!found.length && presentation && typeof presentation === "object" && Object.isFrozen(presentation)) settled.set(presentation, [...(known ?? []), renderOptions ?? {}].slice(-4));
+    return found;
   };
   const gate = {
     [GATE]: true,

@@ -710,6 +710,42 @@
   text-overflow: ellipsis;
   pointer-events: none;
 }
+.opf-studio-placeholders {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.opf-studio-placeholder {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px dashed var(--opf-ui-border-strong);
+  border-radius: var(--opf-ui-radius-sm);
+  color: var(--opf-ui-muted-fg);
+  font: 12px var(--opf-ui-font);
+}
+.opf-studio-placeholder-add {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: 50%;
+  background: var(--opf-ui-surface);
+  color: var(--opf-ui-fg);
+  cursor: pointer;
+  pointer-events: auto;
+}
+@media (pointer: coarse) {
+  .opf-studio .opf-studio-placeholder-add {
+    width: 44px;
+    height: 44px;
+  }
+}
 .opf-studio-empty {
   position: absolute;
   inset: 0;
@@ -1154,6 +1190,7 @@
   bottom: 0;
   z-index: 30;
   display: flex;
+  grid-column: 1 / -1;
   height: 55%;
   border: 0;
   border-top: 1px solid var(--opf-ui-border);
@@ -1186,6 +1223,13 @@
   .opf-studio :is(.opf-studio-barbutton, .opf-studio-iconbutton, .opf-studio-segment, .opf-studio-action, .opf-studio-tab, .opf-studio-menuitem, .opf-studio-validity) {
     min-width: 44px;
     min-height: 44px;
+  }
+  .opf-studio .opf-studio-design-advanced > summary {
+    padding-block: calc((44px - 1lh) / 2);
+  }
+  .opf-studio :is(.opf-studio-number, .opf-studio-input, .opf-studio-name) {
+    min-height: 44px;
+    font-size: 16px;
   }
   .opf-studio .opf-studio-row-label {
     min-height: 44px;

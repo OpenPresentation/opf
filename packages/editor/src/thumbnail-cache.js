@@ -6,6 +6,7 @@ export function createThumbnailCache({toSvg, getOptions}) {
   const cache = new Map();
   let context;
   let preparedDeck;
+  let peeked = { deck: null, same: false };
   const key = (deck, index) => JSON.stringify([index, deck.slides.length, deck.slides[index]]);
   const contextOf = (deck, options) => {
     const {slides, ...metadata} = deck;
@@ -19,6 +20,7 @@ export function createThumbnailCache({toSvg, getOptions}) {
     if (nextContext !== context) cache.clear();
     context = nextContext;
     preparedDeck = deck;
+    peeked = { deck: null, same: false };
     const keys = deck.slides.map((_, index) => key(deck, index));
     const wanted = indices === undefined ? keys.map((_, index) => index) : [...new Set(indices)].filter(index => Number.isInteger(index) && index >= 0 && index < keys.length);
     const missing = wanted.filter(index => !cache.has(keys[index]));
@@ -47,9 +49,11 @@ export function createThumbnailCache({toSvg, getOptions}) {
     },
     /** CE-20: the cached thumbnail of a slide, or undefined when it has not been drawn yet (a lazy strip draws it with `prepare`). */
     peek(deck, index) {
-      if (contextOf(deck, getOptions()) !== context) return undefined;
+      // The context of a deck is read once per deck (a strip peeks at every slide of it in one render).
+      if (peeked.deck !== deck) peeked = { deck, same: contextOf(deck, getOptions()) === context };
+      if (!peeked.same) return undefined;
       return cache.get(key(deck, index));
     },
-    clear: () => { cache.clear(); preparedDeck = undefined; },
+    clear: () => { cache.clear(); preparedDeck = undefined; peeked = { deck: null, same: false }; },
   };
 }

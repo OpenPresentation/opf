@@ -89,7 +89,8 @@ export function createStudioLayers(container, { dom, adapter, studio }) {
     const selected = new Set(studio.selectedKeys());
     const primary = studio.primaryKey();
     for (const entry of rows) entry.row.setAttribute("aria-selected", String(entry.key !== "#background" && selected.has(entry.key)));
-    const stop = rows.find((entry) => entry.key === (focusKey && tree.contains(doc.activeElement) ? focusKey : primary)) ?? rows.find((entry) => entry.key === primary) ?? rows[0];
+    const stop = (focus ? null : rows.find((entry) => entry.key === (focusKey && tree.contains(doc.activeElement) ? focusKey : primary))) ?? rows.find((entry) => entry.key === primary) ?? rows[0];
+    if (focus && stop) focusKey = stop.key;
     rovingTabStop(rows.map((entry) => entry.row), stop?.row);
     if (focus && stop) stop.row.focus({ preventScroll: false });
     else if (stop && !tree.contains(doc.activeElement)) stop.row.scrollIntoView?.({ block: "nearest" });
@@ -185,7 +186,7 @@ export function createStudioLayers(container, { dom, adapter, studio }) {
   tree.addEventListener("pointermove", (event) => {
     if (!drag || event.pointerId !== drag.id) return;
     if (!drag.moved && Math.hypot(event.clientX - drag.x, event.clientY - drag.y) < 4) return;
-    if (!drag.moved) { drag.moved = true; tree.setPointerCapture?.(event.pointerId); if (!studio.selectedKeys().includes(drag.entry.key)) studio.select([drag.entry.key], { source: "layers" }); }
+    if (!drag.moved) { drag.moved = true; try { tree.setPointerCapture?.(event.pointerId); } catch { /* a pointer that cannot be captured (a synthetic one) */ } if (!studio.selectedKeys().includes(drag.entry.key)) studio.select([drag.entry.key], { source: "layers" }); }
     drag.drop = dropFor(event.clientY);
     showTreeDrop(mark, scroller, drag.drop ? { mode: drag.drop.mode, state: drag.drop.ok ? (drag.drop.noop ? "same" : "ok") : "refused", reason: drag.drop.reason, box: drag.drop.box } : null);
     if (drag.drop && !drag.drop.ok) studio.status(drag.drop.reason);

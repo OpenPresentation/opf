@@ -641,18 +641,21 @@ function normalizeOptions(options) {
  * Resolve a presentation for drawing: template variables filled, the boundary check passed, and every slide bound to its
  * layout, design, script fonts and composed geometry. `toSvg` draws from this.
  */
-export function resolvePresentation(input, options = {}) {
-  return resolveDeck(input, normalizeOptions(options));
+export function resolvePresentation(input, options = {}, { slides } = {}) {
+  return resolveDeck(input, normalizeOptions(options), Array.isArray(slides) ? () => new Set(slides) : undefined);
 }
 
-function resolveDeck(input, options) {
+// `wanted(count)` names the 0-based slides to bind (CE-20): a slide is composed on its own, so drawing one slide of a long deck binds that slide
+// only, and the others are left undefined. Without it every slide is bound.
+function resolveDeck(input, options, wanted) {
   const presentation = resolveTemplateInput(parseInput(input), options);
   if (options.validate !== false) {
     assertValidBoundary(presentation, options);
   }
 
   const context = { presentation, options };
-  const slides = presentation.slides.map((_, index) => bindSlide(presentation, index, context));
+  const only = wanted?.(presentation.slides.length);
+  const slides = presentation.slides.map((_, index) => (only && !only.has(index) ? undefined : bindSlide(presentation, index, context)));
 
   return {
     presentation,
@@ -670,7 +673,11 @@ function resolveDeck(input, options) {
 export function toSvg(input, slides, options) {
   if (slides !== null && typeof slides === "object" && !Array.isArray(slides)) { options = slides; slides = undefined; }
   const drawn = normalizeOptions(options ?? {});
-  const resolved = resolveDeck(input, drawn);
+  // Only the slides drawn are bound (the whole deck when every slide is drawn).
+  const resolved = resolveDeck(input, drawn, slides === undefined ? undefined : (count) => {
+    if (typeof slides === "number") return new Set([slides - 1]);
+    try { return new Set(selectSlides(slides, count).map((number) => number - 1)); } catch { return new Set(); }
+  });
   const count = resolved.slides.length;
   if (typeof slides === "number") {
     if (!Number.isInteger(slides) || slides < 1 || slides > count) throw new OPFRenderError("slide-out-of-range", `Slide ${slides} is not in the presentation, which has ${count} slide${count === 1 ? "" : "s"} (slides count from 1).`, { slide: slides, slideCount: count });

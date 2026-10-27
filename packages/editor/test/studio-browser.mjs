@@ -306,6 +306,20 @@ try {
     assert.equal(await depth(), before, 'nothing is inserted');
     assert.match(await status(), /accepts only text/);
   }
+  // An empty region shows a placeholder with its accepted kinds and a + that inserts into it.
+  {
+    const placeholder = page.locator('.opf-studio-placeholder[data-key="/slides/@layout#media"]');
+    assert.match(await placeholder.textContent(), /image, chart/, 'the empty region names what it accepts');
+    before = await depth();
+    await placeholder.getByRole('button', { name: 'Insert into region media' }).click();
+    assert.equal(await page.locator('.opf-studio-menu [role=menuitem]', { hasText: 'Text' }).first().getAttribute('aria-disabled'), 'true', 'a kind the region refuses is off');
+    await page.locator('.opf-studio-menu [role=menuitem]', { hasText: 'Chart' }).first().click();
+    const blocks = await ev(() => window.ed.getDocument().slides[2].blocks);
+    assert.equal(blocks.at(-1).region, 'media', 'the chart goes into the region');
+    assert.ok(blocks.at(-1).chart);
+    assert.equal(await depth(), before + 1);
+    await press(`${mod}+z`);
+  }
   // + Slide with a layout adds the slide after the current one.
   await ev(() => window.ed.setSlide(0));
   {
@@ -331,7 +345,7 @@ try {
     assert.equal(after[3].layout, 'text-and-media', 'Enter in the filmstrip adds a slide with the same layout');
     await press(`${mod}+z`);
   }
-  mark('6: Insert ▸ Chart adds after the primary and selects it; an image dragged onto a text-only region is refused; + Slide adds after the current slide; Enter in the filmstrip repeats the layout');
+  mark('6: Insert ▸ Chart adds after the primary and selects it; an image dragged onto a text-only region is refused; + Slide adds after the current slide; Enter in the filmstrip repeats the layout; an empty region offers + for the kinds it accepts');
 
   // ---- 7. clipboard ------------------------------------------------------------------------------------------------------------------------
   await ev(() => window.ed.setSlide(0));
@@ -589,6 +603,21 @@ try {
     await press('Enter');
     await press('ArrowRight');
     assert.deepEqual(await keys(), ['/slides/@row/blocks/@second']);
+    // Into the layers by Shift+Tab, a range by Shift+ArrowDown, then group and ungroup.
+    let hops = 0;
+    while (!(await ev(() => document.activeElement?.closest?.('.opf-studio-tree') !== null)) && hops++ < 40) await press('Shift+Tab');
+    assert.ok(hops < 40, 'Shift+Tab reaches the layers');
+    while ((await ev(() => document.activeElement.dataset.key)) !== '/slides/@row/blocks/@second' && hops++ < 80) await press('ArrowDown');
+    await press('Shift+ArrowDown');
+    assert.deepEqual(await keys(), ['/slides/@row/blocks/@second', '/slides/@row/blocks/@first'], 'Shift+ArrowDown in the layers selects a range');
+    await press(`${mod}+g`);
+    assert.match(await status(), /Grouped 2 blocks/, 'Mod+G groups from the layers');
+    await press(`${mod}+Shift+g`);
+    assert.deepEqual(await order(0), ['second', 'first', 'third'], 'Shift+Mod+G ungroups');
+    await press('Enter');
+    assert.equal(await ev(() => document.activeElement.classList.contains('opf-studio-box')), true, 'Enter in the layers goes to the canvas');
+    for (let step = 0; step < 6 && (await keys())[0] !== '/slides/@row/blocks/@second'; step += 1) await press('ArrowLeft');
+    assert.deepEqual(await keys(), ['/slides/@row/blocks/@second'], `the arrows select siblings again: ${JSON.stringify(await ev(() => document.activeElement.dataset.key))}`);
     await press(`${mod}+d`);
     assert.equal((await order(0)).length, 4, 'Mod+D duplicates');
     await press('Delete');

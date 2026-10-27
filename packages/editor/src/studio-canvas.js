@@ -43,10 +43,13 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
   hoverBox.hidden = true;
   const empty = el("div", `${p}-empty`);
   empty.hidden = true;
-  overlay.append(parentOutline, hoverBox, layer, dividers, chip, empty);
+  // A layout region that holds nothing shows a dashed placeholder with the kinds it accepts and a + that opens Insert for those kinds.
+  const placeholders = el("div", `${p}-placeholders`);
+  overlay.append(parentOutline, hoverBox, placeholders, layer, dividers, chip, empty);
   const marks = createOverlay(dom, overlay, { markers: true });
   const keyed = createKeyedLayer(layer);
   const keyedDividers = createKeyedLayer(dividers);
+  const keyedPlaceholders = createKeyedLayer(placeholders);
   let tool = "select";
   let enabled = true;
   let hover = null;
@@ -154,6 +157,7 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
     }
     paintDividers(s);
     paintEmpty(s);
+    paintPlaceholders(s);
     paintHover();
     frame.setAttribute("aria-label", studio.frameLabel());
     if (keepFocus && !studio.editingText()) focusPrimary();
@@ -172,6 +176,31 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
     const layout = dom.button(`${p}-empty-button`, { text: "Choose a layout", iconName: "Columns2", size: 14 });
     layout.addEventListener("click", () => studio.openSlideMenu(layout, { apply: true }));
     empty.replaceChildren(el("p", `${p}-empty-text`, { text: "Insert a block or choose a layout" }), insert, layout);
+  }
+
+  function paintPlaceholders(s) {
+    const pass = keyedPlaceholders.begin();
+    if (studio.layout === "studio") {
+      for (const region of s.nodes) {
+        if (region.kind !== "region" || !region.virtual || !region.box || s.contentChildren(region.key).length) continue;
+        const node = pass.ensure(region.key, () => {
+          const box = el("div", `${p}-placeholder`);
+          const add = dom.button(`${p}-placeholder-add`, { iconName: "Plus", size: 14 });
+          add.addEventListener("pointerdown", (event) => event.stopPropagation());
+          add.addEventListener("click", (event) => { event.stopPropagation(); studio.openInsertMenu(add, { target: box.dataset.key }); });
+          box.append(el("span", `${p}-placeholder-text`), add);
+          return box;
+        });
+        node.dataset.key = region.key;
+        setBox(node, region.box);
+        node.firstChild.textContent = region.accepts?.length ? region.accepts.join(", ") : "Any content";
+        const add = node.lastChild;
+        add.setAttribute("aria-label", `Insert into region ${region.region}`);
+        add.title = `Insert into region ${region.region}`;
+        add.disabled = studio.readOnly;
+      }
+    }
+    pass.done();
   }
 
   // The dividers of the primary's container (or of the selected container): one between each pair of tracks, a grid's columns only.
@@ -217,14 +246,17 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
     if (!hoverBox.hidden) setBox(hoverBox, node.box);
   }
 
-  /** Put focus on the primary's box (or the slide's), after the selection or the structure changed. */
-  function focusPrimary() {
+  /**
+   * Put focus on the primary's box (or the slide's), after the selection or the structure changed. A pointer press moves focus without the
+   * focus ring (`visible: false`); the keyboard shows it.
+   */
+  function focusPrimary({ visible } = {}) {
     if (!enabled) return;
     const key = studio.primaryKey() ?? scene().slideKey;
     const node = boxEl(key) ?? boxEl(scene().slideKey);
     if (node && doc.activeElement !== node) {
       studio.selecting = true;
-      try { node.focus({ preventScroll: true }); } finally { studio.selecting = false; }
+      try { node.focus({ preventScroll: true, ...(visible === undefined ? {} : { focusVisible: visible }) }); } finally { studio.selecting = false; }
     }
   }
 
@@ -260,9 +292,9 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
     const hit = targetAt(point, event);
     if (!hit) return;
     event.preventDefault();
-    if (event.shiftKey) { studio.selectAdd(hit.key, { source: "canvas" }); focusPrimary(); return; }
+    if (event.shiftKey) { studio.selectAdd(hit.key, { source: "canvas" }); focusPrimary({ visible: false }); return; }
     if (!isSelected(hit.key)) studio.select([hit.key], { source: "canvas" });
-    focusPrimary();
+    focusPrimary({ visible: false });
     // A touch long-press (500 ms, no movement) opens the context menu.
     if (event.pointerType === "touch") {
       longPress = { id: event.pointerId, x: event.clientX, y: event.clientY, timer: win.setTimeout(() => { longPress = null; drag.cancel(); studio.openContextMenu({ x: event.clientX, y: event.clientY }); }, 500) };
@@ -271,7 +303,7 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
     const nodes = keys.map((key) => scene().node(key)).filter(Boolean);
     if (!studio.readOnly && nodes.length && nodes.every((node) => node.can.move)) {
       drag.press(event, { keys });
-      frame.setPointerCapture?.(event.pointerId);
+      try { frame.setPointerCapture?.(event.pointerId); } catch { /* a pointer that cannot be captured (a synthetic one) */ }
     }
   }
   function clearLongPress() { if (longPress) { win.clearTimeout(longPress.timer); longPress = null; } }
@@ -298,7 +330,7 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
       const chain = chainAt(point, false);
       const at = chain.findIndex((entry) => entry.key === node.key);
       const child = chain[at + 1];
-      if (child) { studio.select([child.key], { source: "canvas" }); focusPrimary(); }
+      if (child) { studio.select([child.key], { source: "canvas" }); focusPrimary({ visible: false }); }
       return;
     }
     if (studio.readOnly) { studio.announce("This editor is read-only."); return; }
@@ -312,7 +344,7 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
     const hit = outside(point) ? null : targetAt(point, event);
     event.preventDefault();
     if (hit && !isSelected(hit.key)) studio.select([hit.key], { source: "canvas" });
-    focusPrimary();
+    focusPrimary({ visible: false });
     studio.openContextMenu({ x: event.clientX, y: event.clientY });
   }
   // A press on the viewport outside the slide selects nothing (the deck).
@@ -430,7 +462,7 @@ export function createStudioCanvas({ dom, elements, canvas, adapter, studio }) {
     event.stopPropagation();
     if (!adapter.begin("Resize")) return;
     resize = { node, info, label: null, id: event.pointerId };
-    node.setPointerCapture?.(event.pointerId);
+    try { node.setPointerCapture?.(event.pointerId); } catch { /* a pointer that cannot be captured (a synthetic one) */ }
     node.focus({ preventScroll: true });
     node.dataset.active = "true";
     trackPointer(node, {

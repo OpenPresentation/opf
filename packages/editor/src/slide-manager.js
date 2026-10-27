@@ -83,7 +83,8 @@ export function createSlideManager(container, options) {
     : "Up and Down arrows move between slides. Shift plus arrow keys extend the selection. Alt plus Up or Down moves the selected slides. Delete removes them. Press the context menu key for more actions." });
   container.after(hint);
 
-  const deck = () => editor.presentation;
+  // The snapshot is one object per version; `editor.presentation` copies the whole deck on every read (CE-20: read once per card).
+  const deck = () => editor.snapshot?.().presentation ?? editor.presentation;
   const count = () => deck().slides.length;
   const current = () => Math.max(0, Math.min(count() - 1, options.getSlideIndex()));
   const announce = (message) => {

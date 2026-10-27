@@ -271,7 +271,8 @@ export function createOpfEditor(element, options = {}) {
 
   // ---- navigation and the refresh loop ----------------------------------------------------------------------------------------
   function renderViews(deck) {
-    thumbnailCache?.prepare(deck);
+    // The Studio's filmstrip draws the thumbnails it shows itself, as they scroll in.
+    if (!studioLayout) thumbnailCache?.prepare(deck);
     slideManager?.render();
     if (activeView === "sorter") sorter?.render();
     if (activeView === "outline") outline?.render();
@@ -299,7 +300,8 @@ export function createOpfEditor(element, options = {}) {
   }
   function sync() {
     fonts?.registry?.clearSubstitutions?.();
-    const deck = session.presentation;
+    // The frozen snapshot (one object per version): the session's `presentation` copies the whole deck on every read.
+    const deck = session.snapshot().presentation;
     slideIndex = Math.max(0, Math.min(slideIndex, deck.slides.length - 1));
     renderViews(deck);
     slideNav?.setSlide(slideIndex);
@@ -316,7 +318,7 @@ export function createOpfEditor(element, options = {}) {
     if (!mounted || destroyed) return Promise.resolve();
     const token = ++refreshToken;
     let loaded = false;
-    lastRefresh = whenFontsReady(fonts, session.presentation, {
+    lastRefresh = whenFontsReady(fonts, session.snapshot().presentation, {
       renderOptions: renderOptions(),
       isCurrent: () => token === refreshToken && !destroyed,
       loading: () => {
@@ -497,6 +499,8 @@ export function createOpfEditor(element, options = {}) {
     strip?.destroy();
     slideNav = undefined;
     strip = undefined;
+    // The Studio shows its filmstrip; the slide row is the Playground preset's, mounted only while that preset is on.
+    if (studioLayout && (studioCtl?.layout ?? layout) !== "playground") return;
     if (parts.navigator && slots.navigator) {
       slideNav = createSlideNavigator(slots.navigator, {
         editor: ui,
@@ -975,6 +979,7 @@ export function createOpfEditor(element, options = {}) {
       getName: () => pane?.getName(),
       setName: (name) => pane?.setName(name),
       layoutStudio: () => studio,
+      mountSlideRow: () => mountSlideRow(),
     });
   }
 

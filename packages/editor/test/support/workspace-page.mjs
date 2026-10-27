@@ -28,20 +28,21 @@ export async function bundleWorkspace({ extraEntry = '', alias } = {}) {
     import { loadFonts } from '@openpresentation/opf-render/fonts-browser';
     window.opfWs = { ...workspace, createEditorSession, gallery, loadFonts, react };
     ${extraEntry}
-  ` }, bundle: true, platform: 'browser', format: 'iife', write: false, minify: true, conditions: ['browser'], logLevel: 'error',
+  ` }, bundle: true, platform: 'browser', format: 'iife', write: false, minify: !process.env.OPF_TEST_UNMINIFIED, conditions: ['browser'], logLevel: 'error',
     // The development build of React: StrictMode double-invokes effects there (and only there), which is what the tests exercise.
     define: { 'process.env.NODE_ENV': '"development"' } });
   return result.outputFiles[0].text;
 }
 
-export async function startWorkspacePage({ viewport = { width: 1280, height: 860 }, body = '<div id="host" style="width:1200px;height:800px"></div>', colorScheme, bundle: bundleOptions = {} } = {}) {
+export async function startWorkspacePage({ viewport = { width: 1280, height: 860 }, body = '<div id="host" style="width:1200px;height:800px"></div>', colorScheme, bundle: bundleOptions = {}, context = {}, args = [] } = {}) {
   const key = JSON.stringify(bundleOptions);
   if (!bundles.has(key)) bundles.set(key, await bundleWorkspace(bundleOptions));
   const bundle = bundles.get(key);
   const faces = (await loadFonts({ pack: 'office' })).registry.embeddedFonts.filter((face) => face.family === 'Roboto' && [400, 700].includes(face.weight) && !face.italic);
   const css = (await buildStyles(new URL('../../src/styles/', import.meta.url))).css;
-  const browser = await chromium.launch({ channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined });
-  const page = await browser.newPage({ viewport, ...(colorScheme ? { colorScheme } : {}) });
+  const browser = await chromium.launch({ channel: process.platform === 'win32' && !process.env.CI ? 'msedge' : undefined, args });
+  // `context` adds page options (CE-20: `hasTouch` and `isMobile` for a coarse pointer); `args` adds browser flags (`--js-flags=--expose-gc`).
+  const page = await browser.newPage({ viewport, ...(colorScheme ? { colorScheme } : {}), ...context });
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.stack ?? error.message));
   page.on('console', (message) => { if (message.type() === 'error' && !/Failed to load resource/.test(message.text())) errors.push(message.text()); });

@@ -112,7 +112,7 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
       if (event.button !== 0 || studio.readOnly) return;
       event.preventDefault();
       const start = { x: event.clientX, value: Number(input.value || 0) };
-      caption.setPointerCapture?.(event.pointerId);
+      try { caption.setPointerCapture?.(event.pointerId); } catch { /* a pointer that cannot be captured (a synthetic one) */ }
       const move = (next) => {
         const delta = Math.round((next.clientX - start.x) / 4) * step;
         input.value = String(Math.max(min ?? -Infinity, Math.min(max ?? Infinity, Math.round((start.value + delta) * 1000) / 1000)));

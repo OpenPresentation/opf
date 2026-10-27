@@ -295,7 +295,11 @@ export declare class OPFRenderError extends Error {
   constructor(code: string, message: string, details?: Record<string, unknown>);
 }
 
-export declare function resolvePresentation(input: unknown, options?: ToSvgOptions): ResolvedPresentation;
+/**
+ * Resolve a presentation for drawing. `select.slides` (0-based) binds only those slides (each slide is composed on its own); the other entries
+ * of `slides` are then undefined. Without it every slide is bound.
+ */
+export declare function resolvePresentation(input: unknown, options?: ToSvgOptions, select?: { slides?: number[] }): ResolvedPresentation;
 
 /** An SVG slide the renderer drew: its text, or its bytes. */
 export type SvgSlide = string | Uint8Array;
