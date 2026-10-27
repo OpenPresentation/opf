@@ -225,6 +225,10 @@
           "command": "node test/hang-indent-perf-browser.mjs"
         },
         {
+          "id": "browser:startup-perf",
+          "command": "node test/startup-perf-browser.mjs"
+        },
+        {
           "id": "browser:mobile-touch",
           "command": "node test/mobile-touch-browser.mjs"
         },

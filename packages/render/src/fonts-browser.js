@@ -1,11 +1,11 @@
 import { createFontRegistry, OPFFontError } from "./font-registry.js";
 import { lazyFontEntries, lazyFontList, normalizeExtraLazyFonts } from "./lazy-font-list.js";
-import { lazyFacesNeeded } from "./lazy-fonts.js";
+import { createFontAnalysis, lazyFacesNeeded } from "./lazy-fonts.js";
 import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { textOutlines } from "./text-paths.js";
 import { createSubsetter, fontSubsets } from "./font-subset.js";
 import { instantiateShaper } from "./hb-shape.js";
-import { analyzePresentationScripts, nextFallbackPackage, scriptFontPackages, scriptPackageEntries, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
+import { analyzePresentationScripts, createScriptAnalysis, nextFallbackPackage, scriptFontPackages, scriptPackageEntries, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontEntries, scriptFontPackages } from "./script-font-pack.js";
 export { lazyFontEntries, lazyFontList, splitStartupFaces } from "./lazy-font-list.js";
 export { lazyFacesNeeded, lazyFontsFor, presentationFaces, presentationFamilies } from "./lazy-fonts.js";
@@ -102,6 +102,10 @@ async function loadRegistry(entries, options = {}, startup = {}) {
   };
   await registerBrowserFaces(faces, described);
 
+  // `pending` and `ensure` run before every render and edit, so the analyses keep what they found (the 0.28.0 startup regression):
+  // each slide's faces and families are analyzed again only when the slide changes, each drawn string is scanned once.
+  const fontAnalysis = createFontAnalysis(), scriptMemory = createScriptAnalysis({ fonts: fontAnalysis });
+  Object.defineProperty(registry, "analysisStats", { get: () => ({ ...fontAnalysis.stats, ...scriptMemory.stats }), enumerable: false });
   // Script faces (FF-19) are loaded lazily, once a document needs them, and only for the scripts it uses.
   const scriptPackages = new Set();
   let queue = Promise.resolve();
@@ -167,7 +171,7 @@ async function loadRegistry(entries, options = {}, startup = {}) {
      */
     async ensureScripts(presentation, callOptions) {
       if (disposed) throw gone();
-      const analysis = analyzePresentationScripts(presentation, undefined, renderOptionsFor(callOptions)), selection = scriptSelectionOf(analysis);
+      const analysis = analyzePresentationScripts(presentation, undefined, renderOptionsFor(callOptions), scriptMemory), selection = scriptSelectionOf(analysis);
       const loadedNow = [], failed = [];
       const attempt = async (item) => {
         try { loadedNow.push(...(await loadPackageList([item], callOptions))); }
@@ -186,7 +190,7 @@ async function loadRegistry(entries, options = {}, startup = {}) {
     },
     /** Synchronous: script-pack packages the presentation needs that are not loaded yet. Empty means `ensureScripts` would fetch nothing. `renderOptions` are the `toSvg` options the document resolves with (`catalogs`, ...). */
     pendingScripts(presentation, renderOptions) {
-      const analysis = analyzePresentationScripts(presentation, undefined, renderOptionsFor(renderOptions));
+      const analysis = analyzePresentationScripts(presentation, undefined, renderOptionsFor(renderOptions), scriptMemory);
       const primary = scriptFontPackages(scriptSelectionOf(analysis).scripts).map((item) => item.name).filter((name) => !scriptPackages.has(name));
       if (primary.length) return primary;
       const next = nextFallbackPackage(analysis, { covers, loaded: scriptPackages });
@@ -203,7 +207,7 @@ async function loadRegistry(entries, options = {}, startup = {}) {
   const aliasTargets = new Map(Object.entries(options.aliases ?? {}).map(([from, to]) => [from.toLowerCase(), to]));
   // Face level (FF-41): the faces the document draws, resolved as the registry resolves them with every vendored face loaded.
   // A document that does not resolve throws what `toSvg` throws for it.
-  const neededLazy = (presentation, callOptions) => lazyFacesNeeded(presentation, renderOptionsFor(callOptions), { lazy, held: registry.describeFaces(), loaded: lazyLoaded, policy, aliases: aliasTargets, fallbackFamily: options.fallbackFamily });
+  const neededLazy = (presentation, callOptions) => lazyFacesNeeded(presentation, renderOptionsFor(callOptions), { lazy, held: registry.describeFaces(), loaded: lazyLoaded, policy, aliases: aliasTargets, fallbackFamily: options.fallbackFamily, analysis: fontAnalysis });
   const lazyBaseUrl = () => {
     if (typeof options.lazyFontsBaseUrl !== "string" || !options.lazyFontsBaseUrl)
       throw new OPFFontError("invalid-font-source", "Loading vendored fonts requires lazyFontsBaseUrl, where the host serves the package's fonts directory.");
@@ -360,6 +364,8 @@ export async function loadFonts({ faces = [], subsetWasm, shapeWasm, ...options 
     },
     /** Synchronous: the files and script packages `ensure` would fetch. Empty means a render can start now. Throws what `toSvg` throws for a document that does not resolve. */
     pending,
+    /** Counters of the font analysis behind `pending` and `ensure` (slides analyzed, strings scanned), for tests and benchmarks. */
+    get analysisStats() { return registry.analysisStats; },
     dispose: () => registry.dispose(),
   };
 }

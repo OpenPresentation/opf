@@ -1,6 +1,7 @@
 import { fontPolicyFor } from "@openpresentation/opf/font-policy";
 import { pickFace } from "./font-registry.js";
-import { resolvePresentation, toSvg } from "./svg.js";
+import { toSvg } from "./svg.js";
+import { deckInternals } from "./svg-internals.js";
 export { lazyFontEntries, lazyFontList } from "./lazy-font-list.js";
 
 /**
@@ -35,10 +36,7 @@ function resolveOptionsOf(options) {
  * `options.catalogs` needs those catalogs here too.
  */
 export function presentationFamilies(presentation, options = {}) {
-  const families = new Set();
-  const resolved = resolvePresentation(presentation, resolveOptionsOf(options));
-  for (const slide of resolved.slides) for (const family of Object.values(slide.design?.fonts ?? {})) if (typeof family === "string" && family) families.add(family);
-  return families;
+  return createFontAnalysis().families(presentation, options);
 }
 
 // A measurement that costs nothing to overflow: text is measured as very narrow, so layout never fails on text that
@@ -81,25 +79,206 @@ function registryView({ faces, policy = "none", aliases = new Map(), fallbackFam
  * @returns {{family: string, weight: number, italic: boolean}[]}
  */
 export function presentationFaces(presentation, options = {}, registry) {
-  const seen = new Map();
-  const resolve = registry ? registryView(registry) : undefined;
-  const settle = style => {
-    if (!resolve) return { ...style };
-    try { return resolve(style); } catch { return { ...style }; }
-  };
-  const record = style => {
-    const family = style?.fontFamily;
-    if (typeof family !== "string" || !family.trim() || family.startsWith("+")) return;
-    const weight = Number.isFinite(style.fontWeight) ? style.fontWeight : 400, italic = style.italic === true;
-    const key = `${lc(family)}\u0000${weight}\u0000${italic}`;
-    if (!seen.has(key)) seen.set(key, { family, weight, italic });
-  };
-  const textMeasurement = {
-    measure(text, size, style) { if (text !== "") record(settle(style)); return String(text).length * size * RECORDED_EM; },
+  return createFontAnalysis().faces(presentation, options, registry);
+}
+
+const faceKey = (family, weight, italic) => `${lc(family)}\u0000${weight}\u0000${italic}`;
+const byFace = (a, b) => a.family < b.family ? -1 : a.family > b.family ? 1 : Number(a.italic) - Number(b.italic) || a.weight - b.weight;
+
+/**
+ * The measurement `presentationFaces` draws with: it records every style it is asked to measure (resolved through `settle`) into
+ * the map `record.into` holds (switch it to file what follows elsewhere).
+ */
+function recordingMeasurement(settle, into) {
+  const record = { into };
+  record.textMeasurement = {
+    measure(text, size, style) {
+      if (text !== "") {
+        const settled = settle(style), family = settled?.fontFamily;
+        if (typeof family === "string" && family.trim() && !family.startsWith("+")) {
+          const weight = Number.isFinite(settled.fontWeight) ? settled.fontWeight : 400, italic = settled.italic === true;
+          const key = faceKey(family, weight, italic);
+          if (!record.into.has(key)) record.into.set(key, { family, weight, italic });
+        }
+      }
+      return String(text).length * size * RECORDED_EM;
+    },
     resolveStyle: settle,
   };
-  toSvg(presentation, { ...resolveOptionsOf(options), fonts: { textMeasurement } });
-  return [...seen.values()].sort((a, b) => a.family < b.family ? -1 : a.family > b.family ? 1 : Number(a.italic) - Number(b.italic) || a.weight - b.weight);
+  return record;
+}
+
+// Stable short tokens for option values: objects by identity (a host passes the same catalog objects on every call; the editor
+// freezes its catalog list), plain values and small plain objects by content.
+const objectTokens = new WeakMap();
+let nextObjectToken = 0;
+function optionToken(value) {
+  if (value === null || typeof value !== "object" && typeof value !== "function") return JSON.stringify(value ?? null);
+  if (Array.isArray(value)) return `[${value.map(optionToken).join(",")}]`;
+  let token = objectTokens.get(value);
+  if (token === undefined) { token = `#${nextObjectToken++}`; objectTokens.set(value, token); }
+  return token;
+}
+// The options a deck resolves with, as a key. `variables` is left out where it cannot change the deck (the editor's views pass `variables:
+// false` or nothing for the same plain deck, which must not analyze it twice).
+function optionsKey(options, presentation) {
+  return Object.keys(options).sort().filter(key => key !== "variables" || !deckInternals.variablesIdle(presentation, options.variables))
+    .map(key => `${JSON.stringify(key)}:${optionToken(options[key])}`).join(",");
+}
+
+/**
+ * Content keys of a deck for the per-slide caches: `context` is everything a slide's drawing reads besides the slide itself (the deck
+ * without its slides, and every slide's section, which furniture can show on other slides; the rule the editor's thumbnail cache
+ * uses), `slides[i]` the slide with its number and the slide count. Keys are taken from the content on every call, never from object
+ * identity, so a host that changes a deck in place is analyzed right. Undefined for input that is not a plain deck object (JSON
+ * text, bytes, a deck without a slide list or one JSON cannot write): such input is analyzed whole, as `toSvg` draws it.
+ */
+export function deckKeys(presentation) {
+  if (presentation === null || typeof presentation !== "object" || ArrayBuffer.isView(presentation) || !Array.isArray(presentation.slides)) return undefined;
+  try {
+    const { slides, ...metadata } = presentation;
+    return {
+      context: JSON.stringify([metadata, slides.map(slide => slide?.section ?? null)]),
+      slides: slides.map((slide, index) => `${index}/${slides.length}/${JSON.stringify(slide) ?? ""}`),
+    };
+  } catch { return undefined; }
+}
+
+/**
+ * Per-slide results kept between calls: a few contexts (least recently used first out) and, in each, the slides most recently asked
+ * for, up to twice the deck's slides (a host that alternates a document and a draft of it keeps both).
+ */
+function slideMemory(contexts = 8) {
+  const byContext = new Map();
+  return (context, slides) => {
+    let entries = byContext.get(context);
+    if (entries) byContext.delete(context);
+    else entries = new Map();
+    byContext.set(context, entries);
+    while (byContext.size > contexts) byContext.delete(byContext.keys().next().value);
+    const limit = 2 * slides + 16;
+    return {
+      get(key) {
+        const value = entries.get(key);
+        if (value !== undefined) { entries.delete(key); entries.set(key, value); }
+        return value;
+      },
+      set(key, value) {
+        entries.set(key, value);
+        while (entries.size > limit) entries.delete(entries.keys().next().value);
+      },
+    };
+  };
+}
+
+/**
+ * `presentationFaces` and `presentationFamilies` with memory, for a fonts handle that is asked again and again (FF-41; the 0.28.0
+ * startup regression). Each slide's result is kept by the slide's content, and a call analyzes only the slides whose content,
+ * number or slide count changed: `faces` composes and draws just those slides with the recording measurement, `families` resolves
+ * just their designs. Everything else a slide's result depends on (the rest of the deck, every slide's section, the render
+ * options and, for faces, the registry view) is the cache's context: a change there analyzes every slide again. The results are
+ * the ones `presentationFaces` and `presentationFamilies` give, errors included: a deck not checked before is opened (resolved and
+ * checked) even when every slide is known, and a slide that fails throws what `toSvg` throws for it (only slides that succeed are
+ * kept).
+ *
+ * `stats` counts the work, for tests and benchmarks: `decks` (decks opened), `slides` (slides composed and drawn for faces) and
+ * `designs` (slide designs resolved for families).
+ */
+export function createFontAnalysis() {
+  const memory = slideMemory(), stats = { decks: 0, slides: 0, designs: 0 }, checked = new Set();
+  // The deck behind `keys`, opened (resolved and checked as `toSvg` does) when work is needed or this exact deck was never checked.
+  const opener = (presentation, resolveOptions, keys, optionsToken) => {
+    const whole = `${optionsToken}\u0001${keys.context}\u0001${keys.slides.join("\u0001")}`;
+    let deck;
+    const open = () => {
+      if (!deck) {
+        deck = deckInternals.openDeck(presentation, resolveOptions);
+        stats.decks++;
+        checked.delete(whole);
+        checked.add(whole);
+        while (checked.size > 8) checked.delete(checked.keys().next().value);
+      }
+      return deck;
+    };
+    return { open, check: () => { if (!checked.has(whole)) open(); } };
+  };
+
+  function faces(presentation, options = {}, registry) {
+    const resolveOptions = resolveOptionsOf(options);
+    if (registry) registry = { ...registry, faces: [...registry.faces] };
+    const view = registry ? registryView(registry) : undefined;
+    const settle = style => {
+      if (!view) return { ...style };
+      try { return view(style); } catch { return { ...style }; }
+    };
+    const keys = deckKeys(presentation);
+    if (!keys) {
+      // Not a deck object: one whole-deck pass, kept nowhere.
+      const seen = new Map();
+      toSvg(presentation, { ...resolveOptions, fonts: { textMeasurement: recordingMeasurement(settle, seen).textMeasurement } });
+      stats.decks++;
+      return [...seen.values()].sort(byFace);
+    }
+    const optionsToken = optionsKey(resolveOptions, presentation);
+    const slides = memory(`faces\u0001${optionsToken}\u0001${registry ? registryKey(registry) : ""}\u0001${keys.context}`, keys.slides.length);
+    const deck = opener(presentation, resolveOptions, keys, optionsToken);
+    const entries = keys.slides.map(slides.get);
+    const missing = entries.flatMap((entry, index) => entry === undefined ? [index] : []);
+    if (missing.length) {
+      // Composition of the slides, then their drawing, as `toSvg` runs them.
+      const opened = deck.open();
+      const made = new Map(missing.map(index => [index, { composed: new Map(), drawn: new Map() }]));
+      const recorders = new Map(missing.map(index => [index, recordingMeasurement(settle, made.get(index).composed)]));
+      for (const index of missing) opened.bind(index, recorders.get(index).textMeasurement);
+      // A slide is drawn with the measurement it was composed with; what it measures from here on is its drawing. `skipHidden`
+      // leaves hidden slides undrawn (they are still composed), as in `toSvg`.
+      for (const index of missing) {
+        if (resolveOptions.skipHidden === true && opened.presentation.slides[index]?.hidden === true) continue;
+        recorders.get(index).into = made.get(index).drawn;
+        opened.render(index);
+      }
+      for (const [index, entry] of made) { slides.set(keys.slides[index], entry); entries[index] = entry; }
+      stats.slides += missing.length;
+    } else deck.check();
+    // In the order one `toSvg` records them: every slide's composition, then every slide's drawing.
+    const seen = new Map();
+    for (const phase of ["composed", "drawn"]) for (const entry of entries) for (const [key, face] of entry[phase]) if (!seen.has(key)) seen.set(key, face);
+    return [...seen.values()].sort(byFace).map(face => ({ ...face }));
+  }
+
+  function families(presentation, options = {}) {
+    const resolveOptions = resolveOptionsOf(options);
+    const familiesOf = design => Object.values(design?.fonts ?? {}).filter(family => typeof family === "string" && family);
+    const keys = deckKeys(presentation);
+    let entries;
+    if (!keys) {
+      const opened = deckInternals.openDeck(presentation, resolveOptions);
+      stats.decks++;
+      entries = opened.presentation.slides.map((_, index) => familiesOf(opened.design(index)));
+      stats.designs += entries.length;
+    } else {
+      const optionsToken = optionsKey(resolveOptions, presentation);
+      const slides = memory(`families\u0001${optionsToken}\u0001${keys.context}`, keys.slides.length);
+      const deck = opener(presentation, resolveOptions, keys, optionsToken);
+      entries = keys.slides.map(slides.get);
+      const missing = entries.flatMap((entry, index) => entry === undefined ? [index] : []);
+      if (missing.length) {
+        const opened = deck.open();
+        // The design as drawing binds it, without composing the slide (composing every slide with the default measurement made
+        // this the slowest step of a browser font check in 0.28.0).
+        for (const index of missing) { entries[index] = familiesOf(opened.design(index)); slides.set(keys.slides[index], entries[index]); }
+        stats.designs += missing.length;
+      } else deck.check();
+    }
+    return new Set(entries.flat());
+  }
+
+  return { faces, families, stats };
+}
+
+function registryKey({ faces, policy = "none", aliases = new Map(), fallbackFamily }) {
+  // Every field `pickFace` reads, as it reads them (`italic` is compared with ===, `fallbackOnly` and `scripts` by truth).
+  return JSON.stringify([faces.map(face => [face.family, face.familyGroup ?? face.family, face.weight ?? null, face.italic ?? null, !!face.fallbackOnly, !!face.scripts]), policy, [...aliases], fallbackFamily ?? null]);
 }
 
 /**
@@ -108,11 +287,13 @@ export function presentationFaces(presentation, options = {}, registry) {
  * (`registry.describeFaces()`), `loaded` the lazy files already loaded; `policy`, `aliases` and `fallbackFamily` are the
  * registry's. `renderOptions` are the `toSvg` options the document resolves with (`catalogs`, ...), and a document that
  * does not resolve throws what `toSvg` throws for it. Face level: a bold or italic run added by an edit adds just that face.
+ * Pass `analysis` (`createFontAnalysis()`) to keep each slide's faces between calls: then only slides that changed are analyzed.
  */
-export function lazyFacesNeeded(presentation, renderOptions, { lazy, held, loaded = new Set(), policy = "none", aliases = new Map(), fallbackFamily }) {
+export function lazyFacesNeeded(presentation, renderOptions, { lazy, held, loaded = new Set(), policy = "none", aliases = new Map(), fallbackFamily, analysis }) {
   const heldFaces = [...held], heldKeys = new Set(heldFaces.map(faceKeyOf));
   const missing = lazy.filter(face => !heldKeys.has(faceKeyOf(face)) && !loaded.has(face.file));
-  const drawn = new Set(presentationFaces(presentation, renderOptions, { faces: [...heldFaces, ...missing], policy, aliases, fallbackFamily }).map(faceKeyOf));
+  // `analysis` (from `createFontAnalysis`) keeps each slide's faces between calls, so a fonts handle redoes only changed slides.
+  const drawn = new Set((analysis ?? createFontAnalysis()).faces(presentation, renderOptions, { faces: [...heldFaces, ...missing], policy, aliases, fallbackFamily }).map(faceKeyOf));
   return missing.filter(face => drawn.has(faceKeyOf(face)));
 }
 function faceKeyOf(face) { return `${lc(face.family)}\u0000${face.weight}\u0000${!!face.italic}`; }

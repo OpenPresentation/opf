@@ -5,7 +5,7 @@ import { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
 import { OPFFontError } from "./font-registry.js";
 import { SCRIPT_FONT_REPLACEMENTS, glyphFallbackFamilies, scriptOfCharacter, scriptsOfText } from "./script-fonts.js";
 import { resolveScriptFonts } from "@openpresentation/opf/composition";
-import { presentationFamilies } from "./lazy-fonts.js";
+import { createFontAnalysis } from "./lazy-fonts.js";
 import { SYMBOL_SCRIPT, isSymbolEncodedFamily } from "./symbol-fonts.js";
 
 const SCRIPT_ALIASES = Object.freeze({Hira: "Jpan", Kana: "Jpan", Hrkt: "Jpan", Hang: "Kore", Hani: "Hans", Zyyy: "Latn"});
@@ -134,7 +134,7 @@ function scriptOfFamily(family) {
  * unchanged, and the families the renderer resolves per slide count too, so a scheme that exists only in the host's catalogs
  * and names a script font still loads that font.
  */
-function designScripts(presentation, profile, renderOptions) {
+function designScripts(presentation, profile, renderOptions, memory) {
   const scripts = new Set();
   let han;
   const note = resolved => {
@@ -153,7 +153,7 @@ function designScripts(presentation, profile, renderOptions) {
     });
   }
   if (renderOptions?.catalogs) {
-    for (const family of presentationFamilies(presentation, renderOptions)) note({ heading: { latin: family }, body: { latin: family } });
+    for (const family of memory.fonts.families(presentation, renderOptions)) note({ heading: { latin: family }, body: { latin: family } });
   }
   // FF-45: a run or design that names a symbol-encoded family (a Wingdings bullet run, a Symbol heading) needs the symbol faces.
   for (const family of namedFontFamilies(presentation)) if (isSymbolEncodedFamily(family)) scripts.add(SYMBOL_SCRIPT);
@@ -179,17 +179,60 @@ function* namedFontFamilies(value, key) {
  * `toSvg` options) matter only for font schemes the host supplies in `renderOptions.catalogs`, which then resolve
  * like the renderer resolves them; a document that then does not resolve throws what `toSvg` throws for it.
  */
-export function analyzePresentationScripts(presentation, profile, renderOptions) {
+export function analyzePresentationScripts(presentation, profile, renderOptions, memory = createScriptAnalysis()) {
   profile ??= presentationScriptProfile(presentation, renderOptions);
   const scripts = new Set(), cjk = new Set();
-  const design = designScripts(presentation, profile, renderOptions);
+  const design = designScripts(presentation, profile, renderOptions, memory);
   // Han-only text in a deck whose language is not CJK draws with the scheme's own CJK face when the scheme names one.
   const itemizing = design.han && !cjkKeys.includes(profile?.script) ? { ...profile, script: design.han } : profile;
+  const scan = memory.scanner(itemizing);
   for (const text of drawnStrings(presentation)) {
-    for (const script of scriptsOfText(text, itemizing)) scripts.add(script);
-    for (const character of text) if (character.codePointAt(0) > 0x2E7F && cjkCharacters.has(scriptOfCharacter(character))) cjk.add(character);
+    const found = scan(text);
+    for (const script of found.scripts) scripts.add(script);
+    for (const character of found.cjk) cjk.add(character);
   }
   return { profile, detected: [...scripts].sort(), design: design.scripts, cjk };
+}
+
+/** One string's scripts (`scriptsOfText`) and the Han, kana and Hangul characters it draws, in order. One pass over the characters. */
+function scanText(text, itemizing) {
+  const cjk = [];
+  for (const character of text) if (character.codePointAt(0) > 0x2E7F && cjkCharacters.has(scriptOfCharacter(character))) cjk.push(character);
+  return { scripts: scriptsOfText(text, itemizing), cjk };
+}
+
+const STRING_MEMORY_LIMIT = 65536;
+
+/**
+ * Memory for `analyzePresentationScripts`, for a fonts handle that analyzes the same deck again and again (the 0.28.0 startup
+ * regression): each drawn string is scanned once per itemizing profile (the document language decides how Han text and East
+ * Asian punctuation itemize), and the font families of the deck's slides come from a `createFontAnalysis` that redoes only
+ * changed slides. Pass the handle's own `fonts` analysis to share its slide memory. `stats.strings` counts the strings scanned.
+ */
+export function createScriptAnalysis({ fonts = createFontAnalysis() } = {}) {
+  const byProfile = new Map(), stats = { strings: 0 };
+  return {
+    fonts,
+    stats,
+    scanner(itemizing) {
+      const key = JSON.stringify(itemizing ?? null) ?? "null";
+      let seen = byProfile.get(key);
+      if (!seen) {
+        if (byProfile.size >= 4) byProfile.delete(byProfile.keys().next().value);
+        byProfile.set(key, seen = new Map());
+      }
+      return text => {
+        let found = seen.get(text);
+        if (found === undefined) {
+          found = scanText(text, itemizing);
+          stats.strings++;
+          if (seen.size >= STRING_MEMORY_LIMIT) seen.clear();
+          seen.set(text, found);
+        }
+        return found;
+      };
+    },
+  };
 }
 
 /**
