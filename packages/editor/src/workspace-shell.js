@@ -50,25 +50,35 @@ export function buildWorkspaceShell(root, { parts, views, layout, labels = {} })
   if (parts.present) bar.append(slot("present", "div", { class: "opf-ws-present" }));
   const hasBar = bar.children.length > 1;
 
-  // The main column: the slide (or another view) over the slide row.
-  const stage = make(doc, "div", { class: "opf-ws-stage" });
-  const frame = make(doc, "div", { class: "opf-ws-frame" }, slot("canvas", "div", { class: "opf-ws-canvas", "aria-label": "Slide preview" }));
-  stage.append(frame);
-  for (const view of ["sorter", "outline", "layouts"]) if (parts[view]) stage.append(slot(view, "div", { class: `opf-ws-view opf-ws-${view}`, hidden: true }));
-  const main = make(doc, "section", { class: "opf-ws-main", "aria-label": "Slide workspace" });
-  if (parts.find) main.append(slot("find", "div", { class: "opf-ws-find", hidden: true }));
-  main.append(stage);
-  if (parts.navigator || parts.thumbnails) {
-    const dock = make(doc, "div", { class: "opf-ws-dock" });
-    if (parts.navigator) dock.append(slot("navigator", "div", { class: "opf-ws-navigator" }));
-    if (parts.thumbnails) dock.append(slot("thumbnails", "div", { class: "opf-ws-thumbnails" }));
-    main.append(dock);
+  // The main column: the slide (or another view) over the slide row, and the status line. A source-only layout has none: the pane has its own
+  // bar, problems and status.
+  const viewParts = ["sorter", "outline", "layouts"].filter((view) => parts[view]);
+  const hasMain = parts.canvas || parts.find || parts.navigator || parts.thumbnails || viewParts.length > 0;
+  let stage;
+  let frame;
+  let main;
+  if (hasMain) {
+    stage = make(doc, "div", { class: "opf-ws-stage" });
+    if (parts.canvas) {
+      frame = make(doc, "div", { class: "opf-ws-frame" }, slot("canvas", "div", { class: "opf-ws-canvas", "aria-label": "Slide preview" }));
+      stage.append(frame);
+    }
+    for (const view of viewParts) stage.append(slot(view, "div", { class: `opf-ws-view opf-ws-${view}`, hidden: true }));
+    main = make(doc, "section", { class: "opf-ws-main", "aria-label": "Slide workspace" });
+    if (parts.find) main.append(slot("find", "div", { class: "opf-ws-find", hidden: true }));
+    main.append(stage);
+    if (parts.navigator || parts.thumbnails) {
+      const dock = make(doc, "div", { class: "opf-ws-dock" });
+      if (parts.navigator) dock.append(slot("navigator", "div", { class: "opf-ws-navigator" }));
+      if (parts.thumbnails) dock.append(slot("thumbnails", "div", { class: "opf-ws-thumbnails" }));
+      main.append(dock);
+    }
+    main.append(slot("status", "p", { class: "opf-ws-status", role: "status" }));
   }
-  main.append(slot("status", "p", { class: "opf-ws-status", role: "status" }));
 
   const body = make(doc, "div", { class: "opf-ws-body" });
   if (parts.source) body.append(make(doc, "section", { class: "opf-ws-source", "aria-label": "OPF source" }, slot("source", "div", { class: "opf-ws-source-host" })));
-  body.append(main);
+  if (main) body.append(main);
 
   // The side panel: Review and Design as tabs.
   const tabs = ["design", "review"].filter((name) => parts[name]);

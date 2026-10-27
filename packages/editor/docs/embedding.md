@@ -18,11 +18,13 @@ const editor = createOpfEditor(document.querySelector("#editor"), {
 await editor.ready;
 ```
 
-The editor owns the content of the element you give it (it replaces it, and `destroy()` leaves it empty). Nothing here fetches anything, stores anything unless you give `persistence`, or talks to a service: the host supplies fonts, catalogs, storage and export converters. The entry point imports the renderer (`@openpresentation/opf-render`, an optional peer of the package) and every component, so load it on demand (a dynamic `import()`) where bundle size matters.
+The editor owns the content of the element you give it (it replaces it, and `destroy()` leaves it empty). Nothing here fetches anything, stores anything unless you give `persistence`, or talks to a service: the host supplies fonts, catalogs, storage and export converters.
+
+**What it loads.** The entry point imports the session, the source pane (CodeMirror) and core up front. The renderer (`@openpresentation/opf-render`, an optional peer of the package) and every part that shows slides (the canvas, the slide row, the presenter, Export, Review, Find, Design, the sorter, the outline and Layout Studio) are one chunk it imports on demand (`import("./workspace-parts.js")`), only when the layout mounts one of them, so a host that mounts only the source pane never loads the renderer. Measured with esbuild (ESM, code splitting, minified; `test/workspace-bundle.mjs`): a source-only host loads 1,914 KiB (602 KiB gzip) up front, where it loaded 3,086 KiB (1,007 KiB gzip) before; the bare `createSourcePane` is 1,728 KiB (558 KiB gzip). The parts mount once the fonts have arrived and, for a layout with slides, once that chunk has loaded (a source-only editor with a fonts handle at hand mounts before `createOpfEditor` returns); await `ready` before you use them.
 
 ## Layouts and parts
 
-`layout: "full"` (default) builds a bar (Undo, Redo, Find, the view switch, Export, Present), the source pane, the slide, the slide row (previous, counter, next and thumbnails), a status line and a side panel (Review, and Design when on). `"canvas"` builds the slide and its slide row. `"source"` builds only the source pane. `"studio"` is the Presentation and Slide Studio and `"playground"` its first-contact preset, which `editor.setLayout()` switches between in place ([studio.md](studio.md)). `panels` turns any part on or off:
+`layout: "full"` (default) builds a bar (Undo, Redo, Find, the view switch, Export, Present), the source pane, the slide, the slide row (previous, counter, next and thumbnails), a status line and a side panel (Review, and Design when on). `"canvas"` builds the slide and its slide row. `"source"` builds only the source pane (its own bar, problems and status; no slide stage, no status line, no slide chunk), which fills the element. `"studio"` is the Presentation and Slide Studio and `"playground"` its first-contact preset, which `editor.setLayout()` switches between in place ([studio.md](studio.md)). `panels` turns any part on or off:
 
 | `panels.` | Part | Default in `full` |
 | --- | --- | --- |
@@ -76,7 +78,7 @@ Slot names: `source`, `canvas`, `slide` (the element hidden while another view s
 
 ## The handle
 
-`getDocument()` (frozen, replaced on every change, so a store snapshot) · `setDocument(document, { text, format, name, rebase })` (opens a document as one undoable change that forks no catalog record; the source pane shows `text` as written; a document the session refuses becomes a draft in the pane and the call returns `false`) · `session` · `canvas` · `sourcePane` and the other parts · `slideIndex`, `setSlide(index)`, `goTo(index, path)`, `select(path)` · `view`, `views`, `setView(view)` · `undo()`, `redo()`, `commit()` · `focus("source" | "canvas")` · `present()` · `openFind()` · `readSource()` · `sourceCursor` · `setReadOnly`, `setTheme`, `setDensity`, `setExportMode` · `status(message)` · `on(event, listener)` (returns the unsubscribe) and `off` · `ready` · `destroy()`.
+`getDocument()` (frozen, replaced on every change, so a store snapshot) · `setDocument(document, { text, format, name, rebase })` (opens a document as one undoable change that forks no catalog record; the source pane shows `text` as written; a document the session refuses becomes a draft in the pane and the call returns `false`) · `setSourceText(text, { format, name, rebase })` (raw text in the source pane, below) · `session` · `canvas` · `sourcePane` and the other parts · `slideIndex`, `setSlide(index)`, `goTo(index, path)`, `select(path)` · `view`, `views`, `setView(view)` · `undo()`, `redo()`, `commit()` · `focus("source" | "canvas")` · `present()` · `openFind()` · `readSource()` · `sourceCursor` · `setReadOnly`, `setTheme`, `setDensity`, `setExportMode` · `status(message)` · `on(event, listener)` (returns the unsubscribe) and `off` · `ready` · `destroy()`.
 
 Events: `mounted` (the parts exist; the first update may still wait for fonts), `ready` (the first update is done), `change` (`{ document, canUndo, canRedo, event }`), `selection`, `cursor` (the caret of the source pane, below), `slide`, `view`, `source` (the verdict on the text: `valid`, `invalid` or `syntax`), `checking`, `fonts`, `geometry`, `sync` (after every update once fonts are ready, with the slide's geometry and layout notes computed when read), `render`, `draft`, `commit`, `cancel`, `status`, `error`, `kept`, `rename`, `export`, `persistence`, `review`, `panel`, `destroy`; the Studio adds `zoom`, `layout`, `command` and `layoutStudio`, and its `selection` carries the list (`items`, `primary`, `source`). An exception thrown by a listener is reported to `error` and does not stop the others.
 
@@ -108,6 +110,27 @@ editor.sourcePane.clearDecorations("agent");   // or clearDecorations() for ever
 - **`cursor`** is `{ pointer, idPath, from, to, head, part, format }`. `pointer` is the JSON Pointer of the field under the caret (`/slides/0/title`; on a property name or a value it is that property, between members it is the container, and `""` outside the content). `idPath` is the same place addressed by id (`/slides/@intro/title`), read from the session's document, so it survives a reorder; an element without an id keeps its index, and while the text does not read as a document `idPath` is the pointer. `from` and `to` are the selection and `head` the end the caret is at, in source offsets (UTF-16 positions in `getText()`, a CRLF counting as two). `part` is `key`, `value`, `between` or `none`. The event is not told while a typed edit waits to be applied (so `idPath` names the right slide), is coalesced over `cursorDelay`, is not repeated for a place already told, and is told also while the pane has no focus (a reveal that selects, a click, a format switch). The detail is frozen. The `onCursor` option is the same as `on: { cursor }`.
 - **`revealPath(target, options?)`** takes a pointer (or dotted path) or `{ from, to }`. It scrolls the start of the target into view, opening any fold around it, and moves neither the caret nor the focus, unlike `focusPath`. Options: `focus` (also focus the code), `select` (also select the range, which emits `cursor`), `align` (`center`, the default, `start` or `nearest`), `flash` (mark the first line for a moment) and `part` (which part of a field a path means: `entry`, the default, `value`, `key`, `open` or `colon`). It returns `{ from, to, line, exact }` (`exact` is false when only the nearest container could be placed) or `null`.
 - **`setDecorations(list, { group })`** draws one set, replacing the set of that `group` (default `default`); `[]` or `null` clears it. An item is `{ path, part?, kind?, label?, line? }` or `{ range: { from, to }, kind?, label?, line? }`. A path stays on its field as the text is edited and the format is switched, and is not drawn while the text has no such field; a range follows the text as positions, like a selection. `kind` becomes the class `opf-source-decoration-<kind>` (`highlight`, `error`, `warning`, `info`, `added` and `changed` have a look in the stylesheet; style any other kind yourself, the `--opf-ui-*` tokens work in it), `label` is the tooltip of a mark, and `line: true` puts the class on every line the range touches. `getDecorations(group?)` lists what is drawn now at the current offsets. The sets are the host's: the editor's own problems, field highlights and selection are untouched, and `clearDecorations()` removes only the host's.
+
+## Raw text and the exact-source writer
+
+`setDocument` opens a document; a host that has text instead (a file as it was read, a buffer it keeps itself, a draft that does not parse) gives it to the pane as it is:
+
+```js
+// The pane shows the text byte for byte in its format (comments, spelling and line endings kept) and applies it when it reads as a deck.
+const applied = editor.setSourceText(fileText, { format: "yaml", name: "q3-review" });
+if (!applied) showProblems(editor.sourceState); // a draft: the pane lists its problems, the slide keeps the last valid document
+```
+
+It is what pasting the text over everything does: one undoable change when it applies (Undo, or Cmd/Ctrl+Z in the code, brings the old text back), nothing converted. An open canvas edit is committed first. It throws before `ready`, in a layout without a source pane and while read-only; `editor.sourcePane.setSourceText(text, { format, name })` is the same on the pane. Hosts that called `sourcePane.editor.api.replace(...)` for this use it instead.
+
+A host that keeps the JSON text of a deck itself writes an edit back with the editor's own writer, so the author's bytes survive (only the changed values are rewritten):
+
+```js
+import { createSourceMemory, updateJsonSource } from "@openpresentation/opf-editor/exact-source";
+
+const memory = createSourceMemory();                     // one per document
+buffer = updateJsonSource(buffer, editedDeck, memory);    // indentation, key order, escapes and CRLF kept
+```
 
 ## The source worker
 

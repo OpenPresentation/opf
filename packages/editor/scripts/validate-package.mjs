@@ -82,6 +82,9 @@ for (const [entry, file] of [["./workspace", "workspace"], ["./canvas-variables"
   assert.equal(pkg.exports[entry].default, `./dist/${file}.js`);
   assert.equal(pkg.exports[entry].types, `./dist/${file}.d.ts`);
 }
+// The exact-source JSON writer the source pane and the canvas use, for hosts that keep authored JSON themselves.
+assert.equal(pkg.exports?.["./exact-source"]?.default, "./dist/exact-source.js", "Must expose the exact-source writer as ./exact-source.");
+assert.equal(pkg.exports["./exact-source"].types, "./dist/exact-source.d.ts");
 assert.equal(pkg.peerDependencies?.react, ">=18", "React 18 or later is a peer of the React bindings.");
 assert.deepEqual(pkg.peerDependenciesMeta?.react, { optional: true }, "React must stay an optional peer: only ./react needs it.");
 assert.ok(!pkg.dependencies?.react && !pkg.dependencies?.["react-dom"], "React must not be a dependency.");

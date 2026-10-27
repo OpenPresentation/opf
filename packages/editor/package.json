@@ -239,6 +239,10 @@
       "types": "./dist/source-pane.d.ts",
       "default": "./dist/source-pane.js"
     },
+    "./exact-source": {
+      "types": "./dist/exact-source.d.ts",
+      "default": "./dist/exact-source.js"
+    },
     "./presenter": {
       "types": "./dist/presenter.d.ts",
       "default": "./dist/presenter.js"

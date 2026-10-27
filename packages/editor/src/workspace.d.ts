@@ -435,6 +435,14 @@ export interface OpfEditor {
    * as written. A document the session refuses is listed in the pane as a draft and `false` is returned. Throws before `ready`.
    */
   setDocument(document: unknown, options?: OpfEditorSetDocumentOptions): boolean;
+  /**
+   * Load raw source text into the source pane without converting it (a file as it was read, text that does not parse): what pasting it over
+   * everything does. `options.format` is the text's format (the pane switches to it), `options.name` the file name, `options.rebase` as in
+   * `setDocument` (only when the text applied). Text that reads as a document the session accepts is applied as one undoable change; anything
+   * else stays in the pane as a draft with its problems (the slide keeps the last valid document) and `false` is returned. An open canvas edit
+   * is committed first. Throws before `ready`, without a source pane, and while read-only.
+   */
+  setSourceText(text: string, options?: Omit<OpfEditorSetDocumentOptions, "text">): boolean;
   /** Switch the view. Commits an open canvas edit first; false when that failed or the view is not available. */
   setView(view: OpfEditorView, options?: { focus?: boolean }): boolean;
   /** Show slide `index` (0-based). Commits an open canvas edit first. */
@@ -475,7 +483,10 @@ export interface OpfEditor {
   destroy(): void;
 }
 
-/** Mount the editor in `element` (its content is replaced). */
+/**
+ * Mount the editor in `element` (its content is replaced). The parts mount once the fonts have arrived and, for a layout that shows slides,
+ * once the slide chunk (the renderer and the slide parts, imported on demand) has loaded; await `ready`. A source-only editor never loads that chunk.
+ */
 export declare function createOpfEditor(element: HTMLElement, options?: OpfEditorOptions): OpfEditor;
 
 export type { LayoutStudio } from "./workspace-layouts.js";

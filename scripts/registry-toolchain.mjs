@@ -6,6 +6,7 @@ import { registryPlan } from './registry-plan.mjs';
 import { UNEXPORTED_EDITOR_MODULES } from './gallery-editor-imports.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+const EDITOR_SUBPATH = /^@openpresentation\/opf-editor\/[a-z-]+$/;
 
 
 /** Every registry entry must be a real file within this consumer, never an ancestor or escaped link. */
@@ -45,6 +46,13 @@ export async function registryToolchain() {
 }
 
 export function registryBindings(modules, resolve) {
+  const resolvable = (specifier) => {
+    try {
+      return Boolean(resolve(specifier));
+    } catch {
+      return false;
+    }
+  };
   // RR-20 (core 0.18): core's root export is conditional (node: the full build, browser: dist/browser.js). import.meta.resolve takes
   // the node condition, so a browser bundle takes the subpath's `browser` entry instead, as a browser host's bundler does.
   const browserEntry = (specifier) => {
@@ -62,10 +70,10 @@ export function registryBindings(modules, resolve) {
       name: 'published-opf-packages',
       setup(build) {
         build.onResolve({ filter: /^@openpresentation\// }, ({ path: specifier }) => {
-          // opf-editor 0.10.0 ships dist/exact-source.js (imported by the playground example, which the build rewrites from
-          // ../src/exact-source.js) but does not list it in package.json "exports". Bundle the published file by its path
-          // inside the installed package; the bytes are still the registry's. Remove this when a release exports it.
-          if (UNEXPORTED_EDITOR_MODULES.includes(specifier)) {
+          // The playground example imports editor modules the installed release may not list in package.json "exports": font-gate
+          // (UNEXPORTED_EDITOR_MODULES), and a module exported only after that release (exact-source, before the release after 0.28.0).
+          // Bundle the published file by its path inside the installed package; the bytes are still the registry's.
+          if (UNEXPORTED_EDITOR_MODULES.includes(specifier) || (EDITOR_SUBPATH.test(specifier) && !resolvable(specifier))) {
             return { path: registryFile(modules, pathToFileURL(path.join(path.dirname(registryFile(modules, resolve('@openpresentation/opf-editor'))), `${specifier.split('/').pop()}.js`))) };
           }
           if (browser && specifier === '@openpresentation/opf-render') return { path: registryFile(modules, resolve('@openpresentation/opf-render/svg')) };
