@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.29.1 (2026-10-27)
+
+No package changes; released with the set.
+
 ## 0.29.0 (2026-10-27)
 
 - The editor draws its first preview faster than 0.26.10 again (0.28.0 took up to 2.3 times as long; the playground's sample deck now draws in 2.3 s and a 300-slide deck in 3.4 s, against 3.2 s and 6.4 s in 0.26.10 and 4.1 s and 6.4 s in 0.28.0). The browser fonts handle's `pending`, which the editor asks before every render, composed every slide of the deck to find its font families (with core's default measurement: a dozen `\p{...}` regular expressions per character, run again for every fitting trial, and 0.28.0's content sizing tries more sizes), then composed and drew every slide again to find its faces, on every call. Now the families come from each slide's design without composing it, each slide's faces and families are kept by the slide's content so an edit analyzes only the slides it changed, each drawn string is scanned for scripts once, and the handle's new `analysisStats` counts that work. Core's `measureText` classifies each character once (identical widths), and script detection classifies a character with one precompiled pattern and works out a text's Han script once. Results, rendered output and the fonts loaded before drawing are unchanged. The playground takes `OPF_EDITOR_HOST.document` (its starting deck) and `OPF_EDITOR_HOST.onReady` from a host page, and `test/startup-perf-browser.mjs` holds the startup time and the work counts.
