@@ -58,6 +58,13 @@ export interface CanvasEditorOptions {
    * their properties on double-click.
    */
   textEntry?: "click" | "dblclick";
+  /**
+   * CE-20: "interactive" (default) makes each piece of content a focusable button on the slide. "passive" is for a host that draws its own
+   * selection over the slide (the Studio): the slide SVG is `aria-hidden` and its targets leave the tab order; editing works through `beginEdit`.
+   */
+  targets?: "interactive" | "passive";
+  /** CE-20: what Escape does in an inline text field: "cancel" (default) drops the draft, "commit" keeps it and leaves. */
+  escape?: "cancel" | "commit";
   /** Picture tools (default true): a selected picture shows a "Crop picture" button that opens the crop and focal point layer. */
   imageTools?: boolean;
   /** Optional empty host for property forms; defaults to a floating canvas panel. */
@@ -106,7 +113,12 @@ export interface CanvasEditor {
   openInsertMenu(containerPath?: string,index?: number): void;
   select(path: string): void;
   /** Start editing with all text selected (keyboard entry). Pointer entry places the caret at the pointer instead. */
-  beginEdit(path: string): void;
+  beginEdit(path: string, entry?: { point?: { clientX: number; clientY: number } }): void;
+  /** How a pointer enters text editing now; `setTextEntry` changes it without remounting. */
+  readonly textEntry: "click" | "dblclick";
+  setTextEntry(mode: "click" | "dblclick"): void;
+  readonly targets: "interactive" | "passive";
+  setTargets(mode: "interactive" | "passive"): void;
   /** Open structured controls, including rich run fields. */
   editProperties(path: string): boolean;
   commit(): boolean;

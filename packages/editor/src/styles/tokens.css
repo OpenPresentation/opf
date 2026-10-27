@@ -23,6 +23,9 @@
   --opf-ui-success: hsl(152 76% 26%);
   --opf-ui-code-bg: hsl(220 30% 96%);
   --opf-ui-code-border: hsl(214 18% 84%);
+  --opf-ui-selection: hsl(214 57% 28%);
+  --opf-ui-hover: hsl(214 57% 52%);
+  --opf-ui-studio-canvas-bg: hsl(214 20% 90%);
 
   --opf-ui-font: Inter, system-ui, sans-serif;
   --opf-ui-mono: "Geist Mono", ui-monospace, Menlo, monospace;
@@ -61,6 +64,9 @@
   --opf-ui-success: hsl(152 60% 70%);
   --opf-ui-code-bg: hsl(222 22% 13%);
   --opf-ui-code-border: hsl(220 16% 24%);
+  --opf-ui-selection: hsl(214 90% 72%);
+  --opf-ui-hover: hsl(214 70% 60%);
+  --opf-ui-studio-canvas-bg: hsl(220 22% 6%);
 
   --opf-ui-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.4);
 
@@ -94,6 +100,9 @@
   --opf-ui-success: hsl(152 76% 26%);
   --opf-ui-code-bg: hsl(220 30% 96%);
   --opf-ui-code-border: hsl(214 18% 84%);
+  --opf-ui-selection: hsl(214 57% 28%);
+  --opf-ui-hover: hsl(214 57% 52%);
+  --opf-ui-studio-canvas-bg: hsl(214 20% 90%);
 
   --opf-ui-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.1);
 

@@ -31,6 +31,9 @@ const COLORS = {
   "--opf-ui-success": ["hsl(152 76% 26%)", "hsl(152 60% 70%)"],
   "--opf-ui-code-bg": ["hsl(220 30% 96%)", "hsl(222 22% 13%)"],
   "--opf-ui-code-border": ["hsl(214 18% 84%)", "hsl(220 16% 24%)"],
+  "--opf-ui-selection": ["hsl(214 57% 28%)", "hsl(214 90% 72%)"],
+  "--opf-ui-hover": ["hsl(214 57% 52%)", "hsl(214 70% 60%)"],
+  "--opf-ui-studio-canvas-bg": ["hsl(214 20% 90%)", "hsl(220 22% 6%)"],
 };
 const OTHER = {
   "--opf-ui-font": "Inter, system-ui, sans-serif",

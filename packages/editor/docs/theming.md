@@ -25,6 +25,9 @@ The editor's chrome (the source pane, the slide row, the export menu, the presen
 | Status | `success` | `--opf-ui-success` | `hsl(152 76% 26%)` | `hsl(152 60% 70%)` |
 | Code | `codeBackground` | `--opf-ui-code-bg` | `hsl(220 30% 96%)` | `hsl(222 22% 13%)` |
 | Code | `codeBorder` | `--opf-ui-code-border` | `hsl(214 18% 84%)` | `hsl(220 16% 24%)` |
+| Studio | `selection` | `--opf-ui-selection` | `hsl(214 57% 28%)` | `hsl(214 90% 72%)` |
+| Studio | `hover` | `--opf-ui-hover` | `hsl(214 57% 52%)` | `hsl(214 70% 60%)` |
+| Studio | `canvasBackground` | `--opf-ui-studio-canvas-bg` | `hsl(214 20% 90%)` | `hsl(220 22% 6%)` |
 | Font | `font` | `--opf-ui-font` | `Inter, system-ui, sans-serif` | same |
 | Font | `mono` | `--opf-ui-mono` | `"Geist Mono", ui-monospace, Menlo, monospace` | same |
 | Radius | `radiusSmall` | `--opf-ui-radius-sm` | `4px` | same |
@@ -41,6 +44,7 @@ Rules every component follows, and a host can rely on:
 - `surface` is the card, popover and pane background, `background` the page behind them, `muted` and `mutedAlt` the quiet fills (hover, selected row, code-free toolbars), `border` and `borderStrong` the rules and the input outlines.
 - `accent` fills the one primary action and marks the current item; `accentText` is the text on it; `accentStrong` is the accent as text or a link on a surface; `focus` is the 2px focus ring.
 - `danger`, `warning` and `success` are text and icon colors on a surface, never fills.
+- The Studio (CE-20) draws its selection in `selection` (a 2px ring between two 1px rings of `surface`, so it keeps 4.5:1 on any slide; forced-colors mode uses `Highlight`), the hover outline in `hover`, and the area around the slide in `canvasBackground`. `selection` must keep 4.5:1 against `surface` and `canvasBackground`.
 - The package's own values are chosen for WCAG AA contrast in these pairs; when you change one, check the pair in both schemes: `text` on `surface`, `textMuted` on `surface`, `accentStrong` on `surface` and `accentText` on `accent`.
 - A selection in a code surface is `accent` at 16% over what is behind it; the text keeps its own colors, so `text`, `textMuted`, `accentStrong` and `warning` must keep 4.5:1 against that tint as well (`test/selection-contrast-browser.mjs` measures it in both schemes). The code views are flagged dark for CodeMirror when the tokens resolve to a dark `color-scheme` and follow a later change of the page, so a host never sets that itself.
 

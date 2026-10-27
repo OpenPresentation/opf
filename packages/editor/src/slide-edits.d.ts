@@ -2,6 +2,7 @@
 import type { Catalog } from "@openpresentation/opf";
 import type { JsonPatchOperation, OPFEditorError } from "./index.js";
 import type { SlideScene } from "./slide-scene.js";
+import type { SlideComposition } from "@openpresentation/opf/composition";
 
 export interface PreparedSceneChange {
   presentation: unknown;
@@ -31,6 +32,11 @@ export declare function prepareSceneUngroup(presentation: unknown, scene: SlideS
 export declare function prepareSceneDuplicate(presentation: unknown, scene: SlideScene, keys: string[], options?: SceneEditOptions): PreparedSceneChange;
 export declare function prepareSceneDelete(presentation: unknown, scene: SlideScene, keys: string[], options?: SceneEditOptions): PreparedSceneChange;
 export declare function ratioLabel(a: number, b: number): string;
+/**
+ * The weights a composed flow's tracks are drawn with (`drawn` when a content-sized column is read as weights from its drawn heights, the
+ * last row taking the empty space), and `scale(boundary)`, which turns a fraction of the drawn pair into the fraction of the weighted pair.
+ */
+export declare function drawnTracks(flow: SlideComposition["flows"][number]): { weights: number[]; drawn: boolean; scale(boundary: number): number };
 export declare function snapTrackPair(weights: number[], boundary: number, fraction: number, options?: { free?: boolean }): { a: number; b: number };
 export declare function prepareSceneTrackResize(presentation: unknown, scene: SlideScene, key: string, boundary: number, fraction: number, options?: SceneEditOptions & { free?: boolean }): PreparedSceneChange;
 export declare function prepareSceneEqualize(presentation: unknown, scene: SlideScene, key: string, boundary: number, options?: SceneEditOptions): PreparedSceneChange;

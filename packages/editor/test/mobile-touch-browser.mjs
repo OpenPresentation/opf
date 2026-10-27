@@ -125,7 +125,7 @@ async function sourcePane(context, engine, width) {
     ['JSON', '', async () => {}],
     ['YAML (Canonicalize)', '?format=yaml', async () => {}],
     ['outline', '?outline=open', async () => {}],
-    ['format menu', '', async (page) => { await page.getByRole('button', { name: 'Source format', exact: true }).click(); }],
+    ['format menu', '', async (page) => { await page.getByRole('button', { name: /^Source format \.opf\./ }).click(); }],
     ['rename', '', async (page) => { await page.getByRole('button', { name: 'Rename deck' }).click(); }],
     ['problems with a fix and details', '?deck=broken', async (page) => {
       await page.locator('.opf-source-finding-fix').first().waitFor();

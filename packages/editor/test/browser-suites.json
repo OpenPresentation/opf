@@ -259,6 +259,10 @@
         {
           "id": "browser:studio-kit",
           "command": "node test/studio-kit-browser.mjs"
+        },
+        {
+          "id": "browser:studio",
+          "command": "node test/studio-browser.mjs"
         }
       ]
     }

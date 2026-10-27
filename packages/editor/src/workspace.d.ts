@@ -36,6 +36,9 @@ export declare const THEME_TOKENS: Readonly<{
   success: "--opf-ui-success";
   codeBackground: "--opf-ui-code-bg";
   codeBorder: "--opf-ui-code-border";
+  selection: "--opf-ui-selection";
+  hover: "--opf-ui-hover";
+  canvasBackground: "--opf-ui-studio-canvas-bg";
   font: "--opf-ui-font";
   mono: "--opf-ui-mono";
   radiusSmall: "--opf-ui-radius-sm";

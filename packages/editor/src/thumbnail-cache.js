@@ -45,6 +45,11 @@ export function createThumbnailCache({toSvg, getOptions}) {
       if (deck !== preparedDeck || !cache.has(value)) prepare(deck);
       return cache.get(value);
     },
+    /** CE-20: the cached thumbnail of a slide, or undefined when it has not been drawn yet (a lazy strip draws it with `prepare`). */
+    peek(deck, index) {
+      if (contextOf(deck, getOptions()) !== context) return undefined;
+      return cache.get(key(deck, index));
+    },
     clear: () => { cache.clear(); preparedDeck = undefined; },
   };
 }

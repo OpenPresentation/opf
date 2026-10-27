@@ -795,6 +795,8 @@ export function createSourcePane(container, options = {}) {
     nameButton.textContent = name;
     nameButton.setAttribute("aria-label", `Rename ${name}`);
     formatLabel.textContent = `.opf.${current.extension}`;
+    // The visible extension is part of the button's name (WCAG 2.5.3, label in name).
+    formatButton.setAttribute("aria-label", `Source format .opf.${current.extension}`);
     root.dataset.format = current.id;
     canonicalAction.hidden = current.id === "json";
     for (const item of menuItems) item.setAttribute("aria-checked", String(item.dataset.format === current.id));

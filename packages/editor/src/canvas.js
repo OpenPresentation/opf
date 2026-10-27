@@ -95,9 +95,16 @@ export function createCanvasEditor(container, options = {}) {
   // How a pointer enters text editing: "click" (default; PowerPoint / Google Slides) puts the caret at the pressed
   // character on a single press and lets a press-drag select a range; "dblclick" keeps the older double-click gesture
   // but still places the caret at the pointer. Keyboard entry (Enter, Space, F2) always selects all text.
-  const textEntry = options.textEntry ?? "click";
+  let textEntry = options.textEntry ?? "click";
   if (textEntry !== "click" && textEntry !== "dblclick")
     throw new RangeError('textEntry must be "click" or "dblclick".');
+  // CE-20: "passive" targets are for a host that draws its own selection over the slide (the Studio's overlay): the slide is aria-hidden and
+  // its targets leave the tab order, while editing, crop and properties work as before through `beginEdit` and the other calls.
+  let targetMode = options.targets ?? "interactive";
+  if (targetMode !== "interactive" && targetMode !== "passive")
+    throw new RangeError('targets must be "interactive" or "passive".');
+  // CE-20: what Escape does in an inline text field: "cancel" (default) drops the draft; "commit" keeps it and leaves (the Studio, as Figma).
+  const escapeAction = options.escape ?? "cancel";
   const root = doc.createElement("div"),
     preview = doc.createElement("div"),
     overlay = doc.createElement("div"),
@@ -276,6 +283,7 @@ export function createCanvasEditor(container, options = {}) {
     const svg = preview.querySelector("svg");
     svg.setAttribute("role", "group");
     svg.setAttribute("aria-label", "Editable slide");
+    if (targetMode === "passive") svg.setAttribute("aria-hidden", "true");
     // FA-30: the renderer labels its slide root a "slide" group named by the title; the canvas is named for editing instead, so it drops
     // the roledescription rather than announce "Editable slide, slide".
     svg.removeAttribute("aria-roledescription");
@@ -396,6 +404,8 @@ export function createCanvasEditor(container, options = {}) {
       node.removeAttribute("tabindex");
       node.setAttribute("aria-label", `${field.charAt(0).toUpperCase()}${field.slice(1)}`);
     }
+    if (targetMode === "passive")
+      for (const node of svg.querySelectorAll("[tabindex]")) node.setAttribute("tabindex", "-1");
     layoutHandles.update(presentation, geometry);
     blockControls.update(presentation, geometry);
     imageCropper?.update();
@@ -605,8 +615,9 @@ export function createCanvasEditor(container, options = {}) {
     if (active && !commit()) return;
     startEdit(path, { point: event, drag: true });
   }
-  function beginEdit(path) {
-    startEdit(path);
+  // `entry.point` ({ clientX, clientY }) puts the caret there (a double-click in the Studio); without it all text is selected.
+  function beginEdit(path, entry) {
+    startEdit(path, entry?.point ? { point: entry.point } : undefined);
   }
   // entry: undefined selects all text (keyboard and programmatic entry); {point} places the caret at a client point;
   // {point, drag} also selects while the pressed pointer moves.
@@ -702,7 +713,7 @@ export function createCanvasEditor(container, options = {}) {
         } else if (event.key === "Escape") {
           event.preventDefault();
           event.stopPropagation();
-          cancel();
+          if (escapeAction === "commit") commit(); else cancel();
         } else if (event.key === "Enter" && (event.metaKey || event.ctrlKey)) {
           event.preventDefault();
           commit();
@@ -721,7 +732,7 @@ export function createCanvasEditor(container, options = {}) {
       active = {kind:"rich-text",path,base:JSON.stringify(value),valid:true};
       active.rich = createRichTextInput(root, overlay, {
         path, value, getTarget, selectAll: !entry?.point,
-        onInput: queueDraft, onCommit: commit, onCancel: cancel, onError: report,
+        onInput: queueDraft, onCommit: commit, onCancel: () => (escapeAction === "commit" ? commit() : cancel()), onError: report,
         onFormat(start,end) {
           if (!commit()) return;
           if(start===end)richToolbar.selectAll(path);else richToolbar.selectRange(path,start,end);
@@ -1113,6 +1124,20 @@ export function createCanvasEditor(container, options = {}) {
     render,
     setSlide,
     reveal,
+    get textEntry() { return textEntry; },
+    /** CE-20: switch how a pointer enters text editing ("click" or "dblclick") without remounting (the Studio's presets). */
+    setTextEntry(mode) {
+      if (mode !== "click" && mode !== "dblclick") throw new RangeError('textEntry must be "click" or "dblclick".');
+      textEntry = mode;
+    },
+    get targets() { return targetMode; },
+    /** CE-20: "interactive" targets (buttons in the tab order) or "passive" ones (the host draws selection); redraws. */
+    setTargets(mode) {
+      if (mode !== "interactive" && mode !== "passive") throw new RangeError('targets must be "interactive" or "passive".');
+      if (mode === targetMode) return;
+      targetMode = mode;
+      if (!active) renderFor();
+    },
     setRenderOptions(next) {
       if (!commit()) return false;
       richToolbar.hide();
