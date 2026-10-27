@@ -29,6 +29,8 @@ function workerOption(mode) {
   if (mode === 'off') return false;
   if (mode === 'throw') return () => { throw new Error('The worker could not be created.'); };
   if (mode === 'missing') return () => new Worker('./no-such-worker.js', { type: 'module' });
+  // A script that loads and does nothing: what a bundler emits when it drops a bare import of the worker entry.
+  if (mode === 'empty') return () => new Worker(URL.createObjectURL(new Blob(['// emptied by a bundler'], { type: 'text/javascript' })), { type: 'module' });
   return () => new Worker('./source-worker.js', { type: 'module' });
 }
 // The default catalog is registered, so the pane offers layouts and tones as you type and in the field menu.
@@ -47,7 +49,8 @@ const pane = createSourcePane(document.getElementById('pane'), {
   applyDelay: Number(query.get('applyDelay') ?? 50),
   outline: query.get('outline') === 'open' ? 'open' : query.get('outline') === 'on',
   // The text checks run in a Web Worker (the page's own bundle of src/source-worker.js); ?worker=off keeps them on the main thread. The tests also
-  // start it broken (?worker=throw: the factory throws; ?worker=missing: the script URL answers 404) to see the pane fall back to the main thread.
+  // start it broken (?worker=throw: the factory throws; ?worker=missing: the script URL answers 404; ?worker=empty: the script runs but never
+  // answers) to see the pane fall back to the main thread.
   worker: workerOption(query.get('worker')),
   completions: query.get('completions') !== 'off',
   smartListEnter: query.get('smartListEnter') !== 'off',

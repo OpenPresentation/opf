@@ -179,13 +179,17 @@ export interface SourcePaneOptions {
   smartListEnter?: boolean;
   /**
    * Run the pane's text checks (reading YAML or Markdown, the syntax pass of JSON and the document validation) in a Web Worker, so typing in a deck
-   * of a thousand slides never blocks the main thread. A function returns the Worker (`() => new Worker(new URL("@openpresentation/opf-editor/source-worker", import.meta.url), { type: "module" })`
-   * with a bundler that supports that form); a Worker is used as given; `true` starts `source-worker.js` beside the package's own module, which works
-   * when a bundler follows `new URL(..., import.meta.url)`. Only the typing delay uses the worker: every explicit action (`getText`, switching the format,
-   * `replaceDocument`, Format, Undo) is applied on the main thread at once. When the worker cannot start, fails or stops answering, the pane checks on the
-   * main thread from then on and `onError` is called once; no edit is lost. Default `false` (everything on the main thread).
+   * of a thousand slides never blocks the main thread. `true` starts the package's own worker with `new Worker(new URL("./source-worker.js",
+   * import.meta.url), { type: "module" })`, which webpack, Turbopack and Vite (build) bundle; a function returns the Worker
+   * (`() => new Worker(new URL("@openpresentation/opf-editor/source-worker", import.meta.url), { type: "module" })`); a Worker is used as given; a URL
+   * (or a string) is the address of a worker script the host built itself (esbuild: build `@openpresentation/opf-editor/source-worker` as an entry
+   * point) and is started as a module worker. The worker file imports core, so it only runs bundled. See docs/embedding.md, "The source worker",
+   * for each bundler. Only the typing delay uses the worker: every explicit action (`getText`, switching the format, `replaceDocument`, Format, Undo)
+   * is applied on the main thread at once. When the worker cannot start, fails, stops answering, or loads but does not say it is ready within 5 s (a
+   * script the bundler emptied), the pane checks on the main thread from then on and `onError` is called once with a message that names the
+   * worker; no edit is lost. Default `false` (everything on the main thread).
    */
-  worker?: boolean | Worker | (() => Worker);
+  worker?: boolean | string | URL | Worker | (() => Worker);
   /** A preview for the card F12 and Alt+F12 open on a catalog record only the app provides (see `JsonCodeEditorOptions.resolvePreview`). */
   resolvePreview?: (kind: string, id: string) => HTMLElement | string | undefined | Promise<HTMLElement | string | undefined>;
   onError?(error: unknown): void;
