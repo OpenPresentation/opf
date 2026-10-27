@@ -79,6 +79,8 @@ console.log(`checkSource: ${corpus.length} texts equal the golden of the old rea
   const before = globalThis.self;
   globalThis.self = { postMessage: (message) => sent.push(message), onmessage: null };
   await import('../dist/source-worker.js');
+  // The first message says the worker runs (the checker gives up on a worker that never says it).
+  assert.deepEqual(sent.shift(), { ready: true }, 'the worker says it is ready as soon as its module has run');
   const text = corpus.find((row) => row.id === 'valid-yaml').text;
   globalThis.self.onmessage({ data: { id: 1, type: 'catalogs', catalogs: [gallery] } });
   globalThis.self.onmessage({ data: { id: 2, type: 'check', format: 'yaml', text } });
@@ -240,6 +242,61 @@ const layouts = corpus.find((row) => row.id === 'layouts-yaml').text;
   // An onError that throws does not break the fallback.
   const client = createSourceChecker({ worker: () => { throw new Error('no'); }, onError: () => { throw new Error('host bug'); } });
   await assert.rejects(client.check('yaml', yaml, Object.freeze([])), (error) => error.workerFailed === true);
+}
+{
+  // A worker that loads but never starts (a bundler emptied its script: `sideEffects: false` dropped a bare import of the worker entry) is given up
+  // after `startTimeout`, not after the 15 s a check may take; one that says it is ready may take longer to answer.
+  const errors = [];
+  const silent = fakeWorker({ broken: 'silent' });
+  const began = Date.now();
+  const client = createSourceChecker({ worker: silent, onError: (error) => errors.push(error), startTimeout: 30 });
+  await assert.rejects(client.check('yaml', yaml, Object.freeze([])), (error) => error.workerFailed === true && /did not start within/.test(error.message));
+  assert.ok(Date.now() - began < 5000, 'the pane falls back long before the request timeout');
+  assert.equal(client.available, false);
+  assert.equal(errors.length, 1);
+  assert.match(errors[0].message, /^The source worker loaded but did not start/);
+
+  const slow = fakeWorker({ delay: 80 });
+  const ready = createSourceChecker({ worker: () => { setTimeout(() => slow.onmessage?.({ data: { ready: true } }), 0); return slow; }, startTimeout: 30 });
+  const answer = await ready.check('yaml', yaml, Object.freeze([]));
+  assert.ok(answer, 'a worker that said it is ready keeps its 15 s per check');
+  assert.equal(ready.available, true);
+  ready.dispose();
+
+  // A host's own worker object that answers without the ready signal counts as started by its first answer.
+  const plainWorker = fakeWorker({ delay: 10 });
+  const quiet = createSourceChecker({ worker: plainWorker, startTimeout: 5000 });
+  assert.ok(await quiet.check('yaml', yaml, Object.freeze([])));
+  quiet.dispose();
+}
+{
+  // The messages say which worker failed: a URL a host gave, or the package's own file (`worker: true`); a module worker that cannot load its
+  // script fires an error event without a message.
+  const made = [];
+  const original = globalThis.Worker;
+  globalThis.Worker = class { constructor(url, options) { this.url = String(url); this.options = options; made.push(this); } postMessage() {} terminate() {} };
+  try {
+    const cases = [
+      [new URL('https://example.test/assets/opf-source-worker.js'), /^The source worker \(https:\/\/example\.test\/assets\/opf-source-worker\.js\) failed to start\.$/],
+      ['/workers/source.js', /^The source worker \(\/workers\/source\.js\) failed to start\.$/],
+      [true, /^The source worker \(worker: true, the package's source-worker\.js, which the app's bundler must emit\) failed to start\.$/],
+    ];
+    for (const [option, expected] of cases) {
+      const errors = [];
+      const client = createSourceChecker({ worker: option, onError: (error) => errors.push(error) });
+      const request = client.check('yaml', yaml, Object.freeze([]));
+      const worker = made.at(-1);
+      assert.equal(worker.options.type, 'module', `${String(option)}: a module worker`);
+      if (option === true) assert.match(worker.url, /\/source-worker\.js$/, 'worker: true starts the file next to the checker');
+      else assert.equal(worker.url, String(option));
+      worker.onerror({ preventDefault() {} });
+      await assert.rejects(request, (error) => error.workerFailed === true);
+      assert.equal(errors.length, 1);
+      assert.match(errors[0].message, expected);
+    }
+  } finally {
+    globalThis.Worker = original;
+  }
 }
 {
   // dispose: pending requests end with null, the worker is terminated, nothing more is sent.

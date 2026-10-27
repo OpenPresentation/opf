@@ -93,8 +93,9 @@ try {
     console.log('W-002 typing a wrong key and removing it: identical with and without the worker.');
   }
 
-  // (c) FALLBACK: a factory that throws and a script that is not found leave a working pane; onError hears it once.
-  for (const mode of ['throw', 'missing']) {
+  // (c) FALLBACK: a factory that throws, a script that is not found and a script that runs but never answers (a bundler emptied it) leave a
+  // working pane; onError hears it once. The empty one is given up after the 5 s start timeout, not the 15 s of a check.
+  for (const mode of ['throw', 'missing', 'empty']) {
     const page = await openHarness(mode);
     await page.evaluate(() => demo.pane.setFormat('yaml'));
     await page.evaluate(() => { const { api } = demo.pane.editor; api.focus(); api.setSelection(api.getValue().indexOf('title: OWAA Rocks!') + 'title: OWAA Rocks!'.length); });
@@ -103,6 +104,8 @@ try {
     const state = await page.evaluate(() => ({ title: demo.editor.presentation.slides[0].title, errors: demo.errors, stats: demo.pane.checkerStats() }));
     assert.equal(state.title, 'OWAA Rocks! typed', `${mode}: the edit is applied`);
     assert.equal(state.errors.length, 1, `${mode}: onError is called once (${state.errors.join(' | ')})`);
+    if (mode === 'empty') assert.match(state.errors[0], /did not start within 5 s/, 'empty: the message says the worker never started');
+    if (mode === 'missing') assert.match(state.errors[0], /^The source worker failed/, 'missing: the message says the worker did not start');
     assert.equal(state.stats.available, false, `${mode}: the worker is not tried again`);
     assert.equal(state.stats.worker, 0);
     assert.ok(state.stats.inline >= 1, `${mode}: checked on the main thread`);

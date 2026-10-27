@@ -13,6 +13,7 @@ import {textInputMap} from './text-input.js';
 import {detectIndent,formatJsonSource,whitespaceEdits} from './json-format.js';
 import { redoPair, undoPair } from "./source-undo-groups.js";
 import {a11yExtension,createAnnouncer} from './source-a11y.js';
+import { checkCodeMirrorCopies } from './codemirror-guard.js';
 import { forEachDiagnostic } from "@codemirror/lint";
 import {createDiagnostics,editsTransaction} from './source-diagnostics.js';
 import { createKeymap, domKeymap, strokeText } from './source-keymap.js';
@@ -540,7 +541,7 @@ function mountJsonCodeEditor(parent, options) {
     autocapitalize: "off",
     autocorrect: "off"
   });
-  const view = new EditorView({ parent, state: EditorState.create({ doc: options.code, extensions: [
+  const mountExtensions = [
     // The problem menu's keys come before the list's: the two are never open together, and Enter must reach whichever is.
     diagnostics.extension,
     language.of(languageExtension(languageName, completionExtension)),
@@ -620,7 +621,10 @@ function mountJsonCodeEditor(parent, options) {
       if (update.docChanged) options.onDocChange?.();
       if (update.docChanged && update.transactions.some((tr) => tr.isUserEvent("input.type"))) autoHint(update.view);
     })
-  ] }) });
+  ];
+  // Two copies of @codemirror/view break the tooltips, completions, problems and find without an error: say so once (codemirror-guard.js).
+  checkCodeMirrorCopies(mountExtensions, options.onError);
+  const view = new EditorView({ parent, state: EditorState.create({ doc: options.code, extensions: mountExtensions }) });
   const api = {
     getValue: () => view.state.field(jsonSource),
     getSelection: () => {const map=textInputMap(api.getValue());return [map.toSource(view.state.selection.main.from),map.toSource(view.state.selection.main.to)];},

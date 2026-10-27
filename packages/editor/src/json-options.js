@@ -2,7 +2,7 @@ import { checkFormat, firstErrorMessage } from "./checks.js";
 import { listCatalogRecords } from "./catalogs.js";
 import { resolveSchema, schemaAtPath, schemaVariants } from "./schema.js";
 import { findNodeAtOffset, getNodePath, parse as parseJsonc, parseTree } from "jsonc-parser";
-import { LAYOUT_INTENT_GROUPS, layoutRegionSummary } from "./layout-templates.js";
+import { CUSTOM_LAYOUTS_GROUP, layoutGroupName, layoutGroupOrder, layoutRegionSummary } from "./layout-templates.js";
 import { catalogKindAt } from "@openpresentation/opf/schema";
 const sourceDetails = {
     "Loaded catalog": ["Provided by app", "Records from a catalog this app registered; nothing is fetched from a URL. Saving embeds the record in the document."],
@@ -10,16 +10,17 @@ const sourceDetails = {
     "Current value": ["Custom value", "The current value is not in the available catalogs."],
     "Schema": ["OPF option", "Allowed by the OPF schema."],
 };
-const layoutGroups = ["Current layout", ...LAYOUT_INTENT_GROUPS.map(group => group.name), "Custom layouts"];
 function describeOptions(choices, records, current, catalog) {
+    // A layout's group is its catalog record's (see layoutGroupName); the groups follow the catalog's own order.
+    const layoutGroups = catalog === "layouts" ? ["Current layout", ...layoutGroupOrder([...records.values()]), CUSTOM_LAYOUTS_GROUP] : [];
     for (const option of choices) {
         const [label, description] = sourceDetails[option.source];
         option.sourceLabel = label;
         option.sourceDescription = description;
         if (catalog !== "layouts") continue;
-        const id = String(option.value).replace(/^default:/, "");
-        option.regions = layoutRegionSummary(records.get(String(option.value)));
-        option.layoutGroup = option.value === current ? "Current layout" : LAYOUT_INTENT_GROUPS.find(group => group.ids.includes(id))?.name ?? "Custom layouts";
+        const entry = records.get(String(option.value));
+        option.regions = layoutRegionSummary(entry?.record);
+        option.layoutGroup = option.value === current ? "Current layout" : entry ? layoutGroupName(entry) : CUSTOM_LAYOUTS_GROUP;
     }
     const priority = option => option.source === "Document catalog" ? 2 : option.source === "Loaded catalog" ? 1 : 0;
     return choices.sort((a, b) => (catalog === "layouts" ? layoutGroups.indexOf(a.layoutGroup) - layoutGroups.indexOf(b.layoutGroup) : priority(b) - priority(a)) || a.label.localeCompare(b.label, "en", {numeric: true}) || String(a.value).localeCompare(String(b.value), "en"));
@@ -42,7 +43,7 @@ function fieldOptions(presentation, path, loadedCatalogs, { string, boolean }) {
         const attempt = (document) => { try { return listCatalogRecords(document, catalog, { catalogs: hostCatalogs }); } catch { return undefined; } };
         const available = attempt(presentation) ?? attempt({ ...presentation, catalogs: undefined }) ?? [];
         for (const option of available) {
-            records.set(option.id, option.record);
+            records.set(option.id, option);
             options.set(option.id, { value: option.id, label: option.label, description: option.description,
                 source: option.origin === "document" ? "Document catalog" : "Loaded catalog" });
         }

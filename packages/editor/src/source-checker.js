@@ -2,8 +2,12 @@
 // pane's, and falls back to the pane's own inline path for good, once, when anything about the worker goes wrong (it cannot start, a script URL is
 // blocked or missing, a message cannot be cloned, the worker throws or stops answering). It never loses an edit: a failed request rejects with
 // `error.workerFailed === true`, and the pane then does the same work inline.
+//
+// The worker says `{ ready: true }` as soon as its module has run. A worker that loads but never says so (a script a bundler emptied, a wrong
+// file) is given up after `startTimeout` (5 s), not after the 15 s a single check may take.
 
 const DEFAULT_TIMEOUT = 15000;
+const DEFAULT_START_TIMEOUT = 5000;
 
 /** A failure of the worker as an error the caller can tell from an exception of the checked text. */
 function failure(cause) {
@@ -13,23 +17,50 @@ function failure(cause) {
   return error;
 }
 
-/** The worker the `worker` option stands for: a function is called, an object with `postMessage` is used as given, `true` starts the package's own. */
-function makeWorker(option) {
-  if (typeof option === "function") return option();
-  if (option && typeof option === "object" && typeof option.postMessage === "function") return option;
-  if (option === true) {
-    if (typeof Worker !== "function") throw new Error("Web Workers are not available here.");
-    return new Worker(new URL("./source-worker.js", import.meta.url), { type: "module" });
+/** Where the worker comes from, for the messages: the URL a host gave, or the package's own file. */
+function describe(option) {
+  if (option instanceof URL || typeof option === "string") return `The source worker (${String(option)})`;
+  if (option === true) return "The source worker (worker: true, the package's source-worker.js, which the app's bundler must emit)";
+  return "The source worker";
+}
+
+/** Vite's dev server moves a dependency into node_modules/.vite/deps, where `new URL("./source-worker.js", import.meta.url)` names no file. */
+function hint(option) {
+  if (option === true && /\/\.vite\/deps\//.test(import.meta.url)) {
+    return ' Vite\'s dependency optimizer moved the editor into .vite/deps, so the worker file is not next to it: pass `worker: () => new Worker(new URL("@openpresentation/opf-editor/source-worker", import.meta.url), { type: "module" })` and list "@openpresentation/opf" and its "/yaml", "/markdown" and "/source" entries in optimizeDeps.include (docs/embedding.md, "The source worker").';
   }
-  throw new TypeError("The worker option is true, a Worker, or a function that returns one.");
+  return "";
 }
 
 /**
- * @param {{ worker: boolean | object | (() => object), onError?: (error: unknown) => void, timeout?: number }} options
+ * The worker the `worker` option stands for: a function is called, an object with `postMessage` is used as given, a URL (or a string) is started
+ * as a module worker, `true` starts the package's own.
+ */
+function makeWorker(option) {
+  if (typeof option === "function") return option();
+  if (option && typeof option === "object" && typeof option.postMessage === "function") return option;
+  if (option instanceof URL || (typeof option === "string" && option)) {
+    if (typeof Worker !== "function") throw new Error("Web Workers are not available here.");
+    return new Worker(option, { type: "module" });
+  }
+  if (option === true) {
+    if (typeof Worker !== "function") throw new Error("Web Workers are not available here.");
+    // Written as one expression so that webpack, Turbopack, Vite and Parcel see it and bundle the worker with its imports.
+    return new Worker(new URL("./source-worker.js", import.meta.url), { type: "module" });
+  }
+  throw new TypeError("The worker option is true, a Worker, a function that returns one, or the URL of a worker script.");
+}
+
+/**
+ * @param {{ worker: boolean | string | URL | object | (() => object), onError?: (error: unknown) => void, timeout?: number, startTimeout?: number }} options
  */
 export function createSourceChecker(options = {}) {
   const timeout = options.timeout ?? DEFAULT_TIMEOUT;
+  const startTimeout = options.startTimeout ?? DEFAULT_START_TIMEOUT;
+  const source = describe(options.worker);
   let worker = null;
+  let started = false;
+  let startTimer = null;
   let failed = false;
   let disposed = false;
   let nextId = 0;
@@ -42,6 +73,7 @@ export function createSourceChecker(options = {}) {
   function fail(cause) {
     if (failed || disposed) return;
     failed = true;
+    clearTimeout(startTimer);
     const error = failure(cause);
     for (const entry of pending.values()) { clearTimeout(entry.timer); entry.reject(error); }
     pending.clear();
@@ -52,6 +84,9 @@ export function createSourceChecker(options = {}) {
 
   function reply(event) {
     const data = event?.data;
+    // Any message says the worker runs: its ready signal, or an answer (a host's own worker object may not send the signal).
+    if (!started) { started = true; clearTimeout(startTimer); }
+    if (data?.ready === true && data.id === undefined) return;
     const entry = pending.get(data?.id);
     if (!entry) return;
     pending.delete(data.id);
@@ -67,8 +102,11 @@ export function createSourceChecker(options = {}) {
     worker = makeWorker(options.worker);
     if (!worker || typeof worker.postMessage !== "function") throw new TypeError("The worker option did not give a Worker.");
     worker.onmessage = reply;
-    worker.onerror = (event) => { event?.preventDefault?.(); fail(new Error(event?.message || "The source worker failed to start.")); };
-    worker.onmessageerror = () => fail(new Error("The source worker sent a message that could not be read."));
+    // A module worker whose script is missing or cannot load fires an error without a message: say which worker it was.
+    worker.onerror = (event) => { event?.preventDefault?.(); fail(new Error(event?.message ? `${source} failed: ${event.message}` : `${source} failed to start.${hint(options.worker)}`)); };
+    worker.onmessageerror = () => fail(new Error(`${source} sent a message that could not be read.`));
+    startTimer = setTimeout(() => { if (!started) fail(new Error(`${source} loaded but did not start within ${Math.round(startTimeout / 1000)} s; the checks run on the main thread.${hint(options.worker)}`)); }, startTimeout);
+    startTimer?.unref?.();
     return worker;
   }
 
@@ -79,7 +117,7 @@ export function createSourceChecker(options = {}) {
     const id = ++nextId;
     if (kind) latest[kind] = id;
     return new Promise((resolve, reject) => {
-      const timer = setTimeout(() => fail(new Error("The source worker did not answer in time.")), timeout);
+      const timer = setTimeout(() => fail(new Error(`${source} did not answer in time.`)), timeout);
       pending.set(id, { resolve, reject, timer, kind });
       try { target.postMessage({ id, ...message }); } catch (error) { fail(error); }
     });
@@ -121,6 +159,7 @@ export function createSourceChecker(options = {}) {
     dispose() {
       if (disposed) return;
       disposed = true;
+      clearTimeout(startTimer);
       for (const entry of pending.values()) { clearTimeout(entry.timer); entry.resolve(null); }
       pending.clear();
       try { worker?.terminate?.(); } catch { /* Already gone. */ }
