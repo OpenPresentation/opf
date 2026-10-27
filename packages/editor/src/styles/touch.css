@@ -184,7 +184,13 @@
   :root .opf-find button[aria-label="Next match"] {
     min-width: 44px;
   }
+  .opf-dc-tool,
+  .opf-dc-path {
+    min-width: 44px;
+    min-height: 44px;
+  }
   .opf-dc-group > summary,
+  .opf-dc-advanced > summary,
   .opf-template-insert-section summary {
     min-height: 44px;
     padding-block: calc((44px - 1lh) / 2);

@@ -37,6 +37,19 @@ export interface DesignControlsOptions {
   onAddAsset?: (image: { name: string; mediaType: string; bytes: Uint8Array; size: number; alt?: string; file: unknown }) => string | { src: string } | Promise<string | { src: string }>;
   /** Called with every status or error message the panel shows in its live regions. */
   onStatus?: (message: string, info: { error: boolean }) => void;
+  /** Show the selected block's path as a copyable chip under the selection section's Advanced (default true). A host with its own Advanced turns it off. */
+  showPath?: boolean;
+  /** Host actions for the selected block's arrange toolbar: `before` Group with the next block and Ungroup (Move up, Move down), `after` them (Duplicate, Delete). */
+  blockActions?: { before?: readonly DesignBlockAction[]; after?: readonly DesignBlockAction[] };
+}
+/** One icon button of the arrange toolbar, supplied by the host. Its tooltip is the label and shortcut, or the label and the reason when it is disabled. */
+export interface DesignBlockAction {
+  role: string;
+  label: string;
+  /** An icon name of the studio kit's set (`ArrowUp`, `ArrowDown`, `Copy`, `Trash2`, ...). */
+  icon: string;
+  state(): { enabled: boolean; reason?: string; shortcut?: string };
+  run(): void;
 }
 export interface DesignControls {
   element: HTMLElement;

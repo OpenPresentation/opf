@@ -177,9 +177,9 @@ try {
     await field(design, 'Background type').selectOption('image');
     await field(design, 'Fit').selectOption('stretch');
     await field(design, 'Background alt text').fill('A pixel backdrop');
-    await field(design, 'Focus down (0 top to 1 bottom)').fill('0.7');
+    await field(design, 'Focus Y').fill('0.7');
     await field(design, 'Overlay color').fill('dark1');
-    await field(design, 'Overlay opacity (0 to 1)').fill('0.4');
+    await field(design, 'Overlay opacity').fill('0.4');
     // The source last: leaving it applies the image with the settings above (Apply then has nothing left to change).
     await field(design, 'Background image source').fill('asset:photo');
   }), current => JSON.stringify(current.design.background) === JSON.stringify({ type: 'image', src: 'asset:photo', alt: 'A pixel backdrop', fit: 'stretch', focus: { x: 0.5, y: 0.7 }, overlay: { color: 'dark1', opacity: 0.4 } }), { preview: true });
@@ -277,12 +277,12 @@ try {
   await step('logo: a specific organization', () => field(design, 'Logo for covers, sections and bullets').selectOption('acme'), current => current.design.logo === 'var:organization.acme.logo');
   await step('logo: a shape of the primary organization', () => field(design, 'Shape to draw').selectOption('icon'), current => current.design.logo === 'var:organization.logo.icon');
   await step('logo: none', () => field(design, 'Logo for covers, sections and bullets').selectOption('none'), current => current.design.logo === false);
-  assert.equal(await field(design, 'Watermark opacity (0 to 1)').isDisabled(), true, 'the opacity waits for a watermark image');
+  assert.equal(await field(design, 'Watermark opacity').isDisabled(), true, 'the opacity waits for a watermark image');
   await step('watermark', async () => { const input = field(design, 'Watermark source'); await input.fill('asset:mark'); await input.press('Enter'); }, current => current.design.watermark === 'asset:mark', { preview: true });
   await field(design, 'Watermark source').fill('asset:mark');
   await field(design, 'Watermark source').press('Enter');
   await waitDoc(current => current.design.watermark === 'asset:mark', 'watermark source');
-  await step('watermark opacity', async () => { const opacity = field(design, 'Watermark opacity (0 to 1)'); await opacity.fill('0.3'); await opacity.press('Enter'); }, current => current.design.watermark?.opacity === 0.3);
+  await step('watermark opacity', async () => { const opacity = field(design, 'Watermark opacity'); await opacity.fill('0.3'); await opacity.press('Enter'); }, current => current.design.watermark?.opacity === 0.3);
   await button('Undo').click();
   await waitDoc(current => current.design.watermark === undefined, 'watermark removed again');
   await settle();
@@ -317,7 +317,7 @@ try {
   // Bad input is explained and changes nothing.
   {
     const before = await doc();
-    const input = field(design, 'Watermark opacity \(0 to 1\)');
+    const input = field(design, 'Watermark opacity');
     await field(design, 'Watermark source').fill('asset:mark');
     await field(design, 'Watermark source').press('Enter');
     await waitDoc(current => current.design.watermark === 'asset:mark', 'watermark for the opacity check');
@@ -346,14 +346,18 @@ try {
   mark('one click on text still enters editing');
   await page.keyboard.press('Escape');
   await selection.getByLabel(label('Content type')).waitFor();
-  assert.match(await selection.locator('[data-role="selection-summary"]').textContent(), /Text block \(slides\.1\.blocks\.0\)/);
+  // The block's path is internal: no paragraph names it; it is a copyable chip under Advanced.
+  assert.equal(await selection.locator('[data-role="selection-path"]').getAttribute('data-path'), 'slides.1.blocks.0');
+  assert.equal(await selection.locator('[data-role="selection-path"]').getAttribute('aria-label'), 'Copy path slides.1.blocks.0');
+  assert.equal(await selection.locator('[data-role="selection-path"]').isVisible(), false, 'the path waits under the closed Advanced');
+  // No helper paragraphs: the options are the controls, and a hint is a tooltip.
+  assert.deepEqual(await selection.locator('details[data-section="selection"] p, details[data-section="selection"] li').evaluateAll(nodes => nodes.filter(node => node.checkVisibility() && node.textContent.trim()).map(node => node.textContent)), [], 'the selected content has no helper paragraphs or warning lists');
 
-  // Conversion: options say what is lost; unavailable ones are explained; the change keeps the text.
+  // Conversion: options say what is lost; every type is listed, and one the text cannot become is disabled with its reason as its tooltip.
   const targets = await selection.getByLabel(label('Content type')).locator('option').evaluateAll(options => options.map(option => [option.value, option.textContent, option.disabled]));
   assert.deepEqual(targets.map(entry => entry[0]), ['', 'list', 'quote', 'metric', 'code', 'timeline', 'table']);
-  // A table needs structure the text does not have: it is listed, disabled, with the reason as its title.
-  assert.deepEqual(targets.at(-1).slice(1), ['Table (unavailable)', true]);
-  assert.match(await selection.getByLabel(label('Content type')).locator('option[value="table"]').getAttribute('title'), /no table structure/);
+  assert.deepEqual(targets.at(-1).slice(1), ['Table', true]);
+  assert.equal(await selection.getByLabel(label('Content type')).locator('option[value="table"]').getAttribute('title'), 'Table: This text has no table structure.');
   await step('block conversion text to list', () => selection.getByLabel(label('Content type')).selectOption('list'), current => JSON.stringify(current.slides[1].blocks[0]) === '{"items":["First line","Second line"]}', { preview: true });
   // Keyboard-only conversion: the next option of the focused select (the first target is the list).
   {
@@ -373,11 +377,11 @@ try {
   await page.keyboard.press('Escape');
   await selection.getByLabel(label('Content type')).selectOption('timeline');
   await waitDoc(current => Array.isArray(current.slides[1].blocks[1].timeline), 'list to timeline');
-  assert.match(await status(), /Converted to timeline\. Nothing was lost\./);
+  assert.match(await status(), /Converted to timeline\.\s*$/, 'a conversion that loses nothing says only what it did');
   await button('Undo').click();
   await settle();
   // Replacement is separate and says the old content is discarded.
-  await step('block replacement', () => selection.getByLabel(label('Replace with new content')).selectOption('quote'), current => current.slides[1].blocks[1].quote?.text === 'Add a quotation');
+  await step('block replacement', () => selection.getByLabel(label('Replace with')).selectOption('quote'), current => current.slides[1].blocks[1].quote?.text === 'Add a quotation');
   // A metric cannot become a list: it is not offered, and the panel says why only where a pair exists.
   const metric = page.locator('#preview [data-canvas-target][data-opf-path^="slides.1.blocks.2"]').first();
   await metric.click({ position: { x: 4, y: 4 } });
@@ -436,7 +440,7 @@ try {
   await selection.getByRole('button', { name: 'Merge cells' }).click();
   await page.waitForFunction(() => /hide text/.test(document.querySelector('#selection-controls .opf-dc-error').textContent));
   assert.deepEqual(await doc(), beforeRefusal, 'a merge that would hide text changes nothing');
-  await step('table merge keeping text', async () => { await selection.getByLabel('Keep text from the merged cells').check(); await selection.getByRole('button', { name: 'Merge cells' }).click(); }, current => JSON.stringify(current.slides[2].blocks[1].table.rows[0][0]) === '{"value":"north b","colSpan":2}');
+  await step('table merge keeping text', async () => { await selection.getByLabel('Keep merged text').check(); await selection.getByRole('button', { name: 'Merge cells' }).click(); }, current => JSON.stringify(current.slides[2].blocks[1].table.rows[0][0]) === '{"value":"north b","colSpan":2}');
   mark('a merge never hides text unless asked to keep it');
 
   // --- RR-26: more conversions and content actions in the Content tab ----------------------------------------
@@ -459,9 +463,8 @@ try {
   const outdent = selection.getByRole('button', { name: 'Outdent item', exact: true });
   await indent.waitFor();
   assert.equal(await outdent.isDisabled(), true, 'a top level item cannot be outdented');
-  assert.match(await selection.locator('[data-role="outdent-note"]').textContent(), /already at the top level/);
-  assert.match(await selection.locator('[data-role="indent-note"]').textContent(), /Nothing is lost/);
-  assert.equal(await indent.getAttribute('aria-describedby'), await selection.locator('[data-role="indent-note"]').getAttribute('id'), 'the report is the button description');
+  assert.match(await outdent.getAttribute('title'), /^Outdent item: .*already at the top level/, 'the reason is the tooltip');
+  assert.equal(await indent.getAttribute('title'), 'Indent item', 'an action that loses nothing has its name as its tooltip');
   await step('list indent from the keyboard', async () => { await indent.focus(); await page.keyboard.press('Enter'); }, current => JSON.stringify(current.slides[1].blocks[1].items) === '["One",{"text":"Two","level":1}]', { preview: true });
   await indent.click();
   await waitDoc(current => current.slides[1].blocks[1].items[1].level === 1, 'indented for the outdent step');
@@ -473,7 +476,7 @@ try {
   await page.locator('#preview [data-canvas-target][data-opf-path="slides.1.blocks.1.items.0"]').click();
   await page.keyboard.press('Escape');
   assert.equal(await indent.isDisabled(), true, 'the first item cannot be nested');
-  assert.match(await selection.locator('[data-role="indent-note"]').textContent(), /first item/);
+  assert.match(await indent.getAttribute('title'), /first item/);
   mark('list levels move in and out, with the reason when they cannot');
 
   // Group with the next block, then ungroup from inside the group.
@@ -482,14 +485,15 @@ try {
   await page.keyboard.press('Escape');
   const groupNext = selection.getByRole('button', { name: 'Group with the next block', exact: true });
   await groupNext.waitFor();
-  assert.match(await selection.locator('[data-role="group-next-note"]').textContent(), /Nothing is lost/);
+  assert.equal(await groupNext.getAttribute('title'), 'Group with the next block');
+  assert.equal(await selection.getByRole('button', { name: 'Ungroup', exact: true }).getAttribute('title'), 'Ungroup: This block is not inside a group.', 'a disabled action names why in its tooltip');
   await step('group with the next block', () => groupNext.click(), current => current.slides[1].blocks.length === 2 && current.slides[1].blocks[0].blocks?.length === 2, { preview: true });
   await groupNext.click();
   await waitDoc(current => current.slides[1].blocks[0].blocks?.length === 2, 'grouped for the ungroup step');
   await settle();
   await page.locator('#preview [data-canvas-target][data-opf-path="slides.1.blocks.0.blocks.0.text"]').click();
   await page.keyboard.press('Escape');
-  await step('ungroup', () => selection.getByRole('button', { name: 'Ungroup these blocks', exact: true }).click(), current => current.slides[1].blocks.length === 3 && current.slides[1].blocks[0].text !== undefined, { preview: true });
+  await step('ungroup', () => selection.getByRole('button', { name: 'Ungroup', exact: true }).click(), current => current.slides[1].blocks.length === 3 && current.slides[1].blocks[0].text !== undefined, { preview: true });
   await button('Undo').click();
   await waitDoc(current => current.slides[1].blocks.length === 3 && current.slides[1].blocks[0].text !== undefined, 'group undone');
   await settle();
@@ -509,7 +513,7 @@ try {
   await slide(4);
   await page.locator('#preview [data-canvas-target][data-opf-path^="slides.4.blocks.0"]').first().click({ position: { x: 4, y: 4 } });
   await page.keyboard.press('Escape');
-  const imageUse = selection.getByLabel(label('Use this image as'));
+  const imageUse = selection.getByLabel(label('Use image as'));
   await imageUse.waitFor();
   const imageOptions = await imageUse.locator('option').evaluateAll(options => options.map(option => [option.value, option.textContent]));
   assert.deepEqual(imageOptions.map(entry => entry[0]), ['', 'background', 'watermark'], 'OPF 0.15: a background or a watermark; an edge band is the block placement');
@@ -537,7 +541,7 @@ try {
 
   // Blocks into regions and back: layouts are offered by block count, the loss comes before the change.
   await slide(5);
-  const regionLayout = selection.getByLabel(label('Place the blocks in regions'));
+  const regionLayout = selection.getByLabel(label('Place blocks in regions'));
   await regionLayout.waitFor();
   assert.deepEqual(await regionLayout.locator('option').evaluateAll(options => options.map(option => option.value)), ['', 'left-right', 'top-bottom']);
   await step('blocks to regions', () => regionLayout.selectOption('left-right'), current => current.slides[5].left?.text === 'Left text' && current.slides[5].right?.items?.[0] === 'Right' && current.slides[5].blocks === undefined, { preview: true });
@@ -546,18 +550,18 @@ try {
   await settle();
   const toBlocks = selection.getByRole('button', { name: 'Turn regions into blocks', exact: true });
   await toBlocks.waitFor();
-  assert.match(await selection.locator('[data-role="regions-to-blocks-note"]').textContent(), /region placement/);
+  assert.match(await toBlocks.getAttribute('title'), /region placement/, 'what the action would not carry over is its tooltip');
   await step('regions to blocks', () => toBlocks.click(), current => current.slides[5].blocks?.length === 2 && current.slides[5].left === undefined, { preview: true });
   await button('Undo').click();
   await waitDoc(current => current.slides[5].blocks?.length === 2, 'regions undone');
   await settle();
   mark('blocks and regions convert both ways');
 
-  // Every new control has a name; every action button's description is its report.
-  const unnamed = await page.evaluate(() => [...document.querySelectorAll('#selection-controls select, #selection-controls input, #selection-controls button')].filter(node => !node.closest('[hidden]') && !(node.labels?.length || node.textContent.trim())).map(node => node.outerHTML.slice(0, 80)));
+  // Every new control has a name; every action button has its report as its tooltip.
+  const unnamed = await page.evaluate(() => [...document.querySelectorAll('#selection-controls select, #selection-controls input, #selection-controls button')].filter(node => !node.closest('[hidden]') && !(node.labels?.length || node.textContent.trim() || node.getAttribute('aria-label'))).map(node => node.outerHTML.slice(0, 80)));
   assert.deepEqual(unnamed, [], 'every visible content control has a name');
-  const described = await page.evaluate(() => [...document.querySelectorAll('#selection-controls .opf-dc-action > button')].filter(node => !node.closest('[hidden]')).map(node => !!document.getElementById(node.getAttribute('aria-describedby'))));
-  assert.ok(described.every(Boolean), 'every action button points at its report');
+  const described = await page.evaluate(() => [...document.querySelectorAll('#selection-controls .opf-dc-action > button, #selection-controls .opf-dc-tool')].filter(node => !node.closest('[hidden]')).map(node => Boolean(node.title)));
+  assert.ok(described.every(Boolean), 'every action button has its report as its tooltip');
   mark('the content controls are named and described');
 
   // The controls follow Undo and Redo done elsewhere: the theme select shows the document, not its last click.

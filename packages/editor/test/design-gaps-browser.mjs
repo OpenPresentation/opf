@@ -178,15 +178,15 @@ try {
     await field(design, 'Shape to edit').selectOption('all');
     // A deck-wide draft survives moving between slides; a slide's draft belongs to that slide.
     await field(design, 'Background type').selectOption('gradient');
-    await field(design, 'Angle in degrees').fill('77');
+    await field(design, 'Angle').fill('77');
     await slide(1);
-    assert.equal(await field(design, 'Angle in degrees').inputValue(), '77', 'a draft for the whole presentation stays while you move between slides');
+    assert.equal(await field(design, 'Angle').inputValue(), '77', 'a draft for the whole presentation stays while you move between slides');
     await field(design, 'Applies to').selectOption('slide');
-    assert.equal(await field(design, 'Angle in degrees').inputValue(), '', 'changing what the form applies to drops the draft');
+    assert.equal(await field(design, 'Angle').inputValue(), '', 'changing what the form applies to drops the draft');
     await field(design, 'Background type').selectOption('gradient');
-    await field(design, 'Angle in degrees').fill('78');
+    await field(design, 'Angle').fill('78');
     await slide(0);
-    assert.equal(await field(design, 'Angle in degrees').inputValue(), '', 'moving to another slide drops the draft of the slide you left');
+    assert.equal(await field(design, 'Angle').inputValue(), '', 'moving to another slide drops the draft of the slide you left');
     await field(design, 'Applies to').selectOption('deck');
     await slide(0);
     assert.deepEqual(await doc(), source);
@@ -218,23 +218,23 @@ try {
   assert.deepEqual(await doc(), source, 'choosing a type changes nothing until Apply');
   await step('background: linear gradient with scheme slots', async () => {
     await bgType.selectOption('gradient');
-    await field(design, 'Angle in degrees').fill('45');
+    await field(design, 'Angle').fill('45');
     await field(design, 'Stop 1 color').fill('accent1');
-    await field(design, 'Stop 1 position (0 to 1)').fill('0');
+    await field(design, 'Stop 1 position').fill('0');
     await field(design, 'Stop 2 color').fill('#FFFFFF');
-    await field(design, 'Stop 2 position (0 to 1)').fill('1');
+    await field(design, 'Stop 2 position').fill('1');
     await applyBackground();
   }, current => JSON.stringify(current.design.background) === '{"type":"gradient","gradient":{"angle":45,"stops":[{"color":"accent1","position":0},{"color":"#FFFFFF","position":1}]}}', { preview: true });
   await step('background: three stops, added and removed from the keyboard', async () => {
     await bgType.selectOption('gradient');
     await field(design, 'Stop 1 color').fill('accent1');
-    await field(design, 'Stop 1 position (0 to 1)').fill('0');
+    await field(design, 'Stop 1 position').fill('0');
     await field(design, 'Stop 2 color').fill('surface');
-    await field(design, 'Stop 2 position (0 to 1)').fill('1');
+    await field(design, 'Stop 2 position').fill('1');
     await design.getByRole('button', { name: 'Add stop' }).focus();
     await page.keyboard.press('Enter');
     await field(design, 'Stop 3 color').fill('#102030');
-    await field(design, 'Stop 3 position (0 to 1)').fill('0.5');
+    await field(design, 'Stop 3 position').fill('0.5');
     await design.getByRole('button', { name: 'Remove stop 2' }).focus();
     await page.keyboard.press('Space');
     await applyBackground();
@@ -248,7 +248,7 @@ try {
     assert.equal(await field(design, 'Stop 1 color').inputValue(), 'teal', 'the draft is kept so it can be fixed');
     assert.deepEqual(await doc(), source);
     await field(design, 'Stop 1 color').fill('accent1');
-    await field(design, 'Stop 2 position (0 to 1)').fill('3');
+    await field(design, 'Stop 2 position').fill('3');
     await applyBackground();
     await page.waitForFunction(() => /Stop 2: the position is a number from 0/.test(document.querySelector('#design-controls .opf-dc-error').textContent));
     mark('invalid gradient stops are explained and the draft is kept');
@@ -259,7 +259,7 @@ try {
   await button('Undo').click();
   await waitDoc(current => current.tone === 'formal', 'tone undone');
   await settle();
-  await step('background: solid scheme color with opacity', async () => { await bgType.selectOption('solid'); await field(design, 'Color').fill('accent2'); await field(design, 'Opacity (0 to 1, optional)').fill('0.5'); await applyBackground(); }, current => JSON.stringify(current.design.background) === '{"type":"solid","color":"accent2","opacity":0.5}', { preview: true });
+  await step('background: solid scheme color with opacity', async () => { await bgType.selectOption('solid'); await field(design, 'Color').fill('accent2'); await field(design, 'Opacity').fill('0.5'); await applyBackground(); }, current => JSON.stringify(current.design.background) === '{"type":"solid","color":"accent2","opacity":0.5}', { preview: true });
   await step('background: image with fit tile', async () => { await bgType.selectOption('image'); await field(design, 'Background image source').fill('asset:photo'); await field(design, 'Fit').first().selectOption('tile'); await applyBackground(); }, current => JSON.stringify(current.design.background) === '{"type":"image","src":"asset:photo","fit":"tile"}');
   await step('background: image from an uploaded file', async () => { await bgType.selectOption('image'); await field(design, 'Fit').first().selectOption('contain'); await upload(design, 'Upload background image file', 'bg.png', png, 'image/png'); }, current => JSON.stringify(current.design.background) === '{"type":"image","src":"asset:bg","fit":"contain"}' && Boolean(current.assets.bg));
   // Patterns: all 54 presets, grouped; any of them applies.
@@ -361,7 +361,7 @@ try {
     await withText('{{slide.section}}', async () => {
       assert.match(await warnings(), /shows \{\{slide\.section\}\}, but this slide has no section/, 'a section value on a slide without one is explained');
     });
-    await toggle('current date', current => current.design.footer?.right?.date === true, 'Show the current date');
+    await toggle('current date', current => current.design.footer?.right?.date === true, "Today's date");
     await write('fixed date', current => current.design.footer?.right?.date === '2026-10-01', 'Fixed date', '2026-10-01');
     await write('date format', current => current.design.footer?.right?.dateFormat === 'MMMM d, yyyy', 'Date format', 'MMMM d, yyyy');
     mark('every header and footer part (text with the six inserted values, logo, image, date and format) in its zone');
@@ -385,7 +385,7 @@ try {
     mark('an unknown slide variable is refused and changes nothing');
     // Parts that need something say so.
     await zone('left');
-    await design.getByLabel("Show the organization's social profiles").check();
+    await design.getByLabel('Social profiles').check();
     await waitDoc(current => current.design.footer?.left?.socials === true, 'socials without any');
     assert.match(await warnings(), /social profiles, but the organization has none/);
     await button('Undo').click();
@@ -411,7 +411,7 @@ try {
     await field(design, 'Applies to').selectOption('slide');
     await settle();
     await field(design, 'Zone').selectOption('right');
-    await step('slide scope: a date part keeps the deck zones', () => design.getByLabel('Show the current date').check(), current => current.slides[1].design?.footer?.left?.text === 'Acme' && current.slides[1].design.footer.right?.date === true && current.design.footer.right === undefined);
+    await step('slide scope: a date part keeps the deck zones', () => design.getByLabel("Today's date").check(), current => current.slides[1].design?.footer?.left?.text === 'Acme' && current.slides[1].design.footer.right?.date === true && current.design.footer.right === undefined);
     await field(design, 'Edit').selectOption('header');
     await step('slide scope: hide the header on this slide', () => design.getByLabel('Hide it').check(), current => current.slides[1].design?.header === false);
     await field(design, 'Applies to').selectOption('deck');

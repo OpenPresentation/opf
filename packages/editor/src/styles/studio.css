@@ -872,12 +872,6 @@
   cursor: ew-resize;
   user-select: none;
 }
-.opf-studio-field-help {
-  grid-column: 1 / -1;
-  margin: 0;
-  color: var(--opf-ui-muted-fg);
-  font: 12px var(--opf-ui-font);
-}
 .opf-studio-number,
 .opf-studio-input,
 .opf-studio-notes {
@@ -895,9 +889,10 @@
   grid-column: 1 / -1;
   resize: vertical;
 }
+/* An arrangement is one row of icon segments; each is named, with its name as its tooltip. */
 .opf-studio-segmented {
-  display: inline-flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 2px;
   padding: 2px;
   border: 1px solid var(--opf-ui-border);
@@ -905,8 +900,42 @@
 }
 .opf-studio-segmented .opf-studio-segment {
   min-height: 26px;
-  padding: 0 6px;
-  font-size: 12px;
+  padding: 0;
+}
+.opf-studio-design .opf-dc-toolbar {
+  margin: 0;
+}
+.opf-studio-design button[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: default;
+}
+.opf-studio-path {
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+  align-self: flex-start;
+  gap: 6px;
+  margin: 0 0 8px;
+  padding: 2px 6px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-sm);
+  background: var(--opf-ui-muted);
+  color: var(--opf-ui-fg);
+  font: 11.5px/1.5 var(--opf-ui-mono);
+  cursor: pointer;
+}
+.opf-studio-path[hidden] {
+  display: none;
+}
+.opf-studio-path > code {
+  overflow: hidden;
+  font: inherit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.opf-studio-path > svg {
+  flex: none;
+  color: var(--opf-ui-muted-fg);
 }
 .opf-studio-weights {
   display: grid;
@@ -1206,7 +1235,7 @@
 }
 
 /* ---- touch: 44px targets ------------------------------------------------------------------------------------------------------------- */
-.opf-studio[data-density="touch"] :is(.opf-studio-barbutton, .opf-studio-iconbutton, .opf-studio-segment, .opf-studio-action, .opf-studio-tab, .opf-studio-menuitem, .opf-studio-validity) {
+.opf-studio[data-density="touch"] :is(.opf-studio-barbutton, .opf-studio-iconbutton, .opf-studio-segment, .opf-studio-action, .opf-studio-tab, .opf-studio-menuitem, .opf-studio-validity, .opf-studio-path, .opf-dc-tool) {
   min-width: 44px;
   min-height: 44px;
 }
@@ -1220,7 +1249,7 @@
   min-height: 48px;
 }
 @media (pointer: coarse) {
-  .opf-studio :is(.opf-studio-barbutton, .opf-studio-iconbutton, .opf-studio-segment, .opf-studio-action, .opf-studio-tab, .opf-studio-menuitem, .opf-studio-validity) {
+  .opf-studio :is(.opf-studio-barbutton, .opf-studio-iconbutton, .opf-studio-segment, .opf-studio-action, .opf-studio-tab, .opf-studio-menuitem, .opf-studio-validity, .opf-studio-path, .opf-dc-tool) {
     min-width: 44px;
     min-height: 44px;
   }
