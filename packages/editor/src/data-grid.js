@@ -1120,6 +1120,19 @@ export function createDataGrid(container, options = {}) {
     const td = event.target.closest?.("td[data-line]");
     return td ? { u: Number(td.dataset.line), c: Number(td.dataset.column) } : undefined;
   };
+  // A press focuses a cell (or the table) at once. A host that was editing text elsewhere (the slide canvas) saves it when the grid takes
+  // the focus, and may move the focus back as it does (the canvas focuses the target it saved, from its field's blur), so the grid takes it
+  // once more. Both happen inside the press: a key pressed straight after the click must reach the grid, and a timer would run after it
+  // (browsers dispatch pending input before timers). The timer stays for a host that moves the focus later.
+  const focusFromPress = (at) => {
+    const take = () => (cellNode(at.u, at.c) ?? table).focus?.({ preventScroll: true });
+    const lost = () => !destroyed && !editing && grid && !root.contains(doc.activeElement);
+    take();
+    if (lost()) take();
+    setTimeout(() => {
+      if (lost()) take();
+    }, 0);
+  };
   table.addEventListener("mousedown", (event) => {
     if (!grid || event.button !== 0) return;
     const ruler = event.target.closest?.("th[data-ruler]");
@@ -1139,7 +1152,7 @@ export function createDataGrid(container, options = {}) {
         if (event.shiftKey) selection.anchor = { u: selection.anchor.u, c: 0 };
       }
       paint();
-      (cellNode(selection.focus.u, selection.focus.c) ?? table).focus?.({ preventScroll: true });
+      focusFromPress({ ...selection.focus });
       return;
     }
     const hit = cellFromEvent(event);
@@ -1154,12 +1167,7 @@ export function createDataGrid(container, options = {}) {
     dragging = true;
     invalid = new Map();
     setSelection(event.shiftKey ? selection.anchor : hit, hit, { scroll: false });
-    // A host that was editing text elsewhere (the slide canvas) saves it when this click takes the focus, and may move the focus back as it does.
-    const wanted = { ...selection.focus };
-    setTimeout(() => {
-      if (destroyed || editing || !grid || root.contains(doc.activeElement)) return;
-      cellNode(wanted.u, wanted.c)?.focus({ preventScroll: true });
-    }, 0);
+    focusFromPress({ ...selection.focus });
   });
   table.addEventListener("mouseover", (event) => {
     if (!dragging) return;

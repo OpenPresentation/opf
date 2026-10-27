@@ -477,6 +477,27 @@ try {
   assert.deepEqual(await active(), [3, 0], 'ArrowDown from a merged cell goes past it');
   await page.keyboard.press('ArrowUp');
   assert.deepEqual(await active(), [1, 0], 'and ArrowUp lands on the merge itself');
+  // A host field that saves on blur and moves the focus as it does (the canvas focuses the target it saved) does not keep the focus from a
+  // press on the grid: the grid holds it when the press returns, before any timer, so a key pressed straight after the click reaches the
+  // grid. Synthetic presses have no native focus change, so only the grid can move the focus here.
+  const pressFocus = await page.evaluate(() => {
+    const field = document.createElement('textarea'), elsewhere = document.createElement('button');
+    document.body.append(field, elsewhere);
+    field.addEventListener('blur', () => elsewhere.focus());
+    const press = selector => {
+      field.focus();
+      if (document.activeElement !== field) return 'the host field did not take the focus';
+      document.querySelector(`#data-grid-dock ${selector}`).dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, button: 0 }));
+      document.dispatchEvent(new MouseEvent('mouseup', { bubbles: true, button: 0 }));
+      const node = document.activeElement;
+      return node.matches('#data-grid-dock td') ? [Number(node.dataset.line), Number(node.dataset.column)] : node.tagName;
+    };
+    const result = { cell: press('td[data-line="3"][data-column="0"]'), ruler: press('th[data-ruler="column"][data-column="0"]') };
+    field.remove();
+    elsewhere.remove();
+    return result;
+  });
+  assert.deepEqual(pressFocus, { cell: [3, 0], ruler: [4, 0] }, 'a pressed cell or ruler takes the focus back from a host that moved it on blur');
   await cell(1, 0).click();
   await page.keyboard.press('Shift+ArrowRight');
   assert.equal(await dock.locator('td[aria-selected="true"]').count(), 3, 'a selection that touches a merge takes the whole merge (the merged cell and the two cells beside it)');
