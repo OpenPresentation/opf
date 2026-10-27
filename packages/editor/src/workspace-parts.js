@@ -1,4 +1,4 @@
-// The slide half of `createOpfEditor` (src/workspace.js), loaded on demand: the renderer and every part that shows or edits slides. A host
+// The slide half of `createOpfEditor` (src/workspace.js), loaded on demand: the renderer, every part that shows or edits slides and the Studio. A host
 // whose editor mounts only the source pane never loads this chunk (and so never loads the renderer); every other layout loads it once, before
 // its parts mount. Internal: only workspace.js imports it.
 export { toSvg } from "@openpresentation/opf-render/svg";
@@ -17,3 +17,4 @@ export { prepareDimensionSwitch } from "./switches.js";
 export { mergeSlides, splitSlideByBlocks } from "./content-actions.js";
 export { installCanvasVariableEditing } from "./canvas-variables.js";
 export { createLayoutStudio } from "./workspace-layouts.js";
+export { buildStudioShell, createStudio } from "./studio.js";

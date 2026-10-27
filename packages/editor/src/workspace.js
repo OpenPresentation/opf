@@ -18,7 +18,6 @@ import { SOURCE_CHECKS, copyText, downloadSourceFile, lf, reportSource } from ".
 import { createThemeController } from "./workspace-theme.js";
 import { retainedSlideIndex } from "./slide-retention.js";
 import { createSourceMemory, updateJsonSource } from "./exact-source.js";
-import { buildStudioShell, createStudio } from "./studio.js";
 
 export { THEME_TOKENS, createThemeController, normalizeTheme, normalizeThemeTokens } from "./workspace-theme.js";
 // The script-aware measurement options for composing one slide: a host that calls `composeSlide` or `paginateSlide` on the session passes these (the playground does).
@@ -29,14 +28,14 @@ export { layoutOptionsFor } from "./workspace-measure.js";
 // here once the chunk has arrived, before any part is mounted.
 let toSvg, createCanvasEditor, createSlideNavigator, createThumbnailStrip, createThumbnailCache, createSlideManager, createOutlineView, createExportMenu;
 let bindPresentShortcut, createPresentButton, createPresenter, createReviewPanel, createFindPanel, installFindShortcuts, createDesignControls;
-let prepareDimensionSwitch, mergeSlides, splitSlideByBlocks, installCanvasVariableEditing, createLayoutStudio;
+let prepareDimensionSwitch, mergeSlides, splitSlideByBlocks, installCanvasVariableEditing, createLayoutStudio, buildStudioShell, createStudio;
 let partsModule;
 let partsLoaded = false;
 function loadParts() {
   partsModule ??= import("./workspace-parts.js").then((parts) => {
     ({ toSvg, createCanvasEditor, createSlideNavigator, createThumbnailStrip, createThumbnailCache, createSlideManager, createOutlineView, createExportMenu } = parts);
     ({ bindPresentShortcut, createPresentButton, createPresenter, createReviewPanel, createFindPanel, installFindShortcuts, createDesignControls } = parts);
-    ({ prepareDimensionSwitch, mergeSlides, splitSlideByBlocks, installCanvasVariableEditing, createLayoutStudio } = parts);
+    ({ prepareDimensionSwitch, mergeSlides, splitSlideByBlocks, installCanvasVariableEditing, createLayoutStudio, buildStudioShell, createStudio } = parts);
     partsLoaded = true;
   });
   // A chunk that failed to load is asked for again by the next editor.
@@ -204,22 +203,26 @@ export function createOpfEditor(element, options = {}) {
   let slots = { ...given };
   let controls = {};
   let studioShell = null;
-  if (layout === "slots") root.setAttribute("data-opf-layout", "slots");
-  else if (studioLayout) {
-    // CE-20: the Studio builds its own shell; a host's slots add parts to it (`topbarEnd`, `overlay`).
+  let overlay = root;
+  // CE-20: the Studio builds its own shell; a host's slots add parts to it (`topbarEnd`, `overlay`). Its code is in the slide chunk, so the Studio
+  // shell is built once that has loaded, right before the parts mount.
+  function buildStudio() {
     const built = buildStudioShell(root, { parts, layout, labels: options.labels, studio: options.studio, slots: given });
     const { topbarEnd: _placed, ...rest } = given;
     slots = { ...built.slots, ...rest };
     controls = built.controls;
     studioShell = built.shell;
-  } else {
+    overlay = slots.overlay ?? root;
+  }
+  if (layout === "slots") root.setAttribute("data-opf-layout", "slots");
+  else if (!studioLayout) {
     const built = buildWorkspaceShell(root, { parts, views, layout, labels: options.labels });
     slots = { ...built.slots, ...given };
     controls = built.controls;
   }
-  const overlay = slots.overlay ?? root;
-  // The slide chunk is loaded before the parts mount, unless only the source pane (with its autosave) is mounted.
-  const slideParts = needsSlideParts(parts, slots);
+  overlay = slots.overlay ?? root;
+  // The slide chunk is loaded before the parts mount, unless only the source pane (with its autosave) is mounted. The Studio always needs it.
+  const slideParts = studioLayout || needsSlideParts(parts, slots);
 
   // ---- state ------------------------------------------------------------------------------------------------------------------
   let fonts;
@@ -1366,6 +1369,7 @@ export function createOpfEditor(element, options = {}) {
 
   // ---- start ------------------------------------------------------------------------------------------------------------------
   function mount(resolved) {
+    if (studioLayout && !studioShell) buildStudio();
     fonts = resolved;
     density = densityFor(options.density);
     exportMode = exportModeFor(options.exportMode);

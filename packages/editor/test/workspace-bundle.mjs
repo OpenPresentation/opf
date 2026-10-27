@@ -11,7 +11,7 @@ import { build } from 'esbuild';
 // are one chunk the SDK imports on demand, only when a layout needs them. Measured the way a host bundles the package (esbuild, ESM, code
 // splitting, minified): the "initial" graph is the entry's chunk and every chunk it imports statically.
 const root = fileURLToPath(new URL('../', import.meta.url));
-const SLIDE_ONLY = [/(^|[/\\])render[/\\]dist[/\\]/, /@openpresentation[/\\]opf-render/, ...['canvas', 'presenter', 'export-menu', 'design-controls', 'slide-manager', 'workspace-parts'].map((file) => new RegExp(`(^|[/\\\\])dist[/\\\\]${file}\\.js$`))];
+const SLIDE_ONLY = [/(^|[/\\])render[/\\]dist[/\\]/, /@openpresentation[/\\]opf-render/, ...['canvas', 'presenter', 'export-menu', 'design-controls', 'slide-manager', 'studio', 'workspace-parts'].map((file) => new RegExp(`(^|[/\\\\])dist[/\\\\]${file}\\.js$`))];
 
 async function measure(name, contents) {
   const outdir = mkdtempSync(path.join(os.tmpdir(), `opf-ws-bundle-${name}-`));
@@ -59,7 +59,7 @@ const pane = await measure('pane-host', `
 `);
 
 assert.deepEqual(slideOnly(source.initialInputs), [], 'a source-only SDK host loads no renderer, canvas or slide part up front');
-assert.deepEqual([...slideFiles(source.allInputs)].sort(), ['canvas.js', 'design-controls.js', 'export-menu.js', 'presenter.js', 'renderer', 'slide-manager.js', 'workspace-parts.js'], 'the slide parts are still in the build, as a chunk loaded on demand');
+assert.deepEqual([...slideFiles(source.allInputs)].sort(), ['canvas.js', 'design-controls.js', 'export-menu.js', 'presenter.js', 'renderer', 'slide-manager.js', 'studio.js', 'workspace-parts.js'], 'the slide parts are still in the build, as a chunk loaded on demand');
 assert.ok(source.initial.raw < pane.initial.raw * 1.25, `the SDK adds little to the bare source pane up front (${kib(source.initial)} against ${kib(pane.initial)})`);
 
 console.log(`workspace-bundle: a source-only SDK host loads ${kib(source.initial)} up front (the bare source pane: ${kib(pane.initial)}); the slide chunk and the rest bring the build to ${kib(source.total)}; no renderer up front.`);
