@@ -1138,16 +1138,34 @@ const SCRIPT_WIDTH_FACTORS: readonly (readonly [RegExp, number])[] = [
   [/\p{Script=Ethiopic}/u, 1.13], [/\p{Script=Georgian}/u, 1.28],
 ];
 
+const ZERO_WIDTH_MARK = /\p{Mn}|\p{Me}|\u200d|\ufe0f/u, SPACING_MARK = /\p{Mc}/u;
+const LATIN_CJK = /\p{Script=Latin}|\p{Script=Han}|\p{Script=Hangul}|\p{Script=Hiragana}|\p{Script=Katakana}/u;
+/** One character's advance in em, or NaN for a mark that takes no space. */
+function characterUnits(character: string): number {
+  if (ZERO_WIDTH_MARK.test(character)) return Number.NaN;
+  // Preserve the pre-0.19 Latin/CJK estimate, including their spacing tone/reading marks.
+  if (SPACING_MARK.test(character) && LATIN_CJK.test(character)) return Number.NaN;
+  const base = character === " " ? 0.32 : /[A-Z0-9]/.test(character) ? 0.62 : character.codePointAt(0)! > 0x2e80 ? 1 : 0.54;
+  const factor = SCRIPT_WIDTH_FACTORS.find(([script]) => script.test(character))?.[1] ?? 1;
+  return base * factor;
+}
+// Each character is classified once (the property regexes above used to run for every character of every measured string, and
+// the default measurement measures each string many times while text is fitted): ASCII from a table, the rest from a bounded cache.
+const ASCII_UNITS = Array.from({ length: 128 }, (_, code) => characterUnits(String.fromCharCode(code)));
+const characterUnitCache = new Map<string, number>();
+const CHARACTER_UNIT_CACHE_LIMIT = 65536;
+
 /** Deterministic estimate, not a font shaping engine. Spacing marks outside Latin/CJK contribute; nonspacing/enclosing marks do not. */
 export function measureText(text: string, fontSize: number): number {
   let units = 0;
   for (const character of text) {
-    if (/\p{Mn}|\p{Me}|\u200d|\ufe0f/u.test(character)) continue;
-    // Preserve the pre-0.19 Latin/CJK estimate, including their spacing tone/reading marks.
-    if (/\p{Mc}/u.test(character) && /\p{Script=Latin}|\p{Script=Han}|\p{Script=Hangul}|\p{Script=Hiragana}|\p{Script=Katakana}/u.test(character)) continue;
-    const base = character === " " ? 0.32 : /[A-Z0-9]/.test(character) ? 0.62 : character.codePointAt(0)! > 0x2e80 ? 1 : 0.54;
-    const factor = SCRIPT_WIDTH_FACTORS.find(([script]) => script.test(character))?.[1] ?? 1;
-    units += base * factor;
+    const code = character.charCodeAt(0);
+    let advance = code < 128 ? ASCII_UNITS[code] : characterUnitCache.get(character);
+    if (advance === undefined) {
+      advance = characterUnits(character);
+      if (characterUnitCache.size < CHARACTER_UNIT_CACHE_LIMIT) characterUnitCache.set(character, advance);
+    }
+    if (!Number.isNaN(advance)) units += advance;
   }
   return units * fontSize;
 }

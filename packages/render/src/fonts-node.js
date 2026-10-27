@@ -9,7 +9,7 @@ import { createSubsetter, fontSubsets } from "./font-subset.js";
 import { createShaper } from "./hb-shape.js";
 import { packageRoot, resolveInstalled } from "./node-resolve.js";
 export { BUNDLED_FONT_MANIFEST } from "./font-manifest.js";
-import { analyzePresentationScripts, autoScriptSelection, nextFallbackPackage, scriptFontPackages, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
+import { analyzePresentationScripts, autoScriptSelection, createScriptAnalysis, nextFallbackPackage, scriptFontPackages, scriptSelectionOf, uncoveredCjkCharacters } from "./script-font-pack.js";
 export { autoScriptSelection, detectPresentationScripts, scriptFontPackages } from "./script-font-pack.js";
 // Script faces are embedded in a standalone SVG only when the slide's text uses their family.
 const embedUsed = entries => entries.map(entry => ({...entry, embed: "used"}));
@@ -286,6 +286,8 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
   // Calls mutate one registry: serialize their reads/additions, while returning each
   // call's own result or error. A rejection must not poison later preparation.
   let ensureQueue = Promise.resolve();
+  // `pending` is asked before every render: each string is scanned once and each slide's families resolved once (see createScriptAnalysis).
+  const scriptMemory = createScriptAnalysis();
   const refresh = () => { embeddedFonts = undefined; fontFiles = [...registry.fontFiles]; };
   const [subsetter, shaper] = await Promise.all([nodeHarfbuzz("subsets"), nodeHarfbuzz("shaper")]);
   for (const [kind, engine] of [["subsets", subsetter], ["shaper", shaper]]) if (!engine) {
@@ -318,7 +320,7 @@ export async function loadFonts({pack = "base", embedScriptFonts = false, ...opt
     /** Synchronous: the script packages the presentation needs that are not loaded yet. Empty means `ensure` loads nothing. */
     pending(presentation, renderOptions) {
       const held = new Set([...loaded.packages, ...(loaded.selection?.notInstalled ?? [])]);
-      const analysis = analyzePresentationScripts(presentation, undefined, {...options.renderOptions, ...renderOptions});
+      const analysis = analyzePresentationScripts(presentation, undefined, {...options.renderOptions, ...renderOptions}, scriptMemory);
       const primary = scriptFontPackages(scriptSelectionOf(analysis).scripts).map(pkg => pkg.name).filter(name => !held.has(name));
       if (primary.length) return primary;
       const next = nextFallbackPackage(analysis, {covers: character => registry.scriptFacesCover(character), loaded: held});

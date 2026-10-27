@@ -92,7 +92,8 @@ function status(message) { ed.status(message); }
 // undoable session change, so the editor's update loop (which redraws every part, and loads fonts first) runs after an edit exactly as for any change.
 // The editor library mounts these parts in the page's own elements.
 ed = createOpfEditor(document.body, {
-  document: startDeck,
+  // A host page can start the playground with its own deck: `globalThis.OPF_EDITOR_HOST = { document }` before this script runs.
+  document: globalThis.OPF_EDITOR_HOST?.document ?? startDeck,
   catalogs,
   fonts,
   slots: {
@@ -113,6 +114,8 @@ ed = createOpfEditor(document.body, {
   labels: { thumbnails: 'Slide thumbnails' },
 });
 editor = ed.session;
+// A host page (or a test) that wants the live editor and fonts handle passes `OPF_EDITOR_HOST.onReady`.
+globalThis.OPF_EDITOR_HOST?.onReady?.({ editor: ed, session: editor, fonts });
 const designControls = createDesignControls(element('design-controls'), {editor, vocabularies: catalogDisplay, getSlideIndex: () => ed.slideIndex, getSelectedPath: () => selectedPath, sections: ['look', 'variant', 'background', 'header-footer', 'brand', 'layout-options', 'info', 'catalog']});
 const selectionControls = createDesignControls(element('selection-controls'), {editor, vocabularies: catalogDisplay, getSlideIndex: () => ed.slideIndex, getSelectedPath: () => selectedPath, sections: ['selection', 'image', 'table', 'slide-content'], onSelectPath: path => select(path)});
 // RR-24: "Edit data" opens the data grid for the selected chart or table over the bottom of the canvas (it never moves the slide), so edits show in the preview at once.

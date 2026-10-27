@@ -181,9 +181,18 @@ const latinGroup = new Set(["Latn", "Cyrl", "Grek", "Zyyy", "Zinh", "Zzzz"]);
 
 const detected = ["Latn", "Cyrl", "Grek", "Hani", "Hira", "Kana", "Hang", "Bopo", "Yiii", "Arab", "Hebr", "Syrc", "Thaa", "Nkoo", "Adlm", "Rohg", "Mand", "Samr",
   "Deva", "Beng", "Guru", "Gujr", "Orya", "Taml", "Telu", "Knda", "Mlym", "Sinh", "Thai", "Laoo", "Tibt", "Mymr", "Khmr", "Mong", "Bali", "Java", "Lana",
-  "Tale", "Talu", "Cakm", "Olck", "Armn", "Geor", "Ethi", "Cher", "Tfng", "Vaii", "Zinh", "Zyyy"].map(code => [code, new RegExp(String.raw`^\p{Script=${code}}$`, "u")]);
+  "Tale", "Talu", "Cakm", "Olck", "Armn", "Geor", "Ethi", "Cher", "Tfng", "Vaii", "Zinh", "Zyyy"];
+// One precompiled pattern for every script, a capture group each, tried in the list's order (the first match wins, as with one
+// pattern per script): a character is classified by one match instead of up to 48 tests.
+const detectedPattern = new RegExp(`^(?:${detected.map(code => String.raw`(\p{Script=${code}})`).join("|")})$`, "u");
 const ignorable = /^\p{Default_Ignorable_Code_Point}$/u;
 const scriptCache = new Map();
+function classify(character) {
+  const match = detectedPattern.exec(character);
+  if (!match) return "Zzzz";
+  for (let group = 1; group < match.length; group++) if (match[group] !== undefined) return detected[group - 1];
+  return "Zzzz";
+}
 
 /** ISO 15924 script of one character: `Zyyy` common, `Zinh` inherited, `Zzzz` otherwise unknown. */
 export function scriptOfCharacter(character) {
@@ -192,7 +201,7 @@ export function scriptOfCharacter(character) {
     const code = character.codePointAt(0);
     script = code < 0x80 ? (/[A-Za-z]/.test(character) ? "Latn" : "Zyyy")
       : ignorable.test(character) ? "Zinh"
-        : (detected.find(([, pattern]) => pattern.test(character))?.[0] ?? "Zzzz");
+        : classify(character);
     if (scriptCache.size < 65536) scriptCache.set(character, script);
   }
   return script;
@@ -214,10 +223,10 @@ function hanScript(text, profile) {
   return "Hans";
 }
 
-function fontKey(script, text, profile) {
+function fontKey(script, text, profile, han = () => hanScript(text, profile)) {
   if (script === "Hira" || script === "Kana") return "Jpan";
   if (script === "Hang") return "Kore";
-  if (script === "Hani" || script === "Bopo") return hanScript(text, profile);
+  if (script === "Hani" || script === "Bopo") return han();
   return latinGroup.has(script) ? "Latn" : script;
 }
 
@@ -251,6 +260,9 @@ export function itemizeScripts(text, profile) {
   const runs = [];
   let pending = "";
   const eastAsian = eastAsianLanguage(profile);
+  // The Han key depends on the whole text and the profile only: work it out once per text, not once per Han character.
+  let han;
+  const hanOfText = () => han ??= hanScript(source, profile);
   const push = (character, key) => {
     const last = runs.at(-1);
     if (last && last.script === key) last.text += character;
@@ -268,7 +280,7 @@ export function itemizeScripts(text, profile) {
   for (const character of source) {
     const script = scriptOfCharacter(character);
     if (eastAsianCommon.test(character) || (eastAsian && eastAsianAmbiguous.test(character))) {
-      strong(character, script === "Hira" || script === "Kana" ? "Jpan" : hanScript(source, profile));
+      strong(character, script === "Hira" || script === "Kana" ? "Jpan" : hanOfText());
     } else if (script === "Zinh") {
       if (runs.length) runs.at(-1).text += character; else pending += character;
     } else if (script === "Zyyy") {
@@ -276,7 +288,7 @@ export function itemizeScripts(text, profile) {
       if (!last) pending += character;
       else if (character.codePointAt(0) < 0x80 && last.role === "eastAsian") push(character, "Latn");
       else last.text += character;
-    } else strong(character, fontKey(script, source, profile));
+    } else strong(character, fontKey(script, source, profile, hanOfText));
   }
   if (!runs.length) return [{text: pending, script: "Latn", role: "latin"}];
   return runs;

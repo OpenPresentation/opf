@@ -27,6 +27,7 @@ import { renderCaption, renderFootnotes } from "./annotations.js";
 import { drawnFaces } from "./drawn-faces.js";
 import { dataUrlFsType, embeddingAllowed } from "./font-fstype.js";
 import { rejectRenamedOptions, selectSlides } from "./slide-sources.js";
+import { deckInternals } from "./svg-internals.js";
 
 export const packageName = "@openpresentation/opf-render";
 
@@ -2287,3 +2288,34 @@ function tag(name, attrs = {}, children = "") {
   if (children === "") return `<${name}${serializedAttrs}/>`;
   return `<${name}${serializedAttrs}>${children}</${name}>`;
 }
+
+// For the renderer's own font analysis (lazy-fonts.js), not part of the package API (index.js re-exports this module): `openDeck`
+// opens the deck once (the parsing, template variables and boundary check of `toSvg`) and works on single slides on request, so an
+// analysis can redo only the slides that changed. Binding and drawing a slide read the deck and that slide only (its number and
+// the slide count included), never another slide's binding.
+// - `design(index)` is the slide's design as `bindSlide` resolves it, without composing the slide. Its font families do not depend
+//   on composition: without a measurement (the analysis passes none) the drawn families are the scheme's.
+// - `bind(index, textMeasurement)` composes the slide with that measurement, which `render(index)` then draws with too, exactly as
+//   `toSvg` measures each slide.
+// - `variablesIdle(deck, variables)`: the `variables` option leaves this deck as it is (a deck that is no template and has no content
+//   variables, with `variables` false, absent or empty; see `resolveTemplateInput`), so an analysis need not tell those options apart.
+deckInternals.variablesIdle = (input, variables) =>
+  isPlainObject(input) && (variables === undefined || variables === false || (isPlainObject(variables) && !Object.keys(variables).length)) && !isTemplate(input) && !hasContentVariables(input);
+deckInternals.openDeck = (input, options = {}) => {
+  const drawn = normalizeOptions(options);
+  const presentation = resolveTemplateInput(parseInput(input), drawn);
+  if (drawn.validate !== false) assertValidBoundary(presentation, drawn);
+  const resolved = { presentation, engineDefaults, slides: [] }, measurements = [];
+  return {
+    presentation,
+    design(index) {
+      const slideContext = resolveContext(presentation, index, { presentation, options: drawn });
+      return resolveDesign(presentation, slideContext.slide, slideContext);
+    },
+    bind(index, textMeasurement = drawn.textMeasurement) {
+      measurements[index] = textMeasurement;
+      resolved.slides[index] = bindSlide(presentation, index, { presentation, options: { ...drawn, textMeasurement } });
+    },
+    render(index) { return renderResolvedSlide(resolved, index, { ...drawn, textMeasurement: measurements[index] }); },
+  };
+};

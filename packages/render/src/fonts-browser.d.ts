@@ -73,6 +73,12 @@ export interface BrowserFontsHandle extends FontsHandle {
   ensure(presentation: unknown, options?: { signal?: AbortSignal } & Partial<ToSvgOptions>): Promise<EnsureResult>;
   /** Synchronous: the vendored files and script packages `ensure` would fetch. Empty means a render can start now. Throws what `toSvg` throws for a document that does not resolve. */
   pending(presentation: unknown, renderOptions?: Partial<ToSvgOptions>): string[];
+  /**
+   * Counters of the analysis behind `pending` and `ensure`, for tests and benchmarks: `decks` opened (resolved and checked),
+   * `slides` composed and drawn to find their faces, `designs` resolved for their families, and `strings` scanned for scripts.
+   * The analysis keeps what it found, so asking again about the same deck adds nothing and an edit adds only the changed slides.
+   */
+  readonly analysisStats: { decks: number; slides: number; designs: number; strings: number };
 }
 export declare function loadFonts(
   options?: FontRegistryOptions & {
