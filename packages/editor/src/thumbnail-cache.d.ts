@@ -17,6 +17,8 @@ export interface ThumbnailCache {
   prepare(presentation: any, indices?: number[]): void;
   /** The SVG markup (or the text "Preview unavailable") of one slide. Entries are keyed by the slide's index, the slide count and the slide's own content. */
   html(presentation: any, index: number): string;
+  /** CE-20: the cached thumbnail of one slide, or undefined when it has not been drawn yet (a lazy strip calls `prepare` with the visible slides). */
+  peek(presentation: any, index: number): string | undefined;
   /** Forget everything, for example after fonts load. */
   clear(): void;
 }

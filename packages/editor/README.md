@@ -34,6 +34,18 @@ const document = useOpfDocument(editor); // also useOpfSelection(editor), useOpf
 
 [docs/embedding.md](docs/embedding.md) lists the layouts, `panels`, `slots` (your own arrangement), every option, the handle, the events and the React bindings; [docs/theming.md](docs/theming.md) is the token contract (surface, text, accent, border, radius and font, light and dark) and the `theme` option. `examples/playground.js` is a thin user of it.
 
+## The Studio (CE-20)
+
+`createOpfEditor(element, { layout: "studio" })` is the Presentation and Slide Studio, a Figma Auto Layout-style editor over the same parts: a filmstrip over a layers tree, the slide in a zoomable viewport with selection, drop lines and track dividers, a Design panel bound to the selection, Insert by kind and + Slide by layout, the source as a split synchronized both ways, Present, a context menu, a shortcut sheet (`?`) and one undo history. Slides stay auto-layout: no free positioning. `layout: "playground"` arranges the same editor for first contact, and `editor.setLayout("studio" | "playground")` switches in place.
+
+```js
+const editor = createOpfEditor(element, { layout: "studio", document, catalogs: [gallery], fonts, studio: { hostPanels: [{ id: "agent", label: "Agent", mount(el) {} }] } });
+editor.selection;               // [{ key, path, idPath, kind }]
+editor.commands.run("studio.group");
+```
+
+React: `<OpfEditor layout="studio" hostPanels={[{ id, label, render }]} />`, `useOpfSelection(editor)` and `useOpfCommands(editor)`. [docs/studio.md](docs/studio.md) has the shell, the keyboard map, the API and the known limits; `examples/studio.html` (built by `pnpm run build:playground`) tries it.
+
 ## Install the editor and optional export dependencies (RR-63)
 
 `@openpresentation/opf-render` is an optional peer of the editor, and from render 0.16 its heavy pieces are optional peers too, so install only what you use. The editor itself draws with `@openpresentation/opf-render/svg` and loads fonts with `/fonts-browser`, which need nothing else. Add:

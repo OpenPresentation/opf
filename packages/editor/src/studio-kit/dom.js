@@ -41,6 +41,19 @@ export const ICONS = {
   Hash: '<line x1="4" x2="20" y1="9" y2="9"/><line x1="4" x2="20" y1="15" y2="15"/><line x1="10" x2="8" y1="3" y2="21"/><line x1="16" x2="14" y1="3" y2="21"/>',
   Quote: '<path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"/>',
   GitCommitHorizontal: '<circle cx="12" cy="12" r="3"/><line x1="3" x2="9" y1="12" y2="12"/><line x1="15" x2="21" y1="12" y2="12"/>',
+  Video: '<path d="m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect x="2" y="6" width="14" height="12" rx="2"/>',
+  Gauge: '<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
+  CalendarRange: '<rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4"/><path d="M3 10h18"/><path d="M8 2v4"/><path d="M17 14h-6"/><path d="M13 18H7"/><path d="M7 14h.01"/><path d="M17 18h.01"/>',
+  Type: '<polyline points="4 7 4 4 20 4 20 7"/><line x1="9" x2="15" y1="20" y2="20"/><line x1="12" x2="12" y1="4" y2="20"/>',
+  Menu: '<line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>',
+  FileCode: '<path d="M10 12.5 8 15l2 2.5"/><path d="m14 12.5 2 2.5-2 2.5"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/>',
+  PanelLeft: '<rect width="18" height="18" x="3" y="3" rx="2"/><path d="M9 3v18"/>',
+  Presentation: '<path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/>',
+  Keyboard: '<path d="M10 8h.01"/><path d="M12 12h.01"/><path d="M14 8h.01"/><path d="M16 12h.01"/><path d="M18 8h.01"/><path d="M6 8h.01"/><path d="M7 16h10"/><path d="M8 12h.01"/><rect width="20" height="16" x="2" y="4" rx="2"/>',
+  EyeOff: '<path d="M10.733 5.076a10.744 10.744 0 0 1 11.205 6.575 1 1 0 0 1 0 .696 10.747 10.747 0 0 1-1.444 2.49"/><path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/><path d="M17.479 17.499a10.75 10.75 0 0 1-15.417-5.151 1 1 0 0 1 0-.696 10.75 10.75 0 0 1 4.446-5.143"/><path d="m2 2 20 20"/>',
+  Ungroup: '<rect width="8" height="6" x="5" y="4" rx="1"/><rect width="8" height="6" x="11" y="14" rx="1"/>',
+  ArrowUp: '<path d="m5 12 7-7 7 7"/><path d="M12 19V5"/>',
+  ArrowDown: '<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>',
   Group: '<path d="M3 7V5c0-1.1.9-2 2-2h2"/><path d="M17 3h2c1.1 0 2 .9 2 2v2"/><path d="M21 17v2c0 1.1-.9 2-2 2h-2"/><path d="M7 21H5c-1.1 0-2-.9-2-2v-2"/><rect width="7" height="5" x="7" y="7" rx="1"/><rect width="7" height="5" x="10" y="12" rx="1"/>',
 };
 
@@ -114,20 +127,41 @@ export const pct = (fraction) => `${Math.round(fraction * 10000) / 100}%`;
 export function openMenu(dom, host, { x, y, items, label, returnFocus, onClose, className = "" }) {
   const p = dom.prefix;
   const menu = dom.el("div", `${p}-menu ${className}`.trim(), { role: "menu", "aria-label": label });
-  const buttons = items.map((item) => {
+  // CE-20: items may carry an `icon` (a Lucide name), a `media` element (a layout diagram), a `description` (a second line), a `title` (why
+  // it is disabled), `pointerdown(event, item)` (an item that can also be dragged out of the menu) and a `group` name: consecutive items of
+  // one group sit in a `role="group"` under a visible heading. `{ separator: true }` draws a separator.
+  let parent = menu, groupName;
+  const buttons = [];
+  for (const item of items) {
+    if (item.separator) { menu.append(dom.el("div", `${p}-menu-separator`, { role: "separator" })); parent = menu; groupName = undefined; continue; }
+    if (item.group !== groupName) {
+      groupName = item.group;
+      if (groupName) {
+        parent = dom.el("div", `${p}-menu-group`, { role: "group", "aria-label": groupName });
+        parent.append(dom.el("div", `${p}-menu-heading`, { "aria-hidden": "true", text: groupName }));
+        menu.append(parent);
+      } else parent = menu;
+    }
     const role = item.role ?? "menuitem";
-    const node = dom.el("button", `${p}-menuitem`, { type: "button", role, tabindex: "-1", "aria-disabled": item.disabled ? "true" : undefined, "aria-checked": role === "menuitemcheckbox" ? String(Boolean(item.checked)) : undefined });
-    node.append(dom.el("span", `${p}-menu-label`, { text: item.label }));
+    const node = dom.el("button", `${p}-menuitem`, { type: "button", role, tabindex: "-1", title: item.title, "aria-disabled": item.disabled ? "true" : undefined, "aria-checked": role === "menuitemcheckbox" ? String(Boolean(item.checked)) : undefined, "aria-keyshortcuts": item.keyshortcuts });
+    if (item.media) node.append(item.media);
+    else if (item.icon) node.append(dom.icon(item.icon, 16));
+    if (item.description) {
+      const text = dom.el("span", `${p}-menu-text`);
+      text.append(dom.el("span", `${p}-menu-label`, { text: item.label }), dom.el("span", `${p}-menu-description`, { text: item.description }));
+      node.append(text);
+    } else node.append(dom.el("span", `${p}-menu-label`, { text: item.label }));
     if (item.hint) node.append(dom.el("span", `${p}-menu-hint`, { text: item.hint }));
     if (role === "menuitemcheckbox") node.prepend(dom.icon(item.checked ? "Check" : "Square", 14));
+    if (item.pointerdown) node.addEventListener("pointerdown", (event) => item.pointerdown(event, item, { close: () => close({ restore: false }) }));
     node.addEventListener("click", () => {
       if (item.disabled) return;
       close();
       item.onSelect?.();
     });
-    return node;
-  });
-  menu.append(...buttons);
+    parent.append(node);
+    buttons.push(node);
+  }
   let closed = false;
   const outside = (event) => { if (!menu.contains(event.target)) close({ restore: false }); };
   function close({ restore = true } = {}) {

@@ -1,4 +1,5 @@
-import { createElement, forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState, useSyncExternalStore } from "react";
+import { createElement, forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { commitCatalogControl } from "./catalog-control.js";
 import {
   getCatalogOptions,
@@ -116,7 +117,7 @@ function resolveSlots(slots) {
 }
 
 // The props that are not editor options.
-const COMPONENT_PROPS = new Set(["className", "style", "id", "onEditor", "children", "slots", "onChange", "onSelection", "onCursor", "onError", "onReady"]);
+const COMPONENT_PROPS = new Set(["className", "style", "id", "onEditor", "children", "slots", "onChange", "onSelection", "onCursor", "onError", "onReady", "hostPanels"]);
 
 function splitProps(props) {
   const options = {};
@@ -130,7 +131,7 @@ function splitProps(props) {
  * `key` of the component to mount another); `theme`, `readOnly`, `view`, `density` and `exportMode` follow later renders. The callbacks
  * (`onChange`, `onSelection`, `onCursor`, `onError`, `onReady`) always call the latest function passed. Returns the editor once it is mounted, else `null`.
  */
-function useMountedEditor(container, props, onEditor) {
+function useMountedEditor(container, props, onEditor, registerPanel) {
   const [editor, setEditor] = useState(null);
   const latest = useRef(props);
   latest.current = props;
@@ -145,8 +146,11 @@ function useMountedEditor(container, props, onEditor) {
       if (cancelled) return;
       const { options } = splitProps(latest.current);
       const current = () => latest.current;
+      // CE-20: host panels with `render` are mounted by React through portals into the Studio's panel elements.
+      const hostPanels = (latest.current.hostPanels ?? []).map(({ render: _render, ...panel }) => ({ ...panel, mount: (panelElement) => registerPanel?.(panel.id, panelElement) }));
       created = createOpfEditor(element, {
         ...options,
+        ...(hostPanels.length ? { studio: { ...options.studio, hostPanels: [...(options.studio?.hostPanels ?? []), ...hostPanels] } } : {}),
         slots: resolveSlots(latest.current.slots),
         onChange: (detail) => current().onChange?.(detail),
         onSelection: (detail) => current().onSelection?.(detail),
@@ -188,10 +192,22 @@ function useMountedEditor(container, props, onEditor) {
  */
 export const OpfEditor = forwardRef(function OpfEditor(props, ref) {
   const container = useRef(null);
-  const editor = useMountedEditor(container, props, props.onEditor);
+  // CE-20: the elements of the Studio's host panels, by id, once the editor mounted them; each `render` goes there through a portal.
+  const [panelHosts, setPanelHosts] = useState({});
+  const registerPanel = useCallback((id, panelElement) => {
+    setPanelHosts((previous) => ({ ...previous, [id]: panelElement }));
+    return () => setPanelHosts((previous) => {
+      if (previous[id] !== panelElement) return previous;
+      const next = { ...previous };
+      delete next[id];
+      return next;
+    });
+  }, []);
+  const editor = useMountedEditor(container, props, props.onEditor, registerPanel);
   useImperativeHandle(ref, () => editor, [editor]);
   const { rest } = splitProps(props);
-  return createElement("div", { ref: container, id: rest.id, className: rest.className, style: rest.style, "data-opf-react": "" });
+  const portals = (props.hostPanels ?? []).map((panel) => (panelHosts[panel.id] && typeof panel.render === "function" ? createPortal(panel.render(), panelHosts[panel.id], panel.id) : null));
+  return createElement("div", { ref: container, id: rest.id, className: rest.className, style: rest.style, "data-opf-react": "" }, ...portals);
 });
 
 /**
@@ -216,6 +232,24 @@ export function useOpfDocument(editor) {
 export function useOpfSelection(editor) {
   const subscribe = useCallback(subscribeTo(editor, "selection"), [editor]);
   return useSyncExternalStore(subscribe, () => (editor ? editor.selection : null), () => null);
+}
+
+/**
+ * CE-20: the Studio's commands for a host palette: `{ commands, run }`, where `commands` is `editor.commands.list()` (id, label, group, keys,
+ * shortcut, enabled, reason), read again after every selection, document, layout and command change, and `run(id)` runs one.
+ */
+export function useOpfCommands(editor) {
+  const [version, setVersion] = useState(0);
+  useEffect(() => {
+    if (!editor) return undefined;
+    const bump = () => setVersion((value) => value + 1);
+    const stops = ["selection", "change", "layout", "command", "source", "slide"].map((name) => editor.on(name, bump));
+    return () => { for (const stop of stops) stop(); };
+  }, [editor]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const commands = useMemo(() => (editor ? editor.commands.list() : []), [editor, version]);
+  const run = useCallback((id) => (editor ? editor.commands.run(id) : false), [editor]);
+  return { commands, run };
 }
 
 /** The path under the caret of the source pane (the latest `cursor` event: `{ pointer, idPath, from, to, ... }`), or `null` before the first. */

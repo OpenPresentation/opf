@@ -155,7 +155,7 @@
 .opf-source[data-density="touch"] .opf-source-code .cm-scroller { font-size: 13px; line-height: 21px; }
 .opf-source-code .cm-content { padding: 16px 16px 16px 4px; caret-color: var(--opf-ui-fg); }
 .opf-source-code .cm-line { --opf-line-start: 2px; padding-top: 0; padding-right: 2px; padding-bottom: 0; }
-.opf-source-code .cm-gutters { border: 0; background: transparent; color: color-mix(in srgb, var(--opf-ui-muted-fg) 60%, transparent); }
+.opf-source-code .cm-gutters { border: 0; background: transparent; color: var(--opf-ui-muted-fg); }
 .opf-source-code .cm-lineNumbers .cm-gutterElement { min-width: 30px; padding: 0 12px 0 0; text-align: right; font-size: 11px; }
 .opf-source-code .cm-activeLine { background: transparent; }
 /* The selection color is the shared one in panels.css (JSON editor section). */

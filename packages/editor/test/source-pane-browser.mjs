@@ -59,7 +59,7 @@ try {
     }, needle);
   };
   const line = page => page.evaluate(() => { const { state } = demo.pane.editor.view; return state.doc.lineAt(state.selection.main.head).number; });
-  const menuButton = page => page.getByRole('button', { name: 'Source format', exact: true });
+  const menuButton = page => page.getByRole('button', { name: /^Source format \.opf\./ });
   const chooseFormat = async (page, label) => {
     await menuButton(page).click();
     await page.getByRole('menuitemradio', { name: new RegExp(`^${label}`) }).click();
@@ -205,7 +205,7 @@ try {
   await page.keyboard.press('Home'); assert.equal(await focusedLabel(), 'json');
   await page.keyboard.press('Escape');
   await menu.waitFor({ state: 'hidden' });
-  assert.equal(await page.evaluate(() => document.activeElement.getAttribute('aria-label')), 'Source format', 'Escape returns focus to the button');
+  assert.match(await page.evaluate(() => document.activeElement.getAttribute('aria-label')), /^Source format \.opf\./, 'Escape returns focus to the button');
   await page.keyboard.press('ArrowUp');
   assert.equal(await focusedLabel(), 'md', 'ArrowUp on the button opens at the last item');
   await page.keyboard.press('Enter');

@@ -107,7 +107,8 @@ export function createSlideAdapter(session, options = {}) {
     const doc = document();
     const last = args.length && args.at(-1) && typeof args.at(-1) === "object" && !Array.isArray(args.at(-1)) && !args.at(-1).kind ? args.pop() : {};
     const prepared = run(doc, committedScene(), ...args, { ...last, catalogs: catalogs() });
-    return { ...prepared, base: doc, command };
+    // CE-20: a caller may name the step itself (`{ label }` as the last argument: "Inserted chart" for a paste of a new block).
+    return { ...prepared, ...(typeof last.label === "string" ? { label: last.label } : {}), base: doc, command };
   }
 
   // Selections recorded per undo depth, so undo and redo restore the selection of the edit they cross.

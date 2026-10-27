@@ -34,6 +34,7 @@ import { SOURCE_CHECKS, copyText, downloadSourceFile, lf, reportSource } from ".
 import { createThemeController } from "./workspace-theme.js";
 import { retainedSlideIndex } from "./slide-retention.js";
 import { createSourceMemory, updateJsonSource } from "./exact-source.js";
+import { buildStudioShell, createStudio } from "./studio.js";
 
 export { THEME_TOKENS, createThemeController, normalizeTheme, normalizeThemeTokens } from "./workspace-theme.js";
 // The script-aware measurement options for composing one slide: a host that calls `composeSlide` or `paginateSlide` on the session passes these (the playground does).
@@ -57,7 +58,11 @@ const LAYOUT_PARTS = {
   full: { source: true, navigator: true, thumbnails: true, history: true, find: true, present: true, export: true, review: true, layouts: true, sorter: true, outline: true },
   canvas: { navigator: true, thumbnails: true, history: true },
   source: { source: true },
+  // CE-20: the Studio and its Playground preset arrange the same parts; the Studio mounts its own Design panel.
+  studio: { source: true, navigator: true, thumbnails: true, history: true, find: true, present: true, export: true, review: true, layouts: true, slides: true },
+  playground: { source: true, navigator: true, thumbnails: true, history: true, find: true, present: true, export: true, review: true, layouts: true, slides: true },
 };
+const STUDIO_LAYOUTS = new Set(["studio", "playground"]);
 
 const isThenable = (value) => value !== null && typeof value === "object" && typeof value.then === "function";
 
@@ -165,8 +170,9 @@ export function createOpfEditor(element, options = {}) {
 
   // ---- layout, parts and slots ------------------------------------------------------------------------------------------------
   const given = options.slots ?? {};
-  const layout = options.slots ? "slots" : (options.layout ?? "full");
-  if (!["full", "canvas", "source", "slots"].includes(layout)) throw new RangeError('layout must be "full", "canvas" or "source", or pass `slots`.');
+  const layout = options.slots && !STUDIO_LAYOUTS.has(options.layout) ? "slots" : (options.layout ?? "full");
+  if (!["full", "canvas", "source", "slots", "studio", "playground"].includes(layout)) throw new RangeError('layout must be "full", "canvas", "source", "studio" or "playground", or pass `slots`.');
+  const studioLayout = STUDIO_LAYOUTS.has(layout);
   const parts = resolveParts(options, layout, given);
   const views = VIEWS.filter((view) => view === "slide" || parts[view]);
   if (options.view !== undefined && !views.includes(options.view)) throw new RangeError(`view "${options.view}" is not available in this layout (${views.join(", ")}).`);
@@ -183,8 +189,16 @@ export function createOpfEditor(element, options = {}) {
   const themeController = createThemeController(element, options.theme);
   let slots = { ...given };
   let controls = {};
+  let studioShell = null;
   if (layout === "slots") root.setAttribute("data-opf-layout", "slots");
-  else {
+  else if (studioLayout) {
+    // CE-20: the Studio builds its own shell; a host's slots add parts to it (`topbarEnd`, `overlay`).
+    const built = buildStudioShell(root, { parts, layout, labels: options.labels, studio: options.studio, slots: given });
+    const { topbarEnd: _placed, ...rest } = given;
+    slots = { ...built.slots, ...rest };
+    controls = built.controls;
+    studioShell = built.shell;
+  } else {
     const built = buildWorkspaceShell(root, { parts, views, layout, labels: options.labels });
     slots = { ...built.slots, ...given };
     controls = built.controls;
@@ -201,6 +215,8 @@ export function createOpfEditor(element, options = {}) {
   let sorter;
   let outline;
   let studio;
+  let studioCtl;
+  let fontsPending = false;
   let presenter;
   let presentButton;
   let exportMenu;
@@ -234,7 +250,7 @@ export function createOpfEditor(element, options = {}) {
   let frameSize = { width: 0, height: 0 };
   const draftMemory = createSourceMemory();
   const variablesMode = options.variables === "resolved" ? "resolved" : "authored";
-  const fitMode = options.fit === undefined ? (layout === "slots" ? false : "contain") : options.fit;
+  const fitMode = studioLayout ? false : options.fit === undefined ? (layout === "slots" ? false : "contain") : options.fit;
 
   const say = (message) => {
     statusText = message;
@@ -255,7 +271,8 @@ export function createOpfEditor(element, options = {}) {
 
   // ---- navigation and the refresh loop ----------------------------------------------------------------------------------------
   function renderViews(deck) {
-    thumbnailCache?.prepare(deck);
+    // The Studio's filmstrip draws the thumbnails it shows itself, as they scroll in.
+    if (!studioLayout) thumbnailCache?.prepare(deck);
     slideManager?.render();
     if (activeView === "sorter") sorter?.render();
     if (activeView === "outline") outline?.render();
@@ -283,7 +300,8 @@ export function createOpfEditor(element, options = {}) {
   }
   function sync() {
     fonts?.registry?.clearSubstitutions?.();
-    const deck = session.presentation;
+    // The frozen snapshot (one object per version): the session's `presentation` copies the whole deck on every read.
+    const deck = session.snapshot().presentation;
     slideIndex = Math.max(0, Math.min(slideIndex, deck.slides.length - 1));
     renderViews(deck);
     slideNav?.setSlide(slideIndex);
@@ -300,16 +318,18 @@ export function createOpfEditor(element, options = {}) {
     if (!mounted || destroyed) return Promise.resolve();
     const token = ++refreshToken;
     let loaded = false;
-    lastRefresh = whenFontsReady(fonts, session.presentation, {
+    lastRefresh = whenFontsReady(fonts, session.snapshot().presentation, {
       renderOptions: renderOptions(),
       isCurrent: () => token === refreshToken && !destroyed,
       loading: () => {
         loaded = true;
+        fontsPending = true;
         emit("fonts", { state: "loading" });
         say(MESSAGES.loadingFonts);
       },
       ready: () => {
         fontsFailure = undefined;
+        fontsPending = false;
         if (loaded) {
           thumbnailCache?.clear();
           emit("fonts", { state: "ready" });
@@ -354,7 +374,8 @@ export function createOpfEditor(element, options = {}) {
   }
   function goTo(index, path) {
     if (index !== slideIndex && !go(index)) return false;
-    if (path) canvas?.reveal(path);
+    if (studioCtl) studioCtl.revealPath(path ?? `slides.${index}`);
+    else if (path) canvas?.reveal(path);
     return true;
   }
 
@@ -367,7 +388,8 @@ export function createOpfEditor(element, options = {}) {
     if (controls.redo) controls.redo.disabled = !inSync || readOnly || !session.canRedo;
     // Text in the source pane that is not a valid deck: the slide shows the last valid one and is not editable until the text is fixed.
     const frame = slots.canvas && (slots.slide ?? slots.canvas);
-    if (frame && (!inSync || readOnly)) frame.setAttribute("inert", "");
+    // The Studio keeps selection, zoom and Present while read-only (its commands say why they are off); only invalid text locks the slide.
+    if (frame && (!inSync || (readOnly && !studioLayout))) frame.setAttribute("inert", "");
     else frame?.removeAttribute("inert");
   }
   function applyFit() {
@@ -393,7 +415,8 @@ export function createOpfEditor(element, options = {}) {
       setSlideIndex: (index) => {
         go(index);
       },
-      renderThumbnail: (deck, index) => thumbnailCache.html(deck, index),
+      // The Studio's filmstrip draws only the thumbnails it shows (an IntersectionObserver fills the rest as they scroll in).
+      renderThumbnail: studioLayout ? (deck, index) => thumbnailCache.peek(deck, index) ?? "" : (deck, index) => thumbnailCache.html(deck, index),
       renderLayoutPreview: (deck, index, choice) => {
         const candidate = prepareDimensionSwitch(deck, "layouts", choice.id, { slideIndex: index, catalogs: catalogs() }).presentation;
         return toSvg(candidate, index + 1, { ...renderOptions(), fonts, text: "system", trace: false });
@@ -454,6 +477,7 @@ export function createOpfEditor(element, options = {}) {
     return true;
   }
   function showPanel(name, focus = false) {
+    if (studioCtl) return studioCtl.showTab(name, { focus });
     const tabs = controls.tabs;
     if (!tabs?.[name]) return false;
     for (const [tabName, tab] of Object.entries(tabs)) {
@@ -475,6 +499,8 @@ export function createOpfEditor(element, options = {}) {
     strip?.destroy();
     slideNav = undefined;
     strip = undefined;
+    // The Studio shows its filmstrip; the slide row is the Playground preset's, mounted only while that preset is on.
+    if (studioLayout && (studioCtl?.layout ?? layout) !== "playground") return;
     if (parts.navigator && slots.navigator) {
       slideNav = createSlideNavigator(slots.navigator, {
         editor: ui,
@@ -625,6 +651,7 @@ export function createOpfEditor(element, options = {}) {
     );
     canvas = createCanvasEditor(slots.canvas, {
       ...configured,
+      ...(studioLayout ? { textEntry: layout === "playground" ? "click" : "dblclick", targets: layout === "playground" ? "interactive" : "passive", escape: "commit" } : {}),
       editor: ui,
       fonts,
       renderOptions: renderOptions(),
@@ -635,17 +662,22 @@ export function createOpfEditor(element, options = {}) {
         if (event.state === "error") {
           fontsFailure = event.error;
           say(event.error.message);
-        } else if (event.state === "loading") say(MESSAGES.loadingFonts);
+        } else if (event.state === "loading") {
+          fontsPending = true;
+          say(MESSAGES.loadingFonts);
+        }
         else if (fontsFailure) {
           fontsFailure = undefined;
           refresh();
         }
+        if (event.state === "ready") fontsPending = false;
         emit("fonts", event);
         configured.onFonts?.(event);
       },
       onSelect: (value) => {
         selection = { path: value.path, value: value.value };
-        emit("selection", { path: value.path, value: value.value, slideIndex, element: value.element });
+        // The Studio emits its own selection (a list of nodes); the canvas's single selection is internal there.
+        if (!studioLayout) emit("selection", { path: value.path, value: value.value, slideIndex, element: value.element });
         design?.refresh();
         configured.onSelect?.(value);
       },
@@ -783,7 +815,7 @@ export function createOpfEditor(element, options = {}) {
       onFocusField: ({ fix, target }) => emit("review-focus", { fix, target }),
       onStatus: say,
       onChange: (counts) => {
-        const tab = controls.tabs?.review;
+        const tab = controls.tabs?.review ?? studioShell?.tabs.review?.tab;
         if (tab) {
           const name = options.labels?.review ?? "Review";
           const found = !counts.unavailable && counts.total;
@@ -795,13 +827,13 @@ export function createOpfEditor(element, options = {}) {
     });
   }
 
-  function present() {
+  function present(from) {
     if (destroyed || !mounted || !presenter || presenter.isRunning() || !inSync || slides.length === 0) return false;
     // An open canvas edit is committed, and text typed a moment ago is applied, before the document is shown; a source that is not a valid deck waits.
     if (canvas?.commit() === false) return false;
     pane?.getText();
     if (draftInvalid) return false;
-    void presenter.start(canvas?.slideIndex ?? slideIndex);
+    void presenter.start(Number.isInteger(from) ? from : (canvas?.slideIndex ?? slideIndex));
     return true;
   }
 
@@ -867,6 +899,7 @@ export function createOpfEditor(element, options = {}) {
     if (parts.persistence) mountPersistence();
     mountControls();
     mountEnvironment();
+    if (studioShell && canvas) mountStudio();
     // These come last, so a host hears a change after every part has. The refresh runs for every event, the catalogs' included.
     cleanups.push(
       session.subscribe((event) => {
@@ -888,6 +921,66 @@ export function createOpfEditor(element, options = {}) {
         if (event.meta?.notice) setTimeout(() => !destroyed && say(event.meta.notice));
       }),
     );
+  }
+
+  // CE-20: the Studio over the parts mounted above (src/studio.js).
+  function mountStudio() {
+    studioCtl = createStudio({
+      root,
+      element,
+      shell: studioShell,
+      slots,
+      session,
+      ui,
+      canvas,
+      options,
+      layout,
+      hostCatalogs,
+      get pane() {
+        return pane;
+      },
+      get find() {
+        return find;
+      },
+      get exportMenu() {
+        return exportMenu;
+      },
+      get slideManager() {
+        return slideManager;
+      },
+      get thumbnailCache() {
+        return thumbnailCache;
+      },
+      get persistence() {
+        return persistence;
+      },
+      get handle() {
+        return handle;
+      },
+      slideIndex: () => slideIndex,
+      go: (index) => go(index),
+      present: (from) => present(from),
+      say,
+      emit,
+      report,
+      on,
+      setView: (view) => setView(view),
+      readOnly: () => readOnly,
+      inSync: () => inSync,
+      fontsLoading: () => fontsPending,
+      catalogs,
+      layoutFor: (deck, index) => layoutFor(deck, index),
+      setDocument: (document, openOptions) => setDocument(document, openOptions),
+      openFind: (openOptions) => {
+        if (!find) return false;
+        find.openPanel(openOptions ?? {});
+        return true;
+      },
+      getName: () => pane?.getName(),
+      setName: (name) => pane?.setName(name),
+      layoutStudio: () => studio,
+      mountSlideRow: () => mountSlideRow(),
+    });
   }
 
   // The shell's own controls: history, views, tabs.
@@ -977,6 +1070,7 @@ export function createOpfEditor(element, options = {}) {
     studio?.setReadOnly(readOnly);
     root.toggleAttribute("data-readonly", readOnly);
     syncChrome();
+    studioCtl?.refresh();
   }
   function setDensity(setting) {
     const next = densityFor(setting);
@@ -1084,8 +1178,34 @@ export function createOpfEditor(element, options = {}) {
     get slideIndex() {
       return slideIndex;
     },
+    /** The selection: the canvas's `{ path, value }` (or null); in the Studio, the list `[{ key, path, idPath, kind }]`. */
     get selection() {
-      return selection;
+      return studioCtl ? studioCtl.selection : selection;
+    },
+    /** CE-20: the arrangement ("full", "canvas", "source", "slots", or the Studio's "studio" and "playground"). */
+    get layout() {
+      return studioCtl?.layout ?? layout;
+    },
+    /** CE-20: switch the Studio between "studio" and "playground" in place (same session, history, slide and selection). */
+    setLayout(next) {
+      if (!studioCtl) return false;
+      return studioCtl.setLayout(next);
+    },
+    get zoom() {
+      return studioCtl?.zoom ?? 1;
+    },
+    setZoom(value) {
+      studioCtl?.setZoom(value);
+    },
+    fit(mode) {
+      studioCtl?.fit(mode);
+    },
+    openLayout(layoutId, openOptions = {}) {
+      return studioCtl ? studioCtl.openLayout(layoutId, openOptions) : false;
+    },
+    /** CE-20: the Studio's command registry (`list`, `run`, `register`); empty outside the Studio. */
+    get commands() {
+      return studioCtl?.commands ?? { list: () => [], run: () => false, register: () => () => {} };
     },
     get view() {
       return activeView;
@@ -1119,8 +1239,9 @@ export function createOpfEditor(element, options = {}) {
     setView,
     setSlide: go,
     goTo,
-    select(path, { focus = false } = {}) {
-      return canvas?.reveal(path, { focus }) ?? null;
+    select(path, selectOptions = {}) {
+      if (studioCtl) return studioCtl.selectTargets(path, selectOptions);
+      return canvas?.reveal(path, { focus: Boolean(selectOptions.focus) }) ?? null;
     },
     showPanel,
     present,
@@ -1187,6 +1308,7 @@ export function createOpfEditor(element, options = {}) {
           /* already gone */
         }
       }
+      studioCtl?.destroy();
       unbindKeys?.();
       checking?.disconnect();
       persistence?.destroy();

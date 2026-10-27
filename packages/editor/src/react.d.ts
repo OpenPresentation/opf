@@ -32,9 +32,9 @@ export declare function createOPFReactComponents(React: {
 };
 
 // ---- CE-06: the embeddable editor ---------------------------------------------------------------------------------------------------------
-import type { CSSProperties, ForwardRefExoticComponent, MutableRefObject, RefAttributes } from "react";
+import type { CSSProperties, ForwardRefExoticComponent, MutableRefObject, ReactNode, RefAttributes } from "react";
 import type { SourceCursor } from "./source-pane.js";
-import type { OpfEditor as OpfEditorHandle, OpfEditorOptions, OpfEditorSlots } from "./workspace.js";
+import type { OpfEditor as OpfEditorHandle, OpfEditorOptions, OpfEditorSlots, OpfCommandInfo, OpfStudioHostPanel, OpfStudioSelectionItem } from "./workspace.js";
 
 /** A slot is an element, or a React ref to one (resolved when the editor mounts). */
 export type OpfEditorReactSlots = { [Name in keyof OpfEditorSlots]?: OpfEditorSlots[Name] | { current: OpfEditorSlots[Name] | null } };
@@ -46,6 +46,11 @@ export interface OpfEditorProps extends Omit<OpfEditorOptions, "slots"> {
   id?: string;
   /** Called with the editor right after it is created, and with `null` when it is destroyed. For the hooks below. */
   onEditor?: (editor: OpfEditorHandle | null) => void;
+  /**
+   * CE-20, the Studio: the host's panels (`layout: "studio"`). Each `render()` is mounted by React through a portal into the panel the Studio
+   * makes for it (a tab of the right panel, or a section of the left panel with `side: "left"`), so it shares the host's context and state.
+   */
+  hostPanels?: (Omit<OpfStudioHostPanel, "mount"> & { render(): ReactNode })[];
 }
 
 /**
@@ -61,8 +66,11 @@ export declare function useOpfEditor(options?: OpfEditorProps): { ref: MutableRe
 /** The document of an editor, replaced on every change; `undefined` while `editor` is `null`. Frozen: do not modify it. */
 export declare function useOpfDocument(editor: OpfEditorHandle | null | undefined): unknown;
 
-/** The content last selected on the canvas, or `null`. */
-export declare function useOpfSelection(editor: OpfEditorHandle | null | undefined): { path: string; value: unknown } | null;
+/** The content last selected on the canvas, or `null`; in the Studio, the selection list `[{ key, path, idPath, kind }]`. */
+export declare function useOpfSelection(editor: OpfEditorHandle | null | undefined): { path: string; value: unknown } | OpfStudioSelectionItem[] | null;
+
+/** CE-20: the Studio's commands for a host palette (pptx.dev's Cmd+K): the list with each command's state, and `run(id)`. */
+export declare function useOpfCommands(editor: OpfEditorHandle | null | undefined): { commands: OpfCommandInfo[]; run(id: string): boolean };
 
 /** The path under the caret of the source pane, the latest `cursor` event (`pointer`, `idPath`, `from`, `to`, ...), or `null` before the first. */
 export declare function useOpfCursor(editor: OpfEditorHandle | null | undefined): SourceCursor | null;

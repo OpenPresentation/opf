@@ -531,6 +531,8 @@ function mountJsonCodeEditor(parent, options) {
   const shortcutAttribute = (ids) => ids.flatMap((id) => km.shortcuts().find((row) => row.id === id)?.strokes.slice(0, 1) ?? []).map((stroke) => strokeText(stroke, km.platform).replace(/Cmd/g, "Meta").replace(/Ctrl/g, "Control")).join(" ");
   const contentAttributes = (invalid = options.invalid, describedBy = options.describedBy) => EditorView.contentAttributes.of({
     "aria-label": options.label,
+    // CE-20: the scroller around the text is a scrolling region; its text is focusable (axe scrollable-region-focusable).
+    tabindex: "0",
     "aria-invalid": String(Boolean(invalid)),
     "aria-describedby": describedBy ?? "",
     "aria-keyshortcuts": shortcutAttribute(["suggest.trigger", "problem.next", "problem.previous", "problem.quickFix", "format.document", "nav.symbol"]),

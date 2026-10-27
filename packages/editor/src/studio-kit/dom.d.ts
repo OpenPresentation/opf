@@ -31,6 +31,22 @@ export interface KitMenuItem {
   role?: "menuitem" | "menuitemcheckbox";
   checked?: boolean;
   hint?: string;
+  /** CE-20: a Lucide icon name drawn before the label. */
+  icon?: string;
+  /** CE-20: an element drawn before the label instead of an icon (a layout diagram). */
+  media?: HTMLElement;
+  /** CE-20: a second, quieter line under the label. */
+  description?: string;
+  /** CE-20: the item's title (why it is disabled). */
+  title?: string;
+  /** CE-20: `aria-keyshortcuts`. */
+  keyshortcuts?: string;
+  /** CE-20: consecutive items with the same group sit in a `role="group"` under a visible heading. */
+  group?: string;
+  /** CE-20: a separator instead of an item. */
+  separator?: boolean;
+  /** CE-20: a press on the item (an item that can be dragged out of the menu); `close()` closes the menu without restoring focus. */
+  pointerdown?(event: PointerEvent, item: KitMenuItem, menu: { close(): void }): void;
 }
 export interface KitMenu { element: HTMLElement; close(options?: { restore?: boolean }): void }
 export declare function openMenu(dom: KitDom, host: HTMLElement, options: { x: number; y: number; items: KitMenuItem[]; label: string; returnFocus?: HTMLElement | null; onClose?(): void; className?: string }): KitMenu;

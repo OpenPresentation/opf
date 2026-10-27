@@ -13,7 +13,7 @@ import type { ReviewPanel, ReviewPanelOptions } from "./review-panel.js";
 import type { SlideManager } from "./slide-manager.js";
 import type { SourceCursor, SourceFormat, SourceFile, SourcePane, SourcePaneOptions } from "./source-pane.js";
 
-export type OpfEditorLayout = "full" | "canvas" | "source";
+export type OpfEditorLayout = "full" | "canvas" | "source" | "studio" | "playground";
 export type OpfEditorView = "slide" | "sorter" | "outline" | "layouts";
 export type OpfEditorDensity = "comfortable" | "touch";
 
@@ -36,6 +36,9 @@ export declare const THEME_TOKENS: Readonly<{
   success: "--opf-ui-success";
   codeBackground: "--opf-ui-code-bg";
   codeBorder: "--opf-ui-code-border";
+  selection: "--opf-ui-selection";
+  hover: "--opf-ui-hover";
+  canvasBackground: "--opf-ui-studio-canvas-bg";
   font: "--opf-ui-font";
   mono: "--opf-ui-mono";
   radiusSmall: "--opf-ui-radius-sm";
@@ -140,6 +143,42 @@ export interface OpfEditorSlots {
   /** The status line: the editor writes its messages here. */
   status?: HTMLElement;
   overlay?: HTMLElement;
+  /** CE-20, the Studio: an element of the host placed at the end of the Studio's bar (Share, avatars). */
+  topbarEnd?: HTMLElement;
+}
+
+/** CE-20: one item of the Studio's selection. `key` is the scene key (the id path, `/slides/@intro/blocks/@kpi`; a layout region `<slide key>#<name>`). */
+export interface OpfStudioSelectionItem { key: string; path: string; idPath?: string; kind: "slide" | "heading" | "region" | "group" | "block" | "part" | "implicit" }
+/** CE-20: a command of the Studio's registry (`studio.group`, `studio.insert.chart`, ...). `when` returns true, or a reason string that disables it. */
+export interface OpfCommand<Ctx = unknown> {
+  id: string;
+  label: string;
+  group?: string;
+  /** CodeMirror-style keys ("Mod-g", "Shift-Mod-z", "F2"); Mod is Cmd on macOS and Ctrl elsewhere. */
+  keys?: string[];
+  /** "canvas": only while focus is on the slide, the layers or the filmstrip; "global" (default) anywhere outside a field. */
+  scope?: "canvas" | "global" | ("canvas" | "global")[];
+  when?(ctx: Ctx): boolean | string;
+  run(ctx: Ctx): boolean | void;
+}
+export interface OpfCommandInfo { id: string; label: string; group?: string; keys: string[]; shortcut: string; enabled: boolean; reason: string }
+/** CE-20: a host's panel in the Studio: a tab of the right panel (default) or a section of the left (`side: "left"`); `mount` returns its cleanup. */
+export interface OpfStudioHostPanel { id: string; label: string; icon?: SVGElement | string; side?: "left" | "right"; mount(element: HTMLElement, editor: OpfEditor): void | (() => void) }
+/** CE-20: the Studio's options (`layout: "studio"` or `"playground"`). */
+export interface OpfStudioOptions {
+  /** Which panels the Studio shows; `source` is where the source split opens ("split-right" by default on wide screens, "split-bottom" below 1100px). */
+  panels?: { source?: "split-right" | "split-bottom" | "tab" | false };
+  hostPanels?: OpfStudioHostPanel[];
+  /** Items added to the File menu. */
+  fileItems?: { id: string; label: string; run(editor: OpfEditor): void }[];
+  /** More commands for the registry (a host palette lists them with the Studio's). */
+  commands?: OpfCommand[];
+  /** Rebind commands: `{ "studio.source.toggle": ["Mod-Alt-s"] }`; `null` unbinds. */
+  keymap?: Record<string, string[] | null>;
+  /** Panel sizes stored per host key (nothing is stored without `storage`). */
+  sizes?: { key: string; storage?: { get(key: string): string | null; set(key: string, value: string): void } };
+  /** Give a deck without ids its ids when the Studio opens it (default true; one undoable change named "Add ids"). Never in the Playground. */
+  assignIds?: boolean;
 }
 
 export interface OpfEditorPanels {
@@ -211,8 +250,15 @@ export interface OpfEditorOptions {
   /** `"authored"` (default): the canvas shows `{{variables}}` as written. `"resolved"`: filled in, except in a template deck; a press on filled-in text opens its properties form. */
   variables?: "authored" | "resolved";
 
-  /** `"full"` (default), `"canvas"` or `"source"`: the editor builds the arrangement. Ignored when `slots` is given. */
+  /**
+   * `"full"` (default), `"canvas"` or `"source"`: the editor builds the arrangement (ignored when `slots` is given). CE-20: `"studio"` is the
+   * Presentation and Slide Studio and `"playground"` its first-contact preset (a host's `slots` then add parts, such as `topbarEnd`).
+   */
   layout?: OpfEditorLayout;
+  /** CE-20: the Studio's options. */
+  studio?: OpfStudioOptions;
+  /** CE-20: `import.pptx(editor)` adds "Import PowerPoint…" to the Studio's File menu. */
+  import?: { pptx?(editor: OpfEditor): void };
   slots?: OpfEditorSlots;
   panels?: OpfEditorPanels;
   /** The view shown first (default `"slide"`). */
@@ -277,7 +323,16 @@ export interface OpfEditorEvents {
   ready: { editor: OpfEditor };
   /** The document changed (an edit in the canvas or the source, undo, redo, a loaded document). Not fired for a catalogs change. */
   change: { document: unknown; canUndo: boolean; canRedo: boolean; event: EditorEvent };
-  selection: { path: string; value: unknown; slideIndex: number; element: Element | undefined };
+  /** The canvas's selection; in the Studio, the list (`items`, the `primary` and what changed it: `canvas`, `layers`, `keyboard`, `source`, ...). */
+  selection: { path: string | undefined; value: unknown; slideIndex: number; element?: Element | undefined; items?: OpfStudioSelectionItem[]; primary?: OpfStudioSelectionItem | null; source?: string };
+  /** CE-20: the Studio's zoom changed (a factor of the fitted slide). */
+  zoom: { zoom: number };
+  /** CE-20: the Studio switched preset. */
+  layout: { layout: "studio" | "playground"; previous: "studio" | "playground" };
+  /** CE-20: a Studio command ran (`ok` false when it was off; `reason` says why). */
+  command: { id: string; ok: boolean; reason?: string };
+  /** CE-20: Layout Studio was opened from "Edit layout", or closed. */
+  layoutStudio: { open: boolean; recordId: string };
   /**
    * The caret or selection of the source pane moved, in JSON, YAML or Markdown, also while the pane has no focus: the path under it as a JSON Pointer
    * and by id, and the selection in source offsets. Quiet for `source.cursorDelay` first and not repeated for a place already reported; the detail is
@@ -349,8 +404,19 @@ export interface OpfEditor {
   readonly layoutStudio: LayoutStudio | undefined;
   readonly fonts: EditorFonts | undefined;
   readonly slideIndex: number;
-  /** The content last selected on the canvas. */
-  readonly selection: { path: string; value: unknown } | null;
+  /** The content last selected on the canvas; in the Studio, the selection list. */
+  readonly selection: { path: string; value: unknown } | OpfStudioSelectionItem[] | null;
+  /** CE-20: the arrangement; `setLayout` switches the Studio between "studio" and "playground". */
+  readonly layout: OpfEditorLayout | "slots";
+  setLayout(layout: "studio" | "playground"): boolean;
+  /** CE-20: the Studio's zoom (1 is the slide fitted), `setZoom` and `fit` ("slide" or "width"). */
+  readonly zoom: number;
+  setZoom(zoom: number): void;
+  fit(mode?: "slide" | "width"): void;
+  /** CE-20: "Edit layout": open a layout of the slide (default the current slide's) in Layout Studio, forked into the deck when it comes from a catalog. */
+  openLayout(layoutId?: string, options?: { slide?: number }): boolean;
+  /** CE-20: the Studio's command registry; empty outside the Studio. */
+  readonly commands: { list(): OpfCommandInfo[]; run(id: string): boolean; register(command: OpfCommand): () => void };
   readonly view: OpfEditorView;
   readonly views: OpfEditorView[];
   readonly readOnly: boolean;
@@ -380,10 +446,12 @@ export interface OpfEditor {
   /** Show a slide and select the content at `path` on it. */
   goTo(index: number, path?: string): boolean;
   /** Select the content at `path` on the current slide (or the closest content that can be selected); returns the path selected. */
-  select(path: string, options?: { focus?: boolean }): string | null;
+  /** Select content by path (the canvas: returns the path it selected). In the Studio: scene keys or paths, several siblings at once; returns whether all were found. */
+  select(path: string | string[], options?: { focus?: boolean }): string | null | boolean;
   showPanel(panel: "review" | "design", focus?: boolean): boolean;
   /** Start the full-screen presentation at the slide on show. False when it cannot start (invalid source, no slides, already running). */
-  present(): boolean;
+  /** Present from the slide on show (or from `from`, 0-based). */
+  present(from?: number): boolean;
   undo(): boolean;
   redo(): boolean;
   /** Commit an open canvas edit. False when it could not be committed. */
