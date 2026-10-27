@@ -47,11 +47,16 @@ try {
   console.log(`selection paint: p95 ${p95(select).toFixed(1)}ms, median ${p95(select.slice().sort((a, b) => a - b).slice(0, 30)).toFixed(1)}ms`);
   assert.ok(p95(select) < 50, `selection paint p95 under 50ms: ${p95(select).toFixed(1)}ms`);
 
-  // A drop commit: the move a drag lands, one change through the adapter, timed until the canvas has drawn it.
-  const commit = await ev(async () => {
+  // A drop commit: the move a drag lands, one change through the adapter, timed until the canvas has drawn it. The font gate checks the
+  // document before the canvas draws it: its analysis keeps each slide's faces and families, so a commit that changes one slide analyzes
+  // that slide and no other (opf#906; before it, about 250ms of each commit at 300 slides was the gate composing every slide).
+  const stats = () => ev(() => ({ ...window.fonts.analysisStats }));
+  const statsBefore = await stats();
+  const rounds = 30;
+  const commit = await ev(async (count) => {
     const times = [];
     window.ed.select(['/slides/@s151/blocks/@s151-a']);
-    for (let round = 0; round < 30; round += 1) {
+    for (let round = 0; round < count; round += 1) {
       const id = round % 2 ? 'studio.move.earlier' : 'studio.move.later';
       const start = performance.now();
       const ok = window.ed.commands.run(id);
@@ -60,14 +65,18 @@ try {
       await new Promise((resolve) => requestAnimationFrame(() => resolve()));
     }
     return times;
-  });
-  console.log(`drop commit: p95 ${p95(commit).toFixed(1)}ms`);
-  // KNOWN GAP (CE-20, reported in the PR): the spec's budget is 150ms. At 300 slides about 250ms of each commit is the font gate's
-  // whole-deck face analysis (the renderer's presentationFaces composes every slide with a recording measurement to know which lazy faces
-  // the document draws); the rest (validation, the canvas, the overlay, the filmstrip) is about 150ms. The fix is a per-slide cache of the
-  // faces a slide draws in the renderer's lazy-fonts.js. Until it lands this asserts the budget only with OPF_STUDIO_PERF_STRICT=1 and
-  // otherwise guards against a regression past 1500ms (a CI runner measures about 1.8 times a developer laptop: ~740ms against ~400ms).
-  const budget = process.env.OPF_STUDIO_PERF_STRICT === '1' ? 150 : 1500;
+  }, rounds);
+  const statsAfter = await stats();
+  const work = { slides: statsAfter.slides - statsBefore.slides, designs: statsAfter.designs - statsBefore.designs, decks: statsAfter.decks - statsBefore.decks };
+  console.log(`drop commit: p95 ${p95(commit).toFixed(1)}ms; font analysis over ${rounds} commits: ${JSON.stringify(work)}`);
+  // The work, which no runner's speed changes: at most one slide composed for its faces and one slide design resolved per edit.
+  assert.ok(work.slides <= rounds, `${rounds} commits of one slide composed ${work.slides} slides for the font gate (at most one per edit)`);
+  assert.ok(work.designs <= rounds, `${rounds} commits of one slide resolved ${work.designs} slide designs (at most one per edit)`);
+  // The time: STUDIO-SPEC's 150ms at p95 on a developer laptop (115 to 125ms measured). A shared CI runner is two to three times slower
+  // (316ms on the first CI run, its selection paint 2.7 times the laptop's), so on CI the bound is three times the budget; a commit that
+  // composes the whole deck again (about 400ms on a laptop, 740ms on CI) fails either, and the work count above catches it on any machine.
+  // OPF_STUDIO_COMMIT_LIMIT_MS sets the bound.
+  const budget = Number(process.env.OPF_STUDIO_COMMIT_LIMIT_MS ?? (process.env.CI ? 450 : 150));
   assert.ok(p95(commit) < budget, `a drop commit p95 under ${budget}ms: ${p95(commit).toFixed(1)}ms`);
 
   // The filmstrip draws only the visible thumbnails, and more as it scrolls.
