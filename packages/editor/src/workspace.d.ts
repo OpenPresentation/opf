@@ -383,6 +383,15 @@ export interface OpfEditorSetDocumentOptions {
   rebase?: boolean;
 }
 
+/**
+ * The handle of a mounted editor. It is returned at once, before the parts have mounted (they wait for the fonts and, in a layout that shows
+ * slides, for the slide chunk), and every method works from the first moment: a setting (`setDensity`, `setExportMode`, `setView`, `setSlide`,
+ * `setReadOnly`, `setTheme`, `setName`) is kept and read when the parts mount, and a call that acts on a part (`select`, `goTo`, `showPanel`,
+ * `focus`, `openFind`, `present`, and the Studio's `setLayout`, `setZoom`, `fit`, `openLayout` and `commands.register`) is queued and runs, in
+ * order, as soon as the editor is mounted, before `mounted` is emitted; a later call to the same method replaces an earlier one. A queued call
+ * returns `true` (accepted) or, where it needs a part the editor does not have, `false`. Only `setDocument` and `setSourceText`, whose result
+ * depends on the document, throw before `ready`.
+ */
 export interface OpfEditor {
   /** The mount element and the node the editor built inside it. */
   readonly element: HTMLElement;

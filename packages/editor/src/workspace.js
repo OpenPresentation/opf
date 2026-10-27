@@ -266,6 +266,31 @@ export function createOpfEditor(element, options = {}) {
   let statusText = "";
   let density = "comfortable";
   let exportMode = "menu";
+  // The parts are bound once the slide chunk has arrived and the fonts are at hand; `partsReady` is true from then on. A call on the handle made
+  // before that (a React host's effects run right after `createOpfEditor` returns) must neither reach a factory that is not bound yet nor be lost:
+  // a setting is remembered in `requested` and read when the parts mount; a call that acts on a mounted part waits in `queued` and runs, in order,
+  // once the editor is mounted (a later call with the same key replaces the earlier one).
+  let partsReady = false;
+  const requested = {};
+  const queued = [];
+  const waiting = () => !mounted && !destroyed;
+  const queue = (key, task) => {
+    const at = queued.findIndex((entry) => entry.key === key);
+    if (at >= 0) queued.splice(at, 1);
+    const entry = { key, task };
+    queued.push(entry);
+    return entry;
+  };
+  function flushQueued() {
+    for (const { task } of queued.splice(0)) {
+      if (destroyed) return;
+      try {
+        task();
+      } catch (error) {
+        report(error);
+      }
+    }
+  }
   let frameSize = { width: 0, height: 0 };
   const draftMemory = createSourceMemory();
   const variablesMode = options.variables === "resolved" ? "resolved" : "authored";
@@ -392,6 +417,11 @@ export function createOpfEditor(element, options = {}) {
     return false;
   }
   function goTo(index, path) {
+    if (waiting()) {
+      go(index);
+      queue("goTo", () => goTo(index, path));
+      return true;
+    }
     if (index !== slideIndex && !go(index)) return false;
     if (studioCtl) studioCtl.revealPath(path ?? `slides.${index}`);
     else if (path) canvas?.reveal(path);
@@ -454,6 +484,7 @@ export function createOpfEditor(element, options = {}) {
     if (!views.includes(view)) return false;
     if (!mounted) {
       activeView = view;
+      requested.view = view;
       return true;
     }
     if (view !== "slide" && canvas && !canvas.commit()) return false;
@@ -496,6 +527,15 @@ export function createOpfEditor(element, options = {}) {
     return true;
   }
   function showPanel(name, focus = false) {
+    if (!mounted) {
+      // The tabs of the shell are known now, the Studio's when it mounts; the panel is shown after the default one.
+      if (destroyed || (!studioLayout && !controls.tabs?.[name])) return false;
+      queue("panel", () => showPanel(name, focus));
+      return true;
+    }
+    return showPanelNow(name, focus);
+  }
+  function showPanelNow(name, focus = false) {
     if (studioCtl) return studioCtl.showTab(name, { focus });
     const tabs = controls.tabs;
     if (!tabs?.[name]) return false;
@@ -513,6 +553,9 @@ export function createOpfEditor(element, options = {}) {
 
   // ---- the parts --------------------------------------------------------------------------------------------------------------
   function mountSlideRow() {
+    // The row is built from the slide chunk's factories: before they are bound (and after destroy) there is nothing to rebuild; the first
+    // mount reads the density and the layout as they are by then.
+    if (!partsReady || destroyed) return;
     unbindKeys?.();
     slideNav?.destroy();
     strip?.destroy();
@@ -590,7 +633,7 @@ export function createOpfEditor(element, options = {}) {
       ...(configured.cursorDelay !== undefined ? { cursorDelay: configured.cursorDelay } : {}),
       ...(configured.completions !== undefined ? { completions: configured.completions } : {}),
       ...(configured.catalogs !== undefined ? { catalogs: configured.catalogs } : {}),
-      ...(configured.name !== undefined ? { name: configured.name } : {}),
+      ...((requested.name ?? configured.name) !== undefined ? { name: requested.name ?? configured.name } : {}),
       ...(text !== undefined ? { source: text } : {}),
       editor: ui,
       format: configured.format ?? "json",
@@ -847,6 +890,10 @@ export function createOpfEditor(element, options = {}) {
   }
 
   function present(from) {
+    if (waiting() && parts.present) {
+      queue("present", () => present(from));
+      return true;
+    }
     if (destroyed || !mounted || !presenter || presenter.isRunning() || !inSync || slides.length === 0) return false;
     // An open canvas edit is committed, and text typed a moment ago is applied, before the document is shown; a source that is not a valid deck waits.
     if (canvas?.commit() === false) return false;
@@ -1008,17 +1055,17 @@ export function createOpfEditor(element, options = {}) {
     controls.redo?.addEventListener("click", () => redo());
     for (const [name, button] of Object.entries(controls.views ?? {})) button.addEventListener("click", () => setView(name, { focus: true }));
     for (const [name, tab] of Object.entries(controls.tabs ?? {})) {
-      tab.addEventListener("click", () => showPanel(name));
+      tab.addEventListener("click", () => showPanelNow(name));
       tab.addEventListener("keydown", (event) => {
         if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
         event.preventDefault();
         const names = Object.keys(controls.tabs);
         const at = names.indexOf(name);
         const next = event.key === "Home" ? 0 : event.key === "End" ? names.length - 1 : (at + (event.key === "ArrowRight" ? 1 : -1) + names.length) % names.length;
-        showPanel(names[next], true);
+        showPanelNow(names[next], true);
       });
     }
-    if (controls.tabs) showPanel(options.panel && controls.tabs[options.panel] ? options.panel : Object.keys(controls.tabs)[0]);
+    if (controls.tabs) showPanelNow(options.panel && controls.tabs[options.panel] ? options.panel : Object.keys(controls.tabs)[0]);
     if (options.shortcuts !== false) {
       // Ctrl/Cmd+Z and +Shift+Z undo and redo when nothing that edits text has focus (the code editor and the canvas's inputs keep their own).
       const onKey = (event) => {
@@ -1055,8 +1102,8 @@ export function createOpfEditor(element, options = {}) {
       media.addEventListener("change", change);
       cleanups.push(() => media.removeEventListener("change", change));
     };
-    follow(options.density, "(pointer: coarse)", setDensity);
-    follow(options.exportMode, "(max-width: 900px)", setExportMode);
+    follow("density" in requested ? requested.density : options.density, "(pointer: coarse)", setDensity);
+    follow("exportMode" in requested ? requested.exportMode : options.exportMode, "(max-width: 900px)", setExportMode);
   }
 
   // ---- the handle -------------------------------------------------------------------------------------------------------------
@@ -1092,6 +1139,14 @@ export function createOpfEditor(element, options = {}) {
     studioCtl?.refresh();
   }
   function setDensity(setting) {
+    if (destroyed) return;
+    // Before the parts mount the setting is kept; the mount reads it instead of the `density` option.
+    if (!partsReady) {
+      requested.density = setting;
+      density = densityFor(setting);
+      root.setAttribute("data-density", density);
+      return;
+    }
     const next = densityFor(setting);
     if (next === density) return;
     density = next;
@@ -1103,6 +1158,8 @@ export function createOpfEditor(element, options = {}) {
     mountSlideRow();
   }
   function setExportMode(setting) {
+    if (destroyed) return;
+    if (!partsReady) requested.exportMode = setting;
     exportMode = exportModeFor(setting);
     exportMenu?.setMode(exportMode);
   }
@@ -1151,6 +1208,26 @@ export function createOpfEditor(element, options = {}) {
     return applied;
   }
 
+  // The Studio's command registry is not there before mount: `register` keeps the command and adds it when the Studio mounts (the function it
+  // returns removes it either way); `list` is empty and `run` finds nothing yet.
+  const preMountCommands = {
+    list: () => [],
+    run: () => false,
+    register(command) {
+      if (!waiting() || !studioLayout) return () => {};
+      let stop;
+      let withdrawn = false;
+      const entry = queue(Symbol("command"), () => {
+        if (!withdrawn) stop = studioCtl?.commands.register(command);
+      });
+      return () => {
+        withdrawn = true;
+        const at = queued.indexOf(entry);
+        if (at >= 0) queued.splice(at, 1);
+        stop?.();
+      };
+    },
+  };
   let fontsRef = { value: undefined };
   let releaseFonts;
   let readyPromise;
@@ -1220,24 +1297,33 @@ export function createOpfEditor(element, options = {}) {
     },
     /** CE-20: switch the Studio between "studio" and "playground" in place (same session, history, slide and selection). */
     setLayout(next) {
-      if (!studioCtl) return false;
-      return studioCtl.setLayout(next);
+      if (studioCtl) return studioCtl.setLayout(next);
+      // Before mount the switch is queued (true), as the Studio's own check of the name would refuse it later.
+      if (!waiting() || !studioLayout) return false;
+      if (next !== "studio" && next !== "playground") throw new RangeError('setLayout takes "studio" or "playground".');
+      queue("layout", () => studioCtl?.setLayout(next));
+      return true;
     },
     get zoom() {
       return studioCtl?.zoom ?? 1;
     },
     setZoom(value) {
-      studioCtl?.setZoom(value);
+      if (studioCtl) studioCtl.setZoom(value);
+      else if (waiting() && studioLayout) queue("zoom", () => studioCtl?.setZoom(value));
     },
     fit(mode) {
-      studioCtl?.fit(mode);
+      if (studioCtl) studioCtl.fit(mode);
+      else if (waiting() && studioLayout) queue("zoom", () => studioCtl?.fit(mode));
     },
     openLayout(layoutId, openOptions = {}) {
-      return studioCtl ? studioCtl.openLayout(layoutId, openOptions) : false;
+      if (studioCtl) return studioCtl.openLayout(layoutId, openOptions);
+      if (!waiting() || !studioLayout) return false;
+      queue("openLayout", () => studioCtl?.openLayout(layoutId, openOptions));
+      return true;
     },
-    /** CE-20: the Studio's command registry (`list`, `run`, `register`); empty outside the Studio. */
+    /** CE-20: the Studio's command registry (`list`, `run`, `register`); empty outside the Studio. Commands registered before mount are added when it mounts. */
     get commands() {
-      return studioCtl?.commands ?? { list: () => [], run: () => false, register: () => () => {} };
+      return studioCtl?.commands ?? preMountCommands;
     },
     get view() {
       return activeView;
@@ -1273,6 +1359,10 @@ export function createOpfEditor(element, options = {}) {
     setSlide: go,
     goTo,
     select(path, selectOptions = {}) {
+      if (waiting()) {
+        queue("select", () => handle.select(path, selectOptions));
+        return studioLayout ? true : null;
+      }
       if (studioCtl) return studioCtl.selectTargets(path, selectOptions);
       return canvas?.reveal(path, { focus: Boolean(selectOptions.focus) }) ?? null;
     },
@@ -1290,6 +1380,10 @@ export function createOpfEditor(element, options = {}) {
       return canvas?.commit() !== false;
     },
     focus(target) {
+      if (waiting()) {
+        queue("focus", () => handle.focus(target));
+        return true;
+      }
       if ((target ?? (pane ? "source" : "canvas")) === "source") {
         pane?.editor?.api?.focus?.();
         return Boolean(pane);
@@ -1299,6 +1393,10 @@ export function createOpfEditor(element, options = {}) {
       return Boolean(node);
     },
     openFind(openOptions) {
+      if (waiting() && parts.find) {
+        queue("find", () => handle.openFind(openOptions));
+        return true;
+      }
       if (!find) return false;
       find.openPanel(openOptions ?? {});
       return true;
@@ -1311,10 +1409,12 @@ export function createOpfEditor(element, options = {}) {
       return { text, format: pane.getFormat(), draft: draftInvalid };
     },
     setName(name) {
+      if (waiting()) requested.name = name;
       pane?.setName(name);
     },
     getName() {
-      return pane?.getName();
+      if (pane) return pane.getName();
+      return waiting() ? (requested.name ?? options.source?.name) : undefined;
     },
     setReadOnly(value) {
       readOnly = Boolean(value);
@@ -1371,16 +1471,21 @@ export function createOpfEditor(element, options = {}) {
   function mount(resolved) {
     if (studioLayout && !studioShell) buildStudio();
     fonts = resolved;
-    density = densityFor(options.density);
-    exportMode = exportModeFor(options.exportMode);
+    // A density, an export mode or a view the host chose before the parts mounted wins over the option.
+    density = densityFor("density" in requested ? requested.density : options.density);
+    exportMode = exportModeFor("exportMode" in requested ? requested.exportMode : options.exportMode);
     root.setAttribute("data-density", density);
+    partsReady = true;
     mountParts();
     mounted = true;
     if (readOnly) applyReadOnly();
     say(MESSAGES.ready);
-    if (options.view && options.view !== "slide") setView(options.view);
+    const wantedView = "view" in requested ? requested.view : options.view;
+    activeView = "slide";
+    if (wantedView && wantedView !== "slide") setView(wantedView);
     else markView("slide");
     syncChrome();
+    flushQueued();
   }
   readyPromise = new Promise((resolve, reject) => {
     const start = (arrived) => {
