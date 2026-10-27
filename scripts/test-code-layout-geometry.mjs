@@ -53,9 +53,19 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     assert.ok(valid(deck),'Probe inputs must use actual schema-valid dimensions');
     const bound=resolvePresentation(deck,{fonts:registry}).slides[0];
     assert.deepEqual(bound.design.dimensions,dimensions);
-    const options={fontFamilies:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.code',minFontSize:24,scale:Math.min(dimensions.width,dimensions.height)/720};
-    const layout=layoutCode(code,bound.geometry.items[0].box,options);
+    // Since 0.28.0 (content-sized rows, WI-1 and WI-4) a lone code block's item box is the height its code needs, not the whole cell, so the
+    // probe reads the layout composition made (`codeLayout`, laid out in `bounds` with the composition's own floor) instead of laying the code
+    // out again in that drawn box with other settings.
+    const layout=bound.geometry.items[0].codeLayout;
+    assert.ok(layout,'the composed code item carries its code layout');
     assert.equal(layout.overflow,overflowing);
+    const scale=Math.min(dimensions.width,dimensions.height)/720;
+    const options={fontFamilies:bound.design.fonts,textMeasurement:registry.textMeasurement,path:'slides.0.code',minFontSize:layout.parts[0].minFontSize/scale,scale};
+    // The current checkout's layoutCode, in the same bounds with the same floor, lays the code out exactly as the published composition did.
+    const again=layoutCode(code,layout.bounds,options);
+    assert.equal(again.overflow,layout.overflow,'the checkout core agrees on overflow');
+    assert.deepEqual(again.parts.map(part=>[part.role,part.text,part.minFontSize,part.fit?.fontSize,part.fit?.lines]),layout.parts.map(part=>[part.role,part.text,part.minFontSize,part.fit?.fontSize,part.fit?.lines]),'and on every part, its floor, size and lines');
+    for (const [index,part] of again.parts.entries()) for (const key of ['x','y','width','height']) assert.ok(Math.abs(part.box[key]-layout.parts[index].box[key])<1e-6,`and on the ${part.role} box`);
     assert.equal(layout.parts.at(-1).text,code.source);
     for (const field of ['language','filename']) if (code[field]) assert.equal(layout.parts.find(part=>part.role===field).text,code[field]);
     assert.equal(layout.textMeasurement,'provided');
@@ -72,7 +82,7 @@ for (const dimensions of [{width:1280,height:720},{width:540,height:960}]) {
     if (scenario==='long-language') assert.ok(layout.parts[0].fit.lines.length>1);
     if (overflowing) {
       assert.ok(layout.diagnostics.some(item=>item.reason==='part-outside-cell'&&item.parts[0]==='filename'));
-      assert.throws(()=>layoutCode(code,bound.geometry.items[0].box,{...options,overflow:'error'}),OPFCompositionError);
+      assert.throws(()=>layoutCode(code,layout.bounds,{...options,overflow:'error'}),OPFCompositionError);
     }
     results.push({dimensions,scenario,overflowing,algorithm:layout.algorithm,textMeasurement:layout.textMeasurement,diagnostics:layout.diagnostics,
       parts:layout.parts.map(part=>({role:part.role,path:part.path,textSha256:hash(part.text),sourceLength:part.text.length,
@@ -108,7 +118,7 @@ async function fingerprint(file) {
   }
 }
 await fingerprint(path.join(dist,'composition.js'));
-const report={scope:'Current checkout code-flow-v1 core API with the published registry renderer used only to supply existing outer boxes and open-font advances. Exact text/line boundaries, measured tabs, filename/language and a 24-reference-pixel floor are checked. This source probe is separate from installed-registry code workflows and does not verify composition selection, renderer/converter integration, browser glyph bounds or native raster equivalence.',
+const report={scope:'The published registry renderer composes each code slide (codeLayout, laid out in its bounds with the composition floor) with open-font advances, and the current checkout code-flow-v1 core API must reproduce that layout in the same bounds. Exact text/line boundaries, measured tabs, filename/language, the floor and overflow are checked. This source probe is separate from installed-registry code workflows and does not verify composition selection, renderer/converter integration, browser glyph bounds or native raster equivalence.',
   fixtureSha256:hash(fixtureBytes),sourceHashes,runtimeHashes,fontHashes,packages:[...checked.values()].map(({manifest,integrity})=>({name:manifest.name,version:manifest.version,integrity})),results};
 if (output) await writeFile(output,`${JSON.stringify(report,null,2)}\n`);
 console.log(`Verified ${results.length} wide/portrait code layouts with exact installed font measurements.`);
