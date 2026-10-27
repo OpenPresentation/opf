@@ -1,7 +1,9 @@
-// The worker entry of the source pane's text checks (`createSourcePane(el, { worker })`). A host bundles this file as its own worker script
-// (`@openpresentation/opf-editor/source-worker`), for example `new Worker(new URL("@openpresentation/opf-editor/source-worker", import.meta.url), { type: "module" })`
-// with a bundler that understands that form, or builds it as an extra entry point and serves it next to the page. It does the same work as the pane's
-// own inline path (`./source-check.js`), off the main thread. Requests run in order, but when several checks of one kind are waiting only the newest runs
+// The worker entry of the source pane's text checks (`createSourcePane(el, { worker })`). `worker: true` starts it with
+// `new Worker(new URL("./source-worker.js", import.meta.url), { type: "module" })`, which webpack, Turbopack, Vite (build) and Parcel bundle; a host can
+// also write `new Worker(new URL("@openpresentation/opf-editor/source-worker", import.meta.url), { type: "module" })` itself, or build this file as an
+// extra entry point (esbuild) and pass its URL. The file imports core, so it runs only bundled. See docs/embedding.md, "The source worker". It does the
+// same work as the pane's own inline path (`./source-check.js`), off the main thread. It says `{ ready: true }` once it runs, so the pane can tell a
+// worker that loaded but never started (an emptied script) from a slow check. Requests run in order, but when several checks of one kind are waiting only the newest runs
 // (the older ones are answered with `skipped`): the pane drops stale replies anyway.
 import { createCheckService } from "./source-check.js";
 
@@ -22,6 +24,8 @@ function drain() {
     try { self.postMessage(reply); } catch (error) { self.postMessage({ id: message.id, ok: false, error: `The result could not be sent: ${error?.message ?? error}` }); }
   });
 }
+
+self.postMessage({ ready: true });
 
 self.onmessage = (event) => {
   queue.push(event.data);

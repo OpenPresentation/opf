@@ -175,7 +175,7 @@ export interface OpfEditorSourceOptions {
   name?: string;
   /** The text of the document as the author wrote it, so its spelling is kept. A string `document` is used when this is not given. */
   text?: string;
-  /** The Web Worker that runs the pane's text checks off the main thread: `true`, a `Worker`, or a function that returns one. Default: the main thread. */
+  /** The Web Worker that runs the pane's text checks off the main thread: `true`, a `Worker`, a function that returns one, or the URL of a worker script (docs/embedding.md, "The source worker"). Default: the main thread. */
   worker?: SourcePaneOptions["worker"];
   /** Core `validate` options for the verdict on the text (default the format and reference rules). */
   checks?: { only?: readonly string[]; [key: string]: unknown };
