@@ -6,7 +6,7 @@ import { isolateHistory } from "@codemirror/commands";
 import { EditorSelection } from "@codemirror/state";
 import { describeField } from "@openpresentation/opf/schema";
 import { listCatalogRecords, mergeCatalogs } from "./catalogs.js";
-import { LAYOUT_INTENT_GROUPS, layoutRegionSummary } from "./layout-templates.js";
+import { CUSTOM_LAYOUTS_GROUP, layoutGroupName, layoutGroupOrder, layoutRegionSummary } from "./layout-templates.js";
 import { Document, parse as parseYamlDocument, parseDocument } from "yaml";
 import { pathAt, scanMarkdown } from "@openpresentation/opf/source";
 import { findNodeAtLocation, getNodeValue } from "jsonc-parser";
@@ -188,12 +188,14 @@ function literalOption(label, literal, extra) {
 function catalogOptions(kind, context, catalogs) {
   let records = [];
   try { records = listCatalogRecords(context.document, kind, { catalogs }); } catch { records = []; }
+  // Deck records first, then the catalog's groups in its own order (and its records in its order within a group), then custom layouts.
+  const position = new Map(records.map((record, index) => [record, index]));
+  const groups = kind === "layouts" ? layoutGroupOrder(records) : [];
   const order = (record) => {
     if (record.origin === "document") return -1;
     if (kind !== "layouts") return 0;
-    const id = record.id.replace(/^default:/, "");
-    const group = LAYOUT_INTENT_GROUPS.findIndex((entry) => entry.ids.includes(id));
-    return group < 0 ? LAYOUT_INTENT_GROUPS.length * 100 : group * 100 + LAYOUT_INTENT_GROUPS[group].ids.indexOf(id);
+    const group = layoutGroupName(record);
+    return (group === CUSTOM_LAYOUTS_GROUP ? groups.length : groups.indexOf(group)) * 100000 + position.get(record);
   };
   records.sort((a, b) => order(a) - order(b) || a.label.localeCompare(b.label, "en", { numeric: true }) || a.id.localeCompare(b.id, "en"));
   const intent = kind === "layouts";

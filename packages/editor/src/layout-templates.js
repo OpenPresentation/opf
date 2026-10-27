@@ -5,14 +5,32 @@ import { applyJsonPatch, createValuePatch, opfPathToJsonPointer } from "./index.
 import { checkedDocument, fail } from "./edit-helpers.js";
 import { checkFormat } from "./checks.js";
 
-export const LAYOUT_INTENT_GROUPS = Object.freeze([
-  { name: "Openers and closers", ids: ["cover", "section", "agenda", "statement", "closing"] },
-  { name: "Text", ids: ["text", "list", "quote", "two-column"] },
-  { name: "Groups of items", ids: ["pillars", "comparison", "process", "timeline", "faq"] },
-  { name: "Numbers", ids: ["metrics", "scorecard"] },
-  { name: "Visuals", ids: ["image", "image-beside", "gallery", "chart", "chart-beside", "table", "table-beside", "code"] },
-  { name: "Mixed", ids: ["hero", "dashboard", "team", "logos"] },
-]);
+/** The group of a layout the catalogs do not group: a deck's or host's own layout, or a catalog record with no group. */
+export const CUSTOM_LAYOUTS_GROUP = "Custom layouts";
+
+/**
+ * The picker group of one layout choice (`listCatalogRecords` entry, or a host's `{ id, label, record?, group? }`). A catalog
+ * record carries its group as its first tag (the Gallery publishes the same group in its layout index, and its tests keep the
+ * two equal), so a layout added to the catalog is grouped with no change here. A record with no tag, a choice with no record and a
+ * deck's own layout (catalog group `custom`) are `CUSTOM_LAYOUTS_GROUP`.
+ */
+export function layoutGroupName(choice) {
+  if (choice?.group === "custom") return CUSTOM_LAYOUTS_GROUP;
+  const tag = Array.isArray(choice?.record?.tags) ? choice.record.tags[0] : undefined;
+  return typeof tag === "string" && tag.trim() ? tag.trim() : CUSTOM_LAYOUTS_GROUP;
+}
+
+/**
+ * The catalog's groups in picker order, without the custom group: the order the catalog lists its layouts in (the Gallery lists
+ * them in its index order), so the groups follow the catalog. Records a deck embeds come after the registered catalogs' own.
+ */
+export function layoutGroupOrder(choices) {
+  const names = [];
+  const pass = (list) => { for (const choice of list) { const name = layoutGroupName(choice); if (name !== CUSTOM_LAYOUTS_GROUP && !names.includes(name)) names.push(name); } };
+  pass(choices.filter((choice) => choice.origin !== "document"));
+  pass(choices.filter((choice) => choice.origin === "document"));
+  return names;
+}
 
 export const LAYOUT_REGION_KINDS = Object.freeze(["text", "list", "image", "video", "chart", "table", "code", "metric", "quote", "timeline", "group"]);
 export const LAYOUT_REGION_ROLES = Object.freeze(["primary", "secondary", "media", "supporting"]);
@@ -20,15 +38,11 @@ export const LAYOUT_REGION_FLOWS = Object.freeze(["none", "grid", "column", "aut
 const RESERVED = new Set(["title", "subtitle", "tag", "auto", "left", "center", "right", "top", "middle", "bottom"]);
 const NAME = /^[a-z][a-z0-9-]*$/;
 
-/** Group registered layouts by the 28 built-in intents, then any deck or host layouts. */
+/** Group layouts by their catalog group (see `layoutGroupName`), in catalog order, then the custom ones. Choices keep their order within a group. */
 export function groupLayoutChoices(choices) {
-  const byId = new Map(choices.map((choice) => [choice.id, choice]));
-  const used = new Set();
-  const groups = LAYOUT_INTENT_GROUPS.map(({ name, ids }) => ({
-    name, choices: ids.map((id) => byId.get(id)).filter((choice) => { if (!choice || used.has(choice.id)) return false; used.add(choice.id); return true; }),
-  })).filter((group) => group.choices.length);
-  const custom = choices.filter((choice) => !used.has(choice.id));
-  if (custom.length) groups.push({ name: "Custom layouts", choices: custom });
+  const groups = layoutGroupOrder(choices).map((name) => ({ name, choices: choices.filter((choice) => layoutGroupName(choice) === name) }));
+  const custom = choices.filter((choice) => layoutGroupName(choice) === CUSTOM_LAYOUTS_GROUP);
+  if (custom.length) groups.push({ name: CUSTOM_LAYOUTS_GROUP, choices: custom });
   return groups;
 }
 

@@ -1,8 +1,13 @@
 import type { EditorSession, EditorChange, JsonPatchOperation } from "./index.js";
 
-export interface LayoutChoice { id: string; label: string; record?: Record<string, unknown> }
-export interface LayoutIntentGroup { name: string; ids: readonly string[] }
-export declare const LAYOUT_INTENT_GROUPS: readonly LayoutIntentGroup[];
+/** A layout a picker offers. `group` is the catalog group of a `listCatalogRecords` entry (`custom` is the deck's own layout); `origin` is `document` for a record the deck embeds. */
+export interface LayoutChoice { id: string; label: string; record?: Record<string, unknown>; group?: string; origin?: string }
+/** The group of layouts the catalogs do not group: a deck's or host's own layout, or a record with no tags. */
+export declare const CUSTOM_LAYOUTS_GROUP: "Custom layouts";
+/** The picker group of a layout: the first tag of its catalog record (the Gallery's index group), else `CUSTOM_LAYOUTS_GROUP`. */
+export declare function layoutGroupName(choice: LayoutChoice): string;
+/** The catalog's groups in picker order (the catalog's own layout order), without the custom group. */
+export declare function layoutGroupOrder(choices: readonly LayoutChoice[]): string[];
 export declare const LAYOUT_REGION_KINDS: readonly string[];
 export declare const LAYOUT_REGION_ROLES: readonly string[];
 export declare const LAYOUT_REGION_FLOWS: readonly string[];

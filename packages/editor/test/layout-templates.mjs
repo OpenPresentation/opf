@@ -4,11 +4,14 @@ import { createEditorSession } from "../dist/index.js";
 import { prepareDimensionSwitch, switchDimension } from "../dist/switches.js";
 import { groupLayoutChoices, layoutFromRegions, pinBlockToRegion, prepareCustomLayout, saveCustomLayout } from "../dist/layout-templates.js";
 
+// The group is the catalog record's (first tag), not the editor's: no record, no tags, or the deck's own layout is custom.
 const groups = groupLayoutChoices([
-  { id: "two-column", label: "Two columns" }, { id: "cover", label: "Cover" }, { id: "custom:roadmap", label: "Roadmap" },
+  { id: "two-column", label: "Two columns", record: { tags: ["Text"] }, group: "default" }, { id: "cover", label: "Cover", record: { tags: ["Openers and closers"] }, group: "default" },
+  { id: "custom:roadmap", label: "Roadmap", record: {}, group: "custom" }, { id: "bare", label: "Bare" },
+  { id: "tagged-custom", label: "Tagged custom", record: { tags: ["Text"] }, group: "custom" },
 ]);
 assert.deepEqual(groups.map((group) => [group.name, group.choices.map((choice) => choice.id)]), [
-  ["Openers and closers", ["cover"]], ["Text", ["two-column"]], ["Custom layouts", ["custom:roadmap"]],
+  ["Text", ["two-column"]], ["Openers and closers", ["cover"]], ["Custom layouts", ["custom:roadmap", "bare", "tagged-custom"]],
 ]);
 
 const layout = layoutFromRegions({
