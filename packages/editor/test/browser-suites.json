@@ -265,6 +265,10 @@
           "command": "node test/studio-browser.mjs"
         },
         {
+          "id": "browser:studio-design",
+          "command": "node test/studio-design-browser.mjs"
+        },
+        {
           "id": "browser:studio-react",
           "command": "node test/studio-react-browser.mjs"
         },

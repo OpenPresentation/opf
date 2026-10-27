@@ -661,7 +661,7 @@ export function createStudio(ctx) {
   };
   s.commandState = (id) => {
     const info = commands.list(s, { win }).find((entry) => entry.id === id);
-    return info ? { enabled: info.enabled, reason: info.reason } : { enabled: false, reason: "Unknown command." };
+    return info ? { enabled: info.enabled, reason: info.reason, shortcut: info.shortcut } : { enabled: false, reason: "Unknown command." };
   };
   s.run = (id) => runCommand(id);
   function runCommand(id, event) {

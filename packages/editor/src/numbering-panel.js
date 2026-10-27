@@ -159,7 +159,7 @@ export function createNumberingPanel(container, options) {
     }
 
     if (enabled && state.entry) {
-      const start = h(doc, "input", { id: `${id}-entry-start`, type: "number", min: 1, max: MAX_NUMBERING_START, step: 1, value: state.entry.start ?? "", placeholder: state.entry.marker ?? "" });
+      const start = h(doc, "input", { id: `${id}-entry-start`, type: "number", min: 1, max: MAX_NUMBERING_START, step: 1, value: state.entry.start ?? "", placeholder: state.entry.marker ?? "", title: "Empty continues the count" });
       const apply = () => {
         const text = start.value.trim();
         try {
@@ -172,8 +172,7 @@ export function createNumberingPanel(container, options) {
       };
       start.addEventListener("change", apply);
       body.append(h(doc, "div", { class: "opf-numbering-entry" },
-        h(doc, "label", { for: start.id, text: `Entry ${state.entry.index + 1} starts at` }), start,
-        h(doc, "span", { class: "opf-numbering-help", text: "Leave empty to continue the count. Later entries carry on from it." })));
+        h(doc, "label", { for: start.id, text: `Entry ${state.entry.index + 1} starts at` }), start));
     }
   }
 

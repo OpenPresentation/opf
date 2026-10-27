@@ -1,7 +1,7 @@
 // The chart options panel (RR-35): axis titles, legend position and data labels for the selected chart, plus (FA-09) its alt text and
 // (FA-14) which series and categories to highlight.
 // It mounts into any host element over an editor session; every control commits one undoable change through
-// `setChartOptions` (src/chart-options.js), the canvas redraws, and Undo restores the chart. The panel shows only what
+// `setChartOptions` (src/chart-options.js), the canvas redraws, and The panel shows only what
 // the selected chart type can show (core's support table), and hides itself when no chart is selected. On a combo chart
 // (FA-15) a "Series" group sets which series are lines and which lines use the secondary value axis, and a secondary axis
 // title field appears while a line uses that axis. (RR-96) A "Colors" group sets the color of each series (or slice) from the deck's accent
@@ -222,25 +222,25 @@ export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatu
   const checkedNames = (part) => [...fields.highlight[part].querySelectorAll("input:checked")].map((input) => input.value);
   const selectedContent = () => fields.contents.filter((input) => input.checked && !input.closest("label").hidden).map((input) => input.value);
   const listeners = [
-    [fields.alt, "change", () => commit({ alt: fields.alt.value }, "Changed the chart's alt text. Undo restores it.")],
-    [fields.decorative, "change", () => commit({ decorative: fields.decorative.checked }, fields.decorative.checked ? "Marked the chart decorative. Undo restores it." : "The chart is no longer decorative. Undo restores it.")],
-    [fields.category, "change", () => commit({ axisTitles: { category: fields.category.value } }, "Changed the category axis title. Undo restores it.")],
-    [fields.value, "change", () => commit({ axisTitles: { value: fields.value.value } }, "Changed the value axis title. Undo restores it.")],
-    [fields.secondary, "change", () => commit({ axisTitles: { secondary: fields.secondary.value } }, "Changed the secondary axis title. Undo restores it.")],
+    [fields.alt, "change", () => commit({ alt: fields.alt.value }, "Changed the chart's alt text.")],
+    [fields.decorative, "change", () => commit({ decorative: fields.decorative.checked }, fields.decorative.checked ? "Marked the chart decorative." : "The chart is no longer decorative.")],
+    [fields.category, "change", () => commit({ axisTitles: { category: fields.category.value } }, "Changed the category axis title.")],
+    [fields.value, "change", () => commit({ axisTitles: { value: fields.value.value } }, "Changed the value axis title.")],
+    [fields.secondary, "change", () => commit({ axisTitles: { secondary: fields.secondary.value } }, "Changed the secondary axis title.")],
     [fields.series, "change", () => {
       const checked = (option) => [...fields.series.querySelectorAll(`[data-opf-chart-option='${option}']`)].filter((input) => input.checked).map((input) => input.value);
       const line = checked("line");
-      commit({ line, secondaryAxis: checked("secondaryAxis").filter((name) => line.includes(name)) }, "Changed which series are lines. Undo restores them.");
+      commit({ line, secondaryAxis: checked("secondaryAxis").filter((name) => line.includes(name)) }, "Changed which series are lines.");
     }],
-    [fields.legend, "change", () => commit({ legend: fields.legend.value }, "Changed the legend. Undo restores it.")],
-    [fields.labels, "change", () => commit({ dataLabels: fields.labels.checked }, fields.labels.checked ? "Showing data labels. Undo restores the chart." : "Hid the data labels. Undo restores them.")],
-    [fields.position, "change", () => commit({ dataLabels: { position: fields.position.value } }, "Moved the data labels. Undo restores them.")],
-    [fields.separator, "change", () => commit({ dataLabels: { separator: fields.separator.value } }, "Changed the label separator. Undo restores it.")],
+    [fields.legend, "change", () => commit({ legend: fields.legend.value }, "Changed the legend.")],
+    [fields.labels, "change", () => commit({ dataLabels: fields.labels.checked }, fields.labels.checked ? "Showing data labels." : "Hid the data labels.")],
+    [fields.position, "change", () => commit({ dataLabels: { position: fields.position.value } }, "Moved the data labels.")],
+    [fields.separator, "change", () => commit({ dataLabels: { separator: fields.separator.value } }, "Changed the label separator.")],
     [fields.colors, "click", (event) => {
       const button = event.target.closest?.("[data-opf-chart-option='colors.choose']");
       if (!button) return;
       const index = Number(button.closest("[data-position]").dataset.position);
-      commit({ colors: colorsWith(index, button.dataset.color) }, button.dataset.color ? "Changed a chart color. Undo restores it." : "Returned a chart color to the deck palette. Undo restores it.");
+      commit({ colors: colorsWith(index, button.dataset.color) }, button.dataset.color ? "Changed a chart color." : "Returned a chart color to the deck palette.");
     }],
     [fields.colors, "change", (event) => {
       const input = event.target.closest?.("[data-opf-chart-option='colors.hex']");
@@ -248,18 +248,18 @@ export function createChartOptionsPanel(host, { editor, getSelectedPath, onStatu
       const index = Number(input.closest("[data-position]").dataset.position);
       const value = input.value.trim();
       if (value && !isColorRef(value)) { onStatus("Use a hex color such as #7B241C."); refresh(); return; }
-      commit({ colors: colorsWith(index, value) }, "Changed a chart color. Undo restores it.");
+      commit({ colors: colorsWith(index, value) }, "Changed a chart color.");
     }],
-    [fields.colorsReset, "click", () => commit({ colors: null }, "Returned the chart colors to the deck palette. Undo restores them.")],
+    [fields.colorsReset, "click", () => commit({ colors: null }, "Returned the chart colors to the deck palette.")],
     ...["series", "categories"].map((part) => [fields.highlight[part], "change", () => {
       const names = checkedNames(part);
-      commit({ highlight: { [part]: names } }, names.length ? `Highlighted ${names.join(", ")}. Undo restores the colors.` : `Cleared the ${part} highlight. Undo restores it.`);
+      commit({ highlight: { [part]: names } }, names.length ? `Highlighted ${names.join(", ")}.` : `Cleared the ${part} highlight.`);
     }]),
     ...fields.contents.map((input) => [input, "change", () => {
       const content = selectedContent();
       // A label always shows something: unticking the last part keeps it.
       if (!content.length) { input.checked = true; return; }
-      commit({ dataLabels: { content } }, "Changed what the data labels show. Undo restores them.");
+      commit({ dataLabels: { content } }, "Changed what the data labels show.");
     }]),
   ];
   for (const [element, type, handler] of listeners) element.addEventListener(type, handler);

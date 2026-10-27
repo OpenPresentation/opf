@@ -43,7 +43,7 @@ import {
 } from "./design-options.js";
 import { ACCENT_SLOTS } from "./color-slots.js";
 import { readDesignVariant, setDesignVariant, variantSwatches } from "./design-variants.js";
-import { createContentControls } from "./content-controls.js";
+import { createContentControls, iconNode, shortReason } from "./content-controls.js";
 import { IMAGE_EDGES, IMAGE_FITS, IMAGE_SHAPES, readImageTreatments, setImageTreatment } from "./image-options.js";
 import { applyCatalogUpdate, catalogRecordAt, checkCatalogUpdates, mergeCatalogs, moveToCustom, referenceFindings } from "./catalogs.js";
 import { describeTableCell, mergeTableCells, parseTableCellPath, readTableAlt, readTableStyle, setTableAlt, setTableCellStyle, setTableStyle, splitTableCell } from "./table-options.js";
@@ -94,6 +94,14 @@ const BLOCK_REPLACEMENTS = ["text", "list", "chart", "table", "metric", "quote",
 let instances = 0;
 
 const messageOf = (error) => error?.issues?.[0]?.message ?? error?.message ?? String(error);
+/** Whether `path` (an OPF path such as slides.0.blocks.1) is an explicit block that is a group of blocks. */
+function isGroupBlock(presentation, path) {
+  const parts = String(path).split(".");
+  if (parts.at(-2) !== "blocks" || !/^\d+$/.test(parts.at(-1) ?? "")) return false;
+  let value = presentation;
+  for (const part of parts) value = value?.[/^\d+$/.test(part) ? Number(part) : part];
+  return Boolean(value) && typeof value === "object" && Array.isArray(value.blocks);
+}
 const titleCase = (text) => text.charAt(0).toUpperCase() + text.slice(1);
 
 /**
@@ -105,7 +113,12 @@ const titleCase = (text) => text.charAt(0).toUpperCase() + text.slice(1);
  * registered ones), `vocabularies` (display metadata for languages, chart types and social platforms: `catalogDisplay`
  * from `@openpresentation/gallery`), `onChange(change)`, `onStatus(message, { error })` and `onSelectPath(path)`, called
  * after a content conversion or replacement with the path to keep selected (the block, or the inline
- * payload field), because the host's old selection path may no longer exist.
+ * payload field), because the host's old selection path may no longer exist. `showPath` (default true) shows the
+ * selected block's path as a copyable chip under the selection section's Advanced; `blockActions` (`{ before, after }`)
+ * adds host actions to the selected block's arrange toolbar.
+ *
+ * Every option is a visible control with a short label. A hint is the control's tooltip and accessible description, never a
+ * paragraph; an option that does not apply is shown disabled, with its reason as its tooltip.
  */
 export function createDesignControls(container, options = {}) {
   const editor = options.editor;
@@ -173,7 +186,7 @@ export function createDesignControls(container, options = {}) {
       // An edit of a catalog's record forked it into the deck's own records: say so (FA-23).
       const notice = change?.notice ? ` ${change.notice}` : "";
       if (change && change.changed === false) say("Already set. Nothing changed.");
-      else say(`${typeof done === "function" ? done(change) : (done ?? "Changed.")}${warnings}${notice} Undo restores the previous state.`);
+      else say(`${typeof done === "function" ? done(change) : (done ?? "Changed.")}${warnings}${notice}`);
       options.onChange?.(change);
     } catch (error) {
       complain(messageOf(error));
@@ -191,12 +204,12 @@ export function createDesignControls(container, options = {}) {
   let fieldCount = 0;
   const nextId = (name) => `${uid}-${name}-${++fieldCount}`;
 
+  // A hint is a tooltip on the field (and the control's accessible description), never a paragraph under it.
   function wrapField(id, label, control, { help, extra } = {}) {
     const note = h("span", { class: "opf-dc-note" });
     const labelEl = h("label", { for: id }, label, note);
-    const helpEl = help ? h("p", { class: "opf-dc-help", id: `${id}-help` }, help) : undefined;
-    if (helpEl) control.setAttribute("aria-describedby", helpEl.id);
-    const wrap = h("div", { class: "opf-dc-field" }, labelEl, control, extra, helpEl);
+    if (help) control.title = help;
+    const wrap = h("div", { class: "opf-dc-field", title: help }, labelEl, control, extra);
     return { wrap, note, label: labelEl };
   }
 
@@ -275,19 +288,18 @@ export function createDesignControls(container, options = {}) {
     return api;
   }
 
-  function numberField(name, label, { min, max, step, help, onCommit } = {}) {
-    const field = textField(name, label, { help, type: "number", onCommit: onCommit ? (value) => onCommit(value === "" ? null : Number(value)) : undefined });
+  // A range is the field's placeholder (a unit hint), so the label stays short.
+  function numberField(name, label, { min, max, step, help, placeholder, onCommit } = {}) {
+    const field = textField(name, label, { help, placeholder: placeholder ?? (min !== undefined && max !== undefined ? `${min}–${max}` : undefined), type: "number", onCommit: onCommit ? (value) => onCommit(value === "" ? null : Number(value)) : undefined });
     for (const [key, value] of Object.entries({ min, max, step })) if (value !== undefined) field.input.setAttribute(key, String(value));
     return field;
   }
 
   function checkField(name, label, { help, onChange } = {}) {
     const id = nextId(name);
-    const input = h("input", { id, type: "checkbox" });
-    const helpEl = help ? h("p", { class: "opf-dc-help", id: `${id}-help` }, help) : undefined;
-    if (helpEl) input.setAttribute("aria-describedby", helpEl.id);
+    const input = h("input", { id, type: "checkbox", title: help });
     const note = h("span", { class: "opf-dc-note" });
-    const wrap = h("div", { class: "opf-dc-field opf-dc-check" }, input, h("label", { for: id }, label, note), helpEl);
+    const wrap = h("div", { class: "opf-dc-field opf-dc-check", title: help }, input, h("label", { for: id }, label, note));
     if (onChange) input.addEventListener("change", () => onChange(input.checked));
     return {
       wrap,
@@ -307,12 +319,12 @@ export function createDesignControls(container, options = {}) {
    */
   function overlayFields(name, label, { onCommit } = {}) {
     const commit = () => onCommit?.();
-    const color = textField(`${name}-color`, `${label} color`, { list: true, placeholder: "dark1 or #000000", help: "A theme color such as dark1, a hex color, or var:<id>. Clear it to remove the overlay.", onCommit: commit });
+    const color = textField(`${name}-color`, `${label} color`, { list: true, placeholder: "dark1 or #000000", help: "Theme color, hex or var:<id>. Clear to remove.", onCommit: commit });
     color.setList(COLOR_NAMES);
-    const opacity = numberField(`${name}-opacity`, `${label} opacity (0 to 1)`, { min: 0, max: 1, step: 0.05, onCommit: commit });
-    const edge = selectField(`${name}-edge`, `${label} band`, { empty: "Whole picture", help: "Cover only a band along one edge, for example a caption strip.", onChange: commit });
+    const opacity = numberField(`${name}-opacity`, `${label} opacity`, { min: 0, max: 1, step: 0.05, onCommit: commit });
+    const edge = selectField(`${name}-edge`, `${label} band`, { empty: "Whole picture", help: "Cover a band along one edge only", onChange: commit });
     edge.setOptions(IMAGE_EDGES.map((value) => ({ value, label: `Along the ${value}` })));
-    const size = numberField(`${name}-size`, `${label} band size (0.05 to 1)`, { min: 0.05, max: 1, step: 0.05, onCommit: commit });
+    const size = numberField(`${name}-size`, `${label} band size`, { min: 0.05, max: 1, step: 0.05, onCommit: commit });
     const wrap = h("fieldset", { class: "opf-dc-fieldset", "data-role": name }, h("legend", {}, label), color.wrap, opacity.wrap, edge.wrap, size.wrap);
     return {
       wrap,
@@ -344,25 +356,20 @@ export function createDesignControls(container, options = {}) {
     const source = textField(`${name}-source`, `${label} source`, {
       list: true,
       placeholder: "asset:photo or https://…",
-      help: help ?? "An asset reference, a web address or a data address. Press Enter to apply; clear the field to remove it.",
+      help: help ?? "Asset, URL or data URL. Enter applies; clear to remove.",
       onCommit: (value) => {
         const ref = value.trim();
         run(() => apply(ref === "" ? null : ref), ref === "" ? `${label} removed.` : `${label} changed.`);
       },
     });
     const fileId = nextId(`${name}-file`);
-    const input = h("input", { id: fileId, type: "file", accept: IMAGE_ACCEPT, "aria-describedby": `${fileId}-help` });
-    const fileWrap = h(
-      "div",
-      { class: "opf-dc-field" },
-      h("label", { for: fileId }, `Upload ${label.toLowerCase()} file`),
-      input,
-      h("p", { class: "opf-dc-help", id: `${fileId}-help` }, `PNG, JPEG, GIF, WebP or SVG, up to ${sizeLabel}. It is added to the presentation's assets (or handed to your app) and used here in one undoable step.`),
-    );
+    const fileHint = `PNG, JPEG, GIF, WebP or SVG, up to ${sizeLabel}`;
+    const input = h("input", { id: fileId, type: "file", accept: IMAGE_ACCEPT, title: fileHint });
+    const fileWrap = h("div", { class: "opf-dc-field", title: fileHint }, h("label", { for: fileId }, `Upload ${label.toLowerCase()} file`), input);
     let lastRef = "";
     let lastKey = "";
     const alt = textField(`${name}-alt`, `${label} alt text`, {
-      help: "Describes the image for screen readers. Saved with the image's asset; typed before an upload, it is used for that upload. Press Enter to apply.",
+      help: "Read by screen readers. Enter applies.",
       onCommit: (value) => {
         const id = assetIdOf(lastRef);
         if (!id || editor.presentation.assets?.[id] === undefined) return;
@@ -390,7 +397,7 @@ export function createDesignControls(container, options = {}) {
       try {
         const change = await applyImageUpload(editor, file, build, { alt: alt.input.value, maxBytes: maxImageBytes, onAddAsset: options.onAddAsset });
         const warnings = change.prepared?.warnings?.length ? ` ${change.prepared.warnings.map((warning) => warning.message).join(" ")}` : "";
-        say(`${label} set to ${file.name}${change.assetId ? `, added to assets as ${change.assetId}` : ""}.${warnings} Undo restores the previous state.`);
+        say(`${label} set to ${file.name}${change.assetId ? `, added to assets as ${change.assetId}` : ""}.${warnings}`);
         options.onChange?.(change);
       } catch (error) {
         if (destroyed) return;
@@ -438,7 +445,6 @@ export function createDesignControls(container, options = {}) {
   let scopeField;
   if (scopeNeeded) {
     scopeField = selectField("scope", "Applies to", {
-      help: "Choose the whole presentation, or only the slide you are looking at.",
       onChange: (value) => {
         state.scope = value === "slide" ? "slide" : "deck";
         sync();
@@ -459,7 +465,7 @@ export function createDesignControls(container, options = {}) {
   const built = {};
   for (const section of sections) built[section] = group(section);
   // RR-26: list levels, grouping, regions and images between content and design (content-controls.js).
-  const contentControls = built.selection || built["slide-content"] ? createContentControls({ editor, h, selectField, run, nextId, getSlide, reselect }) : undefined;
+  const contentControls = built.selection || built["slide-content"] ? createContentControls({ editor, doc, h, selectField, run, nextId, getSlide, reselect, blockActions: options.blockActions }) : undefined;
 
   // --- look and language --------------------------------------------------------------------------
 
@@ -478,13 +484,13 @@ export function createDesignControls(container, options = {}) {
       });
       return field;
     };
-    catalogField("theme", "Theme", "themes", { help: "A theme brings its own color scheme, font scheme and background: choosing one removes those overrides here." });
+    catalogField("theme", "Theme", "themes", { help: "Brings its own colors, fonts and background" });
     catalogField("color-scheme", "Color scheme", "color-schemes");
-    catalogField("font-scheme", "Font scheme", "font-schemes", { help: "Fonts the preview and export use. The preview shows an open look-alike where a font is not bundled." });
-    catalogField("language", "Language", "languages", { perSlide: false, help: "Sets the language for the whole presentation, including its script fonts." });
+    catalogField("font-scheme", "Font scheme", "font-schemes", { help: "Unbundled fonts preview as an open look-alike" });
+    catalogField("language", "Language", "languages", { perSlide: false, help: "Whole presentation, with its script fonts" });
     // RR-41: one size for the whole presentation; the slides recompose and the export writes the matching slide size.
     const slideSize = selectField("slide-size", "Slide size", {
-      help: "The size and shape of every slide. The preview recomposes at the new size.",
+      help: "Every slide",
       onChange: (value) => run(() => switchDimension(editor, "slide-sizes", value), `Slide size set to ${slideSize.select.selectedOptions[0]?.textContent ?? value}.`),
     });
     body.append(slideSize.wrap);
@@ -495,7 +501,6 @@ export function createDesignControls(container, options = {}) {
     });
 
     const layout = selectField("layout", "Layout of this slide", {
-      help: "Arranges this slide's content in the chosen layout's regions.",
       onChange: (value) => run(() => switchDimension(editor, "layouts", value, { slideIndex: getSlide(), ...catalogOptions() }), `Layout changed to ${layout.select.selectedOptions[0]?.textContent ?? value}.`),
     });
     body.append(layout.wrap);
@@ -578,7 +583,7 @@ export function createDesignControls(container, options = {}) {
 
   if (built.background) {
     const { body } = built.background;
-    const typeSelect = selectField("bg-type", "Background type", { help: "Choose a type and its settings, then Apply. Nothing changes until you apply." });
+    const typeSelect = selectField("bg-type", "Background type", { help: "Applies with Apply background" });
     typeSelect.setOptions([
       { value: "theme", label: "Theme color" },
       { value: "solid", label: "Solid color" },
@@ -588,24 +593,24 @@ export function createDesignControls(container, options = {}) {
     ]);
     const panel = (type, title) => h("fieldset", { class: "opf-dc-fieldset", "data-bg-type": type }, h("legend", {}, title));
     const themePanel = panel("theme", "Theme color");
-    const slot = selectField("bg-slot", "Theme slot", { help: "Follows the color scheme, so it changes with it." });
+    const slot = selectField("bg-slot", "Theme slot", { help: "Follows the color scheme" });
     slot.setOptions(THEME_BACKGROUND_SLOTS.map((value) => ({ value, label: value.replace(/(\D+)(\d)/, (_, name, n) => `${titleCase(name)} ${n}`) })));
     themePanel.append(slot.wrap);
 
     const colorList = [...COLOR_NAMES];
     const solidPanel = panel("solid", "Solid color");
-    const solidColor = textField("bg-color", "Color", { list: true, placeholder: "#1F2937 or accent1", help: "A hex color, a scheme color such as accent1 or surface, or var:<id>." });
+    const solidColor = textField("bg-color", "Color", { list: true, placeholder: "#1F2937 or accent1", help: "Hex, scheme color (accent1, surface) or var:<id>" });
     solidColor.setList(colorList);
     solidPanel.append(solidColor.wrap);
 
     const gradientPanel = panel("gradient", "Linear gradient");
-    const angle = numberField("bg-angle", "Angle in degrees", { step: 1, help: "0 runs left to right, 90 top to bottom." });
+    const angle = numberField("bg-angle", "Angle", { step: 1, placeholder: "degrees", help: "0° left to right, 90° top to bottom" });
     const stopsBox = h("div", { class: "opf-dc-stops", role: "group", "aria-label": "Gradient stops" });
     const stopRows = [];
     const renderStops = () => {
       stopsBox.replaceChildren(
         ...stopRows.map((row, index) => {
-          for (const [field, text] of [[row.color, `Stop ${index + 1} color`], [row.position, `Stop ${index + 1} position (0 to 1)`]]) field.wrap.querySelector("label").firstChild.textContent = text;
+          for (const [field, text] of [[row.color, `Stop ${index + 1} color`], [row.position, `Stop ${index + 1} position`]]) field.wrap.querySelector("label").firstChild.textContent = text;
           const remove = h("button", { type: "button", class: "quiet", disabled: stopRows.length <= 2 || undefined, "aria-label": `Remove stop ${index + 1}`, onclick: () => { stopRows.splice(index, 1); backgroundDirty = true; renderStops(); } }, "Remove");
           return h("div", { class: "opf-dc-stop" }, row.color.wrap, row.position.wrap, remove);
         }),
@@ -626,15 +631,15 @@ export function createDesignControls(container, options = {}) {
     gradientPanel.append(angle.wrap, stopsBox, addStopButton);
 
     const imagePanel = panel("image", "Image");
-    const fit = selectField("bg-fit", "Fit", { help: "Cover fills the slide around the focus point, contain shows the whole image, stretch fills it exactly, tile repeats it." });
+    const fit = selectField("bg-fit", "Fit", { help: "Cover crops to fill; contain shows it all; tile repeats it" });
     fit.setOptions(IMAGE_BACKGROUND_FITS.map((value) => ({ value, label: titleCase(value) })));
     const bgAlt = textField("bg-alt", "Background alt text", {
-      help: "Describe the photo when it carries meaning: PowerPoint then gets a picture at the back that screen readers read. Leave it empty for a decorative background.",
+      help: "Leave empty for a decorative background",
     });
-    const focusX = numberField("bg-focus-x", "Focus across (0 left to 1 right)", { min: 0, max: 1, step: 0.05 });
-    const focusY = numberField("bg-focus-y", "Focus down (0 top to 1 bottom)", { min: 0, max: 1, step: 0.05 });
+    const focusX = numberField("bg-focus-x", "Focus X", { min: 0, max: 1, step: 0.05, help: "0 left to 1 right" });
+    const focusY = numberField("bg-focus-y", "Focus Y", { min: 0, max: 1, step: 0.05, help: "0 top to 1 bottom" });
     const overlay = overlayFields("bg-overlay", "Overlay");
-    const bgRecolor = selectField("bg-recolor", "Recolor", { empty: "None", help: "Grayscale, or a duotone from a dark to a light color. Changes the picture's pixels only, not the overlay." });
+    const bgRecolor = selectField("bg-recolor", "Recolor", { empty: "None", help: "Changes the picture, not the overlay" });
     bgRecolor.setOptions([
       { value: "grayscale", label: "Grayscale" },
       { value: "duotone", label: "Duotone" },
@@ -665,12 +670,12 @@ export function createDesignControls(container, options = {}) {
         const spec = imageSpec(undefined), target = scoped();
         return (ref, doc) => prepareBackground(doc, { ...spec, src: ref }, target);
       },
-      help: "An asset reference, a web address or a data address. Press Enter or choose a file to apply it with the settings here.",
+      help: "Asset, URL or data URL. Enter applies.",
     });
     imagePanel.append(bgImage.wrap, fit.wrap, bgAlt.wrap, focusX.wrap, focusY.wrap, bgRecolor.wrap, bgDuoDark.wrap, bgDuoLight.wrap, overlay.wrap);
 
     const patternPanel = panel("pattern", "Pattern");
-    const preset = selectField("bg-preset", "Pattern", { help: "The 54 PowerPoint presets. PPTX export writes them as native pattern fills." });
+    const preset = selectField("bg-preset", "Pattern", { help: "PowerPoint presets, exported as native fills" });
     preset.setOptions(Object.entries(PATTERN_GROUPS).flatMap(([name, ids]) => ids.map((id) => ({ value: id, label: id, group: name }))));
     const patternFg = textField("bg-pattern-fg", "Pattern color", { list: true, placeholder: "#000000 or text" });
     patternFg.setList(colorList);
@@ -678,7 +683,7 @@ export function createDesignControls(container, options = {}) {
     patternBg.setList(colorList);
     patternPanel.append(preset.wrap, patternFg.wrap, patternBg.wrap);
 
-    const opacity = numberField("bg-opacity", "Opacity (0 to 1, optional)", { min: 0, max: 1, step: 0.05 });
+    const opacity = numberField("bg-opacity", "Opacity", { min: 0, max: 1, step: 0.05 });
     const opacityValue = () => (opacity.input.value === "" ? undefined : Number(opacity.input.value));
     const panels = { theme: themePanel, solid: solidPanel, gradient: gradientPanel, image: imagePanel, pattern: patternPanel };
 
@@ -762,13 +767,13 @@ export function createDesignControls(container, options = {}) {
     const pick = { which: "footer", zone: "center" };
     const which = () => pick.which;
     const zone = () => pick.zone;
-    const furniture = selectField("hf-which", "Edit", { help: "The header runs along the top of every slide, the footer along the bottom." });
+    const furniture = selectField("hf-which", "Edit");
     furniture.setOptions([
       { value: "header", label: "Header" },
       { value: "footer", label: "Footer" },
     ]);
     furniture.set(pick.which);
-    const zoneSelect = selectField("hf-zone", "Zone", { help: "A zone lays its parts out side by side, from the edge it sits on: image (or logo), text, social profiles, date." });
+    const zoneSelect = selectField("hf-zone", "Zone", { help: "Parts sit side by side from the edge: image, text, socials, date" });
     zoneSelect.setOptions(HEADER_FOOTER_ZONES.map((value) => ({ value, label: titleCase(value) })));
     zoneSelect.set(pick.zone);
     furniture.select.addEventListener("change", () => {
@@ -781,7 +786,7 @@ export function createDesignControls(container, options = {}) {
     });
     // Hiding is for a slide that would otherwise show the deck's furniture; at the deck, clear the zones instead.
     const hide = checkField("hf-hide", "Hide it", {
-      help: "On a slide: shows nothing instead of the presentation's. Uncheck to inherit it again.",
+      help: "Hide the presentation's on this slide",
       onChange: (checked) => run(() => switchDimension(editor, "headers-footers", { [which()]: checked ? false : null }, scoped()), checked ? `${titleCase(which())} hidden on this slide.` : `${titleCase(which())} shown again.`),
     });
     const edit = (fields, done) => run(() => setHeaderFooterZone(editor, which(), zone(), fields, scoped()), done);
@@ -792,7 +797,7 @@ export function createDesignControls(container, options = {}) {
     };
     const text = textField("hf-text", "Text", {
       multiline: true,
-      help: "Literal text, with values added by Insert value ({{slide.number}}, {{deck.slideCount}}, {{slide.section}}, {{organization.name}}, {{speaker.name}}, {{deck.name}}). Shift+Enter starts a new line. Clear it to remove.",
+      help: "Shift+Enter for a new line. Clear to remove.",
       onCommit: (value) => {
         if (value === currentText()) return;
         edit({ text: value }, `${where()} text changed.`);
@@ -801,7 +806,7 @@ export function createDesignControls(container, options = {}) {
     // The menu inserts a variable token at the caret (or over the selection) as one edit, together with any text typed but not yet committed.
     const insertValue = selectField("hf-insert-value", "Insert value", {
       empty: "Choose a value…",
-      help: "Adds a value to the text at the cursor. It is a {{ }} variable: slide number, slide count and section change on every slide.",
+      help: "Adds a {{ }} variable at the cursor",
     });
     insertValue.setOptions(ZONE_VALUES.map((value) => ({ value: value.name, label: value.label, title: value.token })));
     insertValue.select.addEventListener("change", () => {
@@ -827,37 +832,36 @@ export function createDesignControls(container, options = {}) {
         const kind = which(), place = zone(), target = scoped();
         return (ref, doc) => prepareHeaderFooterZone(doc, kind, place, { image: ref }, target);
       },
-      help: "A picture in this zone, such as a partner mark or badge: an asset reference, a web address or a data address, or an organization logo (Insert logo, below). Press Enter to apply; clear the field to remove it.",
+      help: "Asset, URL or data URL, or Insert logo. Enter applies.",
     });
     // RR-71: a logo is the zone's image, written as a reference to the organization's logo (var:organization.logo.icon). Which artwork is drawn (light or dark) follows each slide's background.
-    const logoShape = selectField("hf-logo-shape", "Logo shape", { help: "Icon is the mark alone and fits a zone best." });
+    const logoShape = selectField("hf-logo-shape", "Logo shape", { help: "Icon fits a zone best" });
     logoShape.setOptions(LOGO_SHAPES.map((value) => ({ value, label: LOGO_SHAPE_LABELS[value] })));
     logoShape.set("icon");
-    const logoOrganization = selectField("hf-logo-organization", "Logo of", { empty: "Primary organization", help: "Choose another organization when the deck has several." });
+    const logoOrganization = selectField("hf-logo-organization", "Logo of", { empty: "Primary organization" });
     const insertLogoButton = button("Insert logo", () => {
       const shape = logoShape.select.value;
       const organization = logoOrganization.select.value || undefined;
       run(() => insertZoneLogo(editor, which(), zone(), { ...scoped(), shape, ...(organization ? { organization } : {}) }), `${where()} now shows the ${shape} logo (${logoReference({ ...(organization ? { organization } : {}), ...(shape !== "full" ? { shape } : {}) })}), replacing any image.`);
     });
     insertLogoButton.dataset.action = "insert-logo";
-    const logoHelp = h("p", { class: "opf-dc-help", id: `${uid}-hf-logo-help` }, "Puts the organization's logo in this zone as its image. The logo comes from the organization's logo settings; add it under Logo, watermark and bullets.");
-    insertLogoButton.setAttribute("aria-describedby", logoHelp.id);
-    const logo = { wrap: h("fieldset", { class: "opf-dc-fieldset", "data-role": "hf-logo" }, h("legend", {}, "Logo"), logoShape.wrap, logoOrganization.wrap, h("div", { class: "opf-dc-actions" }, insertLogoButton), logoHelp) };
-    const dateNow = checkField("hf-date-now", "Show the current date", {
-      help: "Needs the host to supply today's date when it renders or exports; otherwise the part is reported as unresolved.",
+    insertLogoButton.title = "Uses the organization's logo as this zone's image";
+    const logo = { wrap: h("fieldset", { class: "opf-dc-fieldset", "data-role": "hf-logo" }, h("legend", {}, "Logo"), logoShape.wrap, logoOrganization.wrap, h("div", { class: "opf-dc-actions" }, insertLogoButton)) };
+    const dateNow = checkField("hf-date-now", "Today's date", {
+      help: "The host supplies the date when it renders or exports",
       onChange: (checked) => edit({ date: checked }, `${where()} date ${checked ? "shown" : "removed"}.`),
     });
     const dateFixed = textField("hf-date-fixed", "Fixed date", {
       placeholder: "2026-10-01",
-      help: "A fixed date written YYYY-MM-DD (formatted by the date format), or literal text when there is no date format. Replaces the current date.",
+      help: "YYYY-MM-DD, or text",
       onCommit: (value) => edit({ date: value.trim() }, `${where()} date changed.`),
     });
     const dateFormat = textField("hf-date-format", "Date format", {
       placeholder: "MMMM d, yyyy",
-      help: `Tokens: ${DATE_FORMAT_TOKENS.join(", ")}. Text in single quotes is literal. Clear it for the default (M/d/yyyy).`,
+      help: `Tokens: ${DATE_FORMAT_TOKENS.join(", ")}. 'Quoted' text is literal.`,
       onCommit: (value) => edit({ dateFormat: value.trim() }, `${where()} date format changed.`),
     });
-    const socials = checkField("hf-socials", "Show the organization's social profiles", { onChange: (checked) => edit({ socials: checked }, `${where()} social profiles ${checked ? "shown" : "removed"}.`) });
+    const socials = checkField("hf-socials", "Social profiles", { onChange: (checked) => edit({ socials: checked }, `${where()} social profiles ${checked ? "shown" : "removed"}.`) });
     let shownContext;
     const summary = h("ul", { class: "opf-dc-summary", "aria-label": "Zones in use" });
     const warnings = h("ul", { class: "opf-dc-warnings", "aria-label": "Header and footer warnings" });
@@ -916,17 +920,16 @@ export function createDesignControls(container, options = {}) {
     // RR-71: logos live on the organization. One image serves every shape, or each of the four shapes (full, stacked, icon,
     // wordmark) has its own, optionally split by the background it is drawn on (light or dark).
     const logoOrganizationPick = selectField("org-logo-organization", "Organization to edit", {
-      help: "Whose logo to edit. The primary organization's full logo is drawn on cover and section slides.",
       onChange: () => sync(),
     });
     const logoShapePick = selectField("org-logo-shape", "Shape to edit", {
-      help: "All shapes sets one image for every place the logo is drawn. Set a shape to give it its own image; a missing shape falls back to the full logo.",
+      help: "A missing shape falls back to the full logo",
       onChange: () => sync(),
     });
     logoShapePick.setOptions(["all", ...LOGO_SHAPES].map((value) => ({ value, label: LOGO_SHAPE_LABELS[value] })));
     logoShapePick.set("all");
     const logoBackgroundPick = selectField("org-logo-background", "Background to edit", {
-      help: "Use a different image on light and on dark backgrounds. Each slide draws the one that suits its background; a missing one uses the other.",
+      help: "Each slide draws the one that suits its background",
       onChange: () => sync(),
     });
     logoBackgroundPick.setOptions(LOGO_BACKGROUNDS.map((value) => ({ value, label: LOGO_BACKGROUND_LABELS[value] })));
@@ -941,7 +944,7 @@ export function createDesignControls(container, options = {}) {
         const { shape, ...rest } = logoTarget();
         return (ref, doc) => prepareOrganizationLogo(doc, shape, ref, rest);
       },
-      help: "An asset reference, a web address or a data address for the chosen shape and background. Press Enter to apply; clear the field to remove it.",
+      help: "Asset, URL or data URL. Enter applies; clear to remove.",
     });
     const logoSummary = h("ul", { class: "opf-dc-summary", "aria-label": "Logo shapes set" });
     const organizationLogoGroup = h("fieldset", { class: "opf-dc-fieldset", "data-role": "organization-logo" }, h("legend", {}, "Organization logo"), logoOrganizationPick.wrap, logoShapePick.wrap, logoBackgroundPick.wrap, orgLogo.wrap, logoSummary);
@@ -980,12 +983,11 @@ export function createDesignControls(container, options = {}) {
     // The logo that covers, sections and picture bullets draw: the primary organization's by default, another organization's or shape, or none.
     const choiceOrganizationPick = selectField("design-logo-organization", "Logo for covers, sections and bullets", {
       empty: "Primary organization",
-      help: "Which organization's logo covers and sections draw, and picture bullets use. Choose None to draw no logo.",
       onChange: () => applyLogoChoice(),
     });
     const choiceShapePick = selectField("design-logo-shape", "Shape to draw", {
       empty: "Default (full; icon for bullets)",
-      help: "Choose a shape to draw it instead of the default for that place. A missing shape falls back to the full logo.",
+      help: "A missing shape falls back to the full logo",
       onChange: () => applyLogoChoice(),
     });
     choiceShapePick.setOptions(LOGO_SHAPES.map((value) => ({ value, label: LOGO_SHAPE_LABELS[value] })));
@@ -1018,7 +1020,7 @@ export function createDesignControls(container, options = {}) {
     };
     const bullet = selectField("list-bullet", "List bullets", {
       empty: "Default (character)",
-      help: "Picture bullets draw the logo as the marker and need a logo. No bullets draws no marker and no indent, for label-and-description lists.",
+      help: "Picture bullets need a logo",
       onChange: (value) => run(() => setDesignOption(editor, "listBullet", value === "" ? null : value, scoped()), value === "image" ? "Picture bullets on." : value === "none" ? "No bullets." : "Character bullets."),
     });
     bullet.setOptions([
@@ -1028,7 +1030,7 @@ export function createDesignControls(container, options = {}) {
     ]);
     const accent = textField("accent-font", "Accent font", {
       placeholder: "Font family name",
-      help: "The font for accent text such as tags. Press Enter to apply; clear the field to remove it.",
+      help: "For accent text such as tags. Enter applies.",
       onCommit: (value) => run(() => setDesignOption(editor, "accentFont", value.trim() === "" ? null : value.trim(), scoped()), value.trim() === "" ? "Accent font removed." : "Accent font changed."),
     });
     const watermarkSource = imageCluster("watermark", "Watermark", {
@@ -1041,7 +1043,7 @@ export function createDesignControls(container, options = {}) {
     // FA-13: a watermark is an image or a text stamp; the text field and the image cluster replace each other.
     const watermarkText = textField("watermark-text", "Watermark text", {
       placeholder: "DRAFT",
-      help: "A text stamp centered on the slide, drawn diagonally in the theme text color at the opacity below. Press Enter to apply; clear the field to remove it. It replaces a watermark image.",
+      help: "A diagonal text stamp; replaces a watermark image",
       onCommit: (value) => run(() => {
         const text = value.trim();
         const current = getDesignOption(editor.presentation, "watermark", scoped()).value;
@@ -1050,13 +1052,13 @@ export function createDesignControls(container, options = {}) {
         return setDesignOption(editor, "watermark", { text, opacity }, scoped());
       }, value.trim() === "" ? "Watermark removed." : "Watermark text set."),
     });
-    const watermarkOpacity = numberField("watermark-opacity", "Watermark opacity (0 to 1)", {
+    const watermarkOpacity = numberField("watermark-opacity", "Watermark opacity", {
       min: 0,
       max: 1,
       step: 0.05,
       onCommit: (value) => run(() => setDesignOption(editor, "watermark", { opacity: value === null ? 0.1 : value }, scoped()), "Watermark opacity changed."),
     });
-    const watermarkOff = checkField("watermark-off", "Hide the inherited watermark", {
+    const watermarkOff = checkField("watermark-off", "Hide inherited watermark", {
       onChange: (checked) => run(() => setDesignOption(editor, "watermark", checked ? false : null, scoped()), checked ? "Watermark hidden." : "Watermark restored."),
     });
     body.append(organizationLogoGroup, logoChoiceGroup, bullet.wrap, accent.wrap, watermarkSource.wrap, watermarkText.wrap, watermarkOpacity.wrap, watermarkOff.wrap);
@@ -1102,9 +1104,9 @@ export function createDesignControls(container, options = {}) {
     };
     enumField("titleAlignment", "Title alignment", ["left", "center", "right"], {});
     enumField("contentAlignment", "Content alignment", ["left", "center", "right"], {});
-    enumField("contentDirection", "Content direction", ["horizontal", "vertical"], { horizontal: "Horizontal (row)", vertical: "Vertical (column)" }, "The axis parallel content is arranged along when a slide sets no arrangement of its own.");
-    enumField("chartPrimary", "Primary chart position", ["none", "top", "bottom", "left", "right"], { none: "None (equal)" }, "Where the main chart sits next to supporting content.");
-    enumField("imageFit", "Image fit", IMAGE_FITS, { cover: "Cover (crop to fill)", contain: "Contain (whole image)", stretch: "Stretch to the frame" }, "How pictures fill their frames when an image block does not choose its own fit.");
+    enumField("contentDirection", "Content direction", ["horizontal", "vertical"], { horizontal: "Horizontal (row)", vertical: "Vertical (column)" }, "When a slide sets no arrangement");
+    enumField("chartPrimary", "Primary chart position", ["none", "top", "bottom", "left", "right"], { none: "None (equal)" }, "Where the main chart sits");
+    enumField("imageFit", "Image fit", IMAGE_FITS, { cover: "Cover (crop to fill)", contain: "Contain (whole image)", stretch: "Stretch to the frame" }, "When an image block sets no fit");
     const box = selectField("opt-contentBox", "Content box", {
       empty: "Default",
       onChange: (value) => run(() => setDesignOption(editor, "contentBox", value === "" ? null : value === "yes", scoped()), "Content box changed."),
@@ -1132,13 +1134,13 @@ export function createDesignControls(container, options = {}) {
         field.set(currentSwitchValue(editor.presentation, dimension).value);
       });
     };
-    single("narrative", "Narrative", "narratives", "The narrative plan the deck points at (a catalog reference; a custom one is a record embedded in the document's catalogs). The slides do not change, and keep their beat links.");
+    single("narrative", "Narrative", "narratives", "Authoring metadata; slides do not change");
     single("tone", "Tone", "tones");
-    single("purpose", "Purpose", "purposes", "What the deck is for. Authoring metadata: the slides do not change. A goal written in the JSON source shows as custom.");
+    single("purpose", "Purpose", "purposes", "Authoring metadata; slides do not change");
     const audience = selectField("audience", "Audience", {
       multiple: true,
       size: 6,
-      help: "Hold Ctrl or Shift to choose more than one.",
+      help: "Ctrl or Shift selects several",
       onChange: (values) => {
         if (!values.length) return complain("Choose at least one audience.");
         run(() => switchDimension(editor, "audiences", values, catalogOptions()), "Audience changed.");
@@ -1155,7 +1157,7 @@ export function createDesignControls(container, options = {}) {
 
     const owner = selectField("social-owner", "Socials belong to");
     const platform = selectField("social-platform", "Platform");
-    const handle = textField("social-handle", "Handle or address", { placeholder: "@handle", help: "Press Enter to apply." });
+    const handle = textField("social-handle", "Handle or address", { placeholder: "@handle" });
     const applySocial = () => {
       const value = handle.input.value.trim();
       if (!value) return complain("Enter a handle for the platform.");
@@ -1184,20 +1186,17 @@ export function createDesignControls(container, options = {}) {
   const dynamic = {};
   if (built.selection) {
     const { body, details } = built.selection;
-    const summary = h("p", { class: "opf-dc-help", "data-role": "selection-summary" });
     const convert = selectField("convert", "Content type", {
-      help: "Converting keeps your text and never adds content. What a type cannot carry is named below.",
       onChange: (value) => {
         if (!value) return;
         const path = dynamic.blockPath;
-        run(() => switchDimension(editor, "blocks", value, { path, convert: true }), (change) => `Converted to ${BLOCK_KIND_LABELS[value]?.toLowerCase() ?? value}.${change.loss?.length ? ` Not carried over: ${change.loss.join(", ")}.` : " Nothing was lost."}`);
+        run(() => switchDimension(editor, "blocks", value, { path, convert: true }), (change) => `Converted to ${BLOCK_KIND_LABELS[value]?.toLowerCase() ?? value}.${change.loss?.length ? ` Not carried over: ${change.loss.join(", ")}.` : ""}`);
         reselect(path);
       },
     });
-    const unavailable = h("ul", { class: "opf-dc-warnings", "aria-label": "Conversions not available" });
-    const replace = selectField("replace", "Replace with new content", {
-      empty: "Choose a type…",
-      help: "Starts from sample content. The old content is discarded; Undo brings it back.",
+    const replace = selectField("replace", "Replace with", {
+      empty: "New content…",
+      help: "Replaces this content with a sample",
       onChange: (value) => {
         if (!value) return;
         const path = dynamic.blockPath;
@@ -1207,11 +1206,20 @@ export function createDesignControls(container, options = {}) {
     });
     replace.setOptions(BLOCK_REPLACEMENTS.map((value) => ({ value, label: BLOCK_KIND_LABELS[value] })));
     const chartType = selectField("chart-type", "Chart type", {
-      help: "Only types the chart's data can use as it is.",
+      help: "Types this data supports",
       onChange: (value) => run(() => switchDimension(editor, "charts", value, { slideIndex: getSlide(), path: dynamic.blockPath, ...catalogOptions() }), `Chart type set to ${chartType.select.selectedOptions[0]?.textContent ?? value}.`),
     });
-    body.append(summary, convert.wrap, unavailable, contentControls.nodes.metrics, contentControls.nodes.list, chartType.wrap, contentControls.nodes.arrange, replace.wrap);
-    dynamic.selection = { details, summary, convert, unavailable, replace, chartType };
+    // The block's path is internal: it is a copyable chip under Advanced (a host with its own Advanced, such as the Studio, turns it off).
+    const pathChip = h("button", { type: "button", class: "opf-dc-path", "data-role": "selection-path", title: "Copy path" });
+    pathChip.addEventListener("click", () => {
+      const path = pathChip.dataset.path;
+      const clipboard = doc.defaultView?.navigator?.clipboard;
+      if (!path || !clipboard?.writeText) return complain("Copying is not available here.");
+      clipboard.writeText(path).then(() => say(`Copied ${path}.`), () => complain("Could not copy the path."));
+    });
+    const advanced = h("details", { class: "opf-dc-advanced", "data-role": "selection-advanced", hidden: options.showPath === false || undefined }, h("summary", {}, "Advanced"), pathChip);
+    body.append(contentControls.nodes.arrange, contentControls.nodes.list, convert.wrap, contentControls.nodes.metrics, chartType.wrap, replace.wrap, contentControls.nodes.image, advanced);
+    dynamic.selection = { details, convert, replace, chartType, pathChip, advanced };
   }
 
   if (built["slide-content"]) built["slide-content"].body.append(contentControls.slideNode);
@@ -1220,11 +1228,10 @@ export function createDesignControls(container, options = {}) {
 
   if (built.image) {
     const { body, details } = built.image;
-    const summary = h("p", { class: "opf-dc-help", "data-role": "image-summary" });
     const treat = (fields, done) => run(() => setImageTreatment(editor, dynamic.imagePath, fields), done);
     const fit = selectField("img-fit", "Fit", {
       empty: "Presentation default",
-      help: "Cover fills the frame around the focus point, contain shows the whole picture, stretch fills the frame exactly.",
+      help: "Cover crops to fill; contain shows it all; stretch distorts",
       onChange: (value) => treat({ fit: value === "" ? null : value }, "Image fit changed."),
     });
     fit.setOptions(IMAGE_FITS.map((value) => ({ value, label: titleCase(value) })));
@@ -1232,20 +1239,20 @@ export function createDesignControls(container, options = {}) {
       const x = focusX.input.value, y = focusY.input.value;
       treat({ focus: x === "" && y === "" ? null : { x: x === "" ? 0.5 : Number(x), y: y === "" ? 0.5 : Number(y) } }, "Focus point changed.");
     };
-    const focusX = numberField("img-focus-x", "Focus across (0 left to 1 right)", { min: 0, max: 1, step: 0.05, help: "The point a cover fit keeps in view. Clear both to center it.", onCommit: focusCommit });
-    const focusY = numberField("img-focus-y", "Focus down (0 top to 1 bottom)", { min: 0, max: 1, step: 0.05, onCommit: focusCommit });
+    const focusX = numberField("img-focus-x", "Focus X", { min: 0, max: 1, step: 0.05, help: "0 left to 1 right; the point a cover fit keeps in view", onCommit: focusCommit });
+    const focusY = numberField("img-focus-y", "Focus Y", { min: 0, max: 1, step: 0.05, help: "0 top to 1 bottom", onCommit: focusCommit });
     const shape = selectField("img-shape", "Shape", { empty: "Rectangle", onChange: (value) => treat({ shape: value === "" ? null : value }, "Image shape changed.") });
     shape.setOptions(IMAGE_SHAPES.filter((value) => value !== "rectangle").map((value) => ({ value, label: titleCase(value) })));
-    const radius = numberField("img-radius", "Corner radius (0 to 0.5 of the shorter side)", { min: 0, max: 0.5, step: 0.02, onCommit: (value) => treat({ cornerRadius: value }, "Corner radius changed.") });
-    const aspect = numberField("img-aspect", "Frame aspect ratio (width / height)", { min: 0.1, max: 10, step: 0.01, help: "For example 1.78 for 16:9, 1 for a square. Clear it to use the whole region.", onCommit: (value) => treat({ aspectRatio: value }, "Frame aspect ratio changed.") });
-    const opacity = numberField("img-opacity", "Opacity (0 to 1)", { min: 0, max: 1, step: 0.05, onCommit: (value) => treat({ opacity: value }, "Image opacity changed.") });
+    const radius = numberField("img-radius", "Corner radius", { min: 0, max: 0.5, step: 0.02, help: "Share of the shorter side", onCommit: (value) => treat({ cornerRadius: value }, "Corner radius changed.") });
+    const aspect = numberField("img-aspect", "Aspect ratio", { min: 0.1, max: 10, step: 0.01, placeholder: "width / height", help: "1.78 for 16:9, 1 for a square. Clear to fill the region.", onCommit: (value) => treat({ aspectRatio: value }, "Frame aspect ratio changed.") });
+    const opacity = numberField("img-opacity", "Opacity", { min: 0, max: 1, step: 0.05, onCommit: (value) => treat({ opacity: value }, "Image opacity changed.") });
     const borderCommit = () => {
       const ref = borderColor.input.value.trim();
       treat({ border: ref ? { color: ref, width: borderWidth.input.value === "" ? 2 : Number(borderWidth.input.value) } : null }, ref ? "Border changed." : "Border removed.");
     };
-    const borderColor = textField("img-border-color", "Border color", { list: true, placeholder: "dark1 or #1F2937", help: "Clear it to remove the border.", onCommit: borderCommit });
+    const borderColor = textField("img-border-color", "Border color", { list: true, placeholder: "dark1 or #1F2937", help: "Clear to remove", onCommit: borderCommit });
     borderColor.setList(COLOR_NAMES);
-    const borderWidth = numberField("img-border-width", "Border width (0 to 64)", { min: 0, max: 64, step: 1, onCommit: borderCommit });
+    const borderWidth = numberField("img-border-width", "Border width", { min: 0, max: 64, step: 1, onCommit: borderCommit });
     const recolorCommit = () => {
       const kind = recolor.select.value;
       if (kind === "duotone" && (!duoDark.input.value.trim() || !duoLight.input.value.trim())) return say("Enter the dark and light duotone colors to apply it.");
@@ -1269,19 +1276,18 @@ export function createDesignControls(container, options = {}) {
       );
     };
     const placeEdge = selectField("img-place-edge", "Bleed to an edge", {
-      empty: "No: flows with the content",
-      help: "The image takes a band along that slide edge, edge to edge, and the title and content use the rest of the slide.",
+      empty: "None",
+      help: "Takes a band along that slide edge",
       onChange: placementCommit,
     });
-    const placeSize = numberField("img-place-size", "Share of the slide (0.1 to 0.9)", { min: 0.1, max: 0.9, step: 0.05, onCommit: placementCommit });
-    const placeInset = checkField("img-place-inset", "Inset inside the slide padding", { onChange: placementCommit });
+    const placeSize = numberField("img-place-size", "Band size", { min: 0.1, max: 0.9, step: 0.05, onCommit: placementCommit });
+    const placeInset = checkField("img-place-inset", "Inset in padding", { onChange: placementCommit });
     const placement = h("fieldset", { class: "opf-dc-fieldset", "data-role": "img-placement" }, h("legend", {}, "Placement"), placeEdge.wrap, placeSize.wrap, placeInset.wrap);
-    body.append(summary, fit.wrap, focusX.wrap, focusY.wrap, shape.wrap, radius.wrap, aspect.wrap, opacity.wrap, borderColor.wrap, borderWidth.wrap, recolor.wrap, duoDark.wrap, duoLight.wrap, overlay.wrap, placement);
+    body.append(fit.wrap, focusX.wrap, focusY.wrap, shape.wrap, radius.wrap, aspect.wrap, opacity.wrap, borderColor.wrap, borderWidth.wrap, recolor.wrap, duoDark.wrap, duoLight.wrap, overlay.wrap, placement);
     dynamic.image = {
       details,
       load(path) {
         const current = readImageTreatments(editor.presentation, path);
-        summary.textContent = `Image block (${current.path})`;
         fit.set(current.fit ?? "");
         focusX.set(current.focus ? String(current.focus.x) : "");
         focusY.set(current.focus ? String(current.focus.y) : "");
@@ -1299,7 +1305,7 @@ export function createDesignControls(container, options = {}) {
         for (const field of [duoDark, duoLight]) field.wrap.hidden = !(duotone || recolor.select.value === "duotone");
         overlay.set(current.overlay);
         placement.hidden = !current.placeable;
-        placeEdge.setOptions(IMAGE_EDGES.map((edge) => ({ value: edge, label: titleCase(edge), disabled: current.usedEdges.includes(edge), title: current.usedEdges.includes(edge) ? "Another image already bleeds to this edge." : undefined })));
+        placeEdge.setOptions(IMAGE_EDGES.map((edge) => ({ value: edge, label: titleCase(edge), disabled: current.usedEdges.includes(edge), title: current.usedEdges.includes(edge) ? "Another image bleeds to this edge" : undefined })));
         placeEdge.set(current.placement?.edge ?? "");
         placeSize.set(current.placement?.size === undefined ? "" : String(current.placement.size));
         placeInset.set(current.placement?.inset === true);
@@ -1313,7 +1319,6 @@ export function createDesignControls(container, options = {}) {
   if (built.catalog) {
     const { body } = built.catalog;
     const findings = h("ul", { class: "opf-dc-warnings", "aria-label": "Catalog reference problems", "data-role": "reference-findings" });
-    const intro = h("p", { class: "opf-dc-help" }, "The document embeds every catalog record it uses when it is saved. Updating replaces an embedded record with the catalog's current one, only after you approve it.");
     const updates = h("ul", { class: "opf-dc-summary", "aria-label": "Catalog updates", "data-role": "catalog-updates" });
     const review = { changes: [] };
     const check = button("Check for catalog updates", () => {
@@ -1347,7 +1352,8 @@ export function createDesignControls(container, options = {}) {
       applyButton.hidden = review.changes.length === 0;
     };
     renderUpdates();
-    body.append(intro, findings, h("div", { class: "opf-dc-actions" }, check, applyButton), updates);
+    check.title = "Compares embedded records with the catalog; nothing changes until you apply";
+    body.append(findings, h("div", { class: "opf-dc-actions" }, check, applyButton), updates);
     syncs.push(() => {
       const list = referenceFindings(editor.validation);
       findings.replaceChildren(
@@ -1373,10 +1379,9 @@ export function createDesignControls(container, options = {}) {
 
   if (built.table) {
     const { body, details } = built.table;
-    const summary = h("p", { class: "opf-dc-help", "data-role": "table-summary" });
     const applyStyle = (change, done) => run(() => setTableStyle(editor, dynamic.tablePath, change), done);
     const headerStyle = selectField("table-header", "Header row", {
-      help: "The header fill. Theme uses the primary color; Plain looks like the body.",
+      help: "Theme uses the primary color",
       onChange: (value) => applyStyle({ ...dynamic.tableStyle, header: value }, "Table header changed."),
     });
     headerStyle.setOptions([
@@ -1385,7 +1390,6 @@ export function createDesignControls(container, options = {}) {
       { value: "accent", label: "Accent color" },
     ]);
     const banding = checkField("table-banding", "Banded rows", {
-      help: "Alternates the fill of body rows. Text color adjusts automatically.",
       onChange: (checked) => applyStyle({ ...dynamic.tableStyle, banding: checked }, checked ? "Banded rows on." : "Banded rows off."),
     });
     const borders = selectField("table-borders", "Borders", {
@@ -1398,10 +1402,10 @@ export function createDesignControls(container, options = {}) {
       { value: "none", label: "None" },
     ]);
     const resetStyle = button("Reset table style", () => applyStyle("theme", "Table style reset to the theme."), { quiet: true });
-    const cellLabel = h("p", { class: "opf-dc-help", "data-role": "cell-summary" });
+    const cellLabel = h("p", { class: "opf-dc-cell-label", "data-role": "cell-summary" });
     const columns = numberField("span-columns", "Columns to merge", { min: 1, step: 1 });
     const rows = numberField("span-rows", "Rows to merge", { min: 1, step: 1 });
-    const join = checkField("merge-join", "Keep text from the merged cells", { help: "Without this, merging cells that hold text is refused so nothing is hidden." });
+    const join = checkField("merge-join", "Keep merged text", { help: "Otherwise merging cells that hold text is refused" });
     const merge = button("Merge cells", () => {
       const cell = dynamic.cell;
       if (!cell) return;
@@ -1419,7 +1423,7 @@ export function createDesignControls(container, options = {}) {
     const cellBox = h("div", { class: "opf-dc-cell" }, cellLabel, columns.wrap, rows.wrap, join.wrap, h("div", { class: "opf-dc-actions" }, merge, split), fill.wrap, align.wrap, bold.wrap);
     // FA-27: the table's text alternative, like a chart's. It belongs to the table, so a dataset-backed table has it too.
     const alt = textField("table-alt", "Alt text", {
-      help: "What the table shows: its point and the key numbers, not \"a table\". Optional, because a screen reader reads a table cell by cell. Press Enter to apply.",
+      help: "Its point and key numbers. Enter applies.",
       placeholder: "What the table shows",
       onCommit: (value) => run(() => setTableAlt(editor, dynamic.tablePath, { alt: value }), "Table alt text changed."),
     });
@@ -1428,8 +1432,8 @@ export function createDesignControls(container, options = {}) {
       onChange: (checked) => run(() => setTableAlt(editor, dynamic.tablePath, { decorative: checked }), checked ? "Table marked decorative." : "The table is no longer decorative."),
     });
     const styleControls = [headerStyle.wrap, banding.wrap, borders.wrap, resetStyle, cellBox];
-    body.append(summary, alt.wrap, decorative.wrap, ...styleControls);
-    dynamic.table = { details, summary, alt, decorative, styleControls, headerStyle, banding, borders, cellBox, cellLabel, columns, rows, merge, split, fill, align, bold, join };
+    body.append(alt.wrap, decorative.wrap, ...styleControls);
+    dynamic.table = { details, alt, decorative, styleControls, headerStyle, banding, borders, cellBox, cellLabel, columns, rows, merge, split, fill, align, bold, join };
   }
 
   // --- sync -----------------------------------------------------------------------------------------
@@ -1440,24 +1444,31 @@ export function createDesignControls(container, options = {}) {
     const blockPath = selected ? blockPathForSelection(document_, selected) : undefined;
     const content = blockPath ? readBlockContent(document_, blockPath) : undefined;
     dynamic.blockPath = blockPath;
+    // A selected group has no content of its own, but it can be arranged (grouped with the next block, ungrouped).
+    const groupPath = !blockPath && selected && isGroupBlock(document_, selected) ? selected : undefined;
     const ui = dynamic.selection;
     if (ui) {
-      ui.details.hidden = !content;
+      ui.details.hidden = !content && !groupPath;
+      const path = blockPath ?? groupPath;
+      ui.pathChip.dataset.path = path ?? "";
+      ui.pathChip.replaceChildren(h("code", {}, path ?? ""), iconNode(doc, "Copy", 14));
+      ui.pathChip.setAttribute("aria-label", `Copy path ${path ?? ""}`);
+      for (const field of [ui.convert, ui.replace]) field.wrap.hidden = !content;
+      ui.chartType.wrap.hidden = true;
       if (content) {
         const targets = blockConversionTargets(document_, blockPath);
-        ui.summary.textContent = `${BLOCK_KIND_LABELS[content.kind] ?? content.kind} block (${blockPath})`;
+        // Every type is listed; one this content cannot become is disabled, with the reason as its tooltip and accessible description.
         ui.convert.setOptions([
           { value: "", label: `${BLOCK_KIND_LABELS[content.kind] ?? content.kind} (current)` },
           ...targets.map((target) => ({
             value: target.kind,
-            label: target.available ? `${target.label}${target.lossless ? "" : ` (loses ${target.loss.join(", ")})`}` : `${target.label} (unavailable)`,
+            label: target.available ? `${target.label}${target.lossless ? "" : ` (loses ${target.loss.join(", ")})`}` : target.label,
             disabled: !target.available,
-            title: target.reason,
+            title: target.available ? undefined : `${target.label}: ${shortReason(target.reason)}`,
           })),
         ]);
         ui.convert.set("");
         ui.convert.wrap.hidden = targets.length === 0;
-        ui.unavailable.replaceChildren(...targets.filter((target) => !target.available).map((target) => h("li", {}, `${target.label}: ${target.reason}`)));
         ui.replace.set("");
         const charts = content.kind === "chart" ? compatibleChartTypes(document_, { slideIndex: getSlide(), path: blockPath, ...catalogOptions() }) : [];
         ui.chartType.wrap.hidden = charts.length === 0;
@@ -1486,7 +1497,6 @@ export function createDesignControls(container, options = {}) {
       const inline = Array.isArray(tableValue?.rows);
       tableUi.details.hidden = !tablePath || !(inline || typeof tableValue?.dataset === "string");
       if (tablePath && !tableUi.details.hidden) {
-        tableUi.summary.textContent = `Table (${tablePath})`;
         const textAlternative = readTableAlt(tableValue);
         tableUi.alt.set(textAlternative.alt);
         tableUi.alt.input.disabled = textAlternative.decorative;
@@ -1526,7 +1536,7 @@ export function createDesignControls(container, options = {}) {
       }
     }
     if (contentControls) {
-      contentControls.sync({ blockPath, content, selectedPath: selected, slideIndex: getSlide() });
+      contentControls.sync({ blockPath, groupPath, content, selectedPath: selected, slideIndex: getSlide() });
       const slideContent = built["slide-content"];
       if (slideContent) slideContent.details.hidden = [...contentControls.slideNode.children].every((node) => node.hidden);
     }

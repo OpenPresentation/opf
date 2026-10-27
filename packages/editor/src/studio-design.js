@@ -2,8 +2,11 @@
 // they are, by name, in panels made once per arrangement and shown for the selection that needs them; the Studio adds a Layout row (with the
 // layout's diagram, Change layout and Edit layout), the composition of a group, a promoted region or a slide (mode, columns, gap, padding and
 // one weight per track, linked to the dividers), a region's read-only rules, the multiple-selection actions, speaker notes, and Advanced (the
-// schema inspector, opened on demand). Every field commits one undoable change through the session.
+// selection's path as a copyable chip, and the schema inspector, opened on demand). Every field commits one undoable change through the session.
+// The panel shows options, not explanations: every option is a visible control with a short label, a hint is a tooltip, and an action that
+// does not apply is shown disabled with its reason (and its shortcut when it has one) in its tooltip.
 import { createDesignControls } from "./design-controls.js";
+import { setActionState } from "./content-controls.js";
 import { createChartOptionsPanel } from "./chart-options-panel.js";
 import { createNumberingPanel } from "./numbering-panel.js";
 import { buildLayoutDiagram } from "./layout-diagram.js";
@@ -16,9 +19,14 @@ const ARRANGEMENTS = {
   deck: ["look", "variant", "background", "header-footer", "brand", "info"],
   slide: ["layout-options", "slide-content", "background"],
   block: ["selection"],
-  image: ["image", "selection"],
-  table: ["table", "selection"],
+  image: ["selection", "image"],
+  table: ["selection", "table"],
 };
+// The selected block's structural actions, around the panel's own Group with the next block and Ungroup: [command, label, icon, role].
+const STRUCTURE_BEFORE = [["studio.move.earlier", "Move up", "ArrowUp", "move-up"], ["studio.move.later", "Move down", "ArrowDown", "move-down"]];
+const STRUCTURE_AFTER = [["studio.duplicate", "Duplicate", "Copy", "duplicate"], ["studio.delete", "Delete", "Trash2", "delete"]];
+// Modes whose selection section (the arrange toolbar and the content type) comes before the Studio's own sections.
+const SHARED_FIRST = new Set(["block", "list", "chart", "group", "promoted", "image", "table"]);
 
 /** The arrangement a selection gets: deck, slide, group, region, multi, or a block kind. */
 export function designMode(nodes) {
@@ -45,8 +53,16 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
   const shared = el("div", `${p}-design-shared`);
   const advanced = el("details", `${p}-design-advanced`);
   const advancedSummary = el("summary", "", { text: "Advanced" });
+  // The selection's path is internal: a chip under Advanced that copies it.
+  const pathChip = el("button", `${p}-path`, { type: "button", title: "Copy path" });
+  pathChip.addEventListener("click", () => {
+    const path = pathChip.dataset.path;
+    const clipboard = doc.defaultView?.navigator?.clipboard;
+    if (!path || !clipboard?.writeText) { studio.status("Copying is not available here."); return; }
+    clipboard.writeText(path).then(() => studio.status(`Copied ${path}`), () => studio.status("Could not copy the path."));
+  });
   const advancedBody = el("div", `${p}-design-advanced-body`);
-  advanced.append(advancedSummary, advancedBody);
+  advanced.append(advancedSummary, pathChip, advancedBody);
   const live = el("p", `${p}-design-live`, { role: "status", "aria-live": "polite" });
   container.append(head, notice, own, shared, advanced, live);
   const panels = new Map();
@@ -64,8 +80,11 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
     if (panels.has(name)) return panels.get(name);
     const host = el("div", `${p}-design-panel`, { "data-arrangement": name });
     shared.append(host);
+    const hostAction = ([id, label, icon, role]) => ({ role, label, icon, state: () => studio.commandState(id), run: () => studio.run(id) });
     const controls = createDesignControls(host, {
       ...designOptions,
+      showPath: false,
+      ...(name === "deck" || name === "slide" ? {} : { blockActions: { before: STRUCTURE_BEFORE.map(hostAction), after: STRUCTURE_AFTER.map(hostAction) } }),
       editor: ui,
       sections: ARRANGEMENTS[name],
       scope: name === "deck" ? "deck" : "slide",
@@ -82,14 +101,23 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
   }
 
   const plural = (count, one) => `${count} ${one}${count === 1 ? "" : "s"}`;
+  // A hint is the field's tooltip and the control's accessible description, never a paragraph under it.
   const field = (label, control, help) => {
-    const wrap = el("div", `${p}-field`);
+    const wrap = el("div", `${p}-field`, { title: help });
     const id = `${p}-f-${Math.random().toString(36).slice(2, 9)}`;
     control.id ||= id;
+    if (help) control.title = help;
     wrap.append(el("label", `${p}-field-label`, { for: control.id, text: label }), control);
-    if (help) { const note = el("p", `${p}-field-help`, { id: `${control.id}-help`, text: help }); wrap.append(note); control.setAttribute("aria-describedby", note.id); }
     return wrap;
   };
+  /** An action of the Studio's command registry: an icon button (or a text button with `text`), disabled with its reason, with its shortcut in its tooltip. */
+  const commandButton = (id, label, icon, { text = false, className = text ? `${p}-action` : "opf-dc-tool" } = {}) => {
+    const button = dom.button(className, { ...(text ? { text: label } : { label }), iconName: icon, size: text ? 14 : 16, attributes: { "data-command": id } });
+    setActionState(button, { label, ...studio.commandState(id) });
+    button.addEventListener("click", () => { if (button.getAttribute("aria-disabled") !== "true") studio.run(id); });
+    return button;
+  };
+  const toolbar = (label, buttons) => { const row = el("div", "opf-dc-toolbar", { role: "group", "aria-label": label }); row.append(...buttons); return row; };
   const section = (title) => { const node = el("section", `${p}-section`); node.append(el("h3", `${p}-section-title`, { text: title })); return node; };
   // A number field: the arrow keys step it (Shift for 10 steps), a drag on its label scrubs it (as in Figma), Enter or leaving commits it.
   function numberField(label, value, { min, max, step = 1, onCommit, help, name }) {
@@ -137,7 +165,7 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
     const mode = current.mode ?? "auto";
     const segmented = el("div", `${p}-segmented`, { role: "group", "aria-label": "Arrangement" });
     for (const [value, text, icon] of MODES) {
-      const button = dom.button(`${p}-segment`, { text, iconName: icon, size: 14, pressed: value === mode, attributes: { "data-field": `mode-${value}` } });
+      const button = dom.button(`${p}-segment`, { label: text, iconName: icon, size: 16, pressed: value === mode, attributes: { "data-field": `mode-${value}` } });
       button.addEventListener("click", () => {
         if (value === mode) return;
         const next = { ...current, mode: value };
@@ -153,11 +181,11 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
     body.append(modeWrap);
     if (mode === "grid") body.append(numberField("Columns", current.columns ?? container.columns, { min: 1, max: 6, name: "columns", onCommit: (value) => write({ ...current, columns: value, weights: undefined }, `Columns set to ${value ?? "auto"}`) }));
     body.append(
-      numberField("Gap", current.gap, { min: 0, max: 0.5, step: 0.01, name: "gap", help: "A share of the container's shorter side.", onCommit: (value) => write({ ...current, gap: value }, `Gap set to ${value ?? "auto"}`) }),
-      numberField("Padding", current.padding, { min: 0, max: 0.4, step: 0.01, name: "padding", onCommit: (value) => write({ ...current, padding: value }, `Padding set to ${value ?? "none"}`) }),
+      numberField("Gap", current.gap, { min: 0, max: 0.5, step: 0.01, name: "gap", help: "Share of the container's shorter side (0 to 0.5)", onCommit: (value) => write({ ...current, gap: value }, `Gap set to ${value ?? "auto"}`) }),
+      numberField("Padding", current.padding, { min: 0, max: 0.4, step: 0.01, name: "padding", help: "Share of the container's shorter side (0 to 0.4)", onCommit: (value) => write({ ...current, padding: value }, `Padding set to ${value ?? "none"}`) }),
     );
-    if (mode === "auto") body.append(el("p", `${p}-field-help`, { text: "Switch to Row, Column or Grid to set track sizes." }));
-    else if (container.tracks?.length >= 2) {
+    // Track weights exist in Row, Column and Grid; Auto has none to set.
+    if (mode !== "auto" && container.tracks?.length >= 2) {
       const weights = el("div", `${p}-weights`, { role: "group", "aria-label": "Track weights" });
       const tracks = container.tracks;
       const values = tracks.map((track, index) => current.weights?.[index] ?? track.weight ?? 1);
@@ -185,12 +213,7 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
     const actions = el("div", `${p}-actions`);
     const change = dom.button(`${p}-action`, { text: "Change layout", iconName: "Columns2", size: 14, attributes: { "aria-haspopup": "menu" } });
     change.addEventListener("click", () => studio.openSlideMenu(change, { apply: true }));
-    const edit = dom.button(`${p}-action`, { text: "Edit layout", iconName: "Pencil", size: 14 });
-    const verdict = studio.commandState("studio.layout.edit");
-    edit.disabled = !verdict.enabled;
-    if (!verdict.enabled) edit.title = verdict.reason;
-    edit.addEventListener("click", () => studio.run("studio.layout.edit"));
-    actions.append(change, edit);
+    actions.append(change, commandButton("studio.layout.edit", "Edit layout", "Pencil", { text: true }));
     body.append(actions);
     return body;
   }
@@ -201,13 +224,10 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
     add("Accepts", node.accepts?.length ? node.accepts.join(", ") : "Any content");
     add("Most blocks", node.max ? String(node.max) : "No limit");
     add("Holds now", plural(node.children.length, "block"));
-    body.append(rules, el("p", `${p}-field-help`, { text: "A region's rules belong to the layout. Edit the layout to change them." }));
-    const edit = dom.button(`${p}-action`, { text: "Edit layout", iconName: "Pencil", size: 14 });
-    const verdict = studio.commandState("studio.layout.edit");
-    edit.disabled = !verdict.enabled;
-    if (!verdict.enabled) edit.title = verdict.reason;
-    edit.addEventListener("click", () => studio.run("studio.layout.edit"));
-    body.append(edit);
+    const edit = commandButton("studio.layout.edit", "Edit layout", "Pencil", { text: true });
+    // A region's rules belong to the layout: the tooltip says where they change.
+    if (edit.getAttribute("aria-disabled") !== "true") edit.title = "Edit layout: the region's rules come from it";
+    body.append(rules, edit);
     return body;
   }
   function notesSection(node) {
@@ -227,26 +247,14 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
   }
   function multiSection(nodes) {
     const body = section(plural(nodes.length, "block"));
-    const actions = el("div", `${p}-actions`);
-    for (const [id, text, icon] of [["studio.group", "Group", "Group"], ["studio.duplicate", "Duplicate", "Copy"], ["studio.delete", "Delete", "Trash2"]]) {
-      const button = dom.button(`${p}-action`, { text, iconName: icon, size: 14 });
-      const verdict = studio.commandState(id);
-      button.disabled = !verdict.enabled;
-      if (!verdict.enabled) button.title = verdict.reason;
-      button.addEventListener("click", () => studio.run(id));
-      actions.append(button);
-    }
-    body.append(actions);
+    body.append(toolbar("Arrange", [["studio.group", "Group", "Group"], ["studio.duplicate", "Duplicate", "Copy"], ["studio.delete", "Delete", "Trash2"]].map(([id, label, icon]) => commandButton(id, label, icon))));
     return body;
   }
   function dataSection(node) {
     const body = section("Data");
-    const button = dom.button(`${p}-action`, { text: "Edit data", iconName: "Table", size: 14 });
-    const verdict = studio.commandState("studio.data.edit");
-    button.disabled = !verdict.enabled;
-    if (!verdict.enabled) button.title = verdict.reason;
-    button.addEventListener("click", () => studio.run("studio.data.edit"));
-    body.append(button, el("p", `${p}-field-help`, { text: `Opens the ${node.type === "chart" ? "chart's" : "table's"} values in a grid under the slide.` }));
+    const button = commandButton("studio.data.edit", "Edit data", "Table", { text: true });
+    if (button.getAttribute("aria-disabled") !== "true") button.title = `Edit the ${node.type === "chart" ? "chart's" : "table's"} values under the slide`;
+    body.append(button);
     return body;
   }
 
@@ -263,7 +271,7 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
     container.dataset.mode = next;
     head.replaceChildren(el("h2", `${p}-design-title`, { text: next === "deck" ? "Presentation" : next === "multi" ? plural(nodes.length, "block") : node.kind === "slide" ? studio.slideLabel(node) : node.label }));
     notice.hidden = !(studio.readOnly || !studio.inSync);
-    notice.textContent = studio.readOnly ? "This editor is read-only." : !studio.inSync ? "Fix the source text first: the slide shows the last valid document." : "";
+    notice.textContent = studio.readOnly ? "Read-only" : !studio.inSync ? "Source has errors: showing the last valid version" : "";
     container.toggleAttribute("inert", studio.readOnly || !studio.inSync);
     if (!typing) {
       own.replaceChildren();
@@ -274,7 +282,15 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
       else if (next === "region") own.append(regionSection(node));
       else if (next === "multi") own.append(multiSection(nodes));
       else if (next === "chart" || next === "table") own.append(dataSection(node));
-      else if (next === "heading" || next === "part") own.append(el("p", `${p}-field-help`, { text: next === "heading" ? "Edit the heading's text on the slide (double-click, Enter or F2). Its style comes from the theme." : "A part of a block: select the whole block (Esc) to arrange it." }));
+      else if (next === "heading") own.append(toolbar("Heading", [commandButton("studio.text.edit", "Edit text", "Pencil", { text: true })]));
+      else if (next === "part") own.append(toolbar("Part", [commandButton("studio.select.parent", "Select block", "MousePointer2", { text: true })]));
+    }
+    // The arrange toolbar and the content type come first for a block; a slide's layout and the deck's look come before the shared sections.
+    const sharedFirst = SHARED_FIRST.has(next);
+    // 4 is DOCUMENT_POSITION_FOLLOWING: `own` comes after `shared`.
+    if (sharedFirst !== Boolean(shared.compareDocumentPosition(own) & 4)) {
+      if (sharedFirst) container.insertBefore(shared, own);
+      else container.insertBefore(own, shared);
     }
     const arrangement = next === "deck" ? "deck" : next === "slide" ? "slide" : next === "image" ? "image" : next === "table" ? "table" : ["block", "list", "chart", "group", "promoted"].includes(next) ? "block" : null;
     for (const [name, entry] of panels) entry.host.hidden = name !== arrangement;
@@ -294,6 +310,10 @@ export function createStudioDesign(container, { dom, ui, studio, catalogs, desig
     // Advanced: the node's other fields through the schema inspector, made when opened.
     const path = node && node.kind !== "region" ? dottedPath(node.path) : "";
     advanced.hidden = next === "multi" || next === "region";
+    pathChip.hidden = !path;
+    pathChip.dataset.path = path;
+    pathChip.setAttribute("aria-label", `Copy path ${path}`);
+    pathChip.replaceChildren(el("code", "", { text: path }), dom.icon("Copy", 14));
     if (advanced.open && path !== inspectorPath) mountInspector(path);
   }
   async function mountInspector(path) {
