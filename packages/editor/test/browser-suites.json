@@ -314,6 +314,9 @@
         {
           "id": "browser:editor-expand",
           "command": "node test/editor-expand-browser.mjs"
+    },
+          "id": "browser:thumbnail-strip-actions",
+          "command": "node test/thumbnail-strip-actions-browser.mjs"
         }
       ]
     }
