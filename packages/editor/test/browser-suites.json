@@ -291,6 +291,10 @@
         {
           "id": "browser:studio-perf",
           "command": "node test/studio-perf-browser.mjs"
+        },
+        {
+          "id": "browser:editor-expand",
+          "command": "node test/editor-expand-browser.mjs"
         }
       ]
     }

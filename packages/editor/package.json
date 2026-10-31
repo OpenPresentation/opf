@@ -263,6 +263,10 @@
       "types": "./dist/agent-handoff-dialog.d.ts",
       "default": "./dist/agent-handoff-dialog.js"
     },
+    "./editor-expand": {
+      "types": "./dist/editor-expand.d.ts",
+      "default": "./dist/editor-expand.js"
+    },
     "./slide-navigator": {
       "types": "./dist/slide-navigator.d.ts",
       "default": "./dist/slide-navigator.js"
