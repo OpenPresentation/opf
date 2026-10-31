@@ -1,0 +1,44 @@
+/* The review pill (src/review-pill.js). Uses only --opf-ui-* tokens. State is never color alone: every state has a glyph and words. */
+.opf-review-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  height: var(--opf-ui-control-h);
+  min-height: 0;
+  max-width: 100%;
+  padding: 0 10px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: calc(var(--opf-ui-control-h) / 2);
+  background: var(--opf-ui-surface);
+  color: var(--opf-ui-fg);
+  font: 500 12px/1 var(--opf-ui-font);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--opf-ui-ease), background-color var(--opf-ui-ease), border-color var(--opf-ui-ease);
+}
+.opf-review-pill[data-density="touch"] { height: 40px; }
+.opf-review-pill:hover:not(:disabled) { background: var(--opf-ui-muted); border-color: var(--opf-ui-border-strong); }
+.opf-review-pill:focus-visible { outline: 2px solid var(--opf-ui-ring); outline-offset: 2px; }
+.opf-review-pill:disabled { cursor: default; }
+.opf-review-pill-icon { flex: none; width: 14px; height: 14px; }
+.opf-review-pill[data-density="touch"] .opf-review-pill-icon { width: 16px; height: 16px; }
+.opf-review-pill-text { overflow: hidden; text-overflow: ellipsis; }
+
+.opf-review-pill[data-state="valid"] .opf-review-pill-icon { color: var(--opf-ui-success); }
+.opf-review-pill[data-state="checking"],
+.opf-review-pill[data-state="unavailable"] { color: var(--opf-ui-muted-fg); }
+.opf-review-pill[data-state="unavailable"] { border-style: dashed; opacity: 0.8; }
+.opf-review-pill[data-severity="error"] { border-color: var(--opf-ui-danger); }
+.opf-review-pill[data-severity="error"] .opf-review-pill-icon { color: var(--opf-ui-danger); }
+.opf-review-pill[data-severity="warning"] { border-color: var(--opf-ui-warn); }
+.opf-review-pill[data-severity="warning"] .opf-review-pill-icon { color: var(--opf-ui-warn); }
+.opf-review-pill[data-severity="info"] .opf-review-pill-icon { color: var(--opf-ui-accent-strong); }
+
+@media (prefers-reduced-motion: reduce) {
+  .opf-review-pill { transition: none; }
+}
+@media (forced-colors: active) {
+  .opf-review-pill { border-color: ButtonText; }
+  .opf-review-pill:disabled { border-color: GrayText; color: GrayText; }
+}
