@@ -307,6 +307,14 @@
       "types": "./dist/workspace.d.ts",
       "default": "./dist/workspace.js"
     },
+    "./element": {
+      "types": "./dist/element.d.ts",
+      "default": "./dist/element.js"
+    },
+    "./element/define": {
+      "types": "./dist/element-define.d.ts",
+      "default": "./dist/element-define.js"
+    },
     "./canvas-variables": {
       "types": "./dist/canvas-variables.d.ts",
       "default": "./dist/canvas-variables.js"
@@ -315,7 +323,8 @@
   "types": "./dist/index.d.ts",
   "sideEffects": [
     "./dist/source-worker.js",
-    "./dist/styles.css"
+    "./dist/styles.css",
+    "./dist/element-define.js"
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
@@ -367,7 +376,8 @@
     "test:export-menu-browser": "node test/export-menu-browser.mjs",
     "test:agent-handoff-browser": "node test/agent-handoff-browser.mjs",
     "test:workspace-browser": "node test/workspace-browser.mjs",
-    "test:workspace-react-browser": "node test/workspace-react-browser.mjs"
+    "test:workspace-react-browser": "node test/workspace-react-browser.mjs",
+    "test:element-browser": "node test/element-browser.mjs"
   },
   "dependencies": {
     "@codemirror/autocomplete": "^6.20.4",

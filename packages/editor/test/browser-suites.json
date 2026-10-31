@@ -259,6 +259,9 @@
         {
           "id": "browser:workspace-toolbar",
           "command": "node test/workspace-toolbar-browser.mjs"
+    },
+          "id": "browser:element",
+          "command": "node test/element-browser.mjs"
         },
         {
           "id": "browser:handle-before-mount",
