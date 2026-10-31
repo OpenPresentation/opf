@@ -515,6 +515,8 @@ try {
   const inner = await frame.evaluate(() => { const rect = document.getElementById('fed').getBoundingClientRect(); return { rect: [rect.left, rect.top, rect.width, rect.height], viewport: [document.documentElement.clientWidth, window.innerHeight], overflow: getComputedStyle(document.documentElement).overflow, active: document.activeElement.className }; });
   assert.deepEqual(inner.rect, [0, 0, ...inner.viewport], 'inside the iframe the overlay fills the iframe');
   assert.equal(inner.overflow, 'hidden', 'the iframe document is locked');
+  assert.equal(await frame.evaluate(() => document.getElementById('fout').hasAttribute('inert')), true, 'inside the iframe the page outside the editor is inert');
+  assert.equal(await page.evaluate(() => document.querySelectorAll('[inert]').length), 0, 'the outer page has no inert');
   assert.equal(inner.active, 'opf-expand-button opf-ui', 'the focus is in the iframe');
   assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).overflow), 'visible', 'the outer page is not locked');
   assert.equal(await page.evaluate(() => document.documentElement.hasAttribute('style')), false);
@@ -525,6 +527,7 @@ try {
   await frame.page().keyboard.press('Escape');
   assert.equal(await page.evaluate(() => window.fctl.expanded), false, 'Escape in the iframe collapses');
   assert.equal(await frame.evaluate(() => document.documentElement.getAttribute('style')), null);
+  assert.equal(await frame.evaluate(() => document.querySelectorAll('[inert]').length), 0, 'the iframe marks are gone');
   assert.equal(await frame.evaluate(() => document.activeElement.className), 'opf-expand-button opf-ui', 'the focus returned to the button inside the iframe');
   assert.deepEqual(errors, []);
   mark('iframe: the overlay, scroll lock, Escape and focus use the iframe document; the outer page is untouched');
@@ -556,6 +559,104 @@ try {
   assert.equal(await page.evaluate(() => window.tctl.expanded), false, 'tap collapses');
   assert.deepEqual(errors, []);
   mark('touch: 44px under a coarse pointer for both densities; tap expands and collapses at phone size');
+} finally {
+  await app.browser.close();
+}
+
+// ---------------------------------------------------------------------------------------------------------------------------------------
+// Part 5: the page behind the overlay is inert (inertOutside, keep).
+app = await start();
+try {
+  const { page, errors } = app;
+  await page.evaluate(() => {
+    document.body.insertAdjacentHTML('beforeend', `
+      <div id="host-toolbar"><button id="tb">Host toolbar</button></div>
+      <div id="pre" inert><button id="pre-btn">page inert</button></div>
+      <div id="deep"><div id="deep-a"><button id="keepme">kept</button></div><button id="deep-b">deep b</button></div>
+      <template id="tpl"></template><style id="st"></style><script id="sc"></script>`);
+    const { createExpandController } = window.opfExpand;
+    const name = (node) => node.id || node.tagName;
+    window.ids = () => [...document.querySelectorAll('[inert]')].map(name).sort();
+    // What a full mark would be: every other child of body that is content (the spacer has no id).
+    window.otherChildren = () => [...document.body.children].filter((node) => node.id !== 'ed' && !['SCRIPT', 'STYLE', 'TEMPLATE'].includes(node.tagName)).map(name).sort();
+    window.plain = createExpandController(document.getElementById('ed'));
+    window.kept = createExpandController(document.getElementById('ed'), { keep: () => [document.getElementById('keepme')] });
+    window.off = createExpandController(document.getElementById('ed'), { inertOutside: false });
+    window.second = createExpandController(document.getElementById('ed2'));
+  });
+  const inertIds = () => page.evaluate(() => window.ids());
+  const where = () => page.evaluate(() => { const active = document.activeElement; return active.closest('#ed') ? 'in-editor' : (active === document.body || active === document.documentElement ? 'body' : active.id || active.tagName); });
+  assert.deepEqual(await inertIds(), ['pre'], 'only the page\'s own inert at first');
+
+  // The default: everything outside the target is inert; the page's own inert is untouched; non-content elements are skipped.
+  await page.evaluate(() => window.plain.expand());
+  assert.deepEqual(await inertIds(), await page.evaluate(() => window.otherChildren()), 'every sibling of the target is inert');
+  assert.equal(await page.evaluate(() => ['tpl', 'st', 'sc'].some((id) => document.getElementById(id).hasAttribute('inert'))), false, 'template, style and script are left alone');
+  assert.equal(await page.evaluate(() => document.getElementById('ed').hasAttribute('inert') || document.body.hasAttribute('inert')), false, 'the target and body are not inert');
+  // Tab cycles only inside the editor.
+  await page.locator('#plain').evaluate((node) => node.focus());
+  const seen = new Set();
+  for (let step = 0; step < 24; step++) { await page.keyboard.press('Tab'); seen.add(await where()); }
+  assert.deepEqual([...seen].filter((name) => name !== 'in-editor' && name !== 'body'), [], 'Tab never leaves the editor while expanded');
+  assert.ok(seen.has('in-editor'));
+  const seenBack = new Set();
+  for (let step = 0; step < 24; step++) { await page.keyboard.press('Shift+Tab'); seenBack.add(await where()); }
+  assert.deepEqual([...seenBack].filter((name) => name !== 'in-editor' && name !== 'body'), [], 'Shift+Tab never leaves the editor');
+  mark('inert: every sibling of the target is inert, template/style/script and the page\'s own inert are left alone, Tab and Shift+Tab stay in the editor');
+  await page.evaluate(() => window.plain.collapse());
+  assert.deepEqual(await inertIds(), ['pre'], 'collapse restores exactly: the page\'s own inert stays, ours is gone');
+  mark('inert: collapse removes only the marks it made; the page\'s own inert stays');
+
+  // keep: an element outside stays reachable, with its containers; its siblings do not.
+  await page.evaluate(() => window.kept.expand());
+  assert.equal(await page.evaluate(() => ['keepme', 'deep', 'deep-a'].some((id) => document.getElementById(id).hasAttribute('inert'))), false, 'the kept element and its containers are not inert');
+  assert.equal(await page.evaluate(() => document.getElementById('deep-b').hasAttribute('inert')), true, 'what is next to a kept element is');
+  assert.equal(await page.evaluate(() => ['opener', 'host-toolbar', 'top', 'wrapper'].every((id) => document.getElementById(id).hasAttribute('inert'))), true);
+  await page.locator('#plain').evaluate((node) => node.focus());
+  const reached = new Set();
+  for (let step = 0; step < 24; step++) { await page.keyboard.press('Tab'); reached.add(await where()); }
+  assert.ok(reached.has('keepme'), 'Tab reaches the kept element');
+  assert.deepEqual([...reached].filter((name) => !['in-editor', 'body', 'keepme'].includes(name)), [], 'and nothing else outside');
+  await page.evaluate(() => window.kept.collapse());
+  assert.deepEqual(await inertIds(), ['pre']);
+  // An array, with a null and an element inside the target (nothing to keep there) in it.
+  await page.evaluate(() => { window.arr = window.opfExpand.createExpandController(document.getElementById('ed'), { keep: [document.getElementById('tb'), document.getElementById('plain'), null] }); window.arr.expand(); });
+  assert.deepEqual(await inertIds(), (await page.evaluate(() => window.otherChildren())).filter((id) => id !== 'host-toolbar'), 'keep as an array: the toolbar container is not inert');
+  await page.evaluate(() => window.arr.destroy());
+  assert.deepEqual(await inertIds(), ['pre'], 'destroy while expanded restores');
+  mark('inert: keep (a function or an array) leaves a toolbar outside the target reachable by Tab, its containers un-inert and its siblings inert; destroy restores');
+
+  // inertOutside: false.
+  await page.evaluate(() => window.off.expand());
+  assert.deepEqual(await inertIds(), ['pre'], 'inertOutside: false marks nothing');
+  await page.evaluate(() => window.off.collapse());
+  mark('inert: inertOutside false marks nothing');
+
+  // Hand-over between two controllers.
+  await page.evaluate(() => window.plain.expand());
+  const first = await inertIds();
+  assert.ok(first.includes('wrapper') && !first.includes('ed'));
+  await page.evaluate(() => window.second.expand());
+  assert.equal(await page.evaluate(() => window.plain.expanded), false);
+  const handed = await inertIds();
+  assert.ok(handed.includes('ed') && handed.includes('pre') && handed.includes('opener'), 'the incoming editor marks the page, including the outgoing editor\'s element');
+  assert.ok(!handed.includes('wrapper') && !handed.includes('ed2'), 'and leaves its own ancestors alone: no mark of the outgoing editor remains');
+  await page.evaluate(() => window.second.collapse());
+  assert.deepEqual(await inertIds(), ['pre'], 'after the hand-over and a collapse only the page\'s own inert is left');
+  mark('inert: hand-over between two editors leaves no stale mark and never touches the page\'s own inert');
+
+  // An element added while expanded is not tracked (documented); a mounted presenter is left usable.
+  await page.evaluate(() => window.plain.expand());
+  await page.evaluate(() => { const late = document.createElement('button'); late.id = 'late'; document.body.append(late); });
+  assert.equal(await page.evaluate(() => document.getElementById('late').hasAttribute('inert')), false, 'an element added while expanded is not inert (documented)');
+  await page.evaluate(() => { window.plain.destroy(); document.getElementById('late').remove(); });
+  assert.deepEqual(await inertIds(), ['pre']);
+  await page.evaluate(() => { const node = document.createElement('div'); node.className = 'opf-presenter'; node.id = 'pres'; node.hidden = true; document.body.append(node); window.second.expand(); });
+  assert.equal(await page.evaluate(() => document.getElementById('pres').hasAttribute('inert')), false, 'a mounted presenter is not made inert');
+  await page.evaluate(() => window.second.collapse());
+  assert.deepEqual(await inertIds(), ['pre']);
+  mark('inert: an element added while expanded and a mounted presenter are not made inert');
+  assert.deepEqual(errors, []);
 } finally {
   await app.browser.close();
 }
