@@ -133,6 +133,10 @@
       ],
       "tests": [
         {
+          "id": "browser:deck-title",
+          "command": "node test/deck-title-browser.mjs"
+        },
+        {
           "id": "browser:import-font-wait",
           "command": "node test/import-font-wait-browser.mjs"
         },

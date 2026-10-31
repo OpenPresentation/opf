@@ -216,3 +216,13 @@
     min-height: 44px;
   }
 }
+
+/* ---- deck title (CE-28): the presentation name field ---------------------------------------------------------------------------- */
+@media (pointer: coarse) {
+  .opf-title-input,
+  .opf-title[data-density="touch"] .opf-title-input {
+    height: auto;
+    min-height: 44px;
+    font-size: 16px;
+  }
+}

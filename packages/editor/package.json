@@ -267,6 +267,10 @@
       "types": "./dist/slide-navigator.d.ts",
       "default": "./dist/slide-navigator.js"
     },
+    "./deck-title": {
+      "types": "./dist/deck-title.d.ts",
+      "default": "./dist/deck-title.js"
+    },
     "./thumbnail-strip": {
       "types": "./dist/thumbnail-strip.d.ts",
       "default": "./dist/thumbnail-strip.js"

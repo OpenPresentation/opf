@@ -1,0 +1,58 @@
+/* Deck title (CE-28). Uses only --opf-ui-* tokens. */
+.opf-title {
+  display: inline-flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  font-family: var(--opf-ui-font);
+}
+.opf-title-input {
+  box-sizing: border-box;
+  field-sizing: content;
+  min-width: 6ch;
+  max-width: 100%;
+  height: var(--opf-ui-control-h);
+  margin: 0;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: var(--opf-ui-radius);
+  background: transparent;
+  color: var(--opf-ui-fg);
+  font: 600 15px/1.2 var(--opf-ui-font);
+  text-overflow: ellipsis;
+  transition: border-color var(--opf-ui-ease), background-color var(--opf-ui-ease);
+}
+.opf-title[data-density="touch"] .opf-title-input {
+  height: 40px;
+}
+.opf-title-input::placeholder {
+  color: var(--opf-ui-muted-fg);
+  font-weight: 500;
+  opacity: 1;
+}
+.opf-title-input:hover:not([readonly]) {
+  border-color: var(--opf-ui-border);
+}
+.opf-title-input:focus {
+  border-color: var(--opf-ui-ring);
+  background: var(--opf-ui-surface);
+  outline: 2px solid var(--opf-ui-ring);
+  outline-offset: 1px;
+  text-overflow: clip;
+}
+.opf-title-input[readonly] {
+  cursor: default;
+}
+.opf-title-input[readonly]:focus {
+  background: transparent;
+  border-color: transparent;
+}
+.opf-title-input[aria-disabled="true"] {
+  color: var(--opf-ui-muted-fg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .opf-title-input {
+    transition: none;
+  }
+}
