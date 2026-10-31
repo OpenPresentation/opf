@@ -216,3 +216,12 @@
     min-height: 44px;
   }
 }
+
+/* ---- CE-28: the expand-editor button (src/editor-expand.js) ---------------------------------------------------------------------- */
+@media (pointer: coarse) {
+  .opf-expand-button,
+  .opf-expand-button[data-density="touch"] {
+    width: 44px;
+    height: 44px;
+  }
+}
