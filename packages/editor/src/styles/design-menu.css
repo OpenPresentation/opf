@@ -1,0 +1,191 @@
+/* CE-29: the Design quick menu (src/design-menu.js). Only --opf-ui-* tokens, no color literals (test/styles.mjs). */
+.opf-design-menu,
+.opf-design-menu *,
+.opf-design-menu *::before,
+.opf-design-menu *::after { box-sizing: border-box; }
+.opf-design-menu [hidden] { display: none !important; }
+
+.opf-design-menu {
+  --opf-design-menu-row: 32px;
+  position: relative;
+  display: inline-flex;
+  font-family: var(--opf-ui-font);
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--opf-ui-fg);
+}
+.opf-design-menu[data-density="touch"] { --opf-design-menu-row: 40px; }
+:where(.opf-design-menu button) { font: inherit; color: inherit; margin: 0; }
+.opf-design-menu .opf-icon { flex: none; }
+.opf-design-menu button:focus-visible {
+  outline: 2px solid var(--opf-ui-ring);
+  outline-offset: -2px;
+}
+
+/* ---- the toolbar button ------------------------------------------------------------------------------------------------------------- */
+.opf-design-menu .opf-design-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--opf-ui-control-h);
+  padding: 0 10px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius);
+  background: var(--opf-ui-surface);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--opf-ui-ease), border-color var(--opf-ui-ease);
+}
+.opf-design-menu .opf-design-menu-trigger:hover { background: var(--opf-ui-muted-2); border-color: var(--opf-ui-border-strong); }
+.opf-design-menu .opf-design-menu-trigger[aria-expanded="true"] { background: var(--opf-ui-muted); }
+.opf-design-menu .opf-design-menu-trigger:focus-visible { outline-offset: 2px; }
+.opf-design-menu .opf-design-menu-trigger:disabled { opacity: 0.5; cursor: not-allowed; }
+.opf-design-menu[data-density="touch"] .opf-design-menu-trigger { height: max(var(--opf-ui-control-h), 40px); }
+
+/* ---- the popover ---------------------------------------------------------------------------------------------------------------------- */
+.opf-design-menu .opf-design-menu-popover {
+  position: fixed;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  width: 296px;
+  max-width: calc(100vw - 16px);
+  background: var(--opf-ui-surface);
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-md);
+  box-shadow: var(--opf-ui-shadow-pop);
+  overflow: hidden;
+}
+.opf-design-menu .opf-design-menu-handle,
+.opf-design-menu .opf-design-menu-head { display: none; }
+.opf-design-menu .opf-design-menu-menu {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 4px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.opf-design-menu .opf-design-menu-group + .opf-design-menu-group {
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--opf-ui-border);
+}
+.opf-design-menu .opf-design-menu-group-label {
+  padding: 6px 8px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--opf-ui-muted-fg);
+}
+.opf-design-menu .opf-design-menu-list {
+  max-height: calc(var(--opf-design-menu-row) * 5.5);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.opf-design-menu .opf-design-menu-empty { margin: 0; padding: 12px 8px; color: var(--opf-ui-muted-fg); }
+
+.opf-design-menu .opf-design-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  min-height: var(--opf-design-menu-row);
+  padding: 0 8px;
+  border: 0;
+  border-radius: var(--opf-ui-radius);
+  background: transparent;
+  text-align: start;
+  cursor: pointer;
+  transition: background-color var(--opf-ui-ease);
+}
+.opf-design-menu .opf-design-menu-item:hover { background: var(--opf-ui-muted-2); }
+.opf-design-menu .opf-design-menu-item:focus-visible { background: var(--opf-ui-muted); }
+.opf-design-menu .opf-design-menu-item[aria-checked="true"] { background: var(--opf-ui-muted); font-weight: 600; }
+.opf-design-menu .opf-design-menu-label { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.opf-design-menu .opf-design-menu-check { display: inline-flex; flex: none; width: 14px; color: var(--opf-ui-accent-strong); }
+.opf-design-menu .opf-design-menu-item[aria-checked="false"] .opf-design-menu-check { visibility: hidden; }
+.opf-design-menu .opf-design-menu-more {
+  margin-top: 4px;
+  border-top: 1px solid var(--opf-ui-border);
+  border-radius: 0 0 var(--opf-ui-radius) var(--opf-ui-radius);
+  color: var(--opf-ui-accent-strong);
+}
+
+.opf-design-menu .opf-design-menu-swatches { display: inline-flex; flex: none; gap: 2px; }
+.opf-design-menu .opf-design-menu-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: var(--opf-ui-radius-sm);
+  border: 1px solid var(--opf-ui-border-strong);
+}
+
+/* Screen-reader only. */
+.opf-design-menu .opf-design-menu-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- the bottom sheet (a phone, or a button that is not on screen) --------------------------------------------------------------------- */
+.opf-design-menu .opf-design-menu-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--opf-ui-fg) 32%, transparent);
+}
+.opf-design-menu[data-mode="sheet"] .opf-design-menu-popover {
+  z-index: 51;
+  inset: auto 0 0 0;
+  width: auto;
+  max-width: 560px;
+  max-height: 85vh;
+  max-height: 85dvh;
+  margin-inline: auto;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+  border-width: 1px 0 0;
+  border-radius: var(--opf-ui-radius-lg) var(--opf-ui-radius-lg) 0 0;
+}
+.opf-design-menu[data-mode="sheet"] .opf-design-menu-handle {
+  display: block;
+  flex: none;
+  width: 36px;
+  height: 4px;
+  margin: 8px auto 4px;
+  border-radius: 2px;
+  background: var(--opf-ui-border-strong);
+}
+.opf-design-menu[data-mode="sheet"] .opf-design-menu-head {
+  display: flex;
+  flex: none;
+  align-items: center;
+  padding: 0 8px 0 16px;
+}
+.opf-design-menu .opf-design-menu-title { font-size: 15px; font-weight: 600; }
+.opf-design-menu .opf-design-menu-close {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-inline-start: auto;
+  border: 0;
+  border-radius: var(--opf-ui-radius);
+  background: transparent;
+  color: var(--opf-ui-muted-fg);
+  cursor: pointer;
+}
+.opf-design-menu .opf-design-menu-close:hover { background: var(--opf-ui-muted-2); color: var(--opf-ui-fg); }
+.opf-design-menu[data-mode="sheet"] .opf-design-menu-item { padding: 0 12px; font-size: 14px; }
+.opf-design-menu[data-mode="sheet"] .opf-design-menu-list { max-height: calc(var(--opf-design-menu-row) * 4.5); }
+
+@media (prefers-reduced-motion: reduce) {
+  .opf-design-menu *,
+  .opf-design-menu *::before,
+  .opf-design-menu *::after { transition: none !important; }
+}
