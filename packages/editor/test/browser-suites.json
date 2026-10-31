@@ -259,7 +259,8 @@
         {
           "id": "browser:workspace-toolbar",
           "command": "node test/workspace-toolbar-browser.mjs"
-    },
+        },
+        {
           "id": "browser:element",
           "command": "node test/element-browser.mjs"
         },
@@ -278,7 +279,8 @@
         {
           "id": "browser:design-menu",
           "command": "node test/design-menu-browser.mjs"
-    },
+        },
+        {
           "id": "browser:review-pill",
           "command": "node test/review-pill-browser.mjs"
         },
@@ -317,7 +319,8 @@
         {
           "id": "browser:editor-expand",
           "command": "node test/editor-expand-browser.mjs"
-    },
+        },
+        {
           "id": "browser:thumbnail-strip-actions",
           "command": "node test/thumbnail-strip-actions-browser.mjs"
         }
