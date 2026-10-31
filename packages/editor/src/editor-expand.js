@@ -88,7 +88,14 @@ const internals = new WeakMap();
  *
  * Options: `onChange({ expanded })`, `fullscreen` (also ask the browser for full screen on `target`; best effort, the overlay is the fallback, and
  * the editor collapses when the browser leaves full screen by itself), `labels` (`expand`, `collapse`, `escape`, `expanded`, `collapsed`) and
- * `onStatus(message)` (screen-reader status lines for the two transitions).
+ * `onStatus(message)` (screen-reader status lines for the two transitions), `inertOutside` (default true: while expanded, everything on the page
+ * outside `target` is made `inert`, so keyboard and screen-reader users cannot reach what the overlay hides) and `keep` (elements, or a function
+ * returning them, that stay interactive: a toolbar the host mounted outside `target`; read when the editor expands).
+ *
+ * Inert is applied to the siblings of `target` and of each of its ancestors, up to `body`; a sibling that contains a kept element is entered instead.
+ * Elements that are already `inert`, `script`, `style` and `template` are left alone, and so is a running or mounted presenter (`.opf-presenter`).
+ * Exactly the elements this controller marked are restored on collapse, destroy and hand-over. It is a snapshot: an element added to the page while
+ * the editor is expanded (a menu appended to `body`) is not inert.
  *
  * Returns `{ expanded, expand(on = true), collapse(), toggle(), destroy() }`. The three methods return the resulting state.
  */
@@ -98,6 +105,8 @@ export function createExpandController(target, options = {}) {
   const labels = { ...DEFAULT_LABELS, ...(options.labels ?? {}) };
   const { onChange, onStatus } = options;
   const wantsFullscreen = options.fullscreen === true;
+  const inertOutside = options.inertOutside !== false;
+  let inertMarks = [];
   const subscribers = new Set();
   const yielded = new WeakSet(); // Escape events a typing field, menu, dialog or the presenter owns (decided before anyone handles them)
   let expanded = false, destroyed = false, enteredFullscreen = false, addedTabindex = false, returnTo = null, hinted = null;
@@ -167,6 +176,29 @@ export function createExpandController(target, options = {}) {
     if (enteredFullscreen) leave({ exitFullscreen: false });
   }
 
+  // ---- inert -----------------------------------------------------------------------------------------------------------------------------
+  const INERT_SKIP = new Set(["SCRIPT", "STYLE", "TEMPLATE"]);
+  function applyInert() {
+    const root = doc.body;
+    if (!inertOutside || !root || !root.contains(target) || target === root) return;
+    const wanted = typeof options.keep === "function" ? options.keep() : options.keep;
+    // A mounted presenter lives outside the editor and must stay usable when it is opened from the expanded editor.
+    const keeps = [...(wanted ? Array.from(wanted) : []), ...doc.querySelectorAll(".opf-presenter")].filter((node) => node?.nodeType === 1 && !target.contains(node) && !node.contains(target));
+    const visit = (node) => {
+      if (INERT_SKIP.has(node.tagName) || node.hasAttribute("inert") || keeps.includes(node)) return;
+      if (keeps.some((kept) => node.contains(kept))) { for (const child of node.children) visit(child); return; }
+      node.setAttribute("inert", "");
+      inertMarks.push(node);
+    };
+    for (let current = target; current !== root; current = current.parentElement) {
+      for (const sibling of current.parentElement.children) if (sibling !== current) visit(sibling);
+    }
+  }
+  function removeInert() {
+    for (const node of inertMarks) node.removeAttribute("inert");
+    inertMarks = [];
+  }
+
   // ---- Escape -----------------------------------------------------------------------------------------------------------------------------
   // Two listeners: the capture one decides whether Escape belongs to something else (the state of a menu or the presenter is gone once their own
   // handler ran); the bubbling one collapses unless the event was handled by then.
@@ -197,6 +229,7 @@ export function createExpandController(target, options = {}) {
     expanded = true;
     target.setAttribute("data-opf-expanded", "true");
     lockScroll(doc);
+    applyInert();
     doc.addEventListener("keydown", onKeydownCapture, true);
     doc.addEventListener("keydown", onKeydown, false);
     doc.addEventListener("fullscreenchange", onFullscreenChange);
@@ -212,6 +245,7 @@ export function createExpandController(target, options = {}) {
     target.removeAttribute("data-opf-expanded");
     if (addedTabindex) { target.removeAttribute("tabindex"); addedTabindex = false; }
     unlockScroll(doc);
+    removeInert();
     doc.removeEventListener("keydown", onKeydownCapture, true);
     doc.removeEventListener("keydown", onKeydown, false);
     if (enteredFullscreen) {
