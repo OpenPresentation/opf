@@ -7,6 +7,9 @@ import { retainedSlideIndex } from '../dist/slide-retention.js';
 import { parseSourceText, reportSource } from '../dist/workspace-source.js';
 import { layoutOptionsFor, describeFontChange, fontSubstitutionNotes } from '../dist/workspace-measure.js';
 import { gallery } from '@openpresentation/gallery';
+import { TOOLBAR_ITEMS, normalizeToolbarItems } from '../dist/toolbar.js';
+import { TOOLBAR_PRESETS } from '../dist/workspace-shell.js';
+import { opfDeckName } from '../dist/svelte.js';
 
 // CE-06, the parts of the embeddable editor that need no browser: the theme contract against the stylesheet and its document, the slide kept by its
 // id, the verdict on the text of the source pane, and the measurement helpers. test/workspace-browser.mjs mounts the whole editor.
@@ -107,5 +110,32 @@ assert.deepEqual(fontSubstitutionNotes({ substitutions: [
   { requestedFamily: 'Calibri', requestedWeight: 400, italic: false, resolvedFamily: 'Carlito', resolvedWeight: 400, compatibility: 'metric' },
 ] }).length, 1, 'one note per requested face');
 assert.deepEqual(fontSubstitutionNotes(undefined), []);
+
+// ---- CE-28: the toolbar's items, the presets and the Svelte deck-name store ------------------------------------------------------------
+assert.deepEqual(normalizeToolbarItems(['title', { id: 'export', priority: 3 }, 'spacer', 'spacer', '|', 'more']).map(({ id, priority, collapsible }) => [id, priority, collapsible]), [
+  ['title', TOOLBAR_ITEMS.title.priority, false], ['export', 3, true], ['spacer', 0, false], ['spacer', 0, false], ['|', 0, false], ['more', 100, false],
+], 'names and { id, priority }; spacer and | repeat; more never collapses');
+assert.throws(() => normalizeToolbarItems(['nope']), /"nope" is not a toolbar item/);
+assert.throws(() => normalizeToolbarItems(['find', 'find']), /given twice/);
+assert.throws(() => normalizeToolbarItems([{ id: 'find', priority: 'high' }]), /must be a number/);
+assert.throws(() => normalizeToolbarItems('title'), /must be an array/);
+assert.deepEqual([...TOOLBAR_PRESETS.full], ['title', 'history', 'find', 'views', 'spacer', 'autosave', 'export', 'present', 'expand', 'more']);
+assert.deepEqual([...TOOLBAR_PRESETS.embed], ['title', 'history', 'counter', 'spacer', 'expand', 'present', 'more']);
+for (const preset of Object.values(TOOLBAR_PRESETS)) normalizeToolbarItems(preset);
+{
+  const listeners = new Set();
+  let name = 'First';
+  const fake = { getDeckName: () => name, setDeckName: (next) => { const previous = name; name = next.trim(); for (const listener of listeners) listener({ name, previous }); return true; }, on: (event, listener) => { assert.equal(event, 'deckName'); listeners.add(listener); return () => listeners.delete(listener); } };
+  const store = opfDeckName(fake);
+  const seen = [];
+  const stop = store.subscribe((value) => seen.push(value));
+  assert.equal(store.set('Second'), true);
+  store.update((value) => value + ' again');
+  stop();
+  store.set('Unheard');
+  assert.deepEqual(seen, ['First', 'Second', 'Second again'], 'the store starts with the name, follows deckName and stops when unsubscribed');
+  assert.equal(listeners.size, 0);
+  assert.throws(() => opfDeckName({}), /needs an editor/);
+}
 
 console.log('workspace unit checks passed');

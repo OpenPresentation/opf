@@ -135,7 +135,7 @@ try {
   assert.equal(await more.getAttribute('aria-expanded'), 'true');
   const menu = await ev(() => ({ role: document.querySelector('.opf-tb-menu').getAttribute('role'), labels: [...document.querySelectorAll('.opf-tb-menu [role^=menuitem]')].map((node) => node.textContent), focused: document.activeElement.textContent, checked: document.querySelector('[data-opf-toolbar-menu-item="view:slide"]')?.getAttribute('aria-checked') }));
   assert.equal(menu.role, 'menu');
-  assert.ok(menu.labels.includes('Find…') && menu.labels.includes('Sorter'), menu.labels.join(' | '));
+  assert.ok(menu.labels.includes('Sorter') && menu.labels.includes('Outline'), menu.labels.join(' | '));
   assert.equal(menu.focused, menu.labels[0], 'opening focuses the first item');
   assert.equal(menu.checked, 'true', 'the view on show is checked');
   await page.keyboard.press('ArrowDown');
@@ -156,6 +156,9 @@ try {
   assert.equal(await ev(() => window.ed.view), 'sorter', 'Enter runs the item');
   assert.equal(await ev(() => document.querySelector('.opf-tb-menu').hidden), true);
   await ev(() => window.ed.setView('slide'));
+  // Narrower, Find goes too; run from the menu, it opens its panel and keeps the focus there (the menu does not take it back).
+  await ev(() => { document.querySelector('#host').style.width = '420px'; });
+  await page.waitForFunction(() => window.ed.toolbar.collapsed.includes('find'), undefined, { timeout: 5000 });
   await more.click();
   await page.locator('.opf-tb-menu [data-opf-toolbar-menu-item=find]').click();
   await page.waitForFunction(() => !document.querySelector('[data-opf-slot=find]').hidden && document.querySelector('[data-opf-slot=find]').contains(document.activeElement), undefined, { timeout: 5000 });
@@ -214,7 +217,7 @@ try {
   await page.keyboard.press('ArrowRight');
   await ev(() => window.frames(4));
   assert.equal(await ev(() => window.ed.slideIndex), 0, 'an arrow outside the embedded editor does not move it');
-  await page.locator('.opf-ws-counter .opf-nav-button').first().focus();
+  await page.locator('.opf-ws-counter .opf-nav-button').last().focus();
   await page.keyboard.press('ArrowRight');
   await page.waitForFunction(() => window.ed.slideIndex === 1, undefined, { timeout: 10000 });
   mark('layout "embed" mounts the slide alone (no source, strip, slide row, side panel or Export), fits it, and its counter and keys stay inside it');
@@ -257,13 +260,14 @@ try {
   // Before mount: queued, applied when the editor mounts.
   const early = await ev(async (d) => {
     window.ed.destroy();
-    window.ed = window.opfWs.createOpfEditor(window.makeHost(), { document: d, ...window.base() });
+    window.ed = window.opfWs.createOpfEditor(window.makeHost(), { document: d, ...window.base(), fonts: Promise.resolve(window.fonts) });
+    const mountedAtOnce = window.ed.mounted;
     const accepted = window.ed.setDeckName('Named early');
     const before = window.ed.getDeckName();
     await window.ed.ready;
-    return { accepted, before, after: window.ed.getDeckName(), field: document.querySelector('.opf-title-input').value };
+    return { mountedAtOnce, accepted, before, after: window.ed.getDeckName(), field: document.querySelector('.opf-title-input').value };
   }, deck());
-  assert.deepEqual(early, { accepted: true, before: 'Workspace fixture', after: 'Named early', field: 'Named early' });
+  assert.deepEqual(early, { mountedAtOnce: false, accepted: true, before: 'Workspace fixture', after: 'Named early', field: 'Named early' });
   mark('setDeckName renames through the session (undoable, empty removes), the title field commits, and deckName is told for every source of change; refused over a draft and while read-only; queued before mount');
 
   // ---- expand ----------------------------------------------------------------------------------------------------------------------------
@@ -287,8 +291,36 @@ try {
   assert.deepEqual(noExpand, { early: false, now: false, button: false });
   mark('the expand item and expand(on) make the editor fill the window and back (the button, Escape, the handle), each told as `expand`; `expand: false` turns it off');
 
-  console.log(checks.map((name) => `ok - ${name}`).join('\n'));
   assert.deepEqual(errors, [], errors.join('\n'));
 } finally {
   await app.close();
 }
+
+// ---- a 320px phone with a finger: the embed bar and its ⋯ menu are 44px controls, 16px fields, and nothing scrolls sideways ---------------
+const phone = await startWorkspacePage({ viewport: { width: 320, height: 640 }, body: '<div id="host" style="width:100%;height:600px"></div>', context: { hasTouch: true } });
+try {
+  const audit = async (where) => {
+    const report = await phone.page.evaluate(touchAudit);
+    const found = [];
+    if (report.scrollWidth > report.width || report.bodyScrollWidth > report.width) found.push(`the page scrolls sideways (${report.scrollWidth} > ${report.width})`);
+    // The slide's own targets are the drawing, not the bar; the audit is about the toolbar and its menu.
+    for (const key of ['small', 'fonts', 'outside', 'clipped', 'overlaps']) for (const entry of report[key]) if (/opf-tb|opf-title|opf-nav|opf-expand|opf-present|opf-ws-button/.test(entry)) found.push(`${key}: ${entry}`);
+    assert.deepEqual(found, [], `${where}: ${found.length} problem(s)`);
+  };
+  assert.equal(await phone.page.evaluate(() => matchMedia('(pointer: coarse)').matches), true, 'the phone has a coarse pointer');
+  await phone.page.evaluate(async (d) => {
+    window.ed = window.opfWs.createOpfEditor(document.querySelector('#host'), { document: d, fonts: window.fonts, catalogs: [window.opfWs.gallery], layout: 'embed' });
+    await window.ed.ready;
+    window.ed.toolbar.update();
+  }, deck());
+  const collapsed = await phone.page.evaluate(() => window.ed.toolbar.collapsed);
+  assert.ok(collapsed.length > 0, 'a 320px bar of 44px controls collapses some items into ⋯');
+  await audit('320px embed bar');
+  await phone.page.locator('.opf-tb-more-button').tap();
+  await audit('320px embed bar with ⋯ open');
+  assert.deepEqual(phone.errors, [], phone.errors.join('\n'));
+  checks.push(`on a 320px touch phone the embed bar collapses ${collapsed.join(', ')} into ⋯ and every control is 44px, every field 16px, with no sideways scroll`);
+} finally {
+  await phone.close();
+}
+console.log(checks.map((name) => `ok - ${name}`).join('\n'));

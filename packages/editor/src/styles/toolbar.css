@@ -25,7 +25,7 @@
 }
 .opf-tb[data-measuring] > .opf-tb-item[data-opf-toolbar-item="title"] {
   flex: 0 0 auto;
-  width: 9rem;
+  width: 8rem;
   max-width: none;
 }
 .opf-tb > .opf-tb-item:empty,

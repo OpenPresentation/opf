@@ -76,3 +76,9 @@ export declare function useOpfCommands(editor: OpfEditorHandle | null | undefine
 export declare function useOpfCursor(editor: OpfEditorHandle | null | undefined): SourceCursor | null;
 
 export type { OpfEditorHandle };
+
+/**
+ * CE-28: the deck's name (`""` without one), read again on every `deckName` event, and its setter (`editor.setDeckName`: one undoable edit, an
+ * empty name removes it; false when it was refused). `["", () => false]` while `editor` is `null`.
+ */
+export declare function useOpfDeckName(editor: OpfEditorHandle | null | undefined): [name: string, setName: (name: string) => boolean];

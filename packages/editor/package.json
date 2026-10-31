@@ -275,6 +275,10 @@
       "types": "./dist/deck-title.d.ts",
       "default": "./dist/deck-title.js"
     },
+    "./toolbar": {
+      "types": "./dist/toolbar.d.ts",
+      "default": "./dist/toolbar.js"
+    },
     "./thumbnail-strip": {
       "types": "./dist/thumbnail-strip.d.ts",
       "default": "./dist/thumbnail-strip.js"

@@ -28,3 +28,17 @@ export declare function opfTextInput(node: any, params: OPFTextInputActionParams
 export declare function opfCatalogSelect(node: any, params: OPFCatalogSelectActionParams): SvelteAction;
 
 export declare function opfTrace(node: any, params: OPFTraceActionParams): SvelteAction;
+
+/** The deck name store's editor: the handle of `createOpfEditor` (`@openpresentation/opf-editor/workspace`). */
+export interface OpfDeckNameEditor {
+  getDeckName(): string;
+  setDeckName(name: string): boolean;
+  on(name: "deckName", listener: (detail: { name: string; previous: string }) => void): () => void;
+}
+/** CE-28: a Svelte store of the deck's name (`""` without one); `set` renames through `editor.setDeckName` (false when refused). */
+export interface OpfDeckNameStore {
+  subscribe(run: (name: string) => void): () => void;
+  set(name: string): boolean;
+  update(updater: (name: string) => string): boolean;
+}
+export declare function opfDeckName(editor: OpfDeckNameEditor): OpfDeckNameStore;

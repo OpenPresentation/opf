@@ -257,6 +257,10 @@
           "command": "node test/workspace-react-browser.mjs"
         },
         {
+          "id": "browser:workspace-toolbar",
+          "command": "node test/workspace-toolbar-browser.mjs"
+        },
+        {
           "id": "browser:handle-before-mount",
           "command": "node test/handle-before-mount-browser.mjs"
         },

@@ -12,8 +12,14 @@ import type { ReviewFinding, ReviewHook } from "./review.js";
 import type { ReviewPanel, ReviewPanelOptions } from "./review-panel.js";
 import type { SlideManager } from "./slide-manager.js";
 import type { SourceCursor, SourceFormat, SourceFile, SourcePane, SourcePaneOptions } from "./source-pane.js";
+import type { Toolbar, ToolbarItemName, ToolbarItemSpec } from "./toolbar.js";
+import type { DeckTitle } from "./deck-title.js";
 
-export type OpfEditorLayout = "full" | "canvas" | "source" | "studio" | "playground";
+/** CE-28: `"embed"` is the slide alone under a compact toolbar (title, history, counter, expand, Present), for a page that shows a deck. */
+export type OpfEditorLayout = "full" | "canvas" | "embed" | "source" | "studio" | "playground";
+/** CE-28: a toolbar item by name, or `{ id, priority, collapsible }` (see `toolbar.d.ts`). */
+export type OpfToolbarItem = ToolbarItemSpec;
+export type { Toolbar, ToolbarItemName };
 export type OpfEditorView = "slide" | "sorter" | "outline" | "layouts";
 export type OpfEditorDensity = "comfortable" | "touch";
 
@@ -145,6 +151,18 @@ export interface OpfEditorSlots {
   overlay?: HTMLElement;
   /** CE-20, the Studio: an element of the host placed at the end of the Studio's bar (Share, avatars). */
   topbarEnd?: HTMLElement;
+  /**
+   * CE-28, the toolbar's items in the host's own elements (mode B): the deck title, the Undo and Redo buttons, the slide counter (a second
+   * navigator on the one slide index), the view switch and the expand button. An item given here is left out of the bar. Slots that name only
+   * these (and `toolbar`) keep the built layout; `export`, `present` and `autosave` above are their items' slots too.
+   */
+  title?: HTMLElement;
+  history?: HTMLElement;
+  counter?: HTMLElement;
+  views?: HTMLElement;
+  expand?: HTMLElement;
+  /** CE-28: the element the toolbar is built in, instead of the default layout's bar (with your own `slots` arrangement, the only place it goes). */
+  toolbar?: HTMLElement;
 }
 
 /** CE-20: one item of the Studio's selection. `key` is the scene key (the id path, `/slides/@intro/blocks/@kpi`; a layout region `<slide key>#<name>`). */
@@ -251,7 +269,8 @@ export interface OpfEditorOptions {
   variables?: "authored" | "resolved";
 
   /**
-   * `"full"` (default), `"canvas"` or `"source"`: the editor builds the arrangement (ignored when `slots` is given). CE-20: `"studio"` is the
+   * `"full"` (default), `"canvas"`, `"embed"` (CE-28) or `"source"`: the editor builds the arrangement (ignored when `slots` names a part; slots for the
+   * toolbar's items alone keep it). CE-20: `"studio"` is the
    * Presentation and Slide Studio and `"playground"` its first-contact preset (a host's `slots` then add parts, such as `topbarEnd`).
    */
   layout?: OpfEditorLayout;
@@ -269,6 +288,20 @@ export interface OpfEditorOptions {
   slideIndex?: number;
   /** `"contain"` sizes the slide to fit its frame (default in the built layouts); `false` leaves the size to the host. */
   fit?: "contain" | false;
+  /**
+   * CE-28: the toolbar's items in order (names, or `{ id, priority, collapsible }`); `false` builds no bar (items given in `slots` still mount).
+   * Default: the layout's preset (`full`: title, history, find, views, spacer, autosave, export, present, expand, more; `canvas`: title, history,
+   * spacer, expand, more; `embed`: title, history, counter, spacer, expand, present, more; none for `source` and `slots`). Items this editor has
+   * nothing for (Export without Export, the views with one view) are left out; `zoom`, `design`, `review`, `actions` and `help` are reserved and
+   * left out until their parts ship. The Studio has its own bar and ignores this.
+   */
+  toolbar?: false | readonly OpfToolbarItem[];
+  /**
+   * CE-28: the expanded editor (the `expand` item and `editor.expand()`). `target` is the element that fills the window (default the mount
+   * element; give a wrapper when your own header with the toolbar items sits outside it), `fullscreen` also asks the browser for full screen.
+   * `false` turns it off.
+   */
+  expand?: false | { target?: HTMLElement; fullscreen?: boolean };
 
   source?: OpfEditorSourceOptions;
   canvas?: Omit<CanvasEditorOptions, "editor" | "fonts" | "renderOptions" | "slideIndex" | "presentation" | "catalogs" | "propertiesContainer">;
@@ -288,9 +321,12 @@ export interface OpfEditorOptions {
   theme?: OpfEditorTheme;
   /**
    * Text for the default layouts (`review`, `design`, `find`, `undo`, `redo`, `slideView`, `inspector`) and the accessible names of the slide row's
-   * two landmarks (`navigator`, default "Slide navigation"; `thumbnails`, default "Slides").
+   * two landmarks (`navigator`, default "Slide navigation"; `thumbnails`, default "Slides"). CE-28, the toolbar: `title` (the name of the deck
+   * title field, default "Presentation name"), `untitled` (its placeholder, default "Untitled presentation"), `expand` and `collapse` (the expand
+   * button, default "Expand editor" and "Exit expanded editor"), `more` (the ⋯ button, default "More"), `moreMenu` (its menu, default "More
+   * actions") and `counter` (the toolbar counter's landmark, default "Slide navigation").
    */
-  labels?: Partial<Record<"review" | "design" | "find" | "undo" | "redo" | "slideView" | "inspector" | "navigator" | "thumbnails", string>>;
+  labels?: Partial<Record<"review" | "design" | "find" | "undo" | "redo" | "slideView" | "inspector" | "navigator" | "thumbnails" | OpfEditorChromeLabel, string>>;
   /**
    * Which slide stays on show when the document changes outside the canvas: `"id"` (default) follows the slide by its id (a reorder in the source
    * pane keeps it), `"position"` keeps the position and clamps it to the deck.
@@ -308,6 +344,9 @@ export interface OpfEditorOptions {
   /** Listeners by event name; the same as calling `on` before anything happens. */
   on?: { [Name in keyof OpfEditorEvents]?: (detail: OpfEditorEvents[Name]) => void };
 }
+
+/** CE-28: the labels of the toolbar's parts. */
+export type OpfEditorChromeLabel = "title" | "untitled" | "expand" | "collapse" | "more" | "moreMenu" | "counter";
 
 export interface OpfEditorSourceState {
   /** `valid`, `invalid` (the document has errors) or `syntax` (the text does not read as a document in `format`). */
@@ -369,6 +408,10 @@ export interface OpfEditorEvents {
   "review-goto": { finding: ReviewFinding; target: unknown };
   "review-focus": { fix: unknown; target: unknown };
   panel: { panel: "review" | "design" };
+  /** CE-28: the document's `name` changed, from any source (the title field, the source pane, undo, the host). `""` is no name. */
+  deckName: { name: string; previous: string };
+  /** CE-28: the editor was expanded to fill the window, or returned (the button, `expand()`, Escape, the browser leaving full screen). */
+  expand: { expanded: boolean };
   destroy: Record<string, never>;
 }
 
@@ -387,7 +430,7 @@ export interface OpfEditorSetDocumentOptions {
  * The handle of a mounted editor. It is returned at once, before the parts have mounted (they wait for the fonts and, in a layout that shows
  * slides, for the slide chunk), and every method works from the first moment: a setting (`setDensity`, `setExportMode`, `setView`, `setSlide`,
  * `setReadOnly`, `setTheme`, `setName`) is kept and read when the parts mount, and a call that acts on a part (`select`, `goTo`, `showPanel`,
- * `focus`, `openFind`, `present`, and the Studio's `setLayout`, `setZoom`, `fit`, `openLayout` and `commands.register`) is queued and runs, in
+ * `focus`, `openFind`, `present`, CE-28's `setDeckName` and `expand`, and the Studio's `setLayout`, `setZoom`, `fit`, `openLayout` and `commands.register`) is queued and runs, in
  * order, as soon as the editor is mounted, before `mounted` is emitted; a later call to the same method replaces an earlier one. A queued call
  * returns `true` (accepted) or, where it needs a part the editor does not have, `false`. Only `setDocument` and `setSourceText`, whose result
  * depends on the document, throw before `ready`.
@@ -417,6 +460,20 @@ export interface OpfEditor {
   readonly selection: { path: string; value: unknown } | OpfStudioSelectionItem[] | null;
   /** CE-20: the arrangement; `setLayout` switches the Studio between "studio" and "playground". */
   readonly layout: OpfEditorLayout | "slots";
+  /** CE-28: the toolbar the editor built (undefined without one: `toolbar: false`, `source`, `slots` without `slots.toolbar`, the Studio). */
+  readonly toolbar: Toolbar | undefined;
+  /** CE-28: the deck title part (the `title` item), once mounted. */
+  readonly deckTitle: DeckTitle | undefined;
+  /** CE-28: the deck's `name` (`""` without one). Not the source pane's file name (`getName`). */
+  getDeckName(): string;
+  /**
+   * CE-28: rename the deck: one undoable, validated edit through the session (the text is trimmed; an empty name removes `name`). An open canvas
+   * edit is committed first. False while read-only, while the source text is not a valid deck, or when the edit was refused; queued (true) before mount.
+   */
+  setDeckName(name: string): boolean;
+  /** CE-28: expand the editor to fill the window (`false` returns it). Returns the resulting state; queued (true) before mount; false with `expand: false` and in the Studio. */
+  expand(on?: boolean): boolean;
+  readonly expanded: boolean;
   setLayout(layout: "studio" | "playground"): boolean;
   /** CE-20: the Studio's zoom (1 is the slide fitted), `setZoom` and `fit` ("slide" or "width"). */
   readonly zoom: number;
