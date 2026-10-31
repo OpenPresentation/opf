@@ -267,6 +267,18 @@
       "types": "./dist/slide-navigator.d.ts",
       "default": "./dist/slide-navigator.js"
     },
+    "./review-pill": {
+      "types": "./dist/review-pill.d.ts",
+      "default": "./dist/review-pill.js"
+    },
+    "./shortcuts-sheet": {
+      "types": "./dist/shortcuts-sheet.d.ts",
+      "default": "./dist/shortcuts-sheet.js"
+    },
+    "./toolbar-actions": {
+      "types": "./dist/toolbar-actions.d.ts",
+      "default": "./dist/toolbar-actions.js"
+    },
     "./thumbnail-strip": {
       "types": "./dist/thumbnail-strip.d.ts",
       "default": "./dist/thumbnail-strip.js"

@@ -1,0 +1,42 @@
+/* Toolbar actions (src/toolbar-actions.js): the host's own buttons. Uses only --opf-ui-* tokens. */
+.opf-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--opf-ui-font);
+}
+.opf-actions[hidden] { display: none; }
+.opf-actions-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-sizing: border-box;
+  height: var(--opf-ui-control-h);
+  min-height: 0;
+  padding: 0 12px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius);
+  background: var(--opf-ui-surface);
+  color: var(--opf-ui-fg);
+  font: 500 13px/1 var(--opf-ui-font);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--opf-ui-ease), background-color var(--opf-ui-ease), border-color var(--opf-ui-ease);
+}
+.opf-actions[data-density="touch"] .opf-actions-button { height: 40px; }
+.opf-actions-button:hover:not(:disabled) { background: var(--opf-ui-muted); border-color: var(--opf-ui-border-strong); }
+.opf-actions-button[aria-pressed="true"] { background: var(--opf-ui-muted); border-color: var(--opf-ui-border-strong); box-shadow: inset 0 -2px 0 var(--opf-ui-accent); }
+.opf-actions-button.is-primary { background: var(--opf-ui-accent); border-color: var(--opf-ui-accent); color: var(--opf-ui-accent-fg); }
+.opf-actions-button.is-primary:hover:not(:disabled) { background: var(--opf-ui-accent-strong); border-color: var(--opf-ui-accent-strong); }
+.opf-actions-button:disabled { opacity: 0.45; cursor: default; }
+.opf-actions-button:focus-visible { outline: 2px solid var(--opf-ui-ring); outline-offset: 2px; }
+.opf-actions-icon { flex: none; width: 16px; height: 16px; }
+.opf-actions-label { overflow: hidden; text-overflow: ellipsis; }
+@media (prefers-reduced-motion: reduce) {
+  .opf-actions-button { transition: none; }
+}
+@media (forced-colors: active) {
+  .opf-actions-button { border-color: ButtonText; }
+  .opf-actions-button:disabled { border-color: GrayText; color: GrayText; }
+  .opf-actions-button[aria-pressed="true"] { outline: 2px solid Highlight; }
+}

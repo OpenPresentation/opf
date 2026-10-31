@@ -265,6 +265,18 @@
           "command": "node test/source-hooks-browser.mjs"
         },
         {
+          "id": "browser:review-pill",
+          "command": "node test/review-pill-browser.mjs"
+        },
+        {
+          "id": "browser:shortcuts-sheet",
+          "command": "node test/shortcuts-sheet-browser.mjs"
+        },
+        {
+          "id": "browser:toolbar-actions",
+          "command": "node test/toolbar-actions-browser.mjs"
+        },
+        {
           "id": "browser:studio-kit",
           "command": "node test/studio-kit-browser.mjs"
         },

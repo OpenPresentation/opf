@@ -216,3 +216,24 @@
     min-height: 44px;
   }
 }
+
+/* ---- CE-29 toolbar parts: the review pill (review-pill.js), the help button and its sheet (shortcuts-sheet.js), the host's action buttons (toolbar-actions.js) -- */
+@media (pointer: coarse) {
+  .opf-review-pill,
+  .opf-review-pill[data-density="touch"] {
+    min-height: 44px;
+    min-width: 44px;
+    padding-inline: 14px;
+  }
+  .opf-help-button,
+  .opf-help-button[data-density="touch"] {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .opf-actions-button,
+  .opf-actions[data-density="touch"] .opf-actions-button {
+    min-height: 44px;
+    min-width: 44px;
+    padding-inline: 14px;
+  }
+}
