@@ -83,6 +83,8 @@ const LAYOUT_PARTS = {
 const STUDIO_LAYOUTS = new Set(["studio", "playground"]);
 const LAYOUTS = ["full", "canvas", "embed", "source", "slots", "studio", "playground"];
 // CE-28: the toolbar items a host can place in its own element (`slots.<item>`); `autosave`, `export` and `present` were slots already.
+// The slots that hold only the toolbar or its items: given alone, the layout is still built.
+const CHROME_SLOTS = new Set(["title", "history", "counter", "views", "expand", "toolbar"]);
 const ITEM_SLOT_NAMES = new Set(["title", "history", "counter", "views", "expand", "autosave", "export", "present"]);
 // Reserved names (accepted, and left out until their parts ship): `zoom` is the Studio's.
 const RESERVED_ITEMS = new Set(["zoom", "design", "review", "actions", "help"]);
@@ -148,7 +150,8 @@ function resolveToolbar(options, layout, parts, views, given) {
   const items = normalizeToolbarItems(spec);
   const available = {
     title: true,
-    history: parts.history,
+    // A host that arranges the page itself and asks for the history in its toolbar gets it (there is no other slot to name it by).
+    history: parts.history || (layout === "slots" && options.panels?.history !== false),
     counter: parts.canvas,
     views: views.length > 1,
     find: parts.find,
@@ -222,7 +225,9 @@ export function createOpfEditor(element, options = {}) {
 
   // ---- layout, parts and slots ------------------------------------------------------------------------------------------------
   const given = options.slots ?? {};
-  const layout = options.slots && !STUDIO_LAYOUTS.has(options.layout) ? "slots" : (options.layout ?? "full");
+  // CE-28: slots for the toolbar's items only (mode B: the title in the host's own header) keep the built layout.
+  const chromeOnly = Boolean(options.slots) && Object.keys(options.slots).every((name) => CHROME_SLOTS.has(name));
+  const layout = options.slots && !STUDIO_LAYOUTS.has(options.layout) && !chromeOnly ? "slots" : (options.layout ?? "full");
   if (!LAYOUTS.includes(layout)) throw new RangeError('layout must be "full", "canvas", "embed", "source", "studio" or "playground", or pass `slots`.');
   const studioLayout = STUDIO_LAYOUTS.has(layout);
   const parts = resolveParts(options, layout, given);
@@ -239,7 +244,7 @@ export function createOpfEditor(element, options = {}) {
   root.className = "opf-workspace opf-ui";
   // The editor owns the content of the element it builds a layout in. With `slots` the element is the host's own page (it holds the slots), so the
   // editor only adds one empty node for its overlays.
-  if (options.slots) element.append(root);
+  if (layout === "slots") element.append(root);
   else element.replaceChildren(root);
   const themeController = createThemeController(element, options.theme);
   let slots = { ...given };
@@ -1157,12 +1162,18 @@ export function createOpfEditor(element, options = {}) {
         onError: (error) => report(error),
       });
     }
-    // The editor fills the window (or the screen): a built layout expands its own box, a host's arrangement expands the mount element.
-    if (!studioLayout && createExpandController) {
+    // The editor fills the window (or, with `expand.fullscreen`, the screen): the mount element becomes a fixed overlay, in place.
+    if (!studioLayout && createExpandController && options.expand !== false) {
       const labels = { ...(chromeLabels().expand ? { expand: chromeLabels().expand } : {}), ...(chromeLabels().collapse ? { collapse: chromeLabels().collapse } : {}) };
-      expandCtl = createExpandController(layout === "slots" ? element : root, {
+      const configured = typeof options.expand === "object" && options.expand ? options.expand : {};
+      const target = configured.target ?? element;
+      // The host's own elements for the bar and its items that sit outside what expands stay usable over the overlay.
+      const keep = ["toolbar", ...CHROME_SLOTS].map((name) => given[name]).filter((node, at, all) => node && all.indexOf(node) === at && !target.contains(node));
+      expandCtl = createExpandController(target, {
         labels,
-        ...(options.expand?.fullscreen !== undefined ? { fullscreen: options.expand.fullscreen } : {}),
+        onStatus: say,
+        ...(keep.length ? { keep } : {}),
+        ...(configured.fullscreen !== undefined ? { fullscreen: configured.fullscreen } : {}),
         onChange: ({ expanded }) => {
           if (destroyed) return;
           root.toggleAttribute("data-expanded", expanded);
@@ -1396,7 +1407,7 @@ export function createOpfEditor(element, options = {}) {
     }
   }
   function expand(on = true) {
-    if (destroyed || studioLayout) return false;
+    if (destroyed || studioLayout || options.expand === false) return false;
     if (waiting()) {
       queue("expand", () => expand(on));
       return true;
@@ -1700,6 +1711,8 @@ export function createOpfEditor(element, options = {}) {
     else markView("slide");
     syncChrome();
     flushQueued();
+    // The bar's parts are in their slots now: fit the row at once rather than on the next frame.
+    toolbar?.update();
   }
   readyPromise = new Promise((resolve, reject) => {
     const start = (arrived) => {

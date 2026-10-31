@@ -166,14 +166,19 @@ export function createToolbar(container, options = {}) {
   }
   function activate(item) {
     if (item.disabled) return;
+    // The menu closes without taking the focus back first: what the item opens (Find's field, a popover, a dialog) keeps the focus it takes.
+    // The item runs on the next microtask, after the menu is gone; the focus returns to ⋯ only when nothing else took it.
     closeMenu({ restoreFocus: false });
-    try {
-      item.run();
-    } catch (error) {
-      options.onError?.(error);
-    }
-    // What the item did may have moved the focus (Find focuses its field); otherwise it goes back to the trigger.
-    if (!doc.activeElement || doc.activeElement === doc.body) trigger?.focus();
+    queueMicrotask(() => {
+      if (destroyed) return;
+      try {
+        item.run();
+      } catch (error) {
+        options.onError?.(error);
+      }
+      const active = doc.activeElement;
+      if (!active || active === doc.body || menu.contains(active)) trigger?.focus();
+    });
   }
   function focusAt(which) {
     const list = menuButtons();
