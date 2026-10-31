@@ -1,6 +1,7 @@
-// CE-06: the default arrangement of the workspace (`layout: "full"`, `"canvas"` or `"source"`): a bar, the source pane, the slide, the slide
-// row, and a side panel for Review and Design. It only builds DOM and hands the elements to the workspace as named slots; a host that
+// CE-06: the default arrangement of the workspace (`layout: "full"`, `"canvas"`, `"embed"` or `"source"`): a bar, the source pane, the slide, the
+// slide row, and a side panel for Review and Design. It only builds DOM and hands the elements to the workspace as named slots; a host that
 // arranges the parts itself passes its own elements as `slots` and none of this runs. Styled by src/styles/workspace.css (tokens only).
+// CE-28: the bar is a toolbar (src/toolbar.js): one slot per named item, in the order the preset or the `toolbar` option gives.
 
 const make = (doc, tag, attributes = {}, ...children) => {
   const node = doc.createElement(tag);
@@ -14,41 +15,86 @@ const make = (doc, tag, attributes = {}, ...children) => {
 };
 
 const VIEW_LABELS = { slide: "Slide", sorter: "Sorter", outline: "Outline", layouts: "Layouts" };
+export const viewLabel = (view) => VIEW_LABELS[view] ?? view;
+
+/** CE-28: the toolbar of each built layout. `"source"` has none (the pane has its own bar), nor has `slots`; the Studio builds its own topbar. */
+export const TOOLBAR_PRESETS = Object.freeze({
+  full: Object.freeze(["title", "history", "find", "views", "spacer", "autosave", "export", "present", "expand", "more"]),
+  canvas: Object.freeze(["title", "history", "spacer", "expand", "more"]),
+  embed: Object.freeze(["title", "history", "counter", "spacer", "expand", "present", "more"]),
+  source: Object.freeze([]),
+  slots: Object.freeze([]),
+});
+
+/** The text of the shell's own controls, with the host's `labels`. */
+export const shellText = (labels = {}) => ({ slideView: "Slide view", undo: "Undo", redo: "Redo", find: "Find", review: "Review", design: "Design", inspector: "Inspector", ...labels });
+
+/**
+ * The controls of a toolbar item the workspace builds itself (`history`, `find`, `views`), inside `container`: the bar's slot, or a host's own
+ * element (`slots.history`, `slots.views`). Returns the controls (`undo` and `redo`, `find`, `views`).
+ */
+export function buildItemControls(name, container, { views = [], labels = {} } = {}) {
+  const doc = container.ownerDocument;
+  const text = shellText(labels);
+  const controls = {};
+  if (name === "history") {
+    controls.undo = make(doc, "button", { type: "button", class: "opf-ws-button", "data-opf-action": "undo", "aria-label": text.undo, title: `${text.undo} · Ctrl/Cmd Z`, text: text.undo });
+    controls.redo = make(doc, "button", { type: "button", class: "opf-ws-button", "data-opf-action": "redo", "aria-label": text.redo, title: `${text.redo} · Ctrl/Cmd Shift Z`, text: text.redo });
+    container.classList.add("opf-ws-group");
+    container.append(controls.undo, controls.redo);
+  } else if (name === "find") {
+    controls.find = make(doc, "button", { type: "button", class: "opf-ws-button", "data-opf-action": "find", "aria-expanded": "false", "aria-keyshortcuts": "Control+F Meta+F Control+H", title: `${text.find} · Ctrl/Cmd F`, text: text.find });
+    container.append(controls.find);
+  } else if (name === "views") {
+    controls.views = {};
+    const group = make(doc, "div", { class: "opf-ws-views", role: "group", "aria-label": text.slideView });
+    for (const view of views) group.append(controls.views[view] = make(doc, "button", { type: "button", class: "opf-ws-button", "data-opf-view-button": view, "aria-pressed": "false", text: viewLabel(view) }));
+    container.append(group);
+  }
+  return controls;
+}
+
+// The toolbar items whose slot is a part's mount element, with the class the default layout gives it (`data-opf-slot` is the item's name).
+const ITEM_SLOTS = { autosave: "opf-ws-autosave", export: "opf-ws-export", present: "opf-ws-present", title: "opf-ws-title", counter: "opf-ws-counter", expand: "opf-ws-expand" };
+const STRUCTURE = new Set(["spacer", "|", "more"]);
+
+/**
+ * Build the toolbar in `host` (the shell's bar, or the host's `slots.toolbar`) from `items` (already filtered to what this editor fills).
+ * Returns the toolbar, the slots of the parts that mount in it and the controls the shell built in it; nothing when no item shows anything.
+ */
+export function buildToolbar(host, { items, views, labels = {}, density, createToolbar, onError }) {
+  if (!items.some((item) => !STRUCTURE.has(item.id))) return { toolbar: undefined, slots: {}, controls: {} };
+  const toolbar = createToolbar(host, { items, density, onError, labels: { ...(labels.more ? { more: labels.more } : {}), ...(labels.moreMenu ? { menu: labels.moreMenu } : {}) } });
+  const slots = {};
+  const controls = {};
+  for (const [name, element] of Object.entries(toolbar.slots)) {
+    if (ITEM_SLOTS[name]) {
+      element.setAttribute("data-opf-slot", name);
+      element.classList.add(ITEM_SLOTS[name]);
+      slots[name] = element;
+    } else if (!STRUCTURE.has(name)) Object.assign(controls, buildItemControls(name, element, { views, labels }));
+  }
+  return { toolbar, slots, controls };
+}
 
 /**
  * Build the shell inside `root`. `parts` names what is mounted (`source`, `canvas`, `navigator`, `thumbnails`, `present`, `export`, `find`,
- * `review`, `design`, `layouts`, `sorter`, `outline`, `persistence`, `history`); `views` lists the views in switch order. Returns the slots
- * (one element per mounted part) and the bar's controls.
+ * `review`, `design`, `layouts`, `sorter`, `outline`, `persistence`, `history`); `views` lists the views in switch order; `toolbar` the toolbar
+ * items (`createToolbar` builds them; `toolbarHost`, the host's own element for the bar, replaces the shell's `header`). Returns the slots (one
+ * element per mounted part), the controls and the toolbar.
  */
-export function buildWorkspaceShell(root, { parts, views, layout, labels = {} }) {
+export function buildWorkspaceShell(root, { parts, views, layout, labels = {}, toolbar: items = [], createToolbar, density, toolbarHost, onError }) {
   const doc = root.ownerDocument;
-  const text = { slideView: "Slide view", undo: "Undo", redo: "Redo", find: "Find", review: "Review", design: "Design", inspector: "Inspector", ...labels };
+  const text = shellText(labels);
   const slots = {};
   const controls = {};
   const slot = (name, tag = "div", attributes = {}) => (slots[name] = make(doc, tag, { "data-opf-slot": name, ...attributes }));
 
-  // The bar.
-  const bar = make(doc, "header", { class: "opf-ws-bar" });
-  if (parts.history) {
-    controls.undo = make(doc, "button", { type: "button", class: "opf-ws-button", "data-opf-action": "undo", "aria-label": text.undo, title: `${text.undo} · Ctrl/Cmd Z`, text: text.undo });
-    controls.redo = make(doc, "button", { type: "button", class: "opf-ws-button", "data-opf-action": "redo", "aria-label": text.redo, title: `${text.redo} · Ctrl/Cmd Shift Z`, text: text.redo });
-    bar.append(make(doc, "div", { class: "opf-ws-group" }, controls.undo, controls.redo));
-  }
-  if (parts.find) {
-    controls.find = make(doc, "button", { type: "button", class: "opf-ws-button", "data-opf-action": "find", "aria-expanded": "false", "aria-keyshortcuts": "Control+F Meta+F Control+H", title: `${text.find} · Ctrl/Cmd F`, text: text.find });
-    bar.append(controls.find);
-  }
-  if (views.length > 1) {
-    const group = make(doc, "div", { class: "opf-ws-views", role: "group", "aria-label": text.slideView });
-    controls.views = {};
-    for (const view of views) group.append(controls.views[view] = make(doc, "button", { type: "button", class: "opf-ws-button", "data-opf-view-button": view, "aria-pressed": "false", text: VIEW_LABELS[view] ?? view }));
-    bar.append(group);
-  }
-  bar.append(make(doc, "span", { class: "opf-ws-spacer" }));
-  if (parts.persistence) bar.append(slot("autosave", "span", { class: "opf-ws-autosave" }));
-  if (parts.export) bar.append(slot("export", "div", { class: "opf-ws-export" }));
-  if (parts.present) bar.append(slot("present", "div", { class: "opf-ws-present" }));
-  const hasBar = bar.children.length > 1;
+  // The bar: the toolbar, in the shell's header unless the host gave its own element for it.
+  const bar = toolbarHost ?? make(doc, "header", { class: "opf-ws-bar" });
+  const built = buildToolbar(bar, { items, views, labels, density, createToolbar, onError });
+  Object.assign(slots, built.slots);
+  Object.assign(controls, built.controls);
 
   // The main column: the slide (or another view) over the slide row, and the status line. A source-only layout has none: the pane has its own
   // bar, problems and status.
@@ -94,13 +140,12 @@ export function buildWorkspaceShell(root, { parts, views, layout, labels = {} })
     body.append(side);
   }
 
-  if (parts.persistence) root.append();
-  if (hasBar) root.append(bar);
+  if (built.toolbar && !toolbarHost) root.append(bar);
   if (parts.persistence) root.append(slot("banner", "div", { class: "opf-ws-banner", hidden: true }));
   root.append(body);
   root.setAttribute("data-opf-layout", layout);
   controls.frame = frame;
   controls.stage = stage;
-  controls.bar = bar;
-  return { slots, controls };
+  controls.bar = built.toolbar ? bar : undefined;
+  return { slots, controls, toolbar: built.toolbar };
 }

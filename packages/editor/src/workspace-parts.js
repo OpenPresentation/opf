@@ -18,3 +18,5 @@ export { mergeSlides, splitSlideByBlocks } from "./content-actions.js";
 export { installCanvasVariableEditing } from "./canvas-variables.js";
 export { createLayoutStudio } from "./workspace-layouts.js";
 export { buildStudioShell, createStudio } from "./studio.js";
+// CE-28: the toolbar's deck title (the expand part is added when it lands).
+export { createDeckTitle } from "./deck-title.js";

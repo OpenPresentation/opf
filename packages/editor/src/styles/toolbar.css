@@ -1,0 +1,151 @@
+/* CE-28: the editor's title bar (src/toolbar.js). One row that never wraps: the items that do not fit move into the ⋯ menu. Tokens only. */
+.opf-tb {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  color: var(--opf-ui-fg);
+  font-family: var(--opf-ui-font);
+}
+.opf-tb > .opf-tb-item {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+/* The deck title shrinks before anything collapses below its wish; while the row is measured it asks for its wish. */
+.opf-tb > .opf-tb-item[data-opf-toolbar-item="title"] {
+  flex: 0 1 auto;
+  max-width: 28rem;
+}
+.opf-tb[data-measuring] > .opf-tb-item[data-opf-toolbar-item="title"] {
+  flex: 0 0 auto;
+  width: 9rem;
+  max-width: none;
+}
+.opf-tb > .opf-tb-item:empty,
+.opf-tb > [data-collapsed],
+.opf-tb > [hidden],
+.opf-tb .opf-tb-menu[hidden] {
+  display: none;
+}
+.opf-tb > .opf-tb-spacer {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.opf-tb[data-measuring] > .opf-tb-spacer {
+  flex: 0 0 0;
+}
+.opf-tb > .opf-tb-divider {
+  flex: none;
+  align-self: stretch;
+  width: 1px;
+  margin: 4px 0;
+  background: var(--opf-ui-border);
+}
+.opf-tb .opf-tb-more {
+  position: relative;
+}
+.opf-tb .opf-tb-more-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-width: var(--opf-ui-control-h);
+  height: var(--opf-ui-control-h);
+  padding: 0 8px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius);
+  background: var(--opf-ui-surface);
+  color: var(--opf-ui-fg);
+  cursor: pointer;
+  transition: background-color var(--opf-ui-ease), border-color var(--opf-ui-ease);
+}
+.opf-tb .opf-tb-more-button:hover {
+  background: var(--opf-ui-muted);
+}
+.opf-tb .opf-tb-more-button[aria-expanded="true"] {
+  border-color: var(--opf-ui-accent);
+  background: var(--opf-ui-muted);
+  color: var(--opf-ui-accent-strong);
+}
+.opf-tb .opf-tb-more-button:focus-visible,
+.opf-tb .opf-tb-menu-item:focus-visible {
+  outline: 2px solid var(--opf-ui-ring);
+  outline-offset: 1px;
+}
+.opf-tb .opf-tb-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  min-width: 200px;
+  max-width: min(320px, calc(100vw - 16px));
+  padding: 4px;
+  border: 1px solid var(--opf-ui-border);
+  border-radius: var(--opf-ui-radius-md);
+  background: var(--opf-ui-surface);
+  box-shadow: var(--opf-ui-shadow-pop);
+}
+.opf-tb .opf-tb-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: var(--opf-ui-control-h);
+  padding: 0 10px;
+  border: 0;
+  border-radius: var(--opf-ui-radius-sm);
+  background: transparent;
+  color: var(--opf-ui-fg);
+  font: 500 13px/1.2 var(--opf-ui-font);
+  text-align: left;
+  cursor: pointer;
+}
+.opf-tb .opf-tb-menu-item:hover:not([aria-disabled="true"]),
+.opf-tb .opf-tb-menu-item:focus {
+  background: var(--opf-ui-muted);
+}
+.opf-tb .opf-tb-menu-item[aria-disabled="true"] {
+  color: var(--opf-ui-muted-fg);
+  cursor: default;
+}
+.opf-tb .opf-tb-menu-item[aria-checked="true"] {
+  color: var(--opf-ui-accent-strong);
+}
+.opf-tb .opf-tb-menu-item[role="menuitemcheckbox"]::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+.opf-tb .opf-tb-menu-item[aria-checked="true"]::before {
+  background: var(--opf-ui-accent-strong);
+}
+.opf-tb .opf-tb-menu-separator {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--opf-ui-border);
+}
+.opf-tb[data-density="touch"] .opf-tb-more-button {
+  min-width: max(var(--opf-ui-control-h), 40px);
+  height: max(var(--opf-ui-control-h), 40px);
+}
+.opf-tb[data-density="touch"] .opf-tb-menu-item {
+  min-height: max(var(--opf-ui-control-h), 40px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .opf-tb .opf-tb-more-button {
+    transition: none;
+  }
+}

@@ -226,3 +226,16 @@
     font-size: 16px;
   }
 }
+
+/* ---- toolbar (CE-28): the ⋯ button and its menu ----------------------------------------------------------------------------------- */
+@media (pointer: coarse) {
+  .opf-tb .opf-tb-more-button,
+  .opf-tb[data-density="touch"] .opf-tb-more-button {
+    min-width: 44px;
+    height: 44px;
+  }
+  .opf-tb .opf-tb-menu-item,
+  .opf-tb[data-density="touch"] .opf-tb-menu-item {
+    min-height: 44px;
+  }
+}

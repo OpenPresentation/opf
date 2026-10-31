@@ -15,15 +15,34 @@
 .opf-workspace[data-opf-layout="slots"] {
   display: contents;
 }
+/* CE-28: the bar holds the toolbar (src/styles/toolbar.css), one row whose items move into its ⋯ menu when they do not fit. */
 .opf-ws-bar {
-  display: flex;
+  display: block;
   flex: none;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
+  min-width: 0;
   padding: 6px 12px;
   border-bottom: 1px solid var(--opf-ui-border);
   background: var(--opf-ui-surface);
+}
+/* CE-28, `layout: "embed"`: the slide alone under a compact bar, for a page that shows a deck. The status line is read, not shown. */
+.opf-workspace[data-opf-layout="embed"] .opf-ws-bar {
+  padding: 4px 8px;
+}
+.opf-workspace[data-opf-layout="embed"] .opf-ws-stage {
+  padding: 8px;
+}
+.opf-workspace[data-opf-layout="embed"] .opf-ws-main {
+  position: relative;
+}
+.opf-workspace[data-opf-layout="embed"] .opf-ws-status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 .opf-ws-group,
 .opf-ws-views {
