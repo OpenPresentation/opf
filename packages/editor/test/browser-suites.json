@@ -287,6 +287,10 @@
         {
           "id": "browser:studio-perf",
           "command": "node test/studio-perf-browser.mjs"
+        },
+        {
+          "id": "browser:thumbnail-strip-actions",
+          "command": "node test/thumbnail-strip-actions-browser.mjs"
         }
       ]
     }

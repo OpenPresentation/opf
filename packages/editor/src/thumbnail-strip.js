@@ -2,10 +2,16 @@
 // accent ring. Thumbnails are drawn by the same renderer, catalogs and fonts handle the canvas uses, through the thumbnail cache: a slide whose
 // content did not change is never rendered again, and the strip is lazy (items near the viewport render first, through IntersectionObserver when
 // the browser has it). Plain DOM, no framework, no network.
+//
+// CE-29: with `actions: true` the strip also manages slides, for embeds that have neither the Sorter nor the Studio: a trailing "+" button
+// adds a slide (through a layout menu when the host passes `layoutOptions`), and a context menu on each thumbnail (right-click, Shift+F10,
+// the ContextMenu key) duplicates, deletes, hides or shows, and moves it (also Alt+Arrow and Delete on a focused thumbnail). Each action is
+// one undoable session change from slides.js, the same functions the slide manager uses.
 import { mergeCatalogs } from "./index.js";
 import { toSvg } from "@openpresentation/opf-render/svg";
 import { whenFontsReady } from "./font-gate.js";
-import { slideTitle } from "./slides.js";
+import { addSlide, duplicateSlides, moveSlidesBy, removeSlides, setHidden, slideTitle } from "./slides.js";
+import { groupLayoutChoices } from "./layout-templates.js";
 import { createThumbnailCache } from "./thumbnail-cache.js";
 
 const DEFAULT_LABELS = {
@@ -13,7 +19,30 @@ const DEFAULT_LABELS = {
   untitled: "Untitled",
   hidden: "hidden",
   unavailable: "Preview unavailable",
+  add: "Add slide",
+  layouts: "Layouts",
+  slideActions: "Slide actions",
+  duplicate: "Duplicate slide",
+  delete: "Delete slide",
+  hideSlide: "Hide in slide show",
+  showSlide: "Show in slide show",
+  moveLeft: "Move left",
+  moveRight: "Move right",
+  moveUp: "Move up",
+  moveDown: "Move down",
+  statusAdded: "Slide added at position {position}",
+  statusDuplicated: "Slide duplicated",
+  statusDeleted: "Slide deleted. {count} left",
+  statusHidden: "Slide hidden from the slide show",
+  statusShown: "Slide shown in the slide show",
+  statusMoved: "Slide moved to position {position} of {count}",
+  atStart: "Already the first slide",
+  atEnd: "Already the last slide",
+  lastSlide: "A presentation needs at least one slide",
 };
+const SVG_NS = "http://www.w3.org/2000/svg";
+const META = { source: "thumbnail-strip", rejectInvalid: true };
+const fill = (text, values) => String(text).replace(/\{(\w+)\}/g, (match, key) => (key in values ? String(values[key]) : match));
 const pad = (value, count) => String(value).padStart(Math.max(2, String(count).length), "0");
 
 /**
@@ -25,7 +54,12 @@ const pad = (value, count) => String(value).padStart(Math.max(2, String(count).l
  * the default, or `"vertical"`), `labels` (`navigation`, `untitled`, `hidden`, `unavailable`), `cache` (a thumbnail cache to share; default:
  * its own), `lazy` (default true), `autoRefresh` (default true: follow the editor's changes on its own) and `onError(error)`.
  *
- * Returns `{ element, getSlide(), setSlide(index), refresh({ clear }), destroy() }`.
+ * Slide management (CE-29, off by default): `actions` (true adds the "+" button and the thumbnail context menu), `layoutOptions(presentation)`
+ * (layout choices `{ id, label, record? }` for a layout menu behind "+"; without it, or when it returns none, "+" adds a slide directly after
+ * the current one), `readOnly` (no "+", menu items disabled; change it with `setReadOnly`) and `onStatus(message)` (a screen-reader line
+ * after each action; without it the strip announces in its own live region). `labels` also names every control and status line.
+ *
+ * Returns `{ element, getSlide(), setSlide(index), setReadOnly(readOnly), refresh({ clear }), destroy() }`.
  */
 export function createThumbnailStrip(container, options = {}) {
   if (!container?.ownerDocument) throw new TypeError("A DOM container is required.");
@@ -38,6 +72,8 @@ export function createThumbnailStrip(container, options = {}) {
   const orientation = options.orientation === "vertical" ? "vertical" : "horizontal";
   const size = Number(options.size) > 0 ? Number(options.size) : density === "touch" ? 104 : 128;
   const lazy = options.lazy !== false && typeof win?.IntersectionObserver === "function";
+  const actions = options.actions === true;
+  let readOnly = options.readOnly === true;
 
   // The renderer draws with the session's registered catalogs (plus any `renderOptions.catalogs`): the same list the canvas and core resolve with.
   const resolveOptions = () => ({ variables: false, ...(options.renderOptions ?? {}), catalogs: mergeCatalogs(editor.catalogs, options.renderOptions?.catalogs) });
@@ -53,6 +89,10 @@ export function createThumbnailStrip(container, options = {}) {
   let scheduled;
   let renderToken = 0;
   let observer;
+  let menu;
+  let addSlot;
+  let addButton;
+  let status;
   const visible = new Set();
   const items = [];
 
@@ -61,6 +101,8 @@ export function createThumbnailStrip(container, options = {}) {
   element.dataset.orientation = orientation;
   element.dataset.density = density;
   element.setAttribute("aria-label", labels.navigation);
+  if (actions) element.dataset.actions = "true";
+  if (actions && readOnly) element.dataset.readonly = "true";
   element.style.setProperty("--opf-thumbs-w", `${size}px`);
   const list = doc.createElement("ol");
   list.className = "opf-thumbs-list";
@@ -102,7 +144,7 @@ export function createThumbnailStrip(container, options = {}) {
     while (items.length < slides.length) {
       const item = makeItem(items.length);
       items.push(item);
-      list.append(item.li);
+      list.insertBefore(item.li, addSlot?.parentNode === list ? addSlot : null);
       observer?.observe(item.button);
     }
     while (items.length > slides.length) {
@@ -218,10 +260,11 @@ export function createThumbnailStrip(container, options = {}) {
   });
   // Arrow keys move focus along the strip (Enter or Space chooses); Home and End jump to the ends.
   list.addEventListener("keydown", (event) => {
-    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.isComposing) return;
+    if (event.isComposing) return;
     const button = event.target.closest?.(".opf-thumbs-item");
-    if (!button) return;
-    const rtl = orientation === "horizontal" && win.getComputedStyle(element).direction === "rtl";
+    if (actions && button && handleActionKey(event, button)) return;
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || !button) return;
+    const rtl = isRtl();
     const keys = orientation === "horizontal" ? { ArrowLeft: rtl ? 1 : -1, ArrowRight: rtl ? -1 : 1 } : { ArrowUp: -1, ArrowDown: 1 };
     const from = Number(button.dataset.index);
     let target;
@@ -232,6 +275,348 @@ export function createThumbnailStrip(container, options = {}) {
     event.preventDefault();
     target = clamp(target, items.length);
     items[target]?.button.focus();
+  });
+
+  // --- slide management (CE-29) ---------------------------------------------------------------------
+
+  function isRtl() {
+    return orientation === "horizontal" && win.getComputedStyle(element).direction === "rtl";
+  }
+  /** The step a move key asks for along the strip as it is drawn (left is forward in a right-to-left strip); 0 for any other key. */
+  function moveStep(key) {
+    if (orientation === "vertical") return key === "ArrowUp" ? -1 : key === "ArrowDown" ? 1 : 0;
+    const rtl = isRtl();
+    return key === "ArrowLeft" ? (rtl ? 1 : -1) : key === "ArrowRight" ? (rtl ? -1 : 1) : 0;
+  }
+  function announce(message) {
+    if (!message) return;
+    if (options.onStatus) {
+      options.onStatus(message);
+      return;
+    }
+    if (!status) {
+      status = doc.createElement("div");
+      status.className = "opf-thumbs-status";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      element.prepend(status);
+    }
+    // The same line twice in a row is read twice.
+    status.textContent = status.textContent === message ? `${message} ` : message;
+  }
+
+  /** After a change: show the slide it left current (the moved, copied, added or neighbouring one), keep focus on it and tell the host. */
+  function follow(target, message, notify = true) {
+    cancelScheduled();
+    deck = editor.presentation;
+    active = target;
+    focusIndex = target;
+    syncItems();
+    paintThumbnails();
+    scrollToActive();
+    items[active]?.button.focus();
+    if (notify) options.onSelect?.(active);
+    announce(message);
+  }
+  /** One undoable change for the slide at `index`. Every kind is a function of slides.js, the ones the slide manager calls. */
+  function perform(kind, index, extra = {}) {
+    if (disposed || !actions || readOnly) return;
+    const total = editor.presentation.slides.length;
+    try {
+      if (kind === "add") {
+        const at = total ? clamp(index, total) + 1 : 0;
+        const change = addSlide(editor, { at, ...(extra.layout ? { layout: extra.layout } : {}) }, META);
+        const target = change.index ?? at;
+        follow(target, fill(labels.statusAdded, { position: target + 1 }));
+        return;
+      }
+      if (!Number.isInteger(index) || index < 0 || index >= total) return;
+      if (kind === "duplicate") {
+        const change = duplicateSlides(editor, [index], {}, META);
+        follow(change.selection[0], labels.statusDuplicated);
+      } else if (kind === "delete") {
+        if (total <= 1) {
+          announce(labels.lastSlide);
+          return;
+        }
+        const change = removeSlides(editor, [index], META);
+        follow(change.selection[0], fill(labels.statusDeleted, { count: total - 1 }));
+      } else if (kind === "hide") {
+        const change = setHidden(editor, [index], undefined, META);
+        follow(index, change.hidden ? labels.statusHidden : labels.statusShown, false);
+      } else if (kind === "move") {
+        const change = moveSlidesBy(editor, [index], extra.step, {}, META);
+        if (!change.changed) {
+          announce(extra.step < 0 ? labels.atStart : labels.atEnd);
+          return;
+        }
+        follow(change.selection[0], fill(labels.statusMoved, { position: change.selection[0] + 1, count: total }));
+      }
+    } catch (error) {
+      announce(error?.message ?? String(error));
+    }
+  }
+
+  function handleActionKey(event, button) {
+    const index = Number(button.dataset.index);
+    const { key } = event;
+    if (event.ctrlKey || event.metaKey) return false;
+    if (key === "ContextMenu" || (key === "F10" && event.shiftKey && !event.altKey)) {
+      event.preventDefault();
+      openSlideMenu(index, button);
+      return true;
+    }
+    if (event.altKey && !event.shiftKey) {
+      const step = moveStep(key);
+      if (!step) return false;
+      event.preventDefault();
+      perform("move", index, { step });
+      return true;
+    }
+    if (!event.altKey && !event.shiftKey && (key === "Delete" || key === "Backspace")) {
+      event.preventDefault();
+      perform("delete", index);
+      return true;
+    }
+    return false;
+  }
+
+  // The "+" button: a trailing slot in the list, present while the strip can be edited.
+  function mountAdd() {
+    if (!actions || readOnly || disposed) {
+      addSlot?.remove();
+      return;
+    }
+    if (!addSlot) {
+      addSlot = doc.createElement("li");
+      addSlot.className = "opf-thumbs-add-slot";
+      addButton = doc.createElement("button");
+      addButton.type = "button";
+      addButton.className = "opf-thumbs-add";
+      addButton.setAttribute("aria-label", labels.add);
+      addButton.title = labels.add;
+      if (typeof options.layoutOptions === "function") {
+        addButton.setAttribute("aria-haspopup", "menu");
+        addButton.setAttribute("aria-expanded", "false");
+      }
+      const svg = doc.createElementNS(SVG_NS, "svg");
+      svg.setAttribute("viewBox", "0 0 24 24");
+      svg.setAttribute("class", "opf-thumbs-add-icon");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+      const path = doc.createElementNS(SVG_NS, "path");
+      path.setAttribute("d", "M12 5v14M5 12h14");
+      svg.append(path);
+      addButton.append(svg);
+      addSlot.append(addButton);
+      addButton.addEventListener("click", onAddClick);
+    }
+    if (addSlot.parentNode !== list) list.append(addSlot);
+  }
+  function onAddClick() {
+    if (readOnly || disposed) return;
+    if (menu?.opener === addButton) {
+      closeMenu();
+      return;
+    }
+    let choices = [];
+    if (typeof options.layoutOptions === "function") {
+      try {
+        choices = options.layoutOptions(editor.presentation) ?? [];
+      } catch (error) {
+        announce(error?.message ?? String(error));
+        return;
+      }
+    }
+    if (choices.length) openLayoutMenu(choices);
+    else perform("add", active);
+  }
+
+  // --- menus ------------------------------------------------------------------------------------------
+
+  const SHORTCUT_KEYS = { "←": "ArrowLeft", "→": "ArrowRight", "↑": "ArrowUp", "↓": "ArrowDown" };
+  /**
+   * Open a menu. `entries` are `{ label, shortcut?, disabled?, run }`, `{ separator: true }` and `{ heading }` (the entries up to the next
+   * heading form a labelled group). It opens at `x`, `y`, or under (above, when there is no room) the `anchor` rectangle.
+   */
+  function openMenu({ label, opener, entries, x = 0, y = 0, anchor, toggle = false }) {
+    closeMenu(false);
+    const root = doc.createElement("div");
+    root.className = "opf-thumbs-menu";
+    root.setAttribute("role", "menu");
+    root.setAttribute("aria-label", label);
+    root.tabIndex = -1;
+    const buttons = [];
+    let target = root;
+    for (const entry of entries) {
+      if (entry.separator) {
+        const rule = doc.createElement("div");
+        rule.className = "opf-thumbs-menu-separator";
+        rule.setAttribute("role", "separator");
+        target.append(rule);
+        continue;
+      }
+      if (entry.heading !== undefined) {
+        target = doc.createElement("div");
+        target.className = "opf-thumbs-menu-group";
+        target.setAttribute("role", "group");
+        target.setAttribute("aria-label", entry.heading);
+        const heading = doc.createElement("div");
+        heading.className = "opf-thumbs-menu-heading";
+        heading.setAttribute("aria-hidden", "true");
+        heading.textContent = entry.heading;
+        target.append(heading);
+        root.append(target);
+        continue;
+      }
+      const item = doc.createElement("button");
+      item.type = "button";
+      item.className = "opf-thumbs-menu-item";
+      item.setAttribute("role", "menuitem");
+      item.tabIndex = -1;
+      item.disabled = entry.disabled === true;
+      const text = doc.createElement("span");
+      text.textContent = entry.label;
+      item.append(text);
+      if (entry.shortcut) {
+        const keys = doc.createElement("kbd");
+        keys.textContent = entry.shortcut;
+        keys.setAttribute("aria-hidden", "true");
+        item.append(keys);
+        item.setAttribute("aria-keyshortcuts", entry.shortcut.replace(/[←→↑↓]/, (arrow) => SHORTCUT_KEYS[arrow]));
+      }
+      item.addEventListener("click", () => {
+        // Focus goes back to where the menu came from first; a change then moves it to the slide it leaves current.
+        closeMenu(true);
+        entry.run();
+      });
+      target.append(item);
+      if (!item.disabled) buttons.push(item);
+    }
+    (element.closest(".opf-ui") ?? doc.body).append(root);
+    let box = root.getBoundingClientRect();
+    let left = x;
+    let top = y;
+    if (anchor) {
+      // Under the anchor, or above it when that side has more room; a menu taller than its side scrolls instead of covering the anchor.
+      const below = win.innerHeight - anchor.bottom - 8;
+      const above = anchor.top - 8;
+      const placeAbove = box.height > below && above > below;
+      const room = Math.max(96, placeAbove ? above : below);
+      if (box.height > room) {
+        root.style.maxHeight = `${room}px`;
+        box = root.getBoundingClientRect();
+      }
+      left = isRtl() ? anchor.right - box.width : anchor.left;
+      top = placeAbove ? anchor.top - box.height - 4 : anchor.bottom + 4;
+    }
+    root.style.left = `${Math.max(4, Math.min(left, win.innerWidth - box.width - 4))}px`;
+    root.style.top = `${Math.max(4, Math.min(top, win.innerHeight - box.height - 4))}px`;
+    // The key that opened the menu is released inside it: some platforms open their own menu on that keyup, which would take the focus.
+    root.addEventListener("keyup", (event) => {
+      if (event.key === "ContextMenu" || (event.key === "F10" && event.shiftKey)) event.preventDefault();
+    });
+    root.addEventListener("keydown", (event) => {
+      const at = buttons.indexOf(doc.activeElement);
+      if (event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        closeMenu();
+      } else if (event.key === "Tab") closeMenu(false);
+      else if (event.key === "ArrowDown") {
+        event.preventDefault();
+        buttons[(at + 1) % buttons.length]?.focus();
+      } else if (event.key === "ArrowUp") {
+        event.preventDefault();
+        buttons[(at - 1 + buttons.length) % buttons.length]?.focus();
+      } else if (event.key === "Home") {
+        event.preventDefault();
+        buttons[0]?.focus();
+      } else if (event.key === "End") {
+        event.preventDefault();
+        buttons.at(-1)?.focus();
+      }
+    });
+    // A press outside closes it (the "+" button toggles its own menu on click); so does scrolling anything, which would leave it adrift.
+    const onPointer = (event) => {
+      if (!root.contains(event.target) && !(toggle && opener.contains(event.target))) closeMenu(false);
+    };
+    const onScroll = (event) => {
+      if (!root.contains(event.target)) closeMenu(false);
+    };
+    doc.addEventListener("pointerdown", onPointer, true);
+    // Scrolling that the opening itself caused (focus scrolls its element into view) arrives a frame late: listen only after it.
+    const listenTimer = win.setTimeout(() => win.addEventListener("scroll", onScroll, true), 150);
+    menu = {
+      root,
+      opener,
+      off: () => {
+        win.clearTimeout(listenTimer);
+        doc.removeEventListener("pointerdown", onPointer, true);
+        win.removeEventListener("scroll", onScroll, true);
+      },
+    };
+    if (toggle) opener.setAttribute("aria-expanded", "true");
+    (buttons[0] ?? root).focus();
+  }
+  function closeMenu(restore = true) {
+    if (!menu) return;
+    const { root, opener, off } = menu;
+    menu = undefined;
+    off();
+    root.remove();
+    if (opener?.getAttribute?.("aria-haspopup")) opener.setAttribute("aria-expanded", "false");
+    if (restore && opener?.isConnected) opener.focus();
+  }
+  function openSlideMenu(index, opener, x, y) {
+    const total = editor.presentation.slides.length;
+    const slide = editor.presentation.slides[index];
+    if (!slide) return;
+    const off = readOnly;
+    const vertical = orientation === "vertical";
+    // "Left" steps back in a left-to-right strip and forward in a right-to-left one.
+    const left = moveStep(vertical ? "ArrowUp" : "ArrowLeft");
+    const canStep = (step) => index + step >= 0 && index + step < total;
+    const entries = [
+      { label: labels.duplicate, disabled: off, run: () => perform("duplicate", index) },
+      { label: labels.delete, shortcut: "Delete", disabled: off || total <= 1, run: () => perform("delete", index) },
+      { label: slide.hidden === true ? labels.showSlide : labels.hideSlide, disabled: off, run: () => perform("hide", index) },
+      { separator: true },
+      {
+        label: vertical ? labels.moveUp : labels.moveLeft,
+        shortcut: vertical ? "Alt+↑" : "Alt+←",
+        disabled: off || !canStep(left),
+        run: () => perform("move", index, { step: left }),
+      },
+      {
+        label: vertical ? labels.moveDown : labels.moveRight,
+        shortcut: vertical ? "Alt+↓" : "Alt+→",
+        disabled: off || !canStep(-left),
+        run: () => perform("move", index, { step: -left }),
+      },
+    ];
+    openMenu({ label: labels.slideActions, opener, entries, x, y, anchor: x === undefined ? opener.getBoundingClientRect() : undefined });
+  }
+  function openLayoutMenu(choices) {
+    const groups = groupLayoutChoices(choices).filter((group) => group.choices.length);
+    const entries = [];
+    for (const group of groups) {
+      if (groups.length > 1) entries.push({ heading: group.name });
+      for (const choice of group.choices) entries.push({ label: choice.label ?? choice.id, run: () => perform("add", active, { layout: choice.id }) });
+    }
+    openMenu({ label: labels.layouts, opener: addButton, entries, anchor: addButton.getBoundingClientRect(), toggle: true });
+  }
+  list.addEventListener("contextmenu", (event) => {
+    if (!actions) return;
+    const button = event.target.closest?.(".opf-thumbs-item");
+    if (!button || !list.contains(button)) return;
+    event.preventDefault();
+    const index = Number(button.dataset.index);
+    // A menu the keyboard just opened for this slide stays (some platforms also send a contextmenu event for the key).
+    if (menu?.opener === button) return;
+    if (index !== active) select(index);
+    const keyboard = event.clientX === 0 && event.clientY === 0;
+    openSlideMenu(index, button, keyboard ? undefined : event.clientX, keyboard ? undefined : event.clientY);
   });
 
   if (lazy) {
@@ -248,6 +633,7 @@ export function createThumbnailStrip(container, options = {}) {
   }
 
   syncItems();
+  mountAdd();
   paintThumbnails();
   scrollToActive();
 
@@ -296,11 +682,25 @@ export function createThumbnailStrip(container, options = {}) {
       scrollToActive();
       paintThumbnails();
     },
+    /** Switch slide management off (true) or on again: no "+" button, menu items disabled, keys do nothing. Without `actions` it only records the state. */
+    setReadOnly(value) {
+      if (disposed) return;
+      const next = Boolean(value);
+      if (next === readOnly) return;
+      readOnly = next;
+      if (actions) {
+        if (readOnly) element.dataset.readonly = "true";
+        else delete element.dataset.readonly;
+      }
+      closeMenu(false);
+      mountAdd();
+    },
     /** Redraw from the session now. `{ clear: true }` also drops the cache, for example after the host loaded fonts. */
     refresh,
     destroy() {
       if (disposed) return;
       disposed = true;
+      closeMenu(false);
       cancelScheduled();
       unsubscribe?.();
       observer?.disconnect();

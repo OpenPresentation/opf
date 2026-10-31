@@ -216,3 +216,17 @@
     min-height: 44px;
   }
 }
+
+/* Thumbnail strip slide management (CE-29): the "+" button and the context and layout menu items. */
+@media (pointer: coarse) {
+  .opf-thumbs .opf-thumbs-add {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .opf-thumbs[data-orientation="vertical"] .opf-thumbs-add {
+    height: 44px;
+  }
+  .opf-thumbs-menu .opf-thumbs-menu-item {
+    min-height: 44px;
+  }
+}
