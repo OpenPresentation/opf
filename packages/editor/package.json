@@ -267,6 +267,10 @@
       "types": "./dist/editor-expand.d.ts",
       "default": "./dist/editor-expand.js"
     },
+    "./design-menu": {
+      "types": "./dist/design-menu.d.ts",
+      "default": "./dist/design-menu.js"
+    },
     "./slide-navigator": {
       "types": "./dist/slide-navigator.d.ts",
       "default": "./dist/slide-navigator.js"

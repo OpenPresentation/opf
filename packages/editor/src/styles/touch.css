@@ -248,3 +248,20 @@
     height: 44px;
   }
 }
+
+/* CE-29: the Design quick menu (src/design-menu.js). */
+@media (pointer: coarse) {
+  .opf-design-menu,
+  .opf-design-menu[data-density="touch"] {
+    --opf-design-menu-row: 44px;
+  }
+  .opf-design-menu .opf-design-menu-trigger,
+  .opf-design-menu[data-density="touch"] .opf-design-menu-trigger {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .opf-design-menu .opf-design-menu-close {
+    width: 44px;
+    height: 44px;
+  }
+}

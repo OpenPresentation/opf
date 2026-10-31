@@ -273,6 +273,10 @@
           "command": "node test/source-hooks-browser.mjs"
         },
         {
+          "id": "browser:design-menu",
+          "command": "node test/design-menu-browser.mjs"
+        },
+        {
           "id": "browser:studio-kit",
           "command": "node test/studio-kit-browser.mjs"
         },
