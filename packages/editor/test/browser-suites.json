@@ -253,6 +253,10 @@
           "command": "node test/workspace-react-browser.mjs"
         },
         {
+          "id": "browser:element",
+          "command": "node test/element-browser.mjs"
+        },
+        {
           "id": "browser:handle-before-mount",
           "command": "node test/handle-before-mount-browser.mjs"
         },
